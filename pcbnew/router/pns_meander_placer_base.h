@@ -54,7 +54,7 @@ public:
     };
 
     PNS_MEANDER_PLACER_BASE( PNS_ROUTER* aRouter );
-    virtual ~PNS_MEANDER_PLACER_BASE( );
+    virtual ~PNS_MEANDER_PLACER_BASE();
 
     /**
      * Function TuningInfo()
@@ -62,15 +62,15 @@ public:
      * Returns a string describing the status and length of the
      * tuned traces.
      */
-    virtual const wxString TuningInfo( ) const = 0;
-    
+    virtual const wxString TuningInfo() const = 0;
+
     /**
      * Function TuningStatus()
      *
      * Returns the tuning status (too short, too long, etc.)
      * of the trace(s) being tuned.
      */
-    virtual TUNING_STATUS TuningStatus( ) const = 0;
+    virtual TUNING_STATUS TuningStatus() const = 0;
 
     /**
      * Function AmplitudeStep()
@@ -79,7 +79,7 @@ public:
      * @param aSign direction (negative = decrease, positive = increase).
      */
     virtual void AmplitudeStep( int aSign );
-    
+
     /**
      * Function SpacingStep()
      *
@@ -95,7 +95,7 @@ public:
      * @return the settings
      */
     virtual const PNS_MEANDER_SETTINGS& MeanderSettings() const;
-    
+
     /*
      * Function UpdateSettings()
      *
@@ -103,7 +103,7 @@ public:
      * @param aSettings the settings
      */
     virtual void UpdateSettings( const PNS_MEANDER_SETTINGS& aSettings);
-  
+
     /**
      * Function CheckFit()
      *
@@ -113,18 +113,16 @@ public:
      * @param aShape the shape to check
      * @return true if the shape fits
      */
-    virtual bool CheckFit ( PNS_MEANDER_SHAPE* aShape )
-    { 
+    virtual bool CheckFit( PNS_MEANDER_SHAPE* aShape )
+    {
         return false;
     }
 
-
-
 protected:
-    
+
     /**
      * Function cutTunedLine()
-     * 
+     *
      * Extracts the part of a track to be meandered, depending on the
      * starting point and the cursor position.
      * @param aOrigin the original line
@@ -144,22 +142,22 @@ protected:
     /**
      * Function tuneLineLength()
      *
-     * Takes a set of meanders in aTuned and tunes their length to 
+     * Takes a set of meanders in aTuned and tunes their length to
      * extend the original line length by aElongation.
      */
     void tuneLineLength( PNS_MEANDERED_LINE& aTuned, int aElongation );
 
     /**
-     * Function compareWithTollerance()
+     * Function compareWithTolerance()
      *
-     * Compares aValue against aExpected with given tollerance.
+     * Compares aValue against aExpected with given tolerance.
      */
-    int compareWithTollerance ( int aValue, int aExpected, int aTollerance = 0 ) const;
+    int compareWithTolerance ( int aValue, int aExpected, int aTolerance = 0 ) const;
 
     ///> width of the meandered trace(s)
     int m_currentWidth;
     ///> meandering settings
-    PNS_MEANDER_SETTINGS m_settings;    
+    PNS_MEANDER_SETTINGS m_settings;
     ///> current end point
     VECTOR2I m_currentEnd;
 };

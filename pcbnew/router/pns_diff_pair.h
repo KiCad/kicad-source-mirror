@@ -43,23 +43,22 @@ class PNS_DIFF_PAIR;
  **/
 class PNS_DP_GATEWAY {
 public:
-    PNS_DP_GATEWAY ( const VECTOR2I& aAnchorP, 
-                     const VECTOR2I& aAnchorN, 
-                     bool aIsDiagonal, 
-                     int aAllowedEntryAngles = DIRECTION_45::ANG_OBTUSE, 
-                     int aPriority = 0 ) 
-        : m_anchorP(aAnchorP), 
-          m_anchorN (aAnchorN), 
-          m_isDiagonal( aIsDiagonal ), 
-          m_allowedEntryAngles (aAllowedEntryAngles), 
-          m_priority(aPriority)
+    PNS_DP_GATEWAY( const VECTOR2I& aAnchorP,
+                    const VECTOR2I& aAnchorN,
+                    bool aIsDiagonal,
+                    int aAllowedEntryAngles = DIRECTION_45::ANG_OBTUSE,
+                    int aPriority = 0 )
+        : m_anchorP( aAnchorP ),
+          m_anchorN( aAnchorN ),
+          m_isDiagonal( aIsDiagonal ),
+          m_allowedEntryAngles( aAllowedEntryAngles ),
+          m_priority( aPriority )
     {
         m_hasEntryLines = false;
     }
 
-    ~PNS_DP_GATEWAY ()
+    ~PNS_DP_GATEWAY()
     {
-
     }
 
     /**
@@ -67,15 +66,15 @@ public:
      *
      * @return true, if the gateway anchors lie on a diagonal line
      */
-    
     bool IsDiagonal() const
     {
-        return m_isDiagonal; 
+        return m_isDiagonal;
     }
 
-    const VECTOR2I& AnchorP () const { return m_anchorP; }
-    const VECTOR2I& AnchorN () const { return m_anchorN; }
-    
+    const VECTOR2I& AnchorP() const { return m_anchorP; }
+
+    const VECTOR2I& AnchorN() const { return m_anchorN; }
+
     /**
      * Function AllowedAngles()
      *
@@ -89,36 +88,35 @@ public:
      *
      * @return priority/score value for gateway matching
      */
-    int Priority() const 
-    { 
+    int Priority() const
+    {
         return m_priority;
     }
-    
-    void SetPriority(int aPriority) 
+
+    void SetPriority(int aPriority)
     {
         m_priority = aPriority;
     }
 
-    void SetEntryLines ( const SHAPE_LINE_CHAIN& aEntryP, const SHAPE_LINE_CHAIN& aEntryN )
-    { 
+    void SetEntryLines( const SHAPE_LINE_CHAIN& aEntryP, const SHAPE_LINE_CHAIN& aEntryN )
+    {
         m_entryP = aEntryP;
         m_entryN = aEntryN;
         m_hasEntryLines = true;
     }
 
-    const SHAPE_LINE_CHAIN& EntryP () const { return m_entryP; } 
-    const SHAPE_LINE_CHAIN& EntryN () const { return m_entryN; } 
+    const SHAPE_LINE_CHAIN& EntryP() const { return m_entryP; }
+    const SHAPE_LINE_CHAIN& EntryN() const { return m_entryN; }
     const PNS_DIFF_PAIR Entry() const ;
-    
-    void Reverse();
-    
-    bool HasEntryLines () const 
-    {
-        return  m_hasEntryLines;
-    }
-    
-private:
 
+    void Reverse();
+
+    bool HasEntryLines () const
+    {
+        return m_hasEntryLines;
+    }
+
+private:
     SHAPE_LINE_CHAIN m_entryP, m_entryN;
     bool m_hasEntryLines;
     VECTOR2I m_anchorP, m_anchorN;
@@ -134,37 +132,36 @@ private:
  **/
 class PNS_DP_PRIMITIVE_PAIR
 {
-
 public:
     PNS_DP_PRIMITIVE_PAIR():
-        m_primP (NULL), m_primN ( NULL ) {};
+        m_primP( NULL ), m_primN( NULL ) {};
 
-    PNS_DP_PRIMITIVE_PAIR ( const PNS_DP_PRIMITIVE_PAIR& aOther );
-    PNS_DP_PRIMITIVE_PAIR ( PNS_ITEM *aPrimP, PNS_ITEM *aPrimN );
-    PNS_DP_PRIMITIVE_PAIR ( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
+    PNS_DP_PRIMITIVE_PAIR( const PNS_DP_PRIMITIVE_PAIR& aOther );
+    PNS_DP_PRIMITIVE_PAIR( PNS_ITEM* aPrimP, PNS_ITEM* aPrimN );
+    PNS_DP_PRIMITIVE_PAIR( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
 
     ~PNS_DP_PRIMITIVE_PAIR();
 
-    void SetAnchors ( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
+    void SetAnchors( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
 
-    const VECTOR2I& AnchorP () const { return m_anchorP; }
-    const VECTOR2I& AnchorN () const { return m_anchorN; }
+    const VECTOR2I& AnchorP() const { return m_anchorP; }
+    const VECTOR2I& AnchorN() const { return m_anchorN; }
 
-    PNS_DP_PRIMITIVE_PAIR& operator= ( const PNS_DP_PRIMITIVE_PAIR& aOther );
+    PNS_DP_PRIMITIVE_PAIR& operator=( const PNS_DP_PRIMITIVE_PAIR& aOther );
 
-    PNS_ITEM* PrimP () const { return m_primP; }
-    PNS_ITEM* PrimN () const { return m_primN; }
+    PNS_ITEM* PrimP() const { return m_primP; }
+    PNS_ITEM* PrimN() const { return m_primN; }
 
     bool Directional() const;
 
-    DIRECTION_45 DirP () const;
-    DIRECTION_45 DirN () const;
+    DIRECTION_45 DirP() const;
+    DIRECTION_45 DirN() const;
 
 private:
+    DIRECTION_45 anchorDirection( PNS_ITEM* aItem, const VECTOR2I& aP ) const;
 
-    DIRECTION_45 anchorDirection ( PNS_ITEM *aItem, const VECTOR2I& aP) const; 
-
-    PNS_ITEM *m_primP, *m_primN;
+    PNS_ITEM* m_primP;
+    PNS_ITEM* m_primN;
     VECTOR2I m_anchorP, m_anchorN;
 };
 
@@ -174,21 +171,21 @@ private:
  * A set of gateways calculated for the cursor or starting/ending primitive pair.
  **/
 
-class PNS_DP_GATEWAYS 
+class PNS_DP_GATEWAYS
 {
 
     public:
         PNS_DP_GATEWAYS ( int aGap ):
             m_gap(aGap), m_viaGap( aGap ) {};
 
-        void SetGap ( int aGap ) { 
-            m_gap = aGap; 
+        void SetGap ( int aGap ) {
+            m_gap = aGap;
             m_viaGap = aGap;
         }
-  
-        void Clear() 
-        { 
-            m_gateways.clear(); 
+
+        void Clear()
+        {
+            m_gateways.clear();
         }
 
         void SetFitVias ( bool aEnable, int aDiameter = 0, int aViaGap = -1 )
@@ -201,12 +198,12 @@ class PNS_DP_GATEWAYS
                 m_viaGap = aViaGap;
         }
 
-        
+
         void BuildForCursor ( const VECTOR2I& aCursorPos );
         void BuildOrthoProjections ( PNS_DP_GATEWAYS &aEntries, const VECTOR2I& aCursorPos, int aOrthoScore );
         void BuildGeneric ( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool aBuildEntries = false, bool aViaMode = false );
         void BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool aPreferDiagonal );
-        
+
         bool FitGateways (  PNS_DP_GATEWAYS& aEntry,  PNS_DP_GATEWAYS& aTarget, bool aPrefDiagonal, PNS_DIFF_PAIR& aDp );
 
         std::vector<PNS_DP_GATEWAY>& Gateways()
@@ -216,7 +213,7 @@ class PNS_DP_GATEWAYS
 
     private:
 
-        struct DP_CANDIDATE 
+        struct DP_CANDIDATE
         {
             SHAPE_LINE_CHAIN p, n;
             VECTOR2I gw_p, gw_n;
@@ -246,7 +243,7 @@ class PNS_DIFF_PAIR : public PNS_ITEM {
 
 public:
     struct COUPLED_SEGMENTS {
-        COUPLED_SEGMENTS ( const SEG& aCoupledP, const SEG& aParentP, int aIndexP, 
+        COUPLED_SEGMENTS ( const SEG& aCoupledP, const SEG& aParentP, int aIndexP,
                            const SEG& aCoupledN, const SEG& aParentN, int aIndexN ) :
             coupledP ( aCoupledP ),
             coupledN ( aCoupledN ),
@@ -255,7 +252,7 @@ public:
             indexP ( aIndexP ),
             indexN ( aIndexN )
         {}
-            
+
         SEG coupledP;
         SEG coupledN;
         SEG parentP;
@@ -266,17 +263,17 @@ public:
 
     typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
 
-	PNS_DIFF_PAIR ( ) : PNS_ITEM ( DIFF_PAIR ), m_hasVias (false) {}
+    PNS_DIFF_PAIR ( ) : PNS_ITEM ( DIFF_PAIR ), m_hasVias (false) {}
 
-    PNS_DIFF_PAIR ( int aGap ) : 
-        PNS_ITEM ( DIFF_PAIR ), 
+    PNS_DIFF_PAIR ( int aGap ) :
+        PNS_ITEM ( DIFF_PAIR ),
         m_hasVias (false)
     {
         m_gapConstraint = aGap;
     }
 
     PNS_DIFF_PAIR ( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
-        PNS_ITEM ( DIFF_PAIR ), 
+        PNS_ITEM ( DIFF_PAIR ),
         m_n (aN),
         m_p (aP),
         m_hasVias (false)
@@ -285,7 +282,7 @@ public:
     }
 
     PNS_DIFF_PAIR ( const PNS_LINE &aLineP, const PNS_LINE &aLineN, int aGap = 0 ):
-        PNS_ITEM ( DIFF_PAIR ), 
+        PNS_ITEM ( DIFF_PAIR ),
         m_line_p ( aLineP ),
         m_line_n ( aLineN ),
         m_hasVias (false)
@@ -301,8 +298,8 @@ public:
     {
         return aItem && DIFF_PAIR == aItem->Kind();
     }
-    
-	PNS_DIFF_PAIR * Clone() const { assert(false); return NULL; }
+
+    PNS_DIFF_PAIR * Clone() const { assert(false); return NULL; }
 
     static PNS_DIFF_PAIR* AssembleDp ( PNS_LINE *aLine );
 
@@ -317,7 +314,7 @@ public:
             m_n = aN;
         }
     }
-    
+
     void SetShape ( const PNS_DIFF_PAIR& aPair )
     {
         m_p = aPair.m_p;
@@ -326,20 +323,20 @@ public:
 
     void SetNets ( int aP, int aN )
     {
-    	m_net_p = aP;
-    	m_net_n = aN;
+        m_net_p = aP;
+        m_net_n = aN;
     }
-    
+
     void SetWidth ( int aWidth )
     {
-    	m_width = aWidth;
+        m_width = aWidth;
     }
 
     int Width()  const { return m_width; }
-    
+
     void SetGap ( int aGap)
     {
-    	m_gap = aGap;
+        m_gap = aGap;
         m_gapConstraint = RANGED_NUM<int> ( m_gap, 10000, 10000 );
     }
 
@@ -364,24 +361,24 @@ public:
         return m_hasVias;
     }
 
-    int NetP() const 
+    int NetP() const
     {
         return m_net_p;
     }
 
-    int NetN() const 
+    int NetN() const
     {
         return m_net_n;
     }
 
-    PNS_LINE& PLine() 
+    PNS_LINE& PLine()
     {
         if ( !m_line_p.IsLinked ( ) )
             updateLine(m_line_p, m_p, m_net_p, m_via_p );
         return m_line_p;
-	}
+    }
 
-    PNS_LINE& NLine() 
+    PNS_LINE& NLine()
     {
         if ( !m_line_n.IsLinked ( ) )
             updateLine(m_line_n, m_n, m_net_n, m_via_n );
@@ -415,7 +412,7 @@ public:
     }
     const SHAPE_LINE_CHAIN& CP() const { return m_p; }
     const SHAPE_LINE_CHAIN& CN() const { return m_n; }
-    
+
     bool BuildInitial ( PNS_DP_GATEWAY& aEntry, PNS_DP_GATEWAY& aTarget, bool aPrefDiagonal );
     bool CheckConnectionAngle ( const PNS_DIFF_PAIR &aOther, int allowedAngles ) const;
     int CoupledLength ( const SEG& aP, const SEG& aN ) const;
@@ -428,7 +425,7 @@ public:
 
 private:
 
-    void updateLine( PNS_LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, PNS_VIA& aVia ) 
+    void updateLine( PNS_LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, PNS_VIA& aVia )
     {
         aLine.SetShape( aShape );
         aLine.SetWidth( m_width );

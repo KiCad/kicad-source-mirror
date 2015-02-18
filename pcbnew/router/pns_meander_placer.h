@@ -61,16 +61,16 @@ public:
 
     /// @copydoc PNS_PLACEMENT_ALGO::CurrentNode()
     PNS_NODE* CurrentNode( bool aLoopsRemoved = false ) const;
-    
+
     /// @copydoc PNS_PLACEMENT_ALGO::Traces()
     const PNS_ITEMSET Traces();
 
     /// @copydoc PNS_PLACEMENT_ALGO::CurrentEnd()
     const VECTOR2I& CurrentEnd() const;
-    
+
     /// @copydoc PNS_PLACEMENT_ALGO::CurrentNet()
     int CurrentNet() const;
-    
+
     /// @copydoc PNS_PLACEMENT_ALGO::CurrentLayer()
     int CurrentLayer() const;
 
@@ -84,12 +84,12 @@ public:
     bool CheckFit ( PNS_MEANDER_SHAPE* aShape );
 
 protected:
-    
+
     bool doMove( const VECTOR2I& aP, PNS_ITEM* aEndItem, int aTargetLength );
 
-    void setWorld ( PNS_NODE* aWorld );
-    
-    virtual int origPathLength () const;
+    void setWorld( PNS_NODE* aWorld );
+
+    virtual int origPathLength() const;
 
     ///> pointer to world to search colliding items
     PNS_NODE* m_world;
@@ -106,7 +106,7 @@ protected:
 
     SHAPE_LINE_CHAIN m_finalShape;
     PNS_MEANDERED_LINE m_result;
-    PNS_SEGMENT *m_initialSegment;
+    PNS_SEGMENT* m_initialSegment;
 
     int m_lastLength;
     TUNING_STATUS m_lastStatus;

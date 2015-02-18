@@ -35,41 +35,36 @@ class PNS_DIFF_PAIR;
 
 class PNS_TOPOLOGY
 {
-	public:
-		typedef std::set<PNS_JOINT *> JOINT_SET;
+public:
+    typedef std::set<PNS_JOINT*> JOINT_SET;
 
-		PNS_TOPOLOGY ( PNS_NODE *aNode ):
-			m_world ( aNode ) {};
+    PNS_TOPOLOGY( PNS_NODE* aNode ):
+        m_world( aNode ) {};
 
-		~PNS_TOPOLOGY ( ) {};
+    ~PNS_TOPOLOGY() {};
 
-		bool SimplifyLine ( PNS_LINE *aLine );
-		PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor = NULL, int aKindMask = PNS_ITEM::ANY );
-		bool LeadingRatLine( const PNS_LINE *aTrack, SHAPE_LINE_CHAIN& aRatLine );
+    bool SimplifyLine( PNS_LINE *aLine );
+    PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor = NULL, int aKindMask = PNS_ITEM::ANY );
+    bool LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine );
 
-		const JOINT_SET ConnectedJoints ( PNS_JOINT* aStart );
-		const PNS_ITEMSET ConnectedItems ( PNS_JOINT* aStart, int aKindMask = PNS_ITEM::ANY );
-		const PNS_ITEMSET ConnectedItems ( PNS_ITEM* aStart, int aKindMask = PNS_ITEM::ANY );
-		int64_t ShortestConnectionLength ( PNS_ITEM *aFrom, PNS_ITEM *aTo );
-		
+    const JOINT_SET ConnectedJoints( PNS_JOINT* aStart );
+    const PNS_ITEMSET ConnectedItems( PNS_JOINT* aStart, int aKindMask = PNS_ITEM::ANY );
+    const PNS_ITEMSET ConnectedItems( PNS_ITEM* aStart, int aKindMask = PNS_ITEM::ANY );
+    int64_t ShortestConnectionLength( PNS_ITEM* aFrom, PNS_ITEM* aTo );
 
+    const PNS_ITEMSET AssembleTrivialPath( PNS_SEGMENT* aStart );
+    const PNS_DIFF_PAIR AssembleDiffPair( PNS_SEGMENT* aStart );
 
-		const PNS_ITEMSET AssembleTrivialPath ( PNS_SEGMENT *aStart );
-		const PNS_DIFF_PAIR AssembleDiffPair ( PNS_SEGMENT *aStart );
+    int MatchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
+    int DpCoupledNet( int aNet );
+    int DpNetPolarity( int aNet );
+    const PNS_LINE DpCoupledLine( PNS_LINE* aLine );
+    bool AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair );
 
-		int MatchDpSuffix ( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
-		int DpCoupledNet( int aNet );
-		int DpNetPolarity( int aNet );
-		const PNS_LINE DpCoupledLine( PNS_LINE *aLine );
-		bool AssembleDiffPair ( PNS_ITEM *aStart, PNS_DIFF_PAIR& aPair );
+private:
+    bool followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& aSet, std::set<PNS_ITEM*>& aVisited );
 
-
-		
-	private:
-
-		bool followTrivialPath ( PNS_LINE *aLine, bool aLeft, PNS_ITEMSET& aSet, std::set<PNS_ITEM *>& aVisited );
-
-		PNS_NODE *m_world;
+    PNS_NODE *m_world;
 };
 
 #endif

@@ -37,69 +37,68 @@ class PCB_BASE_FRAME;
 class GRID_HELPER {
 public:
 
-	GRID_HELPER ( PCB_BASE_FRAME *aFrame );
-	~GRID_HELPER ();
+    GRID_HELPER( PCB_BASE_FRAME* aFrame );
+    ~GRID_HELPER();
 
-	void SetGrid ( int aSize );
-	void SetOrigin ( const VECTOR2I& aOrigin );
-	
-	VECTOR2I GetGrid ();
-	VECTOR2I GetOrigin ();
+    void SetGrid( int aSize );
+    void SetOrigin( const VECTOR2I& aOrigin );
 
-	void SetAuxAxes ( bool aEnable, const VECTOR2I aOrigin = VECTOR2I(0, 0), bool aEnableDiagonal = false );
-	
-	VECTOR2I Align ( const VECTOR2I& aPoint );
+    VECTOR2I GetGrid();
+    VECTOR2I GetOrigin();
 
-	VECTOR2I BestDragOrigin ( const VECTOR2I &aMousePos, BOARD_ITEM *aItem );
-	VECTOR2I BestSnapAnchor ( const VECTOR2I &aOrigin, BOARD_ITEM *aDraggedItem );
+    void SetAuxAxes( bool aEnable, const VECTOR2I aOrigin = VECTOR2I( 0, 0 ), bool aEnableDiagonal = false );
+
+    VECTOR2I Align( const VECTOR2I& aPoint );
+
+    VECTOR2I BestDragOrigin ( const VECTOR2I &aMousePos, BOARD_ITEM* aItem );
+    VECTOR2I BestSnapAnchor ( const VECTOR2I &aOrigin, BOARD_ITEM* aDraggedItem );
 
 private:
+    enum ANCHOR_FLAGS {
+        CORNER = 0x1,
+        OUTLINE = 0x2,
+        SNAPPABLE = 0x4,
+        ORIGIN = 0x8
+    };
 
-	enum ANCHOR_FLAGS {
-		CORNER = 0x1,
-		OUTLINE = 0x2,
-		SNAPPABLE = 0x4,
-		ORIGIN = 0x8
-	};
+    struct ANCHOR
+    {
+        ANCHOR( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM* aItem = NULL ):
+            pos( aPos ), flags( aFlags ), item( aItem ) {} ;
 
-	struct ANCHOR 
-	{
-		ANCHOR ( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM *aItem = NULL ):
-			pos (aPos), flags (aFlags), item (aItem) {} ; 
+        VECTOR2I pos;
+        int flags;
+        BOARD_ITEM* item;
 
-		VECTOR2I pos;
-		int flags;
-		BOARD_ITEM *item;
-		
-		double Distance ( const VECTOR2I& aP )
-		{
-			return (aP - pos).EuclideanNorm();
-		}
+        double Distance( const VECTOR2I& aP )
+        {
+            return ( aP - pos ).EuclideanNorm();
+        }
 
-		bool CanSnapItem ( const BOARD_ITEM *aItem );
-	};
+        bool CanSnapItem( const BOARD_ITEM* aItem );
+    };
 
-	std::vector<ANCHOR> m_anchors;
+    std::vector<ANCHOR> m_anchors;
 
-	std::set<BOARD_ITEM *> queryVisible ( const BOX2I& aArea );
+    std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea );
 
-	void addAnchor( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM *aItem = NULL )
-	{
-		m_anchors.push_back( ANCHOR( aPos, aFlags, aItem ) );
-	}
+    void addAnchor( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM* aItem = NULL )
+    {
+        m_anchors.push_back( ANCHOR( aPos, aFlags, aItem ) );
+    }
 
-	ANCHOR* nearestAnchor ( VECTOR2I aPos, int aFlags, LSET aMatchLayers  );
+    ANCHOR* nearestAnchor( VECTOR2I aPos, int aFlags, LSET aMatchLayers );
 
-	void computeAnchors ( BOARD_ITEM *aItem, const VECTOR2I& aRefPos );
+    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos );
 
-	void clearAnchors () 
-	{
-		m_anchors.clear();
-	}
+    void clearAnchors ()
+    {
+        m_anchors.clear();
+    }
 
-	PCB_BASE_FRAME* m_frame;
-	boost::optional<VECTOR2I> m_auxAxis;
-	bool m_diagonalAuxAxesEnable;
+    PCB_BASE_FRAME* m_frame;
+    boost::optional<VECTOR2I> m_auxAxis;
+    bool m_diagonalAuxAxesEnable;
 };
 
 #endif

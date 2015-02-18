@@ -57,74 +57,82 @@ PNS_DIFF_PAIR_PLACER::~PNS_DIFF_PAIR_PLACER()
 }
 
 
-void PNS_DIFF_PAIR_PLACER::setWorld ( PNS_NODE* aWorld )
+void PNS_DIFF_PAIR_PLACER::setWorld( PNS_NODE* aWorld )
 {
     m_world = aWorld;
 }
 
-const PNS_VIA PNS_DIFF_PAIR_PLACER::makeVia ( const VECTOR2I& aP, int aNet )
+
+const PNS_VIA PNS_DIFF_PAIR_PLACER::makeVia( const VECTOR2I& aP, int aNet )
 {
     const PNS_LAYERSET layers( m_sizes.GetLayerTop(), m_sizes.GetLayerBottom() );
 
     PNS_VIA v( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), -1, m_sizes.ViaType() );
-    v.SetNet (aNet);
+    v.SetNet( aNet );
+
     return v;
 }
+
 
 void PNS_DIFF_PAIR_PLACER::SetOrthoMode ( bool aOrthoMode )
 {
     m_orthoMode = aOrthoMode;
-    if(!m_idle)
-        Move ( m_currentEnd, NULL );
+
+    if( !m_idle )
+        Move( m_currentEnd, NULL );
 }
+
 
 bool PNS_DIFF_PAIR_PLACER::ToggleVia( bool aEnabled )
 {
     m_placingVia = aEnabled;
-    if(!m_idle)
-        Move ( m_currentEnd, NULL );
+
+    if( !m_idle )
+        Move( m_currentEnd, NULL );
 
     return true;
 }
 
+
 bool PNS_DIFF_PAIR_PLACER::rhMarkObstacles( const VECTOR2I& aP )
 {
-    if( !routeHead ( aP ) )
+    if( !routeHead( aP ) )
         return false;
 
     bool collP = m_currentNode->CheckColliding( &m_currentTrace.PLine() );
     bool collN = m_currentNode->CheckColliding( &m_currentTrace.NLine() );
- 
-    m_fitOk =  !(collP || collN);
+
+    m_fitOk = !( collP || collN ) ;
     return m_fitOk;
 }
 
+
 bool PNS_DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNewP )
 {
-    PNS_VIA virtHead = makeVia ( aP, -1 );
+    PNS_VIA virtHead = makeVia( aP, -1 );
 
-    if ( m_placingVia )
-        virtHead.SetDiameter ( viaGap() + 2 * virtHead.Diameter() );
-    else 
+    if( m_placingVia )
+        virtHead.SetDiameter( viaGap() + 2 * virtHead.Diameter() );
+    else
     {
-        virtHead.SetLayer ( m_currentLayer );
-        virtHead.SetDiameter ( m_sizes.DiffPairGap() + 2 * m_sizes.TrackWidth() );
+        virtHead.SetLayer( m_currentLayer );
+        virtHead.SetDiameter( m_sizes.DiffPairGap() + 2 * m_sizes.TrackWidth() );
     }
 
-    VECTOR2I lead(0, 0);// = aP - m_currentStart ;
+    VECTOR2I lead( 0, 0 );// = aP - m_currentStart ;
     VECTOR2I force;
-    bool solidsOnly =  true;
-    
+    bool solidsOnly = true;
 
-    if(m_currentMode == RM_MarkObstacles )
+    if( m_currentMode == RM_MarkObstacles )
     {
         aNewP = aP;
-        return true;   
-    } else if (m_currentMode == RM_Walkaround )
+        return true;
+    }
+    else if( m_currentMode == RM_Walkaround )
     {
         solidsOnly = false;
     }
- 
+
     // fixme: I'm too lazy to do it well. Circular approximaton will do for the moment.
     if( virtHead.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
     {
@@ -134,98 +142,96 @@ bool PNS_DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I&
 
     return false;
 }
-    
 
-bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE *aNode, PNS_DIFF_PAIR *aCurrent, PNS_DIFF_PAIR& aWalk, bool aPFirst, bool aWindCw, bool aSolidsOnly )
+
+bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurrent, PNS_DIFF_PAIR& aWalk, bool aPFirst, bool aWindCw, bool aSolidsOnly )
 {
     PNS_WALKAROUND walkaround( aNode, Router() );
     PNS_WALKAROUND::WALKAROUND_STATUS wf1;
 
-    Router()->GetClearanceFunc()->OverrideClearance ( true, aCurrent->NetP(), aCurrent->NetN(), aCurrent->Gap() - 20 );
+    Router()->GetClearanceFunc()->OverrideClearance( true, aCurrent->NetP(), aCurrent->NetN(), aCurrent->Gap() - 20 );
 
     walkaround.SetSolidsOnly( aSolidsOnly );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
 
-    PNS_SHOVE shove(aNode, Router());
+    PNS_SHOVE shove( aNode, Router() );
     PNS_LINE walkP, walkN;
-        
+
     aWalk = *aCurrent;
-    
+
     int iter = 0;
-    
-    PNS_DIFF_PAIR cur (*aCurrent);
+
+    PNS_DIFF_PAIR cur( *aCurrent );
 
     bool currentIsP = aPFirst;
 
     int mask = aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY;
- 
+
     //Router()->DisplayDebugLine( aCurrent->CP(), 4, 10000 );
     //Router()->DisplayDebugLine( aCurrent->CN(), 5, 10000 );
 
-    do {
-        PNS_LINE preWalk = (currentIsP ? cur.PLine() : cur.NLine() );
-        PNS_LINE preShove = (currentIsP ? cur.NLine() : cur.PLine() );
+    do
+    {
+        PNS_LINE preWalk = ( currentIsP ? cur.PLine() : cur.NLine() );
+        PNS_LINE preShove = ( currentIsP ? cur.NLine() : cur.PLine() );
         PNS_LINE postWalk;
 
-        if (!aNode->CheckColliding ( &preWalk, mask ) )
-       {
-
+        if( !aNode->CheckColliding ( &preWalk, mask ) )
+        {
             currentIsP = !currentIsP;
-        
-            if (!aNode->CheckColliding ( &preShove, mask ) )
+
+            if( !aNode->CheckColliding( &preShove, mask ) )
                 break;
             else
                 continue;
         }
-        
+
         wf1 = walkaround.Route( preWalk, postWalk, false );
 
-        if(wf1 != PNS_WALKAROUND::DONE)
+        if( wf1 != PNS_WALKAROUND::DONE )
             return false;
 
-        PNS_LINE postShove ( preShove );
+        PNS_LINE postShove( preShove );
 
-        shove.ForceClearance(true, cur.Gap() - 12);
-        
+        shove.ForceClearance( true, cur.Gap() - 12 );
+
         PNS_SHOVE::SHOVE_STATUS sh1;
-    
+
         sh1 = shove.ProcessSingleLine( &postWalk, &preShove, &postShove );
 
-        if(sh1 != PNS_SHOVE::SH_OK)
+        if( sh1 != PNS_SHOVE::SH_OK )
             return false;
 
         postWalk.Line().Simplify();
         postShove.Line().Simplify();
 
+        cur.SetShape( postWalk.CLine(), postShove.CLine(), !currentIsP );
 
-        cur.SetShape ( postWalk.CLine(), postShove.CLine(), !currentIsP );
-      
         currentIsP = !currentIsP;
-    
-        if (!aNode->CheckColliding ( &postShove, mask ) )
+
+        if( !aNode->CheckColliding( &postShove, mask ) )
             break;
 
-
         iter++;
-    } while (iter < 3);
+    }
+    while( iter < 3 );
 
-    if(iter == 3)
+    if( iter == 3 )
         return false;
 
-
-    
-    aWalk.SetShape(cur.CP(), cur.CN() );
-    Router()->GetClearanceFunc()->OverrideClearance ( false );
+    aWalk.SetShape( cur.CP(), cur.CN() );
+    Router()->GetClearanceFunc()->OverrideClearance( false );
 
     return true;
 }
 
-bool PNS_DIFF_PAIR_PLACER::tryWalkDp ( PNS_NODE* aNode, PNS_DIFF_PAIR &aPair, bool aSolidsOnly )
+
+bool PNS_DIFF_PAIR_PLACER::tryWalkDp( PNS_NODE* aNode, PNS_DIFF_PAIR &aPair, bool aSolidsOnly )
 {
     PNS_DIFF_PAIR best;
     double bestScore = 100000000000000.0;
 
-    for(int attempt = 0; attempt <= 1; attempt ++)
+    for( int attempt = 0; attempt <= 1; attempt++ )
     {
         PNS_DIFF_PAIR p;
         PNS_NODE *tmp = m_currentNode->Branch();
@@ -233,7 +239,7 @@ bool PNS_DIFF_PAIR_PLACER::tryWalkDp ( PNS_NODE* aNode, PNS_DIFF_PAIR &aPair, bo
         bool pfirst = attempt % 2 ? true : false;
         bool wind_cw = attempt / 2 ? true : false;
 
-        if ( attemptWalk ( tmp, &aPair, p, pfirst, wind_cw, aSolidsOnly ) )
+        if( attemptWalk ( tmp, &aPair, p, pfirst, wind_cw, aSolidsOnly ) )
         {
         //    double len = p.TotalLength();
             double cl = p.CoupledLength();
@@ -241,41 +247,42 @@ bool PNS_DIFF_PAIR_PLACER::tryWalkDp ( PNS_NODE* aNode, PNS_DIFF_PAIR &aPair, bo
 
             double score = cl + fabs(skew) * 3.0;
 
-            if(score < bestScore)
+            if( score < bestScore )
             {
                 bestScore = score;
                 best = p;
             }
         }
-    
+
         delete tmp;
     }
-    
-    if(bestScore > 0.0)
+
+    if( bestScore > 0.0 )
     {
         PNS_OPTIMIZER optimizer( m_currentNode );
 
-        aPair.SetShape ( best );
+        aPair.SetShape( best );
+        optimizer.Optimize( &aPair );
 
-        optimizer.Optimize ( &aPair );
         return true;
     }
-    
+
     return false;
 }
 
+
 bool PNS_DIFF_PAIR_PLACER::rhWalkOnly( const VECTOR2I& aP )
 {
-    if ( !routeHead ( aP ) )
+    if( !routeHead ( aP ) )
         return false;
 
-    m_fitOk = tryWalkDp ( m_currentNode, m_currentTrace, false );
+    m_fitOk = tryWalkDp( m_currentNode, m_currentTrace, false );
 
     return m_fitOk;
 }
 
 
-bool PNS_DIFF_PAIR_PLACER::route ( const VECTOR2I& aP )
+bool PNS_DIFF_PAIR_PLACER::route( const VECTOR2I& aP )
 {
     switch( m_currentMode )
     {
@@ -292,7 +299,8 @@ bool PNS_DIFF_PAIR_PLACER::route ( const VECTOR2I& aP )
     return false;
 }
 
-bool PNS_DIFF_PAIR_PLACER::rhShoveOnly ( const VECTOR2I& aP )
+
+bool PNS_DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
 {
     m_currentNode = m_shove->CurrentNode();
 
@@ -300,18 +308,18 @@ bool PNS_DIFF_PAIR_PLACER::rhShoveOnly ( const VECTOR2I& aP )
 
     m_fitOk  = false;
 
-    if(!ok)
+    if( !ok )
         return false;
 
-    if (!tryWalkDp ( m_currentNode, m_currentTrace, true ) )    
+    if( !tryWalkDp( m_currentNode, m_currentTrace, true ) )
         return false;
-    
-    PNS_LINE pLine ( m_currentTrace.PLine() );
-    PNS_LINE nLine ( m_currentTrace.NLine() );
+
+    PNS_LINE pLine( m_currentTrace.PLine() );
+    PNS_LINE nLine( m_currentTrace.NLine() );
     PNS_ITEMSET head;
 
-    head.Add ( &pLine );
-    head.Add ( &nLine );
+    head.Add( &pLine );
+    head.Add( &nLine );
 
     PNS_SHOVE::SHOVE_STATUS status = m_shove->ShoveMultiLines( head );
 
@@ -320,9 +328,9 @@ bool PNS_DIFF_PAIR_PLACER::rhShoveOnly ( const VECTOR2I& aP )
     if( status == PNS_SHOVE::SH_OK )
     {
         m_currentNode = m_shove->CurrentNode();
-    
-        if( !m_currentNode->CheckColliding ( &m_currentTrace.PLine() ) && 
-            !m_currentNode->CheckColliding ( &m_currentTrace.NLine() ) )
+
+        if( !m_currentNode->CheckColliding( &m_currentTrace.PLine() ) &&
+            !m_currentNode->CheckColliding( &m_currentTrace.NLine() ) )
         {
             m_fitOk = true;
         }
@@ -332,14 +340,13 @@ bool PNS_DIFF_PAIR_PLACER::rhShoveOnly ( const VECTOR2I& aP )
 }
 
 
-
 const PNS_ITEMSET PNS_DIFF_PAIR_PLACER::Traces()
 {
       PNS_ITEMSET t;
 
-      t.Add( const_cast<PNS_LINE *> ( &m_currentTrace.PLine( ) ) );
-      t.Add( const_cast<PNS_LINE *> ( &m_currentTrace.NLine( ) ) );
- 
+      t.Add( const_cast<PNS_LINE*>( &m_currentTrace.PLine() ) );
+      t.Add( const_cast<PNS_LINE*>( &m_currentTrace.NLine() ) );
+
       return t;
 }
 
@@ -348,8 +355,8 @@ void PNS_DIFF_PAIR_PLACER::FlipPosture()
 {
     m_startDiagonal = !m_startDiagonal;
 
-    if(!m_idle)
-        Move ( m_currentEnd, NULL );        
+    if( !m_idle )
+        Move( m_currentEnd, NULL );
 }
 
 
@@ -368,88 +375,97 @@ bool PNS_DIFF_PAIR_PLACER::SetLayer( int aLayer )
     {
         m_currentLayer = aLayer;
         return true;
-    } else if( m_chainedPlacement ) 
+    } else if( m_chainedPlacement )
         return false;
-    else if( !m_prevPair ) 
+    else if( !m_prevPair )
         return false;
-    else if( m_prevPair->PrimP() || ( m_prevPair->PrimP()->OfKind( PNS_ITEM::VIA ) && m_prevPair->PrimP()->Layers().Overlaps( aLayer ) ) ) {
+    else if( m_prevPair->PrimP() || ( m_prevPair->PrimP()->OfKind( PNS_ITEM::VIA ) &&
+                m_prevPair->PrimP()->Layers().Overlaps( aLayer ) ) )
+    {
         m_currentLayer = aLayer;
         m_start = *m_prevPair;
-        initPlacement ( false );
-        Move ( m_currentEnd, NULL );
+        initPlacement( false );
+        Move( m_currentEnd, NULL );
         return true;
     }
 
     return false;
 }
 
-int PNS_DIFF_PAIR_PLACER::matchDpSuffix ( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName ) 
+
+int PNS_DIFF_PAIR_PLACER::matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName )
 {
     int rv = 0;
-    if (aNetName.EndsWith("+"))
+
+    if( aNetName.EndsWith( "+" ) )
     {
         aComplementNet = "-";
         rv = 1;
-    } else if (aNetName.EndsWith("_P"))
+    }
+    else if( aNetName.EndsWith( "_P" ) )
     {
         aComplementNet = "_N";
         rv = 1;
-    } else if (aNetName.EndsWith("-"))
+    }
+    else if( aNetName.EndsWith( "-" ) )
     {
         aComplementNet = "+";
         rv = -1;
-    } else if (aNetName.EndsWith("_N"))
+    }
+    else if( aNetName.EndsWith( "_N" ) )
     {
         aComplementNet = "_P";
         rv = -1;
     }
 
-    if (rv != 0) {
-        aBaseDpName = aNetName.Left ( aNetName.Length() - aComplementNet.Length() );
+    if( rv != 0 )
+    {
+        aBaseDpName = aNetName.Left( aNetName.Length() - aComplementNet.Length() );
     }
 
     return rv;
 }
 
-OPT_VECTOR2I PNS_DIFF_PAIR_PLACER::getDanglingAnchor ( PNS_NODE *aNode, PNS_ITEM *aItem )
+
+OPT_VECTOR2I PNS_DIFF_PAIR_PLACER::getDanglingAnchor( PNS_NODE* aNode, PNS_ITEM* aItem )
 {
-    switch(aItem->Kind())
+    switch( aItem->Kind() )
     {
         case PNS_ITEM::VIA:
         case PNS_ITEM::SOLID:
-            return aItem->Anchor(0);
+            return aItem->Anchor( 0 );
 
         case PNS_ITEM::SEGMENT:
         {
-            PNS_SEGMENT *s =static_cast<PNS_SEGMENT*> ( aItem );
+            PNS_SEGMENT* s =static_cast<PNS_SEGMENT*>( aItem );
 
-            PNS_JOINT *jA = aNode->FindJoint( s->Seg().A, s );
-            PNS_JOINT *jB = aNode->FindJoint( s->Seg().B, s );
+            PNS_JOINT* jA = aNode->FindJoint( s->Seg().A, s );
+            PNS_JOINT* jB = aNode->FindJoint( s->Seg().B, s );
 
-            if(jA->LinkCount() == 1)
+            if( jA->LinkCount() == 1 )
                 return s->Seg().A;
-            else if (jB->LinkCount() == 1)
+            else if( jB->LinkCount() == 1 )
                 return s->Seg().B;
-            else 
+            else
                 return OPT_VECTOR2I();
         }
+
         default:
             return OPT_VECTOR2I();
             break;
     }
 }
 
-bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair ( const VECTOR2I& aP, PNS_ITEM *aItem, PNS_DP_PRIMITIVE_PAIR& aPair )
-{  
-    
-    if(!aItem || !aItem->Parent() || !aItem->Parent()->GetNet() )
+
+bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aItem, PNS_DP_PRIMITIVE_PAIR& aPair )
+{
+    if( !aItem || !aItem->Parent() || !aItem->Parent()->GetNet() )
         return false;
 
     wxString netNameP = aItem->Parent()->GetNet()->GetNetname();
     wxString netNameN, netNameBase;
 
-
-    BOARD *brd = Router()->GetBoard();
+    BOARD* brd = Router()->GetBoard();
     PNS_ITEM *primRef = NULL, *primP = NULL, *primN = NULL;
 
   //  printf("Current %p\n", m_currentNode);
@@ -459,61 +475,65 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair ( const VECTOR2I& aP, PNS_ITEM *a
 
     int r = matchDpSuffix ( netNameP, suffix, netNameBase );
 
-    if(r == 0)
+    if( r == 0 )
         return false;
-    else if(r == 1)
+    else if( r == 1 )
     {
-        primRef = primP = static_cast <PNS_SOLID *> (aItem);
+        primRef = primP = static_cast<PNS_SOLID*>( aItem );
         netNameN = netNameBase + suffix;
-    } else {
-        primRef = primN = static_cast <PNS_SOLID *> (aItem);
+    }
+    else
+    {
+        primRef = primN = static_cast<PNS_SOLID*>( aItem );
         netNameN = netNameP;
         netNameP = netNameBase + suffix;
     }
 
-    int netP = brd->FindNet ( netNameP )->GetNet();
-    int netN = brd->FindNet ( netNameN )->GetNet();
-    
-    if ( primP )
+    int netP = brd->FindNet( netNameP )->GetNet();
+    int netN = brd->FindNet( netNameN )->GetNet();
+
+    if( primP )
         refNet = netN;
     else
         refNet = netP;
-    
+
 //    printf("Net: P: %s N: %s\n", (const char *)(netNameP.c_str()), (const char *)(netNameN.c_str()));
 
     std::set<PNS_ITEM*> items;
 
-    OPT_VECTOR2I refAnchor = getDanglingAnchor ( m_currentNode, primRef );
+    OPT_VECTOR2I refAnchor = getDanglingAnchor( m_currentNode, primRef );
 
-    if(!refAnchor)    
+    if( !refAnchor )
         return false;
-    
+
     m_currentNode->AllItemsInNet( refNet, items );
     double bestDist = std::numeric_limits<double>::max();
     bool found = false;
 
-    BOOST_FOREACH (PNS_ITEM *item, items)
+    BOOST_FOREACH(PNS_ITEM* item, items )
     {
-        if ( item->Kind() == aItem->Kind() )
+        if( item->Kind() == aItem->Kind() )
         {
-            OPT_VECTOR2I anchor = getDanglingAnchor ( m_currentNode, item );
-            if(!anchor)
+            OPT_VECTOR2I anchor = getDanglingAnchor( m_currentNode, item );
+            if( !anchor )
                 continue;
 
-            double dist =  (*anchor - *refAnchor).EuclideanNorm();
-            
-            if (dist < bestDist)
+            double dist = ( *anchor - *refAnchor ).EuclideanNorm();
+
+            if( dist < bestDist )
             {
                 found = true;
                 bestDist = dist;
-                        
-                if (refNet == netP)
+
+                if( refNet == netP )
                 {
                     aPair = PNS_DP_PRIMITIVE_PAIR ( item, primRef );
-                    aPair.SetAnchors ( *anchor, *refAnchor );
-                } else {
-                    aPair = PNS_DP_PRIMITIVE_PAIR ( primRef, item );
-                    aPair.SetAnchors ( *refAnchor, *anchor );
+                    aPair.SetAnchors( *anchor, *refAnchor );
+                }
+                else
+                {
+                    aPair = PNS_DP_PRIMITIVE_PAIR( primRef, item );
+                    aPair.SetAnchors( *refAnchor, *anchor );
                 }
             }
         }
@@ -528,10 +548,12 @@ int PNS_DIFF_PAIR_PLACER::viaGap() const
     return m_sizes.DiffPairViaGap();
 }
 
+
 int PNS_DIFF_PAIR_PLACER::gap() const
 {
     return m_sizes.DiffPairGap() + m_sizes.DiffPairWidth();
 }
+
 
 bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
@@ -542,7 +564,7 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     if( Router()->SnappingEnabled() )
         p = Router()->SnapToItem( aStartItem, aP, split );
 
-    if(!aStartItem)
+    if( !aStartItem )
     {
         Router()->SetFailureReason( _( "Can't start a differential pair "
                                        " in the middle of nowhere." ) );
@@ -553,7 +575,7 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     m_currentNode = Router()->GetWorld();
 
-    if (!findDpPrimitivePair(aP, aStartItem, m_start ) )
+    if( !findDpPrimitivePair( aP, aStartItem, m_start ) )
     {
         Router()->SetFailureReason( _( "Unable to find complementary differential pair "
                                        "net. Make sure the names of the nets belonging "
@@ -572,6 +594,7 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     initPlacement( false );
     return true;
 }
+
 
 void PNS_DIFF_PAIR_PLACER::initPlacement( bool aSplitSeg )
 {
@@ -598,7 +621,7 @@ void PNS_DIFF_PAIR_PLACER::initPlacement( bool aSplitSeg )
         delete m_shove;
 
     m_shove = NULL;
-    
+
     if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
     {
         m_shove = new PNS_SHOVE( m_currentNode, Router() );
@@ -609,57 +632,56 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 {
     m_fitOk = false;
 
-    PNS_DP_GATEWAYS gwsEntry  ( gap() );
-    PNS_DP_GATEWAYS gwsTarget ( gap() );
+    PNS_DP_GATEWAYS gwsEntry( gap() );
+    PNS_DP_GATEWAYS gwsTarget( gap() );
 
-
-    if(!m_prevPair)
+    if( !m_prevPair )
         m_prevPair = m_start;
 
-    gwsEntry.BuildFromPrimitivePair ( *m_prevPair, m_startDiagonal );
+    gwsEntry.BuildFromPrimitivePair( *m_prevPair, m_startDiagonal );
 
     PNS_DP_PRIMITIVE_PAIR target;
-    
-    if (findDpPrimitivePair ( aP, m_currentEndItem, target ))
+
+    if( findDpPrimitivePair ( aP, m_currentEndItem, target ) )
     {
         gwsTarget.BuildFromPrimitivePair( target, m_startDiagonal );
         m_snapOnTarget = true;
     } else {
         VECTOR2I fp;
 
-        if( !propagateDpHeadForces ( aP, fp ) )
+        if( !propagateDpHeadForces( aP, fp ) )
             return false;
 
-        gwsTarget.SetFitVias ( m_placingVia, m_sizes.ViaDiameter(), viaGap() );
-        gwsTarget.BuildForCursor ( fp );
-        gwsTarget.BuildOrthoProjections ( gwsEntry, fp, m_orthoMode ? 200 : -200 );
+        gwsTarget.SetFitVias( m_placingVia, m_sizes.ViaDiameter(), viaGap() );
+        gwsTarget.BuildForCursor( fp );
+        gwsTarget.BuildOrthoProjections( gwsEntry, fp, m_orthoMode ? 200 : -200 );
         m_snapOnTarget = false;
     }
 
     m_currentTrace = PNS_DIFF_PAIR();
-    m_currentTrace.SetGap ( gap() );
+    m_currentTrace.SetGap( gap() );
     m_currentTrace.SetLayer( m_currentLayer );
 
-    
-    if ( gwsEntry.FitGateways(gwsEntry, gwsTarget, m_startDiagonal, m_currentTrace ) )
+    if ( gwsEntry.FitGateways( gwsEntry, gwsTarget, m_startDiagonal, m_currentTrace ) )
     {
-        m_currentTrace.SetNets ( m_netP, m_netN );
-        m_currentTrace.SetWidth ( m_sizes.DiffPairWidth() );
-        m_currentTrace.SetGap ( m_sizes.DiffPairGap() );
-    
-        if(m_placingVia)
+        m_currentTrace.SetNets( m_netP, m_netN );
+        m_currentTrace.SetWidth( m_sizes.DiffPairWidth() );
+        m_currentTrace.SetGap( m_sizes.DiffPairGap() );
+
+        if( m_placingVia )
         {
-            m_currentTrace.AppendVias ( makeVia ( m_currentTrace.CP().CPoint(-1), m_netP ), 
+            m_currentTrace.AppendVias ( makeVia ( m_currentTrace.CP().CPoint(-1), m_netP ),
                                         makeVia ( m_currentTrace.CN().CPoint(-1), m_netN ) );
         }
+
         return true;
     }
 
     return false;
-
 }
 
-bool PNS_DIFF_PAIR_PLACER::Move(const VECTOR2I& aP , PNS_ITEM* aEndItem )
+
+bool PNS_DIFF_PAIR_PLACER::Move( const VECTOR2I& aP , PNS_ITEM* aEndItem )
 {
     m_currentEndItem = aEndItem;
     m_fitOk = false;
@@ -667,13 +689,13 @@ bool PNS_DIFF_PAIR_PLACER::Move(const VECTOR2I& aP , PNS_ITEM* aEndItem )
     delete m_lastNode;
     m_lastNode = NULL;
 
-    if ( !route( aP ) )
+    if( !route( aP ) )
         return false;
 
     PNS_NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
 
-    assert  (m_lastNode != NULL);
+    assert( m_lastNode != NULL );
     m_currentEnd = aP;
 
     updateLeadingRatLine();
@@ -681,42 +703,45 @@ bool PNS_DIFF_PAIR_PLACER::Move(const VECTOR2I& aP , PNS_ITEM* aEndItem )
     return true;
 }
 
+
 void PNS_DIFF_PAIR_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
 {
     m_sizes = aSizes;
+
     if( !m_idle )
     {
-        initPlacement ( );
-        Move ( m_currentEnd, NULL );
+        initPlacement();
+        Move( m_currentEnd, NULL );
     }
 }
 
+
 bool PNS_DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
-    if (!m_fitOk)
+    if( !m_fitOk )
         return false;
 
-    if (m_currentTrace.CP().SegmentCount() < 1 || 
-        m_currentTrace.CN().SegmentCount() < 1 )
+    if( m_currentTrace.CP().SegmentCount() < 1 ||
+            m_currentTrace.CN().SegmentCount() < 1 )
         return false;
 
-    if( m_currentTrace.CP().SegmentCount() > 1)
-        m_initialDiagonal = !DIRECTION_45( m_currentTrace.CP().CSegment(-2) ).IsDiagonal();
-    
-    PNS_TOPOLOGY topo ( m_lastNode );
-    
-    if( !m_snapOnTarget && !m_currentTrace.EndsWithVias()  )
+    if( m_currentTrace.CP().SegmentCount() > 1 )
+        m_initialDiagonal = !DIRECTION_45( m_currentTrace.CP().CSegment( -2 ) ).IsDiagonal();
+
+    PNS_TOPOLOGY topo( m_lastNode );
+
+    if( !m_snapOnTarget && !m_currentTrace.EndsWithVias() )
     {
         SHAPE_LINE_CHAIN newP ( m_currentTrace.CP() );
         SHAPE_LINE_CHAIN newN ( m_currentTrace.CN() );
-            
-        if( newP.SegmentCount() > 1 && newN.SegmentCount() > 1)
+
+        if( newP.SegmentCount() > 1 && newN.SegmentCount() > 1 )
         {
-            newP.Remove(-1, -1);
-            newN.Remove(-1, -1);
+            newP.Remove( -1, -1 );
+            newN.Remove( -1, -1 );
         }
 
-        m_currentTrace.SetShape ( newP, newN );
+        m_currentTrace.SetShape( newP, newN );
     }
 
     if( m_currentTrace.EndsWithVias() )
@@ -727,11 +752,11 @@ bool PNS_DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     } else
         m_chainedPlacement = !m_snapOnTarget;
 
-    PNS_LINE lineP ( m_currentTrace.PLine() );
-    PNS_LINE lineN ( m_currentTrace.NLine() );
-        
-    m_lastNode->Add ( &lineP );
-    m_lastNode->Add ( &lineN );
+    PNS_LINE lineP( m_currentTrace.PLine() );
+    PNS_LINE lineN( m_currentTrace.NLine() );
+
+    m_lastNode->Add( &lineP );
+    m_lastNode->Add( &lineN );
 
     topo.SimplifyLine( &lineP );
     topo.SimplifyLine( &lineN );
@@ -742,12 +767,14 @@ bool PNS_DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     m_lastNode = NULL;
     m_placingVia = false;
-    
-    if(m_snapOnTarget)
+
+    if( m_snapOnTarget )
     {
         m_idle = true;
-        return true;   
-    } else {
+        return true;
+    }
+    else
+    {
         initPlacement();
         return false;
     }
@@ -760,19 +787,19 @@ void PNS_DIFF_PAIR_PLACER::GetModifiedNets( std::vector<int> &aNets ) const
     aNets.push_back( m_netN );
 }
 
+
 void PNS_DIFF_PAIR_PLACER::updateLeadingRatLine()
 {
     SHAPE_LINE_CHAIN ratLineN, ratLineP;
-    PNS_TOPOLOGY topo ( m_lastNode );
+    PNS_TOPOLOGY topo( m_lastNode );
 
-    if( topo.LeadingRatLine ( &m_currentTrace.PLine(), ratLineP ))
+    if( topo.LeadingRatLine( &m_currentTrace.PLine(), ratLineP ) )
     {
         Router()->DisplayDebugLine( ratLineP, 1, 10000 );
-    } 
+    }
 
-    if( topo.LeadingRatLine ( &m_currentTrace.NLine(), ratLineN ))
+    if( topo.LeadingRatLine ( &m_currentTrace.NLine(), ratLineN ) )
     {
         Router()->DisplayDebugLine( ratLineN, 3, 10000 );
-    } 
-
+    }
 }

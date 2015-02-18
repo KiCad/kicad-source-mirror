@@ -61,22 +61,22 @@ TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
         AS_CONTEXT, MD_CTRL + 'E',
-        "Open in Footprint Editor", 
+        "Open in Footprint Editor",
         "Opens the selected footprint in the Footprint Editor" );
 
 TOOL_ACTION COMMON_ACTIONS::copyPadToSettings ( "pcbnew.InteractiveEdit.copyPadToSettings",
         AS_CONTEXT, 0,
-        "Copy pad settings to Current Settings", 
+        "Copy pad settings to Current Settings",
         "Copies the properties of selected pad to the current template pad settings." );
 
 TOOL_ACTION COMMON_ACTIONS::copySettingsToPads ( "pcbnew.InteractiveEdit.copySettingsToPads",
         AS_CONTEXT, 0,
-        "Copy Current Settings to pads", 
+        "Copy Current Settings to pads",
         "Copies the current template pad settings to the selected pad(s)." );
 
 TOOL_ACTION COMMON_ACTIONS::globalEditPads ( "pcbnew.InteractiveEdit.globalPadEdit",
         AS_CONTEXT, 0,
-        "Global Pad Edition", 
+        "Global Pad Edition",
         "Changes pad properties globally." );
 
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
@@ -481,13 +481,13 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_TUNE_SINGLE_TRACK_LEN_BUTT:
         return COMMON_ACTIONS::routerActivateTuneSingleTrace.MakeEvent();
-    
+
     case ID_TUNE_DIFF_PAIR_LEN_BUTT:
         return COMMON_ACTIONS::routerActivateTuneDiffPair.MakeEvent();
-    
+
     case ID_TUNE_DIFF_PAIR_SKEW_BUTT:
         return COMMON_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent();
-    
+
     case ID_MENU_INTERACTIVE_ROUTER_SETTINGS:
         return COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent();
 

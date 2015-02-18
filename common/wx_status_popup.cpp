@@ -29,35 +29,37 @@
 #include <wx_status_popup.h>
 #include <wxPcbStruct.h>
 
-WX_STATUS_POPUP::WX_STATUS_POPUP ( PCB_EDIT_FRAME *parent ) : 
-    wxPopupWindow ( parent )
+WX_STATUS_POPUP::WX_STATUS_POPUP( PCB_EDIT_FRAME* aParent ) :
+    wxPopupWindow( aParent )
 {
     m_panel = new wxPanel( this, wxID_ANY );
     m_panel->SetBackgroundColour( *wxLIGHT_GREY );
 
     m_topSizer = new wxBoxSizer( wxVERTICAL );
     m_panel->SetSizer( m_topSizer );
-
 }
+
 
 void WX_STATUS_POPUP::updateSize()
 {
     m_topSizer->Fit( m_panel );
-    SetClientSize( m_panel->GetSize( ) );
+    SetClientSize( m_panel->GetSize() );
 }
+
 
 WX_STATUS_POPUP::~WX_STATUS_POPUP()
 {
 }
 
-void WX_STATUS_POPUP::Popup(wxWindow *focus)
+
+void WX_STATUS_POPUP::Popup( wxWindow* )
 {
-    Show(true);
+    Show( true );
     Raise();
 }
+
 
 void WX_STATUS_POPUP::Move( const wxPoint& aWhere )
 {
     SetPosition ( aWhere );
 }
-    

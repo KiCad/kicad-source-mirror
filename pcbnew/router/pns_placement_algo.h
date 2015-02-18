@@ -34,7 +34,7 @@ class PNS_NODE;
 /**
  * Class PNS_PLACEMENT_ALGO
  *
- * Abstract class for a P&S placement/dragging algorithm. 
+ * Abstract class for a P&S placement/dragging algorithm.
  * All subtools (drag, single/diff pair routing and meandering)
  * are derived from it.
  */
@@ -44,7 +44,7 @@ class PNS_PLACEMENT_ALGO : public PNS_ALGO_BASE
 public:
     PNS_PLACEMENT_ALGO( PNS_ROUTER* aRouter ) :
         PNS_ALGO_BASE( aRouter ) {};
-    
+
     virtual ~PNS_PLACEMENT_ALGO () {};
 
     /**
@@ -90,8 +90,8 @@ public:
      *
      * Returns true if the placer is placing a via (or more vias).
      */
-    virtual bool IsPlacingVia() const 
-    { 
+    virtual bool IsPlacingVia() const
+    {
         return false;
     }
 
@@ -119,14 +119,14 @@ public:
      * to the cursor position due to collisions.
      */
     virtual const VECTOR2I& CurrentEnd() const = 0;
-    
+
     /**
      * Function CurrentNet()
      *
      * Returns the net code of currently routed track.
      */
     virtual int CurrentNet() const = 0;
-    
+
     /**
      * Function CurrentLayer()
      *
@@ -146,9 +146,8 @@ public:
      *
      * Toggles the current posture (straight/diagonal) of the trace head.
      */
-    virtual void FlipPosture() 
+    virtual void FlipPosture()
     {
-
     }
 
     /**
@@ -160,19 +159,17 @@ public:
      */
     virtual void UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
     {
-
     }
 
     /**
      * Function SetOrthoMode()
-     * 
+     *
      * Forces the router to place a straight 90/45 degree trace (with the end
      * as near to the cursor as possible) instead of a standard 135 degree
      * two-segment bend.
      */
     virtual void SetOrthoMode ( bool aOrthoMode )
     {
-
     }
 
     /**
@@ -180,9 +177,8 @@ public:
      *
      * Returns the net codes of all currently routed trace(s)
      */
-    virtual void GetModifiedNets( std::vector<int> &aNets ) const 
+    virtual void GetModifiedNets( std::vector<int> &aNets ) const
     {
-
     }
 };
 

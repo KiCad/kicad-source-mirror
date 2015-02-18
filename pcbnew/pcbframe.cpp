@@ -70,7 +70,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/common_actions.h>
 
-
 #include <scripting/python_console_frame.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
@@ -537,7 +536,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Register tools
-    registerAllTools ( m_toolManager );
+    registerAllTools( m_toolManager );
 
     m_toolManager->ResetTools( TOOL_BASE::RUN );
 

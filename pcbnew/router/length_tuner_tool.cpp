@@ -86,7 +86,7 @@ public:
     TUNER_TOOL_MENU( BOARD* aBoard )
     {
         SetTitle( wxT( "Length Tuner" ) );
-        
+
         //Add( ACT_StartTuning );
         //Add( ACT_EndTuning );
 
@@ -96,7 +96,7 @@ public:
         Add( ACT_SpacingDecrease );
         Add( ACT_AmplIncrease );
         Add( ACT_AmplDecrease );
-        Add( ACT_Settings );        
+        Add( ACT_Settings );
     }
 };
 
@@ -106,10 +106,11 @@ LENGTH_TUNER_TOOL::~LENGTH_TUNER_TOOL()
     delete m_router;
 }
 
+
 void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 {
     PNS_TOOL_BASE::Reset( aReason );
-    
+
     Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, COMMON_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::TuneDiffPair, COMMON_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, COMMON_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
@@ -128,9 +129,9 @@ void LENGTH_TUNER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
         }
     }
 
-    PNS_MEANDER_PLACER_BASE *placer = static_cast <PNS_MEANDER_PLACER_BASE *> ( m_router->Placer() );
+    PNS_MEANDER_PLACER_BASE* placer = static_cast<PNS_MEANDER_PLACER_BASE*>( m_router->Placer() );
 
-    if (!placer)
+    if( !placer )
         return;
 
     if( aEvent.IsAction( &ACT_Settings ) )
@@ -143,15 +144,16 @@ void LENGTH_TUNER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
             placer->UpdateSettings ( settings );
         }
 
-        m_savedMeanderSettings = placer->MeanderSettings( );
+        m_savedMeanderSettings = placer->MeanderSettings();
     }
 }
+
 
 void LENGTH_TUNER_TOOL::performTuning()
 {
     bool saveUndoBuffer = true;
-    
-    if(m_startItem)
+
+    if( m_startItem )
     {
         m_frame->SetActiveLayer( ToLAYER_ID ( m_startItem->Layers().Start() ) );
 
@@ -162,21 +164,20 @@ void LENGTH_TUNER_TOOL::performTuning()
     m_ctls->ForceCursorPosition( false );
     m_ctls->SetAutoPan( true );
 
-    if ( !m_router->StartRouting( m_startSnapPoint, m_startItem, 0 ) )
+    if( !m_router->StartRouting( m_startSnapPoint, m_startItem, 0 ) )
     {
-        wxMessageBox ( m_router->FailureReason(), _("Error") );
-        highlightNet ( false );
+        wxMessageBox( m_router->FailureReason(), _( "Error" ) );
+        highlightNet( false );
         return;
     }
 
-    PNS_TUNE_STATUS_POPUP statusPopup ( m_frame );
+    PNS_TUNE_STATUS_POPUP statusPopup( m_frame );
     statusPopup.Popup();
 
-    PNS_MEANDER_PLACER *placer = static_cast <PNS_MEANDER_PLACER *> ( m_router->Placer() );
+    PNS_MEANDER_PLACER* placer = static_cast<PNS_MEANDER_PLACER*>( m_router->Placer() );
     VECTOR2I end;
 
     placer->UpdateSettings( m_savedMeanderSettings );
-
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -194,10 +195,10 @@ void LENGTH_TUNER_TOOL::performTuning()
 
             wxPoint p = wxGetMousePosition();
 
-            p.x+=20;
-            p.y+=20;
+            p.x += 20;
+            p.y += 20;
 
-            statusPopup.Update ( m_router );
+            statusPopup.Update( m_router );
             statusPopup.Move( p );
         }
         else if( evt->IsClick( BUT_LEFT ) )
@@ -209,16 +210,24 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             if( m_router->FixRoute( end, NULL ) )
                 break;
-        } else if (evt->IsAction ( &ACT_AmplDecrease ) ) {
+        }
+        else if( evt->IsAction( &ACT_AmplDecrease ) )
+        {
             placer->AmplitudeStep( -1 );
             m_router->Move( end, NULL );
-        } else if (evt->IsAction ( &ACT_AmplIncrease ) ) {
+        }
+        else if( evt->IsAction( &ACT_AmplIncrease ) )
+        {
             placer->AmplitudeStep( 1 );
             m_router->Move( end, NULL );
-        } else if (evt->IsAction ( &ACT_SpacingDecrease ) ) {
+        }
+        else if(evt->IsAction( &ACT_SpacingDecrease ) )
+        {
             placer->SpacingStep( -1 );
             m_router->Move( end, NULL );
-        } else if (evt->IsAction ( &ACT_SpacingIncrease ) ) {
+        }
+        else if( evt->IsAction( &ACT_SpacingIncrease ) )
+        {
             placer->SpacingStep( 1 );
             m_router->Move( end, NULL );
         }
@@ -244,27 +253,29 @@ void LENGTH_TUNER_TOOL::performTuning()
     m_ctls->SetAutoPan( false );
     m_ctls->ForceCursorPosition( false );
     highlightNet( false );
-
 }
 
-int LENGTH_TUNER_TOOL::TuneSingleTrace ( const TOOL_EVENT& aEvent )
+
+int LENGTH_TUNER_TOOL::TuneSingleTrace( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Trace Length" ) );
     return mainLoop( PNS_MODE_TUNE_SINGLE );
 }
 
-int LENGTH_TUNER_TOOL::TuneDiffPair ( const TOOL_EVENT& aEvent )
+
+int LENGTH_TUNER_TOOL::TuneDiffPair( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Length" ) );
     return mainLoop( PNS_MODE_TUNE_DIFF_PAIR );
 }
 
-int LENGTH_TUNER_TOOL::TuneDiffPairSkew ( const TOOL_EVENT& aEvent )
+
+int LENGTH_TUNER_TOOL::TuneDiffPairSkew( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Skew" ) );
     return mainLoop( PNS_MODE_TUNE_DIFF_PAIR_SKEW );
 }
-    
+
 
 int LENGTH_TUNER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 {
@@ -273,13 +284,13 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
     Activate();
 
-    m_router->SetMode ( aMode );
-    
+    m_router->SetMode( aMode );
+
     m_ctls->SetSnapping( true );
     m_ctls->ShowCursor( true );
 
-    std::auto_ptr<TUNER_TOOL_MENU> ctxMenu ( new TUNER_TOOL_MENU( m_board ) );
-    SetContextMenu ( ctxMenu.get() );
+    std::auto_ptr<TUNER_TOOL_MENU> ctxMenu( new TUNER_TOOL_MENU( m_board ) );
+    SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -300,7 +311,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
         else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACT_StartTuning ) )
         {
             updateStartItem( *evt );
-            performTuning( );            
+            performTuning( );
         }
 
         handleCommonEvents( *evt );

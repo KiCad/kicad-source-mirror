@@ -48,13 +48,12 @@ class PNS_ROUTER_BASE;
 class PNS_DP_MEANDER_PLACER : public PNS_MEANDER_PLACER_BASE
 {
 public:
- 
     PNS_DP_MEANDER_PLACER( PNS_ROUTER* aRouter );
     ~PNS_DP_MEANDER_PLACER();
 
     /**
      * Function Start()
-     * 
+     *
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL).
      */
@@ -62,8 +61,8 @@ public:
 
     /**
      * Function Move()
-     * 
-     * Moves the end of the currently routed trace to the point aP, taking 
+     *
+     * Moves the end of the currently routed trace to the point aP, taking
      * aEndItem as anchor (if not NULL).
      * (unless NULL).
      */
@@ -71,7 +70,7 @@ public:
 
     /**
      * Function FixRoute()
-     * 
+     *
      * Commits the currently routed track to the parent node, taking
      * aP as the final end point and aEndItem as the final anchor (if provided).
      * @return true, if route has been commited. May return false if the routing
@@ -79,7 +78,7 @@ public:
      * if Settings.CanViolateDRC() is on.
      */
     bool FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem );
-    
+
     const PNS_LINE Trace() const;
 
     /**
@@ -88,39 +87,36 @@ public:
      * Returns the most recent world state.
      */
     PNS_NODE* CurrentNode( bool aLoopsRemoved = false ) const;
-    
+
     const PNS_ITEMSET Traces();
 
     const VECTOR2I& CurrentEnd() const;
-    
+
     int CurrentNet() const;
     int CurrentLayer() const;
-
 
     int totalLength();
 
     const wxString TuningInfo() const;
     TUNING_STATUS TuningStatus() const;
 
-    bool CheckFit ( PNS_MEANDER_SHAPE* aShape );
+    bool CheckFit( PNS_MEANDER_SHAPE* aShape );
 
-    
+
 private:
     friend class PNS_MEANDER_SHAPE;
-    
+
     void meanderSegment ( const SEG& aBase );
 
-
-    
 //    void addMeander ( PNS_MEANDER *aM );
 //    void addCorner ( const VECTOR2I& aP );
 
-    const SEG baselineSegment ( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs );
+    const SEG baselineSegment( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs );
 
-    void setWorld ( PNS_NODE* aWorld );
+    void setWorld( PNS_NODE* aWorld );
     void release();
 
-    int origPathLength () const;
+    int origPathLength() const;
 
     ///> pointer to world to search colliding items
     PNS_NODE* m_world;
@@ -139,7 +135,7 @@ private:
 
     SHAPE_LINE_CHAIN m_finalShapeP, m_finalShapeN;
     PNS_MEANDERED_LINE m_result;
-    PNS_SEGMENT *m_initialSegment;
+    PNS_SEGMENT* m_initialSegment;
 
     int m_lastLength;
     TUNING_STATUS m_lastStatus;

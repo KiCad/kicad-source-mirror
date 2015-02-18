@@ -116,10 +116,10 @@ public:
     static TOOL_ACTION arcPosture;
 
     // Push and Shove Router Tool
-       
+
     /// Activation of the Push and Shove router
     static TOOL_ACTION routerActivateSingle;
-    
+
     /// Activation of the Push and Shove router (differential pair mode)
     static TOOL_ACTION routerActivateDiffPair;
 
@@ -128,14 +128,14 @@ public:
 
     /// Activation of the Push and Shove router (diff pair tuning mode)
     static TOOL_ACTION routerActivateTuneDiffPair;
-    
+
     /// Activation of the Push and Shove router (skew tuning mode)
     static TOOL_ACTION routerActivateTuneDiffPairSkew;
 
     /// Activation of the Push and Shove settings dialogs
     static TOOL_ACTION routerActivateSettingsDialog;
     static TOOL_ACTION routerActivateDpDimensionsDialog;
-        
+
 
     /// Activation of the Push and Shove router (inline dragging mode)
     static TOOL_ACTION routerInlineDrag;

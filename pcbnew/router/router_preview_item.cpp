@@ -57,16 +57,15 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
 {
     m_originLayer = aItem->Layers().Start();
 
-
-    if (aItem->OfKind ( PNS_ITEM::LINE ))
+    if( aItem->OfKind ( PNS_ITEM::LINE ) )
     {
-        const PNS_LINE *l=static_cast<const PNS_LINE *> (aItem);
-        if(!l->SegmentCount())
+        const PNS_LINE* l=static_cast<const PNS_LINE*>( aItem );
+        if( !l->SegmentCount() )
             return;
     }
 
     assert( m_originLayer >= 0 );
-    
+
     m_layer = m_originLayer;
     m_color = getLayerColor( m_originLayer );
     m_color.a = 0.8;
@@ -139,7 +138,7 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
 }
 
 
-void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN &aL, KIGFX::GAL* aGal ) const
+void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL* aGal ) const
 {
     for( int s = 0; s < aL.SegmentCount(); s++ )
         aGal->DrawLine( aL.CSegment( s ).A, aL.CSegment( s ).B );

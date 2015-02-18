@@ -815,11 +815,13 @@ void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
     }
 }
 
+
 const BOX2I MODULE::ViewBBox() const
 {
     return BOX2I( VECTOR2I( GetFootprintRect().GetOrigin() ),
-                  VECTOR2I( GetFootprintRect().GetSize() ) );
+                   VECTOR2I( GetFootprintRect().GetSize() ) );
 }
+
 
 void MODULE::ViewUpdate( int aUpdateFlags )
 {
@@ -1115,6 +1117,7 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
+
 double MODULE::PadCoverageRatio() const
 {
     double padArea = 0.0;
@@ -1128,5 +1131,5 @@ double MODULE::PadCoverageRatio() const
 
     double ratio = padArea / moduleArea;
 
-    return std::min(ratio, 1.0);
+    return std::min( ratio, 1.0 );
 }

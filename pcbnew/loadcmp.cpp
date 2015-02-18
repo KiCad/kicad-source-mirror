@@ -63,7 +63,7 @@ static void DisplayCmpDoc( wxString& aName, void* aData );
 
 static FOOTPRINT_LIST MList;
 
-static void clearModuleItemFlags ( BOARD_ITEM *aItem )
+static void clearModuleItemFlags( BOARD_ITEM* aItem )
 {
     aItem->ClearFlags();
 }

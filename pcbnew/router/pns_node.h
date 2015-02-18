@@ -55,10 +55,9 @@ public:
     virtual ~PNS_CLEARANCE_FUNC() {}
     virtual int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB ) = 0;
     virtual void OverrideClearance (bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0) = 0;
-    
 };
 
-class PNS_PCBNEW_CLEARANCE_FUNC : public PNS_CLEARANCE_FUNC 
+class PNS_PCBNEW_CLEARANCE_FUNC : public PNS_CLEARANCE_FUNC
 {
 public:
     PNS_PCBNEW_CLEARANCE_FUNC( BOARD *aBoard );
@@ -297,7 +296,7 @@ public:
      * @param aOriginSegmentIndex index of aSeg in the resulting line
      * @return the line
      */
-    PNS_LINE* AssembleLine( PNS_SEGMENT* aSeg, int *aOriginSegmentIndex = NULL );
+    PNS_LINE* AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex = NULL );
 
     ///> Prints the contents and joints structure
     void Dump( bool aLong = false );
@@ -365,7 +364,7 @@ public:
 
     int FindByMarker( int aMarker, PNS_ITEMSET& aItems );
     int RemoveByMarker( int aMarker );
-    void SetCollisionFilter ( PNS_COLLISION_FILTER *aFilter );
+    void SetCollisionFilter( PNS_COLLISION_FILTER* aFilter );
 
 private:
     struct OBSTACLE_VISITOR;

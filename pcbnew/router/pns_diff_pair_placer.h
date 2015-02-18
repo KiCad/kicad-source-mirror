@@ -161,11 +161,11 @@ public:
 
     bool IsPlacingVia() const { return m_placingVia; }
 
-    void SetOrthoMode ( bool aOrthoMode );
+    void SetOrthoMode( bool aOrthoMode );
 
-    void GetModifiedNets( std::vector<int> &aNets ) const;
+    void GetModifiedNets( std::vector<int>& aNets ) const;
+
 private:
-
     int viaGap() const;
     int gap() const;
 
@@ -212,10 +212,10 @@ private:
      */
     void setInitialDirection( const DIRECTION_45& aDirection );
 
-    
+
     bool routeHead( const VECTOR2I& aP );
-    bool tryWalkDp ( PNS_NODE* aNode, PNS_DIFF_PAIR &aPair, bool aSolidsOnly );
-    
+    bool tryWalkDp( PNS_NODE* aNode, PNS_DIFF_PAIR& aPair, bool aSolidsOnly );
+
     ///> route step, walkaround mode
     bool rhWalkOnly( const VECTOR2I& aP );
 
@@ -227,10 +227,10 @@ private:
 
     const PNS_VIA makeVia ( const VECTOR2I& aP, int aNet );
 
-    bool findDpPrimitivePair ( const VECTOR2I& aP, PNS_ITEM *aItem, PNS_DP_PRIMITIVE_PAIR& aPair );
-    OPT_VECTOR2I getDanglingAnchor ( PNS_NODE *aNode, PNS_ITEM *aItem );
-    int matchDpSuffix ( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
-    bool attemptWalk ( PNS_NODE *aNode, PNS_DIFF_PAIR *aCurrent, PNS_DIFF_PAIR& aWalk, bool aPFirst, bool aWindCw, bool aSolidsOnly );
+    bool findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aItem, PNS_DP_PRIMITIVE_PAIR& aPair );
+    OPT_VECTOR2I getDanglingAnchor( PNS_NODE* aNode, PNS_ITEM* aItem );
+    int matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
+    bool attemptWalk( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurrent, PNS_DIFF_PAIR& aWalk, bool aPFirst, bool aWindCw, bool aSolidsOnly );
     bool propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNewP );
 
     enum State {
@@ -247,10 +247,9 @@ private:
     bool m_fitOk;
 
     int m_netP, m_netN;
-    
+
     PNS_DP_PRIMITIVE_PAIR m_start;
     boost::optional<PNS_DP_PRIMITIVE_PAIR> m_prevPair;
-
 
     ///> current algorithm iteration
     int m_iteration;
@@ -294,9 +293,9 @@ private:
     VECTOR2I m_currentEnd, m_currentStart;
     PNS_DIFF_PAIR m_currentTrace;
 
-    PNS_ITEM *m_currentEndItem;
+    PNS_ITEM* m_currentEndItem;
     PNS_MODE m_currentMode;
-    
+
     bool m_idle;
 };
 

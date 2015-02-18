@@ -55,7 +55,7 @@ public:
         CHAMFER             // chamfered (45 degree segment)
     };
 
-    PNS_MEANDER_SETTINGS ()
+    PNS_MEANDER_SETTINGS()
     {
         m_minAmplitude = 100000;
         m_maxAmplitude = 1000000;
@@ -65,26 +65,26 @@ public:
         m_targetSkew = 0;
         m_cornerType = ROUND;
         m_cornerRadiusPercentage = 100;
-        m_lengthTollerance = 100000;
+        m_lengthTolerance = 100000;
         m_cornerArcSegments = 8;
     }
-    
+
     ///> minimum meandering amplitude
     int m_minAmplitude;
     ///> maximum meandering amplitude
     int m_maxAmplitude;
-    ///> meandering period/spacing (see dialog picture for explanation)            
+    ///> meandering period/spacing (see dialog picture for explanation)
     int m_spacing;
     ///> amplitude/spacing adjustment step
     int m_step;
     ///> desired length of the tuned line/diff pair
     int m_targetLength;
-    ///> type of corners for the meandered line    
+    ///> type of corners for the meandered line
     CornerType m_cornerType;
     ///> rounding percentage (0 - 100)
     int m_cornerRadiusPercentage;
     ///> allowable tuning error
-    int m_lengthTollerance;
+    int m_lengthTolerance;
     ///> number of line segments for arc approximation
     int m_cornerArcSegments;
     ///> target skew value for diff pair de-skewing
@@ -100,280 +100,278 @@ class PNS_MEANDERED_LINE;
  */
 class PNS_MEANDER_SHAPE
 {
-    public:
-        
-        /**
-         * Constructor
-         *
-         * @param aPlacer the meander placer instance
-         * @param aWidth width of the meandered line
-         * @param aIsDual when true, the shape contains two meandered
-         *                lines at a given offset (diff pairs)
-         */
-        PNS_MEANDER_SHAPE( PNS_MEANDER_PLACER_BASE *aPlacer, int aWidth, bool aIsDual = false ) : 
-            m_placer( aPlacer ),
-            m_dual( aIsDual ),
-            m_width( aWidth ),
-            m_baselineOffset( 0 )
-        {
+public:
+    /**
+     * Constructor
+     *
+     * @param aPlacer the meander placer instance
+     * @param aWidth width of the meandered line
+     * @param aIsDual when true, the shape contains two meandered
+     *                lines at a given offset (diff pairs)
+     */
+    PNS_MEANDER_SHAPE( PNS_MEANDER_PLACER_BASE *aPlacer, int aWidth, bool aIsDual = false ) :
+        m_placer( aPlacer ),
+        m_dual( aIsDual ),
+        m_width( aWidth ),
+        m_baselineOffset( 0 )
+     {
+     }
 
-        }
+    /**
+     * Function SetType()
+     *
+     * Sets the type of the meander.
+     */
+    void SetType( PNS_MEANDER_TYPE aType )
+    {
+        m_type = aType;
+    }
 
-        /**
-         * Function SetType()
-         *
-         * Sets the type of the meander.
-         */
-        void SetType( PNS_MEANDER_TYPE aType )
-        { 
-            m_type = aType; 
-        }
-        
-        /**
-         * Function Type()
-         *
-         * @return the type of the meander.
-         */
-        PNS_MEANDER_TYPE Type( ) const
-        { 
-            return m_type; 
-        }
+    /**
+     * Function Type()
+     *
+     * @return the type of the meander.
+     */
+    PNS_MEANDER_TYPE Type() const
+    {
+        return m_type;
+    }
 
-        /**
-         * Function SetBaseIndex()
-         *
-         * Sets an auxillary index of the segment being meandered in its original PNS_LINE.
-         */
-        void SetBaseIndex( int aIndex )
-        {
-            m_baseIndex = aIndex;
-        }
+    /**
+     * Function SetBaseIndex()
+     *
+     * Sets an auxillary index of the segment being meandered in its original PNS_LINE.
+     */
+    void SetBaseIndex( int aIndex )
+    {
+        m_baseIndex = aIndex;
+    }
 
-        /**
-         * Function BaseIndex()
-         *
-         * @return auxillary index of the segment being meandered in its original PNS_LINE.
-         */
-        int BaseIndex( ) const
-        {
-            return m_baseIndex;
-        }
+    /**
+     * Function BaseIndex()
+     *
+     * @return auxillary index of the segment being meandered in its original PNS_LINE.
+     */
+    int BaseIndex() const
+    {
+        return m_baseIndex;
+    }
 
-        /**
-         * Function Amplitude()
-         *
-         * @return the amplitude of the meander shape.
-         */        
-        int Amplitude( ) const 
-        {
-            return m_amplitude; 
-        }
-        
-        /**
-         * Function MakeCorner()
-         *
-         * Creates a dummy meander shape representing a line corner. Used to define
-         * the starts/ends of meandered segments.
-         * @param aP1 corner point of the 1st line
-         * @param aP2 corner point of the 2nd line (if m_dual == true)
-         */
-        void MakeCorner( VECTOR2I aP1, VECTOR2I aP2 = VECTOR2I ( 0, 0 ) );
+    /**
+     * Function Amplitude()
+     *
+     * @return the amplitude of the meander shape.
+     */
+    int Amplitude() const
+    {
+        return m_amplitude;
+    }
 
-        /**
-         * Function Resize()
-         *
-         * Changes the amplitude of the meander shape to aAmpl and recalculates
-         * the resulting line chain.
-         * @param aAmpl new amplitude.
-         */
-        void Resize( int aAmpl );
+    /**
+     * Function MakeCorner()
+     *
+     * Creates a dummy meander shape representing a line corner. Used to define
+     * the starts/ends of meandered segments.
+     * @param aP1 corner point of the 1st line
+     * @param aP2 corner point of the 2nd line (if m_dual == true)
+     */
+    void MakeCorner( VECTOR2I aP1, VECTOR2I aP2 = VECTOR2I( 0, 0 ) );
 
-        /**
-         * Function Recalculate()
-         *
-         * Recalculates the line chain representing the meanders's shape.
-         */
-        void Recalculate ( );
-        
-        /**
-         * Function IsDual()
-         *
-         * @return true if the shape represents 2 parallel lines (diff pair).
-         */
-        bool IsDual( ) const
-        {
-            return m_dual;
-        }
+    /**
+     * Function Resize()
+     *
+     * Changes the amplitude of the meander shape to aAmpl and recalculates
+     * the resulting line chain.
+     * @param aAmpl new amplitude.
+     */
+    void Resize( int aAmpl );
 
-        /**
-         * Function Side()
-         * 
-         * @return true if the meander is to the right of its base segment.
-         */
-        bool Side( ) const
-        {
-            return m_side;
-        }
+    /**
+     * Function Recalculate()
+     *
+     * Recalculates the line chain representing the meanders's shape.
+     */
+    void Recalculate();
 
-        /**
-         * Function End()
-         * 
-         * @return end vertex of the base segment of the meander shape.
-         */
-        VECTOR2I End( ) const
-        {
-            return m_clippedBaseSeg.B;
-        }
+    /**
+     * Function IsDual()
+     *
+     * @return true if the shape represents 2 parallel lines (diff pair).
+     */
+    bool IsDual() const
+    {
+        return m_dual;
+    }
 
-        /**
-         * Function CLine()
-         * 
-         * @return the line chain representing the shape of the meander.
-         */
-        const SHAPE_LINE_CHAIN& CLine( int aShape ) const 
-        {
-            return m_shapes[ aShape ];
-        }
+    /**
+     * Function Side()
+     *
+     * @return true if the meander is to the right of its base segment.
+     */
+    bool Side() const
+    {
+        return m_side;
+    }
 
-        /**
-         * Function MakeEmpty()
-         * 
-         * Replaces the meander with straight bypass line(s), effectively
-         * clearing it.
-         */
-        void MakeEmpty( );
+    /**
+     * Function End()
+     *
+     * @return end vertex of the base segment of the meander shape.
+     */
+    VECTOR2I End() const
+    {
+        return m_clippedBaseSeg.B;
+    }
 
-        /**
-         * Function Fit()
-         * 
-         * Attempts to fit a meander of a given type onto a segment, avoiding
-         * collisions with other board features.
-         * @param aType type of meander shape
-         * @param aSeg base segment for meandering
-         * @param aP start point of the meander
-         * @param aSide side of aSeg to put the meander on (true = right)
-         * @return true on success.
-         */
-        bool Fit( PNS_MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP, bool aSide );
+    /**
+     * Function CLine()
+     *
+     * @return the line chain representing the shape of the meander.
+     */
+    const SHAPE_LINE_CHAIN& CLine( int aShape ) const
+    {
+        return m_shapes[aShape];
+    }
 
-        /**
-         * Function BaseSegment()
-         *
-         * Returns the base segment the meadner was fitted to.
-         * @return the base segment.
-         */
-        const SEG& BaseSegment( ) const
-        {
-            return m_clippedBaseSeg;
-        }
+    /**
+     * Function MakeEmpty()
+     *
+     * Replaces the meander with straight bypass line(s), effectively
+     * clearing it.
+     */
+    void MakeEmpty();
 
-        /**
-         * Function BaselineLength()
-         *
-         * @return length of the base segment for the meander (i.e.
-         *         the minimim tuned length.
-         */
-        int BaselineLength( ) const;
-        
-        /**
-         * Function MaxTunableLength()
-         *
-         * @return the length of the fitted line chain.
-         */
-        int MaxTunableLength( ) const;
+    /**
+     * Function Fit()
+     *
+     * Attempts to fit a meander of a given type onto a segment, avoiding
+     * collisions with other board features.
+     * @param aType type of meander shape
+     * @param aSeg base segment for meandering
+     * @param aP start point of the meander
+     * @param aSide side of aSeg to put the meander on (true = right)
+     * @return true on success.
+     */
+    bool Fit( PNS_MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP, bool aSide );
 
-        /**
-         * Function Settings()
-         *
-         * @return the current meandering settings.
-         */
-        const PNS_MEANDER_SETTINGS& Settings( ) const;
+    /**
+     * Function BaseSegment()
+     *
+     * Returns the base segment the meadner was fitted to.
+     * @return the base segment.
+     */
+    const SEG& BaseSegment() const
+    {
+        return m_clippedBaseSeg;
+    }
 
-        /**
-         * Function Width()
-         *
-         * @return width of the meandered line.
-         */
-        int Width() const
-        {
-            return m_width;
-        }
+    /**
+     * Function BaselineLength()
+     *
+     * @return length of the base segment for the meander (i.e.
+     *         the minimum tuned length.
+     */
+    int BaselineLength() const;
 
-        /**
-         * Function SetBaselineOffset()
-         *
-         * Sets the parallel offset between the base segment and the meandered
-         * line. Used for dual menaders (diff pair) only.
-         * @param aOffset the offset
-         */
-        void SetBaselineOffset ( int aOffset )
-        {
-            m_baselineOffset = aOffset;
-        }
+    /**
+     * Function MaxTunableLength()
+     *
+     * @return the length of the fitted line chain.
+     */
+    int MaxTunableLength() const;
 
-    private:
-        friend class PNS_MEANDERED_LINE;
+    /**
+     * Function Settings()
+     *
+     * @return the current meandering settings.
+     */
+    const PNS_MEANDER_SETTINGS& Settings() const;
 
-        ///> starts turtle drawing
-        void start ( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir );
-        ///> moves turtle forward by aLength
-        void forward ( int aLength );
-        ///> turns the turtle by aAngle
-        void turn ( int aAngle );
-        ///> tells the turtle to draw an arc of given radius and turn direction
-        void arc ( int aRadius, bool aSide );
-        ///> tells the turtle to draw an U-like shape
-        void uShape ( int aSides, int aCorner, int aTop );
+    /**
+     * Function Width()
+     *
+     * @return width of the meandered line.
+     */
+    int Width() const
+    {
+        return m_width;
+    }
 
-        ///> generates a 90-degree circular arc
-        SHAPE_LINE_CHAIN circleQuad ( VECTOR2D aP, VECTOR2D aDir, bool side );
+    /**
+     * Function SetBaselineOffset()
+     *
+     * Sets the parallel offset between the base segment and the meandered
+     * line. Used for dual menaders (diff pair) only.
+     * @param aOffset the offset
+     */
+    void SetBaselineOffset( int aOffset )
+    {
+        m_baselineOffset = aOffset;
+    }
 
-        ///> reflects a point onto other side of a given segment
-        VECTOR2I reflect ( VECTOR2I p, const SEG& line );
+private:
+    friend class PNS_MEANDERED_LINE;
 
-        ///> produces a meander shape of given type
-        SHAPE_LINE_CHAIN genMeanderShape ( VECTOR2D aP, VECTOR2D aDir, bool aSide, PNS_MEANDER_TYPE aType, int aAmpl, int aBaselineOffset = 0);
-        
-        ///> recalculates the clipped baseline after the parameters of
-        ///> the meander have been changed.
-        void updateBaseSegment();
-        
-        ///> returns sanitized corner radius value
-        int cornerRadius ( ) const;
-        
-        ///> returns sanitized spacing value
-        int spacing ( ) const;
-        
-        ///> the type
-        PNS_MEANDER_TYPE m_type;
-        ///> the placer that placed this meander
-        PNS_MEANDER_PLACER_BASE *m_placer;
-        ///> dual or single line
-        bool m_dual;
-        ///> width of the line
-        int m_width;
-        ///> amplitude of the meander
-        int m_amplitude;
-        ///> offset wrs the base segment (dual only)
-        int m_baselineOffset;
-        ///> first point of the meandered line
-        VECTOR2I m_p0;
-        ///> base segment (unclipped)
-        SEG m_baseSeg;
-        ///> base segment (clipped)
-        SEG m_clippedBaseSeg;
-        ///> side (true = right)
-        bool m_side;
-        ///> the actual shapes (0 used for single, both for dual)
-        SHAPE_LINE_CHAIN m_shapes[2];
-        ///> index of the meandered segment in the base line
-        int m_baseIndex;
-        ///> current turtle direction
-        VECTOR2D m_currentDir;
-        ///> current turtle position
-        VECTOR2D m_currentPos;
-        ///> the line the turtle is drawing on
-        SHAPE_LINE_CHAIN* m_currentTarget;
+    ///> starts turtle drawing
+    void start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir );
+    ///> moves turtle forward by aLength
+    void forward( int aLength );
+    ///> turns the turtle by aAngle
+    void turn( int aAngle );
+    ///> tells the turtle to draw an arc of given radius and turn direction
+    void arc( int aRadius, bool aSide );
+    ///> tells the turtle to draw an U-like shape
+    void uShape( int aSides, int aCorner, int aTop );
+
+    ///> generates a 90-degree circular arc
+    SHAPE_LINE_CHAIN circleQuad( VECTOR2D aP, VECTOR2D aDir, bool aSide );
+
+    ///> reflects a point onto other side of a given segment
+    VECTOR2I reflect( VECTOR2I aP, const SEG& aLine );
+
+    ///> produces a meander shape of given type
+    SHAPE_LINE_CHAIN genMeanderShape( VECTOR2D aP, VECTOR2D aDir, bool aSide, PNS_MEANDER_TYPE aType, int aAmpl, int aBaselineOffset = 0 );
+
+    ///> recalculates the clipped baseline after the parameters of
+    ///> the meander have been changed.
+    void updateBaseSegment();
+
+    ///> returns sanitized corner radius value
+    int cornerRadius() const;
+
+    ///> returns sanitized spacing value
+    int spacing() const;
+
+    ///> the type
+    PNS_MEANDER_TYPE m_type;
+    ///> the placer that placed this meander
+    PNS_MEANDER_PLACER_BASE* m_placer;
+    ///> dual or single line
+    bool m_dual;
+    ///> width of the line
+    int m_width;
+    ///> amplitude of the meander
+    int m_amplitude;
+    ///> offset wrs the base segment (dual only)
+    int m_baselineOffset;
+    ///> first point of the meandered line
+    VECTOR2I m_p0;
+    ///> base segment (unclipped)
+    SEG m_baseSeg;
+    ///> base segment (clipped)
+    SEG m_clippedBaseSeg;
+    ///> side (true = right)
+    bool m_side;
+    ///> the actual shapes (0 used for single, both for dual)
+    SHAPE_LINE_CHAIN m_shapes[2];
+    ///> index of the meandered segment in the base line
+    int m_baseIndex;
+    ///> current turtle direction
+    VECTOR2D m_currentDir;
+    ///> current turtle position
+    VECTOR2D m_currentPos;
+    ///> the line the turtle is drawing on
+    SHAPE_LINE_CHAIN* m_currentTarget;
 };
 
 
@@ -384,115 +382,111 @@ class PNS_MEANDER_SHAPE
  */
 class PNS_MEANDERED_LINE
 {
-    public:
-        PNS_MEANDERED_LINE( )
-        {
+public:
+    PNS_MEANDERED_LINE()
+    {
+    }
 
-        }
+    /**
+     * Constructor
+     *
+     * @param aPlacer the meander placer instance
+     * @param aIsDual when true, the meanders are generated for two coupled lines
+     */
+    PNS_MEANDERED_LINE( PNS_MEANDER_PLACER_BASE* aPlacer, bool aIsDual = false ) :
+        m_placer( aPlacer ),
+        m_dual( aIsDual )
+    {
+    }
 
-        /**
-         * Constructor
-         *
-         * @param aPlacer the meander placer instance
-         * @param aIsDual when true, the meanders are generated for two coupled lines
-         */
-        PNS_MEANDERED_LINE( PNS_MEANDER_PLACER_BASE *aPlacer, bool aIsDual = false ) :
-            m_placer( aPlacer ),
-            m_dual( aIsDual )
-        {
+    /**
+     * Function AddCorner()
+     *
+     * Creates a dummy meander shape representing a line corner. Used to define
+     * the starts/ends of meandered segments.
+     * @param aA corner point of the 1st line
+     * @param aB corner point of the 2nd line (if m_dual == true)
+     */
+    void AddCorner( const VECTOR2I& aA, const VECTOR2I& aB = VECTOR2I( 0, 0 ) );
 
-        }
-        
-        /**
-         * Function AddCorner()
-         *
-         * Creates a dummy meander shape representing a line corner. Used to define
-         * the starts/ends of meandered segments.
-         * @param aA corner point of the 1st line
-         * @param aB corner point of the 2nd line (if m_dual == true)
-         */
-        void AddCorner( const VECTOR2I& aA, const VECTOR2I& aB = VECTOR2I( 0, 0 ) );
-        
-        /**
-         * Function AddMeander()
-         *
-         * Adds a new meander shape the the meandered line.
-         * @param aShape the meander shape to add
-         */
-        void AddMeander( PNS_MEANDER_SHAPE *aShape );
-    
-        /**
-         * Function Clear()
-         *
-         * Clears the line geometry, removing all corners and meanders.
-         */
-        void Clear( );
+    /**
+     * Function AddMeander()
+     *
+     * Adds a new meander shape the the meandered line.
+     * @param aShape the meander shape to add
+     */
+    void AddMeander( PNS_MEANDER_SHAPE* aShape );
 
-        /**
-         * Function SetWidth()
-         *
-         * Sets the line width.
-         */
-        void SetWidth( int aWidth )
-        {
-            m_width = aWidth;
-        }
-    
-        /**
-         * Function MeanderSegment()
-         *
-         * Fits maximum amplitude meanders on a given segment and adds to the
-         * current line.
-         * @param aSeg the base segment to meander
-         * @param aBaseIndex index of the base segment in the original line
-         */
-        void MeanderSegment( const SEG& aSeg, int aBaseIndex = 0 );
+    /**
+     * Function Clear()
+     *
+     * Clears the line geometry, removing all corners and meanders.
+     */
+    void Clear();
 
-        /// @copydoc PNS_MEANDER_SHAPE::SetBaselineOffset()
-        void SetBaselineOffset( int aOffset )
-        {
-            m_baselineOffset = aOffset;
-        }
+    /**
+     * Function SetWidth()
+     *
+     * Sets the line width.
+     */
+    void SetWidth( int aWidth )
+    {
+        m_width = aWidth;
+    }
 
-        /**
-         * Function Meanders()
-         *
-         * @return set of meander shapes for this line
-         */
-        std::vector<PNS_MEANDER_SHAPE*> & Meanders() 
-        {
-            return m_meanders;
-        }
+    /**
+     * Function MeanderSegment()
+     *
+     * Fits maximum amplitude meanders on a given segment and adds to the
+     * current line.
+     * @param aSeg the base segment to meander
+     * @param aBaseIndex index of the base segment in the original line
+     */
+    void MeanderSegment( const SEG& aSeg, int aBaseIndex = 0 );
 
+    /// @copydoc PNS_MEANDER_SHAPE::SetBaselineOffset()
+    void SetBaselineOffset( int aOffset )
+    {
+        m_baselineOffset = aOffset;
+    }
 
-        /**
-         * Function CheckSelfIntersections()
-         * 
-         * Checks if the given shape is intersecting with any other meander in
-         * the current line.
-         * @param aShape the shape to check
-         * @param aClearance clearance value
-         * @return true, if the meander shape is not colliding 
-         */
-        bool CheckSelfIntersections ( PNS_MEANDER_SHAPE *aShape, int aClearance );
-        
-        /**
-         * Function Settings()
-         *
-         * @return the current meandering settings.
-         */
-        const PNS_MEANDER_SETTINGS& Settings() const;
+    /**
+     * Function Meanders()
+     *
+     * @return set of meander shapes for this line
+     */
+    std::vector<PNS_MEANDER_SHAPE*>& Meanders()
+    {
+        return m_meanders;
+    }
 
-    private:
+    /**
+     * Function CheckSelfIntersections()
+     *
+     * Checks if the given shape is intersecting with any other meander in
+     * the current line.
+     * @param aShape the shape to check
+     * @param aClearance clearance value
+     * @return true, if the meander shape is not colliding
+     */
+    bool CheckSelfIntersections ( PNS_MEANDER_SHAPE* aShape, int aClearance );
 
-        VECTOR2I m_last;
-        
-        PNS_MEANDER_PLACER_BASE *m_placer;
-        std::vector<PNS_MEANDER_SHAPE *> m_meanders;
-          
-        bool m_dual;
-        int m_width;
-        int m_baselineOffset;
+    /**
+     * Function Settings()
+     *
+     * @return the current meandering settings.
+     */
+    const PNS_MEANDER_SETTINGS& Settings() const;
+
+private:
+    VECTOR2I m_last;
+
+    PNS_MEANDER_PLACER_BASE* m_placer;
+    std::vector<PNS_MEANDER_SHAPE*> m_meanders;
+
+    bool m_dual;
+    int m_width;
+    int m_baselineOffset;
 };
 
 #endif    // __PNS_MEANDER_H

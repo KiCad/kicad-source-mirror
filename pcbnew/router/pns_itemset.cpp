@@ -23,20 +23,22 @@
 #include "pns_itemset.h"
 
 PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem ) :
-    m_owner ( false )
+    m_owner( false )
 {
     if( aInitialItem )
         m_items.push_back( aInitialItem );
 }
 
+
 PNS_ITEMSET::~PNS_ITEMSET()
 {
-    if (m_owner)
+    if( m_owner )
     {
-        BOOST_FOREACH ( PNS_ITEM *item, m_items )
+        BOOST_FOREACH( PNS_ITEM* item, m_items )
             delete item;
     }
 }
+
 
 PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd, bool aInvert )
 {
@@ -74,6 +76,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask, bool aInvert )
     return *this;
 }
 
+
 PNS_ITEMSET& PNS_ITEMSET::FilterMarker( int aMarker, bool aInvert )
 {
     ITEMS newItems;
@@ -104,6 +107,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet, bool aInvert )
 
     return *this;
 }
+
 
 PNS_ITEMSET& PNS_ITEMSET::ExcludeItem( const PNS_ITEM* aItem )
 {

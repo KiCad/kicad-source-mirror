@@ -35,7 +35,7 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
 {
     VECTOR2I d = B - A;
     ecoord dist_sq = (ecoord) aDist * aDist;
-    ecoord dist_sq_thr = (ecoord) (aDist + 1) * (aDist + 1);
+    ecoord dist_sq_thr = (ecoord) ( aDist + 1 ) * ( aDist + 1 );
 
     SEG::ecoord l_squared = d.Dot( d );
     SEG::ecoord t = d.Dot( aP - A );

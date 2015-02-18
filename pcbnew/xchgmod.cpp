@@ -486,7 +486,6 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
 
             m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
             GetGalCanvas()->ForceRefresh();
-
         }
     }
     else

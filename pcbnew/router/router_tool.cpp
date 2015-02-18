@@ -87,7 +87,7 @@ static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimension
 
 ROUTER_TOOL::ROUTER_TOOL() :
     PNS_TOOL_BASE( "pcbnew.InteractiveRouter" )
-{    
+{
 }
 
 
@@ -229,10 +229,10 @@ public:
         AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
 
         Add( ACT_CustomTrackWidth );
-        
+
         if ( aMode == PNS_MODE_ROUTE_DIFF_PAIR )
             Add( ACT_SetDpDimensions );
-        
+
         AppendSeparator();
         Add( PNS_TOOL_BASE::ACT_RouterOptions );
     }
@@ -248,12 +248,12 @@ ROUTER_TOOL::~ROUTER_TOOL()
 void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
     PNS_TOOL_BASE::Reset( aReason );
-    
+
     Go( &ROUTER_TOOL::RouteSingleTrace, COMMON_ACTIONS::routerActivateSingle.MakeEvent() );
     Go( &ROUTER_TOOL::RouteDiffPair, COMMON_ACTIONS::routerActivateDiffPair.MakeEvent() );
     Go( &ROUTER_TOOL::DpDimensionsDialog, COMMON_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent() );
     Go( &ROUTER_TOOL::SettingsDialog, COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
-       
+
 }
 
 int ROUTER_TOOL::getDefaultWidth( int aNetCode )
@@ -381,7 +381,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    
+
     const int layerCount = bds.GetCopperLayerCount();
     int currentLayer = m_router->GetCurrentLayer();
 
@@ -449,7 +449,7 @@ bool ROUTER_TOOL::prepareInteractive()
     sizes.AddLayerPair ( m_frame->GetScreen()->m_Route_Layer_TOP,
                          m_frame->GetScreen()->m_Route_Layer_BOTTOM );
     m_router->UpdateSizes( sizes );
-    
+
     if ( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
         wxMessageBox ( m_router->FailureReason(), _("Error") );
@@ -570,7 +570,7 @@ int ROUTER_TOOL::DpDimensionsDialog( const TOOL_EVENT& aEvent )
     {
         m_router->UpdateSizes( sizes );
         m_savedSizes = sizes;
-    }   
+    }
 
     return 0;
 }
@@ -612,7 +612,7 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
     Activate();
 
     m_router->SetMode ( aMode );
-    
+
     m_ctls->SetSnapping( true );
     m_ctls->ShowCursor( true );
 

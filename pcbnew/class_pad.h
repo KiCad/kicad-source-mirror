@@ -94,7 +94,7 @@ public:
                                     ///< used for edge board connectors
     static LSET UnplatedHoleMask(); ///< layer set for a mechanical unplated through hole pad
 
-    static inline bool ClassOf( const EDA_ITEM *aItem )
+    static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_PAD_T == aItem->Type();
     }

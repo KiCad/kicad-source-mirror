@@ -50,7 +50,7 @@ public:
     /**
      * Function GetSize()
      * Returns information about number of vertices stored.
-     * @param Number of vertices.
+     * @return Number of vertices.
      */
     inline unsigned int GetSize() const
     {

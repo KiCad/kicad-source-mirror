@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2015 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -180,7 +180,7 @@ public:
         return ( m_dir % 2 ) == 1;
     }
 
-    bool IsDefined() const 
+    bool IsDefined() const
     {
         return m_dir != UNDEFINED;
     }
@@ -282,7 +282,7 @@ public:
             l.m_dir = NW;
         else
             l.m_dir = static_cast<Directions>( m_dir - 1 );
-        
+
         return l;
     }
 
@@ -303,10 +303,10 @@ public:
             case NW: return VECTOR2I( -1, 1 );
             case SE: return VECTOR2I( 1, -1 );
             case SW: return VECTOR2I( -1, -1 );
-            
+
             default:
                 return VECTOR2I( 0, 0 );
-        }        
+        }
     }
 
     int Mask() const
@@ -320,7 +320,8 @@ private:
      * Function construct()
      * Calculates the direction from a vector. If the vector's angle is not a multiple of 45
      * degrees, the direction is rounded to the nearest octant.
-     * @param aVec our vector     */
+     * @param aVec our vector
+     */
     void construct_( const VECTOR2I& aVec )
     {
         m_dir = UNDEFINED;
@@ -343,40 +344,14 @@ private:
 
         if( dir < 0 )
             dir = dir + 8;
-            
+
         m_dir = (Directions) dir;
 
         return;
-
-        if( aVec.y < 0 )
-        {
-            if( aVec.x > 0 )
-                m_dir = NE;
-            else if( aVec.x < 0 )
-                m_dir = NW;
-            else
-                m_dir = N;
-        }
-        else if( aVec.y == 0 )
-        {
-            if( aVec.x > 0 )
-                m_dir = E;
-            else
-                m_dir = W;
-        }
-        else    // aVec.y>0
-        {
-            if( aVec.x > 0 )
-                m_dir = SE;
-            else if( aVec.x < 0 )
-                m_dir = SW;
-            else
-                m_dir = S;
-        }
     }
-    
+
     ///> our actual direction
-    Directions m_dir;    
+    Directions m_dir;
 };
 
 #endif    // __DIRECTION_H

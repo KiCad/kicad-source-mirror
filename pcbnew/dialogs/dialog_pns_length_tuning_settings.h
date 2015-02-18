@@ -35,22 +35,21 @@ class PNS_MEANDER_SETTINGS;
 
 class DIALOG_PNS_LENGTH_TUNING_SETTINGS : public DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE
 {
-	public:
-		DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent, PNS_MEANDER_SETTINGS& aSettings, PNS_ROUTER_MODE aMode );
+public:
+    DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent, PNS_MEANDER_SETTINGS& aSettings, PNS_ROUTER_MODE aMode );
 
-        virtual void OnClose( wxCloseEvent& aEvent );
-        virtual void OnOkClick( wxCommandEvent& aEvent );
-        virtual void OnCancelClick( wxCommandEvent& aEvent );
-	
-	private:
+    virtual void OnClose( wxCloseEvent& aEvent );
+    virtual void OnOkClick( wxCommandEvent& aEvent );
+    virtual void OnCancelClick( wxCommandEvent& aEvent );
 
-		WX_UNIT_BINDER m_minAmpl;
-		WX_UNIT_BINDER m_maxAmpl;
-		WX_UNIT_BINDER m_spacing;
-		WX_UNIT_BINDER m_targetLength;
+private:
+    WX_UNIT_BINDER m_minAmpl;
+    WX_UNIT_BINDER m_maxAmpl;
+    WX_UNIT_BINDER m_spacing;
+    WX_UNIT_BINDER m_targetLength;
 
-		PNS_MEANDER_SETTINGS& m_settings;
-		PNS_ROUTER_MODE m_mode;
+    PNS_MEANDER_SETTINGS& m_settings;
+    PNS_ROUTER_MODE m_mode;
 };
 
 #endif // __dialog_pns_settings__

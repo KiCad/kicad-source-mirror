@@ -137,7 +137,6 @@ private:
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;
 
-
     int m_walkaroundIterationLimit;
     int m_shoveIterationLimit;
     TIME_LIMIT m_shoveTimeLimit;

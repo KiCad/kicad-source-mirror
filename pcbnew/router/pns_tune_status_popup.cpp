@@ -22,48 +22,48 @@
 #include "pns_router.h"
 #include "pns_meander_placer.h"
 
-PNS_TUNE_STATUS_POPUP::PNS_TUNE_STATUS_POPUP ( PCB_EDIT_FRAME *parent ) : 
-	WX_STATUS_POPUP ( parent )
+PNS_TUNE_STATUS_POPUP::PNS_TUNE_STATUS_POPUP( PCB_EDIT_FRAME* aParent ) :
+    WX_STATUS_POPUP( aParent )
 {
-	  m_panel->SetBackgroundColour( wxColour(64,64,64) );
-	  m_statusLine = new wxStaticText( m_panel, wxID_ANY,
-                          wxT("Status text 1\n") ) ;    
+      m_panel->SetBackgroundColour( wxColour( 64, 64, 64 ) );
+      m_statusLine = new wxStaticText( m_panel, wxID_ANY, wxT( "Status text 1\n" ) ) ;
       m_topSizer->Add( m_statusLine, 1, wxALL | wxEXPAND, 5 );
-      
+
       updateSize();
 }
 
+
 PNS_TUNE_STATUS_POPUP::~PNS_TUNE_STATUS_POPUP()
 {
-
 }
 
-void PNS_TUNE_STATUS_POPUP::Update( PNS_ROUTER *aRouter )
-{
-    PNS_MEANDER_PLACER_BASE *placer = dynamic_cast <PNS_MEANDER_PLACER_BASE *> ( aRouter->Placer() );
 
-    if(!placer)
+void PNS_TUNE_STATUS_POPUP::Update( PNS_ROUTER* aRouter )
+{
+    PNS_MEANDER_PLACER_BASE* placer = dynamic_cast<PNS_MEANDER_PLACER_BASE*>( aRouter->Placer() );
+
+    if( !placer )
         return;
 
-    m_statusLine->SetLabel ( placer->TuningInfo() );
+    m_statusLine->SetLabel( placer->TuningInfo() );
 
     wxColour color;
 
-    switch ( placer->TuningStatus() )
+    switch( placer->TuningStatus() )
     {
-    	case PNS_MEANDER_PLACER::TUNED:
-    		color = wxColour ( 0, 255, 0 );
-    		break;
-    	case PNS_MEANDER_PLACER::TOO_SHORT:
-    		color = wxColour ( 255, 128, 128 );
-    		break;
-    	case PNS_MEANDER_PLACER::TOO_LONG:
-    		color = wxColour ( 128, 128, 255 );
-    		break;
+        case PNS_MEANDER_PLACER::TUNED:
+            color = wxColour( 0, 255, 0 );
+            break;
+        case PNS_MEANDER_PLACER::TOO_SHORT:
+            color = wxColour( 255, 128, 128 );
+            break;
+        case PNS_MEANDER_PLACER::TOO_LONG:
+            color = wxColour( 128, 128, 255 );
+            break;
     }
 
-    m_statusLine->SetForegroundColour (color);
+    m_statusLine->SetForegroundColour( color );
 
-	updateSize();
+    updateSize();
 }
 

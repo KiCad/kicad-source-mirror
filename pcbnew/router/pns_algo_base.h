@@ -22,7 +22,7 @@
 #define __PNS_ALGO_BASE_H
 
 #include <wx/wx.h> // for wxString
- 
+
 #include "pns_routing_settings.h"
 
 class PNS_ROUTER;
@@ -33,32 +33,30 @@ class PNS_LOGGER;
  *
  * Base class for all P&S algorithms (shoving, walkaround, line placement, dragging, etc.)
  * Holds a bunch of objects commonly used by all algorithms (P&S settings, parent router instance, logging)
- **/
-
+ */
 class PNS_ALGO_BASE
 {
 public:
-	PNS_ALGO_BASE( PNS_ROUTER *aRouter ) :
-		m_router ( aRouter )
-	{}
+    PNS_ALGO_BASE( PNS_ROUTER* aRouter ) :
+        m_router( aRouter )
+    {}
 
-	virtual ~PNS_ALGO_BASE() {}
+    virtual ~PNS_ALGO_BASE() {}
 
-	///> Returns the instance of our router
-	PNS_ROUTER* Router() const
-	{
-		return m_router;
-	}
+    ///> Returns the instance of our router
+    PNS_ROUTER* Router() const
+    {
+        return m_router;
+    }
 
-	///> Returns current router settings
-	PNS_ROUTING_SETTINGS& Settings() const;
+    ///> Returns current router settings
+    PNS_ROUTING_SETTINGS& Settings() const;
 
-	///> Returns the logger object, allowing to dump geometry to a file.
-	virtual PNS_LOGGER* Logger();
+    ///> Returns the logger object, allowing to dump geometry to a file.
+    virtual PNS_LOGGER* Logger();
 
-	
 private:
-	PNS_ROUTER* m_router;
+    PNS_ROUTER* m_router;
 };
 
 #endif

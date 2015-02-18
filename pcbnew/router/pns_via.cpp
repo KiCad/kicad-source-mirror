@@ -96,12 +96,13 @@ PNS_VIA* PNS_VIA::Clone ( ) const
     return v;
 }
 
-OPT_BOX2I PNS_VIA::ChangedArea ( const PNS_VIA *aOther ) const
+
+OPT_BOX2I PNS_VIA::ChangedArea ( const PNS_VIA* aOther ) const
 {
     if ( aOther->Pos() != Pos() )
     {
-        BOX2I tmp = Shape()->BBox( );
-        tmp.Merge ( aOther->Shape()->BBox( ) );
+        BOX2I tmp = Shape()->BBox();
+        tmp.Merge ( aOther->Shape()->BBox() );
         return tmp;
     }
 

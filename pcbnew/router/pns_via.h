@@ -146,8 +146,8 @@ public:
         return 1;
     }
 
-    OPT_BOX2I ChangedArea ( const PNS_VIA *aOther ) const;
-    
+    OPT_BOX2I ChangedArea( const PNS_VIA* aOther ) const;
+
 private:
     int m_diameter;
     int m_drill;

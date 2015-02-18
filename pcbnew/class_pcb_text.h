@@ -49,7 +49,7 @@ public:
 
     ~TEXTE_PCB();
 
-    static inline bool ClassOf( const EDA_ITEM *aItem )
+    static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_TEXT_T == aItem->Type();
     }

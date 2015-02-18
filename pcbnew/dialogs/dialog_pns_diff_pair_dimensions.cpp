@@ -27,23 +27,22 @@
 
 DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS_SIZES_SETTINGS& aSizes ) :
     DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( aParent ),
-    m_traceWidth ( this, m_traceWidthText, m_traceWidthUnit ),
-    m_traceGap (this, m_traceGapText, m_traceGapUnit ),
-    m_viaGap ( this, m_viaGapText, m_viaGapUnit ),
+    m_traceWidth( this, m_traceWidthText, m_traceWidthUnit ),
+    m_traceGap( this, m_traceGapText, m_traceGapUnit ),
+    m_viaGap( this, m_viaGapText, m_viaGapUnit ),
     m_sizes( aSizes )
-    
 {
-    m_traceWidth.SetValue ( aSizes.DiffPairWidth() );
-    m_traceGap.SetValue ( aSizes.DiffPairGap() );
-    m_viaGap.SetValue ( aSizes.DiffPairViaGap() );
-    m_viaTraceGapEqual->SetValue ( m_sizes.DiffPairViaGapSameAsTraceGap() );
-    
+    m_traceWidth.SetValue( aSizes.DiffPairWidth() );
+    m_traceGap.SetValue( aSizes.DiffPairGap() );
+    m_viaGap.SetValue( aSizes.DiffPairViaGap() );
+    m_viaTraceGapEqual->SetValue( m_sizes.DiffPairViaGapSameAsTraceGap() );
+
     updateCheckbox();
 }
 
+
 void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::updateCheckbox()
 {
-    printf("Checked: %d", m_viaTraceGapEqual->GetValue());
     if( m_viaTraceGapEqual->GetValue() )
     {
         m_sizes.SetDiffPairViaGapSameAsTraceGap( true );
@@ -58,6 +57,7 @@ void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::updateCheckbox()
     }
 }
 
+
 void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnClose( wxCloseEvent& aEvent )
 {
     // Do nothing, it is result of ESC pressing
@@ -71,7 +71,7 @@ void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnOkClick( wxCommandEvent& aEvent )
     m_sizes.SetDiffPairGap ( m_traceGap.GetValue() );
     m_sizes.SetDiffPairViaGap ( m_viaGap.GetValue() );
     m_sizes.SetDiffPairWidth ( m_traceWidth.GetValue() );
-    
+
     // todo: verify against design rules
     EndModal( 1 );
 }
@@ -83,9 +83,10 @@ void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnCancelClick( wxCommandEvent& aEvent )
     EndModal( 0 );
 }
 
+
 void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnViaTraceGapEqualCheck( wxCommandEvent& event )
 {
     event.Skip();
     updateCheckbox();
 }
-    
+

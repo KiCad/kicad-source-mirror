@@ -76,15 +76,14 @@ public:
         ALL         = 0xff
     };
 
-	/**
- 	 * Enum VIEW_VISIBILITY_FLAGS.
-	 * Defines the visibility of the item (temporarily hidden, invisible, etc).
+    /**
+     * Enum VIEW_VISIBILITY_FLAGS.
+     * Defines the visibility of the item (temporarily hidden, invisible, etc).
      */
     enum VIEW_VISIBILITY_FLAGS {
         VISIBLE     = 0x01,     /// Item is visible (in general)
         HIDDEN      = 0x02      /// Item is temporarily hidden (e.g. being used by a tool). Overrides VISIBLE flag.
     };
-
 
     VIEW_ITEM() : m_view( NULL ), m_flags( VISIBLE ), m_requiredUpdate( ALL ),
                   m_groups( NULL ), m_groupsSize( 0 ) {}
@@ -141,13 +140,14 @@ public:
     void ViewSetVisible( bool aIsVisible = true )
     {
         bool cur_visible = m_flags & VISIBLE;
-        
+
         if( cur_visible != aIsVisible )
         {
-            if(aIsVisible)
+            if( aIsVisible )
                 m_flags |= VISIBLE;
             else
                 m_flags &= ~VISIBLE;
+
             ViewUpdate( APPEARANCE | COLOR );
         }
     }
@@ -158,12 +158,12 @@ public:
      *
      * @param aHide: whether the item is hidden (on all layers), or not.
      */
-    void ViewHide ( bool aHide = true )
+    void ViewHide( bool aHide = true )
     {
-        if(! (m_flags & VISIBLE) )
+        if( !( m_flags & VISIBLE ) )
             return;
 
-        if(aHide)
+        if( aHide )
             m_flags |= HIDDEN;
         else
             m_flags &= ~HIDDEN;
@@ -242,7 +242,7 @@ protected:
     }
 
     VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
-    int     m_flags;            ///< Visibility flags
+    int     m_flags;             ///< Visibility flags
     int     m_requiredUpdate;   ///< Flag required for updating
 
     ///* Helper for storing cached items group ids
@@ -341,7 +341,7 @@ protected:
      * Function isRenderable()
      * Returns if the item should be drawn or not.
      */
-	bool isRenderable() const
+    bool isRenderable() const
     {
         return m_flags == VISIBLE;
     }

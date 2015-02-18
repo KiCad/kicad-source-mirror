@@ -41,18 +41,18 @@ class PCB_EDIT_FRAME;
 class WX_STATUS_POPUP: public wxPopupWindow
 {
 public:
-    WX_STATUS_POPUP ( PCB_EDIT_FRAME *parent );
+    WX_STATUS_POPUP( PCB_EDIT_FRAME* aParent );
     virtual ~WX_STATUS_POPUP();
 
-    virtual void Popup(wxWindow *focus = NULL);
+    virtual void Popup(wxWindow* aFocus = NULL);
     virtual void Move( const wxPoint &aWhere );
 
 protected:
 
     void updateSize();
 
-    wxPanel *m_panel;
-    wxBoxSizer *m_topSizer;
+    wxPanel* m_panel;
+    wxBoxSizer* m_topSizer;
 };
 
 #endif /* __WX_STATUS_POPUP_H_*/

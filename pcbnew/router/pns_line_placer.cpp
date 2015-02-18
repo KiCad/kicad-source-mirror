@@ -38,7 +38,7 @@
 using boost::optional;
 
 PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_ROUTER* aRouter ) :
-    PNS_PLACEMENT_ALGO ( aRouter )
+    PNS_PLACEMENT_ALGO( aRouter )
 {
     m_initial_direction = DIRECTION_45::N;
     m_world = NULL;
@@ -71,8 +71,8 @@ const PNS_VIA PNS_LINE_PLACER::makeVia ( const VECTOR2I& aP )
 bool PNS_LINE_PLACER::ToggleVia( bool aEnabled )
 {
     m_placingVia = aEnabled;
-    if(!m_idle)
-        Move ( m_currentEnd, NULL );
+    if( !m_idle )
+        Move( m_currentEnd, NULL );
 
     return true;
 }
@@ -377,7 +377,7 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
 
 bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
-    SHAPE_LINE_CHAIN line = buildInitialLine ( aP );
+    SHAPE_LINE_CHAIN line = buildInitialLine( aP );
     PNS_LINE initTrack( m_head, line ), walkFull;
     int effort = 0;
     bool viaOk = handleViaPlacement( initTrack );
@@ -431,7 +431,7 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
 bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
-    m_head.SetShape( buildInitialLine ( aP ) );
+    m_head.SetShape( buildInitialLine( aP ) );
 
     if( m_placingVia )
     {
@@ -446,7 +446,7 @@ bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
 bool PNS_LINE_PLACER::rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
-    SHAPE_LINE_CHAIN line = buildInitialLine ( aP );
+    SHAPE_LINE_CHAIN line = buildInitialLine( aP );
     PNS_LINE initTrack( m_head, line );
     PNS_LINE walkSolids, l2;
 
@@ -531,9 +531,9 @@ bool PNS_LINE_PLACER::routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead )
         case RM_MarkObstacles:
             return rhMarkObstacles( aP, aNewHead );
         case RM_Walkaround:
-            return rhWalkOnly ( aP, aNewHead );
+            return rhWalkOnly( aP, aNewHead );
         case RM_Shove:
-            return rhShoveOnly ( aP, aNewHead );
+            return rhShoveOnly( aP, aNewHead );
         default:
             break;
     }
@@ -732,9 +732,12 @@ bool PNS_LINE_PLACER::SetLayer( int aLayer )
     {
         m_currentLayer = aLayer;
         return true;
-    } else if( m_chainedPlacement ) {
+    }
+    else if( m_chainedPlacement )
+    {
         return false;
-    } else if( !m_startItem || ( m_startItem->OfKind( PNS_ITEM::VIA ) && m_startItem->Layers().Overlaps( aLayer ) ) ) {
+    }
+    else if( !m_startItem || ( m_startItem->OfKind( PNS_ITEM::VIA ) && m_startItem->Layers().Overlaps( aLayer ) ) ) {
         m_currentLayer = aLayer;
         m_splitSeg = false;
         initPlacement ( m_splitSeg );
@@ -744,6 +747,7 @@ bool PNS_LINE_PLACER::SetLayer( int aLayer )
 
     return false;
 }
+
 
 bool PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
@@ -1013,36 +1017,39 @@ void PNS_LINE_PLACER::updateLeadingRatLine()
     SHAPE_LINE_CHAIN ratLine;
     PNS_TOPOLOGY topo ( m_lastNode );
 
-    if( topo.LeadingRatLine ( &current, ratLine ))
+    if( topo.LeadingRatLine( &current, ratLine ) )
         Router()->DisplayDebugLine( ratLine, 5, 10000 );
 }
 
-void PNS_LINE_PLACER::SetOrthoMode ( bool aOrthoMode )
+
+void PNS_LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 {
     m_orthoMode = aOrthoMode;
-    if(!m_idle)
-        Move ( m_currentEnd, NULL );
+
+    if( !m_idle )
+        Move( m_currentEnd, NULL );
 }
 
-const SHAPE_LINE_CHAIN PNS_LINE_PLACER::buildInitialLine ( const VECTOR2I& aP )
+const SHAPE_LINE_CHAIN PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP )
 {
-    SHAPE_LINE_CHAIN l (m_direction.BuildInitialTrace( m_p_start, aP ) );
+    SHAPE_LINE_CHAIN l( m_direction.BuildInitialTrace( m_p_start, aP ) );
 
     if( l.SegmentCount() <= 1 )
         return l;
-    
-    if (m_orthoMode)
-    {
-        VECTOR2I newLast = l.CSegment(0).LineProject ( l.CPoint(-1) );
 
-        l.Remove(-1, -1);
-        l.Point(1) = newLast;
+    if( m_orthoMode )
+    {
+        VECTOR2I newLast = l.CSegment( 0 ).LineProject( l.CPoint( -1 ) );
+
+        l.Remove( -1, -1 );
+        l.Point( 1 ) = newLast;
     }
 
     return l;
 }
 
-void PNS_LINE_PLACER::GetModifiedNets( std::vector<int> &aNets ) const
+
+void PNS_LINE_PLACER::GetModifiedNets( std::vector<int>& aNets ) const
 {
     aNets.push_back( m_currentNet );
 }

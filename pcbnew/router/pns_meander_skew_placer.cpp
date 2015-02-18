@@ -38,10 +38,11 @@ PNS_MEANDER_SKEW_PLACER::PNS_MEANDER_SKEW_PLACER ( PNS_ROUTER* aRouter ) :
 {
 }
 
+
 PNS_MEANDER_SKEW_PLACER::~PNS_MEANDER_SKEW_PLACER( )
 {
- 
 }
+
 
 bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
@@ -49,19 +50,19 @@ bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     if( !aStartItem || !aStartItem->OfKind( PNS_ITEM::SEGMENT ) )
     {
-        Router( )->SetFailureReason( _( "Please select a differential pair trace you want to tune." ) );
+        Router()->SetFailureReason( _( "Please select a differential pair trace you want to tune." ) );
         return false;
     }
 
-    m_initialSegment = static_cast<PNS_SEGMENT *>( aStartItem );
+    m_initialSegment = static_cast<PNS_SEGMENT*>( aStartItem );
 
-    p = m_initialSegment->Seg( ).NearestPoint( aP );
+    p = m_initialSegment->Seg().NearestPoint( aP );
 
     m_originLine = NULL;
     m_currentNode = NULL;
     m_currentStart = p;
 
-    m_world = Router( )->GetWorld( )->Branch( );
+    m_world = Router()->GetWorld( )->Branch();
     m_originLine = m_world->AssembleLine( m_initialSegment );
 
     PNS_TOPOLOGY topo( m_world );
@@ -75,18 +76,17 @@ bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
         return false;
     }
 
-
     m_originPair.SetGap ( Router()->Sizes().DiffPairGap() );
 
     if( !m_originPair.PLine().SegmentCount() ||
         !m_originPair.NLine().SegmentCount() )
         return false;
-    
-    m_tunedPathP = topo.AssembleTrivialPath ( m_originPair.PLine().GetLink(0) );
-    m_tunedPathN = topo.AssembleTrivialPath ( m_originPair.NLine().GetLink(0) );
+
+    m_tunedPathP = topo.AssembleTrivialPath ( m_originPair.PLine().GetLink( 0 ) );
+    m_tunedPathN = topo.AssembleTrivialPath ( m_originPair.NLine().GetLink( 0 ) );
 
     m_world->Remove( m_originLine );
-    
+
     m_currentWidth = m_originLine->Width( );
     m_currentEnd = VECTOR2I( 0, 0 );
 
@@ -94,55 +94,58 @@ bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
         m_coupledLength = itemsetLength ( m_tunedPathN );
     else
         m_coupledLength = itemsetLength ( m_tunedPathP );
-    
+
     return true;
 }
 
 
-int PNS_MEANDER_SKEW_PLACER::origPathLength( ) const 
+int PNS_MEANDER_SKEW_PLACER::origPathLength( ) const
 {
     return itemsetLength ( m_tunedPath );
 }
 
+
 int PNS_MEANDER_SKEW_PLACER::itemsetLength( const PNS_ITEMSET& aSet ) const
 {
     int total = 0;
-    BOOST_FOREACH( const PNS_ITEM *item, aSet.CItems( ) )
+    BOOST_FOREACH( const PNS_ITEM* item, aSet.CItems() )
     {
-        if( const PNS_LINE *l = dyn_cast<const PNS_LINE *>( item ) )
+        if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
         {
-            total += l->CLine( ).Length( );
+            total += l->CLine().Length();
         }
     }
 
     return total;
 }
 
-int PNS_MEANDER_SKEW_PLACER::currentSkew () const
+
+int PNS_MEANDER_SKEW_PLACER::currentSkew() const
 {
     return m_lastLength - m_coupledLength;
 }
 
+
 bool PNS_MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
-    return doMove ( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew );
+    return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew );
 }
 
 
-const wxString PNS_MEANDER_SKEW_PLACER::TuningInfo( ) const
+const wxString PNS_MEANDER_SKEW_PLACER::TuningInfo() const
 {
     wxString status;
 
-    switch ( m_lastStatus )
+    switch( m_lastStatus )
     {
         case TOO_LONG:
             status = _( "Too long: skew " );
             break;
         case TOO_SHORT:
-            status = _(" Too short: skew " );
+            status = _( "Too short: skew " );
             break;
         case TUNED:
-            status = _(" Tuned: skew " );
+            status = _( "Tuned: skew " );
             break;
         default:
             return _( "?" );
@@ -151,7 +154,7 @@ const wxString PNS_MEANDER_SKEW_PLACER::TuningInfo( ) const
     status += LengthDoubleToString( (double) m_lastLength - m_coupledLength, false );
     status += "/";
     status += LengthDoubleToString( (double) m_settings.m_targetSkew, false );
-    
+
     return status;
 }
 

@@ -47,7 +47,7 @@ public:
     ~PNS_SIZES_SETTINGS() {};
 
     void Init( BOARD* aBoard, PNS_ITEM* aStartItem = NULL, int aNet = -1 );
-    void ImportCurrent ( BOARD_DESIGN_SETTINGS& aSettings );
+    void ImportCurrent( BOARD_DESIGN_SETTINGS& aSettings );
 
     void ClearLayerPairs();
     void AddLayerPair( int aL1, int aL2 );
@@ -57,12 +57,12 @@ public:
 
     int DiffPairWidth() const { return m_diffPairWidth; }
     int DiffPairGap() const { return m_diffPairGap; }
-    
-    int DiffPairViaGap() const { 
+
+    int DiffPairViaGap() const {
         if(m_diffPairViaGapSameAsTraceGap)
             return m_diffPairGap;
         else
-            return m_diffPairViaGap; 
+            return m_diffPairViaGap;
     }
 
     bool DiffPairViaGapSameAsTraceGap() const { return m_diffPairViaGapSameAsTraceGap; }
@@ -83,7 +83,7 @@ public:
         if( m_layerPairs.find(aLayerId) == m_layerPairs.end() )
             return boost::optional<int>();
 
-        return m_layerPairs [ aLayerId ];
+        return m_layerPairs[aLayerId];
     }
 
     int GetLayerTop() const;

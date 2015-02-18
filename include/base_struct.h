@@ -147,7 +147,7 @@ public:
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
 #define DP_COUPLED     (1 << 27)   ///< item is coupled with another item making a differential pair
-                                   ///< (applies to segments only)
+                                  ///< (applies to segments only)
 
 #define EDA_ITEM_ALL_FLAGS -1
 

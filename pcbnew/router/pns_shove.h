@@ -64,7 +64,7 @@ public:
     SHOVE_STATUS ShoveMultiLines( const PNS_ITEMSET& aHeadSet );
 
     SHOVE_STATUS ShoveDraggingVia( PNS_VIA*aVia, const VECTOR2I& aWhere, PNS_VIA** aNewVia );
-    SHOVE_STATUS ProcessSingleLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle,  
+    SHOVE_STATUS ProcessSingleLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle,
                                     PNS_LINE* aShoved );
 
     void ForceClearance ( bool aEnabled, int aClearance )
@@ -115,9 +115,8 @@ private:
     SHOVE_STATUS onReverseCollidingVia( PNS_LINE* aCurrent, PNS_VIA* aObstacleVia );
     SHOVE_STATUS pushVia( PNS_VIA* aVia, const VECTOR2I& aForce, int aCurrentRank, bool aDryRun = false );
 
-    OPT_BOX2I totalAffectedArea ( ) const;
+    OPT_BOX2I totalAffectedArea() const;
 
-    
     void unwindStack( PNS_SEGMENT* aSeg );
     void unwindStack( PNS_ITEM* aItem );
 
@@ -128,8 +127,8 @@ private:
 
     PNS_LINE* assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );
 
-    void replaceItems ( PNS_ITEM *aOld, PNS_ITEM *aNew );
-    
+    void replaceItems( PNS_ITEM *aOld, PNS_ITEM *aNew );
+
     template<class T> T* clone ( const T* aItem )
     {
         T *cloned = aItem->Clone();
@@ -139,7 +138,6 @@ private:
     }
 
     OPT_BOX2I                   m_affectedAreaSum;
-
 
     SHOVE_STATUS shoveIteration( int aIter );
     SHOVE_STATUS shoveMainLoop();

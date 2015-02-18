@@ -43,7 +43,7 @@ public:
      * @param aUnitLabel is the units label displayed next to the text field.
      * @param aSpinButton is an optional spin button (for adjusting the input value)
      */
-    WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl *aTextInput, wxStaticText *aUnitLabel, wxSpinButton *aSpinButton = NULL );
+    WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl* aTextInput, wxStaticText* aUnitLabel, wxSpinButton* aSpinButton = NULL );
 
     virtual ~WX_UNIT_BINDER();
 
@@ -64,20 +64,20 @@ public:
      * Function Enable
      * Enables/diasables the binded widgets
      */
-    void Enable ( bool aEnable );
+    void Enable( bool aEnable );
 
 protected:
 
-    void onTextChanged ( wxEvent& aEvent );
+    void onTextChanged( wxEvent& aEvent );
 
     ///> Text input control.
     wxTextCtrl*   m_textCtrl;
 
     ///> Label showing currently used units.
-    wxStaticText*   m_unitLabel;
+    wxStaticText* m_unitLabel;
 
     ///> Currently used units.
-    EDA_UNITS_T     m_units;
+    EDA_UNITS_T   m_units;
 
     ///> Step size (added/subtracted difference if spin buttons are used).
     int m_step;

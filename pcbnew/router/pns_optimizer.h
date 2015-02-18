@@ -62,7 +62,7 @@ public:
     void Remove( PNS_LINE& aLine );
     void Replace( PNS_LINE& aOldLine, PNS_LINE& aNewLine );
 
-    bool IsBetter( PNS_COST_ESTIMATOR& aOther, double aLengthTollerance,
+    bool IsBetter( PNS_COST_ESTIMATOR& aOther, double aLengthTolerance,
                    double aCornerTollerace ) const;
 
     double GetLengthCost() const { return m_lengthCost; }

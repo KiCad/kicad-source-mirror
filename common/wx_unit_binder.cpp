@@ -35,14 +35,14 @@
 
 #include "wx_unit_binder.h"
 
-WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl *aTextInput, wxStaticText *aUnitLabel, wxSpinButton *aSpinButton )
+WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl* aTextInput, wxStaticText* aUnitLabel, wxSpinButton* aSpinButton )
 {
     // Use the currently selected units
     m_units = g_UserUnit;
     m_textCtrl = aTextInput;
-    m_textCtrl->SetValue ( wxT("0") );
+    m_textCtrl->SetValue( wxT( "0" ) );
     m_unitLabel = aUnitLabel;
-    m_unitLabel->SetLabel ( GetAbbreviatedUnitsLabel (m_units));
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
 }
 
 
@@ -50,14 +50,16 @@ WX_UNIT_BINDER::~WX_UNIT_BINDER()
 {
 }
 
+
 void WX_UNIT_BINDER::SetValue( int aValue )
 {
     wxString s = StringFromValue( m_units, aValue, false );
 
-    m_textCtrl->SetValue ( s );
+    m_textCtrl->SetValue( s );
     
-    m_unitLabel->SetLabel ( GetAbbreviatedUnitsLabel (m_units));
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
 }
+
 
 int WX_UNIT_BINDER::GetValue() const
 {
@@ -66,8 +68,9 @@ int WX_UNIT_BINDER::GetValue() const
     return ValueFromString( m_units, s );
 }
 
-void WX_UNIT_BINDER::Enable ( bool aEnable )
+
+void WX_UNIT_BINDER::Enable( bool aEnable )
 {
-    m_textCtrl->Enable ( aEnable );
-    m_unitLabel->Enable ( aEnable );
+    m_textCtrl->Enable( aEnable );
+    m_unitLabel->Enable( aEnable );
 }

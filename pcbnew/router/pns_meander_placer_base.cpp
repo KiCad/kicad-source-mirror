@@ -25,34 +25,37 @@
 PNS_MEANDER_PLACER_BASE::PNS_MEANDER_PLACER_BASE( PNS_ROUTER* aRouter ) :
         PNS_PLACEMENT_ALGO( aRouter )
 {
+}
 
-};
 
-PNS_MEANDER_PLACER_BASE::~PNS_MEANDER_PLACER_BASE( ) 
+PNS_MEANDER_PLACER_BASE::~PNS_MEANDER_PLACER_BASE()
 {
+}
 
-};
 
 void PNS_MEANDER_PLACER_BASE::AmplitudeStep( int aSign )
 {
     int a = m_settings.m_maxAmplitude + aSign * m_settings.m_step;
     a = std::max( a,  m_settings.m_minAmplitude );
-        
+
     m_settings.m_maxAmplitude = a;
 }
+
 
 void PNS_MEANDER_PLACER_BASE::SpacingStep( int aSign )
 {
     int s = m_settings.m_spacing + aSign * m_settings.m_step;
     s = std::max( s, 2 * m_currentWidth );
-        
+
     m_settings.m_spacing = s;
 }
+
 
 void PNS_MEANDER_PLACER_BASE::UpdateSettings( const PNS_MEANDER_SETTINGS& aSettings )
 {
     m_settings = aSettings;
 }
+
 
 void PNS_MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin,
                                             const VECTOR2I& aTuneStart,
@@ -73,47 +76,48 @@ void PNS_MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin,
 
     if( i_start > i_end )
     {
-        l = l.Reverse( );
+        l = l.Reverse();
         i_start = l.Find( m );
         i_end = l.Find( n );
     }
 
     aPre = l.Slice( 0, i_start );
-    aPost = l.Slice( i_end, -1 );    
+    aPost = l.Slice( i_end, -1 );
     aTuned = l.Slice( i_start, i_end );
-    aTuned.Simplify( );
+    aTuned.Simplify();
 }
+
 
 void PNS_MEANDER_PLACER_BASE::tuneLineLength( PNS_MEANDERED_LINE& aTuned, int aElongation )
 {
-    int remaining = aElongation; 
+    int remaining = aElongation;
     bool finished = false;
 
-    BOOST_FOREACH(PNS_MEANDER_SHAPE *m, aTuned.Meanders())
+    BOOST_FOREACH( PNS_MEANDER_SHAPE* m, aTuned.Meanders() )
     {
-        if(m->Type() != MT_CORNER )
+        if( m->Type() != MT_CORNER )
         {
-            if(remaining >= 0)
+            if( remaining >= 0 )
                 remaining -= m->MaxTunableLength() - m->BaselineLength();
 
-            if(remaining < 0)
+            if( remaining < 0 )
             {
-                if(!finished)
-                    {
-                        PNS_MEANDER_TYPE newType;
+                if( !finished )
+                {
+                    PNS_MEANDER_TYPE newType;
 
-                        if ( m->Type() == MT_START || m->Type() == MT_SINGLE)
-                            newType = MT_SINGLE;
-                        else
-                            newType = MT_FINISH;
+                    if( m->Type() == MT_START || m->Type() == MT_SINGLE )
+                        newType = MT_SINGLE;
+                    else
+                        newType = MT_FINISH;
 
-                        m->SetType ( newType );
-                        m->Recalculate( );
-                        
-                        finished = true;
-                    } else {
-                        m->MakeEmpty();
-                    }
+                    m->SetType( newType );
+                    m->Recalculate();
+
+                    finished = true;
+                } else {
+                    m->MakeEmpty();
+                }
             }
         }
     }
@@ -121,7 +125,7 @@ void PNS_MEANDER_PLACER_BASE::tuneLineLength( PNS_MEANDERED_LINE& aTuned, int aE
     remaining = aElongation;
     int meanderCount = 0;
 
-    BOOST_FOREACH(PNS_MEANDER_SHAPE *m, aTuned.Meanders())
+    BOOST_FOREACH(PNS_MEANDER_SHAPE* m, aTuned.Meanders())
     {
         if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
         {
@@ -137,30 +141,31 @@ void PNS_MEANDER_PLACER_BASE::tuneLineLength( PNS_MEANDERED_LINE& aTuned, int aE
 
     if( meanderCount )
         balance = -remaining / meanderCount;
-    
-    if (balance >= 0)
+
+    if( balance >= 0 )
     {
-        BOOST_FOREACH(PNS_MEANDER_SHAPE *m, aTuned.Meanders())
+        BOOST_FOREACH( PNS_MEANDER_SHAPE* m, aTuned.Meanders() )
         {
-            if(m->Type() != MT_CORNER && m->Type() != MT_EMPTY)
+            if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
             {
-                m->Resize ( std::max( m->Amplitude() - balance / 2, m_settings.m_minAmplitude ) );
+                m->Resize( std::max( m->Amplitude() - balance / 2, m_settings.m_minAmplitude ) );
             }
         }
-        
     }
 }
 
-const PNS_MEANDER_SETTINGS& PNS_MEANDER_PLACER_BASE::MeanderSettings( ) const
+
+const PNS_MEANDER_SETTINGS& PNS_MEANDER_PLACER_BASE::MeanderSettings() const
 {
     return m_settings;
 }
 
-int PNS_MEANDER_PLACER_BASE::compareWithTollerance ( int aValue, int aExpected, int aTollerance ) const
+
+int PNS_MEANDER_PLACER_BASE::compareWithTolerance( int aValue, int aExpected, int aTolerance ) const
 {
-    if( aValue < aExpected - aTollerance )
+    if( aValue < aExpected - aTolerance )
         return -1;
-    else if( aValue > aExpected + aTollerance )
+    else if( aValue > aExpected + aTolerance )
         return 1;
     else
         return 0;

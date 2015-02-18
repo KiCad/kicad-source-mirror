@@ -33,23 +33,22 @@ class PNS_SIZES_SETTINGS;
 
 class DIALOG_PNS_DIFF_PAIR_DIMENSIONS : public DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE
 {
-	public:
-		DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS_SIZES_SETTINGS& aSizes );
+public:
+    DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS_SIZES_SETTINGS& aSizes );
 
-        virtual void OnClose( wxCloseEvent& aEvent );
-        virtual void OnOkClick( wxCommandEvent& aEvent );
-        virtual void OnCancelClick( wxCommandEvent& aEvent );
-		virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event );
-	
+    virtual void OnClose( wxCloseEvent& aEvent );
+    virtual void OnOkClick( wxCommandEvent& aEvent );
+    virtual void OnCancelClick( wxCommandEvent& aEvent );
+    virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event );
 
-	private:
-		void updateCheckbox( );
+private:
+    void updateCheckbox();
 
-		WX_UNIT_BINDER m_traceWidth;
-		WX_UNIT_BINDER m_traceGap;
-		WX_UNIT_BINDER m_viaGap;
+    WX_UNIT_BINDER m_traceWidth;
+    WX_UNIT_BINDER m_traceGap;
+    WX_UNIT_BINDER m_viaGap;
 
-		PNS_SIZES_SETTINGS& m_sizes;
+    PNS_SIZES_SETTINGS& m_sizes;
 };
 
 #endif // __dialog_pns_settings__

@@ -32,14 +32,13 @@ class PNS_ROUTER;
 class PNS_TUNE_STATUS_POPUP : public WX_STATUS_POPUP
 {
 public:
-   	PNS_TUNE_STATUS_POPUP ( PCB_EDIT_FRAME *parent );
+     PNS_TUNE_STATUS_POPUP( PCB_EDIT_FRAME* aParent );
      ~PNS_TUNE_STATUS_POPUP();
 
-    
-    void Update( PNS_ROUTER *aRouter );
+    void Update( PNS_ROUTER* aRouter );
 
 private:
-	wxStaticText *m_statusLine;
+    wxStaticText* m_statusLine;
 };
 
 #endif /* __PNS_TUNE_STATUS_POPUP_H_*/

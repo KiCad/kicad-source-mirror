@@ -49,8 +49,6 @@
 #include "pns_meander_skew_placer.h"
 #include "pns_dp_meander_placer.h"
 
-
-
 #include <router/router_preview_item.h>
 
 #include <class_board.h>
@@ -87,10 +85,11 @@ PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( BOARD* aBoard )
     m_defaultClearance = 254000;    // aBoard->m_NetClasses.Find ("Default clearance")->GetClearance();
 }
 
+
 PNS_PCBNEW_CLEARANCE_FUNC::~PNS_PCBNEW_CLEARANCE_FUNC()
 {
-
 }
+
 
 int PNS_PCBNEW_CLEARANCE_FUNC::localPadClearance( const PNS_ITEM* aItem ) const
 {
@@ -101,6 +100,7 @@ int PNS_PCBNEW_CLEARANCE_FUNC::localPadClearance( const PNS_ITEM* aItem ) const
     return pad->GetLocalClearance();
 }
 
+
 int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* aB )
 {
     int net_a = aA->Net();
@@ -108,7 +108,7 @@ int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* a
     int net_b = aB->Net();
     int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance );
 
-    if(m_overrideEnabled && aA->OfKind(PNS_ITEM::SEGMENT) && aB->OfKind(PNS_ITEM::SEGMENT))
+    if( m_overrideEnabled && aA->OfKind( PNS_ITEM::SEGMENT ) && aB->OfKind( PNS_ITEM::SEGMENT ) )
     {
         if( net_a == m_overrideNetA && net_b == m_overrideNetB )
             return m_overrideClearance;
@@ -123,10 +123,11 @@ int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* a
     cl_b = std::max( cl_b, pad_b );
 
     return std::max( cl_a, cl_b );
-};
+}
+
 
 // fixme: ugly hack to make the optimizer respect gap width for currently routed differential pair.
-void PNS_PCBNEW_CLEARANCE_FUNC::OverrideClearance (bool aEnable, int aNetA , int aNetB , int aClearance )
+void PNS_PCBNEW_CLEARANCE_FUNC::OverrideClearance( bool aEnable, int aNetA, int aNetB , int aClearance )
 {
     m_overrideEnabled = aEnable;
     m_overrideNetA = aNetA;
@@ -249,6 +250,7 @@ PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
 
     if( aTrack->GetFlags( ) & DP_COUPLED )
         s->Mark ( MK_DP_COUPLED );
+
     s->SetWidth( aTrack->GetWidth() );
     s->SetLayers( PNS_LAYERSET( aTrack->GetLayer() ) );
     s->SetParent( aTrack );
@@ -279,6 +281,7 @@ void PNS_ROUTER::SetBoard( BOARD* aBoard )
     m_board = aBoard;
     TRACE( 1, "m_board = %p\n", m_board );
 }
+
 
 void PNS_ROUTER::SyncWorld()
 {
@@ -488,7 +491,7 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
 bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLayer )
 {
-    switch (m_mode)
+    switch( m_mode )
     {
         case PNS_MODE_ROUTE_SINGLE:
             m_placer = new PNS_LINE_PLACER( this );
@@ -505,7 +508,7 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLa
         case PNS_MODE_TUNE_DIFF_PAIR_SKEW:
             m_placer = new PNS_MEANDER_SKEW_PLACER( this );
             break;
-        
+
         default:
             return false;
     }
@@ -513,9 +516,9 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLa
     m_placer->UpdateSizes ( m_sizes );
     m_placer->SetLayer( aLayer );
 
-    bool rv  = m_placer->Start( aP, aStartItem );
+    bool rv = m_placer->Start( aP, aStartItem );
 
-    if(!rv)
+    if( !rv )
         return false;
 
     m_currentEnd = aP;
@@ -524,10 +527,12 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLa
     return rv;
 }
 
-BOARD *PNS_ROUTER::GetBoard()
+
+BOARD* PNS_ROUTER::GetBoard()
 {
     return m_board;
 }
+
 
 void PNS_ROUTER::eraseView()
 {
@@ -710,22 +715,20 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     m_placer->Move( aP, aEndItem );
     PNS_ITEMSET current = m_placer->Traces();
 
-
     BOOST_FOREACH( const PNS_ITEM* item, current.CItems() )
     {
-        if( !item->OfKind ( PNS_ITEM::LINE ) )
+        if( !item->OfKind( PNS_ITEM::LINE ) )
             continue;
 
-        const PNS_LINE *l = static_cast <const PNS_LINE *> (item);
-        DisplayItem(l); 
-    
+        const PNS_LINE* l = static_cast <const PNS_LINE*> (item);
+        DisplayItem( l );
+
         if( l->EndsWithVia() )
             DisplayItem( &l->Via() );
     }
 
-    
     //PNS_ITEMSET tmp( &current );
-    
+
     updateView( m_placer->CurrentNode( true ), current );
 }
 
@@ -844,7 +847,6 @@ void PNS_ROUTER::StopRouting()
         }
     }
 
-
     if( !RoutingInProgress() )
         return;
 
@@ -890,9 +892,9 @@ void PNS_ROUTER::SwitchLayer( int aLayer )
 
 void PNS_ROUTER::ToggleViaPlacement()
 {
-	if( m_state == ROUTE_TRACK )
+    if( m_state == ROUTE_TRACK )
     {
-		bool toggle = !m_placer->IsPlacingVia();
+        bool toggle = !m_placer->IsPlacingVia();
         m_placer->ToggleVia( toggle );
     }
 }
@@ -932,24 +934,26 @@ void PNS_ROUTER::DumpLog()
         logger->Save( "/tmp/shove.log" );
 }
 
+
 bool PNS_ROUTER::IsPlacingVia() const
 {
-    if(!m_placer)
+    if( !m_placer )
         return NULL;
+
     return m_placer->IsPlacingVia();
 }
 
+
 void PNS_ROUTER::SetOrthoMode( bool aEnable )
 {
-    if(!m_placer)
+    if( !m_placer )
         return;
 
-    m_placer->SetOrthoMode ( aEnable );
+    m_placer->SetOrthoMode( aEnable );
 }
 
-void PNS_ROUTER::SetMode ( PNS_ROUTER_MODE aMode )
+
+void PNS_ROUTER::SetMode( PNS_ROUTER_MODE aMode )
 {
     m_mode = aMode;
 }
-
-

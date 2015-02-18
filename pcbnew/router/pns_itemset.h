@@ -41,14 +41,14 @@ public:
     PNS_ITEMSET( PNS_ITEM* aInitialItem = NULL );
 
     PNS_ITEMSET( const PNS_ITEMSET& aOther ):
-        m_owner ( false )
+        m_owner( false )
     {
         m_items = aOther.m_items;
     }
 
     ~PNS_ITEMSET();
 
-    void MakeOwner ( )
+    void MakeOwner()
     {
         m_owner = true;
     }
@@ -105,9 +105,9 @@ public:
         m_items.push_back( aItem );
     }
 
-    void Prepend ( PNS_ITEM *aItem )
+    void Prepend( PNS_ITEM* aItem )
     {
-        m_items.push_front ( aItem );
+        m_items.push_front( aItem );
     }
 
     PNS_ITEM* Get( int index ) const

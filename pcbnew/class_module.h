@@ -262,7 +262,8 @@ public:
             m_ModuleStatus &= ~MODULE_to_PLACE;
     }
 
-    bool PadsLocked() const { return (m_ModuleStatus & MODULE_PADS_LOCKED ); }
+    bool PadsLocked() const { return ( m_ModuleStatus & MODULE_PADS_LOCKED ); }
+
     void SetPadsLocked( bool aPadsLocked )
     {
         if( aPadsLocked )
@@ -569,9 +570,9 @@ public:
         m_initial_comments = aInitialComments;
     }
 
-	/**
-	 * Function PadCoverageRatio
-	 * Calculates the ratio of total area of the footprint pads to the area of the 
+    /**
+     * Function PadCoverageRatio
+     * Calculates the ratio of total area of the footprint pads to the area of the 
      * footprint. Used by selection tool heuristics. 
      * @return the ratio
      */

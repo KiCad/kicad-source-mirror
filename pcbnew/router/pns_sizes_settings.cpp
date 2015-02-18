@@ -66,6 +66,7 @@ int PNS_SIZES_SETTINGS::inheritTrackWidth( PNS_ITEM* aItem )
     return ( mval == INT_MAX ? 0 : mval );
 }
 
+
 void PNS_SIZES_SETTINGS::Init( BOARD* aBoard, PNS_ITEM* aStartItem, int aNet )
 {
     BOARD_DESIGN_SETTINGS &bds = aBoard->GetDesignSettings();
@@ -121,10 +122,12 @@ void PNS_SIZES_SETTINGS::Init( BOARD* aBoard, PNS_ITEM* aStartItem, int aNet )
     m_layerPairs.clear();
 }
 
+
 void PNS_SIZES_SETTINGS::ClearLayerPairs()
 {
     m_layerPairs.clear();
 }
+
 
 void PNS_SIZES_SETTINGS::AddLayerPair( int aL1, int aL2 )
 {
@@ -135,12 +138,14 @@ void PNS_SIZES_SETTINGS::AddLayerPair( int aL1, int aL2 )
     m_layerPairs[top] = bottom;
 }
 
+
 void PNS_SIZES_SETTINGS::ImportCurrent( BOARD_DESIGN_SETTINGS& aSettings )
 {
     m_trackWidth = aSettings.GetCurrentTrackWidth();
     m_viaDiameter = aSettings.GetCurrentViaSize();
     m_viaDrill = aSettings.GetCurrentViaDrill();
 }
+
 
 int PNS_SIZES_SETTINGS::GetLayerTop() const
 {
@@ -149,6 +154,7 @@ int PNS_SIZES_SETTINGS::GetLayerTop() const
     else
         return m_layerPairs.begin()->first;
 }
+
 
 int PNS_SIZES_SETTINGS::GetLayerBottom() const
 {

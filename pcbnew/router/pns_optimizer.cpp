@@ -101,14 +101,14 @@ void PNS_COST_ESTIMATOR::Replace( PNS_LINE& aOldLine, PNS_LINE& aNewLine )
 
 
 bool PNS_COST_ESTIMATOR::IsBetter( PNS_COST_ESTIMATOR& aOther,
-        double aLengthTollerance,
-        double aCornerTollerance ) const
+        double aLengthTolerance,
+        double aCornerTolerance ) const
 {
     if( aOther.m_cornerCost < m_cornerCost && aOther.m_lengthCost < m_lengthCost )
         return true;
 
-    else if( aOther.m_cornerCost < m_cornerCost * aCornerTollerance &&
-             aOther.m_lengthCost < m_lengthCost * aLengthTollerance )
+    else if( aOther.m_cornerCost < m_cornerCost * aCornerTolerance &&
+             aOther.m_lengthCost < m_lengthCost * aLengthTolerance )
         return true;
 
     return false;
@@ -224,27 +224,26 @@ void PNS_OPTIMIZER::ClearCache( bool aStaticOnly  )
     }
 }
 
-class LINE_RESTRICTIONS 
+
+class LINE_RESTRICTIONS
 {
     public:
-        LINE_RESTRICTIONS( ) {};
-        ~LINE_RESTRICTIONS( ) {};
+        LINE_RESTRICTIONS() {};
+        ~LINE_RESTRICTIONS() {};
 
-        void Build( PNS_NODE *aWorld, PNS_LINE *aOriginLine, const SHAPE_LINE_CHAIN& aLine, const BOX2I& aRestrictedArea, bool aRestrictedAreaEnable );
+        void Build( PNS_NODE* aWorld, PNS_LINE* aOriginLine, const SHAPE_LINE_CHAIN& aLine, const BOX2I& aRestrictedArea, bool aRestrictedAreaEnable );
         bool Check ( int aVertex1, int aVertex2, const SHAPE_LINE_CHAIN& aReplacement );
         void Dump();
 
-
     private:
-        int allowedAngles ( PNS_NODE *aWorld, const PNS_LINE *aLine, const VECTOR2I& aP, bool aFirst );
+        int allowedAngles( PNS_NODE* aWorld, const PNS_LINE* aLine, const VECTOR2I& aP, bool aFirst );
 
         struct RVERTEX
         {
-            RVERTEX ( bool aRestricted,  int aAllowedAngles ) : 
-                restricted ( aRestricted ),
-                allowedAngles  ( aAllowedAngles ) 
+            RVERTEX ( bool aRestricted, int aAllowedAngles ) :
+                restricted( aRestricted ),
+                allowedAngles( aAllowedAngles )
             {
-
             }
 
             bool restricted;
@@ -254,55 +253,54 @@ class LINE_RESTRICTIONS
         std::vector<RVERTEX> m_rs;
 };
 
+
 // fixme: use later
-int LINE_RESTRICTIONS::allowedAngles ( PNS_NODE *aWorld, const PNS_LINE *aLine, const VECTOR2I& aP, bool aFirst )
+int LINE_RESTRICTIONS::allowedAngles( PNS_NODE* aWorld, const PNS_LINE* aLine, const VECTOR2I& aP, bool aFirst )
 {
     PNS_JOINT* jt = aWorld->FindJoint( aP , aLine );
 
     if( !jt )
         return 0xff;
 
-    
     DIRECTION_45 dirs [8];
 
     int n_dirs = 0;
 
-    BOOST_FOREACH ( const PNS_ITEM *item, jt->Links().CItems() )
+    BOOST_FOREACH( const PNS_ITEM* item, jt->Links().CItems() )
     {
-        if (item->OfKind (PNS_ITEM::VIA) || item->OfKind (PNS_ITEM::SOLID))
+        if( item->OfKind( PNS_ITEM::VIA ) || item->OfKind( PNS_ITEM::SOLID ) )
             return 0xff;
-        else if ( const PNS_SEGMENT *seg = dyn_cast<const PNS_SEGMENT*> ( item ) )
+        else if( const PNS_SEGMENT* seg = dyn_cast<const PNS_SEGMENT*>( item ) )
         {
             SEG s = seg->Seg();
-            if (s.A != aP)
+            if( s.A != aP )
                 s.Reverse();
 
-            if (n_dirs < 8)
-                dirs [ n_dirs++ ] = aFirst ? DIRECTION_45 ( s ) : DIRECTION_45 ( s ).Opposite();
+            if( n_dirs < 8 )
+                dirs[n_dirs++] = aFirst ? DIRECTION_45( s ) : DIRECTION_45( s ).Opposite();
         }
     }
 
-
-
     const int angleMask = DIRECTION_45::ANG_OBTUSE | DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_STRAIGHT;
     int outputMask = 0xff;
-    
-    for (int d = 0; d < 8; d ++)
+
+    for( int d = 0; d < 8; d++ )
     {
-        DIRECTION_45 refDir( (DIRECTION_45::Directions) d );
-        for (int i = 0; i < n_dirs; i++ )
+        DIRECTION_45 refDir( ( DIRECTION_45::Directions ) d );
+
+        for( int i = 0; i < n_dirs; i++ )
         {
-            if (! (refDir.Angle(dirs [ i ] ) & angleMask) )
+            if( !(refDir.Angle( dirs[i] ) & angleMask ) )
                 outputMask &= ~refDir.Mask();
         }
     }
 
-    DrawDebugDirs ( aP, outputMask, 3 );
+    DrawDebugDirs( aP, outputMask, 3 );
     return 0xff;
 }
 
 
-void LINE_RESTRICTIONS::Build( PNS_NODE *aWorld, PNS_LINE *aOriginLine, const SHAPE_LINE_CHAIN& aLine, const BOX2I& aRestrictedArea, bool aRestrictedAreaEnable )
+void LINE_RESTRICTIONS::Build( PNS_NODE* aWorld, PNS_LINE* aOriginLine, const SHAPE_LINE_CHAIN& aLine, const BOX2I& aRestrictedArea, bool aRestrictedAreaEnable )
 {
     const SHAPE_LINE_CHAIN& l = aLine;
     VECTOR2I v_prev;
@@ -310,49 +308,56 @@ void LINE_RESTRICTIONS::Build( PNS_NODE *aWorld, PNS_LINE *aOriginLine, const SH
 
     m_rs.reserve( n );
 
-    for (int i = 0; i < n; i++)
+    for( int i = 0; i < n; i++ )
     {
-        const VECTOR2I &v = l.CPoint(i), v_next;
-        RVERTEX r ( false, 0xff );
+        const VECTOR2I &v = l.CPoint( i ), v_next;
+        RVERTEX r( false, 0xff );
 
-        if ( aRestrictedAreaEnable )
+        if( aRestrictedAreaEnable )
         {
-            bool exiting = ( i > 0 && aRestrictedArea.Contains( v_prev ) && !aRestrictedArea.Contains(v) );
-            bool entering = false;        
+            bool exiting = ( i > 0 && aRestrictedArea.Contains( v_prev ) && !aRestrictedArea.Contains( v ) );
+            bool entering = false;
 
-            if( i != l.PointCount() - 1)
+            if( i != l.PointCount() - 1 )
             {
-                const VECTOR2I& v_next = l.CPoint(i + 1);
+                const VECTOR2I& v_next = l.CPoint( i + 1 );
                 entering = ( !aRestrictedArea.Contains( v ) && aRestrictedArea.Contains( v_next ) );
             }
 
-            if(entering)
+            if( entering )
             {
-                const SEG& sp = l.CSegment(i);
-                r.allowedAngles = DIRECTION_45(sp).Mask();
-            } else if (exiting) {
-                const SEG& sp = l.CSegment(i - 1);
-                r.allowedAngles = DIRECTION_45(sp).Mask();
-            } else {
-                r.allowedAngles = (! aRestrictedArea.Contains ( v ) ) ? 0 : 0xff;
+                const SEG& sp = l.CSegment( i );
+                r.allowedAngles = DIRECTION_45( sp ).Mask();
+            }
+            else if( exiting )
+            {
+                const SEG& sp = l.CSegment( i - 1 );
+                r.allowedAngles = DIRECTION_45( sp ).Mask();
+            }
+            else
+            {
+                r.allowedAngles = ( !aRestrictedArea.Contains( v ) ) ? 0 : 0xff;
                 r.restricted = r.allowedAngles ? false : true;
             }
         }
+
         v_prev = v;
-        m_rs.push_back(r);
+        m_rs.push_back( r );
     }
 }
+
 
 void LINE_RESTRICTIONS::Dump()
 {
 }
 
-bool LINE_RESTRICTIONS::Check ( int aVertex1, int aVertex2, const SHAPE_LINE_CHAIN& aReplacement )
+
+bool LINE_RESTRICTIONS::Check( int aVertex1, int aVertex2, const SHAPE_LINE_CHAIN& aReplacement )
 {
     if( m_rs.empty( ) )
         return true;
-    
-    for(int i = aVertex1; i <= aVertex2; i++)
+
+    for( int i = aVertex1; i <= aVertex2; i++ )
         if ( m_rs[i].restricted )
             return false;
 
@@ -361,16 +366,15 @@ bool LINE_RESTRICTIONS::Check ( int aVertex1, int aVertex2, const SHAPE_LINE_CHA
 
     int m1 = DIRECTION_45( aReplacement.CSegment( 0 ) ).Mask();
     int m2;
-    if (aReplacement.SegmentCount() == 1)
+
+    if( aReplacement.SegmentCount() == 1 )
         m2 = m1;
     else
-        m2 = DIRECTION_45 ( aReplacement.CSegment( 1 ) ).Mask();
+        m2 = DIRECTION_45( aReplacement.CSegment( 1 ) ).Mask();
 
-
-    return  ((v1.allowedAngles & m1) != 0) &&
-            ((v2.allowedAngles & m2) != 0);
+    return ( ( v1.allowedAngles & m1 ) != 0 ) &&
+           ( ( v2.allowedAngles & m2 ) != 0 );
 }
-
 
 
 bool PNS_OPTIMIZER::checkColliding( PNS_ITEM* aItem, bool aUpdateCache )
@@ -463,7 +467,6 @@ bool PNS_OPTIMIZER::mergeObtuse( PNS_LINE* aLine )
                     s1opt = SEG( s1.A, ip );
                     s2opt = SEG( ip, s2.B );
                 }
-
 
                 if( DIRECTION_45( s1opt ).IsObtuse( DIRECTION_45( s2opt ) ) )
                 {
@@ -802,7 +805,7 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 
                 if(!connect.SegmentCount())
                     continue;
-                
+
                 int ang1 = dir_bkout.Angle( DIRECTION_45( connect.CSegment( 0 ) ) );
                 int ang2 = 0;
 
@@ -872,7 +875,7 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 bool PNS_OPTIMIZER::runSmartPads( PNS_LINE* aLine )
 {
     SHAPE_LINE_CHAIN& line = aLine->Line();
-    
+
     if( line.PointCount() < 3 )
         return false;
 
@@ -916,25 +919,27 @@ bool PNS_OPTIMIZER::fanoutCleanup( PNS_LINE* aLine )
     PNS_ITEM* startPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_start );
     PNS_ITEM* endPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_end );
 
-    int thr = aLine->Width() * 10; 
+    int thr = aLine->Width() * 10;
     int len = aLine->CLine().Length();
 
     if( !startPad )
         return false;
 
     bool startMatch = startPad->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID );
-    bool endMatch = false;   
+    bool endMatch = false;
 
     if(endPad)
     {
         endMatch = endPad->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID );
-    } else {
+    }
+    else
+    {
         endMatch = aLine->EndsWithVia();
     }
-    
+
     if( startMatch && endMatch && len < thr )
     {
-        for(int i = 0; i < 2; i++ )
+        for( int i = 0; i < 2; i++ )
         {
             SHAPE_LINE_CHAIN l2 = DIRECTION_45().BuildInitialTrace( p_start, p_end, i );
             PNS_LINE repl;
@@ -951,97 +956,103 @@ bool PNS_OPTIMIZER::fanoutCleanup( PNS_LINE* aLine )
     return false;
 }
 
-int findCoupledVertices ( const VECTOR2I& aVertex, const SEG& aOrigSeg, const SHAPE_LINE_CHAIN& aCoupled, PNS_DIFF_PAIR *aPair, int *aIndices )
+
+int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg, const SHAPE_LINE_CHAIN& aCoupled, PNS_DIFF_PAIR* aPair, int* aIndices )
 {
-    int count = 0; 
+    int count = 0;
     for ( int i = 0; i < aCoupled.SegmentCount(); i++ )
     {
-        SEG s = aCoupled.CSegment(i);
+        SEG s = aCoupled.CSegment( i );
         VECTOR2I projOverCoupled = s.LineProject ( aVertex );
-        
 
         if( s.ApproxParallel ( aOrigSeg ) )
         {
             int64_t dist = ( projOverCoupled - aVertex ).EuclideanNorm() - aPair->Width();
-                
-            if( aPair->GapConstraint().Matches(dist) )
+
+            if( aPair->GapConstraint().Matches( dist ) )
             {
                *aIndices++ = i;
                count++;
             }
         }
     }
-    
+
     return count;
 }
 
-bool verifyDpBypass ( PNS_NODE *aNode, PNS_DIFF_PAIR *aPair, bool aRefIsP, const SHAPE_LINE_CHAIN& aNewRef, const SHAPE_LINE_CHAIN& aNewCoupled )
+
+bool verifyDpBypass( PNS_NODE* aNode, PNS_DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LINE_CHAIN& aNewRef, const SHAPE_LINE_CHAIN& aNewCoupled )
 {
     PNS_LINE refLine ( aRefIsP ? aPair->PLine() : aPair->NLine(), aNewRef );
     PNS_LINE coupledLine ( aRefIsP ? aPair->NLine() : aPair->PLine(), aNewCoupled );
-    
-    if ( aNode->CheckColliding( &refLine, &coupledLine, PNS_ITEM::ANY, aPair->Gap() - 10 ) )
+
+    if( aNode->CheckColliding( &refLine, &coupledLine, PNS_ITEM::ANY, aPair->Gap() - 10 ) )
         return false;
 
-    if ( aNode->CheckColliding ( &refLine ) )
+    if( aNode->CheckColliding ( &refLine ) )
         return false;
 
-    if ( aNode->CheckColliding ( &coupledLine ) )
+    if( aNode->CheckColliding ( &coupledLine ) )
         return false;
 
     return true;
 }
 
-bool coupledBypass ( PNS_NODE *aNode, PNS_DIFF_PAIR *aPair, bool aRefIsP, const SHAPE_LINE_CHAIN& aRef, const SHAPE_LINE_CHAIN& aRefBypass, const SHAPE_LINE_CHAIN& aCoupled, SHAPE_LINE_CHAIN& aNewCoupled )
+
+bool coupledBypass( PNS_NODE* aNode, PNS_DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LINE_CHAIN& aRef, const SHAPE_LINE_CHAIN& aRefBypass, const SHAPE_LINE_CHAIN& aCoupled, SHAPE_LINE_CHAIN& aNewCoupled )
 {
     int vStartIdx[1024]; // fixme: possible overflow
 
-    int nStarts = findCoupledVertices  ( aRefBypass.CPoint(0), aRefBypass.CSegment(0), aCoupled, aPair, vStartIdx );
-    DIRECTION_45 dir( aRefBypass.CSegment(0) );
-    
+    int nStarts = findCoupledVertices( aRefBypass.CPoint( 0 ), aRefBypass.CSegment( 0 ), aCoupled, aPair, vStartIdx );
+    DIRECTION_45 dir( aRefBypass.CSegment( 0 ) );
+
     int64_t bestLength = -1;
     bool found = false;
     SHAPE_LINE_CHAIN bestBypass;
     int si, ei;
 
-    for(int i=0; i< nStarts ;i++)
-        for ( int j = 1; j < aCoupled.PointCount() - 1; j++)
+    for( int i=0; i< nStarts; i++ )
+    {
+        for( int j = 1; j < aCoupled.PointCount() - 1; j++ )
         {
             int delta = std::abs ( vStartIdx[i] - j );
-            if(delta > 1)
+
+            if( delta > 1 )
             {
                 const VECTOR2I& vs = aCoupled.CPoint( vStartIdx[i] );
                 SHAPE_LINE_CHAIN bypass = dir.BuildInitialTrace( vs, aCoupled.CPoint(j), dir.IsDiagonal() );
 
-                int64_t coupledLength = aPair->CoupledLength ( aRef, bypass );
-            
+                int64_t coupledLength = aPair->CoupledLength( aRef, bypass );
+
                 SHAPE_LINE_CHAIN newCoupled = aCoupled;
 
                 si = vStartIdx[i];
                 ei = j;
-                
+
                 if(si < ei)
                     newCoupled.Replace( si, ei, bypass );
                 else
                     newCoupled.Replace( ei, si, bypass.Reverse() );
 
-                if(coupledLength > bestLength && verifyDpBypass ( aNode, aPair, aRefIsP, aRef, newCoupled) )
+                if(coupledLength > bestLength && verifyDpBypass( aNode, aPair, aRefIsP, aRef, newCoupled) )
                 {
                     bestBypass = newCoupled;
-                    bestLength = coupledLength;                
+                    bestLength = coupledLength;
                     found = true;
                 }
             }
         }
+    }
 
 
-    if(found)
+    if( found )
         aNewCoupled = bestBypass;
 
     return found;
 }
 
-bool checkDpColliding ( PNS_NODE *aNode, PNS_DIFF_PAIR *aPair, bool aIsP, const SHAPE_LINE_CHAIN& aPath )
+
+bool checkDpColliding( PNS_NODE* aNode, PNS_DIFF_PAIR* aPair, bool aIsP, const SHAPE_LINE_CHAIN& aPath )
 {
     PNS_LINE tmp ( aIsP ? aPair->PLine() : aPair->NLine(), aPath );
 
@@ -1049,16 +1060,16 @@ bool checkDpColliding ( PNS_NODE *aNode, PNS_DIFF_PAIR *aPair, bool aIsP, const 
 }
 
 
-bool PNS_OPTIMIZER::mergeDpStep( PNS_DIFF_PAIR *aPair, bool aTryP, int step )
+bool PNS_OPTIMIZER::mergeDpStep( PNS_DIFF_PAIR* aPair, bool aTryP, int step )
 {
     int n = 1;
-    
-    SHAPE_LINE_CHAIN currentPath  = aTryP ? aPair->CP() : aPair->CN();
-    SHAPE_LINE_CHAIN coupledPath  = aTryP ? aPair->CN() : aPair->CP();
+
+    SHAPE_LINE_CHAIN currentPath = aTryP ? aPair->CP() : aPair->CN();
+    SHAPE_LINE_CHAIN coupledPath = aTryP ? aPair->CN() : aPair->CP();
 
     int n_segs = currentPath.SegmentCount() - 1;
 
-    int64_t clenPre = aPair->CoupledLength ( currentPath, coupledPath );
+    int64_t clenPre = aPair->CoupledLength( currentPath, coupledPath );
     int64_t budget = clenPre / 10; // fixme: come up with somethig more intelligent here...
 
     while( n < n_segs - step )
@@ -1066,32 +1077,31 @@ bool PNS_OPTIMIZER::mergeDpStep( PNS_DIFF_PAIR *aPair, bool aTryP, int step )
         const SEG s1    = currentPath.CSegment( n );
         const SEG s2    = currentPath.CSegment( n + step );
 
-        DIRECTION_45 dir1 (s1);
-        DIRECTION_45 dir2 (s2);
+        DIRECTION_45 dir1( s1 );
+        DIRECTION_45 dir2( s2 );
 
-        if( dir1.IsObtuse(dir2 ) )
+        if( dir1.IsObtuse( dir2 ) )
         {
             SHAPE_LINE_CHAIN bypass = DIRECTION_45().BuildInitialTrace( s1.A, s2.B, dir1.IsDiagonal() );
             SHAPE_LINE_CHAIN newRef;
             SHAPE_LINE_CHAIN newCoup;
             int64_t deltaCoupled = -1, deltaUni = -1;
-                        
 
             newRef = currentPath;
             newRef.Replace( s1.Index(), s2.Index(), bypass );
 
             deltaUni = aPair->CoupledLength ( newRef, coupledPath ) - clenPre + budget;
 
-            if ( coupledBypass ( m_world, aPair, aTryP, newRef, bypass, coupledPath, newCoup ) )
+            if ( coupledBypass( m_world, aPair, aTryP, newRef, bypass, coupledPath, newCoup ) )
             {
-                deltaCoupled = aPair->CoupledLength ( newRef, newCoup ) - clenPre + budget;
+                deltaCoupled = aPair->CoupledLength( newRef, newCoup ) - clenPre + budget;
 
-                if(deltaCoupled >= 0)
+                if( deltaCoupled >= 0 )
                 {
                     newRef.Simplify();
                     newCoup.Simplify();
 
-                    aPair->SetShape ( newRef, newCoup, !aTryP );
+                    aPair->SetShape( newRef, newCoup, !aTryP );
                     return true;
                 }
             }
@@ -1100,18 +1110,19 @@ bool PNS_OPTIMIZER::mergeDpStep( PNS_DIFF_PAIR *aPair, bool aTryP, int step )
                 newRef.Simplify();
                 coupledPath.Simplify();
 
-                aPair->SetShape ( newRef, coupledPath, !aTryP );
+                aPair->SetShape( newRef, coupledPath, !aTryP );
                 return true;
             }
         }
-        
+
         n++;
     }
 
-    return false;   
+    return false;
 }
 
-bool PNS_OPTIMIZER::mergeDpSegments( PNS_DIFF_PAIR *aPair )
+
+bool PNS_OPTIMIZER::mergeDpSegments( PNS_DIFF_PAIR* aPair )
 {
     int step_p = aPair->CP().SegmentCount() - 2;
     int step_n = aPair->CN().SegmentCount() - 2;
@@ -1120,7 +1131,7 @@ bool PNS_OPTIMIZER::mergeDpSegments( PNS_DIFF_PAIR *aPair )
     {
         int n_segs_p = aPair->CP().SegmentCount();
         int n_segs_n = aPair->CN().SegmentCount();
-        
+
         int max_step_p = n_segs_p - 2;
         int max_step_n = n_segs_n - 2;
 
@@ -1136,12 +1147,12 @@ bool PNS_OPTIMIZER::mergeDpSegments( PNS_DIFF_PAIR *aPair )
         bool found_anything_p = false;
         bool found_anything_n = false;
 
-        if(step_p > 1)
+        if( step_p > 1 )
             found_anything_p = mergeDpStep( aPair, true, step_p );
 
-        if(step_n > 1)
+        if( step_n > 1 )
             found_anything_n = mergeDpStep( aPair, false, step_n );
-        
+
         if( !found_anything_n && !found_anything_p )
         {
             step_n--;
@@ -1151,9 +1162,8 @@ bool PNS_OPTIMIZER::mergeDpSegments( PNS_DIFF_PAIR *aPair )
     return true;
 }
 
+
 bool PNS_OPTIMIZER::Optimize( PNS_DIFF_PAIR* aPair )
 {
-
-
-    return mergeDpSegments ( aPair );
+    return mergeDpSegments( aPair );
 }

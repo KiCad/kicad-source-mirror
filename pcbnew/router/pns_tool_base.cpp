@@ -95,6 +95,7 @@ void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
         m_router->SetView( getView() );
 }
 
+
 PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
 {
     int tl = getView()->GetTopLayer();
@@ -138,7 +139,7 @@ PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int a
     }
 
     PNS_ITEM* rv = NULL;
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME> ();
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
 
     for( int i = 0; i < 4; i++ )
@@ -178,6 +179,7 @@ void PNS_TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
     getView()->UpdateAllLayersColor();
 }
 
+
 void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
 {
     int tl = getView()->GetTopLayer();
@@ -187,7 +189,7 @@ void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
     if( aEvent.IsMotion() || aEvent.IsClick() )
     {
         bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
-        
+
         VECTOR2I p( aEvent.Position() );
         startItem = pickSingleItem( p );
         m_router->EnableSnapping ( snapEnabled );
@@ -226,6 +228,7 @@ void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
         }
     }
 }
+
 
 void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
 {

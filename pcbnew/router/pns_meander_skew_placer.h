@@ -37,7 +37,6 @@ class PNS_ROUTER_BASE;
 class PNS_MEANDER_SKEW_PLACER : public PNS_MEANDER_PLACER
 {
 public:
-
     PNS_MEANDER_SKEW_PLACER( PNS_ROUTER* aRouter );
     ~PNS_MEANDER_SKEW_PLACER();
 
@@ -51,13 +50,13 @@ public:
     const wxString TuningInfo() const;
 
 private:
-    
+
     int currentSkew( ) const;
     int itemsetLength( const PNS_ITEMSET& aSet ) const;
 
     int origPathLength () const;
 
-    PNS_DIFF_PAIR m_originPair;    
+    PNS_DIFF_PAIR m_originPair;
     PNS_ITEMSET m_tunedPath, m_tunedPathP, m_tunedPathN;
 
     int m_coupledLength;

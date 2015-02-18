@@ -206,7 +206,7 @@ public:
         return sqrt( SquaredDistance( aP ) );
     }
 
-    void CanonicalCoefs ( ecoord& qA, ecoord& qB, ecoord& qC) const
+    void CanonicalCoefs( ecoord& qA, ecoord& qB, ecoord& qC ) const
     {
         qA = A.y - B.y;
         qB = B.x - A.x;
@@ -223,8 +223,8 @@ public:
     bool Collinear( const SEG& aSeg ) const
     {
         ecoord qa, qb, qc;
-        CanonicalCoefs ( qa, qb, qc );
-        
+        CanonicalCoefs( qa, qb, qc );
+
         ecoord d1 = std::abs( aSeg.A.x * qa + aSeg.A.y * qb + qc );
         ecoord d2 = std::abs( aSeg.B.x * qa + aSeg.B.y * qb + qc );
 
@@ -234,23 +234,23 @@ public:
     bool ApproxCollinear( const SEG& aSeg ) const
     {
         ecoord p, q, r;
-        CanonicalCoefs ( p, q, r );
-    
-        ecoord dist1 = ( p * aSeg.A.x + q * aSeg.A.y + r ) / sqrt( p * p + q * q );     
-        ecoord dist2 = ( p * aSeg.B.x + q * aSeg.B.y + r ) / sqrt( p * p + q * q );     
+        CanonicalCoefs( p, q, r );
 
-        return std::abs(dist1) <= 1 && std::abs(dist2) <= 1;
+        ecoord dist1 = ( p * aSeg.A.x + q * aSeg.A.y + r ) / sqrt( p * p + q * q );
+        ecoord dist2 = ( p * aSeg.B.x + q * aSeg.B.y + r ) / sqrt( p * p + q * q );
+
+        return std::abs( dist1 ) <= 1 && std::abs( dist2 ) <= 1;
     }
 
     bool ApproxParallel ( const SEG& aSeg ) const
     {
         ecoord p, q, r;
-        CanonicalCoefs ( p, q, r );
-        
-        ecoord dist1 = ( p * aSeg.A.x + q * aSeg.A.y + r ) / sqrt( p * p + q * q );     
-        ecoord dist2 = ( p * aSeg.B.x + q * aSeg.B.y + r ) / sqrt( p * p + q * q );     
+        CanonicalCoefs( p, q, r );
 
-        return std::abs(dist1 - dist2) <= 1;
+        ecoord dist1 = ( p * aSeg.A.x + q * aSeg.A.y + r ) / sqrt( p * p + q * q );
+        ecoord dist2 = ( p * aSeg.B.x + q * aSeg.B.y + r ) / sqrt( p * p + q * q );
+
+        return std::abs( dist1 - dist2 ) <= 1;
     }
 
 
@@ -291,7 +291,7 @@ public:
         return ( A - B ).SquaredEuclideanNorm();
     }
 
-    ecoord TCoef ( const VECTOR2I& aP ) const;
+    ecoord TCoef( const VECTOR2I& aP ) const;
 
     /**
      * Function Index()
@@ -310,7 +310,7 @@ public:
 
     void Reverse()
     {
-        std::swap ( A, B );
+        std::swap( A, B );
     }
 
 private:
@@ -319,7 +319,6 @@ private:
     ///> index withing the parent shape (used when m_is_local == false)
     int m_index;
 };
-
 
 inline VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 {
@@ -337,7 +336,6 @@ inline VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
     return A + VECTOR2I( xp, yp );
 }
 
-
 inline int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
 {
     ecoord p = A.y - B.y;
@@ -349,10 +347,10 @@ inline int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
     return aDetermineSide ? dist : abs( dist );
 }
 
-inline SEG::ecoord SEG::TCoef ( const VECTOR2I& aP ) const
+inline SEG::ecoord SEG::TCoef( const VECTOR2I& aP ) const
 {
     VECTOR2I d = B - A;
-    return d.Dot ( aP - A);
+    return d.Dot( aP - A);
 }
 
 inline const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
@@ -375,7 +373,6 @@ inline const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
 
     return A + VECTOR2I( xp, yp );
 }
-
 
 inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg )
 {

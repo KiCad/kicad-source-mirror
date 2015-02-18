@@ -49,7 +49,7 @@ protected:
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
     virtual void updateStartItem( TOOL_EVENT& aEvent );
     virtual void updateEndItem( TOOL_EVENT& aEvent );
-    
+
     MSG_PANEL_ITEMS m_panelItems;
 
     PNS_ROUTER* m_router;
@@ -64,10 +64,10 @@ protected:
 
     ///> Flag marking that the router's world needs syncing.
     bool m_needsSync;
-    
-    PCB_EDIT_FRAME *m_frame;
-    KIGFX::VIEW_CONTROLS *m_ctls;
-    BOARD *m_board;
+
+    PCB_EDIT_FRAME* m_frame;
+    KIGFX::VIEW_CONTROLS* m_ctls;
+    BOARD* m_board;
 
 };
 

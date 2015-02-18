@@ -17,37 +17,36 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #ifndef __RANGED_NUM_H
 #define __RANGED_NUM_H
 
 template <class T> class RANGED_NUM {
-	public:
-		RANGED_NUM ( T aValue = 0, T aTollerancePlus = 0, T aTolleranceMinus = 0) :
-			m_value (aValue),
-			m_tollerancePlus ( aTollerancePlus ),
-			m_tolleranceMinus ( aTolleranceMinus )
-		{}
+    public:
+        RANGED_NUM( T aValue = 0, T aTolerancePlus = 0, T aToleranceMinus = 0 ) :
+            m_value( aValue ),
+            m_tolerancePlus( aTolerancePlus ),
+            m_toleranceMinus( aToleranceMinus )
+        {}
 
-		operator T() 
-		{
-			return m_value;
-		}
+        operator T()
+        {
+            return m_value;
+        }
 
-		RANGED_NUM& operator= ( const T aValue )
-		{
-			m_value = aValue;
-			return *this;
-		}
+        RANGED_NUM& operator=( const T aValue )
+        {
+            m_value = aValue;
+            return *this;
+        }
 
-		bool Matches ( const T& aOther ) const
-		{
-			return ( aOther >= m_value - m_tolleranceMinus && aOther <= m_value + m_tollerancePlus );
-		}
+        bool Matches( const T& aOther ) const
+        {
+            return ( aOther >= m_value - m_toleranceMinus && aOther <= m_value + m_tolerancePlus );
+        }
 
-	private:
-		T m_value, m_tollerancePlus, m_tolleranceMinus;
-		
+    private:
+        T m_value, m_tolerancePlus, m_toleranceMinus;
 };
 
 #endif

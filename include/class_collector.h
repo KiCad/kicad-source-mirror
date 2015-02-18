@@ -134,7 +134,7 @@ public:
      * removes the item aItem (if exists in the collector).
      * @param aItem the item to be removed.
      */
-    void Remove( const EDA_ITEM *aItem )
+    void Remove( const EDA_ITEM* aItem )
     {
         for( size_t i = 0;  i < m_List.size();  i++ )
         {
@@ -256,7 +256,6 @@ public:
         }
         return cnt;
     }
-
 
     /**
      * Function Collect

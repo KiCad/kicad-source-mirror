@@ -166,7 +166,7 @@ public:
 
 	///> Makes sure a group selection does not contain items that would cause
 	///> conflicts when moving/rotating together (e.g. a footprint and one of the same footprint's pads)
-    bool SanitizeSelection( );
+    bool SanitizeSelection();
 
     ///> Item selection event handler.
     int SelectItem( const TOOL_EVENT& aEvent );
@@ -194,7 +194,7 @@ private:
      * a menu is shown, otherise function finishes without selecting anything.
      * @return True if an item was selected, false otherwise.
      */
-    bool selectCursor( const VECTOR2I& aWhere, bool aOnDrag = false);
+    bool selectCursor( const VECTOR2I& aWhere, bool aOnDrag = false );
 
     /**
      * Function selectMultiple()

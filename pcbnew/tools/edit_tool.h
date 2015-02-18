@@ -156,15 +156,15 @@ private:
 
     bool invokeInlineRouter();
 
-    template <class T> T* uniqueSelected()
+    template<class T> T* uniqueSelected()
     {
         const SELECTION& selection = m_selectionTool->GetSelection();
 
-        if(selection.items.GetCount() > 1)
+        if( selection.items.GetCount() > 1 )
             return NULL;
 
-        BOARD_ITEM *item = selection.Item<BOARD_ITEM>( 0 );
-        return dyn_cast<T*> (item);
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
+        return dyn_cast<T*>( item );
     }
 };
 

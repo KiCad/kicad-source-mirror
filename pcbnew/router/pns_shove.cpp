@@ -42,14 +42,13 @@
 
 #include <profile.h>
 
-void PNS_SHOVE::replaceItems ( PNS_ITEM *aOld, PNS_ITEM *aNew )
+void PNS_SHOVE::replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew )
 {
     OPT_BOX2I changed_area = ChangedArea( aOld, aNew );
 
-
-    if(changed_area)
+    if( changed_area )
     {
-        assert ( !changed_area->Contains ( VECTOR2I (0, 0 ) ) );
+        assert( !changed_area->Contains( VECTOR2I( 0, 0 ) ) );
 
         m_affectedAreaSum = m_affectedAreaSum ? m_affectedAreaSum->Merge ( *changed_area ) : *changed_area;
     }
@@ -60,11 +59,12 @@ void PNS_SHOVE::replaceItems ( PNS_ITEM *aOld, PNS_ITEM *aNew )
 
 int PNS_SHOVE::getClearance( PNS_ITEM *aA, PNS_ITEM *aB ) const
 {
-    if(m_forceClearance >= 0)
+    if( m_forceClearance >= 0 )
         return m_forceClearance;
 
     return m_currentNode->GetClearance( aA, aB );
 }
+
 
 static void sanityCheck( PNS_LINE* aOld, PNS_LINE* aNew )
 {
@@ -98,6 +98,7 @@ PNS_LINE* PNS_SHOVE::assembleLine( const PNS_SEGMENT* aSeg, int* aIndex )
 
     return l;
 }
+
 
 // A dumb function that checks if the shoved line is shoved the right way, e.g.
 // visually "outwards" of the line/via applying pressure on it. Unfortunately there's no
@@ -311,7 +312,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSegment( PNS_LINE* aCurrent, PNS_S
 
     SHOVE_STATUS rv = ProcessSingleLine( aCurrent, obstacleLine, shovedLine );
 
-    assert ( obstacleLine->LayersOverlap( shovedLine ) );
+    assert( obstacleLine->LayersOverlap( shovedLine ) );
 
     if( rv == SH_OK )
     {
@@ -319,7 +320,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSegment( PNS_LINE* aCurrent, PNS_S
         {
             if( m_multiLineMode )
                 return SH_INCOMPLETE;
-            
+
             m_newHead = *shovedLine;
         }
 
@@ -351,13 +352,11 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingLine( PNS_LINE* aCurrent, PNS_LINE
 
     SHOVE_STATUS rv = ProcessSingleLine( aCurrent, aObstacle, shovedLine );
 
-
-
     if( rv == SH_OK )
     {
         if( shovedLine->Marker() & MK_HEAD )
         {
-            if (m_multiLineMode)
+            if( m_multiLineMode )
                 return SH_INCOMPLETE;
 
             m_newHead = *shovedLine;
@@ -444,7 +443,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE* aCurrent, PNS_SOL
     {
         walkaroundLine->Mark( MK_HEAD );
 
-        if(m_multiLineMode)        
+        if(m_multiLineMode)
             return SH_INCOMPLETE;
 
         m_newHead = *walkaroundLine;
@@ -481,7 +480,7 @@ bool PNS_SHOVE::reduceSpringback( const PNS_ITEMSET& aHeadSet )
 
             delete spTag.m_node;
             m_nodeStack.pop_back();
-            }
+        }
         else
            break;
     }
@@ -496,9 +495,8 @@ bool PNS_SHOVE::pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET& aHeadItems,
     SPRINGBACK_TAG st;
     OPT_BOX2I prev_area;
 
-    if(!m_nodeStack.empty())
+    if( !m_nodeStack.empty() )
         prev_area = m_nodeStack.back().m_affectedArea;
-
 
     st.m_node = aNode;
     st.m_cost = aCost;
@@ -522,20 +520,20 @@ bool PNS_SHOVE::pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET& aHeadItems,
 PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForce, int aCurrentRank, bool aDryRun )
 {
     LINE_PAIR_VEC draggedLines;
-    VECTOR2I p0 ( aVia->Pos() );
+    VECTOR2I p0( aVia->Pos() );
     PNS_JOINT* jt = m_currentNode->FindJoint( p0, aVia );
     VECTOR2I p0_pushed( p0 + aForce );
 
-    while (aForce.x != 0 || aForce.y != 0)
+    while( aForce.x != 0 || aForce.y != 0 )
     {
-        PNS_JOINT *jt_next = m_currentNode->FindJoint ( p0_pushed, aVia );
+        PNS_JOINT* jt_next = m_currentNode->FindJoint( p0_pushed, aVia );
 
-        if(!jt_next)
+        if( !jt_next )
             break;
-    
-        p0_pushed += aForce.Resize ( 2 ); // make sure pushed via does not overlap with any existing joint
+
+        p0_pushed += aForce.Resize( 2 ); // make sure pushed via does not overlap with any existing joint
     }
-    
+
     PNS_VIA* pushedVia = aVia->Clone();
     pushedVia->SetPos( p0_pushed );
     pushedVia->Mark( aVia->Marker() );
@@ -554,7 +552,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
 
     BOOST_FOREACH( PNS_ITEM* item, jt->LinkList() )
     {
-        if( PNS_SEGMENT *seg = dyn_cast<PNS_SEGMENT *>( item ) )
+        if( PNS_SEGMENT* seg = dyn_cast<PNS_SEGMENT*>( item ) )
         {
             LINE_PAIR lp;
             int segIndex;
@@ -569,12 +567,11 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
             lp.second = clone( lp.first );
             lp.second->ClearSegmentLinks();
             lp.second->DragCorner( p0_pushed, lp.second->CLine().Find( p0 ) );
-            lp.second->AppendVia ( *pushedVia );
+            lp.second->AppendVia( *pushedVia );
             draggedLines.push_back( lp );
 
-            if (aVia->Marker() & MK_HEAD )
-                m_draggedViaHeadSet.Add ( clone ( lp.second ) );
-
+            if( aVia->Marker() & MK_HEAD )
+                m_draggedViaHeadSet.Add( clone ( lp.second ) );
         }
     }
 
@@ -584,9 +581,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         return SH_OK;
 
     replaceItems ( aVia, pushedVia );
-    
+
     if( aVia->BelongsTo( m_currentNode ) )
-    	delete aVia;
+        delete aVia;
 
     pushedVia->SetRank( aCurrentRank - 1 );
 
@@ -600,7 +597,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         if( lp.first->Marker() & MK_HEAD )
         {
             lp.second->Mark( MK_HEAD );
-            
+
             if ( m_multiLineMode )
                 return SH_INCOMPLETE;
 
@@ -955,11 +952,12 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveMainLoop()
     return st;
 }
 
-OPT_BOX2I PNS_SHOVE::totalAffectedArea ( ) const
+
+OPT_BOX2I PNS_SHOVE::totalAffectedArea() const
 {
     OPT_BOX2I area;
-    if(!m_nodeStack.empty())
-        area = m_nodeStack.back().m_affectedArea;   
+    if( !m_nodeStack.empty() )
+        area = m_nodeStack.back().m_affectedArea;
 
     if( area )
     {
@@ -977,7 +975,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
     SHOVE_STATUS st = SH_OK;
 
     m_multiLineMode = false;
-    
+
     // empty head? nothing to shove...
     if( !aCurrentHead.SegmentCount() )
         return SH_INCOMPLETE;
@@ -1047,7 +1045,6 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
 }
 
 
-
 PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet )
 {
     SHOVE_STATUS st = SH_OK;
@@ -1056,22 +1053,21 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
 
     PNS_ITEMSET headSet;
 
-    BOOST_FOREACH ( const PNS_ITEM *item, aHeadSet.CItems() )    
+    BOOST_FOREACH ( const PNS_ITEM* item, aHeadSet.CItems() )
     {
-        const PNS_LINE *headOrig = static_cast<const PNS_LINE*> (item);
-        
+        const PNS_LINE* headOrig = static_cast<const PNS_LINE*>( item );
+
         // empty head? nothing to shove...
         if( !headOrig->SegmentCount() )
             return SH_INCOMPLETE;
-      
-        headSet.Add ( clone ( headOrig ) );
-    }
 
+        headSet.Add( clone( headOrig ) );
+    }
 
     m_lineStack.clear();
     m_optimizerQueue.clear();
     m_logger.Clear();
-    
+
     reduceSpringback( headSet );
 
     PNS_NODE* parent = m_nodeStack.empty() ? m_root : m_nodeStack.back().m_node;
@@ -1079,12 +1075,12 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
     int n = 0;
-    BOOST_FOREACH ( const PNS_ITEM *item, aHeadSet.CItems() )    
+    BOOST_FOREACH ( const PNS_ITEM* item, aHeadSet.CItems() )
     {
-        const PNS_LINE *headOrig = static_cast<const PNS_LINE*> (item);
-        PNS_LINE *head = clone ( headOrig );
+        const PNS_LINE* headOrig = static_cast<const PNS_LINE*>( item );
+        PNS_LINE* head = clone( headOrig );
         head->ClearSegmentLinks();
-        
+
         m_currentNode->Add( head );
 
         head->Mark( MK_HEAD );
@@ -1128,11 +1124,11 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
     return st;
 }
 
+
 PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR2I& aWhere,
                                                      PNS_VIA** aNewVia )
 {
     SHOVE_STATUS st = SH_OK;
-
 
     m_lineStack.clear();
     m_optimizerQueue.clear();
@@ -1160,7 +1156,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
-        pushSpringback( m_currentNode, m_draggedViaHeadSet, PNS_COST_ESTIMATOR(), m_affectedAreaSum);
+        pushSpringback( m_currentNode, m_draggedViaHeadSet, PNS_COST_ESTIMATOR(), m_affectedAreaSum );
     }
     else
     {
@@ -1193,9 +1189,9 @@ void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
         maxWidth = std::max ( (*i)->Width(), maxWidth );
     }
 
-    if(area)
+    if( area )
     {
-        area->Inflate ( 10 * maxWidth );
+        area->Inflate( 10 * maxWidth );
     }
 
     switch( effort )
@@ -1207,9 +1203,9 @@ void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
 
     case OE_MEDIUM:
         optFlags = PNS_OPTIMIZER::MERGE_SEGMENTS;
-        
+
         if( area )
-            optimizer.SetRestrictArea ( *area );
+            optimizer.SetRestrictArea( *area );
 
         n_passes = 2;
         break;
@@ -1223,7 +1219,6 @@ void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
         break;
     }
 
- 
     if( Settings().SmartPads() )
         optFlags |= PNS_OPTIMIZER::SMART_PADS ;
 
@@ -1253,6 +1248,7 @@ void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
         }
     }
 }
+
 
 PNS_NODE* PNS_SHOVE::CurrentNode()
 {

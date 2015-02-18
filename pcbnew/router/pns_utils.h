@@ -41,12 +41,12 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
 
 SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
 
-void DrawDebugPoint ( VECTOR2I p, int color );
-void DrawDebugBox ( BOX2I b, int color );
-void DrawDebugSeg ( SEG s, int color );
-void DrawDebugDirs ( VECTOR2D p, int mask, int color );
+void DrawDebugPoint( VECTOR2I aP, int aColor );
+void DrawDebugBox( BOX2I aB, int aColor );
+void DrawDebugSeg( SEG aS, int aColor );
+void DrawDebugDirs( VECTOR2D aP, int aMask, int aColor );
 
-OPT_BOX2I ChangedArea ( const PNS_ITEM *aItemA, const PNS_ITEM *aItemB );
+OPT_BOX2I ChangedArea( const PNS_ITEM* aItemA, const PNS_ITEM* aItemB );
 
 
 #endif    // __PNS_UTILS_H

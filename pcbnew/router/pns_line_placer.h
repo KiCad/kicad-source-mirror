@@ -40,7 +40,6 @@ class PNS_VIA;
 class PNS_SIZES_SETTINGS;
 
 
-
 /**
  * Class PNS_LINE_PLACER
  *
@@ -95,7 +94,6 @@ public:
      * Sets the current routing layer.
      */
     bool SetLayer( int aLayer );
-
 
     /**
      * Function Head()
@@ -181,11 +179,11 @@ public:
      */
     void UpdateSizes( const PNS_SIZES_SETTINGS& aSizes );
 
-    void SetOrthoMode ( bool aOrthoMode );
+    void SetOrthoMode( bool aOrthoMode );
 
     bool IsPlacingVia() const { return m_placingVia; }
 
-    void GetModifiedNets( std::vector<int> &aNets ) const;
+    void GetModifiedNets( std::vector<int>& aNets ) const;
 private:
     /**
      * Function route()
@@ -348,8 +346,9 @@ private:
     bool rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead );
 
     const PNS_VIA makeVia ( const VECTOR2I& aP );
-    const SHAPE_LINE_CHAIN buildInitialLine ( const VECTOR2I& aP );
-    
+
+    const SHAPE_LINE_CHAIN buildInitialLine( const VECTOR2I& aP );
+
     ///> current routing direction
     DIRECTION_45 m_direction;
 

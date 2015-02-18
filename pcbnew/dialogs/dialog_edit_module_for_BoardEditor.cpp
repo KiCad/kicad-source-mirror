@@ -313,9 +313,9 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
         break;
     }
 
-    if (m_CurrentModule->IsLocked() )
+    if( m_CurrentModule->IsLocked() )
         m_AutoPlaceCtrl->SetSelection( 2 );
-    else if (m_CurrentModule->PadsLocked() )
+    else if( m_CurrentModule->PadsLocked() )
         m_AutoPlaceCtrl->SetSelection( 1 );
     else
         m_AutoPlaceCtrl->SetSelection( 0 );

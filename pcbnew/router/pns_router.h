@@ -277,7 +277,6 @@ private:
 
     wxString m_toolStatusbarName;
     wxString m_failureReason;
-
 };
 
 #endif

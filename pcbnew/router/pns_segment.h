@@ -46,7 +46,7 @@ public:
     }
 
     PNS_SEGMENT( const PNS_LINE& aParentLine, const SEG& aSeg ) :
-        PNS_ITEM( SEGMENT ), 
+        PNS_ITEM( SEGMENT ),
         m_seg( aSeg, aParentLine.Width() )
     {
         m_net = aParentLine.Net();
@@ -59,7 +59,7 @@ public:
     {
         return aItem && SEGMENT == aItem->Kind();
     }
-    
+
     PNS_SEGMENT* Clone( ) const;
 
     const SHAPE* Shape() const
@@ -100,7 +100,7 @@ public:
     void SetEnds( const VECTOR2I& a, const VECTOR2I& b )
     {
         m_seg.SetSeg( SEG ( a, b ) );
-	}
+    }
 
     void SwapEnds()
     {
@@ -110,7 +110,7 @@ public:
 
     const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness ) const;
 
-    virtual VECTOR2I Anchor(int n) const 
+    virtual VECTOR2I Anchor(int n) const
     {
         if( n == 0 )
             return m_seg.GetSeg().A;
@@ -118,9 +118,9 @@ public:
             return m_seg.GetSeg().B;
     }
 
-    virtual int AnchorCount() const 
+    virtual int AnchorCount() const
     {
-        return 2; 
+        return 2;
     }
 
 private:

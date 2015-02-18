@@ -515,7 +515,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Configure Interactive Routing." ),
                  KiBitmap( add_tracks_xpm ) ); // fixme: icon
 
-
     //--- dimensions submenu ------------------------------------------------------
     wxMenu* dimensionsMenu = new wxMenu;
 
