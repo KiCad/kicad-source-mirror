@@ -236,6 +236,13 @@ public:
 
     /// Blocks CTRL+F, it is handled by wxWidgets
     static TOOL_ACTION findDummy;
+
+    static TOOL_ACTION editFootprintInFpEditor;
+    static TOOL_ACTION copyPadToSettings;
+    static TOOL_ACTION copySettingsToPads;
+    static TOOL_ACTION globalEditPads;
+
+
     /**
      * Function TranslateLegacyId()
      * Translates legacy tool ids to the corresponding TOOL_ACTION name.

@@ -58,8 +58,27 @@ TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the ho
 TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, 'T');
 
-
 // Edit tool actions
+TOOL_ACTION COMMON_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
+        AS_CONTEXT, MD_CTRL + 'E',
+        "Open in Footprint Editor", 
+        "Opens the selected footprint in the Footprint Editor" );
+
+TOOL_ACTION COMMON_ACTIONS::copyPadToSettings ( "pcbnew.InteractiveEdit.copyPadToSettings",
+        AS_CONTEXT, 0,
+        "Copy pad settings to Current Settings", 
+        "Copies the properties of selected pad to the current template pad settings." );
+
+TOOL_ACTION COMMON_ACTIONS::copySettingsToPads ( "pcbnew.InteractiveEdit.copySettingsToPads",
+        AS_CONTEXT, 0,
+        "Copy Current Settings to pads", 
+        "Copies the current template pad settings to the selected pad(s)." );
+
+TOOL_ACTION COMMON_ACTIONS::globalEditPads ( "pcbnew.InteractiveEdit.globalPadEdit",
+        AS_CONTEXT, 0,
+        "Global Pad Edition", 
+        "Changes pad properties globally." );
+
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
         "Move", "Moves the selected item(s)", AF_ACTIVATE );
