@@ -55,6 +55,11 @@ public:
         m_rank = aParentLine.Rank();
     };
 
+    static inline bool ClassOf( const PNS_ITEM* aItem )
+    {
+        return aItem && SEGMENT == aItem->Kind();
+    }
+    
     PNS_SEGMENT* Clone( ) const;
 
     const SHAPE* Shape() const

@@ -21,6 +21,8 @@
 #ifndef __PNS_ALGO_BASE_H
 #define __PNS_ALGO_BASE_H
 
+#include <wx/wx.h> // for wxString
+ 
 #include "pns_routing_settings.h"
 
 class PNS_ROUTER;
@@ -53,6 +55,7 @@ public:
 
 	///> Returns the logger object, allowing to dump geometry to a file.
 	virtual PNS_LOGGER* Logger();
+
 	
 private:
 	PNS_ROUTER* m_router;

@@ -44,6 +44,12 @@
 #include "pns_router.h"
 #include "pns_shove.h"
 #include "pns_dragger.h"
+#include "pns_diff_pair_placer.h"
+#include "pns_meander_placer.h"
+#include "pns_meander_skew_placer.h"
+#include "pns_dp_meander_placer.h"
+
+
 
 #include <router/router_preview_item.h>
 
@@ -58,65 +64,84 @@
 // To be fixed sometime in the future.
 static PNS_ROUTER* theRouter;
 
-class PCBNEW_CLEARANCE_FUNC : public PNS_CLEARANCE_FUNC
+
+PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( BOARD* aBoard )
 {
-public:
-    PCBNEW_CLEARANCE_FUNC( BOARD* aBoard )
+    m_clearanceCache.resize( aBoard->GetNetCount() );
+
+    for( unsigned int i = 0; i < aBoard->GetNetCount(); i++ )
     {
-        m_clearanceCache.resize( aBoard->GetNetCount() );
+        NETINFO_ITEM* ni = aBoard->FindNet( i );
+        if( ni == NULL )
+            continue;
 
-        for( unsigned int i = 0; i < aBoard->GetNetCount(); i++ )
-        {
-            NETINFO_ITEM* ni = aBoard->FindNet( i );
-            if( ni == NULL )
-                continue;
-
-            wxString netClassName = ni->GetClassName();
-            NETCLASSPTR nc = aBoard->GetDesignSettings().m_NetClasses.Find( netClassName );
-            int clearance = nc->GetClearance();
-            m_clearanceCache[i] = clearance;
-            TRACE( 1, "Add net %d netclass %s clearance %d", i % netClassName.mb_str() %
-                    clearance );
-        }
-
-        m_defaultClearance = 254000;    // aBoard->m_NetClasses.Find ("Default clearance")->GetClearance();
+        wxString netClassName = ni->GetClassName();
+        NETCLASSPTR nc = aBoard->GetDesignSettings().m_NetClasses.Find( netClassName );
+        int clearance = nc->GetClearance();
+        m_clearanceCache[i] = clearance;
+        TRACE( 1, "Add net %d netclass %s clearance %d", i % netClassName.mb_str() %
+            clearance );
     }
 
-    int localPadClearance( const PNS_ITEM* aItem ) const
+    m_overrideEnabled = false;
+    m_defaultClearance = 254000;    // aBoard->m_NetClasses.Find ("Default clearance")->GetClearance();
+}
+
+PNS_PCBNEW_CLEARANCE_FUNC::~PNS_PCBNEW_CLEARANCE_FUNC()
+{
+
+}
+
+int PNS_PCBNEW_CLEARANCE_FUNC::localPadClearance( const PNS_ITEM* aItem ) const
+{
+    if( !aItem->Parent() || aItem->Parent()->Type() != PCB_PAD_T )
+        return 0;
+
+    const D_PAD* pad = static_cast<D_PAD*>( aItem->Parent() );
+    return pad->GetLocalClearance();
+}
+
+int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* aB )
+{
+    int net_a = aA->Net();
+    int cl_a = ( net_a >= 0 ? m_clearanceCache[net_a] : m_defaultClearance );
+    int net_b = aB->Net();
+    int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance );
+
+    if(m_overrideEnabled && aA->OfKind(PNS_ITEM::SEGMENT) && aB->OfKind(PNS_ITEM::SEGMENT))
     {
-        if( !aItem->Parent() || aItem->Parent()->Type() != PCB_PAD_T )
-            return 0;
-
-        const D_PAD* pad = static_cast<D_PAD*>( aItem->Parent() );
-
-        return pad->GetLocalClearance();
+        if( net_a == m_overrideNetA && net_b == m_overrideNetB )
+            return m_overrideClearance;
+        else if( net_a == m_overrideNetB && net_b == m_overrideNetA )
+            return m_overrideClearance;
     }
 
-    int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB )
-    {
-        int net_a = aA->Net();
-        int cl_a = ( net_a >= 0 ? m_clearanceCache[net_a] : m_defaultClearance );
-        int net_b = aB->Net();
-        int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance );
+    int pad_a = localPadClearance( aA );
+    int pad_b = localPadClearance( aB );
 
-        int pad_a = localPadClearance( aA );
-        int pad_b = localPadClearance( aB );
+    cl_a = std::max( cl_a, pad_a );
+    cl_b = std::max( cl_b, pad_b );
 
-        cl_a = std::max( cl_a, pad_a );
-        cl_b = std::max( cl_b, pad_b );
-
-        return std::max( cl_a, cl_b );
-    }
-
-private:
-    std::vector<int> m_clearanceCache;
-    int m_defaultClearance;
+    return std::max( cl_a, cl_b );
 };
+
+// fixme: ugly hack to make the optimizer respect gap width for currently routed differential pair.
+void PNS_PCBNEW_CLEARANCE_FUNC::OverrideClearance (bool aEnable, int aNetA , int aNetB , int aClearance )
+{
+    m_overrideEnabled = aEnable;
+    m_overrideNetA = aNetA;
+    m_overrideNetB = aNetB;
+    m_overrideClearance = aClearance;
+}
 
 
 PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 {
     PNS_LAYERSET layers( 0, MAX_CU_LAYERS - 1 );
+
+    // ignore non-copper pads
+    if ( (aPad->GetLayerSet() & LSET::AllCuMask()).none() )
+        return NULL;
 
     switch( aPad->GetAttribute() )
     {
@@ -222,6 +247,8 @@ PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
     PNS_SEGMENT* s =
         new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
 
+    if( aTrack->GetFlags( ) & DP_COUPLED )
+        s->Mark ( MK_DP_COUPLED );
     s->SetWidth( aTrack->GetWidth() );
     s->SetLayers( PNS_LAYERSET( aTrack->GetLayer() ) );
     s->SetParent( aTrack );
@@ -265,7 +292,7 @@ void PNS_ROUTER::SyncWorld()
 
     int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
 
-    m_clearanceFunc = new PCBNEW_CLEARANCE_FUNC( m_board );
+    m_clearanceFunc = new PNS_PCBNEW_CLEARANCE_FUNC( m_board );
     m_world = new PNS_NODE();
     m_world->SetClearanceFunctor( m_clearanceFunc );
     m_world->SetMaxClearance( 4 * worstClearance );
@@ -309,6 +336,7 @@ PNS_ROUTER::PNS_ROUTER()
     m_previewItems = NULL;
     m_board = NULL;
     m_dragger = NULL;
+    m_mode = PNS_MODE_ROUTE_SINGLE;
 }
 
 
@@ -460,17 +488,45 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
 bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLayer )
 {
-    m_placer = new PNS_LINE_PLACER( this );
+    switch (m_mode)
+    {
+        case PNS_MODE_ROUTE_SINGLE:
+            m_placer = new PNS_LINE_PLACER( this );
+            break;
+        case PNS_MODE_ROUTE_DIFF_PAIR:
+            m_placer = new PNS_DIFF_PAIR_PLACER( this );
+            break;
+        case PNS_MODE_TUNE_SINGLE:
+            m_placer = new PNS_MEANDER_PLACER( this );
+            break;
+        case PNS_MODE_TUNE_DIFF_PAIR:
+            m_placer = new PNS_DP_MEANDER_PLACER( this );
+            break;
+        case PNS_MODE_TUNE_DIFF_PAIR_SKEW:
+            m_placer = new PNS_MEANDER_SKEW_PLACER( this );
+            break;
+        
+        default:
+            return false;
+    }
 
     m_placer->UpdateSizes ( m_sizes );
     m_placer->SetLayer( aLayer );
-    m_placer->Start( aP, aStartItem );
+
+    bool rv  = m_placer->Start( aP, aStartItem );
+
+    if(!rv)
+        return false;
 
     m_currentEnd = aP;
     m_currentEndItem = NULL;
     m_state = ROUTE_TRACK;
+    return rv;
+}
 
-    return true;
+BOARD *PNS_ROUTER::GetBoard()
+{
+    return m_board;
 }
 
 void PNS_ROUTER::eraseView()
@@ -652,15 +708,25 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     eraseView();
 
     m_placer->Move( aP, aEndItem );
-    PNS_LINE current = m_placer->Trace();
+    PNS_ITEMSET current = m_placer->Traces();
 
-    DisplayItem( &current );
 
-    if( current.EndsWithVia() )
-        DisplayItem( &current.Via() );
+    BOOST_FOREACH( const PNS_ITEM* item, current.CItems() )
+    {
+        if( !item->OfKind ( PNS_ITEM::LINE ) )
+            continue;
 
-    PNS_ITEMSET tmp( &current );
-    updateView( m_placer->CurrentNode( true ), tmp );
+        const PNS_LINE *l = static_cast <const PNS_LINE *> (item);
+        DisplayItem(l); 
+    
+        if( l->EndsWithVia() )
+            DisplayItem( &l->Via() );
+    }
+
+    
+    //PNS_ITEMSET tmp( &current );
+    
+    updateView( m_placer->CurrentNode( true ), current );
 }
 
 
@@ -765,11 +831,13 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 void PNS_ROUTER::StopRouting()
 {
     // Update the ratsnest with new changes
+
     if( m_placer )
     {
-        int n = m_placer->CurrentNet();
+        std::vector<int> nets;
+        m_placer->GetModifiedNets( nets );
 
-        if( n >= 0)
+        BOOST_FOREACH ( int n, nets )
         {
             // Update the ratsnest with new changes
             m_board->GetRatsnest()->Recalculate( n );
@@ -870,4 +938,18 @@ bool PNS_ROUTER::IsPlacingVia() const
         return NULL;
     return m_placer->IsPlacingVia();
 }
+
+void PNS_ROUTER::SetOrthoMode( bool aEnable )
+{
+    if(!m_placer)
+        return;
+
+    m_placer->SetOrthoMode ( aEnable );
+}
+
+void PNS_ROUTER::SetMode ( PNS_ROUTER_MODE aMode )
+{
+    m_mode = aMode;
+}
+
 

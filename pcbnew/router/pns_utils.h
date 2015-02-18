@@ -22,11 +22,14 @@
 #define __PNS_UTILS_H
 
 #include <math/vector2d.h>
+#include <math/box2.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
 
 #define HULL_MARGIN 10
+
+class PNS_ITEM;
 
 /** Various utility functions */
 
@@ -37,5 +40,13 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
                                      int aWalkaroundThickness );
 
 SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
+
+void DrawDebugPoint ( VECTOR2I p, int color );
+void DrawDebugBox ( BOX2I b, int color );
+void DrawDebugSeg ( SEG s, int color );
+void DrawDebugDirs ( VECTOR2D p, int mask, int color );
+
+OPT_BOX2I ChangedArea ( const PNS_ITEM *aItemA, const PNS_ITEM *aItemB );
+
 
 #endif    // __PNS_UTILS_H

@@ -104,6 +104,10 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_pcb_text_properties_base.cpp
     dialogs/dialog_pns_settings.cpp
     dialogs/dialog_pns_settings_base.cpp
+    dialogs/dialog_pns_diff_pair_dimensions.cpp
+    dialogs/dialog_pns_diff_pair_dimensions_base.cpp
+    dialogs/dialog_pns_length_tuning_settings.cpp
+    dialogs/dialog_pns_length_tuning_settings_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp
@@ -275,6 +279,7 @@ set( PCBNEW_CLASS_SRCS
     tools/module_tools.cpp
     tools/placement_tool.cpp
     tools/common_actions.cpp
+    tools/grid_helper.cpp
     tools/tools_common.cpp
     )
 

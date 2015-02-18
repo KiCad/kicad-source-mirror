@@ -22,10 +22,20 @@
 
 #include "pns_itemset.h"
 
-PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem )
+PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem ) :
+    m_owner ( false )
 {
     if( aInitialItem )
         m_items.push_back( aInitialItem );
+}
+
+PNS_ITEMSET::~PNS_ITEMSET()
+{
+    if (m_owner)
+    {
+        BOOST_FOREACH ( PNS_ITEM *item, m_items )
+            delete item;
+    }
 }
 
 PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd, bool aInvert )
@@ -56,6 +66,21 @@ PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask, bool aInvert )
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
         if( item->OfKind( aKindMask ) ^ aInvert )
+            newItems.push_back( item );
+    }
+
+    m_items = newItems;
+
+    return *this;
+}
+
+PNS_ITEMSET& PNS_ITEMSET::FilterMarker( int aMarker, bool aInvert )
+{
+    ITEMS newItems;
+
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
+    {
+        if( item->Marker() & aMarker )
             newItems.push_back( item );
     }
 

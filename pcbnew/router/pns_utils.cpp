@@ -20,6 +20,7 @@
 
 #include "pns_utils.h"
 #include "pns_line.h"
+#include "pns_via.h"
 #include "pns_router.h"
 
 #include <geometry/shape_segment.h>
@@ -90,4 +91,84 @@ SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg )
 
     return SHAPE_RECT( std::min( p0.x, p1.x ), std::min( p0.y, p1.y ),
                        std::abs( p1.x - p0.x ), std::abs( p1.y - p0.y ) );
+}
+
+void DrawDebugPoint ( VECTOR2I p, int color )
+{
+    SHAPE_LINE_CHAIN l;
+
+    l.Append ( p - VECTOR2I(-50000, -50000) );
+    l.Append ( p + VECTOR2I(-50000, -50000) );
+    
+    //printf("router @ %p\n", PNS_ROUTER::GetInstance());
+    PNS_ROUTER::GetInstance()->DisplayDebugLine ( l, color, 10000 );
+
+    l.Clear();
+    l.Append ( p - VECTOR2I(50000, -50000) );
+    l.Append ( p + VECTOR2I(50000, -50000) );
+
+    PNS_ROUTER::GetInstance()->DisplayDebugLine ( l, color, 10000 );
+}
+
+void DrawDebugBox ( BOX2I b, int color )
+{
+    SHAPE_LINE_CHAIN l;
+
+    VECTOR2I o = b.GetOrigin();
+    VECTOR2I s = b.GetSize();
+
+    l.Append ( o );
+    l.Append ( o.x + s.x, o.y );
+    l.Append ( o.x + s.x, o.y + s.y );
+    l.Append ( o.x, o.y + s.y );
+    l.Append ( o );
+    
+    //printf("router @ %p\n", PNS_ROUTER::GetInstance());
+    PNS_ROUTER::GetInstance()->DisplayDebugLine ( l, color, 10000 );
+}
+
+void DrawDebugSeg ( SEG s, int color )
+{
+    SHAPE_LINE_CHAIN l;
+
+    l.Append ( s.A );
+    l.Append ( s.B );
+    
+    PNS_ROUTER::GetInstance()->DisplayDebugLine ( l, color, 10000 );
+}
+
+void DrawDebugDirs ( VECTOR2D p, int mask, int color )
+{
+    BOX2I b ( p - VECTOR2I ( 10000, 10000 ), VECTOR2I ( 20000, 20000 ) );
+
+    DrawDebugBox ( b, color );
+    for (int i = 0; i < 8; i++)
+    {
+        if ( (1<<i) & mask )
+        {
+            VECTOR2I v = DIRECTION_45((DIRECTION_45::Directions)i).ToVector() * 100000;
+            DrawDebugSeg ( SEG (p, p+v), color );
+
+        }
+
+    }
+}
+
+
+OPT_BOX2I ChangedArea ( const PNS_ITEM *aItemA, const PNS_ITEM *aItemB )
+{
+    if ( aItemA->OfKind ( PNS_ITEM::VIA ) && aItemB->OfKind ( PNS_ITEM::VIA ) )
+    {
+        const PNS_VIA *va = static_cast <const PNS_VIA *> (aItemA);
+        const PNS_VIA *vb = static_cast <const PNS_VIA *> (aItemB);
+ 
+        return va->ChangedArea (vb);
+    } else if ( aItemA->OfKind ( PNS_ITEM::LINE ) && aItemB->OfKind ( PNS_ITEM::LINE ) )
+    {
+        const PNS_LINE *la = static_cast <const PNS_LINE *> (aItemA);
+        const PNS_LINE *lb = static_cast <const PNS_LINE *> (aItemB);
+
+        return la->ChangedArea (lb);
+    }
+    return OPT_BOX2I();
 }

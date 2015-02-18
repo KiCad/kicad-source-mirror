@@ -30,8 +30,9 @@
 #include "range.h"
 
 class PNS_NODE;
-class PNS_LINE;
 class PNS_ROUTER;
+class PNS_LINE;
+class PNS_DIFF_PAIR;
 
 /**
  * Class PNS_COST_ESTIMATOR
@@ -101,6 +102,8 @@ public:
     static bool Optimize( PNS_LINE* aLine, int aEffortLevel, PNS_NODE* aWorld);
 
     bool Optimize( PNS_LINE* aLine, PNS_LINE* aResult = NULL );
+    bool Optimize( PNS_DIFF_PAIR* aPair );
+
 
     void SetWorld( PNS_NODE* aNode ) { m_world = aNode; }
     void CacheStaticItem( PNS_ITEM* aItem );
@@ -115,6 +118,13 @@ public:
     void SetEffortLevel( int aEffort )
     {
         m_effortLevel = aEffort;
+    }
+
+
+    void SetRestrictArea( const BOX2I& aArea )
+    {
+        m_restrictArea = aArea;
+        m_restrictAreaActive = true;
     }
 
 private:
@@ -136,6 +146,8 @@ private:
     bool runSmartPads( PNS_LINE* aLine );
     bool mergeStep( PNS_LINE* aLine, SHAPE_LINE_CHAIN& aCurrentLine, int step );
     bool fanoutCleanup( PNS_LINE * aLine );
+    bool mergeDpSegments( PNS_DIFF_PAIR *aPair );
+    bool mergeDpStep( PNS_DIFF_PAIR *aPair, bool aTryP, int step );
 
     bool checkColliding( PNS_ITEM* aItem, bool aUpdateCache = true );
     bool checkColliding( PNS_LINE* aLine, const SHAPE_LINE_CHAIN& aOptPath );
@@ -160,6 +172,9 @@ private:
     int m_collisionKindMask;
     int m_effortLevel;
     bool m_keepPostures;
+
+    BOX2I m_restrictArea;
+    bool m_restrictAreaActive;
 };
 
 #endif

@@ -31,13 +31,14 @@
 #include "pns_shove.h"
 #include "pns_utils.h"
 #include "pns_router.h"
+#include "pns_topology.h"
 
 #include <class_board_item.h>
 
 using boost::optional;
 
 PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_ROUTER* aRouter ) :
-    PNS_ALGO_BASE ( aRouter )
+    PNS_PLACEMENT_ALGO ( aRouter )
 {
     m_initial_direction = DIRECTION_45::N;
     m_world = NULL;
@@ -67,11 +68,13 @@ const PNS_VIA PNS_LINE_PLACER::makeVia ( const VECTOR2I& aP )
 }
 
 
-void PNS_LINE_PLACER::ToggleVia( bool aEnabled )
+bool PNS_LINE_PLACER::ToggleVia( bool aEnabled )
 {
     m_placingVia = aEnabled;
     if(!m_idle)
         Move ( m_currentEnd, NULL );
+
+    return true;
 }
 
 
@@ -225,8 +228,6 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
     VECTOR2I new_start;
     int reduce_index = -1;
 
-    DIRECTION_45 head_dir( head.CSegment( 0 ) );
-
     for( int i = tail.SegmentCount() - 1; i >= 0; i-- )
     {
         const SEG s = tail.CSegment( i );
@@ -376,7 +377,7 @@ bool PNS_LINE_PLACER::handleViaPlacement( PNS_LINE& aHead )
 
 bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
-    SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP );
+    SHAPE_LINE_CHAIN line = buildInitialLine ( aP );
     PNS_LINE initTrack( m_head, line ), walkFull;
     int effort = 0;
     bool viaOk = handleViaPlacement( initTrack );
@@ -430,7 +431,7 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
 bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
-    m_head.SetShape( m_direction.BuildInitialTrace( m_p_start, aP ) );
+    m_head.SetShape( buildInitialLine ( aP ) );
 
     if( m_placingVia )
     {
@@ -445,7 +446,7 @@ bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
 bool PNS_LINE_PLACER::rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
-    SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP );
+    SHAPE_LINE_CHAIN line = buildInitialLine ( aP );
     PNS_LINE initTrack( m_head, line );
     PNS_LINE walkSolids, l2;
 
@@ -744,7 +745,7 @@ bool PNS_LINE_PLACER::SetLayer( int aLayer )
     return false;
 }
 
-void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
+bool PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
     VECTOR2I p( aP );
 
@@ -772,6 +773,7 @@ void PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     setInitialDirection( Settings().InitialDirection() );
 
     initPlacement( m_splitSeg );
+    return true;
 }
 
 void PNS_LINE_PLACER::initPlacement( bool aSplitSeg )
@@ -819,7 +821,7 @@ void PNS_LINE_PLACER::initPlacement( bool aSplitSeg )
 }
 
 
-void PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
+bool PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
     PNS_LINE current;
     VECTOR2I p = aP;
@@ -856,6 +858,7 @@ void PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     }
 
     updateLeadingRatLine();
+    return true;
 }
 
 
@@ -962,11 +965,6 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest )
 
             if( !( line->ContainsSegment( seg ) ) && line->SegmentCount() )
             {
-                Router()->DisplayDebugLine ( line->CLine(), -1, 10000 );
-
-                for( int i = 0; i < line->PointCount(); i++ )
-                    Router()->DisplayDebugPoint( line->CPoint( i ), -1 );
-
                 aNode->Remove( line );
                 removedCount ++;
             }
@@ -1012,27 +1010,39 @@ void PNS_LINE_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
 void PNS_LINE_PLACER::updateLeadingRatLine()
 {
     PNS_LINE current = Trace();
+    SHAPE_LINE_CHAIN ratLine;
+    PNS_TOPOLOGY topo ( m_lastNode );
 
-    if( !current.PointCount() )
-        return;
+    if( topo.LeadingRatLine ( &current, ratLine ))
+        Router()->DisplayDebugLine( ratLine, 5, 10000 );
+}
 
-    std::auto_ptr<PNS_NODE> tmpNode ( m_lastNode->Branch() );
-    tmpNode->Add( &current );
+void PNS_LINE_PLACER::SetOrthoMode ( bool aOrthoMode )
+{
+    m_orthoMode = aOrthoMode;
+    if(!m_idle)
+        Move ( m_currentEnd, NULL );
+}
 
-    PNS_JOINT* jt = tmpNode->FindJoint( current.CPoint( -1 ),
-                                        current.Layers().Start(), current.Net() );
+const SHAPE_LINE_CHAIN PNS_LINE_PLACER::buildInitialLine ( const VECTOR2I& aP )
+{
+    SHAPE_LINE_CHAIN l (m_direction.BuildInitialTrace( m_p_start, aP ) );
 
-    if( !jt )
-        return;
-
-    int anchor;
-    PNS_ITEM* it = tmpNode->NearestUnconnectedItem( jt, &anchor );
-
-    if( it )
+    if( l.SegmentCount() <= 1 )
+        return l;
+    
+    if (m_orthoMode)
     {
-        SHAPE_LINE_CHAIN lc;
-        lc.Append ( current.CPoint( -1 ) );
-        lc.Append ( it->Anchor( anchor ) );
-        Router()->DisplayDebugLine( lc, 5, 10000 );
+        VECTOR2I newLast = l.CSegment(0).LineProject ( l.CPoint(-1) );
+
+        l.Remove(-1, -1);
+        l.Point(1) = newLast;
     }
+
+    return l;
+}
+
+void PNS_LINE_PLACER::GetModifiedNets( std::vector<int> &aNets ) const
+{
+    aNets.push_back( m_currentNet );
 }

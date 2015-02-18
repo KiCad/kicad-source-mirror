@@ -88,7 +88,12 @@ public:
     }
 
     ~PNS_LINE();
-
+    
+    static inline bool ClassOf( const PNS_ITEM* aItem )
+    {
+        return aItem && LINE == aItem->Kind();
+    }
+    
     /// @copydoc PNS_ITEM::Clone()
     virtual PNS_LINE* Clone() const;
 
@@ -179,6 +184,11 @@ public:
         return m_segmentRefs;
     }
 
+    bool IsLinked () const 
+    {
+        return m_segmentRefs != NULL;
+    }
+
     ///> Checks if the segment aSeg is a part of the line.
     bool ContainsSegment( PNS_SEGMENT* aSeg ) const
     {
@@ -187,6 +197,11 @@ public:
 
         return std::find( m_segmentRefs->begin(), m_segmentRefs->end(),
                 aSeg ) != m_segmentRefs->end();
+    }
+
+    PNS_SEGMENT* GetLink ( int aIndex ) const
+    {
+        return (*m_segmentRefs) [ aIndex ];
     }
 
     ///> Erases the linking information. Used to detach the line from the owning node.
@@ -251,6 +266,8 @@ public:
         
     bool HasLoops() const;
 
+    OPT_BOX2I ChangedArea ( const PNS_LINE *aOther ) const;
+    
 private:
     VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
                                       int aIndex, int aThreshold) const;

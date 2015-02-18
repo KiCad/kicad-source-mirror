@@ -52,8 +52,28 @@ class PNS_INDEX;
 class PNS_CLEARANCE_FUNC
 {
 public:
-    virtual int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB ) = 0;
     virtual ~PNS_CLEARANCE_FUNC() {}
+    virtual int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB ) = 0;
+    virtual void OverrideClearance (bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0) = 0;
+    
+};
+
+class PNS_PCBNEW_CLEARANCE_FUNC : public PNS_CLEARANCE_FUNC 
+{
+public:
+    PNS_PCBNEW_CLEARANCE_FUNC( BOARD *aBoard );
+    virtual ~PNS_PCBNEW_CLEARANCE_FUNC();
+
+    virtual int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB );
+    virtual void OverrideClearance (bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0);
+
+private:
+    int localPadClearance( const PNS_ITEM* aItem ) const;
+    std::vector<int> m_clearanceCache;
+    int m_defaultClearance;
+    bool m_overrideEnabled;
+    int m_overrideNetA, m_overrideNetB;
+    int m_overrideClearance;
 };
 
 /**
@@ -65,7 +85,7 @@ public:
 struct PNS_OBSTACLE
 {
     ///> Item we search collisions with
-    PNS_ITEM* m_head;
+    const PNS_ITEM* m_head;
 
     ///> Item found to be colliding with m_head
     PNS_ITEM* m_item;
@@ -79,6 +99,15 @@ struct PNS_OBSTACLE
 
     ///> ... and the distance thereof
     int m_distFirst, m_distLast;
+};
+
+/**
+ * Struct PNS_COLLISION_FILTER
+ * Used to override the decision of the collision search algorithm whether two
+ * items collide.
+ **/
+struct PNS_COLLISION_FILTER {
+    virtual bool operator()( const PNS_ITEM *aItemA, const PNS_ITEM *aItemB ) const = 0;
 };
 
 /**
@@ -201,7 +230,8 @@ public:
      */
     bool CheckColliding( const PNS_ITEM*    aItemA,
                          const PNS_ITEM*    aItemB,
-                         int                aKindMask = PNS_ITEM::ANY );
+                         int                aKindMask = PNS_ITEM::ANY,
+                         int                aForceClearance = -1 );
 
     /**
      * Function HitTest()
@@ -229,6 +259,15 @@ public:
      * @param aItem item to remove
      */
     void Remove( PNS_ITEM* aItem );
+
+    /**
+     * Function Remove()
+     *
+     * Just as the name says, removes a line from this branch.
+     * @param aItem item to remove
+     */
+    void Remove( PNS_LINE& aLine );
+
 
     /**
      * Function Replace()
@@ -296,16 +335,18 @@ public:
      * Searches for a joint at a given position, linked to given item.
      * @return the joint, if found, otherwise empty
      */
-    PNS_JOINT* FindJoint( const VECTOR2I& aPos, PNS_ITEM* aItem )
+    PNS_JOINT* FindJoint( const VECTOR2I& aPos, const PNS_ITEM* aItem )
     {
         return FindJoint( aPos, aItem->Layers().Start(), aItem->Net() );
     }
 
+#if 0
     void MapConnectivity( PNS_JOINT* aStart, std::vector<PNS_JOINT*> & aFoundJoints );
 
     PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int *aAnchor = NULL,
                                       int aKindMask = PNS_ITEM::ANY);
 
+#endif
 
     ///> finds all lines between a pair of joints. Used by the loop removal procedure.
     int FindLinesBetweenJoints( PNS_JOINT&                  aA,
@@ -320,10 +361,11 @@ public:
 
     void AllItemsInNet( int aNet, std::set<PNS_ITEM*>& aItems );
 
-    void ClearRanks();
+    void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION );
 
     int FindByMarker( int aMarker, PNS_ITEMSET& aItems );
     int RemoveByMarker( int aMarker );
+    void SetCollisionFilter ( PNS_COLLISION_FILTER *aFilter );
 
 private:
     struct OBSTACLE_VISITOR;
@@ -411,6 +453,9 @@ private:
 
     ///> depth of the node (number of parent nodes in the inheritance chain)
     int m_depth;
+
+    ///> optional collision filtering object
+    PNS_COLLISION_FILTER *m_collisionFilter;
 };
 
 #endif

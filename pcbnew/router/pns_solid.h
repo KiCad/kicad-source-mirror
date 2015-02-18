@@ -48,7 +48,12 @@ public:
         m_shape = aSolid.m_shape->Clone();
         m_pos = aSolid.m_pos;
     }
-    
+
+    static inline bool ClassOf( const PNS_ITEM* aItem )
+    {
+        return aItem && SOLID == aItem->Kind();
+    }
+        
     PNS_ITEM* Clone() const;
 
     const SHAPE* Shape() const { return m_shape; }

@@ -34,11 +34,13 @@ class PNS_SIZES_SETTINGS {
 
 public:
     PNS_SIZES_SETTINGS() :
-        m_trackWidth( 100000 ),
-        m_diffPairWidth( 100000 ),
-        m_diffPairGap( 125000 ),
-        m_viaDiameter( 500000 ),
-        m_viaDrill( 200000 ),
+        m_trackWidth( 155000 ),
+        m_diffPairWidth( 125000 ),
+        m_diffPairGap( 180000 ),
+    m_diffPairViaGap ( 180000 ),
+        m_viaDiameter( 600000 ),
+        m_viaDrill( 250000 ),
+        m_diffPairViaGapSameAsTraceGap ( true ),
         m_viaType( VIA_THROUGH )
     {};
 
@@ -54,8 +56,21 @@ public:
     void SetTrackWidth( int aWidth ) { m_trackWidth = aWidth; }
 
     int DiffPairWidth() const { return m_diffPairWidth; }
-
     int DiffPairGap() const { return m_diffPairGap; }
+    
+    int DiffPairViaGap() const { 
+        if(m_diffPairViaGapSameAsTraceGap)
+            return m_diffPairGap;
+        else
+            return m_diffPairViaGap; 
+    }
+
+    bool DiffPairViaGapSameAsTraceGap() const { return m_diffPairViaGapSameAsTraceGap; }
+
+    void SetDiffPairWidth( int aWidth ) { m_diffPairWidth = aWidth; }
+    void SetDiffPairGap( int aGap ) { m_diffPairGap = aGap; }
+    void SetDiffPairViaGapSameAsTraceGap ( bool aEnable ) { m_diffPairViaGapSameAsTraceGap = aEnable; }
+    void SetDiffPairViaGap( int aGap ) { m_diffPairViaGap = aGap; }
 
     int ViaDiameter() const { return m_viaDiameter; }
     void SetViaDiameter( int aDiameter) { m_viaDiameter = aDiameter; }
@@ -84,8 +99,11 @@ private:
     int m_trackWidth;
     int m_diffPairWidth;
     int m_diffPairGap;
+    int m_diffPairViaGap;
     int m_viaDiameter;
     int m_viaDrill;
+
+    bool m_diffPairViaGapSameAsTraceGap;
 
     VIATYPE_T m_viaType;
 
