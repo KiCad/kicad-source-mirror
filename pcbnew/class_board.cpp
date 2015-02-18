@@ -2635,72 +2635,27 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
             new_module->IncrementReference( true );
         }
 
-        m_Modules.PushBack( new_module );
         new_item = new_module;
         break;
     }
     case PCB_TEXT_T:
-    {
-        const TEXTE_PCB* old_text = static_cast<const TEXTE_PCB*>( aItem );
-
-        TEXTE_PCB* new_text = new TEXTE_PCB( *old_text );
-
-        m_Drawings.PushBack( new_text );
-        new_item = new_text;
-
-        break;
-    }
     case PCB_LINE_T:
-    {
-        DRAWSEGMENT* new_edge = new DRAWSEGMENT(
-                *static_cast<const DRAWSEGMENT*>(aItem) );
-
-        m_Drawings.PushBack( new_edge );
-        new_item = new_edge;
-        break;
-    }
     case PCB_TRACE_T:
-    {
-        TRACK* new_track = new TRACK(
-                *static_cast<const TRACK*>(aItem) );
-
-        m_Track.PushBack( new_track );
-        new_item = new_track;
-        break;
-    }
     case PCB_ZONE_AREA_T:
-    {
-        ZONE_CONTAINER* new_zone = new ZONE_CONTAINER(
-                *static_cast<const ZONE_CONTAINER*>(aItem) );
-
-        m_ZoneDescriptorList.push_back( new_zone );
-        new_item = new_zone;
-        break;
-    }
     case PCB_TARGET_T:
-    {
-        PCB_TARGET* new_target = new PCB_TARGET(
-                *static_cast<const PCB_TARGET*>(aItem) );
-
-        m_Drawings.PushBack( new_target );
-        new_item = new_target;
-        break;
-    }
     case PCB_DIMENSION_T:
-    {
-        DIMENSION* new_dim = new DIMENSION(
-                *static_cast<const DIMENSION*>(aItem) );
-
-        m_Drawings.PushBack( new_dim );
-        new_item = new_dim;
+        new_item = static_cast<BOARD_ITEM*>( aItem->Clone() );
         break;
-    }
+
     default:
         // Un-handled item for duplication
         wxASSERT_MSG( false, "Duplication not supported for items of class "
                       + aItem->GetClass() );
         break;
     }
+
+    if( new_item )
+        Add( new_item );
 
     return new_item;
 }
@@ -2723,7 +2678,7 @@ wxString BOARD::GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
             continue;
 
         // the suffix must be a number
-        if ( !remainder.IsNumber() )
+        if( !remainder.IsNumber() )
             continue;
 
         long number;

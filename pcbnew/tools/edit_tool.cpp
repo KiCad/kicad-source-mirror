@@ -699,10 +699,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         BOARD_ITEM* new_item = NULL;
 
-        if ( PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( editFrame ) )
-            new_item = frame->GetBoard()->DuplicateAndAddItem( item, increment );
-        else if ( FOOTPRINT_EDIT_FRAME* frame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( editFrame ) )
-            new_item = frame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+        if( m_editModules )
+            new_item = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+        else
+            new_item = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
 
         if( new_item )
         {
@@ -759,9 +759,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
     editFrame->OnModify();
 
-    const bool editingModule = NULL != dynamic_cast<FOOTPRINT_EDIT_FRAME*>( editFrame );
-
-    if( editingModule )
+    if( m_editModules )
     {
         // Module editors do their undo point upfront for the whole module
         editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_MODEDIT );
@@ -819,10 +817,10 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
                     // if renumbering, no need to increment
                     const bool increment = !array_opts->ShouldRenumberItems();
 
-                    if ( PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( editFrame ) )
-                        newItem = frame->GetBoard()->DuplicateAndAddItem( item, increment );
-                    else if ( FOOTPRINT_EDIT_FRAME* frame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( editFrame ) )
-                        newItem = frame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+                    if( m_editModules )
+                        newItem = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+                    else
+                        newItem = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
 
                     if( newItem )
                     {
@@ -839,6 +837,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
                         }
 
                         editFrame->GetGalCanvas()->GetView()->Add( newItem );
+                        getModel<BOARD>()->GetRatsnest()->Update( newItem );
                     }
                 }
 
@@ -881,7 +880,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( !editingModule )
+        if( !m_editModules )
         {
             if( originalItemsModified )
             {
@@ -896,6 +895,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
         }
     }
 
+    getModel<BOARD>()->GetRatsnest()->Recalculate();
     setTransitions();
 
     return 0;
