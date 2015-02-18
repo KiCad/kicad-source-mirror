@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg18970"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="duplicate_text.svg">
+  <metadata
+     id="metadata18987">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     id="namedview18985"
+     showgrid="false"
+     inkscape:zoom="16"
+     inkscape:cx="13.659451"
+     inkscape:cy="12.783886"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g18103"
+     inkscape:object-paths="true"
+     inkscape:object-nodes="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3029"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs18972" />
+  <g
+     style="fill-rule:evenodd"
+     transform="matrix(1.1098933,0,0,1.075965,-25.392974,-45.041873)"
+     id="g19009">
+    <path
+       style="fill:#00009b"
+       d="M 1 1 L 1 5 L 2 5 L 4 3 L 6 3 L 6 13 L 4 14 L 4 15 L 7 15 L 8 15 L 11 15 L 11 14 L 9 13 L 9 3 L 11 3 L 13 5 L 14 5 L 14 1 L 8 1 L 7 1 L 1 1 z "
+       transform="matrix(0.90098751,0,0,0.92939826,22.878752,41.861838)"
+       id="path19013" />
+  </g>
+  <g
+     id="g18103"
+     transform="matrix(0.92021476,-0.39141384,0.39141384,0.92021476,-2.5098229,-9.469619)">
+    <path
+       sodipodi:nodetypes="ccccccc"
+       inkscape:connector-curvature="0"
+       d="m 14.365778,23.401859 c 0.202438,-4.960549 -1.242615,-6.237163 -5.6595543,-5.884794 4.3461583,1.028691 4.0709493,2.218515 3.7207813,5.66635 l -1.626346,-0.20242 2.198044,3.513613 2.945419,-2.915713 z"
+       style="fill:#ef2929;fill-opacity:1;stroke:#a40000;stroke-width:1"
+       id="path17320" />
+  </g>
+  <use
+     x="0"
+     y="0"
+     xlink:href="#g19009"
+     id="use3037"
+     transform="translate(11,10)"
+     width="26"
+     height="26"
+     style="opacity:0.7" />
+</svg>

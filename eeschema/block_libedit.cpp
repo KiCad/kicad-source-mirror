@@ -197,6 +197,9 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_SELECT_ITEMS_ONLY:
         break;
+
+    case BLOCK_MOVE_EXACT:
+        break;
     }
 
     if( !nextCmd )

@@ -148,9 +148,20 @@ wxString& operator <<( wxString& aString, const wxPoint& aPoint );
 void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue );
 
 /**
- * Return in internal units the value "val" given in inch or mm
+ * Return in internal units the value "val" given in a real unit
+ * such as "in", "mm" or "deg"
  */
 double From_User_Unit( EDA_UNITS_T aUnit, double aValue );
+
+
+/**
+ * Function DoubleValueFromString
+ * converts \a aTextValue to a double
+ * @param aUnits The units of \a aTextValue.
+ * @param aTextValue A reference to a wxString object containing the string to convert.
+ * @return A double representing that value in internal units
+ */
+double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
 
 /**
  * Function ValueFromString

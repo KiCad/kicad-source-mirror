@@ -65,6 +65,15 @@ public:
     /// Activation of the edit tool
     static TOOL_ACTION properties;
 
+    /// Activation of the exact move tool
+    static TOOL_ACTION moveExact;
+
+    /// Activation of the duplication tool
+    static TOOL_ACTION duplicate;
+
+    /// Activation of the duplication tool with incrementing (e.g. pad number)
+    static TOOL_ACTION duplicateIncrement;
+
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
 
@@ -203,6 +212,9 @@ public:
 
     /// Tool for quick pad enumeration
     static TOOL_ACTION enumeratePads;
+
+    /// Tool for creating an array of objects
+    static TOOL_ACTION createArray;
 
     /// Copying module items to clipboard
     static TOOL_ACTION copyItems;

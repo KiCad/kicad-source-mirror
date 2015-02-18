@@ -92,6 +92,28 @@ public:
     int Remove( const TOOL_EVENT& aEvent );
 
     /**
+     * Function Duplicate()
+     *
+     * Duplicates a selection and starts a move action
+     */
+    int Duplicate( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function MoveExact()
+     *
+     * Invokes a dialog box to allow moving of the item by an exact amount.
+     */
+    int MoveExact( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function CreateArray()
+     *
+     * Creates an array of the selected items, invoking the array editor dialog
+     * to set the array options
+     */
+    int CreateArray( const TOOL_EVENT& aEvent );
+
+    /**
      * Function EditModules()
      *
      * Toggles edit module mode. When enabled, one may select parts of modules individually
