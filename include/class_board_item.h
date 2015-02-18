@@ -79,7 +79,7 @@ protected:
     LAYER_ID    m_Layer;
 
     static int getTrailingInt( wxString aStr );
-    static int getNextNumberInSequence( std::set<int> aSeq, bool aFillSequenceGaps);
+    static int getNextNumberInSequence( std::set<int> aSeq, bool aFillSequenceGaps );
 
 public:
 

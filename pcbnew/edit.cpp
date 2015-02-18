@@ -1531,11 +1531,16 @@ void PCB_EDIT_FRAME::moveExact()
 void PCB_EDIT_FRAME::duplicateItem( bool aIncrement )
 {
     BOARD_ITEM* item = GetScreen()->GetCurItem();
-
+    bool editingModule = NULL != dynamic_cast<FOOTPRINT_EDIT_FRAME*>( this );
     int move_cmd = 0;
 
-    BOARD_ITEM* new_item = GetBoard()->DuplicateAndAddItem(
-            item, aIncrement );
+    if( item->Type() == PCB_PAD_T && !editingModule )
+    {
+        // If it is not the module editor, then duplicate the parent module instead
+        item = static_cast<MODULE*>( item )->GetParent();
+    }
+
+    BOARD_ITEM* new_item = GetBoard()->DuplicateAndAddItem( item, aIncrement );
 
     SaveCopyInUndoList( new_item, UR_NEW );
 
@@ -1595,6 +1600,7 @@ void PCB_BASE_EDIT_FRAME::createArray()
     bool editingModule = NULL != dynamic_cast<FOOTPRINT_EDIT_FRAME*>( this );
 
     BOARD* board = GetBoard();
+    // Remember it is valid only in the module editor
     MODULE* module = static_cast<MODULE*>( item->GetParent() );
 
     DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
@@ -1607,6 +1613,12 @@ void PCB_BASE_EDIT_FRAME::createArray()
     if( ret == DIALOG_CREATE_ARRAY::CREATE_ARRAY_OK && array_opts != NULL )
     {
         PICKED_ITEMS_LIST newItemsList;
+
+        if( item->Type() == PCB_PAD_T && !editingModule )
+        {
+            // If it is not the module editor, then duplicate the parent module instead
+            item = static_cast<MODULE*>( item )->GetParent();
+        }
 
         if( editingModule )
         {
@@ -1631,7 +1643,7 @@ void PCB_BASE_EDIT_FRAME::createArray()
             cachedString = text->GetText();
         }
 
-        for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++)
+        for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
         {
             BOARD_ITEM* new_item = NULL;
 
