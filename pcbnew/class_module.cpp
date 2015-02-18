@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,8 +68,8 @@ MODULE::MODULE( BOARD* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     m_ZoneConnection = UNDEFINED_CONNECTION; // Use zone setting by default
-    m_ThermalWidth = 0; // Use zone setting by default
-    m_ThermalGap = 0; // Use zone setting by default
+    m_ThermalWidth = 0;     // Use zone setting by default
+    m_ThermalGap = 0;       // Use zone setting by default
 
     // These are special and mandatory text fields
     m_Reference = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_REFERENCE );
@@ -172,6 +172,21 @@ MODULE::~MODULE()
     delete m_Reference;
     delete m_Value;
     delete m_initial_comments;
+}
+
+    /**
+     * Function ClearAllNets
+     * Clear (i.e. force the ORPHANED dummy net info) the net info which
+     * depends on a given board for all pads of the footprint.
+     * This is needed when a footprint is copied between the fp editor and
+     * the board editor for instance, because net info become fully broken
+     */
+void MODULE::ClearAllNets()
+{
+    // Force the ORPHANED dummy net info for all pads.
+    // ORPHANED dummy net does not depend on a board
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+        pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
 }
 
 

@@ -101,8 +101,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     // Morever we do not want to save any reference to an unknown net when
     // saving the footprint in lib cache
     // so we force the ORPHANED dummy net info for all pads
-    for( D_PAD* pad = newModule->Pads(); pad; pad = pad->Next() )
-        pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
+    newModule->ClearAllNets();
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( newModule, NULL );
@@ -332,12 +331,12 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
 
     MODULE* module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
 
-    // Clear all references to any net info, to be sure there is no broken links
-    // to any netinfo list (should be not needed, but...)
-#if 0   // FIXME : currently crashes Pcbnew. should not.
-    for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-        pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
-#endif
+    // If the module is found, clear all net info,
+    // to be sure there is no broken links
+    // to any netinfo list (should be not needed, but it can be edited from
+    // the footprint editor )
+    if( module )
+        module->ClearAllNets();
 
     return module;
 }

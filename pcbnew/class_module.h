@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,7 +93,7 @@ public:
 
     void Copy( MODULE* Module );        // Copy structure
 
-    /*
+    /**
      * Function Add
      * adds the given item to this MODULE and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.
@@ -122,6 +122,15 @@ public:
      * @return BOARD_ITEM* \a aBoardItem which was passed in.
      */
     BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
+
+    /**
+     * Function ClearAllNets
+     * Clear (i.e. force the ORPHANED dummy net info) the net info which
+     * depends on a given board for all pads of the footprint.
+     * This is needed when a footprint is copied between the fp editor and
+     * the board editor for instance, because net info become fully broken
+     */
+    void ClearAllNets();
 
     /**
      * Function CalculateBoundingBox
