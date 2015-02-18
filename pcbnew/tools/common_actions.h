@@ -22,10 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef __COMMON_ACTIONS_H
+#define __COMMON_ACTIONS_H
+
 #include <tool/tool_action.h>
 #include <boost/optional.hpp>
 
 class TOOL_EVENT;
+class TOOL_MANAGER;
 
 /**
  * Class COMMON_ACTIONS
@@ -241,3 +245,7 @@ public:
      */
     static boost::optional<TOOL_EVENT> TranslateLegacyId( int aId );
 };
+
+void registerAllTools ( TOOL_MANAGER *aToolManager );
+
+#endif

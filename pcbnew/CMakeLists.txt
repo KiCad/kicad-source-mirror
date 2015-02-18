@@ -275,6 +275,7 @@ set( PCBNEW_CLASS_SRCS
     tools/module_tools.cpp
     tools/placement_tool.cpp
     tools/common_actions.cpp
+    tools/tools_common.cpp
     )
 
 set( PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS} )
