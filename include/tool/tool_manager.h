@@ -30,8 +30,6 @@
 #include <typeinfo>
 #include <map>
 
-#include <math/vector2d.h>
-
 #include <tool/tool_base.h>
 
 class TOOL_BASE;
@@ -301,29 +299,6 @@ public:
         return actionList;
     }
 
-    /**
-     * Increments the undo inhibit counter. This will indicate that tools
-     * should not create an undo point, as another tool is doing it already,
-     * and considers that its operation is atomic, even if it calls another one
-     * (for example a duplicate calls a move)
-     */
-    void IncUndoInhibit();
-
-    /**
-     * Decrements the inhibit counter. An assert is raised if the counter drops
-     * below zero
-     */
-    void DecUndoInhibit();
-
-    /**
-     * Report if the tool manager has been told at least once that undo
-     * points should not be created. This can be ignored if the undo point
-     * is still required.
-     *
-     * @return true if undo are inhibited
-     */
-    bool IsUndoInhibited() const;
-
 private:
     struct TOOL_STATE;
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
@@ -451,9 +426,6 @@ private:
 
     /// Flag saying if the currently processed event should be passed to other tools.
     bool m_passEvent;
-
-    /// Counter of undo inhibitions. When zero, undo is not inhibited
-    int m_undoInhibit;
 };
 
 #endif

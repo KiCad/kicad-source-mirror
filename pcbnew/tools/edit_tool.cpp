@@ -123,9 +123,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // cumulative translation
     wxPoint totalMovement( 0, 0 );
 
-    // make sure nothing is inhibiting undo points
-    bool inhibitUndo = m_toolMgr->IsUndoInhibited();
-
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -218,7 +215,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     break;
 
                 // Save items, so changes can be undone
-                if( !inhibitUndo )
+                if( !isUndoInhibited() )
                 {
                     editFrame->OnModify();
                     editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
@@ -248,7 +245,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 controls->SetAutoPan( true );
                 m_dragging = true;
-                m_toolMgr->IncUndoInhibit();
+                incUndoInhibit();
             }
 
             selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -260,7 +257,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     if( m_dragging )
-        m_toolMgr->DecUndoInhibit();
+        decUndoInhibit();
 
     m_dragging = false;
     m_offset.x = 0;
@@ -382,7 +379,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     wxPoint rotatePoint = getModificationPoint( selection );
 
     // If it is being dragged, then it is already saved with UR_CHANGED flag
-    if( !m_toolMgr->IsUndoInhibited() )
+    if( !isUndoInhibited() )
     {
         editFrame->OnModify();
         editFrame->SaveCopyInUndoList( selection.items, UR_ROTATED, rotatePoint );
@@ -436,7 +433,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     wxPoint flipPoint = getModificationPoint( selection );
 
-    if( !m_toolMgr->IsUndoInhibited() )   // If it is being dragged, then it is already saved with UR_CHANGED flag
+    if( !isUndoInhibited() )   // If it is being dragged, then it is already saved with UR_CHANGED flag
     {
         editFrame->OnModify();
         editFrame->SaveCopyInUndoList( selection.items, UR_FLIPPED, flipPoint );
@@ -614,7 +611,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
     if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
     {
-        if( !m_toolMgr->IsUndoInhibited() )
+        if( !isUndoInhibited() )
         {
             editFrame->OnModify();
             // Record an action of move and rotate
@@ -676,7 +673,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // prevent other tools making undo points while the duplicate is going on
     // so that if you cancel, you don't get a duplicate object hiding over
     // the original
-    m_toolMgr->IncUndoInhibit();
+    incUndoInhibit();
 
     std::vector<BOARD_ITEM*> old_items;
 
@@ -731,7 +728,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     Main( evt );
 
     // and re-enable undos
-    m_toolMgr->DecUndoInhibit();
+    decUndoInhibit();
 
     setTransitions();
 

@@ -142,6 +142,9 @@ private:
     /// Edit module mode flag
     bool m_editModules;
 
+    /// Counter of undo inhibitions. When zero, undo is not inhibited.
+    int m_undoInhibit;
+
     ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
 
@@ -173,6 +176,40 @@ private:
 
     ///> Updates view with the changes in the list.
     void processChanges( const PICKED_ITEMS_LIST* aList );
+
+    /**
+     * Increments the undo inhibit counter. This will indicate that tools
+     * should not create an undo point, as another tool is doing it already,
+     * and considers that its operation is atomic, even if it calls another one
+     * (for example a duplicate calls a move).
+     */
+    inline void incUndoInhibit()
+    {
+        m_undoInhibit++;
+    }
+
+    /**
+     * Decrements the inhibit counter. An assert is raised if the counter drops
+     * below zero.
+     */
+    inline void decUndoInhibit()
+    {
+        m_undoInhibit--;
+
+        wxASSERT_MSG( m_undoInhibit >= 0, wxT( "Undo inhibit count decremented past zero" ) );
+    }
+
+    /**
+     * Report if the tool manager has been told at least once that undo
+     * points should not be created. This can be ignored if the undo point
+     * is still required.
+     *
+     * @return true if undo are inhibited
+     */
+    inline bool isUndoInhibited() const
+    {
+        return m_undoInhibit > 0;
+    }
 };
 
 #endif
