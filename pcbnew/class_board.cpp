@@ -2641,6 +2641,7 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     case PCB_TEXT_T:
     case PCB_LINE_T:
     case PCB_TRACE_T:
+    case PCB_VIA_T:
     case PCB_ZONE_AREA_T:
     case PCB_TARGET_T:
     case PCB_DIMENSION_T:
