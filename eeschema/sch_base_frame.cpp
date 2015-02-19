@@ -160,6 +160,10 @@ void SCH_BASE_FRAME::UpdateStatusBar()
         absformatter = wxT( "X %f  Y %f" );
         locformatter = wxT( "dx %f  dy %f  d %f" );
         break;
+
+    case DEGREES:
+        wxASSERT( false );
+        break;
     }
 
     line.Printf( absformatter, dXpos, dYpos );

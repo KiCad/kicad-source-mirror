@@ -474,6 +474,10 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     case UNSCALED_UNITS:
         SetStatusText( wxEmptyString, 5 );
         break;
+
+    case DEGREES:
+        wxASSERT( false );
+        break;
     }
 
     wxString line;
