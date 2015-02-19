@@ -109,9 +109,4 @@ macro( perform_feature_checks )
     # getc() on platforms where getc_unlocked() doesn't exist.
     check_symbol_exists( getc_unlocked "stdio.h" HAVE_FGETC_NOLOCK )
 
-    # Generate config.h.
-    configure_file( ${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake
-        ${CMAKE_BINARY_DIR}/config.h
-        )
-
 endmacro( perform_feature_checks )
