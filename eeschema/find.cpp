@@ -43,7 +43,6 @@
 #include <base_units.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_library.h>
 #include <lib_pin.h>
 #include <sch_marker.h>

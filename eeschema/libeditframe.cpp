@@ -39,7 +39,6 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <eeschema_id.h>
 #include <libeditframe.h>
 #include <class_library.h>

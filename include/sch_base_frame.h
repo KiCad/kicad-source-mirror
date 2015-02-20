@@ -3,8 +3,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ class TITLE_BLOCK;
 class LIB_VIEW_FRAME;
 class LIB_EDIT_FRAME;
 class LIB_ALIAS;
+class PART_LIB;
 
 /**
  * Class SCH_BASE_FRAME
@@ -132,6 +133,42 @@ protected:
      * If the viewed is already opened from an other window, close it and reopen
      */
     void OnOpenLibraryViewer( wxCommandEvent& event );
+
+    /**
+     * Function DisplayComponentsNamesInLib
+     * Select a component from the list of components in a library
+     *
+     * @param aLibrary = a reference to the library to explore
+     *                If NULL the user will be prompted tp chose a library
+     * @param aBuffer = a wxString to put the selected component name
+     *
+     * @return true if a component is selected
+     *         false on cancel
+     */
+    bool DisplayListComponentsInLib( PART_LIB*  aLibrary, wxString&  aBuffer,
+                                     wxString&  aPreviousChoice );
+
+    /**
+     * Function SelectLibraryFromList
+     * displays a list of current loaded libraries, and allows the user to select
+     * a library
+     * This list is sorted, with the library cache always at end of the list
+     * @return a reference to the selected library, or NULL
+     */
+    PART_LIB* SelectLibraryFromList();
+
+    /**
+     * Function SelectPartNameToLoad
+     * Select a part name from the list of components (parts) found in a library.
+     *
+     * @param aLibrary = a reference to the library to explore
+     *                If NULL the user will be prompted tp chose a library
+     * @param aBufName = a wxString to put the selected component name
+     *
+     * @return true if a component is selected
+     *         false on cancel
+     */
+    bool SelectPartNameToLoad( PART_LIB* aLibrary, wxString& aBufName );
 };
 
 #endif // SCH_BASE_FRAME_H_

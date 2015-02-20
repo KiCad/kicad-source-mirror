@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,9 +44,6 @@ class LIB_VIEW_FRAME;
 class DRAWSEGMENT;
 class SCH_ITEM;
 class SCH_NO_CONNECT;
-class CMP_LIBRARY;
-class LIB_COMPONENT;
-class LIB_DRAW_ITEM;
 class EDA_ITEM;
 class SCH_BUS_ENTRY_BASE;
 class SCH_BUS_WIRE_ENTRY;

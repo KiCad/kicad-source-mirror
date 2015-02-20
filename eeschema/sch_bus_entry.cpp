@@ -38,7 +38,6 @@
 
 #include <eeschema_config.h>
 #include <general.h>
-#include <protos.h>
 #include <sch_bus_entry.h>
 
 

@@ -46,7 +46,6 @@
 #include <plot_common.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_field.h>

@@ -84,7 +84,6 @@ set( EESCHEMA_SRCS
     component_references_lister.cpp
     controle.cpp
     cross-probing.cpp
-    database.cpp
     ${EESCHEMA_DLGS}
     edit_component_in_schematic.cpp
     edit_bitmap.cpp
