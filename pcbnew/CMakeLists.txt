@@ -46,6 +46,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_cleaning_options.cpp
     dialogs/dialog_copper_zones.cpp
     dialogs/dialog_copper_zones_base.cpp
+    dialogs/dialog_create_array.cpp
+    dialogs/dialog_create_array_base.cpp
     dialogs/dialog_design_rules.cpp
     dialogs/dialog_design_rules_base.cpp
     dialogs/dialog_dimension_editor_base.cpp
@@ -104,6 +106,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_pcb_text_properties_base.cpp
     dialogs/dialog_pns_settings.cpp
     dialogs/dialog_pns_settings_base.cpp
+    dialogs/dialog_move_exact.cpp
+    dialogs/dialog_move_exact_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp

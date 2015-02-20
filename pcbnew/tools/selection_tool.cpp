@@ -931,6 +931,30 @@ void SELECTION::clear()
 }
 
 
+VECTOR2I SELECTION::GetCenter() const
+{
+    VECTOR2I centre;
+
+    if( Size() == 1 )
+    {
+        centre = Item<BOARD_ITEM>( 0 )->GetCenter();
+    }
+    else
+    {
+        EDA_RECT bbox =  Item<BOARD_ITEM>( 0 )->GetBoundingBox();
+        for( unsigned int i = 1; i < items.GetCount(); ++i )
+        {
+            BOARD_ITEM* item = Item<BOARD_ITEM>( i );
+            bbox.Merge( item->GetBoundingBox() );
+        }
+
+        centre = bbox.Centre();
+    }
+
+    return centre;
+}
+
+
 const TOOL_EVENT SELECTION_TOOL::SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" );
 const TOOL_EVENT SELECTION_TOOL::UnselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.unselected" );
 const TOOL_EVENT SELECTION_TOOL::ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" );

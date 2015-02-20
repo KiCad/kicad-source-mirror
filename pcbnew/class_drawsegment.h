@@ -117,7 +117,7 @@ public:
     // m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
 
-    const wxPoint& GetCenter() const        { return m_Start; }
+    const wxPoint GetCenter() const;        //override
     const wxPoint& GetArcStart() const      { return m_End; }
     const wxPoint GetArcEnd() const;
 

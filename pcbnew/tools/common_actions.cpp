@@ -56,13 +56,29 @@ TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the ho
         AS_GLOBAL, MD_CTRL + int( 'F' ) );
 
 TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
-        AS_GLOBAL, 'T');
+        AS_GLOBAL, 'T' );
 
 
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
         "Move", "Moves the selected item(s)", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
+        AS_GLOBAL, MD_CTRL + int( 'D' ),
+        "Duplicate", "Duplicates the selected item(s)" );
+
+TOOL_ACTION COMMON_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
+        AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'D' ),
+        "Duplicate", "Duplicates the selected item(s), incrementing pad numbers" );
+
+TOOL_ACTION COMMON_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
+        AS_GLOBAL, MD_CTRL + int( 'M' ),
+        "Move Exactly...", "Moves the selected item(s) by an exact amount" );
+
+TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
+        AS_GLOBAL, MD_CTRL + int( 'N' ),
+        "Create array", "Create array", AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
         AS_GLOBAL, 'R',

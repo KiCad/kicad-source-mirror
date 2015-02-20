@@ -1131,3 +1131,122 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
+BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
+                                         bool aIncrementPadNumbers )
+{
+    BOARD_ITEM* new_item = NULL;
+
+    switch( aItem->Type() )
+    {
+    case PCB_PAD_T:
+    {
+        D_PAD* new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
+
+        if( aIncrementPadNumbers )
+        {
+            // Take the next available pad number
+            new_pad->IncrementPadName( true, true );
+        }
+
+        Pads().PushBack( new_pad );
+        new_item = new_pad;
+        break;
+    }
+    case PCB_MODULE_TEXT_T:
+    {
+        const TEXTE_MODULE* old_text = static_cast<const TEXTE_MODULE*>( aItem );
+
+        // do not duplicate value or reference fields
+        // (there can only be one of each)
+        if( old_text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
+        {
+            TEXTE_MODULE* new_text = new TEXTE_MODULE( *old_text );
+
+            GraphicalItems().PushBack( new_text );
+            new_item = new_text;
+        }
+        break;
+    }
+    case PCB_MODULE_EDGE_T:
+    {
+        EDGE_MODULE* new_edge = new EDGE_MODULE(
+                *static_cast<const EDGE_MODULE*>(aItem) );
+
+        GraphicalItems().PushBack( new_edge );
+        new_item = new_edge;
+        break;
+    }
+    case PCB_MODULE_T:
+        // Ignore the module itself
+        break;
+
+    default:
+        // Un-handled item for duplication
+        wxASSERT_MSG( false, "Duplication not supported for items of class "
+                      + aItem->GetClass() );
+        break;
+    }
+
+    return new_item;
+}
+
+
+wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
+{
+    std::set<int> usedNumbers;
+
+    // Create a set of used pad numbers
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    {
+        int padNumber = getTrailingInt( pad->GetPadName() );
+        usedNumbers.insert( padNumber );
+    }
+
+    const int nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
+
+    return wxString::Format( wxT( "%i" ), nextNum );
+}
+
+
+wxString MODULE::GetReferencePrefix() const
+{
+    wxString prefix = GetReference();
+
+    int strIndex = prefix.length() - 1;
+    while( strIndex >= 0 )
+    {
+        const wxUniChar chr = prefix.GetChar( strIndex );
+
+        // numeric suffix
+        if( chr >= '0' && chr <= '9' )
+            break;
+
+        strIndex--;
+    }
+
+    prefix = prefix.Mid( 0, strIndex );
+
+    return prefix;
+}
+
+
+bool MODULE::IncrementReference( bool aFillSequenceGaps )
+{
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    bool success = false;
+    const wxString prefix = GetReferencePrefix();
+    const wxString newReference = board->GetNextModuleReferenceWithPrefix(
+            prefix, aFillSequenceGaps );
+
+    if( !newReference.IsEmpty() )
+    {
+        SetReference( newReference );
+        success = true;
+    }
+
+    return success;
+}

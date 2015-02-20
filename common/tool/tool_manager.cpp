@@ -634,7 +634,7 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
     if( m_view->IsDirty() )
     {
-        PCB_EDIT_FRAME* f = static_cast<PCB_EDIT_FRAME*>( GetEditFrame() );
+        EDA_DRAW_FRAME* f = static_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
         f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
 

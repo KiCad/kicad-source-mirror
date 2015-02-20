@@ -78,6 +78,13 @@ public:
     int PasteItems( const TOOL_EVENT& aEvent );
 
     /**
+     * Function CreateArray
+     *
+     * Creates an array of objects using settings from a dialog
+     */
+    int CreateArray( TOOL_EVENT& aEvent );
+
+    /**
      * Function ModuleTextOutlines()
      *
      * Toggles display mode for module texts (outline/filled).
