@@ -99,7 +99,7 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 
     childs.clear();
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( ( *text == '}' ) || ( *text == ']' ) )
         {
@@ -138,7 +138,7 @@ int VRML2_MODEL_PARSER::read_Transform()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -257,15 +257,15 @@ int VRML2_MODEL_PARSER::read_DEF_Coordinate()
     char text[128];
 
     // Get the name of the definition.
-    GetNextTag( m_file, text );
+    GetNextTag( m_file, text, sizeof(text) );
     std::string coordinateName = text;
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
             continue;
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
             return 0;
 
         if( strcmp( text, "Coordinate" ) == 0 )
@@ -287,9 +287,9 @@ int VRML2_MODEL_PARSER::read_DEF()
 {
     char text[128];
 
-    GetNextTag( m_file, text );
+    GetNextTag( m_file, text, sizeof(text) );
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -344,7 +344,7 @@ int VRML2_MODEL_PARSER::read_USE()
     char text[128];
 
     // Get the name of the definition.
-    GetNextTag( m_file, text );
+    GetNextTag( m_file, text, sizeof(text) );
     std::string coordinateName = text;
 
     // Look for it in our coordinate map.
@@ -368,7 +368,7 @@ int VRML2_MODEL_PARSER::read_Shape()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -418,7 +418,7 @@ int VRML2_MODEL_PARSER::read_Appearance()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -446,7 +446,7 @@ int VRML2_MODEL_PARSER::read_material()
     S3D_MATERIAL* material = NULL;
     char text[128];
 
-    if( GetNextTag( m_file, text ) )
+    if( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( strcmp( text, "Material" ) == 0 )
         {
@@ -462,7 +462,7 @@ int VRML2_MODEL_PARSER::read_material()
         }
         else if( strcmp( text, "DEF" ) == 0 )
         {
-            if( GetNextTag( m_file, text ) )
+            if( GetNextTag( m_file, text, sizeof(text) ) )
             {
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
@@ -471,7 +471,7 @@ int VRML2_MODEL_PARSER::read_material()
                 GetMaster()->Insert( material );
                 m_model->m_Materials = material;
 
-                if( GetNextTag( m_file, text ) )
+                if( GetNextTag( m_file, text, sizeof(text) ) )
                 {
                     if( strcmp( text, "Material" ) == 0 )
                     {
@@ -482,7 +482,7 @@ int VRML2_MODEL_PARSER::read_material()
         }
         else if( strcmp( text, "USE" ) == 0 )
         {
-            if( GetNextTag( m_file, text ) )
+            if( GetNextTag( m_file, text, sizeof(text) ) )
             {
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
@@ -511,7 +511,7 @@ int VRML2_MODEL_PARSER::read_Material()
     char text[128];
     glm::vec3 vertex;
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -593,7 +593,7 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
     m_normalPerVertex = false;
     colorPerVertex = false;
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -607,7 +607,7 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 
         if( strcmp( text, "normalPerVertex" ) == 0 )
         {
-            if( GetNextTag( m_file, text ) )
+            if( GetNextTag( m_file, text, sizeof(text) ) )
             {
                 if( strcmp( text, "TRUE" ) == 0 )
                 {
@@ -617,7 +617,7 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
         }
         else if( strcmp( text, "colorPerVertex" ) == 0 )
         {
-            GetNextTag( m_file, text );
+            GetNextTag( m_file, text, sizeof(text) );
 
             if( strcmp( text, "TRUE" ) )
             {
@@ -667,12 +667,12 @@ int VRML2_MODEL_PARSER::read_IndexedLineSet()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
             continue;
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
             return 0;
 
         if( strcmp( text, "Coordinate" ) == 0 )
@@ -783,7 +783,7 @@ int VRML2_MODEL_PARSER::read_Color()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -810,7 +810,7 @@ int VRML2_MODEL_PARSER::read_Normal()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -843,7 +843,7 @@ int VRML2_MODEL_PARSER::read_Coordinate()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -872,12 +872,12 @@ int VRML2_MODEL_PARSER::read_CoordinateDef()
 {
     char text[128];
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
-        if( ( text == NULL ) || ( *text == ']' ) )
+        if( *text == ']' )
             continue;
 
-        if( ( *text == '}' ) )
+        if( *text == '}' )
             return 0;
 
         if( strcmp( text, "point" ) == 0 )

@@ -88,7 +88,7 @@ void VRML1_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 
     childs.clear();
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( ( *text == '}' ) || ( *text == ']' ) )
         {
@@ -123,7 +123,7 @@ int VRML1_MODEL_PARSER::read_separator()
 
     // DBG( printf( "Separator\n" ) );
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( strcmp( text, "Material" ) == 0 )
         {
@@ -182,7 +182,7 @@ int VRML1_MODEL_PARSER::readMaterial()
 
     m_model->m_Materials = material;
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -230,7 +230,7 @@ int VRML1_MODEL_PARSER::readCoordinate3()
 
     // DBG( printf( "  readCoordinate3\n" ) );
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -258,7 +258,7 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet()
 
     // DBG( printf( "  readIndexedFaceSet\n" ) );
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
