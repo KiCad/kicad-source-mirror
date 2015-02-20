@@ -204,7 +204,7 @@ void DIALOG_MOVE_EXACT::OnTextFocusLost( wxFocusEvent& event )
     wxTextCtrl* obj = static_cast<wxTextCtrl*>( event.GetEventObject() );
 
     if( obj->GetValue().IsEmpty() )
-    {
         obj->SetValue("0");
-    }
+
+    event.Skip();
 }

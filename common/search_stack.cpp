@@ -203,7 +203,7 @@ void SEARCH_STACK::Show( const char* aPrefix ) const
     printf( "%s SEARCH_STACK:\n", aPrefix );
     for( unsigned i=0;  i<GetCount();  ++i )
     {
-        printf( "  [%2i]:%s\n", i, TO_UTF8( (*this)[i] ) );
+        printf( "  [%2u]:%s\n", i, TO_UTF8( (*this)[i] ) );
     }
 }
 #endif

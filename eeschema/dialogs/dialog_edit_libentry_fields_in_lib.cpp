@@ -282,9 +282,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     }
 
 #if defined(DEBUG)
-    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
+    for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
-        printf( "save[%d].name:'%s' value:'%s'\n", i,
+        printf( "save[%u].name:'%s' value:'%s'\n", i,
                 TO_UTF8( m_FieldsBuf[i].GetName() ),
                 TO_UTF8( m_FieldsBuf[i].GetText() ) );
     }
@@ -488,7 +488,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
 #if defined(DEBUG)
     for( unsigned i=0; i<cmpFields.size();  ++i )
     {
-        printf( "cmpFields[%d].name:%s\n", i, TO_UTF8( cmpFields[i].GetName() ) );
+        printf( "cmpFields[%u].name:%s\n", i, TO_UTF8( cmpFields[i].GetName() ) );
     }
 #endif
 

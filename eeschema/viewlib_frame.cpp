@@ -42,9 +42,7 @@
 #include <dialog_helpers.h>
 
 
-/**
- * Save previous component library viewer state.
- */
+// Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
 wxString LIB_VIEW_FRAME::m_entryName;
 
