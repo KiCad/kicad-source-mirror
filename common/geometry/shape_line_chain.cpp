@@ -428,7 +428,7 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
     else if( PointCount() == 2 )
     {
         if( m_points[0] == m_points[1] )
-            m_points.erase( m_points.end() );
+            m_points.pop_back();
 
         return *this;
     }
