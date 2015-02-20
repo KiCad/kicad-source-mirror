@@ -70,7 +70,7 @@ struct SELECTION
         return static_cast<T*>( items.GetPickedItem( aIndex ) );
     }
 
-    wxPoint GetCenter() const;
+    VECTOR2I GetCenter() const;
 
 private:
     /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not

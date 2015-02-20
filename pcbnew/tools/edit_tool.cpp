@@ -618,7 +618,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
         }
 
-        wxPoint rotPoint = selection.GetCenter();
+        VECTOR2I rp = selection.GetCenter();
+        wxPoint rotPoint( rp.x, rp.y );
 
         for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
         {
@@ -769,7 +770,8 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 
     DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
 
-    const wxPoint rotPoint = selection.GetCenter();
+    VECTOR2I rp = selection.GetCenter();
+    const wxPoint rotPoint( rp.x, rp.y );
 
     DIALOG_CREATE_ARRAY dialog( editFrame, rotPoint, &array_opts );
     int ret = dialog.ShowModal();

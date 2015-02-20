@@ -931,9 +931,9 @@ void SELECTION::clear()
 }
 
 
-wxPoint SELECTION::GetCenter() const
+VECTOR2I SELECTION::GetCenter() const
 {
-    wxPoint centre;
+    VECTOR2I centre;
 
     if( Size() == 1 )
     {
