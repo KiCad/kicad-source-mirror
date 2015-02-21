@@ -88,7 +88,6 @@ set( EESCHEMA_SRCS
     edit_component_in_schematic.cpp
     edit_bitmap.cpp
     edit_label.cpp
-    eelibs_read_libraryfiles.cpp
     eeredraw.cpp
     eeschema.cpp
     eeschema_config.cpp

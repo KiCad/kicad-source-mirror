@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,14 +280,16 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 if( currTrack->Type() != PCB_VIA_T
                   || ( currTrack->GetStart() != track->GetStart() && currTrack->GetStart() != track->GetEnd() ))
                 {
-                    if( distStart <= currTrack->GetWidth()/2 )
+                    double max_dist = currTrack->GetWidth() / 2.0f;
+
+                    if( distStart <= max_dist )
                     {
                         // D(printf("nearest end is start\n");)
                         *curpos = track->GetStart();
                         return true;
                     }
 
-                    if( distEnd <= currTrack->GetWidth()/2 )
+                    if( distEnd <= max_dist )
                     {
                         // D(printf("nearest end is end\n");)
                         *curpos = track->GetEnd();

@@ -304,7 +304,7 @@ void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
             glEnd();
         }
 
-        if( delta > xsize / 2 )
+        if( delta > xsize / 2.0f )
             break;
     }
 

@@ -36,7 +36,7 @@
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <wxEeschemaStruct.h>
-#include <netlist.h>
+#include <sch_reference_list.h>
 #include <sch_component.h>
 
 

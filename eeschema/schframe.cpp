@@ -52,6 +52,7 @@
 #include <hotkeys.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>

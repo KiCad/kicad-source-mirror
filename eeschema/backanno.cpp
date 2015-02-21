@@ -40,7 +40,7 @@
 #include <general.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
-#include <netlist.h>
+#include <sch_reference_list.h>
 
 #include <dsnlexer.h>
 #include <ptree.h>

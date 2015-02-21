@@ -36,6 +36,7 @@
 #include <wxEeschemaStruct.h>
 
 #include <netlist.h>
+#include <sch_reference_list.h>
 #include <class_netlist_object.h>
 #include <class_library.h>
 #include <lib_pin.h>
