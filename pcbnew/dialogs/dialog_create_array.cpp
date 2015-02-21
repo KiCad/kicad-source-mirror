@@ -272,6 +272,8 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
         // Only use settings if all values are good
         if( ok )
             newSettings = newGrid;
+        else
+            delete newGrid;
     }
     else if( page == m_circularPanel )
     {
@@ -301,6 +303,8 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
         // Only use settings if all values are good
         if( ok )
             newSettings = newCirc;
+        else
+            delete newCirc;
     }
 
     // If we got good settings, send them out and finish

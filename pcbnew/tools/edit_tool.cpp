@@ -49,7 +49,8 @@
 
 EDIT_TOOL::EDIT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
-    m_dragging( false ), m_editModules( false ), m_updateFlag( KIGFX::VIEW_ITEM::NONE )
+    m_dragging( false ), m_editModules( false ), m_undoInhibit( 0 ),
+    m_updateFlag( KIGFX::VIEW_ITEM::NONE )
 {
 }
 

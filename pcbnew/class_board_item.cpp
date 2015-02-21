@@ -222,7 +222,7 @@ int BOARD_ITEM::getTrailingInt( wxString aStr )
 int BOARD_ITEM::getNextNumberInSequence( std::set<int> aSeq, bool aFillSequenceGaps)
 {
     // By default go to the end of the sequence
-    int candidate = *aSeq.end();
+    int candidate = *aSeq.rbegin();
 
     // Filling in gaps in pad numbering
     if( aFillSequenceGaps )
