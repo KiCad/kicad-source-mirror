@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <confirm.h>
 
 #include <netlist.h>

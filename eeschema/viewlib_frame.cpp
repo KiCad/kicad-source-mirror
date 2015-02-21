@@ -32,7 +32,7 @@
 #include <pgm_base.h>
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <msgpanel.h>
 
 #include <general.h>

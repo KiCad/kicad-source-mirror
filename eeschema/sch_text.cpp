@@ -35,7 +35,7 @@
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <drawtxt.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <plot_common.h>
 #include <base_units.h>
 #include <msgpanel.h>

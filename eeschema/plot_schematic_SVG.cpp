@@ -31,7 +31,7 @@
 #include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <class_sch_screen.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <base_units.h>
 #include <libeditframe.h>
 #include <sch_sheet_path.h>

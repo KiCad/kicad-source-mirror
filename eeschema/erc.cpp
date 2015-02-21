@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <kicad_string.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <netlist.h>
 #include <class_netlist_object.h>

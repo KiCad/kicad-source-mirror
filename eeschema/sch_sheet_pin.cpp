@@ -34,10 +34,9 @@
 #include <plot_common.h>
 #include <trigo.h>
 #include <richio.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <general.h>
-#include <protos.h>
 #include <sch_sheet.h>
 #include <kicad_string.h>
 

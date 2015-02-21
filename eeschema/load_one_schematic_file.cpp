@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <richio.h>
 #include <project.h>
 

@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <class_sch_screen.h>
 #include <wxstruct.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <class_library.h>
 #include <sch_component.h>

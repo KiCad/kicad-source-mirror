@@ -33,7 +33,7 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <eda_dde.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <general.h>
 #include <eeschema_id.h>

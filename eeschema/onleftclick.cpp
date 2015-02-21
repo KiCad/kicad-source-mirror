@@ -31,7 +31,7 @@
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <menus_helpers.h>
 
 #include <sch_bus_entry.h>

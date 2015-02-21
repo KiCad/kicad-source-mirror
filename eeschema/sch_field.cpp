@@ -41,8 +41,7 @@
 #include <gr_basic.h>
 #include <drawtxt.h>
 #include <macros.h>
-#include <trigo.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <plot_common.h>
 
 #include <general.h>

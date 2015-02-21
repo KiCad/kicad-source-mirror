@@ -32,7 +32,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <pgm_base.h>
 
 #include <eeschema_id.h>

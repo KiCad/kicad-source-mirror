@@ -37,7 +37,7 @@
 #include <pgm_base.h>
 #include <class_drawpanel.h>
 #include <sch_item_struct.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <plot_common.h>
 
 #include <netlist.h>

@@ -34,7 +34,7 @@
 #include <class_drawpanel.h>
 #include <gestfich.h>
 #include <eda_dde.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <eda_text.h>

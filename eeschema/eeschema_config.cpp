@@ -31,7 +31,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <invoke_sch_dialog.h>
 #include <common.h>
 

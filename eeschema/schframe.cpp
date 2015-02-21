@@ -43,7 +43,7 @@
 #include <netlist.h>
 #include <lib_pin.h>
 #include <class_library.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <sch_component.h>
 
 #include <dialog_helpers.h>

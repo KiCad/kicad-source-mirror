@@ -30,7 +30,7 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <sch_component.h>
 #include <class_netlist_object.h>

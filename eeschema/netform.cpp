@@ -33,7 +33,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pgm_base.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <netlist.h>
 #include <sch_reference_list.h>
