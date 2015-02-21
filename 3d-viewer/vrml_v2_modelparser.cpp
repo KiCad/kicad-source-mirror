@@ -53,6 +53,10 @@ VRML2_MODEL_PARSER::VRML2_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
     m_model = NULL;
+    m_file = NULL;
+    m_Materials = NULL;
+    m_normalPerVertex = true;
+    colorPerVertex = true;
 }
 
 

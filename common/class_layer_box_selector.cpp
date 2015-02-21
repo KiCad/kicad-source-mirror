@@ -81,6 +81,8 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
 {
     if( choices != NULL )
         ResyncBitmapOnly();
+
+    m_hotkeys = NULL;
 }
 
 

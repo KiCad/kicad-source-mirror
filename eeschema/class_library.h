@@ -152,7 +152,7 @@ public:
      * loads all of the project's libraries into this container, which should
      * be cleared before calling it.
      */
-    void LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR );
+    void LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::bad_pointer );
 
     /**
      * Function LibNamesAndPaths

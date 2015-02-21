@@ -168,7 +168,7 @@ bool PCB_PARSER::parseBool() throw( PARSE_ERROR )
 }
 
 
-wxPoint PCB_PARSER::parseXY() throw( PARSE_ERROR )
+wxPoint PCB_PARSER::parseXY() throw( PARSE_ERROR, IO_ERROR )
 {
     if( CurTok() != T_LEFT )
         NeedLEFT();
@@ -200,7 +200,7 @@ void PCB_PARSER::parseXY( int* aX, int* aY ) throw( PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR )
+void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
 {
     wxCHECK_RET( CurTok() == T_effects,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );

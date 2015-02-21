@@ -379,7 +379,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
 
 void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR )
+    throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     out->Print( nestLevel, "(fp_lib_table\n" );
 

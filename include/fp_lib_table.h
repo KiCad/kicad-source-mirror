@@ -356,7 +356,8 @@ public:
      * @param nestLevel is the indentation level to base all lines of the output.
      *   Actual indentation will be 2 spaces for each nestLevel.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const
+        throw( IO_ERROR, boost::interprocess::lock_exception );
 
     /**
      * Function GetLogicalLibs

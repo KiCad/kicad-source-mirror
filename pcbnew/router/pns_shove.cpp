@@ -517,13 +517,16 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
     m_currentNode->Remove( aVia );
     m_currentNode->Add ( pushedVia );
 
+#ifdef DEBUG
+    m_logger.Log( aVia, 0, "obstacle-via" );
+#endif
+
     if( aVia->BelongsTo( m_currentNode ) )
         delete aVia;
 
     pushedVia->SetRank( aCurrentRank - 1 );
 
 #ifdef DEBUG
-    m_logger.Log( aVia, 0, "obstacle-via" );
     m_logger.Log( pushedVia, 1, "pushed-via" );
 #endif
 

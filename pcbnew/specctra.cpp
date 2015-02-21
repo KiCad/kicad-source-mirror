@@ -255,7 +255,7 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR )
+void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer )
 {
     FILE_LINE_READER    reader( filename );
 
@@ -274,7 +274,7 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR )
+void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer )
 {
     FILE_LINE_READER    reader( filename );
 
@@ -1748,7 +1748,7 @@ void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IO_ERROR, boost::bad_pointer )
 {
     T       tok = NextTok();
 

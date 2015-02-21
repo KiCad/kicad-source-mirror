@@ -3717,7 +3717,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     void doLAYER_RULE( LAYER_RULE* growth ) throw( IO_ERROR );
     void doCLASSES( CLASSES* growth ) throw( IO_ERROR );
     void doGRID( GRID* growth ) throw( IO_ERROR );
-    void doPLACE( PLACE* growth ) throw( IO_ERROR );
+    void doPLACE( PLACE* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doPROPERTIES( PROPERTIES* growth ) throw( IO_ERROR );
@@ -3895,7 +3895,7 @@ public:
      * @param filename The name of the dsn file to load.
      * @throw IO_ERROR if there is a lexer or parser error.
      */
-    void LoadPCB( const wxString& filename ) throw( IO_ERROR );
+    void LoadPCB( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer );
 
     /**
      * Function LoadSESSION
@@ -3907,7 +3907,7 @@ public:
      * @param filename The name of the dsn file to load.
      * @throw IO_ERROR if there is a lexer or parser error.
      */
-    void LoadSESSION( const wxString& filename ) throw( IO_ERROR );
+    void LoadSESSION( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer );
 
     void ThrowIOError( const wxString& fmt, ... ) throw( IO_ERROR );
 

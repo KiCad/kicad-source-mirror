@@ -35,7 +35,7 @@
 using namespace NL_T;
 
 
-void KICAD_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR )
+void KICAD_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
 {
     m_parser->Parse();
 
