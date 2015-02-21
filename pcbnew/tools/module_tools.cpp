@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -195,7 +195,7 @@ int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 
-    // Create a set containing all pads (to avoid double adding to a list)
+    // Create a set containing all pads (to avoid double adding to the list)
     for( D_PAD* p = module->Pads(); p; p = p->Next() )
         allPads.insert( p );
 
@@ -217,42 +217,76 @@ int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
+    VECTOR2I oldCursorPos = m_controls->GetCursorPosition();
+    std::list<D_PAD*> selectedPads;
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
-            // Add pads to the list according to the selection order
+            selectedPads.clear();
             VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-            collector.Empty();
-            collector.Collect( m_board, types, wxPoint( cursorPos.x, cursorPos.y ), guide );
-
-            for( int i = 0; i < collector.GetCount(); ++i )
+            if( evt->IsClick( BUT_LEFT ) )
             {
-                if( collector[i]->Type() == PCB_PAD_T )
+                oldCursorPos = m_controls->GetCursorPosition();
+                collector.Empty();
+                collector.Collect( m_board, types, wxPoint( cursorPos.x, cursorPos.y ), guide );
+
+                for( int i = 0; i < collector.GetCount(); ++i )
                 {
-                    D_PAD* pad = static_cast<D_PAD*>( collector[i] );
-
-                    std::set<D_PAD*>::iterator it = allPads.find( pad );
-
-                    // Add the pad to the list, if it was not selected previously..
-                    if( it != allPads.end() )
-                    {
-                        allPads.erase( it );
-                        pads.push_back( pad );
-                        pad->SetSelected();
-                    }
-
-                    // ..or remove it from the list if it was clicked
-                    else if( evt->IsClick( BUT_LEFT ) )
-                    {
-                        allPads.insert( pad );
-                        pads.remove( pad );
-                        pad->ClearSelected();
-                    }
+                    if( collector[i]->Type() == PCB_PAD_T )
+                        selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
                 }
             }
+            else //evt->IsDrag( BUT_LEFT )
+            {
+                // wxWidgets deliver mouse move events not frequently enough, resulting in skipping
+                // pads if the user moves cursor too fast. To solve it, create a line that approximates
+                // the mouse move and select items intersecting with the line.
+                int distance = ( cursorPos - oldCursorPos ).EuclideanNorm();
+                int segments = distance / 100000 + 1;
+                const wxPoint LINE_STEP( ( cursorPos - oldCursorPos ).x / segments,
+                                         ( cursorPos - oldCursorPos ).y / segments );
+
+                collector.Empty();
+                for( int j = 0; j < segments; ++j ) {
+                    collector.Collect( m_board, types,
+                                       wxPoint( oldCursorPos.x, oldCursorPos.y ) + j * LINE_STEP,
+                                       guide );
+
+                    for( int i = 0; i < collector.GetCount(); ++i )
+                    {
+                        if( collector[i]->Type() == PCB_PAD_T )
+                            selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
+                    }
+                }
+
+                selectedPads.unique();
+            }
+
+            BOOST_FOREACH( D_PAD* pad, selectedPads )
+            {
+                std::set<D_PAD*>::iterator it = allPads.find( pad );
+
+                // Add the pad to the list, if it was not selected previously..
+                if( it != allPads.end() )
+                {
+                    allPads.erase( it );
+                    pads.push_back( pad );
+                    pad->SetSelected();
+                }
+
+                // ..or remove it from the list if it was clicked
+                else if( evt->IsClick( BUT_LEFT ) )
+                {
+                    allPads.insert( pad );
+                    pads.remove( pad );
+                    pad->ClearSelected();
+                }
+            }
+
+            oldCursorPos = cursorPos;
         }
 
         else if( ( evt->IsKeyPressed() && evt->KeyCode() == WXK_RETURN ) ||
