@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-21 06:09+0100\n"
-"PO-Revision-Date: 2015-02-21 06:37+0100\n"
+"PO-Revision-Date: 2015-02-21 08:17+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -11025,19 +11025,19 @@ msgstr "Przesunięcie y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:87
 msgid "Stagger:"
-msgstr "Otaczanie:"
+msgstr "Przeplot:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:94
 msgid "Rows"
-msgstr "Rzędy"
+msgstr "Rzędami"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:94
 msgid "Columns"
-msgstr "Kolumny"
+msgstr "Kolumnami"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:100
 msgid "Stagger type:"
-msgstr "Typ otaczania:"
+msgstr "Typ przeplotu:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:110
 msgid "Horizontal, then vertical"
@@ -11049,7 +11049,7 @@ msgstr "Najpierw pionowo, potem poziomo"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:112
 msgid "Numbering direction:"
-msgstr "Kierunek numeracji:"
+msgstr "Kierunek numeracji szyku:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid ""
@@ -11070,7 +11070,7 @@ msgstr "Ciągła (1, 2, 3...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:123
 msgid "Co-ordinate (A1, A2, ... B1, ...)"
-msgstr "Względem bloków (A1, A2, ... B1, ...)"
+msgstr "Według osi szyku (A1, A2, ... B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Numbering scheme:"
@@ -11078,11 +11078,11 @@ msgstr "Schemat numeracji:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:129
 msgid "Primary axis numbering:"
-msgstr "Najpierw numeracja według osi:"
+msgstr "Schemat numeracji pierwszej osi/ciągu:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:138
 msgid "Secondary axis numbering:"
-msgstr "Później numeracja według osi:"
+msgstr "Schemat numeracji drugiej ośi:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:154
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
