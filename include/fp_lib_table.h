@@ -581,7 +581,8 @@ public:
      * writes this table to aFileName in s-expression form.
      * @param aFileName is the name of the file to write to.
      */
-    void Save( const wxString& aFileName ) const throw( IO_ERROR );
+    void Save( const wxString& aFileName ) const
+        throw( IO_ERROR, boost::interprocess::lock_exception );
 
 protected:
 

@@ -203,7 +203,8 @@ protected:
 
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
-    void backAnnotateFootprints( const std::string& aChangedSetOfReferences ) throw( IO_ERROR );
+    void backAnnotateFootprints( const std::string& aChangedSetOfReferences )
+        throw( IO_ERROR, boost::bad_pointer );
 
 public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );

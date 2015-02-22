@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,9 @@ public:
 public:
     DRAG_LIST( BOARD* aPcb )
     {
-        m_Brd = aPcb;
+        m_Brd    = aPcb;
+        m_Module = NULL;
+        m_Pad    = NULL;
     }
 
     /**

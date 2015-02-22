@@ -53,8 +53,8 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_sheetNameSize = GetDefaultTextSize();
     m_fileNameSize = GetDefaultTextSize();
     m_screen = NULL;
-    m_name.Printf( wxT( "Sheet%8.8lX" ), m_TimeStamp );
-    m_fileName.Printf( wxT( "file%8.8lX.sch" ), m_TimeStamp );
+    m_name.Printf( wxT( "Sheet%8.8lX" ), (long) m_TimeStamp );
+    m_fileName.Printf( wxT( "file%8.8lX.sch" ), (long) m_TimeStamp );
 }
 
 

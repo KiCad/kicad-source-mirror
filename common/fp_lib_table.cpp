@@ -761,7 +761,8 @@ void FP_LIB_TABLE::Load( const wxString& aFileName )
 }
 
 
-void FP_LIB_TABLE::Save( const wxString& aFileName ) const throw( IO_ERROR )
+void FP_LIB_TABLE::Save( const wxString& aFileName )
+    const throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     FILE_OUTPUTFORMATTER sf( aFileName );
     Format( &sf, 0 );

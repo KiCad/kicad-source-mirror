@@ -188,7 +188,7 @@ wxPoint PCB_PARSER::parseXY() throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-void PCB_PARSER::parseXY( int* aX, int* aY ) throw( PARSE_ERROR )
+void PCB_PARSER::parseXY( int* aX, int* aY ) throw( PARSE_ERROR, IO_ERROR )
 {
     wxPoint pt = parseXY();
 

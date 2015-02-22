@@ -5,7 +5,7 @@
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,11 @@ struct TSubRect : public CRectPlacement::TRect
 {
     int n;      // Original index of this subrect, before sorting
 
-    TSubRect() { }
+    TSubRect() : TRect(),
+        n( 0 )
+    {
+    }
+
     TSubRect( int _w, int _h, int _n ) :
         TRect( 0, 0, _w, _h ), n( _n ) { }
 };

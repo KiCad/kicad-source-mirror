@@ -1773,6 +1773,8 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
 void PCB_IO::init( const PROPERTIES* aProperties )
 {
     m_board = NULL;
+    m_reader = NULL;
+    m_loading_format_version = SEXPR_BOARD_FILE_VERSION;
     m_props = aProperties;
 }
 

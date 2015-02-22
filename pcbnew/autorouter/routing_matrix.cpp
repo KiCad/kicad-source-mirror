@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,13 +47,17 @@
 
 MATRIX_ROUTING_HEAD::MATRIX_ROUTING_HEAD()
 {
-    m_BoardSide[0]   = m_BoardSide[1] = NULL;
-    m_DistSide[0]    = m_DistSide[1] = NULL;
-    m_DirSide[0]     = m_DirSide[1] = NULL;
-    m_InitMatrixDone = false;
-    m_Nrows   = m_Ncols = 0;
-    m_MemSize = 0;
+    m_BoardSide[0] = m_BoardSide[1] = NULL;
+    m_DistSide[0] = m_DistSide[1] = NULL;
+    m_DirSide[0] = m_DirSide[1] = NULL;
+    m_opWriteCell        = NULL;
+    m_InitMatrixDone     = false;
+    m_Nrows              = 0;
+    m_Ncols              = 0;
+    m_MemSize            = 0;
     m_RoutingLayersCount = 1;
+    m_GridRouting        = 0;
+    m_RouteCount         = 0;
 }
 
 
@@ -94,7 +98,6 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb, bool aUseBoardEdgesOnl
 
     return true;
 }
-
 
 
 int MATRIX_ROUTING_HEAD::InitRoutingMatrix()
