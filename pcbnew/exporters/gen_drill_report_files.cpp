@@ -361,9 +361,9 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         }
 
         if( gen_NPTH_holes )
-            sprintf( line, "\nTotal unplated holes count %d\n\n\n", totalHoleCount );
+            sprintf( line, "\nTotal unplated holes count %u\n\n\n", totalHoleCount );
         else
-            sprintf( line, "\nTotal plated holes count %d\n\n\n", totalHoleCount );
+            sprintf( line, "\nTotal plated holes count %u\n\n\n", totalHoleCount );
 
         fputs( line, m_file );
 

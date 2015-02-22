@@ -1516,8 +1516,14 @@ void PCB_EDIT_FRAME::moveExact()
     {
         BOARD_ITEM* item = GetScreen()->GetCurItem();
 
+        // When a pad is modified, the full footprint is saved
+        BOARD_ITEM* itemToSave = item;
+
+        if( item->Type() == PCB_PAD_T )
+            itemToSave = item->GetParent();
+
         // Could be moved or rotated
-        SaveCopyInUndoList( item, UR_CHANGED );
+        SaveCopyInUndoList( itemToSave, UR_CHANGED );
 
         item->Move( translation );
         item->Rotate( item->GetPosition(), rotation );

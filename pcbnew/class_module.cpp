@@ -145,9 +145,7 @@ MODULE::MODULE( const MODULE& aModule ) :
         if( item->GetShape3DName().IsEmpty() )           // do not copy empty shapes.
             continue;
 
-        S3D_MASTER* t3d = m_3D_Drawings;
-
-        t3d = new S3D_MASTER( this );
+        S3D_MASTER* t3d = new S3D_MASTER( this );
         t3d->Copy( item );
         m_3D_Drawings.PushBack( t3d );
     }

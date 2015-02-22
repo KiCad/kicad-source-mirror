@@ -120,10 +120,10 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
     PCB_SCREEN*     screen = frame->GetScreen();
 
-    if( displ_opts->m_DisplayPadFill == FILLED )
-        drawInfo.m_ShowPadFilled = true;
-    else
+    if( displ_opts && displ_opts->m_DisplayPadFill == SKETCH )
         drawInfo.m_ShowPadFilled = false;
+    else
+        drawInfo.m_ShowPadFilled = true;
 
     EDA_COLOR_T color = BLACK;
     if( m_layerMask[F_Cu] )
