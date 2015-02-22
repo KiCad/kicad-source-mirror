@@ -372,7 +372,7 @@ EVIA::EVIA( CPTREE& aVia )
 
     string ext = attribs.get<string>( "extent" );
 
-    sscanf( ext.c_str(), "%u-%u", &layer_front_most, &layer_back_most );
+    sscanf( ext.c_str(), "%d-%d", &layer_front_most, &layer_back_most );
 
     drill = attribs.get<double>( "drill" );
     diam  = attribs.get_optional<double>( "diameter" );
@@ -951,6 +951,7 @@ ELAYER::ELAYER( CPTREE& aLayer )
     number = attribs.get<int>( "number" );
     name   = attribs.get<string>( "name" );
     color  = attribs.get<int>( "color" );
+    fill   = 1;    // Temporary value.
     visible = parseOptionalBool( attribs, "visible" );
     active  = parseOptionalBool( attribs, "active" );
 }
@@ -992,6 +993,7 @@ struct ERULES
 
     ERULES() :
         psElongationLong    ( 100 ),
+        psElongationOffset  ( 0 ),
         rvPadTop            ( 0.25 ),
         // rvPadBottom      ( 0.25 ),
         rlMinPadTop         ( Mils2iu( 10 ) ),

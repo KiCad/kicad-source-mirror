@@ -206,7 +206,11 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit )
         break;
 
     case DEGREES:
-        wxASSERT( false );
+        label = _( "deg" );
+        break;
+
+    default:
+        label = wxT( "??" );
         break;
     }
 

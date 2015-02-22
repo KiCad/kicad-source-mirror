@@ -1512,7 +1512,7 @@ void PCB_EDIT_FRAME::moveExact()
     DIALOG_MOVE_EXACT dialog( this, translation, rotation );
     int ret = dialog.ShowModal();
 
-    if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+    if( ret == wxID_OK )
     {
         BOARD_ITEM* item = GetScreen()->GetCurItem();
 

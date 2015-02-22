@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,7 +16,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Use polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
 	bMainSizer->Add( m_polarCoords, 0, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer2;
@@ -30,45 +30,48 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer2->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_xEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_xEntry, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_xEntry, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_xUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_xUnit->Wrap( -1 );
 	fgSizer2->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL, 5 );
 	
 	m_clearX = new wxBitmapButton( this, wxID_CLEAR, wxArtProvider::GetBitmap( wxART_DELETE, wxART_BUTTON ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	fgSizer2->Add( m_clearX, 0, wxALL, 5 );
+	fgSizer2->Add( m_clearX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
 	fgSizer2->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_yEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_yEntry, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_yEntry, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_yUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yUnit->Wrap( -1 );
 	fgSizer2->Add( m_yUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_clearY = new wxBitmapButton( this, wxID_CLEAR, wxArtProvider::GetBitmap( wxART_DELETE, wxART_BUTTON ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	fgSizer2->Add( m_clearY, 0, wxALL, 5 );
+	fgSizer2->Add( m_clearY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_rotLabel = new wxStaticText( this, wxID_ANY, _("Rotate:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rotLabel = new wxStaticText( this, wxID_ANY, _("Item rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotLabel->Wrap( -1 );
 	fgSizer2->Add( m_rotLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_rotEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_rotEntry, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_rotEntry, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_rotUnit = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotUnit->Wrap( -1 );
 	fgSizer2->Add( m_rotUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_clearRot = new wxBitmapButton( this, wxID_CLEAR, wxArtProvider::GetBitmap( wxART_DELETE, wxART_BUTTON ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	fgSizer2->Add( m_clearRot, 0, wxALL, 5 );
+	fgSizer2->Add( m_clearRot, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bMainSizer->Add( fgSizer2, 1, wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -82,7 +85,6 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_MOVE_EXACT_BASE::OnClose ) );

@@ -610,7 +610,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     DIALOG_MOVE_EXACT dialog( editFrame, translation, rotation );
     int ret = dialog.ShowModal();
 
-    if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+    if( ret == wxID_OK )
     {
         if( !isUndoInhibited() )
         {

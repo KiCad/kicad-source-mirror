@@ -595,7 +595,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         D_PAD* pad = padstacks[i];
 
         // Straight padstack
-        fprintf( aFile, "PADSTACK PAD%d %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
+        fprintf( aFile, "PADSTACK PAD%u %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
 
         LSET pad_set = pad->GetLayerSet() & master_layermask;
 
@@ -604,18 +604,18 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         {
             LAYER_ID layer = *seq;
 
-            fprintf( aFile, "PAD P%d %s 0 0\n", i, GenCADLayerName( cu_count, layer ).c_str() );
+            fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerName( cu_count, layer ).c_str() );
         }
 
         // Flipped padstack
-        fprintf( aFile, "PADSTACK PAD%dF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
+        fprintf( aFile, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
 
         // the normal LAYER_ID sequence is inverted from gc_seq[]
         for( LSEQ seq = pad_set.Seq();  seq;  ++seq )
         {
             LAYER_ID layer = *seq;
 
-            fprintf( aFile, "PAD P%d %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
+            fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
         }
     }
 

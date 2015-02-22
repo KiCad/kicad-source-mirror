@@ -24,6 +24,7 @@
 
 #include <wxPcbStruct.h>
 #include <base_units.h>
+#include <macros.h>
 
 #include <module_editor_frame.h>
 
@@ -42,8 +43,6 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent,
     // set the unit labels
     m_xUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
     m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
-    // rotation is always degrees
-    m_rotUnit->SetLabelText( _( "deg" ) );
 
     // tabbing goes through the entries in sequence
     m_yEntry->MoveAfterInTabOrder( m_xEntry );
@@ -54,8 +53,11 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent,
     m_xEntry->SetValue( wxString::FromDouble( m_options.entry1 ) );
     m_yEntry->SetValue( wxString::FromDouble( m_options.entry2 ) );
     m_rotEntry->SetValue( wxString::FromDouble( m_options.entryRotation ) );
+    updateDlgTexts( m_polarCoords->IsChecked() );
 
-    Fit();
+    m_stdButtonsOK->SetDefault();
+
+    GetSizer()->SetSizeHints(this);
 }
 
 
@@ -64,12 +66,6 @@ DIALOG_MOVE_EXACT::~DIALOG_MOVE_EXACT()
 }
 
 
-/*!
- * Convert a given Cartesian point into a polar representation.
- *
- * Linear units are not considered, the answer is in the same units as given
- * Angle is returned in degrees
- */
 void DIALOG_MOVE_EXACT::ToPolarDeg( double x, double y, double& r, double& q )
 {
     // convert to polar coordinates
@@ -79,12 +75,6 @@ void DIALOG_MOVE_EXACT::ToPolarDeg( double x, double y, double& r, double& q )
 }
 
 
-/*!
- * Get the (Cartesian) translation described by the text entries
- * @param val output translation vector
- * @param polar interpret as polar coords
- * @return false if error (though the text conversion functions don't report errors)
- */
 bool DIALOG_MOVE_EXACT::GetTranslationInIU ( wxPoint& val, bool polar )
 {
     if( polar )
@@ -110,6 +100,7 @@ bool DIALOG_MOVE_EXACT::GetTranslationInIU ( wxPoint& val, bool polar )
 void DIALOG_MOVE_EXACT::OnPolarChanged( wxCommandEvent& event )
 {
     bool newPolar = m_polarCoords->IsChecked();
+    updateDlgTexts( newPolar );
     wxPoint val;
 
     // get the value as previously stored
@@ -122,25 +113,34 @@ void DIALOG_MOVE_EXACT::OnPolarChanged( wxCommandEvent& event )
         ToPolarDeg( val.x, val.y, r, q);
 
         PutValueInLocalUnits( *m_xEntry, round( r / 10.0) * 10 );
-        m_xLabel->SetLabelText( wxT( "r:" ) );
-
         m_yEntry->SetValue( wxString::FromDouble( q ) );
-        m_yLabel->SetLabelText( wxT( "\u03b8:" ) ); // theta
+    }
+    else
+    {
+        // vector is already in Cartesian, so just render out
+        // note - round off the last decimal place (10nm) to prevent
+        // (some) rounding causing errors when round-tripping
+        // you can never eliminate entirely, however
+        PutValueInLocalUnits( *m_xEntry, KiROUND( val.x / 10.0) * 10 );
+        PutValueInLocalUnits( *m_yEntry, KiROUND( val.y / 10.0) * 10 );
+    }
+    Layout();
+}
+
+
+void DIALOG_MOVE_EXACT::updateDlgTexts( bool aPolar )
+{
+    if( aPolar )
+    {
+        m_xLabel->SetLabelText( _( "Distance:" ) );     // Polar radius
+        m_yLabel->SetLabelText( _( "Angle:" ) );        // Polar theta or angle
 
         m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( DEGREES ) );
     }
     else
     {
-        // vector is already in Cartesian, so just render out
-
-        // note - round off the last decimal place (10nm) to prevent
-        // (some) rounding causing errors when round-tripping
-        // you can never eliminate entirely, however
-        PutValueInLocalUnits( *m_xEntry, round( val.x / 10.0) * 10 );
-        m_xLabel->SetLabelText( wxT( "x:" ) );
-
-        PutValueInLocalUnits( *m_yEntry, round( val.y / 10.0) * 10 );
-        m_yLabel->SetLabelText( wxT( "y:" ) );
+        m_xLabel->SetLabelText( _( "Move vector X:" ) );
+        m_yLabel->SetLabelText( _( "Move vector Y:" ) );
 
         m_yUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
     }
@@ -172,7 +172,7 @@ void DIALOG_MOVE_EXACT::OnClear( wxCommandEvent& event )
 
 void DIALOG_MOVE_EXACT::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( MOVE_ABORT );
+    EndModal( wxID_ABORT );
 }
 
 
@@ -191,14 +191,11 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
         m_yEntry->GetValue().ToDouble( &m_options.entry2 );
         m_rotEntry->GetValue().ToDouble( &m_options.entryRotation );
 
-        EndModal( MOVE_OK );
+        EndModal( wxID_OK);
     }
 }
 
 
-/*!
- * Reset a text field to be 0 if it was exited while blank
- */
 void DIALOG_MOVE_EXACT::OnTextFocusLost( wxFocusEvent& event )
 {
     wxTextCtrl* obj = static_cast<wxTextCtrl*>( event.GetEventObject() );

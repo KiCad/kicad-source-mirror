@@ -37,13 +37,6 @@ private:
     double& m_rotation;
 
 public:
-
-    enum MOVE_EDIT_T
-    {
-        MOVE_ABORT,     ///< if not changed or error
-        MOVE_OK,        ///< if successfully changed
-    };
-
     // Constructor and destructor
     DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent, wxPoint& translation,
                        double& rotation );
@@ -51,15 +44,35 @@ public:
 
 private:
 
+    /*!
+     * Reset a text field to be 0 if it was exited while blank
+     */
     void OnTextFocusLost( wxFocusEvent& event );
+
     void OnPolarChanged( wxCommandEvent& event );
     void OnClear( wxCommandEvent& event );
 
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
 
+    /**
+     * Convert a given Cartesian point into a polar representation.
+     *
+     * Linear units are not considered, the answer is in the same units as given
+     * Angle is returned in degrees
+     */
     void ToPolarDeg( double x, double y, double& r, double& q );
+
+    /**
+     * Get the (Cartesian) translation described by the text entries
+     * @param val output translation vector
+     * @param polar interpret as polar coords
+     * @return false if error (though the text conversion functions don't report errors)
+     */
     bool GetTranslationInIU ( wxPoint& val, bool polar );
+
+    // Update texts (comments) after changing the coordinates type (polar/cartesian)
+    void updateDlgTexts( bool aPolar );
 
     /**
      * Persistent dialog options
