@@ -204,8 +204,6 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                             PICKED_ITEMS_LIST& aAuxiliaryList,
                             BOARD*             aPcb )
 {
-    wxLogDebug( wxT( "Inside UpdadeCopyOfZonesList()." ) );
-
     for( unsigned kk = 0; kk < aPickList.GetCount(); kk++ )
     {
         UNDO_REDO_T  status = aPickList.GetPickedItemStatus( kk );
