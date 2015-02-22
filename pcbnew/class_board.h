@@ -301,6 +301,16 @@ public:
      */
     BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
 
+    BOARD_ITEM* DuplicateAndAddItem( const BOARD_ITEM* aItem,
+                                     bool aIncrementReferences );
+
+    /**
+     * Function GetNextModuleReferenceWithPrefix
+     * Get the next available module reference with this prefix
+     */
+    wxString GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
+                                               bool aFillSequenceGaps );
+
     /**
      * Function GetRatsnest()
      * returns list of missing connections between components/tracks.

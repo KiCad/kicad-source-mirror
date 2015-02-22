@@ -30,7 +30,7 @@
 #include <fctsys.h>
 #include <eeschema_id.h>
 #include <hotkeys.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <class_drawpanel.h>
 
 #include <general.h>

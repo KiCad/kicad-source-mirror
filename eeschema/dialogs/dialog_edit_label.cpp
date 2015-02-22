@@ -30,7 +30,7 @@
 
 #include <fctsys.h>
 #include <wx/valgen.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <base_units.h>
 
 #include <class_drawpanel.h>

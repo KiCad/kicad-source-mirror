@@ -41,12 +41,10 @@
 #include <gr_basic.h>
 #include <drawtxt.h>
 #include <macros.h>
-#include <trigo.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <plot_common.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_field.h>

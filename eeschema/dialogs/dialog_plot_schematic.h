@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <plot_common.h>
 #include <class_sch_screen.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <dialog_plot_schematic_base.h>
 #include <reporter.h>
 

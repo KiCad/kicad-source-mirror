@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,10 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pgm_base.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <netlist.h>
+#include <sch_reference_list.h>
 #include <class_netlist_object.h>
 #include <class_library.h>
 #include <lib_pin.h>
@@ -48,7 +49,7 @@
 #include <build_version.h>
 #include <set>
 
-#define INTERMEDIATE_NETLIST_EXT wxT("xml")
+#define INTERMEDIATE_NETLIST_EXT wxT( "xml" )
 
 /**
  * Class UNIQUE_STRINGS
@@ -87,7 +88,7 @@ bool UNIQUE_STRINGS::Lookup( const wxString& aString )
 /**
  * Class NETLIST_EXPORT_TOOL
  * is a private implementation class used in this source file to keep track
- * of and recycle datastructures used in the generation of various exported netlist
+ * of and recycle data structures used in the generation of various exported netlist
  * files.  Since it is private it is not in a header file.
  */
 class NETLIST_EXPORT_TOOL
@@ -305,8 +306,8 @@ public:
      * .-PSpice or .-gnucap put at beginning of the netlist
      * .+PSpice or .-genucap are put at end of the netList
      * @param f = the file to write to
-     * @param aUsePrefix = true, adds an 'X' prefix to any reference designator starting with "U" or "IC",
-     *                     false to leave reference designator unchanged.
+     * @param aUsePrefix = true, adds an 'X' prefix to any reference designator starting
+     *                     with "U" or "IC", false to leave reference designator unchanged.
      * @param aUseNetcodeAsNetName = true to use numbers (net codes) as net names.
      *                                false to use net names from schematic.
      */
@@ -353,25 +354,14 @@ wxString NETLIST_EXPORT_TOOL::MakeCommandLine( const wxString& aFormatString,
     wxFileName  in   = aTempfile;
     wxFileName  out  = aFinalFile;
 
-    ret.Replace( wxT("%B"), out.GetName().GetData(), true );
-    ret.Replace( wxT("%I"), in.GetFullPath().GetData(), true );
-    ret.Replace( wxT("%O"), out.GetFullPath().GetData(), true );
+    ret.Replace( wxT( "%B" ), out.GetName().GetData(), true );
+    ret.Replace( wxT( "%I" ), in.GetFullPath().GetData(), true );
+    ret.Replace( wxT( "%O" ), out.GetFullPath().GetData(), true );
 
     return ret;
 }
 
 
-/* Function  WriteNetListFile
- * creates the netlist file. Netlist info must be existing
- * (call BuildNetListBase() to create this info )
- * param aConnectedItemsList = the initialized list of connected items
- * param aFormat = netlist format (NET_TYPE_PCBNEW ...)
- * param aFullFileName = full netlist file name
- * param aNetlistOptions = netlist options using OR'ed bits.
- * For SPICE netlist only:
- *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
- * return true if success.
- */
 bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList,
                                        int aFormat, const wxString& aFullFileName,
                                        unsigned aNetlistOptions )
@@ -382,6 +372,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
     NETLIST_EXPORT_TOOL helper( aConnectedItemsList, Prj().SchLibs() );
 
     bool open_file = (aFormat < NET_TYPE_CUSTOM1) && (aFormat >= 0);
+
     if( (aFormat == NET_TYPE_PCBNEW) && (aNetlistOptions & NET_PCBNEW_USE_NEW_FORMAT ) )
         open_file = false;
 
@@ -405,57 +396,51 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
         if( (aNetlistOptions & NET_PCBNEW_USE_NEW_FORMAT ) )
             ret = helper.WriteKiCadNetList( aFullFileName );
         else
-        {
             ret = helper.WriteNetListPCBNEW( f, true );
-            fclose( f );
-        }
         break;
 
     case NET_TYPE_ORCADPCB2:
         ret = helper.WriteNetListPCBNEW( f, false );
-        fclose( f );
         break;
 
     case NET_TYPE_CADSTAR:
         ret = helper.WriteNetListCADSTAR( f );
-        fclose( f );
         break;
 
     case NET_TYPE_SPICE:
         ret = helper.WriteNetListPspice( f, aNetlistOptions & NET_USE_X_PREFIX,
                                          aNetlistOptions & NET_USE_NETCODES_AS_NETNAMES );
-        fclose( f );
         break;
 
     default:
-        {
-            wxFileName  tmpFile = aFullFileName;
-            tmpFile.SetExt( INTERMEDIATE_NETLIST_EXT );
+    {
+        wxFileName  tmpFile = aFullFileName;
+        tmpFile.SetExt( INTERMEDIATE_NETLIST_EXT );
 
-            DBG(printf("tmpFile:'%s'\n", TO_UTF8( tmpFile.GetFullPath() ) );)
+        ret = helper.WriteGENERICNetList( tmpFile.GetFullPath() );
 
-            ret = helper.WriteGENERICNetList( tmpFile.GetFullPath() );
-            if( !ret )
-                break;
+        if( !ret )
+            break;
 
-            // If user provided no plugin command line, return now.
-            if( m_netListerCommand.IsEmpty() )
-                break;
+        // If user provided no plugin command line, return now.
+        if( m_netListerCommand.IsEmpty() )
+            break;
 
-            // build full command line from user's format string, e.g.:
-            // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
-            // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
-            // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.xml"
-            wxString commandLine = NETLIST_EXPORT_TOOL::MakeCommandLine( m_netListerCommand,
-                                                                 tmpFile.GetFullPath(),
-                                                                 aFullFileName );
+        // build full command line from user's format string, e.g.:
+        // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
+        // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
+        // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.xml"
+        wxString commandLine = NETLIST_EXPORT_TOOL::MakeCommandLine( m_netListerCommand,
+                                                                     tmpFile.GetFullPath(),
+                                                                     aFullFileName );
 
-            DBG(printf("commandLine:'%s'\n", TO_UTF8( commandLine ) );)
-
-            ProcessExecute( commandLine, wxEXEC_SYNC );
-        }
+        ProcessExecute( commandLine, wxEXEC_SYNC );
         break;
     }
+    }
+
+    if( f != NULL )
+        fclose( f );
 
     return ret;
 }
@@ -1276,19 +1261,22 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix, bool aUs
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
                 // Case of Alt Sequence definition with Unused/Invalid Node index:
-                // Valid used Node Indexes are in the set {0,1,2,...m_SortedComponentPinList.size()-1}
+                // Valid used Node Indexes are in the set
+                // {0,1,2,...m_SortedComponentPinList.size()-1}
                 if( pinSequence.size() )
                 {
                     // All Vector values must be less <= max package size
                     // And Total Vector size should be <= package size
-                    if( ( (unsigned) pinSequence[ii] < m_SortedComponentPinList.size() ) && ( ii < pinSequence.size() ) )
+                    if( ( (unsigned) pinSequence[ii] < m_SortedComponentPinList.size() )
+                      && ( ii < pinSequence.size() ) )
                     {
                         // Case of Alt Pin Sequence in control good Index:
                         activePinIndex = pinSequence[ii];
                     }
                     else
                     {
-                        // Case of Alt Pin Sequence in control Bad Index or not using all pins for simulation:
+                        // Case of Alt Pin Sequence in control Bad Index or not using all
+                        // pins for simulation:
                         continue;
                     }
                 }
@@ -1358,6 +1346,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool aUsePrefix, bool aUs
 
     // Print texts starting with [+]pspice or [+]gnucap
     nbitems = spiceCommandAtEndFile.GetCount();
+
     if( nbitems )
     {
         ret |= fprintf( f, "\n" );
@@ -1452,16 +1441,19 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
                 field.Replace( wxT( " " ), wxT( "_" ) );
                 ret |= fprintf( f, " {Lib=%s}", TO_UTF8( field ) );
             }
+
             ret |= fprintf( f, "\n" );
 
             // Write pin list:
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
                 NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
+
                 if( !pin )
                     continue;
 
                 sprintPinNetName( netName, wxT( "N-%.6d" ), pin );
+
                 if( netName.IsEmpty() )
                     netName = wxT( "?" );
 
@@ -1524,7 +1516,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 
 
 bool NETLIST_EXPORT_TOOL::addPinToComponentPinList( SCH_COMPONENT* aComponent,
-                                      SCH_SHEET_PATH* aSheetPath, LIB_PIN* aPin )
+                                                    SCH_SHEET_PATH* aSheetPath, LIB_PIN* aPin )
 {
     // Search the PIN description for Pin in g_NetObjectslist
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
@@ -1558,14 +1550,7 @@ bool NETLIST_EXPORT_TOOL::addPinToComponentPinList( SCH_COMPONENT* aComponent,
     return false;
 }
 
-/*
- * remove duplicate pins from aPinList (list of pins relative to a given component)
- * (i.e. set pointer to duplicate pins to NULL in this list).
- * also set .m_Flag member of "removed" NETLIST_OBJECT pins to 1
- * When pins are duplicated, not connected duplicate is removed
- * (for instance when a multiple part per package component has its power pins connected
- * only on a part).
- */
+
 void NETLIST_EXPORT_TOOL::eraseDuplicatePins( )
 {
     for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
@@ -1582,6 +1567,7 @@ void NETLIST_EXPORT_TOOL::eraseDuplicatePins( )
          * are necessary successive in list
          */
         int idxref = ii;
+
         for( unsigned jj = ii + 1; jj < m_SortedComponentPinList.size(); jj++ )
         {
             if(  m_SortedComponentPinList[jj] == NULL )   // Already removed
@@ -1618,8 +1604,8 @@ void NETLIST_EXPORT_TOOL::eraseDuplicatePins( )
 
 
 void NETLIST_EXPORT_TOOL::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
-                                         LIB_PART*       aEntry,
-                                         SCH_SHEET_PATH* aSheetPath )
+                                                       LIB_PART*       aEntry,
+                                                       SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref = aComponent->GetRef( aSheetPath );
     wxString    ref2;
@@ -1847,6 +1833,7 @@ bool NETLIST_EXPORT_TOOL::writeListOfNetsCADSTAR( FILE* f )
 
         Cmp = nitem->GetComponentParent();
         wxString refstr = Cmp->GetRef( &nitem->m_SheetPath );
+
         if( refstr[0] == '#' )
             continue;  // Power supply symbols.
 
@@ -1860,10 +1847,10 @@ bool NETLIST_EXPORT_TOOL::writeListOfNetsCADSTAR( FILE* f )
                 buf[4]     = 0;
                 str_pinnum = FROM_UTF8( buf );
                 InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                       GetChars( InitNetDesc ),
-                                       GetChars( refstr ),
-                                       GetChars( str_pinnum ),
-                                       GetChars( netcodeName ) );
+                                        GetChars( InitNetDesc ),
+                                        GetChars( refstr ),
+                                        GetChars( str_pinnum ),
+                                        GetChars( netcodeName ) );
             }
             print_ter++;
             break;

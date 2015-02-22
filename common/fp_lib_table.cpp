@@ -379,7 +379,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
 
 void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR )
+    throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     out->Print( nestLevel, "(fp_lib_table\n" );
 
@@ -391,7 +391,7 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 
 
 void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR )
+    throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s))\n",
                 out->Quotew( GetNickName() ).c_str(),
@@ -665,7 +665,7 @@ bool FP_LIB_TABLE::IsEmpty( bool aIncludeFallback )
 
 
 MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
-    throw( IO_ERROR, PARSE_ERROR )
+    throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     wxString   nickname = aFootprintId.GetLibNickname();
     wxString   fpname   = aFootprintId.GetFootprintName();

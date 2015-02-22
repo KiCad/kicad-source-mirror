@@ -32,7 +32,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <msgpanel.h>
 
 #include <general.h>
@@ -77,7 +77,6 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 
     // Don't use GetText() here.  If the field is the reference designator and it's parent
     // component has multiple parts, we don't want the part suffix added to the field.
-    wxString newtext = aField->GetText();
     m_canvas->SetIgnoreMouseEvents( true );
 
     wxString title;
@@ -91,7 +90,7 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
-    newtext = dlg.GetTextField( );
+    wxString newtext = dlg.GetTextField( );
 
     if ( response != wxID_OK )
         return;  // canceled by user

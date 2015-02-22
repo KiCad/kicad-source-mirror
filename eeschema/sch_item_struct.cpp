@@ -33,7 +33,7 @@
 #include <sch_item_struct.h>
 #include <class_sch_screen.h>
 #include <class_drawpanel.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <general.h>
 

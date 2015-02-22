@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,8 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     m_use_modelfile_ambientIntensity = true;
     m_use_modelfile_transparency = true;
     m_use_modelfile_shininess = true;
+    m_loadTransparentObjects = true;
+    m_loadNonTransparentObjects = true;
 }
 
 

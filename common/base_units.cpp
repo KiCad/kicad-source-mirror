@@ -97,6 +97,9 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue )
     case INCHES:
         return IU_TO_IN( aValue );
 
+    case DEGREES:
+        return aValue / 10.0f;
+
     default:
         return aValue;
     }
@@ -246,6 +249,10 @@ wxString StringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol )
             stringValue += _( " mm" );
             break;
 
+        case DEGREES:
+            stringValue += _( " deg" );
+            break;
+
         case UNSCALED_UNITS:
             break;
         }
@@ -277,6 +284,11 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue )
         value = IN_TO_IU( aValue );
         break;
 
+    case DEGREES:
+        // Convert to "decidegrees"
+        value = aValue * 10;
+        break;
+
     default:
     case UNSCALED_UNITS:
         value = aValue;
@@ -286,7 +298,7 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue )
 }
 
 
-int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
+double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
 {
     double value;
     double dtmp = 0;
@@ -328,22 +340,39 @@ int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
     // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
 
-    if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
+    if( aUnits == INCHES || aUnits == MILLIMETRES )
     {
-        aUnits = INCHES;
+        if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
+        {
+            aUnits = INCHES;
+        }
+        else if( unit == wxT( "mm" ) )
+        {
+            aUnits = MILLIMETRES;
+        }
+        else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // Mils or thous
+        {
+            aUnits = INCHES;
+            dtmp /= 1000;
+        }
     }
-    else if( unit == wxT( "mm" ) )
+    else if( aUnits == DEGREES )
     {
-        aUnits = MILLIMETRES;
-    }
-    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // Mils or thous
-    {
-        aUnits = INCHES;
-        dtmp /= 1000;
+        if( unit == wxT( "ra" ) ) // Radians
+        {
+            dtmp *= 180.0f / M_PI;
+        }
     }
 
     value = From_User_Unit( aUnits, dtmp );
 
+    return value;
+}
+
+
+int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
+{
+    double value = DoubleValueFromString( aUnits, aTextValue );
     return KiROUND( value );
 }
 

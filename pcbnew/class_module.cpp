@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,8 +68,8 @@ MODULE::MODULE( BOARD* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     m_ZoneConnection = UNDEFINED_CONNECTION; // Use zone setting by default
-    m_ThermalWidth = 0; // Use zone setting by default
-    m_ThermalGap = 0; // Use zone setting by default
+    m_ThermalWidth = 0;     // Use zone setting by default
+    m_ThermalGap = 0;       // Use zone setting by default
 
     // These are special and mandatory text fields
     m_Reference = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_REFERENCE );
@@ -112,8 +112,6 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
-    // m_Pads.DeleteAll();
-
     for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( *pad );
@@ -174,6 +172,21 @@ MODULE::~MODULE()
     delete m_Reference;
     delete m_Value;
     delete m_initial_comments;
+}
+
+    /**
+     * Function ClearAllNets
+     * Clear (i.e. force the ORPHANED dummy net info) the net info which
+     * depends on a given board for all pads of the footprint.
+     * This is needed when a footprint is copied between the fp editor and
+     * the board editor for instance, because net info become fully broken
+     */
+void MODULE::ClearAllNets()
+{
+    // Force the ORPHANED dummy net info for all pads.
+    // ORPHANED dummy net does not depend on a board
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+        pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
 }
 
 
@@ -1118,3 +1131,122 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
+BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
+                                         bool aIncrementPadNumbers )
+{
+    BOARD_ITEM* new_item = NULL;
+
+    switch( aItem->Type() )
+    {
+    case PCB_PAD_T:
+    {
+        D_PAD* new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
+
+        if( aIncrementPadNumbers )
+        {
+            // Take the next available pad number
+            new_pad->IncrementPadName( true, true );
+        }
+
+        Pads().PushBack( new_pad );
+        new_item = new_pad;
+        break;
+    }
+    case PCB_MODULE_TEXT_T:
+    {
+        const TEXTE_MODULE* old_text = static_cast<const TEXTE_MODULE*>( aItem );
+
+        // do not duplicate value or reference fields
+        // (there can only be one of each)
+        if( old_text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
+        {
+            TEXTE_MODULE* new_text = new TEXTE_MODULE( *old_text );
+
+            GraphicalItems().PushBack( new_text );
+            new_item = new_text;
+        }
+        break;
+    }
+    case PCB_MODULE_EDGE_T:
+    {
+        EDGE_MODULE* new_edge = new EDGE_MODULE(
+                *static_cast<const EDGE_MODULE*>(aItem) );
+
+        GraphicalItems().PushBack( new_edge );
+        new_item = new_edge;
+        break;
+    }
+    case PCB_MODULE_T:
+        // Ignore the module itself
+        break;
+
+    default:
+        // Un-handled item for duplication
+        wxASSERT_MSG( false, "Duplication not supported for items of class "
+                      + aItem->GetClass() );
+        break;
+    }
+
+    return new_item;
+}
+
+
+wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
+{
+    std::set<int> usedNumbers;
+
+    // Create a set of used pad numbers
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    {
+        int padNumber = getTrailingInt( pad->GetPadName() );
+        usedNumbers.insert( padNumber );
+    }
+
+    const int nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
+
+    return wxString::Format( wxT( "%i" ), nextNum );
+}
+
+
+wxString MODULE::GetReferencePrefix() const
+{
+    wxString prefix = GetReference();
+
+    int strIndex = prefix.length() - 1;
+    while( strIndex >= 0 )
+    {
+        const wxUniChar chr = prefix.GetChar( strIndex );
+
+        // numeric suffix
+        if( chr >= '0' && chr <= '9' )
+            break;
+
+        strIndex--;
+    }
+
+    prefix = prefix.Mid( 0, strIndex );
+
+    return prefix;
+}
+
+
+bool MODULE::IncrementReference( bool aFillSequenceGaps )
+{
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    bool success = false;
+    const wxString prefix = GetReferencePrefix();
+    const wxString newReference = board->GetNextModuleReferenceWithPrefix(
+            prefix, aFillSequenceGaps );
+
+    if( !newReference.IsEmpty() )
+    {
+        SetReference( newReference );
+        success = true;
+    }
+
+    return success;
+}

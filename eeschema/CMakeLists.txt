@@ -84,12 +84,10 @@ set( EESCHEMA_SRCS
     component_references_lister.cpp
     controle.cpp
     cross-probing.cpp
-    database.cpp
     ${EESCHEMA_DLGS}
     edit_component_in_schematic.cpp
     edit_bitmap.cpp
     edit_label.cpp
-    eelibs_read_libraryfiles.cpp
     eeredraw.cpp
     eeschema.cpp
     eeschema_config.cpp
@@ -140,6 +138,7 @@ set( EESCHEMA_SRCS
     sch_collectors.cpp
     sch_component.cpp
     sch_field.cpp
+    sch_item_struct.cpp
     sch_junction.cpp
     sch_line.cpp
     sch_marker.cpp
@@ -165,10 +164,6 @@ set( EESCHEMA_SRCS
     transform.cpp
     viewlib_frame.cpp
     viewlibs.cpp
-
-    # This file does not look common.
-    # Keep it after template_fieldnames_keywords.cpp
-    ../common/sch_item_struct.cpp
     )
 
 

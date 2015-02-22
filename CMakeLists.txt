@@ -670,6 +670,13 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         # wxWidgets found.  At least the major an minor version should match.
         set( _wxpy_version "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}" )
         set( _py_cmd "import wxversion;print wxversion.checkInstalled('${_wxpy_version}')" )
+
+        # Add user specified Python site package path.
+        if( PYTHON_SITE_PACKAGE_PATH )
+            set( _py_cmd
+                "import sys;sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}\");${_py_cmd}" )
+        endif()
+
         execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_cmd}"
             RESULT_VARIABLE WXPYTHON_VERSION_RESULT
             OUTPUT_VARIABLE WXPYTHON_VERSION_FOUND
@@ -685,11 +692,12 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         endif()
 
         if( NOT WXPYTHON_VERSION_FOUND STREQUAL "True" )
-            message( FATAL_ERROR "wxPython version ${_wxpy_version} does not appear to be installed on the system." )
-        else()
-            set( WXPYTHON_VERSION_FOUND "${_wxpy_version}"
-                CACHE STRING "wxPython version found." )
+            message( FATAL_ERROR
+                "wxPython version ${_wxpy_version} does not appear to be installed on the system." )
         endif()
+
+        set( WXPYTHON_VERSION ${_wxpy_version} CACHE STRING "wxPython version found." )
+        message( STATUS "wxPython version ${_wxpy_version} found." )
     endif()
 
     #message( STATUS "PYTHON_INCLUDE_DIRS:${PYTHON_INCLUDE_DIRS}" )
@@ -829,6 +837,9 @@ else()
     message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
 endif()
 
+# Generate config.h.
+configure_file( ${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake
+    ${CMAKE_BINARY_DIR}/config.h )
 
 #================================================
 # "make uninstall" rules

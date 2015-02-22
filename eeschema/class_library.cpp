@@ -756,7 +756,7 @@ bool PART_LIB::SaveHeader( OUTPUTFORMATTER& aFormatter )
 }
 
 
-PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR )
+PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer )
 {
     std::auto_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
@@ -784,7 +784,7 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR )
 }
 
 
-PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName ) throw( IO_ERROR )
+PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer )
 {
     PART_LIB* lib;
 
@@ -979,7 +979,8 @@ void PART_LIBS::RemoveCacheLibrary()
 
 
 void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
-        wxString* aPaths, wxArrayString* aNames ) throw( IO_ERROR )
+                                  wxString* aPaths, wxArrayString* aNames )
+    throw( IO_ERROR, boost::bad_pointer )
 {
     wxString pro = aProject->GetProjectFullName();
 
@@ -1049,7 +1050,7 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
 }
 
 
-void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR )
+void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::bad_pointer )
 {
     wxFileName      fn;
     wxString        filename;

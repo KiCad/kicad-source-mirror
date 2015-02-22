@@ -94,10 +94,41 @@ void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
 
 void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_Start, aRotCentre, aAngle );
-    RotatePoint( &m_End, aRotCentre, aAngle );
-}
+    switch( m_Shape )
+    {
+    case S_ARC:
+    case S_SEGMENT:
+    case S_CIRCLE:
+        // these can all be done by just rotating the start and end points
+        RotatePoint( &m_Start, aRotCentre, aAngle);
+        RotatePoint( &m_End, aRotCentre, aAngle);
+        break;
 
+    case S_POLYGON:
+        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+        {
+            RotatePoint( &m_PolyPoints[ii], aRotCentre, aAngle);
+        }
+        break;
+
+    case S_CURVE:
+        RotatePoint( &m_Start, aRotCentre, aAngle);
+        RotatePoint( &m_End, aRotCentre, aAngle);
+
+        for( unsigned int ii = 0; ii < m_BezierPoints.size(); ii++ )
+        {
+            RotatePoint( &m_BezierPoints[ii], aRotCentre, aAngle);
+        }
+        break;
+
+    case S_RECT:
+    default:
+        // un-handled edge transform
+        wxASSERT_MSG( false, wxT( "DRAWSEGMENT::Rotate not implemented for "
+                + ShowShape( m_Shape ) ) );
+        break;
+    }
+};
 
 void DRAWSEGMENT::Flip( const wxPoint& aCentre )
 {
@@ -110,6 +141,37 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
     }
 
     SetLayer( FlipLayer( GetLayer() ) );
+}
+
+const wxPoint DRAWSEGMENT::GetCenter() const
+{
+    wxPoint c;
+
+    switch( m_Shape )
+    {
+    case S_ARC:
+    case S_CIRCLE:
+        c = m_Start;
+        break;
+
+    case S_SEGMENT:
+        // Midpoint of the line
+        c = ( GetStart() + GetEnd() ) / 2;
+        break;
+
+    case S_POLYGON:
+    case S_RECT:
+    case S_CURVE:
+        c = GetBoundingBox().Centre();
+        break;
+
+    default:
+        wxASSERT_MSG( false, "DRAWSEGMENT::GetCentre not implemented for shape"
+                + ShowShape( GetShape() ) );
+        break;
+    }
+
+    return c;
 }
 
 const wxPoint DRAWSEGMENT::GetArcEnd() const
@@ -529,8 +591,11 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
             return true;
         break;
 
+    case S_POLYGON:     // not yet handled
+        break;
+
     default:
-        wxASSERT( 0 );
+        wxASSERT_MSG( 0, wxString::Format( "unknown DRAWSEGMENT shape: %d", m_Shape ) );
         break;
     }
 
@@ -582,9 +647,15 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
         break;
 
+    case S_CURVE:
+    case S_POLYGON:     // not yet handled
+        break;
+
     default:
-        ;
+        wxASSERT_MSG( 0, wxString::Format( "unknown DRAWSEGMENT shape: %d", m_Shape ) );
+        break;
     }
+
     return false;
 }
 

@@ -32,7 +32,7 @@
 #include <drawtxt.h>
 #include <trigo.h>
 #include <richio.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <plot_common.h>
 #include <kicad_string.h>
 #include <msgpanel.h>

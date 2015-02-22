@@ -72,7 +72,7 @@
 
 /// The wxPython version found during configuration.
 #if defined( KICAD_SCRIPTING_WXPYTHON )
-#define WXPYTHON_VERSION                "@WXPYTHON_VERSION_FOUND@"
+#define WXPYTHON_VERSION                "@WXPYTHON_VERSION@"
 #endif
 
 /// When defined, build the GITHUB_PLUGIN for pcbnew.

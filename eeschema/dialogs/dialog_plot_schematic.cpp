@@ -34,7 +34,7 @@
 #include <worksheet.h>
 #include <plot_common.h>
 #include <class_sch_screen.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <base_units.h>
 #include <sch_sheet.h>
 #include <dialog_plot_schematic.h>

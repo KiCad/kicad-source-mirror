@@ -35,7 +35,7 @@
 #include <class_sch_screen.h>
 #include <sch_item_struct.h>
 
-#include <netlist.h>
+#include <sch_reference_list.h>
 #include <class_library.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>

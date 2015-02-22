@@ -33,7 +33,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <netlist.h>
 #include <sch_sheet.h>

@@ -166,7 +166,8 @@ inline int Mils2mm( double x ) { return KiROUND( x * 25.4 / 1000. ); }
 enum EDA_UNITS_T {
     INCHES = 0,
     MILLIMETRES = 1,
-    UNSCALED_UNITS = 2
+    UNSCALED_UNITS = 2,
+    DEGREES = 3,
 };
 
 

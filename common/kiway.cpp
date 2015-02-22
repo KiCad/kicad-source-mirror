@@ -67,7 +67,7 @@ void KIWAY::player_destroy_handler( wxWindowDestroyEvent& event )
         // if destroying one of our flock, then mark it as deceased.
         if( (wxWindow*) m_player[i] == w )
         {
-            DBG(printf( "%s: m_player[%d] destroyed: %s\n",
+            DBG(printf( "%s: m_player[%u] destroyed: %s\n",
                 __func__, i, TO_UTF8( m_player[i]->GetName() ) );)
 
             m_player[i] = 0;

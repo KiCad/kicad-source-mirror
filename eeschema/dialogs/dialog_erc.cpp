@@ -34,7 +34,7 @@
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <class_sch_screen.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <invoke_sch_dialog.h>
 #include <project.h>
 

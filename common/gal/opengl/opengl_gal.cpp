@@ -492,7 +492,7 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 
     boost::shared_array<GLdouble> points( new GLdouble[3 * aPointList.size()] );
     int v = 0;
-    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); it++ )
+    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); ++it )
     {
         points[v]     = it->x;
         points[v + 1] = it->y;

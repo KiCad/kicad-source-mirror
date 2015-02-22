@@ -31,7 +31,7 @@
 #include <kiway.h>
 #include <confirm.h>
 #include <class_drawpanel.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <id.h>
 #include <base_units.h>
 
@@ -54,7 +54,7 @@ static int s_SelectedRow;
 class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 {
 public:
-    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( LIB_EDIT_FRAME* aParent, LIB_PART*      aLibEntry );
+    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( LIB_EDIT_FRAME* aParent, LIB_PART* aLibEntry );
     //~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB() {}
 
 private:
@@ -282,9 +282,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     }
 
 #if defined(DEBUG)
-    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
+    for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
-        printf( "save[%d].name:'%s' value:'%s'\n", i,
+        printf( "save[%u].name:'%s' value:'%s'\n", i,
                 TO_UTF8( m_FieldsBuf[i].GetName() ),
                 TO_UTF8( m_FieldsBuf[i].GetText() ) );
     }
@@ -488,7 +488,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
 #if defined(DEBUG)
     for( unsigned i=0; i<cmpFields.size();  ++i )
     {
-        printf( "cmpFields[%d].name:%s\n", i, TO_UTF8( cmpFields[i].GetName() ) );
+        printf( "cmpFields[%u].name:%s\n", i, TO_UTF8( cmpFields[i].GetName() ) );
     }
 #endif
 

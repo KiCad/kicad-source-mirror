@@ -31,7 +31,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <eda_dde.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <menus_helpers.h>
 #include <msgpanel.h>
 

@@ -50,7 +50,10 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) 
 
 void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
 {
-//    assert( aNetCode >= 0 );
+    // if aNetCode < 0 ( typically NETINFO_LIST::FORCE_ORPHANED )
+    // or no parent board,
+    // set the m_netinfo to the dummy NETINFO_LIST::ORPHANED
+
     BOARD* board = GetBoard();
 
     if( ( aNetCode >= 0 ) && board )

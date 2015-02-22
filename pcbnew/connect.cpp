@@ -780,27 +780,21 @@ void PCB_BASE_FRAME::TestConnections()
 
 void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
 {
-    wxString msg;
-
-    if( aNetCode <= 0 ) // -1 = not existing net, 0 = dummy net
+    // Skip dummy net -1, and "not connected" net 0 (grouping all not connected pads)
+    if( aNetCode <= 0 )
         return;
 
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         Compile_Ratsnest( aDC, true );
 
     // Clear the cluster identifier (subnet) of pads for this net
+    // Pads are grouped by netcode (and in netname alphabetic order)
     for( unsigned i = 0; i < m_Pcb->GetPadCount(); ++i )
     {
         D_PAD* pad = m_Pcb->GetPad(i);
-        int    pad_net_code = pad->GetNetCode();
 
-        if( pad_net_code < aNetCode )
-            continue;
-
-        if( pad_net_code > aNetCode )
-            break;
-
-        pad->SetSubNet( 0 );
+        if( m_Pcb->GetPad(i)->GetNetCode() == aNetCode )
+            pad->SetSubNet( 0 );
     }
 
     m_Pcb->Test_Connections_To_Copper_Areas( aNetCode );
@@ -810,16 +804,15 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     {
         CONNECTIONS connections( m_Pcb );
 
-        TRACK* firstTrack;
         TRACK* lastTrack = NULL;
-        firstTrack = m_Pcb->m_Track.GetFirst()->GetStartNetCode( aNetCode );
+        TRACK* firstTrack = m_Pcb->m_Track.GetFirst()->GetStartNetCode( aNetCode );
 
         if( firstTrack )
             lastTrack = firstTrack->GetEndNetCode( aNetCode );
 
         if( firstTrack && lastTrack ) // i.e. if there are segments
         {
-            connections.Build_CurrNet_SubNets_Connections( firstTrack, lastTrack, firstTrack->GetNetCode() );
+            connections.Build_CurrNet_SubNets_Connections( firstTrack, lastTrack, aNetCode );
         }
     }
 
@@ -831,6 +824,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     DrawGeneralRatsnest( aDC, aNetCode );
 
     // Display results
+    wxString msg;
     int net_notconnected_count = 0;
     NETINFO_ITEM* net = m_Pcb->FindNet( aNetCode );
 
@@ -842,14 +836,15 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
                 net_notconnected_count++;
         }
 
-        msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
-                    m_Pcb->GetRatsnestsCount(), m_Pcb->GetUnconnectedNetCount(),
+        msg.Printf( wxT( "links %d nc %d  net %d: not conn %d" ),
+                    m_Pcb->GetRatsnestsCount(), m_Pcb->GetUnconnectedNetCount(), aNetCode,
                     net_notconnected_count );
     }
     else
-        msg.Printf( wxT( "net not found: netcode %d" ),aNetCode );
+        msg.Printf( wxT( "net not found: netcode %d" ), aNetCode );
 
     SetStatusText( msg );
+
     return;
 }
 

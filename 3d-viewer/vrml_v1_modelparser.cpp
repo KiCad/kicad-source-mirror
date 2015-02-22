@@ -75,9 +75,6 @@ void VRML1_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
     glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y,
             GetMaster()->m_MatPosition.z );
 
-
-#define SCALE_3D_CONV ( (IU_PER_MILS * 1000.0f) / UNITS3D_TO_UNITSPCB )
-
     // glPushMatrix();
     glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
 
@@ -91,7 +88,7 @@ void VRML1_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
 
     childs.clear();
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( ( *text == '}' ) || ( *text == ']' ) )
         {
@@ -126,7 +123,7 @@ int VRML1_MODEL_PARSER::read_separator()
 
     // DBG( printf( "Separator\n" ) );
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( strcmp( text, "Material" ) == 0 )
         {
@@ -185,7 +182,7 @@ int VRML1_MODEL_PARSER::readMaterial()
 
     m_model->m_Materials = material;
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -233,7 +230,7 @@ int VRML1_MODEL_PARSER::readCoordinate3()
 
     // DBG( printf( "  readCoordinate3\n" ) );
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {
@@ -261,7 +258,7 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet()
 
     // DBG( printf( "  readIndexedFaceSet\n" ) );
 
-    while( GetNextTag( m_file, text ) )
+    while( GetNextTag( m_file, text, sizeof(text) ) )
     {
         if( *text == ']' )
         {

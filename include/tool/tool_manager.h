@@ -30,8 +30,6 @@
 #include <typeinfo>
 #include <map>
 
-#include <math/vector2d.h>
-
 #include <tool/tool_base.h>
 
 class TOOL_BASE;

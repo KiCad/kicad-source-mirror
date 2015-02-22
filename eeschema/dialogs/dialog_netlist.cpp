@@ -42,7 +42,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <gestfich.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <general.h>
 #include <netlist.h>

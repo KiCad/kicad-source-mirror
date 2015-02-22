@@ -34,7 +34,7 @@
 #include <class_drawpanel.h>
 #include <drawtxt.h>
 #include <plot_common.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>

@@ -33,6 +33,7 @@
 
 
 #include <vector>
+#include <boost/interprocess/exceptions.hpp>
 
 #include <draw_frame.h>
 #include <base_struct.h>
@@ -103,7 +104,7 @@ protected:
      *                 occurs while reading footprint library files.
      */
     MODULE* loadFootprint( const FPID& aFootprintId )
-        throw( IO_ERROR, PARSE_ERROR );
+        throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
 
 public:
     PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,

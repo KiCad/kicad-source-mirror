@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +35,7 @@
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <drawtxt.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <plot_common.h>
 #include <base_units.h>
 #include <msgpanel.h>
@@ -558,7 +559,7 @@ bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
     if( aRect.Contains( m_Pos ) )
         SetFlags( SELECTED );
     else
-        SetFlags( SELECTED );
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }

@@ -950,7 +950,7 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
                     PrintSeg( *bl );
 #endif
                     aOutline.push( *bl );
-                    aLines.erase( bl );
+                    bl = aLines.erase( bl );
                 }
 
                 continue;
@@ -982,7 +982,7 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
                         printSeg( *bl );
 #endif
                         aOutline.push( *bl );
-                        aLines.erase( bl );
+                        bl = aLines.erase( bl );
                     }
 
                     continue;

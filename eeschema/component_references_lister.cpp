@@ -1,4 +1,4 @@
-/*
+/**
  * @file component_references_lister.cpp
  * @brief Code for creating a flat list of components needed for annotation and BOM.
  */
@@ -35,8 +35,8 @@
 
 #include <fctsys.h>
 #include <kicad_string.h>
-#include <wxEeschemaStruct.h>
-#include <netlist.h>
+#include <schframe.h>
+#include <sch_reference_list.h>
 #include <sch_component.h>
 
 

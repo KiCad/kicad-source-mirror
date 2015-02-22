@@ -33,14 +33,14 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <kiface_i.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
 
 #include <general.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
-#include <netlist.h>
+#include <sch_reference_list.h>
 
 #include <dsnlexer.h>
 #include <ptree.h>

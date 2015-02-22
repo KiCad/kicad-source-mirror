@@ -43,7 +43,7 @@
 #include <netlist.h>
 #include <lib_pin.h>
 #include <class_library.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <sch_component.h>
 
 #include <dialog_helpers.h>
@@ -52,6 +52,7 @@
 #include <hotkeys.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>

@@ -35,11 +35,10 @@
 #include <confirm.h>
 #include <eda_doc.h>
 #include <gr_basic.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <msgpanel.h>
 
 #include <general.h>
-#include <protos.h>
 #include <eeschema_id.h>
 #include <libeditframe.h>
 #include <class_library.h>

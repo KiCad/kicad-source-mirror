@@ -31,9 +31,9 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
-#include <netlist.h>
+#include <sch_reference_list.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <lib_pin.h>

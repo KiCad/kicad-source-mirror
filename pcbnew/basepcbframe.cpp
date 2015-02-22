@@ -677,6 +677,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         case UNSCALED_UNITS:
             formatter = wxT( "Ro %f  Th %f" );
             break;
+
+        case DEGREES:
+            wxASSERT( false );
+            break;
         }
 
         line.Printf( formatter, To_User_Unit( g_UserUnit, ro ), theta );
@@ -706,6 +710,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
         locformatter = wxT( "dx %f dy %f dist %f" );
+        break;
+
+    case DEGREES:
+        wxASSERT( false );
         break;
     }
 

@@ -146,6 +146,10 @@ wxString ReturnUnitSymbol( EDA_UNITS_T aUnit, const wxString& formatString )
 
     case UNSCALED_UNITS:
         break;
+
+    case DEGREES:
+        wxASSERT( false );
+        break;
     }
 
     if( formatString.IsEmpty() )
@@ -174,6 +178,10 @@ wxString GetUnitsLabel( EDA_UNITS_T aUnit )
     case UNSCALED_UNITS:
         label = _( "units" );
         break;
+
+    case DEGREES:
+        wxASSERT( false );
+        break;
     }
 
     return label;
@@ -195,6 +203,10 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit )
         break;
 
     case UNSCALED_UNITS:
+        break;
+
+    case DEGREES:
+        wxASSERT( false );
         break;
     }
 

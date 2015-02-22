@@ -34,7 +34,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>
 

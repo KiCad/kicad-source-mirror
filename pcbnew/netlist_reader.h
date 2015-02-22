@@ -183,7 +183,7 @@ public:
      * @throw IO_ERROR if a file IO error occurs.
      * @throw PARSE_ERROR if an error occurs while parsing the file.
      */
-    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR ) = 0;
+    virtual void LoadNetlist() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer ) = 0;
 
     /**
      * Function GetLineReader()
@@ -214,7 +214,7 @@ class LEGACY_NETLIST_READER : public NETLIST_READER
      * @return the new component created by parsing \a aLine
      * @throw PARSE_ERROR when \a aLine is not a valid component description.
      */
-    COMPONENT* loadComponent( char* aText ) throw( PARSE_ERROR );
+    COMPONENT* loadComponent( char* aText ) throw( PARSE_ERROR, boost::bad_pointer );
 
     /**
      * Function loadFootprintFilters
@@ -277,7 +277,7 @@ public:
      * @throw IO_ERROR if a file IO error occurs.
      * @throw PARSE_ERROR if an error occurs while parsing the file.
      */
-    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR );
+    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer );
 };
 
 
@@ -392,7 +392,7 @@ public:
             delete m_parser;
     }
 
-    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR );
+    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer );
 };
 
 

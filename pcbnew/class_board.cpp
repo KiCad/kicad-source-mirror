@@ -54,6 +54,10 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_marker_pcb.h>
+#include <class_drawsegment.h>
+#include <class_pcb_text.h>
+#include <class_mire.h>
+#include <class_dimension.h>
 
 
 /* This is an odd place for this, but CvPcb won't link if it is
@@ -2204,7 +2208,6 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     wxString       msg;
     D_PAD*         pad;
     MODULE*        footprint;
-    COMPONENT_NET  net;
 
     if( !IsEmpty() )
     {
@@ -2400,24 +2403,21 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         // At this point, the component footprint is updated.  Now update the nets.
         for( pad = footprint->Pads();  pad;  pad = pad->Next() )
         {
-            net = component->GetNet( pad->GetPadName() );
+            COMPONENT_NET net = component->GetNet( pad->GetPadName() );
 
             if( !net.IsValid() )                // Footprint pad had no net.
             {
-                if( !pad->GetNetname().IsEmpty() )
+                if( aReporter && aReporter->ReportAll() && !pad->GetNetname().IsEmpty() )
                 {
-                    if( aReporter && aReporter->ReportAll() )
-                    {
-                        msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
-                                    GetChars( footprint->GetReference() ),
-                                    GetChars( footprint->GetPath() ),
-                                    GetChars( pad->GetPadName() ) );
-                        aReporter->Report( msg );
-                    }
-
-                    if( !aNetlist.IsDryRun() )
-                        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                    msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
+                                GetChars( footprint->GetReference() ),
+                                GetChars( footprint->GetPath() ),
+                                GetChars( pad->GetPadName() ) );
+                    aReporter->Report( msg );
                 }
+
+                if( !aNetlist.IsDryRun() )
+                    pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
             }
             else                                 // Footprint pad has a net.
             {
@@ -2584,7 +2584,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             // Explore all pins/pads in component
             for( unsigned jj = 0; jj < component->GetNetCount(); jj++ )
             {
-                net = component->GetNet( jj );
+                COMPONENT_NET net = component->GetNet( jj );
                 padname = net.GetPinName();
 
                 if( footprint->FindPadByName( padname ) )
@@ -2615,6 +2615,87 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             }
         }
     }
+}
+
+
+BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
+                                        bool aIncrementReferences )
+{
+    BOARD_ITEM* new_item = NULL;
+
+    switch( aItem->Type() )
+    {
+    case PCB_MODULE_T:
+    {
+        MODULE* new_module = new MODULE( *static_cast<const MODULE*>( aItem ) );
+
+        if( aIncrementReferences )
+        {
+            // Take the next available module number
+            new_module->IncrementReference( true );
+        }
+
+        new_item = new_module;
+        break;
+    }
+    case PCB_TEXT_T:
+    case PCB_LINE_T:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
+    case PCB_ZONE_AREA_T:
+    case PCB_TARGET_T:
+    case PCB_DIMENSION_T:
+        new_item = static_cast<BOARD_ITEM*>( aItem->Clone() );
+        break;
+
+    default:
+        // Un-handled item for duplication
+        wxASSERT_MSG( false, "Duplication not supported for items of class "
+                      + aItem->GetClass() );
+        break;
+    }
+
+    if( new_item )
+        Add( new_item );
+
+    return new_item;
+}
+
+
+wxString BOARD::GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
+                                                  bool aFillSequenceGaps )
+{
+    wxString nextRef;
+
+    std::set<int> usedNumbers;
+
+    for( MODULE* module = m_Modules; module; module = module->Next() )
+    {
+        const wxString ref = module->GetReference();
+        wxString remainder;
+
+        // ONly interested in modules with the right prefix
+        if( !ref.StartsWith( aPrefix, &remainder ) )
+            continue;
+
+        // the suffix must be a number
+        if( !remainder.IsNumber() )
+            continue;
+
+        long number;
+        if( remainder.ToCLong( &number ) )
+            usedNumbers.insert( number );
+    }
+
+    int nextNum = 1;
+
+    if( usedNumbers.size() )
+    {
+        nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
+        nextRef = wxString::Format( wxT( "%s%i" ), aPrefix, nextNum );
+    }
+
+    return nextRef;
 }
 
 

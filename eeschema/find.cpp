@@ -39,11 +39,10 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <base_units.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_library.h>
 #include <lib_pin.h>
 #include <sch_marker.h>

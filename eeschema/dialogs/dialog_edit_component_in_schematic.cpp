@@ -35,7 +35,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <class_sch_screen.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <base_units.h>
 
 #include <general.h>
@@ -70,7 +70,7 @@ private:
     friend class SCH_EDIT_FRAME;
 
     SCH_EDIT_FRAME* m_Parent;
-    SCH_COMPONENT*  m_Cmp;
+    SCH_COMPONENT*  m_cmp;
     LIB_PART*       m_part;
     bool            m_skipCopyFromPanel;
 
@@ -141,7 +141,7 @@ int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
 void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 {
     wxCHECK_RET( aComponent != NULL && aComponent->Type() == SCH_COMPONENT_T,
-                 wxT( "Invalid component object pointer.  Bad Programmer!" )  );
+                 wxT( "Invalid component object pointer.  Bad Programmer!" ) );
 
     m_canvas->SetIgnoreMouseEvents( true );
 
@@ -169,6 +169,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 {
     m_Parent = (SCH_EDIT_FRAME*) parent;
 
+    m_cmp = NULL;
     m_part = NULL;
     m_skipCopyFromPanel = false;
 
@@ -301,7 +302,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     wxString newname = chipnameTextCtrl->GetValue();
 
     // Save current flags which could be modified by next change settings
-    STATUS_FLAGS flags = m_Cmp->GetFlags();
+    STATUS_FLAGS flags = m_cmp->GetFlags();
 
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
@@ -309,7 +310,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     {
         DisplayError( NULL, _( "No Component Name!" ) );
     }
-    else if( Cmp_KEEPCASE( newname, m_Cmp->m_part_name ) )
+    else if( Cmp_KEEPCASE( newname, m_cmp->m_part_name ) )
     {
         PART_LIBS* libs = Prj().SchLibs();
 
@@ -321,41 +322,41 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
         }
         else    // Change component from lib!
         {
-            m_Cmp->SetPartName( newname, libs );
+            m_cmp->SetPartName( newname, libs );
         }
     }
 
     // For components with multiple shapes (De Morgan representation) Set the selected shape:
     if( convertCheckBox->IsEnabled() )
     {
-        m_Cmp->SetConvert( convertCheckBox->GetValue() ? 2 : 1 );
+        m_cmp->SetConvert( convertCheckBox->GetValue() ? 2 : 1 );
     }
 
     //Set the part selection in multiple part per package
-    if( m_Cmp->GetUnit() )
+    if( m_cmp->GetUnit() )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
 
-        m_Cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
-        m_Cmp->SetUnit( unit_selection );
+        m_cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
+        m_cmp->SetUnit( unit_selection );
     }
 
     switch( orientationRadioBox->GetSelection() )
     {
     case 0:
-        m_Cmp->SetOrientation( CMP_ORIENT_0 );
+        m_cmp->SetOrientation( CMP_ORIENT_0 );
         break;
 
     case 1:
-        m_Cmp->SetOrientation( CMP_ORIENT_90 );
+        m_cmp->SetOrientation( CMP_ORIENT_90 );
         break;
 
     case 2:
-        m_Cmp->SetOrientation( CMP_ORIENT_180 );
+        m_cmp->SetOrientation( CMP_ORIENT_180 );
         break;
 
     case 3:
-        m_Cmp->SetOrientation( CMP_ORIENT_270 );
+        m_cmp->SetOrientation( CMP_ORIENT_270 );
         break;
     }
 
@@ -367,17 +368,17 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
         break;
 
     case 1:
-        m_Cmp->SetOrientation( CMP_MIRROR_X );
+        m_cmp->SetOrientation( CMP_MIRROR_X );
         break;
 
     case 2:
-        m_Cmp->SetOrientation( CMP_MIRROR_Y );
+        m_cmp->SetOrientation( CMP_MIRROR_Y );
         break;
     }
 
     // Restore m_Flag modified by SetUnit() and other change settings
-    m_Cmp->ClearFlags();
-    m_Cmp->SetFlags( flags );
+    m_cmp->ClearFlags();
+    m_cmp->SetFlags( flags );
 }
 
 
@@ -396,9 +397,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     // save old cmp in undo list if not already in edit, or moving ...
     // or the component to be edited is part of a block
-    if( m_Cmp->m_Flags == 0 ||
-        m_Parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
+    if( m_cmp->m_Flags == 0
+      || m_Parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+        m_Parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
     copyPanelToOptions();
 
@@ -441,21 +442,21 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
-        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() + m_Cmp->m_Pos );
+        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() + m_cmp->m_Pos );
     }
 
-    LIB_PART* entry = Prj().SchLibs()->FindLibPart( m_Cmp->m_part_name );
+    LIB_PART* entry = Prj().SchLibs()->FindLibPart( m_cmp->m_part_name );
 
     if( entry && entry->IsPower() )
-        m_FieldsBuf[VALUE].SetText( m_Cmp->m_part_name );
+        m_FieldsBuf[VALUE].SetText( m_cmp->m_part_name );
 
     // copy all the fields back, and change the length of m_Fields.
-    m_Cmp->SetFields( m_FieldsBuf );
+    m_cmp->SetFields( m_FieldsBuf );
 
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_Cmp->SetRef( &m_Parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
+    m_cmp->SetRef( &m_Parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
 
     m_Parent->OnModify();
     m_Parent->GetScreen()->TestDanglingEnds();
@@ -474,7 +475,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::addFieldButtonHandler( wxCommandEvent& 
 
     unsigned  fieldNdx = m_FieldsBuf.size();
 
-    SCH_FIELD blank( wxPoint(), fieldNdx, m_Cmp );
+    SCH_FIELD blank( wxPoint(), fieldNdx, m_cmp );
 
     blank.SetOrientation( m_FieldsBuf[REFERENCE].GetOrientation() );
 
@@ -564,7 +565,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
     SCH_FIELD tmp = m_FieldsBuf[fieldNdx - 1];
 
     DBG( printf( "tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
-               TO_UTF8( tmp.GetText() ), TO_UTF8( tmp.GetName( false ) ) ); )
+                 TO_UTF8( tmp.GetText() ), TO_UTF8( tmp.GetName( false ) ) ); )
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
     setRowItem( fieldNdx - 1, m_FieldsBuf[fieldNdx] );
@@ -621,7 +622,7 @@ SCH_FIELD* DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::findField( const wxString& aField
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent )
 {
-    m_Cmp = aComponent;
+    m_cmp = aComponent;
 
     /*  We have 3 component related field lists to be aware of: 1) UI
         presentation, 2) fields in component ram copy, and 3) fields recorded
@@ -635,7 +636,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         which came from the component.
     */
 
-    m_part = Prj().SchLibs()->FindLibPart( m_Cmp->m_part_name );
+    m_part = Prj().SchLibs()->FindLibPart( m_cmp->m_part_name );
 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
@@ -658,7 +659,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         m_FieldsBuf.push_back(  aComponent->m_Fields[i] );
 
         // make the editable field position relative to the component
-        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() - m_Cmp->m_Pos );
+        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() - m_cmp->m_Pos );
     }
 
     // Add template fieldnames:
@@ -669,7 +670,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
         // add a new field unconditionally to the UI only
-        SCH_FIELD   fld( wxPoint(0,0), -1 /* id is a relic */, m_Cmp, it->m_Name );
+        SCH_FIELD   fld( wxPoint(0,0), -1 /* id is a relic */, m_cmp, it->m_Name );
 
         // See if field by same name already exists in component.
         SCH_FIELD* schField = aComponent->FindField( it->m_Name );
@@ -691,7 +692,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
             fld = *schField;
 
             // make the editable field position relative to the component
-            fld.SetTextPosition( fld.GetTextPosition() - m_Cmp->m_Pos );
+            fld.SetTextPosition( fld.GetTextPosition() - m_cmp->m_Pos );
         }
 
         m_FieldsBuf.push_back( fld );
@@ -711,7 +712,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 
             // make the editable field position relative to the component
             m_FieldsBuf[newNdx].SetTextPosition( m_FieldsBuf[newNdx].GetTextPosition() -
-                                                 m_Cmp->m_Pos );
+                                                 m_cmp->m_Pos );
         }
     }
 
@@ -724,7 +725,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     }
 #endif
 
-    m_FieldsBuf[REFERENCE].SetText( m_Cmp->GetRef( &m_Parent->GetCurrentSheet() ) );
+    m_FieldsBuf[REFERENCE].SetText( m_cmp->GetRef( &m_Parent->GetCurrentSheet() ) );
 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
@@ -744,7 +745,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 
     // disable some options inside the edit dialog
     // which can cause problems while dragging
-    if( m_Cmp->IsDragging() )
+    if( m_cmp->IsDragging() )
     {
         orientationRadioBox->Disable();
         mirrorRadioBox->Disable();
@@ -784,6 +785,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_FI
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 {
+    wxCHECK_RET( m_cmp != NULL, wxT( "Component pointer not initialized." ) );
+
     unsigned fieldNdx = getSelectedFieldNdx();
 
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
@@ -855,7 +858,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
     wxPoint coord = field.GetTextPosition();
-    wxPoint zero  = -m_Cmp->m_Pos;  // relative zero
+    wxPoint zero  = -m_cmp->m_Pos;  // relative zero
 
     // If the field value is empty and the position is at relative zero, we
     // set the initial position as a small offset from the ref field, and
@@ -965,11 +968,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     }
 
     // For components with multiple parts per package, set the unit selection
-    if( m_Cmp->GetUnit() <= (int)unitChoice->GetCount() )
-        unitChoice->SetSelection( m_Cmp->GetUnit() - 1 );
+    if( m_cmp->GetUnit() <= (int)unitChoice->GetCount() )
+        unitChoice->SetSelection( m_cmp->GetUnit() - 1 );
 
     // Disable unit selection if only one unit exists:
-    if( m_Cmp->GetUnit() <= 1 )
+    if( m_cmp->GetUnit() <= 1 )
     {
         unitChoice->Enable( false );
         unitsInterchageableLabel->Show( false );
@@ -984,7 +987,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
             unitsInterchageableLabel->SetLabel( _( "No" ) );
     }
 
-    int orientation = m_Cmp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int orientation = m_cmp->GetOrientation() & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
 
     if( orientation == CMP_ORIENT_90 )
         orientationRadioBox->SetSelection( 1 );
@@ -995,7 +998,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     else
         orientationRadioBox->SetSelection( 0 );
 
-    int mirror = m_Cmp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
+    int mirror = m_cmp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
 
     if( mirror == CMP_MIRROR_X )
     {
@@ -1012,38 +1015,37 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 
     // Activate/Desactivate the normal/convert option ? (activated only if
     // the component has more than one shape)
-    if( m_Cmp->GetConvert() > 1 )
+    if( m_cmp->GetConvert() > 1 )
         convertCheckBox->SetValue( true );
 
     if( m_part == NULL || !m_part->HasConversion() )
         convertCheckBox->Enable( false );
 
     // Set the component's library name.
-    chipnameTextCtrl->SetValue( m_Cmp->m_part_name );
+    chipnameTextCtrl->SetValue( m_cmp->m_part_name );
 
     // Set the component's unique ID time stamp.
     m_textCtrlTimeStamp->SetValue( wxString::Format( wxT( "%8.8lX" ),
-                                   (unsigned long) m_Cmp->GetTimeStamp() ) );
+                                   (unsigned long) m_cmp->GetTimeStamp() ) );
 }
 
 
 #include <kicad_device_context.h>
 
-/* reinitialize components parameters to default values found in lib
- */
+
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 {
-    if( !m_Cmp )
+    if( !m_cmp )
         return;
 
-    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( m_Cmp->m_part_name ) )
+    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( m_cmp->m_part_name ) )
     {
         // save old cmp in undo list if not already in edit, or moving ...
-        if( m_Cmp->m_Flags == 0 )
-            m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
+        if( m_cmp->m_Flags == 0 )
+            m_Parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
         INSTALL_UNBUFFERED_DC( dc, m_Parent->GetCanvas() );
-        m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
+        m_cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
 
         // Initialize fixed field values to default values found in library
         // Note: the field texts are not modified because they are set in schematic,
@@ -1051,35 +1053,35 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
         // Only VALUE, REFERENCE , FOOTPRINT and DATASHEET are re-initialized
         LIB_FIELD& refField = part->GetReferenceField();
 
-        m_Cmp->GetField( REFERENCE )->SetTextPosition( refField.GetTextPosition() + m_Cmp->m_Pos );
-        m_Cmp->GetField( REFERENCE )->ImportValues( refField );
+        m_cmp->GetField( REFERENCE )->SetTextPosition( refField.GetTextPosition() + m_cmp->m_Pos );
+        m_cmp->GetField( REFERENCE )->ImportValues( refField );
 
         LIB_FIELD& valField = part->GetValueField();
 
-        m_Cmp->GetField( VALUE )->SetTextPosition( valField.GetTextPosition() + m_Cmp->m_Pos );
-        m_Cmp->GetField( VALUE )->ImportValues( valField );
+        m_cmp->GetField( VALUE )->SetTextPosition( valField.GetTextPosition() + m_cmp->m_Pos );
+        m_cmp->GetField( VALUE )->ImportValues( valField );
 
         LIB_FIELD* field = part->GetField(FOOTPRINT);
 
-        if( field && m_Cmp->GetField( FOOTPRINT ) )
+        if( field && m_cmp->GetField( FOOTPRINT ) )
         {
-            m_Cmp->GetField( FOOTPRINT )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
-            m_Cmp->GetField( FOOTPRINT )->ImportValues( *field );
+            m_cmp->GetField( FOOTPRINT )->SetTextPosition( field->GetTextPosition() + m_cmp->m_Pos );
+            m_cmp->GetField( FOOTPRINT )->ImportValues( *field );
         }
 
         field = part->GetField(DATASHEET);
 
-        if( field && m_Cmp->GetField( DATASHEET ) )
+        if( field && m_cmp->GetField( DATASHEET ) )
         {
-            m_Cmp->GetField( DATASHEET )->SetTextPosition( field->GetTextPosition() + m_Cmp->m_Pos );
-            m_Cmp->GetField( DATASHEET )->ImportValues( *field );
+            m_cmp->GetField( DATASHEET )->SetTextPosition( field->GetTextPosition() + m_cmp->m_Pos );
+            m_cmp->GetField( DATASHEET )->ImportValues( *field );
         }
 
-        m_Cmp->SetOrientation( CMP_NORMAL );
+        m_cmp->SetOrientation( CMP_NORMAL );
 
         m_Parent->OnModify();
 
-        m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        m_cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
         EndQuasiModal( wxID_OK );
     }

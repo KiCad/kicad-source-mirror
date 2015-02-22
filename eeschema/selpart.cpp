@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,23 +29,40 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <confirm.h>
-#include <draw_frame.h>
+#include <pgm_base.h>
+#include <sch_base_frame.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_library.h>
 #include <dialog_helpers.h>
 
-
-PART_LIB* SelectLibraryFromList( EDA_DRAW_FRAME* aFrame )
+// Used in DisplayListComponentsInLib: this is a callback function for EDA_LIST_DIALOG
+// to display keywords and description of a component
+static void DisplayCmpDocAndKeywords( wxString& aName, void* aData )
 {
-    PROJECT&    prj = aFrame->Prj();
+    PART_LIBS*  libs = (PART_LIBS*) aData;
+
+    wxASSERT( libs );
+
+    LIB_ALIAS* part = libs->FindLibraryEntry( aName );
+
+    if( !part )
+        return;
+
+    aName  = wxT( "Description: " ) + part->GetDescription();
+    aName += wxT( "\nKey Words: " ) + part->GetKeyWords();
+}
+
+
+PART_LIB* SCH_BASE_FRAME::SelectLibraryFromList()
+{
+    PROJECT&    prj = Prj();
 
     if( PART_LIBS* libs = prj.SchLibs() )
     {
         if( !libs->GetLibraryCount() )
         {
-            DisplayError( aFrame, _( "No component libraries are loaded." ) );
+            DisplayError( this, _( "No component libraries are loaded." ) );
             return NULL;
         }
 
@@ -69,7 +86,7 @@ PART_LIB* SelectLibraryFromList( EDA_DRAW_FRAME* aFrame )
 
         wxString old_lib_name = prj.GetRString( PROJECT::SCH_LIB_SELECT );
 
-        EDA_LIST_DIALOG dlg( aFrame, _( "Select Library" ), headers, itemsToDisplay, old_lib_name );
+        EDA_LIST_DIALOG dlg( this, _( "Select Library" ), headers, itemsToDisplay, old_lib_name );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;
@@ -91,22 +108,19 @@ PART_LIB* SelectLibraryFromList( EDA_DRAW_FRAME* aFrame )
 }
 
 
-void DisplayCmpDocAndKeywords( wxString& aName, void* aData );
 
-
-int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
-                                 PART_LIB* Library,
-                                 wxString& Buffer, wxString& OldName )
+bool SCH_BASE_FRAME::DisplayListComponentsInLib( PART_LIB*  aLibrary,
+                        wxString&  aBuffer, wxString&  aPreviousChoice )
 {
     wxArrayString  nameList;
 
-    if( Library == NULL )
-        Library = SelectLibraryFromList( frame );
+    if( aLibrary == NULL )
+        aLibrary = SelectLibraryFromList();
 
-    if( Library == NULL )
-        return 0;
+    if( aLibrary == NULL )
+        return false;
 
-    Library->GetEntryNames( nameList );
+    aLibrary->GetEntryNames( nameList );
 
     wxArrayString headers;
     headers.Add( wxT("Component") );
@@ -118,32 +132,32 @@ int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
     {
         wxArrayString item;
         item.Add( nameList[i] );
-        item.Add( Library->GetLogicalName() );
+        item.Add( aLibrary->GetLogicalName() );
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), headers, itemsToDisplay,
-                         OldName, DisplayCmpDocAndKeywords, frame->Prj().SchLibs() );
+    EDA_LIST_DIALOG dlg( this, _( "Select Component" ), headers, itemsToDisplay,
+                         aPreviousChoice, DisplayCmpDocAndKeywords, Prj().SchLibs() );
 
     if( dlg.ShowModal() != wxID_OK )
-        return 0;
+        return false;
 
-    Buffer = dlg.GetTextSelection();
+    aBuffer = dlg.GetTextSelection();
 
-    return 1;
+    return true;
 }
 
 
-int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, PART_LIB* Library, wxString& BufName )
+bool SCH_BASE_FRAME::SelectPartNameToLoad( PART_LIB* aLibrary, wxString& aBufName )
 {
     int             ii;
-    static wxString OldCmpName;
+    static wxString previousCmpName;
 
-    ii = DisplayComponentsNamesInLib( frame, Library, BufName, OldCmpName );
+    ii = DisplayListComponentsInLib( aLibrary, aBufName, previousCmpName );
 
-    if( ii <= 0 || BufName.IsEmpty() )
-        return 0;
+    if( ii <= 0 || aBufName.IsEmpty() )
+        return false;
 
-    OldCmpName = BufName;
-    return 1;
+    previousCmpName = aBufName;
+    return true;
 }

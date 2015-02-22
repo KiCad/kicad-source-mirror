@@ -41,7 +41,6 @@
 #include <class_libentry.h>
 #include <lib_pin.h>
 #include <general.h>
-#include <protos.h>
 
 #include <../common/dialogs/dialog_display_info_HTML_base.h>
 #include <dialog_lib_edit_pin.h>

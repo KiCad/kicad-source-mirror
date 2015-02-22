@@ -195,3 +195,51 @@ void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 1;
     aLayers[0] = m_Layer;
 }
+
+
+int BOARD_ITEM::getTrailingInt( wxString aStr )
+{
+    int number = 0;
+    int base = 1;
+
+    // Trim and extract the trailing numeric part
+    int index = aStr.Len() - 1;
+    while( index >= 0 )
+    {
+        const char chr = aStr.GetChar( index );
+
+        if( chr < '0' || chr > '9' )
+            break;
+
+        number += ( chr - '0' ) * base;
+        base *= 10;
+        index--;
+    }
+
+    return number;
+}
+
+int BOARD_ITEM::getNextNumberInSequence( std::set<int> aSeq, bool aFillSequenceGaps)
+{
+    // By default go to the end of the sequence
+    int candidate = *aSeq.rbegin();
+
+    // Filling in gaps in pad numbering
+    if( aFillSequenceGaps )
+    {
+        // start at the beginning
+        candidate = *aSeq.begin();
+
+        for( std::set<int>::iterator it = aSeq.begin(),
+            itEnd = aSeq.end(); it != itEnd; ++it )
+        {
+            if( *it - candidate > 1 )
+                break;
+
+            candidate = *it;
+        }
+    }
+
+    candidate++;
+    return candidate;
+}

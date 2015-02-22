@@ -96,12 +96,12 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     newModule->ClearFlags();
 
-    // Clear references to net info, because the footprint editor
+    // Clear references to any net info, because the footprint editor
     // does know any thing about nets handled by the current edited board.
-    // Morever the main board can change or the net info relative to this main board
-    // can change while editing this footprint in the footprint editor
-    for( D_PAD* pad = newModule->Pads(); pad; pad = pad->Next() )
-        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+    // Morever we do not want to save any reference to an unknown net when
+    // saving the footprint in lib cache
+    // so we force the ORPHANED dummy net info for all pads
+    newModule->ClearAllNets();
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( newModule, NULL );
@@ -269,6 +269,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     if( module )
     {
         GetBoard()->Add( module, ADD_APPEND );
+
         lastComponentName = moduleName;
         AddHistoryComponentName( HistoryList, moduleName );
 
@@ -322,13 +323,22 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
 
 
 MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
-    throw( IO_ERROR, PARSE_ERROR )
+    throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
 
-    return fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+    MODULE* module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+
+    // If the module is found, clear all net info,
+    // to be sure there is no broken links
+    // to any netinfo list (should be not needed, but it can be edited from
+    // the footprint editor )
+    if( module )
+        module->ClearAllNets();
+
+    return module;
 }
 
 

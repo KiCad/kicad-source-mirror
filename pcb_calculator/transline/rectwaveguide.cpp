@@ -358,7 +358,7 @@ void RECTWAVEGUIDE::show_results()
                     continue;
                 if( f >= ( fc( m, n ) ) )
                 {
-                    sprintf( txt, "H(%u,%u) ", m, n );
+                    sprintf( txt, "H(%d,%d) ", m, n );
                     if( (strlen( text ) + strlen( txt ) + 5) < MAXSTRLEN )
                         strcat( text, txt );
                     else
@@ -384,7 +384,7 @@ void RECTWAVEGUIDE::show_results()
             {
                 if( f >= fc( m, n ) )
                 {
-                    sprintf( txt, "E(%u,%u) ", m, n );
+                    sprintf( txt, "E(%d,%d) ", m, n );
                     if( (strlen( text ) + strlen( txt ) + 5) < MAXSTRLEN )
                         strcat( text, txt );
                     else

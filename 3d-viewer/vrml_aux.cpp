@@ -94,13 +94,13 @@ static int SkipGetChar( FILE* File )
 }
 
 
-char* GetNextTag( FILE* File, char* tag )
+bool GetNextTag( FILE* File, char* tag, size_t len )
 {
     int c = SkipGetChar( File );
 
     if( c == EOF )
     {
-        return NULL;
+        return false;
     }
 
     tag[0]  = c;
@@ -109,9 +109,10 @@ char* GetNextTag( FILE* File, char* tag )
     // DBG( printf( "tag[0] %c\n", tag[0] ) );
     if( (c != '}') && (c != ']') )
     {
+        len--;
         char* dst = &tag[1];
 
-        while( fscanf( File, "%c", dst ) )
+        while( fscanf( File, "%c", dst ) && len > 0 )
         {
             if( (*dst == ' ') || (*dst == '[') || (*dst == '{')
                 || (*dst == '\t') || (*dst == '\n')|| (*dst == '\r') )
@@ -121,6 +122,7 @@ char* GetNextTag( FILE* File, char* tag )
             }
 
             dst++;
+            len--;
         }
 
 
@@ -134,7 +136,7 @@ char* GetNextTag( FILE* File, char* tag )
         }
     }
 
-    return tag;
+    return true;
 }
 
 

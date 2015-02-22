@@ -35,8 +35,7 @@
 #include <netlist_reader.h>
 
 
-
-void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR )
+void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
 {
     int state            = 0;
     bool is_comment      = false;
@@ -98,7 +97,8 @@ void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR )
 }
 
 
-COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText ) throw( PARSE_ERROR )
+COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
+    throw( PARSE_ERROR, boost::bad_pointer )
 {
     char*    text;
     wxString msg;

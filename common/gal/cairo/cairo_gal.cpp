@@ -956,7 +956,7 @@ void CAIRO_GAL::blitCursor( wxBufferedDC& clientDC )
     }
 
     // Store pixels that are going to be overpainted
-    VECTOR2D cursorScreen = ToScreen( cursorPosition ) - cursorSize / 2;
+    VECTOR2D cursorScreen = ToScreen( cursorPosition ) - cursorSize / 2.0f;
     cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, cursorScreen.x, cursorScreen.y );
 
     // Draw the cursor

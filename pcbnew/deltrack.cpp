@@ -44,8 +44,6 @@
 
 TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 {
-    int current_net_code;
-
     if( aTrack == NULL )
         return NULL;
 
@@ -120,20 +118,20 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
         return NULL;
     }
 
-    current_net_code = aTrack->GetNetCode();
+    int netcode = aTrack->GetNetCode();
 
-    DLIST<TRACK>* container = (DLIST<TRACK>*)aTrack->GetList();
-    wxASSERT( container );
+    // Remove the segment from list, but do not delete it (it will be stored i n undo list)
+    GetBoard()->Remove( aTrack );
+
     GetBoard()->GetRatsnest()->Remove( aTrack );
     aTrack->ViewRelease();
-    container->Remove( aTrack );
 
     // redraw the area where the track was
     m_canvas->RefreshDrawingRect( aTrack->GetBoundingBox() );
 
     SaveCopyInUndoList( aTrack, UR_DELETED );
     OnModify();
-    TestNetConnection( DC, current_net_code );
+    TestNetConnection( DC, netcode );
     SetMsgPanel( GetBoard() );
 
     return NULL;
@@ -144,10 +142,10 @@ void PCB_EDIT_FRAME::Delete_Track( wxDC* DC, TRACK* aTrack )
 {
     if( aTrack != NULL )
     {
-        int current_net_code = aTrack->GetNetCode();
+        int netcode = aTrack->GetNetCode();
         Remove_One_Track( DC, aTrack );
         OnModify();
-        TestNetConnection( DC, current_net_code );
+        TestNetConnection( DC, netcode );
     }
 }
 
@@ -162,10 +160,10 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 
     PICKED_ITEMS_LIST itemsList;
     ITEM_PICKER       picker( NULL, UR_DELETED );
-    int    net_code_delete = aTrack->GetNetCode();
+    int    netcode = aTrack->GetNetCode();
 
     /* Search the first item for the given net code */
-    TRACK* trackList = GetBoard()->m_Track->GetStartNetCode( net_code_delete );
+    TRACK* trackList = GetBoard()->m_Track->GetStartNetCode( netcode );
 
     /* Remove all segments having the given net code */
     int    ii = 0;
@@ -173,7 +171,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
     for( TRACK* segm = trackList;  segm; segm = next_track, ++ii )
     {
         next_track = segm->Next();
-        if( segm->GetNetCode() != net_code_delete )
+        if( segm->GetNetCode() != netcode )
             break;
 
         GetBoard()->GetRatsnest()->Remove( segm );
@@ -188,7 +186,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 
     SaveCopyInUndoList( itemsList, UR_DELETED );
     OnModify();
-    TestNetConnection( DC, net_code_delete );
+    TestNetConnection( DC, netcode );
     SetMsgPanel( GetBoard() );
 }
 

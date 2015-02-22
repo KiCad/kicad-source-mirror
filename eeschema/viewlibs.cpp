@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,6 @@
 #include <class_sch_screen.h>
 
 #include <general.h>
-#include <protos.h>
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
 #include <class_library.h>
@@ -152,7 +151,7 @@ void LIB_VIEW_FRAME::SelectCurrentLibrary()
 {
     PART_LIB* Lib;
 
-    Lib = SelectLibraryFromList( this );
+    Lib = SelectLibraryFromList();
 
     if( Lib )
     {
@@ -179,6 +178,7 @@ void LIB_VIEW_FRAME::SelectAndViewLibraryPart( int option )
 {
     if( m_libraryName.IsEmpty() )
         SelectCurrentLibrary();
+
     if( m_libraryName.IsEmpty() )
         return;
 
@@ -224,9 +224,7 @@ void LIB_VIEW_FRAME::ViewOneLibraryContent( PART_LIB* Lib, int Flag )
         return;
 
     if( Flag == NEW_PART )
-    {
-        DisplayComponentsNamesInLib( this, Lib, CmpName, m_entryName );
-    }
+        DisplayListComponentsInLib( Lib, CmpName, m_entryName );
 
     if( Flag == NEXT_PART )
     {
@@ -259,59 +257,56 @@ void LIB_VIEW_FRAME::ViewOneLibraryContent( PART_LIB* Lib, int Flag )
         if( id >= 0 )
             m_cmpList->SetSelection( id );
     }
+
     ReCreateHToolbar();
 }
 
 
 void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    if( PART_LIBS* libs = Prj().SchLibs() )
+    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryEntry( m_entryName, m_libraryName );
+
+    if( !entry )
+        return;
+
+    LIB_PART* part = entry->GetPart();
+
+    if( !part )
+        return;
+
+    wxString    msg;
+    wxString    tmp;
+
+    m_canvas->DrawBackGround( DC );
+
+    if( !entry->IsRoot() )
     {
-        if( PART_LIB* lib = libs->FindLibrary( m_libraryName ) )
-        {
-            if( LIB_ALIAS* entry = lib->FindEntry( m_entryName ) )
-            {
-                if( LIB_PART* part = entry->GetPart() )
-                {
-                    wxString    msg;
-                    wxString    tmp;
+        // Temporarily change the name field text to reflect the alias name.
+        msg = entry->GetName();
+        tmp = part->GetName();
 
-                    m_canvas->DrawBackGround( DC );
+        part->SetName( msg );
 
-                    if( !entry->IsRoot() )
-                    {
-                        // Temporarily change the name field text to reflect the alias name.
-                        msg = entry->GetName();
-                        tmp = part->GetName();
+        if( m_unit < 1 )
+            m_unit = 1;
 
-                        part->SetName( msg );
-
-                        if( m_unit < 1 )
-                            m_unit = 1;
-
-                        if( m_convert < 1 )
-                            m_convert = 1;
-                    }
-                    else
-                    {
-                        msg = _( "None" );
-                    }
-
-                    part->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE );
-
-                    // Redraw the cursor
-                    m_canvas->DrawCrossHair( DC );
-
-                    if( !tmp.IsEmpty() )
-                        part->SetName( tmp );
-
-                    ClearMsgPanel();
-                    AppendMsgPanel( _( "Part" ), part->GetName(), BLUE, 6 );
-                    AppendMsgPanel( _( "Alias" ), msg, RED, 6 );
-                    AppendMsgPanel( _( "Description" ), entry->GetDescription(), CYAN, 6 );
-                    AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );
-                }
-            }
-        }
+        if( m_convert < 1 )
+            m_convert = 1;
     }
+    else
+        msg = _( "None" );
+
+    part->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE );
+
+    // Redraw the cursor
+    m_canvas->DrawCrossHair( DC );
+
+    if( !tmp.IsEmpty() )
+        part->SetName( tmp );
+
+    ClearMsgPanel();
+    AppendMsgPanel( _( "Part" ), part->GetName(), BLUE, 6 );
+    AppendMsgPanel( _( "Alias" ), msg, RED, 6 );
+    AppendMsgPanel( _( "Description" ), entry->GetDescription(), CYAN, 6 );
+    AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );
 }

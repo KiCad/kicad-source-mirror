@@ -32,7 +32,7 @@
 #include <pgm_base.h>
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <msgpanel.h>
 
 #include <general.h>
@@ -42,9 +42,7 @@
 #include <dialog_helpers.h>
 
 
-/**
- * Save previous component library viewer state.
- */
+// Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
 wxString LIB_VIEW_FRAME::m_entryName;
 

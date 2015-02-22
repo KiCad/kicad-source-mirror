@@ -26,6 +26,8 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_zone.h>
+#include <class_draw_panel_gal.h>
+#include <module_editor_frame.h>
 #include <wxPcbStruct.h>
 
 #include <tool/tool_manager.h>
@@ -42,9 +44,13 @@
 #include "selection_tool.h"
 #include "edit_tool.h"
 
+#include <dialogs/dialog_create_array.h>
+#include <dialogs/dialog_move_exact.h>
+
 EDIT_TOOL::EDIT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
-    m_dragging( false ), m_editModules( false ), m_updateFlag( KIGFX::VIEW_ITEM::NONE )
+    m_dragging( false ), m_editModules( false ), m_undoInhibit( 0 ),
+    m_updateFlag( KIGFX::VIEW_ITEM::NONE )
 {
 }
 
@@ -73,6 +79,9 @@ bool EDIT_TOOL::Init()
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
     m_offset.x = 0;
     m_offset.y = 0;
@@ -112,6 +121,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetSnapping( true );
     controls->ForceCursorPosition( false );
 
+    // cumulative translation
+    wxPoint totalMovement( 0, 0 );
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -147,9 +159,41 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 break;       // exit the loop, as there is no further processing for removed items
             }
+            else if( evt->IsAction( &COMMON_ACTIONS::duplicate ) )
+            {
+                // On duplicate, stop moving this item
+                // The duplicate tool should then select the new item and start
+                // a new move procedure
+                break;
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::moveExact ) )
+            {
+                // Can't do this, because the selection will then contain
+                // stale pointers and it will all go horribly wrong...
+                //editFrame->RestoreCopyFromUndoList( dummy );
+                //
+                // So, instead, reset the position manually
+                for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
+                {
+                    BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+                    item->SetPosition( item->GetPosition() - totalMovement );
+
+                    // And what about flipping and rotation?
+                    // for now, they won't be undone, but maybe that is how
+                    // it should be, so you can flip and move exact in the
+                    // same action?
+                }
+
+                // This causes a double event, so we will get the dialogue
+                // correctly, somehow - why does Rotate not?
+                //MoveExact( aEvent );
+                break;      // exit the loop - we move exactly, so we have
+                            // finished moving
+            }
         }
 
-        else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::editActivate )
+                || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             m_cursor = controls->GetCursorPosition();
 
@@ -157,6 +201,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) -
                                    selection.Item<BOARD_ITEM>( 0 )->GetPosition();
+
+                totalMovement += movement;
 
                 // Drag items to the current cursor position
                 for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
@@ -170,8 +216,11 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     break;
 
                 // Save items, so changes can be undone
-                editFrame->OnModify();
-                editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                if( !isUndoInhibited() )
+                {
+                    editFrame->OnModify();
+                    editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                }
 
                 if( selection.Size() == 1 )
                 {
@@ -197,6 +246,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 controls->SetAutoPan( true );
                 m_dragging = true;
+                incUndoInhibit();
             }
 
             selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -206,6 +256,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
             break; // Finish
     }
+
+    if( m_dragging )
+        decUndoInhibit();
 
     m_dragging = false;
     m_offset.x = 0;
@@ -326,7 +379,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     wxPoint rotatePoint = getModificationPoint( selection );
 
-    if( !m_dragging )   // If it is being dragged, then it is already saved with UR_CHANGED flag
+    // If it is being dragged, then it is already saved with UR_CHANGED flag
+    if( !isUndoInhibited() )
     {
         editFrame->OnModify();
         editFrame->SaveCopyInUndoList( selection.items, UR_ROTATED, rotatePoint );
@@ -380,7 +434,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     wxPoint flipPoint = getModificationPoint( selection );
 
-    if( !m_dragging )   // If it is being dragged, then it is already saved with UR_CHANGED flag
+    if( !isUndoInhibited() )   // If it is being dragged, then it is already saved with UR_CHANGED flag
     {
         editFrame->OnModify();
         editFrame->SaveCopyInUndoList( selection.items, UR_FLIPPED, flipPoint );
@@ -534,6 +588,320 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
 }
 
 
+int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
+{
+    const SELECTION& selection = m_selectionTool->GetSelection();
+
+    // Shall the selection be cleared at the end?
+    bool unselect = selection.Empty();
+
+    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
+    {
+        setTransitions();
+
+        return 0;
+    }
+
+    wxPoint translation;
+    double rotation = 0;
+
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+
+    DIALOG_MOVE_EXACT dialog( editFrame, translation, rotation );
+    int ret = dialog.ShowModal();
+
+    if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+    {
+        if( !isUndoInhibited() )
+        {
+            editFrame->OnModify();
+            // Record an action of move and rotate
+            editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        }
+
+        VECTOR2I rp = selection.GetCenter();
+        wxPoint rotPoint( rp.x, rp.y );
+
+        for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
+        {
+            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+
+            item->Move( translation );
+            item->Rotate( rotPoint, rotation );
+
+            if( !m_dragging )
+                item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        updateRatsnest( m_dragging );
+
+        if( m_dragging )
+            selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        else
+            getModel<BOARD>()->GetRatsnest()->Recalculate();
+
+        if( unselect )
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+
+        m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
+{
+    bool increment = aEvent.IsAction( &COMMON_ACTIONS::duplicateIncrement );
+
+    // first, check if we have a selection, or try to get one
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    // Be sure that there is at least one item that we can modify
+    if( !makeSelection( selection ) || selTool->CheckLock() )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    // we have a selection to work on now, so start the tool process
+
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+    editFrame->OnModify();
+
+    // prevent other tools making undo points while the duplicate is going on
+    // so that if you cancel, you don't get a duplicate object hiding over
+    // the original
+    incUndoInhibit();
+
+    std::vector<BOARD_ITEM*> old_items;
+
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+
+        if( item )
+            old_items.push_back( item );
+    }
+
+    for( unsigned i = 0; i < old_items.size(); ++i )
+    {
+        BOARD_ITEM* item = old_items[i];
+
+        // Unselect the item, so we won't pick it up again
+        // Do this first, so a single-item duplicate will correctly call
+        // SetCurItem and show the item properties
+        m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, item );
+
+        BOARD_ITEM* new_item = NULL;
+
+        if( m_editModules )
+            new_item = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+        else
+            new_item = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
+
+        if( new_item )
+        {
+            if( new_item->Type() == PCB_MODULE_T )
+            {
+                static_cast<MODULE*>( new_item )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
+                        getView(), _1 ) );
+            }
+
+            editFrame->GetGalCanvas()->GetView()->Add( new_item );
+
+            // Select the new item, so we can pick it up
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, new_item );
+        }
+    }
+
+    // record the new items as added
+    editFrame->SaveCopyInUndoList( selection.items, UR_NEW );
+
+    editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
+            (int) old_items.size() ) );
+
+    // pick up the selected item(s) and start moving
+    // this works well for "dropping" copies around
+    TOOL_EVENT evt = COMMON_ACTIONS::editActivate.MakeEvent();
+    Main( evt );
+
+    // and re-enable undos
+    decUndoInhibit();
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
+{
+    // first, check if we have a selection, or try to get one
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    // Be sure that there is at least one item that we can modify
+    if( !makeSelection( selection ) || selTool->CheckLock() )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    bool originalItemsModified = false;
+
+    // we have a selection to work on now, so start the tool process
+
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+    editFrame->OnModify();
+
+    if( m_editModules )
+    {
+        // Module editors do their undo point upfront for the whole module
+        editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_MODEDIT );
+    }
+    else
+    {
+        // We may also change the original item
+        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+    }
+
+    DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
+
+    VECTOR2I rp = selection.GetCenter();
+    const wxPoint rotPoint( rp.x, rp.y );
+
+    DIALOG_CREATE_ARRAY dialog( editFrame, rotPoint, &array_opts );
+    int ret = dialog.ShowModal();
+
+    if( ret == DIALOG_CREATE_ARRAY::CREATE_ARRAY_OK && array_opts != NULL )
+    {
+        PICKED_ITEMS_LIST newItemList;
+
+        for( int i = 0; i < selection.Size(); ++i )
+        {
+            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+
+            if( !item )
+                continue;
+
+            wxString cachedString;
+
+            if( item->Type() == PCB_MODULE_T )
+            {
+                cachedString = static_cast<MODULE*>( item )->GetReferencePrefix();
+            }
+            else if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
+            {
+                // Copy the text (not just take a reference
+                cachedString = text->GetText();
+            }
+
+            // iterate across the array, laying out the item at the
+            // correct position
+            const unsigned nPoints = array_opts->GetArraySize();
+
+            for( unsigned ptN = 0; ptN < nPoints; ++ptN )
+            {
+                BOARD_ITEM* newItem = NULL;
+
+                if( ptN == 0 )
+                {
+                    newItem = item;
+                }
+                else
+                {
+                    // if renumbering, no need to increment
+                    const bool increment = !array_opts->ShouldRenumberItems();
+
+                    if( m_editModules )
+                        newItem = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+                    else
+                        newItem = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
+
+                    if( newItem )
+                    {
+                        array_opts->TransformItem( ptN, newItem, rotPoint );
+
+                        m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, newItem );
+
+                        newItemList.PushItem( newItem );
+
+                        if( newItem->Type() == PCB_MODULE_T)
+                        {
+                            static_cast<MODULE*>( newItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
+                                    getView(), _1 ) );
+                        }
+
+                        editFrame->GetGalCanvas()->GetView()->Add( newItem );
+                        getModel<BOARD>()->GetRatsnest()->Update( newItem );
+                    }
+                }
+
+                // set the number if needed:
+                if( array_opts->ShouldRenumberItems() )
+                {
+                    switch( newItem->Type() )
+                    {
+                    case PCB_PAD_T:
+                    {
+                        const wxString padName = array_opts->GetItemNumber( ptN );
+                        static_cast<D_PAD*>( newItem )->SetPadName( padName );
+
+                        originalItemsModified = true;
+                        break;
+                    }
+                    case PCB_MODULE_T:
+                    {
+                        const wxString moduleName = array_opts->GetItemNumber( ptN );
+                        MODULE* module = static_cast<MODULE*>( newItem );
+                        module->SetReference( cachedString + moduleName );
+
+                        originalItemsModified = true;
+                        break;
+                    }
+                    case PCB_MODULE_TEXT_T:
+                    case PCB_TEXT_T:
+                    {
+                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( newItem );
+                        text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
+
+                        originalItemsModified = true;
+                        break;
+                    }
+                    default:
+                        // no renumbering of other items
+                        break;
+                    }
+                }
+            }
+        }
+
+        if( !m_editModules )
+        {
+            if( originalItemsModified )
+            {
+                // Update the appearance of the original items
+                selection.group->ItemsViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+
+            // Add all items as a single undo point for PCB editors
+            // TODO: Can this be merged into the previous undo point (where
+            //       we saved the original items)
+            editFrame->SaveCopyInUndoList( newItemList, UR_NEW );
+        }
+    }
+
+    getModel<BOARD>()->GetRatsnest()->Recalculate();
+    setTransitions();
+
+    return 0;
+}
+
+
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::Main,       COMMON_ACTIONS::editActivate.MakeEvent() );
@@ -541,6 +909,10 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Flip,       COMMON_ACTIONS::flip.MakeEvent() );
     Go( &EDIT_TOOL::Remove,     COMMON_ACTIONS::remove.MakeEvent() );
     Go( &EDIT_TOOL::Properties, COMMON_ACTIONS::properties.MakeEvent() );
+    Go( &EDIT_TOOL::MoveExact,  COMMON_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicateIncrement.MakeEvent() );
+    Go( &EDIT_TOOL::CreateArray,COMMON_ACTIONS::createArray.MakeEvent() );
 }
 
 

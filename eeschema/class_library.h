@@ -123,7 +123,7 @@ public:
      * @param aFileName - File name object of part library.
      * @throw IO_ERROR if there's any problem loading.
      */
-    PART_LIB* AddLibrary( const wxString& aFileName ) throw( IO_ERROR );
+    PART_LIB* AddLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer );
 
     /**
      * Function AddLibrary
@@ -152,7 +152,7 @@ public:
      * loads all of the project's libraries into this container, which should
      * be cleared before calling it.
      */
-    void LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR );
+    void LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::bad_pointer );
 
     /**
      * Function LibNamesAndPaths
@@ -160,7 +160,8 @@ public:
      * (without paths).
      */
     static void LibNamesAndPaths( PROJECT* aProject, bool doSave,
-            wxString* aPaths, wxArrayString* aNames=NULL ) throw( IO_ERROR );
+                                  wxString* aPaths, wxArrayString* aNames=NULL )
+        throw( IO_ERROR, boost::bad_pointer );
 
     /**
      * Function cacheName
@@ -545,7 +546,7 @@ public:
      *   the caller.
      * @throw IO_ERROR if there's any problem loading the library.
      */
-    static PART_LIB* LoadLibrary( const wxString& aFileName ) throw( IO_ERROR );
+    static PART_LIB* LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer );
 };
 
 

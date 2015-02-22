@@ -55,7 +55,7 @@ SHADER::~SHADER()
     {
         // Delete the shaders and the program
         for( std::deque<GLuint>::iterator it = shaderNumbers.begin(); it != shaderNumbers.end();
-             it++ )
+             ++it )
         {
             glDeleteShader( *it );
         }

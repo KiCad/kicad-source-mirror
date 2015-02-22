@@ -29,7 +29,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 #include <sch_bitmap.h>
 #include <dialog_image_editor.h>
 

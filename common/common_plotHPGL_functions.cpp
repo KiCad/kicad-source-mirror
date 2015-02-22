@@ -489,9 +489,7 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
     DPOINT  pos_dev = userToDeviceCoordinates( pos );
 
     int     delta   = KiROUND( penDiameter - penOverlap );
-    int     radius  = diametre / 2;
-
-    radius = ( diametre - KiROUND( penDiameter ) ) / 2;
+    int     radius  = ( diametre - KiROUND( penDiameter ) ) / 2;
 
     if( radius < 0 )
         radius = 0;

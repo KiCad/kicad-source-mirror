@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -24,14 +24,14 @@
  */
 
 /**
- * @file hierarch.cpp
+ * @file hierarch.schframe
  */
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <id.h>
-#include <wxEeschemaStruct.h>
+#include <schframe.h>
 
 #include <general.h>
 #include <sch_sheet.h>

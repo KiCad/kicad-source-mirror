@@ -42,6 +42,14 @@
  */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MILS * 100)
 
+/**
+ * scaling factor for 3D shape offset ( S3D_MASTER::m_MatPosition member )
+ * Was in inches in legacy version, and, due to a mistake, still in inches
+ * in .kicad_pcb files (which are using mm)
+ * so this scaling convert file units (inch) to 3D units (0.1 inch), only
+ * for S3D_MASTER::m_MatPosition parameter
+ */
+#define SCALE_3D_CONV 10
 
 class S3D_MASTER;
 class STRUCT_3D_SHAPE;

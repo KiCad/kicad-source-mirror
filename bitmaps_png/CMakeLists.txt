@@ -151,6 +151,12 @@ set( BMAPS_MID
     annotate_down_right
     annotate_right_down
     annotate
+    array_line
+    array_module
+    array_pad
+    array_text
+    array_target
+    array_zone
     auto_associe
     auto_delete_track
     auto_track_width
@@ -217,6 +223,12 @@ set( BMAPS_MID
     drag_track_segment
     drc_off
     drc
+    duplicate_line
+    duplicate_module
+    duplicate_pad
+    duplicate_target
+    duplicate_text
+    duplicate_zone
     edges_sketch
     edit_comp_footprint
     edit_component
@@ -363,9 +375,11 @@ set( BMAPS_MID
     move_polygon
     move_rectangle
     move_sheet
+    move_target
     move_text
     move_track_segment
     move_track
+    move_zone
     move
     mw_add_gap
     mw_add_line
