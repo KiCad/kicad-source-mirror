@@ -4,7 +4,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,24 @@
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_gen_module_position_file_base.h>
+/*
+ * The format of the kicad place file is:
+ *      ### Module positions - created on 04/12/2012 15:24:24 ###
+ *      ### Printed by Pcbnew version pcbnew (2012-11-30 BZR 3828)-testing
+ *      ## Unit = inches, Angle = deg.
+ * or
+ *      ## Unit = mm, Angle = deg.
+ *      ## Side : top
+ * or
+ *      ## Side : bottom
+ * or
+ *      ## Side : all
+ *      # Ref    Val                  Package         PosX       PosY        Rot     Side
+ *      C123     0,1uF/50V        SM0603              1.6024    -2.6280     180.0    Front
+ *      C124     0,1uF/50V        SM0603              1.6063    -2.7579     180.0    Front
+ *      C125     0,1uF/50V        SM0603              1.6010    -2.8310     180.0    Front
+ *      ## End
+ */
 
 
 class LIST_MOD      // An helper class used to build a list of useful footprints.
@@ -126,6 +144,11 @@ private:
 int DIALOG_GEN_MODULE_POSITION::m_unitsOpt = 0;
 int DIALOG_GEN_MODULE_POSITION::m_fileOpt = 0;
 
+// Use standard board side name. do not translate them,
+// they are keywords in place file
+const wxString frontSideName = wxT( "top" );
+const wxString backSideName = wxT( "bottom" );
+
 void DIALOG_GEN_MODULE_POSITION::OnInitDialog( wxInitDialogEvent& event )
 {
     // Output directory
@@ -192,8 +215,6 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     BOARD * brd = m_parent->GetBoard();
     wxFileName  fn;
     wxString    msg;
-    wxString    frontLayerName;
-    wxString    backLayerName;
     bool singleFile = OneFileOnly();
     int fullcount = 0;
 
@@ -222,8 +243,6 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
-    frontLayerName = brd->GetLayerName( F_Cu );
-    backLayerName = brd->GetLayerName( B_Cu );
 
     // Create the the Front or Top side placement file,
     // or the single file
@@ -235,7 +254,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
         fn.SetName( fn.GetName() + wxT( "-" ) + wxT("all") );
     }
     else
-        fn.SetName( fn.GetName() + wxT( "-" ) + frontLayerName );
+        fn.SetName( fn.GetName() + wxT( "-" ) + frontSideName );
 
     fn.SetExt( FootprintPlaceFileExtension );
 
@@ -267,7 +286,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     side = 0;
     fn = brd->GetFileName();
     fn.SetPath( outputDir.GetPath() );
-    fn.SetName( fn.GetName() + wxT( "-" ) + backLayerName );
+    fn.SetName( fn.GetName() + wxT( "-" ) + backSideName );
     fn.SetExt( wxT( "pos" ) );
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
@@ -356,18 +375,6 @@ void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
  * aSide = 2 -> both sides
  * if aFullFileName is empty, the file is not crated, only the
  * count of footprints to place is returned
- *
- * The format is:
- *  ### Module positions - created on 04/12/2012 15:24:24 ###
- *  ### Printed by Pcbnew version pcbnew (2012-11-30 BZR 3828)-testing
- *  ## Unit = inches, Angle = deg.
- *  ## Side : Front
- *  # Ref    Val                  Package         PosX       PosY        Rot     Side
- *  C123     0,1uF/50V        SM0603              1.6024    -2.6280     180.0    Front
- *  C124     0,1uF/50V        SM0603              1.6063    -2.7579     180.0    Front
- *  C125     0,1uF/50V        SM0603              1.6010    -2.8310     180.0    Front
- *  ## End
- *
  */
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                                                  bool aUnitsMM,
@@ -463,9 +470,6 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     if( list.size() > 1 )
         sort( list.begin(), list.end(), sortFPlist );
 
-    wxString frontLayerName = GetBoard()->GetLayerName( F_Cu );
-    wxString backLayerName = GetBoard()->GetLayerName( B_Cu );
-
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO   toggle;
 
@@ -480,7 +484,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     fputs( unit_text, file );
 
     sprintf( line, "## Side : %s\n",
-             ( aSide < 2 ) ? TO_UTF8( frontLayerName ) : "All" );
+             ( aSide < 2 ) ? TO_UTF8( frontSideName ) : "All" );
     fputs( line, file );
 
     sprintf( line,
@@ -515,13 +519,13 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
         if( layer == F_Cu )
         {
-            strcat( line, TO_UTF8( frontLayerName ) );
+            strcat( line, TO_UTF8( frontSideName ) );
             strcat( line, "\n" );
             fputs( line, file );
         }
         else if( layer == B_Cu )
         {
-            strcat( line, TO_UTF8( backLayerName ) );
+            strcat( line, TO_UTF8( backSideName ) );
             strcat( line, "\n" );
             fputs( line, file );
         }
