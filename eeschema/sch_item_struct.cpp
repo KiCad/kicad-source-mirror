@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,8 +112,7 @@ std::string SCH_ITEM::FormatInternalUnits( int aValue )
 
     if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
     {
-        // printf( "f: " );
-        len = snprintf( buf, 49, "%.10f", engUnits );
+        len = snprintf( buf, sizeof(buf), "%.10f", engUnits );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
@@ -122,8 +121,7 @@ std::string SCH_ITEM::FormatInternalUnits( int aValue )
     }
     else
     {
-        // printf( "g: " );
-        len = snprintf( buf, 49, "%.10g", engUnits );
+        len = snprintf( buf, sizeof(buf), "%.10g", engUnits );
     }
 
     return std::string( buf, len );
@@ -135,7 +133,7 @@ std::string SCH_ITEM::FormatAngle( double aAngle )
     char temp[50];
     int len;
 
-    len = snprintf( temp, 49, "%.10g", aAngle / 10.0 );
+    len = snprintf( temp, sizeof(temp), "%.10g", aAngle / 10.0 );
 
     return std::string( temp, len );
 }

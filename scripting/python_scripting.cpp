@@ -144,7 +144,7 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
     // Make sure that that the correct version of wxPython is loaded. In systems where there
     // are different versions of wxPython installed this can lead to select wrong wxPython
     // version being selected.
-    snprintf( cmd, 1023, "import wxversion; wxversion.select('%s')", WXPYTHON_VERSION );
+    snprintf( cmd, sizeof(cmd), "import wxversion; wxversion.select('%s')", WXPYTHON_VERSION );
     PyRun_SimpleString( cmd );
 
     // Load the wxPython core API.  Imports the wx._core_ module and sets a
@@ -168,7 +168,7 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
     {
         char cmd[1024];
         PyLOCK lock;
-        sprintf( cmd, "import sys, traceback\n"
+        snprintf( cmd, sizeof(cmd), "import sys, traceback\n"
                       "sys.path.append(\".\")\n"
                       "import pcbnew\n"
                       "pcbnew.LoadPlugins(\"%s\")", aUserPluginsPath );
