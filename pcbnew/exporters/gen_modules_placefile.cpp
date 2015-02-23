@@ -373,7 +373,7 @@ void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
  * aSide = 0 -> Back (bottom) side)
  * aSide = 1 -> Front (top) side)
  * aSide = 2 -> both sides
- * if aFullFileName is empty, the file is not crated, only the
+ * if aFullFileName is empty, the file is not created, only the
  * count of footprints to place is returned
  */
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
@@ -483,13 +483,19 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
     fputs( unit_text, file );
 
-    sprintf( line, "## Side : %s\n",
-             ( aSide < 2 ) ? TO_UTF8( frontSideName ) : "All" );
-    fputs( line, file );
+    fputs( "## Side : ", file );
 
-    sprintf( line,
-             "# Ref    Val                  Package         PosX       PosY        Rot     Side\n" );
-    fputs( line, file );
+    if( aSide == 0 )
+        fputs( TO_UTF8( backSideName ), file );
+    else if( aSide == 1 )
+        fputs( TO_UTF8( frontSideName ), file );
+    else
+        fputs( "All", file );
+
+    fputs( "\n", file );
+
+    fputs( "# Ref    Val                  Package         PosX       PosY        Rot     Side\n",
+           file );
 
     for( int ii = 0; ii < moduleCount; ii++ )
     {
@@ -515,20 +521,16 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
         LAYER_NUM layer = list[ii].m_Module->GetLayer();
 
+        fputs( line, file );
+
         wxASSERT( layer==F_Cu || layer==B_Cu );
 
         if( layer == F_Cu )
-        {
-            strcat( line, TO_UTF8( frontSideName ) );
-            strcat( line, "\n" );
-            fputs( line, file );
-        }
+            fputs( TO_UTF8( frontSideName ), file );
         else if( layer == B_Cu )
-        {
-            strcat( line, TO_UTF8( backSideName ) );
-            strcat( line, "\n" );
-            fputs( line, file );
-        }
+            fputs( TO_UTF8( backSideName ), file );
+
+        fputs( "\n", file );
     }
 
     // Write EOF
