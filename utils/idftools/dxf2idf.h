@@ -91,6 +91,8 @@ private:
     virtual void writeTextstyles(){}
     virtual void writeVports(){}
     virtual void writeDimstyles(){}
+    virtual void addAppId( const DRW_AppId& data ) {}
+    virtual void writeAppId() {}
 };
 
 #endif  // DXF2IDF_H

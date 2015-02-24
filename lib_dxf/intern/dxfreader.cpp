@@ -127,7 +127,7 @@ int dxfReader::getHandleString()
 bool dxfReaderBinary::readCode( int* code )
 {
     unsigned short* int16p;
-    char            buffer[2];
+    char buffer[2];
 
     filestr->read( buffer, 2 );
     int16p = (unsigned short*) buffer;
@@ -179,8 +179,8 @@ bool dxfReaderBinary::readInt()
 
 bool dxfReaderBinary::readInt32()
 {
-    unsigned int*   int32p;
-    char            buffer[4];
+    unsigned int* int32p;
+    char buffer[4];
 
     filestr->read( buffer, 4 );
     int32p  = (unsigned int*) buffer;
@@ -206,11 +206,11 @@ bool dxfReaderBinary::readInt64()
 bool dxfReaderBinary::readDouble()
 {
     double* result;
-    char    buffer[8];
+    char buffer[8];
 
     filestr->read( buffer, 8 );
-    result      = (double*) buffer;
-    doubleData  = *result;
+    result = (double*) buffer;
+    doubleData = *result;
     DBG( doubleData ); DBG( "\n" );
     return filestr->good();
 }

@@ -41,6 +41,58 @@ void DRW_TableEntry::parseCode( int code, dxfReader* reader )
         flags = reader->getInt32();
         break;
 
+    case 1000:
+    case 1001:
+    case 1002:
+    case 1003:
+    case 1004:
+    case 1005:
+        extData.push_back( new DRW_Variant( code, reader->getString() ) );
+        break;
+
+    case 1010:
+    case 1011:
+    case 1012:
+    case 1013:
+        curr = new DRW_Variant();
+        curr->addCoord();
+        curr->setCoordX( reader->getDouble() );
+        curr->code = code;
+        extData.push_back( curr );
+        break;
+
+    case 1020:
+    case 1021:
+    case 1022:
+    case 1023:
+
+        if( curr )
+            curr->setCoordY( reader->getDouble() );
+
+        break;
+
+    case 1030:
+    case 1031:
+    case 1032:
+    case 1033:
+
+        if( curr )
+            curr->setCoordZ( reader->getDouble() );
+
+        curr = NULL;
+        break;
+
+    case 1040:
+    case 1041:
+    case 1042:
+        extData.push_back( new DRW_Variant( code, reader->getDouble() ) );
+        break;
+
+    case 1070:
+    case 1071:
+        extData.push_back( new DRW_Variant( code, reader->getInt32() ) );
+        break;
+
     default:
         break;
     }
@@ -747,7 +799,7 @@ void DRW_Header::parseCode( int code, dxfReader* reader )
         break;
 
     case 10:
-        curr->addCoord( new DRW_Coord() );
+        curr->addCoord();
         curr->setCoordX( reader->getDouble() );
         curr->code = code;
         break;
@@ -815,8 +867,8 @@ void DRW_Header::parseCode( int code, dxfReader* reader )
 void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
 {
 /*RLZ: TODO complete all vars to AC1024*/
-    double      varDouble;
-    int         varInt;
+    double varDouble;
+    int varInt;
     std::string varStr;
     DRW_Coord   varCoord;
 
@@ -970,6 +1022,8 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
             writer->writeUtf8String( 7, varStr );
 
 
+
+
     else
         writer->writeString( 7, "STANDARD" );
 
@@ -980,6 +1034,8 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
             writer->writeUtf8Caps( 8, varStr );
         else
             writer->writeUtf8String( 8, varStr );
+
+
 
 
     else
@@ -1080,6 +1136,8 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
             writer->writeUtf8Caps( 2, varStr );
         else
             writer->writeUtf8String( 2, varStr );
+
+
 
 
     else
@@ -1235,13 +1293,49 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
 #ifdef DRW_DBG
     std::map<std::string, DRW_Variant*>::const_iterator it;
 
-    for( it = vars.begin(); it != vars.end(); it++ )
+    for( it = vars.begin(); it != vars.end(); ++it )
     {
 // QString key = QString::fromStdString((*it).first);
         std::cerr << (*it).first << std::endl;
     }
 
 #endif
+}
+
+
+void DRW_Header::addDouble( std::string key, double value, int code )
+{
+    curr = new DRW_Variant();
+    curr->addDouble( value );
+    curr->code  = code;
+    vars[key]   = curr;
+}
+
+
+void DRW_Header::addInt( std::string key, int value, int code )
+{
+    curr = new DRW_Variant();
+    curr->addInt( value );
+    curr->code  = code;
+    vars[key]   = curr;
+}
+
+
+void DRW_Header::addStr( std::string key, std::string value, int code )
+{
+    curr = new DRW_Variant();
+    curr->addString( value );
+    curr->code  = code;
+    vars[key]   = curr;
+}
+
+
+void DRW_Header::addCoord( std::string key, DRW_Coord value, int code )
+{
+    curr = new DRW_Variant();
+    curr->addCoord( value );
+    curr->code  = code;
+    vars[key]   = curr;
 }
 
 
@@ -1258,8 +1352,8 @@ bool DRW_Header::getDouble( std::string key, double* varDouble )
 
         if( var->type == DRW_Variant::DOUBLE )
         {
-            *varDouble  = var->content.d;
-            result      = true;
+            *varDouble = var->content.d;
+            result = true;
         }
 
         vars.erase( it );
@@ -1330,8 +1424,8 @@ bool DRW_Header::getCoord( std::string key, DRW_Coord* varCoord )
 
         if( var->type == DRW_Variant::COORD )
         {
-            *varCoord   = *var->content.v;
-            result      = true;
+            *varCoord = *var->content.v;
+            result = true;
         }
 
         vars.erase( it );
