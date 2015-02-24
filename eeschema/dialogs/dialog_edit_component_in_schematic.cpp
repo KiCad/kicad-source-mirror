@@ -187,8 +187,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     m_staticTextUnitPosX->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
     m_staticTextUnitPosY->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
-    copySelectedFieldToPanel();
-
     wxToolTip::Enable( true );
 
     GetSizer()->SetSizeHints( this );
@@ -757,6 +755,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 
     // resume editing at the last row edited, last time dialog was up.
     setSelectedFieldNdx( s_SelectedRow );
+
+    copySelectedFieldToPanel();
 }
 
 
