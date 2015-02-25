@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +29,6 @@
 
 class DIALOG_SCRIPTING: public DIALOG_SCRIPTING_BASE
 {
-private:
-    wxDialog * m_Parent;
-
 public:
     DIALOG_SCRIPTING( wxWindow * parent );
 

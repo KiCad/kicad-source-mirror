@@ -63,6 +63,8 @@ PART_LIB::PART_LIB( int aType, const wxString& aFileName ) :
     timeStamp = 0;
     isCache = false;
     timeStamp = wxDateTime::Now();
+    versionMajor = 0;       // Will be updated after reading the lib file
+    versionMinor = 0;       // Will be updated after reading the lib file
 
     fileName = aFileName;
 
