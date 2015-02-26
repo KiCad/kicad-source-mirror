@@ -46,6 +46,8 @@ dxfRW::dxfRW( const char* name )
     applyExt    = false;
     elParts     = 128; // parts munber when convert ellipse to polyline
 
+    version = DRW::UNKNOWNV;
+
     binary = false;
     iface = NULL;
     entCount = 0;

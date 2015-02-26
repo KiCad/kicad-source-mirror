@@ -119,6 +119,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_NO_TOOL_SELECTED:
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        break;
 
     case ID_SELECT_PAGE_NUMBER:
         m_canvas->Refresh();

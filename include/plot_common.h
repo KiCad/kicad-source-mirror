@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -671,6 +671,8 @@ class PDF_PLOTTER : public PSLIKE_PLOTTER
 public:
     PDF_PLOTTER() : pageStreamHandle( 0 ), workFile( NULL )
     {
+        // Avoid non initialized variables:
+        pageStreamHandle = streamLengthHandle = fontResDictHandle = 0;
     }
 
     virtual PlotFormat GetPlotterType() const
@@ -986,6 +988,8 @@ class DXF_PLOTTER : public PLOTTER
 public:
     DXF_PLOTTER() : textAsLines( false )
     {
+        textAsLines = true;
+        m_currentColor = BLACK;
     }
 
     virtual PlotFormat GetPlotterType() const

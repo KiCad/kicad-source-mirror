@@ -102,7 +102,7 @@ private:
     * @param aOldsheetpath the stored old sheet path for the current sheet before the plot started
     * @param aMsg the message which is print to the message box
     */
-    void    restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH  aOldsheetpath,
+    void    restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath,
                                 const wxString& aMsg );
 
     // DXF

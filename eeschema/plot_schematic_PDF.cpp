@@ -139,7 +139,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
 
 void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
-                            SCH_SHEET_PATH aOldsheetpath, const wxString& aMsg )
+                            SCH_SHEET_PATH& aOldsheetpath, const wxString& aMsg )
 {
     aPlotter->EndPlot();
     delete aPlotter;

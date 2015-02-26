@@ -163,6 +163,7 @@ public:
     DRW_Variant()
     {
         type = INVALID;
+        code = 0;
     }
 
     DRW_Variant( const DRW_Variant& d )
