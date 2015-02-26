@@ -44,6 +44,7 @@
 #include "pns_router.h"
 #include "pns_shove.h"
 #include "pns_dragger.h"
+#include "pns_topology.h"
 #include "pns_diff_pair_placer.h"
 #include "pns_meander_placer.h"
 #include "pns_meander_skew_placer.h"
@@ -63,20 +64,33 @@
 static PNS_ROUTER* theRouter;
 
 
-PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( BOARD* aBoard )
+PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER *aRouter ) :
+    m_router( aRouter )
 {
-    m_clearanceCache.resize( aBoard->GetNetCount() );
+    BOARD *brd = m_router->GetBoard();
+    PNS_NODE *world = m_router->GetWorld();
 
-    for( unsigned int i = 0; i < aBoard->GetNetCount(); i++ )
+    PNS_TOPOLOGY topo( world );
+    m_clearanceCache.resize( brd->GetNetCount() );
+    
+    for( unsigned int i = 0; i < brd->GetNetCount(); i++ )
     {
-        NETINFO_ITEM* ni = aBoard->FindNet( i );
+        NETINFO_ITEM* ni = brd->FindNet( i );
         if( ni == NULL )
             continue;
 
+        CLEARANCE_ENT ent;
+        ent.coupledNet = topo.DpCoupledNet( i );
+
+        printf("net %d coupled %d\n", i, ent.coupledNet);
+
         wxString netClassName = ni->GetClassName();
-        NETCLASSPTR nc = aBoard->GetDesignSettings().m_NetClasses.Find( netClassName );
+        NETCLASSPTR nc = brd->GetDesignSettings().m_NetClasses.Find( netClassName );
+        
         int clearance = nc->GetClearance();
-        m_clearanceCache[i] = clearance;
+        ent.clearance = clearance;
+        m_clearanceCache[i] = ent;
+        
         TRACE( 1, "Add net %d netclass %s clearance %d", i % netClassName.mb_str() %
             clearance );
     }
@@ -104,11 +118,21 @@ int PNS_PCBNEW_CLEARANCE_FUNC::localPadClearance( const PNS_ITEM* aItem ) const
 int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* aB )
 {
     int net_a = aA->Net();
-    int cl_a = ( net_a >= 0 ? m_clearanceCache[net_a] : m_defaultClearance );
+    int cl_a = ( net_a >= 0 ? m_clearanceCache[net_a].clearance : m_defaultClearance );
     int net_b = aB->Net();
-    int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b] : m_defaultClearance );
+    int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b].clearance : m_defaultClearance );
 
-    if( m_overrideEnabled && aA->OfKind( PNS_ITEM::SEGMENT ) && aB->OfKind( PNS_ITEM::SEGMENT ) )
+    bool segsOnly = aA->OfKind( PNS_ITEM::SEGMENT ) && aB->OfKind( PNS_ITEM::SEGMENT );
+
+    #if 0
+    if( segsOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
+    {
+        cl_a = cl_b = m_router->Sizes().DiffPairGap() - 3 * PNS_HULL_MARGIN;
+        printf("Cl %d\n", cl_a);
+    }
+    #endif
+    
+    if( m_overrideEnabled && segsOnly )
     {
         if( net_a == m_overrideNetA && net_b == m_overrideNetB )
             return m_overrideClearance;
@@ -248,9 +272,6 @@ PNS_ITEM* PNS_ROUTER::syncTrack( TRACK* aTrack )
     PNS_SEGMENT* s =
         new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
 
-    if( aTrack->GetFlags( ) & DP_COUPLED )
-        s->Mark ( MK_DP_COUPLED );
-
     s->SetWidth( aTrack->GetWidth() );
     s->SetLayers( PNS_LAYERSET( aTrack->GetLayer() ) );
     s->SetParent( aTrack );
@@ -293,12 +314,7 @@ void PNS_ROUTER::SyncWorld()
 
     ClearWorld();
 
-    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
-
-    m_clearanceFunc = new PNS_PCBNEW_CLEARANCE_FUNC( m_board );
     m_world = new PNS_NODE();
-    m_world->SetClearanceFunctor( m_clearanceFunc );
-    m_world->SetMaxClearance( 4 * worstClearance );
 
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
@@ -324,7 +340,13 @@ void PNS_ROUTER::SyncWorld()
         if( item )
             m_world->Add( item );
     }
+
+    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
+    m_clearanceFunc = new PNS_PCBNEW_CLEARANCE_FUNC( this );
+    m_world->SetClearanceFunctor( m_clearanceFunc );
+    m_world->SetMaxClearance( 4 * worstClearance );
 }
+    
 
 
 PNS_ROUTER::PNS_ROUTER()

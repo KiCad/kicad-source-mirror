@@ -42,7 +42,7 @@ class PNS_SOLID;
 class PNS_VIA;
 class PNS_RATSNEST;
 class PNS_INDEX;
-
+class PNS_ROUTER;
 
 /**
  * Class PNS_CLEARANCE_FUNC
@@ -60,15 +60,22 @@ public:
 class PNS_PCBNEW_CLEARANCE_FUNC : public PNS_CLEARANCE_FUNC
 {
 public:
-    PNS_PCBNEW_CLEARANCE_FUNC( BOARD *aBoard );
+    PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER *aRouter );
     virtual ~PNS_PCBNEW_CLEARANCE_FUNC();
 
     virtual int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB );
     virtual void OverrideClearance (bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0);
 
 private:
+    struct CLEARANCE_ENT {
+        int coupledNet;
+        int clearance;
+    };
+
+    PNS_ROUTER *m_router;
+
     int localPadClearance( const PNS_ITEM* aItem ) const;
-    std::vector<int> m_clearanceCache;
+    std::vector<CLEARANCE_ENT> m_clearanceCache;
     int m_defaultClearance;
     bool m_overrideEnabled;
     int m_overrideNetA, m_overrideNetB;

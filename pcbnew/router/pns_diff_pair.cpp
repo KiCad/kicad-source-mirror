@@ -190,15 +190,6 @@ bool PNS_DIFF_PAIR::BuildInitial( PNS_DP_GATEWAY& aEntry, PNS_DP_GATEWAY &aTarge
     SHAPE_LINE_CHAIN p = DIRECTION_45().BuildInitialTrace ( aEntry.AnchorP(), aTarget.AnchorP(), aPrefDiagonal );
     SHAPE_LINE_CHAIN n = DIRECTION_45().BuildInitialTrace ( aEntry.AnchorN(), aTarget.AnchorN(), aPrefDiagonal );
 
-    if( !checkGap ( p, n, m_gapConstraint ) )
-        return false;
-
-    if( p.SelfIntersecting() || n.SelfIntersecting() )
-        return false;
-
-    if( p.Intersects( n ) )
-        return false;
-
     int mask = aEntry.AllowedAngles() | DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE;
 
     SHAPE_LINE_CHAIN sum_n, sum_p;
@@ -241,6 +232,15 @@ bool PNS_DIFF_PAIR::BuildInitial( PNS_DP_GATEWAY& aEntry, PNS_DP_GATEWAY &aTarge
     m_p = sum_p;
     m_n = sum_n;
 
+    if( !checkGap ( p, n, m_gapConstraint ) )
+        return false;
+
+    if( p.SelfIntersecting() || n.SelfIntersecting() )
+        return false;
+
+    if( p.Intersects( n ) )
+        return false;
+    
     return true;
 }
 

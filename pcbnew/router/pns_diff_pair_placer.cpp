@@ -149,7 +149,7 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurren
     PNS_WALKAROUND walkaround( aNode, Router() );
     PNS_WALKAROUND::WALKAROUND_STATUS wf1;
 
-    Router()->GetClearanceFunc()->OverrideClearance( true, aCurrent->NetP(), aCurrent->NetN(), aCurrent->Gap() - 20 );
+    Router()->GetClearanceFunc()->OverrideClearance( true, aCurrent->NetP(), aCurrent->NetN(), aCurrent->Gap() );
 
     walkaround.SetSolidsOnly( aSolidsOnly );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
@@ -167,23 +167,29 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurren
 
     int mask = aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY;
 
-    //Router()->DisplayDebugLine( aCurrent->CP(), 4, 10000 );
-    //Router()->DisplayDebugLine( aCurrent->CN(), 5, 10000 );
+    Router()->DisplayDebugLine( aCurrent->CP(), 4, 10000 );
+    Router()->DisplayDebugLine( aCurrent->CN(), 5, 10000 );
 
+    printf("WStart\n");
     do
     {
         PNS_LINE preWalk = ( currentIsP ? cur.PLine() : cur.NLine() );
         PNS_LINE preShove = ( currentIsP ? cur.NLine() : cur.PLine() );
         PNS_LINE postWalk;
+        printf("iter %d\n", iter);
 
         if( !aNode->CheckColliding ( &preWalk, mask ) )
         {
+            printf("PreWalkIsColl\n");
             currentIsP = !currentIsP;
 
             if( !aNode->CheckColliding( &preShove, mask ) )
                 break;
             else
+            {
+                printf("PreShoveIsColl\n");
                 continue;
+            }
         }
 
         wf1 = walkaround.Route( preWalk, postWalk, false );
@@ -193,7 +199,7 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurren
 
         PNS_LINE postShove( preShove );
 
-        shove.ForceClearance( true, cur.Gap() - 12 );
+        shove.ForceClearance( true, cur.Gap() );
 
         PNS_SHOVE::SHOVE_STATUS sh1;
 
@@ -609,9 +615,6 @@ void PNS_DIFF_PAIR_PLACER::initPlacement( bool aSplitSeg )
     PNS_NODE* rootNode = world->Branch();
 
     setWorld( rootNode );
-
-    TRACE( 1, "world %p, intitial-direction %s layer %d\n",
-            m_world % m_direction.Format().c_str() % aLayer );
 
     m_lastNode = NULL;
     m_currentNode = rootNode;
