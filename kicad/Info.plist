@@ -30,9 +30,5 @@
     <key>LSRequiresCarbon</key>	                    <true/>
     <key>NSHumanReadableCopyright</key>	            <string></string>
     <key>NSHighResolutionCapable</key>              <string>True</string>
-    <key>LSEnvironment</key>
-        <dict>
-            <key>KIGITHUB</key>     <string>https://github.com/kicad</string>
-        </dict>
 </dict>
 </plist>

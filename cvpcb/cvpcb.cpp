@@ -181,11 +181,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     start_common( aCtlBits );
 
-    // Set 3D shape path (environment variable KISYS3DMOD (if not defined or valid)
-    // Currently, called here, but could be moved ( OpenProjectFiles() ? )
-    // if KISYS3DMOD is defined in a project config file
-    Set3DShapesDefaultPath( KISYS3DMOD, aProgram );
-
     /*  Now that there are no *.mod files in the standard library, this function
         has no utility.  User should simply set the variable manually.
         Looking for *.mod files which do not exist is fruitless.

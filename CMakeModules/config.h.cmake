@@ -64,7 +64,7 @@
 /// The install prefix used for KiCad's libraries.
 /// These paths are only intended to be reasonable default values that work if
 /// the user installs KiCad in the default path for a given platform.
-#if defined( APPLE )
+#if defined( __APPLE__ )
 #define KICAD_DATA_PATH                 "/Library/Application Support/kicad"
 #else
 #define KICAD_DATA_PATH                 "@CMAKE_INSTALL_PREFIX@/@KICAD_DATA@"
