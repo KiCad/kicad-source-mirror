@@ -662,12 +662,12 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         if( !pad->IsSelected() && !force_all )
             continue;
 
-        wxPoint pos = pad->GetPosition();
+        wxPoint pos = pad->GetPos0();
         ROTATE( pos );
-        pad->SetPosition( pos );
-
-        pad->SetPos0( pad->GetPosition() );
+        pad->SetPos0( pos );
         pad->SetOrientation( pad->GetOrientation() + 900 );
+
+        pad->SetDrawCoord();
     }
 
     for( EDA_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
@@ -681,15 +681,15 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         {
             EDGE_MODULE* em = (EDGE_MODULE*) item;
 
-            wxPoint tmp = em->GetStart();
+            wxPoint tmp = em->GetStart0();
             ROTATE( tmp );
-            em->SetStart( tmp );
             em->SetStart0( tmp );
 
-            tmp = em->GetEnd();
+            tmp = em->GetEnd0();
             ROTATE( tmp );
-            em->SetEnd( tmp );
             em->SetEnd0( tmp );
+
+            em->SetDrawCoord();
         }
         break;
 

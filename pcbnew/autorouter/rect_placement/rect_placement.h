@@ -26,7 +26,7 @@ public:
     {
         int x, y;
 
-        TPos() { }
+        TPos() : x( 0 ), y( 0 ) { }
         TPos( int _x, int _y ) : x( _x ), y( _y ) { }
 
         bool operator ==( const TPos& p ) const { return x == p.x && y == p.y; }
@@ -36,7 +36,7 @@ public:
     {
         int w, h;
 
-        TRect() { }
+        TRect() : w( 0 ), h( 0 ) { }
         TRect( int _x, int _y, int _w, int _h ) : TPos( _x, _y ), w( _w > 0 ? _w : 0 ), h(
                 _h > 0 ? _h : 0 ) { }
 

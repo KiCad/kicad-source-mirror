@@ -233,7 +233,8 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, LSET aLayerMask, TRACK_PTRS*
          *  if > 1 segment:
          *      end of track (more than 2 segment connected at this location)
          */
-        segment = m_Track; candidate = NULL;
+        segment = m_Track;
+        candidate = NULL;
         NbSegm  = 0;
 
         while( ( segment = ::GetTrack( segment, NULL, aPosition, aLayerMask ) ) != NULL )
@@ -279,8 +280,6 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, LSET aLayerMask, TRACK_PTRS*
             {
                 aPosition = candidate->GetStart();
             }
-
-            segment = m_Track; /* restart list of tracks to analyze */
 
             /* flag this item an push it in list of selected items */
             aList->push_back( candidate );

@@ -271,9 +271,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     // only the intercept will change, segment slopes does not change
     // because we are moving parallel with is initial state
     if( !s_MovingSegmentVertical )
-    {
         s_MovingSegment_Yorg = ty1 - ( s_MovingSegmentSlope * tx1 );
-    }
 
     if( ( !s_EndPointVertical ) && ( !s_MovingSegmentVertical ) )
     {
@@ -283,43 +281,29 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     else
     {
         if( !s_EndPointVertical )
-        {
             xi2 = tx2;
-        }
         else
         {
             //P1=P2
             if( !s_EndPointHorizontal )
-            {
                 xi2 = tx2 - dx;
-            }
             else
-            {
                 update = false;
-            }
         }
     }
 
     if( !s_MovingSegmentVertical )
-    {
-        yi2 = s_MovingSegmentSlope * ( xi2 ) + s_MovingSegment_Yorg;
-    }
+        yi2 = ( s_MovingSegmentSlope * xi2 ) + s_MovingSegment_Yorg;
     else
     {
         if( !s_EndPointVertical )
-        {
-            yi2 = s_EndSegmentSlope * ( xi2 ) + s_EndSegment_Yorg;
-        }
+            yi2 = ( s_EndSegmentSlope * xi2 ) + s_EndSegment_Yorg;
         else
         {
             if( !s_EndPointHorizontal )
-            {
                 update = false;
-            }
-            else
-            {
-                yi2 = s_MovingSegmentSlope * ( xi2 ) + s_MovingSegment_Yorg;
-            }
+             else
+                yi2 = ( s_MovingSegmentSlope * xi2 ) + s_MovingSegment_Yorg;
         }
     }
 
@@ -331,46 +315,32 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     else
     {
         if( !s_StartPointVertical )
-        {
             xi1 = tx1;
-        }
         else
         {
             //P1=P2
             if( !s_StartPointHorizontal )
-            {
                 xi1 = tx1 - dx;
-            }
             else
             {
                 if( !s_StartPointHorizontal )
-                {
                     update = false;
-                }
             }
         }
     }
 
     if( !s_MovingSegmentVertical )
-    {
-        yi1 = s_MovingSegmentSlope * ( xi1 ) + s_MovingSegment_Yorg;
-    }
+        yi1 = ( s_MovingSegmentSlope * xi1 ) + s_MovingSegment_Yorg;
     else
     {
         if( !s_StartPointVertical )
-        {
-            yi1 = s_StartSegmentSlope * ( xi1 ) + s_StartSegment_Yorg;
-        }
+            yi1 = ( s_StartSegmentSlope * xi1 ) + s_StartSegment_Yorg;
         else
         {
             if( !s_StartPointHorizontal )
-            {
                 update = false;
-            }
             else
-            {
-                yi2 = s_MovingSegmentSlope * ( xi1 ) + s_MovingSegment_Yorg;
-            }
+                yi2 = ( s_MovingSegmentSlope * xi1 ) + s_MovingSegment_Yorg;
         }
     }
 
@@ -703,7 +673,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     if( !track )
         return;
 
-    // TODO: Use clenup functions to merge collinear segments if track
+    // TODO: Use cleanup functions to merge collinear segments if track
     // is connected to a collinear segment.
 
     s_StartSegmentPresent = s_EndSegmentPresent = true;
