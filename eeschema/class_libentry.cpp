@@ -1697,7 +1697,7 @@ LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
         bool rename = aAlias->IsRoot();
 
         wxLogTrace( traceSchLibMem,
-                    wxT( "%s: part:'%s', alias:'%s', alias count %llu, reference count %d." ),
+                    wxT( "%s: part:'%s', alias:'%s', alias count %llu, reference count %ld." ),
                     GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
                     GetChars( m_name ),
                     GetChars( aAlias->GetName() ),

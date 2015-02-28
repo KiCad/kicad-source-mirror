@@ -414,7 +414,7 @@ wxString SCH_COMPONENT::GetPath( const SCH_SHEET_PATH* sheet ) const
 
     wxString str;
 
-    str.Printf( wxT( "%8.8lX" ), m_TimeStamp );
+    str.Printf( wxT( "%8.8lX" ), (long unsigned) m_TimeStamp );
     return sheet->Path() + str;
 }
 
@@ -547,8 +547,8 @@ void SCH_COMPONENT::SetTimeStamp( time_t aNewTimeStamp )
 {
     wxString string_timestamp, string_oldtimestamp;
 
-    string_timestamp.Printf( wxT( "%08lX" ), aNewTimeStamp );
-    string_oldtimestamp.Printf( wxT( "%08lX" ), m_TimeStamp );
+    string_timestamp.Printf( wxT( "%08lX" ), (long unsigned) aNewTimeStamp );
+    string_oldtimestamp.Printf( wxT( "%08lX" ), (long unsigned) m_TimeStamp );
     EDA_ITEM::SetTimeStamp( aNewTimeStamp );
 
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
