@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -327,23 +327,26 @@ int SCH_COMPONENT::GetUnitCount() const
 }
 
 
-void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                          GR_DRAWMODE DrawMode, EDA_COLOR_T Color, bool DrawPinText )
+void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                          GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
+                          bool aDrawPinText )
 {
     if( PART_SPTR part = m_part.lock() )
     {
-        part->Draw( panel, DC, m_Pos + offset, m_unit, m_convert, DrawMode, Color, m_transform, DrawPinText, false );
+        part->Draw( aPanel, aDC, m_Pos + aOffset, m_unit, m_convert, aDrawMode, aColor,
+                    m_transform, aDrawPinText, false );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
-        dummy()->Draw( panel, DC, m_Pos + offset, 0, 0, DrawMode, Color, m_transform, DrawPinText, false );
+        dummy()->Draw( aPanel, aDC, m_Pos + aOffset, 0, 0, aDrawMode, aColor,
+                       m_transform, aDrawPinText, false );
     }
 
     SCH_FIELD* field = GetField( REFERENCE );
 
     if( field->IsVisible() && !field->IsMoving() )
     {
-        field->Draw( panel, DC, offset, DrawMode );
+        field->Draw( aPanel, aDC, aOffset, aDrawMode );
     }
 
     for( int ii = VALUE; ii < GetFieldCount(); ii++ )
@@ -353,26 +356,26 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
         if( field->IsMoving() )
             continue;
 
-        field->Draw( panel, DC, offset, DrawMode );
+        field->Draw( aPanel, aDC, aOffset, aDrawMode );
     }
 
 #if 0
-    // Draw the component bounding box
+    // Only for testing purposes, draw the component bounding box
     {
         EDA_RECT boundingBox = GetBoundingBox();
 
-        GRRect( panel->GetClipBox(), DC, boundingBox, 0, BROWN );
+        GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
 #if 1
         if( GetField( REFERENCE )->IsVisible() )
         {
             boundingBox = GetField( REFERENCE )->GetBoundingBox();
-            GRRect( panel->GetClipBox(), DC, boundingBox, 0, BROWN );
+            GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
         }
 
         if( GetField( VALUE )->IsVisible() )
         {
             boundingBox = GetField( VALUE )->GetBoundingBox();
-            GRRect( panel->GetClipBox(), DC, boundingBox, 0, BROWN );
+            GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
         }
 #endif
     }

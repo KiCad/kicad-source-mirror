@@ -3,11 +3,12 @@
 #
 """
     @package
-    Generate a csv list file.
-    Components are sorted by ref and grouped by value
+    Generate a BOM list file.
+    Components are sorted by ref
     One component per line
     Fields are (if exist)
     Ref, Quantity, value, Part, footprint, 'Description', 'Vendor'
+    Fields are separated by tabs
 """
 
 from __future__ import print_function
@@ -38,7 +39,8 @@ out = csv.writer(f, lineterminator='\n', delimiter='\t', quoting=csv.QUOTE_NONE)
 def writerow( acsvwriter, columns ):
     utf8row = []
     for col in columns:
-        utf8row.append( str(col).encode('utf8') )
+        txt=str(col);
+        utf8row.append( txt.encode('utf-8') )
     acsvwriter.writerow( utf8row )
 
 components = net.getInterestingComponents()

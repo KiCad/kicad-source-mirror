@@ -123,7 +123,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 
     // Prepare display to move the new item
     textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-    MoveItem( (SCH_ITEM*) textItem, aDC );
+    PrepareMoveItem( (SCH_ITEM*) textItem, aDC );
 
     return textItem;
 }

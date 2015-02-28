@@ -1,8 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,6 +134,16 @@ public:
     {
         return wxT( "SCH_COMPONENT" );
     }
+
+    /**
+     * Virtual function IsMovableFromAnchorPoint
+     * Return true for items which are moved with the anchor point at mouse cursor
+     *  and false for items moved with no reference to anchor
+     * Usually return true for small items (labels, junctions) and false for
+     * items which can be large (hierarchical sheets, compoments)
+     * @return false for a componant
+     */
+    bool IsMovableFromAnchorPoint() { return false; }
 
     void SetPartName( const wxString& aName, PART_LIBS* aLibs=NULL );
     const wxString& GetPartName() const        { return m_part_name; }
@@ -287,21 +299,30 @@ public:
      */
     LIB_PIN* GetPin( const wxString& number );
 
-    void Draw( EDA_DRAW_PANEL* panel,
-               wxDC*           DC,
-               const wxPoint&  offset,
-               GR_DRAWMODE     draw_mode,
-               EDA_COLOR_T     Color = UNSPECIFIED_COLOR )
+    /**
+     * Virtual function, from the base class SCH_ITEM::Draw
+     */
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR )
     {
-        Draw( panel, DC, offset, draw_mode, Color, true );
+        Draw( aPanel, aDC, aOffset, aDrawMode, aColor, true );
     }
 
-    void Draw( EDA_DRAW_PANEL* panel,
-               wxDC*           DC,
-               const wxPoint&  offset,
-               GR_DRAWMODE     draw_mode,
-               EDA_COLOR_T     Color,
-               bool            DrawPinText );
+    /**
+     * Function Draw, specific to components.
+     * Draw a component, with or without pin texts.
+     * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
+     * @param aDC Device Context (can be null)
+     * @param aOffset drawing Offset (usually wxPoint(0,0),
+     *  but can be different when moving an object)
+     * @param aDrawMode GR_OR, GR_XOR, ...
+     * @param aColor UNSPECIFIED_COLOR to use the normal body item color, or use this color if >= 0
+     * @param aDrawPinText = true to draw pin texts, false to draw only the pin shape
+     *  usually false to draw a component when moving it, and true otherwise.
+     */
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
+               bool aDrawPinText );
 
     void SwapData( SCH_ITEM* aItem );
 

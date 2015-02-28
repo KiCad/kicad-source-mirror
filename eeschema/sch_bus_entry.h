@@ -51,6 +51,14 @@ public:
 
     ~SCH_BUS_ENTRY_BASE() { }
 
+    /**
+     * Virtual function IsMovableFromAnchorPoint
+     * Return true for items which are moved with the anchor point at mouse cursor
+     *  and false for items moved with no reference to anchor
+     * @return false for a bus entry
+     */
+    bool IsMovableFromAnchorPoint() { return false; }
+
     wxPoint m_End() const;
 
     /**

@@ -1,7 +1,7 @@
 bom_?.py are some python scripts which read a generic xml netlist from eeschema,
 and create a bom.
 
-All examples use ky_netlist_reader.py, which is a python utility to read
+All examples use kicad_netlist_reader.py, which is a python utility to read
 and parse this generic xml netlist and create the corresponding data
 used to build the bom.
 

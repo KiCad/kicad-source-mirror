@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,11 +131,8 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset() const;
 
-    virtual void Draw( EDA_DRAW_PANEL* panel,
-                       wxDC*           DC,
-                       const wxPoint&  offset,
-                       GR_DRAWMODE     draw_mode,
-                       EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
+    virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
+                       GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR );
 
     /**
      * Function CreateGraphicShape
@@ -230,11 +227,8 @@ public:
 
     ~SCH_LABEL() { }
 
-    void Draw( EDA_DRAW_PANEL* panel,
-               wxDC*           DC,
-               const wxPoint&  offset,
-               GR_DRAWMODE     draw_mode,
-               EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
+               GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR );
 
     wxString GetClass() const
     {
@@ -279,11 +273,8 @@ public:
 
     ~SCH_GLOBALLABEL() { }
 
-    void Draw( EDA_DRAW_PANEL* panel,
-               wxDC*           DC,
-               const wxPoint&  offset,
-               GR_DRAWMODE     draw_mode,
-               EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
+               GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR );
 
     wxString GetClass() const
     {
@@ -332,11 +323,8 @@ public:
 
     ~SCH_HIERLABEL() { }
 
-    void Draw( EDA_DRAW_PANEL* panel,
-               wxDC*           DC,
-               const wxPoint&  offset,
-               GR_DRAWMODE     draw_mode,
-               EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
+               GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR );
 
     wxString GetClass() const
     {

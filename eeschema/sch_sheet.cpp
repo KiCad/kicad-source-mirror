@@ -887,6 +887,14 @@ void SCH_SHEET::MirrorY( int aYaxis_position )
     }
 }
 
+void SCH_SHEET::SetPosition( const wxPoint& aPosition )
+{
+    // Remember the sheet and all pin sheet positions must be
+    // modified. So use Move function to do that.
+    Move( aPosition - m_pos );
+}
+
+
 
 void SCH_SHEET::Resize( const wxSize& aSize )
 {

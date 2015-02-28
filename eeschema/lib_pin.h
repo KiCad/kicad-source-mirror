@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,8 +99,21 @@ class LIB_PIN : public LIB_ITEM
                              ///< "G6", or "12".  It is stored as "12\0\0" and does not
                              ///< depend on endian type.
     int      m_numTextSize;
-    int      m_nameTextSize; /* Pin num and Pin name sizes */
+    int      m_nameTextSize; ///< Pin num and Pin name sizes
 
+    /**
+     * Draw a pin, with or without the pin texts
+     *
+     * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
+     * @param aDC Device Context (can be null)
+     * @param aOffset Offset to draw
+     * @param aColor -1 to use the normal body item color, or use this color if >= 0
+     * @param aDrawMode GR_OR, GR_XOR, ...
+     * @param aData = used here as bool: if not null, draw pin texts
+     *   (i.e = true to draw pin texts, false to draw only the pin shape, which
+     *    is useful to draw moving component in fast mode)
+     * @param aTransform Transform Matrix (rotation, mirror ..)
+     */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform );

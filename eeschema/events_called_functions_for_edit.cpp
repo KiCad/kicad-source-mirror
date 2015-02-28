@@ -56,7 +56,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         newitem->SetFlags( IS_NEW );
         // Draw the new part, MoveItem() expects it to be already on screen.
         newitem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
-        MoveItem( newitem, &dc );
+        PrepareMoveItem( newitem, &dc );
     }
     break;
 
@@ -69,7 +69,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         newitem->SetFlags( IS_NEW );
         // Draw the new item, MoveItem() expects it to be already on screen.
         newitem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
-        MoveItem( newitem, &dc );
+        PrepareMoveItem( newitem, &dc );
     }
         break;
 

@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -834,11 +835,12 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
         aColor = GetInvisibleItemColor();
     }
 
-    LIB_PART*      Entry = GetParent();
-    bool           DrawPinText = true;
+    // aData is used here as bool: if not null, draw pin texts
+    //(i.e = true to draw pin texts, false to draw only the pin shape, which
+    // is useful to draw moving component in fast mode)
 
-    if( ( aData != NULL ) && ( (bool*) aData == false ) )
-        DrawPinText = false;
+    LIB_PART* Entry = GetParent();
+    bool      drawPinText = aData ? true : false;
 
     /* Calculate pin orient taking in account the component orientation. */
     int     orient = PinDrawOrient( aTransform );
@@ -849,7 +851,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
     /* Drawing from the pin and the special symbol combination */
     DrawPinSymbol( aPanel, aDC, pos1, orient, aDrawMode, aColor );
 
-    if( DrawPinText )
+    if( drawPinText )
     {
         DrawPinTexts( aPanel, aDC, pos1, orient, Entry->GetPinNameOffset(),
                       Entry->ShowPinNumbers(), Entry->ShowPinNames(),

@@ -251,9 +251,11 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
 
 /* Move selected sheet with the cursor.
- * Callback function use by m_mouseCaptureCallback.
+ * Callback function used by m_mouseCaptureCallback.
+ * Note also now this function is aclled only when resizing the sheet
+ * But the (very small code) relative to sheet move is still present here
  */
-static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                bool aErase )
 {
     wxPoint        moveVector;
@@ -265,36 +267,28 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     wxPoint pos = sheet->GetPosition();
 
-    if( sheet->IsResized() )
+    int width  = aPanel->GetParent()->GetCrossHairPosition().x - sheet->GetPosition().x;
+    int height = aPanel->GetParent()->GetCrossHairPosition().y - sheet->GetPosition().y;
+
+    // If the sheet doesn't have any pins, clamp the minimum size to the default values.
+    width = ( width < MIN_SHEET_WIDTH ) ? MIN_SHEET_WIDTH : width;
+    height = ( height < MIN_SHEET_HEIGHT ) ? MIN_SHEET_HEIGHT : height;
+
+    if( sheet->HasPins() )
     {
-        int width  = aPanel->GetParent()->GetCrossHairPosition().x - sheet->GetPosition().x;
-        int height = aPanel->GetParent()->GetCrossHairPosition().y - sheet->GetPosition().y;
+        int gridSizeX = KiROUND( screen->GetGridSize().x );
+        int gridSizeY = KiROUND( screen->GetGridSize().y );
 
-        // If the sheet doesn't have any pins, clamp the minimum size to the default values.
-        width = ( width < MIN_SHEET_WIDTH ) ? MIN_SHEET_WIDTH : width;
-        height = ( height < MIN_SHEET_HEIGHT ) ? MIN_SHEET_HEIGHT : height;
-
-        if( sheet->HasPins() )
-        {
-            int gridSizeX = KiROUND( screen->GetGridSize().x );
-            int gridSizeY = KiROUND( screen->GetGridSize().y );
-
-            // If the sheet has pins, use the pin positions to clamp the minimum height.
-            height = ( height < sheet->GetMinHeight() + gridSizeY ) ?
-                     sheet->GetMinHeight() + gridSizeY : height;
-            width = ( width < sheet->GetMinWidth() + gridSizeX ) ?
-                    sheet->GetMinWidth() + gridSizeX : width;
-        }
-
-        wxPoint grid = aPanel->GetParent()->GetNearestGridPosition(
-                        wxPoint( pos.x + width, pos.y + height ) );
-        sheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
+        // If the sheet has pins, use the pin positions to clamp the minimum height.
+        height = ( height < sheet->GetMinHeight() + gridSizeY ) ?
+                 sheet->GetMinHeight() + gridSizeY : height;
+        width = ( width < sheet->GetMinWidth() + gridSizeX ) ?
+                sheet->GetMinWidth() + gridSizeX : width;
     }
-    else if( sheet->IsMoving() )
-    {
-        moveVector = aPanel->GetParent()->GetCrossHairPosition() - pos;
-        sheet->Move( moveVector );
-    }
+
+    wxPoint grid = aPanel->GetParent()->GetNearestGridPosition(
+                    wxPoint( pos.x + width, pos.y + height ) );
+    sheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
 
     sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
@@ -360,7 +354,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     // also need to update the hierarchy, if we are adding
     // a sheet to a screen that already has multiple instances (!)
     GetScreen()->SetCurItem( sheet );
-    m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    m_canvas->SetMouseCapture( resizeSheetWithMouseCursor, ExitSheet );
     m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
     m_canvas->CrossHairOff( aDC );
 
@@ -390,28 +384,10 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     SetUndoItem( aSheet );
     aSheet->SetFlags( IS_RESIZED );
 
-    m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    m_canvas->SetMouseCapture( resizeSheetWithMouseCursor, ExitSheet );
     m_canvas->CallMouseCapture( aDC, wxDefaultPosition, true );
 
     if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
         SetUndoItem( aSheet );
 }
 
-
-void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
-{
-    if( ( aSheet == NULL ) || ( aSheet->Type() != SCH_SHEET_T ) )
-        return;
-
-    m_canvas->CrossHairOff( aDC );
-    SetCrossHairPosition( aSheet->GetPosition() );
-    m_canvas->MoveCursorToCrossHair();
-
-    if( !aSheet->IsNew() )
-        SetUndoItem( aSheet );
-
-    aSheet->SetFlags( IS_MOVED );
-    m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
-    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, true );
-    m_canvas->CrossHairOn( aDC );
-}

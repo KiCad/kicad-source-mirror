@@ -443,21 +443,26 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     case SCH_COMPONENT_T:
     case SCH_SHEET_PIN_T:
     case SCH_FIELD_T:
-        MoveItem( item, &dc );
+    case SCH_SHEET_T:
+        PrepareMoveItem( item, &dc );
         break;
 
     case SCH_BITMAP_T:
+        // move an image is a special case:
+        // we cannot undraw/redraw a bitmap just using our xor mode
+        // the MoveImage function handle this undraw/redraw difficulty
+        // By redrawing the full bounding box
         MoveImage( (SCH_BITMAP*) item, &dc );
         break;
 
-    case SCH_SHEET_T:
-        StartMoveSheet( (SCH_SHEET*) item, &dc );
-        break;
-
     case SCH_MARKER_T:
-    default:
+        // Moving a marker has no sense
         wxFAIL_MSG( wxString::Format( wxT( "Cannot move item type %s" ),
                                       GetChars( item->GetClass() ) ) );
+    default:
+        // Unknown items cannot be moved
+        wxFAIL_MSG( wxString::Format(
+                    wxT( "Cannot move unknown item type %d" ), item->Type() ) );
         break;
     }
 
@@ -640,25 +645,44 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
     return false;
 }
 
-
-static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
+// This function is a callback function, called by the mouse cursor movin event
+// when an item is currently moved
+static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                     const wxPoint& aPosition, bool aErase )
 {
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_ITEM*   item   = screen->GetCurItem();
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move invalid schematic item." ) );
 
+    SCH_COMPONENT* cmp = NULL;
+
+    if( item->Type() == SCH_COMPONENT_T )
+        cmp = static_cast< SCH_COMPONENT* >( item );
+
 #ifndef USE_WX_OVERLAY
     // Erase the current item at its current position.
     if( aErase )
-        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    {
+        if( cmp )   // Use fast mode (do not draw pin texts)
+            cmp->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, UNSPECIFIED_COLOR, false );
+        else
+            item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    }
 #endif
 
-    item->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
+    wxPoint cpos = aPanel->GetParent()->GetCrossHairPosition();
+    cpos -= item->GetStoredPos();
+
+    item->SetPosition( cpos );
 
     // Draw the item item at it's new position.
     item->SetWireImage();  // While moving, the item may choose to render differently
-    item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+
+    if( cmp )   // Use fast mode (do not draw pin texts)
+        cmp->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, UNSPECIFIED_COLOR, false );
+    else
+        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 
@@ -714,7 +738,7 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 }
 
 
-void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
+void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move invalid schematic item" ) );
 
@@ -729,22 +753,27 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
     }
 
     aItem->SetFlags( IS_MOVED );
-#ifdef USE_WX_OVERLAY
-    this->Refresh();
-    this->Update();
-#endif
-    m_canvas->CrossHairOff( aDC );
 
-    if( aItem->Type() != SCH_SHEET_PIN_T )
+    // For some items, moving the cursor to anchor is not good
+    // (for instance large hierarchical sheets od componants can have
+    // the anchor position outside the canvas)
+    // these items return IsMovableFromAnchorPoint() == false
+    // For these items, do not wrap the cursor
+    if( aItem->IsMovableFromAnchorPoint() )
+    {
         SetCrossHairPosition( aItem->GetPosition() );
+        m_canvas->MoveCursorToCrossHair();
+        aItem->SetStoredPos( wxPoint( 0,0 ) );
+    }
+    else
+        aItem->SetStoredPos( GetCrossHairPosition() - aItem->GetPosition() );
 
-    m_canvas->MoveCursorToCrossHair();
 
     OnModify();
-    m_canvas->SetMouseCapture( moveItem, abortMoveItem );
+    m_canvas->SetMouseCapture( moveItemWithMouseCursor, abortMoveItem );
     GetScreen()->SetCurItem( aItem );
-    moveItem( m_canvas, aDC, wxDefaultPosition, true );
-    m_canvas->CrossHairOn( aDC );
+
+    m_canvas->Refresh();
 }
 
 

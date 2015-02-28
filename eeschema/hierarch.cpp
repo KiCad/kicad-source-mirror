@@ -56,7 +56,8 @@ class TreeItemData : public wxTreeItemData
 {
 public:
     SCH_SHEET_PATH m_SheetPath;
-    TreeItemData( SCH_SHEET_PATH sheet ) : wxTreeItemData()
+
+    TreeItemData( SCH_SHEET_PATH& sheet ) : wxTreeItemData()
     {
         m_SheetPath = sheet;
     }
