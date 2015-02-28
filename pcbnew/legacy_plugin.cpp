@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3051,6 +3051,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
 void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 {
+    m_loading_format_version = 0;
     m_cu_count = 16;
     m_board = NULL;
     m_props = aProperties;

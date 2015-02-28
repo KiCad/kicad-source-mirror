@@ -359,7 +359,7 @@ public:
      * Function Parse
      * parse the full netlist
      */
-    void Parse() throw( IO_ERROR, PARSE_ERROR );
+    void Parse() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer );
 
     // Useful for debug only:
     const char* getTokenName( NL_T::T aTok )

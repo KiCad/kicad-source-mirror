@@ -81,7 +81,7 @@ void KICAD_NETLIST_PARSER::skipCurrent() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void KICAD_NETLIST_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
+void KICAD_NETLIST_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
 {
     wxString text;
 

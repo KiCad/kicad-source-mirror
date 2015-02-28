@@ -71,7 +71,12 @@ private:
     wxImageList*      imageList;
 
 public:
-    HIERARCHY_TREE() { }
+    HIERARCHY_TREE()
+    {
+        m_Parent = NULL;
+        imageList = NULL;
+    }
+
     HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent );
 
     DECLARE_DYNAMIC_CLASS( HIERARCHY_TREE )

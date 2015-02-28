@@ -182,6 +182,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     SCH_ITEM( aComponent )
 {
+    m_currentSheetPath = NULL;
     m_Parent    = aComponent.m_Parent;
     m_Pos       = aComponent.m_Pos;
     m_unit      = aComponent.m_unit;

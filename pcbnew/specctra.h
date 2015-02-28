@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3694,7 +3694,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     void doPARSER( PARSER* growth ) throw( IO_ERROR );
     void doRESOLUTION( UNIT_RES* growth ) throw( IO_ERROR );
     void doUNIT( UNIT_RES* growth ) throw( IO_ERROR );
-    void doSTRUCTURE( STRUCTURE* growth ) throw( IO_ERROR );
+    void doSTRUCTURE( STRUCTURE* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_ERROR, boost::bad_pointer );
     void doLAYER_PAIR( LAYER_PAIR* growth ) throw( IO_ERROR );

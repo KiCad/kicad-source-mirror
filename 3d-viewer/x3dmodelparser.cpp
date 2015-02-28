@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Tuomas Vaherkoski <tuomasvaherkoski@gmail.com>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@
 X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
+    m_model = NULL;
 }
 
 
@@ -52,7 +53,7 @@ X3D_MODEL_PARSER::~X3D_MODEL_PARSER()
 }
 
 
-void X3D_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Dunits )
+void X3D_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlUnitsTo3DUnits )
 {
     wxXmlDocument doc;
 
@@ -69,7 +70,7 @@ void X3D_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Du
     }
 
 
-    float vrmlunits_to_3Dunits = aVrmlunits_to_3Dunits;
+    float vrmlunits_to_3Dunits = aVrmlUnitsTo3DUnits;
     glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
 
     glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,

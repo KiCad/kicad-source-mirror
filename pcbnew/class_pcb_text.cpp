@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,19 +119,9 @@ void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString    msg;
 
-#if defined(__WXDEBUG__)
-    BOARD_ITEM* parent = (BOARD_ITEM*) m_Parent;
-    wxASSERT( parent );
+    wxCHECK_RET( m_Parent != NULL, wxT( "TEXTE_PCB::GetMsgPanelInfo() m_Parent is NULL." ) );
 
-    BOARD*      board;
-    if( parent->Type() == PCB_DIMENSION_T )
-        board = (BOARD*) parent->GetParent();
-    else
-        board = (BOARD*) parent;
-    wxASSERT( board );
-#endif
-
-    if( m_Parent && m_Parent->Type() == PCB_DIMENSION_T )
+    if( m_Parent->Type() == PCB_DIMENSION_T )
         aList.push_back( MSG_PANEL_ITEM( _( "Dimension" ), GetShownText(), DARKGREEN ) );
     else
         aList.push_back( MSG_PANEL_ITEM( _( "PCB Text" ), GetShownText(), DARKGREEN ) );

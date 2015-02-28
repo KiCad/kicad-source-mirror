@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -762,9 +762,10 @@ unsigned int TRACK::ViewGetLOD( int aLayer ) const
 }
 
 
-void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                   const wxPoint& aOffset )
+void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
 {
+    wxCHECK_RET( panel != NULL, wxT( "VIA::Draw panel cannot be NULL." ) );
+
     int radius;
     LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
@@ -967,10 +968,11 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE )
         {
             tsize = (tsize * 7) / 10;        // small reduction to give a better look, inside via
+
             if( (aDrawMode & GR_XOR) == 0 )
                 GRSetDrawMode( aDC, GR_COPY );
 
-            EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+            EDA_RECT* clipbox = panel->GetClipBox();
             DrawGraphicHaloText( clipbox, aDC, m_Start,
                                  color, WHITE, BLACK, net->GetShortNetname(), 0,
                                  wxSize( tsize, tsize ),
