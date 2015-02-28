@@ -324,3 +324,12 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
 
     SetLayer( FlipLayer( GetLayer() ) );
 }
+
+void EDGE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    // do the base class rotation
+    DRAWSEGMENT::Rotate( aRotCentre, aAngle );
+
+    // and now work out the new offset
+    SetLocalCoord();
+}
