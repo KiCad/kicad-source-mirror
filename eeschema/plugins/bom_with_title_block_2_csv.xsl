@@ -2,24 +2,24 @@
     @package
     EESCHEMA BOM plugin. Creates BOM CSV files from the project net file.
     Based on Stefan Helmert bom2csv.xsl
-    
+
     Note:
         The project infomation (i.e title, company and revision) is taken from and the root sheet.
-    
-    Arthur: 
+
+    Arthur:
         Ronald Sousa HashDefineElectronics.com
-    
+
     Usage:
         on Windows:
             xsltproc -o "%O.csv" "C:\Program Files (x86)\KiCad\bin\plugins\bom2csv.xsl" "%I"
         on Linux:
             xsltproc -o "%O.csv" /usr/local/lib/kicad/plugins/bom2csv.xsl "%I"
-    
+
     Ouput Example:
         Source,
         Kicad Rev,  working director and file source
         Generated Date, date this file was generated
-        
+
         Title, the project's tile
         Company, the project's company
         Rev, the project's revision
@@ -48,15 +48,15 @@
         <xsl:text>Source,</xsl:text><xsl:value-of  select="design/source"/><xsl:text>&nl;</xsl:text>
         <xsl:text>Kicad Rev,</xsl:text><xsl:value-of  select="design/tool"/><xsl:text>&nl;</xsl:text>
         <xsl:text>Generated Date,</xsl:text><xsl:value-of  select="design/date"/><xsl:text>&nl;</xsl:text>
-        
+
         <xsl:text>&nl;</xsl:text>
-        
+
         <!-- Ouput Root sheet project information -->
         <xsl:apply-templates select="/export/design/sheet[1]"/>
-        
+
         <xsl:text>&nl;</xsl:text>
-        
-		<!-- Output table header -->
+
+        <!-- Output table header -->
         <xsl:text>Reference,Value,</xsl:text>
         <xsl:for-each select="components/comp/fields/field[generate-id(.) = generate-id(key('headentr',@name)[1])]">
             <xsl:value-of select="@name"/>
@@ -68,10 +68,10 @@
         <!-- all table entries -->
         <xsl:apply-templates select="components/comp"/>
     </xsl:template>
-    
+
     <!-- generate the Root sheet project information -->
     <xsl:template match="/export/design/sheet[1]">
-        
+
         <xsl:choose>
             <xsl:when test="title_block/title !=''">
                 <xsl:text>Title,</xsl:text><xsl:value-of  select="title_block/title"/><xsl:text>&nl;</xsl:text>
@@ -80,8 +80,8 @@
                 <xsl:text>Title,Not Set</xsl:text><xsl:text>&nl;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        
-   
+
+
         <xsl:choose>
             <xsl:when test="title_block/company !=''">
                 <xsl:text>Company,</xsl:text><xsl:value-of  select="title_block/company"/><xsl:text>&nl;</xsl:text>
@@ -90,7 +90,7 @@
                 <xsl:text>Company,Not Set</xsl:text><xsl:text>&nl;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        
+
         <xsl:choose>
             <xsl:when test="title_block/rev !=''">
                 <xsl:text>Revision,</xsl:text><xsl:value-of  select="title_block/rev"/><xsl:text>&nl;</xsl:text>
@@ -99,7 +99,7 @@
                 <xsl:text>Revision,Not Set</xsl:text><xsl:text>&nl;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        
+
         <xsl:choose>
             <xsl:when test="title_block/date !=''">
                 <xsl:text>Date Issue,</xsl:text><xsl:value-of  select="title_block/date"/><xsl:text>&nl;</xsl:text>
@@ -110,9 +110,9 @@
         </xsl:choose>
 
         <xsl:apply-templates select="title_block/comment"/>
-		
+
     </xsl:template>
-    
+
     <xsl:template match="title_block/comment">
         <xsl:choose>
             <xsl:when test="@value !=''">
@@ -120,9 +120,9 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
-    
 
-    
+
+
     <!-- the table entries -->
     <xsl:template match="components/comp">
         <xsl:value-of select="@ref"/><xsl:text>,</xsl:text>

@@ -665,23 +665,23 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-    	screen = sheet->LastScreen();
+        screen = sheet->LastScreen();
 
         xdesign->AddChild( xsheet = node( wxT( "sheet" ) ) );
 
-        // get the string representation of the sheet index number. 
-        // Note that sheet->GetIndex() is zero index base and we need to increment the number by one to make 
+        // get the string representation of the sheet index number.
+        // Note that sheet->GetIndex() is zero index base and we need to increment the number by one to make
         // human readable
-		sheetTxt.Printf( wxT( "%d" ), ( sheetList.GetIndex() + 1 ) );
+        sheetTxt.Printf( wxT( "%d" ), ( sheetList.GetIndex() + 1 ) );
         xsheet->AddAttribute( wxT( "number" ), sheetTxt );
         xsheet->AddAttribute( wxT( "name" ), sheet->PathHumanReadable() );
         xsheet->AddAttribute( wxT( "tstamps" ), sheet->Path() );
 
-    
+
         TITLE_BLOCK tb = screen->GetTitleBlock();
 
         xsheet->AddChild( xtitleBlock = node( wxT( "title_block" ) ) );
-    
+
         xtitleBlock->AddChild( node( wxT( "title" ), tb.GetTitle() ) );
         xtitleBlock->AddChild( node( wxT( "company" ), tb.GetCompany() ) );
         xtitleBlock->AddChild( node( wxT( "rev" ), tb.GetRevision() ) );
@@ -690,7 +690,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
         // We are going to remove the fileName directories.
         sourceFileName = wxFileName( screen->GetFileName() );
         xtitleBlock->AddChild( node( wxT( "source" ), sourceFileName.GetFullName() ) );
-   
+
         xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
         xcomment->AddAttribute( wxT("number"), wxT("1") );
         xcomment->AddAttribute( wxT( "value" ), tb.GetComment1() );
@@ -706,7 +706,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
         xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
         xcomment->AddAttribute( wxT("number"), wxT("4") );
         xcomment->AddAttribute( wxT( "value" ), tb.GetComment4() );
-	}
+    }
 
     return xdesign;
 }
