@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,13 +79,13 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.odt$" ),
     wxT( "^.*\\.htm$" ),
     wxT( "^.*\\.html$" ),
-    wxT( "^.*\\.rpt$" ),    // Report files
-    wxT( "^.*\\.csv$" ),    // Report files in comma separateed format
-    wxT( "^.*\\.pos$" ),    // Footprint position files
-    wxT( "^.*\\.cmp$" ),    // Cvpcb cmp/footprint link files
-    wxT( "^.*\\.drl$" ),    // Excellon drill files
-    wxT( "^.*\\.svg$" ),    // SVG print/plot files
-    NULL                    // end of list
+    wxT( "^.*\\.rpt$" ),            // Report files
+    wxT( "^.*\\.csv$" ),            // Report files in comma separated format
+    wxT( "^.*\\.pos$" ),            // Footprint position files
+    wxT( "^.*\\.cmp$" ),            // Cvpcb cmp/footprint link files
+    wxT( "^.*\\.drl$" ),            // Excellon drill files
+    wxT( "^.*\\.svg$" ),            // SVG print/plot files
+    NULL                            // end of list
 };
 
 
@@ -110,13 +110,13 @@ const wxChar  TextFileWildcard[] = wxT( "Text files (*.txt)|*.txt" );
 
 
 BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
-EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnSelect )
-EVT_TREE_ITEM_EXPANDED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnExpand )
-EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRight )
-EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor )
-EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
-EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
-EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
+    EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnSelect )
+    EVT_TREE_ITEM_EXPANDED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnExpand )
+    EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRight )
+    EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor )
+    EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
+    EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
+    EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
 END_EVENT_TABLE()
 
 
@@ -125,7 +125,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
                         ID_LEFT_FRAME,
                         wxDefaultPosition,
                         wxDefaultSize,
-                        wxNO_BORDER | wxSW_3D )
+                        wxNO_BORDER | wxSW_3D | wxTAB_TRAVERSAL )
 {
     m_Parent = parent;
     m_TreeProject = NULL;
@@ -752,7 +752,7 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
     wxTextEntryDialog   dlg( this, msg, _( "Change filename" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )
-        return; // cancelled by user
+        return; // canceled by user
 
     buffer = dlg.GetValue();
     buffer.Trim( true );
@@ -793,6 +793,7 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
     wxTreeItemId        kid = m_TreeProject->GetFirstChild( itemId, cookie );
 
     bool subdir_populated = false;
+
     for( ; kid.IsOk(); kid = m_TreeProject->GetNextChild( itemId, cookie ) )
     {
         TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
@@ -866,6 +867,7 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
     std::stack < wxTreeItemId > subdirs_id;
 
     wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
+
     while( 1 )
     {
         if( ! kid.IsOk() )
@@ -1018,6 +1020,7 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
     std::stack < wxTreeItemId > subdirs_id;
 
     wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
+
     while( 1 )
     {
         if( !kid.IsOk() )
