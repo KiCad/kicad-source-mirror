@@ -325,6 +325,12 @@ public:
     int GetCount() const { return m_count; }
 
     /**
+     * Function GetIndex
+     * @return the last selected screen index.
+     */
+    int GetIndex() const { return m_index; }
+
+    /**
      * Function GetFirst
      * @return the first item (sheet) in m_List and prepare calls to GetNext()
      */
