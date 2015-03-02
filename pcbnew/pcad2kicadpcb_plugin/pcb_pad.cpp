@@ -207,7 +207,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
         pad->SetSize( wxSize( m_hole, m_hole ) );
 
-        pad->SetLayerSet( LSET::AllCuMask() | LSET( 3, B_Mask, F_Mask ) );
+        pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
     }
     else
     {

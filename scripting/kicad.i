@@ -28,6 +28,7 @@
  */
 
 %include <std_vector.i>
+%include <std_basic_string.i>
 %include <std_string.i>
 %include <std_map.i>
 
@@ -65,6 +66,7 @@
     #include <wx_python_helpers.h>
     #include <cstddef>
     #include <vector>
+    #include <bitset>
 
     #include <class_title_block.h>
     #include <class_colors_design_settings.h>
@@ -113,6 +115,12 @@
 /* std template mappings */
 %template(intVector) std::vector<int>;
 %template(str_utf8_Map) std::map< std::string,UTF8 >;
+
+// wrapper of BASE_SEQ (see typedef std::vector<LAYER_ID> BASE_SEQ;)
+%template(base_seqVect) std::vector<enum LAYER_ID>;
+
+// TODO: wrapper of BASE_SET (see std::bitset<LAYER_ID_COUNT> BASE_SET;)
+
 
 /* KiCad plugin handling */
 %include "kicadplugins.i"

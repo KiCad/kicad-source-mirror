@@ -1035,13 +1035,11 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
      * but:
      * - the footprint position is not modified.
      * - the relative (local) coordinates of these items are modified
+     * - Draw coordinates are updated
      */
 
-    wxPoint footprintPos = GetPosition();
 
-    /* Update the relative coordinates:
-     * The coordinates are relative to the anchor point.
-     * Calculate deltaX and deltaY from the anchor. */
+    // Update (move) the relative coordinates relative to the new anchor point.
     wxPoint moveVector = aMoveVector;
     RotatePoint( &moveVector, -GetOrientation() );
 

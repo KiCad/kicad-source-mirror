@@ -116,7 +116,8 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     lastTextItalic = textItem->IsItalic();
     lastTextOrientation = textItem->GetOrientation();
 
-    if( (aType == SCH_GLOBAL_LABEL_T) || (aType == SCH_HIERARCHICAL_LABEL_T) )
+    if( ( textItem->Type() == SCH_GLOBAL_LABEL_T ) ||
+        ( textItem->Type() == SCH_HIERARCHICAL_LABEL_T ) )
     {
         lastGlobalLabelShape = textItem->GetShape();
     }
