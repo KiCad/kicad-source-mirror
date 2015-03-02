@@ -1549,7 +1549,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             else
                 attribute = PAD_STANDARD;
 
-            data = strtok_r( NULL, delims, &saveptr );  // skip BufCar
+            strtok_r( NULL, delims, &saveptr );  // skip BufCar
             data = strtok_r( NULL, delims, &saveptr );
 
             LEG_MASK layer_mask = hexParse( data );

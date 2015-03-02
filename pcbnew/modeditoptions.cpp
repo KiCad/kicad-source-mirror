@@ -107,22 +107,22 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
         // design settings
         m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorGrlineWidth" ),
                                                        &settings.m_ModuleSegmentWidth,
-                                                       Millimeter2iu( 0.15 ),
+                                                       Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
                                                        Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
                                                        NULL, 1/IU_PER_MM ) );
         m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeH" ),
                                                        &settings.m_ModuleTextSize.x,
-                                                       Millimeter2iu( 1.5 ),
+                                                       Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
                                                        Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
                                                        NULL, 1/IU_PER_MM ) );
         m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeV" ),
                                                        &settings.m_ModuleTextSize.y,
-                                                       Millimeter2iu( 1.5 ),
+                                                       Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
                                                        Millimeter2iu(0.01), Millimeter2iu( 100.0 ),
                                                        NULL, 1/IU_PER_MM ) );
         m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultThickness" ),
                                                        &settings.m_ModuleTextWidth,
-                                                       Millimeter2iu( 0.15 ),
+                                                       Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
                                                        Millimeter2iu( 0.01 ), Millimeter2iu( 20.0 ),
                                                        NULL, 1/IU_PER_MM ) );
 

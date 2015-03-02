@@ -31,6 +31,23 @@
 #include <class_netclass.h>
 #include <config_params.h>
 
+// Some default values for the board editor and the fp editor (given in mm)
+#define DEFAULT_TEXT_MODULE_SIZE     1.0
+#define DEFAULT_GR_MODULE_THICKNESS  0.15         // given in mm
+
+// Board thickness, mainly for 3D view:
+#define DEFAULT_BOARD_THICKNESS_MM   1.6
+
+// Default values for some board items (given in mm)
+#define DEFAULT_TEXT_PCB_SIZE  1.5
+#define DEFAULT_TEXT_PCB_THICKNESS  0.3
+#define DEFAULT_PCB_EDGE_THICKNESS  0.15
+#define DEFAULT_GRAPHIC_THICKNESS   0.2
+
+#define DEFAULT_SOLDERMASK_CLEARANCE 0.2
+#define DEFAULT_SOLDERMASK_MIN_WIDTH Millimeter2iu( 0.0 )
+
+
 /**
  * Struct VIA_DIMENSION
  * is a small helper container to handle a stock of specific vias each with
