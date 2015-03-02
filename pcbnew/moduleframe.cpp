@@ -835,11 +835,11 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
     {
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:

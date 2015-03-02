@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,7 +225,7 @@ bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
     return false;
 }
 
-
+#ifdef USE_EDA_ITEM_OP_EQ   // see base_struct.h for explanations
 EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
     if( &aItem != this )
@@ -241,7 +241,7 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 
     return *this;
 }
-
+#endif
 
 const BOX2I EDA_ITEM::ViewBBox() const
 {

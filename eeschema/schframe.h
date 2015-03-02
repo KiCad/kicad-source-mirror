@@ -30,6 +30,7 @@
 #ifndef  WX_EESCHEMA_STRUCT_H
 #define  WX_EESCHEMA_STRUCT_H
 
+
 #include <sch_base_frame.h>
 #include <config_params.h>
 #include <class_undoredo_container.h>
@@ -105,6 +106,8 @@ enum SCH_SEARCH_T {
     FIND_FIELD              ///< Find a component field.
 };
 
+
+#define SCH_EDIT_FRAME_NAME wxT( "SchematicFrame" )
 
 /**
  * Schematic editor (Eeschema) main window.

@@ -177,11 +177,11 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
@@ -282,11 +282,11 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Eeschema_Hokeys_Descr, wxT( "eeschema" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:

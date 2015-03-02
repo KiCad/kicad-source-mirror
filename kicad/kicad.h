@@ -46,6 +46,8 @@
  #define KICAD_USE_FILES_WATCHER
 #endif
 
+#define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
+
 class LAUNCHER_PANEL;
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
@@ -190,6 +192,9 @@ public:
     void OnFileHistory( wxCommandEvent& event );
     void OnExit( wxCommandEvent& event );
     void Process_Preferences( wxCommandEvent& event );
+
+    void Process_Config( wxCommandEvent& event );
+
     void ReCreateMenuBar();
     void RecreateBaseHToolbar();
 
@@ -292,6 +297,7 @@ private:
     wxAuiToolBar*       m_VToolBar;             // Vertical toolbar (not used)
 
     int m_leftWinWidth;
+    EDA_HOTKEY_CONFIG* m_manager_Hokeys_Descr;
 
     void language_change( wxCommandEvent& event );
 };

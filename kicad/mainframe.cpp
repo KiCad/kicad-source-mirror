@@ -40,17 +40,19 @@
 #include <tree_project_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <menus_helpers.h>
+#include <dialog_hotkeys_editor.h>
 
 
 #define TREE_FRAME_WIDTH_ENTRY     wxT( "LeftWinWidth" )
 
-
 KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
         const wxString& title, const wxPoint&  pos, const wxSize&   size ) :
     EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size,
-                    KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "KicadFrame" ) )
+                    KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME )
 {
     m_leftWinWidth = 60;
+    m_manager_Hokeys_Descr = NULL;
+    m_FrameName = KICAD_MANAGER_FRAME_NAME;
 
     // Create the status line (bottom of the frame
     static const int dims[3] = { -1, -1, 100 };
@@ -529,3 +531,33 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
     PrintMsg( msg );
 }
 
+void KICAD_MANAGER_FRAME::Process_Config( wxCommandEvent& event )
+{
+    int        id = event.GetId();
+    wxFileName fn;
+
+    switch( id )
+    {
+    // Hotkey IDs
+    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
+        InstallHotkeyFrame( this, m_manager_Hokeys_Descr );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
+        ExportHotkeyConfigToFile( m_manager_Hokeys_Descr, wxT( "kicad" ) );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
+        ImportHotkeyConfigFromFile( m_manager_Hokeys_Descr, wxT( "kicad" ) );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+        // Display current hotkey list for LibEdit.
+        DisplayHotkeyList( this, m_manager_Hokeys_Descr );
+        break;
+
+    default:
+        wxFAIL_MSG( wxT( "KICAD_MANAGER_FRAME::Process_Config error" ) );
+        break;
+    }
+}
