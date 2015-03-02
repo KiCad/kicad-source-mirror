@@ -167,29 +167,20 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurren
 
     int mask = aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY;
 
-    Router()->DisplayDebugLine( aCurrent->CP(), 4, 10000 );
-    Router()->DisplayDebugLine( aCurrent->CN(), 5, 10000 );
-
-    printf("WStart\n");
     do
     {
         PNS_LINE preWalk = ( currentIsP ? cur.PLine() : cur.NLine() );
         PNS_LINE preShove = ( currentIsP ? cur.NLine() : cur.PLine() );
         PNS_LINE postWalk;
-        printf("iter %d\n", iter);
 
         if( !aNode->CheckColliding ( &preWalk, mask ) )
         {
-            printf("PreWalkIsColl\n");
             currentIsP = !currentIsP;
 
             if( !aNode->CheckColliding( &preShove, mask ) )
                 break;
             else
-            {
-                printf("PreShoveIsColl\n");
                 continue;
-            }
         }
 
         wf1 = walkaround.Route( preWalk, postWalk, false );
@@ -199,7 +190,7 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurren
 
         PNS_LINE postShove( preShove );
 
-        shove.ForceClearance( true, cur.Gap() );
+        shove.ForceClearance( true, cur.Gap() - 2 * PNS_HULL_MARGIN );
 
         PNS_SHOVE::SHOVE_STATUS sh1;
 
@@ -474,7 +465,6 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
     BOARD* brd = Router()->GetBoard();
     PNS_ITEM *primRef = NULL, *primP = NULL, *primN = NULL;
 
-  //  printf("Current %p\n", m_currentNode);
     int refNet;
 
     wxString suffix;
@@ -503,7 +493,6 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
     else
         refNet = netP;
 
-//    printf("Net: P: %s N: %s\n", (const char *)(netNameP.c_str()), (const char *)(netNameN.c_str()));
 
     std::set<PNS_ITEM*> items;
 

@@ -387,8 +387,6 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingLine( PNS_LINE* aCurrent, PNS_LINE
 
 PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE* aCurrent, PNS_SOLID* aObstacleSolid )
 {
-    //printf("pre2-v %d\n", aCurrent->EndsWithVia());
-
     PNS_WALKAROUND walkaround( m_currentNode, Router() );
     PNS_LINE* walkaroundLine = clone( aCurrent );
 

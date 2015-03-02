@@ -82,8 +82,6 @@ PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER *aRouter ) :
         CLEARANCE_ENT ent;
         ent.coupledNet = topo.DpCoupledNet( i );
 
-        printf("net %d coupled %d\n", i, ent.coupledNet);
-
         wxString netClassName = ni->GetClassName();
         NETCLASSPTR nc = brd->GetDesignSettings().m_NetClasses.Find( netClassName );
         
@@ -122,22 +120,11 @@ int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* a
     int net_b = aB->Net();
     int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b].clearance : m_defaultClearance );
 
-    bool segsOnly = aA->OfKind( PNS_ITEM::SEGMENT ) && aB->OfKind( PNS_ITEM::SEGMENT );
+    bool linesOnly = aA->OfKind( PNS_ITEM::SEGMENT | PNS_ITEM::LINE ) && aB->OfKind( PNS_ITEM::SEGMENT | PNS_ITEM::LINE );
 
-    #if 0
-    if( segsOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
+    if( linesOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
     {
-        cl_a = cl_b = m_router->Sizes().DiffPairGap() - 3 * PNS_HULL_MARGIN;
-        printf("Cl %d\n", cl_a);
-    }
-    #endif
-    
-    if( m_overrideEnabled && segsOnly )
-    {
-        if( net_a == m_overrideNetA && net_b == m_overrideNetB )
-            return m_overrideClearance;
-        else if( net_a == m_overrideNetB && net_b == m_overrideNetA )
-            return m_overrideClearance;
+        cl_a = cl_b = m_router->Sizes().DiffPairGap() - 2 * PNS_HULL_MARGIN;
     }
 
     int pad_a = localPadClearance( aA );
