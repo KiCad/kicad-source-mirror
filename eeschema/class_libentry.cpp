@@ -247,7 +247,7 @@ LIB_PART::~LIB_PART()
     wxLogTrace( traceSchLibMem,
                 wxT( "%s: destroying part '%s' with alias list count of %u." ),
                 GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( GetName() ),
-                m_aliases.size() );
+                (unsigned int) m_aliases.size() );
 
     // If the part is being deleted directly rather than through the library,
     // delete all of the aliases.
@@ -1701,8 +1701,8 @@ LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
                     GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
                     GetChars( m_name ),
                     GetChars( aAlias->GetName() ),
-                    m_aliases.size(),
-                    m_me.use_count() );
+                    (unsigned int) m_aliases.size(),
+                    (unsigned int) m_me.use_count() );
 
         it = m_aliases.erase( it );
 
