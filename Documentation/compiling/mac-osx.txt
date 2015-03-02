@@ -117,7 +117,7 @@ also work. If you do so, be sure to apply the patches needed for KiCad:
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx.patch
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_bug_15908.patch
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_soname.patch
-  # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_bug_15684.patch
+  # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_scrolledwindow.patch
 
 Optionally, to enable Magic Trackpad pinch-to-zoom support, add the following:
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.0_macosx_magnify_event.patch
