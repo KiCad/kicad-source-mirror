@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-12 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -538,7 +538,8 @@ public:
      * @throw IO_ERROR if an error occurs attempting to load the footprint library
      *                 table.
      */
-    static bool LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR );
+    static bool LoadGlobalTable( FP_LIB_TABLE& aTable )
+        throw (IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
 
     /**
      * Function GetGlobalTableFileName
@@ -581,7 +582,8 @@ public:
      * writes this table to aFileName in s-expression form.
      * @param aFileName is the name of the file to write to.
      */
-    void Save( const wxString& aFileName ) const throw( IO_ERROR );
+    void Save( const wxString& aFileName ) const
+        throw( IO_ERROR, boost::interprocess::lock_exception );
 
 protected:
 

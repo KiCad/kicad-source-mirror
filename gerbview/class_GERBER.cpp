@@ -200,11 +200,16 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_PreviousPos.x = m_PreviousPos.y = 0;          // last specified coord
     m_IJPos.x = m_IJPos.y = 0;                      // current centre coord for
                                                     // plot arcs & circles
-    m_Current_File    = NULL;                       // Gerger file to read
+    m_Current_File    = NULL;                       // Gerber file to read
     m_FilesPtr        = 0;
     m_PolygonFillMode = false;
     m_PolygonFillModeState = 0;
     m_Selected_Tool = FIRST_DCODE;
+    m_Last_Pen_Command = 0;
+    m_Exposure = false;
+
+    for( unsigned ii = 0; ii < DIM( m_FilesList ); ii++ )
+        m_FilesList[ii] = NULL;
 }
 
 /* Function HasNegativeItems
@@ -455,7 +460,7 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
         gerber = m_GERBER_List[aIdx];
 
-    if( IsUsed(aIdx ) )
+    if( gerber && IsUsed(aIdx ) )
     {
         if( gerber->m_FileFunction )
             name.Printf( _( "Layer %d (%s, %s)" ), aIdx + 1,

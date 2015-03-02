@@ -253,15 +253,14 @@ int VRML2_MODEL_PARSER::read_Transform()
 }
 
 
-/**
- * Read the DEF for a Coordinate
- */
 int VRML2_MODEL_PARSER::read_DEF_Coordinate()
 {
     char text[128];
 
     // Get the name of the definition.
-    GetNextTag( m_file, text, sizeof(text) );
+    if( !GetNextTag( m_file, text, sizeof(text) ) )
+        return -1;
+
     std::string coordinateName = text;
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
@@ -291,7 +290,8 @@ int VRML2_MODEL_PARSER::read_DEF()
 {
     char text[128];
 
-    GetNextTag( m_file, text, sizeof(text) );
+    if( !GetNextTag( m_file, text, sizeof(text) ) )
+        return -1;
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
     {
@@ -348,7 +348,9 @@ int VRML2_MODEL_PARSER::read_USE()
     char text[128];
 
     // Get the name of the definition.
-    GetNextTag( m_file, text, sizeof(text) );
+    if( !GetNextTag( m_file, text, sizeof(text) ) )
+        return -1;
+
     std::string coordinateName = text;
 
     // Look for it in our coordinate map.

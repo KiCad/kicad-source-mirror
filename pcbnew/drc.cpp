@@ -103,6 +103,9 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_doPad2PadTest     = true;     // enable pad to pad clearance tests
     m_doUnconnectedTest = true;     // enable unconnected tests
     m_doZonesTest = true;           // enable zone to items clearance tests
+    m_doKeepoutTest = true;        // enable keepout areas to items clearance tests
+    m_abortDRC = false;
+    m_drcInProgress = false;
 
     m_doCreateRptFile = false;
 

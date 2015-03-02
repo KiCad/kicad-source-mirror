@@ -242,7 +242,7 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
     int clearance = m_NetClasses.GetDefault()->GetClearance();
 
     //Read list of Net Classes
-    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); ++nc )
     {
         NETCLASSPTR netclass = nc->second;
         clearance = std::max( clearance, netclass->GetClearance() );
@@ -257,7 +257,7 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
     int clearance = m_NetClasses.GetDefault()->GetClearance();
 
     //Read list of Net Classes
-    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); ++nc )
     {
         NETCLASSPTR netclass = nc->second;
         clearance = std::min( clearance, netclass->GetClearance() );

@@ -182,7 +182,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             DIALOG_MOVE_EXACT dialog( this, translation, rotation  );
             int ret = dialog.ShowModal();
 
-            if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+            if( ret == wxID_OK )
             {
                 SaveCopyInUndoList( currentModule, UR_MODEDIT );
                 const wxPoint blockCentre = GetScreen()->m_BlockLocate.Centre();
@@ -662,12 +662,12 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         if( !pad->IsSelected() && !force_all )
             continue;
 
-        wxPoint pos = pad->GetPosition();
+        wxPoint pos = pad->GetPos0();
         ROTATE( pos );
-        pad->SetPosition( pos );
-
-        pad->SetPos0( pad->GetPosition() );
+        pad->SetPos0( pos );
         pad->SetOrientation( pad->GetOrientation() + 900 );
+
+        pad->SetDrawCoord();
     }
 
     for( EDA_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
@@ -681,15 +681,15 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         {
             EDGE_MODULE* em = (EDGE_MODULE*) item;
 
-            wxPoint tmp = em->GetStart();
+            wxPoint tmp = em->GetStart0();
             ROTATE( tmp );
-            em->SetStart( tmp );
             em->SetStart0( tmp );
 
-            tmp = em->GetEnd();
+            tmp = em->GetEnd0();
             ROTATE( tmp );
-            em->SetEnd( tmp );
             em->SetEnd0( tmp );
+
+            em->SetDrawCoord();
         }
         break;
 

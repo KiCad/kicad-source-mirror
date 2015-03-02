@@ -91,8 +91,7 @@ void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumbe
     GeneralControl( aDC, tPosition );
 
     for( std::list<MACROS_RECORD>::iterator i = m_Macros[aNumber].m_Record.begin();
-         i != m_Macros[aNumber].m_Record.end();
-         i++ )
+         i != m_Macros[aNumber].m_Record.end(); ++i )
     {
         wxPoint tmpPos = GetNearestGridPosition( tPosition + i->m_Position );
 

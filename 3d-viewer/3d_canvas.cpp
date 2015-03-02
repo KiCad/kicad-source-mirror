@@ -83,6 +83,18 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
 {
     m_init   = false;
     m_shadow_init = false;
+    // set an invalide value to not yet initialized indexes managing
+    // textures created to enhance 3D rendering
+    // (they are dummy values but we do not want uninitialized values)
+    m_text_pcb = m_text_silk = -1;
+    m_text_fake_shadow_front = -1;
+    m_text_fake_shadow_back = -1;
+    m_text_fake_shadow_board = -1;
+
+    // position of the front and back layers
+    // (will be initialized to a better value later)
+    m_ZBottom = 0.0;
+    m_ZTop = 0.0;
 
     // Clear all gl list identifiers:
     for( int ii = GL_ID_BEGIN; ii < GL_ID_END; ii++ )

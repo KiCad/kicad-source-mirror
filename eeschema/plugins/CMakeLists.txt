@@ -10,6 +10,7 @@ set( xsl_lst
     netlist_form_cadstar.xsl
     netlist_form_OrcadPcb2.xsl
     netlist_form_pads-pcb.xsl
+    bom_with_title_block_2_csv.xsl
     )
 
 install( FILES ${xsl_lst}

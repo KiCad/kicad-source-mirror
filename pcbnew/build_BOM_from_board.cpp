@@ -132,7 +132,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         bool valExist = false;
 
         // try to find component in existing list
-        for( iter = list.begin(); iter != list.end(); iter++ )
+        for( iter = list.begin(); iter != list.end(); ++iter )
         {
             cmp* current = *iter;
 

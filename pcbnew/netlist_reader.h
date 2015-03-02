@@ -9,8 +9,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>.
+ * Copyright (C) 2012-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -309,7 +309,7 @@ private:
      * (sheetpath (names /) (tstamps /))
      * (tstamp 3256759C))
      */
-    void parseComponent() throw( IO_ERROR, PARSE_ERROR );
+    void parseComponent() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer );
 
     /**
      * Function parseNet
@@ -359,7 +359,7 @@ public:
      * Function Parse
      * parse the full netlist
      */
-    void Parse() throw( IO_ERROR, PARSE_ERROR );
+    void Parse() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer );
 
     // Useful for debug only:
     const char* getTokenName( NL_T::T aTok )

@@ -48,6 +48,7 @@
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 #include <build_version.h>
 #include <set>
+#include <sch_base_frame.h>
 
 #define INTERMEDIATE_NETLIST_EXT wxT( "xml" )
 
@@ -197,12 +198,13 @@ class NETLIST_EXPORT_TOOL
      * builds the entire document tree for the generic export.  This is factored
      * out here so we can write the tree in either S-expression file format
      * or in XML if we put the tree built here into a wxXmlDocument.
+     * @return XNODE* - the root nodes
      */
     XNODE* makeGenericRoot();
 
     /**
      * Function makeGenericComponents
-     * returns a sub-tree holding all the schematic components.
+     * @return XNODE* - returns a sub-tree holding all the schematic components.
      */
     XNODE* makeGenericComponents();
 
@@ -216,12 +218,14 @@ class NETLIST_EXPORT_TOOL
     /**
      * Function makeGenericLibParts
      * fills out an XML node with the unique library parts and returns it.
+     * @return XNODE* - the library parts nodes
      */
     XNODE* makeGenericLibParts();
 
     /**
      * Function makeGenericListOfNets
      * fills out an XML node with a list of nets and returns it.
+     * @return XNODE* - the list of nets nodes
      */
     XNODE* makeGenericListOfNets();
 
@@ -229,6 +233,7 @@ class NETLIST_EXPORT_TOOL
      * Function makeGenericLibraries
      * fills out an XML node with a list of used libraries and returns it.
      * Must have called makeGenericLibParts() before this function.
+     * @return XNODE* - the library nodes
      */
     XNODE* makeGenericLibraries();
 
@@ -637,7 +642,13 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 
 XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 {
-    XNODE*  xdesign = node( wxT("design") );
+    SCH_SCREEN* screen;
+    XNODE*     xdesign = node( wxT("design") );
+    XNODE*     xtitleBlock;
+    XNODE*     xsheet;
+    XNODE*     xcomment;
+    wxString   sheetTxt;
+    wxFileName sourceFileName;
 
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
@@ -647,27 +658,55 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
     // which Eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
 
-    /*  @todo might do a list of schematic pages
-
-        <page name="">
-            <title/>
-            <revision/>
-            <company/>
-            <comments>
-                <comment>blah</comment> <!-- comment1 -->
-                <comment>blah</comment> <!-- comment2 -->
-            </comments>
-            <pagesize/>
-        </page>
-        :
-
-        and a sheet hierarchy report here
-        <sheets>
-            <sheet name="sheetname1" page="pagenameA">
-                <sheet name="sheetname2" page="pagenameB"/>  use recursion to output?
-            </sheet>
-        </sheets>
+    /*
+        Export the sheets information
     */
+    SCH_SHEET_LIST sheetList;
+
+    for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
+    {
+        screen = sheet->LastScreen();
+
+        xdesign->AddChild( xsheet = node( wxT( "sheet" ) ) );
+
+        // get the string representation of the sheet index number.
+        // Note that sheet->GetIndex() is zero index base and we need to increment the number by one to make
+        // human readable
+        sheetTxt.Printf( wxT( "%d" ), ( sheetList.GetIndex() + 1 ) );
+        xsheet->AddAttribute( wxT( "number" ), sheetTxt );
+        xsheet->AddAttribute( wxT( "name" ), sheet->PathHumanReadable() );
+        xsheet->AddAttribute( wxT( "tstamps" ), sheet->Path() );
+
+
+        TITLE_BLOCK tb = screen->GetTitleBlock();
+
+        xsheet->AddChild( xtitleBlock = node( wxT( "title_block" ) ) );
+
+        xtitleBlock->AddChild( node( wxT( "title" ), tb.GetTitle() ) );
+        xtitleBlock->AddChild( node( wxT( "company" ), tb.GetCompany() ) );
+        xtitleBlock->AddChild( node( wxT( "rev" ), tb.GetRevision() ) );
+        xtitleBlock->AddChild( node( wxT( "date" ), tb.GetDate() ) );
+
+        // We are going to remove the fileName directories.
+        sourceFileName = wxFileName( screen->GetFileName() );
+        xtitleBlock->AddChild( node( wxT( "source" ), sourceFileName.GetFullName() ) );
+
+        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
+        xcomment->AddAttribute( wxT("number"), wxT("1") );
+        xcomment->AddAttribute( wxT( "value" ), tb.GetComment1() );
+
+        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
+        xcomment->AddAttribute( wxT("number"), wxT("2") );
+        xcomment->AddAttribute( wxT( "value" ), tb.GetComment2() );
+
+        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
+        xcomment->AddAttribute( wxT("number"), wxT("3") );
+        xcomment->AddAttribute( wxT( "value" ), tb.GetComment3() );
+
+        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
+        xcomment->AddAttribute( wxT("number"), wxT("4") );
+        xcomment->AddAttribute( wxT( "value" ), tb.GetComment4() );
+    }
 
     return xdesign;
 }

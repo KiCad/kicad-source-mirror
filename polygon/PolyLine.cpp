@@ -985,6 +985,7 @@ void CPolyLine::Copy( const CPolyLine* src )
     m_layer         = src->m_layer;
     m_hatchStyle    = src->m_hatchStyle;
     m_hatchPitch    = src->m_hatchPitch;
+    m_flags         = src->m_flags;
     m_CornersList.RemoveAllContours();
     m_CornersList.Append( src->m_CornersList );
 }

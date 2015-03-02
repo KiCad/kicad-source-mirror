@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2009-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -397,7 +397,12 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
         for( unsigned ii = 0; ii < block->GetCount(); ii++ )
         {
             schitem = (SCH_ITEM*) block->GetItem( ii );
-            schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
+
+            if( schitem->Type() == SCH_COMPONENT_T )
+                ((SCH_COMPONENT*)schitem)->Draw( aPanel, aDC, block->GetMoveVector(),
+                                                 g_XorMode, g_GhostColor, false );
+            else
+                schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
         }
     }
 
@@ -408,7 +413,12 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
         schitem = (SCH_ITEM*) block->GetItem( ii );
-        schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
+
+            if( schitem->Type() == SCH_COMPONENT_T )
+                ((SCH_COMPONENT*)schitem)->Draw( aPanel, aDC, block->GetMoveVector(),
+                                                 g_XorMode, g_GhostColor, false );
+            else
+                schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
     }
 }
 

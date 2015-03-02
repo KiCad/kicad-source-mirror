@@ -35,9 +35,9 @@
 
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
-    #include <class_board_item.h>
+    #include <class_board_item.h>       // for FMT_IU
 #elif defined( EESCHEMA )
-    #include <sch_item_struct.h>
+    #include <sch_item_struct.h>        // for FMT_IU
 #elif defined( GERBVIEW )
 #elif defined( PL_EDITOR )
     #include <base_units.h>

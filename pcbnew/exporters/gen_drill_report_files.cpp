@@ -282,17 +282,17 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
 
 bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 {
-    unsigned    totalHoleCount;
-    char        line[1024];
-    LAYER_NUM   layer1 = B_Cu;
-    LAYER_NUM   layer2 = F_Cu;
-    bool        gen_through_holes   = true;
-    bool        gen_NPTH_holes      = false;
-
     m_file = wxFopen( aFullFileName, wxT( "w" ) );
 
     if( m_file == NULL )
         return false;
+
+    unsigned    totalHoleCount;
+    char        line[1024];
+    LAYER_NUM   layer1 = F_Cu;      // First layer of the stack layer
+    LAYER_NUM   layer2 = B_Cu;      // Last layer of the stack layer
+    bool        gen_through_holes   = true;
+    bool        gen_NPTH_holes      = false;
 
     wxString brdFilename = m_pcb->GetFileName();
     fprintf( m_file, "Drill report for %s\n", TO_UTF8( brdFilename ) );
@@ -318,7 +318,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         else
         {
             // If this is the first partial hole list: print a title
-            if( layer1 == B_Cu )
+            if( layer1 == F_Cu )
                 fputs( "Drill report for buried and blind vias :\n\n", m_file );
 
             sprintf( line, "Drill report for holes from layer %s to layer %s :\n",
@@ -361,9 +361,9 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         }
 
         if( gen_NPTH_holes )
-            sprintf( line, "\nTotal unplated holes count %d\n\n\n", totalHoleCount );
+            sprintf( line, "\nTotal unplated holes count %u\n\n\n", totalHoleCount );
         else
-            sprintf( line, "\nTotal plated holes count %d\n\n\n", totalHoleCount );
+            sprintf( line, "\nTotal plated holes count %u\n\n\n", totalHoleCount );
 
         fputs( line, m_file );
 
@@ -380,12 +380,12 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
             }
 
             if( gen_through_holes )
-            {
+            {   // Prepare the next iteration, which print the not through holes
                 layer2 = layer1 + 1;
             }
             else
             {
-                if( layer2 >= F_Cu )    // no more layer pair to consider
+                if( layer2 >= B_Cu )    // no more layer pair to consider
                 {
                     gen_NPTH_holes = true;
                     continue;
@@ -395,9 +395,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
                 ++layer2;           // use next layer pair
 
                 if( layer2 == m_pcb->GetCopperLayerCount() - 1 )
-                    layer2 = F_Cu; // the last layer is always the
-
-                // component layer
+                    layer2 = B_Cu; // the last layer is always the bottom layer
             }
 
             gen_through_holes = false;

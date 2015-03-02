@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2007-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,22 +91,16 @@ END_EVENT_TABLE()
 
 EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
                                 const wxPoint& pos, const wxSize& size ) :
-#if wxCHECK_VERSION( 2, 9, 5 )
     wxScrolledWindow( parent, id, pos, size, wxBORDER | wxHSCROLL | wxVSCROLL )
-#else
-    wxScrolledWindow( parent, id, pos, size, wxBORDER | wxHSCROLL | wxVSCROLL | wxALWAYS_SHOW_SB )
-#endif
 {
     wxASSERT( parent );
 
-#if wxCHECK_VERSION( 2, 9, 5 )
 #ifndef USE_OSX_MAGNIFY_EVENT
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
 #else
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
 #endif
     DisableKeyboardScrolling();
-#endif
 
     m_scrollIncrementX = std::min( size.x / 8, 10 );
     m_scrollIncrementY = std::min( size.y / 8, 10 );

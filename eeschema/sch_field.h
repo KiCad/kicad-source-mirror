@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,11 +134,8 @@ public:
         return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
     }
 
-    void Draw( EDA_DRAW_PANEL* aPanel,
-               wxDC*           aDC,
-               const wxPoint&  aOffset,
-               GR_DRAWMODE     aDrawMode,
-               EDA_COLOR_T     aColor = UNSPECIFIED_COLOR );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     bool Save( FILE* aFile ) const;
 

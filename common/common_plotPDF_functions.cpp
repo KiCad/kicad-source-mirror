@@ -452,7 +452,8 @@ void PDF_PLOTTER::closePdfStream()
 {
     wxASSERT( workFile );
 
-    int stream_len = ftell( workFile );
+    long stream_len = ftell( workFile );
+    wxASSERT( stream_len >= 0 );
 
     // Rewind the file, read in the page stream and DEFLATE it
     fseek( workFile, 0, SEEK_SET );
@@ -468,7 +469,7 @@ void PDF_PLOTTER::closePdfStream()
     ::wxRemoveFile( workFilename );
 
     // NULL means memos owns the memory, but provide a hint on optimum size needed.
-    wxMemoryOutputStream    memos( NULL, std::max( 2000, stream_len ) ) ;
+    wxMemoryOutputStream    memos( NULL, std::max( 2000l, stream_len ) ) ;
 
     {
         /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is

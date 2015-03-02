@@ -221,6 +221,8 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize.y *= 10.0 * aIusPerDecimil;
     SetDefaultLineWidth( 0 );    // HPGL has pen sizes instead
     m_plotMirror = aMirror;
+    penOverlap = 0;
+    penDiameter = 0;
 }
 
 

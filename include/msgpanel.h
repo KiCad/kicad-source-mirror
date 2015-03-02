@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011-2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,11 +69,19 @@ public:
         m_Color( aColor ),
         m_Pad( aPad )
     {
+        m_X = 0;
+        m_UpperY = 0;
+        m_LowerY = 0;
     }
 
     MSG_PANEL_ITEM() :
         m_Pad( MSG_PANEL_DEFAULT_PAD )
+
     {
+        m_X = 0;
+        m_UpperY = 0;
+        m_LowerY = 0;
+        m_Color = UNSPECIFIED_COLOR;
     }
 
     void SetUpperText( const wxString& aUpperText ) { m_UpperText = aUpperText; }

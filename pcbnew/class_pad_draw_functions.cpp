@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,15 +117,19 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         return;
 
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
+
+    wxCHECK_RET( frame != NULL, wxT( "Panel has no parent frame window." ) );
+
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
     PCB_SCREEN*     screen = frame->GetScreen();
 
-    if( displ_opts->m_DisplayPadFill == FILLED )
-        drawInfo.m_ShowPadFilled = true;
-    else
+    if( displ_opts && displ_opts->m_DisplayPadFill == SKETCH )
         drawInfo.m_ShowPadFilled = false;
+    else
+        drawInfo.m_ShowPadFilled = true;
 
     EDA_COLOR_T color = BLACK;
+
     if( m_layerMask[F_Cu] )
     {
         color = brd->GetVisibleElementColor( PAD_FR_VISIBLE );
@@ -169,7 +173,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         displ_opts && displ_opts->m_ContrastModeDisplay )
     {
         // when routing tracks
-        if( frame && frame->GetToolId() == ID_TRACK_BUTT )
+        if( frame->GetToolId() == ID_TRACK_BUTT )
         {
             LAYER_ID routeTop = screen->m_Route_Layer_TOP;
             LAYER_ID routeBot = screen->m_Route_Layer_BOTTOM;

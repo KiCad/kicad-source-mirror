@@ -90,8 +90,11 @@ TEXTE_MODULE::~TEXTE_MODULE()
 void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
+
     m_Orient += aAngle;
     NORMALIZE_ANGLE_360( m_Orient );
+
+    SetLocalCoord();
 }
 
 

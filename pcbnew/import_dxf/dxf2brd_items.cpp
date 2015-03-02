@@ -447,7 +447,7 @@ void DXF2BRD_CONVERTER::addHeader( const DRW_Header* data )
 {
     std::map<std::string, DRW_Variant*>::const_iterator it;
 
-    for( it = data->vars.begin(); it != data->vars.end(); it++ )
+    for( it = data->vars.begin(); it != data->vars.end(); ++it )
     {
         std::string key = ( (*it).first ).c_str();
 

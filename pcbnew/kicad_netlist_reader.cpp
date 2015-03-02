@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,8 +55,9 @@ void KICAD_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::b
 KICAD_NETLIST_PARSER::KICAD_NETLIST_PARSER( LINE_READER* aReader, NETLIST* aNetlist ) :
     NETLIST_LEXER( aReader )
 {
-    m_lineReader  = aReader;
-    m_netlist = aNetlist;
+    m_lineReader = aReader;
+    m_netlist    = aNetlist;
+    token        = T_NONE;
 }
 
 
@@ -80,7 +81,7 @@ void KICAD_NETLIST_PARSER::skipCurrent() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void KICAD_NETLIST_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
+void KICAD_NETLIST_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
 {
     wxString text;
 
@@ -269,7 +270,7 @@ void KICAD_NETLIST_PARSER::parseNet() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR )
+void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
 {
    /* Parses a section like
      * (comp (ref P1)

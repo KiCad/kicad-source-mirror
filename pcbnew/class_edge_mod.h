@@ -100,6 +100,8 @@ public:
 
     EDA_ITEM* Clone() const;
 
+    void Rotate( const wxPoint& aRotCentre, double aAngle ); // override
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif

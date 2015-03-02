@@ -49,6 +49,7 @@ DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     m_Width( Millimeter2iu( 0.2 ) ), m_Unit( INCHES ), m_Value( 0 ), m_Height( 0 ), m_Text( this )
 {
     m_Layer = Dwgs_User;
+    m_Shape = 0;
 }
 
 

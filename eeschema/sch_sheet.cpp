@@ -53,8 +53,8 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_sheetNameSize = GetDefaultTextSize();
     m_fileNameSize = GetDefaultTextSize();
     m_screen = NULL;
-    m_name.Printf( wxT( "Sheet%8.8lX" ), m_TimeStamp );
-    m_fileName.Printf( wxT( "file%8.8lX.sch" ), m_TimeStamp );
+    m_name.Printf( wxT( "Sheet%8.8lX" ), (long) m_TimeStamp );
+    m_fileName.Printf( wxT( "file%8.8lX.sch" ), (long) m_TimeStamp );
 }
 
 
@@ -886,6 +886,14 @@ void SCH_SHEET::MirrorY( int aYaxis_position )
         label.MirrorY( aYaxis_position );
     }
 }
+
+void SCH_SHEET::SetPosition( const wxPoint& aPosition )
+{
+    // Remember the sheet and all pin sheet positions must be
+    // modified. So use Move function to do that.
+    Move( aPosition - m_pos );
+}
+
 
 
 void SCH_SHEET::Resize( const wxSize& aSize )

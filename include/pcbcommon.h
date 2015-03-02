@@ -30,26 +30,6 @@
 
 class PGM_BASE;
 
-/**
- * attempts to set (when not set or valid) the environment variable given by aKiSys3Dmod
- * (typically "KISYS3DMOD" ) to a valid path.
- * If the environment variable is already set, then it left as is to respect
- * the wishes of the user.
- *
- * The path is determined by attempting to find the path modules/packages3d
- * files in kicad tree.
- * This may or may not be the best path but it provides the best solution for
- * backwards compatibility with the previous 3D shapes search path implementation.
- *
- * @note This must be called after #SetBinDir() is called at least on Windows.
- * Otherwise, the kicad path is not known (Windows specific)
- *
- * @param aKiSys3Dmod = the value of environment variable, typically "KISYS3DMOD"
- * @param aProcess = the current process
- * @return false if the aKiSys3Dmod path is not valid.
- */
-bool Set3DShapesDefaultPath( const wxString& aKiSys3Dmod, const PGM_BASE* aProcess );
-
 
 /// Utility for comma separated lists
 inline void AccumulateDescription( wxString &aDesc, const wxString &aItem )

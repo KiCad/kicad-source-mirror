@@ -208,8 +208,6 @@ void LIB_VIEW_FRAME::SelectAndViewLibraryPart( int option )
 void LIB_VIEW_FRAME::ViewOneLibraryContent( PART_LIB* Lib, int Flag )
 {
     int        NumOfParts = 0;
-    LIB_ALIAS* entry;
-    wxString   CmpName;
 
     if( Lib )
         NumOfParts = Lib->GetCount();
@@ -220,8 +218,8 @@ void LIB_VIEW_FRAME::ViewOneLibraryContent( PART_LIB* Lib, int Flag )
         return;
     }
 
-    if( Lib == NULL )
-        return;
+    LIB_ALIAS* entry;
+    wxString   CmpName;
 
     if( Flag == NEW_PART )
         DisplayListComponentsInLib( Lib, CmpName, m_entryName );

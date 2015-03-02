@@ -223,6 +223,11 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
             endif()
         endif()
 
+        # The MinGW compiler can use the microsoft system snprintf as standard and it has a broken
+        # API with respect to the C99 standard, so make sure we force it to use its own compliant
+        # snprintf
+        add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+
     else()
         # We build DLL/DSOs from static libraries, so create position independent
         # code for all cases, since we do not have DLL/DSO specific static

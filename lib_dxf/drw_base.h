@@ -13,7 +13,7 @@
 #ifndef DRW_BASE_H
 #define DRW_BASE_H
 
-#define DRW_VERSION "0.5.11"
+#define DRW_VERSION "0.5.13"
 
 #include <string>
 #include <cmath>
@@ -42,7 +42,8 @@
 
 namespace DRW {
 // ! Version numbers for the DXF Format.
-enum Version {
+enum Version
+{
     UNKNOWNV,       /*!< UNKNOWN VERSION. */
     AC1006,         /*!< R10. */
     AC1009,         /*!< R11 & R12. */
@@ -54,7 +55,8 @@ enum Version {
     AC1024          /*!< ACAD 2010. */
 };
 
-enum error {
+enum error
+{
     BAD_NONE,               /*!< No error. */
     BAD_UNKNOWN,            /*!< UNKNOWN. */
     BAD_OPEN,               /*!< error opening file. */
@@ -76,7 +78,7 @@ enum error {
 class DRW_Coord
 {
 public:
-    DRW_Coord() { x = 0; y = 0; z = 0; }
+    DRW_Coord(): x(0), y(0), z(0) {}
     DRW_Coord( double ix, double iy, double iz )
     {
         x = ix; y = iy; z = iz;
@@ -121,15 +123,15 @@ public:
     DRW_Vertex2D()
     {
 // eType = DRW::LWPOLYLINE;
-        stawidth = endwidth = bulge = 0;
+        x = y = stawidth = endwidth = bulge = 0.0;
     }
 
     DRW_Vertex2D( double sx, double sy, double b )
     {
         stawidth = endwidth = 0;
-        x       = sx;
-        y       = sy;
-        bulge   = b;
+        x   = sx;
+        y   = sy;
+        bulge = b;
     }
 
 public:
@@ -149,7 +151,8 @@ public:
 class DRW_Variant
 {
 public:
-    enum TYPE {
+    enum TYPE
+    {
         STRING,
         INTEGER,
         DOUBLE,
@@ -160,48 +163,66 @@ public:
     DRW_Variant()
     {
         type = INVALID;
+        code = 0;
+    }
+
+    DRW_Variant( const DRW_Variant& d )
+    {
+        code    = d.code;
+        type    = d.type;
+
+        if( d.type == COORD ) vdata = d.vdata;
+
+        if( d.type == STRING ) sdata = d.sdata;
+
+        content = d.content;
+    }
+
+    DRW_Variant( int c, UTF8STRING s ) { addString( s ); code = c; }
+    DRW_Variant( int c, int i ) { addInt( i ); code = c; }
+    DRW_Variant( int c, double d ) { addDouble( d ); code = c; }
+    DRW_Variant( int c, double x, double y, double z )
+    {
+        setType( COORD ); vdata.x = x; vdata.y = y;
+        vdata.z = z; content.v = &vdata; code = c;
     }
 
     ~DRW_Variant()
     {
-        if( type == COORD )
-            delete content.v;
     }
 
-    enum TYPE type;
-
-    void addString( UTF8STRING s ) { setType( STRING ); data = s; content.s = &data; }
+    void addString( UTF8STRING s ) { setType( STRING ); sdata = s; content.s = &sdata; }
     void addInt( int i ) { setType( INTEGER ); content.i = i; }
     void addDouble( double d ) { setType( DOUBLE ); content.d = d; }
-    void addCoord( DRW_Coord* v ) { setType( COORD ); content.v = v; }
-    void setType( enum TYPE t )
+    void addCoord()
     {
-        if( type == COORD )
-            delete content.v;
-
-        type = t;
+        setType( COORD ); vdata.x = 0.0; vdata.y = 0.0; vdata.z = 0.0; content.v =
+            &vdata;
     }
 
-    void setCoordX( double d ) { if( type == COORD ) content.v->x = d; }
-    void setCoordY( double d ) { if( type == COORD ) content.v->y = d; }
-    void setCoordZ( double d ) { if( type == COORD ) content.v->z = d; }
+    void addCoord( DRW_Coord v ) { setType( COORD ); vdata = v; content.v = &vdata; }
+    void setType( enum TYPE t ) { type = t; }
+    void setCoordX( double d ) { if( type == COORD ) vdata.x = d; }
+    void setCoordY( double d ) { if( type == COORD ) vdata.y = d; }
+    void setCoordZ( double d ) { if( type == COORD ) vdata.z = d; }
+
 private:
     typedef union
     {
         UTF8STRING* s;
-        int         i;
-        double      d;
-        DRW_Coord*  v;
+        int i;
+        double d;
+        DRW_Coord* v;
     } DRW_VarContent;
+
 public:
-    DRW_VarContent  content;
-public:
-    int             code;
-// string version;
-// string codepage;
+    DRW_VarContent content;
+    enum TYPE type;
+    int code;            /*!< dxf code of this value*/
+
 private:
-// DRW_VarContent content;
-    std::string data;
+    std::string sdata;
+    DRW_Coord   vdata;
 };
 
 
@@ -215,7 +236,8 @@ private:
 class DRW_LW_Conv
 {
 public:
-    enum lineWidth {
+    enum lineWidth
+    {
         width00 = 0,            /*!< 0.00mm (dxf 0)*/
         width01 = 1,            /*!< 0.05mm (dxf 5)*/
         width02 = 2,            /*!< 0.09mm (dxf 9)*/

@@ -134,8 +134,8 @@ public:
      * @return PART_LIB* - the new PART_LIB, which remains owned by this PART_LIBS container.
      * @throw IO_ERROR if there's any problem loading.
      */
-    PART_LIB* AddLibrary( const wxString& aFileName,
-                          PART_LIBS::iterator& aIterator ) throw( IO_ERROR );
+    PART_LIB* AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator )
+        throw( IO_ERROR, boost::bad_pointer );
 
     /**
      * Function RemoveLibrary

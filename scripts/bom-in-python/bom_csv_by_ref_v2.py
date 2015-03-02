@@ -7,7 +7,7 @@
 """
     @package
     Generate a csv list file.
-    Components are sorted by ref and grouped by value
+    Components are sorted by ref
     One component per line
     Fields are (if exist)
     Ref, value, Part, footprint, Datasheet, Manufacturer, Vendor

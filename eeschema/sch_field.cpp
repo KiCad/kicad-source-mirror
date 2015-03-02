@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,8 +114,8 @@ int SCH_FIELD::GetPenSize() const
 }
 
 
-void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                      const wxPoint& offset, GR_DRAWMODE DrawMode, EDA_COLOR_T Color )
+void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
     int            orient;
     EDA_COLOR_T    color;
@@ -131,14 +131,13 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
             LineWidth = GetDefaultLineThickness();
     }
 
-
     // Clip pen size for small texts:
     LineWidth = Clamp_Text_PenSize( LineWidth, m_Size, m_Bold );
 
     if( ((m_Attributs & TEXT_NO_VISIBLE) && !m_forceVisible) || IsVoid() )
         return;
 
-    GRSetDrawMode( DC, DrawMode );
+    GRSetDrawMode( aDC, aDrawMode );
 
     // Calculate the text orientation according to the component orientation.
     orient = m_Orient;
@@ -163,7 +162,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
     EDA_RECT boundaryBox = GetBoundingBox();
-    textpos = boundaryBox.Centre();
+    textpos = boundaryBox.Centre() + aOffset;
 
     if( m_forceVisible )
     {
@@ -179,8 +178,8 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
             color = GetLayerColor( LAYER_FIELDS );
     }
 
-    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, DC, textpos, color, GetFullyQualifiedText(), orient, m_Size,
+    EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
+    DrawGraphicText( clipbox, aDC, textpos, color, GetFullyQualifiedText(), orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                      LineWidth, m_Italic, m_Bold );
 
@@ -191,7 +190,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
         textpos  = m_Pos - origin;
         textpos  = parentComponent->GetScreenCoord( textpos );
         textpos += parentComponent->GetPosition();
-        GRLine( clipbox, DC, origin, textpos, 2, DARKGRAY );
+        GRLine( clipbox, aDC, origin, textpos, 2, DARKGRAY );
     }
 
     /* Enable this to draw the bounding box around the text field to validate
@@ -200,7 +199,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 #if 0
 
     // Draw boundary box:
-    GRRect( panel->GetClipBox(), DC, boundaryBox, 0, BROWN );
+    GRRect( aPanel->GetClipBox(), aDC, boundaryBox, 0, BROWN );
 
     // Draw the text anchor point
 
@@ -210,9 +209,9 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     textpos  = parentComponent->GetScreenCoord( textpos );
     textpos += parentComponent->GetPosition();
     const int len = 10;
-    GRLine( clipbox, DC,
+    GRLine( clipbox, aDC,
             textpos.x - len, textpos.y, textpos.x + len, textpos.y, 0, BLUE );
-    GRLine( clipbox, DC,
+    GRLine( clipbox, aDC,
             textpos.x, textpos.y - len, textpos.x, textpos.y + len, 0, BLUE );
 #endif
 }

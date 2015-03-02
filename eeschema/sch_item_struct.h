@@ -117,6 +117,8 @@ class SCH_ITEM : public EDA_ITEM
 protected:
     LAYERSCH_ID    m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
+    wxPoint        m_storedPos;     ///< a temporary variable used in some move commands
+                                    ///> to store a initial pos (of the item or mouse cursor)
 
 public:
     SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
@@ -142,6 +144,19 @@ public:
     SCH_ITEM* Back() const { return static_cast<SCH_ITEM*>( Pback ); }
 
     /**
+     * Virtual function IsMovableFromAnchorPoint
+     * @return true for items which are moved with the anchor point at mouse cursor
+     *  and false for items moved with no reference to anchor
+     * Usually return true for small items (labels, junctions) and false for
+     * items which can be large (hierarchical sheets, compoments)
+     */
+    virtual bool IsMovableFromAnchorPoint() { return true; }
+
+    wxPoint& GetStoredPos() { return m_storedPos; }
+    void     SetStoredPos( wxPoint aPos ) { m_storedPos = aPos; }
+
+
+    /**
      * Function GetLayer
      * returns the layer this item is on.
      */
@@ -162,12 +177,17 @@ public:
 
     /**
      * Function Draw
+     * Draw a schematic item. Each schematic item should have its own method
+     * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
+     * @param aDC Device Context (can be null)
+     * @param aOffset drawing Offset (usually wxPoint(0,0),
+     *  but can be different when moving an object)
+     * @param aDrawMode GR_OR, GR_XOR, ...
+     * @param aColor UNSPECIFIED_COLOR to use the normal body item color,
+     * or force this color if it is a valid color
      */
-    virtual void Draw( EDA_DRAW_PANEL* aPanel,
-                       wxDC*           aDC,
-                       const wxPoint&  aOffset,
-                       GR_DRAWMODE     aDrawMode,
-                       EDA_COLOR_T     aColor = UNSPECIFIED_COLOR ) = 0;
+    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&  aOffset,
+                       GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) = 0;
 
     /**
      * Function Move

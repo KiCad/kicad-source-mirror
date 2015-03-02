@@ -63,6 +63,8 @@ PART_LIB::PART_LIB( int aType, const wxString& aFileName ) :
     timeStamp = 0;
     isCache = false;
     timeStamp = wxDateTime::Now();
+    versionMajor = 0;       // Will be updated after reading the lib file
+    versionMinor = 0;       // Will be updated after reading the lib file
 
     fileName = aFileName;
 
@@ -804,7 +806,8 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
 }
 
 
-PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator ) throw( IO_ERROR )
+PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator )
+    throw( IO_ERROR, boost::bad_pointer )
 {
 #if 1
     // Don't reload the library if it is already loaded.

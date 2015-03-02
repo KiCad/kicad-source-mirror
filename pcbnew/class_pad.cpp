@@ -838,6 +838,9 @@ void D_PAD::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
     m_Orient += aAngle;
+    NORMALIZE_ANGLE_360( m_Orient );
+
+    SetLocalCoord();
 }
 
 

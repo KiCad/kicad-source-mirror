@@ -71,6 +71,7 @@ public:
         m_DisplayPolarCood      = false;
         m_DisplayDCodes = true;
         m_IsPrinting = false;
+        m_DisplayNegativeObjects = false;
     }
 };
 

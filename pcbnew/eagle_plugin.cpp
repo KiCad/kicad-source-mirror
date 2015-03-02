@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2015 KiCad Developers, see change_log.txt for contributors.
 
  *
  * This program is free software; you can redistribute it and/or
@@ -372,7 +372,7 @@ EVIA::EVIA( CPTREE& aVia )
 
     string ext = attribs.get<string>( "extent" );
 
-    sscanf( ext.c_str(), "%u-%u", &layer_front_most, &layer_back_most );
+    sscanf( ext.c_str(), "%d-%d", &layer_front_most, &layer_back_most );
 
     drill = attribs.get<double>( "drill" );
     diam  = attribs.get_optional<double>( "diameter" );
@@ -951,6 +951,7 @@ ELAYER::ELAYER( CPTREE& aLayer )
     number = attribs.get<int>( "number" );
     name   = attribs.get<string>( "name" );
     color  = attribs.get<int>( "color" );
+    fill   = 1;    // Temporary value.
     visible = parseOptionalBool( attribs, "visible" );
     active  = parseOptionalBool( attribs, "active" );
 }
@@ -992,6 +993,7 @@ struct ERULES
 
     ERULES() :
         psElongationLong    ( 100 ),
+        psElongationOffset  ( 0 ),
         rvPadTop            ( 0.25 ),
         // rvPadBottom      ( 0.25 ),
         rlMinPadTop         ( Mils2iu( 10 ) ),
@@ -1206,8 +1208,10 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
 void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
 {
-    m_hole_count = 0;
-
+    m_hole_count   = 0;
+    m_min_trace    = 0;
+    m_min_via      = 0;
+    m_min_via_hole = 0;
     m_xpath->clear();
     m_pads_to_nets.clear();
 

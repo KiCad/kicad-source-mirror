@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-12 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -701,7 +701,8 @@ const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 }
 
 
-bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable ) throw (IO_ERROR, PARSE_ERROR )
+bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
+    throw (IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     bool        tableExists = true;
     wxFileName  fn = GetGlobalTableFileName();
@@ -761,7 +762,8 @@ void FP_LIB_TABLE::Load( const wxString& aFileName )
 }
 
 
-void FP_LIB_TABLE::Save( const wxString& aFileName ) const throw( IO_ERROR )
+void FP_LIB_TABLE::Save( const wxString& aFileName )
+    const throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     FILE_OUTPUTFORMATTER sf( aFileName );
     Format( &sf, 0 );

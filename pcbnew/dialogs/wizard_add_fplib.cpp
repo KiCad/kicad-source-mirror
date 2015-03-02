@@ -891,7 +891,7 @@ bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
     wxString default_path;
     wxGetEnv(  FP_LIB_TABLE::GlobalPathEnvVariableName(), &default_path );
 
-    masterFolder =	wxDirSelector( _("Output Folder" ),
+    masterFolder =	wxDirSelector( _("Choose Folder to Copy Downloaded '.pretty' Libraries" ),
                                    default_path, 0, wxDefaultPosition, this );
 
     if( masterFolder.IsEmpty() )    // Aborted by user

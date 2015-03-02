@@ -309,11 +309,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
-    // Set 3D shape path (environment variable KISYS3DMOD) if not defined or valid
-    // Currently, called here, but could be moved ( OpenProjectFiles() ? )
-    // if KISYS3DMOD is defined in a project config file
-    Set3DShapesDefaultPath( KISYS3DMOD, aProgram );
-
     try
     {
         // The global table is not related to a specific project.  All projects

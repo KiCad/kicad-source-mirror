@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,6 +28,7 @@ class DIALOG_SHIM;
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,6 +55,7 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_rotEntry;
 		wxStaticText* m_rotUnit;
 		wxBitmapButton* m_clearRot;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
@@ -69,7 +71,7 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Move item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Move item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 331,200 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_MOVE_EXACT_BASE();
 	
 };

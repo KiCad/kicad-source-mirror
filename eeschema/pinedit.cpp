@@ -515,8 +515,6 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
 void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
 
 {
-    bool selected = aMasterPin->IsSelected();
-
     LIB_PART*      part = GetCurPart();
 
     if( !part || !aMasterPin )
@@ -526,6 +524,8 @@ void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
         return;
 
     OnModify( );
+
+    bool selected = aMasterPin->IsSelected();
 
     for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {

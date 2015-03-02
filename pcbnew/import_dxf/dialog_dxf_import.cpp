@@ -116,7 +116,9 @@ void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
                       path, filename,
                       wxT( "dxf Files (*.dxf)|*.dxf" ),
                       wxFD_OPEN|wxFD_FILE_MUST_EXIST );
-    dlg.ShowModal();
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
 
     wxString fileName = dlg.GetPath();
 

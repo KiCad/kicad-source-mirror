@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,11 +95,16 @@ public:
 
     bool operator ==( const SCH_SHEET_PIN* aPin ) const;
 
-    void Draw( EDA_DRAW_PANEL* aPanel,
-               wxDC*           aDC,
-               const wxPoint&  aOffset,
-               GR_DRAWMODE     aDraw_mode,
-               EDA_COLOR_T     aColor = UNSPECIFIED_COLOR );
+    /**
+     * Virtual function IsMovableFromAnchorPoint
+     * Return true for items which are moved with the anchor point at mouse cursor
+     *  and false for items moved with no reference to anchor
+     * @return false for a hierarchical sheet pin
+     */
+    bool IsMovableFromAnchorPoint() { return false; }
+
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     /**
      * Function CreateGraphicShape (virtual)
@@ -247,6 +252,15 @@ public:
         return wxT( "SCH_SHEET" );
     }
 
+    /**
+     * Virtual function IsMovableFromAnchorPoint
+     * Return true for items which are moved with the anchor point at mouse cursor
+     *  and false for items moved with no reference to anchor
+     * Usually return true for small items (labels, junctions) and false for
+     * items which can be large (hierarchical sheets, compoments)
+     * @return false for a hierarchical sheet
+     */
+    bool IsMovableFromAnchorPoint() { return false; }
 
     wxString GetName() const { return m_name; }
 
@@ -392,11 +406,8 @@ public:
 
     int GetPenSize() const;
 
-    void Draw( EDA_DRAW_PANEL* aPanel,
-               wxDC*           aDC,
-               const wxPoint&  aOffset,
-               GR_DRAWMODE     aDrawMode,
-               EDA_COLOR_T     aColor = UNSPECIFIED_COLOR );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     EDA_RECT const GetBoundingBox() const;
 
@@ -549,7 +560,7 @@ public:
 
     wxPoint GetPosition() const { return m_pos; }
 
-    void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
+    void SetPosition( const wxPoint& aPosition );
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 

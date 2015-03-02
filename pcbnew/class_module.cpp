@@ -145,9 +145,7 @@ MODULE::MODULE( const MODULE& aModule ) :
         if( item->GetShape3DName().IsEmpty() )           // do not copy empty shapes.
             continue;
 
-        S3D_MASTER* t3d = m_3D_Drawings;
-
-        t3d = new S3D_MASTER( this );
+        S3D_MASTER* t3d = new S3D_MASTER( this );
         t3d->Copy( item );
         m_3D_Drawings.PushBack( t3d );
     }
@@ -1057,7 +1055,7 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
     for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
     {
         pad->SetPos0( pad->GetPos0() + moveVector );
-        pad->SetPosition( pad->GetPos0() + footprintPos );
+        pad->SetDrawCoord();
     }
 
     // Update the draw element coordinates.
@@ -1102,13 +1100,8 @@ void MODULE::SetOrientation( double newangle )
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pt = pad->GetPos0();
-
         pad->SetOrientation( pad->GetOrientation() + angleChange );
-
-        RotatePoint( &pt, m_Orient );
-
-        pad->SetPosition( GetPosition() + pt );
+        pad->SetDrawCoord();
     }
 
     // Update of the reference and value.

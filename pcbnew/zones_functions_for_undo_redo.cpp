@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras <jp.charras@wanadoo.fr>
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,6 +225,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 if( status == UR_NEW )
                 {
                     delete ref;
+                    ref = NULL;
                     aPickList.RemovePicker( kk );
                     kk--;
                 }
@@ -233,10 +234,10 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                     ZONE_CONTAINER* zcopy = (ZONE_CONTAINER*) aPickList.GetPickedItemLink( kk );
                     aPickList.SetPickedItemStatus( UR_DELETED, kk );
 
-                    if( zcopy )
-                        ref->Copy( zcopy );
-                    else
-                        wxMessageBox( wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
+                    wxASSERT_MSG( zcopy != NULL,
+                                  wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
+
+                    ref->Copy( zcopy );
 
                     // the copy was deleted; the link does not exists now.
                     aPickList.SetPickedItemLink( NULL, kk );
@@ -248,7 +249,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
 
                 for( unsigned nn = 0; nn < aAuxiliaryList.GetCount(); nn++ )
                 {
-                    if( aAuxiliaryList.GetPickedItem( nn ) == ref )
+                    if( ref != NULL && aAuxiliaryList.GetPickedItem( nn ) == ref )
                     {
                         aAuxiliaryList.RemovePicker( nn );
                         notfound = false;
@@ -256,11 +257,12 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                     }
                 }
 
-                if( notfound )
-                    wxMessageBox( wxT( "UpdateCopyOfZonesList() error: item not found in aAuxiliaryList" ) );
-
+                wxASSERT_MSG( notfound != true,
+                              wxT( "UpdateCopyOfZonesList() error: item not found in "
+                                   "aAuxiliaryList" ) );
                 break;
             }
+
             if( zone == ref )      // picked zone found
             {
                 if( aPickList.GetPickedItemStatus( kk ) != UR_NEW )
@@ -279,7 +281,6 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
             }
         }
     }
-
 
     // Add new zones in main pick list, and remove pickers from Auxiliary List
     for( unsigned ii = 0; ii < aAuxiliaryList.GetCount(); )
@@ -300,17 +301,6 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
     }
 
     // Should not occur:
-    if( aAuxiliaryList.GetCount()> 0 )
-    {
-        wxString msg;
-        msg.Printf( wxT( "UpdateCopyOfZonesList() error: aAuxiliaryList not void: %d item left (status %d)" ),
-                    aAuxiliaryList.GetCount(), aAuxiliaryList.GetPickedItemStatus( 0 ) );
-        wxMessageBox( msg );
-
-        while( aAuxiliaryList.GetCount() > 0 )
-        {
-            delete aAuxiliaryList.GetPickedItemLink( 0 );
-            aAuxiliaryList.RemovePicker( 0 );
-        }
-    }
+    wxASSERT_MSG( aAuxiliaryList.GetCount() == 0,
+                  wxT( "UpdateCopyOfZonesList() error: aAuxiliaryList not empty." ) );
 }

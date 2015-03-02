@@ -848,7 +848,7 @@ void FOOTPRINT_EDIT_FRAME::moveExact()
     DIALOG_MOVE_EXACT dialog( this, translation, rotation );
     int ret = dialog.ShowModal();
 
-    if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+    if( ret == wxID_OK )
     {
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
 
@@ -926,7 +926,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         DIALOG_MOVE_EXACT dialog( this, translation, rotation  );
         int ret = dialog.ShowModal();
 
-        if( ret == DIALOG_MOVE_EXACT::MOVE_OK )
+        if( ret == wxID_OK )
         {
             MoveMarkedItemsExactly( module, wxPoint(0, 0),
                                     translation, rotation, true );

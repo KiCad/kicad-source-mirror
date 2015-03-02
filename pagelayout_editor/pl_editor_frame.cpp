@@ -709,6 +709,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
     // because the locate requirements are very basic.
     std::vector <WS_DRAW_ITEM_BASE*> list;
     drawList.Locate( list, aPosition );
+
     if( list.size() == 0 )
         return NULL;
 

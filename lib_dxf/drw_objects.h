@@ -24,14 +24,16 @@ class dxfWriter;
 
 namespace DRW {
 // ! Table entries type.
-enum TTYPE {
+enum TTYPE
+{
     UNKNOWNT,
     LTYPE,
     LAYER,
     STYLE,
     DIMSTYLE,
     VPORT,
-    BLOCK_RECORD
+    BLOCK_RECORD,
+    APPID
 };
 }
 
@@ -48,18 +50,42 @@ public:
     {
         tType   = DRW::UNKNOWNT;
         flags   = 0;
+        curr    = NULL;
+        handle  = 0;
+        handleBlock = 0;
     }
 
-    virtual ~DRW_TableEntry() {}
+    virtual ~DRW_TableEntry()
+    {
+        for( std::vector<DRW_Variant*>::iterator it = extData.begin(); it!=extData.end(); ++it )
+            delete *it;
+
+        extData.clear();
+    }
+
 protected:
     void parseCode( int code, dxfReader* reader );
 
+    void reset()
+    {
+        flags = 0;
+
+        for( std::vector<DRW_Variant*>::iterator it = extData.begin(); it!=extData.end(); ++it )
+            delete *it;
+
+        extData.clear();
+    }
+
 public:
-    enum DRW::TTYPE tType;          /*!< enum: entity type, code 0 */
-    int             handle;         /*!< entity identifier, code 5 */
-    int             handleBlock;    /*!< Soft-pointer ID/handle to owner BLOCK_RECORD object, code 330 */
-    UTF8STRING      name;           /*!< entry name, code 2 */
-    int             flags;          /*!< Flags relevant to entry, code 70 */
+    enum DRW::TTYPE tType;              /*!< enum: entity type, code 0 */
+    int handle;                         /*!< entity identifier, code 5 */
+    int handleBlock;                    /*!< Soft-pointer ID/handle to owner BLOCK_RECORD object, code 330 */
+    UTF8STRING name;                    /*!< entry name, code 2 */
+    int flags;                          /*!< Flags relevant to entry, code 70 */
+    std::vector<DRW_Variant*> extData;  /*!< FIFO list of extended data, codes 1000 to 1071*/
+
+private:
+    DRW_Variant* curr;
 };
 
 
@@ -75,27 +101,28 @@ public:
 
     void reset()
     {
-        tType       = DRW::DIMSTYLE;
-        dimasz      = dimtxt = dimexe = 0.18;
-        dimexo      = 0.0625;
-        dimgap      = dimcen = 0.09;
+        tType   = DRW::DIMSTYLE;
+        dimasz  = dimtxt = dimexe = 0.18;
+        dimexo  = 0.0625;
+        dimgap  = dimcen = 0.09;
         dimtxsty    = "Standard";
         dimscale    = dimlfac = dimtfac = 1.0;
-        dimdli      = 0.38;
-        dimrnd      = dimdle = dimtp = dimtm = dimtsz = dimtvp = 0.0;
-        dimaltf     = 25.4;
-        dimtol      = dimlim = dimse1 = dimse2 = dimtad = dimzin = 0;
-        dimtoh      = dimtolj = 1;
-        dimalt      = dimtofl = dimsah = dimtix = dimsoxd = 0;
-        dimaltd     = dimunit = dimaltu = dimalttd = dimlunit = 2;
-        dimclrd     = dimclre = dimclrt = dimjust = dimupt = 0;
-        dimazin     = dimaltz = dimaltttz = dimtzin = dimfrac = 0;
-        dimtih      = dimadec = dimaunit = dimsd1 = dimsd2 = dimtmove = 0;
-        dimaltrnd   = 0.0;
-        dimdec      = dimtdec = 4;
-        dimfit      = dimatfit = 3;
-        dimdsep     = '.';
-        dimlwd      = dimlwe = -2;
+        dimdli  = 0.38;
+        dimrnd  = dimdle = dimtp = dimtm = dimtsz = dimtvp = 0.0;
+        dimaltf = 25.4;
+        dimtol  = dimlim = dimse1 = dimse2 = dimtad = dimzin = 0;
+        dimtoh  = dimtolj = 1;
+        dimalt  = dimtofl = dimsah = dimtix = dimsoxd = 0;
+        dimaltd = dimunit = dimaltu = dimalttd = dimlunit = 2;
+        dimclrd = dimclre = dimclrt = dimjust = dimupt = 0;
+        dimazin = dimaltz = dimaltttz = dimtzin = dimfrac = 0;
+        dimtih  = dimadec = dimaunit = dimsd1 = dimsd2 = dimtmove = 0;
+        dimaltrnd = 0.0;
+        dimdec  = dimtdec = 4;
+        dimfit  = dimatfit = 3;
+        dimdsep = '.';
+        dimlwd  = dimlwe = -2;
+        DRW_TableEntry::reset();
     }
 
     void parseCode( int code, dxfReader* reader );
@@ -108,67 +135,67 @@ public:
     UTF8STRING  dimblk;         /*!< code 5, code 342 V2000+ */
     UTF8STRING  dimblk1;        /*!< code 6, code 343 V2000+ */
     UTF8STRING  dimblk2;        /*!< code 7, code 344 V2000+ */
-    double      dimscale;       /*!< code 40 */
-    double      dimasz;         /*!< code 41 */
-    double      dimexo;         /*!< code 42 */
-    double      dimdli;         /*!< code 43 */
-    double      dimexe;         /*!< code 44 */
-    double      dimrnd;         /*!< code 45 */
-    double      dimdle;         /*!< code 46 */
-    double      dimtp;          /*!< code 47 */
-    double      dimtm;          /*!< code 48 */
-    double      dimtxt;         /*!< code 140 */
-    double      dimcen;         /*!< code 141 */
-    double      dimtsz;         /*!< code 142 */
-    double      dimaltf;        /*!< code 143 */
-    double      dimlfac;        /*!< code 144 */
-    double      dimtvp;         /*!< code 145 */
-    double      dimtfac;        /*!< code 146 */
-    double      dimgap;         /*!< code 147 */
-    double      dimaltrnd;      /*!< code 148 V2000+ */
-    int         dimtol;         /*!< code 71 */
-    int         dimlim;         /*!< code 72 */
-    int         dimtih;         /*!< code 73 */
-    int         dimtoh;         /*!< code 74 */
-    int         dimse1;         /*!< code 75 */
-    int         dimse2;         /*!< code 76 */
-    int         dimtad;         /*!< code 77 */
-    int         dimzin;         /*!< code 78 */
-    int         dimazin;        /*!< code 79 V2000+ */
-    int         dimalt;         /*!< code 170 */
-    int         dimaltd;        /*!< code 171 */
-    int         dimtofl;        /*!< code 172 */
-    int         dimsah;         /*!< code 173 */
-    int         dimtix;         /*!< code 174 */
-    int         dimsoxd;        /*!< code 175 */
-    int         dimclrd;        /*!< code 176 */
-    int         dimclre;        /*!< code 177 */
-    int         dimclrt;        /*!< code 178 */
-    int         dimadec;        /*!< code 179 V2000+ */
-    int         dimunit;        /*!< code 270 R13+ (obsolete 2000+, use dimlunit & dimfrac) */
-    int         dimdec;         /*!< code 271 R13+ */
-    int         dimtdec;        /*!< code 272 R13+ */
-    int         dimaltu;        /*!< code 273 R13+ */
-    int         dimalttd;       /*!< code 274 R13+ */
-    int         dimaunit;       /*!< code 275 R13+ */
-    int         dimfrac;        /*!< code 276 V2000+ */
-    int         dimlunit;       /*!< code 277 V2000+ */
-    int         dimdsep;        /*!< code 278 V2000+ */
-    int         dimtmove;       /*!< code 279 V2000+ */
-    int         dimjust;        /*!< code 280 R13+ */
-    int         dimsd1;         /*!< code 281 R13+ */
-    int         dimsd2;         /*!< code 282 R13+ */
-    int         dimtolj;        /*!< code 283 R13+ */
-    int         dimtzin;        /*!< code 284 R13+ */
-    int         dimaltz;        /*!< code 285 R13+ */
-    int         dimaltttz;      /*!< code 286 R13+ */
-    int         dimfit;         /*!< code 287 R13+  (obsolete 2000+, use dimatfit & dimtmove)*/
-    int         dimupt;         /*!< code 288 R13+ */
-    int         dimatfit;       /*!< code 289 V2000+ */
+    double  dimscale;           /*!< code 40 */
+    double  dimasz;             /*!< code 41 */
+    double  dimexo;             /*!< code 42 */
+    double  dimdli;             /*!< code 43 */
+    double  dimexe;             /*!< code 44 */
+    double  dimrnd;             /*!< code 45 */
+    double  dimdle;             /*!< code 46 */
+    double  dimtp;              /*!< code 47 */
+    double  dimtm;              /*!< code 48 */
+    double  dimtxt;             /*!< code 140 */
+    double  dimcen;             /*!< code 141 */
+    double  dimtsz;             /*!< code 142 */
+    double  dimaltf;            /*!< code 143 */
+    double  dimlfac;            /*!< code 144 */
+    double  dimtvp;             /*!< code 145 */
+    double  dimtfac;            /*!< code 146 */
+    double  dimgap;             /*!< code 147 */
+    double  dimaltrnd;          /*!< code 148 V2000+ */
+    int dimtol;                 /*!< code 71 */
+    int dimlim;                 /*!< code 72 */
+    int dimtih;                 /*!< code 73 */
+    int dimtoh;                 /*!< code 74 */
+    int dimse1;                 /*!< code 75 */
+    int dimse2;                 /*!< code 76 */
+    int dimtad;                 /*!< code 77 */
+    int dimzin;                 /*!< code 78 */
+    int dimazin;                /*!< code 79 V2000+ */
+    int dimalt;                 /*!< code 170 */
+    int dimaltd;                /*!< code 171 */
+    int dimtofl;                /*!< code 172 */
+    int dimsah;                 /*!< code 173 */
+    int dimtix;                 /*!< code 174 */
+    int dimsoxd;                /*!< code 175 */
+    int dimclrd;                /*!< code 176 */
+    int dimclre;                /*!< code 177 */
+    int dimclrt;                /*!< code 178 */
+    int dimadec;                /*!< code 179 V2000+ */
+    int dimunit;                /*!< code 270 R13+ (obsolete 2000+, use dimlunit & dimfrac) */
+    int dimdec;                 /*!< code 271 R13+ */
+    int dimtdec;                /*!< code 272 R13+ */
+    int dimaltu;                /*!< code 273 R13+ */
+    int dimalttd;               /*!< code 274 R13+ */
+    int dimaunit;               /*!< code 275 R13+ */
+    int dimfrac;                /*!< code 276 V2000+ */
+    int dimlunit;               /*!< code 277 V2000+ */
+    int dimdsep;                /*!< code 278 V2000+ */
+    int dimtmove;               /*!< code 279 V2000+ */
+    int dimjust;                /*!< code 280 R13+ */
+    int dimsd1;                 /*!< code 281 R13+ */
+    int dimsd2;                 /*!< code 282 R13+ */
+    int dimtolj;                /*!< code 283 R13+ */
+    int dimtzin;                /*!< code 284 R13+ */
+    int dimaltz;                /*!< code 285 R13+ */
+    int dimaltttz;              /*!< code 286 R13+ */
+    int dimfit;                 /*!< code 287 R13+  (obsolete 2000+, use dimatfit & dimtmove)*/
+    int dimupt;                 /*!< code 288 R13+ */
+    int dimatfit;               /*!< code 289 V2000+ */
     UTF8STRING  dimtxsty;       /*!< code 340 R13+ */
     UTF8STRING  dimldrblk;      /*!< code 341 V2000+ */
-    int         dimlwd;         /*!< code 371 V2000+ */
-    int         dimlwe;         /*!< code 372 V2000+ */
+    int dimlwd;                 /*!< code 371 V2000+ */
+    int dimlwe;                 /*!< code 372 V2000+ */
 };
 
 
@@ -190,24 +217,22 @@ public:
         size    = 0;
         length  = 0.0;
         pathIdx = 0;
-/*        color = 256; // default BYLAYER (256)
- *       plotF = true; // default TRUE (plot yes)
- *       lWeight = -1; // default BYLAYER (-1)*/
-// align = 65; //always 65
+        DRW_TableEntry::reset();
     }
 
     void    parseCode( int code, dxfReader* reader );
     void    update();
 
 public:
-    UTF8STRING          desc;   /*!< descriptive string, code 3 */
+    UTF8STRING desc;            /*!< descriptive string, code 3 */
 // int align;               /*!< align code, always 65 ('A') code 72 */
-    int                 size;   /*!< element number, code 73 */
-    double              length; /*!< total length of pattern, code 40 */
+    int size;                   /*!< element number, code 73 */
+    double length;              /*!< total length of pattern, code 40 */
 // int haveShape;      /*!< complex linetype type, code 74 */
     std::vector<double> path;   /*!< trace, point or space length sequence, code 49 */
+
 private:
-    int                 pathIdx;
+    int pathIdx;
 };
 
 
@@ -223,21 +248,22 @@ public:
 
     void reset()
     {
-        tType       = DRW::LAYER;
-        lineType    = "CONTINUOUS";
-        color       = 7;                            // default BYLAYER (256)
-        plotF       = true;                         // default TRUE (plot yes)
-        lWeight     = DRW_LW_Conv::widthDefault;    // default BYDEFAULT (dxf -3, dwg 31)
-        color24     = -1;                           // default -1 not set
+        tType = DRW::LAYER;
+        lineType = "CONTINUOUS";
+        color   = 7;                            // default BYLAYER (256)
+        plotF   = true;                         // default TRUE (plot yes)
+        lWeight = DRW_LW_Conv::widthDefault;    // default BYDEFAULT (dxf -3, dwg 31)
+        color24 = -1;                           // default -1 not set
+        DRW_TableEntry::reset();
     }
 
     void parseCode( int code, dxfReader* reader );
 
 public:
-    UTF8STRING  lineType;                   /*!< line type, code 6 */
-    int         color;                      /*!< layer color, code 62 */
-    int         color24;                    /*!< 24-bit color, code 420 */
-    bool        plotF;                      /*!< Plot flag, code 290 */
+    UTF8STRING lineType;                    /*!< line type, code 6 */
+    int color;                              /*!< layer color, code 62 */
+    int color24;                            /*!< 24-bit color, code 420 */
+    bool plotF;                             /*!< Plot flag, code 290 */
     enum DRW_LW_Conv::lineWidth lWeight;    /*!< layer lineweight, code 370 */
     std::string handlePlotS;                /*!< Hard-pointer ID/handle of plotstyle, code 390 */
     std::string handlePlotM;                /*!< Hard-pointer ID/handle of materialstyle, code 347 */
@@ -255,25 +281,26 @@ public:
 
     void reset()
     {
-        tType       = DRW::STYLE;
-        height      = oblique = 0.0;
-        width       = lastHeight = 1.0;
-        font        = "txt";
-        genFlag     = 0; // 2= X mirror, 4= Y mirror
-        fontFamily  = 0;
+        tType   = DRW::STYLE;
+        height  = oblique = 0.0;
+        width   = lastHeight = 1.0;
+        font = "txt";
+        genFlag = 0;    // 2= X mirror, 4= Y mirror
+        fontFamily = 0;
+        DRW_TableEntry::reset();
     }
 
     void parseCode( int code, dxfReader* reader );
 
 public:
-    double      height;     /*!< Fixed text height (0 not set), code 40 */
-    double      width;      /*!< Width factor, code 41 */
-    double      oblique;    /*!< Oblique angle, code 50 */
-    int         genFlag;    /*!< Text generation flags, code 71 */
-    double      lastHeight; /*!< Last height used, code 42 */
+    double  height;         /*!< Fixed text height (0 not set), code 40 */
+    double  width;          /*!< Width factor, code 41 */
+    double  oblique;        /*!< Oblique angle, code 50 */
+    int genFlag;            /*!< Text generation flags, code 71 */
+    double lastHeight;      /*!< Last height used, code 42 */
     UTF8STRING  font;       /*!< primary font file name, code 3 */
     UTF8STRING  bigFont;    /*!< bigfont file name or blank if none, code 4 */
-    int         fontFamily; /*!< ttf font family, italic and bold flags, code 1071 */
+    int fontFamily;         /*!< ttf font family, italic and bold flags, code 1071 */
 };
 
 // ! Class to handle vport entries
@@ -290,19 +317,20 @@ public:
     {
         UpperRight.x    = UpperRight.y = 1.0;
         snapSpacing.x   = snapSpacing.y = 10.0;
-        gridSpacing     = snapSpacing;
-        center.x        = 0.651828;
-        center.y        = -0.16;
-        viewDir.z       = 1;
-        height          = 5.13732;
-        ratio           = 2.4426877;
-        lensHeight      = 50;
-        frontClip       = backClip = snapAngle = twistAngle = 0.0;
-        viewMode        = snap = grid = snapStyle = snapIsopair = 0;
-        fastZoom        = 1;
-        circleZoom      = 100;
-        ucsIcon         = 3;
-        gridBehavior    = 7;
+        gridSpacing = snapSpacing;
+        center.x    = 0.651828;
+        center.y    = -0.16;
+        viewDir.z   = 1;
+        height  = 5.13732;
+        ratio   = 2.4426877;
+        lensHeight  = 50;
+        frontClip   = backClip = snapAngle = twistAngle = 0.0;
+        viewMode    = snap = grid = snapStyle = snapIsopair = 0;
+        fastZoom    = 1;
+        circleZoom = 100;
+        ucsIcon = 3;
+        gridBehavior = 7;
+        DRW_TableEntry::reset();
     }
 
     void parseCode( int code, dxfReader* reader );
@@ -316,22 +344,22 @@ public:
     DRW_Coord   gridSpacing;    /*!< grid Spacing, code 15 & 25 */
     DRW_Coord   viewDir;        /*!< view direction from target point, code 16, 26 & 36 */
     DRW_Coord   viewTarget;     /*!< view target point, code 17, 27 & 37 */
-    double      height;         /*!< view height, code 40 */
-    double      ratio;          /*!< viewport aspect ratio, code 41 */
-    double      lensHeight;     /*!< lens height, code 42 */
-    double      frontClip;      /*!< front clipping plane, code 43 */
-    double      backClip;       /*!< back clipping plane, code 44 */
-    double      snapAngle;      /*!< snap rotation angle, code 50 */
-    double      twistAngle;     /*!< view twist angle, code 51 */
-    int         viewMode;       /*!< view mode, code 71 */
-    int         circleZoom;     /*!< circle zoom percent, code 72 */
-    int         fastZoom;       /*!< fast zoom setting, code 73 */
-    int         ucsIcon;        /*!< UCSICON setting, code 74 */
-    int         snap;           /*!< snap on/off, code 75 */
-    int         grid;           /*!< grid on/off, code 76 */
-    int         snapStyle;      /*!< snap style, code 77 */
-    int         snapIsopair;    /*!< snap isopair, code 78 */
-    int         gridBehavior;   /*!< grid behavior, code 60, undocummented */
+    double  height;             /*!< view height, code 40 */
+    double  ratio;              /*!< viewport aspect ratio, code 41 */
+    double  lensHeight;         /*!< lens height, code 42 */
+    double  frontClip;          /*!< front clipping plane, code 43 */
+    double  backClip;           /*!< back clipping plane, code 44 */
+    double  snapAngle;          /*!< snap rotation angle, code 50 */
+    double  twistAngle;         /*!< view twist angle, code 51 */
+    int viewMode;               /*!< view mode, code 71 */
+    int circleZoom;             /*!< circle zoom percent, code 72 */
+    int fastZoom;               /*!< fast zoom setting, code 73 */
+    int ucsIcon;                /*!< UCSICON setting, code 74 */
+    int snap;                   /*!< snap on/off, code 75 */
+    int grid;                   /*!< grid on/off, code 76 */
+    int snapStyle;              /*!< snap style, code 77 */
+    int snapIsopair;            /*!< snap isopair, code 78 */
+    int gridBehavior;           /*!< grid behavior, code 60, undocummented */
     /** code 60, bit coded possible value are
      * bit 1 (1) show out of limits
      * bit 2 (2) adaptive grid
@@ -352,6 +380,9 @@ public:
     DRW_ImageDef()
     {
         version = 0;
+        u = v = up = vp = 0.0;
+        loaded = 0;
+        resolution = 0;
     }
 
     void parseCode( int code, dxfReader* reader );
@@ -359,13 +390,13 @@ public:
 public:
     std::string handle;         /*!< entity identifier, code 5 */
     UTF8STRING  name;           /*!< File name of image, code 1 */
-    int         version;        /*!< class version, code 90, 0=R14 version */
-    double      u;              /*!< image size in pixels U value, code 10 */
-    double      v;              /*!< image size in pixels V value, code 20 */
-    double      up;             /*!< default size of one pixel U value, code 11 */
-    double      vp;             /*!< default size of one pixel V value, code 12 really is 21*/
-    int         loaded;         /*!< image is loaded flag, code 280, 0=unloaded, 1=loaded */
-    int         resolution;     /*!< resolution units, code 281, 0=no, 2=centimeters, 5=inch */
+    int version;                /*!< class version, code 90, 0=R14 version */
+    double  u;                  /*!< image size in pixels U value, code 10 */
+    double  v;                  /*!< image size in pixels V value, code 20 */
+    double  up;                 /*!< default size of one pixel U value, code 11 */
+    double  vp;                 /*!< default size of one pixel V value, code 12 really is 21*/
+    int loaded;                 /*!< image is loaded flag, code 280, 0=unloaded, 1=loaded */
+    int resolution;             /*!< resolution units, code 281, 0=no, 2=centimeters, 5=inch */
 
     std::map<std::string, std::string> reactors;
 };
@@ -373,7 +404,9 @@ public:
 
 // ! Class to handle header entries
 /*!
- *  Class to handle layer symbol table entries
+ *  Class to handle header vars, to read iterate over "std::map vars"
+ *  to write add a DRW_Variant* into "std::map vars" (do not delete it, are cleared in dtor)
+ *  or use add* helper functions.
  *  @author Rallaz
  */
 class DRW_Header
@@ -381,18 +414,29 @@ class DRW_Header
 public:
     DRW_Header()
     {
+        version = 0;
+        curr = 0;
     }
 
     ~DRW_Header()
     {
+        for( std::map<std::string, DRW_Variant*>::iterator it = vars.begin(); it!=vars.end(); ++it )
+            delete it->second;
+
         vars.clear();
     }
+
+    void    addDouble( std::string key, double value, int code );
+    void    addInt( std::string key, int value, int code );
+    void    addStr( std::string key, std::string value, int code );
+    void    addCoord( std::string key, DRW_Coord value, int code );
+
+    std::string getComments() const { return comments; }
 
     void    parseCode( int code, dxfReader* reader );
     void    write( dxfWriter* writer, DRW::Version ver );
     void    addComment( std::string c );
 
-    std::string getComments() const { return comments; }
 private:
     bool    getDouble( std::string key, double* varDouble );
     bool    getInt( std::string key, int* varInt );
@@ -401,11 +445,32 @@ private:
 
 public:
     std::map<std::string, DRW_Variant*> vars;
+
 private:
-    std::string     comments;
-    std::string     name;
-    DRW_Variant*    curr;
-    int             version; // to use on read
+    std::string comments;
+    std::string name;
+    DRW_Variant* curr;
+    int version;    // to use on read
+};
+
+// ! Class to handle AppId entries
+/*!
+ *  Class to handle AppId symbol table entries
+ *  @author Rallaz
+ */
+class DRW_AppId : public DRW_TableEntry
+{
+public:
+    DRW_AppId() { reset(); }
+
+    void reset()
+    {
+        tType   = DRW::APPID;
+        flags   = 0;
+        name    = "";
+    }
+
+    void parseCode( int code, dxfReader* reader ) { DRW_TableEntry::parseCode( code, reader ); }
 };
 
 namespace DRW {

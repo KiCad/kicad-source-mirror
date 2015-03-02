@@ -760,7 +760,6 @@ private:
         unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
         // This special environment variable is used to locate 3d shapes
         unique.insert( KISYS3DMOD );
-        unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
 
         m_path_subs_grid->AppendRows( unique.size() );
 

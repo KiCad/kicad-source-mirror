@@ -4,11 +4,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 Jean-Pierre Charras <jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -343,7 +343,15 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirecto
 
     wxString plotFileName = Prj().AbsolutePath( aPlotFileName + wxT(".") + aExtension);
 
-    EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter );
+    if( !EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter ) )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
+                    GetChars( outputDir.GetPath() ) );
+        msg << wxT( "\n" );
+        aReporter->Report( msg );
+    }
+
     wxFileName fn( plotFileName );
     fn.SetPath( outputDir.GetFullPath() );
     return fn;

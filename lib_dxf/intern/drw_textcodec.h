@@ -14,20 +14,21 @@ public:
     std::string toUtf8( std::string s );
 
     int getVersion() { return version; }
-    void        setVersion( std::string* v );
+    void setVersion( std::string* v );
 
     void setVersion( int v ) { version = v; }
-    void        setCodePage( std::string* c );
+    void setCodePage( std::string* c );
 
     void setCodePage( std::string c ) { setCodePage( &c ); }
     std::string getCodePage() { return cp; }
+
 private:
     std::string correctCodePage( const std::string& s );
 
 private:
-    int             version;
-    std::string     cp;
-    DRW_Converter*  conv;
+    int version;
+    std::string cp;
+    DRW_Converter* conv;
 };
 
 class DRW_Converter
@@ -47,8 +48,8 @@ public:
     std::string         encodeNum( int c );
     int                 decodeNum( std::string s, int* b );
 
-    const int*  table;
-    int         cpLenght;
+    const int* table;
+    int cpLenght;
 };
 
 class DRW_ConvTable : public DRW_Converter
@@ -63,9 +64,9 @@ class DRW_ConvDBCSTable : public DRW_Converter
 {
 public:
     DRW_ConvDBCSTable( const int* t, const int* lt, const int dt[][2], int l ) : DRW_Converter( t,
-                                                                                                l )
+                l )
     {
-        leadTable   = lt;
+        leadTable = lt;
         doubleTable = dt;
     }
 
@@ -81,9 +82,9 @@ class DRW_Conv932Table : public DRW_Converter
 {
 public:
     DRW_Conv932Table( const int* t, const int* lt, const int dt[][2], int l ) : DRW_Converter( t,
-                                                                                               l )
+                l )
     {
-        leadTable   = lt;
+        leadTable = lt;
         doubleTable = dt;
     }
 

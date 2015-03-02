@@ -174,7 +174,7 @@ class PCB_PARSER : public PCB_LEXER
      */
     wxPoint parseXY() throw( PARSE_ERROR, IO_ERROR );
 
-    void parseXY( int* aX, int* aY ) throw( PARSE_ERROR );
+    void parseXY( int* aX, int* aY ) throw( PARSE_ERROR, IO_ERROR );
 
     /**
      * Function parseEDA_TEXT

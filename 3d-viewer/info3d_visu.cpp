@@ -66,6 +66,7 @@ INFO3D_VISU::INFO3D_VISU()
     m_epoxyThickness    = 0;
     m_nonCopperLayerThickness = 0;
     m_BiuTo3Dunits = 1.0;
+    zpos_offset = 0.0;
 
     // Set copper color, in realistic mode
     #define LUMINANCE 0.7/255.0

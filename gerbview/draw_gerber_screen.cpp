@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jpierre.charras at wanadoo
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,8 @@
 void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                                 bool aPrintMirrorMode, void* aData )
 {
+    wxCHECK_RET( aData != NULL, wxT( "aDate cannot be NULL." ) );
+
     // Save current draw options, because print mode has specific options:
     GBR_DISPLAY_OPTIONS imgDisplayOptions = m_DisplayOptions;
     std::bitset <GERBER_DRAWLAYERS_COUNT> printLayersMask = GetGerberLayout()->GetPrintableLayers();
@@ -63,7 +65,7 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
     printCurrLayerMask.set(printParameters->m_Flags);   // m_Flags contains the draw layer number
     GetGerberLayout()->SetPrintableLayers( printCurrLayerMask );
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
-    bool printBlackAndWhite = printParameters && printParameters->m_Print_Black_and_White;
+    bool printBlackAndWhite = printParameters->m_Print_Black_and_White;
 
     GetGerberLayout()->Draw( m_canvas, aDC, UNSPECIFIED_DRAWMODE,
                              wxPoint( 0, 0 ), printBlackAndWhite );

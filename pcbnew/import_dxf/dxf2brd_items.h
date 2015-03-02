@@ -165,6 +165,9 @@ private:
 
     void writeLine();
     void writeMtext();
+
+    virtual void addAppId( const DRW_AppId& data ) {}
+    virtual void writeAppId() {}
 };
 
 #endif  // FILTERDXFRW_H

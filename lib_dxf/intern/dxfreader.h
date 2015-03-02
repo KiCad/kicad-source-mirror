@@ -21,6 +21,9 @@ public:
     dxfReader( std::ifstream* stream )
     {
         filestr = stream;
+        doubleData = 0.0;
+        intData = 0;
+        int64 = 0;
 #ifdef DRW_DBG
         count = 0;
 #endif
@@ -31,14 +34,14 @@ public:
     virtual bool    readString( std::string* text ) = 0;
     virtual bool    readString() = 0;
     bool            readRec( int* code, bool skip );
-    virtual bool    readInt()       = 0;
+    virtual bool    readInt() = 0;
     virtual bool    readInt32()     = 0;
     virtual bool    readInt64()     = 0;
     virtual bool    readDouble()    = 0;
-    virtual bool    readBool()      = 0;
+    virtual bool    readBool() = 0;
 
     std::string getString() { return strData; }
-    int             getHandleString(); // Convert hex string to int
+    int getHandleString();    // Convert hex string to int
 
     std::string toUtf8String( std::string t ) { return decoder.toUtf8( t ); }
     std::string getUtf8String() { return decoder.toUtf8( strData ); }
@@ -51,22 +54,24 @@ public:
     void setCodePage( std::string* c ) { decoder.setCodePage( c ); }
     std::string getCodePage() { return decoder.getCodePage(); }
 #ifdef DRW_DBG
-    int                     count; // DBG
+    int count;    // DBG
 #endif
+
 protected:
-    std::ifstream*          filestr;
-    std::string             strData;
-    double                  doubleData;
-    signed int              intData;    // 32 bits integer
-    unsigned long long int  int64;      // 64 bits integer
+    std::ifstream* filestr;
+    std::string strData;
+    double doubleData;
+    signed int intData;             // 32 bits integer
+    unsigned long long int int64;   // 64 bits integer
+
 private:
-    DRW_TextCodec           decoder;
+    DRW_TextCodec decoder;
 };
 
 class dxfReaderBinary : public dxfReader
 {
 public:
-    dxfReaderBinary( std::ifstream* stream ) : dxfReader( stream ) { }
+    dxfReaderBinary( std::ifstream* stream ) : dxfReader( stream ) {}
     virtual ~dxfReaderBinary() {}
     virtual bool    readCode( int* code );
     virtual bool    readString( std::string* text );
@@ -81,7 +86,7 @@ public:
 class dxfReaderAscii : public dxfReader
 {
 public:
-    dxfReaderAscii( std::ifstream* stream ) : dxfReader( stream ) { }
+    dxfReaderAscii( std::ifstream* stream ) : dxfReader( stream ) {}
     virtual ~dxfReaderAscii() {}
     virtual bool    readCode( int* code );
     virtual bool    readString( std::string* text );

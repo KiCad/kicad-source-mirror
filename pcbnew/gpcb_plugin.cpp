@@ -132,6 +132,7 @@ GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aModule, const wxFileName& aFi
     m_module( aModule )
 {
     m_file_name = aFileName;
+    m_writable = true;          // temporary init
 
     if( m_file_name.FileExists() )
         m_mod_time = m_file_name.GetModificationTime();

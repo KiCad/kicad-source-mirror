@@ -442,7 +442,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         ( (SCH_COMPONENT*) my_clone )->SetTimeStamp( GetNewTimeStamp() );
         my_clone->Move( pos );
         my_clone->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
-        MoveItem( my_clone, DC );
+        PrepareMoveItem( my_clone, DC );
     }
     else
     {

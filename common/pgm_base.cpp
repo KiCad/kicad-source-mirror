@@ -37,6 +37,7 @@
 #include <wx/filename.h>
 #include <wx/snglinst.h>
 #include <wx/stdpaths.h>
+#include <wx/sysopt.h>
 
 #include <pgm_base.h>
 #include <wxstruct.h>
@@ -426,9 +427,13 @@ bool PGM_BASE::initPgm()
     // Set locale option for separator used in float numbers
     SetLocaleTo_Default();
 
+#ifdef __WXMAC__
+    // Always show filters on Open dialog to be able to choose plugin
+    wxSystemOptions::SetOption( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1 );
+#endif
+
     return true;
 }
-
 
 
 bool PGM_BASE::setExecutablePath()

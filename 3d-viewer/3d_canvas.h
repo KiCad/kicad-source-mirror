@@ -83,9 +83,10 @@ private:
     double          m_ZBottom;          // position of the back layer
     double          m_ZTop;             // position of the front layer
 
-    GLuint          m_text_pcb;
-    GLuint          m_text_silk;
+    GLuint          m_text_pcb;     // an index to the texture generated for pcb texts
+    GLuint          m_text_silk;    // an index to the texture generated for silk layers
 
+    // Index to the textures generated for shadows
     bool            m_shadow_init;
     GLuint          m_text_fake_shadow_front;
     GLuint          m_text_fake_shadow_back;

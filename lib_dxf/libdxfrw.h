@@ -35,7 +35,7 @@ public:
      * @param ext should the extrusion be applied to convert in 2D?
      * @return true for success
      */
-    bool            read( DRW_Interface* interface_, bool ext );
+    bool read( DRW_Interface* interface_, bool ext );
 
     void setBinary( bool b ) { binary = b; }
 
@@ -45,6 +45,7 @@ public:
     bool            writeDimstyle( DRW_Dimstyle* ent );
     bool            writeTextstyle( DRW_Textstyle* ent );
     bool            writeVport( DRW_Vport* ent );
+    bool            writeAppId( DRW_AppId* ent );
     bool            writePoint( DRW_Point* ent );
     bool            writeLine( DRW_Line* ent );
     bool            writeRay( DRW_Ray* ent );
@@ -70,74 +71,77 @@ public:
     bool            writeDimension( DRW_Dimension* ent );
 
     void setEllipseParts( int parts ) { elParts = parts; }    /*!< set parts munber when convert ellipse to polyline */
+
 private:
     /// used by read() to parse the content of the file
-    bool            processDxf();
-    bool            processHeader();
-    bool            processTables();
-    bool            processBlocks();
-    bool            processBlock();
-    bool            processEntities( bool isblock );
-    bool            processObjects();
+    bool    processDxf();
+    bool    processHeader();
+    bool    processTables();
+    bool    processBlocks();
+    bool    processBlock();
+    bool    processEntities( bool isblock );
+    bool    processObjects();
 
-    bool            processLType();
-    bool            processLayer();
-    bool            processDimStyle();
-    bool            processTextStyle();
-    bool            processVports();
+    bool    processLType();
+    bool    processLayer();
+    bool    processDimStyle();
+    bool    processTextStyle();
+    bool    processVports();
+    bool    processAppId();
 
-    bool            processPoint();
-    bool            processLine();
-    bool            processRay();
-    bool            processXline();
-    bool            processCircle();
-    bool            processArc();
-    bool            processEllipse();
-    bool            processTrace();
-    bool            processSolid();
-    bool            processInsert();
-    bool            processLWPolyline();
-    bool            processPolyline();
-    bool            processVertex( DRW_Polyline* pl );
-    bool            processText();
-    bool            processMText();
-    bool            processHatch();
-    bool            processSpline();
-    bool            process3dface();
-    bool            processViewport();
-    bool            processImage();
-    bool            processImageDef();
-    bool            processDimension();
-    bool            processLeader();
+    bool    processPoint();
+    bool    processLine();
+    bool    processRay();
+    bool    processXline();
+    bool    processCircle();
+    bool    processArc();
+    bool    processEllipse();
+    bool    processTrace();
+    bool    processSolid();
+    bool    processInsert();
+    bool    processLWPolyline();
+    bool    processPolyline();
+    bool    processVertex( DRW_Polyline* pl );
+    bool    processText();
+    bool    processMText();
+    bool    processHatch();
+    bool    processSpline();
+    bool    process3dface();
+    bool    processViewport();
+    bool    processImage();
+    bool    processImageDef();
+    bool    processDimension();
+    bool    processLeader();
 
 // bool writeHeader();
-    bool            writeEntity( DRW_Entity* ent );
-    bool            writeTables();
-    bool            writeBlocks();
-    bool            writeObjects();
-    std::string     toHexStr( int n );
+    bool        writeEntity( DRW_Entity* ent );
+    bool        writeTables();
+    bool        writeBlocks();
+    bool        writeObjects();
+    bool        writeExtData( const std::vector<DRW_Variant*>& ed );
+    std::string toHexStr( int n );
 
 private:
-    DRW::Version                version;
-    std::string                 fileName;
-    std::string                 codePage;
-    bool                        binary;
-    dxfReader*                  reader;
-    dxfWriter*                  writer;
-    DRW_Interface*              iface;
-    DRW_Header                  header;
+    DRW::Version    version;
+    std::string     fileName;
+    std::string     codePage;
+    bool binary;
+    dxfReader*  reader;
+    dxfWriter*  writer;
+    DRW_Interface* iface;
+    DRW_Header header;
 // int section;
-    std::string                 nextentity;
-    int                         entCount;
-    bool                        wlayer0;
-    bool                        dimstyleStd;
-    bool                        applyExt;
-    bool                        writingBlock;
-    int                         elParts;    /*!< parts munber when convert ellipse to polyline */
+    std::string nextentity;
+    int entCount;
+    bool    wlayer0;
+    bool    dimstyleStd;
+    bool    applyExt;
+    bool    writingBlock;
+    int     elParts;                        /*!< parts munber when convert ellipse to polyline */
     std::map<std::string, int>  blockMap;
     std::vector<DRW_ImageDef*>  imageDef;   /*!< imageDef list */
 
-    int                         currHandle;
+    int currHandle;
 };
 
 #endif    // LIBDXFRW_H
