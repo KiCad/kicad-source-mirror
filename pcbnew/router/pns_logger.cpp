@@ -70,7 +70,7 @@ void PNS_LOGGER::EndGroup()
 
 void PNS_LOGGER::Log ( const PNS_ITEM* aItem, int aKind, const std::string aName )
 {
-    m_theLog << "aItem " << aKind << " " << aName << " ";
+    m_theLog << "item " << aKind << " " << aName << " ";
     m_theLog << aItem->Net() << " " << aItem->Layers().Start() << " " <<
                 aItem->Layers().End() << " " << aItem->Marker() << " " << aItem->Rank();
 
