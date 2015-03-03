@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-03 17:55+0100\n"
-"PO-Revision-Date: 2015-03-03 18:31+0100\n"
+"PO-Revision-Date: 2015-03-03 19:33+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -8842,13 +8842,13 @@ msgstr "Dostraja długości ścieżek pary różnicowej by pasowały do siebie"
 
 #: pcbnew/menubar_pcbframe.cpp:461
 msgid "Tune Differential Pair Skew/Phase"
-msgstr "Dostrajanie przesunięć fazowych par różnicowych"
+msgstr "Dostrajanie odchyleń/fazy par różnicowych"
 
 #: pcbnew/menubar_pcbframe.cpp:462
 msgid "Tune skew/phase of a differential pair"
 msgstr ""
-"Dostraja długość ścieżki pary różnicowej by zniwelować przesunięcia fazowe "
-"sygnałów"
+"Dostraja długość ścieżki pary różnicowej by zniwelować odchyłkę długości/"
+"przesunięcia fazowe sygnałów"
 
 #: pcbnew/menubar_pcbframe.cpp:489
 msgid "Hide La&yers Manager"
@@ -15460,15 +15460,15 @@ msgstr "Dostrajanie długości par różnicowych"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:64
 msgid "Differential pair skew tuning"
-msgstr "Dostrajanie przesunięć fazowych par różnicowych"
+msgstr "Dostrajanie odchyłek par różnicowych"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:66
 msgid "Target skew: "
-msgstr "Docelowe przesunięcie fazowe:"
+msgstr "Docelowa odchyłka:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:20
 msgid "Length/skew"
-msgstr "Długość/Przesunięcie fazowe"
+msgstr "Długość/Odchyłka"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:28
 msgid "Tune from:"
@@ -16361,7 +16361,7 @@ msgstr "Dostrajanie długości par różnicowych"
 
 #: pcbnew/router/length_tuner_tool.cpp:275
 msgid "Tune Diff Pair Skew"
-msgstr "Dostrajanie przesunięć fazowych par różnicowych"
+msgstr "Dostrajanie odchyłek par różnicowych"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:564
 msgid "Can't start a differential pair  in the middle of nowhere."
@@ -16422,20 +16422,20 @@ msgid ""
 "_N/_P or +/-."
 msgstr ""
 "Nie można znaleźć komplementarnej ścieżki pary różnicowej by móc dostroić "
-"przesunięcie fazowe. Sprawdź czy nazwy sieci należących do par różnicowych "
+"odchyłki ich długości. Sprawdź czy nazwy sieci należących do par różnicowych "
 "zawierają _N/_P lub +/-."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:142
 msgid "Too long: skew "
-msgstr "Przesunięcie fazowe jest zbyt duże"
+msgstr "Zbyt długa: odchyłka "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:145
 msgid "Too short: skew "
-msgstr "Przesunięcie fazowe jest zbyt małe"
+msgstr "Zbyt krótka: odchyłka "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:148
 msgid "Tuned: skew "
-msgstr "Przesunięcie fazowe jest dostrojone"
+msgstr "Dostrojono: odchyłka "
 
 #: pcbnew/router/router_tool.cpp:110 pcbnew/router/router_menus.h:137
 msgid "Custom size"
