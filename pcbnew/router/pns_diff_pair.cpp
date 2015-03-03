@@ -139,14 +139,9 @@ static void drawGw( VECTOR2I p, int color )
     l.Append( p - VECTOR2I( -50000, -50000 ) );
     l.Append( p + VECTOR2I( -50000, -50000 ) );
 
-    //printf("router @ %p\n", PNS_ROUTER::GetInstance());
-//    PNS_ROUTER::GetInstance()->DisplayDebugLine ( l, color, 10000 );
-
     l.Clear();
     l.Append( p - VECTOR2I( 50000, -50000 ) );
     l.Append( p + VECTOR2I( 50000, -50000 ) );
-
-//    PNS_ROUTER::GetInstance()->DisplayDebugLine ( l, color, 10000 );
 }
 
 

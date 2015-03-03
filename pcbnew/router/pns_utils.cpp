@@ -101,7 +101,6 @@ void DrawDebugPoint( VECTOR2I aP, int aColor )
     l.Append( aP - VECTOR2I( -50000, -50000 ) );
     l.Append( aP + VECTOR2I( -50000, -50000 ) );
 
-    //printf("router @ %p\n", PNS_ROUTER::GetInstance());
     PNS_ROUTER::GetInstance()->DisplayDebugLine ( l, aColor, 10000 );
 
     l.Clear();
@@ -125,7 +124,6 @@ void DrawDebugBox( BOX2I aB, int aColor )
     l.Append( o.x, o.y + s.y );
     l.Append( o );
 
-    //printf("router @ %p\n", PNS_ROUTER::GetInstance());
     PNS_ROUTER::GetInstance()->DisplayDebugLine( l, aColor, 10000 );
 }
 
