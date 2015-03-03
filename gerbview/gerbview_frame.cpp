@@ -76,7 +76,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     SetPageSettings( pageInfo );
 
-    m_FrameName = GERBVIEW_FRAME_NAME;
     m_show_layer_manager_tools = true;
 
     m_showAxis = true;                      // true to show X and Y axis on screen

@@ -113,7 +113,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
         SetModal( true );
 
-    m_FrameName  = GetFootprintViewerFrameName();
     m_configPath = wxT( "FootprintViewer" );
     m_showAxis   = true;         // true to draw axis.
 

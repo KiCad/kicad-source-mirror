@@ -184,7 +184,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 {
     wxASSERT( aParent );
 
-    m_FrameName  = GetLibEditFrameName();
     m_showAxis   = true;            // true to draw axis
     m_configPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );

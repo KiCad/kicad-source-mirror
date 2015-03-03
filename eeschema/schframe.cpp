@@ -307,7 +307,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_item_to_repeat( 0 )
 {
-    m_FrameName = SCH_EDIT_FRAME_NAME;
     m_showAxis = false;                 // true to show axis
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_CurrentSheet = new SCH_SHEET_PATH;

@@ -534,7 +534,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     }
     else
     {
-        wxFileName fn( m_FrameName );
+        wxFileName fn( GetName() );
         fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
         wxConfigBase* config = GetNewConfig( fn.GetFullPath() );
         config->Write( HOTKEYS_CONFIG_KEY, msg );
@@ -604,7 +604,7 @@ void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescL
  */
 int EDA_BASE_FRAME::ReadHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    ::ReadHotkeyConfig( m_FrameName, aDescList );
+    ::ReadHotkeyConfig( GetName(), aDescList );
     return 1;
 }
 

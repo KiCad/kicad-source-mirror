@@ -52,7 +52,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
 {
     m_leftWinWidth = 60;
     m_manager_Hokeys_Descr = NULL;
-    m_FrameName = KICAD_MANAGER_FRAME_NAME;
 
     // Create the status line (bottom of the frame
     static const int dims[3] = { -1, -1, 100 };

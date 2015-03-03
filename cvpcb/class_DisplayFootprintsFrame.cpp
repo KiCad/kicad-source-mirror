@@ -76,7 +76,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRA
         wxDefaultPosition, wxDefaultSize,
         KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME )
 {
-    m_FrameName = FOOTPRINTVIEWER_FRAME_NAME;
     m_showAxis = true;         // true to draw axis.
 
     // Give an icon

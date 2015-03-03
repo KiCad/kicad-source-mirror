@@ -199,7 +199,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                          wxDefaultPosition, wxDefaultSize,
                          KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
 {
-    m_FrameName = GetFootprintEditorFrameName();
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis

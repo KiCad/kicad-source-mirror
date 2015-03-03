@@ -129,7 +129,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
-    m_FrameName     = FOOTPRINT_WIZARD_FRAME_NAME;
     m_configPath    = wxT( "FootprintWizard" );
     m_showAxis      = true;    // true to draw axis.
 
