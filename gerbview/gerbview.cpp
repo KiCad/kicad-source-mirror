@@ -140,7 +140,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( wxT("GerberFrame"), s_Gerbview_Hokeys_Descr );
+    ReadHotkeyConfig( GERBVIEW_FRAME_NAME, s_Gerbview_Hokeys_Descr );
 
     return true;
 }

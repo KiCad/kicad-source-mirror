@@ -198,13 +198,13 @@ public:
 class HOTKEYS_EDITOR_DIALOG : public HOTKEYS_EDITOR_DIALOG_BASE
 {
 protected:
-    EDA_DRAW_FRAME* m_parent;
+    EDA_BASE_FRAME* m_parent;
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
 
     std::vector<HOTKEY_SECTION_PAGE*> m_hotkeySectionPages;
 
 public:
-    HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
+    HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
 
     ~HOTKEYS_EDITOR_DIALOG() {};
 
@@ -259,6 +259,6 @@ private:
  * @param aParent is the parent window
  * @param aHotkeys is the hotkey configuration array
  */
-void InstallHotkeyFrame( EDA_DRAW_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
+void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
 
 #endif

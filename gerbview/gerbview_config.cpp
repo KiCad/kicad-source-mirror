@@ -55,11 +55,11 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
     {
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( s_Gerbview_Hokeys_Descr );
+        ExportHotkeyConfigToFile( s_Gerbview_Hokeys_Descr, wxT( "gerbview" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( s_Gerbview_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( s_Gerbview_Hokeys_Descr, wxT( "gerbview" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:

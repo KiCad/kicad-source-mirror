@@ -291,15 +291,21 @@ public:
      * Function ImportHotkeyConfigFromFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
+     * @param aDefaultShortname = a default short name (extention not needed)
+     *     like eechema, kicad...
      */
-    void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList );
+    void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
+                                     const wxString& aDefaultShortname );
 
     /**
      * Function ExportHotkeyConfigToFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
+     * @param aDefaultShortname = a default short name (extention not needed)
+     *     like eechema, kicad...
      */
-    void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList );
+    void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
+                                   const wxString& aDefaultShortname );
 
     /**
      * Function GetFileFromHistory

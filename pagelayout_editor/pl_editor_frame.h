@@ -45,6 +45,8 @@ class WORKSHEET_DATAITEM;
  * Class PL_EDITOR_FRAME
  * is the main window used in the page layout editor.
  */
+#define PL_EDITOR_FRAME_NAME wxT( "PlEditorFrame" )
+
 class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
 {
     PL_EDITOR_LAYOUT m_pageLayout;

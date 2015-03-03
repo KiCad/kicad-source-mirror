@@ -50,8 +50,6 @@
 /* class PL_EDITOR_FRAME */
 /*************************/
 
-#define PL_EDITOR_FRAME_NAME wxT( "PlEditorFrame" )
-
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
             wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )

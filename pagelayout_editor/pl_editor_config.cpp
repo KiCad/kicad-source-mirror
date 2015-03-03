@@ -74,11 +74,11 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( s_PlEditor_Hokeys_Descr );
+        ExportHotkeyConfigToFile( s_PlEditor_Hokeys_Descr, wxT( "pl_editor" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( s_PlEditor_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( s_PlEditor_Hokeys_Descr, wxT( "pl_editor" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:

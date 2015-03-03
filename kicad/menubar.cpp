@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2009-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <kicad.h>
 #include <menus_helpers.h>
 #include <tree_project_frame.h>
+#include <hotkeys_basic.h>
 
 // Menubar and toolbar event table
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
@@ -68,24 +69,42 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, KICAD_MANAGER_FRAME::OnFileHistory )
 
+    // Hotkey management (show list, edit ...) events
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
+                    KICAD_MANAGER_FRAME::Process_Config )
+
+
     // Special functions
 #ifdef KICAD_USE_FILES_WATCHER
     EVT_MENU( ID_INIT_WATCHED_PATHS, KICAD_MANAGER_FRAME::OnChangeWatchedPaths )
 #endif
 
-    // Button events
+    // Button events (in command frame), and menu events equivalent to buttons
     EVT_BUTTON( ID_TO_SCH, KICAD_MANAGER_FRAME::OnRunEeschema )
+    EVT_MENU( ID_TO_SCH, KICAD_MANAGER_FRAME::OnRunEeschema )
+
     EVT_BUTTON( ID_TO_SCH_LIB_EDITOR, KICAD_MANAGER_FRAME::OnRunSchLibEditor )
+    EVT_MENU( ID_TO_SCH_LIB_EDITOR, KICAD_MANAGER_FRAME::OnRunSchLibEditor )
 
     EVT_BUTTON( ID_TO_CVPCB, KICAD_MANAGER_FRAME::OnRunCvpcb )
 
     EVT_BUTTON( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )
+    EVT_MENU( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )
+
     EVT_BUTTON( ID_TO_PCB_FP_EDITOR, KICAD_MANAGER_FRAME::OnRunPcbFpEditor )
+    EVT_MENU( ID_TO_PCB_FP_EDITOR, KICAD_MANAGER_FRAME::OnRunPcbFpEditor )
 
     EVT_BUTTON( ID_TO_GERBVIEW, KICAD_MANAGER_FRAME::OnRunGerbview )
+    EVT_MENU( ID_TO_GERBVIEW, KICAD_MANAGER_FRAME::OnRunGerbview )
+
     EVT_BUTTON( ID_TO_BITMAP_CONVERTER, KICAD_MANAGER_FRAME::OnRunBitmapConverter )
+    EVT_MENU( ID_TO_BITMAP_CONVERTER, KICAD_MANAGER_FRAME::OnRunBitmapConverter )
+
     EVT_BUTTON( ID_TO_PCB_CALCULATOR, KICAD_MANAGER_FRAME::OnRunPcbCalculator )
+    EVT_MENU( ID_TO_PCB_CALCULATOR, KICAD_MANAGER_FRAME::OnRunPcbCalculator )
+
     EVT_BUTTON( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
+    EVT_MENU( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
 
     EVT_UPDATE_UI( ID_SELECT_DEFAULT_PDF_BROWSER, KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser )
     EVT_UPDATE_UI( ID_SELECT_PREFERED_PDF_BROWSER,
@@ -93,14 +112,71 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
 END_EVENT_TABLE()
 
+enum hotkey_id_commnand
+{
+    HK_RUN_EESCHEMA = HK_COMMON_END,
+    HK_LOAD_PROJECT,
+    HK_SAVE_PROJECT,
+    HK_NEW_PRJ,
+    HK_NEW_PRJ_TEMPLATE,
+    HK_RUN_LIBEDIT,
+    HK_RUN_PCBNEW,
+    HK_RUN_FPEDITOR,
+    HK_RUN_GERBVIEW,
+    HK_RUN_BM2COMPONENT,
+    HK_RUN_PCBCALCULATOR,
+    HK_RUN_PLEDITOR
+};
+
+/////////////  Hotkeys management   ///////////////////////////////////////
+// hotkeys command:
+static EDA_HOTKEY HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
+static EDA_HOTKEY HkLoadPrj( wxT( "Load project" ), HK_LOAD_PROJECT, 'O' + GR_KB_CTRL );
+static EDA_HOTKEY HkSavePrj( wxT( "Save project" ), HK_SAVE_PROJECT, 'S' + GR_KB_CTRL );
+static EDA_HOTKEY HkNewProject( wxT( "New Project" ), HK_NEW_PRJ, 'N' + GR_KB_CTRL );
+static EDA_HOTKEY HkNewPrjFromTemplate( wxT( "New Prj From Template" ),
+                                        HK_NEW_PRJ_TEMPLATE, 'T' + GR_KB_CTRL );
+
+static EDA_HOTKEY HkRunEeschema( wxT( "Run Eeschema" ), HK_RUN_EESCHEMA, 'E', 0 );
+static EDA_HOTKEY HkRunLibedit( wxT( "Run LibEdit" ), HK_RUN_LIBEDIT, 'L', 0 );
+static EDA_HOTKEY HkRunPcbnew( wxT( "Run Pcbnew" ), HK_RUN_PCBNEW, 'P', 0 );
+static EDA_HOTKEY HkRunModedit( wxT( "Run FpEditor" ), HK_RUN_FPEDITOR, 'F', 0 );
+static EDA_HOTKEY HkRunGerbview( wxT( "Run Gerbview" ), HK_RUN_GERBVIEW, 'G', 0 );
+static EDA_HOTKEY HkRunBm2Cmp( wxT( "Run Bitmap2Component" ), HK_RUN_BM2COMPONENT, 'B', 0 );
+static EDA_HOTKEY HkRunPcbCalc( wxT( "Run PcbCalculator" ), HK_RUN_PCBCALCULATOR, 'C', 0 );
+static EDA_HOTKEY HkRunPleditor( wxT( "Run PlEditor" ), HK_RUN_PLEDITOR, 'Y', 0 );
+
+// List of hotkey descriptors
+EDA_HOTKEY* common_Hotkey_List[] =
+{
+    &HkHelp,
+    &HkLoadPrj,     &HkSavePrj,     &HkNewProject,  &HkNewPrjFromTemplate,
+    &HkRunEeschema, &HkRunLibedit,
+    &HkRunPcbnew,   &HkRunModedit,  &HkRunGerbview,
+    &HkRunBm2Cmp,   &HkRunPcbCalc,  &HkRunPleditor,
+    NULL
+};
+
+// list of sections and corresponding hotkey list for Kicad
+// (used to create an hotkey config file, and edit hotkeys )
+// here we have only one section.
+struct EDA_HOTKEY_CONFIG kicad_Manager_Hokeys_Descr[] = {
+    { &g_CommonSectionTag,      common_Hotkey_List,         &g_CommonSectionTitle      },
+    { NULL,                     NULL,                       NULL                       }
+};
+/////////////  End hotkeys management   ///////////////////////////////////////
+
 
 /**
  * @brief (Re)Create the menubar
  */
 void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 {
+    wxString msg;
     static wxMenu* openRecentMenu;  // Open Recent submenu,
                                     // static to remember this menu
+
+    m_manager_Hokeys_Descr = kicad_Manager_Hokeys_Descr;
 
     // Create and try to get the current  menubar
     wxMenuBar*  menuBar = GetMenuBar();
@@ -127,9 +203,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     wxMenu* fileMenu = new wxMenu;
 
     // Open
-    AddMenuItem( fileMenu,
-                 ID_LOAD_PROJECT,
-                 _( "&Open Project\tCtrl+O" ),
+    msg = AddHotkeyName( _( "&Open Project" ), kicad_Manager_Hokeys_Descr, HK_LOAD_PROJECT );
+    AddMenuItem( fileMenu, ID_LOAD_PROJECT, msg,
                  _( "Open existing project" ),
                  KiBitmap( open_project_xpm ) );
 
@@ -143,30 +218,35 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "Open recent schematic project" ),
                  KiBitmap( open_project_xpm ) );
 
-    // New
-    wxMenu* newMenu = new wxMenu();
-    AddMenuItem( newMenu, ID_NEW_PROJECT,
-                 _( "&Blank Project\tCtrl+N" ),
-                 _( "Create blank project" ),
+    // New project creation
+    wxMenu* newprjSubMenu = new wxMenu();
+
+    msg = AddHotkeyName( _( "&New Project" ), kicad_Manager_Hokeys_Descr, HK_NEW_PRJ );
+    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT, msg,
+                 _( "Create new blank project" ),
                  KiBitmap( new_project_xpm ) );
 
-    AddMenuItem( newMenu, ID_NEW_PROJECT_FROM_TEMPLATE,
-                 _( "Project from &Template\tCtrl+T" ),
-                 _( "Create new project from template" ),
+    msg = AddHotkeyName( _( "New Project from &Template" ),
+                         kicad_Manager_Hokeys_Descr, HK_NEW_PRJ_TEMPLATE );
+    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT_FROM_TEMPLATE, msg,
+                 _( "Create a new project from a template" ),
                  KiBitmap( new_project_with_template_xpm ) );
 
-    AddMenuItem( fileMenu, newMenu,
+    AddMenuItem( fileMenu, newprjSubMenu,
                  wxID_ANY,
-                 _( "New" ),
+                 _( "New Project" ),
                  _( "Create new project" ),
                  KiBitmap( new_project_xpm ) );
 
+    // Currently there is nothing to save
+    // (Kicad manager does not save any info in .pro file)
+#if 0
     // Save
-    AddMenuItem( fileMenu,
-                 ID_SAVE_PROJECT,
-                 _( "&Save\tCtrl+S" ),
+    msg = AddHotkeyName( _( "&Save" ), kicad_Manager_Hokeys_Descr, HK_SAVE_PROJECT );
+    AddMenuItem( fileMenu, ID_SAVE_PROJECT, msg,
                  _( "Save current project" ),
                  KiBitmap( save_project_xpm ) );
+#endif
 
     // Archive
     fileMenu->AppendSeparator();
@@ -255,9 +335,60 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "PDF viewer preferences" ),
                  KiBitmap( datasheet_xpm ) );
 
+    // Hotkey submenu
+    preferencesMenu->AppendSeparator();
+    AddHotkeyConfigMenu( preferencesMenu );
+
     // Language submenu
     preferencesMenu->AppendSeparator();
     Pgm().AddMenuLanguageList( preferencesMenu );
+
+    // Hotkey submenu
+    AddHotkeyConfigMenu( preferencesMenu );
+
+    // Menu Tools:
+    wxMenu* toolsMenu = new wxMenu;
+
+    msg = AddHotkeyName( _( "Run Eeschema" ), kicad_Manager_Hokeys_Descr, HK_RUN_EESCHEMA );
+    AddMenuItem( toolsMenu, ID_TO_SCH, msg,
+                 KiBitmap( eeschema_xpm ) );
+
+    msg = AddHotkeyName( _( "Run Library Editor" ),
+                         kicad_Manager_Hokeys_Descr, HK_RUN_LIBEDIT );
+    AddMenuItem( toolsMenu, ID_TO_SCH_LIB_EDITOR, msg,
+                 KiBitmap( libedit_xpm ) );
+
+    msg = AddHotkeyName( _( "Run Pcbnew" ),
+                         kicad_Manager_Hokeys_Descr, HK_RUN_PCBNEW );
+    AddMenuItem( toolsMenu, ID_TO_PCB, msg,
+                 KiBitmap( pcbnew_xpm ) );
+
+    msg = AddHotkeyName( _( "Run Footprint Editor" ),
+                         kicad_Manager_Hokeys_Descr, HK_RUN_FPEDITOR );
+    AddMenuItem( toolsMenu, ID_TO_PCB_FP_EDITOR, msg,
+                 KiBitmap( module_editor_xpm ) );
+
+    msg = AddHotkeyName( _( "Run Gerbview" ),
+                         kicad_Manager_Hokeys_Descr, HK_RUN_GERBVIEW );
+    AddMenuItem( toolsMenu, ID_TO_GERBVIEW, msg,
+                 KiBitmap( icon_gerbview_small_xpm ) );
+
+    msg = AddHotkeyName( _( "Run Bitmap2Component" ),
+                         kicad_Manager_Hokeys_Descr, HK_RUN_BM2COMPONENT );
+    AddMenuItem( toolsMenu, ID_TO_BITMAP_CONVERTER, msg,
+                 _( "Bitmap2Component - Convert bitmap images to Eeschema\n"
+                    "or Pcbnew elements" ),
+                 KiBitmap( image_xpm ) );
+
+    msg = AddHotkeyName( _( "Run Pcb Calculator" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
+    AddMenuItem( toolsMenu, ID_TO_PCB_CALCULATOR, msg,
+                 _( "Pcb calculator - Calculator for components, track width, etc." ),
+                 KiBitmap( options_module_xpm ) );
+
+    msg = AddHotkeyName( _( "Run Page Layout Editor" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
+    AddMenuItem( toolsMenu, ID_TO_PL_EDITOR, msg,
+                 _( "Pl editor - Worksheet layout editor" ),
+                 KiBitmap( pagelayout_load_xpm ) );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
@@ -289,6 +420,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( browseMenu, _( "&Browse" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
+    menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();
@@ -298,6 +430,15 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
         SetMenuBar( menuBar );
     else
         menuBar->Refresh();
+
+    // Add the hotkey to the "show hotkey list" menu, because we do not have
+    // a management of the keyboard keys in Kicad.
+    // So all hotheys should be added to the menubar
+    // Note Use wxMenuBar::SetLabel only after the menubar
+    // has been associated with a frame. (see wxWidgets doc)
+    msg = AddHotkeyName( menuBar->GetLabel( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST ),
+                         kicad_Manager_Hokeys_Descr, HK_HELP );
+    menuBar->SetLabel( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, msg );
 }
 
 
