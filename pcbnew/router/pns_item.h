@@ -36,7 +36,8 @@ class PNS_NODE;
 enum LineMarker {
     MK_HEAD         = ( 1 << 0 ),
     MK_VIOLATION    = ( 1 << 3 ),
-    MK_LOCKED       = ( 1 << 4 )
+    MK_LOCKED       = ( 1 << 4 ),
+    MK_DP_COUPLED   = ( 1 << 5 )
 };
 
 /**
@@ -58,6 +59,7 @@ public:
         JOINT   = 4,
         SEGMENT = 8,
         VIA     = 16,
+        DIFF_PAIR = 32,
         ANY     = 0xff
     };
 

@@ -25,6 +25,8 @@
 #ifndef __dialog_track_via_size__
 #define __dialog_track_via_size__
 
+#include <wx_unit_binder.h>
+
 #include "dialog_track_via_size_base.h"
 
 class BOARD_DESIGN_SETTINGS;
@@ -32,21 +34,25 @@ class BOARD_DESIGN_SETTINGS;
 /** Implementing DIALOG_TRACK_VIA_SIZE_BASE */
 class DIALOG_TRACK_VIA_SIZE : public DIALOG_TRACK_VIA_SIZE_BASE
 {
-	public:
-		/** Constructor */
-		DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SETTINGS& aSettings );
+public:
+    /** Constructor */
+    DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SETTINGS& aSettings );
 
-    protected:
-		// Routings settings that are modified by the dialog.
-        BOARD_DESIGN_SETTINGS& m_settings;
+protected:
+    WX_UNIT_BINDER m_trackWidth;
+    WX_UNIT_BINDER m_viaDiameter;
+    WX_UNIT_BINDER m_viaDrill;
 
-        ///> Checks if values given in the dialog are sensible.
-        bool check();
+    // Routings settings that are modified by the dialog.
+    BOARD_DESIGN_SETTINGS& m_settings;
 
-        // Handlers for DIALOG_TRACK_VIA_SIZE_BASE events.
-        void onClose( wxCloseEvent& aEvent );
-        void onOkClick( wxCommandEvent& aEvent );
-        void onCancelClick( wxCommandEvent& aEvent );
+    ///> Checks if values given in the dialog are sensible.
+    bool check();
+
+    // Handlers for DIALOG_TRACK_VIA_SIZE_BASE events.
+    void onClose( wxCloseEvent& aEvent );
+    void onOkClick( wxCommandEvent& aEvent );
+    void onCancelClick( wxCommandEvent& aEvent );
 };
 
 #endif // __dialog_track_via_size__

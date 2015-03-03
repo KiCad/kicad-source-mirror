@@ -26,17 +26,17 @@
 class TIME_LIMIT
 {
 public:
-	TIME_LIMIT( int aMilliseconds = 0 );
-	~TIME_LIMIT();
+    TIME_LIMIT( int aMilliseconds = 0 );
+    ~TIME_LIMIT();
 
-	bool Expired() const; 
-	void Restart();
+    bool Expired() const;
+    void Restart();
 
-	void Set( int aMilliseconds );
+    void Set( int aMilliseconds );
 
 private:
-	int m_limitMs;
-	int64_t m_startTics;
+    int m_limitMs;
+    int64_t m_startTics;
 };
 
 #endif

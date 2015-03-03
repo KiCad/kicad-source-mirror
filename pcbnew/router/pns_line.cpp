@@ -140,7 +140,7 @@ PNS_SEGMENT* PNS_SEGMENT::Clone( ) const
 {
     PNS_SEGMENT* s = new PNS_SEGMENT;
 
-	s->m_seg = m_seg;
+    s->m_seg = m_seg;
     s->m_net = m_net;
     s->m_layers = m_layers;
     s->m_marker = m_marker;
@@ -348,7 +348,6 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 {
     optional<SHAPE_LINE_CHAIN> picked;
     int i;
-
     int d = 2;
 
     if( aOrigin.CSegment( -1 ).Length() > 100000 * 30 ) // fixme: constant/parameter?
@@ -701,6 +700,9 @@ void PNS_LINE::Reverse()
 
 void PNS_LINE::AppendVia( const PNS_VIA& aVia )
 {
+    if( m_line.PointCount() == 0 )
+        return;
+
     if( aVia.Pos() == m_line.CPoint( 0 ) )
     {
         Reverse();
@@ -780,4 +782,94 @@ void PNS_LINE::ClearSegmentLinks()
         delete m_segmentRefs;
 
     m_segmentRefs = NULL;
+}
+
+
+static void extendBox( BOX2I& aBox, bool& aDefined, const VECTOR2I& aP )
+{
+    if( aDefined )
+        aBox.Merge ( aP );
+    else {
+        aBox = BOX2I( aP, VECTOR2I( 0, 0 ) );
+        aDefined = true;
+    }
+}
+
+
+OPT_BOX2I PNS_LINE::ChangedArea( const PNS_LINE* aOther ) const
+{
+    BOX2I area;
+    bool areaDefined = false;
+
+    int i_start = -1;
+    int i_end_self = -1, i_end_other = -1;
+
+    SHAPE_LINE_CHAIN self( m_line );
+    self.Simplify();
+    SHAPE_LINE_CHAIN other( aOther->m_line );
+    other.Simplify();
+
+    int np_self = self.PointCount();
+    int np_other = other.PointCount();
+
+    int n = std::min( np_self, np_other );
+
+    for( int i = 0; i < n; i++ )
+    {
+        const VECTOR2I p1 = self.CPoint( i );
+        const VECTOR2I p2 = other.CPoint( i );
+
+        if( p1 != p2 )
+        {
+            if( i != n - 1 )
+            {
+                SEG s = self.CSegment( i );
+
+                if( !s.Contains( p2 ) )
+                {
+                    i_start = i;
+                    break;
+                }
+            } else {
+                i_start = i;
+                break;
+            }
+        }
+    }
+
+    for( int i = 0; i < n; i++ )
+    {
+        const VECTOR2I p1 = self.CPoint( np_self - 1 - i );
+        const VECTOR2I p2 = other.CPoint( np_other - 1 - i );
+
+        if( p1 != p2 )
+        {
+            i_end_self = np_self - 1 - i;
+            i_end_other = np_other - 1 - i;
+            break;
+        }
+    }
+
+    if( i_start < 0 )
+        i_start = n;
+
+    if( i_end_self < 0 )
+        i_end_self = np_self - 1;
+
+    if( i_end_other < 0 )
+        i_end_other = np_other - 1;
+
+    for( int i = i_start; i <= i_end_self; i++ )
+        extendBox( area, areaDefined, self.CPoint( i ) );
+
+    for( int i = i_start; i <= i_end_other; i++ )
+        extendBox( area, areaDefined, other.CPoint( i ) );
+
+    if( areaDefined )
+    {
+        area.Inflate( std::max( Width(), aOther->Width() ) );
+        return area;
+    }
+
+    return OPT_BOX2I();
 }

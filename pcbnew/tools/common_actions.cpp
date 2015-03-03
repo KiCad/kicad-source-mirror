@@ -58,8 +58,27 @@ TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the ho
 TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, 'T' );
 
-
 // Edit tool actions
+TOOL_ACTION COMMON_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
+        AS_CONTEXT, MD_CTRL + 'E',
+        "Open in Footprint Editor",
+        "Opens the selected footprint in the Footprint Editor" );
+
+TOOL_ACTION COMMON_ACTIONS::copyPadToSettings ( "pcbnew.InteractiveEdit.copyPadToSettings",
+        AS_CONTEXT, 0,
+        "Copy pad settings to Current Settings",
+        "Copies the properties of selected pad to the current template pad settings." );
+
+TOOL_ACTION COMMON_ACTIONS::copySettingsToPads ( "pcbnew.InteractiveEdit.copySettingsToPads",
+        AS_CONTEXT, 0,
+        "Copy Current Settings to pads",
+        "Copies the current template pad settings to the selected pad(s)." );
+
+TOOL_ACTION COMMON_ACTIONS::globalEditPads ( "pcbnew.InteractiveEdit.globalPadEdit",
+        AS_CONTEXT, 0,
+        "Global Pad Edition",
+        "Changes pad properties globally." );
+
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
         "Move", "Moves the selected item(s)", AF_ACTIVATE );
@@ -387,10 +406,40 @@ TOOL_ACTION COMMON_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
         AS_GLOBAL, 0,           // dialog saying it is not implemented yet
         "", "" );               // so users are aware of that
 
-TOOL_ACTION COMMON_ACTIONS::routerActivate( "pcbnew.InteractiveRouter",
+TOOL_ACTION COMMON_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL, 'X',
-        "Run push & shove router", "Run push & shove router", AF_ACTIVATE );
+        "Run push & shove router (single tracks)", "Run push & shove router (single tracks)", AF_ACTIVATE );
 
+
+TOOL_ACTION COMMON_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
+        AS_GLOBAL, '6',
+        "Run push & shove router (differential pairs)", "Run push & shove router (differential pairs)", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
+        AS_GLOBAL, 0,
+        "Open Interactive Router settings", "Open Interactive Router settings", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRouter.DpDimensionsDialog",
+        AS_GLOBAL, 0,
+        "Open Differential Pair Dimension settings", "Open Differential Pair Dimension settings", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
+        AS_GLOBAL, '7',
+        "Tune length of a single track", "", AF_ACTIVATE );
+
+
+TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
+        AS_GLOBAL, '8',
+        "Tune length of a differential pair", "", AF_ACTIVATE );
+
+
+TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
+        AS_GLOBAL, '9',
+        "Tune skew of a differential pair", "", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
+        AS_GLOBAL, 0,
+        "", "" );
 
 // Point editor
 TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
@@ -400,7 +449,6 @@ TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
 TOOL_ACTION COMMON_ACTIONS::pointEditorBreakOutline( "pcbnew.PointEditor.breakOutline",
         AS_GLOBAL, 0,
         "Create corner", "Create corner" );
-
 
 // Placement tool
 TOOL_ACTION COMMON_ACTIONS::alignTop( "pcbnew.Place.alignTop",
@@ -442,7 +490,25 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
         return COMMON_ACTIONS::placeModule.MakeEvent();
 
     case ID_TRACK_BUTT:
-        return COMMON_ACTIONS::routerActivate.MakeEvent();
+        return COMMON_ACTIONS::routerActivateSingle.MakeEvent();
+
+    case ID_DIFF_PAIR_BUTT:
+        return COMMON_ACTIONS::routerActivateDiffPair.MakeEvent();
+
+    case ID_TUNE_SINGLE_TRACK_LEN_BUTT:
+        return COMMON_ACTIONS::routerActivateTuneSingleTrace.MakeEvent();
+
+    case ID_TUNE_DIFF_PAIR_LEN_BUTT:
+        return COMMON_ACTIONS::routerActivateTuneDiffPair.MakeEvent();
+
+    case ID_TUNE_DIFF_PAIR_SKEW_BUTT:
+        return COMMON_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent();
+
+    case ID_MENU_INTERACTIVE_ROUTER_SETTINGS:
+        return COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent();
+
+    case ID_MENU_DIFF_PAIR_DIMENSIONS:
+        return COMMON_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent();
 
     case ID_PCB_ZONES_BUTT:
         return COMMON_ACTIONS::drawZone.MakeEvent();

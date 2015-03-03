@@ -146,6 +146,9 @@ public:
 #define HIGHLIGHTED    (1 << 25)   ///< item is drawn in normal colors, when the rest is darkened
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
+#define DP_COUPLED     (1 << 27)   ///< item is coupled with another item making a differential pair
+                                  ///< (applies to segments only)
+
 #define EDA_ITEM_ALL_FLAGS -1
 
 typedef unsigned STATUS_FLAGS;

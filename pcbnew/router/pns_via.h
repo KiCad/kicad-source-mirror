@@ -73,6 +73,12 @@ public:
         m_viaType = aB.m_viaType;
     }
 
+    static inline bool ClassOf( const PNS_ITEM* aItem )
+    {
+        return aItem && VIA == aItem->Kind();
+    }
+
+
     const VECTOR2I& Pos() const
     {
         return m_pos;
@@ -139,6 +145,8 @@ public:
     {
         return 1;
     }
+
+    OPT_BOX2I ChangedArea( const PNS_VIA* aOther ) const;
 
 private:
     int m_diameter;

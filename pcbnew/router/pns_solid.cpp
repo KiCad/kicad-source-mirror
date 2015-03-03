@@ -62,7 +62,7 @@ const SHAPE_LINE_CHAIN PNS_SOLID::Hull( int aClearance, int aWalkaroundThickness
 }
 
 
-PNS_ITEM* PNS_SOLID::Clone ( ) const
+PNS_ITEM* PNS_SOLID::Clone() const
 {
     PNS_ITEM* solid = new PNS_SOLID( *this );
     return solid;

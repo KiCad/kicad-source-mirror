@@ -35,25 +35,25 @@ class SHAPE;
 class PNS_LOGGER
 {
 public:
-	PNS_LOGGER();
-	~PNS_LOGGER();
+    PNS_LOGGER();
+    ~PNS_LOGGER();
 
-	void Save( const std::string& aFilename );
-	void Clear();
+    void Save( const std::string& aFilename );
+    void Clear();
 
-	void NewGroup( const std::string& aName, int aIter = 0 );
-	void EndGroup();
+    void NewGroup( const std::string& aName, int aIter = 0 );
+    void EndGroup();
 
-	void Log( const PNS_ITEM* aItem, int aKind = 0, const std::string aName = std::string() );
-	void Log( const SHAPE_LINE_CHAIN *aL, int aKind = 0, const std::string aName = std::string() );
-	void Log( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aKind = 0,
-	          const std::string aName = std::string() );
+    void Log( const PNS_ITEM* aItem, int aKind = 0, const std::string aName = std::string() );
+    void Log( const SHAPE_LINE_CHAIN *aL, int aKind = 0, const std::string aName = std::string() );
+    void Log( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aKind = 0,
+              const std::string aName = std::string() );
 
 private:
-	void dumpShape ( const SHAPE* aSh );
+    void dumpShape( const SHAPE* aSh );
 
-	bool m_groupOpened;
-	std::stringstream m_theLog;
+    bool m_groupOpened;
+    std::stringstream m_theLog;
 };
 
 #endif

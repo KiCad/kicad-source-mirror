@@ -39,6 +39,7 @@ public:
     {
         m_forceSingleDirection = false;
         m_forceLongerPath = false;
+        m_forceWinding = false;
         m_cursorApproachMode = false;
         m_itemMask = PNS_ITEM::ANY;
     }
@@ -79,13 +80,23 @@ public:
     {
         m_forceSingleDirection = aForceSingleDirection;
         m_forceLongerPath = aForceSingleDirection;
-        //printf("FSD %d FPD %d\n", m_forceSingleDirection?1:0, m_forceLongerPath ? 1: 0);
+    }
+
+    void SetSingleDirection2( bool aForceSingleDirection )
+    {
+        m_forceSingleDirection = aForceSingleDirection;
     }
 
     void SetApproachCursor( bool aEnabled, const VECTOR2I& aPos )
     {
         m_cursorPos = aPos;
         m_cursorApproachMode = aEnabled;
+    }
+
+    void SetForceWinding ( bool aEnabled, bool aCw )
+    {
+        m_forceCw = aCw;
+        m_forceWinding = aEnabled;
     }
 
     WALKAROUND_STATUS Route( const PNS_LINE& aInitialPath, PNS_LINE& aWalkPath,
@@ -110,6 +121,8 @@ private:
     int m_itemMask;
     bool m_forceSingleDirection, m_forceLongerPath;
     bool m_cursorApproachMode;
+    bool m_forceWinding;
+    bool m_forceCw;
     VECTOR2I m_cursorPos;
     PNS_NODE::OPT_OBSTACLE m_currentObstacle[2];
     bool m_recursiveCollision[2];

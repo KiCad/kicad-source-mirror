@@ -177,7 +177,6 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         area.SetOrigin( m_Pos.x-dx, m_Pos.y-dy );
         area.SetSize( 2*dx, 2*dy );
         break;
-        break;
 
     case PAD_RECT:
         //Use two corners and track their rotation

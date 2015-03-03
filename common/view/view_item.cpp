@@ -29,17 +29,6 @@
 
 using namespace KIGFX;
 
-void VIEW_ITEM::ViewSetVisible( bool aIsVisible )
-{
-    // update only if the visibility has really changed
-    if( m_visible != aIsVisible )
-    {
-        m_visible = aIsVisible;
-        ViewUpdate( APPEARANCE );
-    }
-}
-
-
 void VIEW_ITEM::ViewRelease()
 {
     if( m_view && m_view->IsDynamic() )

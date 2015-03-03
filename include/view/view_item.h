@@ -76,7 +76,16 @@ public:
         ALL         = 0xff
     };
 
-    VIEW_ITEM() : m_view( NULL ), m_visible( true ), m_requiredUpdate( ALL ),
+    /**
+     * Enum VIEW_VISIBILITY_FLAGS.
+     * Defines the visibility of the item (temporarily hidden, invisible, etc).
+     */
+    enum VIEW_VISIBILITY_FLAGS {
+        VISIBLE     = 0x01,     /// Item is visible (in general)
+        HIDDEN      = 0x02      /// Item is temporarily hidden (e.g. being used by a tool). Overrides VISIBLE flag.
+    };
+
+    VIEW_ITEM() : m_view( NULL ), m_flags( VISIBLE ), m_requiredUpdate( ALL ),
                   m_groups( NULL ), m_groupsSize( 0 ) {}
 
     /**
@@ -128,7 +137,39 @@ public:
      *
      * @param aIsVisible: whether the item is visible (on all layers), or not.
      */
-    void ViewSetVisible( bool aIsVisible = true );
+    void ViewSetVisible( bool aIsVisible = true )
+    {
+        bool cur_visible = m_flags & VISIBLE;
+
+        if( cur_visible != aIsVisible )
+        {
+            if( aIsVisible )
+                m_flags |= VISIBLE;
+            else
+                m_flags &= ~VISIBLE;
+
+            ViewUpdate( APPEARANCE | COLOR );
+        }
+    }
+
+    /**
+     * Function ViewHide()
+     * Temporarily hides the item in the view (e.g. for overlaying)
+     *
+     * @param aHide: whether the item is hidden (on all layers), or not.
+     */
+    void ViewHide( bool aHide = true )
+    {
+        if( !( m_flags & VISIBLE ) )
+            return;
+
+        if( aHide )
+            m_flags |= HIDDEN;
+        else
+            m_flags &= ~HIDDEN;
+
+        ViewUpdate( APPEARANCE );
+    }
 
     /**
      * Function ViewIsVisible()
@@ -139,7 +180,7 @@ public:
      */
     bool ViewIsVisible() const
     {
-        return m_visible;
+        return m_flags & VISIBLE;
     }
 
     /**
@@ -201,7 +242,7 @@ protected:
     }
 
     VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
-    bool    m_visible;          ///< Are we visible in the current dynamic VIEW.
+    int     m_flags;             ///< Visibility flags
     int     m_requiredUpdate;   ///< Flag required for updating
 
     ///* Helper for storing cached items group ids
@@ -294,6 +335,15 @@ protected:
     void clearUpdateFlags()
     {
         m_requiredUpdate = NONE;
+    }
+
+    /**
+     * Function isRenderable()
+     * Returns if the item should be drawn or not.
+     */
+    bool isRenderable() const
+    {
+        return m_flags == VISIBLE;
     }
 };
 } // namespace KIGFX
