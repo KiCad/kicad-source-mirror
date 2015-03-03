@@ -45,6 +45,8 @@
 #include <wildcards_and_files_ext.h>
 
 #include <boost/bind.hpp>
+#include <tool/tool_manager.h>
+#include <tools/common_actions.h>
 
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
 
@@ -481,6 +483,9 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
 
             aNewModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
             view->Add( aNewModule );
+
+            m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
+            GetGalCanvas()->ForceRefresh();
         }
     }
     else

@@ -569,6 +569,12 @@ set( BMAPS_BIG
     wizard_add_fplib_icon
     )
 
+set( BMAPS_OTHER
+    tune_diff_pair_length_legend
+    tune_diff_pair_skew_legend
+    tune_single_track_length_legend
+    )
+
 
 # @todo keep these in sync with .bzrignore
 set( TMP_DIR   "${CMAKE_CURRENT_SOURCE_DIR}/tmp" )
@@ -740,6 +746,11 @@ endforeach()
 foreach( bmn ${BMAPS_BIG} )
     #message( "library add cpp_48/${bmn}.cpp" )
     list( APPEND CPP_LIST cpp_48/${bmn}.cpp )
+endforeach()
+
+foreach( bmn ${BMAPS_OTHER} )
+    #message( "library add cpp_other/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_other/${bmn}.cpp )
 endforeach()
 
 #add_library( bitmaps SHARED ${CPP_LIST} )

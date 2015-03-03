@@ -564,7 +564,7 @@ struct VIEW::drawItem
     bool operator()( VIEW_ITEM* aItem )
     {
         // Conditions that have te be fulfilled for an item to be drawn
-        bool drawCondition = aItem->ViewIsVisible() &&
+        bool drawCondition = aItem->isRenderable() &&
                              aItem->ViewGetLOD( layer ) < view->m_scale;
         if( !drawCondition )
             return true;

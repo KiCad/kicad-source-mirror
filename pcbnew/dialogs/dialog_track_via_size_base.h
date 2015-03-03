@@ -11,12 +11,13 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include <wxunittext.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
+#include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -32,9 +33,15 @@ class DIALOG_TRACK_VIA_SIZE_BASE : public wxDialog
 	private:
 	
 	protected:
-		WX_UNIT_TEXT* m_trackWidth;
-		WX_UNIT_TEXT* m_viaDiameter;
-		WX_UNIT_TEXT* m_viaDrill;
+		wxStaticText* m_staticText3;
+		wxTextCtrl* m_trackWidthText;
+		wxStaticText* m_trackWidthLabel;
+		wxStaticText* m_staticText5;
+		wxTextCtrl* m_viaDiameterText;
+		wxStaticText* m_viaDiameterLabel;
+		wxStaticText* m_staticText7;
+		wxTextCtrl* m_viaDrillText;
+		wxStaticText* m_viaDrillLabel;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;

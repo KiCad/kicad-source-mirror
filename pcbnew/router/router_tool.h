@@ -22,61 +22,41 @@
 #ifndef __ROUTER_TOOL_H
 #define __ROUTER_TOOL_H
 
-#include <import_export.h>
+#include "pns_tool_base.h"
 
-#include <math/vector2d.h>
-#include <tool/tool_interactive.h>
-
-#include <msgpanel.h>
-
-#include "pns_routing_settings.h"
-
-class PNS_ROUTER;
-class PNS_ITEM;
-
-class APIEXPORT ROUTER_TOOL : public TOOL_INTERACTIVE
+class APIEXPORT ROUTER_TOOL : public PNS_TOOL_BASE
 {
 public:
     ROUTER_TOOL();
     ~ROUTER_TOOL();
 
     void Reset( RESET_REASON aReason );
-    int Main( const TOOL_EVENT& aEvent );
+
+    int RouteSingleTrace ( const TOOL_EVENT& aEvent );
+    int RouteDiffPair ( const TOOL_EVENT& aEvent );
+    int InlineDrag ( const TOOL_EVENT& aEvent );
+
+    int DpDimensionsDialog ( const TOOL_EVENT& aEvent );
+    int SettingsDialog ( const TOOL_EVENT& aEvent );
 
 private:
-    PNS_ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
+
+    int mainLoop( PNS_ROUTER_MODE aMode );
 
     int getDefaultWidth( int aNetCode );
 
     void performRouting();
     void performDragging();
 
-    void highlightNet( bool aEnabled, int aNetcode = -1 );
-
-    void updateStartItem( TOOL_EVENT& aEvent );
-    void updateEndItem( TOOL_EVENT& aEvent );
-
     void getNetclassDimensions( int aNetCode, int& aWidth, int& aViaDiameter, int& aViaDrill );
-    void handleCommonEvents( TOOL_EVENT& evt );
+    void handleCommonEvents( const TOOL_EVENT& evt );
 
     int getStartLayer( const PNS_ITEM* aItem );
     void switchLayerOnViaPlacement();
     bool onViaCommand( VIATYPE_T aType );
 
-    MSG_PANEL_ITEMS m_panelItems;
-
-    PNS_ROUTER* m_router;
-    PNS_ROUTING_SETTINGS m_settings;     ///< Stores routing settings between router invocations
-
-    PNS_ITEM* m_startItem;
-    int m_startLayer;
-    VECTOR2I m_startSnapPoint;
-
-    PNS_ITEM* m_endItem;
-    VECTOR2I m_endSnapPoint;
-
-    ///> Flag marking that the router's world needs syncing.
-    bool m_needsSync;
+    bool prepareInteractive( );
+    bool finishInteractive( bool aSaveUndoBuffer );
 };
 
 #endif

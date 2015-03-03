@@ -546,5 +546,8 @@ EXTERN_BITMAP( zoom_out_xpm )
 EXTERN_BITMAP( zoom_page_xpm )
 EXTERN_BITMAP( zoom_selection_xpm )
 EXTERN_BITMAP( zoom_xpm )
+EXTERN_BITMAP( tune_diff_pair_length_legend_xpm )
+EXTERN_BITMAP( tune_diff_pair_skew_legend_xpm )
+EXTERN_BITMAP( tune_single_track_length_legend_xpm )
 
 #endif  // BITMAPS_H_

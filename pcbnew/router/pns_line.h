@@ -70,7 +70,7 @@ public:
     }
 
     PNS_LINE( const PNS_LINE& aOther ) ;
-            
+
     /**
      * Constructor
      * Copies properties (net, layers, etc.) from a base line and replaces the shape
@@ -89,6 +89,11 @@ public:
 
     ~PNS_LINE();
 
+    static inline bool ClassOf( const PNS_ITEM* aItem )
+    {
+        return aItem && LINE == aItem->Kind();
+    }
+
     /// @copydoc PNS_ITEM::Clone()
     virtual PNS_LINE* Clone() const;
 
@@ -96,62 +101,62 @@ public:
 
     ///> Assigns a shape to the line (a polyline/line chain)
     void SetShape( const SHAPE_LINE_CHAIN& aLine )
-    { 
+    {
         m_line = aLine;
     }
 
     ///> Returns the shape of the line
-    const SHAPE* Shape() const 
-    { 
-        return &m_line; 
+    const SHAPE* Shape() const
+    {
+        return &m_line;
     }
 
     ///> Modifiable accessor to the underlying shape
-    SHAPE_LINE_CHAIN& Line() 
-    { 
-        return m_line; 
+    SHAPE_LINE_CHAIN& Line()
+    {
+        return m_line;
     }
 
     ///> Const accessor to the underlying shape
-    const SHAPE_LINE_CHAIN& CLine() const 
-    { 
+    const SHAPE_LINE_CHAIN& CLine() const
+    {
         return m_line;
     }
 
     ///> Returns the number of segments in the line
-    int SegmentCount() const 
+    int SegmentCount() const
     {
-        return m_line.SegmentCount(); 
+        return m_line.SegmentCount();
     }
 
     ///> Returns the number of points in the line
-    int PointCount() const 
-    { 
-        return m_line.PointCount(); 
+    int PointCount() const
+    {
+        return m_line.PointCount();
     }
 
     ///> Returns the aIdx-th point of the line
-    const VECTOR2I& CPoint( int aIdx ) const 
-    { 
+    const VECTOR2I& CPoint( int aIdx ) const
+    {
         return m_line.CPoint( aIdx );
     }
 
     ///> Returns the aIdx-th segment of the line
     const SEG CSegment( int aIdx ) const
-    { 
+    {
         return m_line.CSegment( aIdx );
     }
 
     ///> Sets line width
-    void SetWidth( int aWidth ) 
-    { 
-        m_width = aWidth; 
+    void SetWidth( int aWidth )
+    {
+        m_width = aWidth;
     }
-    
+
     ///> Returns line width
-    int Width() const 
-    { 
-        return m_width; 
+    int Width() const
+    {
+        return m_width;
     }
 
     ///> Returns true if the line is geometrically identical as line aOther
@@ -163,7 +168,7 @@ public:
 
     /* Linking functions */
 
-    ///> Adds a reference to a segment registered in a PNS_NODE that is a part of this line. 
+    ///> Adds a reference to a segment registered in a PNS_NODE that is a part of this line.
     void LinkSegment( PNS_SEGMENT* aSeg )
     {
         if( !m_segmentRefs )
@@ -179,6 +184,11 @@ public:
         return m_segmentRefs;
     }
 
+    bool IsLinked() const
+    {
+        return m_segmentRefs != NULL;
+    }
+
     ///> Checks if the segment aSeg is a part of the line.
     bool ContainsSegment( PNS_SEGMENT* aSeg ) const
     {
@@ -189,9 +199,14 @@ public:
                 aSeg ) != m_segmentRefs->end();
     }
 
+    PNS_SEGMENT* GetLink( int aIndex ) const
+    {
+        return (*m_segmentRefs) [ aIndex ];
+    }
+
     ///> Erases the linking information. Used to detach the line from the owning node.
     void ClearSegmentLinks();
-    
+
     ///> Returns the number of segments that were assembled together to form this line.
     int LinkCount() const
     {
@@ -205,9 +220,9 @@ public:
     ///> Returns the clipped line.
     const PNS_LINE ClipToNearestObstacle( PNS_NODE* aNode ) const;
 
-    ///> Clips the line to a given range of vertices. 
+    ///> Clips the line to a given range of vertices.
     void ClipVertexRange ( int aStart, int aEnd );
-    
+
     ///> Returns the number of corners of angles specified by mask aAngles.
     int CountCorners( int aAngles );
 
@@ -238,18 +253,20 @@ public:
     void RemoveVia() { m_hasVia = false; }
 
     const PNS_VIA& Via() const { return m_via; }
- 
+
     virtual void Mark( int aMarker );
     virtual void Unmark ();
     virtual int Marker() const;
-    
+
     void DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
     void DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
 
     void SetRank( int aRank );
     int Rank() const;
-        
+
     bool HasLoops() const;
+
+    OPT_BOX2I ChangedArea( const PNS_LINE* aOther ) const;
 
 private:
     VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
@@ -260,7 +277,7 @@ private:
 
     ///> Copies m_segmentRefs from the line aParent.
     void copyLinks( const PNS_LINE* aParent ) ;
-    
+
     ///> List of segments in the owning PNS_NODE (PNS_ITEM::m_owner) that constitute this line, or NULL
     ///> if the line is not a part of any node.
     SEGMENT_REFS* m_segmentRefs;

@@ -21,7 +21,7 @@
 #ifndef __PNS_ITEMSET_H
 #define __PNS_ITEMSET_H
 
-#include <vector>
+#include <deque>
 #include <boost/foreach.hpp>
 
 #include "pns_item.h"
@@ -36,13 +36,21 @@
 class PNS_ITEMSET
 {
 public:
-    typedef std::vector<PNS_ITEM*> ITEMS;
+    typedef std::deque<PNS_ITEM*> ITEMS;
 
     PNS_ITEMSET( PNS_ITEM* aInitialItem = NULL );
 
-    PNS_ITEMSET( const PNS_ITEMSET& aOther )
+    PNS_ITEMSET( const PNS_ITEMSET& aOther ):
+        m_owner( false )
     {
         m_items = aOther.m_items;
+    }
+
+    ~PNS_ITEMSET();
+
+    void MakeOwner()
+    {
+        m_owner = true;
     }
 
     const PNS_ITEMSET& operator=( const PNS_ITEMSET& aOther )
@@ -68,6 +76,7 @@ public:
     PNS_ITEMSET& FilterLayers( int aStart, int aEnd = -1, bool aInvert = false );
     PNS_ITEMSET& FilterKinds( int aKindMask, bool aInvert = false );
     PNS_ITEMSET& FilterNet( int aNet, bool aInvert = false );
+    PNS_ITEMSET& FilterMarker( int aMarker, bool aInvert = false );
 
     PNS_ITEMSET& ExcludeLayers( int aStart, int aEnd = -1 )
     {
@@ -94,6 +103,11 @@ public:
     void Add( PNS_ITEM* aItem )
     {
         m_items.push_back( aItem );
+    }
+
+    void Prepend( PNS_ITEM* aItem )
+    {
+        m_items.push_front( aItem );
     }
 
     PNS_ITEM* Get( int index ) const
@@ -126,6 +140,7 @@ public:
 
 private:
     ITEMS m_items;
+    bool m_owner;
 };
 
 #endif

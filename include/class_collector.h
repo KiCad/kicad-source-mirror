@@ -130,6 +130,23 @@ public:
     }
 
     /**
+     * Function Remove
+     * removes the item aItem (if exists in the collector).
+     * @param aItem the item to be removed.
+     */
+    void Remove( const EDA_ITEM* aItem )
+    {
+        for( size_t i = 0;  i < m_List.size();  i++ )
+        {
+            if( m_List[i] == aItem )
+            {
+                m_List.erase( m_List.begin() + i);
+                return;
+            }
+        }
+    }
+
+    /**
      * Function operator[int]
      * is used for read only access and returns the object at \a aIndex.
      * @param aIndex The index into the list.
@@ -222,6 +239,22 @@ public:
             return true;
         else
             return false;
+    }
+    /**
+     * Function CountType
+     * counts the number of items matching aType
+     * @param aType type we are interested in
+     * @return number of occurences
+     */
+    int CountType( KICAD_T aType )
+    {
+        int cnt = 0;
+        for( size_t i = 0;  i < m_List.size();  i++ )
+        {
+            if( m_List[i]->Type() == aType )
+                cnt++;
+        }
+        return cnt;
     }
 
     /**

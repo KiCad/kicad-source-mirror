@@ -28,6 +28,8 @@
  * @brief Footprints selection and loading functions.
  */
 
+#include <boost/bind.hpp>
+ 
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
@@ -61,6 +63,10 @@ static void DisplayCmpDoc( wxString& aName, void* aData );
 
 static FOOTPRINT_LIST MList;
 
+static void clearModuleItemFlags( BOARD_ITEM* aItem )
+{
+    aItem->ClearFlags();
+}
 
 bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 {
@@ -92,9 +98,10 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     aModule = newModule;
 
-    GetBoard()->Add( newModule );
-
     newModule->ClearFlags();
+    newModule->RunOnChildren( boost::bind( &clearModuleItemFlags, _1 ) );
+
+    GetBoard()->Add( newModule );
 
     // Clear references to any net info, because the footprint editor
     // does know any thing about nets handled by the current edited board.

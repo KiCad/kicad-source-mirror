@@ -99,7 +99,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
         pnew.Append( path_walk[1] );
         pnew.Append( path_post[1] );
 
-        if(!path_post[1].PointCount() || !path_walk[1].PointCount())
+        if( !path_post[1].PointCount() || !path_walk[1].PointCount() )
             current_obs = nearestObstacle( PNS_LINE( aPath, path_pre[1] ) );
         else
             current_obs = nearestObstacle( PNS_LINE( aPath, path_post[1] ) );
@@ -111,7 +111,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
         pnew.Append( path_walk[0] );
         pnew.Append( path_post[0] );
 
-        if(!path_post[0].PointCount() || !path_walk[0].PointCount())
+        if( !path_post[0].PointCount() || !path_walk[0].PointCount() )
             current_obs = nearestObstacle( PNS_LINE( aPath, path_pre[0] ) );
         else
             current_obs = nearestObstacle( PNS_LINE( aPath, path_walk[0] ) );
@@ -136,7 +136,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
         PNS_LINE& aWalkPath, bool aOptimize )
 {
     PNS_LINE path_cw( aInitialPath ), path_ccw( aInitialPath );
-    WALKAROUND_STATUS s_cw = IN_PROGRESS, s_ccw = IN_PROGRESS;
+    WALKAROUND_STATUS s_cw, s_ccw; // = IN_PROGRESS, s_ccw = IN_PROGRESS;
     SHAPE_LINE_CHAIN best_path;
 
     start( aInitialPath );
@@ -145,6 +145,15 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
     m_recursiveBlockageCount = 0;
 
     aWalkPath = aInitialPath;
+
+    if( m_forceWinding )
+    {
+        s_cw = m_forceCw ? IN_PROGRESS : STUCK;
+        s_ccw = m_forceCw ? STUCK : IN_PROGRESS;
+        m_forceSingleDirection = true;
+    } else {
+        m_forceSingleDirection = false;
+    }
 
     while( m_iteration < m_iterationLimit )
     {
@@ -160,9 +169,9 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
             int len_ccw = path_ccw.CLine().Length();
 
             if( m_forceLongerPath )
-                aWalkPath = (len_cw > len_ccw ? path_cw : path_ccw);
+                aWalkPath = ( len_cw > len_ccw ? path_cw : path_ccw );
             else
-                aWalkPath = (len_cw < len_ccw ? path_cw : path_ccw);
+                aWalkPath = ( len_cw < len_ccw ? path_cw : path_ccw );
 
             break;
         }
@@ -229,17 +238,18 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
 
     if( aWalkPath.SegmentCount() < 1 )
         return STUCK;
-
     if( aWalkPath.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
         return STUCK;
-
     if( aWalkPath.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
         return STUCK;
 
     WALKAROUND_STATUS st = s_ccw == DONE || s_cw == DONE ? DONE : STUCK;
 
-    if( aOptimize && st == DONE )
-       PNS_OPTIMIZER::Optimize( &aWalkPath, PNS_OPTIMIZER::MERGE_OBTUSE, m_world );
+    if( st == DONE )
+    {
+        if( aOptimize )
+            PNS_OPTIMIZER::Optimize( &aWalkPath, PNS_OPTIMIZER::MERGE_OBTUSE, m_world );
+    }
 
     return st;
 }

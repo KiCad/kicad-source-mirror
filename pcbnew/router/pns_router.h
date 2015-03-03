@@ -41,6 +41,8 @@ class D_PAD;
 class TRACK;
 class VIA;
 class PNS_NODE;
+class PNS_DIFF_PAIR_PLACER;
+class PNS_PLACEMENT_ALGO;
 class PNS_LINE_PLACER;
 class PNS_ITEM;
 class PNS_LINE;
@@ -58,6 +60,14 @@ namespace KIGFX
     class VIEW_GROUP;
 };
 
+
+enum PNS_ROUTER_MODE {
+    PNS_MODE_ROUTE_SINGLE = 1,
+    PNS_MODE_ROUTE_DIFF_PAIR,
+    PNS_MODE_TUNE_SINGLE,
+    PNS_MODE_TUNE_DIFF_PAIR,
+    PNS_MODE_TUNE_DIFF_PAIR_SKEW
+};
 
 /**
  * Class PNS_ROUTER
@@ -77,6 +87,9 @@ private:
 public:
     PNS_ROUTER();
     ~PNS_ROUTER();
+
+    void SetMode ( PNS_ROUTER_MODE aMode );
+    PNS_ROUTER_MODE Mode() const { return m_mode; }
 
     static PNS_ROUTER* GetInstance();
 
@@ -113,6 +126,7 @@ public:
     void SwitchLayer( int layer );
 
     void ToggleViaPlacement();
+    void SetOrthoMode ( bool aEnable );
 
     int GetCurrentLayer() const;
     int GetCurrentNet() const;
@@ -193,6 +207,15 @@ public:
         return m_sizes;
     }
 
+    PNS_ITEM *QueryItemByParent ( const BOARD_ITEM *aItem ) const;
+
+    BOARD *GetBoard();
+
+    void SetFailureReason ( const wxString& aReason ) { m_failureReason = aReason; }
+    const wxString& FailureReason() const { return m_failureReason; }
+
+    PNS_PLACEMENT_ALGO *Placer() { return m_placer; }
+
 private:
     void movePlacing( const VECTOR2I& aP, PNS_ITEM* aItem );
     void moveDragging( const VECTOR2I& aP, PNS_ITEM* aItem );
@@ -225,7 +248,7 @@ private:
     BOARD* m_board;
     PNS_NODE* m_world;
     PNS_NODE* m_lastNode;
-    PNS_LINE_PLACER* m_placer;
+    PNS_PLACEMENT_ALGO * m_placer;
     PNS_DRAGGER* m_dragger;
     PNS_SHOVE* m_shove;
     int m_iterLimit;
@@ -250,6 +273,10 @@ private:
     ///> Stores list of modified items in the current operation
     PICKED_ITEMS_LIST m_undoBuffer;
     PNS_SIZES_SETTINGS m_sizes;
+    PNS_ROUTER_MODE m_mode;
+
+    wxString m_toolStatusbarName;
+    wxString m_failureReason;
 };
 
 #endif

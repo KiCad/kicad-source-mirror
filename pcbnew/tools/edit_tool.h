@@ -172,7 +172,7 @@ private:
 
     ///> If there are no items currently selected, it tries to choose the item that is under
     ///> the cursor or displays a disambiguation menu if there are multpile items.
-    bool makeSelection( const SELECTION& aSelection );
+    bool hoverSelection( const SELECTION& aSelection, bool aSanitize = true );
 
     ///> Updates view with the changes in the list.
     void processChanges( const PICKED_ITEMS_LIST* aList );
@@ -209,6 +209,21 @@ private:
     inline bool isUndoInhibited() const
     {
         return m_undoInhibit > 0;
+    }
+
+    int editFootprintInFpEditor( const TOOL_EVENT& aEvent );
+
+    bool invokeInlineRouter();
+
+    template<class T> T* uniqueSelected()
+    {
+        const SELECTION& selection = m_selectionTool->GetSelection();
+
+        if( selection.items.GetCount() > 1 )
+            return NULL;
+
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
+        return dyn_cast<T*>( item );
     }
 };
 

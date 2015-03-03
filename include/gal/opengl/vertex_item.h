@@ -69,7 +69,7 @@ public:
 
     /**
      * Function GetVertices()
-     * areturn a pointer to the data used by the VERTEX_ITEM.
+     * Returns pointer to the data used by the VERTEX_ITEM.
      */
     VERTEX* GetVertices() const;
 

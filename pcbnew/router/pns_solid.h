@@ -43,12 +43,17 @@ public:
     }
 
     PNS_SOLID( const PNS_SOLID& aSolid ) :
-        PNS_ITEM ( aSolid )
+        PNS_ITEM( aSolid )
     {
         m_shape = aSolid.m_shape->Clone();
         m_pos = aSolid.m_pos;
     }
-    
+
+    static inline bool ClassOf( const PNS_ITEM* aItem )
+    {
+        return aItem && SOLID == aItem->Kind();
+    }
+
     PNS_ITEM* Clone() const;
 
     const SHAPE* Shape() const { return m_shape; }
@@ -78,7 +83,7 @@ public:
         return m_pos;
     }
 
-    virtual int AnchorCount() const 
+    virtual int AnchorCount() const
     {
         return 1;
     }

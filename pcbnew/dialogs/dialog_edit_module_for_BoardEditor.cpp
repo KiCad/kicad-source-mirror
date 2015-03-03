@@ -313,12 +313,19 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
         break;
     }
 
-    m_AutoPlaceCtrl->SetSelection( (m_CurrentModule->IsLocked()) ? 1 : 0 );
+    if( m_CurrentModule->IsLocked() )
+        m_AutoPlaceCtrl->SetSelection( 2 );
+    else if( m_CurrentModule->PadsLocked() )
+        m_AutoPlaceCtrl->SetSelection( 1 );
+    else
+        m_AutoPlaceCtrl->SetSelection( 0 );
 
     m_AutoPlaceCtrl->SetItemToolTip( 0,
-                                    _( "Enable hotkey move commands and Auto Placement" ) );
+                                    _( "Component can be freely moved and auto placed. User can arbitrarily select and edit component's pads." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1,
-                                    _( "Disable hotkey move commands and Auto Placement" ) );
+                                    _( "Component can be freely moved and auto placed, but its pads cannot be selected or edited." ) );
+    m_AutoPlaceCtrl->SetItemToolTip( 2,
+                                    _( "Component is locked: it cannot be freely moved or auto placed." ) );
 
     m_CostRot90Ctrl->SetValue( m_CurrentModule->GetPlacementCost90() );
 
@@ -583,7 +590,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     modpos.x = ValueFromTextCtrl( *m_ModPositionX );
     modpos.y = ValueFromTextCtrl( *m_ModPositionY );
     m_CurrentModule->SetPosition( modpos );
-    m_CurrentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
+    m_CurrentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 2 );
+    m_CurrentModule->SetPadsLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     switch( m_AttributsCtrl->GetSelection() )
     {
