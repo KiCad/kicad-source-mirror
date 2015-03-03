@@ -189,6 +189,9 @@ bool PNS_MEANDER_PLACER::doMove( const VECTOR2I& aP, PNS_ITEM* aEndItem, int aTa
 
 bool PNS_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
+    if( !m_currentNode )
+        return false;
+
     m_currentTrace = PNS_LINE( *m_originLine, m_finalShape );
     m_currentNode->Add( &m_currentTrace );
 
