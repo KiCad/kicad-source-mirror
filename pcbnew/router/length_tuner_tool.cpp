@@ -103,7 +103,6 @@ public:
 
 LENGTH_TUNER_TOOL::~LENGTH_TUNER_TOOL()
 {
-    delete m_router;
 }
 
 
