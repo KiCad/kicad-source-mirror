@@ -136,7 +136,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
         PNS_LINE& aWalkPath, bool aOptimize )
 {
     PNS_LINE path_cw( aInitialPath ), path_ccw( aInitialPath );
-    WALKAROUND_STATUS s_cw, s_ccw; // = IN_PROGRESS, s_ccw = IN_PROGRESS;
+    WALKAROUND_STATUS s_cw = IN_PROGRESS, s_ccw = IN_PROGRESS;
     SHAPE_LINE_CHAIN best_path;
 
     start( aInitialPath );
