@@ -115,6 +115,7 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
     Init( aPos );
+    m_currentSheetPath = NULL;
 }
 
 
@@ -128,6 +129,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
     m_convert   = convert;
     m_part_name = aPart.GetName();
     m_part      = aPart.SharedPtr();
+    m_currentSheetPath = NULL;
 
     SetTimeStamp( GetNewTimeStamp() );
 

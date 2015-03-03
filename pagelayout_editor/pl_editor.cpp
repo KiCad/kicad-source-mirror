@@ -122,7 +122,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( wxT("PlEditorFrame"), s_PlEditor_Hokeys_Descr );
+    ReadHotkeyConfig( PL_EDITOR_FRAME_NAME, s_PlEditor_Hokeys_Descr );
 
     g_UserUnit = MILLIMETRES;
 
@@ -159,7 +159,7 @@ bool MYFACE::OnKifaceStart( PGM_BASE* aProgram )
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( wxT("PlEditorFrame"), s_PlEditor_Hokeys_Descr );
+    ReadHotkeyConfig( PL_EDITOR_FRAME_NAME, s_PlEditor_Hokeys_Descr );
 
     PL_EDITOR_FRAME * frame = new PL_EDITOR_FRAME( NULL, wxT( "PlEditorFrame" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 

@@ -22,10 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef __COMMON_ACTIONS_H
+#define __COMMON_ACTIONS_H
+
 #include <tool/tool_action.h>
 #include <boost/optional.hpp>
 
 class TOOL_EVENT;
+class TOOL_MANAGER;
 
 /**
  * Class COMMON_ACTIONS
@@ -121,8 +125,29 @@ public:
     static TOOL_ACTION arcPosture;
 
     // Push and Shove Router Tool
+
     /// Activation of the Push and Shove router
-    static TOOL_ACTION routerActivate;
+    static TOOL_ACTION routerActivateSingle;
+
+    /// Activation of the Push and Shove router (differential pair mode)
+    static TOOL_ACTION routerActivateDiffPair;
+
+    /// Activation of the Push and Shove router (tune single line mode)
+    static TOOL_ACTION routerActivateTuneSingleTrace;
+
+    /// Activation of the Push and Shove router (diff pair tuning mode)
+    static TOOL_ACTION routerActivateTuneDiffPair;
+
+    /// Activation of the Push and Shove router (skew tuning mode)
+    static TOOL_ACTION routerActivateTuneDiffPairSkew;
+
+    /// Activation of the Push and Shove settings dialogs
+    static TOOL_ACTION routerActivateSettingsDialog;
+    static TOOL_ACTION routerActivateDpDimensionsDialog;
+
+
+    /// Activation of the Push and Shove router (inline dragging mode)
+    static TOOL_ACTION routerInlineDrag;
 
     // Point Editor
     /// Update edit points
@@ -244,6 +269,13 @@ public:
 
     /// Blocks CTRL+F, it is handled by wxWidgets
     static TOOL_ACTION findDummy;
+
+    static TOOL_ACTION editFootprintInFpEditor;
+    static TOOL_ACTION copyPadToSettings;
+    static TOOL_ACTION copySettingsToPads;
+    static TOOL_ACTION globalEditPads;
+
+
     /**
      * Function TranslateLegacyId()
      * Translates legacy tool ids to the corresponding TOOL_ACTION name.
@@ -253,3 +285,7 @@ public:
      */
     static boost::optional<TOOL_EVENT> TranslateLegacyId( int aId );
 };
+
+void registerAllTools ( TOOL_MANAGER *aToolManager );
+
+#endif

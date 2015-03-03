@@ -433,6 +433,49 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Set the origin point for the grid" ),
                  KiBitmap( grid_select_axis_xpm ) );
 
+    wxMenu* routeMenu = new wxMenu;
+  
+    AddMenuItem( routeMenu, ID_TRACK_BUTT,
+                 _( "Single Track" ),
+                 _( "Interactively route a single track" ),
+                 KiBitmap( add_tracks_xpm ) );
+
+    AddMenuItem( routeMenu, ID_DIFF_PAIR_BUTT,
+                 _( "Differential Pair" ),
+                 _( "Interactively route a differential pair" ),
+                 KiBitmap( add_tracks_xpm ) );
+
+    routeMenu->AppendSeparator();
+
+    AddMenuItem( routeMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT,
+                 _( "Tune Track Length" ),
+                 _( "Tune length of a single track" ),
+                 KiBitmap( add_tracks_xpm ) );
+
+    AddMenuItem( routeMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT,
+                 _( "Tune Differential Pair Length" ),
+                 _( "Tune length of a differential pair" ),
+                 KiBitmap( add_tracks_xpm ) );
+
+    AddMenuItem( routeMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT,
+                 _( "Tune Differential Pair Skew/Phase" ),
+                 _( "Tune skew/phase of a differential pair" ),
+                 KiBitmap( add_tracks_xpm ) );
+
+/* Fixme: add icons & missing menu entries!
+    routeMenu->AppendSeparator();
+
+    AddMenuItem( routeMenu, ID_MENU_MITER_TRACES,
+                 _( "Miter traces..." ),
+                 _( "Miter trace corners with arcs" ),
+                 KiBitmap( grid_select_axis_xpm ) );
+
+    AddMenuItem( routeMenu, ID_MENU_ADD_TEARDROPS,
+                 _( "Teardrops..." ),
+                 _( "Add teardrops to pads/vias" ),
+                 KiBitmap( grid_select_axis_xpm ) );
+*/
+
     //----- Preferences and configuration menu------------------------------------
     wxMenu* configmenu = new wxMenu;
 
@@ -467,6 +510,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Select how items (pads, tracks texts ... ) are displayed" ),
                  KiBitmap( display_options_xpm ) );
 
+    AddMenuItem( configmenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
+                 _( "Interactive Routing" ),
+                 _( "Configure Interactive Routing." ),
+                 KiBitmap( add_tracks_xpm ) ); // fixme: icon
+
     //--- dimensions submenu ------------------------------------------------------
     wxMenu* dimensionsMenu = new wxMenu;
 
@@ -487,6 +535,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Pads &Mask Clearance" ),
                  _( "Adjust the global clearance between pads and the solder resist mask" ),
                  KiBitmap( pads_mask_layers_xpm ) );
+
+    AddMenuItem( dimensionsMenu, ID_MENU_DIFF_PAIR_DIMENSIONS,
+                 _( "Differential Pairs" ),
+                 _( "Define the global gap/width for differential pairs." ),
+                 KiBitmap( add_tracks_xpm ) ); // fixme: icon
 
     dimensionsMenu->AppendSeparator();
     AddMenuItem( dimensionsMenu, ID_CONFIG_SAVE,
@@ -592,6 +645,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( routeMenu, _( "&Route" ) );
     menuBar->Append( configmenu, _( "P&references" ) );
     menuBar->Append( dimensionsMenu, _( "D&imensions" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );

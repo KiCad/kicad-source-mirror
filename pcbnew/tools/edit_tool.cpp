@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,13 +23,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <limits>
+
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_zone.h>
+#include <wxPcbStruct.h>
+#include <kiway.h>
 #include <class_draw_panel_gal.h>
 #include <module_editor_frame.h>
-#include <wxPcbStruct.h>
 
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
@@ -43,6 +47,7 @@
 #include "common_actions.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
+#include "grid_helper.h"
 
 #include <dialogs/dialog_create_array.h>
 #include <dialogs/dialog_move_exact.h>
@@ -83,12 +88,33 @@ bool EDIT_TOOL::Init()
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
+    // Footprint actions
+    m_selectionTool->AddMenuItem( COMMON_ACTIONS::editFootprintInFpEditor,
+                                SELECTION_CONDITIONS::OnlyType ( PCB_MODULE_T ) &&
+                                SELECTION_CONDITIONS::Count ( 1 ) );
+
     m_offset.x = 0;
     m_offset.y = 0;
 
     setTransitions();
 
     return true;
+}
+
+
+bool EDIT_TOOL::invokeInlineRouter()
+{
+    TRACK* track = uniqueSelected<TRACK>();
+    VIA* via = uniqueSelected<VIA>();
+
+    if( track || via )
+    {
+        //printf("Calling interactive drag\n");
+        m_toolMgr->RunAction( COMMON_ACTIONS::routerInlineDrag, true );
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -99,11 +125,11 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    // Be sure that there is at least one item that we can modify
-    if( !makeSelection( selection ) )
+    // Be sure that there is at least one item that we can modify. If nothing was selected before,
+    // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
+    if( !hoverSelection( selection ) )
     {
         setTransitions();
-
         return 0;
     }
 
@@ -111,6 +137,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     m_dragging = false;         // Are selected items being dragged?
     bool restore = false;       // Should items' state be restored when finishing the tool?
+    bool lockOverride = false;
+    bool isDragAndDrop = false;
 
     // By default, modified items need to update their geometry
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
@@ -118,11 +146,13 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     controls->ShowCursor( true );
-    controls->SetSnapping( true );
+    //controls->SetSnapping( true );
     controls->ForceCursorPosition( false );
 
     // cumulative translation
     wxPoint totalMovement( 0, 0 );
+
+    GRID_HELPER grid ( editFrame );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -195,10 +225,16 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::editActivate )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
-            m_cursor = controls->GetCursorPosition();
+            VECTOR2I mousePos = evt->Position();
+
+            m_cursor = grid.Align( evt->Position() );
+            isDragAndDrop = evt->IsDrag( BUT_LEFT );
 
             if( m_dragging )
             {
+                m_cursor = grid.BestSnapAnchor( evt->Position(), selection.Item<BOARD_ITEM>( 0 ) );
+                getViewControls()->ForceCursorPosition ( true, m_cursor );
+
                 wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) -
                                    selection.Item<BOARD_ITEM>( 0 )->GetPosition();
 
@@ -212,8 +248,18 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else    // Prepare to start dragging
             {
-                if( m_selectionTool->CheckLock() || selection.Empty() )
+                m_selectionTool->SanitizeSelection();
+
+                if( selection.Empty() )
                     break;
+
+                // deal with locked items (override lock or abort the operation)
+                SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
+
+                if( lockFlags == SELECTION_LOCKED )
+                    break;
+                else if( lockFlags == SELECTION_LOCK_OVERRIDE )
+                    lockOverride = true;
 
                 // Save items, so changes can be undone
                 if( !isUndoInhibited() )
@@ -222,26 +268,32 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
                 }
 
+                VECTOR2I origin;
+
+                if( evt->IsDrag( BUT_LEFT ) )
+                    mousePos = evt->DragOrigin();
+
+                //    origin = grid.Align ( evt->DragOrigin() );
+                //else
+                origin = grid.Align( mousePos );
+
                 if( selection.Size() == 1 )
                 {
                     // Set the current cursor position to the first dragged item origin, so the
                     // movement vector could be computed later
-                    m_cursor = VECTOR2I( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
-                    m_offset.x = 0;
-                    m_offset.y = 0;
+                    m_cursor = grid.BestDragOrigin( mousePos, selection.Item<BOARD_ITEM>( 0 ) );
+                    getViewControls()->ForceCursorPosition( true, m_cursor );
+                    grid.SetAuxAxes( true, m_cursor );
+
+                    VECTOR2I o = VECTOR2I( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
+                    m_offset.x = o.x - m_cursor.x;
+                    m_offset.y = o.y - m_cursor.y;
                 }
                 else
                 {
-                    VECTOR2D origin;
-
-                    if( evt->IsDrag( BUT_LEFT ) )
-                        origin = getView()->GetGAL()->GetGridPoint( evt->DragOrigin() );
-                    else
-                        origin = getViewControls()->GetCursorPosition();
-
-                    // Update dragging offset (distance between cursor and the first dragged item)
                     m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
                                                          wxPoint( origin.x, origin.y );
+                    getViewControls()->ForceCursorPosition( true, origin );
                 }
 
                 controls->SetAutoPan( true );
@@ -254,7 +306,12 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
-            break; // Finish
+        {
+            if( !isDragAndDrop || !lockOverride )
+                break; // Finish
+
+            lockOverride = false;
+        }
     }
 
     if( m_dragging )
@@ -284,8 +341,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     ratsnest->Recalculate();
 
     controls->ShowCursor( false );
-    controls->SetSnapping( false );
+    //controls->SetSnapping( false );
     controls->SetAutoPan( false );
+    controls->ForceCursorPosition( false );
 
     setTransitions();
 
@@ -298,7 +356,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    if( !makeSelection( selection ) )
+    if( !hoverSelection( selection, false ) )
     {
         setTransitions();
 
@@ -310,22 +368,6 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         // Display properties dialog
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
-
-        // Check if user wants to edit pad or module properties
-        if( item->Type() == PCB_MODULE_T )
-        {
-            VECTOR2D cursor = getViewControls()->GetCursorPosition();
-
-            for( D_PAD* pad = static_cast<MODULE*>( item )->Pads(); pad; pad = pad->Next() )
-            {
-                if( pad->ViewBBox().Contains( cursor ) )
-                {
-                    // Turns out that user wants to edit a pad properties
-                    item = pad;
-                    break;
-                }
-            }
-        }
 
         std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
 
@@ -370,7 +412,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
+    if( !hoverSelection( selection ) )
     {
         setTransitions();
 
@@ -425,7 +467,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
+    if( !hoverSelection( selection ) )
     {
         setTransitions();
 
@@ -475,7 +517,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
+    if( !hoverSelection( selection ) )
     {
         setTransitions();
 
@@ -531,40 +573,58 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     // Default removal procedure
     case PCB_MODULE_TEXT_T:
     {
-        if( m_editModules )
-        {
-            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( aItem );
+        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( aItem );
 
-            switch( text->GetType() )
-            {
+        switch( text->GetType() )
+        {
             case TEXTE_MODULE::TEXT_is_REFERENCE:
-                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete REFERENCE!" ) );
+                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete component reference." ) );
                 return;
 
             case TEXTE_MODULE::TEXT_is_VALUE:
-                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete VALUE!" ) );
+                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete component value." ) );
                 return;
 
             case TEXTE_MODULE::TEXT_is_DIVERS:    // suppress warnings
                 break;
-            }
         }
-    }
-    /* no break */
 
-    case PCB_PAD_T:
-    case PCB_MODULE_EDGE_T:
         if( m_editModules )
         {
             MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
             module->SetLastEditTime();
-
             board->m_Status_Pcb = 0; // it is done in the legacy view
             aItem->DeleteStructure();
         }
 
         return;
-        break;
+    }
+
+    case PCB_PAD_T:
+    case PCB_MODULE_EDGE_T:
+    {
+        MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
+        module->SetLastEditTime();
+
+        board->m_Status_Pcb = 0; // it is done in the legacy view
+
+
+        if( !m_editModules )
+        {
+            if( aItem->Type() == PCB_PAD_T && module->GetPadCount() == 1 )
+            {
+                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete the only remaining pad of the module (modules on PCB must have at least one pad)." ) );
+                return;
+            }
+
+            getView()->Remove( aItem );
+            board->Remove( aItem );
+        }
+
+        aItem->DeleteStructure();
+
+        return;
+    }
 
     case PCB_LINE_T:                // a segment not on copper layers
     case PCB_TEXT_T:                // a text on a layer
@@ -580,7 +640,6 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     default:                        // other types do not need to (or should not) be handled
         assert( false );
         return;
-        break;
     }
 
     getView()->Remove( aItem );
@@ -595,7 +654,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !makeSelection( selection ) || m_selectionTool->CheckLock() )
+    if( !hoverSelection( selection ) )
     {
         setTransitions();
 
@@ -661,7 +720,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     const SELECTION& selection = selTool->GetSelection();
 
     // Be sure that there is at least one item that we can modify
-    if( !makeSelection( selection ) || selTool->CheckLock() )
+    if( !hoverSelection( selection ) )
     {
         setTransitions();
         return 0;
@@ -745,7 +804,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     const SELECTION& selection = selTool->GetSelection();
 
     // Be sure that there is at least one item that we can modify
-    if( !makeSelection( selection ) || selTool->CheckLock() )
+    if( !hoverSelection( selection ) )
     {
         setTransitions();
         return 0;
@@ -913,6 +972,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,COMMON_ACTIONS::createArray.MakeEvent() );
+    Go( &EDIT_TOOL::editFootprintInFpEditor, COMMON_ACTIONS::editFootprintInFpEditor.MakeEvent() );
 }
 
 
@@ -922,6 +982,7 @@ void EDIT_TOOL::updateRatsnest( bool aRedraw )
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
     ratsnest->ClearSimple();
+
     for( unsigned int i = 0; i < selection.items.GetCount(); ++i )
     {
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
@@ -952,10 +1013,24 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 }
 
 
-bool EDIT_TOOL::makeSelection( const SELECTION& aSelection )
+bool EDIT_TOOL::hoverSelection( const SELECTION& aSelection, bool aSanitize )
 {
     if( aSelection.Empty() )                        // Try to find an item that could be modified
+    {
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+
+        if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
+        {
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+            return false;
+        }
+    }
+
+    if( aSanitize )
+        m_selectionTool->SanitizeSelection();
+
+    if( aSelection.Empty() )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     return !aSelection.Empty();
 }
@@ -997,4 +1072,34 @@ void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
             break;
         }
     }
+}
+
+
+int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
+{
+    MODULE* mod = uniqueSelected<MODULE>();
+
+    if( !mod )
+        return 0;
+
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    editFrame-> SetCurItem( mod );
+
+    if( editFrame->GetCurItem()->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
+    {
+        editFrame->GetCurItem()->SetTimeStamp( GetNewTimeStamp() );
+        editFrame->OnModify();
+    }
+
+    FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
+
+    editor->Load_Module_From_BOARD( (MODULE*) editFrame->GetCurItem() );
+    editFrame->SetCurItem( NULL );     // the current module could be deleted by
+
+    editor->Show( true );
+    editor->Raise();        // Iconize( false );
+
+    setTransitions();
+    return 0;
 }

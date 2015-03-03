@@ -227,15 +227,18 @@ static void DrawGraphicTextPline( EDA_RECT* aClipBox,
                        coord[ik + 1].x, coord[ik + 1].y );
         }
     }
-    else if( aSketchMode )
+    else if( aDC )
     {
-        for( int ik = 0; ik < (point_count - 1); ik++ )
-            GRCSegm( aClipBox, aDC, coord[ik].x, coord[ik].y,
-                     coord[ik + 1].x, coord[ik + 1].y, aWidth, aColor );
+        if( aSketchMode )
+        {
+            for( int ik = 0; ik < (point_count - 1); ik++ )
+                GRCSegm( aClipBox, aDC, coord[ik].x, coord[ik].y,
+                         coord[ik + 1].x, coord[ik + 1].y, aWidth, aColor );
+        }
+        else
+            GRPoly( aClipBox, aDC, point_count, coord, 0,
+                    aWidth, aColor, aColor );
     }
-    else
-        GRPoly( aClipBox, aDC, point_count, coord, 0,
-                aWidth, aColor, aColor );
 }
 
 

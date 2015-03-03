@@ -258,7 +258,7 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
         // If the selectedField is still not in the templateField range now,
         // make sure we stay in range and when there are no fields present
         // move to -1
-        if( selectedField >= templateFields.size() )
+        if( selectedField >= int( templateFields.size() ) )
             selectedField = templateFields.size() - 1;
 
         // Update the display to reflect the new data

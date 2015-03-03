@@ -1,7 +1,7 @@
 #
 # Example python script to generate a BOM from a KiCad generic netlist
 #
-# Example: Sorted and Grouped HTML BOM with more advanced grouping
+# Example: Sorted and Grouped HTML BOM with advanced grouping
 #
 
 """
@@ -75,7 +75,7 @@ def myEqu(self, other):
 kicad_netlist_reader.comp.__equ__ = myEqu
 
 # Generate an instance of a generic netlist, and load the netlist tree from
-# video.tmp. If the file doesn't exist, execution will stop
+# <file>.tmp. If the file doesn't exist, execution will stop
 net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write too, if the file cannot be opened output to stdout

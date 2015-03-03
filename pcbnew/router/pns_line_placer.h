@@ -30,7 +30,7 @@
 #include "pns_node.h"
 #include "pns_via.h"
 #include "pns_line.h"
-#include "pns_algo_base.h"
+#include "pns_placement_algo.h"
 
 class PNS_ROUTER;
 class PNS_SHOVE;
@@ -47,7 +47,7 @@ class PNS_SIZES_SETTINGS;
  * Applies shove and walkaround algorithms when needed.
  */
 
-class PNS_LINE_PLACER : public PNS_ALGO_BASE
+class PNS_LINE_PLACER : public PNS_PLACEMENT_ALGO
 {
 public:
     PNS_LINE_PLACER( PNS_ROUTER* aRouter );
@@ -59,7 +59,7 @@ public:
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL).
      */
-    void Start( const VECTOR2I& aP, PNS_ITEM* aStartItem );
+    bool Start( const VECTOR2I& aP, PNS_ITEM* aStartItem );
 
     /**
      * Function Move()
@@ -68,7 +68,7 @@ public:
      * aEndItem as anchor (if not NULL).
      * (unless NULL).
      */
-    void Move( const VECTOR2I& aP, PNS_ITEM* aEndItem );
+    bool Move( const VECTOR2I& aP, PNS_ITEM* aEndItem );
 
     /**
      * Function FixRoute()
@@ -86,7 +86,7 @@ public:
      *
      * Enables/disables a via at the end of currently routed trace.
      */
-    void ToggleVia( bool aEnabled );
+    bool ToggleVia( bool aEnabled );
 
     /**
      * Function SetLayer()
@@ -94,7 +94,6 @@ public:
      * Sets the current routing layer.
      */
     bool SetLayer( int aLayer );
-
 
     /**
      * Function Head()
@@ -180,7 +179,11 @@ public:
      */
     void UpdateSizes( const PNS_SIZES_SETTINGS& aSizes );
 
+    void SetOrthoMode( bool aOrthoMode );
+
     bool IsPlacingVia() const { return m_placingVia; }
+
+    void GetModifiedNets( std::vector<int>& aNets ) const;
 private:
     /**
      * Function route()
@@ -344,6 +347,8 @@ private:
 
     const PNS_VIA makeVia ( const VECTOR2I& aP );
 
+    const SHAPE_LINE_CHAIN buildInitialLine( const VECTOR2I& aP );
+
     ///> current routing direction
     DIRECTION_45 m_direction;
 
@@ -403,6 +408,7 @@ private:
     bool m_idle;
     bool m_chainedPlacement;
     bool m_splitSeg;
+    bool m_orthoMode;
 };
 
 #endif    // __PNS_LINE_PLACER_H

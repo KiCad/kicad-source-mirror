@@ -387,7 +387,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
 
         // For texts belonging to modules, we need to save state of the parent module
-        if( item->Type() == PCB_MODULE_TEXT_T )
+        if( item->Type() == PCB_MODULE_TEXT_T  || item->Type() == PCB_PAD_T )
         {
             item = item->GetParent();
             wxASSERT( item->Type() == PCB_MODULE_T );

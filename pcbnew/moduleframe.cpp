@@ -199,7 +199,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                          wxDefaultPosition, wxDefaultSize,
                          KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
 {
-    m_FrameName = GetFootprintEditorFrameName();
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis
@@ -835,11 +834,11 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
     {
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:

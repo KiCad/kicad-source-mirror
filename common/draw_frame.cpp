@@ -642,17 +642,19 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    aCfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
+    wxString baseCfgName = GetName();
+
+    aCfg->Read( baseCfgName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
 
     bool btmp;
-    if( aCfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
+    if( aCfg->Read( baseCfgName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
 
     int itmp;
-    if( aCfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
+    if( aCfg->Read( baseCfgName + GridColorEntryKeyword, &itmp ) )
         SetGridColor( ColorFromInt( itmp ) );
 
-    aCfg->Read( m_FrameName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
+    aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
 
     // m_LastGridSizeId is an offset, expected to be >= 0
     if( m_LastGridSizeId < 0 )
@@ -664,10 +666,12 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    aCfg->Write( m_FrameName + CursorShapeEntryKeyword, m_cursorShape );
-    aCfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
-    aCfg->Write( m_FrameName + GridColorEntryKeyword, ( long ) GetGridColor() );
-    aCfg->Write( m_FrameName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
+    wxString baseCfgName = GetName();
+
+    aCfg->Write( baseCfgName + CursorShapeEntryKeyword, m_cursorShape );
+    aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
+    aCfg->Write( baseCfgName + GridColorEntryKeyword, ( long ) GetGridColor() );
+    aCfg->Write( baseCfgName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
 }
 
 

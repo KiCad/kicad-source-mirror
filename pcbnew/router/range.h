@@ -24,70 +24,70 @@
 template<class T>
 class RANGE
 {
-	public:
-		RANGE( T aMin, T aMax ) :
-			m_min( aMin ),
-			m_max( aMax ),
-			m_defined( true ) {}
+public:
+    RANGE( T aMin, T aMax ) :
+        m_min( aMin ),
+        m_max( aMax ),
+        m_defined( true ) {}
 
-		RANGE():
-			m_defined( false ) {}
+    RANGE():
+        m_defined( false ) {}
 
-		T MinV() const
-		{
-			return m_min;
-		}
+    T MinV() const
+    {
+        return m_min;
+    }
 
-		T MaxV() const
-		{
-			return m_max;
-		}
+    T MaxV() const
+    {
+        return m_max;
+    }
 
-		void Set( T aMin, T aMax ) const
-		{
-			m_max = aMax;
-			m_min = aMin;
-		}
+    void Set( T aMin, T aMax ) const
+    {
+        m_max = aMax;
+        m_min = aMin;
+    }
 
-		void Grow( T aValue )
-		{
-			if( !m_defined )
-			{
-				m_min = aValue;
-				m_max = aValue;
-				m_defined = true;
-			}
-			else
-			{
-				m_min = std::min( m_min, aValue );
-				m_max = std::max( m_max, aValue );
-			}
-		}
+    void Grow( T aValue )
+    {
+        if( !m_defined )
+        {
+            m_min = aValue;
+            m_max = aValue;
+            m_defined = true;
+        }
+        else
+        {
+            m_min = std::min( m_min, aValue );
+            m_max = std::max( m_max, aValue );
+        }
+    }
 
-		bool Inside( const T& aValue ) const
-		{
-			if( !m_defined )
-				return true;
+    bool Inside( const T& aValue ) const
+    {
+        if( !m_defined )
+            return true;
 
-			return aValue >= m_min && aValue <= m_max;
-		}
+        return aValue >= m_min && aValue <= m_max;
+    }
 
-		bool Overlaps ( const RANGE<T>& aOther ) const
-		{
-	        if( !m_defined || !aOther.m_defined )
-	        	return true;
+    bool Overlaps ( const RANGE<T>& aOther ) const
+    {
+        if( !m_defined || !aOther.m_defined )
+            return true;
 
-	        return m_max >= aOther.m_min && m_min <= aOther.m_max;
-		}
+        return m_max >= aOther.m_min && m_min <= aOther.m_max;
+    }
 
-		bool Defined() const
-		{
-			return m_defined;
-		}
+    bool Defined() const
+    {
+        return m_defined;
+    }
 
-	private:
-		T m_min, m_max;
-		bool m_defined;
+private:
+    T m_min, m_max;
+    bool m_defined;
 };
 
 #endif

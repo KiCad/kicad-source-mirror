@@ -29,10 +29,10 @@
 #ifndef  HOTKEYS_BASIC_H
 #define  HOTKEYS_BASIC_H
 
-#define DEFAULT_HOTKEY_FILENAME_EXT wxT( "key" )
+#define DEFAULT_HOTKEY_FILENAME_EXT wxT( "hotkeys" )
 
 
-class EDA_DRAW_FRAME;
+class EDA_BASE_FRAME;
 
 
 /* Identifiers (tags) in key code configuration file (or section names)
@@ -116,7 +116,7 @@ public:
 /* Functions:
  */
 void AddHotkeyConfigMenu( wxMenu* menu );
-void HandleHotkeyConfigMenuSelection( EDA_DRAW_FRAME* frame, int id );
+void HandleHotkeyConfigMenuSelection( EDA_BASE_FRAME* frame, int id );
 
 /**
  * Function KeyNameFromKeyCode
@@ -196,7 +196,7 @@ wxString AddHotkeyName( const wxString&           aText,
  * @param aFrame = current active frame
  * @param aList = pointer to a EDA_HOTKEY_CONFIG list (Null terminated)
  */
-void DisplayHotkeyList( EDA_DRAW_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aList );
+void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aList );
 
 /**
  * Function GetDescriptorFromHotkey

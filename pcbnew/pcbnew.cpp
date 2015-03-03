@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -307,7 +307,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
+    ReadHotkeyConfig( PCB_EDIT_FRAME_NAME, g_Board_Editor_Hokeys_Descr );
 
     try
     {

@@ -92,7 +92,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
 
-    m_FrameName = GetLibViewerFrameName();
     m_configPath = wxT( "LibraryViewer" );
 
     // Give an icon

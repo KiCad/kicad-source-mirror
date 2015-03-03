@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -118,8 +118,7 @@ protected:
     wxSize       m_FrameSize;
 
     wxAuiToolBar* m_mainToolBar;    ///< Standard horizontal Toolbar
-    wxString     m_FrameName;       ///< name used for writing and reading setup
-                                    ///< It is "SchematicFrame", "PcbFrame" ....
+
     wxString     m_AboutTitle;      ///< Name of program displayed in About.
 
     wxAuiManager m_auimgr;
@@ -196,8 +195,6 @@ public:
     void SetAutoSaveInterval( int aInterval ) { m_autoSaveInterval = aInterval; }
 
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }
-
-    wxString GetName() const { return m_FrameName; }
 
     bool IsType( FRAME_T aType ) const { return m_Ident == aType; }
 
@@ -291,15 +288,21 @@ public:
      * Function ImportHotkeyConfigFromFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
+     * @param aDefaultShortname = a default short name (extention not needed)
+     *     like eechema, kicad...
      */
-    void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList );
+    void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
+                                     const wxString& aDefaultShortname );
 
     /**
      * Function ExportHotkeyConfigToFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
+     * @param aDefaultShortname = a default short name (extention not needed)
+     *     like eechema, kicad...
      */
-    void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList );
+    void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
+                                   const wxString& aDefaultShortname );
 
     /**
      * Function GetFileFromHistory

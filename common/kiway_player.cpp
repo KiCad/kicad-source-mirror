@@ -48,6 +48,7 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
     m_modal_loop( 0 ), m_modal_resultant_parent( 0 )
 {
     // DBG( printf("KIWAY_EXPRESS::wxEVENT_ID:%d\n", KIWAY_EXPRESS::wxEVENT_ID );)
+    m_modal_ret_val = 0;
 }
 
 

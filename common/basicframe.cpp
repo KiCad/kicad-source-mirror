@@ -226,24 +226,26 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     int maximized = 0;
 
-    wxString text = m_FrameName + wxT( "Pos_x" );
+    wxString baseCfgName = GetName();
+
+    wxString text = baseCfgName + wxT( "Pos_x" );
     aCfg->Read( text, &m_FramePos.x );
 
-    text = m_FrameName + wxT( "Pos_y" );
+    text = baseCfgName + wxT( "Pos_y" );
     aCfg->Read( text, &m_FramePos.y );
 
-    text = m_FrameName + wxT( "Size_x" );
+    text = baseCfgName + wxT( "Size_x" );
     aCfg->Read( text, &m_FrameSize.x, 600 );
 
-    text = m_FrameName + wxT( "Size_y" );
+    text = baseCfgName + wxT( "Size_y" );
     aCfg->Read( text, &m_FrameSize.y, 400 );
 
-    text = m_FrameName + wxT( "Maximized" );
+    text = baseCfgName + wxT( "Maximized" );
     aCfg->Read( text, &maximized, 0 );
 
     if( m_hasAutoSave )
     {
-        text = m_FrameName + entryAutoSaveInterval;
+        text = baseCfgName + entryAutoSaveInterval;
         aCfg->Read( text, &m_autoSaveInterval, DEFAULT_AUTO_SAVE_INTERVAL );
     }
 
@@ -261,7 +263,7 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( maximized )
         Maximize();
 
-    aCfg->Read( m_FrameName + entryPerspective, &m_perspective );
+    aCfg->Read( baseCfgName + entryPerspective, &m_perspective );
 }
 
 
@@ -272,27 +274,29 @@ void EDA_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
     if( IsIconized() )
         return;
 
+    wxString baseCfgName = GetName();
+
     m_FrameSize = GetSize();
     m_FramePos  = GetPosition();
 
-    text = m_FrameName + wxT( "Pos_x" );
+    text = baseCfgName + wxT( "Pos_x" );
     aCfg->Write( text, (long) m_FramePos.x );
 
-    text = m_FrameName + wxT( "Pos_y" );
+    text = baseCfgName + wxT( "Pos_y" );
     aCfg->Write( text, (long) m_FramePos.y );
 
-    text = m_FrameName + wxT( "Size_x" );
+    text = baseCfgName + wxT( "Size_x" );
     aCfg->Write( text, (long) m_FrameSize.x );
 
-    text = m_FrameName + wxT( "Size_y" );
+    text = baseCfgName + wxT( "Size_y" );
     aCfg->Write( text, (long) m_FrameSize.y );
 
-    text = m_FrameName + wxT( "Maximized" );
+    text = baseCfgName + wxT( "Maximized" );
     aCfg->Write( text, IsMaximized() );
 
     if( m_hasAutoSave )
     {
-        text = m_FrameName + entryAutoSaveInterval;
+        text = baseCfgName + entryAutoSaveInterval;
         aCfg->Write( text, m_autoSaveInterval );
     }
 
@@ -303,7 +307,7 @@ void EDA_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     // printf( "perspective(%s): %s\n",
     //    TO_UTF8( m_FrameName + entryPerspective ), TO_UTF8( perspective ) );
-    aCfg->Write( m_FrameName + entryPerspective, perspective );
+    aCfg->Write( baseCfgName + entryPerspective, perspective );
 }
 
 

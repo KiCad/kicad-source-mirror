@@ -69,6 +69,11 @@ public:
     /// skip the linked list stuff, and parent
     const DRAWSEGMENT& operator = ( const DRAWSEGMENT& rhs );
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_LINE_T == aItem->Type();
+    }
+
     void SetWidth( int aWidth )             { m_Width = aWidth; }
     int GetWidth() const                    { return m_Width; }
 

@@ -160,7 +160,6 @@ PNS_INDEX::PNS_INDEX()
     memset( m_subIndices, 0, sizeof( m_subIndices ) );
 }
 
-
 PNS_INDEX::ITEM_SHAPE_INDEX* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
 {
     int idx_n = -1;
@@ -201,7 +200,6 @@ PNS_INDEX::ITEM_SHAPE_INDEX* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
     return m_subIndices[idx_n];
 }
 
-
 void PNS_INDEX::Add( PNS_ITEM* aItem )
 {
     ITEM_SHAPE_INDEX* idx = getSubindex( aItem );
@@ -216,7 +214,6 @@ void PNS_INDEX::Add( PNS_ITEM* aItem )
     }
 }
 
-
 void PNS_INDEX::Remove( PNS_ITEM* aItem )
 {
     ITEM_SHAPE_INDEX* idx = getSubindex( aItem );
@@ -230,13 +227,11 @@ void PNS_INDEX::Remove( PNS_ITEM* aItem )
         m_netMap[net].remove( aItem );
 }
 
-
 void PNS_INDEX::Replace( PNS_ITEM* aOldItem, PNS_ITEM* aNewItem )
 {
     Remove( aOldItem );
     Add( aNewItem );
 }
-
 
 template<class Visitor>
 int PNS_INDEX::querySingle( int index, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
@@ -246,7 +241,6 @@ int PNS_INDEX::querySingle( int index, const SHAPE* aShape, int aMinDistance, Vi
 
     return m_subIndices[index]->Query( aShape, aMinDistance, aVisitor, false );
 }
-
 
 template<class Visitor>
 int PNS_INDEX::Query( const PNS_ITEM* aItem, int aMinDistance, Visitor& aVisitor )
@@ -281,7 +275,6 @@ int PNS_INDEX::Query( const PNS_ITEM* aItem, int aMinDistance, Visitor& aVisitor
     return total;
 }
 
-
 template<class Visitor>
 int PNS_INDEX::Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
 {
@@ -292,7 +285,6 @@ int PNS_INDEX::Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
 
     return total;
 }
-
 
 void PNS_INDEX::Clear()
 {
@@ -307,12 +299,10 @@ void PNS_INDEX::Clear()
     }
 }
 
-
 PNS_INDEX::~PNS_INDEX()
 {
     Clear();
 }
-
 
 PNS_INDEX::NET_ITEMS_LIST* PNS_INDEX::GetItemsForNet( int aNet )
 {

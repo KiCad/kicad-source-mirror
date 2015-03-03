@@ -251,7 +251,7 @@ void HOTKEY_SECTION_PAGE::Restore()
 }
 
 
-void InstallHotkeyFrame( EDA_DRAW_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
+void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
 {
     HOTKEYS_EDITOR_DIALOG dialog( aParent, aHotkeys );
 
@@ -264,7 +264,7 @@ void InstallHotkeyFrame( EDA_DRAW_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
 }
 
 
-HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*    aParent,
+HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
                                               EDA_HOTKEY_CONFIG* aHotkeys ) :
     HOTKEYS_EDITOR_DIALOG_BASE( aParent ),
     m_parent( aParent ),

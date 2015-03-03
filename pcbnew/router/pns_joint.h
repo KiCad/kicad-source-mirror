@@ -41,7 +41,7 @@
 class PNS_JOINT : public PNS_ITEM
 {
 public:
-    typedef std::vector<PNS_ITEM*> LINKED_ITEMS;
+    typedef std::deque<PNS_ITEM*> LINKED_ITEMS;
 
     ///> Joints are hashed by their position, layers and net.
     ///  Linked items are, obviously, not hashed
@@ -93,6 +93,22 @@ public:
 
         // joints between segments of different widths are not considered trivial.
         return seg1->Width() == seg2->Width();
+    }
+
+    bool IsNonFanoutVia() const
+    {
+        if( m_linkedItems.Size() != 3 )
+            return false;
+
+        int vias = 0, segs = 0;
+
+        for( int i = 0; i < 3; i++ )
+        {
+            vias += m_linkedItems[i]->Kind() == VIA ? 1 : 0;
+            segs += m_linkedItems[i]->Kind() == SEGMENT ? 1 : 0;
+        }
+
+        return ( vias == 1 && segs == 2 );
     }
 
     ///> Links the joint to a given board item (when it's added to the PNS_NODE)
@@ -193,14 +209,10 @@ private:
     PNS_ITEMSET m_linkedItems;
 };
 
-
-// hash function & comparison operator for boost::unordered_map<>
-inline bool operator==( PNS_JOINT::HASH_TAG const& aP1,
-                        PNS_JOINT::HASH_TAG const& aP2 )
+inline bool operator==( PNS_JOINT::HASH_TAG const& aP1, PNS_JOINT::HASH_TAG const& aP2 )
 {
     return aP1.pos == aP2.pos && aP1.net == aP2.net;
 }
-
 
 inline std::size_t hash_value( PNS_JOINT::HASH_TAG const& aP )
 {

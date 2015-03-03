@@ -104,7 +104,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, wxT( "CvPCB" ), wxDefaultPosition,
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
-    m_FrameName             = CVPCB_MAINFRAME_NAME;
     m_compListBox           = NULL;
     m_footprintListBox      = NULL;
     m_libListBox            = NULL;

@@ -9,10 +9,8 @@
 
 """
     @package
-    Generate a HTML BOM list.
-    Components are sorted and grouped by value
-    Fields are (if exist)
-    Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+    Helper module for interpreting generic netlist and build custom
+    bom generators or netlists in foreign format
 """
 
 

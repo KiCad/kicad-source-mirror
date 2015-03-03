@@ -38,6 +38,7 @@
 #include <online_help.h>
 #include <wildcards_and_files_ext.h>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <hotkeys_basic.h>
 
 #include <build_version.h>
 
@@ -136,6 +137,11 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
 
         //DBG( m_bm.m_search.Show( (std::string( __func__ ) + " SysSearch()").c_str() );)
     }
+
+    // Must be called before creating the main frame in order to
+    // display the real hotkeys in menus or tool tips
+    extern struct EDA_HOTKEY_CONFIG kicad_Manager_Hokeys_Descr[];
+    ReadHotkeyConfig( KICAD_MANAGER_FRAME_NAME, kicad_Manager_Hokeys_Descr );
 
     KICAD_MANAGER_FRAME* frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
                                      wxDefaultPosition, wxDefaultSize );

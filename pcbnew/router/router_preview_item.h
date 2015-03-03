@@ -50,19 +50,19 @@ public:
         PR_POINT,
         PR_SHAPE
     };
-    
+
     ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS_ITEM* aItem );
 
     void StuckMarker( VECTOR2I& aPosition );
-    
+
     void Line( const SHAPE_LINE_CHAIN& aLine, int aWidth = 0, int aStyle = 0 );
     void Box( const BOX2I& aBox, int aStyle = 0 );
     void Point ( const VECTOR2I& aPos, int aStyle = 0);
 
-    void SetColor( const KIGFX::COLOR4D& aColor ) 
+    void SetColor( const KIGFX::COLOR4D& aColor )
     {
         m_color = aColor;
     }
@@ -96,7 +96,7 @@ private:
     SHAPE* m_shape;
 
     ITEM_TYPE m_type;
-    
+
     int m_style;
     int m_width;
     int m_layer;

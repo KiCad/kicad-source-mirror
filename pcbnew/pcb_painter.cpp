@@ -894,7 +894,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
         }
 
         std::vector<CPolyPt>::const_iterator polyIterator;
-        for( polyIterator = polyPoints.begin(); polyIterator != polyPoints.end(); polyIterator++ )
+        for( polyIterator = polyPoints.begin(); polyIterator != polyPoints.end(); ++polyIterator )
         {
             // Find out all of polygons and then draw them
             corners.push_back( VECTOR2D( *polyIterator ) );

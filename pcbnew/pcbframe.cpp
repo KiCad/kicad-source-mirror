@@ -68,15 +68,6 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-
-#include <tools/selection_tool.h>
-#include <router/router_tool.h>
-#include <tools/edit_tool.h>
-#include <tools/drawing_tool.h>
-#include <tools/point_editor.h>
-#include <tools/pcbnew_control.h>
-#include <tools/pcb_editor_control.h>
-#include <tools/placement_tool.h>
 #include <tools/common_actions.h>
 
 #include <scripting/python_console_frame.h>
@@ -310,13 +301,10 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-#define PCB_EDIT_FRAME_NAME wxT( "PcbFrame" )
-
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB, wxT( "Pcbnew" ), wxDefaultPosition,
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME )
 {
-    m_FrameName = PCB_EDIT_FRAME_NAME;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
     m_showAxis = false;                 // true to display X and Y axis
     m_showOriginAxis = true;
@@ -545,14 +533,8 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Register tools
-    m_toolManager->RegisterTool( new SELECTION_TOOL );
-    m_toolManager->RegisterTool( new ROUTER_TOOL );
-    m_toolManager->RegisterTool( new EDIT_TOOL );
-    m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
-    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-    m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
-    m_toolManager->RegisterTool( new PLACEMENT_TOOL );
+    registerAllTools( m_toolManager );
+
     m_toolManager->ResetTools( TOOL_BASE::RUN );
 
     // Run the selection tool, it is supposed to be always active

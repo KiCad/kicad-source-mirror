@@ -752,23 +752,25 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
 
-    aCfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
-    aCfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
+    wxString baseCfgName = GetName();
+
+    aCfg->Read( baseCfgName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
+    aCfg->Read( baseCfgName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
 
     long itmp;
-    aCfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
+    aCfg->Read( baseCfgName + UserGridUnitsEntry, &itmp, ( long )INCHES );
     m_UserGridUnit = (EDA_UNITS_T) itmp;
-    aCfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
-    aCfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
-    aCfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayOptions.m_DisplayPadNum, true );
-    aCfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdgeFill, true );
+    aCfg->Read( baseCfgName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
+    aCfg->Read( baseCfgName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
+    aCfg->Read( baseCfgName + DisplayPadNumberEntry, &m_DisplayOptions.m_DisplayPadNum, true );
+    aCfg->Read( baseCfgName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdgeFill, true );
 
-    aCfg->Read( m_FrameName + FastGrid1Entry, &itmp, ( long )0);
+    aCfg->Read( baseCfgName + FastGrid1Entry, &itmp, ( long )0);
     m_FastGrid1 = itmp;
-    aCfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
+    aCfg->Read( baseCfgName + FastGrid2Entry, &itmp, ( long )0);
     m_FastGrid2 = itmp;
 
-    aCfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayOptions.m_DisplayModTextFill, true );
+    aCfg->Read( baseCfgName + DisplayModuleTextEntry, &m_DisplayOptions.m_DisplayModTextFill, true );
 }
 
 
@@ -776,16 +778,18 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    aCfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
-    aCfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
-    aCfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnit );
-    aCfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
-    aCfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
-    aCfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );
-    aCfg->Write( m_FrameName + DisplayModuleEdgeEntry, m_DisplayOptions.m_DisplayModEdgeFill );
-    aCfg->Write( m_FrameName + DisplayModuleTextEntry, m_DisplayOptions.m_DisplayModTextFill );
-    aCfg->Write( m_FrameName + FastGrid1Entry, ( long )m_FastGrid1 );
-    aCfg->Write( m_FrameName + FastGrid2Entry, ( long )m_FastGrid2 );
+    wxString baseCfgName = GetName();
+
+    aCfg->Write( baseCfgName + UserGridSizeXEntry, m_UserGridSize.x );
+    aCfg->Write( baseCfgName + UserGridSizeYEntry, m_UserGridSize.y );
+    aCfg->Write( baseCfgName + UserGridUnitsEntry, ( long )m_UserGridUnit );
+    aCfg->Write( baseCfgName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
+    aCfg->Write( baseCfgName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
+    aCfg->Write( baseCfgName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );
+    aCfg->Write( baseCfgName + DisplayModuleEdgeEntry, m_DisplayOptions.m_DisplayModEdgeFill );
+    aCfg->Write( baseCfgName + DisplayModuleTextEntry, m_DisplayOptions.m_DisplayModTextFill );
+    aCfg->Write( baseCfgName + FastGrid1Entry, ( long )m_FastGrid1 );
+    aCfg->Write( baseCfgName + FastGrid2Entry, ( long )m_FastGrid2 );
 }
 
 

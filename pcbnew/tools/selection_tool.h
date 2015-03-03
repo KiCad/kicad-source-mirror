@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -80,6 +80,13 @@ private:
     friend class SELECTION_TOOL;
 };
 
+enum SELECTION_LOCK_FLAGS
+{ 
+    SELECTION_UNLOCKED = 0,
+    SELECTION_LOCK_OVERRIDE = 1,
+    SELECTION_LOCKED = 2
+};
+
 /**
  * Class SELECTION_TOOL
  *
@@ -151,13 +158,17 @@ public:
     }
 
     ///> Checks if the user has agreed to modify locked items for the given selection.
-    bool CheckLock();
+    SELECTION_LOCK_FLAGS CheckLock();
 
     ///> Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
 
     ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
+
+	///> Makes sure a group selection does not contain items that would cause
+	///> conflicts when moving/rotating together (e.g. a footprint and one of the same footprint's pads)
+    bool SanitizeSelection();
 
     ///> Item selection event handler.
     int SelectItem( const TOOL_EVENT& aEvent );
@@ -185,7 +196,7 @@ private:
      * a menu is shown, otherise function finishes without selecting anything.
      * @return True if an item was selected, false otherwise.
      */
-    bool selectCursor( const VECTOR2I& aWhere, bool aAllowDisambiguation = true );
+    bool selectCursor( const VECTOR2I& aWhere, bool aOnDrag = false );
 
     /**
      * Function selectMultiple()
@@ -293,14 +304,12 @@ private:
     void highlightNet( const VECTOR2I& aPoint );
 
     /**
-     * Function prefer()
-     * Checks if collector's list contains only single entry of asked types. If so, it returns it.
+     * Function guessSelectionCandidates()
+     * Tries to guess best selection candidates in case multiple items are clicked, by
+     * doing some braindead heuristics.
      * @param aCollector is the collector that has a list of items to be queried.
-     * @param aTypes is the list of searched/preferred types.
-     * @return Pointer to the preferred item, if there is only one entry of given type or NULL
-     * if there are more entries or no entries at all.
      */
-    BOARD_ITEM* prefer( GENERAL_COLLECTOR& aCollector, const KICAD_T aTypes[] ) const;
+    void guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) const;
 
     /**
      * Function generateMenu()

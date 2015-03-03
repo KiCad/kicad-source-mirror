@@ -658,6 +658,8 @@ public:
      */
     void SetFastGrid2();
 
+    void ClearSelection();
+
     DECLARE_EVENT_TABLE()
 };
 

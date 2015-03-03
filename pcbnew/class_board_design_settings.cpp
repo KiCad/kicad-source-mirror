@@ -36,20 +36,6 @@
 #include <class_track.h>
 #include <convert_from_iu.h>
 
-// Board thickness, mainly for 3D view:
-#define DEFAULT_BOARD_THICKNESS_MM   1.6
-
-// Default values for some board items
-#define DEFAULT_TEXT_PCB_SIZE  Millimeter2iu( 1.5 )
-#define DEFAULT_TEXT_PCB_THICKNESS  Millimeter2iu( 0.3 )
-#define DEFAULT_PCB_EDGE_THICKNESS  Millimeter2iu( 0.15 )
-#define DEFAULT_GRAPHIC_THICKNESS   Millimeter2iu( 0.2 )
-#define DEFAULT_TEXT_MODULE_SIZE    Millimeter2iu( 1.5 )
-#define DEFAULT_GR_MODULE_THICKNESS Millimeter2iu( 0.15 )
-
-#define DEFAULT_SOLDERMASK_CLEARANCE Millimeter2iu( 0.2 )
-#define DEFAULT_SOLDERMASK_MIN_WIDTH Millimeter2iu( 0.0 )
-
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_Pad_Master( NULL )
@@ -74,13 +60,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_BlindBuriedViaAllowed = false;            // true to allow blind/buried vias
     m_MicroViasAllowed = false;                 // true to allow micro vias
 
-    m_DrawSegmentWidth = DEFAULT_GRAPHIC_THICKNESS;     // current graphic line width (not EDGE layer)
+    m_DrawSegmentWidth = Millimeter2iu( DEFAULT_GRAPHIC_THICKNESS );     // current graphic line width (not EDGE layer)
 
-    m_EdgeSegmentWidth = DEFAULT_PCB_EDGE_THICKNESS;    // current graphic line width (EDGE layer only)
-    m_PcbTextWidth     = DEFAULT_TEXT_PCB_THICKNESS;    // current Pcb (not module) Text width
+    m_EdgeSegmentWidth = Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS );    // current graphic line width (EDGE layer only)
+    m_PcbTextWidth     = Millimeter2iu(DEFAULT_TEXT_PCB_THICKNESS );    // current Pcb (not module) Text width
 
-    m_PcbTextSize       = wxSize( DEFAULT_TEXT_PCB_SIZE,
-                                  DEFAULT_TEXT_PCB_SIZE );  // current Pcb (not module) Text size
+    m_PcbTextSize       = wxSize( Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ),
+                                  Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ) );  // current Pcb (not module) Text size
 
     m_useCustomTrackVia = false;
     m_customTrackWidth  = DMils2iu( 100 );
@@ -91,8 +77,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_MicroViasMinDrill = DMils2iu( 50 );       // micro vias (not vias) min drill diameter
 
     // Global mask margins:
-    m_SolderMaskMargin  = DEFAULT_SOLDERMASK_CLEARANCE; // Solder mask margin
-    m_SolderMaskMinWidth = DEFAULT_SOLDERMASK_MIN_WIDTH;   // Solder mask min width
+    m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ); // Solder mask margin
+    m_SolderMaskMinWidth = Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH );   // Solder mask min width
     m_SolderPasteMargin = 0;                    // Solder paste margin absolute value
     m_SolderPasteMarginRatio = 0.0;             // Solder pask margin ratio value of pad size
                                                 // The final margin is the sum of these 2 values
@@ -106,10 +92,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 
     // Default values for the footprint editor and fp creation
     // (also covers footprints created on the fly by micor-waves tools)
-    m_ModuleTextSize = wxSize( DEFAULT_TEXT_MODULE_SIZE,
-                               DEFAULT_TEXT_MODULE_SIZE );
-    m_ModuleTextWidth = DEFAULT_GR_MODULE_THICKNESS;
-    m_ModuleSegmentWidth = DEFAULT_GR_MODULE_THICKNESS;
+    m_ModuleTextSize = wxSize( Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
+                               Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ) );
+    m_ModuleTextWidth = Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS );
+    m_ModuleSegmentWidth = Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS );
 
     // These values will be overriden by config values after reading the config
     // Default ref text on fp creation. if empty, use footprint name as default
@@ -130,17 +116,17 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PcbTextSizeV" ),
                     &m_PcbTextSize.y,
-                    DEFAULT_TEXT_PCB_SIZE, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+                    Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PcbTextSizeH" ),
                     &m_PcbTextSize.x,
-                    DEFAULT_TEXT_PCB_SIZE, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+                    Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PcbTextThickness" ),
                     &m_PcbTextWidth,
-                    DEFAULT_TEXT_PCB_THICKNESS,
+                    Millimeter2iu(DEFAULT_TEXT_PCB_THICKNESS ),
                     Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
                     NULL, MM_PER_IU ) );
 
@@ -156,34 +142,34 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "ModuleTextSizeThickness" ),
                     &m_ModuleTextWidth,
-                    DEFAULT_GR_MODULE_THICKNESS, 1, TEXTS_MAX_WIDTH,
+                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ), 1, TEXTS_MAX_WIDTH,
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskClearance" ),
                     &m_SolderMaskMargin,
-                    DEFAULT_SOLDERMASK_CLEARANCE, 0, Millimeter2iu( 1.0 ),
+                    Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ), 0, Millimeter2iu( 1.0 ),
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskMinWidth" ),
                     &m_SolderMaskMinWidth,
-                    DEFAULT_SOLDERMASK_MIN_WIDTH, 0, Millimeter2iu( 0.5 ),
+                    Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH ), 0, Millimeter2iu( 0.5 ),
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "DrawSegmentWidth" ),
                     &m_DrawSegmentWidth,
-                    DEFAULT_GRAPHIC_THICKNESS,
+                    Millimeter2iu( DEFAULT_GRAPHIC_THICKNESS ),
                     Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "BoardOutlineThickness" ),
                     &m_EdgeSegmentWidth,
-                    DEFAULT_PCB_EDGE_THICKNESS,
+                    Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS ),
                     Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "ModuleOutlineThickness" ),
                     &m_ModuleSegmentWidth,
-                    DEFAULT_GR_MODULE_THICKNESS,
+                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
                     Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
                     NULL, MM_PER_IU ) );
 }

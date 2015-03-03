@@ -81,6 +81,8 @@ public:
  * is the main window used in GerbView.
  */
 
+#define GERBVIEW_FRAME_NAME wxT( "GerberFrame" )
+
 class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
 {
     GBR_LAYOUT*     m_gerberLayout;

@@ -419,7 +419,7 @@ int KeyCodeFromKeyName( const wxString& keyname )
  * Displays the current hotkey list
  * aList = a EDA_HOTKEY_CONFIG list(Null terminated)
  */
-void DisplayHotkeyList( EDA_DRAW_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescList )
+void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxString     keyname;
     EDA_HOTKEY** list;
@@ -534,7 +534,9 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     }
     else
     {
-        wxConfigBase* config = GetNewConfig( m_FrameName );
+        wxFileName fn( GetName() );
+        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+        wxConfigBase* config = GetNewConfig( fn.GetFullPath() );
         config->Write( HOTKEYS_CONFIG_KEY, msg );
         delete config;
     }
@@ -546,7 +548,10 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
                                           struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    wxFile cfgfile( aFilename );
+    wxFileName fn( aFilename );
+    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+
+    wxFile cfgfile( fn.GetFullPath() );
 
     if( !cfgfile.IsOpened() )       // There is a problem to open file
         return 0;
@@ -574,7 +579,10 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
 
 void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    wxConfigBase* config = GetNewConfig( Appname );
+    wxFileName fn( Appname );
+    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+
+    wxConfigBase* config = GetNewConfig( fn.GetFullPath() );
 
     if( !config->HasEntry( HOTKEYS_CONFIG_KEY ) )
     {
@@ -596,7 +604,7 @@ void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescL
  */
 int EDA_BASE_FRAME::ReadHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    ::ReadHotkeyConfig( m_FrameName, aDescList );
+    ::ReadHotkeyConfig( GetName(), aDescList );
     return 1;
 }
 
@@ -677,7 +685,8 @@ void ParseHotkeyConfig( const wxString&           data,
 }
 
 
-void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList )
+void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
+                                            const wxString& aDefaultShortname )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
@@ -687,12 +696,12 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList )
 #else
     wxString path = wxGetCwd();
 #endif
+    wxFileName fn( aDefaultShortname );
+    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
-    wxString filename = Kiface().Name() + wxT( '.' ) + ext;
-
-    filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
+    wxString  filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
                                  path,
-                                 filename,
+                                 fn.GetFullPath(),
                                  ext,
                                  mask,
                                  this,
@@ -706,7 +715,8 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList )
 }
 
 
-void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList )
+void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
+                                        const wxString& aDefaultShortname )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
@@ -716,12 +726,12 @@ void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList )
 #else
     wxString path = wxGetCwd();
 #endif
+    wxFileName fn( aDefaultShortname );
+    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
-    wxString filename = Kiface().Name() + wxT( "." ) + ext;
-
-    filename = EDA_FileSelector( _( "Write Hotkey Configuration File:" ),
+    wxString filename = EDA_FileSelector( _( "Write Hotkey Configuration File:" ),
                                  path,
-                                 filename,
+                                 fn.GetFullPath(),
                                  ext,
                                  mask,
                                  this,

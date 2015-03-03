@@ -60,6 +60,7 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
 
         if( num > ( dist_sq + 100 ) )
             return false;
+
         else if( num < ( dist_sq - 100 ) )
             return true;
     }

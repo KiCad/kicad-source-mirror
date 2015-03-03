@@ -50,13 +50,10 @@
 /* class PL_EDITOR_FRAME */
 /*************************/
 
-#define PL_EDITOR_FRAME_NAME wxT( "PlEditorFrame" )
-
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
             wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
-    m_FrameName = PL_EDITOR_FRAME_NAME;
     m_zoomLevelCoeff = 290.0;   // Adjusted to roughly displays zoom level = 1
                                 // when the screen shows a 1:1 image
                                 // obviously depends on the monitor,
