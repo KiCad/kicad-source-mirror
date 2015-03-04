@@ -684,7 +684,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             wxPoint padPos( parseInt( parameters[2], conv_unit ),
                             parseInt( parameters[3], conv_unit ) );
 
-            int padSize = padSize = parseInt( parameters[4], conv_unit );
+            int padSize = parseInt( parameters[4], conv_unit );
 
             pad->SetSize( wxSize( padSize, padSize ) );
 
