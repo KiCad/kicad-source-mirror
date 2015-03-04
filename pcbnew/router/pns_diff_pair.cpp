@@ -638,14 +638,17 @@ void PNS_DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, 
             // are on the same straight/diagonal line
             for( int k = 0; k < 2; k++ )
             {
-                m = *ips[k];
-                if( m && *m != p0_p && *m != p0_n )
+                if (ips[k] )
                 {
-                    int prio = ( padDist > padToGapThreshold * m_gap ? 10 : 20 );
-                    VECTOR2I g_p( ( p0_p - *m ).Resize( (double) m_gap * M_SQRT1_2 ) );
-                    VECTOR2I g_n( ( p0_n - *m ).Resize( (double) m_gap * M_SQRT1_2 ) );
+                    const VECTOR2I m ( *ips[k] );
+                    if( m != p0_p && m != p0_n )
+                    {
+                        int prio = ( padDist > padToGapThreshold * m_gap ? 10 : 20 );
+                        VECTOR2I g_p( ( p0_p - m ).Resize( (double) m_gap * M_SQRT1_2 ) );
+                        VECTOR2I g_n( ( p0_n - m ).Resize( (double) m_gap * M_SQRT1_2 ) );
 
-                    m_gateways.push_back( PNS_DP_GATEWAY( *m + g_p, *m + g_n, k == 0 ? true : false, DIRECTION_45::ANG_OBTUSE, prio ) );
+                        m_gateways.push_back( PNS_DP_GATEWAY( m + g_p, m + g_n, k == 0 ? true : false, DIRECTION_45::ANG_OBTUSE, prio ) );
+                    }
                 }
             }
 
