@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -495,6 +495,9 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
                 conv_unit = NEW_GPCB_UNIT_CONV;
         }
 
+        wxLogTrace( traceFootprintLibrary, wxT( "%s parameter count = %d." ),
+                    GetChars( parameters[0] ), paramCnt );
+
         // Parse a line with format: ElementLine [X1 Y1 X2 Y2 Thickness]
         if( parameters[0].CmpNoCase( wxT( "ElementLine" ) ) == 0 )
         {
@@ -681,20 +684,25 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             wxPoint padPos( parseInt( parameters[2], conv_unit ),
                             parseInt( parameters[3], conv_unit ) );
 
-            int drillSize = parseInt( parameters[5], conv_unit );
+            int padSize = padSize = parseInt( parameters[4], conv_unit );
 
-            pad->SetDrillSize( wxSize( drillSize, drillSize ) );
+            pad->SetSize( wxSize( padSize, padSize ) );
 
-            int padSize = parseInt( parameters[4], conv_unit );
+            int drillSize = 0;
 
-            // Get the pad clearance and the solder mask clearance.
-            if( paramCnt == 13 )
+            // Get the pad clearance, solder mask clearance, and drill size.
+            if( paramCnt == 12 )
             {
                 pad->SetLocalClearance( parseInt( parameters[5], conv_unit ) );
                 pad->SetLocalSolderMaskMargin( parseInt( parameters[6], conv_unit ) );
+                drillSize = parseInt( parameters[7], conv_unit );
+            }
+            else
+            {
+                drillSize = parseInt( parameters[5], conv_unit );
             }
 
-            pad->SetSize( wxSize( padSize, padSize ) );
+            pad->SetDrillSize( wxSize( drillSize, drillSize ) );
             padPos += module->GetPosition();
             pad->SetPos0( padPos );
             pad->SetPosition( padPos );
