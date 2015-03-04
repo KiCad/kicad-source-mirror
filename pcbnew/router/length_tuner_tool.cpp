@@ -171,8 +171,6 @@ void LENGTH_TUNER_TOOL::performTuning()
     }
 
     PNS_TUNE_STATUS_POPUP statusPopup( m_frame );
-    statusPopup.Popup();
-
     PNS_MEANDER_PLACER* placer = static_cast<PNS_MEANDER_PLACER*>( m_router->Placer() );
     VECTOR2I end;
 
@@ -199,6 +197,7 @@ void LENGTH_TUNER_TOOL::performTuning()
 
             statusPopup.Update( m_router );
             statusPopup.Move( p );
+            statusPopup.Popup();
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {

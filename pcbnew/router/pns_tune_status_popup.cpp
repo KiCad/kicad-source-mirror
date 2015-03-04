@@ -25,11 +25,11 @@
 PNS_TUNE_STATUS_POPUP::PNS_TUNE_STATUS_POPUP( PCB_EDIT_FRAME* aParent ) :
     WX_STATUS_POPUP( aParent )
 {
-      m_panel->SetBackgroundColour( wxColour( 64, 64, 64 ) );
-      m_statusLine = new wxStaticText( m_panel, wxID_ANY, wxT( "Status text 1\n" ) ) ;
-      m_topSizer->Add( m_statusLine, 1, wxALL | wxEXPAND, 5 );
+    m_panel->SetBackgroundColour( wxColour( 64, 64, 64 ) );
+    m_statusLine = new wxStaticText( m_panel, wxID_ANY, wxT( "Status text 1\n" ) ) ;
+    m_topSizer->Add( m_statusLine, 1, wxALL | wxEXPAND, 5 );
 
-      updateSize();
+    updateSize();
 }
 
 
