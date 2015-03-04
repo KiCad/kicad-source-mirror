@@ -34,6 +34,13 @@
 TWISTEDPAIR::TWISTEDPAIR() : TRANSLINE()
 {
     m_name = "TwistedPair";
+
+    // Initialize these variables mainly to avoid warnings from a static analyzer
+    Z0 = 0.0;               // characteristic impedance
+    ang_l = 0.0;            // Electrical length in angle
+    atten_dielectric = 0.0; // Loss in dielectric (dB)
+    atten_cond = 0.0;       // Loss in conductors (dB)
+    er_eff = 1.0;           // Effective dielectric constant
 }
 
 

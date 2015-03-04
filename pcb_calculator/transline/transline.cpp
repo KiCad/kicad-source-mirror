@@ -62,6 +62,13 @@ TRANSLINE::TRANSLINE()
 {
     murC = 1.0;
     m_name = (const char*) 0;
+
+    // Initialize these variables mainly to avoid warnings from a static analyzer
+    f = 0.0;            // Frequency of operation
+    er = 0.0;           // dielectric constant
+    tand = 0.0;         // Dielectric Loss Tangent
+    sigma = 0.0;        // Conductivity of the metal
+    skindepth = 0.0;    // Skin depth
 }
 
 

@@ -72,7 +72,8 @@ TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
     m_ValueCtrl     = NULL;
     m_UnitCtrl      = NULL;
     m_UnitSelection = 0;
-}
+    m_NormalizedValue = 0;
+ }
 
 
 #define TRANSLINE_PRM_KEY wxT( "translineprm%d" )

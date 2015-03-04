@@ -58,7 +58,7 @@ class WORKSHEET_LAYOUT_IO
 protected:
     OUTPUTFORMATTER* m_out;
 
-    WORKSHEET_LAYOUT_IO() {}
+    WORKSHEET_LAYOUT_IO() { m_out = NULL; }
     virtual ~WORKSHEET_LAYOUT_IO() {}
 
 public:

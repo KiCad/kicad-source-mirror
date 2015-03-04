@@ -41,6 +41,13 @@
 MICROSTRIP::MICROSTRIP() : TRANSLINE()
 {
     m_name = "MicroStrip";
+
+    // Initialize these variables mainly to avoid warnings from a static analyzer
+    mur_eff = 0.0;          // Effective mag. permeability
+    w_eff = 0.0;            // Effective width of line
+    atten_dielectric = 0.0; // Loss in dielectric (dB)
+    atten_cond = 0.0;       // Loss in conductors (dB)
+    Z0_h_1 = 0.0;           // homogeneous stripline impedance
 }
 
 

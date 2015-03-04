@@ -40,6 +40,14 @@ C_MICROSTRIP::C_MICROSTRIP() : TRANSLINE()
 {
     m_name = "Coupled_MicroStrip";
     aux_ms = NULL;
+
+    // Initialize these variables mainly to avoid warnings from a static analyzer
+    er_eff = 0.0;               // dummy
+    w_eff = 0.0;                // Effective width of line
+    atten_dielectric_e = 0.0;   // even-mode dielectric losses (dB)
+    atten_cond_e = 0.0;         // even-mode conductors losses (dB)
+    atten_dielectric_o = 0.0;   // odd-mode conductors losses (dB)
+    atten_cond_o = 0.0;         // odd-mode conductors losses (dB)
 }
 
 

@@ -690,7 +690,10 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
         if( aFrame->GetCanvas()->GetAbortRequest() )
         {
             if( IsOK( aFrame, _( "OK to abort?" ) ) )
+            {
+                displ_opts->m_Show_Module_Ratsnest = showRats;
                 return ESC;
+            }
             else
                 aFrame->GetCanvas()->SetAbortRequest( false );
         }

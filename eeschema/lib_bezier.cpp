@@ -90,9 +90,9 @@ bool LIB_BEZIER::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         return false;
     }
 
-    p = strtok( line + 2, " \t\n" );
-    p = strtok( NULL, " \t\n" );
-    p = strtok( NULL, " \t\n" );
+    strtok( line + 2, " \t\n" );     // Skip field
+    strtok( NULL, " \t\n" );         // Skip field
+    strtok( NULL, " \t\n" );         // Skip field
     p = strtok( NULL, " \t\n" );
 
     for( i = 0; i < ccount; i++ )

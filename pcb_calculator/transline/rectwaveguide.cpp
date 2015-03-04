@@ -32,6 +32,13 @@
 RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE()
 {
     m_name = "RectWaveGuide";
+
+    // Initialize these here variables mainly to avoid warnings from a static analyzer
+    er_eff = 0.0;               // Effective dielectric constant
+    mur_eff = 0.0;              // Effective mag. permeability
+    atten_dielectric = 0.0;     // Loss in dielectric (dB)
+    atten_cond = 0.0;           // Loss in conductors (dB)
+    fc10 = 0.0;                 // Cutoff frequency for TE10 mode
 }
 
 
