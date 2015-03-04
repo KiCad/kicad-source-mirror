@@ -54,12 +54,16 @@ PLOTTER::PLOTTER( )
     defaultPenWidth = 0;
     currentPenWidth = -1;       // To-be-set marker
     penState = 'Z';             // End-of-path idle
-    m_plotMirror = false;    		// Mirror flag
+    m_plotMirror = false;       // Plot mirror option flag
     m_mirrorIsHorizontal = true;
     m_yaxisReversed = false;
     outputFile = 0;
     colorMode = false;          // Starts as a BW plot
     negativeMode = false;
+    // Temporary init to avoid not initialized vars, will be set later
+    m_IUsPerDecimil = 1;        // will be set later to the actual value
+    iuPerDeviceUnit = 1;        // will be set later to the actual value
+
 }
 
 PLOTTER::~PLOTTER()

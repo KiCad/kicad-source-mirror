@@ -26,6 +26,7 @@
 #define DIALOG_COLOR_CONFIG_H_
 
 #include <wx/statline.h>
+#include <dialog_shim.h>
 
 
 class wxBoxSizer;
@@ -33,18 +34,13 @@ class wxStaticLine;
 class wxStdDialogButtonSizer;
 
 
-extern void SeedLayers();
-
-
 /***********************************************/
 /* Derived class for the frame color settings. */
 /***********************************************/
 
-class DIALOG_COLOR_CONFIG : public wxDialog
+class DIALOG_COLOR_CONFIG : public DIALOG_SHIM
 {
 private:
-    DECLARE_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG )
-
     EDA_DRAW_FRAME*         m_parent;
     wxBoxSizer*             m_outerBoxSizer;
     wxBoxSizer*             m_mainBoxSizer;
@@ -54,14 +50,6 @@ private:
     wxRadioBox*             m_SelBgColor;
     wxStaticLine*           m_line;
     wxStdDialogButtonSizer* m_stdDialogButtonSizer;
-
-    // Creation
-    bool Create( wxWindow* aParent,
-                 wxWindowID aId = wxID_ANY,
-                 const wxString& aCaption =  _( "EESchema Colors" ),
-                 const wxPoint& aPosition = wxDefaultPosition,
-                 const wxSize& aSize = wxDefaultSize,
-                 long aStyle = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
 
     // Initializes member variables
     void Init();

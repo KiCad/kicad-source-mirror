@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -110,46 +110,22 @@ static BUTTONINDEX buttonGroups[] = {
 static EDA_COLOR_T currentColors[ LAYERSCH_ID_COUNT ];
 
 
-IMPLEMENT_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG, wxDialog )
-
-
-DIALOG_COLOR_CONFIG::DIALOG_COLOR_CONFIG()
-{
-    Init();
-}
-
-
-DIALOG_COLOR_CONFIG::DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent )
+DIALOG_COLOR_CONFIG::DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent ) :
+    DIALOG_SHIM( aParent, wxID_ANY,  _( "EESchema Colors" ),
+              wxDefaultPosition, wxDefaultSize,
+              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     m_parent = aParent;
+    SetExtraStyle( wxWS_EX_BLOCK_EVENTS );
     Init();
-    Create( aParent );
+    CreateControls();
+
+    GetSizer()->SetSizeHints( this );
 }
 
 
 DIALOG_COLOR_CONFIG::~DIALOG_COLOR_CONFIG()
 {
-}
-
-
-bool DIALOG_COLOR_CONFIG::Create( wxWindow*       aParent,
-                                  wxWindowID      aId,
-                                  const wxString& aCaption,
-                                  const wxPoint&  aPosition,
-                                  const wxSize&   aSize,
-                                  long            aStyle )
-{
-    SetExtraStyle( wxWS_EX_BLOCK_EVENTS );
-    wxDialog::Create( aParent, aId, aCaption, aPosition, aSize, aStyle );
-
-    CreateControls();
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
-
-    return true;
 }
 
 

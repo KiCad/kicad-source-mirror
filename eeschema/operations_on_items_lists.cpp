@@ -159,8 +159,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invalid item." ) );
 
-    if( aItem == NULL )
-        return;
+    // Here, aItem is not null.
 
     SCH_SCREEN* screen = GetScreen();
 

@@ -50,6 +50,11 @@ enum
 GRID_TRICKS::GRID_TRICKS( wxGrid* aGrid ):
     m_grid( aGrid )
 {
+    m_sel_row_start = 0;
+    m_sel_col_start = 0;
+    m_sel_row_count = 0;
+    m_sel_col_count = 0;
+
     aGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), NULL, this );
     aGrid->Connect( MYID_FIRST, MYID_LAST, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), NULL, this );
     aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), NULL, this );
