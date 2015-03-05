@@ -147,6 +147,16 @@ void LENGTH_TUNER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     }
 }
 
+void LENGTH_TUNER_TOOL::updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup )
+{
+    wxPoint p = wxGetMousePosition(); 
+
+    p.x += 20;
+    p.y += 20;
+
+    aPopup.Update( m_router );
+    aPopup.Move( p );
+}
 
 void LENGTH_TUNER_TOOL::performTuning()
 {
@@ -170,14 +180,19 @@ void LENGTH_TUNER_TOOL::performTuning()
         return;
     }
 
+    PNS_MEANDER_PLACER_BASE* placer = static_cast<PNS_MEANDER_PLACER_BASE*>( m_router->Placer() );
+    
+    placer->UpdateSettings( m_savedMeanderSettings );
+
+    VECTOR2I end( m_startSnapPoint );
+
     PNS_TUNE_STATUS_POPUP statusPopup( m_frame );
     statusPopup.Popup();
 
-    PNS_MEANDER_PLACER* placer = static_cast<PNS_MEANDER_PLACER*>( m_router->Placer() );
-    VECTOR2I end;
+    m_router->Move( end, NULL );
+    updateStatusPopup( statusPopup );
 
-    placer->UpdateSettings( m_savedMeanderSettings );
-
+    
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsCancel() || evt->IsActivate() )
@@ -191,14 +206,8 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             end = evt->Position();
             m_router->Move( end, NULL );
-
-            wxPoint p = wxGetMousePosition();
-
-            p.x += 20;
-            p.y += 20;
-
-            statusPopup.Update( m_router );
-            statusPopup.Move( p );
+            updateStatusPopup( statusPopup );
+            
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {

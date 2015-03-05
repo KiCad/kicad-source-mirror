@@ -64,7 +64,20 @@ void PNS_MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin,
                                             SHAPE_LINE_CHAIN& aTuned,
                                             SHAPE_LINE_CHAIN& aPost )
 {
-    VECTOR2I n = aOrigin.NearestPoint( aCursorPos );
+    VECTOR2I cp ( aCursorPos );
+
+    if ( cp == aTuneStart ) // we don't like tuning segments with 0 length
+    {
+        int idx = aOrigin.FindSegment( cp );
+        if( idx >= 0 ) 
+        {
+            const SEG& s = aOrigin.CSegment( idx );
+            cp += (s.B - s.A).Resize(2);
+        } else
+            cp += VECTOR2I (2, 5); // some arbitrary value that is not 45 degrees oriented
+    }
+
+    VECTOR2I n = aOrigin.NearestPoint( cp );
     VECTOR2I m = aOrigin.NearestPoint( aTuneStart );
 
     SHAPE_LINE_CHAIN l( aOrigin );
@@ -84,6 +97,7 @@ void PNS_MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin,
     aPre = l.Slice( 0, i_start );
     aPost = l.Slice( i_end, -1 );
     aTuned = l.Slice( i_start, i_end );
+
     aTuned.Simplify();
 }
 
