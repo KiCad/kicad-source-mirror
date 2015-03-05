@@ -485,8 +485,14 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
         netNameP = netNameBase + suffix;
     }
 
-    int netP = brd->FindNet( netNameP )->GetNet();
-    int netN = brd->FindNet( netNameN )->GetNet();
+    NETINFO_ITEM* netInfoP = brd->FindNet( netNameP );
+    NETINFO_ITEM* netInfoN = brd->FindNet( netNameN );
+    
+    if( !netInfoP || !netInfoN )
+        return false;
+
+    int netP = netInfoP->GetNet();
+    int netN = netInfoN->GetNet();
 
     if( primP )
         refNet = netN;
