@@ -2,6 +2,8 @@
 # KiCad python module for interpreting generic netlists which can be used
 # to generate Bills of materials, etc.
 #
+# Remember these files use UTF8 encoding
+#
 # No string formatting is used on purpose as the only string formatting that
 # is current compatible with python 2.4+ to 3.0+ is the '%' method, and that
 # is due to be deprecated in 3.0+ soon
@@ -304,12 +306,24 @@ class comp():
         self.grouped = False
 
     def __eq__(self, other):
-        """Equlivalency operator, remember this can be easily overloaded"""
+        """ Equivalency operator, remember this can be easily overloaded
+            2 components are equivalent ( i.e. can be grouped
+            if they have same value and same footprint
+
+            Override the component equivalence operator must be done before
+            loading the netlist, otherwise all components will have the original
+            equivalency operator.
+
+            You have to define a comparison module (for instance named myEqu)
+            and add the line;
+                kicad_netlist_reader.comp.__eq__ = myEqu
+            in your bom generator script before calling the netliste reader by something like:
+                net = kicad_netlist_reader.netlist(sys.argv[1])
+        """
         result = False
         if self.getValue() == other.getValue():
-            if self.getLibName() == other.getLibName():
-                if self.getPartName() == other.getPartName():
-                    result = True
+            if self.getFootprint() == other.getFootprint():
+                result = True
         return result
 
     def setLibPart(self, part):
@@ -331,7 +345,7 @@ class comp():
             v.setChars(value)
 
     def getValue(self):
-        return self.element.get("value")
+        return self.element.get("value").encode( "utf-8" )
 
     def getField(self, name, libraryToo=True):
         """Return the value of a field named name. The component is first
@@ -347,7 +361,7 @@ class comp():
 
         field = self.element.get("field", "name", name)
         if field == "" and libraryToo:
-            field = self.libpart.getField(name)
+            field = self.libpart.getField(name).encode( "utf-8" )
         return field
 
     def getFieldNames(self):
@@ -360,7 +374,7 @@ class comp():
         fields = self.element.getChild('fields')
         if fields:
             for f in fields.getChildren():
-                fieldNames.append( f.get('field','name') )
+                fieldNames.append( f.get('field','name').encode( "utf-8" ) )
         return fieldNames
 
     def getRef(self):
@@ -382,7 +396,7 @@ class comp():
         return self.element.get("tstamp")
 
     def getDescription(self):
-        return self.libpart.getDescription()
+        return self.libpart.getDescription().encode( "utf-8" )
 
 
 class netlist():

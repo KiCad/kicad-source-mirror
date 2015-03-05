@@ -41,21 +41,14 @@
 VRML_MODEL_PARSER::VRML_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
-    vrml1_parser = new VRML1_MODEL_PARSER( aMaster );
-    vrml2_parser = new VRML2_MODEL_PARSER( aMaster );
+    m_curr3DShape = aMaster;
+    vrml1_parser = NULL;
+    vrml2_parser = NULL;
 }
 
 
 VRML_MODEL_PARSER::~VRML_MODEL_PARSER()
 {
-    if( vrml1_parser )
-    {
-        delete vrml1_parser;
-    }
-    if( vrml2_parser )
-    {
-        delete vrml2_parser;
-    }
 }
 
 
@@ -69,32 +62,32 @@ void VRML_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3D
     file = wxFopen( aFilename, wxT( "rt" ) );
 
     if( file == NULL )
-    {
         return;
-    }
 
     if( fgets( line, 11, file ) == NULL )
     {
         fclose( file );
-
         return;
     }
 
     fclose( file );
 
-
     if( stricmp( line, "#VRML V2.0" ) == 0 )
     {
         //DBG( printf( "About to parser a #VRML V2.0 file\n" ) );
+        vrml2_parser = new VRML2_MODEL_PARSER( m_curr3DShape );
         vrml2_parser->Load( aFilename, aVrmlunits_to_3Dunits );
-
+        delete vrml2_parser;
+        vrml2_parser = NULL;
         return;
     }
     else if( stricmp( line, "#VRML V1.0" ) == 0 )
     {
         //DBG( printf( "About to parser a #VRML V1.0 file\n" ) );
+        vrml1_parser = new VRML1_MODEL_PARSER( m_curr3DShape );
         vrml1_parser->Load( aFilename, aVrmlunits_to_3Dunits );
-
+        delete vrml1_parser;
+        vrml1_parser = NULL;
         return;
     }
 

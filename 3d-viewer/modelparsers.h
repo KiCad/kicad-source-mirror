@@ -246,12 +246,27 @@ private:
 class VRML_MODEL_PARSER: public S3D_MODEL_PARSER
 {
 public:
+    /**
+     * ctor: initialize a VRML file parser
+     * @param aMaster = a ref to a 3D footprint shape description to fill
+     * by the vrml file data
+     */
     VRML_MODEL_PARSER( S3D_MASTER* aMaster );
+
     ~VRML_MODEL_PARSER();
 
+    /**
+     * Function load
+     * Load a 3D file and build a S3D_MASTER shape.
+     * file has .vrml ext and can be VRML 1 or VRML 2 format
+     * @param aFilename = the full filename to read
+     * @param aVrmlunits_to_3Dunits = the csaling factor to convert the 3D file unit
+     * to our internal units.
+     */
     void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
 
 private:
+    S3D_MASTER*         m_curr3DShape;  ///< the current 3D shape to build from the file
     VRML1_MODEL_PARSER* vrml1_parser;
     VRML2_MODEL_PARSER* vrml2_parser;
 };

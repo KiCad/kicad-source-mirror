@@ -9,7 +9,7 @@
     Generate a HTML BOM list.
     Components are sorted and grouped by value
     Fields are (if exist)
-    Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+    Ref, Quantity, Value, Part, Footprint, Description, Vendor
 """
 
 
@@ -43,7 +43,7 @@ html = """
 def myEqu(self, other):
     """myEqu is a more advanced equivalence function for components which is
     used by component grouping. Normal operation is to group components based
-    on their Value, Library source, and Library part.
+    on their Value and Footprint.
 
     In this example of a more advanced equivalency operator we also compare the
     custom fields Voltage, Tolerance and Manufacturer as well as the assigned
@@ -53,8 +53,6 @@ def myEqu(self, other):
     """
     result = True
     if self.getValue() != other.getValue():
-        result = False
-    elif self.getLibName() != other.getLibName():
         result = False
     elif self.getPartName() != other.getPartName():
         result = False
@@ -72,7 +70,7 @@ def myEqu(self, other):
 # Override the component equivalence operator - it is important to do this
 # before loading the netlist, otherwise all components will have the original
 # equivalency operator.
-kicad_netlist_reader.comp.__equ__ = myEqu
+kicad_netlist_reader.comp.__eq__ = myEqu
 
 # Generate an instance of a generic netlist, and load the netlist tree from
 # <file>.tmp. If the file doesn't exist, execution will stop
@@ -95,7 +93,7 @@ html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
     str(len(net.components)))
 
 row  = "<tr><th style='width:640px'>Ref</th>" + "<th>Qnty</th>"
-row += "<th>Value</th>" + "<th>Part</th>" + "<th>Datasheet</th>"
+row += "<th>Value</th>" + "<th>Part</th>" + "<th>Footprint</th>"
 row += "<th>Description</th>" + "<th>Vendor</th></tr>"
 
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
@@ -121,7 +119,7 @@ for group in grouped:
     row = "\n    "
     row += "<tr><td>" + refs +"</td><td>" + str(len(group))
     row += "</td><td>" + c.getValue() + "</td><td>" + c.getLibName() + ":"
-    row += c.getPartName() + "</td><td>" + c.getDatasheet() + "</td><td>"
+    row += c.getPartName() + "</td><td>" + c.getFootprint() + "</td><td>"
     row += c.getDescription() + "</td><td>" + c.getField("Vendor")
     row += "</td></tr>"
 

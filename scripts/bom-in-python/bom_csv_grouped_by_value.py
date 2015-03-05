@@ -3,6 +3,13 @@
 #
 # Example: Sorted and Grouped CSV BOM
 #
+"""
+    @package
+    Generate a csv BOM list.
+    Components are sorted by ref and grouped by value
+    Fields are (if exist)
+    Item, Qty, Reference(s), Value, LibPart, Footprint, Datasheet
+"""
 
 from __future__ import print_function
 
@@ -11,6 +18,29 @@ import kicad_netlist_reader
 import csv
 import sys
 
+def myEqu(self, other):
+    """myEqu is a more advanced equivalence function for components which is
+    used by component grouping. Normal operation is to group components based
+    on their value and footprint.
+
+    In this example of a custom equivalency operator we compare the
+    value, the part name and the footprint.
+
+    """
+    result = True
+    if self.getValue() != other.getValue():
+        result = False
+    elif self.getPartName() != other.getPartName():
+        result = False
+    elif self.getFootprint() != other.getFootprint():
+        result = False
+
+    return result
+
+# Override the component equivalence operator - it is important to do this
+# before loading the netlist, otherwise all components will have the original
+# equivalency operator.
+kicad_netlist_reader.comp.__eq__ = myEqu
 
 if len(sys.argv) != 3:
     print("Usage ", __file__, "<generic_netlist.xml> <output.csv>", file=sys.stderr)
@@ -48,17 +78,18 @@ columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Data
 # Create a new csv writer object to use as the output formatter
 out = csv.writer( f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL )
 
-# override csv.writer's writerow() to support utf8 encoding:
+# override csv.writer's writerow() to support encoding conversion (initial encoding is utf8):
 def writerow( acsvwriter, columns ):
     utf8row = []
     for col in columns:
-        utf8row.append( str(col).encode('utf8') )
+        utf8row.append( str(col) )  # currently, no change
     acsvwriter.writerow( utf8row )
 
 # Output a set of rows as a header providing general information
 writerow( out, ['Source:', net.getSource()] )
 writerow( out, ['Date:', net.getDate()] )
 writerow( out, ['Tool:', net.getTool()] )
+writerow( out, ['Generator:', sys.argv[0]] )
 writerow( out, ['Component Count:', len(components)] )
 writerow( out, [] )
 writerow( out, ['Individual Components:'] )
@@ -129,6 +160,6 @@ for group in grouped:
     for field in columns[7:]:
         row.append( net.getGroupField(group, field) );
 
-    writerow( out,  row  )
+    writerow( out, row  )
 
 f.close()

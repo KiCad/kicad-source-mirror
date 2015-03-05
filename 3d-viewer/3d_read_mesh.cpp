@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras@wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,18 +43,12 @@ S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
                                             const wxString aExtension )
 {
     if ( aExtension == wxT( "x3d" ) )
-    {
         return new X3D_MODEL_PARSER( aMaster );
-    }
     else if ( aExtension == wxT( "wrl" ) )
-    {
         return new VRML_MODEL_PARSER( aMaster );
-    }
-    else
-    {
-        return NULL;
-    }
-}
+
+    return NULL;
+ }
 
 const wxString S3D_MASTER::GetShape3DFullFilename()
 {

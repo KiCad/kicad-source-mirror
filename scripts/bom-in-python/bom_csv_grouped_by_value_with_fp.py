@@ -7,9 +7,9 @@
 """
     @package
     Generate a Tab delimited list (csv file type).
-    Components are sorted by ref and grouped by value
+    Components are sorted by ref and grouped by value with same footprint
     Fields are (if exist)
-    'Ref', 'Qnty', 'Value', 'Sch lib name', 'footprint', 'Description', 'Vendor'
+    'Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor'
 """
 
 # Import the KiCad python helper module and the csv formatter
@@ -37,8 +37,9 @@ out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=
 out.writerow(['Source:', net.getSource()])
 out.writerow(['Date:', net.getDate()])
 out.writerow(['Tool:', net.getTool()])
+out.writerow( ['Generator:', sys.argv[0]] )
 out.writerow(['Component Count:', len(net.components)])
-out.writerow(['Ref', 'Qnty', 'Value', 'Sch lib name', 'footprint', 'Description', 'Vendor'])
+out.writerow(['Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor'])
 
 # Get all of the components in groups of matching parts + values
 # (see ky_generic_netlist_reader.py)
@@ -55,7 +56,7 @@ for group in grouped:
         c = component
 
     # Fill in the component groups common data
-    out.writerow([refs, len(group), c.getValue(), c.getLibName() + "/" + c.getPartName(), c.getFootprint(),
+    out.writerow([refs, len(group), c.getValue(), c.getPartName(), c.getFootprint(),
         c.getDescription(), c.getField("Vendor")])
 
 
