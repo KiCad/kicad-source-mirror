@@ -172,8 +172,7 @@ static bool clipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &
     return false;
 }
 
-static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-                                EDA_COLOR_T Color, int width = 1 )
+static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width )
 {
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
@@ -186,7 +185,6 @@ static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int
             return;
     }
 
-    GRSetColorPen( DC, Color, width );
     DC->DrawLine( x1, y1, x2, y2 );
 }
 
@@ -374,7 +372,8 @@ void GRLine( EDA_RECT* ClipBox,
              int       width,
              EDA_COLOR_T       Color )
 {
-    WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, Color, width );
+    GRSetColorPen( DC, Color, width );
+    WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, width );
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
 }
@@ -390,7 +389,7 @@ void GRDashedLineTo( EDA_RECT* ClipBox, wxDC* DC, int x2, int y2, int width, EDA
 {
     s_DC_lastcolor = UNSPECIFIED_COLOR;
     GRSetColorPen( DC, Color, width, wxPENSTYLE_SHORT_DASH );
-    GRLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x2, y2, width, Color );
+    WinClipAndDrawLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x2, y2, width );
     s_DC_lastcolor = UNSPECIFIED_COLOR;
     GRSetColorPen( DC, Color, width );
     GRLastMoveToX = x2;
@@ -411,7 +410,7 @@ void GRDashedLine( EDA_RECT* ClipBox,
     GRLastMoveToY  = y2;
     s_DC_lastcolor = UNSPECIFIED_COLOR;
     GRSetColorPen( DC, Color, width, wxPENSTYLE_SHORT_DASH );
-    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color );
+    WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, width );
     s_DC_lastcolor = UNSPECIFIED_COLOR;
     GRSetColorPen( DC, Color, width );
 }
@@ -590,14 +589,16 @@ void GRCSegm( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
 void GRFillCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                   int width, EDA_COLOR_T Color )
 {
-    WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, Color, width );
+    GRSetColorPen( DC, Color, width );
+    WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, width );
 }
 
 
 void GRFilledSegment( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
                       int aWidth, EDA_COLOR_T aColor )
 {
-    WinClipAndDrawLine( aClipBox, aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aColor, aWidth );
+    GRSetColorPen( aDC, aColor, aWidth );
+    WinClipAndDrawLine( aClipBox, aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aWidth );
 }
 
 

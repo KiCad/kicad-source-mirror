@@ -774,7 +774,7 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     GetScreen()->ClrModify();
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
     RebuildDesignTree();
-    Zoom_Automatique( true );
+    Zoom_Automatique( false );
     m_canvas->Refresh();
 }
 

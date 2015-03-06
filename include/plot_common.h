@@ -813,6 +813,7 @@ protected:
     bool m_graphics_changed;        // true if a pen/brush parameter is modified
                                     // color, pen size, fil mode ...
                                     // the new SVG stype must be output on file
+    bool m_dashed;                  // true to use plot dashed line style
 
     /**
      * function emitSetRGBColor()

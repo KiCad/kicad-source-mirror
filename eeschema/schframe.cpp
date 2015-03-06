@@ -397,7 +397,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
     GetScreen()->SetZoom( BestZoom() );
 
-    Zoom_Automatique( true );
+    Zoom_Automatique( false );
 }
 
 

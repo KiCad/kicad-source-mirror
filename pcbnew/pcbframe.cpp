@@ -450,7 +450,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     setupTools();
 
-    Zoom_Automatique( true );
+    Zoom_Automatique( false );
 }
 
 

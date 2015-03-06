@@ -175,7 +175,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.Update();
 
     setActiveLayer( 0, true );
-    Zoom_Automatique( true );           // Gives a default zoom value
+    Zoom_Automatique( false );           // Gives a default zoom value
 }
 
 
