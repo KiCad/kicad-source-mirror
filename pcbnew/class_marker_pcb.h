@@ -124,6 +124,14 @@ public:
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
+    /** Get class name
+     * @return  string "MARKER_PCB"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "MARKER_PCB" );
+    }
+
 protected:
     ///> Pointer to BOARD_ITEM that causes DRC error.
     const BOARD_ITEM* m_item;

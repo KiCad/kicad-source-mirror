@@ -176,6 +176,14 @@ public:
         return m_Shape3DName;
     }
 
+    /** Get class name
+     * @return  string "S3D_MASTER"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "S3D_MASTER" );
+    }
+
     /**
      * Function GetShape3DFullFilename
      * @return the full filename of the 3D shape,

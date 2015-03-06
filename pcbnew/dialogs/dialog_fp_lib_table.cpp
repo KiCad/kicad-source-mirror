@@ -660,7 +660,7 @@ private:
         }
     }
 
-	void OnClickLibraryWizard( wxCommandEvent& event );
+    void OnClickLibraryWizard( wxCommandEvent& event );
 
     void onCancelButtonClick( wxCommandEvent& event )
     {

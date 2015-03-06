@@ -386,10 +386,7 @@ public:
      * returns the class name.
      * @return wxString
      */
-    virtual wxString GetClass() const
-    {
-        return wxT( "EDA_ITEM" );
-    }
+    virtual wxString GetClass() const = 0;
 
     /**
      * Function GetSelectMenuText

@@ -43,8 +43,8 @@ public:
     DIALOG_MODEDIT_OPTIONS( FOOTPRINT_EDIT_FRAME* aParent );
 
 private:
-	void OnCancelClick( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
-	void OnOkClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
+    void OnOkClick( wxCommandEvent& event );
 
     void initValues( );
 };

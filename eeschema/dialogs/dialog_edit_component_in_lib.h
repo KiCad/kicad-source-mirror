@@ -63,7 +63,7 @@ private:
     void DeleteAllFootprintFilter(wxCommandEvent& event);
     void DeleteOneFootprintFilter(wxCommandEvent& event);
     void AddFootprintFilter(wxCommandEvent& event);
-	void EditOneFootprintFilter( wxCommandEvent& event );
+    void EditOneFootprintFilter( wxCommandEvent& event );
 };
 
 #endif

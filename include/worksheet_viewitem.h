@@ -123,9 +123,19 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const;
 
+#if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()
     void Show( int x, std::ostream& st ) const
     {
+    }
+#endif
+
+    /** Get class name
+     * @return  string "WORKSHEET_VIEWITEM"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "WORKSHEET_VIEWITEM" );
     }
 
 protected:

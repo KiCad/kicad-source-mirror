@@ -57,6 +57,14 @@ public:
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const {}
 #endif
+
+    /** Get class name
+     * @return  string "PL_ITEM_LAYOUT"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "PL_ITEM_LAYOUT" );
+    }
 };
 
 void PL_EDITOR_FRAME::SaveCopyInUndoList()

@@ -48,7 +48,7 @@ private:
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnAddFiles( wxCommandEvent& event );
-	void OnEditEquFile( wxCommandEvent& event );
+    void OnEditEquFile( wxCommandEvent& event );
     void OnRemoveFiles( wxCommandEvent& event );
     void OnButtonMoveUp( wxCommandEvent& event );
     void OnButtonMoveDown( wxCommandEvent& event );

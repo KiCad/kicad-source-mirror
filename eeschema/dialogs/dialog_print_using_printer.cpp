@@ -60,7 +60,7 @@ private:
     void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
-    void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
+    void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
 
     void GetPrintOptions();
 };

@@ -63,8 +63,18 @@ public:
         m_end = aEnd;
     }
 
+#if defined(DEBUG)
     void Show( int x, std::ostream& st ) const
     {
+    }
+#endif
+
+    /** Get class name
+     * @return  string "SELECTION_AREA"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "SELECTION_AREA" );
     }
 
 private:

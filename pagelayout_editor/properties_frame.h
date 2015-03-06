@@ -48,8 +48,8 @@ public:
     ~PROPERTIES_FRAME();
 
     // Event functions
-	void OnAcceptPrms( wxCommandEvent& event );
-	void OnSetDefaultValues( wxCommandEvent& event );
+    void OnAcceptPrms( wxCommandEvent& event );
+    void OnSetDefaultValues( wxCommandEvent& event );
 
 
     // Data transfert from general properties to widgets

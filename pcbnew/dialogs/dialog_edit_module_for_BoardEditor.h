@@ -64,7 +64,7 @@ private:
         Edit3DShapeFileName();
     }
     void Remove3DShape( wxCommandEvent& event );
-	void Add3DShape( wxCommandEvent& event )
+    void Add3DShape( wxCommandEvent& event )
     {
         BrowseAndAdd3DShapeFile();
     }

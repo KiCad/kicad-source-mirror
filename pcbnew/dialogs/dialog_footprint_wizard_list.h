@@ -41,7 +41,7 @@ public:
 private:
     void OnCellWizardClick( wxGridEvent& event );
     void OnOpenButtonClick( wxCommandEvent& event );
-	void OnCancelClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
 };
 
 #endif  // _DIALOG_FOOTPRINT_WIZARD_LIST_H_

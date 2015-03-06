@@ -62,7 +62,7 @@ private:
     void Init();
 
     // from DIALOG_ERC_BASE:
-	void OnCloseErcDialog( wxCloseEvent& event );
+    void OnCloseErcDialog( wxCloseEvent& event );
     void OnErcCmpClick( wxCommandEvent& event );
     void OnEraseDrcMarkersClick( wxCommandEvent& event );
     void OnButtonCloseClick( wxCommandEvent& event );

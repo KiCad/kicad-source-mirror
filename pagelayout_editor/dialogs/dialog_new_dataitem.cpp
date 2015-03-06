@@ -43,8 +43,8 @@ public:
     DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller, WORKSHEET_DATAITEM* aItem );
 
 private:
-	void OnCancelClick( wxCommandEvent& event );
-	void OnOKClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
+    void OnOKClick( wxCommandEvent& event );
 
     void initDlg();
 };

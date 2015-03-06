@@ -60,7 +60,7 @@ public:
 private:
     // Events handlers:
     void OnInitDialog( wxInitDialogEvent& event );
-	void OnCloseDialog( wxCloseEvent& event );
+    void OnCloseDialog( wxCloseEvent& event );
 
     void OnListItemDeselected( wxListEvent& event );
     void OnListItemSelected( wxListEvent& event );

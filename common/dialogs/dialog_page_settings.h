@@ -98,7 +98,7 @@ private:
     void OnDateApplyClick( wxCommandEvent& event );
 
     // .kicad_wks file description selection
-	void OnWksFileSelection( wxCommandEvent& event );
+    void OnWksFileSelection( wxCommandEvent& event );
 
     // Save in the current title block the new page settings
     // return true if changes are made, or false if not

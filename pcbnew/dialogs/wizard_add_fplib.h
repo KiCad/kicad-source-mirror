@@ -186,11 +186,11 @@ private:
     void OnRemoveFpLibs( wxCommandEvent& event );
     void OnPathManagementSelection( wxCommandEvent& event );
     void OnSelectEnvVarCell( wxGridEvent& event );
-	void OnPluginSelection( wxCommandEvent& event );
+    void OnPluginSelection( wxCommandEvent& event );
 #ifdef BUILD_GITHUB_PLUGIN
     void OnGithubLibsList( wxCommandEvent& event );
 #endif
-	bool ValidateOptions();
+    bool ValidateOptions();
 };
 
 

@@ -65,7 +65,7 @@ protected:
      * Process the wxWidgets @a event produced when the user click on
      * the check box which controls the field visibility
      */
-	void OnVisibleFieldClick( wxCommandEvent& event );
+    void OnVisibleFieldClick( wxCommandEvent& event );
 
     /**
      * Function OnAddButtonClick

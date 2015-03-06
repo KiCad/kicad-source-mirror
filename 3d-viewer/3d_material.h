@@ -65,6 +65,14 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
+
+    /** Get class name
+     * @return  string "S3D_MATERIAL"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "S3D_MATERIAL" );
+    }
 };
 
 void SetOpenGlDefaultMaterial();

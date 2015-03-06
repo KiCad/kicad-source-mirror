@@ -503,8 +503,18 @@ public:
         aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );
     }
 
+#if defined(DEBUG)
     void Show( int x, std::ostream& st ) const
     {
+    }
+#endif
+
+    /** Get class name
+     * @return  string "EDIT_POINTS"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "EDIT_POINTS" );
     }
 
 private:

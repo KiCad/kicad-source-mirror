@@ -72,7 +72,17 @@ public:
         m_clearance = aClearance;
     }
 
+#if defined(DEBUG)
     void Show( int aA, std::ostream& aB ) const {};
+#endif
+
+    /** Get class name
+     * @return  string "ROUTER_PREVIEW_ITEM"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "ROUTER_PREVIEW_ITEM" );
+    }
 
     const BOX2I ViewBBox() const;
 

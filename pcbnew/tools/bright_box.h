@@ -55,8 +55,18 @@ public:
         aCount = 1;
     }
 
+#if defined(DEBUG)
     void Show( int x, std::ostream& st ) const
     {
+    }
+#endif
+
+    /** Get class name
+     * @return  string "BRIGHT_BOX"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "BRIGHT_BOX" );
     }
 
 private:

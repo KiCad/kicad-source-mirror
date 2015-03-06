@@ -117,8 +117,8 @@ private:
     void deleteFieldButtonHandler( wxCommandEvent& event );
     void moveUpButtonHandler( wxCommandEvent& event );
     void showButtonHandler( wxCommandEvent& event );
-	void OnTestChipName( wxCommandEvent& event );
-	void OnSelectChipName( wxCommandEvent& event );
+    void OnTestChipName( wxCommandEvent& event );
+    void OnSelectChipName( wxCommandEvent& event );
 
     SCH_FIELD* findField( const wxString& aFieldName );
 

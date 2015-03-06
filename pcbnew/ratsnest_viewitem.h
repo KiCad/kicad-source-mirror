@@ -52,9 +52,19 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const;
 
+#if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()
     void Show( int x, std::ostream& st ) const
     {
+    }
+#endif
+
+    /** Get class name
+     * @return  string "RATSNEST_VIEWITEM"
+     */
+    virtual wxString GetClass() const
+    {
+        return wxT( "RATSNEST_VIEWITEM" );
     }
 
 protected:
