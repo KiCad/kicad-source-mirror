@@ -64,14 +64,6 @@ public:
     ///> @copydoc VERTEX_CONTAINER::Clear()
     virtual void Clear();
 
-    /**
-     * Function GetVertices()
-     * returns the vertices stored by the specific item.
-     *
-     * @param aItem is the item.
-     */
-    virtual VERTEX* GetVertices( const VERTEX_ITEM* aItem ) const;
-
 protected:
     ///> Maps size of free memory chunks to their offsets
     typedef std::pair<unsigned int, unsigned int> CHUNK;

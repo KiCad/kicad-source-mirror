@@ -280,16 +280,6 @@ public:
     /**
      * Function Collide()
      *
-     * Checks if box aBox lies closer to us than aClearance.
-     * @param aBox the box to check for collisions with
-     * @param aClearance minimum distance that does not qualify as a collision.
-     * @return true, when a collision has been found
-     */
-    bool Collide( const BOX2I& aBox, int aClearance = 0 ) const;
-
-    /**
-     * Function Collide()
-     *
      * Checks if segment aSeg lies closer to us than aClearance.
      * @param aSeg the segment to check for collisions with
      * @param aClearance minimum distance that does not qualify as a collision.

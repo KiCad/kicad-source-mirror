@@ -203,14 +203,6 @@ void CACHED_CONTAINER::Clear()
 }
 
 
-VERTEX* CACHED_CONTAINER::GetVertices( const VERTEX_ITEM* aItem ) const
-{
-    int offset = aItem->GetOffset();
-
-    return &m_vertices[offset];
-}
-
-
 unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
 {
     wxASSERT( aSize > 0 );

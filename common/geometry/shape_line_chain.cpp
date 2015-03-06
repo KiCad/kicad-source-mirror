@@ -35,13 +35,6 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 }
 
 
-bool SHAPE_LINE_CHAIN::Collide( const BOX2I& aBox, int aClearance ) const
-{
-    assert( false );
-    return false;
-}
-
-
 bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance ) const
 {
     BOX2I box_a( aSeg.A, aSeg.B - aSeg.A );

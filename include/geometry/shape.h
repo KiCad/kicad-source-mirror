@@ -128,7 +128,7 @@ public:
     virtual bool Collide( const SEG& aSeg, int aClearance = 0 ) const = 0;
 
     /**
-     * Function Collide()
+     * Function BBox()
      *
      * Computes a bounding box of the shape, with a margin of aClearance
      * a collision.
