@@ -344,7 +344,7 @@ inline int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
 
     ecoord dist = ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q );
 
-    return aDetermineSide ? dist : abs( dist );
+    return aDetermineSide ? dist : std::abs( dist );
 }
 
 inline SEG::ecoord SEG::TCoef( const VECTOR2I& aP ) const

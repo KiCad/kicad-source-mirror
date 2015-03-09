@@ -138,7 +138,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
                              ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
         double   scrollSpeed;
 
-        if( abs( scrollVec.x ) > abs( scrollVec.y ) )
+        if( std::abs( scrollVec.x ) > std::abs( scrollVec.y ) )
             scrollSpeed = scrollVec.x;
         else
             scrollSpeed = scrollVec.y;

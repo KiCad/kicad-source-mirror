@@ -35,7 +35,7 @@ public:
      PNS_TUNE_STATUS_POPUP( PCB_EDIT_FRAME* aParent );
      ~PNS_TUNE_STATUS_POPUP();
 
-    void Update( PNS_ROUTER* aRouter );
+    void UpdateStatus( PNS_ROUTER* aRouter );
 
 private:
     wxStaticText* m_statusLine;

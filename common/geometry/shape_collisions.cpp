@@ -137,12 +137,9 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN& aB, 
                             bool aNeedMTV, VECTOR2I& aMTV )
 {
     bool found = false;
-    VECTOR2I::extended_type clSq = (VECTOR2I::extended_type) aClearance * aClearance;
-
 
     for( int s = 0; s < aB.SegmentCount(); s++ )
     {
-
         if( aA.Collide( aB.CSegment( s ), aClearance ) )
         {
             found = true;

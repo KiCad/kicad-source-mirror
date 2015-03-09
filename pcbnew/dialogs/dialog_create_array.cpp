@@ -446,9 +446,9 @@ void DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::TransformItem( int n, BOARD_ITEM* 
     point.x = coords.x * m_delta.x + coords.y * m_offset.x;
     point.y = coords.y * m_delta.y + coords.x * m_offset.y;
 
-    if( abs( m_stagger ) > 1 )
+    if( std::abs( m_stagger ) > 1 )
     {
-        const int stagger = abs( m_stagger );
+        const int stagger = std::abs( m_stagger );
         const bool  sr = m_stagger_rows;
         const int   stagger_idx = ( ( sr ? coords.y : coords.x ) % stagger );
 

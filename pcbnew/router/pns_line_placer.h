@@ -362,9 +362,6 @@ private:
     ///> routing "tail": part of the track that has been already fixed due to collisions with obstacles
     PNS_LINE m_tail;
 
-    ///> current algorithm iteration
-    int m_iteration;
-
     ///> pointer to world to search colliding items
     PNS_NODE* m_world;
 
@@ -385,19 +382,8 @@ private:
     ///> Are we placing a via?
     bool m_placingVia;
 
-    ///> current via diameter
-    int m_viaDiameter;
-
-    ///> current via drill
-    int m_viaDrill;
-
-    ///> current track width
-    int m_currentWidth;
-
     int m_currentNet;
     int m_currentLayer;
-
-    bool m_startsOnVia;
 
     VECTOR2I m_currentEnd, m_currentStart;
     PNS_LINE m_currentTrace;

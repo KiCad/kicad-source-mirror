@@ -332,7 +332,7 @@ bool PNS_DP_GATEWAYS::FitGateways( PNS_DP_GATEWAYS& aEntry, PNS_DP_GATEWAYS& aTa
 
     int bestScore = -1000;
     DP_CANDIDATE best;
-    bool found;
+    bool found = false;
 
     BOOST_FOREACH( DP_CANDIDATE c, candidates )
     {

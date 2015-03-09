@@ -36,7 +36,7 @@ PNS_TUNE_STATUS_POPUP::~PNS_TUNE_STATUS_POPUP()
 }
 
 
-void PNS_TUNE_STATUS_POPUP::Update( PNS_ROUTER* aRouter )
+void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS_ROUTER* aRouter )
 {
     PNS_MEANDER_PLACER_BASE* placer = dynamic_cast<PNS_MEANDER_PLACER_BASE*>( aRouter->Placer() );
 

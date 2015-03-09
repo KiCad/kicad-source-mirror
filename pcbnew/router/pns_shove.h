@@ -161,7 +161,6 @@ private:
     int                         m_iter;
     int m_forceClearance;
     bool m_multiLineMode;
-    bool m_headModified;
 };
 
 #endif // __PNS_SHOVE_H

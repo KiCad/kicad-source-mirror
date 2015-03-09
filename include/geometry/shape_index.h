@@ -46,13 +46,6 @@ static const SHAPE* shapeFunctor( T aItem )
     return aItem->Shape();
 }
 
-
-/**
- * shapeFunctor template function: specialization for T = SHAPE*
- */
-template <>
-const SHAPE* shapeFunctor( SHAPE* aItem );
-
 /**
  * boundingBox template method
  *
@@ -68,7 +61,6 @@ BOX2I boundingBox( T aObject )
     return shapeFunctor( aObject )->BBox();
 }
 
-
 /**
  * acceptVisitor template method
  *
@@ -83,7 +75,6 @@ void acceptVisitor( T aObject, V aVisitor )
 {
     aVisitor( aObject );
 }
-
 
 /**
  * collide template method

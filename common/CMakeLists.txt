@@ -242,7 +242,6 @@ set( COMMON_SRCS
     geometry/seg.cpp
     geometry/shape_line_chain.cpp
     geometry/shape_collisions.cpp
-    geometry/shape_index.cpp
     )
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
