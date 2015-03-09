@@ -50,8 +50,6 @@
 
 bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* Window );
 
-static void LoadLayers( LINE_READER* aLine );
-
 
 bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName, bool append )
 {
@@ -142,14 +140,25 @@ again." );
     }
 #endif
 
-    if( !reader.ReadLine() || strncmp( reader, "LIBS:", 5 ) != 0 )
+    // The next lines are the lib list section, and are mainly comments, like:
+    // LIBS:power
+    // the lib list is not used, but is in schematic file just in case.
+    // It is usually not empty, but we accept empty list.
+    // If empty, there is a legacy section, not used
+    // EELAYER i j
+    // and the last line is
+    // EELAYER END
+    // Skip all lines until end end of header EELAYER END is found
+    while( reader.ReadLine() )
     {
-        msgDiag.Printf( _( "<%s> is NOT an Eeschema file!" ), GetChars( aFullFileName ) );
-        DisplayError( this, msgDiag );
-        return false;
-    }
+        line = reader.Line();
 
-    LoadLayers( &reader );
+        while( *line == ' ' )
+            line++;
+
+        if( strnicmp( line, "EELAYER END", 11 ) == 0 )
+            break;  // end of not used header found
+    }
 
     while( reader.ReadLine() )
     {
@@ -269,22 +278,6 @@ again." );
     return true;    // Although it may be that file is only partially loaded.
 }
 
-
-static void LoadLayers( LINE_READER* aLine )
-{
-    /* read the layer descr
-     * legacy code, not actually used, so this section is just skipped
-     * read lines like
-     * EELAYER 25  0
-     * EELAYER END
-     */
-
-    while( aLine->ReadLine() )
-    {
-        if( strnicmp( *aLine, "EELAYER END", 11 ) == 0 )
-            break;
-    }
-}
 
 /// Get the length of a string constant, at compile time
 #define SZ( x )         (sizeof(x)-1)

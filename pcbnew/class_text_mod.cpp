@@ -262,9 +262,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     wxASSERT( m_Parent );
 
     BOARD* brd = GetBoard( );
-
     EDA_COLOR_T color = brd->GetLayerColor( GetLayer() );
-
 
     /* For reference and value suppress the element if the layer it is
      * on is on a disabled side, user text also has standard layer
@@ -317,15 +315,14 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( m_Mirror )
         size.x = -size.x;
 
-    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, DC, pos, color, GetShownText(), orient,
+    DrawGraphicText( panel->GetClipBox(), DC, pos, color, GetShownText(), orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
+        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
