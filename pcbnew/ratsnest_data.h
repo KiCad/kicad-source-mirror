@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -48,6 +48,16 @@ class VIA;
 class TRACK;
 class ZONE_CONTAINER;
 class CPolyPt;
+
+///> Types of items that are handled by the class
+enum RN_ITEM_TYPES
+{
+    RN_PADS    = 0x01,
+    RN_VIAS    = 0x02,
+    RN_TRACKS  = 0x04,
+    RN_ZONES   = 0x08,
+    RN_ALL     = 0xFF
+};
 
 // Preserve KiCad coding style policy
 typedef hed::NODE           RN_NODE;
@@ -157,8 +167,8 @@ public:
      * @param aDistance is the distance of the connection (0 means that nodes are actually
      * connected, >0 means a missing connection).
      */
-    const RN_EDGE_PTR& AddConnection( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2,
-                                      unsigned int aDistance = 0 );
+    RN_EDGE_MST_PTR AddConnection( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2,
+                                    unsigned int aDistance = 0 );
 
     /**
      * Function RemoveConnection()
@@ -181,7 +191,7 @@ public:
     }
 
 protected:
-    ///> Set of nodes that are used are expected to be connected together.
+    ///> Set of nodes that are expected to be connected together (vias, tracks, pads).
     RN_NODE_SET m_nodes;
 
     ///> List of edges that currently connect nodes.
@@ -209,7 +219,6 @@ public:
     {
         return m_node;
     }
-
 
     /**
      * Function GetParent()
@@ -307,7 +316,7 @@ public:
      * Returns pointer to a vector of edges that makes ratsnest for a given net.
      * @return Pointer to a vector of edges that makes ratsnest for a given net.
      */
-    const std::vector<RN_EDGE_PTR>* GetUnconnected() const
+    const std::vector<RN_EDGE_MST_PTR>* GetUnconnected() const
     {
         return m_rnEdges.get();
     }
@@ -430,21 +439,11 @@ public:
                                             const RN_NODE_FILTER& aFilter, int aNumber = -1 ) const;
 
     /**
-     * Function GetEdges()
-     * Returns pointer to the vector of edges that makes ratsnest for a given net.
-     * @return Pointer to the vector of edges that makes ratsnest for a given net.
-     */
-    const std::vector<RN_EDGE_PTR>* GetEdges() const
-    {
-        return m_rnEdges.get();
-    }
-
-    /**
      * Function AddSimpleNode()
      * Changes drawing mode for a node to simple (i.e. one ratsnest line per node).
      * @param aNode is a node that changes its drawing mode.
      */
-    void AddSimpleNode( RN_NODE_PTR& aNode )
+    inline void AddSimpleNode( RN_NODE_PTR& aNode )
     {
         m_simpleNodes.push_back( aNode );
         aNode->SetFlag( true );
@@ -456,7 +455,7 @@ public:
      * target the node). The status is cleared after calling ClearSimple().
      * @param aNode is the node that is not going to be used as a ratsnest line target.
      */
-    void AddBlockedNode( RN_NODE_PTR& aNode )
+    inline void AddBlockedNode( RN_NODE_PTR& aNode )
     {
         m_blockedNodes.push_back( aNode );
         aNode->SetFlag( true );
@@ -468,7 +467,7 @@ public:
      * ratsnest line per node).
      * @return list of nodes for which ratsnest is drawn in simple mode.
      */
-    const std::deque<RN_NODE_PTR>& GetSimpleNodes() const
+    inline const std::deque<RN_NODE_PTR>& GetSimpleNodes() const
     {
         return m_simpleNodes;
     }
@@ -477,22 +476,23 @@ public:
      * Function ClearSimple()
      * Removes all nodes and edges that are used for displaying ratsnest in simple mode.
      */
-    void ClearSimple()
-    {
-        BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
-            node->SetFlag( false );
+    void ClearSimple();
 
-        BOOST_FOREACH( const RN_NODE_PTR& node, m_blockedNodes )
-            node->SetFlag( false );
-
-        m_simpleNodes.clear();
-        m_blockedNodes.clear();
-    }
+    /**
+     * Function GetConnectedItems()
+     * Adds items that are connected together to a list.
+     * @param aItem is the reference item to find other connected items.
+     * @param aOutput is the list that will contain found items.
+     * @param aTypes allows to filter by item types.
+     */
+    void GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
+                            std::list<BOARD_CONNECTED_ITEM*>& aOutput,
+                            RN_ITEM_TYPES aTypes = RN_ALL) const;
 
 protected:
     ///> Validates edge, i.e. modifies source and target nodes for an edge
     ///> to make sure that they are not ones with the flag set.
-    void validateEdge( RN_EDGE_PTR& aEdge );
+    void validateEdge( RN_EDGE_MST_PTR& aEdge );
 
     ///> Removes all ratsnest edges for a given node.
     void clearNode( const RN_NODE_PTR& aNode );
@@ -507,31 +507,37 @@ protected:
     RN_LINKS m_links;
 
     ///> Vector of edges that makes ratsnest for a given net.
-    boost::shared_ptr< std::vector<RN_EDGE_PTR> > m_rnEdges;
+    boost::shared_ptr< std::vector<RN_EDGE_MST_PTR> > m_rnEdges;
 
     ///> List of nodes for which ratsnest is drawn in simple mode.
     std::deque<RN_NODE_PTR> m_simpleNodes;
 
-    ///> List of nodes which should be used as ratsnest target nodes..
+    ///> List of nodes which will not be used as ratsnest target nodes.
     std::deque<RN_NODE_PTR> m_blockedNodes;
 
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
 
+    ///> Helper typedefs
+    typedef boost::unordered_map<const D_PAD*, RN_NODE_PTR> PAD_NODE_MAP;
+    typedef boost::unordered_map<const VIA*, RN_NODE_PTR> VIA_NODE_MAP;
+    typedef boost::unordered_map<const TRACK*, RN_EDGE_MST_PTR> TRACK_EDGE_MAP;
+    typedef boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_POLY> > ZONE_POLY_MAP;
+    typedef boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_EDGE_MST_PTR> > ZONE_EDGE_MAP;
     ///> Map that associates nodes in the ratsnest model to respective nodes.
-    boost::unordered_map<const D_PAD*, RN_NODE_PTR> m_pads;
+    PAD_NODE_MAP m_pads;
 
     ///> Map that associates nodes in the ratsnest model to respective vias.
-    boost::unordered_map<const VIA*, RN_NODE_PTR> m_vias;
+    VIA_NODE_MAP m_vias;
 
     ///> Map that associates edges in the ratsnest model to respective tracks.
-    boost::unordered_map<const TRACK*, RN_EDGE_PTR> m_tracks;
+    TRACK_EDGE_MAP m_tracks;
 
-    ///> Map that associates groups of subpolygons in the ratsnest model to their respective zones.
-    boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_POLY> > m_zonePolygons;
+    ///> Map that associates groups of subpolygons in the ratsnest model to respective zones.
+    ZONE_POLY_MAP m_zonePolygons;
 
-    ///> Map that associates groups of edges in the ratsnest model to their respective zones.
-    boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_EDGE_PTR> > m_zoneConnections;
+    ///> Map that associates groups of edges in the ratsnest model to respective zones.
+    ZONE_EDGE_MAP m_zoneConnections;
 
     ///> Visibility flag.
     bool m_visible;
@@ -645,6 +651,26 @@ public:
 
         return m_nets[aNetCode];
     }
+
+    /**
+     * Function GetConnectedItems()
+     * Adds items that are connected together to a list.
+     * @param aItem is the reference item to find other connected items.
+     * @param aOutput is the list that will contain found items.
+     * @param aTypes allows to filter by item types.
+     */
+    void GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
+                            std::list<BOARD_CONNECTED_ITEM*>& aOutput,
+                            RN_ITEM_TYPES aTypes = RN_ALL ) const;
+
+    /**
+     * Function AreConnected()
+     * Checks if two items are connected with copper.
+     * @param aThis is the first item.
+     * @param aOther is the second item.
+     * @return True if they are connected, false otherwise.
+     */
+    bool AreConnected( const BOARD_CONNECTED_ITEM* aItem, const BOARD_CONNECTED_ITEM* aOther );
 
 protected:
     /**

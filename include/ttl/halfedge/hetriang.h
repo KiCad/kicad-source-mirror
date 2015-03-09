@@ -4,21 +4,21 @@
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
- * Contact information: E-mail: tor.dokken@sintef.no                      
- * SINTEF ICT, Department of Applied Mathematics,                         
- * P.O. Box 124 Blindern,                                                 
- * 0314 Oslo, Norway.                                                     
+ * Contact information: E-mail: tor.dokken@sintef.no
+ * SINTEF ICT, Department of Applied Mathematics,
+ * P.O. Box 124 Blindern,
+ * 0314 Oslo, Norway.
  *
  * This file is part of TTL.
  *
  * TTL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version. 
+ * License, or (at your option) any later version.
  *
- * TTL is distributed in the hope that it will be useful,        
- * but WITHOUT ANY WARRANTY; without even the implied warranty of         
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          
+ * TTL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public
@@ -36,7 +36,7 @@
  * disclosing the source code of your own applications.
  *
  * This file may be used in accordance with the terms contained in a
- * written agreement between you and SINTEF ICT. 
+ * written agreement between you and SINTEF ICT.
  */
 
 #ifndef _HE_TRIANG_H_
@@ -100,6 +100,9 @@ protected:
     /// Node coordinates
     int m_x, m_y;
 
+    /// Tag for quick connection resolution
+    int m_tag;
+
     /// Reference count
     unsigned int m_refCount;
 
@@ -112,7 +115,7 @@ public:
 #ifdef TTL_USE_NODE_ID
         m_id( id_count++ ),
 #endif
-        m_x( aX ), m_y( aY ), m_refCount( 0 )
+        m_x( aX ), m_y( aY ), m_tag( -1 ), m_refCount( 0 )
     {
     }
 
@@ -120,20 +123,32 @@ public:
     ~NODE() {}
 
     /// Returns the x-coordinate
-    int GetX() const
+    inline int GetX() const
     {
         return m_x;
     }
 
     /// Returns the y-coordinate
-    int GetY() const
+    inline int GetY() const
     {
         return m_y;
     }
 
+    /// Returns tag, common identifier for connected nodes
+    inline int GetTag() const
+    {
+        return m_tag;
+    }
+
+    /// Sets tag, common identifier for connected nodes
+    inline void SetTag( int aTag )
+    {
+        m_tag = aTag;
+    }
+
 #ifdef TTL_USE_NODE_ID
     /// Returns the id (TTL_USE_NODE_ID must be defined)
-    int Id() const
+    inline int Id() const
     {
         return m_id;
     }
@@ -141,35 +156,35 @@ public:
 
 #ifdef TTL_USE_NODE_FLAG
     /// Sets the flag (TTL_USE_NODE_FLAG must be defined)
-    void SetFlag( bool aFlag )
+    inline void SetFlag( bool aFlag )
     {
         m_flag = aFlag;
     }
 
     /// Returns the flag (TTL_USE_NODE_FLAG must be defined)
-    const bool& GetFlag() const
+    inline const bool& GetFlag() const
     {
         return m_flag;
     }
 #endif
 
-    void IncRefCount()
+    inline void IncRefCount()
     {
         m_refCount++;
     }
 
-    void DecRefCount()
+    inline void DecRefCount()
     {
         m_refCount--;
     }
 
-    unsigned int GetRefCount() const
+    inline unsigned int GetRefCount() const
     {
         return m_refCount;
     }
 };
 
-  
+
 /**
  * \class EDGE
  * \brief \b %Edge class in the in the half-edge data structure.
@@ -187,55 +202,65 @@ public:
     {
     }
 
+    /// Returns tag, common identifier for connected nodes
+    inline int GetTag() const
+    {
+        int tag = GetSourceNode()->GetTag();
+        if( tag >= 0 )
+            return tag;
+
+        return GetTargetNode()->GetTag();
+    }
+
     /// Sets the source node
-    void SetSourceNode( const NODE_PTR& aNode )
+    inline void SetSourceNode( const NODE_PTR& aNode )
     {
         m_sourceNode = aNode;
     }
 
     /// Sets the next edge in face
-    void SetNextEdgeInFace( const EDGE_PTR& aEdge )
+    inline void SetNextEdgeInFace( const EDGE_PTR& aEdge )
     {
         m_nextEdgeInFace = aEdge;
     }
 
     /// Sets the twin edge
-    void SetTwinEdge( const EDGE_PTR& aEdge )
+    inline void SetTwinEdge( const EDGE_PTR& aEdge )
     {
         m_twinEdge = aEdge;
     }
 
     /// Sets the edge as a leading edge
-    void SetAsLeadingEdge( bool aLeading = true )
+    inline void SetAsLeadingEdge( bool aLeading = true )
     {
         m_isLeadingEdge = aLeading;
     }
 
     /// Checks if an edge is a leading edge
-    bool IsLeadingEdge() const
+    inline bool IsLeadingEdge() const
     {
         return m_isLeadingEdge;
     }
 
     /// Returns the twin edge
-    EDGE_PTR GetTwinEdge() const
+    inline EDGE_PTR GetTwinEdge() const
     {
         return m_twinEdge.lock();
     }
 
-    void ClearTwinEdge()
+    inline void ClearTwinEdge()
     {
         m_twinEdge.reset();
     }
 
     /// Returns the next edge in face
-    const EDGE_PTR& GetNextEdgeInFace() const
+    inline const EDGE_PTR& GetNextEdgeInFace() const
     {
         return m_nextEdgeInFace;
     }
 
     /// Retuns the source node
-    const NODE_PTR& GetSourceNode() const
+    inline const NODE_PTR& GetSourceNode() const
     {
         return m_sourceNode;
     }
@@ -246,12 +271,12 @@ public:
         return m_nextEdgeInFace->GetSourceNode();
     }
 
-    void SetWeight( unsigned int weight )
+    inline void SetWeight( unsigned int weight )
     {
         m_weight = weight;
     }
 
-    unsigned int GetWeight() const
+    inline unsigned int GetWeight() const
     {
         return m_weight;
     }
@@ -294,21 +319,16 @@ public:
         m_weight = aWeight;
     }
 
-    EDGE_MST( const EDGE& edge )
-    {
-        m_sourceNode = edge.GetSourceNode();
-        m_target = edge.GetTargetNode();
-        m_weight = edge.GetWeight();
-    }
-
-    ~EDGE_MST()
-    {
-    }
-
     /// @copydoc Edge::setSourceNode()
     virtual const NODE_PTR& GetTargetNode() const
     {
         return m_target;
+    }
+
+private:
+    EDGE_MST( const EDGE& aEdge )
+    {
+        assert( false );
     }
 };
 
@@ -410,7 +430,7 @@ public:
     /// Swaps the edge associated with diagonal
     void SwapEdge( EDGE_PTR& aDiagonal );
 
-    /// Splits the triangle associated with edge into three new triangles joining at point 
+    /// Splits the triangle associated with edge into three new triangles joining at point
     EDGE_PTR SplitTriangle( EDGE_PTR& aEdge, const NODE_PTR& aPoint );
 
     // Functions required by TTL for removing nodes in a Delaunay triangulation
@@ -440,7 +460,7 @@ public:
     std::list<EDGE_PTR>* GetEdges( bool aSkipBoundaryEdges = false ) const;
 
 #ifdef TTL_USE_NODE_FLAG
-    /// Sets flag in all the nodes  
+    /// Sets flag in all the nodes
     void FlagNodes( bool aFlag ) const;
 
     /// Returns a list of nodes. This function requires TTL_USE_NODE_FLAG to be defined. \see Node.

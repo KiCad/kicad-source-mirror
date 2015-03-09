@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -96,22 +96,26 @@ bool isEdgeConnectingNode( const RN_EDGE_PTR& aEdge, const RN_NODE_PTR& aNode )
 }
 
 
-std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
-                                      const std::vector<RN_NODE_PTR>& aNodes )
+static std::vector<RN_EDGE_MST_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
+                                                 std::vector<RN_NODE_PTR>& aNodes )
 {
     unsigned int nodeNumber = aNodes.size();
     unsigned int mstExpectedSize = nodeNumber - 1;
     unsigned int mstSize = 0;
+    bool ratsnestLines = false;
 
     // The output
-    std::vector<RN_EDGE_PTR>* mst = new std::vector<RN_EDGE_PTR>;
+    std::vector<RN_EDGE_MST_PTR>* mst = new std::vector<RN_EDGE_MST_PTR>;
     mst->reserve( mstExpectedSize );
 
     // Set tags for marking cycles
     boost::unordered_map<RN_NODE_PTR, int> tags;
     unsigned int tag = 0;
-    BOOST_FOREACH( const RN_NODE_PTR& node, aNodes )
+    BOOST_FOREACH( RN_NODE_PTR& node, aNodes )
+    {
+        node->SetTag( tag );
         tags[node] = tag++;
+    }
 
     // Lists of nodes connected together (subtrees) to detect cycles in the graph
     std::vector<std::list<int> > cycles( nodeNumber );
@@ -123,27 +127,40 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
 
     while( mstSize < mstExpectedSize && !aEdges.empty() )
     {
-        RN_EDGE_PTR& dt = *aEdges.begin();
+        RN_EDGE_PTR& dt = aEdges.front();
 
         int srcTag = tags[dt->GetSourceNode()];
         int trgTag = tags[dt->GetTargetNode()];
+
+        // Because edges are sorted by their weight, first we always process connected
+        // items (weight == 0). Once we stumble upon an edge with non-zero weight,
+        // it means that the rest of the lines are ratsnest.
+        if( !ratsnestLines && dt->GetWeight() != 0 )
+            ratsnestLines = true;
 
         // Check if by adding this edge we are going to join two different forests
         if( srcTag != trgTag )
         {
             // Update tags
             std::list<int>::iterator it, itEnd;
-            for( it = cycles[trgTag].begin(), itEnd = cycles[trgTag].end(); it != itEnd; ++it )
-                tags[aNodes[*it]] = srcTag;
+
+            if( ratsnestLines )
+            {
+                for( it = cycles[trgTag].begin(), itEnd = cycles[trgTag].end(); it != itEnd; ++it )
+                    tags[aNodes[*it]] = srcTag;
+            }
+            else
+            {
+                for( it = cycles[trgTag].begin(), itEnd = cycles[trgTag].end(); it != itEnd; ++it ) {
+                    tags[aNodes[*it]] = srcTag;
+                    aNodes[*it]->SetTag( srcTag );
+                }
+            }
 
             // Move nodes that were marked with old tag to the list marked with the new tag
             cycles[srcTag].splice( cycles[srcTag].end(), cycles[trgTag] );
 
-            if( dt->GetWeight() == 0 )      // Skip already existing connections (weight == 0)
-            {
-                mstExpectedSize--;
-            }
-            else
+            if( ratsnestLines )
             {
                 // Do a copy of edge, but make it RN_EDGE_MST. In contrary to RN_EDGE,
                 // RN_EDGE_MST saves both source and target node and does not require any other
@@ -153,6 +170,11 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
                                                                            dt->GetWeight() );
                 mst->push_back( newEdge );
                 ++mstSize;
+            }
+            else
+            {
+                // Processing a connection, decrease the expected size of the ratsnest MST
+                --mstExpectedSize;
             }
         }
 
@@ -167,7 +189,7 @@ std::vector<RN_EDGE_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
 }
 
 
-void RN_NET::validateEdge( RN_EDGE_PTR& aEdge )
+void RN_NET::validateEdge( RN_EDGE_MST_PTR& aEdge )
 {
     RN_NODE_PTR source = aEdge->GetSourceNode();
     RN_NODE_PTR target = aEdge->GetTargetNode();
@@ -238,12 +260,13 @@ bool RN_LINKS::RemoveNode( const RN_NODE_PTR& aNode )
 }
 
 
-const RN_EDGE_PTR& RN_LINKS::AddConnection( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2,
-                                            unsigned int aDistance )
+RN_EDGE_MST_PTR RN_LINKS::AddConnection( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2,
+                                          unsigned int aDistance )
 {
-    m_edges.push_back( boost::make_shared<RN_EDGE_MST>( aNode1, aNode2, aDistance ) );
+    RN_EDGE_MST_PTR edge = boost::make_shared<RN_EDGE_MST>( aNode1, aNode2, aDistance );
+    m_edges.push_back( edge );
 
-    return m_edges.back();
+    return edge;
 }
 
 
@@ -252,10 +275,10 @@ void RN_NET::compute()
     const RN_LINKS::RN_NODE_SET& boardNodes = m_links.GetNodes();
     const RN_LINKS::RN_EDGE_LIST& boardEdges = m_links.GetConnections();
 
-    // Special case that does need so complicated algorithm
-    if( boardNodes.size() == 2 )
+    // Special cases that does need so complicated algorithm
+    if( boardNodes.size() <= 2 )
     {
-        m_rnEdges.reset( new std::vector<RN_EDGE_PTR>( 0 ) );
+        m_rnEdges.reset( new std::vector<RN_EDGE_MST_PTR>( 0 ) );
 
         // Check if the only possible connection exists
         if( boardEdges.size() == 0 )
@@ -265,12 +288,6 @@ void RN_NET::compute()
             // There can be only one possible connection, but it is missing
             m_rnEdges->push_back( boost::make_shared<RN_EDGE_MST>( *boardNodes.begin(), *last ) );
         }
-
-        return;
-    }
-    else if( boardNodes.size() <= 1 )   // This case is even simpler
-    {
-        m_rnEdges.reset( new std::vector<RN_EDGE_PTR>( 0 ) );
 
         return;
     }
@@ -301,7 +318,7 @@ void RN_NET::clearNode( const RN_NODE_PTR& aNode )
     if( !m_rnEdges )
         return;
 
-    std::vector<RN_EDGE_PTR>::iterator newEnd;
+    std::vector<RN_EDGE_MST_PTR>::iterator newEnd;
 
     // Remove all ratsnest edges for associated with the node
     newEnd = std::remove_if( m_rnEdges->begin(), m_rnEdges->end(),
@@ -377,7 +394,7 @@ void RN_NET::Update()
 
     compute();
 
-    BOOST_FOREACH( RN_EDGE_PTR& edge, *m_rnEdges )
+    BOOST_FOREACH( RN_EDGE_MST_PTR& edge, *m_rnEdges )
         validateEdge( edge );
 
     m_dirty = false;
@@ -386,8 +403,7 @@ void RN_NET::Update()
 
 void RN_NET::AddItem( const D_PAD* aPad )
 {
-    RN_NODE_PTR nodePtr = m_links.AddNode( aPad->GetPosition().x, aPad->GetPosition().y );
-    m_pads[aPad] = nodePtr;
+    m_pads[aPad] = m_links.AddNode( aPad->GetPosition().x, aPad->GetPosition().y );
 
     m_dirty = true;
 }
@@ -505,7 +521,7 @@ void RN_NET::RemoveItem( const TRACK* aTrack )
 {
     try
     {
-        RN_EDGE_PTR& edge = m_tracks.at( aTrack );
+        RN_EDGE_MST_PTR& edge = m_tracks.at( aTrack );
 
         // Save nodes, so they can be cleared later
         RN_NODE_PTR aBegin = edge->GetSourceNode();
@@ -546,8 +562,8 @@ void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
         polygons.clear();
 
         // Remove all connections added by the zone
-        std::deque<RN_EDGE_PTR>& edges = m_zoneConnections.at( aZone );
-        BOOST_FOREACH( RN_EDGE_PTR& edge, edges )
+        std::deque<RN_EDGE_MST_PTR>& edges = m_zoneConnections.at( aZone );
+        BOOST_FOREACH( RN_EDGE_PTR edge, edges )
             m_links.RemoveConnection( edge );
         edges.clear();
 
@@ -694,7 +710,7 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
         case PCB_TRACE_T:
         {
             const TRACK* track = static_cast<const TRACK*>( aItem );
-            RN_EDGE_PTR edge = m_tracks.at( track );
+            const RN_EDGE_MST_PTR& edge = m_tracks.at( track );
 
             nodes.push_back( edge->GetSourceNode() );
             nodes.push_back( edge->GetTargetNode() );
@@ -711,6 +727,76 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
     }
 
     return nodes;
+}
+
+
+void RN_NET::ClearSimple()
+{
+    BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
+        node->SetFlag( false );
+
+    BOOST_FOREACH( const RN_NODE_PTR& node, m_blockedNodes )
+        node->SetFlag( false );
+
+    m_simpleNodes.clear();
+    m_blockedNodes.clear();
+}
+
+
+void RN_NET::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
+                                std::list<BOARD_CONNECTED_ITEM*>& aOutput,
+                                RN_ITEM_TYPES aTypes ) const
+{
+    std::list<RN_NODE_PTR> nodes = GetNodes( aItem );
+    assert( !nodes.empty() );
+
+    int tag = nodes.front()->GetTag();
+    assert( tag >= 0 );
+
+    if( aTypes & RN_PADS )
+    {
+        for( PAD_NODE_MAP::const_iterator it = m_pads.begin(); it != m_pads.end(); ++it )
+        {
+            if( it->second->GetTag() == tag )
+                aOutput.push_back( const_cast<D_PAD*>( it->first ) );
+        }
+    }
+
+    if( aTypes & RN_VIAS )
+    {
+        for( VIA_NODE_MAP::const_iterator it = m_vias.begin(); it != m_vias.end(); ++it )
+        {
+            if( it->second->GetTag() == tag )
+                aOutput.push_back( const_cast<VIA*>( it->first ) );
+        }
+    }
+
+    if( aTypes & RN_TRACKS )
+    {
+        for( TRACK_EDGE_MAP::const_iterator it = m_tracks.begin(); it != m_tracks.end(); ++it )
+        {
+            if( it->second->GetTag() == tag )
+                aOutput.push_back( const_cast<TRACK*>( it->first ) );
+        }
+    }
+
+    if( aTypes & RN_ZONES )
+    {
+        for( ZONE_EDGE_MAP::const_iterator it = m_zoneConnections.begin();
+                it != m_zoneConnections.end(); ++it )
+        {
+            const std::deque<RN_EDGE_MST_PTR>& edges = it->second;
+
+            BOOST_FOREACH( const RN_EDGE_MST_PTR& edge, edges )
+            {
+                if( edge->GetTag() == tag )
+                {
+                    aOutput.push_back( const_cast<ZONE_CONTAINER*>( it->first ) );
+                    break;
+                }
+            }
+        }
+    }
 }
 
 
@@ -784,11 +870,46 @@ void RN_DATA::AddSimple( const VECTOR2I& aPosition, int aNetCode )
 }
 
 
+void RN_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
+                                 std::list<BOARD_CONNECTED_ITEM*>& aOutput,
+                                 RN_ITEM_TYPES aTypes ) const
+{
+    int net = aItem->GetNetCode();
+
+    if( net < 1 )
+        return;
+
+    assert( net < (int) m_nets.size() );
+
+    m_nets[net].GetConnectedItems( aItem, aOutput, aTypes );
+}
+
+
+bool RN_DATA::AreConnected( const BOARD_CONNECTED_ITEM* aItem, const BOARD_CONNECTED_ITEM* aOther )
+{
+    int net1 = aItem->GetNetCode();
+    int net2 = aOther->GetNetCode();
+
+    if( net1 < 1 || net2 < 1 || net1 != net2 )
+        return false;
+
+    assert( net1 < (int) m_nets.size() && net2 < (int) m_nets.size() );
+
+    // net1 == net2
+    std::list<RN_NODE_PTR> items1 = m_nets[net1].GetNodes( aItem );
+    std::list<RN_NODE_PTR> items2 = m_nets[net1].GetNodes( aOther );
+
+    assert( !items1.empty() && !items2.empty() );
+
+    return ( items1.front()->GetTag() == items2.front()->GetTag() );
+}
+
+
 void RN_NET::processZones()
 {
-    BOOST_FOREACH( std::deque<RN_EDGE_PTR>& edges, m_zoneConnections | boost::adaptors::map_values )
+    BOOST_FOREACH( std::deque<RN_EDGE_MST_PTR>& edges, m_zoneConnections | boost::adaptors::map_values )
     {
-        BOOST_FOREACH( RN_EDGE_PTR& edge, edges )
+        BOOST_FOREACH( RN_EDGE_MST_PTR edge, edges )
             m_links.RemoveConnection( edge );
 
         edges.clear();
@@ -814,7 +935,7 @@ void RN_NET::processZones()
             {
                 if( poly->HitTest( *point ) )
                 {
-                    const RN_EDGE_PTR& connection = m_links.AddConnection( poly->GetNode(), *point );
+                    RN_EDGE_MST_PTR connection = m_links.AddConnection( poly->GetNode(), *point );
                     m_zoneConnections[poly->GetParent()].push_back( connection );
 
                     // This point already belongs to a polygon, we do not need to check it anymore

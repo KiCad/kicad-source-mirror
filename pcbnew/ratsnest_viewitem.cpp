@@ -72,7 +72,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         // Set brighter color for the temporary ratsnest
         aGal->SetStrokeColor( color.Brightened( 0.8 ) );
 
-        // Draw the "dynamic" ratsnest (ie. for objects that may be currently being moved)
+        // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
         BOOST_FOREACH( const RN_NODE_PTR& node, net.GetSimpleNodes() )
         {
             RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() );
@@ -93,11 +93,12 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         if( i != highlightedNet )
             aGal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
-        const std::vector<RN_EDGE_PTR>* edges = net.GetUnconnected();
+        const std::vector<RN_EDGE_MST_PTR>* edges = net.GetUnconnected();
+
         if( edges == NULL )
             continue;
 
-        BOOST_FOREACH( const RN_EDGE_PTR& edge, *edges )
+        BOOST_FOREACH( const RN_EDGE_MST_PTR& edge, *edges )
         {
             const RN_NODE_PTR& sourceNode = edge->GetSourceNode();
             const RN_NODE_PTR& targetNode = edge->GetTargetNode();
