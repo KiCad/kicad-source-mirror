@@ -368,7 +368,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
         double alpha;
 
-        for( alpha = aStartAngle + alphaIncrement; alpha < aEndAngle; alpha += alphaIncrement )
+        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
         {
             VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
             DrawLine( p, p_next );
