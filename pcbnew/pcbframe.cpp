@@ -467,6 +467,8 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
 void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
+    bool new_board = ( aBoard != m_Pcb );
+
     PCB_BASE_FRAME::SetBoard( aBoard );
 
     if( IsGalCanvasActive() )
@@ -484,7 +486,9 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
         {
             m_toolManager->SetEnvironment( aBoard, drawPanel->GetView(),
                                            drawPanel->GetViewControls(), this );
-            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+            if( new_board )
+                m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
         }
     }
 }
