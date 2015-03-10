@@ -83,18 +83,17 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     {
         m_frame->SetToolID( ID_MODEDIT_LINE_TOOL, wxCURSOR_PENCIL, _( "Add graphic line" ) );
 
-        MODULE* module = m_board->m_Modules;
-        EDGE_MODULE* line = new EDGE_MODULE( module );
+        EDGE_MODULE* line = new EDGE_MODULE( m_board->m_Modules );
 
         while( drawSegment( S_SEGMENT, reinterpret_cast<DRAWSEGMENT*&>( line ), startingPoint  ) )
         {
             if( line )
             {
                 m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                line->SetParent( m_board->m_Modules );
                 line->SetLocalCoord();
-                line->SetParent( module );
-                module->GraphicalItems().PushFront( line );
+                m_board->m_Modules->GraphicalItems().PushFront( line );
                 startingPoint = line->GetEnd();
             }
             else
@@ -102,7 +101,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
                 startingPoint = boost::none;
             }
 
-            line = new EDGE_MODULE( module );
+            line = new EDGE_MODULE( m_board->m_Modules );
         }
     }
     else
@@ -142,21 +141,20 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     {
         m_frame->SetToolID( ID_MODEDIT_CIRCLE_TOOL, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
 
-        MODULE* module = m_board->m_Modules;
-        EDGE_MODULE* circle = new EDGE_MODULE( module );
+        EDGE_MODULE* circle = new EDGE_MODULE( m_board->m_Modules );
 
         while( drawSegment( S_CIRCLE, reinterpret_cast<DRAWSEGMENT*&>( circle ) ) )
         {
             if( circle )
             {
                 m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                circle->SetParent( m_board->m_Modules );
                 circle->SetLocalCoord();
-                circle->SetParent( module );
-                module->GraphicalItems().PushFront( circle );
+                m_board->m_Modules->GraphicalItems().PushFront( circle );
             }
 
-            circle = new EDGE_MODULE( module );
+            circle = new EDGE_MODULE( m_board->m_Modules );
         }
     }
     else
@@ -191,21 +189,20 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     {
         m_frame->SetToolID( ID_MODEDIT_ARC_TOOL, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
 
-        MODULE* module = m_board->m_Modules;
-        EDGE_MODULE* arc = new EDGE_MODULE( module );
+        EDGE_MODULE* arc = new EDGE_MODULE( m_board->m_Modules );
 
         while( drawArc( reinterpret_cast<DRAWSEGMENT*&>( arc ) ) )
         {
             if( arc )
             {
                 m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                arc->SetParent( m_board->m_Modules );
                 arc->SetLocalCoord();
-                arc->SetParent( module );
-                module->GraphicalItems().PushFront( arc );
+                m_board->m_Modules->GraphicalItems().PushFront( arc );
             }
 
-            arc = new EDGE_MODULE( module );
+            arc = new EDGE_MODULE( m_board->m_Modules );
         }
     }
     else
@@ -642,9 +639,8 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     int dlgResult = dlg.ShowModal();
 
     const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
-    MODULE* module = m_board->m_Modules;
 
-    if( dlgResult != wxID_OK || module == NULL || list.empty() )
+    if( dlgResult != wxID_OK || m_board->m_Modules == NULL || list.empty() )
     {
         setTransitions();
 
@@ -672,7 +668,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         {
             if( m_editModules )
             {
-                converted = new EDGE_MODULE( module );
+                converted = new EDGE_MODULE( m_board->m_Modules );
                 *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
                 converted->Move( wxPoint( delta.x, delta.y ) );
                 preview.Add( converted );
@@ -690,7 +686,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         {
             if( m_editModules )
             {
-                converted = new TEXTE_MODULE( module );
+                converted = new TEXTE_MODULE( m_board->m_Modules );
                 *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
                 converted->Move( wxPoint( delta.x, delta.y ) );
                 preview.Add( converted );
@@ -760,16 +756,15 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             // Place the drawing
-
             if( m_editModules )
             {
-                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
-                module->SetLastEditTime();
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_board->m_Modules->SetLastEditTime();
 
                 for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-                    module->Add( item );
+                    m_board->m_Modules->Add( item );
 
                     switch( item->Type() )
                     {
@@ -843,16 +838,14 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     {
         if( evt->IsClick( BUT_LEFT ) )
         {
-            MODULE* module = m_board->m_Modules;
-
-            m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
+            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
 
             // set the new relative internal local coordinates of footprint items
             VECTOR2I cursorPos = controls->GetCursorPosition();
-            wxPoint moveVector = module->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
-            module->MoveAnchorPosition( moveVector );
+            wxPoint moveVector = m_board->m_Modules->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
+            m_board->m_Modules->MoveAnchorPosition( moveVector );
 
-            module->ViewUpdate();
+            m_board->m_Modules->ViewUpdate();
 
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
@@ -1435,7 +1428,6 @@ int DRAWING_TOOL::placeTextModule()
 {
     TEXTE_MODULE* text = new TEXTE_MODULE( NULL );
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    MODULE* module = m_board->m_Modules;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -1501,8 +1493,8 @@ int DRAWING_TOOL::placeTextModule()
                     continue;
 
                 m_controls->ShowCursor( false );
-                text->SetParent( module );   // it has to set after the settings dialog
-                                             // otherwise the dialog stores it in undo buffer
+                text->SetParent( m_board->m_Modules );  // it has to set after the settings dialog
+                                                        // otherwise the dialog stores it in undo buffer
                 preview.Add( text );
             }
             else
@@ -1514,8 +1506,8 @@ int DRAWING_TOOL::placeTextModule()
                 text->ClearFlags();
 
                 // Module has to be saved before any modification is made
-                m_frame->SaveCopyInUndoList( module, UR_MODEDIT );
-                module->GraphicalItems().PushFront( text );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_board->m_Modules->GraphicalItems().PushFront( text );
 
                 m_view->Add( text );
                 text->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
