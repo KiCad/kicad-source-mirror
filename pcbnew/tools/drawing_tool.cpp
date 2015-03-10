@@ -339,6 +339,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                         preview.Add( dimension );
 
                         m_controls->SetAutoPan( true );
+                        m_controls->CaptureCursor( true );
                     }
                 }
                 break;
@@ -375,6 +376,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
                 step = SET_ORIGIN;
                 m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
             }
         }
 
@@ -410,6 +412,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     setTransitions();
@@ -455,6 +458,7 @@ int DRAWING_TOOL::PlaceTarget( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( true );
 
     Activate();
     m_frame->SetToolID( ID_PCB_MIRE_BUTT, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
@@ -514,6 +518,7 @@ int DRAWING_TOOL::PlaceTarget( const TOOL_EVENT& aEvent )
 
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     setTransitions();
@@ -535,6 +540,7 @@ int DRAWING_TOOL::PlaceModule( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( true );
 
     Activate();
     m_frame->SetToolID( ID_PCB_MODULE_BUTT, wxCURSOR_HAND, _( "Add module" ) );
@@ -624,6 +630,7 @@ int DRAWING_TOOL::PlaceModule( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     setTransitions();
@@ -813,6 +820,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     setTransitions();
@@ -829,10 +837,10 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( ID_MODEDIT_ANCHOR_TOOL, wxCURSOR_PENCIL,
                         _( "Place the footprint anchor" ) );
 
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
-    controls->SetAutoPan( true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+    m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( false );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -841,7 +849,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
 
             // set the new relative internal local coordinates of footprint items
-            VECTOR2I cursorPos = controls->GetCursorPosition();
+            VECTOR2I cursorPos = m_controls->GetCursorPosition();
             wxPoint moveVector = m_board->m_Modules->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
             m_board->m_Modules->MoveAnchorPosition( moveVector );
 
@@ -856,9 +864,10 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             break;
     }
 
-    controls->SetAutoPan( false );
-    controls->SetSnapping( false );
-    controls->ShowCursor( false );
+    m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
+    m_controls->SetSnapping( false );
+    m_controls->ShowCursor( false );
 
     setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
@@ -905,6 +914,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
         preview.Add( aGraphic );
         m_controls->SetAutoPan( true );
+        m_controls->CaptureCursor( true );
 
         started = true;
     }
@@ -968,6 +978,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
                     preview.Add( aGraphic );
                     m_controls->SetAutoPan( true );
+                    m_controls->CaptureCursor( true );
 
                     started = true;
                 }
@@ -1028,6 +1039,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     return started;
@@ -1107,6 +1119,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                     preview.Add( &helperLine );
 
                     m_controls->SetAutoPan( true );
+                    m_controls->CaptureCursor( true );
                 }
             }
             break;
@@ -1209,6 +1222,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     return ( step > SET_ORIGIN );
@@ -1268,6 +1282,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 delete zone;
                 zone = NULL;
                 m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
 
                 if( direction45 )
                 {
@@ -1321,6 +1336,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
 
                 numPoints = 0;
                 m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
 
                 if( direction45 )
                 {
@@ -1340,6 +1356,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     zoneInfo.m_CurrentZone_Layer = m_frame->GetScreen()->m_Active_Layer;
 
                     m_controls->SetAutoPan( true );
+                    m_controls->CaptureCursor( true );
 
                     // Show options dialog
                     ZONE_EDIT_T dialogResult;
@@ -1356,6 +1373,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     if( dialogResult == ZONE_ABORT )
                     {
                         m_controls->SetAutoPan( false );
+                        m_controls->CaptureCursor( false );
                         continue;
                     }
 
@@ -1415,6 +1433,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     setTransitions();
@@ -1437,6 +1456,7 @@ int DRAWING_TOOL::placeTextModule()
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( true );
 
     Activate();
     m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
@@ -1534,6 +1554,7 @@ int DRAWING_TOOL::placeTextModule()
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( true );
     m_view->Remove( &preview );
 
     setTransitions();
@@ -1555,6 +1576,7 @@ int DRAWING_TOOL::placeTextPcb()
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( true );
 
     Activate();
     m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
@@ -1642,6 +1664,7 @@ int DRAWING_TOOL::placeTextPcb()
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     setTransitions();
