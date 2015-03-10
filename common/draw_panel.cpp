@@ -337,6 +337,9 @@ void EDA_DRAW_PANEL::MoveCursorToCrossHair()
 
 void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
 {
+    if( GetParent()->IsGalCanvasActive() )
+        return;
+
     int     x, y, xPpu, yPpu;
     wxPoint screenPos, drawingPos;
     wxRect  clientRect( wxPoint( 0, 0 ), GetClientSize() );
