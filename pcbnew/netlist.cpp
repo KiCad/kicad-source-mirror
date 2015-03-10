@@ -136,8 +136,8 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     // Rebuild the board connectivity:
     if( IsGalCanvasActive() )
         board->GetRatsnest()->ProcessBoard();
-    else
-        Compile_Ratsnest( NULL, true );
+
+    Compile_Ratsnest( NULL, true );
 
     SetMsgPanel( board );
     m_canvas->Refresh();

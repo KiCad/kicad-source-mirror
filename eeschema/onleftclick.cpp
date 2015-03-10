@@ -112,16 +112,13 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         item = LocateAndShowItem( aPosition, SCH_COLLECTOR::SheetsOnly );
 
-        if( item )
+        if( item )  // The user has clicked on a sheet: this is an enter sheet command
         {
             m_CurrentSheet->Push( (SCH_SHEET*) item );
             DisplayCurrentSheet();
         }
-        else
-        {
-            wxCHECK_RET( m_CurrentSheet->Last() != g_RootSheet,
-                         wxT( "Cannot leave root sheet.  Bad Programmer!" ) );
-
+        else if( m_CurrentSheet->Last() != g_RootSheet )
+        {   // The user has clicked ouside a sheet:this is an leave sheet command
             m_CurrentSheet->Pop();
             DisplayCurrentSheet();
         }

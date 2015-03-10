@@ -673,6 +673,7 @@ public:
     {
         // Avoid non initialized variables:
         pageStreamHandle = streamLengthHandle = fontResDictHandle = 0;
+        pageTreeHandle = 0;
     }
 
     virtual PlotFormat GetPlotterType() const

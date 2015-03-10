@@ -359,19 +359,60 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
 
     wxLogDebug( wxT( "Importing schematic " ) + fullFileName );
 
+    // Keep trace of the last item in list.
+    // New items will be loaded after this one.
+    SCH_ITEM* bs = screen->GetDrawItems();
+
+    if( bs )
+        while( bs->Next() )
+            bs = bs->Next();
+
     // load the project
     bool success = LoadOneEEFile( screen, fullFileName, true );
 
     if( success )
     {
-        // load sub-sheets
-        EDA_ITEM* bs = screen->GetDrawItems();
+        // the new loaded items need cleaning to avoid duplicate parameters
+        // which should be unique (ref and time stamp).
+        // Clear ref and set a new time stamp for new items
+        if( bs == NULL )
+            bs = screen->GetDrawItems();
+        else
+            bs = bs->Next();
+
         while( bs )
         {
-            // do not append hierarchical sheets
-            if( bs->Type() ==  SCH_SHEET_T )
+            SCH_ITEM* nextbs = bs->Next();
+
+            // To avoid issues with the current hieratchy,
+            // do not load included sheets files and give new filenames
+            // and new sheet names.
+            // There are many tricky cases (loops, creation of complex hierarchies
+            // with duplicate file names, duplicate sheet names...)
+            // So the included sheets names are renamed if existing,
+            // and filenames are just renamed to avoid loops and
+            // creation of complex hierarchies.
+            // If someone want to change it for a better append function, remember
+            // these cases need work to avoid issues.
+            if( bs->Type() == SCH_SHEET_T )
             {
-                screen->Remove( (SCH_SHEET*) bs );
+                SCH_SHEET * sheet = (SCH_SHEET *) bs;
+                time_t newtimestamp = GetNewTimeStamp();
+                sheet->SetTimeStamp( newtimestamp );
+
+                // Check for existing subsheet name in the current sheet
+                wxString tmp = sheet->GetName();
+                sheet->SetName( wxEmptyString );
+                const SCH_SHEET* subsheet = GetScreen()->GetSheet( tmp );
+
+                if( subsheet )
+                    sheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), (long) newtimestamp ) );
+                else
+                    sheet->SetName( tmp );
+
+                sheet->SetFileName( wxString::Format( wxT( "file%8.8lX.sch" ), (long) newtimestamp ) );
+                sheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
+                sheet->GetScreen()->SetFileName( sheet->GetFileName() );
             }
             // clear annotation and init new time stamp for the new components
             else if( bs->Type() == SCH_COMPONENT_T )
@@ -383,7 +424,7 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
                 bs->ClearFlags();
             }
 
-            bs = bs->Next();
+            bs = nextbs;
         }
     }
 

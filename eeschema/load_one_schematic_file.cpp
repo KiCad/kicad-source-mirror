@@ -148,7 +148,7 @@ again." );
     // EELAYER i j
     // and the last line is
     // EELAYER END
-    // Skip all lines until end end of header EELAYER END is found
+    // Skip all lines until the end of header "EELAYER END" is found
     while( reader.ReadLine() )
     {
         line = reader.Line();

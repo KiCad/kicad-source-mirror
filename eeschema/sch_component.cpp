@@ -276,10 +276,11 @@ void SCH_COMPONENT::ResolveAll(
 {
     for( int i = 0;  i < aComponents.GetCount();  ++i )
     {
-        SCH_COMPONENT* c = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
-        wxASSERT( c );
+        SCH_COMPONENT* cmp = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
+        wxASSERT( cmp );
 
-        c->Resolve( aLibs );
+        if( cmp )   // cmp == NULL should not occur.
+            cmp->Resolve( aLibs );
     }
 }
 

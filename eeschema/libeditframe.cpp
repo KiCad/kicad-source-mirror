@@ -1191,9 +1191,6 @@ LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
 
     LIB_ITEM* item = locateItem( aPosition, aFilterList );
 
-    if( item == NULL )
-        return NULL;
-
     wxPoint pos = GetNearestGridPosition( aPosition );
 
     if( item == NULL && aPosition != pos )
