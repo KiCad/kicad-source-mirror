@@ -132,7 +132,8 @@ void PDF_PLOTTER::SetDash( bool dashed )
 {
     wxASSERT( workFile );
     if( dashed )
-        fputs( "[200] 100 d\n", workFile );
+        fprintf( workFile, "[%d %d] 0 d\n",
+                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
     else
         fputs( "[] 0 d\n", workFile );
 }

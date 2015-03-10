@@ -82,6 +82,10 @@ enum PlotTextMode {
  */
 class PLOTTER
 {
+private:
+    double m_dashMarkLength_mm ;     ///< Dashed line parameter in mm: segment
+    double m_dashGapLength_mm;       ///< Dashed line parameter in mm: gap
+
 public:
     static const int DEFAULT_LINE_WIDTH = -1;
 
@@ -396,7 +400,11 @@ protected:
      * Modifies size according to the plotter scale factors
      * (simple double version)
      */
-    virtual double userToDeviceSize( double size );
+    virtual double userToDeviceSize( double size ) const;
+
+    double GetDashMarkLenIU() const;
+
+    double GetDashGapLenIU() const;
 
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
     double        plotScale;

@@ -231,14 +231,8 @@ void SVG_PLOTTER::setSVGPlotStyle()
     fputs( "stroke-linecap:round; stroke-linejoin:round;", outputFile );
 
     if( m_dashed )
-    {
-        // Use a simple dash shape: a segment + a space
-        #define DASH_SIZE 0.3     // length in mm of a dash
-        double segm_len = DASH_SIZE * 10000/2.54 * m_IUsPerDecimil;
-        // Use a space to the same len as segment, between segments
-        double space_len = segm_len + pen_w;
-        fprintf( outputFile, "stroke-dasharray:%g,%g;", segm_len, space_len );
-    }
+        fprintf( outputFile, "stroke-dasharray:%g,%g;",
+                 GetDashMarkLenIU(), GetDashGapLenIU() );
 
     fputs( "\">\n", outputFile );
 
