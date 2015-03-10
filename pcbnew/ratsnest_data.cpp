@@ -730,6 +730,34 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
 }
 
 
+void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYPE aType ) const
+{
+    if( aType & RN_PADS )
+    {
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_pads | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+    }
+
+    if( aType & RN_VIAS )
+    {
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_vias | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+    }
+
+    if( aType & RN_TRACKS )
+    {
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_tracks | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+    }
+
+    if( aType & RN_ZONES )
+    {
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_zoneConnections | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+    }
+}
+
+
 void RN_NET::ClearSimple()
 {
     BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
@@ -745,7 +773,7 @@ void RN_NET::ClearSimple()
 
 void RN_NET::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
                                 std::list<BOARD_CONNECTED_ITEM*>& aOutput,
-                                RN_ITEM_TYPES aTypes ) const
+                                RN_ITEM_TYPE aTypes ) const
 {
     std::list<RN_NODE_PTR> nodes = GetNodes( aItem );
     assert( !nodes.empty() );
@@ -872,7 +900,7 @@ void RN_DATA::AddSimple( const VECTOR2I& aPosition, int aNetCode )
 
 void RN_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
                                  std::list<BOARD_CONNECTED_ITEM*>& aOutput,
-                                 RN_ITEM_TYPES aTypes ) const
+                                 RN_ITEM_TYPE aTypes ) const
 {
     int net = aItem->GetNetCode();
 
@@ -882,6 +910,18 @@ void RN_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
     assert( net < (int) m_nets.size() );
 
     m_nets[net].GetConnectedItems( aItem, aOutput, aTypes );
+}
+
+
+void RN_DATA::GetNetItems( int aNetCode, std::list<BOARD_CONNECTED_ITEM*>& aOutput,
+                           RN_ITEM_TYPE aTypes ) const
+{
+    if( aNetCode < 1 )
+        return;
+
+    assert( aNetCode < (int) m_nets.size() );
+
+    m_nets[aNetCode].GetAllItems( aOutput, aTypes );
 }
 
 

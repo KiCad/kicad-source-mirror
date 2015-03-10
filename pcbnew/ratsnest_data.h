@@ -50,7 +50,7 @@ class ZONE_CONTAINER;
 class CPolyPt;
 
 ///> Types of items that are handled by the class
-enum RN_ITEM_TYPES
+enum RN_ITEM_TYPE
 {
     RN_PADS    = 0x01,
     RN_VIAS    = 0x02,
@@ -400,6 +400,14 @@ public:
     std::list<RN_NODE_PTR> GetNodes( const BOARD_CONNECTED_ITEM* aItem ) const;
 
     /**
+     * Function GetAllNodes()
+     * Adds all stored items to a list.
+     * @param aOutput is the list that will have items added.
+     * @param aType determines the type of added items.
+     */
+    void GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYPE aType = RN_ALL ) const;
+
+    /**
      * Function GetClosestNode()
      * Returns a single node that lies in the shortest distance from a specific node.
      * @param aNode is the node for which the closest node is searched.
@@ -487,7 +495,7 @@ public:
      */
     void GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
                             std::list<BOARD_CONNECTED_ITEM*>& aOutput,
-                            RN_ITEM_TYPES aTypes = RN_ALL) const;
+                            RN_ITEM_TYPE aTypes = RN_ALL ) const;
 
 protected:
     ///> Validates edge, i.e. modifies source and target nodes for an edge
@@ -524,6 +532,7 @@ protected:
     typedef boost::unordered_map<const TRACK*, RN_EDGE_MST_PTR> TRACK_EDGE_MAP;
     typedef boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_POLY> > ZONE_POLY_MAP;
     typedef boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_EDGE_MST_PTR> > ZONE_EDGE_MAP;
+
     ///> Map that associates nodes in the ratsnest model to respective nodes.
     PAD_NODE_MAP m_pads;
 
@@ -661,7 +670,17 @@ public:
      */
     void GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
                             std::list<BOARD_CONNECTED_ITEM*>& aOutput,
-                            RN_ITEM_TYPES aTypes = RN_ALL ) const;
+                            RN_ITEM_TYPE aTypes = RN_ALL ) const;
+
+    /**
+     * Function GetNetItems()
+     * Adds all items that belong to a certain net to a list.
+     * @param aNetCode is the net code.
+     * @param aOutput is the list that will have items added.
+     * @param aTypes allows to filter by item types.
+     */
+    void GetNetItems( int aNetCode, std::list<BOARD_CONNECTED_ITEM*>& aOutput,
+                            RN_ITEM_TYPE aTypes = RN_ALL ) const;
 
     /**
      * Function AreConnected()

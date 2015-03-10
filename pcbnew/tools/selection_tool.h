@@ -81,7 +81,7 @@ private:
 };
 
 enum SELECTION_LOCK_FLAGS
-{ 
+{
     SELECTION_UNLOCKED = 0,
     SELECTION_LOCK_OVERRIDE = 1,
     SELECTION_LOCKED = 2
@@ -205,6 +205,12 @@ private:
      * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
+
+    ///> Selects a continuous copper connection.
+    int selectConnection( const TOOL_EVENT& aEvent );
+
+    ///> Selects all copper connections belonging to a single net.
+    int selectNet( const TOOL_EVENT& aEvent );
 
     ///> Find dialog callback.
     void findCallback( BOARD_ITEM* aItem );

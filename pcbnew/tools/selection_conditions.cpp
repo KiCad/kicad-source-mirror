@@ -34,6 +34,23 @@ bool SELECTION_CONDITIONS::NotEmpty( const SELECTION& aSelection )
 }
 
 
+bool SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
+{
+    if( aSelection.Empty() )
+        return false;
+
+    for( int i = 0; i < aSelection.Size(); ++i )
+    {
+        KICAD_T type = aSelection.Item<EDA_ITEM>( i )->Type();
+
+        if( type != PCB_PAD_T && type != PCB_VIA_T && type != PCB_TRACE_T && type != PCB_ZONE_T )
+            return false;
+    }
+
+    return true;
+}
+
+
 SELECTION_CONDITION SELECTION_CONDITIONS::HasType( KICAD_T aType )
 {
     return boost::bind( &SELECTION_CONDITIONS::hasTypeFunc, _1, aType );

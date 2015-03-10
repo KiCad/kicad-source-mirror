@@ -66,6 +66,14 @@ public:
     static bool NotEmpty( const SELECTION& aSelection );
 
     /**
+     * Function OnlyConnectedItems
+     * Tests if selection contains exclusively connected items (pads, tracks, vias, zones).
+     * @param aSelection is the selection to be tested.
+     * @return True if there are only connected items connected.
+     */
+    static bool OnlyConnectedItems( const SELECTION& aSelection );
+
+    /**
      * Function HasType
      * Creates functor that tests if among the selected items there is at least one of a given type.
      * @param aType is the type that is searched.

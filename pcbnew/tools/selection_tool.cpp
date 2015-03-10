@@ -28,7 +28,6 @@
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 
-
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_track.h>
@@ -48,11 +47,22 @@
 
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
+#include <ratsnest_data.h>
 
 #include "selection_tool.h"
 #include "selection_area.h"
 #include "bright_box.h"
 #include "common_actions.h"
+
+class SELECT_MENU: public CONTEXT_MENU
+{
+public:
+    SELECT_MENU()
+    {
+        Add( COMMON_ACTIONS::selectConnection );
+        Add( COMMON_ACTIONS::selectNet );
+    }
+};
 
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
@@ -61,6 +71,10 @@ SELECTION_TOOL::SELECTION_TOOL() :
 {
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
+
+    AddSubMenu( new SELECT_MENU, "Select...",
+            (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
+            SELECTION_CONDITIONS::Count( 1 ) );
 }
 
 
@@ -207,6 +221,16 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             clearSelection();
         }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::selectConnection ) )
+        {
+            selectConnection( *evt );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::selectNet ) )
+        {
+            selectNet( *evt );
+        }
     }
 
     // This tool is supposed to be active forever
@@ -293,7 +317,7 @@ bool SELECTION_TOOL::selectCursor( const VECTOR2I& aWhere, bool aOnDrag )
 
         return true;
 
-    default:        
+    default:
         // Apply some ugly heuristics to avoid disambiguation menus whenever possible
         guessSelectionCandidates( collector );
 
@@ -308,7 +332,7 @@ bool SELECTION_TOOL::selectCursor( const VECTOR2I& aWhere, bool aOnDrag )
         {
             if( aOnDrag )
                 Wait ( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
-            
+
             item = disambiguationMenu( &collector );
 
             if( item )
@@ -408,8 +432,11 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
     Go( &SELECTION_TOOL::SelectItem, COMMON_ACTIONS::selectItem.MakeEvent() );
     Go( &SELECTION_TOOL::UnselectItem, COMMON_ACTIONS::unselectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectItem, COMMON_ACTIONS::selectItem.MakeEvent() );
     Go( &SELECTION_TOOL::find, COMMON_ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove, COMMON_ACTIONS::findMove.MakeEvent() );
+    Go( &SELECTION_TOOL::selectConnection, COMMON_ACTIONS::selectConnection.MakeEvent() );
+    Go( &SELECTION_TOOL::selectNet, COMMON_ACTIONS::selectNet.MakeEvent() );
 }
 
 
@@ -453,7 +480,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
         else
             return SELECTION_LOCKED;
     }
-    
+
     m_locked = false;
 
     return SELECTION_UNLOCKED;
@@ -511,6 +538,58 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
+
+int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
+{
+    std::list<BOARD_CONNECTED_ITEM*> itemsList;
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+    BOARD_CONNECTED_ITEM* item = m_selection.Item<BOARD_CONNECTED_ITEM>( 0 );
+
+    clearSelection();
+    ratsnest->GetConnectedItems( item, itemsList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
+
+    BOOST_FOREACH( BOARD_CONNECTED_ITEM* i, itemsList )
+        select( i );
+
+    // Inform other potentially interested tools
+    if( itemsList.size() > 0 )
+    {
+        TOOL_EVENT selectEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( selectEvent );
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
+
+int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
+{
+    std::list<BOARD_CONNECTED_ITEM*> itemsList;
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+    BOARD_CONNECTED_ITEM* item = m_selection.Item<BOARD_CONNECTED_ITEM>( 0 );
+    int netCode = item->GetNetCode();
+
+    clearSelection();
+    ratsnest->GetNetItems( netCode, itemsList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
+
+    BOOST_FOREACH( BOARD_CONNECTED_ITEM* i, itemsList )
+        select( i );
+
+    // Inform other potentially interested tools
+    if( itemsList.size() > 0 )
+    {
+        TOOL_EVENT selectEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( selectEvent );
+    }
+
+    setTransitions();
+
+    return 0;
+}
+
 
 void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 {
@@ -785,8 +864,8 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     if( aItem->Type() == PCB_PAD_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
-    
-        if( m_selection.items.FindItem( module ) >= 0 ) 
+
+        if( m_selection.items.FindItem( module ) >= 0 )
             return;
     }
 
@@ -921,7 +1000,7 @@ static double calcArea( BOARD_ITEM* aItem )
 static double calcMinArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
 {
     double best = std::numeric_limits<double>::max();
-    
+
     if( !aCollector.GetCount() )
         return 0.0;
 
@@ -998,11 +1077,11 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         {
             aCollector.Empty();
 
-            BOOST_FOREACH( BOARD_ITEM* item, preferred )              
+            BOOST_FOREACH( BOARD_ITEM* item, preferred )
                 aCollector.Append( item );
             return;
         }
-    } 
+    }
 
     if( aCollector.CountType( PCB_MODULE_TEXT_T ) > 0 )
     {
@@ -1085,7 +1164,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         {
             if( VIA* via = dyn_cast<VIA*>( aCollector[i] ) )
             {
-                double viaArea = calcArea( via ); 
+                double viaArea = calcArea( via );
 
                 for( int j = 0; j < aCollector.GetCount(); ++j )
                 {
@@ -1098,7 +1177,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                     if( item->Type() == PCB_PAD_T && areaRatio < padViaAreaRatio )
                         rejected.insert( item );
 
-                    if( TRACK* track = dyn_cast<TRACK*>( item ) )     
+                    if( TRACK* track = dyn_cast<TRACK*>( item ) )
                     {
                         if( track->GetNetCode() != via->GetNetCode() )
                             continue;
@@ -1128,7 +1207,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                 maxLength = std::max( (double)track->GetWidth(), maxLength );
 
                 minLength = std::min( std::max ( track->GetLength(), (double)track->GetWidth() ), minLength );
-                
+
                 double area =  ( track->GetLength() + track->GetWidth() * track->GetWidth() );
                 maxArea = std::max(area, maxArea);
             }
@@ -1180,11 +1259,11 @@ bool SELECTION_TOOL::SanitizeSelection()
         for( unsigned int i = 0; i < m_selection.items.GetCount(); ++i )
         {
             BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
-        
+
             if( item->Type() == PCB_PAD_T )
             {
                 MODULE* mod = static_cast <MODULE*>( item->GetParent() );
-                
+
                 // case 1: module (or its pads) are locked
                 if( mod && ( mod->PadsLocked() || mod->IsLocked() ) )
                     rejected.insert( item );
@@ -1196,9 +1275,9 @@ bool SELECTION_TOOL::SanitizeSelection()
         }
     }
 
-    while( !rejected.empty () ) 
+    while( !rejected.empty () )
     {
-        BOARD_ITEM* item = *rejected.begin();        
+        BOARD_ITEM* item = *rejected.begin();
         int itemIdx = m_selection.items.FindItem( item );
 
         if( itemIdx >= 0 )
