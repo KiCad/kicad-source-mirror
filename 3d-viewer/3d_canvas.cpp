@@ -563,7 +563,7 @@ void EDA_3D_CANVAS::InitGL()
 void EDA_3D_CANVAS::SetLights()
 {
     // activate light. the source is above the xy plane, at source_pos
-    GLfloat source_pos[4]    = { 0.0, 0.0, 30.0, 0.0 };
+    GLfloat source_pos[4]    = { 0.0, 0.0, 1000.0, 0.0 };
     GLfloat light_color[4];     // color of lights (RGBA values)
     light_color[3] = 1.0;
 

@@ -54,7 +54,8 @@ static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
 static const wxChar keyRenderShadows[] =        wxT( "Render_Shadows" );
 static const wxChar keyRenderRemoveHoles[] =    wxT( "Render_RemoveHoles" );
 static const wxChar keyRenderTextures[] =       wxT( "Render_Textures" );
-static const wxChar keyRenderSmooth[] =         wxT( "Render_Smooth" );
+static const wxChar keyRenderSmoothNormals[] =  wxT( "Render_Smooth_Normals" );
+static const wxChar keyRenderUseModelNormals[] =wxT( "Render_Use_Model_Normals" );
 static const wxChar keyRenderMaterial[] =       wxT( "Render_Material" );
 
 static const wxChar keyShowAxis[] =             wxT( "ShowAxis" );
@@ -247,8 +248,11 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyRenderTextures, &tmp, false );
     prms.SetFlag( FL_RENDER_TEXTURES, tmp );
 
-    aCfg->Read( keyRenderSmooth, &tmp, false );
-    prms.SetFlag( FL_RENDER_SMOOTH, tmp );
+    aCfg->Read( keyRenderSmoothNormals, &tmp, false );
+    prms.SetFlag( FL_RENDER_SMOOTH_NORMALS, tmp );
+
+    aCfg->Read( keyRenderUseModelNormals, &tmp, false );
+    prms.SetFlag( FL_RENDER_USE_MODEL_NORMALS, tmp );
 
     aCfg->Read( keyRenderMaterial, &tmp, false );
     prms.SetFlag( FL_RENDER_MATERIAL, tmp );
@@ -312,7 +316,8 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyRenderShadows, prms.GetFlag( FL_RENDER_SHADOWS ) );
     aCfg->Write( keyRenderRemoveHoles, prms.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) );
     aCfg->Write( keyRenderTextures, prms.GetFlag( FL_RENDER_TEXTURES ) );
-    aCfg->Write( keyRenderSmooth, prms.GetFlag( FL_RENDER_SMOOTH ) );
+    aCfg->Write( keyRenderSmoothNormals, prms.GetFlag( FL_RENDER_SMOOTH_NORMALS ) );
+    aCfg->Write( keyRenderUseModelNormals, prms.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) );
     aCfg->Write( keyRenderMaterial, prms.GetFlag( FL_RENDER_MATERIAL ) );
 
     aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS ) );
@@ -488,8 +493,13 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         NewDisplay(GL_ID_TECH_LAYERS);
         return;
 
-    case ID_MENU3D_FL_RENDER_SMOOTH:
-        GetPrm3DVisu().SetFlag( FL_RENDER_SMOOTH, isChecked );
+    case ID_MENU3D_FL_RENDER_SMOOTH_NORMALS:
+        GetPrm3DVisu().SetFlag( FL_RENDER_SMOOTH_NORMALS, isChecked );
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_FL_RENDER_USE_MODEL_NORMALS:
+        GetPrm3DVisu().SetFlag( FL_RENDER_USE_MODEL_NORMALS, isChecked );
         NewDisplay();
         return;
 

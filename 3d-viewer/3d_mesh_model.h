@@ -95,6 +95,9 @@ private:
 
     bool isPerPointNormalsComputed;
     void calcPerPointNormals();
+
+    bool isPerVertexNormalsVerified;
+    void perVertexNormalsVerify_and_Repair();
 };
 
 

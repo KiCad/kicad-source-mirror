@@ -342,16 +342,9 @@ void EDA_3D_CANVAS::Redraw()
     glClearStencil( 0 );
     glClearDepth( 1.0 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
-
-	if( isEnabled( FL_RENDER_SMOOTH ) )
-	{
-		glShadeModel( GL_SMOOTH );
-	}
-	else
-	{
-		glShadeModel( GL_FLAT );
-	}
-
+   
+    glShadeModel( GL_SMOOTH );
+	
     // Draw background
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();

@@ -175,8 +175,12 @@ void EDA_3D_FRAME::CreateMenuBar()
         _( "Apply a grid/cloud textures to Board, Solder Mask and Silkscreen" ),
         KiBitmap( green_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SMOOTH,
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SMOOTH_NORMALS,
         _( "Render Smooth Normals" ),
+        KiBitmap( green_xpm ), wxITEM_CHECK );
+    
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_USE_MODEL_NORMALS,
+        _( "Use Model Normals" ),
         KiBitmap( green_xpm ), wxITEM_CHECK );
 
     AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_MATERIAL,
@@ -287,8 +291,11 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_TEXTURES );
     item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_TEXTURES ) );
 
-    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SMOOTH );
-    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SMOOTH ) );
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SMOOTH_NORMALS );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SMOOTH_NORMALS ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_USE_MODEL_NORMALS );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_USE_MODEL_NORMALS ) );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL );
     item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_MATERIAL ) );
