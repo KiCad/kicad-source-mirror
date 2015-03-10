@@ -281,7 +281,7 @@ void RN_NET::compute()
         m_rnEdges.reset( new std::vector<RN_EDGE_MST_PTR>( 0 ) );
 
         // Check if the only possible connection exists
-        if( boardEdges.size() == 0 )
+        if( boardEdges.size() == 0 && boardNodes.size() == 2 )
         {
             RN_LINKS::RN_NODE_SET::iterator last = ++boardNodes.begin();
 
