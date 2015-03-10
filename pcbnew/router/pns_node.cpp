@@ -52,6 +52,7 @@ PNS_NODE::PNS_NODE()
     m_root = this;
     m_parent = NULL;
     m_maxClearance = 800000;    // fixme: depends on how thick traces are.
+    m_clearanceFunctor = NULL;
     m_index = new PNS_INDEX;
     m_collisionFilter = NULL;
 
@@ -179,6 +180,8 @@ struct PNS_NODE::OBSTACLE_VISITOR
     int m_extraClearance;
 
     OBSTACLE_VISITOR( PNS_NODE::OBSTACLES& aTab, const PNS_ITEM* aItem, int aKindMask ) :
+        m_node( NULL ),
+        m_override( NULL ),
         m_tab( aTab ),
         m_item( aItem ),
         m_kindMask( aKindMask ),
@@ -517,11 +520,15 @@ void PNS_NODE::addLine( PNS_LINE* aLine, bool aAllowRedundant )
             PNS_SEGMENT* pseg = new PNS_SEGMENT( *aLine, s );
             PNS_SEGMENT* psegR = NULL;
 
-            if ( !aAllowRedundant )
-                psegR =  findRedundantSegment( pseg );
+            if( !aAllowRedundant )
+                psegR = findRedundantSegment( pseg );
 
             if( psegR )
+            {
                 aLine->LinkSegment( psegR );
+
+                delete pseg;
+            }
             else
             {
                 pseg->SetOwner( this );

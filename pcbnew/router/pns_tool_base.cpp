@@ -64,6 +64,16 @@ PNS_TOOL_BASE::PNS_TOOL_BASE( const std::string& aToolName ) :
     TOOL_INTERACTIVE( aToolName )
 {
     m_router = NULL;
+    m_startItem = NULL;
+    m_startLayer = 0;
+
+    m_endItem = NULL;
+
+    m_needsSync = false;
+
+    m_frame = NULL;
+    m_ctls = NULL;
+    m_board = NULL;
 }
 
 

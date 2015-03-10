@@ -929,7 +929,9 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         m_chainedPlacement = !pl.EndsWithVia();
         m_splitSeg = false;
         initPlacement( );
-    } else {
+    }
+    else
+    {
         m_idle = true;
     }
 
@@ -955,7 +957,7 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest )
 
         if( a == b )
         {
-            aNode->FindLineEnds( aLatest, a, b);
+            aNode->FindLineEnds( aLatest, a, b );
         }
 
         aNode->FindLinesBetweenJoints( a, b, lines );
@@ -992,20 +994,23 @@ void PNS_LINE_PLACER::simplifyNewLine( PNS_NODE* aNode, PNS_SEGMENT* aLatest )
 
     if( simplified.PointCount() != l->PointCount() )
     {
-        std::auto_ptr<PNS_LINE> lnew ( l->Clone() );
-        aNode -> Remove( l );
+        std::auto_ptr<PNS_LINE> lnew( l->Clone() );
+        aNode->Remove( l );
         lnew->SetShape( simplified );
-        aNode -> Add( lnew.get() );
+        aNode->Add( lnew.get() );
     }
+
+    delete l;
 }
 
 
 void PNS_LINE_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
 {
     m_sizes = aSizes;
+
     if( !m_idle )
     {
-        initPlacement ( m_splitSeg );
+        initPlacement( m_splitSeg );
         Move ( m_currentEnd, NULL );
     }
 }
@@ -1015,7 +1020,7 @@ void PNS_LINE_PLACER::updateLeadingRatLine()
 {
     PNS_LINE current = Trace();
     SHAPE_LINE_CHAIN ratLine;
-    PNS_TOPOLOGY topo ( m_lastNode );
+    PNS_TOPOLOGY topo( m_lastNode );
 
     if( topo.LeadingRatLine( &current, ratLine ) )
         Router()->DisplayDebugLine( ratLine, 5, 10000 );

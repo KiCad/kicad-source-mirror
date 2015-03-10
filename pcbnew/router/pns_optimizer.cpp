@@ -119,16 +119,17 @@ bool PNS_COST_ESTIMATOR::IsBetter( PNS_COST_ESTIMATOR& aOther,
  *  Optimizer
  **/
 PNS_OPTIMIZER::PNS_OPTIMIZER( PNS_NODE* aWorld ) :
-    m_world( aWorld ), m_collisionKindMask( PNS_ITEM::ANY ), m_effortLevel( MERGE_SEGMENTS )
+    m_world( aWorld ),
+    m_collisionKindMask( PNS_ITEM::ANY ),
+    m_effortLevel( MERGE_SEGMENTS ),
+    m_keepPostures( false ),
+    m_restrictAreaActive( false )
 {
-    // m_cache = new SHAPE_INDEX_LIST<PNS_ITEM*>();
-    m_restrictAreaActive = false;
 }
 
 
 PNS_OPTIMIZER::~PNS_OPTIMIZER()
 {
-    // delete m_cache;
 }
 
 
@@ -188,7 +189,7 @@ void PNS_OPTIMIZER::removeCachedSegments( PNS_LINE* aLine, int aStartVertex, int
         PNS_SEGMENT* s = (*segs)[i];
         m_cacheTags.erase( s );
         m_cache.Remove( s );
-    }    // *cacheRemove( (*segs)[i] );
+    }
 }
 
 

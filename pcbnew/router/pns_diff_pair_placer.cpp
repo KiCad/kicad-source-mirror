@@ -42,11 +42,29 @@ using boost::optional;
 PNS_DIFF_PAIR_PLACER::PNS_DIFF_PAIR_PLACER( PNS_ROUTER* aRouter ) :
     PNS_PLACEMENT_ALGO ( aRouter )
 {
+    m_state = RT_START;
+    m_chainedPlacement = false;
     m_initialDiagonal = false;
     m_startDiagonal = false;
+    m_fitOk = false;
+    m_netP = 0;
+    m_netN = 0;
+    m_iteration = 0;
     m_world = NULL;
     m_shove = NULL;
     m_currentNode = NULL;
+    m_lastNode = NULL;
+    m_placingVia = false;
+    m_viaDiameter = 0;
+    m_viaDrill = 0;
+    m_currentWidth = 0;
+    m_currentNet = 0;
+    m_currentLayer = 0;
+    m_startsOnVia = false;
+    m_orthoMode = false;
+    m_snapOnTarget = false;
+    m_currentEndItem = NULL;
+    m_currentMode = RM_MarkObstacles;
     m_idle = true;
 }
 
