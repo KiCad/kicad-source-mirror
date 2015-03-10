@@ -57,6 +57,18 @@ public:
     int ZoneUnfill( const TOOL_EVENT& aEvent );
     int ZoneUnfillAll( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function PlaceTarget()
+     * Allows user to place a layer alignment target.
+     */
+    int PlaceTarget( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function PlaceModule()
+     * Displays a dialog to select a module to be added and allows the user to set its position.
+     */
+    int PlaceModule( const TOOL_EVENT& aEvent );
+
     ///> Notifies eeschema about the selected item.
     int SelectionCrossProbe( const TOOL_EVENT& aEvent );
 
@@ -66,6 +78,9 @@ private:
 
     ///> Pointer to the currently used edit frame.
     PCB_EDIT_FRAME* m_frame;
+
+    // How does line width change after one -/+ key press.
+    static const int WIDTH_STEP;
 };
 
 #endif

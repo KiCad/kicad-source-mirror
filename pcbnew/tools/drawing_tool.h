@@ -110,18 +110,6 @@ public:
     int DrawKeepout( const TOOL_EVENT& aEvent );
 
     /**
-     * Function PlaceTarget()
-     * Allows user to place a layer alignment target.
-     */
-    int PlaceTarget( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function PlaceModule()
-     * Displays a dialog to select a module to be added and allows the user to set its position.
-     */
-    int PlaceModule( const TOOL_EVENT& aEvent );
-
-    /**
      * Function PlaceDXF()
      * Places a drawing imported from a DXF file in module editor.
      */
@@ -206,7 +194,7 @@ private:
     unsigned int m_lineWidth;
 
     // How does line width change after one -/+ key press.
-    static const int WIDTH_STEP = 100000;
+    static const int WIDTH_STEP;
 };
 
 #endif /* __DRAWING_TOOL_H */

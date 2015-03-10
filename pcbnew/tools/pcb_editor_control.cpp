@@ -22,15 +22,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/bind.hpp>
+
 #include "pcb_editor_control.h"
 #include "common_actions.h"
 
 #include "selection_tool.h"
 
+#include <project.h>
+#include <pcbnew_id.h>
 #include <wxPcbStruct.h>
 #include <class_board.h>
 #include <class_zone.h>
 #include <class_draw_panel_gal.h>
+#include <class_module.h>
+#include <class_mire.h>
+
+#include <view/view_group.h>
+#include <view/view_controls.h>
 
 
 class ZONE_CONTEXT_MENU : public CONTEXT_MENU
@@ -159,6 +168,214 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
+{
+    MODULE* module = NULL;
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>();
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    view->Add( &preview );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
+    controls->CaptureCursor( true );
+
+    Activate();
+    m_frame->SetToolID( ID_PCB_MODULE_BUTT, wxCURSOR_HAND, _( "Add module" ) );
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        VECTOR2I cursorPos = controls->GetCursorPosition();
+
+        if( evt->IsCancel() || evt->IsActivate() )
+        {
+            if( module )
+            {
+                board->Delete( module );  // it was added by LoadModuleFromLibrary()
+                module = NULL;
+
+                preview.Clear();
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                controls->ShowCursor( true );
+            }
+            else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
+        }
+
+        else if( module && evt->Category() == TC_COMMAND )
+        {
+            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            {
+                module->Rotate( module->GetPosition(), m_frame->GetRotationAngle() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            {
+                module->Flip( module->GetPosition() );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !module )
+            {
+                // Init the new item attributes
+                module = m_frame->LoadModuleFromLibrary( wxEmptyString,
+                                                         m_frame->Prj().PcbFootprintLibs(),
+                                                         true, NULL );
+                if( module == NULL )
+                    continue;
+
+                controls->ShowCursor( false );
+                module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+                // Add all the drawable parts to preview
+                preview.Add( module );
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
+
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+            else
+            {
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                view->Add( module );
+                module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( module, UR_NEW );
+
+                // Remove from preview
+                preview.Remove( module );
+                module->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Remove, &preview, _1 ) );
+                module = NULL;  // to indicate that there is no module that we currently modify
+
+                controls->ShowCursor( true );
+            }
+        }
+
+        else if( module && evt->IsMotion() )
+        {
+            module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
+    view->Remove( &preview );
+
+    setTransitions();
+    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    BOARD* board = getModel<BOARD>();
+    PCB_TARGET* target = new PCB_TARGET( board );
+
+    // Init the new item attributes
+    target->SetLayer( Edge_Cuts );
+    target->SetWidth( board->GetDesignSettings().m_EdgeSegmentWidth );
+    target->SetSize( Millimeter2iu( 5 ) );
+    VECTOR2I cursorPos = controls->GetCursorPosition();
+    target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    KIGFX::VIEW_GROUP preview( view );
+    preview.Add( target );
+    view->Add( &preview );
+    preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
+    controls->CaptureCursor( true );
+
+    Activate();
+    m_frame->SetToolID( ID_PCB_MIRE_BUTT, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = controls->GetCursorPosition();
+
+        if( evt->IsCancel() || evt->IsActivate() )
+            break;
+
+        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
+        {
+            target->SetWidth( target->GetWidth() + WIDTH_STEP );
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
+        {
+            int width = target->GetWidth();
+
+            if( width > WIDTH_STEP )
+            {
+                target->SetWidth( width - WIDTH_STEP );
+                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            }
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            assert( target->GetSize() > 0 );
+            assert( target->GetWidth() > 0 );
+
+            view->Add( target );
+            board->Add( target );
+            target->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( target, UR_NEW );
+
+            preview.Remove( target );
+
+            // Create next PCB_TARGET
+            target = new PCB_TARGET( *target );
+            preview.Add( target );
+        }
+
+        else if( evt->IsMotion() )
+        {
+            target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+    delete target;
+
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
+    view->Remove( &preview );
+
+    setTransitions();
+    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
 // Zone actions
 int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 {
@@ -266,5 +483,12 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ZoneUnfill,         COMMON_ACTIONS::zoneUnfill.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneUnfillAll,      COMMON_ACTIONS::zoneUnfillAll.MakeEvent() );
 
+    // Placing tools
+    Go( &PCB_EDITOR_CONTROL::PlaceTarget,        COMMON_ACTIONS::placeTarget.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PlaceModule,        COMMON_ACTIONS::placeModule.MakeEvent() );
+
     Go( &PCB_EDITOR_CONTROL::SelectionCrossProbe, SELECTION_TOOL::SelectedEvent );
 }
+
+
+const int PCB_EDITOR_CONTROL::WIDTH_STEP = 100000;

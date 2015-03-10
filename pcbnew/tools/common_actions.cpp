@@ -153,14 +153,6 @@ TOOL_ACTION COMMON_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
         "Add a keepout area", "Add a keepout area", AF_ACTIVATE );
 
-TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.InteractiveDrawing.placeTarget",
-        AS_GLOBAL, 0,
-        "Add layer alignment target", "Add layer alignment target", AF_ACTIVATE );
-
-TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.InteractiveDrawing.placeModule",
-        AS_GLOBAL, 'O',
-        "Add modules", "Add modules", AF_ACTIVATE );
-
 TOOL_ACTION COMMON_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
         AS_GLOBAL, 0,
         "", "", AF_ACTIVATE );
@@ -361,6 +353,15 @@ TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
 TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
         AS_GLOBAL, int( 'N' ),
         "Unfill all", "Unfill all zones" );
+
+
+TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
+        AS_GLOBAL, 0,
+        "Add layer alignment target", "Add layer alignment target", AF_ACTIVATE );
+
+TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
+        AS_GLOBAL, 'O',
+        "Add modules", "Add modules", AF_ACTIVATE );
 
 
 // Module editor tools
