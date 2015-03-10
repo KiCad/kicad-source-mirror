@@ -64,6 +64,7 @@ public:
     }
 };
 
+
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
@@ -87,16 +88,8 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
-    if( aReason == TOOL_BASE::MODEL_RELOAD )
-    {
-        // Remove pointers to the selected items from containers
-        // without changing their properties (as they are already deleted)
-        m_selection.group->Clear();
-        m_selection.clear();
-    }
-    else
-        // Restore previous properties of selected items and remove them from containers
-        clearSelection();
+    // Restore previous properties of selected items and remove them from containers
+    clearSelection();
 
     m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_locked = true;
