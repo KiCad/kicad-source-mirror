@@ -149,7 +149,7 @@ public:
         if( IsActivation() )
             return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope );
         else if( IsNotification() )
-            return TOOL_EVENT( TC_MESSAGE, TA_ANY, m_name, m_scope );
+            return TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope );
         else
             return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
     }
