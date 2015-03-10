@@ -53,6 +53,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), NULL, this );
 #endif
+    m_parentPanel->Connect( wxEVT_LEAVE_WINDOW,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), NULL, this );
 
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER,
@@ -208,6 +210,43 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 {
     m_parentPanel->SetFocus();
+}
+
+
+void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
+{
+    if( m_cursorCaptured )
+    {
+        bool warp = false;
+        int x = aEvent.GetX();
+        int y = aEvent.GetY();
+        wxSize parentSize = m_parentPanel->GetClientSize();
+
+        if( x < 0 )
+        {
+            x = 0;
+            warp = true;
+        }
+        else if( x >= parentSize.x )
+        {
+            x = parentSize.x - 1;
+            warp = true;
+        }
+
+        if( y < 0 )
+        {
+            y = 0;
+            warp = true;
+        }
+        else if( y >= parentSize.y )
+        {
+            y = parentSize.y - 1;
+            warp = true;
+        }
+
+        if( warp )
+            m_parentPanel->WarpPointer( x, y );
+    }
 }
 
 

@@ -56,6 +56,7 @@ public:
     void onMotion( wxMouseEvent& aEvent );
     void onButton( wxMouseEvent& aEvent );
     void onEnter( wxMouseEvent& WXUNUSED( aEvent ) );
+    void onLeave( wxMouseEvent& WXUNUSED( aEvent ) );
     void onTimer( wxTimerEvent& WXUNUSED( aEvent ) );
 
     /**

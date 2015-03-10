@@ -47,8 +47,9 @@ class VIEW_CONTROLS
 {
 public:
     VIEW_CONTROLS( VIEW* aView ) : m_view( aView ), m_minScale( 4.0 ), m_maxScale( 15000 ),
-        m_forceCursorPosition( false ), m_snappingEnabled( false ), m_grabMouse( false ),
-        m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ), m_autoPanSpeed( 0.15 )
+        m_forceCursorPosition( false ), m_cursorCaptured( false ), m_snappingEnabled( false ),
+        m_grabMouse( false ), m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ),
+        m_autoPanSpeed( 0.15 )
     {
         m_panBoundary.SetMaximum();
     }
@@ -171,6 +172,16 @@ public:
      */
     virtual void ShowCursor( bool aEnabled );
 
+    /**
+     * Function CaptureCursor()
+     * Forces the cursor to stay within the drawing panel area.
+     * @param aEnabled determines if the cursor should be captured.
+     */
+    virtual void CaptureCursor( bool aEnabled )
+    {
+        m_cursorCaptured = aEnabled;
+    }
+
 protected:
     /// Sets center for VIEW, takes into account panning boundaries.
     void setCenter( const VECTOR2D& aCenter );
@@ -198,6 +209,9 @@ protected:
 
     /// Is the forced cursor position enabled
     bool        m_forceCursorPosition;
+
+    /// Should the cursor be locked within the parent window area
+    bool        m_cursorCaptured;
 
     /// Should the cursor snap to grid or move freely
     bool        m_snappingEnabled;
