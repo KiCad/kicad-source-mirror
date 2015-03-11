@@ -52,7 +52,7 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
         int cb = sgn( d.x );
         int cc = -ca * A.x - cb * A.y;
 
-        ecoord num = ca * aP.x + cb * aP.y + cc;
+        ecoord num = (ecoord) ca * aP.x + (ecoord) cb * aP.y + cc;
         num *= num;
 
         if( ca && cb )

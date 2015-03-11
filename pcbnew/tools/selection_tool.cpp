@@ -1302,8 +1302,18 @@ void SELECTION_TOOL::generateMenu()
     // Filter out entries that does not apply to the current selection
     for( int i = m_menuCopy.GetMenuItemCount() - 1; i >= 0; --i )
     {
-        if( !m_menuConditions[i]( m_selection ) )
+        try
         {
+            if( !m_menuConditions[i]( m_selection ) )
+            {
+                wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
+                m_menuCopy.Destroy( item );
+            }
+        }
+        catch( boost::bad_function_call )
+        {
+            // If it is not possible to determine if a menu entry should be
+            // shown or not - do not let users pick non-existing options
             wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
             m_menuCopy.Destroy( item );
         }

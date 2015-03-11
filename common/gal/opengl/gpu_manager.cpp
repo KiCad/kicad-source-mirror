@@ -55,7 +55,7 @@ GPU_MANAGER* GPU_MANAGER::MakeManager( VERTEX_CONTAINER* aContainer )
 
 
 GPU_MANAGER::GPU_MANAGER( VERTEX_CONTAINER* aContainer ) :
-    m_isDrawing( false ), m_container( aContainer ), m_shader( NULL )
+    m_isDrawing( false ), m_container( aContainer ), m_shader( NULL ), m_shaderAttrib( 0 )
 {
 }
 
@@ -80,8 +80,8 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 
 // Cached manager
 GPU_CACHED_MANAGER::GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
-    GPU_MANAGER( aContainer ), m_buffersInitialized( false ),
-    m_indicesSize( 0 )
+    GPU_MANAGER( aContainer ), m_buffersInitialized( false ), m_indicesPtr( NULL ),
+    m_verticesBuffer( 0 ), m_indicesBuffer( 0 ), m_indicesSize( 0 )
 {
     // Allocate the biggest possible buffer for indices
     m_indices.reset( new GLuint[aContainer->GetSize()] );

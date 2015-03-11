@@ -930,11 +930,11 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         {
             const NETINFO_ITEM* netinfo = m_board->FindNet( padNetname );
 
-            if( !padNetname.IsEmpty() &&  netinfo == NULL )
+            if( !padNetname.IsEmpty() && netinfo == NULL )
             {
                 DisplayError( NULL, _( "Unknown netname, netname not changed" ) );
             }
-            else
+            else if( netinfo )
             {
                 rastnestIsChanged = true;
                 m_currentPad->SetNetCode( netinfo->GetNet() );
