@@ -219,6 +219,15 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
             break;
         }
 
+
+        case PCB_PAD_T:
+        {
+            D_PAD* pad = static_cast<D_PAD*>( aItem );
+            addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
+
+            break;
+        }
+
         case PCB_MODULE_EDGE_T:
         case PCB_LINE_T:
         {
