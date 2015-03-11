@@ -76,6 +76,10 @@ void DSNLEXER::init()
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
                     FILE* aFile, const wxString& aFilename ) :
     iOwnReaders( true ),
+    start( NULL ),
+    next( NULL ),
+    limit( NULL ),
+    reader( NULL ),
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
@@ -88,6 +92,10 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
                     const std::string& aClipboardTxt, const wxString& aSource ) :
     iOwnReaders( true ),
+    start( NULL ),
+    next( NULL ),
+    limit( NULL ),
+    reader( NULL ),
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
@@ -101,6 +109,10 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
                     LINE_READER* aLineReader ) :
     iOwnReaders( false ),
+    start( NULL ),
+    next( NULL ),
+    limit( NULL ),
+    reader( NULL ),
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
@@ -114,6 +126,10 @@ static const KEYWORD empty_keywords[1] = {};
 
 DSNLEXER::DSNLEXER( const std::string& aSExpression, const wxString& aSource ) :
     iOwnReaders( true ),
+    start( NULL ),
+    next( NULL ),
+    limit( NULL ),
+    reader( NULL ),
     keywords( empty_keywords ),
     keywordCount( 0 )
 {

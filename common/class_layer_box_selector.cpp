@@ -35,10 +35,10 @@
 #include <class_layer_box_selector.h>
 
 
-LAYER_SELECTOR::LAYER_SELECTOR()
+LAYER_SELECTOR::LAYER_SELECTOR() :
+    m_layerhotkeys( true ),
+    m_hotkeys( NULL )
 {
-    m_layerhotkeys = true;
-    m_hotkeys      = NULL;
 }
 
 
@@ -81,8 +81,6 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
 {
     if( choices != NULL )
         ResyncBitmapOnly();
-
-    m_hotkeys = NULL;
 }
 
 

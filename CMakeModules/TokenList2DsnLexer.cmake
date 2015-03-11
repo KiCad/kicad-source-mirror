@@ -374,14 +374,10 @@ const char* ${LEXERCLASS}::TokenName( T aTok )
 {
     const char* ret;
 
-    if( (unsigned) aTok < keyword_count )
-    {
-        ret = keywords[aTok].name;
-    }
-    else if( aTok < 0 )
-    {
+    if( aTok < 0 )
         ret = DSNLEXER::Syntax( aTok );
-    }
+    else if( (unsigned) aTok < keyword_count )
+        ret = keywords[aTok].name;
     else
         ret = \"token too big\";
 

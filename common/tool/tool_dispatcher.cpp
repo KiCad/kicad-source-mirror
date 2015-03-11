@@ -42,6 +42,9 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 {
     BUTTON_STATE( TOOL_MOUSE_BUTTONS aButton, const wxEventType& aDownEvent,
                  const wxEventType& aUpEvent, const wxEventType& aDblClickEvent ) :
+        dragging( false ),
+        pressed( false ),
+        dragMaxDelta( 0.0f ),
         button( aButton ),
         downEvent( aDownEvent ),
         upEvent( aUpEvent ),

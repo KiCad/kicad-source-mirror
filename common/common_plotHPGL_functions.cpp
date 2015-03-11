@@ -203,8 +203,10 @@ static const double PLUsPERDECIMIL = 0.102041;
 
 HPGL_PLOTTER::HPGL_PLOTTER()
 {
-    SetPenSpeed( 40 );      // Default pen speed = 40 cm/s
+    SetPenSpeed( 40 );      // Default pen speed = 40 cm/s; Pen speed is *always* in cm
     SetPenNumber( 1 );      // Default pen num = 1
+    SetPenDiameter( 0.0 );
+    SetPenOverlap( 0.0 );
 }
 
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,

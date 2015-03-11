@@ -195,7 +195,11 @@ private:
 
 
 TOOL_MANAGER::TOOL_MANAGER() :
-    m_model( NULL ), m_view( NULL ), m_viewControls( NULL ), m_editFrame( NULL )
+    m_model( NULL ),
+    m_view( NULL ),
+    m_viewControls( NULL ),
+    m_editFrame( NULL ),
+    m_passEvent( false )
 {
     m_actionMgr = new ACTION_MANAGER( this );
 

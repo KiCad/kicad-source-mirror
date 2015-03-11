@@ -120,18 +120,15 @@ void PARSE_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc,
 
 //-----<LINE_READER>------------------------------------------------------
 
-LINE_READER::LINE_READER( unsigned aMaxLineLength )
+LINE_READER::LINE_READER( unsigned aMaxLineLength ) :
+    length( 0 ),
+    lineNum( 0 ),
+    line( NULL ),
+    capacity( 0 ),
+    maxLineLength( aMaxLineLength )
 {
-    lineNum = 0;
-
-    if( aMaxLineLength == 0 )
+    if( aMaxLineLength != 0 )
     {
-        line = 0;
-    }
-    else
-    {
-        maxLineLength = aMaxLineLength;
-
         // start at the INITIAL size, expand as needed up to the MAX size in maxLineLength
         capacity = LINE_READER_LINE_INITIAL_SIZE;
 
@@ -143,8 +140,6 @@ LINE_READER::LINE_READER( unsigned aMaxLineLength )
 
         line[0] = '\0';
     }
-
-    length  = 0;
 }
 
 

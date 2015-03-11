@@ -99,7 +99,7 @@ void DIALOG_PNS_LENGTH_TUNING_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
         m_settings.m_targetLength = m_targetLength.GetValue();
 
     if( m_settings.m_maxAmplitude < m_settings.m_minAmplitude )
-        m_settings.m_maxAmplitude = m_settings.m_maxAmplitude;
+        m_settings.m_maxAmplitude = m_settings.m_minAmplitude;
 
     m_settings.m_cornerType = m_miterStyle->GetSelection() ? PNS_MEANDER_SETTINGS::CHAMFER : PNS_MEANDER_SETTINGS::ROUND;
 

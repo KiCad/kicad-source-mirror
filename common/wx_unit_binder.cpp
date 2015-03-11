@@ -35,13 +35,17 @@
 
 #include "wx_unit_binder.h"
 
-WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl* aTextInput, wxStaticText* aUnitLabel, wxSpinButton* aSpinButton )
+WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl* aTextInput, 
+                                wxStaticText* aUnitLabel, wxSpinButton* aSpinButton ) :
+    m_textCtrl( aTextInput ),
+    m_unitLabel( aUnitLabel ),
+    m_units( g_UserUnit ),
+    m_step( 1 ),
+    m_min( 0 ),
+    m_max( 1 )
 {
     // Use the currently selected units
-    m_units = g_UserUnit;
-    m_textCtrl = aTextInput;
     m_textCtrl->SetValue( wxT( "0" ) );
-    m_unitLabel = aUnitLabel;
     m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
 }
 

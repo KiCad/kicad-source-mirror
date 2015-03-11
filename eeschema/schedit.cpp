@@ -459,6 +459,8 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
         // Moving a marker has no sense
         wxFAIL_MSG( wxString::Format( wxT( "Cannot move item type %s" ),
                                       GetChars( item->GetClass() ) ) );
+        break;
+
     default:
         // Unknown items cannot be moved
         wxFAIL_MSG( wxString::Format(
