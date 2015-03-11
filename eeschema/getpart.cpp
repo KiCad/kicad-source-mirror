@@ -305,9 +305,6 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
         if( unitCount <= 1 || component->GetUnit() == unit )
             return;
 
-        if( unit < 1 )
-            unit = 1;
-
         if( unit > unitCount )
             unit = unitCount;
 

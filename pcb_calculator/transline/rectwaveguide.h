@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
+ * Modified for Kicad: 2015 jean-pierre.charras
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,8 +19,8 @@
  * along with this package; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street - Fifth Floor,
  * Boston, MA 02110-1301, USA.
- *
  */
+
 
 #ifndef __RECTWAVEGUIDE_H
 #define __RECTWAVEGUIDE_H
@@ -29,19 +30,19 @@ class RECTWAVEGUIDE : public TRANSLINE
 public: RECTWAVEGUIDE();
 
 private:
-    double mur;                 /* magnetic permeability of substrate */
-    double tanm;                /* Magnetic Loss Tangent */
-    double a;                   /* width of waveguide */
-    double b;                   /* height of waveguide */
-    double l;                   /* length of waveguide */
-    double Z0;                  /* characteristic impedance */
-    double Z0EH;                /* characteristic impedance of field quantities*/
-    double ang_l;               /* Electrical length in angle */
-    double er_eff;              /* Effective dielectric constant */
-    double mur_eff;             /* Effective mag. permeability */
-    double atten_dielectric;    /* Loss in dielectric (dB) */
-    double atten_cond;          /* Loss in conductors (dB) */
-    double fc10;                /* Cutoff frequency for TE10 mode */
+    double mur;                 // magnetic permeability of substrate
+    double tanm;                // Magnetic Loss Tangent
+    double a;                   // width of waveguide
+    double b;                   // height of waveguide
+    double l;                   // length of waveguide
+    double Z0;                  // characteristic impedance
+    double Z0EH;                // characteristic impedance of field quantities*/
+    double ang_l;               // Electrical length in angle
+    double er_eff;              // Effective dielectric constant
+    double mur_eff;             // Effective mag. permeability
+    double atten_dielectric;    // Loss in dielectric (dB)
+    double atten_cond;          // Loss in conductors (dB)
+    double fc10;                // Cutoff frequency for TE10 mode
 
 public:
     void   analyze();
@@ -61,4 +62,4 @@ private:
     void   show_results();
 };
 
-#endif /* __RECTWAVEGUIDE_H */
+#endif      // __RECTWAVEGUIDE_H

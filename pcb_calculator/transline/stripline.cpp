@@ -36,11 +36,16 @@ STRIPLINE::STRIPLINE() : TRANSLINE()
     m_name = "StripLine";
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
-    Z0 = 0.0;               // characteristic impedance
-    ang_l = 0.0;            // Electrical length in angle
-    er_eff = 0.0;           // effective dielectric constant
-    atten_dielectric = 0.0; // Loss in dielectric (dB)
-    atten_cond = 0.0;       // Loss in conductors (dB)
+    h = 0.0;                    // height of substrate
+    a = 0.0;                    // distance of strip to top metal
+    t = 0.0;                    // thickness of top metal
+    w = 0.0;                    // width of line
+    len = 0.0;                  // length of line
+    Z0 = 0.0;                   // characteristic impedance
+    ang_l = 0.0;                // Electrical length in angle
+    er_eff = 0.0;               // effective dielectric constant
+    atten_dielectric = 0.0;     // Loss in dielectric (dB)
+    atten_cond = 0.0;           // Loss in conductors (dB)
 }
 
 

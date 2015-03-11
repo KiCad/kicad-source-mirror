@@ -33,47 +33,21 @@
 #include <dialog_helpers.h>
 #include <class_DCodeSelectionbox.h>
 
-/* Process the command triggered by the left button of the mouse when a tool
- * is already selected.
+/* Process the command triggered by the left button of the mouse
+ * currently: just display info in the message panel.
  */
 void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
-    GERBER_DRAW_ITEM* DrawStruct = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
-    wxString    msg;
+    GERBER_DRAW_ITEM* DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
 
-    if( GetToolId() == ID_NO_TOOL_SELECTED )
+    GetScreen()->SetCurItem( DrawStruct );
+
+    if( DrawStruct == NULL )
     {
-        if( DrawStruct && DrawStruct->GetFlags() )
-        {
-            msg.Printf( wxT( "GERBVIEW_FRAME::OnLeftClick err: Struct %u, m_Flags = %X" ),
-                        (unsigned) DrawStruct->Type(),
-                        (unsigned) DrawStruct->GetFlags() );
-            wxFAIL_MSG( msg );
-        }
-        else
-        {
-            DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
-            GetScreen()->SetCurItem( DrawStruct );
-            if( DrawStruct == NULL )
-            {
-                GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
-                if( gerber )
-                    gerber->DisplayImageInfo( );
-            }
-        }
-    }
+        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
 
-    switch( GetToolId() )
-    {
-    case ID_NO_TOOL_SELECTED:
-        break;
-
-        if( DrawStruct == NULL )
-            break;
-
-    default:
-        wxFAIL_MSG( wxT( "GERBVIEW_FRAME::ProcessCommand error" ) );
-        break;
+        if( gerber )
+            gerber->DisplayImageInfo( );
     }
 }
 

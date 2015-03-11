@@ -95,10 +95,7 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         // it now has, so we decrement the count of components without
         // a footprint assigned.
         if( !hasFootprint )
-        {
-            hasFootprint = true;
             m_undefinedComponentCnt -= 1;
-        }
 
         // Set the new description and deselect the processed component
         m_compListBox->SetString( componentIndex, description );

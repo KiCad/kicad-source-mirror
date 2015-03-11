@@ -273,10 +273,8 @@ void DIALOG_PRINT_USING_PRINTER::initValues( )
     m_FineAdjustYscaleOpt->SetValue( msg );
 
     bool enable = (s_Parameters.m_PrintScale == 1.0);
-    if( m_FineAdjustXscaleOpt )
-        m_FineAdjustXscaleOpt->Enable(enable);
-    if( m_FineAdjustYscaleOpt )
-        m_FineAdjustYscaleOpt->Enable(enable);
+    m_FineAdjustXscaleOpt->Enable(enable);
+    m_FineAdjustYscaleOpt->Enable(enable);
 }
 
 

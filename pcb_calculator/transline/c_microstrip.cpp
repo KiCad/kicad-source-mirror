@@ -42,6 +42,27 @@ C_MICROSTRIP::C_MICROSTRIP() : TRANSLINE()
     aux_ms = NULL;
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
+    h = 0.0;                    // height of substrate
+    ht = 0.0;                   // height to the top of box
+    t = 0.0;                    // thickness of top metal
+    rough = 0.0;                // Roughness of top metal
+    w = 0.0;                    // width of lines
+    w_t_e = 0.0;                // even-mode thickness-corrected line width
+    w_t_o = 0.0;                // odd-mode thickness-corrected line width
+    l = 0.0;                    // length of lines
+    s = 0.0;                    // spacing of lines
+    Z0_e_0 = 0.0;               // static even-mode impedance
+    Z0_o_0 = 0.0;               // static odd-mode impedance
+    Z0e = 0.0;                  // even-mode impedance
+    Z0o = 0.0;                  // odd-mode impedance
+    c_e = 0.0;                  // even-mode capacitance
+    c_o = 0.0;                  // odd-mode capacitance
+    ang_l_e = 0.0;              // even-mode electrical length in angle
+    ang_l_o = 0.0;              // odd-mode electrical length in angle
+    er_eff_e = 0.0;             // even-mode effective dielectric constant
+    er_eff_o = 0.0;             // odd-mode effective dielectric constant
+    er_eff_e_0 = 0.0;           // static even-mode effective dielectric constant
+    er_eff_o_0 = 0.0;           // static odd-mode effective dielectric constant
     er_eff = 0.0;               // dummy
     w_eff = 0.0;                // Effective width of line
     atten_dielectric_e = 0.0;   // even-mode dielectric losses (dB)

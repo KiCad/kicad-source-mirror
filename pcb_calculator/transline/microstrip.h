@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
+ * Modified for Kicad: 2015 jean-pierre.charras
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,8 +19,8 @@
  * along with this package; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street - Fifth Floor,
  * Boston, MA 02110-1301, USA.
- *
  */
+
 
 #ifndef __MICROSTRIP_H
 #define __MICROSTRIP_H
@@ -31,25 +32,25 @@ public: MICROSTRIP();
     friend class C_MICROSTRIP;
 
 private:
-    double h;                   /* height of substrate */
-    double ht;                  /* height to the top of box */
-    double t;                   /* thickness of top metal */
-    double rough;               /* Roughness of top metal */
-    double mur;                 /* magnetic permeability of substrate */
-    double w;                   /* width of line */
-    double l;                   /* length of line */
-    double Z0_0;                /* static characteristic impedance */
-    double Z0;                  /* characteristic impedance */
-    double ang_l;               /* Electrical length in angle */
-    double er_eff_0;            /* Static effective dielectric constant */
-    double er_eff;              /* Effective dielectric constant */
-    double mur_eff;             /* Effective mag. permeability */
-    double w_eff;               /* Effective width of line */
-    double atten_dielectric;    /* Loss in dielectric (dB) */
-    double atten_cond;          /* Loss in conductors (dB) */
+    double h;                   // height of substrate
+    double ht;                  // height to the top of box
+    double t;                   // thickness of top metal
+    double rough;               // Roughness of top metal
+    double mur;                 // magnetic permeability of substrate
+    double w;                   // width of line
+    double l;                   // length of line
+    double Z0_0;                // static characteristic impedance
+    double Z0;                  // characteristic impedance
+    double ang_l;               // Electrical length in angle
+    double er_eff_0;            // Static effective dielectric constant
+    double er_eff;              // Effective dielectric constant
+    double mur_eff;             // Effective mag. permeability
+    double w_eff;               // Effective width of line
+    double atten_dielectric;    // Loss in dielectric (dB)
+    double atten_cond;          // Loss in conductors (dB)
 
-    /* private params */
-    double Z0_h_1;      /* homogeneous stripline impedance */
+    // private params
+    double Z0_h_1;      // homogeneous stripline impedance
 
 public:
     void   analyze();
@@ -88,4 +89,4 @@ private:
     void   show_results();
 };
 
-#endif /* __MICROSTRIP_H */
+#endif      // __MICROSTRIP_H

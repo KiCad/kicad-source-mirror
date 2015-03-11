@@ -194,8 +194,10 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
         case PCB_MODULE_TEXT_T:
             {
                 TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
-                if( text->GetLayer() == aLayer )
+
+                if( text->GetLayer() == aLayer && text->IsVisible() )
                     texts.push_back( text );
+
                 break;
             }
 

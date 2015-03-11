@@ -34,6 +34,14 @@ RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE()
     m_name = "RectWaveGuide";
 
     // Initialize these here variables mainly to avoid warnings from a static analyzer
+    mur = 0.0;                  // magnetic permeability of substrate
+    tanm = 0.0;                 // Magnetic Loss Tangent
+    a = 0.0;                    // width of waveguide
+    b = 0.0;                    // height of waveguide
+    l = 0.0;                    // length of waveguide
+    Z0 = 0.0;                   // characteristic impedance
+    Z0EH = 0.0;                 // characteristic impedance of field quantities*/
+    ang_l = 0.0;                // Electrical length in angle
     er_eff = 0.0;               // Effective dielectric constant
     mur_eff = 0.0;              // Effective mag. permeability
     atten_dielectric = 0.0;     // Loss in dielectric (dB)

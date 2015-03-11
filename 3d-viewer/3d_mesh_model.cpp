@@ -114,17 +114,18 @@ void S3D_MESH::openGL_Render()
             perVertexNormalsVerify_and_Repair();
         else
             calcPerPointNormals();
-            
+
     }
 
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
-        if( m_MaterialIndex.size() == 0 )
-            m_Materials->SetOpenGLMaterial( 0, useMaterial );
-        else
-            if( m_Materials )
+        if( m_Materials )
+        {
+            if( m_MaterialIndex.size() == 0 )
+                m_Materials->SetOpenGLMaterial( 0, useMaterial );
+            else
                 m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx], useMaterial );
-
+        }
 
         switch( m_CoordIndex[idx].size() )
         {
@@ -465,7 +466,7 @@ void S3D_MESH::calcPerPointNormals()
                 if( each_face_A_idx != each_face_B_idx )
                 {
                     bool addThisVertex = false;
-                    
+
                     for( unsigned int ii = 0; ii < m_CoordIndex[each_face_B_idx].size(); ii++ )
                     {
                         if( m_CoordIndex[each_face_B_idx][ii] == vertexIndex )
@@ -474,7 +475,7 @@ void S3D_MESH::calcPerPointNormals()
                             break;
                         }
                     }
-                    
+
                     if( addThisVertex )
                     {
                         glm::vec3 vector_face_B = m_PerFaceNormalsNormalized[each_face_B_idx];
