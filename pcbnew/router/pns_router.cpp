@@ -161,6 +161,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
         break;
 
     case PAD_SMD:
+    case PAD_HOLE_NOT_PLATED:
     case PAD_CONN:
         {
             LSET lmsk = aPad->GetLayerSet();
