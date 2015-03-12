@@ -62,7 +62,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_CntRot90 = m_CntRot180 = 0;
     m_Surface  = 0.0;
     m_Link     = 0;
-    m_LastEditTime  = time( NULL );
+    m_LastEditTime  = 0;
     m_LocalClearance = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
@@ -551,8 +551,13 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     // Display last date the component was edited (useful in Module Editor).
     wxDateTime date( m_LastEditTime );
+
+    if( m_LastEditTime && date.IsValid() )
     // Date format: see http://www.cplusplus.com/reference/ctime/strftime
-    msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
+        msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
+    else
+        msg = _( "Unknown" );
+
     aList.push_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
 
     // display schematic path

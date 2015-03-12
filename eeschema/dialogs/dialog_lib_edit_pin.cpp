@@ -84,13 +84,13 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     scale *= 0.9;
     dc.SetUserScale( scale, scale );
 
-    wxPoint offset =  bBox.Centre();
-    NEGATE( offset.x );
-    NEGATE( offset.y );
+    wxPoint offset = -bBox.Centre();
 
     GRResetPenAndBrush( &dc );
+    bool drawpinTexts = true;   // this is a dummy param. We use its reference
+                                // as non null value for m_dummyPin->Draw
     m_dummyPin->Draw( NULL, &dc, offset, UNSPECIFIED_COLOR, GR_COPY,
-                      NULL, DefaultTransform );
+                      &drawpinTexts, DefaultTransform );
 
     m_dummyPin->SetParent(NULL);
 

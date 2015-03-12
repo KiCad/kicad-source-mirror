@@ -448,7 +448,18 @@ void DIALOG_MODULE_BOARD_EDITOR::Edit3DShapeFileName()
     if( dlg.ShowModal() != wxID_OK || filename.IsEmpty() )
         return;    //Aborted by user
 
+#ifdef __WINDOWS__
+    // In Kicad files, filenames and paths are stored using Unix notation
+    // So be sure the unix notation is still used
+    filename.Replace( wxT( "\\" ), wxT( "/" ) );
+#endif
+
     m_3D_ShapeNameListBox->SetString( idx, filename );
+
+    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
+    new3DShape->SetShape3DName( filename );
+    delete m_Shapes3D_list[idx];
+    m_Shapes3D_list[idx] = new3DShape;
 }
 
 
