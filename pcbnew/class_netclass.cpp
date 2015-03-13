@@ -40,9 +40,12 @@
 const wxChar NETCLASS::Default[] = wxT( "Default" );
 
 // Initial values for netclass initialization
-const int NETCLASS::DEFAULT_CLEARANCE  = DMils2iu( 100 );   // track to track and track to pads clearance
-const int NETCLASS::DEFAULT_VIA_DRILL  = DMils2iu( 250 );   // default via drill
-const int NETCLASS::DEFAULT_UVIA_DRILL = DMils2iu( 50 );    // micro via drill
+const int NETCLASS::DEFAULT_CLEARANCE  = Millimeter2iu( 0.2 ); // track to track and track to pads clearance
+const int NETCLASS::DEFAULT_VIA_DIAMETER  = Millimeter2iu( 0.6 );
+const int NETCLASS::DEFAULT_VIA_DRILL  = Millimeter2iu( 0.4 );
+const int NETCLASS::DEFAULT_UVIA_DIAMETER = Millimeter2iu( 0.3 );
+const int NETCLASS::DEFAULT_UVIA_DRILL = Millimeter2iu( 0.1 );
+const int NETCLASS::DEFAULT_TRACK_WIDTH = Millimeter2iu( 0.25 );
 
 
 NETCLASS::NETCLASS( const wxString& aName ) :
@@ -52,6 +55,11 @@ NETCLASS::NETCLASS( const wxString& aName ) :
     SetClearance( DEFAULT_CLEARANCE );
     SetViaDrill( DEFAULT_VIA_DRILL );
     SetuViaDrill( DEFAULT_UVIA_DRILL );
+    // These defaults will be overwritten by SetParams,
+    // from the board design parameters, later
+    SetTrackWidth( DEFAULT_TRACK_WIDTH );
+    SetViaDiameter( DEFAULT_VIA_DIAMETER );
+    SetuViaDiameter( DEFAULT_UVIA_DIAMETER );
 }
 
 
@@ -63,20 +71,6 @@ void NETCLASS::SetParams( const NETCLASS& aDefaults )
     SetViaDrill( aDefaults.GetViaDrill() );
     SetuViaDiameter( aDefaults.GetuViaDiameter() );
     SetuViaDrill( aDefaults.GetuViaDrill() );
-}
-
-
-void NETCLASS::SetParams( const BOARD_DESIGN_SETTINGS& aSettings )
-{
-    SetTrackWidth( aSettings.m_TrackMinWidth );
-    SetViaDiameter( aSettings.m_ViasMinSize );
-    SetuViaDiameter( aSettings.m_MicroViasMinSize );
-
-    // TODO: BOARD_DESIGN_SETTINGS may provide the following parameters - should it?
-    // Use default values for next parameters:
-    SetClearance( DEFAULT_CLEARANCE );
-    SetViaDrill( DEFAULT_VIA_DRILL );
-    SetuViaDrill( DEFAULT_UVIA_DRILL );
 }
 
 

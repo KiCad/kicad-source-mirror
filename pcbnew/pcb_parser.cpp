@@ -1164,23 +1164,6 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
     m_board->SetDesignSettings( designSettings );
     m_board->SetZoneSettings( zoneSettings );
-
-    // Until such time as the *.brd file does not have the
-    // global parameters:
-    // "last_trace_width", "trace_min_width", "via_size", "via_drill",
-    // "via_min_size", and "via_clearance", put those same global
-    // values into the default NETCLASS until later board load
-    // code should override them.  *.kicad_pcb files which have been
-    // saved with knowledge of NETCLASSes will override these
-    // defaults, old boards will not.
-    //
-    // @todo: I expect that at some point we can remove said global
-    //        parameters from the *.brd file since the ones in the
-    //        default netclass serve the same purpose.  If needed
-    //        at all, the global defaults should go into a preferences
-    //        file instead so they are there to start new board
-    //        projects.
-    defaultNetClass->SetParams( m_board->GetDesignSettings() );
 }
 
 

@@ -94,11 +94,9 @@ BOARD::BOARD() :
             m_Layer[layer].m_type = LT_UNDEFINED;
     }
 
+    // Initialize default netclass.
     NETCLASSPTR defaultClass = m_designSettings.GetDefault();
     defaultClass->SetDescription( _( "This is the default net class." ) );
-
-    // Initialize default values in default netclass.
-    defaultClass->SetParams( m_designSettings );
     m_designSettings.SetCurrentNetClass( defaultClass->GetName() );
 
     // Set sensible initial values for custom track width & via size

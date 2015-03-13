@@ -215,7 +215,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
     case SCH_BUS_BUS_ENTRY_T:
     case SCH_BUS_WIRE_ENTRY_T:
-        AddMenusForBusEntry( PopMenu, dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ) );
+        AddMenusForBusEntry( PopMenu, static_cast<SCH_BUS_ENTRY_BASE*>( item ) );
         break;
 
     case SCH_MARKER_T:
@@ -854,6 +854,7 @@ void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* 
 void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
 {
     wxString msg;
+
     if( aBitmap->GetFlags() == 0 )
     {
         msg = AddHotkeyName( _( "Move Image" ), g_Schematic_Hokeys_Descr,
@@ -884,6 +885,7 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
 void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY_BASE* aBusEntry )
 {
     wxString msg;
+
     if( !aBusEntry->GetFlags() )
     {
         msg = AddHotkeyName( _( "Move Bus Entry" ), g_Schematic_Hokeys_Descr,

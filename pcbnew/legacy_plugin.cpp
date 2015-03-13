@@ -254,16 +254,6 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 #endif
 
 
-/* corrected old junk, element 14 was wrong.  can delete.
-// Look up Table for conversion copper layer count -> general copper layer mask:
-static const LEG_MASK all_cu_mask[] = {
-    0x0001, 0x8001, 0x8003, 0x8007,
-    0x800F, 0x801F, 0x803F, 0x807F,
-    0x80FF, 0x81FF, 0x83FF, 0x87FF,
-    0x8FFF, 0x9FFF, 0xBFFF, 0xFFFF
-};
-*/
-
 
 using namespace std;    // auto_ptr
 
@@ -951,6 +941,12 @@ void LEGACY_PLUGIN::loadSETUP()
             }
         }
 
+        else if( TESTLINE( "TrackWidth" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "TrackWidth" ) );
+            netclass_default->SetTrackWidth( tmp );
+        }
+
         else if( TESTLINE( "TrackWidthList" ) )
         {
             BIU tmp = biuParse( line + SZ( "TrackWidthList" ) );
@@ -1020,6 +1016,12 @@ void LEGACY_PLUGIN::loadSETUP()
                                                                                         drill ) );
         }
 
+        else if( TESTLINE( "ViaSize" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "ViaSize" ) );
+            netclass_default->SetViaDiameter( tmp );
+        }
+
         else if( TESTLINE( "ViaDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaDrill" ) );
@@ -1030,6 +1032,12 @@ void LEGACY_PLUGIN::loadSETUP()
         {
             BIU tmp = biuParse( line + SZ( "ViaMinDrill" ) );
             bds.m_ViasMinDrill = tmp;
+        }
+
+        else if( TESTLINE( "MicroViaSize" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "MicroViaSize" ) );
+            netclass_default->SetuViaDiameter( tmp );
         }
 
         else if( TESTLINE( "MicroViaDrill" ) )
@@ -1142,22 +1150,14 @@ void LEGACY_PLUGIN::loadSETUP()
             m_board->SetDesignSettings( bds );
             m_board->SetZoneSettings( zs );
 
-            // Until such time as the *.brd file does not have the
-            // global parameters:
-            // "TrackWidth", "TrackMinWidth", "ViaSize", "ViaDrill",
-            // "ViaMinSize", and "TrackClearence", put those same global
-            // values into the default NETCLASS until later board load
+            // Very old *.brd file does not have  NETCLASSes
+            // "TrackWidth", "ViaSize", "ViaDrill", "ViaMinSize",
+            // and "TrackClearence", were defined in SETUP
+            // these values are put into the default NETCLASS until later board load
             // code should override them.  *.brd files which have been
             // saved with knowledge of NETCLASSes will override these
-            // defaults, old boards will not.
-            //
-            // @todo: I expect that at some point we can remove said global
-            //        parameters from the *.brd file since the ones in the
-            //        default netclass serve the same purpose.  If needed
-            //        at all, the global defaults should go into a preferences
-            //        file instead so they are there to start new board
-            //        projects.
-            m_board->GetDesignSettings().GetDefault()->SetParams( m_board->GetDesignSettings() );
+            // defaults, very old boards (before 2009) will not and use the setup values.
+            // However these values should be the same as default NETCLASS.
 
             return;     // preferred exit
         }

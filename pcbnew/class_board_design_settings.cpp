@@ -69,12 +69,12 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
                                   Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ) );  // current Pcb (not module) Text size
 
     m_useCustomTrackVia = false;
-    m_customTrackWidth  = DMils2iu( 100 );
-    m_TrackMinWidth     = DMils2iu( 100 );      // track min value for width (min copper size value)
-    m_ViasMinSize       = DMils2iu( 350 );      // vias (not micro vias) min diameter
-    m_ViasMinDrill      = DMils2iu( 200 );      // vias (not micro vias) min drill diameter
-    m_MicroViasMinSize  = DMils2iu( 200 );      // micro vias (not vias) min diameter
-    m_MicroViasMinDrill = DMils2iu( 50 );       // micro vias (not vias) min drill diameter
+    m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );
+    m_TrackMinWidth     = Millimeter2iu( DEFAULT_TRACKMINWIDTH );   // track min width
+    m_ViasMinSize       = Millimeter2iu( DEFAULT_VIASMINSIZE );     // via (not uvia) min diam
+    m_ViasMinDrill      = Millimeter2iu( DEFAULT_VIASMINDRILL );    // via (not uvia) min drill diam
+    m_MicroViasMinSize  = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );// uvia (not via) min diam
+    m_MicroViasMinDrill = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );// uvia (not via) min drill diam
 
     // Global mask margins:
     m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ); // Solder mask margin

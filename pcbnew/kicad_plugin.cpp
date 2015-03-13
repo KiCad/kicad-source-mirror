@@ -536,23 +536,6 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, "(layers\n" );
 
     // Save only the used copper layers from front to back.
-#if 0   // was:
-    for( LAYER_NUM layer = LAST_COPPER_LAYER; layer >= FIRST_COPPER_LAYER; --layer)
-    {
-        LSET mask = GetLayerSet( layer );
-        if( mask & aBoard->GetEnabledLayers() )
-        {
-            m_out->Print( aNestLevel+1, "(%d %s %s", layer,
-                          m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
-                          LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
-
-            if( !( aBoard->GetVisibleLayers() & mask ) )
-                m_out->Print( 0, " hide" );
-
-            m_out->Print( 0, ")\n" );
-        }
-    }
-#else
     LSET visible_layers = aBoard->GetVisibleLayers();
 
     for( LSEQ cu = aBoard->GetEnabledLayers().CuStack();  cu;  ++cu )
@@ -568,26 +551,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
         m_out->Print( 0, ")\n" );
     }
-#endif
-
 
     // Save used non-copper layers in the order they are defined.
-#if 0 // was:
-    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER; ++layer)
-    {
-        LAYER_MSK mask = GetLayerMask( layer );
-        if( mask & aBoard->GetEnabledLayers() )
-        {
-            m_out->Print( aNestLevel+1, "(%d %s user", layer,
-                          m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
-
-            if( !( aBoard->GetVisibleLayers() & mask ) )
-                m_out->Print( 0, " hide" );
-
-            m_out->Print( 0, ")\n" );
-        }
-    }
-#else
     // desired sequence for non Cu BOARD layers.
     static const LAYER_ID non_cu[] = {
         B_Adhes,        // 32
@@ -622,7 +587,6 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
         m_out->Print( 0, ")\n" );
     }
-#endif
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -984,15 +948,6 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
 
     if( aModuleDrawing->GetWidth() != 0 )
         m_out->Print( 0, " (width %s)", FMT_IU( aModuleDrawing->GetWidth() ).c_str() );
-
-    /*  11-Nov-2021 remove if no one whines after a couple of months.  Simple graphic items
-        perhaps do not need these.
-    if( aModuleDrawing->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", aModuleDrawing->GetTimeStamp() );
-
-    if( aModuleDrawing->GetStatus() )
-        m_out->Print( 0, " (status %X)", aModuleDrawing->GetStatus() );
-    */
 
     m_out->Print( 0, ")\n" );
 }

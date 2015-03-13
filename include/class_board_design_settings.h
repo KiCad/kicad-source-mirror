@@ -47,6 +47,12 @@
 #define DEFAULT_SOLDERMASK_CLEARANCE 0.2
 #define DEFAULT_SOLDERMASK_MIN_WIDTH Millimeter2iu( 0.0 )
 
+#define DEFAULT_CUSTOMTRACKWIDTH    0.2
+#define DEFAULT_TRACKMINWIDTH       0.2     // track width min value
+#define DEFAULT_VIASMINSIZE         0.4     // vias (not micro vias) min diameter
+#define DEFAULT_VIASMINDRILL        0.3     // vias (not micro vias) min drill diameter
+#define DEFAULT_MICROVIASMINSIZE    0.2     // micro vias (not vias) min diameter
+#define DEFAULT_MICROVIASMINDRILL   0.1     // micro vias (not vias) min drill diameter
 
 /**
  * Struct VIA_DIMENSION

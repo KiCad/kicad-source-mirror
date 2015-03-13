@@ -615,8 +615,8 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, wxString aActualConversion )
                                     m_boardOutline.Add( new wxRealPoint( x, y ) );
                             }
 
-
-                            pNode = pNode->GetNext();
+                            if( pNode )
+                                pNode = pNode->GetNext();
 
                             if( pNode )
                             {

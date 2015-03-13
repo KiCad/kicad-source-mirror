@@ -38,6 +38,9 @@ using namespace KIGFX;
 OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
     m_initialized( false ), m_current( 0 ), m_currentFbo( DIRECT_RENDERING )
 {
+    // Avoid not initialized members:
+    m_framebuffer = 0;
+    m_depthBuffer = 0;
 }
 
 

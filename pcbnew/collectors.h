@@ -299,6 +299,8 @@ public:
      */
     GENERAL_COLLECTOR()
     {
+        m_Guide = NULL;
+        m_PrimaryLength = 0;
         SetScanTypes( AllBoardItems );
     }
 

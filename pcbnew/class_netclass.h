@@ -58,6 +58,9 @@ private:
     static const int DEFAULT_CLEARANCE;
     static const int DEFAULT_VIA_DRILL;
     static const int DEFAULT_UVIA_DRILL;
+    static const int DEFAULT_VIA_DIAMETER;
+    static const int DEFAULT_UVIA_DIAMETER;
+    static const int DEFAULT_TRACK_WIDTH;
 
 protected:
     wxString    m_Name;                 ///< Name of the net class
@@ -67,7 +70,7 @@ protected:
 
     STRINGSET   m_Members;              ///< names of NET members of this class
 
-    /// The units on these parameters is Internal Units (1 decimil or 1 nm)
+    /// The units on these parameters is Internal Units (1 nm)
 
     int         m_Clearance;            ///< clearance when routing
 
@@ -185,14 +188,6 @@ public:
      * @param aDefaults is another NETCLASS object to copy from.
      */
     void SetParams( const NETCLASS& aDefaults );
-
-    /**
-     * Function SetParams
-     * will set all the parameters by copying them from board design settings.
-     * @param aSettings is a BOARD_DESIGN_SETTINGS object to copy from. Clearance, via drill and
-     * microvia drill values are taken from the defaults.
-     */
-    void SetParams( const BOARD_DESIGN_SETTINGS& aSettings );
 
     /**
      * Function Format

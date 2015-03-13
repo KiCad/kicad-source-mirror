@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,13 +11,14 @@
 
 DIALOG_TRACK_VIA_SIZE_BASE::DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 280,240 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizes;
 	bSizes = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -28,7 +29,7 @@ DIALOG_TRACK_VIA_SIZE_BASE::DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWind
 	m_trackWidthText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_trackWidthText, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
-	m_trackWidthLabel = new wxStaticText( this, wxID_ANY, _("inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackWidthLabel = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trackWidthLabel->Wrap( -1 );
 	fgSizer1->Add( m_trackWidthLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -39,7 +40,7 @@ DIALOG_TRACK_VIA_SIZE_BASE::DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWind
 	m_viaDiameterText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_viaDiameterText, 1, wxALL|wxEXPAND, 5 );
 	
-	m_viaDiameterLabel = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaDiameterLabel = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaDiameterLabel->Wrap( -1 );
 	fgSizer1->Add( m_viaDiameterLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -50,7 +51,7 @@ DIALOG_TRACK_VIA_SIZE_BASE::DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWind
 	m_viaDrillText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_viaDrillText, 1, wxALL|wxEXPAND, 5 );
 	
-	m_viaDrillLabel = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaDrillLabel = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaDrillLabel->Wrap( -1 );
 	fgSizer1->Add( m_viaDrillLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -69,7 +70,6 @@ DIALOG_TRACK_VIA_SIZE_BASE::DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWind
 	
 	this->SetSizer( bSizes );
 	this->Layout();
-	bSizes->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

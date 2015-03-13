@@ -331,7 +331,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool aErase )
 {
     BASE_SCREEN*            screen = aPanel->GetScreen();
-    FOOTPRINT_EDIT_FRAME*   moduleEditFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( aPanel->GetParent() );
+    FOOTPRINT_EDIT_FRAME*   moduleEditFrame = static_cast<FOOTPRINT_EDIT_FRAME*>( aPanel->GetParent() );
 
     wxASSERT( moduleEditFrame );
     MODULE* currentModule = moduleEditFrame->GetBoard()->m_Modules;

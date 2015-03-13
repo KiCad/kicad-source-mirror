@@ -87,7 +87,8 @@ void PCB_ARC::Parse( XNODE*     aNode,
                          &m_startX, &m_startY, aActualConversion );
 
         // end point
-        lNode = lNode->GetNext();
+        if( lNode )
+            lNode = lNode->GetNext();
 
         if( lNode )
             SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
