@@ -59,8 +59,9 @@ public:
      * @param aMaterialIndex = the index in list of available materials
      * @param aUseMaterial = true to use the values found in the available material
      *                     = false to use only the color, and other prms are fixed
+     * @return true if the material is transparency
      */
-    void SetOpenGLMaterial(unsigned int aMaterialIndex, bool aUseMaterial);
+    bool SetOpenGLMaterial(unsigned int aMaterialIndex, bool aUseMaterial);
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override

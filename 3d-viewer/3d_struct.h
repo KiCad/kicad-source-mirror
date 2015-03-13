@@ -36,6 +36,7 @@
 #include <3d_material.h>
 #include <gal/opengl/glm/glm.hpp>
 
+
 /**
  * @note For historical reasons the 3D modeling unit is 0.1 inch
  * 1 3Dunit = 2.54 mm = 0.1 inch = 100 mils
@@ -81,15 +82,18 @@ public:
     }
 };
 
+class S3D_MODEL_PARSER;
+
 // Master structure for a 3D footprint shape description
 class S3D_MASTER : public EDA_ITEM
 {
 public:
-    S3DPOINT      m_MatScale;       ///< a scaling factor for the entire 3D footprint shape
-    S3DPOINT      m_MatRotation;    ///< a grotation for the entire 3D footprint shape
-    S3DPOINT      m_MatPosition;    ///< an offset for the entire 3D footprint shape
-    STRUCT_3D_SHAPE* m_3D_Drawings; ///< the list of basic shapes
-    S3D_MATERIAL*   m_Materials;    ///< the list of materiels used by the shapes
+    S3DPOINT            m_MatScale;     ///< a scaling factor for the entire 3D footprint shape
+    S3DPOINT            m_MatRotation;  ///< a grotation for the entire 3D footprint shape
+    S3DPOINT            m_MatPosition;  ///< an offset for the entire 3D footprint shape
+    STRUCT_3D_SHAPE*    m_3D_Drawings;  ///< the list of basic shapes
+    S3D_MATERIAL*       m_Materials;    ///< the list of materiels used by the shapes
+    S3D_MODEL_PARSER*   m_parser;       ///< it store the loaded file to be rendered later
 
     enum FILE3D_TYPE
     {
@@ -110,12 +114,6 @@ public:
 private:
     wxString    m_Shape3DName;      // the 3D shape filename in 3D library
     FILE3D_TYPE m_ShapeType;
-    double      m_lastTransparency;         // last transparency value from
-                                            // last material in use
-    bool        m_loadTransparentObjects;
-    bool        m_loadNonTransparentObjects;
-
-
 
 public:
     S3D_MASTER( EDA_ITEM* aParent );
@@ -125,23 +123,7 @@ public:
     S3D_MASTER* Back() const { return (S3D_MASTER*) Pback; }
 
     // Accessors
-    void SetLastTransparency( double aValue ) { m_lastTransparency = aValue; }
-
-    void SetLoadTransparentObjects( bool aLoad )
-        { m_loadTransparentObjects = aLoad; }
-
-    void SetLoadNonTransparentObjects( bool aLoad )
-        { m_loadNonTransparentObjects = aLoad; }
-
     void Insert( S3D_MATERIAL* aMaterial );
-
-    /**
-     * Function IsOpenGlAllowed
-     * @return true if opengl current list accepts a gl data
-     * used to filter transparent objects, which are drawn after
-     * non transparent objects
-     */
-    bool IsOpenGlAllowed();
 
     void Copy( S3D_MASTER* pattern );
 
@@ -151,6 +133,9 @@ public:
      * and build the description objects list
      */
     int  ReadData();
+
+    void Render( bool aIsRenderingJustNonTransparentObjects,
+                 bool aIsRenderingJustTransparentObjects );
 
     /**
      * Function ObjectCoordsTo3DUnits

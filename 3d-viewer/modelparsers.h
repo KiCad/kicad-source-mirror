@@ -49,8 +49,13 @@ public:
         master( aMaster )
     {}
 
-    virtual ~S3D_MODEL_PARSER()
-    {}
+    ~S3D_MODEL_PARSER()
+    {
+        for( unsigned int idx = 0; idx < childs.size(); idx++ )
+        {
+            delete childs[idx];
+        }
+    }
 
     S3D_MASTER* GetMaster()
     {
@@ -71,10 +76,21 @@ public:
      * pure virtual Function
      * Concrete parsers should implement this function
      * @param aFilename = the full file name of the file to load
-     * @param aVrmlunits_to_3Dunits = the scaling factor, i.e. the
-     *     convertion from file unit to internal 3D units
+     * @return true if as succeeded
      */
-    virtual void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits ) = 0;
+    virtual bool Load( const wxString& aFilename ) = 0;
+
+    /**
+     * Function Render
+     * Render the model to openGL. The arguments can be both false but just only one
+     * can be true.
+     * @param aIsRenderingJustNonTransparentObjects
+     * @param aIsRenderingJustTransparentObjects
+     */
+    void Render( bool aIsRenderingJustNonTransparentObjects,
+                 bool aIsRenderingJustTransparentObjects );
+
+    std::vector< S3D_MESH* > childs;
 
 private:
     S3D_MASTER* master;
@@ -93,7 +109,7 @@ public:
     X3D_MODEL_PARSER( S3D_MASTER* aMaster );
     ~X3D_MODEL_PARSER();
 
-    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
+    bool Load( const wxString& aFilename );
 
     typedef std::map< wxString, wxString > PROPERTY_MAP;
     typedef std::vector< wxXmlNode* >      NODE_LIST;
@@ -127,7 +143,6 @@ public:
 private:
     wxString                 m_Filename;
     S3D_MESH*                m_model;
-    std::vector< S3D_MESH* > childs;
 
     std::vector< wxString > vrml_materials;
     std::vector< wxString > vrml_points;
@@ -148,13 +163,13 @@ typedef std::map< std::string, std::vector< glm::vec3 > > VRML2_COORDINATE_MAP;
  * class VRML2_MODEL_PARSER
  * Parses
  */
-class VRML2_MODEL_PARSER: public S3D_MODEL_PARSER
+class VRML2_MODEL_PARSER
 {
 public:
-    VRML2_MODEL_PARSER( S3D_MASTER* aMaster );
+    VRML2_MODEL_PARSER( S3D_MODEL_PARSER* aModelParser );
     ~VRML2_MODEL_PARSER();
 
-    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
+    bool Load( const wxString& aFilename );
 
     /**
      * Return string representing VRML2 file in vrml2 format
@@ -185,11 +200,11 @@ private:
     bool                      m_normalPerVertex;
     bool                      colorPerVertex;
     S3D_MESH*                 m_model;
-    std::vector< S3D_MESH* >  childs;
     FILE*                     m_file;
-    S3D_MATERIAL*             m_Materials;
     wxString                  m_Filename;
     VRML2_COORDINATE_MAP      m_defCoordinateMap;
+    S3D_MODEL_PARSER*         m_ModelParser;
+    S3D_MASTER*               m_Master;
 };
 
 
@@ -197,13 +212,13 @@ private:
  * class VRML1_MODEL_PARSER
  * Parses
  */
-class VRML1_MODEL_PARSER: public S3D_MODEL_PARSER
+class VRML1_MODEL_PARSER
 {
 public:
-    VRML1_MODEL_PARSER( S3D_MASTER* aMaster );
+    VRML1_MODEL_PARSER( S3D_MODEL_PARSER* aModelParser );
     ~VRML1_MODEL_PARSER();
 
-    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
+    bool Load( const wxString& aFilename );
 
     /**
      * Return string representing VRML2 file in vrml2 format
@@ -233,10 +248,10 @@ private:
     bool                     m_normalPerVertex;
     bool                     colorPerVertex;
     S3D_MESH*                m_model;
-    std::vector< S3D_MESH* > childs;
-    S3D_MATERIAL*            m_Materials;
     FILE*                    m_file;
     wxString                 m_Filename;
+    S3D_MODEL_PARSER*        m_ModelParser;
+    S3D_MASTER*              m_Master;
 };
 
 /**
@@ -263,7 +278,7 @@ public:
      * @param aVrmlunits_to_3Dunits = the csaling factor to convert the 3D file unit
      * to our internal units.
      */
-    void Load( const wxString& aFilename, double aVrmlunits_to_3Dunits );
+    bool Load( const wxString& aFilename );
 
 private:
     S3D_MASTER*         m_curr3DShape;  ///< the current 3D shape to build from the file

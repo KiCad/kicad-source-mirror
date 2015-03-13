@@ -85,7 +85,7 @@ const wxString S3D_MASTER::GetShape3DFullFilename()
 }
 
 int S3D_MASTER::ReadData()
-{
+{    
     if( m_Shape3DName.IsEmpty() )
         return 1;
 
@@ -109,12 +109,13 @@ int S3D_MASTER::ReadData()
     wxFileName fn( filename );
 
     wxString extension = fn.GetExt();
-    S3D_MODEL_PARSER* parser = S3D_MODEL_PARSER::Create( this, extension );
 
-    if( parser )
+    m_parser = S3D_MODEL_PARSER::Create( this, extension );
+
+    if( m_parser )
     {
-        parser->Load( filename, g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB );
-        delete parser;
+        m_parser->Load( filename );
+
         return 0;
     }
     else
@@ -123,4 +124,43 @@ int S3D_MASTER::ReadData()
     }
 
     return -1;
+}
+
+void S3D_MASTER::Render( bool aIsRenderingJustNonTransparentObjects,
+                         bool aIsRenderingJustTransparentObjects )
+{
+    if( m_parser == NULL )
+        return;
+    
+    double aVrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+
+    glScalef( aVrmlunits_to_3Dunits, aVrmlunits_to_3Dunits, aVrmlunits_to_3Dunits );
+
+    glm::vec3 matScale( m_MatScale.x,
+                        m_MatScale.y,
+                        m_MatScale.z );
+
+    glm::vec3 matRot( m_MatRotation.x,
+                      m_MatRotation.y,
+                      m_MatRotation.z );
+
+    glm::vec3 matPos( m_MatPosition.x,
+                      m_MatPosition.y,
+                      m_MatPosition.z );
+
+    glTranslatef( matPos.x * SCALE_3D_CONV,
+                  matPos.y * SCALE_3D_CONV,
+                  matPos.z * SCALE_3D_CONV );
+
+    glRotatef( -matRot.z, 0.0f, 0.0f, 1.0f );
+    glRotatef( -matRot.y, 0.0f, 1.0f, 0.0f );
+    glRotatef( -matRot.x, 1.0f, 0.0f, 0.0f );
+
+    glScalef( matScale.x, matScale.y, matScale.z );
+
+    for( unsigned int idx = 0; idx < m_parser->childs.size(); idx++ )
+    {
+        m_parser->childs[idx]->openGL_RenderAllChilds( aIsRenderingJustNonTransparentObjects,
+                                                       aIsRenderingJustTransparentObjects );
+    }
 }

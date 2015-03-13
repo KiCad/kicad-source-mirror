@@ -43,7 +43,8 @@
 #endif
 
 #include <3d_struct.h>
-
+#include <class_module.h>
+ 
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
 class CPOLYGONS_LIST;
@@ -273,6 +274,32 @@ private:
      * Build a vertical hole (round or oblong) between the front and back layers
      */
     void   Draw3DPadHole( const D_PAD * aPad );
+
+    /**
+     * function Render3DComponentShape
+     * insert mesh in gl list
+     * @param module
+     * @param  aIsRenderingJustNonTransparentObjects = true to load non transparent objects
+     * @param  aIsRenderingJustTransparentObjects = true to load non transparent objects
+     * @param  aSideToLoad = false will load not fliped, true will load fliped objects
+     * in openGL, transparent objects should be drawn *after* non transparent objects
+     */
+    void Render3DComponentShape( MODULE* module,
+                                 bool aIsRenderingJustNonTransparentObjects,
+                                 bool aIsRenderingJustTransparentObjects,
+                                 bool aSideToLoad );
+
+    /**
+     * function Read3DComponentShape
+     * read the 3D component shape(s) of the footprint (physical shape).
+     * @param module
+     * @param model_parsers_list = list of each new model loaded
+     * @param model_filename_list = list of each new filename model loaded
+     * @return true if load was succeeded, false otherwise
+     */
+    bool Read3DComponentShape( MODULE* module,
+                               std::vector<S3D_MODEL_PARSER *>& model_parsers_list,
+                               std::vector<wxString>& model_filename_list );
 
     void   GenerateFakeShadowsTextures();
 

@@ -41,9 +41,9 @@
 VRML_MODEL_PARSER::VRML_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
-    m_curr3DShape = aMaster;
     vrml1_parser = NULL;
     vrml2_parser = NULL;
+    m_curr3DShape = NULL;
 }
 
 
@@ -52,9 +52,9 @@ VRML_MODEL_PARSER::~VRML_MODEL_PARSER()
 }
 
 
-void VRML_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Dunits )
+bool VRML_MODEL_PARSER::Load( const wxString& aFilename )
 {
-    char       line[128];
+    char       line[11 + 1];
     FILE*      file;
 
     //DBG( printf( "Load %s", GetChars( aFilename ) ) );
@@ -62,34 +62,33 @@ void VRML_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3D
     file = wxFopen( aFilename, wxT( "rt" ) );
 
     if( file == NULL )
-        return;
+        return false;
 
     if( fgets( line, 11, file ) == NULL )
     {
         fclose( file );
-        return;
+        return false;
     }
 
     fclose( file );
 
     if( stricmp( line, "#VRML V2.0" ) == 0 )
     {
-        //DBG( printf( "About to parser a #VRML V2.0 file\n" ) );
-        vrml2_parser = new VRML2_MODEL_PARSER( m_curr3DShape );
-        vrml2_parser->Load( aFilename, aVrmlunits_to_3Dunits );
+        vrml2_parser = new VRML2_MODEL_PARSER( this );
+        vrml2_parser->Load( aFilename );
         delete vrml2_parser;
         vrml2_parser = NULL;
-        return;
+        return true;
     }
     else if( stricmp( line, "#VRML V1.0" ) == 0 )
     {
-        //DBG( printf( "About to parser a #VRML V1.0 file\n" ) );
-        vrml1_parser = new VRML1_MODEL_PARSER( m_curr3DShape );
-        vrml1_parser->Load( aFilename, aVrmlunits_to_3Dunits );
+        vrml1_parser = new VRML1_MODEL_PARSER( this );
+        vrml1_parser->Load( aFilename );
         delete vrml1_parser;
         vrml1_parser = NULL;
-        return;
+        return true;
     }
 
-    // DBG( printf( "Unknown VRML file format: %s\n", line ) );
+    DBG( printf( "Unknown internal VRML file format: %s\n", line ) );
+    return false;
 }

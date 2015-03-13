@@ -71,30 +71,22 @@ void SetOpenGlDefaultMaterial()
 }
 
 
-void S3D_MATERIAL::SetOpenGLMaterial( unsigned int aMaterialIndex, bool aUseMaterial )
+bool S3D_MATERIAL::SetOpenGLMaterial( unsigned int aMaterialIndex, bool aUseMaterial )
 {
     S3D_MASTER * s3dParent = (S3D_MASTER *) GetParent();
-
-    if( ! s3dParent->IsOpenGlAllowed() )
-        return;
 
     if( aUseMaterial )
     {
         float transparency_value = 0.0f;
+
         if( m_Transparency.size() > aMaterialIndex )
         {
             transparency_value = m_Transparency[aMaterialIndex];
-            s3dParent->SetLastTransparency( transparency_value );
         }
-
+        
         if( m_DiffuseColor.size() > aMaterialIndex )
         {
             glm::vec3 color = m_DiffuseColor[aMaterialIndex];
-
-            if( m_AmbientColor.size() == 0 )
-            {
-                glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-            }
 
             glColor4f( color.x, color.y, color.z, 1.0 - transparency_value );
         }
@@ -136,15 +128,18 @@ void S3D_MATERIAL::SetOpenGLMaterial( unsigned int aMaterialIndex, bool aUseMate
             ambient[3] = 1.0f;
             glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT,  &ambient.x );
         }
+
+        return (transparency_value != 0.0f);
     }
     else
     {
         if( m_DiffuseColor.size() > aMaterialIndex )
         {
             glm::vec3 color = m_DiffuseColor[aMaterialIndex];
-            glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
             glColor4f( color.x, color.y, color.z, 1.0 );
         }
     }
+
+    return false;
 }
 

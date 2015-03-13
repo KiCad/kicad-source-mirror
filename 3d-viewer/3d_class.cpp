@@ -28,26 +28,9 @@
 
 #include <fctsys.h>
 
-#include <3d_viewer.h>
-#include <3d_struct.h>
-
-
-bool S3D_MASTER::IsOpenGlAllowed()
-{
-    if( m_loadNonTransparentObjects )    // return true for non transparent objects only
-    {
-        if( m_lastTransparency == 0.0 )
-            return true;
-    }
-
-    if( m_loadTransparentObjects )      // return true for transparent objects only
-    {
-        if( m_lastTransparency != 0.0 )
-            return true;
-    }
-
-    return false;
-}
+#include "3d_viewer.h"
+#include "3d_struct.h"
+#include "modelparsers.h"
 
 
 void S3D_MASTER::Insert( S3D_MATERIAL* aMaterial )
@@ -72,9 +55,10 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     EDA_ITEM( aParent, NOT_USED )
 {
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
-    m_lastTransparency = 0.0;
+    
     m_3D_Drawings = NULL;
     m_Materials   = NULL;
+    m_parser      = NULL;
     m_ShapeType   = FILE3D_NONE;
 
     m_use_modelfile_diffuseColor = true;
@@ -83,8 +67,6 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     m_use_modelfile_ambientIntensity = true;
     m_use_modelfile_transparency = true;
     m_use_modelfile_shininess = true;
-    m_loadTransparentObjects = true;
-    m_loadNonTransparentObjects = true;
 }
 
 

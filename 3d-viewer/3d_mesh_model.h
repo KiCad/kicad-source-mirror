@@ -58,8 +58,8 @@ public:
     S3D_MESH();
     ~S3D_MESH();
 
-    void openGL_Render();
-    void openGL_RenderAllChilds();
+    void openGL_RenderAllChilds( bool aIsRenderingJustNonTransparentObjects,
+                        bool aIsRenderingJustTransparentObjects );
 
     S3D_MATERIAL    *m_Materials;
 
@@ -81,10 +81,10 @@ public:
     std::vector<S3D_MESH *> childs;
 
 private:
-    std::vector< glm::vec3 > m_PerFaceNormalsRaw;
+    std::vector< glm::vec3 > m_PerFaceNormalsRaw_X_PerFaceSquaredArea;
     std::vector< std::vector< glm::vec3 > > m_PerFaceVertexNormals;
     std::vector< glm::vec3 > m_PointNormalized;
-    std::vector< float > m_PerFaceSquaredArea;
+
     std::vector< std::vector<int> > m_InvalidCoordIndexes; //!TODO: check for invalid CoordIndex in file and remove the index and the same material index
 
     bool isPerFaceNormalsComputed;
@@ -98,7 +98,9 @@ private:
 
     bool isPerVertexNormalsVerified;
     void perVertexNormalsVerify_and_Repair();
-};
 
+    void openGL_Render( bool aIsRenderingJustNonTransparentObjects,
+                        bool aIsRenderingJustTransparentObjects );
+};
 
 #endif

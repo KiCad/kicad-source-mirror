@@ -40,6 +40,14 @@
 #include <modelparsers.h>
 #include <xnode.h>
 
+/**
+ * Trace mask used to enable or disable the trace output of the X3D parser code.
+ * The debug output can be turned on by setting the WXTRACE environment variable to
+ * "KI_TRACE_X3D_PARSER".  See the wxWidgets documentation on wxLogTrace for
+ * more information.
+ */
+static const wxChar* traceX3DParser = wxT( "KI_TRACE_X3D_PARSER" );
+
 
 X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
@@ -53,40 +61,23 @@ X3D_MODEL_PARSER::~X3D_MODEL_PARSER()
 }
 
 
-void X3D_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlUnitsTo3DUnits )
+bool X3D_MODEL_PARSER::Load( const wxString& aFilename )
 {
+    wxLogTrace( traceX3DParser, wxT( "Loading: %s" ), GetChars( aFilename ) );
+
     wxXmlDocument doc;
 
     if( !doc.Load( aFilename ) )
     {
-        wxLogError( wxT( "Error while parsing file '%s'" ), GetChars( aFilename ) );
-        return;
+        wxLogTrace( traceX3DParser, wxT( "Error while parsing file: %s" ), GetChars( aFilename ) );
+        return false;
     }
 
     if( doc.GetRoot()->GetName() != wxT( "X3D" ) )
     {
-        wxLogError( wxT( "Filetype is not X3D '%s'" ), GetChars( aFilename ) );
-        return;
+        wxLogTrace( traceX3DParser, wxT( "Filetype is not X3D: %s" ), GetChars( aFilename ) );
+        return false;
     }
-
-
-    float vrmlunits_to_3Dunits = aVrmlUnitsTo3DUnits;
-    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
-
-    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,
-            GetMaster()->m_MatScale.z );
-    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y,
-            GetMaster()->m_MatRotation.z );
-    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y,
-            GetMaster()->m_MatPosition.z );
-
-    glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
-
-    glRotatef( -matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef( -matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef( -matRot.x, 1.0f, 0.0f, 0.0f );
-
-    glScalef( matScale.x, matScale.y, matScale.z );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
@@ -109,15 +100,7 @@ void X3D_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlUnitsTo3DUni
         readTransform( *node_it );
     }
 
-    // DBG( printf( "chils size:%lu\n", childs.size() ) );
-
-    if( GetMaster()->IsOpenGlAllowed() )
-    {
-        for( unsigned int idx = 0; idx < childs.size(); idx++ )
-        {
-            childs[idx]->openGL_RenderAllChilds();
-        }
-    }
+    return true;
 }
 
 
@@ -485,7 +468,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
         }
         else
         {
-            wxLogError( wxT( "Error converting to double" ) );
+            wxLogTrace( traceX3DParser, wxT( "Error converting to double" ) );
         }
     }
 
@@ -552,7 +535,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
             }
             else
             {
-                wxLogError( wxT( "Error converting to double" ) );
+                wxLogTrace( traceX3DParser, wxT( "Error converting to double" ) );
             }
         }
 

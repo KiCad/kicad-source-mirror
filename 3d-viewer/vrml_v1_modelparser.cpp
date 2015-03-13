@@ -36,14 +36,23 @@
 #include "modelparsers.h"
 #include "vrml_aux.h"
 
-#define BUFLINE_SIZE 512
+#define BUFLINE_SIZE 32
 
-VRML1_MODEL_PARSER::VRML1_MODEL_PARSER( S3D_MASTER* aMaster ) :
-    S3D_MODEL_PARSER( aMaster )
+ /**
+ * Trace mask used to enable or disable the trace output of the VRML V1 parser code.
+ * The debug output can be turned on by setting the WXTRACE environment variable to
+ * "KI_TRACE_VRML_V1_PARSER".  See the wxWidgets documentation on wxLogTrace for
+ * more information.
+ */
+static const wxChar* traceVrmlV1Parser = wxT( "KI_TRACE_VRML_V1_PARSER" );
+
+
+VRML1_MODEL_PARSER::VRML1_MODEL_PARSER( S3D_MODEL_PARSER* aModelParser )
 {
+    m_ModelParser = aModelParser;
+    m_Master = m_ModelParser->GetMaster();
     m_model = NULL;
     m_file  = NULL;
-    m_Materials = NULL;
     m_normalPerVertex = true;
     colorPerVertex = true;
 }
@@ -51,43 +60,24 @@ VRML1_MODEL_PARSER::VRML1_MODEL_PARSER( S3D_MASTER* aMaster ) :
 
 VRML1_MODEL_PARSER::~VRML1_MODEL_PARSER()
 {
-    for( unsigned int idx = 0; idx < childs.size(); idx++ )
-        delete childs[idx];
 }
 
 
-void VRML1_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Dunits )
+bool VRML1_MODEL_PARSER::Load( const wxString& aFilename )
 {
     char text[BUFLINE_SIZE];
 
-    // DBG( printf( "Load %s\n", GetChars(aFilename) ) );
+    wxLogTrace( traceVrmlV1Parser, wxT( "Loading: %s" ), GetChars( aFilename ) );
+
     m_file = wxFopen( aFilename, wxT( "rt" ) );
 
     if( m_file == NULL )
-        return;
+        return false;
 
-    float vrmlunits_to_3Dunits = aVrmlunits_to_3Dunits;
-    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
+    // Switch the locale to standard C (needed to print floating point numbers)
+    LOCALE_IO toggle;
 
-    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,
-            GetMaster()->m_MatScale.z );
-    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y,
-            GetMaster()->m_MatRotation.z );
-    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y,
-            GetMaster()->m_MatPosition.z );
-
-    // glPushMatrix();
-    glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
-
-    glRotatef( -matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef( -matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef( -matRot.x, 1.0f, 0.0f, 0.0f );
-
-    glScalef( matScale.x, matScale.y, matScale.z );
-
-    LOCALE_IO toggle;   // Switch the locale to standard C
-
-    childs.clear();
+    m_ModelParser->childs.clear();
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
     {
@@ -99,22 +89,14 @@ void VRML1_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
         if( strcmp( text, "Separator" ) == 0 )
         {
             m_model = new S3D_MESH();
-            childs.push_back( m_model );
+            m_ModelParser->childs.push_back( m_model );
             read_separator();
         }
     }
 
     fclose( m_file );
 
-    // DBG( printf( "chils size:%lu\n", childs.size() ) );
-
-    if( GetMaster()->IsOpenGlAllowed() )
-    {
-        for( unsigned int idx = 0; idx < childs.size(); idx++ )
-        {
-            childs[idx]->openGL_RenderAllChilds();
-        }
-    }
+    return true;
 }
 
 
@@ -175,9 +157,9 @@ int VRML1_MODEL_PARSER::readMaterial()
 
     wxString mat_name;
 
-    material = new S3D_MATERIAL( GetMaster(), mat_name );
+    material = new S3D_MATERIAL( m_Master, mat_name );
 
-    GetMaster()->Insert( material );
+    m_Master->Insert( material );
 
     m_model->m_Materials = material;
 
@@ -219,6 +201,7 @@ int VRML1_MODEL_PARSER::readMaterial()
         }
     }
 
+    wxLogTrace( traceVrmlV1Parser, wxT( "  readMaterial failed" ) );
     return -1;
 }
 
@@ -247,6 +230,7 @@ int VRML1_MODEL_PARSER::readCoordinate3()
         }
     }
 
+    wxLogTrace( traceVrmlV1Parser, wxT( "  readCoordinate3 failed" ) );
     return -1;
 }
 
@@ -279,6 +263,7 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet()
         }
     }
 
+    wxLogTrace( traceVrmlV1Parser, wxT( "  readIndexedFaceSet failed" ) );
     return -1;
 }
 
@@ -305,7 +290,7 @@ int VRML1_MODEL_PARSER::readMaterial_emissiveColor()
 
     int ret = parseVertexList( m_file, m_model->m_Materials->m_EmissiveColor );
 
-    if( GetMaster()->m_use_modelfile_emissiveColor == false )
+    if( m_Master->m_use_modelfile_emissiveColor == false )
     {
         m_model->m_Materials->m_EmissiveColor.clear();
     }
@@ -320,7 +305,7 @@ int VRML1_MODEL_PARSER::readMaterial_specularColor()
 
     int ret = parseVertexList( m_file, m_model->m_Materials->m_SpecularColor );
 
-    if( GetMaster()->m_use_modelfile_specularColor == false )
+    if( m_Master->m_use_modelfile_specularColor == false )
     {
         m_model->m_Materials->m_SpecularColor.clear();
     }
@@ -344,7 +329,7 @@ int VRML1_MODEL_PARSER::readMaterial_shininess()
         m_model->m_Materials->m_Shininess.push_back( shininess_value );
     }
 
-    if( GetMaster()->m_use_modelfile_shininess == false )
+    if( m_Master->m_use_modelfile_shininess == false )
     {
         m_model->m_Materials->m_Shininess.clear();
     }
@@ -368,7 +353,7 @@ int VRML1_MODEL_PARSER::readMaterial_transparency()
         m_model->m_Materials->m_Transparency.push_back( tmp );
     }
 
-    if( GetMaster()->m_use_modelfile_transparency == false )
+    if( m_Master->m_use_modelfile_transparency == false )
     {
         m_model->m_Materials->m_Transparency.clear();
     }
@@ -388,6 +373,7 @@ int VRML1_MODEL_PARSER::readCoordinate3_point()
         return 0;
     }
 
+    wxLogTrace( traceVrmlV1Parser, wxT( "  readCoordinate3_point failed" ) );
     return -1;
 }
 
@@ -415,12 +401,12 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet_coordIndex()
             || (coord[0] == coord[2])
             || (coord[2] == coord[1]) )
         {
-            // DBG( printf( "    invalid coordIndex at index %lu (%d, %d, %d, %d)\n", m_model->m_CoordIndex.size()+1,coord[0], coord[1], coord[2], dummy ) );
+            wxLogTrace( traceVrmlV1Parser, wxT( "    invalid coordIndex at index %u (%d, %d, %d, %d)" ), (unsigned int)m_model->m_CoordIndex.size() + 1,coord[0], coord[1], coord[2], dummy );
         }
 
         if( dummy != -1 )
         {
-            // DBG( printf( "    Error at index %lu, -1 Expected, got %d\n", m_model->m_CoordIndex.size()+1, dummy  ) );
+            wxLogTrace( traceVrmlV1Parser, wxT( "    Error at index %u, -1 Expected, got %d" ), (unsigned int)m_model->m_CoordIndex.size() + 1, dummy );
         }
 
         m_model->m_CoordIndex.push_back( coord_list );

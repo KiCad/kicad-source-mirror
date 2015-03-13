@@ -547,11 +547,7 @@ void EDA_3D_CANVAS::Redraw()
     glEnable(GL_COLOR_MATERIAL);
     SetOpenGlDefaultMaterial();
 
-
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glDisable( GL_BLEND );
 
     // Draw Solid Shapes
     if( isEnabled( FL_MODULE ) )
@@ -562,6 +558,9 @@ void EDA_3D_CANVAS::Redraw()
         glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
     }
 
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
     // Grid uses transparency: draw it after all objects
     if( isEnabled( FL_GRID ) && m_glLists[GL_ID_GRID] )
         glCallList( m_glLists[GL_ID_GRID] );
@@ -571,6 +570,8 @@ void EDA_3D_CANVAS::Redraw()
     // non transparent objects
     if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
         glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
+
+    glDisable( GL_BLEND );
 
     // Draw Board Shadow
     if( isEnabled( FL_MODULE ) && isRealisticMode() &&
@@ -667,7 +668,7 @@ void EDA_3D_CANVAS::BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint
 }
 
 
-void EDA_3D_CANVAS::BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList)
+void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList )
 {
     BOARD* pcb = GetBoard();
 
@@ -1315,6 +1316,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
 // For testing purpose only, display calculation time to generate 3D data
 // #define PRINT_CALCULATION_TIME
 
+
 #ifdef PRINT_CALCULATION_TIME
     unsigned strtime = GetRunningMicroSecs();
 #endif
@@ -1355,7 +1357,13 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
         if( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
             glDeleteLists( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT], 1 );
 
-        m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] = glGenLists( 1 );
+        bool useMaterial = g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL );
+
+        if( useMaterial )
+            m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] = glGenLists( 1 );
+        else
+            m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] = 0;
+
         BuildFootprintShape3DList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT],
                                    m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT], false );
 
@@ -1364,6 +1372,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
         m_glLists[GL_ID_SHADOW_FRONT] = glGenLists( 1 );
         m_glLists[GL_ID_SHADOW_BACK]  = glGenLists( 1 );
         m_glLists[GL_ID_SHADOW_BOARD] = glGenLists( 1 );
+
         BuildShadowList(m_glLists[GL_ID_SHADOW_FRONT], m_glLists[GL_ID_SHADOW_BACK], m_glLists[GL_ID_SHADOW_BOARD]);
 
         CheckGLError( __FILE__, __LINE__ );
@@ -1382,65 +1391,155 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
 void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
                                                GLuint aTransparentList, bool aSideToLoad)
 {
+#ifdef PRINT_CALCULATION_TIME
+    unsigned strtime = GetRunningMicroSecs();
+#endif
+    // This lists are used to just load once of each filename model
+    std::vector<S3D_MODEL_PARSER *> model_parsers_list;
+    std::vector<wxString> model_filename_list;
+
+    BOARD* pcb = GetBoard();
+
+    for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
+        Read3DComponentShape( module, model_parsers_list, model_filename_list );
+
+#ifdef PRINT_CALCULATION_TIME
+    {
+    unsigned    endtime = GetRunningMicroSecs();
+    wxString    msg;
+    msg.Printf( "  Read3DComponentShape total time %.1f ms", (double) (endtime - strtime) / 1000 );
+    DBG( printf( "%s\n", (const char*)msg.c_str() ) );
+    }
+#endif
+
+#ifdef PRINT_CALCULATION_TIME
+    strtime = GetRunningMicroSecs();
+#endif
+
+    bool useMaterial = g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL );
+
+    if( useMaterial )
+    {
         // aOpaqueList is the gl list for non transparent items
         // aTransparentList is the gl list for non transparent items,
         // which need to be drawn after all other items
 
-        BOARD* pcb = GetBoard();
         glNewList( aOpaqueList, GL_COMPILE );
-        bool loadTransparentObjects = false;
+        bool loadOpaqueObjects = true;
 
         for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-            module->ReadAndInsert3DComponentShape( this, !loadTransparentObjects,
-                                                   loadTransparentObjects, aSideToLoad );
-
+            Render3DComponentShape( module,  loadOpaqueObjects,
+                                             !loadOpaqueObjects, aSideToLoad );
         glEndList();
+
 
         glNewList( aTransparentList, GL_COMPILE );
-        loadTransparentObjects = true;
+        bool loadTransparentObjects = true;
 
         for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-            module->ReadAndInsert3DComponentShape( this, !loadTransparentObjects,
-                                                   loadTransparentObjects, aSideToLoad );
+            Render3DComponentShape( module, !loadTransparentObjects,
+                                            loadTransparentObjects, aSideToLoad );
 
         glEndList();
+    }
+    else
+    {
+        // Just create one list
+        glNewList( aOpaqueList, GL_COMPILE );
+
+        for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
+            Render3DComponentShape( module, false, false, aSideToLoad );
+        glEndList();
+    }
+
+#ifdef PRINT_CALCULATION_TIME
+    {
+    unsigned    endtime = GetRunningMicroSecs();
+    wxString    msg;
+    msg.Printf( "  Render3DComponentShape total time %.1f ms", (double) (endtime - strtime) / 1000 );
+    DBG( printf( "%s\n", (const char*)msg.c_str() ) );
+    }
+#endif
 }
 
 
-void MODULE::ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
-                                    bool aAllowNonTransparentObjects,
-                                    bool aAllowTransparentObjects,
-                                    bool aSideToLoad )
+bool EDA_3D_CANVAS::Read3DComponentShape( MODULE* module,
+                                          std::vector<S3D_MODEL_PARSER *>& model_parsers_list,
+                                          std::vector<wxString>& model_filename_list )
 {
+    S3D_MASTER* shape3D = module->Models();
 
+    for( ; shape3D; shape3D = shape3D->Next() )
+    {
+        if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
+        {
+            bool found = false;
+
+            unsigned int i;
+            wxString shape_filename = shape3D->GetShape3DFullFilename();
+
+            // Search for already loaded files
+            for( i = 0; i < model_filename_list.size(); i++ )
+            {
+                if( shape_filename.Cmp(model_filename_list[i]) == 0 )
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if( found == false )
+            {
+                shape3D->ReadData();
+                model_filename_list.push_back( shape_filename );
+                model_parsers_list.push_back( shape3D->m_parser );
+            }
+            else
+            {
+                DBG( printf( "  Read3DComponentShape reusing %s\n", (const char*)shape_filename.c_str() ) );
+                shape3D->m_parser = model_parsers_list[i];
+            }
+        }
+    }
+
+    return true;
+}
+
+
+void EDA_3D_CANVAS::Render3DComponentShape( MODULE* module,
+                                            bool aIsRenderingJustNonTransparentObjects,
+                                            bool aIsRenderingJustTransparentObjects,
+                                            bool aSideToLoad )
+{
     // Read from disk and draws the footprint 3D shapes if exists
-    double zpos = glcanvas->GetPrm3DVisu().GetModulesZcoord3DIU( IsFlipped() );
+    double zpos = GetPrm3DVisu().GetModulesZcoord3DIU( module->IsFlipped() );
 
     glPushMatrix();
 
-    glTranslatef( m_Pos.x * glcanvas->GetPrm3DVisu().m_BiuTo3Dunits,
-                  -m_Pos.y * glcanvas->GetPrm3DVisu().m_BiuTo3Dunits,
-                  zpos );
+    wxPoint pos = module->GetPosition();
 
-    if( m_Orient )
-        glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
+    glTranslatef(  pos.x * GetPrm3DVisu().m_BiuTo3Dunits,
+                  -pos.y * GetPrm3DVisu().m_BiuTo3Dunits,
+                   zpos );
 
-    if( IsFlipped() )
+    if( module->GetOrientation() )
+        glRotatef( (double) module->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
+
+    if( module->IsFlipped() )
     {
         glRotatef( 180.0, 0.0, 1.0, 0.0 );
         glRotatef( 180.0, 0.0, 0.0, 1.0 );
     }
 
-    S3D_MASTER* shape3D = Models();
+    S3D_MASTER* shape3D = module->Models();
+
     for( ; shape3D; shape3D = shape3D->Next() )
     {
-        shape3D->SetLoadNonTransparentObjects( aAllowNonTransparentObjects );
-        shape3D->SetLoadTransparentObjects( aAllowTransparentObjects );
-
         if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
         {
             glPushMatrix();
-            shape3D->ReadData();
+            shape3D->Render( aIsRenderingJustNonTransparentObjects,
+                             aIsRenderingJustTransparentObjects );
             glPopMatrix();
         }
     }

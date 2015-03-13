@@ -313,21 +313,6 @@ public:
                wxDC* aDC, const wxPoint&  aMoveVector );
 
     /**
-     * function ReadandInsert3DComponentShape
-     * read the 3D component shape(s) of the footprint (physical shape)
-     * and insert mesh in gl list
-     * @param glcanvas = the openGL canvas
-     * @param  aAllowNonTransparentObjects = true to load non transparent objects
-     * @param  aAllowTransparentObjects = true to load non transparent objects
-     * @param  aSideToLoad = false will load not fliped, true will load fliped objects
-     * in openGL, transparent objects should be drawn *after* non transparent objects
-     */
-    void ReadAndInsert3DComponentShape( EDA_3D_CANVAS* glcanvas,
-                                        bool aAllowNonTransparentObjects,
-                                        bool aAllowTransparentObjects,
-                                        bool aSideToLoad );
-
-    /**
      * function TransformPadsShapesWithClearanceToPolygon
      * generate pads shapes on layer aLayer as polygons,
      * and adds these polygons to aCornerBuffer
@@ -619,8 +604,8 @@ public:
 
     /**
      * Function PadCoverageRatio
-     * Calculates the ratio of total area of the footprint pads to the area of the 
-     * footprint. Used by selection tool heuristics. 
+     * Calculates the ratio of total area of the footprint pads to the area of the
+     * footprint. Used by selection tool heuristics.
      * @return the ratio
      */
     double PadCoverageRatio() const;

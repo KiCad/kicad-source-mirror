@@ -39,7 +39,7 @@
 #include "modelparsers.h"
 #include "vrml_aux.h"
 
-#define BUFLINE_SIZE 512
+#define BUFLINE_SIZE 32
 
 /**
  * Trace mask used to enable or disable the trace output of the VRML V2 parser code.
@@ -50,12 +50,12 @@
 static const wxChar* traceVrmlV2Parser = wxT( "KI_TRACE_VRML_V2_PARSER" );
 
 
-VRML2_MODEL_PARSER::VRML2_MODEL_PARSER( S3D_MASTER* aMaster ) :
-    S3D_MODEL_PARSER( aMaster )
+VRML2_MODEL_PARSER::VRML2_MODEL_PARSER( S3D_MODEL_PARSER* aModelParser )
 {
+    m_ModelParser = aModelParser;
+    m_Master = m_ModelParser->GetMaster();
     m_model = NULL;
     m_file = NULL;
-    m_Materials = NULL;
     m_normalPerVertex = true;
     colorPerVertex = true;
 }
@@ -63,46 +63,27 @@ VRML2_MODEL_PARSER::VRML2_MODEL_PARSER( S3D_MASTER* aMaster ) :
 
 VRML2_MODEL_PARSER::~VRML2_MODEL_PARSER()
 {
-    for( unsigned int idx = 0; idx < childs.size(); idx++ )
-    {
-        delete childs[idx];
-    }
 }
 
 
-void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3Dunits )
+bool VRML2_MODEL_PARSER::Load( const wxString& aFilename )
 {
     char text[BUFLINE_SIZE];
 
-    wxLogTrace( traceVrmlV2Parser, wxT( "Load %s" ), GetChars( aFilename ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "Loading: %s" ), GetChars( aFilename ) );
+
     m_file = wxFopen( aFilename, wxT( "rt" ) );
 
     if( m_file == NULL )
     {
-        return;
+        wxLogTrace( traceVrmlV2Parser, wxT( "Failed to open file: %s" ), GetChars( aFilename ) );
+        return false;
     }
 
-    float vrmlunits_to_3Dunits = aVrmlunits_to_3Dunits;
-    glScalef( vrmlunits_to_3Dunits, vrmlunits_to_3Dunits, vrmlunits_to_3Dunits );
+    // Switch the locale to standard C (needed to print floating point numbers)
+    LOCALE_IO toggle;
 
-    glm::vec3 matScale( GetMaster()->m_MatScale.x, GetMaster()->m_MatScale.y,
-            GetMaster()->m_MatScale.z );
-    glm::vec3 matRot( GetMaster()->m_MatRotation.x, GetMaster()->m_MatRotation.y,
-            GetMaster()->m_MatRotation.z );
-    glm::vec3 matPos( GetMaster()->m_MatPosition.x, GetMaster()->m_MatPosition.y,
-            GetMaster()->m_MatPosition.z );
-
-    glTranslatef( matPos.x * SCALE_3D_CONV, matPos.y * SCALE_3D_CONV, matPos.z * SCALE_3D_CONV );
-
-    glRotatef( -matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef( -matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef( -matRot.x, 1.0f, 0.0f, 0.0f );
-
-    glScalef( matScale.x, matScale.y, matScale.z );
-
-    LOCALE_IO toggle;   // Temporary switch the locale to standard C to r/w floats
-
-    childs.clear();
+    m_ModelParser->childs.clear();
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
     {
@@ -114,33 +95,50 @@ void VRML2_MODEL_PARSER::Load( const wxString& aFilename, double aVrmlunits_to_3
         if( strcmp( text, "Transform" ) == 0 )
         {
             m_model = new S3D_MESH();
-            childs.push_back( m_model );
+            m_ModelParser->childs.push_back( m_model );
 
-            read_Transform();
+            if( read_Transform() == 0)
+            {
+                //wxLogTrace( traceVrmlV2Parser, wxT( "  m_Point.size: %u" ), (unsigned int)m_model->m_Point.size() );
+                //wxLogTrace( traceVrmlV2Parser, wxT( "  m_CoordIndex.size: %u" ), (unsigned int)m_model->m_CoordIndex.size() );
+            }
         }
         else if( strcmp( text, "DEF" ) == 0 )
         {
             m_model = new S3D_MESH();
-            childs.push_back( m_model );
+            m_ModelParser->childs.push_back( m_model );
 
-            read_DEF();
+            if( read_DEF() == 0 )
+            {
+                //wxLogTrace( traceVrmlV2Parser, wxT( "  m_Point.size: %u" ), (unsigned int)m_model->m_Point.size() );
+                //wxLogTrace( traceVrmlV2Parser, wxT( "  m_CoordIndex.size: %u" ), (unsigned int)m_model->m_CoordIndex.size() );
+            }
+        }
+        else if( strcmp( text, "Shape" ) == 0 )
+        {
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    Shape" ) );
+
+            m_model = new S3D_MESH();
+            m_ModelParser->childs.push_back( m_model );
+
+            if( read_Shape() == 0 )
+            {
+                //wxLogTrace( traceVrmlV2Parser, wxT( "  m_Point.size: %u" ), (unsigned int)m_model->m_Point.size() );
+                //wxLogTrace( traceVrmlV2Parser, wxT( "  m_CoordIndex.size: %u" ), (unsigned int)m_model->m_CoordIndex.size() );
+            }
         }
     }
 
     fclose( m_file );
 
-    if( GetMaster()->IsOpenGlAllowed() )
-    {
-        for( unsigned int idx = 0; idx < childs.size(); idx++ )
-        {
-            childs[idx]->openGL_RenderAllChilds();
-        }
-    }
+    return true;
 }
 
 
 int VRML2_MODEL_PARSER::read_Transform()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "  read_Transform" ) );
+
     char text[BUFLINE_SIZE];
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
@@ -158,6 +156,11 @@ int VRML2_MODEL_PARSER::read_Transform()
         if( strcmp( text, "translation" ) == 0 )
         {
             parseVertex( m_file, m_model->m_translation );
+            
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    translation (%f,%f,%f)" ),
+            //                               m_model->m_translation.x,
+            //                               m_model->m_translation.y,
+            //                               m_model->m_translation.z );
         }
         else if( strcmp( text, "rotation" ) == 0 )
         {
@@ -166,20 +169,29 @@ int VRML2_MODEL_PARSER::read_Transform()
                         &m_model->m_rotation[2],
                         &m_model->m_rotation[3] ) != 4 )
             {
-                // !TODO: log errors
                 m_model->m_rotation[0]  = 0.0f;
                 m_model->m_rotation[1]  = 0.0f;
                 m_model->m_rotation[2]  = 0.0f;
                 m_model->m_rotation[3]  = 0.0f;
+
+                wxLogTrace( traceVrmlV2Parser, wxT( "    rotation failed, setting to zeros" ) );
             }
             else
             {
                 m_model->m_rotation[3] = m_model->m_rotation[3] * 180.0f / 3.14f;    // !TODO: use constants or functions
             }
+
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    rotation (%f,%f,%f,%f)" ),
+            //                   m_model->m_rotation[0],
+            //                   m_model->m_rotation[1],
+            //                   m_model->m_rotation[2],
+            //                   m_model->m_rotation[3] );
         }
         else if( strcmp( text, "scale" ) == 0 )
         {
             parseVertex( m_file, m_model->m_scale );
+
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    scale (%f,%f,%f)" ), m_model->m_scale.x, m_model->m_scale.y, m_model->m_scale.z );
         }
         else if( strcmp( text, "scaleOrientation" ) == 0 )
         {
@@ -189,16 +201,25 @@ int VRML2_MODEL_PARSER::read_Transform()
                         &m_model->m_scaleOrientation[2],
                         &m_model->m_scaleOrientation[3] ) != 4 )
             {
-                // !TODO: log errors
                 m_model->m_scaleOrientation[0]  = 0.0f;
                 m_model->m_scaleOrientation[1]  = 0.0f;
                 m_model->m_scaleOrientation[2]  = 0.0f;
                 m_model->m_scaleOrientation[3]  = 0.0f;
+
+                wxLogTrace( traceVrmlV2Parser, wxT( "    scaleOrientation failed, setting to zeros" ) );
             }
+
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    scaleOrientation (%f,%f,%f,%f)" ),
+            //                   m_model->m_scaleOrientation[0],
+            //                   m_model->m_scaleOrientation[1],
+            //                   m_model->m_scaleOrientation[2],
+            //                   m_model->m_scaleOrientation[3] );
         }
         else if( strcmp( text, "center" ) == 0 )
         {
             parseVertex( m_file, m_model->m_center );
+
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    center (%f,%f,%f)" ), m_model->m_center.x, m_model->m_center.y, m_model->m_center.z );
         }
         else if( strcmp( text, "children" ) == 0 )
         {
@@ -227,6 +248,8 @@ int VRML2_MODEL_PARSER::read_Transform()
         }
         else if( strcmp( text, "Shape" ) == 0 )
         {
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    Shape" ) );
+
             S3D_MESH* parent = m_model;
 
             S3D_MESH* new_mesh_model = new S3D_MESH();
@@ -256,6 +279,8 @@ int VRML2_MODEL_PARSER::read_Transform()
 
 int VRML2_MODEL_PARSER::read_DEF_Coordinate()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_DEF_Coordinate" ) );
+
     char text[BUFLINE_SIZE];
 
     // Get the name of the definition.
@@ -283,16 +308,23 @@ int VRML2_MODEL_PARSER::read_DEF_Coordinate()
         }
     }
 
+    wxLogTrace( traceVrmlV2Parser, wxT( "  read_DEF_Coordinate failed" ) );
     return -1;
 }
 
 
 int VRML2_MODEL_PARSER::read_DEF()
 {
-    char text[BUFLINE_SIZE];
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_DEF" ) );
 
-    if( !GetNextTag( m_file, text, sizeof(text) ) )
+    char text[BUFLINE_SIZE];
+    char tagName[BUFLINE_SIZE];
+
+    if( !GetNextTag( m_file, tagName, sizeof(tagName) ) )
+    {
+        wxLogTrace( traceVrmlV2Parser, wxT( "  DEF failed GetNextTag first" ) );
         return -1;
+    }
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
     {
@@ -337,6 +369,13 @@ int VRML2_MODEL_PARSER::read_DEF()
             read_Shape();
             m_model = parent;
         }
+        else
+        {
+            wxLogTrace( traceVrmlV2Parser, wxT( "    DEF %s %s NotImplemented, skipping." ), tagName, text );
+            read_NotImplemented( m_file, '}' );
+
+            return -1;
+        }
     }
 
     wxLogTrace( traceVrmlV2Parser, wxT( "  DEF failed" ) );
@@ -346,6 +385,8 @@ int VRML2_MODEL_PARSER::read_DEF()
 
 int VRML2_MODEL_PARSER::read_USE()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_USE" ) );
+
     char text[BUFLINE_SIZE];
 
     // Get the name of the definition.
@@ -373,6 +414,8 @@ int VRML2_MODEL_PARSER::read_USE()
 
 int VRML2_MODEL_PARSER::read_Shape()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_Shape" ) );
+
     char text[BUFLINE_SIZE];
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
@@ -389,7 +432,7 @@ int VRML2_MODEL_PARSER::read_Shape()
 
         if( strcmp( text, "appearance" ) == 0 )
         {
-            wxLogTrace( traceVrmlV2Parser, wxT( "\"appearance\" key word not supported." ) );
+            //wxLogTrace( traceVrmlV2Parser, wxT( "     \"appearance\" key word not supported." ) );
             // skip
         }
         else if( strcmp( text, "Appearance" ) == 0 )
@@ -398,7 +441,7 @@ int VRML2_MODEL_PARSER::read_Shape()
         }
         else if( strcmp( text, "geometry" ) == 0 )
         {
-            wxLogTrace( traceVrmlV2Parser, wxT( "\"geometry\" key word not supported." ) );
+            //wxLogTrace( traceVrmlV2Parser, wxT( "     \"geometry\" key word not supported." ) );
             // skip
         }
         else if( strcmp( text, "IndexedFaceSet" ) == 0 )
@@ -423,6 +466,8 @@ int VRML2_MODEL_PARSER::read_Shape()
 
 int VRML2_MODEL_PARSER::read_Appearance()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_Appearance" ) );
+
     char text[BUFLINE_SIZE];
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
@@ -450,6 +495,8 @@ int VRML2_MODEL_PARSER::read_Appearance()
 
 int VRML2_MODEL_PARSER::read_material()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_material" ) );
+
     S3D_MATERIAL* material = NULL;
     char text[BUFLINE_SIZE];
 
@@ -458,8 +505,8 @@ int VRML2_MODEL_PARSER::read_material()
         if( strcmp( text, "Material" ) == 0 )
         {
             wxString mat_name;
-            material = new S3D_MATERIAL( GetMaster(), mat_name );
-            GetMaster()->Insert( material );
+            material = new S3D_MATERIAL( m_Master, mat_name );
+            m_Master->Insert( material );
             m_model->m_Materials = material;
 
             if( strcmp( text, "Material" ) == 0 )
@@ -474,8 +521,8 @@ int VRML2_MODEL_PARSER::read_material()
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
 
-                material = new S3D_MATERIAL( GetMaster(), mat_name );
-                GetMaster()->Insert( material );
+                material = new S3D_MATERIAL( m_Master, mat_name );
+                m_Master->Insert( material );
                 m_model->m_Materials = material;
 
                 if( GetNextTag( m_file, text, sizeof(text) ) )
@@ -494,7 +541,7 @@ int VRML2_MODEL_PARSER::read_material()
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
 
-                for( material = GetMaster()->m_Materials; material; material = material->Next() )
+                for( material = m_Master->m_Materials; material; material = material->Next() )
                 {
                     if( material->m_Name == mat_name )
                     {
@@ -515,6 +562,8 @@ int VRML2_MODEL_PARSER::read_material()
 
 int VRML2_MODEL_PARSER::read_Material()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_Material" ) );
+
     char text[BUFLINE_SIZE];
     glm::vec3 vertex;
 
@@ -539,7 +588,7 @@ int VRML2_MODEL_PARSER::read_Material()
         {
             parseVertex( m_file, vertex );
 
-            if( GetMaster()->m_use_modelfile_emissiveColor == true )
+            if( m_Master->m_use_modelfile_emissiveColor == true )
             {
                 m_model->m_Materials->m_EmissiveColor.push_back( vertex );
             }
@@ -548,7 +597,7 @@ int VRML2_MODEL_PARSER::read_Material()
         {
             parseVertex( m_file, vertex );
 
-            if( GetMaster()->m_use_modelfile_specularColor == true )
+            if( m_Master->m_use_modelfile_specularColor == true )
             {
                 m_model->m_Materials->m_SpecularColor.push_back( vertex );
             }
@@ -558,7 +607,7 @@ int VRML2_MODEL_PARSER::read_Material()
             float ambientIntensity;
             parseFloat( m_file, &ambientIntensity );
 
-            if( GetMaster()->m_use_modelfile_ambientIntensity == true )
+            if( m_Master->m_use_modelfile_ambientIntensity == true )
             {
                 m_model->m_Materials->m_AmbientColor.push_back( glm::vec3( ambientIntensity,
                                 ambientIntensity, ambientIntensity ) );
@@ -569,7 +618,7 @@ int VRML2_MODEL_PARSER::read_Material()
             float transparency;
             parseFloat( m_file, &transparency );
 
-            if( GetMaster()->m_use_modelfile_transparency == true )
+            if( m_Master->m_use_modelfile_transparency == true )
             {
                 m_model->m_Materials->m_Transparency.push_back( transparency );
             }
@@ -580,7 +629,7 @@ int VRML2_MODEL_PARSER::read_Material()
             parseFloat( m_file, &shininess );
 
             // VRML value is normalized and openGL expects a value 0 - 128
-            if( GetMaster()->m_use_modelfile_shininess == true )
+            if( m_Master->m_use_modelfile_shininess == true )
             {
                 shininess = shininess * 128.0f;
                 m_model->m_Materials->m_Shininess.push_back( shininess );
@@ -588,13 +637,15 @@ int VRML2_MODEL_PARSER::read_Material()
         }
     }
 
-    wxLogTrace( traceVrmlV2Parser, wxT( "  Material failed\n" ) );
+    wxLogTrace( traceVrmlV2Parser, wxT( "  Material failed" ) );
     return -1;
 }
 
 
 int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_IndexedFaceSet" ) );
+
     char text[BUFLINE_SIZE];
 
     m_normalPerVertex = false;
@@ -672,6 +723,8 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
 
 int VRML2_MODEL_PARSER::read_IndexedLineSet()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_IndexedLineSet" ) );
+
     char text[BUFLINE_SIZE];
 
     while( GetNextTag( m_file, text, sizeof(text) ) )
@@ -696,6 +749,8 @@ int VRML2_MODEL_PARSER::read_IndexedLineSet()
 
 int VRML2_MODEL_PARSER::read_colorIndex()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_colorIndex" ) );
+
     m_model->m_MaterialIndex.clear();
 
     if( colorPerVertex == true )
@@ -726,12 +781,16 @@ int VRML2_MODEL_PARSER::read_colorIndex()
         }
     }
 
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_colorIndex m_MaterialIndex.size: %u" ), (unsigned int)m_model->m_MaterialIndex.size() );
+
     return 0;
 }
 
 
 int VRML2_MODEL_PARSER::read_NormalIndex()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_NormalIndex" ) );
+
     m_model->m_NormalIndex.clear();
 
     glm::ivec3 coord;
@@ -754,12 +813,16 @@ int VRML2_MODEL_PARSER::read_NormalIndex()
         }
     }
 
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_NormalIndex m_NormalIndex.size: %u" ), (unsigned int)m_model->m_NormalIndex.size() );
+
     return 0;
 }
 
 
 int VRML2_MODEL_PARSER::read_coordIndex()
 {
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_coordIndex" ) );
+
     m_model->m_CoordIndex.clear();
 
     glm::ivec3 coord;
@@ -781,6 +844,8 @@ int VRML2_MODEL_PARSER::read_coordIndex()
             coord_list.push_back( dummy );
         }
     }
+
+    //wxLogTrace( traceVrmlV2Parser, wxT( "    read_coordIndex m_CoordIndex.size: %u" ), (unsigned int)m_model->m_CoordIndex.size() );
 
     return 0;
 }
@@ -808,7 +873,7 @@ int VRML2_MODEL_PARSER::read_Color()
         }
     }
 
-    wxLogTrace( traceVrmlV2Parser, wxT( "  read_Color failed" ) );
+    //wxLogTrace( traceVrmlV2Parser, wxT( "  read_Color failed" ) );
     return -1;
 }
 
@@ -826,6 +891,11 @@ int VRML2_MODEL_PARSER::read_Normal()
 
         if( *text == '}' )
         {
+            //if( m_normalPerVertex == false )
+            //    wxLogTrace( traceVrmlV2Parser, wxT( "    read_Normal m_PerFaceNormalsNormalized.size: %u" ), (unsigned int)m_model->m_PerFaceNormalsNormalized.size() );
+            //else
+            //    wxLogTrace( traceVrmlV2Parser, wxT( "    read_Normal m_PerVertexNormalsNormalized.size: %u" ), (unsigned int)m_model->m_PerVertexNormalsNormalized.size() );
+
             return 0;
         }
 
@@ -842,6 +912,7 @@ int VRML2_MODEL_PARSER::read_Normal()
         }
     }
 
+    wxLogTrace( traceVrmlV2Parser, wxT( "  read_Normal failed" ) );
     return -1;
 }
 
@@ -859,6 +930,7 @@ int VRML2_MODEL_PARSER::read_Coordinate()
 
         if( *text == '}' )
         {
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    read_Coordinate m_Point.size: %u" ), (unsigned int)m_model->m_Point.size() );
             return 0;
         }
 
@@ -868,6 +940,7 @@ int VRML2_MODEL_PARSER::read_Coordinate()
         }
     }
 
+    wxLogTrace( traceVrmlV2Parser, wxT( "  read_Coordinate failed" ) );
     return -1;
 }
 
@@ -885,11 +958,15 @@ int VRML2_MODEL_PARSER::read_CoordinateDef()
             continue;
 
         if( *text == '}' )
+        {
+            //wxLogTrace( traceVrmlV2Parser, wxT( "    read_CoordinateDef m_Point.size: %u" ), (unsigned int)m_model->m_Point.size() );
             return 0;
+        }
 
         if( strcmp( text, "point" ) == 0 )
             parseVertexList( m_file, m_model->m_Point );
     }
 
+    wxLogTrace( traceVrmlV2Parser, wxT( "  read_CoordinateDef failed" ) );
     return -1;
 }
