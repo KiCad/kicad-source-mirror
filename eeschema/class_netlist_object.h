@@ -276,7 +276,15 @@ public:
      * @param aIsOwner true if the instance is the owner of item list
      * (default = false)
      */
-    NETLIST_OBJECT_LIST( bool aIsOwner = false ) { m_isOwner = aIsOwner; }
+    NETLIST_OBJECT_LIST( bool aIsOwner = false )
+    {
+        m_isOwner = aIsOwner;
+
+        // Do not leave some members uninitialized:
+        m_lastNetCode = 0;
+        m_lastBusNetCode = 0;
+    }
+
     ~NETLIST_OBJECT_LIST();
 
     void SetOwner( bool aIsOwner ) { m_isOwner = aIsOwner; }

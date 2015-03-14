@@ -179,6 +179,10 @@ static EDA_HOTKEY HkEditComponentReference( wxT( "Edit Component Reference" ),
 static EDA_HOTKEY HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                             HK_EDIT_COMPONENT_FOOTPRINT, 'F',
                                             ID_SCH_EDIT_COMPONENT_FOOTPRINT );
+static EDA_HOTKEY HkEditComponentWithLibedit( wxT( "Edit with Component Editor" ),
+                                              HK_EDIT_COMPONENT_WITH_LIBEDIT,
+                                              'E' + GR_KB_CTRL,
+                                              ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
 static EDA_HOTKEY HkMove( wxT( "Move Schematic Item" ),
                           HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_SCH_MOVE_ITEM );
@@ -270,6 +274,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkEditComponentValue,
     &HkEditComponentReference,
     &HkEditComponentFootprint,
+    &HkEditComponentWithLibedit,
     &HkBeginWire,
     &HkBeginBus,
     &HkEndLineWireBus,
@@ -545,6 +550,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_MIRROR_X_COMPONENT:             // Mirror X
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
     case HK_ROTATE:                         // Rotate schematic item.
+    case HK_EDIT_COMPONENT_WITH_LIBEDIT:    // Call Libedit and load the current component
         {
             // force a new item search on hot keys at current position,
             // if there is no currently edited item,

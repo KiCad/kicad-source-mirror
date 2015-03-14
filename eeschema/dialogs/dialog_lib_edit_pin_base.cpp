@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -103,7 +103,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	bLeftSizer->Add( boarderSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 	
 	
-	bUpperSizer->Add( bLeftSizer, 2, wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -179,7 +179,6 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

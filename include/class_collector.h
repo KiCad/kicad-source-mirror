@@ -74,6 +74,7 @@ public:
     COLLECTOR()
     {
         m_ScanTypes = 0;
+        m_TimeAtCollection = 0;
     }
 
     virtual ~COLLECTOR() {}

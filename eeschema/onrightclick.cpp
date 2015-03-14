@@ -461,9 +461,10 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_L
 
     if( !Component->GetFlags() )
     {
+        msg = AddHotkeyName( _( "Edit with Library Editor" ), g_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_WITH_LIBEDIT );
         AddMenuItem( editmenu, ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP,
-                     _( "Edit with Library Editor" ),
-                     KiBitmap( libedit_xpm ) );
+                     msg, KiBitmap( libedit_xpm ) );
     }
 
     AddMenuItem( PopMenu, editmenu, ID_SCH_EDIT_ITEM,

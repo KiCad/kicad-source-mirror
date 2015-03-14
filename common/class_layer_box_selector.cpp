@@ -35,10 +35,10 @@
 #include <class_layer_box_selector.h>
 
 
-LAYER_SELECTOR::LAYER_SELECTOR() :
-    m_layerhotkeys( true ),
-    m_hotkeys( NULL )
+LAYER_SELECTOR::LAYER_SELECTOR()
 {
+    m_layerhotkeys = true;
+    m_hotkeys = NULL;
 }
 
 
@@ -79,6 +79,8 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),
     LAYER_SELECTOR()
 {
+    m_hotkeys = NULL;
+
     if( choices != NULL )
         ResyncBitmapOnly();
 }
@@ -90,6 +92,8 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY ),
     LAYER_SELECTOR()
 {
+    m_hotkeys = NULL;
+
     if( !choices.IsEmpty() )
         ResyncBitmapOnly();
 }

@@ -72,7 +72,8 @@ void PCB_LINE::Parse( XNODE*        aNode,
         SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
                      &m_positionX, &m_positionY, aActualConversion );
 
-    lNode = lNode->GetNext();
+    if( lNode )
+        lNode = lNode->GetNext();
 
     if( lNode )
         SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,

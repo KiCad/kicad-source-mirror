@@ -43,6 +43,7 @@
 GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
     m_frame( aFrame )
 {
+    m_diagonalAuxAxesEnable = true;
 }
 
 

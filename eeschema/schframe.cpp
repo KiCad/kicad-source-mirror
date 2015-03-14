@@ -999,7 +999,29 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 
     if( event.GetId() == ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP )
     {
+        // We want to edit a component with Libedit.
+        // we are here by a hot key, or by a popup menu
         SCH_ITEM* item = GetScreen()->GetCurItem();
+
+        if( !item )
+        {
+            // If we didn't get here by a hot key, then something has gone wrong.
+            if( event.GetInt() == 0 )
+                return;
+
+            EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) event.GetClientObject();
+
+            wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
+
+            // Set the locat filter, according to the edit command
+            const KICAD_T* filterList = SCH_COLLECTOR::ComponentsOnly;
+            item = LocateAndShowItem( data->GetPosition(), filterList, event.GetInt() );
+
+            // Exit if no item found at the current location or the item is already being edited.
+            if( (item == NULL) || (item->GetFlags() != 0) )
+                return;
+        }
+
 
         if( !item || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
         {

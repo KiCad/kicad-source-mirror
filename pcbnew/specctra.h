@@ -1345,6 +1345,8 @@ public:
     TOKPROP( ELEM* aParent, DSN_T aType ) :
         ELEM( aType, aParent )
     {
+        // Do not leave uninitialized members
+        value = T_NONE;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )

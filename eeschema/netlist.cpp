@@ -441,7 +441,6 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
     candidate = NULL;
     for( unsigned ii = 0; ii <= size(); ii++ )
     {
-
         if( ii == size() ) // last item already found
             netcode = -2;
         else
