@@ -864,10 +864,14 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
                              g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE_PRMS, msg,
                      KiBitmap( edit_module_xpm ) );
+
+        msg = AddHotkeyName( _( "Edit with Footprint Editor" ),
+                             g_Board_Editor_Hokeys_Descr, HK_EDIT_MODULE_WITH_MODEDIT );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE_WITH_MODEDIT,
-                     _( "Edit with Footprint Editor" ),
-                     KiBitmap( module_editor_xpm ) );
+                     msg, KiBitmap( module_editor_xpm ) );
+
         sub_menu_footprint->AppendSeparator();
+
         msg = AddHotkeyName( _( "Delete Footprint" ),
                              g_Board_Editor_Hokeys_Descr, HK_DELETE );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,

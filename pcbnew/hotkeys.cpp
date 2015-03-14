@@ -105,6 +105,7 @@ static EDA_HOTKEY HkSwitchTrackPosture( wxT( "Switch Track Posture" ),  HK_SWITC
 static EDA_HOTKEY HkDragTrackKeepSlope( wxT( "Drag Track Keep Slope" ), HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
 static EDA_HOTKEY HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P' );
 static EDA_HOTKEY HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
+static EDA_HOTKEY HkEditWithModedit( wxT( "Edit with Footprint Editor" ), HK_EDIT_MODULE_WITH_MODEDIT, 'E' + GR_KB_CTRL );
 static EDA_HOTKEY HkFlipItem( wxT( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static EDA_HOTKEY HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M' );
@@ -287,6 +288,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile, &HkSavefileAs,
     &HkLoadfile,               &HkFindItem,                  &HkEditBoardItem,
+    &HkEditWithModedit,
     &HkSwitch2CopperLayer,     &HkSwitch2InnerLayer1,
     &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
     &HkSwitch2InnerLayer5,     &HkSwitch2InnerLayer6,        &HkSwitch2ComponentLayer,
