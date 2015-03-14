@@ -799,6 +799,15 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     wxString        compFootprintLinkFileName;
     wxFileName      fn = m_NetlistFileName;
 
+    // Ensure the netlist file exists, and wran the user if not:
+    if( ! wxFileExists( m_NetlistFileName.GetFullPath() ) )
+    {
+        msg.Printf( _( "Unable to find netlist file:\n'%s'\n\nPlease, create it" ),
+                       GetChars( m_NetlistFileName.GetFullPath() ) );
+        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
+        return 1;
+    }
+
     // Load the footprint association file if it has already been created.
     fn.SetExt( ComponentFileExtension );
 

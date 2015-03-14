@@ -51,9 +51,11 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( EDA_DRAW_FRAME* parent, LIB_PIN* aPin 
     m_sdbSizerButtonsOK->SetDefault();
 
     GetSizer()->SetSizeHints( this );
-    Raise();    // On Unity, ans some other windows manager,
-                // this dialog is not always shown,
-                // depending on this dialog is run. Force it to be shown
+
+    // On some windows manager (Unity, XFCE), this dialog is
+    // not always raised, depending on this dialog is run.
+    // Force it to be raised
+    Raise();
 }
 
 
