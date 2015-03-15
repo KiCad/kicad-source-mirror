@@ -443,24 +443,24 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( routeMenu, ID_DIFF_PAIR_BUTT,
                  _( "Differential Pair" ),
                  _( "Interactively route a differential pair" ),
-                 KiBitmap( add_tracks_xpm ) );
+                 KiBitmap( ps_diff_pair_xpm ) );
 
     routeMenu->AppendSeparator();
 
     AddMenuItem( routeMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT,
                  _( "Tune Track Length" ),
                  _( "Tune length of a single track" ),
-                 KiBitmap( add_tracks_xpm ) );
+                 KiBitmap( ps_tune_length_xpm ) );
 
     AddMenuItem( routeMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT,
                  _( "Tune Differential Pair Length" ),
                  _( "Tune length of a differential pair" ),
-                 KiBitmap( add_tracks_xpm ) );
+                 KiBitmap( ps_diff_pair_tune_length_xpm ) );
 
     AddMenuItem( routeMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT,
                  _( "Tune Differential Pair Skew/Phase" ),
                  _( "Tune skew/phase of a differential pair" ),
-                 KiBitmap( add_tracks_xpm ) );
+                 KiBitmap( ps_diff_pair_tune_phase_xpm ) );
 
 /* Fixme: add icons & missing menu entries!
     routeMenu->AppendSeparator();
@@ -539,7 +539,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( dimensionsMenu, ID_MENU_DIFF_PAIR_DIMENSIONS,
                  _( "Differential Pairs" ),
                  _( "Define the global gap/width for differential pairs." ),
-                 KiBitmap( add_tracks_xpm ) ); // fixme: icon
+                 KiBitmap( ps_diff_pair_xpm ) );
 
     dimensionsMenu->AppendSeparator();
     AddMenuItem( dimensionsMenu, ID_CONFIG_SAVE,

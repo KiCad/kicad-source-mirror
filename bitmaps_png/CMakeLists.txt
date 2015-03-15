@@ -461,6 +461,12 @@ set( BMAPS_MID
     preference
     print_button
     ps_router
+    ps_diff_pair
+    ps_diff_pair_gap
+    ps_diff_pair_tune_length
+    ps_diff_pair_tune_phase
+    ps_diff_pair_via_gap
+    ps_tune_length
     py_script
     ratsnest
     read_setup
