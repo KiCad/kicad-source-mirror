@@ -54,6 +54,7 @@ TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data
     SetFileName( data );
     SetRootFile( false );    // true only for the root item of the tree (the project name)
     SetPopulated( false );
+    m_state = 0;
 }
 
 
