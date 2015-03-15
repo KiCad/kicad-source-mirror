@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( 350,-1 ), wxDefaultSize );
 	
@@ -30,6 +30,7 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 6 );
 	
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textName->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_textName, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 6 );
 	
 	
@@ -40,6 +41,7 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_textHeight = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textHeight->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_textHeight, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
 	m_staticHeightUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -51,6 +53,7 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_textWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textWidth->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_textWidth, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
 	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -69,20 +72,24 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 6 );
 	
+	
 	m_nameSizer->Add( fgSizer1, 1, wxEXPAND, 6 );
+	
 	
 	m_mainSizer->Add( m_nameSizer, 1, wxALL|wxEXPAND, 6 );
 	
 	
 	m_mainSizer->Add( 0, 0, 0, wxALL|wxEXPAND, 3 );
 	
-	m_sdbSizer2 = new wxStdDialogButtonSizer();
-	m_sdbSizer2OK = new wxButton( this, wxID_OK );
-	m_sdbSizer2->AddButton( m_sdbSizer2OK );
-	m_sdbSizer2Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer2->AddButton( m_sdbSizer2Cancel );
-	m_sdbSizer2->Realize();
-	m_mainSizer->Add( m_sdbSizer2, 0, wxALL|wxEXPAND, 6 );
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
+	
+	m_mainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 6 );
+	
 	
 	this->SetSizer( m_mainSizer );
 	this->Layout();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,5 +46,10 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( wxWindow* parent ) :
 
     m_choiceConnectionType->SetSelection( 0 );
     m_textName->SetFocus();
-    m_sdbSizer2OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
+
+    // On some windows manager (Unity, XFCE), this dialog is
+    // not always raised, depending on this dialog is run.
+    // Force it to be raised
+    Raise();
 }

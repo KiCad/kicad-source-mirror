@@ -419,6 +419,8 @@ int KeyCodeFromKeyName( const wxString& keyname )
  * Displays the current hotkey list
  * aList = a EDA_HOTKEY_CONFIG list(Null terminated)
  */
+#include <html_messagebox.h>
+
 void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxString     keyname;
@@ -453,7 +455,17 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
     }
 
     msg += wxT( "</table></html></body>" );
+
+#if 0   // Set to 1 to create a modal dialog (blocking)
     DisplayHtmlInfoMessage( aFrame, _( "Hotkeys List" ), msg, wxSize( 340, 750 ) );
+#else
+    // Create a non modal dialog, which shows the list of hotkeys until dismissed
+    // but does not block the parent window
+    HTML_MESSAGE_BOX *dlg = new HTML_MESSAGE_BOX( aFrame, _( "Hotkeys List" ),
+                                        wxDefaultPosition, wxSize( 340, 750 ) );
+    dlg->AddHTML_Text( msg );
+    dlg->Show( true );
+#endif
 }
 
 

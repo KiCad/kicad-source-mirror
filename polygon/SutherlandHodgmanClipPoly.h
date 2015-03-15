@@ -183,9 +183,11 @@ private:
     {
 public:
         ClipStage( Stage& nextStage, REAL position ) :
-            Boundary( position ) , m_NextStage( nextStage ), m_bFirst( true )
+            Boundary( position ) , m_NextStage( nextStage ), m_bFirst( true ), m_bPreviousInside( false )
         { }
-        void HandleVertex( const PointF& pntCurrent )           // Function to handle one vertex
+
+        // Function to handle one vertex
+        void HandleVertex( const PointF& pntCurrent )
         {
             bool bCurrentInside = this->IsInside( pntCurrent );       // See if vertex is inside the boundary.
 
