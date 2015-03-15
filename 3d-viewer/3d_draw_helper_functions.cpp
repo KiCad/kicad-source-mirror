@@ -113,7 +113,7 @@ void EDA_3D_CANVAS::setGLCopperColor()
 
 // Helper function: initialize the color to draw the epoxy
 // body board in realistic mode.
-void EDA_3D_CANVAS::setGLEpoxyColor( double aTransparency )
+void EDA_3D_CANVAS::setGLEpoxyColor( float aTransparency )
 {
     // Generates an epoxy color, near board color
     SetGLColor( GetPrm3DVisu().m_BoardBodyColor, aTransparency );
@@ -126,7 +126,7 @@ void EDA_3D_CANVAS::setGLEpoxyColor( double aTransparency )
 
 // Helper function: initialize the color to draw the
 // solder mask layers in realistic mode.
-void EDA_3D_CANVAS::setGLSolderMaskColor( double aTransparency )
+void EDA_3D_CANVAS::setGLSolderMaskColor( float aTransparency )
 {
     // Generates a solder mask color
     SetGLColor( GetPrm3DVisu().m_SolderMaskColor, aTransparency );

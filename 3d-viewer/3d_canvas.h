@@ -196,13 +196,13 @@ private:
      * Helper function SetGLEpoxyColor
      * Initialize the color to draw the epoxy body board in realistic mode.
      */
-    void setGLEpoxyColor( double aTransparency = 1.0 );
+    void setGLEpoxyColor( float aTransparency = 1.0 );
 
     /**
      * Helper function SetGLSolderMaskColor
      * Initialize the color to draw the solder mask layers in realistic mode.
      */
-    void setGLSolderMaskColor( double aTransparency = 1.0 );
+    void setGLSolderMaskColor( float aTransparency = 1.0 );
 
     /**
      * Function BuildBoard3DView

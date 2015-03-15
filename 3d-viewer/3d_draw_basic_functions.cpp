@@ -129,10 +129,10 @@ void SetGLColor( EDA_COLOR_T color, double alpha )
 {
     const StructColors &colordata = g_ColorRefs[ColorGetBase( color )];
 
-    double red     = colordata.m_Red / 255.0;
-    double blue    = colordata.m_Blue / 255.0;
-    double green   = colordata.m_Green / 255.0;
-    glColor4f( red, green, blue, alpha );
+    float red     = colordata.m_Red / 255.0;
+    float blue    = colordata.m_Blue / 255.0;
+    float green   = colordata.m_Green / 255.0;
+    glColor4f( red, green, blue, (float)alpha );
 }
 
 

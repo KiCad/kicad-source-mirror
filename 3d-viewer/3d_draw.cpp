@@ -53,6 +53,10 @@
 #include <trackball.h>
 #include <3d_draw_basic_functions.h>
 
+#include <CImage.h>
+
+
+
 /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
  * Z orientation is 1.0 for all layers but "back" layers:
  *  B_Cu , B_Adhes, B_Paste ), B_SilkS
@@ -61,99 +65,14 @@
 static GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
 
 
-/* Based on the tutorial http://www.ulrichmierendorff.com/software/opengl_blur.html
- * It will blur a openGL texture
- */
-static void blur_tex( GLuint aTex, int aPasses, GLuint aTexture_size )
-{
-    int i, x, y;
-
-    glFlush();
-    glFinish();
-
-    glPushAttrib( GL_ALL_ATTRIB_BITS );
-
-    glDisable( GL_LIGHTING );
-
-    glDisable( GL_CULL_FACE );
-    glDisable( GL_DEPTH_TEST );
-    glDisable( GL_ALPHA_TEST );
-    glDisable( GL_COLOR_MATERIAL );
-
-    glReadBuffer( GL_BACK_LEFT );
-    glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-
-
-    glViewport( 0, 0, aTexture_size, aTexture_size );
-
-    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glMatrixMode( GL_PROJECTION );
-    glPushMatrix();
-    glLoadIdentity();
-
-    glOrtho( 0.0f, aTexture_size, aTexture_size, 0.0f, -1.0f, 1.0f );
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, aTex );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-
-    while (aPasses > 0)
-    {
-        i = 0;
-        for (x = 0; x < 2; x++)
-        {
-            for (y = 0; y < 2; y++, i++)
-            {
-                glColor4f (1.0f,1.0f,1.0f,1.0 / (i + 1.0));
-                glBegin(GL_TRIANGLE_STRIP);
-                glTexCoord2f( 0 + (x - 0.5)/aTexture_size, 1 + (y-0.5)/aTexture_size );
-                glVertex2f( 0, 0 );
-                glTexCoord2f( 0 + (x - 0.5)/aTexture_size, 0 + (y-0.5)/aTexture_size );
-                glVertex2f( 0, aTexture_size );
-                glTexCoord2f( 1 + (x - 0.5)/aTexture_size, 1 + (y-0.5)/aTexture_size );
-                glVertex2f( aTexture_size, 0 );
-                glTexCoord2f( 1 + (x - 0.5)/aTexture_size, 0 + (y-0.5)/aTexture_size );
-                glVertex2f( aTexture_size, aTexture_size );
-                glEnd ();
-            }
-        }
-        glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, aTexture_size, aTexture_size, 0 );
-        aPasses--;
-    }
-
-    glFlush();
-    glFinish();
-    glDisable( GL_BLEND );
-
-    glMatrixMode( GL_PROJECTION );
-    glPopMatrix();
-
-    glPopAttrib();
-
-    glEnable(GL_DEPTH_TEST);
-}
-
-
 void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
         GLuint aTexture_size, bool aDraw_body, int aBlurPasses )
 {
-
-    float *depthbufferFloat = (float*) malloc( aTexture_size * aTexture_size * sizeof(float) );
     unsigned char *depthbufferRGBA = (unsigned char*) malloc( aTexture_size * aTexture_size * 4 );
 
     glDisable( GL_TEXTURE_2D );
 
-    glViewport( 0, 0, aTexture_size, aTexture_size );
+    glViewport( 0, 0, aTexture_size, aTexture_size);
 
     glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -163,79 +82,70 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
                   -GetPrm3DVisu().m_BoardPos.y * GetPrm3DVisu().m_BiuTo3Dunits,
                   0.0F );
 
-    if( aDraw_body )
-    {
-        if( m_glLists[GL_ID_BODY] )
-        {
+    if( aDraw_body && m_glLists[GL_ID_BODY] )
             glCallList( m_glLists[GL_ID_BODY] );
-        }
-    }
 
-    // Call model list
-    glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
-
-    if( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
-    {
-        glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
-    }
-
-    glPixelStorei( GL_PACK_ALIGNMENT, 4 );
-    glReadBuffer( GL_BACK_LEFT );
+    if( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
+        glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
 
     glFinish();
 
+    float *depthbufferFloat = (float*) malloc( aTexture_size * aTexture_size * sizeof(float) );
+    for( unsigned int i = 0; i < (aTexture_size * aTexture_size); i++ )
+        depthbufferFloat[i] = 1.0f;
+
+    glPixelStorei( GL_PACK_ALIGNMENT, 4 );
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
+    glReadBuffer( GL_BACK_LEFT );
     glReadPixels( 0, 0,
                   aTexture_size, aTexture_size,
                   GL_DEPTH_COMPONENT, GL_FLOAT, depthbufferFloat );
 
 
-    glFinish();
-
-    for( unsigned int i = 0; i< (aTexture_size * aTexture_size); i++ )
-    {
-        unsigned char v = depthbufferFloat[i] * 255;
-        depthbufferRGBA[i * 4 + 0] = v;
-        depthbufferRGBA[i * 4 + 1] = v;
-        depthbufferRGBA[i * 4 + 2] = v;
-        depthbufferRGBA[i * 4 + 3] = 255;
-    }
-
-    glFinish();
-
     glEnable( GL_TEXTURE_2D );
     glGenTextures( 1, aDst_gl_texture );
     glBindTexture( GL_TEXTURE_2D, *aDst_gl_texture );
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
+    CIMAGE imgDepthBuffer( aTexture_size, aTexture_size );
+    CIMAGE imgDepthBufferAux( aTexture_size, aTexture_size );
 
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    imgDepthBuffer.setPixelsFromNormalizedFloat( depthbufferFloat );
+    
+    free( depthbufferFloat );
 
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aTexture_size, aTexture_size, 0,
-                  GL_RGBA, GL_UNSIGNED_BYTE, depthbufferRGBA );
+    wxString filename;
+    //filename.Printf( "imgDepthBuffer_%04d", *aDst_gl_texture );
+    //imgDepthBuffer.saveAsPNG( filename );
 
-    glFlush();
-    glFinish();
-
-    CheckGLError( __FILE__, __LINE__ );
-
-    blur_tex( *aDst_gl_texture, aBlurPasses, aTexture_size );
-
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, *aDst_gl_texture );
-
-    glGetTexImage( GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, depthbufferRGBA );
-
-    for(unsigned int i = 0; i< (aTexture_size * aTexture_size); i++)
+    while (aBlurPasses > 0)
     {
-        float v = (float)depthbufferRGBA[i * 4] / 255.0f;
-        v = v * v;
+        aBlurPasses--;
+        imgDepthBufferAux.efxFilter( &imgDepthBuffer, 1.0, FILTER_BLUR);
+        imgDepthBuffer.efxFilter( &imgDepthBufferAux, 1.0, FILTER_BLUR);
+    }
+    //filename.Printf( "imgDepthBuffer_blur_%04d", *aDst_gl_texture );
+    //imgDepthBuffer.saveAsPNG( filename );
+
+    imgDepthBuffer.copyFull( &imgDepthBuffer, &imgDepthBuffer, COPY_MUL );
+    //imgDepthBuffer.copyFull( &imgDepthBuffer, &imgDepthBuffer, COPY_MUL );
+    //filename.Printf( "imgDepthBuffer_mul_%04d", *aDst_gl_texture );
+    //imgDepthBuffer.saveAsPNG( filename );
+
+    //imgDepthBufferAux.efxFilter( &imgDepthBuffer, 1.0, FILTER_BLUR);
+    //imgDepthBuffer.efxFilter( &imgDepthBufferAux, 1.0, FILTER_BLUR);
+    //filename.Printf( "imgDepthBuffer_mulblur_%04d", *aDst_gl_texture );
+    //imgDepthBuffer.saveAsPNG( filename );
+
+    imgDepthBuffer.invert();
+    //filename.Printf( "imgDepthBuffer_invert_%04d", *aDst_gl_texture );
+    //imgDepthBuffer.saveAsPNG( filename );
+
+    for(unsigned int i = 0; i < (aTexture_size * aTexture_size); i++)
+    {
         depthbufferRGBA[i * 4 + 0] = 0;
         depthbufferRGBA[i * 4 + 1] = 0;
         depthbufferRGBA[i * 4 + 2] = 0;
-        depthbufferRGBA[i * 4 + 3] = 255 - (unsigned char)(v * 255);
+        depthbufferRGBA[i * 4 + 3] = imgDepthBuffer.m_pixels[i];
     }
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -246,7 +156,6 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aTexture_size, aTexture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, depthbufferRGBA );
 
     free( depthbufferRGBA );
-    free( depthbufferFloat );
 }
 
 #define SHADOW_BOARD_SCALE 1.5f
@@ -281,7 +190,7 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures()
     glTranslatef( 0, 0, 0.03 );
     glRotatef( 180, 0.0, 1.0, 0.0 );
 
-    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_front, 512, false, 5 );
+    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_front, 512, false, 1 );
 
 
     // Render BACK shadow
@@ -290,7 +199,7 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures()
     glTranslatef( 0, 0, 0.03 );
     ///glRotatef( 0.0, 0.0, 1.0, 0.0 );
 
-    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_back, 512, false, 5 );
+    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_back, 512, false, 1 );
 
     // Render ALL BOARD shadow
     glMatrixMode( GL_PROJECTION );
@@ -306,7 +215,7 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures()
     glTranslatef( 0, 0, -0.4f );
     glRotatef( 180.0, 0.0, 1.0, 0.0 );
 
-    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_board, 512, true, 20 );
+    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_board, 512, true, 5 );
 }
 
 
@@ -451,16 +360,6 @@ void EDA_3D_CANVAS::Redraw()
 
 	if( isEnabled( FL_SHOW_BOARD_BODY ) )
 	{
-		if( !isEnabled( FL_RENDER_TEXTURES ) ||
-             isEnabled( FL_SOLDERMASK ) || !isRealisticMode() )
-		{
-			glDisable( GL_TEXTURE_2D );
-		}
-		else
-		{
-			glEnable( GL_TEXTURE_2D );
-		}
-
 		glDisable( GL_LIGHTING );
 
 		if( m_glLists[GL_ID_BODY] )
@@ -481,24 +380,22 @@ void EDA_3D_CANVAS::Redraw()
     glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
 
-    if( isRealisticMode() && isEnabled( FL_RENDER_TEXTURES ) )
-    {
-    	glEnable( GL_TEXTURE_2D );
-	}
-	else
-	{
-		glDisable( GL_TEXTURE_2D );
-	}
-
     if( m_glLists[GL_ID_BOARD] )
     {
         glCallList( m_glLists[GL_ID_BOARD] );
     }
 
+    if( isRealisticMode() && isEnabled( FL_RENDER_TEXTURES ) )
+        glEnable( GL_TEXTURE_2D );
+    else
+        glDisable( GL_TEXTURE_2D );
+
 	SetOpenGlDefaultMaterial();
 
     if( m_glLists[GL_ID_TECH_LAYERS] )
     {
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glCallList( m_glLists[GL_ID_TECH_LAYERS] );
     }
 
@@ -565,20 +462,15 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_GRID ) && m_glLists[GL_ID_GRID] )
         glCallList( m_glLists[GL_ID_GRID] );
 
-    // This list must be drawn last, because it contains the
-    // transparent gl objects, which should be drawn after all
-    // non transparent objects
-    if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
-        glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
-
-    glDisable( GL_BLEND );
-
     // Draw Board Shadow
     if( isEnabled( FL_MODULE ) && isRealisticMode() &&
         isEnabled( FL_RENDER_SHADOWS ) )
     {
         if( m_glLists[GL_ID_SHADOW_BOARD] )
         {
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            glColor4f( 1.0, 1.0, 1.0, 1.0 );
             glEnable( GL_CULL_FACE );
             glDisable( GL_COLOR_MATERIAL );
             glEnable( GL_TEXTURE_2D );
@@ -586,6 +478,17 @@ void EDA_3D_CANVAS::Redraw()
             glCallList( m_glLists[GL_ID_SHADOW_BOARD] );
             glDisable( GL_CULL_FACE );
         }
+    }
+
+    // This list must be drawn last, because it contains the
+    // transparent gl objects, which should be drawn after all
+    // non transparent objects
+    if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
+    {
+        glDisable( GL_TEXTURE_2D );
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
     }
 
     SwapBuffers();
@@ -1153,7 +1056,11 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
             currLayerPolyset += polyset;
         }
 
-        int         thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
+        int         thickness = 0;
+
+        if( layer != B_Mask && layer != F_Mask )
+            thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
+
         int         zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
 
         if( layer == Edge_Cuts )

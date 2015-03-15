@@ -73,8 +73,6 @@ void SetOpenGlDefaultMaterial()
 
 bool S3D_MATERIAL::SetOpenGLMaterial( unsigned int aMaterialIndex, bool aUseMaterial )
 {
-    S3D_MASTER * s3dParent = (S3D_MASTER *) GetParent();
-
     if( aUseMaterial )
     {
         float transparency_value = 0.0f;

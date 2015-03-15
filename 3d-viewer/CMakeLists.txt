@@ -30,6 +30,7 @@ set(3D-VIEWER_SRCS
     vrml_v1_modelparser.cpp
     vrml_v2_modelparser.cpp
     x3dmodelparser.cpp
+    CImage.cpp
     )
 
 add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})

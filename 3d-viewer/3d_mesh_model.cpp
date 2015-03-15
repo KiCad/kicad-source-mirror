@@ -113,6 +113,11 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
 
         if( !isTransparent && aIsRenderingJustTransparentObjects )
             return;
+
+        if( useMaterial )
+            if( m_Materials->m_Transparency.size() > 0 )
+                if( m_Materials->m_Transparency[0] >= 1.0f )
+                    return;
     }
 
     glPushMatrix();
@@ -146,6 +151,11 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
 
                 if( !isTransparent && aIsRenderingJustTransparentObjects )
                     continue;
+
+                if( useMaterial )
+                    if( m_Materials->m_Transparency.size() > idx )
+                        if( m_Materials->m_Transparency[idx] >= 1.0f )
+                            return;
             }
             else
             {

@@ -183,9 +183,7 @@ public: INFO3D_VISU();
      */
     int GetNonCopperLayerThicknessBIU() const
     {
-        bool use_thickness = GetFlag( FL_USE_COPPER_THICKNESS )
-//                                    || GetFlag( FL_USE_REALISTIC_MODE )
-                                    ;
+        bool use_thickness = GetFlag( FL_USE_COPPER_THICKNESS );
         return  use_thickness ?
             KiROUND( m_nonCopperLayerThickness / m_BiuTo3Dunits )
             : 0;
@@ -202,8 +200,7 @@ public: INFO3D_VISU();
     {
         return IsCopperLayer( aLayerId ) ?
                         GetCopperThicknessBIU() :
-                        GetNonCopperLayerThicknessBIU()
-                        ;
+                        GetNonCopperLayerThicknessBIU();
     }
 
     bool IsRealisticMode() { return GetFlag( FL_USE_REALISTIC_MODE ); }
