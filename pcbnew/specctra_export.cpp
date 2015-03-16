@@ -1336,13 +1336,18 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
         // Creates a valid polygon outline is not possible.
         // So uses the board edge cuts bounding box to create a
         // rectangular outline
-        // (when no edge cuts items, fillBOUNDARY biuld n outline
+        // (when no edge cuts items, fillBOUNDARY build a contour
         // from global bounding box
         success = false;
         if( aErrorText )
             *aErrorText = ioe.errorText;
 
         EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
+
+        // Ensure non null area. If happen, gives a minimal size.
+        if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
+            bbbox.Inflate( Millimeter2iu( 1.0 ) );
+
         corner.x = bbbox.GetOrigin().x;
         corner.y = bbbox.GetOrigin().y;
         aOutlines.Append( corner );

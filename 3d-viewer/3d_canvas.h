@@ -44,7 +44,7 @@
 
 #include <3d_struct.h>
 #include <class_module.h>
- 
+
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
 class CPOLYGONS_LIST;
@@ -132,9 +132,11 @@ public:
     /**
      * Function CreateDrawGL_List
      * Prepares the parameters of the OpenGL draw list
-     * creates the OpenGL draw list items (board, grid ...
+     * creates the OpenGL draw list items (board, grid ...)
+     * @param aErrorMessages = a wxString which will filled with error messages,
+     * if any
      */
-    void   CreateDrawGL_List();
+    void   CreateDrawGL_List( wxString* aErrorMessages );
     void   InitGL();
     void   SetLights();
 
@@ -209,15 +211,17 @@ private:
      * Called by CreateDrawGL_List()
      * Populates the OpenGL GL_ID_BOARD draw list with board items only on copper layers.
      * 3D footprint shapes, tech layers and aux layers are not on this list
+     * Fills aErrorMessages with error messages created by some calculation function
      */
-    void   BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList);
+    void   BuildBoard3DView(GLuint aBoardList, GLuint aBodyOnlyList, wxString* aErrorMessages );
 
     /**
      * Function BuildTechLayers3DView
      * Called by CreateDrawGL_List()
      * Populates the OpenGL GL_ID_TECH_LAYERS draw list with items on tech layers
+     * Add error messages in aErrorMessages, if any
      */
-    void   BuildTechLayers3DView();
+    void   BuildTechLayers3DView( wxString* aErrorMessages );
 
     /**
      * Function BuildShadowList
@@ -301,7 +305,7 @@ private:
                                std::vector<S3D_MODEL_PARSER *>& model_parsers_list,
                                std::vector<wxString>& model_filename_list );
 
-    void   GenerateFakeShadowsTextures();
+    void   GenerateFakeShadowsTextures( wxString* aErrorMessages );
 
     DECLARE_EVENT_TABLE()
 };

@@ -110,7 +110,7 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     CIMAGE imgDepthBufferAux( aTexture_size, aTexture_size );
 
     imgDepthBuffer.setPixelsFromNormalizedFloat( depthbufferFloat );
-    
+
     free( depthbufferFloat );
 
     wxString filename;
@@ -160,7 +160,7 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
 
 #define SHADOW_BOARD_SCALE 1.5f
 
-void EDA_3D_CANVAS::GenerateFakeShadowsTextures()
+void EDA_3D_CANVAS::GenerateFakeShadowsTextures( wxString* aErrorMessages )
 {
     if( m_shadow_init == true )
     {
@@ -168,7 +168,7 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures()
     }
 
     // Init info 3d parameters and create gl lists:
-    CreateDrawGL_List();
+    CreateDrawGL_List( aErrorMessages );
 
     m_shadow_init = true;
 
@@ -225,6 +225,8 @@ void EDA_3D_CANVAS::Redraw()
     if( !IsShown() )
         return;
 
+    wxString errorMessages;
+
     SetCurrent( *m_glRC );
 
     // Set the OpenGL viewport according to the client size of this canvas.
@@ -240,7 +242,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) && isRealisticMode() &&
         isEnabled( FL_RENDER_SHADOWS ) )
     {
-        GenerateFakeShadowsTextures();
+        GenerateFakeShadowsTextures( &errorMessages );
     }
 
     // *MUST* be called *after*  SetCurrent( ):
@@ -251,9 +253,9 @@ void EDA_3D_CANVAS::Redraw()
     glClearStencil( 0 );
     glClearDepth( 1.0 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
-   
+
     glShadeModel( GL_SMOOTH );
-	
+
     // Draw background
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
@@ -336,7 +338,7 @@ void EDA_3D_CANVAS::Redraw()
 
 
     if( ! m_glLists[GL_ID_BOARD] || ! m_glLists[GL_ID_TECH_LAYERS] )
-        CreateDrawGL_List();
+        CreateDrawGL_List( &errorMessages );
 
     if( isEnabled( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
         glCallList( m_glLists[GL_ID_AXIS] );
@@ -352,7 +354,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
-            CreateDrawGL_List();
+            CreateDrawGL_List( &errorMessages );
     }
 
     glEnable( GL_BLEND );
@@ -402,7 +404,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_COMMENTS ) || isEnabled( FL_COMMENTS )  )
     {
         if( ! m_glLists[GL_ID_AUX_LAYERS] )
-            CreateDrawGL_List();
+            CreateDrawGL_List( &errorMessages );
 
         glCallList( m_glLists[GL_ID_AUX_LAYERS] );
     }
@@ -450,7 +452,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
-            CreateDrawGL_List();
+            CreateDrawGL_List( &errorMessages );
 
         glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
     }
@@ -492,6 +494,9 @@ void EDA_3D_CANVAS::Redraw()
     }
 
     SwapBuffers();
+
+    if( !errorMessages.IsEmpty() )
+        wxLogMessage( errorMessages );
 }
 
 
@@ -571,7 +576,8 @@ void EDA_3D_CANVAS::BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint
 }
 
 
-void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList )
+void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
+                                      wxString* aErrorMessages  )
 {
     BOARD* pcb = GetBoard();
 
@@ -609,10 +615,12 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList )
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-        msg << wxT("\n\n") <<
-            _("Unable to calculate the board outlines.\n"
-              "Therefore use the board boundary box.");
-        wxMessageBox( msg );
+        if( aErrorMessages )
+        {
+            *aErrorMessages << msg << wxT("\n") <<
+                _("Unable to calculate the board outlines.\n"
+                  "Therefore use the board boundary box.") << wxT("\n\n");
+        }
     }
 
     CPOLYGONS_LIST  bufferZonesPolys;
@@ -878,7 +886,7 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList )
 }
 
 
-void EDA_3D_CANVAS::BuildTechLayers3DView()
+void EDA_3D_CANVAS::BuildTechLayers3DView( wxString* aErrorMessages )
 {
     BOARD* pcb = GetBoard();
     bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
@@ -899,15 +907,23 @@ void EDA_3D_CANVAS::BuildTechLayers3DView()
     allLayerHoles.reserve( 20000 );
 
     CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
+
     // Build a polygon from edge cut items
     wxString msg;
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-        msg << wxT("\n\n") <<
-            _("Unable to calculate the board outlines.\n"
-              "Therefore use the board boundary box.");
-        wxMessageBox( msg );
+#if 0
+        // Usually this message is already shown when the  copper layers are built
+        // So do not show it twice.
+        // TODO: display it only if when copper layers are not built
+        if( aErrorMessages )
+        {
+            *aErrorMessages << msg << wxT("\n") <<
+                _("Unable to calculate the board outlines.\n"
+                  "Therefore use the board boundary box.") << wxT("\n\n");
+        }
+#endif
     }
 
     int thickness = GetPrm3DVisu().GetCopperThicknessBIU();
@@ -1194,7 +1210,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
     }
 }
 
-void EDA_3D_CANVAS::CreateDrawGL_List()
+void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages)
 {
     BOARD* pcb = GetBoard();
 
@@ -1232,7 +1248,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
     {
         m_glLists[GL_ID_BOARD] = glGenLists( 1 );
         m_glLists[GL_ID_BODY] = glGenLists( 1 );
-        BuildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY]);
+        BuildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages );
         CheckGLError( __FILE__, __LINE__ );
     }
 
@@ -1240,7 +1256,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List()
     {
         m_glLists[GL_ID_TECH_LAYERS] = glGenLists( 1 );
         glNewList( m_glLists[GL_ID_TECH_LAYERS], GL_COMPILE );
-        BuildTechLayers3DView();
+        BuildTechLayers3DView( aErrorMessages );
         glEndList();
         CheckGLError( __FILE__, __LINE__ );
     }

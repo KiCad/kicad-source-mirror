@@ -626,9 +626,10 @@ void EDA_3D_FRAME::NewDisplay( int aGlList )
     m_reloadRequest = false;
 
     m_canvas->ClearLists( aGlList );
-    m_canvas->CreateDrawGL_List();
 
+    // Rebuild the 3D board and refresh the view:
     m_canvas->Refresh( true );
+
     m_canvas->DisplayStatus();
 }
 
