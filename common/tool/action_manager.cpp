@@ -116,13 +116,13 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
     HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( key | mod );
 
-    // If no luck, try without modifier, to handle keys that require a modifier
+    // If no luck, try without Shift, to handle keys that require it
     // e.g. to get ? you need to press Shift+/ without US keyboard layout
     // Hardcoding ? as Shift+/ is a bad idea, as on another layout you may need to press a
     // different combination
     if( it == m_actionHotKeys.end() )
     {
-        it = m_actionHotKeys.find( key );
+        it = m_actionHotKeys.find( key | (mod & ~MD_SHIFT) );
 
         if( it == m_actionHotKeys.end() )
             return false; // no appropriate action found for the hotkey
