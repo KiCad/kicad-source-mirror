@@ -736,6 +736,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // the original
     incUndoInhibit();
 
+    if( m_editModules )
+        editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_MODEDIT );
+
     std::vector<BOARD_ITEM*> old_items;
 
     for( int i = 0; i < selection.Size(); ++i )
@@ -778,7 +781,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     // record the new items as added
-    editFrame->SaveCopyInUndoList( selection.items, UR_NEW );
+    if( !m_editModules )
+        editFrame->SaveCopyInUndoList( selection.items, UR_NEW );
 
     editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
             (int) old_items.size() ) );
