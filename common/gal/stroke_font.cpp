@@ -32,7 +32,7 @@
 
 using namespace KIGFX;
 
-const double STROKE_FONT::OVERBAR_HEIGHT = 0.85;
+const double STROKE_FONT::OVERBAR_HEIGHT = 1.22;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::HERSHEY_SCALE = 1.0 / 21.0;
 
@@ -235,6 +235,8 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
     double      xOffset;
     VECTOR2D    glyphSize( m_glyphSize );
+    double      overbar_italic_comp;
+    bool        last_had_overbar;
 
     // Compute the text size
     VECTOR2D textSize = computeTextSize( aText );
@@ -275,6 +277,11 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         xOffset = 0.0;
     }
 
+    // The overbar is indented inward at the beginning of an italicized section, but
+    // must not be indented on subsequent letters to ensure that the bar segments
+    // overlap.
+    last_had_overbar = false;
+
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
         // Toggle overbar
@@ -297,13 +304,39 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         GLYPH& glyph = m_glyphs[dd];
         BOX2D& bbox  = m_glyphBoundingBoxes[dd];
 
+        if( m_overbar && m_italic )
+        {
+            if( m_mirrored )
+            {
+                overbar_italic_comp = (-m_glyphSize.y * OVERBAR_HEIGHT) / 8;
+            }
+            else
+            {
+                overbar_italic_comp = (m_glyphSize.y * OVERBAR_HEIGHT) / 8;
+            }
+        }
+
         if( m_overbar )
         {
-            VECTOR2D startOverbar( xOffset, -getInterline() * OVERBAR_HEIGHT );
-            VECTOR2D endOverbar( xOffset + glyphSize.x * bbox.GetEnd().x,
-                                 -getInterline() * OVERBAR_HEIGHT );
+            double overbar_start_x = xOffset;
+            double overbar_start_y = -m_glyphSize.y * OVERBAR_HEIGHT;
+            double overbar_end_x = xOffset + glyphSize.x * bbox.GetEnd().x;
+            double overbar_end_y = -m_glyphSize.y * OVERBAR_HEIGHT;
+
+            if( !last_had_overbar )
+            {
+                overbar_start_x += overbar_italic_comp;
+                last_had_overbar = true;
+            }
+
+            VECTOR2D startOverbar( overbar_start_x, overbar_start_y );
+            VECTOR2D endOverbar( overbar_end_x, overbar_end_y );
 
             m_gal->DrawLine( startOverbar, endOverbar );
+        }
+        else
+        {
+            last_had_overbar = false;
         }
 
         for( GLYPH::iterator pointListIt = glyph.begin(); pointListIt != glyph.end();
