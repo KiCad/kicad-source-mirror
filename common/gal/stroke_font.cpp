@@ -32,7 +32,7 @@
 
 using namespace KIGFX;
 
-const double STROKE_FONT::OVERBAR_HEIGHT = 0.45;
+const double STROKE_FONT::OVERBAR_HEIGHT = 0.85;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::HERSHEY_SCALE = 1.0 / 21.0;
 
@@ -163,7 +163,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     // Single line height
     int lineHeight = getInterline( );
     int lineCount = linesCount( aText );
-    
+
     // align the 1st line of text
     switch( m_verticalJustify )
     {
