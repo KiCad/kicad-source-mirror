@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,7 +160,7 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
 
 #define SHADOW_BOARD_SCALE 1.5f
 
-void EDA_3D_CANVAS::GenerateFakeShadowsTextures( wxString* aErrorMessages )
+void EDA_3D_CANVAS::GenerateFakeShadowsTextures( wxString* aErrorMessages, bool aShowWarnings )
 {
     if( m_shadow_init == true )
     {
@@ -168,7 +168,7 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures( wxString* aErrorMessages )
     }
 
     // Init info 3d parameters and create gl lists:
-    CreateDrawGL_List( aErrorMessages );
+    CreateDrawGL_List( aErrorMessages, aShowWarnings );
 
     m_shadow_init = true;
 
@@ -226,6 +226,7 @@ void EDA_3D_CANVAS::Redraw()
         return;
 
     wxString errorMessages;
+    bool showWarnings = m_reportWarnings;
 
     SetCurrent( *m_glRC );
 
@@ -242,7 +243,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) && isRealisticMode() &&
         isEnabled( FL_RENDER_SHADOWS ) )
     {
-        GenerateFakeShadowsTextures( &errorMessages );
+        GenerateFakeShadowsTextures( &errorMessages, showWarnings );
     }
 
     // *MUST* be called *after*  SetCurrent( ):
@@ -338,7 +339,7 @@ void EDA_3D_CANVAS::Redraw()
 
 
     if( ! m_glLists[GL_ID_BOARD] || ! m_glLists[GL_ID_TECH_LAYERS] )
-        CreateDrawGL_List( &errorMessages );
+        CreateDrawGL_List( &errorMessages, showWarnings );
 
     if( isEnabled( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
         glCallList( m_glLists[GL_ID_AXIS] );
@@ -354,7 +355,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
-            CreateDrawGL_List( &errorMessages );
+            CreateDrawGL_List( &errorMessages, showWarnings );
     }
 
     glEnable( GL_BLEND );
@@ -404,7 +405,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_COMMENTS ) || isEnabled( FL_COMMENTS )  )
     {
         if( ! m_glLists[GL_ID_AUX_LAYERS] )
-            CreateDrawGL_List( &errorMessages );
+            CreateDrawGL_List( &errorMessages, showWarnings );
 
         glCallList( m_glLists[GL_ID_AUX_LAYERS] );
     }
@@ -452,7 +453,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
-            CreateDrawGL_List( &errorMessages );
+            CreateDrawGL_List( &errorMessages, showWarnings );
 
         glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
     }
@@ -497,6 +498,8 @@ void EDA_3D_CANVAS::Redraw()
 
     if( !errorMessages.IsEmpty() )
         wxLogMessage( errorMessages );
+
+    ReportWarnings( false );
 }
 
 
@@ -577,7 +580,7 @@ void EDA_3D_CANVAS::BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint
 
 
 void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
-                                      wxString* aErrorMessages  )
+                                      wxString* aErrorMessages, bool aShowWarnings  )
 {
     BOARD* pcb = GetBoard();
 
@@ -615,7 +618,7 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-        if( aErrorMessages )
+        if( aErrorMessages && aShowWarnings )
         {
             *aErrorMessages << msg << wxT("\n") <<
                 _("Unable to calculate the board outlines.\n"
@@ -886,7 +889,7 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 }
 
 
-void EDA_3D_CANVAS::BuildTechLayers3DView( wxString* aErrorMessages )
+void EDA_3D_CANVAS::BuildTechLayers3DView( wxString* aErrorMessages, bool aShowWarnings )
 {
     BOARD* pcb = GetBoard();
     bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
@@ -913,17 +916,12 @@ void EDA_3D_CANVAS::BuildTechLayers3DView( wxString* aErrorMessages )
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-#if 0
-        // Usually this message is already shown when the  copper layers are built
-        // So do not show it twice.
-        // TODO: display it only if when copper layers are not built
-        if( aErrorMessages )
+        if( aErrorMessages && aShowWarnings )
         {
             *aErrorMessages << msg << wxT("\n") <<
                 _("Unable to calculate the board outlines.\n"
                   "Therefore use the board boundary box.") << wxT("\n\n");
         }
-#endif
     }
 
     int thickness = GetPrm3DVisu().GetCopperThicknessBIU();
@@ -1210,7 +1208,7 @@ void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
     }
 }
 
-void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages)
+void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarnings )
 {
     BOARD* pcb = GetBoard();
 
@@ -1248,7 +1246,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages)
     {
         m_glLists[GL_ID_BOARD] = glGenLists( 1 );
         m_glLists[GL_ID_BODY] = glGenLists( 1 );
-        BuildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages );
+        BuildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages, aShowWarnings );
         CheckGLError( __FILE__, __LINE__ );
     }
 
@@ -1256,7 +1254,9 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages)
     {
         m_glLists[GL_ID_TECH_LAYERS] = glGenLists( 1 );
         glNewList( m_glLists[GL_ID_TECH_LAYERS], GL_COMPILE );
-        BuildTechLayers3DView( aErrorMessages );
+        // when calling BuildTechLayers3DView,
+        // do not show warnings, which are the same as BuildBoard3DView
+        BuildTechLayers3DView( aErrorMessages, false );
         glEndList();
         CheckGLError( __FILE__, __LINE__ );
     }
@@ -1296,7 +1296,8 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages)
         m_glLists[GL_ID_SHADOW_BACK]  = glGenLists( 1 );
         m_glLists[GL_ID_SHADOW_BOARD] = glGenLists( 1 );
 
-        BuildShadowList(m_glLists[GL_ID_SHADOW_FRONT], m_glLists[GL_ID_SHADOW_BACK], m_glLists[GL_ID_SHADOW_BOARD]);
+        BuildShadowList( m_glLists[GL_ID_SHADOW_FRONT], m_glLists[GL_ID_SHADOW_BACK],
+                         m_glLists[GL_ID_SHADOW_BOARD]);
 
         CheckGLError( __FILE__, __LINE__ );
     }

@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -410,6 +410,7 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_RELOAD3D_BOARD:
+        m_reloadRequest = true;
         NewDisplay();
         return;
         break;
@@ -623,20 +624,22 @@ void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
 
 void EDA_3D_FRAME::NewDisplay( int aGlList )
 {
-    m_reloadRequest = false;
-
     m_canvas->ClearLists( aGlList );
 
-    // Rebuild the 3D board and refresh the view:
+    // Rebuild the 3D board and refresh the view on reload request:
+    if( m_reloadRequest )
+        m_canvas->ReportWarnings( true );
+
     m_canvas->Refresh( true );
 
     m_canvas->DisplayStatus();
+    m_reloadRequest = false;
 }
 
 
 void EDA_3D_FRAME::OnActivate( wxActivateEvent& event )
 {
-    // Reload data if 3D frame shows a footprint,
+    // Reload data if 3D frame shows a board,
     // because it can be changed since last frame activation
     if( m_reloadRequest )
         NewDisplay();

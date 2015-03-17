@@ -79,6 +79,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
                 wxFULL_REPAINT_ON_RESIZE )
 {
     m_init   = false;
+    m_reportWarnings = true;
     m_shadow_init = false;
     // set an invalide value to not yet initialized indexes managing
     // textures created to enhance 3D rendering
