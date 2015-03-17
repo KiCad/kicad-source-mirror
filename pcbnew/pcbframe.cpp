@@ -595,7 +595,9 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
 
         case wxID_YES:
-            SavePcbFile( GetBoard()->GetFileName() );
+            // save the board. if the board has no name,
+            // the ID_SAVE_BOARD_AS will actually made
+            Files_io_from_id( ID_SAVE_BOARD );
             break;
         }
     }

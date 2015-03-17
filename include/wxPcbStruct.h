@@ -849,9 +849,27 @@ public:
 
     /**
      * Function Files_io
-     * is the command event handler for read and write file commands.
+     * @param event is the command event handler.
+     * do nothing else than call Files_io_from_id with the
+     * wxCommandEvent id
      */
     void Files_io( wxCommandEvent& event );
+
+    /**
+     * Function Files_io_from_id
+     * Read and write board files
+     * @param aId is an event ID ciming from file command events:
+     * ID_LOAD_FILE
+     * ID_MENU_READ_BOARD_BACKUP_FILE
+     * ID_MENU_RECOVER_BOARD_AUTOSAVE
+     * ID_APPEND_FILE
+     * ID_NEW_BOARD
+     * ID_SAVE_BOARD
+     * ID_COPY_BOARD_AS
+     * ID_SAVE_BOARD_AS
+     * Files_io_from_id prepare parameters and calls the specialized function
+     */
+    void Files_io_from_id( int aId );
 
     /**
      * Function OpenProjectFiles    (was LoadOnePcbFile)

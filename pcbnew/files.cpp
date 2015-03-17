@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -222,6 +222,11 @@ void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 {
     int        id = event.GetId();
+    Files_io_from_id( id );
+}
+
+void PCB_EDIT_FRAME::Files_io_from_id( int id )
+{
     wxString   msg;
 
     // If an edition is in progress, stop it.
@@ -326,9 +331,9 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
             SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) );
             break;
         }
-        // Fall through
-        case ID_COPY_BOARD_AS:
-        case ID_SAVE_BOARD_AS:
+    // Fall through
+    case ID_COPY_BOARD_AS:
+    case ID_SAVE_BOARD_AS:
         {
             wxString    pro_dir = wxPathOnly( Prj().GetProjectFullName() );
             wxFileName  fn( pro_dir, _( "noname" ), KiCadPcbFileExtension );
