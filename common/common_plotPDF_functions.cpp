@@ -167,7 +167,8 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int wi
     /* OK. Here's a trick. PDF doesn't support circles or circular angles, that's
        a fact. You'll have to do with cubic beziers. These *can't* represent
        circular arcs (NURBS can, beziers don't). But there is a widely known
-       approximation which is really good */
+       approximation which is really good
+    */
 
     SetCurrentLineWidth( width );
     double magic = radius * 0.551784; // You don't want to know where this come from
@@ -747,6 +748,10 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         bool                        aBold,
                         bool                        aMultilineAllowed )
 {
+    // PDF files do not like 0 sized texts which create broken files.
+    if( aSize.x == 0 || aSize.y == 0 )
+        return;
+
     // Fix me: see how to use PDF text mode for multiline texts
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
         aMultilineAllowed = false;  // the text has only one line.

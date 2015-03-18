@@ -183,12 +183,17 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 {
     if( aImage == NULL )
-    {
         return;
-    }
+
+    // Remark: to create images of edited items to undo, we are using Clone method
+    // which can duplication of items foe copy, but does not clone all members
+    // mainly pointers in chain and time stamp, which is set to new, unique value.
+    // So we have to use the current values of these parameters.
 
     EDA_ITEM * pnext = Next();
     EDA_ITEM * pback = Back();
+    DHEAD* mylist    = m_List;
+    time_t timestamp = GetTimeStamp();
 
     switch( Type() )
     {
@@ -286,15 +291,11 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
         break;
     }
 
-    if( pnext != Next() || pback != Back() )
-    {
-        Pnext = pnext;
-        Pback = pback;
-#ifdef DEBUG
-        wxLogMessage( wxT( "SwapData Error: %s Pnext or Pback pointers modified" ),
-                      GetClass().GetData() );
-#endif
-    }
+    // Restore pointers and time stamp, to be sure they are not broken
+    Pnext = pnext;
+    Pback = pback;
+    m_List = mylist;
+    SetTimeStamp( timestamp );
 }
 
 
