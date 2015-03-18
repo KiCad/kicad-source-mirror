@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-18 07:57+0100\n"
-"PO-Revision-Date: 2015-03-18 07:59+0100\n"
+"POT-Creation-Date: 2015-03-18 09:35+0100\n"
+"PO-Revision-Date: 2015-03-18 09:35+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -19976,7 +19976,7 @@ msgstr "Incremento di temperatura"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:290
 msgid "deg C"
-msgstr "Gradi Celsius"
+msgstr "°C"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:294
 msgid "Cu thickness"
@@ -19984,11 +19984,11 @@ msgstr "Spessore Cu"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:307
 msgid "Conductor length"
-msgstr "Lunghezza condutore"
+msgstr "Lunghezza conduttore"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:336
 msgid "Track Characteristics (External Layers):"
-msgstr "Caratteristiche della pista (Strati esterni):"
+msgstr "Caratteristiche della pista (strati esterni):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:344
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:420
@@ -20003,7 +20003,7 @@ msgstr "Sezione della zona"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:365
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:441
 msgid "mm ^ 2"
-msgstr "mm quadrati"
+msgstr "mm²"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:369
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:445
@@ -20033,11 +20033,11 @@ msgstr "Watt"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:412
 msgid "Track Characteristics (Internal Layers):"
-msgstr "Caratteristiche della pista (Strati interni):"
+msgstr "Caratteristiche della pista (strati interni):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:510
 msgid "Voltage > 500V:"
-msgstr "Tensione> 500V"
+msgstr "Tensione > 500V:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:518
 msgid "Update Values"
@@ -20045,7 +20045,7 @@ msgstr "Aggiorna valori"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:527
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr "Nota: I valori sono quelli minimi (da IPC 2221)"
+msgstr "Nota: i valori sono quelli minimi (da IPC 2221)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:546
 msgid "B1"
@@ -20172,11 +20172,11 @@ msgstr "Linea inglobata"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:596
 msgid "Twisted Pair"
-msgstr "Coppia attorcigliata"
+msgstr "Doppino intrecciato"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
 msgid "Transmission Line Type:"
-msgstr "Tipo linea di trasmissione"
+msgstr "Tipo linea di trasmissione:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:615
 msgid "Substrate Parameters"
@@ -20184,7 +20184,7 @@ msgstr "Parametri substrato"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:647
 msgid "Specific resistance in ohms * meters"
-msgstr "Resistenza specifica in Hom x Metro"
+msgstr "Resistività in Ohm x metro"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:743
 msgid "Component Parameters:"
@@ -20229,7 +20229,7 @@ msgstr "Risultato"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1001
 msgid "TransLine"
-msgstr "Linee trasmissione"
+msgstr "Linea trasmissione"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1004
 msgid "label"
@@ -20237,7 +20237,7 @@ msgstr "Etichetta"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1009
 msgid "PI"
-msgstr "P greco"
+msgstr "𝝅"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1009
 msgid "Tee"
@@ -20265,7 +20265,7 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1045
 msgid "Zin"
-msgstr "Z ent"
+msgstr "Z ing"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1053
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1065
@@ -20273,7 +20273,7 @@ msgstr "Z ent"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1116
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1128
 msgid "Ohms"
-msgstr "Ohms"
+msgstr "Ohm"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1057
 msgid "Zout"
@@ -20350,7 +20350,7 @@ msgstr "Codice colori"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1241
 msgid "Note: Values are minimal values"
-msgstr "Nota: I valori sono quelli minimi"
+msgstr "Nota: i valori sono quelli minimi"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1260
 msgid "Class 1"
@@ -20398,7 +20398,7 @@ msgstr "Piazz. non placc.: (diam-foro)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1295
 msgid "Board Classes"
-msgstr "Parametri Circuiti stampati"
+msgstr "Classi schede"
 
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:51
 msgid "Separate sense pin"
