@@ -24,7 +24,7 @@
 # mc: - netclass = TT
 # mc: - DRC = TT
 # mc: - Browser = TT
-# mc: - Nickname = TT
+# mc: - Nickname = Denominazione
 # mc: - Die = TT
 # mc: - legacy = datato (o non tradurlo)
 # mc: - courtyard = TT
@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-19 17:27+0100\n"
-"PO-Revision-Date: 2015-03-19 17:27+0100\n"
+"POT-Creation-Date: 2015-03-20 00:24+0100\n"
+"PO-Revision-Date: 2015-03-20 00:24+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -2937,7 +2937,7 @@ msgstr "Componente [%s] aggiunto in '%s'"
 
 #: pcbnew/librairi.cpp:790 pcbnew/dialogs/dialog_fp_lib_table.cpp:204
 msgid "Nickname"
-msgstr "Nomignolo"
+msgstr "Denominazione"
 
 #: pcbnew/librairi.cpp:791 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
@@ -8860,7 +8860,7 @@ msgstr "Cancella segmenti di piste non terminati"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:20
 msgid "Library Tables by Scope"
-msgstr "Tabella Librerie per tipologia"
+msgstr "Tabella librerie per tipologia"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:32
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:84
@@ -9033,7 +9033,7 @@ msgstr "Elenco librerie da aggiungere nella tabella Fp:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:181
 msgid "NickName"
-msgstr "NickName"
+msgstr "Denominazione"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:182
 msgid "Path"
@@ -10514,21 +10514,21 @@ msgstr "Percorso libreria"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:208
 msgid "Plugin Type"
-msgstr "Tipo di plugin:"
+msgstr "Tipo plugin"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:432
 #, c-format
 msgid "Illegal character '%s' found in Nickname: '%s' in row %d"
-msgstr "Carattere illegale \"%s\" trovato nel nickname: \"%s\" riga %d"
+msgstr "Carattere illegale \"%s\" trovato nella denominazione: \"%s\" riga %d"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:446
 msgid "No Colon in Nicknames"
-msgstr "No duepunti nei nickname"
+msgstr "No duepunti nella denominazione"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:476
 #, c-format
 msgid "Duplicate Nickname: '%s' in rows %d and %d"
-msgstr "Duplicazione nickname: \"%s\" righe %d e %d"
+msgstr "Denominazioni duplicate: \"%s\" righe %d e %d"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:491
 msgid "Please Delete or Modify One"
@@ -12102,12 +12102,12 @@ msgstr "Pos "
 #: common/fp_lib_table.cpp:373
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
-msgstr "\"%s\" è un nickname di libreria impronte duplicato"
+msgstr "\"%s\" è una denominazione di libreria impronte duplicata"
 
 #: common/fp_lib_table.cpp:620
 #, c-format
 msgid "fp-lib-table files contain no lib with nickname '%s'"
-msgstr "i file fp-lib-table non contengono lib con nickname \"%s\""
+msgstr "i file fp-lib-table non contengono lib con denominazione \"%s\""
 
 #: common/fp_lib_table.cpp:716
 #, c-format
