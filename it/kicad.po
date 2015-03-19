@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-19 15:27+0100\n"
-"PO-Revision-Date: 2015-03-19 15:32+0100\n"
+"POT-Creation-Date: 2015-03-19 17:27+0100\n"
+"PO-Revision-Date: 2015-03-19 17:27+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -8860,7 +8860,7 @@ msgstr "Cancella segmenti di piste non terminati"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:20
 msgid "Library Tables by Scope"
-msgstr "Tabella Librerie da Scope"
+msgstr "Tabella Librerie per tipologia"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:32
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:84
@@ -9099,27 +9099,24 @@ msgstr "Opzioni editor globali:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:136
 msgid "Set tracks and vias of the current Net to the current value"
-msgstr "Imposta piste e Via del collegamento corrente al valore corrente"
+msgstr "Imposta piste e via del collegamento corrente al valore corrente"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:140
 msgid "Set tracks and vias of the current Net to the Netclass value"
-msgstr ""
-"Imposta piste e Via del collegamento corrente al valore del gruppo di "
-"collegamenti"
+msgstr "Imposta piste e via del collegamento corrente al valore della netclass"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:143
 msgid "Set all tracks and vias to their Netclass value"
-msgstr "Imposta piste e Via del collegamento corrente al loro valore corrente"
+msgstr ""
+"Imposta piste e via del collegamento corrente al valore della loro netclass"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:146
 msgid "Set all vias (no track) to their Netclass value"
-msgstr ""
-"Imposta tutti i Via (non le piste) al valore del loro gruppo di collegamenti"
+msgstr "Imposta tutti i via (non le piste) al valore della loro netclass"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:149
 msgid "Set all tracks (no via) to their Netclass value"
-msgstr ""
-"Imposta tutte le piste (non i Via) al valore del loro gruppo di collegamenti"
+msgstr "Imposta tutte le piste (non i via) al valore della loro netclass"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:92
 msgid "Settings are incorrect"
@@ -9252,7 +9249,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:23
 msgid "Tracks and vias:"
-msgstr "Piste e Via:"
+msgstr "Piste e via:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:25
 msgid "Tracks sketch mode"
@@ -9268,14 +9265,14 @@ msgstr "Fori definiti"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:33
 msgid "Show Via Holes:"
-msgstr "Mostra fori Via:"
+msgstr "Mostra fori via:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:35
 msgid ""
 "Show (or not) via holes.\n"
 "If Defined Holes is selected, only the non default size holes are shown"
 msgstr ""
-"Mostra (o no) i fori dei Via. \n"
+"Mostra (o no) i fori dei via. \n"
 "Se Fori definiti è selezionato, verranno mostrati soltanto quelli non "
 "predefiniti"
 
@@ -9313,11 +9310,11 @@ msgstr "Nuova pista"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
 msgid "New track with via area"
-msgstr "Nuova pista con Via"
+msgstr "Nuova pista con via"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
 msgid "New and edited tracks with via area"
-msgstr "Nuova pista con Via"
+msgstr "Nuova pista con via"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:55
 msgid "Show Tracks Clearance:"
@@ -10166,7 +10163,7 @@ msgstr ""
 "Imposta la correzione globale della larghezza per l'esatta larghezza "
 "dell'uscita postscript.\n"
 "Questa correzione intende compensare gli errori di dimensioni di piste, "
-"piazzole e Via.\n"
+"piazzole e via.\n"
 "Il valore possibile di correzione deve essere compreso tra [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
 
@@ -10201,7 +10198,7 @@ msgstr "Deseleziona tutti gli strati"
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:214
 msgid "Tracks, vias and pads are allowed. The keepout is useless"
 msgstr ""
-"Piste, Via e piazzole sono consentite. La zona vuota non verrà considerata."
+"Piste, via e piazzole sono consentite. La zona vuota non verrà considerata."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:223
 #: pcbnew/dialogs/dialog_copper_zones.cpp:470
@@ -10219,15 +10216,15 @@ msgstr "Larghezza piste"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:50
 msgid "Via Dia"
-msgstr "Diametro Via"
+msgstr "Diametro via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:51
 msgid "Via Drill"
-msgstr "Foro Via"
+msgstr "Foro via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:52
 msgid "uVia Dia"
-msgstr "Dia uVia"
+msgstr "Dia uvia"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:102
@@ -10321,7 +10318,7 @@ msgstr "Editor delle neclass"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:168
 msgid "Via Options:"
-msgstr "Opzioni Via:"
+msgstr "Opzioni via:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:170
 msgid "Do not allow blind/buried vias"
@@ -10359,8 +10356,8 @@ msgid ""
 "They are very small vias only from an external copper layer to its near "
 "neightbour"
 msgstr ""
-"Permetti o no l'uso dei MicroVia\n"
-"Essi sono Via molto piccoli possibili soltanto da uno strato esterno in rame "
+"Permetti o no l'uso dei microvia\n"
+"Essi sono via molto piccoli possibili soltanto da uno strato esterno in rame "
 "al suo più prossimo "
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:190
@@ -10374,11 +10371,11 @@ msgstr "Minima larghezza pista"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:206
 msgid "Min via diameter"
-msgstr "Diametro minimo Via"
+msgstr "Diametro minimo via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:214
 msgid "Min via drill dia"
-msgstr "Diametro minimo foro dei Via"
+msgstr "Diametro minimo foro dei via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:222
 msgid "Min uvia diameter"
@@ -10394,13 +10391,13 @@ msgid ""
 "can be used to replace default Netclass values \n"
 "on demand, for arbitrary vias or track segments."
 msgstr ""
-"Specifica il diametro dei Via e la larghezza delle piste, \n"
-"per dimesioni arbitrarie di Via e piste, \n"
+"Specifica il diametro dei via e la larghezza delle piste, \n"
+"per dimesioni arbitrarie di via e piste, \n"
 "utilizzabile per sostituire i valori del gruppo predefinito."
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:258
 msgid "Custom Via Sizes:"
-msgstr "Dimensioni Via personalizzate:"
+msgstr "Dimensioni via personalizzate:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:260
 msgid "Drill value: a blank or 0 => default Netclass value"
@@ -11271,11 +11268,11 @@ msgstr "Inserire il valore minimo accettabile per la larghezza pista"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:56
 msgid "Min via size"
-msgstr "Minima dimensione Via"
+msgstr "Minima dimensione via"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:58
 msgid "Enter the minimum acceptable diameter for a standard via"
-msgstr "Inserire il valore minimo accettabile per il diametro dei Via"
+msgstr "Inserire il valore minimo accettabile per il diametro dei via"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:66
 msgid "Min uVia size"
@@ -11367,26 +11364,26 @@ msgstr "Valore errato per l'orientamento dell'impronta"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:173
 msgid "Set current Net tracks and vias sizes and drill to the current values?"
 msgstr ""
-"Impostare pista corrente, dimensioni Via e foratura ai valori correnti?"
+"Impostare pista corrente, dimensioni via e foratura ai valori correnti?"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:183
 msgid ""
 "Set current Net tracks and vias sizes and drill to the Netclass default "
 "value?"
 msgstr ""
-"Impostare pista corrente, dimensioni Via e foratura alle regole predefinite?"
+"Impostare pista corrente, dimensioni via e foratura alle regole predefinite?"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:192
 msgid "Set All Tracks and Vias to Netclass value"
-msgstr "Assegna a tutte le piste e i Via le regole"
+msgstr "Assegna a tutte le piste e via i valori della netclass"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:201
 msgid "Set All Via to Netclass value"
-msgstr "Assegna a tutti i Via le regole"
+msgstr "Assegna a tutti i via i valori della netclass"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:210
 msgid "Set All Track to Netclass value"
-msgstr "Assegna a tutte le piste le regole"
+msgstr "Assegna a tutte le piste i valori della netclass"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
@@ -11483,7 +11480,7 @@ msgstr "Larghezza pista:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr "Diametro Via:"
+msgstr "Diametro via:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
@@ -11741,91 +11738,91 @@ msgstr "Larghezza minima pista: <b>%s</b><br>\n"
 #: pcbnew/dialogs/dialog_design_rules.cpp:204
 #, c-format
 msgid "Minimum value for vias diameter: <b>%s</b><br>\n"
-msgstr "Diametro minimo dei Via: <b>%s</b><br>\n"
+msgstr "Diametro minimo via: <b>%s</b><br>\n"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:208
 #, c-format
 msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
-msgstr "Diametro minimo per MicroVia: <b>%s</b><br>\n"
+msgstr "Diametro minimo microvia: <b>%s</b><br>\n"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:648
 msgid "Errors detected, Abort"
-msgstr "Rilevato errore, Interrotto"
+msgstr "Rilevato errore. Annullato"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:666
 msgid "New Net Class Name:"
-msgstr "Nomina nuove regole per il circuito stampato:"
+msgstr "Nuovo nome netclass:"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:686
 msgid "This NetClass is already existing, cannot add it; Aborted"
-msgstr "Queste regole sono esistenti, non è possibile aggiungerle; Termina"
+msgstr "Questa netclass esiste già, non è possibile aggiungerla. Annullato"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:748
 msgid "The default Netclass cannot be removed"
-msgstr ""
-"Le regole predefinite Gruppi di collegamento non possono essere rimosse"
+msgstr "Le regole predefinite netclass non possono essere rimosse"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:930
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
-msgstr "%s: <b>Dimensione pista</b> &lt; <b>Min Dimensione pista</b><br>"
+msgstr "%s: <b>Dimensione pista</b> &lt; <b>Dimensione minima pista</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:943
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
-msgstr "%s: <b>Diametro Via</b> &lt; <b>Min Diametro Via</b><br>"
+msgstr "%s: <b>Diametro via</b> &lt; <b>Diametro minimo via</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:955
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
-msgstr "%s: <b>Foratura Via</b> &ge; <b>Diametro Via</b><br>"
+msgstr "%s: <b>Foratura via</b> &ge; <b>Diametro via</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:964
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
-msgstr "%s: <b>Foratura Via</b> &lt; <b>Min Foratura Via</b><br>"
+msgstr "%s: <b>Foratura Via</b> &lt; <b>Foratura minima via</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:977
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
-msgstr "%s: <b>Diametro MicroVia</b> &lt; <b>Min Diametro MicroVia</b><br>"
+msgstr "%s: <b>Diametro microvia</b> &lt; <b>Diametro minimo microvia</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:989
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
-msgstr "%s: <b>Foratura MicroVia</b> &ge; <b>Diametro MicroVia</b><br>"
+msgstr "%s: <b>Foratura microvia</b> &ge; <b>Diametro microvia</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:998
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
-msgstr "%s: <b>Foratura MicroVia</b> &lt; <b>Min Foratura MicroVia</b><br>"
+msgstr "%s: <b>Foratura microvia</b> &lt; <b>Foratura minima microvia</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1019
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
-"<b>Pista Extra  %d Dimensione</b> %s &lt; <b>Min Dimensione pista</b><br>"
+"<b>Dimensione pista extra %d</b> %s &lt; <b>Dimensione minima pista</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1028
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
-msgstr "<b>Pista Extra  %d Dimensione</b> %s &gt; <b>1 inch!</b><br>"
+msgstr "<b>Dimensione pista extra %d</b> %s &gt; <b>1 pollice!</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1053
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
-msgstr "<b>Extra Via %d Size</b> %s &lt; <b>Min Dimensione Via</b><br>"
+msgstr ""
+"<b>Dimensione extra via %d</b> %s &lt; <b>Dimensione minima via</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1062
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr ""
-"<b>Extra Via %d Dimensione</b> %s &le; <b> Dimensione foratura</b> %s<br>"
+"<b>Dimensione extra via %d</b> %s &le; <b>Dimensione foratura</b> %s<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1072
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
-msgstr "<b>Extra Via %d Dimensione</b>%s &gt; <b>1 inch!</b><br>"
+msgstr "<b>Dimensione extra via %d</b>%s &gt; <b>1 pollice!</b><br>"
 
 #: pcbnew/router/pns_meander_placer.cpp:64
 #: pcbnew/router/pns_dp_meander_placer.cpp:73
