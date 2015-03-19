@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-18 09:35+0100\n"
-"PO-Revision-Date: 2015-03-18 09:35+0100\n"
+"POT-Creation-Date: 2015-03-19 15:27+0100\n"
+"PO-Revision-Date: 2015-03-19 15:32+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -3274,15 +3274,15 @@ msgstr "Mostra contorni e isolamento dei riempimenti nelle zone"
 #: pcbnew/tool_pcb.cpp:374 pcbnew/basepcbframe.cpp:481
 #: cvpcb/class_DisplayFootprintsFrame.cpp:198
 msgid "Show pads in outline mode"
-msgstr "Mostra contorno piazzole"
+msgstr "Mostra contorni piazzole"
 
 #: pcbnew/tool_pcb.cpp:378 pcbnew/toolbars_update_user_interface.cpp:176
 msgid "Show vias in outline mode"
-msgstr "Mostra contorno Via"
+msgstr "Mostra contorni via"
 
 #: pcbnew/tool_pcb.cpp:382 pcbnew/toolbars_update_user_interface.cpp:187
 msgid "Show tracks in outline mode"
-msgstr "Mostra contorno piste"
+msgstr "Mostra contorni piste"
 
 #: pcbnew/tool_pcb.cpp:387 pcbnew/tool_modedit.cpp:239
 msgid "Enable high contrast display mode"
@@ -7484,7 +7484,7 @@ msgstr "Applica le impostazioni di questa zona a tutte altre zone in rame"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:23
 msgid "Plugin Options:"
-msgstr "Opzioni Plugin:"
+msgstr "Opzioni plugin:"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:39
 msgid "Option"
@@ -16500,7 +16500,7 @@ msgstr "File netlist CadStar (.frp)|*.frp"
 
 #: eeschema/dialogs/dialog_netlist.cpp:784
 msgid "This plugin already exists. Abort"
-msgstr "Il Pluging è già esistente!"
+msgstr "Questo pluging esiste già. Annullato."
 
 #: eeschema/dialogs/dialog_netlist.cpp:811
 msgid "Error. You must provide a command String"
@@ -16829,12 +16829,12 @@ msgstr "Genera"
 #: eeschema/dialogs/dialog_netlist_base.cpp:52
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add Plugin"
-msgstr "Aggiungi Plugin"
+msgstr "Aggiungi plugin"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:55
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Remove Plugin"
-msgstr "Rimuovi Plugin"
+msgstr "Rimuovi plugin"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:61
 msgid "Use default netname"
@@ -16846,7 +16846,7 @@ msgstr "Nome file Elenco collegamenti predefinito "
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:136
 msgid "Browse Plugins"
-msgstr "Esplora Plugins"
+msgstr "Esplora plugin"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:25
 msgid "&Text:"
@@ -17640,7 +17640,7 @@ msgstr "Aiuto"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:77
 msgid "Edit Plugin File"
-msgstr "Modifica file dei plugin"
+msgstr "Modifica file plugin"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:89
 msgid "Command line:"
@@ -18006,7 +18006,7 @@ msgstr "Visualizzazione 3D"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:251
 msgid "Show texts in filled mode"
-msgstr "Mostra testo in modalità pieno"
+msgstr "Mostra testo in modalità piena"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:252
 msgid "Show texts in sketch mode"
@@ -18014,7 +18014,7 @@ msgstr "Mostra testo in modalità schizzo"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:266
 msgid "Show outlines in filled mode"
-msgstr "Mostra contorno in modalità pieno"
+msgstr "Mostra contorni in modalità piena"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:267
 msgid "Show outlines in sketch mode"
