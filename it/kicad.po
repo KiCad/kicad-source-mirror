@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-20 00:24+0100\n"
-"PO-Revision-Date: 2015-03-20 00:24+0100\n"
+"PO-Revision-Date: 2015-03-20 08:02+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -20977,23 +20977,23 @@ msgstr "Assistente librerie di impronte"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.h:70
 msgid "Dimension Properties"
-msgstr "Dimensioni"
+msgstr "Proprietà dimensioni"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:79
 msgid "Graphic Item Properties"
-msgstr "Proprietà Elemento grafico"
+msgstr "Proprietà elemento grafico"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:68
 msgid "Interactive Router settings"
-msgstr "Impostazioni Sbrogliatore interattivo"
+msgstr "Impostazioni sbrogliatore interattivo"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:130
 msgid "Copper Zone Properties"
-msgstr "Proprietà Zona in rame"
+msgstr "Proprietà zona in rame"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.h:81
 msgid "PCB Library Tables"
-msgstr "Tabella Librerie"
+msgstr "Tabella librerie impronte"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.h:74
 msgid "Pads Mask Clearance"
