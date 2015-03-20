@@ -39,7 +39,12 @@ HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle,
 
 void HTML_MESSAGE_BOX::OnCloseButtonClick( wxCommandEvent& event )
 {
-    EndModal( 0 );
+    // the dialog can be shown modal or not modal.
+    // therefore, use the right way to close it.
+    if( IsModal() )
+        EndModal( 0 );
+    else
+        Destroy();
 }
 
 
