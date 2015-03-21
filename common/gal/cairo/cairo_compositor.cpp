@@ -36,6 +36,10 @@ using namespace KIGFX;
 CAIRO_COMPOSITOR::CAIRO_COMPOSITOR( cairo_t** aMainContext ) :
     m_current( 0 ), m_currentContext( aMainContext ), m_mainContext( *aMainContext )
 {
+    // Do not have uninitialized members:
+    cairo_matrix_init_identity( &m_matrix );
+    m_stride = 0;
+    m_bufferSize = 0;
 }
 
 

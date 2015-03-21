@@ -1403,7 +1403,7 @@ bool dxfRW::writeDimension( DRW_Dimension* ent )
 
         writer->writeUtf8String( 3, ent->getStyle() );
 
-        if( ent->getTextLineFactor() != 0 )
+        if( ent->getDir() != 0 )
             writer->writeDouble( 53, ent->getDir() );
 
         writer->writeDouble( 210, ent->getExtrusion().x );

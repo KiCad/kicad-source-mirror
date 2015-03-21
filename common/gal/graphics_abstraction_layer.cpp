@@ -48,8 +48,10 @@ GAL::GAL() :
     SetWorldUnitLength( 1.0 / METRIC_UNIT_LENGTH * 2.54 );   // 1 inch in nanometers
     SetScreenDPI( 106 );                                     // Display resolution setting
     SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
+    SetLayerDepth( 0.0 );
     SetFlip( false, false );
     SetLineWidth( 1.0 );
+    ComputeWorldScale();
 
     // Set grid defaults
     SetGridVisibility( true );

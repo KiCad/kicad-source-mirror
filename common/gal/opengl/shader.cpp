@@ -45,7 +45,10 @@ SHADER::SHADER() :
     maximumVertices( 4 ),
     geomInputType( GL_LINES ),
     geomOutputType( GL_LINES )
+
 {
+    // Do not have uninitialized members:
+    programNumber = 0;
 }
 
 

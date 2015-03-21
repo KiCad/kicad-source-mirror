@@ -855,6 +855,7 @@ GPCB_PLUGIN::GPCB_PLUGIN() :
     m_cache( 0 ),
     m_ctl( 0 )
 {
+    m_reader = NULL;
     init( 0 );
 }
 
@@ -863,6 +864,7 @@ GPCB_PLUGIN::GPCB_PLUGIN( int aControlFlags ) :
     m_cache( 0 ),
     m_ctl( aControlFlags )
 {
+    m_reader = NULL;
     init( 0 );
 }
 

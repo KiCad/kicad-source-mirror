@@ -1030,13 +1030,12 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
     fputs( "$BOARD\n", aFile );
 
     // Extract the board edges
-    for( EDA_ITEM* drawing = aPcb->m_Drawings;
-        drawing != 0;
+    for( EDA_ITEM* drawing = aPcb->m_Drawings; drawing != 0;
         drawing = drawing->Next() )
     {
         if( drawing->Type() == PCB_LINE_T )
         {
-            DRAWSEGMENT* drawseg = dynamic_cast<DRAWSEGMENT*>( drawing );
+            DRAWSEGMENT* drawseg = static_cast<DRAWSEGMENT*>( drawing );
             if( drawseg->GetLayer() == Edge_Cuts )
             {
                 // XXX GenCAD supports arc boundaries but I've seen nothing that reads them

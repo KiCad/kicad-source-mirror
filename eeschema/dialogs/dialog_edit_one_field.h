@@ -59,6 +59,14 @@ public:
     {
         m_parent = aParent;
         SetTitle( aTitle );
+
+        // Avoid not initialized members:
+        m_textshape = 0;
+        m_textsize = 0;
+        m_textorient = 0;
+        m_textHjustify = GR_TEXT_HJUSTIFY_CENTER;
+        m_textVjustify = GR_TEXT_VJUSTIFY_CENTER;
+        m_text_invisible = false;
     }
 
     // ~DIALOG_EDIT_ONE_FIELD() {};

@@ -164,6 +164,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
 {
     m_parent   = aParent;
     m_libEntry = aLibEntry;
+    m_skipCopyFromPanel = false;
 
     GetSizer()->SetSizeHints( this );
     Centre();

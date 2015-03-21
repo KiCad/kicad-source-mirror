@@ -47,6 +47,11 @@ CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
 {
     // In the beginning there is only free space
     m_freeChunks.insert( CHUNK( aSize, 0 ) );
+
+    // Do not have uninitialized members:
+    m_chunkSize = 0;
+    m_chunkOffset = 0;
+    m_itemSize = 0;
 }
 
 
