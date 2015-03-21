@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-20 00:24+0100\n"
-"PO-Revision-Date: 2015-03-20 08:02+0100\n"
+"POT-Creation-Date: 2015-03-21 15:39+0100\n"
+"PO-Revision-Date: 2015-03-21 15:39+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -639,7 +639,7 @@ msgstr "Rif."
 #: eeschema/lib_field.cpp:766
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:183
 #: eeschema/dialogs/dialog_color_config.cpp:79
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:183
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
 msgid "Value"
 msgstr "Valore "
@@ -2515,13 +2515,13 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "tipo smusso angolo zona sconosciuto %d"
 
 #: pcbnew/kicad_plugin.cpp:1758 pcbnew/gpcb_plugin.cpp:269
-#: pcbnew/gpcb_plugin.cpp:903
+#: pcbnew/gpcb_plugin.cpp:905
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "il percorso libreria impronte \"%s\" non esiste"
 
 #: pcbnew/kicad_plugin.cpp:1831 pcbnew/kicad_plugin.cpp:1896
-#: pcbnew/librairi.cpp:493 pcbnew/gpcb_plugin.cpp:971
+#: pcbnew/librairi.cpp:493 pcbnew/gpcb_plugin.cpp:973
 #: pcbnew/legacy_plugin.cpp:4609 pcbnew/legacy_plugin.cpp:4654
 #, c-format
 msgid "Library '%s' is read only"
@@ -2542,22 +2542,22 @@ msgstr "Non si dispone dei permessi necessari per salvare il file '%s'."
 msgid "cannot overwrite library path '%s'"
 msgstr "impossibile sovrascrivere il percorso libreria \"%s\""
 
-#: pcbnew/kicad_plugin.cpp:1933 pcbnew/gpcb_plugin.cpp:990
+#: pcbnew/kicad_plugin.cpp:1933 pcbnew/gpcb_plugin.cpp:992
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "l'utente non ha i permessi per cancellare la cartella \"%s\""
 
-#: pcbnew/kicad_plugin.cpp:1941 pcbnew/gpcb_plugin.cpp:998
+#: pcbnew/kicad_plugin.cpp:1941 pcbnew/gpcb_plugin.cpp:1000
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "la cartella libreria \"%s\" ha sottocartelle inattese"
 
-#: pcbnew/kicad_plugin.cpp:1960 pcbnew/gpcb_plugin.cpp:1017
+#: pcbnew/kicad_plugin.cpp:1960 pcbnew/gpcb_plugin.cpp:1019
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "file inatteso \"%s\" trovato nel percorso libreria \"%s\""
 
-#: pcbnew/kicad_plugin.cpp:1978 pcbnew/gpcb_plugin.cpp:1035
+#: pcbnew/kicad_plugin.cpp:1978 pcbnew/gpcb_plugin.cpp:1037
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "la libreria impronte \"%s\" non può essere cancellata"
@@ -8019,7 +8019,7 @@ msgstr "Esplora"
 #: eeschema/libedit.cpp:477 eeschema/lib_pin.cpp:1928
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:180
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:180
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 msgid "Name"
@@ -13487,11 +13487,6 @@ msgstr "Inserisci componente"
 msgid "Add power"
 msgstr "Inserisci alimentazione"
 
-#: eeschema/netform.cpp:389 eeschema/files-io.cpp:109
-#, c-format
-msgid "Failed to create file '%s'"
-msgstr "Impossibile creare il file \"%s\""
-
 #: eeschema/sch_collectors.cpp:431
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
@@ -15131,6 +15126,14 @@ msgstr "File di schema"
 msgid "Could not save backup of file '%s'"
 msgstr "Impossibile salvare il file di backup \"%s\""
 
+#: eeschema/files-io.cpp:109
+#: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:51
+#: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
+#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:61
+#, c-format
+msgid "Failed to create file '%s'"
+msgstr "Impossibile creare il file \"%s\""
+
 #: eeschema/files-io.cpp:138 cvpcb/readwrite_dlgs.cpp:406
 #, c-format
 msgid "File %s saved"
@@ -16163,7 +16166,7 @@ msgstr "Valore campo"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:216
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:845
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:696
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:697
 msgid "Show in Browser"
 msgstr "Mostra nell'esploratore"
 
@@ -16216,7 +16219,7 @@ msgstr "Nome plugin"
 msgid "This name already exists. Abort"
 msgstr "Questo nome esiste già. Interrotto"
 
-#: eeschema/dialogs/dialog_bom.cpp:483 eeschema/dialogs/dialog_netlist.cpp:841
+#: eeschema/dialogs/dialog_bom.cpp:483 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "File di plugin:"
 
@@ -16482,32 +16485,32 @@ msgstr "Comando netlist:"
 msgid "Title:"
 msgstr "Titolo:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:572
+#: eeschema/dialogs/dialog_netlist.cpp:571
 #, c-format
 msgid "%s Export"
 msgstr "%s Esporta"
 
-#: eeschema/dialogs/dialog_netlist.cpp:623
+#: eeschema/dialogs/dialog_netlist.cpp:622
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "File netlist SPICE (.cir)|*.cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:628
+#: eeschema/dialogs/dialog_netlist.cpp:627
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "File netlist CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:784
+#: eeschema/dialogs/dialog_netlist.cpp:783
 msgid "This plugin already exists. Abort"
 msgstr "Questo pluging esiste già. Annullato."
 
-#: eeschema/dialogs/dialog_netlist.cpp:811
+#: eeschema/dialogs/dialog_netlist.cpp:810
 msgid "Error. You must provide a command String"
 msgstr "Errore. Bisogna fornire una stringa di comando"
 
-#: eeschema/dialogs/dialog_netlist.cpp:817
+#: eeschema/dialogs/dialog_netlist.cpp:816
 msgid "Error. You must provide a Title"
 msgstr "Errore. Bisogna fornire un titolo"
 
-#: eeschema/dialogs/dialog_netlist.cpp:875
+#: eeschema/dialogs/dialog_netlist.cpp:874
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr ""
 "Non dimenticare di scegliere un titolo per questa pagina di controllo netlist"
@@ -16666,7 +16669,7 @@ msgstr ""
 "Per le porte logiche, questa è la conversione \"De Morgan\""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:669
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:670
 msgid "Chip Name"
 msgstr "Nome componente"
 
@@ -17407,7 +17410,7 @@ msgid "Remove Fields"
 msgstr "Elimina campo"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:847
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:698
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Assign Footprint"
 msgstr "Assegna impronta"
 
@@ -17647,13 +17650,13 @@ msgstr "Riga di comando:"
 msgid "Plugin Info:"
 msgstr "Info plugin:"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:242
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:243
 msgid "Illegal reference prefix. A reference must start by a letter"
 msgstr ""
 "Prefisso del riferimento errato. Un riferimento deve cominciare con una "
 "lettera."
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:258
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:259
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -17826,11 +17829,11 @@ msgstr ""
 #: cvpcb/cvframe.cpp:649
 #, c-format
 msgid "Components: %d, unassigned: %d"
-msgstr "Componenti: %d, non assegnato: %d"
+msgstr "Componenti: %d, non assegnati: %d"
 
 #: cvpcb/cvframe.cpp:667
 msgid "Filter list: "
-msgstr "Filtra lista:"
+msgstr "Elenco filtri:"
 
 #: cvpcb/cvframe.cpp:683
 msgid "Key words: "
@@ -17838,24 +17841,24 @@ msgstr "Parole chiave:"
 
 #: cvpcb/cvframe.cpp:694
 msgid "key words"
-msgstr "Parole chiave"
+msgstr "parole chiave"
 
 #: cvpcb/cvframe.cpp:701
 msgid "pin count"
-msgstr "Conteggio piedini"
+msgstr "numero piedini"
 
 #: cvpcb/cvframe.cpp:709
 msgid "library"
-msgstr "Libreria "
+msgstr "libreria "
 
 #: cvpcb/cvframe.cpp:713
 msgid "No filtering"
-msgstr "Nessun filtro"
+msgstr "nessun filtro"
 
 #: cvpcb/cvframe.cpp:715
 #, c-format
 msgid "Filtered by %s"
-msgstr "Filtrato da %s"
+msgstr "Filtrato per %s"
 
 #: cvpcb/cvframe.cpp:731
 msgid ""
@@ -17871,7 +17874,7 @@ msgstr "Errore di configurazione"
 #: cvpcb/cvframe.cpp:755
 #, c-format
 msgid "Project: '%s'  (netlist: '%s')"
-msgstr "Progetto: '%s'  (netlist: '%s')"
+msgstr "Progetto: \"%s\"  (netlist: \"%s\")"
 
 #: cvpcb/cvframe.cpp:764
 msgid "[no project]"
