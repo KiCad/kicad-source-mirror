@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-15 07:18+0100\n"
-"PO-Revision-Date: 2015-03-15 07:25+0100\n"
+"POT-Creation-Date: 2015-03-21 09:24+0100\n"
+"PO-Revision-Date: 2015-03-21 09:24+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -27,7 +27,7 @@ msgstr ""
 "X-Poedit-SearchPath-8: pcb_calculator\n"
 "X-Poedit-SearchPath-9: pagelayout_editor\n"
 
-#: kicad/class_treeproject_item.cpp:111
+#: kicad/class_treeproject_item.cpp:112
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -35,24 +35,24 @@ msgstr ""
 "Zmiana rozszerzenia pliku zmieni typ pliku.\n"
 " Czy chcesz kontynuować?"
 
-#: kicad/class_treeproject_item.cpp:112
+#: kicad/class_treeproject_item.cpp:113
 msgid "Rename File"
 msgstr "Zmień nazwę pliku"
 
-#: kicad/class_treeproject_item.cpp:121
+#: kicad/class_treeproject_item.cpp:122
 msgid "Unable to rename file ... "
 msgstr "Nie mogę zmienić nazwy pliku ... "
 
-#: kicad/class_treeproject_item.cpp:122
+#: kicad/class_treeproject_item.cpp:123
 msgid "Permission error ?"
 msgstr "Błąd uprawnień ?"
 
-#: kicad/class_treeproject_item.cpp:137
+#: kicad/class_treeproject_item.cpp:138
 #, c-format
 msgid "Do you really want to delete '%s'"
 msgstr "Czy na pewno chcesz usunąć '%s'"
 
-#: kicad/class_treeproject_item.cpp:142
+#: kicad/class_treeproject_item.cpp:143
 msgid "Delete File"
 msgstr "Usuń plik"
 
@@ -492,7 +492,7 @@ msgid "KiCad project file '%s' not found"
 msgstr "Plik projektu KiCad '%s' nie został znaleziony"
 
 #: kicad/prjconfig.cpp:277 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1247
-#: pcbnew/moduleframe.cpp:780 pcbnew/pcbframe.cpp:959 cvpcb/cvframe.cpp:761
+#: pcbnew/moduleframe.cpp:780 pcbnew/pcbframe.cpp:961 cvpcb/cvframe.cpp:761
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -1009,11 +1009,11 @@ msgid ""
 msgstr ""
 "Bieżący schemat został zmodyfikowany. Czy chcesz zapisać dokonane zmiany?"
 
-#: eeschema/files-io.cpp:212 pcbnew/files.cpp:414
+#: eeschema/files-io.cpp:212 pcbnew/files.cpp:419
 msgid "Save and Load"
 msgstr "Zapisz i Załaduj"
 
-#: eeschema/files-io.cpp:213 pcbnew/files.cpp:415
+#: eeschema/files-io.cpp:213 pcbnew/files.cpp:420
 msgid "Load Without Saving"
 msgstr "Załaduj bez zapisu"
 
@@ -5026,8 +5026,8 @@ msgstr "Rozmiar:"
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:137
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:149
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:45
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:56
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:47
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:59
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:49
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:72 common/common.cpp:179
 msgid "units"
@@ -6197,15 +6197,15 @@ msgstr "Zamień"
 msgid "Replace &All"
 msgstr "Z&amień wszystkie"
 
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:38
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:39
 msgid "Text height:"
 msgstr "Wysokość tekstu:"
 
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:49
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:51
 msgid "Text width:"
 msgstr "Szerokość tekstu:"
 
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:60
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:63
 msgid "Connection type:"
 msgstr "Typ połączenia:"
 
@@ -6225,7 +6225,7 @@ msgstr "Nazwa arku&sza:"
 msgid "Unique timestamp:"
 msgstr "Unikalny znacznik czasowy:"
 
-#: pcbnew/append_board_to_current.cpp:91 pcbnew/files.cpp:503
+#: pcbnew/append_board_to_current.cpp:91 pcbnew/files.cpp:508
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -7531,36 +7531,36 @@ msgstr ""
 msgid "Printed circuit board"
 msgstr "Wydrukuj obwód drukowany"
 
-#: pcbnew/files.cpp:269
+#: pcbnew/files.cpp:274
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Plik odtworzeniowy '%s' nie został znaleziony."
 
-#: pcbnew/files.cpp:275
+#: pcbnew/files.cpp:280
 #, c-format
 msgid "OK to load recovery or backup file '%s'"
 msgstr ""
 "Nacisnij OK by załadować dane odtworzeniowe lub plik kopii zapasowej '%s'"
 
-#: pcbnew/files.cpp:334
+#: pcbnew/files.cpp:339
 msgid "noname"
 msgstr "bez_nazwy"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:407
 #, c-format
 msgid "PCB file '%s' is already open."
 msgstr "Plik PCB '%s' jest już otwarty."
 
-#: pcbnew/files.cpp:412
+#: pcbnew/files.cpp:417
 msgid "The current board has been modified.  Do you wish to save the changes?"
 msgstr "Bieżąca płytka została zmieniona. Czy chcesz zapisać dokonane zmiany?"
 
-#: pcbnew/files.cpp:438
+#: pcbnew/files.cpp:443
 #, c-format
 msgid "Board '%s' does not exist.  Do you wish to create it?"
 msgstr "Płytka '%s' nie istnieje. Czy chcesz ją utworzyć?"
 
-#: pcbnew/files.cpp:534
+#: pcbnew/files.cpp:539
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -7568,17 +7568,17 @@ msgstr ""
 "Ten plik został stworzony w starszej wersji Pcbnew.\n"
 " Plik zostanie zachowany w nowym formacie, gdy ponownie zostanie zapisany."
 
-#: pcbnew/files.cpp:632
+#: pcbnew/files.cpp:637
 #, c-format
 msgid "Warning: unable to create backup file '%s'"
 msgstr "Ostrzeżenie: Nie można utworzyć pliku kopii zapasowej '%s'"
 
-#: pcbnew/files.cpp:659 pcbnew/files.cpp:754
+#: pcbnew/files.cpp:664 pcbnew/files.cpp:759
 #, c-format
 msgid "No access rights to write to file '%s'"
 msgstr "Brak uprawnień do zapisu do pliku '%s'"
 
-#: pcbnew/files.cpp:700 pcbnew/files.cpp:780
+#: pcbnew/files.cpp:705 pcbnew/files.cpp:785
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -7587,22 +7587,22 @@ msgstr ""
 "Błąd podczas zapisywania płytki '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:706
+#: pcbnew/files.cpp:711
 #, c-format
 msgid "Failed to create '%s'"
 msgstr "Błąd przy tworzeniu '%s'"
 
-#: pcbnew/files.cpp:732
+#: pcbnew/files.cpp:737
 #, c-format
 msgid "Backup file: '%s'"
 msgstr "Plik kopii zapasowej: '%s'"
 
-#: pcbnew/files.cpp:734
+#: pcbnew/files.cpp:739
 #, c-format
 msgid "Wrote board file: '%s'"
 msgstr "Zapisuję plik płytki: '%s'"
 
-#: pcbnew/files.cpp:789
+#: pcbnew/files.cpp:794
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -9213,7 +9213,7 @@ msgstr "Zmień warstwę elementów"
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
-#: pcbnew/moduleframe.cpp:279 pcbnew/pcbframe.cpp:395 pcbnew/pcbframe.cpp:889
+#: pcbnew/moduleframe.cpp:279 pcbnew/pcbframe.cpp:395 pcbnew/pcbframe.cpp:891
 #: gerbview/events_called_functions.cpp:318 gerbview/gerbview_frame.cpp:146
 msgid "Visibles"
 msgstr "Widoczność"
@@ -9227,7 +9227,7 @@ msgid "Library is not set, the footprint could not be saved."
 msgstr ""
 "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:708 pcbnew/pcbframe.cpp:652
+#: pcbnew/moduleframe.cpp:708 pcbnew/pcbframe.cpp:654
 #: cvpcb/class_DisplayFootprintsFrame.cpp:397
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
@@ -10042,12 +10042,12 @@ msgstr "Przelotka %s, wiercenie %s"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
-#: pcbnew/pcbframe.cpp:615
+#: pcbnew/pcbframe.cpp:617
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej '%s' nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:963
+#: pcbnew/pcbframe.cpp:965
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -10245,12 +10245,12 @@ msgstr ""
 "Popraw wewnętrzny obrys na warstwie Edge.Cuts, tworząc z niego zamknięty "
 "wielokąt."
 
-#: pcbnew/specctra_export.cpp:1396
+#: pcbnew/specctra_export.cpp:1401
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Komponent z wartością '%s' nie posiada oznaczenia."
 
-#: pcbnew/specctra_export.cpp:1404
+#: pcbnew/specctra_export.cpp:1409
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Wiele komponentów ma to samo oznaczenie \"%s\"."
@@ -12595,7 +12595,7 @@ msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
-#: 3d-viewer/3d_canvas.cpp:396
+#: 3d-viewer/3d_canvas.cpp:397
 msgid "Move Down"
 msgstr "Przesuń w dół"
 
@@ -16507,7 +16507,7 @@ msgstr ""
 "Nie można usunąć ostatniego pola lutowniczego footprintu (Footprinty na PCB "
 "muszą posiadać przynajmniej jedno pole)."
 
-#: pcbnew/tools/edit_tool.cpp:783
+#: pcbnew/tools/edit_tool.cpp:787
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Powielono %d pozycji"
@@ -17637,63 +17637,63 @@ msgstr "Pełny rozmiar bez ograniczeń"
 msgid "Page"
 msgstr "Strona"
 
-#: 3d-viewer/3d_canvas.cpp:348
+#: 3d-viewer/3d_canvas.cpp:349
 msgid "Zoom +"
 msgstr "Powiększ"
 
-#: 3d-viewer/3d_canvas.cpp:352
+#: 3d-viewer/3d_canvas.cpp:353
 msgid "Zoom -"
 msgstr "Pomniejsz"
 
-#: 3d-viewer/3d_canvas.cpp:357
+#: 3d-viewer/3d_canvas.cpp:358
 msgid "Top View"
 msgstr "Widok z góry"
 
-#: 3d-viewer/3d_canvas.cpp:361
+#: 3d-viewer/3d_canvas.cpp:362
 msgid "Bottom View"
 msgstr "Widok z dołu"
 
-#: 3d-viewer/3d_canvas.cpp:366
+#: 3d-viewer/3d_canvas.cpp:367
 msgid "Right View"
 msgstr "Widok z prawej"
 
-#: 3d-viewer/3d_canvas.cpp:370
+#: 3d-viewer/3d_canvas.cpp:371
 msgid "Left View"
 msgstr "Widok z lewej"
 
-#: 3d-viewer/3d_canvas.cpp:375
+#: 3d-viewer/3d_canvas.cpp:376
 msgid "Front View"
 msgstr "Widok z przodu"
 
-#: 3d-viewer/3d_canvas.cpp:379
+#: 3d-viewer/3d_canvas.cpp:380
 msgid "Back View"
 msgstr "Widok z tyłu"
 
-#: 3d-viewer/3d_canvas.cpp:384
+#: 3d-viewer/3d_canvas.cpp:385
 msgid "Move left <-"
 msgstr "Przesuń w lewo <-"
 
-#: 3d-viewer/3d_canvas.cpp:388
+#: 3d-viewer/3d_canvas.cpp:389
 msgid "Move right ->"
 msgstr "Przesuń w prawo ->"
 
-#: 3d-viewer/3d_canvas.cpp:392
+#: 3d-viewer/3d_canvas.cpp:393
 msgid "Move Up ^"
 msgstr "Przesuń w górę ^"
 
-#: 3d-viewer/3d_canvas.cpp:610
+#: 3d-viewer/3d_canvas.cpp:611
 msgid "3D Image filename:"
 msgstr "Nazwa pliku obrazu 3D:"
 
-#: 3d-viewer/3d_canvas.cpp:665
+#: 3d-viewer/3d_canvas.cpp:666
 msgid "Failed to copy image to clipboard"
 msgstr "Nie można skopiować obrazu do schowka"
 
-#: 3d-viewer/3d_canvas.cpp:679
+#: 3d-viewer/3d_canvas.cpp:680
 msgid "Can't save file"
 msgstr "Nie mogę zapisać pliku"
 
-#: 3d-viewer/3d_draw.cpp:710 3d-viewer/3d_draw.cpp:1005
+#: 3d-viewer/3d_draw.cpp:624 3d-viewer/3d_draw.cpp:922
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -18293,57 +18293,58 @@ msgstr "Zaznacz wszystkie\tCTRL+A"
 msgid "Select all cells"
 msgstr "Zaznacz wszystkie komórki"
 
-#: common/hotkeys_basic.cpp:430 common/hotkeys_basic.cpp:456
+#: common/hotkeys_basic.cpp:432 common/hotkeys_basic.cpp:460
+#: common/hotkeys_basic.cpp:464
 msgid "Hotkeys List"
 msgstr "Lista skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:702
+#: common/hotkeys_basic.cpp:714
 msgid "Read Hotkey Configuration File:"
 msgstr "Wczytaj plik konfiguracji klawiszy skrótów:"
 
-#: common/hotkeys_basic.cpp:732
+#: common/hotkeys_basic.cpp:744
 msgid "Write Hotkey Configuration File:"
 msgstr "Zapisz plik konfiguracji klawiszy skrótów:"
 
-#: common/hotkeys_basic.cpp:760
+#: common/hotkeys_basic.cpp:772
 msgid "&List Current Keys"
 msgstr "&Lista bieżących skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:761
+#: common/hotkeys_basic.cpp:773
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Wyświetl bieżące skróty klawiszowe i odpowiadające im polecenia"
 
-#: common/hotkeys_basic.cpp:766
+#: common/hotkeys_basic.cpp:778
 msgid "&Edit Hotkeys"
 msgstr "&Edytuj plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:767
+#: common/hotkeys_basic.cpp:779
 msgid "Call the hotkeys editor"
 msgstr "Uruchom edytor skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:774
+#: common/hotkeys_basic.cpp:786
 msgid "E&xport Hotkeys"
 msgstr "Eksportuj plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:775
+#: common/hotkeys_basic.cpp:787
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr ""
 "Utwórz plik konfiguracji klawiszy skrótów by wyeksportować bieżącą "
 "konfigurację klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:780
+#: common/hotkeys_basic.cpp:792
 msgid "&Import Hotkeys"
 msgstr "&Importuj konfigurację skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:781
+#: common/hotkeys_basic.cpp:793
 msgid "Load an existing hotkey configuration file"
 msgstr "Wczytaj istniejący plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:786
+#: common/hotkeys_basic.cpp:798
 msgid "&Hotkeys"
 msgstr "Skróty klawiszowe"
 
-#: common/hotkeys_basic.cpp:787
+#: common/hotkeys_basic.cpp:799
 msgid "Hotkeys configuration and preferences"
 msgstr "Konfiguracja i właściwości skrótów klawiszowych"
 
@@ -20960,7 +20961,7 @@ msgstr "Wtyczki:"
 msgid "Plot Schematic"
 msgstr "Rysuj schemat (na ploterze)"
 
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:55
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:56
 msgid "Sheet Pin Properties"
 msgstr "Właściwości arkusza pinów"
 
