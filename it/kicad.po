@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-21 15:39+0100\n"
-"PO-Revision-Date: 2015-03-21 15:39+0100\n"
+"POT-Creation-Date: 2015-03-21 18:48+0100\n"
+"PO-Revision-Date: 2015-03-21 18:48+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -6254,8 +6254,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"Seleziona una <b>Scelta opzionale</b> nell'elenco del riquadro sopra, e poi "
-"fai clic sul pulsante <b>Acconda opzione selezionata</b>."
+"Selezionare un'<b>opzione</b> dall'elenco nel riquadro sopra, e fare clic "
+"sul pulsante <b>Accoda l'opzione selezionata</b>."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:64
 #, c-format
@@ -7528,7 +7528,7 @@ msgstr "Sposta la riga selezionata in basso di una posizione"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:90
 msgid "Option Choices:"
-msgstr "Opzioni di scelta:"
+msgstr "Opzioni selezionabili:"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:94
 msgid "Options supported by current plugin"
@@ -7536,7 +7536,7 @@ msgstr "Opzioni non supportate dal plugin corrente"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:98
 msgid "<< Append Selected Option"
-msgstr "<< accoda l'opzione selezionata"
+msgstr "<< Accoda l'opzione selezionata"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:101
 msgid "Option Specific Help:"
