@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-21 18:48+0100\n"
-"PO-Revision-Date: 2015-03-21 18:48+0100\n"
+"POT-Creation-Date: 2015-03-21 19:26+0100\n"
+"PO-Revision-Date: 2015-03-21 19:26+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -7581,7 +7581,7 @@ msgstr "Orizzontale"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:110
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
 msgid "Vertical"
-msgstr "Veriticale"
+msgstr "Verticale"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:112
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:68
@@ -15747,7 +15747,7 @@ msgstr "Disegna fili e bus in ogni direzione"
 
 #: eeschema/schframe.cpp:745
 msgid "Draw horizontal and vertical wires and buses only"
-msgstr "Disegna fili e bus soltanto in verticale e orrizontale"
+msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 
 #: eeschema/schframe.cpp:754
 msgid "Do not show hidden pins"
@@ -15764,7 +15764,7 @@ msgstr "Nuovo schema"
 #: eeschema/schframe.cpp:891
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
-msgstr "Il file di schema \"%s\" esiste già, usa invece Apri"
+msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
 #: eeschema/schframe.cpp:911
 msgid "Open Schematic"
