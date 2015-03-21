@@ -12,6 +12,7 @@ add_definitions( -DEESCHEMA )
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
+    ./netlist_exporters
     ../common
     ../common/dialogs
     ${INC_AFTER}
@@ -164,6 +165,13 @@ set( EESCHEMA_SRCS
     transform.cpp
     viewlib_frame.cpp
     viewlibs.cpp
+
+    netlist_exporters/netlist_exporter.cpp
+    netlist_exporters/netlist_exporter_cadstar.cpp
+    netlist_exporters/netlist_exporter_generic.cpp
+    netlist_exporters/netlist_exporter_kicad.cpp
+    netlist_exporters/netlist_exporter_orcadpcb2.cpp
+    netlist_exporters/netlist_exporter_pspice.cpp
     )
 
 

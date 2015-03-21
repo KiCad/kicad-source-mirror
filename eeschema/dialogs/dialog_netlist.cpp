@@ -562,7 +562,6 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
         break;
 
     case NET_TYPE_PCBNEW:
-        netlist_opt = NET_PCBNEW_USE_NEW_FORMAT;
         break;
 
     case NET_TYPE_ORCADPCB2:
