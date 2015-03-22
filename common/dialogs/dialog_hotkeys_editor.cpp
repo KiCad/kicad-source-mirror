@@ -129,7 +129,7 @@ wxString HOTKEY_LIST_CTRL::OnGetItemText( long aRow, long aColumn ) const
 
     if( aColumn == 0 )
     {
-        return hotkey_descr->m_InfoMsg;
+        return wxGetTranslation( hotkey_descr->m_InfoMsg );
     }
     else
     {
@@ -370,10 +370,11 @@ bool HOTKEYS_EDITOR_DIALOG::CanSetKey( long aKey, const wxString* sectionTag )
 
     if( conflictingKey != NULL )
     {
+        wxString info = wxGetTranslation( conflictingKey->m_InfoMsg );
         wxString msg = wxString::Format(
             _( "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
                "to change its assignment?" ),
-            KeyNameFromKeyCode( aKey ), conflictingKey->m_InfoMsg,
+            KeyNameFromKeyCode( aKey ), GetChars( info ),
             *(conflictingSection->GetHotkeySection()->m_Title) );
 
         wxMessageDialog dlg( this, msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );

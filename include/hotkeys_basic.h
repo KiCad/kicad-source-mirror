@@ -31,6 +31,13 @@
 
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( "hotkeys" )
 
+// A define to allow translation of Hot Key message Info in hotkey help menu
+// We do not want to use the _( x ) usual macro from wxWidgets, which calls wxGetTranslation(),
+// because the English string is used in key file configuration
+// The translated string is used only when displaying the help window.
+// Therefore translation tools have to use the "_" and the "_HKI" prefix to extract
+// strings to translate
+#define _HKI( x ) wxT( x )
 
 class EDA_BASE_FRAME;
 

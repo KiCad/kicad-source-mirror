@@ -38,10 +38,16 @@
 #include <pl_editor_id.h>
 
 
+// Remark: the hotkey message info is used as keyword in hotkey config files and
+// as comments in help windows, therefore translated only when displayed
+// they are marked _HKI to be extracted by translation tools
+// See hotkeys_basic.h for more info
+
+
 /* How to add a new hotkey:
  * add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.
  * add a new EDA_HOTKEY entry like:
- * static EDA_HOTKEY HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION, default key value);
+ * static EDA_HOTKEY HkMyNewEntry(_HKI("Command Label"), MY_NEW_ID_FUNCTION, default key value);
  * 'Command Label' is the name used in hotkey list display, and the identifier in the
  * hotkey list file
  * 'MY_NEW_ID_FUNCTION' is the id event function used in the switch in OnHotKey() function.
@@ -58,30 +64,30 @@
 // Hotkey list:
 
 // mouse click command:
-static EDA_HOTKEY HkMouseLeftClick( wxT( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
-static EDA_HOTKEY HkMouseLeftDClick( wxT( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
+static EDA_HOTKEY HkMouseLeftClick( _HKI( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
+static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
 
-static EDA_HOTKEY    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
+static EDA_HOTKEY    HkResetLocalCoord( _HKI( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
-static EDA_HOTKEY    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
+static EDA_HOTKEY    HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
+static EDA_HOTKEY    HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
                                    ID_POPUP_ZOOM_CENTER );
-static EDA_HOTKEY    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3, ID_ZOOM_REDRAW );
-static EDA_HOTKEY    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_POPUP_ZOOM_OUT );
-static EDA_HOTKEY    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_POPUP_ZOOM_IN );
-static EDA_HOTKEY    HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
-static EDA_HOTKEY    HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M', ID_POPUP_ITEM_MOVE );
-static EDA_HOTKEY    HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P', ID_POPUP_ITEM_PLACE );
-static EDA_HOTKEY    HkMoveStartPoint( wxT( "Move Start Point" ), HK_MOVE_START_POINT, 'S',
+static EDA_HOTKEY    HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3, ID_ZOOM_REDRAW );
+static EDA_HOTKEY    HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_POPUP_ZOOM_OUT );
+static EDA_HOTKEY    HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_POPUP_ZOOM_IN );
+static EDA_HOTKEY    HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
+static EDA_HOTKEY    HkMoveItem( _HKI( "Move Item" ), HK_MOVE_ITEM, 'M', ID_POPUP_ITEM_MOVE );
+static EDA_HOTKEY    HkPlaceItem( _HKI( "Place Item" ), HK_PLACE_ITEM, 'P', ID_POPUP_ITEM_PLACE );
+static EDA_HOTKEY    HkMoveStartPoint( _HKI( "Move Start Point" ), HK_MOVE_START_POINT, 'S',
                                        ID_POPUP_ITEM_MOVE_START_POINT );
-static EDA_HOTKEY    HkMoveEndPoint( wxT( "Move End Point" ), HK_MOVE_END_POINT, 'E',
+static EDA_HOTKEY    HkMoveEndPoint( _HKI( "Move End Point" ), HK_MOVE_END_POINT, 'E',
                                      ID_POPUP_ITEM_MOVE_END_POINT );
-static EDA_HOTKEY    HkDeleteItem( wxT( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE,
+static EDA_HOTKEY    HkDeleteItem( _HKI( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE,
                                    ID_POPUP_ITEM_DELETE );
 
 // Undo Redo
-static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
-static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* s_Common_Hotkey_List[] =

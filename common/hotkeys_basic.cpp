@@ -424,6 +424,7 @@ int KeyCodeFromKeyName( const wxString& keyname )
 void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxString     keyname;
+    wxString     keymessage;
     EDA_HOTKEY** list;
 
     wxString     msg = wxT( "<html><body bgcolor=\"#E2E2E2\">" );
@@ -443,12 +444,13 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
             if( !hk_decr->m_InfoMsg.Contains( wxT( "Macros" ) ) )
             {
                 keyname = KeyNameFromKeyCode( hk_decr->m_KeyCode );
+                keymessage = wxGetTranslation( hk_decr->m_InfoMsg );
 
-                // Some chars should be modified, using html encoding, to be
+                // Some chars are modified, using html encoding, to be
                 // displayed by DisplayHtmlInfoMessage()
                 keyname.Replace( wxT( "<" ), wxT( "&lt;" ) );
                 keyname.Replace( wxT( ">" ), wxT( "&gt;" ) );
-                msg    += wxT( "<tr><td>" ) + hk_decr->m_InfoMsg + wxT( "</td>" );
+                msg    += wxT( "<tr><td>" ) + keymessage + wxT( "</td>" );
                 msg    += wxT( "<td><b>&nbsp;&nbsp;" ) + keyname + wxT( "</b></td></tr>" );
             }
         }
