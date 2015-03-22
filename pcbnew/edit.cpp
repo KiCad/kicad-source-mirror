@@ -1202,7 +1202,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DUPLICATE_ITEM:
     case ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT:
-        duplicateItem( id == ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT );
+        duplicateItems( id == ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT );
         break;
 
     case ID_POPUP_PCB_CREATE_ARRAY:
@@ -1519,84 +1519,75 @@ void PCB_EDIT_FRAME::moveExact()
 
     if( ret == wxID_OK )
     {
-        BOARD_ITEM* item = GetScreen()->GetCurItem();
+        if( BOARD_ITEM* item = GetScreen()->GetCurItem() )
+        {
+            // When a pad is modified, the full footprint is saved
+            BOARD_ITEM* itemToSave = item;
 
-        // When a pad is modified, the full footprint is saved
-        BOARD_ITEM* itemToSave = item;
+            if( item->Type() == PCB_PAD_T )
+                itemToSave = item->GetParent();
 
-        if( item->Type() == PCB_PAD_T )
-            itemToSave = item->GetParent();
+            // Could be moved or rotated
+            SaveCopyInUndoList( itemToSave, UR_CHANGED );
 
-        // Could be moved or rotated
-        SaveCopyInUndoList( itemToSave, UR_CHANGED );
-
-        item->Move( translation );
-        item->Rotate( item->GetPosition(), rotation );
-        m_canvas->Refresh();
+            item->Move( translation );
+            item->Rotate( item->GetPosition(), rotation );
+            m_canvas->Refresh();
+        }
     }
 
     m_canvas->MoveCursorToCrossHair();
 }
 
-
-void PCB_EDIT_FRAME::duplicateItem( bool aIncrement )
+void PCB_EDIT_FRAME::duplicateItems( bool aIncrement )
 {
     BOARD_ITEM* item = GetScreen()->GetCurItem();
-    bool editingModule = NULL != dynamic_cast<FOOTPRINT_EDIT_FRAME*>( this );
-    int move_cmd = 0;
 
-    if( item->Type() == PCB_PAD_T && !editingModule )
-    {
-        // If it is not the module editor, then duplicate the parent module instead
+    if( !item )
+        return;
+
+    // In the board editor, the pads or fp texts can be edited
+    // but cannot be duplicated (only the fp editor can do that).
+    // only the footprint can be duplicated
+    if( item->Type() == PCB_PAD_T || item->Type() == PCB_MODULE_TEXT_T )
         item = static_cast<MODULE*>( item )->GetParent();
-    }
 
-    BOARD_ITEM* new_item = GetBoard()->DuplicateAndAddItem( item, aIncrement );
+    PCB_BASE_EDIT_FRAME::duplicateItem( item, aIncrement );
+}
 
-    SaveCopyInUndoList( new_item, UR_NEW );
+void PCB_BASE_EDIT_FRAME::duplicateItem( BOARD_ITEM* aItem, bool aIncrement )
+{
+    if( !aItem )
+        return;
 
-    if( new_item )
+    // The easiest way to handle a duplicate item command
+    // is to simulate a block copy command, which gives us the undo management
+    // for free
+    if( GetScreen()->m_BlockLocate.GetState() == STATE_NO_BLOCK )
     {
-        switch( new_item->Type() )
-        {
-        case PCB_MODULE_T:
-            move_cmd = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
-            break;
-        case PCB_TEXT_T:
-            move_cmd = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
-            break;
-        case PCB_LINE_T:
-            move_cmd = ID_POPUP_PCB_MOVE_DRAWING_REQUEST;
-            break;
-        case PCB_ZONE_AREA_T:
-            move_cmd = ID_POPUP_PCB_MOVE_ZONE_OUTLINES;
-            break;
-        case PCB_TRACE_T:
-            move_cmd = ID_POPUP_PCB_MOVE_TRACK_SEGMENT;
-            break;
-        case PCB_TARGET_T:
-            move_cmd = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
-            break;
-        case PCB_DIMENSION_T:
-            move_cmd = ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST;
-            break;
-        case PCB_PAD_T:
-            move_cmd = ID_POPUP_PCB_MOVE_PAD_REQUEST;
-            break;
-        default:
-            break;
-        }
+        m_canvas->MoveCursorToCrossHair();
 
-        if( move_cmd )
-        {
-            SetMsgPanel( new_item );
-            SetCurItem( new_item );
+        INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-            m_canvas->MoveCursorToCrossHair();
+        wxPoint crossHairPos = GetCrossHairPosition();
 
-            // pick up the item and start moving
-            PostCommandMenuEvent( move_cmd );
-        }
+        const BLOCK_COMMAND_T blockType = aIncrement ? BLOCK_COPY_AND_INCREMENT : BLOCK_COPY;
+
+        if( !HandleBlockBegin( &dc, blockType, crossHairPos ) )
+            return;
+
+        // Add the item to the block copy pick list:
+        PICKED_ITEMS_LIST& itemsList = GetScreen()->m_BlockLocate.GetItems();
+        ITEM_PICKER        picker( NULL, UR_UNSPECIFIED );
+
+        picker.SetItem ( aItem );
+        itemsList.PushItem( picker );
+
+        // Set 2 coordinates updated by the mouse, because our simulation
+        // does not use the mouse to call HandleBlockEnd()
+        GetScreen()->m_BlockLocate.SetLastCursorPosition( crossHairPos );
+        GetScreen()->m_BlockLocate.SetEnd( crossHairPos );
+        HandleBlockEnd( &dc );
     }
 }
 

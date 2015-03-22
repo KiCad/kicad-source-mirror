@@ -198,7 +198,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     case BLOCK_SELECT_ITEMS_ONLY:
         break;
 
-    case BLOCK_MOVE_EXACT:
+    case BLOCK_COPY_AND_INCREMENT:      // not used in Eeschema
+    case BLOCK_MOVE_EXACT:              // not used in Eeschema
         break;
     }
 

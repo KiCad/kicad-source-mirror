@@ -869,44 +869,9 @@ void FOOTPRINT_EDIT_FRAME::moveExact()
 
 void FOOTPRINT_EDIT_FRAME::duplicateItems( bool aIncrement )
 {
-    SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-
     BOARD_ITEM* item = GetScreen()->GetCurItem();
-    MODULE* module = static_cast<MODULE*>( item->GetParent() );
 
-    int move_cmd = 0;
-
-    BOARD_ITEM* new_item = module->DuplicateAndAddItem(
-            item, aIncrement );
-
-    if( new_item )
-    {
-        switch( new_item->Type() )
-        {
-        case PCB_PAD_T:
-            move_cmd = ID_POPUP_PCB_MOVE_PAD_REQUEST;
-            break;
-        case PCB_MODULE_TEXT_T:
-            move_cmd = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
-            break;
-        case PCB_MODULE_EDGE_T:
-            move_cmd = ID_POPUP_PCB_MOVE_EDGE;
-            break;
-        default:
-            break;
-        }
-
-        if( move_cmd )
-        {
-            SetMsgPanel( new_item );
-            SetCurItem( new_item );
-
-            m_canvas->MoveCursorToCrossHair();
-
-            // pick up the item and start moving
-            PostCommandMenuEvent( move_cmd );
-        }
-    }
+    PCB_BASE_EDIT_FRAME::duplicateItem( item, aIncrement );
 }
 
 

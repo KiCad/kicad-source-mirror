@@ -1132,12 +1132,6 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     {
         D_PAD* new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
 
-        if( aIncrementPadNumbers )
-        {
-            // Take the next available pad number
-            new_pad->IncrementPadName( true, true );
-        }
-
         Pads().PushBack( new_pad );
         new_item = new_pad;
         break;
@@ -1175,6 +1169,11 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         wxASSERT_MSG( false, "Duplication not supported for items of class "
                       + aItem->GetClass() );
         break;
+    }
+
+    if( aIncrementPadNumbers && new_item )
+    {
+        new_item->IncrementItemReference();
     }
 
     return new_item;
@@ -1217,6 +1216,13 @@ wxString MODULE::GetReferencePrefix() const
     prefix = prefix.Mid( 0, strIndex );
 
     return prefix;
+}
+
+
+bool MODULE::IncrementItemReference()
+{
+    // Take the next available module number
+    return IncrementReference( true );
 }
 
 

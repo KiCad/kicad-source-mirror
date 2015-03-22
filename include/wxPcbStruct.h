@@ -206,7 +206,7 @@ protected:
      * Duplicate selected item if possible and start a move
      * @param aIncrement increment the item number if appropriate
      */
-    void duplicateItem( bool aIncrement );
+    void duplicateItems( bool aIncrement ); //override
 
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
     PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -794,7 +794,7 @@ public:
      * New location is determined by the current offset from the selected
      * block's original location.
      */
-    void Block_Duplicate();
+    void Block_Duplicate( bool aIncrement );
 
     void Process_Settings( wxCommandEvent& event );
     void OnConfigurePcbOptions( wxCommandEvent& aEvent );

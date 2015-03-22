@@ -749,6 +749,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
     case BLOCK_DRAG:                // Drag (block defined)
     case BLOCK_DRAG_ITEM:           // Drag from a drag item command
     case BLOCK_COPY:                // Copy
+    case BLOCK_COPY_AND_INCREMENT:  // Copy and increment relevant references
     case BLOCK_DELETE:              // Delete
     case BLOCK_SAVE:                // Save
     case BLOCK_ROTATE:              // Rotate 90 deg

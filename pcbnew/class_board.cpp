@@ -2625,13 +2625,6 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     case PCB_MODULE_T:
     {
         MODULE* new_module = new MODULE( *static_cast<const MODULE*>( aItem ) );
-
-        if( aIncrementReferences )
-        {
-            // Take the next available module number
-            new_module->IncrementReference( true );
-        }
-
         new_item = new_module;
         break;
     }
@@ -2653,7 +2646,12 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     }
 
     if( new_item )
+    {
+        if( aIncrementReferences )
+            new_item->IncrementItemReference();
+
         Add( new_item );
+    }
 
     return new_item;
 }

@@ -73,7 +73,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 static int  MarkItemsInBloc( MODULE* module, EDA_RECT& Rect );
 
 static void ClearMarkItems( MODULE* module );
-static void CopyMarkedItems( MODULE* module, wxPoint offset );
+static void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement );
 static void MoveMarkedItems( MODULE* module, wxPoint offset );
 static void DeleteMarkedItems( MODULE* module );
 
@@ -129,17 +129,18 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( GetScreen()->m_BlockLocate.GetCount() )
     {
-        BLOCK_STATE_T   state   = GetScreen()->m_BlockLocate.GetState();
-        BLOCK_COMMAND_T command = GetScreen()->m_BlockLocate.GetCommand();
+        // Set the SELECTED flag of all preselected items, and clear preselect list
+        ClearMarkItems( currentModule );
+        PICKED_ITEMS_LIST* list = &GetScreen()->m_BlockLocate.GetItems();
 
-        m_canvas->CallEndMouseCapture( DC );
-        GetScreen()->m_BlockLocate.SetState( state );
-        GetScreen()->m_BlockLocate.SetCommand( command );
-        m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
+        for( unsigned ii = 0, e = list->GetCount(); ii < e; ++ii )
+        {
+            BOARD_ITEM* item = (BOARD_ITEM*) list->GetPickedItem( ii );
+            item->SetFlags( SELECTED );
+            ++itemsCount;
+        }
 
-        SetCrossHairPosition( wxPoint(  GetScreen()->m_BlockLocate.GetRight(),
-                                        GetScreen()->m_BlockLocate.GetBottom() ) );
-        m_canvas->MoveCursorToCrossHair();
+        GetScreen()->m_BlockLocate.ClearItemsList();
     }
 
     switch( GetScreen()->m_BlockLocate.GetCommand() )
@@ -148,11 +149,15 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
         break;
 
-    case BLOCK_DRAG:        // Drag
-    case BLOCK_DRAG_ITEM:   // Drag a given item (not used here)
-    case BLOCK_MOVE:        // Move
-    case BLOCK_COPY:        // Copy
-        itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
+    case BLOCK_DRAG:                // Drag
+    case BLOCK_DRAG_ITEM:           // Drag a given item (not used here)
+    case BLOCK_MOVE:                // Move
+    case BLOCK_COPY:                // Copy
+    case BLOCK_COPY_AND_INCREMENT:  // Specific to duplicate with increment command
+
+        // Find selected items if we didn't already set them manually
+        if( itemsCount == 0 )
+            itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
 
         if( itemsCount )
         {
@@ -270,7 +275,9 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
 
-    switch( GetScreen()->m_BlockLocate.GetCommand() )
+    const BLOCK_COMMAND_T command = GetScreen()->m_BlockLocate.GetCommand();
+
+    switch( command )
     {
     case  BLOCK_IDLE:
         break;
@@ -284,10 +291,12 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         m_canvas->Refresh( true );
         break;
 
-    case BLOCK_COPY:     // Copy
+    case BLOCK_COPY:                // Copy
+    case BLOCK_COPY_AND_INCREMENT:  // Copy and increment references
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
-        CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector() );
+        CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector(),
+                         command == BLOCK_COPY_AND_INCREMENT );
         break;
 
     case BLOCK_PASTE:     // Paste
@@ -419,7 +428,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 /* Copy marked items, at new position = old position + offset
  */
-void CopyMarkedItems( MODULE* module, wxPoint offset )
+void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
 {
     if( module == NULL )
         return;
@@ -439,6 +448,9 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         NewPad->SetParent( module );
         NewPad->SetFlags( SELECTED );
         module->Pads().PushFront( NewPad );
+
+        if( aIncrement )
+            NewPad->IncrementItemReference();
     }
 
     BOARD_ITEM* newItem;
@@ -454,6 +466,9 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         newItem->SetParent( module );
         newItem->SetFlags( SELECTED );
         module->GraphicalItems().PushFront( newItem );
+
+        if( aIncrement )
+            newItem->IncrementItemReference();
     }
 
     MoveMarkedItems( module, offset );

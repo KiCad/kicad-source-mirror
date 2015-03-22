@@ -51,6 +51,7 @@ typedef enum {
     BLOCK_IDLE,
     BLOCK_MOVE,
     BLOCK_COPY,
+    BLOCK_COPY_AND_INCREMENT,
     BLOCK_SAVE,
     BLOCK_DELETE,
     BLOCK_PASTE,

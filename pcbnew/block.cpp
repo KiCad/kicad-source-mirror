@@ -228,7 +228,9 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
 
-    switch( GetScreen()->m_BlockLocate.GetCommand() )
+    const BLOCK_COMMAND_T command = GetScreen()->m_BlockLocate.GetCommand();
+
+    switch( command )
     {
     case BLOCK_IDLE:
         break;
@@ -244,10 +246,11 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_COPY:     // Copy
+    case BLOCK_COPY_AND_INCREMENT:
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-        Block_Duplicate();
+        Block_Duplicate( command == BLOCK_COPY_AND_INCREMENT );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
@@ -315,10 +318,11 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
             break;
 
-        case BLOCK_DRAG:            // Drag (not used, for future enhancements)
-        case BLOCK_MOVE:            // Move
-        case BLOCK_COPY:            // Copy
-        case BLOCK_PRESELECT_MOVE:  // Move with preselection list
+        case BLOCK_DRAG:                // Drag (not used, for future enhancements)
+        case BLOCK_MOVE:                // Move
+        case BLOCK_COPY:                // Copy
+        case BLOCK_COPY_AND_INCREMENT:  // Copy and increment relevant references
+        case BLOCK_PRESELECT_MOVE:      // Move with preselection list
             GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
             nextcmd = true;
             m_canvas->SetMouseCaptureCallback( drawMovingBlock );
@@ -845,7 +849,7 @@ void PCB_EDIT_FRAME::Block_Move()
 }
 
 
-void PCB_EDIT_FRAME::Block_Duplicate()
+void PCB_EDIT_FRAME::Block_Duplicate( bool aIncrement )
 {
     wxPoint MoveVector = GetScreen()->m_BlockLocate.GetMoveVector();
 
@@ -864,6 +868,9 @@ void PCB_EDIT_FRAME::Block_Duplicate()
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
 
         newitem = (BOARD_ITEM*)item->Clone();
+
+        if( aIncrement )
+            newitem->IncrementItemReference();
 
         if( item->Type() == PCB_MODULE_T )
             m_Pcb->m_Status_Pcb = 0;

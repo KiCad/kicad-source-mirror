@@ -108,14 +108,23 @@ public:
     void SetPadName( const wxString& name );    // Change pad name
     const wxString GetPadName() const;
 
+    /*!
+     * Function IncrementItemReference
+     * Implementation of the generic "reference" incrementing interface
+     * Increments the numeric suffix, filling any sequence gaps and skipping
+     * pads that aren't connectable
+     */
+    bool IncrementItemReference(); // override
+
     /**
      * Function IncrementPadName
      *
      * Increments the pad name to the next available name in the module.
      *
      * @param aSkipUnconnectable skips any pads that are not connectable (for example NPTH)
+     * @return pad name incremented
      */
-    void IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps );
+    bool IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps );
 
     bool PadNameEqual( const D_PAD* other ) const
     {

@@ -65,7 +65,7 @@ public:
 
     /**
      * Function GetConfigurationSettings
-     * returns the footprçint editor settings list.
+     * returns the footprï¿½int editor settings list.
      *
      * Currently, only the settings that are needed at start
      * up by the main window are defined here.  There are other locally used
@@ -549,7 +549,7 @@ private:
      * Duplicate the item under the cursor
      * @param aIncrement increment the number of pad (if that is what is selected)
      */
-    void duplicateItems( bool aIncrement );
+    void duplicateItems( bool aIncrement ); //override
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

@@ -436,8 +436,15 @@ public:
     TEXTE_MODULE& Value() const       { return *m_Value; }
     TEXTE_MODULE& Reference() const   { return *m_Reference; }
 
+    /*!
+     * Function IncrementItemReference
+     * Implementation of the generic "reference" incrementing interface
+     * Increments the numeric suffix, filling any sequence gaps
+     */
+    bool IncrementItemReference(); //override
+
     /**
-     * Function INcrementReference
+     * Function IncrementReference
      * Increments the module's reference, if possible. A reference with
      * a numerical suffix and an optional alphabetical prefix can be
      * incremented: "A1" and "1" can be, "B" can't.
