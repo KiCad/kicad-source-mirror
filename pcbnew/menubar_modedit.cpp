@@ -282,7 +282,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* prefs_menu = new wxMenu;
 
     AddMenuItem( prefs_menu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
+                _( "Footprint Li&braries" ), _( "Configure footprint libraries" ),
                 KiBitmap( library_table_xpm ) );
 
     // Settings

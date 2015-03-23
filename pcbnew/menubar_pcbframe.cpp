@@ -480,7 +480,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* configmenu = new wxMenu;
 
     AddMenuItem( configmenu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
+                _( "Footprint Li&braries" ), _( "Configure footprint libraries" ),
                 KiBitmap( library_table_xpm ) );
 
     // Colors and Visibility are also handled by the layers manager toolbar

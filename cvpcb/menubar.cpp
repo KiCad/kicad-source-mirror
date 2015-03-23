@@ -113,7 +113,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxMenu* preferencesMenu = new wxMenu;
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
-                 _( "Edit Li&brary Table" ), _( "Setup footprint libraries" ),
+                 _( "Footprint Li&braries" ), _( "Configure footprint libraries" ),
                  KiBitmap( library_table_xpm ) );
 
     AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,

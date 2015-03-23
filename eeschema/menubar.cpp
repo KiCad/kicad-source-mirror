@@ -378,8 +378,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Library
     AddMenuItem( preferencesMenu,
                  ID_CONFIG_REQ,
-                 _( "Set Active &Libraries" ),
-                 _( "Set active library list and library paths" ),
+                 _( "Component &Libraries" ),
+                 _( "Configure component libraries and paths" ),
                  KiBitmap( library_xpm ) );
 
     // Colors
