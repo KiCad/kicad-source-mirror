@@ -199,9 +199,9 @@ public:
     int GetAttributes() const { return m_Attributs; }
     void SetAttributes( int aAttributes ) { m_Attributs = aAttributes; }
 
-    void SetFlag( int aFlag ) { flag = aFlag; }
-    void IncrementFlag() { flag += 1; }
-    int GetFlag() const { return flag; }
+    void SetFlag( int aFlag ) { m_arflag = aFlag; }
+    void IncrementFlag() { m_arflag += 1; }
+    int GetFlag() const { return m_arflag; }
 
     void Move( const wxPoint& aMoveVector );
 
@@ -328,12 +328,19 @@ public:
      *  if aCorrectionFactor = 1.0, the polygon is inside the circle
      *  the radius of circle approximated by segments is
      *  initial radius * aCorrectionFactor
+     * @param aSkipNPTHPadsWihNoCopper = if true, do not add a NPTH pad shape,
+     *  if the shape has same size and position as the hole. Usually, these
+     *  pads are not drawn on copper layers, because there is actually no copper
+     *  Due to diff between layers and holes, these pads must be skipped to be sure
+     *  there is no copper left on the board (for instance when creating Gerber Files or 3D shapes)
+     *  default = false
      */
     void TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
                             CPOLYGONS_LIST& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
-                            double          aCorrectionFactor );
+                            double          aCorrectionFactor,
+                            bool            aSkipNPTHPadsWihNoCopper = false );
 
     /**
      * function TransformGraphicShapesWithClearanceToPolygonSet
@@ -645,7 +652,7 @@ private:
     wxString          m_Path;
     ZoneConnection    m_ZoneConnection;
     time_t            m_LastEditTime;
-    int               flag;             ///< Use to trace ratsnest and auto routing.
+    int               m_arflag;             ///< Use to trace ratsnest and auto routing.
     double            m_Surface;        ///< Bounding box area
     time_t            m_Link;           ///< Temporary logical link used in edition
     int               m_CntRot90;       ///< Horizontal automatic placement cost ( 0..10 ).

@@ -2125,6 +2125,8 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         }
     }
 
+    // If we are here, there is an error.
+    delete net;
     THROW_IO_ERROR( "Missing '$EndEQUIPOT'" );
 }
 

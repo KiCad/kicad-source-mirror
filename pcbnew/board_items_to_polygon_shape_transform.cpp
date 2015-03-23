@@ -131,7 +131,8 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
                         CPOLYGONS_LIST& aCornerBuffer,
                         int                    aInflateValue,
                         int                    aCircleToSegmentsCount,
-                        double                 aCorrectionFactor )
+                        double                 aCorrectionFactor,
+                        bool                   aSkipNPTHPadsWihNoCopper )
 {
     D_PAD* pad = Pads();
 
@@ -141,6 +142,29 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
         if( !pad->IsOnLayer(aLayer) )
             continue;
 
+        // NPTH pads are not drawn on layers if the shape size and pos is the same
+        // as their hole:
+        if( aSkipNPTHPadsWihNoCopper && pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+        {
+            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == wxPoint( 0, 0 ) )
+            {
+                switch( pad->GetShape() )
+                {
+                case PAD_CIRCLE:
+                    if( pad->GetDrillShape() == PAD_DRILL_CIRCLE )
+                        continue;
+                    break;
+
+                case PAD_OVAL:
+                    if( pad->GetDrillShape() != PAD_DRILL_CIRCLE )
+                        continue;
+                    break;
+
+                default:
+                    break;
+                }
+            }
+        }
 
         switch( aLayer )
         {

@@ -349,9 +349,6 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     preferencesMenu->AppendSeparator();
     Pgm().AddMenuLanguageList( preferencesMenu );
 
-    // Hotkey submenu
-    AddHotkeyConfigMenu( preferencesMenu );
-
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
 

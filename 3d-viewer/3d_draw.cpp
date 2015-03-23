@@ -692,11 +692,13 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         // draw pads
         for( MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
         {
+            // Note: NPTH pads are not drawn on copper layers when the pad
+            // has same shape as its hole
             module->TransformPadsShapesWithClearanceToPolygon( layer,
                                                                bufferPolys,
                                                                0,
                                                                segcountforcircle,
-                                                               correctionFactor );
+                                                               correctionFactor, true );
 
             // Micro-wave modules may have items on copper layers
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
