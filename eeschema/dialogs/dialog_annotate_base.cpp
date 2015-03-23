@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -42,6 +42,9 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_rbResetAnnotation = new wxRadioButton( this, ID_RESET_ANNOTATION, _("&Reset existing annotation"), wxDefaultPosition, wxDefaultSize, 0 );
 	bscopeOptSizer->Add( m_rbResetAnnotation, 0, wxALL, 3 );
+	
+	m_rbResetButLock = new wxRadioButton( this, ID_RESET_BUT_LOCK, _("R&eset, but do not swap any annotated multi-unit parts"), wxDefaultPosition, wxDefaultSize, 0 );
+	bscopeOptSizer->Add( m_rbResetButLock, 0, wxALL, 3 );
 	
 	
 	bupperSizer->Add( bscopeOptSizer, 0, wxEXPAND|wxLEFT|wxALIGN_RIGHT, 25 );

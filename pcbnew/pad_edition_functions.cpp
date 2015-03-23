@@ -193,28 +193,19 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
 }
 
 
-/**
- * Function DeletePad
- * Delete the pad aPad.
- * Refresh the modified screen area
- * Refresh modified parameters of the parent module (bounding box, last date)
- * @param aPad = the pad to delete
- * @param aQuery = true to promt for confirmation, false to delete silently
- */
 void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
 {
-    MODULE*  module;
-
     if( aPad == NULL )
         return;
 
-    module = (MODULE*) aPad->GetParent();
+    MODULE* module = (MODULE*) aPad->GetParent();
     module->SetLastEditTime();
 
+    // aQuery = true to prompt for confirmation, false to delete silently
     if( aQuery )
     {
         wxString msg;
-        msg.Printf( _( "Delete Pad (module %s %s) " ),
+        msg.Printf( _( "Delete Pad (footprint %s %s) ?" ),
                     GetChars( module->GetReference() ),
                     GetChars( module->GetValue() ) );
 
@@ -224,7 +215,10 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
 
     m_Pcb->m_Status_Pcb = 0;
     aPad->DeleteStructure();
+    // Refresh the modified screen area, using the initial bounding box
+    // which is perhaps larger than the new bounding box
     m_canvas->RefreshDrawingRect( module->GetBoundingBox() );
+    // Update the bounding box
     module->CalculateBoundingBox();
 
     OnModify();

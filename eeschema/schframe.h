@@ -30,7 +30,6 @@
 #ifndef  WX_EESCHEMA_STRUCT_H
 #define  WX_EESCHEMA_STRUCT_H
 
-
 #include <sch_base_frame.h>
 #include <config_params.h>
 #include <class_undoredo_container.h>
@@ -522,8 +521,8 @@ public:
     /**
      * Function DeleteAnnotation
      * clears the current component annotation.
-     * @param aCurrentSheetOnly Clear the entire schematic annotation if true.  Otherwise
-     *                          only clear the annotation for the current sheet.
+     * @param aCurrentSheetOnly Clear only the annotation for the current sheet if true.
+     *                          Otherwise clear the entire schematic annotation.
      */
     void DeleteAnnotation( bool aCurrentSheetOnly );
 
@@ -542,6 +541,14 @@ public:
      *                          Otherwise, keep the existing time stamps.  This option
      *                          could change previous annotation because time stamps are
      *                          used to handle annotation in complex hierarchies.
+     * @param aLockUnits    When both aLockUnits and aResetAnnotation are true, all unit
+     *                          associations should be kept when reannotating. That is, if
+     *                          two components were R8A and R8B, they may become R3A and R3B,
+     *                          but not R3A and R3C or R3C and R4D.
+     *                          When aResetAnnotation is true but aLockUnits is false, the
+     *                          usual behavior of annotating each part individually is
+     *                          performed.
+     *                          When aResetAnnotation is false, this option has no effect.
      *
      * When the sheet number is used in annotation, each sheet annotation starts from sheet
      * number * 100.  In other words the first sheet uses 100 to 199, the second sheet uses
@@ -549,7 +556,7 @@ public:
      */
     void AnnotateComponents( bool aAnnotateSchematic, ANNOTATE_ORDER_T aSortOption,
                              ANNOTATE_OPTION_T aAlgoOption, bool aResetAnnotation,
-                             bool aRepairTimestamps );
+                             bool aRepairTimestamps, bool aLockUnits );
 
     /**
      * Function CheckAnnotate

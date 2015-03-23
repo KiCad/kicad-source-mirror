@@ -39,6 +39,10 @@
 #include <sch_component.h>
 #include <sch_text.h>
 
+#include <map>
+
+class SCH_REFERENCE;
+class SCH_REFERENCE_LIST;
 
 /**
  * Class SCH_REFERENCE
@@ -149,6 +153,16 @@ public:
     int CompareLibName( const SCH_REFERENCE& item ) const
     {
         return Cmp_KEEPCASE( m_RootCmp->GetPartName(), item.m_RootCmp->GetPartName() );
+    }
+
+    /**
+     * Function IsSameInstance
+     * returns whether this reference refers to the same component instance
+     * (component and sheet) as another.
+     */
+    bool IsSameInstance( const SCH_REFERENCE& other ) const
+    {
+        return GetComp() == other.GetComp() && GetSheetPath().Path() == other.GetSheetPath().Path();
     }
 
     bool IsUnitsLocked()
@@ -272,6 +286,9 @@ public:
      * @param aUseSheetNum Set to true to start annotation for each sheet at the sheet number
      *                     times \a aSheetIntervalId.  Otherwise annotate incrementally.
      * @param aSheetIntervalId The per sheet reference designator multiplier.
+     * @param aLockedUnitMap A SCH_MULTI_UNIT_REFERENCE_MAP of reference designator wxStrings
+     *      to SCH_REFERENCE_LISTs. May be an empty map. If not empty, any multi-unit parts
+     *      found in this map will be annotated as a group rather than individually.
      * <p>
      * If a the sheet number is 2 and \a aSheetIntervalId is 100, then the first reference
      * designator would be 201 and the last reference designator would be 299 when no overlap
@@ -279,7 +296,7 @@ public:
      * referenced U201 to U351, and items in sheet 3 start from U352
      * </p>
      */
-    void Annotate( bool aUseSheetNum, int aSheetIntervalId );
+    void Annotate( bool aUseSheetNum, int aSheetIntervalId, SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap );
 
     /**
      * Function CheckAnnotation
@@ -448,6 +465,5 @@ private:
      */
     int CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
 };
-
 
 #endif    // _SCH_REFERENCE_LIST_H_

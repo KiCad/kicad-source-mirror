@@ -38,6 +38,7 @@
 #include <sch_component.h>
 #include <lib_pin.h>
 
+#include <boost/foreach.hpp>
 
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 {
@@ -62,7 +63,8 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                                          ANNOTATE_ORDER_T  aSortOption,
                                          ANNOTATE_OPTION_T aAlgoOption,
                                          bool              aResetAnnotation,
-                                         bool              aRepairTimestamps )
+                                         bool              aRepairTimestamps,
+                                         bool              aLockUnits )
 {
     SCH_REFERENCE_LIST references;
 
@@ -72,6 +74,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     // Build the sheet list.
     SCH_SHEET_LIST sheets;
+
+    // Map of locked components
+    SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
 
     // Test for and replace duplicate time stamps in components and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual
@@ -85,6 +90,19 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
             wxString msg;
             msg.Printf( _( "%d duplicate time stamps were found and replaced." ), count );
             DisplayInfoMessage( NULL, msg, 2 );
+        }
+    }
+
+    // If units must be locked, collect all the sets that must be annotated together.
+    if( aLockUnits )
+    {
+        if( aAnnotateSchematic )
+        {
+            sheets.GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
+        }
+        else
+        {
+            m_CurrentSheet->GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
         }
     }
 
@@ -141,7 +159,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     }
 
     // Recalculate and update reference numbers in schematic
-    references.Annotate( useSheetNum, idStep );
+    references.Annotate( useSheetNum, idStep, lockedComponents );
     references.UpdateAnnotation();
 
     wxArrayString errors;

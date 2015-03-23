@@ -60,16 +60,6 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 
     fieldNdx = aField->GetId();
 
-    if( fieldNdx == VALUE && part->IsPower() )
-    {
-        wxString msg = wxString::Format( _(
-            "%s is a power component and it's value cannot be modified!\n\n"
-            "You must create a new power component with the new value." ),
-            GetChars( part->GetName() )
-            );
-        DisplayInfoMessage( this, msg );
-        return;
-    }
 
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetFlags() == 0 )
@@ -83,6 +73,13 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
 
     DIALOG_SCH_EDIT_ONE_FIELD dlg( this, title, aField );
+
+    // Value fields of power components cannot be modified. This will grey out
+    // the text box and display an explanation.
+    if( fieldNdx == VALUE && part->IsPower() )
+    {
+        dlg.SetPowerWarning( true );
+    }
 
     //The diag may invoke a kiway player for footprint fields
     //so we must use a quasimodal
@@ -120,12 +117,17 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
             DisplayError( this, _( "The reference field cannot be empty!  No change" ) );
             can_update = false;
         }
-        else if( fieldNdx == VALUE )
+        else if( fieldNdx == VALUE && ! part->IsPower() )
         {
+            // Note that power components also should not have empty value fields - but
+            // since the user is forbidden from changing the value field here, if it
+            // were to happen somehow, it'd be awfully confusing if an error were to
+            // be displayed!
+
             DisplayError( this, _( "The value field cannot be empty!  No change" ) );
             can_update = false;
         }
-        else
+        else if ( !( fieldNdx == VALUE && part->IsPower() ) )
         {
             dlg.SetTextField( wxT( "~" ) );
         }
@@ -133,7 +135,7 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 
     if( can_update )
     {
-        dlg.TransfertDataToField();
+        dlg.TransfertDataToField( /* aIncludeText = */ !( fieldNdx == VALUE && part->IsPower() ) );
         OnModify();
         m_canvas->Refresh();
     }

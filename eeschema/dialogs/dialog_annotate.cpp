@@ -67,6 +67,7 @@ private:
     // User functions:
     bool GetLevel();
     bool GetResetItems();
+    bool GetLockUnits();
 
     /**
      * Function GetSortOrder
@@ -212,7 +213,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
     m_Parent->AnnotateComponents( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
                                   (ANNOTATE_OPTION_T) GetAnnotateAlgo(),
-                                  GetResetItems() , true );
+                                  GetResetItems() , true, GetLockUnits() );
     m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable();
@@ -273,9 +274,13 @@ bool DIALOG_ANNOTATE::GetLevel()
 
 bool DIALOG_ANNOTATE::GetResetItems()
 {
-    return m_rbResetAnnotation->GetValue();
+    return m_rbResetAnnotation->GetValue() || m_rbResetButLock->GetValue();
 }
 
+bool DIALOG_ANNOTATE::GetLockUnits()
+{
+    return m_rbResetButLock->GetValue();
+}
 
 int DIALOG_ANNOTATE::GetSortOrder()
 {

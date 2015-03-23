@@ -39,6 +39,8 @@
 #include <sch_reference_list.h>
 #include <sch_component.h>
 
+#include <boost/foreach.hpp>
+
 
 //#define USE_OLD_ALGO
 
@@ -283,7 +285,8 @@ int SCH_REFERENCE_LIST::CreateFirstFreeRefId( std::vector<int>& aIdList, int aFi
 }
 
 
-void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
+void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
+      SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap )
 {
     if ( componentFlatList.size() == 0 )
         return;
@@ -326,6 +329,24 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
     {
         if( componentFlatList[ii].m_Flag )
             continue;
+
+        // Check whether this component is in aLockedUnitMap.
+        SCH_REFERENCE_LIST* lockedList = NULL;
+        BOOST_FOREACH( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair, aLockedUnitMap )
+        {
+            unsigned n_refs = pair.second.GetCount();
+            for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
+            {
+                SCH_REFERENCE &thisRef = pair.second[thisRefI];
+
+                if( thisRef.IsSameInstance( componentFlatList[ii] ) )
+                {
+                    lockedList = &pair.second;
+                    break;
+                }
+            }
+            if( lockedList != NULL ) break;
+        }
 
         if(  ( componentFlatList[first].CompareRef( componentFlatList[ii] ) != 0 )
           || ( aUseSheetNum && ( componentFlatList[first].m_SheetNum != componentFlatList[ii].m_SheetNum ) )  )
@@ -388,47 +409,80 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
             componentFlatList[ii].m_Flag = 1;
         }
 
-        /* search for others units of this component.
-         * we search for others parts that have the same value and the same
-         * reference prefix (ref without ref number)
-         */
-        for( Unit = 1; Unit <= NumberOfUnits; Unit++ )
+        // If this component is in aLockedUnitMap, copy the annotation to all
+        // components that are not it
+        if( lockedList != NULL )
         {
-            if( componentFlatList[ii].m_Unit == Unit )
-                continue;
-
-            int found = FindUnit( ii, Unit );
-
-            if( found >= 0 )
-                continue; // this unit exists for this reference (unit already annotated)
-
-            // Search a component to annotate ( same prefix, same value, not annotated)
-            for( unsigned jj = ii + 1; jj < componentFlatList.size(); jj++ )
+            unsigned n_refs = lockedList->GetCount();
+            for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
             {
-                if( componentFlatList[jj].m_Flag )    // already tested
-                    continue;
-
-                if( componentFlatList[ii].CompareRef( componentFlatList[jj] ) != 0 )
-                    continue;
-
-                if( componentFlatList[jj].CompareValue( componentFlatList[ii] ) != 0 )
-                    continue;
-
-                if( componentFlatList[jj].CompareLibName( componentFlatList[ii] ) != 0 )
-                    continue;
-
-                if( !componentFlatList[jj].m_IsNew )
-                    continue;
-
-                // Component without reference number found, annotate it if possible
-                if( !componentFlatList[jj].IsUnitsLocked()
-                    || ( componentFlatList[jj].m_Unit == Unit ) )
+                SCH_REFERENCE &thisRef = (*lockedList)[thisRefI];
+                if( thisRef.IsSameInstance( componentFlatList[ii] ) )
                 {
+                    // This is the component we're currently annotating. Hold the unit!
+                    componentFlatList[ii].m_Unit = thisRef.m_Unit;
+                }
+
+                if( thisRef.CompareValue( componentFlatList[ii] ) != 0 ) continue;
+                if( thisRef.CompareLibName( componentFlatList[ii] ) != 0 ) continue;
+
+                // Find the matching component
+                for( unsigned jj = ii + 1; jj < componentFlatList.size(); jj++ )
+                {
+                    if( ! thisRef.IsSameInstance( componentFlatList[jj] ) ) continue;
                     componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
-                    componentFlatList[jj].m_Unit   = Unit;
-                    componentFlatList[jj].m_Flag   = 1;
-                    componentFlatList[jj].m_IsNew  = false;
+                    componentFlatList[jj].m_Unit = thisRef.m_Unit;
+                    componentFlatList[jj].m_IsNew = false;
+                    componentFlatList[jj].m_Flag = 1;
                     break;
+                }
+            }
+        }
+
+        else
+        {
+            /* search for others units of this component.
+            * we search for others parts that have the same value and the same
+            * reference prefix (ref without ref number)
+            */
+            for( Unit = 1; Unit <= NumberOfUnits; Unit++ )
+            {
+                if( componentFlatList[ii].m_Unit == Unit )
+                    continue;
+
+                int found = FindUnit( ii, Unit );
+
+                if( found >= 0 )
+                    continue; // this unit exists for this reference (unit already annotated)
+
+                // Search a component to annotate ( same prefix, same value, not annotated)
+                for( unsigned jj = ii + 1; jj < componentFlatList.size(); jj++ )
+                {
+                    if( componentFlatList[jj].m_Flag )    // already tested
+                        continue;
+
+                    if( componentFlatList[ii].CompareRef( componentFlatList[jj] ) != 0 )
+                        continue;
+
+                    if( componentFlatList[jj].CompareValue( componentFlatList[ii] ) != 0 )
+                        continue;
+
+                    if( componentFlatList[jj].CompareLibName( componentFlatList[ii] ) != 0 )
+                        continue;
+
+                    if( !componentFlatList[jj].m_IsNew )
+                        continue;
+
+                    // Component without reference number found, annotate it if possible
+                    if( !componentFlatList[jj].IsUnitsLocked()
+                        || ( componentFlatList[jj].m_Unit == Unit ) )
+                    {
+                        componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
+                        componentFlatList[jj].m_Unit   = Unit;
+                        componentFlatList[jj].m_Flag   = 1;
+                        componentFlatList[jj].m_IsNew  = false;
+                        break;
+                    }
                 }
             }
         }

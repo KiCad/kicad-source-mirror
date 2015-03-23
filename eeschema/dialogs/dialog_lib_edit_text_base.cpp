@@ -64,6 +64,12 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	
 	bPropertiesSizer->Add( bUpperBoxSizer, 0, wxEXPAND, 5 );
 	
+	m_PowerComponentValues = new wxStaticText( this, wxID_ANY, _("Power component value text cannot be modified!"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PowerComponentValues->Wrap( -1 );
+	m_PowerComponentValues->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bPropertiesSizer->Add( m_PowerComponentValues, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	wxBoxSizer* bBottomtBoxSizer;
 	bBottomtBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -91,7 +97,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	wxString m_TextShapeOptChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_TextShapeOptNChoices = sizeof( m_TextShapeOptChoices ) / sizeof( wxString );
 	m_TextShapeOpt = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_TextShapeOptNChoices, m_TextShapeOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextShapeOpt->SetSelection( 3 );
+	m_TextShapeOpt->SetSelection( 0 );
 	bBottomtBoxSizer->Add( m_TextShapeOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextHJustificationOptChoices[] = { _("Align left"), _("Align center"), _("Align right") };
@@ -130,7 +136,6 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCloseDialog ) );

@@ -44,6 +44,7 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 		wxButton* m_TextValueSelectButton;
 		wxStaticText* m_TextSizeText;
 		wxTextCtrl* m_TextSize;
+		wxStaticText* m_PowerComponentValues;
 		wxCheckBox* m_Orient;
 		wxStaticLine* m_staticline1;
 		wxCheckBox* m_CommonUnit;
@@ -65,7 +66,7 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 615,343 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_EDIT_TEXT_BASE();
 	
 };

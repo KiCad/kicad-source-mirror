@@ -85,6 +85,11 @@ class SCH_ITEM;
 class SCH_REFERENCE_LIST;
 class PART_LIBS;
 
+/**
+ * Type SCH_MULTI_UNIT_REFERENCE_MAP
+ * is used to create a map of reference designators for multi-unit parts.
+ */
+typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
 
 /**
  * Class SCH_SHEET_PATH
@@ -228,6 +233,18 @@ public:
      */
     void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
                         bool aIncludePowerSymbols = true  );
+
+    /**
+     * Function GetMultiUnitComponents
+     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
+     * multi-unit parts in the sheet. The map key for each element will be the
+     * reference designator.
+     * @param aLibs the library list to use
+     * @param aRefList Map of reference designators to reference lists
+     * @param aIncludePowerSymbols : false to only get normal components.
+     */
+    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+                                 bool aIncludePowerSymbols = true );
 
     /**
      * Function SetFootprintField
@@ -413,6 +430,18 @@ public:
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
     void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
+
+    /**
+     * Function GetMultiUnitComponents
+     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
+     * multi-unit parts in the list of sheets. The map key for each element will be the
+     * reference designator.
+     * @param aLibs the library list to use
+     * @param aRefList Map of reference designators to reference lists
+     * @param aIncludePowerSymbols Set to false to only get normal components.
+     */
+    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+            bool aIncludePowerSymbols = true );
 
     /**
      * Function FindNextItem

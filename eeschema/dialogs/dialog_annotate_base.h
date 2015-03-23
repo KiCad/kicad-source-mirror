@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -37,9 +37,10 @@ class DIALOG_SHIM;
 #define ID_CURRENT_PAGE 1001
 #define ID_KEEP_ANNOTATION 1002
 #define ID_RESET_ANNOTATION 1003
-#define ID_SORT_BY_X_POSITION 1004
-#define ID_SORT_BY_Y_POSITION 1005
-#define ID_CLEAR_ANNOTATION_CMP 1006
+#define ID_RESET_BUT_LOCK 1004
+#define ID_SORT_BY_X_POSITION 1005
+#define ID_SORT_BY_Y_POSITION 1006
+#define ID_CLEAR_ANNOTATION_CMP 1007
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ANNOTATE_BASE
@@ -55,6 +56,7 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline1;
 		wxRadioButton* m_rbKeepAnnotation;
 		wxRadioButton* m_rbResetAnnotation;
+		wxRadioButton* m_rbResetButLock;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticTextOrder;
 		wxRadioButton* m_rbSortBy_X_Position;

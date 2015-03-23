@@ -62,6 +62,7 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base()
 
     m_Invisible->SetValue( m_text_invisible );
     m_TextShapeOpt->SetSelection( m_textshape );
+    SetPowerWarning( false );
 
     switch ( m_textHjustify )
     {
@@ -97,8 +98,15 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base()
     m_TextSizeText->SetLabel( msg );
 
     m_sdbSizerButtonsOK->SetDefault();
+
 }
 
+void DIALOG_EDIT_ONE_FIELD::SetPowerWarning( bool aWarn )
+{
+    m_PowerComponentValues->Show( aWarn );
+    m_TextValue->Enable( ! aWarn );
+    Fit();
+}
 
 void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
 {
@@ -159,8 +167,11 @@ wxString DIALOG_LIB_EDIT_ONE_FIELD::GetTextField()
 }
 
 
-void DIALOG_EDIT_ONE_FIELD::TransfertDataToField()
+void DIALOG_EDIT_ONE_FIELD::TransfertDataToField( bool aIncludeText )
 {
+    // This method doesn't transfer text anyway.
+    (void) aIncludeText;
+
     m_textorient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
     m_textsize = ValueFromString( g_UserUnit, msg );
@@ -197,11 +208,12 @@ void DIALOG_EDIT_ONE_FIELD::TransfertDataToField()
 }
 
 
-void DIALOG_LIB_EDIT_ONE_FIELD::TransfertDataToField()
+void DIALOG_LIB_EDIT_ONE_FIELD::TransfertDataToField( bool aIncludeText )
 {
-    DIALOG_EDIT_ONE_FIELD::TransfertDataToField();
+    DIALOG_EDIT_ONE_FIELD::TransfertDataToField( aIncludeText );
 
-    m_field->SetText( GetTextField() );
+    if( aIncludeText )
+        m_field->SetText( GetTextField() );
 
     m_field->SetSize( wxSize( m_textsize, m_textsize ) );
     m_field->SetOrientation( m_textorient );
@@ -255,11 +267,12 @@ wxString DIALOG_SCH_EDIT_ONE_FIELD::GetTextField()
 };
 
 
-void DIALOG_SCH_EDIT_ONE_FIELD::TransfertDataToField()
+void DIALOG_SCH_EDIT_ONE_FIELD::TransfertDataToField( bool aIncludeText )
 {
-    DIALOG_EDIT_ONE_FIELD::TransfertDataToField();
+    DIALOG_EDIT_ONE_FIELD::TransfertDataToField( aIncludeText );
 
-    m_field->SetText( GetTextField() );
+    if( aIncludeText )
+        m_field->SetText( GetTextField() );
 
     m_field->SetSize( wxSize( m_textsize, m_textsize ) );
     m_field->SetOrientation( m_textorient );
