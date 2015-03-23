@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-23 20:29+0100\n"
-"PO-Revision-Date: 2015-03-23 20:30+0100\n"
+"POT-Creation-Date: 2015-03-23 21:23+0100\n"
+"PO-Revision-Date: 2015-03-23 21:23+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -16451,11 +16451,11 @@ msgstr "Ordine annotazione"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:67
 msgid "Sort components by &X position"
-msgstr "Ordinare componenti per posizione &X"
+msgstr "Ordina componenti per posizione &X"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Sort components by &Y position"
-msgstr "Ordinare componenti per posizione &Y"
+msgstr "Ordina componenti per posizione &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:103
 msgid "Annotation Choice"
@@ -16463,15 +16463,15 @@ msgstr "Opzioni annotazione"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:115
 msgid "Use first free number in schematic"
-msgstr "Usare il primo numero libero dello schema"
+msgstr "Usa il primo numero libero dello schema"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:127
 msgid "Start to  sheet number*100 and use first free number"
-msgstr "Iniziare dal numero 100 di foglio e usare il primo numero libero"
+msgstr "Inizia dal numero 100 di foglio e usa il primo numero libero"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:139
 msgid "Start to  sheet number*1000 and use first free number"
-msgstr "Iniziare dal numero 1000 di foglio e usare il primo numero libero"
+msgstr "Inizia dal numero 1000 di foglio e usa il primo numero libero"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:160
 msgid "Dialog"
@@ -16483,7 +16483,7 @@ msgstr "Chiudi automaticamente la finestra"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:208
 msgid "Clear Annotation"
-msgstr "Ripulire annotazione "
+msgstr "Cancella annotazione "
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:211
 msgid "Annotate"
