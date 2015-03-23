@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-23 21:23+0100\n"
-"PO-Revision-Date: 2015-03-23 21:23+0100\n"
+"POT-Creation-Date: 2015-03-23 22:23+0100\n"
+"PO-Revision-Date: 2015-03-23 22:23+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -16467,11 +16467,11 @@ msgstr "Usa il primo numero libero dello schema"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:127
 msgid "Start to  sheet number*100 and use first free number"
-msgstr "Inizia dal numero 100 di foglio e usa il primo numero libero"
+msgstr "Inizia dal foglio numero 100 e usa il primo numero libero"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:139
 msgid "Start to  sheet number*1000 and use first free number"
-msgstr "Inizia dal numero 1000 di foglio e usa il primo numero libero"
+msgstr "Inizia dal foglio numero 1000 e usa il primo numero libero"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:160
 msgid "Dialog"
