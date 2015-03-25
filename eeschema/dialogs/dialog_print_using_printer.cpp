@@ -452,7 +452,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     EDA_COLOR_T bg_color = GetSchFrameParent()->GetDrawBgColor();
 
-    aScreen->Draw( panel, dc, GR_DEFAULT_DRAWMODE );
+    aScreen->Draw( panel, dc, (GR_DRAWMODE) 0 );
 
     if( printReference )
         parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
