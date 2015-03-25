@@ -207,15 +207,10 @@ void GRResetPenAndBrush( wxDC* DC )
  */
 void GRSetColorPen( wxDC* DC, EDA_COLOR_T Color, int width, wxPenStyle style )
 {
-    if( width < 0 )
-        width = 0;
-
-#ifdef __WXMAC__
-    // Under OSX when wxPen is set to 0, cocoa follows the request drawing nothing &
-    // in the bitmap world the minimum is enough to light a pixel, in vectorial one not
+    // Under OSX and while printing when wxPen is set to 0, renderer follows the request drawing
+    // nothing & in the bitmap world the minimum is enough to light a pixel, in vectorial one not
     if( width <= 1 )
         width = DC->DeviceToLogicalXRel( 1 );
-#endif
 
     if( s_ForceBlackPen )
     {
@@ -341,7 +336,7 @@ void GRSetDrawMode( wxDC* DC, GR_DRAWMODE draw_mode )
 
         DC->SetLogicalFunction( wxINVERT );
 #endif
-    else
+    else if( draw_mode & GR_COPY )
         DC->SetLogicalFunction( wxCOPY );
 
 #ifdef USE_WX_OVERLAY
@@ -795,13 +790,17 @@ void GRFilledCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r,
         y0 = ClipBox->GetY();
         xm = ClipBox->GetRight();
         ym = ClipBox->GetBottom();
-        if( x < (x0 - r) )
+
+        if( x < ( x0 - r ) )
             return;
-        if( y < (y0 - r) )
+
+        if( y < ( y0 - r ) )
             return;
-        if( x > (r + xm) )
+
+        if( x > ( r + xm ) )
             return;
-        if( y > (r + ym) )
+
+        if( y > ( r + ym ) )
             return;
     }
 

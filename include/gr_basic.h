@@ -37,13 +37,13 @@ class EDA_RECT;
 
 /// Drawmode. Compositing mode plus a flag or two
 enum GR_DRAWMODE {
-    GR_COPY               = 0,
     GR_OR                 = 0x01000000,
     GR_XOR                = 0x02000000,
     GR_AND                = 0x04000000,
     GR_NXOR               = 0x08000000,
     GR_INVERT             = 0x10000000,
     GR_ALLOW_HIGHCONTRAST = 0x20000000,
+    GR_COPY               = 0x40000000,
     GR_HIGHLIGHT          = 0x80000000,
     UNSPECIFIED_DRAWMODE  = -1
 };

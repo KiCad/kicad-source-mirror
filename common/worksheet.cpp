@@ -55,7 +55,6 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
                      int aPenWidth, double aScalar,
                      EDA_COLOR_T aColor, EDA_COLOR_T aAltColor )
 {
-    GRSetDrawMode( aDC, GR_COPY );
     WS_DRAW_ITEM_LIST drawList;
 
     drawList.SetPenSize( aPenWidth );

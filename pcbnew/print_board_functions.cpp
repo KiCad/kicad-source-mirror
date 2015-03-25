@@ -50,7 +50,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
                                       bool  aPrintMirrorMode,
                                       void * aData)
 {
-    GR_DRAWMODE drawmode = GR_COPY;
+    const GR_DRAWMODE drawmode = (GR_DRAWMODE) 0;
     int     defaultPenSize = Millimeter2iu( 0.2 );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
@@ -81,13 +81,6 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
-    // The OR mode is used in color mode, but be aware the background *must be
-    // BLACK.  In the print page dialog, we first print in BLACK, and after
-    // reprint in color, on the black "local" background, in OR mode the black
-    // print is not made before, only a white page is printed
-    if( GetGRForceBlackPenState() == false )
-        drawmode = GR_OR;
-
     // Draw footprints, this is done at last in order to print the pad holes in
     // white after the tracks and zones
     int tmp = D_PAD::m_PadSketchModePenSize;
@@ -117,7 +110,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                                 bool  aPrintMirrorMode,
                                 void* aData)
 {
-    GR_DRAWMODE     drawmode = GR_COPY;
+    const GR_DRAWMODE drawmode = (GR_DRAWMODE) 0;
     DISPLAY_OPTIONS save_opt;
     BOARD*          Pcb   = GetBoard();
     int             defaultPenSize = Millimeter2iu( 0.2 );
@@ -201,16 +194,6 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
-    // The OR mode is used in color mode, but be aware the background *must be
-    // BLACK.  In the print page dialog, we first print in BLACK, and after
-    // reprint in color, on the black "local" background, in OR mode the black
-    // print is not made before, only a white page is printed
-    if( GetGRForceBlackPenState() == false )
-        drawmode = GR_OR;
-
-    // Print the pcb graphic items (texts, ...)
-    GRSetDrawMode( aDC, drawmode );
-
     for( BOARD_ITEM* item = Pcb->m_Drawings; item; item = item->Next() )
     {
         switch( item->Type() )
@@ -242,7 +225,6 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
             EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->GetViaType() );
 
-            GRSetDrawMode( aDC, drawmode );
             GRFilledCircle( m_canvas->GetClipBox(), aDC,
                             via->GetStart().x,
                             via->GetStart().y,
@@ -295,7 +277,6 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         bool blackpenstate = GetGRForceBlackPenState();
 
         GRForceBlackPen( false );
-        GRSetDrawMode( aDC, GR_COPY );
 
         for( ; track; track = track->Next() )
         {

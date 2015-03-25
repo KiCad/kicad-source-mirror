@@ -308,7 +308,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                 }
 
                 // Draw areas:
-                if( m_FillMode==0  && !outline_mode )
+                if( m_FillMode == 0 && !outline_mode )
                     GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0],
                             true, 0, color, color );
             }

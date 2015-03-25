@@ -142,7 +142,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     wxBusyCursor  dummy;
 
-    BOARD * brd = ((PCB_BASE_FRAME*) m_Parent)->GetBoard();
+    BOARD* brd = ((PCB_BASE_FRAME*) m_Parent)->GetBoard();
     boardBoundingBox = brd->ComputeBoundingBox();
     wxString titleblockFilename = brd->GetFileName();
 
@@ -160,7 +160,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     if( m_PrintParams.m_PrintScale == 0 )   //  fit in page option
     {
-        if(boardBoundingBox.GetWidth() && boardBoundingBox.GetHeight())
+        if( boardBoundingBox.GetWidth() && boardBoundingBox.GetHeight() )
         {
             int margin = Millimeter2iu( 10.0 ); // add a margin around the drawings
             double scaleX = (double)(pageSizeIU.x - (2 * margin)) /

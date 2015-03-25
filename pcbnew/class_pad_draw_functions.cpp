@@ -424,11 +424,10 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRForceBlackPen( false );
             aDrawInfo.m_HoleColor = WHITE;
         }
-
-        if( aDrawInfo.m_DrawMode != GR_XOR )
-            GRSetDrawMode( aDC, GR_COPY );
         else
-            GRSetDrawMode( aDC, GR_XOR );
+        {
+            GRSetDrawMode( aDC, ( aDrawInfo.m_DrawMode != GR_XOR ) ? GR_COPY : GR_XOR );
+        }
 
         EDA_COLOR_T hole_color = aDrawInfo.m_HoleColor;
 
@@ -477,10 +476,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                     holepos.x - dx0, holepos.y + dx0, 0, nc_color );
     }
 
-    if( aDrawInfo.m_DrawMode != GR_XOR )
-        GRSetDrawMode( aDC, GR_COPY );
-    else
-        GRSetDrawMode( aDC, GR_XOR );
+    if( !aDrawInfo.m_IsPrinting )
+        GRSetDrawMode( aDC, ( aDrawInfo.m_DrawMode != GR_XOR ) ? GR_COPY : GR_XOR );
 
     // Draw the pad number
     if( !aDrawInfo.m_Display_padnum && !aDrawInfo.m_Display_netname )
