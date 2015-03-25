@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +142,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 }
 
 void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_ID aLayer,
-                     const PCB_PLOT_PARAMS& aPlotOpt )
+                        const PCB_PLOT_PARAMS& aPlotOpt )
 {
     PCB_PLOT_PARAMS plotOpt = aPlotOpt;
     int soldermask_min_thickness = aBoard->GetDesignSettings().m_SolderMaskMinWidth;
@@ -1044,12 +1044,18 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
 
     if( plotter->OpenFile( aFullFileName ) )
     {
+        plotter->ClearHeaderLinesList();
+
         // For the Gerber "file function" attribute, set the layer number
         if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER )
         {
             bool useX2mode = plotOpts.GetUseGerberAttributes();
-            plotter->SetLayerAttribFunction( GetGerberFileFunction( aBoard, aLayer,
-                                             useX2mode ? false : true ) );
+
+            if( useX2mode )
+                AddGerberX2Attribute( plotter, aBoard, aLayer );
+            else
+                plotter->AddLineToHeader( GetGerberFileFunctionAttribute(
+                                                aBoard, aLayer, true ) );
         }
 
         plotter->StartPlot();

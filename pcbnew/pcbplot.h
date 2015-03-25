@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,9 +252,9 @@ void BuildPlotFileName( wxFileName*     aFilename,
 const wxString GetGerberExtension( LAYER_NUM aLayer );
 
 /**
- * Function GetGerberFileFunction
+ * Function GetGerberFileFunctionAttribute
  * Returns the "file function" attribute for \a aLayer, as defined in the
- * Gerber file format specification J1 (chapter 5). The returned string excludes
+ * Gerber file format specification J1 (chapter 5). The returned string includes
  * the "%TF.FileFunction" attribute prefix and the "*%" suffix.
  * @param aBoard = the board, needed to get the total count of copper layers
  * @param aLayer = the layer number to create the attribute for
@@ -262,10 +262,18 @@ const wxString GetGerberExtension( LAYER_NUM aLayer );
  *      , compatible with X1 (rx274) notation (G04#@!TF.FileFunction)
  * @return The attribute, as a text string
  */
-extern wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer,
-                                       bool aUseX1CompatibilityMode );
+extern wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
+                LAYER_NUM aLayer, bool aUseX1CompatibilityMode );
 
-// PLOTGERB.CPP
-void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );
+/**
+ * Function AddGerberX2Attribute
+ * Calculates some X2 attributes, as defined in the
+ * Gerber file format specification J4 (chapter 5) and add them
+ * the to the gerber file header
+ * @param aPlotter, the current plotter.
+ * @param aBoard = the board, needed to extract some info
+ * @param aLayer = the layer number to create the attribute for
+ */
+extern void AddGerberX2Attribute( PLOTTER * aPlotter, const BOARD *aBoard, LAYER_NUM aLayer );
 
 #endif // PCBPLOT_H_

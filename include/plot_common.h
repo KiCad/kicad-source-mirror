@@ -142,9 +142,28 @@ public:
 
     virtual void SetDash( bool dashed ) = 0;
 
-    virtual void SetCreator( const wxString& _creator )
+    virtual void SetCreator( const wxString& aCreator )
     {
-        creator = _creator;
+        creator = aCreator;
+    }
+
+    /**
+     * Function AddLineToHeader
+     * Add a line to the list of free lines to print at the beginning of the file
+     * @param aExtraString is the string to print
+     */
+    void AddLineToHeader( const wxString& aExtraString )
+    {
+        m_headerExtraLines.Add( aExtraString );
+    }
+
+    /**
+     * Function ClearHeaderLinesList
+     * remove all lines from the list of free lines to print at the beginning of the file
+     */
+    void ClearHeaderLinesList()
+    {
+        m_headerExtraLines.Clear();
     }
 
     /**
@@ -324,11 +343,6 @@ public:
         // NOP for most plotters.
     }
 
-    virtual void SetLayerAttribFunction( const wxString& function )
-    {
-        // NOP for most plotters. Only for Gerber plotter
-    }
-
     virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false )
     {
         // NOP for most plotters. Only for Gerber plotter
@@ -406,6 +420,7 @@ protected:
 
     double GetDashGapLenIU() const;
 
+protected:      // variables used in most of plotters:
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
     double        plotScale;
 
@@ -444,6 +459,8 @@ protected:
     PAGE_INFO     pageInfo;
     /// Paper size in IU - not in mils
     wxSize        paperSize;
+
+    wxArrayString m_headerExtraLines;  /// a set of string to print in header file
 };
 
 
@@ -943,11 +960,6 @@ public:
      */
     virtual void SetLayerPolarity( bool aPositive );
 
-    virtual void SetLayerAttribFunction( const wxString& function )
-    {
-        m_attribFunction = function;
-    }
-
     /**
      * Function SetGerberCoordinatesFormat
      * selection of Gerber units and resolution (number of digits in mantissa)
@@ -985,8 +997,6 @@ protected:
     std::vector<APERTURE>           apertures;
     std::vector<APERTURE>::iterator currentAperture;
 
-    wxString m_attribFunction;  // the layer "function", in GERBER X2 extention
-                                // it is linked with the layer id
     bool     m_gerberUnitInch;  // true if the gerber units are inches, false for mm
     int      m_gerberUnitFmt;   // number of digits in mantissa.
                                 // usually 6 in Inches and 5 or 6  in mm

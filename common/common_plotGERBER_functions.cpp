@@ -117,9 +117,10 @@ bool GERBER_PLOTTER::StartPlot()
     if( outputFile == NULL )
         return false;
 
-    if( ! m_attribFunction.IsEmpty() )
+    for( unsigned ii = 0; ii < m_headerExtraLines.GetCount(); ii++ )
     {
-        fprintf( outputFile, "%s\n", TO_UTF8( m_attribFunction ) );
+        if( ! m_headerExtraLines[ii].IsEmpty() )
+            fprintf( outputFile, "%s\n", TO_UTF8( m_headerExtraLines[ii] ) );
     }
 
     // Set coordinate format to 3.6 or 4.5 absolute, leading zero omitted

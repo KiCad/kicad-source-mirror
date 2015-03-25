@@ -143,14 +143,16 @@ static EDA_HOTKEY HkNewProject( _HKI( "New Project" ), HK_NEW_PRJ, 'N' + GR_KB_C
 static EDA_HOTKEY HkNewPrjFromTemplate( _HKI( "New Prj From Template" ),
                                         HK_NEW_PRJ_TEMPLATE, 'T' + GR_KB_CTRL );
 
-static EDA_HOTKEY HkRunEeschema( _HKI( "Run Eeschema" ), HK_RUN_EESCHEMA, 'E', 0 );
-static EDA_HOTKEY HkRunLibedit( _HKI( "Run LibEdit" ), HK_RUN_LIBEDIT, 'L', 0 );
-static EDA_HOTKEY HkRunPcbnew( _HKI( "Run Pcbnew" ), HK_RUN_PCBNEW, 'P', 0 );
-static EDA_HOTKEY HkRunModedit( _HKI( "Run FpEditor" ), HK_RUN_FPEDITOR, 'F', 0 );
-static EDA_HOTKEY HkRunGerbview( _HKI( "Run Gerbview" ), HK_RUN_GERBVIEW, 'G', 0 );
-static EDA_HOTKEY HkRunBm2Cmp( _HKI( "Run Bitmap2Component" ), HK_RUN_BM2COMPONENT, 'B', 0 );
-static EDA_HOTKEY HkRunPcbCalc( _HKI( "Run PcbCalculator" ), HK_RUN_PCBCALCULATOR, 'C', 0 );
-static EDA_HOTKEY HkRunPleditor( _HKI( "Run PlEditor" ), HK_RUN_PLEDITOR, 'Y', 0 );
+static EDA_HOTKEY HkRunEeschema( _HKI( "Run Eeschema" ), HK_RUN_EESCHEMA, 'E' + GR_KB_CTRL, 0 );
+static EDA_HOTKEY HkRunLibedit( _HKI( "Run LibEdit" ), HK_RUN_LIBEDIT, 'L' + GR_KB_CTRL, 0 );
+static EDA_HOTKEY HkRunPcbnew( _HKI( "Run Pcbnew" ), HK_RUN_PCBNEW, 'P' + GR_KB_CTRL, 0 );
+static EDA_HOTKEY HkRunModedit( _HKI( "Run FpEditor" ), HK_RUN_FPEDITOR, 'F' + GR_KB_CTRL, 0 );
+static EDA_HOTKEY HkRunGerbview( _HKI( "Run Gerbview" ), HK_RUN_GERBVIEW, 'G' + GR_KB_CTRL, 0 );
+static EDA_HOTKEY HkRunBm2Cmp( _HKI( "Run Bitmap2Component" ),
+                               HK_RUN_BM2COMPONENT, 'B' + GR_KB_CTRL, 0 );
+static EDA_HOTKEY HkRunPcbCalc( _HKI( "Run PcbCalculator" ),
+                                HK_RUN_PCBCALCULATOR, 'C' + GR_KB_CTRL, 0 );
+static EDA_HOTKEY HkRunPleditor( _HKI( "Run PlEditor" ), HK_RUN_PLEDITOR, 'Y' + GR_KB_CTRL, 0 );
 
 // List of hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =

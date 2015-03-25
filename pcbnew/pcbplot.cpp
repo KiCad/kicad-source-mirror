@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@
 #include <wx/ffile.h>
 #include <dialog_plot.h>
 #include <macros.h>
+#include <build_version.h>
 
 
 const wxString GetGerberExtension( LAYER_NUM aLayer )
@@ -84,8 +85,8 @@ const wxString GetGerberExtension( LAYER_NUM aLayer )
 }
 
 
-wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer,
-                                bool aUseX1CompatibilityMode )
+wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
+                LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
 {
     wxString attrib;
 
@@ -146,6 +147,14 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer,
         attrib = wxString( wxT( "Other,ECO2" ) );
         break;
 
+    case B_Fab:
+        attrib = wxString( wxT( "Other,Fab,Bot" ) );
+        break;
+
+    case F_Fab:
+        attrib = wxString( wxT( "Other,Fab,Top" ) );
+        break;
+
     case B_Cu:
         attrib = wxString::Format( wxT( "Copper,L%d,Bot" ), aBoard->GetCopperLayerCount() );
         break;
@@ -156,9 +165,9 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer,
 
     default:
         if( IsCopperLayer( aLayer ) )
-        {
             attrib = wxString::Format( wxT( "Copper,L%d,Inr" ), aLayer+1 );
-        }
+        else
+            attrib = wxString::Format( wxT( "Other,User" ), aLayer+1 );
         break;
     }
 
@@ -191,6 +200,95 @@ wxString GetGerberFileFunction( const BOARD *aBoard, LAYER_NUM aLayer,
         fileFct.Printf( "%%TF.FileFunction,%s*%%", GetChars( attrib ) );
 
     return fileFct;
+}
+
+/* Add some X2 attributes to the file header, as defined in the
+ * Gerber file format specification J4 and J5
+ */
+#define USE_J5_ATTR
+void AddGerberX2Attribute( PLOTTER * aPlotter,
+            const BOARD *aBoard, LAYER_NUM aLayer )
+{
+    wxString text;
+
+#ifdef USE_J5_ATTR
+    text = wxT("%TF.GerberVersion,J5*%");
+#else
+    text = wxT("%TF.GerberVersion,J4*%");
+#endif
+    aPlotter->AddLineToHeader( text );
+
+#ifdef USE_J5_ATTR
+    // Creates the TF,.GenerationSoftware. Format is:
+    // %TF,.GenerationSoftware,<vendor>,<application name>[,<application version>]*%
+    text.Printf( wxT( "%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
+    aPlotter->AddLineToHeader( text );
+
+    // creates the TF.CreationDate ext:
+    // The attribute value must conform to the full version of the ISO 8601
+    // date and time format, including time and time zone. Note that this is
+    // the date the Gerber file was effectively created,
+    // not the time the project of PCB was started
+    wxDateTime date( wxDateTime::GetTimeNow() );
+    // Date format: see http://www.cplusplus.com/reference/ctime/strftime
+    wxString msg = date.Format( wxT( "%z" ) );  // Extract the time zone offset
+    // The time zone offset format is + (or -) mm or hhmm  (mm = number of minutes, hh = number of hours)
+    // we want +(or -) hh:mm
+    if( msg.Len() > 3 )
+        msg.insert( 3, ":", 1 ),
+    text.Printf( wxT( "%TF.CreationDate,%s%s*%%" ), GetChars( date.FormatISOCombined() ), GetChars( msg ) );
+    aPlotter->AddLineToHeader( text );
+
+    // Creates the TF,.JobID. Format is (from Gerber file format doc):
+    // %TF.JobID,<project id>,<project GUID>,<revision id>*%
+    // <project id> is the name of the project, restricted to basic ASCII symbols only,
+    // and comma not accepted
+    // All illegal chars will be replaced by underscore
+    // <project GUID> is a 32 hexadecimal digits string which is an unique id of a project.
+    // This is a random 128-bit number expressed in 32 hexadecimal digits.
+    // See en.wikipedia.org/wiki/GUID for more information
+    // However Kicad does not handle such a project GUID, so it is built from the board name
+    // Rem: <project id> accepts only ASCII 7 code (only basic ASCII codes are allowed in gerber files).
+    wxFileName fn = aBoard->GetFileName();
+    msg = fn.GetFullName();
+    wxString guid;
+
+    // Build a 32 digits GUID from the board name:
+    for( unsigned ii = 0; ii < msg.Len(); ii++ )
+    {
+        int cc1 = int( msg[ii] ) & 0x0F;
+        int cc2 = ( int( msg[ii] ) >> 4) & 0x0F;
+        guid << wxString::Format( wxT( "%X%X" ), cc2, cc1 );
+
+        if( guid.Len() >= 32 )
+            break;
+    }
+
+    // guid has 32 digits, so add missing digits
+    int cnt = 32 - guid.Len();
+
+    if( cnt > 0 )
+        guid.Append( '0', cnt );
+
+    // build the <project id> string: this is the board short filename (without ext)
+    // and all non ASCII chars and comma are replaced by '_'
+    msg = fn.GetName();
+    msg.Replace( wxT( "," ), wxT( "_" ) );
+
+    // build the <rec> string. All non ASCII chars and comma are replaced by '_'
+    wxString rev = ((BOARD*)aBoard)->GetTitleBlock().GetRevision();
+    rev.Replace( wxT( "," ), wxT( "_" ) );
+
+    if( rev.IsEmpty() )
+        rev = wxT( "rev?" );
+
+    text.Printf( wxT( "%TF.JobID,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
+    aPlotter->AddLineToHeader( text );
+#endif
+
+    // Add the TF.FileFunction
+    text = GetGerberFileFunctionAttribute( aBoard, aLayer, false );
+    aPlotter->AddLineToHeader( text );
 }
 
 

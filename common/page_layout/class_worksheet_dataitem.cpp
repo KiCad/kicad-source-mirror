@@ -465,7 +465,7 @@ void WORKSHEET_DATAITEM_TEXT::IncrementLabel( int aIncr )
 
 // Replace the '\''n' sequence by EOL
 // and the sequence  '\''\' by only one '\' in m_FullText
-// if m_FullTextis a multiline text (i;e.contains '\n') return true
+// if m_FullText is a multiline text (i.e.contains '\n') return true
 bool WORKSHEET_DATAITEM_TEXT::ReplaceAntiSlashSequence()
 {
     bool multiline = false;
