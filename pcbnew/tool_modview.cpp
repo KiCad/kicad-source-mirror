@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,8 +142,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
 
     // Active library selection
     AddMenuItem( fileMenu, ID_MODVIEW_SELECT_LIB, _("Set Current Library"),
-                           _( "Select library to be displayed" ),
-                           KiBitmap( open_library_xpm ) );
+                 _( "Select library to be displayed" ), KiBitmap( open_library_xpm ) );
     fileMenu->AppendSeparator();
 
     // Close viewer
@@ -175,9 +174,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
     viewMenu->AppendSeparator();
 
     // 3D view
-    AddMenuItem( viewMenu, ID_MODVIEW_SHOW_3D_VIEW,
-                 _( "3&D View" ),
-                 _( "Show footprint in 3D viewer" ),
+    text = AddHotkeyName( _( "3&D Viewer" ), g_Module_Viewer_Hokeys_Descr, HK_3D_VIEWER );
+    AddMenuItem( viewMenu, ID_MODVIEW_SHOW_3D_VIEW, text, _( "Show footprint in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 
     // Menu Help:

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,9 +43,11 @@ private:
     void OnOKClick( wxCommandEvent& event );
 };
 
+
 void EDA_3D_FRAME::Install_3D_ViewOptionDialog( wxCommandEvent& event )
 {
     DIALOG_3D_VIEW_OPTIONS dlg( this );
+
     if( dlg.ShowModal() == wxID_OK )
     {
         SetMenuBarOptionsState();
@@ -61,8 +63,9 @@ DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_FRAME* parent )
 
     initDialog();
 
+    SetDefaultItem( (wxWindow*) m_sdbSizerOK );
 	Layout();
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
 	Centre();
 }
 

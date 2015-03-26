@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,6 +172,8 @@ static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
 #endif
 
+static EDA_HOTKEY Hk3DViewer( _HKI( "3D Viewer" ), HK_3D_VIEWER, GR_KB_ALT + '3' );
+
 static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
 
 
@@ -257,7 +259,7 @@ static EDA_HOTKEY HkCallMacros9( _HKI( "Call Macro 9" ), HK_CALL_MACROS_9, '9' )
 EDA_HOTKEY* common_Hotkey_List[] =
 {
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
-    &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,
+    &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,      &Hk3DViewer,
     &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin, &HkResetGridOrigin,
     &HkUndo,        &HkRedo,
     &HkMouseLeftClick,
@@ -269,7 +271,7 @@ EDA_HOTKEY* common_Hotkey_List[] =
 EDA_HOTKEY* common_basic_Hotkey_List[] =
 {
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
-    &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,
+    &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,   &Hk3DViewer,
     &HkSwitchUnits, &HkResetLocalCoord,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,

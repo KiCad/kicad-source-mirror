@@ -236,7 +236,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiBitmap( three_d_xpm ),
-                            _( "3D Display" ) );
+                            _( "3D Display (Alt+3)" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -361,6 +361,11 @@ bool DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
 
     case ' ':
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case GR_KB_ALT + '3':
+        cmd.SetId( ID_CVPCB_SHOW3D_FRAME );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     default:

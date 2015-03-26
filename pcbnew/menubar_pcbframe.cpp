@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -345,8 +345,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                 _( "&3D Display" ),_( "Show board in 3D viewer" ),
+    text = AddHotkeyName( _( "&3D Viewer" ), g_Pcbnew_Editor_Hokeys_Descr, HK_3D_VIEWER );
+
+    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME, text, _( "Show board in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 
     AddMenuItem( viewMenu, ID_MENU_LIST_NETS,
@@ -434,7 +435,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( grid_select_axis_xpm ) );
 
     wxMenu* routeMenu = new wxMenu;
-  
+
     AddMenuItem( routeMenu, ID_TRACK_BUTT,
                  _( "Single Track" ),
                  _( "Interactively route a single track" ),

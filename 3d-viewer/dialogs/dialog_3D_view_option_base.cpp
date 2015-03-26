@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -69,13 +69,13 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_bitmapComments = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizeShowOpts->Add( m_bitmapComments, 0, wxALL, 5 );
 	
-	m_checkBoxComments = new wxCheckBox( this, wxID_ANY, _("Show comments and drawings Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxComments = new wxCheckBox( this, wxID_ANY, _("Show comments and drawings layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizeShowOpts->Add( m_checkBoxComments, 0, wxALL, 5 );
 	
 	m_bitmapECO = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizeShowOpts->Add( m_bitmapECO, 0, wxALL, 5 );
 	
-	m_checkBoxECO = new wxCheckBox( this, wxID_ANY, _("Show ECOs layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxECO = new wxCheckBox( this, wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizeShowOpts->Add( m_checkBoxECO, 0, wxALL, 5 );
 	
 	
@@ -106,11 +106,12 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxALIGN_RIGHT, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

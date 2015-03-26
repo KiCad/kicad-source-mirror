@@ -233,9 +233,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     // 3D view
-    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                 _( "3&D View" ),
-                 _( "Show board in 3D viewer" ),
+    text = AddHotkeyName( _( "3&D Viewer" ), g_Module_Editor_Hokeys_Descr, HK_3D_VIEWER );
+    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME, text, _( "Show footprint in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 
     //-------- Place menu --------------------

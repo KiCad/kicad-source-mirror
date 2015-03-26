@@ -599,41 +599,6 @@ bool FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
         eventHandled = OnHotKey( aDC, aHotKey, aPosition );
     }
 
-/*    switch( aHotKey )
-    {
-    case WXK_F1:
-        cmd.SetId( ID_POPUP_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case WXK_F2:
-        cmd.SetId( ID_POPUP_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case WXK_F3:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case WXK_F4:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case WXK_HOME:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case ' ':
-        GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    default:
-        eventHandled = false;
-    }
-*/
     SetCrossHairPosition( pos );
     RefreshCrossHair( oldpos, aPosition, aDC );
 
