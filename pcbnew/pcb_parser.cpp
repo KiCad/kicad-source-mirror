@@ -1138,7 +1138,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_visible_elements:
-            designSettings.SetVisibleElements( parseHex() );
+            designSettings.SetVisibleElements( parseHex() | MIN_VISIBILITY_MASK );
             NeedRIGHT();
             break;
 

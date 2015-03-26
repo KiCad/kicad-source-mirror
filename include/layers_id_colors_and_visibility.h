@@ -436,6 +436,17 @@ enum PCB_VISIBLE
     END_PCB_VISIBLE_LIST        // sentinel
 };
 
+// Some elements do not have yet a visibility control
+// from a dialog, but have a visibility control flag.
+// Here is a mask to set them visible, to be sure they are displayed
+// after loading a board for instance
+#define MIN_VISIBILITY_MASK int( (1 << TRACKS_VISIBLE) +\
+                 (1 << PADS_VISIBLE) +\
+                 (1 << PADS_HOLES_VISIBLE) +\
+                 (1 << VIAS_HOLES_VISIBLE) +\
+                 (1 << DRC_VISIBLE) +\
+                 (1 << WORKSHEET) +\
+                 (1 << GP_OVERLAY) )
 
 /**
  * Enum NETNAMES_VISIBLE

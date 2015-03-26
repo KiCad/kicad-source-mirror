@@ -235,8 +235,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
     double      xOffset;
     VECTOR2D    glyphSize( m_glyphSize );
-    double      overbar_italic_comp;
-    bool        last_had_overbar;
+    double      overbar_italic_comp = 0.0;
 
     // Compute the text size
     VECTOR2D textSize = computeTextSize( aText );
@@ -280,7 +279,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     // The overbar is indented inward at the beginning of an italicized section, but
     // must not be indented on subsequent letters to ensure that the bar segments
     // overlap.
-    last_had_overbar = false;
+    bool last_had_overbar = false;
 
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
