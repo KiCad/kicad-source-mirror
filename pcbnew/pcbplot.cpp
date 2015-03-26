@@ -212,13 +212,6 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     wxString text;
 
 #ifdef USE_J5_ATTR
-    text = wxT("%TF.GerberVersion,J5*%");
-#else
-    text = wxT("%TF.GerberVersion,J4*%");
-#endif
-    aPlotter->AddLineToHeader( text );
-
-#ifdef USE_J5_ATTR
     // Creates the TF,.GenerationSoftware. Format is:
     // %TF,.GenerationSoftware,<vendor>,<application name>[,<application version>]*%
     text.Printf( wxT( "%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
