@@ -106,15 +106,15 @@ public:
      * @param aPrintBlackAndWhite = true to force black and white insdeat of color
      *        useful only to print/plot gebview layers
      */
-    void    Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                  GR_DRAWMODE aDrawMode, const wxPoint& aOffset,
-                  bool aPrintBlackAndWhite = false );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset,
+               bool aPrintBlackAndWhite = false );
     /**
      * Function SetPrintableLayers
      * changes the list of printable layers
      * @param aLayerMask = The new bit-mask of printable layers
      */
-    void    SetPrintableLayers( const std::bitset <GERBER_DRAWLAYERS_COUNT>& aLayerMask  )
+    void SetPrintableLayers( const std::bitset <GERBER_DRAWLAYERS_COUNT>& aLayerMask  )
     {
         m_printLayersMask = aLayerMask;
     }

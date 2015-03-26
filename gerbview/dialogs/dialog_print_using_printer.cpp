@@ -78,8 +78,8 @@ private:
     void OnScaleSelectionClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
-    void SetPrintParameters( );
-    void InitValues( );
+    void SetPrintParameters();
+    void InitValues();
 
 public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
@@ -151,8 +151,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         s_pageSetupData = new wxPageSetupDialogData;
         // Set initial page margins.
         // Margins are already set in Gerbview, so we can use 0
-        s_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
-        s_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
+        s_pageSetupData->SetMarginTopLeft( wxPoint( 0, 0 ) );
+        s_pageSetupData->SetMarginBottomRight( wxPoint( 0, 0 ) );
     }
 
     s_Parameters.m_PageSetupData = s_pageSetupData;
@@ -175,7 +175,6 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
                                             wxGROW | wxLEFT | wxRIGHT | wxTOP );
     }
 
-
     // Read the scale adjust option
     int scale_idx = 4; // default selected scale = ScaleList[4] = 1.000
 
@@ -184,8 +183,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         m_Config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &s_Parameters.m_XScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &s_Parameters.m_YScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_SCALE, &scale_idx );
-        m_Config->Read( OPTKEY_PRINT_PAGE_FRAME, &s_Parameters.m_Print_Sheet_Ref, 1);
-        m_Config->Read( OPTKEY_PRINT_MONOCHROME_MODE, &s_Parameters.m_Print_Black_and_White, 1);
+        m_Config->Read( OPTKEY_PRINT_PAGE_FRAME, &s_Parameters.m_Print_Sheet_Ref, 1 );
+        m_Config->Read( OPTKEY_PRINT_MONOCHROME_MODE, &s_Parameters.m_Print_Black_and_White, 1 );
 
         // Test for a reasonnable scale value. Set to 1 if problem
         if( s_Parameters.m_XScaleAdjust < MIN_SCALE ||
@@ -207,8 +206,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
     m_ScaleOption->SetSelection( scale_idx );
     scale_idx = m_ScaleOption->GetSelection();
-    s_Parameters.m_PrintScale =  s_ScaleList[scale_idx];
-    m_Print_Mirror->SetValue(s_Parameters.m_PrintMirror);
+    s_Parameters.m_PrintScale = s_ScaleList[scale_idx];
+    m_Print_Mirror->SetValue( s_Parameters.m_PrintMirror );
 
 
     if( s_Parameters.m_Print_Black_and_White )
@@ -229,6 +228,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     m_FineAdjustXscaleOpt->Enable(enable);
     m_FineAdjustYscaleOpt->Enable(enable);
 }
+
 
 int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
 {
@@ -275,7 +275,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
+void DIALOG_PRINT_USING_PRINTER::SetPrintParameters()
 {
     s_Parameters.m_PrintMirror = m_Print_Mirror->GetValue();
     s_Parameters.m_Print_Black_and_White =
@@ -288,7 +288,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     SetLayerSetFromListSelection();
 
     int idx = m_ScaleOption->GetSelection();
-    s_Parameters.m_PrintScale =  s_ScaleList[idx];
+    s_Parameters.m_PrintScale = s_ScaleList[idx];
 
     if( m_FineAdjustXscaleOpt )
     {
@@ -331,7 +331,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 
 bool DIALOG_PRINT_USING_PRINTER::PreparePrintPrms()
 {
-    SetPrintParameters( );
+    SetPrintParameters();
 
     // If no layer selected, we have no plot. prompt user if it happens
     // because he could think there is a bug in Pcbnew:

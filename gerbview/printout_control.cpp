@@ -81,7 +81,7 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
 {
     // in gerbview, draw layers are always printed on separate pages
     // because handling negative objects when using only one page is tricky
-    m_PrintParams.m_Flags = aPage-1;    // = gerber draw layer id
+    m_PrintParams.m_Flags = aPage;
     DrawPage();
 
     return true;
@@ -233,12 +233,12 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     if( m_PrintParams.PrintBorderAndTitleBlock() )
         m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  IU_PER_MILS, titleblockFilename );
+                                 IU_PER_MILS, titleblockFilename );
 
     if( printMirror )
     {
         // To plot mirror, we reverse the x axis, and modify the plot x origin
-        dc->SetAxisOrientation( false, false);
+        dc->SetAxisOrientation( false, false );
 
         /* Plot offset x is moved by the x plot area size in order to have
          * the old draw area in the new draw area, because the draw origin has not moved
@@ -248,7 +248,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
         x_dc_offset = KiROUND( x_dc_offset  * userscale );
         dc->SetDeviceOrigin( x_dc_offset, 0 );
 
-        panel->SetClipBox( EDA_RECT( wxPoint( -MAX_VALUE/2, -MAX_VALUE/2 ),
+        panel->SetClipBox( EDA_RECT( wxPoint( -MAX_VALUE / 2, -MAX_VALUE / 2 ),
                                      panel->GetClipBox()->GetSize() ) );
     }
 
@@ -261,8 +261,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     // B&W mode is handled in print page function
     GRForceBlackPen( false );
 
-    m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror,
-                         &m_PrintParams );
+    m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
 
     m_Parent->SetDrawBgColor( bg_color );
     screen->m_IsPrinting = false;

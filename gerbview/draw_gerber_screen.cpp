@@ -46,7 +46,7 @@
 void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                                 bool aPrintMirrorMode, void* aData )
 {
-    wxCHECK_RET( aData != NULL, wxT( "aDate cannot be NULL." ) );
+    wxCHECK_RET( aData != NULL, wxT( "aData cannot be NULL." ) );
 
     // Save current draw options, because print mode has specific options:
     GBR_DISPLAY_OPTIONS imgDisplayOptions = m_DisplayOptions;
@@ -59,15 +59,28 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
     m_DisplayOptions.m_DisplayDCodes = false;
     m_DisplayOptions.m_IsPrinting = true;
 
-    PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*)aData;
+    PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*) aData;
+
+    // Find the layer to be printed
+    int page = printParameters->m_Flags;    // contains the page number (not necessarily layer number)
+    int layer = 0;
+
+    // Find the layer number for the printed page (search through the mask and count bits)
+    while( page > 0 )
+    {
+        if( printLayersMask[layer++] )
+            --page;
+    }
+    --layer;
+
     std::bitset <GERBER_DRAWLAYERS_COUNT> printCurrLayerMask;
     printCurrLayerMask.reset();
-    printCurrLayerMask.set(printParameters->m_Flags);   // m_Flags contains the draw layer number
+    printCurrLayerMask.set( layer );
     GetGerberLayout()->SetPrintableLayers( printCurrLayerMask );
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
     bool printBlackAndWhite = printParameters->m_Print_Black_and_White;
 
-    GetGerberLayout()->Draw( m_canvas, aDC, UNSPECIFIED_DRAWMODE,
+    GetGerberLayout()->Draw( m_canvas, aDC, (GR_DRAWMODE) 0,
                              wxPoint( 0, 0 ), printBlackAndWhite );
 
     m_canvas->SetPrintMirrored( false );
