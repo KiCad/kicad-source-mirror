@@ -206,10 +206,16 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         // installation bug.
 
         wxString msg = wxString::Format( wxT(
-            "Fatal Installation Bug\nmissing file:\n'%s'\n\nargv[0]:\n'%s'" ),
-            GetChars( dname ),
-            GetChars( wxStandardPaths::Get().GetExecutablePath() )
-            );
+            "Fatal Installation Bug. File:\n"
+            "'%s'\ncould not be loaded\n" ), GetChars( dname ) );
+
+        if( ! wxFileExists( dname ) )
+            msg << wxT( "It is missing.\n" );
+        else
+            msg << wxT( "Perhaps a wxWidgets shared (.dll or .so) file is missing.\n" );
+
+        msg << wxT( "From command line: argv[0]:\n'" );
+        msg << wxStandardPaths::Get().GetExecutablePath() << wxT( "'\n" );
 
         // This is a fatal error, one from which we cannot recover, nor do we want
         // to protect against in client code which would require numerous noisy
