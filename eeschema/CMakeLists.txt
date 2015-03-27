@@ -53,6 +53,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_libedit_options.cpp
     dialogs/dialog_lib_edit_pin.cpp
     dialogs/dialog_lib_edit_pin_base.cpp
+    dialogs/dialog_lib_edit_pin_table.cpp
+    dialogs/dialog_lib_edit_pin_table_base.cpp
     dialogs/dialog_lib_new_component.cpp
     dialogs/dialog_lib_new_component_base.cpp
     dialogs/dialog_netlist.cpp

@@ -307,6 +307,9 @@ public:
      */
     void SetPartNumber( int aPart );
 
+    /** Get the pin part number. */
+    int GetPartNumber() const { return m_Unit; }
+
     /**
      * Set the body style (conversion) of the pin.
      *

@@ -209,6 +209,8 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     msg = _( "Edit pins per part or body style (Use carefully!)" );
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString, KiBitmap( pin2pin_xpm ),
                             msg, wxITEM_CHECK );
+    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString, KiBitmap( pin_table_xpm ),
+                            _( "Show pin table" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();

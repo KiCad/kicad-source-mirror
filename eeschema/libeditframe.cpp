@@ -51,6 +51,7 @@
 #include <dialogs/dialog_lib_edit_text.h>
 #include <dialogs/dialog_edit_component_in_lib.h>
 #include <dialogs/dialog_libedit_dimensions.h>
+#include <dialogs/dialog_lib_edit_pin_table.h>
 
 #include <menus_helpers.h>
 
@@ -108,6 +109,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnViewEntryDoc )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_PIN, LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
     EVT_TOOL( ExportPartId, LIB_EDIT_FRAME::OnExportPart )
     EVT_TOOL( CreateNewLibAndSavePartId, LIB_EDIT_FRAME::OnExportPart )
     EVT_TOOL( ImportPartId, LIB_EDIT_FRAME::OnImportPart )
@@ -165,6 +167,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::OnUpdateSaveCurrentLib )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_PIN, LIB_EDIT_FRAME::OnUpdatePinByPin )
+    EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnUpdateSelectAlias )
     EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganNormal )
@@ -508,6 +511,11 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
     event.Check( m_editPinsPerPartOrConvert );
 }
 
+void LIB_EDIT_FRAME::OnUpdatePinTable( wxUpdateUIEvent& event )
+{
+    LIB_PART* part = GetCurPart();
+    event.Enable( part );
+}
 
 void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 {
@@ -1334,6 +1342,17 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
     }
 }
 
+void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
+{
+    LIB_PART* part = GetCurPart();
+
+    DIALOG_LIB_EDIT_PIN_TABLE dlg( this, *part );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    return;
+}
 
 bool LIB_EDIT_FRAME::SynchronizePins()
 {
