@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-27 08:31+0100\n"
-"PO-Revision-Date: 2015-03-27 08:31+0100\n"
+"POT-Creation-Date: 2015-03-27 13:21+0100\n"
+"PO-Revision-Date: 2015-03-27 13:21+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -699,6 +699,7 @@ msgstr "Impronta"
 #: pcbnew/class_drawsegment.cpp:368 pcbnew/dialogs/dialog_layers_setup.cpp:354
 #: eeschema/sch_text.cpp:788 eeschema/libedit.cpp:507
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1937
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:157
 #: gerbview/class_gerber_draw_item.cpp:550
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:167
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
@@ -3113,21 +3114,21 @@ msgstr ""
 "\n"
 "Impossibile inserire questa impronta"
 
-#: pcbnew/modedit.cpp:929 eeschema/libeditframe.cpp:1121
+#: pcbnew/modedit.cpp:929 eeschema/libeditframe.cpp:1129
 msgid "Add line"
 msgstr "Inserisci linea "
 
-#: pcbnew/modedit.cpp:933 eeschema/libeditframe.cpp:1117
+#: pcbnew/modedit.cpp:933 eeschema/libeditframe.cpp:1125
 msgid "Add arc"
 msgstr "Inserisci arco"
 
-#: pcbnew/modedit.cpp:937 eeschema/libeditframe.cpp:1113
+#: pcbnew/modedit.cpp:937 eeschema/libeditframe.cpp:1121
 msgid "Add circle"
 msgstr "Inserisci cerchio"
 
 #: pcbnew/modedit.cpp:941 pcbnew/edit.cpp:1482
 #: pcbnew/tools/drawing_tool.cpp:1256 pcbnew/tools/drawing_tool.cpp:1376
-#: eeschema/schedit.cpp:548 eeschema/libeditframe.cpp:1105
+#: eeschema/schedit.cpp:548 eeschema/libeditframe.cpp:1113
 msgid "Add text"
 msgstr "Inserisci testo "
 
@@ -3148,7 +3149,7 @@ msgid "Pad settings"
 msgstr "Impostazioni piazzola"
 
 #: pcbnew/modedit.cpp:966 pcbnew/edit.cpp:1494 eeschema/schedit.cpp:584
-#: eeschema/libeditframe.cpp:1147 eeschema/help_common_strings.h:48
+#: eeschema/libeditframe.cpp:1155 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
 
@@ -3267,16 +3268,16 @@ msgid "Display polar coordinates"
 msgstr "Mostra coordinate polari"
 
 #: pcbnew/tool_pcb.cpp:338 pcbnew/tool_modedit.cpp:214
-#: eeschema/tool_lib.cpp:230 cvpcb/class_DisplayFootprintsFrame.cpp:185
+#: eeschema/tool_lib.cpp:232 cvpcb/class_DisplayFootprintsFrame.cpp:185
 msgid "Units in inches"
 msgstr "Unità in pollici"
 
 #: pcbnew/tool_pcb.cpp:341 pcbnew/tool_modedit.cpp:218
-#: eeschema/tool_lib.cpp:234 cvpcb/class_DisplayFootprintsFrame.cpp:189
+#: eeschema/tool_lib.cpp:236 cvpcb/class_DisplayFootprintsFrame.cpp:189
 msgid "Units in millimeters"
 msgstr "Unità in millimetri"
 
-#: pcbnew/tool_pcb.cpp:344 eeschema/tool_lib.cpp:238 eeschema/tool_sch.cpp:299
+#: pcbnew/tool_pcb.cpp:344 eeschema/tool_lib.cpp:240 eeschema/tool_sch.cpp:299
 #: cvpcb/class_DisplayFootprintsFrame.cpp:193 gerbview/toolbars_gerber.cpp:167
 msgid "Change cursor shape"
 msgstr "Cambia dimensione puntatore"
@@ -8377,6 +8378,7 @@ msgstr "Esplora"
 #: pcbnew/dialogs/dialog_layers_setup.cpp:350
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:36
 #: eeschema/libedit.cpp:477 eeschema/lib_pin.cpp:1928
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:150
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:180
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
@@ -15072,7 +15074,7 @@ msgstr "Cambiare la libreria attiva?"
 msgid "Part name '%s' not found in library '%s'"
 msgstr "Il componente \"%s\" non trovato nella libreria \"%s\""
 
-#: eeschema/libedit.cpp:315 eeschema/libeditframe.cpp:704
+#: eeschema/libedit.cpp:315 eeschema/libeditframe.cpp:712
 msgid "No library specified."
 msgstr "Nessuna libreria specificata."
 
@@ -15399,20 +15401,24 @@ msgid "Edit pins per part or body style (Use carefully!)"
 msgstr ""
 "Modifica piedini per componente o stile del corpo (usare con attenzione!)"
 
-#: eeschema/tool_lib.cpp:227 eeschema/tool_sch.cpp:287
+#: eeschema/tool_lib.cpp:213
+msgid "Show pin table"
+msgstr "Mostra tabella pin"
+
+#: eeschema/tool_lib.cpp:229 eeschema/tool_sch.cpp:287
 #: gerbview/toolbars_gerber.cpp:151
 msgid "Turn grid off"
 msgstr "Visualizzazione griglia "
 
-#: eeschema/libeditframe.cpp:180
+#: eeschema/libeditframe.cpp:183
 msgid "Library Editor"
 msgstr "Editor delle librerie"
 
-#: eeschema/libeditframe.cpp:295
+#: eeschema/libeditframe.cpp:298
 msgid "Save the changes in the library before closing?"
 msgstr "Salvare le modifiche alla libreria prima di chiudere?"
 
-#: eeschema/libeditframe.cpp:322
+#: eeschema/libeditframe.cpp:325
 #, c-format
 msgid ""
 "Library '%s' was modified!\n"
@@ -15421,40 +15427,40 @@ msgstr ""
 "La libreria \"%s\" è stata modificata!\n"
 "Annullare le modifiche?"
 
-#: eeschema/libeditframe.cpp:428
+#: eeschema/libeditframe.cpp:431
 #, c-format
 msgid "Unit %s"
 msgstr "Parte %s"
 
-#: eeschema/libeditframe.cpp:691
+#: eeschema/libeditframe.cpp:699
 msgid "No part to save."
 msgstr "Nessun componente da salvare."
 
-#: eeschema/libeditframe.cpp:1090
+#: eeschema/libeditframe.cpp:1098
 msgid "Add pin"
 msgstr "Inserisci piedino"
 
-#: eeschema/libeditframe.cpp:1094
+#: eeschema/libeditframe.cpp:1102
 msgid "Set pin options"
 msgstr "Imposta opzioni piedino"
 
-#: eeschema/libeditframe.cpp:1109
+#: eeschema/libeditframe.cpp:1117
 msgid "Add rectangle"
 msgstr "Inserisci rettangolo"
 
-#: eeschema/libeditframe.cpp:1125
+#: eeschema/libeditframe.cpp:1133
 msgid "Set anchor position"
 msgstr "Imposta posizione ancoraggio"
 
-#: eeschema/libeditframe.cpp:1129
+#: eeschema/libeditframe.cpp:1137
 msgid "Import"
 msgstr "Importa"
 
-#: eeschema/libeditframe.cpp:1135 bitmap2component/bitmap2cmp_gui_base.cpp:124
+#: eeschema/libeditframe.cpp:1143 bitmap2component/bitmap2cmp_gui_base.cpp:124
 msgid "Export"
 msgstr "Esporta"
 
-#: eeschema/libeditframe.cpp:1231 eeschema/controle.cpp:165
+#: eeschema/libeditframe.cpp:1239 eeschema/controle.cpp:165
 msgid "Clarify Selection"
 msgstr "Specifica selezione:"
 
@@ -15633,6 +15639,7 @@ msgid "Pin"
 msgstr "Pin"
 
 #: eeschema/lib_pin.cpp:1935
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:143
 msgid "Number"
 msgstr "Numero"
 
@@ -21715,6 +21722,10 @@ msgstr "Proprietà foglio"
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:69
 msgid "Library Text Properties"
 msgstr "Proprietà testo"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:48
+msgid "Pin Table"
+msgstr "Tabella pin"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:136
 msgid "Schematic Editor Options"
