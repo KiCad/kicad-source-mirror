@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-27 13:21+0100\n"
-"PO-Revision-Date: 2015-03-27 13:21+0100\n"
+"POT-Creation-Date: 2015-03-28 00:36+0100\n"
+"PO-Revision-Date: 2015-03-28 00:36+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -2053,11 +2053,11 @@ msgstr "Sbroglia automaticamente tutte le impronte"
 
 #: pcbnew/onrightclick.cpp:477
 msgid "Reset Unrouted"
-msgstr "Azzera collegamenti non sbrogliati"
+msgstr "Azzera non sbrogliati"
 
 #: pcbnew/onrightclick.cpp:508
 msgid "Zoom Block"
-msgstr "Inquadra blocco"
+msgstr "Zoom blocco"
 
 #: pcbnew/onrightclick.cpp:511 eeschema/libedit_onrightclick.cpp:339
 #: eeschema/onrightclick.cpp:823
@@ -5440,7 +5440,7 @@ msgstr "Passa a schermo Cairo"
 #: pcbnew/hotkeys.cpp:152 eeschema/hotkeys.cpp:93
 #: pagelayout_editor/hotkeys.cpp:73
 msgid "Zoom Center"
-msgstr "Inquadra zoom"
+msgstr "Centra zoom"
 
 #: pcbnew/hotkeys.cpp:156 pcbnew/hotkeys.cpp:158 eeschema/hotkeys.cpp:98
 #: eeschema/hotkeys.cpp:100 pagelayout_editor/hotkeys.cpp:75
@@ -9947,7 +9947,7 @@ msgstr "Sinistra"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Center"
-msgstr "Inquadra"
+msgstr "Centrato"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
 #: eeschema/lib_pin.cpp:58
@@ -16138,7 +16138,7 @@ msgstr "Centro arco (%s,%s), raggio %s"
 
 #: eeschema/hotkeys.cpp:87
 msgid "Fit on Screen"
-msgstr "Inquadra sullo schermo"
+msgstr "Centra sullo schermo"
 
 #: eeschema/hotkeys.cpp:140
 msgid "End Line Wire Bus"
@@ -21215,11 +21215,11 @@ msgstr "Non in pagina 1"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:80
 msgid "H justification"
-msgstr "Giustificato orrizontale"
+msgstr "Allineamento orizzontale"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:99
 msgid "V justification"
-msgstr "Giustificato verticale"
+msgstr "Allineamento verticale"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:124
 msgid "Text Width (mm)"
@@ -21231,15 +21231,15 @@ msgstr "Altezza testo (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:150
 msgid "Constraints:"
-msgstr "Costringi"
+msgstr "Limiti:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Max Size X (mm)"
-msgstr "Max dimensione Y (mm)"
+msgstr "Dimensione X max (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:173
 msgid "Max Size Y (mm)"
-msgstr "Max dimensione Y (mm)"
+msgstr "Dimensione max Y (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:192
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:609
@@ -21252,15 +21252,15 @@ msgstr "Commento "
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:335
 msgid "Set to 0 to use default"
-msgstr "Impostare a 0 per impostazioni predefinite"
+msgstr "A 0 per usare i predefiniti"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:365
 msgid "Bitmap PPI"
-msgstr "Bitmap PPI"
+msgstr "PPI bitmap"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:378
 msgid "Repeat parameters:"
-msgstr "Rpeti parametri"
+msgstr "Ripeti parametri:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:388
 msgid "Repeat count"
@@ -21268,7 +21268,7 @@ msgstr "Ripeti conteggio"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 msgid "Text Increment"
-msgstr "Incrementa testo"
+msgstr "Incremento testo"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:419
 msgid "Step X (mm)"
@@ -21284,7 +21284,7 @@ msgstr "Proprietà elemento"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:458
 msgid "Default Values:"
-msgstr "Valori predefiniti"
+msgstr "Valori predefiniti:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:468
 msgid "Text Size X (mm)"
@@ -21328,23 +21328,23 @@ msgstr "Margine inferirore (mm)"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
-msgstr "Cerca componenti e testo nella scheda corrente "
+msgstr "Cerca componenti e testo nella scheda corrente"
 
 #: pcbnew/help_common_strings.h:21
 msgid "Zoom to fit the board on the screen"
-msgstr "Inquadra la scheda nella finestra"
+msgstr "Zoom per centrare la scheda sullo schermo"
 
 #: pcbnew/help_common_strings.h:22
 msgid "Redraw the screen of the board"
-msgstr "Aggiorna"
+msgstr "Aggiorna il disegno della scheda"
 
 #: pcbnew/help_common_strings.h:26
 msgid ""
 "Show/hide the toolbar for microwave tools\n"
 "This is a experimental feature (under development)"
 msgstr ""
-"Mostra o nascondi barra degli strumenti per applicazioni a microonde\n"
-"(In sviluppo)"
+"Mostra/nascondi barra strumenti per applicazioni a microonde\n"
+"Caratteristica sperimentale (in sviluppo)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.h:65
 msgid "Exchange Footprints"
