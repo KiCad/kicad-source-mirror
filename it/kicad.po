@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-28 00:36+0100\n"
-"PO-Revision-Date: 2015-03-28 00:36+0100\n"
+"POT-Creation-Date: 2015-03-28 00:50+0100\n"
+"PO-Revision-Date: 2015-03-28 00:50+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -7348,7 +7348,7 @@ msgstr "Retro"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1077
 msgid "Layer name of back (bottom) copper layer"
-msgstr "Nome dello strato in rame Retro"
+msgstr "Nome dello strato in rame in basso (retro)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1088
 msgid "If you want a back copper layer"
@@ -7925,7 +7925,7 @@ msgstr "Scostamento Y"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 msgid "Italic"
-msgstr "Italico"
+msgstr "Corsivo"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:106
 #: eeschema/sch_text.cpp:770 eeschema/lib_pin.cpp:1947
@@ -11077,14 +11077,14 @@ msgstr "Impostazioni 3D"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Top"
-msgstr "Fronte"
+msgstr "Alto"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Bottom"
-msgstr "Retro"
+msgstr "Basso"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:62
 msgid "Side"
@@ -13085,7 +13085,7 @@ msgstr "Grassetto"
 
 #: common/eda_text.cpp:379
 msgid "Bold+Italic"
-msgstr "Grassetto Italico"
+msgstr "Grassetto+corsivo"
 
 #: common/class_marker_base.cpp:200
 msgid "Marker Info"
