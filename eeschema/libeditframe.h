@@ -266,6 +266,8 @@ public:
     void OnEditPin( wxCommandEvent& event );
     void OnSelectItem( wxCommandEvent& aEvent );
 
+    void OnOpenPinTable( wxCommandEvent& aEvent );
+
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateNotEditingPart( wxUpdateUIEvent& event );
@@ -274,6 +276,7 @@ public:
     void OnUpdateSaveCurrentLib( wxUpdateUIEvent& event );
     void OnUpdateViewDoc( wxUpdateUIEvent& event );
     void OnUpdatePinByPin( wxUpdateUIEvent& event );
+    void OnUpdatePinTable( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
     void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
     void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
