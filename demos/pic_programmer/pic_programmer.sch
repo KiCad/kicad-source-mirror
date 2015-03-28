@@ -5,7 +5,7 @@ LIBS:74xx
 LIBS:conn
 LIBS:xilinx
 LIBS:pic_programmer-cache
-EELAYER 24 0
+EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -482,7 +482,7 @@ F 3 "" H 7750 5400 60  0001 C CNN
 	1    7750 5400
 	1    0    0    -1  
 $EndComp
-Text Notes 6550 4650 0    60   ~ 0
+Text Notes 8100 4700 0    100  Italic 20
 VPP (13V) power
 $Comp
 L GND #PWR07
@@ -1363,4 +1363,10 @@ Wire Notes Line
 	5850 7750 5850 6700
 Text Notes 6050 7700 0    40   Italic 0
 Mounting holes
+NoConn ~ 6250 6800
+NoConn ~ 6250 6950
+NoConn ~ 6250 7100
+NoConn ~ 6250 7250
+NoConn ~ 6250 7400
+NoConn ~ 6250 7550
 $EndSCHEMATC
