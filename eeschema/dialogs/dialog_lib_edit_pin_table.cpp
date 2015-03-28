@@ -47,10 +47,11 @@ public:
 
     enum
     {
-        NONE        = -1,
-        PIN_NUMBER  = 0,
-        PIN_NAME    = 1,
-        PIN_TYPE    = 2
+        NONE            = -1,
+        PIN_NUMBER      = 0,
+        PIN_NAME        = 1,
+        PIN_TYPE        = 2,
+        PIN_POSITION    = 3
     };
 
 private:
@@ -160,10 +161,18 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent,
             100,
             wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
             wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewTextRenderer* rend3 = new wxDataViewTextRenderer( wxT( "string" ), wxDATAVIEW_CELL_INERT );
+    wxDataViewColumn* col3 = new wxDataViewColumn( _( "Position" ),
+            rend3,
+            DataViewModel::PIN_POSITION,
+            100,
+            wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
+            wxDATAVIEW_COL_RESIZABLE );
     m_Pins->AppendColumn( col0 );
     m_Pins->SetExpanderColumn( col0 );
     m_Pins->AppendColumn( col1 );
     m_Pins->AppendColumn( col2 );
+    m_Pins->AppendColumn( col3 );
 
     GetSizer()->SetSizeHints(this);
     Centre();
@@ -198,7 +207,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::DataViewModel( LIB_PART& aPart ) :
 
 unsigned int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetColumnCount() const
 {
-    return 3;
+    return 4;
 }
 
 
@@ -417,6 +426,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::SetGroupingColumn( int aCol )
 
     m_GroupingColumn = aCol;
 
+    Cleared();
     CalculateGrouping();
     Refresh();
 }
@@ -455,8 +465,6 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Refresh()
 #ifdef REASSOCIATE_HACK
     m_Widget->AssociateModel( this );
 #else
-    Cleared();
-
     std::queue<wxDataViewItem> todo;
     todo.push( wxDataViewItem() );
 
@@ -558,6 +566,15 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetValue( wxVariant& aValue,
 
     case PIN_TYPE:
         aValue = m_Backing->GetTypeString();
+        break;
+
+    case PIN_POSITION:
+        {
+            wxPoint position = m_Backing->GetPosition();
+            wxString value;
+            value << "(" << position.x << "," << position.y << ")";
+            aValue = value;
+        }
         break;
     }
 }
