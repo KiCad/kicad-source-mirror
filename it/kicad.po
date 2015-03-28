@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-28 00:50+0100\n"
-"PO-Revision-Date: 2015-03-28 00:50+0100\n"
+"POT-Creation-Date: 2015-03-28 23:08+0100\n"
+"PO-Revision-Date: 2015-03-28 23:09+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -699,7 +699,7 @@ msgstr "Impronta"
 #: pcbnew/class_drawsegment.cpp:368 pcbnew/dialogs/dialog_layers_setup.cpp:354
 #: eeschema/sch_text.cpp:788 eeschema/libedit.cpp:507
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1937
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:157
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:158
 #: gerbview/class_gerber_draw_item.cpp:550
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:167
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
@@ -5931,6 +5931,7 @@ msgstr "Foratura X / Y"
 
 #: pcbnew/class_pad.cpp:681
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:80
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:165
 msgid "Position"
 msgstr "Posizione"
 
@@ -7879,7 +7880,7 @@ msgstr "Sposta la riga selezionata in alto di una posizione"
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
-#: 3d-viewer/3d_canvas.cpp:397
+#: 3d-viewer/3d_canvas.cpp:416
 msgid "Move Down"
 msgstr "Sposta in basso"
 
@@ -8378,7 +8379,7 @@ msgstr "Esplora"
 #: pcbnew/dialogs/dialog_layers_setup.cpp:350
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:36
 #: eeschema/libedit.cpp:477 eeschema/lib_pin.cpp:1928
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:150
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:151
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:180
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
@@ -15639,7 +15640,7 @@ msgid "Pin"
 msgstr "Pin"
 
 #: eeschema/lib_pin.cpp:1935
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:143
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:144
 msgid "Number"
 msgstr "Numero"
 
@@ -18692,91 +18693,95 @@ msgstr "Usa le normali del modello"
 msgid "Render Material Properties"
 msgstr "Disegna le proprietà del materiale"
 
-#: 3d-viewer/3d_toolbar.cpp:196
+#: 3d-viewer/3d_toolbar.cpp:191
+msgid "Show Model Bouding Boxes"
+msgstr "Mostra i perimetri di delimitazione del modello"
+
+#: 3d-viewer/3d_toolbar.cpp:200
 msgid "Choose Colors"
 msgstr "Scegli i colori"
 
-#: 3d-viewer/3d_toolbar.cpp:199
+#: 3d-viewer/3d_toolbar.cpp:203
 msgid "Background Top Color"
 msgstr "Colore di sfondo in cima"
 
-#: 3d-viewer/3d_toolbar.cpp:202
+#: 3d-viewer/3d_toolbar.cpp:206
 msgid "Background Bottom Color"
 msgstr "Colore di sfondo in fondo"
 
-#: 3d-viewer/3d_toolbar.cpp:205
+#: 3d-viewer/3d_toolbar.cpp:209
 msgid "Show 3D &Axis"
 msgstr "Mostra assi 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:210
+#: 3d-viewer/3d_toolbar.cpp:214
 msgid "3D Grid"
 msgstr "Griglia 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:211
+#: 3d-viewer/3d_toolbar.cpp:215
 msgid "No 3D Grid"
 msgstr "No griglia 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:212
+#: 3d-viewer/3d_toolbar.cpp:216
 msgid "3D Grid 10 mm"
 msgstr "Griglia 3D 10mm"
 
-#: 3d-viewer/3d_toolbar.cpp:213
+#: 3d-viewer/3d_toolbar.cpp:217
 msgid "3D Grid 5 mm"
 msgstr "Griglia 3D 5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:214
+#: 3d-viewer/3d_toolbar.cpp:218
 msgid "3D Grid 2.5 mm"
 msgstr "Griglia 3D 2.5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:215
+#: 3d-viewer/3d_toolbar.cpp:219
 msgid "3D Grid 1 mm"
 msgstr "Griglia 3D 1 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:231
+#: 3d-viewer/3d_toolbar.cpp:235
 msgid "Show Board Bod&y"
 msgstr "Mostra il corpo sche&da"
 
-#: 3d-viewer/3d_toolbar.cpp:234
+#: 3d-viewer/3d_toolbar.cpp:238
 msgid "Show Copper &Thickness"
 msgstr "Mos&tra lo spessore rame"
 
-#: 3d-viewer/3d_toolbar.cpp:237
+#: 3d-viewer/3d_toolbar.cpp:241
 msgid "Show 3D F&ootprints"
 msgstr "Mostra i m&oduli in 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:240
+#: 3d-viewer/3d_toolbar.cpp:244
 msgid "Show Zone &Filling"
 msgstr "Mostra riempimenti &zone"
 
-#: 3d-viewer/3d_toolbar.cpp:246
+#: 3d-viewer/3d_toolbar.cpp:250
 msgid "Show &Layers"
 msgstr "Mostra g&li strati"
 
-#: 3d-viewer/3d_toolbar.cpp:249
+#: 3d-viewer/3d_toolbar.cpp:253
 msgid "Show &Adhesive Layers"
 msgstr "Mostra gli strati &adesivi"
 
-#: 3d-viewer/3d_toolbar.cpp:252
+#: 3d-viewer/3d_toolbar.cpp:256
 msgid "Show &Silkscreen Layer"
 msgstr "Mostra lo strato &serigrafia"
 
-#: 3d-viewer/3d_toolbar.cpp:255
+#: 3d-viewer/3d_toolbar.cpp:259
 msgid "Show Solder &Mask Layers"
 msgstr "Mostra gli strati &maschera saldatura"
 
-#: 3d-viewer/3d_toolbar.cpp:258
+#: 3d-viewer/3d_toolbar.cpp:262
 msgid "Show Solder &Paste Layers"
 msgstr "Mostra gli strati &pasta salda"
 
-#: 3d-viewer/3d_toolbar.cpp:261
+#: 3d-viewer/3d_toolbar.cpp:265
 msgid "Show &Comments and Drawings Layer"
 msgstr "Mostra strati &commenti ed grafica"
 
-#: 3d-viewer/3d_toolbar.cpp:264
+#: 3d-viewer/3d_toolbar.cpp:268
 msgid "Show &Eco Layers"
 msgstr "Mostra gli strati &eco"
 
-#: 3d-viewer/3d_draw.cpp:624 3d-viewer/3d_draw.cpp:924
+#: 3d-viewer/3d_draw.cpp:676 3d-viewer/3d_draw.cpp:985
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -18784,59 +18789,59 @@ msgstr ""
 "Impossibile calcolare i contorni della scheda.\n"
 "Perciò usa il riquadro delimitatore scheda."
 
-#: 3d-viewer/3d_canvas.cpp:349
+#: 3d-viewer/3d_canvas.cpp:368
 msgid "Zoom +"
 msgstr "Zoom +"
 
-#: 3d-viewer/3d_canvas.cpp:353
+#: 3d-viewer/3d_canvas.cpp:372
 msgid "Zoom -"
 msgstr "Zoom -"
 
-#: 3d-viewer/3d_canvas.cpp:358
+#: 3d-viewer/3d_canvas.cpp:377
 msgid "Top View"
 msgstr "Vista dall'alto"
 
-#: 3d-viewer/3d_canvas.cpp:362
+#: 3d-viewer/3d_canvas.cpp:381
 msgid "Bottom View"
 msgstr "Vista da sotto"
 
-#: 3d-viewer/3d_canvas.cpp:367
+#: 3d-viewer/3d_canvas.cpp:386
 msgid "Right View"
 msgstr "Vista da destra"
 
-#: 3d-viewer/3d_canvas.cpp:371
+#: 3d-viewer/3d_canvas.cpp:390
 msgid "Left View"
 msgstr "Vista da sinistra"
 
-#: 3d-viewer/3d_canvas.cpp:376
+#: 3d-viewer/3d_canvas.cpp:395
 msgid "Front View"
 msgstr "Vista di fronte"
 
-#: 3d-viewer/3d_canvas.cpp:380
+#: 3d-viewer/3d_canvas.cpp:399
 msgid "Back View"
 msgstr "Vista da dietro"
 
-#: 3d-viewer/3d_canvas.cpp:385
+#: 3d-viewer/3d_canvas.cpp:404
 msgid "Move left <-"
 msgstr "Sposta a sinistra"
 
-#: 3d-viewer/3d_canvas.cpp:389
+#: 3d-viewer/3d_canvas.cpp:408
 msgid "Move right ->"
 msgstr "Sposta a destra"
 
-#: 3d-viewer/3d_canvas.cpp:393
+#: 3d-viewer/3d_canvas.cpp:412
 msgid "Move Up ^"
 msgstr "Sposta in alto"
 
-#: 3d-viewer/3d_canvas.cpp:611
+#: 3d-viewer/3d_canvas.cpp:630
 msgid "3D Image filename:"
 msgstr "Nome file 3D: "
 
-#: 3d-viewer/3d_canvas.cpp:666
+#: 3d-viewer/3d_canvas.cpp:685
 msgid "Failed to copy image to clipboard"
 msgstr "Impossibile salvare immagine sugli appunti"
 
-#: 3d-viewer/3d_canvas.cpp:680
+#: 3d-viewer/3d_canvas.cpp:699
 msgid "Can't save file"
 msgstr "Impossibile salvare il file"
 
@@ -21166,14 +21171,14 @@ msgstr "Pos Y (mm)"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:252
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:307
 msgid "Upper Right"
-msgstr "Alto a destra"
+msgstr "In alto a destra"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:52
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:96
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:253
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:308
 msgid "Upper Left"
-msgstr "Alto a sinistra"
+msgstr "In alto a sinistra"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:52
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:96
@@ -21182,14 +21187,14 @@ msgstr "Alto a sinistra"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:306
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:309
 msgid "Lower Right"
-msgstr "Basso a destra "
+msgstr "In basso a destra "
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:52
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:96
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:255
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:310
 msgid "Lower Left"
-msgstr "Basso a sinistra"
+msgstr "In basso a sinistra"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:72
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:273
@@ -21235,7 +21240,7 @@ msgstr "Limiti:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Max Size X (mm)"
-msgstr "Dimensione X max (mm)"
+msgstr "Dimensione max X (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:173
 msgid "Max Size Y (mm)"
