@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-28 11:34+0300\n"
-"PO-Revision-Date: 2015-03-28 11:43+0300\n"
+"PO-Revision-Date: 2015-03-28 12:46+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -5508,7 +5508,7 @@ msgstr "Добавить ввод проводника в шину"
 
 #: eeschema/hotkeys.cpp:161
 msgid "Add Graphic PolyLine"
-msgstr "Добавить графическая линия"
+msgstr "Добавить графическую линию"
 
 #: eeschema/hotkeys.cpp:163
 msgid "Add Graphic Text"
@@ -5548,7 +5548,7 @@ msgstr "Редактировать посадочное место компон�
 
 #: eeschema/hotkeys.cpp:182
 msgid "Edit with Component Editor"
-msgstr "Редактировать в редакторе кмпонентов"
+msgstr "Редактировать в редакторе компонентов"
 
 #: eeschema/hotkeys.cpp:186
 msgid "Move Schematic Item"
@@ -5613,7 +5613,7 @@ msgstr "Сохранить схему"
 
 #: eeschema/hotkeys.cpp:217
 msgid "Load Schematic"
-msgstr "Зугрузить схему"
+msgstr "Загрузить схему"
 
 #: eeschema/hotkeys.cpp:695
 msgid "Add Pin"
@@ -17968,7 +17968,7 @@ msgstr "Контрастный режим отображения"
 
 #: pcbnew/hotkeys.cpp:131
 msgid "Set Grid Origin"
-msgstr "Сброс нач.координат сетки"
+msgstr "Установка начальных координат сетки"
 
 #: pcbnew/hotkeys.cpp:134
 msgid "Switch to Default Canvas"
@@ -18096,7 +18096,7 @@ msgstr "Записать макрос 8"
 
 #: pcbnew/hotkeys.cpp:251
 msgid "Call Macro 8"
-msgstr "Записать макрос 8"
+msgstr "Вызвать макрос 8"
 
 #: pcbnew/hotkeys.cpp:253
 msgid "Record Macro 9"
