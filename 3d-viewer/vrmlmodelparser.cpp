@@ -41,16 +41,19 @@
 VRML_MODEL_PARSER::VRML_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
-    vrml1_parser = NULL;
-    vrml2_parser = NULL;
-    m_curr3DShape = NULL;
 }
-
 
 VRML_MODEL_PARSER::~VRML_MODEL_PARSER()
 {
+    for( unsigned int idx = 0; idx < childs.size(); idx++ )
+    {
+        if( childs[idx] )
+        {
+            delete childs[idx];
+            childs[idx] = 0;
+        }
+    }
 }
-
 
 bool VRML_MODEL_PARSER::Load( const wxString& aFilename )
 {
@@ -72,20 +75,20 @@ bool VRML_MODEL_PARSER::Load( const wxString& aFilename )
 
     fclose( file );
 
+    childs.clear();
+
     if( stricmp( line, "#VRML V2.0" ) == 0 )
     {
-        vrml2_parser = new VRML2_MODEL_PARSER( this );
+        VRML2_MODEL_PARSER *vrml2_parser = new VRML2_MODEL_PARSER( this );
         vrml2_parser->Load( aFilename );
         delete vrml2_parser;
-        vrml2_parser = NULL;
         return true;
     }
     else if( stricmp( line, "#VRML V1.0" ) == 0 )
     {
-        vrml1_parser = new VRML1_MODEL_PARSER( this );
+        VRML1_MODEL_PARSER *vrml1_parser = new VRML1_MODEL_PARSER( this );
         vrml1_parser->Load( aFilename );
         delete vrml1_parser;
-        vrml1_parser = NULL;
         return true;
     }
 

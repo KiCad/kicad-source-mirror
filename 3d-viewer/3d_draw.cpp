@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +24,7 @@
 
 /**
  * @file 3d_draw.cpp
+ *
  */
 
 #include <fctsys.h>
@@ -42,7 +44,8 @@
 #include <class_pcb_text.h>
 #include <colors_selection.h>
 #include <convert_basic_shapes_to_polygon.h>
-
+#include <gal/opengl/glm/gtc/matrix_transform.hpp>
+#include <gal/opengl/opengl_compositor.h>
 #ifdef __WINDOWS__
 #include <GL/glew.h>        // must be included before gl.h
 #endif
@@ -65,11 +68,9 @@
 static GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
 
 
-void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
+void EDA_3D_CANVAS::create_and_render_shadow_buffer( GLuint *aDst_gl_texture,
         GLuint aTexture_size, bool aDraw_body, int aBlurPasses )
 {
-    unsigned char *depthbufferRGBA = (unsigned char*) malloc( aTexture_size * aTexture_size * 4 );
-
     glDisable( GL_TEXTURE_2D );
 
     glViewport( 0, 0, aTexture_size, aTexture_size);
@@ -77,10 +78,7 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    // move the board in order to draw it with its center at 0,0 3D coordinates
-    glTranslatef( -GetPrm3DVisu().m_BoardPos.x * GetPrm3DVisu().m_BiuTo3Dunits,
-                  -GetPrm3DVisu().m_BoardPos.y * GetPrm3DVisu().m_BiuTo3Dunits,
-                  0.0F );
+    // Render body and shapes
 
     if( aDraw_body && m_glLists[GL_ID_BODY] )
             glCallList( m_glLists[GL_ID_BODY] );
@@ -88,9 +86,10 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     if( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
         glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
 
-    glFinish();
+    // Create and Initialize the float depth buffer
 
     float *depthbufferFloat = (float*) malloc( aTexture_size * aTexture_size * sizeof(float) );
+
     for( unsigned int i = 0; i < (aTexture_size * aTexture_size); i++ )
         depthbufferFloat[i] = 1.0f;
 
@@ -101,6 +100,7 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
                   aTexture_size, aTexture_size,
                   GL_DEPTH_COMPONENT, GL_FLOAT, depthbufferFloat );
 
+    CheckGLError( __FILE__, __LINE__ );
 
     glEnable( GL_TEXTURE_2D );
     glGenTextures( 1, aDst_gl_texture );
@@ -109,43 +109,36 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     CIMAGE imgDepthBuffer( aTexture_size, aTexture_size );
     CIMAGE imgDepthBufferAux( aTexture_size, aTexture_size );
 
-    imgDepthBuffer.setPixelsFromNormalizedFloat( depthbufferFloat );
-
+    imgDepthBuffer.SetPixelsFromNormalizedFloat( depthbufferFloat );
+    
     free( depthbufferFloat );
 
-    wxString filename;
+    // Debug texture image
+    //wxString filename;
     //filename.Printf( "imgDepthBuffer_%04d", *aDst_gl_texture );
-    //imgDepthBuffer.saveAsPNG( filename );
+    //imgDepthBuffer.SaveAsPNG( filename );
 
-    while (aBlurPasses > 0)
+    while( aBlurPasses > 0 )
     {
         aBlurPasses--;
-        imgDepthBufferAux.efxFilter( &imgDepthBuffer, 1.0, FILTER_BLUR);
-        imgDepthBuffer.efxFilter( &imgDepthBufferAux, 1.0, FILTER_BLUR);
+        imgDepthBufferAux.EfxFilter( &imgDepthBuffer, FILTER_GAUSSIAN_BLUR );
+        imgDepthBuffer.EfxFilter( &imgDepthBufferAux, FILTER_GAUSSIAN_BLUR );
     }
-    //filename.Printf( "imgDepthBuffer_blur_%04d", *aDst_gl_texture );
-    //imgDepthBuffer.saveAsPNG( filename );
 
-    imgDepthBuffer.copyFull( &imgDepthBuffer, &imgDepthBuffer, COPY_MUL );
-    //imgDepthBuffer.copyFull( &imgDepthBuffer, &imgDepthBuffer, COPY_MUL );
-    //filename.Printf( "imgDepthBuffer_mul_%04d", *aDst_gl_texture );
-    //imgDepthBuffer.saveAsPNG( filename );
+    // Debug texture image
+    //filename.Printf( "imgDepthBuffer_blur%04d", *aDst_gl_texture );
+    //imgDepthBuffer.SaveAsPNG( filename );
 
-    //imgDepthBufferAux.efxFilter( &imgDepthBuffer, 1.0, FILTER_BLUR);
-    //imgDepthBuffer.efxFilter( &imgDepthBufferAux, 1.0, FILTER_BLUR);
-    //filename.Printf( "imgDepthBuffer_mulblur_%04d", *aDst_gl_texture );
-    //imgDepthBuffer.saveAsPNG( filename );
+    unsigned char *depthbufferRGBA = (unsigned char*) malloc( aTexture_size * aTexture_size * 4 );
+    unsigned char *pPixels = imgDepthBuffer.GetBuffer();
 
-    imgDepthBuffer.invert();
-    //filename.Printf( "imgDepthBuffer_invert_%04d", *aDst_gl_texture );
-    //imgDepthBuffer.saveAsPNG( filename );
-
-    for(unsigned int i = 0; i < (aTexture_size * aTexture_size); i++)
+    // Convert it to a RGBA buffer
+    for( unsigned int i = 0; i < (aTexture_size * aTexture_size); i++ )
     {
         depthbufferRGBA[i * 4 + 0] = 0;
         depthbufferRGBA[i * 4 + 1] = 0;
         depthbufferRGBA[i * 4 + 2] = 0;
-        depthbufferRGBA[i * 4 + 3] = imgDepthBuffer.m_pixels[i];
+        depthbufferRGBA[i * 4 + 3] = 255 - pPixels[i];                  // Store in alpha channel the inversion of the image
     }
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -156,11 +149,14 @@ void EDA_3D_CANVAS::Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aTexture_size, aTexture_size, 0, GL_RGBA, GL_UNSIGNED_BYTE, depthbufferRGBA );
 
     free( depthbufferRGBA );
+
+    CheckGLError( __FILE__, __LINE__ );
 }
 
-#define SHADOW_BOARD_SCALE 1.5f
+/// Scale factor to make a bigger BBox in order to blur the texture and dont have artifacts in the edges
+#define SHADOW_BOUNDING_BOX_SCALE 1.25f
 
-void EDA_3D_CANVAS::GenerateFakeShadowsTextures( wxString* aErrorMessages, bool aShowWarnings )
+void EDA_3D_CANVAS::generateFakeShadowsTextures( wxString* aErrorMessages, bool aShowWarnings )
 {
     if( m_shadow_init == true )
     {
@@ -170,6 +166,8 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures( wxString* aErrorMessages, bool 
     // Init info 3d parameters and create gl lists:
     CreateDrawGL_List( aErrorMessages, aShowWarnings );
 
+    DBG( unsigned strtime = GetRunningMicroSecs() );
+        
     m_shadow_init = true;
 
     glClearColor( 0, 0, 0, 1 );
@@ -177,45 +175,80 @@ void EDA_3D_CANVAS::GenerateFakeShadowsTextures( wxString* aErrorMessages, bool 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-    const double ZDIST_MAX = Millimeter2iu( 3.5 ) * GetPrm3DVisu().m_BiuTo3Dunits;
+    const float zDistMax = Millimeter2iu( 3.5 ) * GetPrm3DVisu().m_BiuTo3Dunits;
+
     glOrtho( -GetPrm3DVisu().m_BoardSize.x * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
              GetPrm3DVisu().m_BoardSize.x * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
              -GetPrm3DVisu().m_BoardSize.y * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
              GetPrm3DVisu().m_BoardSize.y * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
-             0.0, ZDIST_MAX );
+             0.0, zDistMax );
+
+    float zpos = GetPrm3DVisu().GetLayerZcoordBIU( F_Paste ) * GetPrm3DVisu().m_BiuTo3Dunits;
 
     // Render FRONT shadow
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    glTranslatef( 0, 0, 0.03 );
-    glRotatef( 180, 0.0, 1.0, 0.0 );
+    glTranslatef( 0.0f, 0.0f, zpos );
+    glRotatef( 180.0f, 0.0f, 1.0f, 0.0f );
 
-    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_front, 512, false, 1 );
+    // move the board in order to draw it with its center at 0,0 3D coordinates
+    glTranslatef( -GetPrm3DVisu().m_BoardPos.x * GetPrm3DVisu().m_BiuTo3Dunits,
+                  -GetPrm3DVisu().m_BoardPos.y * GetPrm3DVisu().m_BiuTo3Dunits,
+                  0.0f );
 
+    create_and_render_shadow_buffer( &m_text_fake_shadow_front, 512, false, 1 );
+
+    zpos = GetPrm3DVisu().GetLayerZcoordBIU( B_Paste ) * GetPrm3DVisu().m_BiuTo3Dunits;
 
     // Render BACK shadow
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    glTranslatef( 0, 0, 0.03 );
-    ///glRotatef( 0.0, 0.0, 1.0, 0.0 );
+    glTranslatef( 0.0f, 0.0f, fabs( zpos ) );
 
-    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_back, 512, false, 1 );
+
+    // move the board in order to draw it with its center at 0,0 3D coordinates
+    glTranslatef( -GetPrm3DVisu().m_BoardPos.x * GetPrm3DVisu().m_BiuTo3Dunits,
+                  -GetPrm3DVisu().m_BoardPos.y * GetPrm3DVisu().m_BiuTo3Dunits,
+                  0.0f );
+
+    create_and_render_shadow_buffer( &m_text_fake_shadow_back, 512, false, 1 );
+
 
     // Render ALL BOARD shadow
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    glOrtho( -GetPrm3DVisu().m_BoardSize.x * SHADOW_BOARD_SCALE * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
-             GetPrm3DVisu().m_BoardSize.x * SHADOW_BOARD_SCALE * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
-             -GetPrm3DVisu().m_BoardSize.y * SHADOW_BOARD_SCALE * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
-             GetPrm3DVisu().m_BoardSize.y * SHADOW_BOARD_SCALE * GetPrm3DVisu().m_BiuTo3Dunits / 2.0f,
-             0.0, 6.0f * ZDIST_MAX );
+
+    // Normalization scale to convert bouding box
+    // to normalize 3D units between -1.0 and +1.0
+
+    S3D_VERTEX v = m_fastAABBox_Shadow.Max() - m_fastAABBox_Shadow.Min();
+    float BoundingBoxBoardiuTo3Dunits = 2.0f / glm::max( v.x, v.y );
+
+    //float zDistance = (m_lightPos.z * zDistMax) / sqrt( (m_lightPos.z - m_fastAABBox_Shadow.Min().z) );
+    float zDistance = (m_lightPos.z - m_fastAABBox_Shadow.Min().z) / 3.0f;
+
+    glOrtho( -v.x * BoundingBoxBoardiuTo3Dunits / 2.0f,
+              v.x * BoundingBoxBoardiuTo3Dunits / 2.0f,
+             -v.y * BoundingBoxBoardiuTo3Dunits / 2.0f,
+              v.y * BoundingBoxBoardiuTo3Dunits / 2.0f,
+             0.0f, zDistance );
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    glTranslatef( 0, 0, -0.4f );
-    glRotatef( 180.0, 0.0, 1.0, 0.0 );
 
-    Create_and_Render_Shadow_Buffer( &m_text_fake_shadow_board, 512, true, 5 );
+    // fits the bouding box to scale this size
+    glScalef( BoundingBoxBoardiuTo3Dunits, BoundingBoxBoardiuTo3Dunits, 1.0f );
+
+    // Place the eye in the lowerpoint of boudingbox and turn arround and look up to the model
+    glTranslatef( 0.0f, 0.0f, m_fastAABBox_Shadow.Min().z );
+    glRotatef( 180.0, 0.0f, 1.0f, 0.0f );
+
+    // move the bouding box in order to draw it with its center at 0,0 3D coordinates
+    glTranslatef( -(m_fastAABBox_Shadow.Min().x + v.x / 2.0f), -(m_fastAABBox_Shadow.Min().y + v.y / 2.0f), 0.0f );
+    
+    create_and_render_shadow_buffer( &m_text_fake_shadow_board, 512, true, 10 );
+
+    DBG( printf( "  generateFakeShadowsTextures total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
 }
 
 
@@ -243,7 +276,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) && isRealisticMode() &&
         isEnabled( FL_RENDER_SHADOWS ) )
     {
-        GenerateFakeShadowsTextures( &errorMessages, showWarnings );
+        generateFakeShadowsTextures( &errorMessages, showWarnings );
     }
 
     // *MUST* be called *after*  SetCurrent( ):
@@ -290,6 +323,7 @@ void EDA_3D_CANVAS::Redraw()
     glLoadIdentity();
 
 #define MAX_VIEW_ANGLE 160.0 / 45.0
+
     if( GetPrm3DVisu().m_Zoom > MAX_VIEW_ANGLE )
         GetPrm3DVisu().m_Zoom = MAX_VIEW_ANGLE;
 
@@ -309,14 +343,14 @@ void EDA_3D_CANVAS::Redraw()
          double ratio_HV = (double) size.x / size.y;
 
          // Initialize Projection Matrix for Perspective View
-         gluPerspective( 45.0 * GetPrm3DVisu().m_Zoom, ratio_HV, 1, 100 );
+         gluPerspective( 45.0f * GetPrm3DVisu().m_Zoom, ratio_HV, 1, 100 );
      }
 
     // position viewer
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    glTranslatef( 0.0F, 0.0F, -( m_ZBottom + m_ZTop) / 2 );
+    glTranslatef( 0.0f, 0.0f, -(m_ZBottom + m_ZTop) / 2.0f );
 
     // Setup light sources:
     SetLights();
@@ -324,6 +358,7 @@ void EDA_3D_CANVAS::Redraw()
     CheckGLError( __FILE__, __LINE__ );
 
     glMatrixMode( GL_MODELVIEW );    // position viewer
+
     // transformations
     GLfloat mat[4][4];
 
@@ -347,10 +382,7 @@ void EDA_3D_CANVAS::Redraw()
     // move the board in order to draw it with its center at 0,0 3D coordinates
     glTranslatef( -GetPrm3DVisu().m_BoardPos.x * GetPrm3DVisu().m_BiuTo3Dunits,
                   -GetPrm3DVisu().m_BoardPos.y * GetPrm3DVisu().m_BiuTo3Dunits,
-                  0.0F );
-
-    // draw all objects in lists
-    // transparent objects should be drawn after opaque objects
+                  0.0f );
 
     if( isEnabled( FL_MODULE ) )
     {
@@ -358,29 +390,42 @@ void EDA_3D_CANVAS::Redraw()
             CreateDrawGL_List( &errorMessages, showWarnings );
     }
 
+    glEnable( GL_LIGHTING );
+
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-	if( isEnabled( FL_SHOW_BOARD_BODY ) )
-	{
-		glDisable( GL_LIGHTING );
+    if( isRealisticMode() && isEnabled( FL_RENDER_TEXTURES ) )
+        glEnable( GL_TEXTURE_2D );
+    else
+        glDisable( GL_TEXTURE_2D );
 
-		if( m_glLists[GL_ID_BODY] )
-		{
-			glCallList( m_glLists[GL_ID_BODY] );
-		}
+    // Set material for the board
+    glEnable( GL_COLOR_MATERIAL );
+    SetOpenGlDefaultMaterial();
+    
+    // Board Body
 
-		glEnable( GL_LIGHTING );
-	}
-
-	glEnable( GL_COLOR_MATERIAL );
-	SetOpenGlDefaultMaterial();
-    glm::vec4 specular( GetPrm3DVisu().m_CopperColor.m_Red   * 0.3,
-                        GetPrm3DVisu().m_CopperColor.m_Green * 0.3,
-                        GetPrm3DVisu().m_CopperColor.m_Blue  * 0.3, 1.0 );
-    GLint shininess_value = 8;
-
+    GLint shininess_value = 32;
     glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
+
+    if( isEnabled( FL_SHOW_BOARD_BODY ) )
+    {
+        if( m_glLists[GL_ID_BODY] )
+        {
+            glCallList( m_glLists[GL_ID_BODY] );
+        }
+    }
+
+
+    // Board
+
+    shininess_value = 52;
+    glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
+
+    glm::vec4 specular( GetPrm3DVisu().m_CopperColor.m_Red   * 0.20f,
+                        GetPrm3DVisu().m_CopperColor.m_Green * 0.20f,
+                        GetPrm3DVisu().m_CopperColor.m_Blue  * 0.20f, 1.0f );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.x );
 
     if( m_glLists[GL_ID_BOARD] )
@@ -388,17 +433,17 @@ void EDA_3D_CANVAS::Redraw()
         glCallList( m_glLists[GL_ID_BOARD] );
     }
 
-    if( isRealisticMode() && isEnabled( FL_RENDER_TEXTURES ) )
-        glEnable( GL_TEXTURE_2D );
-    else
-        glDisable( GL_TEXTURE_2D );
 
-	SetOpenGlDefaultMaterial();
+    // Tech layers
+
+    shininess_value = 32;
+    glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
+
+    glm::vec4 specularTech( 0.0f, 0.0f, 0.0f, 1.0f );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specularTech.x );
 
     if( m_glLists[GL_ID_TECH_LAYERS] )
     {
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glCallList( m_glLists[GL_ID_TECH_LAYERS] );
     }
 
@@ -410,7 +455,9 @@ void EDA_3D_CANVAS::Redraw()
         glCallList( m_glLists[GL_ID_AUX_LAYERS] );
     }
 
+
     // Draw Component Shadow
+
     if( isEnabled( FL_MODULE )  && isRealisticMode() &&
         isEnabled( FL_RENDER_SHADOWS ) )
     {
@@ -419,7 +466,7 @@ void EDA_3D_CANVAS::Redraw()
 
         glEnable( GL_COLOR_MATERIAL ) ;
         SetOpenGlDefaultMaterial();
-        glColor4f( 1.0, 1.0, 1.0, 1.0 );
+        glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
         glEnable( GL_TEXTURE_2D );
 
@@ -437,19 +484,21 @@ void EDA_3D_CANVAS::Redraw()
             glBindTexture( GL_TEXTURE_2D, m_text_fake_shadow_back );
             glCallList( m_glLists[GL_ID_SHADOW_BACK] );
         }
-        glColor4f( 1.0, 1.0, 1.0, 1.0 );
+        glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
         glEnable( GL_DEPTH_TEST );
         glDisable( GL_TEXTURE_2D );
         glDisable( GL_CULL_FACE );
     }
 
-    glEnable(GL_COLOR_MATERIAL);
+    glEnable( GL_COLOR_MATERIAL );
     SetOpenGlDefaultMaterial();
 
     glDisable( GL_BLEND );
 
+
     // Draw Solid Shapes
+
     if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
@@ -461,25 +510,29 @@ void EDA_3D_CANVAS::Redraw()
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+
     // Grid uses transparency: draw it after all objects
+
     if( isEnabled( FL_GRID ) && m_glLists[GL_ID_GRID] )
         glCallList( m_glLists[GL_ID_GRID] );
 
+
     // Draw Board Shadow
-    if( isEnabled( FL_MODULE ) && isRealisticMode() &&
-        isEnabled( FL_RENDER_SHADOWS ) )
+
+    if( isRealisticMode() && isEnabled( FL_RENDER_SHADOWS ) )
     {
         if( m_glLists[GL_ID_SHADOW_BOARD] )
         {
             glEnable( GL_BLEND );
             glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-            glColor4f( 1.0, 1.0, 1.0, 1.0 );
+            glColor4f( 1.0, 1.0, 1.0, 0.85f );
             glEnable( GL_CULL_FACE );
             glDisable( GL_COLOR_MATERIAL );
             glEnable( GL_TEXTURE_2D );
             glBindTexture( GL_TEXTURE_2D, m_text_fake_shadow_board );
             glCallList( m_glLists[GL_ID_SHADOW_BOARD] );
             glDisable( GL_CULL_FACE );
+            glDisable( GL_TEXTURE_2D );
         }
     }
 
@@ -488,11 +541,22 @@ void EDA_3D_CANVAS::Redraw()
     // non transparent objects
     if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
     {
-        glDisable( GL_TEXTURE_2D );
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
     }
+
+    // Debug bounding boxes
+    /*
+    glDisable( GL_BLEND );
+    glDisable( GL_COLOR_MATERIAL );
+    glDisable( GL_LIGHTING );
+    glColor4f( 1.0f, 0.0f, 1.0f, 1.0f );
+    m_fastAABBox_Shadow.GLdebug();
+
+    glColor4f( 0.0f, 1.0f, 1.0f, 1.0f );
+    m_boardAABBox.GLdebug();
+    */
 
     SwapBuffers();
 
@@ -503,23 +567,16 @@ void EDA_3D_CANVAS::Redraw()
 }
 
 
-void EDA_3D_CANVAS::BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint aBoardList )
-{
-    // Use similar calculation as Grid limits, in 3D units
-    wxSize  brd_size = getBoardSize();
-    wxPoint brd_center_pos = getBoardCenter();
+void EDA_3D_CANVAS::buildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint aBoardList )
+{ 
+    // Board shadows are based on board dimension.
 
-    float xsize   = brd_size.x;
-    float ysize   = brd_size.y;
+    float xmin    = m_boardAABBox.Min().x;
+    float xmax    = m_boardAABBox.Max().x;
+    float ymin    = m_boardAABBox.Min().y;
+    float ymax    = m_boardAABBox.Max().y;
 
-    float scale   = GetPrm3DVisu().m_BiuTo3Dunits;
-    float xmin    = (brd_center_pos.x - xsize / 2.0) * scale;
-    float xmax    = (brd_center_pos.x + xsize / 2.0) * scale;
-    float ymin    = (brd_center_pos.y - ysize / 2.0) * scale;
-    float ymax    = (brd_center_pos.y + ysize / 2.0) * scale;
-
-    float zpos = GetPrm3DVisu().GetLayerZcoordBIU( F_Paste );
-    zpos *= GetPrm3DVisu().m_BiuTo3Dunits;
+    float zpos = GetPrm3DVisu().GetLayerZcoordBIU( F_Paste ) * GetPrm3DVisu().m_BiuTo3Dunits;
 
     // Shadow FRONT
     glNewList( aFrontList, GL_COMPILE );
@@ -537,8 +594,7 @@ void EDA_3D_CANVAS::BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint
 
 
     // Shadow BACK
-    zpos = GetPrm3DVisu().GetLayerZcoordBIU( B_Paste );
-    zpos *= GetPrm3DVisu().m_BiuTo3Dunits;
+    zpos = GetPrm3DVisu().GetLayerZcoordBIU( B_Paste ) * GetPrm3DVisu().m_BiuTo3Dunits;
 
     glNewList( aBacklist, GL_COMPILE );
 
@@ -553,33 +609,29 @@ void EDA_3D_CANVAS::BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint
 
     glEndList();
 
-
     // Shadow BOARD
-    xsize   = brd_size.x * SHADOW_BOARD_SCALE;
-    ysize   = brd_size.y * SHADOW_BOARD_SCALE;
 
-    scale = GetPrm3DVisu().m_BiuTo3Dunits;
-    xmin    = (brd_center_pos.x - xsize / 2.0) * scale;
-    xmax    = (brd_center_pos.x + xsize / 2.0) * scale;
-    ymin    = (brd_center_pos.y - ysize / 2.0) * scale;
-    ymax    = (brd_center_pos.y + ysize / 2.0) * scale;
-
+    // Floor shadow is based on axis alighned bounding box dimension
+    xmin = m_fastAABBox_Shadow.Min().x;
+    xmax = m_fastAABBox_Shadow.Max().x;
+    ymin = m_fastAABBox_Shadow.Min().y;
+    ymax = m_fastAABBox_Shadow.Max().y;
 
     glNewList( aBoardList, GL_COMPILE );
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( F_Paste ) );
 
     glBegin (GL_QUADS);
-    glTexCoord2f( 1.0, 0.0 ); glVertex3f( xmin, ymin, zpos * 30.0);
-    glTexCoord2f( 0.0, 0.0 ); glVertex3f( xmax, ymin, zpos * 30.0);
-    glTexCoord2f( 0.0, 1.0 ); glVertex3f( xmax, ymax, zpos * 30.0);
-    glTexCoord2f( 1.0, 1.0 ); glVertex3f( xmin, ymax, zpos * 30.0);
+    glTexCoord2f( 1.0, 0.0 ); glVertex3f( xmin, ymin, m_fastAABBox_Shadow.Min().z );
+    glTexCoord2f( 0.0, 0.0 ); glVertex3f( xmax, ymin, m_fastAABBox_Shadow.Min().z );
+    glTexCoord2f( 0.0, 1.0 ); glVertex3f( xmax, ymax, m_fastAABBox_Shadow.Min().z );
+    glTexCoord2f( 1.0, 1.0 ); glVertex3f( xmin, ymax, m_fastAABBox_Shadow.Min().z );
     glEnd();
 
     glEndList();
 }
 
 
-void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
+void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                       wxString* aErrorMessages, bool aShowWarnings  )
 {
     BOARD* pcb = GetBoard();
@@ -599,12 +651,12 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     // ( We already used this trick in plot_board_layers.cpp,
     // see PlotSolderMaskLayer() )
     const int       segcountforcircle   = 18;
-    double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
-    const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality
+    double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2.0) );
+    const int       segcountLowQuality  =  8;   // segments to draw a circle with low quality
                                                 // to reduce time calculations
                                                 // for holes and items which do not need
                                                 // a fine representation
-    double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
+    double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2.0) );
 
     CPOLYGONS_LIST  bufferPolys;
     bufferPolys.reserve( 200000 );              // Reserve for large board (tracks mainly)
@@ -640,7 +692,7 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
     glNewList( aBoardList, GL_COMPILE );
 
-    for( unsigned i=0; i<DIM(cu_seq); ++i )
+    for( unsigned i=0; i < DIM( cu_seq ); ++i )
         cu_seq[i] = ToLAYER_ID( B_Cu - i );
 
     for( LSEQ cu = cu_set.Seq( cu_seq, DIM(cu_seq) );  cu;  ++cu )
@@ -713,8 +765,15 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                 D_PAD* pad = module->Pads();
 
                 for( ; pad; pad = pad->Next() )
+                {
+                    // Calculate a factor to apply to segcount (bigger pad size -> more segments)
+                    wxSize padSize = pad->GetSize();
+                    int maxPadSize = glm::max( padSize.x, padSize.y );
+                    float segFactor = (float)maxPadSize / (float)Millimeter2iu( 0.6 );
+
                     pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
-                                                    segcountLowQuality );
+                                                    (int)(segcountLowQuality * segFactor) );
+                }
             }
         }
 
@@ -801,7 +860,7 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
         if( isEnabled( FL_USE_COPPER_THICKNESS ) == true )
         {
-        	thickness -= ( 0.04 * IU_PER_MM );
+            thickness -= ( 0.04 * IU_PER_MM );
         }
 
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
@@ -813,7 +872,8 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         throughHolesListBuilt = true;
     }
 
-    if ( !isEnabled( FL_SHOW_BOARD_BODY ) )
+    if ( !isEnabled( FL_SHOW_BOARD_BODY ) ||
+          isEnabled( FL_USE_COPPER_THICKNESS ) )
     {
         setGLCopperColor();
 
@@ -823,25 +883,26 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
             const VIA *via = dynamic_cast<const VIA*>(track);
 
             if( via )
-                Draw3DViaHole( via );
+                draw3DViaHole( via );
         }
 
         // Draw pads holes (vertical cylinders)
         for( const MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
         {
             for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-                Draw3DPadHole( pad );
+                if( pad->GetAttribute () != PAD_HOLE_NOT_PLATED )
+                    draw3DPadHole( pad );
         }
     }
 
-	glEndList();
+    glEndList();
 
     // Build the body board:
-	glNewList( aBodyOnlyList, GL_COMPILE );
+    glNewList( aBodyOnlyList, GL_COMPILE );
 
     if( isRealisticMode() )
     {
-    	setGLEpoxyColor( 0.95 );
+        setGLEpoxyColor( 1.00 );
     }
     else
     {
@@ -862,10 +923,10 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     // are drawn from zpos - copper_thickness/2 to zpos + copper_thickness
     // therefore substrate position is copper_thickness/2 to
     // substrate_height - copper_thickness/2
-    zpos += (copper_thickness + epsilon) / 2.0;
+    zpos += (copper_thickness + epsilon) / 2.0f;
     board_thickness -= copper_thickness + epsilon;
 
-    glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( F_Cu ) );
+    glNormal3f( 0.0f, 0.0f, Get3DLayer_Z_Orientation( F_Cu ) );
     KI_POLYGON_SET  currLayerPolyset;
     KI_POLYGON_SET  polysetHoles;
 
@@ -883,7 +944,7 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
     if( bufferPcbOutlines.GetCornersCount() )
     {
-        Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness/2.0,
+        Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness / 2.0,
                                             board_thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
     }
 
@@ -891,7 +952,7 @@ void EDA_3D_CANVAS::BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 }
 
 
-void EDA_3D_CANVAS::BuildTechLayers3DView( wxString* aErrorMessages, bool aShowWarnings )
+void EDA_3D_CANVAS::buildTechLayers3DView( wxString* aErrorMessages, bool aShowWarnings )
 {
     BOARD* pcb = GetBoard();
     bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
@@ -1016,7 +1077,7 @@ void EDA_3D_CANVAS::BuildTechLayers3DView( wxString* aErrorMessages, bool aShowW
                     if( !pad->IsOnLayer( layer ) )
                         continue;
 
-                    BuildPadShapeThickOutlineAsPolygon( pad, bufferPolys,
+                    buildPadShapeThickOutlineAsPolygon( pad, bufferPolys,
                             linewidth, segcountforcircle, correctionFactor );
                 }
             }
@@ -1110,12 +1171,12 @@ void EDA_3D_CANVAS::BuildTechLayers3DView( wxString* aErrorMessages, bool aShowW
 
 
 /**
- * Function BuildBoard3DAuxLayers
+ * Function buildBoard3DAuxLayers
  * Called by CreateDrawGL_List()
  * Fills the OpenGL GL_ID_BOARD draw list with items
  * on aux layers only
  */
-void EDA_3D_CANVAS::BuildBoard3DAuxLayers()
+void EDA_3D_CANVAS::buildBoard3DAuxLayers()
 {
     const int   segcountforcircle   = 18;
     double      correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
@@ -1222,54 +1283,48 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
     // Create axis gl list (if it is not shown, the list will be not called
-    Draw3DAxis();
-
-    // Create grid gl list
-    if( ! m_glLists[GL_ID_GRID] )
-    {
-        m_glLists[GL_ID_GRID] = glGenLists( 1 );
-        glNewList( m_glLists[GL_ID_GRID], GL_COMPILE );
-
-        Draw3DGrid( GetPrm3DVisu().m_3D_Grid );
-        glEndList();
-    }
+    draw3DAxis();
 
     // Create Board full gl lists:
 
-// For testing purpose only, display calculation time to generate 3D data
-// #define PRINT_CALCULATION_TIME
-
-
-#ifdef PRINT_CALCULATION_TIME
-    unsigned strtime = GetRunningMicroSecs();
-#endif
-
     if( ! m_glLists[GL_ID_BOARD] )
     {
+        DBG( unsigned strtime = GetRunningMicroSecs() );
+        
         m_glLists[GL_ID_BOARD] = glGenLists( 1 );
         m_glLists[GL_ID_BODY] = glGenLists( 1 );
-        BuildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages, aShowWarnings );
+        buildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages, aShowWarnings );
         CheckGLError( __FILE__, __LINE__ );
+
+        DBG( printf( "  buildBoard3DView total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
     }
 
     if( ! m_glLists[GL_ID_TECH_LAYERS] )
     {
+        DBG( unsigned strtime = GetRunningMicroSecs() );
+
         m_glLists[GL_ID_TECH_LAYERS] = glGenLists( 1 );
         glNewList( m_glLists[GL_ID_TECH_LAYERS], GL_COMPILE );
         // when calling BuildTechLayers3DView,
-        // do not show warnings, which are the same as BuildBoard3DView
-        BuildTechLayers3DView( aErrorMessages, false );
+        // do not show warnings, which are the same as buildBoard3DView
+        buildTechLayers3DView( aErrorMessages, false );
         glEndList();
         CheckGLError( __FILE__, __LINE__ );
+
+        DBG( printf( "  buildTechLayers3DView total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
     }
 
     if( ! m_glLists[GL_ID_AUX_LAYERS] )
     {
+        DBG( unsigned strtime = GetRunningMicroSecs() );
+
         m_glLists[GL_ID_AUX_LAYERS] = glGenLists( 1 );
         glNewList( m_glLists[GL_ID_AUX_LAYERS], GL_COMPILE );
-        BuildBoard3DAuxLayers();
+        buildBoard3DAuxLayers();
         glEndList();
         CheckGLError( __FILE__, __LINE__ );
+
+        DBG( printf( "  buildBoard3DAuxLayers total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
     }
 
     // draw modules 3D shapes
@@ -1289,58 +1344,130 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
         else
             m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] = 0;
 
-        BuildFootprintShape3DList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT],
-                                   m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT], false );
-
-        CheckGLError( __FILE__, __LINE__ );
-
-        m_glLists[GL_ID_SHADOW_FRONT] = glGenLists( 1 );
-        m_glLists[GL_ID_SHADOW_BACK]  = glGenLists( 1 );
-        m_glLists[GL_ID_SHADOW_BOARD] = glGenLists( 1 );
-
-        BuildShadowList( m_glLists[GL_ID_SHADOW_FRONT], m_glLists[GL_ID_SHADOW_BACK],
-                         m_glLists[GL_ID_SHADOW_BOARD]);
+        buildFootprintShape3DList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT],
+                                   m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
 
         CheckGLError( __FILE__, __LINE__ );
     }
 
+    calcBBox();
 
-#ifdef PRINT_CALCULATION_TIME
-    unsigned    endtime = GetRunningMicroSecs();
-    wxString    msg;
-    msg.Printf( "Built data %.1f ms", (double) (endtime - strtime) / 1000 );
-    Parent()->SetStatusText( msg, 0 );
-#endif
+    // Create grid gl list
+    if( ! m_glLists[GL_ID_GRID] )
+    {
+        m_glLists[GL_ID_GRID] = glGenLists( 1 );
+        glNewList( m_glLists[GL_ID_GRID], GL_COMPILE );
+
+        draw3DGrid( GetPrm3DVisu().m_3D_Grid );
+
+        glEndList();
+    }
+
+    if( !m_glLists[GL_ID_SHADOW_FRONT] )
+        m_glLists[GL_ID_SHADOW_FRONT] = glGenLists( 1 );
+    
+    if( !m_glLists[GL_ID_SHADOW_BACK] )
+        m_glLists[GL_ID_SHADOW_BACK]  = glGenLists( 1 );
+    
+    if( !m_glLists[GL_ID_SHADOW_BOARD] )
+        m_glLists[GL_ID_SHADOW_BOARD] = glGenLists( 1 );
+
+    buildShadowList( m_glLists[GL_ID_SHADOW_FRONT],
+                     m_glLists[GL_ID_SHADOW_BACK],
+                     m_glLists[GL_ID_SHADOW_BOARD] );
+
+    CheckGLError( __FILE__, __LINE__ );
 }
 
 
-void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
-                                               GLuint aTransparentList, bool aSideToLoad)
+void EDA_3D_CANVAS::calcBBox()
 {
-#ifdef PRINT_CALCULATION_TIME
-    unsigned strtime = GetRunningMicroSecs();
-#endif
-    // This lists are used to just load once of each filename model
-    std::vector<S3D_MODEL_PARSER *> model_parsers_list;
-    std::vector<wxString> model_filename_list;
+    BOARD* pcb = GetBoard();
+
+    m_fastAABBox.Reset();
+
+    for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
+    {
+        CBBOX tmpFastAABBox;
+
+        // Compute the transformation matrix for this module based on translation, rotation and orientation.
+        float  zpos = GetPrm3DVisu().GetModulesZcoord3DIU( module->IsFlipped() );
+        wxPoint pos = module->GetPosition();
+
+        glm::mat4 fullTransformMatrix;
+        fullTransformMatrix = glm::translate( glm::mat4(),  S3D_VERTEX( (float)(pos.x * GetPrm3DVisu().m_BiuTo3Dunits),
+                                                                        (float)(-pos.y * GetPrm3DVisu().m_BiuTo3Dunits),
+                                                                        zpos ) );
+
+        if( module->GetOrientation() )
+            fullTransformMatrix = glm::rotate( fullTransformMatrix,
+                                               (float)(module->GetOrientation() / 10.0f),
+                                               S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
+
+        if( module->IsFlipped() )
+        {
+            fullTransformMatrix = glm::rotate( fullTransformMatrix, 180.0f, S3D_VERTEX( 0.0f, 1.0f, 0.0f ) );
+            fullTransformMatrix = glm::rotate( fullTransformMatrix, 180.0f, S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
+        }
+
+        // Compute a union bounding box for all the shapes of the model
+        
+        S3D_MASTER* shape3D = module->Models();
+
+        for( ; shape3D; shape3D = shape3D->Next() )
+        {
+            if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
+                tmpFastAABBox.Union( shape3D->getFastAABBox() );
+        }
+
+        tmpFastAABBox.ApplyTransformationAA( fullTransformMatrix );
+
+        m_fastAABBox.Union( tmpFastAABBox );
+    }
+
+    // Create a board bounding box based on board size
+    wxSize  brd_size = getBoardSize();
+    wxPoint brd_center_pos = getBoardCenter();
+
+    float xsize   = brd_size.x;
+    float ysize   = brd_size.y;
+
+    float scale   = GetPrm3DVisu().m_BiuTo3Dunits;
+    float xmin    = (brd_center_pos.x - xsize / 2.0) * scale;
+    float xmax    = (brd_center_pos.x + xsize / 2.0) * scale;
+    float ymin    = (brd_center_pos.y - ysize / 2.0) * scale;
+    float ymax    = (brd_center_pos.y + ysize / 2.0) * scale;
+
+    float zmin = GetPrm3DVisu().GetLayerZcoordBIU( B_Adhes ) * scale;
+    float zmax = GetPrm3DVisu().GetLayerZcoordBIU( F_Adhes ) * scale;
+
+    m_boardAABBox = CBBOX(  S3D_VERTEX(xmin, ymin, zmin),
+                            S3D_VERTEX(xmax, ymax, zmax) );
+
+    // Add BB board with BB models and scale it a bit
+    m_fastAABBox.Union( m_boardAABBox );
+    m_fastAABBox_Shadow = m_fastAABBox;
+    m_fastAABBox_Shadow.Scale( SHADOW_BOUNDING_BOX_SCALE );
+}
+
+
+void EDA_3D_CANVAS::buildFootprintShape3DList( GLuint aOpaqueList,
+                                               GLuint aTransparentList )
+{
+    DBG( unsigned strtime = GetRunningMicroSecs() );
+
+    // clean the parser list if it have any already loaded files
+    m_model_parsers_list.clear();
+    m_model_filename_list.clear();
 
     BOARD* pcb = GetBoard();
 
     for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-        Read3DComponentShape( module, model_parsers_list, model_filename_list );
+        read3DComponentShape( module );
 
-#ifdef PRINT_CALCULATION_TIME
-    {
-    unsigned    endtime = GetRunningMicroSecs();
-    wxString    msg;
-    msg.Printf( "  Read3DComponentShape total time %.1f ms", (double) (endtime - strtime) / 1000 );
-    DBG( printf( "%s\n", (const char*)msg.c_str() ) );
-    }
-#endif
+    DBG( printf( "  read3DComponentShape total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
 
-#ifdef PRINT_CALCULATION_TIME
-    strtime = GetRunningMicroSecs();
-#endif
+    DBG( strtime = GetRunningMicroSecs() );
 
     bool useMaterial = g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL );
 
@@ -1354,8 +1481,9 @@ void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
         bool loadOpaqueObjects = true;
 
         for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-            Render3DComponentShape( module,  loadOpaqueObjects,
-                                             !loadOpaqueObjects, aSideToLoad );
+            render3DComponentShape( module,  loadOpaqueObjects,
+                                             !loadOpaqueObjects );
+
         glEndList();
 
 
@@ -1363,8 +1491,8 @@ void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
         bool loadTransparentObjects = true;
 
         for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-            Render3DComponentShape( module, !loadTransparentObjects,
-                                            loadTransparentObjects, aSideToLoad );
+            render3DComponentShape( module, !loadTransparentObjects,
+                                            loadTransparentObjects );
 
         glEndList();
     }
@@ -1374,56 +1502,60 @@ void EDA_3D_CANVAS::BuildFootprintShape3DList( GLuint aOpaqueList,
         glNewList( aOpaqueList, GL_COMPILE );
 
         for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-            Render3DComponentShape( module, false, false, aSideToLoad );
+            render3DComponentShape( module, false, false );
         glEndList();
     }
 
-#ifdef PRINT_CALCULATION_TIME
-    {
-    unsigned    endtime = GetRunningMicroSecs();
-    wxString    msg;
-    msg.Printf( "  Render3DComponentShape total time %.1f ms", (double) (endtime - strtime) / 1000 );
-    DBG( printf( "%s\n", (const char*)msg.c_str() ) );
-    }
-#endif
+    DBG( printf( "  render3DComponentShape total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
 }
 
 
-bool EDA_3D_CANVAS::Read3DComponentShape( MODULE* module,
-                                          std::vector<S3D_MODEL_PARSER *>& model_parsers_list,
-                                          std::vector<wxString>& model_filename_list )
+bool EDA_3D_CANVAS::read3DComponentShape( MODULE* module )
 {
-    S3D_MASTER* shape3D = module->Models();
-
-    for( ; shape3D; shape3D = shape3D->Next() )
+    if( module )
     {
-        if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
+        S3D_MASTER* shape3D = module->Models();
+
+        for( ; shape3D; shape3D = shape3D->Next() )
         {
-            bool found = false;
-
-            unsigned int i;
-            wxString shape_filename = shape3D->GetShape3DFullFilename();
-
-            // Search for already loaded files
-            for( i = 0; i < model_filename_list.size(); i++ )
+            if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
             {
-                if( shape_filename.Cmp(model_filename_list[i]) == 0 )
+                bool found = false;
+
+                unsigned int i;
+                wxString shape_filename = shape3D->GetShape3DFullFilename();
+
+                // Search for already loaded files
+                for( i = 0; i < m_model_filename_list.size(); i++ )
                 {
-                    found = true;
-                    break;
+                    if( shape_filename.Cmp(m_model_filename_list[i]) == 0 )
+                    {
+                        found = true;
+                        break;
+                    }
                 }
-            }
 
-            if( found == false )
-            {
-                shape3D->ReadData();
-                model_filename_list.push_back( shape_filename );
-                model_parsers_list.push_back( shape3D->m_parser );
-            }
-            else
-            {
-                DBG( printf( "  Read3DComponentShape reusing %s\n", (const char*)shape_filename.c_str() ) );
-                shape3D->m_parser = model_parsers_list[i];
+                if( found == false )
+                {
+                    // Create a new parser
+                    S3D_MODEL_PARSER *newParser = S3D_MODEL_PARSER::Create( shape3D, shape3D->GetShape3DExtension() );
+                    
+                    if( newParser )
+                    {
+                        // Read file
+                        if( shape3D->ReadData( newParser ) == 0 )
+                        {
+                            // Store this couple filename / parsed file
+                            m_model_filename_list.push_back( shape_filename );
+                            m_model_parsers_list.push_back( newParser );
+                        }
+                    }
+                }
+                else
+                {
+                    // Reusing file
+                    shape3D->m_parser = m_model_parsers_list[i];
+                }
             }
         }
     }
@@ -1432,12 +1564,10 @@ bool EDA_3D_CANVAS::Read3DComponentShape( MODULE* module,
 }
 
 
-void EDA_3D_CANVAS::Render3DComponentShape( MODULE* module,
+void EDA_3D_CANVAS::render3DComponentShape( MODULE* module,
                                             bool aIsRenderingJustNonTransparentObjects,
-                                            bool aIsRenderingJustTransparentObjects,
-                                            bool aSideToLoad )
+                                            bool aIsRenderingJustTransparentObjects )
 {
-    // Read from disk and draws the footprint 3D shapes if exists
     double zpos = GetPrm3DVisu().GetModulesZcoord3DIU( module->IsFlipped() );
 
     glPushMatrix();
@@ -1449,12 +1579,12 @@ void EDA_3D_CANVAS::Render3DComponentShape( MODULE* module,
                    zpos );
 
     if( module->GetOrientation() )
-        glRotatef( (double) module->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
+        glRotatef( (double) module->GetOrientation() / 10.0, 0.0f, 0.0f, 1.0f );
 
     if( module->IsFlipped() )
     {
-        glRotatef( 180.0, 0.0, 1.0, 0.0 );
-        glRotatef( 180.0, 0.0, 0.0, 1.0 );
+        glRotatef( 180.0f, 0.0f, 1.0f, 0.0f );
+        glRotatef( 180.0f, 0.0f, 0.0f, 1.0f );
     }
 
     S3D_MASTER* shape3D = module->Models();
@@ -1464,9 +1594,27 @@ void EDA_3D_CANVAS::Render3DComponentShape( MODULE* module,
         if( shape3D->Is3DType( S3D_MASTER::FILE3D_VRML ) )
         {
             glPushMatrix();
+
             shape3D->Render( aIsRenderingJustNonTransparentObjects,
                              aIsRenderingJustTransparentObjects );
+
+            if( isEnabled( FL_RENDER_SHOW_MODEL_BBOX ) )
+            {
+                // Set the alpha current color to opaque
+                float currentColor[4];
+                glGetFloatv( GL_CURRENT_COLOR,currentColor );
+                currentColor[3] = 1.0f;
+                glColor4fv( currentColor );
+
+                CBBOX thisBBox = shape3D->getBBox();
+                thisBBox.GLdebug();
+            }
+
             glPopMatrix();
+
+            // Debug AABBox
+            //thisBBox = shape3D->getfastAABBox();
+            //thisBBox.GLdebug();
         }
     }
 

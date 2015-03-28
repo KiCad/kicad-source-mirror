@@ -181,7 +181,7 @@ void EDA_3D_CANVAS::setGLTechLayersColor( LAYER_NUM aLayer )
     }
 }
 
-void EDA_3D_CANVAS::Draw3DAxis()
+void EDA_3D_CANVAS::draw3DAxis()
 {
     if( ! m_glLists[GL_ID_AXIS] )
     {
@@ -207,7 +207,7 @@ void EDA_3D_CANVAS::Draw3DAxis()
 
 // draw a 3D grid: an horizontal grid (XY plane and Z = 0,
 // and a vertical grid (XZ plane and Y = 0)
-void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
+void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
 {
     double      zpos = 0.0;
     EDA_COLOR_T gridcolor = DARKGRAY;           // Color of grid lines
@@ -343,7 +343,7 @@ void EDA_3D_CANVAS::Draw3DGrid( double aGriSizeMM )
 
 
 // Draw 3D pads.
-void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
+void EDA_3D_CANVAS::draw3DPadHole( const D_PAD* aPad )
 {
     // Draw the pad hole
     wxSize  drillsize   = aPad->GetDrillSize();
@@ -363,13 +363,13 @@ void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
     else
         SetGLColor( DARKGRAY );
 
-    int holeZpoz    = GetPrm3DVisu().GetLayerZcoordBIU( B_Cu ) + thickness / 2;
-    int holeHeight  = height - thickness;
+    int holeZpoz    = GetPrm3DVisu().GetLayerZcoordBIU( B_Cu ) - thickness / 2;
+    int holeHeight  = height + thickness;
 
     if( drillsize.x == drillsize.y )    // usual round hole
     {
         Draw3D_ZaxisCylinder( aPad->GetPosition(),
-                              (drillsize.x + thickness) / 2, holeHeight,
+                              (drillsize.x + thickness / 2) / 2, holeHeight,
                               thickness, holeZpoz, GetPrm3DVisu().m_BiuTo3Dunits );
     }
     else    // Oblong hole
@@ -401,11 +401,11 @@ void EDA_3D_CANVAS::Draw3DPadHole( const D_PAD* aPad )
 }
 
 
-void EDA_3D_CANVAS::Draw3DViaHole( const VIA* aVia )
+void EDA_3D_CANVAS::draw3DViaHole( const VIA* aVia )
 {
     LAYER_ID    top_layer, bottom_layer;
-    int         inner_radius    = aVia->GetDrillValue() / 2;
     int         thickness       = GetPrm3DVisu().GetCopperThicknessBIU();
+    int         inner_radius    = (int)((float)aVia->GetDrillValue() * 1.01f) / 2.0f;      // This add a bit more in order to correct a draw artifact while using tickness
 
     aVia->LayerPair( &top_layer, &bottom_layer );
 
@@ -419,17 +419,17 @@ void EDA_3D_CANVAS::Draw3DViaHole( const VIA* aVia )
     }
 
     int height = GetPrm3DVisu().GetLayerZcoordBIU( top_layer ) -
-                 GetPrm3DVisu().GetLayerZcoordBIU( bottom_layer ) - thickness;
-    int   zpos = GetPrm3DVisu().GetLayerZcoordBIU( bottom_layer ) + thickness / 2;
+                 GetPrm3DVisu().GetLayerZcoordBIU( bottom_layer ) + thickness;
+    int   zpos = GetPrm3DVisu().GetLayerZcoordBIU( bottom_layer ) - thickness / 2;
 
-    Draw3D_ZaxisCylinder( aVia->GetStart(), inner_radius + thickness / 2, height,
+    Draw3D_ZaxisCylinder( aVia->GetStart(), inner_radius, height,
                           thickness, zpos, GetPrm3DVisu().m_BiuTo3Dunits );
 }
 
 /* Build a pad outline as non filled polygon, to draw pads on silkscreen layer
  * Used only to draw pads outlines on silkscreen layers.
  */
-void EDA_3D_CANVAS::BuildPadShapeThickOutlineAsPolygon( const D_PAD*  aPad,
+void EDA_3D_CANVAS::buildPadShapeThickOutlineAsPolygon( const D_PAD*  aPad,
                                                 CPOLYGONS_LIST& aCornerBuffer,
                                                 int             aWidth,
                                                 int             aCircleToSegmentsCount,

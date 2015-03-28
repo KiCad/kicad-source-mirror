@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -24,9 +24,56 @@
 
 /**
  * @file vrml_aux.cpp
+ * @brief implements auxiliar functions to parse VRML files
  */
 
 #include "vrml_aux.h"
+
+
+bool GetString( FILE* File, char* aDstString, size_t maxDstLen )
+{
+
+    if( (!aDstString) || (maxDstLen == 0) )
+        return false;
+
+    int c;
+    
+    while( ( c = fgetc( File ) ) != EOF )
+    {
+        if( c == '\"' )
+        {
+            break;
+        }
+    }
+
+    if( c != '\"' )
+    {
+        return false;
+    }
+
+    while( (( c = fgetc( File ) ) != EOF) && (maxDstLen > 0) )
+    {
+        if( c == '\"' )
+        {
+            break;
+        }
+
+        maxDstLen--;
+
+        *aDstString = c;
+        aDstString++;
+
+    }
+
+    *aDstString = 0;
+
+    if( c == '\"' )
+    {
+        return true;
+    }
+
+    return false;
+}
 
 
 static int SkipGetChar ( FILE* File );
@@ -140,7 +187,7 @@ bool GetNextTag( FILE* File, char* tag, size_t len )
 }
 
 
-int read_NotImplemented( FILE* File, char closeChar )
+int Read_NotImplemented( FILE* File, char closeChar )
 {
     int c;
 
@@ -150,12 +197,12 @@ int read_NotImplemented( FILE* File, char closeChar )
         if( c == '{' )
         {
             // DBG( printf( "{\n") );
-            read_NotImplemented( File, '}' );
+            Read_NotImplemented( File, '}' );
         }
         else if( c == '[' )
         {
             // DBG( printf( "[\n") );
-            read_NotImplemented( File, ']' );
+            Read_NotImplemented( File, ']' );
         }
         else if( c == closeChar )
         {
@@ -169,15 +216,15 @@ int read_NotImplemented( FILE* File, char closeChar )
 }
 
 
-int parseVertexList( FILE* File, std::vector<glm::vec3>& dst_vector )
+int ParseVertexList( FILE* File, std::vector<glm::vec3>& dst_vector )
 {
-    // DBG( printf( "      parseVertexList\n" ) );
+    // DBG( printf( "      ParseVertexList\n" ) );
 
     dst_vector.clear();
 
     glm::vec3 vertex;
 
-    while( parseVertex( File, vertex ) == 3 )
+    while( ParseVertex( File, vertex ) == 3 )
     {
         dst_vector.push_back( vertex );
     }
@@ -186,7 +233,7 @@ int parseVertexList( FILE* File, std::vector<glm::vec3>& dst_vector )
 }
 
 
-int parseVertex( FILE* File, glm::vec3& dst_vertex )
+int ParseVertex( FILE* File, glm::vec3& dst_vertex )
 {
     float   a, b, c;
     int     ret = fscanf( File, "%e %e %e", &a, &b, &c );
@@ -209,7 +256,7 @@ int parseVertex( FILE* File, glm::vec3& dst_vertex )
 }
 
 
-int parseFloat( FILE* File, float* dst_float )
+int ParseFloat( FILE* File, float* dst_float )
 {
     float   value;
     int     ret = fscanf( File, "%e", &value );

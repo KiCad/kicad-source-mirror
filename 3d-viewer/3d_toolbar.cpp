@@ -187,6 +187,10 @@ void EDA_3D_FRAME::CreateMenuBar()
         _( "Render Material Properties" ),
         KiBitmap( green_xpm ), wxITEM_CHECK );
 
+    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SHOW_MODEL_BBOX,
+        _( "Show Model Bouding Boxes" ),
+        KiBitmap( green_xpm ), wxITEM_CHECK );
+
     prefsMenu->AppendSeparator();
 
     wxMenu * backgrounColorMenu = new wxMenu;
@@ -299,6 +303,9 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL );
     item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_MATERIAL ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHOW_MODEL_BBOX );
+    item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SHOW_MODEL_BBOX ) );
 
     item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );
     item->Check( GetPrm3DVisu().GetFlag( FL_SHOW_BOARD_BODY ) );

@@ -36,7 +36,7 @@
 #include <modelparsers.h>
 
 // Number of segments to approximate a circle by segments
-#define SEGM_PER_CIRCLE 16
+#define SEGM_PER_CIRCLE 24
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -57,12 +57,12 @@ static void CALLBACK    tessCPolyPt2Vertex( const GLvoid* data );
 // 2 helper functions to set the current normal vector for gle items
 static inline void SetNormalZpos()
 {
-    //glNormal3f( 0.0, 0.0, 1.0 );
+    glNormal3f( 0.0, 0.0, 1.0 );
 }
 
 static inline void SetNormalZneg()
 {
-    //glNormal3f( 0.0, 0.0, -1.0 );
+    glNormal3f( 0.0, 0.0, -1.0 );
 }
 
 void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
@@ -203,7 +203,8 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
             }
 
             // https://www.opengl.org/sdk/docs/man2/xhtml/gluTessNormal.xml
-            gluTessNormal( tess, 0.0, 0.0, 0.0 );
+            if( !aThickness )
+                gluTessNormal( tess, 0.0, 0.0, 0.0 );
 
 
             v_data[0]   = polylist.GetX( ii ) * aBiuTo3DUnits;
@@ -231,7 +232,8 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
         s_currentZpos = zpos;     // for Tess callback functions
         v_data[2] = zpos;
         // Set normal toward negative Z axis, for a solid object on bottom side
-        SetNormalZneg();
+        if( aThickness )
+            SetNormalZneg();
     }
 
     if( startContour == 0 )
@@ -248,7 +250,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     }
 
     // Build the 3D data : vertical side
-    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos - (aThickness / 2.0), false, aBiuTo3DUnits );
+    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos - (aThickness / 2.0), true, aBiuTo3DUnits );
 }
 
 
@@ -292,9 +294,11 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
 
     if( aHeight )
     {
+        
         // Draw the vertical outer side
         Draw3D_VerticalPolygonalCylinder( outer_cornerBuffer,
                                       aHeight, aZpos, false, aBiuTo3DUnits );
+
         if( aThickness )
             // Draws the vertical inner side (hole)
             Draw3D_VerticalPolygonalCylinder( inner_cornerBuffer,

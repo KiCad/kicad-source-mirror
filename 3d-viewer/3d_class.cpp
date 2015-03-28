@@ -1,7 +1,3 @@
-/**
- * @file 3d_class.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -25,7 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
+/**
+ * @file 3d_class.cpp
+ */
+ 
 #include <fctsys.h>
 
 #include "3d_viewer.h"
@@ -79,12 +78,14 @@ S3D_MASTER:: ~S3D_MASTER()
     {
         next = m_3D_Drawings->Next();
         delete m_3D_Drawings;
+        m_3D_Drawings = 0;
     }
 
     for( ; m_Materials != NULL; m_Materials = nextmat )
     {
         nextmat = m_Materials->Next();
         delete m_Materials;
+        m_Materials = 0;
     }
 }
 
@@ -115,16 +116,56 @@ void S3D_MASTER::SetShape3DName( const wxString& aShapeName )
         return;
 
     wxFileName fn = m_Shape3DName;
-    wxString ext  = fn.GetExt();
+    m_Shape3DNameExtension  = fn.GetExt();
 
-    if( ext == wxT( "wrl" ) || ext == wxT( "x3d" ) )
+    if( m_Shape3DNameExtension == wxT( "wrl" ) ||
+        m_Shape3DNameExtension == wxT( "x3d" ) )
         m_ShapeType = FILE3D_VRML;
-    else if( ext == wxT( "idf" ) )
+    else if( m_Shape3DNameExtension == wxT( "idf" ) )
         m_ShapeType = FILE3D_IDF;
     else
         m_ShapeType = FILE3D_UNKNOWN;
 
+    // Expand any environment variables embedded in footprint's m_Shape3DName field.
+    // To ensure compatibility with most of footprint's m_Shape3DName field,
+    // if the m_Shape3DName is not an absolute path the default path
+    // given by the environment variable KISYS3DMOD will be used
+
+    if( m_Shape3DName.StartsWith( wxT("${") ) )
+        m_Shape3DFullFilename = wxExpandEnvVars( m_Shape3DName );
+    else
+        m_Shape3DFullFilename = m_Shape3DName;
+
+    wxFileName fnFull( m_Shape3DFullFilename );
+
+    if( !( fnFull.IsAbsolute() || m_Shape3DFullFilename.StartsWith( wxT(".") ) ) )
+    {
+        wxString default_path;
+        wxGetEnv( KISYS3DMOD, &default_path );
+
+        if( !( default_path.IsEmpty() ) )
+        {
+
+            if( !default_path.EndsWith( wxT("/") ) && !default_path.EndsWith( wxT("\\") ) )
+                default_path += wxT("/");
+
+            m_Shape3DFullFilename = default_path + m_Shape3DFullFilename;
+        }
+    }
+
     return;
+}
+
+
+const wxString S3D_MASTER::GetShape3DFullFilename()
+{
+    return m_Shape3DFullFilename;
+}
+
+
+const wxString S3D_MASTER::GetShape3DExtension()
+{
+    return m_Shape3DNameExtension;
 }
 
 

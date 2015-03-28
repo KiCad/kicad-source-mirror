@@ -138,7 +138,7 @@ int VRML1_MODEL_PARSER::read_separator()
         else if( ( *text != '}' ) )
         {
             // DBG( printf( "read_NotImplemented %s\n", text ) );
-            read_NotImplemented( m_file, '}' );
+            Read_NotImplemented( m_file, '}' );
         }
         else
             break;
@@ -272,7 +272,7 @@ int VRML1_MODEL_PARSER::readMaterial_ambientColor()
 {
     // DBG( printf( "    readMaterial_ambientColor\n" ) );
 
-    return parseVertexList( m_file, m_model->m_Materials->m_AmbientColor );
+    return ParseVertexList( m_file, m_model->m_Materials->m_AmbientColor );
 }
 
 
@@ -280,7 +280,7 @@ int VRML1_MODEL_PARSER::readMaterial_diffuseColor()
 {
     // DBG( printf( "    readMaterial_diffuseColor\n" ) );
 
-    return parseVertexList( m_file, m_model->m_Materials->m_DiffuseColor );
+    return ParseVertexList( m_file, m_model->m_Materials->m_DiffuseColor );
 }
 
 
@@ -288,7 +288,7 @@ int VRML1_MODEL_PARSER::readMaterial_emissiveColor()
 {
     // DBG( printf( "    readMaterial_emissiveColor\n" ) );
 
-    int ret = parseVertexList( m_file, m_model->m_Materials->m_EmissiveColor );
+    int ret = ParseVertexList( m_file, m_model->m_Materials->m_EmissiveColor );
 
     if( m_Master->m_use_modelfile_emissiveColor == false )
     {
@@ -303,7 +303,7 @@ int VRML1_MODEL_PARSER::readMaterial_specularColor()
 {
     // DBG( printf( "    readMaterial_specularColor\n" ) );
 
-    int ret = parseVertexList( m_file, m_model->m_Materials->m_SpecularColor );
+    int ret = ParseVertexList( m_file, m_model->m_Materials->m_SpecularColor );
 
     if( m_Master->m_use_modelfile_specularColor == false )
     {
@@ -368,7 +368,7 @@ int VRML1_MODEL_PARSER::readCoordinate3_point()
 {
     // DBG( printf( "    readCoordinate3_point\n" ) );
 
-    if( parseVertexList( m_file, m_model->m_Point ) == 0 )
+    if( ParseVertexList( m_file, m_model->m_Point ) == 0 )
     {
         return 0;
     }

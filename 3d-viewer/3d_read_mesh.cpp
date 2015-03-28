@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
@@ -32,14 +33,14 @@
 #include <macros.h>
 #include <kicad_string.h>
 #include <pgm_base.h>
-
+#include <gal/opengl/glm/gtc/matrix_transform.hpp>
 #include <3d_viewer.h>
 #include <info3d_visu.h>
 #include "3d_struct.h"
 #include "modelparsers.h"
 
 
-S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
+S3D_MODEL_PARSER *S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
                                             const wxString aExtension )
 {
     if ( aExtension == wxT( "x3d" ) )
@@ -50,46 +51,25 @@ S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
     return NULL;
  }
 
-const wxString S3D_MASTER::GetShape3DFullFilename()
-{
 
-    wxString shapeName;
-
-    // Expand any environment variables embedded in footprint's m_Shape3DName field.
-    // To ensure compatibility with most of footprint's m_Shape3DName field,
-    // if the m_Shape3DName is not an absolute path the default path
-    // given by the environment variable KISYS3DMOD will be used
-
-    if( m_Shape3DName.StartsWith( wxT("${") ) )
-        shapeName = wxExpandEnvVars( m_Shape3DName );
-    else
-        shapeName = m_Shape3DName;
-
-    wxFileName fn( shapeName );
-
-    if( fn.IsAbsolute() || shapeName.StartsWith( wxT(".") ) )
-        return shapeName;
-
-    wxString default_path;
-    wxGetEnv( KISYS3DMOD, &default_path );
-
-    if( default_path.IsEmpty() )
-        return shapeName;
-
-    if( !default_path.EndsWith( wxT("/") ) && !default_path.EndsWith( wxT("\\") ) )
-        default_path += wxT("/");
-
-    default_path += shapeName;
-
-    return default_path;
-}
-
-int S3D_MASTER::ReadData()
+int S3D_MASTER::ReadData( S3D_MODEL_PARSER* aParser )
 {    
     if( m_Shape3DName.IsEmpty() )
-        return 1;
+    {
+        //DBG( printf("m_Shape3DName.IsEmpty") );
+        return -1;
+    }
 
-    wxString filename = GetShape3DFullFilename();
+    if( m_Shape3DFullFilename.IsEmpty() )
+    {
+        //DBG( printf("m_Shape3DFullFilename.IsEmpty") );
+        return -1;
+    }
+
+    if( aParser == NULL )
+        return -1;
+
+    wxString filename = m_Shape3DFullFilename;
 
 #ifdef __WINDOWS__
     filename.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -97,34 +77,29 @@ int S3D_MASTER::ReadData()
     filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-    if( !wxFileName::FileExists( filename ) )
+    if( wxFileName::FileExists( filename ) )
     {
-        wxLogDebug( wxT( "3D shape '%s' not found, even tried '%s' after env var substitution." ),
-                    GetChars( m_Shape3DName ),
-                    GetChars( filename )
-                    );
-        return -1;
+        wxFileName fn( filename );
+
+        if( aParser->Load( filename ) )
+        {
+            // Invalidate bounding boxes
+            m_fastAABBox.Reset();
+            m_BBox.Reset();
+
+            m_parser = aParser;
+
+            return 0;
+        }
     }
 
-    wxFileName fn( filename );
-
-    wxString extension = fn.GetExt();
-
-    m_parser = S3D_MODEL_PARSER::Create( this, extension );
-
-    if( m_parser )
-    {
-        m_parser->Load( filename );
-
-        return 0;
-    }
-    else
-    {
-        wxLogDebug( wxT( "Unknown file type '%s'" ), GetChars( extension ) );
-    }
+    wxLogDebug( wxT( "3D shape '%s' not found, even tried '%s' after env var substitution." ),
+        GetChars( m_Shape3DName ),
+        GetChars( filename ) );
 
     return -1;
 }
+
 
 void S3D_MASTER::Render( bool aIsRenderingJustNonTransparentObjects,
                          bool aIsRenderingJustTransparentObjects )
@@ -136,31 +111,80 @@ void S3D_MASTER::Render( bool aIsRenderingJustNonTransparentObjects,
 
     glScalef( aVrmlunits_to_3Dunits, aVrmlunits_to_3Dunits, aVrmlunits_to_3Dunits );
 
-    glm::vec3 matScale( m_MatScale.x,
-                        m_MatScale.y,
-                        m_MatScale.z );
+    glTranslatef( m_MatPosition.x * SCALE_3D_CONV,
+                  m_MatPosition.y * SCALE_3D_CONV,
+                  m_MatPosition.z * SCALE_3D_CONV );
 
-    glm::vec3 matRot( m_MatRotation.x,
-                      m_MatRotation.y,
-                      m_MatRotation.z );
+    glRotatef( -m_MatRotation.z, 0.0f, 0.0f, 1.0f );
+    glRotatef( -m_MatRotation.y, 0.0f, 1.0f, 0.0f );
+    glRotatef( -m_MatRotation.x, 1.0f, 0.0f, 0.0f );
 
-    glm::vec3 matPos( m_MatPosition.x,
-                      m_MatPosition.y,
-                      m_MatPosition.z );
-
-    glTranslatef( matPos.x * SCALE_3D_CONV,
-                  matPos.y * SCALE_3D_CONV,
-                  matPos.z * SCALE_3D_CONV );
-
-    glRotatef( -matRot.z, 0.0f, 0.0f, 1.0f );
-    glRotatef( -matRot.y, 0.0f, 1.0f, 0.0f );
-    glRotatef( -matRot.x, 1.0f, 0.0f, 0.0f );
-
-    glScalef( matScale.x, matScale.y, matScale.z );
+    glScalef( m_MatScale.x, m_MatScale.y, m_MatScale.z );
 
     for( unsigned int idx = 0; idx < m_parser->childs.size(); idx++ )
-    {
         m_parser->childs[idx]->openGL_RenderAllChilds( aIsRenderingJustNonTransparentObjects,
                                                        aIsRenderingJustTransparentObjects );
-    }
+}
+
+
+CBBOX &S3D_MASTER::getBBox( )
+{
+    if( !m_BBox.IsInitialized() )
+        calcBBox();
+
+    return m_BBox;
+}
+
+
+CBBOX &S3D_MASTER::getFastAABBox( )
+{
+    if( !m_fastAABBox.IsInitialized() )
+        calcBBox();
+    
+    return m_fastAABBox;
+}
+
+
+void S3D_MASTER::calcBBox()
+{
+    if( m_parser == NULL )
+        return;
+
+    bool firstBBox = true;
+    
+    for( unsigned int idx = 0; idx < m_parser->childs.size(); idx++ )
+        if( firstBBox )
+        {
+            firstBBox = false;
+            m_BBox = m_parser->childs[idx]->getBBox();
+        }
+        else
+            m_BBox.Union( m_parser->childs[idx]->getBBox() );
+
+    // Calc transformation matrix to apply in AABBox
+
+    float aVrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+
+    glm::mat4 fullTransformMatrix;
+
+    fullTransformMatrix = glm::scale( glm::mat4(), S3D_VERTEX(  aVrmlunits_to_3Dunits,
+                                                                aVrmlunits_to_3Dunits,
+                                                                aVrmlunits_to_3Dunits ) );
+
+    fullTransformMatrix = glm::translate( fullTransformMatrix,  S3D_VERTEX( m_MatPosition.x * SCALE_3D_CONV,
+                                                                            m_MatPosition.y * SCALE_3D_CONV,
+                                                                            m_MatPosition.z * SCALE_3D_CONV) );
+    
+    if( m_MatRotation.z != 0.0 )
+        fullTransformMatrix = glm::rotate( fullTransformMatrix, -(float)m_MatRotation.z, S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
+    if( m_MatRotation.y != 0.0 )
+        fullTransformMatrix = glm::rotate( fullTransformMatrix, -(float)m_MatRotation.y, S3D_VERTEX( 0.0f, 1.0f, 0.0f ) );
+    if( m_MatRotation.x != 0.0 )
+        fullTransformMatrix = glm::rotate( fullTransformMatrix, -(float)m_MatRotation.x, S3D_VERTEX( 1.0f, 0.0f, 0.0f ) );
+
+     fullTransformMatrix = glm::scale( fullTransformMatrix, S3D_VERTEX( m_MatScale.x, m_MatScale.y, m_MatScale.z ) );
+    
+    // Apply transformation
+    m_fastAABBox = m_BBox;
+    m_fastAABBox.ApplyTransformationAA( fullTransformMatrix );
 }

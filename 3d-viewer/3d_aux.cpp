@@ -105,9 +105,9 @@ void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUni
     ay = aVertices[1].y - aVertices[0].y;
     az = aVertices[1].z - aVertices[0].z;
 
-    bx = aVertices[aVertices.size() - 1].x - aVertices[0].x;
-    by = aVertices[aVertices.size() - 1].y - aVertices[0].y;
-    bz = aVertices[aVertices.size() - 1].z - aVertices[0].z;
+    bx = aVertices[2].x - aVertices[0].x;
+    by = aVertices[2].y - aVertices[0].y;
+    bz = aVertices[2].z - aVertices[0].z;
 
     nx = ay * bz - az * by;
     ny = az * bx - ax * bz;

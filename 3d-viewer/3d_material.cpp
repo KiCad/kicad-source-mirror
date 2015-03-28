@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -55,10 +55,10 @@ S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
 
 void SetOpenGlDefaultMaterial()
 {
-    glm::vec4 ambient( 0.2, 0.2, 0.2, 1.0 );
-    glm::vec4 specular( 0.0, 0.0, 0.0, 1.0 );
-    glm::vec4 emissive( 0.0, 0.0, 0.0, 1.0 );
-    glm::vec4 diffuse( 0.0, 0.0, 0.0, 1.0 );
+    glm::vec4 ambient( 0.2f, 0.2f, 0.2f, 1.0f );
+    glm::vec4 specular( 0.0f, 0.0f, 0.0f, 1.0f );
+    glm::vec4 emissive( 0.0f, 0.0f, 0.0f, 1.0f );
+    glm::vec4 diffuse( 0.0f, 0.0f, 0.0f, 1.0f );
     GLint shininess_value = 0;
 
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );

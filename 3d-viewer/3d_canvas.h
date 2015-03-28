@@ -43,7 +43,9 @@
 #endif
 
 #include <3d_struct.h>
+#include <modelparsers.h>
 #include <class_module.h>
+#include <CBBox.h>
 
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
@@ -78,16 +80,15 @@ class EDA_3D_CANVAS : public wxGLCanvas
 {
 private:
     bool            m_init;
-    bool            m_reportWarnings;       // true to report all wranings when build the 3D scene
-                                            // false to report errors only
-    GLuint          m_glLists[GL_ID_END];   // GL lists
+    bool            m_reportWarnings;       ///< true to report all wranings when build the 3D scene false to report errors only
+    GLuint          m_glLists[GL_ID_END];   ///< GL lists
     wxGLContext*    m_glRC;
-    wxRealPoint     m_draw3dOffset;     // offset to draw the 3D mesh.
-    double          m_ZBottom;          // position of the back layer
-    double          m_ZTop;             // position of the front layer
+    wxRealPoint     m_draw3dOffset;         ///< offset to draw the 3D mesh.
+    double          m_ZBottom;              ///< position of the back layer
+    double          m_ZTop;                 ///< position of the front layer
 
-    GLuint          m_text_pcb;     // an index to the texture generated for pcb texts
-    GLuint          m_text_silk;    // an index to the texture generated for silk layers
+    GLuint          m_text_pcb;             ///< an index to the texture generated for pcb texts
+    GLuint          m_text_silk;            ///< an index to the texture generated for silk layers
 
     // Index to the textures generated for shadows
     bool            m_shadow_init;
@@ -95,8 +96,20 @@ private:
     GLuint          m_text_fake_shadow_back;
     GLuint          m_text_fake_shadow_board;
 
-    void Create_and_Render_Shadow_Buffer( GLuint *aDst_gl_texture,
+    CBBOX           m_boardAABBox;          ///< Axis Align Bounding Box of the board
+    CBBOX           m_fastAABBox;           ///< Axis Align Bounding Box that contain the other bounding boxes
+    CBBOX           m_fastAABBox_Shadow;    ///< A bit scalled version of the m_fastAABBox
+
+    S3D_VERTEX      m_lightPos;
+
+    /// Stores the list of parsers for each new file name (dont repeat files already loaded)
+    std::vector<S3D_MODEL_PARSER *> m_model_parsers_list;
+    std::vector<wxString> m_model_filename_list;
+
+    void create_and_render_shadow_buffer( GLuint *aDst_gl_texture,
             GLuint aTexture_size, bool aDraw_body, int aBlurPasses );
+
+    void calcBBox();
 
 public:
     EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList = 0 );
@@ -187,33 +200,33 @@ private:
     wxPoint getBoardCenter() const;
 
     /**
-     * Helper function SetGLTechLayersColor
+     * Helper function setGLTechLayersColor
      * Initialize the color to draw the non copper layers
      * in realistic mode and normal mode.
      */
     void setGLTechLayersColor( LAYER_NUM aLayer );
 
     /**
-     * Helper function SetGLCopperColor
+     * Helper function setGLCopperColor
      * Initialize the copper color to draw the board
      * in realistic mode (a golden yellow color )
      */
     void setGLCopperColor();
 
     /**
-     * Helper function SetGLEpoxyColor
+     * Helper function setGLEpoxyColor
      * Initialize the color to draw the epoxy body board in realistic mode.
      */
     void setGLEpoxyColor( float aTransparency = 1.0 );
 
     /**
-     * Helper function SetGLSolderMaskColor
+     * Helper function setGLSolderMaskColor
      * Initialize the color to draw the solder mask layers in realistic mode.
      */
     void setGLSolderMaskColor( float aTransparency = 1.0 );
 
     /**
-     * Function BuildBoard3DView
+     * Function buildBoard3DView
      * Called by CreateDrawGL_List()
      * Populates the OpenGL GL_ID_BOARD draw list with board items only on copper layers.
      * 3D footprint shapes, tech layers and aux layers are not on this list
@@ -224,27 +237,27 @@ private:
      * created by the build process (can be NULL)
      * @param aShowWarnings = true to show all messages, false to show errors only
      */
-    void   BuildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
+    void   buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                              wxString* aErrorMessages, bool aShowWarnings );
 
     /**
-     * Function BuildTechLayers3DView
+     * Function buildTechLayers3DView
      * Called by CreateDrawGL_List()
      * Populates the OpenGL GL_ID_TECH_LAYERS draw list with items on tech layers
      * @param aErrorMessages = a wxString to add error and warning messages
      * created by the build process (can be NULL)
      * @param aShowWarnings = true to show all messages, false to show errors only
      */
-    void   BuildTechLayers3DView( wxString* aErrorMessages, bool aShowWarnings );
+    void   buildTechLayers3DView( wxString* aErrorMessages, bool aShowWarnings );
 
     /**
-     * Function BuildShadowList
+     * Function buildShadowList
      * Called by CreateDrawGL_List()
      */
-     void BuildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint aBoardList );
+     void buildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint aBoardList );
 
     /**
-     * Function BuildFootprintShape3DList
+     * Function buildFootprintShape3DList
      * Called by CreateDrawGL_List()
      * Fills the OpenGL GL_ID_3DSHAPES_SOLID and GL_ID_3DSHAPES_TRANSP
      * draw lists with 3D footprint shapes
@@ -252,19 +265,18 @@ private:
      * @param aTransparentList is the gl list for non transparent items,
      * which need to be drawn after all other items
      */
-    void   BuildFootprintShape3DList( GLuint aOpaqueList,
-                                      GLuint aTransparentList,
-                                      bool aSideToLoad );
+    void   buildFootprintShape3DList( GLuint aOpaqueList,
+                                      GLuint aTransparentList );
     /**
-     * Function BuildBoard3DAuxLayers
+     * Function buildBoard3DAuxLayers
      * Called by CreateDrawGL_List()
      * Fills the OpenGL GL_ID_AUX_LAYERS draw list
      * with items on aux layers only
      */
-    void   BuildBoard3DAuxLayers();
+    void   buildBoard3DAuxLayers();
 
-    void   Draw3DGrid( double aGriSizeMM );
-    void   Draw3DAxis();
+    void   draw3DGrid( double aGriSizeMM );
+    void   draw3DAxis();
 
     /**
      * Helper function BuildPadShapeThickOutlineAsPolygon:
@@ -272,7 +284,7 @@ private:
      * with a line thickness = aWidth
      * Used only to draw pads outlines on silkscreen layers.
      */
-    void BuildPadShapeThickOutlineAsPolygon( const D_PAD*          aPad,
+    void buildPadShapeThickOutlineAsPolygon( const D_PAD*          aPad,
                                              CPOLYGONS_LIST& aCornerBuffer,
                                              int             aWidth,
                                              int             aCircleToSegmentsCount,
@@ -280,54 +292,48 @@ private:
 
 
     /**
-     * Helper function Draw3DViaHole:
+     * Helper function draw3DViaHole:
      * Draw the via hole:
      * Build a vertical hole (a cylinder) between the first and the last via layers
      */
-    void   Draw3DViaHole( const VIA * aVia );
+    void   draw3DViaHole( const VIA * aVia );
 
     /**
-     * Helper function Draw3DPadHole:
+     * Helper function draw3DPadHole:
      * Draw the pad hole:
      * Build a vertical hole (round or oblong) between the front and back layers
      */
-    void   Draw3DPadHole( const D_PAD * aPad );
+    void   draw3DPadHole( const D_PAD * aPad );
 
     /**
-     * function Render3DComponentShape
+     * function render3DComponentShape
      * insert mesh in gl list
      * @param module
      * @param  aIsRenderingJustNonTransparentObjects = true to load non transparent objects
      * @param  aIsRenderingJustTransparentObjects = true to load non transparent objects
-     * @param  aSideToLoad = false will load not fliped, true will load fliped objects
      * in openGL, transparent objects should be drawn *after* non transparent objects
      */
-    void Render3DComponentShape( MODULE* module,
+    void render3DComponentShape( MODULE* module,
                                  bool aIsRenderingJustNonTransparentObjects,
-                                 bool aIsRenderingJustTransparentObjects,
-                                 bool aSideToLoad );
+                                 bool aIsRenderingJustTransparentObjects );
 
     /**
-     * function Read3DComponentShape
+     * function read3DComponentShape
      * read the 3D component shape(s) of the footprint (physical shape).
      * @param module
-     * @param model_parsers_list = list of each new model loaded
-     * @param model_filename_list = list of each new filename model loaded
      * @return true if load was succeeded, false otherwise
      */
-    bool Read3DComponentShape( MODULE* module,
-                               std::vector<S3D_MODEL_PARSER *>& model_parsers_list,
-                               std::vector<wxString>& model_filename_list );
+    bool read3DComponentShape( MODULE* module );
 
     /**
-     * function GenerateFakeShadowsTextures
+     * function generateFakeShadowsTextures
      * creates shadows of the board an footprints
      * for aesthetical purpose
      * @param aErrorMessages = a wxString to add error and warning messages
      * created by the build process (can be NULL)
      * @param aShowWarnings = true to show all messages, false to show errors only
      */
-    void   GenerateFakeShadowsTextures( wxString* aErrorMessages, bool aShowWarnings );
+    void   generateFakeShadowsTextures( wxString* aErrorMessages, bool aShowWarnings );
 
     DECLARE_EVENT_TABLE()
 };

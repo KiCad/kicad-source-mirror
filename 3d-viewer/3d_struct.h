@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
@@ -34,54 +34,12 @@
 #include <common.h>
 #include <base_struct.h>
 #include <3d_material.h>
-#include <gal/opengl/glm/glm.hpp>
+#include <3d_types.h>
+#include <CBBox.h>
 
-
-/**
- * @note For historical reasons the 3D modeling unit is 0.1 inch
- * 1 3Dunit = 2.54 mm = 0.1 inch = 100 mils
- */
-#define UNITS3D_TO_UNITSPCB (IU_PER_MILS * 100)
-
-/**
- * scaling factor for 3D shape offset ( S3D_MASTER::m_MatPosition member )
- * Was in inches in legacy version, and, due to a mistake, still in inches
- * in .kicad_pcb files (which are using mm)
- * so this scaling convert file units (inch) to 3D units (0.1 inch), only
- * for S3D_MASTER::m_MatPosition parameter
- */
-#define SCALE_3D_CONV 10
 
 class S3D_MASTER;
 class STRUCT_3D_SHAPE;
-
-// S3D_VERTEX manages a opengl 3D coordinate (3 float numbers: x,y,z coordinates)
-// float are widely used in opengl functions.
-// they are used here in coordinates which are also used in opengl functions.
-#define S3D_VERTEX glm::vec3
-
-// S3DPOINT manages a set of 3 double values (x,y,z )
-// It is used for values which are not directly used in opengl functions.
-// It is used in dialogs, or when reading/writing files for instance
-class S3DPOINT
-{
-public:
-    double x, y, z;
-
-public:
-    S3DPOINT()
-    {
-        x = y = z = 0.0;
-    }
-
-    S3DPOINT( double px, double py, double pz)
-    {
-        x = px;
-        y = py;
-        z = pz;
-    }
-};
-
 class S3D_MODEL_PARSER;
 
 // Master structure for a 3D footprint shape description
@@ -112,8 +70,10 @@ public:
     bool        m_use_modelfile_shininess;
 
 private:
-    wxString    m_Shape3DName;      // the 3D shape filename in 3D library
-    FILE3D_TYPE m_ShapeType;
+    wxString            m_Shape3DName;          ///< The 3D shape filename in 3D library
+    FILE3D_TYPE         m_ShapeType;            ///< Shape type based on filename extension
+    wxString            m_Shape3DFullFilename;  ///< Full file path name
+    wxString            m_Shape3DNameExtension; ///< Extension of the shape file name
 
 public:
     S3D_MASTER( EDA_ITEM* aParent );
@@ -131,8 +91,9 @@ public:
      * Function ReadData
      * Select the parser to read the 3D data file (vrml, x3d ...)
      * and build the description objects list
+     * @param aParser the parser that should be used to read model data and stored in
      */
-    int  ReadData();
+    int  ReadData( S3D_MODEL_PARSER* aParser );
 
     void Render( bool aIsRenderingJustNonTransparentObjects,
                  bool aIsRenderingJustTransparentObjects );
@@ -178,6 +139,12 @@ public:
     const wxString GetShape3DFullFilename();
 
     /**
+     * Function GetShape3DExtension
+     * @return the extension of the filename of the 3D shape,
+     */
+    const wxString GetShape3DExtension();
+
+    /**
      * Function SetShape3DName
      * @param aShapeName = file name of the data file relative to the 3D shape
      *
@@ -185,6 +152,23 @@ public:
      * (vrl, x3d, idf ) the type of file.
      */
     void SetShape3DName( const wxString& aShapeName );
+
+    /**
+     * Function getBBox Model Space Bouding Box
+     * @return return the model space bouding box
+     */
+    CBBOX &getBBox();
+
+    /**
+     * Function getFastAABBox
+     * @return return the Axis Align Bounding Box of the other bouding boxes
+     */
+    CBBOX &getFastAABBox();
+
+private:
+    void    calcBBox();
+    CBBOX   m_BBox;             ///< Model oriented Bouding Box
+    CBBOX   m_fastAABBox;       ///< Axis Align Bounding Box that contain the other bounding boxes
 };
 
 
@@ -206,32 +190,6 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
-};
-
-
-/**
- * Class S3DPOINT_VALUE_CTRL
- * displays a S3DPOINT for editing (in dialogs).  A S3DPOINT is a triplet of values
- * Values can be scale, rotation, offset...
- */
-class S3DPOINT_VALUE_CTRL
-{
-private:
-    wxTextCtrl*   m_XValueCtrl, * m_YValueCtrl, * m_ZValueCtrl;
-
-public:
-    S3DPOINT_VALUE_CTRL( wxWindow* parent, wxBoxSizer* BoxSizer );
-
-    ~S3DPOINT_VALUE_CTRL();
-
-    /**
-     * Function GetValue
-     * @return the 3D point in internal units.
-     */
-    S3DPOINT   GetValue();
-    void       SetValue( S3DPOINT a3Dpoint );
-    void       Enable( bool enbl );
-    void       SetToolTip( const wxString& text );
 };
 
 #endif // STRUCT_3D_H

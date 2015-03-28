@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 
 /**
  * @file vrml_aux.h
+ * @brief auxiliar functions to parse VRML files
  */
 
 #ifndef _VRML_AUX_H
@@ -48,10 +49,63 @@
 #endif
 #include <wx/glcanvas.h>
 
-int read_NotImplemented( FILE* File, char closeChar);
-int parseVertexList( FILE* File, std::vector< glm::vec3 > &dst_vector);
-int parseVertex( FILE* File, glm::vec3 &dst_vertex );
-int parseFloat( FILE* File, float *dst_float );
+/**
+ * Function GetEpoxyThicknessBIU
+ * skip a VRML block and eventualy internal blocks until it find the close char
+ * @param File file to read from
+ * @param closeChar the expected close char of the block
+ * @return int - -1 if failed, 0 if OK
+ */
+int Read_NotImplemented( FILE* File, char closeChar);
+
+
+/**
+ * Function ParseVertexList
+ * parse a vertex list
+ * @param File file to read from
+ * @param dst_vector destination vector list
+ * @return int - -1 if failed, 0 if OK
+ */
+int ParseVertexList( FILE* File, std::vector< glm::vec3 > &dst_vector);
+
+
+/**
+ * Function ParseVertex
+ * parse a vertex
+ * @param File file to read from
+ * @param dst_vertex destination vector
+ * @return int - return the number of elements readed
+ */
+int ParseVertex( FILE* File, glm::vec3 &dst_vertex );
+
+
+/**
+ * Function ParseFloat
+ * parse a float value
+ * @param File file to read from
+ * @param dst_float destination float
+ * @return int - Return the number of floats readed
+ */
+int ParseFloat( FILE* File, float *dst_float );
+
+/**
+ * Function GetNextTag
+ * parse the next tag
+ * @param File file to read from
+ * @param tag destination pointer
+ * @param len max length of storage
+ * @return bool - true if succeeded, false if EOF
+ */
 bool GetNextTag( FILE* File, char* tag, size_t len );
+
+/**
+ * Function GetString
+ * parse a string, it expects starting by " and end with "
+ * @param File file to read from
+ * @param aDstString destination pointer
+ * @param maxDstLen max length of storage
+ * @return bool - true if successful read the string, false if failed to get a string
+ */
+bool GetString( FILE* File, char* aDstString, size_t maxDstLen );
 
 #endif
