@@ -785,7 +785,7 @@ int VRML2_MODEL_PARSER::read_DEF()
             if( read_Transform() == 0 )
             {
                 std::string groupName = tagName;
-                //m_defGroupMap.insert( std::make_pair( groupName, new_mesh_model ) );
+
                 m_defGroupMap[groupName] = new_mesh_model;
 
                 wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "Group %s: inserted model with %lu points, %lu coordIndex, %lu childs." ),
@@ -808,8 +808,10 @@ int VRML2_MODEL_PARSER::read_DEF()
         }
         else
         {
-            wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "DEF %s %s NotImplemented, skipping." ), tagName, text );
+            debug_exit();
+            wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_DEF %s %s NotImplemented, skipping." ), tagName, text );
             Read_NotImplemented( m_file, '}' );
+            return 0;
         }
     }
 
@@ -878,12 +880,7 @@ int VRML2_MODEL_PARSER::read_Shape()
 
         if( strcmp( text, "appearance" ) == 0 )
         {
-            //wxLogTrace( traceVrmlV2Parser, wxT( "     \"appearance\" key word not supported." ) );
-            // skip
-        }
-        else if( strcmp( text, "Appearance" ) == 0 )
-        {
-            read_Appearance();
+            read_appearance();
         }
         else if( strcmp( text, "geometry" ) == 0 )
         {
@@ -899,7 +896,7 @@ int VRML2_MODEL_PARSER::read_Shape()
         }
         else
         {
-            wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "%s NotImplemented" ), text );
+            wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Shape %s NotImplemented" ), text );
             Read_NotImplemented( m_file, '}' );
         }
     }
@@ -964,6 +961,96 @@ int VRML2_MODEL_PARSER::read_geometry()
     return -1;
 }
 
+
+int VRML2_MODEL_PARSER::read_appearance()
+{
+    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_appearance" ) );
+    debug_enter();
+
+    S3D_MATERIAL* material = NULL;
+    char text[BUFLINE_SIZE];
+
+    while( GetNextTag( m_file, text, sizeof(text) ) )
+    {
+        if( *text == ']' )
+        {
+            continue;
+        }
+
+        if( *text == '}' )
+        {
+            debug_exit();
+            wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_appearance exit" ) );
+            return 0;
+        }
+
+        if( strcmp( text, "Appearance" ) == 0 )
+        {
+            int ret = read_Appearance();
+            debug_exit();
+            return ret;
+        }
+        else if( strcmp( text, "DEF" ) == 0 )
+        {
+            if( GetNextTag( m_file, text, sizeof(text) ) )
+            {
+                wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_appearance adding new material %s" ), text );
+
+                wxString mat_name;
+                mat_name = FROM_UTF8( text );
+
+                material = new S3D_MATERIAL( m_Master, mat_name );
+                m_Master->Insert( material );
+                m_model->m_Materials = material;
+
+                if( GetNextTag( m_file, text, sizeof(text) ) )
+                {
+                    if( strcmp( text, "Appearance" ) == 0 )
+                    {
+                        int ret = read_Appearance();
+                        debug_exit();
+                        return ret;
+                    }
+                }
+            }
+
+            // Exit loop with error
+            break;
+        }
+        else if( strcmp( text, "USE" ) == 0 )
+        {
+            if( GetNextTag( m_file, text, sizeof(text) ) )
+            {
+                wxString mat_name;
+                mat_name = FROM_UTF8( text );
+
+                for( material = m_Master->m_Materials; material; material = material->Next() )
+                {
+                    if( material->m_Name == mat_name )
+                    {
+                        m_model->m_Materials = material;
+                        debug_exit();
+                        return 0;
+                    }
+                }
+
+                wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_appearance error: material not found" ) );
+            }
+
+            // Exit loop with error
+            break;
+        }
+        else
+        {
+            // Exit loop with error
+            break;
+        }
+    }
+
+    debug_exit();
+    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_appearance failed" ) );
+    return -1;
+}
 
 int VRML2_MODEL_PARSER::read_Appearance()
 {

@@ -3850,6 +3850,12 @@ public:
         modulesAreFlipped = false;
 
         SetSpecctraMode( true );
+
+        // Avoid not initialized members:
+        routeResolution = NULL;
+        sessionBoard = NULL;
+        m_top_via_layer = 0;
+        m_bot_via_layer = 0;
     }
 
     virtual ~SPECCTRA_DB()

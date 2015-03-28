@@ -431,7 +431,9 @@ void PCB_MODULE::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
     }
 
     lNode   = lNode->GetParent();
-    lNode   = FindNode( lNode, wxT( "layerContents" ) );
+
+    if( lNode )
+        lNode = FindNode( lNode, wxT( "layerContents" ) );
 
     while( lNode )
     {

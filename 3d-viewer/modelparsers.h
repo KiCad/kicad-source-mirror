@@ -179,6 +179,7 @@ private:
     int read_DEF();
     int read_DEF_Coordinate();
     int read_Shape();
+    int read_appearance();
     int read_Appearance();
     int read_material();
     int read_Material();

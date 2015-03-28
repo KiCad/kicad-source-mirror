@@ -1,6 +1,7 @@
 boost_root
 .downloads-by-cmake
 Build
+build
 common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h
