@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -30,24 +30,12 @@
 #ifndef __3D_MESH_MODEL_H__
 #define __3D_MESH_MODEL_H__
 
-#include <fctsys.h>
-#include <common.h>
-#include <macros.h>
-#include <base_struct.h>
-#include <gal/opengl/glm/glm.hpp>
 #include <vector>
-#include <kicad_string.h>
-#include <info3d_visu.h>
-#ifdef __WXMAC__
-#  ifdef __DARWIN__
-#    include <OpenGL/glu.h>
-#  else
-#    include <glu.h>
-#  endif
-#else
-#  include <GL/glu.h>
-#endif
-#include <wx/glcanvas.h>
+#include <gal/opengl/glm/glm.hpp>
+#include "3d_struct.h"
+#include "3d_material.h"
+#include "CBBox.h"
+
 
 class S3D_MESH;
 
@@ -59,33 +47,31 @@ public:
     ~S3D_MESH();
 
     void openGL_RenderAllChilds( bool aIsRenderingJustNonTransparentObjects,
-                        bool aIsRenderingJustTransparentObjects );
+                                 bool aIsRenderingJustTransparentObjects );
 
-    S3D_MATERIAL    *m_Materials;
+    S3D_MATERIAL                    *m_Materials;
 
     // Point and index list
-    std::vector< glm::vec3 > m_Point;
+    std::vector< S3D_VERTEX >       m_Point;
     std::vector< std::vector<int> > m_CoordIndex;
     std::vector< std::vector<int> > m_NormalIndex;
-    std::vector< glm::vec3 > m_PerFaceNormalsNormalized;
-    std::vector< glm::vec3 > m_PerVertexNormalsNormalized;
+    std::vector< S3D_VERTEX >       m_PerFaceNormalsNormalized;
+    std::vector< S3D_VERTEX >       m_PerVertexNormalsNormalized;
+    std::vector< int >              m_MaterialIndex;
+    std::vector< S3D_MESH * >       childs;
 
-    std::vector< int > m_MaterialIndex;
+    S3D_VERTEX  m_translation;
+    glm::vec4   m_rotation;
+    S3D_VERTEX  m_scale;
 
-    glm::vec3 m_translation;
-    glm::vec4 m_rotation;
-    glm::vec3 m_scale;
-    glm::vec4 m_scaleOrientation; // not used
-    glm::vec3 m_center; // not used
-
-    std::vector<S3D_MESH *> childs;
+    CBBOX &getBBox();
 
 private:
-    std::vector< glm::vec3 > m_PerFaceNormalsRaw_X_PerFaceSquaredArea;
-    std::vector< std::vector< glm::vec3 > > m_PerFaceVertexNormals;
-    std::vector< glm::vec3 > m_PointNormalized;
+    std::vector< S3D_VERTEX >                 m_PerFaceNormalsRaw_X_PerFaceSquaredArea;
+    std::vector< std::vector< S3D_VERTEX > >  m_PerFaceVertexNormals;
+    std::vector< S3D_VERTEX >                 m_PointNormalized;
 
-    std::vector< std::vector<int> > m_InvalidCoordIndexes; //!TODO: check for invalid CoordIndex in file and remove the index and the same material index
+    std::vector< std::vector<int> >           m_InvalidCoordIndexes; //!TODO: check for invalid CoordIndex in file and remove the index and the same material index
 
     bool isPerFaceNormalsComputed;
     void calcPerFaceNormals ();
@@ -98,6 +84,11 @@ private:
 
     bool isPerVertexNormalsVerified;
     void perVertexNormalsVerify_and_Repair();
+
+    void calcBBox();
+    void calcBBoxAllChilds();
+
+    CBBOX   m_BBox;
 
     void openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                         bool aIsRenderingJustTransparentObjects );

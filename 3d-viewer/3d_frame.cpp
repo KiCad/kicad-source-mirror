@@ -57,6 +57,7 @@ static const wxChar keyRenderTextures[] =       wxT( "Render_Textures" );
 static const wxChar keyRenderSmoothNormals[] =  wxT( "Render_Smooth_Normals" );
 static const wxChar keyRenderUseModelNormals[] =wxT( "Render_Use_Model_Normals" );
 static const wxChar keyRenderMaterial[] =       wxT( "Render_Material" );
+static const wxChar keyRenderShowModelBBox[] =  wxT( "Render_ShowModelBoudingBoxes" );
 
 static const wxChar keyShowAxis[] =             wxT( "ShowAxis" );
 static const wxChar keyShowGrid[] =             wxT( "ShowGrid3D" );
@@ -257,6 +258,9 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyRenderMaterial, &tmp, false );
     prms.SetFlag( FL_RENDER_MATERIAL, tmp );
 
+    aCfg->Read( keyRenderShowModelBBox, &tmp, false );
+    prms.SetFlag( FL_RENDER_SHOW_MODEL_BBOX, tmp );
+    
     aCfg->Read( keyShowAxis, &tmp, true );
     prms.SetFlag( FL_AXIS, tmp );
 
@@ -319,7 +323,8 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyRenderSmoothNormals, prms.GetFlag( FL_RENDER_SMOOTH_NORMALS ) );
     aCfg->Write( keyRenderUseModelNormals, prms.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) );
     aCfg->Write( keyRenderMaterial, prms.GetFlag( FL_RENDER_MATERIAL ) );
-
+    aCfg->Write( keyRenderShowModelBBox, prms.GetFlag( FL_RENDER_SHOW_MODEL_BBOX ) );
+    
     aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS ) );
     aCfg->Write( keyShowGrid, prms.GetFlag( FL_GRID ) );
     aCfg->Write( keyShowGridSize, prms.m_3D_Grid );
@@ -509,6 +514,11 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         NewDisplay();
         return;
 
+    case ID_MENU3D_FL_RENDER_SHOW_MODEL_BBOX:
+        GetPrm3DVisu().SetFlag( FL_RENDER_SHOW_MODEL_BBOX, isChecked );
+        NewDisplay();
+        return;
+
     case ID_MENU3D_SHOW_BOARD_BODY:
         GetPrm3DVisu().SetFlag( FL_SHOW_BOARD_BODY, isChecked );
         NewDisplay();
@@ -526,43 +536,43 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_USE_COPPER_THICKNESS:
         GetPrm3DVisu().SetFlag( FL_USE_COPPER_THICKNESS, isChecked );
-        NewDisplay(GL_ID_BOARD);
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_BOARD );
+        NewDisplay( GL_ID_TECH_LAYERS );
         return;
 
     case ID_MENU3D_ZONE_ONOFF:
         GetPrm3DVisu().SetFlag( FL_ZONE, isChecked );
-        NewDisplay(GL_ID_BOARD);
+        NewDisplay( GL_ID_BOARD );
         return;
 
     case ID_MENU3D_ADHESIVE_ONOFF:
         GetPrm3DVisu().SetFlag( FL_ADHESIVE, isChecked );
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_TECH_LAYERS );
         return;
 
     case ID_MENU3D_SILKSCREEN_ONOFF:
         GetPrm3DVisu().SetFlag( FL_SILKSCREEN, isChecked );
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_TECH_LAYERS );
         return;
 
     case ID_MENU3D_SOLDER_MASK_ONOFF:
         GetPrm3DVisu().SetFlag( FL_SOLDERMASK, isChecked );
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_TECH_LAYERS );
         return;
 
     case ID_MENU3D_SOLDER_PASTE_ONOFF:
         GetPrm3DVisu().SetFlag( FL_SOLDERPASTE, isChecked );
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay();
         return;
 
     case ID_MENU3D_COMMENTS_ONOFF:
         GetPrm3DVisu().SetFlag( FL_COMMENTS, isChecked );
-        NewDisplay(GL_ID_AUX_LAYERS);
+        NewDisplay( GL_ID_AUX_LAYERS );
         return;
 
     case ID_MENU3D_ECO_ONOFF:
         GetPrm3DVisu().SetFlag( FL_ECO, isChecked );
-        NewDisplay(GL_ID_AUX_LAYERS);
+        NewDisplay( GL_ID_AUX_LAYERS );
         return;
 
     default:

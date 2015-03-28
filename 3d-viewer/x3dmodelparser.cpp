@@ -58,6 +58,14 @@ X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
 
 X3D_MODEL_PARSER::~X3D_MODEL_PARSER()
 {
+    for( unsigned int idx = 0; idx < childs.size(); idx++ )
+    {
+        if( childs[idx] )
+        {
+            delete childs[idx];
+            childs[idx] = 0;
+        }
+    }
 }
 
 

@@ -35,7 +35,6 @@
 #include <3d_mesh_model.h>
 
 class S3D_MASTER;
-class S3D_MODEL_PARSER;
 class X3D_MODEL_PARSER;
 
 /**
@@ -49,13 +48,7 @@ public:
         master( aMaster )
     {}
 
-    ~S3D_MODEL_PARSER()
-    {
-        for( unsigned int idx = 0; idx < childs.size(); idx++ )
-        {
-            delete childs[idx];
-        }
-    }
+    virtual ~S3D_MODEL_PARSER(){}
 
     S3D_MASTER* GetMaster()
     {
@@ -73,22 +66,14 @@ public:
     static S3D_MODEL_PARSER* Create( S3D_MASTER* aMaster, const wxString aExtension );
 
     /**
-     * pure virtual Function
+     * virtual Function
      * Concrete parsers should implement this function
      * @param aFilename = the full file name of the file to load
      * @return true if as succeeded
      */
-    virtual bool Load( const wxString& aFilename ) = 0;
-
-    /**
-     * Function Render
-     * Render the model to openGL. The arguments can be both false but just only one
-     * can be true.
-     * @param aIsRenderingJustNonTransparentObjects
-     * @param aIsRenderingJustTransparentObjects
-     */
-    void Render( bool aIsRenderingJustNonTransparentObjects,
-                 bool aIsRenderingJustTransparentObjects );
+    virtual bool Load( const wxString& aFilename ) { 
+        return false;
+    };
 
     std::vector< S3D_MESH* > childs;
 
@@ -158,6 +143,7 @@ private:
 
 
 typedef std::map< std::string, std::vector< glm::vec3 > > VRML2_COORDINATE_MAP;
+typedef std::map< std::string, S3D_MESH* > VRML2_DEF_GROUP_MAP;
 
 /**
  * class VRML2_MODEL_PARSER
@@ -172,6 +158,15 @@ public:
     bool Load( const wxString& aFilename );
 
     /**
+     * Function Load
+     * Load a VRML2 filename and apply a transformation to the root
+     * @param aFilename file name with path
+     * @param aTransformationModel a model with translation, rotation and scale to apply to default root
+     * @return bool - true if finnished with success
+     */
+    bool Load( const wxString& aFilename, S3D_MESH *aTransformationModel );
+
+    /**
      * Return string representing VRML2 file in vrml2 format
      * Function Load must be called before this function, otherwise empty
      * data set is returned.
@@ -179,6 +174,7 @@ public:
     wxString VRML2_representation();
 
 private:
+    int loadFileModel( S3D_MESH *transformationModel );
     int read_Transform();
     int read_DEF();
     int read_DEF_Coordinate();
@@ -195,16 +191,33 @@ private:
     int read_Color();
     int read_coordIndex();
     int read_colorIndex();
-    int read_USE();
+    int read_geometry();
+    int read_IndexedFaceSet_USE();
+    int read_Transform_USE();
+    int read_Inline();
+
+    /** Function debug_enter
+     * Used in debug to increase a ' ' in the m_debugSpacer,
+     * should be called after the first debug comment in a function
+     */
+    void debug_enter();
+
+    /** Function debug_exit
+     * Used in debug to decrease a ' ' in the m_debugSpacer,
+     * should be called before the last debug comment in a funtion before exit
+     */
+    void debug_exit();
 
     bool                      m_normalPerVertex;
     bool                      colorPerVertex;
-    S3D_MESH*                 m_model;
+    S3D_MESH*                 m_model;              ///< It stores the current model that the parsing is adding data
     FILE*                     m_file;
-    wxString                  m_Filename;
+    wxFileName                m_Filename;
     VRML2_COORDINATE_MAP      m_defCoordinateMap;
+    VRML2_DEF_GROUP_MAP       m_defGroupMap;        ///< Stores a list of labels for groups and meshs that will be used later by the USE keyword
     S3D_MODEL_PARSER*         m_ModelParser;
     S3D_MASTER*               m_Master;
+    wxString                  m_debugSpacer;        ///< Used to give identation space
 };
 
 
@@ -267,7 +280,6 @@ public:
      * by the vrml file data
      */
     VRML_MODEL_PARSER( S3D_MASTER* aMaster );
-
     ~VRML_MODEL_PARSER();
 
     /**
@@ -279,11 +291,6 @@ public:
      * to our internal units.
      */
     bool Load( const wxString& aFilename );
-
-private:
-    S3D_MASTER*         m_curr3DShape;  ///< the current 3D shape to build from the file
-    VRML1_MODEL_PARSER* vrml1_parser;
-    VRML2_MODEL_PARSER* vrml2_parser;
 };
 
 

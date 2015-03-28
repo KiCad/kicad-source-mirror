@@ -231,10 +231,19 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
  */
 double INFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped )
 {
-    // NOTE: Z position to display modules in top of Paste and near the shadow
-    if(  aIsFlipped )
-        return m_layerZcoord[B_Paste] - ( m_copperThickness / 2 );
+    if( aIsFlipped )
+    {
+        if( g_Parm_3D_Visu.GetFlag( FL_SOLDERPASTE ) )
+            return m_layerZcoord[B_SilkS] - ( m_copperThickness / 2.0 );
+        else
+            return m_layerZcoord[B_Paste] - ( m_copperThickness / 2.0 );
+    }
     else
-        return m_layerZcoord[F_Paste] + ( m_copperThickness / 2 );
+    {
+        if( g_Parm_3D_Visu.GetFlag( FL_SOLDERPASTE ) )
+            return m_layerZcoord[F_SilkS] + ( m_copperThickness / 2.0 );
+        else
+            return m_layerZcoord[F_Paste] + ( m_copperThickness / 2.0 );
+    }
 }
 

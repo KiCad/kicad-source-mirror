@@ -22,17 +22,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+ /**
+ * @file CImage.cpp
+ * @brief one 8bit-channel image implementation
+ */
+
 #include "CImage.h"
+#include <wx/image.h>                                                           // Used for save an image to disk
+#include <string.h>                                                             // For memcpy
 
+#ifndef CLAMP
 #define CLAMP(n, min, max) {if (n < min) n=min; else if (n > max) n = max;}
+#endif
 
 
-CIMAGE::CIMAGE( unsigned int xsize, unsigned int ysize )
+CIMAGE::CIMAGE( unsigned int aXsize, unsigned int aYsize )
 {
-    m_pixels  = (unsigned char*)malloc( xsize * ysize );
-    m_width   = xsize;
-    m_height  = ysize;
-    m_wxh     = xsize * ysize;
+    m_wxh     = aXsize * aYsize;
+    m_pixels  = (unsigned char*)malloc( m_wxh );
+    m_width   = aXsize;
+    m_height  = aYsize;
     m_wraping = (E_WRAP)WRAP_CLAMP;
 }
 
@@ -43,10 +52,16 @@ CIMAGE::~CIMAGE()
 }
 
 
-bool CIMAGE::wrapCoords( int *xo, int *yo )
+unsigned char* CIMAGE::GetBuffer() const
 {
-    int x = *xo;
-    int y = *yo;
+    return m_pixels;
+}
+
+
+bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
+{
+    int x = *aXo;
+    int y = *aYo;
 
     switch(m_wraping)
     {
@@ -66,40 +81,41 @@ bool CIMAGE::wrapCoords( int *xo, int *yo )
         break;
     }
     
-    if( (x < 0) || (x >= (int)m_width) || (y < 0) || (y >= (int)m_height))
+    if( (x < 0) || (x >= (int)m_width) ||
+        (y < 0) || (y >= (int)m_height) )
         return false;
     
-    *xo = x;
-    *yo = y;
+    *aXo = x;
+    *aYo = y;
 
     return true;
 }
 
 
-void CIMAGE::setpixel( int x, int y, unsigned char value )
+void CIMAGE::Setpixel( int aX, int aY, unsigned char aValue )
 {
-    if( wrapCoords( &x, &y ) )
-        m_pixels[x + y * m_width] = value;
+    if( wrapCoords( &aX, &aY ) )
+        m_pixels[aX + aY * m_width] = aValue;
 }
 
 
-unsigned char CIMAGE::getpixel(int x, int y)
+unsigned char CIMAGE::Getpixel( int aX, int aY ) const
 {
-    if( wrapCoords( &x, &y ) )
-        return m_pixels[x + y * m_width];
+    if( wrapCoords( &aX, &aY ) )
+        return m_pixels[aX + aY * m_width];
     else
         return 0;
 }
 
 
-void CIMAGE::invert()
+void CIMAGE::Invert()
 {
-    for( unsigned int it = 0;it < m_wxh; it++ )
+    for( unsigned int it = 0; it < m_wxh; it++ )
         m_pixels[it] = 255 - m_pixels[it];
 }
 
 
-void CIMAGE::copyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOperation )
+void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOperation )
 {
     int aV, bV;
 
@@ -116,105 +132,116 @@ void CIMAGE::copyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
 
     switch(aOperation)
     {
-        case COPY_RAW:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-                m_pixels[it] = aImgA->m_pixels[it];
-        break;
+    case COPY_RAW:
+        memcpy( m_pixels, aImgA->m_pixels, m_wxh );
+    break;
 
-        case COPY_ADD:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                aV = aImgA->m_pixels[it];
-                bV = aImgB->m_pixels[it];
+    case COPY_ADD:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            aV = aImgA->m_pixels[it];
+            bV = aImgB->m_pixels[it];
 
-                aV = (aV + bV);
-                aV = (aV > 255)?255:aV;
+            aV = (aV + bV);
+            aV = (aV > 255)?255:aV;
 
-                m_pixels[it] = aV;
-            }
-        break;
+            m_pixels[it] = aV;
+        }
+    break;
 
-        case COPY_SUB:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                aV = aImgA->m_pixels[it];
-                bV = aImgB->m_pixels[it];
+    case COPY_SUB:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            aV = aImgA->m_pixels[it];
+            bV = aImgB->m_pixels[it];
 
-                aV = (aV - bV);
-                aV = (aV < 0)?0:aV;
+            aV = (aV - bV);
+            aV = (aV < 0)?0:aV;
 
-                m_pixels[it] = aV;
-            }
-        break;
+            m_pixels[it] = aV;
+        }
+    break;
 
-        case COPY_DIF:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                aV = aImgA->m_pixels[it];
-                bV = aImgB->m_pixels[it];
+    case COPY_DIF:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            aV = aImgA->m_pixels[it];
+            bV = aImgB->m_pixels[it];
 
-                m_pixels[it] = abs(aV - bV);
-            }
-        break;
+            m_pixels[it] = abs(aV - bV);
+        }
+    break;
 
-        case COPY_MUL:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                aV = aImgA->m_pixels[it];
-                bV = aImgB->m_pixels[it];
+    case COPY_MUL:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            aV = aImgA->m_pixels[it];
+            bV = aImgB->m_pixels[it];
 
-                m_pixels[it] = (unsigned char)((((float)aV / 255.0f) * ((float)bV / 255.0f)) * 255);
-            }
-        break;
+            m_pixels[it] = (unsigned char)((((float)aV / 255.0f) * ((float)bV / 255.0f)) * 255);
+        }
+    break;
 
-        case COPY_AND:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                m_pixels[it] = aImgA->m_pixels[it] & aImgB->m_pixels[it];
-            }
-        break;
+    case COPY_AND:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            m_pixels[it] = aImgA->m_pixels[it] & aImgB->m_pixels[it];
+        }
+    break;
 
-        case COPY_OR:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                m_pixels[it] = aImgA->m_pixels[it] | aImgB->m_pixels[it];
-            }
-        break;
+    case COPY_OR:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            m_pixels[it] = aImgA->m_pixels[it] | aImgB->m_pixels[it];
+        }
+    break;
 
-        case COPY_XOR:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                m_pixels[it] = aImgA->m_pixels[it] ^ aImgB->m_pixels[it];
-            }
-        break;
-        
-        case COPY_BLEND50:
-        break;
+    case COPY_XOR:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            m_pixels[it] = aImgA->m_pixels[it] ^ aImgB->m_pixels[it];
+        }
+    break;
+    
+    case COPY_BLEND50:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            aV = aImgA->m_pixels[it];
+            bV = aImgB->m_pixels[it];
 
-        case COPY_MIN:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                aV = aImgA->m_pixels[it];
-                bV = aImgB->m_pixels[it];
+            m_pixels[it] = (aV + bV) / 2;
+        }
+    break;
 
-                m_pixels[it] = (aV < bV)?aV:bV;
-            }
-        break;
+    case COPY_MIN:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            aV = aImgA->m_pixels[it];
+            bV = aImgB->m_pixels[it];
 
-        case COPY_MAX:
-            for( unsigned int it = 0;it < m_wxh; it++ )
-            {
-                aV = aImgA->m_pixels[it];
-                bV = aImgB->m_pixels[it];
+            m_pixels[it] = (aV < bV)?aV:bV;
+        }
+    break;
 
-                m_pixels[it] = (aV > bV)?aV:bV;
-            }
-        break;
+    case COPY_MAX:
+        for( unsigned int it = 0;it < m_wxh; it++ )
+        {
+            aV = aImgA->m_pixels[it];
+            bV = aImgB->m_pixels[it];
+
+            m_pixels[it] = (aV > bV)?aV:bV;
+        }
+    break;
+
+    default:
+    break;
     }
 }
 
-
-S_FILTER FILTERS[9] =   {
+// TIP: If you want create or test filters you can use GIMP
+// with a generic convolution matrix and get the values from there.
+// http://docs.gimp.org/nl/plug-in-convmatrix.html
+static const S_FILTER FILTERS[] =   {
     // Hi Pass
     {
     {   { 0, -1, -1, -1,  0},
@@ -230,17 +257,28 @@ S_FILTER FILTERS[9] =   {
     // Blur
     {
     {   { 3,  5,  7,  5,  3},
-        { 4,  9, 12,  9,  5},
+        { 5,  9, 12,  9,  5},
         { 7, 12, 20, 12,  7},
-        { 4,  9, 12,  9,  5},
+        { 5,  9, 12,  9,  5},
         { 3,  5,  7,  5,  3}
     },
-        180,
+        182,
         0
     },
 
+    // Blur Invert
+    {
+    {   { 0,  0,  0,  0,  0},
+        { 0,  0, -1,  0,  0},
+        { 0, -1,  0, -1,  0},
+        { 0,  0, -1,  0,  0},
+        { 0,  0,  0,  0,  0}
+    },
+        4,
+        255
+    },
 
-    // KS 01
+    //
     {
     {   { 0,  2,  4,  2,  0},
         { 2, -2,  1, -2,  2},
@@ -326,30 +364,40 @@ S_FILTER FILTERS[9] =   {
 };// Filters
 
 
-void CIMAGE::efxFilter( CIMAGE *aInImg, float aGain, E_FILTER aFilterType )
+//!TODO: This functions can be optimized slipting it between the edges and
+//       do it without use the getpixel function.
+//       Optimization can be done to m_pixels[ix + iy * m_width]
+//       but keep in mind the parallel process of the algorithm
+void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
 {
     S_FILTER filter = FILTERS[aFilterType];
 
     aInImg->m_wraping = WRAP_CLAMP;
     m_wraping = WRAP_CLAMP;
 
+    #ifdef USE_OPENMP
+    #pragma omp parallel for
+    #endif /* USE_OPENMP */
+    
     for( int iy = 0; iy < (int)m_height; iy++)
     {
         for( int ix = 0; ix < (int)m_width; ix++ )
         {
-            int v = filter.offset;
+            int v = 0;
 
             for( int sy = 0; sy < 5; sy++ )
             {
                 for( int sx = 0; sx < 5; sx++ )
                 {
                     int factor = filter.kernel[sx][sy];
-                    unsigned char pixelv = aInImg->getpixel( ix + sx - 2, iy + sy - 2 );
+                    unsigned char pixelv = aInImg->Getpixel( ix + sx - 2, iy + sy - 2 );
                     v += pixelv * factor;
                 }
             }
             
             v /= filter.div;
+
+            v += filter.offset;
 
             CLAMP(v, 0, 255);
 
@@ -359,7 +407,7 @@ void CIMAGE::efxFilter( CIMAGE *aInImg, float aGain, E_FILTER aFilterType )
 }
 
 
-void CIMAGE::setPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
+void CIMAGE::SetPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
 {
     for( unsigned int i = 0; i < m_wxh; i++ )
     {
@@ -370,26 +418,23 @@ void CIMAGE::setPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
 }
 
 
-void CIMAGE::saveAsPNG( wxString aFileName )
+void CIMAGE::SaveAsPNG( wxString aFileName ) const
 {
-    unsigned char*       pixelbuffer = (unsigned char*) malloc( m_wxh * 3 );
-    //unsigned char*       alphabuffer = (unsigned char*) malloc( m_width * aHeight );
-    
+    unsigned char* pixelbuffer = (unsigned char*) malloc( m_wxh * 3 );
+   
     wxImage image( m_width, m_height );
 
     for( unsigned int i = 0; i < m_wxh; i++)
     {
         unsigned char v = m_pixels[i];
+        // Set RGB value with all same values intensities
         pixelbuffer[i * 3 + 0] = v;
         pixelbuffer[i * 3 + 1] = v;
         pixelbuffer[i * 3 + 2] = v;
-        //alphabuffer[i * 1 + 0] = aRGBABufferImage[i * 4 + 3];
     }
 
     image.SetData( pixelbuffer );
-    //image.SetAlpha( alphabuffer );
     image = image.Mirror( false );
     image.SaveFile( aFileName + ".png", wxBITMAP_TYPE_PNG );
     image.Destroy();
 }
-

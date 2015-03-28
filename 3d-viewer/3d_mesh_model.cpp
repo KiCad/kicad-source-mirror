@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -27,33 +27,130 @@
  * @brief
  */
 
-
+#include <fctsys.h>
 #include <3d_mesh_model.h>
 #include <boost/geometry/algorithms/area.hpp>
+#include <gal/opengl/glm/gtc/matrix_transform.hpp>
+ #include <gal/opengl/glm/glm.hpp>
+
+#ifdef __WXMAC__
+#  ifdef __DARWIN__
+#    include <OpenGL/glu.h>
+#  else
+#    include <glu.h>
+#  endif
+#else
+#  include <GL/glu.h>
+#endif
 
 #ifdef USE_OPENMP
 #include <omp.h>
 #endif  // USE_OPENMP
 
+#include "info3d_visu.h"
+
+
 S3D_MESH::S3D_MESH()
 {
-    isPerFaceNormalsComputed = false;
-    isPointNormalizedComputed = false;
-    isPerPointNormalsComputed = false;
-    isPerVertexNormalsVerified = false;
+    isPerFaceNormalsComputed    = false;
+    isPointNormalizedComputed   = false;
+    isPerPointNormalsComputed   = false;
+    isPerVertexNormalsVerified  = false;
     m_Materials = NULL;
     childs.clear();
 
-    m_translation = glm::vec3( 0.0f, 0.0f, 0.0f );
-    m_rotation = glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f );
-    m_scale = glm::vec3( 1.0f, 1.0f, 1.0f );
-    m_scaleOrientation = glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f );  // not used
-    m_center = glm::vec3( 0.0f, 0.0f, 0.0f );                  // not used
+    m_translation   = glm::vec3( 0.0f, 0.0f, 0.0f );
+    m_rotation      = glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f );
+    m_scale         = glm::vec3( 1.0f, 1.0f, 1.0f );
 }
 
 
 S3D_MESH::~S3D_MESH()
 {
+    for( unsigned int idx = 0; idx < childs.size(); idx++ )
+    {
+        if( childs[idx] )
+        {
+            delete childs[idx];
+        }
+    }
+}
+
+
+CBBOX &S3D_MESH::getBBox( )
+{
+    if( !m_BBox.IsInitialized() )
+        calcBBoxAllChilds();
+    
+    return m_BBox;
+}
+
+
+void S3D_MESH::calcBBoxAllChilds( )
+{
+    // Calc your own boudingbox
+    calcBBox();
+
+    for( unsigned int idx = 0; idx < childs.size(); idx++ )
+        m_BBox.Union( childs[idx]->getBBox() );
+
+    CBBOX tmpBBox = m_BBox;
+
+    // Calc transformation matrix
+    glm::mat4 fullTransformMatrix;
+    glm::mat4   translationMatrix       = glm::translate( glm::mat4(),       m_translation );
+    
+    if( m_rotation[3] != 0.0f )
+    {
+        glm::mat4   rotationMatrix      = glm::rotate(    translationMatrix, m_rotation[3],
+                                                                             S3D_VERTEX( m_rotation[0], m_rotation[1], m_rotation[2] ) );
+                    fullTransformMatrix = glm::scale(     rotationMatrix,    m_scale );
+    }
+    else
+        fullTransformMatrix = glm::scale(     translationMatrix, m_scale );
+
+    
+    // Apply transformation
+    m_BBox.Set( S3D_VERTEX( fullTransformMatrix * glm::vec4( tmpBBox.Min(), 1.0f ) ),
+                S3D_VERTEX( fullTransformMatrix * glm::vec4( tmpBBox.Max(), 1.0f ) ) );
+}
+
+
+void S3D_MESH::calcBBox( )
+{
+    CBBOX tmpBBox;
+
+    bool firstBBox = true;
+
+    bool useMaterial = g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL );
+
+    // Do not add complete transparent materials
+    if( useMaterial && (m_Materials != 0) && ( m_MaterialIndex.size() == 0 ) )
+        if( m_Materials->m_Transparency.size() > 0 )
+            if( m_Materials->m_Transparency[0] >= 1.0f )
+                return;
+
+
+    // Calc boudingbox for all coords
+    for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
+    {
+        // Do not add complete transparent materials
+        if( useMaterial && (m_Materials != 0) && ( m_MaterialIndex.size() > idx ) )
+            if( (int)m_Materials->m_Transparency.size() > m_MaterialIndex[idx] )
+                if( m_Materials->m_Transparency[m_MaterialIndex[idx]] >= 1.0f )
+                    continue;
+
+        for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+            if( firstBBox )
+            {
+                firstBBox = false;
+                tmpBBox = CBBOX( m_Point[m_CoordIndex[idx][ii]] );              // Initialize with the first vertex found
+            }
+            else
+                tmpBBox.Union( m_Point[m_CoordIndex[idx][ii]] );
+    }
+
+    m_BBox = tmpBBox;
 }
 
 
@@ -72,11 +169,11 @@ void S3D_MESH::openGL_RenderAllChilds(  bool aIsRenderingJustNonTransparentObjec
     openGL_Render( aIsRenderingJustNonTransparentObjects,
                    aIsRenderingJustTransparentObjects );
 
-    // Render childs
+    // Render childs recursively
     for( unsigned int idx = 0; idx < childs.size(); idx++ )
     {
-        childs[idx]->openGL_Render( aIsRenderingJustNonTransparentObjects,
-                                    aIsRenderingJustTransparentObjects );
+        childs[idx]->openGL_RenderAllChilds( aIsRenderingJustNonTransparentObjects,
+                                             aIsRenderingJustTransparentObjects );
     }
 
     SetOpenGlDefaultMaterial();
@@ -142,7 +239,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
     {
         if( m_Materials )
         {
-            if ( m_MaterialIndex.size() > 0 )
+            if ( m_MaterialIndex.size() > idx )
             {
                 bool isTransparent = m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx], useMaterial );
                 
@@ -153,9 +250,9 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                     continue;
 
                 if( useMaterial )
-                    if( m_Materials->m_Transparency.size() > idx )
-                        if( m_Materials->m_Transparency[idx] >= 1.0f )
-                            return;
+                    if( (int)m_Materials->m_Transparency.size() > m_MaterialIndex[idx] )
+                        if( m_Materials->m_Transparency[m_MaterialIndex[idx]] >= 1.0f )
+                            continue;
             }
             else
             {
@@ -270,37 +367,37 @@ void S3D_MESH::perVertexNormalsVerify_and_Repair()
     {
         glm::vec3 normal = m_PerVertexNormalsNormalized[idx];
 
-        if( (normal.x == 1.0) && ((normal.y != 0.0) || (normal.z != 0.0)) )
+        if( (normal.x == 1.0f) && ((normal.y != 0.0f) || (normal.z != 0.0f)) )
         {
-            normal.y = 0.0;
-            normal.z = 0.0;
+            normal.y = 0.0f;
+            normal.z = 0.0f;
         }
         else
-        if( (normal.y == 1.0) && ((normal.x != 0.0) || (normal.z != 0.0)) )
+        if( (normal.y == 1.0f) && ((normal.x != 0.0f) || (normal.z != 0.0f)) )
         {
-            normal.x = 0.0;
-            normal.z = 0.0;
+            normal.x = 0.0f;
+            normal.z = 0.0f;
         }
         else
-        if( (normal.z == 1.0) && ((normal.x != 0.0) || (normal.y != 0.0)) )
+        if( (normal.z == 1.0f) && ((normal.x != 0.0f) || (normal.y != 0.0f)) )
         {
-            normal.x = 0.0;
-            normal.y = 0.0;
+            normal.x = 0.0f;
+            normal.y = 0.0f;
         }
         else
         if( (normal.x < FLT_EPSILON) && (normal.x > -FLT_EPSILON) )
         {
-            normal.x = 0.0;
+            normal.x = 0.0f;
         }
         else
         if( (normal.y < FLT_EPSILON) && (normal.y > -FLT_EPSILON) )
         {
-            normal.y = 0.0;
+            normal.y = 0.0f;
         }
         else
         if( (normal.z < FLT_EPSILON) && (normal.z > -FLT_EPSILON) )
         {
-            normal.z = 0.0;
+            normal.z = 0.0f;
         }
 
         float l = glm::length( normal );
@@ -327,10 +424,6 @@ void S3D_MESH::calcPointNormalized()
         return;
 
     isPointNormalizedComputed = true;
-
-    /*
-    m_PointNormalized = m_Point;
-    */
 
     m_PointNormalized.clear();
     m_PointNormalized.resize( m_Point.size() );
@@ -406,9 +499,9 @@ void S3D_MESH::calcPerFaceNormals()
     {
         glm::vec3 cross_prod;
 
-        cross_prod.x = 0.0;
-        cross_prod.y = 0.0;
-        cross_prod.z = 0.0;
+        cross_prod.x = 0.0f;
+        cross_prod.y = 0.0f;
+        cross_prod.z = 0.0f;
 
         // Newell's Method
         // http://www.opengl.org/wiki/Calculating_a_Surface_Normal
@@ -434,15 +527,6 @@ void S3D_MESH::calcPerFaceNormals()
         float area = glm::dot( cross_prod, cross_prod );
         area = fabs( area );
 
-        // Dont remmember why this code was used for..
-        /*
-        if( cross_prod[2] < 0.0 )
-            area = -area;
-
-        if( area < FLT_EPSILON )
-            area = FLT_EPSILON * 2.0f;
-        */
-
         m_PerFaceNormalsRaw_X_PerFaceSquaredArea[idx] = cross_prod * area;
 
         if( haveAlreadyNormals_from_model_file == false )
@@ -456,35 +540,35 @@ void S3D_MESH::calcPerFaceNormals()
             }
             else
             {
-                DBG( printf( "Cannot calc normal idx: %u cross(%f, %f, %f) l:%f m_CoordIndex[idx].size: %u\n",
+/*                DBG( printf( "Cannot calc normal idx: %u cross(%f, %f, %f) l:%f m_CoordIndex[idx].size: %u\n",
                         idx,
                         cross_prod.x, cross_prod.y, cross_prod.z,
                         l,
                         (unsigned int)m_CoordIndex[idx].size()) );
-
+*/
                 if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )
                 {
-                    cross_prod.x = 0.0;
-                    cross_prod.y = 1.0;
-                    cross_prod.z = 0.0;
+                    cross_prod.x = 0.0f;
+                    cross_prod.y = 1.0f;
+                    cross_prod.z = 0.0f;
                 }
                 else if( ( cross_prod.y > cross_prod.x ) && ( cross_prod.y > cross_prod.z ) )
                 {
-                    cross_prod.x = 0.0;
-                    cross_prod.y = 1.0;
-                    cross_prod.z = 0.0;
+                    cross_prod.x = 0.0f;
+                    cross_prod.y = 1.0f;
+                    cross_prod.z = 0.0f;
                 }
                 else if( ( cross_prod.z > cross_prod.x ) && ( cross_prod.z > cross_prod.y ) )
                 {
-                    cross_prod.x = 0.0;
-                    cross_prod.y = 0.0;
-                    cross_prod.z = 1.0;
+                    cross_prod.x = 0.0f;
+                    cross_prod.y = 0.0f;
+                    cross_prod.z = 1.0f;
                 }
                 else
                 {
-                    cross_prod.x = 0.0;
-                    cross_prod.y = 0.0;
-                    cross_prod.z = 0.0;
+                    cross_prod.x = 0.0f;
+                    cross_prod.y = 0.0f;
+                    cross_prod.z = 0.0f;
                 }
             }
 
@@ -494,6 +578,7 @@ void S3D_MESH::calcPerFaceNormals()
 }
 
 
+// Documentation literature
 // http://www.bytehazard.com/code/vertnorm.html
 // http://www.emeyex.com/site/tuts/VertexNormals.pdf
 void S3D_MESH::calcPerPointNormals()

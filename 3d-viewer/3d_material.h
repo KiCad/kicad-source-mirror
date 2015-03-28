@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2014-2015 Mario Luzeiro <mrluzeiro@gmail.com>
  * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -45,8 +45,8 @@ public:
     std::vector< glm::vec3 > m_DiffuseColor;
     std::vector< glm::vec3 > m_EmissiveColor;
     std::vector< glm::vec3 > m_SpecularColor;
-    std::vector< float > m_Shininess;
-    std::vector< float > m_Transparency;
+    std::vector< float >     m_Shininess;
+    std::vector< float >     m_Transparency;
 
 public:
     S3D_MATERIAL( S3D_MASTER* father, const wxString& name );
