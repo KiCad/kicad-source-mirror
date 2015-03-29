@@ -69,6 +69,7 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_HELP, CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, CVPCB_MAINFRAME::GetKicadAbout )
     EVT_MENU( ID_SAVE_PROJECT, CVPCB_MAINFRAME::SaveProjectFile )
+    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, CVPCB_MAINFRAME::OnConfigurePaths )
     EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnKeepOpenOnSave )
     EVT_MENU( ID_CVPCB_EQUFILES_LIST_EDIT, CVPCB_MAINFRAME::OnEditEquFilesList )
 
@@ -1033,4 +1034,10 @@ DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFpViewerFrame()
 {
     // returns the Footprint Viewer frame, if exists, or NULL
     return (DISPLAY_FOOTPRINTS_FRAME*) wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME );
+}
+
+
+void CVPCB_MAINFRAME::OnConfigurePaths( wxCommandEvent& aEvent )
+{
+    Pgm().ConfigurePaths( this );
 }

@@ -275,6 +275,7 @@ public:
     void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
+    void OnConfigurePaths( wxCommandEvent& aEvent );
 
     /**
      * Function RecordMacros.

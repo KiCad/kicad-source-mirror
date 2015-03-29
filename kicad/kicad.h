@@ -185,6 +185,7 @@ public:
     void OnRunPcbCalculator( wxCommandEvent& event );
     void OnRunPageLayoutEditor( wxCommandEvent& event );
 
+    void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnOpenFileInEditor( wxCommandEvent& event );

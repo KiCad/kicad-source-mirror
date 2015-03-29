@@ -142,6 +142,8 @@ public:
      */
     void             OnEditFootprintLibraryTable( wxCommandEvent& aEvent );
 
+    void             OnConfigurePaths( wxCommandEvent& aEvent );
+
     /**
      * Function OnEditEquFilesList
      * envokes the equ files list edit dialog.

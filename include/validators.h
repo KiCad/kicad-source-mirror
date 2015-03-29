@@ -60,4 +60,23 @@ public:
     FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = NULL );
 };
 
+/**
+ * Class ENVIRONMENT_VARIABLE_CHAR_VALIDATOR
+ *
+ * This class provides a custome wxValidator object for limiting the allowable characters
+ * when defining an environment varaible name in a text edit control.  Only uppercase,
+ * numbers, and underscore (_) characters are valid and the first character of the name
+ * cannot start with a number.  This is according to IEEE Std 1003.1-2001.  Even though
+ * most systems support other characters, these characters guarantee compatibility for
+ * all shells.
+ */
+class ENVIRONMENT_VARIABLE_CHAR_VALIDATOR : public wxTextValidator
+{
+public:
+    ENVIRONMENT_VARIABLE_CHAR_VALIDATOR( wxString* aValue = NULL );
+
+protected:
+    void OnChar( wxKeyEvent& aEvent );
+};
+
 #endif  // #ifndef VALIDATORS_H

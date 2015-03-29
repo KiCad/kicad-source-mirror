@@ -44,14 +44,13 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_TOOL( ID_NEW_PROJECT, KICAD_MANAGER_FRAME::OnLoadProject )
     EVT_TOOL( ID_NEW_PROJECT_FROM_TEMPLATE, KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate )
     EVT_TOOL( ID_LOAD_PROJECT, KICAD_MANAGER_FRAME::OnLoadProject )
-    EVT_TOOL( ID_SAVE_PROJECT, KICAD_MANAGER_FRAME::OnSaveProject )
-    EVT_TOOL( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
 
     // Menu events
     EVT_MENU( ID_SAVE_PROJECT, KICAD_MANAGER_FRAME::OnSaveProject )
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
     EVT_MENU( ID_TO_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
     EVT_MENU( ID_BROWSE_AN_SELECT_FILE, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
+    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, KICAD_MANAGER_FRAME::OnConfigurePaths )
     EVT_MENU( ID_SELECT_PREFERED_EDITOR, EDA_BASE_FRAME::OnSelectPreferredEditor )
     EVT_MENU( ID_SELECT_DEFAULT_PDF_BROWSER, KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser )
     EVT_MENU( ID_SELECT_PREFERED_PDF_BROWSER, KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser )
@@ -300,6 +299,13 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
+
+    // Path configuration edit dialog.
+    AddMenuItem( preferencesMenu,
+                 ID_PREFERENCES_CONFIGURE_PATHS,
+                 _( "Configure Pa&ths" ),
+                 _( "Edit path configuration environment variables" ),
+                 KiBitmap( editor_xpm ) );
 
     // Text editor
     AddMenuItem( preferencesMenu,

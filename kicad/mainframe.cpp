@@ -560,3 +560,9 @@ void KICAD_MANAGER_FRAME::Process_Config( wxCommandEvent& event )
         break;
     }
 }
+
+
+void KICAD_MANAGER_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
+{
+    Pgm().ConfigurePaths( this );
+}

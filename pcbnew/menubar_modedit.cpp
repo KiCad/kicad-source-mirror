@@ -284,6 +284,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                 _( "Footprint Li&braries" ), _( "Configure footprint libraries" ),
                 KiBitmap( library_table_xpm ) );
 
+    // Path configuration edit dialog.
+    AddMenuItem( prefs_menu,
+                 ID_PREFERENCES_CONFIGURE_PATHS,
+                 _( "Configure Pa&ths" ),
+                 _( "Edit path configuration environment variables" ),
+                 KiBitmap( editor_xpm ) );
+
     // Settings
     AddMenuItem( prefs_menu, wxID_PREFERENCES,
                  _( "&Settings" ), _( "Select default parameters values in Footprint Editor" ),

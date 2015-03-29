@@ -129,6 +129,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( wxID_PREFERENCES,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, FOOTPRINT_EDIT_FRAME::OnConfigurePaths )
 
     // popup commands
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
@@ -912,3 +913,8 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
     }
 }
 
+
+void FOOTPRINT_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
+{
+    Pgm().ConfigurePaths( this );
+}

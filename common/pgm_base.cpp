@@ -38,6 +38,7 @@
 #include <wx/snglinst.h>
 #include <wx/stdpaths.h>
 #include <wx/sysopt.h>
+#include <wx/richmsgdlg.h>
 
 #include <pgm_base.h>
 #include <wxstruct.h>
@@ -50,6 +51,7 @@
 #include <gestfich.h>
 #include <menus_helpers.h>
 #include <confirm.h>
+#include <dialog_env_var_config.h>
 
 
 #define KICAD_COMMON                     wxT( "kicad_common" )
@@ -61,6 +63,7 @@ const wxChar PGM_BASE::workingDirKey[] = wxT( "WorkingDir" );     // public
 static const wxChar languageCfgKey[]   = wxT( "LanguageID" );
 static const wxChar kicadFpLibPath[]   = wxT( "KicadFootprintLibraryPath" );
 static const wxChar pathEnvVariables[] = wxT( "EnvironmentVariables" );
+static const wxChar showEnvVarWarningDialog[] = wxT( "ShowEnvVarWarningDialog" );
 static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );
 
 
@@ -269,6 +272,7 @@ PGM_BASE::PGM_BASE()
     m_common_settings = NULL;
 
     m_wx_app = NULL;
+    m_show_env_var_dialog = true;
 
     setLanguageId( wxLANGUAGE_DEFAULT );
 
@@ -404,19 +408,34 @@ bool PGM_BASE::initPgm()
 
     SetLanguagePath();
 
-    // Useful local environment variable settings.
-    m_local_env_vars[ wxString( wxT( "KIGITHUB" ) ) ] =
-                      wxString( wxT( "https://github.com/KiCad" ) );
-
-    wxFileName tmpFileName;
-    tmpFileName.AssignDir( wxString( wxT( KICAD_DATA_PATH ) ) );
-    tmpFileName.AppendDir( wxT( "modules" ) );
-    m_local_env_vars[ wxString( wxT( "KISYSMOD" ) ) ] = tmpFileName.GetPath();
-    tmpFileName.AppendDir( wxT( "packages3d" ) );
-    m_local_env_vars[ wxString( wxT( "KISYS3DMOD" ) ) ] = tmpFileName.GetPath();
-
     // OS specific instantiation of wxConfigBase derivative:
     m_common_settings = GetNewConfig( KICAD_COMMON );
+
+    // Only define the default environment variable if they haven't been set in the
+    // .kicad_common configuration file.
+    if( m_common_settings && !m_common_settings->HasGroup( pathEnvVariables ) )
+    {
+        wxString envVarName = wxT( "KIGITHUB" );
+        ENV_VAR_ITEM envVarItem;
+
+        envVarItem.SetValue( wxString( wxT( "https://github.com/KiCad" ) ) );
+        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
+        m_local_env_vars[ envVarName ] = envVarItem;
+
+        wxFileName tmpFileName;
+        tmpFileName.AssignDir( wxString( wxT( KICAD_DATA_PATH ) ) );
+        tmpFileName.AppendDir( wxT( "modules" ) );
+        envVarName = wxT( "KISYSMOD" );
+        envVarItem.SetValue( tmpFileName.GetPath() );
+        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
+        m_local_env_vars[ envVarName ] = envVarItem;
+
+        envVarName = wxT( "KISYS3DMOD" );
+        tmpFileName.AppendDir( wxT( "packages3d" ) );
+        envVarItem.SetValue( tmpFileName.GetPath() );
+        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
+        m_local_env_vars[ envVarName ] = envVarItem;
+    }
 
     ReadPdfBrowserInfos();      // needs m_common_settings
 
@@ -490,6 +509,8 @@ void PGM_BASE::loadCommonSettings()
     m_common_settings->Read( languageCfgKey, &languageSel );
     setLanguageId( wxLANGUAGE_DEFAULT );
 
+    m_common_settings->Read( showEnvVarWarningDialog, &m_show_env_var_dialog );
+
     // Search for the current selection
     for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
     {
@@ -519,13 +540,11 @@ void PGM_BASE::loadCommonSettings()
     for( unsigned i = 0;  i < entries.GetCount();  i++ )
     {
         wxString val = m_common_settings->Read( entries[i], wxEmptyString );
-        m_local_env_vars[ entries[i]  ] = val;
+        m_local_env_vars[ entries[i]  ] = ENV_VAR_ITEM( val, wxGetEnv( entries[i], NULL ) );
     }
 
-    for( std::map<wxString, wxString>::iterator it = m_local_env_vars.begin();
-         it != m_local_env_vars.end();
-         ++it )
-        SetLocalEnvVariable( it->first, it->second );
+    for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
+        SetLocalEnvVariable( it->first, it->second.GetValue() );
 
     m_common_settings->SetPath( oldPath );
 }
@@ -540,17 +559,16 @@ void PGM_BASE::saveCommonSettings()
         wxString cur_dir = wxGetCwd();
 
         m_common_settings->Write( workingDirKey, cur_dir );
+        m_common_settings->Write( showEnvVarWarningDialog, m_show_env_var_dialog );
 
         // Save the local environment variables.
         m_common_settings->SetPath( pathEnvVariables );
 
-        for( std::map<wxString, wxString>::iterator it = m_local_env_vars.begin();
-             it != m_local_env_vars.end();
-             ++it )
+        for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
         {
             wxLogTrace( traceEnvVars, wxT( "Saving environment varaiable config entry %s as %s" ),
-                        GetChars( it->first ),  GetChars( it->second ) );
-            m_common_settings->Write( it->first, it->second );
+                        GetChars( it->first ),  GetChars( it->second.GetValue() ) );
+            m_common_settings->Write( it->first, it->second.GetValue() );
         }
 
         m_common_settings->SetPath( wxT( ".." ) );
@@ -745,4 +763,64 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
                 GetChars( aName ), GetChars( aValue ) );
 
     return wxSetEnv( aName, aValue );
+}
+
+
+void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
+{
+    m_local_env_vars.clear();
+    m_local_env_vars = aEnvVarMap;
+
+    if( m_common_settings )
+        m_common_settings->DeleteGroup( pathEnvVariables );
+
+    saveCommonSettings();
+
+    // Overwrites externally defined environment variable until the next time the application
+    // is run.
+    for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
+    {
+        wxLogTrace( traceEnvVars, wxT( "Setting local environment variable %s to %s." ),
+                    GetChars( it->first ), GetChars( it->second.GetValue() ) );
+        wxSetEnv( it->first, it->second.GetValue() );
+    }
+}
+
+
+void PGM_BASE::ConfigurePaths( wxWindow* aParent )
+{
+    DIALOG_ENV_VAR_CONFIG dlg( aParent, GetLocalEnvVariables() );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    ENV_VAR_MAP envVarMap = dlg.GetEnvVarMap();
+
+    for( ENV_VAR_MAP_ITER it = envVarMap.begin(); it != envVarMap.end(); ++it )
+    {
+        wxLogDebug( wxT( "Environment variable %s=%s defined externally = %d" ),
+                    GetChars( it->first ), GetChars( it->second.GetValue() ),
+                    it->second.GetDefinedExternally() );
+    }
+
+    // If any of the environment variables are defined externally, warn the user that the
+    // next time kicad is run that the externally defined variables will be used instead of
+    // the user's settings.  This is by design.
+    if( dlg.ExternalDefsChanged() && m_show_env_var_dialog )
+    {
+        wxString msg1 = _( "Warning!  Some of paths you have configured have been defined \n"
+                           "externally to the running process and will be temporarily overwritten." );
+        wxString msg2 = _( "The next time KiCad is launched, any paths that have already\n"
+                           "been defined are honored and any settings defined in the path\n"
+                           "configuration dialog are ignored.  If you did not intend for this\n"
+                           "behavior, either rename any conflicting entries or remove the\n"
+                           "external environment variable definition(s) from your system." );
+        wxRichMessageDialog dlg( aParent, msg1 );
+        dlg.ShowDetailedText( msg2 );
+        dlg.ShowCheckBox( _( "Do not show this message again." ) );
+        dlg.ShowModal();
+        m_show_env_var_dialog = !dlg.IsCheckBoxChecked();
+    }
+
+    SetLocalEnvVariables( dlg.GetEnvVarMap() );
 }

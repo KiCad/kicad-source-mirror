@@ -41,9 +41,50 @@ class wxConfigBase;
 class wxSingleInstanceChecker;
 class wxApp;
 class wxMenu;
+class wxWindow;
+
 
 // inter program module calling
 #define VTBL_ENTRY      virtual
+
+
+/**
+ * Class ENV_VAR_ITEM
+ *
+ * is a simple helper class to store environment variable values and the status of whether
+ * or not they were defined externally to the process created when any of the KiCad applications
+ * was launched.
+ */
+class ENV_VAR_ITEM
+{
+public:
+    ENV_VAR_ITEM( const wxString& aValue = wxEmptyString, bool aIsDefinedExternally = false ) :
+        m_value( aValue ),
+        m_isDefinedExternally( aIsDefinedExternally )
+    {
+    }
+
+    bool GetDefinedExternally() const { return m_isDefinedExternally; }
+    void SetDefinedExternally( bool aIsDefinedExternally )
+    {
+        m_isDefinedExternally = aIsDefinedExternally;
+    }
+
+    const wxString& GetValue() const { return m_value; }
+    void SetValue( const wxString& aValue ) { m_value = aValue; }
+
+private:
+    /// The environment variable string value.
+    wxString m_value;
+
+    /// Flag to indicate if the environment variable was defined externally to the process.
+    bool     m_isDefinedExternally;
+};
+
+
+typedef std::map<wxString, ENV_VAR_ITEM>                 ENV_VAR_MAP;
+typedef std::map<wxString, ENV_VAR_ITEM>::iterator       ENV_VAR_MAP_ITER;
+typedef std::map<wxString, ENV_VAR_ITEM>::const_iterator ENV_VAR_MAP_CITER;
 
 
 /**
@@ -186,6 +227,35 @@ public:
     VTBL_ENTRY bool SetLocalEnvVariable( const wxString& aName, const wxString& aValue );
 
     /**
+     * Function SetLocalEnvVariables
+     *
+     * sets the internal local environment variable map to \a aEnvVarMap, updates the entries
+     * in the .kicad_common configuration file, and sets the environment variable to the new
+     * settings.
+     *
+     * @param aEnvVarMap is a ENV_VAR_MAP object containing the new environment variables.
+     */
+    VTBL_ENTRY void SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap );
+
+    VTBL_ENTRY const ENV_VAR_MAP& GetLocalEnvVariables() const
+    {
+        return m_local_env_vars;
+    }
+
+    /**
+     * Function ConfigurePaths
+     *
+     * presents a dialog to the user to edit local environment variable settings for use in
+     * the footprint library table and the 3D model importer.  It was added to PGM_BASE because
+     * it will eventually find use for in schematic I/O design so it needs to accessible by
+     * almost every KiCad application.
+     *
+     * @param aParent - a pointer the wxWindow parent of the dialog or NULL to use the top level
+     *                  window.
+     */
+    VTBL_ENTRY void ConfigurePaths( wxWindow* aParent = NULL );
+
+    /**
      * Function App
      * returns a bare naked wxApp, which may come from wxPython, SINGLE_TOP, or kicad.exe.
      * Use this function instead of wxGetApp().
@@ -265,8 +335,10 @@ protected:
     wxSize          m_help_size;
 
     /// Local environment variable expansion settings such as KIGITHUB, KISYSMOD, and KISYS3DMOD.
-    /// library table.
-    std::map<wxString, wxString>  m_local_env_vars;
+    ENV_VAR_MAP     m_local_env_vars;
+
+    /// Flag to indicate if the environment variable overwrite warning dialog should be shown.
+    bool            m_show_env_var_dialog;
 
     wxApp*          m_wx_app;
 

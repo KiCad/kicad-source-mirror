@@ -125,6 +125,7 @@ public:
 
     void ToolOnRightClick( wxCommandEvent& event );
     void OnSelectOptionToolbar( wxCommandEvent& event );
+    void OnConfigurePaths( wxCommandEvent& aEvent );
 
     /**
      * Function OnSaveLibraryAs

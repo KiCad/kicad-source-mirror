@@ -116,6 +116,13 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  _( "Footprint Li&braries" ), _( "Configure footprint libraries" ),
                  KiBitmap( library_table_xpm ) );
 
+    // Path configuration edit dialog.
+    AddMenuItem( preferencesMenu,
+                 ID_PREFERENCES_CONFIGURE_PATHS,
+                 _( "Configure Pa&ths" ),
+                 _( "Edit path configuration environment variables" ),
+                 KiBitmap( editor_xpm ) );
+
     AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,
                  _( "Edit &Equ Files List" ),
                  _( "Setup equ files list (.equ files)\n"
