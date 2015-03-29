@@ -526,7 +526,7 @@ void EDA_3D_CANVAS::Redraw()
         {
             glEnable( GL_BLEND );
             glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-            glColor4f( 1.0, 1.0, 1.0, 0.85f );
+            glColor4f( 1.0, 1.0, 1.0, 0.75f );
             glEnable( GL_CULL_FACE );
             glDisable( GL_COLOR_MATERIAL );
             glEnable( GL_TEXTURE_2D );

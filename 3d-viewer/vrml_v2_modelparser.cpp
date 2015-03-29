@@ -277,7 +277,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
         {
             for( VRML2_DEF_GROUP_MAP::iterator groupIt = m_defGroupMap.begin(); groupIt!=m_defGroupMap.end(); ++groupIt )
             {
-                 S3D_MESH* ptrModel = groupIt->second;
+                wxString groupName = groupIt->first;
+                S3D_MESH* ptrModel = groupIt->second;
                 
 
                 if( ((ptrModel->m_Point.size() == 0) || (ptrModel->m_CoordIndex.size() == 0)) &&
@@ -288,6 +289,7 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
                 }
                 else
                 {
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: forced added %s group" ), groupName );
                     m_ModelParser->childs.push_back( ptrModel );
                 }
             }
@@ -471,27 +473,36 @@ int VRML2_MODEL_PARSER::read_Transform()
 
             if( read_Shape() == 0 )
             {
-                m_model = save_ptr;
-
-                if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
-                     (m_model->childs.size() == 0) )
+                if( m_discardLastGeometry == false )
                 {
-                    delete m_model;
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: Shape, skipping model with no points or childs" ) );
+                    m_model = save_ptr;
+
+                    if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
+                         (m_model->childs.size() == 0) )
+                    {
+                        delete m_model;
+                        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: Shape, skipping model with no points or childs" ) );
+                    }
+                    else
+                    {
+                        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: Shape, Add child model with %lu points, %lu coordIndex, %lu childs." ),
+                                                    m_model->m_Point.size(),
+                                                    m_model->m_CoordIndex.size(),
+                                                    m_model->childs.size() );
+
+                        parent->childs.push_back( m_model );
+                    }
                 }
                 else
                 {
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: Shape, Add child model with %lu points, %lu coordIndex, %lu childs." ),
-                                                m_model->m_Point.size(),
-                                                m_model->m_CoordIndex.size(),
-                                                m_model->childs.size() );
+                    delete m_model;
 
-                    parent->childs.push_back( m_model );
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: Shape, discard child." ) );
                 }
             }
             else
             {
-                delete m_model;   
+                delete m_model;
             }
 
             m_model = parent;
@@ -692,7 +703,10 @@ int VRML2_MODEL_PARSER::read_DEF_Coordinate()
             int retVal = read_CoordinateDef();
 
             if( retVal == 0 )
+            {
                 m_defCoordinateMap.insert( std::make_pair( coordinateName, m_model->m_Point ) );
+                wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_DEF_Coordinate insert %s" ), coordinateName );
+            }
 
             debug_exit();
             return retVal;
@@ -801,6 +815,7 @@ int VRML2_MODEL_PARSER::read_DEF()
         }
         else if( strcmp( text, "IndexedFaceSet" ) == 0 )
         {
+            m_discardLastGeometry = false;
             read_IndexedFaceSet();
         }
         else if( strcmp( text, "Group" ) == 0 )
@@ -882,10 +897,12 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet_USE()
     if( coordinate == m_defCoordinateMap.end() )
     {
         debug_exit();
-        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "USE: coordinate %s not previously defined "
-                                            "in a DEF section." ), text );
+        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_IndexedFaceSet_USE: coordinate %s not previously defined "
+                                                            "in a DEF section." ), text );
         return -1;
     }
+
+    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_IndexedFaceSet_USE %s" ), text );
 
     m_model->m_Point = coordinate->second;
     debug_exit();
@@ -924,10 +941,12 @@ int VRML2_MODEL_PARSER::read_Shape()
         }
         else if( strcmp( text, "IndexedFaceSet" ) == 0 )
         {
+            m_discardLastGeometry = false;
             read_IndexedFaceSet();
         }
         else if( strcmp( text, "IndexedLineSet" ) == 0 )
         {
+            m_discardLastGeometry = true;
             read_IndexedLineSet();
         }
         else
@@ -977,9 +996,18 @@ int VRML2_MODEL_PARSER::read_geometry()
         }
         else if( strcmp( text, "IndexedFaceSet" ) == 0 )
         {
+            m_discardLastGeometry = false;
             int ret = read_IndexedFaceSet();
             debug_exit();
             wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_geometry exit, after IndexedFaceSet" ) );
+            return ret;
+        }
+        else if( strcmp( text, "IndexedLineSet" ) == 0 )
+        {
+            m_discardLastGeometry = true;
+            int ret = read_IndexedLineSet();
+            debug_exit();
+            wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_geometry exit, after IndexedLineSet" ) );
             return ret;
         }
         else

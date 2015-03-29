@@ -211,17 +211,19 @@ private:
 
     bool                      m_normalPerVertex;
     bool                      colorPerVertex;
-    S3D_MESH*                 m_model;              ///< It stores the current model that the parsing is adding data
+    S3D_MESH*                 m_model;                  ///< It stores the current model that the parsing is adding data
     FILE*                     m_file;
     wxFileName                m_Filename;
     VRML2_COORDINATE_MAP      m_defCoordinateMap;
-    VRML2_DEF_GROUP_MAP       m_defGroupMap;        ///< Stores a list of labels for groups and meshs that will be used later by the USE keyword
+    VRML2_DEF_GROUP_MAP       m_defGroupMap;            ///< Stores a list of labels for groups and meshs that will be used later by the USE keyword
     S3D_MODEL_PARSER*         m_ModelParser;
     S3D_MASTER*               m_Master;
-    wxString                  m_debugSpacer;        ///< Used to give identation space
+    wxString                  m_debugSpacer;            ///< Used to give identation space
 
-    int                       m_counter_DEF_GROUP;  ///< Counts the number of DEF * GROUPS used
-    int                       m_counter_USE_GROUP;  ///< Counts the number of USE * used, in the end, if m_counter_DEF_GROUP > 0 and m_counter_USE_GROUP == 0 then it will add the first group with childs
+    int                       m_counter_DEF_GROUP;      ///< Counts the number of DEF * GROUPS used
+    int                       m_counter_USE_GROUP;      ///< Counts the number of USE * used, in the end, if m_counter_DEF_GROUP > 0 and m_counter_USE_GROUP == 0 then it will add the first group with childs
+
+    bool                      m_discardLastGeometry;    ///< If true, it should not store the latest loaded geometry (used to discard IndexedLineSet, but load it)
 };
 
 

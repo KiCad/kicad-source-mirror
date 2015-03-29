@@ -262,6 +262,32 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
             }
         }
 
+/*
+#if defined(DEBUG)
+        // Debug Normals
+        glColor4f( 1.0, 0.0, 1.0, 1.0 );
+        for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+        {
+            // Flat
+            if( m_PerFaceNormalsNormalized.size() > 0 )
+            {
+                S3D_VERTEX normal = m_PerFaceNormalsNormalized[idx];
+                glNormal3fv( &normal.x );
+
+                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                {
+                    glBegin( GL_LINES );
+                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                    glVertex3fv( &point.x );
+                    point += normal;
+                    glVertex3fv( &point.x );
+                    glEnd();
+                }
+            }
+        }
+#endif
+*/
+
         switch( m_CoordIndex[idx].size() )
         {
         case 3:
