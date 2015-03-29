@@ -31,6 +31,7 @@
 #define __3D_MESH_MODEL_H__
 
 #include <vector>
+#define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/glm.hpp>
 #include "3d_struct.h"
 #include "3d_material.h"
@@ -55,6 +56,7 @@ public:
     std::vector< S3D_VERTEX >       m_Point;
     std::vector< std::vector<int> > m_CoordIndex;
     std::vector< std::vector<int> > m_NormalIndex;
+    std::vector< S3D_VERTEX >       m_PerFaceColor;
     std::vector< S3D_VERTEX >       m_PerFaceNormalsNormalized;
     std::vector< S3D_VERTEX >       m_PerVertexNormalsNormalized;
     std::vector< int >              m_MaterialIndex;

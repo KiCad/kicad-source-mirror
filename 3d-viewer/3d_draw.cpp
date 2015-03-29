@@ -44,6 +44,7 @@
 #include <class_pcb_text.h>
 #include <colors_selection.h>
 #include <convert_basic_shapes_to_polygon.h>
+#define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/gtc/matrix_transform.hpp>
 #include <gal/opengl/opengl_compositor.h>
 #ifdef __WINDOWS__
@@ -1401,13 +1402,13 @@ void EDA_3D_CANVAS::calcBBox()
 
         if( module->GetOrientation() )
             fullTransformMatrix = glm::rotate( fullTransformMatrix,
-                                               (float)(module->GetOrientation() / 10.0f),
+                                               glm::radians( (float)(module->GetOrientation() / 10.0f) ),
                                                S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
 
         if( module->IsFlipped() )
         {
-            fullTransformMatrix = glm::rotate( fullTransformMatrix, 180.0f, S3D_VERTEX( 0.0f, 1.0f, 0.0f ) );
-            fullTransformMatrix = glm::rotate( fullTransformMatrix, 180.0f, S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
+            fullTransformMatrix = glm::rotate( fullTransformMatrix, glm::radians( 180.0f ), S3D_VERTEX( 0.0f, 1.0f, 0.0f ) );
+            fullTransformMatrix = glm::rotate( fullTransformMatrix, glm::radians( 180.0f ), S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
         }
 
         // Compute a union bounding box for all the shapes of the model

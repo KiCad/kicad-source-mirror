@@ -29,6 +29,7 @@
 #ifndef _3D_TYPES_H_
 #define _3D_TYPES_H_
 
+#define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/glm.hpp>
 #include <base_units.h>     // for IU_PER_MILS
 

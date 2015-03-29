@@ -34,6 +34,7 @@
 #include <common.h>
 #include <macros.h>
 #include <base_struct.h>
+#define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/glm.hpp>
 #include <vector>
 #include <kicad_string.h>

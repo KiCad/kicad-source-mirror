@@ -33,6 +33,7 @@
 #include <macros.h>
 #include <kicad_string.h>
 #include <pgm_base.h>
+#define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/gtc/matrix_transform.hpp>
 #include <3d_viewer.h>
 #include <info3d_visu.h>
@@ -176,11 +177,11 @@ void S3D_MASTER::calcBBox()
                                                                             m_MatPosition.z * SCALE_3D_CONV) );
     
     if( m_MatRotation.z != 0.0 )
-        fullTransformMatrix = glm::rotate( fullTransformMatrix, -(float)m_MatRotation.z, S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
+        fullTransformMatrix = glm::rotate( fullTransformMatrix, glm::radians(-(float)m_MatRotation.z), S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
     if( m_MatRotation.y != 0.0 )
-        fullTransformMatrix = glm::rotate( fullTransformMatrix, -(float)m_MatRotation.y, S3D_VERTEX( 0.0f, 1.0f, 0.0f ) );
+        fullTransformMatrix = glm::rotate( fullTransformMatrix, glm::radians(-(float)m_MatRotation.y), S3D_VERTEX( 0.0f, 1.0f, 0.0f ) );
     if( m_MatRotation.x != 0.0 )
-        fullTransformMatrix = glm::rotate( fullTransformMatrix, -(float)m_MatRotation.x, S3D_VERTEX( 1.0f, 0.0f, 0.0f ) );
+        fullTransformMatrix = glm::rotate( fullTransformMatrix, glm::radians(-(float)m_MatRotation.x), S3D_VERTEX( 1.0f, 0.0f, 0.0f ) );
 
      fullTransformMatrix = glm::scale( fullTransformMatrix, S3D_VERTEX( m_MatScale.x, m_MatScale.y, m_MatScale.z ) );
     

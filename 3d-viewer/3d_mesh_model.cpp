@@ -30,8 +30,9 @@
 #include <fctsys.h>
 #include <3d_mesh_model.h>
 #include <boost/geometry/algorithms/area.hpp>
+#define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/gtc/matrix_transform.hpp>
- #include <gal/opengl/glm/glm.hpp>
+#include <gal/opengl/glm/glm.hpp>
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -102,7 +103,7 @@ void S3D_MESH::calcBBoxAllChilds( )
     
     if( m_rotation[3] != 0.0f )
     {
-        glm::mat4   rotationMatrix      = glm::rotate(    translationMatrix, m_rotation[3],
+        glm::mat4   rotationMatrix      = glm::rotate(    translationMatrix, glm::radians( m_rotation[3] ),
                                                                              S3D_VERTEX( m_rotation[0], m_rotation[1], m_rotation[2] ) );
                     fullTransformMatrix = glm::scale(     rotationMatrix,    m_scale );
     }
@@ -237,7 +238,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
 
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
-        if( m_Materials )
+        if( m_Materials && ( m_MaterialIndex.size() != 0 ) )
         {
             if ( m_MaterialIndex.size() > idx )
             {
@@ -284,13 +285,15 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                 {
                     glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
                     glNormal3fv( &normal.x );
-
-                    // Flag error vertices
+/*
 #if defined(DEBUG)
+                    // Flag error vertices
                     if ((normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0))
+                    {
                         glColor4f( 1.0, 0.0, 1.0, 1.0 );
+                    }
 #endif
-
+*/
                     glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                     glVertex3fv( &point.x );
                 }
@@ -305,11 +308,15 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                     glm::vec3 normal = normals_list[ii];
                     glNormal3fv( &normal.x );
 
-                    // Flag error vertices
+/*
 #if defined(DEBUG)
+                    // Flag error vertices
                     if ((normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0))
+                    {
                         glColor4f( 1.0, 0.0, 1.0, 1.0 );
+                    }
 #endif
+*/
 
                     glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                     glVertex3fv( &point.x );
@@ -321,18 +328,21 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
             // Flat
             if( m_PerFaceNormalsNormalized.size() > 0 )
             {
-                glm::vec3 normal = m_PerFaceNormalsNormalized[idx];
+                S3D_VERTEX normal = m_PerFaceNormalsNormalized[idx];
+/*
+#if defined(DEBUG)
+                // Flag error vertices
+                if( (normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0) )
+                {
+                    DBG( printf("%u\n", idx) );
+                    glColor4f( 1.0, 0.0, 1.0, 1.0 );
+                }
+#endif
+*/
+                glNormal3fv( &normal.x );
 
                 for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
                 {
-                    glNormal3fv( &normal.x );
-
-                    // Flag error vertices
-#if defined(DEBUG)
-                    if ((normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0))
-                        glColor4f( 1.0, 0.0, 1.0, 1.0 );
-#endif
-
                     glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
                     glVertex3fv( &point.x );
                 }
@@ -479,13 +489,29 @@ void S3D_MESH::calcPerFaceNormals()
 
     if( ( m_PerFaceNormalsNormalized.size() > 0 ) &&
         g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) )
+    {
         haveAlreadyNormals_from_model_file = true;
-    else
-        m_PerFaceNormalsNormalized.clear();
 
-    m_PerFaceNormalsRaw_X_PerFaceSquaredArea.clear();
+        // !TODO: this is a workarround for some VRML2 modules files (ex: from we-online.de website)
+        // are using (incorrectly) the normals with m_CoordIndex as per face normal. This maybe be addressed by the parser in the future.
+        if( ( m_PerFaceNormalsNormalized.size() == m_Point.size() ) &&
+            ( m_PerFaceNormalsNormalized.size() != m_CoordIndex.size() ) )
+        {
+            //DBG( printf("m_PerFaceNormalsNormalized.size() != m_CoordIndex.size() Appling a workarroudn recover\n") );
+            m_NormalIndex = m_CoordIndex;
+            m_PerVertexNormalsNormalized = m_PerFaceNormalsNormalized;
+            m_PerFaceNormalsNormalized.clear();
+            haveAlreadyNormals_from_model_file = false;
+        }
+    }
+    else
+    {
+        m_PerFaceNormalsNormalized.clear();
+    }
 
     m_PerFaceNormalsNormalized.resize( m_CoordIndex.size() );
+
+    m_PerFaceNormalsRaw_X_PerFaceSquaredArea.clear();
     m_PerFaceNormalsRaw_X_PerFaceSquaredArea.resize( m_CoordIndex.size() );
 
     // There are no points defined for the coordIndex
@@ -531,48 +557,104 @@ void S3D_MESH::calcPerFaceNormals()
 
         if( haveAlreadyNormals_from_model_file == false )
         {
-            // normalize vertex normal
-            float l = glm::length( cross_prod );
+            if( g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) &&
+                (m_PerVertexNormalsNormalized.size() > 0) )
+            {
+                glm::vec3 normalSum;
 
-            if( l > FLT_EPSILON ) // avoid division by zero
-            {
-                cross_prod = cross_prod / l;
-            }
-            else
-            {
-/*                DBG( printf( "Cannot calc normal idx: %u cross(%f, %f, %f) l:%f m_CoordIndex[idx].size: %u\n",
-                        idx,
-                        cross_prod.x, cross_prod.y, cross_prod.z,
-                        l,
-                        (unsigned int)m_CoordIndex[idx].size()) );
-*/
-                if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )
+                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
                 {
-                    cross_prod.x = 0.0f;
-                    cross_prod.y = 1.0f;
-                    cross_prod.z = 0.0f;
+                    normalSum += m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
                 }
-                else if( ( cross_prod.y > cross_prod.x ) && ( cross_prod.y > cross_prod.z ) )
+
+                float l = glm::length( normalSum );
+
+                if( l > FLT_EPSILON ) // avoid division by zero
                 {
-                    cross_prod.x = 0.0f;
-                    cross_prod.y = 1.0f;
-                    cross_prod.z = 0.0f;
-                }
-                else if( ( cross_prod.z > cross_prod.x ) && ( cross_prod.z > cross_prod.y ) )
-                {
-                    cross_prod.x = 0.0f;
-                    cross_prod.y = 0.0f;
-                    cross_prod.z = 1.0f;
+                    normalSum = normalSum / l;
                 }
                 else
                 {
-                    cross_prod.x = 0.0f;
-                    cross_prod.y = 0.0f;
-                    cross_prod.z = 0.0f;
+                    if( ( normalSum.x > normalSum.y ) && ( normalSum.x > normalSum.z ) )
+                    {
+                        normalSum.x = 0.0f;
+                        normalSum.y = 1.0f;
+                        normalSum.z = 0.0f;
+                    }
+                    else if( ( normalSum.y > normalSum.x ) && ( normalSum.y > normalSum.z ) )
+                    {
+                        normalSum.x = 0.0f;
+                        normalSum.y = 1.0f;
+                        normalSum.z = 0.0f;
+                    }
+                    else if( ( normalSum.z > normalSum.x ) && ( normalSum.z > normalSum.y ) )
+                    {
+                        normalSum.x = 0.0f;
+                        normalSum.y = 0.0f;
+                        normalSum.z = 1.0f;
+                    }
+                    else
+                    {
+                        normalSum.x = 0.0f;
+                        normalSum.y = 0.0f;
+                        normalSum.z = 0.0f;
+                    }
                 }
-            }
 
-            m_PerFaceNormalsNormalized[idx] = cross_prod;
+                m_PerFaceNormalsNormalized[idx] = normalSum;
+            }
+            else
+            {
+                // normalize vertex normal
+                float l = glm::length( cross_prod );
+
+                if( l > FLT_EPSILON ) // avoid division by zero
+                {
+                    cross_prod = cross_prod / l;
+                }
+                else
+                {
+                    /*
+                    for( unsigned int i = 0; i < m_CoordIndex[idx].size(); i++ )
+                    {
+                        glm::vec3 v = m_PointNormalized[m_CoordIndex[idx][i]];
+                        DBG( printf( "v[%u](%f, %f, %f)", i, v.x, v.y, v.z ) );
+                    }
+                    DBG( printf( "Cannot calc normal idx: %u cross(%f, %f, %f) l:%f m_CoordIndex[idx].size: %u\n",
+                            idx,
+                            cross_prod.x, cross_prod.y, cross_prod.z,
+                            l,
+                            (unsigned int)m_CoordIndex[idx].size()) );
+                    */
+    
+                    if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )
+                    {
+                        cross_prod.x = 0.0f;
+                        cross_prod.y = 1.0f;
+                        cross_prod.z = 0.0f;
+                    }
+                    else if( ( cross_prod.y > cross_prod.x ) && ( cross_prod.y > cross_prod.z ) )
+                    {
+                        cross_prod.x = 0.0f;
+                        cross_prod.y = 1.0f;
+                        cross_prod.z = 0.0f;
+                    }
+                    else if( ( cross_prod.z > cross_prod.x ) && ( cross_prod.z > cross_prod.y ) )
+                    {
+                        cross_prod.x = 0.0f;
+                        cross_prod.y = 0.0f;
+                        cross_prod.z = 1.0f;
+                    }
+                    else
+                    {
+                        cross_prod.x = 0.0f;
+                        cross_prod.y = 0.0f;
+                        cross_prod.z = 0.0f;
+                    }
+                }
+
+                m_PerFaceNormalsNormalized[idx] = cross_prod;
+            }
         }
     }
 }

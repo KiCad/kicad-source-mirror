@@ -31,6 +31,7 @@
 
 #include <common.h>
 #include <base_struct.h>
+#define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/glm.hpp>
 
 class S3D_MASTER;

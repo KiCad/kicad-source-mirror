@@ -219,6 +219,9 @@ private:
     S3D_MODEL_PARSER*         m_ModelParser;
     S3D_MASTER*               m_Master;
     wxString                  m_debugSpacer;        ///< Used to give identation space
+
+    int                       m_counter_DEF_GROUP;  ///< Counts the number of DEF * GROUPS used
+    int                       m_counter_USE_GROUP;  ///< Counts the number of USE * used, in the end, if m_counter_DEF_GROUP > 0 and m_counter_USE_GROUP == 0 then it will add the first group with childs
 };
 
 
