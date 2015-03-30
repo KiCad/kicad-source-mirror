@@ -42,7 +42,7 @@ using namespace KIGFX;
 // Prototypes
 void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 
-const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
+const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 24, 0 };
 
 wxGLContext* OPENGL_GAL::glContext = NULL;
 
