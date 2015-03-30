@@ -192,7 +192,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
     // Check if footprint links were generated before the footprint library table was implemented.
     if( hasMissingNicks )
     {
-        msg = wxT(
+        msg = _(
             "Some of the assigned footprints are legacy entries (are missing lib nicknames). "
             "Would you like CvPcb to attempt to convert them to the new required FPID format? "
             "(If you answer no, then these assignments will be cleared out and you will "

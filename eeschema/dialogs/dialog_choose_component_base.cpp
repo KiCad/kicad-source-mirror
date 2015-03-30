@@ -11,7 +11,7 @@
 
 DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 450,100 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -30,7 +30,7 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	bSizerMain->Add( bSearchSizer, 0, wxEXPAND, 5 );
 	
 	m_libraryComponentTree = new wxTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxTR_HIDE_ROOT );
-	m_libraryComponentTree->SetMinSize( wxSize( -1,50 ) );
+	m_libraryComponentTree->SetMinSize( wxSize( 400,200 ) );
 	
 	bSizerMain->Add( m_libraryComponentTree, 1, wxALL|wxEXPAND, 5 );
 	
@@ -38,12 +38,12 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	bSizerView = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_componentView = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
-	m_componentView->SetMinSize( wxSize( 150,150 ) );
+	m_componentView->SetMinSize( wxSize( 200,200 ) );
 	
 	bSizerView->Add( m_componentView, 4, wxEXPAND | wxALL, 5 );
 	
 	m_componentDetails = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_MULTILINE );
-	m_componentDetails->SetMinSize( wxSize( -1,100 ) );
+	m_componentDetails->SetMinSize( wxSize( 200,200 ) );
 	
 	bSizerView->Add( m_componentDetails, 3, wxALL|wxEXPAND, 5 );
 	

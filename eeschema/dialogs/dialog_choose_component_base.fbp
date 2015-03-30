@@ -41,10 +41,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size">450,100</property>
+            <property name="minimum_size">-1,-1</property>
             <property name="name">DIALOG_CHOOSE_COMPONENT_BASE</property>
             <property name="pos"></property>
-            <property name="size">450,500</property>
+            <property name="size">503,500</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title"></property>
@@ -315,7 +315,7 @@
                         <property name="maximum_size"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size">-1,50</property>
+                        <property name="minimum_size">400,200</property>
                         <property name="moveable">1</property>
                         <property name="name">m_libraryComponentTree</property>
                         <property name="pane_border">1</property>
@@ -426,7 +426,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">150,150</property>
+                                <property name="minimum_size">200,200</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_componentView</property>
                                 <property name="pane_border">1</property>
@@ -507,7 +507,7 @@
                                 <property name="maxlength"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,100</property>
+                                <property name="minimum_size">200,200</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_componentDetails</property>
                                 <property name="pane_border">1</property>

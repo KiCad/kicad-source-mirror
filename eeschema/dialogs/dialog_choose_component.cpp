@@ -58,9 +58,11 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_libraryComponentTree->SetFont( wxFont( font.GetPointSize(),
              wxFONTFAMILY_MODERN,  wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
 
-    // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
-    // and works fine on all systems
-    GetSizer()->Fit( this );
+    // We have to call SetSizeHints to fix the minimal size of the dialog
+    // and its widgets.
+    // this line also fixes an issue on Linux Ubuntu using Unity (dialog not shown).
+    GetSizer()->SetSizeHints( this );
+
     Centre();
 }
 

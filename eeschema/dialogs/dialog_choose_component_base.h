@@ -61,7 +61,7 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 450,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 503,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_CHOOSE_COMPONENT_BASE();
 	
 };
