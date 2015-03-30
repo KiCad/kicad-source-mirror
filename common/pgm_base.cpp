@@ -815,7 +815,7 @@ void PGM_BASE::ConfigurePaths( wxWindow* aParent )
                            "configuration dialog are ignored.  If you did not intend for this\n"
                            "behavior, either rename any conflicting entries or remove the\n"
                            "external environment variable definition(s) from your system." );
-        wxRichMessageDialog dlg( aParent, msg1 );
+        wxRichMessageDialog dlg( aParent, msg1, _( "Warning" ), wxOK | wxCENTRE );
         dlg.ShowDetailedText( msg2 );
         dlg.ShowCheckBox( _( "Do not show this message again." ) );
         dlg.ShowModal();
