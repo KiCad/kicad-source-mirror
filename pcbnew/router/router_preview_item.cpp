@@ -241,7 +241,7 @@ void ROUTER_PREVIEW_ITEM::Line( const SHAPE_LINE_CHAIN& aLine, int aWidth, int a
     m_width = aWidth;
     m_color = assignColor( aStyle );
     m_type = PR_SHAPE;
-    m_depth = -2047;
+    m_depth = -BaseOverlayDepth;
     m_shape = aLine.Clone();
 
     ViewSetVisible( true );
@@ -306,3 +306,7 @@ const COLOR4D ROUTER_PREVIEW_ITEM::assignColor( int aStyle ) const
 
     return color;
 }
+
+const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -200;
+const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -210;
+const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -246;

@@ -114,9 +114,9 @@ private:
     int m_clearance;
 
     // fixme: shouldn't this go to VIEW?
-    static const int ClearanceOverlayDepth = -2000;
-    static const int BaseOverlayDepth = -2010;
-    static const int ViaOverlayDepth = -2046;
+    static const int ClearanceOverlayDepth;
+    static const int BaseOverlayDepth;
+    static const int ViaOverlayDepth;
 
     double m_depth;
 
