@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-30 21:06+0100\n"
-"PO-Revision-Date: 2015-03-30 21:06+0100\n"
+"POT-Creation-Date: 2015-03-30 23:35+0100\n"
+"PO-Revision-Date: 2015-03-30 23:35+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -3995,7 +3995,7 @@ msgid "Segs Count"
 msgstr "Conteggio segmenti"
 
 #: pcbnew/class_module.cpp:561
-#: eeschema/dialogs/dialog_choose_component.cpp:271
+#: eeschema/dialogs/dialog_choose_component.cpp:273
 msgid "Unknown"
 msgstr "Sconosciuto"
 
@@ -17197,15 +17197,15 @@ msgstr "Dimensioni testo n&umero:"
 msgid "&Length:"
 msgstr "&Lunghezza:"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:250
+#: eeschema/dialogs/dialog_choose_component.cpp:252
 msgid "Description\n"
 msgstr "Descrizione\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:263
+#: eeschema/dialogs/dialog_choose_component.cpp:265
 msgid "Keywords\n"
 msgstr "Parole chiave\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:277
+#: eeschema/dialogs/dialog_choose_component.cpp:279
 msgid "Alias of "
 msgstr "Alias di"
 
@@ -18294,6 +18294,18 @@ msgstr "File progetto: \"%s\""
 #, c-format
 msgid "Project file '%s' is not writable"
 msgstr "File progetto \"%s\" non scrivibile"
+
+#: cvpcb/readwrite_dlgs.cpp:196
+msgid ""
+"Some of the assigned footprints are legacy entries (are missing lib "
+"nicknames). Would you like CvPcb to attempt to convert them to the new "
+"required FPID format? (If you answer no, then these assignments will be "
+"cleared out and you will have to re-assign these footprints yourself.)"
+msgstr ""
+"Alcune delle impronte assegnate sono voci obsolete (sono denominazioni di "
+"librerie mancanti). Vuoi che CvPcb cerchi di convertirle nel nuovo formato "
+"FPID? Se si risponde no, questi assegnamenti verranno cancellati e sarà "
+"necessario ri-assegnare le impronte manualmente."
 
 #: cvpcb/readwrite_dlgs.cpp:229
 #, c-format
