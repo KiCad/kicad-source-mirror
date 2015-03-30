@@ -346,6 +346,13 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART* aComponent, int aUnit )
     NEGATE( offset.x );
     NEGATE( offset.y );
 
+    // Avoid rendering when either dimension is zero
+    int width, height;
+
+    dc.GetSize( &width, &height );
+    if( !width || !height )
+        return;
+
     aComponent->Draw( NULL, &dc, offset, aUnit, m_deMorganConvert, GR_COPY,
                       UNSPECIFIED_COLOR, DefaultTransform, true, true, false );
 }
