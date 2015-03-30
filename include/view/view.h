@@ -670,7 +670,7 @@ private:
     bool m_dirtyTargets[TARGETS_NUMBER];
 
     /// Rendering order modifier for layers that are marked as top layers
-    static const int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
+    static const int TOP_LAYER_MODIFIER;
 
     /// Items to be updated
     std::vector<VIEW_ITEM*> m_needsUpdate;

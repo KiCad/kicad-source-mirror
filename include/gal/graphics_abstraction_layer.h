@@ -836,9 +836,6 @@ public:
         depthStack.pop();
     }
 
-    /// Depth level on which the grid is drawn
-    static const int GRID_DEPTH = 1024;
-
     static const double METRIC_UNIT_LENGTH;
 
 protected:
@@ -903,8 +900,13 @@ protected:
      */
     virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
 
-    static const int MIN_DEPTH = -2048;
-    static const int MAX_DEPTH = 2047;
+    /// Possible depth range
+    static const int MIN_DEPTH;
+    static const int MAX_DEPTH;
+
+    /// Depth level on which the grid is drawn
+    static const int GRID_DEPTH;
+
 };
 }    // namespace KIGFX
 

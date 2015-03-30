@@ -211,7 +211,7 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
     aGal->SetIsFill( true );
     aGal->SetIsStroke( false );
     aGal->PushDepth();
-    aGal->SetLayerDepth( -512.0 );      // TODO no hardcoded depths?
+    aGal->SetLayerDepth( aGal->GetMinDepth() );
 
     float size = m_view->ToWorld( EDIT_POINT::POINT_SIZE );
 

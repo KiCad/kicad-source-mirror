@@ -1041,7 +1041,7 @@ struct VIEW::extentsVisitor
 };
 
 
-const BOX2I VIEW::CalculateExtents() 
+const BOX2I VIEW::CalculateExtents()
 {
     extentsVisitor v;
     BOX2I fullScene;
@@ -1051,6 +1051,9 @@ const BOX2I VIEW::CalculateExtents()
     {
         l->items->Query( fullScene, v );
     }
-    
+
     return v.extents;
 }
+
+
+const int VIEW::TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;

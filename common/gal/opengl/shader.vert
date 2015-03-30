@@ -27,12 +27,12 @@
 #version 120
 
 // Shader types
-const float SHADER_LINE                 = 1.0f;
-const float SHADER_FILLED_CIRCLE        = 2.0f;
-const float SHADER_STROKED_CIRCLE       = 3.0f;
+const float SHADER_LINE                 = 1.0;
+const float SHADER_FILLED_CIRCLE        = 2.0;
+const float SHADER_STROKED_CIRCLE       = 3.0;
 
 // Minimum line width
-const float MIN_WIDTH = 1.0f;
+const float MIN_WIDTH = 1.0;
 
 attribute vec4 attrShaderParams;
 varying vec4 shaderParams;
@@ -47,42 +47,39 @@ void main()
     {
         float lineWidth = shaderParams[3];
         float worldScale = gl_ModelViewMatrix[0][0];
-        float scale;
 
         // Make lines appear to be at least 1 pixel wide
         if( worldScale * lineWidth < MIN_WIDTH )
-            scale = MIN_WIDTH / ( worldScale * lineWidth );
+            gl_Position = gl_ModelViewProjectionMatrix *
+                ( gl_Vertex + vec4( shaderParams.yz * MIN_WIDTH / ( worldScale * lineWidth ), 0.0, 0.0 ) );
         else
-            scale = 1.0f;
-
-        gl_Position = gl_ModelViewProjectionMatrix *
-            ( gl_Vertex + vec4( shaderParams.yz * scale, 0.0, 0.0 ) );
+            gl_Position = gl_ModelViewProjectionMatrix *
+                ( gl_Vertex + vec4( shaderParams.yz, 0.0, 0.0 ) );
     }
     else if( ( shaderParams[0] == SHADER_STROKED_CIRCLE ) ||
              ( shaderParams[0] == SHADER_FILLED_CIRCLE  ) )
     {
         // Compute relative circle coordinates basing on indices
         // Circle
-        if( shaderParams[1] == 1.0f )
-            circleCoords = vec2( -sqrt( 3.0f ), -1.0f );
-        else if( shaderParams[1] == 2.0f )
-            circleCoords = vec2( sqrt( 3.0f ), -1.0f );
-        else if( shaderParams[1] == 3.0f )
-            circleCoords = vec2( 0.0f, 2.0f );
+        if( shaderParams[1] == 1.0 )
+            circleCoords = vec2( -sqrt( 3.0 ), -1.0 );
+        else if( shaderParams[1] == 2.0 )
+            circleCoords = vec2( sqrt( 3.0 ), -1.0 );
+        else if( shaderParams[1] == 3.0 )
+            circleCoords = vec2( 0.0, 2.0 );
 
         // Semicircle
-        else if( shaderParams[1] == 4.0f )
-            circleCoords = vec2( -3.0f / sqrt( 3.0f ), 0.0f );
-        else if( shaderParams[1] == 5.0f )
-            circleCoords = vec2( 3.0f / sqrt( 3.0f ), 0.0f );
-        else if( shaderParams[1] == 6.0f )
-            circleCoords = vec2( 0.0f, 2.0f );
+        else if( shaderParams[1] == 4.0 )
+            circleCoords = vec2( -3.0 / sqrt( 3.0 ), 0.0 );
+        else if( shaderParams[1] == 5.0 )
+            circleCoords = vec2( 3.0 / sqrt( 3.0 ), 0.0 );
+        else if( shaderParams[1] == 6.0 )
+            circleCoords = vec2( 0.0, 2.0 );
 
         // Make the line appear to be at least 1 pixel wide
         float lineWidth = shaderParams[3];
         float worldScale = gl_ModelViewMatrix[0][0];
 
-        // Make lines appear to be at least 1 pixel width
         if( worldScale * lineWidth < MIN_WIDTH )
             shaderParams[3] = shaderParams[3] / ( worldScale * lineWidth );
 
