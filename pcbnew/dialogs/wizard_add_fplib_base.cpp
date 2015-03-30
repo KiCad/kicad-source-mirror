@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,210 +12,221 @@
 WIZARD_FPLIB_TABLE_BASE::WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxBitmap& bitmap, const wxPoint& pos, long style ) 
 {
 	this->Create( parent, id, title, bitmap, pos, style );
-	this->SetSizeHints( wxSize( 450,-1 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 720,480 ), wxDefaultSize );
 	
-	wxWizardPageSimple* m_wizPage1 = new wxWizardPageSimple( this );
+	wxWizardPageSimple* m_wizPage1 = new wxWizardPageSimple( this, NULL, NULL, wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ) );
 	m_pages.Add( m_wizPage1 );
 	
-	m_wizPage1->SetMinSize( wxSize( 500,-1 ) );
+	m_wizPage1->SetMinSize( wxSize( 720,480 ) );
 	
-	wxBoxSizer* bSizerPage1;
-	bSizerPage1 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizer1;
+	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_rbFpLibFormatChoices[] = { _("KiCad (*.Pretty folder containing .kicad_mod files)"), _("GitHub (.Pretty lib stored on GitHub repos)"), _("Legacy ( old *.mod lib file)"), _("Eagle V6 xml library file"), _("Geda footprint folder (folder containing *.fp files)") };
-	int m_rbFpLibFormatNChoices = sizeof( m_rbFpLibFormatChoices ) / sizeof( wxString );
-	m_rbFpLibFormat = new wxRadioBox( m_wizPage1, wxID_ANY, _("Library Format:"), wxDefaultPosition, wxDefaultSize, m_rbFpLibFormatNChoices, m_rbFpLibFormatChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbFpLibFormat->SetSelection( 0 );
-	bSizerPage1->Add( m_rbFpLibFormat, 0, wxALL|wxEXPAND, 5 );
+	wxFlexGridSizer* fgSizer112;
+	fgSizer112 = new wxFlexGridSizer( 3, 1, 0, 0 );
+	fgSizer112->AddGrowableRow( 1 );
+	fgSizer112->SetFlexibleDirection( wxBOTH );
+	fgSizer112->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticline2 = new wxStaticLine( m_wizPage1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerPage1->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-	
-	m_bitmapGithubURL = new wxStaticBitmap( m_wizPage1, wxID_ANY, wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPage1->Add( m_bitmapGithubURL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	m_staticText10 = new wxStaticText( m_wizPage1, wxID_ANY, _("Default URL for KiCad libraries on Github:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText10->Wrap( -1 );
-	bSizerPage1->Add( m_staticText10, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_textCtrlGithubURL = new wxTextCtrl( m_wizPage1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPage1->Add( m_textCtrlGithubURL, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	m_wizPage1->SetSizer( bSizerPage1 );
-	m_wizPage1->Layout();
-	bSizerPage1->Fit( m_wizPage1 );
-	wxWizardPageSimple* m_wizPage2 = new wxWizardPageSimple( this );
-	m_pages.Add( m_wizPage2 );
-	
-	m_wizPage2->SetMinSize( wxSize( 450,-1 ) );
-	
-	wxBoxSizer* bSizerPage2;
-	bSizerPage2 = new wxBoxSizer( wxVERTICAL );
-	
-	wxString m_rbPathManagementChoices[] = { _("Use  path relative to the project"), _("Use environment variable in path"), _("Use absolute path") };
-	int m_rbPathManagementNChoices = sizeof( m_rbPathManagementChoices ) / sizeof( wxString );
-	m_rbPathManagement = new wxRadioBox( m_wizPage2, wxID_ANY, _("Path management:"), wxDefaultPosition, wxDefaultSize, m_rbPathManagementNChoices, m_rbPathManagementChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbPathManagement->SetSelection( 2 );
-	bSizerPage2->Add( m_rbPathManagement, 0, wxALL|wxEXPAND, 5 );
-	
-	m_staticText1 = new wxStaticText( m_wizPage2, wxID_ANY, _("Environment variables:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( m_wizPage1, wxID_ANY, wxT("Welcome to the Add Footprint Libraries Wizard!\n\nPlease select the source for the libraries to add:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bSizerPage2->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer112->Add( m_staticText1, 1, wxALL|wxEXPAND, 5 );
 	
-	m_gridEnvironmentVariablesList = new wxGrid( m_wizPage2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxVERTICAL );
 	
-	// Grid
-	m_gridEnvironmentVariablesList->CreateGrid( 3, 2 );
-	m_gridEnvironmentVariablesList->EnableEditing( true );
-	m_gridEnvironmentVariablesList->EnableGridLines( true );
-	m_gridEnvironmentVariablesList->EnableDragGridSize( false );
-	m_gridEnvironmentVariablesList->SetMargins( 0, 0 );
+	m_radioAddLocal = new wxRadioButton( m_wizPage1, wxID_ANY, wxT("Files on my computer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer19->Add( m_radioAddLocal, 0, wxALL|wxEXPAND, 5 );
 	
-	// Columns
-	m_gridEnvironmentVariablesList->SetColSize( 0, 125 );
-	m_gridEnvironmentVariablesList->SetColSize( 1, 154 );
-	m_gridEnvironmentVariablesList->AutoSizeColumns();
-	m_gridEnvironmentVariablesList->EnableDragColMove( false );
-	m_gridEnvironmentVariablesList->EnableDragColSize( true );
-	m_gridEnvironmentVariablesList->SetColLabelSize( 30 );
-	m_gridEnvironmentVariablesList->SetColLabelValue( 0, _("Environment Variable") );
-	m_gridEnvironmentVariablesList->SetColLabelValue( 1, _("Path Segment") );
-	m_gridEnvironmentVariablesList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Rows
-	m_gridEnvironmentVariablesList->AutoSizeRows();
-	m_gridEnvironmentVariablesList->EnableDragRowSize( false );
-	m_gridEnvironmentVariablesList->SetRowLabelSize( 40 );
-	m_gridEnvironmentVariablesList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	m_gridEnvironmentVariablesList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizerPage2->Add( m_gridEnvironmentVariablesList, 1, wxALL|wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizerButs;
-	bSizerButs = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_buttonAddEV = new wxButton( m_wizPage2, wxID_ANY, _("Add Environment Variable"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButs->Add( m_buttonAddEV, 0, wxALL, 5 );
-	
-	m_buttonRemoveEV = new wxButton( m_wizPage2, wxID_ANY, _("Remove Environment Variable"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButs->Add( m_buttonRemoveEV, 0, wxALL, 5 );
+	wxBoxSizer* m_sizerGithub;
+	m_sizerGithub = new wxBoxSizer( wxHORIZONTAL );
 	
 	
-	bSizerPage2->Add( bSizerButs, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer19->Add( m_sizerGithub, 0, wxEXPAND, 5 );
+	
+	wxGridSizer* gSizer1;
+	gSizer1 = new wxGridSizer( 2, 2, 0, 0 );
 	
 	
-	m_wizPage2->SetSizer( bSizerPage2 );
-	m_wizPage2->Layout();
-	bSizerPage2->Fit( m_wizPage2 );
-	wxWizardPageSimple* m_wizPage3 = new wxWizardPageSimple( this );
-	m_pages.Add( m_wizPage3 );
+	bSizer19->Add( gSizer1, 0, wxEXPAND, 5 );
 	
-	m_wizPage3->SetMinSize( wxSize( 450,-1 ) );
+	wxFlexGridSizer* m_githubSizer;
+	m_githubSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_githubSizer->SetFlexibleDirection( wxBOTH );
+	m_githubSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxBoxSizer* bSizerPage3;
-	bSizerPage3 = new wxBoxSizer( wxVERTICAL );
+	m_radioAddGithub = new wxRadioButton( m_wizPage1, wxID_ANY, wxT("Github repository"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_githubSizer->Add( m_radioAddGithub, 0, wxALL|wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_wizPage3, wxID_ANY, _("Options") ), wxVERTICAL );
+	m_textCtrlGithubURL = new wxTextCtrl( m_wizPage1, wxID_ANY, wxT("http://github.com/KiCad"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlGithubURL->SetMinSize( wxSize( 300,-1 ) );
 	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	m_textPluginTitle = new wxStaticText( m_wizPage3, wxID_ANY, _("Plugin type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPluginTitle->Wrap( -1 );
-	fgSizer1->Add( m_textPluginTitle, 0, wxALL, 5 );
-	
-	m_textPluginType = new wxStaticText( m_wizPage3, wxID_ANY, _("KiCad"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPluginType->Wrap( -1 );
-	fgSizer1->Add( m_textPluginType, 1, wxALL, 5 );
-	
-	m_textOptionTitle = new wxStaticText( m_wizPage3, wxID_ANY, _("Option:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textOptionTitle->Wrap( -1 );
-	fgSizer1->Add( m_textOptionTitle, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_textOption = new wxStaticText( m_wizPage3, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textOption->Wrap( -1 );
-	fgSizer1->Add( m_textOption, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_stPathTitle = new wxStaticText( m_wizPage3, wxID_ANY, _("Path:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stPathTitle->Wrap( -1 );
-	fgSizer1->Add( m_stPathTitle, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_textPath = new wxStaticText( m_wizPage3, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPath->Wrap( -1 );
-	fgSizer1->Add( m_textPath, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_githubSizer->Add( m_textCtrlGithubURL, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	sbSizer1->Add( fgSizer1, 0, wxEXPAND, 5 );
+	m_githubSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_downloadGithub = new wxCheckBox( m_wizPage1, wxID_ANY, wxT("Save a local copy to:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_downloadGithub->SetValue(true); 
+	m_githubSizer->Add( m_downloadGithub, 0, wxALL, 5 );
 	
 	
-	bSizerPage3->Add( sbSizer1, 0, wxEXPAND|wxBOTTOM, 5 );
+	m_githubSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_staticText2 = new wxStaticText( m_wizPage3, wxID_ANY, _("Library list to add in Fp table:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	bSizerPage3->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	m_downloadDir = new wxStaticText( m_wizPage1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_downloadDir->Wrap( -1 );
+	m_downloadDir->SetMinSize( wxSize( 300,-1 ) );
 	
-	m_gridFpListLibs = new wxGrid( m_wizPage3, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_downloadDir, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	// Grid
-	m_gridFpListLibs->CreateGrid( 0, 3 );
-	m_gridFpListLibs->EnableEditing( true );
-	m_gridFpListLibs->EnableGridLines( true );
-	m_gridFpListLibs->EnableDragGridSize( false );
-	m_gridFpListLibs->SetMargins( 0, 0 );
-	
-	// Columns
-	m_gridFpListLibs->EnableDragColMove( false );
-	m_gridFpListLibs->EnableDragColSize( true );
-	m_gridFpListLibs->SetColLabelSize( 30 );
-	m_gridFpListLibs->SetColLabelValue( 0, _("NickName") );
-	m_gridFpListLibs->SetColLabelValue( 1, _("Path") );
-	m_gridFpListLibs->SetColLabelValue( 2, _("Plugin") );
-	m_gridFpListLibs->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Rows
-	m_gridFpListLibs->EnableDragRowSize( true );
-	m_gridFpListLibs->SetRowLabelSize( 30 );
-	m_gridFpListLibs->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	m_gridFpListLibs->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer6->Add( m_gridFpListLibs, 1, wxALL|wxEXPAND, 5 );
+	m_btnBrowse = new wxButton( m_wizPage1, wxID_ANY, wxT("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_btnBrowse, 0, wxALL, 5 );
 	
 	
-	bSizerPage3->Add( bSizer6, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_buttonGithubLibList = new wxButton( m_wizPage3, wxID_ANY, _("Github Libs List"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_buttonGithubLibList, 0, wxALL, 5 );
-	
-	m_buttonAddLib = new wxButton( m_wizPage3, wxID_ANY, _("Add FP Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_buttonAddLib, 0, wxALL, 5 );
-	
-	m_buttonRemoveLib = new wxButton( m_wizPage3, wxID_ANY, _("Remove FP Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_buttonRemoveLib, 0, wxALL, 5 );
+	m_githubSizer->Add( bSizer9, 1, wxEXPAND, 5 );
 	
 	
-	bSizerPage3->Add( bSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_githubSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_invalidDir = new wxStaticText( m_wizPage1, wxID_ANY, wxT("It is not possible to write in the selected directory.\nPlease choose another one."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_invalidDir->Wrap( -1 );
+	m_invalidDir->SetForegroundColour( wxColour( 255, 0, 0 ) );
+	
+	m_githubSizer->Add( m_invalidDir, 0, wxALL, 5 );
 	
 	
-	m_wizPage3->SetSizer( bSizerPage3 );
-	m_wizPage3->Layout();
-	bSizerPage3->Fit( m_wizPage3 );
+	bSizer19->Add( m_githubSizer, 1, wxEXPAND, 5 );
+	
+	
+	fgSizer112->Add( bSizer19, 1, wxEXPAND, 5 );
+	
+	wxFlexGridSizer* fgSizer12;
+	fgSizer12 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer12->SetFlexibleDirection( wxBOTH );
+	fgSizer12->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText8 = new wxStaticText( m_wizPage1, wxID_ANY, wxT("Visit the official"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8->Wrap( -1 );
+	fgSizer12->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	m_hyperlink1 = new wxHyperlinkCtrl( m_wizPage1, wxID_ANY, wxT("Kicad repository on Github"), wxT("https://github.com/KiCad"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	fgSizer12->Add( m_hyperlink1, 0, wxTOP|wxBOTTOM, 5 );
+	
+	m_staticText9 = new wxStaticText( m_wizPage1, wxID_ANY, wxT("to find numerous footprint libraries!"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	fgSizer12->Add( m_staticText9, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	fgSizer112->Add( fgSizer12, 1, wxEXPAND, 5 );
+	
+	
+	bSizer1->Add( fgSizer112, 1, wxEXPAND, 5 );
+	
+	
+	m_wizPage1->SetSizer( bSizer1 );
+	m_wizPage1->Layout();
+	wxWizardPageSimple* m_wizPage2_Local = new wxWizardPageSimple( this, NULL, NULL, wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ) );
+	m_pages.Add( m_wizPage2_Local );
+	
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText7 = new wxStaticText( m_wizPage2_Local, wxID_ANY, wxT("Select files or folders to add:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->Wrap( -1 );
+	bSizer8->Add( m_staticText7, 0, wxALL, 5 );
+	
+	m_filePicker = new wxGenericDirCtrl( m_wizPage2_Local, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_3D_INTERNAL|wxDIRCTRL_MULTIPLE|wxDIRCTRL_SHOW_FILTERS|wxSUNKEN_BORDER, wxEmptyString, 0 );
+	
+	m_filePicker->ShowHidden( false );
+	bSizer8->Add( m_filePicker, 1, wxEXPAND | wxALL, 5 );
+	
+	
+	m_wizPage2_Local->SetSizer( bSizer8 );
+	m_wizPage2_Local->Layout();
+	bSizer8->Fit( m_wizPage2_Local );
+	wxWizardPageSimple* m_wizPage2_Github = new wxWizardPageSimple( this, NULL, NULL, wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ) );
+	m_pages.Add( m_wizPage2_Github );
+	
+	wxBoxSizer* bSizer111;
+	bSizer111 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText112 = new wxStaticText( m_wizPage2_Github, wxID_ANY, wxT("Select Github libraries to add:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText112->Wrap( -1 );
+	bSizer111->Add( m_staticText112, 0, wxALL|wxEXPAND, 5 );
+	
+	wxArrayString m_checkListGHChoices;
+	m_checkListGH = new wxCheckListBox( m_wizPage2_Github, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkListGHChoices, wxLB_MULTIPLE|wxLB_NEEDED_SB );
+	bSizer111->Add( m_checkListGH, 1, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_btnSelectAllGH = new wxButton( m_wizPage2_Github, wxID_ANY, wxT("Select all"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_btnSelectAllGH, 1, wxALL, 5 );
+	
+	m_btnUnselectAllGH = new wxButton( m_wizPage2_Github, wxID_ANY, wxT("Unselect all"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_btnUnselectAllGH, 1, wxALL, 5 );
+	
+	
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_searchCtrlGH = new wxSearchCtrl( m_wizPage2_Github, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_searchCtrlGH->ShowSearchButton( true );
+	#endif
+	m_searchCtrlGH->ShowCancelButton( false );
+	bSizer7->Add( m_searchCtrlGH, 2, wxALL, 5 );
+	
+	
+	bSizer111->Add( bSizer7, 0, wxEXPAND, 5 );
+	
+	
+	m_wizPage2_Github->SetSizer( bSizer111 );
+	m_wizPage2_Github->Layout();
+	bSizer111->Fit( m_wizPage2_Github );
+	wxWizardPageSimple* m_wizPage3_Review = new wxWizardPageSimple( this, NULL, NULL, wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ) );
+	m_pages.Add( m_wizPage3_Review );
+	
+	wxBoxSizer* bSizer1111;
+	bSizer1111 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText1121 = new wxStaticText( m_wizPage3_Review, wxID_ANY, wxT("Review and confirm the changes to the libraries:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1121->Wrap( -1 );
+	bSizer1111->Add( m_staticText1121, 0, wxALL|wxEXPAND, 5 );
+	
+	m_listCtrlReview = new wxDataViewListCtrl( m_wizPage3_Review, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_ROW_LINES|wxDV_VERT_RULES );
+	m_dvLibName = m_listCtrlReview->AppendTextColumn( wxT("Library") ); 
+	m_dvLibStatus = m_listCtrlReview->AppendTextColumn( wxT("Status") ); 
+	m_dvLibFormat = m_listCtrlReview->AppendTextColumn( wxT("Format") ); 
+	bSizer1111->Add( m_listCtrlReview, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	m_wizPage3_Review->SetSizer( bSizer1111 );
+	m_wizPage3_Review->Layout();
+	bSizer1111->Fit( m_wizPage3_Review );
+	wxWizardPageSimple* m_wizPage4_SelectTarget = new wxWizardPageSimple( this, NULL, NULL, wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ) );
+	m_pages.Add( m_wizPage4_SelectTarget );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText12 = new wxStaticText( m_wizPage4_SelectTarget, wxID_ANY, wxT("Where do you wish the new libraries to be added:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	bSizer12->Add( m_staticText12, 0, wxALL|wxEXPAND, 5 );
+	
+	m_radioGlobal = new wxRadioButton( m_wizPage4_SelectTarget, wxID_ANY, wxT("To global library configuration (visible by all projects)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_radioGlobal, 0, wxALL|wxEXPAND, 5 );
+	
+	m_radioProject = new wxRadioButton( m_wizPage4_SelectTarget, wxID_ANY, wxT("To the current project only"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_radioProject, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	m_wizPage4_SelectTarget->SetSizer( bSizer12 );
+	m_wizPage4_SelectTarget->Layout();
+	bSizer12->Fit( m_wizPage4_SelectTarget );
 	
 	this->Centre( wxBOTH );
 	
@@ -226,33 +237,27 @@ WIZARD_FPLIB_TABLE_BASE::WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	}
 	
 	// Connect Events
-	this->Connect( wxID_ANY, wxEVT_WIZARD_FINISHED, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnFinish ) );
+	this->Connect( wxID_ANY, wxEVT_WIZARD_FINISHED, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnWizardFinished ) );
 	this->Connect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGED, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPageChanged ) );
 	this->Connect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGING, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPageChanging ) );
-	m_rbFpLibFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPluginSelection ), NULL, this );
-	m_rbPathManagement->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPathManagementSelection ), NULL, this );
-	m_gridEnvironmentVariablesList->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WIZARD_FPLIB_TABLE_BASE::OnSelectEnvVarCell ), NULL, this );
-	m_buttonAddEV->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddEVariable ), NULL, this );
-	m_buttonRemoveEV->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveEVariable ), NULL, this );
-	m_buttonGithubLibList->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnGithubLibsList ), NULL, this );
-	m_buttonAddLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddFpLibs ), NULL, this );
-	m_buttonRemoveLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveFpLibs ), NULL, this );
+	m_downloadGithub->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnCheckSaveCopy ), NULL, this );
+	m_btnBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnBrowseButtonClick ), NULL, this );
+	m_btnSelectAllGH->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnSelectAllGH ), NULL, this );
+	m_btnUnselectAllGH->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnUnselectAllGH ), NULL, this );
+	m_searchCtrlGH->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnChangeSearch ), NULL, this );
 }
 
 WIZARD_FPLIB_TABLE_BASE::~WIZARD_FPLIB_TABLE_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxID_ANY, wxEVT_WIZARD_FINISHED, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnFinish ) );
+	this->Disconnect( wxID_ANY, wxEVT_WIZARD_FINISHED, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnWizardFinished ) );
 	this->Disconnect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGED, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPageChanged ) );
 	this->Disconnect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGING, wxWizardEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPageChanging ) );
-	m_rbFpLibFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPluginSelection ), NULL, this );
-	m_rbPathManagement->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnPathManagementSelection ), NULL, this );
-	m_gridEnvironmentVariablesList->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WIZARD_FPLIB_TABLE_BASE::OnSelectEnvVarCell ), NULL, this );
-	m_buttonAddEV->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddEVariable ), NULL, this );
-	m_buttonRemoveEV->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveEVariable ), NULL, this );
-	m_buttonGithubLibList->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnGithubLibsList ), NULL, this );
-	m_buttonAddLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnAddFpLibs ), NULL, this );
-	m_buttonRemoveLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnRemoveFpLibs ), NULL, this );
+	m_downloadGithub->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnCheckSaveCopy ), NULL, this );
+	m_btnBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnBrowseButtonClick ), NULL, this );
+	m_btnSelectAllGH->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnSelectAllGH ), NULL, this );
+	m_btnUnselectAllGH->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnUnselectAllGH ), NULL, this );
+	m_searchCtrlGH->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( WIZARD_FPLIB_TABLE_BASE::OnChangeSearch ), NULL, this );
 	
 	m_pages.Clear();
 }

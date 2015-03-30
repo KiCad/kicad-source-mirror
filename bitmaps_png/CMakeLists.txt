@@ -543,6 +543,7 @@ set( BMAPS_MID
     width_track
     width_vias
     window_close
+    wizard_add_fplib_small
     zip_tool
     zip
     zone_duplicate

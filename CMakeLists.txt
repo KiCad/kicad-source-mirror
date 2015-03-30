@@ -36,26 +36,6 @@ option( KICAD_KEEPCASE
     ON
     )
 
-# The footprint library wizard uses wxWebview, which needs a system webkit to be built
-# The default build option in wxWidgets is to build wxWebview, but it could be not built
-# if web kit devel tools are missing
-# So this option disable use of wxWebview, if building wxWebview creates issues
-# see:
-# http://docs.wxwidgets.org/3.0/classwx_web_view.html
-# * No issues on Windows.
-# * needs webkitgtk-devel package installed on Linux, and wxWidgets rebuilt with this package.
-# * Seems also OK on OSX.
-# This option has effect only if BUILD_GITHUB_PLUGIN is ON
-#
-# This option is set to OFF because Kicad developers cannot be sure the use of Webkit does no open
-# a security issue when runnig Kicad.
-# the probability is low, but not zero.
-option( KICAD_USE_WEBKIT
-    "Use system web kit to build a web viewer in footprint library wizard to easily select github libraries (default ON)."
-    OFF
-    )
-
-
 option( USE_WX_GRAPHICS_CONTEXT
     "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental" )
 
@@ -101,17 +81,6 @@ mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
 # python binary file should be is exec path.
 
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
-
-# When KICAD_USE_WEBKIT in on, the Kicad web viewer has access to the www.
-# Kicad developers cannot be sure the use of Web viewer does no open a security issue when runnig Kicad.
-# the probability is low, but not zero.
-#so warn the user:
-if( KICAD_USE_WEBKIT )
-    message( STATUS "by setting KICAD_USE_WEBKIT ON, you are building a web viewer inside Kicad.
-Kicad developers cannot be sure the Web access does no open a security issue,
-when running a Web Viewer inside Kicad. The probability is low, but not zero.
-You are warned" )
-endif()
 
 
 # This can be set to a custom name to brag about a particular branch in the "About" dialog:
@@ -439,14 +408,7 @@ add_definitions( -DWX_COMPATIBILITY )
 # See line 41 of CMakeModules/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS --static=no )
 
-if( KICAD_USE_WEBKIT AND BUILD_GITHUB_PLUGIN )
-    set( webkitlib "webview" )
-    add_definitions( -DKICAD_USE_WEBKIT )
-else()
-    set( webkitlib "" )
-endif()
-
-find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml ${webkitlib} stc REQUIRED )
+find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -761,9 +723,6 @@ add_subdirectory( cvpcb )
 add_subdirectory( eeschema )
 add_subdirectory( gerbview )
 add_subdirectory( lib_dxf )
-if( KICAD_USE_WEBKIT )
-    add_subdirectory( webviewer )
-endif()
 add_subdirectory( pcbnew )
 add_subdirectory( polygon )
 add_subdirectory( pagelayout_editor )

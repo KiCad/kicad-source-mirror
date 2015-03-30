@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,24 +10,25 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-#include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/statline.h>
+#include <wx/radiobut.h>
+#include <wx/sizer.h>
+#include <wx/textctrl.h>
+#include <wx/checkbox.h>
+#include <wx/button.h>
+#include <wx/hyperlink.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/statbmp.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/grid.h>
-#include <wx/button.h>
-#include <wx/statbox.h>
+#include <wx/dirctrl.h>
+#include <wx/checklst.h>
+#include <wx/srchctrl.h>
+#include <wx/dataview.h>
 #include <wx/wizard.h>
 #include <wx/dynarray.h>
 WX_DEFINE_ARRAY_PTR( wxWizardPageSimple*, WizardPages );
@@ -43,45 +44,47 @@ class WIZARD_FPLIB_TABLE_BASE : public wxWizard
 	private:
 	
 	protected:
-		wxRadioBox* m_rbFpLibFormat;
-		wxStaticLine* m_staticline2;
-		wxStaticBitmap* m_bitmapGithubURL;
-		wxStaticText* m_staticText10;
-		wxTextCtrl* m_textCtrlGithubURL;
-		wxRadioBox* m_rbPathManagement;
 		wxStaticText* m_staticText1;
-		wxGrid* m_gridEnvironmentVariablesList;
-		wxButton* m_buttonAddEV;
-		wxButton* m_buttonRemoveEV;
-		wxStaticText* m_textPluginTitle;
-		wxStaticText* m_textPluginType;
-		wxStaticText* m_textOptionTitle;
-		wxStaticText* m_textOption;
-		wxStaticText* m_stPathTitle;
-		wxStaticText* m_textPath;
-		wxStaticText* m_staticText2;
-		wxGrid* m_gridFpListLibs;
-		wxButton* m_buttonGithubLibList;
-		wxButton* m_buttonAddLib;
-		wxButton* m_buttonRemoveLib;
+		wxRadioButton* m_radioAddLocal;
+		wxRadioButton* m_radioAddGithub;
+		wxTextCtrl* m_textCtrlGithubURL;
+		wxCheckBox* m_downloadGithub;
+		wxStaticText* m_downloadDir;
+		wxButton* m_btnBrowse;
+		wxStaticText* m_invalidDir;
+		wxStaticText* m_staticText8;
+		wxHyperlinkCtrl* m_hyperlink1;
+		wxStaticText* m_staticText9;
+		wxStaticText* m_staticText7;
+		wxGenericDirCtrl* m_filePicker;
+		wxStaticText* m_staticText112;
+		wxCheckListBox* m_checkListGH;
+		wxButton* m_btnSelectAllGH;
+		wxButton* m_btnUnselectAllGH;
+		wxSearchCtrl* m_searchCtrlGH;
+		wxStaticText* m_staticText1121;
+		wxDataViewListCtrl* m_listCtrlReview;
+		wxDataViewColumn* m_dvLibName;
+		wxDataViewColumn* m_dvLibStatus;
+		wxDataViewColumn* m_dvLibFormat;
+		wxStaticText* m_staticText12;
+		wxRadioButton* m_radioGlobal;
+		wxRadioButton* m_radioProject;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnFinish( wxWizardEvent& event ) { event.Skip(); }
+		virtual void OnWizardFinished( wxWizardEvent& event ) { event.Skip(); }
 		virtual void OnPageChanged( wxWizardEvent& event ) { event.Skip(); }
 		virtual void OnPageChanging( wxWizardEvent& event ) { event.Skip(); }
-		virtual void OnPluginSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPathManagementSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSelectEnvVarCell( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnAddEVariable( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemoveEVariable( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnGithubLibsList( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAddFpLibs( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemoveFpLibs( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckSaveCopy( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelectAllGH( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUnselectAllGH( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnChangeSearch( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Library Wizard"), const wxBitmap& bitmap = wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ), const wxPoint& pos = wxDefaultPosition, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add Footprint Libraries Wizard"), const wxBitmap& bitmap = wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ), const wxPoint& pos = wxDefaultPosition, long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
 		WizardPages m_pages;
 		~WIZARD_FPLIB_TABLE_BASE();
 	

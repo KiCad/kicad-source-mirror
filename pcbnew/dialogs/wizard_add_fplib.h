@@ -1,12 +1,10 @@
-/**
- * @file wizard_add_fplib.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,230 +24,254 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-#include <dialog_helpers.h>
 #include <wizard_add_fplib_base.h>
+#include <io_mgr.h>
+#include <boost/optional.hpp>
 
-// A helper class to handle the different types of lib depending
-// on the plugin: ext, type of lib: files/folders ... and info
-// needed to populate the main fp lib table
-class LIB_DESCR
-{
-public:
-    wxString m_PluginName;  // The "official" name of the plugin (see fp lib table dialog)
-    wxString m_Ext;         // standard extension (.mod, .pretty ...)
-    wxString m_EnvVarName;  // the environment var if selected, or empty
-    wxString m_DefaultPath;
-    bool     m_IsAbsolutePath;  // true if absolue path is selected
-    bool     m_IsFile;      // true for libs which are single files,
-                            // false for libs which are directories containing footprints
-    bool     m_IsGitHub;    // true only for GitHub plugin
-
-    LIB_DESCR()
-    {
-        m_IsAbsolutePath = true;
-        m_IsFile = true;
-        m_IsGitHub = false;
-    }
-};
-
+class KIWAY_PLAYER;
 
 class WIZARD_FPLIB_TABLE : public WIZARD_FPLIB_TABLE_BASE
 {
-    int m_rowPrjEnvVarPosition;     // the row of the PROJECT_VAR_NAME
-    int m_predefinedEnvVarCnt;      // number of predefined env var when calling the wizard
-                                    // at least 3 are always defined
-    LIB_DESCR * m_currLibDescr;
-
-    // static members to store options during a session
-    static int m_last_plugin_choice;
-    static int m_last_defaultpath_choice;
-
-    // This enum must have the same order than m_rbPathManagement
-    enum OPT_PATH {
-        PROJECT_PATH,
-        ENV_VAR_PATH,
-        ABSOLUTE_PATH
-    };
-
-    // This enum must have the same order than m_rbFpLibFormat
-    enum OPT_PLUGIN {
-        KICAD_PLUGIN,
-        GITHUB_PLUGIN,
-        LEGACY_PLUGIN,
-        EAGLE_PLUGIN,
-        GEDA_PCB_PLUGIN
-    };
-
 public:
-    WIZARD_FPLIB_TABLE( wxWindow* aParent, wxArrayString& aEnvVariableList );
-    wxWizardPage* GetFirstPage() { return m_pages[0]; }
-
+    WIZARD_FPLIB_TABLE( wxWindow* aParent );
     ~WIZARD_FPLIB_TABLE();
 
+    ///> Source of the libraries (local files or Github)
+    enum LIB_SOURCE { LOCAL, GITHUB };
+
+    ///> Scope (global/project)
+    enum LIB_SCOPE { GLOBAL = 1, PROJECT = 2 };
+
     /**
-     * Return info on lib at line aIdx in aLibDescr
-     * @param aLibDescr = a wxArrayString to return the nickname, the lib URI and the lin type
-     * @return true if aIdx lin exists
+     * Function GetFirstPage
+     * Returns the welcoming page for the wizard.
      */
-    bool GetLibDescr( int aIdx, wxArrayString& aLibDescr )
+    inline wxWizardPage* GetFirstPage() const
     {
-        int count = m_gridFpListLibs->GetTable()->GetRowsCount();
-
-        if( aIdx >= count )
-            return false;
-
-        // Return info
-        // Add the nickname:
-        aLibDescr.Add( m_gridFpListLibs->GetCellValue( aIdx, 0 ) );
-        // Add the full path:
-        aLibDescr.Add( m_gridFpListLibs->GetCellValue( aIdx, 1 ) );
-        // Add the plugin name:
-        aLibDescr.Add( m_gridFpListLibs->GetCellValue( aIdx, 2 ) );
-
-        return true;
+        return m_welcomeDlg;
     }
 
-private:
-    void initDlg( wxArrayString& aEnvVariableList );
-    wxString getSelectedEnvVar();       // return the selected env variable
-    wxString getSelectedEnvVarValue();  // return the selected env variable value
-    bool setSecondPage();               // Init prms for the second wizard page
-    bool setLastPage();                 // Init prms for the last wizard page
-    void selectLibsFiles();             // select a set of library files
-    void selectLibsFolders();           // select a set of library folders
-
-    /** select a set of library on Github, using the Web viewer to explore
-     * the repos
+    /**
+     * Function GetGithubURL
+     * Returns the current Github repository URL set in the wizard.
      */
-    void selectLibsGithubWithWebViewer();
+    inline wxString GetGithubURL() const
+    {
+        return m_textCtrlGithubURL->GetValue();
+    }
 
-    /** Get the list of .pretty libraries on Github,
-     * without using the viewer, from the lib list extracted from the KiCad repos
+    /**
+     * Function SetGithubURL
+     * Sets the current Github repository URL used by the wizard.
+     * @param aUrl is the new URL to be applied.
      */
+    inline void SetGithubURL( const wxString& aUrl )
+    {
+        m_textCtrlGithubURL->SetValue( aUrl );
+    }
+
+    /**
+     * Function GetLibSource
+     * Returns the source of libraries (local / Github).
+     */
+    LIB_SOURCE GetLibSource() const;
+
+    /**
+     * Function GetLibScope
+     * Returns the scope for the added libraries (global / project specific).
+     */
+    LIB_SCOPE GetLibScope() const;
+
+    // Wizard event handlers
+    void OnSourceCheck( wxCommandEvent& aEvent );
+    void OnSelectFiles( wxCommandEvent& aEvent );
+    void OnCheckGithubList( wxCommandEvent& aEvent );
+    void OnPageChanged( wxWizardEvent& aEvent );
+    void OnSelectAllGH( wxCommandEvent& aEvent );
+    void OnUnselectAllGH( wxCommandEvent& aEvent );
+    void OnChangeSearch( wxCommandEvent& aEvent );
+    void OnWizardFinished( wxWizardEvent& aEvent );
+    void OnBrowseButtonClick( wxCommandEvent& aEvent );
+    void OnCheckSaveCopy( wxCommandEvent& aEvent );
+
+    class LIBRARY
+    {
+    public:
+        LIBRARY( const wxString& aPath, const wxString& aDescription = wxEmptyString );
+        ~LIBRARY()
+        {
+            std::cout << "destroyed " << this << std::endl;
+        }
+
+        ///> Possible states of validation.
+        enum STATUS { OK, INVALID, NOT_CHECKED };
+
+        /**
+         * Function Test
+         * Uses the associated plugin to validate the library contents.
+         * @return True if the library and the matched plugin type are valid.
+         */
+        bool Test();
+
+        /**
+         * Function GetPluginType
+         * Returns the plugin type, autodetected basing on the path.
+         * @return Returns empty boost::optional if the type could not be autodetected.
+         */
+        inline boost::optional<IO_MGR::PCB_FILE_T> GetPluginType() const
+        {
+            return m_plugin;
+        }
+
+        /**
+         * Function GetPluginName
+         * Returns the plugin name, as used in the FPLIB table editor.
+         */
+        wxString GetPluginName() const;
+
+        /**
+         * Function GetAbsolutePath
+         * Returns the absolute path for the library.
+         */
+        inline const wxString& GetAbsolutePath() const
+        {
+            return m_path;
+        }
+
+        /**
+         * Function GetRelativePath
+         * Returns the relative path, based on the input path with the base part replaced.
+         * @param aBase is the base for the relative path.
+         * @param aSubstitution is the string to be replace the base path.
+         * @return Adjusted path if possible, or the absolute path when it is not possible.
+         */
+        wxString GetRelativePath( const wxString& aBase, const wxString& aSubstitution = wxEmptyString ) const;
+
+        /**
+         * Function GetAutoPath
+         * Returns path that is either absolute or related to KISYSMOD/KIPRJMOD if the files
+         * are stored within one of the mentioned paths.
+         * @param aScoep is the scope for the library. It determines the environmental variables
+         * that are used to check the path (GLOBAL scope checks only KISYSMOD, while PROJECT
+         * scope checks both KISYSMOD & KIPRJMOD).
+         */
+        wxString GetAutoPath( LIB_SCOPE aScope ) const;
+
+        /**
+         * Function GetDescription
+         * Returns the description for the library. If it is not specified in the constructor,
+         * it is just the filename.
+         */
+        wxString GetDescription() const;
+
+        /**
+         * Function GetStatus
+         * Returns the validity status for the library. It requires running Test() before, to get
+         * a result different than NOT_CHECKED.
+         */
+        STATUS GetStatus() const
+        {
+            return m_status;
+        }
+
+    protected:
+        inline void setPath( const wxString& aPath )
+        {
+            m_path = aPath;
+        }
+
+        inline void setPluginType( IO_MGR::PCB_FILE_T aType )
+        {
+            m_plugin = aType;
+        }
+
+        /**
+         * Function replaceEnv
+         * replaces path with environmental variable if applicable.
+         * @param aEnvVar is the environmental variable that should be substituted.
+         * @param aFilePath determines if the path is a file path (contrary to e.g. http address).
+         */
+        wxString replaceEnv( const wxString& aEnvVar, bool aFilePath = true ) const;
+
+        wxString m_path;
+        wxString m_description;
+        boost::optional<IO_MGR::PCB_FILE_T> m_plugin;
+        STATUS m_status;
+
+        friend class WIZARD_FPLIB_TABLE;
+    };
+
+    /**
+     * Function GetLibraries
+     * Returns libraries selected by the user.
+     */
+    const std::vector<LIBRARY>& GetLibraries() const
+    {
+        return m_libraries;
+    }
+
+
+protected:
+    // Initialization of wizard pages
+    void setupDialogOrder();
+    void setupGithubList();
+    void setupFileSelect();
+    void setupReview();
+
+    ///> Checks the selection in file picker
+    bool checkFiles() const;
+
+    ///> Sets the target directory for libraries downloaded from Github
+    void setDownloadDir( const wxString& aDir )
+    {
+        m_downloadDir->SetLabel( aDir );
+    }
+
+    ///> Gets the current target for downloaded libraries
+    inline wxString getDownloadDir()
+    {
+        return m_downloadDir->GetLabel();
+    }
+
+    ///> Downloads the list of Github libraries
     void getLibsListGithub( wxArrayString& aList );
 
-    /** Helper function.
-     * add the .pretty libraries found in aUrlList, after calculating a nickname and
-     * replacing the path by an env variable, if allowed and possible
-     */
-    void installGithubLibsFromList( wxArrayString& aUrlList );
+    ///> Saves a list of Github libraries locally.
+    bool downloadGithubLibsFromList( wxArrayString& aUrlList, wxString* aErrorMessage );
 
-    /**
-     * Download the .pretty libraries found in aUrlLis and store them on disk
-     * in a master folder
-     * @return true if OK, false on error
-     * @param aUrlList is the list of Github .pretty libs to download
-     * @param aErrorMessage is a wxString pointer to store error messages if any.
-     */
-    bool downloadGithubLibsFromList( wxArrayString& aUrlList, wxString * aErrorMessage = NULL );
+    ///> Does the user want a local copy of Github libraries?
+    inline bool wantLocalCopy() const { return m_downloadGithub->GetValue(); }
 
-    void updateFromPlugingChoice();     // update dialog options and widgets
-                                        // depending on the plugin choice
-    int GetEnvVarCount()                // Get the number of rows in env var table
+    ///> Enables Github widgets depending on the selected options.
+    void updateGithubControls();
+
+    ///> Updates m_libraries basing on dialogs contents
+    void updateLibraries();
+
+    ///> Enables/disable 'Next' button
+    inline void enableNext( bool aEnable )
     {
-        return m_gridEnvironmentVariablesList->GetTable()->GetRowsCount();
+        wxWindow* nextBtn = FindWindowById( wxID_FORWARD );
+
+        if( nextBtn )
+            nextBtn->Enable( aEnable );
     }
 
-    int GetLibsCount()                // Get the number of rows in libs table
-    {
-        return m_gridFpListLibs->GetTable()->GetRowsCount();
-    }
+    ///> Cache for the downloaded Github library list
+    wxArrayString m_githubLibs;
 
-    bool IsGithubPlugin()               // Helper funct, return true if
-    {                                   // the Github plugin is the choice
-        return m_rbFpLibFormat->GetSelection() == GITHUB_PLUGIN;
-    }
+    ///> Libraries selected in the wizard
+    std::vector<LIBRARY> m_libraries;
 
+    // Aliases for wizard pages to make code more readable
+    wxWizardPageSimple* const m_welcomeDlg;
+    wxWizardPageSimple* const m_fileSelectDlg;
+    wxWizardPageSimple* const m_githubListDlg;
+    wxWizardPageSimple* const m_reviewDlg;
+    wxWizardPageSimple* const m_targetDlg;
 
-    bool IsKicadPlugin()                // Helper funct, return true if
-    {                                   // the Kicad plugin is the choice
-        return m_rbFpLibFormat->GetSelection() == KICAD_PLUGIN;
-    }
-
-    int HasGithubEnvVarCompatible();    // Return the first index to one env var
-                                        // which defines a url compatible github
-                                        // or -1 if not found
-
-    // Populate the library list with the currently selected libs
-    void populateLibList( const wxArrayString& aNickNames,
-                          const wxArrayString& aPaths,
-                          const wxString&      aPluginName );
-
-    // Virtual event functions, from WIZARD_FPLIB_TABLE_BASE
-    void OnFinish( wxWizardEvent& event ) { event.Skip(); }
-    void OnPageChanged( wxWizardEvent& event );
-    void OnPageChanging( wxWizardEvent& event );
-    void OnAddEVariable( wxCommandEvent& event );
-    void OnRemoveEVariable( wxCommandEvent& event );
-    void OnAddFpLibs( wxCommandEvent& event );
-    void OnRemoveFpLibs( wxCommandEvent& event );
-    void OnPathManagementSelection( wxCommandEvent& event );
-    void OnSelectEnvVarCell( wxGridEvent& event );
-    void OnPluginSelection( wxCommandEvent& event );
-#ifdef BUILD_GITHUB_PLUGIN
-    void OnGithubLibsList( wxCommandEvent& event );
-#endif
-    bool ValidateOptions();
+    // Since the same event is used for changing the selection/filter type, we need a way to
+    // determine what's the real cause of the event. Therefore here we store the number of the
+    // selected file type filter.
+    int m_selectedFilter;
 };
-
-
-// Specialized helper classes to handle the different plugin types:
-class LIB_DESCR_KICAD: public LIB_DESCR
-{
-public:
-    LIB_DESCR_KICAD(): LIB_DESCR()
-    {
-        m_PluginName = IO_MGR::ShowType( IO_MGR::KICAD );
-        m_Ext = wxT("pretty");
-        m_IsFile = false;
-    }
-};
-
-
-class LIB_DESCR_GITHUB: public LIB_DESCR
-{
-public:
-    LIB_DESCR_GITHUB(): LIB_DESCR()
-    {
-        m_PluginName = IO_MGR::ShowType( IO_MGR::GITHUB );
-        m_Ext = wxT("pretty");
-        m_IsFile = false;
-        m_IsGitHub = true;
-    }
-};
-
-class LIB_DESCR_LEGACY: public LIB_DESCR
-{
-public:
-    LIB_DESCR_LEGACY(): LIB_DESCR()
-    {
-        m_PluginName = IO_MGR::ShowType( IO_MGR::LEGACY );
-        m_Ext = wxT("mod");
-    }
-};
-
-
-class LIB_DESCR_EAGLE: public LIB_DESCR
-{
-public:
-    LIB_DESCR_EAGLE(): LIB_DESCR()
-    {
-        m_PluginName = IO_MGR::ShowType( IO_MGR::EAGLE );
-        m_Ext = wxT("lbr");
-        m_IsFile = true;
-    }
-};
-
-
-class LIB_DESCR_GEDA: public LIB_DESCR
-{
-public:
-    // No specific extension known for folders
-    LIB_DESCR_GEDA(): LIB_DESCR()
-    {
-        m_PluginName = IO_MGR::ShowType( IO_MGR::GEDA_PCB );
-        m_IsFile = false;
-    }
-};
-

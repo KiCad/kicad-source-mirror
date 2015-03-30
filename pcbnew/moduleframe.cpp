@@ -116,7 +116,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
 
-    // Preferences et option menus
+    // Preferences and option menus
     EVT_MENU( ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
@@ -124,6 +124,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( ID_PCB_LIB_WIZARD,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
@@ -851,10 +853,16 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
         DisplayHotkeyList( this, g_Module_Editor_Hokeys_Descr );
         break;
 
+    case ID_PCB_LIB_WIZARD:
     case ID_PCB_LIB_TABLE_EDIT:
         {
             bool tableChanged = false;
-            int r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
+            int r = 0;
+
+            if( id == ID_PCB_LIB_TABLE_EDIT )
+                r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
+            else
+                r = InvokeFootprintWizard( this, &GFootprintTable, Prj().PcbFootprintLibs() );
 
             if( r & 1 )
             {

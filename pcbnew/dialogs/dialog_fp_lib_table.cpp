@@ -802,43 +802,45 @@ int DIALOG_FP_LIB_TABLE::m_pageNdx = 0;
 
 void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
 {
-    wxArrayString envVariableList;
+    WIZARD_FPLIB_TABLE dlg( this );
 
-    // Build the environment variables in use:
-    for( int ii = 0; ii <  m_path_subs_grid->GetTable()->GetRowsCount(); ii ++ )
-        envVariableList.Add( m_path_subs_grid->GetCellValue( wxGridCellCoords( ii, 0 ) ) );
-
-    WIZARD_FPLIB_TABLE dlg( this, envVariableList );
-
-    if( ! dlg.RunWizard( dlg.GetFirstPage() ) )
+    if( !dlg.RunWizard( dlg.GetFirstPage() ) )
         return;     // Aborted by user
 
-    wxGrid* libgrid = m_cur_grid;
-    FP_TBL_MODEL*  tbl = (FP_TBL_MODEL*) libgrid->GetTable();
+    const std::vector<WIZARD_FPLIB_TABLE::LIBRARY>& libs = dlg.GetLibraries();
+    bool global_scope = dlg.GetLibScope() == WIZARD_FPLIB_TABLE::GLOBAL;
+    wxGrid* libgrid = global_scope ? m_global_grid : m_project_grid;
+    FP_TBL_MODEL* tbl = (FP_TBL_MODEL*) libgrid->GetTable();
 
-    // Import fp library list
-    int idx = 0;
-    wxArrayString libDescr;   // Will contain nickname, URI, plugin
-
-    while( dlg.GetLibDescr( idx++, libDescr ) )
+    for( std::vector<WIZARD_FPLIB_TABLE::LIBRARY>::const_iterator it = libs.begin();
+            it != libs.end(); ++it )
     {
-        if( ! libDescr[0].IsEmpty() && m_cur_grid->AppendRows( 1 ) )
+        if( it->GetStatus() == WIZARD_FPLIB_TABLE::LIBRARY::INVALID )
+            continue;
+
+        if( libgrid->AppendRows( 1 ) )
         {
             int last_row = libgrid->GetNumberRows() - 1;
 
             // Add the nickname: currently make it from filename
-            tbl->SetValue( last_row, COL_NICKNAME, libDescr[0] );
-            // Add the full path:
-            tbl->SetValue( last_row, COL_URI, libDescr[1] );
+            tbl->SetValue( last_row, COL_NICKNAME, it->GetDescription() );
+
+            // Add the path:
+            tbl->SetValue( last_row, COL_URI, it->GetAutoPath( dlg.GetLibScope() ) );
+
             // Add the plugin name:
-            tbl->SetValue( last_row, COL_TYPE, libDescr[2] );
+            tbl->SetValue( last_row, COL_TYPE, it->GetPluginName() );
 
             libgrid->MakeCellVisible( last_row, 0 );
             libgrid->SetGridCursor( last_row, 0 );
         }
-
-        libDescr.Clear();
     }
+
+    // Switch to the current scope tab
+    if( global_scope )
+        m_auinotebook->SetSelection( 0 );
+    else
+        m_auinotebook->SetSelection( 1 );
 
     libgrid->SelectRow( libgrid->GetGridCursorRow() );
 }
@@ -851,4 +853,35 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, F
     int dialogRet = dlg.ShowModal();    // returns value passed to EndModal() above
 
     return dialogRet;
+}
+
+
+int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
+{
+    WIZARD_FPLIB_TABLE dlg( aParent );
+
+    if( !dlg.RunWizard( dlg.GetFirstPage() ) )
+        return 0;     // Aborted by user
+
+    const std::vector<WIZARD_FPLIB_TABLE::LIBRARY>& libs = dlg.GetLibraries();
+    WIZARD_FPLIB_TABLE::LIB_SCOPE scope = dlg.GetLibScope();
+    FP_LIB_TABLE* fp_tbl = ( scope == WIZARD_FPLIB_TABLE::GLOBAL ? aGlobal : aProject );
+
+    if( fp_tbl )
+    {
+        for( std::vector<WIZARD_FPLIB_TABLE::LIBRARY>::const_iterator it = libs.begin();
+                it != libs.end(); ++it )
+        {
+            if( it->GetStatus() == WIZARD_FPLIB_TABLE::LIBRARY::INVALID )
+                continue;
+
+            FP_LIB_TABLE::ROW row( it->GetDescription(),
+                                it->GetAutoPath( scope ),
+                                it->GetPluginName(),
+                                wxEmptyString );     // options
+            fp_tbl->InsertRow( row );
+        }
+    }
+
+    return scope;
 }

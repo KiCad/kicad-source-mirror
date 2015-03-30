@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,8 +51,8 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText4;
 		wxStaticText* m_PrjTableFilename;
 		wxGrid* m_project_grid;
-		wxButton* m_append_button;
 		wxButton* m_buttonWizard;
+		wxButton* m_append_button;
 		wxButton* m_delete_button;
 		wxButton* m_move_up_button;
 		wxButton* m_move_down_button;
@@ -66,8 +66,8 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		virtual void onCancelCaptionButtonClick( wxCloseEvent& event ) = 0;
 		virtual void onKeyDown( wxKeyEvent& event ) = 0;
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
-		virtual void appendRowHandler( wxCommandEvent& event ) = 0;
 		virtual void OnClickLibraryWizard( wxCommandEvent& event ) = 0;
+		virtual void appendRowHandler( wxCommandEvent& event ) = 0;
 		virtual void deleteRowHandler( wxCommandEvent& event ) = 0;
 		virtual void moveUpHandler( wxCommandEvent& event ) = 0;
 		virtual void moveDownHandler( wxCommandEvent& event ) = 0;

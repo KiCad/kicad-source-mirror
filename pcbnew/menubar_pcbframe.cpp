@@ -480,8 +480,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- Preferences and configuration menu------------------------------------
     wxMenu* configmenu = new wxMenu;
 
+    AddMenuItem( configmenu, ID_PCB_LIB_WIZARD,
+                _( "&Footprint Libraries Wizard" ), _( "Add footprint libraries with wizard" ),
+                KiBitmap( wizard_add_fplib_small_xpm ) );
+
     AddMenuItem( configmenu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Footprint Li&braries" ), _( "Configure footprint libraries" ),
+                _( "Footprint Li&braries Manager" ), _( "Configure footprint libraries" ),
                 KiBitmap( library_table_xpm ) );
 
     // Path configuration edit dialog.

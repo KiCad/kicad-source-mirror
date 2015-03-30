@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -130,13 +130,13 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_buttonWizard = new wxButton( this, wxID_ANY, _("Append with Wizard"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer51->Add( m_buttonWizard, 0, wxALL, 5 );
+	
 	m_append_button = new wxButton( this, wxID_ANY, _("Append Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_append_button->SetToolTip( _("Add a PCB library row to this table") );
 	
 	bSizer51->Add( m_append_button, 0, wxALL, 5 );
-	
-	m_buttonWizard = new wxButton( this, wxID_ANY, _("Append with Wizard"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer51->Add( m_buttonWizard, 0, wxALL, 5 );
 	
 	m_delete_button = new wxButton( this, wxID_ANY, _("Remove Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_delete_button->SetToolTip( _("Remove a PCB library from this library table") );
@@ -228,8 +228,8 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelCaptionButtonClick ) );
 	this->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_buttonWizard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::OnClickLibraryWizard ), NULL, this );
+	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
@@ -244,8 +244,8 @@ DIALOG_FP_LIB_TABLE_BASE::~DIALOG_FP_LIB_TABLE_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_FP_LIB_TABLE_BASE::onCancelCaptionButtonClick ) );
 	this->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FP_LIB_TABLE_BASE::onKeyDown ) );
 	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_FP_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
-	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_buttonWizard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::OnClickLibraryWizard ), NULL, this );
+	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
