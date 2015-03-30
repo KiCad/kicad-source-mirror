@@ -181,16 +181,6 @@ Default: ON
 This option enables or disables building KiCad with a pcbnew plugin for loading
 footprints from a GitHub repository.
 
-KICAD_USE_WEBKIT (ON/OFF)
-----------------------------
-Default: ON (and OFF when BUILD_GITHUB_PLUGIN is OFF)
-
-This option enables or disables building a web viewer used if the
-footprint library table wizard to easily add footprints library entries
-to this tables when libraries are on a GitHub repository.
-This option need the full support of wxWebview/WebKit in wxWidgets, which is not
-always the case on Linux.
-
 
 KICAD_REPO_NAME (STRING)
 ------------------------

@@ -95,10 +95,6 @@ or more recent (Older versions have a print function which does not work).
 Verify that wx-config is in your path by running it from a command prompt.
 Linux users then go to next step.
 
-Note also wxWidgets must be compiled with the wxWebView support.
-This is the default when building wxWidgets, but only if the libwebkitgtk-dev is installed
-before building wxWidgets (sudo apt-get install libwebkitgtk-dev)
-
 Install CMake
 -------------
 On windows, download the installation binary for windows from cmake.org.
