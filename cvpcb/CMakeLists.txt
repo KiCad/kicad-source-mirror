@@ -8,11 +8,6 @@ endif()
 
 add_definitions( -DCVPCB )
 
-if( KICAD_USE_WEBKIT AND BUILD_GITHUB_PLUGIN )
-    set( WEBVIEWER_WXLIB "webviewer" )
-endif()
-
-
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
@@ -118,7 +113,6 @@ target_link_libraries( cvpcb_kiface
     pcbcommon
     pcad2kicadpcb
     common
-    ${WEBVIEWER_WXLIB}   # before bitmaps, because it uses some bitmaps defined in bitmaps
     bitmaps
     polygon
     gal
