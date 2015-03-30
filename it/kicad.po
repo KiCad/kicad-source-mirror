@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-28 23:08+0100\n"
-"PO-Revision-Date: 2015-03-28 23:09+0100\n"
+"POT-Creation-Date: 2015-03-30 13:06+0100\n"
+"PO-Revision-Date: 2015-03-30 13:06+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -2135,7 +2135,7 @@ msgstr "Seleziona strato e piazza via coperto/interno"
 
 #: pcbnew/onrightclick.cpp:621 pcbnew/hotkeys.cpp:110
 msgid "Switch Track Posture"
-msgstr "Cambia posizione pista"
+msgstr "Commuta postura pista"
 
 #: pcbnew/onrightclick.cpp:629
 msgid "Place Micro Via"
@@ -11823,7 +11823,9 @@ msgstr "Ricostruire i dati delle connessioni?"
 msgid ""
 "It appears that the Java run time environment is not installed on this "
 "computer.  Java is required to use FreeRoute."
-msgstr "Java non risulta installato sul PC. E' necessario per usare FreeRoute"
+msgstr ""
+"Sembra che Java non sia installato su questo computer. È necessario per "
+"l'esecuzione di FreeRoute."
 
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:176
 msgid "Pcbnew Error"
@@ -18694,7 +18696,7 @@ msgid "Render Material Properties"
 msgstr "Disegna le proprietà del materiale"
 
 #: 3d-viewer/3d_toolbar.cpp:191
-msgid "Show Model Bouding Boxes"
+msgid "Show Model Bounding Boxes"
 msgstr "Mostra i perimetri di delimitazione del modello"
 
 #: 3d-viewer/3d_toolbar.cpp:200
@@ -18781,7 +18783,7 @@ msgstr "Mostra strati &commenti ed grafica"
 msgid "Show &Eco Layers"
 msgstr "Mostra gli strati &eco"
 
-#: 3d-viewer/3d_draw.cpp:676 3d-viewer/3d_draw.cpp:985
+#: 3d-viewer/3d_draw.cpp:677 3d-viewer/3d_draw.cpp:986
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
