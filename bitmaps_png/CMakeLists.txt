@@ -581,6 +581,7 @@ set( BMAPS_OTHER
     tune_diff_pair_length_legend
     tune_diff_pair_skew_legend
     tune_single_track_length_legend
+    paperclip
     )
 
 

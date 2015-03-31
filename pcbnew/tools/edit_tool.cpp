@@ -51,6 +51,7 @@
 
 #include <dialogs/dialog_create_array.h>
 #include <dialogs/dialog_move_exact.h>
+#include <dialogs/dialog_assistant.h>
 
 EDIT_TOOL::EDIT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
@@ -248,6 +249,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else    // Prepare to start dragging
             {
+                if( !m_editModules )
+                    static_cast<PCB_EDIT_FRAME*>( editFrame )->GetAssistant()->RandomHint( KICAD_ASSISTANT::MOVING, 6000, 10 );
+
                 m_selectionTool->SanitizeSelection();
 
                 if( selection.Empty() )

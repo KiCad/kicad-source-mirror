@@ -41,6 +41,7 @@ include_directories(
     )
 
 set( PCBNEW_DIALOGS
+    dialogs/dialog_assistant.cpp
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options_base.cpp
     dialogs/dialog_cleaning_options.cpp
