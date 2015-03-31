@@ -798,7 +798,7 @@ void PGM_BASE::ConfigurePaths( wxWindow* aParent )
 
     for( ENV_VAR_MAP_ITER it = envVarMap.begin(); it != envVarMap.end(); ++it )
     {
-        wxLogDebug( wxT( "Environment variable %s=%s defined externally = %d" ),
+        wxLogTrace( traceEnvVars, wxT( "Environment variable %s=%s defined externally = %d" ),
                     GetChars( it->first ), GetChars( it->second.GetValue() ),
                     it->second.GetDefinedExternally() );
     }

@@ -56,8 +56,6 @@ DIALOG_ENV_VAR_CONFIG::DIALOG_ENV_VAR_CONFIG( wxWindow* aParent, const ENV_VAR_M
 
     if( okButton )
         SetDefaultItem( okButton );
-
-    wxLogDebug( wxT( "In DIALOG_ENV_VAR_CONFIG ctor." ) );
 }
 
 
@@ -174,6 +172,8 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
         }
     }
 
+    std::vector< wxString > removeFromMap;
+
     // Remove deleted entries from the map.
     for( ENV_VAR_MAP_ITER it = m_envVarMap.begin(); it != m_envVarMap.end(); ++it )
     {
@@ -189,13 +189,12 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
         }
 
         if( !found )
-        {
-            m_envVarMap.erase( it );
-            it--;
-        }
+            removeFromMap.push_back( it->first );
     }
 
-    wxLogDebug( wxT( "In DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()." ) );
+    for( size_t i = 0; i < removeFromMap.size(); i++ )
+        m_envVarMap.erase( removeFromMap[i] );
+
     return true;
 }
 
