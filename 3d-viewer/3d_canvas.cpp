@@ -73,6 +73,8 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
     EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END, EDA_3D_CANVAS::OnPopUpMenu )
 END_EVENT_TABLE()
 
+// Define an invalid value for some unsigned int indexes
+#define INVALID_INDEX GL_INVALID_VALUE
 
 EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
     wxGLCanvas( parent, wxID_ANY, attribList, wxDefaultPosition, wxDefaultSize,
@@ -83,11 +85,10 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
     m_shadow_init = false;
     // set an invalide value to not yet initialized indexes managing
     // textures created to enhance 3D rendering
-    // (they are dummy values but we do not want uninitialized values)
-    m_text_pcb = m_text_silk = -1;
-    m_text_fake_shadow_front = -1;
-    m_text_fake_shadow_back = -1;
-    m_text_fake_shadow_board = -1;
+    m_text_pcb = m_text_silk = INVALID_INDEX;
+    m_text_fake_shadow_front = INVALID_INDEX;
+    m_text_fake_shadow_back = INVALID_INDEX;
+    m_text_fake_shadow_board = INVALID_INDEX;
 
     // position of the front and back layers
     // (will be initialized to a better value later)
@@ -117,7 +118,7 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
     for( unsigned int i = 0; i < m_model_parsers_list.size(); i++ )
         if( m_model_parsers_list[i] )
             delete m_model_parsers_list[i];
-    
+
 }
 
 
@@ -141,13 +142,15 @@ void EDA_3D_CANVAS::ClearLists( int aGlList )
         m_glLists[ii] = 0;
     }
 
-    if( m_text_fake_shadow_front >= 0 )
+    // When m_text_fake_shadow_??? is set to INVALID_INDEX, textures are no yet
+    // created.
+    if( m_text_fake_shadow_front != INVALID_INDEX )
         glDeleteTextures( 1, &m_text_fake_shadow_front );
 
-    if( m_text_fake_shadow_back >= 0 )
+    if( m_text_fake_shadow_back != INVALID_INDEX )
         glDeleteTextures( 1, &m_text_fake_shadow_back );
 
-    if( m_text_fake_shadow_board >= 0 )
+    if( m_text_fake_shadow_board != INVALID_INDEX )
         glDeleteTextures( 1, &m_text_fake_shadow_board );
 
     m_shadow_init = false;

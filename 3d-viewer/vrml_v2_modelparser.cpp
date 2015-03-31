@@ -61,6 +61,7 @@ VRML2_MODEL_PARSER::VRML2_MODEL_PARSER( S3D_MODEL_PARSER* aModelParser )
     m_debugSpacer = "";
     m_counter_DEF_GROUP = 0;
     m_counter_USE_GROUP = 0;
+    m_discardLastGeometry = false;
 }
 
 
@@ -228,7 +229,7 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
         else if( strcmp( text, "Shape" ) == 0 )
         {
             m_model = new S3D_MESH();
-            
+
             S3D_MESH* save_ptr = m_model;
 
             if( read_Shape() == 0 )
@@ -279,7 +280,7 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
             {
                 wxString groupName = groupIt->first;
                 S3D_MESH* ptrModel = groupIt->second;
-                
+
 
                 if( ((ptrModel->m_Point.size() == 0) || (ptrModel->m_CoordIndex.size() == 0)) &&
                      (ptrModel->childs.size() == 0) )
@@ -304,7 +305,7 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
 int VRML2_MODEL_PARSER::read_Transform()
 {
     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform" ) );
-    
+
     debug_enter();
 
     char text[BUFLINE_SIZE];
@@ -326,7 +327,7 @@ int VRML2_MODEL_PARSER::read_Transform()
         if( strcmp( text, "Transform" ) == 0 )
         {
             m_model = new S3D_MESH();
-            
+
             S3D_MESH* save_ptr = m_model;
 
             if( read_Transform() == 0 )
@@ -357,7 +358,7 @@ int VRML2_MODEL_PARSER::read_Transform()
         else if( strcmp( text, "translation" ) == 0 )
         {
             ParseVertex( m_file, m_model->m_translation );
-            
+
             wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "translation (%f,%f,%f)" ),
                                           m_model->m_translation.x,
                                           m_model->m_translation.y,
@@ -550,7 +551,7 @@ int VRML2_MODEL_PARSER::read_Transform()
                 }
                 else
                 {
-                    
+
                     m_counter_USE_GROUP++;
 
                     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: USE %s Add child model with %lu points, %lu coordIndex, %lu childs." ),
@@ -622,25 +623,25 @@ int VRML2_MODEL_PARSER::read_Inline()
                 }
                 else
                 {
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "URL Failed to open file as a full path: \"%s\", will try now a relative path..." ), filename );    
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "URL Failed to open file as a full path: \"%s\", will try now a relative path..." ), filename );
 
                     #ifdef __WINDOWS__
                         filename = m_Filename.GetPath() + '\\' + filename;
                     #else
                         filename = m_Filename.GetPath() + '/' + filename;
                     #endif
-                    
-                    
+
+
                     if( wxFileName::FileExists( filename ) )
                     {
                         fileExists = true;
                     }
                     else
                     {
-                        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "URL Failed to open file: \"%s\"" ), filename );    
+                        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "URL Failed to open file: \"%s\"" ), filename );
                     }
                 }
-                
+
                 if( fileExists )
                 {
                     // Will now create a new parser and set the default
@@ -651,7 +652,7 @@ int VRML2_MODEL_PARSER::read_Inline()
                 }
                 else
                 {
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "URL Failed to open file: %s" ), text );    
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "URL Failed to open file: %s" ), text );
                 }
             }
             else
@@ -808,7 +809,7 @@ int VRML2_MODEL_PARSER::read_DEF()
             }
             else
             {
-                delete m_model;   
+                delete m_model;
             }
 
             m_model = parent;

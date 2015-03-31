@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,6 +10,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -17,14 +18,15 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/radiobut.h>
-#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
-#include <wx/hyperlink.h>
+#include <wx/sizer.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/statbmp.h>
+#include <wx/hyperlink.h>
 #include <wx/dirctrl.h>
 #include <wx/checklst.h>
 #include <wx/srchctrl.h>
@@ -52,9 +54,8 @@ class WIZARD_FPLIB_TABLE_BASE : public wxWizard
 		wxStaticText* m_downloadDir;
 		wxButton* m_btnBrowse;
 		wxStaticText* m_invalidDir;
-		wxStaticText* m_staticText8;
-		wxHyperlinkCtrl* m_hyperlink1;
-		wxStaticText* m_staticText9;
+		wxStaticBitmap* m_bitmapRepo;
+		wxHyperlinkCtrl* m_hyperlinkGithubKicad;
 		wxStaticText* m_staticText7;
 		wxGenericDirCtrl* m_filePicker;
 		wxStaticText* m_staticText112;
@@ -84,7 +85,7 @@ class WIZARD_FPLIB_TABLE_BASE : public wxWizard
 	
 	public:
 		
-		WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add Footprint Libraries Wizard"), const wxBitmap& bitmap = wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ), const wxPoint& pos = wxDefaultPosition, long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
+		WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Add Footprint Libraries Wizard"), const wxBitmap& bitmap = wxArtProvider::GetBitmap( wxART_HELP_BOOK, wxART_FRAME_ICON ), const wxPoint& pos = wxDefaultPosition, long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
 		WizardPages m_pages;
 		~WIZARD_FPLIB_TABLE_BASE();
 	

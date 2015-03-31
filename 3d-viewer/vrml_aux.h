@@ -85,7 +85,7 @@ int ParseVertex( FILE* File, glm::vec3 &dst_vertex );
  * parse a float value
  * @param File file to read from
  * @param dst_float destination float
- * @return int - Return the number of floats readed
+ * @return int - Return the number of floats readed (0 or 1)
  */
 int ParseFloat( FILE* File, float *dst_float );
 
