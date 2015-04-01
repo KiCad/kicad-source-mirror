@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-30 23:35+0100\n"
-"PO-Revision-Date: 2015-03-30 23:35+0100\n"
+"POT-Creation-Date: 2015-04-01 09:29+0100\n"
+"PO-Revision-Date: 2015-04-01 17:38+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -400,7 +400,7 @@ msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nessun modello selezionato. Impossibile generare un nuovo progetto."
 
 #: kicad/prjconfig.cpp:143 pcbnew/router/length_tuner_tool.cpp:178
-#: pcbnew/router/router_tool.cpp:455 common/confirm.cpp:80
+#: pcbnew/router/router_tool.cpp:457 common/confirm.cpp:80
 #: pcbnew/router/router_menus.h:698
 msgid "Error"
 msgstr "Errore"
@@ -437,7 +437,7 @@ msgstr ""
 msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
-#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:963 pcbnew/moduleframe.cpp:783
+#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:969 pcbnew/moduleframe.cpp:783
 #: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1247 cvpcb/cvframe.cpp:762
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -816,12 +816,12 @@ msgstr "Valore %s di %s"
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
 
-#: pcbnew/pcbframe.cpp:397 pcbnew/pcbframe.cpp:893 pcbnew/moduleframe.cpp:282
+#: pcbnew/pcbframe.cpp:398 pcbnew/pcbframe.cpp:899 pcbnew/moduleframe.cpp:282
 #: gerbview/gerbview_frame.cpp:146 gerbview/events_called_functions.cpp:318
 msgid "Visibles"
 msgstr "Visibili"
 
-#: pcbnew/pcbframe.cpp:583 eeschema/schframe.cpp:596
+#: pcbnew/pcbframe.cpp:588 eeschema/schframe.cpp:596
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -832,17 +832,17 @@ msgstr ""
 "\"%s\"\n"
 "prima di chiudere?"
 
-#: pcbnew/pcbframe.cpp:619
+#: pcbnew/pcbframe.cpp:624
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:656 pcbnew/hotkeys.cpp:175 pcbnew/moduleframe.cpp:711
+#: pcbnew/pcbframe.cpp:661 pcbnew/hotkeys.cpp:175 pcbnew/moduleframe.cpp:711
 #: cvpcb/class_DisplayFootprintsFrame.cpp:402
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
 
-#: pcbnew/pcbframe.cpp:967
+#: pcbnew/pcbframe.cpp:973
 msgid " [new file]"
 msgstr " [nuovo file]"
 
@@ -1330,7 +1330,7 @@ msgstr "ModView: visualizzatore 3D [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:579
 msgid "Select wizard to use"
-msgstr "Seleziona assistente da usare"
+msgstr "Seleziona l'assistente da usare"
 
 #: pcbnew/footprint_wizard_frame.cpp:584
 msgid "Select previous editable item"
@@ -3079,7 +3079,7 @@ msgstr "Contorno zona %s su %s"
 
 #: pcbnew/footprint_wizard.cpp:88
 msgid "no wizard selected"
-msgstr "Nessuna libreria selezionata"
+msgstr "nessun assistente selezionato"
 
 #: pcbnew/footprint_wizard.cpp:134
 msgid "Couldn't reload footprint wizard"
@@ -3259,7 +3259,7 @@ msgstr "Modalità piste: autosbroglio"
 
 #: pcbnew/tool_pcb.cpp:302
 msgid "Fast access to the FreeROUTE external advanced router"
-msgstr "Accesso veloce allo sbrogliatore basato su Web FreeRoute"
+msgstr "Accesso veloce allo sbroglio basato su Web FreeRoute"
 
 #: pcbnew/tool_pcb.cpp:310 pcbnew/menubar_pcbframe.cpp:621
 msgid "Show/Hide the Python Scripting console"
@@ -3862,6 +3862,7 @@ msgid "NC Via Drill"
 msgstr "Foratura via NC"
 
 #: pcbnew/class_track.cpp:1121 pcbnew/class_module.cpp:590
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:186
 msgid "Status"
 msgstr "Stato"
 
@@ -4258,7 +4259,8 @@ msgstr ""
 "in nessuno dei percorsi di ricerca. Verificare che il sistema sia "
 "configurato in modo che possa trovare le librerie di impronte."
 
-#: pcbnew/loadcmp.cpp:436 eeschema/sch_component.cpp:1513
+#: pcbnew/loadcmp.cpp:436 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
+#: eeschema/sch_component.cpp:1513
 msgid "Library"
 msgstr "Libreria"
 
@@ -4842,7 +4844,7 @@ msgstr "&FreeRoute"
 
 #: pcbnew/menubar_pcbframe.cpp:615
 msgid "Fast access to the Web Based FreeROUTE advanced router"
-msgstr "Accesso veloce allo sbrogliatore basato su Web FreeRoute"
+msgstr "Accesso veloce allo sbroglio basato su Web FreeRoute"
 
 #: pcbnew/menubar_pcbframe.cpp:620
 msgid "&Scripting Console"
@@ -6085,15 +6087,15 @@ msgstr "Copiati %d elementi"
 msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
-#: pcbnew/tools/edit_tool.cpp:581
+#: pcbnew/tools/edit_tool.cpp:585
 msgid "Cannot delete component reference."
 msgstr "Impossibile cancellare il riferimento componente."
 
-#: pcbnew/tools/edit_tool.cpp:585
+#: pcbnew/tools/edit_tool.cpp:589
 msgid "Cannot delete component value."
 msgstr "Impossibile cancellare il valore componente."
 
-#: pcbnew/tools/edit_tool.cpp:616
+#: pcbnew/tools/edit_tool.cpp:620
 msgid ""
 "Cannot delete the only remaining pad of the module (modules on PCB must have "
 "at least one pad)."
@@ -6101,7 +6103,7 @@ msgstr ""
 "Impossibile cancellare l'unica piazzola rimanente dell'impronta (le impronte "
 "sul C.S. devono avere almeno una piazzola)."
 
-#: pcbnew/tools/edit_tool.cpp:787
+#: pcbnew/tools/edit_tool.cpp:791
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d elementi duplicati"
@@ -7834,7 +7836,7 @@ msgstr "Sposta la riga selezionata in alto di una posizione"
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
-#: 3d-viewer/3d_canvas.cpp:416
+#: 3d-viewer/3d_canvas.cpp:419
 msgid "Move Down"
 msgstr "Sposta in basso"
 
@@ -8323,6 +8325,7 @@ msgstr "File netlist:"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:29
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:73
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:76
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:33
 #: common/dialogs/dialog_page_settings_base.cpp:356
@@ -9199,7 +9202,7 @@ msgstr "Librerie specifiche del progetto"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:133
 msgid "Append with Wizard"
-msgstr "Aggiungi con l'assistente"
+msgstr "Accoda con l'assistente"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:136
 msgid "Append Library"
@@ -9250,6 +9253,83 @@ msgid "This is a read-only table which shows pertinent environment variables."
 msgstr ""
 "Questa è una tabella in sola lettura che mostra le variabili ambiente "
 "pertinenti."
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:31
+msgid ""
+"Welcome to the Add Footprint Libraries Wizard!\n"
+"\n"
+"Please select the source for the libraries to add:"
+msgstr ""
+"Benvenuti all'assistente inserimento librerie di impronte!\n"
+"\n"
+"Selezionare la sorgente di librerie da aggiungere:"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:38
+msgid "Files on my computer"
+msgstr "File sul proprio computer"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:46
+msgid "Github repository"
+msgstr "Repository Github"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:49
+msgid "http://github.com/KiCad"
+msgstr "http://github.com/KiCad"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:57
+msgid "Save a local copy to:"
+msgstr "Salva una copia locale su:"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:82
+msgid ""
+"It is not possible to write in the selected directory.\n"
+"Please choose another one."
+msgstr ""
+"Non è possibile scrivere nella cartella selezionata.\n"
+"Sceglierne un'altra."
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:106
+msgid "Visit our official Kicad repository on Github and get more libraries"
+msgstr "Visitare l'archivio ufficiale di Kicad su Github per avere più librerie"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:121
+msgid "Select files or folders to add:"
+msgstr "Seleziona i file o le cartelle da aggiungere:"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:140
+msgid "Select Github libraries to add:"
+msgstr "Seleziona le librerie Github da aggiungere:"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:151
+msgid "Select all"
+msgstr "Seleziona tutto"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:154
+msgid "Unselect all"
+msgstr "Deseseleziona tutto"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:180
+msgid "Review and confirm the changes to the libraries:"
+msgstr "Revisiona e conferma i cambiamenti alle librerie:"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:187
+#: pcbnew/dialogs/dialog_plot_base.cpp:248
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:88
+#: bitmap2component/bitmap2cmp_gui_base.cpp:131
+msgid "Format"
+msgstr "Formato"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:200
+msgid "Where do you wish the new libraries to be added:"
+msgstr "Dove si desidera aggiungere le nuove librerie:"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:204
+msgid "To global library configuration (visible by all projects)"
+msgstr "Alla configurazione librerie globale (visibile da tutti i progetti)"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:207
+msgid "To the current project only"
+msgstr "Solo al progetto corrente"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:22
 msgid "Current Settings:"
@@ -10284,12 +10364,6 @@ msgstr "4.5 (unità mm)"
 #: pcbnew/dialogs/dialog_plot_base.cpp:246
 msgid "4.6 (unit mm)"
 msgstr "4.6 (unità mm)"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:248
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:88
-#: bitmap2component/bitmap2cmp_gui_base.cpp:131
-msgid "Format"
-msgstr "Formato"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:250
 msgid ""
@@ -12088,52 +12162,52 @@ msgstr ""
 "Assicurarsi che i nomi dei collegamenti appartenenti ad una coppia "
 "differenziale non finiscano con _N/_P o con +/-."
 
-#: pcbnew/router/router_tool.cpp:110 pcbnew/router/router_menus.h:137
+#: pcbnew/router/router_tool.cpp:112 pcbnew/router/router_menus.h:137
 msgid "Custom size"
 msgstr "Dimensioni personalizzate"
 
-#: pcbnew/router/router_tool.cpp:113 pcbnew/router/router_menus.h:140
+#: pcbnew/router/router_tool.cpp:115 pcbnew/router/router_menus.h:140
 msgid "Use the starting track width"
 msgstr "Usa larghezza iniziale della pista"
 
-#: pcbnew/router/router_tool.cpp:114 pcbnew/router/router_menus.h:141
+#: pcbnew/router/router_tool.cpp:116 pcbnew/router/router_menus.h:141
 msgid "Route using the width of the starting track."
 msgstr "Sbroglia usando la larghezza della pista iniziale."
 
-#: pcbnew/router/router_tool.cpp:116 pcbnew/router/router_menus.h:143
+#: pcbnew/router/router_tool.cpp:118 pcbnew/router/router_menus.h:143
 msgid "Use netclass values"
 msgstr "Utilizza regole del gruppo di collegamenti"
 
-#: pcbnew/router/router_tool.cpp:117 pcbnew/router/router_menus.h:144
+#: pcbnew/router/router_tool.cpp:119 pcbnew/router/router_menus.h:144
 msgid "Use track and via sizes from the net class"
 msgstr "Usa dimensioni piste e via dalla netclass"
 
-#: pcbnew/router/router_tool.cpp:121 pcbnew/router/router_menus.h:148
+#: pcbnew/router/router_tool.cpp:123 pcbnew/router/router_menus.h:148
 msgid "Track "
 msgstr "Pista "
 
-#: pcbnew/router/router_tool.cpp:125 pcbnew/router/router_tool.cpp:150
+#: pcbnew/router/router_tool.cpp:127 pcbnew/router/router_tool.cpp:152
 #: pcbnew/router/router_menus.h:152 pcbnew/router/router_menus.h:177
 msgid " (from netclass)"
 msgstr " (dalla netclass)"
 
-#: pcbnew/router/router_tool.cpp:134 pcbnew/router/router_menus.h:161
+#: pcbnew/router/router_tool.cpp:136 pcbnew/router/router_menus.h:161
 msgid "Via "
 msgstr "Via "
 
-#: pcbnew/router/router_tool.cpp:142 pcbnew/router/router_menus.h:169
+#: pcbnew/router/router_tool.cpp:144 pcbnew/router/router_menus.h:169
 msgid ", drill: default"
 msgstr ", foro: predefinito"
 
-#: pcbnew/router/router_tool.cpp:146 pcbnew/router/router_menus.h:173
+#: pcbnew/router/router_tool.cpp:148 pcbnew/router/router_menus.h:173
 msgid ", drill: "
 msgstr ", foro: "
 
-#: pcbnew/router/router_tool.cpp:594 pcbnew/router/router_menus.h:802
+#: pcbnew/router/router_tool.cpp:598 pcbnew/router/router_menus.h:802
 msgid "Route Track"
 msgstr "Sbroglia pista"
 
-#: pcbnew/router/router_tool.cpp:600 pcbnew/router/router_menus.h:809
+#: pcbnew/router/router_tool.cpp:604 pcbnew/router/router_menus.h:809
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
@@ -13415,25 +13489,25 @@ msgstr ""
 "invece che\n"
 "\"%s\""
 
-#: common/dialogs/dialog_env_var_config.cpp:111
+#: common/dialogs/dialog_env_var_config.cpp:109
 msgid "Invalid Input"
 msgstr "Valore non valido"
 
-#: common/dialogs/dialog_env_var_config.cpp:122
+#: common/dialogs/dialog_env_var_config.cpp:120
 msgid "Path configuration name cannot be empty."
 msgstr "Il nome della configurazione di percorso non può essere vuoto."
 
-#: common/dialogs/dialog_env_var_config.cpp:128
+#: common/dialogs/dialog_env_var_config.cpp:126
 msgid "Path configuration value cannot be empty."
 msgstr "Il valore della configurazione di percorso non può essere vuoto."
 
-#: common/dialogs/dialog_env_var_config.cpp:136
+#: common/dialogs/dialog_env_var_config.cpp:134
 msgid "Path configuration names cannot have a number as the first character."
 msgstr ""
 "I nomi delle configurazioni di percorso non possono avere un numero come "
 "primo carattere."
 
-#: common/dialogs/dialog_env_var_config.cpp:144
+#: common/dialogs/dialog_env_var_config.cpp:142
 msgid "Cannot have duplicate configuration names."
 msgstr "Impossibile avere nomi di configurazione doppi."
 
@@ -18710,59 +18784,59 @@ msgstr ""
 "Impossibile calcolare i contorni della scheda.\n"
 "Perciò usa il riquadro delimitatore scheda."
 
-#: 3d-viewer/3d_canvas.cpp:368
+#: 3d-viewer/3d_canvas.cpp:371
 msgid "Zoom +"
 msgstr "Zoom +"
 
-#: 3d-viewer/3d_canvas.cpp:372
+#: 3d-viewer/3d_canvas.cpp:375
 msgid "Zoom -"
 msgstr "Zoom -"
 
-#: 3d-viewer/3d_canvas.cpp:377
+#: 3d-viewer/3d_canvas.cpp:380
 msgid "Top View"
 msgstr "Vista dall'alto"
 
-#: 3d-viewer/3d_canvas.cpp:381
+#: 3d-viewer/3d_canvas.cpp:384
 msgid "Bottom View"
 msgstr "Vista da sotto"
 
-#: 3d-viewer/3d_canvas.cpp:386
+#: 3d-viewer/3d_canvas.cpp:389
 msgid "Right View"
 msgstr "Vista da destra"
 
-#: 3d-viewer/3d_canvas.cpp:390
+#: 3d-viewer/3d_canvas.cpp:393
 msgid "Left View"
 msgstr "Vista da sinistra"
 
-#: 3d-viewer/3d_canvas.cpp:395
+#: 3d-viewer/3d_canvas.cpp:398
 msgid "Front View"
 msgstr "Vista di fronte"
 
-#: 3d-viewer/3d_canvas.cpp:399
+#: 3d-viewer/3d_canvas.cpp:402
 msgid "Back View"
 msgstr "Vista da dietro"
 
-#: 3d-viewer/3d_canvas.cpp:404
+#: 3d-viewer/3d_canvas.cpp:407
 msgid "Move left <-"
 msgstr "Sposta a sinistra"
 
-#: 3d-viewer/3d_canvas.cpp:408
+#: 3d-viewer/3d_canvas.cpp:411
 msgid "Move right ->"
 msgstr "Sposta a destra"
 
-#: 3d-viewer/3d_canvas.cpp:412
+#: 3d-viewer/3d_canvas.cpp:415
 msgid "Move Up ^"
 msgstr "Sposta in alto"
 
-#: 3d-viewer/3d_canvas.cpp:630
+#: 3d-viewer/3d_canvas.cpp:633
 msgid "3D Image filename:"
 msgstr "Nome file 3D: "
 
-#: 3d-viewer/3d_canvas.cpp:685
+#: 3d-viewer/3d_canvas.cpp:688
 msgid "Failed to copy image to clipboard"
 msgstr "Impossibile salvare immagine sugli appunti"
 
-#: 3d-viewer/3d_canvas.cpp:699
+#: 3d-viewer/3d_canvas.cpp:702
 msgid "Can't save file"
 msgstr "Impossibile salvare il file"
 
@@ -21382,6 +21456,10 @@ msgstr "Proprietà impronta"
 msgid "Select Copper Layer Pair:"
 msgstr "Seleziona coppia di strati in rame:"
 
+#: pcbnew/dialogs/wizard_add_fplib_base.h:88
+msgid "Add Footprint Libraries Wizard"
+msgstr "Assistente aggiunta librerie di impronte"
+
 #: pcbnew/dialogs/dialog_dimension_editor_base.h:70
 msgid "Dimension Properties"
 msgstr "Proprietà dimensioni"
@@ -21392,7 +21470,7 @@ msgstr "Proprietà elemento grafico"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:68
 msgid "Interactive Router settings"
-msgstr "Impostazioni sbrogliatore interattivo"
+msgstr "Impostazioni sbroglio interattivo"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:130
 msgid "Copper Zone Properties"
@@ -21412,7 +21490,7 @@ msgstr "Esporta IDFv3"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:53
 msgid "Footprint Wizards"
-msgstr "Assistente impronta"
+msgstr "Assistenti impronte"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:167
 msgid "Pad Properties"
