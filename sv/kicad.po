@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2015-03-30 22:40+0100\n"
-"PO-Revision-Date: 2015-03-31 00:18+0100\n"
+"PO-Revision-Date: 2015-04-01 21:46+0100\n"
 "Last-Translator: Martin Nielsen-Lönn <martin.nielsen.lonn@gmail.com>\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -867,7 +867,7 @@ msgstr "Normal"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100
 msgid "Italic"
-msgstr ""
+msgstr "Kursiv"
 
 #: common/eda_text.cpp:378
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
@@ -875,11 +875,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:761
 msgid "Bold"
-msgstr ""
+msgstr "Fet"
 
 #: common/eda_text.cpp:379
 msgid "Bold+Italic"
-msgstr ""
+msgstr "Fet+Kursiv"
 
 #: common/footprint_info.cpp:315 common/footprint_info.cpp:336
 msgid "Errors were encountered loading footprints"
@@ -1012,7 +1012,7 @@ msgstr ""
 
 #: common/hotkeys_basic.cpp:800
 msgid "&Hotkeys"
-msgstr ""
+msgstr "Snabbtangenter"
 
 #: common/hotkeys_basic.cpp:801
 msgid "Hotkeys configuration and preferences"
@@ -1050,7 +1050,7 @@ msgstr "Franska"
 
 #: common/pgm_base.cpp:132
 msgid "Finnish"
-msgstr ""
+msgstr "Finska"
 
 #: common/pgm_base.cpp:140
 msgid "Spanish"
@@ -1070,7 +1070,7 @@ msgstr "Tyska"
 
 #: common/pgm_base.cpp:172
 msgid "Greek"
-msgstr ""
+msgstr "Grekiska"
 
 #: common/pgm_base.cpp:180
 msgid "Slovenian"
@@ -1086,7 +1086,7 @@ msgstr "Polska"
 
 #: common/pgm_base.cpp:204
 msgid "Czech"
-msgstr ""
+msgstr "Tjeckiska"
 
 #: common/pgm_base.cpp:212
 msgid "Russian"
@@ -1098,7 +1098,7 @@ msgstr "Koreanska"
 
 #: common/pgm_base.cpp:228
 msgid "Chinese simplified"
-msgstr ""
+msgstr "Kinesiska förenklad"
 
 #: common/pgm_base.cpp:236
 msgid "Catalan"
@@ -1106,15 +1106,15 @@ msgstr "Katalan"
 
 #: common/pgm_base.cpp:244
 msgid "Dutch"
-msgstr ""
+msgstr "Nederländska"
 
 #: common/pgm_base.cpp:252
 msgid "Japanese"
-msgstr ""
+msgstr "Japanska"
 
 #: common/pgm_base.cpp:260
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgariska"
 
 #: common/pgm_base.cpp:329
 msgid "No default editor found, you must choose it"
@@ -1514,7 +1514,7 @@ msgstr "Radera markerade"
 #: cvpcb/cvframe.cpp:420 eeschema/dialogs/dialog_netlist_base.h:78
 #: pcbnew/dialogs/dialog_netlist_fbp.h:86
 msgid "Netlist"
-msgstr "Netlist"
+msgstr "Nätlista"
 
 #: cvpcb/cvframe.cpp:424
 msgid "Open Net List"
@@ -1809,11 +1809,11 @@ msgstr "&Öppna nätlista"
 #: cvpcb/menubar.cpp:88 eeschema/menubar.cpp:99 kicad/menubar.cpp:225
 #: pcbnew/menubar_pcbframe.cpp:94
 msgid "Open &Recent"
-msgstr ""
+msgstr "Senaste projekt"
 
 #: cvpcb/menubar.cpp:89
 msgid "Open recent netlist"
-msgstr ""
+msgstr "Öppna senaste nätlista"
 
 #: cvpcb/menubar.cpp:98
 msgid "&Save Cmp File\tCtrl+S"
@@ -3006,7 +3006,7 @@ msgstr "Höger"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Horiz. Justify"
-msgstr ""
+msgstr "Horis. justering"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
@@ -3023,7 +3023,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:64
 msgid "Vert. Justify"
-msgstr ""
+msgstr "Vert. justering"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:167
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
@@ -3035,7 +3035,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:79
 msgid "Show"
-msgstr ""
+msgstr "Visa"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:80
@@ -3052,7 +3052,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:761
 msgid "Bold Italic"
-msgstr ""
+msgstr "Fet kursiv"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
@@ -3205,7 +3205,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:78
 msgid "St&yle"
-msgstr ""
+msgstr "St&il"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:30 eeschema/lib_pin.cpp:135
@@ -3729,7 +3729,7 @@ msgstr ""
 #: eeschema/sch_text.cpp:770
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:106
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 msgid "Align left"
@@ -4861,7 +4861,7 @@ msgstr ""
 #: eeschema/lib_field.cpp:602 eeschema/libedit.cpp:510
 #: eeschema/template_fieldnames.cpp:39
 msgid "Datasheet"
-msgstr ""
+msgstr "Datablad"
 
 #: eeschema/lib_field.cpp:611
 #, c-format
@@ -4886,7 +4886,7 @@ msgstr "Bredd"
 #: pcbnew/class_pcb_text.cpp:146 pcbnew/class_text_mod.cpp:419
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
 msgid "Height"
-msgstr ""
+msgstr "Höjd"
 
 #: eeschema/lib_pin.cpp:89 pcbnew/class_board_item.cpp:42
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
@@ -5200,7 +5200,7 @@ msgstr ""
 
 #: eeschema/libedit_onrightclick.cpp:118
 msgid "Move Arc"
-msgstr ""
+msgstr "Flytta båge"
 
 #: eeschema/libedit_onrightclick.cpp:122
 msgid "Drag Arc Size"
@@ -5212,7 +5212,7 @@ msgstr ""
 
 #: eeschema/libedit_onrightclick.cpp:131
 msgid "Delete Arc"
-msgstr ""
+msgstr "Ta bort båge"
 
 #: eeschema/libedit_onrightclick.cpp:139
 msgid "Move Circle"
@@ -5228,23 +5228,23 @@ msgstr ""
 
 #: eeschema/libedit_onrightclick.cpp:154
 msgid "Delete Circle"
-msgstr ""
+msgstr "Ta bort cirkel"
 
 #: eeschema/libedit_onrightclick.cpp:163
 msgid "Move Rectangle"
-msgstr ""
+msgstr "Flytta rektangel"
 
 #: eeschema/libedit_onrightclick.cpp:169
 msgid "Edit Rectangle Options"
-msgstr ""
+msgstr "Ändra rektangelegenskaper"
 
 #: eeschema/libedit_onrightclick.cpp:175
 msgid "Drag Rectangle Edge"
-msgstr ""
+msgstr "Flytta rektangel kant"
 
 #: eeschema/libedit_onrightclick.cpp:178
 msgid "Delete Rectangle"
-msgstr ""
+msgstr "Ta bort rektangel"
 
 #: eeschema/libedit_onrightclick.cpp:188 eeschema/onrightclick.cpp:591
 #: pcbnew/modedit_onclick.cpp:343
@@ -5280,11 +5280,11 @@ msgstr ""
 
 #: eeschema/libedit_onrightclick.cpp:224
 msgid "Edit Line Options"
-msgstr ""
+msgstr "Ändra linjeegenskaper"
 
 #: eeschema/libedit_onrightclick.cpp:230
 msgid "Delete Line "
-msgstr ""
+msgstr "Radera linje"
 
 #: eeschema/libedit_onrightclick.cpp:239 pcbnew/onrightclick.cpp:665
 msgid "Delete Segment"
@@ -5304,19 +5304,19 @@ msgstr "Fältegenskaper"
 
 #: eeschema/libedit_onrightclick.cpp:283
 msgid "Move Pin "
-msgstr ""
+msgstr "Fltta pinne"
 
 #: eeschema/libedit_onrightclick.cpp:288
 msgid "Edit Pin "
-msgstr ""
+msgstr "Redigera pinne"
 
 #: eeschema/libedit_onrightclick.cpp:291
 msgid "Rotate Pin "
-msgstr ""
+msgstr "Rotera pinne"
 
 #: eeschema/libedit_onrightclick.cpp:296
 msgid "Delete Pin "
-msgstr ""
+msgstr "Ta bort pinne"
 
 #: eeschema/libedit_onrightclick.cpp:303
 msgid "Global"
@@ -5371,15 +5371,15 @@ msgstr "Kopiera block"
 
 #: eeschema/libedit_onrightclick.cpp:340 eeschema/onrightclick.cpp:828
 msgid "Mirror Block ||"
-msgstr ""
+msgstr "Spegla block ||"
 
 #: eeschema/libedit_onrightclick.cpp:342 eeschema/onrightclick.cpp:831
 msgid "Mirror Block --"
-msgstr ""
+msgstr "Spegla block --"
 
 #: eeschema/libedit_onrightclick.cpp:344
 msgid "Rotate Block ccw"
-msgstr ""
+msgstr "Rotera block motsols"
 
 #: eeschema/libedit_onrightclick.cpp:346 eeschema/onrightclick.cpp:827
 #: pcbnew/onrightclick.cpp:514
@@ -5399,7 +5399,7 @@ msgstr "Filnamn:"
 #: eeschema/libedit_plot_component.cpp:139
 #, c-format
 msgid "Can't save file <%s>"
-msgstr ""
+msgstr "Kan inte spara fil <%s>"
 
 #: eeschema/libeditframe.cpp:183
 msgid "Library Editor"
@@ -5419,7 +5419,7 @@ msgstr ""
 #: eeschema/libeditframe.cpp:431
 #, c-format
 msgid "Unit %s"
-msgstr ""
+msgstr "Enhet %s"
 
 #: eeschema/libeditframe.cpp:699
 msgid "No part to save."
@@ -5427,7 +5427,7 @@ msgstr ""
 
 #: eeschema/libeditframe.cpp:1098
 msgid "Add pin"
-msgstr ""
+msgstr "Lägg till pinne"
 
 #: eeschema/libeditframe.cpp:1102
 msgid "Set pin options"
@@ -5441,19 +5441,19 @@ msgstr "Lägg till text"
 
 #: eeschema/libeditframe.cpp:1117
 msgid "Add rectangle"
-msgstr ""
+msgstr "Lägg till rektangel"
 
 #: eeschema/libeditframe.cpp:1121 pcbnew/modedit.cpp:937
 msgid "Add circle"
-msgstr ""
+msgstr "Lägg till cirkel"
 
 #: eeschema/libeditframe.cpp:1125 pcbnew/modedit.cpp:933
 msgid "Add arc"
-msgstr ""
+msgstr "Lägg till båge"
 
 #: eeschema/libeditframe.cpp:1129 pcbnew/modedit.cpp:929
 msgid "Add line"
-msgstr ""
+msgstr "Lägg till linje"
 
 #: eeschema/libeditframe.cpp:1133
 msgid "Set anchor position"
@@ -5471,11 +5471,11 @@ msgstr "Exportera"
 #: pcbnew/edit.cpp:1494 pcbnew/modedit.cpp:966
 #: eeschema/help_common_strings.h:48
 msgid "Delete item"
-msgstr ""
+msgstr "Radera föremål"
 
 #: eeschema/libfield.cpp:57
 msgid "Component Name"
-msgstr ""
+msgstr "Komponentnamn"
 
 #: eeschema/libfield.cpp:58
 msgid "Enter a name to create a new component based on this one."
@@ -5512,7 +5512,7 @@ msgstr ""
 #: eeschema/libfield.cpp:114 eeschema/libfield.cpp:130
 #: eeschema/libfield.cpp:149
 msgid "Confirm"
-msgstr ""
+msgstr "Bekräfta"
 
 #: eeschema/libfield.cpp:125
 #, c-format
@@ -5539,7 +5539,7 @@ msgstr ""
 #: eeschema/load_one_schematic_file.cpp:98
 #, c-format
 msgid "Loading '%s'"
-msgstr ""
+msgstr "Laddar '%s'"
 
 #: eeschema/load_one_schematic_file.cpp:105
 #, c-format
@@ -5632,11 +5632,11 @@ msgstr ""
 
 #: eeschema/menubar.cpp:128
 msgid "Save Current Sheet &As"
-msgstr ""
+msgstr "Spara aktivt blad"
 
 #: eeschema/menubar.cpp:129
 msgid "Save current schematic sheet as..."
-msgstr ""
+msgstr "Spara aktivt blad som..."
 
 #: eeschema/menubar.cpp:137
 msgid "Pa&ge Settings"
@@ -5652,7 +5652,7 @@ msgstr "Skriv &ut"
 
 #: eeschema/menubar.cpp:144
 msgid "Print schematic sheet"
-msgstr ""
+msgstr "Skriv ut schemablad"
 
 #: eeschema/menubar.cpp:152 eeschema/menubar.cpp:165 eeschema/menubar.cpp:174
 msgid "&Plot"
@@ -5681,12 +5681,12 @@ msgstr "Avsluta Eeschema"
 #: eeschema/menubar.cpp:194 eeschema/menubar_libedit.cpp:118
 #: pcbnew/menubar_modedit.cpp:158 pcbnew/menubar_pcbframe.cpp:278
 msgid "&Undo"
-msgstr ""
+msgstr "Ångra"
 
 #: eeschema/menubar.cpp:199 eeschema/menubar_libedit.cpp:127
 #: pcbnew/menubar_modedit.cpp:164 pcbnew/menubar_pcbframe.cpp:281
 msgid "&Redo"
-msgstr ""
+msgstr "Återställ"
 
 #: eeschema/menubar.cpp:206 eeschema/menubar_libedit.cpp:140
 #: pcbnew/menubar_modedit.cpp:171 pcbnew/menubar_pcbframe.cpp:285
@@ -5763,7 +5763,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:311
 msgid "&Junction"
-msgstr ""
+msgstr "&Korsning"
 
 #: eeschema/menubar.cpp:317
 msgid "&Label"
@@ -5811,7 +5811,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:388 eeschema/menubar_libedit.cpp:244
 msgid "Set &Colors Scheme"
-msgstr ""
+msgstr "Ställ in färgschema"
 
 #: eeschema/menubar.cpp:389 eeschema/menubar_libedit.cpp:245
 msgid "Set color preferences"
@@ -5827,7 +5827,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:416 pcbnew/menubar_pcbframe.cpp:577
 msgid "&Save Preferences"
-msgstr ""
+msgstr "&Spara inställningar"
 
 #: eeschema/menubar.cpp:417 pcbnew/menubar_pcbframe.cpp:578
 msgid "Save application preferences"
@@ -5835,7 +5835,7 @@ msgstr "Spara programinställningar"
 
 #: eeschema/menubar.cpp:422 pcbnew/menubar_pcbframe.cpp:582
 msgid "Load Prefe&rences"
-msgstr ""
+msgstr "&Ladda inställningar"
 
 #: eeschema/menubar.cpp:423 pcbnew/menubar_pcbframe.cpp:583
 msgid "Load application preferences"
@@ -5902,7 +5902,7 @@ msgstr ""
 #: pcbnew/menubar_modedit.cpp:311 pcbnew/menubar_pcbframe.cpp:634
 #: pcbnew/tool_modview.cpp:194
 msgid "&Getting Started in KiCad"
-msgstr ""
+msgstr "Kom igång med KiCad"
 
 #: eeschema/menubar.cpp:496 kicad/menubar.cpp:412
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
@@ -5962,7 +5962,7 @@ msgstr "Spara det nuvarande aktiva biblioteket"
 
 #: eeschema/menubar_libedit.cpp:83
 msgid "Save Current Library &As"
-msgstr ""
+msgstr "Spara nuvarande aktiva bibliotek som..."
 
 #: eeschema/menubar_libedit.cpp:84
 msgid "Save current active library as..."
@@ -6007,7 +6007,7 @@ msgstr ""
 
 #: eeschema/menubar_libedit.cpp:199
 msgid "&Rectangle"
-msgstr ""
+msgstr "&Rektangel"
 
 #: eeschema/menubar_libedit.cpp:206 pcbnew/menubar_modedit.cpp:252
 #: pcbnew/menubar_pcbframe.cpp:407
@@ -6287,7 +6287,7 @@ msgstr ""
 
 #: eeschema/onrightclick.cpp:628
 msgid "Delete Junction"
-msgstr ""
+msgstr "Ta bort korsning"
 
 #: eeschema/onrightclick.cpp:634
 msgid "Drag Junction"
@@ -6713,7 +6713,7 @@ msgstr "Lägg till buss"
 
 #: eeschema/schedit.cpp:528
 msgid "Add lines"
-msgstr ""
+msgstr "Lägg till linjer"
 
 #: eeschema/schedit.cpp:532
 msgid "Add junction"
@@ -6733,7 +6733,7 @@ msgstr ""
 
 #: eeschema/schedit.cpp:552
 msgid "Add image"
-msgstr ""
+msgstr "Lägg till bild"
 
 #: eeschema/schedit.cpp:556
 msgid "Add wire to bus entry"
@@ -6745,7 +6745,7 @@ msgstr ""
 
 #: eeschema/schedit.cpp:564
 msgid "Add sheet"
-msgstr ""
+msgstr "Lägg till blad"
 
 #: eeschema/schedit.cpp:568
 msgid "Add sheet pins"
@@ -6797,11 +6797,11 @@ msgstr ""
 
 #: eeschema/schframe.cpp:859
 msgid "Schematic"
-msgstr ""
+msgstr "Schema"
 
 #: eeschema/schframe.cpp:878
 msgid "New Schematic"
-msgstr ""
+msgstr "Nytt schema"
 
 #: eeschema/schframe.cpp:891
 #, c-format
@@ -6810,7 +6810,7 @@ msgstr ""
 
 #: eeschema/schframe.cpp:911
 msgid "Open Schematic"
-msgstr ""
+msgstr "Öppna schema"
 
 #: eeschema/schframe.cpp:1028
 msgid "Error: not a component or no component"
@@ -6826,15 +6826,15 @@ msgstr ""
 
 #: eeschema/selpart.cpp:89 pcbnew/librairi.cpp:80
 msgid "Select Library"
-msgstr ""
+msgstr "Välj bibliotek"
 
 #: eeschema/selpart.cpp:139
 msgid "Select Component"
-msgstr ""
+msgstr "Välj komponent"
 
 #: eeschema/sheet.cpp:80
 msgid "File name is not valid!"
-msgstr ""
+msgstr "Filnamnet är inte giltigt!"
 
 #: eeschema/sheet.cpp:93
 #, c-format
@@ -6980,11 +6980,11 @@ msgstr ""
 
 #: eeschema/tool_lib.cpp:150 eeschema/help_common_strings.h:40
 msgid "Undo last command"
-msgstr ""
+msgstr "Ångra senaste kommando"
 
 #: eeschema/tool_lib.cpp:152
 msgid "Redo the last command"
-msgstr ""
+msgstr "Återställ sensate kommando"
 
 #: eeschema/tool_lib.cpp:158
 msgid "Edit component properties"
@@ -7016,7 +7016,7 @@ msgstr ""
 
 #: eeschema/tool_lib.cpp:213
 msgid "Show pin table"
-msgstr ""
+msgstr "Visa pinntabell"
 
 #: eeschema/tool_lib.cpp:229 eeschema/tool_sch.cpp:287
 msgid "Turn grid off"
@@ -7024,15 +7024,15 @@ msgstr "Dölj rutnät"
 
 #: eeschema/tool_sch.cpp:55
 msgid "New schematic project"
-msgstr ""
+msgstr "Nytt schemaprojekt"
 
 #: eeschema/tool_sch.cpp:58
 msgid "Open schematic project"
-msgstr ""
+msgstr "Öppna schemaprojekt"
 
 #: eeschema/tool_sch.cpp:61
 msgid "Save schematic project"
-msgstr ""
+msgstr "Spara schemaprojekt"
 
 #: eeschema/tool_sch.cpp:68
 msgid "Page settings"
@@ -7064,7 +7064,7 @@ msgstr ""
 
 #: eeschema/tool_sch.cpp:152
 msgid "Generate netlist"
-msgstr ""
+msgstr "Generera nätlista"
 
 #: eeschema/tool_sch.cpp:165
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
@@ -7109,11 +7109,11 @@ msgstr ""
 
 #: eeschema/tool_viewlib.cpp:68
 msgid "Display previous component"
-msgstr ""
+msgstr "Visa föregående komponent"
 
 #: eeschema/tool_viewlib.cpp:72
 msgid "Display next component"
-msgstr ""
+msgstr "Visa nästa komponent"
 
 #: eeschema/tool_viewlib.cpp:116
 msgid "View component documents"
@@ -7134,7 +7134,7 @@ msgstr ""
 #: eeschema/tool_viewlib.cpp:218 pcbnew/menubar_modedit.cpp:150
 #: pcbnew/tool_modview.cpp:150
 msgid "Cl&ose"
-msgstr ""
+msgstr "Stäng"
 
 #: eeschema/tool_viewlib.cpp:219
 msgid "Close schematic component viewer"
@@ -7216,7 +7216,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:51
 msgid "KiCad project file"
-msgstr ""
+msgstr "KiCad projektfil"
 
 #: kicad/files-io.cpp:69
 msgid "Unzip Project"
@@ -7228,6 +7228,8 @@ msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
+"\n"
+"Öppna '%s'\n"
 
 #: kicad/files-io.cpp:79
 msgid "Target Directory"
@@ -7249,7 +7251,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:120
 msgid " *ERROR*\n"
-msgstr ""
+msgstr "*FEL*\n"
 
 #: kicad/files-io.cpp:148
 msgid "Archive Project Files"
@@ -7267,7 +7269,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:211
 msgid " >>Error\n"
-msgstr ""
+msgstr ">>Fel\n"
 
 #: kicad/files-io.cpp:218
 #, c-format
@@ -7288,11 +7290,11 @@ msgstr ""
 
 #: kicad/mainframe.cpp:471
 msgid "Text file ("
-msgstr ""
+msgstr "Textfil ("
 
 #: kicad/mainframe.cpp:474
 msgid "Load File to Edit"
-msgstr ""
+msgstr "Ladda fil för redigering"
 
 #: kicad/mainframe.cpp:528
 #, c-format
@@ -7300,6 +7302,8 @@ msgid ""
 "Project name:\n"
 "%s\n"
 msgstr ""
+"Projektnamn:\n"
+"%s\n"
 
 #: kicad/menubar.cpp:214
 msgid "&Open Project"
@@ -7311,7 +7315,7 @@ msgstr "Öppna existerande projekt"
 
 #: kicad/menubar.cpp:226
 msgid "Open recent schematic project"
-msgstr ""
+msgstr "Öppna senaste schemaprojekt"
 
 #: kicad/menubar.cpp:232
 msgid "&New Project"
@@ -7368,15 +7372,15 @@ msgstr "Avsluta KiCad"
 
 #: kicad/menubar.cpp:290
 msgid "Open Text E&ditor"
-msgstr ""
+msgstr "Öppna textredigerare"
 
 #: kicad/menubar.cpp:291
 msgid "Launch preferred text editor"
-msgstr ""
+msgstr "Öppna textredigerare"
 
 #: kicad/menubar.cpp:297
 msgid "&Open Local File"
-msgstr ""
+msgstr "Öppna lokal fil"
 
 #: kicad/menubar.cpp:298
 msgid "Edit local file"
@@ -7384,7 +7388,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:307
 msgid "&Set Text Editor"
-msgstr ""
+msgstr "Ställ in textredigerare"
 
 #: kicad/menubar.cpp:308
 msgid "Set your preferred text editor"
@@ -7416,7 +7420,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:342
 msgid "&PDF Viewer"
-msgstr ""
+msgstr "PDF visare"
 
 #: kicad/menubar.cpp:343
 msgid "PDF viewer preferences"
@@ -7537,11 +7541,11 @@ msgstr ""
 #: kicad/prjconfig.cpp:265
 #, c-format
 msgid "KiCad project file '%s' not found"
-msgstr ""
+msgstr "KiCad projektfil '%s' hittades inte"
 
 #: kicad/prjconfig.cpp:304
 msgid "New Project Folder"
-msgstr ""
+msgstr "Ny projektmapp"
 
 #: kicad/tree_project_frame.cpp:218
 #, c-format
@@ -7580,11 +7584,11 @@ msgstr "Öppna filen i en textredigerare"
 
 #: kicad/tree_project_frame.cpp:695
 msgid "&Rename file"
-msgstr ""
+msgstr "&Döp om fil"
 
 #: kicad/tree_project_frame.cpp:696
 msgid "Rename file"
-msgstr ""
+msgstr "Döp om fil"
 
 #: kicad/tree_project_frame.cpp:699
 msgid "&Delete File"
@@ -7593,11 +7597,11 @@ msgstr "&Radera fil"
 #: kicad/tree_project_frame.cpp:749
 #, c-format
 msgid "Change filename: '%s'"
-msgstr ""
+msgstr "Ändra filnamn: '%s'"
 
 #: kicad/tree_project_frame.cpp:752
 msgid "Change filename"
-msgstr ""
+msgstr "Ändra filnamn"
 
 #: pcbnew/append_board_to_current.cpp:91 pcbnew/files.cpp:508
 #, c-format
@@ -7641,7 +7645,7 @@ msgstr ""
 
 #: pcbnew/autorouter/autorout.cpp:90
 msgid "Net not selected"
-msgstr ""
+msgstr "Nät inte markerat"
 
 #: pcbnew/autorouter/autorout.cpp:98
 msgid "Footprint not selected"
@@ -13961,7 +13965,7 @@ msgstr ""
 #: pcbnew/files.cpp:443
 #, c-format
 msgid "Board '%s' does not exist.  Do you wish to create it?"
-msgstr ""
+msgstr "Kretskortet '%s' existerar inte. Vill du skapa det?"
 
 #: pcbnew/files.cpp:539
 msgid ""
@@ -14809,15 +14813,15 @@ msgstr ""
 #: pcbnew/menubar_modedit.cpp:318 pcbnew/menubar_pcbframe.cpp:640
 #: pcbnew/tool_modview.cpp:201
 msgid "&About Pcbnew"
-msgstr ""
+msgstr "&Om Pcbnew"
 
 #: pcbnew/menubar_modedit.cpp:319 pcbnew/tool_modview.cpp:202
 msgid "About Pcbnew PCB designer"
-msgstr ""
+msgstr "Om Pcbnew PCB designer"
 
 #: pcbnew/menubar_modedit.cpp:328
 msgid "Di&mensions"
-msgstr ""
+msgstr "Di&mensioner"
 
 #: pcbnew/menubar_pcbframe.cpp:68
 msgid "&New"
@@ -14851,7 +14855,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:111
 msgid "Save current board"
-msgstr ""
+msgstr "Spara nuvarande aktiva kretskort"
 
 #: pcbnew/menubar_pcbframe.cpp:121
 msgid "Sa&ve As..."
@@ -14879,7 +14883,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:144
 msgid "Rescue"
-msgstr ""
+msgstr "Rädda"
 
 #: pcbnew/menubar_pcbframe.cpp:145
 msgid "Clear board and get last rescue file automatically saved by Pcbnew"
@@ -15099,15 +15103,15 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:348
 msgid "&3D Viewer"
-msgstr ""
+msgstr "&3D visare"
 
 #: pcbnew/menubar_pcbframe.cpp:350
 msgid "Show board in 3D viewer"
-msgstr ""
+msgstr "Visa kretskort i 3D visare"
 
 #: pcbnew/menubar_pcbframe.cpp:354
 msgid "&List Nets"
-msgstr ""
+msgstr "&Lista nät"
 
 #: pcbnew/menubar_pcbframe.cpp:354
 msgid "View a list of nets with names and id's"
@@ -15320,19 +15324,19 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:560
 msgid "&Save macros"
-msgstr ""
+msgstr "&Spara makron"
 
 #: pcbnew/menubar_pcbframe.cpp:561
 msgid "Save macros to file"
-msgstr ""
+msgstr "Spara makron till fil"
 
 #: pcbnew/menubar_pcbframe.cpp:565
 msgid "&Read macros"
-msgstr ""
+msgstr "&Läs in makron"
 
 #: pcbnew/menubar_pcbframe.cpp:566
 msgid "Read macros from file"
-msgstr ""
+msgstr "Läs makron från fil"
 
 #: pcbnew/menubar_pcbframe.cpp:570
 msgid "Ma&cros"
@@ -15384,7 +15388,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:617
 msgid "Design Rules"
-msgstr ""
+msgstr "Design regler"
 
 #: pcbnew/menubar_pcbframe.cpp:618
 msgid "Open the design rules editor"
@@ -15416,7 +15420,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:653
 msgid "&Design Rules"
-msgstr ""
+msgstr "&Design regler"
 
 #: pcbnew/modedit.cpp:185
 msgid ""
