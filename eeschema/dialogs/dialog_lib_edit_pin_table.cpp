@@ -568,7 +568,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetValue( wxVariant& aValue,
     break;
 
     case PIN_TYPE:
-        aValue = m_Backing->GetTypeString();
+        aValue = m_Backing->GetElectricalTypeName();
         break;
 
     case PIN_POSITION:

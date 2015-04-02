@@ -281,7 +281,9 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         if( aMinConn == NOC )    /* Only 1 element in the net. */
         {
             msg.Printf( _( "Pin %s (%s) of component %s is unconnected." ),
-                        GetChars( string_pinnum ), MsgPinElectricType[ii], GetChars( cmp_ref ) );
+                        GetChars( string_pinnum ),
+                        GetChars( LIB_PIN::GetElectricalTypeName( ii ) ),
+                        GetChars( cmp_ref ) );
             marker->SetData( ERCE_PIN_NOT_CONNECTED,
                              aNetItemRef->m_Start,
                              msg,
@@ -296,7 +298,9 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
                     &aNetItemRef->m_SheetPath );
 
             msg.Printf( _( "Pin %s (%s) of component %s is not driven (Net %d)." ),
-                        GetChars( string_pinnum ), MsgPinElectricType[ii], GetChars( cmp_ref ),
+                        GetChars( string_pinnum ),
+                        GetChars( LIB_PIN::GetElectricalTypeName( ii ) ),
+                        GetChars( cmp_ref ),
                         aNetItemRef->GetNet() );
             marker->SetData( ERCE_PIN_NOT_DRIVEN,
                              aNetItemRef->m_Start,
@@ -336,10 +340,14 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
             alt_cmp = aNetItemTst->GetComponentParent()->GetRef( &aNetItemTst->m_SheetPath );
 
         msg.Printf( _( "Pin %s (%s) of component %s is connected to " ),
-                    GetChars( string_pinnum ), MsgPinElectricType[ii], GetChars( cmp_ref ) );
+                    GetChars( string_pinnum ),
+                    GetChars( LIB_PIN::GetElectricalTypeName( ii ) ),
+                    GetChars( cmp_ref ) );
         marker->SetData( errortype, aNetItemRef->m_Start, msg, aNetItemRef->m_Start );
         msg.Printf( _( "pin %s (%s) of component %s (net %d)." ),
-                    GetChars( alt_string_pinnum ), MsgPinElectricType[jj], GetChars( alt_cmp ),
+                    GetChars( alt_string_pinnum ),
+                    GetChars( LIB_PIN::GetElectricalTypeName( jj ) ),
+                    GetChars( alt_cmp ),
                     aNetItemRef->GetNet() );
         marker->SetAuxiliaryData( msg, aNetItemTst->m_Start );
     }

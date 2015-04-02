@@ -53,8 +53,6 @@ enum ElectricPinType {
     PIN_NMAX            /* End of List (no used as pin type) */
 };
 
-/* Electrical pin type names. */
-extern const wxChar* MsgPinElectricType[];
 
 /* Pin visibility flag bit. */
 #define PIN_INVISIBLE 1    /* Set makes pin invisible */
@@ -269,11 +267,38 @@ public:
     int GetType() const { return m_type; }
 
     /**
+     * return a string giving the electrical type of a pin.
+     * Can be used when a known, not translated name is needed (for instance in net lists)
+     * @param aType is the electrical type (see enum ElectricPinType )
+     * @return The electrical name for a pin type (see enun MsgPinElectricType for names).
+     */
+    static const wxString GetCanonicalElectricalTypeName( unsigned aType );
+
+    /**
      * return a string giving the electrical type of the pin.
-     *
+     * Can be used when a known, not translated name is needed (for instance in net lists)
+     * @return The canonical electrical name of the pin.
+     */
+    wxString const GetCanonicalElectricalTypeName() const
+    {
+        return GetCanonicalElectricalTypeName( m_type );
+    }
+
+    /**
+     * return a translated string for messages giving the electrical type of a pin.
+     * @param aType is the electrical type (see enum ElectricPinType )
      * @return The electrical name of the pin (see enun MsgPinElectricType for names).
      */
-    wxString GetTypeString() const { return MsgPinElectricType[m_type]; }
+    static const wxString GetElectricalTypeName( unsigned aType );
+
+    /**
+     * return a translated string for messages giving the electrical type of the pin.
+     * @return The electrical name of the pin.
+     */
+    wxString const GetElectricalTypeName() const
+    {
+        return GetElectricalTypeName( m_type );
+    }
 
     /**
      * Set the electrical type of the pin.

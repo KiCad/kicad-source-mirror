@@ -48,18 +48,16 @@
 #include <sch_component.h>
 
 
-/**
- * Note: The following name lists are sentence capitalized per the GNOME UI
- *       standards for list controls.  Please do not change the capitalization
- *       of these strings unless the GNOME UI standards are changed.
- */
-static const wxString pin_orientation_names[] =
+static const int    pin_orientation_codes[] =
 {
-    _( "Right" ),
-    _( "Left" ),
-    _( "Up" ),
-    _( "Down" )
+    PIN_RIGHT,
+    PIN_LEFT,
+    PIN_UP,
+    PIN_DOWN
 };
+
+
+#define PIN_ORIENTATION_CNT DIM( pin_orientation_codes )
 
 // bitmaps to show pins orientations in dialog editor
 // must have same order than pin_orientation_names
@@ -71,31 +69,6 @@ static const BITMAP_DEF s_icons_Pins_Orientations[] =
     pinorient_down_xpm,
 };
 
-static const int    pin_orientation_codes[] =
-{
-    PIN_RIGHT,
-    PIN_LEFT,
-    PIN_UP,
-    PIN_DOWN
-};
-
-
-#define PIN_ORIENTATION_CNT ( sizeof( pin_orientation_names ) / \
-                             sizeof( wxString ) )
-
-
-static const wxString pin_style_names[] =
-{
-    _( "Line" ),
-    _( "Inverted" ),
-    _( "Clock" ),
-    _( "Inverted clock" ),
-    _( "Input low" ),
-    _( "Clock low" ),
-    _( "Output low" ),
-    _( "Falling edge clock" ),
-    _( "NonLogic" )
-};
 
 // bitmaps to show pins shapes in dialog editor
 // must have same order than pin_style_names
@@ -113,8 +86,6 @@ static BITMAP_DEF s_icons_Pins_Shapes[] =
 };
 
 
-#define PIN_STYLE_CNT ( sizeof( pin_style_names ) / sizeof( wxString ) )
-
 
 static const int pin_style_codes[] =
 {
@@ -129,25 +100,11 @@ static const int pin_style_codes[] =
     NONLOGIC
 };
 
-
-static const wxString pin_electrical_type_names[] =
-{
-    _( "Input" ),
-    _( "Output" ),
-    _( "Bidirectional" ),
-    _( "Tri-state" ),
-    _( "Passive" ),
-    _( "Unspecified" ),
-    _( "Power input" ),
-    _( "Power output" ),
-    _( "Open collector" ),
-    _( "Open emitter" ),
-    _( "Not connected" )
-};
+#define PIN_STYLE_CNT DIM( pin_style_codes )
 
 // bitmaps to show pins electrical type in dialog editor
-// must have same order than pin_electrical_type_names
-static const BITMAP_DEF s_icons_Pins_Electrical_Type[] =
+// must have same order than enum ElectricPinType (see lib_pin.h)
+static const BITMAP_DEF iconsPinsElectricalType[] =
 {
     pintype_input_xpm,
     pintype_output_xpm,
@@ -162,25 +119,105 @@ static const BITMAP_DEF s_icons_Pins_Electrical_Type[] =
     pintype_noconnect_xpm
 };
 
+#define PIN_ELECTRICAL_TYPE_CNT DIM( iconsPinsElectricalType )
 
-#define PIN_ELECTRICAL_TYPE_CNT ( sizeof( pin_electrical_type_names ) / sizeof( wxString ) )
 
-
-const wxChar* MsgPinElectricType[] =
+const wxString LIB_PIN::GetCanonicalElectricalTypeName( unsigned aType )
 {
-    wxT( "input" ),
-    wxT( "output" ),
-    wxT( "BiDi" ),
-    wxT( "3state" ),
-    wxT( "passive" ),
-    wxT( "unspc" ),
-    wxT( "power_in" ),
-    wxT( "power_out" ),
-    wxT( "openCol" ),
-    wxT( "openEm" ),
-    wxT( "NotConnected" ),
-    wxT( "???" )
-};
+    // These strings are the canonical name of the electrictal type
+    // Not translated, no space in name, only ASCII chars.
+    // to use when the string name must be known and well defined
+    // must have same order than enum ElectricPinType (see lib_pin.h)
+    static const wxChar* msgPinElectricType[] =
+    {
+        wxT( "input" ),
+        wxT( "output" ),
+        wxT( "BiDi" ),
+        wxT( "3state" ),
+        wxT( "passive" ),
+        wxT( "unspc" ),
+        wxT( "power_in" ),
+        wxT( "power_out" ),
+        wxT( "openCol" ),
+        wxT( "openEm" ),
+        wxT( "NotConnected" ),
+        wxT( "???" )
+    };
+
+    if( aType >= PIN_NMAX )
+        aType = PIN_NMAX;
+
+    return msgPinElectricType[ aType ];
+}
+
+
+// Helper functions to get the pin orientation name from pin_orientation_codes
+// Note: the strings are *not* static because they are translated and must be built
+// on the fly, to be properly translated
+
+static const wxString getPinOrientationName( unsigned aPinOrientationCode )
+{
+    /* Note: The following name lists are sentence capitalized per the GNOME UI
+     *       standards for list controls.  Please do not change the capitalization
+     *       of these strings unless the GNOME UI standards are changed.
+     */
+    const wxString pin_orientation_names[] =
+    {
+        _( "Right" ),
+        _( "Left" ),
+        _( "Up" ),
+        _( "Down" )
+    };
+
+    if( aPinOrientationCode < PIN_ORIENTATION_CNT )
+        return pin_orientation_names[ aPinOrientationCode ];
+    else
+        return wxT( "??" );
+}
+
+const wxString LIB_PIN::GetElectricalTypeName( unsigned aPinsElectricalType )
+{
+    const wxString pin_electrical_type_names[] =
+    {   // Keep these translated strings not static
+        _( "Input" ),
+        _( "Output" ),
+        _( "Bidirectional" ),
+        _( "Tri-state" ),
+        _( "Passive" ),
+        _( "Unspecified" ),
+        _( "Power input" ),
+        _( "Power output" ),
+        _( "Open collector" ),
+        _( "Open emitter" ),
+        _( "Not connected" )
+    };
+
+    if( aPinsElectricalType < PIN_ELECTRICAL_TYPE_CNT )
+        return pin_electrical_type_names[ aPinsElectricalType ];
+
+    return wxT( "??" );
+}
+
+const wxString getPinStyleName( unsigned aPinsStyle )
+{
+    const wxString pin_style_names[] =
+    {   // Keep these translated strings not static
+        _( "Line" ),
+        _( "Inverted" ),
+        _( "Clock" ),
+        _( "Inverted clock" ),
+        _( "Input low" ),
+        _( "Clock low" ),
+        _( "Output low" ),
+        _( "Falling edge clock" ),
+        _( "NonLogic" )
+    };
+
+    if( aPinsStyle < PIN_STYLE_CNT )
+        return pin_style_names[ aPinsStyle ];
+
+    return wxT( "??" );
+}
 
 
 /// Utility for getting the size of the 'internal' pin decorators (as a radius)
@@ -1935,12 +1972,12 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Number" ), text, DARKCYAN ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ),
-                                     wxGetTranslation( pin_electrical_type_names[ m_type ] ),
+                                     LIB_PIN::GetElectricalTypeName( m_type ),
                                      RED ) );
 
     int styleCodeIndex = GetStyleCodeIndex( m_shape );
     if( styleCodeIndex >= 0 )
-        text = wxGetTranslation( pin_style_names[ styleCodeIndex ] );
+        text = getPinStyleName( styleCodeIndex );
     else
         text = wxT( "?" );
 
@@ -1957,7 +1994,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     text = StringFromValue( g_UserUnit, m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
-    text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );
+    text = getPinOrientationName( GetOrientationCodeIndex( m_orientation ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
@@ -2080,7 +2117,7 @@ wxArrayString LIB_PIN::GetOrientationNames( void )
     wxArrayString tmp;
 
     for( unsigned ii = 0; ii < PIN_ORIENTATION_CNT; ii++ )
-        tmp.Add( wxGetTranslation( pin_orientation_names[ii] ) );
+        tmp.Add( getPinOrientationName( ii ) );
 
     return tmp;
 }
@@ -2142,7 +2179,7 @@ wxArrayString LIB_PIN::GetStyleNames( void )
     wxArrayString tmp;
 
     for( unsigned ii = 0; ii < PIN_STYLE_CNT; ii++ )
-        tmp.Add( wxGetTranslation( pin_style_names[ii] ) );
+        tmp.Add( getPinStyleName( ii ) );
 
     return tmp;
 }
@@ -2176,7 +2213,7 @@ wxArrayString LIB_PIN::GetElectricalTypeNames( void )
     wxArrayString tmp;
 
     for( unsigned ii = 0; ii < PIN_ELECTRICAL_TYPE_CNT; ii++ )
-        tmp.Add( wxGetTranslation( pin_electrical_type_names[ii] ) );
+        tmp.Add( LIB_PIN::GetElectricalTypeName( ii ) );
 
     return tmp;
 }
@@ -2184,7 +2221,7 @@ wxArrayString LIB_PIN::GetElectricalTypeNames( void )
 
 const BITMAP_DEF* LIB_PIN::GetElectricalTypeSymbols()
 {
-    return s_icons_Pins_Electrical_Type;
+    return iconsPinsElectricalType;
 }
 
 
@@ -2202,7 +2239,7 @@ const BITMAP_DEF* LIB_PIN::GetStyleSymbols()
 
 BITMAP_DEF LIB_PIN::GetMenuImage() const
 {
-    return s_icons_Pins_Electrical_Type[m_type];
+    return iconsPinsElectricalType[m_type];
 }
 
 
@@ -2212,14 +2249,15 @@ wxString LIB_PIN::GetSelectMenuText() const
     wxString style;
 
     int styleCode = GetStyleCodeIndex( m_shape );
+
     if( styleCode >= 0 )
-        style = wxGetTranslation( pin_style_names[ styleCode ] );
+        style = getPinStyleName( styleCode );
     else
         style = wxT( "?" );
 
     tmp.Printf( _( "Pin %s, %s, %s" ),
                 GetChars( GetNumberString() ),
-                GetChars( GetTypeString() ),
+                GetChars( GetElectricalTypeName() ),
                 GetChars( style )
                 );
     return tmp;
