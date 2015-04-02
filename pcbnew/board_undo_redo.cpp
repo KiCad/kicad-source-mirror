@@ -47,8 +47,6 @@
 #include <tools/selection_tool.h>
 #include <tool/tool_manager.h>
 
-#include <dialogs/dialog_assistant.h>
-
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
  *  commands to redo are stored in CurrentScreen->m_RedoList
@@ -641,9 +639,6 @@ void PCB_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     // Inform tools that undo command was issued
     TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
     m_toolManager->ProcessEvent( event );
-
-    if( IsGalCanvasActive() )
-        GetAssistant()->RandomHint( KICAD_ASSISTANT::UNDO, 6000, 10 );
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();

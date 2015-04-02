@@ -64,7 +64,6 @@ class REPORTER;
 struct PARSE_ERROR;
 struct IO_ERROR;
 class FP_LIB_TABLE;
-class KICAD_ASSISTANT;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 
@@ -1729,10 +1728,6 @@ public:
      * </p>
      */
     void UpdateTitle();
-
-    KICAD_ASSISTANT* GetAssistant() { return m_assistant; }
-
-    KICAD_ASSISTANT* m_assistant;
 
     DECLARE_EVENT_TABLE()
 };

@@ -53,7 +53,6 @@
 #include <module_editor_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
-#include <dialog_assistant.h>
 #include <convert_from_iu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -454,10 +453,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
 
     Zoom_Automatique( false );
-
-    m_assistant = new KICAD_ASSISTANT( this );
-    m_assistant->Show();
-    m_assistant->RandomHint( KICAD_ASSISTANT::WELCOME, 10000 );
 }
 
 
@@ -702,7 +697,6 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
 
     case ID_MENU_CANVAS_OPENGL:
         use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-        GetAssistant()->DisplayHint( "Wooow! OpenGL!\nThat's cool, it was not here the last time..", 5000 );
         break;
     }
 

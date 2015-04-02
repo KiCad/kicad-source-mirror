@@ -37,8 +37,6 @@
 #include <boost/optional.hpp>
 #include <boost/foreach.hpp>
 
-#include <dialogs/dialog_assistant.h>
-
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
 {
@@ -332,12 +330,7 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
     boost::optional<TOOL_EVENT> evt = COMMON_ACTIONS::TranslateLegacyId( aEvent.GetId() );
 
     if( evt )
-    {
-        PCB_EDIT_FRAME*frame = dynamic_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
-        if(frame)
-            frame->GetAssistant()->RandomHint( KICAD_ASSISTANT::TIP_OF_THE_DAY, 6000, 10 );
         m_toolMgr->ProcessEvent( *evt );
-    }
     else
         aEvent.Skip();
 }

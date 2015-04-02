@@ -49,8 +49,6 @@
 #include "pns_router.h"
 #include "trace.h"
 
-#include <dialogs/dialog_assistant.h>
-
 using namespace KIGFX;
 using boost::optional;
 
@@ -515,8 +513,6 @@ void ROUTER_TOOL::performRouting()
         {
             updateEndItem( *evt );
             bool needLayerSwitch = m_router->IsPlacingVia();
-
-            m_frame->GetAssistant()->RandomHint( KICAD_ASSISTANT::ROUTING, 6000, 10 );
 
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
