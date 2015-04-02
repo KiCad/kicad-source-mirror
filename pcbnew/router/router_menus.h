@@ -56,59 +56,68 @@ using namespace KIGFX;
 using boost::optional;
 
 static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack",
-                                 AS_CONTEXT, 'X',
-                                 "New Track", "Starts laying a new track.");
+        AS_CONTEXT, 'X',
+        _( "New Track" ),  _( "Starts laying a new track." ) );
+
 static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
-                                 AS_CONTEXT, WXK_END,
-                                 "End Track", "Stops laying the current track.");
+        AS_CONTEXT, WXK_END,
+        _( "End Track" ) ,  _( "Stops laying the current track." ) );
+
 static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
-                                     AS_CONTEXT, 'F',
-                                     "Auto-end Track", "Automagically finishes currently routed track." );
+        AS_CONTEXT, 'F',
+        _( "Auto-end Track" ), _( "Automagically finishes currently routed track." ) );
+
 static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag",
-                                     AS_CONTEXT, 'G',
-                                     "Drag Track/Via", "Drags a track or a via." );
+        AS_CONTEXT, 'G',
+        _( "Drag Track/Via" ), _( "Drags a track or a via." ) );
+
 static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
-                                 AS_CONTEXT, 'V',
-                                 "Place Through Via", "Adds a through-hole via at the end of currently routed track." );
+        AS_CONTEXT, 'V',
+        _( "Place Through Via" ), _( "Adds a through-hole via at the end of currently routed track." ) );
+
 static TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
-                                 AS_CONTEXT, 'Z',
-                                 "Place Blind/Buried Via", "Adds a blind or buried via at the end of currently routed track." );
+        AS_CONTEXT, 'Z',
+        _( "Place Blind/Buried Via" ), _( "Adds a blind or buried via at the end of currently routed track." ) );
+
 static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
-                                 AS_CONTEXT, 'Q',
-                                 "Place Microvia", "Adds a microvia at the end of currently routed track." );
+        AS_CONTEXT, 'Q',
+        _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ) );
+
 static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackWidth",
-                                      AS_CONTEXT, 'W',
-                                      "Custom Track Width", "Shows a dialog for changing the track width and via size.");
+        AS_CONTEXT, 'W',
+        _( "Custom Track Width" ), _( "Shows a dialog for changing the track width and via size." ) );
+
 static TOOL_ACTION ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
-                                      AS_CONTEXT, 'E',
-                                      "Routing Options...", "Shows a dialog containing router options.");
+        AS_CONTEXT, 'E',
+        _( "Routing Options..." ), _( "Shows a dialog containing router options." ) );
+
 static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture",
-                                      AS_CONTEXT, '/',
-                                      "Switch Track Posture", "Switches posture of the currenly routed track.");
+        AS_CONTEXT, '/',
+        _( "Switch Track Posture" ), _( "Switches posture of the currenly routed track." ) );
 
 static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",
-                                      AS_CONTEXT, 'D',
-                                      "Differential Pair Dimensions...", "Sets the width and gap of the currently routed differential pair.");
+        AS_CONTEXT, 'D',
+        _( "Differential Pair Dimensions..." ), _( "Sets the width and gap of the currently routed differential pair." ) );
 
 static TOOL_ACTION ACT_SetLengthTune( "pcbnew.InteractiveRouter.LengthTunerSettings",
-                                      AS_CONTEXT, 'L',
-                                      "Length Tuning Settings", "Sets the length tuning parameters for currently routed item.");
+        AS_CONTEXT, 'L',
+        _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ) );
 
 static TOOL_ACTION ACT_LengthTuneSpacingIncrease( "pcbnew.InteractiveRouter.LengthTunerSpacingIncrease",
-                                      AS_CONTEXT, '1',
-                                      "Length Tuning Settings", "Sets the length tuning parameters for currently routed item.");
+        AS_CONTEXT, '1',
+        _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ) );
 
 static TOOL_ACTION ACT_LengthTuneSpacingDecrease( "pcbnew.InteractiveRouter.LengthTunerSpacingDecrease",
-                                      AS_CONTEXT, '2',
-                                      "Length Tuning Settings", "Sets the length tuning parameters for currently routed item.");
+        AS_CONTEXT, '2',
+        _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ) );
 
 static TOOL_ACTION ACT_SetLengthTuneAmplIncrease( "pcbnew.InteractiveRouter.LengthTunerAmplIncrease",
-                                      AS_CONTEXT, '3',
-                                      "Length Tuning Settings", "Sets the length tuning parameters for currently routed item.");
+        AS_CONTEXT, '3',
+        _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ) );
 
 static TOOL_ACTION ACT_SetLengthTuneAmplDecrease( "pcbnew.InteractiveRouter.LengthTunerAmplDecrease",
-                                      AS_CONTEXT, '4',
-                                      "Length Tuning Settings", "Sets the length tuning parameters for currently routed item.");
+        AS_CONTEXT, '4',
+        _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ) );
 
 
 ROUTER_TOOL::ROUTER_TOOL() :
@@ -239,7 +248,7 @@ class ROUTER_TOOL_MENU: public CONTEXT_MENU
 public:
     ROUTER_TOOL_MENU( BOARD* aBoard, PNS_ROUTER_MODE aMode )
     {
-        SetTitle( wxT( "Interactive Router" ) );
+        SetTitle( _( "Interactive Router" ) );
         Add( ACT_NewTrack );
         Add( ACT_EndTrack );
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
@@ -253,7 +262,7 @@ public:
 
         CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
         trackMenu->SetBoard( aBoard );
-        AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
+        AppendSubMenu( trackMenu, _( "Select Track Width" ) );
 
         Add( ACT_CustomTrackWidth );
 

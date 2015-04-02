@@ -156,8 +156,7 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
     int id = m_actionId + aAction.GetId();
 
     wxMenuItem* item = new wxMenuItem( this, id,
-        wxString( aAction.GetMenuItem().c_str(), wxConvUTF8 ),
-        wxString( aAction.GetDescription().c_str(), wxConvUTF8 ), wxITEM_NORMAL );
+        aAction.GetMenuItem(), aAction.GetDescription(), wxITEM_NORMAL );
 
     if( aAction.HasHotKey() )
     {

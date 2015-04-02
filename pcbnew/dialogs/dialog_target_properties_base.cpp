@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,33 +25,33 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	fgSizer->SetFlexibleDirection( wxBOTH );
 	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextSize = new wxStaticText( this, wxID_ANY, wxT("Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSize = new wxStaticText( this, wxID_ANY, _("Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSize->Wrap( -1 );
 	fgSizer->Add( m_staticTextSize, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TargetSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer->Add( m_TargetSizeCtrl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticTextSizeUnits = new wxStaticText( this, wxID_ANY, wxT("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSizeUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeUnits->Wrap( -1 );
 	fgSizer->Add( m_staticTextSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_staticTextThickness = new wxStaticText( this, wxID_ANY, wxT("Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextThickness = new wxStaticText( this, wxID_ANY, _("Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextThickness->Wrap( -1 );
 	fgSizer->Add( m_staticTextThickness, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TargetThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer->Add( m_TargetThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_staticTextThicknessUnits = new wxStaticText( this, wxID_ANY, wxT("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextThicknessUnits->Wrap( -1 );
 	fgSizer->Add( m_staticTextThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_staticTextShape = new wxStaticText( this, wxID_ANY, wxT("Shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextShape = new wxStaticText( this, wxID_ANY, _("Shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextShape->Wrap( -1 );
 	fgSizer->Add( m_staticTextShape, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	wxString m_TargetShapeChoices[] = { wxT("+"), wxT("X") };
+	wxString m_TargetShapeChoices[] = { _("+"), _("X") };
 	int m_TargetShapeNChoices = sizeof( m_TargetShapeChoices ) / sizeof( wxString );
 	m_TargetShape = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TargetShapeNChoices, m_TargetShapeChoices, 0 );
 	m_TargetShape->SetSelection( 0 );

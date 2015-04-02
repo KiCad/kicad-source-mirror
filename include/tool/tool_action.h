@@ -45,8 +45,8 @@ class TOOL_ACTION
 {
 public:
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
-            int aDefaultHotKey = 0, const std::string& aMenuItem = std::string( "" ),
-            const std::string& aMenuDesc = std::string( "" ), TOOL_ACTION_FLAGS aFlags = AF_NONE ) :
+            int aDefaultHotKey = 0, const wxString aMenuItem = wxEmptyString,
+            const wxString& aMenuDesc = wxEmptyString, TOOL_ACTION_FLAGS aFlags = AF_NONE ) :
         m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
         m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ),
         m_menuDescription( aMenuDesc ), m_id( -1 ), m_flags( aFlags )
@@ -154,22 +154,22 @@ public:
             return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
     }
 
-    const std::string& GetMenuItem() const
+    const wxString& GetMenuItem() const
     {
         return m_menuItem;
     }
 
-    void SetMenuItem( const std::string& aItem )
+    void SetMenuItem( const wxString& aItem )
     {
         m_menuItem = aItem;
     }
 
-    const std::string& GetDescription() const
+    const wxString& GetDescription() const
     {
         return m_menuDescription;
     }
 
-    void SetDescription( const std::string& aDescription )
+    void SetDescription( const wxString& aDescription )
     {
         m_menuDescription = aDescription;
     }
@@ -218,10 +218,10 @@ private:
     int m_currentHotKey;
 
     /// Menu entry text
-    std::string m_menuItem;
+    wxString m_menuItem;
 
     /// Pop-up help
-    std::string m_menuDescription;
+    wxString m_menuDescription;
 
     // Icon for menu entry
     // KiBitmap m_bitmap;

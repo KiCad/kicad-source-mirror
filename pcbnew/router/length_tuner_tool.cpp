@@ -46,32 +46,26 @@
 using namespace KIGFX;
 using boost::optional;
 
-static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning",
-                                 AS_CONTEXT, 'X',
-                                 "New Track", "Starts laying a new track.");
-static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning",
-                                 AS_CONTEXT, WXK_END,
-                                 "End Track", "Stops laying the current meander.");
+static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning", AS_CONTEXT, 'X',
+    _( "New Track" ), _( "Starts laying a new track." ) );
 
-static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings",
-                                      AS_CONTEXT, 'L',
-                                      "Length Tuning Settings", "Sets the length tuning parameters for currently routed item.");
+static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning", AS_CONTEXT, WXK_END,
+    _( "End Track" ), _( "Stops laying the current meander." ) );
 
-static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease",
-                                      AS_CONTEXT, '1',
-                                      "Increase spacing", "Increase meander spacing by one step.");
+static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", AS_CONTEXT, 'L',
+    _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ) );
 
-static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease",
-                                      AS_CONTEXT, '2',
-                                      "Decrease spacing ", "Decrease meander spacing by one step.");
+static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease", AS_CONTEXT, '1',
+    _( "Increase spacing" ), _( "Increase meander spacing by one step." ) );
 
-static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease",
-                                      AS_CONTEXT, '3',
-                                      "Increase amplitude", "Increase meander amplitude by one step.");
+static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease", AS_CONTEXT, '2',
+    _( "Decrease spacing" ), _( "Decrease meander spacing by one step." ) );
 
-static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease",
-                                      AS_CONTEXT, '4',
-                                      "Decrease amplitude", "Decrease meander amplitude by one step.");
+static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease", AS_CONTEXT, '3',
+    _( "Increase amplitude" ), _( "Increase meander amplitude by one step." ) );
+
+static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", AS_CONTEXT, '4',
+    _( "Decrease amplitude" ), _( "Decrease meander amplitude by one step." ) );
 
 
 LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
@@ -85,7 +79,7 @@ class TUNER_TOOL_MENU: public CONTEXT_MENU
 public:
     TUNER_TOOL_MENU( BOARD* aBoard )
     {
-        SetTitle( wxT( "Length Tuner" ) );
+        SetTitle( _( "Length Tuner" ) );
 
         //Add( ACT_StartTuning );
         //Add( ACT_EndTuning );

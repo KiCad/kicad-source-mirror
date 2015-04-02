@@ -73,7 +73,7 @@ bool PCB_EDITOR_CONTROL::Init()
 
     if( selTool )
     {
-        selTool->AddSubMenu( new ZONE_CONTEXT_MENU, wxT( "Zones" ),
+        selTool->AddSubMenu( new ZONE_CONTEXT_MENU, _( "Zones" ),
                              SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
     }
 

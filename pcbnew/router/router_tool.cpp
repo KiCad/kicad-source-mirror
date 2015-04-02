@@ -52,37 +52,35 @@
 using namespace KIGFX;
 using boost::optional;
 
-static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack",
-                                 AS_CONTEXT, 'X',
-                                 "New Track", "Starts laying a new track.");
-static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
-                                 AS_CONTEXT, WXK_END,
-                                 "End Track", "Stops laying the current track.");
-static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
-                                     AS_CONTEXT, 'F',
-                                     "Auto-end Track", "Automagically finishes currently routed track." );
-static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag",
-                                     AS_CONTEXT, 'G',
-                                     "Drag Track/Via", "Drags a track or a via." );
-static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
-                                 AS_CONTEXT, 'V',
-                                 "Place Through Via", "Adds a through-hole via at the end of currently routed track." );
-static TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
-                                 AS_CONTEXT, 'Z',
-                                 "Place Blind/Buried Via", "Adds a blind or buried via at the end of currently routed track." );
-static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
-                                 AS_CONTEXT, 'Q',
-                                 "Place Microvia", "Adds a microvia at the end of currently routed track." );
-static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackWidth",
-                                      AS_CONTEXT, 'W',
-                                      "Custom Track Width", "Shows a dialog for changing the track width and via size.");
-static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture",
-                                      AS_CONTEXT, '/',
-                                      "Switch Track Posture", "Switches posture of the currenly routed track.");
+static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT, 'X',
+    _( "New Track" ),  _( "Starts laying a new track." ) );
 
-static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",
-                                      AS_CONTEXT, 'D',
-                                      "Differential Pair Dimensions...", "Sets the width and gap of the currently routed differential pair.");
+static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END,
+    _( "End Track" ),  _( "Stops laying the current track." ) );
+
+static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'F',
+    _( "Auto-end Track" ),  _( "Automagically finishes currently routed track." ) );
+
+static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag", AS_CONTEXT, 'G',
+    _( "Drag Track/Via" ), _( "Drags a track or a via." ) );
+
+static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia", AS_CONTEXT, 'V',
+    _( "Place Through Via" ), _( "Adds a through-hole via at the end of currently routed track." ) );
+
+static TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia", AS_CONTEXT, 'Z',
+    _( "Place Blind/Buried Via" ), _( "Adds a blind or buried via at the end of currently routed track." ) );
+
+static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia", AS_CONTEXT, 'Q',
+    _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ) );
+
+static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackWidth", AS_CONTEXT, 'W',
+    _( "Custom Track Width" ), _( "Shows a dialog for changing the track width and via size." ) );
+
+static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT, '/',
+    _( "Switch Track Posture" ), _( "Switches posture of the currenly routed track." ) );
+
+static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions", AS_CONTEXT, 'D',
+    _( "Differential Pair Dimensions..." ), _( "Sets the width and gap of the currently routed differential pair." ) );
 
 
 ROUTER_TOOL::ROUTER_TOOL() :
@@ -131,7 +129,7 @@ public:
 
         for( unsigned i = 0; i < bds.m_ViasDimensionsList.size(); i++ )
         {
-            msg = _("Via ");
+            msg = _( "Via " );
             msg << StringFromValue( g_UserUnit, bds.m_ViasDimensionsList[i].m_Diameter, true );
             wxString drill = StringFromValue( g_UserUnit,
                                               bds.m_ViasDimensionsList[i].m_Drill,
@@ -139,11 +137,11 @@ public:
 
             if( bds.m_ViasDimensionsList[i].m_Drill <= 0 )
             {
-                msg << _ (", drill: default");
+                msg << _( ", drill: default" );
             }
             else
             {
-                msg << _ (", drill: ") << drill;
+                msg << _( ", drill: " ) << drill;
             }
 
             if( i == 0 )
@@ -212,7 +210,7 @@ class ROUTER_TOOL_MENU: public CONTEXT_MENU
 public:
     ROUTER_TOOL_MENU( BOARD* aBoard, PNS_ROUTER_MODE aMode )
     {
-        SetTitle( wxT( "Interactive Router" ) );
+        SetTitle( _( "Interactive Router" ) );
         Add( ACT_NewTrack );
         Add( ACT_EndTrack );
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
@@ -226,7 +224,7 @@ public:
 
         CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
         trackMenu->SetBoard( aBoard );
-        AppendSubMenu( trackMenu, wxT( "Select Track Width" ) );
+        AppendSubMenu( trackMenu, _( "Select Track Width" ) );
 
         Add( ACT_CustomTrackWidth );
 
@@ -241,7 +239,6 @@ public:
 
 ROUTER_TOOL::~ROUTER_TOOL()
 {
-
 }
 
 
@@ -452,7 +449,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     if ( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
-        wxMessageBox ( m_router->FailureReason(), _("Error") );
+        wxMessageBox ( m_router->FailureReason(), _( "Error" ) );
         highlightNet ( false );
         return false;
     }
