@@ -47,6 +47,7 @@ class ZONE_CONTEXT_MENU : public CONTEXT_MENU
 public:
     ZONE_CONTEXT_MENU()
     {
+        SetIcon( add_zone_xpm );
         Add( COMMON_ACTIONS::zoneFill );
         Add( COMMON_ACTIONS::zoneFillAll );
         Add( COMMON_ACTIONS::zoneUnfill );

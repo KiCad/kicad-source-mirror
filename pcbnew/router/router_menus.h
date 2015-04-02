@@ -57,7 +57,7 @@ using boost::optional;
 
 static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack",
         AS_CONTEXT, 'X',
-        _( "New Track" ),  _( "Starts laying a new track." ) );
+        _( "New Track" ),  _( "Starts laying a new track." ), add_tracks_xpm );
 
 static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
         AS_CONTEXT, WXK_END,
@@ -69,7 +69,7 @@ static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
 
 static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag",
         AS_CONTEXT, 'G',
-        _( "Drag Track/Via" ), _( "Drags a track or a via." ) );
+        _( "Drag Track/Via" ), _( "Drags a track or a via." ), drag_track_segment_xpm );
 
 static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
         AS_CONTEXT, 'V',
@@ -93,7 +93,8 @@ static TOOL_ACTION ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
 
 static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture",
         AS_CONTEXT, '/',
-        _( "Switch Track Posture" ), _( "Switches posture of the currenly routed track." ) );
+        _( "Switch Track Posture" ), _( "Switches posture of the currenly routed track." ),
+        change_entry_orient_xpm );
 
 static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",
         AS_CONTEXT, 'D',
@@ -143,14 +144,22 @@ public:
         wxString msg;
         m_board = aBoard;
 
-        Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom size" ),
-                wxEmptyString, wxITEM_CHECK );
+        wxMenuItem* custom_width = new wxMenu( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom size" ),
+                _( "Allows to specify any track/via size" ), wxITEM_CHECK );
+        //custom->SetBitmap();  // TODO missing icon
+        Append( custom_width );
 
-        Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Use the starting track width" ),
-                _( "Route using the width of the starting track." ), wxITEM_CHECK );
+        wxMenuItem* auto_width = new wxMenu( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
+                _( "Use the starting track width" ),
+                _( "Route using the width of the starting track" ), wxITEM_CHECK );
+        auto_width->SetBitmap( KiBitmap( auto_track_width_xpm ) );
+        Append( auto_width );
 
-        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES, _( "Use netclass values" ),
+        wxMenuItem* net_width = new wxMenu( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
+                _( "Use netclass values" ),
                 _( "Use track and via sizes from the net class" ), wxITEM_CHECK );
+        //net_width->SetBitmap();   // TODO missing icon
+        Append( net_width );
 
         for( unsigned i = 0; i < bds.m_TrackWidthList.size(); i++ )
         {

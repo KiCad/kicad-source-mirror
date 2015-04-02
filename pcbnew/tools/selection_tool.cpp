@@ -251,9 +251,10 @@ void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction, const SELECTION_CO
 }
 
 
-void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel, const SELECTION_CONDITION& aCondition )
+void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
+                                 const SELECTION_CONDITION& aCondition )
 {
-    m_menu.AppendSubMenu( aMenu, aLabel );
+    m_menu.Add( aMenu, aLabel );
     m_menuConditions.push_back( aCondition );
 }
 

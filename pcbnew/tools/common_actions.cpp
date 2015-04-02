@@ -30,7 +30,7 @@
 // Selection tool actions
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
         AS_GLOBAL, 0,
-        "", "", AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
+        "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION COMMON_ACTIONS::selectionCursor( "pcbnew.InteractiveSelection.Cursor",
         AS_GLOBAL, 0,
@@ -58,7 +58,7 @@ TOOL_ACTION COMMON_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
 
 TOOL_ACTION COMMON_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         AS_GLOBAL, 0,                                    // it is handled by wxWidgets hotkey system
-        _( "Find an item" ), _( "Searches the document for an item" ) );
+        _( "Find an item" ), _( "Searches the document for an item" ), find_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the hotkey
         AS_GLOBAL, MD_CTRL + int( 'F' ) );
@@ -70,14 +70,15 @@ TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
 TOOL_ACTION COMMON_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
         AS_CONTEXT, MD_CTRL + 'E',
         _( "Open in Footprint Editor" ),
-        _( "Opens the selected footprint in the Footprint Editor" ) );
+        _( "Opens the selected footprint in the Footprint Editor" ),
+        module_editor_xpm );
 
-TOOL_ACTION COMMON_ACTIONS::copyPadToSettings ( "pcbnew.InteractiveEdit.copyPadToSettings",
+TOOL_ACTION COMMON_ACTIONS::copyPadToSettings( "pcbnew.InteractiveEdit.copyPadToSettings",
         AS_CONTEXT, 0,
         _( "Copy pad settings to Current Settings" ),
         _( "Copies the properties of selected pad to the current template pad settings." ) );
 
-TOOL_ACTION COMMON_ACTIONS::copySettingsToPads ( "pcbnew.InteractiveEdit.copySettingsToPads",
+TOOL_ACTION COMMON_ACTIONS::copySettingsToPads( "pcbnew.InteractiveEdit.copySettingsToPads",
         AS_CONTEXT, 0,
         _( "Copy Current Settings to pads" ),
         _( "Copies the current template pad settings to the selected pad(s)." ) );
@@ -85,15 +86,15 @@ TOOL_ACTION COMMON_ACTIONS::copySettingsToPads ( "pcbnew.InteractiveEdit.copySet
 TOOL_ACTION COMMON_ACTIONS::globalEditPads ( "pcbnew.InteractiveEdit.globalPadEdit",
         AS_CONTEXT, 0,
         _( "Global Pad Edition" ),
-        _( "Changes pad properties globally." ) );
+        _( "Changes pad properties globally." ), global_options_pad_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 'M',
-        _( "Move" ), _( "Moves the selected item(s)" ), AF_ACTIVATE );
+        _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
         AS_GLOBAL, MD_CTRL + int( 'D' ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s)" ) );
+        _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_module_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'D' ),
@@ -101,66 +102,67 @@ TOOL_ACTION COMMON_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicat
 
 TOOL_ACTION COMMON_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         AS_GLOBAL, MD_CTRL + int( 'M' ),
-        _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ) );
+        _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
+        move_module_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         AS_GLOBAL, MD_CTRL + int( 'N' ),
-        _( "Create array" ), _( "Create array" ), AF_ACTIVATE );
+        _( "Create array" ), _( "Create array" ), array_module_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
         AS_GLOBAL, 'R',
-        _( "Rotate" ), _( "Rotates selected item(s)" ) );
+        _( "Rotate" ), _( "Rotates selected item(s)" ), rotate_cw_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL, 'F',
-        _( "Flip" ), _( "Flips selected item(s)" ) );
+        _( "Flip" ), _( "Flips selected item(s)" ), swap_layer_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
         AS_GLOBAL, WXK_DELETE,
-        _( "Remove" ), _( "Deletes selected item(s)" ) );
+        _( "Remove" ), _( "Deletes selected item(s)" ), delete_track_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
-        _( "Properties..." ), _( "Displays properties window" ) );
+        _( "Properties..." ), _( "Displays properties window" ), editor_xpm );
 
 
 // Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         AS_GLOBAL, 0,
-        _( "Draw a line" ), _( "Draw a line" ), AF_ACTIVATE );
+        _( "Draw a line" ), _( "Draw a line" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL, 0,
-        _( "Draw a circle" ), _( "Draw a circle" ), AF_ACTIVATE );
+        _( "Draw a circle" ), _( "Draw a circle" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         AS_GLOBAL, 0,
-        _( "Draw an arc" ), _( "Draw an arc" ), AF_ACTIVATE );
+        _( "Draw an arc" ), _( "Draw an arc" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL, 0,
-        _( "Add a text" ), _( "Add a text" ), AF_ACTIVATE );
+        _( "Add a text" ), _( "Add a text" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
         AS_GLOBAL, 0,
-        _( "Add a dimension" ), _( "Add a dimension" ), AF_ACTIVATE );
+        _( "Add a dimension" ), _( "Add a dimension" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL, 0,
-        _( "Add a filled zone" ), _( "Add a filled zone" ), AF_ACTIVATE );
+        _( "Add a filled zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
-        _( "Add a keepout area" ), _( "Add a keepout area" ), AF_ACTIVATE );
+        _( "Add a keepout area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
         AS_GLOBAL, 0,
-        "", "", AF_ACTIVATE );
+        "", "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL, 0,
         _( "Place the footprint anchor" ), _( "Place the footprint anchor" ),
-        AF_ACTIVATE );
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
         AS_CONTEXT, '+',
@@ -290,7 +292,7 @@ TOOL_ACTION COMMON_ACTIONS::layerAlphaDec( "pcbnew.Control.layerAlphaDec",
 
 TOOL_ACTION COMMON_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
         AS_GLOBAL, 0,
-        "", "", AF_NOTIFY );
+        "", "", NULL, AF_NOTIFY );
 
 
 // Grid control
@@ -334,13 +336,13 @@ TOOL_ACTION COMMON_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
 
 TOOL_ACTION COMMON_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0,
-        "", "", AF_NOTIFY );
+        "", "", NULL, AF_NOTIFY );
 
 
 // Zone actions
 TOOL_ACTION COMMON_ACTIONS::zoneFill( "pcbnew.EditorControl.zoneFill",
         AS_GLOBAL, 0,
-        _( "Fill" ), _( "Fill zone(s)" ) );
+        _( "Fill" ), _( "Fill zone(s)" ), fill_zone_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
         AS_GLOBAL, int( 'B' ),
@@ -348,7 +350,7 @@ TOOL_ACTION COMMON_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
         AS_GLOBAL, 0,
-        _( "Unfill" ), _( "Unfill zone(s)" ) );
+        _( "Unfill" ), _( "Unfill zone(s)" ), zone_unfill_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
         AS_GLOBAL, int( 'N' ),
@@ -357,29 +359,29 @@ TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
 
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
         AS_GLOBAL, 0,
-        _( "Add layer alignment target" ), _( "Add layer alignment target" ), AF_ACTIVATE );
+        _( "Add layer alignment target" ), _( "Add layer alignment target" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
         AS_GLOBAL, 'O',
-        _( "Add modules" ), _( "Add modules" ), AF_ACTIVATE );
+        _( "Add modules" ), _( "Add modules" ), NULL, AF_ACTIVATE );
 
 
 // Module editor tools
 TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
         AS_GLOBAL, 0,
-        _( "Add pads" ), _( "Add pads" ), AF_ACTIVATE );
+        _( "Add pads" ), _( "Add pads" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
-        _( "Enumerate pads" ), _( "Enumerate pads" ), AF_ACTIVATE );
+        _( "Enumerate pads" ), _( "Enumerate pads" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
         AS_GLOBAL, MD_CTRL + int( 'C' ),
-        _( "Copy items" ), _( "Copy items" ), AF_ACTIVATE );
+        _( "Copy items" ), _( "Copy items" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
         AS_GLOBAL, MD_CTRL + int( 'V' ),
-        _( "Paste items" ), _( "Paste items" ), AF_ACTIVATE );
+        _( "Paste items" ), _( "Paste items" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
         AS_GLOBAL, 0,
@@ -393,7 +395,7 @@ TOOL_ACTION COMMON_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutline
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
         AS_GLOBAL, 0,
-        "", "", AF_ACTIVATE );
+        "", "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
         AS_GLOBAL, ' ',
@@ -419,36 +421,36 @@ TOOL_ACTION COMMON_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
 TOOL_ACTION COMMON_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL, 'X',
         _( "Run push & shove router (single tracks)" ),
-        _( "Run push & shove router (single tracks)" ), AF_ACTIVATE );
+        _( "Run push & shove router (single tracks)" ), ps_router_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
         AS_GLOBAL, '6',
         _( "Run push & shove router (differential pairs)" ),
-        _( "Run push & shove router (differential pairs)" ), AF_ACTIVATE );
+        _( "Run push & shove router (differential pairs)" ), ps_diff_pair_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL, 0,
         _( "Open Interactive Router settings" ),
-        _( "Open Interactive Router settings" ), AF_ACTIVATE );
+        _( "Open Interactive Router settings" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRouter.DpDimensionsDialog",
         AS_GLOBAL, 0,
         _( "Open Differential Pair Dimension settings" ),
-        _( "Open Differential Pair Dimension settings" ), AF_ACTIVATE );
+        _( "Open Differential Pair Dimension settings" ), ps_diff_pair_gap_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
         AS_GLOBAL, '7',
-        _( "Tune length of a single track" ), "", AF_ACTIVATE );
+        _( "Tune length of a single track" ), "", ps_tune_length_xpm, AF_ACTIVATE );
 
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
         AS_GLOBAL, '8',
-        _( "Tune length of a differential pair" ), "", AF_ACTIVATE );
+        _( "Tune length of a differential pair" ), "", NULL, AF_ACTIVATE );
 
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
         AS_GLOBAL, '9',
-        _( "Tune skew of a differential pair" ), "", AF_ACTIVATE );
+        _( "Tune skew of a differential pair" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
         AS_GLOBAL, 0,
@@ -461,7 +463,7 @@ TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
 
 TOOL_ACTION COMMON_ACTIONS::pointEditorBreakOutline( "pcbnew.PointEditor.breakOutline",
         AS_GLOBAL, 0,
-        _( "Create corner" ), _( "Create corner" ) );
+        _( "Create corner" ), _( "Create corner" ), add_corner_xpm );
 
 // Placement tool
 TOOL_ACTION COMMON_ACTIONS::alignTop( "pcbnew.Place.alignTop",

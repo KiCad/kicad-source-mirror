@@ -60,13 +60,24 @@ public:
     void SetTitle( const wxString& aTitle );
 
     /**
+     * Function SetIcon()
+     * Assigns an icon for the entry.
+     * @param aIcon is the icon to be assigned. NULL is used to remove icon.
+     */
+    void SetIcon( const BITMAP_OPAQUE* aIcon )
+    {
+        m_icon = aIcon;
+    }
+
+    /**
      * Function Add()
      * Adds an entry to the menu. After highlighting/selecting the entry, a TOOL_EVENT command is
      * sent that contains ID of the entry.
      * @param aLabel is the text label show in the menu.
      * @param aId is the ID that is sent in the TOOL_EVENT. It should be unique for every entry.
+     * @param aIcon is an optional icon.
      */
-    void Add( const wxString& aLabel, int aId );
+    void Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon = NULL );
 
     /**
      * Function Add()
@@ -75,6 +86,15 @@ public:
      * @param aAction is the action to be added to menu entry.
      */
     void Add( const TOOL_ACTION& aAction );
+
+    /**
+     * Function Add()
+     * Adds a context menu as a submenu. The difference between this function and wxMenu::AppendSubMenu()
+     * is the capability to handle icons.
+     * @param aMenu is the submenu to be added.
+     * @param aLabel is the caption displayed for the menu entry.
+     */
+    void Add( CONTEXT_MENU* aMenu, const wxString& aLabel );
 
     /**
      * Function Clear()
@@ -112,6 +132,9 @@ private:
      */
     void copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) const;
 
+    ///> Common part of copy constructor and assignment operator.
+    void copyFrom( const CONTEXT_MENU& aMenu );
+
     ///> Initializes handlers for events.
     void setupEvents();
 
@@ -145,6 +168,9 @@ private:
 
     /// Custom events handler, allows to translate wxEvents to TOOL_EVENTs.
     boost::function<OPT_TOOL_EVENT(const wxMenuEvent& aEvent)> m_customHandler;
+
+    /// Optional icon
+    const BITMAP_OPAQUE* m_icon;
 
     friend class TOOL_INTERACTIVE;
 };

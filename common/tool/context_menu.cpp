@@ -26,14 +26,14 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
 #include <tool/context_menu.h>
+
 #include <boost/bind.hpp>
 #include <cassert>
 
 CONTEXT_MENU::CONTEXT_MENU() :
-    m_titleSet( false ), m_selected( -1 ), m_tool( NULL )
+    m_titleSet( false ), m_selected( -1 ), m_tool( NULL ), m_icon( NULL )
 {
     setCustomEventHandler( boost::bind( &CONTEXT_MENU::handleCustomEvent, this, _1 ) );
-
     setupEvents();
 }
 
@@ -42,31 +42,7 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
     m_titleSet( aMenu.m_titleSet ), m_selected( -1 ), m_tool( aMenu.m_tool ),
     m_toolActions( aMenu.m_toolActions ), m_customHandler( aMenu.m_customHandler )
 {
-    // Copy all the menu entries
-    for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
-    {
-        wxMenuItem* item = aMenu.FindItemByPosition( i );
-
-        if( item->IsSubMenu() )
-        {
-#ifdef DEBUG
-            // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
-            assert( dynamic_cast<CONTEXT_MENU*>( item->GetSubMenu() ) );
-#endif
-
-            CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *item->GetSubMenu() ) );
-            AppendSubMenu( menu, item->GetItemLabel(), wxEmptyString );
-        }
-        else
-        {
-            wxMenuItem* newItem = new wxMenuItem( this, item->GetId(), item->GetItemLabel(),
-                    wxEmptyString, item->GetKind() );
-
-            Append( newItem );
-            copyItem( item, newItem );
-        }
-    }
-
+    copyFrom( aMenu );
     setupEvents();
 }
 
@@ -81,31 +57,7 @@ CONTEXT_MENU& CONTEXT_MENU::operator=( const CONTEXT_MENU& aMenu )
     m_toolActions = aMenu.m_toolActions;
     m_customHandler = aMenu.m_customHandler;
 
-    // Copy all the menu entries
-    for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
-    {
-        wxMenuItem* item = aMenu.FindItemByPosition( i );
-
-        if( item->IsSubMenu() )
-        {
-#ifdef DEBUG
-            // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
-            assert( dynamic_cast<CONTEXT_MENU*>( item->GetSubMenu() ) );
-#endif
-
-            CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *item->GetSubMenu() ) );
-            AppendSubMenu( menu, item->GetItemLabel(), wxEmptyString );
-        }
-        else
-        {
-            wxMenuItem* newItem = new wxMenuItem( this, item->GetId(), item->GetItemLabel(),
-                    wxEmptyString, item->GetKind() );
-
-            Append( newItem );
-            copyItem( item, newItem );
-        }
-    }
-
+    copyFrom( aMenu );
     setupEvents();
 
     return *this;
@@ -138,7 +90,7 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 }
 
 
-void CONTEXT_MENU::Add( const wxString& aLabel, int aId )
+void CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon )
 {
 #ifdef DEBUG
 
@@ -146,7 +98,12 @@ void CONTEXT_MENU::Add( const wxString& aLabel, int aId )
         wxLogWarning( wxT( "Adding more than one menu entry with the same ID may result in"
                 "undefined behaviour" ) );
 #endif
-    Append( new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL ) );
+    wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
+
+    if( aIcon )
+        item->SetBitmap( KiBitmap( aIcon ) );
+
+    Append( item );
 }
 
 
@@ -154,9 +111,13 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 {
     /// ID numbers for tool actions need to have a value higher than m_actionId
     int id = m_actionId + aAction.GetId();
+    const BITMAP_OPAQUE* icon = aAction.GetIcon();
 
     wxMenuItem* item = new wxMenuItem( this, id,
         aAction.GetMenuItem(), aAction.GetDescription(), wxITEM_NORMAL );
+
+    if( icon )
+        item->SetBitmap( KiBitmap( icon ) );
 
     if( aAction.HasHotKey() )
     {
@@ -177,6 +138,22 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 
     Append( item );
     m_toolActions[id] = &aAction;
+}
+
+
+void CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& aLabel )
+{
+    if( aMenu->m_icon )
+    {
+        wxMenuItem* newItem = new wxMenuItem( this, -1, aLabel, wxEmptyString, wxITEM_NORMAL );
+        newItem->SetBitmap( KiBitmap( aMenu->m_icon ) );
+        newItem->SetSubMenu( aMenu );
+        Append( newItem );
+    }
+    else
+    {
+        AppendSubMenu( aMenu, aLabel );
+    }
 }
 
 
@@ -277,7 +254,39 @@ void CONTEXT_MENU::copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) cons
 
     if( aSource->IsCheckable() )
         aDest->Check( aSource->IsChecked() );
+}
 
-    if( aSource->GetKind() == wxITEM_NORMAL )
-        aDest->SetBitmap( aSource->GetBitmap() );
+
+void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
+{
+    m_icon = aMenu.m_icon;
+
+    // Copy all the menu entries
+    for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
+    {
+        wxMenuItem* item = aMenu.FindItemByPosition( i );
+
+        wxMenuItem* newItem = new wxMenuItem( this, item->GetId(), item->GetItemLabel(),
+                                              item->GetHelp(), item->GetKind() );
+
+        if( item->GetKind() == wxITEM_NORMAL )
+            newItem->SetBitmap( item->GetBitmap() );
+
+        if( item->IsSubMenu() )
+        {
+#ifdef DEBUG
+            // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
+            assert( dynamic_cast<CONTEXT_MENU*>( item->GetSubMenu() ) );
+#endif
+
+            CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *item->GetSubMenu() ) );
+            newItem->SetSubMenu( menu );
+            Append( newItem );
+        }
+        else
+        {
+            Append( newItem );
+            copyItem( item, newItem );
+        }
+    }
 }
