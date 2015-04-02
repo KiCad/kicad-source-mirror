@@ -378,9 +378,12 @@ void WIZARD_FPLIB_TABLE::OnPageChanged( wxWizardEvent& aEvent )
     SetBitmap( KiBitmap( wizard_add_fplib_icon_xpm ) );
     enableNext( true );
 
+#ifdef BUILD_GITHUB_PLUGIN
     if( GetCurrentPage() == m_githubListDlg )
         setupGithubList();
-    else if( GetCurrentPage() == m_fileSelectDlg )
+    else
+#endif
+    if( GetCurrentPage() == m_fileSelectDlg )
         setupFileSelect();
     else if( GetCurrentPage() == m_reviewDlg )
         setupReview();
@@ -481,6 +484,7 @@ void WIZARD_FPLIB_TABLE::OnChangeSearch( wxCommandEvent& aEvent )
 
 void WIZARD_FPLIB_TABLE::OnWizardFinished( wxWizardEvent& aEvent )
 {
+#ifdef BUILD_GITHUB_PLUGIN
     // Shall we download a localy copy of the libraries
     if( GetLibSource() == GITHUB && m_downloadGithub->GetValue() )
     {
@@ -511,11 +515,11 @@ void WIZARD_FPLIB_TABLE::OnWizardFinished( wxWizardEvent& aEvent )
                 wxString path = it->GetAbsolutePath();
                 path.Replace( GetGithubURL(), getDownloadDir() );
                 it->setPath( path );
-                std::cout << "replaced path " << it->GetAbsolutePath() << std::endl;
                 it->setPluginType( IO_MGR::KICAD );
             }
         }
     }
+#endif
 }
 
 
@@ -637,6 +641,25 @@ bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
 
     return true;
 }
+
+
+void WIZARD_FPLIB_TABLE::setupGithubList()
+{
+    // Enable 'Next' only if there is at least one library selected
+    wxArrayInt checkedIndices;
+    m_checkListGH->GetCheckedItems( checkedIndices );
+    enableNext( checkedIndices.GetCount() > 0 );
+
+    // Update only if necessary
+    if( m_githubLibs.GetCount() == 0 )
+        getLibsListGithub( m_githubLibs );
+
+    m_searchCtrlGH->Clear();
+
+    // Clear the review list so it will be reloaded
+    m_libraries.clear();
+    m_listCtrlReview->DeleteAllItems();
+}
 #endif /* BUILD_GITHUB_PLUGIN */
 
 
@@ -730,25 +753,6 @@ void WIZARD_FPLIB_TABLE::setupDialogOrder()
         wxASSERT( false );
         break;
     }
-}
-
-
-void WIZARD_FPLIB_TABLE::setupGithubList()
-{
-    // Enable 'Next' only if there is at least one library selected
-    wxArrayInt checkedIndices;
-    m_checkListGH->GetCheckedItems( checkedIndices );
-    enableNext( checkedIndices.GetCount() > 0 );
-
-    // Update only if necessary
-    if( m_githubLibs.GetCount() == 0 )
-        getLibsListGithub( m_githubLibs );
-
-    m_searchCtrlGH->Clear();
-
-    // Clear the review list so it will be reloaded
-    m_libraries.clear();
-    m_listCtrlReview->DeleteAllItems();
 }
 
 
