@@ -572,6 +572,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     syncLayerWidgetLayer();
     syncRenderStates();
 
+    // Update the tracks / vias available sizes list:
+    ReCreateAuxiliaryToolbar();
+
     // Update the RATSNEST items, which were not loaded at the time
     // BOARD::SetVisibleElements() was called from within any PLUGIN.
     // See case RATSNEST_VISIBLE: in BOARD::SetElementVisibility()

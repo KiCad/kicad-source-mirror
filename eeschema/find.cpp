@@ -420,10 +420,13 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
         // Make the item temporarily visible just in case it's hide flag is set.  This
         // has no effect on objects that don't support hiding.  If this is a close find
         // dialog event, clear the temporary visibility flag.
-        if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
-            item->SetForceVisible( false );
-        else if( item->Type() == SCH_FIELD_T && !( (SCH_FIELD*) item )->IsVisible() )
-            item->SetForceVisible( true );
+        if( item )
+        {
+            if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
+                item->SetForceVisible( false );
+            else if( item->Type() == SCH_FIELD_T && !( (SCH_FIELD*) item )->IsVisible() )
+                item->SetForceVisible( true );
+        }
 
         if( sheet->PathHumanReadable() != m_CurrentSheet->PathHumanReadable() )
         {

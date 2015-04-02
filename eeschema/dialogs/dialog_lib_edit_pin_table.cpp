@@ -196,6 +196,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::DataViewModel( LIB_PART& aPart ) :
     m_GroupingColumn( 1 ),
     m_UnitCount( m_Part.GetUnitCount() )
 {
+#ifdef REASSOCIATE_HACK
+    m_Widget = NULL;
+#endif
     aPart.GetPins( m_Backing );
     /// @todo C++11
     for( LIB_PINS::const_iterator i = m_Backing.begin(); i != m_Backing.end(); ++i )

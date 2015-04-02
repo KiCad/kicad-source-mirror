@@ -221,7 +221,7 @@ void PCB_EDIT_FRAME::Reset_Noroutable( wxDC* DC )
 /* DEBUG Function: displays the routing matrix */
 void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
-    int dcell0, dcell1 = 0;
+    int dcell0;
     EDA_COLOR_T color;
 
     int maxi = 600 / RoutingMatrix.m_Ncols;
@@ -242,14 +242,17 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
             if( dcell0 & HOLE )
                 color = GREEN;
 
-//            if( RoutingMatrix.m_RoutingLayersCount )
-//                dcell1 = GetCell( row, col, TOP );
+#if 0
+            int dcell1 = 0;
+
+            if( RoutingMatrix.m_RoutingLayersCount )
+                dcell1 = GetCell( row, col, TOP );
 
             if( dcell1 & HOLE )
                 color = RED;
 
-//            dcell0 |= dcell1;
-
+            dcell0 |= dcell1;
+#endif
             if( !color && ( dcell0 & VIA_IMPOSSIBLE ) )
                 color = BLUE;
 

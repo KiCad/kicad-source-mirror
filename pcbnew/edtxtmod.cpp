@@ -303,53 +303,38 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
 {
     wxSize newSize;
     int newThickness;
-    TEXTE_PCB* pcbText = NULL;
-    TEXTE_MODULE* moduleText = NULL;
-    EDA_TEXT* text;
 
-    switch( aItem->Type() )
+    if( aItem->Type() == PCB_TEXT_T )
     {
-    case PCB_TEXT_T:
         newSize = GetDesignSettings().m_PcbTextSize;
         newThickness = GetDesignSettings().m_PcbTextWidth;
-        pcbText = static_cast<TEXTE_PCB*>( aItem );
-        text = static_cast<EDA_TEXT*>( pcbText );
-        break;
+        TEXTE_PCB* text = static_cast<TEXTE_PCB*>( aItem );
 
-    case PCB_MODULE_TEXT_T:
+        // Exit if there's nothing to do
+        if( text->GetSize() == newSize && text->GetThickness() == newThickness )
+            return;
+
+        SaveCopyInUndoList( text, UR_CHANGED );
+        text->SetSize( newSize );
+        text->SetThickness( newThickness );
+    }
+
+    else if( aItem->Type() ==  PCB_MODULE_TEXT_T )
+    {
         newSize = GetDesignSettings().m_ModuleTextSize;
         newThickness = GetDesignSettings().m_ModuleTextWidth;
-        moduleText = static_cast<TEXTE_MODULE*>( aItem );
-        text = static_cast<EDA_TEXT*>( moduleText );
-        break;
+        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( aItem );
 
-    default:
-        // Exit if aItem is not a text field
-        return;
+        // Exit if there's nothing to do
+        if( text->GetSize() == newSize && text->GetThickness() == newThickness )
+            return;
+
+        SaveCopyInUndoList( text->GetParent(), UR_CHANGED );
+        text->SetSize( newSize );
+        text->SetThickness( newThickness );
     }
-
-    // Exit if there's nothing to do
-    if( text->GetSize() == newSize && text->GetThickness() == newThickness )
+    else
         return;
-
-    // Push item to undo list
-    switch( aItem->Type() )
-    {
-    case PCB_TEXT_T:
-        SaveCopyInUndoList( pcbText, UR_CHANGED );
-        break;
-
-    case PCB_MODULE_TEXT_T:
-        SaveCopyInUndoList( moduleText->GetParent(), UR_CHANGED );
-        break;
-
-    default:
-        break;
-    }
-
-    // Apply changes
-    text->SetSize( newSize );
-    text->SetThickness( newThickness );
 
     if( aDC )
         m_canvas->Refresh();

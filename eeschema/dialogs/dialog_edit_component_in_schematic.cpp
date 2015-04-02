@@ -156,7 +156,8 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     // frame. Therefore this dialog as a modal frame parent, MUST be run under
     // quasimodal mode for the quasimodal frame support to work.  So don't use
     // the QUASIMODAL macros here.
-    dlg->ShowQuasiModal();
+    int ret = dlg->ShowQuasiModal();
+    (void) ret;     // not used. Make coverity and static analysers quiet.
 
     m_canvas->SetIgnoreMouseEvents( false );
     m_canvas->MoveCursorToCrossHair();

@@ -581,6 +581,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_CHECK:
+        // Currently: not implemented
         break;
 
     case ID_MODEDIT_EDIT_MODULE_PROPERTIES:

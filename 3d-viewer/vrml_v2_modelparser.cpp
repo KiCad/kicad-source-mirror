@@ -1283,7 +1283,7 @@ int VRML2_MODEL_PARSER::read_Material()
         else if( strcmp( text, "ambientIntensity" ) == 0 )
         {
             float ambientIntensity;
-            ParseFloat( m_file, &ambientIntensity );
+            ParseFloat( m_file, &ambientIntensity, 0.8 );
 
             if( m_Master->m_use_modelfile_ambientIntensity == true )
             {
@@ -1294,7 +1294,7 @@ int VRML2_MODEL_PARSER::read_Material()
         else if( strcmp( text, "transparency" ) == 0 )
         {
             float transparency;
-            ParseFloat( m_file, &transparency );
+            ParseFloat( m_file, &transparency, 0.0 );
 
             if( m_Master->m_use_modelfile_transparency == true )
             {
@@ -1304,7 +1304,7 @@ int VRML2_MODEL_PARSER::read_Material()
         else if( strcmp( text, "shininess" ) == 0 )
         {
             float shininess;
-            ParseFloat( m_file, &shininess );
+            ParseFloat( m_file, &shininess, 1.0 );
 
             // VRML value is normalized and openGL expects a value 0 - 128
             if( m_Master->m_use_modelfile_shininess == true )

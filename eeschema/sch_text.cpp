@@ -360,7 +360,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
-    if( m_isDangling )
+    if( m_isDangling && panel)
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
@@ -1282,7 +1282,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     CreateGraphicShape( Poly, m_Pos + aOffset );
     GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
-    if( m_isDangling )
+    if( m_isDangling && panel )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
@@ -1614,7 +1614,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     CreateGraphicShape( Poly, m_Pos + offset );
     GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
-    if( m_isDangling )
+    if( m_isDangling && panel )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)

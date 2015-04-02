@@ -170,6 +170,7 @@ TRIANGULATION::TRIANGULATION()
 
 TRIANGULATION::TRIANGULATION( const TRIANGULATION& aTriangulation )
 {
+    m_helper = 0;   // make coverity and static analysers quiet.
     // Triangulation: Copy constructor not present
     assert( false );
 }

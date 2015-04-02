@@ -111,7 +111,7 @@ void EDA_3D_CANVAS::create_and_render_shadow_buffer( GLuint *aDst_gl_texture,
     CIMAGE imgDepthBufferAux( aTexture_size, aTexture_size );
 
     imgDepthBuffer.SetPixelsFromNormalizedFloat( depthbufferFloat );
-    
+
     free( depthbufferFloat );
 
     // Debug texture image
@@ -168,7 +168,7 @@ void EDA_3D_CANVAS::generateFakeShadowsTextures( wxString* aErrorMessages, bool 
     CreateDrawGL_List( aErrorMessages, aShowWarnings );
 
     DBG( unsigned strtime = GetRunningMicroSecs() );
-        
+
     m_shadow_init = true;
 
     glClearColor( 0, 0, 0, 1 );
@@ -246,7 +246,7 @@ void EDA_3D_CANVAS::generateFakeShadowsTextures( wxString* aErrorMessages, bool 
 
     // move the bouding box in order to draw it with its center at 0,0 3D coordinates
     glTranslatef( -(m_fastAABBox_Shadow.Min().x + v.x / 2.0f), -(m_fastAABBox_Shadow.Min().y + v.y / 2.0f), 0.0f );
-    
+
     create_and_render_shadow_buffer( &m_text_fake_shadow_board, 512, true, 10 );
 
     DBG( printf( "  generateFakeShadowsTextures total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
@@ -404,7 +404,7 @@ void EDA_3D_CANVAS::Redraw()
     // Set material for the board
     glEnable( GL_COLOR_MATERIAL );
     SetOpenGlDefaultMaterial();
-    
+
     // Board Body
 
     GLint shininess_value = 32;
@@ -569,7 +569,7 @@ void EDA_3D_CANVAS::Redraw()
 
 
 void EDA_3D_CANVAS::buildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint aBoardList )
-{ 
+{
     // Board shadows are based on board dimension.
 
     float xmin    = m_boardAABBox.Min().x;
@@ -646,14 +646,14 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
 
     // Number of segments to convert a circle to polygon
-    // Boost polygon (at least v 1.54, v1.55 and previous) in very rare cases crashes
+    // Boost polygon (at least v1.57 and previous) in very rare cases crashes
     // when using 16 segments to approximate a circle.
     // So using 18 segments is a workaround to try to avoid these crashes
     // ( We already used this trick in plot_board_layers.cpp,
     // see PlotSolderMaskLayer() )
     const int       segcountforcircle   = 18;
     double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2.0) );
-    const int       segcountLowQuality  =  8;   // segments to draw a circle with low quality
+    const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality
                                                 // to reduce time calculations
                                                 // for holes and items which do not need
                                                 // a fine representation
@@ -767,13 +767,28 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
                 for( ; pad; pad = pad->Next() )
                 {
-                    // Calculate a factor to apply to segcount (bigger pad size -> more segments)
-                    wxSize padSize = pad->GetSize();
-                    int maxPadSize = glm::max( padSize.x, padSize.y );
-                    float segFactor = (float)maxPadSize / (float)Millimeter2iu( 0.6 );
+                    // Calculate a factor to apply to segcount for large holes ( > 1 mm)
+                    // (bigger pad drill size -> more segments) because holes in pads can have
+                    // very different sizes and optimizing this segcount gives a better look
+                    // Mainly mounting holes have a size bigger thon 1 mm
+                    wxSize padHole = pad->GetDrillSize();
 
-                    pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
-                                                    (int)(segcountLowQuality * segFactor) );
+                    if( ! padHole.x )       // Not drilled pad like SMD pad
+                        continue;
+
+                    // we use the hole diameter to calculate the seg count.
+                    // for round holes, padHole.x == padHole.y
+                    // for oblong holes, the diameter is the smaller of (padHole.x, padHole.y)
+                    int diam = std::min( padHole.x, padHole.y );
+                    double segFactor = (double)diam / Millimeter2iu( 1.0 );
+
+                    int segcount = (int)(segcountLowQuality * segFactor);
+
+                    // Clamp segcount between segcountLowQuality and 48.
+                    // 48 segm for a circle is a very good approx.
+                    segcount = Clamp( segcountLowQuality, segcount, 48 );
+
+                    pad->BuildPadDrillShapePolygon( allLayerHoles, 0, segcount );
                 }
             }
         }
@@ -1291,7 +1306,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
     if( ! m_glLists[GL_ID_BOARD] )
     {
         DBG( unsigned strtime = GetRunningMicroSecs() );
-        
+
         m_glLists[GL_ID_BOARD] = glGenLists( 1 );
         m_glLists[GL_ID_BODY] = glGenLists( 1 );
         buildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages, aShowWarnings );
@@ -1366,10 +1381,10 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
 
     if( !m_glLists[GL_ID_SHADOW_FRONT] )
         m_glLists[GL_ID_SHADOW_FRONT] = glGenLists( 1 );
-    
+
     if( !m_glLists[GL_ID_SHADOW_BACK] )
         m_glLists[GL_ID_SHADOW_BACK]  = glGenLists( 1 );
-    
+
     if( !m_glLists[GL_ID_SHADOW_BOARD] )
         m_glLists[GL_ID_SHADOW_BOARD] = glGenLists( 1 );
 
@@ -1412,7 +1427,7 @@ void EDA_3D_CANVAS::calcBBox()
         }
 
         // Compute a union bounding box for all the shapes of the model
-        
+
         S3D_MASTER* shape3D = module->Models();
 
         for( ; shape3D; shape3D = shape3D->Next() )
@@ -1540,7 +1555,7 @@ bool EDA_3D_CANVAS::read3DComponentShape( MODULE* module )
                 {
                     // Create a new parser
                     S3D_MODEL_PARSER *newParser = S3D_MODEL_PARSER::Create( shape3D, shape3D->GetShape3DExtension() );
-                    
+
                     if( newParser )
                     {
                         // Read file

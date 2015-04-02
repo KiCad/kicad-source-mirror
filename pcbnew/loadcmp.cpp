@@ -29,7 +29,7 @@
  */
 
 #include <boost/bind.hpp>
- 
+
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
@@ -146,7 +146,8 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 
     wxString    fpid;
 
-    viewer->ShowModal( &fpid, this );
+    int ret = viewer->ShowModal( &fpid, this );
+    (void) ret;     // make static analyser quiet
 
     //DBG(printf("%s: fpid:'%s'\n", __func__, TO_UTF8( fpid ) );)
 

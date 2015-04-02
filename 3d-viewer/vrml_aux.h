@@ -83,11 +83,12 @@ int ParseVertex( FILE* File, glm::vec3 &dst_vertex );
 /**
  * Function ParseFloat
  * parse a float value
- * @param File file to read from
- * @param dst_float destination float
- * @return int - Return the number of floats readed (0 or 1)
+ * @param aFile file to read from
+ * @param aDstFloat destination float
+ * @param aDefaultValue = the default value, when the actual value cannot be read
+ * @return bool - Return true if the float was read without error
  */
-int ParseFloat( FILE* File, float *dst_float );
+bool ParseFloat( FILE* aFile, float *aDstFloat, float aDefaultValue );
 
 /**
  * Function GetNextTag

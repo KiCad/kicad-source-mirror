@@ -455,7 +455,12 @@ void PDF_PLOTTER::closePdfStream()
     wxASSERT( workFile );
 
     long stream_len = ftell( workFile );
-    wxASSERT( stream_len >= 0 );
+
+    if( stream_len < 0 )
+    {
+        wxASSERT( false );
+        return;
+    }
 
     // Rewind the file, read in the page stream and DEFLATE it
     fseek( workFile, 0, SEEK_SET );
@@ -475,11 +480,11 @@ void PDF_PLOTTER::closePdfStream()
 
     {
         /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is
-           misleading, it says it wants a DEFLATE stream but it really want a ZLIB
-           stream! (a DEFLATE stream would be generated with -15 instead of 15)
-        rc = deflateInit2( &zstrm, Z_BEST_COMPRESSION, Z_DEFLATED, 15,
-                               8, Z_DEFAULT_STRATEGY );
-        */
+         * misleading, it says it wants a DEFLATE stream but it really want a ZLIB
+         * stream! (a DEFLATE stream would be generated with -15 instead of 15)
+         * rc = deflateInit2( &zstrm, Z_BEST_COMPRESSION, Z_DEFLATED, 15,
+         *                    8, Z_DEFAULT_STRATEGY );
+         */
 
         wxZlibOutputStream      zos( memos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
 

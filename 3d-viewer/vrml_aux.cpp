@@ -37,7 +37,7 @@ bool GetString( FILE* File, char* aDstString, size_t maxDstLen )
         return false;
 
     int c;
-    
+
     while( ( c = fgetc( File ) ) != EOF )
     {
         if( c == '\"' )
@@ -256,12 +256,15 @@ int ParseVertex( FILE* File, glm::vec3& dst_vertex )
 }
 
 
-int ParseFloat( FILE* File, float* dst_float )
+bool ParseFloat( FILE* aFile, float *aDstFloat, float aDefaultValue )
 {
     float   value;
-    int     ret = fscanf( File, "%e", &value );
+    int     ret = fscanf( aFile, "%e", &value );
 
-    *dst_float = value;
+    if( ret == 1 )
+        *aDstFloat = value;
+    else
+        *aDstFloat = aDefaultValue;
 
-    return ret;
+    return ret == 1;
 }
