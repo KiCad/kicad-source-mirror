@@ -702,6 +702,8 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
 
     if( !use_gal )
         Compile_Ratsnest( NULL, true );
+    else
+        GetBoard()->GetRatsnest()->ProcessBoard();
 
     UseGalCanvas( use_gal );
 }
