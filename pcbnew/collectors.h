@@ -228,7 +228,7 @@ protected:
 
     /**
      * The number of items that were originally in the primary list before the
-     * m_List2nd was concatonated onto the end of it.
+     * m_List2nd was concatenated onto the end of it.
      */
     int                         m_PrimaryLength;
 

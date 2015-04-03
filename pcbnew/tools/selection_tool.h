@@ -225,7 +225,7 @@ private:
     void setTransitions();
 
     /**
-     * Function ClearSelection()
+     * Function clearSelection()
      * Clears the current selection.
      */
     void clearSelection();
@@ -264,7 +264,7 @@ private:
     bool selectable( const BOARD_ITEM* aItem ) const;
 
     /**
-     * Function selectItem()
+     * Function select()
      * Takes necessary action mark an item as selected.
      *
      * @param aItem is an item to be selected.
@@ -272,7 +272,7 @@ private:
     void select( BOARD_ITEM* aItem );
 
     /**
-     * Function unselectItem()
+     * Function unselect()
      * Takes necessary action mark an item as unselected.
      *
      * @param aItem is an item to be unselected.
@@ -280,7 +280,7 @@ private:
     void unselect( BOARD_ITEM* aItem );
 
     /**
-     * Function unselectVisually()
+     * Function selectVisually()
      * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
      * @param aItem is an item to be be marked.
      */
@@ -294,7 +294,7 @@ private:
     void unselectVisually( BOARD_ITEM* aItem ) const;
 
     /**
-     * Function containsSelected()
+     * Function selectionContains()
      * Checks if the given point is placed within any of selected items' bounding box.
      *
      * @return True if the given point is contained in any of selected items' bouding box.

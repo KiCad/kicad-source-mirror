@@ -531,6 +531,9 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
         wxDC* aDC, GR_DRAWMODE aDrawMode, EDA_COLOR_T aBgColor )
 {
+    if( ! panel )
+        return;
+
     /* we must filter tracks, to avoid a lot of texts.
      *  - only tracks with a length > 10 * thickness are eligible
      * and, of course, if we are not printing the board
@@ -594,6 +597,7 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
         }
 
         LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+
         if( ( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE )
          && ( !(!IsOnLayer( curr_layer )&& displ_opts->m_ContrastModeDisplay) ) )
         {
@@ -601,8 +605,7 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
                 GRSetDrawMode( aDC, GR_COPY );
 
             tsize = (tsize * 7) / 10;       // small reduction to give a better look
-            EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-            DrawGraphicHaloText( clipbox, aDC, tpos,
+            DrawGraphicHaloText( panel->GetClipBox(), aDC, tpos,
                                  aBgColor, BLACK, WHITE, net->GetShortNetname(), angle,
                                  wxSize( tsize, tsize ),
                                  GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,

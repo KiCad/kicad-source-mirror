@@ -697,7 +697,9 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
     drawList.SetSheetNumber( screen->m_ScreenNumber );
     drawList.SetSheetCount( screen->m_NumberOfScreens );
     drawList.SetFileName( GetCurrFileName() );
-    drawList.SetSheetName( GetScreenDesc() );
+    // GetScreenDesc() returns a temporary string. Store it to avoid issues.
+    wxString descr = GetScreenDesc();
+    drawList.SetSheetName( descr );
 
     drawList.BuildWorkSheetGraphicList( pageInfo, t_block, color, color );
 

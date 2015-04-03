@@ -272,7 +272,7 @@ public:
      * @param aType is the electrical type (see enum ElectricPinType )
      * @return The electrical name for a pin type (see enun MsgPinElectricType for names).
      */
-    static const wxString GetCanonicalElectricalTypeName( unsigned aType );
+    static const wxString GetCanonicalElectricalTypeName( int aType );
 
     /**
      * return a string giving the electrical type of the pin.
@@ -289,7 +289,7 @@ public:
      * @param aType is the electrical type (see enum ElectricPinType )
      * @return The electrical name of the pin (see enun MsgPinElectricType for names).
      */
-    static const wxString GetElectricalTypeName( unsigned aType );
+    static const wxString GetElectricalTypeName( int aType );
 
     /**
      * return a translated string for messages giving the electrical type of the pin.

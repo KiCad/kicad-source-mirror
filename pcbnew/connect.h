@@ -107,7 +107,7 @@ public:
     /**
      * Function BuildPadsList
      * Fills m_sortedPads with all pads that be connected to tracks
-     * pads are sorted by > then Y coordinates to allow fast binary search in list
+     * pads are sorted by X then Y coordinates to allow fast binary search in list
      * @param aNetcode = net code to use to filter pads
      * if  aNetcode < 0, all pads will be put in list (default)
      */

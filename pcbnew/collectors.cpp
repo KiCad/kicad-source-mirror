@@ -421,7 +421,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
          * follows layer visibility controls (but that was already
          * checked) */
 
-        if( via || module || pad || m_Guide->IsLayerVisible( layer ) 
+        if( via || module || pad || m_Guide->IsLayerVisible( layer )
                 || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
@@ -466,7 +466,7 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 
     SetTimeNow();               // when snapshot was taken
 
-    // record the length of the primary list before concatonating on to it.
+    // record the length of the primary list before concatenating on to it.
     m_PrimaryLength = m_List.size();
 
     // append 2nd list onto end of the first list

@@ -82,6 +82,9 @@ public:
         m_func( aEntry ), m_saved( NULL ), m_self( NULL ), m_stack( NULL ),
         m_stackSize( c_defaultStackSize ), m_running( false )
     {
+        // Avoid not initialized members, and make static analysers quiet
+        m_args = 0;
+        m_retVal = 0;
     }
 
     ~COROUTINE()

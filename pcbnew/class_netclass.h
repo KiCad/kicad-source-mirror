@@ -125,7 +125,7 @@ public:
     }
 
     /**
-     * Function AddMember
+     * Function Add
      * adds \a aNetname to this NETCLASS if it is not already in this NETCLASS.
      * It is harmless to try and add a second identical name.
      */

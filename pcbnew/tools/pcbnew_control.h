@@ -86,7 +86,7 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions();
 
-    ///> Pointerto the currently used edit frame.
+    ///> Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;
 };
 

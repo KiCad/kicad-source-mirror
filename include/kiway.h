@@ -198,7 +198,7 @@ struct KIFACE
      * @param aCtlBits consists of bit flags from the set of KFCTL_* \#defines above.
      *
      * @return wxWindow* - and if not NULL, should be cast into the known type using
-     *  and old school cast.  dynamic_cast is problemenatic since it needs typeinfo probably
+     *  and old school cast.  dynamic_cast is problematic since it needs typeinfo probably
      *  not contained in the caller's link image.
      */
     VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent, int aClassId,
@@ -228,7 +228,7 @@ struct KIFACE
  * having to link to the top process module which houses the KIWAY(s).  More importantly
  * it makes it possible to send custom wxEvents between DSOs and from the top
  * process module down into the DSOs.  The latter capability is thought useful
- * for driving the lower DSOs from a python test rig or for demo (automaton) purposes.
+ * for driving the lower DSOs from a python test rig or for demo (automation) purposes.
  * <p>
  * Most all calls are via virtual functions, which means C++ vtables
  * are used to hold function pointers and eliminate the need to link to specific
