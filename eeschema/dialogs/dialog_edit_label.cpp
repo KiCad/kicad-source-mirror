@@ -38,6 +38,7 @@
 #include <drawtxt.h>
 #include <confirm.h>
 #include <sch_text.h>
+#include <typeinfo>
 
 #include <dialog_edit_label_base.h>
 
@@ -49,6 +50,30 @@ class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
 {
 public:
     DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+
+    void SetTitle( const wxString& aTitle )    // OVERRIDE wxTopLevelWindow::SetTitle
+    {
+        // This class is shared for numerous tasks: a couple of
+        // single line labels and multi-line text fields.
+        // Often the desired size of the multi-line text field editor
+        // is larger than is needed for the single line label.
+        // Therefore the session retained sizes of these dialogs needs
+        // to be class independent, make them title dependent.
+        switch( m_CurrentText->Type() )
+        {
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_LABEL_T:
+            // labels can share retained settings probably.
+            break;
+
+        default:
+            m_hash_key = TO_UTF8( aTitle );
+            m_hash_key += typeid(*this).name();
+        }
+
+        DIALOG_LABEL_EDITOR_BASE::SetTitle( aTitle );
+    }
 
 private:
     void InitDialog( );

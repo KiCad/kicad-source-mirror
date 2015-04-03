@@ -540,7 +540,8 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     return true;
 }
 
-void SCH_SCREEN::BuildSchCmpLinksToLibCmp()
+
+void SCH_SCREEN::CheckComponentsToPartsLinks()
 {
     // Initialize or reinitialize the pointer to the LIB_PART for each component
     // found in m_drawList, but only if needed (change in lib or schematic)
@@ -561,10 +562,12 @@ void SCH_SCREEN::BuildSchCmpLinksToLibCmp()
             SCH_COMPONENT::ResolveAll( c, libs );
 
             m_modification_sync = mod_hash;     // note the last mod_hash
+
+            // guard against unneeded runs through this code path by printing trace
+            DBG(printf("%s: resync-ing %s\n", __func__, TO_UTF8( GetFileName() ) );)
         }
     }
 }
-
 
 
 void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
@@ -574,7 +577,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      * their SCH_SCREEN::Draw() draws nothing
      */
 
-    BuildSchCmpLinksToLibCmp();
+    CheckComponentsToPartsLinks();
 
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
@@ -596,7 +599,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
  */
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
-    BuildSchCmpLinksToLibCmp();
+    CheckComponentsToPartsLinks();
 
     for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
     {
@@ -1406,7 +1409,7 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
         // up to date (the cost is low if this is the case)
         // We do this update here, because most of time this function is called
         // to create a netlist, or an ERC, which need this update
-        screen->BuildSchCmpLinksToLibCmp();
+        screen->CheckComponentsToPartsLinks();
 
         AddScreenToList( screen );
         EDA_ITEM* strct = screen->GetDrawItems();
