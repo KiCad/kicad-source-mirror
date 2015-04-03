@@ -763,7 +763,15 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         if( m_editModules )
             new_item = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
         else
-            new_item = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
+        {
+#if 0
+            // @TODO: see if we allow zone duplication here
+            // Duplicate zones is especially tricky (overlaping zones must be merged)
+            // so zones are not duplicated
+            if( item->Type() != PCB_ZONE_AREA_T )
+#endif
+                new_item = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
+        }
 
         if( new_item )
         {
@@ -872,18 +880,30 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
                 BOARD_ITEM* newItem = NULL;
 
                 if( ptN == 0 )
-                {
                     newItem = item;
-                }
                 else
                 {
                     // if renumbering, no need to increment
                     const bool increment = !array_opts->ShouldRenumberItems();
 
+                    // Some items cannot be duplicated
+                    // i.e. the ref and value fields of a footprint or zones
+                    // therefore newItem can be null
+
                     if( m_editModules )
                         newItem = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
                     else
-                        newItem = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
+                    {
+#if 0
+                        // @TODO: see if we allow zone duplication here
+                        // Duplicate zones is especially tricky (overlaping zones must be merged)
+                        // so zones are not duplicated
+                        if( item->Type() == PCB_ZONE_AREA_T )
+                            newItem = NULL;
+                        else
+#endif
+                            newItem = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
+                    }
 
                     if( newItem )
                     {
@@ -905,7 +925,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
                 }
 
                 // set the number if needed:
-                if( array_opts->ShouldRenumberItems() )
+                if( newItem && array_opts->ShouldRenumberItems() )
                 {
                     switch( newItem->Type() )
                     {

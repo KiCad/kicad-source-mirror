@@ -430,6 +430,7 @@ set( BMAPS_MID
     pad_sketch
     pad
     pad_dimensions
+    pad_enumerate
     pads_mask_layers
     pagelayout_load
     pagelayout_load_default

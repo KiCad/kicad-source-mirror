@@ -27,6 +27,8 @@
 #include <pcbnew_id.h>
 #include <wx/defs.h>
 
+// These members are static in class COMMON_ACTIONS: Build them here:
+
 // Selection tool actions
 TOOL_ACTION COMMON_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
         AS_GLOBAL, 0,
@@ -373,7 +375,7 @@ TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
 
 TOOL_ACTION COMMON_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
-        _( "Enumerate pads" ), _( "Enumerate pads" ), NULL, AF_ACTIVATE );
+        _( "Enumerate pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
         AS_GLOBAL, MD_CTRL + int( 'C' ),
@@ -479,7 +481,7 @@ TOOL_ACTION COMMON_ACTIONS::alignBottom( "pcbnew.Place.alignBottom",
 TOOL_ACTION COMMON_ACTIONS::alignLeft( "pcbnew.Place.alignLeft",
         AS_GLOBAL, 0,
         _( "Align items to the left" ),
-        _( "Aligns selected items to the top left" ) );
+        _( "Aligns selected items to the left edge" ) );
 
 TOOL_ACTION COMMON_ACTIONS::alignRight( "pcbnew.Place.alignRight",
         AS_GLOBAL, 0,
@@ -493,7 +495,7 @@ TOOL_ACTION COMMON_ACTIONS::distributeHorizontally( "pcbnew.Place.distributeHori
 
 TOOL_ACTION COMMON_ACTIONS::distributeVertically( "pcbnew.Place.distributeVertically",
         AS_GLOBAL, 0,
-        _( "Distribure vertically" ),
+        _( "Distribute vertically" ),
         _( "Distributes selected items along the vertical axis" ) );
 
 
