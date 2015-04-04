@@ -73,7 +73,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
     m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
 
-    AddSubMenu( new SELECT_MENU, "Select...",
+    AddSubMenu( new SELECT_MENU, _( "Select..." ),
             (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
             SELECTION_CONDITIONS::Count( 1 ) );
 }
