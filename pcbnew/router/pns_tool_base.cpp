@@ -57,7 +57,8 @@ using boost::optional;
 
 TOOL_ACTION PNS_TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
                                             AS_CONTEXT, 'E',
-                                            "Routing Options...", "Shows a dialog containing router options.");
+                                            _( "Routing Options..." ),
+                                            _( "Shows a dialog containing router options." ) );
 
 
 PNS_TOOL_BASE::PNS_TOOL_BASE( const std::string& aToolName ) :
