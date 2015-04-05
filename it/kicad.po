@@ -66,8 +66,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-03 23:50+0100\n"
-"PO-Revision-Date: 2015-04-03 23:50+0100\n"
+"POT-Creation-Date: 2015-04-05 12:20+0100\n"
+"PO-Revision-Date: 2015-04-05 12:20+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1326,7 +1326,7 @@ msgstr "Parametro"
 msgid "Units"
 msgstr "Unità"
 
-#: pcbnew/footprint_wizard_frame.cpp:553 pcbnew/modview_frame.cpp:641
+#: pcbnew/footprint_wizard_frame.cpp:553 pcbnew/modview_frame.cpp:640
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: visualizzatore 3D [%s]"
@@ -5053,7 +5053,7 @@ msgstr "Aggiungi forma polinominale "
 msgid "Footprint Library Browser"
 msgstr "Esploratore librerie impronte"
 
-#: pcbnew/modview_frame.cpp:445
+#: pcbnew/modview_frame.cpp:444
 #, c-format
 msgid ""
 "Could not load footprint \"%s\" from library \"%s\".\n"
@@ -5064,12 +5064,12 @@ msgstr ""
 "\n"
 "Errore %s."
 
-#: pcbnew/modview_frame.cpp:699 eeschema/viewlibs.cpp:134
+#: pcbnew/modview_frame.cpp:698 eeschema/viewlibs.cpp:134
 #: eeschema/viewlib_frame.cpp:83
 msgid "Library Browser"
 msgstr "Esplora libreria"
 
-#: pcbnew/modview_frame.cpp:705 eeschema/viewlibs.cpp:141
+#: pcbnew/modview_frame.cpp:704 eeschema/viewlibs.cpp:141
 #: eeschema/libedit.cpp:65
 msgid "no library selected"
 msgstr "nessuna libreria selezionata"
@@ -6353,6 +6353,10 @@ msgstr "Distribuisci verticalmente"
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
 
+#: pcbnew/tools/selection_tool.cpp:76
+msgid "Select..."
+msgstr "Seleziona..."
+
 #: pcbnew/tools/selection_tool.cpp:478
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
@@ -7037,6 +7041,22 @@ msgstr "Non valida"
 #, c-format
 msgid "Validating libraries %d/%d"
 msgstr "Validazione librerie %d/%d"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:53
+msgid "Numerals (0,1,2,...,9,10)"
+msgstr "Numerali (0,1,2,...,9,10)"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:54
+msgid "Hexadecimal (0,1,...,F,10,...)"
+msgstr "Esadecimali (0,1,...,F,10,...)"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:55
+msgid "Alphabet, minus IOSQXZ"
+msgstr "Alfabeto, senza IOSQXZ"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:56
+msgid "Alphabet, full 26 characters"
+msgstr "Alfabeto, completo di 26 caratteri"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:37
