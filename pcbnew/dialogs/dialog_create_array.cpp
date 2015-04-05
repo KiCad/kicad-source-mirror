@@ -24,6 +24,7 @@
 
 #include <wxPcbStruct.h>
 #include <base_units.h>
+#include <macros.h>
 
 #include <class_drawpanel.h>
 #include <class_board.h>
@@ -35,16 +36,6 @@
 // initialise statics
 DIALOG_CREATE_ARRAY::CREATE_ARRAY_DIALOG_ENTRIES DIALOG_CREATE_ARRAY::m_options;
 
-// character set
-// NOTE: do not change the order of this relative to the ARRAY_NUMBERING_TYPE_T enum
-static const wxString charSetDescriptions[] =
-{
-    "Numerals (0,1,2,...,9,10)",
-    "Hexadecimal (0,1,...,F,10,...)",
-    "Alphabet, minus IOSQXZ",
-    "Alphabet, full 26 characters"
-};
-
 
 DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrigPos,
                                           ARRAY_OPTIONS** aSettings ) :
@@ -54,9 +45,19 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrig
     m_originalItemPosition( aOrigPos )
 {
     // Set up numbering scheme drop downs
-    m_choicePriAxisNumbering->Set( boost::size( charSetDescriptions ), charSetDescriptions );
-    m_choiceSecAxisNumbering->Set( boost::size( charSetDescriptions ), charSetDescriptions );
-    m_choiceCircNumberingType->Set( boost::size( charSetDescriptions ), charSetDescriptions );;
+    //
+    // character set
+    // NOTE: do not change the order of this relative to the ARRAY_NUMBERING_TYPE_T enum
+    const wxString charSetDescriptions[] =
+    {
+        _( "Numerals (0,1,2,...,9,10)" ),
+        _( "Hexadecimal (0,1,...,F,10,...)" ),
+        _( "Alphabet, minus IOSQXZ" ),
+        _( "Alphabet, full 26 characters" )
+    };
+    m_choicePriAxisNumbering->Set( DIM( charSetDescriptions ), charSetDescriptions );
+    m_choiceSecAxisNumbering->Set( DIM( charSetDescriptions ), charSetDescriptions );
+    m_choiceCircNumberingType->Set( DIM( charSetDescriptions ), charSetDescriptions );;
 
     m_choicePriAxisNumbering->SetSelection( 0 );
     m_choiceSecAxisNumbering->SetSelection( 0 );

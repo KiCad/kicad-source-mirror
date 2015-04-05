@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -128,25 +128,25 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	m_labelPriAxisNumbering = new wxStaticText( m_gridPanel, wxID_ANY, _("Primary axis numbering:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelPriAxisNumbering->Wrap( -1 );
-	bSizer3->Add( m_labelPriAxisNumbering, 0, wxALL, 5 );
+	bSizer3->Add( m_labelPriAxisNumbering, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_choicePriAxisNumberingChoices;
 	m_choicePriAxisNumbering = new wxChoice( m_gridPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePriAxisNumberingChoices, 0 );
 	m_choicePriAxisNumbering->SetSelection( 0 );
-	bSizer3->Add( m_choicePriAxisNumbering, 0, wxALL|wxEXPAND, 5 );
+	bSizer3->Add( m_choicePriAxisNumbering, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_labelSecAxisNumbering = new wxStaticText( m_gridPanel, wxID_ANY, _("Secondary axis numbering:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelSecAxisNumbering->Wrap( -1 );
 	m_labelSecAxisNumbering->Enable( false );
 	
-	bSizer3->Add( m_labelSecAxisNumbering, 0, wxALL, 5 );
+	bSizer3->Add( m_labelSecAxisNumbering, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_choiceSecAxisNumberingChoices;
 	m_choiceSecAxisNumbering = new wxChoice( m_gridPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceSecAxisNumberingChoices, 0 );
 	m_choiceSecAxisNumbering->SetSelection( 0 );
 	m_choiceSecAxisNumbering->Enable( false );
 	
-	bSizer3->Add( m_choiceSecAxisNumbering, 0, wxALL|wxEXPAND, 5 );
+	bSizer3->Add( m_choiceSecAxisNumbering, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -255,12 +255,12 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	m_labelCircNumbering = new wxStaticText( m_circularPanel, wxID_ANY, _("Numbering type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircNumbering->Wrap( -1 );
-	bSizer6->Add( m_labelCircNumbering, 0, wxALL, 5 );
+	bSizer6->Add( m_labelCircNumbering, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_choiceCircNumberingTypeChoices;
 	m_choiceCircNumberingType = new wxChoice( m_circularPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceCircNumberingTypeChoices, 0 );
 	m_choiceCircNumberingType->SetSelection( 0 );
-	bSizer6->Add( m_choiceCircNumberingType, 0, wxALL|wxEXPAND, 5 );
+	bSizer6->Add( m_choiceCircNumberingType, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
