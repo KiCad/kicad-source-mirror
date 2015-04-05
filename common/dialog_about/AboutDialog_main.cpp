@@ -75,7 +75,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.SetAppName( wxT( ".: " ) + Pgm().App().GetAppName() + wxT( " :." ) );
 
     /* Copyright information */
-    info.SetCopyright( wxT( "(C) 1992-2014 KiCad Developers Team" ) );
+    info.SetCopyright( wxT( "(C) 1992-2015 KiCad Developers Team" ) );
 
     /* KiCad build version */
     wxString version;
@@ -221,89 +221,105 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     // The core developers
     info.AddDeveloper(
-        new Contributor( wxT( "Jean-Pierre Charras" ),  wxT( "jp.charras@wanadoo.fr" ) ) );
+        new Contributor( wxT( "Jean-Pierre Charras" ),     wxT( "jp.charras@wanadoo.fr" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Dick Hollenbeck" ),      wxT( "dick@softplc.com" ) ) );
+        new Contributor( wxT( "Dick Hollenbeck" ),         wxT( "dick@softplc.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Wayne Stambaugh" ),      wxT( "stambaughw@verizon.net" ) ) );
+        new Contributor( wxT( "Wayne Stambaugh" ),         wxT( "stambaughw@verizon.net" ) ) );
 
     // alphabetically by last name after main 3 above:
     info.AddDeveloper(
-        new Contributor( wxT( "Frank Bennett" ),        wxT( "bennett78@lpbroadband.net" ) ) );
+        new Contributor( wxT( "Frank Bennett" ),           wxT( "bennett78@lpbroadband.net" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Cirilo Bernardo" ),      wxT( "cirilo_bernardo@yahoo.com" ) ) );
+        new Contributor( wxT( "Cirilo Bernardo" ),         wxT( "cirilo_bernardo@yahoo.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Jonas Diemer" ),         wxT( "diemer@gmx.de" ) ) );
+        new Contributor( wxT( "Jonas Diemer" ),            wxT( "diemer@gmx.de" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Tim Hanson" ),           wxT( "sideskate@gmail.com" ) ) );
+        new Contributor( wxT( "Tim Hanson" ),              wxT( "sideskate@gmail.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Hauptmech" ),            wxT( "hauptmech@gmail.com" ) ) );
+        new Contributor( wxT( "Hauptmech" ),               wxT( "hauptmech@gmail.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Jerry Jacobs" ),         wxT( "xor.gate.engineering@gmail.com" ) ) );
+        new Contributor( wxT( "Torsten Hüter" ),           wxT( "torstenhtr@gmx.de" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Lorenzo Marcantonio" ),  wxT( "lomarcan@tin.it" ) ) );
+        new Contributor( wxT( "Jerry Jacobs" ),            wxT( "xor.gate.engineering@gmail.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Rok Markovic" ),         wxT( "rok@kanardia.eu" ) ) );
+        new Contributor( wxT( "Daniel Majewski" ),         wxT( "lordblick@gmail.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Marco Mattila" ),        wxT( "marcom99@gmail.com" ) ) );
+        new Contributor( wxT( "Lorenzo Marcantonio" ),     wxT( "lomarcan@tin.it" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Miguel Angel Ajo Pelayo" ),wxT( "miguelangel@nbee.es" ) ) );
+        new Contributor( wxT( "Rok Markovic" ),            wxT( "rok@kanardia.eu" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Marco Serantoni" ),      wxT( "marco.serantoni@gmail.com" ) ) );
+        new Contributor( wxT( "Marco Mattila" ),           wxT( "marcom99@gmail.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Brian Sidebotham" ),     wxT( "brian.sidebotham@gmail.com" ) ) );
+        new Contributor( wxT( "Miguel Angel Ajo Pelayo" ), wxT( "miguelangel@nbee.es" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Orson (Maciej Suminski)" ),    wxT( "maciej.suminski@cern.ch" ) ) );
+        new Contributor( wxT( "Jacobo Aragunde Perez" ),   wxT( "jaragunde@igalia.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Rafael Sokolowski" ),    wxT( "rafael.sokolowski@web.de" ) ) );
+        new Contributor( wxT( "Mark Roszko" ),             wxT( "mark.roszko@gmail.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Vesa Solonen" ),         wxT( "vesa.solonen@hut.fi" ) ) );
+        new Contributor( wxT( "Marco Serantoni" ),         wxT( "marco.serantoni@gmail.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Tomasz Wlostowski" ),    wxT( "tomasz.wlostowski@cern.ch" ) ) );
+        new Contributor( wxT( "Brian Sidebotham" ),        wxT( "brian.sidebotham@gmail.com" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Orson (Maciej Sumiński)" ), wxT( "maciej.suminski@cern.ch" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Rafael Sokolowski" ),       wxT( "rafael.sokolowski@web.de" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Vesa Solonen" ),            wxT( "vesa.solonen@hut.fi" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Tomasz Wlostowski" ),       wxT( "tomasz.wlostowski@cern.ch" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Alexander Zakamaldin" ),    wxT( "zaka62@mail.ru" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Henner Zeller" ),           wxT( "h.zeller@acm.org" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Andrew Zonenberg" ),        wxT( "azonenberg@drawersteak.com" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Nick Østergaard" ),         wxT( "toe.nick@gmail.com" ) ) );
 
     // The document writers
     info.AddDocWriter(
-        new Contributor( wxT( "Jean-Pierre Charras" ),  wxT( "jp.charras@wanadoo.fr" ) ) );
+        new Contributor( wxT( "Jean-Pierre Charras" ),     wxT( "jp.charras@wanadoo.fr" ) ) );
     info.AddDocWriter(
-        new Contributor( wxT( "Igor Plyatov" ),         wxT( "plyatov@gmail.com" ) ) );
+        new Contributor( wxT( "Igor Plyatov" ),            wxT( "plyatov@gmail.com" ) ) );
     info.AddDocWriter(
-        new Contributor( wxT( "Fabrizio Tappero" ),     wxT( "fabrizio.tappero@gmail.com" ) ) );
+        new Contributor( wxT( "Fabrizio Tappero" ),        wxT( "fabrizio.tappero@gmail.com" ) ) );
 
     /* The translators
      * As category the language to which the translation was done is used
      * and as icon the national flag of the corresponding country.
      */
     info.AddTranslator(
-        new Contributor( wxT( "Martin Kratoška" ),      wxT( "martin@ok1rr.com" ),              wxT( "Czech (CZ)" ),    KiBitmapNew( lang_cs_xpm ) ) );
+        new Contributor( wxT( "Martin Kratoška" ),        wxT( "martin@ok1rr.com" ),              wxT( "Czech (CZ)" ),    KiBitmapNew( lang_cs_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Jerry Jacobs" ),         wxT( "xor.gate.engineering@gmail.com" ),wxT( "Dutch (NL)" ),    KiBitmapNew( lang_nl_xpm ) ) );
+        new Contributor( wxT( "Jerry Jacobs" ),           wxT( "xor.gate.engineering@gmail.com" ),wxT( "Dutch (NL)" ),    KiBitmapNew( lang_nl_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Vesa Solonen" ),         wxT( "vesa.solonen@hut.fi" ),           wxT( "Finnish (FI)" ),  KiBitmapNew( lang_fi_xpm ) ) );
+        new Contributor( wxT( "Vesa Solonen" ),           wxT( "vesa.solonen@hut.fi" ),           wxT( "Finnish (FI)" ),  KiBitmapNew( lang_fi_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Jean-Pierre Charras" ),  wxT( "jp.charras@wanadoo.fr" ),         wxT( "French (FR)" ),   KiBitmapNew( lang_fr_xpm ) ) );
+        new Contributor( wxT( "Jean-Pierre Charras" ),    wxT( "jp.charras@wanadoo.fr" ),         wxT( "French (FR)" ),   KiBitmapNew( lang_fr_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Mateusz Skowroński" ),   wxT( "skowri@gmail.com" ),              wxT( "Polish (PL)" ),   KiBitmapNew( lang_pl_xpm ) ) );
+        new Contributor( wxT( "Mateusz Skowroński" ),     wxT( "skowri@gmail.com" ),              wxT( "Polish (PL)" ),   KiBitmapNew( lang_pl_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Renie Marquet" ),        wxT( "reniemarquet@uol.com.br" ),       wxT( "Portuguese (PT)" ), KiBitmapNew( lang_pt_xpm ) ) );
+        new Contributor( wxT( "Renie Marquet" ),          wxT( "reniemarquet@uol.com.br" ),       wxT( "Portuguese (PT)" ), KiBitmapNew( lang_pt_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Igor Plyatov" ),         wxT( "plyatov@gmail.com" ),             wxT( "Russian (RU)" ),  KiBitmapNew( lang_ru_xpm ) ) );
+        new Contributor( wxT( "Igor Plyatov" ),           wxT( "plyatov@gmail.com" ),             wxT( "Russian (RU)" ),  KiBitmapNew( lang_ru_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Andrey Fedorushkov" ),   wxT( "andrf@mail.ru" ),                 wxT( "Russian (RU)" ),  KiBitmapNew( lang_ru_xpm ) ) );
+        new Contributor( wxT( "Andrey Fedorushkov" ),     wxT( "andrf@mail.ru" ),                 wxT( "Russian (RU)" ),  KiBitmapNew( lang_ru_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Pedro Martin del Valle" ), wxT( "pkicad@yahoo.es" ),             wxT( "Spanish (ES)" ),  KiBitmapNew( lang_es_xpm ) ) );
+        new Contributor( wxT( "Pedro Martin del Valle" ), wxT( "pkicad@yahoo.es" ),               wxT( "Spanish (ES)" ),  KiBitmapNew( lang_es_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Iñigo Zuluaga" ),        wxT( "inigo_zuluaga@yahoo.es" ),        wxT( "Spanish (ES)" ),  KiBitmapNew( lang_es_xpm ) ) );
+        new Contributor( wxT( "Iñigo Zuluaga" ),          wxT( "inigo_zuluaga@yahoo.es" ),        wxT( "Spanish (ES)" ),  KiBitmapNew( lang_es_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Rafael Sokolowski" ),    wxT( "rafael.sokolowski@web.de" ),      wxT( "German (DE)" ),   KiBitmapNew( lang_de_xpm ) ) );
+        new Contributor( wxT( "Rafael Sokolowski" ),      wxT( "rafael.sokolowski@web.de" ),      wxT( "German (DE)" ),   KiBitmapNew( lang_de_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Kenta Yonekura" ),       wxT( "midpika@hotmail.com" ),           wxT( "Japanese (JA)" ), KiBitmapNew( lang_jp_xpm ) ) );
+        new Contributor( wxT( "Kenta Yonekura" ),         wxT( "midpika@hotmail.com" ),           wxT( "Japanese (JA)" ), KiBitmapNew( lang_jp_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Manolis Stefanis, Athanasios Vlastos and Milonas Kostas" ),
-                                                        wxT( "milonas.ko@gmail.com" ),          wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
+                                                          wxT( "milonas.ko@gmail.com" ),          wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Massimo Cioce" ),        wxT( "ciocemax@alice.it" ),             wxT( "Italian (IT)" ),  KiBitmapNew( lang_it_xpm ) ) );
+        new Contributor( wxT( "Massimo Cioce" ),          wxT( "ciocemax@alice.it" ),             wxT( "Italian (IT)" ),  KiBitmapNew( lang_it_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Evgeniy Ivanov" ),       wxT( "evgeniy_p_ivanov@yahoo.ca" ),     wxT( "Bulgarian (BG)" ),KiBitmapNew( lang_bg_xpm ) ) );
+        new Contributor( wxT( "Evgeniy Ivanov" ),         wxT( "evgeniy_p_ivanov@yahoo.ca" ),     wxT( "Bulgarian (BG)" ),KiBitmapNew( lang_bg_xpm ) ) );
 
     // TODO: are these all russian translators,
     // placed them here now,
@@ -315,15 +331,15 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     // Programm credits for icons
     info.AddArtist(
-        new Contributor( wxT( "Iñigo Zuluagaz" ),       wxT( "inigo_zuluaga@yahoo.es" ),        wxT( "Icons by" ),      KiBitmapNew( edit_module_xpm ) ) );
+        new Contributor( wxT( "Iñigo Zuluagaz" ),         wxT( "inigo_zuluaga@yahoo.es" ),        wxT( "Icons by" ),      KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist(
-        new Contributor( wxT( "Fabrizio Tappero" ),     wxT( "fabrizio.tappero@gmail.com" ),    wxT( "New icons by" ),  KiBitmapNew( edit_module_xpm ) ) );
+        new Contributor( wxT( "Fabrizio Tappero" ),       wxT( "fabrizio.tappero@gmail.com" ),    wxT( "New icons by" ),  KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist(
         new Contributor( wxT( "Konstantin Baranovskiy" ), wxT( "baranovskiykonstantin@gmail.com" ),    wxT( "New icons by" ),  KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist(
-        new Contributor( wxT( "Renie Marquet" ),        wxT( "reniemarquet@uol.com.br" ),       wxT( "3D modules by" ), KiBitmapNew( three_d_xpm ) ) );
+        new Contributor( wxT( "Renie Marquet" ),          wxT( "reniemarquet@uol.com.br" ),       wxT( "3D modules by" ), KiBitmapNew( three_d_xpm ) ) );
     info.AddArtist(
-        new Contributor( wxT( "Christophe Boschat" ),   wxT( "nox454@hotmail.fr" ),             wxT( "3D modules by" ), KiBitmapNew( three_d_xpm ) ) );
+        new Contributor( wxT( "Christophe Boschat" ),     wxT( "nox454@hotmail.fr" ),             wxT( "3D modules by" ), KiBitmapNew( three_d_xpm ) ) );
 }
 
 
