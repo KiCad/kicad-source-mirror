@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-04 10:31+0300\n"
-"PO-Revision-Date: 2015-04-04 14:09+0300\n"
+"POT-Creation-Date: 2015-04-05 11:55+0300\n"
+"PO-Revision-Date: 2015-04-05 12:12+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -1778,19 +1778,19 @@ msgstr "Корейский"
 
 #: common/pgm_base.cpp:231
 msgid "Chinese simplified"
-msgstr "Chinese simplified"
+msgstr "Китайский упрощенный"
 
 #: common/pgm_base.cpp:239
 msgid "Catalan"
-msgstr "Catalan"
+msgstr "Каталонский"
 
 #: common/pgm_base.cpp:247
 msgid "Dutch"
-msgstr "Dutch"
+msgstr "Голландский"
 
 #: common/pgm_base.cpp:255
 msgid "Japanese"
-msgstr "Japanese"
+msgstr "Японский"
 
 #: common/pgm_base.cpp:263
 msgid "Bulgarian"
@@ -21140,7 +21140,7 @@ msgstr "Выбирает все медное соединение."
 
 #: pcbnew/tools/common_actions.cpp:59
 msgid "whole net"
-msgstr "вся цепь"
+msgstr "всю цепь"
 
 #: pcbnew/tools/common_actions.cpp:59
 msgid "Selects all tracks & vias belonging to the same net."
@@ -21447,6 +21447,10 @@ msgstr "Пока не реализовано."
 #: pcbnew/tools/placement_tool.cpp:66
 msgid "Align/distribute"
 msgstr "Выравнивание/распределение"
+
+#: pcbnew/tools/selection_tool.cpp:76
+msgid "Select..."
+msgstr "Выбрать..."
 
 #: pcbnew/tools/selection_tool.cpp:478
 msgid "Selection contains locked items. Do you want to continue?"
@@ -24026,3 +24030,33 @@ msgstr "Трассировать с шириной начальной дорож
 
 #~ msgid "The replacement is permitted with"
 #~ msgstr "Разрешается замена на"
+
+#~ msgid "Failed to open file <%s>"
+#~ msgstr "Не удалось открыть файл  <%s>"
+
+#~ msgid "Components by reference"
+#~ msgstr "Компоненты по обозначению"
+
+#~ msgid "Components by value"
+#~ msgstr "Компоненты по значению"
+
+#~ msgid "Unspecified component reference: "
+#~ msgstr "Не задано поз.обозначение у компонента:"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "The Component Manager does not support components with unspecified "
+#~ "reference.\n"
+#~ "\n"
+#~ "The Component Manager is going to be closed."
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Менеджер компонентов не поддерживает компоненты с незаданным поз."
+#~ "обозначением.\n"
+#~ "\n"
+#~ "Менеджер компонентов будет закрыт."
+
+#~ msgid "Switch to English"
+#~ msgstr "Перейти в режим генерации КД на английском языке"
