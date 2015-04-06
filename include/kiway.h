@@ -56,7 +56,7 @@ CMake target must be defined to build either. Whether that is a separate build
 or not is not the important thing. Simply having a single CMake target has
 advantages. (Each builder person will have his/her own intentions relative to
 use of python or not.) Once a DSO is python capable, it can be driven by any
-number of python program tops, including demo-ing (automaton) and testing
+number of python program tops, including demo-ing (automation) and testing
 separately.</li>
 
 

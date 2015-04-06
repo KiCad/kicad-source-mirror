@@ -25,7 +25,7 @@
 
 /**
  * @file edit_pcb_text.cpp
- * @brief Editimg of text on copper and technical layers (TEXTE_PCB class)
+ * @brief Editing of text on copper and technical layers (TEXTE_PCB class)
  */
 
 #include <fctsys.h>

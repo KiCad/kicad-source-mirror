@@ -52,7 +52,7 @@ public:
     ~TOOL_MANAGER();
 
     /**
-     * Generates an unique ID from for a tool with given name.
+     * Generates a unique ID from for a tool with given name.
      */
     static TOOL_ID MakeToolId( const std::string& aToolName );
 
