@@ -196,7 +196,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
         if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
         {
-            DisplayInfoMessage( NULL, wxT(
+            DisplayInfoMessage( NULL, _(
                 "You have run CvPcb for the first time using the "
                 "new footprint library table method for finding "
                 "footprints.  CvPcb has either copied the default "

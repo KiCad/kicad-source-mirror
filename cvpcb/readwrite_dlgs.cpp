@@ -247,9 +247,9 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
             {
                 wxString msg = ioe.errorText;
                 msg += wxT( "\n\n" );
-                msg += _( "First check your fp-lib-table entries." );
+                msg += _( "First check your footprint library table entries." );
 
-                wxMessageBox( msg, wxT( "Problematic fp-lib-tables" ) );
+                wxMessageBox( msg, _( "Problematic Footprint Library Tables" ) );
                 return false;
             }
 
@@ -257,12 +257,12 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
             {
                 HTML_MESSAGE_BOX dlg( this, wxEmptyString );
 
-                dlg.MessageSet( wxT( "The following errors occurred attempting to convert the "
-                                     "footprint assignments:\n\n" ) );
+                dlg.MessageSet( _( "The following errors occurred attempting to convert the "
+                                   "footprint assignments:\n\n" ) );
                 dlg.ListSet( msg );
-                dlg.MessageSet( wxT( "\nYou will need to reassign them manually if you want them "
-                                     "to be updated correctly the next time you import the "
-                                     "netlist in Pcbnew." ) );
+                dlg.MessageSet( _( "\nYou will need to reassign them manually if you want them "
+                                   "to be updated correctly the next time you import the "
+                                   "netlist in Pcbnew." ) );
 
 #if 1
                 dlg.ShowModal();
@@ -398,8 +398,8 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     if( !IsWritable( fn.GetFullPath() ) || WriteComponentLinkFile( fn.GetFullPath() ) == 0 )
     {
         DisplayError( this,
-            wxString::Format( _( "Unable to create component footprint link file '%s'" ),
-                             fn.GetFullPath() ) );
+                      wxString::Format( _( "Unable to create component footprint link file '%s'" ),
+                                        fn.GetFullPath() ) );
         return 0;
     }
 
