@@ -284,15 +284,16 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
         // use one letter if letter = A .. Z or a ... z, and 2 letters otherwise
         // first letter is expected to be 'A' or 'a' (i.e. 26 letters are available)
         int u;
+        aUnit -= 1;     // Unit number starts to 1. now to 0.
 
-        while( aUnit > 26 )    // more than one letter are needed
+        while( aUnit >= 26 )    // more than one letter are needed
         {
             u = aUnit / 26;
             subRef << wxChar( m_subpartFirstId + u -1 );
             aUnit %= 26;
         }
 
-        u = m_subpartFirstId + aUnit - 1;
+        u = m_subpartFirstId + aUnit;
         subRef << wxChar( u );
     }
 

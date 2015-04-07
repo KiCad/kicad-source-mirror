@@ -958,14 +958,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     if( unitcount < 1 )
         unitcount = 1;
 
-    if( unitcount > 26 )
-        unitcount = 26;
-
     unitChoice->Clear();
 
-    for( int ii=0;  ii < unitcount;  ii++ )
+    for( int ii = 1; ii <= unitcount; ii++ )
     {
-        unitChoice->Append( wxString::Format( "%c", "?ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ ii + 1 ] ) );
+        unitChoice->Append( LIB_PART::SubReference(  ii, false ) );
     }
 
     // For components with multiple parts per package, set the unit selection

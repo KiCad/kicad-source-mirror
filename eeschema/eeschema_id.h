@@ -40,6 +40,13 @@
  */
 #define MAX_SELECT_ITEM_IDS 10
 
+/**
+ * The maximum number of units per package.
+ * Increase this number if that ever becomes a problem, but remember
+ * the popup menu to select a given unit could be not easy to use.
+ */
+#define MAX_UNIT_COUNT_PER_PACKAGE 64
+
 
 /**
  * Command IDs for the schematic editor.
@@ -129,8 +136,10 @@ enum id_eeschema_frm
     // Unit select context menus command IDs.
     ID_POPUP_SCH_SELECT_UNIT_CMP,
     ID_POPUP_SCH_SELECT_UNIT1,
-    // ... leave room for 52 IDs , to select one unit among 52 in popup menu
-    ID_POPUP_SCH_SELECT_UNIT_CMP_MAX = ID_POPUP_SCH_SELECT_UNIT1 + 52,
+    // ... leave room for MAX_UNIT_COUNT_PER_PACKAGE IDs ,
+    // to select one unit among MAX_UNIT_COUNT_PER_PACKAGE in popup menu
+    ID_POPUP_SCH_SELECT_UNIT_CMP_MAX = ID_POPUP_SCH_SELECT_UNIT1
+                                       + MAX_UNIT_COUNT_PER_PACKAGE,
 
     // Change text type context menu command IDs.
     ID_POPUP_SCH_CHANGE_TYPE_TEXT,

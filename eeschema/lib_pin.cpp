@@ -122,7 +122,7 @@ static const BITMAP_DEF iconsPinsElectricalType[] =
 #define PIN_ELECTRICAL_TYPE_CNT DIM( iconsPinsElectricalType )
 
 
-const wxString LIB_PIN::GetCanonicalElectricalTypeName( int aType )
+const wxString LIB_PIN::GetCanonicalElectricalTypeName( unsigned aType )
 {
     // These strings are the canonical name of the electrictal type
     // Not translated, no space in name, only ASCII chars.
@@ -144,7 +144,7 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( int aType )
         wxT( "???" )
     };
 
-    if( aType < 0 || aType > int( PIN_NMAX ) )
+    if( aType > PIN_NMAX )
         aType = PIN_NMAX;
 
     return msgPinElectricType[ aType ];
@@ -155,7 +155,7 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( int aType )
 // Note: the strings are *not* static because they are translated and must be built
 // on the fly, to be properly translated
 
-static const wxString getPinOrientationName( int aPinOrientationCode )
+static const wxString getPinOrientationName( unsigned aPinOrientationCode )
 {
     /* Note: The following name lists are sentence capitalized per the GNOME UI
      *       standards for list controls.  Please do not change the capitalization
@@ -170,13 +170,13 @@ static const wxString getPinOrientationName( int aPinOrientationCode )
         wxT( "???" )
     };
 
-    if( aPinOrientationCode < 0 || aPinOrientationCode > int( PIN_ORIENTATION_CNT ) )
+    if( aPinOrientationCode > PIN_ORIENTATION_CNT )
         aPinOrientationCode = PIN_ORIENTATION_CNT;
 
     return pin_orientation_names[ aPinOrientationCode ];
 }
 
-const wxString LIB_PIN::GetElectricalTypeName( int aPinsElectricalType )
+const wxString LIB_PIN::GetElectricalTypeName( unsigned aPinsElectricalType )
 {
     const wxString pin_electrical_type_names[] =
     {   // Keep these translated strings not static
@@ -194,13 +194,13 @@ const wxString LIB_PIN::GetElectricalTypeName( int aPinsElectricalType )
         wxT( "???" )
     };
 
-    if( aPinsElectricalType < 0 || aPinsElectricalType > int( PIN_ELECTRICAL_TYPE_CNT ) )
+    if( aPinsElectricalType > PIN_ELECTRICAL_TYPE_CNT )
         aPinsElectricalType = PIN_ELECTRICAL_TYPE_CNT;
 
     return pin_electrical_type_names[ aPinsElectricalType ];
 }
 
-static const wxString getPinStyleName( int aPinsStyle )
+static const wxString getPinStyleName( unsigned aPinsStyle )
 {
     const wxString pin_style_names[] =
     {   // Keep these translated strings not static
@@ -216,7 +216,7 @@ static const wxString getPinStyleName( int aPinsStyle )
         wxT( "???" )
     };
 
-    if( aPinsStyle < 0 || aPinsStyle > int( PIN_STYLE_CNT ) )
+    if( aPinsStyle > PIN_STYLE_CNT )
         aPinsStyle = PIN_STYLE_CNT;
 
     return pin_style_names[ aPinsStyle ];
@@ -1979,6 +1979,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
                                      RED ) );
 
     int styleCodeIndex = GetStyleCodeIndex( m_shape );
+
     if( styleCodeIndex >= 0 )
         text = getPinStyleName( styleCodeIndex );
     else
@@ -1997,7 +1998,7 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     text = StringFromValue( g_UserUnit, m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
-    text = getPinOrientationName( GetOrientationCodeIndex( m_orientation ) );
+    text = getPinOrientationName( (unsigned) GetOrientationCodeIndex( m_orientation ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
