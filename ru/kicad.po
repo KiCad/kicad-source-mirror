@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-07 19:29+0300\n"
-"PO-Revision-Date: 2015-04-07 19:29+0300\n"
+"PO-Revision-Date: 2015-04-07 20:41+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -3268,7 +3268,7 @@ msgstr "Свойства для %s"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:165
 #, c-format
 msgid "Number of Units (max allowed %d)"
-msgstr "Число элементов (макс. допустимо %d)"
+msgstr "Число частей (макс. допустимо %d)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:299
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:375
