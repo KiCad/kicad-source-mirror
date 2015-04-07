@@ -48,6 +48,9 @@
 #include <pcbnew.h>
 #include <io_mgr.h>
 
+#include <tool/tool_manager.h>
+#include <tools/common_actions.h>
+
 
 void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
                                      const wxString& aCmpFileName,
@@ -107,6 +110,9 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
             view->Remove( module );
         }
     }
+
+    // Clear selection, just in case a selected item has to be removed
+    m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     netlist.SortByReference();
     board->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
