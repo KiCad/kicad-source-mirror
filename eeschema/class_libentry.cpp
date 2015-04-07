@@ -279,7 +279,22 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
     if( m_subpartFirstId >= '0' && m_subpartFirstId <= '9' )
         subRef << aUnit;
     else
-        subRef << wxChar( m_subpartFirstId + aUnit - 1);
+    {
+        // use letters as notation. To allow more than 26 units, the sub ref
+        // use one letter if letter = A .. Z or a ... z, and 2 letters otherwise
+        // first letter is expected to be 'A' or 'a' (i.e. 26 letters are available)
+        int u;
+
+        while( aUnit > 26 )    // more than one letter are needed
+        {
+            u = aUnit / 26;
+            subRef << wxChar( m_subpartFirstId + u -1 );
+            aUnit %= 26;
+        }
+
+        u = m_subpartFirstId + aUnit - 1;
+        subRef << wxChar( u );
+    }
 
     return subRef;
 }

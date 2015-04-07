@@ -75,9 +75,9 @@ int ParseVertexList( FILE* File, std::vector< glm::vec3 > &dst_vector);
  * parse a vertex
  * @param File file to read from
  * @param dst_vertex destination vector
- * @return int - return the number of elements readed
+ * @return bool - return true if the 3 elements are read
  */
-int ParseVertex( FILE* File, glm::vec3 &dst_vertex );
+bool ParseVertex( FILE* File, glm::vec3 &dst_vertex );
 
 
 /**

@@ -152,14 +152,6 @@ static void formatList( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& 
 
         int ctl = 0;
 
-#if defined(DEBUG)
-        if( it->first == "field" )
-        {
-            int breakhere = 1;
-            (void) breakhere;
-        }
-#endif
-
         if( isLast( aTree, it ) )   // is "it" the last one?
         {
             //if( !( aCtl & CTL_IN_ATTRS ) )
@@ -205,8 +197,7 @@ static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
 
     else            // is an atom, not a list
     {
-        const char* atom = out->Quotes( aKey ).c_str();
-        out->Print( 0, " %s", atom );
+        out->Print( 0, " %s", out->Quotes( aKey ).c_str() );
     }
 }
 

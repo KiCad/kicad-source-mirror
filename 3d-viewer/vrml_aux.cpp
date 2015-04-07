@@ -233,7 +233,7 @@ int ParseVertexList( FILE* File, std::vector<glm::vec3>& dst_vector )
 }
 
 
-int ParseVertex( FILE* File, glm::vec3& dst_vertex )
+bool ParseVertex( FILE* File, glm::vec3& dst_vertex )
 {
     float   a, b, c;
     int     ret = fscanf( File, "%e %e %e", &a, &b, &c );
@@ -252,7 +252,7 @@ int ParseVertex( FILE* File, glm::vec3& dst_vertex )
 
     // DBG( printf( "ret%d(%.9f,%.9f,%.9f)", ret, a,b,c) );
 
-    return ret;
+    return ret == 3;
 }
 
 

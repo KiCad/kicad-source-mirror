@@ -275,7 +275,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddDeveloper(
         new Contributor( wxT( "Andrew Zonenberg" ),        wxT( "azonenberg@drawersteak.com" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Nick Østergaard" ),         wxT( "toe.nick@gmail.com" ) ) );
+        new Contributor( wxT( "Nick Østergaard" ),         wxT( "oe.nick@gmail.com" ) ) );
 
     // The document writers
     info.AddDocWriter(
@@ -300,6 +300,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator(
         new Contributor( wxT( "Mateusz Skowroński" ),     wxT( "skowri@gmail.com" ),              wxT( "Polish (PL)" ),   KiBitmapNew( lang_pl_xpm ) ) );
     info.AddTranslator(
+        new Contributor( wxT( "Kerusey Karyu" ),          wxT( "keruseykaryu@o2.pl" ),            wxT( "Polish (PL)" ),   KiBitmapNew( lang_pl_xpm ) ) );
+    info.AddTranslator(
         new Contributor( wxT( "Renie Marquet" ),          wxT( "reniemarquet@uol.com.br" ),       wxT( "Portuguese (PT)" ), KiBitmapNew( lang_pt_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Igor Plyatov" ),           wxT( "plyatov@gmail.com" ),             wxT( "Russian (RU)" ),  KiBitmapNew( lang_ru_xpm ) ) );
@@ -318,6 +320,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                                           wxT( "milonas.ko@gmail.com" ),          wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Massimo Cioce" ),          wxT( "ciocemax@alice.it" ),             wxT( "Italian (IT)" ),  KiBitmapNew( lang_it_xpm ) ) );
+    info.AddTranslator(
+        new Contributor( wxT( "Marco Ciampa" ),           wxT( "ciampix@libero.it" ),             wxT( "Italian (IT)" ),  KiBitmapNew( lang_it_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Evgeniy Ivanov" ),         wxT( "evgeniy_p_ivanov@yahoo.ca" ),     wxT( "Bulgarian (BG)" ),KiBitmapNew( lang_bg_xpm ) ) );
 

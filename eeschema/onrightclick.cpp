@@ -447,12 +447,17 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_L
         {
             wxString num_unit;
             int unit = Component->GetUnit();
-            num_unit.Printf( _( "Unit %c" ), "?ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ ii + 1 ] );
+            num_unit.Printf( _( "Unit %s" ), GetChars( LIB_PART::SubReference(  ii + 1, false ) ) );
             wxMenuItem * item = sel_unit_menu->Append( ID_POPUP_SCH_SELECT_UNIT1 + ii,
                                                        num_unit, wxEmptyString,
                                                        wxITEM_CHECK );
             if( unit == ii + 1 )
                 item->Check(true);
+
+            // The ID max for these submenus is ID_POPUP_SCH_SELECT_UNIT_CMP_MAX
+            // See eeschema_id to modify this value.
+            if( ii >= (ID_POPUP_SCH_SELECT_UNIT_CMP_MAX - ID_POPUP_SCH_SELECT_UNIT1) )
+                break;      // We have used all IDs for these submenus
         }
 
         AddMenuItem( editmenu, sel_unit_menu, ID_POPUP_SCH_SELECT_UNIT_CMP,

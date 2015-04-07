@@ -56,7 +56,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
 {
 public:
     /** Constructor */
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* parent );
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* aParent );
 
     /**
      * Function InitBuffers
@@ -69,7 +69,7 @@ private:
 
     friend class SCH_EDIT_FRAME;
 
-    SCH_EDIT_FRAME* m_Parent;
+    SCH_EDIT_FRAME* m_parent;
     SCH_COMPONENT*  m_cmp;
     LIB_PART*       m_part;
     bool            m_skipCopyFromPanel;
@@ -165,10 +165,10 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 }
 
 
-DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* parent ) :
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( parent )
+DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* aParent ) :
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( aParent )
 {
-    m_Parent = (SCH_EDIT_FRAME*) parent;
+    m_parent = (SCH_EDIT_FRAME*) aParent;
 
     m_cmp = NULL;
     m_part = NULL;
@@ -258,7 +258,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
 {
     wxArrayString dummy;
     int dummyunit = 1;
-    wxString chipname = m_Parent->SelectComponentFromLibrary( wxEmptyString, dummy, dummyunit,
+    wxString chipname = m_parent->SelectComponentFromLibrary( wxEmptyString, dummy, dummyunit,
                                                               true, NULL, NULL );
     if( chipname.IsEmpty() )
         return;
@@ -336,7 +336,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
 
-        m_cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
+        m_cmp->SetUnitSelection( &m_parent->GetCurrentSheet(), unit_selection );
         m_cmp->SetUnit( unit_selection );
     }
 
@@ -397,8 +397,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // save old cmp in undo list if not already in edit, or moving ...
     // or the component to be edited is part of a block
     if( m_cmp->m_Flags == 0
-      || m_Parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        m_Parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
+      || m_parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+        m_parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
     copyPanelToOptions();
 
@@ -412,7 +412,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
             // correct the problem before removing the undefined fields.  It should also
             // resolve most of the bug reports and questions regarding missing fields.
             if( !m_FieldsBuf[i].GetName( false ).IsEmpty() && m_FieldsBuf[i].GetText().IsEmpty()
-                && !m_Parent->GetTemplates().HasFieldName( m_FieldsBuf[i].GetName( false ) )
+                && !m_parent->GetTemplates().HasFieldName( m_FieldsBuf[i].GetName( false ) )
                 && !removeRemainingFields )
             {
                 wxString msg = wxString::Format(
@@ -455,11 +455,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_cmp->SetRef( &m_Parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
+    m_cmp->SetRef( &m_parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
 
-    m_Parent->OnModify();
-    m_Parent->GetScreen()->TestDanglingEnds();
-    m_Parent->GetCanvas()->Refresh( true );
+    m_parent->OnModify();
+    m_parent->GetScreen()->TestDanglingEnds();
+    m_parent->GetCanvas()->Refresh( true );
 
     EndQuasiModal( wxID_OK );
 }
@@ -664,7 +664,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     // Add template fieldnames:
     // Now copy in the template fields, in the order that they are present in the
     // template field editor UI.
-    const TEMPLATE_FIELDNAMES& tfnames = m_Parent->GetTemplateFieldNames();
+    const TEMPLATE_FIELDNAMES& tfnames = m_parent->GetTemplateFieldNames();
 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
@@ -724,7 +724,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     }
 #endif
 
-    m_FieldsBuf[REFERENCE].SetText( m_cmp->GetRef( &m_Parent->GetCurrentSheet() ) );
+    m_FieldsBuf[REFERENCE].SetText( m_cmp->GetRef( &m_parent->GetCurrentSheet() ) );
 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
@@ -973,7 +973,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
         unitChoice->SetSelection( m_cmp->GetUnit() - 1 );
 
     // Disable unit selection if only one unit exists:
-    if( m_cmp->GetUnit() <= 1 )
+    if( m_cmp->GetUnitCount() <= 1 )
     {
         unitChoice->Enable( false );
         unitsInterchageableLabel->Show( false );
@@ -1043,10 +1043,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     {
         // save old cmp in undo list if not already in edit, or moving ...
         if( m_cmp->m_Flags == 0 )
-            m_Parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
+            m_parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
-        INSTALL_UNBUFFERED_DC( dc, m_Parent->GetCanvas() );
-        m_cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
+        INSTALL_UNBUFFERED_DC( dc, m_parent->GetCanvas() );
+        m_cmp->Draw( m_parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
 
         // Initialize fixed field values to default values found in library
         // Note: the field texts are not modified because they are set in schematic,
@@ -1080,9 +1080,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
         m_cmp->SetOrientation( CMP_NORMAL );
 
-        m_Parent->OnModify();
+        m_parent->OnModify();
 
-        m_cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        m_cmp->Draw( m_parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
         EndQuasiModal( wxID_OK );
     }

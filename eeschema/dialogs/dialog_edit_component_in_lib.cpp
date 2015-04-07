@@ -35,6 +35,7 @@
 #include <general.h>
 #include <libeditframe.h>
 #include <class_library.h>
+#include <eeschema_id.h>    // for ID_POPUP_SCH_SELECT_UNIT_CMP_MAX and ID_POPUP_SCH_SELECT_UNIT1
 
 #include <dialog_edit_component_in_lib.h>
 
@@ -156,6 +157,13 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
 
     if( m_Parent->GetShowDeMorgan() )
         m_AsConvertButt->SetValue( true );
+
+    int maxUnits = ID_POPUP_SCH_SELECT_UNIT_CMP_MAX - ID_POPUP_SCH_SELECT_UNIT1;
+    m_SelNumberOfUnits->SetRange (1, maxUnits );
+
+    m_staticTextNbUnits->SetLabel( wxString::Format(
+                            _( "Number of Units (max allowed %d)" ), maxUnits ) );
+
 
     /* Default values for a new component. */
     if( component == NULL )

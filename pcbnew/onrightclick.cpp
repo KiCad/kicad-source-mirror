@@ -126,7 +126,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         if( !item || cursorPos != selectPos )
         {
             m_canvas->SetAbortRequest( false );
-            item = PcbGeneralLocateAndDisplay();
+            PcbGeneralLocateAndDisplay();
 
             if( m_canvas->GetAbortRequest() )
             {
