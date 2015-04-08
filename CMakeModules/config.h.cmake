@@ -58,17 +58,8 @@
 /// The legacy file format revision of the *.brd file created by this build
 #define LEGACY_BOARD_FILE_VERSION       2
 
-/// The install prefix defined in CMAKE_INSTALL_PREFIX.
-#define DEFAULT_INSTALL_PATH            "@CMAKE_INSTALL_PREFIX@"
-
-/// The install prefix used for KiCad's libraries.
-/// These paths are only intended to be reasonable default values that work if
-/// the user installs KiCad in the default path for a given platform.
-#if defined( __APPLE__ )
-#define KICAD_DATA_PATH                 "/Library/Application Support/kicad"
-#else
-#define KICAD_DATA_PATH                 "@CMAKE_INSTALL_PREFIX@/@KICAD_DATA@"
-#endif
+/// The install prefix defined during CMake configuration or fall back to CMAKE_INSTALL_PREFIX.
+#define DEFAULT_INSTALL_PATH            "@DEFAULT_INSTALL_PATH@"
 
 /// The wxPython version found during configuration.
 #if defined( KICAD_SCRIPTING_WXPYTHON )

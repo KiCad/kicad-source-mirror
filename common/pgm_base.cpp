@@ -423,7 +423,7 @@ bool PGM_BASE::initPgm()
         m_local_env_vars[ envVarName ] = envVarItem;
 
         wxFileName tmpFileName;
-        tmpFileName.AssignDir( wxString( wxT( KICAD_DATA_PATH ) ) );
+        tmpFileName.AssignDir( wxString( wxT( DEFAULT_INSTALL_PATH ) ) );
         tmpFileName.AppendDir( wxT( "modules" ) );
         envVarName = wxT( "KISYSMOD" );
         envVarItem.SetValue( tmpFileName.GetPath() );
