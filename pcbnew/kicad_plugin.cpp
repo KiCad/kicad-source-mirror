@@ -946,8 +946,7 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
 
     formatLayer( aModuleDrawing );
 
-    if( aModuleDrawing->GetWidth() != 0 )
-        m_out->Print( 0, " (width %s)", FMT_IU( aModuleDrawing->GetWidth() ).c_str() );
+    m_out->Print( 0, " (width %s)", FMT_IU( aModuleDrawing->GetWidth() ).c_str() );
 
     m_out->Print( 0, ")\n" );
 }
