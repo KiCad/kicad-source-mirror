@@ -1,11 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * First copyright (C) Randy Nevin, 1989 (see PCBCA package)
  *
@@ -54,12 +54,6 @@ static long             qlen = 0;   /* current queue length */
 static struct PcbQueue* Head = NULL;
 static struct PcbQueue* Tail = NULL;
 static struct PcbQueue* Save = NULL;    /* hold empty queue structs */
-
-
-void InitQueue();
-void GetQueue( int*, int*, int*, int*, int* );
-int  SetQueue( int, int, int, int, int, int, int );
-void ReSetQueue( int, int, int, int, int, int, int );
 
 
 /* Free the memory used for storing all the queue */
@@ -123,7 +117,7 @@ void GetQueue( int* r, int* c, int* s, int* d, int* a )
  *      1 - OK
  *      0 - Failed to allocate memory.
  */
-int SetQueue( int r, int c, int side, int d, int a, int r2, int c2 )
+bool SetQueue( int r, int c, int side, int d, int a, int r2, int c2 )
 {
     struct PcbQueue* p, * q, * t;
     int i, j;
@@ -221,5 +215,6 @@ void ReSetQueue( int r, int c, int s, int d, int a, int r2, int c2 )
         ClosNodes--;    /* we will close it again, but just count once */
 
     /* if it was there, it's gone now; insert it at the proper position */
-    SetQueue( r, c, s, d, a, r2, c2 );
+    bool res = SetQueue( r, c, s, d, a, r2, c2 );
+    (void) res;
 }

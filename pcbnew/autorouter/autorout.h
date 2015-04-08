@@ -218,7 +218,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
 void FreeQueue();
 void InitQueue();
 void GetQueue( int *, int *, int *, int *, int * );
-int  SetQueue( int, int, int, int, int, int, int );
+bool  SetQueue( int, int, int, int, int, int, int );
 void ReSetQueue( int, int, int, int, int, int, int );
 
 /* WORK.CPP */

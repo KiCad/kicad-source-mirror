@@ -68,8 +68,6 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 {
     SCH_REFERENCE_LIST references;
 
-    wxBusyCursor dummy;
-
     SCH_SCREENS screens;
 
     // Build the sheet list.

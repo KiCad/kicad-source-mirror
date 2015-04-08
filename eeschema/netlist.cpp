@@ -136,8 +136,6 @@ void NETLIST_OBJECT_LIST::SortListbySheet()
 
 NETLIST_OBJECT_LIST * SCH_EDIT_FRAME::BuildNetListBase()
 {
-    wxBusyCursor    Busy;
-
     // Creates the flattened sheet list:
     SCH_SHEET_LIST aSheets;
 

@@ -794,7 +794,6 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
 
 int CVPCB_MAINFRAME::ReadSchematicNetlist()
 {
-    wxBusyCursor    dummy;           // Shows an hourglass while loading.
     NETLIST_READER* netlistReader;
     wxString        msg;
     wxString        compFootprintLinkFileName;

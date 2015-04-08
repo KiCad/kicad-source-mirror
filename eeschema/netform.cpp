@@ -50,7 +50,6 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
     bool executeCommandLine = false;
 
     wxString fileName = aFullFileName;
-    wxBusyCursor Busy;
     NETLIST_EXPORTER *helper;
 
     switch( aFormat )

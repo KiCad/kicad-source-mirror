@@ -224,7 +224,7 @@ int ParseVertexList( FILE* File, std::vector<glm::vec3>& dst_vector )
 
     glm::vec3 vertex;
 
-    while( ParseVertex( File, vertex ) == 3 )
+    while( ParseVertex( File, vertex ) )
     {
         dst_vector.push_back( vertex );
     }

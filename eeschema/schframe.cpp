@@ -985,9 +985,10 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
         if( !player )
         {
             player = Kiway().Player( FRAME_CVPCB, true );
-            player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
             player->Show( true );
+            player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
         }
+
         player->Raise();
     }
 }
