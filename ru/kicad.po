@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-07 19:29+0300\n"
-"PO-Revision-Date: 2015-04-07 20:41+0300\n"
+"POT-Creation-Date: 2015-04-08 18:25+0300\n"
+"PO-Revision-Date: 2015-04-08 19:04+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -2297,7 +2297,7 @@ msgstr "Ошибка конфигурации"
 msgid "Project: '%s'  (netlist: '%s')"
 msgstr "Проект: '%s'  (список цепей: '%s')"
 
-#: cvpcb/cvframe.cpp:762 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1247
+#: cvpcb/cvframe.cpp:762 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1248
 #: kicad/prjconfig.cpp:277 pcbnew/moduleframe.cpp:783 pcbnew/pcbframe.cpp:965
 msgid " [Read Only]"
 msgstr " [Только чтение]"
@@ -2306,7 +2306,7 @@ msgstr " [Только чтение]"
 msgid "[no project]"
 msgstr "[нет проекта]"
 
-#: cvpcb/cvframe.cpp:806
+#: cvpcb/cvframe.cpp:805
 #, c-format
 msgid ""
 "Unable to find netlist file:\n"
@@ -2319,16 +2319,16 @@ msgstr ""
 "\n"
 "Создайте его, пожалуйста"
 
-#: cvpcb/cvframe.cpp:808 cvpcb/cvframe.cpp:836
-#: pcbnew/dialogs/dialog_netlist.cpp:438 pcbnew/netlist.cpp:93
+#: cvpcb/cvframe.cpp:807 cvpcb/cvframe.cpp:835
+#: pcbnew/dialogs/dialog_netlist.cpp:438 pcbnew/netlist.cpp:96
 msgid "Netlist Load Error"
 msgstr "Ошибка чтения списка цепей"
 
-#: cvpcb/cvframe.cpp:831
+#: cvpcb/cvframe.cpp:830
 msgid "Unknown netlist format."
 msgstr "Неизвестный формат списка цепей."
 
-#: cvpcb/cvframe.cpp:835 pcbnew/netlist.cpp:92
+#: cvpcb/cvframe.cpp:834 pcbnew/netlist.cpp:95
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -2340,6 +2340,22 @@ msgstr ""
 #: cvpcb/cvpcb.cpp:57
 msgid "Component/footprint equ files (*.equ)|*.equ"
 msgstr "Файл соответствия компонентов и посадочных мест (*.equ)|*.equ"
+
+#: cvpcb/cvpcb.cpp:200
+msgid ""
+"You have run CvPcb for the first time using the new footprint library table "
+"method for finding footprints.  CvPcb has either copied the default table or "
+"created an empty table in your home folder.  You must first configure the "
+"library table to include all footprint libraries not included with KiCad.  "
+"See the \"Footprint Library Table\" section of the CvPcb documentation for "
+"more information."
+msgstr ""
+"Вы запустили CvPcb в первый раз, используя новый метод таблицы библиотек "
+"посадочных мест для нахождения посадочных мест.  Либо CvPcb скопировал "
+"таблицу по умолчанию или создал пустую таблицу в вашей домашней директории.  "
+"Сначала вы должны сконфигурировать таблицу библиотек, включив все посадочные "
+"места не включенные KiCad.  Для большей информации смотрите раздел \"Таблица "
+"библиотек посадочных мест\" документации CvPcb."
 
 #: cvpcb/cvpcb.cpp:214 pcbnew/pcbnew.cpp:335
 #, c-format
@@ -2621,8 +2637,33 @@ msgstr ""
 "b>библиотеках.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:250
-msgid "First check your fp-lib-table entries."
-msgstr "Проверьте записи в таблице библиотек fp-lib-table."
+msgid "First check your footprint library table entries."
+msgstr "Сначала проверьте записи своей таблицы библиотек посадочных мест."
+
+#: cvpcb/readwrite_dlgs.cpp:252
+msgid "Problematic Footprint Library Tables"
+msgstr "Проблемные таблицы библиотек посадочных мест"
+
+#: cvpcb/readwrite_dlgs.cpp:260
+msgid ""
+"The following errors occurred attempting to convert the footprint "
+"assignments:\n"
+"\n"
+msgstr ""
+"Следующие ошибки произошли в попытке преобразовать назначения посадочного "
+"места:\n"
+"\n"
+
+#: cvpcb/readwrite_dlgs.cpp:263
+msgid ""
+"\n"
+"You will need to reassign them manually if you want them to be updated "
+"correctly the next time you import the netlist in Pcbnew."
+msgstr ""
+"\n"
+"Вам необходимо переназначить их вручную, если вы хотите, чтобы они были "
+"корректно обновлены в следующий раз когда вы импортируете список цепей в "
+"Pcbnew."
 
 #: cvpcb/readwrite_dlgs.cpp:385
 msgid "Save Component Footprint Link File"
@@ -2678,7 +2719,7 @@ msgstr "Фильтр посадочных мест по количеству в�
 msgid "Filter footprint list by library"
 msgstr "Фильтр посадочных мест по библиотеке"
 
-#: eeschema/annotate.cpp:91
+#: eeschema/annotate.cpp:89
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d дубликаты временных меток и найдены и заменены."
@@ -7134,11 +7175,11 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Ошибка: дубликат имени листа. Продолжить?"
 
-#: eeschema/netlist.cpp:149
+#: eeschema/netlist.cpp:147
 msgid "No Objects"
 msgstr "Нет объектов"
 
-#: eeschema/netlist.cpp:157
+#: eeschema/netlist.cpp:155
 #, c-format
 msgid "Net count = %zu"
 msgstr "Количество цепей = %zu"
@@ -7869,11 +7910,11 @@ msgstr ""
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/schframe.cpp:1028
+#: eeschema/schframe.cpp:1029
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1250
+#: eeschema/schframe.cpp:1251
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -14144,7 +14185,7 @@ msgstr "Глобальные библиотеки"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:126
 msgid "Project Specific Libraries"
-msgstr "Библиотеки для данного проекта"
+msgstr "Библиотеки проекта"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:133
 msgid "Append with Wizard"
@@ -15962,7 +16003,7 @@ msgid "Using time stamps to select footprints in file \"%s\".\n"
 msgstr ""
 "Использовать штамп времени для выбора посадочных мест в файле \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:213 pcbnew/netlist.cpp:151
+#: pcbnew/dialogs/dialog_netlist.cpp:213 pcbnew/netlist.cpp:157
 msgid "No footprints"
 msgstr "Нет посадочных мест"
 
@@ -16011,12 +16052,12 @@ msgstr "Не удалось записать содержание сообщен
 msgid "File Write Error"
 msgstr "Ошибка записи файла"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:427 pcbnew/netlist.cpp:80
+#: pcbnew/dialogs/dialog_netlist.cpp:427 pcbnew/netlist.cpp:83
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
 msgstr "Не удалось открыть файл списка цепей <%s>."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:428 pcbnew/netlist.cpp:81
+#: pcbnew/dialogs/dialog_netlist.cpp:428 pcbnew/netlist.cpp:84
 msgid "Netlist Load Error."
 msgstr "Ошибка загрузки списка цепей."
 
@@ -17803,7 +17844,7 @@ msgid "Cannot convert \"%s\" to an integer"
 msgstr "Не удалось преобразовать \"%s\" в целое"
 
 #: pcbnew/gpcb_plugin.cpp:269 pcbnew/gpcb_plugin.cpp:905
-#: pcbnew/kicad_plugin.cpp:1758
+#: pcbnew/kicad_plugin.cpp:1757
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "Путь библиотеки посадочных мест '%s' не существует"
@@ -17824,29 +17865,29 @@ msgstr "неизвестная лексема \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "Лексема Element содержит %d параметров."
 
-#: pcbnew/gpcb_plugin.cpp:973 pcbnew/kicad_plugin.cpp:1831
-#: pcbnew/kicad_plugin.cpp:1896 pcbnew/legacy_plugin.cpp:4611
+#: pcbnew/gpcb_plugin.cpp:973 pcbnew/kicad_plugin.cpp:1830
+#: pcbnew/kicad_plugin.cpp:1895 pcbnew/legacy_plugin.cpp:4611
 #: pcbnew/legacy_plugin.cpp:4656 pcbnew/librairi.cpp:493
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Библиотека '%s' доступна только для чтения"
 
-#: pcbnew/gpcb_plugin.cpp:992 pcbnew/kicad_plugin.cpp:1933
+#: pcbnew/gpcb_plugin.cpp:992 pcbnew/kicad_plugin.cpp:1932
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "у Вас нет прав на удаление директории '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1000 pcbnew/kicad_plugin.cpp:1941
+#: pcbnew/gpcb_plugin.cpp:1000 pcbnew/kicad_plugin.cpp:1940
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "директория библиотеки '%s' содержит неожиданные поддиректории"
 
-#: pcbnew/gpcb_plugin.cpp:1019 pcbnew/kicad_plugin.cpp:1960
+#: pcbnew/gpcb_plugin.cpp:1019 pcbnew/kicad_plugin.cpp:1959
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "неизвестный файл '%s' найден по пути библиотеки '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1037 pcbnew/kicad_plugin.cpp:1978
+#: pcbnew/gpcb_plugin.cpp:1037 pcbnew/kicad_plugin.cpp:1977
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "библиотеку посадочных мест '%s' не удалось удалить"
@@ -18257,37 +18298,37 @@ msgstr "Путь библиотека посадочных мест '%s' не с
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "в библиотеке '%s' нет посадочного места '%s' для удаления"
 
-#: pcbnew/kicad_plugin.cpp:1235 pcbnew/legacy_plugin.cpp:98
+#: pcbnew/kicad_plugin.cpp:1234 pcbnew/legacy_plugin.cpp:98
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "неизвестный тип контактной площадки; %d"
 
-#: pcbnew/kicad_plugin.cpp:1248 pcbnew/legacy_plugin.cpp:99
+#: pcbnew/kicad_plugin.cpp:1247 pcbnew/legacy_plugin.cpp:99
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "неизвестный тип атрибута контактной площадки: %d"
 
-#: pcbnew/kicad_plugin.cpp:1430
+#: pcbnew/kicad_plugin.cpp:1429
 #, c-format
 msgid "unknown via type %d"
 msgstr "неизвестный тип контактной площадки %d"
 
-#: pcbnew/kicad_plugin.cpp:1561
+#: pcbnew/kicad_plugin.cpp:1560
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "неизвестный тип скругления углов зоны %d"
 
-#: pcbnew/kicad_plugin.cpp:1847
+#: pcbnew/kicad_plugin.cpp:1846
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Неправильное имя файла посадочных мест '%s'."
 
-#: pcbnew/kicad_plugin.cpp:1853
+#: pcbnew/kicad_plugin.cpp:1852
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "У Вас нет прав на запись и удаление файла '%s'"
 
-#: pcbnew/kicad_plugin.cpp:1908
+#: pcbnew/kicad_plugin.cpp:1907
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "не удалось переписать путь библиотеки '%s'"
@@ -19791,30 +19832,30 @@ msgstr "Добавить дугу"
 msgid "Add Polynomial Shape"
 msgstr "Добавить полиномиальную форму"
 
-#: pcbnew/netlist.cpp:174
+#: pcbnew/netlist.cpp:180
 msgid "Components"
 msgstr "Компоненты"
 
-#: pcbnew/netlist.cpp:221
+#: pcbnew/netlist.cpp:227
 #, c-format
 msgid "No footprint defined for component '%s'.\n"
 msgstr "Не задано посадочное место для компонента '%s'.\n"
 
-#: pcbnew/netlist.cpp:243
+#: pcbnew/netlist.cpp:249
 #, c-format
 msgid "* Warning: component '%s' has footprint '%s' and should be '%s'\n"
 msgstr ""
 "*** Предупреждение: компонент '%s' имеет посадочное место '%s', а должно "
 "быть '%s'\n"
 
-#: pcbnew/netlist.cpp:272
+#: pcbnew/netlist.cpp:278
 #, c-format
 msgid "*** Warning: Component '%s' footprint ID '%s' is not valid. ***\n"
 msgstr ""
 "*** Предупреждение: компонент '%s' с неправильным ID посадочного места '%s. "
 "***\n"
 
-#: pcbnew/netlist.cpp:294
+#: pcbnew/netlist.cpp:300
 #, c-format
 msgid ""
 "*** Warning: component '%s' footprint '%s' was not found in any libraries in "
@@ -22037,6 +22078,9 @@ msgstr "Позволяет указать размер любой дорожки
 #: pcbnew/router/router_menus.h:154
 msgid "Route using the width of the starting track"
 msgstr "Трассировать с шириной начальной дорожки"
+
+#~ msgid "First check your fp-lib-table entries."
+#~ msgstr "Проверьте записи в таблице библиотек fp-lib-table."
 
 #~ msgid ""
 #~ "The footprint library is a folder.\n"
