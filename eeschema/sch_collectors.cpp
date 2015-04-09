@@ -467,7 +467,7 @@ bool SCH_FIND_COLLECTOR::ReplaceItem( SCH_SHEET_PATH* aSheetPath )
     bool replaced = item->Replace( m_findReplaceData, aSheetPath );
 
     if( replaced )
-        m_forceSearch = true;
+        SetForceSearch();
 
     return replaced;
 }
@@ -512,7 +512,7 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
     Empty();                 // empty the collection just in case
     m_data.clear();
     m_foundIndex = 0;
-    m_forceSearch = false;
+    SetForceSearch( false );
 
     if( aSheetPath )
     {

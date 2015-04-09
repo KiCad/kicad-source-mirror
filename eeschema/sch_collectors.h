@@ -231,11 +231,15 @@ class SCH_FIND_COLLECTOR : public COLLECTOR
     SCH_SHEET_PATH* m_sheetPath;
 
     /// The current found item list index.
-    int m_foundIndex;
+    int     m_foundIndex;
 
     /// A flag to indicate that the schemtic has been modified and a new search must be
     /// performed even if the search criteria hasn't changed.
-    bool m_forceSearch;
+    bool    m_forceSearch;
+
+    /// last known library change hash, used to detect library changes which
+    /// should trigger cache obsolescence.
+    int     m_lib_hash;
 
     /**
      * Function dump
@@ -254,7 +258,7 @@ public:
     {
         SetScanTypes( aScanTypes );
         m_foundIndex = 0;
-        m_forceSearch = false;
+        SetForceSearch( false );
         m_sheetPath = NULL;
     }
 
@@ -265,7 +269,10 @@ public:
         m_data.clear();
     }
 
-    void SetForceSearch() { m_forceSearch = true; }
+    void SetForceSearch( bool doSearch = true ) { m_forceSearch = doSearch; }
+
+    int GetLibHash() const          { return m_lib_hash; }
+    void SetLibHash( int aHash )    { m_lib_hash = aHash; }
 
     /**
      * Function PassedEnd
@@ -294,7 +301,7 @@ public:
 
     /**
      * Function IsSearchRequired
-     * checks the current collector state agaianst \a aFindReplaceData to see if a new search
+     * checks the current collector state against \a aFindReplaceData to see if a new search
      * needs to be performed to update the collector.
      *
      * @param aFindReplaceData A #SCH_FIND_REPLACE_DATA object containing the search criteria
@@ -302,7 +309,7 @@ public:
      * @return True if \a aFindReplaceData would require a new search to be performaed or
      *         the force search flag is true.  Otherwise, false is returned.
      */
-    bool IsSearchRequired( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    bool IsSearchRequired( const SCH_FIND_REPLACE_DATA& aFindReplaceData )
     {
         return m_findReplaceData.ChangesCompare( aFindReplaceData ) || m_forceSearch ||
                (m_findReplaceData.IsWrapping() != aFindReplaceData.IsWrapping());

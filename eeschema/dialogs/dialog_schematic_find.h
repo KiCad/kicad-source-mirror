@@ -131,7 +131,7 @@ public:
      * @return True if \a aFindReplaceData would result in a search and/or replace change,
      *         otherwise false.
      */
-    bool ChangesCompare( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    bool ChangesCompare( const SCH_FIND_REPLACE_DATA& aFindReplaceData )
     {
         return ( (GetFindString() != aFindReplaceData.GetFindString())
               || (GetCompareFlags() != aFindReplaceData.GetCompareFlags()) );

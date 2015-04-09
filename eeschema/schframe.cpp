@@ -719,8 +719,7 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetModify();
     GetScreen()->SetSave();
 
-    if( m_dlgFindReplace == NULL )
-        m_foundItems.SetForceSearch();
+    m_foundItems.SetForceSearch();
 }
 
 

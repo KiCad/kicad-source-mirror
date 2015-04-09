@@ -35,6 +35,7 @@
 #include <kicad_string.h>
 #include <eeschema_id.h>
 #include <pgm_base.h>
+#include <kiway.h>
 #include <class_drawpanel.h>
 #include <sch_item_struct.h>
 #include <schframe.h>

@@ -285,6 +285,25 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 }
 
 
+bool SCH_EDIT_FRAME::IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearchCriteria )
+{
+    PART_LIBS*  libs = Prj().SchLibs();
+    int         mod_hash = libs->GetModifyHash();
+
+    // the cache is obsolete whenever any library changes.
+    if( mod_hash != m_foundItems.GetLibHash() )
+    {
+        m_foundItems.SetForceSearch();
+        m_foundItems.SetLibHash( mod_hash );
+        return true;
+    }
+    else if( m_foundItems.IsSearchRequired( aSearchCriteria ) )
+        return true;
+    else
+        return false;
+}
+
+
 void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 {
     static wxPoint          itemPosition;  // the actual position of the matched item.
@@ -303,7 +322,7 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
         if( m_foundItems.GetCount() == 0 )
             return;
     }
-    else if( m_foundItems.IsSearchRequired( searchCriteria ) )
+    else if( IsSearchCacheObsolete( searchCriteria ) )
     {
         if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
         {
