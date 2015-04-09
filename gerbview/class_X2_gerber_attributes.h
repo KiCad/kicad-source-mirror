@@ -153,12 +153,19 @@ class X2_ATTRIBUTE_FILEFUNCTION : public X2_ATTRIBUTE
 public:
     X2_ATTRIBUTE_FILEFUNCTION( X2_ATTRIBUTE& aAttributeBase );
 
-    const wxString& GetFileType();    ///< the type of layer (Copper ,  Soldermask ... )
-    const wxString& GetBrdLayerId();  ///< the brd layer identifier: Top, Bot, Ln
-    const wxString& GetLabel();       ///< the filefunction label, if any
+    bool IsCopper();                    ///< return true if the filefunction type is "Copper"
 
-    int GetZOrder() { return m_z_order; }   ///< the Order of the bdr layer, from front (Top side) to back side
-    int GetZSubOrder() { return m_z_sub_order; }   ///< the Order of the bdr copper layer, from front (Top side) to back side
+    const wxString& GetFileType();      ///< the type of layer (Copper, Soldermask ... )
+    const wxString& GetBrdLayerId();    ///< the brd layer identifier: Ln, only for Copper type
+                                        ///< or Top, Bot for other types
+    const wxString& GetBrdLayerSide();  ///< the brd layer Pos: Top, Bot, Inr
+                                        ///< same as GetBrdLayerId() for non copper type
+    const wxString& GetLabel();         ///< the filefunction label, if any
+
+    int GetZOrder() { return m_z_order; }           ///< the Order of the board layer,
+                                                    ///< from front (Top) side to back (Bot) side
+    int GetZSubOrder() { return m_z_sub_order; }    ///< the Order of the bdr copper layer,
+                                                    ///< from front (Top) side to back (Bot) side
 
 private:
 

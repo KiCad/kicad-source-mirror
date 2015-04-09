@@ -189,17 +189,34 @@ const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetFileType()
 
 const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetBrdLayerId()
 {
-    // the brd layer identifier: Top, Bot, Ln
+    // the brd layer identifier: Ln (for Copper type) or Top, Bot
     return m_Prms.Item( 2 );
 }
 
+const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetBrdLayerSide()
+{
+    if( IsCopper() )
+        // the brd layer identifier: Top, Bot, Inr
+        return m_Prms.Item( 3 );
+    else
+        // the brd layer identifier: Top, Bot ( same as GetBrdLayerId() )
+        return m_Prms.Item( 2 );
+}
 
 const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetLabel()
 {
-    // the filefunction label, if any
-    return m_Prms.Item( 3 );
+    if( IsCopper() )
+       return m_Prms.Item( 4 );
+    else
+        return m_Prms.Item( 3 );
 }
 
+
+bool X2_ATTRIBUTE_FILEFUNCTION::IsCopper()
+{
+    // the filefunction label, if any
+    return GetFileType().IsSameAs( wxT( "Copper" ), false );
+}
 
 // Initialize the z order priority of the current file, from its attributes
 // this priority is the order of layers from top to bottom to draw/display gerber images
@@ -211,7 +228,7 @@ void X2_ATTRIBUTE_FILEFUNCTION::set_Z_Order()
     m_z_order = -100;     // low level
     m_z_sub_order = 0;
 
-    if( GetFileType().IsSameAs( wxT( "Copper" ), false ) )
+    if( IsCopper() )
     {
         // Copper layer: the priority is the layer Id
         m_z_order = 0;

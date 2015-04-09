@@ -463,9 +463,21 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
     if( gerber && IsUsed(aIdx ) )
     {
         if( gerber->m_FileFunction )
-            name.Printf( _( "Layer %d (%s, %s)" ), aIdx + 1,
-                         GetChars( gerber->m_FileFunction->GetFileType() ),
-                         GetChars( gerber->m_FileFunction->GetBrdLayerId() ) );
+        {
+            if( gerber->m_FileFunction->IsCopper() )
+            {
+                name.Printf( _( "Layer %d (%s, %s, %s)" ), aIdx + 1,
+                             GetChars( gerber->m_FileFunction->GetFileType() ),
+                             GetChars( gerber->m_FileFunction->GetBrdLayerId() ),
+                             GetChars( gerber->m_FileFunction->GetBrdLayerSide() ) );
+            }
+            else
+            {
+                name.Printf( _( "Layer %d (%s, %s)" ), aIdx + 1,
+                             GetChars( gerber->m_FileFunction->GetFileType() ),
+                             GetChars( gerber->m_FileFunction->GetBrdLayerId() ) );
+            }
+        }
         else
             name.Printf( _( "Layer %d *" ), aIdx + 1 );
     }

@@ -71,6 +71,7 @@ extern const wxString GedaPcbFootprintLibFileExtension;
 extern const wxString EagleFootprintLibPathExtension;
 extern const wxString ComponentFileExtensionWildcard;
 extern const wxString PageLayoutDescrFileWildcard;
+extern const wxString KiCadLib3DShapesPathExtension;
 
 /// Proper wxFileDialog wild card definitions.
 extern const wxString SchematicSymbolFileWildcard;

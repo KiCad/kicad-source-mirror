@@ -54,8 +54,9 @@ const wxString DrillFileExtension( wxT( "drl" ) );
 const wxString SVGFileExtension( wxT( "svg" ) );
 const wxString ReportFileExtension( wxT( "rpt" ) );
 const wxString FootprintPlaceFileExtension( wxT( "pos" ) );
+const wxString KiCadLib3DShapesPathExtension( wxT( "3dshapes" ) );  ///< 3D shapes default libpath
 
-const wxString KiCadFootprintLibPathExtension( wxT( "pretty" ) );    ///< KICAD PLUGIN libpath
+const wxString KiCadFootprintLibPathExtension( wxT( "pretty" ) );   ///< KICAD PLUGIN libpath
 const wxString LegacyFootprintLibPathExtension( wxT( "mod" ) );
 const wxString EagleFootprintLibPathExtension( wxT( "lbr" ) );
 

@@ -227,52 +227,13 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 
         case PCB_MODULE_EDGE_T:
             outline = (EDGE_MODULE*) item;
+
             if( outline->GetLayer() != aLayer )
                 break;
-
-            switch( outline->GetShape() )
-            {
-            case S_SEGMENT:
-                TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                           outline->GetStart(),
-                                           outline->GetEnd(),
-                                           aCircleToSegmentsCount,
-                                           outline->GetWidth() );
-                break;
-
-            case S_CIRCLE:
-                TransformRingToPolygon( aCornerBuffer, outline->GetCenter(),
-                                outline->GetRadius(), aCircleToSegmentsCount,
-                                outline->GetWidth() );
-                break;
-
-            case S_ARC:
-                TransformArcToPolygon( aCornerBuffer,
-                            outline->GetCenter(), outline->GetArcStart(),
-                            outline->GetAngle(),
-                            aCircleToSegmentsCount, outline->GetWidth() );
-                break;
-
-            case S_POLYGON:
-                // for outline shape = S_POLYGON:
-                // We must compute true coordinates from m_PolyPoints
-                // which are relative to module position and module orientation = 0
-                for( unsigned ii = 0; ii < outline->GetPolyPoints().size(); ii++ )
-                {
-                    CPolyPt corner( outline->GetPolyPoints()[ii] );
-                    RotatePoint( &corner.x, &corner.y, GetOrientation() );
-                    corner.x += GetPosition().x;
-                    corner.y += GetPosition().y;
-                    aCornerBuffer.Append( corner );
-                }
-                aCornerBuffer.CloseLastContour();
-                break;
-
-            default:
-                DBG( printf( "Error: Shape %d not implemented!\n",
-                        outline->GetShape() ); )
-                break;
-            }
+                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer,
+                                                        0,
+                                                        aCircleToSegmentsCount,
+                                                        aCorrectionFactor );
                 break;
 
             default:
@@ -332,7 +293,7 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
     // add filled areas polygons
     aCornerBuffer.Append( m_FilledPolysList );
 
-    // add filled areas outlines, which are drawn with thich lines
+    // add filled areas outlines, which are drawn with thick lines
     wxPoint seg_start, seg_end;
     int i_start_contour = 0;
     for( unsigned ic = 0; ic < cornerscount; ic++ )
@@ -473,25 +434,81 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerB
                                                         int                    aCircleToSegmentsCount,
                                                         double                 aCorrectionFactor ) const
 {
+    // The full width of the lines to create:
+    int linewidth = m_Width + (2 * aClearanceValue);
+
     switch( m_Shape )
     {
     case S_CIRCLE:
         TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(),
-                                aCircleToSegmentsCount,
-                                m_Width + (2 * aClearanceValue) ) ;
+                                aCircleToSegmentsCount, linewidth ) ;
         break;
 
     case S_ARC:
         TransformArcToPolygon( aCornerBuffer, GetCenter(),
                                GetArcStart(), m_Angle,
-                               aCircleToSegmentsCount,
-                               m_Width + (2 * aClearanceValue) );
+                               aCircleToSegmentsCount, linewidth );
+        break;
+
+    case S_SEGMENT:
+        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, m_Start, m_End,
+                                              aCircleToSegmentsCount, linewidth );
+        break;
+
+    case S_POLYGON:
+        if ( GetPolyPoints().size() < 2 )
+            break;      // Malformed polygon.
+        {
+        // The polygon is expected to be a simple polygon
+        // not self intersecting, no hole.
+        MODULE* module = GetParentModule();     // NULL for items not in footprints
+        double orientation = module ? module->GetOrientation() : 0.0;
+
+        // Build the polygon with the actual position and orientation:
+        std::vector< wxPoint> poly;
+        poly = GetPolyPoints();
+
+        for( unsigned ii = 0; ii < poly.size(); ii++ )
+        {
+            RotatePoint( &poly[ii], orientation );
+            poly[ii] += GetPosition();
+        }
+
+        // Generate polygons for the outline + clearance
+        // This code is compatible with a polygon with holes linked to external outline
+        // by overlapping segments.
+        if( linewidth )     // Add thick outlines
+        {
+            CPolyPt corner1( poly[poly.size()-1] );
+
+            for( unsigned ii = 0; ii < poly.size(); ii++ )
+            {
+                CPolyPt corner2( poly[ii] );
+
+                if( corner2 != corner1 )
+                {
+                    TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
+                            corner1, corner2, aCircleToSegmentsCount, linewidth );
+                }
+
+                corner1 = corner2;
+            }
+        }
+
+        // Polygon for the inside
+        for( unsigned ii = 0; ii < poly.size(); ii++ )
+        {
+            CPolyPt corner( poly[ii] );
+            aCornerBuffer.Append( corner );
+        }
+        aCornerBuffer.CloseLastContour();
+        }
+        break;
+
+    case S_CURVE:       // Bezier curve (TODO: not yet in use)
         break;
 
     default:
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, m_Start, m_End,
-                                              aCircleToSegmentsCount,
-                                              m_Width + (2 * aClearanceValue) );
         break;
     }
 }
