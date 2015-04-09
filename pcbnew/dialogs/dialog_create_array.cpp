@@ -145,7 +145,7 @@ static const std::string& alphabetFromNumberingScheme(
     static const std::string    alphaNumeric = "0123456789";
     static const std::string    alphaHex = "0123456789ABCDEF";
     static const std::string    alphaFull = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    static const std::string    alphaNoIOSQXZ   = "ABCDEFGHJKLNMPRTUVWY";
+    static const std::string    alphaNoIOSQXZ   = "ABCDEFGHJKLMNPRTUVWY";
     static const std::string    alphaEmpty      = "";
 
     switch( type )
