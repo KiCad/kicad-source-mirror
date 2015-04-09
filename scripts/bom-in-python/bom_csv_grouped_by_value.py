@@ -111,7 +111,7 @@ for c in components:
 
     # from column 7 upwards, use the fieldnames to grab the data
     for field in columns[7:]:
-        row.append( c.getField( field ) );
+        row.append( c.getField( field ) ); #And how to use these scripts when the data field names and their data must contain unicode texts?
 
     writerow( out, row )
 
