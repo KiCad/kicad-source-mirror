@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,8 @@
 #include <pcbnew_id.h>
 #include <dialog_set_grid_base.h>
 #include <invoke_pcb_dialog.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <class_draw_panel_gal.h>
 
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
@@ -155,7 +157,7 @@ void DIALOG_SET_GRID::setGridOrigin( const wxPoint& grid )
 }
 
 
-void DIALOG_SET_GRID::setGridForFastSwitching( const wxArrayString& aGrids, int aGrid1, int aGrid2  )
+void DIALOG_SET_GRID::setGridForFastSwitching( const wxArrayString& aGrids, int aGrid1, int aGrid2 )
 {
     m_comboBoxGrid1->Append( aGrids );
     m_comboBoxGrid2->Append( aGrids );
@@ -216,12 +218,21 @@ bool PCB_BASE_FRAME::InvokeDialogGrid()
 
         SetGridOrigin( grid_origin );
 
-        GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
+        BASE_SCREEN* screen = GetScreen();
+
+        screen->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
 
         // If the user grid is the current option, recall SetGrid()
         // to force new values put in list as current grid value
-        if( GetScreen()->GetGridId() == ID_POPUP_GRID_USER )
-            GetScreen()->SetGrid( ID_POPUP_GRID_USER  );
+        if( screen->GetGridId() == ID_POPUP_GRID_USER )
+            screen->SetGrid( ID_POPUP_GRID_USER );
+
+        if( IsGalCanvasActive() )
+        {
+            GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
+                                                             screen->GetGrid().m_Size.y ) );
+            GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        }
 
         m_canvas->Refresh();
 
