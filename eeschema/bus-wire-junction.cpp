@@ -45,13 +45,11 @@
 #include <sch_sheet.h>
 
 
-static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void AbortCreateNewLine( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
 
 static DLIST< SCH_ITEM > s_wires;       // when creating a new set of wires,
                                         // stores here the new wires.
-static DLIST< SCH_ITEM > s_oldWires;    // when creating a new set of wires,
-                                        // stores here the old wires (for undo command)
 
 
 /**
@@ -123,11 +121,8 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         }
     }
 
-    if( !segment )  /* first point : Create first wire or bus */
+    if( !segment )      // first point : Create the first wire or bus segment
     {
-        GetScreen()->ExtractWires( s_oldWires, true );
-        GetScreen()->SchematicCleanUp( m_canvas );
-
         switch( type )
         {
         default:
@@ -251,6 +246,22 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     SCH_LINE* firstsegment = (SCH_LINE*) s_wires.GetFirst();
     wxPoint startPoint = firstsegment->GetStartPoint();
 
+    // Save the old wires for the undo command
+    DLIST< SCH_ITEM > oldWires;                     // stores here the old wires
+    GetScreen()->ExtractWires( oldWires, true );    // Save them in oldWires list
+    // Put the snap shot of the previous wire, buses, and junctions in the undo/redo list.
+    PICKED_ITEMS_LIST oldItems;
+    oldItems.m_Status = UR_WIRE_IMAGE;
+
+    while( oldWires.GetCount() != 0 )
+    {
+        ITEM_PICKER picker = ITEM_PICKER( oldWires.PopFront(), UR_WIRE_IMAGE );
+        oldItems.PushItem( picker );
+    }
+
+    SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
+
+    // Add the new wires
     screen->Append( s_wires );
 
     // Correct and remove segments that need to be merged.
@@ -265,19 +276,6 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         screen->Append( AddJunction( DC, startPoint ) );
 
     m_canvas->Refresh();
-
-    // Put the snap shot of the previous wire, buses, and junctions in the undo/redo list.
-    PICKED_ITEMS_LIST oldItems;
-
-    oldItems.m_Status = UR_WIRE_IMAGE;
-
-    while( s_oldWires.GetCount() != 0 )
-    {
-        ITEM_PICKER picker = ITEM_PICKER( s_oldWires.PopFront(), UR_WIRE_IMAGE );
-        oldItems.PushItem( picker );
-    }
-
-    SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
 
     OnModify();
 }
@@ -396,20 +394,19 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPositio
 
 /* Abort function for wire, bus or line creation
  */
-static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC )
+static void AbortCreateNewLine( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
-    SCH_SCREEN* screen = (SCH_SCREEN*) Panel->GetScreen();
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
 
     if( screen->GetCurItem() )
     {
-        s_wires.DeleteAll();
-        s_oldWires.DeleteAll();
+        s_wires.DeleteAll();    // Free the list, for a future usage
         screen->SetCurItem( NULL );
-        Panel->Refresh();
+        aPanel->Refresh();
     }
     else
     {
-        SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) Panel->GetParent();
+        SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
         parent->SetRepeatItem( NULL );
     }
 
