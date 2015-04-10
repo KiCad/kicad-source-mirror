@@ -66,8 +66,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-10 13:02+0100\n"
-"PO-Revision-Date: 2015-04-10 13:02+0100\n"
+"POT-Creation-Date: 2015-04-10 16:21+0100\n"
+"PO-Revision-Date: 2015-04-10 16:21+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -890,7 +890,7 @@ msgstr "Posiziona blocco"
 
 #: pcbnew/modedit_onclick.cpp:252
 msgid "Copy Block (shift + drag mouse)"
-msgstr "Copia blocco (shift + trascina mouse)"
+msgstr "Copia blocco (maiusc + trascina mouse)"
 
 #: pcbnew/modedit_onclick.cpp:255
 msgid "Mirror Block (alt + drag mouse)"
@@ -902,7 +902,7 @@ msgstr "Ruota blocco (ctrl + trascina il mouse)"
 
 #: pcbnew/modedit_onclick.cpp:261
 msgid "Delete Block (shift+ctrl + drag mouse)"
-msgstr "Cancella blocco (shift + ctrl + trascina il mouse)"
+msgstr "Cancella blocco (maiusc + ctrl + trascina il mouse)"
 
 #: pcbnew/modedit_onclick.cpp:264
 msgid "Move Block Exactly"
@@ -10296,11 +10296,11 @@ msgstr "Orientamento trapezio:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:211 eeschema/sch_line.cpp:476
 msgid "Horiz."
-msgstr "Orrizontale"
+msgstr "Oriz."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:211 eeschema/sch_line.cpp:474
 msgid "Vert."
-msgstr "Verticale"
+msgstr "Vert."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:225
 msgid "Parent footprint orientation"
@@ -13675,7 +13675,7 @@ msgstr "Testo segnaposto"
 #: common/dialogs/dialog_page_settings_base.cpp:46
 #: common/dialogs/dialog_page_settings.cpp:707
 msgid "Landscape"
-msgstr "Orrizzontale"
+msgstr "Orizzontale"
 
 #: common/dialogs/dialog_page_settings_base.cpp:46
 #: common/dialogs/dialog_page_settings.cpp:269
@@ -13822,11 +13822,11 @@ msgstr "Visualizzatore librerie"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Mirror X"
-msgstr "Specchia orrizzontale"
+msgstr "Ribalta in X"
 
 #: common/dialogs/dialog_image_editor_base.cpp:36
 msgid "Mirror Y"
-msgstr "Specchia verticale"
+msgstr "Ribalta in Y"
 
 #: common/dialogs/dialog_image_editor_base.cpp:42
 msgid "Grey"
@@ -13834,15 +13834,15 @@ msgstr "Scala di grigi"
 
 #: common/dialogs/dialog_image_editor_base.cpp:45
 msgid "Half Size"
-msgstr "Dimezza"
+msgstr "Mezza dimensione"
 
 #: common/dialogs/dialog_image_editor_base.cpp:49
 msgid "Undo Last"
-msgstr "Annulla"
+msgstr "Annulla l'ultimo"
 
 #: common/dialogs/dialog_image_editor_base.cpp:52
 msgid "Image Scale:"
-msgstr "Scala:"
+msgstr "Scala immagine:"
 
 #: common/dialogs/dialog_page_settings.cpp:61
 msgid "A4 210x297mm"
@@ -14149,15 +14149,15 @@ msgstr "Seleziona voce"
 
 #: eeschema/libedit_onrightclick.cpp:340 eeschema/onrightclick.cpp:833
 msgid "Mirror Block ||"
-msgstr "Specchia blocco orrizzontale"
+msgstr "Ribalta blocco ||"
 
 #: eeschema/libedit_onrightclick.cpp:342 eeschema/onrightclick.cpp:836
 msgid "Mirror Block --"
-msgstr "Specchia blocco verticale"
+msgstr "Ribalta blocco --"
 
 #: eeschema/libedit_onrightclick.cpp:344
 msgid "Rotate Block ccw"
-msgstr "Ruota blocco"
+msgstr "Ruota blocco antiorario"
 
 #: eeschema/template_fieldnames.cpp:39 eeschema/libedit.cpp:510
 #: eeschema/lib_field.cpp:602
@@ -17024,7 +17024,7 @@ msgstr "Sposta il il campo opzionale selezionato su di una posizione"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:56
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
 msgid "Horiz. Justify"
-msgstr "Allineamento orrizontale"
+msgstr "Allineamento orizzontale"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:58
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
@@ -17573,11 +17573,11 @@ msgstr "Orientamento (in decimi di grado)"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
 msgid "Mirror ---"
-msgstr "Specchia orrizontale"
+msgstr "Ribalta --"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
 msgid "Mirror |"
-msgstr "Specchia verticale"
+msgstr "Ribalta ||"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:64
 msgid "Converted Shape"
