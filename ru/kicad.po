@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-08 18:25+0300\n"
-"PO-Revision-Date: 2015-04-08 19:04+0300\n"
+"POT-Creation-Date: 2015-04-10 18:45+0300\n"
+"PO-Revision-Date: 2015-04-10 18:45+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -1880,119 +1880,119 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER ошибка записи"
 msgid "Colors"
 msgstr "Цвета"
 
-#: common/wildcards_and_files_ext.cpp:68
+#: common/wildcards_and_files_ext.cpp:69
 msgid "KiCad drawing symbol file (*.sym)|*.sym"
 msgstr "Файлы графических символов KiCad (*.sym)|*.sym"
 
-#: common/wildcards_and_files_ext.cpp:69
+#: common/wildcards_and_files_ext.cpp:70
 msgid "KiCad component library file (*.lib)|*.lib"
 msgstr "Файлы библиотек компонентов KiCad (*.lib)|*.lib"
 
-#: common/wildcards_and_files_ext.cpp:70
+#: common/wildcards_and_files_ext.cpp:71
 msgid "KiCad project files (*.pro)|*.pro"
 msgstr "Файлы проекта KiCad (*.pro)|*.pro"
 
-#: common/wildcards_and_files_ext.cpp:71
+#: common/wildcards_and_files_ext.cpp:72
 msgid "KiCad schematic files (*.sch)|*.sch"
 msgstr "Файлы схемы KiCad (*.sch)|*.sch"
 
-#: common/wildcards_and_files_ext.cpp:72
+#: common/wildcards_and_files_ext.cpp:73
 msgid "KiCad netlist files (*.net)|*.net"
 msgstr "Файлы списка цепей KiCad (*.net)|*.net"
 
-#: common/wildcards_and_files_ext.cpp:73
+#: common/wildcards_and_files_ext.cpp:74
 msgid "Gerber files (*.pho)|*.pho"
 msgstr "Файлы Gerber (*.pho)|*.pho"
 
-#: common/wildcards_and_files_ext.cpp:74
+#: common/wildcards_and_files_ext.cpp:75
 msgid "KiCad printed circuit board files (*.brd)|*.brd"
 msgstr "Файлы печатной платы KiCad (*.brd)|*.brd"
 
-#: common/wildcards_and_files_ext.cpp:75
+#: common/wildcards_and_files_ext.cpp:76
 msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 msgstr "Eagle ver. 6.x XML PCB файлы (*.brd)|*.brd"
 
-#: common/wildcards_and_files_ext.cpp:76
+#: common/wildcards_and_files_ext.cpp:77
 msgid "P-Cad 200x ASCII PCB files (*.pcb)|*.pcb"
 msgstr "P-Cad 200x ASCII PCB файлы (*.pcb)|*.pcb"
 
-#: common/wildcards_and_files_ext.cpp:77
+#: common/wildcards_and_files_ext.cpp:78
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 msgstr "Файлы печатной платы s-формата (*.kicad_pcb)|*.kicad_pcb"
 
-#: common/wildcards_and_files_ext.cpp:78
+#: common/wildcards_and_files_ext.cpp:79
 msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
 msgstr "Файлы посадочных мест KiCad s-expre (*.kicad_mod)|*.kicad_mod"
 
-#: common/wildcards_and_files_ext.cpp:79
+#: common/wildcards_and_files_ext.cpp:80
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
 msgstr "Файлы библиотек посадочных мест KiCad s-expre (*.pretty)|*.pretty"
 
-#: common/wildcards_and_files_ext.cpp:80
+#: common/wildcards_and_files_ext.cpp:81
 msgid "Legacy footprint library file (*.mod)|*.mod"
 msgstr "Файлы библиотек посадочных мест KiCad (*.mod)|*.mod"
 
-#: common/wildcards_and_files_ext.cpp:81
+#: common/wildcards_and_files_ext.cpp:82
 msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
 msgstr "Файлы библиотек Eagle ver. 6.x XML (*.lbr)|*.lbr"
 
-#: common/wildcards_and_files_ext.cpp:82
+#: common/wildcards_and_files_ext.cpp:83
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
 msgstr "Файл библиотеки посадочных мест Geda PCB (*.fp)|*.fp"
 
-#: common/wildcards_and_files_ext.cpp:83
+#: common/wildcards_and_files_ext.cpp:84
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
 msgstr "Файлы записанных макросов KiCad (*.mcr)|*.mcr"
 
-#: common/wildcards_and_files_ext.cpp:84
+#: common/wildcards_and_files_ext.cpp:85
 msgid "Component-footprint link file (*.cmp)|*cmp"
 msgstr "Файлы соответствия элемент-посадочное место (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:85
+#: common/wildcards_and_files_ext.cpp:86
 msgid "Page layout descr file (*.kicad_wks)|*kicad_wks"
 msgstr "Файл описания листа (*.kicad_wks)|*.kicad_wks"
 
-#: common/wildcards_and_files_ext.cpp:87
+#: common/wildcards_and_files_ext.cpp:88
 msgid "All files (*)|*"
 msgstr "Все файлы (*)|*"
 
-#: common/wildcards_and_files_ext.cpp:90
+#: common/wildcards_and_files_ext.cpp:91
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr "Файлы соответствия элемент/посадочное место (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:93
+#: common/wildcards_and_files_ext.cpp:94
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "Файлы сверловки (*.drl)|*.drl;*.DRL"
 
-#: common/wildcards_and_files_ext.cpp:94
+#: common/wildcards_and_files_ext.cpp:95
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "SVG файлы (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:95
+#: common/wildcards_and_files_ext.cpp:96
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Файлы PDF (*.pdf)|*.pdf"
 
-#: common/wildcards_and_files_ext.cpp:96
+#: common/wildcards_and_files_ext.cpp:97
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Файлы PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:97
+#: common/wildcards_and_files_ext.cpp:98
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "Файлы отчета (.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:98
+#: common/wildcards_and_files_ext.cpp:99
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Файлы размещения посадочных мест (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:99
+#: common/wildcards_and_files_ext.cpp:100
 msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
 msgstr "Vrml и x3d файлы (*.wrl *.x3d)|*.wrl;*.x3d"
 
-#: common/wildcards_and_files_ext.cpp:100
+#: common/wildcards_and_files_ext.cpp:101
 msgid "IDFv3 component files (*.idf)|*.idf"
 msgstr "Файлы компонентов IDFv3 (*.idf)|*.idf"
 
-#: common/wildcards_and_files_ext.cpp:101
+#: common/wildcards_and_files_ext.cpp:102
 msgid "Text files (*.txt)|*.txt"
 msgstr "Текстовые файлы (*.txt)|*.txt"
 
@@ -2297,7 +2297,7 @@ msgstr "Ошибка конфигурации"
 msgid "Project: '%s'  (netlist: '%s')"
 msgstr "Проект: '%s'  (список цепей: '%s')"
 
-#: cvpcb/cvframe.cpp:762 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1248
+#: cvpcb/cvframe.cpp:762 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1247
 #: kicad/prjconfig.cpp:277 pcbnew/moduleframe.cpp:783 pcbnew/pcbframe.cpp:965
 msgid " [Read Only]"
 msgstr " [Только чтение]"
@@ -5523,7 +5523,7 @@ msgstr "%s найден, но %s не найден"
 msgid "Component %s not found"
 msgstr "Компонент %s не найден"
 
-#: eeschema/find.cpp:454
+#: eeschema/find.cpp:473
 #, c-format
 msgid "No item found matching %s."
 msgstr "Ничего не найдено для %s."
@@ -7874,31 +7874,31 @@ msgstr ""
 "'%s'\n"
 "перед закрытием?"
 
-#: eeschema/schframe.cpp:744
+#: eeschema/schframe.cpp:743
 msgid "Draw wires and buses in any direction"
 msgstr "Цепи и шины в любом направлении"
 
-#: eeschema/schframe.cpp:745
+#: eeschema/schframe.cpp:744
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Цепи и шины только вертикально и горизонтально"
 
-#: eeschema/schframe.cpp:754
+#: eeschema/schframe.cpp:753
 msgid "Do not show hidden pins"
 msgstr "Не показывать скрытые выводы"
 
-#: eeschema/schframe.cpp:755 eeschema/tool_sch.cpp:304
+#: eeschema/schframe.cpp:754 eeschema/tool_sch.cpp:304
 msgid "Show hidden pins"
 msgstr "Показать скрытые выводы"
 
-#: eeschema/schframe.cpp:859
+#: eeschema/schframe.cpp:858
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/schframe.cpp:878
+#: eeschema/schframe.cpp:877
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/schframe.cpp:891
+#: eeschema/schframe.cpp:890
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr ""
@@ -7906,15 +7906,15 @@ msgstr ""
 "\n"
 "Используйте Отрыть вместо Создать"
 
-#: eeschema/schframe.cpp:911
+#: eeschema/schframe.cpp:910
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/schframe.cpp:1029
+#: eeschema/schframe.cpp:1028
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1251
+#: eeschema/schframe.cpp:1250
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -8285,17 +8285,22 @@ msgstr "Выровнять по Y"
 msgid "Image Justify Offset"
 msgstr "Выровнять смещение изображения"
 
-#: gerbview/class_GERBER.cpp:466
+#: gerbview/class_GERBER.cpp:469
+#, c-format
+msgid "Layer %d (%s, %s, %s)"
+msgstr "Слой %d (%s, %s, %s)"
+
+#: gerbview/class_GERBER.cpp:476
 #, c-format
 msgid "Layer %d (%s, %s)"
 msgstr "Слой %d (%s, %s)"
 
-#: gerbview/class_GERBER.cpp:470
+#: gerbview/class_GERBER.cpp:482
 #, c-format
 msgid "Layer %d *"
 msgstr "Слой %d *"
 
-#: gerbview/class_GERBER.cpp:473 gerbview/select_layers_to_pcb.cpp:183
+#: gerbview/class_GERBER.cpp:485 gerbview/select_layers_to_pcb.cpp:183
 #, c-format
 msgid "Layer %d"
 msgstr "Слой %d"
@@ -17535,7 +17540,7 @@ msgid "Save GenCAD Board File"
 msgstr "Сохранить в формате GenCAD"
 
 #: pcbnew/exporters/export_idf.cpp:571 pcbnew/exporters/export_idf.cpp:580
-#: pcbnew/exporters/export_idf.cpp:588 pcbnew/exporters/export_vrml.cpp:1442
+#: pcbnew/exporters/export_idf.cpp:588 pcbnew/exporters/export_vrml.cpp:1435
 msgid "IDF Export Failed:\n"
 msgstr "IDF экспорт не удался:\n"
 
