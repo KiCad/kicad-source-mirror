@@ -66,8 +66,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-10 11:33+0100\n"
-"PO-Revision-Date: 2015-04-10 11:33+0100\n"
+"POT-Creation-Date: 2015-04-10 13:02+0100\n"
+"PO-Revision-Date: 2015-04-10 13:02+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1376,7 +1376,7 @@ msgstr "Aggiorna vista"
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:88
 msgid "Zoom auto"
-msgstr "Centra"
+msgstr "Zoom auto"
 
 #: pcbnew/footprint_wizard_frame.cpp:622
 msgid "Add footprint to board"
@@ -6447,7 +6447,7 @@ msgstr ""
 "Esportazione VRML fallita:\n"
 "Impossibile aggiungere fori ai contorni."
 
-#: pcbnew/exporters/export_vrml.cpp:1442 pcbnew/exporters/export_idf.cpp:571
+#: pcbnew/exporters/export_vrml.cpp:1435 pcbnew/exporters/export_idf.cpp:571
 #: pcbnew/exporters/export_idf.cpp:580 pcbnew/exporters/export_idf.cpp:588
 msgid "IDF Export Failed:\n"
 msgstr "Esportazione IDF fallita:\n"
@@ -10169,7 +10169,7 @@ msgstr "Sinistra"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Center"
-msgstr "Centrato"
+msgstr "Centra"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
 #: eeschema/lib_pin.cpp:166
