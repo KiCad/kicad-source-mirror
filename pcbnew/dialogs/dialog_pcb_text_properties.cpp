@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras <jean-pierre.charras@gpisa-lab.inpg.fr>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,6 +153,18 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     EDA_TEXT_HJUSTIFY_T hJustify = m_SelectedPCBText->GetHorizJustify();
     m_justifyChoice->SetSelection( (int) hJustify + 1 );
 
+    // Manually set tab order
+    m_SizeXCtrl->MoveAfterInTabOrder( m_TextContentCtrl );
+    m_SizeYCtrl->MoveAfterInTabOrder( m_SizeXCtrl );
+    m_ThicknessCtrl->MoveAfterInTabOrder( m_SizeYCtrl );
+    m_PositionXCtrl->MoveAfterInTabOrder( m_ThicknessCtrl );
+    m_PositionYCtrl->MoveAfterInTabOrder( m_PositionXCtrl );
+    m_OrientationCtrl->MoveAfterInTabOrder( m_PositionYCtrl );
+    m_LayerSelectionCtrl->MoveAfterInTabOrder( m_OrientationCtrl );
+    m_StyleCtrl->MoveAfterInTabOrder( m_LayerSelectionCtrl );
+    m_DisplayCtrl->MoveAfterInTabOrder( m_StyleCtrl );
+    m_justifyChoice->MoveAfterInTabOrder( m_DisplayCtrl );
+
     // Set focus on most important control
     m_TextContentCtrl->SetFocus();
     m_TextContentCtrl->SetSelection( -1, -1 );
@@ -178,7 +190,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     // having texts on edge cut layer for instance
     if( m_LayerSelectionCtrl->GetLayerSelection() < 0 )
     {
-        wxMessageBox( wxT("No layer selected, Please select the text layer") );
+        wxMessageBox( _( "No layer selected, Please select the text layer" ) );
         return;
     }
 
@@ -236,7 +248,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
 
     // Set the new thickness
     m_SelectedPCBText->SetThickness( ValueFromString( g_UserUnit,
-                                                            m_ThicknessCtrl->GetValue() ) );
+                                                      m_ThicknessCtrl->GetValue() ) );
 
     // Test for acceptable values for thickness and size and clamp if fails
     int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->GetThickness(),
