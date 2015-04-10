@@ -54,20 +54,8 @@ S3D_MODEL_PARSER *S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
 
 
 int S3D_MASTER::ReadData( S3D_MODEL_PARSER* aParser )
-{    
-    if( m_Shape3DName.IsEmpty() )
-    {
-        //DBG( printf("m_Shape3DName.IsEmpty") );
-        return -1;
-    }
-
-    if( m_Shape3DFullFilename.IsEmpty() )
-    {
-        //DBG( printf("m_Shape3DFullFilename.IsEmpty") );
-        return -1;
-    }
-
-    if( aParser == NULL )
+{
+    if( m_Shape3DFullFilename.IsEmpty() || aParser == NULL )
         return -1;
 
     wxString filename = m_Shape3DFullFilename;
@@ -107,7 +95,7 @@ void S3D_MASTER::Render( bool aIsRenderingJustNonTransparentObjects,
 {
     if( m_parser == NULL )
         return;
-    
+
     double aVrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
 
     glScalef( aVrmlunits_to_3Dunits, aVrmlunits_to_3Dunits, aVrmlunits_to_3Dunits );
@@ -141,7 +129,7 @@ CBBOX &S3D_MASTER::getFastAABBox( )
 {
     if( !m_fastAABBox.IsInitialized() )
         calcBBox();
-    
+
     return m_fastAABBox;
 }
 
@@ -152,7 +140,7 @@ void S3D_MASTER::calcBBox()
         return;
 
     bool firstBBox = true;
-    
+
     for( unsigned int idx = 0; idx < m_parser->childs.size(); idx++ )
         if( firstBBox )
         {
@@ -175,7 +163,7 @@ void S3D_MASTER::calcBBox()
     fullTransformMatrix = glm::translate( fullTransformMatrix,  S3D_VERTEX( m_MatPosition.x * SCALE_3D_CONV,
                                                                             m_MatPosition.y * SCALE_3D_CONV,
                                                                             m_MatPosition.z * SCALE_3D_CONV) );
-    
+
     if( m_MatRotation.z != 0.0 )
         fullTransformMatrix = glm::rotate( fullTransformMatrix, glm::radians(-(float)m_MatRotation.z), S3D_VERTEX( 0.0f, 0.0f, 1.0f ) );
     if( m_MatRotation.y != 0.0 )
@@ -184,7 +172,7 @@ void S3D_MASTER::calcBBox()
         fullTransformMatrix = glm::rotate( fullTransformMatrix, glm::radians(-(float)m_MatRotation.x), S3D_VERTEX( 1.0f, 0.0f, 0.0f ) );
 
      fullTransformMatrix = glm::scale( fullTransformMatrix, S3D_VERTEX( m_MatScale.x, m_MatScale.y, m_MatScale.z ) );
-    
+
     // Apply transformation
     m_fastAABBox = m_BBox;
     m_fastAABBox.ApplyTransformationAA( fullTransformMatrix );

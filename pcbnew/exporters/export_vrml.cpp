@@ -4,7 +4,7 @@
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
  * Copyright (C) 2014  Cirilo Bernado
  * Copyright (C) 2013 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -893,7 +893,6 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
         const CPOLYGONS_LIST& poly = zone->GetFilledPolysList();
         int nvert = poly.GetCornersCount();
         int i = 0;
-        bool cutout = false;
 
         while( i < nvert )
         {
@@ -916,13 +915,7 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
                 ++i;
             }
 
-            // KiCad ensures that the first polygon is the outline
-            // and all others are holes
-             vl->EnsureWinding( seg, cutout );
-
-             if( !cutout )
-                 cutout = true;
-
+             vl->EnsureWinding( seg, false );
             ++i;
         }
     }
