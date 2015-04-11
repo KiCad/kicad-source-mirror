@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-10 18:45+0300\n"
-"PO-Revision-Date: 2015-04-10 18:45+0300\n"
+"POT-Creation-Date: 2015-04-11 09:03+0300\n"
+"PO-Revision-Date: 2015-04-11 09:06+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -13992,7 +13992,7 @@ msgstr ""
 "Принудительно назначен передний слой шелкографии. Пожалуйста, поправьте это"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:231
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:248 pcbnew/dimension.cpp:202
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:260 pcbnew/dimension.cpp:202
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr "Толщина линии текста больше размера текста. Текст может быть нечитаем"
 
@@ -16581,6 +16581,10 @@ msgstr ""
 "Предупреждение:\n"
 "Контактная площадка будет перевернута на плате.\n"
 "Верхний и нижний слои будут изменены местами."
+
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:193
+msgid "No layer selected, Please select the text layer"
+msgstr "Слой не выбран, пожалуйста выберите текстовый слой"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:29
 msgid "Enter the text placed on selected layer."
