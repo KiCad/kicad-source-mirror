@@ -66,8 +66,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-10 16:21+0100\n"
-"PO-Revision-Date: 2015-04-10 16:21+0100\n"
+"POT-Creation-Date: 2015-04-11 09:33+0100\n"
+"PO-Revision-Date: 2015-04-11 09:33+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -3721,7 +3721,7 @@ msgstr ""
 "Questo elemento ha un id strato illegale.\n"
 "Ora, è forzato sullo strato grafico. Prego, sistemarlo."
 
-#: pcbnew/dimension.cpp:202 pcbnew/dialogs/dialog_pcb_text_properties.cpp:248
+#: pcbnew/dimension.cpp:202 pcbnew/dialogs/dialog_pcb_text_properties.cpp:260
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:231
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
@@ -7041,6 +7041,10 @@ msgstr "Non valida"
 #, c-format
 msgid "Validating libraries %d/%d"
 msgstr "Validazione librerie %d/%d"
+
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:193
+msgid "No layer selected, Please select the text layer"
+msgstr "Nessuno strato selezionato. Selezionare uno strato di testo."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:53
 msgid "Numerals (0,1,2,...,9,10)"
