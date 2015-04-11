@@ -146,8 +146,6 @@ int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
             module->SetLastEditTime();
             module->Pads().PushBack( pad );
 
-            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-
             // Set the relative pad position
             // ( pad position for module orient, 0, and relative to the module position)
             pad->SetLocalCoord();
