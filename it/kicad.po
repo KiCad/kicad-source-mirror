@@ -66,8 +66,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 09:33+0100\n"
-"PO-Revision-Date: 2015-04-11 09:33+0100\n"
+"POT-Creation-Date: 2015-04-11 10:27+0100\n"
+"PO-Revision-Date: 2015-04-11 10:27+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1362,7 +1362,7 @@ msgstr "Ingrandisci"
 #: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:82
 #: pcbnew/help_common_strings.h:20 eeschema/help_common_strings.h:44
 msgid "Zoom out"
-msgstr "Riduci"
+msgstr "Rimpicciolisci"
 
 #: pcbnew/footprint_wizard_frame.cpp:606 pcbnew/tool_modview.cpp:89
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:235
@@ -1376,7 +1376,7 @@ msgstr "Aggiorna vista"
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:88
 msgid "Zoom auto"
-msgstr "Zoom auto"
+msgstr "Inquadra tutto"
 
 #: pcbnew/footprint_wizard_frame.cpp:622
 msgid "Add footprint to board"
@@ -1484,19 +1484,19 @@ msgstr "Chiudi il visualizzatore impronte"
 #: pcbnew/menubar_pcbframe.cpp:329 eeschema/tool_viewlib.cpp:225
 #: eeschema/menubar.cpp:245 eeschema/menubar_libedit.cpp:161
 msgid "Zoom &In"
-msgstr "Zoom &in"
+msgstr "&Ingrandisci"
 
 #: pcbnew/tool_modview.cpp:161 pcbnew/menubar_modedit.cpp:220
 #: pcbnew/menubar_pcbframe.cpp:333 eeschema/tool_viewlib.cpp:229
 #: eeschema/menubar.cpp:249 eeschema/menubar_libedit.cpp:165
 msgid "Zoom &Out"
-msgstr "Zoom &out"
+msgstr "Rimpicci&olisci"
 
 #: pcbnew/tool_modview.cpp:165 pcbnew/menubar_modedit.cpp:224
 #: pcbnew/menubar_pcbframe.cpp:337 eeschema/tool_viewlib.cpp:233
 #: eeschema/menubar.cpp:253 eeschema/menubar_libedit.cpp:169
 msgid "&Fit on Screen"
-msgstr "In&quadra sullo schermo"
+msgstr "Per&fetto su schermo"
 
 #: pcbnew/tool_modview.cpp:170 pcbnew/menubar_modedit.cpp:229
 #: pcbnew/menubar_pcbframe.cpp:342 eeschema/tool_viewlib.cpp:238
@@ -4957,7 +4957,7 @@ msgstr "Mostra piazzole"
 #: pcbnew/basepcbframe.cpp:839 pcbnew/hotkeys.cpp:147 pcbnew/hotkeys.cpp:149
 #: eeschema/hotkeys.cpp:89 pagelayout_editor/hotkeys.cpp:72
 msgid "Zoom Auto"
-msgstr "Zoom Auto"
+msgstr "Inquadra tutto"
 
 #: pcbnew/basepcbframe.cpp:844
 msgid "Zoom "
@@ -5484,12 +5484,12 @@ msgstr "Aggiorna zoom"
 #: pcbnew/hotkeys.cpp:163 pcbnew/hotkeys.cpp:165 eeschema/hotkeys.cpp:106
 #: eeschema/hotkeys.cpp:108 pagelayout_editor/hotkeys.cpp:77
 msgid "Zoom In"
-msgstr "Zoom in"
+msgstr "Ingrandisci"
 
 #: pcbnew/hotkeys.cpp:170 pcbnew/hotkeys.cpp:172 eeschema/hotkeys.cpp:113
 #: eeschema/hotkeys.cpp:115 pagelayout_editor/hotkeys.cpp:76
 msgid "Zoom Out"
-msgstr "Zoom out"
+msgstr "Rimpicciolisci"
 
 #: pcbnew/hotkeys.cpp:181 common/dialogs/dialog_hotkeys_editor_base.cpp:36
 #: eeschema/hotkeys.cpp:123 pagelayout_editor/hotkeys.cpp:89
@@ -9549,7 +9549,7 @@ msgstr "Opzioni editor"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:157
 msgid "Zoom into the options table for current row"
-msgstr "Zoom nella tabella delle opzioni per la riga corrente"
+msgstr "Entra nella tabella delle opzioni per la riga corrente"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:168
 msgid "Path Substitutions"
@@ -14764,7 +14764,7 @@ msgstr "Trascina blocco"
 
 #: eeschema/onrightclick.cpp:839
 msgid "Rotate Block CCW"
-msgstr "Ruota blocco CCW"
+msgstr "Ruota blocco antiorario"
 
 #: eeschema/onrightclick.cpp:845
 msgid "Copy to Clipboard"
@@ -14772,15 +14772,15 @@ msgstr "Copia su appunti"
 
 #: eeschema/onrightclick.cpp:866
 msgid "Move Image"
-msgstr "Sposta"
+msgstr "Sposta immagine"
 
 #: eeschema/onrightclick.cpp:871
 msgid "Rotate Image"
-msgstr "Ruota "
+msgstr "Ruota immagine"
 
 #: eeschema/onrightclick.cpp:885
 msgid "Delete Image"
-msgstr "Cancella"
+msgstr "Cancella immagine"
 
 #: eeschema/onrightclick.cpp:897
 msgid "Move Bus Entry"
@@ -18956,15 +18956,15 @@ msgstr "Mostra contorni in modalità linea"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:221
 #: pcbnew/dialogs/dialog_display_options_base.h:72
 msgid "Display options"
-msgstr "Opzioni di visualizzazione"
+msgstr "Opzioni schermo"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:226
 msgid "Zoom in (F1)"
-msgstr "Zoom in (F1)"
+msgstr "Ingrandisci (F1)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:229
 msgid "Zoom out (F2)"
-msgstr "Zoom out (F2)"
+msgstr "Rimpicciolisci (F2)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:232
 msgid "Redraw view (F3)"
@@ -18972,7 +18972,7 @@ msgstr "Aggiorna vista (F3)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:235
 msgid "Zoom auto (Home)"
-msgstr "Zoom auto (Home)"
+msgstr "Inquadra tutto (Home)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:239
 msgid "3D Display (Alt+3)"
@@ -21854,7 +21854,7 @@ msgstr "Cerca componenti e testo nella scheda corrente"
 
 #: pcbnew/help_common_strings.h:21
 msgid "Zoom to fit the board on the screen"
-msgstr "Zoom per centrare la scheda sullo schermo"
+msgstr "Zoom perfetto della scheda sullo schermo"
 
 #: pcbnew/help_common_strings.h:22
 msgid "Redraw the screen of the board"
