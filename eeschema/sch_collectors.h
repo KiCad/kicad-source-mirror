@@ -260,6 +260,7 @@ public:
         m_foundIndex = 0;
         SetForceSearch( false );
         m_sheetPath = NULL;
+        m_lib_hash = 0;
     }
 
     void Empty()

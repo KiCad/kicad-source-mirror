@@ -950,7 +950,8 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
                     case PCB_TEXT_T:
                     {
                         EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( newItem );
-                        text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
+                        if( text )
+                            text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
 
                         originalItemsModified = true;
                         break;

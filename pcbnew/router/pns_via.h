@@ -35,7 +35,11 @@ class PNS_VIA : public PNS_ITEM
 public:
     PNS_VIA() :
         PNS_ITEM( VIA )
-    {}
+    {
+        m_diameter = 2;     // Dummy value
+        m_drill = 0;
+        m_viaType = VIA_THROUGH;
+    }
 
     PNS_VIA( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
              int aDiameter, int aDrill, int aNet = -1, VIATYPE_T aViaType = VIA_THROUGH ) :

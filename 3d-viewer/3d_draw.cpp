@@ -793,7 +793,11 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
             }
         }
 
-        // Draw copper zones
+        // Draw copper zones. Note:
+        // * if the holes are removed from copper zones
+        // the polygons are stored in bufferPolys (which contains all other polygons)
+        // * if the holes are NOT removed from copper zones
+        // the polygons are stored in bufferZonesPolys
         if( isEnabled( FL_ZONE ) )
         {
             for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
@@ -844,13 +848,13 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         // Add polygons, without holes
         bufferPolys.ExportTo( currLayerPolyset );
 
-        // Add holes in polygon list
+        // Add through holes (created only once) in current polygon holes list
         currLayerHoles.Append( allLayerHoles );
 
         if( currLayerHoles.GetCornersCount() > 0 )
             currLayerHoles.ExportTo( polysetHoles );
 
-        // Merge polygons, remove holes
+        // Merge polygons, and remove holes
         currLayerPolyset -= polysetHoles;
 
         int thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
@@ -866,40 +870,39 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
             SetGLColor( color );
         }
 
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
-
         bufferPolys.RemoveAllContours();
         bufferPolys.ImportFrom( currLayerPolyset );
-        Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
-                                            thickness,
+
+        // If holes are removed from copper zones, bufferPolys contains all polygons
+        // to draw (tracks+zones+texts).
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
+        Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos, thickness,
                                             GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
 
-        if( isEnabled( FL_USE_COPPER_THICKNESS ) == true )
+        // If holes are not removed from copper zones (for calculation time reasons,
+        // the zone polygons are stored in bufferZonesPolys and have to be drawn now:
+        if( bufferZonesPolys.GetCornersCount() )
         {
-            thickness -= ( 0.04 * IU_PER_MM );
+            glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
+            Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos, thickness,
+                                    GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
         }
 
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
-
-        if( bufferZonesPolys.GetCornersCount() )
-            Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos,
-                                                thickness,
-                                                GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
         throughHolesListBuilt = true;
     }
 
-    if ( !isEnabled( FL_SHOW_BOARD_BODY ) ||
-          isEnabled( FL_USE_COPPER_THICKNESS ) )
+    if( !isEnabled( FL_SHOW_BOARD_BODY ) || isEnabled( FL_USE_COPPER_THICKNESS ) )
     {
         setGLCopperColor();
 
         // Draw vias holes (vertical cylinders)
         for( const TRACK* track = pcb->m_Track;  track;  track = track->Next() )
         {
-            const VIA *via = dynamic_cast<const VIA*>(track);
-
-            if( via )
+            if( track->Type() == PCB_VIA_T )
+            {
+                const VIA *via = static_cast<const VIA*>(track);
                 draw3DViaHole( via );
+            }
         }
 
         // Draw pads holes (vertical cylinders)

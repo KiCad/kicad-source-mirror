@@ -119,6 +119,12 @@ public:
 class NETINFO_MAPPING
 {
 public:
+    NETINFO_MAPPING()
+    {
+        m_board = NULL;
+    }
+
+
     /**
      * Function SetBoard
      * Sets a BOARD object that is used to prepare the net code map.

@@ -435,16 +435,15 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
     NETLIST_OBJECT* candidate;
 
     // Pass 1: find the best name for labelled nets:
-    item = NULL;
     candidate = NULL;
     for( unsigned ii = 0; ii <= size(); ii++ )
     {
-        if( ii == size() ) // last item already found
-            netcode = -2;
+        if( ii == size() ) // last item already tested
+            item = NULL;
         else
             item = GetItem( ii );
 
-        if( netcode != item->GetNet() )     // End of net found
+        if( !item || netcode != item->GetNet() )     // End of net found
         {
             if( candidate )         // One or more labels exists, find the best
             {
@@ -452,7 +451,7 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
                     GetItem( jj )->SetNetNameCandidate( candidate );
             }
 
-            if( netcode == -2 )
+            if( item == NULL )
                 break;
 
             netcode = item->GetNet();
@@ -512,8 +511,10 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
     {
         if( ii < list.size() )
             item = list.GetItem( ii );
+        else
+            item = NULL;
 
-        if( netcode != item->GetNet() || ii >= list.size() )     // End of net found
+        if( !item || netcode != item->GetNet() )     // End of net found
         {
             if( candidate )
             {
@@ -524,7 +525,7 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
                 }
             }
 
-            if( ii >= list.size() )
+            if( !item )
                 break;
 
             netcode = item->GetNet();

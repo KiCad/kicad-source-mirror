@@ -1677,7 +1677,8 @@ void PCB_BASE_EDIT_FRAME::createArray()
             case PCB_TEXT_T:
             {
                 EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( new_item );
-                text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
+                if( text )
+                    text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
 
                 break;
             }

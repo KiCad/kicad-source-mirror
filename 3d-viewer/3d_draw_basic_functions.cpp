@@ -245,12 +245,11 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     gluDeleteTess( tess );
 
     if( aThickness == 0 )
-    {
         return;
-    }
 
     // Build the 3D data : vertical side
-    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos - (aThickness / 2.0), true, aBiuTo3DUnits );
+    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos - (aThickness / 2.0),
+                                      true, aBiuTo3DUnits );
 }
 
 
@@ -294,7 +293,7 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
 
     if( aHeight )
     {
-        
+
         // Draw the vertical outer side
         Draw3D_VerticalPolygonalCylinder( outer_cornerBuffer,
                                       aHeight, aZpos, false, aBiuTo3DUnits );
