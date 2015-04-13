@@ -51,7 +51,7 @@ VRML1_MODEL_PARSER::VRML1_MODEL_PARSER( S3D_MODEL_PARSER* aModelParser )
 {
     m_ModelParser = aModelParser;
     m_Master = m_ModelParser->GetMaster();
-    m_model = NULL;
+    m_model.reset();
     m_file  = NULL;
     m_normalPerVertex = true;
     colorPerVertex = true;
@@ -88,7 +88,7 @@ bool VRML1_MODEL_PARSER::Load( const wxString& aFilename )
 
         if( strcmp( text, "Separator" ) == 0 )
         {
-            m_model = new S3D_MESH();
+            m_model.reset( new S3D_MESH() );
             m_ModelParser->childs.push_back( m_model );
             read_separator();
         }
@@ -122,18 +122,18 @@ int VRML1_MODEL_PARSER::read_separator()
         }
         else if( strcmp( text, "Separator" ) == 0 )
         {
-            S3D_MESH* parent = m_model;
+            S3D_MESH_PTR parent( m_model.get() );
 
-            S3D_MESH* new_mesh_model = new S3D_MESH();
+            S3D_MESH_PTR new_mesh_model( new S3D_MESH() );
 
             m_model->childs.push_back( new_mesh_model );
 
-            m_model = new_mesh_model;
+            m_model.reset( new_mesh_model.get() );
 
             // recursive
             read_separator();
 
-            m_model = parent;
+            m_model.reset( parent.get() );
         }
         else if( ( *text != '}' ) )
         {

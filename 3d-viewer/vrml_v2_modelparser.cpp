@@ -54,7 +54,7 @@ VRML2_MODEL_PARSER::VRML2_MODEL_PARSER( S3D_MODEL_PARSER* aModelParser )
 {
     m_ModelParser = aModelParser;
     m_Master = m_ModelParser->GetMaster();
-    m_model = NULL;
+    m_model.reset();
     m_file = NULL;
     m_normalPerVertex = true;
     colorPerVertex = true;
@@ -98,7 +98,7 @@ bool VRML2_MODEL_PARSER::Load( const wxString& aFilename )
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
 
-    loadFileModel( NULL );
+    loadFileModel( S3D_MESH_PTR() );
 
     fclose( m_file );
 
@@ -107,7 +107,7 @@ bool VRML2_MODEL_PARSER::Load( const wxString& aFilename )
 }
 
 
-bool VRML2_MODEL_PARSER::Load( const wxString& aFilename, S3D_MESH *aTransformationModel )
+bool VRML2_MODEL_PARSER::Load( const wxString& aFilename, S3D_MESH_PTR aTransformationModel )
 {
     if( aTransformationModel )
     {
@@ -141,7 +141,7 @@ bool VRML2_MODEL_PARSER::Load( const wxString& aFilename, S3D_MESH *aTransformat
 }
 
 
-int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
+int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
 {
     char text[BUFLINE_SIZE];
 
@@ -156,9 +156,9 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
 
         if( strcmp( text, "Transform" ) == 0 )
         {
-            m_model = new S3D_MESH();
+            m_model.reset( new S3D_MESH() );
 
-            S3D_MESH* save_ptr = m_model;
+            S3D_MESH_PTR save_ptr( m_model );
 
             if( read_Transform() == 0 )
             {
@@ -167,12 +167,12 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
                 if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
                      (m_model->childs.size() == 0) )
                 {
-                    delete m_model;
+                    m_model.reset();
                     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: skipping model with no points or childs" ) );
                 }
                 else
                 {
-                    if( aTransformationModel )
+                    if( aTransformationModel.get() != NULL )
                     {
                         m_model->m_translation   = aTransformationModel->m_translation;
                         m_model->m_rotation      = aTransformationModel->m_rotation;
@@ -187,14 +187,14 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
             }
             else
             {
-                delete m_model;
+                m_model.reset();
             }
         }
         else if( strcmp( text, "DEF" ) == 0 )
         {
-            m_model = new S3D_MESH();
+            m_model.reset( new S3D_MESH() );
 
-            S3D_MESH* save_ptr = m_model;
+            S3D_MESH_PTR save_ptr( m_model );
 
             if( read_DEF() == 0 )
             {
@@ -203,12 +203,12 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
                 if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
                      (m_model->childs.size() == 0) )
                 {
-                    delete m_model;
+                    m_model.reset();
                     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: skipping model with no points or childs" ) );
                 }
                 else
                 {
-                    if( aTransformationModel )
+                    if( aTransformationModel.get() != NULL )
                     {
                         m_model->m_translation   = aTransformationModel->m_translation;
                         m_model->m_rotation      = aTransformationModel->m_rotation;
@@ -223,14 +223,14 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
             }
             else
             {
-                delete m_model;
+                m_model.reset();
             }
         }
         else if( strcmp( text, "Shape" ) == 0 )
         {
-            m_model = new S3D_MESH();
+            m_model.reset( new S3D_MESH() );
 
-            S3D_MESH* save_ptr = m_model;
+            S3D_MESH_PTR save_ptr = m_model;
 
             if( read_Shape() == 0 )
             {
@@ -239,12 +239,12 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
                 if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
                      (m_model->childs.size() == 0) )
                 {
-                    delete m_model;
+                    m_model.reset();
                     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: skipping model with no points or childs" ) );
                 }
                 else
                 {
-                    if( aTransformationModel )
+                    if( aTransformationModel.get() != NULL )
                     {
                         m_model->m_translation   = aTransformationModel->m_translation;
                         m_model->m_rotation      = aTransformationModel->m_rotation;
@@ -261,7 +261,7 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
             }
             else
             {
-                delete m_model;
+                m_model.reset();
             }
         }
     }
@@ -279,7 +279,7 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH *aTransformationModel )
             for( VRML2_DEF_GROUP_MAP::iterator groupIt = m_defGroupMap.begin(); groupIt!=m_defGroupMap.end(); ++groupIt )
             {
                 wxString groupName = groupIt->first;
-                S3D_MESH* ptrModel = groupIt->second;
+                S3D_MESH_PTR ptrModel( groupIt->second );
 
 
                 if( ((ptrModel->m_Point.size() == 0) || (ptrModel->m_CoordIndex.size() == 0)) &&
@@ -326,9 +326,9 @@ int VRML2_MODEL_PARSER::read_Transform()
 
         if( strcmp( text, "Transform" ) == 0 )
         {
-            m_model = new S3D_MESH();
+            m_model.reset( new S3D_MESH() );
 
-            S3D_MESH* save_ptr = m_model;
+            S3D_MESH_PTR save_ptr( m_model );
 
             if( read_Transform() == 0 )
             {
@@ -337,7 +337,7 @@ int VRML2_MODEL_PARSER::read_Transform()
                 if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
                     (m_model->childs.size() == 0) )
                 {
-                    delete m_model;
+                    m_model.reset();
                     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: skipping model with no points or childs" ) );
                 }
                 else
@@ -352,7 +352,7 @@ int VRML2_MODEL_PARSER::read_Transform()
             }
             else
             {
-                delete m_model;
+                m_model.reset();
             }
         }
         else if( strcmp( text, "translation" ) == 0 )
@@ -463,14 +463,14 @@ int VRML2_MODEL_PARSER::read_Transform()
         else if( strcmp( text, "Shape" ) == 0 )
         {
             // Save the pointer
-            S3D_MESH* parent = m_model;
+            S3D_MESH_PTR parent( m_model );
 
-            S3D_MESH* new_mesh_model = new S3D_MESH();
+            S3D_MESH_PTR new_mesh_model( new S3D_MESH() );
 
             // Assign the current pointer
             m_model = new_mesh_model;
 
-            S3D_MESH* save_ptr = m_model;
+            S3D_MESH_PTR save_ptr = m_model;
 
             if( read_Shape() == 0 )
             {
@@ -481,7 +481,7 @@ int VRML2_MODEL_PARSER::read_Transform()
                     if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
                          (m_model->childs.size() == 0) )
                     {
-                        delete m_model;
+                        m_model.reset();
                         wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: Shape, skipping model with no points or childs" ) );
                     }
                     else
@@ -496,14 +496,14 @@ int VRML2_MODEL_PARSER::read_Transform()
                 }
                 else
                 {
-                    delete m_model;
+                    m_model.reset();
 
                     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Transform: Shape, discard child." ) );
                 }
             }
             else
             {
-                delete m_model;
+                m_model.reset();
             }
 
             m_model = parent;
@@ -540,7 +540,7 @@ int VRML2_MODEL_PARSER::read_Transform()
                     return -1;
                 }
 
-                S3D_MESH* ptrModel = groupIt->second;
+                S3D_MESH_PTR ptrModel( groupIt->second );
 
                 if( ((ptrModel->m_Point.size() == 0) || (ptrModel->m_CoordIndex.size() == 0)) &&
                      (ptrModel->childs.size() == 0) )
@@ -778,14 +778,14 @@ int VRML2_MODEL_PARSER::read_DEF()
             wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "Shape" ) );
 
             // Save the pointer
-            S3D_MESH* parent = m_model;
+            S3D_MESH_PTR parent = m_model;
 
-            S3D_MESH* new_mesh_model = new S3D_MESH();
+            S3D_MESH_PTR new_mesh_model( new S3D_MESH() );
 
             // Assign the current pointer
             m_model = new_mesh_model;
 
-            S3D_MESH* save_ptr = m_model;
+            S3D_MESH_PTR save_ptr = m_model;
 
             if( read_Shape() == 0 )
             {
@@ -794,7 +794,7 @@ int VRML2_MODEL_PARSER::read_DEF()
                 if( ((m_model->m_Point.size() == 0) || (m_model->m_CoordIndex.size() == 0)) &&
                      (m_model->childs.size() == 0) )
                 {
-                    delete m_model;
+                    m_model.reset();
                     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_DEF: Shape, skipping model with no points or childs" ) );
                 }
                 else
@@ -809,7 +809,7 @@ int VRML2_MODEL_PARSER::read_DEF()
             }
             else
             {
-                delete m_model;
+                m_model.reset();
             }
 
             m_model = parent;
@@ -824,9 +824,9 @@ int VRML2_MODEL_PARSER::read_DEF()
             wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "Group %s" ), tagName );
 
             // Save the pointer
-            S3D_MESH* parent = m_model;
+            S3D_MESH_PTR parent = m_model;
 
-            S3D_MESH* new_mesh_model = new S3D_MESH();
+            S3D_MESH_PTR new_mesh_model( new S3D_MESH() );
 
             // Assign the current pointer
             m_model = new_mesh_model;
@@ -848,7 +848,7 @@ int VRML2_MODEL_PARSER::read_DEF()
             }
             else
             {
-                delete m_model;
+                m_model.reset();
             }
 
             // Restore current model pointer

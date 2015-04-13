@@ -52,20 +52,12 @@ static const wxChar* traceX3DParser = wxT( "KI_TRACE_X3D_PARSER" );
 X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
     S3D_MODEL_PARSER( aMaster )
 {
-    m_model = NULL;
+    m_model.reset();
 }
 
 
 X3D_MODEL_PARSER::~X3D_MODEL_PARSER()
 {
-    for( unsigned int idx = 0; idx < childs.size(); idx++ )
-    {
-        if( childs[idx] )
-        {
-            delete childs[idx];
-            childs[idx] = 0;
-        }
-    }
 }
 
 
@@ -102,7 +94,7 @@ bool X3D_MODEL_PARSER::Load( const wxString& aFilename )
          node_it != transforms.end();
          node_it++ )
     {
-        m_model = new S3D_MESH();
+        m_model.reset( new S3D_MESH() );
         childs.push_back( m_model );
 
         readTransform( *node_it );

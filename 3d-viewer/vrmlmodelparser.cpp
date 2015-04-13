@@ -45,14 +45,6 @@ VRML_MODEL_PARSER::VRML_MODEL_PARSER( S3D_MASTER* aMaster ) :
 
 VRML_MODEL_PARSER::~VRML_MODEL_PARSER()
 {
-    for( unsigned int idx = 0; idx < childs.size(); idx++ )
-    {
-        if( childs[idx] )
-        {
-            delete childs[idx];
-            childs[idx] = 0;
-        }
-    }
 }
 
 bool VRML_MODEL_PARSER::Load( const wxString& aFilename )

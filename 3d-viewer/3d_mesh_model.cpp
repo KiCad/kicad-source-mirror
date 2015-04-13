@@ -68,13 +68,6 @@ S3D_MESH::S3D_MESH()
 
 S3D_MESH::~S3D_MESH()
 {
-    for( unsigned int idx = 0; idx < childs.size(); idx++ )
-    {
-        if( childs[idx] )
-        {
-            delete childs[idx];
-        }
-    }
 }
 
 
@@ -82,7 +75,7 @@ CBBOX &S3D_MESH::getBBox( )
 {
     if( !m_BBox.IsInitialized() )
         calcBBoxAllChilds();
-    
+
     return m_BBox;
 }
 
@@ -100,7 +93,7 @@ void S3D_MESH::calcBBoxAllChilds( )
     // Calc transformation matrix
     glm::mat4 fullTransformMatrix;
     glm::mat4   translationMatrix       = glm::translate( glm::mat4(),       m_translation );
-    
+
     if( m_rotation[3] != 0.0f )
     {
         glm::mat4   rotationMatrix      = glm::rotate(    translationMatrix, glm::radians( m_rotation[3] ),
@@ -110,7 +103,7 @@ void S3D_MESH::calcBBoxAllChilds( )
     else
         fullTransformMatrix = glm::scale(     translationMatrix, m_scale );
 
-    
+
     // Apply transformation
     m_BBox.Set( S3D_VERTEX( fullTransformMatrix * glm::vec4( tmpBBox.Min(), 1.0f ) ),
                 S3D_VERTEX( fullTransformMatrix * glm::vec4( tmpBBox.Max(), 1.0f ) ) );
@@ -243,7 +236,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
             if ( m_MaterialIndex.size() > idx )
             {
                 bool isTransparent = m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx], useMaterial );
-                
+
                 if( isTransparent && aIsRenderingJustNonTransparentObjects )
                     continue;
 
@@ -652,7 +645,7 @@ void S3D_MESH::calcPerFaceNormals()
                             l,
                             (unsigned int)m_CoordIndex[idx].size()) );
                     */
-    
+
                     if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )
                     {
                         cross_prod.x = 0.0f;
@@ -713,7 +706,7 @@ void S3D_MESH::calcPerPointNormals()
     for( unsigned int each_face_A_idx = 0; each_face_A_idx < m_CoordIndex.size(); each_face_A_idx++ )
     {
         glm::vec3 initVertexFaceNormal = m_PerFaceNormalsRaw_X_PerFaceSquaredArea[each_face_A_idx];
-        
+
         std::vector< glm::vec3 >& face_A_normals = m_PerFaceVertexNormals[each_face_A_idx];
 
         for( unsigned int each_vert_A_idx = 0; each_vert_A_idx < m_CoordIndex[each_face_A_idx].size(); each_vert_A_idx++ )
@@ -722,7 +715,7 @@ void S3D_MESH::calcPerPointNormals()
         }
     }
 
-    
+
     #ifdef USE_OPENMP
     #pragma omp parallel for
     #endif /* USE_OPENMP */
@@ -732,7 +725,7 @@ void S3D_MESH::calcPerPointNormals()
     {
         // n = face A facet normal
         std::vector< glm::vec3 >& face_A_normals = m_PerFaceVertexNormals[each_face_A_idx];
- 
+
         // loop through all vertices
         // for each vert in face A
         for( unsigned int each_vert_A_idx = 0; each_vert_A_idx < m_CoordIndex[each_face_A_idx].size(); each_vert_A_idx++ )

@@ -24,12 +24,14 @@
 
 /**
  * @file 3d_mesh_model.h
- * @brief 
+ * @brief
  */
 
 #ifndef __3D_MESH_MODEL_H__
 #define __3D_MESH_MODEL_H__
 
+#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 #define GLM_FORCE_RADIANS
 #include <gal/opengl/glm/glm.hpp>
@@ -37,8 +39,13 @@
 #include "3d_material.h"
 #include "CBBox.h"
 
-
 class S3D_MESH;
+
+/** A smart pointer to an S3D_MESH object */
+typedef boost::shared_ptr<S3D_MESH> S3D_MESH_PTR;
+
+/** A container of smar S3D_MESH object pointers */
+typedef std::vector<S3D_MESH_PTR> S3D_MESH_PTRS;
 
 class S3D_MESH
 {
@@ -60,7 +67,7 @@ public:
     std::vector< S3D_VERTEX >       m_PerFaceNormalsNormalized;
     std::vector< S3D_VERTEX >       m_PerVertexNormalsNormalized;
     std::vector< int >              m_MaterialIndex;
-    std::vector< S3D_MESH * >       childs;
+    S3D_MESH_PTRS                   childs;
 
     S3D_VERTEX  m_translation;
     glm::vec4   m_rotation;

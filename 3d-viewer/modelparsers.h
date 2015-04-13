@@ -30,6 +30,7 @@
 #define MODELPARSERS_H
 
 #include <map>
+#include <memory>
 #include <vector>
 #include <wx/string.h>
 #include <3d_mesh_model.h>
@@ -71,11 +72,11 @@ public:
      * @param aFilename = the full file name of the file to load
      * @return true if as succeeded
      */
-    virtual bool Load( const wxString& aFilename ) { 
+    virtual bool Load( const wxString& aFilename ) {
         return false;
     };
 
-    std::vector< S3D_MESH* > childs;
+    S3D_MESH_PTRS childs;
 
 private:
     S3D_MASTER* master;
@@ -127,7 +128,7 @@ public:
 
 private:
     wxString                 m_Filename;
-    S3D_MESH*                m_model;
+    S3D_MESH_PTR             m_model;
 
     std::vector< wxString > vrml_materials;
     std::vector< wxString > vrml_points;
@@ -143,7 +144,7 @@ private:
 
 
 typedef std::map< std::string, std::vector< glm::vec3 > > VRML2_COORDINATE_MAP;
-typedef std::map< std::string, S3D_MESH* > VRML2_DEF_GROUP_MAP;
+typedef std::map< std::string, S3D_MESH_PTR > VRML2_DEF_GROUP_MAP;
 
 /**
  * class VRML2_MODEL_PARSER
@@ -164,7 +165,7 @@ public:
      * @param aTransformationModel a model with translation, rotation and scale to apply to default root
      * @return bool - true if finnished with success
      */
-    bool Load( const wxString& aFilename, S3D_MESH *aTransformationModel );
+    bool Load( const wxString& aFilename, S3D_MESH_PTR aTransformationModel );
 
     /**
      * Return string representing VRML2 file in vrml2 format
@@ -174,7 +175,7 @@ public:
     wxString VRML2_representation();
 
 private:
-    int loadFileModel( S3D_MESH *transformationModel );
+    int loadFileModel( S3D_MESH_PTR transformationModel );
     int read_Transform();
     int read_DEF();
     int read_DEF_Coordinate();
@@ -211,7 +212,7 @@ private:
 
     bool                      m_normalPerVertex;
     bool                      colorPerVertex;
-    S3D_MESH*                 m_model;                  ///< It stores the current model that the parsing is adding data
+    S3D_MESH_PTR              m_model;                  ///< It stores the current model that the parsing is adding data
     FILE*                     m_file;
     wxFileName                m_Filename;
     VRML2_COORDINATE_MAP      m_defCoordinateMap;
@@ -266,7 +267,7 @@ private:
 
     bool                     m_normalPerVertex;
     bool                     colorPerVertex;
-    S3D_MESH*                m_model;
+    S3D_MESH_PTR             m_model;
     FILE*                    m_file;
     wxString                 m_Filename;
     S3D_MODEL_PARSER*        m_ModelParser;
