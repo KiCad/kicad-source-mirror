@@ -275,7 +275,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
     for( section = m_hotkeys; section->m_HK_InfoList; section++ )
     {
         m_hotkeySectionPages.push_back( new HOTKEY_SECTION_PAGE( this, m_hotkeySections,
-                                                                 _( *section->m_Title ),
+                                                                 wxGetTranslation( *section->m_Title ),
                                                                  section ) );
     }
 

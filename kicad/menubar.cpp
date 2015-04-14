@@ -167,9 +167,11 @@ EDA_HOTKEY* common_Hotkey_List[] =
 // list of sections and corresponding hotkey list for Kicad
 // (used to create an hotkey config file, and edit hotkeys )
 // here we have only one section.
+wxString sectionTitle( _HKI( "Kicad Manager Hotkeys" ) );
+
 struct EDA_HOTKEY_CONFIG kicad_Manager_Hokeys_Descr[] = {
-    { &g_CommonSectionTag,      common_Hotkey_List,         &g_CommonSectionTitle      },
-    { NULL,                     NULL,                       NULL                       }
+    { &g_CommonSectionTag,      common_Hotkey_List,         &sectionTitle      },
+    { NULL,                     NULL,                       NULL               }
 };
 /////////////  End hotkeys management   ///////////////////////////////////////
 

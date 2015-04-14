@@ -52,11 +52,11 @@ wxString g_LibEditSectionTag( wxT( "[libedit]" ) );
 wxString g_BoardEditorSectionTag( wxT( "[pcbnew]" ) );
 wxString g_ModuleEditSectionTag( wxT( "[footprinteditor]" ) );
 
-wxString g_CommonSectionTitle( wxT( "Common" ) );
-wxString g_SchematicSectionTitle( wxT( "Schematic Editor" ) );
-wxString g_LibEditSectionTitle( wxT( "Library Editor" ) );
-wxString g_BoardEditorSectionTitle( wxT( "Board Editor" ) );
-wxString g_ModuleEditSectionTitle( wxT( "Footprint Editor" ) );
+wxString g_CommonSectionTitle( _HKI( "Common" ) );
+wxString g_SchematicSectionTitle( _HKI( "Schematic Editor" ) );
+wxString g_LibEditSectionTitle( _HKI( "Library Editor" ) );
+wxString g_BoardEditorSectionTitle( _HKI( "Board Editor" ) );
+wxString g_ModuleEditSectionTitle( _HKI( "Footprint Editor" ) );
 
 
 /* Class to handle hotkey commnands. hotkeys have a default value
