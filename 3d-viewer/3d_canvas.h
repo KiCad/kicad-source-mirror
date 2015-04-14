@@ -50,6 +50,7 @@
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
 class CPOLYGONS_LIST;
+class REPORTER;
 
 class VIA;
 class D_PAD;
@@ -80,7 +81,8 @@ class EDA_3D_CANVAS : public wxGLCanvas
 {
 private:
     bool            m_init;
-    bool            m_reportWarnings;       ///< true to report all wranings when build the 3D scene false to report errors only
+    bool            m_reportWarnings;       ///< true to report all warnings when building the 3D scene
+                                            ///< false to report errors only
     GLuint          m_glLists[GL_ID_END];   ///< GL lists
     wxGLContext*    m_glRC;
     wxRealPoint     m_draw3dOffset;         ///< offset to draw the 3D mesh.
@@ -148,11 +150,11 @@ public:
      * Function CreateDrawGL_List
      * Prepares the parameters of the OpenGL draw list
      * creates the OpenGL draw list items (board, grid ...)
-     * @param aErrorMessages = a wxString which will filled with error messages,
+     * @param aErrorMessages = a REPORTER which will filled with error messages,
      * if any
-     * @param aShowWarnings = true to show all messages, false to show errors only
+     * @param aActivity = a REPORTER to display activity state
      */
-    void   CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarnings );
+    void   CreateDrawGL_List( REPORTER* aErrorMessages, REPORTER* aActivity );
     void   InitGL();
 
     void ReportWarnings( bool aReport ) { m_reportWarnings = aReport; }
@@ -231,24 +233,25 @@ private:
      * Populates the OpenGL GL_ID_BOARD draw list with board items only on copper layers.
      * 3D footprint shapes, tech layers and aux layers are not on this list
      * Fills aErrorMessages with error messages created by some calculation function
+     * display activity state
      * @param aBoardList =
      * @param aBodyOnlyList =
-     * @param aErrorMessages = a wxString to add error and warning messages
+     * @param aErrorMessages = a REPORTER to add error and warning messages
      * created by the build process (can be NULL)
-     * @param aShowWarnings = true to show all messages, false to show errors only
+     * @param aActivity = a REPORTER to display activity state
      */
     void   buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
-                             wxString* aErrorMessages, bool aShowWarnings );
+                             REPORTER* aErrorMessages, REPORTER* aActivity );
 
     /**
      * Function buildTechLayers3DView
      * Called by CreateDrawGL_List()
      * Populates the OpenGL GL_ID_TECH_LAYERS draw list with items on tech layers
-     * @param aErrorMessages = a wxString to add error and warning messages
+     * @param aErrorMessages = a REPORTER to add error and warning messages
      * created by the build process (can be NULL)
-     * @param aShowWarnings = true to show all messages, false to show errors only
+     * @param aActivity = a REPORTER to display activity state
      */
-    void   buildTechLayers3DView( wxString* aErrorMessages, bool aShowWarnings );
+    void   buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* aActivity );
 
     /**
      * Function buildShadowList
@@ -263,17 +266,25 @@ private:
      * draw lists with 3D footprint shapes
      * @param aOpaqueList is the gl list for non transparent items
      * @param aTransparentList is the gl list for non transparent items,
+     * @param aErrorMessages = a REPORTER to add error and warning messages
+     * created by the build process (can be NULL)
+     * @param aActivity = a REPORTER to display activity state
      * which need to be drawn after all other items
      */
     void   buildFootprintShape3DList( GLuint aOpaqueList,
-                                      GLuint aTransparentList );
+                                      GLuint aTransparentList,
+                                      REPORTER* aErrorMessages, REPORTER* aActivity );
     /**
      * Function buildBoard3DAuxLayers
      * Called by CreateDrawGL_List()
      * Fills the OpenGL GL_ID_AUX_LAYERS draw list
      * with items on aux layers only
+     * @param aErrorMessages = a REPORTER to add error and warning messages
+     * created by the build process (can be NULL)
+     * @param aActivity = a REPORTER to display activity state
+     * which need to be drawn after all other items
      */
-    void   buildBoard3DAuxLayers();
+    void   buildBoard3DAuxLayers( REPORTER* aErrorMessages, REPORTER* aActivity );
 
     void   draw3DGrid( double aGriSizeMM );
     void   draw3DAxis();
@@ -329,11 +340,11 @@ private:
      * function generateFakeShadowsTextures
      * creates shadows of the board an footprints
      * for aesthetical purpose
-     * @param aErrorMessages = a wxString to add error and warning messages
+     * @param aErrorMessages = a REPORTER to add error and warning messages
      * created by the build process (can be NULL)
-     * @param aShowWarnings = true to show all messages, false to show errors only
+     * @param aActivity = a REPORTER to display activity state
      */
-    void   generateFakeShadowsTextures( wxString* aErrorMessages, bool aShowWarnings );
+    void   generateFakeShadowsTextures( REPORTER* aErrorMessages, REPORTER* aActivity );
 
     DECLARE_EVENT_TABLE()
 };

@@ -58,6 +58,7 @@
 #include <3d_draw_basic_functions.h>
 
 #include <CImage.h>
+#include <reporter.h>
 
 
 
@@ -67,6 +68,41 @@
  * used to calculate the Z orientation parameter for glNormal3f
  */
 static GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
+
+
+/**
+ * Class STATUS_TEXT_REPORTER
+ * is a wrapper for reporting to a wxString in a wxFrame status text.
+ */
+class STATUS_TEXT_REPORTER : public REPORTER
+{
+    wxFrame * m_frame;
+    int m_position;
+    bool m_hasMessage;
+
+
+public:
+    STATUS_TEXT_REPORTER( wxFrame* aFrame, int aPosition = 0 ) :
+        REPORTER(),
+        m_frame( aFrame ), m_position( aPosition )
+    {
+        SetReportAll( true );
+        SetReportWarnings( true );
+        SetReportErrors( true );
+        m_hasMessage = false;
+    }
+
+    REPORTER& Report( const wxString& aText )
+    {
+        if( !aText.IsEmpty() )
+            m_hasMessage = true;
+
+        m_frame->SetStatusText( aText, m_position );
+        return *this;
+    }
+
+    bool HasMessage() const { return m_hasMessage; }
+};
 
 
 void EDA_3D_CANVAS::create_and_render_shadow_buffer( GLuint *aDst_gl_texture,
@@ -157,7 +193,7 @@ void EDA_3D_CANVAS::create_and_render_shadow_buffer( GLuint *aDst_gl_texture,
 /// Scale factor to make a bigger BBox in order to blur the texture and dont have artifacts in the edges
 #define SHADOW_BOUNDING_BOX_SCALE 1.25f
 
-void EDA_3D_CANVAS::generateFakeShadowsTextures( wxString* aErrorMessages, bool aShowWarnings )
+void EDA_3D_CANVAS::generateFakeShadowsTextures( REPORTER* aErrorMessages, REPORTER* aActivity )
 {
     if( m_shadow_init == true )
     {
@@ -165,7 +201,7 @@ void EDA_3D_CANVAS::generateFakeShadowsTextures( wxString* aErrorMessages, bool 
     }
 
     // Init info 3d parameters and create gl lists:
-    CreateDrawGL_List( aErrorMessages, aShowWarnings );
+    CreateDrawGL_List( aErrorMessages, aActivity );
 
     DBG( unsigned strtime = GetRunningMicroSecs() );
 
@@ -259,8 +295,14 @@ void EDA_3D_CANVAS::Redraw()
     if( !IsShown() )
         return;
 
-    wxString errorMessages;
-    bool showWarnings = m_reportWarnings;
+    wxString err_messages;
+    WX_STRING_REPORTER errorReporter( &err_messages );
+    STATUS_TEXT_REPORTER activityReporter( Parent(), 0 );
+    errorReporter.SetReportAll( false );
+    errorReporter.SetReportWarnings( m_reportWarnings );
+
+    // Display build time at the end of build
+    unsigned strtime = GetRunningMicroSecs();
 
     SetCurrent( *m_glRC );
 
@@ -274,10 +316,9 @@ void EDA_3D_CANVAS::Redraw()
 
     InitGL();
 
-    if( isEnabled( FL_MODULE ) && isRealisticMode() &&
-        isEnabled( FL_RENDER_SHADOWS ) )
+    if( isRealisticMode() && isEnabled( FL_RENDER_SHADOWS ) )
     {
-        generateFakeShadowsTextures( &errorMessages, showWarnings );
+        generateFakeShadowsTextures( &errorReporter, &activityReporter );
     }
 
     // *MUST* be called *after*  SetCurrent( ):
@@ -375,7 +416,7 @@ void EDA_3D_CANVAS::Redraw()
 
 
     if( ! m_glLists[GL_ID_BOARD] || ! m_glLists[GL_ID_TECH_LAYERS] )
-        CreateDrawGL_List( &errorMessages, showWarnings );
+        CreateDrawGL_List( &errorReporter, &activityReporter );
 
     if( isEnabled( FL_AXIS ) && m_glLists[GL_ID_AXIS] )
         glCallList( m_glLists[GL_ID_AXIS] );
@@ -388,7 +429,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
-            CreateDrawGL_List( &errorMessages, showWarnings );
+            CreateDrawGL_List( &errorReporter, &activityReporter );
     }
 
     glEnable( GL_LIGHTING );
@@ -451,7 +492,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_COMMENTS ) || isEnabled( FL_COMMENTS )  )
     {
         if( ! m_glLists[GL_ID_AUX_LAYERS] )
-            CreateDrawGL_List( &errorMessages, showWarnings );
+            CreateDrawGL_List( &errorReporter, &activityReporter );
 
         glCallList( m_glLists[GL_ID_AUX_LAYERS] );
     }
@@ -503,7 +544,7 @@ void EDA_3D_CANVAS::Redraw()
     if( isEnabled( FL_MODULE ) )
     {
         if( ! m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
-            CreateDrawGL_List( &errorMessages, showWarnings );
+            CreateDrawGL_List( &errorReporter, &activityReporter );
 
         glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
     }
@@ -561,8 +602,20 @@ void EDA_3D_CANVAS::Redraw()
 
     SwapBuffers();
 
-    if( !errorMessages.IsEmpty() )
-        wxLogMessage( errorMessages );
+    // Show calculation time if some activity was reported
+    if( activityReporter.HasMessage() )
+    {
+        // Calculation time in seconds
+        double calculation_time = (double)( GetRunningMicroSecs() - strtime) / 1e6;
+
+        activityReporter.Report( wxString::Format( _( "Build time %3f s" ),
+                                 calculation_time ) );
+    }
+    else
+        activityReporter.Report( wxEmptyString );
+
+    if( !err_messages.IsEmpty() )
+        wxLogMessage( err_messages );
 
     ReportWarnings( false );
 }
@@ -633,7 +686,7 @@ void EDA_3D_CANVAS::buildShadowList( GLuint aFrontList, GLuint aBacklist, GLuint
 
 
 void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
-                                      wxString* aErrorMessages, bool aShowWarnings  )
+                                      REPORTER* aErrorMessages, REPORTER* aActivity  )
 {
     BOARD* pcb = GetBoard();
 
@@ -660,7 +713,8 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2.0) );
 
     CPOLYGONS_LIST  bufferPolys;
-    bufferPolys.reserve( 200000 );              // Reserve for large board (tracks mainly)
+    bufferPolys.reserve( 500000 );              // Reserve for large board: tracks mainly
+                                                // + zones when holes are removed from zones
 
     CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
     CPOLYGONS_LIST  allLayerHoles;              // Contains through holes, calculated only once
@@ -671,7 +725,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-        if( aErrorMessages && aShowWarnings )
+        if( aErrorMessages && aErrorMessages->ReportWarnings() )
         {
             *aErrorMessages << msg << wxT("\n") <<
                 _("Unable to calculate the board outlines.\n"
@@ -680,7 +734,8 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     }
 
     CPOLYGONS_LIST  bufferZonesPolys;
-    bufferZonesPolys.reserve( 500000 );             // Reserve for large board ( copper zones mainly )
+    bufferZonesPolys.reserve( 300000 );             // Reserve for large board ( copper zones mainly )
+                                                    // when holes are not removed from zones
 
     CPOLYGONS_LIST  currLayerHoles;                 // Contains holes for the current layer
     bool            throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
@@ -707,6 +762,9 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         // and internal layers in realistic mode
         if( !is3DLayerEnabled( layer ) )
             continue;
+
+        if( aActivity )
+            aActivity->Report( wxString::Format( _( "Build layer %s" ), LSET::Name( layer ) ) );
 
         bufferPolys.RemoveAllContours();
         bufferZonesPolys.RemoveAllContours();
@@ -745,6 +803,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         // draw pads
         for( MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
         {
+            int thickness = GetPrm3DVisu().GetCopperThicknessBIU();
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
             module->TransformPadsShapesWithClearanceToPolygon( layer,
@@ -788,7 +847,14 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                     // 48 segm for a circle is a very good approx.
                     segcount = Clamp( segcountLowQuality, segcount, 48 );
 
-                    pad->BuildPadDrillShapePolygon( allLayerHoles, 0, segcount );
+                    // The hole in the body is inflated by copper thickness.
+                    int inflate = thickness;
+
+                    // If not plated, no copper.
+                    if( pad->GetAttribute () == PAD_HOLE_NOT_PLATED )
+                        inflate = 0;
+
+                    pad->BuildPadDrillShapePolygon( allLayerHoles, inflate, segcount );
                 }
             }
         }
@@ -891,10 +957,15 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         throughHolesListBuilt = true;
     }
 
+    if( aActivity )
+        aActivity->Report( _( "Build board body" ) );
+
+
+    // Draw plated vertical holes inside the board, but not always. They are drawn:
+    // - if the board body is not shown, to show the holes.
+    // - or if the copper thickness is shown
     if( !isEnabled( FL_SHOW_BOARD_BODY ) || isEnabled( FL_USE_COPPER_THICKNESS ) )
     {
-        setGLCopperColor();
-
         // Draw vias holes (vertical cylinders)
         for( const TRACK* track = pcb->m_Track;  track;  track = track->Next() )
         {
@@ -971,7 +1042,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 }
 
 
-void EDA_3D_CANVAS::buildTechLayers3DView( wxString* aErrorMessages, bool aShowWarnings )
+void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* aActivity )
 {
     BOARD* pcb = GetBoard();
     bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
@@ -998,7 +1069,7 @@ void EDA_3D_CANVAS::buildTechLayers3DView( wxString* aErrorMessages, bool aShowW
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-        if( aErrorMessages && aShowWarnings )
+        if( aErrorMessages && aErrorMessages->ReportWarnings() )
         {
             *aErrorMessages << msg << wxT("\n") <<
                 _("Unable to calculate the board outlines.\n"
@@ -1059,6 +1130,10 @@ void EDA_3D_CANVAS::buildTechLayers3DView( wxString* aErrorMessages, bool aShowW
 
         if( layer == Edge_Cuts && isEnabled( FL_SHOW_BOARD_BODY )  )
             continue;
+
+        if( aActivity )
+            aActivity->Report( wxString::Format( _( "Build layer %s" ), LSET::Name( layer ) ) );
+
 
         bufferPolys.RemoveAllContours();
 
@@ -1195,7 +1270,7 @@ void EDA_3D_CANVAS::buildTechLayers3DView( wxString* aErrorMessages, bool aShowW
  * Fills the OpenGL GL_ID_BOARD draw list with items
  * on aux layers only
  */
-void EDA_3D_CANVAS::buildBoard3DAuxLayers()
+void EDA_3D_CANVAS::buildBoard3DAuxLayers( REPORTER* aErrorMessages, REPORTER* aActivity )
 {
     const int   segcountforcircle   = 18;
     double      correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
@@ -1220,6 +1295,9 @@ void EDA_3D_CANVAS::buildBoard3DAuxLayers()
 
         if( !is3DLayerEnabled( layer ) )
             continue;
+
+        if( aActivity )
+            aActivity->Report( wxString::Format( _( "Build layer %s" ), LSET::Name( layer ) ) );
 
         bufferPolys.RemoveAllContours();
 
@@ -1290,7 +1368,7 @@ void EDA_3D_CANVAS::buildBoard3DAuxLayers()
     }
 }
 
-void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarnings )
+void EDA_3D_CANVAS::CreateDrawGL_List( REPORTER* aErrorMessages, REPORTER* aActivity )
 {
     BOARD* pcb = GetBoard();
 
@@ -1312,7 +1390,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
 
         m_glLists[GL_ID_BOARD] = glGenLists( 1 );
         m_glLists[GL_ID_BODY] = glGenLists( 1 );
-        buildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages, aShowWarnings );
+        buildBoard3DView(m_glLists[GL_ID_BOARD], m_glLists[GL_ID_BODY], aErrorMessages, aActivity );
         CheckGLError( __FILE__, __LINE__ );
 
         DBG( printf( "  buildBoard3DView total time %f ms\n", (double) (GetRunningMicroSecs() - strtime) / 1000.0 ) );
@@ -1326,7 +1404,10 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
         glNewList( m_glLists[GL_ID_TECH_LAYERS], GL_COMPILE );
         // when calling BuildTechLayers3DView,
         // do not show warnings, which are the same as buildBoard3DView
-        buildTechLayers3DView( aErrorMessages, false );
+        bool report_warn = aErrorMessages->ReportWarnings();
+        aErrorMessages->SetReportWarnings( false );
+        buildTechLayers3DView( aErrorMessages, aActivity );
+        aErrorMessages->SetReportWarnings( report_warn );
         glEndList();
         CheckGLError( __FILE__, __LINE__ );
 
@@ -1339,7 +1420,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
 
         m_glLists[GL_ID_AUX_LAYERS] = glGenLists( 1 );
         glNewList( m_glLists[GL_ID_AUX_LAYERS], GL_COMPILE );
-        buildBoard3DAuxLayers();
+        buildBoard3DAuxLayers( aErrorMessages, aActivity );
         glEndList();
         CheckGLError( __FILE__, __LINE__ );
 
@@ -1364,7 +1445,8 @@ void EDA_3D_CANVAS::CreateDrawGL_List( wxString* aErrorMessages, bool aShowWarni
             m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] = 0;
 
         buildFootprintShape3DList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT],
-                                   m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
+                                   m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT],
+                                   aErrorMessages, aActivity );
 
         CheckGLError( __FILE__, __LINE__ );
     }
@@ -1471,9 +1553,14 @@ void EDA_3D_CANVAS::calcBBox()
 
 
 void EDA_3D_CANVAS::buildFootprintShape3DList( GLuint aOpaqueList,
-                                               GLuint aTransparentList )
+                                               GLuint aTransparentList,
+                                               REPORTER* aErrorMessages,
+                                               REPORTER* aActivity )
 {
     DBG( unsigned strtime = GetRunningMicroSecs() );
+
+    if( aActivity )
+        aActivity->Report( _( "Load 3D Shapes" ) );
 
     // clean the parser list if it have any already loaded files
     m_model_parsers_list.clear();

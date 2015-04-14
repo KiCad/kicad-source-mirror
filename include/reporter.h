@@ -138,7 +138,7 @@ public:
 
 
 /**
- * Class WX_STRING_REPROTER
+ * Class WX_STRING_REPORTER
  * is a wrapper for reporting to a wxString object.
  */
 class WX_STRING_REPORTER : public REPORTER

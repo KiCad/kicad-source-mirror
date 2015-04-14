@@ -368,8 +368,9 @@ void EDA_3D_CANVAS::draw3DPadHole( const D_PAD* aPad )
 
     if( drillsize.x == drillsize.y )    // usual round hole
     {
+        int hole_radius = ( drillsize.x + thickness ) / 2;
         Draw3D_ZaxisCylinder( aPad->GetPosition(),
-                              (drillsize.x + thickness / 2) / 2, holeHeight,
+                              hole_radius, holeHeight,
                               thickness, holeZpoz, GetPrm3DVisu().m_BiuTo3Dunits );
     }
     else    // Oblong hole
