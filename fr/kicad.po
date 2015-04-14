@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-10 20:27+0100\n"
-"PO-Revision-Date: 2015-04-10 20:37+0100\n"
+"POT-Creation-Date: 2015-04-14 17:44+0100\n"
+"PO-Revision-Date: 2015-04-14 17:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -87,13 +87,32 @@ msgstr "Impossible de copier l'image dans le presse papier"
 msgid "Can't save file"
 msgstr "Impossible de sauver le  fichier"
 
-#: 3d-viewer/3d_draw.cpp:677 3d-viewer/3d_draw.cpp:1001
+#: 3d-viewer/3d_draw.cpp:611
+#, c-format
+msgid "Build time %.3f s"
+msgstr "Temps de la construction %.3fs"
+
+#: 3d-viewer/3d_draw.cpp:731 3d-viewer/3d_draw.cpp:1075
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
 msgstr ""
 "Impossible de calculer le contour du CI.\n"
 "Par conséquent, le rectangle d'encadrement du CI sera utilisé."
+
+#: 3d-viewer/3d_draw.cpp:767 3d-viewer/3d_draw.cpp:1135
+#: 3d-viewer/3d_draw.cpp:1300
+#, c-format
+msgid "Build layer %s"
+msgstr "Génère couche %s"
+
+#: 3d-viewer/3d_draw.cpp:961
+msgid "Build board body"
+msgstr "Génère le corps du PCB"
+
+#: 3d-viewer/3d_draw.cpp:1563
+msgid "Load 3D Shapes"
+msgstr "Chargement des Formes 3D"
 
 #: 3d-viewer/3d_toolbar.cpp:52
 msgid "Reload board"
@@ -2652,6 +2671,8 @@ msgstr ""
 #: cvpcb/readwrite_dlgs.cpp:250
 msgid "First check your footprint library table entries."
 msgstr ""
+"En premier lieu, vérifiez les entrées de votre table des librairies "
+"d'empreintes."
 
 #: cvpcb/readwrite_dlgs.cpp:252
 msgid "Problematic Footprint Library Tables"
@@ -2663,6 +2684,9 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
+"Les erreurs suivantes se sont produites lors de la tentative de conversion "
+"d'assignement des empreintes:\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:263
 msgid ""
@@ -8327,7 +8351,7 @@ msgstr "Offset Image Justifiée"
 #: gerbview/class_GERBER.cpp:469
 #, c-format
 msgid "Layer %d (%s, %s, %s)"
-msgstr ""
+msgstr "Couche %d (%s, %s, %s)"
 
 #: gerbview/class_GERBER.cpp:476
 #, c-format
@@ -14037,7 +14061,7 @@ msgstr ""
 "Maintenant, il est forcé sur la couche sérigraphie du dessus. Svp, fixer cela"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:231
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:248 pcbnew/dimension.cpp:202
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:260 pcbnew/dimension.cpp:202
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "L'épaisseur du texte est trop grande pour ses dimensions. Elle sera limitée"
@@ -16649,6 +16673,10 @@ msgstr ""
 "Ce pad est retourné sur le circuit imprimé.\n"
 "Les couches coté composant et coté cuivre seront échangées"
 
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:193
+msgid "No layer selected, Please select the text layer"
+msgstr "Aucune couche sélectionnée. SVP sélectionnez la couche du texte."
+
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:29
 msgid "Enter the text placed on selected layer."
 msgstr "Entrer le texte à placer sur la couche courante"
@@ -16980,15 +17008,15 @@ msgstr "u"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
-msgstr ""
+msgstr "Espacement piste:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:49
 msgid "Via gap:"
-msgstr ""
+msgstr "Espacement via:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:70
 msgid "Via gap same as trace gap"
-msgstr ""
+msgstr "Espacement via identique espacement piste"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:52
 msgid "Single track length tuning"
@@ -17356,10 +17384,11 @@ msgstr "L'endroit où vous voulez que les nouvelles librairies soient ajoutées:
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:204
 msgid "To global library configuration (visible by all projects)"
 msgstr ""
+"A la configuration globale de librairies (visible par tous les projets)"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:207
 msgid "To the current project only"
-msgstr ""
+msgstr "A la configuration de librairies du projet actuel"
 
 #: pcbnew/dimension.cpp:144
 msgid ""
@@ -18146,11 +18175,11 @@ msgstr "Supprimer le Remplissage de toutes les Zones"
 
 #: pcbnew/hotkeys.cpp:192
 msgid "Switch Track Width To Next"
-msgstr ""
+msgstr "Commuter Largeur de Piste à la Suivante"
 
 #: pcbnew/hotkeys.cpp:195
 msgid "Switch Track Width To Previous"
-msgstr ""
+msgstr "Commuter Largeur de Piste à la Précédente"
 
 #: pcbnew/hotkeys.cpp:199
 msgid "Switch Grid To Fast Grid1"
@@ -20639,7 +20668,7 @@ msgstr "Nouvelle Piste"
 #: pcbnew/router/length_tuner_tool.cpp:50 pcbnew/router/router_tool.cpp:56
 #: pcbnew/router/router_menus.h:60
 msgid "Starts laying a new track."
-msgstr ""
+msgstr "Démarrer le tracé d'une nouvelle piste."
 
 #: pcbnew/router/length_tuner_tool.cpp:53
 msgid "Stops laying the current meander."
@@ -20786,11 +20815,11 @@ msgstr "Options de Routage..."
 
 #: pcbnew/router/pns_tool_base.cpp:61 pcbnew/router/router_menus.h:92
 msgid "Shows a dialog containing router options."
-msgstr ""
+msgstr "Montrer un dialogue pour les options du routeur"
 
 #: pcbnew/router/router_tool.cpp:59 pcbnew/router/router_menus.h:64
 msgid "Stops laying the current track."
-msgstr ""
+msgstr "Arréter le tracé de la piste en cours."
 
 #: pcbnew/router/router_tool.cpp:62 pcbnew/router/router_menus.h:68
 msgid "Auto-end Track"
@@ -20802,11 +20831,11 @@ msgstr "Finit automatiquement la piste en cours de routage."
 
 #: pcbnew/router/router_tool.cpp:65 pcbnew/router/router_menus.h:72
 msgid "Drag Track/Via"
-msgstr ""
+msgstr "Drag Piste/Via"
 
 #: pcbnew/router/router_tool.cpp:65 pcbnew/router/router_menus.h:72
 msgid "Drags a track or a via."
-msgstr ""
+msgstr "Dragger une piste ou une via"
 
 #: pcbnew/router/router_tool.cpp:68 pcbnew/router/router_menus.h:76
 msgid "Adds a through-hole via at the end of currently routed track."
@@ -20831,6 +20860,8 @@ msgstr "Largeur de Piste sur Mesure."
 #: pcbnew/router/router_tool.cpp:77 pcbnew/router/router_menus.h:88
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
+"Montrer un dialogue pour changer la largeur de la piste et la dimension de "
+"la via."
 
 #: pcbnew/router/router_tool.cpp:80 pcbnew/router/router_menus.h:96
 msgid "Switches posture of the currenly routed track."
@@ -21386,7 +21417,7 @@ msgstr "Duplique le (les) élement(s) sélectionné(s)"
 
 #: pcbnew/tools/common_actions.cpp:103
 msgid "Duplicates the selected item(s), incrementing pad numbers"
-msgstr ""
+msgstr "Dupliquer la sélection, en incrémentant les numéros  de pastilles."
 
 #: pcbnew/tools/common_actions.cpp:107
 msgid "Move Exactly..."
@@ -21515,11 +21546,11 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:425 pcbnew/tools/common_actions.cpp:426
 msgid "Run push & shove router (single tracks)"
-msgstr ""
+msgstr "Lancer le routeur push & shove (pistes simples)"
 
 #: pcbnew/tools/common_actions.cpp:430 pcbnew/tools/common_actions.cpp:431
 msgid "Run push & shove router (differential pairs)"
-msgstr ""
+msgstr "Lancer le routeur push & shove (paires différentielles)"
 
 #: pcbnew/tools/common_actions.cpp:435 pcbnew/tools/common_actions.cpp:436
 msgid "Open Interactive Router settings"
@@ -21604,22 +21635,22 @@ msgstr ""
 msgid "Duplicated %d item(s)"
 msgstr "%d élément(s) dupliqué(s)"
 
-#: pcbnew/tools/module_tools.cpp:214
+#: pcbnew/tools/module_tools.cpp:212
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr ""
 "Laisser appuyé le bouton de gauche de la souris et déplacer le curseur sur "
 "les pads pour les numéroter."
 
-#: pcbnew/tools/module_tools.cpp:333
+#: pcbnew/tools/module_tools.cpp:331
 msgid "Select reference point"
 msgstr "Sélection point de référence"
 
-#: pcbnew/tools/module_tools.cpp:384
+#: pcbnew/tools/module_tools.cpp:382
 #, c-format
 msgid "Copied %d item(s)"
 msgstr "%d élément(s) copié(s)"
 
-#: pcbnew/tools/module_tools.cpp:410
+#: pcbnew/tools/module_tools.cpp:408
 msgid "Invalid clipboard contents"
 msgstr "Contenu du presse-papier invalide"
 
@@ -22201,6 +22232,9 @@ msgstr ""
 #: pcbnew/router/router_menus.h:154
 msgid "Route using the width of the starting track"
 msgstr "Router en utilisant la largeur de la piste de départ"
+
+#~ msgid "Build time %3f s"
+#~ msgstr "Temps de la construction %.3fs"
 
 #~ msgid "First check your fp-lib-table entries."
 #~ msgstr "Tout d'abord, vérifiez vos entrées de table des librairies."
