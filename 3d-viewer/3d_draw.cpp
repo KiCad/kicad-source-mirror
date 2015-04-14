@@ -608,7 +608,7 @@ void EDA_3D_CANVAS::Redraw()
         // Calculation time in seconds
         double calculation_time = (double)( GetRunningMicroSecs() - strtime) / 1e6;
 
-        activityReporter.Report( wxString::Format( _( "Build time %3f s" ),
+        activityReporter.Report( wxString::Format( _( "Build time %.3f s" ),
                                  calculation_time ) );
     }
     else

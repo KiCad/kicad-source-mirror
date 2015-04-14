@@ -70,7 +70,7 @@
 // std::vector templates
 
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
-%template (RATSNET_Vector) std::vector<RATSNEST_ITEM>;
+%template (RATSNEST_Vector) std::vector<RATSNEST_ITEM>;
 
 %extend BOARD
 {
