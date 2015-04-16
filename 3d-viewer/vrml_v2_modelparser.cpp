@@ -174,7 +174,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
                      (m_model->childs.size() == 0) )
                 {
                     m_model.reset();
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: skipping model with no points or childs" ) );
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+                                + wxT( "loadFileModel: skipping model with no points or childs" ) );
                 }
                 else
                 {
@@ -184,7 +185,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
                         m_model->m_rotation      = aTransformationModel->m_rotation;
                         m_model->m_scale         = aTransformationModel->m_scale;
                     }
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: Add model with %zu points, %zu coordIndex, %zu childs." ),
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+                                + wxT( "loadFileModel: Add model with %zu points, %zu coordIndex, %zu childs." ),
                                 m_model->m_Point.size(),
                                 m_model->m_CoordIndex.size(),
                                 m_model->childs.size() );
@@ -210,7 +212,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
                      (m_model->childs.size() == 0) )
                 {
                     m_model.reset();
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: skipping model with no points or childs" ) );
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+                                + wxT( "loadFileModel: skipping model with no points or childs" ) );
                 }
                 else
                 {
@@ -220,7 +223,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
                         m_model->m_rotation      = aTransformationModel->m_rotation;
                         m_model->m_scale         = aTransformationModel->m_scale;
                     }
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: Add model with %zu points, %zu coordIndex, %zu childs." ),
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+                                + wxT( "loadFileModel: Add model with %zu points, %zu coordIndex, %zu childs." ),
                                 m_model->m_Point.size(),
                                 m_model->m_CoordIndex.size(),
                                 m_model->childs.size() );
@@ -246,7 +250,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
                      (m_model->childs.size() == 0) )
                 {
                     m_model.reset();
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: skipping model with no points or childs" ) );
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+                                + wxT( "loadFileModel: skipping model with no points or childs" ) );
                 }
                 else
                 {
@@ -257,7 +262,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
                         m_model->m_scale         = aTransformationModel->m_scale;
                     }
 
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: Add model with %zu points, %zu coordIndex, %zu childs." ),
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+                                + wxT( "loadFileModel: Add model with %zu points, %zu coordIndex, %zu childs." ),
                                 m_model->m_Point.size(),
                                 m_model->m_CoordIndex.size(),
                                 m_model->childs.size() );
@@ -278,11 +284,13 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
 
     if( ( m_counter_DEF_GROUP > 0 ) && (m_counter_USE_GROUP == 0 ) )
     {
-        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: groups defined with DEF * GROUP but not used with USE, forcing add it..." ) );
+        wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+            + wxT( "loadFileModel: groups defined with DEF * GROUP but not used with USE, forcing add it..." ) );
 
-        if( m_defGroupMap.size() > 0 )
+        if( !m_defGroupMap.empty() )
         {
-            for( VRML2_DEF_GROUP_MAP::iterator groupIt = m_defGroupMap.begin(); groupIt!=m_defGroupMap.end(); ++groupIt )
+            for( VRML2_DEF_GROUP_MAP::iterator groupIt = m_defGroupMap.begin();
+                 groupIt!=m_defGroupMap.end(); ++groupIt )
             {
                 wxString groupName = groupIt->first;
                 S3D_MESH_PTR ptrModel( groupIt->second );
@@ -296,7 +304,8 @@ int VRML2_MODEL_PARSER::loadFileModel( S3D_MESH_PTR aTransformationModel )
                 }
                 else
                 {
-                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "loadFileModel: forced added %s group" ), groupName );
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer
+                        + wxT( "loadFileModel: forced added %s group" ), groupName );
                     m_ModelParser->childs.push_back( ptrModel );
                 }
             }

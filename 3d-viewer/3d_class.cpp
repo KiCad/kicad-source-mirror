@@ -24,7 +24,7 @@
 /**
  * @file 3d_class.cpp
  */
- 
+
 #include <fctsys.h>
 
 #include "3d_viewer.h"
@@ -54,7 +54,7 @@ S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
     EDA_ITEM( aParent, NOT_USED )
 {
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
-    
+
     m_3D_Drawings = NULL;
     m_Materials   = NULL;
     m_parser      = NULL;

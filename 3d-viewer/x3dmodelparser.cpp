@@ -104,7 +104,7 @@ bool X3D_MODEL_PARSER::Load( const wxString& aFilename )
 
         readTransform( node );
 
-        
+
     }
 
     return true;
@@ -117,7 +117,7 @@ void X3D_MODEL_PARSER::GetChildsByName( wxXmlNode* aParent,
 {
     // (-Breadth-first search (BFS)-)
     // **NOTE** This function was changed to get only the first depth of ocorrences
-    //          so it will be an workarround for the Bug #1443431 
+    //          so it will be an workarround for the Bug #1443431
     std::queue<wxXmlNode*> found;
 
     found.push( aParent );

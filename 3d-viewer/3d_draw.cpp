@@ -929,7 +929,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
         int thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
         int zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
-        
+
         float zNormal = 1.0f; // When using thickness it will draw first the top and then botton (with z inverted)
 
         // If we are not using thickness, then the znormal must face the layer direction

@@ -188,9 +188,9 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
     printf("m_MaterialIndexPerVertex.size() %lu\n", m_MaterialIndexPerVertex.size() );
     printf("m_PerVertexNormalsNormalized.size() %lu\n", m_PerVertexNormalsNormalized.size() );
     printf("m_PerFaceVertexNormals.size() %lu\n", m_PerFaceVertexNormals.size() );
-    
+
     printf("smoothShapes %d\n", smoothShapes );
-    
+
     if( m_Materials )
     {
         printf(" m_Name %s\n", static_cast<const char*>(m_Materials->m_Name.c_str()) );
@@ -314,7 +314,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                 {
                     glm::vec3 normal = normals_list[ii];
                     printf("normal(%f, %f, %f), ", normal.x, normal.y, normal.z );
-                    
+
                     //glNormal3fv( &normal.x );
 
                     glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
@@ -378,7 +378,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                                 continue;
                         }
                 }
-                
+
                 if( isTransparent && aIsRenderingJustNonTransparentObjects )
                     continue;
 
@@ -408,7 +408,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                 // for VRML2:
                 // http://accad.osu.edu/~pgerstma/class/vnv/resources/info/AnnotatedVrmlRef/ch3-323.htm
                 // "If colorPerVertex is TRUE, colours are applied to each vertex, as follows:
-                if( ( m_Materials->m_ColorPerVertex == true ) && 
+                if( ( m_Materials->m_ColorPerVertex == true ) &&
                     ( m_Materials->m_DiffuseColor.size() > 1 ) )
                 {
                     // "If the colorIndex field is not empty, then colours
@@ -572,7 +572,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
                     // for VRML2:
                     // http://accad.osu.edu/~pgerstma/class/vnv/resources/info/AnnotatedVrmlRef/ch3-323.htm
                     // "If colorPerVertex is TRUE, colours are applied to each vertex, as follows:
-                    if( ( m_Materials->m_ColorPerVertex == true ) && 
+                    if( ( m_Materials->m_ColorPerVertex == true ) &&
                         ( m_Materials->m_DiffuseColor.size() > 1 ) )
                     {
                         // "If the colorIndex field is not empty, then colours
@@ -804,7 +804,7 @@ void S3D_MESH::calcPerFaceNormals()
 
         for( unsigned int i = 0; i < m_CoordIndex[idx].size(); i++ )
         {
-            
+
             glm::dvec3 u = glm::dvec3( m_PointNormalized[m_CoordIndex[idx][i]] );
             glm::dvec3 v = glm::dvec3( m_PointNormalized[m_CoordIndex[idx][(i + 1) % m_CoordIndex[idx].size()]] );
 
@@ -883,7 +883,7 @@ void S3D_MESH::calcPerFaceNormals()
                 }
                 else
                 {
-                    
+
                     /*
                     for( unsigned int i = 0; i < m_CoordIndex[idx].size(); i++ )
                     {
@@ -895,7 +895,7 @@ void S3D_MESH::calcPerFaceNormals()
                             cross_prod.x, cross_prod.y, cross_prod.z,
                             l,
                             (unsigned int)m_CoordIndex[idx].size()) );
-                    
+
                     */
 
                     if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )

@@ -87,7 +87,7 @@ bool S3D_MATERIAL::SetOpenGLMaterial( unsigned int aMaterialIndex, bool aUseMate
             if( m_Transparency.size() > 0 )
                 transparency_value = m_Transparency[0];
         }
-        
+
         if( m_DiffuseColor.size() > aMaterialIndex )
         {
             glm::vec3 color = m_DiffuseColor[aMaterialIndex];
