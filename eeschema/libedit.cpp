@@ -134,7 +134,9 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 
     wxArrayString dummyHistoryList;
     int dummyLastUnit;
-    cmp_name = SelectComponentFromLibrary( lib->GetName(), dummyHistoryList, dummyLastUnit,
+    SCHLIB_FILTER filter;
+    filter.LoadFrom( lib->GetName() );
+    cmp_name = SelectComponentFromLibrary( &filter, dummyHistoryList, dummyLastUnit,
                                           true, NULL, NULL );
 
     if( cmp_name.IsEmpty() )

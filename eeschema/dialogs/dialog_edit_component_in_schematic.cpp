@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -258,7 +258,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
 {
     wxArrayString dummy;
     int dummyunit = 1;
-    wxString chipname = m_parent->SelectComponentFromLibrary( wxEmptyString, dummy, dummyunit,
+    wxString chipname = m_parent->SelectComponentFromLibrary( NULL, dummy, dummyunit,
                                                               true, NULL, NULL );
     if( chipname.IsEmpty() )
         return;

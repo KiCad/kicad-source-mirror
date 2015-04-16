@@ -102,6 +102,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_HotkeysZoomAndGridList = g_Viewlib_Hokeys_Descr;
     m_cmpList   = NULL;
     m_libList   = NULL;
+    m_listPowerCmpOnly = false;
 
     SetScreen( new SCH_SCREEN( aKiway ) );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
@@ -309,7 +310,36 @@ void LIB_VIEW_FRAME::ReCreateListLib()
         return;
 
     m_libList->Clear();
-    m_libList->Append( Prj().SchLibs()->GetLibraryNames() );
+
+    wxArrayString libs = Prj().SchLibs()->GetLibraryNames();
+
+    // Remove not allowed libs from main list, if the allowed lib list is not empty
+    if( m_allowedLibs.GetCount() )
+    {
+        for( unsigned ii = 0; ii < libs.GetCount(); )
+        {
+            if( m_allowedLibs.Index( libs[ii] ) == wxNOT_FOUND )
+                libs.RemoveAt( ii );
+            else
+                ii++;
+        }
+    }
+
+    // Remove libs which have no power components, if this filter is activated
+    if( m_listPowerCmpOnly )
+    {
+        for( unsigned ii = 0; ii < libs.GetCount(); )
+        {
+            PART_LIB* lib = Prj().SchLibs()->FindLibrary( libs[ii] );
+
+            if( lib && !lib->HasPowerParts() )
+                libs.RemoveAt( ii );
+            else
+                ii++;
+        }
+    }
+
+    m_libList->Append( libs );
 
     // Search for a previous selection:
     int index = m_libList->FindString( m_libraryName );
@@ -355,7 +385,11 @@ void LIB_VIEW_FRAME::ReCreateListCmp()
 
     wxArrayString  nameList;
 
-    lib->GetEntryNames( nameList );
+    if( m_listPowerCmpOnly )
+        lib->GetEntryTypePowerNames( nameList );
+    else
+        lib->GetEntryNames( nameList );
+
     m_cmpList->Append( nameList );
 
     int index = m_cmpList->FindString( m_entryName );
@@ -536,4 +570,18 @@ void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 void LIB_VIEW_FRAME::CloseLibraryViewer( wxCommandEvent& event )
 {
     Close();
+}
+
+void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
+{
+    m_listPowerCmpOnly = false;
+    m_allowedLibs.Clear();
+
+    if( aFilter )
+    {
+        m_allowedLibs = aFilter->GetAllowedLibList();
+        m_listPowerCmpOnly = aFilter->GetFilterPowerParts();
+    }
+
+    ReCreateListLib();
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,24 @@ class wxArrayString;
 class COMPONENT_TREE_SEARCH_CONTAINER
 {
 public:
+    /** This enum allows a selective filtering of component to list
+     * currently: no filtering
+     * list power components only
+     */
+    enum CMP_FILTER_TYPE
+    {
+        CMP_FILTER_NONE,    ///< no filtering
+        CMP_FILTER_POWER    ///< list components flagged PWR
+    };
+
+public:
     COMPONENT_TREE_SEARCH_CONTAINER( PART_LIBS* aLibs );
     ~COMPONENT_TREE_SEARCH_CONTAINER();
+
+    void SetFilter( CMP_FILTER_TYPE aFilter )
+    {
+        m_filter = aFilter;
+    }
 
     /** Function AddLibrary
      * Add all the components and their aliases of this library to be searched.
@@ -102,6 +118,13 @@ public:
      */
     LIB_ALIAS* GetSelectedAlias( int* aUnit );
 
+    /**
+     * Function GetComponentsCount
+     * @return the number of components loaded in the tree
+     */
+    int GetComponentsCount() { return components_added; }
+
+
 private:
     struct TREE_NODE;
     static bool scoreComparator( const TREE_NODE* a1, const TREE_NODE* a2 );
@@ -109,11 +132,14 @@ private:
     std::vector<TREE_NODE*> nodes;
     wxTreeCtrl* tree;
     int libraries_added;
+    int components_added;
 
     wxString preselect_node_name;
     int preselect_unit_number;
 
     PART_LIBS*      m_libs;         // no ownership
+
+    enum CMP_FILTER_TYPE m_filter;  // the current filter
 };
 
 #endif /* COMPONENT_TREE_SEARCH_CONTAINER_H */

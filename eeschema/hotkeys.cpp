@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,13 +307,23 @@ static EDA_HOTKEY* viewlib_Hotkey_List[] =
     NULL
 };
 
+// Keyword Identifiers (tags) in key code configuration file (section names)
+// (.m_SectionTag member of a EDA_HOTKEY_CONFIG)
+static wxString schematicSectionTag( wxT( "[eeschema]" ) );
+static wxString libEditSectionTag( wxT( "[libedit]" ) );
+
+// Titles for hotkey editor and hotkey display
+static wxString commonSectionTitle( _HKI( "Common" ) );
+static wxString schematicSectionTitle( _HKI( "Schematic Editor" ) );
+static wxString libEditSectionTitle( _HKI( "Library Editor" ) );
+
 // list of sections and corresponding hotkey list for Eeschema (used to create
 // an hotkey config file)
 struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    common_Hotkey_List,    &g_CommonSectionTitle    },
-    { &g_SchematicSectionTag, schematic_Hotkey_List, &g_SchematicSectionTitle },
-    { &g_LibEditSectionTag,   libEdit_Hotkey_List,   &g_LibEditSectionTitle   },
+    { &g_CommonSectionTag,    common_Hotkey_List,    &commonSectionTitle    },
+    { &schematicSectionTag,   schematic_Hotkey_List, &schematicSectionTitle },
+    { &libEditSectionTag,     libEdit_Hotkey_List,   &schematicSectionTitle   },
     { NULL,                   NULL,                  NULL                     }
 };
 
@@ -321,25 +331,25 @@ struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[] =
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    common_Hotkey_List,    &g_CommonSectionTitle },
-    { &g_SchematicSectionTag, schematic_Hotkey_List, &g_SchematicSectionTitle },
-    { NULL,                   NULL,                    NULL }
+    { &g_CommonSectionTag,    common_Hotkey_List,    &commonSectionTitle },
+    { &schematicSectionTitle, schematic_Hotkey_List, &schematicSectionTitle },
+    { NULL,                   NULL,                  NULL }
 };
 
 // list of sections and corresponding hotkey list for the component editor
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Libedit_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,  common_Hotkey_List,  &g_CommonSectionTitle },
-    { &g_LibEditSectionTag, libEdit_Hotkey_List, &g_LibEditSectionTitle },
-    { NULL,                 NULL,                NULL }
+    { &g_CommonSectionTag,  common_Hotkey_List,   &commonSectionTitle },
+    { &libEditSectionTag,   libEdit_Hotkey_List,  &schematicSectionTitle },
+    { NULL,                 NULL,                 NULL }
 };
 
 // list of sections and corresponding hotkey list for the component browser
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Viewlib_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag, common_basic_Hotkey_List, &g_CommonSectionTitle },
+    { &g_CommonSectionTag, common_basic_Hotkey_List, &commonSectionTitle },
     { NULL,                NULL,                 NULL }
 };
 

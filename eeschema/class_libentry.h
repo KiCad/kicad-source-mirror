@@ -63,7 +63,7 @@ typedef boost::weak_ptr<LIB_PART>       PART_REF;       ///< weak pointer to LIB
 
 
 /* values for member .m_options */
-enum  LibrEntryOptions
+enum  LIBRENTRYOPTIONS
 {
     ENTRY_NORMAL,   // Libentry is a standard part (real or alias)
     ENTRY_POWER     // Libentry is a power symbol
@@ -207,7 +207,7 @@ class LIB_PART : public EDA_ITEM
     bool                m_showPinNames;     ///< Determines if part pin names are visible.
     bool                m_showPinNumbers;   ///< Determines if part pin numbers are visible.
     long                m_dateModified;     ///< Date the part was last modified.
-    LibrEntryOptions    m_options;          ///< Special part features such as POWER or NORMAL.)
+    LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
     int                 m_unitCount;        ///< Number of units (parts) per package.
     LIB_ITEMS           drawings;           ///< How to draw this part.
     wxArrayString       m_FootprintList;    /**< List of suitable footprint names for the

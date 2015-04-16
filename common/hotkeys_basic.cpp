@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, j-p.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, j-p.charras at wanadoo.fr
  * Copyright (C) 2010-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,16 +47,6 @@
 #define HOTKEYS_CONFIG_KEY wxT( "Keys" )
 
 wxString g_CommonSectionTag( wxT( "[common]" ) );
-wxString g_SchematicSectionTag( wxT( "[eeschema]" ) );
-wxString g_LibEditSectionTag( wxT( "[libedit]" ) );
-wxString g_BoardEditorSectionTag( wxT( "[pcbnew]" ) );
-wxString g_ModuleEditSectionTag( wxT( "[footprinteditor]" ) );
-
-wxString g_CommonSectionTitle( _HKI( "Common" ) );
-wxString g_SchematicSectionTitle( _HKI( "Schematic Editor" ) );
-wxString g_LibEditSectionTitle( _HKI( "Library Editor" ) );
-wxString g_BoardEditorSectionTitle( _HKI( "Board Editor" ) );
-wxString g_ModuleEditSectionTitle( _HKI( "Footprint Editor" ) );
 
 
 /* Class to handle hotkey commnands. hotkeys have a default value

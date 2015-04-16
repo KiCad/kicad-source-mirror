@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,15 +52,20 @@
 #include <boost/foreach.hpp>
 
 
-wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedAlias,
+wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( const SCHLIB_FILTER* aFilter,
+                                                        LIB_ALIAS* aPreselectedAlias,
                                                         int* aUnit, int* aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+
     if( viewlibFrame )
         viewlibFrame->Destroy();
 
     viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
+
+    if( aFilter )
+        viewlibFrame->SetFilter( aFilter );
 
     if( aPreselectedAlias )
     {
@@ -93,37 +98,47 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( LIB_ALIAS* aPreselectedA
 }
 
 
-wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
+wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilter,
                                                      wxArrayString&  aHistoryList,
                                                      int&            aHistoryLastUnit,
                                                      bool            aUseLibBrowser,
                                                      int*            aUnit,
                                                      int*            aConvert )
 {
-    int             cmpCount  = 0;
     wxString        dialogTitle;
     PART_LIBS*      libs = Prj().SchLibs();
 
     COMPONENT_TREE_SEARCH_CONTAINER search_container( libs );   // Container doing search-as-you-type
+    bool loaded = false;
 
-    if( !aLibname.IsEmpty() )
+    if( aFilter )
     {
-        PART_LIB* currLibrary = libs->FindLibrary( aLibname );
+        const wxArrayString& liblist = aFilter->GetAllowedLibList();
 
-        if( currLibrary )
+        for( unsigned ii = 0; ii < liblist.GetCount(); ii++ )
         {
-            cmpCount = currLibrary->GetCount();
-            search_container.AddLibrary( *currLibrary );
+            PART_LIB* currLibrary = libs->FindLibrary( liblist[ii] );
+
+            if( currLibrary )
+            {
+                loaded = true;
+                search_container.AddLibrary( *currLibrary );
+            }
         }
+
+        if( aFilter->GetFilterPowerParts() )
+            search_container.SetFilter( COMPONENT_TREE_SEARCH_CONTAINER::CMP_FILTER_POWER );
+
     }
-    else
+
+    if( !loaded )
     {
         BOOST_FOREACH( PART_LIB& lib, *libs )
         {
-            cmpCount += lib.GetCount();
             search_container.AddLibrary( lib );
         }
     }
+
 
     if( !aHistoryList.empty() )
     {
@@ -140,7 +155,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     }
 
     const int deMorgan = aConvert ? *aConvert : 1;
-    dialogTitle.Printf( _( "Choose Component (%d items loaded)" ), cmpCount );
+    dialogTitle.Printf( _( "Choose Component (%d items loaded)" ), search_container.GetComponentsCount() );
     DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, deMorgan );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -151,8 +166,8 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     if ( alias )
         cmpName = alias->GetName();
 
-    if( dlg.IsExternalBrowserSelected() )   // User requested big component browser.
-        cmpName = SelectComponentFromLibBrowser( alias, aUnit, aConvert);
+    if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
+        cmpName = SelectComponentFromLibBrowser( aFilter, alias, aUnit, aConvert);
 
     if( !cmpName.empty() )
     {
@@ -165,7 +180,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 
 
 SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
-                                               const wxString& aLibname,
+                                               const SCHLIB_FILTER* aFilter,
                                                wxArrayString&  aHistoryList,
                                                int&            aHistoryLastUnit,
                                                bool            aUseLibBrowser )
@@ -175,7 +190,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     SetRepeatItem( NULL );
     m_canvas->SetIgnoreMouseEvents( true );
 
-    wxString name = SelectComponentFromLibrary( aLibname, aHistoryList, aHistoryLastUnit,
+    wxString name = SelectComponentFromLibrary( aFilter, aHistoryList, aHistoryLastUnit,
                                                 aUseLibBrowser, &unit, &convert );
 
     if( name.IsEmpty() )
@@ -188,7 +203,12 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     m_canvas->SetIgnoreMouseEvents( false );
     m_canvas->MoveCursorToCrossHair();
 
-    LIB_PART* part = Prj().SchLibs()->FindLibPart( name, aLibname );
+    wxString libsource;     // the library name to use. If empty, load from any lib
+
+    if( aFilter )
+        libsource = aFilter->GetLibSource();
+
+    LIB_PART* part = Prj().SchLibs()->FindLibPart( name, libsource );
 
     if( !part )
     {

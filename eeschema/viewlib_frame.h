@@ -38,6 +38,7 @@
 
 class wxListBox;
 class PART_LIB;
+class SCHLIB_FILTER;
 
 
 /**
@@ -109,6 +110,17 @@ public:
     void SaveSettings( wxConfigBase* aCfg );
 
     /**
+     * set a filter to display only libraries and/or components
+     * which match the filter
+     *
+     * @param aFilter is a filter to pass the allowed library name list
+     *          and/or some other filter
+     *  see SCH_BASE_FRAME::SelectComponentFromLibrary() for details.
+     * if aFilter == NULL, remove all filtering
+     */
+    void SetFilter( const SCHLIB_FILTER* aFilter );
+
+    /**
      * Set the selected library in the library window.
      *
      * @param aLibName name of the library to be selected.
@@ -149,6 +161,7 @@ private:
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void DClickOnCmpList( wxCommandEvent& event );
 
+// Private members:
     wxComboBox*         m_selpartBox;
 
     // List of libraries (for selection )
@@ -158,6 +171,10 @@ private:
     // List of components in the selected library
     wxListBox*          m_cmpList;          // The list of components
     int                 m_cmpListWidth;     // Last width of the window
+
+    // Filters to build list of libs/list of parts
+    bool                m_listPowerCmpOnly;
+    wxArrayString       m_allowedLibs;
 
     wxString            m_configPath;       // subpath for configuration
 

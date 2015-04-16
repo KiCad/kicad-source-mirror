@@ -110,14 +110,17 @@ EDA_HOTKEY* s_PlEditor_Hotkey_List[] =
     NULL
 };
 
+// Titles for hotkey editor and hotkey display
+static wxString commonSectionTitle( _HKI( "Common" ) );
+
 // list of sections and corresponding hotkey list for Pl_Editor
 // (used to create an hotkey config file)
-wxString s_PlEditorSectionTag( wxT( "[pl_editor]" ) );
-wxString s_PlEditorSectionTitle( wxT( "Part Layout Editor" ) );
+static wxString s_PlEditorSectionTag( wxT( "[pl_editor]" ) );
+static wxString s_PlEditorSectionTitle( wxT( "Part Layout Editor" ) );
 
 struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    s_Common_Hotkey_List,     &g_CommonSectionTitle    },
+    { &g_CommonSectionTag,    s_Common_Hotkey_List,     &commonSectionTitle    },
     { &s_PlEditorSectionTag,  s_PlEditor_Hotkey_List,   &s_PlEditorSectionTitle  },
     { NULL,                   NULL,                     NULL                     }
 };

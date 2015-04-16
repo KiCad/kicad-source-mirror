@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,8 +94,8 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     }
 
     aSheetPin->SetText( dlg.GetLabelName() );
-    aSheetPin->SetSize( wxSize( ValueFromString( g_UserUnit, dlg.GetTextHeight() ),
-                                ValueFromString( g_UserUnit, dlg.GetTextWidth() ) ) );
+    aSheetPin->SetSize( wxSize( ValueFromString( g_UserUnit, dlg.GetTextWidth() ),
+                                ValueFromString( g_UserUnit, dlg.GetTextHeight() ) ) );
     aSheetPin->SetShape( dlg.GetConnectionType() );
 
     if( aDC )

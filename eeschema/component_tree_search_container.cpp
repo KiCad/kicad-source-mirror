@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,12 +98,14 @@ bool COMPONENT_TREE_SEARCH_CONTAINER::scoreComparator( const TREE_NODE* a1, cons
 }
 
 
-COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER( PART_LIBS* aLibs ) :
-    tree( NULL ),
-    libraries_added( 0 ),
-    preselect_unit_number( -1 ),
-    m_libs( aLibs )
+COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER( PART_LIBS* aLibs )
 {
+    tree = NULL,
+    libraries_added = 0,
+    components_added = 0,
+    preselect_unit_number = -1,
+    m_libs = aLibs,
+    m_filter = CMP_FILTER_NONE;
 }
 
 
@@ -134,8 +136,13 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( PART_LIB& aLib )
 {
     wxArrayString all_aliases;
 
-    aLib.GetEntryNames( all_aliases );
+    if( m_filter == CMP_FILTER_POWER )
+        aLib.GetEntryTypePowerNames( all_aliases );
+    else
+        aLib.GetEntryNames( all_aliases );
+
     AddAliasList( aLib.GetName(), all_aliases, &aLib );
+
     ++libraries_added;
 }
 
@@ -203,6 +210,8 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                 nodes.push_back( unit_node );
             }
         }
+
+        ++components_added;
     }
 }
 

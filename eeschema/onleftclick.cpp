@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_bitmap.h>
+#include <class_library.h>      // fo class SCHLIB_FILTER to filter power parts
 
 
 // TODO(hzeller): These pairs of elmenets should be represented by an object, but don't want
@@ -296,7 +297,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_SCH_PLACE_COMPONENT:
         if( (item == NULL) || (item->GetFlags() == 0) )
         {
-            GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString,
+            GetScreen()->SetCurItem( Load_Component( aDC, NULL,
                                                      s_CmpNameList, s_CmpLastUnit, true ) );
             m_canvas->SetAutoPanRequest( true );
         }
@@ -309,7 +310,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PLACE_POWER_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            GetScreen()->SetCurItem( Load_Component( aDC, wxT( "power" ),
+            SCHLIB_FILTER filter;
+            filter.FilterPowerParts( true );
+            GetScreen()->SetCurItem( Load_Component( aDC, &filter,
                                                      s_PowerNameList, s_LastPowerUnit, false ) );
             m_canvas->SetAutoPanRequest( true );
         }

@@ -61,6 +61,7 @@ class SCH_JUNCTION;
 class DIALOG_SCH_FIND;
 class wxFindDialogEvent;
 class wxFindReplaceData;
+class SCHLIB_FILTER;
 
 
 /// enum used in RotationMiroir()
@@ -1007,7 +1008,9 @@ private:
      * else search in all loaded libs
      *
      * @param aDC is the device context to draw upon.
-     * @param aLibName is the library name to load the component from.
+     * @param aFilters is a filter to pass the allowed lib names list, or library name
+     * to load the component from and/or some other filters
+     *          if NULL, no filtering.
      * @param aHistoryList     list remembering recently used component names.
      * @param aHistoryLastUnit remembering last unit in last component.
      * @param aUseLibBrowser is the flag to determine if the library browser should be launched.
@@ -1016,7 +1019,7 @@ private:
      *  want to change too much while other refactoring is going on)
      */
     SCH_COMPONENT* Load_Component( wxDC*           aDC,
-                                   const wxString& aLibName,
+                                   const SCHLIB_FILTER*  aFilter,
                                    wxArrayString&  aHistoryList,
                                    int&            aHistoryLastUnit,
                                    bool            aUseLibBrowser );

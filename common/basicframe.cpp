@@ -632,13 +632,6 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         KICAD_USE_WEBKIT=" );
-#ifdef KICAD_USE_WEBKIT
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
     wxMessageBox( tmp, _("Version Information (copied to the clipboard)") );
 
     wxTheClipboard->SetData( new wxTextDataObject( tmp ) );

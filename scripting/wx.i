@@ -298,3 +298,4 @@ public:
     $result = wxArrayString2PyList($1);
 }
 
+%template(wxPoint_Vector) std::vector<wxPoint>;

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,6 +71,90 @@ class OUTPUTFORMATTER;
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
 
 #define DOC_EXT           wxT( "dcm" )
+
+// Helper class to filter a list of libraries, and/or a list of PART_LIB
+// in dialogs
+class SCHLIB_FILTER
+{
+    wxArrayString m_allowedLibs;        ///< a list of lib names to list some libraries
+                                        ///< if empty: no filter
+    bool          m_filterPowerParts;   ///< true to filter (show only) power parts
+    bool          m_forceLoad;          // When true, load a part lib from the lib
+                                        // which is given in m_allowedLibs[0]
+
+public:
+    SCHLIB_FILTER()
+    {
+        m_filterPowerParts = false;
+    }
+
+    /**
+     * add a lib name to the allowed libraries
+     */
+    void AddLib( const wxString& aLibName )
+    {
+        m_allowedLibs.Add( aLibName );
+        m_forceLoad = false;
+    }
+
+
+    /**
+     * add a lib name to the allowed libraries
+     */
+    void LoadFrom( const wxString& aLibName )
+    {
+        m_allowedLibs.Clear();
+        m_allowedLibs.Add( aLibName );
+        m_forceLoad = true;
+    }
+
+    /**
+     * Clear the allowed libraries list (allows all libs)
+     */
+    void ClearLibList()
+    {
+        m_allowedLibs.Clear();
+        m_forceLoad = false;
+    }
+
+    /**
+     * set the filtering of power parts
+     */
+    void FilterPowerParts( bool aFilterEnable )
+    {
+        m_filterPowerParts = aFilterEnable;
+    }
+
+    // Accessors
+
+    /**
+     * Function GetFilterPowerParts
+     * @return true if the filtering of power parts is on
+     */
+    bool GetFilterPowerParts() const { return m_filterPowerParts; }
+
+
+    /**
+     * Function GetAllowedLibList
+     * @return am wxArrayString of the names of allowed libs
+     */
+    const wxArrayString& GetAllowedLibList() const { return m_allowedLibs; }
+
+    /**
+     * Function GetLibSource
+     * @return the name of the lib to use to load a part, or an a emty string
+     * Useful to load (in lib editor or lib viewer) a part from a given library
+     */
+    const wxString& GetLibSource() const
+    {
+        static wxString dummy;
+
+        if( m_forceLoad && m_allowedLibs.GetCount() > 0 )
+            return m_allowedLibs[0];
+        else
+            return dummy;
+    }
+};
 
 
 /* Helpers for creating a list of part libraries. */
@@ -351,6 +435,16 @@ public:
                         bool aMakeUpperCase = false );
 
     /**
+     * Load a string array with the names of  entries of type POWER in this library.
+     *
+     * @param aNames - String array to place entry names into.
+     * @param aSort - Sort names if true.
+     * @param aMakeUpperCase - Force entry names to upper case.
+     */
+    void GetEntryTypePowerNames( wxArrayString& aNames, bool aSort = true,
+                        bool aMakeUpperCase = false );
+
+    /**
      * Load string array with entry names matching name and/or key word.
      *
      * This currently mimics the old behavior of calling KeyWordOk() and
@@ -547,6 +641,13 @@ public:
      * @throw IO_ERROR if there's any problem loading the library.
      */
     static PART_LIB* LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer );
+
+    /**
+     * Function HasPowerParts
+     * @return true if at least one power part is found in lib
+     * Useful to select or list only libs containing power parts
+     */
+    bool HasPowerParts();
 };
 
 

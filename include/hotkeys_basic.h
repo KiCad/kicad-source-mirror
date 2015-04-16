@@ -46,17 +46,6 @@ class EDA_BASE_FRAME;
  *  .m_SectionTag member of a EDA_HOTKEY_CONFIG
  */
 extern wxString g_CommonSectionTag;
-extern wxString g_SchematicSectionTag;
-extern wxString g_LibEditSectionTag;
-extern wxString g_BoardEditorSectionTag;
-extern wxString g_ModuleEditSectionTag;
-
-extern wxString g_CommonSectionTitle;
-extern wxString g_SchematicSectionTitle;
-extern wxString g_LibEditSectionTitle;
-extern wxString g_BoardEditorSectionTitle;
-extern wxString g_ModuleEditSectionTitle;
-
 
 /**
  * class EDA_HOTKEY

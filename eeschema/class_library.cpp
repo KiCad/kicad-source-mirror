@@ -115,6 +115,33 @@ void PART_LIB::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUpper
 }
 
 
+void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames, bool aSort, bool aMakeUpperCase )
+{
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
+    {
+        LIB_ALIAS* alias = it->second;
+        LIB_PART* root = alias->GetPart();
+
+        if( !root || !root->IsPower() )
+            continue;
+
+        if( aMakeUpperCase )
+        {
+            wxString tmp = (*it).first;
+            tmp.MakeUpper();
+            aNames.Add( tmp );
+        }
+        else
+        {
+            aNames.Add( (*it).first );
+        }
+    }
+
+    if( aSort )
+        aNames.Sort();
+}
+
+
 /**
  * Function sortFunction
  * simple function used as comparator to sort a std::vector<wxArrayString>&.
@@ -232,6 +259,22 @@ LIB_PART* PART_LIB::FindPart( const wxString& aName )
     }
 
     return NULL;
+}
+
+
+bool PART_LIB::HasPowerParts()
+{
+    // return true if at least one power part is found in lib
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
+    {
+        LIB_ALIAS* alias = it->second;
+        LIB_PART* root = alias->GetPart();
+
+        if( root && root->IsPower() )
+            return true;
+    }
+
+    return false;
 }
 
 
