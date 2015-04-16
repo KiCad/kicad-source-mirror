@@ -446,6 +446,8 @@ void EDA_3D_CANVAS::Redraw()
     glEnable( GL_COLOR_MATERIAL );
     SetOpenGlDefaultMaterial();
 
+    //glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, FALSE );
+
     // Board Body
 
     GLint shininess_value = 32;
@@ -497,6 +499,7 @@ void EDA_3D_CANVAS::Redraw()
         glCallList( m_glLists[GL_ID_AUX_LAYERS] );
     }
 
+    //glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, TRUE );
 
     // Draw Component Shadow
 
@@ -583,6 +586,7 @@ void EDA_3D_CANVAS::Redraw()
     // non transparent objects
     if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
     {
+        glEnable( GL_COLOR_MATERIAL );
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
@@ -925,6 +929,14 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
         int thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
         int zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
+        
+        float zNormal = 1.0f; // When using thickness it will draw first the top and then botton (with z inverted)
+
+        // If we are not using thickness, then the znormal must face the layer direction
+        // because it will draw just one plane
+        if( !thickness )
+            zNormal = Get3DLayer_Z_Orientation( layer );
+
 
         if( realistic_mode )
         {
@@ -941,17 +953,17 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
         // If holes are removed from copper zones, bufferPolys contains all polygons
         // to draw (tracks+zones+texts).
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos, thickness,
-                                            GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
+                                            GetPrm3DVisu().m_BiuTo3Dunits, useTextures,
+                                            zNormal );
 
         // If holes are not removed from copper zones (for calculation time reasons,
         // the zone polygons are stored in bufferZonesPolys and have to be drawn now:
         if( bufferZonesPolys.GetCornersCount() )
         {
-            glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
             Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos, thickness,
-                                    GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
+                                    GetPrm3DVisu().m_BiuTo3Dunits, useTextures,
+                                    zNormal );
         }
 
         throughHolesListBuilt = true;
@@ -1016,7 +1028,6 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     zpos += (copper_thickness + epsilon) / 2.0f;
     board_thickness -= copper_thickness + epsilon;
 
-    glNormal3f( 0.0f, 0.0f, Get3DLayer_Z_Orientation( F_Cu ) );
     KI_POLYGON_SET  currLayerPolyset;
     KI_POLYGON_SET  polysetHoles;
 
@@ -1035,7 +1046,8 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     if( bufferPcbOutlines.GetCornersCount() )
     {
         Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness / 2.0,
-                                            board_thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
+                                            board_thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures,
+                                            1.0f );
     }
 
     glEndList();
@@ -1256,10 +1268,18 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
         bufferPolys.RemoveAllContours();
         bufferPolys.ImportFrom( currLayerPolyset );
 
+        float zNormal = 1.0f; // When using thickness it will draw first the top and then botton (with z inverted)
+
+        // If we are not using thickness, then the znormal must face the layer direction
+        // because it will draw just one plane
+        if( !thickness )
+            zNormal = Get3DLayer_Z_Orientation( layer );
+
+
         setGLTechLayersColor( layer );
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
-                thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures );
+                thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures,
+                zNormal );
     }
 }
 
@@ -1361,10 +1381,17 @@ void EDA_3D_CANVAS::buildBoard3DAuxLayers( REPORTER* aErrorMessages, REPORTER* a
         bufferPolys.RemoveAllContours();
         bufferPolys.ImportFrom( currLayerPolyset );
 
+        float zNormal = 1.0f; // When using thickness it will draw first the top and then botton (with z inverted)
+
+        // If we are not using thickness, then the znormal must face the layer direction
+        // because it will draw just one plane
+        if( !thickness )
+            zNormal = Get3DLayer_Z_Orientation( layer );
+
         setGLTechLayersColor( layer );
-        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
         Draw3D_SolidHorizontalPolyPolygons( bufferPolys, zpos,
-                                            thickness, GetPrm3DVisu().m_BiuTo3Dunits, false );
+                                            thickness, GetPrm3DVisu().m_BiuTo3Dunits, false,
+                                            zNormal );
     }
 }
 

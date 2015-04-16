@@ -54,17 +54,6 @@ static void CALLBACK    tessEndCB();
 static void CALLBACK    tessErrorCB( GLenum errorCode );
 static void CALLBACK    tessCPolyPt2Vertex( const GLvoid* data );
 
-// 2 helper functions to set the current normal vector for gle items
-static inline void SetNormalZpos()
-{
-    glNormal3f( 0.0, 0.0, 1.0 );
-}
-
-static inline void SetNormalZneg()
-{
-    glNormal3f( 0.0, 0.0, -1.0 );
-}
-
 void TransfertToGLlist( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 
 /* Draw3D_VerticalPolygonalCylinder is a helper function.
@@ -160,7 +149,8 @@ void SetGLTexture( GLuint text_id, float scale )
  */
 void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
                                          int aZpos, int aThickness, double aBiuTo3DUnits,
-                                         bool aUseTextures )
+                                         bool aUseTextures,
+                                         float aNormal_Z_Orientation )
 {
     // for Tess callback functions:
     s_biuTo3Dunits = aBiuTo3DUnits;
@@ -173,16 +163,17 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
     gluTessCallback( tess, GLU_TESS_ERROR, ( void (CALLBACK*) () )tessErrorCB );
     gluTessCallback( tess, GLU_TESS_VERTEX, ( void (CALLBACK*) () )tessCPolyPt2Vertex );
 
-    GLdouble    v_data[3];
-    double      zpos = ( aZpos + (aThickness / 2.0) ) * aBiuTo3DUnits;
+    GLdouble v_data[3];
+    double   zpos = ( aZpos + (aThickness / 2.0) ) * aBiuTo3DUnits;
     s_currentZpos = zpos;     // for Tess callback functions
-    v_data[2] = aZpos + (aThickness / 2.0);
+    v_data[2]     = zpos;
 
     // Set normal toward positive Z axis, for a solid object on the top side
-    if( aThickness )
-        SetNormalZpos();
 
-    // gluTessProperty(tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD);
+    //gluTessProperty( tess, GLU_TESS_BOUNDARY_ONLY, GL_TRUE );
+    //gluTessProperty( tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD );
+
+    glNormal3f( 0.0, 0.0, aNormal_Z_Orientation );
 
     // Draw solid areas contained in this list
     CPOLYGONS_LIST polylist = aPolysList;    // temporary copy for gluTessVertex
@@ -201,11 +192,6 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
                 gluTessBeginContour( tess );
                 startContour = 0;
             }
-
-            // https://www.opengl.org/sdk/docs/man2/xhtml/gluTessNormal.xml
-            if( !aThickness )
-                gluTessNormal( tess, 0.0, 0.0, 0.0 );
-
 
             v_data[0]   = polylist.GetX( ii ) * aBiuTo3DUnits;
             v_data[1]   = -polylist.GetY( ii ) * aBiuTo3DUnits;
@@ -231,9 +217,8 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
         zpos = ( aZpos - (aThickness / 2.0) ) * aBiuTo3DUnits;
         s_currentZpos = zpos;     // for Tess callback functions
         v_data[2] = zpos;
-        // Set normal toward negative Z axis, for a solid object on bottom side
-        if( aThickness )
-            SetNormalZneg();
+
+        glNormal3f( 0.0, 0.0, -aNormal_Z_Orientation );
     }
 
     if( startContour == 0 )
@@ -259,12 +244,14 @@ void Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
  */
 void Draw3D_SolidHorizontalPolygonWithHoles( const CPOLYGONS_LIST& aPolysList,
                                              int aZpos, int aThickness,
-                                             double aBiuTo3DUnits, bool aUseTextures )
+                                             double aBiuTo3DUnits, bool aUseTextures,
+                                             float aNormal_Z_Orientation )
 {
     CPOLYGONS_LIST polygon;
 
     ConvertPolysListWithHolesToOnePolygon( aPolysList, polygon );
-    Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, aThickness, aBiuTo3DUnits, aUseTextures );
+    Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, aThickness, aBiuTo3DUnits, aUseTextures,
+                                        aNormal_Z_Orientation );
 }
 
 
@@ -307,23 +294,21 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
     if( aThickness )
     {
         // draw top (front) and bottom (back) horizontal sides (rings)
-        SetNormalZpos();
         outer_cornerBuffer.Append( inner_cornerBuffer );
         CPOLYGONS_LIST polygon;
 
         ConvertPolysListWithHolesToOnePolygon( outer_cornerBuffer, polygon );
         // draw top (front) horizontal ring
-        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits, false );
+        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits, false,
+                                            1.0f );
 
         if( aHeight )
         {
             // draw bottom (back) horizontal ring
-            SetNormalZneg();
-            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits, false );
+            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits, false,
+                                                -1.0f );
         }
     }
-
-    SetNormalZpos();
 }
 
 
@@ -372,18 +357,16 @@ void Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
         ConvertPolysListWithHolesToOnePolygon( outer_cornerBuffer, polygon );
 
         // draw top (front) horizontal side (ring)
-        SetNormalZpos();
-        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits, false );
+        Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits, false,
+                                            1.0f );
 
         if( aHeight )
         {
             // draw bottom (back) horizontal side (ring)
-            SetNormalZneg();
-            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits, false );
+            Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits, false,
+                                                -1.0f );
         }
     }
-
-    SetNormalZpos();
 }
 
 
@@ -401,7 +384,7 @@ void Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
 
     TransformRoundedEndsSegmentToPolygon( cornerBuffer, aStart, aEnd, slice, aWidth );
 
-    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits, false );
+    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits, false, 1.0f );
 }
 
 
@@ -415,7 +398,7 @@ void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
     TransformArcToPolygon( cornerBuffer, aCenterPos, aStartPoint, aArcAngle,
                            slice, aWidth );
 
-    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits, false );
+    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits, false, 1.0f );
 }
 
 

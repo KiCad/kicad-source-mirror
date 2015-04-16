@@ -37,6 +37,7 @@
  * @param aThickness = thickness in board internal units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  * @param aUseTextures = true to use textxures for the polygons
+ * @param aNormal_Z_Orientation = the normal Z orientation to apply
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
  * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
@@ -44,7 +45,8 @@
  */
 void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
                                             int aZpos, int aThickness, double aBiuTo3DUnits,
-                                            bool aUseTextures );
+                                            bool aUseTextures,
+                                            float aNormal_Z_Orientation );
 
 /** draw the solid polygon found in aPolysList
  * The first polygonj is the main polygon, others are holes
@@ -53,6 +55,7 @@ void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
  * @param aThickness = thickness in board internal units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  * @param aUseTextures = true to use textxures for the polygons
+ * @param aNormal_Z_Orientation = the normal Z orientation to apply
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
  * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
@@ -60,7 +63,8 @@ void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
  */
 void    Draw3D_SolidHorizontalPolygonWithHoles( const CPOLYGONS_LIST& aPolysList,
                                                 int aZpos, int aThickness, double aBiuTo3DUnits,
-                                                bool aUseTextures );
+                                                bool aUseTextures,
+                                                float aNormal_Z_Orientation );
 
 /** draw a thick segment using 3D primitives, in a XY plane
  * @param aStart = YX position of start point in board units

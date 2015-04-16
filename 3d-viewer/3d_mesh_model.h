@@ -66,7 +66,8 @@ public:
     std::vector< S3D_VERTEX >       m_PerFaceColor;
     std::vector< S3D_VERTEX >       m_PerFaceNormalsNormalized;
     std::vector< S3D_VERTEX >       m_PerVertexNormalsNormalized;
-    std::vector< int >              m_MaterialIndex;
+    std::vector< int >              m_MaterialIndexPerFace;
+    std::vector< std::vector<int> > m_MaterialIndexPerVertex;
     S3D_MESH_PTRS                   childs;
 
     S3D_VERTEX  m_translation;

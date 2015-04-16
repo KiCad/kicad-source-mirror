@@ -50,6 +50,7 @@ S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
     m_SpecularColor.clear();
     m_Shininess.clear();
     m_Transparency.clear();
+    m_ColorPerVertex = false;
 }
 
 
@@ -81,17 +82,29 @@ bool S3D_MATERIAL::SetOpenGLMaterial( unsigned int aMaterialIndex, bool aUseMate
         {
             transparency_value = m_Transparency[aMaterialIndex];
         }
+        else
+        {
+            if( m_Transparency.size() > 0 )
+                transparency_value = m_Transparency[0];
+        }
         
         if( m_DiffuseColor.size() > aMaterialIndex )
         {
             glm::vec3 color = m_DiffuseColor[aMaterialIndex];
 
-            glColor4f( color.x, color.y, color.z, 1.0 - transparency_value );
+            glColor4f( color.x, color.y, color.z, 1.0f - transparency_value );
+        }
+        else
+        {
+            if( m_DiffuseColor.size() == 0 )
+            {
+                glColor4f( 0.8f, 0.8f, 0.8f, 1.0f );
+            }
         }
 
-        if( m_Shininess.size() > aMaterialIndex )
+        if( m_Shininess.size() > 0 )
         {
-            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_Shininess[aMaterialIndex] );
+            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_Shininess[0] );
         }
 
         // emissive

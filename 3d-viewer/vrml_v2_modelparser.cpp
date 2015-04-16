@@ -1103,23 +1103,34 @@ int VRML2_MODEL_PARSER::read_appearance()
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
 
-                bool found = false;
+                S3D_MATERIAL* found_material = NULL;
 
                 for( material = m_Master->m_Materials; material; material = material->Next() )
                 {
                     if( material->m_Name == mat_name )
                     {
-                        m_model->m_Materials = material;
+                        found_material = material;
                         // We dont exit here, since it seems that VRML can have
                         // multiple material defined, so, it will copy the latest one that was defined.
-                        found = true;
                     }
                 }
 
                 debug_exit();
 
-                if( found )
+                if( found_material )
+                {
+                    // Create a new material instead of assign a pointer because
+                    // the indexfaceset can set color pervertex and that will be stored in the material.
+                    m_model->m_Materials = new S3D_MATERIAL( m_Master, found_material->m_Name );
+                    m_model->m_Materials->m_AmbientColor    = found_material->m_AmbientColor;
+                    m_model->m_Materials->m_DiffuseColor    = found_material->m_DiffuseColor;
+                    m_model->m_Materials->m_EmissiveColor   = found_material->m_EmissiveColor;
+                    m_model->m_Materials->m_SpecularColor   = found_material->m_SpecularColor;
+                    m_model->m_Materials->m_Shininess       = found_material->m_Shininess;
+                    m_model->m_Materials->m_Transparency    = found_material->m_Transparency;
+                    m_model->m_Materials->m_ColorPerVertex  = false;
                     return 0;
+                }
 
                 wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_appearance error: material not found" ) );
                 return -1;
@@ -1228,17 +1239,37 @@ int VRML2_MODEL_PARSER::read_material()
                 wxString mat_name;
                 mat_name = FROM_UTF8( text );
 
+                S3D_MATERIAL* found_material = NULL;
+
                 for( material = m_Master->m_Materials; material; material = material->Next() )
                 {
                     if( material->m_Name == mat_name )
                     {
-                        m_model->m_Materials = material;
-                        debug_exit();
-                        return 0;
+                        found_material = material;
+                        // We dont exit here, since it seems that VRML can have
+                        // multiple material defined, so, it will copy the latest one that was defined.
                     }
                 }
 
+                debug_exit();
+
+                if( found_material )
+                {
+                    // Create a new material instead of assign a pointer because
+                    // the indexfaceset can set color pervertex and that will be stored in the material.
+                    m_model->m_Materials = new S3D_MATERIAL( m_Master, found_material->m_Name );
+                    m_model->m_Materials->m_AmbientColor    = found_material->m_AmbientColor;
+                    m_model->m_Materials->m_DiffuseColor    = found_material->m_DiffuseColor;
+                    m_model->m_Materials->m_EmissiveColor   = found_material->m_EmissiveColor;
+                    m_model->m_Materials->m_SpecularColor   = found_material->m_SpecularColor;
+                    m_model->m_Materials->m_Shininess       = found_material->m_Shininess;
+                    m_model->m_Materials->m_Transparency    = found_material->m_Transparency;
+                    m_model->m_Materials->m_ColorPerVertex  = false;
+                    return 0;
+                }
+
                 wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_material error: material not found" ) );
+                return -1;
             }
         }
     }
@@ -1365,6 +1396,7 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
             {
                 if( strcmp( text, "TRUE" ) == 0 )
                 {
+                    wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_IndexedFaceSet m_normalPerVertex TRUE" ) );
                     m_normalPerVertex = true;
                 }
             }
@@ -1373,12 +1405,15 @@ int VRML2_MODEL_PARSER::read_IndexedFaceSet()
         {
             GetNextTag( m_file, text, sizeof(text) );
 
-            if( strcmp( text, "TRUE" ) )
+            if( strcmp( text, "TRUE" ) == 0 )
             {
+                wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_IndexedFaceSet colorPerVertex TRUE" ) );
                 colorPerVertex = true;
+                m_model->m_Materials->m_ColorPerVertex = true;
             }
             else
             {
+                wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_IndexedFaceSet colorPerVertex FALSE" ) );
                 colorPerVertex = false;
             }
         }
@@ -1456,37 +1491,51 @@ int VRML2_MODEL_PARSER::read_colorIndex()
     wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex" ) );
     debug_enter();
 
-    m_model->m_MaterialIndex.clear();
+    m_model->m_MaterialIndexPerFace.clear();
+    m_model->m_MaterialIndexPerVertex.clear();
+
 
     if( colorPerVertex == true )
     {
         int index;
-        int first_index;
 
-        while( fscanf( m_file, "%d, ", &index ) )
+        if( m_model->m_CoordIndex.size() > 0 )
+            m_model->m_MaterialIndexPerVertex.reserve( m_model->m_CoordIndex.size() );
+
+        std::vector<int> materialIndexPerVertex;
+        materialIndexPerVertex.reserve( 3 );        // Start at least with 3
+
+        while( fscanf( m_file, "%d, ", &index ) == 1 )
         {
             if( index == -1 )
             {
-                // it only implemented color per face, so it will store as the first in the list
-                m_model->m_MaterialIndex.push_back( first_index );
+                m_model->m_MaterialIndexPerVertex.push_back( materialIndexPerVertex );
+                materialIndexPerVertex.clear();
+                materialIndexPerVertex.reserve( 3 );
             }
             else
             {
-                first_index = index;
+                materialIndexPerVertex.push_back( index );
             }
         }
+
+        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex m_MaterialIndexPerVertex.size: %lu" ), m_model->m_MaterialIndexPerVertex.size() );
     }
     else
     {
         int index;
 
+        if( m_model->m_CoordIndex.size() > 0 )
+            m_model->m_MaterialIndexPerFace.reserve( m_model->m_CoordIndex.size() );
+
         while( fscanf( m_file, "%d,", &index ) )
         {
-            m_model->m_MaterialIndex.push_back( index );
+            m_model->m_MaterialIndexPerFace.push_back( index );
         }
+
+        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex m_MaterialIndexPerFace.size: %lu" ), m_model->m_MaterialIndexPerFace.size() );
     }
 
-    //wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex m_MaterialIndex.size: %u" ), (unsigned int)m_model->m_MaterialIndex.size() );
     debug_exit();
     return 0;
 }
@@ -1534,21 +1583,21 @@ int VRML2_MODEL_PARSER::read_coordIndex()
 
     glm::ivec3 coord;
 
-    int dummy;    // should be -1
+    int coordIdx;    // should be -1
 
     std::vector<int> coord_list;
     coord_list.clear();
 
-    while( fscanf( m_file, "%d, ", &dummy ) == 1 )
+    while( fscanf( m_file, "%d, ", &coordIdx ) == 1 )
     {
-        if( dummy == -1 )
+        if( coordIdx == -1 )
         {
             m_model->m_CoordIndex.push_back( coord_list );
             coord_list.clear();
         }
         else
         {
-            coord_list.push_back( dummy );
+            coord_list.push_back( coordIdx );
         }
     }
 
@@ -1582,6 +1631,7 @@ int VRML2_MODEL_PARSER::read_Color()
 
         if( strcmp( text, "color" ) == 0 )
         {
+            m_model->m_Materials->m_DiffuseColor.clear();
             ParseVertexList( m_file, m_model->m_Materials->m_DiffuseColor );
         }
     }

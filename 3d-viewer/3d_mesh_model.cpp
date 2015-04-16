@@ -116,24 +116,9 @@ void S3D_MESH::calcBBox( )
 
     bool firstBBox = true;
 
-    bool useMaterial = g_Parm_3D_Visu.GetFlag( FL_RENDER_MATERIAL );
-
-    // Do not add complete transparent materials
-    if( useMaterial && (m_Materials != 0) && ( m_MaterialIndex.size() == 0 ) )
-        if( m_Materials->m_Transparency.size() > 0 )
-            if( m_Materials->m_Transparency[0] >= 1.0f )
-                return;
-
-
     // Calc boudingbox for all coords
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
-        // Do not add complete transparent materials
-        if( useMaterial && (m_Materials != 0) && ( m_MaterialIndex.size() > idx ) )
-            if( (int)m_Materials->m_Transparency.size() > m_MaterialIndex[idx] )
-                if( m_Materials->m_Transparency[m_MaterialIndex[idx]] >= 1.0f )
-                    continue;
-
         for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
             if( firstBBox )
             {
@@ -194,21 +179,56 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
     {
         return;
     }
+/*
+    // DEBUG INFO
+    printf("aIsRenderingJustNonTransparentObjects %d aIsRenderingJustTransparentObjects %d\n", aIsRenderingJustNonTransparentObjects, aIsRenderingJustTransparentObjects);
 
-    if( m_Materials && ( m_MaterialIndex.size() == 0 ) )
+    printf("m_CoordIndex.size() %lu\n", m_CoordIndex.size() );
+    printf("m_MaterialIndexPerFace.size() %lu\n", m_MaterialIndexPerFace.size() );
+    printf("m_MaterialIndexPerVertex.size() %lu\n", m_MaterialIndexPerVertex.size() );
+    printf("m_PerVertexNormalsNormalized.size() %lu\n", m_PerVertexNormalsNormalized.size() );
+    printf("m_PerFaceVertexNormals.size() %lu\n", m_PerFaceVertexNormals.size() );
+    
+    printf("smoothShapes %d\n", smoothShapes );
+    
+    if( m_Materials )
     {
-        bool isTransparent = m_Materials->SetOpenGLMaterial( 0, useMaterial );
+        printf(" m_Name %s\n", static_cast<const char*>(m_Materials->m_Name.c_str()) );
+        printf(" m_ColorPerVertex %d\n", m_Materials->m_ColorPerVertex );
+        printf(" m_Transparency.size() %lu\n", m_Materials->m_Transparency.size() );
+        printf(" m_DiffuseColor.size() %lu\n", m_Materials->m_DiffuseColor.size() );
+        printf(" m_Shininess.size() %lu\n", m_Materials->m_Shininess.size() );
+        printf(" m_EmissiveColor.size() %lu\n", m_Materials->m_EmissiveColor.size() );
+        printf(" m_SpecularColor.size() %lu\n", m_Materials->m_SpecularColor.size() );
+        printf(" m_AmbientColor.size() %lu\n", m_Materials->m_AmbientColor.size() );
+    }
+    printf("m_Materials %p\n", ( void * )m_Materials );
+*/
 
-        if( isTransparent && aIsRenderingJustNonTransparentObjects )
-            return;
+    float lastTransparency_value = 0.0f;
 
-        if( !isTransparent && aIsRenderingJustTransparentObjects )
-            return;
+    if( m_Materials )
+    {
+        if ( m_Materials->m_ColorPerVertex == false )
+        {
+            bool isTransparent = m_Materials->SetOpenGLMaterial( 0, useMaterial );
 
-        if( useMaterial )
-            if( m_Materials->m_Transparency.size() > 0 )
-                if( m_Materials->m_Transparency[0] >= 1.0f )
-                    return;
+            if( isTransparent && aIsRenderingJustNonTransparentObjects )
+                return;
+
+            if( !isTransparent && aIsRenderingJustTransparentObjects )
+                return;
+
+            // Skip total transparent models
+            if( useMaterial )
+                if( m_Materials->m_Transparency.size() > 0 )
+                {
+                    lastTransparency_value = m_Materials->m_Transparency[0];
+
+                    if( lastTransparency_value >= 1.0f )
+                        return;
+                }
+        }
     }
 
     glPushMatrix();
@@ -228,58 +248,144 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
             calcPerPointNormals();
 
     }
+/*
+#if defined(DEBUG)
+    // Debug Normals
+    glColor4f( 1.0, 0.0, 1.0, 0.7 );
+    for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
+    {
+        if( m_PerFaceNormalsNormalized.size() > 0 )
+        {
+            S3D_VERTEX normal = m_PerFaceNormalsNormalized[idx];
+            //glNormal3fv( &normal.x );
+
+            glm::vec3 point = m_Point[m_CoordIndex[idx][0]];
+            for( unsigned int ii = 1; ii < m_CoordIndex[idx].size(); ii++ )
+            {
+                point += m_Point[m_CoordIndex[idx][ii]];
+            }
+
+            point /= m_CoordIndex[idx].size();
+
+            glBegin( GL_LINES );
+            glVertex3fv( &point.x );
+            point += normal * 0.01f;
+            glVertex3fv( &point.x );
+            glEnd();
+        }
+    }
+
+    // Restore material
+    if( m_Materials )
+        m_Materials->SetOpenGLMaterial( 0, useMaterial );
+#endif
+*/
+
+/*
+#if defined(DEBUG)
+    if( smoothShapes )
+    {
+        // Debug Per Vertex Normals
+        glColor4f( 0.0, 1.0, 1.0, 0.7 );
+        for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
+        {
+            if( (m_PerVertexNormalsNormalized.size() > 0) &&
+                g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) )
+            {
+                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                {
+                    glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
+                    //glNormal3fv( &normal.x );
+
+                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                    glBegin( GL_LINES );
+                    glVertex3fv( &point.x );
+                    point += normal * 1.00f;
+                    glVertex3fv( &point.x );
+                    glEnd();
+                }
+            }
+            else
+            {
+                std::vector< glm::vec3 > normals_list;
+                normals_list = m_PerFaceVertexNormals[idx];
+
+                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                {
+                    glm::vec3 normal = normals_list[ii];
+                    printf("normal(%f, %f, %f), ", normal.x, normal.y, normal.z );
+                    
+                    //glNormal3fv( &normal.x );
+
+                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                    glBegin( GL_LINES );
+                    glVertex3fv( &point.x );
+                    point += normal * 1.00f;
+                    glVertex3fv( &point.x );
+                    glEnd();
+                }
+                printf("\n");
+            }
+        }
+
+        // Restore material
+        if( m_Materials )
+            m_Materials->SetOpenGLMaterial( 0, useMaterial );
+    }
+#endif
+*/
 
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
-        if( m_Materials && ( m_MaterialIndex.size() != 0 ) )
+        if( m_Materials )
         {
-            if ( m_MaterialIndex.size() > idx )
+            // http://accad.osu.edu/~pgerstma/class/vnv/resources/info/AnnotatedVrmlRef/ch3-323.htm
+            // "If colorPerVertex is FALSE, colours are applied to each face, as follows:"
+            if( ( m_Materials->m_ColorPerVertex == false ) &&
+                ( m_Materials->m_DiffuseColor.size() > 1 ) )
             {
-                bool isTransparent = m_Materials->SetOpenGLMaterial( m_MaterialIndex[idx], useMaterial );
+                bool isTransparent;
 
+                // "If the colorIndex field is not empty, then one colour is
+                //  used for each face of the IndexedFaceSet. There must be
+                //  at least as many indices in the colorIndex field as
+                //  there are faces in the IndexedFaceSet."
+                if ( m_MaterialIndexPerFace.size() == m_CoordIndex.size() )
+                {
+                    isTransparent = m_Materials->SetOpenGLMaterial( m_MaterialIndexPerFace[idx], useMaterial );
+
+                    // Skip total transparent faces
+                    if( useMaterial )
+                        if( (int)m_Materials->m_Transparency.size() > m_MaterialIndexPerFace[idx] )
+                        {
+                            if( m_Materials->m_Transparency[m_MaterialIndexPerFace[idx]] >= 1.0f )
+                                continue;
+                        }
+                }
+                else
+                {
+                    // "If the colorIndex field is empty, then the colours in the
+                    //  Color node are applied to each face of the IndexedFaceSet
+                    //  in order. There must be at least as many colours in the
+                    //  Color node as there are faces."
+                    isTransparent = m_Materials->SetOpenGLMaterial( idx, useMaterial );
+
+                    // Skip total transparent faces
+                    if( useMaterial )
+                        if( m_Materials->m_Transparency.size() > idx )
+                        {
+                            if( m_Materials->m_Transparency[idx] >= 1.0f )
+                                continue;
+                        }
+                }
+                
                 if( isTransparent && aIsRenderingJustNonTransparentObjects )
                     continue;
 
                 if( !isTransparent && aIsRenderingJustTransparentObjects )
                     continue;
-
-                if( useMaterial )
-                    if( (int)m_Materials->m_Transparency.size() > m_MaterialIndex[idx] )
-                        if( m_Materials->m_Transparency[m_MaterialIndex[idx]] >= 1.0f )
-                            continue;
-            }
-            else
-            {
-                // This is only need on debug, because above we are marking the bad elements
-                DBG( m_Materials->SetOpenGLMaterial( 0, useMaterial ) );
             }
         }
-
-/*
-#if defined(DEBUG)
-        // Debug Normals
-        glColor4f( 1.0, 0.0, 1.0, 1.0 );
-        for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
-        {
-            // Flat
-            if( m_PerFaceNormalsNormalized.size() > 0 )
-            {
-                S3D_VERTEX normal = m_PerFaceNormalsNormalized[idx];
-                glNormal3fv( &normal.x );
-
-                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
-                {
-                    glBegin( GL_LINES );
-                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
-                    glVertex3fv( &point.x );
-                    point += normal;
-                    glVertex3fv( &point.x );
-                    glEnd();
-                }
-            }
-        }
-#endif
-*/
 
         switch( m_CoordIndex[idx].size() )
         {
@@ -297,48 +403,159 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
 
         if( smoothShapes )
         {
-            if( (m_PerVertexNormalsNormalized.size() > 0) &&
-                g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) )
+            if( m_Materials )
             {
-                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                // for VRML2:
+                // http://accad.osu.edu/~pgerstma/class/vnv/resources/info/AnnotatedVrmlRef/ch3-323.htm
+                // "If colorPerVertex is TRUE, colours are applied to each vertex, as follows:
+                if( ( m_Materials->m_ColorPerVertex == true ) && 
+                    ( m_Materials->m_DiffuseColor.size() > 1 ) )
                 {
-                    glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
-                    glNormal3fv( &normal.x );
-/*
-#if defined(DEBUG)
-                    // Flag error vertices
-                    if ((normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0))
+                    // "If the colorIndex field is not empty, then colours
+                    // are applied to each vertex of the IndexedFaceSet in
+                    // exactly the same manner that the coordIndex field is
+                    // used to choose coordinates for each vertex from the
+                    // Coordinate node. The colorIndex field must contain at
+                    // least as many indices as the coordIndex field, and
+                    // must contain end-of-face markers (-1) in exactly the
+                    // same places as the coordIndex field. If the greatest
+                    // index in the colorIndex field is N, then there must
+                    // be N+1 colours in the Color node."
+                    if ( m_MaterialIndexPerVertex.size() != 0 )
                     {
-                        glColor4f( 1.0, 0.0, 1.0, 1.0 );
+                        if( (m_PerVertexNormalsNormalized.size() > 0) &&
+                            g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) )
+                        {
+                            for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                            {
+                                S3D_VERTEX color = m_Materials->m_DiffuseColor[m_MaterialIndexPerVertex[idx][ii]];
+                                glColor4f( color.x, color.y, color.z, 1.0f - lastTransparency_value );
+
+                                glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
+                                glNormal3fv( &normal.x );
+
+                                glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                                glVertex3fv( &point.x );
+                            }
+                        }
+                        else
+                        {
+                            std::vector< glm::vec3 > normals_list;
+                            normals_list = m_PerFaceVertexNormals[idx];
+
+                            for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                            {
+                                S3D_VERTEX color = m_Materials->m_DiffuseColor[m_MaterialIndexPerVertex[idx][ii]];
+                                glColor4f( color.x, color.y, color.z, 1.0f - lastTransparency_value );
+
+                                glm::vec3 normal = normals_list[ii];
+                                glNormal3fv( &normal.x );
+
+                                glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                                glVertex3fv( &point.x );
+                            }
+                        }
                     }
-#endif
-*/
-                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
-                    glVertex3fv( &point.x );
+                    else
+                    {
+                        // "If the colorIndex field is empty, then the
+                        // coordIndex field is used to choose colours from
+                        // the Color node. If the greatest index in the
+                        // coordIndex field is N, then there must be N+1
+                        // colours in the Color node."
+
+
+                        if( (m_PerVertexNormalsNormalized.size() > 0) &&
+                            g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) )
+                        {
+                            for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                            {
+                                S3D_VERTEX color = m_Materials->m_DiffuseColor[m_CoordIndex[idx][ii]];
+                                glColor4f( color.x, color.y, color.z, 1.0f - lastTransparency_value );
+
+                                glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
+                                glNormal3fv( &normal.x );
+
+                                glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                                glVertex3fv( &point.x );
+                            }
+                        }
+                        else
+                        {
+                            std::vector< glm::vec3 > normals_list;
+                            normals_list = m_PerFaceVertexNormals[idx];
+
+                            for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                            {
+                                S3D_VERTEX color = m_Materials->m_DiffuseColor[m_CoordIndex[idx][ii]];
+                                glColor4f( color.x, color.y, color.z, 1.0f - lastTransparency_value );
+
+                                glm::vec3 normal = normals_list[ii];
+                                glNormal3fv( &normal.x );
+
+                                glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                                glVertex3fv( &point.x );
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if( (m_PerVertexNormalsNormalized.size() > 0) &&
+                        g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) )
+                    {
+                        for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                        {
+                            glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
+                            glNormal3fv( &normal.x );
+
+                            glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                            glVertex3fv( &point.x );
+                        }
+                    }
+                    else
+                    {
+                        std::vector< glm::vec3 > normals_list;
+                        normals_list = m_PerFaceVertexNormals[idx];
+
+                        for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                        {
+                            glm::vec3 normal = normals_list[ii];
+                            glNormal3fv( &normal.x );
+
+                            glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                            glVertex3fv( &point.x );
+                        }
+                    }
                 }
             }
             else
             {
-                std::vector< glm::vec3 > normals_list;
-                normals_list = m_PerFaceVertexNormals[idx];
-
-                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                if( (m_PerVertexNormalsNormalized.size() > 0) &&
+                    g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) )
                 {
-                    glm::vec3 normal = normals_list[ii];
-                    glNormal3fv( &normal.x );
-
-/*
-#if defined(DEBUG)
-                    // Flag error vertices
-                    if ((normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0))
+                    for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
                     {
-                        glColor4f( 1.0, 0.0, 1.0, 1.0 );
-                    }
-#endif
-*/
+                        glm::vec3 normal = m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
+                        glNormal3fv( &normal.x );
 
-                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
-                    glVertex3fv( &point.x );
+                        glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                        glVertex3fv( &point.x );
+                    }
+                }
+                else
+                {
+                    std::vector< glm::vec3 > normals_list;
+                    normals_list = m_PerFaceVertexNormals[idx];
+
+                    for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                    {
+                        glm::vec3 normal = normals_list[ii];
+                        glNormal3fv( &normal.x );
+
+                        glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                        glVertex3fv( &point.x );
+                    }
                 }
             }
         }
@@ -348,29 +565,78 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
             if( m_PerFaceNormalsNormalized.size() > 0 )
             {
                 S3D_VERTEX normal = m_PerFaceNormalsNormalized[idx];
-/*
-#if defined(DEBUG)
-                // Flag error vertices
-                if( (normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0) )
-                {
-                    DBG( printf("%u\n", idx) );
-                    glColor4f( 1.0, 0.0, 1.0, 1.0 );
-                }
-#endif
-*/
                 glNormal3fv( &normal.x );
 
-                for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                if( m_Materials )
                 {
-                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
-                    glVertex3fv( &point.x );
+                    // for VRML2:
+                    // http://accad.osu.edu/~pgerstma/class/vnv/resources/info/AnnotatedVrmlRef/ch3-323.htm
+                    // "If colorPerVertex is TRUE, colours are applied to each vertex, as follows:
+                    if( ( m_Materials->m_ColorPerVertex == true ) && 
+                        ( m_Materials->m_DiffuseColor.size() > 1 ) )
+                    {
+                        // "If the colorIndex field is not empty, then colours
+                        // are applied to each vertex of the IndexedFaceSet in
+                        // exactly the same manner that the coordIndex field is
+                        // used to choose coordinates for each vertex from the
+                        // Coordinate node. The colorIndex field must contain at
+                        // least as many indices as the coordIndex field, and
+                        // must contain end-of-face markers (-1) in exactly the
+                        // same places as the coordIndex field. If the greatest
+                        // index in the colorIndex field is N, then there must
+                        // be N+1 colours in the Color node."
+                        if ( m_MaterialIndexPerVertex.size() != 0 )
+                        {
+                            for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                            {
+                                S3D_VERTEX color = m_Materials->m_DiffuseColor[m_MaterialIndexPerVertex[idx][ii]];
+                                glColor4f( color.x, color.y, color.z, 1.0f - lastTransparency_value );
+
+                                S3D_VERTEX point = m_Point[m_CoordIndex[idx][ii]];
+                                glVertex3fv( &point.x );
+                            }
+                        }
+                        else
+                        {
+                            // "If the colorIndex field is empty, then the
+                            // coordIndex field is used to choose colours from
+                            // the Color node. If the greatest index in the
+                            // coordIndex field is N, then there must be N+1
+                            // colours in the Color node."
+
+                            for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                            {
+                                S3D_VERTEX color = m_Materials->m_DiffuseColor[m_CoordIndex[idx][ii]];
+                                glColor4f( color.x, color.y, color.z, 1.0f - lastTransparency_value );
+
+                                S3D_VERTEX point = m_Point[m_CoordIndex[idx][ii]];
+                                glVertex3fv( &point.x );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                        {
+                            S3D_VERTEX point = m_Point[m_CoordIndex[idx][ii]];
+                            glVertex3fv( &point.x );
+                        }
+                    }
+                }
+                else
+                {
+                    for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
+                    {
+                        S3D_VERTEX point = m_Point[m_CoordIndex[idx][ii]];
+                        glVertex3fv( &point.x );
+                    }
                 }
             }
             else
             {
                 for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
                 {
-                    glm::vec3 point = m_Point[m_CoordIndex[idx][ii]];
+                    S3D_VERTEX point = m_Point[m_CoordIndex[idx][ii]];
                     glVertex3fv( &point.x );
                 }
             }
@@ -474,24 +740,10 @@ void S3D_MESH::calcPointNormalized()
             biggerPoint = v;
     }
 
-    biggerPoint = 1.0 / biggerPoint;
-
     for( unsigned int i = 0; i < m_Point.size(); i++ )
     {
-        m_PointNormalized[i] = m_Point[i] * biggerPoint;
+        m_PointNormalized[i] = m_Point[i] / biggerPoint;
     }
-}
-
-
-bool IsClockwise( glm::vec3 v0, glm::vec3 v1, glm::vec3 v2 )
-{
-    double sum = 0.0;
-
-    sum += (v1.x - v0.x) * (v1.y + v0.y);
-    sum += (v2.x - v1.x) * (v2.y + v1.y);
-    sum += (v0.x - v2.x) * (v0.y + v2.y);
-
-    return sum > FLT_EPSILON;
 }
 
 
@@ -512,7 +764,8 @@ void S3D_MESH::calcPerFaceNormals()
         haveAlreadyNormals_from_model_file = true;
 
         // !TODO: this is a workarround for some VRML2 modules files (ex: from we-online.de website)
-        // are using (incorrectly) the normals with m_CoordIndex as per face normal. This maybe be addressed by the parser in the future.
+        // are using (incorrectly) the normals with m_CoordIndex as per face normal.
+        // This maybe be addressed by the parser in the future.
         if( ( m_PerFaceNormalsNormalized.size() == m_Point.size() ) &&
             ( m_PerFaceNormalsNormalized.size() != m_CoordIndex.size() ) )
         {
@@ -542,11 +795,7 @@ void S3D_MESH::calcPerFaceNormals()
 
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
-        glm::vec3 cross_prod;
-
-        cross_prod.x = 0.0f;
-        cross_prod.y = 0.0f;
-        cross_prod.z = 0.0f;
+        glm::dvec3 cross_prod = glm::dvec3( 0.0, 0.0, 0.0 );
 
         // Newell's Method
         // http://www.opengl.org/wiki/Calculating_a_Surface_Normal
@@ -555,40 +804,41 @@ void S3D_MESH::calcPerFaceNormals()
 
         for( unsigned int i = 0; i < m_CoordIndex[idx].size(); i++ )
         {
-            glm::vec3 u = m_PointNormalized[m_CoordIndex[idx][i]];
-            glm::vec3 v = m_PointNormalized[m_CoordIndex[idx][(i + 1) % m_CoordIndex[idx].size()]];
+            
+            glm::dvec3 u = glm::dvec3( m_PointNormalized[m_CoordIndex[idx][i]] );
+            glm::dvec3 v = glm::dvec3( m_PointNormalized[m_CoordIndex[idx][(i + 1) % m_CoordIndex[idx].size()]] );
 
             cross_prod.x +=  (u.y - v.y) * (u.z + v.z);
             cross_prod.y +=  (u.z - v.z) * (u.x + v.x);
             cross_prod.z +=  (u.x - v.x) * (u.y + v.y);
-
-            // This method works same way
-            /*
-            cross_prod.x += (u.y * v.z) - (u.z * v.y);
-            cross_prod.y += (u.z * v.x) - (u.x * v.z);
-            cross_prod.z += (u.x * v.y) - (u.y * v.x);*/
         }
 
-        float area = glm::dot( cross_prod, cross_prod );
+        double area = glm::dot( cross_prod, cross_prod );
+
         area = fabs( area );
 
-        m_PerFaceNormalsRaw_X_PerFaceSquaredArea[idx] = cross_prod * area;
+        m_PerFaceNormalsRaw_X_PerFaceSquaredArea[idx] = glm::vec3( cross_prod * area );
+
+        //printf("cross_prod(%g, %g, %g), area:%g m_PerFaceNormalsRaw_X_PerFaceSquaredArea(%f, %f, %f)\n", cross_prod.x, cross_prod.y, cross_prod.z, area,
+        //m_PerFaceNormalsRaw_X_PerFaceSquaredArea[idx].x,
+        //m_PerFaceNormalsRaw_X_PerFaceSquaredArea[idx].y,
+        //m_PerFaceNormalsRaw_X_PerFaceSquaredArea[idx].z);
 
         if( haveAlreadyNormals_from_model_file == false )
         {
             if( g_Parm_3D_Visu.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) &&
                 (m_PerVertexNormalsNormalized.size() > 0) )
             {
-                glm::vec3 normalSum;
+                glm::dvec3 normalSum;
 
                 for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
                 {
-                    normalSum += m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]];
+                    normalSum += glm::dvec3( m_PerVertexNormalsNormalized[m_NormalIndex[idx][ii]] );
                 }
 
-                float l = glm::length( normalSum );
+                double l = glm::length( normalSum );
 
-                if( l > FLT_EPSILON ) // avoid division by zero
+                if( l > DBL_EPSILON ) // avoid division by zero
                 {
                     normalSum = normalSum / l;
                 }
@@ -596,83 +846,86 @@ void S3D_MESH::calcPerFaceNormals()
                 {
                     if( ( normalSum.x > normalSum.y ) && ( normalSum.x > normalSum.z ) )
                     {
-                        normalSum.x = 0.0f;
-                        normalSum.y = 1.0f;
-                        normalSum.z = 0.0f;
+                        normalSum.x = 0.0;
+                        normalSum.y = 1.0;
+                        normalSum.z = 0.0;
                     }
                     else if( ( normalSum.y > normalSum.x ) && ( normalSum.y > normalSum.z ) )
                     {
-                        normalSum.x = 0.0f;
-                        normalSum.y = 1.0f;
-                        normalSum.z = 0.0f;
+                        normalSum.x = 0.0;
+                        normalSum.y = 1.0;
+                        normalSum.z = 0.0;
                     }
                     else if( ( normalSum.z > normalSum.x ) && ( normalSum.z > normalSum.y ) )
                     {
-                        normalSum.x = 0.0f;
-                        normalSum.y = 0.0f;
-                        normalSum.z = 1.0f;
+                        normalSum.x = 0.0;
+                        normalSum.y = 0.0;
+                        normalSum.z = 1.0;
                     }
                     else
                     {
-                        normalSum.x = 0.0f;
-                        normalSum.y = 0.0f;
-                        normalSum.z = 0.0f;
+                        normalSum.x = 0.0;
+                        normalSum.y = 0.0;
+                        normalSum.z = 0.0;
                     }
                 }
 
-                m_PerFaceNormalsNormalized[idx] = normalSum;
+                m_PerFaceNormalsNormalized[idx] = glm::vec3( normalSum );
             }
             else
             {
                 // normalize vertex normal
-                float l = glm::length( cross_prod );
+                double l = glm::length( cross_prod );
 
-                if( l > FLT_EPSILON ) // avoid division by zero
+                if( l > DBL_EPSILON ) // avoid division by zero
                 {
                     cross_prod = cross_prod / l;
                 }
                 else
                 {
+                    
                     /*
                     for( unsigned int i = 0; i < m_CoordIndex[idx].size(); i++ )
                     {
-                        glm::vec3 v = m_PointNormalized[m_CoordIndex[idx][i]];
+                        glm::vec3 v = m_Point[m_CoordIndex[idx][i]];
                         DBG( printf( "v[%u](%f, %f, %f)", i, v.x, v.y, v.z ) );
                     }
-                    DBG( printf( "Cannot calc normal idx: %u cross(%f, %f, %f) l:%f m_CoordIndex[idx].size: %u\n",
+                    DBG( printf( "Cannot calc normal idx: %u cross(%g, %g, %g) l:%g m_CoordIndex[idx].size: %u\n",
                             idx,
                             cross_prod.x, cross_prod.y, cross_prod.z,
                             l,
                             (unsigned int)m_CoordIndex[idx].size()) );
+                    
                     */
 
                     if( ( cross_prod.x > cross_prod.y ) && ( cross_prod.x > cross_prod.z ) )
                     {
-                        cross_prod.x = 0.0f;
-                        cross_prod.y = 1.0f;
-                        cross_prod.z = 0.0f;
+                        cross_prod.x = 0.0;
+                        cross_prod.y = 1.0;
+                        cross_prod.z = 0.0;
                     }
                     else if( ( cross_prod.y > cross_prod.x ) && ( cross_prod.y > cross_prod.z ) )
                     {
-                        cross_prod.x = 0.0f;
-                        cross_prod.y = 1.0f;
-                        cross_prod.z = 0.0f;
+                        cross_prod.x = 0.0;
+                        cross_prod.y = 1.0;
+                        cross_prod.z = 0.0;
                     }
                     else if( ( cross_prod.z > cross_prod.x ) && ( cross_prod.z > cross_prod.y ) )
                     {
-                        cross_prod.x = 0.0f;
-                        cross_prod.y = 0.0f;
-                        cross_prod.z = 1.0f;
+                        cross_prod.x = 0.0;
+                        cross_prod.y = 0.0;
+                        cross_prod.z = 1.0;
                     }
                     else
                     {
-                        cross_prod.x = 0.0f;
-                        cross_prod.y = 0.0f;
-                        cross_prod.z = 0.0f;
+                        cross_prod.x = 0.0;
+                        cross_prod.y = 0.0;
+                        cross_prod.z = 0.0;
                     }
                 }
 
-                m_PerFaceNormalsNormalized[idx] = cross_prod;
+                m_PerFaceNormalsNormalized[idx] = glm::vec3( cross_prod );
+                //printf("normal(%g, %g, %g)\n", m_PerFaceNormalsNormalized[idx].x, m_PerFaceNormalsNormalized[idx].y, m_PerFaceNormalsNormalized[idx].z );
             }
         }
     }

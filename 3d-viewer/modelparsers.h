@@ -119,13 +119,6 @@ public:
      */
     static void GetNodeProperties( wxXmlNode* aNode, PROPERTY_MAP& aProps );
 
-    /**
-     * Return string representing x3d file in vrml2 format
-     * Function Load must be called before this function, otherwise empty
-     * data set is returned.
-     */
-    wxString VRML2_representation();
-
 private:
     wxString                 m_Filename;
     S3D_MESH_PTR             m_model;

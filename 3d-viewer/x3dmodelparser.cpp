@@ -97,41 +97,17 @@ bool X3D_MODEL_PARSER::Load( const wxString& aFilename )
         m_model.reset( new S3D_MESH() );
         childs.push_back( m_model );
 
-        readTransform( *node_it );
+        wxXmlNode* node = *node_it;
+        wxXmlAttribute* prop = node->GetAttributes();
+
+        wxLogTrace( traceX3DParser, wxT( "Transform: %s %s" ), prop->GetName(), prop->GetValue() );
+
+        readTransform( node );
+
+        
     }
 
     return true;
-}
-
-
-wxString X3D_MODEL_PARSER::VRML2_representation()
-{
-    wxString output;
-
-    for( unsigned i = 0; i < vrml_points.size(); i++ )
-    {
-        output +=
-            wxT( "Shape {\n"
-                 "  appearance Appearance {\n"
-                 "    material Material {\n" ) +
-            vrml_materials[i] +
-            wxT( "    }\n"
-                 "  }\n"
-                 "  geometry IndexedFaceSet {\n"
-                 "    solid TRUE\n"
-                 "    coord Coordinate {\n"
-                 "      point [\n" ) +
-            vrml_points[i] +
-            wxT( "      ]\n"
-                 "    }\n"
-                 "    coordIndex [\n" ) +
-            vrml_coord_indexes[i] +
-            wxT( "    ]\n"
-                 "  }\n"
-                 "},\n" );
-    }
-
-    return output;
 }
 
 
@@ -139,7 +115,9 @@ void X3D_MODEL_PARSER::GetChildsByName( wxXmlNode* aParent,
         const wxString aName,
         std::vector<wxXmlNode*>& aResult )
 {
-    // Breadth-first search (BFS)
+    // (-Breadth-first search (BFS)-)
+    // **NOTE** This function was changed to get only the first depth of ocorrences
+    //          so it will be an workarround for the Bug #1443431 
     std::queue<wxXmlNode*> found;
 
     found.push( aParent );
@@ -153,11 +131,9 @@ void X3D_MODEL_PARSER::GetChildsByName( wxXmlNode* aParent,
              child = child->GetNext() )
         {
             if( child->GetName() == aName )
-            {
                 aResult.push_back( child );
-            }
-
-            found.push( child );
+            else                                // **NOTE** This function was changed here to get only the first depth of ocorrences
+                found.push( child );
         }
 
         found.pop();
@@ -198,6 +174,9 @@ void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
     PROPERTY_MAP properties;
 
     GetNodeProperties( aTransformNode, properties );
+
+
+
     GetChildsByName( aTransformNode, wxT( "IndexedFaceSet" ), childnodes );
 
     for( NODE_LIST::iterator node = childnodes.begin();
@@ -430,7 +409,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
     double angle = 0.0;
     wxStringTokenizer tokens( aTransformProps[ wxT( "rotation" ) ] );
 
-    double x, y, z;
+    double x = 0.0, y = 0.0, z = 0.0;
 
     if( !( tokens.GetNextToken().ToDouble( &x )
            && tokens.GetNextToken().ToDouble( &y )
@@ -551,7 +530,7 @@ void X3D_MODEL_PARSER::readIndexedFaceSet( wxXmlNode* aFaceNode,
 
         for( unsigned id = 0; id < color_points.size() / 3; id++ )
         {
-            m_model->m_MaterialIndex.push_back( id );
+            m_model->m_MaterialIndexPerFace.push_back( id );
 
             int color_triplet_indx = id * 3;
             glm::vec3 colorface( color_points[ color_triplet_indx + 0 ],

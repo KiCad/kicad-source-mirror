@@ -285,7 +285,6 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
         double                 aCorrectionFactor )
 {
     unsigned cornerscount = GetFilledPolysList().GetCornersCount();
-    CPOLYGONS_LIST polygonslist;
 
     if( cornerscount == 0 )
         return;

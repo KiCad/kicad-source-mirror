@@ -48,6 +48,7 @@ public:
     std::vector< glm::vec3 > m_SpecularColor;
     std::vector< float >     m_Shininess;
     std::vector< float >     m_Transparency;
+    bool                     m_ColorPerVertex;
 
 public:
     S3D_MATERIAL( S3D_MASTER* father, const wxString& name );

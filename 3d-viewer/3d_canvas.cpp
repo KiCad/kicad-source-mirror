@@ -95,7 +95,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
     m_ZBottom = 0.0;
     m_ZTop = 0.0;
 
-    m_lightPos = S3D_VERTEX(0.0f, 0.0f, 50.0f);
+    m_lightPos = S3D_VERTEX(0.0f, 0.0f, 30.0f);
 
     // Clear all gl list identifiers:
     for( int ii = GL_ID_BEGIN; ii < GL_ID_END; ii++ )
@@ -591,7 +591,7 @@ void EDA_3D_CANVAS::SetLights()
     light_color[3] = 1.0;
 
     // Light above the xy plane
-    light_color[0] = light_color[1] = light_color[2] = 0.2;
+    light_color[0] = light_color[1] = light_color[2] = 0.0;
     glLightfv( GL_LIGHT0, GL_AMBIENT, light_color );
 
     light_color[0] = light_color[1] = light_color[2] = 1.0;
@@ -604,6 +604,8 @@ void EDA_3D_CANVAS::SetLights()
 
     light_color[0] = light_color[1] = light_color[2] = 0.2;
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, light_color );
+
+    glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE );
 
     glEnable( GL_LIGHT0 );      // White spot on Z axis ( top )
     glEnable( GL_LIGHTING );

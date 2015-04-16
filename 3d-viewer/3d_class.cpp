@@ -85,7 +85,7 @@ S3D_MASTER:: ~S3D_MASTER()
     {
         nextmat = m_Materials->Next();
         delete m_Materials;
-        m_Materials = 0;
+        m_Materials = NULL;
     }
 }
 

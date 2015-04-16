@@ -422,16 +422,16 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet_materialIndex()
 {
     // DBG( printf( "    readIndexedFaceSet_materialIndex\n" ) );
 
-    m_model->m_MaterialIndex.clear();
+    m_model->m_MaterialIndexPerFace.clear();
 
     int index;
 
     while( fscanf( m_file, "%d,", &index ) )
     {
-        m_model->m_MaterialIndex.push_back( index );
+        m_model->m_MaterialIndexPerFace.push_back( index );
     }
 
-    // DBG( printf( "    m_MaterialIndex.size: %ld\n", m_model->m_MaterialIndex.size() ) );
+    // DBG( printf( "    m_MaterialIndexPerFace.size: %ld\n", m_model->m_MaterialIndexPerFace.size() ) );
 
     return 0;
 }
