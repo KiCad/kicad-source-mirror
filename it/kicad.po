@@ -71,8 +71,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-17 15:31+0100\n"
-"PO-Revision-Date: 2015-04-17 15:39+0200\n"
+"POT-Creation-Date: 2015-04-17 17:16+0100\n"
+"PO-Revision-Date: 2015-04-17 17:17+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -3741,7 +3741,9 @@ msgstr ""
 #: pcbnew/dimension.cpp:216 pcbnew/dialogs/dialog_pcb_text_properties.cpp:260
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:237
 msgid "The text thickness is too large for the text size. It will be clamped"
-msgstr "Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà tagliato."
+msgstr ""
+"Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà "
+"tagliato."
 
 #: pcbnew/layer_widget.cpp:432
 msgid ""
@@ -21836,11 +21838,11 @@ msgstr "PPI bitmap"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:378
 msgid "Repeat parameters:"
-msgstr "Ripeti parametri:"
+msgstr "Parametri ripetizioni:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:388
 msgid "Repeat count"
-msgstr "Ripeti conteggio"
+msgstr "Conteggio ripetizione"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 msgid "Text Increment"
