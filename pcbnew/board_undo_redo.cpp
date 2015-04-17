@@ -533,6 +533,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 MODULE* oldModule = static_cast<MODULE*>( item );
                 oldModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
+            view->Remove( item );
             ratsnest->Remove( item );
 
             item->SwapData( image );
@@ -544,6 +545,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 MODULE* newModule = static_cast<MODULE*>( item );
                 newModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
             }
+            view->Add( item );
             ratsnest->Add( item );
 
             item->ClearFlags( SELECTED );

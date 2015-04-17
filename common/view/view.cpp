@@ -102,8 +102,7 @@ void VIEW::Add( VIEW_ITEM* aItem )
     if( m_dynamic )
         aItem->viewAssign( this );
 
-    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )
-        MarkForUpdate( aItem );
+    aItem->ViewUpdate( VIEW_ITEM::ALL );
 }
 
 
@@ -119,6 +118,8 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
         if( item != m_needsUpdate.end() )
             m_needsUpdate.erase( item );
+
+        aItem->clearUpdateFlags();
     }
 
     int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
