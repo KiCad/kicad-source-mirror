@@ -134,6 +134,10 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
 
     // Hide the select button as the child dialog classes use this
     m_TextValueSelectButton->Hide();
+
+    // Hide the "Power component value text cannot be modified!" warning
+    m_PowerComponentValues->Show( false );
+    Fit();
 }
 
 
