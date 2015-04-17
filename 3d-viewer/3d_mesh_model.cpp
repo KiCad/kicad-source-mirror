@@ -188,6 +188,7 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
     printf("m_MaterialIndexPerVertex.size() %lu\n", m_MaterialIndexPerVertex.size() );
     printf("m_PerVertexNormalsNormalized.size() %lu\n", m_PerVertexNormalsNormalized.size() );
     printf("m_PerFaceVertexNormals.size() %lu\n", m_PerFaceVertexNormals.size() );
+    printf("m_PerFaceNormalsNormalized.size() %lu\n", m_PerFaceNormalsNormalized.size() );
 
     printf("smoothShapes %d\n", smoothShapes );
 
@@ -209,26 +210,23 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
 
     if( m_Materials )
     {
-        if ( m_Materials->m_ColorPerVertex == false )
-        {
-            bool isTransparent = m_Materials->SetOpenGLMaterial( 0, useMaterial );
+        bool isTransparent = m_Materials->SetOpenGLMaterial( 0, useMaterial );
 
-            if( isTransparent && aIsRenderingJustNonTransparentObjects )
-                return;
+        if( isTransparent && aIsRenderingJustNonTransparentObjects )
+            return;
 
-            if( !isTransparent && aIsRenderingJustTransparentObjects )
-                return;
+        if( !isTransparent && aIsRenderingJustTransparentObjects )
+            return;
 
-            // Skip total transparent models
-            if( useMaterial )
-                if( m_Materials->m_Transparency.size() > 0 )
-                {
-                    lastTransparency_value = m_Materials->m_Transparency[0];
+        // Skip total transparent models
+        if( useMaterial )
+            if( m_Materials->m_Transparency.size() > 0 )
+            {
+                lastTransparency_value = m_Materials->m_Transparency[0];
 
-                    if( lastTransparency_value >= 1.0f )
-                        return;
-                }
-        }
+                if( lastTransparency_value >= 1.0f )
+                    return;
+            }
     }
 
     glPushMatrix();

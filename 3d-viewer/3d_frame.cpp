@@ -260,7 +260,7 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( keyRenderShowModelBBox, &tmp, false );
     prms.SetFlag( FL_RENDER_SHOW_MODEL_BBOX, tmp );
-    
+
     aCfg->Read( keyShowAxis, &tmp, true );
     prms.SetFlag( FL_AXIS, tmp );
 
@@ -324,7 +324,7 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyRenderUseModelNormals, prms.GetFlag( FL_RENDER_USE_MODEL_NORMALS ) );
     aCfg->Write( keyRenderMaterial, prms.GetFlag( FL_RENDER_MATERIAL ) );
     aCfg->Write( keyRenderShowModelBBox, prms.GetFlag( FL_RENDER_SHOW_MODEL_BBOX ) );
-    
+
     aCfg->Write( keyShowAxis, prms.GetFlag( FL_AXIS ) );
     aCfg->Write( keyShowGrid, prms.GetFlag( FL_GRID ) );
     aCfg->Write( keyShowGridSize, prms.m_3D_Grid );

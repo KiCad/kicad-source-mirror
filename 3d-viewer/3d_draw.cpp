@@ -118,7 +118,7 @@ void EDA_3D_CANVAS::create_and_render_shadow_buffer( GLuint *aDst_gl_texture,
     // Render body and shapes
 
     if( aDraw_body && m_glLists[GL_ID_BODY] )
-            glCallList( m_glLists[GL_ID_BODY] );
+        glCallList( m_glLists[GL_ID_BODY] );
 
     if( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] )
         glCallList( m_glLists[GL_ID_3DSHAPES_SOLID_FRONT] );
@@ -587,6 +587,7 @@ void EDA_3D_CANVAS::Redraw()
     if(  isEnabled( FL_MODULE ) && m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] )
     {
         glEnable( GL_COLOR_MATERIAL );
+        SetOpenGlDefaultMaterial();
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glCallList( m_glLists[GL_ID_3DSHAPES_TRANSP_FRONT] );
