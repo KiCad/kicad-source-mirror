@@ -6,10 +6,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras
+ * Copyright (C) 2015 Jean-Pierre Charras
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@
 
 #include <class_module.h>
 #include <class_text_mod.h>
+#include <class_board.h>
 
 #include <dialog_edit_module_text.h>
 
@@ -162,6 +163,11 @@ void DialogEditModuleText::initDlg( )
         m_Show->SetSelection( 1 );
 
     // Configure the layers list selector
+    if( !m_parent->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
+        // Footprints are built outside the current board, so items cann be
+        // on a not activated layer, therefore show it if happens.
+        m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
+
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetLayerSet( forbiddenLayers );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );

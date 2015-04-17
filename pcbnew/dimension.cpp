@@ -6,9 +6,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,6 +134,11 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     AddUnitSymbol( *m_staticTextPosY );
 
     // Configure the layers list selector
+    if( !m_Parent->GetBoard()->IsLayerEnabled( aDimension->GetLayer() ) )
+        // Should not happens, because one acnnot select a board item on a
+        // not activated layer, but ...
+        m_SelLayerBox->ShowNonActivatedLayers( true );
+
     m_SelLayerBox->SetLayersHotkeys( false );
     m_SelLayerBox->SetLayerSet( LSET::AllCuMask().set( Edge_Cuts ) );
     m_SelLayerBox->SetBoardFrame( m_Parent );
@@ -160,6 +165,15 @@ void DIALOG_DIMENSION_EDITOR::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
+    LAYER_ID newlayer = ToLAYER_ID( m_SelLayerBox->GetLayerSelection() );
+
+    if( !m_Parent->GetBoard()->IsLayerEnabled( newlayer ) )
+    {
+        wxMessageBox( _( "the layer currently selected is not enabled for this board\n"
+                        "You cannot use it" ) );
+        return;
+    }
+
 #ifndef USE_WX_OVERLAY
     if( m_DC )     // Delete old text.
     {
@@ -208,7 +222,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
-    CurrentDimension->SetLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
+    CurrentDimension->SetLayer( newlayer );
 #ifndef USE_WX_OVERLAY
     if( m_DC )     // Display new text
     {
