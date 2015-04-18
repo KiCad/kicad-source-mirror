@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 09:03+0300\n"
-"PO-Revision-Date: 2015-04-11 09:06+0300\n"
+"POT-Creation-Date: 2015-04-18 10:11+0300\n"
+"PO-Revision-Date: 2015-04-18 10:46+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -76,25 +76,44 @@ msgstr "Сдвинуть вверх ^"
 msgid "Move Down"
 msgstr "Сдвинуть вниз"
 
-#: 3d-viewer/3d_canvas.cpp:633
+#: 3d-viewer/3d_canvas.cpp:635
 msgid "3D Image filename:"
 msgstr "Имя файла 3D изображения:"
 
-#: 3d-viewer/3d_canvas.cpp:688
+#: 3d-viewer/3d_canvas.cpp:690
 msgid "Failed to copy image to clipboard"
 msgstr "Не удалось скопировать изображение в буфер обмена"
 
-#: 3d-viewer/3d_canvas.cpp:702
+#: 3d-viewer/3d_canvas.cpp:704
 msgid "Can't save file"
 msgstr "Не удалось сохранить файл"
 
-#: 3d-viewer/3d_draw.cpp:677 3d-viewer/3d_draw.cpp:1001
+#: 3d-viewer/3d_draw.cpp:616
+#, c-format
+msgid "Build time %.3f s"
+msgstr "Время построения %.3f с"
+
+#: 3d-viewer/3d_draw.cpp:736 3d-viewer/3d_draw.cpp:1088
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
 msgstr ""
 "Не удалось рассчитать контур платы.\n"
 "Используются габариты платы."
+
+#: 3d-viewer/3d_draw.cpp:772 3d-viewer/3d_draw.cpp:1148
+#: 3d-viewer/3d_draw.cpp:1321
+#, c-format
+msgid "Build layer %s"
+msgstr "Построение слоя %s"
+
+#: 3d-viewer/3d_draw.cpp:974
+msgid "Build board body"
+msgstr "Построение тела платы"
+
+#: 3d-viewer/3d_draw.cpp:1591
+msgid "Load 3D Shapes"
+msgstr "Загрузка 3D форм"
 
 #: 3d-viewer/3d_toolbar.cpp:52
 msgid "Reload board"
@@ -184,7 +203,7 @@ msgstr "Вкл/Выкл ортогональную проекцию"
 
 #: 3d-viewer/3d_toolbar.cpp:139 cvpcb/menubar.cpp:168 eeschema/menubar.cpp:507
 #: eeschema/menubar_libedit.cpp:283 eeschema/tool_viewlib.cpp:267
-#: gerbview/menubar.cpp:236 kicad/menubar.cpp:431
+#: gerbview/menubar.cpp:236 kicad/menubar.cpp:433
 #: pagelayout_editor/menubar.cpp:163 pcbnew/menubar_modedit.cpp:334
 #: pcbnew/menubar_pcbframe.cpp:656 pcbnew/tool_modview.cpp:206
 msgid "&File"
@@ -203,7 +222,7 @@ msgid "&Exit"
 msgstr "Выход"
 
 #: 3d-viewer/3d_toolbar.cpp:153 cvpcb/menubar.cpp:169 gerbview/menubar.cpp:237
-#: kicad/menubar.cpp:433 pagelayout_editor/menubar.cpp:164
+#: kicad/menubar.cpp:435 pagelayout_editor/menubar.cpp:164
 msgid "&Preferences"
 msgstr "Настройки"
 
@@ -536,7 +555,7 @@ msgstr "Формат"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:498
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:500
 #: eeschema/onrightclick.cpp:380 eeschema/sch_text.cpp:761
 #: gerbview/class_GERBER.cpp:359 gerbview/class_GERBER.cpp:363
 #: gerbview/class_GERBER.cpp:366 pcbnew/class_module.cpp:599
@@ -694,26 +713,26 @@ msgstr "Could not open clipboard to write version information."
 msgid "Clipboard Error"
 msgstr "Ошибка буфера обмена"
 
-#: common/basicframe.cpp:642
+#: common/basicframe.cpp:635
 msgid "Version Information (copied to the clipboard)"
 msgstr "Информация о версии (копирование в буфер обмена)"
 
-#: common/basicframe.cpp:669
+#: common/basicframe.cpp:662
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "У Вас нет прав на запись в директорию <%s>."
 
-#: common/basicframe.cpp:674
+#: common/basicframe.cpp:667
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s> в директорию <%s>."
 
-#: common/basicframe.cpp:679
+#: common/basicframe.cpp:672
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s>."
 
-#: common/basicframe.cpp:711
+#: common/basicframe.cpp:704
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!  It appears that the last time you "
@@ -723,12 +742,12 @@ msgstr ""
 "Возможны некоторые затруднения! При последнем редактировании файл '%s' не "
 "был корректно сохранен. Хотите восстановить последние изменения?"
 
-#: common/basicframe.cpp:738
+#: common/basicframe.cpp:731
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Не удалось создать файл резервной копии <%s>"
 
-#: common/basicframe.cpp:746
+#: common/basicframe.cpp:739
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Файл автосохранения не может быть переименован в файл платы."
 
@@ -851,7 +870,7 @@ msgstr "Подтверждение"
 #: common/dialog_about/AboutDialog_main.cpp:143
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1524
+#: eeschema/libedit.cpp:510 eeschema/sch_component.cpp:1524
 #: eeschema/viewlibs.cpp:308
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:210 pcbnew/librairi.cpp:791
@@ -1010,7 +1029,7 @@ msgstr "Не может быть одинаковых имен конфигур�
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:151
-#: eeschema/lib_pin.cpp:1968 eeschema/libedit.cpp:477
+#: eeschema/lib_pin.cpp:1968 eeschema/libedit.cpp:479
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:36
 #: pcbnew/dialogs/dialog_layers_setup.cpp:350
@@ -1643,58 +1662,58 @@ msgstr "Выбрать все\tCTRL+A"
 msgid "Select all cells"
 msgstr "Выбрать все ячейки"
 
-#: common/hotkeys_basic.cpp:433 common/hotkeys_basic.cpp:462
-#: common/hotkeys_basic.cpp:466
+#: common/hotkeys_basic.cpp:423 common/hotkeys_basic.cpp:452
+#: common/hotkeys_basic.cpp:456
 msgid "Hotkeys List"
 msgstr "Список горячих клавиш"
 
-#: common/hotkeys_basic.cpp:716
+#: common/hotkeys_basic.cpp:706
 msgid "Read Hotkey Configuration File:"
 msgstr "Считать файл конфигурации горячих клавиш"
 
-#: common/hotkeys_basic.cpp:746
+#: common/hotkeys_basic.cpp:736
 msgid "Write Hotkey Configuration File:"
 msgstr "Записать файл конфигурации горячих клавиш:"
 
-#: common/hotkeys_basic.cpp:774
+#: common/hotkeys_basic.cpp:764
 msgid "&List Current Keys"
 msgstr "Список текущих клавиш"
 
-#: common/hotkeys_basic.cpp:775
+#: common/hotkeys_basic.cpp:765
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
 
-#: common/hotkeys_basic.cpp:780
+#: common/hotkeys_basic.cpp:770
 msgid "&Edit Hotkeys"
 msgstr "Редактор горячих клавиш"
 
-#: common/hotkeys_basic.cpp:781
+#: common/hotkeys_basic.cpp:771
 msgid "Call the hotkeys editor"
 msgstr "Вызов редактора горячих клавиш"
 
-#: common/hotkeys_basic.cpp:788
+#: common/hotkeys_basic.cpp:778
 msgid "E&xport Hotkeys"
 msgstr "Экспорт горячих клавиши"
 
-#: common/hotkeys_basic.cpp:789
+#: common/hotkeys_basic.cpp:779
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr ""
 "Создать файл конфигурации горячих клавиш для экспорта назначенных горячих "
 "клавиш"
 
-#: common/hotkeys_basic.cpp:794
+#: common/hotkeys_basic.cpp:784
 msgid "&Import Hotkeys"
 msgstr "Импорт конфигурации горячих клавиш"
 
-#: common/hotkeys_basic.cpp:795
+#: common/hotkeys_basic.cpp:785
 msgid "Load an existing hotkey configuration file"
 msgstr "Загрузить файл конфигурации горячих клавиш"
 
-#: common/hotkeys_basic.cpp:800
+#: common/hotkeys_basic.cpp:790
 msgid "&Hotkeys"
 msgstr "Горячие клавиши"
 
-#: common/hotkeys_basic.cpp:801
+#: common/hotkeys_basic.cpp:791
 msgid "Hotkeys configuration and preferences"
 msgstr "Настройка горячих клавиш"
 
@@ -2512,7 +2531,7 @@ msgstr "Соответствие в Cmp файле"
 msgid "&Open Netlist"
 msgstr "Открыть список цепей"
 
-#: cvpcb/menubar.cpp:88 eeschema/menubar.cpp:99 kicad/menubar.cpp:224
+#: cvpcb/menubar.cpp:88 eeschema/menubar.cpp:99 kicad/menubar.cpp:226
 #: pcbnew/menubar_pcbframe.cpp:94
 msgid "Open &Recent"
 msgstr "Последние файлы"
@@ -2530,7 +2549,7 @@ msgid "Save Cmp File &As...\tCtrl+Shift+S"
 msgstr "Сохранить файл Cmp как...\tCtrl+Shift+S"
 
 #: cvpcb/menubar.cpp:109 eeschema/menubar.cpp:186
-#: eeschema/menubar_libedit.cpp:110 kicad/menubar.cpp:279
+#: eeschema/menubar_libedit.cpp:110 kicad/menubar.cpp:281
 #: pcbnew/menubar_pcbframe.cpp:272
 msgid "&Quit"
 msgstr "Выход"
@@ -2548,12 +2567,12 @@ msgstr "Библиотеки посад.мест"
 msgid "Configure footprint libraries"
 msgstr "Конфигурация библиотек посад.мест"
 
-#: cvpcb/menubar.cpp:122 kicad/menubar.cpp:306 pcbnew/menubar_modedit.cpp:294
+#: cvpcb/menubar.cpp:122 kicad/menubar.cpp:308 pcbnew/menubar_modedit.cpp:294
 #: pcbnew/menubar_pcbframe.cpp:494
 msgid "Configure Pa&ths"
 msgstr "Настройка путей"
 
-#: cvpcb/menubar.cpp:123 kicad/menubar.cpp:307 pcbnew/menubar_modedit.cpp:295
+#: cvpcb/menubar.cpp:123 kicad/menubar.cpp:309 pcbnew/menubar_modedit.cpp:295
 #: pcbnew/menubar_pcbframe.cpp:495
 msgid "Edit path configuration environment variables"
 msgstr "Редактировать переменную окружения настройки пути"
@@ -2604,7 +2623,7 @@ msgstr "О CvPcb - селекторе посадочных мест"
 
 #: cvpcb/menubar.cpp:170 eeschema/menubar.cpp:513
 #: eeschema/menubar_libedit.cpp:288 eeschema/tool_viewlib.cpp:270
-#: gerbview/menubar.cpp:239 kicad/menubar.cpp:435
+#: gerbview/menubar.cpp:239 kicad/menubar.cpp:437
 #: pagelayout_editor/menubar.cpp:165 pcbnew/menubar_modedit.cpp:340
 #: pcbnew/menubar_pcbframe.cpp:665 pcbnew/tool_modview.cpp:209
 msgid "&Help"
@@ -2808,61 +2827,61 @@ msgstr ""
 "Библиотека '%s' содержит дубликат имени '%s'.\n"
 "Это может вызвать неожиданный результат при загрузке компонентов в схему."
 
-#: eeschema/class_library.cpp:256
+#: eeschema/class_library.cpp:299
 #, c-format
 msgid "Cannot add duplicate alias '%s' to library '%s'."
 msgstr "Нельзя добавлять повторяющийся псевдоним '%s' в библиотеку '%s'."
 
-#: eeschema/class_library.cpp:423
+#: eeschema/class_library.cpp:466
 msgid "The component library file name is not set."
 msgstr "Не задано имя файла библиотеки компонентов."
 
-#: eeschema/class_library.cpp:431
+#: eeschema/class_library.cpp:474
 msgid "The file could not be opened."
 msgstr "Не удалось открыть файл."
 
-#: eeschema/class_library.cpp:439
+#: eeschema/class_library.cpp:482
 msgid "The file is empty!"
 msgstr "Файл пуст!"
 
-#: eeschema/class_library.cpp:464
+#: eeschema/class_library.cpp:507
 msgid "The file is NOT an Eeschema library!"
 msgstr "Файл не является библиотекой Eeschema!"
 
-#: eeschema/class_library.cpp:470
+#: eeschema/class_library.cpp:513
 msgid "The file header is missing version and time stamp information."
 msgstr "Заголовок файла не содержит номер версии и метки времени."
 
-#: eeschema/class_library.cpp:514
+#: eeschema/class_library.cpp:557
 msgid "An error occurred attempting to read the header."
 msgstr "Непредвиденная ошибка при чтении заголовка."
 
-#: eeschema/class_library.cpp:543
+#: eeschema/class_library.cpp:586
 #, c-format
 msgid "Library '%s' component load error %s."
 msgstr "Библиотека '%s' - ошибка загрузки компонента %s."
 
-#: eeschema/class_library.cpp:616
+#: eeschema/class_library.cpp:659
 #, c-format
 msgid "Could not open component document library file '%s'."
 msgstr "Не удалось открыть файл '%s' документации компонента."
 
-#: eeschema/class_library.cpp:623
+#: eeschema/class_library.cpp:666
 #, c-format
 msgid "Part document library file '%s' is empty."
 msgstr "Файл '%s' документации компонента пуст."
 
-#: eeschema/class_library.cpp:631
+#: eeschema/class_library.cpp:674
 #, c-format
 msgid "File '%s' is not a valid component library document file."
 msgstr "Файл '%s' не является файлом документации компонента."
 
-#: eeschema/class_library.cpp:1019
+#: eeschema/class_library.cpp:1062
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "Не удалось загрузить файл проекта '%s'"
 
-#: eeschema/class_library.cpp:1110
+#: eeschema/class_library.cpp:1153
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -2871,7 +2890,7 @@ msgstr ""
 "Не удалось загрузить библиотеку компонентов '%s'. Ошибка:\n"
 "%s"
 
-#: eeschema/class_library.cpp:1132
+#: eeschema/class_library.cpp:1175
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -2917,9 +2936,9 @@ msgstr "Различаются значения для %s%d%s (%s) и %s%d%s (%s
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Дубликат временной метки (%s) для %s%d и %s%d"
 
-#: eeschema/component_tree_search_container.cpp:196
+#: eeschema/component_tree_search_container.cpp:203
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:25
-#: eeschema/lib_draw_item.cpp:72 eeschema/libedit.cpp:493
+#: eeschema/lib_draw_item.cpp:72 eeschema/libedit.cpp:495
 #: eeschema/onrightclick.cpp:464
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:38
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:50
@@ -3173,7 +3192,7 @@ msgstr "Заметки"
 msgid "No Connect Symbol"
 msgstr "Символ \"Не подключено\""
 
-#: eeschema/dialogs/dialog_color_config.cpp:73 eeschema/libedit.cpp:500
+#: eeschema/dialogs/dialog_color_config.cpp:73 eeschema/libedit.cpp:502
 msgid "Body"
 msgstr "Контур"
 
@@ -3515,7 +3534,7 @@ msgid "Delete All"
 msgstr "Удалить все"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:202
-#: eeschema/libedit.cpp:488 eeschema/viewlibs.cpp:307
+#: eeschema/libedit.cpp:490 eeschema/viewlibs.cpp:307
 msgid "Alias"
 msgstr "Псевдоним"
 
@@ -4502,7 +4521,7 @@ msgstr "Номер"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:158
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1977
-#: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:788
+#: eeschema/libedit.cpp:509 eeschema/sch_text.cpp:788
 #: gerbview/class_gerber_draw_item.cpp:550
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
@@ -5528,16 +5547,16 @@ msgstr "Компонент %s не найден"
 msgid "No item found matching %s."
 msgstr "Ничего не найдено для %s."
 
-#: eeschema/getpart.cpp:137
+#: eeschema/getpart.cpp:152
 msgid "History"
 msgstr "История"
 
-#: eeschema/getpart.cpp:143
+#: eeschema/getpart.cpp:158
 #, c-format
 msgid "Choose Component (%d items loaded)"
 msgstr "Выбор компонента (загружено %d элементов)"
 
-#: eeschema/getpart.cpp:196
+#: eeschema/getpart.cpp:216
 #, c-format
 msgid "Failed to find part '%s' in library"
 msgstr "Не удалось найти элемент '%s' в библиотеке"
@@ -5772,7 +5791,20 @@ msgstr "Сохранить схему"
 msgid "Load Schematic"
 msgstr "Загрузить схему"
 
-#: eeschema/hotkeys.cpp:695
+#: eeschema/hotkeys.cpp:316 pagelayout_editor/hotkeys.cpp:114
+#: pcbnew/hotkeys.cpp:337
+msgid "Common"
+msgstr "Общее"
+
+#: eeschema/hotkeys.cpp:317
+msgid "Schematic Editor"
+msgstr "Редактор схем"
+
+#: eeschema/hotkeys.cpp:318 eeschema/libeditframe.cpp:183
+msgid "Library Editor"
+msgstr "Редактор библиотек"
+
+#: eeschema/hotkeys.cpp:705
 msgid "Add Pin"
 msgstr "Добавить вывод"
 
@@ -5868,7 +5900,7 @@ msgstr "нет"
 msgid "yes"
 msgstr "да"
 
-#: eeschema/lib_draw_item.cpp:83 eeschema/libedit.cpp:496
+#: eeschema/lib_draw_item.cpp:83 eeschema/libedit.cpp:498
 #: eeschema/onrightclick.cpp:439
 msgid "Convert"
 msgstr "Преобразовать"
@@ -5943,7 +5975,7 @@ msgstr "Поле"
 msgid "Footprint"
 msgstr "Посадочное место"
 
-#: eeschema/lib_field.cpp:602 eeschema/libedit.cpp:510
+#: eeschema/lib_field.cpp:602 eeschema/libedit.cpp:512
 #: eeschema/template_fieldnames.cpp:39
 msgid "Datasheet"
 msgstr "Документация"
@@ -6111,7 +6143,7 @@ msgstr "Графический текст %s"
 msgid "An error occurred attempting to save component library '%s'."
 msgstr "При сохранении библиотеки компонентов '%s' произошла ошибка."
 
-#: eeschema/libarch.cpp:111 eeschema/libedit.cpp:406
+#: eeschema/libarch.cpp:111 eeschema/libedit.cpp:408
 #, c-format
 msgid "Failed to create component library file '%s'"
 msgstr "Не удалось создать файл библиотеки компонентов '%s'"
@@ -6135,66 +6167,66 @@ msgstr ""
 "\n"
 "Отказаться от изменений?"
 
-#: eeschema/libedit.cpp:166
+#: eeschema/libedit.cpp:168
 msgid "The selected component is not in the active library."
 msgstr "Выбранный компонент не из активной библиотеки."
 
-#: eeschema/libedit.cpp:168
+#: eeschema/libedit.cpp:170
 msgid "Do you want to change the active library?"
 msgstr "Желаете изменить активную библиотеку?"
 
-#: eeschema/libedit.cpp:178
+#: eeschema/libedit.cpp:180
 #, c-format
 msgid "Part name '%s' not found in library '%s'"
 msgstr "Компонент '%s' не найден в библиотеке '%s'"
 
-#: eeschema/libedit.cpp:315 eeschema/libeditframe.cpp:712
+#: eeschema/libedit.cpp:317 eeschema/libeditframe.cpp:712
 msgid "No library specified."
 msgstr "Не указана библиотека."
 
-#: eeschema/libedit.cpp:321
+#: eeschema/libedit.cpp:323
 msgid "Include last component changes?"
 msgstr "Включая последние изменения компонента?"
 
-#: eeschema/libedit.cpp:336
+#: eeschema/libedit.cpp:338
 msgid "Part Library Name:"
 msgstr "Имя библиотеки компонентов:"
 
-#: eeschema/libedit.cpp:356
+#: eeschema/libedit.cpp:358
 #, c-format
 msgid "Modify library file '%s' ?"
 msgstr "Изменить файл библиотеки '%s'?"
 
-#: eeschema/libedit.cpp:396
+#: eeschema/libedit.cpp:398
 #, c-format
 msgid "Error occurred while saving library file '%s'"
 msgstr "Ошибка при записи файла библиотеки '%s'"
 
-#: eeschema/libedit.cpp:398 eeschema/libedit.cpp:440
+#: eeschema/libedit.cpp:400 eeschema/libedit.cpp:442
 msgid "*** ERROR: ***"
 msgstr "*** ОШИБКА: ***"
 
-#: eeschema/libedit.cpp:438
+#: eeschema/libedit.cpp:440
 #, c-format
 msgid "Error occurred while saving library documentation file <%s>"
 msgstr "Ошибка при записи файла документации библиотеки <%s>"
 
-#: eeschema/libedit.cpp:448
+#: eeschema/libedit.cpp:450
 #, c-format
 msgid "Failed to create component document library file <%s>"
 msgstr "Не удалось создать файл <%s> документации компонента библиотеки"
 
-#: eeschema/libedit.cpp:454
+#: eeschema/libedit.cpp:456
 #, c-format
 msgid "Library file '%s' OK"
 msgstr "Файл библиотеки '%s' ОК"
 
-#: eeschema/libedit.cpp:457
+#: eeschema/libedit.cpp:459
 #, c-format
 msgid "Documentation file '%s' OK"
 msgstr "Файл документации '%s' ОК"
 
-#: eeschema/libedit.cpp:480 eeschema/viewlibs.cpp:295
+#: eeschema/libedit.cpp:482 eeschema/viewlibs.cpp:295
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
@@ -6205,32 +6237,32 @@ msgstr "Файл документации '%s' ОК"
 msgid "None"
 msgstr "Отсутствует"
 
-#: eeschema/libedit.cpp:503
+#: eeschema/libedit.cpp:505
 msgid "Power Symbol"
 msgstr "Символ питания"
 
-#: eeschema/libedit.cpp:505 eeschema/viewlibs.cpp:306
+#: eeschema/libedit.cpp:507 eeschema/viewlibs.cpp:306
 msgid "Part"
 msgstr " Часть"
 
-#: eeschema/libedit.cpp:509 eeschema/viewlibs.cpp:309
+#: eeschema/libedit.cpp:511 eeschema/viewlibs.cpp:309
 msgid "Key words"
 msgstr "Ключевые слова"
 
-#: eeschema/libedit.cpp:535
+#: eeschema/libedit.cpp:537
 msgid "Please select a component library."
 msgstr "Выберите библиотеку компонентов."
 
-#: eeschema/libedit.cpp:544
+#: eeschema/libedit.cpp:546
 #, c-format
 msgid "Part library '%s' is empty."
 msgstr "Библиотека компонентов '%s' пустая."
 
-#: eeschema/libedit.cpp:545
+#: eeschema/libedit.cpp:547
 msgid "Delete Entry Error"
 msgstr "Ошибка удаления"
 
-#: eeschema/libedit.cpp:549
+#: eeschema/libedit.cpp:551
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -6239,21 +6271,21 @@ msgstr ""
 "Выберите 1 из %d компонентов для удаления\n"
 "из библиотеки '%s'."
 
-#: eeschema/libedit.cpp:553
+#: eeschema/libedit.cpp:555
 msgid "Delete Part"
 msgstr "Удалить компонент"
 
-#: eeschema/libedit.cpp:562
+#: eeschema/libedit.cpp:564
 #, c-format
 msgid "Entry '%s' not found in library '%s'."
 msgstr "Компонент '%s' не найден в библиотеке '%s'."
 
-#: eeschema/libedit.cpp:569
+#: eeschema/libedit.cpp:571
 #, c-format
 msgid "Delete component '%s' from library '%s' ?"
 msgstr "Удалить компонент '%s' из библиотеки '%s' ?"
 
-#: eeschema/libedit.cpp:588
+#: eeschema/libedit.cpp:590
 msgid ""
 "The component being deleted has been modified. All changes will be lost. "
 "Discard changes?"
@@ -6261,7 +6293,7 @@ msgstr ""
 "Удаляемый компонент был изменен. Все изменения будут потеряны.\n"
 "Отказаться от изменений?"
 
-#: eeschema/libedit.cpp:617
+#: eeschema/libedit.cpp:619
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -6271,22 +6303,22 @@ msgstr ""
 "\n"
 "Очистить текущий компонент на экране?"
 
-#: eeschema/libedit.cpp:636
+#: eeschema/libedit.cpp:638
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr ""
 "Новый компонент не имеет имени и не может быть создан. Создание прервано"
 
-#: eeschema/libedit.cpp:649
+#: eeschema/libedit.cpp:651
 #, c-format
 msgid "Part '%s' already exists in library '%s'"
 msgstr "Компонент '%s' уже есть в библиотеке '%s'"
 
-#: eeschema/libedit.cpp:721
+#: eeschema/libedit.cpp:723
 #, c-format
 msgid "Part '%s' already exists. Change it?"
 msgstr "Компонент '%s' уже существует. Заменить его?"
 
-#: eeschema/libedit.cpp:735
+#: eeschema/libedit.cpp:737
 #, c-format
 msgid "Part '%s' saved in library '%s'"
 msgstr "Компонент '%s' сохранён в библиотеке '%s'"
@@ -6502,10 +6534,6 @@ msgstr "Имя файла:"
 #, c-format
 msgid "Can't save file <%s>"
 msgstr "Не удалось сохранить файл <%s>"
-
-#: eeschema/libeditframe.cpp:183
-msgid "Library Editor"
-msgstr "Редактор библиотеки"
 
 #: eeschema/libeditframe.cpp:298
 msgid "Save the changes in the library before closing?"
@@ -7001,9 +7029,9 @@ msgstr "Запустить CvPcb"
 msgid "&Layout Printed Circuit Board"
 msgstr "Создание печатной платы"
 
-#: eeschema/menubar.cpp:478 kicad/menubar.cpp:147 kicad/menubar.cpp:372
+#: eeschema/menubar.cpp:478 kicad/menubar.cpp:147 kicad/menubar.cpp:374
 msgid "Run Pcbnew"
-msgstr "Запустить Pcbnew"
+msgstr "Pcbnew"
 
 #: eeschema/menubar.cpp:489 eeschema/tool_viewlib.cpp:250
 msgid "Eesc&hema Manual"
@@ -7014,13 +7042,13 @@ msgid "Open Eeschema manual"
 msgstr "Открыть руководство по Eeschema"
 
 #: eeschema/menubar.cpp:495 eeschema/menubar_libedit.cpp:269
-#: eeschema/tool_viewlib.cpp:255 kicad/menubar.cpp:417
+#: eeschema/tool_viewlib.cpp:255 kicad/menubar.cpp:419
 #: pcbnew/menubar_modedit.cpp:322 pcbnew/menubar_pcbframe.cpp:645
 #: pcbnew/tool_modview.cpp:194
 msgid "&Getting Started in KiCad"
 msgstr "Введение в KiCad"
 
-#: eeschema/menubar.cpp:496 kicad/menubar.cpp:418
+#: eeschema/menubar.cpp:496 kicad/menubar.cpp:420
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство \"Введение в KiCad\" для начинающих"
 
@@ -7055,7 +7083,7 @@ msgstr "Разместить"
 msgid "P&references"
 msgstr "Настройки"
 
-#: eeschema/menubar.cpp:512 kicad/menubar.cpp:434
+#: eeschema/menubar.cpp:512 kicad/menubar.cpp:436
 #: pcbnew/menubar_pcbframe.cpp:663
 msgid "&Tools"
 msgstr "Инструменты"
@@ -8175,6 +8203,7 @@ msgstr "Сформировать список цепей"
 
 #: eeschema/tool_sch.cpp:165
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
+#: pcbnew/hotkeys.cpp:339
 msgid "Footprint Editor"
 msgstr "Редактор посадочных мест"
 
@@ -9224,7 +9253,7 @@ msgstr "Редактор посадочных мест"
 msgid "GerbView - Gerber viewer"
 msgstr "GerbView - просмотра Gerber файлов"
 
-#: kicad/commandframe.cpp:88 kicad/menubar.cpp:390
+#: kicad/commandframe.cpp:88 kicad/menubar.cpp:392
 msgid ""
 "Bitmap2Component - Convert bitmap images to Eeschema\n"
 "or Pcbnew elements"
@@ -9232,11 +9261,11 @@ msgstr ""
 "Bitmap2Component - преобразование bitmap изображения в Eeschema\n"
 "или Pcbnew элемент"
 
-#: kicad/commandframe.cpp:92 kicad/menubar.cpp:396
+#: kicad/commandframe.cpp:92 kicad/menubar.cpp:398
 msgid "Pcb calculator - Calculator for components, track width, etc."
 msgstr "Pcb калькулятор - Калькулятор для компонентов, ширины дорожек и т.п."
 
-#: kicad/commandframe.cpp:95 kicad/menubar.cpp:401
+#: kicad/commandframe.cpp:95 kicad/menubar.cpp:403
 msgid "Pl editor - Worksheet layout editor"
 msgstr "Pl editor -редактор формата рабочего листа"
 
@@ -9345,7 +9374,7 @@ msgstr "Загрузить проект"
 msgid "Save project"
 msgstr "Сохранить проект"
 
-#: kicad/menubar.cpp:141 kicad/menubar.cpp:244
+#: kicad/menubar.cpp:141 kicad/menubar.cpp:246
 msgid "New Project"
 msgstr "Новый проект"
 
@@ -9353,23 +9382,23 @@ msgstr "Новый проект"
 msgid "New Prj From Template"
 msgstr "Новый проект из шаблона"
 
-#: kicad/menubar.cpp:145 kicad/menubar.cpp:363
+#: kicad/menubar.cpp:145 kicad/menubar.cpp:365
 msgid "Run Eeschema"
 msgstr "Eeschema"
 
 #: kicad/menubar.cpp:146
 msgid "Run LibEdit"
-msgstr "Редактор библиотеки"
+msgstr "Редактор библиотек"
 
 #: kicad/menubar.cpp:148
 msgid "Run FpEditor"
 msgstr "Редактор посадочных мест"
 
-#: kicad/menubar.cpp:149 kicad/menubar.cpp:382
+#: kicad/menubar.cpp:149 kicad/menubar.cpp:384
 msgid "Run Gerbview"
 msgstr "GerbView"
 
-#: kicad/menubar.cpp:150 kicad/menubar.cpp:387
+#: kicad/menubar.cpp:150 kicad/menubar.cpp:389
 msgid "Run Bitmap2Component"
 msgstr "Bitmap2Component"
 
@@ -9381,168 +9410,172 @@ msgstr "Калькулятор для печатных плат"
 msgid "Run PlEditor"
 msgstr "Редактор листа"
 
-#: kicad/menubar.cpp:213
+#: kicad/menubar.cpp:170
+msgid "Kicad Manager Hotkeys"
+msgstr "Горячие клавиши менеджера Kicad"
+
+#: kicad/menubar.cpp:215
 msgid "&Open Project"
 msgstr "Открыть проект"
 
-#: kicad/menubar.cpp:215 kicad/menubar.cpp:481
+#: kicad/menubar.cpp:217 kicad/menubar.cpp:483
 msgid "Open existing project"
 msgstr "Открыть существующий проект"
 
-#: kicad/menubar.cpp:225
+#: kicad/menubar.cpp:227
 msgid "Open recent schematic project"
 msgstr "Открыть недавний проект схемы"
 
-#: kicad/menubar.cpp:231
+#: kicad/menubar.cpp:233
 msgid "&New Project"
 msgstr "Новый проект"
 
-#: kicad/menubar.cpp:233
+#: kicad/menubar.cpp:235
 msgid "Create new blank project"
 msgstr "Создать новый пустой проект"
 
-#: kicad/menubar.cpp:236
+#: kicad/menubar.cpp:238
 msgid "New Project from &Template"
 msgstr "Новый проект из шаблона"
 
-#: kicad/menubar.cpp:239
+#: kicad/menubar.cpp:241
 msgid "Create a new project from a template"
 msgstr "Создать новый проект из шаблона"
 
-#: kicad/menubar.cpp:245 kicad/menubar.cpp:472
+#: kicad/menubar.cpp:247 kicad/menubar.cpp:474
 msgid "Create new project"
 msgstr "Создать новый проект"
 
-#: kicad/menubar.cpp:252 pcbnew/menubar_pcbframe.cpp:109
+#: kicad/menubar.cpp:254 pcbnew/menubar_pcbframe.cpp:109
 #: pcbnew/menubar_pcbframe.cpp:558
 msgid "&Save"
 msgstr "Сохранить"
 
-#: kicad/menubar.cpp:254 kicad/menubar.cpp:486
+#: kicad/menubar.cpp:256 kicad/menubar.cpp:488
 msgid "Save current project"
 msgstr "Сохранить текущий проект"
 
-#: kicad/menubar.cpp:262
+#: kicad/menubar.cpp:264
 msgid "&Archive"
 msgstr "Архивировать"
 
-#: kicad/menubar.cpp:263
+#: kicad/menubar.cpp:265
 msgid "Archive project files in zip archive"
 msgstr "Архивировать файлы проекта в zip-архив"
 
-#: kicad/menubar.cpp:269
+#: kicad/menubar.cpp:271
 msgid "&Unarchive"
 msgstr "Разархивировать"
 
-#: kicad/menubar.cpp:270
+#: kicad/menubar.cpp:272
 msgid "Unarchive project files from zip file"
 msgstr "Разархивировать файлы проекта из zip-архива"
 
-#: kicad/menubar.cpp:280
+#: kicad/menubar.cpp:282
 msgid "Quit KiCad"
 msgstr "Выход из KiСad"
 
-#: kicad/menubar.cpp:289
+#: kicad/menubar.cpp:291
 msgid "Open Text E&ditor"
 msgstr "Открыть текстовый редактор"
 
-#: kicad/menubar.cpp:290
+#: kicad/menubar.cpp:292
 msgid "Launch preferred text editor"
 msgstr "Запуск редактора текста"
 
-#: kicad/menubar.cpp:296
+#: kicad/menubar.cpp:298
 msgid "&Open Local File"
 msgstr "Открыть локальный файл"
 
-#: kicad/menubar.cpp:297
+#: kicad/menubar.cpp:299
 msgid "Edit local file"
 msgstr "Редактировать локальный файл"
 
-#: kicad/menubar.cpp:313
+#: kicad/menubar.cpp:315
 msgid "&Set Text Editor"
 msgstr "Выбрать текстовый редактор"
 
-#: kicad/menubar.cpp:314
+#: kicad/menubar.cpp:316
 msgid "Set your preferred text editor"
 msgstr "Выбор предпочитаемого редактора текстов"
 
-#: kicad/menubar.cpp:322
+#: kicad/menubar.cpp:324
 msgid "System &Default PDF Viewer"
 msgstr "Системный PDF просмотрщик"
 
-#: kicad/menubar.cpp:323
+#: kicad/menubar.cpp:325
 msgid "Use system default PDF viewer"
 msgstr "Использовать системный просмотрщик PDF"
 
-#: kicad/menubar.cpp:331
+#: kicad/menubar.cpp:333
 msgid "&Favourite PDF Viewer"
 msgstr "Предпочитаемый PDF просмотрщик"
 
-#: kicad/menubar.cpp:332
+#: kicad/menubar.cpp:334
 msgid "Use favourite PDF viewer"
 msgstr "Использовать предпочитаемый просмотрщик PDF"
 
-#: kicad/menubar.cpp:342
+#: kicad/menubar.cpp:344
 msgid "Set &PDF Viewer"
 msgstr "Выбрать PDF просмотрщик"
 
-#: kicad/menubar.cpp:343
+#: kicad/menubar.cpp:345
 msgid "Set favourite PDF viewer"
 msgstr "Выбрать предпочитаемый  PDF просмотрщик"
 
-#: kicad/menubar.cpp:348
+#: kicad/menubar.cpp:350
 msgid "&PDF Viewer"
 msgstr "PDF просмотрщик"
 
-#: kicad/menubar.cpp:349
+#: kicad/menubar.cpp:351
 msgid "PDF viewer preferences"
 msgstr "Выбор просмотрщика PDF"
 
-#: kicad/menubar.cpp:367
+#: kicad/menubar.cpp:369
 msgid "Run Library Editor"
-msgstr "Редактор библиотеки"
+msgstr "Редактор библиотек"
 
-#: kicad/menubar.cpp:377
+#: kicad/menubar.cpp:379
 msgid "Run Footprint Editor"
 msgstr "Редактор посадочных мест"
 
-#: kicad/menubar.cpp:394
+#: kicad/menubar.cpp:396
 msgid "Run Pcb Calculator"
 msgstr "Калькулятор для печатных плат"
 
-#: kicad/menubar.cpp:399
+#: kicad/menubar.cpp:401
 msgid "Run Page Layout Editor"
 msgstr "Редактор разметки листа"
 
-#: kicad/menubar.cpp:412
+#: kicad/menubar.cpp:414
 msgid "KiCad &Manual"
 msgstr "KiCad руководство"
 
-#: kicad/menubar.cpp:413
+#: kicad/menubar.cpp:415
 msgid "Open KiCad user manual"
 msgstr "Открыть руководство пользователя KiCad"
 
-#: kicad/menubar.cpp:426
+#: kicad/menubar.cpp:428
 msgid "&About KiCad"
 msgstr "О программе KiСad"
 
-#: kicad/menubar.cpp:427
+#: kicad/menubar.cpp:429
 msgid "About KiCad project manager"
 msgstr "О менеджере проектов KiCad"
 
-#: kicad/menubar.cpp:432
+#: kicad/menubar.cpp:434
 msgid "&Browse"
 msgstr "Просмотр"
 
-#: kicad/menubar.cpp:476
+#: kicad/menubar.cpp:478
 msgid "Create new project from template"
 msgstr "Создать новый проект из шаблона"
 
-#: kicad/menubar.cpp:494
+#: kicad/menubar.cpp:496
 msgid "Archive all project files"
 msgstr "Архивировать все файлы проекта"
 
-#: kicad/menubar.cpp:502
+#: kicad/menubar.cpp:504
 msgid "Refresh project tree"
 msgstr "Обновить дерево проекта"
 
@@ -11907,6 +11940,10 @@ msgstr "Конт.пл. на %s из %s"
 msgid "Pad %s on %s of %s"
 msgstr "Конт.пл. %s на %s из %s"
 
+#: pcbnew/class_pcb_layer_box_selector.cpp:98
+msgid "(not activated)"
+msgstr "(не активирован)"
+
 #: pcbnew/class_pcb_layer_widget.cpp:60 pcbnew/class_track.cpp:1204
 msgid "Through Via"
 msgstr "Сквозное ПО"
@@ -13357,7 +13394,7 @@ msgid "Global Design Rules"
 msgstr "Общие правила проектирования"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:21
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:128
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:129
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:24
 msgid "Text:"
 msgstr "Текст:"
@@ -13974,16 +14011,16 @@ msgstr "Дюйм"
 msgid "3D Shape Names"
 msgstr "Имя 3D образа"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:124
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:125
 msgid "Value:"
 msgstr "Номинал:"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:132
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:133
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:40 pcbnew/modules.cpp:66
 msgid "Reference:"
 msgstr "Обозначение:"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:172
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:178
 msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the front silk screen layer. Please, fix it"
@@ -13991,8 +14028,8 @@ msgstr ""
 "Этот элемент имеет неправильный слой.\n"
 "Принудительно назначен передний слой шелкографии. Пожалуйста, поправьте это"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:231
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:260 pcbnew/dimension.cpp:202
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:237
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:260 pcbnew/dimension.cpp:216
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr "Толщина линии текста больше размера текста. Текст может быть нечитаем"
 
@@ -17300,13 +17337,21 @@ msgstr "В глобальную конфигурацию библиотек (в�
 msgid "To the current project only"
 msgstr "Только в текущий проект"
 
-#: pcbnew/dimension.cpp:144
+#: pcbnew/dimension.cpp:149
 msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the drawings layer. Please, fix it"
 msgstr ""
 "Этот элемент имеет неправильный слой.\n"
 "Принудительно назначен слой чертежа. Пожалуйста, поправьте это"
+
+#: pcbnew/dimension.cpp:172
+msgid ""
+"the layer currently selected is not enabled for this board\n"
+"You cannot use it"
+msgstr ""
+"текущий выбранный слой не разрешен на данной плате\n"
+"Его нельзя использовать"
 
 #: pcbnew/drc.cpp:180
 msgid "Compile ratsnest...\n"
@@ -18189,6 +18234,10 @@ msgstr "Записать макрос 9"
 #: pcbnew/hotkeys.cpp:255
 msgid "Call Macro 9"
 msgstr "Вызвать макрос 9"
+
+#: pcbnew/hotkeys.cpp:338
+msgid "Board Editor"
+msgstr "Редактор печатных плат"
 
 #: pcbnew/hotkeys_board_editor.cpp:62
 #, c-format
@@ -21501,21 +21550,21 @@ msgstr ""
 msgid "Duplicated %d item(s)"
 msgstr "Скопирован(о) %d элемент(ов)"
 
-#: pcbnew/tools/module_tools.cpp:214
+#: pcbnew/tools/module_tools.cpp:212
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr ""
 "Для нумерации вывода поместите курсор на вывод, удерживая левую кнопку мыши"
 
-#: pcbnew/tools/module_tools.cpp:333
+#: pcbnew/tools/module_tools.cpp:331
 msgid "Select reference point"
 msgstr "Выбрать опорную точку"
 
-#: pcbnew/tools/module_tools.cpp:384
+#: pcbnew/tools/module_tools.cpp:382
 #, c-format
 msgid "Copied %d item(s)"
 msgstr "СКопирован(о) %d элемент(ов)"
 
-#: pcbnew/tools/module_tools.cpp:410
+#: pcbnew/tools/module_tools.cpp:408
 msgid "Invalid clipboard contents"
 msgstr "Содержимое буфера обмена ошибочно"
 
