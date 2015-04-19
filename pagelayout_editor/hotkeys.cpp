@@ -116,7 +116,7 @@ static wxString commonSectionTitle( _HKI( "Common" ) );
 // list of sections and corresponding hotkey list for Pl_Editor
 // (used to create an hotkey config file)
 static wxString s_PlEditorSectionTag( wxT( "[pl_editor]" ) );
-static wxString s_PlEditorSectionTitle( wxT( "Part Layout Editor" ) );
+static wxString s_PlEditorSectionTitle( _HKI( "Page Layout Editor" ) );
 
 struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
 {

@@ -323,15 +323,15 @@ struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag,    common_Hotkey_List,    &commonSectionTitle    },
     { &schematicSectionTag,   schematic_Hotkey_List, &schematicSectionTitle },
-    { &libEditSectionTag,     libEdit_Hotkey_List,   &schematicSectionTitle   },
-    { NULL,                   NULL,                  NULL                     }
+    { &libEditSectionTag,     libEdit_Hotkey_List,   &libEditSectionTitle   },
+    { NULL,                   NULL,                  NULL                   }
 };
 
 // list of sections and corresponding hotkey list for the schematic editor
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    common_Hotkey_List,    &commonSectionTitle },
+    { &g_CommonSectionTag,    common_Hotkey_List,    &commonSectionTitle    },
     { &schematicSectionTitle, schematic_Hotkey_List, &schematicSectionTitle },
     { NULL,                   NULL,                  NULL }
 };
@@ -340,8 +340,8 @@ struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 // (used to list current hotkeys)
 struct EDA_HOTKEY_CONFIG g_Libedit_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,  common_Hotkey_List,   &commonSectionTitle },
-    { &libEditSectionTag,   libEdit_Hotkey_List,  &schematicSectionTitle },
+    { &g_CommonSectionTag,  common_Hotkey_List,   &commonSectionTitle  },
+    { &libEditSectionTag,   libEdit_Hotkey_List,  &libEditSectionTitle },
     { NULL,                 NULL,                 NULL }
 };
 

@@ -335,7 +335,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( add_hierarchical_label_xpm ) );
 
 
-    text = AddHotkeyName( _( "H&ierarchical &Sheet" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Hierarchical &Sheet" ), g_Schematic_Hokeys_Descr,
                           HK_ADD_HIER_SHEET, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT, text,
                  HELP_PLACE_SHEET,
@@ -355,13 +355,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     placeMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Graphic Polyline" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Graphic Pol&yline" ), g_Schematic_Hokeys_Descr,
                           HK_ADD_GRAPHIC_POLYLINE, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( placeMenu, ID_LINE_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICLINES,
                  KiBitmap( add_dashed_line_xpm ) );
 
-    text = AddHotkeyName( _( "Graphic Text" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Graphic &Text" ), g_Schematic_Hokeys_Descr,
                           HK_ADD_GRAPHIC_TEXT, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICTEXTS,

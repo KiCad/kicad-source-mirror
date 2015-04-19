@@ -454,7 +454,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     double dXpos = To_User_Unit( g_UserUnit, coord.x*Xsign );
     double dYpos = To_User_Unit( g_UserUnit, coord.y*Ysign );
 
-    wxString pagesizeformatter = wxT( "Page size: width %.4g height %.4g" );
+    wxString pagesizeformatter = _( "Page size: width %.4g height %.4g" );
     wxString absformatter = wxT( "X %.4g  Y %.4g" );
     wxString locformatter = wxT( "dx %.4g  dy %.4g" );
 
