@@ -80,7 +80,7 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
         {
             if( (item->GetFlags() & LOCATE_STARTPOINT) )
             {
-                msg = AddHotkeyName( _( "Move Start Point" ), s_PlEditor_Hokeys_Descr,
+                msg = AddHotkeyName( _( "Move Start Point" ), PlEditorHokeysDescr,
                                      HK_MOVE_START_POINT );
                 AddMenuItem( aPopMenu, ID_POPUP_ITEM_MOVE_START_POINT, msg,
                              KiBitmap( move_xpm ) );
@@ -88,19 +88,19 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 
             if( (item->GetFlags() & LOCATE_ENDPOINT ) )
             {
-                msg = AddHotkeyName( _( "Move End Point" ), s_PlEditor_Hokeys_Descr,
+                msg = AddHotkeyName( _( "Move End Point" ), PlEditorHokeysDescr,
                                      HK_MOVE_END_POINT );
                 AddMenuItem( aPopMenu, ID_POPUP_ITEM_MOVE_END_POINT, msg,
                              KiBitmap( move_xpm ) );
             }
 
-            msg = AddHotkeyName( _( "Move Item" ), s_PlEditor_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Item" ), PlEditorHokeysDescr,
                                  HK_MOVE_ITEM );
             AddMenuItem( aPopMenu, ID_POPUP_ITEM_MOVE, msg,
                          KiBitmap( move_xpm ) );
             aPopMenu->AppendSeparator();
 
-            msg = AddHotkeyName( _( "Delete" ), s_PlEditor_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Delete" ), PlEditorHokeysDescr,
                                  HK_DELETE_ITEM );
             AddMenuItem( aPopMenu, ID_POPUP_ITEM_DELETE, msg, KiBitmap( delete_xpm ) );
             aPopMenu->AppendSeparator();
@@ -108,7 +108,7 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
     }
     else     // An item is currently in edit
     {
-        msg = AddHotkeyName( _( "Place Item" ), s_PlEditor_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Place Item" ), PlEditorHokeysDescr,
                                  HK_PLACE_ITEM );
         AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE, msg,
                      KiBitmap( move_xpm ) );

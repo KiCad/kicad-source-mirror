@@ -80,7 +80,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_showAxis = true;                      // true to show X and Y axis on screen
     m_showBorderAndTitleBlock   = false;    // true for reference drawings.
-    m_HotkeysZoomAndGridList    = s_Gerbview_Hokeys_Descr;
+    m_HotkeysZoomAndGridList    = GerbviewHokeysDescr;
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
     m_displayMode   = 0;
@@ -874,7 +874,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f  d %f" );
+        locformatter = wxT( "dx %f  dy %f  dist %f" );
         break;
 
     case DEGREES:

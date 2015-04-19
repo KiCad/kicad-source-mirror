@@ -118,7 +118,7 @@ static wxString commonSectionTitle( _HKI( "Common" ) );
 static wxString s_PlEditorSectionTag( wxT( "[pl_editor]" ) );
 static wxString s_PlEditorSectionTitle( _HKI( "Page Layout Editor" ) );
 
-struct EDA_HOTKEY_CONFIG s_PlEditor_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG PlEditorHokeysDescr[] =
 {
     { &g_CommonSectionTag,    s_Common_Hotkey_List,     &commonSectionTitle    },
     { &s_PlEditorSectionTag,  s_PlEditor_Hotkey_List,   &s_PlEditorSectionTitle  },
@@ -163,7 +163,7 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         break;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, s_PlEditor_Hokeys_Descr );
+        DisplayHotkeyList( this, PlEditorHokeysDescr );
         break;
 
     case HK_UNDO:

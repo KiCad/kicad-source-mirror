@@ -1,4 +1,3 @@
-
 /**
  * @file toolbars_pl_editor.cpp
  * @brief Build tool bars
@@ -76,16 +75,16 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 
     // Standard Zoom controls:
     m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Zoom in" ), s_PlEditor_Hokeys_Descr, HK_ZOOM_IN,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom in" ), PlEditorHokeysDescr, HK_ZOOM_IN,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), s_PlEditor_Hokeys_Descr, HK_ZOOM_OUT,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom out" ), PlEditorHokeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), s_PlEditor_Hokeys_Descr, HK_ZOOM_REDRAW,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Redraw view" ), PlEditorHokeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), s_PlEditor_Hokeys_Descr, HK_ZOOM_AUTO,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom auto" ), PlEditorHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
     // Display mode switch

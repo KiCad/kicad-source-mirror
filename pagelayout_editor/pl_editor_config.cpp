@@ -70,19 +70,19 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
 
     // Standard basic hotkey IDs
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, s_PlEditor_Hokeys_Descr );
+        InstallHotkeyFrame( this, PlEditorHokeysDescr );
         break;
 
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( s_PlEditor_Hokeys_Descr, wxT( "pl_editor" ) );
+        ExportHotkeyConfigToFile( PlEditorHokeysDescr, wxT( "pl_editor" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( s_PlEditor_Hokeys_Descr, wxT( "pl_editor" ) );
+        ImportHotkeyConfigFromFile( PlEditorHokeysDescr, wxT( "pl_editor" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        DisplayHotkeyList( this, s_PlEditor_Hokeys_Descr );
+        DisplayHotkeyList( this, PlEditorHokeysDescr );
         break;
 
     default:

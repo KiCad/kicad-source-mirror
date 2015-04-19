@@ -36,12 +36,16 @@
 // for shared hotkeys id
 enum hotkey_id_commnand {
     HK_SWITCH_UNITS = HK_COMMON_END,
-    HK_SWITCH_GBR_ITEMS_DISPLAY_MODE,
+    HK_GBR_LINES_DISPLAY_MODE,
+    HK_GBR_FLASHED_DISPLAY_MODE,
+    HK_GBR_POLYGON_DISPLAY_MODE,
+    HK_GBR_NEGATIVE_DISPLAY_ONOFF,
+    HK_GBR_DCODE_DISPLAY_ONOFF,
     HK_SWITCH_LAYER_TO_NEXT,
     HK_SWITCH_LAYER_TO_PREVIOUS
 };
 
 // List of hotkey descriptors for GerbView.
-extern struct EDA_HOTKEY_CONFIG s_Gerbview_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG GerbviewHokeysDescr[];
 
 #endif		// GERBVIEW_KOTKEYS_H_

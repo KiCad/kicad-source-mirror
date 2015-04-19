@@ -128,7 +128,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_NOCONN_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            if( false == GetScreen()->GetItem( gridPosition, 0, SCH_NO_CONNECT_T ) )
+            if( GetScreen()->GetItem( gridPosition, 0, SCH_NO_CONNECT_T ) == NULL )
             {
                 SCH_NO_CONNECT*  no_connect = AddNoConnect( aDC, gridPosition );
                 SetRepeatItem( no_connect );
@@ -145,7 +145,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_JUNCTION_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            if( false == GetScreen()->GetItem( gridPosition, 0, SCH_JUNCTION_T ) )
+            if( GetScreen()->GetItem( gridPosition, 0, SCH_JUNCTION_T ) == NULL )
             {
                 SCH_JUNCTION* junction = AddJunction( aDC, gridPosition, true );
                 SetRepeatItem( junction );
