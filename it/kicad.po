@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-19 12:01+0100\n"
-"PO-Revision-Date: 2015-04-19 12:01+0100\n"
+"PO-Revision-Date: 2015-04-19 12:05+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -15915,7 +15915,7 @@ msgstr "Imposta opzioni piedino"
 
 #: eeschema/libeditframe.cpp:1117
 msgid "Add rectangle"
-msgstr "Inserisci rettangolo"
+msgstr "Aggiungi rettangolo"
 
 #: eeschema/libeditframe.cpp:1133
 msgid "Set anchor position"
