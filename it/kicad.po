@@ -50,6 +50,7 @@
 # mc: - skew = TT (se qualcuno conosce un termine con il quale tradurlo, mi lasci un'email)
 # mc: - tune = regola
 # mc: - Push & Shove (spingi e compatta) = sbroglio interattivo P&S
+# mc: - stub = spezzone
 #
 # Note meccaniche: se due superfici vengono poste assieme, l'arrotondamento in meccanica
 # viene chiamato fillet (filetto) mentre se lo smusso è piatto viene chiamato chamfer
@@ -71,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-17 17:16+0100\n"
-"PO-Revision-Date: 2015-04-17 17:17+0100\n"
+"POT-Creation-Date: 2015-04-19 12:01+0100\n"
+"PO-Revision-Date: 2015-04-19 12:01+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1028,7 +1029,7 @@ msgstr "Crea array di contorni"
 
 #: pcbnew/modedit_onclick.cpp:415
 msgid "Place edge"
-msgstr "Inserisci contorno"
+msgstr "Piazza contorno"
 
 #: pcbnew/modedit_onclick.cpp:418 pcbnew/onrightclick.cpp:1012
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:53
@@ -1654,15 +1655,15 @@ msgstr "Foratura microvia netclass &lt; limiti globali"
 
 #: pcbnew/class_drc_item.cpp:108
 msgid "Via inside a keepout area"
-msgstr "Via interno ad zona vuota"
+msgstr "Via interno ad zona proibita"
 
 #: pcbnew/class_drc_item.cpp:111
 msgid "Track inside a keepout area"
-msgstr "Pista interna a zona vuota"
+msgstr "Pista interna a zona proibita"
 
 #: pcbnew/class_drc_item.cpp:114
 msgid "Pad inside a keepout area"
-msgstr "Piazzola interna a zona vuota"
+msgstr "Piazzola interna a zona proibita"
 
 #: pcbnew/class_drc_item.cpp:117
 msgid "Via inside a text"
@@ -2130,12 +2131,12 @@ msgstr "Interrompi pista"
 
 #: pcbnew/onrightclick.cpp:585
 msgid "Place Node"
-msgstr "Inserisci nodo"
+msgstr "Piazza nodo"
 
 #: pcbnew/onrightclick.cpp:592 pcbnew/router/length_tuner_tool.cpp:53
 #: pcbnew/router/router_tool.cpp:59 pcbnew/router/router_menus.h:64
 msgid "End Track"
-msgstr "Inserisci pista"
+msgstr "Finisci pista"
 
 #: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:68
 #: pcbnew/router/router_menus.h:76
@@ -2241,19 +2242,19 @@ msgstr "Collegamento sbloccato"
 
 #: pcbnew/onrightclick.cpp:714
 msgid "Place Edge Outline"
-msgstr "Inserisci contorno"
+msgstr "Piazza contorno"
 
 #: pcbnew/onrightclick.cpp:720
 msgid "Place Corner"
-msgstr "Inserisci blocco"
+msgstr "Piazza angolo"
 
 #: pcbnew/onrightclick.cpp:723
 msgid "Place Zone"
-msgstr "Organizza zona"
+msgstr "Piazza zona"
 
 #: pcbnew/onrightclick.cpp:730
 msgid "Keepout Area"
-msgstr "Zona vuota"
+msgstr "Zona proibita"
 
 #: pcbnew/onrightclick.cpp:730 pcbnew/tools/pcb_editor_control.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
@@ -2278,7 +2279,7 @@ msgstr "Trascina segmento contorno"
 
 #: pcbnew/onrightclick.cpp:752
 msgid "Add Similar Zone"
-msgstr "Inserisci zona simile"
+msgstr "Aggiungi zona simile"
 
 #: pcbnew/onrightclick.cpp:755
 msgid "Add Cutout Area"
@@ -2686,7 +2687,7 @@ msgstr "Piazzole non collegate...\n"
 
 #: pcbnew/drc.cpp:262
 msgid "Keepout areas ...\n"
-msgstr "Zona vuota ...\n"
+msgstr "Zone proibite ...\n"
 
 #: pcbnew/drc.cpp:272
 msgid "Test texts...\n"
@@ -3029,7 +3030,7 @@ msgstr "Escluso rame"
 
 #: pcbnew/class_zone.cpp:622
 msgid "Keepout"
-msgstr "Zona vuota"
+msgstr "Proibita"
 
 #: pcbnew/class_zone.cpp:633
 msgid "<unknown>"
@@ -3074,7 +3075,7 @@ msgstr "Conteggio fori"
 
 #: pcbnew/class_zone.cpp:861
 msgid "(Keepout)"
-msgstr "(Zona vuota)"
+msgstr "(Proibita)"
 
 #: pcbnew/class_zone.cpp:881
 msgid "** NO BOARD DEFINED **"
@@ -3140,25 +3141,25 @@ msgstr ""
 
 #: pcbnew/modedit.cpp:930 eeschema/libeditframe.cpp:1129
 msgid "Add line"
-msgstr "Inserisci linea "
+msgstr "Aggiungi linea "
 
 #: pcbnew/modedit.cpp:934 eeschema/libeditframe.cpp:1125
 msgid "Add arc"
-msgstr "Inserisci arco"
+msgstr "Aggiungi arco"
 
 #: pcbnew/modedit.cpp:938 eeschema/libeditframe.cpp:1121
 msgid "Add circle"
-msgstr "Inserisci cerchio"
+msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:942 pcbnew/edit.cpp:1482
 #: pcbnew/tools/drawing_tool.cpp:1256 pcbnew/tools/drawing_tool.cpp:1376
 #: eeschema/schedit.cpp:548 eeschema/libeditframe.cpp:1113
 msgid "Add text"
-msgstr "Inserisci testo "
+msgstr "Aggiungi testo "
 
 #: pcbnew/modedit.cpp:946
 msgid "Place anchor"
-msgstr "Inserisci ancoraggio"
+msgstr "Piazza ancoraggio"
 
 #: pcbnew/modedit.cpp:950
 msgid "Set grid origin"
@@ -3166,7 +3167,7 @@ msgstr "Imposta origine griglia"
 
 #: pcbnew/modedit.cpp:956 pcbnew/menubar_modedit.cpp:245
 msgid "Add pad"
-msgstr "Inserisci piazzola"
+msgstr "Aggiungi piazzola"
 
 #: pcbnew/modedit.cpp:960 pcbnew/tool_modedit.cpp:138
 msgid "Pad settings"
@@ -3361,63 +3362,63 @@ msgstr "Aggiungi impronte"
 
 #: pcbnew/tool_pcb.cpp:438 pcbnew/menubar_pcbframe.cpp:391
 msgid "Add tracks and vias"
-msgstr "Inserisci tracce e Via"
+msgstr "Aggiungi tracce e Via"
 
 #: pcbnew/tool_pcb.cpp:441 pcbnew/menubar_pcbframe.cpp:394
 msgid "Add filled zones"
-msgstr "Inserisci zona "
+msgstr "Aggiungi zone piene"
 
 #: pcbnew/tool_pcb.cpp:445 pcbnew/menubar_pcbframe.cpp:397
 msgid "Add keepout areas"
-msgstr "Inserisci zona vuota"
+msgstr "Aggiungi zone proibite"
 
 #: pcbnew/tool_pcb.cpp:449 pcbnew/menubar_modedit.cpp:258
 #: pcbnew/menubar_pcbframe.cpp:412 pcbnew/tool_modedit.cpp:170
 msgid "Add graphic line or polygon"
-msgstr "Inserisci linea o poligono"
+msgstr "Aggiungi linea o poligono grafici"
 
 #: pcbnew/tool_pcb.cpp:452 pcbnew/menubar_modedit.cpp:252
 #: pcbnew/menubar_pcbframe.cpp:407 pcbnew/edit.cpp:1478
 #: pcbnew/tool_modedit.cpp:173 pcbnew/tools/drawing_tool.cpp:138
 #: pcbnew/tools/drawing_tool.cpp:158
 msgid "Add graphic circle"
-msgstr "Inserisci cerchio grafico"
+msgstr "Aggiungi cerchio grafico"
 
 #: pcbnew/tool_pcb.cpp:455 pcbnew/menubar_modedit.cpp:263
 #: pcbnew/menubar_pcbframe.cpp:404 pcbnew/edit.cpp:1474
 #: pcbnew/tool_modedit.cpp:176 pcbnew/tools/drawing_tool.cpp:186
 #: pcbnew/tools/drawing_tool.cpp:206
 msgid "Add graphic arc"
-msgstr "Inserisci arco grafico"
+msgstr "Aggiungi arco grafico"
 
 #: pcbnew/tool_pcb.cpp:458 pcbnew/menubar_pcbframe.cpp:400
 msgid "Add text on copper layers or graphic text"
-msgstr "Includi testo sugli strati in rame"
+msgstr "Aggiungi testo sugli strati in rame o di testo"
 
 #: pcbnew/tool_pcb.cpp:462 pcbnew/menubar_pcbframe.cpp:418
 #: pcbnew/edit.cpp:1490 pcbnew/tools/drawing_tool.cpp:253
 msgid "Add dimension"
-msgstr "Inserisci quote"
+msgstr "Aggiungi quota"
 
 #: pcbnew/tool_pcb.cpp:465 pcbnew/menubar_pcbframe.cpp:422
 #: pcbnew/edit.cpp:1458 pcbnew/tools/common_actions.cpp:364
 #: pcbnew/tools/pcb_editor_control.cpp:313
 msgid "Add layer alignment target"
-msgstr "Inserisci marcatore di allineamento strati"
+msgstr "Aggiungi marcatore di allineamento strati"
 
 #: pcbnew/tool_pcb.cpp:469 pcbnew/menubar_pcbframe.cpp:285
 #: pcbnew/tool_modedit.cpp:188
 msgid "Delete items"
-msgstr "Cancella elemento"
+msgstr "Cancella elementi"
 
 #: pcbnew/tool_pcb.cpp:474 pcbnew/menubar_pcbframe.cpp:429
 msgid "Place the origin point for drill and place files"
-msgstr "Allineamento strati per forature e posizionamento file"
+msgstr "Piazza il punto di origine per il file di forature e posizionamento"
 
 #: pcbnew/tool_pcb.cpp:479 pcbnew/menubar_pcbframe.cpp:434
 #: pcbnew/tool_modedit.cpp:192
 msgid "Set the origin point for the grid"
-msgstr "Imposta origine griglia"
+msgstr "Imposta l'origine della griglia"
 
 #: pcbnew/tool_pcb.cpp:502
 msgid "Create line of specified length for microwave applications"
@@ -3668,7 +3669,7 @@ msgstr "&Testo"
 
 #: pcbnew/menubar_modedit.cpp:268
 msgid "Add graphic text"
-msgstr "Inserisci testo grafico"
+msgstr "Aggiungi testo grafico"
 
 #: pcbnew/menubar_modedit.cpp:275
 msgid "A&nchor"
@@ -4353,15 +4354,15 @@ msgstr "Apri recente scheda "
 
 #: pcbnew/menubar_pcbframe.cpp:100
 msgid "&Append Board"
-msgstr "&Apri scheda"
+msgstr "&Accoda scheda"
 
 #: pcbnew/menubar_pcbframe.cpp:101
 msgid ""
 "Append another Pcbnew board to the current loaded board. Available only when "
 "Pcbnew runs in stand alone mode"
 msgstr ""
-"Aggiungi una nuova scheda alla corrente. Funzione disponibile sono quando "
-"Pcbnew viene eseguito autonomamente"
+"Aggiunge una nuova scheda a quella caricata attualmente. Funzione "
+"disponibile sono quando Pcbnew viene eseguito autonomamente"
 
 #: pcbnew/menubar_pcbframe.cpp:111
 msgid "Save current board"
@@ -4665,7 +4666,7 @@ msgstr "&Zona"
 
 #: pcbnew/menubar_pcbframe.cpp:397
 msgid "&Keepout Area"
-msgstr "&Zona vuota"
+msgstr "&Zona proibita"
 
 #: pcbnew/menubar_pcbframe.cpp:400
 msgid "Te&xt"
@@ -4931,16 +4932,16 @@ msgstr "La piazzola di origine (%s) è bloccata"
 
 #: pcbnew/edit.cpp:1427 pcbnew/edit.cpp:1429
 msgid "Add tracks"
-msgstr "Inserisci pista"
+msgstr "Aggiungi pista"
 
 #: pcbnew/edit.cpp:1439 pcbnew/edit.cpp:1486
 #: pcbnew/tools/pcb_editor_control.cpp:190
 msgid "Add module"
-msgstr "Inserisci modulo"
+msgstr "Aggiungi modulo"
 
 #: pcbnew/edit.cpp:1443 pcbnew/tools/drawing_tool.cpp:423
 msgid "Add zones"
-msgstr "Inserisci zona "
+msgstr "Aggiungi zone"
 
 #: pcbnew/edit.cpp:1446
 msgid "Warning: zone display is OFF!!!"
@@ -4948,7 +4949,7 @@ msgstr "Attenzione: La visulizzazione delle zone è disabilitata!"
 
 #: pcbnew/edit.cpp:1454 pcbnew/tools/drawing_tool.cpp:431
 msgid "Add keepout"
-msgstr "Inserisci zona vietata"
+msgstr "Aggiungi proibita"
 
 #: pcbnew/edit.cpp:1462
 msgid "Adjust zero"
@@ -4961,7 +4962,7 @@ msgstr "Imposta origine griglia"
 #: pcbnew/edit.cpp:1470 pcbnew/tools/drawing_tool.cpp:80
 #: pcbnew/tools/drawing_tool.cpp:105
 msgid "Add graphic line"
-msgstr "Inserisci linea"
+msgstr "Aggiungi linea grafica"
 
 #: pcbnew/edit.cpp:1502
 msgid "Select rats nest"
@@ -5036,7 +5037,7 @@ msgstr "Zona: Errore del contorno nella Verifica regole "
 
 #: pcbnew/zones_by_polygon.cpp:528
 msgid "Error: a keepout area is allowed only on copper layers"
-msgstr "Errore: le aree vuote sono consentite solo sugli strati in rame"
+msgstr "Errore: le aree proibite sono consentite solo sugli strati in rame"
 
 #: pcbnew/zones_by_polygon.cpp:675
 msgid "DRC error: this start point is inside or too close an other area"
@@ -5052,19 +5053,19 @@ msgstr ""
 
 #: pcbnew/muwave_command.cpp:60 pagelayout_editor/onrightclick.cpp:45
 msgid "Add Line"
-msgstr "Inserisci linea"
+msgstr "Aggiungi linea"
 
 #: pcbnew/muwave_command.cpp:64
 msgid "Add Gap"
-msgstr "Inserisci spazio"
+msgstr "Aggiungi spazio"
 
 #: pcbnew/muwave_command.cpp:68
 msgid "Add Stub"
-msgstr "Inserisci segmento"
+msgstr "Aggiungi spezzone"
 
 #: pcbnew/muwave_command.cpp:72
 msgid "Add Arc Stub"
-msgstr "Inserisci spezzone di arco"
+msgstr "Aggiungi spezzone di arco"
 
 #: pcbnew/muwave_command.cpp:76
 msgid "Add Polynomial Shape"
@@ -5412,7 +5413,7 @@ msgstr "Trascina pista mantendo l'inclinazione"
 #: pcbnew/hotkeys.cpp:112 pagelayout_editor/onrightclick.cpp:111
 #: pagelayout_editor/hotkeys.cpp:80
 msgid "Place Item"
-msgstr "Inserisci elemento"
+msgstr "Piazza elemento"
 
 #: pcbnew/hotkeys.cpp:113 eeschema/hotkeys.cpp:172
 msgid "Edit Item"
@@ -6239,19 +6240,19 @@ msgstr "Disegna arco"
 
 #: pcbnew/tools/common_actions.cpp:146
 msgid "Add a text"
-msgstr "Inserisci testo"
+msgstr "Aggiungi un testo"
 
 #: pcbnew/tools/common_actions.cpp:150
 msgid "Add a dimension"
-msgstr "Inserisci quota"
+msgstr "Aggiungi una quota"
 
 #: pcbnew/tools/common_actions.cpp:154
 msgid "Add a filled zone"
-msgstr "Inserisci zona piena"
+msgstr "Aggiungi una zona piena"
 
 #: pcbnew/tools/common_actions.cpp:158
 msgid "Add a keepout area"
-msgstr "Inserisci zona proibita"
+msgstr "Aggiungi una zona proibita"
 
 #: pcbnew/tools/common_actions.cpp:166 pcbnew/tools/drawing_tool.cpp:632
 msgid "Place the footprint anchor"
@@ -6303,7 +6304,7 @@ msgstr "Svuota tutte le zone"
 
 #: pcbnew/tools/common_actions.cpp:368
 msgid "Add modules"
-msgstr "Inserisci moduli"
+msgstr "Aggiungi moduli"
 
 #: pcbnew/tools/common_actions.cpp:378
 msgid "Enumerate pads"
@@ -6665,7 +6666,7 @@ msgstr "Memoria insufficente per l'autosbroglio"
 
 #: pcbnew/autorouter/autorout.cpp:185
 msgid "Place Cells"
-msgstr "Inserisci celle"
+msgstr "Piazza celle"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:52
 msgid "Single track length tuning"
@@ -7143,7 +7144,7 @@ msgstr "Aspetto contorni"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 msgid "Keepout Options:"
-msgstr "Opzioni di esclusione:"
+msgstr "Opzioni di divieto:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
 msgid "No Tracks"
@@ -8163,7 +8164,7 @@ msgstr "Inserisci "
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:58
 msgid "Append a blank row"
-msgstr "Inserisci riga vuota"
+msgstr "Accoda una riga vuota"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:63
 msgid "Delete the selected row"
@@ -10812,7 +10813,8 @@ msgstr "Deseleziona tutti gli strati"
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:214
 msgid "Tracks, vias and pads are allowed. The keepout is useless"
 msgstr ""
-"Piste, via e piazzole sono consentite. La zona vuota non verrà considerata."
+"Piste, via e piazzole sono consentite. La zona proibita non verrà "
+"considerata."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:223
 #: pcbnew/dialogs/dialog_copper_zones.cpp:470
@@ -14851,11 +14853,11 @@ msgstr "Apri un schema elettrico aperto recentemente"
 
 #: eeschema/menubar.cpp:105
 msgid "&Append Schematic Sheet"
-msgstr "&Aggiungi foglio schema"
+msgstr "&Accoda foglio schema"
 
 #: eeschema/menubar.cpp:106
 msgid "Append schematic sheet to current project"
-msgstr "Aggiunge un nuovo foglio allo schema corrente"
+msgstr "Accoda un nuovo foglio allo schema corrente"
 
 #: eeschema/menubar.cpp:111
 msgid "&Save Schematic Project"
@@ -21572,11 +21574,11 @@ msgstr "File \"%s\" scritto"
 
 #: pagelayout_editor/onrightclick.cpp:47
 msgid "Add Rectangle"
-msgstr "Aggiungi rettangolo "
+msgstr "Inserisci rettangolo "
 
 #: pagelayout_editor/onrightclick.cpp:55
 msgid "Add Bitmap"
-msgstr "Aggiungi bitmap"
+msgstr "Inserisci bitmap"
 
 #: pagelayout_editor/onrightclick.cpp:83 pagelayout_editor/hotkeys.cpp:81
 msgid "Move Start Point"
@@ -22212,7 +22214,7 @@ msgstr "Inserisci testo"
 
 #: eeschema/help_common_strings.h:76
 msgid "Annotate schematic components"
-msgstr "Annota schema "
+msgstr "Annota componenti dello schema"
 
 #: eeschema/help_common_strings.h:77
 msgid "Library Editor - Create/edit components"
