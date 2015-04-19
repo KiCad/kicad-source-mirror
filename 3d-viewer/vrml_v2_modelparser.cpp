@@ -403,7 +403,7 @@ int VRML2_MODEL_PARSER::read_Transform()
                         m_model->m_rotation[0],
                         m_model->m_rotation[1],
                         m_model->m_rotation[2],
-                              m_model->m_rotation[3] );
+                        m_model->m_rotation[3] );
         }
         else if( strcmp( text, "scale" ) == 0 )
         {
@@ -1528,7 +1528,7 @@ int VRML2_MODEL_PARSER::read_colorIndex()
             }
         }
 
-        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex m_MaterialIndexPerVertex.size: %lu" ), m_model->m_MaterialIndexPerVertex.size() );
+        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex m_MaterialIndexPerVertex.size: %zu" ), m_model->m_MaterialIndexPerVertex.size() );
     }
     else
     {
@@ -1542,7 +1542,7 @@ int VRML2_MODEL_PARSER::read_colorIndex()
             m_model->m_MaterialIndexPerFace.push_back( index );
         }
 
-        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex m_MaterialIndexPerFace.size: %lu" ), m_model->m_MaterialIndexPerFace.size() );
+        wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_colorIndex m_MaterialIndexPerFace.size: %zu" ), m_model->m_MaterialIndexPerFace.size() );
     }
 
     debug_exit();

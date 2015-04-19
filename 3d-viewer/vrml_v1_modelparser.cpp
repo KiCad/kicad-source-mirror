@@ -212,7 +212,7 @@ int VRML1_MODEL_PARSER::readCoordinate3()
 
     // DBG( printf( "  readCoordinate3\n" ) );
 
-    while( GetNextTag( m_file, text, sizeof(text) ) )
+    while( GetNextTag( m_file, text, sizeof( text ) ) )
     {
         if( *text == ']' )
         {
@@ -401,12 +401,14 @@ int VRML1_MODEL_PARSER::readIndexedFaceSet_coordIndex()
             || (coord[0] == coord[2])
             || (coord[2] == coord[1]) )
         {
-            wxLogTrace( traceVrmlV1Parser, wxT( "    invalid coordIndex at index %u (%d, %d, %d, %d)" ), (unsigned int)m_model->m_CoordIndex.size() + 1,coord[0], coord[1], coord[2], dummy );
+            wxLogTrace( traceVrmlV1Parser, wxT( "    invalid coordIndex at index %zu (%d, %d, %d, %d)" ),
+                        m_model->m_CoordIndex.size() + 1, coord[0], coord[1], coord[2], dummy );
         }
 
         if( dummy != -1 )
         {
-            wxLogTrace( traceVrmlV1Parser, wxT( "    Error at index %u, -1 Expected, got %d" ), (unsigned int)m_model->m_CoordIndex.size() + 1, dummy );
+            wxLogTrace( traceVrmlV1Parser, wxT( "    Error at index %zu, -1 Expected, got %d" ),
+                        m_model->m_CoordIndex.size() + 1, dummy );
         }
 
         m_model->m_CoordIndex.push_back( coord_list );
