@@ -86,6 +86,7 @@ public:
     SCHLIB_FILTER()
     {
         m_filterPowerParts = false;
+        m_forceLoad = false;
     }
 
     /**

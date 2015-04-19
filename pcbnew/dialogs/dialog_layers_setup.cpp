@@ -139,15 +139,15 @@ class DIALOG_LAYERS_SETUP : public DIALOG_LAYERS_SETUP_BASE
 public:
     DIALOG_LAYERS_SETUP( wxTopLevelWindow* aCaller, BOARD* aBoard );
 
-protected:
-    int             m_CopperLayerCount;
-    LSET            m_EnabledLayers;
+private:
+    int             m_copperLayerCount;
+    LSET            m_enabledLayers;
 
-    BOARD*          m_Pcb;
+    BOARD*          m_pcb;
 
-    wxStaticText*   m_NameStaticText;
-    wxStaticText*   m_EnabledStaticText;
-    wxStaticText*   m_TypeStaticText;
+    wxStaticText*   m_nameStaticText;
+    wxStaticText*   m_enabledStaticText;
+    wxStaticText*   m_typeStaticText;
 
     void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
@@ -202,30 +202,19 @@ protected:
         int offset = 0;
         wxSize txtz;
 
-        txtz = m_NameStaticText->GetSize();
-        m_NameStaticText->Move( offset + (widths[0] - txtz.x)/2, 5 );
+        txtz = m_nameStaticText->GetSize();
+        m_nameStaticText->Move( offset + (widths[0] - txtz.x)/2, 5 );
         offset += widths[0];
 
-        txtz = m_EnabledStaticText->GetSize();
-        m_EnabledStaticText->Move( offset + (widths[1] - txtz.x)/2, 5 );
+        txtz = m_enabledStaticText->GetSize();
+        m_enabledStaticText->Move( offset + (widths[1] - txtz.x)/2, 5 );
         offset += widths[1];
 
-        txtz = m_TypeStaticText->GetSize();
-        m_TypeStaticText->Move( offset + (widths[2] - txtz.x)/2, 5 );
+        txtz = m_typeStaticText->GetSize();
+        m_typeStaticText->Move( offset + (widths[2] - txtz.x)/2, 5 );
     }
 
-    /**
-     * Function Layout
-     * overrides the standard Layout() function so that the column titles can
-     * be positioned using information in the flexgridsizer.
-     */
-    bool Layout()
-    {
-        bool ret = DIALOG_LAYERS_SETUP_BASE::Layout();
-
-        moveTitles();
-        return ret;
-    }
+    void OnSize( wxSizeEvent& event );
 };
 
 
@@ -328,17 +317,17 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
 DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( wxTopLevelWindow* aParent, BOARD* aBoard ) :
     DIALOG_LAYERS_SETUP_BASE( aParent )
 {
-    m_Pcb = aBoard;
+    m_pcb = aBoard;
 
-    m_CopperLayerCount = m_Pcb->GetCopperLayerCount();
-    showCopperChoice( m_CopperLayerCount );
-    setCopperLayerCheckBoxes( m_CopperLayerCount );
+    m_copperLayerCount = m_pcb->GetCopperLayerCount();
+    showCopperChoice( m_copperLayerCount );
+    setCopperLayerCheckBoxes( m_copperLayerCount );
 
     showBoardLayerNames();
 
-    m_EnabledLayers = m_Pcb->GetEnabledLayers();
-    showSelectedLayerCheckBoxes( m_EnabledLayers );
-    showPresets( m_EnabledLayers );
+    m_enabledLayers = m_pcb->GetEnabledLayers();
+    showSelectedLayerCheckBoxes( m_enabledLayers );
+    showPresets( m_enabledLayers );
 
     showLayerTypes();
 
@@ -347,11 +336,11 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( wxTopLevelWindow* aParent, BOARD* aBoa
     // these 3 controls are handled outside wxformbuilder so that we can add
     // them without a sizer.  Then we position them manually based on the column
     // widths from m_LayerListFlexGridSizer->GetColWidths()
-    m_NameStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_nameStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
 
-    m_EnabledStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_enabledStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
 
-    m_TypeStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_typeStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 
     // set the height of the title panel to be the size of any wxStaticText object
     // plus 10 so we can have a border of 5 on both top and bottom.
@@ -361,13 +350,19 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( wxTopLevelWindow* aParent, BOARD* aBoa
 
     Layout();
     Fit();
+    moveTitles();
 
     Center();
 
-    m_sdbSizer2OK->SetFocus();
-    m_sdbSizer2OK->SetDefault();
+    m_sdbSizerOK->SetFocus();
+    m_sdbSizerOK->SetDefault();
 }
 
+void DIALOG_LAYERS_SETUP::OnSize( wxSizeEvent& event )
+{
+    moveTitles();
+    event.Skip();
+}
 
 void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
 {
@@ -406,7 +401,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 
         if( ctl )
         {
-            wxString lname = m_Pcb->GetLayerName( layer );
+            wxString lname = m_pcb->GetLayerName( layer );
 
             //D(printf("layerName[%d]=%s\n", layer, TO_UTF8( lname ) );)
 
@@ -455,7 +450,7 @@ void DIALOG_LAYERS_SETUP::showLayerTypes()
         LAYER_ID cu_layer = *seq;
 
         wxChoice* ctl = getChoice( cu_layer );
-        ctl->SetSelection( m_Pcb->GetLayerType( cu_layer ) );
+        ctl->SetSelection( m_pcb->GetLayerType( cu_layer ) );
     }
 }
 
@@ -532,9 +527,9 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
 
 void DIALOG_LAYERS_SETUP::OnCheckBox( wxCommandEvent& event )
 {
-    m_EnabledLayers = getUILayerMask();
+    m_enabledLayers = getUILayerMask();
 
-    showPresets( m_EnabledLayers );
+    showPresets( m_enabledLayers );
 }
 
 
@@ -546,7 +541,7 @@ void DIALOG_LAYERS_SETUP::DenyChangeCheckBox( wxCommandEvent& event )
     // I tried to simply disable the copper CheckBoxes but they look like crap,
     // so leave them enabled and reverse the user's attempt to toggle them.
 
-    setCopperLayerCheckBoxes( m_CopperLayerCount );
+    setCopperLayerCheckBoxes( m_copperLayerCount );
 }
 
 
@@ -559,32 +554,32 @@ void DIALOG_LAYERS_SETUP::OnPresetsChoice( wxCommandEvent& event )
 
     if( presetNdx < DIM(presets) )
     {
-        m_EnabledLayers = presets[ presetNdx ];
+        m_enabledLayers = presets[ presetNdx ];
 
-        LSET copperSet = m_EnabledLayers & LSET::AllCuMask();
+        LSET copperSet = m_enabledLayers & LSET::AllCuMask();
 
         int copperCount = copperSet.count();
 
-        m_CopperLayerCount = copperCount;
+        m_copperLayerCount = copperCount;
 
-        showCopperChoice( m_CopperLayerCount );
+        showCopperChoice( m_copperLayerCount );
 
-        showSelectedLayerCheckBoxes( m_EnabledLayers );
+        showSelectedLayerCheckBoxes( m_enabledLayers );
 
-        setCopperLayerCheckBoxes( m_CopperLayerCount );
+        setCopperLayerCheckBoxes( m_copperLayerCount );
     }
 }
 
 
 void DIALOG_LAYERS_SETUP::OnCopperLayersChoice( wxCommandEvent& event )
 {
-    m_CopperLayerCount = m_CopperLayersChoice->GetCurrentSelection() * 2 + 2;
+    m_copperLayerCount = m_CopperLayersChoice->GetCurrentSelection() * 2 + 2;
 
-    setCopperLayerCheckBoxes( m_CopperLayerCount );
+    setCopperLayerCheckBoxes( m_copperLayerCount );
 
-    m_EnabledLayers = getUILayerMask();
+    m_enabledLayers = getUILayerMask();
 
-    showPresets( m_EnabledLayers );
+    showPresets( m_enabledLayers );
 }
 
 
@@ -600,28 +595,28 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
     {
         wxString name;
 
-        m_EnabledLayers = getUILayerMask();
-        m_Pcb->SetEnabledLayers( m_EnabledLayers );
+        m_enabledLayers = getUILayerMask();
+        m_pcb->SetEnabledLayers( m_enabledLayers );
 
         /* Ensure enabled layers are also visible
          * This is mainly to avoid mistakes if some enabled
          * layers are not visible when exiting this dialog
          */
-        m_Pcb->SetVisibleLayers( m_EnabledLayers );
+        m_pcb->SetVisibleLayers( m_enabledLayers );
 
         for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
         {
             LAYER_ID  layer = *seq;
 
-            if( m_EnabledLayers[layer] )
+            if( m_enabledLayers[layer] )
             {
                 name = getLayerName( layer );
 
-                m_Pcb->SetLayerName( layer, name );
+                m_pcb->SetLayerName( layer, name );
 
                 LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
 
-                m_Pcb->SetLayerType( layer, t );
+                m_pcb->SetLayerType( layer, t );
             }
         }
 
@@ -673,8 +668,8 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
     {
         LAYER_ID layer = *seq;
 
-        // we _can_ rely on m_EnabledLayers being current here:
-        if( !m_EnabledLayers[layer] )
+        // we _can_ rely on m_enabledLayers being current here:
+        if( !m_enabledLayers[layer] )
             continue;
 
         wxString name = getLayerName( layer );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  5 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -396,11 +396,12 @@ class DIALOG_LAYERS_SETUP_BASE : public DIALOG_SHIM
 		wxPanel* m_DrawingsPanel;
 		wxCheckBox* m_DrawingsCheckBox;
 		wxStaticText* m_DrawingsStaticText;
-		wxStdDialogButtonSizer* m_sdbSizer2;
-		wxButton* m_sdbSizer2OK;
-		wxButton* m_sdbSizer2Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnPresetsChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCopperLayersChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
