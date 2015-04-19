@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 12:06+0100\n"
-"PO-Revision-Date: 2015-04-19 12:06+0100\n"
+"POT-Creation-Date: 2015-04-19 12:29+0100\n"
+"PO-Revision-Date: 2015-04-19 12:29+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -8160,7 +8160,7 @@ msgstr "Opzioni "
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:57
 msgid "Append"
-msgstr "Inserisci "
+msgstr "Accoda"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:58
 msgid "Append a blank row"
@@ -9562,7 +9562,7 @@ msgstr "Accoda libreria"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:137
 msgid "Add a PCB library row to this table"
-msgstr "Inserisci una riga libreria PCB in questa tabella"
+msgstr "Aggiungi una riga libreria PCB a questa tabella"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:141
 msgid "Remove Library"
@@ -9964,8 +9964,8 @@ msgid ""
 "the track."
 msgstr ""
 "Mostra (o no) l'isolamento delle piste. \n"
-"Se Inserisci pista è selezionato, l'isolamento  viene mostrato soltanto "
-"mentre si crea la pista."
+"Se Nuova pista è selezionato, l'isolamento viene mostrato soltanto mentre si "
+"crea la pista."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:70
 msgid "Outlines sketch mode"
@@ -13819,7 +13819,7 @@ msgstr ""
 
 #: common/dialogs/dialog_env_var_config_base.cpp:66
 msgid "Add a new entry to the table."
-msgstr "Inserisci una nuova voce alla tabella."
+msgstr "Aggiungi una nuova voce alla tabella."
 
 #: common/dialogs/dialog_env_var_config_base.cpp:71
 msgid "Remove the selectect entry from the table."
@@ -14244,55 +14244,55 @@ msgstr "Gerarchia discendente o ascendente"
 
 #: eeschema/schedit.cpp:516
 msgid "Add no connect"
-msgstr "Inserisci elemento di non connessione"
+msgstr "Aggiungi non connessione"
 
 #: eeschema/schedit.cpp:520
 msgid "Add wire"
-msgstr "Inserisci filo"
+msgstr "Aggiungi filo"
 
 #: eeschema/schedit.cpp:524
 msgid "Add bus"
-msgstr "Inserisci Bus"
+msgstr "Aggiungi Bus"
 
 #: eeschema/schedit.cpp:528
 msgid "Add lines"
-msgstr "Inserisci linea"
+msgstr "Aggiungi linee"
 
 #: eeschema/schedit.cpp:532
 msgid "Add junction"
-msgstr "Inserisci giunzione"
+msgstr "Aggiungi giunzione"
 
 #: eeschema/schedit.cpp:536
 msgid "Add label"
-msgstr "Inserisci etichetta"
+msgstr "Aggiungi etichetta"
 
 #: eeschema/schedit.cpp:540
 msgid "Add global label"
-msgstr "Inserisci etichetta globale"
+msgstr "Aggiungi etichetta globale"
 
 #: eeschema/schedit.cpp:544
 msgid "Add hierarchical label"
-msgstr "Inserisci etichetta gerarchica"
+msgstr "Aggiungi etichetta gerarchica"
 
 #: eeschema/schedit.cpp:552
 msgid "Add image"
-msgstr "Inserisci immagine"
+msgstr "Aggiungi immagine"
 
 #: eeschema/schedit.cpp:556
 msgid "Add wire to bus entry"
-msgstr "Inserisci elemento da filo a bus"
+msgstr "Aggiungi elemento da filo a bus"
 
 #: eeschema/schedit.cpp:560
 msgid "Add bus to bus entry"
-msgstr "Inserisci elemento da bus a bus"
+msgstr "Aggiungi elemento da bus a bus"
 
 #: eeschema/schedit.cpp:564
 msgid "Add sheet"
-msgstr "Inserisci foglio"
+msgstr "Aggiungi foglio"
 
 #: eeschema/schedit.cpp:568
 msgid "Add sheet pins"
-msgstr "Inserisci punto di connessione"
+msgstr "Aggiungi pin foglio"
 
 #: eeschema/schedit.cpp:572
 msgid "Import sheet pins"
@@ -14300,11 +14300,11 @@ msgstr "Importa punto di connessione"
 
 #: eeschema/schedit.cpp:576
 msgid "Add component"
-msgstr "Inserisci componente"
+msgstr "Aggiungi componente"
 
 #: eeschema/schedit.cpp:580
 msgid "Add power"
-msgstr "Inserisci alimentazione"
+msgstr "Aggiungi alimentazione"
 
 #: eeschema/sch_collectors.cpp:431
 #, c-format
@@ -14749,7 +14749,7 @@ msgstr "Trascina foglio"
 
 #: eeschema/onrightclick.cpp:764
 msgid "Place Sheet"
-msgstr "Inserisci foglio"
+msgstr "Piazza foglio"
 
 #: eeschema/onrightclick.cpp:768
 msgid "Edit Sheet"
@@ -14957,15 +14957,15 @@ msgstr "&Bus"
 
 #: eeschema/menubar.cpp:295
 msgid "Wire to Bus &Entry"
-msgstr "Inserisci &elemento da filo a bus"
+msgstr "&Elemento da filo a bus"
 
 #: eeschema/menubar.cpp:301
 msgid "Bus &to Bus Entry"
-msgstr "&Inserisci elemento da bus a bus "
+msgstr "Elemen&to da bus a bus "
 
 #: eeschema/menubar.cpp:307
 msgid "&No Connect Flag"
-msgstr "&Indicatore di non connessione "
+msgstr "Indicatore di &non connessione "
 
 #: eeschema/menubar.cpp:311
 msgid "&Junction"
@@ -14977,15 +14977,15 @@ msgstr "&Etichetta"
 
 #: eeschema/menubar.cpp:323
 msgid "Gl&obal Label"
-msgstr "Inserisci& etichetta globale "
+msgstr "Etichetta gl&obale "
 
 #: eeschema/menubar.cpp:331
 msgid "&Hierarchical Label"
-msgstr "Etichetta gerarchica&"
+msgstr "Etichetta gerarc&hica"
 
 #: eeschema/menubar.cpp:338
 msgid "H&ierarchical &Sheet"
-msgstr "&Foglio gerarchico"
+msgstr "Fogl&io gerarchico"
 
 #: eeschema/menubar.cpp:346
 msgid "I&mport Hierarchical Label"
@@ -14997,11 +14997,11 @@ msgstr "Aggiungi piedino gerarchico al foglio"
 
 #: eeschema/menubar.cpp:358
 msgid "Graphic Polyline"
-msgstr "Linea"
+msgstr "Polilinea grafica"
 
 #: eeschema/menubar.cpp:364 eeschema/sch_text.cpp:711
 msgid "Graphic Text"
-msgstr "Testo"
+msgstr "Testo grafico"
 
 #: eeschema/menubar.cpp:371 eeschema/sch_bitmap.h:127
 msgid "Image"
@@ -15907,7 +15907,7 @@ msgstr "Nessun componente da salvare."
 
 #: eeschema/libeditframe.cpp:1098
 msgid "Add pin"
-msgstr "Inserisci piedino"
+msgstr "Aggiungi piedino"
 
 #: eeschema/libeditframe.cpp:1102
 msgid "Set pin options"
@@ -16348,7 +16348,7 @@ msgstr "Gerarchia ascendente o discendente"
 
 #: eeschema/tool_sch.cpp:260 eeschema/help_common_strings.h:90
 msgid "Add bitmap image"
-msgstr "Inserisci immagine"
+msgstr "Aggiungi immagine bitmap"
 
 #: eeschema/tool_sch.cpp:291
 msgid "Set unit to inch"
@@ -16513,11 +16513,11 @@ msgstr "Campo %s %s"
 
 #: eeschema/sch_bus_entry.cpp:257
 msgid "Bus to Wire Entry"
-msgstr "Inserisci elemento da bus a filo"
+msgstr "Elemento da bus a filo"
 
 #: eeschema/sch_bus_entry.cpp:263
 msgid "Bus to Bus Entry"
-msgstr "Inserisci elemento da bus a bus "
+msgstr "Elemento da bus a bus "
 
 #: eeschema/netlist.cpp:64
 msgid ""
@@ -16615,23 +16615,23 @@ msgstr "Fine linea bus fili"
 
 #: eeschema/hotkeys.cpp:144
 msgid "Add Hierarchical Label"
-msgstr "Inserisci etichetta gerarchica"
+msgstr "Aggiungi etichetta gerarchica"
 
 #: eeschema/hotkeys.cpp:149
 msgid "Add Component"
-msgstr "Inserisci componente"
+msgstr "Aggiungi componente"
 
 #: eeschema/hotkeys.cpp:151
 msgid "Add Power"
-msgstr "Inserisci alimentazione"
+msgstr "Aggiungi alimentazione"
 
 #: eeschema/hotkeys.cpp:153
 msgid "Add No Connect Flag"
-msgstr "Indicatore di non connessione"
+msgstr "Aggiungi segnale di non connessione"
 
 #: eeschema/hotkeys.cpp:155
 msgid "Add Sheet"
-msgstr "Inserisci foglio"
+msgstr "Aggiungi foglio"
 
 #: eeschema/hotkeys.cpp:157
 msgid "Add Bus Entry"
@@ -16639,7 +16639,7 @@ msgstr "Aggiungi elemento bus"
 
 #: eeschema/hotkeys.cpp:159
 msgid "Add Wire Entry"
-msgstr "Inserisci elemento filo"
+msgstr "Aggiungi elemento filo"
 
 #: eeschema/hotkeys.cpp:161
 msgid "Add Graphic PolyLine"
@@ -21574,11 +21574,11 @@ msgstr "File \"%s\" scritto"
 
 #: pagelayout_editor/onrightclick.cpp:47
 msgid "Add Rectangle"
-msgstr "Inserisci rettangolo "
+msgstr "Aggiungi rettangolo "
 
 #: pagelayout_editor/onrightclick.cpp:55
 msgid "Add Bitmap"
-msgstr "Inserisci bitmap"
+msgstr "Aggiungi bitmap"
 
 #: pagelayout_editor/onrightclick.cpp:83 pagelayout_editor/hotkeys.cpp:81
 msgid "Move Start Point"
@@ -22137,35 +22137,35 @@ msgstr "Trova e sostituisci testo negli elementi dello schema"
 
 #: eeschema/help_common_strings.h:53
 msgid "Place component"
-msgstr "Inserisci componente"
+msgstr "Piazza componente"
 
 #: eeschema/help_common_strings.h:54
 msgid "Place power port"
-msgstr "Inserisci porta di alimentazione"
+msgstr "Piazza porta di alimentazione"
 
 #: eeschema/help_common_strings.h:55
 msgid "Place wire"
-msgstr "Inserisci filo"
+msgstr "Piazza filo"
 
 #: eeschema/help_common_strings.h:56
 msgid "Place bus"
-msgstr "Inserisci bus"
+msgstr "Piazza bus"
 
 #: eeschema/help_common_strings.h:57
 msgid "Place wire to bus entry"
-msgstr "Inserisci elemento da filo a bus"
+msgstr "Piazza elemento da filo a bus"
 
 #: eeschema/help_common_strings.h:58
 msgid "Place bus to bus entry"
-msgstr "Inserisci elemento da bus a bus"
+msgstr "Piazza elemento da bus a bus"
 
 #: eeschema/help_common_strings.h:59
 msgid "Place not-connected flag"
-msgstr "Inserisci segnalatore non connesso"
+msgstr "Piazza segnalatore non connesso"
 
 #: eeschema/help_common_strings.h:61
 msgid "Place net name - local label"
-msgstr "Inserisci nome collegamento (etichetta locale)"
+msgstr "Piazza nome collegamento (etichetta locale)"
 
 #: eeschema/help_common_strings.h:64
 msgid ""
@@ -22173,7 +22173,7 @@ msgid ""
 "Warning: inside global hierarchy , all global labels with same name are "
 "connected"
 msgstr ""
-"Inserisci etichetta globale.\n"
+"Piazza etichetta globale.\n"
 "Tutte le etichette globali con lo stesso nome, saranno connesse tra loro "
 "nell'intera gerarchia dello schema"
 
@@ -22182,12 +22182,12 @@ msgid ""
 "Place a hierarchical label. Label will be seen as a hierarchical pin in the "
 "sheet symbol"
 msgstr ""
-"Inserisci etichetta gerarchica. Questa etichetta verrà considerata come "
-"punto di connessione nel simbolo del foglio"
+"Piazza etichetta gerarchica. Questa etichetta verrà considerata come punto "
+"di connessione nel simbolo del foglio"
 
 #: eeschema/help_common_strings.h:68
 msgid "Place junction"
-msgstr "Inserisci giunzione "
+msgstr "Piazza giunzione "
 
 #: eeschema/help_common_strings.h:69
 msgid "Create hierarchical sheet"
@@ -22197,20 +22197,20 @@ msgstr "Aggiungi foglio alla gerarchia dello schema "
 msgid ""
 "Place hierarchical pin imported from the corresponding hierarchical label"
 msgstr ""
-"Inserisci piedino gerarchico importato dalla corrispondente etichetta "
+"Piazza piedino gerarchico importato dalla corrispondente etichetta "
 "gerarchica "
 
 #: eeschema/help_common_strings.h:72
 msgid "Place hierarchical pin in sheet"
-msgstr "Inserisci piedino gerarchico alla gerarchia del foglio"
+msgstr "Piazza piedino gerarchico alla gerarchia del foglio"
 
 #: eeschema/help_common_strings.h:73
 msgid "Place graphic lines or polygons"
-msgstr "Inserisci linea o poligono"
+msgstr "Piazza linea o poligono grafici"
 
 #: eeschema/help_common_strings.h:74
 msgid "Place text"
-msgstr "Inserisci testo"
+msgstr "Piazza testo"
 
 #: eeschema/help_common_strings.h:76
 msgid "Annotate schematic components"
