@@ -186,7 +186,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString, KiBitmap( datasheet_xpm ),
-                            _( "Edit document file" ) );
+                            _( "Show the associated datasheet or document" ) );
 
     m_mainToolBar->AddSeparator();
     m_partSelectBox = new wxComboBox( m_mainToolBar,

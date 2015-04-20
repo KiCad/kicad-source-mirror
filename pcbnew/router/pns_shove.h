@@ -152,7 +152,7 @@ private:
     PNS_NODE*                   m_root;
     PNS_NODE*                   m_currentNode;
 
-    OPT_LINE                     m_newHead;
+    OPT_LINE                    m_newHead;
 
     PNS_LOGGER                  m_logger;
     PNS_VIA*                    m_draggedVia;

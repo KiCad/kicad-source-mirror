@@ -496,7 +496,7 @@ void EDA_3D_CANVAS::DisplayStatus()
     msg.Printf( wxT( "dy %3.2f" ), m_draw3dOffset.y );
     Parent()->SetStatusText( msg, 2 );
 
-    msg.Printf( wxT( "View: %3.1f" ), 45 * GetPrm3DVisu().m_Zoom );
+    msg.Printf( _( "Zoom: %3.1f" ), 45 * GetPrm3DVisu().m_Zoom );
     Parent()->SetStatusText( msg, 3 );
 }
 

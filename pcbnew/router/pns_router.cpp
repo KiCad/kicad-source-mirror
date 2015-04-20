@@ -349,6 +349,18 @@ PNS_ROUTER::PNS_ROUTER()
     m_board = NULL;
     m_dragger = NULL;
     m_mode = PNS_MODE_ROUTE_SINGLE;
+
+    // Initialize all other variables:
+    m_lastNode = NULL;
+    m_shove = NULL;
+    m_iterLimit = 0;
+    m_showInterSteps = false;
+    m_snapshotIter = 0;
+    m_view = NULL;
+    m_currentEndItem = NULL;
+    m_snappingEnabled  = false;
+    m_violation = false;
+
 }
 
 

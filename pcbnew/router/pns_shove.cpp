@@ -80,6 +80,12 @@ PNS_SHOVE::PNS_SHOVE( PNS_NODE* aWorld, PNS_ROUTER* aRouter ) :
 {
     m_forceClearance = -1;
     m_root = aWorld;
+
+    // Initialize other temporary variables:
+    m_currentNode = NULL;
+    m_draggedVia = NULL;
+    m_iter = 0;
+    m_multiLineMode = false;
 }
 
 

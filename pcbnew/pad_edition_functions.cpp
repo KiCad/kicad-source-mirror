@@ -213,13 +213,17 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
             return;
     }
 
+    // Stores the initial bounding box to refresh the old area
+    EDA_RECT bbox = module->GetBoundingBox();
+
     m_Pcb->m_Status_Pcb = 0;
     aPad->DeleteStructure();
-    // Refresh the modified screen area, using the initial bounding box
-    // which is perhaps larger than the new bounding box
-    m_canvas->RefreshDrawingRect( module->GetBoundingBox() );
     // Update the bounding box
     module->CalculateBoundingBox();
+
+    // Refresh the modified screen area, using the initial bounding box
+    // which is perhaps larger than the new bounding box
+    m_canvas->RefreshDrawingRect( bbox );
 
     OnModify();
 }

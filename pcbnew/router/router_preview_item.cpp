@@ -43,6 +43,13 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem, VIEW_GROUP* aPa
     m_clearance = -1;
     m_originLayer = m_layer = ITEM_GAL_LAYER( GP_OVERLAY );
 
+    // initialize variables, overwritten by Update( aItem ), if aItem != NULL
+    m_router = NULL;
+    m_type = PR_SHAPE;
+    m_style = 0;
+    m_width = 0;
+    m_depth = 0;
+
     if( aItem )
         Update( aItem );
 }
