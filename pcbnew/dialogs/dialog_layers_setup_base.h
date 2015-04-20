@@ -22,9 +22,9 @@ class DIALOG_SHIM;
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
+#include <wx/textctrl.h>
 #include <wx/panel.h>
 #include <wx/checkbox.h>
-#include <wx/textctrl.h>
 #include <wx/scrolwin.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -192,6 +192,9 @@ class DIALOG_LAYERS_SETUP_BASE : public DIALOG_SHIM
 		wxChoice* m_PresetsChoice;
 		wxStaticText* m_staticTextCopperLayers;
 		wxChoice* m_CopperLayersChoice;
+		wxStaticText* m_staticTextBrdThickness;
+		wxTextCtrl* m_textCtrlBrdThickness;
+		wxStaticText* m_staticTextBrdThicknessUnit;
 		wxStaticText* m_staticTextLayers;
 		wxPanel* m_TitlePanel;
 		wxScrolledWindow* m_LayersListPanel;

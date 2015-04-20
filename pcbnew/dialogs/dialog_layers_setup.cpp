@@ -322,6 +322,9 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( wxTopLevelWindow* aParent, BOARD* aBoa
     m_copperLayerCount = m_pcb->GetCopperLayerCount();
     showCopperChoice( m_copperLayerCount );
     setCopperLayerCheckBoxes( m_copperLayerCount );
+    m_staticTextBrdThicknessUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    PutValueInLocalUnits( *m_textCtrlBrdThickness,
+                          m_pcb->GetDesignSettings().GetBoardThickness() );
 
     showBoardLayerNames();
 
@@ -619,6 +622,13 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
                 m_pcb->SetLayerType( layer, t );
             }
         }
+
+        int thickness = ValueFromTextCtrl( *m_textCtrlBrdThickness );
+
+        // Clamp the value between reasonable values
+
+        thickness = Clamp( Millimeter2iu( 0.1 ), thickness, Millimeter2iu( 3.0 ) );
+        m_pcb->GetDesignSettings().SetBoardThickness( thickness );
 
         EndModal( wxID_OK );
     }

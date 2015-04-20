@@ -33,7 +33,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bPresetsSizer->Add( m_PresetsChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bChoicesSizer->Add( bPresetsSizer, 1, wxEXPAND, 5 );
+	bChoicesSizer->Add( bPresetsSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bCopperLayersSizer;
 	bCopperLayersSizer = new wxBoxSizer( wxVERTICAL );
@@ -49,7 +49,33 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bCopperLayersSizer->Add( m_CopperLayersChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bChoicesSizer->Add( bCopperLayersSizer, 1, wxEXPAND, 5 );
+	bChoicesSizer->Add( bCopperLayersSizer, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bBrdThicknessSizer;
+	bBrdThicknessSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextBrdThickness = new wxStaticText( this, wxID_ANY, _("Board Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBrdThickness->Wrap( -1 );
+	bBrdThicknessSizer->Add( m_staticTextBrdThickness, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxFlexGridSizer* fgSizerBrdThickness;
+	fgSizerBrdThickness = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerBrdThickness->AddGrowableCol( 0 );
+	fgSizerBrdThickness->SetFlexibleDirection( wxBOTH );
+	fgSizerBrdThickness->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_textCtrlBrdThickness = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerBrdThickness->Add( m_textCtrlBrdThickness, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticTextBrdThicknessUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBrdThicknessUnit->Wrap( -1 );
+	fgSizerBrdThickness->Add( m_staticTextBrdThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	
+	
+	bBrdThicknessSizer->Add( fgSizerBrdThickness, 1, wxEXPAND, 5 );
+	
+	
+	bChoicesSizer->Add( bBrdThicknessSizer, 1, wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bChoicesSizer, 0, wxEXPAND, 5 );
