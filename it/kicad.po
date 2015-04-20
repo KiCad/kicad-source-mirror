@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-20 12:41+0100\n"
-"PO-Revision-Date: 2015-04-20 12:42+0100\n"
+"POT-Creation-Date: 2015-04-20 20:11+0100\n"
+"PO-Revision-Date: 2015-04-20 20:11+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -718,7 +718,7 @@ msgstr "Impronta"
 #: pcbnew/class_text_mod.cpp:390 pcbnew/class_marker_pcb.cpp:97
 #: pcbnew/class_zone.cpp:607 pcbnew/class_track.cpp:1132
 #: pcbnew/class_track.cpp:1159 pcbnew/class_track.cpp:1208
-#: pcbnew/class_drawsegment.cpp:368 pcbnew/dialogs/dialog_layers_setup.cpp:343
+#: pcbnew/class_drawsegment.cpp:368 pcbnew/dialogs/dialog_layers_setup.cpp:346
 #: eeschema/sch_text.cpp:788 eeschema/libedit.cpp:509
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1977
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:158
@@ -3904,7 +3904,7 @@ msgstr "Zona"
 msgid "Blind/Buried Via"
 msgstr "Via coperto/interno"
 
-#: pcbnew/class_track.cpp:1223 pcbnew/dialogs/dialog_layers_setup_base.cpp:60
+#: pcbnew/class_track.cpp:1223 pcbnew/dialogs/dialog_layers_setup_base.cpp:86
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_plot_base.cpp:71
 msgid "Layers"
@@ -7268,263 +7268,281 @@ msgstr "30"
 msgid "32"
 msgstr "32"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:84
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:57
+msgid "Board Thickness"
+msgstr "Spessore scheda"
+
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:70
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:38
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:50
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:62
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:74
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:113
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:125
+#: eeschema/component_tree_search_container.cpp:203
+#: eeschema/onrightclick.cpp:464 eeschema/libedit.cpp:495
+#: eeschema/lib_draw_item.cpp:72
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:25
+msgid "Unit"
+msgstr "Parti"
+
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:110
 msgid "CrtYd_Front_later"
 msgstr "CrtYd_Front_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:98
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1310
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:124
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1336
 msgid "If you want a courtyard layer for the front side of the board"
 msgstr "Se si desidera uno strato courtyard sul lato frontale della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:111
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1320
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:137
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1346
 msgid "Off-board, testing"
 msgstr "Esterno alla scheda, di prova"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:115
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:141
 msgid "Fab_Front_later"
 msgstr "Fab_Front_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:126
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:152
 msgid "If you want a fabrication layer for the front side of the board"
 msgstr ""
 "Se si desidera uno strato per la fabbricazione sul lato frontale della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:136
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:161
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1270
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1295
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:162
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:187
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1296
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1321
 msgid "Off-board, manufacturing"
 msgstr "Esterno alla scheda, di lavorazione"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:140
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:166
 msgid "Adhes_Front_later"
 msgstr "Adhes_Front_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:151
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:177
 msgid "If you want an adhesive template for the front side of the board"
 msgstr "Se si desidera una maschera adesiva sul lato frontale della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:165
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:191
 msgid "SoldP_Front_later"
 msgstr "SoldP_Front_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:176
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:202
 msgid "If you want a solder paster layer for front side of the board"
 msgstr ""
 "Se si desidera uno strato di pasta salda sul lato frontale della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:186
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:211
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:236
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1195
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1220
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1245
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:212
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:237
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:262
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1221
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1246
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1271
 msgid "On-board, non-copper"
 msgstr "Sulla scheda, non in rame"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:190
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:216
 msgid "SilkS_Front_later"
 msgstr "SilkS_Front_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:201
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:227
 msgid "If you want a silk screen layer for the front side of the board"
 msgstr "Se si desidera uno strato serigrafato sul lato frontale della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:215
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:241
 msgid "Mask_Front_later"
 msgstr "Mask_Front_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:226
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:252
 msgid "If you want a solder mask layer for the front of the board"
 msgstr ""
 "Se si desidera uno strato di mascheratura per saldatura sullo strato Fronte"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:240
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:266
 msgid "Front_later"
 msgstr "Front_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:242
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:268
 msgid "Layer name of front (top) copper layer"
 msgstr "Nome dello strato in rame Fronte"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:254
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:280
 msgid "If you want a front copper layer"
 msgstr "Se si desidera lo strato Fronte in rame"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:264
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:293
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:322
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:351
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:409
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:438
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:467
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:496
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:525
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:554
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:583
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:612
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:641
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:670
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:699
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:728
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:757
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:786
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:815
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:844
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:873
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:902
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:931
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:960
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:989
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1018
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1047
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1076
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1105
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1134
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1166
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:290
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:319
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:348
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:377
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:406
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:435
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:464
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:493
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:522
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:551
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:580
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:609
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:638
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:667
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:696
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:725
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:754
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:783
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:812
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:841
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:870
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:899
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:928
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:957
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:986
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1015
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1044
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1073
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1102
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1131
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1160
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1192
 msgid "signal"
 msgstr "Segnale"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:264
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:293
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:322
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:351
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:409
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:438
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:467
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:496
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:525
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:554
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:583
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:612
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:641
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:670
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:699
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:728
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:757
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:786
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:815
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:844
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:873
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:902
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:931
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:960
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:989
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1018
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1047
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1076
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1105
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1134
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1166
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:290
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:319
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:348
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:377
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:406
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:435
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:464
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:493
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:522
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:551
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:580
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:609
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:638
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:667
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:696
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:725
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:754
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:783
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:812
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:841
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:870
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:899
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:928
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:957
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:986
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1015
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1044
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1073
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1102
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1131
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1160
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1192
 msgid "power"
 msgstr "Alimentazione"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:264
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:293
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:322
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:351
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:409
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:438
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:467
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:496
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:525
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:554
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:583
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:612
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:641
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:670
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:699
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:728
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:757
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:786
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:815
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:844
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:873
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:902
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:931
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:960
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:989
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1018
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1047
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1076
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1105
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1134
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1166
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:290
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:319
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:348
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:377
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:406
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:435
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:464
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:493
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:522
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:551
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:580
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:609
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:638
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:667
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:696
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:725
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:754
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:783
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:812
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:841
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:870
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:899
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:928
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:957
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:986
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1015
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1044
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1073
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1102
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1131
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1160
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1192
 msgid "mixed"
 msgstr "Misto"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:264
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:293
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:322
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:351
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:409
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:438
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:467
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:496
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:525
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:554
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:583
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:612
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:641
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:670
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:699
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:728
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:757
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:786
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:815
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:844
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:873
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:902
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:931
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:960
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:989
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1018
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1047
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1076
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1105
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1134
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1166
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:290
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:319
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:348
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:377
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:406
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:435
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:464
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:493
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:522
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:551
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:580
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:609
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:638
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:667
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:696
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:725
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:754
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:783
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:812
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:841
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:870
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:899
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:928
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:957
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:986
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1015
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1044
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1073
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1102
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1131
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1160
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1192
 msgid "jumper"
 msgstr "Ponticello"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:268
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:297
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:326
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:355
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:384
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:413
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:442
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:471
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:500
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:529
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:558
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:587
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:616
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:645
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:674
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:703
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:732
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:761
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:790
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:819
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:848
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:877
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:906
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:935
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:964
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:993
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1022
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1051
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1080
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1109
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1138
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1170
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:294
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:323
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:352
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:381
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:410
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:439
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:468
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:497
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:526
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:555
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:584
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:613
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:642
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:671
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:700
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:729
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:758
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:787
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:816
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:845
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:874
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:903
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:932
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:961
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:990
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1019
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1048
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1077
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1106
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1135
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1164
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1196
 msgid ""
 "Copper layer type for Freerouter.  Power layers are removed from "
 "Freerouter's layer menus."
@@ -7532,237 +7550,237 @@ msgstr ""
 "Tipo di strato in rame per Freerouter. Gli strati di alimentazione verranno "
 "rimossi dal menù degli starti di Freeroute."
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:272
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:298
 msgid "In1"
 msgstr "In1"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:301
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:327
 msgid "In2"
 msgstr "In2"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:330
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:356
 msgid "In3"
 msgstr "In3"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:359
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:385
 msgid "In4"
 msgstr "In4"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:388
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:414
 msgid "In5"
 msgstr "In5"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:417
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:443
 msgid "In6"
 msgstr "In6"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:446
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:472
 msgid "In7"
 msgstr "In7"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:475
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:501
 msgid "In8"
 msgstr "In8"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:504
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:530
 msgid "In9"
 msgstr "In9"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:533
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:559
 msgid "In10"
 msgstr "In10"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:562
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:588
 msgid "In11"
 msgstr "In11"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:591
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:617
 msgid "In12"
 msgstr "In12"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:620
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:646
 msgid "In13"
 msgstr "In13"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:649
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:675
 msgid "In14"
 msgstr "In14"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:678
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:704
 msgid "In15"
 msgstr "In15"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:707
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:733
 msgid "In16"
 msgstr "In16"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:736
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:762
 msgid "In17"
 msgstr "In17"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:765
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:791
 msgid "In18"
 msgstr "In18"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:794
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:820
 msgid "In19"
 msgstr "In19"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:823
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:849
 msgid "In20"
 msgstr "In20"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:852
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:878
 msgid "In21"
 msgstr "In21"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:881
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:907
 msgid "In22"
 msgstr "In22"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:910
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:936
 msgid "In23"
 msgstr "In23"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:939
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:965
 msgid "In24"
 msgstr "In24"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:968
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:994
 msgid "In25"
 msgstr "In25"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:997
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1023
 msgid "In26"
 msgstr "In26"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1026
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1052
 msgid "In27"
 msgstr "In27"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1055
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1081
 msgid "In28"
 msgstr "In28"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1084
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1110
 msgid "In29"
 msgstr "In29"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1113
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1139
 msgid "In30"
 msgstr "In30"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1142
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 msgid "Back"
 msgstr "Retro"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1144
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1170
 msgid "Layer name of back (bottom) copper layer"
 msgstr "Nome dello strato in rame in basso (retro)"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1156
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1182
 msgid "If you want a back copper layer"
 msgstr "Se si desidera lo strato Retro in rame"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1174
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1200
 msgid "Mask_Back_later"
 msgstr "Mask_Back_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1185
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1211
 msgid "If you want a solder mask layer for the back side of the board"
 msgstr ""
 "Se si desidera uno strato maschera per saldatura sul lato retrostante della "
 "scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1199
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1225
 msgid "SilkS_Back_later"
 msgstr "SilkS_Back_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1210
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1236
 msgid "If you want a silk screen layer for the back side of the board"
 msgstr ""
 "Se si desidera uno strato serigrafato sul lato retrostante della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1224
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1250
 msgid "SoldP_Back_later"
 msgstr "SoldP_Back_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1235
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1261
 msgid "If you want a solder paste layer for the back side of the board"
 msgstr ""
 "Se si desidera uno strato di pasta salda sul lato retrostante della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1249
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1275
 msgid "Adhes_Back_later"
 msgstr "Adhes_Back_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1260
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1286
 msgid "If you want an adhesive layer for the back side of the board"
 msgstr "Se si desidera uno strato di adesivo sul lato retrostante della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1274
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1300
 msgid "Fab_Back_later"
 msgstr "Fab_Back_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1285
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1311
 msgid "If you want a fabrication layer for the back side of the board"
 msgstr ""
 "Se si desidera uno strato per la fabbricazione sul lato retrostante della "
 "scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1299
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1325
 msgid "CrtYd_Back_later"
 msgstr "CrtYd_Back_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1324
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1350
 msgid "PCB_Edges_later"
 msgstr "PCB_Edges_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1335
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1361
 msgid "If you want a board perimeter layer"
 msgstr "Se si desidera uno strato con l'ingombro della scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1345
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1371
 msgid "Board contour"
 msgstr "Contorno scheda"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1349
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1375
 msgid "Margin_later"
 msgstr "Margin_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1368
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1394
 msgid "Edge_Cuts setback"
 msgstr "Edge_Cuts setback"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1372
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1398
 msgid "Eco1_later"
 msgstr "Eco1_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1391
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1414
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1439
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1464
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1417
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1440
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1465
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1490
 msgid "Auxiliary"
 msgstr "Ausiliario"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1395
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1421
 msgid "Eco2_later"
 msgstr "Eco2_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1418
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1444
 msgid "Comments_later"
 msgstr "Comments_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1429
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1455
 msgid "If you want a separate layer for comments or notes"
 msgstr "Se si desidera strati separati per commenti e note"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1443
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1469
 msgid "Drawings_later"
 msgstr "Drawings_later"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1454
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1480
 msgid "If you want a layer for documentation drawings"
 msgstr "Se si desidera uno strato per documentazione grafica"
 
@@ -8687,7 +8705,7 @@ msgstr "File netlist:"
 msgid "Browse"
 msgstr "Esplora"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:339
+#: pcbnew/dialogs/dialog_layers_setup.cpp:342
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:36
 #: common/dialogs/dialog_env_var_config_base.cpp:35 eeschema/libedit.cpp:479
 #: eeschema/lib_pin.cpp:1968
@@ -8700,23 +8718,23 @@ msgstr "Esplora"
 msgid "Name"
 msgstr "Nome"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:341
+#: pcbnew/dialogs/dialog_layers_setup.cpp:344
 msgid "Enabled"
 msgstr "Abilitato"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:692
+#: pcbnew/dialogs/dialog_layers_setup.cpp:702
 msgid "Layer name may not be empty"
 msgstr "Il nome strato non essere vuoto"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:699
+#: pcbnew/dialogs/dialog_layers_setup.cpp:709
 msgid "Layer name has an illegal character, one of: '"
 msgstr "Il nome strato ha un carattere illegale, uno di: '"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:706
+#: pcbnew/dialogs/dialog_layers_setup.cpp:716
 msgid "'signal' is a reserved layer name"
 msgstr "\"signal\" è un nome strato riservato"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:715
+#: pcbnew/dialogs/dialog_layers_setup.cpp:725
 msgid "Layer name is a duplicate of another"
 msgstr "Il nome strato è un duplicato di un'altro"
 
@@ -12016,19 +12034,6 @@ msgstr "Spazio via uguale allo spazio pista"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:30
 msgid "Start point X"
 msgstr "Punto iniziale X"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:38
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:50
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:62
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:74
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:113
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:125
-#: eeschema/component_tree_search_container.cpp:203
-#: eeschema/onrightclick.cpp:464 eeschema/libedit.cpp:495
-#: eeschema/lib_draw_item.cpp:72
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:25
-msgid "Unit"
-msgstr "Parti"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:42
 msgid "Start point Y"
@@ -15871,8 +15876,8 @@ msgid "Test for duplicate and off grid pins"
 msgstr "Prova se esistono piedini duplicati o fuori griglia"
 
 #: eeschema/tool_lib.cpp:189
-msgid "Edit document file"
-msgstr "Visualizza le specifiche del componente"
+msgid "Show the associated datasheet or document"
+msgstr "Mostra il documento o il datasheet associato"
 
 #: eeschema/tool_lib.cpp:209
 msgid "Edit pins per part or body style (Use carefully!)"
@@ -19388,6 +19393,11 @@ msgstr "Sposta a destra"
 msgid "Move Up ^"
 msgstr "Sposta in alto"
 
+#: 3d-viewer/3d_canvas.cpp:499
+#, c-format
+msgid "Zoom: %3.1f"
+msgstr "Zoom: %3.1f"
+
 #: 3d-viewer/3d_canvas.cpp:635
 msgid "3D Image filename:"
 msgstr "Nome file 3D: "
@@ -21999,7 +22009,7 @@ msgstr "Opzioni editor impronte"
 msgid "Delete Items"
 msgstr "Cancella elementi"
 
-#: pcbnew/dialogs/dialog_layers_setup_base.h:415
+#: pcbnew/dialogs/dialog_layers_setup_base.h:418
 msgid "Layer Setup"
 msgstr "Configurazione strati"
 
