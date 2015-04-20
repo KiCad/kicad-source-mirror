@@ -36,46 +36,29 @@
 #endif /* __WXDEBUG__ */
 
 #include <limits>
+#include <boost/bind.hpp>
 
 using namespace KIGFX;
 
-// Prototypes
-void InitTesselatorCallbacks( GLUtesselator* aTesselator );
-
+static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
-
 wxGLContext* OPENGL_GAL::glContext = NULL;
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
-    parentWindow( aParent ),
     mouseListener( aMouseListener ),
     paintListener( aPaintListener ),
     cachedManager( true ),
     nonCachedManager( false ),
     overlayManager( false )
 {
-    // Create the OpenGL-Context
     if( glContext == NULL )
         glContext = new wxGLContext( this );
 
-    aParent->Show();   // wxWidgets require the window to be visible to set its GL context
-
-    // Initialize GLEW, FBOs & VBOs
-    SetCurrent( *glContext );
-    initGlew();
-
-    // Prepare shaders
-    if( !shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
-        throw std::runtime_error( "Cannot compile vertex shader!" );
-
-    if( !shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
-        throw std::runtime_error( "Cannot compile fragment shader!" );
-
-    if( !shader.Link() )
-        throw std::runtime_error( "Cannot link the shaders!" );
+    // Check if OpenGL requirements are met
+    runTest();
 
     // Make VBOs use shaders
     cachedManager.SetShader( shader );
@@ -88,7 +71,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     groupCounter             = 0;
 
     // Connecting the event handlers
-    Connect( wxEVT_PAINT,       wxPaintEventHandler( OPENGL_GAL::onPaint ) );
+    Connect( wxEVT_PAINT,           wxPaintEventHandler( OPENGL_GAL::onPaint ) );
 
     // Mouse events are skipped to the parent
     Connect( wxEVT_MOTION,          wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
@@ -145,7 +128,8 @@ void OPENGL_GAL::BeginDrawing()
     glViewport( 0, 0, (GLsizei) screenSize.x, (GLsizei) screenSize.y );
 
     // Create the screen transformation
-    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, -depthRange.x, -depthRange.y );
+    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y,
+             -depthRange.x, -depthRange.y );
 
     if( !isFramebufferInitialized )
     {
@@ -914,37 +898,6 @@ void OPENGL_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 }
 
 
-void OPENGL_GAL::initGlew()
-{
-    // Initialize GLEW library
-    GLenum err = glewInit();
-
-    if( GLEW_OK != err )
-    {
-        throw std::runtime_error( (const char*) glewGetErrorString( err ) );
-    }
-    else
-    {
-        wxLogDebug( wxString( wxT( "Status: Using GLEW " ) ) +
-                    FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
-    }
-
-    // Check the OpenGL version (minimum 2.1 is required)
-    if( GLEW_VERSION_2_1 )
-        wxLogInfo( wxT( "OpenGL 2.1 supported." ) );
-    else
-        throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
-
-    // Framebuffers have to be supported
-    if( !GLEW_EXT_framebuffer_object )
-        throw std::runtime_error( "Framebuffer objects are not supported!" );
-
-    // Vertex buffer has to be supported
-    if( !GLEW_ARB_vertex_buffer_object )
-        throw std::runtime_error( "Vertex buffer objects are not supported!" );
-}
-
-
 void OPENGL_GAL::blitCursor()
 {
     if( !isCursorEnabled )
@@ -984,11 +937,112 @@ unsigned int OPENGL_GAL::getNewGroupNumber()
 }
 
 
-// -------------------------------------
-// Callback functions for the tesselator
-// -------------------------------------
+bool OPENGL_GAL::runTest()
+{
+    wxDialog* dialog = new wxDialog( GetParent(), -1, wxT( "opengl test" ),
+                                     wxPoint( 50, 50 ), wxSize( 50, 50 ) );
+    OPENGL_TEST* test = new OPENGL_TEST( dialog, this );
 
-// Compare Redbook Chapter 11
+    dialog->ShowModal();
+    bool result = test->IsOk();
+
+    if( !result )
+        throw std::runtime_error( test->GetError() );
+
+    return result;
+}
+
+
+OPENGL_GAL::OPENGL_TEST::OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal ) :
+    wxGLCanvas( aParent, wxID_ANY, glAttributes, wxDefaultPosition,
+                wxDefaultSize, 0, wxT( "GLCanvas" ) ),
+    m_parent( aParent ), m_gal( aGal ), m_tested( false ), m_result( false )
+{
+    Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::OPENGL_TEST::Render ) );
+}
+
+
+void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
+{
+    if( !m_tested )
+    {
+        m_result = true;    // Assume everything is fine, until proven otherwise
+
+        // One test is enough - close the testing dialog when the test is finished
+        Disconnect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::OPENGL_TEST::Render ) );
+        CallAfter( boost::bind( &wxDialog::EndModal, m_parent, wxID_NONE ) );
+
+        SetCurrent( *OPENGL_GAL::glContext );
+        GLenum err = glewInit();
+
+        if( GLEW_OK != err )
+        {
+            error( (const char*) glewGetErrorString( err ) );
+            return;
+        }
+        else
+        {
+            wxLogDebug( wxString( wxT( "Status: Using GLEW " ) ) +
+                        FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
+        }
+
+        // Check the OpenGL version (minimum 2.1 is required)
+        if( GLEW_VERSION_2_1 )
+        {
+            wxLogInfo( wxT( "OpenGL 2.1 supported." ) );
+        }
+        else
+        {
+            error( "OpenGL 2.1 or higher is required!" );
+            return;
+        }
+
+        // Framebuffers have to be supported
+        if( !GLEW_EXT_framebuffer_object )
+        {
+            error( "Framebuffer objects are not supported!" );
+            return;
+        }
+
+        // Vertex buffer has to be supported
+        if( !GLEW_ARB_vertex_buffer_object )
+        {
+            error( "Vertex buffer objects are not supported!" );
+            return;
+        }
+
+        // Prepare shaders
+        if( !m_gal->shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
+        {
+            error( "Cannot compile vertex shader!" );
+            return;
+        }
+
+        if( !m_gal->shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
+        {
+            error( "Cannot compile fragment shader!" );
+            return;
+        }
+
+        if( !m_gal->shader.Link() )
+        {
+            error( "Cannot link the shaders!" );
+            return;
+        }
+
+        m_tested = true;
+    }
+}
+
+
+void OPENGL_GAL::OPENGL_TEST::error(const std::string& aError )
+{
+    m_result = false;
+    m_tested = true;
+    m_error = aError;
+}
+
+// ------------------------------------- // Callback functions for the tesselator // ------------------------------------- // Compare Redbook Chapter 11
 void CALLBACK VertexCallback( GLvoid* aVertexPtr, void* aData )
 {
     GLdouble* vertex = static_cast<GLdouble*>( aVertexPtr );
@@ -1029,7 +1083,7 @@ void CALLBACK ErrorCallback( GLenum aErrorCode )
 }
 
 
-void InitTesselatorCallbacks( GLUtesselator* aTesselator )
+static void InitTesselatorCallbacks( GLUtesselator* aTesselator )
 {
     gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA,  ( void (CALLBACK*)() )VertexCallback );
     gluTessCallback( aTesselator, GLU_TESS_COMBINE_DATA, ( void (CALLBACK*)() )CombineCallback );

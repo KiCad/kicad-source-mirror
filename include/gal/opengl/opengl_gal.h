@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
@@ -55,7 +55,7 @@ class SHADER;
  * @brief Class OpenGL_GAL is the OpenGL implementation of the Graphics Abstraction Layer.
  *
  * This is a direct OpenGL-implementation and uses low-level graphics primitives like triangles
- * and quads. The purpuse is to provide a fast graphics interface, that takes advantage of modern
+ * and quads. The purpose is to provide a fast graphics interface, that takes advantage of modern
  * graphics card GPUs. All methods here benefit thus from the hardware acceleration.
  */
 class OPENGL_GAL : public GAL, public wxGLCanvas
@@ -254,7 +254,6 @@ private:
 
     wxClientDC*             clientDC;               ///< Drawing context
     static wxGLContext*     glContext;              ///< OpenGL context of wxWidgets
-    wxWindow*               parentWindow;           ///< Parent window
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;
 
@@ -340,9 +339,6 @@ private:
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
-    /// Initialize GLEW
-    void initGlew();
-
     /**
      * @brief Blits cursor into the current screen.
      */
@@ -354,6 +350,34 @@ private:
      * @return An unique group number that is not used by any other group.
      */
     unsigned int getNewGroupNumber();
+
+    /**
+     * @brief Checks if the required OpenGL version and extensions are supported.
+     * @return true in case of success.
+     */
+    bool runTest();
+
+    // Helper class to determine OpenGL capabilities
+    class OPENGL_TEST: public wxGLCanvas
+    {
+    public:
+        OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal );
+        void Render( wxPaintEvent& aEvent );
+        inline bool IsTested() const { return m_tested; }
+        inline bool IsOk() const { return m_result && m_tested; }
+        inline std::string GetError() const { return m_error; }
+
+    private:
+        void error( const std::string& aError );
+
+        wxDialog* m_parent;
+        OPENGL_GAL* m_gal;
+        bool m_tested;
+        bool m_result;
+        std::string m_error;
+    };
+
+    friend class OPENGL_TEST;
 };
 } // namespace KIGFX
 
