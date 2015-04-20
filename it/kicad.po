@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 15:27+0100\n"
-"PO-Revision-Date: 2015-04-19 15:27+0100\n"
+"POT-Creation-Date: 2015-04-20 12:41+0100\n"
+"PO-Revision-Date: 2015-04-20 12:42+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -99,7 +99,7 @@ msgstr ""
 "X-Poedit-SearchPath-13: pagelayout_editor\n"
 
 #: kicad/menubar.cpp:138 pcbnew/hotkeys.cpp:177 eeschema/hotkeys.cpp:118
-#: pagelayout_editor/hotkeys.cpp:78
+#: gerbview/hotkeys.cpp:67 pagelayout_editor/hotkeys.cpp:78
 msgid "Help (this window)"
 msgstr "Aiuto (questa finestra)"
 
@@ -1361,7 +1361,7 @@ msgstr "Mostra impronta nel visualizzatore 3D"
 #: pcbnew/footprint_wizard_frame.cpp:596 pcbnew/tool_modview.cpp:79
 #: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:231
 #: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:72
-#: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:79
+#: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
 #: pcbnew/help_common_strings.h:19 eeschema/help_common_strings.h:43
 msgid "Zoom in"
 msgstr "Ingrandisci"
@@ -1369,7 +1369,7 @@ msgstr "Ingrandisci"
 #: pcbnew/footprint_wizard_frame.cpp:601 pcbnew/tool_modview.cpp:84
 #: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:233
 #: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:75
-#: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:82
+#: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
 #: pcbnew/help_common_strings.h:20 eeschema/help_common_strings.h:44
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
@@ -1377,14 +1377,14 @@ msgstr "Rimpicciolisci"
 #: pcbnew/footprint_wizard_frame.cpp:606 pcbnew/tool_modview.cpp:89
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:235
 #: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:79
-#: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:85
+#: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
 msgid "Redraw view"
 msgstr "Aggiorna vista"
 
 #: pcbnew/footprint_wizard_frame.cpp:611 pcbnew/tool_modview.cpp:94
 #: pcbnew/tool_modedit.cpp:133 common/zoom.cpp:237
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
-#: pagelayout_editor/toolbars_pl_editor.cpp:88
+#: pagelayout_editor/toolbars_pl_editor.cpp:87
 msgid "Zoom auto"
 msgstr "Inquadra tutto"
 
@@ -1678,13 +1678,13 @@ msgid "Pad inside a text"
 msgstr "Piazzola dentro un testo"
 
 #: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:241
-#: gerbview/menubar.cpp:155 gerbview/menubar.cpp:157 gerbview/options.cpp:88
+#: gerbview/menubar.cpp:155 gerbview/menubar.cpp:157 gerbview/options.cpp:89
 #: gerbview/events_called_functions.cpp:381
 msgid "Hide &Layers Manager"
 msgstr "Nascondi &Gestione livelli"
 
 #: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:241
-#: gerbview/menubar.cpp:157 gerbview/options.cpp:88
+#: gerbview/menubar.cpp:157 gerbview/options.cpp:89
 #: gerbview/events_called_functions.cpp:381
 msgid "Show &Layers Manager"
 msgstr "Mostra &Gestione livelli"
@@ -4977,7 +4977,8 @@ msgid "Show pads in fill mode"
 msgstr "Mostra piazzole"
 
 #: pcbnew/basepcbframe.cpp:839 pcbnew/hotkeys.cpp:147 pcbnew/hotkeys.cpp:149
-#: eeschema/hotkeys.cpp:89 pagelayout_editor/hotkeys.cpp:72
+#: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:62
+#: pagelayout_editor/hotkeys.cpp:72
 msgid "Zoom Auto"
 msgstr "Inquadra tutto"
 
@@ -5353,11 +5354,11 @@ msgstr "Passa allo strato interno 5"
 msgid "Switch to Inner layer 6"
 msgstr "Passa allo strato interno 6"
 
-#: pcbnew/hotkeys.cpp:91
+#: pcbnew/hotkeys.cpp:91 gerbview/hotkeys.cpp:77
 msgid "Switch to Next Layer"
 msgstr "Passa allo strato successivo"
 
-#: pcbnew/hotkeys.cpp:93
+#: pcbnew/hotkeys.cpp:93 gerbview/hotkeys.cpp:78
 msgid "Switch to Previous Layer"
 msgstr "Passa allo strato precedente"
 
@@ -5464,7 +5465,7 @@ msgstr "Blocca/sblocca impronta"
 msgid "Delete Track or Footprint"
 msgstr "Cancella pista o impronta"
 
-#: pcbnew/hotkeys.cpp:128 eeschema/hotkeys.cpp:119
+#: pcbnew/hotkeys.cpp:128 eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:69
 #: pagelayout_editor/hotkeys.cpp:70
 msgid "Reset Local Coordinates"
 msgstr "Reimposta le coordinate locali"
@@ -5493,23 +5494,26 @@ msgstr "Passa a schermo a OpenGL"
 msgid "Switch to Cairo Canvas"
 msgstr "Passa a schermo Cairo"
 
-#: pcbnew/hotkeys.cpp:152 eeschema/hotkeys.cpp:93
+#: pcbnew/hotkeys.cpp:152 eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:63
 #: pagelayout_editor/hotkeys.cpp:73
 msgid "Zoom Center"
 msgstr "Centra zoom"
 
 #: pcbnew/hotkeys.cpp:156 pcbnew/hotkeys.cpp:158 eeschema/hotkeys.cpp:98
-#: eeschema/hotkeys.cpp:100 pagelayout_editor/hotkeys.cpp:75
+#: eeschema/hotkeys.cpp:100 gerbview/hotkeys.cpp:64
+#: pagelayout_editor/hotkeys.cpp:75
 msgid "Zoom Redraw"
 msgstr "Aggiorna zoom"
 
 #: pcbnew/hotkeys.cpp:163 pcbnew/hotkeys.cpp:165 eeschema/hotkeys.cpp:106
-#: eeschema/hotkeys.cpp:108 pagelayout_editor/hotkeys.cpp:77
+#: eeschema/hotkeys.cpp:108 gerbview/hotkeys.cpp:66
+#: pagelayout_editor/hotkeys.cpp:77
 msgid "Zoom In"
 msgstr "Ingrandisci"
 
 #: pcbnew/hotkeys.cpp:170 pcbnew/hotkeys.cpp:172 eeschema/hotkeys.cpp:113
-#: eeschema/hotkeys.cpp:115 pagelayout_editor/hotkeys.cpp:76
+#: eeschema/hotkeys.cpp:115 gerbview/hotkeys.cpp:65
+#: pagelayout_editor/hotkeys.cpp:76
 msgid "Zoom Out"
 msgstr "Rimpicciolisci"
 
@@ -5547,7 +5551,7 @@ msgstr "Cambia griglia alla prossima"
 msgid "Switch Grid To Previous"
 msgstr "Cambia griglia alla precedente"
 
-#: pcbnew/hotkeys.cpp:211
+#: pcbnew/hotkeys.cpp:211 gerbview/hotkeys.cpp:68
 msgid "Switch Units"
 msgstr "Commuta unità"
 
@@ -16302,7 +16306,7 @@ msgstr "Apri progetto schema"
 msgid "Save schematic project"
 msgstr "Salva progetto schema"
 
-#: eeschema/tool_sch.cpp:68 pagelayout_editor/toolbars_pl_editor.cpp:62
+#: eeschema/tool_sch.cpp:68 pagelayout_editor/toolbars_pl_editor.cpp:61
 msgid "Page settings"
 msgstr "Impostazioni pagina"
 
@@ -19881,6 +19885,30 @@ msgstr "Nessun editor definito. Selezionarne uno."
 msgid "No file loaded on the active layer %d"
 msgstr "Nessun file caricato sullo strato attivo %d"
 
+#: gerbview/hotkeys.cpp:71
+msgid "Gbr Lines Display Mode"
+msgstr "Modalità visual. Linee Gbr"
+
+#: gerbview/hotkeys.cpp:72
+msgid "Gbr Flashed Display Mode"
+msgstr "Modalità visual. Flash Bgr"
+
+#: gerbview/hotkeys.cpp:73
+msgid "Gbr Polygons Display Mode"
+msgstr "Modalità visual. Polipoligoni Gbr"
+
+#: gerbview/hotkeys.cpp:74
+msgid "Gbr Negative Obj Display Mode"
+msgstr "Modalità visual. Ogg. Gbr negativi "
+
+#: gerbview/hotkeys.cpp:75
+msgid "DCodes Display Mode"
+msgstr "Modalità visual. DCode"
+
+#: gerbview/hotkeys.cpp:96
+msgid "Gerbview Hotkeys"
+msgstr "Scorciatoie da tastiera Gerbview"
+
 #: gerbview/toolbars_gerber.cpp:59
 msgid "Erase all layers"
 msgstr "Cancella tutti gli strati"
@@ -21649,28 +21677,28 @@ msgstr "Informazioni su Pl_editor"
 msgid "About page layout description editor"
 msgstr "Informazioni sull'editor di descrizione disposizione pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:52
+#: pagelayout_editor/toolbars_pl_editor.cpp:51
 msgid "New page layout design"
 msgstr "Nuovo progetto disposizione pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:55
+#: pagelayout_editor/toolbars_pl_editor.cpp:54
 msgid "Load a page layout file. Previous data will be deleted"
 msgstr ""
 "Carica un file progetto disposizione pagina. Il precedente verrà cancellato"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:58
+#: pagelayout_editor/toolbars_pl_editor.cpp:57
 msgid "Save page layout design"
 msgstr "Salva progetto disposizione pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:65
+#: pagelayout_editor/toolbars_pl_editor.cpp:64
 msgid "Print page layout"
 msgstr "Stampa disposizione pagina"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:69
+#: pagelayout_editor/toolbars_pl_editor.cpp:68
 msgid "Delete selected item"
 msgstr "Cancella elemento selezionato"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:95
+#: pagelayout_editor/toolbars_pl_editor.cpp:94
 msgid ""
 "Show title block like it will be displayed in applications\n"
 "texts with format are replaced by the full text"
@@ -21679,7 +21707,7 @@ msgstr ""
 "applicazioni\n"
 "I testi con formato vengono rimpiazzati dal testo completo"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:100
+#: pagelayout_editor/toolbars_pl_editor.cpp:99
 msgid ""
 "Show title block in edit mode: texts are shown as is:\n"
 "texts with format are displayed with no change"
@@ -21688,39 +21716,39 @@ msgstr ""
 "come sono:\n"
 "I testi con formato sono visualizzati senza cambiamenti"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:108
+#: pagelayout_editor/toolbars_pl_editor.cpp:107
 msgid "Left Top paper corner"
 msgstr "Angolo alto a sinistra"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:109
+#: pagelayout_editor/toolbars_pl_editor.cpp:108
 msgid "Right Bottom page corner"
 msgstr "Angolo inferiore destro"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:110
+#: pagelayout_editor/toolbars_pl_editor.cpp:109
 msgid "Left Bottom page corner"
 msgstr "Angolo inferiore sinistro"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:111
+#: pagelayout_editor/toolbars_pl_editor.cpp:110
 msgid "Right Top page corner"
 msgstr "Angolo superiore destro"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:112
+#: pagelayout_editor/toolbars_pl_editor.cpp:111
 msgid "Left Top page corner"
 msgstr "Angolo superiore sinistro"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:119
+#: pagelayout_editor/toolbars_pl_editor.cpp:118
 msgid " Origin of coordinates displayed to the status bar"
 msgstr " Origine delle coordinate mostrate sulla barra di stato"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:132
+#: pagelayout_editor/toolbars_pl_editor.cpp:131
 msgid "Page 1"
 msgstr "Pagina 1"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:133
+#: pagelayout_editor/toolbars_pl_editor.cpp:132
 msgid "Other pages"
 msgstr "Altre pagine"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:140
+#: pagelayout_editor/toolbars_pl_editor.cpp:139
 msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
