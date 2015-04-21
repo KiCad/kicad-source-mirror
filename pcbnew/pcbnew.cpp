@@ -247,6 +247,7 @@ static bool scriptingSetup()
     // [KICAD_PATH]/scripting/plugins
     // Add this default search path:
     path_frag = Pgm().GetExecutablePath() + wxT( "scripting/plugins" );
+
 #elif defined( __WXMAC__ )
     // User plugin folder is ~/Library/Application Support/kicad/scripting/plugins
     path_frag = GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
@@ -275,6 +276,7 @@ static bool scriptingSetup()
 
     // set $PYTHONPATH
     wxSetEnv( "PYTHONPATH", pypath );
+
 #else
     // Add this default search path:
     path_frag = wxT( "/usr/local/kicad/bin/scripting/plugins" );
@@ -317,16 +319,17 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
         if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
         {
-            DisplayInfoMessage( NULL, wxT(
+            DisplayInfoMessage( NULL, _(
                 "You have run Pcbnew for the first time using the "
-                "new footprint library table method for finding "
-                "footprints.  Pcbnew has either copied the default "
+                "new footprint library table method for finding footprints.\n"
+                "Pcbnew has either copied the default "
                 "table or created an empty table in the kicad configuration "
-                "folder.  You must first configure the library "
+                "folder.\n"
+                "You must first configure the library "
                 "table to include all footprint libraries not "
-                "included with KiCad.  See the \"Footprint Library "
-                "Table\" section of the CvPcb or Pcbnew documentation for "
-                "more information." ) );
+                "included with KiCad.\n"
+                "See the \"Footprint Library  Table\" section of"
+                "the CvPcb or Pcbnew documentation for more information." ) );
         }
     }
     catch( const IO_ERROR& ioe )

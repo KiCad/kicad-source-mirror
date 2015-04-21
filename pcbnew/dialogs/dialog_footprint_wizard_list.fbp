@@ -44,7 +44,7 @@
             <property name="minimum_size">400,200</property>
             <property name="name">DIALOG_FOOTPRINT_WIZARD_LIST_BASE</property>
             <property name="pos"></property>
-            <property name="size">404,200</property>
+            <property name="size">501,273</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Footprint Wizards</property>
@@ -121,10 +121,10 @@
                         <property name="close_button">1</property>
                         <property name="col_label_horiz_alignment">wxALIGN_LEFT</property>
                         <property name="col_label_size">20</property>
-                        <property name="col_label_values">&quot;Preview&quot; &quot;Name&quot; &quot;Description&quot;</property>
+                        <property name="col_label_values">&quot;Name&quot; &quot;Description&quot;</property>
                         <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
-                        <property name="cols">3</property>
-                        <property name="column_sizes">80,80,325</property>
+                        <property name="cols">2</property>
+                        <property name="column_sizes">160,325</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
                         <property name="default_pane">0</property>
@@ -275,7 +275,7 @@
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
                         <property name="moveable">1</property>
-                        <property name="name">m_staticline1</property>
+                        <property name="name">m_staticline</property>
                         <property name="pane_border">1</property>
                         <property name="pane_position"></property>
                         <property name="pane_size"></property>
@@ -334,11 +334,11 @@
                         <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
-                        <event name="OnCancelButtonClick">OnCancelClick</event>
+                        <event name="OnCancelButtonClick"></event>
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">OnOpenButtonClick</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>

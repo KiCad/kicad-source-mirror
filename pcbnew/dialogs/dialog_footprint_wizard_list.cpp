@@ -34,12 +34,13 @@
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
 
+#define ROW_NAME 0
+#define ROW_DESCR 1
 
 
 DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     : DIALOG_FOOTPRINT_WIZARD_LIST_BASE( aParent )
 {
-    SetFocus();
     int n_wizards = FOOTPRINT_WIZARDS::GetSize();
 
     // Current wizard selection, empty or first
@@ -49,8 +50,6 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         m_FootprintWizard = FOOTPRINT_WIZARDS::GetWizard( 0 );
 
     // Choose selection mode and insert the needed rows
-
-    m_footprintWizardsGrid->SetColSize( 0, 0 ); // hide the preview for now
 
     m_footprintWizardsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_footprintWizardsGrid->InsertRows( 0, n_wizards, true );
@@ -63,8 +62,8 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         wxString description = wizard->GetDescription();
         wxString image = wizard->GetImage();
 
-        m_footprintWizardsGrid->SetCellValue( i, 1, name );
-        m_footprintWizardsGrid->SetCellValue( i, 2, description );
+        m_footprintWizardsGrid->SetCellValue( i, ROW_NAME, name );
+        m_footprintWizardsGrid->SetCellValue( i, ROW_DESCR, description );
 
     }
 
@@ -72,6 +71,8 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     m_footprintWizardsGrid->ClearSelection();
     m_footprintWizardsGrid->SelectRow( 0, false );
 
+    GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 
@@ -86,16 +87,4 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellWizardClick( wxGridEvent& event )
 FOOTPRINT_WIZARD* DIALOG_FOOTPRINT_WIZARD_LIST::GetWizard()
 {
     return m_FootprintWizard;
-}
-
-
-void DIALOG_FOOTPRINT_WIZARD_LIST::OnOpenButtonClick( wxCommandEvent& event )
-{
-    EndModal( wxID_OK );
-}
-
-
-void DIALOG_FOOTPRINT_WIZARD_LIST::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
 }

@@ -19,10 +19,6 @@
 #include <dialogs/dialog_footprint_wizard_list.h>
 #include <base_units.h>
 
-#define NEXT_PART       1
-#define NEW_PART        0
-#define PREVIOUS_PART   -1
-
 
 void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
@@ -154,13 +150,12 @@ MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 
 void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 {
-    DIALOG_FOOTPRINT_WIZARD_LIST* selectWizard =
-        new DIALOG_FOOTPRINT_WIZARD_LIST( this );
+    DIALOG_FOOTPRINT_WIZARD_LIST wizardSelector( this );
 
-    if( selectWizard->ShowModal() != wxID_OK )
+    if( wizardSelector.ShowModal() != wxID_OK )
         return;
 
-    FOOTPRINT_WIZARD* footprintWizard = selectWizard->GetWizard();
+    FOOTPRINT_WIZARD* footprintWizard = wizardSelector.GetWizard();
 
     if( footprintWizard )
     {
@@ -169,8 +164,8 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
     }
     else
     {
-        m_wizardName = wxT( "" );
-        m_wizardDescription = wxT( "" );
+        m_wizardName.Empty();
+        m_wizardDescription.Empty();
     }
 
     ReloadFootprint();
@@ -207,7 +202,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
     wxArrayString   arr;
     wxArrayString   ptList = footprintWizard->GetParameterTypes( page );
 
-    for( int i = 0; i<n; i++ )
+    for( int i = 0; i < n; i++ )
     {
         wxString value = m_parameterGrid->GetCellValue( i, 1 );
 

@@ -19,22 +19,20 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_footprintWizardsGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_footprintWizardsGrid->CreateGrid( 0, 3 );
+	m_footprintWizardsGrid->CreateGrid( 0, 2 );
 	m_footprintWizardsGrid->EnableEditing( false );
 	m_footprintWizardsGrid->EnableGridLines( true );
 	m_footprintWizardsGrid->EnableDragGridSize( false );
 	m_footprintWizardsGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_footprintWizardsGrid->SetColSize( 0, 80 );
-	m_footprintWizardsGrid->SetColSize( 1, 80 );
-	m_footprintWizardsGrid->SetColSize( 2, 325 );
+	m_footprintWizardsGrid->SetColSize( 0, 160 );
+	m_footprintWizardsGrid->SetColSize( 1, 325 );
 	m_footprintWizardsGrid->EnableDragColMove( false );
 	m_footprintWizardsGrid->EnableDragColSize( true );
 	m_footprintWizardsGrid->SetColLabelSize( 20 );
-	m_footprintWizardsGrid->SetColLabelValue( 0, _("Preview") );
-	m_footprintWizardsGrid->SetColLabelValue( 1, _("Name") );
-	m_footprintWizardsGrid->SetColLabelValue( 2, _("Description") );
+	m_footprintWizardsGrid->SetColLabelValue( 0, _("Name") );
+	m_footprintWizardsGrid->SetColLabelValue( 1, _("Description") );
 	m_footprintWizardsGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
 	
 	// Rows
@@ -51,8 +49,8 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	
 	bSizerMain->Add( m_footprintWizardsGrid, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerMain->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -71,15 +69,11 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	
 	// Connect Events
 	m_footprintWizardsGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCellWizardClick ), NULL, this );
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnOpenButtonClick ), NULL, this );
 }
 
 DIALOG_FOOTPRINT_WIZARD_LIST_BASE::~DIALOG_FOOTPRINT_WIZARD_LIST_BASE()
 {
 	// Disconnect Events
 	m_footprintWizardsGrid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCellWizardClick ), NULL, this );
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnOpenButtonClick ), NULL, this );
 	
 }

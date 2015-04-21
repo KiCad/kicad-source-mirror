@@ -25,7 +25,7 @@
  */
 
 /**
- * @file modview_frame.cpp
+ * @file footprint_wizard_frame.cpp
  */
 
 #include <fctsys.h>
@@ -40,7 +40,6 @@
 #include <class_module.h>
 #include <module_editor_frame.h>
 
-#include <pcbnew.h>
 #include <pcbnew_id.h>
 #include "footprint_wizard_frame.h"
 #include <footprint_info.h>
@@ -93,26 +92,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
-/*
- * This emulates the zoom menu entries found in the other KiCad applications.
- * The library viewer does not have any menus so add an accelerator table to
- * the main frame.
- */
-static wxAcceleratorEntry accels[] =
-{
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F1,    ID_ZOOM_IN ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F2,    ID_ZOOM_OUT ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F3,    ID_ZOOM_REDRAW ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F4,    ID_POPUP_ZOOM_CENTER ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_HOME,  ID_ZOOM_PAGE ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_SPACE, ID_SET_RELATIVE_OFFSET )
-};
-
-#define ACCEL_TABLE_CNT ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
-
-#define EXTRA_BORDER_SIZE 2
-
-
 #define FOOTPRINT_WIZARD_FRAME_NAME wxT( "FootprintWizard" )
 
 FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
@@ -126,8 +105,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     if( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD_MODAL )
         SetModal( true );
-
-    wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_configPath    = wxT( "FootprintWizard" );
     m_showAxis      = true;    // true to draw axis.
@@ -175,9 +152,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     ReCreatePageList();
 
     DisplayWizardInfos();
-
-    if( m_canvas )
-        m_canvas->SetAcceleratorTable( table );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -230,7 +204,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     Show( true );
 
-    this->SelectFootprintWizard();
+    SelectFootprintWizard();
 }
 
 
