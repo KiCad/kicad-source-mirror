@@ -323,12 +323,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
                 "You have run Pcbnew for the first time using the "
                 "new footprint library table method for finding footprints.\n"
                 "Pcbnew has either copied the default "
-                "table or created an empty table in the kicad configuration "
-                "folder.\n"
+                "table or created an empty table in the kicad configuration folder.\n"
                 "You must first configure the library "
-                "table to include all footprint libraries not "
-                "included with KiCad.\n"
-                "See the \"Footprint Library  Table\" section of"
+                "table to include all footprint libraries you want to use.\n"
+                "See the \"Footprint Library  Table\" section of "
                 "the CvPcb or Pcbnew documentation for more information." ) );
         }
     }
