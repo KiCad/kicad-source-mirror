@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-22 13:26+0100\n"
-"PO-Revision-Date: 2015-04-22 13:26+0100\n"
+"POT-Creation-Date: 2015-04-22 14:47+0100\n"
+"PO-Revision-Date: 2015-04-22 14:47+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -21523,7 +21523,7 @@ msgstr "Regolatore a tre terminali"
 
 #: pagelayout_editor/pl_editor_frame.cpp:115
 msgid "coord origin: Right Bottom page corner"
-msgstr "origine coordinate: angolo inferiore destro"
+msgstr "origine coordinate: angolo basso a dx pagina"
 
 #: pagelayout_editor/pl_editor_frame.cpp:147
 msgid "Design"
