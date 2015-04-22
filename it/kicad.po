@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-20 20:11+0100\n"
-"PO-Revision-Date: 2015-04-20 20:11+0100\n"
+"POT-Creation-Date: 2015-04-22 08:27+0100\n"
+"PO-Revision-Date: 2015-04-22 08:27+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -682,7 +682,7 @@ msgstr "<html><h1>Selezione modelli</h1></html>"
 msgid "Ref."
 msgstr "Rif."
 
-#: pcbnew/class_text_mod.cpp:380 pcbnew/footprint_wizard_frame.cpp:170
+#: pcbnew/class_text_mod.cpp:380 pcbnew/footprint_wizard_frame.cpp:147
 #: pcbnew/class_edge_mod.cpp:261
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
@@ -1320,15 +1320,15 @@ msgstr "Testo non consentito su strato di taglio scheda"
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Dimensioni non consentite sugli strati in rame o di taglio"
 
-#: pcbnew/footprint_wizard_frame.cpp:120 pcbnew/footprint_wizard.cpp:82
+#: pcbnew/footprint_wizard_frame.cpp:99 pcbnew/footprint_wizard.cpp:78
 msgid "Footprint Wizard"
 msgstr "Assistente impronte"
 
-#: pcbnew/footprint_wizard_frame.cpp:169
+#: pcbnew/footprint_wizard_frame.cpp:146
 msgid "Parameter"
 msgstr "Parametro"
 
-#: pcbnew/footprint_wizard_frame.cpp:171
+#: pcbnew/footprint_wizard_frame.cpp:148
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:35
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:28
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:27 common/draw_frame.cpp:508
@@ -1336,29 +1336,29 @@ msgstr "Parametro"
 msgid "Units"
 msgstr "Unità"
 
-#: pcbnew/footprint_wizard_frame.cpp:553 pcbnew/modview_frame.cpp:640
+#: pcbnew/footprint_wizard_frame.cpp:527 pcbnew/modview_frame.cpp:640
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: visualizzatore 3D [%s]"
 
-#: pcbnew/footprint_wizard_frame.cpp:579
+#: pcbnew/footprint_wizard_frame.cpp:553
 msgid "Select wizard to use"
 msgstr "Seleziona l'assistente da usare"
 
-#: pcbnew/footprint_wizard_frame.cpp:584
+#: pcbnew/footprint_wizard_frame.cpp:558
 msgid "Select previous editable item"
 msgstr "Seleziona il precedente elemento modificabile"
 
-#: pcbnew/footprint_wizard_frame.cpp:588
+#: pcbnew/footprint_wizard_frame.cpp:562
 msgid "Select next editable item"
 msgstr "Seleziona il successivo elemento modificabile"
 
-#: pcbnew/footprint_wizard_frame.cpp:593 pcbnew/tool_modview.cpp:76
+#: pcbnew/footprint_wizard_frame.cpp:567 pcbnew/tool_modview.cpp:76
 #: pcbnew/tool_modview.cpp:178 pcbnew/menubar_modedit.cpp:237
 msgid "Show footprint in 3D viewer"
 msgstr "Mostra impronta nel visualizzatore 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:596 pcbnew/tool_modview.cpp:79
+#: pcbnew/footprint_wizard_frame.cpp:570 pcbnew/tool_modview.cpp:79
 #: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:231
 #: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:72
 #: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
@@ -1366,7 +1366,7 @@ msgstr "Mostra impronta nel visualizzatore 3D"
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:601 pcbnew/tool_modview.cpp:84
+#: pcbnew/footprint_wizard_frame.cpp:575 pcbnew/tool_modview.cpp:84
 #: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:233
 #: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:75
 #: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
@@ -1374,21 +1374,21 @@ msgstr "Ingrandisci"
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:606 pcbnew/tool_modview.cpp:89
+#: pcbnew/footprint_wizard_frame.cpp:580 pcbnew/tool_modview.cpp:89
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:235
 #: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:79
 #: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
 msgid "Redraw view"
 msgstr "Aggiorna vista"
 
-#: pcbnew/footprint_wizard_frame.cpp:611 pcbnew/tool_modview.cpp:94
+#: pcbnew/footprint_wizard_frame.cpp:585 pcbnew/tool_modview.cpp:94
 #: pcbnew/tool_modedit.cpp:133 common/zoom.cpp:237
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:87
 msgid "Zoom auto"
 msgstr "Inquadra tutto"
 
-#: pcbnew/footprint_wizard_frame.cpp:622
+#: pcbnew/footprint_wizard_frame.cpp:596
 msgid "Add footprint to board"
 msgstr "Aggiungi impronta alla scheda"
 
@@ -3000,7 +3000,7 @@ msgid "Nickname"
 msgstr "Denominazione"
 
 #: pcbnew/librairi.cpp:791 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
-#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
+#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: common/dialog_about/AboutDialog_main.cpp:143 eeschema/viewlibs.cpp:308
 #: eeschema/libedit.cpp:510 eeschema/sch_component.cpp:1524
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
@@ -3090,11 +3090,11 @@ msgstr "Non trovato"
 msgid "Zone Outline %s on %s"
 msgstr "Contorno zona %s su %s"
 
-#: pcbnew/footprint_wizard.cpp:88
+#: pcbnew/footprint_wizard.cpp:84
 msgid "no wizard selected"
 msgstr "nessun assistente selezionato"
 
-#: pcbnew/footprint_wizard.cpp:134
+#: pcbnew/footprint_wizard.cpp:130
 msgid "Couldn't reload footprint wizard"
 msgstr "Impossibile ricaricare l'assistente impronte"
 
@@ -3960,7 +3960,27 @@ msgstr "Segmento"
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Elemento grafico: %s, lunghezza %s su %s"
 
-#: pcbnew/pcbnew.cpp:335 cvpcb/cvpcb.cpp:214
+#: pcbnew/pcbnew.cpp:323
+msgid ""
+"You have run Pcbnew for the first time using the new footprint library table "
+"method for finding footprints.\n"
+"Pcbnew has either copied the default table or created an empty table in the "
+"kicad configuration folder.\n"
+"You must first configure the library table to include all footprint "
+"libraries you want to use.\n"
+"See the \"Footprint Library  Table\" section of the CvPcb or Pcbnew "
+"documentation for more information."
+msgstr ""
+"È necessario eseguire CvPcb per la prima volta usando il nuovo metodo "
+"tabella librerie impronte per rilevare le impronte.\n"
+"CvPcb ha copiato la tabella predefinita o creato una tabella vuota nella "
+"cartella utente.\n"
+"Bisogna configurare la tabella librerie per includere tutte le librerie "
+"impronte non incluse in KiCad.\n"
+"Consultare la sezione \"Tabella librerie impronte\" della documentazione di "
+"CvPcb per ulteriori informazioni."
+
+#: pcbnew/pcbnew.cpp:336 cvpcb/cvpcb.cpp:214
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -8507,7 +8527,6 @@ msgstr "Opzioni di stampa"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
-#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: eeschema/dialogs/dialog_print_using_printer.cpp:265
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:102
@@ -8706,7 +8725,7 @@ msgid "Browse"
 msgstr "Esplora"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:342
-#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:36
+#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
 #: common/dialogs/dialog_env_var_config_base.cpp:35 eeschema/libedit.cpp:479
 #: eeschema/lib_pin.cpp:1968
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:151
@@ -22098,7 +22117,7 @@ msgstr "Isolamento delle piazzole per le maschere"
 msgid "Export IDFv3"
 msgstr "Esporta IDFv3"
 
-#: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:53
+#: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:51
 msgid "Footprint Wizards"
 msgstr "Assistenti impronte"
 
