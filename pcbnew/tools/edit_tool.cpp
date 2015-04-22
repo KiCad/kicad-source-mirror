@@ -848,7 +848,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     DIALOG_CREATE_ARRAY dialog( editFrame, rotPoint, &array_opts );
     int ret = dialog.ShowModal();
 
-    if( ret == DIALOG_CREATE_ARRAY::CREATE_ARRAY_OK && array_opts != NULL )
+    if( ret == wxID_OK && array_opts != NULL )
     {
         PICKED_ITEMS_LIST newItemList;
 

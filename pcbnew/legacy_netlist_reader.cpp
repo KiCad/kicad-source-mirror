@@ -34,7 +34,6 @@
 #include <pcb_netlist.h>
 #include <netlist_reader.h>
 
-
 void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
 {
     int state            = 0;

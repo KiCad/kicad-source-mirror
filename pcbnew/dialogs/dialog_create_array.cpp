@@ -133,12 +133,6 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 }
 
 
-void DIALOG_CREATE_ARRAY::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( CREATE_ARRAY_ABORT );
-}
-
-
 static const std::string& alphabetFromNumberingScheme(
         DIALOG_CREATE_ARRAY::ARRAY_NUMBERING_TYPE_T type )
 {
@@ -318,7 +312,7 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
 
         ReadConfigFromControls();
 
-        EndModal( CREATE_ARRAY_OK );
+        EndModal( wxID_OK );
     }
 }
 
@@ -359,11 +353,10 @@ void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
     centre.x = DoubleValueFromString( g_UserUnit, m_entryCentreX->GetValue() );
     centre.y = DoubleValueFromString( g_UserUnit, m_entryCentreY->GetValue() );
 
-    // FInd the radius, etc of the circle
+    // Find the radius, etc of the circle
     centre -= m_originalItemPosition;
 
     const double radius = VECTOR2I(centre.x, centre.y).EuclideanNorm();
-
     m_labelCircRadiusValue->SetLabelText( StringFromValue( g_UserUnit, int(radius), true ) );
 }
 

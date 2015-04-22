@@ -172,12 +172,6 @@ class DIALOG_CREATE_ARRAY : public DIALOG_CREATE_ARRAY_BASE,
 {
 public:
 
-    enum CREATE_ARRAY_EDIT_T
-    {
-        CREATE_ARRAY_ABORT,     ///< if not changed or error
-        CREATE_ARRAY_OK,        ///< if successfully changed
-    };
-
     enum ARRAY_TYPE_T
     {
         ARRAY_GRID,         ///< A grid (x*y) array
@@ -312,7 +306,6 @@ private:
 
     // Event callbacks
     void    OnParameterChanged( wxCommandEvent& event );
-    void    OnCancelClick( wxCommandEvent& event );
     void    OnOkClick( wxCommandEvent& event );
 
     // Internal callback handlers

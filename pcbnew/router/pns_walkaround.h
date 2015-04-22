@@ -42,6 +42,11 @@ public:
         m_forceWinding = false;
         m_cursorApproachMode = false;
         m_itemMask = PNS_ITEM::ANY;
+
+        // Initialize other members, to avoid uninitialized variables.
+        m_recursiveBlockageCount = 0;
+        m_iteration = 0;
+        m_forceCw = false;
     }
 
     ~PNS_WALKAROUND() {};

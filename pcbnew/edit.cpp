@@ -1612,7 +1612,7 @@ void PCB_BASE_EDIT_FRAME::createArray()
     DIALOG_CREATE_ARRAY dialog( this, rotPoint, &array_opts );
     int ret = dialog.ShowModal();
 
-    if( ret == DIALOG_CREATE_ARRAY::CREATE_ARRAY_OK && array_opts != NULL )
+    if( ret == wxID_OK && array_opts != NULL )
     {
         PICKED_ITEMS_LIST newItemsList;
 
