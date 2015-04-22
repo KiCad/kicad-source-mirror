@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -469,27 +469,58 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
 
     if( repo.HasServer() && repo.HasPath() )
     {
-        // goal: "https://github.com/liftoff-sr/pretty_footprints/archive/master.zip"
-        wxString    zip_url( wxT( "https://" ) );
+        // scheme might be "http" or if truly github.com then "https".
+        wxString    zip_url( repo.GetScheme() + "://"  );
 
-#if 0   // Github issues a redirect for this "master.zip".  i.e.
-        //  "https://github.com/liftoff-sr/pretty_footprints/archive/master.zip"
-        // would be redirected to:
-        //  "https://codeload.github.com/liftoff-sr/pretty_footprints/zip/master"
-
-        // The alternate code path below uses the redirected URL on first attempt
-        // to save one HTTP GET hit.  avhttp does the redirect behind the scenes normally.
-
-        zip_url += repo.GetServer();
-        zip_url += repo.GetPath();
-        zip_url += wxT( '/' );
-        zip_url += wxT( "archive/master.zip" );
+        if( repo.GetServer() == "github.com" )
+        {
+#if 0       // A proper code path would be this one, but it is not the fastest.
+            zip_url += repo.GetServer();
+            zip_url += repo.GetPath();      // path comes with a leading '/'
+            zip_url += '/';
+            zip_url += "archive/master.zip";
 #else
-        zip_url += wxT( "codeload.github.com" );
-        zip_url += repo.GetPath();
-        zip_url += wxT( '/' );
-        zip_url += wxT( "zip/master" );
+            // Github issues a redirect for the "master.zip".  i.e.
+            //  "https://github.com/liftoff-sr/pretty_footprints/archive/master.zip"
+            // would be redirected to:
+            //  "https://codeload.github.com/liftoff-sr/pretty_footprints/zip/master"
+
+            // In order to bypass this redirect, saving time, we use the
+            // redirected URL on first attempt to save one HTTP GET hit.
+            // avhttp would do the redirect behind the scenes normally, but that would
+            // be slower than doing this bypass.
+            zip_url += "codeload.github.com";
+            zip_url += repo.GetPath();      // path comes with a leading '/'
+            zip_url += '/';
+            zip_url += "zip/master";
 #endif
+        }
+        else
+        {
+            // This is the generic code path for any server which can serve
+            // up zip files which is not github.com. The schemes tested include:
+            // http and https, I don't know what the avhttp library supports beyond that.
+
+            // zip_url goal: "<scheme>://<server>[:<port>]/<path>"
+
+            // Remember that <scheme>, <server>, <port> if present, and <path> all came
+            // from the lib_path in the fp-lib-table row.
+
+            zip_url += repo.GetServer();
+
+            if( repo.HasPort() )
+            {
+                zip_url += ':';
+                zip_url += repo.GetPort();
+            }
+
+            zip_url += repo.GetPath();      // path comes with a leading '/'
+
+            // Do not modify the path, we cannot anticipate the needs of all
+            // servers which are serving up zip files directly.  URL modifications
+            // are more generally done in the server, rather than contaminating
+            // this code path with the needs of one particular inflexible server.
+        }
 
         *aZipURL = zip_url.utf8_str();
         return true;
@@ -533,7 +564,7 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
     catch( boost::system::system_error& e )
     {
         // https "GET" has faild, report this to API caller.
-        static const char errorcmd[] = "https GET command failed";  // Do not translate this message
+        static const char errorcmd[] = "http GET command failed";  // Do not translate this message
 
         UTF8 fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
 
@@ -550,9 +581,9 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
     }
 }
 
-// This GITHUB_GETLIBLIST method should not be here, but in github_getliblist.cpp!
+// This GITHUB_GETLIBLIST method should not be here, but in github_getliblist.cpp !
 // However it is here just because we need to include <avhttp.hpp> to compile it.
-// and if we include avhttp in 2 .cpp files, the link fails becuse it detects duplicate
+// and when we include avhttp in two .cpp files, the link fails because it detects duplicate
 // avhttp functions.
 // So until it is fixed, this code is here.
 bool GITHUB_GETLIBLIST::remote_get_json( std::string* aFullURLCommand, wxString* aMsgError )
