@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-22 08:27+0100\n"
-"PO-Revision-Date: 2015-04-22 08:27+0100\n"
+"PO-Revision-Date: 2015-04-22 08:49+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -21747,23 +21747,23 @@ msgstr ""
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:107
 msgid "Left Top paper corner"
-msgstr "Angolo alto a sinistra"
+msgstr "angolo alto sx carta"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:108
 msgid "Right Bottom page corner"
-msgstr "Angolo inferiore destro"
+msgstr "angolo basso dx pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:109
 msgid "Left Bottom page corner"
-msgstr "Angolo inferiore sinistro"
+msgstr "angolo basso sx pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:110
 msgid "Right Top page corner"
-msgstr "Angolo superiore destro"
+msgstr "angolo alto dx pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:111
 msgid "Left Top page corner"
-msgstr "Angolo superiore sinistro"
+msgstr "angolo alto sx pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:118
 msgid " Origin of coordinates displayed to the status bar"
