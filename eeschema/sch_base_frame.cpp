@@ -28,6 +28,9 @@
 #include <base_units.h>
 #include <kiway.h>
 
+// Sttaic members:
+
+
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
         FRAME_T aWindowType, const wxString& aTitle,
         const wxPoint& aPosition, const wxSize& aSize, long aStyle,
@@ -35,10 +38,12 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,
             aSize, aStyle, aFrameName )
 {
-    m_zoomLevelCoeff = 11.0;     // Adjusted to roughly displays zoom level = 1
+    m_zoomLevelCoeff = 11.0;    // Adjusted to roughly displays zoom level = 1
                                 // when the screen shows a 1:1 image
                                 // obviously depends on the monitor,
                                 // but this is an acceptable value
+    m_repeatStep = wxPoint( DEFAULT_REPEAT_OFFSET_X, DEFAULT_REPEAT_OFFSET_Y );
+    m_repeatDeltaLabel = DEFAULT_REPEAT_LABEL_INC;
 }
 
 

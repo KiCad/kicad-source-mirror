@@ -31,12 +31,17 @@
 #include <class_base_screen.h>
 
 #include <dialog_libedit_options.h>
+#include <libeditframe.h>
 
 
-DIALOG_LIBEDIT_OPTIONS::DIALOG_LIBEDIT_OPTIONS( wxWindow* parent ) :
+DIALOG_LIBEDIT_OPTIONS::DIALOG_LIBEDIT_OPTIONS( LIB_EDIT_FRAME* parent ) :
     DIALOG_LIBEDIT_OPTIONS_BASE( parent )
 {
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
+
+    SetRepeatLabelInc( Parent()->GetRepeatDeltaLabel() );
+    SetItemRepeatStep( Parent()->GetRepeatStep() );
+    SetPinRepeatStep( Parent()->GetRepeatPinStep() );
 }
 
 void DIALOG_LIBEDIT_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id )

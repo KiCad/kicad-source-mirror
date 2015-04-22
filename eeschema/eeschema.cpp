@@ -48,13 +48,10 @@
 
 #include <kiway.h>
 
-
-// Global variables
-wxSize  g_RepeatStep;
-int     g_RepeatDeltaLabel;
-int     g_DefaultBusWidth;
+// The main sheet of the project
 SCH_SHEET*  g_RootSheet = NULL;
 
+// a transform matrix, to display components in lib editor
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 
 

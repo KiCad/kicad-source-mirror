@@ -119,6 +119,9 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     ///  Default pin length
     static int m_defaultPinLength;
 
+    /// Default repeat offset for pins in repeat place pin
+    int m_repeatPinStep;
+
     static wxSize m_clientSize;
 
     friend class DIALOG_LIB_EDIT_TEXT;
@@ -172,7 +175,20 @@ public:
 
     /** Set the default pin len.
      */
-     static void SetDefaultPinLength( int aLength ) { m_defaultPinLength = aLength; }
+    static void SetDefaultPinLength( int aLength ) { m_defaultPinLength = aLength; }
+
+    /**
+     * @return the increment value of the position of a pin
+     * for the pin repeat command
+     */
+    int GetRepeatPinStep() const { return m_repeatPinStep; }
+
+    /**
+     * Sets the repeat step value for pins repeat command
+     * @param aStep the increment value of the position of an item
+     * for the repeat command
+     */
+    void SetRepeatPinStep( int aStep) { m_repeatPinStep = aStep; }
 
 
     void ReCreateMenuBar();

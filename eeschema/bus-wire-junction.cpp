@@ -443,10 +443,10 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     }
     else
     {
-        my_clone->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
+        my_clone->Move( GetRepeatStep() );
 
         if( my_clone->CanIncrementLabel() )
-            ( (SCH_TEXT*) my_clone )->IncrementLabel();
+            ( (SCH_TEXT*) my_clone )->IncrementLabel( GetRepeatDeltaLabel() );
 
         GetScreen()->Append( my_clone );
         GetScreen()->TestDanglingEnds();

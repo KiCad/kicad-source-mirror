@@ -292,9 +292,9 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
 
 /* Function to increment bus label members numbers,
  * i.e. when a text is ending with a number, adds
- * <RepeatDeltaLabel> to this number
+ * aIncrement to this number
  */
-void IncrementLabelMember( wxString& name )
+void IncrementLabelMember( wxString& name, int aIncrement )
 {
     int  ii, nn;
     long number = 0;
@@ -314,7 +314,7 @@ void IncrementLabelMember( wxString& name )
 
     if( litt_number.ToLong( &number ) )
     {
-        number += g_RepeatDeltaLabel;
+        number += aIncrement;
         name.Remove( ii ); name << number;
     }
 }

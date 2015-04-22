@@ -134,7 +134,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText16->Wrap( -1 );
 	fgSizer1->Add( m_staticText16, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
-	m_spinRepeatLabel = new wxSpinCtrl( m_panel1, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 10, 1 );
+	m_spinRepeatLabel = new wxSpinCtrl( m_panel1, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -10, 10, 1 );
 	fgSizer1->Add( m_spinRepeatLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	
@@ -213,7 +213,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel1->SetSizer( p1mainSizer );
 	m_panel1->Layout();
 	p1mainSizer->Fit( m_panel1 );
-	m_notebook->AddPage( m_panel1, _("General Options"), false );
+	m_notebook->AddPage( m_panel1, _("General Options"), true );
 	m_panel2 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
@@ -258,7 +258,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Template Field Names"), true );
+	m_notebook->AddPage( m_panel2, _("Template Field Names"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	

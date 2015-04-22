@@ -47,6 +47,13 @@ class SCHLIB_FILTER;
  */
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
+protected:
+    wxPoint  m_repeatStep;          ///< the increment value of the position of an item
+                                    ///< when it is repeated
+    int      m_repeatDeltaLabel;    ///< the increment value of labels like bus members
+                                    ///< when they are repeated
+
+
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
                     FRAME_T aWindowType,
@@ -55,6 +62,33 @@ public:
                     long aStyle, const wxString & aFrameName );
 
     SCH_SCREEN* GetScreen() const;                              // overload EDA_DRAW_FRAME
+
+    /**
+     * @return the increment value of the position of an item
+     * for the repeat command
+     */
+    const wxPoint GetRepeatStep() const { return m_repeatStep; }
+
+    /**
+     * Sets the repeat step value for repeat command
+     * @param aStep the increment value of the position of an item
+     * for the repeat command
+     */
+    void SetRepeatStep( const wxPoint& aStep) { m_repeatStep = aStep; }
+
+    /**
+     * @return the increment value of labels like bus members
+     * for the repeat command
+     */
+    int GetRepeatDeltaLabel() const { return m_repeatDeltaLabel; }
+
+    /**
+     * Sets the repeat delta label value for repeat command
+     * @param aDelta the increment value of labels like bus members
+     * for the repeat command
+     */
+    void SetRepeatDeltaLabel( int aDelta ) { m_repeatDeltaLabel = aDelta; }
+
 
     /**
      * Function GetZoomLevelIndicator

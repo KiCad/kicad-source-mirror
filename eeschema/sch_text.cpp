@@ -46,7 +46,7 @@
 #include <class_netlist_object.h>
 
 
-extern void IncrementLabelMember( wxString& name );
+extern void IncrementLabelMember( wxString& name, int aIncrement );
 
 
 /* Names of sheet label types. */
@@ -131,9 +131,9 @@ EDA_ITEM* SCH_TEXT::Clone() const
 }
 
 
-void SCH_TEXT::IncrementLabel()
+void SCH_TEXT::IncrementLabel( int aIncrement )
 {
-    IncrementLabelMember( m_Text );
+    IncrementLabelMember( m_Text, aIncrement );
 }
 
 

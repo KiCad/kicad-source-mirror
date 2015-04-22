@@ -57,7 +57,7 @@
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
 
-static int s_defaultBusThickness = 15;
+static int s_defaultBusThickness = DEFAULTBUSTHICKNESS;
 
 int GetDefaultBusThickness()
 {
@@ -93,7 +93,7 @@ void SetDefaultTextSize( int aTextSize )
  * Default line (in Eeschema units) thickness used to draw/plot items having a
  * default thickness line value (i.e. = 0 ).
  */
-static int s_drawDefaultLineThickness;
+static int s_drawDefaultLineThickness  = DEFAULTDRAWLINETHICKNESS;
 
 
 int GetDefaultLineThickness()
@@ -320,9 +320,9 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetBusWidth( GetDefaultBusThickness() );
     dlg.SetLineWidth( GetDefaultLineThickness() );
     dlg.SetTextSize( GetDefaultTextSize() );
-    dlg.SetRepeatHorizontal( g_RepeatStep.x );
-    dlg.SetRepeatVertical( g_RepeatStep.y );
-    dlg.SetRepeatLabel( g_RepeatDeltaLabel );
+    dlg.SetRepeatHorizontal( GetRepeatStep().x );
+    dlg.SetRepeatVertical( GetRepeatStep().y );
+    dlg.SetRepeatLabel( GetRepeatDeltaLabel() );
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
     dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator(),
                            LIB_PART::GetSubpartFirstId() );
@@ -367,15 +367,11 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
         saveProjectConfig = true;
     }
 
-    if( g_RepeatStep.x != dlg.GetRepeatHorizontal() ||
-        g_RepeatStep.y != dlg.GetRepeatVertical() ||
-        g_RepeatDeltaLabel != dlg.GetRepeatLabel() )
-    {
-        g_RepeatStep.x = dlg.GetRepeatHorizontal();
-        g_RepeatStep.y = dlg.GetRepeatVertical();
-        g_RepeatDeltaLabel = dlg.GetRepeatLabel();
-        saveProjectConfig = true;
-    }
+    wxPoint step;
+    step.x = dlg.GetRepeatHorizontal();
+    step.y = dlg.GetRepeatVertical();
+    SetRepeatStep( step );
+    SetRepeatDeltaLabel( dlg.GetRepeatLabel() );
 
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
@@ -441,15 +437,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
     m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceUseNetNumbers" ),
                                                     &m_spiceNetlistUseNetcodeAsNetname, false ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_X" ),
-                                                      &g_RepeatStep.x,
-                                                      0, -1000, +1000 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_Y" ),
-                                                      &g_RepeatStep.y,
-                                                      100, -1000, +1000 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptLab" ),
-                                                      &g_RepeatDeltaLabel,
-                                                      1, -10, +10 ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
                                                       &s_defaultTextSize,
                                                       DEFAULT_SIZE_TEXT, 5,
@@ -545,6 +532,10 @@ static const wxChar lastLibImportPathEntry[] =      wxT( "LastLibraryImportPath"
 static const wxChar defaultPinNumSizeEntry[] =      wxT( "LibeditPinNumSize" );
 static const wxChar defaultPinNameSizeEntry[] =     wxT( "LibeditPinNameSize" );
 static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );
+static const wxChar repeatLibLabelIncEntry[] =      wxT( "LibeditRepeatLabelInc" );
+static const wxChar pinRepeatStepEntry[] =          wxT( "LibeditPinRepeatStep" );
+static const wxChar repeatLibStepXEntry[] =         wxT( "LibeditRepeatStepX" );
+static const wxChar repeatLibStepYEntry[] =         wxT( "LibeditRepeatStepY" );
 
 
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
@@ -562,6 +553,19 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintSheetReferenceAndTitleBlock" ),
                                                     &m_printSheetReference, true ) );
 
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RepeatStepX" ),
+                                                      &m_repeatStep.x,
+                                                      DEFAULT_REPEAT_OFFSET_X,
+                                                      -REPEAT_OFFSET_MAX,
+                                                      REPEAT_OFFSET_MAX ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RepeatStepY" ),
+                                                      &m_repeatStep.y,
+                                                      DEFAULT_REPEAT_OFFSET_Y,
+                                                      -REPEAT_OFFSET_MAX,
+                                                      REPEAT_OFFSET_MAX ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RepeatLabelIncrement" ),
+                                                      &m_repeatDeltaLabel,
+                                                      DEFAULT_REPEAT_LABEL_INC, -10, +10 ) );
     return m_configSettings;
 }
 
@@ -746,6 +750,12 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetDefaultPinLength( aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
     m_textPinNumDefaultSize = aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
     m_textPinNameDefaultSize = aCfg->Read( defaultPinNameSizeEntry, DEFAULTPINNAMESIZE );
+    SetRepeatDeltaLabel( aCfg->Read( repeatLibLabelIncEntry, DEFAULT_REPEAT_LABEL_INC ) );
+    SetRepeatPinStep( aCfg->Read( pinRepeatStepEntry, DEFAULT_REPEAT_OFFSET_PIN ) );
+    wxPoint step;
+    step.x = aCfg->Read( repeatLibStepXEntry, (long)DEFAULT_REPEAT_OFFSET_X );
+    step.y = aCfg->Read( repeatLibStepYEntry, (long)DEFAULT_REPEAT_OFFSET_Y );
+    SetRepeatStep( step );
 }
 
 
@@ -758,9 +768,14 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
     aCfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
     aCfg->Write( DefaultPinLengthEntry, (long) GetDefaultPinLength() );
-    aCfg->Write( defaultPinNumSizeEntry, (long) m_textPinNumDefaultSize );
-    aCfg->Write( defaultPinNameSizeEntry, (long) m_textPinNameDefaultSize );
+    aCfg->Write( defaultPinNumSizeEntry, (long) GetPinNumDefaultSize() );
+    aCfg->Write( defaultPinNameSizeEntry, (long) GetPinNameDefaultSize() );
+    aCfg->Write( repeatLibLabelIncEntry, (long) GetRepeatDeltaLabel() );
+    aCfg->Write( pinRepeatStepEntry, (long) GetRepeatPinStep() );
+    aCfg->Write( repeatLibStepXEntry, (long) GetRepeatStep().x );
+    aCfg->Write( repeatLibStepYEntry, (long) GetRepeatStep().y );
 }
+
 
 void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 {
@@ -790,6 +805,9 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     m_textPinNumDefaultSize = dlg.GetPinNumSize();
     m_textPinNameDefaultSize = dlg.GetPinNameSize();
     SetGridVisibility( dlg.GetShowGrid() );
+    SetRepeatPinStep( dlg.GetPinRepeatStep() );
+    SetRepeatStep( dlg.GetItemRepeatStep() );
+    SetRepeatDeltaLabel( dlg.GetRepeatLabelInc() );
 
     SaveSettings( config() );  // save values shared by eeschema applications.
 

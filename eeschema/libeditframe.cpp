@@ -194,6 +194,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_drawSpecificUnit    = false;
     m_HotkeysZoomAndGridList = g_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
+    m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
 
     // Delayed initialization
     if( m_textSize == -1 )

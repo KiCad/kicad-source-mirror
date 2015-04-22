@@ -54,16 +54,27 @@ class DIALOG_LIBEDIT_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText9;
 		wxSpinCtrl* m_spinPinNameSize;
 		wxStaticText* m_staticRepeatXUnits;
+		wxStaticText* m_staticText11;
+		wxSpinCtrl* m_spinRepeatHorizontal;
+		wxStaticText* m_staticText12;
+		wxStaticText* m_staticText13;
+		wxSpinCtrl* m_spinRepeatVertical;
+		wxStaticText* m_staticText14;
+		wxStaticText* m_staticText15;
+		wxChoice* m_choicePinDisplacement;
+		wxStaticText* m_staticText16;
+		wxStaticText* m_staticText17;
+		wxSpinCtrl* m_spinRepeatLabel;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkShowGrid;
 		wxStaticLine* m_staticline2;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 	
 	public:
 		
-		DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 492,244 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 492,403 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIBEDIT_OPTIONS_BASE();
 	
 };

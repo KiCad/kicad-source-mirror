@@ -98,9 +98,11 @@ public:
 
     /**
      * Function IncrementLabel
-     * increments the label text.
+     * increments the label text, if it ends with a number.
+     * @param aIncrement = the increment value to add to the number
+     * ending the text
      */
-    void IncrementLabel();
+    void IncrementLabel( int aIncrement );
 
     /**
      * Function SetOrientation

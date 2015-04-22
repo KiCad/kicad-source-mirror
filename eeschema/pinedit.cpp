@@ -46,7 +46,7 @@
 #include <dialog_lib_edit_pin.h>
 
 
-extern void IncrementLabelMember( wxString& name );
+extern void IncrementLabelMember( wxString& name, int aIncrement );
 
 
 static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC );
@@ -572,13 +572,34 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 
     pin->ClearFlags();
     pin->SetFlags( IS_NEW );
-    pin->Move( pin->GetPosition() + wxPoint( g_RepeatStep.x, -g_RepeatStep.y ) );
+    wxPoint step;
+
+    switch( pin->GetOrientation() )
+    {
+    case PIN_UP:
+        step.x = GetRepeatPinStep();
+        break;
+
+    case PIN_DOWN:
+        step.x = GetRepeatPinStep();
+        break;
+
+    case PIN_LEFT:
+        step.y = - GetRepeatPinStep();
+        break;
+
+    case PIN_RIGHT:
+        step.y = - GetRepeatPinStep();
+        break;
+    }
+
+    pin->Move( pin->GetPosition() + step );
     wxString nextName = pin->GetName();
-    IncrementLabelMember( nextName );
+    IncrementLabelMember( nextName, GetRepeatDeltaLabel() );
     pin->SetName( nextName );
 
     pin->PinStringNum( msg );
-    IncrementLabelMember( msg );
+    IncrementLabelMember( msg, GetRepeatDeltaLabel() );
     pin->SetPinNumFromString( msg );
 
     m_drawItem = pin;

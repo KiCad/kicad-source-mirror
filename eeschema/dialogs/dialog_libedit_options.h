@@ -33,10 +33,14 @@
 
 #include <dialog_libedit_options_base.h>
 
+class LIB_EDIT_FRAME;
+
 class DIALOG_LIBEDIT_OPTIONS : public DIALOG_LIBEDIT_OPTIONS_BASE
 {
 public:
-    DIALOG_LIBEDIT_OPTIONS( wxWindow* parent );
+    DIALOG_LIBEDIT_OPTIONS( LIB_EDIT_FRAME* parent );
+
+    LIB_EDIT_FRAME* Parent() { return (LIB_EDIT_FRAME*) GetParent(); }
 
     void SetGridSelection( int select ) { m_choiceGridSize->SetSelection( select ); }
     int GetGridSelection( void ) { return m_choiceGridSize->GetSelection(); }
@@ -56,6 +60,31 @@ public:
 
     void SetPinNameSize( int text_size ) { m_spinPinNameSize->SetValue( text_size ); }
     int GetPinNameSize( void ) { return m_spinPinNameSize->GetValue(); }
+
+    void SetPinRepeatStep( int aValue ) { m_choicePinDisplacement->SetSelection( aValue == 50 ? 1 : 0 ); }
+    int GetPinRepeatStep( void )
+    {
+        return m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100;
+    }
+
+    void SetItemRepeatStep( wxPoint aValue )
+    {
+        m_spinRepeatHorizontal->SetValue( aValue.x );
+        m_spinRepeatVertical->SetValue( aValue.y );
+     }
+    wxPoint GetItemRepeatStep( void )
+    {
+        wxPoint step;
+        step.x = m_spinRepeatHorizontal->GetValue();
+        step.y = m_spinRepeatVertical->GetValue();
+        return step;
+    }
+
+    void SetRepeatLabelInc( int aValue ) { m_spinRepeatLabel->SetValue( aValue ); }
+    int GetRepeatLabelInc( void )
+    {
+        return m_spinRepeatLabel->GetValue();
+    }
 };
 
 #endif // __DIALOG_LIBEDIT_OPTIONS__

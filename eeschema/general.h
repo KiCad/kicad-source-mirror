@@ -37,11 +37,19 @@ class SCH_SHEET;
 #define EESCHEMA_VERSION 2
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
-#define TXTMARGE 10             // Offset in mils for placement of labels and pin numbers
+#define TXTMARGE 10                     // Offset in mils for placement of labels and pin numbers
 #define DANGLING_SYMBOL_SIZE 12
 
+
+#define DEFAULT_REPEAT_OFFSET_X 0       ///< the default X value (overwritten by the eeschema config)
+#define DEFAULT_REPEAT_OFFSET_Y 100     ///< the default Y value (overwritten by the eeschema config)
+#define REPEAT_OFFSET_MAX 1000          ///< the max value of repeat offset value
+#define DEFAULT_REPEAT_LABEL_INC 1      ///< the default value (overwritten by the eeschema config)
+#define DEFAULT_REPEAT_OFFSET_PIN 100   ///< the default value (overwritten by the eeschema config)
+                                        ///< when repeating a pin
+
 ///< The thickness to draw busses that do not have a specific width
-//</ (can be changed in preference menu)
+///< (can be changed in preference menu)
 #define DEFAULTBUSTHICKNESS 12
 
 ///< The thickness to draw lines that thickness is set to 0 (default thickness)
@@ -103,13 +111,10 @@ inline LAYERSCH_ID operator++( LAYERSCH_ID& a )
 /* Rotation, mirror of graphic items in components bodies are handled by a
  * transform matrix.  The default matrix is useful to draw lib entries with
  * using this default matrix ( no rotation, no mirror but Y axis is bottom to top, and
- * Y draw axis is to to bottom so we must have a default matix that reverses
+ * Y draw axis is to to bottom so we must have a default matrix that reverses
  * the Y coordinate and keeps the X coordiate
  */
 extern TRANSFORM DefaultTransform;
-
-extern wxSize   g_RepeatStep;
-extern int      g_RepeatDeltaLabel;
 
 /* First and main (root) screen */
 extern SCH_SHEET*   g_RootSheet;
