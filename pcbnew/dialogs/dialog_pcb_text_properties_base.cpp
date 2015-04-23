@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	bSizer9->Add( m_TextContentCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 6, 4, 0, 0 );
 	fgSizer1->AddGrowableCol( 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->AddGrowableCol( 2 );
@@ -40,82 +40,82 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_SizeXLabel = new wxStaticText( this, wxID_ANY, _("Size X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXLabel->Wrap( -1 );
-	fgSizer1->Add( m_SizeXLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_SizeXLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_PositionXLabel = new wxStaticText( this, wxID_ANY, _("Position X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PositionXLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionXLabel->Wrap( -1 );
-	fgSizer1->Add( m_PositionXLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_PositionXLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	fgSizer1->Add( m_LayerLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticText10 = new wxStaticText( this, wxID_ANY, _("Display:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	fgSizer1->Add( m_staticText10, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_SizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_SizeXCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_SizeXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_PositionXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionXCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_PositionXCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_PositionXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	fgSizer1->Add( m_LayerSelectionCtrl, 0, wxALL, 5 );
+	fgSizer1->Add( m_LayerSelectionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	wxString m_DisplayCtrlChoices[] = { _("Normal"), _("Mirrored") };
 	int m_DisplayCtrlNChoices = sizeof( m_DisplayCtrlChoices ) / sizeof( wxString );
 	m_DisplayCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DisplayCtrlNChoices, m_DisplayCtrlChoices, 0 );
 	m_DisplayCtrl->SetSelection( 0 );
-	fgSizer1->Add( m_DisplayCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_DisplayCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Size Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYLabel->Wrap( -1 );
-	fgSizer1->Add( m_SizeYLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_SizeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_PositionYLabel = new wxStaticText( this, wxID_ANY, _("Position Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PositionYLabel = new wxStaticText( this, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionYLabel->Wrap( -1 );
-	fgSizer1->Add( m_PositionYLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_PositionYLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	fgSizer1->Add( m_staticText9, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticText11 = new wxStaticText( this, wxID_ANY, _("Justification:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	fgSizer1->Add( m_staticText11, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_SizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_SizeYCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_SizeYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_PositionYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionYCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_PositionYCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_PositionYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	wxString m_StyleCtrlChoices[] = { _("Normal"), _("Italic") };
 	int m_StyleCtrlNChoices = sizeof( m_StyleCtrlChoices ) / sizeof( wxString );
 	m_StyleCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_StyleCtrlNChoices, m_StyleCtrlChoices, 0 );
 	m_StyleCtrl->SetSelection( 0 );
-	fgSizer1->Add( m_StyleCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_StyleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	wxString m_justifyChoiceChoices[] = { _("Left"), _("Center"), _("Right") };
 	int m_justifyChoiceNChoices = sizeof( m_justifyChoiceChoices ) / sizeof( wxString );
 	m_justifyChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_justifyChoiceNChoices, m_justifyChoiceChoices, 0 );
 	m_justifyChoice->SetSelection( 0 );
-	fgSizer1->Add( m_justifyChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_justifyChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_ThicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessLabel->Wrap( -1 );
-	fgSizer1->Add( m_ThicknessLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_orientationLabel = new wxStaticText( this, wxID_ANY, _("Orientation (0.1 deg):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_orientationLabel->Wrap( -1 );
-	fgSizer1->Add( m_orientationLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_orientationLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -125,14 +125,14 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_ThicknessCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_ThicknessCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_OrientationCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientationCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_OrientationCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_OrientationCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
-	bSizer9->Add( fgSizer1, 1, wxEXPAND, 5 );
+	bSizer9->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
 	
 	m_StandardSizer = new wxStdDialogButtonSizer();
 	m_StandardSizerOK = new wxButton( this, wxID_OK );
@@ -141,7 +141,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_StandardSizer->AddButton( m_StandardSizerCancel );
 	m_StandardSizer->Realize();
 	
-	bSizer9->Add( m_StandardSizer, 0, wxALIGN_BOTTOM|wxALIGN_RIGHT|wxALL, 5 );
+	bSizer9->Add( m_StandardSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bSizer9, 1, wxALL|wxEXPAND, 5 );
@@ -149,6 +149,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

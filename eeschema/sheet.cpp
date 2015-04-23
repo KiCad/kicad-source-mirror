@@ -239,7 +239,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     aSheet->SetSheetNameSize( ValueFromString( g_UserUnit, dlg.GetSheetNameTextSize() ) );
 
     if( aSheet->GetName().IsEmpty() )
-        aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );
+        aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ),
+                                           (long unsigned) aSheet->GetTimeStamp() ) );
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );

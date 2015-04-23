@@ -64,7 +64,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* fileMenu = new wxMenu;
 
     // Active library selection
-    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB, _("Set Active Library"),
+    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB, _("Set Acti&ve Library"),
                            _( "Select active library" ),
                            KiBitmap( open_library_xpm ) );
     fileMenu->AppendSeparator();
@@ -104,7 +104,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save the currently loaded legacy library as an s-expression library.
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
-                 _( "Save Current Library As..." ),
+                 _( "Save &Current Library As..." ),
                  _( "Save entire current library under a new name." ),
                  KiBitmap( copy_library_xpm ) );
 
@@ -233,7 +233,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     // 3D view
-    text = AddHotkeyName( _( "3&D Viewer" ), g_Module_Editor_Hokeys_Descr, HK_3D_VIEWER );
+    text = AddHotkeyName( _( "&3D Viewer" ), g_Module_Editor_Hokeys_Descr, HK_3D_VIEWER );
     AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME, text, _( "Show footprint in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 

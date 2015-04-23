@@ -106,7 +106,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Quit
     AddMenuItem( filesMenu, wxID_EXIT,
-                 _( "&Quit" ), _( "Quit CvPcb" ),
+                 _( "&Close" ), _( "Close CvPcb" ),
                  KiBitmap( exit_xpm ) );
 
     // Menu Preferences:
@@ -134,7 +134,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Keep open on save
     item = new wxMenuItem( preferencesMenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
-                           _( "Keep Open On Save" ),
+                           _( "&Keep Open On Save" ),
                            _( "Prevent CvPcb from exiting after saving netlist file" ),
                            wxITEM_CHECK );
     preferencesMenu->Append( item );

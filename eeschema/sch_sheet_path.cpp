@@ -202,7 +202,7 @@ wxString SCH_SHEET_PATH::Path() const
     // it's timestamp changes anyway.
     for( unsigned i = 1; i < m_numSheets; i++ )
     {
-        t.Printf( _( "%8.8lX/" ), m_sheets[i]->GetTimeStamp() );
+        t.Printf( _( "%8.8lX/" ), (long unsigned) m_sheets[i]->GetTimeStamp() );
         s = s + t;
     }
 

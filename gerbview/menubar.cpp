@@ -112,7 +112,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Clear all
     AddMenuItem( fileMenu,
                  ID_GERBVIEW_ERASE_ALL,
-                 _( "&Clear All" ),
+                 _( "Clear &All" ),
                  _( "Clear all layers. All data will be deleted" ),
                  KiBitmap( gerbview_clear_layers_xpm ) );
 
@@ -142,8 +142,8 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Exit
     AddMenuItem( fileMenu,
                  wxID_EXIT,
-                 _( "E&xit" ),
-                 _( "Quit GerbView" ),
+                 _( "&Close" ),
+                 _( "Close GerbView" ),
                  KiBitmap( exit_xpm ) );
 
     // Menu for configuration and preferences

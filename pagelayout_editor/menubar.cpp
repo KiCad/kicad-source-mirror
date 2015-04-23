@@ -62,7 +62,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  _( "&New Page Layout Design" ),
                  wxEmptyString, KiBitmap( pagelayout_new_xpm ) );
     AddMenuItem( fileMenu, wxID_OPEN,
-                 _( "Load &Page Layout File" ),
+                 _( "Load Page Layout &File" ),
                  wxEmptyString, KiBitmap(  pagelayout_load_xpm ) );
     AddMenuItem( fileMenu, ID_LOAD_DEFAULT_PAGE_LAYOUT,
                  _( "Load &Default Page Layout" ),
@@ -108,8 +108,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     // Exit
     AddMenuItem( fileMenu, wxID_EXIT,
-                 _( "E&xit" ),
-                 _( "Quit Pl_Editor" ),
+                 _( "&Close" ),
+                 _( "&Close Page Layout Editor" ),
                  KiBitmap( exit_xpm ) );
 
     // Menu for preferences
@@ -155,7 +155,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // About GerbView
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About Pl_Editor" ),
+                 _( "&About Page Layout Editor" ),
                  _( "About page layout description editor" ),
                  KiBitmap( online_help_xpm ) );
 

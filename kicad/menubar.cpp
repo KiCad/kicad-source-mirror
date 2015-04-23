@@ -278,8 +278,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Quit
     AddMenuItem( fileMenu,
                  wxID_EXIT,
-                 _( "&Quit" ),
-                 _( "Quit KiCad" ),
+                 _( "&Close" ),
+                 _( "Close KiCad" ),
                  KiBitmap( exit_xpm ) );
 
     // Menu Browse:

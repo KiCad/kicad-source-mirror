@@ -136,12 +136,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     AddMenuItem( filesMenu, ID_MENU_READ_BOARD_BACKUP_FILE,
-                 _( "Revert to Last" ),
+                 _( "Revert to Las&t" ),
                  _( "Clear board and get previous backup version of board" ),
                  KiBitmap( revert_pcbnew_xpm ) );
 
     AddMenuItem( filesMenu, ID_MENU_RECOVER_BOARD_AUTOSAVE,
-            _( "Rescue" ),
+            _( "Resc&ue" ),
             _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
             KiBitmap( rescue_pcbnew_xpm ) );
     filesMenu->AppendSeparator();
@@ -149,7 +149,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- Fabrication Outputs submenu -----------------------------------------
     wxMenu* fabricationOutputsMenu = new wxMenu;
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
-                 _( "&Footprint Position (.pos) File" ),
+                 _( "Footprint &Position (.pos) File" ),
                  _( "Generate footprint position file for pick and place" ),
                  KiBitmap( post_compo_xpm ) );
 
@@ -269,8 +269,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( library_xpm ) );
 
     filesMenu->AppendSeparator();
-    AddMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit Pcbnew" ),
-                 KiBitmap( exit_xpm ) );
+    AddMenuItem( filesMenu, wxID_EXIT, _( "&Close" ), _( "Close Pcbnew" ), KiBitmap( exit_xpm ) );
 
     //----- Edit menu -----------------------------------------------------------
     wxMenu* editMenu = new wxMenu;
@@ -357,21 +356,21 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "&Switch canvas to default" ), g_Pcbnew_Editor_Hokeys_Descr,
-            HK_CANVAS_DEFAULT );
+                          HK_CANVAS_DEFAULT );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
                  text, _( "Switch the canvas implementation to default" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "&Switch canvas to OpenGL" ), g_Pcbnew_Editor_Hokeys_Descr,
-            HK_CANVAS_OPENGL );
+    text = AddHotkeyName( _( "Switch canvas to Open&GL" ), g_Pcbnew_Editor_Hokeys_Descr,
+                          HK_CANVAS_OPENGL );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "&Switch canvas to Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
-            HK_CANVAS_CAIRO );
+    text = AddHotkeyName( _( "Switch canvas to &Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
+                          HK_CANVAS_CAIRO );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
                  text, _( "Switch the canvas implementation to Cairo" ),
@@ -425,7 +424,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AppendSeparator();
 
     AddMenuItem( placeMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
-                 _( "Drill and Place O&ffset" ),
+                 _( "Drill and &Place Offset" ),
                  _( "Place the origin point for drill and place files" ),
                  KiBitmap( pcb_offset_xpm ) );
 
@@ -437,29 +436,29 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* routeMenu = new wxMenu;
 
     AddMenuItem( routeMenu, ID_TRACK_BUTT,
-                 _( "Single Track" ),
+                 _( "&Single Track" ),
                  _( "Interactively route a single track" ),
                  KiBitmap( add_tracks_xpm ) );
 
     AddMenuItem( routeMenu, ID_DIFF_PAIR_BUTT,
-                 _( "Differential Pair" ),
+                 _( "&Differential Pair" ),
                  _( "Interactively route a differential pair" ),
                  KiBitmap( ps_diff_pair_xpm ) );
 
     routeMenu->AppendSeparator();
 
     AddMenuItem( routeMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT,
-                 _( "Tune Track Length" ),
+                 _( "&Tune Track Length" ),
                  _( "Tune length of a single track" ),
                  KiBitmap( ps_tune_length_xpm ) );
 
     AddMenuItem( routeMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT,
-                 _( "Tune Differential Pair Length" ),
+                 _( "Tune Differential Pair &Length" ),
                  _( "Tune length of a differential pair" ),
                  KiBitmap( ps_diff_pair_tune_length_xpm ) );
 
     AddMenuItem( routeMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT,
-                 _( "Tune Differential Pair Skew/Phase" ),
+                 _( "Tune Differential Pair &Skew/Phase" ),
                  _( "Tune skew/phase of a differential pair" ),
                  KiBitmap( ps_diff_pair_tune_phase_xpm ) );
 
@@ -504,13 +503,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
                  m_show_microwave_tools ?
-                 _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ),
+                 _( "Hide Microwa&ve Toolbar" ): _( "Show Microwave Toolbar" ),
                  HELP_SHOW_HIDE_MICROWAVE_TOOLS,
                  KiBitmap( mw_toolbar_xpm ) );
 
     // General
 #ifdef __WXMAC__
-    configmenu->Append(wxID_PREFERENCES);
+    configmenu->Append( wxID_PREFERENCES );
 #else
     AddMenuItem( configmenu, wxID_PREFERENCES,
                  _( "&General" ), _( "Select general options for Pcbnew" ),
@@ -523,7 +522,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( display_options_xpm ) );
 
     AddMenuItem( configmenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
-                 _( "Interactive Routing" ),
+                 _( "&Interactive Routing" ),
                  _( "Configure Interactive Routing." ),
                  KiBitmap( add_tracks_xpm ) ); // fixme: icon
 
@@ -549,7 +548,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( pads_mask_layers_xpm ) );
 
     AddMenuItem( dimensionsMenu, ID_MENU_DIFF_PAIR_DIMENSIONS,
-                 _( "Differential Pairs" ),
+                 _( "&Differential Pairs" ),
                  _( "Define the global gap/width for differential pairs." ),
                  KiBitmap( ps_diff_pair_xpm ) );
 
@@ -625,7 +624,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* designRulesMenu = new wxMenu;
 
     AddMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
-                 _( "Design Rules" ),
+                 _( "&Design Rules" ),
                  _( "Open the design rules editor" ), KiBitmap( hammer_xpm ) );
 
     AddMenuItem( designRulesMenu, ID_PCB_LAYERS_SETUP,
@@ -657,7 +656,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
-    menuBar->Append( routeMenu, _( "&Route" ) );
+    menuBar->Append( routeMenu, _( "Ro&ute" ) );
     menuBar->Append( configmenu, _( "P&references" ) );
     menuBar->Append( dimensionsMenu, _( "D&imensions" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
