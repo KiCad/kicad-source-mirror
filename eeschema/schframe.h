@@ -808,6 +808,7 @@ private:
     void OnOpenPcbModuleEditor( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
     void OnOpenLibraryEditor( wxCommandEvent& event );
+    void OnRescueCached( wxCommandEvent& event );
     void OnPreferencesOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
@@ -1258,6 +1259,20 @@ public:
      * @return True if \a aFileName was written successfully.
      */
     bool CreateArchiveLibrary( const wxString& aFileName );
+
+    /**
+     * Function RescueCacheConflicts
+     * exports components from the '-cache' library that conflict with parts
+     * in the project libraries to a new library, renaming them to add a suffix
+     * of the root document's name to avoid conflicts.
+     *
+     * @param aRunningOnDemand - indicates whether the tool has been called up by the user
+     *      (as opposed to being run automatically). If true, an information dialog is
+     *      displayed if there are no components to rescue. If false, the tool is silent
+     *      if there are no components to rescue, and a "Never Show Again" button is
+     *      displayed.
+     */
+    bool RescueCacheConflicts( bool aRunningOnDemand );
 
     /**
      * Function PrintPage

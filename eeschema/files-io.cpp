@@ -34,6 +34,7 @@
 #include <gestfich.h>
 #include <schframe.h>
 #include <pgm_base.h>
+#include <kiface_i.h>
 
 #include <eeschema_id.h>
 #include <class_library.h>
@@ -42,6 +43,7 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <wildcards_and_files_ext.h>
+#include <lib_cache_rescue.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bool aCreateBackupFile )
@@ -303,6 +305,20 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         GetScreen()->ClrModify();
 
         UpdateFileHistory( fullFileName );
+
+        // Check to see whether some old, cached library parts need to be rescued
+        // Only do this if RescueNeverShow was not set.
+        wxConfigBase *config = Kiface().KifaceSettings();
+        bool rescueNeverShow = false;
+        config->Read( wxT("RescueNeverShow"), &rescueNeverShow, false );
+        if( !rescueNeverShow )
+        {
+            if( RescueCacheConflicts( false ) )
+            {
+                GetScreen()->CheckComponentsToPartsLinks();
+                GetScreen()->TestDanglingEnds();
+            }
+        }
     }
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );

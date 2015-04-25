@@ -63,6 +63,10 @@ set( EESCHEMA_DLGS
     dialogs/dialog_plot_schematic.cpp
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_print_using_printer.cpp
+    dialogs/dialog_rescue_each.cpp
+    dialogs/dialog_rescue_each_base.cpp
+    dialogs/dialog_rescue_summary.cpp
+    dialogs/dialog_rescue_summary_base.cpp
     dialogs/dialog_sch_edit_sheet_pin.cpp
     dialogs/dialog_sch_edit_sheet_pin_base.cpp
     dialogs/dialog_sch_sheet_props.cpp
@@ -111,6 +115,7 @@ set( EESCHEMA_SRCS
     libedit_undo_redo.cpp
     lib_arc.cpp
     lib_bezier.cpp
+    lib_cache_rescue.cpp
     lib_circle.cpp
     lib_collectors.cpp
     lib_draw_item.cpp

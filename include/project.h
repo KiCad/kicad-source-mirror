@@ -94,6 +94,13 @@ public:
     VTBL_ENTRY const wxString GetProjectPath() const;
 
     /**
+     * Function GetProjectName
+     * returns the short name of the project. This is the file name without
+     * extension or path.
+     */
+    VTBL_ENTRY const wxString GetProjectName() const;
+
+    /**
      * Function FootprintLibTblName
      * returns the path and filename of this project's fp-lib-table,
      * i.e. the project specific one, not the global one.

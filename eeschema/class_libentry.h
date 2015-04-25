@@ -523,6 +523,22 @@ public:
     LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 );
 
     /**
+     * Function PinsConflictWith
+     * returns true if this part's pins do not match another part's pins. This
+     * is used to detect whether the project cache is out of sync with the
+     * system libs.
+     *
+     * @param aOtherPart - The other library part to test
+     * @param aTestNums - Whether two pins at the same point must have the same number.
+     * @param aTestNames - Whether two pins at the same point must have the same name.
+     * @param aTestType - Whether two pins at the same point must have the same electrical type.
+     * @param aTestOrientation - Whether two pins at the same point must have the same orientation.
+     * @param aTestLength - Whether two pins at the same point must have the same length.
+     */
+    bool PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
+            bool aTestType, bool aTestOrientation, bool aTestLength );
+
+    /**
      * Move the part \a aOffset.
      *
      * @param aOffset - Offset displacement.

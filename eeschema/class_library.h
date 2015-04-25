@@ -302,6 +302,15 @@ public:
             const wxString& aLibraryName = wxEmptyString );
 
     /**
+     * Function FindLibraryEntries
+     * searches all libraries in the list for an entry, returns all matches.
+     *
+     * @param aEntryName - Name of entry to search for (case sensitive).
+     * @param aEntries - a std::vector to store entries
+     */
+    void FindLibraryEntries( const wxString& aEntryName, std::vector<LIB_ALIAS*>& aEntries );
+
+    /**
      * Function FindLibraryNearEntries
      * Searches all libraries in the list for an entry, using a case insensitive comparison.
      * Helper function used in dialog to find all candidates.

@@ -628,6 +628,65 @@ LIB_PIN* LIB_PART::GetPin( const wxString& aNumber, int aUnit, int aConvert )
 }
 
 
+bool LIB_PART::PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
+        bool aTestType, bool aTestOrientation, bool aTestLength )
+{
+    LIB_PINS thisPinList;
+    GetPins( thisPinList, /* aUnit */ 0, /* aConvert */ 0 );
+
+    BOOST_FOREACH( LIB_PIN* eachThisPin, thisPinList )
+    {
+        wxASSERT( eachThisPin );
+        LIB_PINS otherPinList;
+        aOtherPart.GetPins( otherPinList, /* aUnit */ 0, /* aConvert */ 0 );
+        bool foundMatch = false;
+
+        BOOST_FOREACH( LIB_PIN* eachOtherPin, otherPinList )
+        {
+            wxASSERT( eachOtherPin );
+            // Same position?
+            if( eachThisPin->GetPosition() != eachOtherPin->GetPosition() )
+                continue;
+
+            // Same number?
+            wxString eachThisPinNumber, eachOtherPinNumber;
+            eachThisPin->PinStringNum( eachThisPinNumber );
+            eachOtherPin->PinStringNum( eachOtherPinNumber );
+            if( aTestNums && ( eachThisPinNumber != eachOtherPinNumber ))
+                continue;
+
+            // Same name?
+            if( aTestNames && ( eachThisPin->GetName() != eachOtherPin->GetName() ))
+                continue;
+
+            // Same electrical type?
+            if( aTestType && ( eachThisPin->GetType() != eachOtherPin->GetType() ))
+                continue;
+
+            // Same orientation?
+            if( aTestOrientation && ( eachThisPin->GetOrientation() != eachOtherPin->GetOrientation() ))
+                continue;
+
+            // Same length?
+            if( aTestLength && ( eachThisPin->GetLength() != eachOtherPin->GetLength() ))
+                continue;
+
+            foundMatch = true;
+        }
+
+        if( !foundMatch )
+        {
+            // This means there was not an identical (according to the arguments)
+            // pin at the same position in the other component.
+            return true;
+        }
+    }
+
+    // The loop never gave up, so no conflicts were found.
+    return false;
+}
+
+
 bool LIB_PART::Save( OUTPUTFORMATTER& aFormatter )
 {
     LIB_FIELD&  value = GetValueField();

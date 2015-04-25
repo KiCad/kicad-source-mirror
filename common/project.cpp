@@ -93,9 +93,16 @@ const wxString PROJECT::GetProjectFullName() const
     return m_project_name.GetFullPath();
 }
 
+
 const wxString PROJECT::GetProjectPath() const
 {
     return m_project_name.GetPathWithSep();
+}
+
+
+const wxString PROJECT::GetProjectName() const
+{
+    return m_project_name.GetName();
 }
 
 

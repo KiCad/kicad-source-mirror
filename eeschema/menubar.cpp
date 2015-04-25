@@ -436,6 +436,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Library &Browser" ),  HELP_RUN_LIB_VIEWER,
                  KiBitmap( library_browse_xpm ) );
 
+    AddMenuItem( toolsMenu,
+                 ID_RESCUE_CACHED,
+                 _( "&Rescue Cached Components" ),
+                 _( "Find old components in the project cache and rescue them to a new library" ),
+                 KiBitmap( copycomponent_xpm ) );
+
     toolsMenu->AppendSeparator();
 
     AddMenuItem( toolsMenu,

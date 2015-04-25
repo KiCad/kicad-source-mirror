@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_ANNOTATE_BASE</property>
             <property name="pos"></property>
-            <property name="size">432,550</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Annotate Schematic</property>

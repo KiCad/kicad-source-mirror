@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  5 2013)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,7 @@ class DIALOG_SHIM;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -60,6 +61,7 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public DIALOG_SHIM
 		wxStaticText* m_staticTextPathlist;
 		wxListBox* m_DefaultLibraryPathslistBox;
 		wxStaticLine* m_staticline3;
+		wxCheckBox* m_cbRescue;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
