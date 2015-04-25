@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-23 23:02+0100\n"
-"PO-Revision-Date: 2015-04-23 23:02+0100\n"
+"POT-Creation-Date: 2015-04-26 00:59+0100\n"
+"PO-Revision-Date: 2015-04-26 00:59+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -127,7 +127,7 @@ msgstr "Avvia Eeschema"
 msgid "Run LibEdit"
 msgstr "Avvia LibEdit"
 
-#: kicad/menubar.cpp:147 kicad/menubar.cpp:374 eeschema/menubar.cpp:478
+#: kicad/menubar.cpp:147 kicad/menubar.cpp:374 eeschema/menubar.cpp:484
 msgid "Run Pcbnew"
 msgstr "Avvia PcbNew"
 
@@ -336,12 +336,12 @@ msgstr "Apri il manuale utente di KiCad"
 
 #: kicad/menubar.cpp:419 pcbnew/tool_modview.cpp:194
 #: pcbnew/menubar_modedit.cpp:322 pcbnew/menubar_pcbframe.cpp:644
-#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:495
+#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:501
 #: eeschema/menubar_libedit.cpp:269
 msgid "&Getting Started in KiCad"
 msgstr "&Iniziare con KiCad"
 
-#: kicad/menubar.cpp:420 eeschema/menubar.cpp:496
+#: kicad/menubar.cpp:420 eeschema/menubar.cpp:502
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Apri  \"Iniziare con KiCad\", guida introduttiva"
 
@@ -355,7 +355,7 @@ msgstr "Informazioni sul manager dei progetti di KiCad"
 
 #: kicad/menubar.cpp:433 pcbnew/tool_modview.cpp:206
 #: pcbnew/menubar_modedit.cpp:334 pcbnew/menubar_pcbframe.cpp:655
-#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:507
+#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:513
 #: eeschema/menubar_libedit.cpp:283 cvpcb/menubar.cpp:168
 #: 3d-viewer/3d_toolbar.cpp:139 gerbview/menubar.cpp:236
 #: pagelayout_editor/menubar.cpp:163
@@ -372,13 +372,13 @@ msgid "&Preferences"
 msgstr "&Preferenze"
 
 #: kicad/menubar.cpp:436 pcbnew/menubar_pcbframe.cpp:662
-#: eeschema/menubar.cpp:512
+#: eeschema/menubar.cpp:518
 msgid "&Tools"
 msgstr "&Strumenti "
 
 #: kicad/menubar.cpp:437 pcbnew/tool_modview.cpp:209
 #: pcbnew/menubar_modedit.cpp:340 pcbnew/menubar_pcbframe.cpp:664
-#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:513
+#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:519
 #: eeschema/menubar_libedit.cpp:288 cvpcb/menubar.cpp:170
 #: gerbview/menubar.cpp:239 pagelayout_editor/menubar.cpp:165
 msgid "&Help"
@@ -451,7 +451,7 @@ msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
 #: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:965 pcbnew/moduleframe.cpp:783
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1247 cvpcb/cvframe.cpp:762
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1252 cvpcb/cvframe.cpp:762
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -613,11 +613,11 @@ msgstr "Crea una nuova cartella"
 
 #: kicad/tree_project_frame.cpp:684
 msgid "&Delete Directory"
-msgstr "&Cancella cartella"
+msgstr "&Distruggi cartella"
 
 #: kicad/tree_project_frame.cpp:685 kicad/tree_project_frame.cpp:700
 msgid "Delete the Directory and its content"
-msgstr "Cancella la cartella e il suo contenuto"
+msgstr "Elimina la cartella e il suo contenuto"
 
 #: kicad/tree_project_frame.cpp:691
 msgid "&Edit in a text editor"
@@ -834,7 +834,7 @@ msgstr "Testo \"%s\" su %s di %s"
 msgid "Visibles"
 msgstr "Visibili"
 
-#: pcbnew/pcbframe.cpp:583 eeschema/schframe.cpp:596
+#: pcbnew/pcbframe.cpp:583 eeschema/schframe.cpp:597
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -1543,7 +1543,7 @@ msgstr "Informazioni su Pcbnew progettazione circuiti stampati"
 
 #: pcbnew/tool_modview.cpp:208 pcbnew/menubar_modedit.cpp:336
 #: pcbnew/menubar_pcbframe.cpp:657 eeschema/tool_viewlib.cpp:269
-#: eeschema/menubar.cpp:509 eeschema/menubar_libedit.cpp:285
+#: eeschema/menubar.cpp:515 eeschema/menubar_libedit.cpp:285
 msgid "&View"
 msgstr "&Visualizza"
 
@@ -1795,11 +1795,11 @@ msgstr "Il file del C.S. \"%s\" è già aperto."
 msgid "The current board has been modified.  Do you wish to save the changes?"
 msgstr "La scheda corrente è stata modificata. Vuoi salvare le modifiche?"
 
-#: pcbnew/files.cpp:419 eeschema/files-io.cpp:212
+#: pcbnew/files.cpp:419 eeschema/files-io.cpp:214
 msgid "Save and Load"
 msgstr "Salva e carica"
 
-#: pcbnew/files.cpp:420 eeschema/files-io.cpp:213
+#: pcbnew/files.cpp:420 eeschema/files-io.cpp:215
 msgid "Load Without Saving"
 msgstr "Carica senza salvare"
 
@@ -3708,17 +3708,17 @@ msgid "Select default parameters values in Footprint Editor"
 msgstr "Seleziona i valori dei parametri predefiniti nell'editor impronte"
 
 #: pcbnew/menubar_modedit.cpp:335 pcbnew/menubar_pcbframe.cpp:656
-#: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:284
+#: eeschema/menubar.cpp:514 eeschema/menubar_libedit.cpp:284
 msgid "&Edit"
 msgstr "&Modifica"
 
 #: pcbnew/menubar_modedit.cpp:337 pcbnew/menubar_pcbframe.cpp:658
-#: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:286
+#: eeschema/menubar.cpp:516 eeschema/menubar_libedit.cpp:286
 msgid "&Place"
 msgstr "&Piazza"
 
 #: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:660
-#: eeschema/menubar.cpp:511 eeschema/menubar_libedit.cpp:287
+#: eeschema/menubar.cpp:517 eeschema/menubar_libedit.cpp:287
 msgid "P&references"
 msgstr "O&pzioni"
 
@@ -11884,7 +11884,7 @@ msgstr "Usare un percorso relativo a \"%s\"?"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:380
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:513
-#: eeschema/dialogs/dialog_eeschema_config.cpp:406
+#: eeschema/dialogs/dialog_eeschema_config.cpp:416
 msgid "Path type"
 msgstr "Tipo di percorso"
 
@@ -13462,7 +13462,7 @@ msgstr "Stringa non ultimata"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Il limitatore di stringa deve essere un singolo carattere ', \", o $"
 
-#: common/project.cpp:236
+#: common/project.cpp:243
 #, c-format
 msgid "Unable to find '%s' template config file."
 msgstr "Impossibile trovare il file di modello configurazione \"%s\"."
@@ -14338,12 +14338,13 @@ msgstr "Elemento derivato %s dall'elemento %s trovato nel foglio %s"
 msgid "Item %s found in sheet %s"
 msgstr "Elemento %s trovato nel foglio %s"
 
-#: eeschema/libarch.cpp:101
+#: eeschema/libarch.cpp:101 eeschema/lib_cache_rescue.cpp:60
 #, c-format
 msgid "An error occurred attempting to save component library '%s'."
 msgstr "Un errore durante il salvataggio della libreria componenti \"%s\"."
 
 #: eeschema/libarch.cpp:111 eeschema/libedit.cpp:408
+#: eeschema/lib_cache_rescue.cpp:70
 #, c-format
 msgid "Failed to create component library file '%s'"
 msgstr "Impossibile creare il file della libreria componenti \"%s\""
@@ -14460,20 +14461,20 @@ msgstr "Unità %c"
 msgid "Close schematic component viewer"
 msgstr "Chiudu visualizzatore componente dello schema"
 
-#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:489
+#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:495
 msgid "Eesc&hema Manual"
 msgstr "Manuale di Eesc&hema"
 
-#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:490
+#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:496
 msgid "Open Eeschema manual"
 msgstr "Apri il manuale di Eeschema"
 
-#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:502
+#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:508
 #: eeschema/menubar_libedit.cpp:278
 msgid "&About Eeschema"
 msgstr "&Informazioni su Eeschema"
 
-#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:503
+#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:509
 #: eeschema/menubar_libedit.cpp:279
 msgid "About Eeschema schematic designer"
 msgstr "Informazioni sulla creazione schemi elettrici con Eeschema"
@@ -15061,39 +15062,50 @@ msgstr "Editor di libreri&e"
 msgid "Library &Browser"
 msgstr "Esplora &librerie"
 
-#: eeschema/menubar.cpp:443
+#: eeschema/menubar.cpp:441
+msgid "&Rescue Cached Components"
+msgstr "&Recupera componenti in cache"
+
+#: eeschema/menubar.cpp:442
+msgid ""
+"Find old components in the project cache and rescue them to a new library"
+msgstr ""
+"Trova vecchi componenti nella cache del progetto e li recupera in una nuova "
+"libreria"
+
+#: eeschema/menubar.cpp:449
 msgid "&Annotate Schematic"
 msgstr "&Annota schema"
 
-#: eeschema/menubar.cpp:449
+#: eeschema/menubar.cpp:455
 msgid "Electrical Rules &Checker"
 msgstr "&Controllo Regole Elettriche (ERC)"
 
-#: eeschema/menubar.cpp:450 eeschema/tool_sch.cpp:149
+#: eeschema/menubar.cpp:456 eeschema/tool_sch.cpp:149
 msgid "Perform electrical rules check"
 msgstr "Esegui un controllo regole elettriche"
 
-#: eeschema/menubar.cpp:455
+#: eeschema/menubar.cpp:461
 msgid "Generate &Netlist File"
 msgstr "Genera file &netlist"
 
-#: eeschema/menubar.cpp:456
+#: eeschema/menubar.cpp:462
 msgid "Generate the component netlist file"
 msgstr "Genera il file elenco dei collegamenti componente (Netlist)"
 
-#: eeschema/menubar.cpp:461
+#: eeschema/menubar.cpp:467
 msgid "Generate Bill of &Materials"
 msgstr "Genera la distinta &materiali"
 
-#: eeschema/menubar.cpp:470
+#: eeschema/menubar.cpp:476
 msgid "A&ssign Component Footprint"
 msgstr "A&ssegna impronta al componente"
 
-#: eeschema/menubar.cpp:471
+#: eeschema/menubar.cpp:477
 msgid "Run CvPcb"
 msgstr "Avvia CvPcb"
 
-#: eeschema/menubar.cpp:477
+#: eeschema/menubar.cpp:483
 msgid "&Layout Printed Circuit Board"
 msgstr "Disposi&zione circuito stampato"
 
@@ -15198,7 +15210,7 @@ msgstr "Alias"
 msgid "Key words"
 msgstr "Parole chiave"
 
-#: eeschema/class_library.cpp:52
+#: eeschema/class_library.cpp:53
 #, c-format
 msgid ""
 "Library '%s' has duplicate entry name '%s'.\n"
@@ -15209,62 +15221,62 @@ msgstr ""
 "Questo potrebbe causare un comportamento imprevisto all'inserimento in uno "
 "schema del componente."
 
-#: eeschema/class_library.cpp:299
+#: eeschema/class_library.cpp:300
 #, c-format
 msgid "Cannot add duplicate alias '%s' to library '%s'."
 msgstr "Impossibile aggiungere duplicato alias \"%s\" nella libreria \"%s\"."
 
-#: eeschema/class_library.cpp:466
+#: eeschema/class_library.cpp:467
 msgid "The component library file name is not set."
 msgstr "Il nome file libreria componenti non è impostato."
 
-#: eeschema/class_library.cpp:474
+#: eeschema/class_library.cpp:475
 msgid "The file could not be opened."
 msgstr "Il file non può essere aperto."
 
-#: eeschema/class_library.cpp:482
+#: eeschema/class_library.cpp:483
 msgid "The file is empty!"
 msgstr "Il file è vuoto!"
 
-#: eeschema/class_library.cpp:507
+#: eeschema/class_library.cpp:508
 msgid "The file is NOT an Eeschema library!"
 msgstr "Questo file NON è una libreria di Eeschema!"
 
-#: eeschema/class_library.cpp:513
+#: eeschema/class_library.cpp:514
 msgid "The file header is missing version and time stamp information."
 msgstr "L'intestazione del file manca della versione e della stampigliatura"
 
-#: eeschema/class_library.cpp:557
+#: eeschema/class_library.cpp:558
 msgid "An error occurred attempting to read the header."
 msgstr "Un errore è occorso nel tentativo di leggere l'intestazione"
 
-#: eeschema/class_library.cpp:586
+#: eeschema/class_library.cpp:587
 #, c-format
 msgid "Library '%s' component load error %s."
 msgstr "Libreria \"%s\" errore caricamento componente %s."
 
-#: eeschema/class_library.cpp:659
+#: eeschema/class_library.cpp:660
 #, c-format
 msgid "Could not open component document library file '%s'."
 msgstr "Impossibile aprire il file libreria specifiche componenti \"%s\"."
 
-#: eeschema/class_library.cpp:666
+#: eeschema/class_library.cpp:667
 #, c-format
 msgid "Part document library file '%s' is empty."
 msgstr "Il file della libreria di documentazione componenti \"%s\" è vuoto."
 
-#: eeschema/class_library.cpp:674
+#: eeschema/class_library.cpp:675
 #, c-format
 msgid "File '%s' is not a valid component library document file."
 msgstr ""
 "Il file \"%s\" non è un file di libreria di documentazione componenti valido."
 
-#: eeschema/class_library.cpp:1062
+#: eeschema/class_library.cpp:1074
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "Impossibile caricare il file progetto \"%s\""
 
-#: eeschema/class_library.cpp:1153
+#: eeschema/class_library.cpp:1165
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -15273,7 +15285,7 @@ msgstr ""
 "Fallito il caricamento della libreria componenti \"%s\". Errore:\n"
 "%s"
 
-#: eeschema/class_library.cpp:1175
+#: eeschema/class_library.cpp:1190
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -15755,6 +15767,22 @@ msgstr "%s Linea su strato sconosciuto da (%s,%s) a (%s,%s) "
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Punto di connessione gerarchico %s"
 
+#: eeschema/lib_cache_rescue.cpp:332
+msgid "There are no conflicting symbols to rescue from the cache."
+msgstr "Non ci sono simboli in conflitto da recuperare dalla cache."
+
+#: eeschema/lib_cache_rescue.cpp:353
+msgid "No cached symbols were rescued."
+msgstr "Nessun simbolo in cache è stato recuperato."
+
+#: eeschema/lib_cache_rescue.cpp:379
+msgid ""
+"An error occurred while attempting to rescue components. No changes have "
+"been made."
+msgstr ""
+"Un errore si è verificaro nel tentativo di recuperare dei componenti. Non è "
+"stato effettuato nessun cambiamento."
+
 #: eeschema/load_one_schematic_file.cpp:90
 #, c-format
 msgid "Failed to open '%s'"
@@ -15963,16 +15991,16 @@ msgstr "Esporta"
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
 
-#: eeschema/files-io.cpp:65
+#: eeschema/files-io.cpp:67
 msgid "Schematic Files"
 msgstr "File di schema"
 
-#: eeschema/files-io.cpp:95
+#: eeschema/files-io.cpp:97
 #, c-format
 msgid "Could not save backup of file '%s'"
 msgstr "Impossibile salvare il file di backup \"%s\""
 
-#: eeschema/files-io.cpp:109
+#: eeschema/files-io.cpp:111
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:51
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:61
@@ -15980,31 +16008,31 @@ msgstr "Impossibile salvare il file di backup \"%s\""
 msgid "Failed to create file '%s'"
 msgstr "Impossibile creare il file \"%s\""
 
-#: eeschema/files-io.cpp:138 cvpcb/readwrite_dlgs.cpp:406
+#: eeschema/files-io.cpp:140 cvpcb/readwrite_dlgs.cpp:406
 #, c-format
 msgid "File %s saved"
 msgstr "File %s salvato"
 
-#: eeschema/files-io.cpp:143
+#: eeschema/files-io.cpp:145
 msgid "File write operation failed."
 msgstr "Operazione di scrittura file fallita"
 
-#: eeschema/files-io.cpp:197
+#: eeschema/files-io.cpp:199
 #, c-format
 msgid "Schematic file '%s' is already open."
 msgstr "Il file schema \"%s\" è già aperto."
 
-#: eeschema/files-io.cpp:210
+#: eeschema/files-io.cpp:212
 msgid ""
 "The current schematic has been modified.  Do you wish to save the changes?"
 msgstr "Lo schema corrente è stato modificato. Salvare le modifiche?"
 
-#: eeschema/files-io.cpp:243
+#: eeschema/files-io.cpp:245
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Lo schema \"%s\" non esiste. Volete crearlo?"
 
-#: eeschema/files-io.cpp:265
+#: eeschema/files-io.cpp:267
 #, c-format
 msgid ""
 "Ready\n"
@@ -16013,11 +16041,11 @@ msgstr ""
 "Pronto\n"
 "Cartella progetto: \"%s\"\n"
 
-#: eeschema/files-io.cpp:334
+#: eeschema/files-io.cpp:350
 msgid "Import Schematic"
 msgstr "Importa schema"
 
-#: eeschema/files-io.cpp:442
+#: eeschema/files-io.cpp:458
 msgid ""
 "This operation cannot be undone. Besides, take into account that "
 "hierarchical sheets will not be appended.\n"
@@ -16029,7 +16057,7 @@ msgstr ""
 "\n"
 "Si desidera salvare il documento prima di procedere?"
 
-#: eeschema/files-io.cpp:466
+#: eeschema/files-io.cpp:482
 #, c-format
 msgid "Directory '%s' is not writable"
 msgstr "Cartella \"%s\" non scrivibile"
@@ -16388,7 +16416,7 @@ msgstr "Unità in pollici"
 msgid "Set unit to mm"
 msgstr "Unità in millimetri"
 
-#: eeschema/tool_sch.cpp:304 eeschema/schframe.cpp:754
+#: eeschema/tool_sch.cpp:304 eeschema/schframe.cpp:755
 msgid "Show hidden pins"
 msgstr "Mostra piedini nascosti"
 
@@ -16588,40 +16616,40 @@ msgstr "Centro cerchio (%s, %s), raggio %s"
 msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
-#: eeschema/schframe.cpp:743
+#: eeschema/schframe.cpp:744
 msgid "Draw wires and buses in any direction"
 msgstr "Disegna fili e bus in ogni direzione"
 
-#: eeschema/schframe.cpp:744
+#: eeschema/schframe.cpp:745
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 
-#: eeschema/schframe.cpp:753
+#: eeschema/schframe.cpp:754
 msgid "Do not show hidden pins"
 msgstr "Non mostrare i piedini nascosti"
 
-#: eeschema/schframe.cpp:858
+#: eeschema/schframe.cpp:859
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/schframe.cpp:877
+#: eeschema/schframe.cpp:878
 msgid "New Schematic"
 msgstr "Nuovo schema"
 
-#: eeschema/schframe.cpp:890
+#: eeschema/schframe.cpp:891
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
-#: eeschema/schframe.cpp:910
+#: eeschema/schframe.cpp:911
 msgid "Open Schematic"
 msgstr "Apri schema"
 
-#: eeschema/schframe.cpp:1028
+#: eeschema/schframe.cpp:1029
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1250
+#: eeschema/schframe.cpp:1255
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -16930,6 +16958,44 @@ msgstr ""
 "nella libreria \"%s\".\n"
 "\n"
 "Eliminare tutti gli alias in conflitto da questo componente?"
+
+#: eeschema/dialogs/dialog_rescue_each_base.cpp:19
+msgid ""
+"This project uses symbols that no longer match the symbols in the system "
+"libraries. Using this tool, you can rescue these cached symbols into a new "
+"library.\n"
+"\n"
+"Choose \"Rescue\" for any parts you would like to save from this project's "
+"cache, or press Cancel to allow the symbols to be updated to the new "
+"versions."
+msgstr ""
+"Questo progetto usa simboli che non corrispondono più i simboli presenti "
+"nelle librerie di sistema. Usando questo strumento, è possibile recuperare "
+"questi simboli dalla cache e inserirli in una nuova libreria.\n"
+"\n"
+"Selezionare \"Recupera\" per ogni elemento che si desidera salvare dalla "
+"cache del progetto, o premere Annulla per permettere l'aggiornamento dei "
+"simboli alle nuove versioni."
+
+#: eeschema/dialogs/dialog_rescue_each_base.cpp:23
+msgid "Symbols with cache/library conflicts:"
+msgstr "Simboli con conflitti cache/libreria:"
+
+#: eeschema/dialogs/dialog_rescue_each_base.cpp:32
+msgid "Instances of this symbol:"
+msgstr "Istanze di questo simbolo:"
+
+#: eeschema/dialogs/dialog_rescue_each_base.cpp:47
+msgid "Cached Part:"
+msgstr "Elemento in cache:"
+
+#: eeschema/dialogs/dialog_rescue_each_base.cpp:64
+msgid "Library Part:"
+msgstr "Elemento di libreria:"
+
+#: eeschema/dialogs/dialog_rescue_each_base.cpp:84
+msgid "Never Show Again"
+msgstr "Non mostrarlo più"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:22
 msgid "Scope"
@@ -17590,6 +17656,10 @@ msgstr ""
 "L'operazione sovrasciverà l'annotazione esistente e non potrà essere "
 "annulata."
 
+#: eeschema/dialogs/dialog_rescue_summary_base.cpp:22
+msgid "The symbols of the following components were changed:"
+msgstr "I simboli dei seguenti componenti sono cambiati:"
+
 #: eeschema/dialogs/dialog_erc_base.cpp:40
 msgid "ERC Report:"
 msgstr "Rapporto ERC:"
@@ -17756,29 +17826,29 @@ msgstr "Coordinate X del testo relativo al componente"
 msgid "Find"
 msgstr "Cerca"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:128
+#: eeschema/dialogs/dialog_eeschema_config.cpp:136
 #, c-format
 msgid "Project '%s'"
 msgstr "Progetto \"%s\""
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:304
+#: eeschema/dialogs/dialog_eeschema_config.cpp:314
 msgid "Library files:"
 msgstr "File libreria:"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:364
+#: eeschema/dialogs/dialog_eeschema_config.cpp:374
 #, c-format
 msgid "'%s' : library already in use"
 msgstr "\"%s\": libreria già in uso"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:379
+#: eeschema/dialogs/dialog_eeschema_config.cpp:389
 msgid "Default Path for Libraries"
 msgstr "Percorso predefinito per le librerie"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:406
+#: eeschema/dialogs/dialog_eeschema_config.cpp:416
 msgid "Use a relative path?"
 msgstr "Usare un percorso relativo?"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:426
+#: eeschema/dialogs/dialog_eeschema_config.cpp:436
 msgid "Path already in use"
 msgstr "Percorso già in uso"
 
@@ -17943,6 +18013,10 @@ msgstr ""
 "Percorsi (predefiniti e personalizzati) utilizzati per caricare le librerie "
 "e le specifiche dei componenti.\n"
 "Elencati in ordine decrescente di priorità."
+
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:123
+msgid "Check for cache/library conflicts at schematic load"
+msgstr "Controllo conflitti cache/libreria al caricamento dello schema"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:53
 msgid "Measurement &units:"
@@ -21734,7 +21808,7 @@ msgstr "Stampa disposizione pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:68
 msgid "Delete selected item"
-msgstr "Cancella elemento selezionato"
+msgstr "Elimina elemento selezionato"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:94
 msgid ""
@@ -22412,6 +22486,10 @@ msgstr "Proprietà grafica"
 #: eeschema/dialogs/dialog_netlist_base.h:119
 msgid "Plugins:"
 msgstr "Plugins:"
+
+#: eeschema/dialogs/dialog_rescue_summary_base.h:46
+msgid "Summary of Library Rescue"
+msgstr "Riassunto del recupero libreria"
 
 #: cvpcb/common_help_msg.h:28
 msgid "Open netlist file"
