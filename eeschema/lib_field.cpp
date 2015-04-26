@@ -100,15 +100,6 @@ bool LIB_FIELD::Save( OUTPUTFORMATTER& aFormatter )
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
-    /*  Dick 24-May-2013:
-        What the hell is this?.  There was no comment here.
-        Hell no.  You don't want this in the *.lib files, it is crap.  Fields get read
-        back in and they have a tilda in them.
-
-    if( text.IsEmpty() )
-        text = wxT( "~" );
-    */
-
     aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
                       m_id,
                       EscapedUTF8( text ).c_str(),       // wraps in quotes

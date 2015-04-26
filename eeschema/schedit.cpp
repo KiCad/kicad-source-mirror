@@ -1,9 +1,9 @@
  /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -457,14 +457,12 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 
     case SCH_MARKER_T:
         // Moving a marker has no sense
-        wxFAIL_MSG( wxString::Format( wxT( "Cannot move item type %s" ),
-                                      GetChars( item->GetClass() ) ) );
         break;
 
     default:
         // Unknown items cannot be moved
         wxFAIL_MSG( wxString::Format(
-                    wxT( "Cannot move unknown item type %d" ), item->Type() ) );
+                    wxT( "Cannot move item type %d" ), item->Type() ) );
         break;
     }
 
@@ -841,8 +839,25 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         RotateImage( (SCH_BITMAP*) item );
         break;
 
-    case SCH_SHEET_T:           /// @todo allow sheet rotate on hotkey
+    case SCH_SHEET_T:
+        if( !item->IsNew() )    // rotate a sheet during its creation has no sense
+        {
+            bool retCCW = ( aEvent.GetId() == ID_SCH_ROTATE_COUNTERCLOCKWISE );
+            RotateHierarchicalSheet( static_cast<SCH_SHEET*>( item ), retCCW );
+        }
+
+        break;
+
+    case SCH_JUNCTION_T:
+    case SCH_NO_CONNECT_T:
+        // these items are not rotated, because rotation does not change them.
+        break;
+
     default:
+        // Other items (wires...) cannot be rotated, at least during creation
+        if( item->IsNew() )
+            break;
+
         wxFAIL_MSG( wxString::Format( wxT( "Cannot rotate schematic item type %s." ),
                                       GetChars( item->GetClass() ) ) );
     }
@@ -1109,6 +1124,14 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
             MirrorImage( (SCH_BITMAP*) item, true );
         else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
             MirrorImage( (SCH_BITMAP*) item, false );
+
+        break;
+
+    case SCH_SHEET_T:
+        if( aEvent.GetId() == ID_SCH_MIRROR_X )
+            MirrorSheet( (SCH_SHEET*) item, true );
+        else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
+            MirrorSheet( (SCH_SHEET*) item, false );
 
         break;
 

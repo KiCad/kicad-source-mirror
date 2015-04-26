@@ -373,9 +373,9 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
     AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate Counterclockwise" ),
                  KiBitmap( rotate_ccw_xpm ) );
-    msg = AddHotkeyName( _( "Mirror --" ), g_Schematic_Hokeys_Descr, HK_MIRROR_X_COMPONENT );
+    msg = AddHotkeyName( _( "Mirror --" ), g_Schematic_Hokeys_Descr, HK_MIRROR_X );
     AddMenuItem( orientmenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
-    msg = AddHotkeyName( _( "Mirror ||" ), g_Schematic_Hokeys_Descr, HK_MIRROR_Y_COMPONENT );
+    msg = AddHotkeyName( _( "Mirror ||" ), g_Schematic_Hokeys_Descr, HK_MIRROR_Y );
     AddMenuItem( orientmenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
     msg = AddHotkeyName( _( "Normal" ), g_Schematic_Hokeys_Descr, HK_ORIENT_NORMAL_COMPONENT );
     AddMenuItem( orientmenu, ID_SCH_ORIENT_NORMAL, msg, KiBitmap( normal_xpm ) );
@@ -757,6 +757,21 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 
         msg = AddHotkeyName( _( "Drag Sheet" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( move_sheet_xpm ) );
+
+        wxMenu* orientmenu = new wxMenu;
+        msg = AddHotkeyName( _( "Rotate Sheet CW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+        AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
+
+        AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate Sheet CCW" ),
+                     KiBitmap( rotate_ccw_xpm ) );
+
+        msg = AddHotkeyName( _( "Mirror --" ), g_Schematic_Hokeys_Descr, HK_MIRROR_X );
+        AddMenuItem( orientmenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
+        msg = AddHotkeyName( _( "Mirror ||" ), g_Schematic_Hokeys_Descr, HK_MIRROR_Y );
+        AddMenuItem( orientmenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
+
+        AddMenuItem( PopMenu, orientmenu, ID_POPUP_SCH_GENERIC_ORIENT_CMP,
+                 _( "Orient Sheet" ), KiBitmap( orient_xpm ) );
     }
 
     if( Sheet->GetFlags() )
@@ -831,10 +846,10 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         AddMenuItem( PopMenu, ID_POPUP_DRAG_BLOCK, msg, KiBitmap( move_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );
         msg = AddHotkeyName( _( "Mirror Block ||" ), g_Schematic_Hokeys_Descr,
-                             HK_MIRROR_Y_COMPONENT );
+                             HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
         msg = AddHotkeyName( _( "Mirror Block --" ), g_Schematic_Hokeys_Descr,
-                             HK_MIRROR_X_COMPONENT );
+                             HK_MIRROR_X );
         AddMenuItem( PopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
         msg = AddHotkeyName( _( "Rotate Block CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
@@ -871,10 +886,10 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
     msg = AddHotkeyName( _( "Rotate Image" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( aPopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Mirror --" ), g_Schematic_Hokeys_Descr,
-                         HK_MIRROR_X_COMPONENT );
+                         HK_MIRROR_X );
     AddMenuItem( aPopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
     msg = AddHotkeyName( _( "Mirror ||" ), g_Schematic_Hokeys_Descr,
-                         HK_MIRROR_Y_COMPONENT );
+                         HK_MIRROR_Y );
     AddMenuItem( aPopMenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
     msg = AddHotkeyName( _( "Edit Image" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( aPopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( image_xpm ) );

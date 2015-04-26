@@ -162,9 +162,9 @@ static EDA_HOTKEY HkAddGraphicPolyLine( _HKI( "Add Graphic PolyLine" ), HK_ADD_G
                                         'I', ID_LINE_COMMENT_BUTT );
 static EDA_HOTKEY HkAddGraphicText( _HKI( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T',
                                     ID_TEXT_COMMENT_BUTT );
-static EDA_HOTKEY HkMirrorY( _HKI( "Mirror Y Component" ), HK_MIRROR_Y_COMPONENT, 'Y',
+static EDA_HOTKEY HkMirrorY( _HKI( "Mirror Y" ), HK_MIRROR_Y, 'Y',
                              ID_SCH_MIRROR_Y );
-static EDA_HOTKEY HkMirrorX( _HKI( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X',
+static EDA_HOTKEY HkMirrorX( _HKI( "Mirror X" ), HK_MIRROR_X, 'X',
                              ID_SCH_MIRROR_X );
 static EDA_HOTKEY HkOrientNormalComponent( _HKI( "Orient Normal Component" ),
                                            HK_ORIENT_NORMAL_COMPONENT, 'N', ID_SCH_ORIENT_NORMAL );
@@ -556,8 +556,8 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
     case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
-    case HK_MIRROR_Y_COMPONENT:             // Mirror Y
-    case HK_MIRROR_X_COMPONENT:             // Mirror X
+    case HK_MIRROR_Y:                       // Mirror Y
+    case HK_MIRROR_X:                       // Mirror X
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
     case HK_ROTATE:                         // Rotate schematic item.
     case HK_EDIT_COMPONENT_WITH_LIBEDIT:    // Call Libedit and load the current component

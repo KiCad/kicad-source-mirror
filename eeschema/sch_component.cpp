@@ -148,8 +148,18 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
         if( it->GetName().IsEmpty() )
             continue;
 
-        // See if field by same name already exists.
-        SCH_FIELD* schField = FindField( it->GetName() );
+        // See if field already exists (mandatory fields always exist).
+        // for mandatory fields, the name and field id are fixed, so we use the
+        // known and fixed id to get them (more reliable than names, which can be translated)
+        // for other fields (custom fields), locate the field by same name
+        // (field id has no known meaning for custom fields)
+        int idx = it->GetId();
+        SCH_FIELD* schField;
+
+        if( idx < MANDATORY_FIELDS )
+            schField = GetField( idx );
+        else
+            schField = FindField( it->GetName() );
 
         if( !schField )
         {
@@ -158,9 +168,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
         }
 
         schField->SetTextPosition( m_Pos + it->GetTextPosition() );
-
         schField->ImportValues( *it );
-
         schField->SetText( it->GetText() );
     }
 
@@ -232,7 +240,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
         AddField( field );
     }
 
-    m_prefix = wxString( _( "U" ) );
+    m_prefix = wxString( wxT( "U" ) );
 }
 
 

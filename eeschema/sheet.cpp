@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -392,3 +392,52 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
         SetUndoItem( aSheet );
 }
 
+#define GRID_SIZE_REF 50
+void SCH_EDIT_FRAME::RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW )
+{
+    if( aSheet == NULL )
+        return;
+
+    // Save old sheet in undo list if not already in edit, or moving.
+    if( aSheet->GetFlags() == 0 )
+        SaveCopyInUndoList( aSheet, UR_CHANGED );
+
+    // Rotate the sheet on itself. Sheets do not have a anchor point.
+    // Rotation is made around it center
+    wxPoint rotPoint = aSheet->GetBoundingBox().Centre();
+
+    // rotate CCW, or CW. to rotate CW, rotate 3 times
+    aSheet->Rotate( rotPoint );
+
+    if( !aRotCCW )
+    {
+        aSheet->Rotate( rotPoint );
+        aSheet->Rotate( rotPoint );
+    }
+
+    GetCanvas()->Refresh();
+    OnModify();
+}
+
+
+void SCH_EDIT_FRAME::MirrorSheet( SCH_SHEET* aSheet, bool aFromXaxis )
+{
+    if( aSheet == NULL )
+        return;
+
+    // Save old sheet in undo list if not already in edit, or moving.
+    if( aSheet->GetFlags() == 0 )
+        SaveCopyInUndoList( aSheet, UR_CHANGED );
+
+    // Mirror the sheet on itself. Sheets do not have a anchor point.
+    // Mirroring is made around it center
+    wxPoint mirrorPoint = aSheet->GetBoundingBox().Centre();
+
+    if( aFromXaxis )    // mirror relative to Horizontal axis
+        aSheet->MirrorX( mirrorPoint.y );
+    else                // Mirror relative to vertical axis
+        aSheet->MirrorY( mirrorPoint.x );
+
+    GetCanvas()->Refresh();
+    OnModify();
+}

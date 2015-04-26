@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,27 +29,32 @@
 
 using namespace TFIELD_T;
 
-wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
+const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 {
     // Fixed values for the first few default fields used by EESCHEMA
-    static const wxString fixedNames[] = {
-        _( "Reference" ),   // The component reference, R1, C1, etc.
-        _( "Value" ),       // The component value + name
-        _( "Footprint" ),   // The footprint for use with Pcbnew
-        _( "Datasheet" ),   // Link to a datasheet for component
-    };
-
-    if( (unsigned) aFieldNdx < DIM(fixedNames) )
-        return fixedNames[aFieldNdx];
-
-    else
+    // (mandatory fields)
+    switch( aFieldNdx )
     {
-        wxString fieldName = _( "Field" );
+        case  REFERENCE:
+            return _( "Reference" );   // The component reference, R1, C1, etc.
 
-        fieldName << aFieldNdx;
+        case  VALUE:
+            return _( "Value" );       // The component value + name
 
-        return fieldName;
+        case  FOOTPRINT:
+            return _( "Footprint" );   // The footprint for use with Pcbnew
+
+        case  DATASHEET:
+            return _( "Datasheet" );   // Link to a datasheet for component
+
+        default:
+            break;
     }
+
+    // Other fields are use fields, give a default name:
+    wxString fieldName = _( "Field" );
+    fieldName << aFieldNdx;
+    return fieldName;
 }
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )

@@ -930,6 +930,25 @@ private:
     SCH_SHEET*  CreateSheet( wxDC* DC );
     void        ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
 
+    /**
+     * Rotate a sheet on itself. Sheets do not have a anchor point.
+     * Because rotating it from its origin or its end is not friendly,
+     * Rotation is made around its centre
+     * @param aSheet the hierarchical sheet to rotate
+     * @param aRotCCW = true to rotate CCW, false to rotate CW
+     */
+    void        RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW );
+
+    /**
+     * Function MirrorSheet
+     * Mirror a hierarchical sheet
+     * Mirroring is made around its centre
+     * @param aSheet = the SCH_SHEET to mirror
+     * @param aFromXaxis = true to mirror relative to Horizontal axis
+     *                     false to mirror relative to vertical axis
+     */
+    void MirrorSheet( SCH_SHEET* aSheet, bool aFromXaxis );
+
     /// Loads the cache library associated to the aFileName
     bool        LoadCacheLibrary( const wxString& aFileName );
 

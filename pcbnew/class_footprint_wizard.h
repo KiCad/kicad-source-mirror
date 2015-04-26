@@ -24,7 +24,7 @@
 
 
 /**
- * @file  pcbnew_footprint_wizards.h
+ * @file  class_footprint_wizard.h
  * @brief Class PCBNEW_FOOTPRINT_WIZARDS
  */
 
@@ -130,7 +130,6 @@ public:
      * Function register_wizard
      * It's the standard method of a "FOOTPRINT_WIZARD" to register itself into
      * the FOOTPRINT_WIZARDS singleton manager
-     *
      */
     void                    register_wizard();
 };
@@ -143,6 +142,7 @@ private:
      * FOOTPRINT_WIZARD system wide static list
      */
     static std::vector<FOOTPRINT_WIZARD*> m_FootprintWizards;
+
 public:
 
     /**
@@ -151,7 +151,6 @@ public:
      * into the system wizards
      *
      * @param aWizard is the footprint wizard to be registered
-     *
      */
     static void                 register_wizard( FOOTPRINT_WIZARD* aWizard );
 
@@ -162,7 +161,6 @@ public:
      * and deleted
      *
      * @param aObject is the footprint wizard object to be deregistered
-     *
      */
     static bool                 deregister_object( void* aObject );
 
@@ -170,7 +168,6 @@ public:
      * Function GetWizard
      * @param aName is the footprint wizard name
      * @return a wizard object by it's name or NULL if it isn't available.
-     *
      */
     static FOOTPRINT_WIZARD*    GetWizard( wxString aName );
 
@@ -178,15 +175,14 @@ public:
      * Function GetWizard
      * @return a wizard object by it's number or NULL if it isn't available.
      * @param  aIndex is the wizard index in list
-     *
      */
     static FOOTPRINT_WIZARD*    GetWizard( int aIndex );
 
     /**
-     * Function GetSize
+     * Function GetWizardsCount
      * @return the number of wizards available into the system
      */
-    static int                  GetSize();
+    static int                  GetWizardsCount();
 };
 
 #endif /* PCBNEW_FOOTPRINT_WIZARDS_H */

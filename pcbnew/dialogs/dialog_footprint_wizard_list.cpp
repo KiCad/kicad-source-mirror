@@ -41,7 +41,7 @@
 DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     : DIALOG_FOOTPRINT_WIZARD_LIST_BASE( aParent )
 {
-    int n_wizards = FOOTPRINT_WIZARDS::GetSize();
+    int n_wizards = FOOTPRINT_WIZARDS::GetWizardsCount();
 
     // Current wizard selection, empty or first
     m_FootprintWizard = NULL;

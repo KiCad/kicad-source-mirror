@@ -120,7 +120,7 @@ struct TEMPLATE_FIELDNAME
      * These fieldnames are not modifiable, but template fieldnames are.
      * @param aFieldNdx The field number index, > 0
      */
-    static wxString GetDefaultFieldName( int aFieldNdx );
+    static const wxString GetDefaultFieldName( int aFieldNdx );
 };
 
 typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;

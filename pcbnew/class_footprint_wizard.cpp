@@ -53,7 +53,7 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( int aIndex )
 
 FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( wxString aName )
 {
-    int max = GetSize();
+    int max = GetWizardsCount();
 
     for( int i = 0; i<max; i++ )
     {
@@ -69,7 +69,7 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( wxString aName )
 }
 
 
-int FOOTPRINT_WIZARDS::GetSize()
+int FOOTPRINT_WIZARDS::GetWizardsCount()
 {
     return m_FootprintWizards.size();
 }
@@ -85,7 +85,7 @@ void FOOTPRINT_WIZARDS::register_wizard( FOOTPRINT_WIZARD* aWizard )
 
 bool FOOTPRINT_WIZARDS::deregister_object( void* aObject )
 {
-    int max = GetSize();
+    int max = GetWizardsCount();
 
     for( int i = 0; i<max; i++ )
     {
