@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-26 00:59+0100\n"
-"PO-Revision-Date: 2015-04-26 00:59+0100\n"
+"POT-Creation-Date: 2015-04-26 20:47+0100\n"
+"PO-Revision-Date: 2015-04-26 20:47+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -690,9 +690,9 @@ msgstr "Rif."
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:135
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
-#: eeschema/template_fieldnames.cpp:37 eeschema/onrightclick.cpp:422
-#: eeschema/sch_component.cpp:1503 eeschema/lib_field.cpp:588
-#: eeschema/lib_field.cpp:766
+#: eeschema/template_fieldnames.cpp:42 eeschema/onrightclick.cpp:422
+#: eeschema/sch_component.cpp:1511 eeschema/lib_field.cpp:579
+#: eeschema/lib_field.cpp:757
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:184
 #: eeschema/dialogs/dialog_color_config.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
@@ -710,9 +710,9 @@ msgstr "Testo"
 
 #: pcbnew/class_text_mod.cpp:384 pcbnew/class_module.cpp:616
 #: pcbnew/loadcmp.cpp:436 pcbnew/class_pad.cpp:627
-#: pcbnew/class_edge_mod.cpp:260 eeschema/template_fieldnames.cpp:38
-#: eeschema/onrightclick.cpp:432 eeschema/sch_component.cpp:1521
-#: eeschema/lib_field.cpp:595
+#: pcbnew/class_edge_mod.cpp:260 eeschema/template_fieldnames.cpp:45
+#: eeschema/onrightclick.cpp:432 eeschema/sch_component.cpp:1529
+#: eeschema/lib_field.cpp:586
 msgid "Footprint"
 msgstr "Impronta"
 
@@ -804,13 +804,13 @@ msgstr "Spessore"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:48
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
-#: eeschema/lib_field.cpp:756
+#: eeschema/lib_field.cpp:747
 msgid "Width"
 msgstr "Larghezza"
 
 #: pcbnew/class_text_mod.cpp:419 pcbnew/class_pcb_text.cpp:147
 #: pcbnew/class_pad.cpp:652 pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
-#: eeschema/lib_field.cpp:759
+#: eeschema/lib_field.cpp:750
 msgid "Height"
 msgstr "Altezza"
 
@@ -883,7 +883,7 @@ msgid "End Tool"
 msgstr "Chiudi strumento"
 
 #: pcbnew/modedit_onclick.cpp:244 pcbnew/onrightclick.cpp:501
-#: eeschema/libedit_onrightclick.cpp:323 eeschema/onrightclick.cpp:811
+#: eeschema/libedit_onrightclick.cpp:323 eeschema/onrightclick.cpp:826
 #: gerbview/onrightclick.cpp:73
 msgid "Cancel Block"
 msgstr "Cancella blocco"
@@ -893,7 +893,7 @@ msgid "Zoom Block (drag middle mouse)"
 msgstr "Zoom blocco (trascina pulsante centrale del mouse)"
 
 #: pcbnew/modedit_onclick.cpp:250 pcbnew/onrightclick.cpp:505
-#: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:819
+#: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:834
 #: gerbview/onrightclick.cpp:76
 msgid "Place Block"
 msgstr "Posiziona blocco"
@@ -2079,7 +2079,7 @@ msgid "Zoom Block"
 msgstr "Zoom blocco"
 
 #: pcbnew/onrightclick.cpp:506 eeschema/libedit_onrightclick.cpp:339
-#: eeschema/onrightclick.cpp:828
+#: eeschema/onrightclick.cpp:843
 msgid "Copy Block"
 msgstr "Copia blocco"
 
@@ -2092,7 +2092,7 @@ msgid "Rotate Block"
 msgstr "Ruota blocco"
 
 #: pcbnew/onrightclick.cpp:509 eeschema/libedit_onrightclick.cpp:346
-#: eeschema/onrightclick.cpp:832
+#: eeschema/onrightclick.cpp:847
 msgid "Delete Block"
 msgstr "Cancella blocco"
 
@@ -2402,11 +2402,11 @@ msgstr "Collegamenti autosbrogliati"
 msgid "Copy"
 msgstr "Copia"
 
-#: pcbnew/onrightclick.cpp:1028 eeschema/onrightclick.cpp:854
+#: pcbnew/onrightclick.cpp:1028 eeschema/onrightclick.cpp:869
 msgid "Delete Marker"
 msgstr "Cancella marcatore"
 
-#: pcbnew/onrightclick.cpp:1030 eeschema/onrightclick.cpp:855
+#: pcbnew/onrightclick.cpp:1030 eeschema/onrightclick.cpp:870
 msgid "Marker Error Info"
 msgstr "Info errore marcatore"
 
@@ -3001,7 +3001,7 @@ msgstr "Denominazione"
 #: pcbnew/librairi.cpp:791 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: common/dialog_about/AboutDialog_main.cpp:143 eeschema/viewlibs.cpp:308
-#: eeschema/libedit.cpp:510 eeschema/sch_component.cpp:1524
+#: eeschema/libedit.cpp:510 eeschema/sch_component.cpp:1532
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
 msgid "Description"
@@ -3152,7 +3152,7 @@ msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:942 pcbnew/edit.cpp:1482
 #: pcbnew/tools/drawing_tool.cpp:1256 pcbnew/tools/drawing_tool.cpp:1376
-#: eeschema/schedit.cpp:548 eeschema/libeditframe.cpp:1114
+#: eeschema/schedit.cpp:546 eeschema/libeditframe.cpp:1114
 msgid "Add text"
 msgstr "Aggiungi testo "
 
@@ -3172,7 +3172,7 @@ msgstr "Aggiungi piazzola"
 msgid "Pad settings"
 msgstr "Impostazioni piazzola"
 
-#: pcbnew/modedit.cpp:967 pcbnew/edit.cpp:1494 eeschema/schedit.cpp:584
+#: pcbnew/modedit.cpp:967 pcbnew/edit.cpp:1494 eeschema/schedit.cpp:582
 #: eeschema/libeditframe.cpp:1156 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
@@ -4311,7 +4311,7 @@ msgstr ""
 "configurato in modo che possa trovare le librerie di impronte."
 
 #: pcbnew/loadcmp.cpp:437 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
-#: eeschema/sch_component.cpp:1513
+#: eeschema/sch_component.cpp:1521
 msgid "Library"
 msgstr "Libreria"
 
@@ -8277,7 +8277,7 @@ msgstr "Corsivo"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:106
 #: eeschema/sch_text.cpp:770 eeschema/lib_pin.cpp:1988
-#: eeschema/lib_field.cpp:753
+#: eeschema/lib_field.cpp:744
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:99
 msgid "Style"
 msgstr "Stile"
@@ -8536,8 +8536,8 @@ msgstr "Anteprima di stampa"
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:31
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
-#: eeschema/template_fieldnames.cpp:36 eeschema/onrightclick.cpp:427
-#: eeschema/sch_component.cpp:1499 eeschema/lib_field.cpp:581
+#: eeschema/template_fieldnames.cpp:39 eeschema/onrightclick.cpp:427
+#: eeschema/sch_component.cpp:1507 eeschema/lib_field.cpp:572
 #: eeschema/dialogs/dialog_color_config.cpp:78
 msgid "Reference"
 msgstr "Riferimento"
@@ -13879,11 +13879,11 @@ msgstr "Seleziona componente"
 msgid "Select by Browser"
 msgstr "Visualizzatore librerie"
 
-#: common/dialogs/dialog_image_editor_base.cpp:33
+#: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:167
 msgid "Mirror X"
 msgstr "Ribalta in X"
 
-#: common/dialogs/dialog_image_editor_base.cpp:36
+#: common/dialogs/dialog_image_editor_base.cpp:36 eeschema/hotkeys.cpp:165
 msgid "Mirror Y"
 msgstr "Ribalta in Y"
 
@@ -14206,11 +14206,11 @@ msgstr "Applica numero e dimensioni a tutti"
 msgid "Select Items"
 msgstr "Seleziona voce"
 
-#: eeschema/libedit_onrightclick.cpp:340 eeschema/onrightclick.cpp:833
+#: eeschema/libedit_onrightclick.cpp:340 eeschema/onrightclick.cpp:848
 msgid "Mirror Block ||"
 msgstr "Ribalta blocco ||"
 
-#: eeschema/libedit_onrightclick.cpp:342 eeschema/onrightclick.cpp:836
+#: eeschema/libedit_onrightclick.cpp:342 eeschema/onrightclick.cpp:851
 msgid "Mirror Block --"
 msgstr "Ribalta blocco --"
 
@@ -14218,13 +14218,13 @@ msgstr "Ribalta blocco --"
 msgid "Rotate Block ccw"
 msgstr "Ruota blocco antiorario"
 
-#: eeschema/template_fieldnames.cpp:39 eeschema/libedit.cpp:512
-#: eeschema/lib_field.cpp:602
+#: eeschema/template_fieldnames.cpp:48 eeschema/libedit.cpp:512
+#: eeschema/lib_field.cpp:593
 msgid "Datasheet"
 msgstr "Specifiche"
 
-#: eeschema/template_fieldnames.cpp:47 eeschema/lib_field.cpp:72
-#: eeschema/lib_field.cpp:763
+#: eeschema/template_fieldnames.cpp:55 eeschema/lib_field.cpp:72
+#: eeschema/lib_field.cpp:754
 msgid "Field"
 msgstr "Campo"
 
@@ -14256,84 +14256,84 @@ msgstr "Non ci sono etichette indefinite da eliminare nel foglio."
 msgid "Do you wish to cleanup this sheet?"
 msgstr "Desideri ripulire questo foglio?"
 
-#: eeschema/schedit.cpp:508
+#: eeschema/schedit.cpp:506
 msgid "No tool selected"
 msgstr "Nessun strumento selezionato"
 
-#: eeschema/schedit.cpp:512
+#: eeschema/schedit.cpp:510
 msgid "Descend or ascend hierarchy"
 msgstr "Gerarchia discendente o ascendente"
 
-#: eeschema/schedit.cpp:516
+#: eeschema/schedit.cpp:514
 msgid "Add no connect"
 msgstr "Aggiungi non connessione"
 
-#: eeschema/schedit.cpp:520
+#: eeschema/schedit.cpp:518
 msgid "Add wire"
 msgstr "Aggiungi filo"
 
-#: eeschema/schedit.cpp:524
+#: eeschema/schedit.cpp:522
 msgid "Add bus"
 msgstr "Aggiungi Bus"
 
-#: eeschema/schedit.cpp:528
+#: eeschema/schedit.cpp:526
 msgid "Add lines"
 msgstr "Aggiungi linee"
 
-#: eeschema/schedit.cpp:532
+#: eeschema/schedit.cpp:530
 msgid "Add junction"
 msgstr "Aggiungi giunzione"
 
-#: eeschema/schedit.cpp:536
+#: eeschema/schedit.cpp:534
 msgid "Add label"
 msgstr "Aggiungi etichetta"
 
-#: eeschema/schedit.cpp:540
+#: eeschema/schedit.cpp:538
 msgid "Add global label"
 msgstr "Aggiungi etichetta globale"
 
-#: eeschema/schedit.cpp:544
+#: eeschema/schedit.cpp:542
 msgid "Add hierarchical label"
 msgstr "Aggiungi etichetta gerarchica"
 
-#: eeschema/schedit.cpp:552
+#: eeschema/schedit.cpp:550
 msgid "Add image"
 msgstr "Aggiungi immagine"
 
-#: eeschema/schedit.cpp:556
+#: eeschema/schedit.cpp:554
 msgid "Add wire to bus entry"
 msgstr "Aggiungi elemento da filo a bus"
 
-#: eeschema/schedit.cpp:560
+#: eeschema/schedit.cpp:558
 msgid "Add bus to bus entry"
 msgstr "Aggiungi elemento da bus a bus"
 
-#: eeschema/schedit.cpp:564
+#: eeschema/schedit.cpp:562
 msgid "Add sheet"
 msgstr "Aggiungi foglio"
 
-#: eeschema/schedit.cpp:568
+#: eeschema/schedit.cpp:566
 msgid "Add sheet pins"
 msgstr "Aggiungi pin foglio"
 
-#: eeschema/schedit.cpp:572
+#: eeschema/schedit.cpp:570
 msgid "Import sheet pins"
 msgstr "Importa punto di connessione"
 
-#: eeschema/schedit.cpp:576
+#: eeschema/schedit.cpp:574
 msgid "Add component"
 msgstr "Aggiungi componente"
 
-#: eeschema/schedit.cpp:580
+#: eeschema/schedit.cpp:578
 msgid "Add power"
 msgstr "Aggiungi alimentazione"
 
-#: eeschema/sch_collectors.cpp:431
+#: eeschema/sch_collectors.cpp:432
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
 msgstr "Elemento derivato %s dall'elemento %s trovato nel foglio %s"
 
-#: eeschema/sch_collectors.cpp:438
+#: eeschema/sch_collectors.cpp:439
 #, c-format
 msgid "Item %s found in sheet %s"
 msgstr "Elemento %s trovato nel foglio %s"
@@ -14491,7 +14491,7 @@ msgstr "Modifica etichetta globale "
 msgid "Edit Hierarchical Label"
 msgstr "Modifica etichetta gerarchica"
 
-#: eeschema/onrightclick.cpp:122 eeschema/onrightclick.cpp:879
+#: eeschema/onrightclick.cpp:122 eeschema/onrightclick.cpp:894
 msgid "Edit Image"
 msgstr "Modifica immagine"
 
@@ -14564,11 +14564,13 @@ msgstr "Ruota in senso orario"
 msgid "Rotate Counterclockwise"
 msgstr "Ruota in senso antiorario"
 
-#: eeschema/onrightclick.cpp:376 eeschema/onrightclick.cpp:873
+#: eeschema/onrightclick.cpp:376 eeschema/onrightclick.cpp:768
+#: eeschema/onrightclick.cpp:888
 msgid "Mirror --"
 msgstr "Speculare --"
 
-#: eeschema/onrightclick.cpp:378 eeschema/onrightclick.cpp:876
+#: eeschema/onrightclick.cpp:378 eeschema/onrightclick.cpp:770
+#: eeschema/onrightclick.cpp:891
 msgid "Mirror ||"
 msgstr "Speculare |"
 
@@ -14770,87 +14772,99 @@ msgstr "Sposta foglio"
 msgid "Drag Sheet"
 msgstr "Trascina foglio"
 
-#: eeschema/onrightclick.cpp:764
+#: eeschema/onrightclick.cpp:762
+msgid "Rotate Sheet CW"
+msgstr "Ruota foglio in s. orario"
+
+#: eeschema/onrightclick.cpp:765
+msgid "Rotate Sheet CCW"
+msgstr "Ruota foglio in s. antiorario"
+
+#: eeschema/onrightclick.cpp:774
+msgid "Orient Sheet"
+msgstr "Orienta foglio"
+
+#: eeschema/onrightclick.cpp:779
 msgid "Place Sheet"
 msgstr "Piazza foglio"
 
-#: eeschema/onrightclick.cpp:768
+#: eeschema/onrightclick.cpp:783
 msgid "Edit Sheet"
 msgstr "Modifica foglio"
 
-#: eeschema/onrightclick.cpp:771
+#: eeschema/onrightclick.cpp:786
 msgid "Resize Sheet"
 msgstr "Dimensiona foglio"
 
-#: eeschema/onrightclick.cpp:774
+#: eeschema/onrightclick.cpp:789
 msgid "Import Sheet Pins"
 msgstr "Importa punto di connessione fogli"
 
-#: eeschema/onrightclick.cpp:778
+#: eeschema/onrightclick.cpp:793
 msgid "Cleanup Sheet Pins"
 msgstr "Ripulisci punti di connessione fogli"
 
-#: eeschema/onrightclick.cpp:782
+#: eeschema/onrightclick.cpp:797
 msgid "Delete Sheet"
 msgstr "Cancella foglio"
 
-#: eeschema/onrightclick.cpp:794
+#: eeschema/onrightclick.cpp:809
 msgid "Move Sheet Pin"
 msgstr "Sposta punto di connessione fogli"
 
-#: eeschema/onrightclick.cpp:799
+#: eeschema/onrightclick.cpp:814
 msgid "Edit Sheet Pin"
 msgstr "Modifica punto di connessione fogli"
 
-#: eeschema/onrightclick.cpp:802
+#: eeschema/onrightclick.cpp:817
 msgid "Delete Sheet Pin"
 msgstr "Cancella punto di connessione fogli"
 
-#: eeschema/onrightclick.cpp:817
+#: eeschema/onrightclick.cpp:832
 msgid "Window Zoom"
 msgstr "Zoom finestra"
 
-#: eeschema/onrightclick.cpp:825 eeschema/hotkeys.cpp:195
+#: eeschema/onrightclick.cpp:840 eeschema/hotkeys.cpp:195
 msgid "Save Block"
 msgstr "Salva blocco"
 
-#: eeschema/onrightclick.cpp:829
+#: eeschema/onrightclick.cpp:844
 msgid "Drag Block"
 msgstr "Trascina blocco"
 
-#: eeschema/onrightclick.cpp:839
+#: eeschema/onrightclick.cpp:854
 msgid "Rotate Block CCW"
 msgstr "Ruota blocco antiorario"
 
-#: eeschema/onrightclick.cpp:845
+#: eeschema/onrightclick.cpp:860
 msgid "Copy to Clipboard"
 msgstr "Copia su appunti"
 
-#: eeschema/onrightclick.cpp:866
+#: eeschema/onrightclick.cpp:881
 msgid "Move Image"
 msgstr "Sposta immagine"
 
-#: eeschema/onrightclick.cpp:871
+#: eeschema/onrightclick.cpp:886
 msgid "Rotate Image"
 msgstr "Ruota immagine"
 
-#: eeschema/onrightclick.cpp:885
+#: eeschema/onrightclick.cpp:900
 msgid "Delete Image"
 msgstr "Cancella immagine"
 
-#: eeschema/onrightclick.cpp:897
+#: eeschema/onrightclick.cpp:912
 msgid "Move Bus Entry"
 msgstr "Sposta elemento bus"
 
-#: eeschema/onrightclick.cpp:904
+#: eeschema/onrightclick.cpp:919
 msgid "Set Bus Entry Shape /"
 msgstr "Imposta forma elemento bus /"
 
-#: eeschema/onrightclick.cpp:907
+#: eeschema/onrightclick.cpp:922
 msgid "Set Bus Entry Shape \\"
 msgstr "Imposta forma elemento bus \\"
 
-#: eeschema/onrightclick.cpp:909
+#: eeschema/onrightclick.cpp:924
 msgid "Delete Bus Entry"
 msgstr "Cancella elemento bus"
 
@@ -16188,34 +16202,29 @@ msgstr "Seleziona componente"
 msgid "Field %s"
 msgstr "Campo %s"
 
-#: eeschema/sch_component.cpp:235
-#: eeschema/dialogs/dialog_lib_new_component_base.cpp:48
-msgid "U"
-msgstr "U"
-
-#: eeschema/sch_component.cpp:1503
+#: eeschema/sch_component.cpp:1511
 msgid "Power symbol"
 msgstr "Simbolo di alimentazione"
 
-#: eeschema/sch_component.cpp:1508
+#: eeschema/sch_component.cpp:1516
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 #: eeschema/dialogs/dialog_color_config.cpp:103
 msgid "Component"
 msgstr "Componente"
 
-#: eeschema/sch_component.cpp:1511
+#: eeschema/sch_component.cpp:1519
 msgid "Alias of"
 msgstr "Alias di"
 
-#: eeschema/sch_component.cpp:1519
+#: eeschema/sch_component.cpp:1527
 msgid "<Unknown>"
 msgstr "<Sconosciuto>"
 
-#: eeschema/sch_component.cpp:1525
+#: eeschema/sch_component.cpp:1533
 msgid "Key Words"
 msgstr "Parole chiave"
 
-#: eeschema/sch_component.cpp:1690
+#: eeschema/sch_component.cpp:1698
 #, c-format
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
@@ -16559,12 +16568,12 @@ msgstr ""
 msgid "No off grid or duplicate pins were found."
 msgstr "Non è stato trovato nessun piedino duplicato o fuori griglia "
 
-#: eeschema/lib_field.cpp:611
+#: eeschema/lib_field.cpp:602
 #, c-format
 msgid "Field%d"
 msgstr "Campo%d"
 
-#: eeschema/lib_field.cpp:674
+#: eeschema/lib_field.cpp:665
 #, c-format
 msgid "Field %s %s"
 msgstr "Campo %s %s"
@@ -16706,14 +16715,6 @@ msgstr "Aggiungi polilinea grafica"
 #: eeschema/hotkeys.cpp:163
 msgid "Add Graphic Text"
 msgstr "Aggiungi testo grafico"
-
-#: eeschema/hotkeys.cpp:165
-msgid "Mirror Y Component"
-msgstr "Componente speculare in Y"
-
-#: eeschema/hotkeys.cpp:167
-msgid "Mirror X Component"
-msgstr "Componente speculare in X"
 
 #: eeschema/hotkeys.cpp:169
 msgid "Orient Normal Component"
@@ -18630,6 +18631,10 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:44
 msgid "Default reference designator:"
 msgstr "Designatore predefinito riferimento componente "
+
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:48
+msgid "U"
+msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:51
 msgid "Number of units per package:"
