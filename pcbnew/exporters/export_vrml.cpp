@@ -569,7 +569,7 @@ static void export_vrml_arc( MODEL_VRML& aModel, LAYER_NUM layer,
     centery = -centery;
     arc_starty = -arc_starty;
 
-    if( !vlayer->AddArc( centerx, centery, arc_startx, arc_starty, width, arc_angle, false ) )
+    if( !vlayer->AddArc( centerx, centery, arc_startx, arc_starty, width, -arc_angle, false ) )
         throw( std::runtime_error( vlayer->GetError() ) );
 
 }
@@ -592,10 +592,10 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
     {
     case S_ARC:
         export_vrml_arc( aModel, layer,
-                         (double) drawseg->GetCenter().x,
-                         (double) drawseg->GetCenter().y,
-                         (double) drawseg->GetArcStart().x,
-                         (double) drawseg->GetArcStart().y,
+                         (double) drawseg->GetCenter().x * aModel.scale,
+                         (double) drawseg->GetCenter().y * aModel.scale,
+                         (double) drawseg->GetArcStart().x * aModel.scale,
+                         (double) drawseg->GetArcStart().y * aModel.scale,
                          w, drawseg->GetAngle() / 10 );
         break;
 
