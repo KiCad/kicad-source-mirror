@@ -108,6 +108,10 @@ option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
     ON )
 
+option( KICAD_BUILD_PARALLEL_CL_MP
+    "Build in parallel using the /MP compiler option (default OFF for safety reasons)"
+    OFF )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -360,6 +364,38 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+
+if( MSVC )
+    # Disallow implicit linking for Boost
+    add_definitions( -DBOOST_ALL_NO_LIB )
+    # Disable MSVC's deprecation warnings
+    add_definitions( -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
+    # Hide Windows's min() and max() macros
+    add_definitions( -DNOMINMAX )
+    # source and execution charset are UTF-8
+    string( APPEND CMAKE_CXX_FLAGS " /utf-8" )
+    # C4290: throw() is interpreted as declspec(nothrow)
+    string( APPEND CMAKE_CXX_FLAGS " /wd4290" )
+    # C4800: non-bool is explicitly cast to bool, forcing value of 0 or 1
+    string( APPEND CMAKE_CXX_FLAGS " /wd4800" )
+    # /Zi: create PDB
+    string( APPEND CMAKE_CXX_FLAGS " /Zi" )
+    # /GF: enable string pooling
+    string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GF" )
+    foreach( type EXE SHARED MODULE)
+        # /DEBUG: create PDB
+        string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG" )
+        # /OPT:REF: omit unreferenced code
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:REF" )
+        # /OPT:ICF: fold common data
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF" )
+    endforeach()
+
+    # Let cl.exe parallelize builds
+    if( KICAD_BUILD_PARALLEL_CL_MP )
+        string( APPEND CMAKE_CXX_FLAGS " /MP" )
+    endif()
+endif()
 
 if( KICAD_SCRIPTING )
     add_definitions( -DKICAD_SCRIPTING )
