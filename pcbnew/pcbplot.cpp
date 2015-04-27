@@ -314,8 +314,10 @@ void BuildPlotFileName( wxFileName*     aFilename,
 
 
 PLOT_CONTROLLER::PLOT_CONTROLLER( BOARD *aBoard )
-    : m_plotter( NULL ), m_board( aBoard )
 {
+    m_plotter = NULL;
+    m_board = aBoard;
+    m_plotLayer = UNDEFINED_LAYER;
 }
 
 
@@ -351,14 +353,14 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
     /* Save the current format: sadly some plot routines depends on this
        but the main reason is that the StartPlot method uses it to
        dispatch the plotter creation */
-    m_plotOpts.SetFormat( aFormat );
+    GetPlotOptions().SetFormat( aFormat );
 
     // Ensure that the previous plot is closed
     ClosePlot();
 
     // Now compute the full filename for the output and start the plot
     // (after ensuring the output directory is OK)
-    wxString outputDirName = m_plotOpts.GetOutputDirectory() ;
+    wxString outputDirName = GetPlotOptions().GetOutputDirectory() ;
     wxFileName outputDir = wxFileName::DirName( outputDirName );
     wxString boardFilename = m_board->GetFileName();
 
@@ -367,14 +369,14 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
         wxFileName fn( boardFilename );
         BuildPlotFileName( &fn, outputDirName, aSuffix, GetDefaultPlotExtension( aFormat ) );
 
-        m_plotter = StartPlotBoard( m_board, &m_plotOpts, UNDEFINED_LAYER, fn.GetFullPath(), aSheetDesc );
+        m_plotter = StartPlotBoard( m_board, &GetPlotOptions(), ToLAYER_ID( GetLayer() ), fn.GetFullPath(), aSheetDesc );
     }
 
     return( m_plotter != NULL );
 }
 
 
-bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )
+bool PLOT_CONTROLLER::PlotLayer()
 {
     LOCALE_IO toggle;
 
@@ -383,7 +385,7 @@ bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )
         return false;
 
     // Fully delegated to the parent
-    PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( aLayer ), m_plotOpts );
+    PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( GetLayer() ), GetPlotOptions() );
 
     return true;
 }

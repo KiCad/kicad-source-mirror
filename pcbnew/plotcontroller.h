@@ -34,7 +34,6 @@
 
 class PLOTTER;
 class BOARD;
-class REPORTER;
 
 
 /**
@@ -47,29 +46,51 @@ public:
     /** Batch plotter constructor, nothing interesting here */
     PLOT_CONTROLLER( BOARD *aBoard );
 
-    /** Batch plotter destructor, ensures that the last plot is closed */
+    /** Batch plotter destructor, ensures that the last plot is closed
+     */
     ~PLOT_CONTROLLER();
 
-    PCB_PLOT_PARAMS *AccessPlotOpts() { return &m_plotOpts; }
+    /**
+     * Accessor to the plot parameters and options
+     */
+    PCB_PLOT_PARAMS& GetPlotOptions() { return m_plotOptions; }
+
+    void SetLayer( LAYER_NUM aLayer ) { m_plotLayer = aLayer; }
+    LAYER_NUM GetLayer() { return m_plotLayer; }
+
+
+    /**
+     * @return true if a plotter is initialized and can be used
+     */
     bool IsPlotOpen() const { return m_plotter != NULL; }
 
-    /** Close the current plot, nothing happens if it isn't open */
+    /** Close the current plot, nothing happens if it isn't open
+     */
     void ClosePlot();
 
     /** Open a new plotfile; works as a factory for plotter objects
+     * @param aSuffix is a string added to the base filename (derived from
+     * the board filename) to identify the plot file
+     * @param aFormat is the plot file format identifier
+     * @param aSheetDesc
      */
     bool OpenPlotfile( const wxString &aSuffix, PlotFormat aFormat,
                        const wxString &aSheetDesc );
 
-    /** Plot a single layer on the current plotfile */
-    bool PlotLayer( LAYER_NUM layer );
+    /** Plot a single layer on the current plotfile
+     * m_plotLayer is the layer to plot
+     */
+    bool PlotLayer();
 
     void SetColorMode( bool aColorMode );
     bool GetColorMode();
 
 private:
+    /// the layer to plot
+    LAYER_NUM m_plotLayer;
+
     /// Option bank
-    PCB_PLOT_PARAMS m_plotOpts;
+    PCB_PLOT_PARAMS m_plotOptions;
 
     /// This is the plotter object; it starts NULL and become instantiated
     /// when a plotfile is requested
