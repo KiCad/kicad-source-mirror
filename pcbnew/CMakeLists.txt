@@ -352,6 +352,7 @@ if( KICAD_SCRIPTING )
                         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 
         DEPENDS pcbcommon
+        DEPENDS plotcontroller.h
         DEPENDS scripting/pcbnew.i
         DEPENDS scripting/board.i
         DEPENDS scripting/board_item.i
