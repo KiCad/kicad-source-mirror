@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-26 20:47+0100\n"
-"PO-Revision-Date: 2015-04-26 20:47+0100\n"
+"POT-Creation-Date: 2015-04-27 23:18+0100\n"
+"PO-Revision-Date: 2015-04-27 23:18+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1795,11 +1795,11 @@ msgstr "Il file del C.S. \"%s\" è già aperto."
 msgid "The current board has been modified.  Do you wish to save the changes?"
 msgstr "La scheda corrente è stata modificata. Vuoi salvare le modifiche?"
 
-#: pcbnew/files.cpp:419 eeschema/files-io.cpp:214
+#: pcbnew/files.cpp:419 eeschema/files-io.cpp:215
 msgid "Save and Load"
 msgstr "Salva e carica"
 
-#: pcbnew/files.cpp:420 eeschema/files-io.cpp:215
+#: pcbnew/files.cpp:420 eeschema/files-io.cpp:216
 msgid "Load Without Saving"
 msgstr "Carica senza salvare"
 
@@ -11884,7 +11884,7 @@ msgstr "Usare un percorso relativo a \"%s\"?"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:380
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:513
-#: eeschema/dialogs/dialog_eeschema_config.cpp:416
+#: eeschema/dialogs/dialog_eeschema_config.cpp:417
 msgid "Path type"
 msgstr "Tipo di percorso"
 
@@ -16005,16 +16005,16 @@ msgstr "Esporta"
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
 
-#: eeschema/files-io.cpp:67
+#: eeschema/files-io.cpp:68
 msgid "Schematic Files"
 msgstr "File di schema"
 
-#: eeschema/files-io.cpp:97
+#: eeschema/files-io.cpp:98
 #, c-format
 msgid "Could not save backup of file '%s'"
 msgstr "Impossibile salvare il file di backup \"%s\""
 
-#: eeschema/files-io.cpp:111
+#: eeschema/files-io.cpp:112
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:51
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:61
@@ -16022,31 +16022,31 @@ msgstr "Impossibile salvare il file di backup \"%s\""
 msgid "Failed to create file '%s'"
 msgstr "Impossibile creare il file \"%s\""
 
-#: eeschema/files-io.cpp:140 cvpcb/readwrite_dlgs.cpp:406
+#: eeschema/files-io.cpp:141 cvpcb/readwrite_dlgs.cpp:406
 #, c-format
 msgid "File %s saved"
 msgstr "File %s salvato"
 
-#: eeschema/files-io.cpp:145
+#: eeschema/files-io.cpp:146
 msgid "File write operation failed."
 msgstr "Operazione di scrittura file fallita"
 
-#: eeschema/files-io.cpp:199
+#: eeschema/files-io.cpp:200
 #, c-format
 msgid "Schematic file '%s' is already open."
 msgstr "Il file schema \"%s\" è già aperto."
 
-#: eeschema/files-io.cpp:212
+#: eeschema/files-io.cpp:213
 msgid ""
 "The current schematic has been modified.  Do you wish to save the changes?"
 msgstr "Lo schema corrente è stato modificato. Salvare le modifiche?"
 
-#: eeschema/files-io.cpp:245
+#: eeschema/files-io.cpp:246
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Lo schema \"%s\" non esiste. Volete crearlo?"
 
-#: eeschema/files-io.cpp:267
+#: eeschema/files-io.cpp:268
 #, c-format
 msgid ""
 "Ready\n"
@@ -16055,11 +16055,11 @@ msgstr ""
 "Pronto\n"
 "Cartella progetto: \"%s\"\n"
 
-#: eeschema/files-io.cpp:350
+#: eeschema/files-io.cpp:352
 msgid "Import Schematic"
 msgstr "Importa schema"
 
-#: eeschema/files-io.cpp:458
+#: eeschema/files-io.cpp:460
 msgid ""
 "This operation cannot be undone. Besides, take into account that "
 "hierarchical sheets will not be appended.\n"
@@ -16071,7 +16071,7 @@ msgstr ""
 "\n"
 "Si desidera salvare il documento prima di procedere?"
 
-#: eeschema/files-io.cpp:482
+#: eeschema/files-io.cpp:484
 #, c-format
 msgid "Directory '%s' is not writable"
 msgstr "Cartella \"%s\" non scrivibile"
@@ -16963,16 +16963,17 @@ msgstr ""
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:19
 msgid ""
 "This project uses symbols that no longer match the symbols in the system "
-"libraries. Using this tool, you can rescue these cached symbols into a new "
-"library.\n"
+"libraries.\n"
+"Using this tool, you can rescue these cached symbols into a new library.\n"
 "\n"
 "Choose \"Rescue\" for any parts you would like to save from this project's "
 "cache, or press Cancel to allow the symbols to be updated to the new "
 "versions."
 msgstr ""
-"Questo progetto usa simboli che non corrispondono più i simboli presenti "
-"nelle librerie di sistema. Usando questo strumento, è possibile recuperare "
-"questi simboli dalla cache e inserirli in una nuova libreria.\n"
+"Questo progetto usa simboli che non corrispondono più ai simboli presenti "
+"nelle librerie di sistema.\n"
+"Usando questo strumento, è possibile recuperare questi simboli dalla cache e "
+"inserirli in una nuova libreria.\n"
 "\n"
 "Selezionare \"Recupera\" per ogni elemento che si desidera salvare dalla "
 "cache del progetto, o premere Annulla per permettere l'aggiornamento dei "
@@ -17827,29 +17828,29 @@ msgstr "Coordinate X del testo relativo al componente"
 msgid "Find"
 msgstr "Cerca"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:136
+#: eeschema/dialogs/dialog_eeschema_config.cpp:137
 #, c-format
 msgid "Project '%s'"
 msgstr "Progetto \"%s\""
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:314
+#: eeschema/dialogs/dialog_eeschema_config.cpp:315
 msgid "Library files:"
 msgstr "File libreria:"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:374
+#: eeschema/dialogs/dialog_eeschema_config.cpp:375
 #, c-format
 msgid "'%s' : library already in use"
 msgstr "\"%s\": libreria già in uso"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:389
+#: eeschema/dialogs/dialog_eeschema_config.cpp:390
 msgid "Default Path for Libraries"
 msgstr "Percorso predefinito per le librerie"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:416
+#: eeschema/dialogs/dialog_eeschema_config.cpp:417
 msgid "Use a relative path?"
 msgstr "Usare un percorso relativo?"
 
-#: eeschema/dialogs/dialog_eeschema_config.cpp:436
+#: eeschema/dialogs/dialog_eeschema_config.cpp:437
 msgid "Path already in use"
 msgstr "Percorso già in uso"
 
@@ -22438,6 +22439,10 @@ msgstr "Proprietà componente"
 #: eeschema/dialogs/dialog_annotate_base.h:88
 msgid "Annotate Schematic"
 msgstr "Annota schema"
+
+#: eeschema/dialogs/dialog_rescue_each_base.h:65
+msgid "Conflicts Checking"
+msgstr "Controllo conflitti"
 
 #: eeschema/dialogs/dialog_bom_base.h:93
 msgid "Bill of Material"
