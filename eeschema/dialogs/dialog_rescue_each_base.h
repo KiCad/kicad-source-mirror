@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -62,7 +62,7 @@ class DIALOG_RESCUE_EACH_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,593 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Conflicts Checking"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,593 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_RESCUE_EACH_BASE();
 	
 };

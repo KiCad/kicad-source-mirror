@@ -47,7 +47,7 @@
             <property name="size">529,593</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title"></property>
+            <property name="title">Conflicts Checking</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -125,7 +125,7 @@
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="label">This project uses symbols that no longer match the symbols in the system libraries. Using this tool, you can rescue these cached symbols into a new library.&#x0A;&#x0A;Choose &quot;Rescue&quot; for any parts you would like to save from this project&apos;s cache, or press Cancel to allow the symbols to be updated to the new versions.</property>
+                        <property name="label">This project uses symbols that no longer match the symbols in the system libraries.&#x0A;Using this tool, you can rescue these cached symbols into a new library.&#x0A;&#x0A;Choose &quot;Rescue&quot; for any parts you would like to save from this project&apos;s cache, or press Cancel to allow the symbols to be updated to the new versions.</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
@@ -178,7 +178,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALL</property>
+                    <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticText" expanded="1">
                         <property name="BottomDockable">1</property>
@@ -329,7 +329,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALL</property>
+                    <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticText" expanded="1">
                         <property name="BottomDockable">1</property>
@@ -498,7 +498,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -672,7 +672,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>

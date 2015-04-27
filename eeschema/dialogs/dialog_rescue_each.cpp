@@ -33,6 +33,7 @@
 #include <vector>
 #include <boost/foreach.hpp>
 #include <lib_cache_rescue.h>
+#include <eeschema_config.h>
 
 class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
 {
@@ -84,6 +85,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, std::vector<RES
       m_AskShowAgain( aAskShowAgain ),
       m_insideUpdateEvent( false )
 {
+    m_Config = Kiface().KifaceSettings();
 }
 
 
@@ -97,7 +99,6 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_Config = Kiface().KifaceSettings();
     m_ListOfConflicts->AppendToggleColumn( wxT("Rescue") );
     m_ListOfConflicts->AppendTextColumn( wxT("Symbol Name") );
     m_ListOfInstances->AppendTextColumn( wxT("Reference") );
@@ -135,6 +136,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     m_ListOfInstances->DeleteAllItems();
 
     int row = m_ListOfConflicts->GetSelectedRow();
+
     if( row == wxNOT_FOUND )
         row = 0;
 
@@ -160,6 +162,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
 void DIALOG_RESCUE_EACH::OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEvent )
 {
     int row = m_ListOfConflicts->GetSelectedRow();
+
     if( row == wxNOT_FOUND )
         row = 0;
 
@@ -172,6 +175,7 @@ void DIALOG_RESCUE_EACH::OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEven
 void DIALOG_RESCUE_EACH::OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEvent )
 {
     int row = m_ListOfConflicts->GetSelectedRow();
+
     if( row == wxNOT_FOUND )
         row = 0;
 
@@ -190,6 +194,7 @@ void DIALOG_RESCUE_EACH::OnDialogResize( wxSizeEvent& aSizeEvent )
 
 // Render the preview in our m_componentView. If this gets more complicated, we should
 // probably have a derived class from wxPanel; but this keeps things local.
+// Call it only from a Paint Event, because we are using a wxPaintDC to draw the component
 void DIALOG_RESCUE_EACH::renderPreview( LIB_PART* aComponent, int aUnit, wxPanel* aPanel )
 {
     wxPaintDC dc( aPanel );
@@ -215,9 +220,7 @@ void DIALOG_RESCUE_EACH::renderPreview( LIB_PART* aComponent, int aUnit, wxPanel
 
     dc.SetUserScale( scale, scale );
 
-    wxPoint offset =  bBox.Centre();
-    NEGATE( offset.x );
-    NEGATE( offset.y );
+    wxPoint offset = - bBox.Centre();
 
     // Avoid rendering when either dimension is zero
     int width, height;
@@ -236,18 +239,13 @@ void DIALOG_RESCUE_EACH::OnConflictSelect( wxDataViewEvent& aEvent )
     // wxformbuilder connects this event to the _dialog_, not the data view.
     // Make sure the correct item triggered it, otherwise we trigger recursively
     // and get a stack overflow.
-    if( aEvent.GetEventObject() != m_ListOfConflicts ) return;
+    if( aEvent.GetEventObject() != m_ListOfConflicts )
+        return;
 
     PopulateInstanceList();
 
-    int row = m_ListOfConflicts->GetSelectedRow();
-    if( row == wxNOT_FOUND )
-        row = 0;
-
-    RESCUE_CANDIDATE& selected_part = (*m_Candidates)[row];
-
-    renderPreview( selected_part.cache_candidate, 0, m_componentViewOld );
-    renderPreview( selected_part.lib_candidate, 0, m_componentViewNew );
+    m_componentViewOld->Refresh();
+    m_componentViewNew->Refresh();
 }
 
 
@@ -283,7 +281,7 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 
     if( resp == wxID_YES )
     {
-        m_Config->Write( wxT("RescueNeverShow"), true );
+        m_Config->Write( RESCUE_NEVER_SHOW_KEY, true );
         m_Candidates->clear();
         Close();
     }

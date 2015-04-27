@@ -48,7 +48,9 @@ private:
 
 DIALOG_RESCUE_SUMMARY::DIALOG_RESCUE_SUMMARY( SCH_EDIT_FRAME* aParent, std::vector<RESCUE_LOG>& aRescueLog )
     : DIALOG_RESCUE_SUMMARY_BASE( aParent ), m_Parent( aParent), m_RescueLog( &aRescueLog )
-{ }
+{
+    m_Config = Kiface().KifaceSettings();
+}
 
 
 bool DIALOG_RESCUE_SUMMARY::TransferDataToWindow()
@@ -56,7 +58,6 @@ bool DIALOG_RESCUE_SUMMARY::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_Config = Kiface().KifaceSettings();
     m_ListOfChanges->AppendTextColumn( wxT( "Reference" ) );
     m_ListOfChanges->AppendTextColumn( wxT( "Old Symbol" ), wxDATAVIEW_CELL_INERT, /*width*/ 100);
     m_ListOfChanges->AppendTextColumn( wxT( "New Symbol" ), wxDATAVIEW_CELL_INERT, /*width*/ 100);

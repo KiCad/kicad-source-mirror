@@ -44,6 +44,7 @@
 #include <sch_component.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_cache_rescue.h>
+#include <eeschema_config.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bool aCreateBackupFile )
@@ -310,7 +311,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // Only do this if RescueNeverShow was not set.
         wxConfigBase *config = Kiface().KifaceSettings();
         bool rescueNeverShow = false;
-        config->Read( wxT("RescueNeverShow"), &rescueNeverShow, false );
+        config->Read( RESCUE_NEVER_SHOW_KEY, &rescueNeverShow, false );
+
         if( !rescueNeverShow )
         {
             if( RescueCacheConflicts( false ) )

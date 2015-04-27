@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,7 +16,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
-	m_lblInfo = new wxStaticText( this, wxID_ANY, _("This project uses symbols that no longer match the symbols in the system libraries. Using this tool, you can rescue these cached symbols into a new library.\n\nChoose \"Rescue\" for any parts you would like to save from this project's cache, or press Cancel to allow the symbols to be updated to the new versions."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblInfo = new wxStaticText( this, wxID_ANY, _("This project uses symbols that no longer match the symbols in the system libraries.\nUsing this tool, you can rescue these cached symbols into a new library.\n\nChoose \"Rescue\" for any parts you would like to save from this project's cache, or press Cancel to allow the symbols to be updated to the new versions."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblInfo->Wrap( 500 );
 	bSizerMain->Add( m_lblInfo, 0, wxALL|wxEXPAND, 5 );
 	
@@ -24,7 +24,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_staticText5->Wrap( -1 );
 	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizerMain->Add( m_staticText5, 0, wxALL, 5 );
+	bSizerMain->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListOfConflicts = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMain->Add( m_ListOfConflicts, 2, wxALL|wxEXPAND, 5 );
@@ -33,7 +33,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_staticText4->Wrap( -1 );
 	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizerMain->Add( m_staticText4, 0, wxALL, 5 );
+	bSizerMain->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListOfInstances = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMain->Add( m_ListOfInstances, 1, wxALL|wxEXPAND, 5 );
@@ -48,7 +48,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_staticText2->Wrap( -1 );
 	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizer6->Add( m_staticText2, 0, wxALL, 5 );
+	bSizer6->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_componentViewOld = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
 	m_componentViewOld->SetMinSize( wxSize( 150,150 ) );
@@ -65,7 +65,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_staticText3->Wrap( -1 );
 	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizer7->Add( m_staticText3, 0, wxALL, 5 );
+	bSizer7->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_componentViewNew = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
 	m_componentViewNew->SetMinSize( wxSize( 150,150 ) );

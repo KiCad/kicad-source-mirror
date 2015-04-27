@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,17 +21,19 @@ DIALOG_RESCUE_SUMMARY_BASE::DIALOG_RESCUE_SUMMARY_BASE( wxWindow* parent, wxWind
 	
 	m_staticText5 = new wxStaticText( this, wxID_ANY, _("The symbols of the following components were changed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	bupperSizer->Add( m_staticText5, 0, wxALL, 5 );
+	bupperSizer->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListOfChanges = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ListOfChanges->SetMinSize( wxSize( -1,200 ) );
+	
 	bupperSizer->Add( m_ListOfChanges, 1, wxALL|wxEXPAND, 5 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizer->Realize();
 	
-	bupperSizer->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	bupperSizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
 	
 	
 	bmainSizer->Add( bupperSizer, 1, wxALL|wxEXPAND, 6 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,8 +38,8 @@ class DIALOG_RESCUE_SUMMARY_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText5;
 		wxDataViewListCtrl* m_ListOfChanges;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
 	
 	public:
 		
