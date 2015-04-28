@@ -143,12 +143,12 @@ private:
                                                         // (i.e inches or mm)
     bool                     m_mirror;
     wxPoint                  m_offset;                  // Drill offset coordinates
-    bool                     m_mergePTHNPTH;
+    bool                     m_merge_PTH_NPTH;
     std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
 public:
-    EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
+    EXCELLON_WRITER( BOARD* aPcb )
     {
         m_file = NULL;
         m_pcb  = aPcb;
@@ -156,7 +156,7 @@ public:
         m_conversionUnits = 0.0001;
         m_unitsDecimal    = false;
         m_mirror = false;
-        m_mergePTHNPTH = false;
+        m_merge_PTH_NPTH = false;
         m_minimalHeader = false;
         m_ShortHeader = false;
     }
@@ -188,14 +188,14 @@ public:
      * @param aMirror = true to create mirrored coordinates (Y coordinates negated)
      * @param aMinimalHeader = true to use a minimal header (no comments, no info)
      * @param aOffset = drill coordinates offset
-     * @param aMergePTHNPTH : true to create only one list which contains both PTH and NPTH
+     * @param aMerge_PTH_NPTH : true to create only one list which contains both PTH and NPTH
      */
-    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMergePTHNPTH )
+    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMerge_PTH_NPTH )
     {
         m_mirror = aMirror;
         m_offset = aOffset;
         m_minimalHeader = aMinimalHeader;
-        m_mergePTHNPTH = aMergePTHNPTH;
+        m_merge_PTH_NPTH = aMerge_PTH_NPTH;
     }
 
     /**
@@ -210,12 +210,12 @@ public:
      * @param aGenerateNPTH_list :
      *       true to create NPTH only list (with no plated holes)
      *       false to created plated holes list (with no NPTH )
-     * @param aMergePTHNPTH : true to create only one list which contains both PTH and NPTH
+     * @param aMerge_PTH_NPTH : true to create only one list which contains both PTH and NPTH
      */
     void BuildHolesList( int aFirstLayer, int aLastLayer,
                          bool aExcludeThroughHoles,
                          bool aGenerateNPTH_list,
-                         bool aMergePTHNPTH );
+                         bool aMerge_PTH_NPTH );
 
     int  GetHolesCount() const { return m_holeListBuffer.size(); }
 

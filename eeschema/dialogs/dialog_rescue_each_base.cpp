@@ -27,7 +27,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	bSizerMain->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListOfConflicts = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMain->Add( m_ListOfConflicts, 2, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_ListOfConflicts, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Instances of this symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
@@ -36,7 +36,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	bSizerMain->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListOfInstances = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMain->Add( m_ListOfInstances, 1, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_ListOfInstances, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizerView;
 	bSizerView = new wxBoxSizer( wxHORIZONTAL );
@@ -53,7 +53,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_componentViewOld = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
 	m_componentViewOld->SetMinSize( wxSize( 150,150 ) );
 	
-	bSizer6->Add( m_componentViewOld, 1, wxEXPAND | wxALL, 5 );
+	bSizer6->Add( m_componentViewOld, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizerView->Add( bSizer6, 1, wxEXPAND, 5 );
@@ -70,7 +70,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_componentViewNew = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
 	m_componentViewNew->SetMinSize( wxSize( 150,150 ) );
 	
-	bSizer7->Add( m_componentViewNew, 1, wxEXPAND | wxALL, 5 );
+	bSizer7->Add( m_componentViewNew, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizerView->Add( bSizer7, 1, wxEXPAND, 5 );

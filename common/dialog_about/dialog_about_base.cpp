@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -65,23 +65,18 @@ dialog_about_base::dialog_about_base( wxWindow* parent, wxWindowID id, const wxS
 	
 	bSizer1->Add( m_auiNotebook, 2, wxEXPAND | wxALL, 5 );
 	
-	m_buttonOK = new wxButton( this, wxID_CANCEL, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetDefault(); 
-	bSizer1->Add( m_buttonOK, 0, wxALIGN_CENTER|wxALL, 5 );
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizer->Realize();
+	
+	bSizer1->Add( m_sdbSizer, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
-	
-	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( dialog_about_base::OnClose ) );
-	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( dialog_about_base::OnOkClick ), NULL, this );
 }
 
 dialog_about_base::~dialog_about_base()
 {
-	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( dialog_about_base::OnClose ) );
-	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( dialog_about_base::OnOkClick ), NULL, this );
-	
 }

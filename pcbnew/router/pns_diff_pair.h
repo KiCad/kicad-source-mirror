@@ -176,9 +176,15 @@ class PNS_DP_GATEWAYS
 
     public:
         PNS_DP_GATEWAYS ( int aGap ):
-            m_gap(aGap), m_viaGap( aGap ) {};
+            m_gap(aGap), m_viaGap( aGap )
+        {
+            // Do not leave unitialized members, and keep static analyser quiet:
+            m_viaDiameter = 0;
+            m_fitVias = true;
+        }
 
-        void SetGap ( int aGap ) {
+        void SetGap ( int aGap )
+        {
             m_gap = aGap;
             m_viaGap = aGap;
         }
@@ -320,6 +326,13 @@ public:
         m_net_n = aLineN.Net();
         m_p = aLineP.CLine();
         m_n = aLineN.CLine();
+
+        // Do not leave unitialized members, and keep static analyser quiet:
+        m_width  = 0;
+        m_gap  = 0;
+        m_viaGap  = 0;
+        m_maxUncoupledLength  = 0;
+        m_chamferLimit  = 0;
     }
 
     static inline bool ClassOf( const PNS_ITEM* aItem )

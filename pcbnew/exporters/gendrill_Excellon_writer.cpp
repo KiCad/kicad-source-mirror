@@ -431,7 +431,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
                                       int aLastLayer,
                                       bool aExcludeThroughHoles,
                                       bool aGenerateNPTH_list,
-                                      bool aMergePTHNPTH )
+                                      bool aMerge_PTH_NPTH )
 {
     HOLE_INFO new_hole;
     int       hole_value;
@@ -445,7 +445,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             EXCHG( aFirstLayer, aLastLayer );
     }
 
-    if ( aGenerateNPTH_list && aMergePTHNPTH )
+    if ( aGenerateNPTH_list && aMerge_PTH_NPTH )
     {
         return;
     }
@@ -497,7 +497,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             {
                 if( ! aGenerateNPTH_list &&
                     pad->GetAttribute() == PAD_HOLE_NOT_PLATED &&
-                    ! aMergePTHNPTH )
+                    ! aMerge_PTH_NPTH )
                     continue;
 
                 if( aGenerateNPTH_list && pad->GetAttribute() != PAD_HOLE_NOT_PLATED )

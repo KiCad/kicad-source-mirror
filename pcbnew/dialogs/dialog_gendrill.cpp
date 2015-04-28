@@ -360,10 +360,6 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
                                          * layer pair by layer pair for
                                          * buried vias
                                          */
-    int        layer1 = F_Cu;
-    int        layer2 = B_Cu;
-    bool       gen_through_holes = true;
-    bool       gen_NPTH_holes    = false;
 
     UpdateConfig();     // set params and Save drill options
 
@@ -372,14 +368,17 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
     if( m_microViasCount || m_blindOrBuriedViasCount )
         hasBuriedVias = true;
 
-    EXCELLON_WRITER excellonWriter( m_parent->GetBoard(),
-                                    m_FileDrillOffset );
+    EXCELLON_WRITER excellonWriter( m_parent->GetBoard() );
     excellonWriter.SetFormat( !m_UnitDrillIsInch,
                               (EXCELLON_WRITER::zeros_fmt) m_ZerosFormat,
                               m_Precision.m_lhs, m_Precision.m_rhs );
     excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset, m_Merge_PTH_NPTH );
 
     wxFileName fn;
+    int        layer1 = F_Cu;
+    int        layer2 = B_Cu;
+    bool       gen_through_holes = true;
+    bool       gen_NPTH_holes    = false;
 
     for( ; ; )
     {
@@ -509,8 +508,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    EXCELLON_WRITER excellonWriter( m_parent->GetBoard(),
-                                    m_FileDrillOffset );
+    EXCELLON_WRITER excellonWriter( m_parent->GetBoard() );
     excellonWriter.SetFormat( !m_UnitDrillIsInch,
                               (EXCELLON_WRITER::zeros_fmt) m_ZerosFormat,
                               m_Precision.m_lhs, m_Precision.m_rhs );

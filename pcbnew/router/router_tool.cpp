@@ -94,6 +94,7 @@ class CONTEXT_TRACK_WIDTH_MENU: public CONTEXT_MENU
 public:
     CONTEXT_TRACK_WIDTH_MENU()
     {
+        m_board = NULL;
         SetIcon( width_track_via_xpm );
         setCustomEventHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::handleCustomEvent,
                                             this, _1 ) );

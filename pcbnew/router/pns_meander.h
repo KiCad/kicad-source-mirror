@@ -115,6 +115,12 @@ public:
         m_width( aWidth ),
         m_baselineOffset( 0 )
      {
+        // Do not leave unitialized members, and keep static analyser quiet:
+        m_type = MT_SINGLE;
+        m_amplitude = 0;
+        m_side = false;
+        m_baseIndex = 0;
+        m_currentTarget = NULL;
      }
 
     /**
@@ -385,6 +391,11 @@ class PNS_MEANDERED_LINE
 public:
     PNS_MEANDERED_LINE()
     {
+        // Do not leave unitialized members, and keep static analyser quiet:
+        m_placer = NULL;
+        m_dual = false;
+        m_width = 0;
+        m_baselineOffset = 0;
     }
 
     /**
@@ -397,6 +408,9 @@ public:
         m_placer( aPlacer ),
         m_dual( aIsDual )
     {
+        // Do not leave unitialized members, and keep static analyser quiet:
+        m_width = 0;
+        m_baselineOffset = 0;
     }
 
     /**

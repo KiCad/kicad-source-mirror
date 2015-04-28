@@ -99,10 +99,10 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_ListOfConflicts->AppendToggleColumn( wxT("Rescue") );
-    m_ListOfConflicts->AppendTextColumn( wxT("Symbol Name") );
-    m_ListOfInstances->AppendTextColumn( wxT("Reference") );
-    m_ListOfInstances->AppendTextColumn( wxT("Value") );
+    m_ListOfConflicts->AppendToggleColumn( _("Rescue symbol") );
+    m_ListOfConflicts->AppendTextColumn( _("Symbol name") );
+    m_ListOfInstances->AppendTextColumn( _("Reference") );
+    m_ListOfInstances->AppendTextColumn( _("Value") );
     PopulateConflictList();
     PopulateInstanceList();
 
@@ -273,10 +273,12 @@ bool DIALOG_RESCUE_EACH::TransferDataFromWindow()
 
 void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 {
-    wxMessageDialog dlg( m_Parent, wxT( "Stop showing this tool? No changes will be made.\n\n"
-                "This setting can be changed from the Component Libraries settings, and the "
-                "tool can be activated manually from the Tools menu." ),
-            wxT( "Rescue Components" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
+    wxMessageDialog dlg( m_Parent,
+                _(  "Stop showing this tool?\n"
+                    "No changes will be made.\n\n"
+                    "This setting can be changed from the \"Component Libraries\" dialog,\n"
+                    "and the tool can be activated manually from the \"Tools\" menu." ),
+            _( "Rescue Components" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
     int resp = dlg.ShowModal ();
 
     if( resp == wxID_YES )

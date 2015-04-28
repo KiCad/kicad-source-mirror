@@ -201,7 +201,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
         << HtmlNewline( 4 )
         << _( "The complete KiCad EDA Suite is released under the" ) << HtmlNewline( 2 )
         << HtmlHyperlink( wxT( "http://www.gnu.org/licenses" ),
-                         _( "GNU General Public License (GPL) version 2" ) )
+                         _( "GNU General Public License (GPL) version 2 or any later version" ) )
         << wxT( "</div>" );
 
     info.SetLicense( license );
