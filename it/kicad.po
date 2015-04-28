@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-27 23:18+0100\n"
-"PO-Revision-Date: 2015-04-27 23:18+0100\n"
+"POT-Creation-Date: 2015-04-28 17:40+0100\n"
+"PO-Revision-Date: 2015-04-28 17:40+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -413,7 +413,7 @@ msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nessun modello selezionato. Impossibile generare un nuovo progetto."
 
 #: kicad/prjconfig.cpp:143 pcbnew/router/length_tuner_tool.cpp:172
-#: pcbnew/router/router_tool.cpp:453 common/confirm.cpp:80
+#: pcbnew/router/router_tool.cpp:454 common/confirm.cpp:80
 #: pcbnew/router/router_menus.h:716
 msgid "Error"
 msgstr "Errore"
@@ -692,7 +692,7 @@ msgstr "Rif."
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: eeschema/template_fieldnames.cpp:42 eeschema/onrightclick.cpp:422
 #: eeschema/sch_component.cpp:1511 eeschema/lib_field.cpp:579
-#: eeschema/lib_field.cpp:757
+#: eeschema/lib_field.cpp:757 eeschema/dialogs/dialog_rescue_each.cpp:105
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:184
 #: eeschema/dialogs/dialog_color_config.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
@@ -4204,7 +4204,6 @@ msgstr "Forma complessa"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:378
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:67
-#: common/dialog_about/dialog_about_base.cpp:68
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:30
 #: common/dialogs/dialog_env_var_config_base.cpp:58
 #: common/dialogs/dialog_get_component_base.cpp:45
@@ -8538,6 +8537,7 @@ msgstr "Anteprima di stampa"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: eeschema/template_fieldnames.cpp:39 eeschema/onrightclick.cpp:427
 #: eeschema/sch_component.cpp:1507 eeschema/lib_field.cpp:572
+#: eeschema/dialogs/dialog_rescue_each.cpp:104
 #: eeschema/dialogs/dialog_color_config.cpp:78
 msgid "Reference"
 msgstr "Riferimento"
@@ -9220,37 +9220,37 @@ msgstr ""
 "Impossibile creare un percorso relativo. Il volume di destinazione è diverso "
 "da quello del file della scheda!"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:426
-#: pcbnew/dialogs/dialog_gendrill.cpp:525
-#: pcbnew/dialogs/dialog_gendrill.cpp:593
+#: pcbnew/dialogs/dialog_gendrill.cpp:425
+#: pcbnew/dialogs/dialog_gendrill.cpp:523
+#: pcbnew/dialogs/dialog_gendrill.cpp:591
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Impossibile creare %s **\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:433
-#: pcbnew/dialogs/dialog_gendrill.cpp:599
+#: pcbnew/dialogs/dialog_gendrill.cpp:432
+#: pcbnew/dialogs/dialog_gendrill.cpp:597
 #, c-format
 msgid "Plot: %s OK\n"
 msgstr "Tracciatore: %s OK\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:505
+#: pcbnew/dialogs/dialog_gendrill.cpp:504
 msgid "Save Drill Report File"
 msgstr "Salva file rapporto foratura"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:530
+#: pcbnew/dialogs/dialog_gendrill.cpp:528
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Il file di rapporto %s è stato creato\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:548
+#: pcbnew/dialogs/dialog_gendrill.cpp:546
 msgid "HPGL plot files (.plt)|*.plt"
 msgstr "File di tracciatura (.plt)|*.plt"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:558
+#: pcbnew/dialogs/dialog_gendrill.cpp:556
 msgid "Gerber files (.pho)|*.pho"
 msgstr "File Gerber (*.pho)|*.pho"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:563
+#: pcbnew/dialogs/dialog_gendrill.cpp:561
 msgid "DXF files (.dxf)|*.dxf"
 msgstr "DXF files (.dxf)|*.dxf"
 
@@ -12665,60 +12665,60 @@ msgstr ""
 "Imposta la larghezza e la spaziatura della coppia differenziale sbrogliata "
 "correntemente."
 
-#: pcbnew/router/router_tool.cpp:109 pcbnew/router/router_menus.h:147
+#: pcbnew/router/router_tool.cpp:110 pcbnew/router/router_menus.h:147
 msgid "Custom size"
 msgstr "Dimensioni personalizzate"
 
-#: pcbnew/router/router_tool.cpp:112 pcbnew/router/router_menus.h:153
+#: pcbnew/router/router_tool.cpp:113 pcbnew/router/router_menus.h:153
 msgid "Use the starting track width"
 msgstr "Usa larghezza iniziale della pista"
 
-#: pcbnew/router/router_tool.cpp:113
+#: pcbnew/router/router_tool.cpp:114
 msgid "Route using the width of the starting track."
 msgstr "Sbroglia usando la larghezza della pista iniziale."
 
-#: pcbnew/router/router_tool.cpp:115 pcbnew/router/router_menus.h:159
+#: pcbnew/router/router_tool.cpp:116 pcbnew/router/router_menus.h:159
 msgid "Use netclass values"
 msgstr "Utilizza regole del gruppo di collegamenti"
 
-#: pcbnew/router/router_tool.cpp:116 pcbnew/router/router_menus.h:160
+#: pcbnew/router/router_tool.cpp:117 pcbnew/router/router_menus.h:160
 msgid "Use track and via sizes from the net class"
 msgstr "Usa dimensioni piste e via dalla netclass"
 
-#: pcbnew/router/router_tool.cpp:120 pcbnew/router/router_menus.h:166
+#: pcbnew/router/router_tool.cpp:121 pcbnew/router/router_menus.h:166
 msgid "Track "
 msgstr "Pista "
 
-#: pcbnew/router/router_tool.cpp:124 pcbnew/router/router_tool.cpp:149
+#: pcbnew/router/router_tool.cpp:125 pcbnew/router/router_tool.cpp:150
 #: pcbnew/router/router_menus.h:170 pcbnew/router/router_menus.h:195
 msgid " (from netclass)"
 msgstr " (dalla netclass)"
 
-#: pcbnew/router/router_tool.cpp:133 pcbnew/router/router_menus.h:179
+#: pcbnew/router/router_tool.cpp:134 pcbnew/router/router_menus.h:179
 msgid "Via "
 msgstr "Via "
 
-#: pcbnew/router/router_tool.cpp:141 pcbnew/router/router_menus.h:187
+#: pcbnew/router/router_tool.cpp:142 pcbnew/router/router_menus.h:187
 msgid ", drill: default"
 msgstr ", foro: predefinito"
 
-#: pcbnew/router/router_tool.cpp:145 pcbnew/router/router_menus.h:191
+#: pcbnew/router/router_tool.cpp:146 pcbnew/router/router_menus.h:191
 msgid ", drill: "
 msgstr ", foro: "
 
-#: pcbnew/router/router_tool.cpp:214 pcbnew/router/router_menus.h:260
+#: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_menus.h:260
 msgid "Interactive Router"
 msgstr "Sbroglio interattivo"
 
-#: pcbnew/router/router_tool.cpp:228
+#: pcbnew/router/router_tool.cpp:229
 msgid "Select Track/Via Width"
 msgstr "Seleziona larghezza piste/via"
 
-#: pcbnew/router/router_tool.cpp:592 pcbnew/router/router_menus.h:820
+#: pcbnew/router/router_tool.cpp:593 pcbnew/router/router_menus.h:820
 msgid "Route Track"
 msgstr "Sbroglia pista"
 
-#: pcbnew/router/router_tool.cpp:598 pcbnew/router/router_menus.h:827
+#: pcbnew/router/router_tool.cpp:599 pcbnew/router/router_menus.h:827
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
@@ -13669,8 +13669,8 @@ msgid "The complete KiCad EDA Suite is released under the"
 msgstr "La suite EDA di KiCad è realizzata secondo la"
 
 #: common/dialog_about/AboutDialog_main.cpp:204
-msgid "GNU General Public License (GPL) version 2"
-msgstr "GNU General Public License (GPL) version 2"
+msgid "GNU General Public License (GPL) version 2 or any later version"
+msgstr "GNU General Public License (GPL) versione 2 o successive"
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
@@ -17084,6 +17084,33 @@ msgstr "In stampa"
 #, c-format
 msgid "Print page %d"
 msgstr "Stampa pagina %d "
+
+#: eeschema/dialogs/dialog_rescue_each.cpp:102
+msgid "Rescue symbol"
+msgstr "Recupera simbolo"
+
+#: eeschema/dialogs/dialog_rescue_each.cpp:103
+msgid "Symbol name"
+msgstr "Nome simbolo"
+
+#: eeschema/dialogs/dialog_rescue_each.cpp:277
+msgid ""
+"Stop showing this tool?\n"
+"No changes will be made.\n"
+"\n"
+"This setting can be changed from the \"Component Libraries\" dialog,\n"
+"and the tool can be activated manually from the \"Tools\" menu."
+msgstr ""
+"Smettere di mostrare questo strumento?\n"
+"Nessun cambiamento verrà effettuato.\n"
+"\n"
+"Questa impostazione può essere modificata dalla finestra \"Librerie "
+"componenti\",\n"
+"e lo strumento può essere attivato manualmente dal menu \"Strumenti\"."
+
+#: eeschema/dialogs/dialog_rescue_each.cpp:281
+msgid "Rescue Components"
+msgstr "Recupera componenti"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:36
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:65
@@ -22254,7 +22281,7 @@ msgstr "Regola lunghezza pista"
 msgid "Import DXF file"
 msgstr "Importa file DXF"
 
-#: common/dialog_about/dialog_about_base.h:55
+#: common/dialog_about/dialog_about_base.h:51
 msgid "About..."
 msgstr "Informazioni..."
 
