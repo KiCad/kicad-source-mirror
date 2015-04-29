@@ -353,6 +353,7 @@ if( KICAD_SCRIPTING )
 
         DEPENDS pcbcommon
         DEPENDS plotcontroller.h
+        DEPENDS exporters/gendrill_Excellon_writer.h
         DEPENDS scripting/pcbnew.i
         DEPENDS scripting/board.i
         DEPENDS scripting/board_item.i

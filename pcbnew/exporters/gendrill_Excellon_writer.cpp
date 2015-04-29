@@ -53,8 +53,180 @@
 #include <pcbnew.h>
 #include <gendrill_Excellon_writer.h>
 #include <wildcards_and_files_ext.h>
+#include <reporter.h>
 
-#include <dialog_gendrill.h>   //  Dialog box for drill file generation
+//#include <dialog_gendrill.h>   //  Dialog box for drill file generation
+
+EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
+{
+    m_file = NULL;
+    m_pcb  = aPcb;
+    m_zeroFormat      = DECIMAL_FORMAT;
+    m_conversionUnits = 0.0001;
+    m_unitsDecimal    = true;
+    m_mirror = false;
+    m_merge_PTH_NPTH = false;
+    m_minimalHeader = false;
+    m_ShortHeader = false;
+    m_mapFileFmt = PLOT_FORMAT_PDF;
+    m_pageInfo = NULL;
+}
+
+
+void EXCELLON_WRITER::CreateDrillandMapFilesSet(  const wxString& aPlotDirectory,
+                                            bool aGenDrill, bool aGenMap,
+                                            REPORTER * aReporter )
+{
+    wxFileName fn;
+    wxString msg;
+
+    wxString    layername_extend;   // added to the board filefame to create a full filename
+                                    //(board fileName + layer pair names)
+
+    // If some buried/blind vias are found, drill files are created
+    // layer pair by layer pair for buried vias
+    bool hasBuriedVias = false;
+
+    for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
+    {
+        if( track->Type() == PCB_VIA_T )
+        {
+            const VIA *via = static_cast<const VIA*>( track );
+
+            if( via->GetViaType() == VIA_MICROVIA ||
+                via->GetViaType() == VIA_BLIND_BURIED )
+            {
+                hasBuriedVias = true;
+                break;
+            }
+        }
+    }
+
+
+    int        layer1 = F_Cu;
+    int        layer2 = B_Cu;
+    bool       gen_through_holes = true;
+    bool       gen_NPTH_holes    = false;
+
+    for( ; ; )
+    {
+        BuildHolesList( layer1, layer2, gen_through_holes ? false : true,
+                                       gen_NPTH_holes, m_merge_PTH_NPTH );
+
+        if( GetHolesCount() > 0 ) // has holes?
+        {
+            fn = m_pcb->GetFileName();
+            layername_extend.Empty();
+
+            if( gen_NPTH_holes )
+            {
+                layername_extend << wxT( "-NPTH" );
+            }
+            else if( !gen_through_holes )
+            {
+                if( layer1 == F_Cu )
+                    layername_extend << wxT( "-front" );
+                else
+                    layername_extend << wxT( "-inner" ) << layer1;
+
+                if( layer2 == B_Cu )
+                    layername_extend << wxT( "-back" );
+                else
+                    layername_extend << wxT( "-inner" ) << layer2;
+            }
+
+            fn.SetName( fn.GetName() + layername_extend );
+
+            fn.SetPath( aPlotDirectory );
+
+            if( aGenDrill )
+            {
+                fn.SetExt( DrillFileExtension );
+                wxString fullFilename = fn.GetFullPath();
+
+                FILE* file = wxFopen( fullFilename, wxT( "w" ) );
+
+                if( file == NULL )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf(  _( "** Unable to create %s **\n" ),
+                                          GetChars( fullFilename ) );
+                        aReporter->Report( msg );
+                    }
+                    break;
+                }
+                else
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Create file %s\n" ), GetChars( fullFilename ) );
+                        aReporter->Report( msg );
+                    }
+                }
+
+                CreateDrillFile( file );
+            }
+
+            if( aGenMap )
+            {
+                fn.SetExt( wxEmptyString ); // Will be added by GenDrillMap
+                wxString fullfilename = fn.GetFullPath() + wxT( "-drl_map" );
+                fullfilename << wxT(".") << GetDefaultPlotExtension( m_mapFileFmt );
+
+                bool success = GenDrillMapFile( fullfilename, m_mapFileFmt );
+
+                if( ! success )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "** Unable to create %s **\n" ), GetChars( fullfilename ) );
+                        aReporter->Report( msg );
+                    }
+
+                    return;
+                }
+                else
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Create file %s\n" ), GetChars( fullfilename ) );
+                        aReporter->Report( msg );
+                    }
+                }
+            }
+        }
+
+        if( gen_NPTH_holes )    // The last drill file was created
+            break;
+
+        if( !hasBuriedVias )
+            gen_NPTH_holes = true;
+        else
+        {
+            if( gen_through_holes )
+                layer2 = layer1 + 1;    // done with through-board holes, prepare generation of first layer pair
+            else
+            {
+                if( layer2 >= B_Cu )    // no more layer pair to consider
+                {
+                    layer1 = F_Cu;
+                    layer2 = B_Cu;
+                    gen_NPTH_holes = true;
+                    continue;
+                }
+
+                layer1++;
+                layer2++;                      // use next layer pair
+
+                if( layer2 == m_pcb->GetCopperLayerCount() - 1 )
+                    layer2 = B_Cu;      // the last layer is always the back layer
+            }
+
+            gen_through_holes = false;
+        }
+    }
+}
 
 
 /*
@@ -67,8 +239,6 @@
  *      - Decimal
  *      - Metric
  */
-
-
 int EXCELLON_WRITER::CreateDrillFile( FILE* aFile )
 {
     m_file = aFile;
@@ -78,7 +248,7 @@ int EXCELLON_WRITER::CreateDrillFile( FILE* aFile )
     double xt, yt;
     char   line[1024];
 
-    SetLocaleTo_C_standard(); // Use the standard notation for double numbers
+    LOCALE_IO dummy;    // Use the standard notation for double numbers
 
     WriteEXCELLONHeader();
 
@@ -212,14 +382,12 @@ int EXCELLON_WRITER::CreateDrillFile( FILE* aFile )
 
     WriteEXCELLONEndOfFile();
 
-    SetLocaleTo_Default();  // Revert to locale double notation
-
     return holes_count;
 }
 
 
 void EXCELLON_WRITER::SetFormat( bool      aMetric,
-                                 zeros_fmt aZerosFmt,
+                                 ZEROS_FMT aZerosFmt,
                                  int       aLeftDigits,
                                  int       aRightDigits )
 {
@@ -228,9 +396,17 @@ void EXCELLON_WRITER::SetFormat( bool      aMetric,
 
     /* Set conversion scale depending on drill file units */
     if( m_unitsDecimal )
-        m_conversionUnits = 1.0 / IU_PER_MM; // EXCELLON units = mm
+        m_conversionUnits = 1.0 / IU_PER_MM;        // EXCELLON units = mm
     else
-        m_conversionUnits = 0.001 / IU_PER_MILS; // EXCELLON units = INCHES
+        m_conversionUnits = 0.001 / IU_PER_MILS;    // EXCELLON units = INCHES
+
+    // Set the zero counts. if aZerosFmt == DECIMAL_FORMAT, these values
+    // will be set, but not used.
+    if( aLeftDigits <= 0 )
+        aLeftDigits = m_unitsDecimal ? 3 : 2;
+
+    if( aRightDigits <= 0 )
+        aRightDigits = m_unitsDecimal ? 3 : 4;
 
     m_precision.m_lhs = aLeftDigits;
     m_precision.m_rhs = aRightDigits;
@@ -344,7 +520,8 @@ void EXCELLON_WRITER::WriteEXCELLONHeader()
     if( !m_minimalHeader )
     {
         // The next 2 lines in EXCELLON files are comments:
-        wxString msg = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
+        wxString msg;
+        msg << wxT("KiCad") << wxT( " " ) << GetBuildVersion();
 
         fprintf( m_file, ";DRILL file {%s} date %s\n", TO_UTF8( msg ),
                  TO_UTF8( DateAndTime() ) );

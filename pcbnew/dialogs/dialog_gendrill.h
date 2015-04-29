@@ -98,14 +98,9 @@ private:
      */
     void            GenDrillAndMapFiles( bool aGenDrill, bool aGenMap );
 
-    void            GenDrillMap( const wxString  aFileName,
-                                 EXCELLON_WRITER& aExcellonWriter,
-                                 PlotFormat      format );
-
     void            UpdatePrecisionOptions();
     void            UpdateConfig();
-    int             Create_Drill_File_EXCELLON( FILE*  aFile,
-                                                wxPoint aOffset );
+    int             Create_Drill_File_EXCELLON( FILE* aFile, wxPoint aOffset );
     int             Gen_Liste_Tools( std::vector<DRILL_TOOL>& buffer,
                                      bool print_header );
 

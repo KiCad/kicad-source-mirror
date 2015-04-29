@@ -108,6 +108,7 @@
 
   #include <plotcontroller.h>
   #include <pcb_plot_params.h>
+  #include <exporters/gendrill_Excellon_writer.h>
   #include <colors.h>
 
   BOARD *GetBoard(); /* get current editor board */
@@ -145,6 +146,7 @@
 %include <plotcontroller.h>
 %include <pcb_plot_params.h>
 %include <plot_common.h>
+%include <exporters/gendrill_Excellon_writer.h>
 %include <colors.h>
 
 %include "board_item.i"

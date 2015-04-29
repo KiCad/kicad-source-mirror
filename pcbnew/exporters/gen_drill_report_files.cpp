@@ -56,16 +56,18 @@ inline double diameter_in_mm( double ius )
 
 
 bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
-                                       const PAGE_INFO& aSheet,
                                        PlotFormat aFormat )
 {
     double          scale = 1.0;
     wxPoint         offset;
     PLOTTER*        plotter = NULL;
+    PAGE_INFO dummy( PAGE_INFO::A4, false );
 
     PCB_PLOT_PARAMS plot_opts;  // starts plotting with default options
 
     LOCALE_IO       toggle;     // use standard C notation for float numbers
+
+    const PAGE_INFO& page_info =  m_pageInfo ? *m_pageInfo : dummy;
 
     // Calculate dimensions and center of PCB
     EDA_RECT        bbbox = m_pcb->ComputeBoundingBox( true );
@@ -88,7 +90,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
         hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
         hpgl_plotter->SetPenOverlap( 0 );
-        plotter->SetPageSettings( aSheet );
+        plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
     }
         break;
@@ -140,7 +142,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
     {
         DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
         plotter = dxf_plotter;
-        plotter->SetPageSettings( aSheet );
+        plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
     }
         break;
@@ -149,7 +151,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
     {
         SVG_PLOTTER* svg_plotter = new SVG_PLOTTER;
         plotter = svg_plotter;
-        plotter->SetPageSettings( aSheet );
+        plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
     }
         break;
@@ -289,14 +291,14 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 
     unsigned    totalHoleCount;
     char        line[1024];
-    LAYER_NUM   layer1 = F_Cu;      // First layer of the stack layer
-    LAYER_NUM   layer2 = B_Cu;      // Last layer of the stack layer
+    LAYER_NUM   layer1 = F_Cu;      // First layer of the layer stack
+    LAYER_NUM   layer2 = B_Cu;      // Last layer of the layer stack
     bool        gen_through_holes   = true;
     bool        gen_NPTH_holes      = false;
 
     wxString brdFilename = m_pcb->GetFileName();
     fprintf( m_file, "Drill report for %s\n", TO_UTF8( brdFilename ) );
-    fprintf( m_file, "Created on %s\n", TO_UTF8( DateAndTime() ) );
+    fprintf( m_file, "Created on %s\n\n", TO_UTF8( DateAndTime() ) );
 
     /* build hole lists:
      * 1 - through holes
@@ -321,7 +323,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
             if( layer1 == F_Cu )
                 fputs( "Drill report for buried and blind vias :\n\n", m_file );
 
-            sprintf( line, "Drill report for holes from layer %s to layer %s :\n",
+            sprintf( line, "Holes from layer %s to layer %s :\n",
                      TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer1 ) ) ),
                      TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer2 ) ) ) );
         }
@@ -332,7 +334,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         {
             // List the tool number assigned to each drill,
             // in mm then in inches.
-            sprintf( line, "T%d  %2.2fmm  %2.3f\"  ",
+            sprintf( line, "    T%d  %2.2fmm  %2.3f\"  ",
                      ii + 1,
                      diameter_in_mm( m_toolListBuffer[ii].m_Diameter ),
                      diameter_in_inches( m_toolListBuffer[ii].m_Diameter ) );

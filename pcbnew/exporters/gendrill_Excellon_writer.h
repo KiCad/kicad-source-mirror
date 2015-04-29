@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,12 +120,11 @@ public: DRILL_PRECISION( int l = 2, int r = 4 )
 class EXCELLON_WRITER
 {
 public:
-    enum zeros_fmt {
-        // Zero format in coordinates
-        DECIMAL_FORMAT,
-        SUPPRESS_LEADING,
-        SUPPRESS_TRAILING,
-        KEEP_ZEROS
+    enum ZEROS_FMT {            // Zero format in coordinates
+        DECIMAL_FORMAT,         // Floating point coordinates
+        SUPPRESS_LEADING,       // Suppress leading zeros
+        SUPPRESS_TRAILING,      // Suppress trainling zeros
+        KEEP_ZEROS              // keep zeros
     };
 
     wxPoint                  m_Offset;                  // offset coordinates
@@ -137,7 +136,7 @@ private:
     bool                     m_minimalHeader;           // True to use minimal header
                                                         // in excellon file (strip comments)
     bool                     m_unitsDecimal;            // true = decimal, false = inches
-    zeros_fmt                m_zeroFormat;              // the zero format option for output file
+    ZEROS_FMT                m_zeroFormat;              // the zero format option for output file
     DRILL_PRECISION          m_precision;               // The current coordinate precision (not used in decimal format)
     double                   m_conversionUnits;         // scaling factor to convert the board unites to Excellon units
                                                         // (i.e inches or mm)
@@ -147,20 +146,13 @@ private:
     std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
-public:
-    EXCELLON_WRITER( BOARD* aPcb )
-    {
-        m_file = NULL;
-        m_pcb  = aPcb;
-        m_zeroFormat      = DECIMAL_FORMAT;
-        m_conversionUnits = 0.0001;
-        m_unitsDecimal    = false;
-        m_mirror = false;
-        m_merge_PTH_NPTH = false;
-        m_minimalHeader = false;
-        m_ShortHeader = false;
-    }
+    PlotFormat              m_mapFileFmt;               // the format of the map drill file,
+                                                        // if this map is needed
+    const PAGE_INFO*        m_pageInfo;                 // the page info used to plot drill maps
+                                                        // If NULL, use a A4 page format
 
+public:
+    EXCELLON_WRITER( BOARD* aPcb );
 
     ~EXCELLON_WRITER()
     {
@@ -178,9 +170,30 @@ public:
      * @param aMetric = true for metric coordinates, false for imperial units
      * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
      * @param aLeftDigits = number of digits for integer part of coordinates
+     *          if <= 0 (default), a suitable value will be used, depending on units
      * @param aRightDigits = number of digits for mantissa part of coordinates
+     *          if <= 0 (default), a suitable value will be used, depending on units
      */
-    void SetFormat( bool aMetric, zeros_fmt aZerosFmt, int aLeftDigits, int aRightDigits );
+    void SetFormat( bool aMetric, ZEROS_FMT aZerosFmt = DECIMAL_FORMAT,
+                    int aLeftDigits = 0, int aRightDigits = 0 );
+
+    /**
+     * Sets the page info used to plot drill maps
+     * If NULL, a A4 page format will be used
+     * @param aPageInfo = a reference to the page info, usually used to plot/display the board
+     */
+    void SetPageInfo( const PAGE_INFO* aPageInfo ) { m_pageInfo = aPageInfo; }
+
+    /**
+     * Function SetMapFileFormat
+     * Initialize the format for the drill map file
+     * @param SetMapFileFormat = a PlotFormat value (one of
+     * PLOT_FORMAT_HPGL, PLOT_FORMAT_POST, PLOT_FORMAT_GERBER,
+     * PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
+     * the most useful are PLOT_FORMAT_PDF and PLOT_FORMAT_POST
+     */
+    void SetMapFileFormat( PlotFormat aMapFmt ) { m_mapFileFmt = aMapFmt; }
+
 
     /**
      * Function SetOptions
@@ -218,6 +231,19 @@ public:
                          bool aMerge_PTH_NPTH );
 
     int  GetHolesCount() const { return m_holeListBuffer.size(); }
+
+    /**
+     * Function CreateDrillandMapFilesSet
+     * Creates the full set of Excellon drill file for the board
+     * filenames are computed from the board name, and layers id
+     * @param aPlotDirectory = the output folder
+     * @param aGenDrill = true to generate the EXCELLON drill file
+     * @param aGenMap = true to generate a drill map file
+     * @param aReporter = a REPORTER to return activity or any message (can be NULL)
+     */
+    void CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
+                                    bool aGenDrill, bool aGenMap,
+                                    REPORTER * aReporter = NULL );
 
     /**
      * Function CreateDrillFile
@@ -275,7 +301,7 @@ public:
      *  Total unplated holes count 1
      *
      * @param aFullFileName : the name of the file to create
-     *  m_unitsDecimal = false tu use inches, true to use mm in report file
+     *  m_unitsDecimal = false to use inches, true to use mm in report file
      *
      * @return success if the file is created
      */
@@ -284,14 +310,14 @@ public:
     /**
      * Function GenDrillMapFile
      * Plot a map of drill marks for holes.
-     * @param aFullFileNameWithoutExt : the full filename of the file to create,
-     *              without extension (will be added according to the format)
-     * @param aSheet : the paper sheet to use for plot
+     * the paper sheet to use to plot the map is set in m_pageInfo
+     * ( calls SetPageInfo() to set it )
+     * if NULL, A4 format will be used
+     * @param aFullFileName : the full filename of the map file to create,
      * @param aFormat : one of the supported plot formats (see enum PlotFormat )
      */
-    bool GenDrillMapFile( const wxString& aFullFileNameWithoutExt,
-                          const PAGE_INFO& aSheet,
-                          PlotFormat aFormat );
+    bool GenDrillMapFile( const wxString& aFullFileName, PlotFormat aFormat );
+
 private:
     /* Print the DRILL file header. The full header is:
      * M48
