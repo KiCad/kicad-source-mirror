@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-28 17:40+0100\n"
-"PO-Revision-Date: 2015-04-28 17:40+0100\n"
+"POT-Creation-Date: 2015-04-29 18:58+0100\n"
+"PO-Revision-Date: 2015-04-29 18:58+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -6525,6 +6525,19 @@ msgstr "Esporta file di test D-356"
 msgid "Unable to create "
 msgstr "Impossibile creare"
 
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:183
+#: pcbnew/dialogs/dialog_gendrill.cpp:415
+#, c-format
+msgid "** Unable to create %s **\n"
+msgstr "** Impossibile creare %s **\n"
+
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:163
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:193
+#, c-format
+msgid "Create file %s\n"
+msgstr "Crea file %s\n"
+
 #: pcbnew/exporters/gen_modules_placefile.cpp:171
 #: pcbnew/exporters/gen_modules_placefile.cpp:549
 #: pcbnew/dialogs/dialog_gendrill.cpp:293
@@ -9220,39 +9233,14 @@ msgstr ""
 "Impossibile creare un percorso relativo. Il volume di destinazione è diverso "
 "da quello del file della scheda!"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:425
-#: pcbnew/dialogs/dialog_gendrill.cpp:523
-#: pcbnew/dialogs/dialog_gendrill.cpp:591
-#, c-format
-msgid "** Unable to create %s **\n"
-msgstr "** Impossibile creare %s **\n"
-
-#: pcbnew/dialogs/dialog_gendrill.cpp:432
-#: pcbnew/dialogs/dialog_gendrill.cpp:597
-#, c-format
-msgid "Plot: %s OK\n"
-msgstr "Tracciatore: %s OK\n"
-
-#: pcbnew/dialogs/dialog_gendrill.cpp:504
+#: pcbnew/dialogs/dialog_gendrill.cpp:396
 msgid "Save Drill Report File"
 msgstr "Salva file rapporto foratura"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:528
+#: pcbnew/dialogs/dialog_gendrill.cpp:420
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Il file di rapporto %s è stato creato\n"
-
-#: pcbnew/dialogs/dialog_gendrill.cpp:546
-msgid "HPGL plot files (.plt)|*.plt"
-msgstr "File di tracciatura (.plt)|*.plt"
-
-#: pcbnew/dialogs/dialog_gendrill.cpp:556
-msgid "Gerber files (.pho)|*.pho"
-msgstr "File Gerber (*.pho)|*.pho"
-
-#: pcbnew/dialogs/dialog_gendrill.cpp:561
-msgid "DXF files (.dxf)|*.dxf"
-msgstr "DXF files (.dxf)|*.dxf"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:197
 msgid ""
@@ -15674,10 +15662,10 @@ msgstr "Cancella errore nella voce"
 #: eeschema/libedit.cpp:551
 #, c-format
 msgid ""
-"Select 1 of %d components to delete\n"
+"Select one of %zu components to delete\n"
 "from library '%s'."
 msgstr ""
-"Seleziona 1 di %d componenti da cancellare\n"
+"Seleziona uno di %zu componenti da cancellare\n"
 "dalla libreria \"%s\"."
 
 #: eeschema/libedit.cpp:555
