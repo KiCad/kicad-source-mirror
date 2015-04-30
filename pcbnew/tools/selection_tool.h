@@ -104,7 +104,10 @@ public:
     SELECTION_TOOL();
     ~SELECTION_TOOL();
 
-    /// @copydoc TOOL_INTERACTIVE::Reset()
+    /// @copydoc TOOL_BASE::Init()
+    bool Init();
+
+    /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason );
 
     /**

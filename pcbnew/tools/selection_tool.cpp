@@ -51,6 +51,8 @@
 
 #include "selection_tool.h"
 #include "selection_area.h"
+#include "zoom_menu.h"
+#include "grid_menu.h"
 #include "bright_box.h"
 #include "common_actions.h"
 
@@ -70,12 +72,6 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
         m_editModules( false ), m_locked( true )
 {
-    m_selArea = new SELECTION_AREA;
-    m_selection.group = new KIGFX::VIEW_GROUP;
-
-    AddSubMenu( new SELECT_MENU, _( "Select..." ),
-            (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
-            SELECTION_CONDITIONS::Count( 1 ) );
 }
 
 
@@ -83,6 +79,28 @@ SELECTION_TOOL::~SELECTION_TOOL()
 {
     delete m_selArea;
     delete m_selection.group;
+}
+
+
+bool SELECTION_TOOL::Init()
+{
+    m_selArea = new SELECTION_AREA;
+    m_selection.group = new KIGFX::VIEW_GROUP;
+
+    AddSubMenu( new SELECT_MENU, _( "Select..." ),
+            (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
+            SELECTION_CONDITIONS::Count( 1 ) );
+
+    AddMenuItem( COMMON_ACTIONS::zoomCenter );
+    AddMenuItem( COMMON_ACTIONS::zoomIn );
+    AddMenuItem( COMMON_ACTIONS::zoomOut );
+    AddMenuItem( COMMON_ACTIONS::zoomFitScreen );
+
+    AddSubMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Zoom" );
+
+    AddSubMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Grid" );
+
+    return true;
 }
 
 

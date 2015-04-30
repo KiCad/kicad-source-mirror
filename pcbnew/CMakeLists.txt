@@ -284,6 +284,9 @@ set( PCBNEW_CLASS_SRCS
     tools/common_actions.cpp
     tools/grid_helper.cpp
     tools/tools_common.cpp
+
+    tools/grid_menu.cpp
+    tools/zoom_menu.cpp
     )
 
 set( PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS} )
