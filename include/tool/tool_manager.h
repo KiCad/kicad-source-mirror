@@ -110,7 +110,18 @@ public:
      * depends on the action.
      * @return False if the action was not found.
      */
-    bool RunAction( const std::string& aActionName, bool aNow = false, void* aParam = NULL );
+    template<typename T>
+    bool RunAction( const std::string& aActionName, bool aNow = false, T aParam = NULL )
+    {
+        return RunAction( aActionName, aNow, reinterpret_cast<void*>( aParam ) );
+    }
+
+    bool RunAction( const std::string& aActionName, bool aNow, void* aParam = NULL );
+
+    bool RunAction( const std::string& aActionName, bool aNow = false )
+    {
+        return RunAction( aActionName, aNow, (void*) NULL );
+    }
 
     /**
      * Function RunAction()
@@ -122,7 +133,18 @@ public:
      * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
      * depends on the action.
      */
-    void RunAction( const TOOL_ACTION& aAction, bool aNow = false, void* aParam = NULL );
+    template<typename T>
+    void RunAction( const TOOL_ACTION& aAction, bool aNow = false, T aParam = NULL )
+    {
+        RunAction( aAction, aNow, reinterpret_cast<void*>( aParam ) );
+    }
+
+    void RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam );
+
+    void RunAction( const TOOL_ACTION& aAction, bool aNow = false )
+    {
+        RunAction( aAction, aNow, (void*) NULL );
+    }
 
     /**
      * Function FindTool()
