@@ -40,6 +40,7 @@
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
 #include <base_units.h>
+#include <tool/tool_manager.h>
 
 
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
@@ -90,6 +91,8 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 
     if( !IsGalCanvasActive() )
         RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
+    else
+        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
 }
 
 
