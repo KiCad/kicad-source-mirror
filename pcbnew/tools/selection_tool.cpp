@@ -77,28 +77,27 @@ SELECTION_TOOL::SELECTION_TOOL() :
 
 SELECTION_TOOL::~SELECTION_TOOL()
 {
-    delete m_selArea;
     delete m_selection.group;
 }
 
 
 bool SELECTION_TOOL::Init()
 {
-    m_selArea = new SELECTION_AREA;
     m_selection.group = new KIGFX::VIEW_GROUP;
 
-    AddSubMenu( new SELECT_MENU, _( "Select..." ),
+    m_menu.AddMenu( new SELECT_MENU, _( "Select..." ),
             (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
             SELECTION_CONDITIONS::Count( 1 ) );
 
-    AddMenuItem( COMMON_ACTIONS::zoomCenter );
-    AddMenuItem( COMMON_ACTIONS::zoomIn );
-    AddMenuItem( COMMON_ACTIONS::zoomOut );
-    AddMenuItem( COMMON_ACTIONS::zoomFitScreen );
+    m_menu.AddItem( COMMON_ACTIONS::zoomCenter );
+    m_menu.AddItem( COMMON_ACTIONS::zoomIn );
+    m_menu.AddItem( COMMON_ACTIONS::zoomOut );
+    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen );
 
-    AddSubMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Zoom" );
+    m_menu.AddMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Zoom" );
+    m_menu.AddMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Grid" );
 
-    AddSubMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Grid" );
+    //m_menu.AddSeparator();
 
     return true;
 }
@@ -160,7 +159,11 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( emptySelection )
                 selectCursor( evt->Position() );
 
-            generateMenu();
+            CONTEXT_MENU& contextMenu = m_menu.Generate( m_selection );
+
+            if( contextMenu.GetMenuItemCount() > 0 )
+                SetContextMenu( &contextMenu, CMENU_NOW );
+
             m_preliminary = emptySelection;
         }
 
@@ -271,25 +274,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition )
-{
-    assert( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
-
-    m_menu.Add( aAction );
-    m_menuConditions.push_back( aCondition );
-}
-
-
-void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
-                                 const SELECTION_CONDITION& aCondition, bool aExpand )
-{
-    std::list<wxMenuItem*> items = m_menu.Add( aMenu, aLabel, aExpand );
-
-    for( unsigned int i = 0; i < items.size(); ++i )
-        m_menuConditions.push_back( aCondition );
-}
-
-
 void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
@@ -390,7 +374,8 @@ bool SELECTION_TOOL::selectMultiple()
     KIGFX::VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
-    view->Add( m_selArea );
+    SELECTION_AREA area;
+    view->Add( &area );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -406,20 +391,20 @@ bool SELECTION_TOOL::selectMultiple()
                 clearSelection();
 
             // Start drawing a selection box
-            m_selArea->SetOrigin( evt->DragOrigin() );
-            m_selArea->SetEnd( evt->Position() );
-            m_selArea->ViewSetVisible( true );
-            m_selArea->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            area.SetOrigin( evt->DragOrigin() );
+            area.SetEnd( evt->Position() );
+            area.ViewSetVisible( true );
+            area.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
             // End drawing the selection box
-            m_selArea->ViewSetVisible( false );
+            area.ViewSetVisible( false );
 
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-            BOX2I selectionBox = m_selArea->ViewBBox();
+            BOX2I selectionBox = area.ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
@@ -450,8 +435,8 @@ bool SELECTION_TOOL::selectMultiple()
     }
 
     // Stop drawing the selection box
-    m_selArea->ViewSetVisible( false );
-    view->Remove( m_selArea );
+    area.ViewSetVisible( false );
+    view->Remove( &area );
     m_multiple = false;         // Multiple selection mode is inactive
     getViewControls()->SetAutoPan( false );
 
@@ -1311,42 +1296,6 @@ bool SELECTION_TOOL::SanitizeSelection()
     }
 
     return true;
-}
-
-
-void SELECTION_TOOL::generateMenu()
-{
-    // Menu has to be updated before its copy is created. Copying does not preserve subtypes of the
-    // stored menus, so updating may not work correctly.
-    m_menu.UpdateAll();
-
-    // Create a copy of the master context menu
-    m_menuCopy = m_menu;
-
-    assert( m_menuCopy.GetMenuItemCount() == m_menuConditions.size() );
-
-    // Filter out entries that do not comply with the current selection
-    for( int i = m_menuCopy.GetMenuItemCount() - 1; i >= 0; --i )
-    {
-        try
-        {
-            if( !m_menuConditions[i]( m_selection ) )
-            {
-                wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
-                m_menuCopy.Destroy( item );
-            }
-        }
-        catch( boost::bad_function_call )
-        {
-            // If it is not possible to determine if a menu entry should be
-            // shown or not - do not let users pick non-existing options
-            wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
-            m_menuCopy.Destroy( item );
-        }
-    }
-
-    if( m_menuCopy.GetMenuItemCount() > 0 )
-        SetContextMenu( &m_menuCopy, CMENU_NOW );
 }
 
 

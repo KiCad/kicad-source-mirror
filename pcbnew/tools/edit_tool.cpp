@@ -79,19 +79,19 @@ bool EDIT_TOOL::Init()
     }
 
     // Add context menu entries that are displayed when selection tool is active
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
     // Footprint actions
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::editFootprintInFpEditor,
-                                  SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) &&
-                                  SELECTION_CONDITIONS::Count( 1 ) );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::editFootprintInFpEditor,
+                                        SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) &&
+                                        SELECTION_CONDITIONS::Count( 1 ) );
 
     m_offset.x = 0;
     m_offset.y = 0;

@@ -210,8 +210,8 @@ bool POINT_EDITOR::Init()
         return false;
     }
 
-    m_selectionTool->AddMenuItem( COMMON_ACTIONS::pointEditorBreakOutline,
-                                  POINT_EDITOR::breakOutlineCondition );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorBreakOutline,
+                                        POINT_EDITOR::breakOutlineCondition );
 
     return true;
 }

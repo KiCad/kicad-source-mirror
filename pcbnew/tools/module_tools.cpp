@@ -74,7 +74,7 @@ bool MODULE_TOOLS::Init()
         return false;
     }
 
-    selectionTool->AddMenuItem( COMMON_ACTIONS::enumeratePads );
+    selectionTool->GetMenu().AddItem( COMMON_ACTIONS::enumeratePads );
 
     return true;
 }
