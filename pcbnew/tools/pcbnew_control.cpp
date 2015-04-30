@@ -135,10 +135,15 @@ int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
 
     m_frame->SetPresetZoom( idx );
 
-    if( idx == 0 )
+    if( idx == 0 )      // Zoom Auto
+    {
         return ZoomFitScreen( aEvent );
+    }
     else if( idx < 0 || idx >= zoomList.size() )
+    {
+        assert( false );
         return 0;
+    }
 
     double selectedZoom = zoomList[idx];
     double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
