@@ -389,6 +389,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     }
 
     aTool->Reset( TOOL_INTERACTIVE::RUN );
+    aTool->SetTransitions();
 
     // Add the tool on the front of the processing queue (it gets events first)
     m_activeTools.push_front( aTool->GetId() );
@@ -425,7 +426,10 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
     ProcessEvent( evt );
 
     BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
+    {
         tool->Reset( aReason );
+        tool->SetTransitions();
+    }
 }
 
 
@@ -621,6 +625,8 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
         if( tool != m_activeTools.end() )
             m_activeTools.erase( tool );
     }
+
+    aState->theTool->SetTransitions();
 }
 
 

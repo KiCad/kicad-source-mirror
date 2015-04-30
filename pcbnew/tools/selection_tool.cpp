@@ -106,8 +106,6 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
     getView()->Add( m_selection.group );
-
-    setTransitions();
 }
 
 
@@ -428,7 +426,7 @@ bool SELECTION_TOOL::selectMultiple()
 }
 
 
-void SELECTION_TOOL::setTransitions()
+void SELECTION_TOOL::SetTransitions()
 {
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
     Go( &SELECTION_TOOL::CursorSelection, COMMON_ACTIONS::selectionCursor.MakeEvent() );
@@ -492,7 +490,6 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
     selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
-    setTransitions();
 
     return 0;
 }
@@ -501,7 +498,6 @@ int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     clearSelection();
-    setTransitions();
 
     return 0;
 }
@@ -519,8 +515,6 @@ int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( SelectedEvent );
     }
 
-    setTransitions();
-
     return 0;
 }
 
@@ -536,8 +530,6 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( UnselectedEvent );
     }
-
-    setTransitions();
 
     return 0;
 }
@@ -562,8 +554,6 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( selectEvent );
     }
 
-    setTransitions();
-
     return 0;
 }
 
@@ -587,8 +577,6 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
         TOOL_EVENT selectEvent( SelectedEvent );
         m_toolMgr->ProcessEvent( selectEvent );
     }
-
-    setTransitions();
 
     return 0;
 }
@@ -618,7 +606,6 @@ int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
     dlg.EnableWarp( false );
     dlg.SetCallback( boost::bind( &SELECTION_TOOL::findCallback, this, _1 ) );
     dlg.ShowModal();
-    setTransitions();
 
     return 0;
 }
@@ -634,8 +621,6 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
         toggleSelection( module );
         m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
     }
-
-    setTransitions();
 
     return 0;
 }

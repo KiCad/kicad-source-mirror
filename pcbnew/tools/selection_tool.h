@@ -185,6 +185,9 @@ public:
     ///> Event sent after selection is cleared.
     static const TOOL_EVENT ClearedEvent;
 
+    ///> Sets up handlers for various events.
+    void SetTransitions();
+
 private:
     /**
      * Function selectCursor()
@@ -220,9 +223,6 @@ private:
 
     ///> Find an item and start moving.
     int findMove( const TOOL_EVENT& aEvent );
-
-    ///> Sets up handlers for various events.
-    void setTransitions();
 
     /**
      * Function clearSelection()

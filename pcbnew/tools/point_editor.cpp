@@ -213,8 +213,6 @@ bool POINT_EDITOR::Init()
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::pointEditorBreakOutline,
                                   POINT_EDITOR::breakOutlineCondition );
 
-    setTransitions();
-
     return true;
 }
 
@@ -233,11 +231,9 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         EDA_ITEM* item = selection.items.GetPickedItem( 0 );
 
         m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+
         if( !m_editPoints )
-        {
-            setTransitions();
             return 0;
-        }
 
         view->Add( m_editPoints.get() );
         m_dragPoint = NULL;
@@ -362,8 +358,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         controls->SetSnapping( false );
         controls->ForceCursorPosition( false );
     }
-
-    setTransitions();
 
     return 0;
 }
@@ -795,7 +789,7 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 }
 
 
-void POINT_EDITOR::setTransitions()
+void POINT_EDITOR::SetTransitions()
 {
     Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::SelectedEvent );
     Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::UnselectedEvent );

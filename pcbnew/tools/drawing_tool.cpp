@@ -66,8 +66,6 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_controls = getViewControls();
     m_board = getModel<BOARD>();
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
-
-    setTransitions();
 }
 
 
@@ -124,7 +122,6 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         }
     }
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -172,7 +169,6 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         }
     }
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -220,7 +216,6 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         }
     }
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -411,7 +406,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -442,11 +436,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
 
     if( dlgResult != wxID_OK || m_board->m_Modules == NULL || list.empty() )
-    {
-        setTransitions();
-
         return 0;
-    }
 
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
     VECTOR2I delta = cursorPos - (*list.begin())->GetPosition();
@@ -617,8 +607,6 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
-    setTransitions();
-
     return 0;
 }
 
@@ -663,7 +651,6 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     m_controls->SetSnapping( false );
     m_controls->ShowCursor( false );
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -1230,7 +1217,6 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -1351,7 +1337,6 @@ int DRAWING_TOOL::placeTextModule()
     m_controls->CaptureCursor( true );
     m_view->Remove( &preview );
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -1461,7 +1446,6 @@ int DRAWING_TOOL::placeTextPcb()
     m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -1490,7 +1474,7 @@ void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) 
 }
 
 
-void DRAWING_TOOL::setTransitions()
+void DRAWING_TOOL::SetTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine,         COMMON_ACTIONS::drawLine.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle,       COMMON_ACTIONS::drawCircle.MakeEvent() );
