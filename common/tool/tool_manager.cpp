@@ -594,6 +594,8 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 
             // Temporarily store the cursor position, so the tools could execute actions
             // using the point where the user has invoked a context menu
+            bool forcedCursor = m_viewControls->IsCursorPositionForced();
+            VECTOR2D cursorPos = m_viewControls->GetCursorPosition();
             m_viewControls->ForceCursorPosition( true, m_viewControls->GetCursorPosition() );
 
             // Run update handlers
@@ -609,7 +611,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
                 dispatchInternal( evt );
             }
 
-            m_viewControls->ForceCursorPosition( false );
+            m_viewControls->ForceCursorPosition( forcedCursor, cursorPos );
 
             break;
         }
