@@ -446,6 +446,21 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::GridPreset( const TOOL_EVENT& aEvent )
+{
+    long idx = aEvent.Parameter<long>();
+
+    m_frame->SetPresetGrid( idx );
+    BASE_SCREEN* screen = m_frame->GetScreen();
+    GRID_TYPE grid = screen->GetGrid( idx );
+
+    getView()->GetGAL()->SetGridSize( VECTOR2D( grid.m_Size ) );
+    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+
+    return 0;
+}
+
+
 // Miscellaneous
 int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
 {
@@ -549,7 +564,7 @@ void PCBNEW_CONTROL::SetTransitions()
     Go( &PCBNEW_CONTROL::GridNext,           COMMON_ACTIONS::gridNext.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridPrev,           COMMON_ACTIONS::gridPrev.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridSetOrigin,      COMMON_ACTIONS::gridSetOrigin.MakeEvent() );
-    //Go( &PCBNEW_CONTROL::GridSetPreset,      COMMON_ACTIONS::gridSetPreset.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridPreset,         COMMON_ACTIONS::gridPreset.MakeEvent() );
 
     // Miscellaneous
     Go( &PCBNEW_CONTROL::ResetCoords,        COMMON_ACTIONS::resetCoords.MakeEvent() );

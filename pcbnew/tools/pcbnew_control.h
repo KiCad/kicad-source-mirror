@@ -72,6 +72,7 @@ public:
     int GridNext( const TOOL_EVENT& aEvent );
     int GridPrev( const TOOL_EVENT& aEvent );
     int GridSetOrigin( const TOOL_EVENT& aEvent );
+    int GridPreset( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
     int ResetCoords( const TOOL_EVENT& aEvent );

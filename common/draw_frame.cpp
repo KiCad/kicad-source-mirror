@@ -387,46 +387,17 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     else
     {
         eventId = event.GetId();
-
-        /* Update the grid select combobox if the grid size was changed
-         * by menu event.
-         */
-        if( m_gridSelectBox != NULL )
-        {
-            for( size_t i = 0; i < m_gridSelectBox->GetCount(); i++ )
-            {
-                clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( i );
-
-                if( clientData && eventId == *clientData )
-                {
-                    m_gridSelectBox->SetSelection( i );
-                    break;
-                }
-            }
-        }
     }
 
-    // Be sure m_LastGridSizeId is up to date.
-    m_LastGridSizeId = eventId - ID_POPUP_GRID_LEVEL_1000;
+    int idx = eventId - ID_POPUP_GRID_LEVEL_1000;
 
-    BASE_SCREEN* screen = GetScreen();
+    // Notify GAL
+    TOOL_MANAGER* mgr = GetToolManager();
 
-    if( screen->GetGridId() == eventId )
-        return;
-
-    /*
-     * This allows for saving non-sequential command ID offsets used that
-     * may be used in the grid size combobox.  Do not use the selection
-     * index returned by GetSelection().
-     */
-    screen->SetGrid( eventId );
-    SetCrossHairPosition( RefPos( true ) );
-
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size ) );
-        GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    }
+    if( mgr && IsGalCanvasActive() )
+        mgr->RunAction( "common.Control.gridPreset", true, idx );
+    else
+        SetPresetGrid( idx );
 
     m_canvas->Refresh();
 }
@@ -556,14 +527,7 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 void EDA_DRAW_FRAME::SetNextGrid()
 {
     if( m_gridSelectBox )
-    {
-        m_gridSelectBox->SetSelection( ( m_gridSelectBox->GetSelection() + 1 ) %
-                                       m_gridSelectBox->GetCount() );
-
-        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
-        //        cmd.SetEventObject( this );
-        OnSelectGrid( cmd );
-    }
+        SetPresetGrid( ( m_gridSelectBox->GetSelection() + 1 ) % m_gridSelectBox->GetCount() );
 }
 
 
@@ -571,17 +535,31 @@ void EDA_DRAW_FRAME::SetPrevGrid()
 {
     if( m_gridSelectBox )
     {
-        int cnt = m_gridSelectBox->GetSelection();
+        int idx = m_gridSelectBox->GetSelection();
 
-        if( --cnt < 0 )
-            cnt = m_gridSelectBox->GetCount() - 1;
+        if( --idx < 0 )
+            idx = m_gridSelectBox->GetCount() - 1;
 
-        m_gridSelectBox->SetSelection( cnt );
-
-        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
-        //        cmd.SetEventObject( this );
-        OnSelectGrid( cmd );
+        SetPresetGrid( idx );
     }
+}
+
+
+void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
+{
+    if( aIndex < 0 || aIndex >= (int) m_gridSelectBox->GetCount() )
+    {
+        wxASSERT_MSG( false, "Invalid grid index" );
+        return;
+    }
+
+    if( m_gridSelectBox )
+        m_gridSelectBox->SetSelection( aIndex );
+
+    // Be sure m_LastGridSizeId is up to date.
+    m_LastGridSizeId = aIndex;
+    GetScreen()->SetGrid( aIndex + ID_POPUP_GRID_LEVEL_1000 );
+    SetCrossHairPosition( RefPos( true ) );
 }
 
 

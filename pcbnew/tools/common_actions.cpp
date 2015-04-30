@@ -303,26 +303,29 @@ TOOL_ACTION COMMON_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
 
 
 // Grid control
-TOOL_ACTION COMMON_ACTIONS::gridFast1( "pcbnew.Control.gridFast1",
+TOOL_ACTION COMMON_ACTIONS::gridFast1( "common.Control.gridFast1",
         AS_GLOBAL, MD_ALT + int( '1' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridFast2( "pcbnew.Control.gridFast2",
+TOOL_ACTION COMMON_ACTIONS::gridFast2( "common.Control.gridFast2",
         AS_GLOBAL, MD_ALT + int( '2' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridNext( "pcbnew.Control.gridNext",
+TOOL_ACTION COMMON_ACTIONS::gridNext( "common.Control.gridNext",
         AS_GLOBAL, '`',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridPrev( "pcbnew.Control.gridPrev",
+TOOL_ACTION COMMON_ACTIONS::gridPrev( "common.Control.gridPrev",
         AS_GLOBAL, MD_CTRL + int( '`' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "pcbnew.Control.gridSetOrigin",
+TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::gridPreset( "common.Control.gridPreset",
+        AS_GLOBAL, 0,
+        "", "" );
 
 // Track & via size control
 TOOL_ACTION COMMON_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",

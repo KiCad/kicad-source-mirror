@@ -223,6 +223,7 @@ public:
     static TOOL_ACTION gridNext;
     static TOOL_ACTION gridPrev;
     static TOOL_ACTION gridSetOrigin;
+    static TOOL_ACTION gridPreset;
 
     // Track & via size control
     static TOOL_ACTION trackWidthInc;
