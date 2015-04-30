@@ -99,17 +99,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
 EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
-    if( m_painter )
-        delete m_painter;
-
-    if( m_viewControls )
-        delete m_viewControls;
-
-    if( m_view )
-        delete m_view;
-
-    if( m_gal )
-        delete m_gal;
+    delete m_painter;
+    delete m_viewControls;
+    delete m_view;
+    delete m_gal;
 }
 
 
@@ -194,42 +187,29 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
     m_eventDispatcher = aEventDispatcher;
 
 #if wxCHECK_VERSION( 3, 0, 0 )
-    if( m_eventDispatcher )
-    {
-        m_parent->Connect( wxEVT_TOOL,
-                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                           NULL, m_eventDispatcher );
-    }
-    else
-    {
-        // While loops are used to be sure, that we are removing all event handlers
-        while( m_parent->Disconnect( wxEVT_TOOL,
-                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                                     NULL, m_eventDispatcher ) );
-    }
+    const wxEventType eventTypes[] = { wxEVT_TOOL };
 #else
+    const wxEventType eventTypes[] = { wxEVT_COMMAND_MENU_SELECTED, wxEVT_COMMAND_TOOL_CLICKED };
+#endif
+
     if( m_eventDispatcher )
     {
-        m_parent->Connect( wxEVT_COMMAND_MENU_SELECTED,
-                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                           NULL, m_eventDispatcher );
-
-        m_parent->Connect( wxEVT_COMMAND_TOOL_CLICKED,
-                           wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                           NULL, m_eventDispatcher );
+        BOOST_FOREACH( wxEventType type, eventTypes )
+        {
+            m_parent->Connect( type, wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                               NULL, m_eventDispatcher );
+        }
     }
     else
     {
-        // While loops are used to be sure, that we are removing all event handlers
-        while( m_parent->Disconnect( wxEVT_COMMAND_MENU_SELECTED,
-                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                                     NULL, m_eventDispatcher ) );
-
-        while( m_parent->Disconnect( wxEVT_COMMAND_TOOL_CLICKED,
-                                     wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                                     NULL, m_eventDispatcher ) );
+        BOOST_FOREACH( wxEventType type, eventTypes )
+        {
+            // While loop is used to be sure that all event handlers are removed.
+            while( m_parent->Disconnect( type,
+                                         wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
+                                         NULL, m_eventDispatcher ) );
+        }
     }
-#endif
 }
 
 
@@ -316,7 +296,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 
         m_backend = aGalType;
     }
-    catch (std::runtime_error& err)
+    catch( std::runtime_error& err )
     {
             DisplayError( m_parent, wxString( err.what() ) );
             return false;
