@@ -100,18 +100,17 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
     BOARD* board = getModel<BOARD>();
     board->ComputeBoundingBox();
     BOX2I boardBBox = board->ViewBBox();
+    VECTOR2I screenSize = gal->GetScreenPixelSize();
 
     if( boardBBox.GetSize().x == 0 || boardBBox.GetSize().y == 0 )
     {
         // Empty view
-        view->SetScale( 100000.0 );
-        view->SetCenter( VECTOR2D( 0, 0 ) );
+        view->SetCenter( view->ToWorld( VECTOR2D( screenSize.x / 2, screenSize.y / 2 ) ) );
+        view->SetScale( 17.0 );
     }
     else
     {
         // Autozoom to board
-        VECTOR2I screenSize = gal->GetScreenPixelSize();
-
         double iuPerX = screenSize.x ? boardBBox.GetWidth() / screenSize.x : 1.0;
         double iuPerY = screenSize.y ? boardBBox.GetHeight() / screenSize.y : 1.0;
 
@@ -119,8 +118,8 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
         double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
         double zoom = 1.0 / ( zoomFactor * bestZoom );
 
-        view->SetScale( zoom );
         view->SetCenter( boardBBox.Centre() );
+        view->SetScale( zoom );
     }
 
     return 0;
