@@ -973,7 +973,13 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         EditImage( (SCH_BITMAP*) item );
         break;
 
-    default:
+    case SCH_LINE_T:        // These items have no param to edit
+    case SCH_MARKER_T:
+    case SCH_JUNCTION_T:
+    case SCH_NO_CONNECT_T:
+        break;
+
+    default:                // Unexpected item
         wxFAIL_MSG( wxString::Format( wxT( "Cannot edit schematic item type %s." ),
                                       GetChars( item->GetClass() ) ) );
     }

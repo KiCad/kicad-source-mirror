@@ -211,9 +211,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, PART_LIB* aLibrar
 
     wxString cmpName = m_aliasName = aEntry->GetName();
 
-    LIB_ALIAS* alias = (LIB_ALIAS*) aEntry;
-
-    LIB_PART* lib_part = alias->GetPart();
+    LIB_PART* lib_part = aEntry->GetPart();
 
     wxASSERT( lib_part );
 

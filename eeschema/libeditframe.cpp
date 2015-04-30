@@ -181,9 +181,7 @@ END_EVENT_TABLE()
 
 LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
-        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() ),
-    m_my_part( 0 ),
-    m_tempCopyComponent( 0 )
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() )
 {
     wxASSERT( aParent );
 
@@ -195,6 +193,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_HotkeysZoomAndGridList = g_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
+
+    m_my_part = NULL;
+    m_tempCopyComponent = NULL;
 
     // Delayed initialization
     if( m_textSize == -1 )
@@ -231,6 +232,27 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
+
+    // Ensure the current alias name is valid if a part is loaded
+    // Sometimes it is not valid. This is the case
+    // when a part value (the part lib name), or the alias list was modified
+    // during a previous session and the modifications not saved in lib.
+    // Reopen libedit in a new session gives a non valid m_aliasName
+    // because the curr part is reloaded from the library (and this is the unmodified part)
+    // and the old alias name (from the previous edition) can be invalid
+    LIB_PART* part = GetCurPart();
+
+    if( part == NULL )
+        m_aliasName.Empty();
+    else if( m_aliasName != part->GetName() )
+    {
+        LIB_ALIAS* alias = part->GetAlias( m_aliasName );
+
+        if( !alias )
+            m_aliasName = part->GetName();
+    }
+
+
     CreateOptionToolbar();
     DisplayLibInfos();
     DisplayCmpDoc();
@@ -278,6 +300,8 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 
     delete m_tempCopyComponent;
     delete m_my_part;
+    m_my_part = NULL;
+    m_tempCopyComponent = NULL;
 }
 
 const wxChar* LIB_EDIT_FRAME::GetLibEditFrameName()
