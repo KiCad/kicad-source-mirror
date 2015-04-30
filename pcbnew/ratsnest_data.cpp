@@ -1182,9 +1182,10 @@ void RN_DATA::Recalculate( int aNet )
     if( netCount > m_nets.size() )
         m_nets.resize( netCount );
 
-    if( aNet < 0 )              // Recompute everything
+    if( aNet < 0 && netCount > 1 )              // Recompute everything
     {
         unsigned int i;
+
 #ifdef USE_OPENMP
         #pragma omp parallel shared(netCount) private(i)
         {
