@@ -31,6 +31,8 @@ install_manifest.txt
 Documentation/doxygen
 Documentation/development/doxygen
 *.bak
+.*.swp
+*.~*
 common/pcb_plot_params_keywords.cpp
 include/pcb_plot_params_lexer.h
 pcbnew/specctra_keywords.cpp
