@@ -122,7 +122,7 @@ TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
 
 TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
         AS_GLOBAL, WXK_DELETE,
-        _( "Remove" ), _( "Deletes selected item(s)" ), delete_track_xpm );
+        _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
@@ -183,11 +183,11 @@ TOOL_ACTION COMMON_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
 // View Controls
 TOOL_ACTION COMMON_ACTIONS::zoomIn( "common.Control.zoomIn",
         AS_GLOBAL, WXK_F1,
-        "", "" );
+        "Zoom In", "", zoom_in_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomOut( "common.Control.zoomOut",
         AS_GLOBAL, WXK_F2,
-        "", "" );
+        "Zoom Out", "", zoom_out_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
         AS_GLOBAL, 0,
@@ -199,11 +199,11 @@ TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
 
 TOOL_ACTION COMMON_ACTIONS::zoomCenter( "common.Control.zoomCenter",
         AS_GLOBAL, WXK_F4,
-        "", "" );
+        "Center", "", zoom_center_on_screen_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         AS_GLOBAL, WXK_HOME,
-        "", "" );
+        "Zoom Auto", "", zoom_fit_in_page_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomPreset( "common.Control.zoomPreset",
         AS_GLOBAL, 0,
