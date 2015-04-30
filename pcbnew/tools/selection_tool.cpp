@@ -352,7 +352,7 @@ bool SELECTION_TOOL::selectCursor( const VECTOR2I& aWhere, bool aOnDrag )
         else if( collector.GetCount() > 1 )
         {
             if( aOnDrag )
-                Wait ( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
+                Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
 
             item = disambiguationMenu( &collector );
 
@@ -507,6 +507,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
     return SELECTION_UNLOCKED;
 }
 
+
 int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
     selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
@@ -521,6 +522,7 @@ int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
@@ -537,6 +539,7 @@ int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 {

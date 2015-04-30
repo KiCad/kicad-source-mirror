@@ -90,8 +90,8 @@ bool EDIT_TOOL::Init()
 
     // Footprint actions
     m_selectionTool->AddMenuItem( COMMON_ACTIONS::editFootprintInFpEditor,
-                                SELECTION_CONDITIONS::OnlyType ( PCB_MODULE_T ) &&
-                                SELECTION_CONDITIONS::Count ( 1 ) );
+                                  SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) &&
+                                  SELECTION_CONDITIONS::Count( 1 ) );
 
     m_offset.x = 0;
     m_offset.y = 0;

@@ -171,8 +171,8 @@ public:
     ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
 
-	///> Makes sure a group selection does not contain items that would cause
-	///> conflicts when moving/rotating together (e.g. a footprint and one of the same footprint's pads)
+    ///> Makes sure a group selection does not contain items that would cause
+    ///> conflicts when moving/rotating together (e.g. a footprint and one of the same footprint's pads)
     bool SanitizeSelection();
 
     ///> Item selection event handler.
