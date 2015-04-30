@@ -242,7 +242,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition )
 {
-    assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
+    assert( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
 
     m_menu.Add( aAction );
     m_menuConditions.push_back( aCondition );
@@ -250,10 +250,12 @@ void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction, const SELECTION_CO
 
 
 void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
-                                 const SELECTION_CONDITION& aCondition )
+                                 const SELECTION_CONDITION& aCondition, bool aExpand )
 {
-    m_menu.Add( aMenu, aLabel );
-    m_menuConditions.push_back( aCondition );
+    std::list<wxMenuItem*> items = m_menu.Add( aMenu, aLabel, aExpand );
+
+    for( unsigned int i = 0; i < items.size(); ++i )
+        m_menuConditions.push_back( aCondition );
 }
 
 
@@ -1285,7 +1287,7 @@ void SELECTION_TOOL::generateMenu()
 
     assert( m_menuCopy.GetMenuItemCount() == m_menuConditions.size() );
 
-    // Filter out entries that does not apply to the current selection
+    // Filter out entries that do not comply with the current selection
     for( int i = m_menuCopy.GetMenuItemCount() - 1; i >= 0; --i )
     {
         try

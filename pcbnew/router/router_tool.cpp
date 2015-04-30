@@ -96,8 +96,8 @@ public:
     {
         m_board = NULL;
         SetIcon( width_track_via_xpm );
-        setCustomEventHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::handleCustomEvent,
-                                            this, _1 ) );
+        AppendCustomEventHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::handleCustomEvent,
+                                               this, _1 ) );
     }
 
     void SetBoard( BOARD* aBoard )

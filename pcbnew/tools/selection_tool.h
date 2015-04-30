@@ -141,9 +141,11 @@ public:
      * @param aMenu is the submenu to be added.
      * @param aLabel is the label of added submenu.
      * @param aCondition is a condition that has to be fulfilled to enable the submenu entry.
+     * @param aExpand determines if the added submenu items should be added as individual items.
      */
     void AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
-                     const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways );
+                     const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
+                     bool aExpand = false );
 
     /**
      * Function EditModules()

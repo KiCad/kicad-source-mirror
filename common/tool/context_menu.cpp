@@ -33,14 +33,11 @@
 CONTEXT_MENU::CONTEXT_MENU() :
     m_titleSet( false ), m_selected( -1 ), m_tool( NULL ), m_icon( NULL )
 {
-    setCustomEventHandler( boost::bind( &CONTEXT_MENU::handleCustomEvent, this, _1 ) );
     setupEvents();
 }
 
 
-CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
-    m_titleSet( aMenu.m_titleSet ), m_selected( -1 ), m_tool( aMenu.m_tool ),
-    m_toolActions( aMenu.m_toolActions ), m_customHandler( aMenu.m_customHandler )
+CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu )
 {
     copyFrom( aMenu );
     setupEvents();
@@ -50,12 +47,6 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu ) :
 CONTEXT_MENU& CONTEXT_MENU::operator=( const CONTEXT_MENU& aMenu )
 {
     Clear();
-
-    m_titleSet = aMenu.m_titleSet;
-    m_selected = aMenu.m_selected;
-    m_tool = aMenu.m_tool;
-    m_toolActions = aMenu.m_toolActions;
-    m_customHandler = aMenu.m_customHandler;
 
     copyFrom( aMenu );
     setupEvents();
@@ -90,7 +81,7 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 }
 
 
-void CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon )
+wxMenuItem* CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon )
 {
 #ifdef DEBUG
 
@@ -103,18 +94,18 @@ void CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aI
     if( aIcon )
         item->SetBitmap( KiBitmap( aIcon ) );
 
-    Append( item );
+    return Append( item );
 }
 
 
-void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
+wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 {
-    /// ID numbers for tool actions need to have a value higher than m_actionId
-    int id = m_actionId + aAction.GetId();
+    /// ID numbers for tool actions need to have a value higher than ACTION_ID
+    int id = ACTION_ID + aAction.GetId();
     const BITMAP_OPAQUE* icon = aAction.GetIcon();
 
-    wxMenuItem* item = new wxMenuItem( this, id,
-        aAction.GetMenuItem(), aAction.GetDescription(), wxITEM_NORMAL );
+    wxMenuItem* item = new wxMenuItem( this, id, aAction.GetMenuItem(),
+                                       aAction.GetDescription(), wxITEM_NORMAL );
 
     if( icon )
         item->SetBitmap( KiBitmap( icon ) );
@@ -136,24 +127,45 @@ void CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
         item->SetAccel( &accel );
     }
 
-    Append( item );
     m_toolActions[id] = &aAction;
+
+    return Append( item );
 }
 
 
-void CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& aLabel )
+std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& aLabel, bool aExpand )
 {
-    if( aMenu->m_icon )
+    std::list<wxMenuItem*> items;
+
+    if( aExpand )
     {
-        wxMenuItem* newItem = new wxMenuItem( this, -1, aLabel, wxEmptyString, wxITEM_NORMAL );
-        newItem->SetBitmap( KiBitmap( aMenu->m_icon ) );
-        newItem->SetSubMenu( aMenu );
-        Append( newItem );
+        unsigned int i = 0;
+
+        for( i = 0; i < aMenu->GetMenuItemCount(); ++i )
+        {
+            wxMenuItem* item = aMenu->FindItemByPosition( i );
+            items.push_back( appendCopy( item ) );
+        }
     }
     else
     {
-        AppendSubMenu( aMenu, aLabel );
+        if( aMenu->m_icon )
+        {
+            wxMenuItem* newItem = new wxMenuItem( this, -1, aLabel, wxEmptyString, wxITEM_NORMAL );
+            newItem->SetBitmap( KiBitmap( aMenu->m_icon ) );
+            newItem->SetSubMenu( aMenu );
+            items.push_back( Append( newItem ) );
+        }
+        else
+        {
+            items.push_back( AppendSubMenu( aMenu, aLabel ) );
+        }
     }
+
+    m_toolActions.insert( aMenu->m_toolActions.begin(), aMenu->m_toolActions.end() );
+    m_handlers.insert( m_handlers.end(), aMenu->m_handlers.begin(), aMenu->m_handlers.end() );
+
+    return items;
 }
 
 
@@ -164,6 +176,7 @@ void CONTEXT_MENU::Clear()
     GetMenuItems().DeleteContents( true );
     GetMenuItems().Clear();
     m_toolActions.clear();
+    m_handlers.clear();
     GetMenuItems().DeleteContents( false ); // restore the default so destructor does not go wild
 
     assert( GetMenuItemCount() == 0 );
@@ -211,7 +224,14 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
                 }
             }
 #endif
-            evt = m_customHandler( aEvent );
+            for( std::list<CUSTOM_MENU_HANDLER>::iterator it = m_handlers.begin();
+                    it != m_handlers.end(); ++it )
+            {
+                evt = (*it)( aEvent );
+
+                if( evt )
+                    break;
+            }
 
             // Handling non-action menu entries (e.g. items in clarification list)
             if( !evt )
@@ -244,49 +264,56 @@ void CONTEXT_MENU::setTool( TOOL_INTERACTIVE* aTool )
 }
 
 
-void CONTEXT_MENU::copyItem( const wxMenuItem* aSource, wxMenuItem* aDest ) const
+wxMenuItem* CONTEXT_MENU::appendCopy( const wxMenuItem* aSource )
 {
-    assert( !aSource->IsSubMenu() );    // it does not transfer submenus
+    wxMenuItem* newItem = new wxMenuItem( this, aSource->GetId(), aSource->GetItemLabel(),
+                                          aSource->GetHelp(), aSource->GetKind() );
 
-    aDest->SetKind( aSource->GetKind() );
-    aDest->SetHelp( aSource->GetHelp() );
-    aDest->Enable( aSource->IsEnabled() );
+    if( aSource->GetKind() == wxITEM_NORMAL )
+        newItem->SetBitmap( aSource->GetBitmap() );
 
-    if( aSource->IsCheckable() )
-        aDest->Check( aSource->IsChecked() );
+    if( aSource->IsSubMenu() )
+    {
+#ifdef DEBUG
+        // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
+        assert( dynamic_cast<CONTEXT_MENU*>( aSource->GetSubMenu() ) );
+#endif
+
+        CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *aSource->GetSubMenu() ) );
+        newItem->SetSubMenu( menu );
+        Append( newItem );
+
+        m_toolActions.insert( menu->m_toolActions.begin(), menu->m_toolActions.end() );
+        m_handlers.insert( m_handlers.end(), menu->m_handlers.begin(), menu->m_handlers.end() );
+    }
+    else
+    {
+        Append( newItem );
+        newItem->SetKind( aSource->GetKind() );
+        newItem->SetHelp( aSource->GetHelp() );
+        newItem->Enable( aSource->IsEnabled() );
+
+        if( aSource->IsCheckable() )
+            newItem->Check( aSource->IsChecked() );
+    }
+
+    return newItem;
 }
 
 
 void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
 {
     m_icon = aMenu.m_icon;
+    m_titleSet = aMenu.m_titleSet;
+    m_selected = -1; // aMenu.m_selected;
+    m_tool = aMenu.m_tool;
+    m_toolActions = aMenu.m_toolActions;
+    m_handlers = aMenu.m_handlers;
 
     // Copy all the menu entries
     for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
     {
         wxMenuItem* item = aMenu.FindItemByPosition( i );
-
-        wxMenuItem* newItem = new wxMenuItem( this, item->GetId(), item->GetItemLabel(),
-                                              item->GetHelp(), item->GetKind() );
-
-        if( item->GetKind() == wxITEM_NORMAL )
-            newItem->SetBitmap( item->GetBitmap() );
-
-        if( item->IsSubMenu() )
-        {
-#ifdef DEBUG
-            // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
-            assert( dynamic_cast<CONTEXT_MENU*>( item->GetSubMenu() ) );
-#endif
-
-            CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *item->GetSubMenu() ) );
-            newItem->SetSubMenu( menu );
-            Append( newItem );
-        }
-        else
-        {
-            Append( newItem );
-            copyItem( item, newItem );
-        }
+        appendCopy( item );
     }
 }
