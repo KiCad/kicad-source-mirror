@@ -346,6 +346,12 @@ public:
      */
     virtual const wxString GetZoomLevelIndicator() const;
 
+    /**
+     * Function GetZoomLevelCoeff
+     * returns the coefficient to convert internal display scale factor to zoom level.
+     */
+    inline double GetZoomLevelCoeff() const { return m_zoomLevelCoeff; }
+
     void EraseMsgBox();
     void Process_PageSettings( wxCommandEvent& event );
 
@@ -504,6 +510,13 @@ public:
      * changes the zoom to the previous one available.
      */
     void SetPrevZoom();
+
+    /**
+     * Function SetPresetZoom()
+     * changes zoom to one of the preset values.
+     * @param aIndex is the zoom index from the list.
+     */
+    void SetPresetZoom( int aIndex );
 
     /**
      * Function RedrawScreen

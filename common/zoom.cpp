@@ -33,8 +33,6 @@
 #include <fctsys.h>
 #include <id.h>
 #include <class_drawpanel.h>
-#include <class_draw_panel_gal.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 #include <class_base_screen.h>
 #include <draw_frame.h>
@@ -46,6 +44,9 @@
 
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
+    if( IsGalCanvasActive() )
+        return;
+
     AdjustScrollBars( aCenterPoint );
 
     // Move the mouse cursor to the on grid graphic cursor position
@@ -58,6 +59,9 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 
 void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 {
+    if( IsGalCanvasActive() )
+        return;
+
     wxPoint dPos = posBefore - m_canvas->GetClientSize() / 2; // relative screen position to center before zoom
     wxPoint newScreenPos = m_canvas->ToDeviceXY( GetCrossHairPosition() ); // screen position of crosshair after zoom
     wxPoint newCenter = m_canvas->ToLogicalXY( newScreenPos - dPos );
@@ -186,18 +190,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     default:
-        unsigned i;
-
-        i = id - ID_POPUP_ZOOM_LEVEL_START;
-
-        if( i >= screen->m_ZoomList.size() )
-        {
-            wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
-                        __TFILE__, __LINE__, i );
-            return;
-        }
-        if( screen->SetZoom( screen->m_ZoomList[i] ) )
-            RedrawScreen( center, true );
+        SetPresetZoom( id - ID_POPUP_ZOOM_LEVEL_START );
     }
 
     UpdateStatusBar();
@@ -213,6 +206,26 @@ void EDA_DRAW_FRAME::SetNextZoom()
 void EDA_DRAW_FRAME::SetPrevZoom()
 {
     GetScreen()->SetPreviousZoom();
+}
+
+
+void EDA_DRAW_FRAME::SetPresetZoom( int aIndex )
+{
+    BASE_SCREEN* screen = GetScreen();
+
+    if( aIndex >= (int) screen->m_ZoomList.size() )
+    {
+        wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
+                    __TFILE__, __LINE__, aIndex );
+        return;
+    }
+
+    m_zoomSelectBox->SetSelection( aIndex );
+
+    if( screen->SetZoom( screen->m_ZoomList[aIndex] ) )
+        RedrawScreen( GetScrollCenterPosition(), true );
+
+    UpdateStatusBar();
 }
 
 

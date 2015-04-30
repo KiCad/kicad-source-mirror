@@ -51,6 +51,7 @@ public:
     int ZoomInOutCenter( const TOOL_EVENT& aEvent );
     int ZoomCenter( const TOOL_EVENT& aEvent );
     int ZoomFitScreen( const TOOL_EVENT& aEvent );
+    int ZoomPreset( const TOOL_EVENT& aEvent );
 
     // Display modes
     int TrackDisplayMode( const TOOL_EVENT& aEvent );

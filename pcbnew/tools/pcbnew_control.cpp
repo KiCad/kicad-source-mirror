@@ -140,6 +140,35 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
+{
+    unsigned int idx = aEvent.Parameter<long>();
+    std::vector<int>& zoomList = m_frame->GetScreen()->m_ZoomList;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+
+    m_frame->SetPresetZoom( idx );
+
+    if( idx == 0 )
+    {
+        return ZoomFitScreen( aEvent );
+    }
+    else if( idx < 0 || idx >= zoomList.size() )
+    {
+        setTransitions();
+        return 0;
+    }
+
+    double selectedZoom = zoomList[idx];
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    view->SetScale( 1.0 / ( zoomFactor * selectedZoom ) );
+
+    setTransitions();
+
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
@@ -539,6 +568,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ZoomInOutCenter,    COMMON_ACTIONS::zoomOutCenter.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoomCenter,         COMMON_ACTIONS::zoomCenter.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoomFitScreen,      COMMON_ACTIONS::zoomFitScreen.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoomPreset,         COMMON_ACTIONS::zoomPreset.MakeEvent() );
 
     // Display modes
     Go( &PCBNEW_CONTROL::TrackDisplayMode,   COMMON_ACTIONS::trackDisplayMode.MakeEvent() );

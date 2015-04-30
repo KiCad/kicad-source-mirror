@@ -188,6 +188,7 @@ public:
     static TOOL_ACTION zoomOutCenter;
     static TOOL_ACTION zoomCenter;
     static TOOL_ACTION zoomFitScreen;
+    static TOOL_ACTION zoomPreset;
 
     // Display modes
     static TOOL_ACTION trackDisplayMode;

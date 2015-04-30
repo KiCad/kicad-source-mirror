@@ -424,8 +424,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     if( IsGalCanvasActive() )
     {
-        GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
-                                                         screen->GetGrid().m_Size.y ) );
+        GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size ) );
         GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
@@ -456,22 +455,14 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
             return;
 
         GetScreen()->SetZoom( selectedZoom );
-
-        if( IsGalCanvasActive() )
-        {
-            // Apply computed view settings to GAL
-            KIGFX::VIEW* view = GetGalCanvas()->GetView();
-            KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
-
-            double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-            double zoom = 1.0 / ( zoomFactor * GetZoom() );
-
-            view->SetScale( zoom );
-            GetGalCanvas()->Refresh();
-        }
-        else
-            RedrawScreen( GetScrollCenterPosition(), false );
+        RedrawScreen( GetScrollCenterPosition(), false );
     }
+
+    // Notify GAL
+    TOOL_MANAGER* mgr = GetToolManager();
+
+    if( mgr && IsGalCanvasActive() )
+        mgr->RunAction( "common.Control.zoomPreset", true, id );
 }
 
 
@@ -1026,38 +1017,29 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
     double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    BASE_SCREEN* screen = GetScreen();
 
     // Display the same view after canvas switching
-    if( aEnable )
+    if( aEnable )       // Switch to GAL rendering
     {
-        BASE_SCREEN* screen = GetScreen();
-
-        // Switch to GAL rendering
-        if( !IsGalCanvasActive() )
-        {
-            // Set up viewport
-            double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
-            view->SetScale( zoom );
-            view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-        }
+        // Set up viewport
+        double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
+        view->SetScale( zoom );
+        view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
         // Set up grid settings
         gal->SetGridVisibility( IsGridVisible() );
-        gal->SetGridSize( VECTOR2D( screen->GetGridSize().x, screen->GetGridSize().y ) );
+        gal->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
         gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
     }
-    else
+    else                // Switch to standard rendering
     {
-        // Switch to standard rendering
-        if( IsGalCanvasActive() )
-        {
-            // Change view settings only if GAL was active previously
-            double zoom = 1.0 / ( zoomFactor * view->GetScale() );
-            m_canvas->SetZoom( zoom );
+        // Change view settings only if GAL was active previously
+        double zoom = 1.0 / ( zoomFactor * view->GetScale() );
+        m_canvas->SetZoom( zoom );
 
-            VECTOR2D center = view->GetCenter();
-            RedrawScreen( wxPoint( center.x, center.y ), false );
-        }
+        VECTOR2D center = view->GetCenter();
+        AdjustScrollBars( wxPoint( center.x, center.y ) );
     }
 
     m_canvas->SetEvtHandlerEnabled( !aEnable );

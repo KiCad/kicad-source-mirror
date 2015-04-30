@@ -181,28 +181,32 @@ TOOL_ACTION COMMON_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
 
 
 // View Controls
-TOOL_ACTION COMMON_ACTIONS::zoomIn( "pcbnew.Control.zoomIn",
+TOOL_ACTION COMMON_ACTIONS::zoomIn( "common.Control.zoomIn",
         AS_GLOBAL, WXK_F1,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomOut( "pcbnew.Control.zoomOut",
+TOOL_ACTION COMMON_ACTIONS::zoomOut( "common.Control.zoomOut",
         AS_GLOBAL, WXK_F2,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "pcbnew.Control.zoomInCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "pcbnew.Control.zoomOutCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomCenter( "pcbnew.Control.zoomCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomCenter( "common.Control.zoomCenter",
         AS_GLOBAL, WXK_F4,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "pcbnew.Control.zoomFitScreen",
+TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         AS_GLOBAL, WXK_HOME,
+        "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::zoomPreset( "common.Control.zoomPreset",
+        AS_GLOBAL, 0,
         "", "" );
 
 
