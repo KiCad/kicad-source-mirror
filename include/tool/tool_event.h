@@ -88,14 +88,19 @@ enum TOOL_ACTIONS
     // closed it without selecting anything.
     TA_CONTEXT_MENU_CHOICE  = 0x8000,
 
+    // Context menu is closed, no matter whether anything has been chosen or not.
+    TA_CONTEXT_MENU_CLOSED  = 0x10000,
+
+    TA_CONTEXT_MENU = TA_CONTEXT_MENU_UPDATE | TA_CONTEXT_MENU_CHOICE | TA_CONTEXT_MENU_CLOSED,
+
     // This event is sent *before* undo/redo command is performed.
-    TA_UNDO_REDO            = 0x10000,
+    TA_UNDO_REDO            = 0x20000,
 
     // Tool action (allows to control tools).
-    TA_ACTION               = 0x20000,
+    TA_ACTION               = 0x40000,
 
     // Tool activation event.
-    TA_ACTIVATE             = 0x40000,
+    TA_ACTIVATE             = 0x80000,
 
     TA_ANY = 0xffffffff
 };

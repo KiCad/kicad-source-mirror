@@ -611,6 +611,9 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
                 dispatchInternal( evt );
             }
 
+            TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
+            dispatchInternal( evt );
+
             m_viewControls->ForceCursorPosition( forcedCursor, cursorPos );
 
             break;
