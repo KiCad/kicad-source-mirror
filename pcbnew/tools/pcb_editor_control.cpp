@@ -74,7 +74,7 @@ bool PCB_EDITOR_CONTROL::Init()
 
     if( selTool )
     {
-        selTool->GetMenu().AddMenu( new ZONE_CONTEXT_MENU, _( "Zones" ),
+        selTool->GetMenu().AddMenu( new ZONE_CONTEXT_MENU, _( "Zones" ), false,
                                     SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
     }
 

@@ -85,19 +85,21 @@ bool SELECTION_TOOL::Init()
 {
     m_selection.group = new KIGFX::VIEW_GROUP;
 
-    m_menu.AddMenu( new SELECT_MENU, _( "Select..." ),
+    m_menu.AddMenu( new SELECT_MENU, _( "Select..." ), false,
             (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
             SELECTION_CONDITIONS::Count( 1 ) );
 
-    m_menu.AddItem( COMMON_ACTIONS::zoomCenter );
-    m_menu.AddItem( COMMON_ACTIONS::zoomIn );
-    m_menu.AddItem( COMMON_ACTIONS::zoomOut );
-    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen );
+    m_menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
 
-    m_menu.AddMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Zoom" );
-    m_menu.AddMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Grid" );
+    m_menu.AddItem( COMMON_ACTIONS::zoomCenter, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomIn, SELECTION_CONDITIONS::ShowAlways, 1000  );
+    m_menu.AddItem( COMMON_ACTIONS::zoomOut , SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen , SELECTION_CONDITIONS::ShowAlways, 1000 );
 
-    //m_menu.AddSeparator();
+    m_menu.AddMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Zoom",
+            false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Grid",
+            false, SELECTION_CONDITIONS::ShowAlways, 1000 );
 
     return true;
 }
