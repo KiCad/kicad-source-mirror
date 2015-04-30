@@ -72,6 +72,9 @@ protected:
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
 
+    TOOL_MANAGER*       m_toolManager;
+    TOOL_DISPATCHER*    m_toolDispatcher;
+
     /// Tool ID of previously active draw tool bar button.
     int     m_lastDrawToolId;
 
@@ -729,6 +732,12 @@ public:
      */
     EDA_DRAW_PANEL_GAL* GetGalCanvas() const        { return m_galCanvas; }
     void SetGalCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_galCanvas = aPanel; }
+
+    /**
+     * Function GetToolManager
+     * returns the tool manager instance, if any.
+     */
+    TOOL_MANAGER* GetToolManager() const            { return m_toolManager; }
 
     /**
      * Function GetDisplayOptions
