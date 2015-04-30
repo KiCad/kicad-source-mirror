@@ -152,7 +152,7 @@ std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& a
 
     if( aExpand )
     {
-        for( unsigned int i = 0; i < aMenu->GetMenuItemCount(); ++i )
+        for( int i = 0; i < (int) aMenu->GetMenuItemCount(); ++i )
         {
             wxMenuItem* item = aMenu->FindItemByPosition( i );
             items.push_back( appendCopy( item ) );
@@ -184,10 +184,10 @@ void CONTEXT_MENU::Clear()
 {
     m_titleSet = false;
 
-    GetMenuItems().DeleteContents( true );
-    GetMenuItems().Clear();
+    for( int i = GetMenuItemCount() - 1; i >= 0; --i )
+        Destroy( FindItemByPosition( i ) );
+
     m_toolActions.clear();
-    GetMenuItems().DeleteContents( false ); // restore the default so destructor does not go wild
     m_submenus.clear();
     m_parent = NULL;
 
@@ -333,7 +333,7 @@ void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
     m_update_handler = aMenu.m_update_handler;
 
     // Copy all the menu entries
-    for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
+    for( int i = 0; i < (int) aMenu.GetMenuItemCount(); ++i )
     {
         wxMenuItem* item = aMenu.FindItemByPosition( i );
         appendCopy( item );
