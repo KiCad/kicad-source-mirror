@@ -509,7 +509,7 @@ int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
     // Check if there is an item to be selected
-    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
 
     if( item )
     {
@@ -527,7 +527,7 @@ int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 {
     // Check if there is an item to be selected
-    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
 
     if( item )
     {

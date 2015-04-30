@@ -159,24 +159,24 @@ public:
     const std::string Format() const;
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory = TC_NONE, TOOL_ACTIONS aAction = TA_NONE,
-            TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
+            TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = NULL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( NULL ) {}
+        m_param( aParameter ) {}
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction, int aExtraParam,
-            TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
+            TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = NULL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( NULL )
+        m_param( aParameter )
     {
         if( aCategory == TC_MOUSE )
         {
@@ -198,14 +198,15 @@ public:
     }
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction,
-            const std::string& aExtraParam, TOOL_ACTION_SCOPE aScope = AS_GLOBAL ) :
+            const std::string& aExtraParam, TOOL_ACTION_SCOPE aScope = AS_GLOBAL,
+            void* aParameter = NULL ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( NULL )
+        m_param( aParameter )
     {
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
@@ -360,9 +361,10 @@ public:
      * Returns a non-standard parameter assigned to the event. Its meaning depends on the
      * target tool.
      */
-    void* Parameter() const
+    template<typename T>
+    inline T Parameter() const
     {
-        return m_param;
+        return reinterpret_cast<T>( m_param );
     }
 
     /**
@@ -371,9 +373,10 @@ public:
      * target tool.
      * @param aParam is the new parameter.
      */
-    void SetParameter(void* aParam)
+    template<typename T>
+    void SetParameter(T aParam)
     {
-        m_param = aParam;
+        m_param = (void*) aParam;
     }
 
     boost::optional<int> GetCommandId() const

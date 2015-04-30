@@ -303,7 +303,10 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
     if( action )
     {
         TOOL_EVENT event = action->MakeEvent();
-        event.SetParameter( aParam );
+
+        // Allow to override the action parameter
+        if( aParam )
+            event.SetParameter( aParam );
 
         if( aNow )
             ProcessEvent( event );
@@ -320,7 +323,10 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
 void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam )
 {
     TOOL_EVENT event = aAction.MakeEvent();
-    event.SetParameter( aParam );
+
+    // Allow to override the action parameter
+    if( aParam )
+        event.SetParameter( aParam );
 
     if( aNow )
         ProcessEvent( event );

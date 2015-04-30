@@ -285,23 +285,7 @@ int PCBNEW_CONTROL::HighContrastDec( const TOOL_EVENT& aEvent )
 // Layer control
 int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
-    if( aEvent.IsAction( &COMMON_ACTIONS::layerTop ) )
-        m_frame->SwitchLayer( NULL, F_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner1 ) )
-        m_frame->SwitchLayer( NULL, In1_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner2 ) )
-        m_frame->SwitchLayer( NULL, In2_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner3 ) )
-        m_frame->SwitchLayer( NULL, In3_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner4 ) )
-        m_frame->SwitchLayer( NULL, In4_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner5 ) )
-        m_frame->SwitchLayer( NULL, In5_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner6 ) )
-        m_frame->SwitchLayer( NULL, In6_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerBottom ) )
-        m_frame->SwitchLayer( NULL, B_Cu );
-
+    m_frame->SwitchLayer( NULL, (LAYER_ID) aEvent.Parameter<long>() );
     setTransitions();
 
     return 0;
@@ -450,8 +434,7 @@ int PCBNEW_CONTROL::GridPrev( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 {
     Activate();
-    m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL,
-                                               _( "Adjust grid origin" ) );
+    m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     controls->ShowCursor( true );

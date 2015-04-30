@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 #include "common_actions.h"
 #include <tool/action_manager.h>
 #include <pcbnew_id.h>
+#include <layers_id_colors_and_visibility.h>
 #include <wx/defs.h>
 
 // These members are static in class COMMON_ACTIONS: Build them here:
@@ -246,35 +247,35 @@ TOOL_ACTION COMMON_ACTIONS::highContrastDec( "pcbnew.Control.highContrastDec",
 // Layer control
 TOOL_ACTION COMMON_ACTIONS::layerTop( "pcbnew.Control.layerTop",
         AS_GLOBAL, WXK_PAGEUP,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) F_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
         AS_GLOBAL, WXK_F5,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In1_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
         AS_GLOBAL, WXK_F6,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In2_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
         AS_GLOBAL, WXK_F7,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In3_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
         AS_GLOBAL, WXK_F8,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In4_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
         AS_GLOBAL, WXK_F9,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In5_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
         AS_GLOBAL, WXK_F10,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In6_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
         AS_GLOBAL, WXK_PAGEDOWN,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) B_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerNext( "pcbnew.Control.layerNext",
         AS_GLOBAL, '+',
