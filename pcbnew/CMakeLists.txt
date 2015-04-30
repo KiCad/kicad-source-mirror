@@ -413,11 +413,7 @@ if( KICAD_SCRIPTING_MODULES )
         polygon
         bitmaps
         gal
-        ${GLEW_LIBRARIES}
-        ${CAIRO_LIBRARIES}
-        ${PIXMAN_LIBRARY}
         ${wxWidgets_LIBRARIES}
-        ${OPENGL_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         ${PYTHON_LIBRARIES}
         ${PCBNEW_EXTRA_LIBS}
@@ -583,12 +579,8 @@ target_link_libraries( pcbnew_kiface
     idf3
     ${GITHUB_PLUGIN_LIBRARIES}
     ${wxWidgets_LIBRARIES}
-    ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${GLEW_LIBRARIES}
-    ${CAIRO_LIBRARIES}
-    ${PIXMAN_LIBRARY}
     ${Boost_LIBRARIES}      # must follow GITHUB
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
     ${OPENMP_LIBRARIES}
