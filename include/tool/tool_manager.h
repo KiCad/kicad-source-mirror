@@ -116,7 +116,7 @@ public:
         return RunAction( aActionName, aNow, reinterpret_cast<void*>( aParam ) );
     }
 
-    bool RunAction( const std::string& aActionName, bool aNow, void* aParam = NULL );
+    bool RunAction( const std::string& aActionName, bool aNow, void* aParam );
 
     bool RunAction( const std::string& aActionName, bool aNow = false )
     {

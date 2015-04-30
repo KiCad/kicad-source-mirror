@@ -203,10 +203,15 @@ public:
      */
     virtual void ViewUpdate( int aUpdateFlags = ALL )
     {
-        if( m_view && m_requiredUpdate == NONE )
-            m_view->MarkForUpdate( this );
+        if( m_view )
+        {
+            assert( aUpdateFlags != NONE );
 
-        m_requiredUpdate |= aUpdateFlags;
+            if( m_requiredUpdate == NONE )
+                m_view->MarkForUpdate( this );
+
+            m_requiredUpdate |= aUpdateFlags;
+        }
     }
 
     /**
