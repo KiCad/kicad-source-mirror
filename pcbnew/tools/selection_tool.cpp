@@ -51,6 +51,8 @@
 
 #include "selection_tool.h"
 #include "selection_area.h"
+#include "zoom_menu.h"
+#include "grid_menu.h"
 #include "bright_box.h"
 #include "common_actions.h"
 
@@ -70,19 +72,36 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
         m_editModules( false ), m_locked( true )
 {
-    m_selArea = new SELECTION_AREA;
-    m_selection.group = new KIGFX::VIEW_GROUP;
-
-    AddSubMenu( new SELECT_MENU, _( "Select..." ),
-            (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
-            SELECTION_CONDITIONS::Count( 1 ) );
 }
 
 
 SELECTION_TOOL::~SELECTION_TOOL()
 {
-    delete m_selArea;
     delete m_selection.group;
+}
+
+
+bool SELECTION_TOOL::Init()
+{
+    m_selection.group = new KIGFX::VIEW_GROUP;
+
+    m_menu.AddMenu( new SELECT_MENU, _( "Select..." ), false,
+            (SELECTION_CONDITION) SELECTION_CONDITIONS::OnlyConnectedItems &&
+            SELECTION_CONDITIONS::Count( 1 ) );
+
+    m_menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    m_menu.AddItem( COMMON_ACTIONS::zoomCenter, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomIn, SELECTION_CONDITIONS::ShowAlways, 1000  );
+    m_menu.AddItem( COMMON_ACTIONS::zoomOut , SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen , SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    m_menu.AddMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Zoom",
+            false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Grid",
+            false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    return true;
 }
 
 
@@ -93,7 +112,6 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         // Remove pointers to the selected items from containers
         // without changing their properties (as they are already deleted
         // while a new board is loaded)
-        m_selection.group->Clear();
         m_selection.clear();
     }
     else
@@ -102,12 +120,11 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 
     m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_locked = true;
+    m_preliminary = true;
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
     getView()->Add( m_selection.group );
-
-    setTransitions();
 }
 
 
@@ -139,10 +156,17 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            if( m_selection.Empty() )
+            bool emptySelection = m_selection.Empty();
+
+            if( emptySelection )
                 selectCursor( evt->Position() );
 
-            generateMenu();
+            CONTEXT_MENU& contextMenu = m_menu.Generate( m_selection );
+
+            if( contextMenu.GetMenuItemCount() > 0 )
+                SetContextMenu( &contextMenu, CMENU_NOW );
+
+            m_preliminary = emptySelection;
         }
 
         // double click? Display the properties window
@@ -159,10 +183,14 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_additive )
             {
+                m_preliminary = false;
+
                 selectMultiple();
             }
             else if( m_selection.Empty() )
             {
+                m_preliminary = false;
+
                 // There is nothing selected, so try to select something
                 if( !selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
                 {
@@ -233,29 +261,18 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             selectNet( *evt );
         }
+
+        else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
+        {
+            if( m_preliminary )
+                clearSelection();
+        }
     }
 
     // This tool is supposed to be active forever
     assert( false );
 
     return 0;
-}
-
-
-void SELECTION_TOOL::AddMenuItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition )
-{
-    assert( aAction.GetId() > 0 );    // Check if the action was registered before in ACTION_MANAGER
-
-    m_menu.Add( aAction );
-    m_menuConditions.push_back( aCondition );
-}
-
-
-void SELECTION_TOOL::AddSubMenu( CONTEXT_MENU* aMenu, const wxString& aLabel,
-                                 const SELECTION_CONDITION& aCondition )
-{
-    m_menu.Add( aMenu, aLabel );
-    m_menuConditions.push_back( aCondition );
 }
 
 
@@ -334,7 +351,7 @@ bool SELECTION_TOOL::selectCursor( const VECTOR2I& aWhere, bool aOnDrag )
         else if( collector.GetCount() > 1 )
         {
             if( aOnDrag )
-                Wait ( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
+                Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
 
             item = disambiguationMenu( &collector );
 
@@ -359,7 +376,8 @@ bool SELECTION_TOOL::selectMultiple()
     KIGFX::VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
-    view->Add( m_selArea );
+    SELECTION_AREA area;
+    view->Add( &area );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -375,20 +393,20 @@ bool SELECTION_TOOL::selectMultiple()
                 clearSelection();
 
             // Start drawing a selection box
-            m_selArea->SetOrigin( evt->DragOrigin() );
-            m_selArea->SetEnd( evt->Position() );
-            m_selArea->ViewSetVisible( true );
-            m_selArea->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            area.SetOrigin( evt->DragOrigin() );
+            area.SetEnd( evt->Position() );
+            area.ViewSetVisible( true );
+            area.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
             // End drawing the selection box
-            m_selArea->ViewSetVisible( false );
+            area.ViewSetVisible( false );
 
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-            BOX2I selectionBox = m_selArea->ViewBBox();
+            BOX2I selectionBox = area.ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
@@ -419,8 +437,8 @@ bool SELECTION_TOOL::selectMultiple()
     }
 
     // Stop drawing the selection box
-    m_selArea->ViewSetVisible( false );
-    view->Remove( m_selArea );
+    area.ViewSetVisible( false );
+    view->Remove( &area );
     m_multiple = false;         // Multiple selection mode is inactive
     getViewControls()->SetAutoPan( false );
 
@@ -428,7 +446,7 @@ bool SELECTION_TOOL::selectMultiple()
 }
 
 
-void SELECTION_TOOL::setTransitions()
+void SELECTION_TOOL::SetTransitions()
 {
     Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
     Go( &SELECTION_TOOL::CursorSelection, COMMON_ACTIONS::selectionCursor.MakeEvent() );
@@ -489,10 +507,10 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
     return SELECTION_UNLOCKED;
 }
 
+
 int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
     selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ) );
-    setTransitions();
 
     return 0;
 }
@@ -501,15 +519,15 @@ int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     clearSelection();
-    setTransitions();
 
     return 0;
 }
 
+
 int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
     // Check if there is an item to be selected
-    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
 
     if( item )
     {
@@ -519,15 +537,14 @@ int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( SelectedEvent );
     }
 
-    setTransitions();
-
     return 0;
 }
+
 
 int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 {
     // Check if there is an item to be selected
-    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aEvent.Parameter() );
+    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
 
     if( item )
     {
@@ -536,8 +553,6 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( UnselectedEvent );
     }
-
-    setTransitions();
 
     return 0;
 }
@@ -562,8 +577,6 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( selectEvent );
     }
 
-    setTransitions();
-
     return 0;
 }
 
@@ -587,8 +600,6 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
         TOOL_EVENT selectEvent( SelectedEvent );
         m_toolMgr->ProcessEvent( selectEvent );
     }
-
-    setTransitions();
 
     return 0;
 }
@@ -618,7 +629,6 @@ int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
     dlg.EnableWarp( false );
     dlg.SetCallback( boost::bind( &SELECTION_TOOL::findCallback, this, _1 ) );
     dlg.ShowModal();
-    setTransitions();
 
     return 0;
 }
@@ -634,8 +644,6 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
         toggleSelection( module );
         m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
     }
-
-    setTransitions();
 
     return 0;
 }
@@ -1290,38 +1298,6 @@ bool SELECTION_TOOL::SanitizeSelection()
     }
 
     return true;
-}
-
-
-void SELECTION_TOOL::generateMenu()
-{
-    // Create a copy of the master context menu
-    m_menuCopy = m_menu;
-
-    assert( m_menuCopy.GetMenuItemCount() == m_menuConditions.size() );
-
-    // Filter out entries that does not apply to the current selection
-    for( int i = m_menuCopy.GetMenuItemCount() - 1; i >= 0; --i )
-    {
-        try
-        {
-            if( !m_menuConditions[i]( m_selection ) )
-            {
-                wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
-                m_menuCopy.Destroy( item );
-            }
-        }
-        catch( boost::bad_function_call )
-        {
-            // If it is not possible to determine if a menu entry should be
-            // shown or not - do not let users pick non-existing options
-            wxMenuItem* item = m_menuCopy.FindItemByPosition( i );
-            m_menuCopy.Destroy( item );
-        }
-    }
-
-    if( m_menuCopy.GetMenuItemCount() > 0 )
-        SetContextMenu( &m_menuCopy, CMENU_NOW );
 }
 
 

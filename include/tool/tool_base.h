@@ -140,6 +140,13 @@ public:
         return m_toolMgr;
     }
 
+    /**
+     * Function SetTransitions()
+     * This method is meant to be overridden in order to specify handlers for events. It is called
+     * every time tool is reset or finished.
+     */
+    virtual void SetTransitions() {};
+
 protected:
     friend class TOOL_MANAGER;
 

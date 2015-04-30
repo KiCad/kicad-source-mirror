@@ -98,10 +98,10 @@ public:
      */
     int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
 
-private:
     ///> Sets up handlers for various events.
-    void setTransitions();
+    void SetTransitions();
 
+private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;

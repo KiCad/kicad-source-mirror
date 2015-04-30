@@ -72,6 +72,9 @@ protected:
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
 
+    TOOL_MANAGER*       m_toolManager;
+    TOOL_DISPATCHER*    m_toolDispatcher;
+
     /// Tool ID of previously active draw tool bar button.
     int     m_lastDrawToolId;
 
@@ -343,6 +346,12 @@ public:
      */
     virtual const wxString GetZoomLevelIndicator() const;
 
+    /**
+     * Function GetZoomLevelCoeff
+     * returns the coefficient to convert internal display scale factor to zoom level.
+     */
+    inline double GetZoomLevelCoeff() const { return m_zoomLevelCoeff; }
+
     void EraseMsgBox();
     void Process_PageSettings( wxCommandEvent& event );
 
@@ -431,6 +440,13 @@ public:
     virtual void SetPrevGrid();
 
     /**
+     * Function SetPresetGrid()
+     * changes the grid size to one of the preset values.
+     * @param aIndex is the index from the list.
+     */
+    void SetPresetGrid( int aIndex );
+
+    /**
      * Command event handler for selecting grid sizes.
      *
      * All commands that set the grid size should eventually end up here.
@@ -501,6 +517,13 @@ public:
      * changes the zoom to the previous one available.
      */
     void SetPrevZoom();
+
+    /**
+     * Function SetPresetZoom()
+     * changes zoom to one of the preset values.
+     * @param aIndex is the zoom index from the list.
+     */
+    void SetPresetZoom( int aIndex );
 
     /**
      * Function RedrawScreen
@@ -729,6 +752,12 @@ public:
      */
     EDA_DRAW_PANEL_GAL* GetGalCanvas() const        { return m_galCanvas; }
     void SetGalCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_galCanvas = aPanel; }
+
+    /**
+     * Function GetToolManager
+     * returns the tool manager instance, if any.
+     */
+    TOOL_MANAGER* GetToolManager() const            { return m_toolManager; }
 
     /**
      * Function GetDisplayOptions

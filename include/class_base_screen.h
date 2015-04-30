@@ -215,7 +215,7 @@ public:
     int                 m_ScreenNumber;
     int                 m_NumberOfScreens;
 
-    std::vector<double> m_ZoomList;         ///< standard zoom (i.e. scale) coefficients.
+    std::vector<int>    m_ZoomList;         ///< standard zoom (i.e. scale) coefficients.
     bool                m_IsPrinting;
 
 public:

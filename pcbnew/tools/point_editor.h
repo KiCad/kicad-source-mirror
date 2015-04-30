@@ -55,6 +55,9 @@ public:
      */
     int OnSelectionChange( const TOOL_EVENT& aEvent );
 
+    ///> Sets up handlers for various events.
+    void SetTransitions();
+
 private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
@@ -97,9 +100,6 @@ private:
 
     ///> Adds a new edit point on a zone outline/line.
     void breakOutline( const VECTOR2I& aBreakPoint );
-
-    ///> Sets up handlers for various events.
-    void setTransitions();
 
     ///> Condition to display "Create corner" context menu entry.
     static bool breakOutlineCondition( const SELECTION& aSelection );

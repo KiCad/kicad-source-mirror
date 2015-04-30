@@ -72,10 +72,10 @@ public:
     ///> Notifies eeschema about the selected item.
     int SelectionCrossProbe( const TOOL_EVENT& aEvent );
 
-private:
     ///> Sets up handlers for various events.
-    void setTransitions();
+    void SetTransitions();
 
+private:
     ///> Pointer to the currently used edit frame.
     PCB_EDIT_FRAME* m_frame;
 

@@ -117,25 +117,8 @@ target_link_libraries( cvpcb_kiface
     polygon
     gal
     ${wxWidgets_LIBRARIES}
-    ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
-    ${GLEW_LIBRARIES}
-    ${CAIRO_LIBRARIES}
-    ${PIXMAN_LIBRARY}
-    ${OPENMP_LIBRARIES}
     )
-
-# Only for win32 cross compilation using MXE
-if( WIN32 AND MSYS AND CMAKE_CROSSCOMPILING )
-    target_link_libraries( cvpcb_kiface
-        opengl32
-        glu32
-        pixman-1
-        fontconfig
-        freetype
-        bz2
-        )
-endif()
 
 if( BUILD_GITHUB_PLUGIN )
     target_link_libraries( cvpcb_kiface github_plugin )

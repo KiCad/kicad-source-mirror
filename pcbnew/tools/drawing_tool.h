@@ -132,6 +132,9 @@ public:
         m_editModules = aEnabled;
     }
 
+    ///> Sets up handlers for various events.
+    void SetTransitions();
+
 private:
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
     ///> @param aShape is the type of created shape (@see STROKE_T).
@@ -175,9 +178,6 @@ private:
      * @param aHelper is a helper line that shows the next possible segment.
      */
     void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const;
-
-    ///> Sets up handlers for various events.
-    void setTransitions();
 
     ///> Returns the appropriate width for a segment depending on the settings.
     int getSegmentWidth( unsigned int aLayer ) const;

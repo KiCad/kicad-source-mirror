@@ -126,6 +126,9 @@ public:
         m_editModules = aEnabled;
     }
 
+    ///> Sets up handlers for various events.
+    void SetTransitions();
+
 private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
@@ -148,9 +151,6 @@ private:
 
     ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
-
-    ///> Sets up handlers for various events.
-    void setTransitions();
 
     ///> The required update flag for modified items
     KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS m_updateFlag;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 #include "common_actions.h"
 #include <tool/action_manager.h>
 #include <pcbnew_id.h>
+#include <layers_id_colors_and_visibility.h>
 #include <wx/defs.h>
 
 // These members are static in class COMMON_ACTIONS: Build them here:
@@ -121,7 +122,7 @@ TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
 
 TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
         AS_GLOBAL, WXK_DELETE,
-        _( "Remove" ), _( "Deletes selected item(s)" ), delete_track_xpm );
+        _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, 'E',
@@ -180,28 +181,32 @@ TOOL_ACTION COMMON_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
 
 
 // View Controls
-TOOL_ACTION COMMON_ACTIONS::zoomIn( "pcbnew.Control.zoomIn",
+TOOL_ACTION COMMON_ACTIONS::zoomIn( "common.Control.zoomIn",
         AS_GLOBAL, WXK_F1,
-        "", "" );
+        "Zoom In", "", zoom_in_xpm );
 
-TOOL_ACTION COMMON_ACTIONS::zoomOut( "pcbnew.Control.zoomOut",
+TOOL_ACTION COMMON_ACTIONS::zoomOut( "common.Control.zoomOut",
         AS_GLOBAL, WXK_F2,
-        "", "" );
+        "Zoom Out", "", zoom_out_xpm );
 
-TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "pcbnew.Control.zoomInCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "pcbnew.Control.zoomOutCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::zoomCenter( "pcbnew.Control.zoomCenter",
+TOOL_ACTION COMMON_ACTIONS::zoomCenter( "common.Control.zoomCenter",
         AS_GLOBAL, WXK_F4,
-        "", "" );
+        "Center", "", zoom_center_on_screen_xpm );
 
-TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "pcbnew.Control.zoomFitScreen",
+TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         AS_GLOBAL, WXK_HOME,
+        "Zoom Auto", "", zoom_fit_in_page_xpm );
+
+TOOL_ACTION COMMON_ACTIONS::zoomPreset( "common.Control.zoomPreset",
+        AS_GLOBAL, 0,
         "", "" );
 
 
@@ -246,35 +251,35 @@ TOOL_ACTION COMMON_ACTIONS::highContrastDec( "pcbnew.Control.highContrastDec",
 // Layer control
 TOOL_ACTION COMMON_ACTIONS::layerTop( "pcbnew.Control.layerTop",
         AS_GLOBAL, WXK_PAGEUP,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) F_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
         AS_GLOBAL, WXK_F5,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In1_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
         AS_GLOBAL, WXK_F6,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In2_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
         AS_GLOBAL, WXK_F7,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In3_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
         AS_GLOBAL, WXK_F8,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In4_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
         AS_GLOBAL, WXK_F9,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In5_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
         AS_GLOBAL, WXK_F10,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) In6_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
         AS_GLOBAL, WXK_PAGEDOWN,
-        "", "" );
+        "", "", NULL, AF_NONE, (void*) B_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerNext( "pcbnew.Control.layerNext",
         AS_GLOBAL, '+',
@@ -298,26 +303,29 @@ TOOL_ACTION COMMON_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
 
 
 // Grid control
-TOOL_ACTION COMMON_ACTIONS::gridFast1( "pcbnew.Control.gridFast1",
+TOOL_ACTION COMMON_ACTIONS::gridFast1( "common.Control.gridFast1",
         AS_GLOBAL, MD_ALT + int( '1' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridFast2( "pcbnew.Control.gridFast2",
+TOOL_ACTION COMMON_ACTIONS::gridFast2( "common.Control.gridFast2",
         AS_GLOBAL, MD_ALT + int( '2' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridNext( "pcbnew.Control.gridNext",
+TOOL_ACTION COMMON_ACTIONS::gridNext( "common.Control.gridNext",
         AS_GLOBAL, '`',
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridPrev( "pcbnew.Control.gridPrev",
+TOOL_ACTION COMMON_ACTIONS::gridPrev( "common.Control.gridPrev",
         AS_GLOBAL, MD_CTRL + int( '`' ),
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "pcbnew.Control.gridSetOrigin",
+TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::gridPreset( "common.Control.gridPreset",
+        AS_GLOBAL, 0,
+        "", "" );
 
 // Track & via size control
 TOOL_ACTION COMMON_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",

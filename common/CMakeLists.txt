@@ -56,9 +56,14 @@ set( GAL_SRCS
 
 add_library( gal STATIC ${GAL_SRCS} )
 add_dependencies( gal shader_headers )
-
 add_dependencies( gal lib-dependencies )
-add_dependencies( shader_headers lib-dependencies )
+
+target_link_libraries( gal
+    ${GLEW_LIBRARIES}
+    ${CAIRO_LIBRARIES}
+    ${PIXMAN_LIBRARY}
+    ${OPENGL_LIBRARIES}
+)
 
 
 # Only for win32 cross compilation using MXE
@@ -247,7 +252,7 @@ set( COMMON_SRCS
     )
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
-
+target_link_libraries( common ${Boost_LIBRARIES} )
 
 set( PCB_COMMON_SRCS
     base_screen.cpp

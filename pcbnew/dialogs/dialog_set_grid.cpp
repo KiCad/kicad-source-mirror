@@ -34,8 +34,10 @@
 #include <pcbnew_id.h>
 #include <dialog_set_grid_base.h>
 #include <invoke_pcb_dialog.h>
+
 #include <gal/graphics_abstraction_layer.h>
 #include <class_draw_panel_gal.h>
+#include <tool/tool_manager.h>
 
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
@@ -227,12 +229,12 @@ bool PCB_BASE_FRAME::InvokeDialogGrid()
         if( screen->GetGridId() == ID_POPUP_GRID_USER )
             screen->SetGrid( ID_POPUP_GRID_USER );
 
-        if( IsGalCanvasActive() )
-        {
-            GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGrid().m_Size.x,
-                                                             screen->GetGrid().m_Size.y ) );
-            GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-        }
+        // Notify GAL
+        TOOL_MANAGER* mgr = GetToolManager();
+
+        if( mgr && IsGalCanvasActive() )
+            mgr->RunAction( "common.Control.gridPreset", true,
+                    ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000 );
 
         m_canvas->Refresh();
 

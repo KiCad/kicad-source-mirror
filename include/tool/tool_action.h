@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -41,7 +41,7 @@ struct BITMAP_OPAQUE;
  * - running the DRC from the menu
  * and so on, and so forth....
  * Action class groups all necessary properties of an action, including explanation,
- * icons, hotkeys,.menu items, etc.
+ * icons, hotkeys, menu items, etc.
  */
 class TOOL_ACTION
 {
@@ -49,10 +49,10 @@ public:
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
             int aDefaultHotKey = 0, const wxString aMenuItem = wxEmptyString,
             const wxString& aMenuDesc = wxEmptyString, const BITMAP_OPAQUE* aIcon = NULL,
-            TOOL_ACTION_FLAGS aFlags = AF_NONE ) :
+            TOOL_ACTION_FLAGS aFlags = AF_NONE, void* aParam = NULL ) :
         m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
-        m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ),
-        m_menuDescription( aMenuDesc ), m_icon( aIcon ), m_id( -1 ), m_flags( aFlags )
+        m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ), m_menuDescription( aMenuDesc ),
+        m_icon( aIcon ), m_id( -1 ), m_flags( aFlags ), m_param( aParam )
     {
         TOOL_MANAGER::GetActionList().push_back( this );
     }
@@ -150,11 +150,11 @@ public:
     TOOL_EVENT MakeEvent() const
     {
         if( IsActivation() )
-            return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope );
+            return TOOL_EVENT( TC_COMMAND, TA_ACTIVATE, m_name, m_scope, m_param );
         else if( IsNotification() )
-            return TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope );
+            return TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope, m_param );
         else
-            return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
+            return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope, m_param );
     }
 
     const wxString& GetMenuItem() const
@@ -219,7 +219,7 @@ private:
     /// Name of the action (convention is: app.[tool.]action.name)
     std::string m_name;
 
-    /// Scope of the action (i.e. the event that is issued after activation).
+    /// Scope of the action
     TOOL_ACTION_SCOPE m_scope;
 
     /// Default hot key that activates the action.
@@ -243,11 +243,8 @@ private:
     /// Action flags
     TOOL_ACTION_FLAGS m_flags;
 
-    /// Origin of the action
-    // const TOOL_BASE* m_origin;
-
-    /// Originating UI object
-    // wxWindow* m_uiOrigin;
+    /// Generic parameter
+    void* m_param;
 };
 
 #endif

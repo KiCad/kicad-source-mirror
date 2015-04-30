@@ -77,10 +77,10 @@ public:
      */
     int DistributeVertically( const TOOL_EVENT& aEvent );
 
-private:
     ///> Sets up handlers for various events.
-    void setTransitions();
+    void SetTransitions();
 
+private:
     SELECTION_TOOL* m_selectionTool;
 };
 

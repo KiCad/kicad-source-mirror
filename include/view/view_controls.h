@@ -152,7 +152,6 @@ public:
      */
     virtual VECTOR2D GetCursorPosition() const = 0;
 
-
     /**
      * Function ForceCursorPosition()
      * Places the cursor immediately at a given point. Mouse movement is ignored.
@@ -180,6 +179,11 @@ public:
     virtual void CaptureCursor( bool aEnabled )
     {
         m_cursorCaptured = aEnabled;
+    }
+
+    inline bool IsCursorPositionForced() const
+    {
+        return m_forceCursorPosition;
     }
 
 protected:

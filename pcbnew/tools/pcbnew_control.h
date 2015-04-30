@@ -43,14 +43,12 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason );
 
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init();
-
     // View controls
     int ZoomInOut( const TOOL_EVENT& aEvent );
     int ZoomInOutCenter( const TOOL_EVENT& aEvent );
     int ZoomCenter( const TOOL_EVENT& aEvent );
     int ZoomFitScreen( const TOOL_EVENT& aEvent );
+    int ZoomPreset( const TOOL_EVENT& aEvent );
 
     // Display modes
     int TrackDisplayMode( const TOOL_EVENT& aEvent );
@@ -74,6 +72,7 @@ public:
     int GridNext( const TOOL_EVENT& aEvent );
     int GridPrev( const TOOL_EVENT& aEvent );
     int GridSetOrigin( const TOOL_EVENT& aEvent );
+    int GridPreset( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
     int ResetCoords( const TOOL_EVENT& aEvent );
@@ -82,10 +81,10 @@ public:
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ToBeDone( const TOOL_EVENT& aEvent );
 
-private:
     ///> Sets up handlers for various events.
-    void setTransitions();
+    void SetTransitions();
 
+private:
     ///> Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;
 };

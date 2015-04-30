@@ -271,6 +271,7 @@ set( PCBNEW_CLASS_SRCS
     tools/selection_tool.cpp
     tools/selection_area.cpp
     tools/selection_conditions.cpp
+    tools/conditional_menu.cpp
     tools/bright_box.cpp
     tools/edit_points.cpp
     tools/edit_constraints.cpp
@@ -284,6 +285,9 @@ set( PCBNEW_CLASS_SRCS
     tools/common_actions.cpp
     tools/grid_helper.cpp
     tools/tools_common.cpp
+
+    tools/grid_menu.cpp
+    tools/zoom_menu.cpp
     )
 
 set( PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS} )
@@ -413,11 +417,7 @@ if( KICAD_SCRIPTING_MODULES )
         polygon
         bitmaps
         gal
-        ${GLEW_LIBRARIES}
-        ${CAIRO_LIBRARIES}
-        ${PIXMAN_LIBRARY}
         ${wxWidgets_LIBRARIES}
-        ${OPENGL_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         ${PYTHON_LIBRARIES}
         ${PCBNEW_EXTRA_LIBS}
@@ -583,12 +583,8 @@ target_link_libraries( pcbnew_kiface
     idf3
     ${GITHUB_PLUGIN_LIBRARIES}
     ${wxWidgets_LIBRARIES}
-    ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${GLEW_LIBRARIES}
-    ${CAIRO_LIBRARIES}
-    ${PIXMAN_LIBRARY}
     ${Boost_LIBRARIES}      # must follow GITHUB
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
     ${OPENMP_LIBRARIES}

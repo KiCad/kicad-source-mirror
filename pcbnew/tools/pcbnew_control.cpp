@@ -52,14 +52,6 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-bool PCBNEW_CONTROL::Init()
-{
-    setTransitions();
-
-    return true;
-}
-
-
 int PCBNEW_CONTROL::ZoomInOut( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
@@ -71,7 +63,6 @@ int PCBNEW_CONTROL::ZoomInOut( const TOOL_EVENT& aEvent )
         zoomScale = 0.7;
 
     view->SetScale( view->GetScale() * zoomScale, getViewControls()->GetCursorPosition() );
-    setTransitions();
 
     return 0;
 }
@@ -88,7 +79,6 @@ int PCBNEW_CONTROL::ZoomInOutCenter( const TOOL_EVENT& aEvent )
         zoomScale = 0.7;
 
     view->SetScale( view->GetScale() * zoomScale );
-    setTransitions();
 
     return 0;
 }
@@ -98,7 +88,6 @@ int PCBNEW_CONTROL::ZoomCenter( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     view->SetCenter( getViewControls()->GetCursorPosition() );
-    setTransitions();
 
     return 0;
 }
@@ -111,18 +100,17 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
     BOARD* board = getModel<BOARD>();
     board->ComputeBoundingBox();
     BOX2I boardBBox = board->ViewBBox();
+    VECTOR2I screenSize = gal->GetScreenPixelSize();
 
     if( boardBBox.GetSize().x == 0 || boardBBox.GetSize().y == 0 )
     {
         // Empty view
-        view->SetScale( 100000.0 );
-        view->SetCenter( VECTOR2D( 0, 0 ) );
+        view->SetCenter( view->ToWorld( VECTOR2D( screenSize.x / 2, screenSize.y / 2 ) ) );
+        view->SetScale( 17.0 );
     }
     else
     {
         // Autozoom to board
-        VECTOR2I screenSize = gal->GetScreenPixelSize();
-
         double iuPerX = screenSize.x ? boardBBox.GetWidth() / screenSize.x : 1.0;
         double iuPerY = screenSize.y ? boardBBox.GetHeight() / screenSize.y : 1.0;
 
@@ -130,11 +118,36 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
         double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
         double zoom = 1.0 / ( zoomFactor * bestZoom );
 
-        view->SetScale( zoom );
         view->SetCenter( boardBBox.Centre() );
+        view->SetScale( zoom );
     }
 
-    setTransitions();
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
+{
+    unsigned int idx = aEvent.Parameter<long>();
+    std::vector<int>& zoomList = m_frame->GetScreen()->m_ZoomList;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+
+    m_frame->SetPresetZoom( idx );
+
+    if( idx == 0 )      // Zoom Auto
+    {
+        return ZoomFitScreen( aEvent );
+    }
+    else if( idx < 0 || idx >= zoomList.size() )
+    {
+        assert( false );
+        return 0;
+    }
+
+    double selectedZoom = zoomList[idx];
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    view->SetScale( 1.0 / ( zoomFactor * selectedZoom ) );
 
     return 0;
 }
@@ -159,7 +172,6 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetGalCanvas()->Refresh();
-    setTransitions();
 
     return 0;
 }
@@ -184,7 +196,6 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetGalCanvas()->Refresh();
-    setTransitions();
 
     return 0;
 }
@@ -209,7 +220,6 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetGalCanvas()->Refresh();
-    setTransitions();
 
     return 0;
 }
@@ -240,7 +250,6 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
         board->GetArea( i )->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
     m_frame->GetGalCanvas()->Refresh();
-    setTransitions();
 
     return 0;
 }
@@ -258,8 +267,6 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
     settings->LoadDisplayOptions( displ_opts );
     m_frame->GetGalCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
 
-    setTransitions();
-
     return 0;
 }
 
@@ -267,7 +274,6 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::HighContrastInc( const TOOL_EVENT& aEvent )
 {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
-    setTransitions();
 
     return 0;
 }
@@ -276,7 +282,6 @@ int PCBNEW_CONTROL::HighContrastInc( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::HighContrastDec( const TOOL_EVENT& aEvent )
 {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
-    setTransitions();
 
     return 0;
 }
@@ -285,24 +290,7 @@ int PCBNEW_CONTROL::HighContrastDec( const TOOL_EVENT& aEvent )
 // Layer control
 int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
-    if( aEvent.IsAction( &COMMON_ACTIONS::layerTop ) )
-        m_frame->SwitchLayer( NULL, F_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner1 ) )
-        m_frame->SwitchLayer( NULL, In1_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner2 ) )
-        m_frame->SwitchLayer( NULL, In2_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner3 ) )
-        m_frame->SwitchLayer( NULL, In3_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner4 ) )
-        m_frame->SwitchLayer( NULL, In4_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner5 ) )
-        m_frame->SwitchLayer( NULL, In5_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerInner6 ) )
-        m_frame->SwitchLayer( NULL, In6_Cu );
-    else if( aEvent.IsAction( &COMMON_ACTIONS::layerBottom ) )
-        m_frame->SwitchLayer( NULL, B_Cu );
-
-    setTransitions();
+    m_frame->SwitchLayer( NULL, (LAYER_ID) aEvent.Parameter<long>() );
 
     return 0;
 }
@@ -314,10 +302,7 @@ int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
     LAYER_NUM layer = editFrame->GetActiveLayer();
 
     if( layer < F_Cu || layer > B_Cu )
-    {
-        setTransitions();
         return 0;
-    }
 
     int layerCount = getModel<BOARD>()->GetCopperLayerCount();
 
@@ -330,7 +315,6 @@ int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 
     assert( IsCopperLayer( layer ) );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
-    setTransitions();
 
     return 0;
 }
@@ -342,10 +326,7 @@ int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
     LAYER_NUM layer = editFrame->GetActiveLayer();
 
     if( layer < F_Cu || layer > B_Cu )
-    {
-        setTransitions();
         return 0;
-    }
 
     int layerCount = getModel<BOARD>()->GetCopperLayerCount();
 
@@ -358,7 +339,6 @@ int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 
     assert( IsCopperLayer( layer ) );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
-    setTransitions();
 
     return 0;
 }
@@ -381,8 +361,6 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
         m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
     }
 
-    setTransitions();
-
     return 0;
 }
 
@@ -404,8 +382,6 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
         m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
     }
 
-    setTransitions();
-
     return 0;
 }
 
@@ -414,7 +390,6 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid1();
-    setTransitions();
 
     return 0;
 }
@@ -423,7 +398,6 @@ int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid2();
-    setTransitions();
 
     return 0;
 }
@@ -432,7 +406,6 @@ int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridNext( const TOOL_EVENT& aEvent )
 {
     m_frame->SetNextGrid();
-    setTransitions();
 
     return 0;
 }
@@ -441,7 +414,6 @@ int PCBNEW_CONTROL::GridNext( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridPrev( const TOOL_EVENT& aEvent )
 {
     m_frame->SetPrevGrid();
-    setTransitions();
 
     return 0;
 }
@@ -450,8 +422,7 @@ int PCBNEW_CONTROL::GridPrev( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 {
     Activate();
-    m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL,
-                                               _( "Adjust grid origin" ) );
+    m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     controls->ShowCursor( true );
@@ -473,8 +444,22 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( false );
     controls->SetSnapping( false );
     controls->ShowCursor( false );
-    setTransitions();
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::GridPreset( const TOOL_EVENT& aEvent )
+{
+    long idx = aEvent.Parameter<long>();
+
+    m_frame->SetPresetGrid( idx );
+    BASE_SCREEN* screen = m_frame->GetScreen();
+    GRID_TYPE grid = screen->GetGrid( idx );
+
+    getView()->GetGAL()->SetGridSize( VECTOR2D( grid.m_Size ) );
+    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     return 0;
 }
@@ -487,7 +472,6 @@ int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
 
     m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
     m_frame->UpdateStatusBar();
-    setTransitions();
 
     return 0;
 }
@@ -505,8 +489,6 @@ int PCBNEW_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
     else
         gal->SetCursorSize( BIG_CURSOR );
 
-    setTransitions();
-
     return 0;
 }
 
@@ -522,7 +504,6 @@ int PCBNEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
         evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_INCH );
 
     m_frame->ProcessEvent( evt );
-    setTransitions();
 
     return 0;
 }
@@ -532,7 +513,6 @@ int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 {
     // TODO
     DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
-    setTransitions();
 
     return 0;
 }
@@ -541,13 +521,12 @@ int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 {
     DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
-    setTransitions();
 
     return 0;
 }
 
 
-void PCBNEW_CONTROL::setTransitions()
+void PCBNEW_CONTROL::SetTransitions()
 {
     // View controls
     Go( &PCBNEW_CONTROL::ZoomInOut,          COMMON_ACTIONS::zoomIn.MakeEvent() );
@@ -556,6 +535,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ZoomInOutCenter,    COMMON_ACTIONS::zoomOutCenter.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoomCenter,         COMMON_ACTIONS::zoomCenter.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoomFitScreen,      COMMON_ACTIONS::zoomFitScreen.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoomPreset,         COMMON_ACTIONS::zoomPreset.MakeEvent() );
 
     // Display modes
     Go( &PCBNEW_CONTROL::TrackDisplayMode,   COMMON_ACTIONS::trackDisplayMode.MakeEvent() );
@@ -588,6 +568,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::GridNext,           COMMON_ACTIONS::gridNext.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridPrev,           COMMON_ACTIONS::gridPrev.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridSetOrigin,      COMMON_ACTIONS::gridSetOrigin.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridPreset,         COMMON_ACTIONS::gridPreset.MakeEvent() );
 
     // Miscellaneous
     Go( &PCBNEW_CONTROL::ResetCoords,        COMMON_ACTIONS::resetCoords.MakeEvent() );

@@ -188,6 +188,7 @@ public:
     static TOOL_ACTION zoomOutCenter;
     static TOOL_ACTION zoomCenter;
     static TOOL_ACTION zoomFitScreen;
+    static TOOL_ACTION zoomPreset;
 
     // Display modes
     static TOOL_ACTION trackDisplayMode;
@@ -222,6 +223,7 @@ public:
     static TOOL_ACTION gridNext;
     static TOOL_ACTION gridPrev;
     static TOOL_ACTION gridSetOrigin;
+    static TOOL_ACTION gridPreset;
 
     // Track & via size control
     static TOOL_ACTION trackWidthInc;
