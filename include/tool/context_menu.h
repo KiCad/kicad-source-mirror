@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,9 +48,9 @@ public:
     ///> Copy constructor
     CONTEXT_MENU( const CONTEXT_MENU& aMenu );
 
-    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu );
+    virtual ~CONTEXT_MENU();
 
-    virtual ~CONTEXT_MENU() {}
+    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu );
 
     /**
      * Function SetTitle()
@@ -64,7 +65,7 @@ public:
      * Assigns an icon for the entry.
      * @param aIcon is the icon to be assigned. NULL is used to remove icon.
      */
-    void SetIcon( const BITMAP_OPAQUE* aIcon )
+    inline void SetIcon( const BITMAP_OPAQUE* aIcon )
     {
         m_icon = aIcon;
     }
@@ -111,21 +112,43 @@ public:
      * menu was dismissed.
      * @return The position of selected item in the context menu.
      */
-    int GetSelected() const
+    inline int GetSelected() const
     {
         return m_selected;
     }
 
-    ///> Function type to handle menu events in a custom way.
-    typedef boost::function<OPT_TOOL_EVENT(const wxMenuEvent&)> CUSTOM_MENU_HANDLER;
+    /**
+     * Function UpdateAll()
+     * Runs update handlers for the menu and its submenus.
+     */
+    void UpdateAll();
 
-    ///> Adds an event handler to the custom menu event handlers chain.
-    void AppendCustomEventHandler( CUSTOM_MENU_HANDLER aHandler )
+    typedef boost::function<OPT_TOOL_EVENT(const wxMenuEvent&)> MENU_HANDLER;
+    typedef boost::function<void()> UPDATE_HANDLER;
+
+    /**
+     * Function SetMenuHandler()
+     * Sets the menu event handler to another function.
+     */
+    inline void SetMenuHandler( MENU_HANDLER aMenuHandler )
     {
-        m_handlers.push_back( aHandler );
+        m_menu_handler = aMenuHandler;
+    }
+
+    /**
+     * Function SetUpdateHandler()
+     * Sets the update handler to a different function.
+     */
+    inline void SetUpdateHandler( UPDATE_HANDLER aUpdateHandler )
+    {
+        m_update_handler = aUpdateHandler;
     }
 
 private:
+    // Empty stubs used by the default constructor
+    static OPT_TOOL_EVENT menuHandlerStub(const wxMenuEvent& );
+    static void updateHandlerStub();
+
     /**
      * Function appendCopy
      * Appends a copy of wxMenuItem.
@@ -138,7 +161,7 @@ private:
     ///> Initializes handlers for events.
     void setupEvents();
 
-    ///> Event handler.
+    ///> The default menu event handler.
     void onMenuEvent( wxMenuEvent& aEvent );
 
     /**
@@ -147,6 +170,13 @@ private:
      * @param aTool is the tool that created the menu.
      */
     void setTool( TOOL_INTERACTIVE* aTool );
+
+    ///> Traverses the submenus tree looking for a submenu capable of handling a particular menu
+    ///> event. In case it is handled, it is returned the aToolEvent parameter.
+    void runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent );
+
+    ///> Runs a function on the menu and all its submenus.
+    void runOnSubmenus( boost::function<void(CONTEXT_MENU*)> aFunction );
 
     ///> Flag indicating that the menu title was set up.
     bool m_titleSet;
@@ -163,11 +193,20 @@ private:
     ///> Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;
 
-    ///> Chain of custom menu event handlers.
-    std::list<CUSTOM_MENU_HANDLER> m_handlers;
+    ///> List of submenus.
+    std::list<CONTEXT_MENU*> m_submenus;
+
+    ///> Parent CONTEXT_MENU.
+    CONTEXT_MENU* m_parent;
 
     ///> Optional icon
     const BITMAP_OPAQUE* m_icon;
+
+    ///> Optional callback to translate wxMenuEvents to TOOL_EVENTs.
+    MENU_HANDLER m_menu_handler;
+
+    ///> Optional callback to update the menu state before it is displayed.
+    UPDATE_HANDLER m_update_handler;
 
     friend class TOOL_INTERACTIVE;
 };

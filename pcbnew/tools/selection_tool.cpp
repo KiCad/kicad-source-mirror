@@ -1282,6 +1282,10 @@ bool SELECTION_TOOL::SanitizeSelection()
 
 void SELECTION_TOOL::generateMenu()
 {
+    // Menu has to be updated before its copy is created. Copying does not preserve subtypes of the
+    // stored menus, so updating may not work correctly.
+    m_menu.UpdateAll();
+
     // Create a copy of the master context menu
     m_menuCopy = m_menu;
 

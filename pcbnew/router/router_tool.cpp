@@ -96,8 +96,7 @@ public:
     {
         m_board = NULL;
         SetIcon( width_track_via_xpm );
-        AppendCustomEventHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::handleCustomEvent,
-                                               this, _1 ) );
+        SetMenuHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::EventHandler, this, _1 ) );
     }
 
     void SetBoard( BOARD* aBoard )
@@ -153,8 +152,7 @@ public:
         }
     }
 
-protected:
-    OPT_TOOL_EVENT handleCustomEvent( const wxMenuEvent& aEvent )
+    OPT_TOOL_EVENT EventHandler( const wxMenuEvent& aEvent )
     {
 #if ID_POPUP_PCB_SELECT_VIASIZE1 < ID_POPUP_PCB_SELECT_WIDTH1
 #error You have changed event ids order, it breaks code. Check the source code for more details.

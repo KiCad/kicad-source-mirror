@@ -596,6 +596,9 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
             // using the point where the user has invoked a context menu
             m_viewControls->ForceCursorPosition( true, m_viewControls->GetCursorPosition() );
 
+            // Run update handlers
+            st->contextMenu->UpdateAll();
+
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
             GetEditFrame()->PopupMenu( menu.get() );
 

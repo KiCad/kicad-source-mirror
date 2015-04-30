@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +32,9 @@
 #include <cassert>
 
 CONTEXT_MENU::CONTEXT_MENU() :
-    m_titleSet( false ), m_selected( -1 ), m_tool( NULL ), m_icon( NULL )
+    m_titleSet( false ), m_selected( -1 ), m_tool( NULL ), m_parent( NULL ), m_icon( NULL ),
+    m_menu_handler( CONTEXT_MENU::menuHandlerStub ),
+    m_update_handler( CONTEXT_MENU::updateHandlerStub )
 {
     setupEvents();
 }
@@ -44,12 +47,22 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu )
 }
 
 
+CONTEXT_MENU::~CONTEXT_MENU()
+{
+    // Set parent to NULL to prevent submenus from unregistering from a notexisting object
+    for( std::list<CONTEXT_MENU*>::iterator it = m_submenus.begin(); it != m_submenus.end(); ++it )
+        (*it)->m_parent = NULL;
+
+    if( m_parent )
+        m_parent->m_submenus.remove( this );
+}
+
+
 CONTEXT_MENU& CONTEXT_MENU::operator=( const CONTEXT_MENU& aMenu )
 {
     Clear();
 
     copyFrom( aMenu );
-    setupEvents();
 
     return *this;
 }
@@ -84,11 +97,11 @@ void CONTEXT_MENU::SetTitle( const wxString& aTitle )
 wxMenuItem* CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon )
 {
 #ifdef DEBUG
-
     if( FindItem( aId ) != NULL )
         wxLogWarning( wxT( "Adding more than one menu entry with the same ID may result in"
                 "undefined behaviour" ) );
 #endif
+
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
 
     if( aIcon )
@@ -139,9 +152,7 @@ std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& a
 
     if( aExpand )
     {
-        unsigned int i = 0;
-
-        for( i = 0; i < aMenu->GetMenuItemCount(); ++i )
+        for( unsigned int i = 0; i < aMenu->GetMenuItemCount(); ++i )
         {
             wxMenuItem* item = aMenu->FindItemByPosition( i );
             items.push_back( appendCopy( item ) );
@@ -162,8 +173,8 @@ std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& a
         }
     }
 
-    m_toolActions.insert( aMenu->m_toolActions.begin(), aMenu->m_toolActions.end() );
-    m_handlers.insert( m_handlers.end(), aMenu->m_handlers.begin(), aMenu->m_handlers.end() );
+    m_submenus.push_back( aMenu );
+    aMenu->m_parent = this;
 
     return items;
 }
@@ -176,10 +187,19 @@ void CONTEXT_MENU::Clear()
     GetMenuItems().DeleteContents( true );
     GetMenuItems().Clear();
     m_toolActions.clear();
-    m_handlers.clear();
     GetMenuItems().DeleteContents( false ); // restore the default so destructor does not go wild
+    m_submenus.clear();
+    m_parent = NULL;
 
     assert( GetMenuItemCount() == 0 );
+}
+
+
+void CONTEXT_MENU::UpdateAll()
+{
+    m_update_handler();
+
+    runOnSubmenus( boost::bind( &CONTEXT_MENU::UpdateAll, _1 ) );
 }
 
 
@@ -208,8 +228,10 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
         }
         else
         {
-        // Under Linux, every submenu can have a separate event handler, under
-        // Windows all submenus are handled by the main menu.
+            runEventHandlers( aEvent, evt );
+
+            // Under Linux, every submenu can have a separate event handler, under
+            // Windows all submenus are handled by the main menu.
 #ifdef __WINDOWS__
             if( !evt )
             {
@@ -224,14 +246,6 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
                 }
             }
 #endif
-            for( std::list<CUSTOM_MENU_HANDLER>::iterator it = m_handlers.begin();
-                    it != m_handlers.end(); ++it )
-            {
-                evt = (*it)( aEvent );
-
-                if( evt )
-                    break;
-            }
 
             // Handling non-action menu entries (e.g. items in clarification list)
             if( !evt )
@@ -251,16 +265,22 @@ void CONTEXT_MENU::setTool( TOOL_INTERACTIVE* aTool )
 {
     m_tool = aTool;
 
-    for( unsigned i = 0; i < GetMenuItemCount(); ++i )
-    {
-        wxMenuItem* item = FindItemByPosition( i );
+    runOnSubmenus( boost::bind( &CONTEXT_MENU::setTool, _1, aTool ) );
+}
 
-        if( item->IsSubMenu() )
-        {
-            CONTEXT_MENU* menu = static_cast<CONTEXT_MENU*>( item->GetSubMenu() );
-            menu->setTool( aTool );
-        }
-    }
+
+void CONTEXT_MENU::runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent )
+{
+    aToolEvent = m_menu_handler( aMenuEvent );
+
+    if( !aToolEvent )
+        runOnSubmenus( boost::bind( &CONTEXT_MENU::runEventHandlers, _1, aMenuEvent, aToolEvent ) );
+}
+
+
+void CONTEXT_MENU::runOnSubmenus( boost::function<void(CONTEXT_MENU*)> aFunction )
+{
+    std::for_each( m_submenus.begin(), m_submenus.end(), aFunction );
 }
 
 
@@ -283,8 +303,8 @@ wxMenuItem* CONTEXT_MENU::appendCopy( const wxMenuItem* aSource )
         newItem->SetSubMenu( menu );
         Append( newItem );
 
-        m_toolActions.insert( menu->m_toolActions.begin(), menu->m_toolActions.end() );
-        m_handlers.insert( m_handlers.end(), menu->m_handlers.begin(), menu->m_handlers.end() );
+        m_submenus.push_back( menu );
+        menu->m_parent = this;
     }
     else
     {
@@ -308,7 +328,9 @@ void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
     m_selected = -1; // aMenu.m_selected;
     m_tool = aMenu.m_tool;
     m_toolActions = aMenu.m_toolActions;
-    m_handlers = aMenu.m_handlers;
+    m_parent = NULL; // aMenu.m_parent;
+    m_menu_handler = aMenu.m_menu_handler;
+    m_update_handler = aMenu.m_update_handler;
 
     // Copy all the menu entries
     for( unsigned i = 0; i < aMenu.GetMenuItemCount(); ++i )
@@ -316,4 +338,15 @@ void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
         wxMenuItem* item = aMenu.FindItemByPosition( i );
         appendCopy( item );
     }
+}
+
+
+OPT_TOOL_EVENT CONTEXT_MENU::menuHandlerStub( const wxMenuEvent& )
+{
+    return OPT_TOOL_EVENT();
+}
+
+
+void CONTEXT_MENU::updateHandlerStub()
+{
 }
