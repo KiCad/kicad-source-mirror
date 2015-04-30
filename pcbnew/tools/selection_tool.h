@@ -122,8 +122,10 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    const SELECTION& GetSelection() const
+    const SELECTION& GetSelection()
     {
+        // The selected items list has been requested, so it is no longer preliminary
+        m_preliminary = false;
         return m_selection;
     }
 
@@ -355,6 +357,9 @@ private:
 
     /// Can other tools modify locked items.
     bool m_locked;
+
+    /// Determines if the selection is preliminary or final.
+    bool m_preliminary;
 
     /// Conditions for specific context menu entries.
     std::deque<SELECTION_CONDITION> m_menuConditions;

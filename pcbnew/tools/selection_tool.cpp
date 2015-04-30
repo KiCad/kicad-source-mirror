@@ -111,7 +111,6 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         // Remove pointers to the selected items from containers
         // without changing their properties (as they are already deleted
         // while a new board is loaded)
-        m_selection.group->Clear();
         m_selection.clear();
     }
     else
@@ -120,6 +119,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 
     m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_locked = true;
+    m_preliminary = true;
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
@@ -155,10 +155,13 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            if( m_selection.Empty() )
+            bool emptySelection = m_selection.Empty();
+
+            if( emptySelection )
                 selectCursor( evt->Position() );
 
             generateMenu();
+            m_preliminary = emptySelection;
         }
 
         // double click? Display the properties window
@@ -175,10 +178,14 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_additive )
             {
+                m_preliminary = false;
+
                 selectMultiple();
             }
             else if( m_selection.Empty() )
             {
+                m_preliminary = false;
+
                 // There is nothing selected, so try to select something
                 if( !selectCursor( getView()->ToWorld( getViewControls()->GetMousePosition() ), false ) )
                 {
@@ -248,6 +255,12 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::selectNet ) )
         {
             selectNet( *evt );
+        }
+
+        else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
+        {
+            if( m_preliminary )
+                clearSelection();
         }
     }
 
