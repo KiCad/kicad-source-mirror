@@ -64,7 +64,7 @@ OPT_TOOL_EVENT ZOOM_MENU::EventHandler( const wxMenuEvent& aEvent )
 void ZOOM_MENU::Update()
 {
     double zoom = m_parent->GetScreen()->GetZoom();
-    const std::vector<int>& zoomList = m_parent->GetScreen()->m_ZoomList;
+    const std::vector<double>& zoomList = m_parent->GetScreen()->m_ZoomList;
 
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
         Check( ID_POPUP_ZOOM_LEVEL_START + i, zoomList[i] == zoom );

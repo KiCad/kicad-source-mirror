@@ -141,7 +141,7 @@ static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Cairo Canvas" ),
 static EDA_HOTKEY HkZoneFillOrRefill( _HKI( "Fill or Refill All Zones" ),
                                  HK_ZONE_FILL_OR_REFILL, 'B' );
 static EDA_HOTKEY HkZoneRemoveFilled( _HKI( "Remove Filled Areas in All Zones" ),
-                                 HK_ZONE_REMOVE_FILLED, 'N' );
+                                 HK_ZONE_REMOVE_FILLED, 'B' + GR_KB_CTRL );
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
@@ -203,10 +203,10 @@ static EDA_HOTKEY HkSwitchGridToFastGrid2( _HKI( "Switch Grid To Fast Grid2" ),
                                            HK_SWITCH_GRID_TO_FASTGRID2, GR_KB_ALT + '2' );
 
 static EDA_HOTKEY HkSwitchGridToNext( _HKI( "Switch Grid To Next" ),
-                                      HK_SWITCH_GRID_TO_NEXT, '`' );
+                                      HK_SWITCH_GRID_TO_NEXT, 'N' );
 
 static EDA_HOTKEY HkSwitchGridToPrevious( _HKI( "Switch Grid To Previous" ),
-                                          HK_SWITCH_GRID_TO_PREVIOUS, '`' + GR_KB_CTRL );
+                                          HK_SWITCH_GRID_TO_PREVIOUS, 'N' + GR_KB_SHIFT );
 
 static EDA_HOTKEY HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' + GR_KB_CTRL );
 static EDA_HOTKEY HkTrackDisplayMode( _HKI( "Track Display Mode" ),

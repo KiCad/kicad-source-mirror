@@ -369,7 +369,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     if( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
     {
-        if( m_gridSelectBox == NULL )
+        if( m_gridSelectBox == NULL )   // Should no happen
             return;
 
         /*
@@ -526,35 +526,44 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 
 void EDA_DRAW_FRAME::SetNextGrid()
 {
-    if( m_gridSelectBox )
-        SetPresetGrid( ( m_gridSelectBox->GetSelection() + 1 ) % m_gridSelectBox->GetCount() );
+    BASE_SCREEN * screen = GetScreen();
+    int grid_cnt = screen->GetGridCount();
+
+    int new_grid_idx = screen->GetGridId() - ID_POPUP_GRID_LEVEL_1000 + 1;
+
+    if( new_grid_idx >= grid_cnt )
+        new_grid_idx = 0;
+
+   SetPresetGrid( new_grid_idx );
 }
 
 
 void EDA_DRAW_FRAME::SetPrevGrid()
 {
-    if( m_gridSelectBox )
-    {
-        int idx = m_gridSelectBox->GetSelection();
+    BASE_SCREEN * screen = GetScreen();
+    int grid_cnt = screen->GetGridCount();
 
-        if( --idx < 0 )
-            idx = m_gridSelectBox->GetCount() - 1;
+    int new_grid_idx = screen->GetGridId() - ID_POPUP_GRID_LEVEL_1000 - 1;
 
-        SetPresetGrid( idx );
-    }
+    if( new_grid_idx < 0 )
+        new_grid_idx = grid_cnt - 1;
+
+    SetPresetGrid( new_grid_idx );
 }
 
 
 void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 {
-    if( aIndex < 0 || aIndex >= (int) m_gridSelectBox->GetCount() )
-    {
-        wxASSERT_MSG( false, "Invalid grid index" );
-        return;
-    }
-
     if( m_gridSelectBox )
+    {
+        if( aIndex < 0 || aIndex >= (int) m_gridSelectBox->GetCount() )
+        {
+            wxASSERT_MSG( false, "Invalid grid index" );
+            return;
+        }
+
         m_gridSelectBox->SetSelection( aIndex );
+    }
 
     // Be sure m_LastGridSizeId is up to date.
     m_LastGridSizeId = aIndex;

@@ -223,7 +223,8 @@ void EDA_DRAW_FRAME::SetPresetZoom( int aIndex )
         return;
     }
 
-    m_zoomSelectBox->SetSelection( aIndex );
+    if( m_zoomSelectBox )
+        m_zoomSelectBox->SetSelection( aIndex );
 
     if( screen->SetZoom( screen->m_ZoomList[aIndex] ) )
         RedrawScreen( GetScrollCenterPosition(), true );
@@ -238,7 +239,7 @@ void EDA_DRAW_FRAME::SetPresetZoom( int aIndex )
 void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 {
     int         maxZoomIds;
-    int         zoom;
+    double      zoom;
     wxString    msg;
     BASE_SCREEN* screen = m_canvas->GetScreen();
 

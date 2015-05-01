@@ -312,11 +312,11 @@ TOOL_ACTION COMMON_ACTIONS::gridFast2( "common.Control.gridFast2",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridNext( "common.Control.gridNext",
-        AS_GLOBAL, '`',
+        AS_GLOBAL, 'N',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridPrev( "common.Control.gridPrev",
-        AS_GLOBAL, MD_CTRL + int( '`' ),
+        AS_GLOBAL, MD_SHIFT + int( 'N' ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
@@ -363,7 +363,7 @@ TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
         _( "Unfill" ), _( "Unfill zone(s)" ), zone_unfill_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
-        AS_GLOBAL, int( 'N' ),
+        AS_GLOBAL, MD_CTRL + int( 'B' ),
         _( "Unfill all" ), _( "Unfill all zones" ) );
 
 

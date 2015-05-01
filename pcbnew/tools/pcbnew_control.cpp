@@ -129,7 +129,7 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
 {
     unsigned int idx = aEvent.Parameter<long>();
-    std::vector<int>& zoomList = m_frame->GetScreen()->m_ZoomList;
+    std::vector<double>& zoomList = m_frame->GetScreen()->m_ZoomList;
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
 
