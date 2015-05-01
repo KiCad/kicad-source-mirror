@@ -316,7 +316,7 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
         return true;
     }
 
-    wxASSERT_MSG( action != NULL, wxString::Format( _( "Could not find action %s." ), aActionName ) );
+    wxASSERT_MSG( action != NULL, wxString::Format( wxT( "Could not find action %s." ), aActionName ) );
 
     return false;
 }

@@ -49,6 +49,7 @@
 #include <pcbplot.h>
 #include <pcb_plot_params.h>
 #include <wildcards_and_files_ext.h>
+#include <kiface_i.h>
 
 #include <dialog_gen_module_position_file_base.h>
 /*
@@ -69,6 +70,9 @@
  *      C125     0,1uF/50V        SM0603              1.6010    -2.8310     180.0    Front
  *      ## End
  */
+
+#define PLACEFILE_UNITS_KEY wxT( "PlaceFileUnits" )
+#define PLACEFILE_OPT_KEY   wxT( "PlaceFileOpts" )
 
 
 class LIST_MOD      // An helper class used to build a list of useful footprints.
@@ -93,21 +97,22 @@ public:
         m_parent( aParent ),
         m_plotOpts( aParent->GetPlotSettings() )
     {
+        initDialog();
+
+        GetSizer()->SetSizeHints(this);
+        Centre();
     }
 
 private:
     PCB_EDIT_FRAME* m_parent;
     PCB_PLOT_PARAMS m_plotOpts;
+    wxConfigBase* m_config;
 
     static int m_unitsOpt;
     static int m_fileOpt;
 
-    void OnInitDialog( wxInitDialogEvent& event );
+    void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
-    void OnCancelButton( wxCommandEvent& event )
-    {
-        EndModal( wxID_CANCEL );
-    }
     void OnOKButton( wxCommandEvent& event );
 
     bool CreateFiles();
@@ -149,16 +154,18 @@ int DIALOG_GEN_MODULE_POSITION::m_fileOpt = 0;
 const wxString frontSideName = wxT( "top" );
 const wxString backSideName = wxT( "bottom" );
 
-void DIALOG_GEN_MODULE_POSITION::OnInitDialog( wxInitDialogEvent& event )
+void DIALOG_GEN_MODULE_POSITION::initDialog()
 {
+    m_config = Kiface().KifaceSettings();
+    m_config->Read( PLACEFILE_UNITS_KEY, &m_unitsOpt, 1 );
+    m_config->Read( PLACEFILE_OPT_KEY, &m_fileOpt, 0 );
+
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
     m_radioBoxUnits->SetSelection( m_unitsOpt );
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
 
     m_sdbSizerButtonsOK->SetDefault();
-    GetSizer()->SetSizeHints(this);
-    Centre();
 }
 
 void DIALOG_GEN_MODULE_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
@@ -195,6 +202,9 @@ void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
 {
     m_unitsOpt = m_radioBoxUnits->GetSelection();
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
+
+    m_config->Write( PLACEFILE_UNITS_KEY, m_unitsOpt );
+    m_config->Write( PLACEFILE_OPT_KEY, m_fileOpt );
 
     // Set output directory and replace backslashes with forward ones
     // (Keep unix convention in cfg files)

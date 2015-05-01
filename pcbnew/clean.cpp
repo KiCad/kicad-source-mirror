@@ -151,7 +151,16 @@ bool TRACKS_CLEANER::CleanupBoard( PCB_EDIT_FRAME *aFrame,
     modified |= (aMergeSegments && clean_segments());
 
     // Delete dangling tracks
-    modified |= (aDeleteUnconnected && deleteUnconnectedTracks());
+    if( aDeleteUnconnected && deleteUnconnectedTracks() )
+    {
+        modified = true ;
+
+        // Removed tracks can leave aligned segments
+        // (when a T was formed by tracks and the "vertical" segment
+        // is removed;
+        if( aMergeSegments )
+            clean_segments();
+    }
 
     if( modified )
     {
@@ -161,6 +170,7 @@ bool TRACKS_CLEANER::CleanupBoard( PCB_EDIT_FRAME *aFrame,
         aFrame->Compile_Ratsnest( NULL, true );
         aFrame->OnModify();
     }
+
     return modified;
 }
 
@@ -515,6 +525,7 @@ bool TRACKS_CLEANER::clean_segments()
 
     // merge collinear segments:
     TRACK *nextsegment;
+
     for( TRACK *segment = m_Brd->m_Track; segment; segment = nextsegment )
     {
         nextsegment = segment->Next();
@@ -522,10 +533,12 @@ bool TRACKS_CLEANER::clean_segments()
         if( segment->Type() == PCB_TRACE_T )
         {
             bool merged_this = merge_collinear_of_track( segment );
-            modified |= merged_this;
 
             if( merged_this ) // The current segment was modified, retry to merge it again
+            {
                 nextsegment = segment->Next();
+                modified = true;
+            }
         }
     }
 

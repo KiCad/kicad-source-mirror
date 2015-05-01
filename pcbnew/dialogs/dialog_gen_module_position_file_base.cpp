@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -101,20 +101,14 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnClose ) );
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnInitDialog ) );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
-	m_sdbSizerButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnCancelButton ), NULL, this );
 	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOKButton ), NULL, this );
 }
 
 DIALOG_GEN_MODULE_POSITION_BASE::~DIALOG_GEN_MODULE_POSITION_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnClose ) );
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnInitDialog ) );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
-	m_sdbSizerButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnCancelButton ), NULL, this );
 	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOKButton ), NULL, this );
 	
 }

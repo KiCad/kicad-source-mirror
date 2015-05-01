@@ -582,12 +582,6 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
 
         if( !m_editModules )
         {
-            if( aItem->Type() == PCB_PAD_T && module->GetPadCount() == 1 )
-            {
-                DisplayError( getEditFrame<PCB_BASE_FRAME>(), _( "Cannot delete the only remaining pad of the module (modules on PCB must have at least one pad)." ) );
-                return;
-            }
-
             getView()->Remove( aItem );
             board->Remove( aItem );
         }
