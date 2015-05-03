@@ -357,7 +357,6 @@ const wxString PROJECT::AbsolutePath( const wxString& aFileName ) const
     if( !fn.IsAbsolute() )
     {
         wxString pro_dir = wxPathOnly( GetProjectFullName() );
-
         fn.Normalize( wxPATH_NORM_ALL, pro_dir );
     }
 

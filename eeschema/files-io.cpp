@@ -121,7 +121,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bo
     {
         // Delete auto save file.
         wxFileName autoSaveFileName = schematicFileName;
-        autoSaveFileName.SetName( wxT( "$" ) + schematicFileName.GetName() );
+        autoSaveFileName.SetName( AUTOSAVE_PREFIX_FILENAME + schematicFileName.GetName() );
 
         if( autoSaveFileName.FileExists() )
         {
@@ -520,8 +520,8 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
         tmpFileName = fn = screen->GetFileName();
 
-        // Auto save file name is the normal file name prefixed with $.
-        fn.SetName( wxT( "$" ) + fn.GetName() );
+        // Auto save file name is the normal file name prefixed with AUTOSAVE_PREFIX_FILENAME.
+        fn.SetName( AUTOSAVE_PREFIX_FILENAME + fn.GetName() );
 
         screen->SetFileName( fn.GetFullPath() );
 

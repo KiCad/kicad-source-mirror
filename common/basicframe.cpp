@@ -692,7 +692,7 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
     wxFileName autoSaveFileName = aFileName;
 
     // Check for auto save file.
-    autoSaveFileName.SetName( wxT( "$" ) + aFileName.GetName() );
+    autoSaveFileName.SetName( AUTOSAVE_PREFIX_FILENAME + aFileName.GetName() );
 
     wxLogTrace( traceAutoSave,
                 wxT( "Checking for auto save file " ) + autoSaveFileName.GetFullPath() );
@@ -701,9 +701,10 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
         return;
 
     wxString msg = wxString::Format( _(
-            "Well this is potentially embarrassing!  It appears that the last time "
-            "you were editing the file '%s' it was not saved properly.  Do you wish to restore the last "
-            "edits you made?" ),
+            "Well this is potentially embarrassing!\n"
+            "It appears that the last time you were editing the file\n"
+            "'%s'\n"
+            "it was not saved properly.  Do you wish to restore the last saved edits you made?" ),
             GetChars( aFileName.GetFullName() )
         );
 

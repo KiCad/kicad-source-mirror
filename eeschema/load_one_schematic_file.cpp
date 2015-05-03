@@ -66,15 +66,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     if( aFullFileName.IsEmpty() )
         return false;
 
-    fn = aFullFileName;
-    CheckForAutoSaveFile( fn, SchematicBackupFileExtension );
-
-    wxLogTrace( traceAutoSave, wxT( "Loading schematic file " ) + aFullFileName );
-
-    aScreen->SetCurItem( NULL );
-    if( !append )
-        aScreen->SetFileName( aFullFileName );
-
+    // If path is relative, this expands it from the project directory.
     wxString fname = Prj().AbsolutePath( aFullFileName );
 
 #ifdef __WINDOWS__
@@ -82,6 +74,15 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 #else
     fname.Replace( wxT("\\"), wxT("/") );
 #endif
+
+    fn = fname;
+    CheckForAutoSaveFile( fn, SchematicBackupFileExtension );
+
+    wxLogTrace( traceAutoSave, wxT( "Loading schematic file " ) + aFullFileName );
+
+    aScreen->SetCurItem( NULL );
+    if( !append )
+        aScreen->SetFileName( aFullFileName );
 
     FILE* f = wxFopen( fname, wxT( "rt" ) );
 
