@@ -98,9 +98,9 @@ bool SELECTION_TOOL::Init()
     m_menu.AddItem( COMMON_ACTIONS::zoomOut , SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen , SELECTION_CONDITIONS::ShowAlways, 1000 );
 
-    m_menu.AddMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Zoom",
+    m_menu.AddMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), _( "Zoom" ),
             false, SELECTION_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), "Grid",
+    m_menu.AddMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), _( "Grid" ),
             false, SELECTION_CONDITIONS::ShowAlways, 1000 );
 
     return true;
