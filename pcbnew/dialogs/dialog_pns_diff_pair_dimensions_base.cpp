@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep 11 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -65,11 +65,14 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	fgSizer1->Add( m_viaGapUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	bSizer7->Add( fgSizer1, 0, wxEXPAND, 5 );
+	bSizer7->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
 	
 	m_viaTraceGapEqual = new wxCheckBox( this, wxID_ANY, _("Via gap same as trace gap"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaTraceGapEqual->SetValue(true); 
-	bSizer7->Add( m_viaTraceGapEqual, 0, wxALL|wxEXPAND, 5 );
+	bSizer7->Add( m_viaTraceGapEqual, 0, wxALL|wxEXPAND, 10 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer7->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -78,14 +81,13 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 	
-	bSizer7->Add( m_stdButtons, 0, wxEXPAND, 5 );
+	bSizer7->Add( m_stdButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizer7 );
 	this->Layout();
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnClose ) );
 	m_viaTraceGapEqual->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnViaTraceGapEqualCheck ), NULL, this );
 	m_stdButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnCancelClick ), NULL, this );
 	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnOkClick ), NULL, this );
@@ -94,7 +96,6 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::~DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnClose ) );
 	m_viaTraceGapEqual->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnViaTraceGapEqualCheck ), NULL, this );
 	m_stdButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnCancelClick ), NULL, this );
 	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::OnOkClick ), NULL, this );

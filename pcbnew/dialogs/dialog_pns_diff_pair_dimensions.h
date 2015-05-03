@@ -36,13 +36,11 @@ class DIALOG_PNS_DIFF_PAIR_DIMENSIONS : public DIALOG_PNS_DIFF_PAIR_DIMENSIONS_B
 public:
     DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS_SIZES_SETTINGS& aSizes );
 
-    virtual void OnClose( wxCloseEvent& aEvent );
-    virtual void OnOkClick( wxCommandEvent& aEvent );
-    virtual void OnCancelClick( wxCommandEvent& aEvent );
-    virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event );
-
 private:
     void updateCheckbox();
+
+    virtual void OnOkClick( wxCommandEvent& aEvent );
+    virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event );
 
     WX_UNIT_BINDER m_traceWidth;
     WX_UNIT_BINDER m_traceGap;

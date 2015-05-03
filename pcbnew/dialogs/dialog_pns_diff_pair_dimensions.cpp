@@ -38,6 +38,9 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aPar
     m_viaTraceGapEqual->SetValue( m_sizes.DiffPairViaGapSameAsTraceGap() );
 
     updateCheckbox();
+
+    GetSizer()->SetSizeHints(this);
+    Centre();
 }
 
 
@@ -49,19 +52,14 @@ void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::updateCheckbox()
         m_viaGapText->Disable();
         m_viaGapLabel->Disable();
         m_viaGapUnit->Disable();
-    } else {
+    }
+    else
+    {
         m_sizes.SetDiffPairViaGapSameAsTraceGap( false );
         m_viaGapText->Enable();
         m_viaGapLabel->Enable();
         m_viaGapUnit->Enable();
     }
-}
-
-
-void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnClose( wxCloseEvent& aEvent )
-{
-    // Do nothing, it is result of ESC pressing
-    EndModal( 0 );
 }
 
 
@@ -73,14 +71,7 @@ void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnOkClick( wxCommandEvent& aEvent )
     m_sizes.SetDiffPairWidth ( m_traceWidth.GetValue() );
 
     // todo: verify against design rules
-    EndModal( 1 );
-}
-
-
-void DIALOG_PNS_DIFF_PAIR_DIMENSIONS::OnCancelClick( wxCommandEvent& aEvent )
-{
-    // Do nothing
-    EndModal( 0 );
+    EndModal( wxID_OK );
 }
 
 

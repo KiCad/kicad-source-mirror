@@ -74,13 +74,9 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* 
     m_stdButtonsOK->SetDefault();
     m_targetLengthText->SetSelection( -1, -1 );
     m_targetLengthText->SetFocus();
-}
 
-
-void DIALOG_PNS_LENGTH_TUNING_SETTINGS::OnClose( wxCloseEvent& aEvent )
-{
-    // Do nothing, it is result of ESC pressing
-    EndModal( 0 );
+    GetSizer()->SetSizeHints(this);
+    Centre();
 }
 
 
@@ -103,12 +99,5 @@ void DIALOG_PNS_LENGTH_TUNING_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
 
     m_settings.m_cornerType = m_miterStyle->GetSelection() ? PNS_MEANDER_SETTINGS::CHAMFER : PNS_MEANDER_SETTINGS::ROUND;
 
-    EndModal( 1 );
-}
-
-
-void DIALOG_PNS_LENGTH_TUNING_SETTINGS::OnCancelClick( wxCommandEvent& aEvent )
-{
-    // Do nothing
-    EndModal( 0 );
+    EndModal( wxID_OK );
 }

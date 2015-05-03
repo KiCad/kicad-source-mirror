@@ -605,7 +605,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         {
             msg = AddHotkeyName( _( "Place Blind/Buried Via" ),
                                  g_Board_Editor_Hokeys_Descr, HK_ADD_BLIND_BURIED_VIA );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA, msg, KiBitmap( via_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA, msg, KiBitmap( via_buried_xpm ) );
 
             msg = AddHotkeyName( _( "Select Layer and Place Blind/Buried Via" ),
                                  g_Board_Editor_Hokeys_Descr, HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA );
@@ -623,7 +623,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         {
             msg = AddHotkeyName( _( "Place Micro Via" ), g_Board_Editor_Hokeys_Descr,
                                  HK_ADD_MICROVIA );
-            PopMenu->Append( ID_POPUP_PCB_PLACE_MICROVIA, msg );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_MICROVIA, msg, KiBitmap( via_microvia_xpm ) );
         }
     }
 

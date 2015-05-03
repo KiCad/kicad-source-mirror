@@ -535,6 +535,8 @@ set( BMAPS_MID
     up
     use_3D_copper_thickness
     via
+    via_buried
+    via_microvia
     via_sketch
     warning
     web_support

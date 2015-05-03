@@ -45,6 +45,7 @@ public:
 
         // Initialize other members, to avoid uninitialized variables.
         m_recursiveBlockageCount = 0;
+        m_recursiveCollision[0] = m_recursiveCollision[1] = false;
         m_iteration = 0;
         m_forceCw = false;
     }

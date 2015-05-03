@@ -38,9 +38,7 @@ class DIALOG_PNS_LENGTH_TUNING_SETTINGS : public DIALOG_PNS_LENGTH_TUNING_SETTIN
 public:
     DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent, PNS_MEANDER_SETTINGS& aSettings, PNS_ROUTER_MODE aMode );
 
-    virtual void OnClose( wxCloseEvent& aEvent );
     virtual void OnOkClick( wxCommandEvent& aEvent );
-    virtual void OnCancelClick( wxCommandEvent& aEvent );
 
 private:
     WX_UNIT_BINDER m_minAmpl;
