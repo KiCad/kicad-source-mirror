@@ -72,6 +72,8 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
         m_editModules( false ), m_locked( true )
 {
+    // Do not leave uninitialized members:
+    m_preliminary = false;
 }
 
 

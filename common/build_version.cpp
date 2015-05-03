@@ -30,7 +30,7 @@
 #endif
 
 #ifndef KICAD_BUILD_VERSION
-#   define KICAD_BUILD_VERSION "(after 2015-apr-15 BZR unknown)"
+#   define KICAD_BUILD_VERSION "(after 2015-may-01 BZR unknown)"
 #endif
 
 /**

@@ -1495,7 +1495,9 @@ void EDA_DRAW_PANEL::CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool
 void EDA_DRAW_PANEL::CallEndMouseCapture( wxDC* aDC )
 {
     wxCHECK_RET( aDC != NULL, wxT( "Invalid device context." ) );
-    wxCHECK_RET( m_endMouseCaptureCallback != NULL, wxT( "End mouse capture callback not set." ) );
 
-    m_endMouseCaptureCallback( this, aDC );
+    // CallEndMouseCapture is sometimes called with m_endMouseCaptureCallback == NULL
+    // for instance after an ABORT in block paste.
+    if( m_endMouseCaptureCallback )
+        m_endMouseCaptureCallback( this, aDC );
 }

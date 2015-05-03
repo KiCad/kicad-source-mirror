@@ -139,7 +139,7 @@ int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
     {
         return ZoomFitScreen( aEvent );
     }
-    else if( idx < 0 || idx >= zoomList.size() )
+    else if( idx >= zoomList.size() )
     {
         assert( false );
         return 0;

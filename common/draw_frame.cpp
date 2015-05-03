@@ -716,17 +716,17 @@ wxString EDA_DRAW_FRAME::LengthDoubleToString( double aValue, bool aConvertToMil
 
 bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition )
 {
-    BLOCK_SELECTOR* Block = &GetScreen()->m_BlockLocate;
+    BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
-    if( ( Block->GetCommand() != BLOCK_IDLE ) || ( Block->GetState() != STATE_NO_BLOCK ) )
+    if( ( block->GetCommand() != BLOCK_IDLE ) || ( block->GetState() != STATE_NO_BLOCK ) )
         return false;
 
-    Block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
+    block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
 
-    if( Block->GetCommand() == 0 )
+    if( block->GetCommand() == 0 )
         return false;
 
-    switch( Block->GetCommand() )
+    switch( block->GetCommand() )
     {
     case BLOCK_IDLE:
         break;
@@ -744,17 +744,17 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:            // mirror
     case BLOCK_PRESELECT_MOVE:      // Move with preselection list
-        Block->InitData( m_canvas, aPosition );
+        block->InitData( m_canvas, aPosition );
         break;
 
     case BLOCK_PASTE:
-        Block->InitData( m_canvas, aPosition );
-        Block->SetLastCursorPosition( wxPoint( 0, 0 ) );
+        block->InitData( m_canvas, aPosition );
+        block->SetLastCursorPosition( wxPoint( 0, 0 ) );
         InitBlockPasteInfos();
 
-        if( Block->GetCount() == 0 )      // No data to paste
+        if( block->GetCount() == 0 )      // No data to paste
         {
-            DisplayError( this, wxT( "No Block to paste" ), 20 );
+            DisplayError( this, wxT( "No block to paste" ), 20 );
             GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
             m_canvas->SetMouseCaptureCallback( NULL );
             return true;
@@ -762,13 +762,13 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
 
         if( !m_canvas->IsMouseCaptured() )
         {
-            Block->ClearItemsList();
+            block->ClearItemsList();
             DisplayError( this,
                           wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
             return true;
         }
 
-        Block->SetState( STATE_BLOCK_MOVE );
+        block->SetState( STATE_BLOCK_MOVE );
         m_canvas->CallMouseCapture( aDC, aPosition, false );
         break;
 
@@ -776,13 +776,13 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
         {
             wxString msg;
             msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
-            Block->GetCommand();
+            block->GetCommand();
             DisplayError( this, msg );
         }
         break;
     }
 
-    Block->SetMessageBlock( this );
+    block->SetMessageBlock( this );
     return true;
 }
 
@@ -1162,13 +1162,23 @@ void EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
 
     switch( aHotKey )
     {
-        // All these keys have almost the same treatment
-    case GR_KB_CTRL | WXK_NUMPAD8: case GR_KB_CTRL | WXK_UP:
-    case GR_KB_CTRL | WXK_NUMPAD2: case GR_KB_CTRL | WXK_DOWN:
-    case GR_KB_CTRL | WXK_NUMPAD4: case GR_KB_CTRL | WXK_LEFT:
-    case GR_KB_CTRL | WXK_NUMPAD6: case GR_KB_CTRL | WXK_RIGHT:
-    case WXK_NUMPAD8: case WXK_UP: case WXK_NUMPAD2: case WXK_DOWN:
-    case WXK_NUMPAD4: case WXK_LEFT: case WXK_NUMPAD6: case WXK_RIGHT:
+    // All these keys have almost the same treatment
+    case GR_KB_CTRL | WXK_NUMPAD8:
+    case GR_KB_CTRL | WXK_UP:
+    case GR_KB_CTRL | WXK_NUMPAD2:
+    case GR_KB_CTRL | WXK_DOWN:
+    case GR_KB_CTRL | WXK_NUMPAD4:
+    case GR_KB_CTRL | WXK_LEFT:
+    case GR_KB_CTRL | WXK_NUMPAD6:
+    case GR_KB_CTRL | WXK_RIGHT:
+    case WXK_NUMPAD8:
+    case WXK_UP:
+    case WXK_NUMPAD2:
+    case WXK_DOWN:
+    case WXK_NUMPAD4:
+    case WXK_LEFT:
+    case WXK_NUMPAD6:
+    case WXK_RIGHT:
         {
             /* Here's a tricky part: when doing cursor key movement, the
              * 'previous' point should be taken from memory, *not* from the

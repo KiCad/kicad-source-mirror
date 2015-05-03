@@ -292,7 +292,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             m_canvas->Refresh();
             break;
 
-        case BLOCK_SAVE:
+        case BLOCK_SAVE:    // Save acopy of items in paste buffer
             GetScreen()->UpdatePickList();
             DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
