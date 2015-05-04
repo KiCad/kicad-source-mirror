@@ -247,7 +247,7 @@ static void find_rescues( std::vector<SCH_COMPONENT*>& aComponents, PART_LIBS* a
 static PART_LIB* create_rescue_library( wxFileName& aFileName )
 {
     wxFileName fn( g_RootSheet->GetScreen()->GetFileName() );
-    fn.SetName( fn.GetName() + wxT("-rescue") );
+    fn.SetName( fn.GetName() + wxT( "-rescue" ) );
     fn.SetExt( SchematicLibraryFileExtension );
     aFileName.SetPath( fn.GetPath() );
     aFileName.SetName( fn.GetName() );
@@ -321,7 +321,7 @@ bool SCH_EDIT_FRAME::RescueCacheConflicts( bool aRunningOnDemand )
     get_components( components );
     prj = &Prj();
     libs = prj->SchLibs();
-    part_name_suffix =  wxT("-RESCUE-") + prj->GetProjectName();
+    part_name_suffix =  wxT( "-RESCUE-" ) + prj->GetProjectName();
 
     // Start!
     find_rescues( components, libs, candidates );

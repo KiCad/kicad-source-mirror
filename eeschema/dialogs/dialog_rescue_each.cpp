@@ -86,6 +86,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, std::vector<RES
       m_insideUpdateEvent( false )
 {
     m_Config = Kiface().KifaceSettings();
+    m_stdButtonsOK->SetDefault();
 }
 
 
@@ -99,10 +100,10 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_ListOfConflicts->AppendToggleColumn( _("Rescue symbol") );
-    m_ListOfConflicts->AppendTextColumn( _("Symbol name") );
-    m_ListOfInstances->AppendTextColumn( _("Reference") );
-    m_ListOfInstances->AppendTextColumn( _("Value") );
+    m_ListOfConflicts->AppendToggleColumn( _( "Rescue symbol" ) );
+    m_ListOfConflicts->AppendTextColumn( _( "Symbol name" ) );
+    m_ListOfInstances->AppendTextColumn( _( "Reference" ) );
+    m_ListOfInstances->AppendTextColumn( _( "Value" ) );
     PopulateConflictList();
     PopulateInstanceList();
 
@@ -152,7 +153,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
 
         data.clear();
         data.push_back( each_component->GetRef( & m_Parent->GetCurrentSheet() ) );
-        data.push_back( valueField ? valueField->GetText() : wxT("") );
+        data.push_back( valueField ? valueField->GetText() : wxT( "" ) );
         m_ListOfInstances->AppendItem( data );
 
     }
