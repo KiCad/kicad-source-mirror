@@ -26,6 +26,7 @@
 #include <pcbnew.h>
 
 #include <tools/common_actions.h>
+#include <tool/tool_manager.h>
 #include <pcb_draw_panel_gal.h>
 
 /* Execute a remote command send by Eeschema via a socket,

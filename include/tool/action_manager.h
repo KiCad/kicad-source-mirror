@@ -90,6 +90,19 @@ public:
      */
     bool RunHotKey( int aHotKey ) const;
 
+    /**
+     * Returns list of TOOL_ACTIONs. TOOL_ACTIONs add themselves to the list upon their
+     * creation.
+     * @return List of TOOL_ACTIONs.
+     */
+    static std::list<TOOL_ACTION*>& GetActionList()
+    {
+        // TODO I am afraid this approach won't work when we reach multitab version of kicad.
+        static std::list<TOOL_ACTION*> actionList;
+
+        return actionList;
+    }
+
 private:
     ///> Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;

@@ -26,6 +26,7 @@
 
 #include "pcb_editor_control.h"
 #include "common_actions.h"
+#include <tool/tool_manager.h>
 
 #include "selection_tool.h"
 

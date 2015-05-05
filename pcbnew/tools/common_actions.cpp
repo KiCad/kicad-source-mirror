@@ -26,6 +26,7 @@
 #include <tool/action_manager.h>
 #include <pcbnew_id.h>
 #include <layers_id_colors_and_visibility.h>
+#include <bitmaps.h>
 #include <wx/defs.h>
 
 // These members are static in class COMMON_ACTIONS: Build them here:

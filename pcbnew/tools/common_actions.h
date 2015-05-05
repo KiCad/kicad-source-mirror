@@ -294,6 +294,6 @@ public:
     static boost::optional<TOOL_EVENT> TranslateLegacyId( int aId );
 };
 
-void registerAllTools ( TOOL_MANAGER *aToolManager );
+void registerAllTools( TOOL_MANAGER* aToolManager );
 
 #endif

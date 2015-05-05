@@ -32,6 +32,7 @@
 #include <dialogs/dialog_pns_length_tuning_settings.h>
 
 #include <tool/context_menu.h>
+#include <tool/tool_manager.h>
 #include <tools/common_actions.h>
 
 #include "pns_segment.h"

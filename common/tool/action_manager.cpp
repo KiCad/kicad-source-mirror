@@ -32,6 +32,10 @@
 ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
     m_toolMgr( aToolManager )
 {
+    // Register known actions
+    std::list<TOOL_ACTION*>& actionList = GetActionList();
+    BOOST_FOREACH( TOOL_ACTION* action, actionList )
+        RegisterAction( action );
 }
 
 

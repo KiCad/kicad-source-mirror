@@ -40,6 +40,7 @@
 #include <base_units.h>
 
 #include <tool/context_menu.h>
+#include <tool/tool_manager.h>
 #include <tools/common_actions.h>
 
 #include <ratsnest_data.h>

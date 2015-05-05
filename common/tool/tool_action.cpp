@@ -23,6 +23,24 @@
  */
 
 #include <tool/tool_action.h>
+#include <tool/action_manager.h>
+
+TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
+        int aDefaultHotKey, const wxString aMenuItem, const wxString& aMenuDesc,
+        const BITMAP_OPAQUE* aIcon, TOOL_ACTION_FLAGS aFlags, void* aParam ) :
+    m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
+    m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ), m_menuDescription( aMenuDesc ),
+    m_icon( aIcon ), m_id( -1 ), m_flags( aFlags ), m_param( aParam )
+{
+    ACTION_MANAGER::GetActionList().push_back( this );
+}
+
+
+TOOL_ACTION::~TOOL_ACTION()
+{
+    ACTION_MANAGER::GetActionList().remove( this );
+}
+
 
 std::string TOOL_ACTION::GetToolName() const
 {

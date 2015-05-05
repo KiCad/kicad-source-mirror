@@ -25,6 +25,7 @@
 #include "placement_tool.h"
 #include "common_actions.h"
 #include "selection_tool.h"
+#include <tool/tool_manager.h>
 
 #include <wxPcbStruct.h>
 #include <class_board.h>

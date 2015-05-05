@@ -29,7 +29,7 @@
 #include <string>
 #include <cassert>
 
-#include <tool/tool_manager.h>
+#include <tool/tool_event.h>
 
 struct BITMAP_OPAQUE;
 
@@ -49,18 +49,9 @@ public:
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
             int aDefaultHotKey = 0, const wxString aMenuItem = wxEmptyString,
             const wxString& aMenuDesc = wxEmptyString, const BITMAP_OPAQUE* aIcon = NULL,
-            TOOL_ACTION_FLAGS aFlags = AF_NONE, void* aParam = NULL ) :
-        m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
-        m_currentHotKey( aDefaultHotKey ), m_menuItem( aMenuItem ), m_menuDescription( aMenuDesc ),
-        m_icon( aIcon ), m_id( -1 ), m_flags( aFlags ), m_param( aParam )
-    {
-        TOOL_MANAGER::GetActionList().push_back( this );
-    }
+            TOOL_ACTION_FLAGS aFlags = AF_NONE, void* aParam = NULL );
 
-    ~TOOL_ACTION()
-    {
-        TOOL_MANAGER::GetActionList().remove( this );
-    }
+    ~TOOL_ACTION();
 
     bool operator==( const TOOL_ACTION& aRhs ) const
     {

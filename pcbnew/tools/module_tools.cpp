@@ -25,6 +25,7 @@
 #include "module_tools.h"
 #include "selection_tool.h"
 #include "common_actions.h"
+#include <tool/tool_manager.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>

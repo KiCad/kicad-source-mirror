@@ -26,10 +26,12 @@
 #ifndef __CONTEXT_MENU_H
 #define __CONTEXT_MENU_H
 
+#include <map>
+#include <list>
+#include <boost/function.hpp>
+
 #include <wx/menu.h>
 #include <tool/tool_action.h>
-#include <map>
-#include <boost/function.hpp>
 
 class TOOL_INTERACTIVE;
 
