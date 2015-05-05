@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-05 23:41+0100\n"
-"PO-Revision-Date: 2015-05-05 23:41+0100\n"
+"POT-Creation-Date: 2015-05-06 00:19+0100\n"
+"PO-Revision-Date: 2015-05-06 00:19+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -4558,7 +4558,7 @@ msgstr "T&racciatore"
 
 #: pcbnew/menubar_pcbframe.cpp:247
 msgid "Plot board in HPGL, PostScript or Gerber RS-274X format)"
-msgstr "Traccia in formato HPGL, PostScript o Gerber RS-274X"
+msgstr "Traccia scheda (in formato HPGL, PostScript o Gerber RS-274X)"
 
 #: pcbnew/menubar_pcbframe.cpp:256
 msgid "&Archive New Footprints"
@@ -6577,7 +6577,7 @@ msgstr "Utilizzare percorso relativo?"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:185
 #: eeschema/dialogs/dialog_plot_schematic.cpp:193
 msgid "Plot Output Directory"
-msgstr "Seleziona percorso di uscita Tracciatore"
+msgstr "Cartella risultati tracciature"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:194
 #: pcbnew/dialogs/dialog_SVG_print.cpp:232
@@ -6596,7 +6596,7 @@ msgstr "Nessun modulo da posizionare automaticamente."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:349
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
-msgstr "Impossibile creare file di tracciatura nella cartella \"%s\"."
+msgstr "Impossibile scrivere i file di tracciatura nella cartella \"%s\"."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:275
 #: pcbnew/exporters/gen_modules_placefile.cpp:307
@@ -7846,7 +7846,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:181
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:247
 msgid "Solder mask clearance:"
-msgstr "Isolamento della maschera di saldatura"
+msgstr "Isolamento maschera di saldatura:"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:42
 msgid ""
@@ -7883,7 +7883,7 @@ msgstr "Pollici"
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:207
 msgid "Solder mask min width:"
-msgstr "Minima larghezza maschera di saldatura:"
+msgstr "Larghezza minima maschera di saldatura:"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:56
 msgid ""
@@ -7891,10 +7891,10 @@ msgid ""
 "Two pad areas nearer than this value will be merged during plotting.\n"
 "This parameter is used only to plot solder mask layers."
 msgstr ""
-"Distanza minima tra l'area di due piazzole.\n"
+"Distanza minima tra le aree di 2 piazzole.\n"
 "Se inferiore al valore impostato, queste verranno fuse durante la "
 "tracciatura.\n"
-"Il parametro è usato soltanto per tracciare gli strati della maschare di "
+"Il parametro si usa solo per tracciare gli strati delle maschere di "
 "saldatura."
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:77
@@ -7902,7 +7902,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:195
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:261
 msgid "Solder paste clearance:"
-msgstr "Isolamento della pasta salda"
+msgstr "Isolamento della pasta salda:"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:79
 msgid ""
@@ -9878,7 +9878,7 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Percorso di destinazione per file di tracciatura. Può essere assoluto o "
+"Cartella di destinazione per file di tracciatura. Può essere assoluto o "
 "relativo alla posizione del file della scheda."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:54
@@ -10551,7 +10551,7 @@ msgstr "Postscript"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Plot sheet reference on all layers"
-msgstr "Stampa squadratura su tutti gli starti"
+msgstr "Traccia squadratura su tutti gli strati"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Plot pads on silkscreen"
@@ -10570,19 +10570,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Plot footprint values"
-msgstr "Disegna i valori dell'impronta"
+msgstr "Traccia i valori dell'impronta"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Plot footprint references"
-msgstr "Disegna i riferimenti dell'impronta"
+msgstr "Traccia i riferimenti dell'impronta"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:106
 msgid "Force plotting of invisible values/references"
-msgstr "Forza il disegno di valori e/o riferimenti invisibili"
+msgstr "Forza la tracciatura di valori e/o riferimenti invisibili"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:107
 msgid "Force plot invisible values and/or references"
-msgstr "Forza il disegno di valori e/o riferimenti invisibili"
+msgstr "Forza la tracciatura di valori e/o riferimenti invisibili"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Do not tent vias"
@@ -10674,7 +10674,7 @@ msgstr "Schizzo"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:168
 msgid "Default line width"
-msgstr "Spessore linea predefinito: "
+msgstr "Spessore linea predefinito"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:176
 msgid "Line width for, e.g., sheet references."
@@ -12227,7 +12227,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot.cpp:812
 #, c-format
 msgid "Plot file <%s> created"
-msgstr "File del tracciatore <%s> creato"
+msgstr "File tracciatura \"%s\" creato"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:25
 msgid "Current footprint"
@@ -14933,15 +14933,15 @@ msgstr "Stampa schema elettrico"
 
 #: eeschema/menubar.cpp:152 eeschema/menubar.cpp:165 eeschema/menubar.cpp:174
 msgid "&Plot"
-msgstr "&Tracciatore"
+msgstr "&Traccia"
 
 #: eeschema/menubar.cpp:153
 msgid "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format"
-msgstr "Stampa schema in formato PostScript, PDF, SVG, DXF or HPGL"
+msgstr "Traccia lo schema in formato PostScript, PDF, SVG, DXF o HPGL"
 
 #: eeschema/menubar.cpp:159
 msgid "Plot to C&lipboard"
-msgstr "Stampa sug&li appunti"
+msgstr "Traccia sug&li appunti"
 
 #: eeschema/menubar.cpp:160
 msgid "Export drawings to clipboard"
@@ -14949,7 +14949,7 @@ msgstr "Esporta grafica sugli appunti"
 
 #: eeschema/menubar.cpp:166 eeschema/menubar.cpp:175
 msgid "Plot schematic sheet in HPGL, PostScript or SVG format"
-msgstr "Stampa il foglio dello schema in formato HPGL, PostScript or SVG"
+msgstr "Traccia il foglio dello schema in formato HPGL, PostScript o SVG"
 
 #: eeschema/menubar.cpp:187
 msgid "Close Eeschema"
@@ -22497,11 +22497,11 @@ msgstr "Traccia schema"
 
 #: eeschema/dialogs/dialog_sch_sheet_props_base.h:60
 msgid "Schematic Sheet Properties"
-msgstr "Proprietà foglio"
+msgstr "Proprietà foglio schema"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:69
 msgid "Library Text Properties"
-msgstr "Proprietà testo"
+msgstr "Proprietà testo libreria"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:48
 msgid "Pin Table"
@@ -22509,7 +22509,7 @@ msgstr "Tabella pin"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:136
 msgid "Schematic Editor Options"
-msgstr "Opzioni"
+msgstr "Opzioni editor schemi"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.h:59
 msgid "Drawing Properties"
