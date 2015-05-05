@@ -62,11 +62,8 @@ TOOL_ACTION COMMON_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         _( "whole net" ), _( "Selects all tracks & vias belonging to the same net." ) );
 
 TOOL_ACTION COMMON_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
-        AS_GLOBAL, 0,                                    // it is handled by wxWidgets hotkey system
+        AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
         _( "Find an item" ), _( "Searches the document for an item" ), find_xpm );
-
-TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the hotkey
-        AS_GLOBAL, MD_CTRL + int( 'F' ) );
 
 TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
