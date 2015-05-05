@@ -115,6 +115,11 @@ if( NOT DEFAULT_INSTALL_PATH )
          "Location of KiCad data files." )
 endif()
 
+# Generate build system specific header file.
+include( PerformFeatureChecks )
+perform_feature_checks()
+
+
 #================================================
 # Set flags for GCC, or treat llvm as GCC
 #================================================
@@ -562,10 +567,6 @@ endif()
 
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
-
-# Generate build system specific header file.
-include( PerformFeatureChecks )
-perform_feature_checks()
 
 # Find GDI+ on windows if wxGraphicsContext is available.
 if( MINGW AND USE_WX_GRAPHICS_CONTEXT )
