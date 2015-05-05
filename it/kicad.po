@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-05 18:25+0100\n"
-"PO-Revision-Date: 2015-05-05 19:04+0100\n"
+"POT-Creation-Date: 2015-05-05 23:41+0100\n"
+"PO-Revision-Date: 2015-05-05 23:41+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -412,8 +412,8 @@ msgstr "Modelli portabili"
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nessun modello selezionato. Impossibile generare un nuovo progetto."
 
-#: kicad/prjconfig.cpp:143 pcbnew/router/length_tuner_tool.cpp:172
-#: pcbnew/router/router_tool.cpp:468 common/confirm.cpp:80
+#: kicad/prjconfig.cpp:143 pcbnew/router/length_tuner_tool.cpp:173
+#: pcbnew/router/router_tool.cpp:469 common/confirm.cpp:80
 #: pcbnew/router/router_menus.h:716
 msgid "Error"
 msgstr "Errore"
@@ -1331,7 +1331,7 @@ msgstr "Parametro"
 #: pcbnew/footprint_wizard_frame.cpp:148
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:35
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:28
-#: pcbnew/dialogs/dialog_set_grid_base.cpp:27 common/draw_frame.cpp:478
+#: pcbnew/dialogs/dialog_set_grid_base.cpp:27 common/draw_frame.cpp:487
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:33
 msgid "Units"
 msgstr "Unità"
@@ -2132,12 +2132,12 @@ msgstr "Interrompi pista"
 msgid "Place Node"
 msgstr "Piazza nodo"
 
-#: pcbnew/onrightclick.cpp:592 pcbnew/router/length_tuner_tool.cpp:53
-#: pcbnew/router/router_tool.cpp:59 pcbnew/router/router_menus.h:64
+#: pcbnew/onrightclick.cpp:592 pcbnew/router/length_tuner_tool.cpp:54
+#: pcbnew/router/router_tool.cpp:60 pcbnew/router/router_menus.h:64
 msgid "End Track"
 msgstr "Finisci pista"
 
-#: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:69
+#: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:70
 #: pcbnew/router/router_menus.h:76
 msgid "Place Through Via"
 msgstr "Piazza via passante"
@@ -2146,7 +2146,7 @@ msgstr "Piazza via passante"
 msgid "Select Layer and Place Through Via"
 msgstr "Seleziona strato e piazza via passante"
 
-#: pcbnew/onrightclick.cpp:606 pcbnew/router/router_tool.cpp:75
+#: pcbnew/onrightclick.cpp:606 pcbnew/router/router_tool.cpp:76
 #: pcbnew/router/router_menus.h:80
 msgid "Place Blind/Buried Via"
 msgstr "Piazza via coperto/interno"
@@ -2156,7 +2156,7 @@ msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Seleziona strato e piazza via coperto/interno"
 
 #: pcbnew/onrightclick.cpp:616 pcbnew/hotkeys.cpp:110
-#: pcbnew/router/router_tool.cpp:91 pcbnew/router/router_menus.h:96
+#: pcbnew/router/router_tool.cpp:92 pcbnew/router/router_menus.h:96
 msgid "Switch Track Posture"
 msgstr "Commuta postura pista"
 
@@ -2255,7 +2255,7 @@ msgstr "Piazza zona"
 msgid "Keepout Area"
 msgstr "Zona proibita"
 
-#: pcbnew/onrightclick.cpp:730 pcbnew/tools/pcb_editor_control.cpp:77
+#: pcbnew/onrightclick.cpp:730 pcbnew/tools/pcb_editor_control.cpp:78
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 msgid "Zones"
 msgstr "Gestisci zona"
@@ -3401,7 +3401,7 @@ msgstr "Aggiungi quota"
 
 #: pcbnew/tool_pcb.cpp:465 pcbnew/menubar_pcbframe.cpp:421
 #: pcbnew/edit.cpp:1458 pcbnew/tools/common_actions.cpp:372
-#: pcbnew/tools/pcb_editor_control.cpp:302
+#: pcbnew/tools/pcb_editor_control.cpp:303
 msgid "Add layer alignment target"
 msgstr "Aggiungi marcatore di allineamento strati"
 
@@ -3764,22 +3764,22 @@ msgstr "Abilitare per visibilità"
 msgid "Middle click for color change"
 msgstr "Tasto centrale per cambiare colore"
 
-#: pcbnew/cross-probing.cpp:65
+#: pcbnew/cross-probing.cpp:66
 #, c-format
 msgid "%s found"
 msgstr "%s trovato"
 
-#: pcbnew/cross-probing.cpp:67 pcbnew/cross-probing.cpp:114
+#: pcbnew/cross-probing.cpp:68 pcbnew/cross-probing.cpp:115
 #, c-format
 msgid "%s not found"
 msgstr "%s non trovato"
 
-#: pcbnew/cross-probing.cpp:118
+#: pcbnew/cross-probing.cpp:119
 #, c-format
 msgid "%s pin %s not found"
 msgstr "%s pin %s non trovato"
 
-#: pcbnew/cross-probing.cpp:123
+#: pcbnew/cross-probing.cpp:124
 #, c-format
 msgid "%s pin %s found"
 msgstr "%s pin %s trovato"
@@ -4139,7 +4139,7 @@ msgstr "Macro %d registrata"
 msgid "Call macro %d"
 msgstr "Richiama macro %d"
 
-#: pcbnew/hotkeys_board_editor.cpp:148
+#: pcbnew/hotkeys_board_editor.cpp:159
 #, c-format
 msgid "Add key [%c] in macro %d"
 msgstr "Aggiungere la chiave [%c] nella macro %d"
@@ -4526,11 +4526,11 @@ msgstr "Esporta scheda in rappresentazione VRML"
 
 #: pcbnew/menubar_pcbframe.cpp:222
 msgid "I&DFv3 Export"
-msgstr "Esporta I&DFv3"
+msgstr "I&DFv3"
 
 #: pcbnew/menubar_pcbframe.cpp:222
 msgid "IDFv3 board and component export"
-msgstr "Esportazione IDFv3 di scheda e componenti"
+msgstr "Esporta scheda e componenti in IDFv3"
 
 #: pcbnew/menubar_pcbframe.cpp:226
 msgid "E&xport"
@@ -4734,7 +4734,7 @@ msgstr "Regola la lunghezza di una singola pista"
 msgid "Tune Differential Pair &Length"
 msgstr "Regola &lunghezza coppia differenziale"
 
-#: pcbnew/menubar_pcbframe.cpp:457 pcbnew/tools/common_actions.cpp:458
+#: pcbnew/menubar_pcbframe.cpp:457 pcbnew/tools/common_actions.cpp:457
 msgid "Tune length of a differential pair"
 msgstr "Regola la lunghezza di una coppia differenziale"
 
@@ -4953,7 +4953,7 @@ msgid "Add tracks"
 msgstr "Aggiungi pista"
 
 #: pcbnew/edit.cpp:1439 pcbnew/edit.cpp:1486
-#: pcbnew/tools/pcb_editor_control.cpp:180
+#: pcbnew/tools/pcb_editor_control.cpp:181
 msgid "Add module"
 msgstr "Aggiungi modulo"
 
@@ -5178,7 +5178,7 @@ msgid "Check footprint"
 msgstr "Controlla impronta"
 
 #: pcbnew/tool_modedit.cpp:166 pcbnew/tools/common_actions.cpp:382
-#: pcbnew/tools/module_tools.cpp:85
+#: pcbnew/tools/module_tools.cpp:86
 msgid "Add pads"
 msgstr "Aggiungi piazzola "
 
@@ -6128,31 +6128,31 @@ msgstr "Grafica (%s) su %s di %s"
 msgid "Dimension \"%s\" on %s"
 msgstr "Dimensioni \"%s\" su %s"
 
-#: pcbnew/tools/placement_tool.cpp:66
+#: pcbnew/tools/placement_tool.cpp:67
 msgid "Align/distribute"
 msgstr "Allineamento/distribuzione"
 
-#: pcbnew/tools/common_actions.cpp:56
+#: pcbnew/tools/common_actions.cpp:58
 msgid "copper connection"
 msgstr "Connessione rame"
 
-#: pcbnew/tools/common_actions.cpp:56
+#: pcbnew/tools/common_actions.cpp:58
 msgid "Selects whole copper connection."
 msgstr "Seleziona l'intero collegamento rame"
 
-#: pcbnew/tools/common_actions.cpp:60
+#: pcbnew/tools/common_actions.cpp:62
 msgid "whole net"
 msgstr "intera net"
 
-#: pcbnew/tools/common_actions.cpp:60
+#: pcbnew/tools/common_actions.cpp:62
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr "Seleziona tutte le piste e via appartenenti allo stesso collegamento."
 
-#: pcbnew/tools/common_actions.cpp:64
+#: pcbnew/tools/common_actions.cpp:66
 msgid "Find an item"
 msgstr "Trova un elemento"
 
-#: pcbnew/tools/common_actions.cpp:64
+#: pcbnew/tools/common_actions.cpp:66
 msgid "Searches the document for an item"
 msgstr "Cerca un elemento nel documento"
 
@@ -6370,59 +6370,59 @@ msgstr "Apri impostazioni sbroglio interattivo"
 msgid "Open Differential Pair Dimension settings"
 msgstr "Apre le impostazioni dimensioni coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:463
+#: pcbnew/tools/common_actions.cpp:461
 msgid "Tune skew of a differential pair"
 msgstr "Regola lo skew di una coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:476
+#: pcbnew/tools/common_actions.cpp:474
 msgid "Create corner"
 msgstr "Crea angolo"
 
-#: pcbnew/tools/common_actions.cpp:481
+#: pcbnew/tools/common_actions.cpp:479
 msgid "Align items to the top"
 msgstr "Allinea elementi in cima"
 
-#: pcbnew/tools/common_actions.cpp:482
+#: pcbnew/tools/common_actions.cpp:480
 msgid "Aligns selected items to the top edge"
 msgstr "Allinea gli elementi selezionati al bordo superiore"
 
-#: pcbnew/tools/common_actions.cpp:486
+#: pcbnew/tools/common_actions.cpp:484
 msgid "Align items to the bottom"
 msgstr "Allinea elementi in fondo"
 
-#: pcbnew/tools/common_actions.cpp:487
+#: pcbnew/tools/common_actions.cpp:485
 msgid "Aligns selected items to the bottom edge"
 msgstr "Allinea gli elementi selezionati al bordo inferiore"
 
-#: pcbnew/tools/common_actions.cpp:491
+#: pcbnew/tools/common_actions.cpp:489
 msgid "Align items to the left"
 msgstr "Allinea elementi a sinistra"
 
-#: pcbnew/tools/common_actions.cpp:492
+#: pcbnew/tools/common_actions.cpp:490
 msgid "Aligns selected items to the left edge"
 msgstr "Allinea gli elementi selezionati al bordo sinistro"
 
-#: pcbnew/tools/common_actions.cpp:496
+#: pcbnew/tools/common_actions.cpp:494
 msgid "Align items to the right"
 msgstr "Allinea elementi a destra"
 
-#: pcbnew/tools/common_actions.cpp:497
+#: pcbnew/tools/common_actions.cpp:495
 msgid "Aligns selected items to the right edge"
 msgstr "Allinea gli elementi selezionati al bordo destro"
 
-#: pcbnew/tools/common_actions.cpp:501
+#: pcbnew/tools/common_actions.cpp:499
 msgid "Distribute horizontally"
 msgstr "Distribuisci orizzontalmente"
 
-#: pcbnew/tools/common_actions.cpp:502
+#: pcbnew/tools/common_actions.cpp:500
 msgid "Distributes selected items along the horizontal axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
 
-#: pcbnew/tools/common_actions.cpp:506
+#: pcbnew/tools/common_actions.cpp:504
 msgid "Distribute vertically"
 msgstr "Distribuisci verticalmente"
 
-#: pcbnew/tools/common_actions.cpp:507
+#: pcbnew/tools/common_actions.cpp:505
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
 
@@ -6442,22 +6442,22 @@ msgstr "Le selezione contiene elementi bloccati. Continuare?"
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
-#: pcbnew/tools/module_tools.cpp:205
+#: pcbnew/tools/module_tools.cpp:206
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr ""
 "Mantenere premuto il tasto sinistro del mouse e spostare il puntatore sulle "
 "piazzole per enumerarle"
 
-#: pcbnew/tools/module_tools.cpp:322
+#: pcbnew/tools/module_tools.cpp:323
 msgid "Select reference point"
 msgstr "Seleziona il punto di riferimento"
 
-#: pcbnew/tools/module_tools.cpp:373
+#: pcbnew/tools/module_tools.cpp:374
 #, c-format
 msgid "Copied %d item(s)"
 msgstr "Copiati %d elementi"
 
-#: pcbnew/tools/module_tools.cpp:397
+#: pcbnew/tools/module_tools.cpp:398
 msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
@@ -8373,7 +8373,7 @@ msgstr "0"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:83
 #: pcbnew/dialogs/dialog_create_array_base.cpp:191
 #: pcbnew/dialogs/dialog_create_array_base.cpp:202
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:61 common/draw_frame.cpp:474
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:61 common/draw_frame.cpp:483
 #: common/common.cpp:144 common/common.cpp:202
 #: common/dialogs/dialog_page_settings.cpp:458
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
@@ -8798,7 +8798,7 @@ msgstr "Millimetri"
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:25
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:79
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:91 common/draw_frame.cpp:163
-#: common/draw_frame.cpp:470
+#: common/draw_frame.cpp:479
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
 #: pagelayout_editor/pl_editor_frame.cpp:118
 msgid "Inches"
@@ -12498,27 +12498,27 @@ msgstr "Troppo corto: skew "
 msgid "Tuned: skew "
 msgstr "Regolato: skew "
 
-#: pcbnew/router/length_tuner_tool.cpp:50 pcbnew/router/router_tool.cpp:56
+#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:57
 #: pcbnew/router/router_menus.h:60
 msgid "New Track"
 msgstr "Nuova pista"
 
-#: pcbnew/router/length_tuner_tool.cpp:50 pcbnew/router/router_tool.cpp:56
+#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:57
 #: pcbnew/router/router_menus.h:60
 msgid "Starts laying a new track."
 msgstr "Comincia la stesura di una nuova pista."
 
-#: pcbnew/router/length_tuner_tool.cpp:53
+#: pcbnew/router/length_tuner_tool.cpp:54
 msgid "Stops laying the current meander."
 msgstr "Ferma la stesura del serpeggiamento corrente."
 
-#: pcbnew/router/length_tuner_tool.cpp:56 pcbnew/router/router_menus.h:105
+#: pcbnew/router/length_tuner_tool.cpp:57 pcbnew/router/router_menus.h:105
 #: pcbnew/router/router_menus.h:109 pcbnew/router/router_menus.h:113
 #: pcbnew/router/router_menus.h:117 pcbnew/router/router_menus.h:121
 msgid "Length Tuning Settings"
 msgstr "Impostazioni regolazione lunghezza"
 
-#: pcbnew/router/length_tuner_tool.cpp:56 pcbnew/router/router_menus.h:105
+#: pcbnew/router/length_tuner_tool.cpp:57 pcbnew/router/router_menus.h:105
 #: pcbnew/router/router_menus.h:109 pcbnew/router/router_menus.h:113
 #: pcbnew/router/router_menus.h:117 pcbnew/router/router_menus.h:121
 msgid "Sets the length tuning parameters for currently routed item."
@@ -12526,51 +12526,51 @@ msgstr ""
 "Imposta i parametri di regolazione lunghezza per gli elementi correntemente "
 "sbrogliati."
 
-#: pcbnew/router/length_tuner_tool.cpp:59
+#: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Increase spacing"
 msgstr "Aumenta spaziatura"
 
-#: pcbnew/router/length_tuner_tool.cpp:59
+#: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Increase meander spacing by one step."
 msgstr "Aumenta di un passo la spaziatura del serpeggiato."
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Decrease spacing"
 msgstr "Diminuisci spaziatura"
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Decrease meander spacing by one step."
 msgstr "Diminuisce di un passo la spaziatura del serpeggiato."
 
-#: pcbnew/router/length_tuner_tool.cpp:65
+#: pcbnew/router/length_tuner_tool.cpp:66
 msgid "Increase amplitude"
 msgstr "Aumenta ampiezza"
 
-#: pcbnew/router/length_tuner_tool.cpp:65
+#: pcbnew/router/length_tuner_tool.cpp:66
 msgid "Increase meander amplitude by one step."
 msgstr "Aumenta di un passo l'ampiezza del serpeggiato."
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease amplitude"
 msgstr "Diminuisci ampiezza"
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease meander amplitude by one step."
 msgstr "Diminuisce di un passo l'ampiezza del serpeggiato."
 
-#: pcbnew/router/length_tuner_tool.cpp:82
+#: pcbnew/router/length_tuner_tool.cpp:83
 msgid "Length Tuner"
 msgstr "Regola lunghezza"
 
-#: pcbnew/router/length_tuner_tool.cpp:262
+#: pcbnew/router/length_tuner_tool.cpp:263
 msgid "Tune Trace Length"
 msgstr "Regola la lunghezza della pista"
 
-#: pcbnew/router/length_tuner_tool.cpp:269
+#: pcbnew/router/length_tuner_tool.cpp:270
 msgid "Tune Diff Pair Length"
 msgstr "Regola lunghezza coppia differenziale"
 
-#: pcbnew/router/length_tuner_tool.cpp:276
+#: pcbnew/router/length_tuner_tool.cpp:277
 msgid "Tune Diff Pair Skew"
 msgstr "Regola skew coppia differenziale"
 
@@ -12595,122 +12595,122 @@ msgstr "Opzioni sbroglio..."
 msgid "Shows a dialog containing router options."
 msgstr "Mostra una finestra di dialogo contenente le opzioni di sbroglio."
 
-#: pcbnew/router/router_tool.cpp:59 pcbnew/router/router_menus.h:64
+#: pcbnew/router/router_tool.cpp:60 pcbnew/router/router_menus.h:64
 msgid "Stops laying the current track."
 msgstr "Ferma la progettazione della pista corrente."
 
-#: pcbnew/router/router_tool.cpp:62 pcbnew/router/router_menus.h:68
+#: pcbnew/router/router_tool.cpp:63 pcbnew/router/router_menus.h:68
 msgid "Auto-end Track"
 msgstr "Auto-chiudi pista"
 
-#: pcbnew/router/router_tool.cpp:62 pcbnew/router/router_menus.h:68
+#: pcbnew/router/router_tool.cpp:63 pcbnew/router/router_menus.h:68
 msgid "Automagically finishes currently routed track."
 msgstr "Finisce automaticamente la pista in corso di sbroglio."
 
-#: pcbnew/router/router_tool.cpp:65 pcbnew/router/router_menus.h:72
+#: pcbnew/router/router_tool.cpp:66 pcbnew/router/router_menus.h:72
 msgid "Drag Track/Via"
 msgstr "Trascina pista/via"
 
-#: pcbnew/router/router_tool.cpp:65 pcbnew/router/router_menus.h:72
+#: pcbnew/router/router_tool.cpp:66 pcbnew/router/router_menus.h:72
 msgid "Drags a track or a via."
 msgstr "Trascina una pista o un via."
 
-#: pcbnew/router/router_tool.cpp:70 pcbnew/router/router_menus.h:76
+#: pcbnew/router/router_tool.cpp:71 pcbnew/router/router_menus.h:76
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr ""
 "Aggiungi un foro passante alla fine della pista sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:76 pcbnew/router/router_menus.h:80
+#: pcbnew/router/router_tool.cpp:77 pcbnew/router/router_menus.h:80
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
 "Aggiunge un via coperto/interno alla fine della pista sbrogliata "
 "correntemente."
 
-#: pcbnew/router/router_tool.cpp:81 pcbnew/router/router_menus.h:84
+#: pcbnew/router/router_tool.cpp:82 pcbnew/router/router_menus.h:84
 msgid "Place Microvia"
 msgstr "Piazza microvia"
 
-#: pcbnew/router/router_tool.cpp:81 pcbnew/router/router_menus.h:84
+#: pcbnew/router/router_tool.cpp:82 pcbnew/router/router_menus.h:84
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Aggiunge un microvia alla fine della pista correntemente sbrogliata."
 
-#: pcbnew/router/router_tool.cpp:86 pcbnew/router/router_menus.h:88
+#: pcbnew/router/router_tool.cpp:87 pcbnew/router/router_menus.h:88
 msgid "Custom Track Width"
 msgstr "Larghezze piste personalizzata"
 
-#: pcbnew/router/router_tool.cpp:87 pcbnew/router/router_menus.h:88
+#: pcbnew/router/router_tool.cpp:88 pcbnew/router/router_menus.h:88
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
 "Mostra una finestra di dialogo per la modifica della larghezza piste e via."
 
-#: pcbnew/router/router_tool.cpp:92 pcbnew/router/router_menus.h:96
+#: pcbnew/router/router_tool.cpp:93 pcbnew/router/router_menus.h:96
 msgid "Switches posture of the currenly routed track."
 msgstr "Commuta la postura della pista sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:97 pcbnew/router/router_menus.h:101
+#: pcbnew/router/router_tool.cpp:98 pcbnew/router/router_menus.h:101
 msgid "Differential Pair Dimensions..."
 msgstr "Dimensioni coppia differenziale..."
 
-#: pcbnew/router/router_tool.cpp:98 pcbnew/router/router_menus.h:101
+#: pcbnew/router/router_tool.cpp:99 pcbnew/router/router_menus.h:101
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr ""
 "Imposta la larghezza e la spaziatura della coppia differenziale sbrogliata "
 "correntemente."
 
-#: pcbnew/router/router_tool.cpp:125 pcbnew/router/router_menus.h:147
+#: pcbnew/router/router_tool.cpp:126 pcbnew/router/router_menus.h:147
 msgid "Custom size"
 msgstr "Dimensioni personalizzate"
 
-#: pcbnew/router/router_tool.cpp:128 pcbnew/router/router_menus.h:153
+#: pcbnew/router/router_tool.cpp:129 pcbnew/router/router_menus.h:153
 msgid "Use the starting track width"
 msgstr "Usa larghezza iniziale della pista"
 
-#: pcbnew/router/router_tool.cpp:129
+#: pcbnew/router/router_tool.cpp:130
 msgid "Route using the width of the starting track."
 msgstr "Sbroglia usando la larghezza della pista iniziale."
 
-#: pcbnew/router/router_tool.cpp:131 pcbnew/router/router_menus.h:159
+#: pcbnew/router/router_tool.cpp:132 pcbnew/router/router_menus.h:159
 msgid "Use netclass values"
 msgstr "Utilizza regole del gruppo di collegamenti"
 
-#: pcbnew/router/router_tool.cpp:132 pcbnew/router/router_menus.h:160
+#: pcbnew/router/router_tool.cpp:133 pcbnew/router/router_menus.h:160
 msgid "Use track and via sizes from the net class"
 msgstr "Usa dimensioni piste e via dalla netclass"
 
-#: pcbnew/router/router_tool.cpp:136 pcbnew/router/router_menus.h:166
+#: pcbnew/router/router_tool.cpp:137 pcbnew/router/router_menus.h:166
 msgid "Track "
 msgstr "Pista "
 
-#: pcbnew/router/router_tool.cpp:140 pcbnew/router/router_tool.cpp:165
+#: pcbnew/router/router_tool.cpp:141 pcbnew/router/router_tool.cpp:166
 #: pcbnew/router/router_menus.h:170 pcbnew/router/router_menus.h:195
 msgid " (from netclass)"
 msgstr " (dalla netclass)"
 
-#: pcbnew/router/router_tool.cpp:149 pcbnew/router/router_menus.h:179
+#: pcbnew/router/router_tool.cpp:150 pcbnew/router/router_menus.h:179
 msgid "Via "
 msgstr "Via "
 
-#: pcbnew/router/router_tool.cpp:157 pcbnew/router/router_menus.h:187
+#: pcbnew/router/router_tool.cpp:158 pcbnew/router/router_menus.h:187
 msgid ", drill: default"
 msgstr ", foro: predefinito"
 
-#: pcbnew/router/router_tool.cpp:161 pcbnew/router/router_menus.h:191
+#: pcbnew/router/router_tool.cpp:162 pcbnew/router/router_menus.h:191
 msgid ", drill: "
 msgstr ", foro: "
 
-#: pcbnew/router/router_tool.cpp:229 pcbnew/router/router_menus.h:260
+#: pcbnew/router/router_tool.cpp:230 pcbnew/router/router_menus.h:260
 msgid "Interactive Router"
 msgstr "Sbroglio interattivo"
 
-#: pcbnew/router/router_tool.cpp:243
+#: pcbnew/router/router_tool.cpp:244
 msgid "Select Track/Via Width"
 msgstr "Seleziona larghezza piste/via"
 
-#: pcbnew/router/router_tool.cpp:607 pcbnew/router/router_menus.h:820
+#: pcbnew/router/router_tool.cpp:608 pcbnew/router/router_menus.h:820
 msgid "Route Track"
 msgstr "Sbroglia pista"
 
-#: pcbnew/router/router_tool.cpp:613 pcbnew/router/router_menus.h:827
+#: pcbnew/router/router_tool.cpp:614 pcbnew/router/router_menus.h:827
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
@@ -13531,58 +13531,58 @@ msgstr "Grassetto+corsivo"
 msgid "Marker Info"
 msgstr "Info marcatore"
 
-#: common/hotkeys_basic.cpp:423 common/hotkeys_basic.cpp:452
-#: common/hotkeys_basic.cpp:456
+#: common/hotkeys_basic.cpp:424 common/hotkeys_basic.cpp:453
+#: common/hotkeys_basic.cpp:457
 msgid "Hotkeys List"
 msgstr "Elenco Comandi da tastiera"
 
-#: common/hotkeys_basic.cpp:706
+#: common/hotkeys_basic.cpp:721
 msgid "Read Hotkey Configuration File:"
 msgstr "Leggi file configurazione scorciatoie da tastiera:"
 
-#: common/hotkeys_basic.cpp:736
+#: common/hotkeys_basic.cpp:751
 msgid "Write Hotkey Configuration File:"
 msgstr "Salva file configurazione scorciatoie da tastiera:"
 
-#: common/hotkeys_basic.cpp:764
+#: common/hotkeys_basic.cpp:779
 msgid "&List Current Keys"
 msgstr "&Elenco tasti correnti"
 
-#: common/hotkeys_basic.cpp:765
+#: common/hotkeys_basic.cpp:780
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Mostra i comandi da tastiera correnti "
 
-#: common/hotkeys_basic.cpp:770
+#: common/hotkeys_basic.cpp:785
 msgid "&Edit Hotkeys"
 msgstr "&Modifica comandi da tastiera"
 
-#: common/hotkeys_basic.cpp:771
+#: common/hotkeys_basic.cpp:786
 msgid "Call the hotkeys editor"
 msgstr "Apri editor scorciatoie da tastiera"
 
-#: common/hotkeys_basic.cpp:778
+#: common/hotkeys_basic.cpp:793
 msgid "E&xport Hotkeys"
 msgstr "E&sporta configurazione comandi da tastiera"
 
-#: common/hotkeys_basic.cpp:779
+#: common/hotkeys_basic.cpp:794
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr ""
 "Crea file di configurazione comandi da tastiera dalla corrente "
 "configurazione "
 
-#: common/hotkeys_basic.cpp:784
+#: common/hotkeys_basic.cpp:799
 msgid "&Import Hotkeys"
 msgstr "&Importa configurazione comandi da tastiera"
 
-#: common/hotkeys_basic.cpp:785
+#: common/hotkeys_basic.cpp:800
 msgid "Load an existing hotkey configuration file"
 msgstr "Carica file di configurazione dei comandi da tastiera"
 
-#: common/hotkeys_basic.cpp:790
+#: common/hotkeys_basic.cpp:805
 msgid "&Hotkeys"
 msgstr "&Comandi da tastiera"
 
-#: common/hotkeys_basic.cpp:791
+#: common/hotkeys_basic.cpp:806
 msgid "Hotkeys configuration and preferences"
 msgstr "Configurazione dei comandi da tastiera"
 
@@ -16791,7 +16791,7 @@ msgstr "Carica schema"
 msgid "Schematic Editor"
 msgstr "Editor schemi elettrici"
 
-#: eeschema/hotkeys.cpp:705
+#: eeschema/hotkeys.cpp:728
 msgid "Add Pin"
 msgstr "Aggiungi pin"
 
