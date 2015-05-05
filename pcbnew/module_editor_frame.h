@@ -136,10 +136,13 @@ public:
      */
     void OnSaveLibraryAs( wxCommandEvent& aEvent );
 
+    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+
     /**
      * Function OnHotKey
      * handle hot key events.
-     * <p?
+     * <p>
      * Some commands are relative to the item under the mouse cursor.  Commands are
      * case insensitive
      * </p>

@@ -371,6 +371,17 @@ struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hokeys_Descr[] = {
 };
 
 
+EDA_HOTKEY* FOOTPRINT_VIEWER_FRAME::GetHotKeyDescription( int aCommand ) const
+{
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, common_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromCommand( aCommand, module_viewer_Hotkey_List );
+
+    return HK_Descr;
+}
+
+
 bool FOOTPRINT_VIEWER_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                                      EDA_ITEM* aItem )
 {

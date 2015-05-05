@@ -41,6 +41,16 @@
  * See hotkeys.cpp
  */
 
+EDA_HOTKEY* FOOTPRINT_EDIT_FRAME::GetHotKeyDescription( int aCommand ) const
+{
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, common_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromCommand( aCommand, module_edit_Hotkey_List );
+
+    return HK_Descr;
+}
+
 
 bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                                      EDA_ITEM* aItem )

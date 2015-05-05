@@ -357,6 +357,10 @@ public:
     void ReCreateVToolbar();
     void ReCreateOptToolbar();
     void ReCreateMenuBar();
+
+    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+
     bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     /**

@@ -39,6 +39,7 @@
 #include <macros.h>
 #include <dialog_hotkeys_editor.h>
 #include <menus_helpers.h>
+#include <tool/tool_manager.h>
 
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>
@@ -475,6 +476,20 @@ EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList )
         EDA_HOTKEY* hk_decr = *aList;
 
         if( hk_decr->m_KeyCode == aKey )
+            return hk_decr;
+    }
+
+    return NULL;
+}
+
+
+EDA_HOTKEY* GetDescriptorFromCommand( int aCommand, EDA_HOTKEY** aList )
+{
+    for( ; *aList != NULL; aList++ )
+    {
+        EDA_HOTKEY* hk_decr = *aList;
+
+        if( hk_decr->m_Idcommand == aCommand )
             return hk_decr;
     }
 

@@ -24,9 +24,12 @@
 
 #include <tool/action_manager.h>
 #include <tool/tool_manager.h>
-#include <tool/tool_event.h>
 #include <tool/tool_action.h>
+#include <draw_frame.h>
+
+#include <hotkeys_basic.h>
 #include <boost/foreach.hpp>
+#include <boost/range/adaptor/map.hpp>
 #include <cassert>
 
 ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
@@ -61,18 +64,6 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 
     m_actionNameIndex[aAction->m_name] = aAction;
     m_actionIdIndex[aAction->m_id] = aAction;
-
-#ifndef NDEBUG
-    // Check if there are two global actions assigned to the same hotkey
-    if( aAction->GetScope() == AS_GLOBAL )
-    {
-        BOOST_FOREACH( const TOOL_ACTION* action, m_actionHotKeys[aAction->m_currentHotKey] )
-            assert( action->GetScope() != AS_GLOBAL );
-    }
-#endif /* not NDEBUG */
-
-    if( aAction->HasHotKey() )
-        m_actionHotKeys[aAction->m_currentHotKey].push_back( aAction );
 }
 
 
@@ -180,4 +171,87 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     }
 
     return false;
+}
+
+
+void ACTION_MANAGER::UpdateHotKeys()
+{
+    m_actionHotKeys.clear();
+    std::list<TOOL_ACTION*>& actions = GetActionList();
+
+    for( std::list<TOOL_ACTION*>::iterator it = actions.begin(); it != actions.end(); ++it )
+    {
+        TOOL_ACTION* aAction = *it;
+
+        int hotkey = processHotKey( aAction, true );
+
+        if( hotkey > 0 )
+            m_actionHotKeys[hotkey].push_back( aAction );
+    }
+
+#ifndef NDEBUG
+    // Check if there are two global actions assigned to the same hotkey
+    BOOST_FOREACH( std::list<TOOL_ACTION*>& action_list, m_actionHotKeys | boost::adaptors::map_values )
+    {
+        int global_actions_cnt = 0;
+
+        BOOST_FOREACH( TOOL_ACTION* action, action_list )
+        {
+            if( action->GetScope() == AS_GLOBAL )
+                ++global_actions_cnt;
+        }
+
+        assert( global_actions_cnt <= 1 );
+    }
+#endif /* not NDEBUG */
+}
+
+
+int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction, bool aForceUpdate )
+{
+    int hotkey = 0;
+
+    if( aForceUpdate )
+        hotkey = aAction->getDefaultHotKey();
+    else
+        hotkey = aAction->GetHotKey();
+
+    if( ( hotkey & TOOL_ACTION::LEGACY_HK ) )
+    {
+        hotkey = hotkey & ~TOOL_ACTION::LEGACY_HK;  // it leaves only HK_xxx identifier
+        EDA_DRAW_FRAME* frame = static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
+        EDA_HOTKEY* hk_desc = frame->GetHotKeyDescription( hotkey );
+
+        if( hk_desc )
+        {
+            hotkey = hk_desc->m_KeyCode;
+
+            // Convert modifiers to the ones used by the Tool Framework
+            if( hotkey & GR_KB_CTRL )
+            {
+                hotkey &= ~GR_KB_CTRL;
+                hotkey |= MD_CTRL;
+            }
+
+            if( hotkey & GR_KB_ALT )
+            {
+                hotkey &= ~GR_KB_ALT;
+                hotkey |= MD_ALT;
+            }
+
+            if( hotkey & GR_KB_SHIFT )
+            {
+                hotkey &= ~GR_KB_SHIFT;
+                hotkey |= MD_SHIFT;
+            }
+        }
+        else
+        {
+            hotkey = 0;
+        }
+
+        aAction->setHotKey( hotkey );
+    }
+
+    return hotkey;
 }

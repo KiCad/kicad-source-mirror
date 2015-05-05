@@ -28,6 +28,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <bitmaps.h>
 #include <wx/defs.h>
+#include <hotkeys.h>
 
 // These members are static in class COMMON_ACTIONS: Build them here:
 
@@ -68,11 +69,12 @@ TOOL_ACTION COMMON_ACTIONS::findDummy( "pcbnew.Find.Dummy", // only block the ho
         AS_GLOBAL, MD_CTRL + int( 'F' ) );
 
 TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
-        AS_GLOBAL, 'T' );
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
+
 
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
-        AS_CONTEXT, MD_CTRL + 'E',
+        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
         _( "Open in Footprint Editor" ),
         _( "Opens the selected footprint in the Footprint Editor" ),
         module_editor_xpm );
@@ -93,40 +95,40 @@ TOOL_ACTION COMMON_ACTIONS::globalEditPads ( "pcbnew.InteractiveEdit.globalPadEd
         _( "Changes pad properties globally." ), global_options_pad_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
-        AS_GLOBAL, 'M',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
-        AS_GLOBAL, MD_CTRL + int( 'D' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_module_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
-        AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'D' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM_AND_INCREMENT ),
         _( "Duplicate" ), _( "Duplicates the selected item(s), incrementing pad numbers" ) );
 
 TOOL_ACTION COMMON_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
-        AS_GLOBAL, MD_CTRL + int( 'M' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM_EXACT ),
         _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
         move_module_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
-        AS_GLOBAL, MD_CTRL + int( 'N' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
         _( "Create array" ), _( "Create array" ), array_module_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
-        AS_GLOBAL, 'R',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
         _( "Rotate" ), _( "Rotates selected item(s)" ), rotate_cw_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
-        AS_GLOBAL, 'F',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
         _( "Flip" ), _( "Flips selected item(s)" ), swap_layer_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
-        AS_GLOBAL, WXK_DELETE,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
-        AS_GLOBAL, 'E',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
         _( "Properties..." ), _( "Displays properties window" ), editor_xpm );
 
 
@@ -177,17 +179,17 @@ TOOL_ACTION COMMON_ACTIONS::decWidth( "pcbnew.InteractiveDrawing.decWidth",
         _( "Decrease the line width" ), _( "Decrease the line width" ) );
 
 TOOL_ACTION COMMON_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
-        AS_CONTEXT, '/',
+        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
         _( "Switch the arc posture" ), _( "Switch the arc posture" ) );
 
 
 // View Controls
 TOOL_ACTION COMMON_ACTIONS::zoomIn( "common.Control.zoomIn",
-        AS_GLOBAL, WXK_F1,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_IN ),
         _( "Zoom In" ), "", zoom_in_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomOut( "common.Control.zoomOut",
-        AS_GLOBAL, WXK_F2,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_OUT ),
         _( "Zoom Out" ), "", zoom_out_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
@@ -199,11 +201,11 @@ TOOL_ACTION COMMON_ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::zoomCenter( "common.Control.zoomCenter",
-        AS_GLOBAL, WXK_F4,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_CENTER ),
         _( "Center" ), "", zoom_center_on_screen_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
-        AS_GLOBAL, WXK_HOME,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_AUTO ),
         _( "Zoom Auto" ), "", zoom_fit_in_page_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoomPreset( "common.Control.zoomPreset",
@@ -213,7 +215,7 @@ TOOL_ACTION COMMON_ACTIONS::zoomPreset( "common.Control.zoomPreset",
 
 // Display modes
 TOOL_ACTION COMMON_ACTIONS::trackDisplayMode( "pcbnew.Control.trackDisplayMode",
-        AS_GLOBAL, 'K',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_DISPLAY_MODE ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::padDisplayMode( "pcbnew.Control.padDisplayMode",
@@ -237,7 +239,7 @@ TOOL_ACTION COMMON_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutl
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::highContrastMode( "pcbnew.Control.highContrastMode",
-        AS_GLOBAL, 'H',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_HIGHCONTRAST_MODE ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::highContrastInc( "pcbnew.Control.highContrastInc",
@@ -251,43 +253,43 @@ TOOL_ACTION COMMON_ACTIONS::highContrastDec( "pcbnew.Control.highContrastDec",
 
 // Layer control
 TOOL_ACTION COMMON_ACTIONS::layerTop( "pcbnew.Control.layerTop",
-        AS_GLOBAL, WXK_PAGEUP,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_COMPONENT ),
         "", "", NULL, AF_NONE, (void*) F_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
-        AS_GLOBAL, WXK_F5,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER1 ),
         "", "", NULL, AF_NONE, (void*) In1_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
-        AS_GLOBAL, WXK_F6,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER2 ),
         "", "", NULL, AF_NONE, (void*) In2_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
-        AS_GLOBAL, WXK_F7,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER3 ),
         "", "", NULL, AF_NONE, (void*) In3_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
-        AS_GLOBAL, WXK_F8,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER4 ),
         "", "", NULL, AF_NONE, (void*) In4_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
-        AS_GLOBAL, WXK_F9,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER5 ),
         "", "", NULL, AF_NONE, (void*) In5_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
-        AS_GLOBAL, WXK_F10,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER6 ),
         "", "", NULL, AF_NONE, (void*) In6_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
-        AS_GLOBAL, WXK_PAGEDOWN,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_COPPER ),
         "", "", NULL, AF_NONE, (void*) B_Cu );
 
 TOOL_ACTION COMMON_ACTIONS::layerNext( "pcbnew.Control.layerNext",
-        AS_GLOBAL, '+',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_NEXT ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",
-        AS_GLOBAL, '-',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_PREVIOUS ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
@@ -305,23 +307,23 @@ TOOL_ACTION COMMON_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
 
 // Grid control
 TOOL_ACTION COMMON_ACTIONS::gridFast1( "common.Control.gridFast1",
-        AS_GLOBAL, MD_ALT + int( '1' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_GRID_TO_FASTGRID1 ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridFast2( "common.Control.gridFast2",
-        AS_GLOBAL, MD_ALT + int( '2' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_GRID_TO_FASTGRID2 ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridNext( "common.Control.gridNext",
-        AS_GLOBAL, 'N',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_GRID_TO_NEXT ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridPrev( "common.Control.gridPrev",
-        AS_GLOBAL, MD_SHIFT + int( 'N' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_GRID_TO_PREVIOUS ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SET_GRID_ORIGIN ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridPreset( "common.Control.gridPreset",
@@ -330,11 +332,11 @@ TOOL_ACTION COMMON_ACTIONS::gridPreset( "common.Control.gridPreset",
 
 // Track & via size control
 TOOL_ACTION COMMON_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
-        AS_GLOBAL, '[',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_WIDTH_TO_NEXT ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
-        AS_GLOBAL, ']',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
@@ -356,7 +358,7 @@ TOOL_ACTION COMMON_ACTIONS::zoneFill( "pcbnew.EditorControl.zoneFill",
         _( "Fill" ), _( "Fill zone(s)" ), fill_zone_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
-        AS_GLOBAL, int( 'B' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_FILL_OR_REFILL ),
         _( "Fill all" ), _( "Fill all zones" ) );
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
@@ -364,7 +366,7 @@ TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
         _( "Unfill" ), _( "Unfill zone(s)" ), zone_unfill_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
-        AS_GLOBAL, MD_CTRL + int( 'B' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
         _( "Unfill all" ), _( "Unfill all zones" ) );
 
 
@@ -373,7 +375,7 @@ TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
         _( "Add layer alignment target" ), _( "Add layer alignment target" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
-        AS_GLOBAL, 'O',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_MODULE ),
         _( "Add modules" ), _( "Add modules" ), NULL, AF_ACTIVATE );
 
 
@@ -387,7 +389,7 @@ TOOL_ACTION COMMON_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         _( "Enumerate pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
-        AS_GLOBAL, MD_CTRL + int( 'C' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_COPY_ITEM ),
         _( "Copy items" ), _( "Copy items" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
@@ -417,7 +419,7 @@ TOOL_ACTION COMMON_ACTIONS::switchCursor( "pcbnew.Control.switchCursor",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::switchUnits( "pcbnew.Control.switchUnits",
-        AS_GLOBAL, MD_CTRL + int( 'U' ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_UNITS ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.Control.showHelp",
@@ -430,7 +432,7 @@ TOOL_ACTION COMMON_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
 
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
-        AS_GLOBAL, 'X',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
         _( "Run push & shove router (single tracks)" ),
         _( "Run push & shove router (single tracks)" ), ps_router_xpm, AF_ACTIVATE );
 
@@ -453,18 +455,16 @@ TOOL_ACTION COMMON_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.T
         AS_GLOBAL, '7',
         _( "Tune length of a single track" ), "", ps_tune_length_xpm, AF_ACTIVATE );
 
-
 TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
         AS_GLOBAL, '8',
         _( "Tune length of a differential pair" ), "", NULL, AF_ACTIVATE );
-
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
         AS_GLOBAL, '9',
         _( "Tune skew of a differential pair" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
         "", "" );
 
 // Point editor

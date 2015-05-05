@@ -91,6 +91,13 @@ public:
     bool RunHotKey( int aHotKey ) const;
 
     /**
+     * Function UpdateHotKeys()
+     * Updates TOOL_ACTIONs hot key assignment according to the current frame's Hot Key Editor settings.
+     */
+    void UpdateHotKeys();
+
+    /**
+     * Function GetActionList()
      * Returns list of TOOL_ACTIONs. TOOL_ACTIONs add themselves to the list upon their
      * creation.
      * @return List of TOOL_ACTIONs.
@@ -104,6 +111,13 @@ public:
     }
 
 private:
+    ///> Resolves a reference to legacy hot key settings to a particular hot key.
+    ///> @param aAction is the action to be resolved.
+    ///> @param aForceUpdate determines whether it should be resolved only when the current hot key
+    ///> setting contains a reference to legacy settings, or update the hot key basing on the
+    ///> originally assigned reference.
+    int processHotKey( TOOL_ACTION* aAction, bool aForceUpdate = false );
+
     ///> Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;
 

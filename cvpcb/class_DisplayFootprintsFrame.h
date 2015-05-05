@@ -96,6 +96,9 @@ public:
     void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );
 
+    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const { return NULL; }
+
     void    Process_Settings( wxCommandEvent& event );
 
     /**

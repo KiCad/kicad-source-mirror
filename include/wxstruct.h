@@ -285,7 +285,7 @@ public:
      * the output format is: shortcut  "key"  "function"
      * lines starting with # are comments
      */
-    int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL);
+    virtual int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL );
 
     /**
      * Function ReadHotkeyConfigFile

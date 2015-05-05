@@ -350,6 +350,15 @@ bool EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     return false;
 }
 
+int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName )
+{
+    int result = EDA_BASE_FRAME::WriteHotkeyConfig( aDescList, aFullFileName );
+
+    if( IsGalCanvasActive() )
+        GetToolManager()->UpdateHotKeys();
+
+    return result;
+}
 
 void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
 {

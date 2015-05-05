@@ -196,12 +196,21 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aList 
 
 /**
  * Function GetDescriptorFromHotkey
- * Return a EDA_HOTKEY * pointer from a key code for OnHotKey() function
+ * Returns a EDA_HOTKEY* pointer from a key code for OnHotKey() function
  * @param aKey = key code (ascii value, or wxWidgets value for function keys
  * @param aList = pointer to a EDA_HOTKEY list of commands
  * @return the corresponding EDA_HOTKEY pointer from the EDA_HOTKEY List
  */
-EDA_HOTKEY*  GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList );
+EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList );
+
+/**
+ * Function GetDescriptorFromCommand
+ * Returns a EDA_HOTKEY* pointer from a hot key identifier.
+ * @param aCommand = hot key identifier (@see hotkeys.h)
+ * @param aList = pointer to a EDA_HOTKEY list of commands
+ * @return the corresponding EDA_HOTKEY pointer from the EDA_HOTKEY List
+ */
+EDA_HOTKEY* GetDescriptorFromCommand( int aCommand, EDA_HOTKEY** aList );
 
 /**
  * Function ReadHotkeyConfig

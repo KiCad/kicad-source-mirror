@@ -102,6 +102,14 @@ struct EDA_HOTKEY_CONFIG GerbviewHokeysDescr[] =
 };
 
 
+EDA_HOTKEY* GERBVIEW_FRAME::GetHotKeyDescription( int aCommand ) const
+{
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, gerbviewHotkeyList );
+
+    return HK_Descr;
+}
+
+
 bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     #define CHANGE( x ) ( x ) = not (x )

@@ -139,6 +139,8 @@ private:
     void                LoadSettings( wxConfigBase* aCfg ); // override virtual
     void                SaveSettings( wxConfigBase* aCfg ); // override virtual
 
+    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
+    EDA_HOTKEY* GetHotKeyDescription( int ) const { return NULL; }
 
     /**
      * Function OnActivate

@@ -114,33 +114,15 @@ wxMenuItem* CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPA
 wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 {
     /// ID numbers for tool actions need to have a value higher than ACTION_ID
-    int id = ACTION_ID + aAction.GetId();
     const BITMAP_OPAQUE* icon = aAction.GetIcon();
 
-    wxMenuItem* item = new wxMenuItem( this, id, aAction.GetMenuItem(),
+    wxMenuItem* item = new wxMenuItem( this, getMenuId( aAction ), aAction.GetMenuItem(),
                                        aAction.GetDescription(), wxITEM_NORMAL );
 
     if( icon )
         item->SetBitmap( KiBitmap( icon ) );
 
-    if( aAction.HasHotKey() )
-    {
-        int key = aAction.GetHotKey() & ~MD_MODIFIER_MASK;
-        int mod = aAction.GetHotKey() & MD_MODIFIER_MASK;
-        int flags = wxACCEL_NORMAL;
-
-        switch( mod )
-        {
-        case MD_ALT:    flags = wxACCEL_ALT;    break;
-        case MD_CTRL:   flags = wxACCEL_CTRL;   break;
-        case MD_SHIFT:  flags = wxACCEL_SHIFT;  break;
-        }
-
-        wxAcceleratorEntry accel( flags, key, id, item );
-        item->SetAccel( &accel );
-    }
-
-    m_toolActions[id] = &aAction;
+    m_toolActions[getMenuId( aAction )] = &aAction;
 
     return Append( item );
 }
@@ -198,8 +180,41 @@ void CONTEXT_MENU::Clear()
 void CONTEXT_MENU::UpdateAll()
 {
     m_update_handler();
+    updateHotKeys();
 
     runOnSubmenus( boost::bind( &CONTEXT_MENU::UpdateAll, _1 ) );
+}
+
+
+void CONTEXT_MENU::updateHotKeys()
+{
+    for( std::map<int, const TOOL_ACTION*>::const_iterator it = m_toolActions.begin();
+            it != m_toolActions.end(); ++it )
+    {
+        int id = it->first;
+        const TOOL_ACTION& action = *it->second;
+
+        if( action.HasHotKey() )
+        {
+            int key = action.GetHotKey() & ~MD_MODIFIER_MASK;
+            int mod = action.GetHotKey() & MD_MODIFIER_MASK;
+            int flags = wxACCEL_NORMAL;
+            wxMenuItem* item = FindChildItem( id );
+
+            if( item )
+            {
+                switch( mod )
+                {
+                    case MD_ALT:    flags = wxACCEL_ALT;    break;
+                    case MD_CTRL:   flags = wxACCEL_CTRL;   break;
+                    case MD_SHIFT:  flags = wxACCEL_SHIFT;  break;
+                }
+
+                wxAcceleratorEntry accel( flags, key, id, item );
+                item->SetAccel( &accel );
+            }
+        }
+    }
 }
 
 

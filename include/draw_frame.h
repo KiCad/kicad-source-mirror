@@ -29,7 +29,7 @@
 #include <kiway_player.h>
 
 class wxSingleInstanceChecker;
-
+class EDA_HOTKEY;
 
 /**
  * Class EDA_DRAW_FRAME
@@ -323,6 +323,18 @@ public:
      * which can be unwanted in some cases
      */
     void SkipNextLeftButtonReleaseEvent();
+
+    ///> @copydoc EDA_BASE_FRAME::WriteHotkeyConfig
+    int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL );
+
+    /**
+     * Function GetHotKeyDescription
+     * Searches lists of hot key identifiers (HK_xxx) used in the frame to find a matching
+     * hot key descriptor.
+     * @param aCommand is the hot key identifier.
+     * @return Hot key descriptor or NULL if none found.
+     */
+    virtual EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const = 0;
 
     virtual bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                            EDA_ITEM* aItem = NULL );

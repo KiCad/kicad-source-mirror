@@ -126,6 +126,17 @@ struct EDA_HOTKEY_CONFIG PlEditorHokeysDescr[] =
 };
 
 
+EDA_HOTKEY* PL_EDITOR_FRAME::GetHotKeyDescription( int aCommand ) const
+{
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, s_Common_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromCommand( aCommand, s_PlEditor_Hotkey_List );
+
+    return HK_Descr;
+}
+
+
 bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
                                 const wxPoint& aPosition, EDA_ITEM* aItem )
 {

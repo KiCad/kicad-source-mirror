@@ -236,6 +236,9 @@ public:
      */
     void                OnQuit( wxCommandEvent& event );
 
+    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+
     /**
      * Function OnHotKey.
      *  ** Commands are case insensitive **

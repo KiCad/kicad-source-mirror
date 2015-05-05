@@ -173,12 +173,21 @@ private:
      */
     void setTool( TOOL_INTERACTIVE* aTool );
 
+    ///> Updates hot key settings for TOOL_ACTIONs in this menu.
+    void updateHotKeys();
+
     ///> Traverses the submenus tree looking for a submenu capable of handling a particular menu
     ///> event. In case it is handled, it is returned the aToolEvent parameter.
     void runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent );
 
     ///> Runs a function on the menu and all its submenus.
     void runOnSubmenus( boost::function<void(CONTEXT_MENU*)> aFunction );
+
+    ///> Returns the corresponding wxMenuItem identifier for a TOOL_ACTION object.
+    static inline int getMenuId( const TOOL_ACTION& aAction )
+    {
+        return aAction.GetId() + ACTION_ID;
+    }
 
     ///> Flag indicating that the menu title was set up.
     bool m_titleSet;

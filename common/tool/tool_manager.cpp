@@ -332,6 +332,12 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
 }
 
 
+void TOOL_MANAGER::UpdateHotKeys()
+{
+    m_actionMgr->UpdateHotKeys();
+}
+
+
 bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );
@@ -723,6 +729,7 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
     m_view = aView;
     m_viewControls = aViewControls;
     m_editFrame = aFrame;
+    m_actionMgr->UpdateHotKeys();
 }
 
 

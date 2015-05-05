@@ -146,6 +146,9 @@ public:
         RunAction( aAction, aNow, (void*) NULL );
     }
 
+    ///> @copydoc ACTION_MANAGER::UpdateHotKeys()
+    void UpdateHotKeys();
+
     /**
      * Function FindTool()
      * Searches for a tool with given ID.
