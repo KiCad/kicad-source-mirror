@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-30 12:46+0100\n"
-"PO-Revision-Date: 2015-04-30 12:46+0100\n"
+"POT-Creation-Date: 2015-05-05 18:25+0100\n"
+"PO-Revision-Date: 2015-05-05 18:25+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -413,7 +413,7 @@ msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nessun modello selezionato. Impossibile generare un nuovo progetto."
 
 #: kicad/prjconfig.cpp:143 pcbnew/router/length_tuner_tool.cpp:172
-#: pcbnew/router/router_tool.cpp:452 common/confirm.cpp:80
+#: pcbnew/router/router_tool.cpp:468 common/confirm.cpp:80
 #: pcbnew/router/router_menus.h:716
 msgid "Error"
 msgstr "Errore"
@@ -692,7 +692,7 @@ msgstr "Rif."
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: eeschema/template_fieldnames.cpp:42 eeschema/onrightclick.cpp:422
 #: eeschema/sch_component.cpp:1511 eeschema/lib_field.cpp:579
-#: eeschema/lib_field.cpp:757 eeschema/dialogs/dialog_rescue_each.cpp:105
+#: eeschema/lib_field.cpp:757 eeschema/dialogs/dialog_rescue_each.cpp:106
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:184
 #: eeschema/dialogs/dialog_color_config.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
@@ -720,7 +720,7 @@ msgstr "Impronta"
 #: pcbnew/class_zone.cpp:607 pcbnew/class_track.cpp:1132
 #: pcbnew/class_track.cpp:1159 pcbnew/class_track.cpp:1208
 #: pcbnew/class_drawsegment.cpp:368 pcbnew/dialogs/dialog_layers_setup.cpp:346
-#: eeschema/sch_text.cpp:788 eeschema/libedit.cpp:509
+#: eeschema/sch_text.cpp:788 eeschema/libedit.cpp:507
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1977
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:158
 #: gerbview/class_gerber_draw_item.cpp:550
@@ -1149,7 +1149,7 @@ msgstr "Ancoraggi"
 msgid "Show footprint and text origins as a cross"
 msgstr "Mostra origine impronte e testi con una crocetta"
 
-#: pcbnew/class_pcb_layer_widget.cpp:74
+#: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:103
 #: pcbnew/dialogs/dialog_create_array_base.cpp:174
 #: eeschema/dialogs/dialog_color_config.cpp:96
 #: gerbview/class_gerbview_layer_widget.cpp:110
@@ -1359,7 +1359,7 @@ msgid "Show footprint in 3D viewer"
 msgstr "Mostra impronta nel visualizzatore 3D"
 
 #: pcbnew/footprint_wizard_frame.cpp:570 pcbnew/tool_modview.cpp:79
-#: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:247
+#: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:248
 #: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:72
 #: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
 #: pcbnew/help_common_strings.h:19 eeschema/help_common_strings.h:43
@@ -1367,7 +1367,7 @@ msgid "Zoom in"
 msgstr "Ingrandisci"
 
 #: pcbnew/footprint_wizard_frame.cpp:575 pcbnew/tool_modview.cpp:84
-#: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:249
+#: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:250
 #: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:75
 #: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
 #: pcbnew/help_common_strings.h:20 eeschema/help_common_strings.h:44
@@ -1375,14 +1375,14 @@ msgid "Zoom out"
 msgstr "Rimpicciolisci"
 
 #: pcbnew/footprint_wizard_frame.cpp:580 pcbnew/tool_modview.cpp:89
-#: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:251
+#: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:252
 #: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:79
 #: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
 msgid "Redraw view"
 msgstr "Aggiorna vista"
 
 #: pcbnew/footprint_wizard_frame.cpp:585 pcbnew/tool_modview.cpp:94
-#: pcbnew/tool_modedit.cpp:133 common/zoom.cpp:253
+#: pcbnew/tool_modedit.cpp:133 common/zoom.cpp:254
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:87
 msgid "Zoom auto"
@@ -2137,7 +2137,7 @@ msgstr "Piazza nodo"
 msgid "End Track"
 msgstr "Finisci pista"
 
-#: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:68
+#: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:69
 #: pcbnew/router/router_menus.h:76
 msgid "Place Through Via"
 msgstr "Piazza via passante"
@@ -2146,7 +2146,7 @@ msgstr "Piazza via passante"
 msgid "Select Layer and Place Through Via"
 msgstr "Seleziona strato e piazza via passante"
 
-#: pcbnew/onrightclick.cpp:606 pcbnew/router/router_tool.cpp:71
+#: pcbnew/onrightclick.cpp:606 pcbnew/router/router_tool.cpp:75
 #: pcbnew/router/router_menus.h:80
 msgid "Place Blind/Buried Via"
 msgstr "Piazza via coperto/interno"
@@ -2156,7 +2156,7 @@ msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Seleziona strato e piazza via coperto/interno"
 
 #: pcbnew/onrightclick.cpp:616 pcbnew/hotkeys.cpp:110
-#: pcbnew/router/router_tool.cpp:80 pcbnew/router/router_menus.h:96
+#: pcbnew/router/router_tool.cpp:91 pcbnew/router/router_menus.h:96
 msgid "Switch Track Posture"
 msgstr "Commuta postura pista"
 
@@ -3001,7 +3001,7 @@ msgstr "Denominazione"
 #: pcbnew/librairi.cpp:791 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: common/dialog_about/AboutDialog_main.cpp:143 eeschema/viewlibs.cpp:308
-#: eeschema/libedit.cpp:510 eeschema/sch_component.cpp:1532
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1532
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
 msgid "Description"
@@ -3138,21 +3138,21 @@ msgstr ""
 "\n"
 "Impossibile inserire questa impronta"
 
-#: pcbnew/modedit.cpp:930 eeschema/libeditframe.cpp:1130
+#: pcbnew/modedit.cpp:930 eeschema/libeditframe.cpp:1154
 msgid "Add line"
 msgstr "Aggiungi linea "
 
-#: pcbnew/modedit.cpp:934 eeschema/libeditframe.cpp:1126
+#: pcbnew/modedit.cpp:934 eeschema/libeditframe.cpp:1150
 msgid "Add arc"
 msgstr "Aggiungi arco"
 
-#: pcbnew/modedit.cpp:938 eeschema/libeditframe.cpp:1122
+#: pcbnew/modedit.cpp:938 eeschema/libeditframe.cpp:1146
 msgid "Add circle"
 msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:942 pcbnew/edit.cpp:1482
 #: pcbnew/tools/drawing_tool.cpp:1242 pcbnew/tools/drawing_tool.cpp:1361
-#: eeschema/schedit.cpp:546 eeschema/libeditframe.cpp:1114
+#: eeschema/schedit.cpp:546 eeschema/libeditframe.cpp:1138
 msgid "Add text"
 msgstr "Aggiungi testo "
 
@@ -3173,7 +3173,7 @@ msgid "Pad settings"
 msgstr "Impostazioni piazzola"
 
 #: pcbnew/modedit.cpp:967 pcbnew/edit.cpp:1494 eeschema/schedit.cpp:582
-#: eeschema/libeditframe.cpp:1156 eeschema/help_common_strings.h:48
+#: eeschema/libeditframe.cpp:1180 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
 
@@ -4063,7 +4063,7 @@ msgstr "Percorso netlist"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83 common/eda_text.cpp:376
 #: eeschema/onrightclick.cpp:380 eeschema/sch_text.cpp:761
-#: eeschema/libedit.cpp:500
+#: eeschema/libedit.cpp:498
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
@@ -4995,8 +4995,8 @@ msgid "Show pads in fill mode"
 msgstr "Mostra piazzole"
 
 #: pcbnew/basepcbframe.cpp:832 pcbnew/hotkeys.cpp:147 pcbnew/hotkeys.cpp:149
-#: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:62
-#: pagelayout_editor/hotkeys.cpp:72
+#: pcbnew/tools/common_actions.cpp:206 eeschema/hotkeys.cpp:89
+#: gerbview/hotkeys.cpp:62 pagelayout_editor/hotkeys.cpp:72
 msgid "Zoom Auto"
 msgstr "Inquadra tutto"
 
@@ -5523,13 +5523,15 @@ msgstr "Centra zoom"
 msgid "Zoom Redraw"
 msgstr "Aggiorna zoom"
 
-#: pcbnew/hotkeys.cpp:163 pcbnew/hotkeys.cpp:165 eeschema/hotkeys.cpp:106
+#: pcbnew/hotkeys.cpp:163 pcbnew/hotkeys.cpp:165
+#: pcbnew/tools/common_actions.cpp:186 eeschema/hotkeys.cpp:106
 #: eeschema/hotkeys.cpp:108 gerbview/hotkeys.cpp:66
 #: pagelayout_editor/hotkeys.cpp:77
 msgid "Zoom In"
 msgstr "Ingrandisci"
 
-#: pcbnew/hotkeys.cpp:170 pcbnew/hotkeys.cpp:172 eeschema/hotkeys.cpp:113
+#: pcbnew/hotkeys.cpp:170 pcbnew/hotkeys.cpp:172
+#: pcbnew/tools/common_actions.cpp:190 eeschema/hotkeys.cpp:113
 #: eeschema/hotkeys.cpp:115 gerbview/hotkeys.cpp:65
 #: pagelayout_editor/hotkeys.cpp:76
 msgid "Zoom Out"
@@ -6292,6 +6294,18 @@ msgstr "Diminuisci larghezza linea"
 msgid "Switch the arc posture"
 msgstr "Commuta postura arco"
 
+#: pcbnew/tools/common_actions.cpp:202
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106 common/zoom.cpp:246
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
+#: gerbview/class_GERBER.cpp:363 gerbview/class_GERBER.cpp:366
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:84
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:103
+msgid "Center"
+msgstr "Centra"
+
 #: pcbnew/tools/common_actions.cpp:355
 msgid "Fill"
 msgstr "Riempi"
@@ -6412,15 +6426,19 @@ msgstr "Distribuisci verticalmente"
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
 
-#: pcbnew/tools/selection_tool.cpp:88
+#: pcbnew/tools/selection_tool.cpp:90
 msgid "Select..."
 msgstr "Seleziona..."
 
-#: pcbnew/tools/selection_tool.cpp:496
+#: pcbnew/tools/selection_tool.cpp:101
+msgid "Zoom"
+msgstr "Zoom"
+
+#: pcbnew/tools/selection_tool.cpp:498
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
 
-#: pcbnew/tools/selection_tool.cpp:694
+#: pcbnew/tools/selection_tool.cpp:696
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
@@ -6451,15 +6469,7 @@ msgstr "Impossibile cancellare il riferimento componente."
 msgid "Cannot delete component value."
 msgstr "Impossibile cancellare il valore componente."
 
-#: pcbnew/tools/edit_tool.cpp:587
-msgid ""
-"Cannot delete the only remaining pad of the module (modules on PCB must have "
-"at least one pad)."
-msgstr ""
-"Impossibile cancellare l'unica piazzola rimanente dell'impronta (le impronte "
-"sul C.S. devono avere almeno una piazzola)."
-
-#: pcbnew/tools/edit_tool.cpp:757
+#: pcbnew/tools/edit_tool.cpp:751
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d elementi duplicati"
@@ -6543,22 +6553,22 @@ msgstr "** Impossibile creare %s **\n"
 msgid "Create file %s\n"
 msgstr "Crea file %s\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:171
-#: pcbnew/exporters/gen_modules_placefile.cpp:549
+#: pcbnew/exporters/gen_modules_placefile.cpp:178
+#: pcbnew/exporters/gen_modules_placefile.cpp:559
 #: pcbnew/dialogs/dialog_gendrill.cpp:293
 #: pcbnew/dialogs/dialog_SVG_print.cpp:214 pcbnew/dialogs/dialog_plot.cpp:311
 #: eeschema/dialogs/dialog_plot_schematic.cpp:170
 msgid "Select Output Directory"
 msgstr "Seleziona percorso di uscita"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:178
+#: pcbnew/exporters/gen_modules_placefile.cpp:185
 #: pcbnew/dialogs/dialog_gendrill.cpp:300
 #: pcbnew/dialogs/dialog_SVG_print.cpp:221
 msgid "Use a relative path? "
 msgstr "Utilizzare percorso relativo?"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:179
-#: pcbnew/exporters/gen_modules_placefile.cpp:188
+#: pcbnew/exporters/gen_modules_placefile.cpp:186
+#: pcbnew/exporters/gen_modules_placefile.cpp:195
 #: pcbnew/dialogs/dialog_gendrill.cpp:301
 #: pcbnew/dialogs/dialog_gendrill.cpp:312
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222
@@ -6569,7 +6579,7 @@ msgstr "Utilizzare percorso relativo?"
 msgid "Plot Output Directory"
 msgstr "Seleziona percorso di uscita Tracciatore"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:187
+#: pcbnew/exporters/gen_modules_placefile.cpp:194
 #: pcbnew/dialogs/dialog_SVG_print.cpp:232
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
@@ -6577,51 +6587,51 @@ msgstr ""
 "Impossibile creare il percorso relativo (volume di destinazione diverso da "
 "quello del file della scheda)! "
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:226
+#: pcbnew/exporters/gen_modules_placefile.cpp:236
 msgid "No modules for automated placement."
 msgstr "Nessun modulo da posizionare automaticamente."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:238
+#: pcbnew/exporters/gen_modules_placefile.cpp:248
 #: pcbnew/dialogs/dialog_plot.cpp:718
 #: eeschema/dialogs/dialog_plot_schematic.cpp:349
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Impossibile creare file di tracciatura nella cartella \"%s\"."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:265
-#: pcbnew/exporters/gen_modules_placefile.cpp:297
-#: pcbnew/exporters/gen_modules_placefile.cpp:570
+#: pcbnew/exporters/gen_modules_placefile.cpp:275
+#: pcbnew/exporters/gen_modules_placefile.cpp:307
+#: pcbnew/exporters/gen_modules_placefile.cpp:580
 #, c-format
 msgid "Unable to create '%s'"
 msgstr "Impossibile creare \"%s\""
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:272
+#: pcbnew/exporters/gen_modules_placefile.cpp:282
 #, c-format
 msgid "Place file: '%s'\n"
 msgstr "Piazza il file: \"%s\"\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:274
+#: pcbnew/exporters/gen_modules_placefile.cpp:284
 #, c-format
 msgid "Front side (top side) place file: '%s'\n"
 msgstr "Posizionamento del file lato frontale (in cima): \"%s\"\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:278
-#: pcbnew/exporters/gen_modules_placefile.cpp:308
+#: pcbnew/exporters/gen_modules_placefile.cpp:288
+#: pcbnew/exporters/gen_modules_placefile.cpp:318
 #, c-format
 msgid "Footprint count %d\n"
 msgstr "Conteggio impronte %d\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:306
+#: pcbnew/exporters/gen_modules_placefile.cpp:316
 #, c-format
 msgid "Back side (bottom side) place file: '%s'\n"
 msgstr "Posizionamento file lato retrostante (in fondo): \"%s\"\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:315
+#: pcbnew/exporters/gen_modules_placefile.cpp:325
 #, c-format
 msgid "Full footprint count %d\n"
 msgstr "Conteggio totale impronte %d\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:563
+#: pcbnew/exporters/gen_modules_placefile.cpp:573
 #, c-format
 msgid ""
 "Footprint report file created:\n"
@@ -6630,7 +6640,7 @@ msgstr ""
 "File di rapporto impronta creato:\n"
 "\"%s\""
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:565
+#: pcbnew/exporters/gen_modules_placefile.cpp:575
 msgid "Footprint Report"
 msgstr "Rapporto impronta"
 
@@ -6873,7 +6883,7 @@ msgstr "Tracciatore"
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_plot_base.cpp:387
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70 common/zoom.cpp:299
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70 common/zoom.cpp:300
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:33
 #: common/dialogs/dialog_display_info_HTML_base.cpp:22
 #: eeschema/dialogs/dialog_annotate_base.cpp:205
@@ -7316,7 +7326,7 @@ msgstr "Spessore scheda"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:125
 #: eeschema/component_tree_search_container.cpp:203
-#: eeschema/onrightclick.cpp:464 eeschema/libedit.cpp:495
+#: eeschema/onrightclick.cpp:464 eeschema/libedit.cpp:493
 #: eeschema/lib_draw_item.cpp:72
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:25
 msgid "Unit"
@@ -7931,7 +7941,7 @@ msgstr ""
 "piazzola"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:101
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:133
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:136
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:451
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:219
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:285
@@ -8088,7 +8098,7 @@ msgstr "Arrotondamento angoli:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 #: pcbnew/dialogs/dialog_plot_base.cpp:142
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
-#: eeschema/viewlibs.cpp:295 eeschema/libedit.cpp:482
+#: eeschema/viewlibs.cpp:295 eeschema/libedit.cpp:480
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 msgid "None"
 msgstr "Nessuno"
@@ -8555,7 +8565,7 @@ msgstr "Anteprima di stampa"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: eeschema/template_fieldnames.cpp:39 eeschema/onrightclick.cpp:427
 #: eeschema/sch_component.cpp:1507 eeschema/lib_field.cpp:572
-#: eeschema/dialogs/dialog_rescue_each.cpp:104
+#: eeschema/dialogs/dialog_rescue_each.cpp:105
 #: eeschema/dialogs/dialog_color_config.cpp:78
 msgid "Reference"
 msgstr "Riferimento"
@@ -8743,7 +8753,7 @@ msgstr "Esplora"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:342
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
-#: common/dialogs/dialog_env_var_config_base.cpp:35 eeschema/libedit.cpp:479
+#: common/dialogs/dialog_env_var_config_base.cpp:35 eeschema/libedit.cpp:477
 #: eeschema/lib_pin.cpp:1968
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:151
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
@@ -9496,10 +9506,10 @@ msgstr "Larghezza:"
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:54
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:66
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:78
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:100
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:111
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:122
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:74
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:103
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:114
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:125
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:35
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:46
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:98
@@ -10130,55 +10140,55 @@ msgstr "Lunghezza/skew"
 msgid "Tune from:"
 msgstr "Regola da:"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:37
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:40
 msgid "Tune to:"
 msgstr "Regola a:"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:46
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:52
 msgid "Constraint:"
 msgstr "Restrizione:"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:50
-msgid "from Design Rules"
-msgstr "dalle regole di progettazione"
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:56
+msgid "From Design Rules"
+msgstr "Dalle regole di progettazione"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:50
-msgid "manual"
-msgstr "manuale"
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:56
+msgid "Manual"
+msgstr "Manuale"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:58
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:67
 msgid "Target length:"
 msgstr "Lunghezza obiettivo:"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:82
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:85
 msgid "Meandering"
 msgstr "Serpeggiamento"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:93
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:96
 msgid "Min amplitude (Amin):"
 msgstr "Ampiezza min (Amin):"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:104
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:107
 msgid "Max amplitude (Amax):"
 msgstr "Ampiezza max (Amax):"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:115
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:118
 msgid "Spacing (s):"
 msgstr "Spaziatura (s):"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:126
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:129
 msgid "Miter radius (r):"
 msgstr "Raggio angolatura (r):"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:137
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:140
 msgid "Miter style:"
 msgstr "Stile angolatura:"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:143
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:146
 msgid "45 degree"
 msgstr "45 gradi"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:143
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:146
 msgid "arc"
 msgstr "arco"
 
@@ -10228,17 +10238,6 @@ msgstr "Giustificato:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Left"
 msgstr "Sinistra"
-
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106 common/zoom.cpp:245
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
-#: gerbview/class_GERBER.cpp:363 gerbview/class_GERBER.cpp:366
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:84
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:103
-msgid "Center"
-msgstr "Centra"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
 #: eeschema/lib_pin.cpp:166
@@ -12616,102 +12615,102 @@ msgstr "Trascina pista/via"
 msgid "Drags a track or a via."
 msgstr "Trascina una pista o un via."
 
-#: pcbnew/router/router_tool.cpp:68 pcbnew/router/router_menus.h:76
+#: pcbnew/router/router_tool.cpp:70 pcbnew/router/router_menus.h:76
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr ""
 "Aggiungi un foro passante alla fine della pista sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:71 pcbnew/router/router_menus.h:80
+#: pcbnew/router/router_tool.cpp:76 pcbnew/router/router_menus.h:80
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
 "Aggiunge un via coperto/interno alla fine della pista sbrogliata "
 "correntemente."
 
-#: pcbnew/router/router_tool.cpp:74 pcbnew/router/router_menus.h:84
+#: pcbnew/router/router_tool.cpp:81 pcbnew/router/router_menus.h:84
 msgid "Place Microvia"
 msgstr "Piazza microvia"
 
-#: pcbnew/router/router_tool.cpp:74 pcbnew/router/router_menus.h:84
+#: pcbnew/router/router_tool.cpp:81 pcbnew/router/router_menus.h:84
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Aggiunge un microvia alla fine della pista correntemente sbrogliata."
 
-#: pcbnew/router/router_tool.cpp:77 pcbnew/router/router_menus.h:88
+#: pcbnew/router/router_tool.cpp:86 pcbnew/router/router_menus.h:88
 msgid "Custom Track Width"
 msgstr "Larghezze piste personalizzata"
 
-#: pcbnew/router/router_tool.cpp:77 pcbnew/router/router_menus.h:88
+#: pcbnew/router/router_tool.cpp:87 pcbnew/router/router_menus.h:88
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
 "Mostra una finestra di dialogo per la modifica della larghezza piste e via."
 
-#: pcbnew/router/router_tool.cpp:80 pcbnew/router/router_menus.h:96
+#: pcbnew/router/router_tool.cpp:92 pcbnew/router/router_menus.h:96
 msgid "Switches posture of the currenly routed track."
 msgstr "Commuta la postura della pista sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:83 pcbnew/router/router_menus.h:101
+#: pcbnew/router/router_tool.cpp:97 pcbnew/router/router_menus.h:101
 msgid "Differential Pair Dimensions..."
 msgstr "Dimensioni coppia differenziale..."
 
-#: pcbnew/router/router_tool.cpp:83 pcbnew/router/router_menus.h:101
+#: pcbnew/router/router_tool.cpp:98 pcbnew/router/router_menus.h:101
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr ""
 "Imposta la larghezza e la spaziatura della coppia differenziale sbrogliata "
 "correntemente."
 
-#: pcbnew/router/router_tool.cpp:109 pcbnew/router/router_menus.h:147
+#: pcbnew/router/router_tool.cpp:125 pcbnew/router/router_menus.h:147
 msgid "Custom size"
 msgstr "Dimensioni personalizzate"
 
-#: pcbnew/router/router_tool.cpp:112 pcbnew/router/router_menus.h:153
+#: pcbnew/router/router_tool.cpp:128 pcbnew/router/router_menus.h:153
 msgid "Use the starting track width"
 msgstr "Usa larghezza iniziale della pista"
 
-#: pcbnew/router/router_tool.cpp:113
+#: pcbnew/router/router_tool.cpp:129
 msgid "Route using the width of the starting track."
 msgstr "Sbroglia usando la larghezza della pista iniziale."
 
-#: pcbnew/router/router_tool.cpp:115 pcbnew/router/router_menus.h:159
+#: pcbnew/router/router_tool.cpp:131 pcbnew/router/router_menus.h:159
 msgid "Use netclass values"
 msgstr "Utilizza regole del gruppo di collegamenti"
 
-#: pcbnew/router/router_tool.cpp:116 pcbnew/router/router_menus.h:160
+#: pcbnew/router/router_tool.cpp:132 pcbnew/router/router_menus.h:160
 msgid "Use track and via sizes from the net class"
 msgstr "Usa dimensioni piste e via dalla netclass"
 
-#: pcbnew/router/router_tool.cpp:120 pcbnew/router/router_menus.h:166
+#: pcbnew/router/router_tool.cpp:136 pcbnew/router/router_menus.h:166
 msgid "Track "
 msgstr "Pista "
 
-#: pcbnew/router/router_tool.cpp:124 pcbnew/router/router_tool.cpp:149
+#: pcbnew/router/router_tool.cpp:140 pcbnew/router/router_tool.cpp:165
 #: pcbnew/router/router_menus.h:170 pcbnew/router/router_menus.h:195
 msgid " (from netclass)"
 msgstr " (dalla netclass)"
 
-#: pcbnew/router/router_tool.cpp:133 pcbnew/router/router_menus.h:179
+#: pcbnew/router/router_tool.cpp:149 pcbnew/router/router_menus.h:179
 msgid "Via "
 msgstr "Via "
 
-#: pcbnew/router/router_tool.cpp:141 pcbnew/router/router_menus.h:187
+#: pcbnew/router/router_tool.cpp:157 pcbnew/router/router_menus.h:187
 msgid ", drill: default"
 msgstr ", foro: predefinito"
 
-#: pcbnew/router/router_tool.cpp:145 pcbnew/router/router_menus.h:191
+#: pcbnew/router/router_tool.cpp:161 pcbnew/router/router_menus.h:191
 msgid ", drill: "
 msgstr ", foro: "
 
-#: pcbnew/router/router_tool.cpp:213 pcbnew/router/router_menus.h:260
+#: pcbnew/router/router_tool.cpp:229 pcbnew/router/router_menus.h:260
 msgid "Interactive Router"
 msgstr "Sbroglio interattivo"
 
-#: pcbnew/router/router_tool.cpp:227
+#: pcbnew/router/router_tool.cpp:243
 msgid "Select Track/Via Width"
 msgstr "Seleziona larghezza piste/via"
 
-#: pcbnew/router/router_tool.cpp:591 pcbnew/router/router_menus.h:820
+#: pcbnew/router/router_tool.cpp:607 pcbnew/router/router_menus.h:820
 msgid "Route Track"
 msgstr "Sbroglia pista"
 
-#: pcbnew/router/router_tool.cpp:597 pcbnew/router/router_menus.h:827
+#: pcbnew/router/router_tool.cpp:613 pcbnew/router/router_menus.h:827
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
@@ -13051,21 +13050,24 @@ msgstr "Non si dispone dei permessi necessari per salvare il file \"%s\"."
 #: common/basicframe.cpp:704
 #, c-format
 msgid ""
-"Well this is potentially embarrassing!  It appears that the last time you "
-"were editing the file '%s' it was not saved properly.  Do you wish to "
-"restore the last edits you made?"
+"Well this is potentially embarrassing!\n"
+"It appears that the last time you were editing the file\n"
+"'%s'\n"
+"it was not saved properly.  Do you wish to restore the last saved edits you "
+"made?"
 msgstr ""
 "Questo speriamo non sia stato causato da qualche difetto, sarebbe "
-"imbarazzante! L'ultima volta che è stato modificato il file \"%s\" "
-"quest'ultimo non è stato salvato correttamente. Recuperare le ultime "
-"modifiche effettuate?"
+"imbarazzante!\n"
+"L'ultima volta che è stato modificato il file\n"
+"\"%s\"\n"
+"non è stato salvato correttamente. Recuperare le ultime modifiche effettuate?"
 
-#: common/basicframe.cpp:731
+#: common/basicframe.cpp:732
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Impossibile creare il file di backup \"%s\""
 
-#: common/basicframe.cpp:739
+#: common/basicframe.cpp:740
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Il file di salvataggio automatico non può essere rinominato con il nome file "
@@ -13319,15 +13321,15 @@ msgstr "File di testo (*.txt)|*.txt"
 msgid "Show grid"
 msgstr "Mostra griglia"
 
-#: common/zoom.cpp:259
+#: common/zoom.cpp:260
 msgid "Zoom select"
 msgstr "Seleziona zoom"
 
-#: common/zoom.cpp:272
+#: common/zoom.cpp:273
 msgid "Zoom: "
 msgstr "Zoom: "
 
-#: common/zoom.cpp:283
+#: common/zoom.cpp:284
 msgid "Grid Select"
 msgstr "Imposta griglia"
 
@@ -13588,11 +13590,6 @@ msgstr "Configurazione dei comandi da tastiera"
 #, c-format
 msgid "The file <%s> was not fully read"
 msgstr "Il file \"%s\" non è stato letto completamente"
-
-#: common/tool/tool_manager.cpp:319
-#, c-format
-msgid "Could not find action %s."
-msgstr "Impossibile trovare l'azione %s."
 
 #: common/dialog_about/dialog_about.cpp:83
 msgid "Information"
@@ -14216,7 +14213,7 @@ msgstr "Ribalta blocco --"
 msgid "Rotate Block ccw"
 msgstr "Ruota blocco antiorario"
 
-#: eeschema/template_fieldnames.cpp:48 eeschema/libedit.cpp:512
+#: eeschema/template_fieldnames.cpp:48 eeschema/libedit.cpp:510
 #: eeschema/lib_field.cpp:593
 msgid "Datasheet"
 msgstr "Specifiche"
@@ -14341,7 +14338,7 @@ msgstr "Elemento %s trovato nel foglio %s"
 msgid "An error occurred attempting to save component library '%s'."
 msgstr "Un errore durante il salvataggio della libreria componenti \"%s\"."
 
-#: eeschema/libarch.cpp:111 eeschema/libedit.cpp:408
+#: eeschema/libarch.cpp:111 eeschema/libedit.cpp:406
 #: eeschema/lib_cache_rescue.cpp:70
 #, c-format
 msgid "Failed to create component library file '%s'"
@@ -14584,12 +14581,12 @@ msgstr "Copia componente"
 msgid "Delete Component"
 msgstr "Cancella componente"
 
-#: eeschema/onrightclick.cpp:439 eeschema/libedit.cpp:498
+#: eeschema/onrightclick.cpp:439 eeschema/libedit.cpp:496
 #: eeschema/lib_draw_item.cpp:83
 msgid "Convert"
 msgstr "Convertito"
 
-#: eeschema/onrightclick.cpp:450 eeschema/libeditframe.cpp:432
+#: eeschema/onrightclick.cpp:450 eeschema/libeditframe.cpp:456
 #, c-format
 msgid "Unit %s"
 msgstr "Parte %s"
@@ -15209,16 +15206,16 @@ msgstr "Etichetta globale %s"
 msgid "Hierarchical Label %s"
 msgstr "Etichetta gerarchica %s"
 
-#: eeschema/viewlibs.cpp:306 eeschema/libedit.cpp:507
+#: eeschema/viewlibs.cpp:306 eeschema/libedit.cpp:505
 msgid "Part"
 msgstr "Parte"
 
-#: eeschema/viewlibs.cpp:307 eeschema/libedit.cpp:490
+#: eeschema/viewlibs.cpp:307 eeschema/libedit.cpp:488
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:202
 msgid "Alias"
 msgstr "Alias"
 
-#: eeschema/viewlibs.cpp:309 eeschema/libedit.cpp:511
+#: eeschema/viewlibs.cpp:309 eeschema/libedit.cpp:509
 msgid "Key words"
 msgstr "Parole chiave"
 
@@ -15602,74 +15599,74 @@ msgstr "Cambiare la libreria attiva?"
 msgid "Part name '%s' not found in library '%s'"
 msgstr "Il componente \"%s\" non trovato nella libreria \"%s\""
 
-#: eeschema/libedit.cpp:317 eeschema/libeditframe.cpp:713
+#: eeschema/libedit.cpp:315 eeschema/libeditframe.cpp:737
 msgid "No library specified."
 msgstr "Nessuna libreria specificata."
 
-#: eeschema/libedit.cpp:323
+#: eeschema/libedit.cpp:321
 msgid "Include last component changes?"
 msgstr "Includi gli ultimi cambiamenti al componente?"
 
-#: eeschema/libedit.cpp:338
+#: eeschema/libedit.cpp:336
 msgid "Part Library Name:"
 msgstr "Nome libreria componenti:"
 
-#: eeschema/libedit.cpp:358
+#: eeschema/libedit.cpp:356
 #, c-format
 msgid "Modify library file '%s' ?"
 msgstr "Modificare il file di libreria  \"%s\"?"
 
-#: eeschema/libedit.cpp:398
+#: eeschema/libedit.cpp:396
 #, c-format
 msgid "Error occurred while saving library file '%s'"
 msgstr "Errore nel salvataggio del file di libreria \"%s\""
 
-#: eeschema/libedit.cpp:400 eeschema/libedit.cpp:442
+#: eeschema/libedit.cpp:398 eeschema/libedit.cpp:440
 msgid "*** ERROR: ***"
 msgstr "*** ERRORE ***"
 
-#: eeschema/libedit.cpp:440
+#: eeschema/libedit.cpp:438
 #, c-format
 msgid "Error occurred while saving library documentation file <%s>"
 msgstr "Errore nel salvataggio del file <%s>  delle specifiche del componente"
 
-#: eeschema/libedit.cpp:450
+#: eeschema/libedit.cpp:448
 #, c-format
 msgid "Failed to create component document library file <%s>"
 msgstr "Impossibile creare il file <%s>  delle specifiche del componente"
 
-#: eeschema/libedit.cpp:456
+#: eeschema/libedit.cpp:454
 #, c-format
 msgid "Library file '%s' OK"
 msgstr "File libreria \"%s\" OK"
 
-#: eeschema/libedit.cpp:459
+#: eeschema/libedit.cpp:457
 #, c-format
 msgid "Documentation file '%s' OK"
 msgstr "File specifiche \"%s\" OK"
 
-#: eeschema/libedit.cpp:502 eeschema/dialogs/dialog_color_config.cpp:73
+#: eeschema/libedit.cpp:500 eeschema/dialogs/dialog_color_config.cpp:73
 msgid "Body"
 msgstr "Corpo"
 
-#: eeschema/libedit.cpp:505
+#: eeschema/libedit.cpp:503
 msgid "Power Symbol"
 msgstr "Simbolo di alimentazione"
 
-#: eeschema/libedit.cpp:537
+#: eeschema/libedit.cpp:535
 msgid "Please select a component library."
 msgstr "Selezionare un componente"
 
-#: eeschema/libedit.cpp:546
+#: eeschema/libedit.cpp:544
 #, c-format
 msgid "Part library '%s' is empty."
 msgstr "La libreria componenti \"%s\" è vuota."
 
-#: eeschema/libedit.cpp:547
+#: eeschema/libedit.cpp:545
 msgid "Delete Entry Error"
 msgstr "Cancella errore nella voce"
 
-#: eeschema/libedit.cpp:551
+#: eeschema/libedit.cpp:549
 #, c-format
 msgid ""
 "Select one of %zu components to delete\n"
@@ -15678,28 +15675,28 @@ msgstr ""
 "Seleziona uno di %zu componenti da cancellare\n"
 "dalla libreria \"%s\"."
 
-#: eeschema/libedit.cpp:555
+#: eeschema/libedit.cpp:553
 msgid "Delete Part"
 msgstr "Cancella componente"
 
-#: eeschema/libedit.cpp:564
+#: eeschema/libedit.cpp:562
 #, c-format
 msgid "Entry '%s' not found in library '%s'."
 msgstr "Elemento \"%s\" non presente nella libreria \"%s\"."
 
-#: eeschema/libedit.cpp:571
+#: eeschema/libedit.cpp:569
 #, c-format
 msgid "Delete component '%s' from library '%s' ?"
 msgstr "Cancellare il componente \"%s\" dalla libreria \"%s\"?"
 
-#: eeschema/libedit.cpp:590
+#: eeschema/libedit.cpp:588
 msgid ""
 "The component being deleted has been modified. All changes will be lost. "
 "Discard changes?"
 msgstr ""
 "Il componente è stato modificato. I cambiamenti andranno persi. Chiudere?"
 
-#: eeschema/libedit.cpp:619
+#: eeschema/libedit.cpp:617
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -15709,21 +15706,21 @@ msgstr ""
 "\n"
 "Chiudo?"
 
-#: eeschema/libedit.cpp:638
+#: eeschema/libedit.cpp:636
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Il nuovo componente non ha nome e non può essere creato. "
 
-#: eeschema/libedit.cpp:651
+#: eeschema/libedit.cpp:649
 #, c-format
 msgid "Part '%s' already exists in library '%s'"
 msgstr "Componente \"%s\" già esistente nella libreria \"%s\""
 
-#: eeschema/libedit.cpp:723
+#: eeschema/libedit.cpp:721
 #, c-format
 msgid "Part '%s' already exists. Change it?"
 msgstr "Componente \"%s\" già esistente. Sostituirlo?"
 
-#: eeschema/libedit.cpp:737
+#: eeschema/libedit.cpp:735
 #, c-format
 msgid "Part '%s' saved in library '%s'"
 msgstr "Componente \"%s\" salvato nella libreria \"%s\""
@@ -15795,22 +15792,22 @@ msgstr ""
 "Un errore si è verificaro nel tentativo di recuperare dei componenti. Non è "
 "stato effettuato nessun cambiamento."
 
-#: eeschema/load_one_schematic_file.cpp:90
+#: eeschema/load_one_schematic_file.cpp:91
 #, c-format
 msgid "Failed to open '%s'"
 msgstr "Impossibile aprire \"%s\""
 
-#: eeschema/load_one_schematic_file.cpp:98
+#: eeschema/load_one_schematic_file.cpp:99
 #, c-format
 msgid "Loading '%s'"
 msgstr "Caricamento \"%s\""
 
-#: eeschema/load_one_schematic_file.cpp:105
+#: eeschema/load_one_schematic_file.cpp:106
 #, c-format
 msgid "'%s' is NOT an Eeschema file!"
 msgstr "\"%s\" non è un file di Eeschema!"
 
-#: eeschema/load_one_schematic_file.cpp:124
+#: eeschema/load_one_schematic_file.cpp:125
 #, c-format
 msgid ""
 "'%s' was created by a more recent version of Eeschema and may not load "
@@ -15819,7 +15816,7 @@ msgstr ""
 "\"%s\" è stato creato con una versione più recente di Eeschema e non può "
 "essere caricato correttamente. Si consiglia di aggiornare!"
 
-#: eeschema/load_one_schematic_file.cpp:135
+#: eeschema/load_one_schematic_file.cpp:136
 msgid ""
 " was created by an older version of Eeschema. It will be stored in the new "
 "file format when you save this file again."
@@ -15827,27 +15824,27 @@ msgstr ""
 " è stato creato con la vecchia versione di Eeschema. Sarà memorizzato nel "
 "nuovo formato al prossimo salvataggio."
 
-#: eeschema/load_one_schematic_file.cpp:221
+#: eeschema/load_one_schematic_file.cpp:222
 #, c-format
 msgid "Eeschema file text load error at line %d"
 msgstr "Eeschema: errore nel file di testo alla riga %d"
 
-#: eeschema/load_one_schematic_file.cpp:237
+#: eeschema/load_one_schematic_file.cpp:238
 #, c-format
 msgid "Eeschema file undefined object at line %d, aborted"
 msgstr "Oggetto non definito nel file Eeschema alla riga %d, interrotto"
 
-#: eeschema/load_one_schematic_file.cpp:260
+#: eeschema/load_one_schematic_file.cpp:261
 #, c-format
 msgid "Eeschema file object not loaded at line %d, aborted"
 msgstr "Oggetto non caricato nel file Eeschema alla riga %d, interrotto"
 
-#: eeschema/load_one_schematic_file.cpp:277
+#: eeschema/load_one_schematic_file.cpp:278
 #, c-format
 msgid "Done Loading <%s>"
 msgstr "Caricamento di \"%s\" eseguito"
 
-#: eeschema/load_one_schematic_file.cpp:306
+#: eeschema/load_one_schematic_file.cpp:307
 #, c-format
 msgid ""
 "Eeschema file dimension definition error line %d,\n"
@@ -15958,11 +15955,11 @@ msgstr "Visualizzazione griglia "
 msgid "Library Editor"
 msgstr "Editor delle librerie"
 
-#: eeschema/libeditframe.cpp:299
+#: eeschema/libeditframe.cpp:323
 msgid "Save the changes in the library before closing?"
 msgstr "Salvare le modifiche alla libreria prima di chiudere?"
 
-#: eeschema/libeditframe.cpp:326
+#: eeschema/libeditframe.cpp:350
 #, c-format
 msgid ""
 "Library '%s' was modified!\n"
@@ -15971,35 +15968,35 @@ msgstr ""
 "La libreria \"%s\" è stata modificata!\n"
 "Annullare le modifiche?"
 
-#: eeschema/libeditframe.cpp:700
+#: eeschema/libeditframe.cpp:724
 msgid "No part to save."
 msgstr "Nessun componente da salvare."
 
-#: eeschema/libeditframe.cpp:1099
+#: eeschema/libeditframe.cpp:1123
 msgid "Add pin"
 msgstr "Aggiungi piedino"
 
-#: eeschema/libeditframe.cpp:1103
+#: eeschema/libeditframe.cpp:1127
 msgid "Set pin options"
 msgstr "Imposta opzioni piedino"
 
-#: eeschema/libeditframe.cpp:1118
+#: eeschema/libeditframe.cpp:1142
 msgid "Add rectangle"
 msgstr "Aggiungi rettangolo"
 
-#: eeschema/libeditframe.cpp:1134
+#: eeschema/libeditframe.cpp:1158
 msgid "Set anchor position"
 msgstr "Imposta posizione ancoraggio"
 
-#: eeschema/libeditframe.cpp:1138
+#: eeschema/libeditframe.cpp:1162
 msgid "Import"
 msgstr "Importa"
 
-#: eeschema/libeditframe.cpp:1144 bitmap2component/bitmap2cmp_gui_base.cpp:124
+#: eeschema/libeditframe.cpp:1168 bitmap2component/bitmap2cmp_gui_base.cpp:124
 msgid "Export"
 msgstr "Esporta"
 
-#: eeschema/libeditframe.cpp:1240 eeschema/controle.cpp:165
+#: eeschema/libeditframe.cpp:1264 eeschema/controle.cpp:165
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
 
@@ -17083,15 +17080,15 @@ msgstr "In stampa"
 msgid "Print page %d"
 msgstr "Stampa pagina %d "
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:102
+#: eeschema/dialogs/dialog_rescue_each.cpp:103
 msgid "Rescue symbol"
 msgstr "Recupera simbolo"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:103
+#: eeschema/dialogs/dialog_rescue_each.cpp:104
 msgid "Symbol name"
 msgstr "Nome simbolo"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:277
+#: eeschema/dialogs/dialog_rescue_each.cpp:278
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -17106,7 +17103,7 @@ msgstr ""
 "componenti\",\n"
 "e lo strumento può essere attivato manualmente dal menu \"Strumenti\"."
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:281
+#: eeschema/dialogs/dialog_rescue_each.cpp:282
 msgid "Rescue Components"
 msgstr "Recupera componenti"
 
@@ -22122,7 +22119,7 @@ msgstr "Opzioni di esportazione VRML"
 msgid "Set Text Size"
 msgstr "Imposta dimensioni testo"
 
-#: pcbnew/dialogs/dialog_gen_module_position_file_base.h:60
+#: pcbnew/dialogs/dialog_gen_module_position_file_base.h:59
 msgid "Position Files:"
 msgstr "File posizionamento:"
 
@@ -22154,7 +22151,7 @@ msgstr "Modifiche globali piazzole"
 msgid "DRC Control"
 msgstr "Controllo regole"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:81
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:79
 msgid "Trace length tuning"
 msgstr "Regolazione lunghezza pista"
 
@@ -22166,7 +22163,7 @@ msgstr "Proprietà obiettivo"
 msgid "Grid Properties"
 msgstr "Proprietà griglia"
 
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:63
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:64
 msgid "Differential Pair Dimensions"
 msgstr "Dimensioni coppia differenziale"
 
