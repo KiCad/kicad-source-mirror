@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-05 18:25+0100\n"
-"PO-Revision-Date: 2015-05-05 18:25+0100\n"
+"PO-Revision-Date: 2015-05-05 19:04+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -4434,7 +4434,7 @@ msgstr "Genera file posizionamento impronte per il pick and place"
 
 #: pcbnew/menubar_pcbframe.cpp:157
 msgid "&Drill (.drl) File"
-msgstr "&File della foratura (.drl) "
+msgstr "File forature (.&drl)"
 
 #: pcbnew/menubar_pcbframe.cpp:158
 msgid "Generate excellon2 drill file"
@@ -4450,7 +4450,7 @@ msgstr "Crea un rapporto di tutte le impronte della scheda corrente"
 
 #: pcbnew/menubar_pcbframe.cpp:167
 msgid "IPC-D-356 Netlist File"
-msgstr "File di Lista collegamenti IPC-D-356"
+msgstr "File netlist IPC-D-356"
 
 #: pcbnew/menubar_pcbframe.cpp:168
 msgid "Generate IPC-D-356 netlist file"
@@ -4458,7 +4458,7 @@ msgstr "Genera file netlist IPC-D-356"
 
 #: pcbnew/menubar_pcbframe.cpp:172
 msgid "&Component (.cmp) File"
-msgstr "&File elenco componenti (.cmp) "
+msgstr "File elenco &componenti (.cmp)"
 
 #: pcbnew/menubar_pcbframe.cpp:173
 msgid "(Re)create components file (*.cmp) for CvPcb"
