@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-06 00:19+0100\n"
-"PO-Revision-Date: 2015-05-06 00:19+0100\n"
+"POT-Creation-Date: 2015-05-07 19:02+0100\n"
+"PO-Revision-Date: 2015-05-07 19:02+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -8101,7 +8101,7 @@ msgstr "Arrotondamento angoli:"
 #: eeschema/viewlibs.cpp:295 eeschema/libedit.cpp:480
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 msgid "None"
-msgstr "Nessuno"
+msgstr "No"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 msgid "Chamfer"
@@ -19582,7 +19582,7 @@ msgstr "Mostra tutto"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:90
 msgid "Show None"
-msgstr "Nascondi tutti"
+msgstr "Mostra niente"
 
 #: gerbview/excellon_read_drill_file.cpp:189
 msgid "No room to load file"
