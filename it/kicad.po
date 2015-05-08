@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-07 19:02+0100\n"
-"PO-Revision-Date: 2015-05-07 19:02+0100\n"
+"POT-Creation-Date: 2015-05-08 13:44+0100\n"
+"PO-Revision-Date: 2015-05-08 13:44+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -450,7 +450,7 @@ msgstr ""
 msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
-#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:965 pcbnew/moduleframe.cpp:783
+#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:995 pcbnew/moduleframe.cpp:783
 #: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1252 cvpcb/cvframe.cpp:762
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -829,12 +829,12 @@ msgstr "Valore %s di %s"
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
 
-#: pcbnew/pcbframe.cpp:397 pcbnew/pcbframe.cpp:895 pcbnew/moduleframe.cpp:282
+#: pcbnew/pcbframe.cpp:397 pcbnew/pcbframe.cpp:925 pcbnew/moduleframe.cpp:282
 #: gerbview/gerbview_frame.cpp:146 gerbview/events_called_functions.cpp:318
 msgid "Visibles"
 msgstr "Visibili"
 
-#: pcbnew/pcbframe.cpp:583 eeschema/schframe.cpp:597
+#: pcbnew/pcbframe.cpp:582 eeschema/schframe.cpp:597
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -845,17 +845,17 @@ msgstr ""
 "\"%s\"\n"
 "prima di chiudere?"
 
-#: pcbnew/pcbframe.cpp:619
+#: pcbnew/pcbframe.cpp:618
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:656 pcbnew/hotkeys.cpp:175 pcbnew/moduleframe.cpp:711
+#: pcbnew/pcbframe.cpp:655 pcbnew/hotkeys.cpp:175 pcbnew/moduleframe.cpp:711
 #: cvpcb/class_DisplayFootprintsFrame.cpp:402
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
 
-#: pcbnew/pcbframe.cpp:969
+#: pcbnew/pcbframe.cpp:999
 msgid " [new file]"
 msgstr " [nuovo file]"
 
@@ -8101,7 +8101,7 @@ msgstr "Arrotondamento angoli:"
 #: eeschema/viewlibs.cpp:295 eeschema/libedit.cpp:480
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 msgid "None"
-msgstr "No"
+msgstr "Nulla"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 msgid "Chamfer"
