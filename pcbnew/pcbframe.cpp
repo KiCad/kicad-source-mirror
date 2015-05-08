@@ -443,14 +443,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     ReFillLayerWidget();        // this is near end because contents establish size
-
     m_Layers->ReFillRender();   // Update colors in Render after the config is read
-
     syncLayerWidgetLayer();
 
     m_auimgr.Update();
 
     setupTools();
+    enableGALSpecificMenus();
 
     Zoom_Automatique( false );
 }
@@ -678,6 +677,8 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
         // Redirect all events to the legacy canvas
         GetGalCanvas()->SetEventDispatcher( NULL );
     }
+
+    enableGALSpecificMenus();
 }
 
 
@@ -706,6 +707,35 @@ void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         GetBoard()->GetRatsnest()->ProcessBoard();
 
     UseGalCanvas( use_gal );
+}
+
+
+void PCB_EDIT_FRAME::enableGALSpecificMenus()
+{
+    // some menus are active only in GAL mode and do nothing in legacy mode.
+    // So enable or disable them, depending on the display mode
+
+    if( GetMenuBar() )
+    {
+        // Enable / disable some menus which are usable only on GAL
+        pcbnew_ids id_list[] =
+        {
+            ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
+            ID_DIFF_PAIR_BUTT,
+            ID_TUNE_SINGLE_TRACK_LEN_BUTT,
+            ID_TUNE_DIFF_PAIR_LEN_BUTT,
+            ID_TUNE_DIFF_PAIR_SKEW_BUTT,
+            ID_MENU_DIFF_PAIR_DIMENSIONS
+        };
+
+        bool enbl = IsGalCanvasActive();
+
+        for( unsigned ii = 0; ii < DIM( id_list ); ii++ )
+        {
+            if( GetMenuBar()->FindItem( id_list[ii] ) )
+                GetMenuBar()->FindItem( id_list[ii] )->Enable( enbl );
+        }
+    }
 }
 
 
