@@ -233,8 +233,6 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     aWalk.SetClosed( false );
     aWalk.Append( nearest.p );
 
-    int i = nearest.their.Index();
-
     assert( nearest.their.Index() >= 0 );
     assert( farthest.their.Index() >= 0 );
 
@@ -246,7 +244,7 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     int i_first = aObstacle.Find( nearest.p );
     int i_last = aObstacle.Find( farthest.p );
 
-    i = i_first;
+    int i = i_first;
 
     while( i != i_last )
     {

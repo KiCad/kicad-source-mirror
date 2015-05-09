@@ -707,7 +707,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_SubsPrm7_choiceUnit->SetSelection( 0 );
 	fgSizerSubstPrms->Add( m_SubsPrm7_choiceUnit, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_substrate_prm8_label = new wxStaticText( m_panelTransline, wxID_ANY, _("Mur"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_substrate_prm8_label = new wxStaticText( m_panelTransline, wxID_ANY, _("mu Rel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm8_label->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm8_label, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
 	
@@ -720,7 +720,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_SubsPrm8_choiceUnit->SetSelection( 0 );
 	fgSizerSubstPrms->Add( m_SubsPrm8_choiceUnit, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_substrate_prm9_label = new wxStaticText( m_panelTransline, wxID_ANY, _("MurC"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_substrate_prm9_label = new wxStaticText( m_panelTransline, wxID_ANY, _("mu Rel C"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm9_label->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm9_label, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	

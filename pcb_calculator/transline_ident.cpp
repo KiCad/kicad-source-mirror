@@ -171,10 +171,10 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,
                                    _( "Rough" ), _( "Conductor Roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   _( "Mur" ),
-                                   _( "Relative Permeability of Substrate" ), 1, false ) );
+                                   _( "mu Rel S" ),
+                                   _( "Relative Permeability (mu) of Substrate" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -204,7 +204,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    _( "T" ), _( "Strip Thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -236,7 +236,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    _( "T" ), _( "Strip Thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -267,11 +267,11 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "TM-Modes" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   _( "Mur" ), _( "Relative Permeability of Insulator" ), 1, false ) );
+                                   _( "mu Rel I" ), _( "Relative Permeability (mu) of Insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TANM_PRM,
                                    _( "TanM" ), _( "Magnetic Loss Tangent" ), 0, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -300,9 +300,9 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "TM-Modes" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   _( "Mur" ), _( "Relative Permeability of Insulator" ), 1, false ) );
+                                   _( "mu Rel I" ), _( "Relative Permeability (mu) of Insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_IN_PRM,
@@ -341,7 +341,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,
                                    _( "Rough" ), _( "Conductor Roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -376,7 +376,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    _( "T" ), _( "Strip Thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -404,7 +404,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TWISTEDPAIR_TWIST_PRM,
                                    _( "Twists" ), _( "Number of Twists per Length" ), 0.0, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
+                                   _( "mu Rel C" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TWISTEDPAIR_EPSILONR_ENV_PRM,
                                    _( "ErEnv" ), _( "Relative Permittivity of Environment" ), 1,

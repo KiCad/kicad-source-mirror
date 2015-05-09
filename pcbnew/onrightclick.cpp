@@ -60,8 +60,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                                     // to display menus relative to tracks twice
     bool        blockActive  = !GetScreen()->m_BlockLocate.IsIdle();
 
-    wxClientDC  dc( m_canvas );
-
     BOARD_ITEM* item = GetCurItem();
 
     m_canvas->SetCanStartBlock( -1 );    // Avoid to start a block command when clicking on menu
@@ -75,8 +73,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         aPopMenu->AppendSeparator();
         return true;
     }
-
-    m_canvas->CrossHairOff( &dc );
 
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
@@ -130,7 +126,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
             if( m_canvas->GetAbortRequest() )
             {
-                m_canvas->CrossHairOn( &dc );
                 return false;
             }
         }
@@ -489,7 +484,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
     }
 
-    m_canvas->CrossHairOn( &dc );
     return true;
 }
 

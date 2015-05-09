@@ -351,7 +351,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( viewMenu, ID_MENU_LIST_NETS,
                  _( "&List Nets" ), _( "View a list of nets with names and id's" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( list_nets_xpm ) );
 
     viewMenu->AppendSeparator();
 

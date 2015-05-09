@@ -337,6 +337,7 @@ set( BMAPS_MID
     library_table
     libview
     lines90
+    list_nets
     load_module_board
     load_module_lib
     local_ratsnest
