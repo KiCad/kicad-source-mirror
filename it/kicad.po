@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-08 13:44+0100\n"
-"PO-Revision-Date: 2015-05-08 13:44+0100\n"
+"POT-Creation-Date: 2015-05-09 17:11+0100\n"
+"PO-Revision-Date: 2015-05-09 17:11+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -860,8 +860,8 @@ msgid " [new file]"
 msgstr " [nuovo file]"
 
 #: pcbnew/modedit_onclick.cpp:229 pcbnew/modedit_onclick.cpp:272
-#: pcbnew/onrightclick.cpp:85 pcbnew/onrightclick.cpp:101
-#: pcbnew/muonde.cpp:803 pcbnew/dialogs/dialog_design_rules_base.cpp:382
+#: pcbnew/onrightclick.cpp:81 pcbnew/onrightclick.cpp:97 pcbnew/muonde.cpp:803
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:382
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55
 #: common/selcolor.cpp:243 common/dialogs/dialog_env_var_config_base.cpp:62
 #: common/dialogs/dialog_exit_base.cpp:69
@@ -876,13 +876,13 @@ msgstr " [nuovo file]"
 msgid "Cancel"
 msgstr "Annulla"
 
-#: pcbnew/modedit_onclick.cpp:232 pcbnew/onrightclick.cpp:91
+#: pcbnew/modedit_onclick.cpp:232 pcbnew/onrightclick.cpp:87
 #: eeschema/libedit_onrightclick.cpp:88 eeschema/onrightclick.cpp:158
 #: gerbview/onrightclick.cpp:62
 msgid "End Tool"
 msgstr "Chiudi strumento"
 
-#: pcbnew/modedit_onclick.cpp:244 pcbnew/onrightclick.cpp:501
+#: pcbnew/modedit_onclick.cpp:244 pcbnew/onrightclick.cpp:495
 #: eeschema/libedit_onrightclick.cpp:323 eeschema/onrightclick.cpp:826
 #: gerbview/onrightclick.cpp:73
 msgid "Cancel Block"
@@ -892,7 +892,7 @@ msgstr "Cancella blocco"
 msgid "Zoom Block (drag middle mouse)"
 msgstr "Zoom blocco (trascina pulsante centrale del mouse)"
 
-#: pcbnew/modedit_onclick.cpp:250 pcbnew/onrightclick.cpp:505
+#: pcbnew/modedit_onclick.cpp:250 pcbnew/onrightclick.cpp:499
 #: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:834
 #: gerbview/onrightclick.cpp:76
 msgid "Place Block"
@@ -918,7 +918,7 @@ msgstr "Cancella blocco (maiusc + ctrl + trascina il mouse)"
 msgid "Move Block Exactly"
 msgstr "Sposta il blocco esattamente"
 
-#: pcbnew/modedit_onclick.cpp:290 pcbnew/onrightclick.cpp:1008
+#: pcbnew/modedit_onclick.cpp:290 pcbnew/onrightclick.cpp:1002
 #: pcbnew/tools/common_actions.cpp:117
 #: common/dialogs/dialog_image_editor_base.cpp:39
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:84
@@ -938,11 +938,11 @@ msgstr "Modifica impronta"
 msgid "Transform Footprint"
 msgstr "Trasforma impronta"
 
-#: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:944
+#: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:938
 msgid "Move Pad"
 msgstr "Sposta piazzola"
 
-#: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:949
+#: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:943
 msgid "Edit Pad"
 msgstr "Modifica piazzola"
 
@@ -974,12 +974,12 @@ msgstr "Crea array di piazzole"
 msgid "Global Pad Settings"
 msgstr "Impostazioni globali piazzola"
 
-#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:883
+#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:877
 #: eeschema/libedit_onrightclick.cpp:188 eeschema/onrightclick.cpp:596
 msgid "Move Text"
 msgstr "Sposta testo"
 
-#: pcbnew/modedit_onclick.cpp:349 pcbnew/onrightclick.cpp:893
+#: pcbnew/modedit_onclick.cpp:349 pcbnew/onrightclick.cpp:887
 #: eeschema/libedit_onrightclick.cpp:197 eeschema/onrightclick.cpp:604
 msgid "Rotate Text"
 msgstr "Ruota testo"
@@ -992,17 +992,17 @@ msgstr "Duplica testo"
 msgid "Create Text Array"
 msgstr "Crea array di testo"
 
-#: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:887
+#: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:881
 msgid "Move Text Exactly"
 msgstr "Sposta testo esattamente"
 
-#: pcbnew/modedit_onclick.cpp:379 pcbnew/onrightclick.cpp:899
+#: pcbnew/modedit_onclick.cpp:379 pcbnew/onrightclick.cpp:893
 #: eeschema/libedit_onrightclick.cpp:194 eeschema/onrightclick.cpp:96
 #: eeschema/onrightclick.cpp:606
 msgid "Edit Text"
 msgstr "Modifica testo"
 
-#: pcbnew/modedit_onclick.cpp:385 pcbnew/onrightclick.cpp:910
+#: pcbnew/modedit_onclick.cpp:385 pcbnew/onrightclick.cpp:904
 #: eeschema/libedit_onrightclick.cpp:202 eeschema/onrightclick.cpp:608
 msgid "Delete Text"
 msgstr "Cancella testo"
@@ -1031,7 +1031,7 @@ msgstr "Crea array di contorni"
 msgid "Place edge"
 msgstr "Piazza contorno"
 
-#: pcbnew/modedit_onclick.cpp:418 pcbnew/onrightclick.cpp:1012
+#: pcbnew/modedit_onclick.cpp:418 pcbnew/onrightclick.cpp:1006
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:53
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:70
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:37
@@ -1882,302 +1882,302 @@ msgstr "Tipo di errore (%d)- %s:"
 msgid "Marker @(%d,%d)"
 msgstr "Marcatore @(%d,%d)"
 
-#: pcbnew/onrightclick.cpp:156
+#: pcbnew/onrightclick.cpp:151
 msgid "Lock Footprint"
 msgstr "Blocca impronte"
 
-#: pcbnew/onrightclick.cpp:163
+#: pcbnew/onrightclick.cpp:158
 msgid "Unlock Footprint"
 msgstr "Sblocca impronte"
 
-#: pcbnew/onrightclick.cpp:171
+#: pcbnew/onrightclick.cpp:166
 msgid "Automatically Place Footprint"
 msgstr "Piazza impronte automaticamente"
 
-#: pcbnew/onrightclick.cpp:178
+#: pcbnew/onrightclick.cpp:173
 msgid "Automatically Route Footprint"
 msgstr "Sbroglia impronte automaticamente"
 
-#: pcbnew/onrightclick.cpp:194 eeschema/onrightclick.cpp:266
+#: pcbnew/onrightclick.cpp:189 eeschema/onrightclick.cpp:266
 msgid "End Drawing"
 msgstr "Termina elemento grafico"
 
-#: pcbnew/onrightclick.cpp:199
+#: pcbnew/onrightclick.cpp:194
 msgid "Move Drawing"
 msgstr "Sposta elemento grafico"
 
-#: pcbnew/onrightclick.cpp:204
+#: pcbnew/onrightclick.cpp:199
 msgid "Duplicate Drawing"
 msgstr "Duplica elemento grafico"
 
-#: pcbnew/onrightclick.cpp:209
+#: pcbnew/onrightclick.cpp:204
 msgid "Move Drawing Exactly"
 msgstr "Sposta elemento grafico esattamente"
 
-#: pcbnew/onrightclick.cpp:214
+#: pcbnew/onrightclick.cpp:209
 msgid "Create Drawing Array"
 msgstr "Crea elemento grafico"
 
-#: pcbnew/onrightclick.cpp:219
+#: pcbnew/onrightclick.cpp:214
 msgid "Edit Drawing"
 msgstr "Modifica elemento grafico"
 
-#: pcbnew/onrightclick.cpp:225 eeschema/onrightclick.cpp:269
+#: pcbnew/onrightclick.cpp:220 eeschema/onrightclick.cpp:269
 msgid "Delete Drawing"
 msgstr "Cancella elemento grafico"
 
-#: pcbnew/onrightclick.cpp:229
+#: pcbnew/onrightclick.cpp:224
 msgid "Delete All Drawings on Layer"
 msgstr "Cancella tutti gli elementi grafici dello strato"
 
-#: pcbnew/onrightclick.cpp:236
+#: pcbnew/onrightclick.cpp:231
 msgid "Delete Zone Filling"
 msgstr "Elimina riempimento zone"
 
-#: pcbnew/onrightclick.cpp:243
+#: pcbnew/onrightclick.cpp:238
 msgid "Close Zone Outline"
 msgstr "Rimuovi contorni zone"
 
-#: pcbnew/onrightclick.cpp:245
+#: pcbnew/onrightclick.cpp:240
 msgid "Delete Last Corner"
 msgstr "Cancella ultimo angolo"
 
-#: pcbnew/onrightclick.cpp:271
+#: pcbnew/onrightclick.cpp:266
 msgid "Edit Dimension"
 msgstr "Modifica dimensioni"
 
-#: pcbnew/onrightclick.cpp:275
+#: pcbnew/onrightclick.cpp:270
 msgid "Move Dimension Text"
 msgstr "Sposta quotatura"
 
-#: pcbnew/onrightclick.cpp:280
+#: pcbnew/onrightclick.cpp:275
 msgid "Duplicate Dimension"
 msgstr "Duplica quotatura"
 
-#: pcbnew/onrightclick.cpp:285
+#: pcbnew/onrightclick.cpp:280
 msgid "Move Dimension Exactly"
 msgstr "Sposta quotatura esattamente"
 
-#: pcbnew/onrightclick.cpp:290
+#: pcbnew/onrightclick.cpp:285
 msgid "Delete Dimension"
 msgstr "Cancella quotatura"
 
-#: pcbnew/onrightclick.cpp:301
+#: pcbnew/onrightclick.cpp:296
 msgid "Move Target"
 msgstr "Sposta marcatore"
 
-#: pcbnew/onrightclick.cpp:306
+#: pcbnew/onrightclick.cpp:301
 msgid "Move Target Exactly"
 msgstr "Sposta marcatore esattamente"
 
-#: pcbnew/onrightclick.cpp:311
+#: pcbnew/onrightclick.cpp:306
 msgid "Duplicate Target"
 msgstr "Duplica marcatore"
 
-#: pcbnew/onrightclick.cpp:316
+#: pcbnew/onrightclick.cpp:311
 msgid "Create Target Array"
 msgstr "Crea array di marcatori"
 
-#: pcbnew/onrightclick.cpp:321
+#: pcbnew/onrightclick.cpp:316
 msgid "Edit Target"
 msgstr "Modifica marcatore"
 
-#: pcbnew/onrightclick.cpp:325
+#: pcbnew/onrightclick.cpp:320
 msgid "Delete Target"
 msgstr "Cancella marcatore"
 
-#: pcbnew/onrightclick.cpp:359 pcbnew/hotkeys.cpp:125
+#: pcbnew/onrightclick.cpp:354 pcbnew/hotkeys.cpp:125
 msgid "Get and Move Footprint"
 msgstr "Ottieni e sposta impronta"
 
-#: pcbnew/onrightclick.cpp:372 pcbnew/hotkeys.cpp:141
+#: pcbnew/onrightclick.cpp:367 pcbnew/hotkeys.cpp:141
 msgid "Fill or Refill All Zones"
 msgstr "Riempi o aggiorna tutte le zone"
 
-#: pcbnew/onrightclick.cpp:376 pcbnew/hotkeys.cpp:143
+#: pcbnew/onrightclick.cpp:371 pcbnew/hotkeys.cpp:143
 msgid "Remove Filled Areas in All Zones"
 msgstr "Elimina riempimenti in tute le zone"
 
-#: pcbnew/onrightclick.cpp:384 pcbnew/onrightclick.cpp:390
-#: pcbnew/onrightclick.cpp:408 pcbnew/onrightclick.cpp:421
-#: pcbnew/onrightclick.cpp:486 pcbnew/onrightclick.cpp:580
+#: pcbnew/onrightclick.cpp:379 pcbnew/onrightclick.cpp:385
+#: pcbnew/onrightclick.cpp:403 pcbnew/onrightclick.cpp:416
+#: pcbnew/onrightclick.cpp:481 pcbnew/onrightclick.cpp:574
 msgid "Select Working Layer"
 msgstr "Seleziona strato corrente"
 
-#: pcbnew/onrightclick.cpp:398 pcbnew/onrightclick.cpp:478
-#: pcbnew/onrightclick.cpp:527
+#: pcbnew/onrightclick.cpp:393 pcbnew/onrightclick.cpp:473
+#: pcbnew/onrightclick.cpp:521
 msgid "Begin Track"
 msgstr "Inizia pista"
 
-#: pcbnew/onrightclick.cpp:404 pcbnew/onrightclick.cpp:482
-#: pcbnew/onrightclick.cpp:651 pcbnew/router/router_menus.h:274
+#: pcbnew/onrightclick.cpp:399 pcbnew/onrightclick.cpp:477
+#: pcbnew/onrightclick.cpp:645 pcbnew/router/router_menus.h:274
 msgid "Select Track Width"
 msgstr "Seleziona larghezza piste"
 
-#: pcbnew/onrightclick.cpp:410
+#: pcbnew/onrightclick.cpp:405
 msgid "Select Layer Pair for Vias"
 msgstr "Seleziona coppia di strati per i Via"
 
-#: pcbnew/onrightclick.cpp:429
+#: pcbnew/onrightclick.cpp:424
 msgid "Footprint Documentation"
 msgstr "Documentazione impronta"
 
-#: pcbnew/onrightclick.cpp:439
+#: pcbnew/onrightclick.cpp:434
 msgid "Global Spread and Place"
 msgstr "Disposizione globale"
 
-#: pcbnew/onrightclick.cpp:441
+#: pcbnew/onrightclick.cpp:436
 msgid "Unlock All Footprints"
 msgstr "Sblocca tutte le impronte"
 
-#: pcbnew/onrightclick.cpp:443
+#: pcbnew/onrightclick.cpp:438
 msgid "Lock All Footprints"
 msgstr "Blocca tutte le impronte"
 
-#: pcbnew/onrightclick.cpp:446
+#: pcbnew/onrightclick.cpp:441
 msgid "Spread out All Footprints"
 msgstr "Disponi tutte le impronte"
 
-#: pcbnew/onrightclick.cpp:448
+#: pcbnew/onrightclick.cpp:443
 msgid "Spread out Footprints not Already on Board"
 msgstr "Disponi tutte le impronte non già presenti sulla scheda"
 
-#: pcbnew/onrightclick.cpp:451
+#: pcbnew/onrightclick.cpp:446
 msgid "Automatically Place All Footprints"
 msgstr "Posiziona automaticamente tutte le impronte"
 
-#: pcbnew/onrightclick.cpp:453
+#: pcbnew/onrightclick.cpp:448
 msgid "Automatically Place New Footprints"
 msgstr "Posiziona automaticamente tutte le nuove impronte"
 
-#: pcbnew/onrightclick.cpp:455
+#: pcbnew/onrightclick.cpp:450
 msgid "Automatically Place Next Footprints"
 msgstr "Posiziona automaticamente l'impronta successiva"
 
-#: pcbnew/onrightclick.cpp:458
+#: pcbnew/onrightclick.cpp:453
 msgid "Orient All Footprints"
 msgstr "Orienta tutte le impronte"
 
-#: pcbnew/onrightclick.cpp:465
+#: pcbnew/onrightclick.cpp:460
 msgid "Autoroute"
 msgstr "Sbroglio automatico"
 
-#: pcbnew/onrightclick.cpp:467
+#: pcbnew/onrightclick.cpp:462
 msgid "Select Layer Pair"
 msgstr "Seleziona le coppie di strati"
 
-#: pcbnew/onrightclick.cpp:470
+#: pcbnew/onrightclick.cpp:465
 msgid "Automatically Route All Footprints"
 msgstr "Sbroglia automaticamente tutte le impronte"
 
-#: pcbnew/onrightclick.cpp:472
+#: pcbnew/onrightclick.cpp:467
 msgid "Reset Unrouted"
 msgstr "Azzera non sbrogliati"
 
-#: pcbnew/onrightclick.cpp:503
+#: pcbnew/onrightclick.cpp:497
 msgid "Zoom Block"
 msgstr "Zoom blocco"
 
-#: pcbnew/onrightclick.cpp:506 eeschema/libedit_onrightclick.cpp:339
+#: pcbnew/onrightclick.cpp:500 eeschema/libedit_onrightclick.cpp:339
 #: eeschema/onrightclick.cpp:843
 msgid "Copy Block"
 msgstr "Copia blocco"
 
-#: pcbnew/onrightclick.cpp:507
+#: pcbnew/onrightclick.cpp:501
 msgid "Flip Block"
 msgstr "Specchia blocco"
 
-#: pcbnew/onrightclick.cpp:508
+#: pcbnew/onrightclick.cpp:502
 msgid "Rotate Block"
 msgstr "Ruota blocco"
 
-#: pcbnew/onrightclick.cpp:509 eeschema/libedit_onrightclick.cpp:346
+#: pcbnew/onrightclick.cpp:503 eeschema/libedit_onrightclick.cpp:346
 #: eeschema/onrightclick.cpp:847
 msgid "Delete Block"
 msgstr "Cancella blocco"
 
-#: pcbnew/onrightclick.cpp:534
+#: pcbnew/onrightclick.cpp:528
 msgid "Drag Via"
 msgstr "Sposta Via"
 
-#: pcbnew/onrightclick.cpp:543
+#: pcbnew/onrightclick.cpp:537
 msgid "Move Node"
 msgstr "Sposta nodo"
 
-#: pcbnew/onrightclick.cpp:549
+#: pcbnew/onrightclick.cpp:543
 msgid "Drag Segments, Keep Slope"
 msgstr "Sposta segmento mantendo inclinazione"
 
-#: pcbnew/onrightclick.cpp:554
+#: pcbnew/onrightclick.cpp:548
 msgid "Drag Segment"
 msgstr "Sposta segmento"
 
-#: pcbnew/onrightclick.cpp:559
+#: pcbnew/onrightclick.cpp:553
 msgid "Duplicate Track"
 msgstr "Duplica pista"
 
-#: pcbnew/onrightclick.cpp:564
+#: pcbnew/onrightclick.cpp:558
 msgid "Move Track Exactly"
 msgstr "Sposta la pista esattamente"
 
-#: pcbnew/onrightclick.cpp:569
+#: pcbnew/onrightclick.cpp:563
 msgid "Create Track Array"
 msgstr "Crea array di tracce"
 
-#: pcbnew/onrightclick.cpp:575
+#: pcbnew/onrightclick.cpp:569
 msgid "Break Track"
 msgstr "Interrompi pista"
 
-#: pcbnew/onrightclick.cpp:585
+#: pcbnew/onrightclick.cpp:579
 msgid "Place Node"
 msgstr "Piazza nodo"
 
-#: pcbnew/onrightclick.cpp:592 pcbnew/router/length_tuner_tool.cpp:54
+#: pcbnew/onrightclick.cpp:586 pcbnew/router/length_tuner_tool.cpp:54
 #: pcbnew/router/router_tool.cpp:60 pcbnew/router/router_menus.h:64
 msgid "End Track"
 msgstr "Finisci pista"
 
-#: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:70
+#: pcbnew/onrightclick.cpp:590 pcbnew/router/router_tool.cpp:70
 #: pcbnew/router/router_menus.h:76
 msgid "Place Through Via"
 msgstr "Piazza via passante"
 
-#: pcbnew/onrightclick.cpp:599
+#: pcbnew/onrightclick.cpp:593
 msgid "Select Layer and Place Through Via"
 msgstr "Seleziona strato e piazza via passante"
 
-#: pcbnew/onrightclick.cpp:606 pcbnew/router/router_tool.cpp:76
+#: pcbnew/onrightclick.cpp:600 pcbnew/router/router_tool.cpp:76
 #: pcbnew/router/router_menus.h:80
 msgid "Place Blind/Buried Via"
 msgstr "Piazza via coperto/interno"
 
-#: pcbnew/onrightclick.cpp:610
+#: pcbnew/onrightclick.cpp:604
 msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Seleziona strato e piazza via coperto/interno"
 
-#: pcbnew/onrightclick.cpp:616 pcbnew/hotkeys.cpp:110
+#: pcbnew/onrightclick.cpp:610 pcbnew/hotkeys.cpp:110
 #: pcbnew/router/router_tool.cpp:92 pcbnew/router/router_menus.h:96
 msgid "Switch Track Posture"
 msgstr "Commuta postura pista"
 
-#: pcbnew/onrightclick.cpp:624
+#: pcbnew/onrightclick.cpp:618
 msgid "Place Micro Via"
 msgstr "Posiziona MicroVia"
 
-#: pcbnew/onrightclick.cpp:635
+#: pcbnew/onrightclick.cpp:629
 msgid "Change Via Size and Drill"
 msgstr "Cambia dimensioni Via e forature"
 
-#: pcbnew/onrightclick.cpp:641
+#: pcbnew/onrightclick.cpp:635
 msgid "Change Segment Width"
 msgstr "Cambia larghezza segmento"
 
-#: pcbnew/onrightclick.cpp:645
+#: pcbnew/onrightclick.cpp:639
 msgid "Change Track Width"
 msgstr "Cambia larghezza pista"
 
-#: pcbnew/onrightclick.cpp:656 pcbnew/onrightclick.cpp:968
-#: pcbnew/onrightclick.cpp:1020
+#: pcbnew/onrightclick.cpp:650 pcbnew/onrightclick.cpp:962
+#: pcbnew/onrightclick.cpp:1014
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
@@ -2191,198 +2191,198 @@ msgstr "Cambia larghezza pista"
 msgid "Delete"
 msgstr "Cancella"
 
-#: pcbnew/onrightclick.cpp:660
+#: pcbnew/onrightclick.cpp:654
 msgid "Delete Via"
 msgstr "Cancella Via"
 
-#: pcbnew/onrightclick.cpp:660 eeschema/libedit_onrightclick.cpp:239
+#: pcbnew/onrightclick.cpp:654 eeschema/libedit_onrightclick.cpp:239
 msgid "Delete Segment"
 msgstr "Cancella segmento"
 
-#: pcbnew/onrightclick.cpp:667
+#: pcbnew/onrightclick.cpp:661
 msgid "Delete Track"
 msgstr "Cancella pista"
 
-#: pcbnew/onrightclick.cpp:669
+#: pcbnew/onrightclick.cpp:663
 msgid "Delete Net"
 msgstr "Cancella collegamento"
 
-#: pcbnew/onrightclick.cpp:678
+#: pcbnew/onrightclick.cpp:672
 msgid "Edit All Tracks and Vias"
 msgstr "Impostazioni globali di piste e Via"
 
-#: pcbnew/onrightclick.cpp:684
+#: pcbnew/onrightclick.cpp:678
 msgid "Set Flags"
 msgstr "Imposta blocchi"
 
-#: pcbnew/onrightclick.cpp:686
+#: pcbnew/onrightclick.cpp:680
 msgid "Locked: Yes"
 msgstr "Bloccato: Sì"
 
-#: pcbnew/onrightclick.cpp:687
+#: pcbnew/onrightclick.cpp:681
 msgid "Locked: No"
 msgstr "Bloccato: No"
 
-#: pcbnew/onrightclick.cpp:696
+#: pcbnew/onrightclick.cpp:690
 msgid "Track Locked: Yes"
 msgstr "Pista bloccata"
 
-#: pcbnew/onrightclick.cpp:697
+#: pcbnew/onrightclick.cpp:691
 msgid "Track Locked: No"
 msgstr "Pista sbloccata"
 
-#: pcbnew/onrightclick.cpp:699
+#: pcbnew/onrightclick.cpp:693
 msgid "Net Locked: Yes"
 msgstr "Collegamento bloccato"
 
-#: pcbnew/onrightclick.cpp:700
+#: pcbnew/onrightclick.cpp:694
 msgid "Net Locked: No"
 msgstr "Collegamento sbloccato"
 
-#: pcbnew/onrightclick.cpp:714
+#: pcbnew/onrightclick.cpp:708
 msgid "Place Edge Outline"
 msgstr "Piazza contorno"
 
-#: pcbnew/onrightclick.cpp:720
+#: pcbnew/onrightclick.cpp:714
 msgid "Place Corner"
 msgstr "Piazza angolo"
 
-#: pcbnew/onrightclick.cpp:723
+#: pcbnew/onrightclick.cpp:717
 msgid "Place Zone"
 msgstr "Piazza zona"
 
-#: pcbnew/onrightclick.cpp:730
+#: pcbnew/onrightclick.cpp:724
 msgid "Keepout Area"
 msgstr "Zona proibita"
 
-#: pcbnew/onrightclick.cpp:730 pcbnew/tools/pcb_editor_control.cpp:78
+#: pcbnew/onrightclick.cpp:724 pcbnew/tools/pcb_editor_control.cpp:78
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 msgid "Zones"
 msgstr "Gestisci zona"
 
-#: pcbnew/onrightclick.cpp:736
+#: pcbnew/onrightclick.cpp:730
 msgid "Move Corner"
 msgstr "Sposta angolo"
 
-#: pcbnew/onrightclick.cpp:738
+#: pcbnew/onrightclick.cpp:732
 msgid "Delete Corner"
 msgstr "Cancella angolo"
 
-#: pcbnew/onrightclick.cpp:743
+#: pcbnew/onrightclick.cpp:737
 msgid "Create Corner"
 msgstr "Crea angolo"
 
-#: pcbnew/onrightclick.cpp:744
+#: pcbnew/onrightclick.cpp:738
 msgid "Drag Outline Segment"
 msgstr "Trascina segmento contorno"
 
-#: pcbnew/onrightclick.cpp:752
+#: pcbnew/onrightclick.cpp:746
 msgid "Add Similar Zone"
 msgstr "Aggiungi zona simile"
 
-#: pcbnew/onrightclick.cpp:755
+#: pcbnew/onrightclick.cpp:749
 msgid "Add Cutout Area"
 msgstr "Svuota area della zona"
 
-#: pcbnew/onrightclick.cpp:758
+#: pcbnew/onrightclick.cpp:752
 msgid "Duplicate Zone Onto Layer"
 msgstr "Duplica zona su strato"
 
-#: pcbnew/onrightclick.cpp:763
+#: pcbnew/onrightclick.cpp:757
 msgid "Fill Zone"
 msgstr "Riempi zona"
 
-#: pcbnew/onrightclick.cpp:769
+#: pcbnew/onrightclick.cpp:763
 msgid "Remove Filled Areas in Zone"
 msgstr "Rimuovi zona"
 
-#: pcbnew/onrightclick.cpp:772
+#: pcbnew/onrightclick.cpp:766
 msgid "Move Zone"
 msgstr "Sposta zona"
 
-#: pcbnew/onrightclick.cpp:775
+#: pcbnew/onrightclick.cpp:769
 msgid "Move Zone Exactly"
 msgstr "Sposta zona esattamente"
 
-#: pcbnew/onrightclick.cpp:780
+#: pcbnew/onrightclick.cpp:774
 msgid "Edit Zone Properties"
 msgstr "Proprietà zona"
 
-#: pcbnew/onrightclick.cpp:790
+#: pcbnew/onrightclick.cpp:784
 msgid "Delete Cutout"
 msgstr "Elimina zona vuota"
 
-#: pcbnew/onrightclick.cpp:793
+#: pcbnew/onrightclick.cpp:787
 msgid "Delete Zone Outline"
 msgstr "Cancella contorno zona"
 
-#: pcbnew/onrightclick.cpp:813 pcbnew/onrightclick.cpp:1000
+#: pcbnew/onrightclick.cpp:807 pcbnew/onrightclick.cpp:994
 #: pcbnew/tools/common_actions.cpp:96
 msgid "Move"
 msgstr "Sposta"
 
-#: pcbnew/onrightclick.cpp:817
+#: pcbnew/onrightclick.cpp:811
 msgid "Duplicate Footprint"
 msgstr "Duplica impronta"
 
-#: pcbnew/onrightclick.cpp:822
+#: pcbnew/onrightclick.cpp:816
 msgid "Move Footprint Exactly"
 msgstr "Sposta impronta esattamente"
 
-#: pcbnew/onrightclick.cpp:827
+#: pcbnew/onrightclick.cpp:821
 msgid "Create Footprint Array"
 msgstr "Crea array di impronte"
 
-#: pcbnew/onrightclick.cpp:832
+#: pcbnew/onrightclick.cpp:826
 msgid "Drag"
 msgstr "Trascina"
 
-#: pcbnew/onrightclick.cpp:837
+#: pcbnew/onrightclick.cpp:831
 msgid "Rotate +"
 msgstr "Ruota +"
 
-#: pcbnew/onrightclick.cpp:841
+#: pcbnew/onrightclick.cpp:835
 msgid "Rotate -"
 msgstr "Ruota -"
 
-#: pcbnew/onrightclick.cpp:842 pcbnew/onrightclick.cpp:1010
+#: pcbnew/onrightclick.cpp:836 pcbnew/onrightclick.cpp:1004
 #: pcbnew/tools/common_actions.cpp:121
 msgid "Flip"
 msgstr "Specchia"
 
-#: pcbnew/onrightclick.cpp:848
+#: pcbnew/onrightclick.cpp:842
 msgid "Edit Parameters"
 msgstr "Modifica parametri"
 
-#: pcbnew/onrightclick.cpp:853 pcbnew/hotkeys.cpp:114
+#: pcbnew/onrightclick.cpp:847 pcbnew/hotkeys.cpp:114
 msgid "Edit with Footprint Editor"
 msgstr "Modifica con l'editor delle impronte"
 
-#: pcbnew/onrightclick.cpp:860
+#: pcbnew/onrightclick.cpp:854
 msgid "Delete Footprint"
 msgstr "Cancella impronta"
 
-#: pcbnew/onrightclick.cpp:903 pcbnew/onrightclick.cpp:1017
+#: pcbnew/onrightclick.cpp:897 pcbnew/onrightclick.cpp:1011
 msgid "Reset Size"
 msgstr "Reimposta dimensioni"
 
-#: pcbnew/onrightclick.cpp:946
+#: pcbnew/onrightclick.cpp:940
 msgid "Drag Pad"
 msgstr "Tracina piazzola"
 
-#: pcbnew/onrightclick.cpp:954
+#: pcbnew/onrightclick.cpp:948
 msgid "Copy Current Settings to this Pad"
 msgstr "Copia le impostazioni correnti su questa piazzola"
 
-#: pcbnew/onrightclick.cpp:958
+#: pcbnew/onrightclick.cpp:952
 msgid "Copy this Pad Settings to Current Settings"
 msgstr "Copia le impostazioni di questa piazzola in quelle correnti"
 
-#: pcbnew/onrightclick.cpp:963
+#: pcbnew/onrightclick.cpp:957
 msgid "Edit All Pads"
 msgstr "Modifica tutte le piazzole"
 
-#: pcbnew/onrightclick.cpp:964
+#: pcbnew/onrightclick.cpp:958
 msgid ""
 "Copy this pad's settings to all pads in this footprint (or similar "
 "footprints)"
@@ -2390,59 +2390,59 @@ msgstr ""
 "Copia le impostazioni di questa piazzola a tutte le piazzole dell'impronta "
 "(o impronte simili)"
 
-#: pcbnew/onrightclick.cpp:972
+#: pcbnew/onrightclick.cpp:966
 msgid "Automatically Route Pad"
 msgstr "Piazzole autosbrogliate"
 
-#: pcbnew/onrightclick.cpp:973
+#: pcbnew/onrightclick.cpp:967
 msgid "Automatically Route Net"
 msgstr "Collegamenti autosbrogliati"
 
-#: pcbnew/onrightclick.cpp:1003
+#: pcbnew/onrightclick.cpp:997
 msgid "Copy"
 msgstr "Copia"
 
-#: pcbnew/onrightclick.cpp:1028 eeschema/onrightclick.cpp:869
+#: pcbnew/onrightclick.cpp:1022 eeschema/onrightclick.cpp:869
 msgid "Delete Marker"
 msgstr "Cancella marcatore"
 
-#: pcbnew/onrightclick.cpp:1030 eeschema/onrightclick.cpp:870
+#: pcbnew/onrightclick.cpp:1024 eeschema/onrightclick.cpp:870
 msgid "Marker Error Info"
 msgstr "Info errore marcatore"
 
-#: pcbnew/onrightclick.cpp:1048
+#: pcbnew/onrightclick.cpp:1042
 msgid "Auto Width"
 msgstr "Larghezza automatica"
 
-#: pcbnew/onrightclick.cpp:1049
+#: pcbnew/onrightclick.cpp:1043
 msgid ""
 "Use the track width when starting on a track, otherwise the current track "
 "width"
 msgstr "Usa la larghezza pista se all'inizio, altrimenti la larghezza corrente"
 
-#: pcbnew/onrightclick.cpp:1059
+#: pcbnew/onrightclick.cpp:1053
 msgid "Use Netclass Values"
 msgstr "Usa i valori netclass"
 
-#: pcbnew/onrightclick.cpp:1060
+#: pcbnew/onrightclick.cpp:1054
 msgid "Use track and via sizes from their Netclass values"
 msgstr "Usa per tutte le piste e i via i loro valori netclass"
 
-#: pcbnew/onrightclick.cpp:1066
+#: pcbnew/onrightclick.cpp:1060
 #, c-format
 msgid "Track %s"
 msgstr "Pista %s"
 
-#: pcbnew/onrightclick.cpp:1069 pcbnew/onrightclick.cpp:1095
+#: pcbnew/onrightclick.cpp:1063 pcbnew/onrightclick.cpp:1089
 msgid " uses NetClass"
 msgstr " usa netclass"
 
-#: pcbnew/onrightclick.cpp:1087
+#: pcbnew/onrightclick.cpp:1081
 #, c-format
 msgid "Via %s"
 msgstr "Via %s"
 
-#: pcbnew/onrightclick.cpp:1091
+#: pcbnew/onrightclick.cpp:1085
 #, c-format
 msgid "Via %s, drill %s"
 msgstr "Via %s, foro %s"
@@ -20609,15 +20609,12 @@ msgid "Conductor Roughness"
 msgstr "Rugosità conduttore"
 
 #: pcb_calculator/transline_ident.cpp:174
-#: pcb_calculator/transline_ident.cpp:270
-#: pcb_calculator/transline_ident.cpp:303
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:710
-msgid "Mur"
-msgstr "Mur"
+msgid "mu Rel S"
+msgstr "mu Rel S"
 
 #: pcb_calculator/transline_ident.cpp:175
-msgid "Relative Permeability of Substrate"
-msgstr "Permeabilità relativa substrato"
+msgid "Relative Permeability (mu) of Substrate"
+msgstr "Permeabilità relativa (mu) del Substrato"
 
 #: pcb_calculator/transline_ident.cpp:177
 #: pcb_calculator/transline_ident.cpp:207
@@ -20628,8 +20625,8 @@ msgstr "Permeabilità relativa substrato"
 #: pcb_calculator/transline_ident.cpp:379
 #: pcb_calculator/transline_ident.cpp:407
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:723
-msgid "MurC"
-msgstr "MurC"
+msgid "mu Rel C"
+msgstr "mu Rel C"
 
 #: pcb_calculator/transline_ident.cpp:177
 #: pcb_calculator/transline_ident.cpp:207
@@ -20639,8 +20636,8 @@ msgstr "MurC"
 #: pcb_calculator/transline_ident.cpp:344
 #: pcb_calculator/transline_ident.cpp:379
 #: pcb_calculator/transline_ident.cpp:407
-msgid "Relative Permeability of Conductor"
-msgstr "Permeabilità relativa del conduttore"
+msgid "Relative Permeability (mu) of Conductor"
+msgstr "Permeabilità relativa (mu) del Conduttore"
 
 #: pcb_calculator/transline_ident.cpp:181
 #: pcb_calculator/transline_ident.cpp:211
@@ -20739,8 +20736,13 @@ msgstr "Modalità trasversale magnetica"
 
 #: pcb_calculator/transline_ident.cpp:270
 #: pcb_calculator/transline_ident.cpp:303
-msgid "Relative Permeability of Insulator"
-msgstr "Permeabilità relativa dell'isolante"
+msgid "mu Rel I"
+msgstr "mu Rel I"
+
+#: pcb_calculator/transline_ident.cpp:270
+#: pcb_calculator/transline_ident.cpp:303
+msgid "Relative Permeability (mu) of Insulator"
+msgstr "Permeabilità relativa (mu) dell'Isolante"
 
 #: pcb_calculator/transline_ident.cpp:272
 msgid "TanM"
@@ -21392,6 +21394,10 @@ msgstr "Parametri substrato"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:647
 msgid "Specific resistance in ohms * meters"
 msgstr "Resistività in Ohm x metro"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:710
+msgid "mu Rel"
+msgstr "mu Rel"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:743
 msgid "Component Parameters:"
