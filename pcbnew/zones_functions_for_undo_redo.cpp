@@ -257,9 +257,13 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                     }
                 }
 
-                wxASSERT_MSG( notfound != true,
-                              wxT( "UpdateCopyOfZonesList() error: item not found in "
-                                   "aAuxiliaryList" ) );
+                if( notfound )  // happens when the new zone overlaps an existing zone
+                                // and these zones are combined
+                {
+                    DBG( printf(
+                        "UpdateCopyOfZonesList(): item not found in aAuxiliaryList,"
+                        "combined with an other zone\n" ) );
+                }
                 break;
             }
 
