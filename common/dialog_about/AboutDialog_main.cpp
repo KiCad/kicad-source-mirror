@@ -26,6 +26,7 @@
 #include <aboutinfo.h>
 #include <wx/aboutdlg.h>
 #include <wx/textctrl.h>
+#include <boost/version.hpp>
 
 
 /* Used icons:
@@ -50,7 +51,7 @@ static wxString HtmlNewline( const unsigned int amount = 1 );
 
 
 /**
- * Initializes the <code>AboutAppInfo</code> object with applicaion specific information.
+ * Initializes the <code>AboutAppInfo</code> object with application specific information.
  *
  * This the object which holds all information about the application
  */
@@ -79,7 +80,14 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     /* KiCad build version */
     wxString version;
-    version << wxT( "Build: " ) << GetBuildVersion();
+    version << wxT( "Version: " ) << GetBuildVersion()
+#ifdef DEBUG
+            << wxT( ", debug" )
+#else
+            << wxT( ", release" )
+#endif
+            << wxT( " build" );
+
     info.SetBuildVersion( version );
 
     /* wxWidgets version */
@@ -90,46 +98,25 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
         << wxMINOR_VERSION << wxT( "." )
         << wxRELEASE_NUMBER
 
-    /* Unicode or Ansi version */
+    /* Unicode or ANSI version */
 #if wxUSE_UNICODE
         << wxT( " Unicode " );
 #else
-        << wxT( " Ansi " );
+        << wxT( " ANSI " );
 #endif
 
-    libVersion << wxT( "and boost C++ libraries" );
+    // Just in case someone builds KiCad with the platform native of Boost instead of
+    // the version included with the KiCad source.
+    libVersion << wxT( "and Boost " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
+               << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." ) << ( BOOST_VERSION % 100 )
+               << wxT( "\n" );
 
-    libVersion << wxT( "\n" );
+    // Operating System Information
 
-    /* Operating System Information */
+    wxPlatformInfo platformInfo;
 
-#if defined __WIN64__
-    libVersion << wxT( "on 64 Bits Windows" );
-
-#   elif defined __WINDOWS__
-    libVersion << wxT( "on 32 Bits Windows" );
-
-    /* Check for wxMAC */
-#   elif defined __WXMAC__
-    libVersion << wxT( "on Macintosh" );
-
-    /* Linux 64 bits */
-#   elif defined _LP64 && __LINUX__
-    libVersion << wxT( "on 64 Bits GNU/Linux" );
-
-    /* Linux 32 bits */
-#   elif defined __LINUX__
-    libVersion << wxT( "on 32 Bits GNU/Linux" );
-
-    /* OpenBSD */
-#   elif defined __OpenBSD__
-    libVersion << wxT( "on OpenBSD" );
-
-    /* FreeBSD */
-#   elif defined __FreeBSD__
-    libVersion << wxT( "on FreeBSD" );
-
-#endif
+    libVersion << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
+               << platformInfo.GetArchName();
 
     info.SetLibVersion( libVersion );
 
@@ -153,7 +140,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     description << wxT( "<p>" );
     description << wxT( "<b><u>" ) << _( "KiCad on the web" ) << wxT( "</u></b>" ); // bold & underlined font for caption
 
-    // bulletet list with some http links
+    // bullet-ed list with some http links
     description << wxT( "<ul>" );
     description << wxT( "<li>" ) << HtmlHyperlink( wxT(
                                                       "http://iut-tice.ujf-grenoble.fr/kicad" ),
@@ -175,7 +162,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     description << wxT( "<p>" );
     description << wxT( "<b><u>" ) << _( "Contribute to KiCad" ) << wxT( "</u></b>" ); // bold & underlined font caption
 
-    // bulletet list with some http links
+    // bullet-ed list with some http links
     description << wxT( "<ul>" );
     description << wxT( "<li>" ) <<
     HtmlHyperlink( wxT( "https://bugs.launchpad.net/kicad" ),

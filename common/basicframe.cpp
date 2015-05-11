@@ -551,7 +551,7 @@ static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
     " (release,"
 #endif
     __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
-    __WX_BO_WXWIN_COMPAT_2_4 __WX_BO_WXWIN_COMPAT_2_6 ")"
+    __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 ")"
     ;
 }
 
@@ -572,9 +572,9 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp = wxT( "Application: " ) + Pgm().App().GetAppName() + wxT( "\n" );
     tmp << wxT( "Version: " ) << GetBuildVersion()
 #ifdef DEBUG
-        << wxT( " Debug" )
+        << wxT( " debug" )
 #else
-        << wxT( " Release" )
+        << wxT( " release" )
 #endif
         << wxT( " build\n" );
     tmp << wxT( "wxWidgets: Version " ) << FROM_UTF8( wxVERSION_NUM_DOT_STRING )
@@ -632,7 +632,7 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    wxMessageBox( tmp, _("Version Information (copied to the clipboard)") );
+    wxMessageBox( tmp, _( "Version Information (copied to the clipboard)" ) );
 
     wxTheClipboard->SetData( new wxTextDataObject( tmp ) );
     wxTheClipboard->Close();
