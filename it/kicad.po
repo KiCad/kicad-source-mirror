@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 17:11+0100\n"
-"PO-Revision-Date: 2015-05-09 17:11+0100\n"
+"POT-Creation-Date: 2015-05-12 09:33+0100\n"
+"PO-Revision-Date: 2015-05-12 09:33+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -3000,7 +3000,7 @@ msgstr "Denominazione"
 
 #: pcbnew/librairi.cpp:791 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
-#: common/dialog_about/AboutDialog_main.cpp:143 eeschema/viewlibs.cpp:308
+#: common/dialog_about/AboutDialog_main.cpp:130 eeschema/viewlibs.cpp:308
 #: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1532
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -5043,28 +5043,36 @@ msgstr "Nuova larghezza:"
 msgid "Edge Width"
 msgstr "Imposta larghezza"
 
-#: pcbnew/zones_by_polygon.cpp:151
-msgid "Duplicate Zone: The outline of the duplicated zone fails DRC check!"
+#: pcbnew/zones_by_polygon.cpp:131
+msgid ""
+"The duplicated zone is on the same layer as the initial zone, which has no "
+"sense.\n"
+"Please, chose an other layer for the new zone"
 msgstr ""
-"Zona duplicata: Il contorno della zona duplicata causa errore nel Controllo "
-"regole"
+"La zona duplicata è sullo stesso strato della zona iniziale, e ciò non ha "
+"senso.\n"
+"Scegliere un altro strato per la nuova zona"
 
-#: pcbnew/zones_by_polygon.cpp:355 pcbnew/zones_by_polygon.cpp:413
-#: pcbnew/zones_by_polygon.cpp:800
+#: pcbnew/zones_by_polygon.cpp:162
+msgid "The outline of the duplicated zone fails DRC check!"
+msgstr "Il contorno della zona duplicata fallisce il controllo DRC!"
+
+#: pcbnew/zones_by_polygon.cpp:366 pcbnew/zones_by_polygon.cpp:424
+#: pcbnew/zones_by_polygon.cpp:811
 msgid "Area: DRC outline error"
 msgstr "Zona: Errore del contorno nella Verifica regole "
 
-#: pcbnew/zones_by_polygon.cpp:528
+#: pcbnew/zones_by_polygon.cpp:539
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "Errore: le aree proibite sono consentite solo sugli strati in rame"
 
-#: pcbnew/zones_by_polygon.cpp:675
+#: pcbnew/zones_by_polygon.cpp:686
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr ""
 "Errore del Controllo regole: Questo punto iniziale è contenuto o troppo "
 "vicino ad un'altra zona"
 
-#: pcbnew/zones_by_polygon.cpp:734
+#: pcbnew/zones_by_polygon.cpp:745
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr ""
 "Errore del Controllo regole: Chiudere questa zona crea un errore con "
@@ -13615,7 +13623,7 @@ msgstr "Traduttori"
 msgid "License"
 msgstr "Licenza"
 
-#: common/dialog_about/AboutDialog_main.cpp:147
+#: common/dialog_about/AboutDialog_main.cpp:134
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and to design printed circuit boards."
@@ -13623,47 +13631,47 @@ msgstr ""
 "KiCad è un insieme di applicazioni libere per la creazione di schemi "
 "elettrici e circuiti stampati"
 
-#: common/dialog_about/AboutDialog_main.cpp:154
+#: common/dialog_about/AboutDialog_main.cpp:141
 msgid "KiCad on the web"
 msgstr "KiCad sul Web"
 
-#: common/dialog_about/AboutDialog_main.cpp:160
+#: common/dialog_about/AboutDialog_main.cpp:147
 msgid "The original site of the initiator of Kicad"
 msgstr "Sito originale dei pionieri di KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:163
+#: common/dialog_about/AboutDialog_main.cpp:150
 msgid "Project on Launchpad"
 msgstr "Il progetto su Launchpad"
 
-#: common/dialog_about/AboutDialog_main.cpp:167
+#: common/dialog_about/AboutDialog_main.cpp:154
 msgid "The new KiCad site"
 msgstr "Il nuovo sito di KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:170
+#: common/dialog_about/AboutDialog_main.cpp:157
 msgid "Repository with additional component libraries"
 msgstr "Repository con librerie componenti aggiuntive"
 
-#: common/dialog_about/AboutDialog_main.cpp:176
+#: common/dialog_about/AboutDialog_main.cpp:163
 msgid "Contribute to KiCad"
 msgstr "Contribuire a KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:182
+#: common/dialog_about/AboutDialog_main.cpp:169
 msgid "Report bugs if you found any"
 msgstr "Segnalare i difetti riscontrati"
 
-#: common/dialog_about/AboutDialog_main.cpp:185
+#: common/dialog_about/AboutDialog_main.cpp:172
 msgid "File an idea for improvement"
 msgstr "Suggerire un miglioramento"
 
-#: common/dialog_about/AboutDialog_main.cpp:189
+#: common/dialog_about/AboutDialog_main.cpp:176
 msgid "KiCad links to user groups, tutorials and much more"
 msgstr "Collegamento al gruppo utilizzatori, guide e altro ancora"
 
-#: common/dialog_about/AboutDialog_main.cpp:202
+#: common/dialog_about/AboutDialog_main.cpp:189
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "La suite EDA di KiCad è realizzata secondo la"
 
-#: common/dialog_about/AboutDialog_main.cpp:204
+#: common/dialog_about/AboutDialog_main.cpp:191
 msgid "GNU General Public License (GPL) version 2 or any later version"
 msgstr "GNU General Public License (GPL) versione 2 o successive"
 
