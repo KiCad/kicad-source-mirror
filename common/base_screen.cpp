@@ -48,7 +48,7 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
     m_NumberOfScreens  = 1;      // Hierarchy: Root: ScreenNumber = 1
     m_Zoom             = 32.0;
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   // Default grid size
-    m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
+    m_Grid.m_CmdId     = ID_POPUP_GRID_LEVEL_50;
     m_Center           = true;
     m_IsPrinting       = false;
     m_ScrollPixelsPerUnitX = 1;
@@ -183,7 +183,7 @@ int BASE_SCREEN::BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst)
         double gridValueMils = To_User_Unit( INCHES, grid.m_Size.x ) * 1000;
         double gridValue_mm = To_User_Unit( MILLIMETRES, grid.m_Size.x );
 
-        if( grid.m_Id == ID_POPUP_GRID_USER )
+        if( grid.m_CmdId == ID_POPUP_GRID_USER )
         {
             msg = _( "User Grid" );
             idx_usergrid = i;
@@ -232,13 +232,13 @@ int BASE_SCREEN::SetGrid( const wxRealPoint& size )
         if( m_grids[i].m_Size == size )
         {
             m_Grid = m_grids[i];
-            return m_grids[i].m_Id - ID_POPUP_GRID_LEVEL_1000;
+            return m_grids[i].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
         }
 
         // keep track of the nearest larger grid size, if the exact size is not found
         if ( size.x < m_grids[i].m_Size.x )
         {
-            gridIdx = m_grids[i].m_Id - ID_POPUP_GRID_LEVEL_1000;
+            gridIdx = m_grids[i].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
             nearest_grid = m_grids[i];
         }
     }
@@ -259,10 +259,10 @@ int BASE_SCREEN::SetGrid( int aCommandId  )
 
     for( unsigned i = 0; i < m_grids.size(); i++ )
     {
-        if( m_grids[i].m_Id == aCommandId )
+        if( m_grids[i].m_CmdId == aCommandId )
         {
             m_Grid = m_grids[i];
-            return m_grids[i].m_Id - ID_POPUP_GRID_LEVEL_1000;
+            return m_grids[i].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
         }
     }
 
@@ -272,26 +272,27 @@ int BASE_SCREEN::SetGrid( int aCommandId  )
                   wxT( "grid size( %g, %g )." ), aCommandId,
                   m_Grid.m_Size.x, m_Grid.m_Size.y );
 
-    return m_grids[0].m_Id - ID_POPUP_GRID_LEVEL_1000;
+    return m_grids[0].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
 }
+
 
 
 void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
 {
     for( unsigned i = 0; i < m_grids.size(); i++ )
     {
-        if( m_grids[i].m_Size == grid.m_Size && grid.m_Id != ID_POPUP_GRID_USER )
+        if( m_grids[i].m_Size == grid.m_Size && grid.m_CmdId != ID_POPUP_GRID_USER )
         {
             wxLogDebug( wxT( "Discarding duplicate grid size( %g, %g )." ),
                         grid.m_Size.x, grid.m_Size.y );
             return;
         }
 
-        if( m_grids[i].m_Id == grid.m_Id )
+        if( m_grids[i].m_CmdId == grid.m_CmdId )
         {
             wxLogDebug( wxT( "Changing grid ID %d from size( %g, %g ) to " ) \
                         wxT( "size( %g, %g )." ),
-                        grid.m_Id, m_grids[i].m_Size.x,
+                        grid.m_CmdId, m_grids[i].m_Size.x,
                         m_grids[i].m_Size.y, grid.m_Size.x, grid.m_Size.y );
             m_grids[i].m_Size = grid.m_Size;
             return;
@@ -307,7 +308,7 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
     GRID_TYPE grid;
 
     grid.m_Size = size;
-    grid.m_Id = id;
+    grid.m_CmdId = id;
     AddGrid( grid );
 }
 
@@ -319,7 +320,7 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id )
 
     new_size.x = From_User_Unit( aUnit, size.x );
     new_size.y = From_User_Unit( aUnit, size.y );
-    new_grid.m_Id = id;
+    new_grid.m_CmdId = id;
     new_grid.m_Size = new_size;
 
     AddGrid( new_grid );
@@ -332,6 +333,19 @@ GRID_TYPE& BASE_SCREEN::GetGrid( size_t aIndex )
                  wxT( "Cannot get grid object outside the bounds of the grid list." ) );
 
     return m_grids[ aIndex ];
+}
+
+
+bool BASE_SCREEN::GridExists( int aCommandId )
+{
+    // tests for grid command ID (not an index in grid list, but a wxID) exists in grid list.
+    for( unsigned i = 0; i < m_grids.size(); i++ )
+    {
+        if( m_grids[i].m_CmdId == aCommandId )
+            return true;
+    }
+
+    return false;
 }
 
 

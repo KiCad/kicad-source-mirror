@@ -316,7 +316,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     units.Add( GetUnitsLabel( MILLIMETRES ) );
 
     dlg.SetUnits( units, g_UserUnit );
-    dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
+    dlg.SetGridSizes( grid_list, GetScreen()->GetGridCmdId() );
     dlg.SetBusWidth( GetDefaultBusThickness() );
     dlg.SetLineWidth( GetDefaultLineThickness() );
     dlg.SetTextSize( GetDefaultTextSize() );
@@ -784,7 +784,7 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 
     DIALOG_LIBEDIT_OPTIONS dlg( this );
 
-    dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
+    dlg.SetGridSizes( grid_list, GetScreen()->GetGridCmdId() );
     dlg.SetLineWidth( GetDefaultLineThickness() );
     dlg.SetPinLength( GetDefaultPinLength() );
     dlg.SetPinNumSize( m_textPinNumDefaultSize );

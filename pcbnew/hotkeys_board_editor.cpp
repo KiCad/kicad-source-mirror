@@ -42,6 +42,7 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <class_zone.h>
+#include <tool/tool_manager.h>
 
 /* How to add a new hotkey:
  * see hotkeys.cpp

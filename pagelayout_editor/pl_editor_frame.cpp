@@ -83,11 +83,10 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_1MM-ID_POPUP_GRID_LEVEL_1000 )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_1MM-ID_POPUP_GRID_LEVEL_1000;
-    if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_1MM-ID_POPUP_GRID_LEVEL_1000 )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_1MM-ID_POPUP_GRID_LEVEL_1000;
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    if( ! GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_1MM - ID_POPUP_GRID_LEVEL_1000;
+
+    GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     ReCreateMenuBar();
     ReCreateHToolbar();

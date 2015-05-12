@@ -289,10 +289,10 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
         for( unsigned i = 0; i < gridsList.GetCount(); i++ )
         {
             GRID_TYPE& grid = screen->GetGrid( i );
-            gridMenu->Append( grid.m_Id, gridsList[i], wxEmptyString, true );
+            gridMenu->Append( grid.m_CmdId, gridsList[i], wxEmptyString, true );
 
             if( (int)i == icurr )
-                gridMenu->Check( grid.m_Id, true );
+                gridMenu->Check( grid.m_CmdId, true );
         }
     }
 

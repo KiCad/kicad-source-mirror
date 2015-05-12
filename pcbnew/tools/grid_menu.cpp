@@ -44,7 +44,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
     for( unsigned int i = 0; i < gridsList.GetCount(); ++i )
     {
         GRID_TYPE& grid = screen->GetGrid( i );
-        Append( grid.m_Id, gridsList[i], wxEmptyString, true );
+        Append( grid.m_CmdId, gridsList[i], wxEmptyString, true );
     }
 }
 
@@ -64,5 +64,5 @@ void GRID_MENU::Update()
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
         Check( ID_POPUP_GRID_SELECT + 1 + i, false );
 
-    Check( m_parent->GetScreen()->GetGridId(), true );
+    Check( m_parent->GetScreen()->GetGridCmdId(), true );
 }

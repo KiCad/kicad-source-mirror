@@ -226,7 +226,7 @@ bool PCB_BASE_FRAME::InvokeDialogGrid()
 
         // If the user grid is the current option, recall SetGrid()
         // to force new values put in list as current grid value
-        if( screen->GetGridId() == ID_POPUP_GRID_USER )
+        if( screen->GetGridCmdId() == ID_POPUP_GRID_USER )
             screen->SetGrid( ID_POPUP_GRID_USER );
 
         // Notify GAL

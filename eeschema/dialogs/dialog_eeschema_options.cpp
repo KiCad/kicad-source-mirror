@@ -153,7 +153,7 @@ void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& aGridSizes, int aGridId
         tmp.Printf( wxT( "%0.1f" ), aGridSizes[i].m_Size.x );
         m_choiceGridSize->Append( tmp );
 
-        if( aGridSizes[i].m_Id == aGridId )
+        if( aGridSizes[i].m_CmdId == aGridId )
             select = (int) i;
     }
 

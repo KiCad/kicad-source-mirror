@@ -56,7 +56,7 @@ void DIALOG_LIBEDIT_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id 
         tmp.Printf( wxT( "%0.1f" ), grid_sizes[i].m_Size.x );
         m_choiceGridSize->Append( tmp );
 
-        if( grid_sizes[i].m_Id == grid_id )
+        if( grid_sizes[i].m_CmdId == grid_id )
             select = (int) i;
     }
 

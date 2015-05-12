@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <class_undoredo_container.h>
 #include <block_commande.h>
 #include <common.h>
+#include <id.h>
 
 
 /**
@@ -44,14 +45,14 @@
 class GRID_TYPE
 {
 public:
-    int         m_Id;
-    wxRealPoint m_Size;
+    int         m_CmdId;    // The command id of this grid ( first id is ID_POPUP_GRID_LEVEL_1000 )
+    wxRealPoint m_Size;     // the size in internal unit of the grid (can differ for X and Y axis)
 
     GRID_TYPE& operator=( const GRID_TYPE& item )
     {
         if( this != &item )
         {
-            m_Id   = item.m_Id;
+            m_CmdId   = item.m_CmdId;
             m_Size = item.m_Size;
         }
 
@@ -60,7 +61,7 @@ public:
 
     const bool operator==( const GRID_TYPE& item ) const
     {
-        return m_Size == item.m_Size && m_Id == item.m_Id;
+        return m_Size == item.m_Size && m_CmdId == item.m_CmdId;
     }
 };
 
@@ -386,7 +387,7 @@ public:
      *
      * @return int - Currently selected grid command ID.
      */
-    int GetGridId() const { return m_Grid.m_Id; }
+    int GetGridCmdId() const { return m_Grid.m_CmdId; }
 
     /**
      * Return the grid size of the currently selected grid.
@@ -425,6 +426,14 @@ public:
     void AddGrid( const GRID_TYPE& grid );
     void AddGrid( const wxRealPoint& size, int id );
     void AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id );
+
+    /**
+     * Function GridExists
+     * tests for grid command ID (not an index in grid list, but a wxID) exists in grid list.
+     * @param aCommandId = the wxWidgets command ID
+     * @return true if the grid exists in grid list.
+     */
+    bool GridExists( int aCommandId );
 
     /**
      * Function GetGridCount().

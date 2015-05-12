@@ -487,7 +487,7 @@ void PCB_BASE_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
-        if( GetScreen()->GetGridId() == GetScreen()->GetGrid( i ).m_Id )
+        if( GetScreen()->GetGridCmdId() == GetScreen()->GetGrid( i ).m_CmdId )
         {
             select = (int) i;
             break;
@@ -815,7 +815,7 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
-        m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_Id );
+        m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_CmdId );
     }
 
     m_gridSelectBox->SetSelection( icurr );
@@ -850,25 +850,66 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
 
 void PCB_BASE_FRAME::SetFastGrid1()
 {
+    if( m_FastGrid1 >= GetScreen()->GetGridCount() )
+        return;
+
+    int cmdId = GetScreen()->GetGrids()[m_FastGrid1].m_CmdId;
+    SetPresetGrid( cmdId - ID_POPUP_GRID_LEVEL_1000 );
+
     if( m_gridSelectBox )
     {
-        m_gridSelectBox->SetSelection( m_FastGrid1 );
-
         wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
         cmd.SetEventObject( this );
         OnSelectGrid( cmd );
     }
+    else
+        GetCanvas()->Refresh();
 }
 
 
 void PCB_BASE_FRAME::SetFastGrid2()
 {
+    if( m_FastGrid2 >= GetScreen()->GetGridCount() )
+        return;
+
+    int cmdId = GetScreen()->GetGrids()[m_FastGrid2].m_CmdId;
+    SetPresetGrid( cmdId - ID_POPUP_GRID_LEVEL_1000 );
+
     if( m_gridSelectBox )
     {
-        m_gridSelectBox->SetSelection( m_FastGrid2 );
-
         wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
         cmd.SetEventObject( this );
         OnSelectGrid( cmd );
     }
+    else
+        GetCanvas()->Refresh();
+}
+
+void PCB_BASE_FRAME::SetNextGrid()
+{
+    EDA_DRAW_FRAME::SetNextGrid();
+
+    if( m_gridSelectBox )
+    {
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
+    else
+        GetCanvas()->Refresh();
+}
+
+
+void PCB_BASE_FRAME::SetPrevGrid()
+{
+    EDA_DRAW_FRAME::SetPrevGrid();
+
+    if( m_gridSelectBox )
+    {
+        wxCommandEvent cmd( wxEVT_COMMAND_COMBOBOX_SELECTED );
+        cmd.SetEventObject( this );
+        OnSelectGrid( cmd );
+    }
+    else
+        GetCanvas()->Refresh();
 }

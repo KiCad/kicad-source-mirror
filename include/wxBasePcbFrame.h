@@ -655,6 +655,18 @@ public:
      */
     void SetFastGrid2();
 
+    /**
+     * Virtual function SetNextGrid()
+     * changes the grid size settings to the next one available.
+     */
+    void SetNextGrid();
+
+    /**
+     * Virtual function SetPrevGrid()
+     * changes the grid size settings to the previous one available.
+     */
+    void SetPrevGrid();
+
     void ClearSelection();
 
     DECLARE_EVENT_TABLE()

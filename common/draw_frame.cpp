@@ -378,7 +378,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     if( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
     {
-        if( m_gridSelectBox == NULL )   // Should no happen
+        if( m_gridSelectBox == NULL )   // Should not happen
             return;
 
         /*
@@ -404,7 +404,9 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     TOOL_MANAGER* mgr = GetToolManager();
 
     if( mgr && IsGalCanvasActive() )
+    {
         mgr->RunAction( "common.Control.gridPreset", true, idx );
+    }
     else
         SetPresetGrid( idx );
 
@@ -536,47 +538,58 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 void EDA_DRAW_FRAME::SetNextGrid()
 {
     BASE_SCREEN * screen = GetScreen();
-    int grid_cnt = screen->GetGridCount();
 
-    int new_grid_idx = screen->GetGridId() - ID_POPUP_GRID_LEVEL_1000 + 1;
+    int new_grid_cmd = screen->GetGridCmdId();
 
-    if( new_grid_idx >= grid_cnt )
-        new_grid_idx = 0;
+    // if the grid id is the not the last, increment it
+    if( screen->GridExists( new_grid_cmd + 1 ) )
+        new_grid_cmd += 1;
 
-   SetPresetGrid( new_grid_idx );
+   SetPresetGrid( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
 }
 
 
 void EDA_DRAW_FRAME::SetPrevGrid()
 {
     BASE_SCREEN * screen = GetScreen();
-    int grid_cnt = screen->GetGridCount();
 
-    int new_grid_idx = screen->GetGridId() - ID_POPUP_GRID_LEVEL_1000 - 1;
+    int new_grid_cmd = screen->GetGridCmdId();
 
-    if( new_grid_idx < 0 )
-        new_grid_idx = grid_cnt - 1;
+    // if the grid id is the not the first, increment it
+    if( screen->GridExists( new_grid_cmd - 1 ) )
+        new_grid_cmd -= 1;
 
-    SetPresetGrid( new_grid_idx );
+    SetPresetGrid( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
 }
 
 
 void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 {
+    BASE_SCREEN * screen = GetScreen();
+
+    if( ! screen->GridExists( aIndex + ID_POPUP_GRID_LEVEL_1000 ) )
+        aIndex = screen->GetGrids()[0].m_CmdId;
+
+    // aIndex is a Command Id relative to ID_POPUP_GRID_LEVEL_1000 comand id code.
+    // we need an index in grid list (the cmd id in list is is screen->GetGrids()[0].m_CmdId):
+    int glistIdx = aIndex + ID_POPUP_GRID_LEVEL_1000 - screen->GetGrids()[0].m_CmdId;
+
     if( m_gridSelectBox )
     {
-        if( aIndex < 0 || aIndex >= (int) m_gridSelectBox->GetCount() )
+        if( glistIdx < 0 || glistIdx >= (int) m_gridSelectBox->GetCount() )
         {
             wxASSERT_MSG( false, "Invalid grid index" );
             return;
         }
 
-        m_gridSelectBox->SetSelection( aIndex );
+        m_gridSelectBox->SetSelection( glistIdx );
     }
 
     // Be sure m_LastGridSizeId is up to date.
     m_LastGridSizeId = aIndex;
     GetScreen()->SetGrid( aIndex + ID_POPUP_GRID_LEVEL_1000 );
+
+    // Put cursor on new grid
     SetCrossHairPosition( RefPos( true ) );
 }
 
