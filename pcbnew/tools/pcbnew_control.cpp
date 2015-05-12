@@ -390,6 +390,7 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid1();
+    updateGrid();
 
     return 0;
 }
@@ -398,6 +399,7 @@ int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid2();
+    updateGrid();
 
     return 0;
 }
@@ -406,6 +408,7 @@ int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridNext( const TOOL_EVENT& aEvent )
 {
     m_frame->SetNextGrid();
+    updateGrid();
 
     return 0;
 }
@@ -414,6 +417,7 @@ int PCBNEW_CONTROL::GridNext( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::GridPrev( const TOOL_EVENT& aEvent )
 {
     m_frame->SetPrevGrid();
+    updateGrid();
 
     return 0;
 }
@@ -455,11 +459,7 @@ int PCBNEW_CONTROL::GridPreset( const TOOL_EVENT& aEvent )
     long idx = aEvent.Parameter<long>();
 
     m_frame->SetPresetGrid( idx );
-    BASE_SCREEN* screen = m_frame->GetScreen();
-    GRID_TYPE grid = screen->GetGrid( idx );
-
-    getView()->GetGAL()->SetGridSize( VECTOR2D( grid.m_Size ) );
-    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    updateGrid();
 
     return 0;
 }
@@ -576,4 +576,13 @@ void PCBNEW_CONTROL::SetTransitions()
     Go( &PCBNEW_CONTROL::SwitchUnits,        COMMON_ACTIONS::switchUnits.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,           COMMON_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,           COMMON_ACTIONS::toBeDone.MakeEvent() );
+}
+
+
+void PCBNEW_CONTROL::updateGrid()
+{
+    BASE_SCREEN* screen = m_frame->GetScreen();
+    //GRID_TYPE grid = screen->GetGrid( idx );
+    getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
+    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }

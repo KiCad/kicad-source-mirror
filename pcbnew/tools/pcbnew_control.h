@@ -87,6 +87,9 @@ public:
 private:
     ///> Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;
+
+    ///> Applies the legacy canvas grid settings for GAL.
+    void updateGrid();
 };
 
 #endif
