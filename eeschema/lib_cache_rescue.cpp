@@ -338,6 +338,16 @@ bool SCH_EDIT_FRAME::RescueCacheConflicts( bool aRunningOnDemand )
     wxFileName library_fn;
     std::auto_ptr<PART_LIB> rescue_lib( create_rescue_library( library_fn ) );
     rescue_components( candidates, rescue_lib.get(), part_name_suffix );
+
+    // If no components were rescued, let the user know what's going on. He might
+    // have clicked cancel by mistake, and should have some indication of that.
+    if( candidates.empty() )
+    {
+        wxMessageDialog dlg( this, _( "No cached symbols were rescued." ) );
+        dlg.ShowModal();
+        return true;
+    }
+
     if( !save_library( library_fn.GetFullPath(), rescue_lib.get(), this ) )
     {
         // Save failed. Do not update the components.
@@ -348,36 +358,27 @@ bool SCH_EDIT_FRAME::RescueCacheConflicts( bool aRunningOnDemand )
     std::vector<RESCUE_LOG> rescue_log;
     update_components( components, candidates, part_name_suffix, rescue_log );
 
-    if( rescue_log.empty() )
+    wxASSERT( !rescue_log.empty() );
+
+    // Try inserting the library into the project
+    if( insert_library( prj, rescue_lib.get(), 0 ) )
     {
-        wxMessageDialog dlg( this, _( "No cached symbols were rescued." ) );
-        dlg.ShowModal();
+        // Clean up wire ends
+        INSTALL_UNBUFFERED_DC( dc, m_canvas );
+        GetScreen()->SchematicCleanUp( NULL, &dc );
+        m_canvas->Refresh( true );
+        OnModify();
+
         return true;
     }
     else
     {
-        // Try inserting the library into the project
-        if( insert_library( prj, rescue_lib.get(), 0 ) )
+        // Unsuccessful! Restore all the components
+        BOOST_FOREACH( RESCUE_LOG& rescue_log_item, rescue_log )
         {
-            InvokeDialogRescueSummary( this, rescue_log );
-
-            // Clean up wire ends
-            INSTALL_UNBUFFERED_DC( dc, m_canvas );
-            GetScreen()->SchematicCleanUp( NULL, &dc );
-            m_canvas->Refresh( true );
-            OnModify();
-
-            return true;
+            rescue_log_item.component->SetPartName( rescue_log_item.old_name );
         }
-        else
-        {
-            // Unsuccessful! Restore all the components
-            BOOST_FOREACH( RESCUE_LOG& rescue_log_item, rescue_log )
-            {
-                rescue_log_item.component->SetPartName( rescue_log_item.old_name );
-            }
-            wxMessageDialog dlg( this, _( "An error occurred while attempting to rescue components. No changes have been made." ) );
-            return false;
-        }
+        wxMessageDialog dlg( this, _( "An error occurred while attempting to rescue components. No changes have been made." ) );
+        return false;
     }
 }

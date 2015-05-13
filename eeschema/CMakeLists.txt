@@ -65,8 +65,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_rescue_each.cpp
     dialogs/dialog_rescue_each_base.cpp
-    dialogs/dialog_rescue_summary.cpp
-    dialogs/dialog_rescue_summary_base.cpp
     dialogs/dialog_sch_edit_sheet_pin.cpp
     dialogs/dialog_sch_edit_sheet_pin_base.cpp
     dialogs/dialog_sch_sheet_props.cpp

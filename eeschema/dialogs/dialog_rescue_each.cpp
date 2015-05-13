@@ -87,6 +87,20 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, std::vector<RES
 {
     m_Config = Kiface().KifaceSettings();
     m_stdButtonsOK->SetDefault();
+
+    // Set the info message, customized to include the proper suffix.
+    wxString info_message;
+    info_message.Printf(
+        _( "This project uses symbols that no longer match the ones in the system libraries.\n"
+           "Using this tool, you can rescue these cached symbols into a new library.\n"
+           "\n"
+           "Choose \"Rescue\" for any parts you would like to save from this project's cache,\n"
+           "or press \"Cancel\" to allow the symbols to be updated to the new versions.\n"
+           "\n"
+           "All rescued components will be renamed with a new suffix of \"-RESCUE-%s\"\n"
+           "to avoid naming conflicts." ),
+        Prj().GetProjectName() );
+    m_lblInfo->SetLabel( info_message );
 }
 
 

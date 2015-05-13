@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,7 +16,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
-	m_lblInfo = new wxStaticText( this, wxID_ANY, _("This project uses symbols that no longer match the symbols in the system libraries.\nUsing this tool, you can rescue these cached symbols into a new library.\n\nChoose \"Rescue\" for any parts you would like to save from this project's cache, or press Cancel to allow the symbols to be updated to the new versions."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblInfo = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblInfo->Wrap( 500 );
 	bSizerMain->Add( m_lblInfo, 0, wxALL|wxEXPAND, 5 );
 	

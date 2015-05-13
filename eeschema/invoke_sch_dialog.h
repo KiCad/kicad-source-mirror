@@ -56,14 +56,6 @@ class RESCUE_LOG;
 class SCH_EDIT_FRAME;
 
 /**
- * Function InvokeDialogRescueSummary
- * This dialog displays a summary of component rescues.
- * @param aCaller - the SCH_EDIT_FRAME calling this
- * @param aRescueLog - a list of RESCUE_LOG items to show
- */
-int InvokeDialogRescueSummary( SCH_EDIT_FRAME* aCaller, std::vector<RESCUE_LOG>& aRescueLog );
-
-/**
  * Function InvokeDialogRescueEach
  * This dialog asks the user which rescuable, cached parts he wants to rescue.
  * Any rejects will be pruned from aCandidates.
