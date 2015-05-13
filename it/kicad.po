@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-12 15:10+0100\n"
-"PO-Revision-Date: 2015-05-12 15:10+0100\n"
+"POT-Creation-Date: 2015-05-13 22:59+0100\n"
+"PO-Revision-Date: 2015-05-13 22:59+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -451,7 +451,7 @@ msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
 #: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:995 pcbnew/moduleframe.cpp:783
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1252 cvpcb/cvframe.cpp:762
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1250 cvpcb/cvframe.cpp:762
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -692,7 +692,7 @@ msgstr "Rif."
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: eeschema/template_fieldnames.cpp:42 eeschema/onrightclick.cpp:422
 #: eeschema/sch_component.cpp:1511 eeschema/lib_field.cpp:579
-#: eeschema/lib_field.cpp:757 eeschema/dialogs/dialog_rescue_each.cpp:106
+#: eeschema/lib_field.cpp:757 eeschema/dialogs/dialog_rescue_each.cpp:120
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:184
 #: eeschema/dialogs/dialog_color_config.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
@@ -834,7 +834,7 @@ msgstr "Testo \"%s\" su %s di %s"
 msgid "Visibles"
 msgstr "Visibili"
 
-#: pcbnew/pcbframe.cpp:582 eeschema/schframe.cpp:597
+#: pcbnew/pcbframe.cpp:582 eeschema/schframe.cpp:595
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -851,7 +851,7 @@ msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
 #: pcbnew/pcbframe.cpp:655 pcbnew/hotkeys.cpp:175 pcbnew/moduleframe.cpp:711
-#: cvpcb/class_DisplayFootprintsFrame.cpp:402
+#: cvpcb/class_DisplayFootprintsFrame.cpp:401
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
 
@@ -1331,7 +1331,7 @@ msgstr "Parametro"
 #: pcbnew/footprint_wizard_frame.cpp:148
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:35
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:28
-#: pcbnew/dialogs/dialog_set_grid_base.cpp:27 common/draw_frame.cpp:487
+#: pcbnew/dialogs/dialog_set_grid_base.cpp:27 common/draw_frame.cpp:489
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:33
 msgid "Units"
 msgstr "Unità"
@@ -3098,7 +3098,7 @@ msgid "Couldn't reload footprint wizard"
 msgstr "Impossibile ricaricare l'assistente impronte"
 
 #: pcbnew/modedit.cpp:130 pcbnew/controle.cpp:231
-#: pagelayout_editor/pl_editor_frame.cpp:748
+#: pagelayout_editor/pl_editor_frame.cpp:747
 msgid "Selection Clarification"
 msgstr "Specifica selezione"
 
@@ -3282,27 +3282,27 @@ msgid "Enable design rule checking"
 msgstr "Abilita controllo regole"
 
 #: pcbnew/tool_pcb.cpp:332 pcbnew/tool_modedit.cpp:208
-#: common/draw_frame.cpp:325 cvpcb/class_DisplayFootprintsFrame.cpp:177
+#: common/draw_frame.cpp:325 cvpcb/class_DisplayFootprintsFrame.cpp:176
 msgid "Hide grid"
 msgstr "Nascondi griglia"
 
 #: pcbnew/tool_pcb.cpp:335 pcbnew/basepcbframe.cpp:464
-#: cvpcb/class_DisplayFootprintsFrame.cpp:181
+#: cvpcb/class_DisplayFootprintsFrame.cpp:180
 msgid "Display polar coordinates"
 msgstr "Mostra coordinate polari"
 
 #: pcbnew/tool_pcb.cpp:338 pcbnew/tool_modedit.cpp:216
-#: eeschema/tool_lib.cpp:232 cvpcb/class_DisplayFootprintsFrame.cpp:185
+#: eeschema/tool_lib.cpp:232 cvpcb/class_DisplayFootprintsFrame.cpp:184
 msgid "Units in inches"
 msgstr "Unità in pollici"
 
 #: pcbnew/tool_pcb.cpp:341 pcbnew/tool_modedit.cpp:220
-#: eeschema/tool_lib.cpp:236 cvpcb/class_DisplayFootprintsFrame.cpp:189
+#: eeschema/tool_lib.cpp:236 cvpcb/class_DisplayFootprintsFrame.cpp:188
 msgid "Units in millimeters"
 msgstr "Unità in millimetri"
 
 #: pcbnew/tool_pcb.cpp:344 eeschema/tool_lib.cpp:240 eeschema/tool_sch.cpp:299
-#: cvpcb/class_DisplayFootprintsFrame.cpp:193 gerbview/toolbars_gerber.cpp:167
+#: cvpcb/class_DisplayFootprintsFrame.cpp:192 gerbview/toolbars_gerber.cpp:167
 msgid "Change cursor shape"
 msgstr "Cambia dimensione puntatore"
 
@@ -3331,7 +3331,7 @@ msgid "Show outlines of filled areas only in zones"
 msgstr "Mostra contorni e isolamento dei riempimenti nelle zone"
 
 #: pcbnew/tool_pcb.cpp:374 pcbnew/basepcbframe.cpp:474
-#: cvpcb/class_DisplayFootprintsFrame.cpp:198
+#: cvpcb/class_DisplayFootprintsFrame.cpp:197
 msgid "Show pads in outline mode"
 msgstr "Mostra contorni piazzole"
 
@@ -4124,22 +4124,22 @@ msgstr "La cancellazione globale di uno strato in rame non è consentita!"
 msgid "Delete everything on layer %s?"
 msgstr "Cancellare tutti gli elementi dello strato %s?"
 
-#: pcbnew/hotkeys_board_editor.cpp:62
+#: pcbnew/hotkeys_board_editor.cpp:63
 #, c-format
 msgid "Recording macro %d"
 msgstr "Registrazione macro %d"
 
-#: pcbnew/hotkeys_board_editor.cpp:69
+#: pcbnew/hotkeys_board_editor.cpp:70
 #, c-format
 msgid "Macro %d recorded"
 msgstr "Macro %d registrata"
 
-#: pcbnew/hotkeys_board_editor.cpp:81
+#: pcbnew/hotkeys_board_editor.cpp:82
 #, c-format
 msgid "Call macro %d"
 msgstr "Richiama macro %d"
 
-#: pcbnew/hotkeys_board_editor.cpp:159
+#: pcbnew/hotkeys_board_editor.cpp:160
 #, c-format
 msgid "Add key [%c] in macro %d"
 msgstr "Aggiungere la chiave [%c] nella macro %d"
@@ -4973,7 +4973,7 @@ msgstr "Aggiungi proibita"
 msgid "Adjust zero"
 msgstr "Regola zero"
 
-#: pcbnew/edit.cpp:1466 pcbnew/tools/pcbnew_control.cpp:425
+#: pcbnew/edit.cpp:1466 pcbnew/tools/pcbnew_control.cpp:429
 msgid "Adjust grid origin"
 msgstr "Imposta origine griglia"
 
@@ -6500,7 +6500,7 @@ msgid "Save GenCAD Board File"
 msgstr "Salva file scheda GenCAD"
 
 #: pcbnew/exporters/export_gencad.cpp:267 pcbnew/dialogs/dialog_plot.cpp:815
-#: pagelayout_editor/pl_editor_frame.cpp:256 pagelayout_editor/files.cpp:194
+#: pagelayout_editor/pl_editor_frame.cpp:255 pagelayout_editor/files.cpp:194
 #, c-format
 msgid "Unable to create <%s>"
 msgstr "Impossibile creare \"%s\""
@@ -8381,13 +8381,13 @@ msgstr "0"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:83
 #: pcbnew/dialogs/dialog_create_array_base.cpp:191
 #: pcbnew/dialogs/dialog_create_array_base.cpp:202
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:61 common/draw_frame.cpp:483
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:61 common/draw_frame.cpp:485
 #: common/common.cpp:144 common/common.cpp:202
 #: common/dialogs/dialog_page_settings.cpp:458
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 #: pcb_calculator/UnitSelector.cpp:38
-#: pagelayout_editor/pl_editor_frame.cpp:468
+#: pagelayout_editor/pl_editor_frame.cpp:467
 msgid "mm"
 msgstr "mm"
 
@@ -8573,7 +8573,7 @@ msgstr "Anteprima di stampa"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: eeschema/template_fieldnames.cpp:39 eeschema/onrightclick.cpp:427
 #: eeschema/sch_component.cpp:1507 eeschema/lib_field.cpp:572
-#: eeschema/dialogs/dialog_rescue_each.cpp:105
+#: eeschema/dialogs/dialog_rescue_each.cpp:119
 #: eeschema/dialogs/dialog_color_config.cpp:78
 msgid "Reference"
 msgstr "Riferimento"
@@ -8806,9 +8806,9 @@ msgstr "Millimetri"
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:25
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:79
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:91 common/draw_frame.cpp:163
-#: common/draw_frame.cpp:479
+#: common/draw_frame.cpp:481
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
-#: pagelayout_editor/pl_editor_frame.cpp:118
+#: pagelayout_editor/pl_editor_frame.cpp:117
 msgid "Inches"
 msgstr "Pollici"
 
@@ -11298,7 +11298,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:236
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:302
-#: pagelayout_editor/pl_editor_frame.cpp:140
+#: pagelayout_editor/pl_editor_frame.cpp:139
 msgid "Properties"
 msgstr "Proprietà "
 
@@ -13393,7 +13393,7 @@ msgid "\""
 msgstr "\""
 
 #: common/common.cpp:171 common/dialogs/dialog_page_settings.cpp:458
-#: pagelayout_editor/pl_editor_frame.cpp:464
+#: pagelayout_editor/pl_editor_frame.cpp:463
 msgid "inches"
 msgstr "pollici"
 
@@ -15788,11 +15788,11 @@ msgstr "Punto di connessione gerarchico %s"
 msgid "There are no conflicting symbols to rescue from the cache."
 msgstr "Non ci sono simboli in conflitto da recuperare dalla cache."
 
-#: eeschema/lib_cache_rescue.cpp:353
+#: eeschema/lib_cache_rescue.cpp:346
 msgid "No cached symbols were rescued."
 msgstr "Nessun simbolo in cache è stato recuperato."
 
-#: eeschema/lib_cache_rescue.cpp:379
+#: eeschema/lib_cache_rescue.cpp:381
 msgid ""
 "An error occurred while attempting to rescue components. No changes have "
 "been made."
@@ -16428,7 +16428,7 @@ msgstr "Unità in pollici"
 msgid "Set unit to mm"
 msgstr "Unità in millimetri"
 
-#: eeschema/tool_sch.cpp:304 eeschema/schframe.cpp:755
+#: eeschema/tool_sch.cpp:304 eeschema/schframe.cpp:753
 msgid "Show hidden pins"
 msgstr "Mostra piedini nascosti"
 
@@ -16511,18 +16511,18 @@ msgid "Electronics Rule Check Error"
 msgstr "Errore controllo regole elettroniche"
 
 #: eeschema/edit_bitmap.cpp:103 bitmap2component/bitmap2cmp_gui.cpp:271
-#: pagelayout_editor/pl_editor_frame.cpp:636
+#: pagelayout_editor/pl_editor_frame.cpp:635
 msgid "Choose Image"
 msgstr "Scegli immagine"
 
 #: eeschema/edit_bitmap.cpp:104 bitmap2component/bitmap2cmp_gui.cpp:272
-#: pagelayout_editor/pl_editor_frame.cpp:637
+#: pagelayout_editor/pl_editor_frame.cpp:636
 msgid "Image Files "
 msgstr "File immagine"
 
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
-#: pagelayout_editor/pl_editor_frame.cpp:647
-#: pagelayout_editor/pl_editor_frame.cpp:654
+#: pagelayout_editor/pl_editor_frame.cpp:646
+#: pagelayout_editor/pl_editor_frame.cpp:653
 #, c-format
 msgid "Couldn't load image from <%s>"
 msgstr "Impossibile caricare immagine da <%s>"
@@ -16628,40 +16628,40 @@ msgstr "Centro cerchio (%s, %s), raggio %s"
 msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
-#: eeschema/schframe.cpp:744
+#: eeschema/schframe.cpp:742
 msgid "Draw wires and buses in any direction"
 msgstr "Disegna fili e bus in ogni direzione"
 
-#: eeschema/schframe.cpp:745
+#: eeschema/schframe.cpp:743
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 
-#: eeschema/schframe.cpp:754
+#: eeschema/schframe.cpp:752
 msgid "Do not show hidden pins"
 msgstr "Non mostrare i piedini nascosti"
 
-#: eeschema/schframe.cpp:859
+#: eeschema/schframe.cpp:857
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/schframe.cpp:878
+#: eeschema/schframe.cpp:876
 msgid "New Schematic"
 msgstr "Nuovo schema"
 
-#: eeschema/schframe.cpp:891
+#: eeschema/schframe.cpp:889
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
-#: eeschema/schframe.cpp:911
+#: eeschema/schframe.cpp:909
 msgid "Open Schematic"
 msgstr "Apri schema"
 
-#: eeschema/schframe.cpp:1029
+#: eeschema/schframe.cpp:1027
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1255
+#: eeschema/schframe.cpp:1253
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -16963,25 +16963,6 @@ msgstr ""
 "\n"
 "Eliminare tutti gli alias in conflitto da questo componente?"
 
-#: eeschema/dialogs/dialog_rescue_each_base.cpp:19
-msgid ""
-"This project uses symbols that no longer match the symbols in the system "
-"libraries.\n"
-"Using this tool, you can rescue these cached symbols into a new library.\n"
-"\n"
-"Choose \"Rescue\" for any parts you would like to save from this project's "
-"cache, or press Cancel to allow the symbols to be updated to the new "
-"versions."
-msgstr ""
-"Questo progetto usa simboli che non corrispondono più ai simboli presenti "
-"nelle librerie di sistema.\n"
-"Usando questo strumento, è possibile recuperare questi simboli dalla cache e "
-"inserirli in una nuova libreria.\n"
-"\n"
-"Selezionare \"Recupera\" per ogni elemento che si desidera salvare dalla "
-"cache del progetto, o premere Annulla per permettere l'aggiornamento dei "
-"simboli alle nuove versioni."
-
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:23
 msgid "Symbols with cache/library conflicts:"
 msgstr "Simboli con conflitti cache/libreria:"
@@ -17088,15 +17069,43 @@ msgstr "In stampa"
 msgid "Print page %d"
 msgstr "Stampa pagina %d "
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:103
+#: eeschema/dialogs/dialog_rescue_each.cpp:94
+#, c-format
+msgid ""
+"This project uses symbols that no longer match the ones in the system "
+"libraries.\n"
+"Using this tool, you can rescue these cached symbols into a new library.\n"
+"\n"
+"Choose \"Rescue\" for any parts you would like to save from this project's "
+"cache,\n"
+"or press \"Cancel\" to allow the symbols to be updated to the new versions.\n"
+"\n"
+"All rescued components will be renamed with a new suffix of \"-RESCUE-%s\"\n"
+"to avoid naming conflicts."
+msgstr ""
+"Questo progetto usa simboli che non corrispondono più ai simboli presenti "
+"nelle librerie di sistema.\n"
+"Usando questo strumento, è possibile recuperare questi simboli dalla cache e "
+"inserirli in una nuova libreria.\n"
+"\n"
+"Selezionare \"Recupera\" per ogni elemento che si desidera salvare dalla "
+"cache del progetto,\n"
+"o premere \"Annulla\" per permettere l'aggiornamento dei simboli alle nuove "
+"versioni.\n"
+"\n"
+"Tutti i componenti recuperati verranno rinominati con il nuovo suffisso di "
+"\"-RESCUE-%s\"\n"
+"per evitare i conflitti di nomi."
+
+#: eeschema/dialogs/dialog_rescue_each.cpp:117
 msgid "Rescue symbol"
 msgstr "Recupera simbolo"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:104
+#: eeschema/dialogs/dialog_rescue_each.cpp:118
 msgid "Symbol name"
 msgstr "Nome simbolo"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:278
+#: eeschema/dialogs/dialog_rescue_each.cpp:292
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -17111,7 +17120,7 @@ msgstr ""
 "componenti\",\n"
 "e lo strumento può essere attivato manualmente dal menu \"Strumenti\"."
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:282
+#: eeschema/dialogs/dialog_rescue_each.cpp:296
 msgid "Rescue Components"
 msgstr "Recupera componenti"
 
@@ -17687,10 +17696,6 @@ msgstr ""
 "\n"
 "L'operazione sovrasciverà l'annotazione esistente e non potrà essere "
 "annulata."
-
-#: eeschema/dialogs/dialog_rescue_summary_base.cpp:22
-msgid "The symbols of the following components were changed:"
-msgstr "I simboli dei seguenti componenti sono cambiati:"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:40
 msgid "ERC Report:"
@@ -19133,66 +19138,66 @@ msgstr "Avvertenza CvPcb"
 msgid "Footprint Viewer"
 msgstr "Visualizzatore impronte"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:202
+#: cvpcb/class_DisplayFootprintsFrame.cpp:201
 msgid "Show texts in line mode"
 msgstr "Mostra testo in modalità linea"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:206
+#: cvpcb/class_DisplayFootprintsFrame.cpp:205
 msgid "Show outlines in line mode"
 msgstr "Mostra contorni in modalità linea"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:221
+#: cvpcb/class_DisplayFootprintsFrame.cpp:220
 #: pcbnew/dialogs/dialog_display_options_base.h:72
 msgid "Display options"
 msgstr "Opzioni schermo"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:226
+#: cvpcb/class_DisplayFootprintsFrame.cpp:225
 msgid "Zoom in (F1)"
 msgstr "Ingrandisci (F1)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:229
+#: cvpcb/class_DisplayFootprintsFrame.cpp:228
 msgid "Zoom out (F2)"
 msgstr "Rimpicciolisci (F2)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:232
+#: cvpcb/class_DisplayFootprintsFrame.cpp:231
 msgid "Redraw view (F3)"
 msgstr "Aggiorna vista (F3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:235
+#: cvpcb/class_DisplayFootprintsFrame.cpp:234
 msgid "Zoom auto (Home)"
 msgstr "Inquadra tutto (Home)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:239
+#: cvpcb/class_DisplayFootprintsFrame.cpp:238
 msgid "3D Display (Alt+3)"
 msgstr "Schermo 3D (Alt+3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:251
+#: cvpcb/class_DisplayFootprintsFrame.cpp:250
 msgid "Show texts in filled mode"
 msgstr "Mostra testo in modalità piena"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:252
+#: cvpcb/class_DisplayFootprintsFrame.cpp:251
 msgid "Show texts in sketch mode"
 msgstr "Mostra testo in modalità schizzo"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:266
+#: cvpcb/class_DisplayFootprintsFrame.cpp:265
 msgid "Show outlines in filled mode"
 msgstr "Mostra contorni in modalità piena"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:267
+#: cvpcb/class_DisplayFootprintsFrame.cpp:266
 msgid "Show outlines in sketch mode"
 msgstr "Mostra contorni in modalità schizzo"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:473
+#: cvpcb/class_DisplayFootprintsFrame.cpp:472
 #, c-format
 msgid "Footprint '%s' not found"
 msgstr "Impronta \"%s\" non trovata"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:489
+#: cvpcb/class_DisplayFootprintsFrame.cpp:488
 #, c-format
 msgid "Footprint: %s"
 msgstr "Impronta: %s"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:501
+#: cvpcb/class_DisplayFootprintsFrame.cpp:500
 #, c-format
 msgid "Lib: %s"
 msgstr "Lib: %s"
@@ -21646,24 +21651,24 @@ msgstr "Piedino di rilevamento separato"
 msgid "3 terminals regulator"
 msgstr "Regolatore a tre terminali"
 
-#: pagelayout_editor/pl_editor_frame.cpp:115
+#: pagelayout_editor/pl_editor_frame.cpp:114
 msgid "coord origin: Right Bottom page corner"
 msgstr "origine coordinate: angolo basso a dx pagina"
 
-#: pagelayout_editor/pl_editor_frame.cpp:147
+#: pagelayout_editor/pl_editor_frame.cpp:146
 msgid "Design"
 msgstr "Progetto"
 
-#: pagelayout_editor/pl_editor_frame.cpp:201
+#: pagelayout_editor/pl_editor_frame.cpp:200
 #, c-format
 msgid "Error when loading file '%s'"
 msgstr "Errore nel caricare il file \"%s\""
 
-#: pagelayout_editor/pl_editor_frame.cpp:223
+#: pagelayout_editor/pl_editor_frame.cpp:222
 msgid "Save changes in a new file before closing?"
 msgstr "Salvare le modifiche in un nuovo file prima di chiudere?"
 
-#: pagelayout_editor/pl_editor_frame.cpp:225
+#: pagelayout_editor/pl_editor_frame.cpp:224
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -21674,29 +21679,29 @@ msgstr ""
 "<%s>\n"
 "prima di chiudere?"
 
-#: pagelayout_editor/pl_editor_frame.cpp:244 pagelayout_editor/files.cpp:175
+#: pagelayout_editor/pl_editor_frame.cpp:243 pagelayout_editor/files.cpp:175
 msgid "Create file"
 msgstr "Crea file"
 
-#: pagelayout_editor/pl_editor_frame.cpp:457
+#: pagelayout_editor/pl_editor_frame.cpp:456
 #, c-format
 msgid "Page size: width %.4g height %.4g"
 msgstr "Dim. pagina: larg. %.4g alt. %.4g"
 
-#: pagelayout_editor/pl_editor_frame.cpp:502
+#: pagelayout_editor/pl_editor_frame.cpp:501
 #, c-format
 msgid "coord origin: %s"
 msgstr "origine coord.: %s"
 
-#: pagelayout_editor/pl_editor_frame.cpp:732
+#: pagelayout_editor/pl_editor_frame.cpp:731
 msgid "(start or end point)"
 msgstr "(punto iniziale o finale)"
 
-#: pagelayout_editor/pl_editor_frame.cpp:736
+#: pagelayout_editor/pl_editor_frame.cpp:735
 msgid "(start point)"
 msgstr "(punto iniziale)"
 
-#: pagelayout_editor/pl_editor_frame.cpp:739
+#: pagelayout_editor/pl_editor_frame.cpp:738
 msgid "(end point)"
 msgstr "(punto finale)"
 
@@ -22533,10 +22538,6 @@ msgstr "Proprietà grafica"
 msgid "Plugins:"
 msgstr "Plugins:"
 
-#: eeschema/dialogs/dialog_rescue_summary_base.h:46
-msgid "Summary of Library Rescue"
-msgstr "Riassunto del recupero libreria"
-
 #: cvpcb/common_help_msg.h:28
 msgid "Open netlist file"
 msgstr "Apri Lista componenti "
@@ -22581,3 +22582,9 @@ msgstr "Parametri regolatore"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nuovo elemento"
+
+#~ msgid "The symbols of the following components were changed:"
+#~ msgstr "I simboli dei seguenti componenti sono cambiati:"
+
+#~ msgid "Summary of Library Rescue"
+#~ msgstr "Riassunto del recupero libreria"
