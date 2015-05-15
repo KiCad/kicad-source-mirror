@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-13 22:59+0100\n"
-"PO-Revision-Date: 2015-05-13 22:59+0100\n"
+"POT-Creation-Date: 2015-05-15 16:25+0100\n"
+"PO-Revision-Date: 2015-05-15 16:26+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -717,7 +717,7 @@ msgid "Footprint"
 msgstr "Impronta"
 
 #: pcbnew/class_text_mod.cpp:390 pcbnew/class_marker_pcb.cpp:97
-#: pcbnew/class_zone.cpp:607 pcbnew/class_track.cpp:1132
+#: pcbnew/class_zone.cpp:615 pcbnew/class_track.cpp:1132
 #: pcbnew/class_track.cpp:1159 pcbnew/class_track.cpp:1208
 #: pcbnew/class_drawsegment.cpp:368 pcbnew/dialogs/dialog_layers_setup.cpp:346
 #: eeschema/sch_text.cpp:788 eeschema/libedit.cpp:507
@@ -754,7 +754,7 @@ msgid "Display"
 msgstr "Mostra"
 
 #: pcbnew/class_text_mod.cpp:400 pcbnew/class_pcb_layer_widget.cpp:242
-#: pcbnew/class_zone.cpp:653 pcbnew/layer_widget.cpp:545
+#: pcbnew/class_zone.cpp:661 pcbnew/layer_widget.cpp:545
 #: pcbnew/class_track.cpp:1142 pcbnew/class_track.cpp:1169
 #: pcbnew/class_drawsegment.cpp:410 pcbnew/class_module.cpp:568
 #: pcbnew/class_pcb_text.cpp:130 pcbnew/class_pad.cpp:643
@@ -2508,7 +2508,7 @@ msgstr "Impossibile creare il file \"%s\""
 msgid "Filling zone %d out of %d (net %s)..."
 msgstr "Riempimento zona %d fuori di %d (collegamento %s)..."
 
-#: pcbnew/zones_by_polygon_fill_functions.cpp:111 pcbnew/class_zone.cpp:638
+#: pcbnew/zones_by_polygon_fill_functions.cpp:111 pcbnew/class_zone.cpp:646
 #: pcbnew/class_track.cpp:1081
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 msgid "NetName"
@@ -3007,84 +3007,84 @@ msgstr "Denominazione"
 msgid "Description"
 msgstr "Descrizione"
 
-#: pcbnew/class_zone.cpp:598
+#: pcbnew/class_zone.cpp:606
 msgid "Zone Outline"
 msgstr "Contorno zona"
 
-#: pcbnew/class_zone.cpp:605 pcbnew/class_zone.cpp:858
+#: pcbnew/class_zone.cpp:613 pcbnew/class_zone.cpp:866
 msgid "(Cutout)"
 msgstr "(Ritaglia)"
 
-#: pcbnew/class_zone.cpp:614
+#: pcbnew/class_zone.cpp:622
 msgid "No via"
 msgstr "Nessun Via"
 
-#: pcbnew/class_zone.cpp:617
+#: pcbnew/class_zone.cpp:625
 msgid "No track"
 msgstr "Nessuna pista"
 
-#: pcbnew/class_zone.cpp:620
+#: pcbnew/class_zone.cpp:628
 msgid "No copper pour"
 msgstr "Escluso rame"
 
-#: pcbnew/class_zone.cpp:622
+#: pcbnew/class_zone.cpp:630
 msgid "Keepout"
 msgstr "Proibita"
 
-#: pcbnew/class_zone.cpp:633
+#: pcbnew/class_zone.cpp:641
 msgid "<unknown>"
 msgstr "<sconosciuto>"
 
-#: pcbnew/class_zone.cpp:642 pcbnew/class_track.cpp:1085
+#: pcbnew/class_zone.cpp:650 pcbnew/class_track.cpp:1085
 msgid "NetCode"
 msgstr "Codice collegamento"
 
-#: pcbnew/class_zone.cpp:646
+#: pcbnew/class_zone.cpp:654
 msgid "Priority"
 msgstr "Priorità"
 
-#: pcbnew/class_zone.cpp:650
+#: pcbnew/class_zone.cpp:658
 msgid "Non Copper Zone"
 msgstr "Zona non in rame"
 
-#: pcbnew/class_zone.cpp:656
+#: pcbnew/class_zone.cpp:664
 msgid "Corners"
 msgstr "Angoli"
 
-#: pcbnew/class_zone.cpp:659
+#: pcbnew/class_zone.cpp:667
 msgid "Segments"
 msgstr "Segmenti"
 
-#: pcbnew/class_zone.cpp:661
+#: pcbnew/class_zone.cpp:669
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
 msgid "Polygons"
 msgstr "Poligoni"
 
-#: pcbnew/class_zone.cpp:663
+#: pcbnew/class_zone.cpp:671
 msgid "Fill Mode"
 msgstr "Modalità piena"
 
-#: pcbnew/class_zone.cpp:667
+#: pcbnew/class_zone.cpp:675
 msgid "Hatch Lines"
 msgstr "Linee tratteggiate"
 
-#: pcbnew/class_zone.cpp:672
+#: pcbnew/class_zone.cpp:680
 msgid "Corner Count"
 msgstr "Conteggio fori"
 
-#: pcbnew/class_zone.cpp:861
+#: pcbnew/class_zone.cpp:869
 msgid "(Keepout)"
 msgstr "(Proibita)"
 
-#: pcbnew/class_zone.cpp:881
+#: pcbnew/class_zone.cpp:889
 msgid "** NO BOARD DEFINED **"
 msgstr "** Nessuna scheda definita **"
 
-#: pcbnew/class_zone.cpp:888 eeschema/schframe.cpp:170
+#: pcbnew/class_zone.cpp:896 eeschema/schframe.cpp:170
 msgid "Not Found"
 msgstr "Non trovato"
 
-#: pcbnew/class_zone.cpp:893
+#: pcbnew/class_zone.cpp:901
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Contorno zona %s su %s"
@@ -4061,7 +4061,7 @@ msgstr "Percorso netlist"
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83 common/eda_text.cpp:376
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83 common/eda_text.cpp:377
 #: eeschema/onrightclick.cpp:380 eeschema/sch_text.cpp:761
 #: eeschema/libedit.cpp:498
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
@@ -5047,7 +5047,7 @@ msgstr "Imposta larghezza"
 msgid ""
 "The duplicated zone is on the same layer as the initial zone, which has no "
 "sense.\n"
-"Please, chose an other layer for the new zone"
+"Please, choose an other layer for the new zone"
 msgstr ""
 "La zona duplicata è sullo stesso strato della zona iniziale, e ciò non ha "
 "senso.\n"
@@ -6529,8 +6529,8 @@ msgstr ""
 "Esportazione VRML fallita:\n"
 "Impossibile aggiungere fori ai contorni."
 
-#: pcbnew/exporters/export_vrml.cpp:1435 pcbnew/exporters/export_idf.cpp:571
-#: pcbnew/exporters/export_idf.cpp:580 pcbnew/exporters/export_idf.cpp:588
+#: pcbnew/exporters/export_vrml.cpp:1435 pcbnew/exporters/export_idf.cpp:576
+#: pcbnew/exporters/export_idf.cpp:585 pcbnew/exporters/export_idf.cpp:593
 msgid "IDF Export Failed:\n"
 msgstr "Esportazione IDF fallita:\n"
 
@@ -8301,7 +8301,7 @@ msgstr "Scostamento Y"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100
-#: common/eda_text.cpp:377 eeschema/sch_text.cpp:761
+#: common/eda_text.cpp:378 eeschema/sch_text.cpp:761
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
@@ -12454,37 +12454,37 @@ msgstr ""
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Dimensione extra via %d</b>%s &gt; <b>1 pollice!</b><br>"
 
-#: pcbnew/router/pns_meander_placer.cpp:64
-#: pcbnew/router/pns_dp_meander_placer.cpp:73
+#: pcbnew/router/pns_meander_placer.cpp:69
+#: pcbnew/router/pns_dp_meander_placer.cpp:78
 msgid "Please select a track whose length you want to tune."
 msgstr "Selezionare una pista di cui si vuole regolare la lunghezza."
 
-#: pcbnew/router/pns_meander_placer.cpp:249
-#: pcbnew/router/pns_dp_meander_placer.cpp:436
+#: pcbnew/router/pns_meander_placer.cpp:254
+#: pcbnew/router/pns_dp_meander_placer.cpp:441
 msgid "Too long: "
 msgstr "Troppo lunga: "
 
-#: pcbnew/router/pns_meander_placer.cpp:252
-#: pcbnew/router/pns_dp_meander_placer.cpp:439
+#: pcbnew/router/pns_meander_placer.cpp:257
+#: pcbnew/router/pns_dp_meander_placer.cpp:444
 msgid "Too short: "
 msgstr "Troppo corta: "
 
-#: pcbnew/router/pns_meander_placer.cpp:255
-#: pcbnew/router/pns_dp_meander_placer.cpp:442
+#: pcbnew/router/pns_meander_placer.cpp:260
+#: pcbnew/router/pns_dp_meander_placer.cpp:447
 msgid "Tuned: "
 msgstr "Regolata: "
 
-#: pcbnew/router/pns_meander_placer.cpp:258
-#: pcbnew/router/pns_meander_skew_placer.cpp:151
-#: pcbnew/router/pns_dp_meander_placer.cpp:445
+#: pcbnew/router/pns_meander_placer.cpp:263
+#: pcbnew/router/pns_meander_skew_placer.cpp:153
+#: pcbnew/router/pns_dp_meander_placer.cpp:450
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:53
+#: pcbnew/router/pns_meander_skew_placer.cpp:55
 msgid "Please select a differential pair trace you want to tune."
 msgstr "Selezionare una coppia differenziale di piste che si vuole regolare."
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:73
+#: pcbnew/router/pns_meander_skew_placer.cpp:75
 msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
@@ -12494,15 +12494,15 @@ msgstr ""
 "regolazione dello skew. Assicurarsi che i nomi dei collegamenti appartenenti "
 "ad una coppia differenziale non finiscano con _N/_P o con +/-."
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:142
+#: pcbnew/router/pns_meander_skew_placer.cpp:144
 msgid "Too long: skew "
 msgstr "Troppo lungo: skew "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:145
+#: pcbnew/router/pns_meander_skew_placer.cpp:147
 msgid "Too short: skew "
 msgstr "Troppo corto: skew "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:148
+#: pcbnew/router/pns_meander_skew_placer.cpp:150
 msgid "Tuned: skew "
 msgstr "Regolato: skew "
 
@@ -12722,7 +12722,7 @@ msgstr "Sbroglia pista"
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:90
+#: pcbnew/router/pns_dp_meander_placer.cpp:95
 msgid ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
@@ -13522,7 +13522,7 @@ msgstr "Non in rame"
 msgid "Colors"
 msgstr "Colori"
 
-#: common/eda_text.cpp:378 eeschema/sch_text.cpp:761
+#: common/eda_text.cpp:379 eeschema/sch_text.cpp:761
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
@@ -13531,7 +13531,7 @@ msgstr "Colori"
 msgid "Bold"
 msgstr "Grassetto"
 
-#: common/eda_text.cpp:379
+#: common/eda_text.cpp:380
 msgid "Bold+Italic"
 msgstr "Grassetto+corsivo"
 
@@ -22582,9 +22582,3 @@ msgstr "Parametri regolatore"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nuovo elemento"
-
-#~ msgid "The symbols of the following components were changed:"
-#~ msgstr "I simboli dei seguenti componenti sono cambiati:"
-
-#~ msgid "Summary of Library Rescue"
-#~ msgstr "Riassunto del recupero libreria"
