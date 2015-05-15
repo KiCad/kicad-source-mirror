@@ -45,6 +45,17 @@ PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_ROUTER* aRouter ) :
     m_shove = NULL;
     m_currentNode = NULL;
     m_idle = true;
+
+    // Init temporary variables (do not leave uninitialized members)
+    m_lastNode = NULL;
+    m_placingVia = false;
+    m_currentNet = 0;
+    m_currentLayer = 0;
+    m_currentMode = RM_MarkObstacles;
+    m_startItem = NULL;
+    m_chainedPlacement = false;
+    m_splitSeg = false;
+    m_orthoMode = false;
 }
 
 

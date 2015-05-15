@@ -31,7 +31,6 @@
 #ifndef _CONVERT_FROM_IU_
 #define _CONVERT_FROM_IU_
 
-#include <config.h>
 
 /// Convert from internal units to user units.
 #if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)

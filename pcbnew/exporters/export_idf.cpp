@@ -37,8 +37,13 @@
 #include <3d_struct.h>
 #include <build_version.h>
 
-// assumed default graphical line thickness: 10000 IU == 0.1mm
-#define LINE_WIDTH (100000)
+#ifndef PCBNEW
+#define PCBNEW                  // needed to define the right value of Millimeter2iu(x)
+#endif
+#include <convert_to_biu.h>     // to define Millimeter2iu(x)
+
+// assumed default graphical line thickness: == 0.1mm
+#define LINE_WIDTH (Millimeter2iu( 0.1 ))
 
 /**
  * Function idf_export_outline

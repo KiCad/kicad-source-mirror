@@ -39,7 +39,6 @@
 #include <wx/fileconf.h>
 
 #include <richio.h>
-#include <convert_to_biu.h>
 #include <colors.h>
 
 

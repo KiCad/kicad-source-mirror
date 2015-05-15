@@ -538,12 +538,7 @@ public:
 
     int  GetCornerSmoothingType() const { return m_cornerSmoothingType; };
 
-    void SetCornerRadius( unsigned int aRadius )
-    {
-        m_cornerRadius = aRadius;
-        if( m_cornerRadius > (unsigned int) Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
-            m_cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
-    };
+    void SetCornerRadius( unsigned int aRadius );
 
     unsigned int GetCornerRadius() const { return m_cornerRadius; };
 

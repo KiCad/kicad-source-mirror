@@ -33,6 +33,7 @@
 #include <hashtables.h>
 #include <layers_id_colors_and_visibility.h>    // LAYER_ID
 #include <common.h>                             // KiROUND
+#include <convert_to_biu.h>                     // IU_PER_MM
 
 
 class BOARD;

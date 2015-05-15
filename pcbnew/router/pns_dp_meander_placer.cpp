@@ -41,6 +41,11 @@ PNS_DP_MEANDER_PLACER::PNS_DP_MEANDER_PLACER( PNS_ROUTER* aRouter ) :
 {
     m_world = NULL;
     m_currentNode = NULL;
+
+    // Init temporary variables (do not leave uninitialized members)
+    m_initialSegment = NULL;
+    m_lastLength = 0;
+    m_lastStatus = TOO_SHORT;
 }
 
 

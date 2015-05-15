@@ -850,7 +850,7 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
 
 void PCB_BASE_FRAME::SetFastGrid1()
 {
-    if( m_FastGrid1 >= GetScreen()->GetGridCount() )
+    if( m_FastGrid1 >= (int)GetScreen()->GetGridCount() )
         return;
 
     int cmdId = GetScreen()->GetGrids()[m_FastGrid1].m_CmdId;
@@ -869,7 +869,7 @@ void PCB_BASE_FRAME::SetFastGrid1()
 
 void PCB_BASE_FRAME::SetFastGrid2()
 {
-    if( m_FastGrid2 >= GetScreen()->GetGridCount() )
+    if( m_FastGrid2 >= (int)GetScreen()->GetGridCount() )
         return;
 
     int cmdId = GetScreen()->GetGrids()[m_FastGrid2].m_CmdId;

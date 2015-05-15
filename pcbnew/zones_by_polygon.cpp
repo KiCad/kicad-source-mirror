@@ -129,7 +129,7 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
     {
         DisplayError( this,
             _( "The duplicated zone is on the same layer as the initial zone, which has no sense.\n"
-               "Please, chose an other layer for the new zone") );
+               "Please, choose an other layer for the new zone") );
         success = false;
     }
 

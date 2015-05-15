@@ -36,6 +36,8 @@
 PNS_MEANDER_SKEW_PLACER::PNS_MEANDER_SKEW_PLACER ( PNS_ROUTER* aRouter ) :
     PNS_MEANDER_PLACER ( aRouter )
 {
+    // Init temporary variables (do not leave uninitialized members)
+    m_coupledLength = 0;
 }
 
 

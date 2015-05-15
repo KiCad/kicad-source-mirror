@@ -25,8 +25,6 @@
 #ifndef CONVERT_TO_BIU_H_
 #define CONVERT_TO_BIU_H_
 
-#include <config.h>
-
 /**
  * @file convert_to_biu.h
  */

@@ -46,6 +46,7 @@
 #error "Cannot resolve units formatting due to no definition of EESCHEMA or PCBNEW."
 #endif
 
+#include <convert_to_biu.h>
 
 EDA_TEXT::EDA_TEXT( const wxString& text )
 {

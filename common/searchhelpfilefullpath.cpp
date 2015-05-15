@@ -25,6 +25,7 @@
 
 #include <pgm_base.h>
 #include <common.h>
+#include <config.h>     // to define DEFAULT_INSTALL_PATH
 
 
 /**

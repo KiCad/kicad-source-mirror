@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 
-#include <common.h>
+#include <convert_to_biu.h>
 #include <pcbnew.h>
 #include <zones.h>
 
@@ -122,3 +122,14 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     // using new parameters values
     aTarget.Outline()->SetHatch( m_Zone_HatchingStyle, Mils2iu( 20 ), true );
 }
+
+
+void ZONE_SETTINGS::SetCornerRadius( int aRadius )
+{
+    if( aRadius > Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
+        m_cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
+    else if( aRadius < 0 )
+        m_cornerRadius = 0;
+    else
+        m_cornerRadius = aRadius;
+};
