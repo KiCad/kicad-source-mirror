@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,8 +22,9 @@ class DIALOG_SHIM;
 #include <wx/html/htmlwin.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
@@ -46,13 +47,18 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		wxNotebook* m_notebook;
 		wxHtmlWindow* m_htmlWin;
 		wxStaticText* m_staticTextTpath;
-		wxTextCtrl* m_textCtrlTemplatePath;
+		wxTextCtrl* m_tcTemplatePath;
+		wxButton* m_buttonBrowse;
+		wxButton* m_buttonValidate;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPageChange( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void onDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onValidatePath( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
@@ -73,7 +79,7 @@ class TEMPLATE_SELECTION_PANEL_BASE : public wxPanel
 	
 	public:
 		wxBoxSizer* m_SizerBase;
-		wxScrolledWindow* m_scrolledWindow1;
+		wxScrolledWindow* m_scrolledWindow;
 		wxBoxSizer* m_SizerChoice;
 		
 		TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,140 ), long style = wxNO_BORDER|wxTAB_TRAVERSAL ); 

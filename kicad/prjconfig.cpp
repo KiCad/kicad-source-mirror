@@ -108,13 +108,13 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
         templatePath = GetOSXKicadDataDir() + sep + wxT( "template" );
 #endif
 
-        ps->AddPage( _( "System Templates" ), templatePath );
+        ps->AddTemplatesPage( _( "System Templates" ), templatePath );
 
         // Add a new tab for user templates
         wxFileName userPath = wxStandardPaths::Get().GetDocumentsDir() +
                 sep + wxT( "kicad" ) + sep + wxT( "template" ) + sep;
 
-        ps->AddPage( _( "User Templates" ), userPath );
+        ps->AddTemplatesPage( _( "User Templates" ), userPath );
 
         // Check to see if a custom template location is available and setup a
         // new selection tab if there is.
@@ -128,15 +128,15 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
 
             wxFileName envPath = envStr;
 
-            ps->AddPage( _( "Portable Templates" ), envPath );
+            ps->AddTemplatesPage( _( "Portable Templates" ), envPath );
         }
 
         // Show the project template selector dialog
         int result = ps->ShowModal();
 
-        if( (result != wxID_OK) || (ps->GetWidget() == NULL) )
+        if( ( result != wxID_OK ) || ( ps->GetSelectedTemplate() == NULL ) )
         {
-            if( ps->GetWidget() == NULL )
+            if( ps->GetSelectedTemplate() == NULL )
             {
                 wxMessageBox( _( "No project template was selected.  Cannot generate new "
                                  "project." ),
@@ -149,7 +149,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
         {
             // The selected template widget contains the template we're attempting to use to
             // create a project
-            if( !ps->GetWidget()->GetTemplate()->CreateProject( newProjectName ) )
+            if( !ps->GetSelectedTemplate()->CreateProject( newProjectName ) )
             {
                 wxMessageBox( _( "Problem whilst creating new project from template!" ),
                               _( "Template Error" ),

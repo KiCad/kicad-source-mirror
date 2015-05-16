@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,10 +25,25 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	
 	m_staticTextTpath = new wxStaticText( this, wxID_ANY, wxT("Templates path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTpath->Wrap( -1 );
-	bmainSizer->Add( m_staticTextTpath, 0, wxRIGHT|wxLEFT, 5 );
+	bmainSizer->Add( m_staticTextTpath, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_textCtrlTemplatePath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bmainSizer->Add( m_textCtrlTemplatePath, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bsizerTemplateSelector;
+	bsizerTemplateSelector = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_tcTemplatePath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	bsizerTemplateSelector->Add( m_tcTemplatePath, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_buttonBrowse = new wxButton( this, wxID_ANY, wxT("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	bsizerTemplateSelector->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	
+	m_buttonValidate = new wxButton( this, wxID_ANY, wxT("Validate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	bsizerTemplateSelector->Add( m_buttonValidate, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	
+	
+	bmainSizer->Add( bsizerTemplateSelector, 0, wxEXPAND, 5 );
+	
+	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bmainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -47,12 +62,16 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	
 	// Connect Events
 	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnPageChange ), NULL, this );
+	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
+	m_buttonValidate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onValidatePath ), NULL, this );
 }
 
 DIALOG_TEMPLATE_SELECTOR_BASE::~DIALOG_TEMPLATE_SELECTOR_BASE()
 {
 	// Disconnect Events
 	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnPageChange ), NULL, this );
+	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
+	m_buttonValidate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onValidatePath ), NULL, this );
 	
 }
 
@@ -60,15 +79,15 @@ TEMPLATE_SELECTION_PANEL_BASE::TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, 
 {
 	m_SizerBase = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_scrolledWindow1 = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL );
-	m_scrolledWindow1->SetScrollRate( 5, 5 );
+	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL );
+	m_scrolledWindow->SetScrollRate( 5, 5 );
 	m_SizerChoice = new wxBoxSizer( wxHORIZONTAL );
 	
 	
-	m_scrolledWindow1->SetSizer( m_SizerChoice );
-	m_scrolledWindow1->Layout();
-	m_SizerChoice->Fit( m_scrolledWindow1 );
-	m_SizerBase->Add( m_scrolledWindow1, 0, wxEXPAND | wxALL, 3 );
+	m_scrolledWindow->SetSizer( m_SizerChoice );
+	m_scrolledWindow->Layout();
+	m_SizerChoice->Fit( m_scrolledWindow );
+	m_SizerBase->Add( m_scrolledWindow, 0, wxEXPAND | wxALL, 3 );
 	
 	
 	this->SetSizer( m_SizerBase );

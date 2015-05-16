@@ -28,49 +28,53 @@
 #include <dialogs/dialog_template_selector_base.h>
 #include "project_template.h"
 
+class DIALOG_TEMPLATE_SELECTOR;
 
 class TEMPLATE_WIDGET : public TEMPLATE_WIDGET_BASE
 {
 protected:
-    wxDialog*   dialog;
-    wxWindow*   parent;
-    wxPanel*    panel;
-    bool        selected;
+    DIALOG_TEMPLATE_SELECTOR* m_dialog;
+    wxWindow*   m_parent;
+    wxPanel*    m_panel;
+    bool        m_selected;
 
-    PROJECT_TEMPLATE* templ;
+    PROJECT_TEMPLATE* m_currTemplate;
 
     void OnKillFocus( wxFocusEvent& event );
     void OnMouse( wxMouseEvent& event );
 
 public:
-    TEMPLATE_WIDGET( wxWindow* aParent, wxDialog* aDialog );
-    ~TEMPLATE_WIDGET();
+    TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* aDialog );
 
     /**
      * Set the project template for this widget, which will determine the icon and title
      * associated with this project template widget
      */
     void SetTemplate(PROJECT_TEMPLATE* aTemplate);
-    PROJECT_TEMPLATE* GetTemplate();
+
+    PROJECT_TEMPLATE* GetTemplate() { return m_currTemplate; }
+
     void Select();
     void Unselect();
-    bool IsSelected();
+
+private:
+    bool IsSelected() { return m_selected; }
 };
 
 
 class TEMPLATE_SELECTION_PANEL : public TEMPLATE_SELECTION_PANEL_BASE
 {
 protected:
-    wxWindow* parent;
-    wxString  m_templatesPath;
+    wxNotebookPage* m_parent;
+    wxString  m_templatesPath;      ///< the path to access to the folder
+                                    ///< containing the templates (which are also folders)
 
 public:
     /**
      * @param aParent The window creating the dialog
      * @param aPath the path
      */
-    TEMPLATE_SELECTION_PANEL( wxWindow* aParent, const wxString& aPath );
-    ~TEMPLATE_SELECTION_PANEL();
+    TEMPLATE_SELECTION_PANEL( wxNotebookPage* aParent, const wxString& aPath );
 
     const wxString& GetPath() { return m_templatesPath; }
 };
@@ -80,23 +84,44 @@ class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
 protected:
     std::vector<TEMPLATE_SELECTION_PANEL*> m_panels;
-    void AddTemplate( int aPage, PROJECT_TEMPLATE* aTemplate );
     TEMPLATE_WIDGET* m_selectedWidget;
+
+    void AddTemplate( int aPage, PROJECT_TEMPLATE* aTemplate );
 
 public:
     DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent );
-    ~DIALOG_TEMPLATE_SELECTOR();
 
     /**
      * Add a new page with \a aTitle, populated with templates from \a aPath
      * - All directories under the path are treated as templates
+     * @param aTitle = the title of the wxNoteBook page
+     * @param aPath = the path of the main folder containing templates
      */
-    void AddPage( const wxString& aTitle, wxFileName& aPath );
-    void SetHtml( wxFileName aFilename );
-    TEMPLATE_WIDGET* GetWidget();
+    void AddTemplatesPage( const wxString& aTitle, wxFileName& aPath );
+
+    /**
+     * @return the selected template, or NULL
+     */
+    PROJECT_TEMPLATE* GetSelectedTemplate();
+
+private:
+
+    void SetHtml( wxFileName aFilename )
+    {
+        m_htmlWin->LoadPage( aFilename.GetFullPath() );
+    }
+
+public:
     void SetWidget( TEMPLATE_WIDGET* aWidget );
+
+private:
+    void buildPageContent( const wxString& aPath, int aPage );
+    void replaceCurrentPage();
+
     void onNotebookResize( wxSizeEvent& event );
     void OnPageChange( wxNotebookEvent& event );
+    void onDirectoryBrowseClicked( wxCommandEvent& event );
+	void onValidatePath( wxCommandEvent& event );
 };
 
 #endif
