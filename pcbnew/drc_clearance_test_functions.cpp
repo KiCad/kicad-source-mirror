@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2007 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,21 +215,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( layer1 > layer2 )
                 EXCHG( layer1, layer2 );
 
-#if 0   // was:
-            // test:
-            if( layer1 == B_Cu && layer2 == LAYER_N_2 )
-                err = false;
-
-            if( layer1 == (m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
-                && layer2 == F_Cu )
-                err = false;
-#else
             if( layer2 == B_Cu && layer1 == m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
                 err = false;
-
             else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
                 err = false;
-#endif
 
             if( err )
             {
@@ -824,18 +813,16 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
  */
 bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist )
 {
-    wxSize  padHalfsize;        // half the dimension of the pad
+    wxSize  padHalfsize;            // half dimension of the pad
     wxPoint startPoint, endPoint;
-    int     seuil;
-    int     deltay;
 
-    int     segmHalfWidth = aSegmentWidth / 2;
+    int segmHalfWidth = aSegmentWidth / 2;
+    int distToLine = segmHalfWidth + aMinDist;
 
-    seuil = segmHalfWidth + aMinDist;
     padHalfsize.x = aPad->GetSize().x >> 1;
     padHalfsize.y = aPad->GetSize().y >> 1;
 
-    if( aPad->GetShape() == PAD_TRAPEZOID ) // The size is bigger, due to GetDelta() extra size
+    if( aPad->GetShape() == PAD_TRAPEZOID )     // The size is bigger, due to GetDelta() extra size
     {
         padHalfsize.x += std::abs(aPad->GetDelta().y) / 2;   // Remember: GetDelta().y is the GetSize().x change
         padHalfsize.y += std::abs(aPad->GetDelta().x) / 2;   // Remember: GetDelta().x is the GetSize().y change
@@ -847,7 +834,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
          * calculate pad coordinates in the X,Y axis with X axis = segment to test
          */
         RotatePoint( &m_padToTestPos, m_segmAngle );
-        return checkMarginToCircle( m_padToTestPos, seuil + padHalfsize.x, m_segmLength );
+        return checkMarginToCircle( m_padToTestPos, distToLine + padHalfsize.x, m_segmLength );
     }
 
     /* calculate the bounding box of the pad, including the clearance and the segment width
@@ -855,10 +842,10 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
      * the clearance is always OK
      * But if intersect, a better analysis of the pad shape must be done.
      */
-    m_xcliplo = m_padToTestPos.x - seuil - padHalfsize.x;
-    m_ycliplo = m_padToTestPos.y - seuil - padHalfsize.y;
-    m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
-    m_ycliphi = m_padToTestPos.y + seuil + padHalfsize.y;
+    m_xcliplo = m_padToTestPos.x - distToLine - padHalfsize.x;
+    m_ycliplo = m_padToTestPos.y - distToLine - padHalfsize.y;
+    m_xcliphi = m_padToTestPos.x + distToLine + padHalfsize.x;
+    m_ycliphi = m_padToTestPos.y + distToLine + padHalfsize.y;
 
     startPoint.x = startPoint.y = 0;
     endPoint     = m_segmEnd;
@@ -880,26 +867,31 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         return false;
 
     case PAD_OVAL:
-
+    {
         /* an oval is a complex shape, but is a rectangle and 2 circles
          * these 3 basic shapes are more easy to test.
+         *
+         * In calculations we are using a vertical oval shape
+         * (i.e. a vertical rounded segment)
+         * for horizontal oval shapes, swap x and y size and rotate the shape
          */
-        /* We use a vertical oval shape. for horizontal ovals, swap x and y size and rotate the shape*/
         if( padHalfsize.x > padHalfsize.y )
         {
             EXCHG( padHalfsize.x, padHalfsize.y );
             orient = AddAngles( orient, 900 );
         }
 
-        deltay = padHalfsize.y - padHalfsize.x;
+        // here, padHalfsize.x is the radius of rounded ends.
 
-        // here: padHalfsize.x = radius, delta = dist centre cercles a centre pad
+        int deltay = padHalfsize.y - padHalfsize.x;
+        // here: padHalfsize.x = radius,
+        // deltay = dist between the centre pad and the centre of a rounded end
 
-        // Test the rectangle area between the two circles
-        m_xcliplo = m_padToTestPos.x - seuil - padHalfsize.x;
-        m_ycliplo = m_padToTestPos.y - segmHalfWidth - deltay;
-        m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
-        m_ycliphi = m_padToTestPos.y + segmHalfWidth + deltay;
+        // Test the rectangular area between the two circles (the rounded ends)
+        m_xcliplo = m_padToTestPos.x - distToLine - padHalfsize.x;
+        m_ycliplo = m_padToTestPos.y - deltay;
+        m_xcliphi = m_padToTestPos.x + distToLine + padHalfsize.x;
+        m_ycliphi = m_padToTestPos.y + deltay;
 
         if( !checkLine( startPoint, endPoint ) )
         {
@@ -916,7 +908,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // Calculate the actual position of the circle in the new X,Y axis:
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, padHalfsize.x + seuil, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, padHalfsize.x + distToLine, m_segmLength ) )
         {
             return false;
         }
@@ -927,67 +919,71 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, padHalfsize.x + seuil, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, padHalfsize.x + distToLine, m_segmLength ) )
         {
             return false;
         }
-
+    }
         break;
 
-    case PAD_RECT:          /* 2 rectangle + 4 1/4 cercles a tester */
-        /* Test du rectangle dimx + seuil, dimy */
-        m_xcliplo = m_padToTestPos.x - padHalfsize.x - seuil;
+    case PAD_RECT:
+        // the area to test is a rounded rectangle.
+        // this can be done by testing 2 rectangles and 4 circles (the corners)
+
+        // Testing the first rectangle dimx + distToLine, dimy:
+        m_xcliplo = m_padToTestPos.x - padHalfsize.x - distToLine;
         m_ycliplo = m_padToTestPos.y - padHalfsize.y;
-        m_xcliphi = m_padToTestPos.x + padHalfsize.x + seuil;
+        m_xcliphi = m_padToTestPos.x + padHalfsize.x + distToLine;
         m_ycliphi = m_padToTestPos.y + padHalfsize.y;
 
         if( !checkLine( startPoint, endPoint ) )
             return false;
 
-        /* Test du rectangle dimx , dimy + seuil */
+        // Testing the second rectangle dimx , dimy + distToLine
         m_xcliplo = m_padToTestPos.x - padHalfsize.x;
-        m_ycliplo = m_padToTestPos.y - padHalfsize.y - seuil;
+        m_ycliplo = m_padToTestPos.y - padHalfsize.y - distToLine;
         m_xcliphi = m_padToTestPos.x + padHalfsize.x;
-        m_ycliphi = m_padToTestPos.y + padHalfsize.y + seuil;
+        m_ycliphi = m_padToTestPos.y + padHalfsize.y + distToLine;
 
         if( !checkLine( startPoint, endPoint ) )
             return false;
 
-        /* test des 4 cercles ( surface d'solation autour des sommets */
-        /* test du coin sup. gauche du pad */
+        // testing the 4 circles which are the clearance area of each corner:
+
+        // testing the left top corner of the rectangle
         startPoint.x = m_padToTestPos.x - padHalfsize.x;
         startPoint.y = m_padToTestPos.y - padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
             return false;
 
-        /* test du coin sup. droit du pad */
+        // testing the right top corner of the rectangle
         startPoint.x = m_padToTestPos.x + padHalfsize.x;
         startPoint.y = m_padToTestPos.y - padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
             return false;
 
-        /* test du coin inf. gauche du pad */
+        // testing the left bottom corner of the rectangle
         startPoint.x = m_padToTestPos.x - padHalfsize.x;
         startPoint.y = m_padToTestPos.y + padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
             return false;
 
-        /* test du coin inf. droit du pad */
+        // testing the right bottom corner of the rectangle
         startPoint.x = m_padToTestPos.x + padHalfsize.x;
         startPoint.y = m_padToTestPos.y + padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
             return false;
 
         break;
@@ -1004,7 +1000,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
             RotatePoint( &poly[ii], m_segmAngle );
         }
 
-        if( !trapezoid2segmentDRC( poly, wxPoint( 0, 0 ), wxPoint(m_segmLength,0), seuil ) )
+        if( !trapezoid2segmentDRC( poly, wxPoint( 0, 0 ), wxPoint(m_segmLength,0), distToLine ) )
             return false;
     }
     break;
