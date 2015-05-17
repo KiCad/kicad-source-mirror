@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-15 16:25+0100\n"
-"PO-Revision-Date: 2015-05-15 16:26+0100\n"
+"POT-Creation-Date: 2015-05-17 17:55+0100\n"
+"PO-Revision-Date: 2015-05-17 17:55+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -675,9 +675,13 @@ msgstr ""
 "Nome progetto:\n"
 "\"%s\"\n"
 
-#: kicad/dialogs/dialog_template_selector.cpp:144
+#: kicad/dialogs/dialog_template_selector.cpp:120
 msgid "<html><h1>Template Selector</h1></html>"
 msgstr "<html><h1>Selezione modelli</h1></html>"
+
+#: kicad/dialogs/dialog_template_selector.cpp:211
+msgid "Select Templates Directory"
+msgstr "Seleziona la cartella modelli"
 
 #: pcbnew/class_text_mod.cpp:380
 msgid "Ref."
