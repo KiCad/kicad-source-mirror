@@ -35,38 +35,3 @@ void VIEW_CONTROLS::ShowCursor( bool aEnabled )
     m_view->GetGAL()->SetCursorEnabled( aEnabled );
 }
 
-
-void VIEW_CONTROLS::setCenter( const VECTOR2D& aCenter )
-{
-    if( !m_panBoundary.Contains( aCenter ) )
-    {
-        VECTOR2D newCenter( aCenter );
-
-        if( aCenter.x < m_panBoundary.GetLeft() )
-            newCenter.x = m_panBoundary.GetLeft();
-        else if( aCenter.x > m_panBoundary.GetRight() )
-            newCenter.x = m_panBoundary.GetRight();
-
-        if( aCenter.y < m_panBoundary.GetTop() )
-            newCenter.y = m_panBoundary.GetTop();
-        else if( aCenter.y > m_panBoundary.GetBottom() )
-            newCenter.y = m_panBoundary.GetBottom();
-
-        m_view->SetCenter( newCenter );
-    }
-    else
-    {
-        m_view->SetCenter( aCenter );
-    }
-}
-
-
-void VIEW_CONTROLS::setScale( double aScale, const VECTOR2D& aAnchor )
-{
-    if( aScale < m_minScale )
-        aScale = m_minScale;
-    else if( aScale > m_maxScale )
-        aScale = m_maxScale;
-
-    m_view->SetScale( aScale, aAnchor );
-}

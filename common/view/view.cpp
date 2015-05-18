@@ -42,11 +42,13 @@ using namespace KIGFX;
 
 VIEW::VIEW( bool aIsDynamic ) :
     m_enableOrderModifier( true ),
-    m_scale( 1.0 ),
+    m_scale( 4.0 ),
+    m_minScale( 4.0 ), m_maxScale( 15000 ),
     m_painter( NULL ),
     m_gal( NULL ),
     m_dynamic( aIsDynamic )
 {
+    m_boundary.SetMaximum();
     m_needsUpdate.reserve( 32768 );
 
     // Redraw everything at the beginning
@@ -298,13 +300,19 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 {
     VECTOR2D a = ToScreen( aAnchor );
 
-    m_gal->SetZoomFactor( aScale );
+    if( aScale < m_minScale )
+        m_scale = m_minScale;
+    else if( aScale > m_maxScale )
+        m_scale = m_maxScale;
+    else
+        m_scale = aScale;
+
+    m_gal->SetZoomFactor( m_scale );
     m_gal->ComputeWorldScreenMatrix();
 
     VECTOR2D delta = ToWorld( a ) - aAnchor;
 
     SetCenter( m_center - delta );
-    m_scale = aScale;
 
     // Redraw everything after the viewport has changed
     MarkDirty();
@@ -314,6 +322,19 @@ void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
 void VIEW::SetCenter( const VECTOR2D& aCenter )
 {
     m_center = aCenter;
+
+    if( !m_boundary.Contains( aCenter ) )
+    {
+        if( m_center.x < m_boundary.GetLeft() )
+            m_center.x = m_boundary.GetLeft();
+        else if( aCenter.x > m_boundary.GetRight() )
+            m_center.x = m_boundary.GetRight();
+
+        if( m_center.y < m_boundary.GetTop() )
+            m_center.y = m_boundary.GetTop();
+        else if( m_center.y > m_boundary.GetBottom() )
+            m_center.y = m_boundary.GetBottom();
+    }
 
     m_gal->SetLookAtPoint( m_center );
     m_gal->ComputeWorldScreenMatrix();

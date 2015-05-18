@@ -79,7 +79,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             VECTOR2D   d = m_dragStartPoint - VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             VECTOR2D   delta = m_view->ToWorld( d, false );
 
-            setCenter( m_lookStartPoint + delta );
+            m_view->SetCenter( m_lookStartPoint + delta );
             aEvent.StopPropagation();
         }
         else
@@ -109,7 +109,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         VECTOR2D delta( aEvent.ControlDown() ? -scrollSpeed : 0.0,
                         aEvent.ShiftDown() ? -scrollSpeed : 0.0 );
 
-        setCenter( m_view->GetCenter() + delta );
+        m_view->SetCenter( m_view->GetCenter() + delta );
     }
     else
     {
@@ -150,7 +150,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         }
 
         VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-        setScale( m_view->GetScale() * zoomScale, anchor );
+        m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
     }
 
     aEvent.Skip();
@@ -249,7 +249,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             dir = dir.Resize( borderSize );
 
         dir = m_view->ToWorld( dir, false );
-        setCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
+        m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
 
         // Notify tools that the cursor position has changed in the world coordinates
         wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
@@ -280,13 +280,14 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 {
     VECTOR2D center = m_view->GetCenter();
+    const BOX2I& boundary = m_view->GetBoundary();
 
     if( aEvent.GetOrientation() == wxHORIZONTAL )
-        center.x = (double) aEvent.GetPosition() * m_panBoundary.GetWidth() / m_scrollScale.x + m_panBoundary.GetLeft();
+        center.x = (double) aEvent.GetPosition() * boundary.GetWidth() / m_scrollScale.x + boundary.GetLeft();
     else if( aEvent.GetOrientation() == wxVERTICAL )
-        center.y = (double) aEvent.GetPosition() * m_panBoundary.GetHeight() / m_scrollScale.y + m_panBoundary.GetTop();
+        center.y = (double) aEvent.GetPosition() * boundary.GetHeight() / m_scrollScale.y + boundary.GetTop();
 
-    VIEW_CONTROLS::setCenter( center );
+    m_view->SetCenter( center );
     m_parentPanel->Refresh();
 }
 
@@ -391,9 +392,10 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 void WX_VIEW_CONTROLS::UpdateScrollbars()
 {
     const BOX2D viewport = m_view->GetViewport();
+    const BOX2I& boundary = m_view->GetBoundary();
 
-    m_scrollScale.x = 2e3 * m_panBoundary.GetWidth() / viewport.GetWidth();
-    m_scrollScale.y = 2e3 * m_panBoundary.GetHeight() / viewport.GetHeight();
+    m_scrollScale.x = 2e3 * boundary.GetWidth() / viewport.GetWidth();
+    m_scrollScale.y = 2e3 * boundary.GetHeight() / viewport.GetHeight();
 
     // Another example of wxWidgets being broken by design: scroll position is determined by the
     // left (or top, if vertical) edge of the slider. Fortunately, slider size seems to be constant
@@ -405,6 +407,6 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
 #else
             m_scrollScale.x, m_scrollScale.y,
 #endif
-            ( viewport.Centre().x - m_panBoundary.GetLeft() ) / m_panBoundary.GetWidth() * m_scrollScale.x,
-            ( viewport.Centre().y - m_panBoundary.GetTop() ) / m_panBoundary.GetHeight() * m_scrollScale.y );
+            ( viewport.Centre().x - boundary.GetLeft() ) / boundary.GetWidth() * m_scrollScale.x,
+            ( viewport.Centre().y - boundary.GetTop() ) / boundary.GetHeight() * m_scrollScale.y );
 }

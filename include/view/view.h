@@ -130,7 +130,7 @@ public:
      * Returns the GAL this view is using to draw graphical primitives.
      * @return Pointer to the currently used GAL instance.
      */
-    GAL* GetGAL() const
+    inline GAL* GetGAL() const
     {
         return m_gal;
     }
@@ -139,7 +139,7 @@ public:
      * Function SetPainter()
      * Sets the painter object used by the view for drawing VIEW_ITEMS.
      */
-    void SetPainter( PAINTER* aPainter )
+    inline void SetPainter( PAINTER* aPainter )
     {
         m_painter = aPainter;
     }
@@ -149,7 +149,7 @@ public:
      * Returns the painter object used by the view for drawing VIEW_ITEMS.
      * @return Pointer to the currently used Painter instance.
      */
-    PAINTER* GetPainter() const
+    inline PAINTER* GetPainter() const
     {
         return m_painter;
     }
@@ -182,7 +182,7 @@ public:
      * (depending on correct GAL unit length & DPI settings).
      * @param aScale: the scalefactor
      */
-    void SetScale( double aScale )
+    inline void SetScale( double aScale )
     {
         SetScale( aScale, m_center );
     }
@@ -198,11 +198,44 @@ public:
 
     /**
      * Function GetScale()
-     * @return Current scalefactor of this VIEW
+     * @return Current scale factor of this VIEW.
      */
-    double GetScale() const
+    inline double GetScale() const
     {
         return m_scale;
+    }
+
+    /**
+     * Function SetBoundary()
+     * Sets limits for view area.
+     * @param aBoundary is the box that limits view area.
+     */
+    inline void SetBoundary( const BOX2I& aBoundary )
+    {
+        m_boundary = aBoundary;
+    }
+
+    /**
+     * Function GetBoundary()
+     * @return Current view area boundary.
+     */
+    inline const BOX2I& GetBoundary() const
+    {
+        return m_boundary;
+    }
+
+    /**
+     * Function SetScaleLimits()
+     * Sets minimum and maximum values for scale.
+     * @param aMaximum is the maximum value for scale.
+     * @param aMinimum is the minimum value for scale.
+     */
+    void SetScaleLimits( double aMaximum, double aMinimum )
+    {
+        wxASSERT_MSG( aMaximum > aMinimum, wxT( "I guess you passed parameters in wrong order" ) );
+
+        m_minScale = aMinimum;
+        m_maxScale = aMaximum;
     }
 
     /**
@@ -655,6 +688,15 @@ private:
 
     /// Scale of displayed VIEW_ITEMs
     double m_scale;
+
+    /// View boundaries
+    BOX2I m_boundary;
+
+    /// Scale lower limit
+    double m_minScale;
+
+    /// Scale upper limit
+    double m_maxScale;
 
     /// PAINTER contains information how do draw items
     PAINTER* m_painter;
