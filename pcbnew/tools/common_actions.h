@@ -56,8 +56,11 @@ public:
     /// Unselects an item (specified as the event parameter).
     static TOOL_ACTION unselectItem;
 
-    /// Selects whole copper connection.
+    /// Selects a connection between junctions.
     static TOOL_ACTION selectConnection;
+
+    /// Selects whole copper connection.
+    static TOOL_ACTION selectCopper;
 
     /// Selects all connections belonging to a single net.
     static TOOL_ACTION selectNet;

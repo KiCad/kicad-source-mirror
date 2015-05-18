@@ -55,6 +55,10 @@ TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
 
 TOOL_ACTION COMMON_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL, 0,
+        _( "trivial connection" ), _( "Selects a connection between two junctions." ) );
+
+TOOL_ACTION COMMON_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
+        AS_GLOBAL, 0,
         _( "copper connection" ), _( "Selects whole copper connection." ) );
 
 TOOL_ACTION COMMON_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",

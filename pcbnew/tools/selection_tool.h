@@ -199,8 +199,11 @@ private:
      */
     bool selectMultiple();
 
-    ///> Selects a continuous copper connection.
+    ///> Selects a trivial connection (between two junctions).
     int selectConnection( const TOOL_EVENT& aEvent );
+
+    ///> Selects a continuous copper connection.
+    int selectCopper( const TOOL_EVENT& aEvent );
 
     ///> Selects all copper connections belonging to a single net.
     int selectNet( const TOOL_EVENT& aEvent );
