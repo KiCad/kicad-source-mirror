@@ -245,7 +245,7 @@ public:
 
         Add( ACT_CustomTrackWidth );
 
-        if ( aMode == PNS_MODE_ROUTE_DIFF_PAIR )
+        if( aMode == PNS_MODE_ROUTE_DIFF_PAIR )
             Add( ACT_SetDpDimensions );
 
         AppendSeparator();
@@ -269,6 +269,7 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
     Go( &ROUTER_TOOL::SettingsDialog, COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
 
 }
+
 
 int ROUTER_TOOL::getDefaultWidth( int aNetCode )
 {
@@ -351,11 +352,12 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &COMMON_ACTIONS::trackViaSizeChanged ) )
     {
 
-        PNS_SIZES_SETTINGS sizes ( m_router->Sizes() );
-        sizes.ImportCurrent ( m_board->GetDesignSettings() );
-        m_router->UpdateSizes ( sizes );
+        PNS_SIZES_SETTINGS sizes( m_router->Sizes() );
+        sizes.ImportCurrent( m_board->GetDesignSettings() );
+        m_router->UpdateSizes( sizes );
     }
 }
+
 
 int ROUTER_TOOL::getStartLayer( const PNS_ITEM* aItem )
 {
@@ -373,6 +375,8 @@ int ROUTER_TOOL::getStartLayer( const PNS_ITEM* aItem )
 
     return tl;
 }
+
+
 void ROUTER_TOOL::switchLayerOnViaPlacement()
 {
     int al = m_frame->GetActiveLayer();
@@ -387,10 +391,11 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     if( newLayer )
     {
-        m_router->SwitchLayer ( *newLayer );
-        m_frame->SetActiveLayer ( ToLAYER_ID( *newLayer ) );
+        m_router->SwitchLayer( *newLayer );
+        m_frame->SetActiveLayer( ToLAYER_ID( *newLayer ) );
     }
 }
+
 
 bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 {
@@ -411,6 +416,7 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( aType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
             return false;
+
         if( ( aType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
             return false;
 
@@ -428,8 +434,8 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
     }
 
 
-    sizes.SetViaType ( aType );
-    m_router->ToggleViaPlacement( );
+    sizes.SetViaType( aType );
+    m_router->ToggleViaPlacement();
     m_router->UpdateSizes( sizes );
 
     m_router->Move( m_endSnapPoint, m_endItem );        // refresh
@@ -440,8 +446,8 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 
 bool ROUTER_TOOL::prepareInteractive()
 {
-    int routingLayer = getStartLayer ( m_startItem );
-    m_frame->SetActiveLayer( ToLAYER_ID ( routingLayer ) );
+    int routingLayer = getStartLayer( m_startItem );
+    m_frame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
     // fixme: switch on invisible layer
 
@@ -457,17 +463,17 @@ bool ROUTER_TOOL::prepareInteractive()
     m_ctls->ForceCursorPosition( false );
     m_ctls->SetAutoPan( true );
 
-    PNS_SIZES_SETTINGS sizes ( m_router->Sizes() );
+    PNS_SIZES_SETTINGS sizes( m_router->Sizes() );
 
-    sizes.Init ( m_board, m_startItem );
-    sizes.AddLayerPair ( m_frame->GetScreen()->m_Route_Layer_TOP,
+    sizes.Init( m_board, m_startItem );
+    sizes.AddLayerPair( m_frame->GetScreen()->m_Route_Layer_TOP,
                          m_frame->GetScreen()->m_Route_Layer_BOTTOM );
     m_router->UpdateSizes( sizes );
 
-    if ( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
+    if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
-        wxMessageBox ( m_router->FailureReason(), _( "Error" ) );
-        highlightNet ( false );
+        wxMessageBox( m_router->FailureReason(), _( "Error" ) );
+        highlightNet( false );
         return false;
     }
 
@@ -476,6 +482,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     return true;
 }
+
 
 bool ROUTER_TOOL::finishInteractive( bool aSaveUndoBuffer )
 {
@@ -501,11 +508,12 @@ bool ROUTER_TOOL::finishInteractive( bool aSaveUndoBuffer )
     return true;
 }
 
+
 void ROUTER_TOOL::performRouting()
 {
     bool saveUndoBuffer = true;
 
-    if ( !prepareInteractive( ) )
+    if( !prepareInteractive( ) )
         return;
 
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -520,7 +528,7 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsMotion() )
         {
             updateEndItem( *evt );
-            m_router->SetOrthoMode ( evt->Modifier ( MD_CTRL ) );
+            m_router->SetOrthoMode( evt->Modifier( MD_CTRL ) );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsClick( BUT_LEFT ) )
@@ -540,15 +548,15 @@ void ROUTER_TOOL::performRouting()
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
-            onViaCommand ( VIA_THROUGH );
+            onViaCommand( VIA_THROUGH );
         }
         else if( evt->IsAction( &ACT_PlaceBlindVia ) )
         {
-            onViaCommand ( VIA_BLIND_BURIED );
+            onViaCommand( VIA_BLIND_BURIED );
         }
         else if( evt->IsAction( &ACT_PlaceMicroVia ) )
         {
-            onViaCommand ( VIA_MICROVIA );
+            onViaCommand( VIA_MICROVIA );
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
@@ -570,8 +578,9 @@ void ROUTER_TOOL::performRouting()
         handleCommonEvents( *evt );
     }
 
-    finishInteractive ( saveUndoBuffer );
+    finishInteractive( saveUndoBuffer );
 }
+
 
 int ROUTER_TOOL::DpDimensionsDialog( const TOOL_EVENT& aEvent )
 {
@@ -588,6 +597,7 @@ int ROUTER_TOOL::DpDimensionsDialog( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 {
@@ -609,11 +619,13 @@ int ROUTER_TOOL::RouteSingleTrace( const TOOL_EVENT& aEvent )
     return mainLoop( PNS_MODE_ROUTE_SINGLE );
 }
 
+
 int ROUTER_TOOL::RouteDiffPair( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Router Differential Pair" ) );
     return mainLoop( PNS_MODE_ROUTE_DIFF_PAIR );
 }
+
 
 int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 {
@@ -625,13 +637,13 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
     Activate();
 
-    m_router->SetMode ( aMode );
+    m_router->SetMode( aMode );
 
     m_ctls->SetSnapping( true );
     m_ctls->ShowCursor( true );
 
-    std::auto_ptr<ROUTER_TOOL_MENU> ctxMenu ( new ROUTER_TOOL_MENU( board, aMode ) );
-    SetContextMenu ( ctxMenu.get() );
+    std::auto_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, aMode ) );
+    SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -675,6 +687,7 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
     return 0;
 }
+
 
 void ROUTER_TOOL::performDragging()
 {
@@ -737,7 +750,8 @@ void ROUTER_TOOL::performDragging()
     highlightNet( false );
 }
 
-int ROUTER_TOOL::InlineDrag ( const TOOL_EVENT& aEvent )
+
+int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
     return 0;
 }
