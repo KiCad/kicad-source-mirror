@@ -35,6 +35,7 @@ set( GAL_SRCS
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
     gal/color4d.cpp
+    view/view_controls.cpp
     view/wx_view_controls.cpp
     geometry/hetriang.cpp
 

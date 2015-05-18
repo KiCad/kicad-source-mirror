@@ -48,7 +48,7 @@ class PAINTER;
 };
 
 
-class EDA_DRAW_PANEL_GAL : public wxWindow
+class EDA_DRAW_PANEL_GAL : public wxScrolledCanvas
 {
 public:
     enum GalType {

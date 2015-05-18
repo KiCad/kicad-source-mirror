@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2015 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +35,8 @@ using namespace KIGFX;
 
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
-WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
-    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel )
+WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel ) :
+    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ), m_scrollScale( 1.0, 1.0 )
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
@@ -55,52 +56,12 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxWindow* aParentPanel ) :
 #endif
     m_parentPanel->Connect( wxEVT_LEAVE_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_THUMBTRACK,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
 
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER,
                    wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
-}
-
-
-void VIEW_CONTROLS::ShowCursor( bool aEnabled )
-{
-    m_view->GetGAL()->SetCursorEnabled( aEnabled );
-}
-
-
-void VIEW_CONTROLS::setCenter( const VECTOR2D& aCenter )
-{
-    if( !m_panBoundary.Contains( aCenter ) )
-    {
-        VECTOR2D newCenter( aCenter );
-
-        if( aCenter.x < m_panBoundary.GetLeft() )
-            newCenter.x = m_panBoundary.GetLeft();
-        else if( aCenter.x > m_panBoundary.GetRight() )
-            newCenter.x = m_panBoundary.GetRight();
-
-        if( aCenter.y < m_panBoundary.GetTop() )
-            newCenter.y = m_panBoundary.GetTop();
-        else if( aCenter.y > m_panBoundary.GetBottom() )
-            newCenter.y = m_panBoundary.GetBottom();
-
-        m_view->SetCenter( newCenter );
-    }
-    else
-    {
-        m_view->SetCenter( aCenter );
-    }
-}
-
-
-void VIEW_CONTROLS::setScale( double aScale, const VECTOR2D& aAnchor )
-{
-    if( aScale < m_minScale )
-        aScale = m_minScale;
-    else if( aScale > m_maxScale )
-        aScale = m_maxScale;
-
-    m_view->SetScale( aScale, aAnchor );
 }
 
 
@@ -298,6 +259,20 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 }
 
 
+void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
+{
+    VECTOR2D center = m_view->GetCenter();
+
+    if( aEvent.GetOrientation() == wxHORIZONTAL )
+        center.x = (double) aEvent.GetPosition() * m_panBoundary.GetWidth() / m_scrollScale.x + m_panBoundary.GetLeft();
+    else if( aEvent.GetOrientation() == wxVERTICAL )
+        center.y = (double) aEvent.GetPosition() * m_panBoundary.GetHeight() / m_scrollScale.y + m_panBoundary.GetTop();
+
+    VIEW_CONTROLS::setCenter( center );
+    m_parentPanel->Refresh();
+}
+
+
 void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 {
     VIEW_CONTROLS::SetGrabMouse( aEnabled );
@@ -392,4 +367,26 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
     wxASSERT_MSG( false, wxT( "This line should never be reached" ) );
     return false;    // Should not be reached, just avoid the compiler warnings..
+}
+
+
+void WX_VIEW_CONTROLS::UpdateScrollbars()
+{
+    const BOX2D viewport = m_view->GetViewport();
+
+    m_scrollScale.x = 2e3 * m_panBoundary.GetWidth() / viewport.GetWidth();
+    m_scrollScale.y = 2e3 * m_panBoundary.GetHeight() / viewport.GetHeight();
+
+    // Another example of wxWidgets being broken by design: scroll position is determined by the
+    // left (or top, if vertical) edge of the slider. Fortunately, slider size seems to be constant
+    // (at least for wxGTK 3.0), so we have to add its size to allow user to scroll the workspace
+    // till the end.
+    m_parentPanel->SetScrollbars( 1, 1,
+#ifdef __LINUX__
+            m_scrollScale.x + 1623, m_scrollScale.y + 1623,
+#else
+            m_scrollScale.x, m_scrollScale.y,
+#endif
+            ( viewport.Centre().x - m_panBoundary.GetLeft() ) / m_panBoundary.GetWidth() * m_scrollScale.x,
+            ( viewport.Centre().y - m_panBoundary.GetTop() ) / m_panBoundary.GetHeight() * m_scrollScale.y );
 }
