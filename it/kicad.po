@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-17 17:55+0100\n"
-"PO-Revision-Date: 2015-05-17 17:55+0100\n"
+"POT-Creation-Date: 2015-05-18 10:13+0100\n"
+"PO-Revision-Date: 2015-05-18 10:13+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -3719,12 +3719,12 @@ msgstr "&Modifica"
 #: pcbnew/menubar_modedit.cpp:337 pcbnew/menubar_pcbframe.cpp:658
 #: eeschema/menubar.cpp:516 eeschema/menubar_libedit.cpp:286
 msgid "&Place"
-msgstr "&Piazza"
+msgstr "&Inserisci"
 
 #: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:660
 #: eeschema/menubar.cpp:517 eeschema/menubar_libedit.cpp:287
 msgid "P&references"
-msgstr "O&pzioni"
+msgstr "&Opzioni"
 
 #: pcbnew/menubar_modedit.cpp:339
 msgid "Di&mensions"
@@ -22460,7 +22460,7 @@ msgstr "Aggiungi archi al corpo del componente"
 msgid "Add lines and polygons to component body"
 msgstr "Aggiungi linee e poligoni al corpo del componente"
 
-#: eeschema/sch_marker.h:107
+#: eeschema/sch_marker.h:115
 msgid "ERC Marker"
 msgstr "Evidenziatore"
 
