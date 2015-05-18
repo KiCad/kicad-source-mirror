@@ -38,6 +38,7 @@
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <base_units.h>
+#include <hotkeys.h>
 
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
@@ -53,7 +54,8 @@
 using namespace KIGFX;
 using boost::optional;
 
-static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT, 'X',
+static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
+    TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
     _( "New Track" ),  _( "Starts laying a new track." ), add_tracks_xpm );
 
 static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END,
@@ -62,23 +64,24 @@ static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT
 static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'F',
     _( "Auto-end Track" ),  _( "Automagically finishes currently routed track." ) );
 
-static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag", AS_CONTEXT, 'G',
+static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag", AS_CONTEXT,
+    TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
     _( "Drag Track/Via" ), _( "Drags a track or a via." ), drag_track_segment_xpm );
 
 static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
-    AS_CONTEXT, 'V',
+    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_THROUGH_VIA ),
     _( "Place Through Via" ),
     _( "Adds a through-hole via at the end of currently routed track." ),
     via_xpm );
 
 static TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
-    AS_CONTEXT, 'Z',
+    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_BLIND_BURIED_VIA ),
     _( "Place Blind/Buried Via" ),
     _( "Adds a blind or buried via at the end of currently routed track."),
     via_buried_xpm );
 
 static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
-    AS_CONTEXT, 'Q',
+    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_MICROVIA ),
     _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
     via_microvia_xpm );
 
@@ -88,7 +91,8 @@ static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackWi
     _( "Shows a dialog for changing the track width and via size." ),
     width_track_xpm );
 
-static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT, '/',
+static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT,
+    TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
     _( "Switch Track Posture" ),
     _( "Switches posture of the currenly routed track." ),
     change_entry_orient_xpm );
