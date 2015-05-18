@@ -70,6 +70,14 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDraw_mode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
+    void Plot( PLOTTER* aPlotter )
+    {
+        // SCH_MARKERs should not be plotted. However, SCH_ITEM will fail an
+        // assertion if we do not confirm this by locally implementing a no-op
+        // Plot().
+        (void) aPlotter;
+    }
+
     bool Save( FILE* aFile ) const;
 
     EDA_RECT const GetBoundingBox() const;      // Virtual
