@@ -140,6 +140,8 @@ echo "*** Patching wxWidgets..."
 doPatch "$1" "$3/patches/wxwidgets-3.0.0_macosx.patch"
 doPatch "$1" "$3/patches/wxwidgets-3.0.0_macosx_bug_15908.patch"
 doPatch "$1" "$3/patches/wxwidgets-3.0.0_macosx_soname.patch"
+# high resolution in OpenGL canvas: http://trac.wxwidgets.org/ticket/15700
+doPatch "$1" "$3/patches/wxwidgets-3.0.2_macosx_opengl_retina.patch"
 
 # configure and build wxWidgets
 wxWidgets_configure "$1" "$2" "$4"

@@ -1,0 +1,37 @@
+--- include/wx/osx/glcanvas.h	2015-05-16 15:40:21.000000000 +0200
++++ include/wx/osx/glcanvas.h	2015-05-16 16:44:53.000000000 +0200
+@@ -88,6 +88,9 @@ public:
+     // update the view port of the current context to match this window
+     void SetViewport();
+ 
++    void SetViewWantsBestResolution( bool aValue );
++    bool GetViewWantsBestResolution();
++    float GetBackingScaleFactor();
+ 
+     // deprecated methods
+     // ------------------
+--- src/osx/cocoa/glcanvas.mm	2015-05-16 15:40:24.000000000 +0200
++++ src/osx/cocoa/glcanvas.mm	2015-05-16 17:10:50.000000000 +0200
+@@ -313,6 +313,22 @@ bool wxGLCanvas::SwapBuffers()
+     return true;
+ }
+ 
++void wxGLCanvas::SetViewWantsBestResolution( bool aValue )
++{
++    [GetHandle() setWantsBestResolutionOpenGLSurface:aValue];
++}
++
++bool wxGLCanvas::GetViewWantsBestResolution()
++{
++    return [GetHandle() wantsBestResolutionOpenGLSurface];
++}
++
++float wxGLCanvas::GetBackingScaleFactor()
++{
++    return [[GetHandle() window] backingScaleFactor];
++}
++
++
+ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
+ {
+     if ( !m_glContext )
