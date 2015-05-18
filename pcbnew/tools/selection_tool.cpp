@@ -726,7 +726,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         wxString text;
         BOARD_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
-        menu.Add( text, i );
+        menu.Add( text, i + 1 );
     }
 
     menu.SetTitle( _( "Clarify selection" ) );
@@ -742,9 +742,9 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             int id = *evt->GetCommandId();
 
             // User has pointed an item, so show it in a different way
-            if( id >= 0 && id < limit )
+            if( id > 0 && id <= limit )
             {
-                current = ( *aCollector )[id];
+                current = ( *aCollector )[id - 1];
                 current->SetBrightened();
             }
             else
@@ -757,8 +757,8 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             boost::optional<int> id = evt->GetCommandId();
 
             // User has selected an item, so this one will be returned
-            if( id && ( *id >= 0 ) )
-                current = ( *aCollector )[*id];
+            if( id && ( *id > 0 ) )
+                current = ( *aCollector )[*id - 1];
 
             break;
         }
