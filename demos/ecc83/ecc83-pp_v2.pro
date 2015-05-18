@@ -1,4 +1,4 @@
-update=01/01/2015 18:33:52
+update=17/05/2015 17:05:45
 last_client=kicad
 [general]
 version=1
@@ -28,9 +28,5 @@ ModuleOutlineThickness=0.381
 version=1
 LibDir=
 [eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=valves
-LibName4=conn
-LibName5=linear
-LibName6=regul
+LibName1=ecc83_schlib
+LibName2=power

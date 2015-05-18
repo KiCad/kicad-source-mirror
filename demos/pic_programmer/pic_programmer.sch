@@ -1,9 +1,6 @@
 EESchema Schematic File Version 2
+LIBS:pic_programmer_schlib
 LIBS:power
-LIBS:device
-LIBS:74xx
-LIBS:conn
-LIBS:xilinx
 LIBS:pic_programmer-cache
 EELAYER 25 0
 EELAYER END

@@ -1,5 +1,5 @@
-update=24/01/2014 13:22:43
-last_client=eeschema
+update=18/05/2015 09:05:34
+last_client=kicad
 [general]
 version=1
 [cvpcb]
@@ -31,26 +31,7 @@ ModuleOutlineThickness=0.1524
 LibDir=
 [eeschema]
 version=1
-PageLayoutDescrFile=
-SubpartIdSeparator=0
-SubpartFirstId=65
 LibDir=
-NetFmtName=
-RptD_X=0
-RptD_Y=100
-RptLab=1
-LabSize=60
 [eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=transistors
-LibName4=conn
-LibName5=linear
-LibName6=regul
-LibName7=74xx
-LibName8=adc-dac
-LibName9=memory
-LibName10=xilinx
-LibName11=special
-LibName12=microcontrollers
-LibName13=motorola
+LibName1=kit-dev-coldfire-xilinx_5213_schlib
+LibName2=power

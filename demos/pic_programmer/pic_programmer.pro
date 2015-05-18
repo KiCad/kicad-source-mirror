@@ -1,4 +1,4 @@
-update=20/09/2014 09:29:07
+update=17/05/2015 17:14:38
 last_client=kicad
 [common]
 NetDir=
@@ -9,15 +9,6 @@ NetIExt=net
 EquName1=devcms
 [general]
 version=1
-[eeschema]
-version=1
-LibDir=
-[eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=74xx
-LibName4=conn
-LibName5=xilinx
 [pcbnew]
 version=1
 PageLayoutDescrFile=
@@ -38,3 +29,9 @@ SolderMaskMinWidth=0
 DrawSegmentWidth=0.381
 BoardOutlineThickness=0.381
 ModuleOutlineThickness=0.381
+[eeschema]
+version=1
+LibDir=
+[eeschema/libraries]
+LibName1=libs/pic_programmer_schlib
+LibName2=power

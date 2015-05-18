@@ -1,4 +1,4 @@
-update=30/08/2014 10:43:23
+update=18/05/2015 09:11:22
 version=1
 last_client=kicad
 [general]
@@ -10,30 +10,6 @@ version=1
 NetIExt=net
 [cvpcb/libraries]
 EquName1=devcms
-[eeschema]
-version=1
-LibDir=
-[eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=transistors
-LibName4=conn
-LibName5=linear
-LibName6=regul
-LibName7=74xx
-LibName8=cmos4000
-LibName9=adc-dac
-LibName10=memory
-LibName11=xilinx
-LibName12=special
-LibName13=analog_switches
-LibName14=motorola
-LibName15=intel
-LibName16=audio
-LibName17=interface
-LibName18=philips
-LibName19=cypress
-LibName20=siliconi
 [pcbnew]
 version=1
 PageLayoutDescrFile=
@@ -54,3 +30,9 @@ SolderMaskMinWidth=0
 DrawSegmentWidth=0.3048
 BoardOutlineThickness=0.2032
 ModuleOutlineThickness=0.3048
+[eeschema]
+version=1
+LibDir=
+[eeschema/libraries]
+LibName1=libs/video_schlib
+LibName2=power

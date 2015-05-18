@@ -1,4 +1,4 @@
-update=25/01/2014 08:37:41
+update=18/05/2015 09:00:28
 version=1
 last_client=kicad
 [cvpcb]
@@ -6,26 +6,6 @@ version=1
 NetIExt=net
 [cvpcb/libraries]
 EquName1=devcms
-[eeschema]
-version=1
-PageLayoutDescrFile=
-SubpartIdSeparator=0
-SubpartFirstId=65
-LibDir=F:/kicad/share/library
-NetFmtName=
-RptD_X=0
-RptD_Y=100
-RptLab=1
-LabSize=60
-[eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=transistors
-LibName4=conn
-LibName5=linear
-LibName6=regul
-LibName7=interface
-LibName8=special
 [pcbnew]
 version=1
 PageLayoutDescrFile=
@@ -50,3 +30,9 @@ ModuleOutlineThickness=0.2
 LibDir=
 [general]
 version=1
+[eeschema]
+version=1
+LibDir=F:/kicad/share/library
+[eeschema/libraries]
+LibName1=complex_hierarchy_schlib
+LibName2=power

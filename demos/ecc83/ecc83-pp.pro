@@ -1,4 +1,4 @@
-update=01/01/2015 18:35:22
+update=17/05/2015 17:04:51
 last_client=kicad
 [general]
 version=1
@@ -11,17 +11,6 @@ version=1
 NetIExt=.net
 [cvpcb/libraries]
 EquName1=devcms
-[eeschema]
-version=1
-LibDir=
-[eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=conn
-LibName4=valves
-LibName5=linear
-LibName6=regul
-LibName7=special
 [pcbnew]
 version=1
 PageLayoutDescrFile=
@@ -42,3 +31,9 @@ SolderMaskMinWidth=0
 DrawSegmentWidth=0.381
 BoardOutlineThickness=0.381
 ModuleOutlineThickness=0.381
+[eeschema]
+version=1
+LibDir=
+[eeschema/libraries]
+LibName1=ecc83_schlib
+LibName2=power

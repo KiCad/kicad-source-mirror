@@ -1,4 +1,4 @@
-update=20/09/2014 09:14:18
+update=18/05/2015 09:03:59
 version=1
 last_client=kicad
 [common]
@@ -12,30 +12,6 @@ version=1
 NetIExt=net
 [cvpcb/libraries]
 EquName1=devcms
-[eeschema]
-version=1
-PageLayoutDescrFile=pagelayout_logo.kicad_wks
-SubpartIdSeparator=0
-SubpartFirstId=65
-LibDir=
-NetFmtName=
-RptD_X=0
-RptD_Y=100
-RptLab=1
-LabSize=60
-[eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=conn
-LibName4=linear
-LibName5=regul
-LibName6=74xx
-LibName7=cmos4000
-LibName8=adc-dac
-LibName9=memory
-LibName10=xilinx
-LibName11=special
-LibName12=image
 [pcbnew]
 version=1
 PageLayoutDescrFile=pagelayout_logo.kicad_wks
@@ -56,3 +32,9 @@ SolderMaskMinWidth=0
 DrawSegmentWidth=0.381
 BoardOutlineThickness=0.127
 ModuleOutlineThickness=0.381
+[eeschema]
+version=1
+LibDir=
+[eeschema/libraries]
+LibName1=interf_u_schlib
+LibName2=power

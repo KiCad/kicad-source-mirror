@@ -1,9 +1,6 @@
 EESchema Schematic File Version 2
+LIBS:pic_programmer_schlib
 LIBS:power
-LIBS:device
-LIBS:74xx
-LIBS:conn
-LIBS:xilinx
 LIBS:pic_programmer-cache
 EELAYER 25 0
 EELAYER END
@@ -450,4 +447,15 @@ Wire Wire Line
 	2400 7000 2400 7050
 Wire Wire Line
 	3300 7000 3300 7050
+$Comp
+L PWR_FLAG #FLG047
+U 1 1 5558FA28
+P 3300 6500
+F 0 "#FLG047" H 3300 6595 30  0001 C CNN
+F 1 "PWR_FLAG" H 3300 6680 30  0000 C CNN
+F 2 "" H 3300 6500 60  0000 C CNN
+F 3 "" H 3300 6500 60  0000 C CNN
+	1    3300 6500
+	0    1    1    0   
+$EndComp
 $EndSCHEMATC

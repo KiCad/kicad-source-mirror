@@ -1,6 +1,6 @@
-update=07/01/2014 20:13:17
+update=18/05/2015 09:07:49
 version=1
-last_client=eeschema
+last_client=kicad
 [cvpcb]
 NetITyp=0
 NetIExt=.net
@@ -39,17 +39,7 @@ LibName8=valves
 version=1
 [eeschema]
 version=1
-PageLayoutDescrFile=
-SubpartIdSeparator=0
-SubpartFirstId=65
 LibDir=
-NetFmtName=
-RptD_X=0
-RptD_Y=100
-RptLab=1
-LabSize=60
 [eeschema/libraries]
-LibName1=power
-LibName2=device
-LibName3=conn
-LibName4=74xx
+LibName1=sonde xilinx_schlib
+LibName2=power
