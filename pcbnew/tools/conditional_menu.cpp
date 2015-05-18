@@ -48,8 +48,10 @@ void CONDITIONAL_MENU::AddSeparator( const SELECTION_CONDITION& aCondition, int 
 
 CONTEXT_MENU& CONDITIONAL_MENU::Generate( SELECTION& aSelection )
 {
-    // Clear, but do not delete entries - they are going to be reused
-    m_menu.GetMenuItems().clear();
+    wxMenuItemList items = m_menu.GetMenuItems();
+
+    for( wxMenuItemList::iterator it = items.begin(); it != items.end(); ++it )
+        m_menu.Remove( (*it) );
 
     for( std::list<ENTRY>::iterator it = m_entries.begin(); it != m_entries.end(); ++it )
     {
