@@ -116,19 +116,37 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         // Zooming
         wxLongLong  timeStamp   = wxGetLocalTimeMillis();
         double      timeDiff    = timeStamp.ToDouble() - m_timeStamp.ToDouble();
+        int         rotation    = aEvent.GetWheelRotation();
+        double      zoomScale;
+
+#ifdef __APPLE__
+        // The following is to support Apple pointer devices (MagicMouse &
+        // Macbook touchpad), which send events more frequently, but with smaller
+        // wheel rotation.
+        //
+        // It should not break other platforms, but I prefer to be safe than
+        // sorry. If you find a device that behaves in the same way on another
+        // platform, feel free to remove #ifdef directives.
+        if( timeDiff > 0 && timeDiff < 100 && std::abs( rotation ) < 20 )
+        {
+            aEvent.Skip();
+            return;
+        }
+#endif
 
         m_timeStamp = timeStamp;
-        double zoomScale;
 
         // Set scaling speed depending on scroll wheel event interval
         if( timeDiff < 500 && timeDiff > 0 )
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 2.05 - timeDiff / 500 :
-                        1.0 / ( 2.05 - timeDiff / 500 );
+            zoomScale = 2.05 - timeDiff / 500;
+
+            if( rotation < 0 )
+                zoomScale = 1.0 / zoomScale;
         }
         else
         {
-            zoomScale = ( aEvent.GetWheelRotation() > 0 ) ? 1.05 : 0.95;
+            zoomScale = ( rotation > 0 ) ? 1.05 : 0.95;
         }
 
         VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
