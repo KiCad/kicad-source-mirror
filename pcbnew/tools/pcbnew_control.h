@@ -63,6 +63,7 @@ public:
     int LayerSwitch( const TOOL_EVENT& aEvent );
     int LayerNext( const TOOL_EVENT& aEvent );
     int LayerPrev( const TOOL_EVENT& aEvent );
+    int LayerToggle( const TOOL_EVENT& aEvent );
     int LayerAlphaInc( const TOOL_EVENT& aEvent );
     int LayerAlphaDec( const TOOL_EVENT& aEvent );
 

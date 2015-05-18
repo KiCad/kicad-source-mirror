@@ -293,6 +293,10 @@ TOOL_ACTION COMMON_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_PREVIOUS ),
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_THROUGH_VIA ),
+        "", "" );
+
 TOOL_ACTION COMMON_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
         AS_GLOBAL, '}',
         "", "" );

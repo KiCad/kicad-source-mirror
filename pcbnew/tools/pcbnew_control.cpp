@@ -344,6 +344,20 @@ int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
+{
+    LAYER_NUM currentLayer = m_frame->GetActiveLayer();
+    PCB_SCREEN* screen = m_frame->GetScreen();
+
+    if( currentLayer == screen->m_Route_Layer_TOP )
+        m_frame->SwitchLayer( NULL, screen->m_Route_Layer_BOTTOM );
+    else
+        m_frame->SwitchLayer( NULL, screen->m_Route_Layer_TOP );
+
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
     KIGFX::PCB_PAINTER* painter =
@@ -559,8 +573,9 @@ void PCBNEW_CONTROL::SetTransitions()
     Go( &PCBNEW_CONTROL::LayerSwitch,        COMMON_ACTIONS::layerBottom.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerNext,          COMMON_ACTIONS::layerNext.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerPrev,          COMMON_ACTIONS::layerPrev.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerToggle,        COMMON_ACTIONS::layerToggle.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerAlphaInc,      COMMON_ACTIONS::layerAlphaInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerAlphaDec ,     COMMON_ACTIONS::layerAlphaDec.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerAlphaDec,      COMMON_ACTIONS::layerAlphaDec.MakeEvent() );
 
     // Grid control
     Go( &PCBNEW_CONTROL::GridFast1,          COMMON_ACTIONS::gridFast1.MakeEvent() );

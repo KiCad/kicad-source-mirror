@@ -217,6 +217,7 @@ public:
     static TOOL_ACTION layerPrev;
     static TOOL_ACTION layerAlphaInc;
     static TOOL_ACTION layerAlphaDec;
+    static TOOL_ACTION layerToggle;
 
     static TOOL_ACTION layerChanged;        // notification
 
