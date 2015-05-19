@@ -625,14 +625,14 @@ public:
     void Show3D_Frame( wxCommandEvent& event );
 
     /**
-     * Function UseGalCanvas
+     * Virtual function UseGalCanvas
      * Enables/disables GAL canvas.
      * @param aEnable determines if GAL should be active or not.
      */
     void UseGalCanvas( bool aEnable );
 
     /**
-     * Function ChangeCanvas
+     * Function SwitchCanvas
      * switches currently used canvas (default / Cairo / OpenGL).
      */
     void SwitchCanvas( wxCommandEvent& aEvent );

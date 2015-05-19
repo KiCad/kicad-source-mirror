@@ -993,15 +993,3 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
         GetGalCanvas()->Refresh();
 }
 
-
-void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
-{
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
-
-    if( aEnable )
-    {
-        SetBoard( m_Pcb );
-        updateView();
-        GetGalCanvas()->StartDrawing();
-    }
-}

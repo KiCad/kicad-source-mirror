@@ -190,7 +190,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
-    m_HotkeysZoomAndGridList = g_Libedit_Hokeys_Descr;
+    m_hotkeysDescrList    = g_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
 

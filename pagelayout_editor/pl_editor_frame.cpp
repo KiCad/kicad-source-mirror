@@ -62,7 +62,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showAxis = false;                 // true to show X and Y axis on screen
     m_showGridAxis = true;
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
-    m_HotkeysZoomAndGridList    = PlEditorHokeysDescr;
+    m_hotkeysDescrList   = PlEditorHokeysDescr;
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
     SetShowPageLimits( true );

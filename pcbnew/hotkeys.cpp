@@ -319,6 +319,7 @@ EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
     &HkMoveItemExact,          &HkDuplicateItem,             &HkDuplicateItemAndIncrement,
     &HkCreateArray,            &HkDelete,                    &HkSaveModule,
+    &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
     NULL
  };
 

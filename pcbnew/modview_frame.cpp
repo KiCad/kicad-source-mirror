@@ -121,7 +121,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     icon.CopyFromBitmap( KiBitmap( modview_icon_xpm ) );
     SetIcon( icon );
 
-    m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
+    m_hotkeysDescrList = g_Module_Viewer_Hokeys_Descr;
 
     m_libList = new wxListBox( this, ID_MODVIEW_LIB_LIST,
             wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL );

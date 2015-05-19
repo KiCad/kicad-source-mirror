@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                 _( "Clear current board and initialize a new one" ),
                 KiBitmap( new_pcb_xpm ) );
 
-        text = AddHotkeyName( _( "&Open" ), g_Board_Editor_Hokeys_Descr, HK_LOAD_BOARD );
+        text = AddHotkeyName( _( "&Open" ), m_hotkeysDescrList, HK_LOAD_BOARD );
         AddMenuItem( filesMenu, ID_LOAD_FILE, text,
                 _( "Delete current board and load new board" ),
                 KiBitmap( open_brd_file_xpm ) );
@@ -106,7 +106,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     filesMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Save" ), g_Board_Editor_Hokeys_Descr, HK_SAVE_BOARD );
+    text = AddHotkeyName( _( "&Save" ), m_hotkeysDescrList, HK_SAVE_BOARD );
     AddMenuItem( filesMenu, ID_SAVE_BOARD, text,
                  _( "Save current board" ),
                  KiBitmap( save_xpm ) );
@@ -118,7 +118,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // when not under a project mgr, we are free to change filenames, cwd ...
     if( Kiface().IsSingle() )      // not when under a project mgr (pcbnew is run as stand alone)
     {
-        text = AddHotkeyName( _( "Sa&ve As..." ), g_Board_Editor_Hokeys_Descr, HK_SAVE_BOARD_AS );
+        text = AddHotkeyName( _( "Sa&ve As..." ), m_hotkeysDescrList, HK_SAVE_BOARD_AS );
         AddMenuItem( filesMenu, ID_SAVE_BOARD_AS, text,
                      _( "Save the current board as..." ),
                      KiBitmap( save_as_xpm ) );
@@ -127,7 +127,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // but do not change the current board file name
     else
     {
-        text = AddHotkeyName( _( "Sa&ve Copy As..." ), g_Board_Editor_Hokeys_Descr, HK_SAVE_BOARD_AS );
+        text = AddHotkeyName( _( "Sa&ve Copy As..." ), m_hotkeysDescrList, HK_SAVE_BOARD_AS );
         AddMenuItem( filesMenu, ID_COPY_BOARD_AS, text,
                      _( "Save a copy of the current board as..." ),
                      KiBitmap( save_as_xpm ) );

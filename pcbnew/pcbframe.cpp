@@ -316,7 +316,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_SelLayerBox = NULL;
     m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
-    m_HotkeysZoomAndGridList = g_Board_Editor_Hokeys_Descr;
+    m_hotkeysDescrList = g_Board_Editor_Hokeys_Descr;
     m_hasAutoSave = true;
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;

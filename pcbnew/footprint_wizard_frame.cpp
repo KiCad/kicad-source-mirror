@@ -114,7 +114,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
     SetIcon( icon );
 
-    m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
+    m_hotkeysDescrList = g_Module_Viewer_Hokeys_Descr;
     m_wizardName.Empty();
 
     SetBoard( new BOARD() );

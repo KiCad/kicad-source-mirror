@@ -165,6 +165,11 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
+    // Switching canvases
+    EVT_MENU( ID_MENU_CANVAS_DEFAULT, FOOTPRINT_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, FOOTPRINT_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, FOOTPRINT_EDIT_FRAME::SwitchCanvas )
+
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
     EVT_UPDATE_UI( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib )
     EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
@@ -197,6 +202,9 @@ END_EVENT_TABLE()
 
 #define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
+// Store the canvas mode during a session:
+static enum PCB_DRAW_PANEL_GAL::GalType galmode = PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
                          wxDefaultPosition, wxDefaultSize,
@@ -205,7 +213,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis
-    m_HotkeysZoomAndGridList = g_Module_Editor_Hokeys_Descr;
+    m_hotkeysDescrList = g_Module_Editor_Hokeys_Descr;
 
     // Give an icon
     wxIcon icon;
@@ -216,9 +224,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     updateTitle();
 
     // Create GAL canvas
-    PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            parentFrame->GetGalCanvas()->GetBackend() );
+                                            galmode != PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE ?
+                                            galmode : PCB_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
@@ -293,8 +301,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Add the layer manager ( most right side of pcbframe )
     m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
-    // Layers manager is visible and served only in GAL canvas mode.
-    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( true );   // parentFrame->IsGalCanvasActive() );
+    // Layers manager is visible
+    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( true );
 
     // The left vertical toolbar (fast acces to display options)
     m_auimgr.AddPane( m_optionsToolBar,
@@ -309,31 +317,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       wxAuiPaneInfo( mesg_pane ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
-    m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
-                                   drawPanel->GetViewControls(), this );
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
-
-    if( parentFrame->IsGalCanvasActive() )
-    {
-        drawPanel->SetEventDispatcher( m_toolDispatcher );
-
-        m_toolManager->RegisterTool( new SELECTION_TOOL );
-        m_toolManager->RegisterTool( new EDIT_TOOL );
-        m_toolManager->RegisterTool( new DRAWING_TOOL );
-        m_toolManager->RegisterTool( new POINT_EDITOR );
-        m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-        m_toolManager->RegisterTool( new MODULE_TOOLS );
-        m_toolManager->RegisterTool( new PLACEMENT_TOOL );
-
-        m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
-        m_toolManager->GetTool<EDIT_TOOL>()->EditModules( true );
-        m_toolManager->GetTool<DRAWING_TOOL>()->EditModules( true );
-
-        m_toolManager->ResetTools( TOOL_BASE::RUN );
-        m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
-        UseGalCanvas( true );
-    }
+    setupTools();
+    UseGalCanvas( galmode != PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     if( m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).IsShown() )
     {
@@ -448,24 +433,12 @@ const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
 
 BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 {
-    // get the BOARD_DESIGN_SETTINGS from the parent editor, not our BOARD.
-
-    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
-//    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
-//    wxASSERT( parentFrame );
-
     return GetBoard()->GetDesignSettings();
 }
 
 
 void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 {
-    // set the BOARD_DESIGN_SETTINGS into parent editor, not our BOARD.
-
-    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
-//    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
-//    wxASSERT( parentFrame );
-
     GetBoard()->SetDesignSettings( aSettings );
 }
 
@@ -925,4 +898,82 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
 void FOOTPRINT_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
     Pgm().ConfigurePaths( this );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+    bool use_gal = false;
+
+    switch( id )
+    {
+    case ID_MENU_CANVAS_DEFAULT:
+        galmode = PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+        break;
+
+    case ID_MENU_CANVAS_CAIRO:
+        galmode = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+        break;
+
+    case ID_MENU_CANVAS_OPENGL:
+        galmode = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+        break;
+    }
+
+    UseGalCanvas( use_gal );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::setupTools()
+{
+    PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
+                                   drawPanel->GetViewControls(), this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+
+    drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new DRAWING_TOOL );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->RegisterTool( new MODULE_TOOLS );
+    m_toolManager->RegisterTool( new PLACEMENT_TOOL );
+
+    m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
+    m_toolManager->GetTool<EDIT_TOOL>()->EditModules( true );
+    m_toolManager->GetTool<DRAWING_TOOL>()->EditModules( true );
+
+    m_toolManager->ResetTools( TOOL_BASE::RUN );
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+
+}
+
+
+void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    if( aEnable )
+    {
+        SetBoard( m_Pcb );
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+        updateView();
+        GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
+        GetGalCanvas()->StartDrawing();
+    }
+    else
+    {
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+
+        // Redirect all events to the legacy canvas
+        GetGalCanvas()->SetEventDispatcher( NULL );
+    }
 }

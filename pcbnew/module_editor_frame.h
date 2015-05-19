@@ -123,6 +123,9 @@ public:
      */
     void ReCreateMenuBar();
 
+    // The Tool Framework initalization, for GAL mode
+    void setupTools();
+
     void ToolOnRightClick( wxCommandEvent& event );
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnConfigurePaths( wxCommandEvent& aEvent );
@@ -163,6 +166,12 @@ public:
      * displays 3D view of the footprint (module) being edited.
      */
     void Show3D_Frame( wxCommandEvent& event );
+
+    /**
+     * Function SwitchCanvas
+     * switches currently used canvas (default / Cairo / OpenGL).
+     */
+    void SwitchCanvas( wxCommandEvent& aEvent );
 
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
     void OnVerticalToolbar( wxCommandEvent& aEvent );

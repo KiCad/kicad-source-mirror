@@ -107,7 +107,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_optionsToolBar      = NULL;
     m_gridSelectBox       = NULL;
     m_zoomSelectBox       = NULL;
-    m_HotkeysZoomAndGridList = NULL;
+    m_hotkeysDescrList    = NULL;
 
     m_canvas              = NULL;
     m_galCanvas           = NULL;

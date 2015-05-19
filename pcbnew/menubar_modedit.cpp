@@ -110,7 +110,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save module
     text = AddHotkeyName( _( "&Save Footprint in Active Library" ),
-                          g_Module_Editor_Hokeys_Descr, HK_SAVE_MODULE );
+                          m_hotkeysDescrList, HK_SAVE_MODULE );
 
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
                  _( "Save footprint in active library" ),
@@ -155,13 +155,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     // Undo
-    text = AddHotkeyName( _( "&Undo" ), g_Module_Editor_Hokeys_Descr, HK_UNDO );
+    text = AddHotkeyName( _( "&Undo" ), m_hotkeysDescrList, HK_UNDO );
     AddMenuItem( editMenu, wxID_UNDO,
                  text, _( "Undo last action" ),
                  KiBitmap( undo_xpm ) );
 
     // Redo
-    text = AddHotkeyName( _( "&Redo" ), g_Module_Editor_Hokeys_Descr, HK_REDO );
+    text = AddHotkeyName( _( "&Redo" ), m_hotkeysDescrList, HK_REDO );
     AddMenuItem( editMenu, wxID_REDO,
                  text, _( "Redo last action" ),
                  KiBitmap( redo_xpm ) );
@@ -213,29 +213,53 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
      * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
      */
-    text = AddHotkeyName( _( "Zoom &In" ), g_Module_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &In" ), m_hotkeysDescrList,
                           HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Module_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &Out" ), m_hotkeysDescrList,
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Fit on Screen" ), m_hotkeysDescrList,
                           HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
-    text = AddHotkeyName( _( "&Redraw" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), m_hotkeysDescrList, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
     viewMenu->AppendSeparator();
 
     // 3D view
-    text = AddHotkeyName( _( "&3D Viewer" ), g_Module_Editor_Hokeys_Descr, HK_3D_VIEWER );
+    text = AddHotkeyName( _( "&3D Viewer" ), m_hotkeysDescrList, HK_3D_VIEWER );
     AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME, text, _( "Show footprint in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
+
+    // Add canvas selection
+    viewMenu->AppendSeparator();
+
+    text = AddHotkeyName( _( "&Switch canvas to default" ), m_hotkeysDescrList,
+                          HK_CANVAS_DEFAULT );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
+                 text, _( "Switch the canvas implementation to default" ),
+                 KiBitmap( tools_xpm ) );
+
+    text = AddHotkeyName( _( "Switch canvas to Open&GL" ), m_hotkeysDescrList,
+                          HK_CANVAS_OPENGL );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
+                 text, _( "Switch the canvas implementation to OpenGL" ),
+                 KiBitmap( tools_xpm ) );
+
+    text = AddHotkeyName( _( "Switch canvas to &Cairo" ), m_hotkeysDescrList,
+                          HK_CANVAS_CAIRO );
+
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
+                 text, _( "Switch the canvas implementation to Cairo" ),
+                 KiBitmap( tools_xpm ) );
 
     //-------- Place menu --------------------
     wxMenu* placeMenu = new wxMenu;
