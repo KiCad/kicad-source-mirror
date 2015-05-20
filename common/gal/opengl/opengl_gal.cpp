@@ -70,7 +70,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isGrouping               = false;
     groupCounter             = 0;
 
-#if RETINA_OPENGL_PATCH
+#ifdef RETINA_OPENGL_PATCH
     SetViewWantsBestResolution( true );
 #endif
 
