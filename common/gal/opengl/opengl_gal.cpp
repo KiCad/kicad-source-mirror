@@ -70,7 +70,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     isGrouping               = false;
     groupCounter             = 0;
 
-#ifdef __APPLE__
+#if RETINA_OPENGL_PATCH
     SetViewWantsBestResolution( true );
 #endif
 
@@ -126,7 +126,7 @@ void OPENGL_GAL::BeginDrawing()
     SetCurrent( *glContext );
     clientDC = new wxClientDC( this );
 
-#ifdef __APPLE__
+#ifdef RETINA_OPENGL_PATCH
     const float scaleFactor = GetBackingScaleFactor();
 #else
     const float scaleFactor = 1.0f;
@@ -538,7 +538,7 @@ void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
 {
     screenSize = VECTOR2I( aWidth, aHeight );
 
-#ifdef __APPLE__
+#ifdef RETINA_OPENGL_PATCH
     const float scaleFactor = GetBackingScaleFactor();
 #else
     const float scaleFactor = 1.0f;

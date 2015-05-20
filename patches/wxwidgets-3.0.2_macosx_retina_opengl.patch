@@ -1,5 +1,18 @@
---- include/wx/osx/glcanvas.h	2015-05-16 15:40:21.000000000 +0200
-+++ include/wx/osx/glcanvas.h	2015-05-16 16:44:53.000000000 +0200
+diff -rupN include/wx/glcanvas.h include/wx/glcanvas.h
+--- include/wx/glcanvas.h	2015-05-21 00:36:27.406145182 +0200
++++ include/wx/glcanvas.h	2015-05-21 00:37:59.169474782 +0200
+@@ -19,6 +19,8 @@
+ #include "wx/palette.h"
+ #include "wx/window.h"
+ 
++#define RETINA_OPENGL_PATCH
++
+ class WXDLLIMPEXP_FWD_GL wxGLCanvas;
+ class WXDLLIMPEXP_FWD_GL wxGLContext;
+ 
+diff -rupN include/wx/osx/glcanvas.h include/wx/osx/glcanvas.h
+--- include/wx/osx/glcanvas.h	2015-05-21 00:36:27.419478515 +0200
++++ include/wx/osx/glcanvas.h	2015-05-21 00:36:37.319478112 +0200
 @@ -88,6 +88,9 @@ public:
      // update the view port of the current context to match this window
      void SetViewport();
@@ -10,8 +23,9 @@
  
      // deprecated methods
      // ------------------
---- src/osx/cocoa/glcanvas.mm	2015-05-16 15:40:24.000000000 +0200
-+++ src/osx/cocoa/glcanvas.mm	2015-05-16 17:10:50.000000000 +0200
+diff -rupN src/osx/cocoa/glcanvas.mm src/osx/cocoa/glcanvas.mm
+--- src/osx/cocoa/glcanvas.mm	2015-05-21 00:36:27.542811843 +0200
++++ src/osx/cocoa/glcanvas.mm	2015-05-21 00:36:37.322811445 +0200
 @@ -313,6 +313,22 @@ bool wxGLCanvas::SwapBuffers()
      return true;
  }
