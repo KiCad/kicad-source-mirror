@@ -263,6 +263,9 @@ public:
      *</p>
      */
     void OnMouseWheel( wxMouseEvent& event );
+#ifdef USE_OSX_MAGNIFY_EVENT
+    void OnMagnify( wxMouseEvent& event );
+#endif
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseLeaving( wxMouseEvent& event );
     void OnKeyEvent( wxKeyEvent& event );

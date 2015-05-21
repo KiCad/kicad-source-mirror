@@ -250,6 +250,9 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     // Mouse handling
     if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
+#ifdef USE_OSX_MAGNIFY_EVENT
+        type == wxEVT_MAGNIFY ||
+#endif
         type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
         type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
         type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||

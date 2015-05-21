@@ -70,6 +70,9 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
     EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
+#ifdef USE_OSX_MAGNIFY_EVENT
+    EVT_MAGNIFY( EDA_DRAW_PANEL::OnMagnify )
+#endif
     EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
     EVT_CHAR( EDA_DRAW_PANEL::OnKeyEvent )
     EVT_CHAR_HOOK( EDA_DRAW_PANEL::OnCharHook )
@@ -91,7 +94,11 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 {
     wxASSERT( parent );
 
+#ifndef USE_OSX_MAGNIFY_EVENT
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+#else
+    ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+#endif
     DisableKeyboardScrolling();
 
     m_scrollIncrementX = std::min( size.x / 8, 10 );
@@ -973,6 +980,34 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     GetEventHandler()->ProcessEvent( cmd );
     event.Skip();
 }
+
+
+#ifdef USE_OSX_MAGNIFY_EVENT
+void EDA_DRAW_PANEL::OnMagnify( wxMouseEvent& event )
+{
+    // Scale the panel around our cursor position.
+    bool warpCursor = false;
+
+    wxPoint cursorPosition = GetParent()->GetCursorPosition( false );
+    wxPoint centerPosition = GetParent()->GetScrollCenterPosition();
+    wxPoint vector = centerPosition - cursorPosition;
+
+    double magnification = ( event.GetMagnification() + 1.0f );
+    double scaleFactor = GetZoom() / magnification;
+
+    // Scale the vector between the cursor and center point
+    vector.x /= magnification;
+    vector.y /= magnification;
+
+    SetZoom(scaleFactor);
+
+    // Recenter the window along our scaled vector such that the
+    // cursor becomes our scale axis, remaining fixed on screen
+    GetParent()->RedrawScreen( cursorPosition + vector, warpCursor );
+
+    event.Skip();
+}
+#endif
 
 
 void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
