@@ -122,6 +122,9 @@ The same patches apply both for wxWidgets and for wxPython.
 There is also an optional patch that enables full screen resolution on Retina displays:
   # patch -p0 < ../kicad/patches/wxwidgets-3.0.2_macosx_retina_opengl.patch
 
+Optional patch to support pinch gesture on trackpads to control zoom:
+  # patch -p0 < ../kicad/patches/wxwidgets-3.0.2_macosx_magnify_event.patch
+
 The script uses the following configure command/options for wxWidgets known to
 work:
   # ../wx-src/configure \

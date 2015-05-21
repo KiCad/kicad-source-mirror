@@ -1,8 +1,16 @@
-Index: include/wx/event.h
-===================================================================
---- include/wx/event.h	(revision 78078)
-+++ include/wx/event.h	(working copy)
-@@ -716,6 +716,7 @@
+diff -rupN include/wx/event.h include/wx/event.h
+--- include/wx/event.h	2015-05-21 23:18:15.126136156 +0200
++++ include/wx/event.h	2015-05-21 23:20:35.112797127 +0200
+@@ -11,6 +11,8 @@
+ #ifndef _WX_EVENT_H_
+ #define _WX_EVENT_H_
+ 
++#define USE_OSX_MAGNIFY_EVENT
++
+ #include "wx/defs.h"
+ #include "wx/cpp.h"
+ #include "wx/object.h"
+@@ -716,6 +718,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_COR
  wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_AUX2_DOWN, wxMouseEvent);
  wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_AUX2_UP, wxMouseEvent);
  wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_AUX2_DCLICK, wxMouseEvent);
@@ -10,7 +18,7 @@ Index: include/wx/event.h
  
      // Character input event type
  wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_CHAR, wxKeyEvent);
-@@ -1751,6 +1752,8 @@
+@@ -1751,6 +1754,8 @@ public:
      bool Aux1DClick() const { return (m_eventType == wxEVT_AUX1_DCLICK); }
      bool Aux2DClick() const { return (m_eventType == wxEVT_AUX2_DCLICK); }
  
@@ -19,7 +27,7 @@ Index: include/wx/event.h
      // True if a button is down and the mouse is moving
      bool Dragging() const
      {
-@@ -1805,6 +1808,8 @@
+@@ -1805,6 +1810,8 @@ public:
      // Is the system set to do page scrolling?
      bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
  
@@ -28,7 +36,7 @@ Index: include/wx/event.h
      virtual wxEvent *Clone() const { return new wxMouseEvent(*this); }
      virtual wxEventCategory GetEventCategory() const { return wxEVT_CATEGORY_USER_INPUT; }
  
-@@ -1824,6 +1829,8 @@
+@@ -1824,6 +1831,8 @@ public:
      int           m_linesPerAction;
      int           m_columnsPerAction;
  
@@ -37,7 +45,7 @@ Index: include/wx/event.h
  protected:
      void Assign(const wxMouseEvent& evt);
  
-@@ -4218,6 +4225,7 @@
+@@ -4218,6 +4227,7 @@ typedef void (wxEvtHandler::*wxClipboard
  #define EVT_MOUSE_AUX2_DOWN(func) wx__DECLARE_EVT0(wxEVT_AUX2_DOWN, wxMouseEventHandler(func))
  #define EVT_MOUSE_AUX2_UP(func) wx__DECLARE_EVT0(wxEVT_AUX2_UP, wxMouseEventHandler(func))
  #define EVT_MOUSE_AUX2_DCLICK(func) wx__DECLARE_EVT0(wxEVT_AUX2_DCLICK, wxMouseEventHandler(func))
@@ -45,7 +53,7 @@ Index: include/wx/event.h
  
  // All mouse events
  #define EVT_MOUSE_EVENTS(func) \
-@@ -4239,7 +4247,8 @@
+@@ -4239,7 +4249,8 @@ typedef void (wxEvtHandler::*wxClipboard
      EVT_MOTION(func) \
      EVT_LEAVE_WINDOW(func) \
      EVT_ENTER_WINDOW(func) \
@@ -55,11 +63,10 @@ Index: include/wx/event.h
  
  // Scrolling from wxWindow (sent to wxScrolledWindow)
  #define EVT_SCROLLWIN_TOP(func) wx__DECLARE_EVT0(wxEVT_SCROLLWIN_TOP, wxScrollWinEventHandler(func))
-Index: src/common/event.cpp
-===================================================================
---- src/common/event.cpp	(revision 78078)
-+++ src/common/event.cpp	(working copy)
-@@ -207,6 +207,7 @@
+diff -rupN src/common/event.cpp src/common/event.cpp
+--- src/common/event.cpp	2015-05-21 23:18:15.049469492 +0200
++++ src/common/event.cpp	2015-05-21 23:18:23.566135812 +0200
+@@ -208,6 +208,7 @@ wxDEFINE_EVENT( wxEVT_AUX1_DCLICK, wxMou
  wxDEFINE_EVENT( wxEVT_AUX2_DOWN, wxMouseEvent );
  wxDEFINE_EVENT( wxEVT_AUX2_UP, wxMouseEvent );
  wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent );
@@ -67,7 +74,7 @@ Index: src/common/event.cpp
  
  // Character input event type
  wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent );
-@@ -568,6 +569,8 @@
+@@ -576,6 +577,8 @@ wxMouseEvent::wxMouseEvent(wxEventType c
      m_wheelDelta = 0;
      m_linesPerAction = 0;
      m_columnsPerAction = 0;
@@ -76,7 +83,7 @@ Index: src/common/event.cpp
  }
  
  void wxMouseEvent::Assign(const wxMouseEvent& event)
-@@ -592,6 +595,8 @@
+@@ -600,6 +603,8 @@ void wxMouseEvent::Assign(const wxMouseE
      m_linesPerAction = event.m_linesPerAction;
      m_columnsPerAction = event.m_columnsPerAction;
      m_wheelAxis = event.m_wheelAxis;
@@ -85,11 +92,10 @@ Index: src/common/event.cpp
  }
  
  // return true if was a button dclick event
-Index: src/osx/cocoa/window.mm
-===================================================================
---- src/osx/cocoa/window.mm	(revision 78078)
-+++ src/osx/cocoa/window.mm	(working copy)
-@@ -728,6 +728,12 @@
+diff -rupN src/osx/cocoa/window.mm src/osx/cocoa/window.mm
+--- src/osx/cocoa/window.mm	2015-05-21 23:18:15.032802826 +0200
++++ src/osx/cocoa/window.mm	2015-05-21 23:18:23.566135812 +0200
+@@ -741,6 +741,12 @@ void wxWidgetCocoaImpl::SetupMouseEvent(
          case NSMouseMoved :
              wxevent.SetEventType( wxEVT_MOTION ) ;
              break;
@@ -102,7 +108,7 @@ Index: src/osx/cocoa/window.mm
          default :
              break ;
      }
-@@ -1749,6 +1755,10 @@
+@@ -1773,6 +1779,10 @@ void wxOSXCocoaClassAddWXMethods(Class c
      wxOSX_CLASS_ADD_METHOD(c, @selector(mouseEntered:), (IMP) wxOSX_mouseEvent, "v@:@" )
      wxOSX_CLASS_ADD_METHOD(c, @selector(mouseExited:), (IMP) wxOSX_mouseEvent, "v@:@" )
  

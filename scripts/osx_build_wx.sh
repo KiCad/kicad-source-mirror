@@ -142,6 +142,8 @@ doPatch "$1" "$3/patches/wxwidgets-3.0.0_macosx_bug_15908.patch"
 doPatch "$1" "$3/patches/wxwidgets-3.0.0_macosx_soname.patch"
 # high resolution in OpenGL canvas: http://trac.wxwidgets.org/ticket/15700
 doPatch "$1" "$3/patches/wxwidgets-3.0.2_macosx_retina_opengl.patch"
+# patch to support pinch-to-zoom on trackpads
+doPatch "$1" "$3/patches/wxwidgets-3.0.2_macosx_magnify_event.patch"
 
 # configure and build wxWidgets
 wxWidgets_configure "$1" "$2" "$4"
