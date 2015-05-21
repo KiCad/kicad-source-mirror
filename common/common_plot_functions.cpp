@@ -87,7 +87,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     wxFileName fn( aFilename );
 
     // Prepare plot parameters
-    drawList.SetPenSize(PLOTTER::DEFAULT_LINE_WIDTH );
+    drawList.SetPenSize(PLOTTER::USE_DEFAULT_LINE_WIDTH );
     drawList.SetMilsToIUfactor( iusPerMil );
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aNumberOfSheets );
@@ -102,7 +102,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item;
          item = drawList.GetNext() )
     {
-        plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
+        plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
 
         switch( item->GetType() )
         {
@@ -157,7 +157,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                     break;
 
                 parent->m_ImageBitmap->PlotImage( plotter, bm->GetPosition(),
-                               plotColor, PLOTTER::DEFAULT_LINE_WIDTH );
+                               plotColor, PLOTTER::USE_DEFAULT_LINE_WIDTH );
             }
             break;
         }

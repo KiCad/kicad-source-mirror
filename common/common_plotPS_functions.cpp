@@ -88,8 +88,8 @@ void PSLIKE_PLOTTER::SetColor( EDA_COLOR_T color )
 }
 
 
-void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
-                                   EDA_DRAW_MODE_T modetrace )
+void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize,
+                                   double aPadOrient, EDA_DRAW_MODE_T aTraceMode )
 {
     wxASSERT( outputFile );
     int x0, y0, x1, y1, delta;
@@ -99,7 +99,7 @@ void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y );
-        orient = AddAngles( orient, 900 );
+        aPadOrient = AddAngles( aPadOrient, 900 );
     }
 
     delta = size.y - size.x;
@@ -107,50 +107,56 @@ void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
     y0    = -delta / 2;
     x1    = 0;
     y1    = delta / 2;
-    RotatePoint( &x0, &y0, orient );
-    RotatePoint( &x1, &y1, orient );
+    RotatePoint( &x0, &y0, aPadOrient );
+    RotatePoint( &x1, &y1, aPadOrient );
 
-    if( modetrace == FILLED )
-        ThickSegment( wxPoint( pos.x + x0, pos.y + y0 ),
-                      wxPoint( pos.x + x1, pos.y + y1 ), size.x, modetrace );
+    if( aTraceMode == FILLED )
+        ThickSegment( wxPoint( aPadPos.x + x0, aPadPos.y + y0 ),
+                      wxPoint( aPadPos.x + x1, aPadPos.y + y1 ), size.x, aTraceMode );
     else
-        sketchOval( pos, size, orient, -1 );
+        sketchOval( aPadPos, size, aPadOrient, -1 );
 }
 
 
-void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
-                                     EDA_DRAW_MODE_T modetrace )
+void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
+                                     EDA_DRAW_MODE_T aTraceMode )
 {
-    int current_line_width;
-    wxASSERT( outputFile );
+    if( aTraceMode == FILLED )
+        Circle( aPadPos, aDiameter, FILLED_SHAPE, 0 );
+    else    // Plot a ring:
+    {
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+        int linewidth = GetCurrentLineWidth();
 
-    SetCurrentLineWidth( -1 );
-    current_line_width = GetCurrentLineWidth();
-    if( current_line_width > diametre )
-        current_line_width = diametre;
+        // avoid aDiameter <= 1 )
+        if( linewidth > aDiameter-2 )
+            linewidth = aDiameter-2;
 
-    if( modetrace == FILLED )
-        Circle( pos, diametre - currentPenWidth, FILLED_SHAPE, current_line_width );
-    else
-        Circle( pos, diametre - currentPenWidth, NO_FILL, current_line_width );
+        Circle( aPadPos, aDiameter - linewidth, NO_FILL, linewidth );
+    }
 
-    SetCurrentLineWidth( -1 );
+    SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 }
 
 
-void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
-                                   double orient, EDA_DRAW_MODE_T trace_mode )
+void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                   double aPadOrient, EDA_DRAW_MODE_T aTraceMode )
 {
     static std::vector< wxPoint > cornerList;
     wxSize size( aSize );
     cornerList.clear();
 
-    SetCurrentLineWidth( -1 );
-    int w = currentPenWidth;
-    size.x -= w;
+    if( aTraceMode == FILLED )
+        SetCurrentLineWidth( 0 );
+    else
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+
+    size.x -= GetCurrentLineWidth();
+    size.y -= GetCurrentLineWidth();
+
     if( size.x < 1 )
         size.x = 1;
-    size.y -= w;
+
     if( size.y < 1 )
         size.y = 1;
 
@@ -158,32 +164,33 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     int dy = size.y / 2;
 
     wxPoint corner;
-    corner.x = pos.x - dx;
-    corner.y = pos.y + dy;
+    corner.x = aPadPos.x - dx;
+    corner.y = aPadPos.y + dy;
     cornerList.push_back( corner );
-    corner.x = pos.x - dx;
-    corner.y = pos.y - dy;
+    corner.x = aPadPos.x - dx;
+    corner.y = aPadPos.y - dy;
     cornerList.push_back( corner );
-    corner.x = pos.x + dx;
-    corner.y = pos.y - dy;
+    corner.x = aPadPos.x + dx;
+    corner.y = aPadPos.y - dy;
     cornerList.push_back( corner );
-    corner.x = pos.x + dx;
-    corner.y = pos.y + dy,
+    corner.x = aPadPos.x + dx;
+    corner.y = aPadPos.y + dy,
     cornerList.push_back( corner );
 
     for( unsigned ii = 0; ii < cornerList.size(); ii++ )
     {
-        RotatePoint( &cornerList[ii], pos, orient );
+        RotatePoint( &cornerList[ii], aPadPos, aPadOrient );
     }
 
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, ( trace_mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL,
+              GetCurrentLineWidth() );
 }
 
 
 void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                     double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                     double aPadOrient, EDA_DRAW_MODE_T aTraceMode )
 {
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
@@ -191,14 +198,14 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
     for( int ii = 0; ii < 4; ii++ )
         cornerList.push_back( aCorners[ii] );
 
-    if( aTrace_Mode == FILLED )
+    if( aTraceMode == FILLED )
     {
         SetCurrentLineWidth( 0 );
     }
     else
     {
-        SetCurrentLineWidth( -1 );
-        int w = currentPenWidth;
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+        int w = GetCurrentLineWidth();
         // offset polygon by w
         // coord[0] is assumed the lower left
         // coord[1] is assumed the upper left
@@ -223,7 +230,8 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
     }
 
     cornerList.push_back( cornerList[0] );
-    PlotPoly( cornerList, ( aTrace_Mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL,
+              GetCurrentLineWidth() );
 }
 
 
@@ -446,7 +454,7 @@ void PS_PLOTTER::SetCurrentLineWidth( int width )
     else
         pen_width = defaultPenWidth;
 
-    if( pen_width != currentPenWidth )
+    if( pen_width != GetCurrentLineWidth() )
         fprintf( outputFile, "%g setlinewidth\n", userToDeviceSize( pen_width ) );
 
     currentPenWidth = pen_width;
@@ -686,7 +694,7 @@ bool PS_PLOTTER::StartPlot()
 
     static const char* PSMacro[] =
     {
-    "%%BeginProlog\n"
+    "%%BeginProlog\n",
     "/line { newpath moveto lineto stroke } bind def\n",
     "/cir0 { newpath 0 360 arc stroke } bind def\n",
     "/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
@@ -708,25 +716,25 @@ bool PS_PLOTTER::StartPlot()
     "/solidline { [] 0 setdash } bind def\n",
 
     // This is for 'hidden' text (search anchors for PDF)
-        "/phantomshow { moveto\n",
-        "    /KicadFont findfont 0.000001 scalefont setfont\n",
+    "/phantomshow { moveto\n",
+    "    /KicadFont findfont 0.000001 scalefont setfont\n",
     "    show } bind def\n",
 
-        // This is for regular postscript text
-        "/textshow { gsave\n",
-        "    findfont exch scalefont setfont concat 1 scale 0 0 moveto show\n",
-        "    } bind def\n",
+    // This is for regular postscript text
+    "/textshow { gsave\n",
+    "    findfont exch scalefont setfont concat 1 scale 0 0 moveto show\n",
+    "    } bind def\n",
 
     // Utility for getting Latin1 encoded fonts
     "/reencodefont {\n",
-        "  findfont dup length dict begin\n",
-        "  { 1 index /FID ne\n",
-        "    { def }\n",
-        "    { pop pop } ifelse\n",
-        "  } forall\n",
-        "  /Encoding ISOLatin1Encoding def\n",
-        "  currentdict\n",
-        "  end } bind def\n"
+    "  findfont dup length dict begin\n",
+    "  { 1 index /FID ne\n",
+    "    { def }\n",
+    "    { pop pop } ifelse\n",
+    "  } forall\n",
+    "  /Encoding ISOLatin1Encoding def\n",
+    "  currentdict\n",
+    "  end } bind def\n"
 
     // Remap AdobeStandard fonts to Latin1
     "/KicadFont /Helvetica reencodefont definefont pop\n",

@@ -87,7 +87,7 @@ private:
     double m_dashGapLength_mm;       ///< Dashed line parameter in mm: gap
 
 public:
-    static const int DEFAULT_LINE_WIDTH = -1;
+    static const int USE_DEFAULT_LINE_WIDTH = -1;
 
     PLOTTER();
 
@@ -128,7 +128,7 @@ public:
 
     /**
      * Set the default line width. Used at the beginning and when a width
-     * of -1 (DEFAULT_LINE_WIDTH) is requested.
+     * of -1 (USE_DEFAULT_LINE_WIDTH) is requested.
      * @param width is specified in IUs
      */
     virtual void SetDefaultLineWidth( int width ) = 0;
@@ -197,15 +197,15 @@ public:
 
     // Low level primitives
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = DEFAULT_LINE_WIDTH ) = 0;
+                       int width = USE_DEFAULT_LINE_WIDTH ) = 0;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = DEFAULT_LINE_WIDTH ) = 0;
+                         int width = USE_DEFAULT_LINE_WIDTH ) = 0;
 
     /**
      * Generic fallback: arc rendered as a polyline
      */
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     /**
      * moveto/lineto primitive, moves the 'pen' to the specified direction
@@ -247,7 +247,7 @@ public:
      * @param aWidth = line width
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
-               int aWidth = DEFAULT_LINE_WIDTH ) = 0;
+               int aWidth = USE_DEFAULT_LINE_WIDTH ) = 0;
 
     /**
      * Function PlotImage
@@ -273,12 +273,12 @@ public:
                               EDA_DRAW_MODE_T tracemode );
 
     // Flash primitives
-    virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 EDA_DRAW_MODE_T trace_mode ) = 0;
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               EDA_DRAW_MODE_T trace_mode ) = 0;
-    virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               double orient, EDA_DRAW_MODE_T trace_mode ) = 0;
+    virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
+                                 EDA_DRAW_MODE_T aTraceMode ) = 0;
+    virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+                               EDA_DRAW_MODE_T aTraceMode ) = 0;
+    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
+                               double aPadOrient, EDA_DRAW_MODE_T aTraceMode ) = 0;
 
     /** virtual function FlashPadTrapez
      * flash a trapezoidal pad
@@ -289,7 +289,7 @@ public:
      * @param aTrace_Mode = FILLED or SKETCH
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode ) = 0;
+                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode ) = 0;
 
 
     /**
@@ -517,16 +517,16 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-               int width = DEFAULT_LINE_WIDTH );
+               int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH);
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH);
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );
@@ -663,14 +663,14 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -734,14 +734,14 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH);
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH);
 
     virtual void PenTo( const wxPoint& pos, char plume );
 
@@ -802,14 +802,14 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -914,18 +914,18 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                           double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
-                      int aRadius, FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
+                      int aRadius, FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     /**
      * Gerber polygon: they can (and *should*) be filled with the
      * appropriate G36/G37 sequence
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PenTo( const wxPoint& pos, char plume );
 
@@ -1053,15 +1053,15 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );

@@ -89,7 +89,10 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 /**
  * Pen width setting for PDF. Since the specs *explicitly* says that a 0
  * width is a bad thing to use (since it results in 1 pixel traces), we
- * convert such requests to the default width (like -1)
+ * convert such requests to the minimal width (like 1)
+ * Note pen width = 0 is used in plot polygons to plot filled polygons with
+ * no outline thickness
+ * use in this case pen width = 1 does not actally change the polygon
  */
 void PDF_PLOTTER::SetCurrentLineWidth( int width )
 {
@@ -98,6 +101,8 @@ void PDF_PLOTTER::SetCurrentLineWidth( int width )
 
     if( width > 0 )
         pen_width = width;
+    else if( width == 0 )
+        pen_width = 1;
     else
         pen_width = defaultPenWidth;
 
