@@ -166,7 +166,7 @@ void WX_VIEW_CONTROLS::onMagnify( wxMouseEvent& aEvent )
 {
     // Scale based on the magnification from our underlying magnification event.
     VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-    setScale( m_view->GetScale() * ( aEvent.GetMagnification() + 1.0f ), anchor );
+    m_view->SetScale( m_view->GetScale() * ( aEvent.GetMagnification() + 1.0f ), anchor );
 
     aEvent.Skip();
 }
