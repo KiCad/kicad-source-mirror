@@ -130,7 +130,7 @@ TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
 
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
-        _( "Properties..." ), _( "Displays properties window" ), editor_xpm );
+        _( "Properties..." ), _( "Displays item properties dialog" ), editor_xpm );
 
 
 // Drawing tool actions

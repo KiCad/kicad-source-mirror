@@ -57,21 +57,21 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	
 	bSizerLeft->Add( bSizerVal, 0, wxEXPAND, 5 );
 	
-	wxString m_LayerCtrlChoices[] = { _("Top"), _("Bottom") };
+	wxString m_LayerCtrlChoices[] = { _("Top side"), _("Bottom side") };
 	int m_LayerCtrlNChoices = sizeof( m_LayerCtrlChoices ) / sizeof( wxString );
 	m_LayerCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Side"), wxDefaultPosition, wxDefaultSize, m_LayerCtrlNChoices, m_LayerCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_LayerCtrl->SetSelection( 0 );
 	bSizerLeft->Add( m_LayerCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_OrientCtrlChoices[] = { _("Normal"), _("+90.0"), _("-90.0"), _("180.0"), _("User") };
+	wxString m_OrientCtrlChoices[] = { _("0.0"), _("+90.0"), _("-90.0"), _("180.0"), _("Other rotation") };
 	int m_OrientCtrlNChoices = sizeof( m_OrientCtrlChoices ) / sizeof( wxString );
-	m_OrientCtrl = new wxRadioBox( m_PanelProperties, ID_LISTBOX_ORIENT_SELECT, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_OrientCtrlNChoices, m_OrientCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_OrientCtrl = new wxRadioBox( m_PanelProperties, ID_LISTBOX_ORIENT_SELECT, _("Rotation"), wxDefaultPosition, wxDefaultSize, m_OrientCtrlNChoices, m_OrientCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_OrientCtrl->SetSelection( 0 );
 	bSizerLeft->Add( m_OrientCtrl, 0, wxEXPAND|wxALL, 5 );
 	
-	m_staticText4 = new wxStaticText( m_PanelProperties, wxID_ANY, _("User orientation (in 0.1 degrees):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	bSizerLeft->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextRotation = new wxStaticText( m_PanelProperties, wxID_ANY, _("Rotation (in 0.1 degrees):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotation->Wrap( -1 );
+	bSizerLeft->Add( m_staticTextRotation, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OrientValue = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientValue->SetMaxLength( 0 ); 
