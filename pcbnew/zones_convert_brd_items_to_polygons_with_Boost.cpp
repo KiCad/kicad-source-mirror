@@ -145,7 +145,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     // This KI_POLYGON_SET is the area(s) to fill, with m_ZoneMinThickness/2
     KI_POLYGON_SET polyset_zone_solid_areas;
-    int         margin = m_ZoneMinThickness / 2;
+    int outline_half_thickness = m_ZoneMinThickness / 2;
 
     /* First, creates the main polygon (i.e. the filled area using only one outline)
      * to reserve a m_ZoneMinThickness/2 margin around the outlines and holes
@@ -170,16 +170,16 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
     // deflate main outline reserve room for thick outline
-    polyset_zone_solid_areas -= margin;
+    polyset_zone_solid_areas -= outline_half_thickness;
     // inflate outline holes
     if( outlineHoles.size() )
-        outlineHoles += margin;
+        outlineHoles += outline_half_thickness;
 
     if( outlineHoles.size() )
         cornerBufferPolysToSubstract.ImportFrom( outlineHoles );
 #else
     CPOLYGONS_LIST tmp;
-    m_smoothedPoly->m_CornersList.InflateOutline( tmp, -margin, true );
+    m_smoothedPoly->m_CornersList.InflateOutline( tmp, -outline_half_thickness, true );
     tmp.ExportTo( polyset_zone_solid_areas );
 #endif
 
@@ -192,7 +192,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      *    or items like texts on copper layers
      */
     int zone_clearance = std::max( m_ZoneClearance, GetClearance() );
-    zone_clearance += margin;
+    zone_clearance += outline_half_thickness;
 
     /* store holes (i.e. tracks and pads areas as polygons outlines)
      * in a polygon list
@@ -256,7 +256,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             // Note: netcode <=0 means not connected item
             if( ( pad->GetNetCode() != GetNetCode() ) || ( pad->GetNetCode() <= 0 ) )
             {
-                item_clearance   = pad->GetClearance() + margin;
+                item_clearance   = pad->GetClearance() + outline_half_thickness;
                 item_boundingbox = pad->GetBoundingBox();
                 item_boundingbox.Inflate( item_clearance );
 
@@ -301,7 +301,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         if( track->GetNetCode() == GetNetCode()  && (GetNetCode() != 0) )
             continue;
 
-        item_clearance   = track->GetClearance() + margin;
+        item_clearance   = track->GetClearance() + outline_half_thickness;
         item_boundingbox = track->GetBoundingBox();
 
         if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -383,18 +383,25 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
         // Add the zone outline area.
         // However if the zone has the same net as the current zone,
-        // do not add clearance.
+        // do not add any clearance.
         // the zone will be connected to the current zone, but filled areas
         // will use different parameters (clearance, thermal shapes )
         bool same_net = GetNetCode() == zone->GetNetCode();
-        int min_clearance = zone_clearance;
         bool use_net_clearance = true;
+        int min_clearance = zone_clearance;
+
+        // Do not forget to make room to draw the thick outlines
+        // of the hole created by the area of the zone to remove
+        int holeclearance = zone->GetClearance() + outline_half_thickness;
+
+        // The final clearance is obviously the max value of each zone clearance
+        min_clearance = std::max( min_clearance, holeclearance );
 
         if( zone->GetIsKeepout() || same_net )
         {
             // Just take in account the fact the outline has a thickness, so
             // the actual area to substract is inflated to take in account this fact
-            min_clearance = m_ZoneMinThickness / 2;
+            min_clearance = outline_half_thickness;
             use_net_clearance = false;
         }
 
