@@ -470,15 +470,16 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
     if( repo.HasServer() && repo.HasPath() )
     {
         // scheme might be "http" or if truly github.com then "https".
-        wxString    zip_url( repo.GetScheme() + "://"  );
+        wxString zip_url = repo.GetScheme();
+
+        zip_url += "://";
 
         if( repo.GetServer() == "github.com" )
         {
 #if 0       // A proper code path would be this one, but it is not the fastest.
             zip_url += repo.GetServer();
             zip_url += repo.GetPath();      // path comes with a leading '/'
-            zip_url += '/';
-            zip_url += "archive/master.zip";
+            zip_url += "/archive/master.zip";
 #else
             // Github issues a redirect for the "master.zip".  i.e.
             //  "https://github.com/liftoff-sr/pretty_footprints/archive/master.zip"
@@ -491,8 +492,7 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
             // be slower than doing this bypass.
             zip_url += "codeload.github.com";
             zip_url += repo.GetPath();      // path comes with a leading '/'
-            zip_url += '/';
-            zip_url += "zip/master";
+            zip_url += "/zip/master";
 #endif
         }
         else
