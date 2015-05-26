@@ -49,7 +49,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
     bool res = true;
     bool executeCommandLine = false;
 
-    wxString fileName = aFullFileName;
+    wxString    fileName = aFullFileName;
+
     NETLIST_EXPORTER *helper;
 
     switch( aFormat )
@@ -93,13 +94,16 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
         if( m_netListerCommand.IsEmpty() )
             return res;
 
+        wxString prj_dir = Prj().GetProjectPath();
+
         // build full command line from user's format string, e.g.:
         // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
         // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
         // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.xml"
         wxString commandLine = NETLIST_EXPORTER::MakeCommandLine( m_netListerCommand,
-                                                                     fileName,
-                                                                     aFullFileName );
+                fileName, aFullFileName,
+                prj_dir.SubString( 0, prj_dir.Len() - 2 )       // strip trailing '/'
+                );
 
         ProcessExecute( commandLine, wxEXEC_SYNC );
     }

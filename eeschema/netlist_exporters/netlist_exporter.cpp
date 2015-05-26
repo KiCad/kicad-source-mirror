@@ -46,18 +46,20 @@
 #include <netlist_exporter.h>
 
 wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
-            const wxString& aTempfile, const wxString& aFinalFile )
+            const wxString& aTempfile, const wxString& aFinalFile, const wxString& aProjectPath )
 {
     wxString    ret  = aFormatString;
     wxFileName  in   = aTempfile;
     wxFileName  out  = aFinalFile;
 
+    ret.Replace( wxT( "%P" ), aProjectPath.GetData(), true );
     ret.Replace( wxT( "%B" ), out.GetName().GetData(), true );
     ret.Replace( wxT( "%I" ), in.GetFullPath().GetData(), true );
     ret.Replace( wxT( "%O" ), out.GetFullPath().GetData(), true );
 
     return ret;
 }
+
 
 void NETLIST_EXPORTER::sprintPinNetName( wxString& aResult,
                                     const wxString& aNetNameFormat, NETLIST_OBJECT* aPin,

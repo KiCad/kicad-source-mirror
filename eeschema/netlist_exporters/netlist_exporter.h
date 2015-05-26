@@ -192,6 +192,8 @@ public:
      *  external program.
      * @param aFinalFile is the name of an output file that
      *  the user expects.
+     * @param aProjectDirectory is used for %P replacement, it should omit
+     *  the trailing '/'.
      *
      *  <p> Supported formatting sequences and their meaning:
      *  <ul>
@@ -201,10 +203,13 @@ public:
      *       input file.
      *  <li> %O => complete filename and path of the user chosen
      *       output file.
+     *  <li> %P => project directory, without name and without trailing '/'
      *  </ul>
      */
     static wxString MakeCommandLine( const wxString& aFormatString,
-            const wxString& aTempfile, const wxString& aFinalFile );
+            const wxString& aTempfile, const wxString& aFinalFile,
+            const wxString& aProjectDirectory
+            );
 };
 
 #endif
