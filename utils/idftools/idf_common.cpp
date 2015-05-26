@@ -1258,8 +1258,12 @@ bool IDF_OUTLINE::IsCCW( void )
             if( ( a1 < -MIN_ANG || a1 > MIN_ANG )
                 && ( a2 < -MIN_ANG || a2 > MIN_ANG ) )
             {
-                // we have 2 arcs
-                if( abs( a1 ) >= abs( a2 ) )
+                // we have 2 arcs; the winding is determined by
+                // the longer cord. although the angles are in
+                // degrees, there is no need to convert to radians
+                // to determine the longer cord.
+                if( abs( a1 * outline.front()->radius ) >=
+                    abs( a2 * outline.back()->radius ) )
                 {
                     // winding depends on a1
                     if( a1 < 0.0 )
@@ -1299,7 +1303,7 @@ bool IDF_OUTLINE::IsCCW( void )
     }
 
     double winding = dir + ( outline.front()->startPoint.x - outline.back()->endPoint.x )
-    * ( outline.front()->startPoint.y + outline.back()->endPoint.y );
+                      * ( outline.front()->startPoint.y + outline.back()->endPoint.y );
 
     if( winding > 0.0 )
         return false;
@@ -1351,8 +1355,31 @@ bool IDF_OUTLINE::push( IDF_SEGMENT* item )
     }
 
     outline.push_back( item );
-    dir += ( outline.back()->endPoint.x - outline.back()->startPoint.x )
-    * ( outline.back()->endPoint.y + outline.back()->startPoint.y );
+
+    double ang = outline.back()->angle;
+    double oang = outline.back()->offsetAngle;
+    double radius = outline.back()->radius;
+
+    if( ang < -MIN_ANG || ang > MIN_ANG )
+    {
+        // arcs require special consideration since the winding depends on
+        // the arc length; the arc length is adequately represented by
+        // taking 2 cords from the endpoints to the midpoint of the arc.
+        oang = (oang + ang / 2.0) * M_PI / 180.0;
+        double midx = outline.back()->center.x + radius * cos( oang );
+        double midy = outline.back()->center.y + radius * sin( oang );
+
+        dir += ( outline.back()->endPoint.x - midx )
+        * ( outline.back()->endPoint.y + midy );
+
+        dir += ( midx - outline.back()->startPoint.x )
+        * ( midy + outline.back()->startPoint.y );
+    }
+    else
+    {
+        dir += ( outline.back()->endPoint.x - outline.back()->startPoint.x )
+        * ( outline.back()->endPoint.y + outline.back()->startPoint.y );
+    }
 
     return true;
 }
