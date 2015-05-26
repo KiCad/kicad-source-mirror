@@ -23,7 +23,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_htmlWin = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
 	bmainSizer->Add( m_htmlWin, 1, wxALL|wxEXPAND, 3 );
 	
-	m_staticTextTpath = new wxStaticText( this, wxID_ANY, wxT("Templates path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTpath = new wxStaticText( this, wxID_ANY, _("Templates path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTpath->Wrap( -1 );
 	bmainSizer->Add( m_staticTextTpath, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -33,10 +33,10 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_tcTemplatePath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	bsizerTemplateSelector->Add( m_tcTemplatePath, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_buttonBrowse = new wxButton( this, wxID_ANY, wxT("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_buttonBrowse = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bsizerTemplateSelector->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_buttonValidate = new wxButton( this, wxID_ANY, wxT("Validate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_buttonValidate = new wxButton( this, wxID_ANY, _("Validate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bsizerTemplateSelector->Add( m_buttonValidate, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
 	
@@ -109,7 +109,7 @@ TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, con
 	m_bitmapIcon = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 64,64 ), 0 );
 	bSizer4->Add( m_bitmapIcon, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 3 );
 	
-	m_staticTitle = new wxStaticText( this, wxID_ANY, wxT("Project Template Title"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticTitle = new wxStaticText( this, wxID_ANY, _("Project Template Title"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticTitle->Wrap( 150 );
 	bSizer4->Add( m_staticTitle, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 3 );
 	
