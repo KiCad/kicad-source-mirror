@@ -47,6 +47,7 @@
 #include <class_module.h>
 #include <polygon_test_point_inside.h>
 #include <convert_from_iu.h>
+#include <boost/foreach.hpp>
 
 
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
@@ -950,28 +951,25 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
     }
 
-    if( IsOnLayer( F_Mask ) )
-        aLayers[aCount++] = F_Mask;
+    // Check non-copper layers. This list should include all the layers that the
+    // footprint editor allows a pad to be placed on.
+    static const LAYER_ID layers_mech[] = { F_Mask, B_Mask, F_Paste, B_Paste,
+        F_Adhes, B_Adhes, F_SilkS, B_SilkS, Dwgs_User, Eco1_User, Eco2_User };
 
-    if( IsOnLayer( B_Mask ) )
-        aLayers[aCount++] = B_Mask;
-
-    if( IsOnLayer( F_Paste ) )
-        aLayers[aCount++] = F_Paste;
-
-    if( IsOnLayer( B_Paste ) )
-        aLayers[aCount++] = B_Paste;
-
-    if( IsOnLayer( B_Adhes ) )
-        aLayers[aCount++] = B_Adhes;
-
-    if( IsOnLayer( F_Adhes ) )
-        aLayers[aCount++] = F_Adhes;
+    BOOST_FOREACH( LAYER_ID each_layer, layers_mech )
+    {
+        if( IsOnLayer( each_layer ) )
+            aLayers[aCount++] = each_layer;
+    }
 
 #ifdef __WXDEBUG__
     if( aCount == 0 )    // Should not occur
     {
-        wxLogWarning( wxT("D_PAD::ViewGetLayers():PAD has no layer") );
+        wxString msg;
+        msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
+                GetParent()->GetReference(),
+                GetPadName().IsEmpty() ? "(unnamed)" : GetPadName() );
+        wxLogWarning( msg );
     }
 #endif
 }

@@ -123,7 +123,7 @@ public:
     /**
      * Function ViewGetLayers()
      * Returns the all the layers within the VIEW the object is painted on. For instance, a D_PAD
-     * spans one or more copper layers and a few technical layers. ViewDraw() or PAINTER::Draw() is
+     * spans zero or more copper layers and a few technical layers. ViewDraw() or PAINTER::Draw() is
      * repeatedly called for each of the layers returned by ViewGetLayers(), depending on the
      * rendering order.
      * @param aLayers[]: output layer index array
