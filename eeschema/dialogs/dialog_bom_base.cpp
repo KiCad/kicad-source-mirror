@@ -66,7 +66,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bRightSizer->Add( m_buttonHelp, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bRightSizer->Add( m_staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bRightSizer->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
 	
 	m_buttonAddPlugin = new wxButton( this, ID_ADD_PLUGIN, _("Add Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonAddPlugin, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
