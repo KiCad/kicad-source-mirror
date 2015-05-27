@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 16:08+0100\n"
-"PO-Revision-Date: 2015-05-23 16:08+0100\n"
+"POT-Creation-Date: 2015-05-27 15:00+0100\n"
+"PO-Revision-Date: 2015-05-27 15:00+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -683,6 +683,29 @@ msgstr "<html><h1>Selezione modelli</h1></html>"
 msgid "Select Templates Directory"
 msgstr "Seleziona la cartella modelli"
 
+#: kicad/dialogs/dialog_template_selector_base.cpp:26
+msgid "Templates path"
+msgstr "Percorso modelli"
+
+#: kicad/dialogs/dialog_template_selector_base.cpp:36
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:164
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:29
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:73
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:76
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:33
+#: common/dialogs/dialog_page_settings_base.cpp:356
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:209
+msgid "Browse"
+msgstr "Esplora"
+
+#: kicad/dialogs/dialog_template_selector_base.cpp:39
+msgid "Validate"
+msgstr "Valida"
+
+#: kicad/dialogs/dialog_template_selector_base.cpp:112
+msgid "Project Template Title"
+msgstr "Titolo modello di progetto"
+
 #: pcbnew/class_text_mod.cpp:380
 msgid "Ref."
 msgstr "Rif."
@@ -713,7 +736,7 @@ msgid "Text"
 msgstr "Testo"
 
 #: pcbnew/class_text_mod.cpp:384 pcbnew/class_module.cpp:616
-#: pcbnew/loadcmp.cpp:436 pcbnew/class_pad.cpp:627
+#: pcbnew/loadcmp.cpp:436 pcbnew/class_pad.cpp:628
 #: pcbnew/class_edge_mod.cpp:260 eeschema/template_fieldnames.cpp:45
 #: eeschema/onrightclick.cpp:432 eeschema/sch_component.cpp:1529
 #: eeschema/lib_field.cpp:586
@@ -761,7 +784,7 @@ msgstr "Mostra"
 #: pcbnew/class_zone.cpp:661 pcbnew/layer_widget.cpp:545
 #: pcbnew/class_track.cpp:1142 pcbnew/class_track.cpp:1169
 #: pcbnew/class_drawsegment.cpp:410 pcbnew/class_module.cpp:568
-#: pcbnew/class_pcb_text.cpp:130 pcbnew/class_pad.cpp:643
+#: pcbnew/class_pcb_text.cpp:130 pcbnew/class_pad.cpp:644
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:115
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:144
 #: gerbview/class_gerbview_layer_widget.cpp:89
@@ -790,7 +813,7 @@ msgstr "Capovolgi"
 
 #: pcbnew/class_text_mod.cpp:410 pcbnew/class_drawsegment.cpp:381
 #: pcbnew/class_drawsegment.cpp:399 pcbnew/class_module.cpp:593
-#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_pad.cpp:678
+#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_pad.cpp:679
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
 msgid "Angle"
 msgstr "Angolo"
@@ -804,7 +827,7 @@ msgstr "Spessore"
 
 #: pcbnew/class_text_mod.cpp:416 pcbnew/class_track.cpp:1147
 #: pcbnew/class_track.cpp:1174 pcbnew/class_drawsegment.cpp:412
-#: pcbnew/class_pcb_text.cpp:144 pcbnew/class_pad.cpp:649
+#: pcbnew/class_pcb_text.cpp:144 pcbnew/class_pad.cpp:650
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:48
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
@@ -813,7 +836,7 @@ msgid "Width"
 msgstr "Larghezza"
 
 #: pcbnew/class_text_mod.cpp:419 pcbnew/class_pcb_text.cpp:147
-#: pcbnew/class_pad.cpp:652 pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
+#: pcbnew/class_pad.cpp:653 pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
 #: eeschema/lib_field.cpp:750
 msgid "Height"
 msgstr "Altezza"
@@ -1418,7 +1441,7 @@ msgstr "Cancellare impronta %s (valore %s)?"
 msgid "Line"
 msgstr "Linea"
 
-#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:866
+#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:867
 msgid "Rect"
 msgstr "Rett."
 
@@ -1428,7 +1451,7 @@ msgid "Arc"
 msgstr "Arco"
 
 #: pcbnew/class_board_item.cpp:45 pcbnew/class_drawsegment.cpp:375
-#: pcbnew/class_pad.cpp:860 eeschema/lib_circle.cpp:53
+#: pcbnew/class_pad.cpp:861 eeschema/lib_circle.cpp:53
 #: gerbview/class_gerber_draw_item.cpp:190
 msgid "Circle"
 msgstr "Cerchio"
@@ -3945,7 +3968,7 @@ msgstr "Strati"
 msgid "Diameter"
 msgstr "Diametro"
 
-#: pcbnew/class_track.cpp:1236 pcbnew/class_pad.cpp:658
+#: pcbnew/class_track.cpp:1236 pcbnew/class_pad.cpp:659
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:278
 msgid "Drill"
@@ -6023,59 +6046,59 @@ msgstr "Libreria '%s' già esistente!"
 msgid "library '%s' cannot be deleted"
 msgstr "La libreria '%s' non può essere cancellata"
 
-#: pcbnew/class_pad.cpp:629
+#: pcbnew/class_pad.cpp:630
 msgid "Pad"
 msgstr "Piazzola"
 
-#: pcbnew/class_pad.cpp:632 pcbnew/dialogs/dialog_design_rules.cpp:52
+#: pcbnew/class_pad.cpp:633 pcbnew/dialogs/dialog_design_rules.cpp:52
 msgid "Net"
 msgstr "Collegamento"
 
-#: pcbnew/class_pad.cpp:666
+#: pcbnew/class_pad.cpp:667
 msgid "Drill X / Y"
 msgstr "Foratura X / Y"
 
-#: pcbnew/class_pad.cpp:681
+#: pcbnew/class_pad.cpp:682
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:80
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:165
 msgid "Position"
 msgstr "Posizione"
 
-#: pcbnew/class_pad.cpp:686
+#: pcbnew/class_pad.cpp:687
 msgid "Length in package"
 msgstr "Lunghezza nel contenitore"
 
-#: pcbnew/class_pad.cpp:863 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+#: pcbnew/class_pad.cpp:864 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval"
 msgstr "Ovale"
 
-#: pcbnew/class_pad.cpp:869
+#: pcbnew/class_pad.cpp:870
 msgid "Trap"
 msgstr "Trap"
 
-#: pcbnew/class_pad.cpp:882
+#: pcbnew/class_pad.cpp:883
 msgid "Std"
 msgstr "Std"
 
-#: pcbnew/class_pad.cpp:885 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
+#: pcbnew/class_pad.cpp:886 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "SMD"
 msgstr "SMD"
 
-#: pcbnew/class_pad.cpp:888
+#: pcbnew/class_pad.cpp:889
 msgid "Conn"
 msgstr "Connessione"
 
-#: pcbnew/class_pad.cpp:891
+#: pcbnew/class_pad.cpp:892
 msgid "Not Plated"
 msgstr "Non placcata"
 
-#: pcbnew/class_pad.cpp:907
+#: pcbnew/class_pad.cpp:908
 #, c-format
 msgid "Pad on %s of %s"
 msgstr "Piazzola su %s di %s"
 
-#: pcbnew/class_pad.cpp:913
+#: pcbnew/class_pad.cpp:914
 #, c-format
 msgid "Pad %s on %s of %s"
 msgstr "Piazzola %s su %s di %s"
@@ -8758,16 +8781,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:154
 msgid "Netlist File:"
 msgstr "File netlist:"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:164
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:29
-#: pcbnew/dialogs/wizard_add_fplib_base.cpp:73
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:76
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:33
-#: common/dialogs/dialog_page_settings_base.cpp:356
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:209
-msgid "Browse"
-msgstr "Esplora"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:342
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
@@ -17358,32 +17371,32 @@ msgstr "Impossibile aprire il file \"%s\""
 msgid "Save Netlist File"
 msgstr "Salva file netlist"
 
-#: eeschema/dialogs/dialog_bom.cpp:444
+#: eeschema/dialogs/dialog_bom.cpp:443
 msgid "Plugin name in plugin list"
 msgstr "Nome plugin nell'elenco plugin"
 
-#: eeschema/dialogs/dialog_bom.cpp:445
+#: eeschema/dialogs/dialog_bom.cpp:444
 msgid "Plugin name"
 msgstr "Nome plugin"
 
-#: eeschema/dialogs/dialog_bom.cpp:455
+#: eeschema/dialogs/dialog_bom.cpp:454
 msgid "This name already exists. Abort"
 msgstr "Questo nome esiste già. Interrotto"
 
-#: eeschema/dialogs/dialog_bom.cpp:483 eeschema/dialogs/dialog_netlist.cpp:840
+#: eeschema/dialogs/dialog_bom.cpp:482 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "File di plugin:"
 
-#: eeschema/dialogs/dialog_bom.cpp:567
+#: eeschema/dialogs/dialog_bom.cpp:566
 msgid "Plugin file name not found. Cannot edit plugin file"
 msgstr ""
 "Nome file plugin non trovato. Impossibile modificare il file del plugin"
 
-#: eeschema/dialogs/dialog_bom.cpp:577
+#: eeschema/dialogs/dialog_bom.cpp:576
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Nessun editor di testo selezionato. Sceglierne uno."
 
-#: eeschema/dialogs/dialog_bom.cpp:582
+#: eeschema/dialogs/dialog_bom.cpp:581
 msgid "Bom Generation Help"
 msgstr "Aiuto generazione distinta"
 
@@ -22122,6 +22135,10 @@ msgstr "Margine superiore (mm)"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:593
 msgid "Bottom Margin (mm)"
 msgstr "Margine inferirore (mm)"
+
+#: kicad/dialogs/dialog_template_selector_base.h:67
+msgid "Project Template Selector"
+msgstr "Selettore modelli di progetto"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
