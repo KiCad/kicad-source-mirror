@@ -288,8 +288,18 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         color = brd->GetVisibleElementColor( MOD_TEXT_INVISIBLE );
     }
 
-    // Draw mode compensation for the width
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+
+    // shade text if high contrast mode is active
+    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
+    {
+        LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+
+        if( !IsOnLayer( curr_layer ) )
+            ColorTurnToDarkDarkGray( &color );
+    }
+
+    // Draw mode compensation for the width
     int width = m_Thickness;
 
     if( displ_opts && displ_opts->m_DisplayModTextFill == SKETCH )

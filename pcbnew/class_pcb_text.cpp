@@ -39,6 +39,7 @@
 #include <richio.h>
 #include <class_drawpanel.h>
 #include <macros.h>
+#include <wxBasePcbFrame.h>
 #include <msgpanel.h>
 #include <base_units.h>
 
@@ -96,6 +97,15 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 
     if( displ_opts && displ_opts->m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;
+
+    // shade text if high contrast mode is active
+    if( ( DrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
+    {
+        LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+
+        if( !IsOnLayer( curr_layer ) )
+            ColorTurnToDarkDarkGray( &color );
+    }
 
     EDA_COLOR_T anchor_color = UNSPECIFIED_COLOR;
 
