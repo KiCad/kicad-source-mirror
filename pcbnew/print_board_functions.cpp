@@ -350,22 +350,11 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
         pad->SetDrillSize( drill_tmp );
     }
 
-    // Print footprint graphic shapes
-    LSET mlayer( aModule->GetLayer() );
+    if( aModule->Reference().IsVisible() && aMask[aModule->Reference().GetLayer()] )
+        aModule->Reference().Draw( aPanel, aDC, aDraw_mode );
 
-    if( aModule->GetLayer() == B_Cu )
-        mlayer = LSET( B_SilkS );
-    else if( aModule->GetLayer() == F_Cu )
-        mlayer = LSET( F_SilkS );
-
-    if( ( mlayer & aMask ).any() )
-    {
-        if( aModule->Reference().IsVisible() )
-            aModule->Reference().Draw( aPanel, aDC, aDraw_mode );
-
-        if( aModule->Value().IsVisible() )
-            aModule->Value().Draw( aPanel, aDC, aDraw_mode );
-    }
+    if( aModule->Value().IsVisible() && aMask[aModule->Value().GetLayer()] )
+        aModule->Value().Draw( aPanel, aDC, aDraw_mode );
 
     for( EDA_ITEM* item = aModule->GraphicalItems();  item;  item = item->Next() )
     {
@@ -373,10 +362,11 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
         {
         case PCB_MODULE_TEXT_T:
             {
-                if( !( mlayer & aMask ).any() )
+                TEXTE_MODULE* textMod = static_cast<TEXTE_MODULE*>( item );
+
+                if( !aMask[textMod->GetLayer()] )
                     break;
 
-                TEXTE_MODULE* textMod = static_cast<TEXTE_MODULE*>( item );
                 textMod->Draw( aPanel, aDC, aDraw_mode );
                 break;
             }
