@@ -378,7 +378,7 @@ void BOARD_OUTLINE::readOutlines( std::ifstream& aBoardFile, IDF3::IDF_VERSION a
 
                 // verify winding of previous outline
                 if( ( loopidx == 0 && !op->IsCCW() )
-                    || ( loopidx > 0 && op->IsCCW() ) )
+                    || ( loopidx > 0 && op->IsCCW() && !op->IsCircle() ) )
                 {
                     ostringstream ostr;
 
@@ -735,9 +735,6 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
         return;
     }
 
-    // ensure that the very last point is the same as the very first point
-    aOutline->back()-> endPoint = aOutline->front()->startPoint;
-
     if( single )
     {
         // only indices 0 (CCW) and 1 (CW) are valid; set the index according to
@@ -748,6 +745,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
             aIndex = 1;
     }
 
+
     // check if we must reverse things
     if( ( aOutline->IsCCW() && ( aIndex > 0 ) )
         || ( ( !aOutline->IsCCW() ) && ( aIndex == 0 ) ) )
@@ -755,6 +753,14 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
         eo  = aOutline->begin();
         bo  = aOutline->end();
         --bo;
+
+        // ensure that the very last point is the same as the very first point
+        if( aOutline->size() > 1 )
+        {
+            std::list<IDF_SEGMENT*>::iterator to = eo;
+            ++to;
+            (*to)->startPoint = (*eo)->endPoint;
+        }
 
         // for the first item we write out both points
         if( unit != UNIT_THOU )
@@ -778,7 +784,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                 << aOutline->front()->startPoint.x << " "
                 << aOutline->front()->startPoint.y << " "
-                << setprecision(2) << -aOutline->front()->angle << "\n";
+                << setprecision(3) << -aOutline->front()->angle << "\n";
             }
         }
         else
@@ -802,7 +808,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                 << (aOutline->front()->startPoint.x / IDF_THOU_TO_MM) << " "
                 << (aOutline->front()->startPoint.y / IDF_THOU_TO_MM) << " "
-                << setprecision(2) << -aOutline->front()->angle << "\n";
+                << setprecision(3) << -aOutline->front()->angle << "\n";
             }
         }
 
@@ -822,7 +828,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                     << (*bo)->startPoint.x << " "
                     << (*bo)->startPoint.y << " "
-                    << setprecision(2) << -(*bo)->angle << "\n";
+                    << setprecision(3) << -(*bo)->angle << "\n";
                 }
             }
             else
@@ -838,7 +844,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                     << ((*bo)->startPoint.x / IDF_THOU_TO_MM) << " "
                     << ((*bo)->startPoint.y / IDF_THOU_TO_MM) << " "
-                    << setprecision(2) << -(*bo)->angle << "\n";
+                    << setprecision(3) << -(*bo)->angle << "\n";
                 }
             }
 
@@ -847,6 +853,10 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
     }
     else
     {
+        // ensure that the very last point is the same as the very first point
+        if( aOutline->size() > 1 )
+            aOutline->back()-> endPoint = aOutline->front()->startPoint;
+
         bo  = aOutline->begin();
         eo  = aOutline->end();
 
@@ -872,7 +882,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                 << (*bo)->endPoint.x << " "
                 << (*bo)->endPoint.y << " "
-                << setprecision(2) << (*bo)->angle << "\n";
+                << setprecision(3) << (*bo)->angle << "\n";
             }
         }
         else
@@ -896,7 +906,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                 aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                 << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
                 << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " "
-                << setprecision(2) << (*bo)->angle << "\n";
+                << setprecision(3) << (*bo)->angle << "\n";
             }
         }
 
@@ -918,7 +928,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
                     << (*bo)->endPoint.x << " "
                     << (*bo)->endPoint.y << " "
-                    << setprecision(2) << (*bo)->angle << "\n";
+                    << setprecision(3) << (*bo)->angle << "\n";
                 }
             }
             else
@@ -934,7 +944,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
                     aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
                     << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
                     << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " "
-                    << setprecision(2) << (*bo)->angle << "\n";
+                    << setprecision(3) << (*bo)->angle << "\n";
                 }
             }
 
