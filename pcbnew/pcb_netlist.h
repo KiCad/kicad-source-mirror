@@ -10,7 +10,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,9 +34,9 @@
 #include <wx/arrstr.h>
 
 #include <fpid.h>
+#include <class_module.h>
 
 
-class MODULE;
 class REPORTER;
 
 
