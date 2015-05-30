@@ -1440,7 +1440,23 @@ void CPOLYGONS_LIST::ImportFrom( ClipperLib::Paths& aPolygons )
  * aInflateValue = the Inflate value. when < 0, this is a deflate transform
  * aLinkHoles = if true, aResult contains only one polygon,
  * with holes linked by overlapping segments
+ *
+ * Important Note:
+ * Inflating a polygon with acute angles or a non convex polygon gives non optimal shapes
+ * for your purposes (creating a clearance area from zones).
+ * So when inflating a polygon, we combine it with a "thick outline"
+ * with a thickness = aInflateValue*2.
+ * the inflated polygon shape is much better to build a polygon
+ * from a polygon + clearance area
+ *
+ * Generic algos (Clipper, Boost Polygon) can inflate polygons, but the result is
+ * not always suitable (they work fine only for polygons with non acute angle)
+ *
+ * To deflate polygons, the same calculation is made, but instead of adding the "thick outline"
+ * we substract it.
  */
+#include <convert_basic_shapes_to_polygon.h>
+
 void CPOLYGONS_LIST::InflateOutline( CPOLYGONS_LIST& aResult, int aInflateValue, bool aLinkHoles )
 {
     KI_POLYGON_SET polyset_outline;
@@ -1456,12 +1472,68 @@ void CPOLYGONS_LIST::InflateOutline( CPOLYGONS_LIST& aResult, int aInflateValue,
     }
 
     // inflate main outline
+    unsigned icnt = 0;
+    int width = std::abs( aInflateValue * 2 );
+
     if( polyset_outline.size() )
-        polyset_outline += aInflateValue;
+    {
+        CPOLYGONS_LIST outlines;
+
+        for( ; icnt < GetCornersCount(); icnt++ )
+        {
+            unsigned ii = icnt+1;
+
+            if( IsEndContour( icnt ) )
+                ii = 0;
+
+            TransformRoundedEndsSegmentToPolygon( outlines,
+                            GetPos( icnt ), GetPos( ii ), 16, width );
+
+            if( IsEndContour( icnt ) )
+                break;
+        }
+
+        KI_POLYGON_SET thicklines;
+        outlines.ExportTo( thicklines );
+
+        if( aInflateValue > 0 )     // Inflate main outline
+            polyset_outline += thicklines;
+        else if( aInflateValue < 0 )    // Actually a deflate transform
+            polyset_outline -= thicklines;   // deflate main outline
+
+    }
 
     // deflate outline holes
     if( outlineHoles.size() )
-        outlineHoles -= aInflateValue;
+    {
+        int deflateValue = -aInflateValue;
+
+        CPOLYGONS_LIST outlines;
+        icnt += 1;   // points the first point of the first hole
+        unsigned firstpoint = icnt;
+
+        for( ; icnt < GetCornersCount(); icnt++ )
+        {
+            unsigned ii = icnt+1;
+
+            if( IsEndContour( icnt ) || ii >= GetCornersCount() )
+            {
+                ii = firstpoint;
+                firstpoint = icnt+1;
+            }
+
+            TransformRoundedEndsSegmentToPolygon( outlines,
+                            GetPos( icnt ), GetPos( ii ), 16, width );
+        }
+
+        KI_POLYGON_SET thicklines;
+        outlines.ExportTo( thicklines );
+
+        if( deflateValue > 0 )     // Inflate holes
+            outlineHoles += thicklines;
+        else if( deflateValue < 0 )    // deflate holes
+            outlineHoles -= thicklines;
+    }
 
     // Copy modified polygons
     if( !aLinkHoles )
@@ -1477,6 +1549,7 @@ void CPOLYGONS_LIST::InflateOutline( CPOLYGONS_LIST& aResult, int aInflateValue,
         aResult.ImportFrom( polyset_outline );
     }
 }
+
 
 /**
  * Function ConvertPolysListWithHolesToOnePolygon

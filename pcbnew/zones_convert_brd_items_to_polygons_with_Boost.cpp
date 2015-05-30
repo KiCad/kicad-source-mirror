@@ -154,7 +154,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * so m_ZoneMinThickness is the min thickness of the filled zones areas
      * the main polygon is stored in polyset_zone_solid_areas
      */
-#if 1
+#if 0
     m_smoothedPoly->m_CornersList.ExportTo( polyset_zone_solid_areas );
 
     if( polyset_zone_solid_areas.size() == 0 )
@@ -181,6 +181,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     CPOLYGONS_LIST tmp;
     m_smoothedPoly->m_CornersList.InflateOutline( tmp, -outline_half_thickness, true );
     tmp.ExportTo( polyset_zone_solid_areas );
+
+    if( polyset_zone_solid_areas.size() == 0 )
+        return;
 #endif
 
     /* Calculates the clearance value that meet DRC requirements

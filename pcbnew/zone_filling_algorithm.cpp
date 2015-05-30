@@ -82,8 +82,12 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST*
         break;
 
     default:
-        m_smoothedPoly = new CPolyLine;
-        m_smoothedPoly->Copy( m_Poly );
+        // Acute angles between adjacent edges can create issues in calculations,
+        // in inflate/deflate outlines transforms, especially when the angle is very small.
+        // We can avoid issues by creating a very small chamfer which remove acute angles,
+        // or left it without chamfer and use only CPOLYGONS_LIST::InflateOutline to create
+        // clearance areas
+        m_smoothedPoly = m_Poly->Chamfer( Millimeter2iu( 0.0 ) );
         break;
     }
 

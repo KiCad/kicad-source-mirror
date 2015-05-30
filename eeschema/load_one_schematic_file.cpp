@@ -304,8 +304,8 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* aScree
 
     if( !pageInfo.SetType( pagename ) )
     {
-        aMsgDiag.Printf( _( "Eeschema file dimension definition error \
-line %d,\nAbort reading file.\n" ),
+        aMsgDiag.Printf( _( "Eeschema file dimension definition error line %d,"
+                            "\nAbort reading file.\n" ),
                          aLine->LineNumber() );
         aMsgDiag << FROM_UTF8( line );
     }
