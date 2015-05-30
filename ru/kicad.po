@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 15:12+0300\n"
-"PO-Revision-Date: 2015-05-23 15:21+0300\n"
+"POT-Creation-Date: 2015-05-30 09:46+0300\n"
+"PO-Revision-Date: 2015-05-30 09:49+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -1473,6 +1473,7 @@ msgid "Page layout description file"
 msgstr "Файл описания разметки листа"
 
 #: common/dialogs/dialog_page_settings_base.cpp:356
+#: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:209
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:76
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:29
@@ -2449,7 +2450,7 @@ msgstr "Доступные переменные окружения для отн
 #: eeschema/dialogs/dialog_rescue_each.cpp:120 eeschema/lib_field.cpp:579
 #: eeschema/lib_field.cpp:757 eeschema/onrightclick.cpp:422
 #: eeschema/sch_component.cpp:1511 eeschema/template_fieldnames.cpp:42
-#: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:380
+#: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:390
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
@@ -3089,31 +3090,31 @@ msgstr "Не удалось открыть файл  '%s'"
 msgid "Save Netlist File"
 msgstr "Сохранить файл списка цепей"
 
-#: eeschema/dialogs/dialog_bom.cpp:444
+#: eeschema/dialogs/dialog_bom.cpp:443
 msgid "Plugin name in plugin list"
 msgstr "Наименование плагина в списке плагинов"
 
-#: eeschema/dialogs/dialog_bom.cpp:445
+#: eeschema/dialogs/dialog_bom.cpp:444
 msgid "Plugin name"
 msgstr "Имя плагина"
 
-#: eeschema/dialogs/dialog_bom.cpp:455
+#: eeschema/dialogs/dialog_bom.cpp:454
 msgid "This name already exists. Abort"
 msgstr "Такое наименование существует. Прервано"
 
-#: eeschema/dialogs/dialog_bom.cpp:483 eeschema/dialogs/dialog_netlist.cpp:840
+#: eeschema/dialogs/dialog_bom.cpp:482 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "Файлы плагинов:"
 
-#: eeschema/dialogs/dialog_bom.cpp:567
+#: eeschema/dialogs/dialog_bom.cpp:566
 msgid "Plugin file name not found. Cannot edit plugin file"
 msgstr "Файл плагина не существует. Невозможно редактировать файл плагина"
 
-#: eeschema/dialogs/dialog_bom.cpp:577
+#: eeschema/dialogs/dialog_bom.cpp:576
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Не выбран редактор. Выберите один"
 
-#: eeschema/dialogs/dialog_bom.cpp:582
+#: eeschema/dialogs/dialog_bom.cpp:581
 msgid "Bom Generation Help"
 msgstr "Помощь в формировании ПЭ"
 
@@ -3637,15 +3638,15 @@ msgstr "Назначить посадочное место"
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:983
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:1991 gerbview/class_gerber_draw_item.cpp:573
-#: gerbview/class_gerber_draw_item.cpp:574 pcbnew/class_pcb_text.cpp:135
-#: pcbnew/class_text_mod.cpp:395
+#: gerbview/class_gerber_draw_item.cpp:574 pcbnew/class_pcb_text.cpp:145
+#: pcbnew/class_text_mod.cpp:405
 msgid "Yes"
 msgstr "Да"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:985
 #: eeschema/lib_pin.cpp:1993 gerbview/class_gerber_draw_item.cpp:573
-#: gerbview/class_gerber_draw_item.cpp:574 pcbnew/class_pcb_text.cpp:133
-#: pcbnew/class_text_mod.cpp:393
+#: gerbview/class_gerber_draw_item.cpp:574 pcbnew/class_pcb_text.cpp:143
+#: pcbnew/class_text_mod.cpp:403
 msgid "No"
 msgstr "Нет"
 
@@ -3701,8 +3702,8 @@ msgstr "Отражение |"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
 #: gerbview/class_gerber_draw_item.cpp:575
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:79
-#: pcbnew/class_pcb_text.cpp:133 pcbnew/class_pcb_text.cpp:135
-#: pcbnew/class_text_mod.cpp:407
+#: pcbnew/class_pcb_text.cpp:143 pcbnew/class_pcb_text.cpp:145
+#: pcbnew/class_text_mod.cpp:417
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
 #: pcbnew/modedit_onclick.cpp:292
@@ -4542,13 +4543,13 @@ msgstr "Номер"
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:167
 #: pcbnew/class_drawsegment.cpp:368 pcbnew/class_marker_pcb.cpp:97
-#: pcbnew/class_text_mod.cpp:390 pcbnew/class_track.cpp:1132
+#: pcbnew/class_text_mod.cpp:400 pcbnew/class_track.cpp:1132
 #: pcbnew/class_track.cpp:1159 pcbnew/class_track.cpp:1208
 #: pcbnew/class_zone.cpp:615 pcbnew/dialogs/dialog_layers_setup.cpp:346
 msgid "Type"
 msgstr "Тип"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:165 pcbnew/class_pad.cpp:681
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:165 pcbnew/class_pad.cpp:682
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:80
 msgid "Position"
 msgstr "Позиция"
@@ -4556,7 +4557,7 @@ msgstr "Позиция"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28 eeschema/lib_text.cpp:51
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:67
-#: pcbnew/class_text_mod.cpp:380 pcbnew/class_text_mod.cpp:387
+#: pcbnew/class_text_mod.cpp:390 pcbnew/class_text_mod.cpp:397
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
 msgid "Text"
 msgstr "Текст"
@@ -5981,7 +5982,7 @@ msgstr ""
 
 #: eeschema/lib_circle.cpp:53 gerbview/class_gerber_draw_item.cpp:190
 #: pcbnew/class_board_item.cpp:45 pcbnew/class_drawsegment.cpp:375
-#: pcbnew/class_pad.cpp:860
+#: pcbnew/class_pad.cpp:861
 msgid "Circle"
 msgstr "Окружность"
 
@@ -6086,7 +6087,7 @@ msgstr "Поле"
 #: eeschema/lib_field.cpp:586 eeschema/onrightclick.cpp:432
 #: eeschema/sch_component.cpp:1529 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:616
-#: pcbnew/class_pad.cpp:627 pcbnew/class_text_mod.cpp:384
+#: pcbnew/class_pad.cpp:628 pcbnew/class_text_mod.cpp:394
 #: pcbnew/loadcmp.cpp:436
 msgid "Footprint"
 msgstr "Посадочное место"
@@ -6107,16 +6108,16 @@ msgid "Field %s %s"
 msgstr "Поле %s %s"
 
 #: eeschema/lib_field.cpp:747 pcbnew/class_drawsegment.cpp:412
-#: pcbnew/class_pad.cpp:649 pcbnew/class_pcb_text.cpp:144
-#: pcbnew/class_text_mod.cpp:416 pcbnew/class_track.cpp:1147
+#: pcbnew/class_pad.cpp:650 pcbnew/class_pcb_text.cpp:154
+#: pcbnew/class_text_mod.cpp:426 pcbnew/class_track.cpp:1147
 #: pcbnew/class_track.cpp:1174 pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:48
 msgid "Width"
 msgstr "Ширина"
 
-#: eeschema/lib_field.cpp:750 pcbnew/class_pad.cpp:652
-#: pcbnew/class_pcb_text.cpp:147 pcbnew/class_text_mod.cpp:419
+#: eeschema/lib_field.cpp:750 pcbnew/class_pad.cpp:653
+#: pcbnew/class_pcb_text.cpp:157 pcbnew/class_text_mod.cpp:429
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
 msgid "Height"
 msgstr "Высота"
@@ -8500,8 +8501,8 @@ msgstr "AB оси"
 #: gerbview/dialogs/dialog_print_using_printer.cpp:163
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
 #: pcbnew/class_drawsegment.cpp:410 pcbnew/class_module.cpp:568
-#: pcbnew/class_pad.cpp:643 pcbnew/class_pcb_layer_widget.cpp:242
-#: pcbnew/class_pcb_text.cpp:130 pcbnew/class_text_mod.cpp:400
+#: pcbnew/class_pad.cpp:644 pcbnew/class_pcb_layer_widget.cpp:242
+#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:410
 #: pcbnew/class_track.cpp:1142 pcbnew/class_track.cpp:1169
 #: pcbnew/class_zone.cpp:661
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:115
@@ -9446,6 +9447,18 @@ msgstr "<html><h1>Выбор шаблона</h1></html>"
 msgid "Select Templates Directory"
 msgstr "Выбор директории шаблонов"
 
+#: kicad/dialogs/dialog_template_selector_base.cpp:26
+msgid "Templates path"
+msgstr "Директория шаблонов"
+
+#: kicad/dialogs/dialog_template_selector_base.cpp:39
+msgid "Validate"
+msgstr "Проверить"
+
+#: kicad/dialogs/dialog_template_selector_base.cpp:112
+msgid "Project Template Title"
+msgstr "Название шаблона проекта"
+
 #: kicad/files-io.cpp:51
 msgid "KiCad project file"
 msgstr "Файл проекта KiCad"
@@ -9983,7 +9996,7 @@ msgid "Comment"
 msgstr "Комментарий"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
-#: pcbnew/class_pcb_text.cpp:141 pcbnew/class_text_mod.cpp:413
+#: pcbnew/class_pcb_text.cpp:151 pcbnew/class_text_mod.cpp:423
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:64
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 msgid "Thickness"
@@ -10922,8 +10935,8 @@ msgstr "Z"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
 #: pcbnew/class_drawsegment.cpp:381 pcbnew/class_drawsegment.cpp:399
-#: pcbnew/class_module.cpp:593 pcbnew/class_pad.cpp:678
-#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:410
+#: pcbnew/class_module.cpp:593 pcbnew/class_pad.cpp:679
+#: pcbnew/class_pcb_text.cpp:148 pcbnew/class_text_mod.cpp:420
 msgid "Angle"
 msgstr "Угол"
 
@@ -11799,7 +11812,7 @@ msgstr ""
 msgid "* Warning: copper zone (net name '%s'): net has no pad*\n"
 msgstr "* Предупреждение: медная зона (цепь '%s'): цепь не имеет конт.пл.*\n"
 
-#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:866
+#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:867
 msgid "Rect"
 msgstr "Прямоуг."
 
@@ -12070,59 +12083,59 @@ msgstr "На плате"
 msgid "In Package"
 msgstr "В корпусе"
 
-#: pcbnew/class_pad.cpp:629
+#: pcbnew/class_pad.cpp:630
 msgid "Pad"
 msgstr "Конт.пл."
 
-#: pcbnew/class_pad.cpp:632 pcbnew/dialogs/dialog_design_rules.cpp:52
+#: pcbnew/class_pad.cpp:633 pcbnew/dialogs/dialog_design_rules.cpp:52
 msgid "Net"
 msgstr "Цепь"
 
-#: pcbnew/class_pad.cpp:658 pcbnew/class_track.cpp:1236
+#: pcbnew/class_pad.cpp:659 pcbnew/class_track.cpp:1236
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:278
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
 msgstr "Отв."
 
-#: pcbnew/class_pad.cpp:666
+#: pcbnew/class_pad.cpp:667
 msgid "Drill X / Y"
 msgstr "Отв. X / Y"
 
-#: pcbnew/class_pad.cpp:686
+#: pcbnew/class_pad.cpp:687
 msgid "Length in package"
 msgstr "Длина в корпусе"
 
-#: pcbnew/class_pad.cpp:863 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+#: pcbnew/class_pad.cpp:864 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval"
 msgstr "Овал"
 
-#: pcbnew/class_pad.cpp:869
+#: pcbnew/class_pad.cpp:870
 msgid "Trap"
 msgstr "Трап"
 
-#: pcbnew/class_pad.cpp:882
+#: pcbnew/class_pad.cpp:883
 msgid "Std"
 msgstr "Стд"
 
-#: pcbnew/class_pad.cpp:885 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
+#: pcbnew/class_pad.cpp:886 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "SMD"
 msgstr "SMD"
 
-#: pcbnew/class_pad.cpp:888
+#: pcbnew/class_pad.cpp:889
 msgid "Conn"
 msgstr "Conn"
 
-#: pcbnew/class_pad.cpp:891
+#: pcbnew/class_pad.cpp:892
 msgid "Not Plated"
 msgstr "Без мет."
 
-#: pcbnew/class_pad.cpp:907
+#: pcbnew/class_pad.cpp:908
 #, c-format
 msgid "Pad on %s of %s"
 msgstr "Конт.пл. на %s из %s"
 
-#: pcbnew/class_pad.cpp:913
+#: pcbnew/class_pad.cpp:914
 #, c-format
 msgid "Pad %s on %s of %s"
 msgstr "Конт.пл. %s на %s из %s"
@@ -12351,48 +12364,48 @@ msgstr "Посадочные места, расположенные на вер�
 msgid "Footprint assembly on board's back"
 msgstr "Посадочные места, расположенные на нижнем слое платы"
 
-#: pcbnew/class_pcb_text.cpp:126
+#: pcbnew/class_pcb_text.cpp:136
 msgid "Dimension"
 msgstr "Размер"
 
-#: pcbnew/class_pcb_text.cpp:128
+#: pcbnew/class_pcb_text.cpp:138
 msgid "PCB Text"
 msgstr "Текст платы"
 
-#: pcbnew/class_pcb_text.cpp:181
+#: pcbnew/class_pcb_text.cpp:191
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
 msgstr "Pcb текст \"%s\" на %s"
 
-#: pcbnew/class_text_mod.cpp:380
+#: pcbnew/class_text_mod.cpp:390
 msgid "Ref."
 msgstr "Поз."
 
-#: pcbnew/class_text_mod.cpp:397
+#: pcbnew/class_text_mod.cpp:407
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
 msgid "Display"
 msgstr "Показать"
 
-#: pcbnew/class_text_mod.cpp:403
+#: pcbnew/class_text_mod.cpp:413
 msgid " Yes"
 msgstr "Да"
 
-#: pcbnew/class_text_mod.cpp:405
+#: pcbnew/class_text_mod.cpp:415
 msgid " No"
 msgstr "Нет"
 
-#: pcbnew/class_text_mod.cpp:431
+#: pcbnew/class_text_mod.cpp:441
 #, c-format
 msgid "Reference %s"
 msgstr "Обозначение %s"
 
-#: pcbnew/class_text_mod.cpp:435
+#: pcbnew/class_text_mod.cpp:445
 #, c-format
 msgid "Value %s of %s"
 msgstr "Значение %s от %s"
 
-#: pcbnew/class_text_mod.cpp:439
+#: pcbnew/class_text_mod.cpp:449
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Текст \"%s\" на %s от %s"
@@ -22155,6 +22168,10 @@ msgstr "Рамка страницы"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:65
 msgid "Gerbview Options"
 msgstr "Параметры Gerbview"
+
+#: kicad/dialogs/dialog_template_selector_base.h:67
+msgid "Project Template Selector"
+msgstr "Выбор шаблона проекта"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
