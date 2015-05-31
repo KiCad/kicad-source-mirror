@@ -26,7 +26,8 @@
  * @file copy_to_clipboard.cpp
  */
 
-#include <wx/metafile.h>
+#include <wx/clipbrd.h>
+//#include <wx/metafile.h>
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
@@ -59,20 +60,9 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
  */
 bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 {
-    bool    success = true;
-
-#ifdef __WINDOWS__
-    int     tmpzoom;
-    wxPoint tmp_startvisu;
-    wxPoint old_org;
-    wxPoint DrawOffset;
-    int     ClipboardSizeX, ClipboardSizeY;
     bool    DrawBlock = false;
     wxRect  DrawArea;
     BASE_SCREEN* screen = aFrame->GetCanvas()->GetScreen();
-
-    // scale is the ratio resolution/internal units
-    double  scale = 82.0 / 1000.0 / (double) screen->MilsToIuScalar();
 
     if( screen->IsBlockActive() )
     {
@@ -82,52 +72,87 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
         DrawArea.SetWidth( screen->m_BlockLocate.GetWidth() );
         DrawArea.SetHeight( screen->m_BlockLocate.GetHeight() );
     }
+    else
+        DrawArea.SetSize( aFrame->GetPageSizeIU() );
 
-    /* Change frames and local settings. */
-    tmp_startvisu = screen->m_StartVisu;
-    tmpzoom = screen->GetZoom();
-    old_org = screen->m_DrawOrg;
+    // Calculate a reasonable dc size, in pixels, and the dc scale to fit
+    // the drawings into the dc size
+    // scale is the ratio resolution (in PPI) / internal units
+    double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
+    double inch2Iu = 1000.0 * (double) screen->MilsToIuScalar();
+    double  scale = ppi / inch2Iu;
+
+    wxSize dcsize = DrawArea.GetSize();
+
+    int maxdim = std::max( dcsize.x, dcsize.y );
+    // the max size in pixels of the bitmap used to byuild the sheet copy
+    const int maxbitmapsize = 3000;
+
+    while( int( maxdim * scale ) > maxbitmapsize )
+    {
+        ppi = ppi / 1.5;
+        scale = ppi / inch2Iu;
+    }
+
+    dcsize.x *= scale;
+    dcsize.y *= scale;
+
+    // Set draw offset, zoom... to values needed to draw in the memory DC
+    // after saving initial values:
+    wxPoint tmp_startvisu = screen->m_StartVisu;
+    double tmpzoom = screen->GetZoom();
+    wxPoint old_org = screen->m_DrawOrg;
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
-    screen->SetZoom( 1 );
+    screen->SetZoom( 1 );   // we use zoom = 1 in draw functions.
 
-    wxMetafileDC dc;
+    wxMemoryDC dc;
+    wxBitmap image( dcsize );
+    dc.SelectObject( image );
 
     EDA_RECT tmp = *aFrame->GetCanvas()->GetClipBox();
     GRResetPenAndBrush( &dc );
-    const bool plotBlackAndWhite = false;
-    GRForceBlackPen( plotBlackAndWhite );
+    GRForceBlackPen( false );
     screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
-    ClipboardSizeX = dc.MaxX() + 10;
-    ClipboardSizeY = dc.MaxY() + 10;
-    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
+
+    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
+                                     wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     if( DrawBlock )
     {
         dc.SetClippingRegion( DrawArea );
     }
 
+    aFrame->GetCanvas()->EraseScreen( &dc );
     const LSET allLayersMask = LSET().set();
     aFrame->PrintPage( &dc, allLayersMask, false );
     screen->m_IsPrinting = false;
     aFrame->GetCanvas()->SetClipBox( tmp );
-    wxMetafile* mf = dc.Close();
 
-    if( mf )
+    bool    success = true;
+
+    if( wxTheClipboard->Open() )
     {
-        success = mf->SetClipboard( ClipboardSizeX, ClipboardSizeY );
-        delete mf;
+        // This data objects are held by the clipboard,
+        // so do not delete them in the app.
+        wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject( image );
+        wxTheClipboard->SetData( clipbrd_data );
+        wxTheClipboard->Close();
     }
+    else
+        success = false;
 
+    // Deselect Bitmap from DC in order to delete the MemoryDC safely
+    // without deleting the bitmap
+    dc.SelectObject( wxNullBitmap );
 
     GRForceBlackPen( false );
 
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;
     screen->SetZoom( tmpzoom );
-#endif
 
     return success;
 }

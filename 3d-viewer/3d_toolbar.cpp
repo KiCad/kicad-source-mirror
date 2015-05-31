@@ -51,15 +51,11 @@ void EDA_3D_FRAME::ReCreateMainToolbar()
     m_mainToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
                             KiBitmap( import3d_xpm ), _( "Reload board" ) );
 
-#if (defined(__WINDOWS__) || defined(__APPLE__ ) )
-
-    // Does not work properly under linux
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
                          KiBitmap( copy_button_xpm ),
                          _( "Copy 3D Image to Clipboard" ) );
-#endif
 
     m_mainToolBar->AddSeparator();
 
@@ -141,11 +137,8 @@ void EDA_3D_FRAME::CreateMenuBar()
     fileMenu->Append( ID_MENU_SCREENCOPY_PNG, _( "Create Image (png format)" ) );
     fileMenu->Append( ID_MENU_SCREENCOPY_JPEG, _( "Create Image (jpeg format)" ) );
 
-#if (defined(__WINDOWS__) || defined(__APPLE__ ) )
-    // Does not work properly under linux
     fileMenu->AppendSeparator();
     fileMenu->Append( ID_TOOL_SCREENCOPY_TOCLIBBOARD, _( "Copy 3D Image to Clipboard" ) );
-#endif
 
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _( "&Exit" ) );

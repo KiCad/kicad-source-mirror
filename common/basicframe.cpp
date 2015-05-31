@@ -566,76 +566,77 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
         return;
     }
 
-    wxString tmp;
+    wxString msg_version;
     wxPlatformInfo info;
 
-    tmp = wxT( "Application: " ) + Pgm().App().GetAppName() + wxT( "\n" );
-    tmp << wxT( "Version: " ) << GetBuildVersion()
+    msg_version = wxT( "Application: " ) + Pgm().App().GetAppName() + wxT( "\n" );
+    msg_version << wxT( "Version: " ) << GetBuildVersion()
 #ifdef DEBUG
-        << wxT( " debug" )
+                << wxT( " debug" )
 #else
-        << wxT( " release" )
+                << wxT( " release" )
 #endif
-        << wxT( " build\n" );
-    tmp << wxT( "wxWidgets: Version " ) << FROM_UTF8( wxVERSION_NUM_DOT_STRING )
-        << FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
-        << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
-        << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName() << wxT( ", " )
-        << info.GetPortIdName() << wxT( "\n" );
+                << wxT( " build\n" );
+    msg_version << wxT( "wxWidgets: Version " ) << FROM_UTF8( wxVERSION_NUM_DOT_STRING )
+                << FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
+                << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
+                << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName()
+                << wxT( ", " ) << info.GetPortIdName() << wxT( "\n" );
 
     // Just in case someone builds KiCad with the platform native of Boost instead of
     // the version included with the KiCad source.
-    tmp << wxT( "Boost version: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
-        << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." ) << ( BOOST_VERSION % 100 ) << wxT( "\n" );
+    msg_version << wxT( "Boost version: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
+                << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
+                << ( BOOST_VERSION % 100 ) << wxT( "\n" );
 
-    tmp << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
+    msg_version << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
 #ifdef USE_WX_GRAPHICS_CONTEXT
-    tmp << wxT( "ON\n" );
+    msg_version << wxT( "ON\n" );
 #else
-    tmp << wxT( "OFF\n" );
+    msg_version << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         USE_WX_OVERLAY=" );
+    msg_version << wxT( "         USE_WX_OVERLAY=" );
 #ifdef USE_WX_OVERLAY
-    tmp << wxT( "ON\n" );
+    msg_version << wxT( "ON\n" );
 #else
-    tmp << wxT( "OFF\n" );
+    msg_version << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         KICAD_SCRIPTING=" );
+    msg_version << wxT( "         KICAD_SCRIPTING=" );
 #ifdef KICAD_SCRIPTING
-    tmp << wxT( "ON\n" );
+    msg_version << wxT( "ON\n" );
 #else
-    tmp << wxT( "OFF\n" );
+    msg_version << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         KICAD_SCRIPTING_MODULES=" );
+    msg_version << wxT( "         KICAD_SCRIPTING_MODULES=" );
 #ifdef KICAD_SCRIPTING_MODULES
-    tmp << wxT( "ON\n" );
+    msg_version << wxT( "ON\n" );
 #else
-    tmp << wxT( "OFF\n" );
+    msg_version << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         KICAD_SCRIPTING_WXPYTHON=" );
+    msg_version << wxT( "         KICAD_SCRIPTING_WXPYTHON=" );
 #ifdef KICAD_SCRIPTING_WXPYTHON
-    tmp << wxT( "ON\n" );
+    msg_version << wxT( "ON\n" );
 #else
-    tmp << wxT( "OFF\n" );
+    msg_version << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         USE_FP_LIB_TABLE=HARD_CODED_ON\n" );
+    msg_version << wxT( "         USE_FP_LIB_TABLE=HARD_CODED_ON\n" );
 
-    tmp << wxT( "         BUILD_GITHUB_PLUGIN=" );
+    msg_version << wxT( "         BUILD_GITHUB_PLUGIN=" );
 #ifdef BUILD_GITHUB_PLUGIN
-    tmp << wxT( "ON\n" );
+    msg_version << wxT( "ON\n" );
 #else
-    tmp << wxT( "OFF\n" );
+    msg_version << wxT( "OFF\n" );
 #endif
 
-    wxMessageBox( tmp, _( "Version Information (copied to the clipboard)" ) );
-
-    wxTheClipboard->SetData( new wxTextDataObject( tmp ) );
+    wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
     wxTheClipboard->Close();
+
+    wxMessageBox( msg_version, _( "Version Information (copied to the clipboard)" ) );
 }
 
 
