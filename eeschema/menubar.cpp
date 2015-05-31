@@ -144,8 +144,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Print schematic sheet" ),
                  KiBitmap( print_button_xpm ) );
 
-#ifdef __WINDOWS__ // __WINDOWS__
-
     // Plot submenu
     wxMenu* choice_plot_fmt = new wxMenu;
     AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC,
@@ -153,8 +151,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format" ),
                  KiBitmap( plot_xpm ) );
 
-    // Plot to Clipboard (Windows only)
-
+    // Plot to Clipboard
     AddMenuItem( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
                  _( "Plot to C&lipboard" ),
                  _( "Export drawings to clipboard" ),
@@ -165,17 +162,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_GEN_PLOT, _( "&Plot" ),
                  _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
                  KiBitmap( plot_xpm ) );
-
-#else   // Other
-
-    // Plot
-    AddMenuItem( fileMenu,
-                 ID_GEN_PLOT_SCHEMATIC,
-                 _( "&Plot" ),
-                 _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
-                 KiBitmap( plot_xpm ) );
-
-#endif
 
     // Separator
     fileMenu->AppendSeparator();

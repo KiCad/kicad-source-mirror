@@ -700,17 +700,15 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
-        wxBitmapDataObject* dobjBmp = new wxBitmapDataObject;
-        dobjBmp->SetBitmap( bitmap );
-
         if( wxTheClipboard->Open() )
         {
+            wxBitmapDataObject* dobjBmp = new wxBitmapDataObject( bitmap );
+
             if( !wxTheClipboard->SetData( dobjBmp ) )
                 wxMessageBox( _( "Failed to copy image to clipboard" ) );
 
             wxTheClipboard->Flush();    /* the data in clipboard will stay
-                                         * available after the
-                                         * application exits */
+                                         * available after the application exits */
             wxTheClipboard->Close();
         }
     }
