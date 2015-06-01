@@ -51,11 +51,15 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                                       wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiBitmap( new_xpm ),
-                            _( "New schematic project" ) );
+    if( Kiface().IsSingle() )   // not when under a project mgr
+    {
+        // These 2 menus have meaning only outside a project, i.e. not under a project manager:
+        m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiBitmap( new_xpm ),
+                                _( "New schematic project" ) );
 
-    m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, KiBitmap( open_document_xpm ),
-                            _( "Open schematic project" ) );
+        m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, KiBitmap( open_document_xpm ),
+                                _( "Open schematic project" ) );
+    }
 
     m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString, KiBitmap( save_project_xpm ),
                             _( "Save schematic project" ) );
@@ -63,20 +67,16 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
-
     m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
                             _( "Page settings" ) );
 
-
     m_mainToolBar->AddSeparator();
-
 
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
                             _( "Print schematic" ) );
 
 
     m_mainToolBar->AddSeparator();
-
 
     m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
                             _( "Cut selected item" ) );
@@ -90,7 +90,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
-
     msg = AddHotkeyName( HELP_UNDO, g_Schematic_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
 
@@ -100,7 +99,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
-
     msg = AddHotkeyName( HELP_FIND, g_Schematic_Hokeys_Descr, HK_FIND_ITEM, IS_COMMENT );
     m_mainToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
 
@@ -108,8 +106,8 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             wxNullBitmap, wxITEM_NORMAL, _( "Find and replace text" ),
                             HELP_REPLACE, NULL );
 
-    m_mainToolBar->AddSeparator();
 
+    m_mainToolBar->AddSeparator();
 
     msg = AddHotkeyName( HELP_ZOOM_IN, g_Schematic_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
@@ -126,19 +124,18 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
-
     m_mainToolBar->AddTool( ID_HIERARCHY, wxEmptyString, KiBitmap( hierarchy_nav_xpm ),
                             _( "Navigate schematic hierarchy" ) );
 
 
     m_mainToolBar->AddSeparator();
 
-
     m_mainToolBar->AddTool( ID_RUN_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
                             HELP_RUN_LIB_EDITOR );
 
     m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
                             HELP_RUN_LIB_VIEWER );
+
 
     m_mainToolBar->AddSeparator();
 
