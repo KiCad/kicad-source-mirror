@@ -219,7 +219,7 @@ static void find_rescues( std::vector<SCH_COMPONENT*>& aComponents, PART_LIBS* a
         // Test whether there is a conflict
         if( !cache_match || !lib_match )
             continue;
-        if( !cache_match->PinsConflictWith( *lib_match, /* aTestNums */ true, /* aTestNames */ false,
+        if( !cache_match->PinsConflictWith( *lib_match, /* aTestNums */ true, /* aTestNames */ true,
                 /* aTestType */ true, /* aTestOrientation */ true, /* aTestLength */ false ))
             continue;
 
