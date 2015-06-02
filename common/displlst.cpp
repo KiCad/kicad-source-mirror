@@ -89,49 +89,11 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
     for( unsigned col = 0; col < aItemHeaders.Count();  ++col )
     {
         m_listBox->SetColumnWidth( col, wxLIST_AUTOSIZE );
-
-#if !wxCHECK_VERSION( 2, 9, 0 )
-        // include the column header in the width decision, wx 2.8 forgets this:
-        wxListItem  col_info;
-
-        m_listBox->GetColumn( col, col_info );
-
-        wxString    header  = col_info.GetText();
-        int         headerz = GetTextSize( header, m_listBox ).x;
-
-        // A reasonable column header has about 14 pixels of whitespace
-        // in addition to the width of the text itself.
-        headerz += 14;
-
-        if( headerz > col_info.GetWidth() )
-        {
-            col_info.SetWidth( headerz );
-
-            m_listBox->SetColumn( col, col_info );
-        }
-#endif
+        int columnwidth = m_listBox->GetColumnWidth( col );
+        m_listBox->SetColumnWidth( col, wxLIST_AUTOSIZE_USEHEADER );
+        int headerwidth = m_listBox->GetColumnWidth( col );
+        m_listBox->SetColumnWidth( col, std::max( columnwidth, headerwidth ) );
     }
-
-
-#if !wxCHECK_VERSION( 2, 9, 0 )
-    // wx 2.8.x has bug in wxListCtrl WRT honoring the omission of wxHSCROLL, at least
-    // on gtk2.  Fix by setting minimum width so horizontal wxListCtrl scrolling is
-    // not needed on 2.8.x because of minumum visible width setting:
-    {
-        int width = 0;
-
-        for( unsigned col = 0;  col < aItemHeaders.Count();  ++col )
-        {
-            width += m_listBox->GetColumnWidth( col ) + 2;
-        }
-
-        wxSize sz = m_listBox->GetSize();
-
-        sz.SetWidth( width );
-
-        m_listBox->SetMinSize( sz );
-    }
-#endif
 
     if( !!aSelection )
     {
