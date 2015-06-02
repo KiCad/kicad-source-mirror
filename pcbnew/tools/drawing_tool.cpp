@@ -920,9 +920,8 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 
             case SET_ANGLE:
             {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != aGraphic->GetArcStart() )
+                if( wxPoint( cursorPos.x, cursorPos.y ) != aGraphic->GetArcStart() && aGraphic->GetAngle() != 0 )
                 {
-                    assert( aGraphic->GetAngle() != 0 );
                     assert( aGraphic->GetArcStart() != aGraphic->GetArcEnd() );
                     assert( aGraphic->GetWidth() > 0 );
 
