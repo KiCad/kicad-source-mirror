@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 15:00+0100\n"
-"PO-Revision-Date: 2015-05-27 15:00+0100\n"
+"POT-Creation-Date: 2015-06-03 23:10+0100\n"
+"PO-Revision-Date: 2015-06-03 23:10+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -127,7 +127,7 @@ msgstr "Avvia Eeschema"
 msgid "Run LibEdit"
 msgstr "Avvia LibEdit"
 
-#: kicad/menubar.cpp:147 kicad/menubar.cpp:374 eeschema/menubar.cpp:484
+#: kicad/menubar.cpp:147 kicad/menubar.cpp:374 eeschema/menubar.cpp:470
 msgid "Run Pcbnew"
 msgstr "Avvia PcbNew"
 
@@ -218,7 +218,7 @@ msgid "Unarchive project files from zip file"
 msgstr "Recupera i file del progetto da un archivio zip"
 
 #: kicad/menubar.cpp:281 pcbnew/menubar_pcbframe.cpp:272
-#: eeschema/menubar.cpp:186 eeschema/dialogs/dialog_erc_base.cpp:110
+#: eeschema/menubar.cpp:172 eeschema/dialogs/dialog_erc_base.cpp:110
 #: cvpcb/menubar.cpp:109 gerbview/menubar.cpp:145
 #: pagelayout_editor/menubar.cpp:111
 msgid "&Close"
@@ -247,7 +247,7 @@ msgstr "Modifica file locale"
 #: kicad/menubar.cpp:308 pcbnew/menubar_modedit.cpp:318
 #: pcbnew/menubar_pcbframe.cpp:493 cvpcb/menubar.cpp:122
 msgid "Configure Pa&ths"
-msgstr "Configura i &percorsi"
+msgstr "Configura &percorsi"
 
 #: kicad/menubar.cpp:309 pcbnew/menubar_modedit.cpp:319
 #: pcbnew/menubar_pcbframe.cpp:494 cvpcb/menubar.cpp:123
@@ -336,12 +336,12 @@ msgstr "Apri il manuale utente di KiCad"
 
 #: kicad/menubar.cpp:419 pcbnew/tool_modview.cpp:194
 #: pcbnew/menubar_modedit.cpp:346 pcbnew/menubar_pcbframe.cpp:644
-#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:501
+#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:487
 #: eeschema/menubar_libedit.cpp:269
 msgid "&Getting Started in KiCad"
 msgstr "&Iniziare con KiCad"
 
-#: kicad/menubar.cpp:420 eeschema/menubar.cpp:502
+#: kicad/menubar.cpp:420 eeschema/menubar.cpp:488
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Apri  \"Iniziare con KiCad\", guida introduttiva"
 
@@ -355,9 +355,9 @@ msgstr "Informazioni sul manager dei progetti di KiCad"
 
 #: kicad/menubar.cpp:433 pcbnew/tool_modview.cpp:206
 #: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:655
-#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:513
+#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:499
 #: eeschema/menubar_libedit.cpp:283 cvpcb/menubar.cpp:168
-#: 3d-viewer/3d_toolbar.cpp:139 gerbview/menubar.cpp:236
+#: 3d-viewer/3d_toolbar.cpp:135 gerbview/menubar.cpp:236
 #: pagelayout_editor/menubar.cpp:163
 msgid "&File"
 msgstr "&File"
@@ -366,19 +366,19 @@ msgstr "&File"
 msgid "&Browse"
 msgstr "&Esplora"
 
-#: kicad/menubar.cpp:435 cvpcb/menubar.cpp:169 3d-viewer/3d_toolbar.cpp:153
+#: kicad/menubar.cpp:435 cvpcb/menubar.cpp:169 3d-viewer/3d_toolbar.cpp:146
 #: gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:164
 msgid "&Preferences"
 msgstr "&Preferenze"
 
 #: kicad/menubar.cpp:436 pcbnew/menubar_pcbframe.cpp:662
-#: eeschema/menubar.cpp:518
+#: eeschema/menubar.cpp:504
 msgid "&Tools"
 msgstr "&Strumenti "
 
 #: kicad/menubar.cpp:437 pcbnew/tool_modview.cpp:209
 #: pcbnew/menubar_modedit.cpp:364 pcbnew/menubar_pcbframe.cpp:664
-#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:519
+#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:505
 #: eeschema/menubar_libedit.cpp:288 cvpcb/menubar.cpp:170
 #: gerbview/menubar.cpp:239 pagelayout_editor/menubar.cpp:165
 msgid "&Help"
@@ -706,11 +706,11 @@ msgstr "Valida"
 msgid "Project Template Title"
 msgstr "Titolo modello di progetto"
 
-#: pcbnew/class_text_mod.cpp:380
+#: pcbnew/class_text_mod.cpp:390
 msgid "Ref."
 msgstr "Rif."
 
-#: pcbnew/class_text_mod.cpp:380 pcbnew/footprint_wizard_frame.cpp:147
+#: pcbnew/class_text_mod.cpp:390 pcbnew/footprint_wizard_frame.cpp:147
 #: pcbnew/class_edge_mod.cpp:261
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
@@ -727,7 +727,7 @@ msgstr "Rif."
 msgid "Value"
 msgstr "Valore"
 
-#: pcbnew/class_text_mod.cpp:380 pcbnew/class_text_mod.cpp:387
+#: pcbnew/class_text_mod.cpp:390 pcbnew/class_text_mod.cpp:397
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 eeschema/lib_text.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
@@ -735,7 +735,7 @@ msgstr "Valore"
 msgid "Text"
 msgstr "Testo"
 
-#: pcbnew/class_text_mod.cpp:384 pcbnew/class_module.cpp:616
+#: pcbnew/class_text_mod.cpp:394 pcbnew/class_module.cpp:616
 #: pcbnew/loadcmp.cpp:436 pcbnew/class_pad.cpp:628
 #: pcbnew/class_edge_mod.cpp:260 eeschema/template_fieldnames.cpp:45
 #: eeschema/onrightclick.cpp:432 eeschema/sch_component.cpp:1529
@@ -743,7 +743,7 @@ msgstr "Testo"
 msgid "Footprint"
 msgstr "Impronta"
 
-#: pcbnew/class_text_mod.cpp:390 pcbnew/class_marker_pcb.cpp:97
+#: pcbnew/class_text_mod.cpp:400 pcbnew/class_marker_pcb.cpp:97
 #: pcbnew/class_zone.cpp:615 pcbnew/class_track.cpp:1132
 #: pcbnew/class_track.cpp:1159 pcbnew/class_track.cpp:1208
 #: pcbnew/class_drawsegment.cpp:368 pcbnew/dialogs/dialog_layers_setup.cpp:346
@@ -757,7 +757,7 @@ msgstr "Impronta"
 msgid "Type"
 msgstr "Tipo"
 
-#: pcbnew/class_text_mod.cpp:393 pcbnew/class_pcb_text.cpp:133
+#: pcbnew/class_text_mod.cpp:403 pcbnew/class_pcb_text.cpp:143
 #: eeschema/lib_pin.cpp:1993
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:985
 #: gerbview/class_gerber_draw_item.cpp:573
@@ -765,7 +765,7 @@ msgstr "Tipo"
 msgid "No"
 msgstr "No"
 
-#: pcbnew/class_text_mod.cpp:395 pcbnew/class_pcb_text.cpp:135
+#: pcbnew/class_text_mod.cpp:405 pcbnew/class_pcb_text.cpp:145
 #: eeschema/lib_pin.cpp:1991
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:983
@@ -774,17 +774,17 @@ msgstr "No"
 msgid "Yes"
 msgstr "Sì"
 
-#: pcbnew/class_text_mod.cpp:397
+#: pcbnew/class_text_mod.cpp:407
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 msgid "Display"
 msgstr "Mostra"
 
-#: pcbnew/class_text_mod.cpp:400 pcbnew/class_pcb_layer_widget.cpp:242
+#: pcbnew/class_text_mod.cpp:410 pcbnew/class_pcb_layer_widget.cpp:242
 #: pcbnew/class_zone.cpp:661 pcbnew/layer_widget.cpp:545
 #: pcbnew/class_track.cpp:1142 pcbnew/class_track.cpp:1169
 #: pcbnew/class_drawsegment.cpp:410 pcbnew/class_module.cpp:568
-#: pcbnew/class_pcb_text.cpp:130 pcbnew/class_pad.cpp:644
+#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_pad.cpp:644
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:115
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:144
 #: gerbview/class_gerbview_layer_widget.cpp:89
@@ -793,16 +793,16 @@ msgstr "Mostra"
 msgid "Layer"
 msgstr "Strato"
 
-#: pcbnew/class_text_mod.cpp:403
+#: pcbnew/class_text_mod.cpp:413
 msgid " Yes"
 msgstr " Sì"
 
-#: pcbnew/class_text_mod.cpp:405
+#: pcbnew/class_text_mod.cpp:415
 msgid " No"
 msgstr " No"
 
-#: pcbnew/class_text_mod.cpp:407 pcbnew/modedit_onclick.cpp:292
-#: pcbnew/class_pcb_text.cpp:133 pcbnew/class_pcb_text.cpp:135
+#: pcbnew/class_text_mod.cpp:417 pcbnew/modedit_onclick.cpp:292
+#: pcbnew/class_pcb_text.cpp:143 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
@@ -811,23 +811,23 @@ msgstr " No"
 msgid "Mirror"
 msgstr "Capovolgi"
 
-#: pcbnew/class_text_mod.cpp:410 pcbnew/class_drawsegment.cpp:381
+#: pcbnew/class_text_mod.cpp:420 pcbnew/class_drawsegment.cpp:381
 #: pcbnew/class_drawsegment.cpp:399 pcbnew/class_module.cpp:593
-#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_pad.cpp:679
+#: pcbnew/class_pcb_text.cpp:148 pcbnew/class_pad.cpp:679
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
 msgid "Angle"
 msgstr "Angolo"
 
-#: pcbnew/class_text_mod.cpp:413 pcbnew/class_pcb_text.cpp:141
+#: pcbnew/class_text_mod.cpp:423 pcbnew/class_pcb_text.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:64
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
 msgid "Thickness"
 msgstr "Spessore"
 
-#: pcbnew/class_text_mod.cpp:416 pcbnew/class_track.cpp:1147
+#: pcbnew/class_text_mod.cpp:426 pcbnew/class_track.cpp:1147
 #: pcbnew/class_track.cpp:1174 pcbnew/class_drawsegment.cpp:412
-#: pcbnew/class_pcb_text.cpp:144 pcbnew/class_pad.cpp:650
+#: pcbnew/class_pcb_text.cpp:154 pcbnew/class_pad.cpp:650
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:48
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:327
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
@@ -835,23 +835,23 @@ msgstr "Spessore"
 msgid "Width"
 msgstr "Larghezza"
 
-#: pcbnew/class_text_mod.cpp:419 pcbnew/class_pcb_text.cpp:147
+#: pcbnew/class_text_mod.cpp:429 pcbnew/class_pcb_text.cpp:157
 #: pcbnew/class_pad.cpp:653 pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
 #: eeschema/lib_field.cpp:750
 msgid "Height"
 msgstr "Altezza"
 
-#: pcbnew/class_text_mod.cpp:431
+#: pcbnew/class_text_mod.cpp:441
 #, c-format
 msgid "Reference %s"
 msgstr "Riferimento %s"
 
-#: pcbnew/class_text_mod.cpp:435
+#: pcbnew/class_text_mod.cpp:445
 #, c-format
 msgid "Value %s of %s"
 msgstr "Valore %s di %s"
 
-#: pcbnew/class_text_mod.cpp:439
+#: pcbnew/class_text_mod.cpp:449
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
@@ -1387,7 +1387,7 @@ msgstr "Mostra impronta nel visualizzatore 3D"
 
 #: pcbnew/footprint_wizard_frame.cpp:570 pcbnew/tool_modview.cpp:79
 #: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:248
-#: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:72
+#: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:68
 #: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
 #: pcbnew/help_common_strings.h:19 eeschema/help_common_strings.h:43
 msgid "Zoom in"
@@ -1395,7 +1395,7 @@ msgstr "Ingrandisci"
 
 #: pcbnew/footprint_wizard_frame.cpp:575 pcbnew/tool_modview.cpp:84
 #: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:250
-#: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:75
+#: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:71
 #: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
 #: pcbnew/help_common_strings.h:20 eeschema/help_common_strings.h:44
 msgid "Zoom out"
@@ -1403,7 +1403,7 @@ msgstr "Rimpicciolisci"
 
 #: pcbnew/footprint_wizard_frame.cpp:580 pcbnew/tool_modview.cpp:89
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:252
-#: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:79
+#: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:75
 #: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
 msgid "Redraw view"
 msgstr "Aggiorna vista"
@@ -1519,25 +1519,25 @@ msgstr "Chiudi il visualizzatore impronte"
 
 #: pcbnew/tool_modview.cpp:157 pcbnew/menubar_modedit.cpp:216
 #: pcbnew/menubar_pcbframe.cpp:328 eeschema/tool_viewlib.cpp:225
-#: eeschema/menubar.cpp:245 eeschema/menubar_libedit.cpp:161
+#: eeschema/menubar.cpp:231 eeschema/menubar_libedit.cpp:161
 msgid "Zoom &In"
 msgstr "&Ingrandisci"
 
 #: pcbnew/tool_modview.cpp:161 pcbnew/menubar_modedit.cpp:220
 #: pcbnew/menubar_pcbframe.cpp:332 eeschema/tool_viewlib.cpp:229
-#: eeschema/menubar.cpp:249 eeschema/menubar_libedit.cpp:165
+#: eeschema/menubar.cpp:235 eeschema/menubar_libedit.cpp:165
 msgid "Zoom &Out"
 msgstr "Rimpicci&olisci"
 
 #: pcbnew/tool_modview.cpp:165 pcbnew/menubar_modedit.cpp:224
 #: pcbnew/menubar_pcbframe.cpp:336 eeschema/tool_viewlib.cpp:233
-#: eeschema/menubar.cpp:253 eeschema/menubar_libedit.cpp:169
+#: eeschema/menubar.cpp:239 eeschema/menubar_libedit.cpp:169
 msgid "&Fit on Screen"
 msgstr "Per&fetto su schermo"
 
 #: pcbnew/tool_modview.cpp:170 pcbnew/menubar_modedit.cpp:229
 #: pcbnew/menubar_pcbframe.cpp:341 eeschema/tool_viewlib.cpp:238
-#: eeschema/menubar.cpp:265 eeschema/menubar_libedit.cpp:176
+#: eeschema/menubar.cpp:251 eeschema/menubar_libedit.cpp:176
 msgid "&Redraw"
 msgstr "Aggio&rna"
 
@@ -1570,7 +1570,7 @@ msgstr "Informazioni su Pcbnew progettazione circuiti stampati"
 
 #: pcbnew/tool_modview.cpp:208 pcbnew/menubar_modedit.cpp:360
 #: pcbnew/menubar_pcbframe.cpp:657 eeschema/tool_viewlib.cpp:269
-#: eeschema/menubar.cpp:515 eeschema/menubar_libedit.cpp:285
+#: eeschema/menubar.cpp:501 eeschema/menubar_libedit.cpp:285
 msgid "&View"
 msgstr "&Visualizza"
 
@@ -3178,7 +3178,7 @@ msgid "Add circle"
 msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:942 pcbnew/edit.cpp:1482
-#: pcbnew/tools/drawing_tool.cpp:1242 pcbnew/tools/drawing_tool.cpp:1361
+#: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1360
 #: eeschema/schedit.cpp:546 eeschema/libeditframe.cpp:1138
 msgid "Add text"
 msgstr "Aggiungi testo "
@@ -3328,7 +3328,7 @@ msgstr "Unità in pollici"
 msgid "Units in millimeters"
 msgstr "Unità in millimetri"
 
-#: pcbnew/tool_pcb.cpp:344 eeschema/tool_lib.cpp:240 eeschema/tool_sch.cpp:299
+#: pcbnew/tool_pcb.cpp:344 eeschema/tool_lib.cpp:240 eeschema/tool_sch.cpp:296
 #: cvpcb/class_DisplayFootprintsFrame.cpp:192 gerbview/toolbars_gerber.cpp:167
 msgid "Change cursor shape"
 msgstr "Cambia dimensione puntatore"
@@ -3612,7 +3612,7 @@ msgid "Close footprint editor"
 msgstr "Chiudi editor impronte"
 
 #: pcbnew/menubar_modedit.cpp:158 pcbnew/menubar_pcbframe.cpp:277
-#: eeschema/menubar.cpp:194 eeschema/menubar_libedit.cpp:118
+#: eeschema/menubar.cpp:180 eeschema/menubar_libedit.cpp:118
 msgid "&Undo"
 msgstr "Ann&ulla"
 
@@ -3621,7 +3621,7 @@ msgid "Undo last action"
 msgstr "Annulla l'ultima azione"
 
 #: pcbnew/menubar_modedit.cpp:164 pcbnew/menubar_pcbframe.cpp:280
-#: eeschema/menubar.cpp:199 eeschema/menubar_libedit.cpp:127
+#: eeschema/menubar.cpp:185 eeschema/menubar_libedit.cpp:127
 msgid "&Redo"
 msgstr "&Ripristina"
 
@@ -3630,7 +3630,7 @@ msgid "Redo last action"
 msgstr "Ripristina l'ultima azione"
 
 #: pcbnew/menubar_modedit.cpp:171 pcbnew/menubar_pcbframe.cpp:284
-#: eeschema/menubar.cpp:206 eeschema/menubar_libedit.cpp:140
+#: eeschema/menubar.cpp:192 eeschema/menubar_libedit.cpp:140
 msgid "&Delete"
 msgstr "&Cancella"
 
@@ -3759,17 +3759,17 @@ msgid "Select default parameters values in Footprint Editor"
 msgstr "Seleziona i valori dei parametri predefiniti nell'editor impronte"
 
 #: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:656
-#: eeschema/menubar.cpp:514 eeschema/menubar_libedit.cpp:284
+#: eeschema/menubar.cpp:500 eeschema/menubar_libedit.cpp:284
 msgid "&Edit"
 msgstr "&Modifica"
 
 #: pcbnew/menubar_modedit.cpp:361 pcbnew/menubar_pcbframe.cpp:658
-#: eeschema/menubar.cpp:516 eeschema/menubar_libedit.cpp:286
+#: eeschema/menubar.cpp:502 eeschema/menubar_libedit.cpp:286
 msgid "&Place"
 msgstr "&Inserisci"
 
 #: pcbnew/menubar_modedit.cpp:362 pcbnew/menubar_pcbframe.cpp:660
-#: eeschema/menubar.cpp:517 eeschema/menubar_libedit.cpp:287
+#: eeschema/menubar.cpp:503 eeschema/menubar_libedit.cpp:287
 msgid "P&references"
 msgstr "&Opzioni"
 
@@ -4643,7 +4643,7 @@ msgstr "Archivia o aggiungi le impronte in un file libreria"
 msgid "Close Pcbnew"
 msgstr "Chiudi Pcbnew"
 
-#: pcbnew/menubar_pcbframe.cpp:289 eeschema/menubar.cpp:211
+#: pcbnew/menubar_pcbframe.cpp:289 eeschema/menubar.cpp:197
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:111
 msgid "&Find"
 msgstr "&Trova"
@@ -4878,19 +4878,19 @@ msgstr "Ma&cro"
 msgid "Macros save/read operations"
 msgstr "Operazioni di salvataggio/caricamento macro"
 
-#: pcbnew/menubar_pcbframe.cpp:587 eeschema/menubar.cpp:416
+#: pcbnew/menubar_pcbframe.cpp:587 eeschema/menubar.cpp:402
 msgid "&Save Preferences"
 msgstr "&Salva le preferenze"
 
-#: pcbnew/menubar_pcbframe.cpp:588 eeschema/menubar.cpp:417
+#: pcbnew/menubar_pcbframe.cpp:588 eeschema/menubar.cpp:403
 msgid "Save application preferences"
 msgstr "Salva le preferenze dell'applicazione"
 
-#: pcbnew/menubar_pcbframe.cpp:592 eeschema/menubar.cpp:422
+#: pcbnew/menubar_pcbframe.cpp:592 eeschema/menubar.cpp:408
 msgid "Load Prefe&rences"
 msgstr "Carica le p&referenze"
 
-#: pcbnew/menubar_pcbframe.cpp:593 eeschema/menubar.cpp:423
+#: pcbnew/menubar_pcbframe.cpp:593 eeschema/menubar.cpp:409
 msgid "Load application preferences"
 msgstr "Carica le preferenze dell'applicazione"
 
@@ -5040,15 +5040,15 @@ msgstr "Plugin %s non trovato."
 msgid "Unknown PCB_FILE_T value: %d"
 msgstr "Valore PCB_FILE_T sconosciuto: %d"
 
-#: pcbnew/class_pcb_text.cpp:126
+#: pcbnew/class_pcb_text.cpp:136
 msgid "Dimension"
 msgstr "Quote"
 
-#: pcbnew/class_pcb_text.cpp:128
+#: pcbnew/class_pcb_text.cpp:138
 msgid "PCB Text"
 msgstr "Testo del C.s."
 
-#: pcbnew/class_pcb_text.cpp:181
+#: pcbnew/class_pcb_text.cpp:191
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
 msgstr "Testo\"%s\" su %s della scheda"
@@ -5708,7 +5708,7 @@ msgstr "Editor scheda"
 
 #: pcbnew/hotkeys.cpp:340
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
-#: eeschema/tool_sch.cpp:165
+#: eeschema/tool_sch.cpp:162
 msgid "Footprint Editor"
 msgstr "Editor impronte"
 
@@ -13061,28 +13061,28 @@ msgstr ""
 msgid "Clipboard Error"
 msgstr "Errore degli appunti"
 
-#: common/basicframe.cpp:635
+#: common/basicframe.cpp:639
 msgid "Version Information (copied to the clipboard)"
 msgstr "Informazioni di versione (copiate negli appunti)"
 
-#: common/basicframe.cpp:662
+#: common/basicframe.cpp:663
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "Non si possiedono i permessi di scrittura per la cartella \"%s\"."
 
-#: common/basicframe.cpp:667
+#: common/basicframe.cpp:668
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr ""
 "Non si possiedono i permessi di scrittura per salvare il file \"%s\" nella "
 "cartella \"%s\"."
 
-#: common/basicframe.cpp:672
+#: common/basicframe.cpp:673
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "Non si dispone dei permessi necessari per salvare il file \"%s\"."
 
-#: common/basicframe.cpp:704
+#: common/basicframe.cpp:705
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -13097,12 +13097,12 @@ msgstr ""
 "\"%s\"\n"
 "non è stato salvato correttamente. Recuperare le ultime modifiche effettuate?"
 
-#: common/basicframe.cpp:732
+#: common/basicframe.cpp:733
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Impossibile creare il file di backup \"%s\""
 
-#: common/basicframe.cpp:740
+#: common/basicframe.cpp:741
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Il file di salvataggio automatico non può essere rinominato con il nome file "
@@ -14491,20 +14491,20 @@ msgstr "Unità %c"
 msgid "Close schematic component viewer"
 msgstr "Chiudu visualizzatore componente dello schema"
 
-#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:495
+#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:481
 msgid "Eesc&hema Manual"
 msgstr "Manuale di Eesc&hema"
 
-#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:496
+#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:482
 msgid "Open Eeschema manual"
 msgstr "Apri il manuale di Eeschema"
 
-#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:508
+#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:494
 #: eeschema/menubar_libedit.cpp:278
 msgid "&About Eeschema"
 msgstr "&Informazioni su Eeschema"
 
-#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:509
+#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:495
 #: eeschema/menubar_libedit.cpp:279
 msgid "About Eeschema schematic designer"
 msgstr "Informazioni sulla creazione schemi elettrici con Eeschema"
@@ -14966,190 +14966,190 @@ msgstr "Sta&mpa"
 msgid "Print schematic sheet"
 msgstr "Stampa schema elettrico"
 
-#: eeschema/menubar.cpp:152 eeschema/menubar.cpp:165 eeschema/menubar.cpp:174
+#: eeschema/menubar.cpp:150 eeschema/menubar.cpp:162
 msgid "&Plot"
 msgstr "&Traccia"
 
-#: eeschema/menubar.cpp:153
+#: eeschema/menubar.cpp:151
 msgid "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format"
 msgstr "Traccia lo schema in formato PostScript, PDF, SVG, DXF o HPGL"
 
-#: eeschema/menubar.cpp:159
+#: eeschema/menubar.cpp:156
 msgid "Plot to C&lipboard"
 msgstr "Traccia sug&li appunti"
 
-#: eeschema/menubar.cpp:160
+#: eeschema/menubar.cpp:157
 msgid "Export drawings to clipboard"
 msgstr "Esporta grafica sugli appunti"
 
-#: eeschema/menubar.cpp:166 eeschema/menubar.cpp:175
+#: eeschema/menubar.cpp:163
 msgid "Plot schematic sheet in HPGL, PostScript or SVG format"
 msgstr "Traccia il foglio dello schema in formato HPGL, PostScript o SVG"
 
-#: eeschema/menubar.cpp:187
+#: eeschema/menubar.cpp:173
 msgid "Close Eeschema"
 msgstr "Chiudi Eeschema"
 
-#: eeschema/menubar.cpp:215
+#: eeschema/menubar.cpp:201
 msgid "Find and Re&place"
 msgstr "Trova e &Sostituisci"
 
-#: eeschema/menubar.cpp:223
+#: eeschema/menubar.cpp:209
 msgid "Import Footprint Selection"
 msgstr "Importa selezione impronte"
 
-#: eeschema/menubar.cpp:261
+#: eeschema/menubar.cpp:247
 msgid "Show &Hierarchical Navigator"
 msgstr "Mostra navigatore &Gerarchia schema"
 
-#: eeschema/menubar.cpp:262
+#: eeschema/menubar.cpp:248
 msgid "Navigate hierarchical sheets"
 msgstr "Esplora Gerarchia dello schema"
 
-#: eeschema/menubar.cpp:271
+#: eeschema/menubar.cpp:257
 msgid "&Component"
 msgstr "&Componente"
 
-#: eeschema/menubar.cpp:277
+#: eeschema/menubar.cpp:263
 msgid "&Power Port"
 msgstr "Connessione& di alimentazione"
 
-#: eeschema/menubar.cpp:283
+#: eeschema/menubar.cpp:269
 msgid "&Wire"
 msgstr "&Filo"
 
-#: eeschema/menubar.cpp:289
+#: eeschema/menubar.cpp:275
 msgid "&Bus"
 msgstr "&Bus"
 
-#: eeschema/menubar.cpp:295
+#: eeschema/menubar.cpp:281
 msgid "Wire to Bus &Entry"
 msgstr "&Elemento da filo a bus"
 
-#: eeschema/menubar.cpp:301
+#: eeschema/menubar.cpp:287
 msgid "Bus &to Bus Entry"
 msgstr "Elemen&to da bus a bus "
 
-#: eeschema/menubar.cpp:307
+#: eeschema/menubar.cpp:293
 msgid "&No Connect Flag"
 msgstr "Indicatore di &non connessione "
 
-#: eeschema/menubar.cpp:311
+#: eeschema/menubar.cpp:297
 msgid "&Junction"
 msgstr "&Giunzione"
 
-#: eeschema/menubar.cpp:317
+#: eeschema/menubar.cpp:303
 msgid "&Label"
 msgstr "&Etichetta"
 
-#: eeschema/menubar.cpp:323
+#: eeschema/menubar.cpp:309
 msgid "Gl&obal Label"
 msgstr "Etichetta gl&obale "
 
-#: eeschema/menubar.cpp:331
+#: eeschema/menubar.cpp:317
 msgid "&Hierarchical Label"
 msgstr "Etichetta gerarc&hica"
 
-#: eeschema/menubar.cpp:338
+#: eeschema/menubar.cpp:324
 msgid "Hierarchical &Sheet"
 msgstr "&Foglio gerarchico"
 
-#: eeschema/menubar.cpp:346
+#: eeschema/menubar.cpp:332
 msgid "I&mport Hierarchical Label"
 msgstr "I&mporta etichetta gerarchica"
 
-#: eeschema/menubar.cpp:352
+#: eeschema/menubar.cpp:338
 msgid "Hierarchical Pi&n to Sheet"
 msgstr "Aggiungi pi&n gerarchico al foglio"
 
-#: eeschema/menubar.cpp:358
+#: eeschema/menubar.cpp:344
 msgid "Graphic Pol&yline"
 msgstr "&Polilinea grafica"
 
-#: eeschema/menubar.cpp:364
+#: eeschema/menubar.cpp:350
 msgid "&Graphic Text"
 msgstr "Testo &grafico"
 
-#: eeschema/menubar.cpp:371
+#: eeschema/menubar.cpp:357
 msgid "&Image"
 msgstr "&Immagine"
 
-#: eeschema/menubar.cpp:381 eeschema/menubar_libedit.cpp:230
+#: eeschema/menubar.cpp:367 eeschema/menubar_libedit.cpp:230
 msgid "Component &Libraries"
 msgstr "&Librerie componenti"
 
-#: eeschema/menubar.cpp:382 eeschema/menubar_libedit.cpp:231
+#: eeschema/menubar.cpp:368 eeschema/menubar_libedit.cpp:231
 msgid "Configure component libraries and paths"
 msgstr "Configura librerie componenti e percorsi"
 
-#: eeschema/menubar.cpp:388 eeschema/menubar_libedit.cpp:244
+#: eeschema/menubar.cpp:374 eeschema/menubar_libedit.cpp:244
 msgid "Set &Colors Scheme"
 msgstr "Imposta schema &colori"
 
-#: eeschema/menubar.cpp:389 eeschema/menubar_libedit.cpp:245
+#: eeschema/menubar.cpp:375 eeschema/menubar_libedit.cpp:245
 msgid "Set color preferences"
 msgstr "Imposta le preferenze colori"
 
-#: eeschema/menubar.cpp:399
+#: eeschema/menubar.cpp:385
 msgid "Schematic Editor &Options"
 msgstr "&Opzioni editor degli schemi"
 
-#: eeschema/menubar.cpp:400
+#: eeschema/menubar.cpp:386
 msgid "Set Eeschema preferences"
 msgstr "Imposta le preferenze di Eeschema"
 
-#: eeschema/menubar.cpp:431
+#: eeschema/menubar.cpp:417
 msgid "Library &Editor"
 msgstr "Editor di libreri&e"
 
-#: eeschema/menubar.cpp:436
+#: eeschema/menubar.cpp:422
 msgid "Library &Browser"
 msgstr "Esplora &librerie"
 
-#: eeschema/menubar.cpp:441
+#: eeschema/menubar.cpp:427
 msgid "&Rescue Cached Components"
 msgstr "&Recupera componenti in cache"
 
-#: eeschema/menubar.cpp:442
+#: eeschema/menubar.cpp:428
 msgid ""
 "Find old components in the project cache and rescue them to a new library"
 msgstr ""
 "Trova vecchi componenti nella cache del progetto e li recupera in una nuova "
 "libreria"
 
-#: eeschema/menubar.cpp:449
+#: eeschema/menubar.cpp:435
 msgid "&Annotate Schematic"
 msgstr "&Annota schema"
 
-#: eeschema/menubar.cpp:455
+#: eeschema/menubar.cpp:441
 msgid "Electrical Rules &Checker"
 msgstr "&Controllo Regole Elettriche (ERC)"
 
-#: eeschema/menubar.cpp:456 eeschema/tool_sch.cpp:149
+#: eeschema/menubar.cpp:442 eeschema/tool_sch.cpp:146
 msgid "Perform electrical rules check"
 msgstr "Esegui un controllo regole elettriche"
 
-#: eeschema/menubar.cpp:461
+#: eeschema/menubar.cpp:447
 msgid "Generate &Netlist File"
 msgstr "Genera file &netlist"
 
-#: eeschema/menubar.cpp:462
+#: eeschema/menubar.cpp:448
 msgid "Generate the component netlist file"
 msgstr "Genera il file elenco dei collegamenti componente (Netlist)"
 
-#: eeschema/menubar.cpp:467
+#: eeschema/menubar.cpp:453
 msgid "Generate Bill of &Materials"
 msgstr "Genera la distinta &materiali"
 
-#: eeschema/menubar.cpp:476
+#: eeschema/menubar.cpp:462
 msgid "A&ssign Component Footprint"
 msgstr "A&ssegna impronta al componente"
 
-#: eeschema/menubar.cpp:477
+#: eeschema/menubar.cpp:463
 msgid "Run CvPcb"
 msgstr "Avvia CvPcb"
 
-#: eeschema/menubar.cpp:483
+#: eeschema/menubar.cpp:469
 msgid "&Layout Printed Circuit Board"
 msgstr "Disposi&zione circuito stampato"
 
@@ -15981,7 +15981,7 @@ msgstr ""
 msgid "Show pin table"
 msgstr "Mostra tabella pin"
 
-#: eeschema/tool_lib.cpp:229 eeschema/tool_sch.cpp:287
+#: eeschema/tool_lib.cpp:229 eeschema/tool_sch.cpp:284
 #: gerbview/toolbars_gerber.cpp:151
 msgid "Turn grid off"
 msgstr "Visualizzazione griglia "
@@ -16387,23 +16387,23 @@ msgstr "\"%s\" - Esportazione OK"
 msgid "Error creating '%s'"
 msgstr "Errore creando \"%s\""
 
-#: eeschema/tool_sch.cpp:55
+#: eeschema/tool_sch.cpp:58
 msgid "New schematic project"
 msgstr "Nuovo progetto schema"
 
-#: eeschema/tool_sch.cpp:58
+#: eeschema/tool_sch.cpp:61
 msgid "Open schematic project"
 msgstr "Apri progetto schema"
 
-#: eeschema/tool_sch.cpp:61
+#: eeschema/tool_sch.cpp:65
 msgid "Save schematic project"
 msgstr "Salva progetto schema"
 
-#: eeschema/tool_sch.cpp:68 pagelayout_editor/toolbars_pl_editor.cpp:61
+#: eeschema/tool_sch.cpp:71 pagelayout_editor/toolbars_pl_editor.cpp:61
 msgid "Page settings"
 msgstr "Impostazioni pagina"
 
-#: eeschema/tool_sch.cpp:75
+#: eeschema/tool_sch.cpp:76
 msgid "Print schematic"
 msgstr "Stampa schema"
 
@@ -16419,47 +16419,47 @@ msgstr "Copia elemento selezionato"
 msgid "Paste"
 msgstr "Incolla"
 
-#: eeschema/tool_sch.cpp:108
+#: eeschema/tool_sch.cpp:106
 msgid "Find and replace text"
 msgstr "Trova e sostituisci testo"
 
-#: eeschema/tool_sch.cpp:131
+#: eeschema/tool_sch.cpp:128
 msgid "Navigate schematic hierarchy"
 msgstr "Esplora gerarchia dello schema"
 
-#: eeschema/tool_sch.cpp:152
+#: eeschema/tool_sch.cpp:149
 msgid "Generate netlist"
 msgstr "Genera netlist"
 
-#: eeschema/tool_sch.cpp:169
+#: eeschema/tool_sch.cpp:166
 msgid "Run CvPcb to associate components and footprints"
 msgstr "Avvia CvPcb per associare le impronte ai componenti"
 
-#: eeschema/tool_sch.cpp:172
+#: eeschema/tool_sch.cpp:169
 msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Avvia PcbNew per la creazione del circuito stampato"
 
-#: eeschema/tool_sch.cpp:204
+#: eeschema/tool_sch.cpp:201
 msgid "Ascend/descend hierarchy"
 msgstr "Gerarchia ascendente o discendente"
 
-#: eeschema/tool_sch.cpp:260 eeschema/help_common_strings.h:90
+#: eeschema/tool_sch.cpp:257 eeschema/help_common_strings.h:90
 msgid "Add bitmap image"
 msgstr "Aggiungi immagine bitmap"
 
-#: eeschema/tool_sch.cpp:291
+#: eeschema/tool_sch.cpp:288
 msgid "Set unit to inch"
 msgstr "Unità in pollici"
 
-#: eeschema/tool_sch.cpp:295
+#: eeschema/tool_sch.cpp:292
 msgid "Set unit to mm"
 msgstr "Unità in millimetri"
 
-#: eeschema/tool_sch.cpp:304 eeschema/schframe.cpp:753
+#: eeschema/tool_sch.cpp:301 eeschema/schframe.cpp:753
 msgid "Show hidden pins"
 msgstr "Mostra piedini nascosti"
 
-#: eeschema/tool_sch.cpp:309
+#: eeschema/tool_sch.cpp:306
 msgid "HV orientation for wires and bus"
 msgstr "Orientamento per fili e bus"
 
@@ -19306,91 +19306,91 @@ msgstr "Il file \"%s\" esiste già nell'elenco"
 msgid "Reload board"
 msgstr "Ricarica scheda"
 
-#: 3d-viewer/3d_toolbar.cpp:61 3d-viewer/3d_toolbar.cpp:147
+#: 3d-viewer/3d_toolbar.cpp:58 3d-viewer/3d_toolbar.cpp:141
 msgid "Copy 3D Image to Clipboard"
 msgstr "Copia immagine 3D sugli appunti"
 
-#: 3d-viewer/3d_toolbar.cpp:68
+#: 3d-viewer/3d_toolbar.cpp:64
 msgid "Set display options, and some layers visibility"
 msgstr "Imposta opzioni schermo, e la visibilità di alcuni strati"
 
-#: 3d-viewer/3d_toolbar.cpp:82
+#: 3d-viewer/3d_toolbar.cpp:78
 msgid "Fit in page"
 msgstr "Adatta alla pagina "
 
-#: 3d-viewer/3d_toolbar.cpp:87
+#: 3d-viewer/3d_toolbar.cpp:83
 msgid "Rotate X <-"
 msgstr "Ruota X <-"
 
-#: 3d-viewer/3d_toolbar.cpp:91
+#: 3d-viewer/3d_toolbar.cpp:87
 msgid "Rotate X ->"
 msgstr "Ruota X ->"
 
-#: 3d-viewer/3d_toolbar.cpp:96
+#: 3d-viewer/3d_toolbar.cpp:92
 msgid "Rotate Y <-"
 msgstr "Ruota Y <-"
 
-#: 3d-viewer/3d_toolbar.cpp:100
+#: 3d-viewer/3d_toolbar.cpp:96
 msgid "Rotate Y ->"
 msgstr "Ruota Y ->"
 
-#: 3d-viewer/3d_toolbar.cpp:105
+#: 3d-viewer/3d_toolbar.cpp:101
 msgid "Rotate Z <-"
 msgstr "Ruota Z <-"
 
-#: 3d-viewer/3d_toolbar.cpp:109
+#: 3d-viewer/3d_toolbar.cpp:105
 msgid "Rotate Z ->"
 msgstr "Ruota Z ->"
 
-#: 3d-viewer/3d_toolbar.cpp:113
+#: 3d-viewer/3d_toolbar.cpp:109
 msgid "Move left"
 msgstr "Sposta a sinistra "
 
-#: 3d-viewer/3d_toolbar.cpp:116
+#: 3d-viewer/3d_toolbar.cpp:112
 msgid "Move right"
 msgstr "Sposta a destra "
 
-#: 3d-viewer/3d_toolbar.cpp:119
+#: 3d-viewer/3d_toolbar.cpp:115
 msgid "Move up"
 msgstr "Sposta in alto"
 
-#: 3d-viewer/3d_toolbar.cpp:122
+#: 3d-viewer/3d_toolbar.cpp:118
 msgid "Move down"
 msgstr "Sposta in basso "
 
-#: 3d-viewer/3d_toolbar.cpp:126
+#: 3d-viewer/3d_toolbar.cpp:122
 msgid "Enable/Disable orthographic projection"
 msgstr "Abilita/Disabilita la proiezione ortogonale"
 
-#: 3d-viewer/3d_toolbar.cpp:141
+#: 3d-viewer/3d_toolbar.cpp:137
 msgid "Create Image (png format)"
 msgstr "Crea immagine (formato png)"
 
-#: 3d-viewer/3d_toolbar.cpp:142
+#: 3d-viewer/3d_toolbar.cpp:138
 msgid "Create Image (jpeg format)"
 msgstr "Crea immagine (formato jpeg)"
 
-#: 3d-viewer/3d_toolbar.cpp:151
+#: 3d-viewer/3d_toolbar.cpp:144
 msgid "&Exit"
 msgstr "&Esci"
 
-#: 3d-viewer/3d_toolbar.cpp:156
+#: 3d-viewer/3d_toolbar.cpp:149
 msgid "Realistic Mode"
 msgstr "Modalità realistica"
 
-#: 3d-viewer/3d_toolbar.cpp:161
+#: 3d-viewer/3d_toolbar.cpp:154
 msgid "Render Options"
 msgstr "Opzioni di disegno"
 
-#: 3d-viewer/3d_toolbar.cpp:164
+#: 3d-viewer/3d_toolbar.cpp:157
 msgid "Render Shadows"
 msgstr "Disegna le ombre"
 
-#: 3d-viewer/3d_toolbar.cpp:168
+#: 3d-viewer/3d_toolbar.cpp:161
 msgid "Show Holes in Zones"
 msgstr "Mostra i fori nelle zone"
 
-#: 3d-viewer/3d_toolbar.cpp:169
+#: 3d-viewer/3d_toolbar.cpp:162
 msgid ""
 "Holes inside a copper layer copper zones are shown, but the calculation time "
 "is longer"
@@ -19398,113 +19398,113 @@ msgstr ""
 "I fori negli strati in rame vengono visualizzati, ma i calcoli impiegano più "
 "tempo"
 
-#: 3d-viewer/3d_toolbar.cpp:174
+#: 3d-viewer/3d_toolbar.cpp:167
 msgid "Render Textures"
 msgstr "Disegna le texture"
 
-#: 3d-viewer/3d_toolbar.cpp:175
+#: 3d-viewer/3d_toolbar.cpp:168
 msgid "Apply a grid/cloud textures to Board, Solder Mask and Silkscreen"
 msgstr ""
 "Applica una trama a griglia/nuvola alla scheda, maschera di saldatura e "
 "serigrafia"
 
-#: 3d-viewer/3d_toolbar.cpp:179
+#: 3d-viewer/3d_toolbar.cpp:172
 msgid "Render Smooth Normals"
 msgstr "Disegna le normali lisce"
 
-#: 3d-viewer/3d_toolbar.cpp:183
+#: 3d-viewer/3d_toolbar.cpp:176
 msgid "Use Model Normals"
 msgstr "Usa le normali del modello"
 
-#: 3d-viewer/3d_toolbar.cpp:187
+#: 3d-viewer/3d_toolbar.cpp:180
 msgid "Render Material Properties"
 msgstr "Disegna le proprietà del materiale"
 
-#: 3d-viewer/3d_toolbar.cpp:191
+#: 3d-viewer/3d_toolbar.cpp:184
 msgid "Show Model Bounding Boxes"
 msgstr "Mostra i perimetri di delimitazione del modello"
 
-#: 3d-viewer/3d_toolbar.cpp:200
+#: 3d-viewer/3d_toolbar.cpp:193
 msgid "Choose Colors"
 msgstr "Scegli i colori"
 
-#: 3d-viewer/3d_toolbar.cpp:203
+#: 3d-viewer/3d_toolbar.cpp:196
 msgid "Background Top Color"
 msgstr "Colore di sfondo in cima"
 
-#: 3d-viewer/3d_toolbar.cpp:206
+#: 3d-viewer/3d_toolbar.cpp:199
 msgid "Background Bottom Color"
 msgstr "Colore di sfondo in fondo"
 
-#: 3d-viewer/3d_toolbar.cpp:209
+#: 3d-viewer/3d_toolbar.cpp:202
 msgid "Show 3D &Axis"
 msgstr "Mostra assi 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:214
+#: 3d-viewer/3d_toolbar.cpp:207
 msgid "3D Grid"
 msgstr "Griglia 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:215
+#: 3d-viewer/3d_toolbar.cpp:208
 msgid "No 3D Grid"
 msgstr "No griglia 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:216
+#: 3d-viewer/3d_toolbar.cpp:209
 msgid "3D Grid 10 mm"
 msgstr "Griglia 3D 10mm"
 
-#: 3d-viewer/3d_toolbar.cpp:217
+#: 3d-viewer/3d_toolbar.cpp:210
 msgid "3D Grid 5 mm"
 msgstr "Griglia 3D 5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:218
+#: 3d-viewer/3d_toolbar.cpp:211
 msgid "3D Grid 2.5 mm"
 msgstr "Griglia 3D 2.5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:219
+#: 3d-viewer/3d_toolbar.cpp:212
 msgid "3D Grid 1 mm"
 msgstr "Griglia 3D 1 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:235
+#: 3d-viewer/3d_toolbar.cpp:228
 msgid "Show Board Bod&y"
 msgstr "Mostra il corpo sche&da"
 
-#: 3d-viewer/3d_toolbar.cpp:238
+#: 3d-viewer/3d_toolbar.cpp:231
 msgid "Show Copper &Thickness"
 msgstr "Mos&tra lo spessore rame"
 
-#: 3d-viewer/3d_toolbar.cpp:241
+#: 3d-viewer/3d_toolbar.cpp:234
 msgid "Show 3D F&ootprints"
 msgstr "Mostra i m&oduli in 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:244
+#: 3d-viewer/3d_toolbar.cpp:237
 msgid "Show Zone &Filling"
 msgstr "Mostra riempimenti &zone"
 
-#: 3d-viewer/3d_toolbar.cpp:250
+#: 3d-viewer/3d_toolbar.cpp:243
 msgid "Show &Layers"
 msgstr "Mostra g&li strati"
 
-#: 3d-viewer/3d_toolbar.cpp:253
+#: 3d-viewer/3d_toolbar.cpp:246
 msgid "Show &Adhesive Layers"
 msgstr "Mostra gli strati &adesivi"
 
-#: 3d-viewer/3d_toolbar.cpp:256
+#: 3d-viewer/3d_toolbar.cpp:249
 msgid "Show &Silkscreen Layer"
 msgstr "Mostra lo strato &serigrafia"
 
-#: 3d-viewer/3d_toolbar.cpp:259
+#: 3d-viewer/3d_toolbar.cpp:252
 msgid "Show Solder &Mask Layers"
 msgstr "Mostra gli strati &maschera saldatura"
 
-#: 3d-viewer/3d_toolbar.cpp:262
+#: 3d-viewer/3d_toolbar.cpp:255
 msgid "Show Solder &Paste Layers"
 msgstr "Mostra gli strati &pasta salda"
 
-#: 3d-viewer/3d_toolbar.cpp:265
+#: 3d-viewer/3d_toolbar.cpp:258
 msgid "Show &Comments and Drawings Layer"
 msgstr "Mostra strati &commenti ed grafica"
 
-#: 3d-viewer/3d_toolbar.cpp:268
+#: 3d-viewer/3d_toolbar.cpp:261
 msgid "Show &Eco Layers"
 msgstr "Mostra gli strati &eco"
 
@@ -19588,11 +19588,11 @@ msgstr "Zoom: %3.1f"
 msgid "3D Image filename:"
 msgstr "Nome file 3D: "
 
-#: 3d-viewer/3d_canvas.cpp:709
+#: 3d-viewer/3d_canvas.cpp:708
 msgid "Failed to copy image to clipboard"
 msgstr "Impossibile salvare immagine sugli appunti"
 
-#: 3d-viewer/3d_canvas.cpp:723
+#: 3d-viewer/3d_canvas.cpp:721
 msgid "Can't save file"
 msgstr "Impossibile salvare il file"
 
@@ -22339,7 +22339,7 @@ msgstr "Informazioni..."
 
 #: common/dialogs/dialog_env_var_config_base.h:51
 msgid "Path Configuration"
-msgstr "Configurazione percorso"
+msgstr "Configurazione percorsi"
 
 #: common/dialogs/dialog_image_editor_base.h:64
 msgid "Image Editor"
@@ -22355,15 +22355,15 @@ msgstr "Impostazioni pagina"
 
 #: eeschema/help_common_strings.h:41
 msgid "Redo last command"
-msgstr "Ripristina "
+msgstr "Ripeti l'ultimo comando"
 
 #: eeschema/help_common_strings.h:45
 msgid "Fit schematic sheet on screen"
-msgstr "Centra "
+msgstr "Centra foglio schema nello schermo"
 
 #: eeschema/help_common_strings.h:46
 msgid "Redraw schematic view"
-msgstr "Aggiorna  "
+msgstr "Aggiorna la vista schema"
 
 #: eeschema/help_common_strings.h:51
 msgid "Find components and text"
