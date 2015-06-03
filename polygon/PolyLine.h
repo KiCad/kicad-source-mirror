@@ -4,10 +4,10 @@
  * Few parts of this code come from  FreePCB, released under the GNU General Public License V2.
  * (see http://www.freepcb.com/ )
  *
- * Copyright (C) 2012-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,6 +207,13 @@ public:
     }
 
     /**
+     * Function GetContoursCount.
+     * @return the number of polygons stored in list
+     * (number of corners flagged "end_contour"
+     */
+    int GetContoursCount() const;
+
+    /**
      * Function ExportTo
      * Copy all contours to a KI_POLYGON_SET, each contour is exported
      * to a KI_POLYGON
@@ -387,21 +394,58 @@ public:
     {
         return m_CornersList.GetCornersCount();
     }
-    int         GetClosed();
-    int         GetContoursCount();
+
+    /**
+     * @return true if the last corner in corners list is flagged end_contour
+     */
+    bool        GetClosed();
+
+    /**
+     * Function GetContoursCount.
+     * @return the number of polygons stored in list
+     * (number of corners flagged "end_contour"
+     */
+    int         GetContoursCount() const;
+
+    /**
+     * Function GetContour.
+     * @return the contour number containing the corner ic
+     * @param ic = the index of the corner in the corner list
+     */
     int         GetContour( int ic );
+
+    /**
+     * Function GetContourStart.
+     * @return the index of the first corner (in corners list) of a contour
+     * @param icont = the index of the contour
+     */
     int         GetContourStart( int icont );
+
+    /**
+     * Function GetContourEnd.
+     * @return the index of the last corner (in corners list) of a contour
+     * @param icont = the index of the contour
+     */
     int         GetContourEnd( int icont );
+
+    /**
+     * Function GetContourSize.
+     * @return the corners count of a contour
+     * @param icont = the index of the contour
+     */
     int         GetContourSize( int icont );
 
     int        GetX( int ic ) const { return m_CornersList.GetX( ic ); }
     int        GetY( int ic ) const { return m_CornersList.GetY( ic ); }
-    bool       IsEndContour( int ic ) const
-    { return m_CornersList.IsEndContour( ic ); }
+
+    /**
+     * Function IsEndContour.
+     * @return true if a corner is flagged end_contour
+     * @param ic= the index (in corners list) of the corner
+     */
+    bool       IsEndContour( int ic ) const { return m_CornersList.IsEndContour( ic ); }
 
     const wxPoint& GetPos( int ic ) const { return m_CornersList.GetPos( ic ); }
-
-    int GetEndContour( int ic );
 
     int        GetUtility( int ic ) const { return m_CornersList.GetUtility( ic ); };
     void       SetUtility( int ic, int aFlag ) { m_CornersList.SetFlag( ic, aFlag ); };

@@ -605,12 +605,6 @@ void CPolyLine::UnHatch()
 }
 
 
-int CPolyLine::GetEndContour( int ic )
-{
-    return m_CornersList[ic].end_contour;
-}
-
-
 const EDA_RECT CPolyLine::GetBoundingBox()
 {
     int xmin    = INT_MAX;
@@ -659,18 +653,28 @@ const EDA_RECT CPolyLine::GetBoundingBox( int icont )
 }
 
 
-int CPolyLine::GetContoursCount()
+int CPolyLine::GetContoursCount() const
 {
-    int ncont = 0;
+    return m_CornersList.GetContoursCount();
+}
 
-    if( !m_CornersList.GetCornersCount() )
+
+
+int CPOLYGONS_LIST::GetContoursCount() const
+{
+    if( !m_cornersList.size() )
         return 0;
 
-    for( unsigned ic = 0; ic < m_CornersList.GetCornersCount(); ic++ )
-        if( m_CornersList[ic].end_contour )
+    // count the number of corners flagged end_contour
+    int ncont = 0;
+
+    for( unsigned ic = 0; ic < m_cornersList.size(); ic++ )
+        if( m_cornersList[ic].end_contour )
             ncont++;
 
-    if( !m_CornersList[m_CornersList.GetCornersCount() - 1].end_contour )
+    // The last corner can be not yet flagged end_contour.
+    // It was not counted, but the polygon exists, so count it
+    if( !m_cornersList[m_cornersList.size() - 1].end_contour )
         ncont++;
 
     return ncont;
@@ -746,10 +750,10 @@ int CPolyLine::GetContourSize( int icont )
 }
 
 
-int CPolyLine::GetClosed()
+bool CPolyLine::GetClosed()
 {
     if( m_CornersList.GetCornersCount() == 0 )
-        return 0;
+        return false;
     else
         return m_CornersList[m_CornersList.GetCornersCount() - 1].end_contour;
 }
@@ -795,7 +799,7 @@ void CPolyLine::Hatch()
             max_y = m_CornersList[ic].y;
     }
 
-    // Calculate spacing betwwen 2 hatch lines
+    // Calculate spacing between 2 hatch lines
     int spacing;
 
     if( m_hatchStyle == DIAGONAL_EDGE )
@@ -1639,7 +1643,7 @@ void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST& aPolysListWith
 bool CPolyLine::IsPolygonSelfIntersecting()
 {
     // first, check for sides intersecting other sides
-    int                n_cont  = GetContoursCount();
+    int n_cont  = GetContoursCount();
 
     // make bounding rect for each contour
     std::vector<EDA_RECT> cr;
