@@ -136,15 +136,15 @@ static std::vector<RN_EDGE_MST_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
         int srcTag = tags[dt->GetSourceNode()];
         int trgTag = tags[dt->GetTargetNode()];
 
-        // Because edges are sorted by their weight, first we always process connected
-        // items (weight == 0). Once we stumble upon an edge with non-zero weight,
-        // it means that the rest of the lines are ratsnest.
-        if( !ratsnestLines && dt->GetWeight() != 0 )
-            ratsnestLines = true;
-
         // Check if by adding this edge we are going to join two different forests
         if( srcTag != trgTag )
         {
+            // Because edges are sorted by their weight, first we always process connected
+            // items (weight == 0). Once we stumble upon an edge with non-zero weight,
+            // it means that the rest of the lines are ratsnest.
+            if( !ratsnestLines && dt->GetWeight() != 0 )
+                ratsnestLines = true;
+
             // Update tags
             std::list<int>::iterator it, itEnd;
 
@@ -267,6 +267,7 @@ bool RN_LINKS::RemoveNode( const RN_NODE_PTR& aNode )
 RN_EDGE_MST_PTR RN_LINKS::AddConnection( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2,
                                           unsigned int aDistance )
 {
+    assert( aNode1 != aNode2 );
     RN_EDGE_MST_PTR edge = boost::make_shared<RN_EDGE_MST>( aNode1, aNode2, aDistance );
     m_edges.push_back( edge );
 
@@ -279,7 +280,7 @@ void RN_NET::compute()
     const RN_LINKS::RN_NODE_SET& boardNodes = m_links.GetNodes();
     const RN_LINKS::RN_EDGE_LIST& boardEdges = m_links.GetConnections();
 
-    // Special cases that does need so complicated algorithm
+    // Special cases do not need complicated algorithms
     if( boardNodes.size() <= 2 )
     {
         m_rnEdges.reset( new std::vector<RN_EDGE_MST_PTR>( 0 ) );
@@ -326,7 +327,7 @@ void RN_NET::clearNode( const RN_NODE_PTR& aNode )
 
     // Remove all ratsnest edges for associated with the node
     newEnd = std::remove_if( m_rnEdges->begin(), m_rnEdges->end(),
-                             boost::bind( isEdgeConnectingNode, _1, boost::ref( aNode ) ) );
+                             boost::bind( isEdgeConnectingNode, _1, boost::cref( aNode ) ) );
 
     m_rnEdges->resize( std::distance( m_rnEdges->begin(), newEnd ) );
 }
@@ -334,11 +335,11 @@ void RN_NET::clearNode( const RN_NODE_PTR& aNode )
 
 RN_POLY::RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd, const ZONE_CONTAINER* aParent,
             RN_LINKS& aConnections, const BOX2I& aBBox ) :
-    m_parent( aParent), m_begin( aBegin ), m_end( aEnd ), m_bbox( aBBox )
+    m_parent( aParent ), m_begin( aBegin ), m_end( aEnd ), m_bbox( aBBox )
 {
     m_node = aConnections.AddNode( m_begin->x, m_begin->y );
 
-    // Mark it as not feasible as a destination of ratsnest edges
+    // Mark it as not appropriate as a destination of ratsnest edges
     // (edges coming out from a polygon vertex look weird)
     m_node->SetFlag( true );
 }
@@ -426,9 +427,11 @@ void RN_NET::AddItem( const TRACK* aTrack )
     RN_NODE_PTR start = m_links.AddNode( aTrack->GetStart().x, aTrack->GetStart().y );
     RN_NODE_PTR end = m_links.AddNode( aTrack->GetEnd().x, aTrack->GetEnd().y );
 
-    m_tracks[aTrack] = m_links.AddConnection( start, end );
-
-    m_dirty = true;
+    if( start != end )
+    {
+        m_tracks[aTrack] = m_links.AddConnection( start, end );
+        m_dirty = true;
+    }
 }
 
 
@@ -436,6 +439,7 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
 {
     // Prepare a list of polygons (every zone can contain one or more polygons)
     const std::vector<CPolyPt>& polyPoints = aZone->GetFilledPolysList().GetList();
+
     if( polyPoints.size() == 0 )
         return;
 
@@ -449,21 +453,8 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
     {
         const CPolyPt& point = polyPoints[i];
 
-        // Determine bounding box
-        if( point.x < origin.x )
-            origin.x = point.x;
-        else if( point.x > end.x )
-            end.x = point.x;
-
-        if( point.y < origin.y )
-            origin.y = point.y;
-        else if( point.y > end.y )
-            end.y = point.y;
-
         if( point.end_contour )
         {
-            // The last vertex is enclosing the polygon (it repeats at the beginning and
-            // at the end), so we skip it
             m_zonePolygons[aZone].push_back( RN_POLY( &polyPoints[idxStart], &point, aZone,
                                              m_links, BOX2I( origin, end - origin ) ) );
 
@@ -476,6 +467,19 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
                 end.x = polyPoints[idxStart].x;
                 end.y = polyPoints[idxStart].y;
             }
+        }
+        else
+        {
+            // Determine bounding box
+            if( point.x < origin.x )
+                origin.x = point.x;
+            else if( point.x > end.x )
+                end.x = point.x;
+
+            if( point.y < origin.y )
+                origin.y = point.y;
+            else if( point.y > end.y )
+                end.y = point.y;
         }
     }
 
@@ -721,11 +725,21 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
         }
         break;
 
+        case PCB_ZONE_AREA_T:
+        {
+            const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
+            const std::deque<RN_POLY>& polys = m_zonePolygons.at( zone );
+
+            for( std::deque<RN_POLY>::const_iterator it = polys.begin(); it != polys.end(); ++it )
+                nodes.push_back( it->GetNode() );
+        }
+        break;
+
         default:
             break;
         }
     }
-    catch ( ... )
+    catch( ... )
     {
         return nodes;
     }
@@ -959,30 +973,32 @@ void RN_NET::processZones()
         edges.clear();
     }
 
-    RN_LINKS::RN_NODE_SET candidates = m_links.GetNodes();
-
     BOOST_FOREACH( std::deque<RN_POLY>& polygons, m_zonePolygons | boost::adaptors::map_values )
     {
-        if( polygons.empty() )
-            continue;
-
+        RN_LINKS::RN_NODE_SET candidates = m_links.GetNodes();
         RN_LINKS::RN_NODE_SET::iterator point, pointEnd;
 
         // Sorting by area should speed up the processing, as smaller polygons are computed
         // faster and may reduce the number of points for further checks
         std::sort( polygons.begin(), polygons.end(), sortArea );
 
-        std::deque<RN_POLY>::iterator poly = polygons.begin(), polyEnd = polygons.end();
-        const RN_NODE_PTR& node = poly->GetNode();
-        std::deque<RN_EDGE_MST_PTR>& connections = m_zoneConnections[poly->GetParent()];
-
-        for( ; poly != polyEnd; ++poly )
+        for( std::deque<RN_POLY>::iterator poly = polygons.begin(), polyEnd = polygons.end();
+                poly != polyEnd; ++poly )
         {
+            const RN_NODE_PTR& node = poly->GetNode();
+            std::deque<RN_EDGE_MST_PTR>& connections = m_zoneConnections[poly->GetParent()];
+
             point = candidates.begin();
             pointEnd = candidates.end();
 
             while( point != pointEnd )
             {
+                if( *point == node )
+                {
+                    ++point;
+                    continue;
+                }
+
                 if( poly->HitTest( *point ) )
                 {
                     RN_EDGE_MST_PTR connection = m_links.AddConnection( node, *point );
@@ -1142,8 +1158,9 @@ void RN_DATA::Update( const BOARD_ITEM* aItem )
 
 void RN_DATA::ProcessBoard()
 {
+    int netCount = m_board->GetNetCount();
     m_nets.clear();
-    m_nets.resize( m_board->GetNetCount() );
+    m_nets.resize( netCount );
     int netCode;
 
     // Iterate over all items that may need to be connected
@@ -1153,7 +1170,9 @@ void RN_DATA::ProcessBoard()
         {
             netCode = pad->GetNetCode();
 
-            if( netCode > 0 )
+            assert( netCode >= 0 && netCode < netCount );
+
+            if( netCode > 0 && netCode < netCount )
                 m_nets[netCode].AddItem( pad );
         }
     }
@@ -1162,7 +1181,9 @@ void RN_DATA::ProcessBoard()
     {
         netCode = track->GetNetCode();
 
-        if( netCode > 0 )
+        assert( netCode >= 0 && netCode < netCount );
+
+        if( netCode > 0 && netCode < netCount )
         {
             if( track->Type() == PCB_VIA_T )
                 m_nets[netCode].AddItem( static_cast<VIA*>( track ) );
@@ -1177,7 +1198,9 @@ void RN_DATA::ProcessBoard()
 
         netCode = zone->GetNetCode();
 
-        if( netCode > 0 )
+        assert( netCode >= 0 && netCode < netCount );
+
+        if( netCode > 0 && netCode < netCount )
             m_nets[netCode].AddItem( zone );
     }
 

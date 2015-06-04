@@ -215,7 +215,7 @@ public:
      * Returns node representing a polygon (it has the same coordinates as the first point of its
      * bounding polyline.
      */
-    const RN_NODE_PTR& GetNode() const
+    inline const RN_NODE_PTR& GetNode() const
     {
         return m_node;
     }
@@ -556,7 +556,7 @@ protected:
 /**
  * Class RN_DATA
  *
- * Stores information about unconnected items for the whole PCB.
+ * Stores information about unconnected items for a board.
  */
 class RN_DATA
 {

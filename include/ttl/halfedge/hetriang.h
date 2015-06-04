@@ -42,7 +42,7 @@
 #ifndef _HE_TRIANG_H_
 #define _HE_TRIANG_H_
 
-#define TTL_USE_NODE_ID   // Each node gets it's own unique id
+//#define TTL_USE_NODE_ID   // Each node gets it's own unique id
 #define TTL_USE_NODE_FLAG // Each node gets a flag (can be set to true or false)
 
 #include <list>
