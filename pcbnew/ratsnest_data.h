@@ -207,8 +207,8 @@ protected:
 class RN_POLY
 {
 public:
-    RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd, const ZONE_CONTAINER* aParent,
-          RN_LINKS& aConnections, const BOX2I& aBBox );
+    RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd,
+             RN_LINKS& aConnections, const BOX2I& aBBox );
 
     /**
      * Function GetNode()
@@ -221,16 +221,6 @@ public:
     }
 
     /**
-     * Function GetParent()
-     * Returns pointer to zone that is the owner of subpolygon.
-     * @return Pointer to zone that is the owner of subpolygon.
-     */
-    const ZONE_CONTAINER* GetParent() const
-    {
-        return m_parent;
-    }
-
-    /**
      * Function HitTest()
      * Tests if selected node is located within polygon boundaries.
      * @param aNode is a node to be checked.
@@ -239,9 +229,6 @@ public:
     bool HitTest( const RN_NODE_PTR& aNode ) const;
 
 private:
-    ///> Owner of this subpolygon.
-    const ZONE_CONTAINER* m_parent;
-
     ///> Pointer to the first point of polyline bounding the polygon.
     const CPolyPt* m_begin;
 
@@ -526,12 +513,20 @@ protected:
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
 
+    typedef struct
+    {
+        ///> Subpolygons belonging to a zone
+        std::deque<RN_POLY> m_Polygons;
+
+        ///> Connections to other nodes
+        std::deque<RN_EDGE_MST_PTR> m_Edges;
+    } RN_ZONE_DATA;
+
     ///> Helper typedefs
     typedef boost::unordered_map<const D_PAD*, RN_NODE_PTR> PAD_NODE_MAP;
     typedef boost::unordered_map<const VIA*, RN_NODE_PTR> VIA_NODE_MAP;
     typedef boost::unordered_map<const TRACK*, RN_EDGE_MST_PTR> TRACK_EDGE_MAP;
-    typedef boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_POLY> > ZONE_POLY_MAP;
-    typedef boost::unordered_map<const ZONE_CONTAINER*, std::deque<RN_EDGE_MST_PTR> > ZONE_EDGE_MAP;
+    typedef boost::unordered_map<const ZONE_CONTAINER*, RN_ZONE_DATA> ZONE_DATA_MAP;
 
     ///> Map that associates nodes in the ratsnest model to respective nodes.
     PAD_NODE_MAP m_pads;
@@ -543,10 +538,7 @@ protected:
     TRACK_EDGE_MAP m_tracks;
 
     ///> Map that associates groups of subpolygons in the ratsnest model to respective zones.
-    ZONE_POLY_MAP m_zonePolygons;
-
-    ///> Map that associates groups of edges in the ratsnest model to respective zones.
-    ZONE_EDGE_MAP m_zoneConnections;
+    ZONE_DATA_MAP m_zones;
 
     ///> Visibility flag.
     bool m_visible;

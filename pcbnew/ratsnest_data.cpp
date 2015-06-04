@@ -333,9 +333,9 @@ void RN_NET::clearNode( const RN_NODE_PTR& aNode )
 }
 
 
-RN_POLY::RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd, const ZONE_CONTAINER* aParent,
-            RN_LINKS& aConnections, const BOX2I& aBBox ) :
-    m_parent( aParent ), m_begin( aBegin ), m_end( aEnd ), m_bbox( aBBox )
+RN_POLY::RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd,
+                  RN_LINKS& aConnections, const BOX2I& aBBox ) :
+    m_begin( aBegin ), m_end( aEnd ), m_bbox( aBBox )
 {
     m_node = aConnections.AddNode( m_begin->x, m_begin->y );
 
@@ -455,8 +455,8 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
 
         if( point.end_contour )
         {
-            m_zonePolygons[aZone].push_back( RN_POLY( &polyPoints[idxStart], &point, aZone,
-                                             m_links, BOX2I( origin, end - origin ) ) );
+            m_zones[aZone].m_Polygons.push_back( RN_POLY( &polyPoints[idxStart], &point,
+                                                 m_links, BOX2I( origin, end - origin ) ) );
 
             idxStart = i + 1;
 
@@ -559,7 +559,7 @@ void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
     try
     {
         // Remove all subpolygons that make the zone
-        std::deque<RN_POLY>& polygons = m_zonePolygons.at( aZone );
+        std::deque<RN_POLY>& polygons = m_zones.at( aZone ).m_Polygons;
         BOOST_FOREACH( RN_POLY& polygon, polygons )
         {
             const RN_NODE_PTR node = polygon.GetNode();
@@ -570,7 +570,7 @@ void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
         polygons.clear();
 
         // Remove all connections added by the zone
-        std::deque<RN_EDGE_MST_PTR>& edges = m_zoneConnections.at( aZone );
+        std::deque<RN_EDGE_MST_PTR>& edges = m_zones.at( aZone ).m_Edges;
         BOOST_FOREACH( RN_EDGE_PTR edge, edges )
             m_links.RemoveConnection( edge );
         edges.clear();
@@ -728,7 +728,7 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
         case PCB_ZONE_AREA_T:
         {
             const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
-            const std::deque<RN_POLY>& polys = m_zonePolygons.at( zone );
+            const std::deque<RN_POLY>& polys = m_zones.at( zone ).m_Polygons;
 
             for( std::deque<RN_POLY>::const_iterator it = polys.begin(); it != polys.end(); ++it )
                 nodes.push_back( it->GetNode() );
@@ -770,7 +770,7 @@ void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYP
 
     if( aType & RN_ZONES )
     {
-        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_zoneConnections | boost::adaptors::map_keys )
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_zones | boost::adaptors::map_keys )
             aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
     }
 }
@@ -828,12 +828,9 @@ void RN_NET::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
 
     if( aTypes & RN_ZONES )
     {
-        for( ZONE_EDGE_MAP::const_iterator it = m_zoneConnections.begin();
-                it != m_zoneConnections.end(); ++it )
+        for( ZONE_DATA_MAP::const_iterator it = m_zones.begin(); it != m_zones.end(); ++it )
         {
-            const std::deque<RN_EDGE_MST_PTR>& edges = it->second;
-
-            BOOST_FOREACH( const RN_EDGE_MST_PTR& edge, edges )
+            BOOST_FOREACH( const RN_EDGE_MST_PTR& edge, it->second.m_Edges )
             {
                 if( edge->GetTag() == tag )
                 {
@@ -965,44 +962,36 @@ bool RN_DATA::AreConnected( const BOARD_CONNECTED_ITEM* aItem, const BOARD_CONNE
 
 void RN_NET::processZones()
 {
-    BOOST_FOREACH( std::deque<RN_EDGE_MST_PTR>& edges, m_zoneConnections | boost::adaptors::map_values )
+    BOOST_FOREACH( RN_ZONE_DATA& zoneData, m_zones | boost::adaptors::map_values )
     {
-        BOOST_FOREACH( RN_EDGE_MST_PTR edge, edges )
+        // Reset existing connections
+        BOOST_FOREACH( RN_EDGE_MST_PTR edge, zoneData.m_Edges )
             m_links.RemoveConnection( edge );
 
-        edges.clear();
-    }
+        zoneData.m_Edges.clear();
 
-    BOOST_FOREACH( std::deque<RN_POLY>& polygons, m_zonePolygons | boost::adaptors::map_values )
-    {
+        // Compute new connections
         RN_LINKS::RN_NODE_SET candidates = m_links.GetNodes();
         RN_LINKS::RN_NODE_SET::iterator point, pointEnd;
 
         // Sorting by area should speed up the processing, as smaller polygons are computed
         // faster and may reduce the number of points for further checks
-        std::sort( polygons.begin(), polygons.end(), sortArea );
+        std::sort( zoneData.m_Polygons.begin(), zoneData.m_Polygons.end(), sortArea );
 
-        for( std::deque<RN_POLY>::iterator poly = polygons.begin(), polyEnd = polygons.end();
-                poly != polyEnd; ++poly )
+        for( std::deque<RN_POLY>::iterator poly = zoneData.m_Polygons.begin(),
+                polyEnd = zoneData.m_Polygons.end(); poly != polyEnd; ++poly )
         {
             const RN_NODE_PTR& node = poly->GetNode();
-            std::deque<RN_EDGE_MST_PTR>& connections = m_zoneConnections[poly->GetParent()];
 
             point = candidates.begin();
             pointEnd = candidates.end();
 
             while( point != pointEnd )
             {
-                if( *point == node )
-                {
-                    ++point;
-                    continue;
-                }
-
-                if( poly->HitTest( *point ) )
+                if( *point != node && poly->HitTest( *point ) )
                 {
                     RN_EDGE_MST_PTR connection = m_links.AddConnection( node, *point );
-                    connections.push_back( connection );
+                    zoneData.m_Edges.push_back( connection );
 
                     // This point already belongs to a polygon, we do not need to check it anymore
                     point = candidates.erase( point );
