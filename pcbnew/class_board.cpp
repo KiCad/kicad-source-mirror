@@ -317,23 +317,22 @@ bool BOARD::SetLayerDescr( LAYER_ID aIndex, const LAYER& aLayer )
 
 #include <stdio.h>
 
-const LAYER_ID BOARD::GetLayerID(wxString aLayerName) const
+const LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
 {
 
     // Look for the BOARD specific copper layer names
     for( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
     {
-        if ( IsCopperLayer( layer ) &&
-             ( m_Layer[ layer ].m_name == aLayerName) )
+        if ( IsCopperLayer( layer ) && ( m_Layer[ layer ].m_name == aLayerName ) )
         {
             return ToLAYER_ID( layer );
         }
     }
 
     // Otherwise fall back to the system standard layer names
-    for ( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
+    for( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
     {
-        if ( GetStandardLayerName( ToLAYER_ID( layer ) ) == aLayerName )
+        if( GetStandardLayerName( ToLAYER_ID( layer ) ) == aLayerName )
         {
             return ToLAYER_ID( layer );
         }

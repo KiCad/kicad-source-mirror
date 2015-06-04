@@ -125,9 +125,17 @@ public:
 
     /**
      * Function GetLayer
-     * returns the layer this item is on.
+     * returns the primary layer this item is on.
      */
     LAYER_ID GetLayer() const { return m_Layer; }
+
+    /**
+     * Function GetLayerSet
+     * returns a "layer mask", which is a bitmap of all layers on which the
+     * TRACK segment or VIA physically resides.
+     * @return int - a layer mask, see layers_id_colors_visibility.h.
+     */
+    virtual LSET GetLayerSet() const { return LSET( m_Layer ); }
 
     /**
      * Function SetLayer

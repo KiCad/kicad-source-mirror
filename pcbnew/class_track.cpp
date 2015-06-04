@@ -403,12 +403,6 @@ LSET VIA::GetLayerSet() const
 }
 
 
-LSET TRACK::GetLayerSet() const
-{
-    return LSET( m_Layer );
-}
-
-
 void VIA::SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer )
 {
     if( GetViaType() == VIA_THROUGH )

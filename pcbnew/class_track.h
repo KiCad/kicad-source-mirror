@@ -183,14 +183,6 @@ public:
                                                int             aCircleToSegmentsCount,
                                                double          aCorrectionFactor ) const;
     /**
-     * Function GetLayerMask
-     * returns a "layer mask", which is a bitmap of all layers on which the
-     * TRACK segment or VIA physically resides.
-     * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
-     */
-    virtual LSET GetLayerSet() const;
-
-    /**
      * Function IsPointOnEnds
      * returns STARTPOINT if point if near (dist = min_dist) start point, ENDPOINT if
      * point if near (dist = min_dist) end point,STARTPOINT|ENDPOINT if point if near
