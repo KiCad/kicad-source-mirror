@@ -38,6 +38,7 @@
 #include <class_draw_panel_gal.h>
 #include <class_module.h>
 #include <class_mire.h>
+#include <ratsnest_data.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -371,6 +372,7 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
     for( int i = 0; i < selection.Size(); ++i )
     {
@@ -379,8 +381,11 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
         ZONE_CONTAINER* zone = selection.Item<ZONE_CONTAINER>( i );
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
+        ratsnest->Update( zone );
         zone->ViewUpdate();
     }
+
+    ratsnest->Recalculate();
 
     return 0;
 }
@@ -389,14 +394,18 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
+    RN_DATA* ratsnest = board->GetRatsnest();
 
     for( int i = 0; i < board->GetAreaCount(); ++i )
     {
         ZONE_CONTAINER* zone = board->GetArea( i );
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
+        ratsnest->Update( zone );
         zone->ViewUpdate();
     }
+
+    ratsnest->Recalculate();
 
     return 0;
 }
@@ -406,6 +415,7 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
     for( int i = 0; i < selection.Size(); ++i )
     {
@@ -414,8 +424,11 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
         ZONE_CONTAINER* zone = selection.Item<ZONE_CONTAINER>( i );
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
+        ratsnest->Update( zone );
         zone->ViewUpdate();
     }
+
+    ratsnest->Recalculate();
 
     return 0;
 }
@@ -424,14 +437,18 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
 int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
+    RN_DATA* ratsnest = board->GetRatsnest();
 
     for( int i = 0; i < board->GetAreaCount(); ++i )
     {
         ZONE_CONTAINER* zone = board->GetArea( i );
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
+        ratsnest->Update( zone );
         zone->ViewUpdate();
     }
+
+    ratsnest->Recalculate();
 
     return 0;
 }
