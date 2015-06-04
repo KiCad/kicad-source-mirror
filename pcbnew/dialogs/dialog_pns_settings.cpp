@@ -42,6 +42,7 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTING
     m_smoothDragged->SetValue( m_settings.SmoothDraggedSegments() );
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
 
+    SetDefaultItem( m_stdButtonsOK );
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }
