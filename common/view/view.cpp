@@ -119,9 +119,10 @@ void VIEW::Remove( VIEW_ITEM* aItem )
                                                             m_needsUpdate.end(), aItem );
 
         if( item != m_needsUpdate.end() )
+        {
             m_needsUpdate.erase( item );
-
-        aItem->clearUpdateFlags();
+            aItem->clearUpdateFlags();
+        }
     }
 
     int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
@@ -732,6 +733,11 @@ void VIEW::Clear()
 
     r.SetMaximum();
 
+    BOOST_FOREACH( VIEW_ITEM* item, m_needsUpdate )
+        item->clearUpdateFlags();
+
+    m_needsUpdate.clear();
+
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = &( ( *i ).second );
@@ -744,7 +750,6 @@ void VIEW::Clear()
     }
 
     m_gal->ClearCache();
-    m_needsUpdate.clear();
 }
 
 
