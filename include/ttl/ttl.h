@@ -2,21 +2,21 @@
  * Copyright (C) 1998, 2000-2007, 2010, 2011, 2012, 2013 SINTEF ICT,
  * Applied Mathematics, Norway.
  *
- * Contact information: E-mail: tor.dokken@sintef.no                      
- * SINTEF ICT, Department of Applied Mathematics,                         
- * P.O. Box 124 Blindern,                                                 
- * 0314 Oslo, Norway.                                                     
+ * Contact information: E-mail: tor.dokken@sintef.no
+ * SINTEF ICT, Department of Applied Mathematics,
+ * P.O. Box 124 Blindern,
+ * 0314 Oslo, Norway.
  *
  * This file is part of TTL.
  *
  * TTL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version. 
+ * License, or (at your option) any later version.
  *
- * TTL is distributed in the hope that it will be useful,        
- * but WITHOUT ANY WARRANTY; without even the implied warranty of         
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          
+ * TTL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public
@@ -34,7 +34,7 @@
  * disclosing the source code of your own applications.
  *
  * This file may be used in accordance with the terms contained in a
- * written agreement between you and SINTEF ICT. 
+ * written agreement between you and SINTEF ICT.
  */
 
 #ifndef _TTL_H_
@@ -145,9 +145,6 @@ public:
 
     template <class TRAITS_TYPE, class POINT_TYPE, class DART_TYPE>
     static bool LocateTriangle( const POINT_TYPE& aPoint, DART_TYPE& aDart );
-
-    template <class TRAITS_TYPE, class POINT_TYPE, class DART_TYPE>
-    static bool InTriangleSimplest( const POINT_TYPE& aPoint, const DART_TYPE& aDart );
 
     template <class TRAITS_TYPE, class POINT_TYPE, class DART_TYPE>
     static bool InTriangle( const POINT_TYPE& aPoint, const DART_TYPE& aDart );
@@ -292,7 +289,7 @@ template <class TRAITS_TYPE, class DART_TYPE, class POINT_TYPE>
 bool TRIANGULATION_HELPER::InsertNode( DART_TYPE& aDart, POINT_TYPE& aPoint )
 {
     bool found = LocateTriangle<TRAITS_TYPE>( aPoint, aDart );
-    
+
     if( !found )
     {
 #ifdef DEBUG_TTL
@@ -546,7 +543,7 @@ bool TRIANGULATION_HELPER::isMemberOfFace( const TOPOLOGY_ELEMENT_TYPE& aTopolog
     // - DART_TYPE::isMember(TOPOLOGY_ELEMENT_TYPE)
 
     DART_TYPE dart_iter = aDart;
-    
+
     do
     {
         if( dart_iter.isMember( aTopologyElement ) )
@@ -708,7 +705,7 @@ bool TRIANGULATION_HELPER::LocateTriangle( const POINT_TYPE& aPoint, DART_TYPE& 
     // - CrossProduct2D, ScalarProduct2D etc., see functions called
 
     bool status = LocateFaceSimplest<TRAITS_TYPE>( aPoint, aDart );
-    
+
     if( status == false )
         return status;
 
@@ -719,50 +716,6 @@ bool TRIANGULATION_HELPER::LocateTriangle( const POINT_TYPE& aPoint, DART_TYPE& 
     // but false if the point coincides with the "supernode" in the case where all
     // edges are degenerate.
     return InTriangle<TRAITS_TYPE>( aPoint, aDart );
-}
-
-//------------------------------------------------------------------------------------------------
-/** Checks if \e point is inside the triangle associated with \e dart.
- *   A fast and simple function that does not deal with degeneracy.
- *
- *   \param aDart
- *   A CCW dart in the triangle
- *
- *   \require
- *   - \ref hed::TTLtraits::Orient2D "TRAITS_TYPE::Orient2D" (DART_TYPE&, DART_TYPE&, POINT_TYPE&)
- *
- *   \see
- *   InTriangle for a more robust function
- */
-template <class TRAITS_TYPE, class POINT_TYPE, class DART_TYPE>
-bool TRIANGULATION_HELPER::InTriangleSimplest( const POINT_TYPE& aPoint, const DART_TYPE& aDart )
-{
-    // Fast and simple: Do not deal with degenerate faces, i.e., if there is
-    // degeneracy, true will be returned if the point is on the extension of the
-    // edges of a degenerate triangle
-
-    DART_TYPE d_iter = aDart;
-    DART_TYPE d0 = d_iter;
-    d0.Alpha0();
-    
-    if( !TRAITS_TYPE::Orient2D( d_iter, d0, aPoint ) >= 0 )
-        return false;
-
-    d_iter.Alpha0().Alpha1();
-    d0 = d_iter;
-    d0.Alpha0();
-    
-    if( !TRAITS_TYPE::Orient2D( d_iter, d0, aPoint ) >= 0 )
-        return false;
-
-    d_iter.Alpha0().Alpha1();
-    d0 = d_iter;
-    d0.Alpha0();
-    
-    if( !TRAITS_TYPE::Orient2D( d_iter, d0, aPoint ) >= 0 )
-        return false;
-
-    return true;
 }
 
 /** Checks if \e point is inside the triangle associated with \e dart.
@@ -835,7 +788,7 @@ bool TRIANGULATION_HELPER::InTriangle( const POINT_TYPE& aPoint, const DART_TYPE
     dart_tmp = dart_iter.Alpha0().Alpha1();
     sc1 = TRAITS_TYPE::ScalarProduct2D( dart_tmp, aPoint );
     sc2 = TRAITS_TYPE::ScalarProduct2D( dart_tmp.Alpha0(), aPoint );
-    
+
     if( sc1 >= 0 && sc2 >= 0 )
     {
         // test for degenerate edge
@@ -846,7 +799,7 @@ bool TRIANGULATION_HELPER::InTriangle( const POINT_TYPE& aPoint, const DART_TYPE
     dart_tmp = dart_iter.Alpha1();
     sc1 = TRAITS_TYPE::ScalarProduct2D( dart_tmp, aPoint );
     sc2 = TRAITS_TYPE::ScalarProduct2D( dart_tmp.Alpha0(), aPoint );
-    
+
     if( sc1 >= 0 && sc2 >= 0 )
     {
         // test for degenerate edge
@@ -948,7 +901,7 @@ template <class DART_TYPE>
 bool TRIANGULATION_HELPER::IsBoundaryEdge( const DART_TYPE& aDart )
 {
     DART_TYPE dart_iter = aDart;
-    
+
     if( dart_iter.Alpha2() == aDart )
         return true;
     else
@@ -1186,7 +1139,7 @@ void TRIANGULATION_HELPER::Get0OrbitBoundary( const DART_TYPE& aDart, DART_LIST_
 {
     DART_TYPE dart_prev;
     DART_TYPE d_iter = aDart;
-    
+
     do
     {
         aOrbit.push_back( d_iter );
@@ -1251,7 +1204,7 @@ template <class DART_TYPE>
 bool TRIANGULATION_HELPER::Same1Orbit( const DART_TYPE& aD1, const DART_TYPE& aD2 )
 {
     DART_TYPE d_iter = aD2;
-    
+
     // (Also works at the boundary)
     return ( d_iter == aD1 || d_iter.Alpha0() == aD1 ||
              d_iter.Alpha2() == aD1 || d_iter.Alpha0() == aD1 );
@@ -1266,7 +1219,7 @@ template <class DART_TYPE>
 bool TRIANGULATION_HELPER::Same2Orbit( const DART_TYPE& aD1, const DART_TYPE& aD2 )
 {
     DART_TYPE d_iter = aD2;
-    
+
     return ( d_iter == aD1 || d_iter.Alpha0() == aD1 || d_iter.Alpha1() == aD1 ||
             d_iter.Alpha0() == aD1 || d_iter.Alpha1() == aD1 || d_iter.Alpha0() == aD1 );
 }
@@ -1281,7 +1234,7 @@ bool TRIANGULATION_HELPER::degenerateTriangle( const DART_TYPE& aDart )
     DART_TYPE d1 = aDart;
     DART_TYPE d2 = d1;
     d2.Alpha1();
-    
+
     return ( TRAITS_TYPE::CrossProduct2D( d1, d2 ) == 0 );
 }
 
@@ -1719,7 +1672,7 @@ void TRIANGULATION_HELPER::SwapEdgesAwayFromInteriorNode( DART_TYPE& aDart,
                                                           LIST_TYPE& aSwappedEdges )
 {
 
-    // Same iteration as in fixEdgesAtCorner, but not boundary    
+    // Same iteration as in fixEdgesAtCorner, but not boundary
     DART_TYPE dnext = aDart;
 
     // Allow degeneracy, otherwise we might end up with degree=4.
