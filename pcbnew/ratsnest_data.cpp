@@ -48,6 +48,10 @@
 #include <algorithm>
 #include <limits>
 
+#ifdef PROFILE
+#include <profile.h>
+#endif
+
 uint64_t getDistance( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2 )
 {
     // Drop the least significant bits to avoid overflow
@@ -959,14 +963,20 @@ void RN_NET::processZones()
 
     BOOST_FOREACH( std::deque<RN_POLY>& polygons, m_zonePolygons | boost::adaptors::map_values )
     {
+        if( polygons.empty() )
+            continue;
+
         RN_LINKS::RN_NODE_SET::iterator point, pointEnd;
-        std::deque<RN_POLY>::iterator poly, polyEnd;
 
         // Sorting by area should speed up the processing, as smaller polygons are computed
         // faster and may reduce the number of points for further checks
         std::sort( polygons.begin(), polygons.end(), sortArea );
 
-        for( poly = polygons.begin(), polyEnd = polygons.end(); poly != polyEnd; ++poly )
+        std::deque<RN_POLY>::iterator poly = polygons.begin(), polyEnd = polygons.end();
+        const RN_NODE_PTR& node = poly->GetNode();
+        std::deque<RN_EDGE_MST_PTR>& connections = m_zoneConnections[poly->GetParent()];
+
+        for( ; poly != polyEnd; ++poly )
         {
             point = candidates.begin();
             pointEnd = candidates.end();
@@ -975,8 +985,8 @@ void RN_NET::processZones()
             {
                 if( poly->HitTest( *point ) )
                 {
-                    RN_EDGE_MST_PTR connection = m_links.AddConnection( poly->GetNode(), *point );
-                    m_zoneConnections[poly->GetParent()].push_back( connection );
+                    RN_EDGE_MST_PTR connection = m_links.AddConnection( node, *point );
+                    connections.push_back( connection );
 
                     // This point already belongs to a polygon, we do not need to check it anymore
                     point = candidates.erase( point );
@@ -1184,6 +1194,11 @@ void RN_DATA::Recalculate( int aNet )
 
     if( aNet < 0 && netCount > 1 )              // Recompute everything
     {
+#ifdef PROFILE
+    prof_counter totalRealTime;
+    prof_start( &totalRealTime );
+#endif
+
         unsigned int i;
 
 #ifdef USE_OPENMP
@@ -1200,6 +1215,11 @@ void RN_DATA::Recalculate( int aNet )
                     updateNet( i );
             }
         }  /* end of parallel section */
+#ifdef PROFILE
+    prof_end( &totalRealTime );
+
+    wxLogDebug( wxT( "Recalculate all nets: %.1f ms" ), totalRealTime.msecs() );
+#endif /* PROFILE */
     }
     else if( aNet > 0 )         // Recompute only specific net
     {
