@@ -408,7 +408,9 @@ void RN_NET::Update()
 
 void RN_NET::AddItem( const D_PAD* aPad )
 {
-    m_pads[aPad] = m_links.AddNode( aPad->GetPosition().x, aPad->GetPosition().y );
+    RN_NODE_PTR node = m_links.AddNode( aPad->GetPosition().x, aPad->GetPosition().y );
+    node->AddParent( aPad );
+    m_pads[aPad] = node;
 
     m_dirty = true;
 }
@@ -416,7 +418,9 @@ void RN_NET::AddItem( const D_PAD* aPad )
 
 void RN_NET::AddItem( const VIA* aVia )
 {
-    m_vias[aVia] = m_links.AddNode( aVia->GetPosition().x, aVia->GetPosition().y );
+    RN_NODE_PTR node = m_links.AddNode( aVia->GetPosition().x, aVia->GetPosition().y );
+    node->AddParent( aVia );
+    m_vias[aVia] = node;
 
     m_dirty = true;
 }
@@ -429,6 +433,8 @@ void RN_NET::AddItem( const TRACK* aTrack )
 
     if( start != end )
     {
+        start->AddParent( aTrack );
+        end->AddParent( aTrack );
         m_tracks[aTrack] = m_links.AddConnection( start, end );
         m_dirty = true;
     }
@@ -455,8 +461,10 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
 
         if( point.end_contour )
         {
-            m_zones[aZone].m_Polygons.push_back( RN_POLY( &polyPoints[idxStart], &point,
-                                                 m_links, BOX2I( origin, end - origin ) ) );
+            RN_POLY poly = RN_POLY( &polyPoints[idxStart], &point,
+                                    m_links, BOX2I( origin, end - origin ) );
+            poly.GetNode()->AddParent( aZone );
+            m_zones[aZone].m_Polygons.push_back( poly );
 
             idxStart = i + 1;
 
@@ -492,6 +500,7 @@ void RN_NET::RemoveItem( const D_PAD* aPad )
     try
     {
         RN_NODE_PTR node = m_pads.at( aPad );
+        node->RemoveParent( aPad );
 
         if( m_links.RemoveNode( node ) )
             clearNode( node );
@@ -511,6 +520,7 @@ void RN_NET::RemoveItem( const VIA* aVia )
     try
     {
         RN_NODE_PTR node = m_vias.at( aVia );
+        node->RemoveParent( aVia );
 
         if( m_links.RemoveNode( node ) )
             clearNode( node );
@@ -532,17 +542,20 @@ void RN_NET::RemoveItem( const TRACK* aTrack )
         RN_EDGE_MST_PTR& edge = m_tracks.at( aTrack );
 
         // Save nodes, so they can be cleared later
-        RN_NODE_PTR aBegin = edge->GetSourceNode();
-        RN_NODE_PTR aEnd = edge->GetTargetNode();
+        RN_NODE_PTR start = edge->GetSourceNode();
+        start->RemoveParent( aTrack );
+        RN_NODE_PTR end = edge->GetTargetNode();
+        end->RemoveParent( aTrack );
+
         m_links.RemoveConnection( edge );
 
         // Remove nodes associated with the edge. It is done in a safe way, there is a check
         // if nodes are not used by other edges.
-        if( m_links.RemoveNode( aBegin ) )
-            clearNode( aBegin );
+        if( m_links.RemoveNode( start ) )
+            clearNode( start );
 
-        if( m_links.RemoveNode( aEnd ) )
-            clearNode( aEnd );
+        if( m_links.RemoveNode( end ) )
+            clearNode( end );
 
         m_tracks.erase( aTrack );
 
@@ -562,7 +575,8 @@ void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
         std::deque<RN_POLY>& polygons = m_zones.at( aZone ).m_Polygons;
         BOOST_FOREACH( RN_POLY& polygon, polygons )
         {
-            const RN_NODE_PTR node = polygon.GetNode();
+            RN_NODE_PTR node = polygon.GetNode();
+            node->RemoveParent( aZone );
 
             if( m_links.RemoveNode( node ) )
                 clearNode( node );
@@ -962,13 +976,17 @@ bool RN_DATA::AreConnected( const BOARD_CONNECTED_ITEM* aItem, const BOARD_CONNE
 
 void RN_NET::processZones()
 {
-    BOOST_FOREACH( RN_ZONE_DATA& zoneData, m_zones | boost::adaptors::map_values )
+    for( ZONE_DATA_MAP::iterator it = m_zones.begin(); it != m_zones.end(); ++it )
     {
+        const ZONE_CONTAINER* zone = it->first;
+        RN_ZONE_DATA& zoneData = it->second;
+
         // Reset existing connections
         BOOST_FOREACH( RN_EDGE_MST_PTR edge, zoneData.m_Edges )
             m_links.RemoveConnection( edge );
 
         zoneData.m_Edges.clear();
+        LSET layers = zone->GetLayerSet();
 
         // Compute new connections
         RN_LINKS::RN_NODE_SET candidates = m_links.GetNodes();
@@ -988,7 +1006,8 @@ void RN_NET::processZones()
 
             while( point != pointEnd )
             {
-                if( *point != node && poly->HitTest( *point ) )
+                if( *point != node && ( (*point)->GetLayers() & layers ).any()
+                        && poly->HitTest( *point ) )
                 {
                     RN_EDGE_MST_PTR connection = m_links.AddConnection( node, *point );
                     zoneData.m_Edges.push_back( connection );

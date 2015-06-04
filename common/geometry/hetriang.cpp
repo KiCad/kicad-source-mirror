@@ -47,12 +47,22 @@
 #include <limits>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
+#include <class_board_connected_item.h>
 
 using namespace hed;
 
 #ifdef TTL_USE_NODE_ID
   int NODE::id_count = 0;
 #endif
+
+
+void NODE::updateLayers()
+{
+    assert( m_layers.none() );
+
+    BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_parents )
+        m_layers |= item->GetLayerSet();
+}
 
 
 //#define DEBUG_HE
