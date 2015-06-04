@@ -116,6 +116,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         // without changing their properties (as they are already deleted
         // while a new board is loaded)
         m_selection.clear();
+        getView()->GetPainter()->GetSettings()->SetHighlight( false );
     }
     else
         // Restore previous properties of selected items and remove them from containers
