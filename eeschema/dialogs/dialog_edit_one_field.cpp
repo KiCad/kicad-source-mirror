@@ -161,8 +161,26 @@ void DIALOG_LIB_EDIT_ONE_FIELD::initDlg()
 wxString DIALOG_LIB_EDIT_ONE_FIELD::GetTextField()
 {
     wxString line = m_TextValue->GetValue();
-    // Spaces are not allowed in fields, so replace them by '_'
-    line.Replace( wxT( " " ), wxT( "_" ) );
+
+    // Spaces are not allowed in reference or value
+    if( m_field->GetId() == REFERENCE || m_field->GetId() == VALUE )
+    {
+        if( line.Replace( wxT( " " ), wxT( "_" ) ) )
+        {
+            wxString msg;
+            msg.Printf( _(
+                "Whitespace is not permitted inside references or values (symbol names in lib).\n"
+                "The text you entered has been converted to use underscores: %s" ),
+                line
+                );
+            wxMessageDialog dlg( this, msg );
+            dlg.ShowModal();
+        }
+    }
+
+    // Prevent the message from appearing twice by restuffing the text box.
+    m_TextValue->SetValue( line );
+
     return line;
 }
 
