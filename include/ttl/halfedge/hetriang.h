@@ -106,9 +106,6 @@ protected:
     /// Tag for quick connection resolution
     int m_tag;
 
-    /// Reference count
-    unsigned int m_refCount;
-
     /// List of board items that share this node
     std::list<const BOARD_CONNECTED_ITEM*> m_parents;
 
@@ -127,7 +124,7 @@ public:
 #ifdef TTL_USE_NODE_ID
         m_id( id_count++ ),
 #endif
-        m_x( aX ), m_y( aY ), m_tag( -1 ), m_refCount( 0 )
+        m_x( aX ), m_y( aY ), m_tag( -1 )
     {
         m_layers.reset();
     }
@@ -181,19 +178,9 @@ public:
     }
 #endif
 
-    inline void IncRefCount()
-    {
-        m_refCount++;
-    }
-
-    inline void DecRefCount()
-    {
-        m_refCount--;
-    }
-
     inline unsigned int GetRefCount() const
     {
-        return m_refCount;
+        return m_parents.size();
     }
 
     inline void AddParent( const BOARD_CONNECTED_ITEM* aParent )

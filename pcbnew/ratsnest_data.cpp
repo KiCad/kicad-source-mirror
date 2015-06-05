@@ -255,7 +255,6 @@ const RN_NODE_PTR& RN_LINKS::AddNode( int aX, int aY )
     bool wasNewElement;
 
     boost::tie( node, wasNewElement ) = m_nodes.emplace( boost::make_shared<RN_NODE>( aX, aY ) );
-    (*node)->IncRefCount(); // TODO use the shared_ptr use_count
 
     return *node;
 }
@@ -263,8 +262,6 @@ const RN_NODE_PTR& RN_LINKS::AddNode( int aX, int aY )
 
 bool RN_LINKS::RemoveNode( const RN_NODE_PTR& aNode )
 {
-    aNode->DecRefCount(); // TODO use the shared_ptr use_count
-
     if( aNode->GetRefCount() == 0 )
     {
         m_nodes.erase( aNode );
