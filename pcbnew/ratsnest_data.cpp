@@ -94,6 +94,18 @@ bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond )
 }
 
 
+RN_NODE_AND_FILTER operator&&( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 )
+{
+    return RN_NODE_AND_FILTER( aFilter1, aFilter2 );
+}
+
+
+RN_NODE_OR_FILTER operator||( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 )
+{
+    return RN_NODE_OR_FILTER( aFilter1, aFilter2 );
+}
+
+
 static bool isEdgeConnectingNode( const RN_EDGE_PTR& aEdge, const RN_NODE_PTR& aNode )
 {
     return aEdge->GetSourceNode() == aNode || aEdge->GetTargetNode() == aNode;

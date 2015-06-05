@@ -71,6 +71,9 @@ typedef boost::shared_ptr<hed::EDGE_MST> RN_EDGE_MST_PTR;
 bool operator==( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );
 bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond );
 
+struct RN_NODE_OR_FILTER;
+struct RN_NODE_AND_FILTER;
+
 ///> General interface for filtering out nodes in search functions.
 struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
 {
@@ -80,7 +83,13 @@ struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
     {
         return true;        // By default everything passes
     }
+
+    friend RN_NODE_AND_FILTER operator&&( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
+    friend RN_NODE_OR_FILTER operator||( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 };
+
+RN_NODE_AND_FILTER operator&&( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
+RN_NODE_OR_FILTER operator||( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 
 ///> Filters out nodes that have the flag set.
 struct WITHOUT_FLAG : public RN_NODE_FILTER
@@ -90,6 +99,39 @@ struct WITHOUT_FLAG : public RN_NODE_FILTER
         return !aNode->GetFlag();
     }
 };
+
+struct RN_NODE_AND_FILTER : public RN_NODE_FILTER
+{
+    RN_NODE_AND_FILTER( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 ) :
+        m_filter1( aFilter1 ), m_filter2( aFilter2 )
+    {}
+
+    bool operator()( const RN_NODE_PTR& aNode ) const
+    {
+        return m_filter1( aNode ) && m_filter2( aNode );
+    }
+
+    private:
+        const RN_NODE_FILTER& m_filter1;
+        const RN_NODE_FILTER& m_filter2;
+};
+
+struct RN_NODE_OR_FILTER : public RN_NODE_FILTER
+{
+    RN_NODE_OR_FILTER( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 ) :
+        m_filter1( aFilter1 ), m_filter2( aFilter2 )
+    {}
+
+    bool operator()( const RN_NODE_PTR& aNode ) const
+    {
+        return m_filter1( aNode ) || m_filter2( aNode );
+    }
+
+    private:
+        const RN_NODE_FILTER& m_filter1;
+        const RN_NODE_FILTER& m_filter2;
+};
+
 
 ///> Functor comparing if two nodes are equal by their coordinates. It is required to make set of
 ///> shared pointers work properly.
