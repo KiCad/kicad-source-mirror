@@ -537,6 +537,7 @@ public:
 
     TOOL_EVENT_LIST& operator||( const TOOL_EVENT_LIST& aEvent )
     {
+        std::copy( aEvent.m_events.begin(), aEvent.m_events.end(), std::back_inserter( m_events ) );
         return *this;
     }
 
