@@ -122,7 +122,7 @@ bool SELECTION_CONDITIONS::moreThanFunc( const SELECTION& aSelection, int aNumbe
 
 bool SELECTION_CONDITIONS::lessThanFunc( const SELECTION& aSelection, int aNumber )
 {
-    return aSelection.Size() > aNumber;
+    return aSelection.Size() < aNumber;
 }
 
 
