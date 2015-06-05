@@ -33,8 +33,6 @@
 
 #define FILTERFOOTPRINTKEY "FilterFootprint"
 
-#define LISTB_STYLE     ( wxSUNKEN_BORDER | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL | \
-                          wxLC_SINGLE_SEL | wxVSCROLL | wxHSCROLL )
 
 extern const wxString EquFileExtension;
 extern const wxString EquFilesWildcard;

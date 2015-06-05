@@ -44,7 +44,7 @@
 ITEMS_LISTBOX_BASE::ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
                                         const wxPoint& aLocation, const wxSize& aSize,
                                         long aStyle) :
-    wxListView( aParent, aId, aLocation, aSize, LISTB_STYLE | aStyle ), columnWidth(0)
+    wxListView( aParent, aId, aLocation, aSize, LISTBOX_STYLE | aStyle ), columnWidth(0)
 {
     InsertColumn( 0, wxEmptyString );
 }
@@ -95,7 +95,7 @@ void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine )
     {
         columnWidth = newWidth;
         SetColumnWidth( 0, columnWidth );
-    }    
+    }
 }
 
 

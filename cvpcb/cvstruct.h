@@ -36,6 +36,8 @@ class CVPCB_MAINFRAME;
 class COMPONENT;
 class FOOTPRINT_LIST;
 
+#define LISTBOX_STYLE     ( wxSUNKEN_BORDER | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL | \
+                            wxVSCROLL | wxHSCROLL )
 
 /*********************************************************************/
 /* ListBox (base class) to display lists of components or footprints */
@@ -45,7 +47,7 @@ class ITEMS_LISTBOX_BASE : public wxListView
 public:
     ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
                         const wxPoint& aLocation, const wxSize& aSize,
-                        long aStyle = wxLC_SINGLE_SEL );
+                        long aStyle = 0 );
 
     ~ITEMS_LISTBOX_BASE();
 
