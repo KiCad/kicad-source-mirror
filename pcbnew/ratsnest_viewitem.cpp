@@ -102,7 +102,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         {
             const RN_NODE_PTR& sourceNode = edge->GetSourceNode();
             const RN_NODE_PTR& targetNode = edge->GetTargetNode();
-            VECTOR2D source( sourceNode->GetX(), sourceNode->GetY()  );
+            VECTOR2D source( sourceNode->GetX(), sourceNode->GetY() );
             VECTOR2D target( targetNode->GetX(), targetNode->GetY() );
 
             aGal->DrawLine( source, target );

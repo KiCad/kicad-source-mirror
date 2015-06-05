@@ -52,7 +52,7 @@
 #include <profile.h>
 #endif
 
-uint64_t getDistance( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2 )
+static uint64_t getDistance( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2 )
 {
     // Drop the least significant bits to avoid overflow
     int64_t x = ( aNode1->GetX() - aNode2->GetX() ) >> 16;
@@ -63,14 +63,14 @@ uint64_t getDistance( const RN_NODE_PTR& aNode1, const RN_NODE_PTR& aNode2 )
 }
 
 
-bool sortDistance( const RN_NODE_PTR& aOrigin, const RN_NODE_PTR& aNode1,
+static bool sortDistance( const RN_NODE_PTR& aOrigin, const RN_NODE_PTR& aNode1,
                    const RN_NODE_PTR& aNode2 )
 {
     return getDistance( aOrigin, aNode1 ) < getDistance( aOrigin, aNode2 );
 }
 
 
-bool sortWeight( const RN_EDGE_PTR& aEdge1, const RN_EDGE_PTR& aEdge2 )
+static bool sortWeight( const RN_EDGE_PTR& aEdge1, const RN_EDGE_PTR& aEdge2 )
 {
     return aEdge1->GetWeight() < aEdge2->GetWeight();
 }
@@ -94,7 +94,7 @@ bool operator!=( const RN_NODE_PTR& aFirst, const RN_NODE_PTR& aSecond )
 }
 
 
-bool isEdgeConnectingNode( const RN_EDGE_PTR& aEdge, const RN_NODE_PTR& aNode )
+static bool isEdgeConnectingNode( const RN_EDGE_PTR& aEdge, const RN_NODE_PTR& aNode )
 {
     return aEdge->GetSourceNode() == aNode || aEdge->GetTargetNode() == aNode;
 }
@@ -667,7 +667,7 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode, int aN
         closest.push_back( node );
 
     // Sort by the distance from aNode
-    closest.sort( boost::bind( sortDistance, boost::ref( aNode ), _1, _2 ) );
+    closest.sort( boost::bind( sortDistance, boost::cref( aNode ), _1, _2 ) );
 
     // Remove the first node (==aNode), as it is surely located within the smallest distance
     closest.pop_front();
@@ -691,7 +691,7 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode,
         closest.push_back( node );
 
     // Sort by the distance from aNode
-    closest.sort( boost::bind( sortDistance, boost::ref( aNode ), _1, _2 ) );
+    closest.sort( boost::bind( sortDistance, boost::cref( aNode ), _1, _2 ) );
 
     // Remove the first node (==aNode), as it is surely located within the smallest distance
     closest.pop_front();
@@ -755,7 +755,7 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
     }
     catch( ... )
     {
-        return nodes;
+        // It is fine, just return empty list of nodes
     }
 
     return nodes;
@@ -766,26 +766,26 @@ void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYP
 {
     if( aType & RN_PADS )
     {
-        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_pads | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_pads | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
     }
 
     if( aType & RN_VIAS )
     {
-        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_vias | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_vias | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
     }
 
     if( aType & RN_TRACKS )
     {
-        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_tracks | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_tracks | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
     }
 
     if( aType & RN_ZONES )
     {
-        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* aItem, m_zones | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
+        BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_zones | boost::adaptors::map_keys )
+            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
     }
 }
 
