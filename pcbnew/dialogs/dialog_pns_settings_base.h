@@ -65,7 +65,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 358,393 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Interactive Router Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 358,393 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PNS_SETTINGS_BASE();
 	
 };
