@@ -440,16 +440,17 @@ void RN_NET::AddItem( const VIA* aVia )
 
 void RN_NET::AddItem( const TRACK* aTrack )
 {
+    if( aTrack->GetStart() == aTrack->GetEnd() )
+        return;
+
     RN_NODE_PTR start = m_links.AddNode( aTrack->GetStart().x, aTrack->GetStart().y );
     RN_NODE_PTR end = m_links.AddNode( aTrack->GetEnd().x, aTrack->GetEnd().y );
 
-    if( start != end )
-    {
-        start->AddParent( aTrack );
-        end->AddParent( aTrack );
-        m_tracks[aTrack] = m_links.AddConnection( start, end );
-        m_dirty = true;
-    }
+    start->AddParent( aTrack );
+    end->AddParent( aTrack );
+    m_tracks[aTrack] = m_links.AddConnection( start, end );
+
+    m_dirty = true;
 }
 
 
