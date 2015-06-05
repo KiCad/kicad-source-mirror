@@ -719,6 +719,22 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode,
 }
 
 
+void RN_NET::AddSimple( const BOARD_CONNECTED_ITEM* aItem )
+{
+    std::list<RN_NODE_PTR> nodes = GetNodes( aItem );
+
+    if( nodes.empty() )
+        return;
+
+    int tag = nodes.front()->GetTag();
+
+    if( m_simpleItems.count( tag ) )
+        return;     // we already have a simple item for this tag
+
+    m_simpleItems[tag] = aItem;
+}
+
+
 std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) const
 {
     std::list<RN_NODE_PTR> nodes;
@@ -802,16 +818,42 @@ void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYP
 }
 
 
+boost::unordered_set<RN_NODE_PTR> RN_NET::GetSimpleNodes() const
+{
+    boost::unordered_set<RN_NODE_PTR> nodes;
+
+    BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_simpleItems | boost::adaptors::map_values )
+    {
+        std::list<RN_NODE_PTR> n = GetNodes( item );
+
+        if( n.empty() )
+            return nodes;
+
+        nodes.insert( n.front() ); // one node is enough, the rest belong to the same item
+        n.front()->SetFlag( true );
+    }
+
+    return nodes;
+}
+
+
 void RN_NET::ClearSimple()
 {
-    BOOST_FOREACH( const RN_NODE_PTR& node, m_simpleNodes )
-        node->SetFlag( false );
+    BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_simpleItems | boost::adaptors::map_values )
+    {
+        std::list<RN_NODE_PTR> n = GetNodes( item );
+
+        if( n.empty() )
+            return;
+
+        n.front()->SetFlag( false );
+    }
 
     BOOST_FOREACH( const RN_NODE_PTR& node, m_blockedNodes )
         node->SetFlag( false );
 
-    m_simpleNodes.clear();
     m_blockedNodes.clear();
+    m_simpleItems.clear();
 }
 
 
@@ -881,9 +923,7 @@ void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
         if( net < 1 )           // do not process unconnected items
             return;
 
-        // Add all nodes belonging to the item
-        BOOST_FOREACH( RN_NODE_PTR node, m_nets[net].GetNodes( item ) )
-            m_nets[net].AddSimpleNode( node );
+        m_nets[net].AddSimple( item );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
@@ -926,16 +966,6 @@ void RN_DATA::AddBlocked( const BOARD_ITEM* aItem )
     }
     else
         return;
-}
-
-
-void RN_DATA::AddSimple( const VECTOR2I& aPosition, int aNetCode )
-{
-    assert( aNetCode > 0 );
-
-    RN_NODE_PTR newNode = boost::make_shared<RN_NODE>( aPosition.x, aPosition.y );
-
-    m_nets[aNetCode].AddSimpleNode( newNode );
 }
 
 

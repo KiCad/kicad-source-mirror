@@ -75,7 +75,8 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
         BOOST_FOREACH( const RN_NODE_PTR& node, net.GetSimpleNodes() )
         {
-            RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() );
+            RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() &&
+                                                         DIFFERENT_TAG( RN_NODE::TAG_UNCONNECTED ) );
 
             if( dest )
             {

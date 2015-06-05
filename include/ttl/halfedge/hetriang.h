@@ -215,6 +215,9 @@ public:
 
         return m_layers;
     }
+
+    // Tag used for unconnected items.
+    static const int TAG_UNCONNECTED = -1;
 };
 
 

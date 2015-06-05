@@ -100,6 +100,22 @@ struct WITHOUT_FLAG : public RN_NODE_FILTER
     }
 };
 
+///> Filters out nodes with a specific tag
+struct DIFFERENT_TAG : public RN_NODE_FILTER
+{
+    DIFFERENT_TAG( int aTag ) :
+        m_tag( aTag )
+    {}
+
+    bool operator()( const RN_NODE_PTR& aNode ) const
+    {
+        return aNode->GetTag() != m_tag;
+    }
+
+    private:
+        int m_tag;
+};
+
 struct RN_NODE_AND_FILTER : public RN_NODE_FILTER
 {
     RN_NODE_AND_FILTER( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 ) :
@@ -476,15 +492,11 @@ public:
                                             const RN_NODE_FILTER& aFilter, int aNumber = -1 ) const;
 
     /**
-     * Function AddSimpleNode()
-     * Changes drawing mode for a node to simple (i.e. one ratsnest line per node).
+     * Function AddSimple()
+     * Changes drawing mode for an item to simple (i.e. one ratsnest line per node).
      * @param aNode is a node that changes its drawing mode.
      */
-    inline void AddSimpleNode( RN_NODE_PTR& aNode )
-    {
-        m_simpleNodes.push_back( aNode );
-        aNode->SetFlag( true );
-    }
+    void AddSimple( const BOARD_CONNECTED_ITEM* aItem );
 
     /**
      * Function AddBlockedNode()
@@ -504,10 +516,7 @@ public:
      * ratsnest line per node).
      * @return list of nodes for which ratsnest is drawn in simple mode.
      */
-    inline const std::deque<RN_NODE_PTR>& GetSimpleNodes() const
-    {
-        return m_simpleNodes;
-    }
+    boost::unordered_set<RN_NODE_PTR> GetSimpleNodes() const;
 
     /**
      * Function ClearSimple()
@@ -546,11 +555,11 @@ protected:
     ///> Vector of edges that makes ratsnest for a given net.
     boost::shared_ptr< std::vector<RN_EDGE_MST_PTR> > m_rnEdges;
 
-    ///> List of nodes for which ratsnest is drawn in simple mode.
-    std::deque<RN_NODE_PTR> m_simpleNodes;
-
     ///> List of nodes which will not be used as ratsnest target nodes.
     std::deque<RN_NODE_PTR> m_blockedNodes;
+
+    ///> Map that stores items to be computed in simple mode, keyed by their tags.
+    boost::unordered_map<int, const BOARD_CONNECTED_ITEM*> m_simpleItems;
 
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
@@ -629,16 +638,6 @@ public:
      * @param aItem is an item to be drawn in simple node.
      */
     void AddSimple( const BOARD_ITEM* aItem );
-
-    /**
-     * Function AddSimple()
-     * Allows to draw a ratsnest line using a position expressed in world coordinates and a
-     * net code (so there is no need to have a real BOARD_ITEM to draw ratsnest line).
-     * It is used for drawing quick, temporary ratsnest, eg. while moving an item.
-     * @param aPosition is the point for which ratsnest line are going to be drawn.
-     * @param aNetCode determines the net code for which the ratsnest line are going to be drawn.
-     */
-    void AddSimple( const VECTOR2I& aPosition, int aNetCode );
 
     /**
      * Function AddBlocked()
