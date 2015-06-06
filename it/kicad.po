@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-05 01:38+0100\n"
-"PO-Revision-Date: 2015-06-05 01:38+0100\n"
+"POT-Creation-Date: 2015-06-06 09:37+0100\n"
+"PO-Revision-Date: 2015-06-06 09:37+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -22277,7 +22277,7 @@ msgid "Graphic Item Properties"
 msgstr "Proprietà elemento grafico"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:68
-msgid "Interactive Router settings"
+msgid "Interactive Router Settings"
 msgstr "Impostazioni sbroglio interattivo"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:130
