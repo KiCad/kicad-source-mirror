@@ -951,7 +951,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     }
 
     case SCH_SHEET_T:
-        EditSheet( (SCH_SHEET*) item, &dc );
+        EditSheet( (SCH_SHEET*) item, m_CurrentSheet, &dc );
         break;
 
     case SCH_SHEET_PIN_T:

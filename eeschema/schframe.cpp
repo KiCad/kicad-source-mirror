@@ -1202,7 +1202,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
             // the m_mouseCaptureCallback function.
             m_canvas->SetMouseCapture( NULL, NULL );
 
-            if( !EditSheet( (SCH_SHEET*)item, aDC ) )
+            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet, aDC ) )
             {
                 screen->SetCurItem( NULL );
                 item->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );

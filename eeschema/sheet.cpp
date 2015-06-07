@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,18 +31,22 @@
 #include <confirm.h>
 #include <schframe.h>
 #include <base_units.h>
+#include <kiface_i.h>
 
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
 #include <dialogs/dialog_sch_sheet_props.h>
 #include <wildcards_and_files_ext.h>
 #include <project.h>
 
 
-bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
+bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, wxDC* aDC )
 {
-    if( aSheet == NULL )
+    if( aSheet == NULL || aHierarchy == NULL )
         return false;
+
+    SCH_SHEET_LIST hierarchy;       // This is the schematic sheet hierarchy.
 
     // Get the new texts
     DIALOG_SCH_SHEET_PROPS dlg( this );
@@ -86,9 +90,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     }
 
     // Duplicate sheet names are not valid.
-    const SCH_SHEET* sheet = GetScreen()->GetSheet( dlg.GetSheetName() );
+    const SCH_SHEET* sheet = hierarchy.FindSheetByName( dlg.GetSheetName() );
 
-    if( sheet && sheet != aSheet )
+    if( sheet && (sheet != aSheet) )
     {
         DisplayError( this, wxString::Format( _( "A sheet named \"%s\" already exists." ),
                                               GetChars( dlg.GetSheetName() ) ) );
@@ -119,24 +123,23 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     }
 
     // Inside Eeschema, filenames are stored using unix notation
-    newFilename.Replace( wxT("\\"), wxT("/") );
+    newFilename.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    if( aSheet->GetScreen() == NULL )                          // New sheet.
+    if( aSheet->GetScreen() == NULL )              // New sheet.
     {
         if( useScreen || loadFromFile )            // Load from existing file.
         {
             if( useScreen != NULL )
             {
-                msg.Printf( _( "A file named '%s' already exists in the current schematic hierarchy." ),
-                            GetChars( newFilename ) );
+                msg.Printf( _( "A file named '%s' already exists in the current schematic "
+                               "hierarchy." ), GetChars( newFilename ) );
             }
             else
             {
-                msg.Printf( _( "A file named '%s' already exists." ),
-                            GetChars( newFilename ) );
+                msg.Printf( _( "A file named '%s' already exists." ), GetChars( newFilename ) );
             }
 
-            msg += _("\n\nDo you want to create a sheet with the contents of this file?" );
+            msg += _( "\n\nDo you want to create a sheet with the contents of this file?" );
 
             if( !IsOK( this, msg ) )
             {
@@ -167,13 +170,14 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
             isUndoable = false;
             msg = _( "Changing the sheet file name cannot be undone.  " );
 
-            if( useScreen || loadFromFile )        // Load from existing file.
+            if( useScreen || loadFromFile )                    // Load from existing file.
             {
                 wxString tmp;
+
                 if( useScreen != NULL )
                 {
-                    tmp.Printf( _( "A file named <%s> already exists in the current schematic hierarchy." ),
-                                GetChars( newFilename ) );
+                    tmp.Printf( _( "A file named <%s> already exists in the current schematic "
+                                   "hierarchy." ), GetChars( newFilename ) );
                 }
                 else
                 {
@@ -182,7 +186,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
                 }
 
                 msg += tmp;
-                msg += _("\n\nDo you want to replace the sheet with the contents of this file?" );
+                msg += _( "\n\nDo you want to replace the sheet with the contents of this file?" );
 
                 if( !IsOK( this, msg ) )
                     return false;
@@ -242,6 +246,25 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ),
                                            (long unsigned) aSheet->GetTimeStamp() ) );
 
+    // Make sure the sheet changes do not cause any recursion.
+    SCH_SHEET_LIST sheetHierarchy( aSheet );
+
+    // Make sure files have fully qualified path and file name.
+    wxFileName destFn = aHierarchy->Last()->GetFileName();
+
+    if( destFn.IsRelative() )
+        destFn.MakeAbsolute( Prj().GetProjectPath() );
+
+    if( hierarchy.TestForRecursion( sheetHierarchy, destFn.GetFullPath( wxPATH_UNIX ) ) )
+    {
+        msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
+                       "has the sheet <%s> or one of it's subsheets as a parent somewhere in "
+                       "the schematic hierarchy." ),
+                    GetChars( newFilename ) );
+        DisplayError( this, msg );
+        return false;
+    }
+
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
     aSheet->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
@@ -257,7 +280,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
  * But the (very small code) relative to sheet move is still present here
  */
 static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                               bool aErase )
+                                        bool aErase )
 {
     wxPoint        moveVector;
     BASE_SCREEN*   screen = aPanel->GetScreen();
@@ -392,7 +415,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
         SetUndoItem( aSheet );
 }
 
-#define GRID_SIZE_REF 50
+
 void SCH_EDIT_FRAME::RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW )
 {
     if( aSheet == NULL )

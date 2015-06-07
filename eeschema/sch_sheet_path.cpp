@@ -45,6 +45,7 @@
 #include <dialogs/dialog_schematic_find.h>
 
 #include <boost/foreach.hpp>
+#include <wx/filename.h>
 
 
 SCH_SHEET_PATH::SCH_SHEET_PATH()
@@ -61,7 +62,7 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
     if( aFound )
         return true;
 
-    if( GetSheetsCount() == 0 )
+    if( GetCount() == 0 )
         Push( g_RootSheet );
 
     if( aPath == Path() )
@@ -69,7 +70,7 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
 
     SCH_ITEM* schitem = LastDrawList();
 
-    while( schitem && GetSheetsCount() < NB_MAX_SHEET )
+    while( schitem && GetCount() < NB_MAX_SHEET )
     {
         if( schitem->Type() == SCH_SHEET_T )
         {
@@ -468,16 +469,101 @@ bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 }
 
 
+bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
+                                       const wxString& aDestFileName ) const
+{
+    wxFileName rootFn = g_RootSheet->GetFileName();
+    wxFileName srcFn = aSrcFileName;
+    wxFileName destFn = aDestFileName;
+
+    if( srcFn.IsRelative() )
+        srcFn.MakeAbsolute( rootFn.GetPath() );
+
+    if( destFn.IsRelative() )
+        destFn.MakeAbsolute( rootFn.GetPath() );
+
+
+    // The source and destination sheet file names cannot be the same.
+    if( srcFn == destFn )
+        return true;
+
+    /// @todo Store sheet file names with full path, either relative to project path
+    ///       or absolute path.  The current design always assumes subsheet files are
+    ///       located in the project folder which may or may not be desirable.
+    unsigned i = 0;
+
+    while( i < m_numSheets )
+    {
+        wxFileName cmpFn = m_sheets[i]->GetFileName();
+
+        if( cmpFn.IsRelative() )
+            cmpFn.MakeAbsolute( rootFn.GetPath() );
+
+        // Test if the file name of the destination sheet is in anywhere in this sheet path.
+        if( cmpFn == destFn )
+            break;
+
+        i++;
+    }
+
+    // The destination sheet file name was not found in the sheet path or the destination
+    // sheet file name is the root sheet so no recursion is possible.
+    if( i >= m_numSheets || i == 0 )
+        return false;
+
+    // Walk back up to the root sheet to see if the source file name is already a parent in
+    // the sheet path.  If so, recursion will occur.
+    do
+    {
+        i -= 1;
+
+        wxFileName cmpFn = m_sheets[i]->GetFileName();
+
+        if( cmpFn.IsRelative() )
+            cmpFn.MakeAbsolute( rootFn.GetPath() );
+
+        if( cmpFn == srcFn )
+            return true;
+
+    } while( i != 0 );
+
+    // The source sheet file name is not a parent of the destination sheet file name.
+    return false;
+}
+
+
+int SCH_SHEET_PATH::FindSheet( const wxString& aFileName ) const
+{
+    for( unsigned i = 0; i < m_numSheets; i++ )
+    {
+        if( m_sheets[i]->GetFileName().CmpNoCase( aFileName ) == 0 )
+            return (int)i;
+    }
+
+    return SHEET_NOT_FOUND;
+}
+
+
+SCH_SHEET* SCH_SHEET_PATH::FindSheetByName( const wxString& aSheetName )
+{
+    for( unsigned i = 0; i < m_numSheets; i++ )
+    {
+        if( m_sheets[i]->GetName().CmpNoCase( aSheetName ) == 0 )
+            return m_sheets[i];
+    }
+
+    return NULL;
+}
+
+
 /********************************************************************/
 /* Class SCH_SHEET_LIST to handle the list of Sheets in a hierarchy */
 /********************************************************************/
-
-
 SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 {
     m_index = 0;
     m_count = 0;
-    m_List  = NULL;
+    m_list  = NULL;
     m_isRootSheet = false;
 
     if( aSheet == NULL )
@@ -492,7 +578,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetFirst()
     m_index = 0;
 
     if( GetCount() > 0 )
-        return &( m_List[0] );
+        return &( m_list[0] );
 
     return NULL;
 }
@@ -529,10 +615,10 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetPrevious()
 }
 
 
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( int aIndex )
+SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( int aIndex ) const
 {
     if( aIndex < GetCount() )
-        return &( m_List[aIndex] );
+        return &( m_list[aIndex] );
 
     return NULL;
 }
@@ -564,18 +650,18 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     if( aSheet == g_RootSheet )
         m_isRootSheet = true;
 
-    if( m_List == NULL )
+    if( m_list == NULL )
     {
         int count = aSheet->CountSheets();
 
         m_count = count;
         m_index = 0;
-        m_List = new SCH_SHEET_PATH[ count ];
+        m_list = new SCH_SHEET_PATH[ count ];
         m_currList.Clear();
     }
 
     m_currList.Push( aSheet );
-    m_List[m_index] = m_currList;
+    m_list[m_index] = m_currList;
     m_index++;
 
     if( aSheet->GetScreen() )
@@ -771,23 +857,70 @@ bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
 }
 
 
-bool SCH_SHEET_LIST::IsComplexHierarchy()
+bool SCH_SHEET_LIST::IsComplexHierarchy() const
 {
     wxString fileName;
 
-    for( int i = 0;  i < GetCount();  i++ )
+    for( int i = 0;  i < m_count;  i++ )
     {
-        fileName = GetSheet( i )->Last()->GetFileName();
+        fileName = m_list[i].Last()->GetFileName();
 
-        for( int j = 0;  j < GetCount();  j++ )
+        for( int j = 0;  j < m_count;  j++ )
         {
             if( i == j )
                 continue;
 
-            if( fileName == GetSheet( j )->Last()->GetFileName() )
+            if( fileName == m_list[j].Last()->GetFileName() )
                 return true;
         }
     }
 
     return false;
+}
+
+
+bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
+                                       const wxString& aDestFileName ) const
+{
+    wxFileName rootFn = g_RootSheet->GetFileName();
+    wxFileName destFn = aDestFileName;
+
+    if( destFn.IsRelative() )
+        destFn.MakeAbsolute( rootFn.GetPath() );
+
+    // Test each SCH_SHEET_PATH in this SCH_SHEET_LIST for potential recursion.
+    for( int i = 0; i < m_count; i++ )
+    {
+        // Test each SCH_SHEET_PATH in the source sheet.
+        for( int j = 0; j < aSrcSheetHierarchy.GetCount(); j++ )
+        {
+            SCH_SHEET_PATH* sheetPath = aSrcSheetHierarchy.GetSheet( j );
+
+            for( unsigned k = 0; k < sheetPath->GetCount(); k++ )
+            {
+                if( m_list[i].TestForRecursion( sheetPath->GetSheet( k )->GetFileName(),
+                                                aDestFileName ) )
+                    return true;
+            }
+        }
+    }
+
+    // The source sheet file can safely be added to the destination sheet file.
+    return false;
+}
+
+
+SCH_SHEET* SCH_SHEET_LIST::FindSheetByName( const wxString& aSheetName )
+{
+    SCH_SHEET* sheet = NULL;
+
+    for( int i = 0; i < m_count; i++ )
+    {
+        sheet = m_list[i].FindSheetByName( aSheetName );
+
+        if( sheet )
+            return sheet;
+    }
+
+    return NULL;
 }

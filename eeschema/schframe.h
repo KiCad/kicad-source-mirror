@@ -994,7 +994,7 @@ public:
      * the current associated screen file name is changed and saved to disk.</li>
      * </ul> </p>
      */
-    bool EditSheet( SCH_SHEET* aSheet, wxDC* aDC );
+    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, wxDC* aDC );
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 

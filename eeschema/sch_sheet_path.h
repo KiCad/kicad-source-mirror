@@ -85,6 +85,9 @@ class SCH_ITEM;
 class SCH_REFERENCE_LIST;
 class PART_LIBS;
 
+#define SHEET_NOT_FOUND          -1
+
+
 /**
  * Type SCH_MULTI_UNIT_REFERENCE_MAP
  * is used to create a map of reference designators for multi-unit parts.
@@ -117,9 +120,17 @@ public:
         m_numSheets = 0;
     }
 
-    unsigned GetSheetsCount()
+    unsigned GetCount()
     {
         return m_numSheets;
+    }
+
+    SCH_SHEET* GetSheet( unsigned index )
+    {
+        if( index < m_numSheets )
+            return m_sheets[index];
+
+        return NULL;
     }
 
     /**
@@ -283,6 +294,31 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
+    /**
+     * Function TestForRecursion
+     *
+     * test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
+     * \a aSrcFileName to the sheet stored in file \a aDestFileName  will cause a sheet
+     * path recursion.
+     *
+     * @param aSrcFileName is the source file name of the sheet add to \a aDestFileName.
+     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
+     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
+     */
+    bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName ) const;
+
+    int FindSheet( const wxString& aFileName ) const;
+
+    /**
+     * Function FindSheetByName
+     *
+     * searches the #SCH_SHEET_PATH for a sheet named \a aSheetName.
+     *
+     * @param aSheetName is the name of the sheet to find.
+     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
+
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& d1 );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
@@ -303,14 +339,14 @@ public:
 class SCH_SHEET_LIST
 {
 private:
-    SCH_SHEET_PATH* m_List;
+    SCH_SHEET_PATH* m_list;
     int             m_count;     /* Number of sheets included in hierarchy,
                                   * starting at the given sheet in constructor .
                                   * the given sheet is counted
                                  */
     int             m_index;     /* internal variable to handle GetNext(): cleared by
                                   * GetFirst() and incremented by GetNext() after
-                                  * returning the next item in m_List.  Also used for
+                                  * returning the next item in m_list.  Also used for
                                   * internal calculations in BuildSheetList()
                                   */
     bool            m_isRootSheet;
@@ -328,10 +364,10 @@ public:
 
     ~SCH_SHEET_LIST()
     {
-        if( m_List )
-            delete[] m_List;
+        if( m_list )
+            delete[] m_list;
 
-        m_List = NULL;
+        m_list = NULL;
     }
 
     /**
@@ -349,13 +385,13 @@ public:
 
     /**
      * Function GetFirst
-     * @return the first item (sheet) in m_List and prepare calls to GetNext()
+     * @return the first item (sheet) in m_list and prepare calls to GetNext()
      */
     SCH_SHEET_PATH* GetFirst();
 
     /**
      * Function GetNext
-     * @return the next item (sheet) in m_List or NULL if no more item in
+     * @return the next item (sheet) in m_list or NULL if no more item in
      * sheet list
      */
     SCH_SHEET_PATH* GetNext();
@@ -381,10 +417,10 @@ public:
      * Function GetSheet
      *
      * @param aIndex A index in sheet list to get the sheet.
-     * @return the sheet at \a aIndex position in m_List or NULL if \a aIndex is
+     * @return the sheet at \a aIndex position in m_list or NULL if \a aIndex is
      *         outside the bounds of the index list.
      */
-    SCH_SHEET_PATH* GetSheet( int aIndex );
+    SCH_SHEET_PATH* GetSheet( int aIndex ) const;
 
     /**
      * Function GetSheet
@@ -491,7 +527,30 @@ public:
      *
      * @return true if the #SCH_SHEET_LIST is a complex hierarchy.
      */
-    bool IsComplexHierarchy();
+    bool IsComplexHierarchy() const;
+
+    /**
+     * Function TestForRecursion
+     *
+     * test every SCH_SHEET_PATH in the SCH_SHEET_LIST to verify if adding the sheets stored
+     * in \a aSrcSheetHierarchy to the sheet stored in \a aDestFileName  will cause recursion.
+     *
+     * @param aSrcSheetHierarchy is the SCH_SHEET_LIST of the source sheet add to \a aDestFileName.
+     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
+     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
+     */
+    bool TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
+                           const wxString& aDestFileName ) const;
+
+    /**
+     * Function FindSheetByName
+     *
+     * searches the entire #SCH_SHEET_LIST for a sheet named \a aSheetName.
+     *
+     * @param aSheetName is the name of the sheet to find.
+     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
 private:
 

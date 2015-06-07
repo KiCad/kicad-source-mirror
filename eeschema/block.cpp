@@ -46,6 +46,7 @@
 #include <sch_text.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
 #include <boost/foreach.hpp>
 
@@ -292,7 +293,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             m_canvas->Refresh();
             break;
 
-        case BLOCK_SAVE:    // Save acopy of items in paste buffer
+        case BLOCK_SAVE:    // Save a copy of items in paste buffer
             GetScreen()->UpdatePickList();
             DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
@@ -448,34 +449,83 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList )
 
 void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 {
-    SCH_ITEM* Struct;
+    unsigned       i;
+    SCH_ITEM*      item;
+    SCH_SHEET_LIST hierarchy;    // This is the entire schematic hierarcy.
 
     if( m_blockItems.GetCount() == 0 )
     {
-        DisplayError( this, wxT( "No struct to paste" ) );
+        DisplayError( this, _( "No item to paste." ) );
         return;
+    }
+
+    wxFileName destFn = m_CurrentSheet->Last()->GetFileName();
+
+    if( destFn.IsRelative() )
+        destFn.MakeAbsolute( Prj().GetProjectPath() );
+
+    // Make sure any sheets in the block to be pasted will not cause recursion in
+    // the destination sheet.
+    for( i = 0; i < m_blockItems.GetCount(); i++ )
+    {
+        item = (SCH_ITEM*) m_blockItems.GetItem( i );
+
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*)item;
+            wxFileName srcFn = sheet->GetFileName();
+
+            if( srcFn.IsRelative() )
+                srcFn.MakeAbsolute( Prj().GetProjectPath() );
+
+            SCH_SHEET_LIST sheetHierarchy( sheet );
+
+            if( hierarchy.TestForRecursion( sheetHierarchy,
+                                            destFn.GetFullPath( wxPATH_UNIX ) ) )
+            {
+                wxString msg;
+
+                msg.Printf( _( "The sheet changes cannot be made because the destination "
+                               "sheet already has the sheet <%s> or one of it's subsheets "
+                               "as a parent somewhere in the schematic hierarchy." ),
+                            GetChars( sheet->GetFileName() ) );
+                DisplayError( this, msg );
+                return;
+            }
+
+            // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
+            // based sheet name and update the time stamp for each sheet in the block.
+            unsigned long timeStamp = (unsigned long)GetNewTimeStamp();
+
+            sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), timeStamp ) );
+            sheet->SetTimeStamp( (time_t)timeStamp );
+        }
     }
 
     PICKED_ITEMS_LIST picklist;
 
-    for( unsigned ii = 0; ii < m_blockItems.GetCount(); ii++ )
+    for( i = 0; i < m_blockItems.GetCount(); i++ )
     {
-        Struct = DuplicateStruct( (SCH_ITEM*) m_blockItems.GetItem( ii ) );
+        item = DuplicateStruct( (SCH_ITEM*) m_blockItems.GetItem( i ) );
 
         // Creates data, and push it as new data in undo item list buffer
-        ITEM_PICKER picker( Struct, UR_NEW );
+        ITEM_PICKER picker( item, UR_NEW );
         picklist.PushItem( picker );
 
-        // Clear annotation and init new time stamp for the new components:
-        if( Struct->Type() == SCH_COMPONENT_T )
+        // Clear annotation and init new time stamp for the new components and sheets:
+        if( item->Type() == SCH_COMPONENT_T )
         {
-            ( (SCH_COMPONENT*) Struct )->SetTimeStamp( GetNewTimeStamp() );
-            ( (SCH_COMPONENT*) Struct )->ClearAnnotation( NULL );
+            ( (SCH_COMPONENT*) item )->SetTimeStamp( GetNewTimeStamp() );
+            ( (SCH_COMPONENT*) item )->ClearAnnotation( NULL );
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            ( (SCH_SHEET*) item )->SetTimeStamp( GetNewTimeStamp() );
         }
 
-        SetSchItemParent( Struct, GetScreen() );
-        Struct->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        GetScreen()->Append( Struct );
+        SetSchItemParent( item, GetScreen() );
+        item->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        GetScreen()->Append( item );
     }
 
     SaveCopyInUndoList( picklist, UR_NEW );
