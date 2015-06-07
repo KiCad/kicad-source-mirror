@@ -33,12 +33,40 @@
 #define GENERIC_INTERMEDIATE_NETLIST_EXT wxT( "xml" )
 
 /**
+ * Enum GNL
+ * is a set of bit which control the totality of the tree built by makeRoot()
+ */
+enum GNL_T
+{
+    GNL_LIBRARIES   = 1 << 0,
+    GNL_COMPONENTS  = 1 << 1,
+    GNL_PARTS       = 1 << 2,
+    GNL_HEADER      = 1 << 3,
+    GNL_NETS        = 1 << 4,
+};
+
+
+/**
  * Class NETLIST_EXPORTER_GENERIC
  * generates a generic XML based netlist file. This allows using XSLT or other methods to
  * transform the XML to other netlist formats outside of the C++ codebase.
  */
 class NETLIST_EXPORTER_GENERIC : public NETLIST_EXPORTER
 {
+public:
+    NETLIST_EXPORTER_GENERIC( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs ) :
+        NETLIST_EXPORTER( aMasterList, aLibs )
+    {
+    }
+
+    /**
+     * Function WriteNetlist
+     * writes to specified output file
+     */
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
+
+#define GNL_ALL     ( GNL_LIBRARIES | GNL_COMPONENTS | GNL_PARTS | GNL_HEADER | GNL_NETS )
+
 protected:
    /**
      * Function node
@@ -50,20 +78,23 @@ protected:
      *   of the returned node, and has type wxXML_TEXT_NODE.
      */
     XNODE* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString );
+
     /**
      * Function writeGENERICListOfNets
      * writes out nets (ranked by Netcode), and elements that are
      * connected as part of that net.
      */
     bool writeListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+
     /**
      * Function makeGenericRoot
      * builds the entire document tree for the generic export.  This is factored
      * out here so we can write the tree in either S-expression file format
      * or in XML if we put the tree built here into a wxXmlDocument.
+     * @param aCtl - a bitset or-ed together from GNL_ENUM values
      * @return XNODE* - the root nodes
      */
-    XNODE* makeRoot();
+    XNODE* makeRoot( int aCtl = GNL_ALL );
 
     /**
      * Function makeComponents
@@ -99,18 +130,6 @@ protected:
      * @return XNODE* - the library nodes
      */
     XNODE* makeLibraries();
-
-public:
-    NETLIST_EXPORTER_GENERIC( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs ) :
-        NETLIST_EXPORTER( aMasterList, aLibs )
-    {
-    }
-
-    /**
-     * Function Write
-     * writes to specified output file
-     */
-    bool Write( const wxString& aOutFileName, unsigned aNetlistOptions );
 };
 
 #endif

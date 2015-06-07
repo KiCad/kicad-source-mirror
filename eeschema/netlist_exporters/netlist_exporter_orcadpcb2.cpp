@@ -35,7 +35,7 @@
 #include <netlist.h>
 #include "netlist_exporter_orcadpcb2.h"
 
-bool NETLIST_EXPORTER_ORCADPCB2::Write( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     (void)aNetlistOptions;      //unused
     FILE* f = NULL;

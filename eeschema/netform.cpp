@@ -42,7 +42,7 @@
 #include <netlist_exporter_kicad.h>
 #include <netlist_exporter_generic.h>
 
-bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList,
+bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
                                        int aFormat, const wxString& aFullFileName,
                                        unsigned aNetlistOptions )
 {
@@ -73,17 +73,17 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList
 
     default:
         {
-        wxFileName  tmpFile = fileName;
-        tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
-        fileName = tmpFile.GetFullPath();
+            wxFileName  tmpFile = fileName;
+            tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
+            fileName = tmpFile.GetFullPath();
 
-        helper = new NETLIST_EXPORTER_GENERIC( aConnectedItemsList, Prj().SchLibs() );
-        executeCommandLine = true;
-        break;
+            helper = new NETLIST_EXPORTER_GENERIC( aConnectedItemsList, Prj().SchLibs() );
+            executeCommandLine = true;
         }
+        break;
     }
 
-    res = helper->Write( fileName, aNetlistOptions );
+    res = helper->WriteNetlist( fileName, aNetlistOptions );
 
     if( executeCommandLine )
     {

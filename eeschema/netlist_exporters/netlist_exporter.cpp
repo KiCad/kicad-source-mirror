@@ -45,6 +45,8 @@
 #include <netlist.h>
 #include <netlist_exporter.h>
 
+
+
 wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
             const wxString& aTempfile, const wxString& aFinalFile, const wxString& aProjectPath )
 {

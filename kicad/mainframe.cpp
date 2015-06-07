@@ -421,6 +421,7 @@ void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 // are now always set by Cvpcb.
 // ( The idea is to drop the .cmp files to avoid to have 2 places were
 // footprints are stored, but only one: the schematic )
+/*
 void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
 {
     wxFileName fn( GetProjectFileName() );
@@ -437,6 +438,8 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
 
     frame->Raise();
 }
+*/
+
 
 #include <wx/filefn.h>
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )

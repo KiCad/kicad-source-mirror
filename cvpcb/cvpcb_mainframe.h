@@ -65,7 +65,6 @@ public:
     LIBRARY_LISTBOX*          m_libListBox;
     COMPONENTS_LISTBOX*       m_compListBox;
     wxAuiToolBar*             m_mainToolBar;
-    wxFileName                m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_EquFilesNames;
     wxString                  m_NetlistFileExtension;
@@ -87,6 +86,8 @@ public:
     ~CVPCB_MAINFRAME();
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl=0 );   // overload KIWAY_PLAYER
+
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // override virtual from KIWAY_PLAYER
 
     /**
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
@@ -192,36 +193,21 @@ public:
     void             CreateScreenCmp();
 
     /**
-     * Function SaveCmpLinkFile
-     * Saves the component - footprint link file (.cmp file) to \a aFullFileName.
-     *
-     * @param aFullFileName A reference wxString object containing the full
-     *                      file name of the netlist or cmp file.
-     * If aFullFileName is empty, a file name will be asked to the user
-     * @return  0 if an error occurred saving the link file to \a aFullFileName.
-     *          -1 if canceled
-     *          1 if OK
+     * Function SaveEdits
+     * saves the edits that the user has done by sending them back to eeschema
+     * via the kiway.
      */
-    int              SaveCmpLinkFile( const wxString& aFullFileName );
-
-
-    /**
-     * Function WriteComponentLinkFile
-     * Writes the component footprint link file \a aFullFileName on disk.
-     *
-     * @param aFullFileName full filename of .cmp file to write.
-     * @return true if OK, false if error.
-     */
-    bool              WriteComponentLinkFile( const wxString& aFullFileName );
+    void SaveEdits();
 
     /**
      * Function ReadNetList
      * reads the netlist (.net) file defined by #m_NetlistFileName.
      * and the corresponding cmp to footprint (.cmp) link file
+     * @param aNetlist is the netlist from eeschema in kicad s-expr format.
      */
-    bool             ReadNetListAndLinkFiles();
+    bool             ReadNetListAndLinkFiles( const std::string& aNetlist );
 
-    int              ReadSchematicNetlist();
+    int              ReadSchematicNetlist( const std::string& aNetlist );
 
     /**
      * Function LoadProjectFile

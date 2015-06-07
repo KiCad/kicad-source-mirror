@@ -34,7 +34,7 @@
 #include <wx/tokenzr.h>
 #include "netlist_exporter_pspice.h"
 
-bool NETLIST_EXPORTER_PSPICE::Write( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     FILE* f = NULL;
     bool aUsePrefix = aNetlistOptions & NET_USE_X_PREFIX;

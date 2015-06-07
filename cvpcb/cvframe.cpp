@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <build_version.h>
+#include <kiway_express.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <macros.h>
@@ -58,13 +59,10 @@ static const wxString KeepCvpcbOpenEntry( wxT( "KeepCvpcbOpen" ) );
 static const wxString FootprintDocFileEntry( wxT( "footprints_doc_file" ) );
 
 
-BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
-    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, CVPCB_MAINFRAME::LoadNetList )
+BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
 
     // Menu events
-    EVT_MENU( ID_LOAD_PROJECT, CVPCB_MAINFRAME::LoadNetList )
     EVT_MENU( wxID_SAVE, CVPCB_MAINFRAME::SaveQuitCvpcb )
-    EVT_MENU( wxID_SAVEAS, CVPCB_MAINFRAME::SaveQuitCvpcb )
     EVT_MENU( wxID_EXIT, CVPCB_MAINFRAME::OnQuit )
     EVT_MENU( wxID_HELP, CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, CVPCB_MAINFRAME::GetKicadAbout )
@@ -75,7 +73,7 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
 
     // Toolbar events
     EVT_TOOL( ID_CVPCB_QUIT, CVPCB_MAINFRAME::OnQuit )
-    EVT_TOOL( ID_CVPCB_READ_INPUT_NETLIST, CVPCB_MAINFRAME::LoadNetList )
+
     EVT_TOOL( ID_CVPCB_LIB_TABLE_EDIT, CVPCB_MAINFRAME::OnEditFootprintLibraryTable )
     EVT_TOOL( ID_CVPCB_CREATE_SCREENCMP, CVPCB_MAINFRAME::DisplayModule )
     EVT_TOOL( ID_CVPCB_GOTO_FIRSTNA, CVPCB_MAINFRAME::ToFirstNA )
@@ -243,8 +241,6 @@ void CVPCB_MAINFRAME::OnQuit( wxCommandEvent& event )
 
 void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    int diag;
-
     if( m_modified )
     {
         wxString msg = _( "Component to Footprint links modified.\nSave before exit ?" );
@@ -260,27 +256,9 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
 
         case wxID_YES:
-            diag = SaveCmpLinkFile( m_NetlistFileName.GetFullPath() );
-
-            if( diag > 0 )
-            {
-                m_modified = false;
-            }
-            else if( diag == 0 )
-            {
-                if( !IsOK( this, _( "Problem when saving file, exit anyway ?" ) ) )
-                {
-                    Event.Veto();
-                    return;
-                }
-            }
+            SaveEdits();
             break;
         }
-    }
-
-    if( m_NetlistFileName.IsOk() )
-    {
-        UpdateFileHistory( m_NetlistFileName.GetFullPath() );
     }
 
     // Close module display frame
@@ -370,18 +348,12 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
 
 void CVPCB_MAINFRAME::SaveQuitCvpcb( wxCommandEvent& aEvent )
 {
-    wxString fullFilename;
+    SaveEdits();
 
-    if( aEvent.GetId() != wxID_SAVEAS )
-        fullFilename = m_NetlistFileName.GetFullPath();
+    m_modified = false;
 
-    if( SaveCmpLinkFile( fullFilename ) > 0 )
-    {
-        m_modified = false;
-
-        if( !m_KeepCvpcbOpen )
-            Close( true );
-    }
+    if( !m_KeepCvpcbOpen )
+        Close( true );
 }
 
 
@@ -411,6 +383,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 }
 
 
+/* Remove in favor of Kiway messaging method of sending netlist
 void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
 {
     int        id = event.GetId();
@@ -437,43 +410,11 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
 
     OpenProjectFiles( std::vector<wxString>( 1, newFileName.GetFullPath() ) );
 }
+*/
 
 
 bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    if( aFileSet.size() != 1 )  // Unexpected comand
-        return false;
-
-    m_NetlistFileName = aFileSet[0];
-
-    if( Kiface().IsSingle() )
-    {
-        // PROJECT::SetProjectFullName() is an impactful function.  It should only be
-        // called under carefully considered circumstances.
-
-        // The calling code should know not to ask me here to change projects unless
-        // it knows what consequences that will have on other KIFACEs running and using
-        // this same PROJECT.  It can be very harmful if that calling code is stupid.
-        //
-        // In Cvpcb, we call SetProjectFullName only in Single mode, i.e. it is not
-        // called from a project
-        wxFileName pro = m_NetlistFileName;
-        pro.SetExt( ProjectFileExtension );
-        Prj().SetProjectFullName( pro.GetFullPath() );
-    }
-
-    ReadNetListAndLinkFiles();
-
-    UpdateTitle();
-
-    // Resize the components list box. This is needed in case the
-    // contents have shrunk compared to the previous netlist.
-    m_compListBox->UpdateWidth();
-
-    // OSX need it since some objects are "rebuild" just make aware AUI
-    // Fixes #1258081
-    m_auimgr.Update();
-
     return true;
 }
 
@@ -753,9 +694,8 @@ void CVPCB_MAINFRAME::UpdateTitle()
 
     if( fn.IsOk() && !prj.GetProjectFullName().IsEmpty() && fn.FileExists() )
     {
-        title += wxString::Format( _("Project: '%s'  (netlist: '%s')"),
-                                   GetChars( fn.GetFullPath() ),
-                                   GetChars( m_NetlistFileName.GetFullName() )
+        title += wxString::Format( _("Project: '%s'"),
+                                   GetChars( fn.GetFullPath() )
                                  );
 
         if( !fn.IsFileWritable() )
@@ -792,46 +732,20 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
 }
 
 
-int CVPCB_MAINFRAME::ReadSchematicNetlist()
+int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
 {
-    NETLIST_READER* netlistReader;
-    wxString        msg;
-    wxString        compFootprintLinkFileName;
-    wxFileName      fn = m_NetlistFileName;
-
-    // Ensure the netlist file exists, and wran the user if not:
-    if( ! wxFileExists( m_NetlistFileName.GetFullPath() ) )
-    {
-        msg.Printf( _( "Unable to find netlist file:\n'%s'\n\nPlease, create it" ),
-                       GetChars( m_NetlistFileName.GetFullPath() ) );
-        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
-        return 1;
-    }
-
-    // Load the footprint association file if it has already been created.
-    fn.SetExt( ComponentFileExtension );
-
-    if( fn.FileExists() && fn.IsFileReadable() )
-        compFootprintLinkFileName = fn.GetFullPath();
+    STRING_LINE_READER*     strrdr = new STRING_LINE_READER( aNetlist, "Eeschema via Kiway" );
+    KICAD_NETLIST_READER    netrdr( strrdr, &m_netlist );
 
     m_netlist.Clear();
 
     try
     {
-        netlistReader = NETLIST_READER::GetNetlistReader( &m_netlist,
-                                                          m_NetlistFileName.GetFullPath(),
-                                                          compFootprintLinkFileName );
-        if( netlistReader != NULL )
-        {
-            std::auto_ptr< NETLIST_READER > nlr( netlistReader );
-            netlistReader->LoadNetlist();
-        }
-        else
-            wxMessageBox( _( "Unknown netlist format." ), wxEmptyString, wxOK | wxICON_ERROR );
+        netrdr.LoadNetlist();
     }
     catch( const IO_ERROR& ioe )
     {
-        msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
+        wxString msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
         return 1;
     }
@@ -848,56 +762,6 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     m_netlist.SortByReference();
 
     return 0;
-}
-
-
-// File header.
-static char headerLinkFile[] = "Cmp-Mod V01";
-
-
-bool CVPCB_MAINFRAME::WriteComponentLinkFile( const wxString& aFullFileName )
-{
-    COMPONENT*  component;
-    FILE*       outputFile;
-    wxFileName  fn( aFullFileName );
-    wxString    title = wxString::Format( wxT( "Cvpcb %s  " ), GetChars( GetBuildVersion() ) );
-
-    outputFile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
-
-    if( outputFile == NULL )
-        return false;
-
-    int retval = 0;
-
-    /*
-     * The header is:
-     * Cmp-Mod V01 Created by CvPcb (2012-02-08 BZR 3403)-testing date = 10/02/2012 20:45:59
-     * and write block per component like:
-     * BeginCmp
-     * TimeStamp = /322D3011;
-     * Reference = BUS1;
-     * ValeurCmp = BUSPC;
-     * IdModule  = BUS_PC;
-     * EndCmp
-     */
-    retval |= fprintf( outputFile, "%s", headerLinkFile );
-    retval |= fprintf( outputFile, " Created by %s", TO_UTF8( title ) );
-    retval |= fprintf( outputFile, " date = %s\n", TO_UTF8( DateAndTime() ) );
-
-    for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
-    {
-        component = m_netlist.GetComponent( i );
-        retval |= fprintf( outputFile, "\nBeginCmp\n" );
-        retval |= fprintf( outputFile, "TimeStamp = %s;\n", TO_UTF8( component->GetTimeStamp() ) );
-        retval |= fprintf( outputFile, "Reference = %s;\n", TO_UTF8( component->GetReference() ) );
-        retval |= fprintf( outputFile, "ValeurCmp = %s;\n", TO_UTF8( component->GetValue() ) );
-        retval |= fprintf( outputFile, "IdModule  = %s;\n", component->GetFPID().Format().c_str() );
-        retval |= fprintf( outputFile, "EndCmp\n" );
-    }
-
-    retval |= fprintf( outputFile, "\nEndListe\n" );
-    fclose( outputFile );
-    return retval >= 0;
 }
 
 
@@ -1039,4 +903,25 @@ DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFpViewerFrame()
 void CVPCB_MAINFRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
     Pgm().ConfigurePaths( this );
+}
+
+
+void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    const std::string& payload = mail.GetPayload();
+
+    DBG(printf( "%s: %s\n", __func__, payload.c_str() );)
+
+    switch( mail.Command() )
+    {
+    case MAIL_EESCHEMA_NETLIST:
+        ReadNetListAndLinkFiles( payload );
+        /* @todo
+        Go into SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event ) and trim GNL_ALL down.
+        */
+        break;
+
+    default:
+        ;       // ignore most
+    }
 }

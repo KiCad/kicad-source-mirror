@@ -27,7 +27,6 @@
  */
 
 #include <fctsys.h>
-#include <kiway.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <gr_basic.h>
@@ -185,6 +184,23 @@ PART_LIBS* PROJECT::SchLibs()
 
     return libs;
 }
+
+/*
+NETLIST_OBJECT_LIST* PROJECT::Netlist()
+{
+    NETLIST_OBJECT_LIST* netlist = (NETLIST_OBJECT_LIST*)  GetElem( PROJECT::ELEM_SCH_NETLIST );
+
+    wxASSERT( !libs || dynamic_cast<NETLIST_OBJECT_LIST*>( netlist ) );
+
+    if( !netlist )
+    {
+        netlist = new NETLIST_OBJECT_LIST();
+
+        // Make PROJECT the new NETLIST_OBJECT_LIST owner.
+        SetElem( PROJECT::ELEM_SCH_NETLIST, netlist );
+    }
+}
+*/
 
 //-----</SCH "data on demand" functions>------------------------------------------
 
@@ -974,10 +990,16 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 
     if( Kiface().IsSingle() )
     {
+        /* the CVPCB executable is now gone, only the *.kiface remains, that is because
+         * CVPCB can now read the netlist ONLY from the Kiway.  This removes cvpcb's
+         * use of the *.cmp file altogether, and also its use of reading the *.net file
+         * from disk.
         ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
+        */
     }
     else
     {
+#if 0
         KIWAY_PLAYER* player = Kiway().Player( FRAME_CVPCB, false );  // test open already.
 
         if( !player )
@@ -988,6 +1010,23 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
         }
 
         player->Raise();
+#else
+        if( prepareForNetlist() )
+        {
+            KIWAY_PLAYER* player = Kiway().Player( FRAME_CVPCB, false );  // test open already.
+
+            if( !player )
+            {
+                player = Kiway().Player( FRAME_CVPCB, true );
+                player->Show( true );
+                // player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+            }
+
+            sendNetlist();
+
+            player->Raise();
+        }
+#endif
     }
 }
 

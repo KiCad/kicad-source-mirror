@@ -64,7 +64,6 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 {
     wxString        msg;
     NETLIST         netlist;
-    NETLIST_READER* netlistReader;
     KIGFX::VIEW*    view = GetGalCanvas()->GetView();
     BOARD*          board = GetBoard();
 
@@ -75,17 +74,16 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 
     try
     {
-        netlistReader = NETLIST_READER::GetNetlistReader( &netlist, aNetlistFileName,
-                                                          aCmpFileName );
+        std::auto_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
+            &netlist, aNetlistFileName, aCmpFileName ) );
 
-        if( netlistReader == NULL )
+        if( !netlistReader.get() )
         {
             msg.Printf( _( "Cannot open netlist file \"%s\"." ), GetChars( aNetlistFileName ) );
             wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR, this );
             return;
         }
 
-        std::auto_ptr< NETLIST_READER > nlr( netlistReader );
         SetLastNetListRead( aNetlistFileName );
         netlistReader->LoadNetlist();
         loadFootprints( netlist, aReporter );

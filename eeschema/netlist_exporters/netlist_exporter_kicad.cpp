@@ -31,8 +31,9 @@
 #include <schframe.h>
 #include "netlist_exporter_kicad.h"
 
-bool NETLIST_EXPORTER_KICAD::Write( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
+#if 0
     // Prepare list of nets generation
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         m_masterList->GetItem( ii )->m_Flag = 0;
@@ -45,6 +46,15 @@ bool NETLIST_EXPORTER_KICAD::Write( const wxString& aOutFileName, unsigned aNetl
 
         xroot->Format( &formatter, 0 );
     }
+#else
+    try
+    {
+        FILE_OUTPUTFORMATTER formatter( aOutFileName );
+
+        Format( &formatter, GNL_ALL );
+    }
+#endif
+
     catch( const IO_ERROR& ioe )
     {
         DisplayError( NULL, ioe.errorText );
@@ -52,4 +62,16 @@ bool NETLIST_EXPORTER_KICAD::Write( const wxString& aOutFileName, unsigned aNetl
     }
 
     return true;
+}
+
+
+void NETLIST_EXPORTER_KICAD::Format( OUTPUTFORMATTER* aOut, int aCtl )
+{
+    // Prepare list of nets generation
+    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
+        m_masterList->GetItem( ii )->m_Flag = 0;
+
+    std::auto_ptr<XNODE> xroot( makeRoot( aCtl ) );
+
+    xroot->Format( aOut, 0 );
 }

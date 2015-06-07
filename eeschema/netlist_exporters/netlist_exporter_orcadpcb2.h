@@ -40,7 +40,7 @@ public:
     {
     }
 
-    bool Write( const wxString& aOutFileName, unsigned aNetlistOptions );
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
 };
 
 #endif

@@ -201,6 +201,7 @@ NETLIST_OBJECT::~NETLIST_OBJECT()
 {
 }
 
+
 // return true if the object is a label of any type
 bool NETLIST_OBJECT::IsLabelType() const
 {

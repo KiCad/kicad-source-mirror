@@ -30,6 +30,8 @@
 #include <fctsys.h>
 #include <schframe.h>
 #include <confirm.h>
+#include <netlist_exporter_kicad.h>
+#include <kiway.h>
 
 #include <netlist.h>
 #include <class_netlist_object.h>
@@ -51,8 +53,8 @@
 //Imported function:
 int TestDuplicateSheetNames( bool aCreateMarker );
 
-bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-                                    unsigned aNetlistOptions )
+
+bool SCH_EDIT_FRAME::prepareForNetlist()
 {
     SCH_SHEET_LIST sheets;
 
@@ -85,32 +87,55 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
 
     screens.SchematicCleanUp();
 
-    NETLIST_OBJECT_LIST* connectedItemsList = BuildNetListBase();
+    return true;
+}
 
-    bool success = WriteNetListFile( connectedItemsList, aFormat,
+
+void SCH_EDIT_FRAME::sendNetlist()
+{
+    NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
+
+    NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchLibs() );
+
+    STRING_FORMATTER    formatter;
+
+    // @todo : trim GNL_ALL down to minimum for CVPCB
+    exporter.Format( &formatter, GNL_ALL );
+
+    Kiway().ExpressMail( FRAME_CVPCB,
+        MAIL_EESCHEMA_NETLIST,
+        formatter.GetString(),  // an abbreviated "kicad" (s-expr) netlist
+        this
+        );
+}
+
+
+bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
+                                    unsigned aNetlistOptions )
+{
+    if( !prepareForNetlist() )
+        return false;
+
+    std::auto_ptr<NETLIST_OBJECT_LIST> connectedItemsList( BuildNetListBase() );
+
+    bool success = WriteNetListFile( connectedItemsList.release(), aFormat,
                                      aFullFileName, aNetlistOptions );
 
     return success;
 }
 
 
-// Buffer to build the list of items used in netlist and erc calculations
-NETLIST_OBJECT_LIST s_NetObjectslist( true );
-
 //#define NETLIST_DEBUG
 
 NETLIST_OBJECT_LIST::~NETLIST_OBJECT_LIST()
 {
-    if( m_isOwner )
-        FreeList();
-    else
-        Clear();
+    Clear();
 }
 
 
-void NETLIST_OBJECT_LIST::FreeList()
+void NETLIST_OBJECT_LIST::Clear()
 {
-    std::vector<NETLIST_OBJECT*>::iterator iter;
+    NETLIST_OBJECTS::iterator iter;
 
     for( iter = begin(); iter != end(); iter++ )
     {
@@ -134,36 +159,33 @@ void NETLIST_OBJECT_LIST::SortListbySheet()
 }
 
 
-NETLIST_OBJECT_LIST * SCH_EDIT_FRAME::BuildNetListBase()
+NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase()
 {
+    // I own this list until I return it to the new owner.
+    std::auto_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
+
     // Creates the flattened sheet list:
     SCH_SHEET_LIST aSheets;
 
     // Build netlist info
-    bool success = s_NetObjectslist.BuildNetListInfo( aSheets );
+    bool success = ret->BuildNetListInfo( aSheets );
 
     if( !success )
     {
-        SetStatusText( _("No Objects" ) );
-        return &s_NetObjectslist;
+        SetStatusText( _( "No Objects" ) );
+        return ret.release();
     }
 
-    /* The new %zu specification is needed to properly format a size_t
-     * value (returned by size(), here) */
-    wxString msg;
+    wxString msg = wxString::Format( _( "Net count = %zu" ), ret->size() );
 
-    msg.Printf( _( "Net count = %zu" ), s_NetObjectslist.size() );
     SetStatusText( msg );
 
-    return &s_NetObjectslist;
+    return ret.release();
 }
 
 
 bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
 {
-    s_NetObjectslist.SetOwner( true );
-    s_NetObjectslist.FreeList();
-
     SCH_SHEET_PATH* sheet;
 
     // Fill list with connected items from the flattened sheet list
@@ -491,8 +513,9 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
     // even if components are moved or deleted and undelete or replaced, as long
     // the reference is kept)
 
-    // Build the list of items with no net names
-    NETLIST_OBJECT_LIST list;
+    // Build a list of items with no net names
+    NETLIST_OBJECTS    list;   // no ownership of elements being pointed at
+
     for( unsigned ii = 0; ii < size(); ii++ )
     {
         item = GetItem( ii );
@@ -505,12 +528,12 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
 
     idxstart = 0;
     candidate = NULL;
-    netcode = list.GetItemNet( 0 );
+    netcode = list[0]->GetNet();
 
     for( unsigned ii = 0; ii <= list.size(); ii++ )
     {
         if( ii < list.size() )
-            item = list.GetItem( ii );
+            item = list[ii];
         else
             item = NULL;
 
@@ -520,7 +543,7 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
             {
                 for (unsigned jj = idxstart; jj < ii; jj++ )
                 {
-                    NETLIST_OBJECT* obj = list.GetItem( jj );
+                    NETLIST_OBJECT* obj = list[jj];
                     obj->SetNetNameCandidate( candidate );
                 }
             }

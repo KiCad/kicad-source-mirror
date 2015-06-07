@@ -64,42 +64,9 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* filesMenu = new wxMenu;
 
-    // Open files can be used only outside a project, because opening a netlist
-    // which is not the project netlist is a non sense.
-    if( Kiface().IsSingle() )
-    {
-        AddMenuItem( filesMenu, ID_LOAD_PROJECT,
-                     _( "&Open Netlist" ), LOAD_FILE_HELP, KiBitmap( open_document_xpm ) );
-
-        // Open Recent submenu
-        static wxMenu* openRecentMenu;
-
-        // Add this menu to list menu managed by m_fileHistory
-        // (the file history will be updated when adding/removing files in history
-        if( openRecentMenu )
-            Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
-
-        openRecentMenu = new wxMenu();
-
-        Kiface().GetFileHistory().UseMenu( openRecentMenu );
-        Kiface().GetFileHistory().AddFilesToMenu();
-
-        AddMenuItem( filesMenu, openRecentMenu, -1,
-                     _( "Open &Recent" ),
-                     _( "Open recent netlist" ),
-                     KiBitmap( open_project_xpm ) );
-
-        // Separator
-        filesMenu->AppendSeparator();
-    }
-
-    // Save the .cmp file
+    // Save the footprints back into eeschema
     AddMenuItem( filesMenu, wxID_SAVE,
-                 _( "&Save Cmp File\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
-
-    // Save as the .cmp file
-    AddMenuItem( filesMenu, wxID_SAVEAS,
-                 _( "Save Cmp File &As...\tCtrl+Shift+S" ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
+                 _( "&Save Edits\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
 
     // Separator
     filesMenu->AppendSeparator();

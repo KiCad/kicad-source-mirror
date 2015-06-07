@@ -752,7 +752,7 @@ add_subdirectory( qa )
 # except perhaps bitmap lib.  This allows a multi-threaded build to succeed.
 add_dependencies( pcbnew boost )
 add_dependencies( eeschema boost )
-add_dependencies( cvpcb boost )
+add_dependencies( cvpcb_kiface boost )
 add_dependencies( gal boost )
 add_dependencies( common boost )
 add_dependencies( pcbcommon boost )

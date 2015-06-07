@@ -156,14 +156,16 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     // The user must HAVE footprints before he can assign them.  So put this before
     // the CVPCB.
-    if( !Kiface().IsSingle() )  // if pcbnew is not a separate process
+    if( !Kiface().IsSingle() )  // if eeschema is not a separate process
     {
         m_mainToolBar->AddTool( ID_RUN_PCB_MODULE_EDITOR, wxEmptyString, KiBitmap( module_editor_xpm ),
                                 _( "Footprint Editor" ) );
-    }
 
-    m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
-                            _( "Run CvPcb to associate components and footprints" ) );
+        // CVPCB only reads from the kiway now, and the kiway is only implemented in the
+        // project manager, not single_top.
+        m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
+                                _( "Run CvPcb to associate components and footprints" ) );
+    }
 
     m_mainToolBar->AddTool( ID_RUN_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
                             _( "Run Pcbnew to layout printed circuit board" ) );

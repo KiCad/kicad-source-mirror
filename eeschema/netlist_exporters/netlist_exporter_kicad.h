@@ -28,9 +28,11 @@
 
 #include <netlist_exporter_generic.h>
 
+class OUTPUTFORMATTER;
+
 /**
  * Class NETLIST_EXPORTER_KICAD
- * generates the kicad netlist format supported by pcbnew. It is basically 
+ * generates the kicad netlist format supported by pcbnew. It is basically
  * the generic netlist format just formatted slightly different.
  */
 class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_GENERIC
@@ -42,10 +44,20 @@ public:
     }
 
     /**
-     * Function Write
+     * Function WriteNetlist
      * writes to specified output file
      */
-    bool Write( const wxString& aOutFileName, unsigned aNetlistOptions );
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );   // OVERRIDE
+
+    /**
+     * Function Format
+     * outputs this s-expression netlist into @a aOutputFormatter.
+     * @param aOutputFormatter is the destination of the serialization to text.
+     * @param aCtl is bit set composed by OR-ing together enum GNL bits, it allows ouputting
+     *  a subset of the full document model.
+     * @throw IO_ERROR if any problems.
+     */
+    void Format( OUTPUTFORMATTER* aOutputFormatter, int aCtl );
 };
 
 #endif

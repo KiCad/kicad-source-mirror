@@ -74,28 +74,59 @@ if( APPLE )
 endif()
 
 
-add_executable( cvpcb WIN32 MACOSX_BUNDLE
-    ../common/single_top.cpp
-    ../common/pgm_base.cpp
-    ${CVPCB_RESOURCES}
-    )
+if( false ) # no CVPCB exe any more, only the *.kiface
+    add_executable( cvpcb WIN32 MACOSX_BUNDLE
+        ../common/single_top.cpp
+        ../common/pgm_base.cpp
+        ${CVPCB_RESOURCES}
+        )
+    set_source_files_properties( ../common/single_top.cpp PROPERTIES
+        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CVPCB;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
+        )
+    target_link_libraries( cvpcb
+        #singletop  # replaces common, giving us restrictive control and link warnings.
+        # There's way too much crap coming in from common yet.
+        common
+        bitmaps
+        ${wxWidgets_LIBRARIES}
+        )
+    if( MAKE_LINK_MAPS )
+        set_target_properties( cvpcb PROPERTIES
+            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=cvpcb.map" )
+    endif()
 
-set_source_files_properties( ../common/single_top.cpp PROPERTIES
-    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CVPCB;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
-    )
+    if( APPLE )
+        set_target_properties( cvpcb PROPERTIES
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+            )
 
-target_link_libraries( cvpcb
-    #singletop  # replaces common, giving us restrictive control and link warnings.
-    # There's way too much crap coming in from common yet.
-    common
-    bitmaps
-    ${wxWidgets_LIBRARIES}
-    )
+        # put individual bundle outside of main bundle as a first step
+        # will be pulled into the main bundle when creating main bundle
+        install( TARGETS cvpcb
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+        install( CODE "
+                # override default embedded path settings
+                ${OSX_BUNDLE_OVERRIDE_PATHS}
 
-if( MAKE_LINK_MAPS )
-    set_target_properties( cvpcb PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=cvpcb.map" )
-endif()
+                # do all the work
+                include( BundleUtilities )
+                fixup_bundle( ${KICAD_BIN}/cvpcb.app/Contents/MacOS/cvpcb
+                    \"\"
+                    \"\"
+                    )
+                " COMPONENT Runtime
+            )
+    else()
+        install( TARGETS cvpcb
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary
+            )
+    endif()
+
+endif() # no CVPCB exe
+
 
 # the main cvpcb program, in DSO form.
 add_library( cvpcb_kiface MODULE
@@ -143,42 +174,13 @@ if( MAKE_LINK_MAPS )
         LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_cvpcb.kiface.map" )
 endif()
 
-# if building cvpcb, then also build cvpcb_kiface if out of date.
-add_dependencies( cvpcb cvpcb_kiface )
-
 # these 2 binaries are a matched set, keep them together:
 if( APPLE )
-    set_target_properties( cvpcb PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-        )
-
     # puts binaries into the *.app bundle while linking
     set_target_properties( cvpcb_kiface PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
-    # put individual bundle outside of main bundle as a first step
-    # will be pulled into the main bundle when creating main bundle
-    install( TARGETS cvpcb
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
-    install( CODE "
-            # override default embedded path settings
-            ${OSX_BUNDLE_OVERRIDE_PATHS}
-
-            # do all the work
-            include( BundleUtilities )
-            fixup_bundle( ${KICAD_BIN}/cvpcb.app/Contents/MacOS/cvpcb
-                \"\"
-                \"\"
-                )
-            " COMPONENT Runtime
-        )
 else()
-    install( TARGETS cvpcb
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary
-        )
     install( TARGETS cvpcb_kiface
         DESTINATION ${KICAD_BIN}
         COMPONENT binary

@@ -605,7 +605,7 @@ public:
      */
     void StripUseless();
 
-    std::string GetString()
+    const std::string& GetString()
     {
         return mystring;
     }

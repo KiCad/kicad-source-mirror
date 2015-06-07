@@ -73,13 +73,14 @@ public:
 class NETLIST_EXPORTER
 {
 protected:
-    NETLIST_OBJECT_LIST* m_masterList;      /// The main connected items flat list
+    NETLIST_OBJECT_LIST*    m_masterList;       /// yes ownership, connected items flat list
 
-    PART_LIBS*          m_libs;             /// no ownership
+    PART_LIBS*              m_libs;             /// no ownership
 
     /// Used to temporary store and filter the list of pins of a schematic component
-    /// when generating schematic component data in netlist (comp section)
-    NETLIST_OBJECT_LIST m_SortedComponentPinList;
+    /// when generating schematic component data in netlist (comp section). No ownership
+    /// of members.
+    NETLIST_OBJECTS         m_SortedComponentPinList;
 
     /// Used for "multi parts per package" components,
     /// avoids processing a lib component more than once.
@@ -90,7 +91,6 @@ protected:
     std::set<void*>     m_LibParts;     ///< unique library parts used
 
     std::set<void*>     m_Libraries;    ///< unique libraries used
-
 
     /**
      * Function sprintPinNetName
@@ -155,21 +155,27 @@ protected:
                                       SCH_SHEET_PATH* aSheetPath );
 
 public:
-    NETLIST_EXPORTER( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs )
+
+    /**
+     * Constructor
+     * @param aMasterList we take ownership of this here.
+     */
+    NETLIST_EXPORTER( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs ) :
+        m_masterList( aMasterList ),
+        m_libs( aLibs )
     {
-        m_masterList = aMasterList;
-        m_libs = aLibs;
     }
 
     virtual ~NETLIST_EXPORTER()
     {
+        delete m_masterList;    // I own the list itself in this instance.
     }
 
     /**
-     * Function Write
+     * Function WriteNetlist
      * writes to specified output file
      */
-    virtual bool Write( const wxString& aOutFileName, unsigned aNetlistOptions )
+    virtual bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
     {
         return false;
     }

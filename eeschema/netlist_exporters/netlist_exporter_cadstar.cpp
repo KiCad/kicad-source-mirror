@@ -36,7 +36,7 @@
 /* Generate CADSTAR net list. */
 static wxString StartLine( wxT( "." ) );
 
-bool NETLIST_EXPORTER_CADSTAR::Write( const wxString& aOutFileName, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     (void)aNetlistOptions;      //unused
     int ret = 0;

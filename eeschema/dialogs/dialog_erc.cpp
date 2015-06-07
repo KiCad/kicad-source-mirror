@@ -466,7 +466,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      */
     TestDuplicateSheetNames( true );
 
-    NETLIST_OBJECT_LIST* objectsConnectedList = m_parent->BuildNetListBase();
+    std::auto_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( m_parent->BuildNetListBase() );
 
     // Reset the connection type indicator
     objectsConnectedList->ResetConnectionsType();
@@ -509,7 +509,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             // ERC problems when pin sheets do not match hierarchical labels.
             // Each pin sheet must match a hierarchical label
             // Each hierarchical label must match a pin sheet
-            TestLabel( objectsConnectedList, net, nextNet );
+            TestLabel( objectsConnectedList.get(), net, nextNet );
             break;
 
         case NET_NOCONNECT:
@@ -525,7 +525,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         case NET_PIN:
 
             // Look for ERC problems between pins:
-            TestOthersItems( objectsConnectedList, net, nextNet, &NetNbItems, &MinConn );
+            TestOthersItems( objectsConnectedList.get(), net, nextNet, &NetNbItems, &MinConn );
             break;
         }
 

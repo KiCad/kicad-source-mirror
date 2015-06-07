@@ -209,6 +209,20 @@ protected:
     void backAnnotateFootprints( const std::string& aChangedSetOfReferences )
         throw( IO_ERROR, boost::bad_pointer );
 
+    /**
+     * Function prepareForNetlist
+     * verifies that annotation is complete so that a proper netlist is even
+     * possible.  If not, asks the user if annotation should be done.
+     * @return bool - true if annotation is complete, else false.
+     */
+    bool prepareForNetlist();
+
+    /**
+     * Function sendNetlist
+     * sends the kicad netlist over to CVPCB.
+     */
+    void sendNetlist();
+
 public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SCH_EDIT_FRAME();
@@ -476,9 +490,9 @@ public:
      * netlist generation:
      * Creates a flat list which stores all connected objects, and mainly
      * pins and labels.
-     * @return a pointer to the list
+     * @return NETLIST_OBJECT_LIST* - caller owns the object.
      */
-    NETLIST_OBJECT_LIST * BuildNetListBase();
+    NETLIST_OBJECT_LIST* BuildNetListBase();
 
     /**
      * Function CreateNetlist
@@ -506,7 +520,7 @@ public:
      * Function  WriteNetListFile
      * Create the netlist file. Netlist info must be existing
      * (BuildNetListBase() creates this info)
-     * @param aConnectedItemsList = the initialized list of connected items
+     * @param aConnectedItemsList = the initialized list of connected items, take ownership.
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
      * @param aNetlistOptions = netlist options using OR'ed bits.
@@ -518,7 +532,7 @@ public:
      * </p>
      * @return true if success.
      */
-    bool WriteNetListFile( NETLIST_OBJECT_LIST * aConnectedItemsList,
+    bool WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
                            int             aFormat,
                            const wxString& aFullFileName,
                            unsigned        aNetlistOptions );

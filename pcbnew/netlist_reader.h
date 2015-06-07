@@ -110,15 +110,6 @@ public:
  */
 class NETLIST_READER
 {
-protected:
-    NETLIST*     m_netlist;               ///< The net list to read the file(s) into.
-    bool         m_loadFootprintFilters;  ///< Load the component footprint filters section if true.
-    bool         m_loadNets;              ///< Load the nets section of the netlist file if true.
-    LINE_READER* m_lineReader;            ///< The line reader of the netlist.
-
-    /// The reader used to load the footprint links.  If NULL, footprint links are not read.
-    CMP_READER*  m_footprintReader;
-
 public:
 
     enum NETLIST_FILE_T
@@ -133,6 +124,12 @@ public:
         // function.
     };
 
+
+    /**
+     * Constructor
+     * @param aLineReader ownership is taken of this LINE_READER.
+     * @param aFootprintLinkReader ownership is taken of this CMP_READER.
+     */
     NETLIST_READER( LINE_READER*  aLineReader,
                     NETLIST*      aNetlist,
                     CMP_READER*   aFootprintLinkReader = NULL )
@@ -190,6 +187,15 @@ public:
      * @return the #LINE_READER associated with the #NETLIST_READER.
      */
     LINE_READER* GetLineReader();
+
+protected:
+    NETLIST*     m_netlist;               ///< The net list to read the file(s) into.
+    bool         m_loadFootprintFilters;  ///< Load the component footprint filters section if true.
+    bool         m_loadNets;              ///< Load the nets section of the netlist file if true.
+    LINE_READER* m_lineReader;            ///< The line reader of the netlist.
+
+    /// The reader used to load the footprint links.  If NULL, footprint links are not read.
+    CMP_READER*  m_footprintReader;
 };
 
 
@@ -388,8 +394,7 @@ public:
 
     virtual ~KICAD_NETLIST_READER()
     {
-        if( m_parser )
-            delete m_parser;
+        delete m_parser;
     }
 
     virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer );

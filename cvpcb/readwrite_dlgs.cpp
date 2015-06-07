@@ -156,12 +156,12 @@ static int guessNickname( FP_LIB_TABLE* aTbl, FPID* aFootprintId )
 }
 
 
-bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
+bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
 {
     wxString        msg;
     bool            hasMissingNicks = false;
 
-    ReadSchematicNetlist();
+    ReadSchematicNetlist( aNetlist );
 
     if( m_compListBox == NULL )
         return false;
@@ -364,56 +364,17 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles()
     DisplayStatus();
 
     UpdateTitle();
-
-    UpdateFileHistory( m_NetlistFileName.GetFullPath() );
-
     return true;
 }
 
 
-int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
+void CVPCB_MAINFRAME::SaveEdits()
 {
-    wxFileName fn;
+    STRING_FORMATTER sf;
 
-    if( !aFullFileName.IsEmpty() )
-    {
-        fn = m_NetlistFileName;
-        fn.SetExt( ComponentFileExtension );
-    }
-    else
-    {
-        wxFileDialog dlg( this, _( "Save Component Footprint Link File" ),
-                          Prj().GetProjectPath(),
-                          wxT( "noname" ), ComponentFileWildcard, wxFD_SAVE );
+    m_netlist.FormatBackAnnotation( &sf );
 
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return -1;
+    Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, sf.GetString() );
 
-        fn = dlg.GetPath();
-
-        if( !fn.HasExt() )
-            fn.SetExt( ComponentFileExtension );
-    }
-
-    if( !IsWritable( fn.GetFullPath() ) || WriteComponentLinkFile( fn.GetFullPath() ) == 0 )
-    {
-        DisplayError( this,
-                      wxString::Format( _( "Unable to create component footprint link file '%s'" ),
-                                        fn.GetFullPath() ) );
-        return 0;
-    }
-
-    wxString msg = wxString::Format( _("File %s saved"), GetChars( fn.GetFullPath() ) );
-
-    // Perhaps this replaces all of the above someday.
-    {
-        STRING_FORMATTER sf;
-
-        m_netlist.FormatBackAnnotation( &sf );
-
-        Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, sf.GetString() );
-    }
-
-    SetStatusText( msg );
-    return 1;
+    SetStatusText( _("Edits sent to Eeschema") );
 }

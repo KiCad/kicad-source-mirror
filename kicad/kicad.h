@@ -179,7 +179,6 @@ public:
     void OnRunSchLibEditor( wxCommandEvent& event );
     void OnRunPcbNew( wxCommandEvent& event );
     void OnRunPcbFpEditor( wxCommandEvent& event );
-    void OnRunCvpcb( wxCommandEvent& event );
     void OnRunGerbview( wxCommandEvent& event );
     void OnRunBitmapConverter( wxCommandEvent& event );
     void OnRunPcbCalculator( wxCommandEvent& event );

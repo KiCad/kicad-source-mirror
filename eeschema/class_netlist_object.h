@@ -34,6 +34,7 @@
 
 #include <sch_sheet_path.h>
 #include <lib_pin.h>      // LIB_PIN::PinStringNum( m_PinNum )
+#include <sch_item_struct.h>
 
 class NETLIST_OBJECT_LIST;
 class SCH_COMPONENT;
@@ -256,13 +257,21 @@ public:
 
 
 /**
- * NETLIST_OBJECT_LIST is a class to handle the list of connected items
- * in a full schematic hierarchy for netlist and erc calculations
+ * Type NETLIST_OBJECTS
+ * is a container referring to (not owning) NETLIST_OBJECTs, which are connected items
+ * in a full schematic hierarchy.  It is useful when referring to NETLIST_OBJECTs
+ * actually owned by some other container.
  */
-class NETLIST_OBJECT_LIST : public std::vector <NETLIST_OBJECT*>
+typedef std::vector<NETLIST_OBJECT*>    NETLIST_OBJECTS;
+
+
+/**
+ * Class NETLIST_OBJECT_LIST
+ * is a container holding and _owning_ NETLIST_OBJECTs, which are connected items
+ * in a full schematic hierarchy.  It is helpful for netlist and ERC calculations.
+ */
+class NETLIST_OBJECT_LIST : public NETLIST_OBJECTS
 {
-    bool m_isOwner;         // = true if the objects in list are owned my me, and therefore
-                            // the memory should be freed by the destructor and the list cleared
     int m_lastNetCode;      // Used in intermediate calculation: last net code created
     int m_lastBusNetCode;   // Used in intermediate calculation:
                             // last net code created for bus members
@@ -276,18 +285,14 @@ public:
      * @param aIsOwner true if the instance is the owner of item list
      * (default = false)
      */
-    NETLIST_OBJECT_LIST( bool aIsOwner = false )
+    NETLIST_OBJECT_LIST()
     {
-        m_isOwner = aIsOwner;
-
         // Do not leave some members uninitialized:
         m_lastNetCode = 0;
         m_lastBusNetCode = 0;
     }
 
     ~NETLIST_OBJECT_LIST();
-
-    void SetOwner( bool aIsOwner ) { m_isOwner = aIsOwner; }
 
     /**
      * Function BuildNetListInfo
@@ -299,7 +304,7 @@ public:
      */
     bool BuildNetListInfo( SCH_SHEET_LIST& aSheets );
 
-    /*
+    /**
      * Acces to an item in list
      */
     NETLIST_OBJECT* GetItem( unsigned aIdx ) const
@@ -307,7 +312,7 @@ public:
         return *( this->begin() + aIdx );
     }
 
-    /*
+    /**
      * Acces to an item type
      */
     NETLIST_ITEM_T GetItemType( unsigned aIdx ) const
@@ -315,7 +320,7 @@ public:
         return GetItem( aIdx )->m_Type;
     }
 
-    /*
+    /**
      * Acces to an item net code
      */
     int GetItemNet( unsigned aIdx ) const
@@ -340,17 +345,8 @@ public:
         GetItem( aIdx )->SetConnectionType( aFlg );
     }
 
-    /*
-     * Delete all objects in list and clear list
-     * (delete NETLIST_OBJECT items)
-     */
-    void FreeList();
-
-    /*
-     * Clear list but do not delete NETLIST_OBJECT items
-     * (they can be deleted only if the instance is owner of the items
-     */
-    void Clear() { this->clear(); }
+    /** Delete all objects in list and clear list */
+    void Clear();
 
     /**
      * Reset the connection type of all items to UNCONNECTED type
@@ -455,6 +451,7 @@ private:
      */
     void findBestNetNameForEachNet();
 };
+
 
 /**
  * Function IsBusLabel

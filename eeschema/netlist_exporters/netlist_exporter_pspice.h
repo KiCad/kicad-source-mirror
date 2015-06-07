@@ -41,10 +41,10 @@ public:
     }
 
     /**
-     * Function Write
+     * Function WriteNetlist
      * writes to specified output file
      */
-    bool Write( const wxString& aOutFileName, unsigned aNetlistOptions );
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
 };
 
 #endif

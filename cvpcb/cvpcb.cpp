@@ -56,36 +56,6 @@ const wxString EquFileExtension( wxT( "equ" ) );
 // Wildcard for schematic retroannotation (import footprint names in schematic):
 const wxString EquFilesWildcard( _( "Component/footprint equ files (*.equ)|*.equ" ) );
 
-#if 0   // add this logic to OpenProjectFiles()
-
-/*
- * MacOSX: Needed for file association
- * http://wiki.wxwidgets.org/WxMac-specific_topics
- */
-void PGM_BASE::MacOpenFile( const wxString& aFileName )
-{
-    wxFileName  filename = aFileName;
-    wxString    oldPath;
-
-    CVPCB_MAINFRAME* frame = (CVPCB_MAINFRAME*) GetTopWindow();
-
-    if( !filename.FileExists() )
-        return;
-
-    if( frame->m_NetlistFileName.DirExists() )
-        oldPath = frame->m_NetlistFileName.GetPath();
-
-    // Update the library search path list.
-    if( Pgm().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
-        Pgm().GetLibraryPathList().Remove( oldPath );
-
-    Pgm().GetLibraryPathList().Insert( filename.GetPath(), 0 );
-
-    frame->m_NetlistFileName = filename;
-    frame->ReadNetListAndLinkFiles();
-}
-#endif
-
 
 namespace CV {
 

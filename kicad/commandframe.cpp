@@ -69,11 +69,6 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
     btn = AddBitmapButton( ID_TO_SCH_LIB_EDITOR, KiBitmap( libedit_icon_xpm ) );
     btn->SetToolTip( _( "Schematic library editor" ) );
 
-#if 0
-    btn = AddBitmapButton( ID_TO_CVPCB, KiBitmap( icon_cvpcb_xpm ) );
-    btn->SetToolTip( _( "CvPcb - Associate footprint to components" ) );
-#endif
-
     btn = AddBitmapButton( ID_TO_PCB, KiBitmap( icon_pcbnew_xpm ) );
     btn->SetToolTip( _( "Pcbnew - Printed circuit board editor" ) );
 

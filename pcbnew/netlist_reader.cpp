@@ -40,17 +40,8 @@
 
 NETLIST_READER::~NETLIST_READER()
 {
-    if( m_lineReader )
-    {
-        delete m_lineReader;
-        m_lineReader = NULL;
-    }
-
-    if( m_footprintReader )
-    {
-        delete m_footprintReader;
-        m_footprintReader = NULL;
-    }
+    delete m_lineReader;
+    delete m_footprintReader;
 }
 
 
@@ -92,43 +83,29 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
 {
     wxASSERT( aNetlist != NULL );
 
-    FILE* file = wxFopen( aNetlistFileName, wxT( "rt" ) );
+    std::auto_ptr< FILE_LINE_READER > file_rdr(new FILE_LINE_READER( aNetlistFileName ) );
 
-    if( file == NULL )
-    {
-        wxString msg;
-        msg.Printf( _( "Cannot open file %s for reading." ), GetChars( aNetlistFileName ) );
-        THROW_IO_ERROR( msg );
-    }
-
-    FILE_LINE_READER* reader = new FILE_LINE_READER( file, aNetlistFileName );
-    std::auto_ptr< FILE_LINE_READER > r( reader );
-
-    NETLIST_FILE_T type = GuessNetlistFileType( reader );
-    reader->Rewind();
+    NETLIST_FILE_T type = GuessNetlistFileType( file_rdr.get() );
+    file_rdr->Rewind();
 
     // The component footprint link reader is NULL if no file name was specified.
-    CMP_READER* cmpFileReader = NULL;
-
-    if( !aCompFootprintFileName.IsEmpty() )
-    {
-        cmpFileReader = new CMP_READER( new FILE_LINE_READER( aCompFootprintFileName ) );
-    }
+    std::auto_ptr<CMP_READER>  cmp_rdr( aCompFootprintFileName.IsEmpty() ?
+            NULL :
+            new CMP_READER( new FILE_LINE_READER( aCompFootprintFileName ) ) );
 
     switch( type )
     {
     case LEGACY:
     case ORCAD:
-        return new LEGACY_NETLIST_READER( r.release(), aNetlist, cmpFileReader );
+        return new LEGACY_NETLIST_READER( file_rdr.release(), aNetlist, cmp_rdr.release() );
 
     case KICAD:
-        return new KICAD_NETLIST_READER( r.release(), aNetlist, cmpFileReader );
+        return new KICAD_NETLIST_READER( file_rdr.release(), aNetlist, cmp_rdr.release() );
 
     default:    // Unrecognized format:
         break;
     }
 
-    delete cmpFileReader;
     return NULL;
 }
 
