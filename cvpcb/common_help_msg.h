@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
 #define HELP_MESSAGE_FILE_H
 
 #define LOAD_FILE_HELP _( "Open netlist file" )
-#define SAVE_HLP_MSG _( "Save component/footprint link file (.cmp file)" )
-#define SAVE_AS_HLP_MSG _( "Save component/footprint link file (.cmp file) with new name" )
+#define SAVE_HLP_MSG _( "Save footprint association changes to netlist" )
 
 #endif      // HELP_MESSAGE_FILE_H
