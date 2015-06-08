@@ -70,7 +70,8 @@ enum DANGLING_END_T {
     PIN_END,
     LABEL_END,
     ENTRY_END,
-    SHEET_LABEL_END
+    SHEET_LABEL_END,
+    NO_CONNECT_END,
 };
 
 

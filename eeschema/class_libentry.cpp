@@ -312,7 +312,7 @@ void LIB_PART::SetName( const wxString& aName )
 void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
                      int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
                      const TRANSFORM& aTransform, bool aShowPinText, bool aDrawFields,
-                     bool aOnlySelected )
+                     bool aOnlySelected, const std::vector<bool>* aPinsDangling )
 {
     BASE_SCREEN*   screen = aPanel ? aPanel->GetScreen() : NULL;
 
@@ -360,6 +360,9 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
         }
     }
 
+    // Track the index into the dangling pins list
+    size_t pin_index = 0;
+
     BOOST_FOREACH( LIB_ITEM& drawItem, drawings )
     {
         if( aOnlySelected && !drawItem.IsSelected() )
@@ -381,8 +384,16 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
 
         if( drawItem.Type() == LIB_PIN_T )
         {
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) aShowPinText,
-                           aTransform );
+            uintptr_t flags = 0;
+            if( aShowPinText )
+                flags |= PIN_DRAW_TEXTS;
+
+            if( !aPinsDangling || (aPinsDangling->size() > pin_index && (*aPinsDangling)[pin_index] ) )
+                flags |= PIN_DRAW_DANGLING;
+
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) flags, aTransform );
+
+            ++pin_index;
         }
         else if( drawItem.Type() == LIB_FIELD_T )
         {

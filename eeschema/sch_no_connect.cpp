@@ -113,6 +113,13 @@ bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
+void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
+{
+    DANGLING_END_ITEM item( NO_CONNECT_END, this, m_pos );
+    aItemList.push_back( item );
+}
+
+
 int SCH_NO_CONNECT::GetPenSize() const
 {
     return GetDefaultLineThickness();

@@ -36,6 +36,7 @@
 #include <schframe.h>
 #include <plot_common.h>
 #include <msgpanel.h>
+#include <boost/foreach.hpp>
 
 #include <general.h>
 #include <class_library.h>
@@ -47,10 +48,12 @@
 #include <sch_sheet_path.h>
 //#include <sch_collectors.h>
 #include <class_netlist_object.h>
+#include <lib_draw_item.h>
 
 #include <dialogs/dialog_schematic_find.h>
 
 #include <wx/tokenzr.h>
+#include <iostream>
 
 #define NULL_STRING "_NONAME_"
 
@@ -212,6 +215,8 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     {
         GetField( i )->SetParent( this );
     }
+
+    m_isDangling = aComponent.m_isDangling;
 }
 
 
@@ -346,7 +351,7 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
     if( PART_SPTR part = m_part.lock() )
     {
         part->Draw( aPanel, aDC, m_Pos + aOffset, m_unit, m_convert, aDrawMode, aColor,
-                    m_transform, aDrawPinText, false );
+                    m_transform, aDrawPinText, false, false, &m_isDangling );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
@@ -1622,6 +1627,74 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
             aItemList.push_back( item );
         }
     }
+}
+
+
+bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &aItemList, LIB_PINS& aLibPins, unsigned aPin )
+{
+    bool previousState;
+    if( aPin < m_isDangling.size() )
+    {
+        previousState = m_isDangling[aPin];
+        m_isDangling[aPin] = true;
+    }
+    else
+    {
+        previousState = true;
+        m_isDangling.push_back( true );
+    }
+
+    wxPoint pin_position = GetPinPhysicalPosition( aLibPins[aPin] );
+
+    BOOST_FOREACH( DANGLING_END_ITEM& each_item, aItemList )
+    {
+        if( each_item.GetItem() == aLibPins[aPin] )
+            continue;
+        switch( each_item.GetType() )
+        {
+        case PIN_END:
+        case LABEL_END:
+        case SHEET_LABEL_END:
+        case WIRE_START_END:
+        case WIRE_END_END:
+        case NO_CONNECT_END:
+            if( pin_position == each_item.GetPosition() )
+                m_isDangling[aPin] = false;
+            break;
+        default:
+            break;
+        }
+        if( !m_isDangling[aPin] )
+            break;
+    }
+
+    return previousState != m_isDangling[aPin];
+}
+
+
+bool SCH_COMPONENT::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList )
+{
+    bool changed = false;
+    LIB_PINS libPins;
+    if( PART_SPTR part = m_part.lock() )
+        part->GetPins( libPins, m_unit, m_convert );
+    for( size_t i = 0; i < libPins.size(); ++i )
+    {
+        if( IsPinDanglingStateChanged( aItemList, libPins, i ) )
+            changed = true;
+    }
+    return changed;
+}
+
+
+bool SCH_COMPONENT::IsDangling() const
+{
+    BOOST_FOREACH( bool each, m_isDangling )
+    {
+        if( each )
+            return true;
+    }
+    return false;
 }
 
 

@@ -1261,6 +1261,8 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
         EDA_CROSS_HAIR_MANAGER( m_canvas, aDC );  // Erase schematic cursor
         undoItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     }
+
+    m_canvas->Refresh();
 }
 
 

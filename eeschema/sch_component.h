@@ -37,7 +37,8 @@
 #include <transform.h>
 #include <general.h>
 #include <boost/weak_ptr.hpp>
-
+#include <vector>
+#include <lib_draw_item.h>
 
 class SCH_SHEET_PATH;
 class LIB_ITEM;
@@ -78,6 +79,8 @@ class SCH_COMPONENT : public SCH_ITEM
     SCH_FIELDS  m_Fields;       ///< Variable length list of fields.
 
     PART_REF    m_part;         ///< points into the PROJECT's libraries to the LIB_PART for this component
+
+    std::vector<bool> m_isDangling; ///< One isDangling per pin
 
     /**
      * A temporary sheet path is required to generate the correct reference designator string
@@ -397,6 +400,15 @@ public:
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList );
+
+    /**
+     * Test if the component's dangling state has changed for one given pin index.
+     */
+    bool IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList, LIB_PINS& aLibPins, unsigned aPin );
+
+    bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList );
+
+    bool IsDangling() const;
 
     wxPoint GetPinPhysicalPosition( LIB_PIN* Pin );
 

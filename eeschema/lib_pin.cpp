@@ -875,12 +875,12 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
         aColor = GetInvisibleItemColor();
     }
 
-    // aData is used here as bool: if not null, draw pin texts
-    //(i.e = true to draw pin texts, false to draw only the pin shape, which
-    // is useful to draw moving component in fast mode)
-
     LIB_PART* Entry = GetParent();
-    bool      drawPinText = aData ? true : false;
+
+    // aData is used here as a bitfield of flags.
+    uintptr_t flags = (uintptr_t) aData;
+    bool drawPinText = flags & PIN_DRAW_TEXTS;
+    bool drawPinDangling = flags & PIN_DRAW_DANGLING;
 
     /* Calculate pin orient taking in account the component orientation. */
     int     orient = PinDrawOrient( aTransform );
@@ -889,7 +889,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
     wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
 
     /* Drawing from the pin and the special symbol combination */
-    DrawPinSymbol( aPanel, aDC, pos1, orient, aDrawMode, aColor );
+    DrawPinSymbol( aPanel, aDC, pos1, orient, aDrawMode, aColor, drawPinDangling );
 
     if( drawPinText )
     {
@@ -918,7 +918,8 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                              const wxPoint&  aPinPos,
                              int             aOrient,
                              GR_DRAWMODE     aDrawMode,
-                             EDA_COLOR_T     aColor )
+                             EDA_COLOR_T     aColor,
+                             bool            aDrawDangling )
 {
     int       MapX1, MapY1, x1, y1;
     int       width   = GetPenSize();
@@ -1144,7 +1145,8 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
     // Draw but do not print the pin end target 1 pixel width
     else if( screen == NULL || !screen->m_IsPrinting )
     {
-        GRCircle( clipbox, aDC, posX, posY, TARGET_PIN_RADIUS, 0, color );
+        if( aDrawDangling )
+            GRCircle( clipbox, aDC, posX, posY, TARGET_PIN_RADIUS, 0, color );
     }
 }
 

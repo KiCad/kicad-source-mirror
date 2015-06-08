@@ -35,6 +35,7 @@
 #include <lib_field.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <vector>
 
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -418,13 +419,18 @@ public:
      *                      the lib part fields).
      * @param aOnlySelected - Draws only the body items that are selected.
      *                        Used for block move redraws.
+     * @param aPinsDangling - if not NULL, this should be a pointer to
+     *              vector<bool> exactly the same length as the number of pins,
+     *              indicating whether each pin is dangling. If NULL, all pins
+     *              will be drawn as if they were dangling.
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
                int aMulti, int aConvert, GR_DRAWMODE aDrawMode,
                EDA_COLOR_T aColor = UNSPECIFIED_COLOR,
                const TRANSFORM& aTransform = DefaultTransform,
                bool aShowPinText = true, bool aDrawFields = true,
-               bool aOnlySelected = false );
+               bool aOnlySelected = false,
+               const std::vector<bool>* aPinsDangling = NULL );
 
     /**
      * Plot lib part to plotter.

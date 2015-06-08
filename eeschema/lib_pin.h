@@ -82,6 +82,11 @@ enum DrawPinOrient {
     PIN_DOWN  = 'D'
 };
 
+enum LibPinDrawFlags {
+    PIN_DRAW_TEXTS = 1,
+    PIN_DRAW_DANGLING = 2,
+};
+
 
 class LIB_PIN : public LIB_ITEM
 {
@@ -107,9 +112,9 @@ class LIB_PIN : public LIB_ITEM
      * @param aOffset Offset to draw
      * @param aColor -1 to use the normal body item color, or use this color if >= 0
      * @param aDrawMode GR_OR, GR_XOR, ...
-     * @param aData = used here as bool: if not null, draw pin texts
-     *   (i.e = true to draw pin texts, false to draw only the pin shape, which
-     *    is useful to draw moving component in fast mode)
+     * @param aData = used here as uintptr_t containing bitwise OR'd flags:
+     *      PIN_DRAW_TEXTS,     -- false to draw only pin shape, useful for fast mode
+     *      PIN_DRAW_DANGLING,
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
@@ -389,7 +394,8 @@ public:
      */
     void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                         int aOrientation, GR_DRAWMODE aDrawMode,
-                        EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+                        EDA_COLOR_T aColor = UNSPECIFIED_COLOR,
+                        bool aDrawDangling = true );
 
     /**
      * Function DrawPinTexts
