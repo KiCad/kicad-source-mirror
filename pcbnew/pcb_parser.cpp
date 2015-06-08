@@ -2408,7 +2408,11 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            track->SetNetCode( getNetCode( parseInt( "net number" ) ) );
+            if( ! track->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
+                THROW_IO_ERROR(
+                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                                      GetChars( CurSource() ), CurLineNumber(), CurOffset() )
+                    );
             break;
 
         case T_tstamp:

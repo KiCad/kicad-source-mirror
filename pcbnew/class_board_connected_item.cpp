@@ -48,7 +48,7 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) 
 }
 
 
-void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
+bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 {
     // if aNetCode < 0 ( typically NETINFO_LIST::FORCE_ORPHANED )
     // or no parent board,
@@ -61,7 +61,9 @@ void BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode )
     else
         m_netinfo = &NETINFO_LIST::ORPHANED;
 
-    assert( m_netinfo );
+    if( !aNoAssert )
+        assert( m_netinfo );
+    return m_netinfo;
 }
 
 
