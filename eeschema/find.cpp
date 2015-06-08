@@ -366,7 +366,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
             SetUndoItem( undoItem );
 
-            sheet = schematic.GetSheet( data.GetSheetPath() );
+            sheet = schematic.GetSheetByPath( data.GetSheetPath() );
 
             wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " ) + data.GetSheetPath() );
 
@@ -396,7 +396,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
         SetUndoItem( undoItem );
 
-        sheet = schematic.GetSheet( data.GetSheetPath() );
+        sheet = schematic.GetSheetByPath( data.GetSheetPath() );
 
         wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " ) + data.GetSheetPath() );
 
@@ -429,7 +429,7 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
     {
         wxLogTrace( traceFindReplace, wxT( "Found " ) + m_foundItems.GetText() );
 
-        SCH_SHEET_PATH* sheet = schematic.GetSheet( data.GetSheetPath() );
+        SCH_SHEET_PATH* sheet = schematic.GetSheetByPath( data.GetSheetPath() );
 
         wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " ) +
                      data.GetSheetPath() );

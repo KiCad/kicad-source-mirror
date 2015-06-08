@@ -423,7 +423,7 @@ public:
     SCH_SHEET_PATH* GetSheet( int aIndex ) const;
 
     /**
-     * Function GetSheet
+     * Function GetSheetByPath
      * returns a sheet matching the path name in \a aPath.
      *
      * @param aPath A wxString object containing path of the sheet to get.
@@ -432,7 +432,7 @@ public:
      * @return The sheet that matches \a aPath or NULL if no sheet matching
      *         \a aPath is found.
      */
-    SCH_SHEET_PATH* GetSheet( const wxString aPath, bool aHumanReadable = true );
+    SCH_SHEET_PATH* GetSheetByPath( const wxString aPath, bool aHumanReadable = true );
 
     /**
      * Function IsModified

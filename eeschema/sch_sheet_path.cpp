@@ -624,7 +624,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( int aIndex ) const
 }
 
 
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( const wxString aPath, bool aHumanReadable )
+SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheetByPath( const wxString aPath, bool aHumanReadable )
 {
     SCH_SHEET_PATH* sheet = GetFirst();
     wxString sheetPath;
