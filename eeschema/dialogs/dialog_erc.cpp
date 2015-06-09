@@ -473,7 +473,6 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
     unsigned lastNet;
     unsigned nextNet = lastNet = 0;
-    int NetNbItems = 0;
     int MinConn    = NOC;
 
     for( unsigned net = 0; net < objectsConnectedList->size(); net++ )
@@ -483,7 +482,6 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         {
             // New net found:
             MinConn    = NOC;
-            NetNbItems = 0;
             nextNet   = net;
         }
 
@@ -517,7 +515,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             // ERC problems when a noconnect symbol is connected to more than one pin.
             MinConn = NET_NC;
 
-            if( NetNbItems != 0 )
+            if( CountPinsInNet( objectsConnectedList.get(), nextNet ) > 1 )
                 Diagnose( objectsConnectedList->GetItem( net ), NULL, MinConn, UNC );
 
             break;
@@ -525,7 +523,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         case NET_PIN:
 
             // Look for ERC problems between pins:
-            TestOthersItems( objectsConnectedList.get(), net, nextNet, &NetNbItems, &MinConn );
+            TestOthersItems( objectsConnectedList.get(), net, nextNet, &MinConn );
             break;
         }
 

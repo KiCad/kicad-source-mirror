@@ -84,11 +84,26 @@ extern void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
 
 /**
  * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
- * on the same net.
+ * (mainly pin) on the same net.
+ * @param aList = a reference to the list of connected objects
+ * @param aNetItemRef = index in list of the current object
+ * @param aNetStart = index in list of net objects of the first item
+ * @param aMinConnexion = a pointer to a variable to store the minimal connection
+ * found( NOD, DRV, NPI, NET_NC)
  */
 extern void TestOthersItems( NETLIST_OBJECT_LIST* aList,
                              unsigned aNetItemRef, unsigned aNetStart,
-                             int* aNetNbItems, int* aMinConnexion );
+                             int* aMinConnexion );
+
+/**
+ * Counts number of pins connected on the same net.
+ * Used to find all pins conected to a no connect symbol
+ * @return the pin count of the net starting at aNetStart
+ * @param aNetStart = index in list of net objects of the first item
+ * @param aList = a reference to the list of connected objects
+ */
+int CountPinsInNet( NETLIST_OBJECT_LIST* aList, unsigned aNetStart );
+
 
 /**
  * Function TestLabel

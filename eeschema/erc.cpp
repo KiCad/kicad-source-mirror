@@ -356,7 +356,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
 void TestOthersItems( NETLIST_OBJECT_LIST* aList,
                       unsigned aNetItemRef, unsigned aNetStart,
-                      int* aNetNbItems, int* aMinConnexion )
+                      int* aMinConnexion )
 {
     unsigned netItemTst = aNetStart;
     int jj;
@@ -467,8 +467,6 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList,
             if( netItemTst <= aNetItemRef )
                 break;
 
-            *aNetNbItems += 1;
-
             if( erc == OK )
             {
                 erc = DiagErc[ref_elect_type][jj];
@@ -488,6 +486,26 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList,
             break;
         }
     }
+}
+
+
+int CountPinsInNet( NETLIST_OBJECT_LIST* aList, unsigned aNetStart )
+{
+    int count = 0;
+    int curr_net = aList->GetItemNet( aNetStart );
+
+    /* Test pins connected to NetItemRef */
+    for( unsigned item = aNetStart; item < aList->size(); item++ )
+    {
+        // We examine only a given net. We stop the search if the net changes
+        if( curr_net != aList->GetItemNet( item ) )   // End of net
+            break;
+
+        if( aList->GetItemType( item ) == NET_PIN )
+            count++;
+    }
+
+    return count;
 }
 
 
