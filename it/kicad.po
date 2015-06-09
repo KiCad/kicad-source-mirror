@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-08 14:19+0100\n"
-"PO-Revision-Date: 2015-06-08 14:19+0100\n"
+"POT-Creation-Date: 2015-06-09 16:23+0100\n"
+"PO-Revision-Date: 2015-06-09 16:23+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -2847,7 +2847,20 @@ msgstr ""
 msgid "cannot handle module text type %s"
 msgstr "Imposssibile elaborare il tipo di testo %s"
 
-#: pcbnew/pcb_parser.cpp:2858
+#: pcbnew/pcb_parser.cpp:2413
+#, c-format
+msgid ""
+"invalid net ID in\n"
+"file: <%s>\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"net ID non valido in\n"
+"file: <%s>\n"
+"linea: %d\n"
+"scostamento: %d"
+
+#: pcbnew/pcb_parser.cpp:2862
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -15577,11 +15590,11 @@ msgstr "Componente %s, piedino %s (%s) connesso a "
 msgid "pin %s (%s) of component %s (net %d)."
 msgstr "Componente %s, piedino %s (%s) non connesso (collegamento %d)."
 
-#: eeschema/erc.cpp:506
+#: eeschema/erc.cpp:524
 msgid "ERC report"
 msgstr "Rapporto ERC"
 
-#: eeschema/erc.cpp:514
+#: eeschema/erc.cpp:532
 #, c-format
 msgid ""
 "\n"
@@ -15590,7 +15603,7 @@ msgstr ""
 "\n"
 "***** Foglio %s\n"
 
-#: eeschema/erc.cpp:536
+#: eeschema/erc.cpp:554
 #, c-format
 msgid ""
 "\n"
@@ -17510,11 +17523,11 @@ msgstr "Genera errori"
 msgid "Annotation required!"
 msgstr "Annotazione necessaria!"
 
-#: eeschema/dialogs/dialog_erc.cpp:549
+#: eeschema/dialogs/dialog_erc.cpp:547
 msgid "ERC File"
 msgstr "File ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:550
+#: eeschema/dialogs/dialog_erc.cpp:548
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "File di controllo regole elettroniche (.erc)|*.erc"
 
