@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 G. Harland
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,7 @@
 #ifndef DIALOG_COLOR_CONFIG_H_
 #define DIALOG_COLOR_CONFIG_H_
 
-#include <wx/statline.h>
-#include <dialog_shim.h>
+#include <dialog_color_config_base.h>
 
 
 class wxBoxSizer;
@@ -38,40 +37,23 @@ class wxStdDialogButtonSizer;
 /* Derived class for the frame color settings. */
 /***********************************************/
 
-class DIALOG_COLOR_CONFIG : public DIALOG_SHIM
+class DIALOG_COLOR_CONFIG : public DIALOG_COLOR_CONFIG_BASE
 {
 private:
     EDA_DRAW_FRAME*         m_parent;
-    wxBoxSizer*             m_outerBoxSizer;
-    wxBoxSizer*             m_mainBoxSizer;
-    wxBoxSizer*             m_columnBoxSizer;
-    wxBoxSizer*             m_rowBoxSizer;
-    wxBitmapButton*         m_bitmapButton;
     wxRadioBox*             m_SelBgColor;
-    wxStaticLine*           m_line;
-    wxStdDialogButtonSizer* m_stdDialogButtonSizer;
-
-    // Initializes member variables
-    void Init();
 
     // Creates the controls and sizers
     void CreateControls();
 
-    wxBitmap GetBitmapResource( const wxString& aName );
-    wxIcon   GetIconResource( const wxString& aName );
-    static bool ShowToolTips();
-
     bool    UpdateColorsSettings();
     void    SetColor( wxCommandEvent& aEvent );
     void    OnOkClick( wxCommandEvent& aEvent );
-    void    OnCancelClick( wxCommandEvent& aEvent );
     void    OnApplyClick( wxCommandEvent& aEvent );
 
 public:
     // Constructors and destructor
-    DIALOG_COLOR_CONFIG();
     DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent );
-    ~DIALOG_COLOR_CONFIG();
 };
 
 #endif    // DIALOG_COLOR_CONFIG_H_
