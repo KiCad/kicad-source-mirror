@@ -26,6 +26,8 @@
 */
 #include <fctsys.h>
 #include <trigo.h>
+#include <project.h>
+#include <gestfich.h>
 
 #include <wx/image.h>
 
@@ -36,8 +38,6 @@
 #include <wx/dataobj.h>
 #include <wx/clipbrd.h>
 #include <wx/wupdlock.h>
-
-#include <gestfich.h>
 
 #ifdef __WINDOWS__
 #include <GL/glew.h>        // must be included before gl.h
@@ -631,15 +631,16 @@ void EDA_3D_CANVAS::SetLights()
 }
 
 
-/* Create a Screenshot of the current 3D view.
- *  Output file format is png or jpeg, or image is copied to the clipboard
- */
 void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
 {
-    wxFileName fn( Parent()->GetDefaultFileName() );
-    wxString   FullFileName;
-    wxString   file_ext, mask;
-    bool       fmt_is_jpeg = false;
+    static wxFileName fn;                 // Remember path between saves during this session only.
+    wxString          FullFileName;
+    wxString          file_ext, mask;
+    bool              fmt_is_jpeg = false;
+
+    // First time path is set to the project path.
+    if( !fn.IsOk() )
+        fn = Parent()->Prj().GetProjectFullName();
 
     if( event.GetId() == ID_MENU_SCREENCOPY_JPEG )
         fmt_is_jpeg = true;
@@ -648,15 +649,16 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
     {
         file_ext     = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
         mask         = wxT( "*." ) + file_ext;
-        FullFileName = Parent()->GetDefaultFileName();
         fn.SetExt( file_ext );
 
-        FullFileName = EDA_FileSelector( _( "3D Image filename:" ), wxEmptyString,
+        FullFileName = EDA_FileSelector( _( "3D Image File Name:" ), fn.GetPath(),
                                          fn.GetFullName(), file_ext, mask, this,
-                                         wxFD_SAVE, true );
+                                         wxFD_SAVE | wxFD_OVERWRITE_PROMPT, true );
 
         if( FullFileName.IsEmpty() )
             return;
+
+        fn = FullFileName;
 
         // Be sure the screen area destroyed by the file dialog is redrawn before making
         // a screen copy.

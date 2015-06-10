@@ -140,6 +140,13 @@ public:
     void   OnMouseMove( wxMouseEvent& event );
     void   OnRightClick( wxMouseEvent& event );
     void   OnPopUpMenu( wxCommandEvent& event );
+
+    /**
+     * Function TakeScreenshot
+     *
+     * creates a screenshot of the current 3D view and save to file as png or jpeg or image
+     * is copied to the clipboard
+     */
     void   TakeScreenshot( wxCommandEvent& event );
     void   OnEnterWindow( wxMouseEvent& event );
 
