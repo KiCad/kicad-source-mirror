@@ -28,6 +28,7 @@
 
 #include <fctsys.h>
 #include <pgm_kicad.h>
+#include <kiway.h>
 #include <wx/fs_zip.h>
 #include <wx/zipstrm.h>
 #include <wx/docview.h>
@@ -52,9 +53,17 @@ void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 
     if( fn.size() )
     {
-        wxCommandEvent cmd( 0, wxID_ANY );
+        // Any open KIFACE's must be closed before changing the project.
+        // We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project,
+        // and then break one project.
+        // Remember when saving files, the full path is build from the current project path
+        // User is prompted here to close those KIWAY_PLAYERs:
+        if( !Kiway.PlayersClose( false ) )
+            return;
 
+        // We can now set the new project filename and load this project
         SetProjectFileName( fn );
+        wxCommandEvent cmd( 0, wxID_ANY );
         OnLoadProject( cmd );
     }
 }
