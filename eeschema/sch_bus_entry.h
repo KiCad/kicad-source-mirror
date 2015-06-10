@@ -32,6 +32,8 @@
 
 #include <sch_item_struct.h>
 
+#define TARGET_BUSENTRY_RADIUS 12   // Circle diameter drawn at the ends
+
 
 /**
  * Class SCH_BUS_ENTRY_BASE
@@ -43,6 +45,7 @@ class SCH_BUS_ENTRY_BASE : public SCH_ITEM
 protected:
     wxPoint m_pos;
     wxSize  m_size;
+    bool m_isDanglingStart, m_isDanglingEnd;
 
 public:
     SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos = wxPoint( 0, 0 ), char shape = '\\' );
@@ -99,6 +102,10 @@ public:
     void Rotate( wxPoint aPosition );
 
     void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+
+    bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList );
+
+    bool IsDangling() const;
 
     bool IsSelectStateChanged( const wxRect& aRect );
 

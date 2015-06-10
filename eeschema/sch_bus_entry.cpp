@@ -35,6 +35,7 @@
 #include <common.h>
 #include <richio.h>
 #include <plot_common.h>
+#include <boost/foreach.hpp>
 
 #include <eeschema_config.h>
 #include <general.h>
@@ -182,6 +183,7 @@ void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
                           GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
     EDA_COLOR_T color;
+    EDA_RECT* clipbox = aPanel->GetClipBox();
 
     if( aColor >= 0 )
         color = aColor;
@@ -190,8 +192,16 @@ void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    GRLine( aPanel->GetClipBox(), aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
+    GRLine( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
             m_End().x + aOffset.x, m_End().y + aOffset.y, GetPenSize(), color );
+
+    if( m_isDanglingStart ) {
+        GRCircle( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, TARGET_BUSENTRY_RADIUS, 0, color );
+    }
+
+    if( m_isDanglingEnd ) {
+        GRCircle( clipbox, aDC, m_End().x + aOffset.x, m_End().y + aOffset.y, TARGET_BUSENTRY_RADIUS, 0, color );
+    }
 }
 
 
@@ -227,6 +237,50 @@ void SCH_BUS_ENTRY_BASE::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLi
 
     DANGLING_END_ITEM item1( ENTRY_END, this, m_End() );
     aItemList.push_back( item1 );
+}
+
+
+bool SCH_BUS_ENTRY_BASE::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList )
+{
+    bool previousStateStart = m_isDanglingStart;
+    bool previousStateEnd = m_isDanglingEnd;
+
+    m_isDanglingStart = m_isDanglingEnd = true;
+
+    // Wires and buses are stored in the list as a pair, start and end. This
+    // variable holds the start position from one iteration so it can be used
+    // when the end position is found.
+    wxPoint seg_start;
+
+    BOOST_FOREACH( DANGLING_END_ITEM& each_item, aItemList )
+    {
+        if( each_item.GetItem() == this )
+            continue;
+
+        switch( each_item.GetType() )
+        {
+        case WIRE_START_END:
+        case BUS_START_END:
+            seg_start = each_item.GetPosition();
+            break;
+        case WIRE_END_END:
+        case BUS_END_END:
+            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
+                m_isDanglingStart = false;
+            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
+                m_isDanglingEnd = false;
+        default:
+            break;
+        }
+    }
+
+    return (previousStateStart != m_isDanglingStart) || (previousStateEnd != m_isDanglingEnd);
+}
+
+
+bool SCH_BUS_ENTRY_BASE::IsDangling() const
+{
+    return m_isDanglingStart || m_isDanglingEnd;
 }
 
 
