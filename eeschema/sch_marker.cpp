@@ -69,11 +69,6 @@ SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
 }
 
 
-SCH_MARKER::~SCH_MARKER()
-{
-}
-
-
 EDA_ITEM* SCH_MARKER::Clone() const
 {
     return new SCH_MARKER( *this );
