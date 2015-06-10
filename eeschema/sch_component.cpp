@@ -1658,6 +1658,7 @@ bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &a
         case WIRE_START_END:
         case WIRE_END_END:
         case NO_CONNECT_END:
+        case JUNCTION_END:
             if( pin_position == each_item.GetPosition() )
                 m_isDangling[aPin] = false;
             break;
