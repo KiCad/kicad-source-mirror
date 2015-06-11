@@ -51,6 +51,7 @@
 # mc: - tune = regola
 # mc: - Push & Shove (spingi e compatta) = sbroglio interattivo P&S
 # mc: - stub = spezzone
+# mc: - hotkey = tasto scorciatoia
 #
 # Note meccaniche: se due superfici vengono poste assieme, l'arrotondamento in meccanica
 # viene chiamato fillet (filetto) mentre se lo smusso è piatto viene chiamato chamfer
@@ -72,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-09 16:23+0100\n"
-"PO-Revision-Date: 2015-06-09 16:23+0100\n"
+"POT-Creation-Date: 2015-06-11 07:59+0100\n"
+"PO-Revision-Date: 2015-06-11 07:59+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -153,7 +154,7 @@ msgstr "Avvia PlEditor"
 
 #: kicad/menubar.cpp:168
 msgid "Kicad Manager Hotkeys"
-msgstr "Tasti scorciatoia manager KiCad"
+msgstr "Tasti scorciatoia KiCad"
 
 #: kicad/menubar.cpp:213
 msgid "&Open Project"
@@ -459,15 +460,15 @@ msgstr " [Sola lettura]"
 msgid "New Project Folder"
 msgstr "Nuova cartella progetto"
 
-#: kicad/files-io.cpp:51
+#: kicad/files-io.cpp:52
 msgid "KiCad project file"
 msgstr "File progetto KiCad"
 
-#: kicad/files-io.cpp:69
+#: kicad/files-io.cpp:78
 msgid "Unzip Project"
 msgstr "Decomprimi progetto"
 
-#: kicad/files-io.cpp:76
+#: kicad/files-io.cpp:85
 #, c-format
 msgid ""
 "\n"
@@ -476,47 +477,47 @@ msgstr ""
 "\n"
 "Apri  \"%s\"\n"
 
-#: kicad/files-io.cpp:79
+#: kicad/files-io.cpp:88
 msgid "Target Directory"
 msgstr "Cartella di destinazione"
 
-#: kicad/files-io.cpp:85
+#: kicad/files-io.cpp:94
 #, c-format
 msgid "Unzipping project in '%s'\n"
 msgstr "Decompressione progetto in \"%s\"\n"
 
-#: kicad/files-io.cpp:107
+#: kicad/files-io.cpp:116
 #, c-format
 msgid "Extract file '%s'"
 msgstr "Estrai file \"%s\""
 
-#: kicad/files-io.cpp:117
+#: kicad/files-io.cpp:126
 msgid " OK\n"
 msgstr " OK\n"
 
-#: kicad/files-io.cpp:120
+#: kicad/files-io.cpp:129
 msgid " *ERROR*\n"
 msgstr " *ERRORE*\n"
 
-#: kicad/files-io.cpp:148
+#: kicad/files-io.cpp:157
 msgid "Archive Project Files"
 msgstr "Archivia i file del progetto"
 
-#: kicad/files-io.cpp:191
+#: kicad/files-io.cpp:200
 #, c-format
 msgid "Archive file <%s>"
 msgstr "Archivia file \"%s\""
 
-#: kicad/files-io.cpp:205
+#: kicad/files-io.cpp:214
 #, c-format
 msgid "(%d bytes, compressed %d bytes)\n"
 msgstr "(%d byte, compressi %d byte)\n"
 
-#: kicad/files-io.cpp:211
+#: kicad/files-io.cpp:220
 msgid " >>Error\n"
 msgstr " >>Errore\n"
 
-#: kicad/files-io.cpp:218
+#: kicad/files-io.cpp:227
 #, c-format
 msgid ""
 "\n"
@@ -891,8 +892,7 @@ msgstr " [nuovo file]"
 #: common/dialogs/dialog_get_component_base.cpp:52
 #: eeschema/libedit_onrightclick.cpp:70 eeschema/onrightclick.cpp:153
 #: eeschema/onrightclick.cpp:186 eeschema/dialogs/dialog_netlist_base.cpp:49
-#: eeschema/dialogs/dialog_netlist_base.cpp:133
-#: eeschema/dialogs/dialog_color_config.cpp:254 gerbview/onrightclick.cpp:59
+#: eeschema/dialogs/dialog_netlist_base.cpp:133 gerbview/onrightclick.cpp:59
 #: gerbview/onrightclick.cpp:81
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
 #: pagelayout_editor/onrightclick.cpp:115
@@ -4262,7 +4262,6 @@ msgstr "Forma complessa"
 #: common/dialogs/dialog_env_var_config_base.cpp:58
 #: common/dialogs/dialog_get_component_base.cpp:45
 #: eeschema/dialogs/dialog_netlist_base.cpp:129
-#: eeschema/dialogs/dialog_color_config.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
 msgid "OK"
 msgstr "OK"
@@ -9078,7 +9077,7 @@ msgstr "Angolo di rotazione:"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:83
 msgid "Context menu and hot key footprint rotation increment."
-msgstr "Menu contestuale e tasti scorciatoie incremento rotazione impronta."
+msgstr "Menu contestuale e tasti scorciatoia incremento rotazione impronta."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:91
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
@@ -13573,57 +13572,55 @@ msgstr "Info marcatore"
 #: common/hotkeys_basic.cpp:424 common/hotkeys_basic.cpp:453
 #: common/hotkeys_basic.cpp:457
 msgid "Hotkeys List"
-msgstr "Elenco Comandi da tastiera"
+msgstr "Tasti scorciatoia"
 
 #: common/hotkeys_basic.cpp:721
 msgid "Read Hotkey Configuration File:"
-msgstr "Leggi file configurazione scorciatoie da tastiera:"
+msgstr "Leggi file configurazione tasti scorciatoia:"
 
 #: common/hotkeys_basic.cpp:751
 msgid "Write Hotkey Configuration File:"
-msgstr "Salva file configurazione scorciatoie da tastiera:"
+msgstr "Salva file configurazione tasti scorciatoia:"
 
 #: common/hotkeys_basic.cpp:779
 msgid "&List Current Keys"
-msgstr "&Elenco tasti correnti"
+msgstr "E&lenco tasti correnti"
 
 #: common/hotkeys_basic.cpp:780
 msgid "Displays the current hotkeys list and corresponding commands"
-msgstr "Mostra i comandi da tastiera correnti "
+msgstr "Mostra i tasti scorciatoia e i comandi corrispondenti correnti"
 
 #: common/hotkeys_basic.cpp:785
 msgid "&Edit Hotkeys"
-msgstr "&Modifica comandi da tastiera"
+msgstr "&Modifica tasti scorciatoia"
 
 #: common/hotkeys_basic.cpp:786
 msgid "Call the hotkeys editor"
-msgstr "Apri editor scorciatoie da tastiera"
+msgstr "Apri editor tasti scorciatoia"
 
 #: common/hotkeys_basic.cpp:793
 msgid "E&xport Hotkeys"
-msgstr "E&sporta configurazione comandi da tastiera"
+msgstr "E&sporta tasti scorciatoia"
 
 #: common/hotkeys_basic.cpp:794
 msgid "Create a hotkey configuration file to export the current hotkeys"
-msgstr ""
-"Crea file di configurazione comandi da tastiera dalla corrente "
-"configurazione "
+msgstr "Crea file tasti scorciatoia per esportare la configurazione corrente"
 
 #: common/hotkeys_basic.cpp:799
 msgid "&Import Hotkeys"
-msgstr "&Importa configurazione comandi da tastiera"
+msgstr "&Importa tasti scorciatoia"
 
 #: common/hotkeys_basic.cpp:800
 msgid "Load an existing hotkey configuration file"
-msgstr "Carica file di configurazione dei comandi da tastiera"
+msgstr "Carica file configurazione tasti scorciatoia"
 
 #: common/hotkeys_basic.cpp:805
 msgid "&Hotkeys"
-msgstr "&Comandi da tastiera"
+msgstr "&Tasti scorciatoia"
 
 #: common/hotkeys_basic.cpp:806
 msgid "Hotkeys configuration and preferences"
-msgstr "Configurazione dei comandi da tastiera"
+msgstr "Configurazione e preferenze tasti scorciatoia"
 
 #: common/page_layout/page_layout_reader.cpp:816
 #, c-format
@@ -16258,7 +16255,7 @@ msgstr "<Sconosciuto>"
 msgid "Key Words"
 msgstr "Parole chiave"
 
-#: eeschema/sch_component.cpp:1771
+#: eeschema/sch_component.cpp:1772
 #, c-format
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
@@ -16548,7 +16545,7 @@ msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Duplicazione stampigliatura (%s) per %s%d e %s%d"
 
-#: eeschema/sch_marker.cpp:162
+#: eeschema/sch_marker.cpp:157
 msgid "Electronics Rule Check Error"
 msgstr "Errore controllo regole elettroniche"
 
@@ -16623,11 +16620,11 @@ msgstr "Campo%d"
 msgid "Field %s %s"
 msgstr "Campo %s %s"
 
-#: eeschema/sch_bus_entry.cpp:257
+#: eeschema/sch_bus_entry.cpp:311
 msgid "Bus to Wire Entry"
 msgstr "Elemento da bus a filo"
 
-#: eeschema/sch_bus_entry.cpp:263
+#: eeschema/sch_bus_entry.cpp:317
 msgid "Bus to Bus Entry"
 msgstr "Elemento da bus a bus "
 
@@ -18674,27 +18671,19 @@ msgstr "Errore del Controllo regole "
 msgid "Miscellaneous"
 msgstr "Miscellanea"
 
-#: eeschema/dialogs/dialog_color_config.cpp:114
-msgid "EESchema Colors"
-msgstr "Colori"
-
-#: eeschema/dialogs/dialog_color_config.cpp:227
+#: eeschema/dialogs/dialog_color_config.cpp:191
 msgid "White"
 msgstr "Bianco"
 
-#: eeschema/dialogs/dialog_color_config.cpp:228
+#: eeschema/dialogs/dialog_color_config.cpp:192
 msgid "Black"
 msgstr "Nero"
 
-#: eeschema/dialogs/dialog_color_config.cpp:229
+#: eeschema/dialogs/dialog_color_config.cpp:193
 msgid "Background Color"
 msgstr "Colore di sfondo "
 
-#: eeschema/dialogs/dialog_color_config.cpp:259
-msgid "Apply"
-msgstr "Applica"
-
-#: eeschema/dialogs/dialog_color_config.cpp:354
+#: eeschema/dialogs/dialog_color_config.cpp:288
 msgid ""
 "Warning:\n"
 "Some items have the same color as the background\n"
@@ -19567,14 +19556,14 @@ msgid "Zoom: %3.1f"
 msgstr "Zoom: %3.1f"
 
 #: 3d-viewer/3d_canvas.cpp:654
-msgid "3D Image filename:"
-msgstr "Nome file 3D: "
+msgid "3D Image File Name:"
+msgstr "Nome file immagine 3D:"
 
-#: 3d-viewer/3d_canvas.cpp:708
+#: 3d-viewer/3d_canvas.cpp:710
 msgid "Failed to copy image to clipboard"
 msgstr "Impossibile salvare immagine sugli appunti"
 
-#: 3d-viewer/3d_canvas.cpp:721
+#: 3d-viewer/3d_canvas.cpp:723
 msgid "Can't save file"
 msgstr "Impossibile salvare il file"
 
@@ -20076,7 +20065,7 @@ msgstr "Modalità visual. DCode"
 
 #: gerbview/hotkeys.cpp:96
 msgid "Gerbview Hotkeys"
-msgstr "Scorciatoie da tastiera Gerbview"
+msgstr "Tasti scorciatoia Gerbview"
 
 #: gerbview/toolbars_gerber.cpp:59
 msgid "Erase all layers"
@@ -22481,7 +22470,7 @@ msgstr "Aggiungi archi al corpo del componente"
 msgid "Add lines and polygons to component body"
 msgstr "Aggiungi linee e poligoni al corpo del componente"
 
-#: eeschema/sch_marker.h:115
+#: eeschema/sch_marker.h:113
 msgid "ERC Marker"
 msgstr "Evidenziatore"
 
@@ -22546,6 +22535,10 @@ msgstr "Proprietà foglio schema"
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:69
 msgid "Library Text Properties"
 msgstr "Proprietà testo libreria"
+
+#: eeschema/dialogs/dialog_color_config_base.h:52
+msgid "EESchema Colors"
+msgstr "Colori"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:48
 msgid "Pin Table"
