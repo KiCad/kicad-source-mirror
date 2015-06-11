@@ -519,7 +519,7 @@ if( APPLE AND USE_OSX_DEPS_BUILDER )
 
     if( KICAD_BUILD_DYNAMIC AND APPLE )
         add_custom_target( osx_fix_bundles ALL DEPENDS
-            cvpcb eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
+            eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
         add_custom_command(TARGET osx_fix_bundles
             POST_BUILD COMMAND ${PROJECT_SOURCE_DIR}/scripts/osx_fixbundle.sh ${PROJECT_SOURCE_DIR}
             COMMENT "Migrating dylibs to bundles")
@@ -712,7 +712,6 @@ if( APPLE )
             # Remove links to standalone apps
             file( REMOVE ${KICAD_BIN}/bitmap2component.app )
             file( REMOVE ${KICAD_BIN}/eeschema.app )
-            file( REMOVE ${KICAD_BIN}/cvpcb.app )
             file( REMOVE ${KICAD_BIN}/gerbview.app )
             file( REMOVE ${KICAD_BIN}/pcb_calculator.app )
             file( REMOVE ${KICAD_BIN}/pcbnew.app )

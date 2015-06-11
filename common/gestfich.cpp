@@ -169,7 +169,6 @@ wxString FindKicadFile( const wxString& shortname )
         wxT( "d:/Program Files/kicad/bin/" ),
 #elif defined( __WXMAC__ )
         // all internal paths are relative to main bundle kicad.app
-        wxT( "Contents/Applications/cvpcb.app/Contents/MacOS/" ),
         wxT( "Contents/Applications/pcbnew.app/Contents/MacOS/" ),
         wxT( "Contents/Applications/eeschema.app/Contents/MacOS/" ),
         wxT( "Contents/Applications/gerbview.app/Contents/MacOS/" ),

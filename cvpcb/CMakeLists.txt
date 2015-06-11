@@ -59,7 +59,7 @@ if( MINGW )
 endif()
 
 
-if( APPLE )
+if( false )
     # setup bundle
     set( CVPCB_RESOURCES cvpcb.icns cvpcb_doc.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.icns" PROPERTIES
