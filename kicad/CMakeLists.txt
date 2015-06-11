@@ -136,7 +136,6 @@ if( APPLE )
         # move all app bundles
         move_to_main_bundle( bitmap2component.app )
         move_to_main_bundle( eeschema.app )
-        move_to_main_bundle( cvpcb.app )
         move_to_main_bundle( gerbview.app )
         move_to_main_bundle( pcb_calculator.app )
         move_to_main_bundle( pcbnew.app )
