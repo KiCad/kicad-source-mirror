@@ -128,6 +128,9 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             _( "Navigate schematic hierarchy" ) );
 
 
+    m_mainToolBar->AddTool( ID_POPUP_SCH_LEAVE_SHEET, wxEmptyString, KiBitmap( leave_sheet_xpm ),
+                            _( "Leave sheet" ) );
+
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_RUN_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),

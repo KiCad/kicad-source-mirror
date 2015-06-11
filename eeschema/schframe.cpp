@@ -308,6 +308,9 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, SCH_EDIT_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START, ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
                          SCH_EDIT_FRAME::OnUpdateSelectTool )
+    EVT_UPDATE_UI( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnUpdateSave )
+    EVT_UPDATE_UI( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::OnUpdateSaveSheet )
+    EVT_UPDATE_UI( ID_POPUP_SCH_LEAVE_SHEET, SCH_EDIT_FRAME::OnUpdateHierarchySheet )
 
     /* Search dialog events. */
     EVT_FIND_CLOSE( wxID_ANY, SCH_EDIT_FRAME::OnFindDialogClose )
@@ -770,6 +773,29 @@ void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 
     aEvent.Check( m_showAllPins );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIDDEN_PINS, tool_tip );
+}
+
+
+void SCH_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
+{
+    SCH_SHEET_LIST sheetList;
+
+    aEvent.Enable( sheetList.IsModified() );
+
+}
+
+
+void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( GetScreen()->IsModify() );
+
+}
+
+
+void SCH_EDIT_FRAME::OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_CurrentSheet->Last() != g_RootSheet );
+
 }
 
 

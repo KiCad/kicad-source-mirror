@@ -844,6 +844,9 @@ private:
     void OnUpdateHiddenPins( wxUpdateUIEvent& event );
     void OnUpdateBusOrientation( wxUpdateUIEvent& event );
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
+    void OnUpdateSave( wxUpdateUIEvent& aEvent );
+    void OnUpdateSaveSheet( wxUpdateUIEvent& aEvent );
+    void OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent );
 
     /**
      * Function UpdateTitle

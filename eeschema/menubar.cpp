@@ -240,6 +240,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, KiBitmap( zoom_fit_in_page_xpm ) );
 
+    text = AddHotkeyName( _( "&Redraw" ), g_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
+
+    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
+
     viewMenu->AppendSeparator();
 
     AddMenuItem( viewMenu,
@@ -248,8 +252,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Navigate hierarchical sheets" ),
                  KiBitmap( hierarchy_nav_xpm ) );
 
-    text = AddHotkeyName( _( "&Redraw" ), g_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
+    AddMenuItem( viewMenu,
+                 ID_POPUP_SCH_LEAVE_SHEET,
+                 _( "&Leave Sheet" ),
+                 _( "Leave Sheet" ),
+                 KiBitmap( leave_sheet_xpm ) );
 
     // Menu place:
     wxMenu* placeMenu = new wxMenu;
