@@ -313,12 +313,14 @@ public:
      */
     void CopyPolygonsFromClipperPathsToFilledPolysList( ClipperLib::Paths& aClipperPolyList );
 
+#if 0   //does not exist in rev 5741.
     /**
      * Function CopyPolygonsFromFilledPolysListToKiPolygonList
      * Copy polygons from m_FilledPolysList to aKiPolyList
      * @param aKiPolyList = a KI_POLYGON_SET to fill by polygons.
      */
     void CopyPolygonsFromFilledPolysListToKiPolygonList( KI_POLYGON_SET& aKiPolyList );
+#endif
 
     /**
      * Function AddClearanceAreasPolygonsToPolysList
