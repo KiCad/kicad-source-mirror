@@ -25,6 +25,9 @@
 #ifndef __SHAPE_H
 #define __SHAPE_H
 
+#include <string>
+#include <sstream>
+
 #include <math/vector2d.h>
 #include <math/box2.h>
 
@@ -42,7 +45,7 @@ enum SHAPE_TYPE
     SH_LINE_CHAIN,      ///> line chain (polyline)
     SH_CIRCLE,          ///> circle
     SH_CONVEX,          ///> convex polygon
-    SH_POLYGON,         ///> any polygon (with holes, etc.)
+    SH_POLY_SET,         ///> any polygon (with holes, etc.)
     SH_COMPOUND         ///> compound shape, consisting of multiple simple shapes
 };
 
@@ -152,6 +155,10 @@ public:
     virtual void Move ( const VECTOR2I& aVector ) = 0;
 
     virtual bool IsSolid() const = 0;
+
+    virtual bool Parse( std::stringstream& aStream );
+
+    virtual const std::string Format( ) const;
 
 protected:
     ///> type of our shape

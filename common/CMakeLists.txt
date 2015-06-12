@@ -248,8 +248,11 @@ set( COMMON_SRCS
     tool/context_menu.cpp
 
     geometry/seg.cpp
+    geometry/shape.cpp
     geometry/shape_line_chain.cpp
+    geometry/shape_poly_set.cpp
     geometry/shape_collisions.cpp
+    geometry/shape_file_io.cpp
     )
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
