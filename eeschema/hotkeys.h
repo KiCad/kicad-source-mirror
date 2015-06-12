@@ -76,7 +76,8 @@ enum hotkey_id_commnand {
     HK_SAVE_SCH,
     HK_LOAD_SCH,
     HK_LEFT_CLICK,
-    HK_LEFT_DCLICK
+    HK_LEFT_DCLICK,
+    HK_LEAVE_SHEET
 };
 
 // List of hotkey descriptors for Eeschema

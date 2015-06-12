@@ -781,7 +781,6 @@ void SCH_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
     SCH_SHEET_LIST sheetList;
 
     aEvent.Enable( sheetList.IsModified() );
-
 }
 
 
@@ -795,7 +794,6 @@ void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
 void SCH_EDIT_FRAME::OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_CurrentSheet->Last() != g_RootSheet );
-
 }
 
 

@@ -117,7 +117,8 @@ static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-', 
 
 static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
-
+static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, WXK_BACK,
+                                ID_POPUP_SCH_LEAVE_SHEET );
 
 // Undo
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
@@ -288,6 +289,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkAddBusEntry,
     &HkAddGraphicPolyLine,
     &HkAddGraphicText,
+    &HkLeaveSheet,
     NULL
 };
 
@@ -439,6 +441,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_REDRAW:
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
+    case HK_LEAVE_SHEET:
     case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
     case HK_SAVE_BLOCK:                      // Copy block to paste buffer.
         cmd.SetId( hotKey->m_IdMenuEvent );

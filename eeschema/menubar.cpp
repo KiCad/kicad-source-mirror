@@ -252,9 +252,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Navigate hierarchical sheets" ),
                  KiBitmap( hierarchy_nav_xpm ) );
 
+    text = AddHotkeyName( _( "&Leave Sheet" ), g_Schematic_Hokeys_Descr, HK_LEAVE_SHEET );
+
     AddMenuItem( viewMenu,
                  ID_POPUP_SCH_LEAVE_SHEET,
-                 _( "&Leave Sheet" ),
+                 text,
                  _( "Leave Sheet" ),
                  KiBitmap( leave_sheet_xpm ) );
 
