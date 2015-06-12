@@ -93,6 +93,9 @@ wxString    g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
  */
 DLIST<TRACK> g_CurrentTrackList;
 
+bool g_UseOldZoneFillingAlgo = false;
+bool g_DumpZonesWhenFilling = false;
+
 namespace PCB {
 
 static struct IFACE : public KIFACE_I

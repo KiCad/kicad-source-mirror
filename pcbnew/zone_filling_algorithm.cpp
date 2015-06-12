@@ -104,10 +104,15 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST*
         m_FilledPolysList.RemoveAllContours();
 
         if( IsOnCopperLayer() )
-            AddClearanceAreasPolygonsToPolysList( aPcb );
+        {
+            if(g_UseOldZoneFillingAlgo)
+                AddClearanceAreasPolygonsToPolysList( aPcb );
+            else
+                AddClearanceAreasPolygonsToPolysList_NG( aPcb );
+        }
         else
         {
-            int         margin = m_ZoneMinThickness / 2;
+            int margin = m_ZoneMinThickness / 2;
             m_smoothedPoly->m_CornersList.InflateOutline(m_FilledPolysList, -margin, true );
         }
 

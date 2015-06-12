@@ -93,6 +93,9 @@ extern bool     g_TwoSegmentTrackBuild;
 extern int      g_MagneticPadOption;
 extern int      g_MagneticTrackOption;
 
+extern bool     g_UseOldZoneFillingAlgo;
+extern bool     g_DumpZonesWhenFilling;
+
 extern wxPoint  g_Offset_Module;         // Offset trace when moving footprint.
 
 /// List of segments of the trace currently being drawn.

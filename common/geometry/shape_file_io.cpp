@@ -72,8 +72,6 @@ void SHAPE_FILE_IO::EndGroup()
 
 void SHAPE_FILE_IO::Write( const SHAPE *aShape, const std::string aName )
 {
-    printf("write %p f %p\n", aShape, m_file );
-
     if(!m_file)
         return;
 

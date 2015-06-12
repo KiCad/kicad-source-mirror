@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -78,6 +78,8 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_MiddleButtonPANOpt;
 		wxCheckBox* m_OptMiddleButtonPanLimited;
 		wxCheckBox* m_AutoPANOpt;
+		wxCheckBox* m_UseOldZoneFillingAlgo;
+		wxCheckBox* m_DumpZonesWhenFilling;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

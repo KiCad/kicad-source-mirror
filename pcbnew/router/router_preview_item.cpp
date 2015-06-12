@@ -234,7 +234,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
             }
 
         case SH_CONVEX:
-        case SH_POLYGON:
+        case SH_POLY_SET:
         case SH_COMPOUND:
             break;          // Not yet in use
         }

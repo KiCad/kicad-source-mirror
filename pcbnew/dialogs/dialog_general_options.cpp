@@ -95,6 +95,10 @@ void DIALOG_GENERALOPTIONS::init()
 
     m_MagneticPadOptCtrl->SetSelection( g_MagneticPadOption );
     m_MagneticTrackOptCtrl->SetSelection( g_MagneticTrackOption );
+
+    m_UseOldZoneFillingAlgo->SetValue ( g_UseOldZoneFillingAlgo );
+    m_DumpZonesWhenFilling->SetValue ( g_DumpZonesWhenFilling );
+
 }
 
 
@@ -143,6 +147,8 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
     g_MagneticTrackOption = m_MagneticTrackOptCtrl->GetSelection();
+    g_UseOldZoneFillingAlgo = m_UseOldZoneFillingAlgo->GetValue();
+    g_DumpZonesWhenFilling = m_DumpZonesWhenFilling->GetValue();
 
     EndModal( wxID_OK );
 }

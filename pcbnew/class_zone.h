@@ -330,8 +330,10 @@ public:
      * BuildFilledSolidAreasPolygons() call this function just after creating the
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
+     * _NG version uses SHAPE_POLY_SET instead of Boost.Polygon
      */
     void AddClearanceAreasPolygonsToPolysList( BOARD* aPcb );
+    void AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb );
 
 
      /**
@@ -578,7 +580,10 @@ public:
 #endif
 
 
+
 private:
+    void buildFeatureHoleList( BOARD* aPcb, CPOLYGONS_LIST& aFeatures );
+
     CPolyLine*            m_Poly;                ///< Outline of the zone.
     CPolyLine*            m_smoothedPoly;        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;

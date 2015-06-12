@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -176,7 +176,23 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	sbSizer2PAN->Add( m_AutoPANOpt, 0, wxALL, 5 );
 	
 	
-	bRightSizer->Add( sbSizer2PAN, 1, wxALL|wxEXPAND, 5 );
+	bRightSizer->Add( sbSizer2PAN, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer2Adv;
+	sbSizer2Adv = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Advanced/Developer") ), wxVERTICAL );
+	
+	m_UseOldZoneFillingAlgo = new wxCheckBox( this, wxID_ANY, _("Use legacy zone filling algorithm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UseOldZoneFillingAlgo->SetToolTip( _("Keep the cursor at its current location when zooming") );
+	
+	sbSizer2Adv->Add( m_UseOldZoneFillingAlgo, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	
+	m_DumpZonesWhenFilling = new wxCheckBox( this, wxID_ANY, _("Dump zone geometry to files when filling"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DumpZonesWhenFilling->SetToolTip( _("Use middle mouse button dragging to pan") );
+	
+	sbSizer2Adv->Add( m_DumpZonesWhenFilling, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	
+	
+	bRightSizer->Add( sbSizer2Adv, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerUpper->Add( bRightSizer, 0, wxALL|wxEXPAND, 5 );
@@ -203,6 +219,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	
 	// Connect Events
 	m_MiddleButtonPANOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnMiddleBtnPanEnbl ), NULL, this );
+	m_DumpZonesWhenFilling->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnMiddleBtnPanEnbl ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnOkClick ), NULL, this );
 }
@@ -211,6 +228,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::~DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE(
 {
 	// Disconnect Events
 	m_MiddleButtonPANOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnMiddleBtnPanEnbl ), NULL, this );
+	m_DumpZonesWhenFilling->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnMiddleBtnPanEnbl ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnOkClick ), NULL, this );
 	
