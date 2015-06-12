@@ -49,14 +49,6 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                       wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    // Open files can be used only outside a project, because opening a netlist
-    // which is not the project netlist is a non sense.
-    if( Kiface().IsSingle() )
-    {
-        m_mainToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
-                                KiBitmap( open_document_xpm ), LOAD_FILE_HELP );
-    }
-
     m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_xpm ), SAVE_HLP_MSG );
 
     m_mainToolBar->AddSeparator();
