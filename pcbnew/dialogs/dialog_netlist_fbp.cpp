@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -35,14 +35,6 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_Select_By_Timestamp->SetToolTip( _("Select how footprints are recognized:\nby their reference (U1, R3...) (normal setting)\nor their time stamp (special setting after a full schematic reannotation)") );
 	
 	bmodulesOptSizer->Add( m_Select_By_Timestamp, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	wxString m_cmpNameSourceOptChoices[] = { _("From netlist"), _("From separate .cmp file") };
-	int m_cmpNameSourceOptNChoices = sizeof( m_cmpNameSourceOptChoices ) / sizeof( wxString );
-	m_cmpNameSourceOpt = new wxRadioBox( this, wxID_ANY, _("Footprint Name Source"), wxDefaultPosition, wxDefaultSize, m_cmpNameSourceOptNChoices, m_cmpNameSourceOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_cmpNameSourceOpt->SetSelection( 0 );
-	m_cmpNameSourceOpt->SetToolTip( _("Source of footprints names for component:\n- the netlist (if you have filled the footprint field of each component  in schematic)\n- the .cmp file created by CvPcb") );
-	
-	bmodulesOptSizer->Add( m_cmpNameSourceOpt, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_ChangeExistingFootprintCtrlChoices[] = { _("Keep"), _("Change") };
 	int m_ChangeExistingFootprintCtrlNChoices = sizeof( m_ChangeExistingFootprintCtrlChoices ) / sizeof( wxString );

@@ -109,8 +109,6 @@ protected:
     PARAM_CFG_ARRAY   m_configSettings;         ///< List of Pcbnew configuration settings.
 
     wxString          m_lastNetListRead;        ///< Last net list read with relative path.
-    bool              m_useCmpFileForFpNames;   ///< is true, use the .cmp file from CvPcb, else use the netlist
-                                                // to know the footprint name of components.
 
     // The Tool Framework initalization
     void setupTools();
@@ -416,26 +414,6 @@ public:
      * @param aNetListFile - The last net list file with full path successfully read.
      */
     void SetLastNetListRead( const wxString& aNetListFile );
-
-    /**
-     * @return true if the .cmp file created by CvPcb should be used to know the
-     * footprint associated to components, false to use the netlist file only
-     */
-    bool GetUseCmpFileForFpNames() { return m_useCmpFileForFpNames; }
-
-    /**
-     * Set the default option to use or not the .cmp file craeted by CvPcb
-     * should be used to know the footprints associated to components when
-     * reading a netlist
-     * When the .cmp netlist is not used, footprint names are read from the netlist.
-     * This imply the user has filled the footprint fields in schematic
-     * @param aUseCmpfile = true to use the .cmp file,
-     *                      false to use the netlist file only
-     */
-    void SetUseCmpFileForFpNames( bool aUseCmpfile)
-    {
-        m_useCmpFileForFpNames = aUseCmpfile;
-    }
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;

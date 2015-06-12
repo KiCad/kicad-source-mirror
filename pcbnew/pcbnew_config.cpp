@@ -319,7 +319,6 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
 
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ), &m_lastNetListRead ) );
 
-    pca.push_back( new PARAM_CFG_BOOL( wxT( "UseCmpFile" ), &m_useCmpFileForFpNames, true ) );
     GetBoard()->GetDesignSettings().AppendConfigs( &pca );
 
     return pca;

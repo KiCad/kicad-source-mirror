@@ -75,14 +75,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     // Project settings are saved in the corresponding <board name>.pro file
     bool configChanged = lastNetlistName != GetLastNetListRead();
 
-    if( dlg.UseCmpFileForFpNames() != GetUseCmpFileForFpNames() )
-    {
-        SetUseCmpFileForFpNames( dlg.UseCmpFileForFpNames() );
-        configChanged = true;
-    }
-
-    if( configChanged
-      && !GetBoard()->GetFileName().IsEmpty()
+    if( configChanged && !GetBoard()->GetFileName().IsEmpty()
       && IsOK( NULL, _( "The project configuration has changed.  Do you want to save it?" ) ) )
     {
         wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
@@ -108,7 +101,6 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     bool tmp = m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l );
     m_rbSingleNets->SetSelection( tmp == 0 ? 0 : 1);
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
-    m_cmpNameSourceOpt->SetSelection( m_parent->GetUseCmpFileForFpNames() ? 1 : 0 );
     m_checkBoxSilentMode->SetValue( m_silentMode );
     m_checkBoxFullMessages->SetValue( m_reportAll );
 
@@ -158,14 +150,6 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 {
     wxString msg;
     wxString netlistFileName = m_NetlistFilenameCtrl->GetValue();
-    wxString cmpFileName;
-
-    if( UseCmpFileForFpNames() )
-    {
-        wxFileName fn = m_NetlistFilenameCtrl->GetValue();
-        fn.SetExt( ComponentFileExtension );
-        cmpFileName = fn.GetFullPath();
-    }
 
     // Give the user a chance to bail out when making changes from a netlist.
     if( !m_checkDryRun->GetValue() && !m_silentMode
@@ -180,23 +164,17 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
     m_MessageWindow->AppendText( msg );
 
-    if( !cmpFileName.IsEmpty() )
-    {
-        msg.Printf( _( "Using component footprint link file \"%s\".\n" ), GetChars( cmpFileName ) );
-        m_MessageWindow->AppendText( msg );
-    }
-
     if( m_Select_By_Timestamp->GetSelection() == 1 )
-    {
-        msg.Printf( _( "Using time stamps to select footprints in file \"%s\".\n" ),
-                    GetChars( cmpFileName ) );
-        m_MessageWindow->AppendText( msg );
-    }
+        msg = _( "Using time stamps to match components and footprints.\n" );
+    else
+        msg = _( "Using references to match components and footprints.\n" );
+
+    m_MessageWindow->AppendText( msg );
 
     WX_TEXT_CTRL_REPORTER reporter( m_MessageWindow );
     reporter.SetReportAll( m_reportAll );
 
-    m_parent->ReadPcbNetlist( netlistFileName, cmpFileName, &reporter,
+    m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, &reporter,
                               m_ChangeExistingFootprintCtrl->GetSelection() == 1,
                               m_DeleteBadTracks->GetSelection() == 1,
                               m_RemoveExtraFootprintsCtrl->GetSelection() == 1,
@@ -219,16 +197,8 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
     wxArrayString missing;
     std::vector <MODULE*> notInNetlist;
     wxString netlistFilename = m_NetlistFilenameCtrl->GetValue();
-    wxString cmpFilename;
 
-    if( UseCmpFileForFpNames() )
-    {
-        wxFileName fn = m_NetlistFilenameCtrl->GetValue();
-        fn.SetExt( ComponentFileExtension );
-        cmpFilename = fn.GetFullPath();
-    }
-
-    if( !verifyFootprints( netlistFilename, cmpFilename, duplicate, missing, notInNetlist ) )
+    if( !verifyFootprints( netlistFilename, wxEmptyString, duplicate, missing, notInNetlist ) )
         return;
 
     #define ERR_CNT_MAX 100 // Max number of errors to output in dialog

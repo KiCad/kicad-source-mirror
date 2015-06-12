@@ -320,7 +320,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hasAutoSave = true;
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
-    m_useCmpFileForFpNames = true;
 
     m_rotationAngle = 900;
 

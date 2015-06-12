@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,14 +48,6 @@ private:
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC* aDC, const wxString & aNetlistFullFilename );
     ~DIALOG_NETLIST();
-
-    // return true if the user choice is to use the .cmp file
-    // created by CvPcb to know footprint names associated to components
-    // and false to use the netlist only
-    bool UseCmpFileForFpNames()
-    {
-        return m_cmpNameSourceOpt->GetSelection() == 1;
-    }
 
 private:
     /**
