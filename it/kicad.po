@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-11 07:59+0100\n"
-"PO-Revision-Date: 2015-06-11 07:59+0100\n"
+"POT-Creation-Date: 2015-06-12 22:01+0100\n"
+"PO-Revision-Date: 2015-06-12 22:01+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -128,7 +128,7 @@ msgstr "Avvia Eeschema"
 msgid "Run LibEdit"
 msgstr "Avvia LibEdit"
 
-#: kicad/menubar.cpp:145 kicad/menubar.cpp:372 eeschema/menubar.cpp:470
+#: kicad/menubar.cpp:145 kicad/menubar.cpp:372 eeschema/menubar.cpp:477
 msgid "Run Pcbnew"
 msgstr "Avvia PcbNew"
 
@@ -337,12 +337,12 @@ msgstr "Apri il manuale utente di KiCad"
 
 #: kicad/menubar.cpp:417 pcbnew/tool_modview.cpp:194
 #: pcbnew/menubar_modedit.cpp:346 pcbnew/menubar_pcbframe.cpp:644
-#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:487
+#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:494
 #: eeschema/menubar_libedit.cpp:269
 msgid "&Getting Started in KiCad"
 msgstr "&Iniziare con KiCad"
 
-#: kicad/menubar.cpp:418 eeschema/menubar.cpp:488
+#: kicad/menubar.cpp:418 eeschema/menubar.cpp:495
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Apri  \"Iniziare con KiCad\", guida introduttiva"
 
@@ -356,7 +356,7 @@ msgstr "Informazioni sul manager dei progetti di KiCad"
 
 #: kicad/menubar.cpp:431 pcbnew/tool_modview.cpp:206
 #: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:655
-#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:499
+#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:506
 #: eeschema/menubar_libedit.cpp:283 cvpcb/menubar.cpp:135
 #: 3d-viewer/3d_toolbar.cpp:135 gerbview/menubar.cpp:236
 #: pagelayout_editor/menubar.cpp:163
@@ -373,13 +373,13 @@ msgid "&Preferences"
 msgstr "&Preferenze"
 
 #: kicad/menubar.cpp:434 pcbnew/menubar_pcbframe.cpp:662
-#: eeschema/menubar.cpp:504
+#: eeschema/menubar.cpp:511
 msgid "&Tools"
 msgstr "&Strumenti "
 
 #: kicad/menubar.cpp:435 pcbnew/tool_modview.cpp:209
 #: pcbnew/menubar_modedit.cpp:364 pcbnew/menubar_pcbframe.cpp:664
-#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:505
+#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:512
 #: eeschema/menubar_libedit.cpp:288 cvpcb/menubar.cpp:137
 #: gerbview/menubar.cpp:239 pagelayout_editor/menubar.cpp:165
 msgid "&Help"
@@ -451,8 +451,8 @@ msgstr ""
 msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
-#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:995 pcbnew/moduleframe.cpp:756
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1291 cvpcb/cvframe.cpp:702
+#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:994 pcbnew/moduleframe.cpp:756
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1317 cvpcb/cvframe.cpp:702
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -685,7 +685,7 @@ msgid "Templates path"
 msgstr "Percorso modelli"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:164
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:156
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:29
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:73
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:76
@@ -853,12 +853,12 @@ msgstr "Valore %s di %s"
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
 
-#: pcbnew/pcbframe.cpp:397 pcbnew/pcbframe.cpp:925 pcbnew/moduleframe.cpp:290
+#: pcbnew/pcbframe.cpp:396 pcbnew/pcbframe.cpp:924 pcbnew/moduleframe.cpp:290
 #: gerbview/gerbview_frame.cpp:146 gerbview/events_called_functions.cpp:318
 msgid "Visibles"
 msgstr "Visibili"
 
-#: pcbnew/pcbframe.cpp:582 eeschema/schframe.cpp:611
+#: pcbnew/pcbframe.cpp:581 eeschema/schframe.cpp:614
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -869,17 +869,17 @@ msgstr ""
 "\"%s\"\n"
 "prima di chiudere?"
 
-#: pcbnew/pcbframe.cpp:618
+#: pcbnew/pcbframe.cpp:617
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:655 pcbnew/hotkeys.cpp:175 pcbnew/moduleframe.cpp:684
+#: pcbnew/pcbframe.cpp:654 pcbnew/hotkeys.cpp:175 pcbnew/moduleframe.cpp:684
 #: cvpcb/class_DisplayFootprintsFrame.cpp:401
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
 
-#: pcbnew/pcbframe.cpp:999
+#: pcbnew/pcbframe.cpp:998
 msgid " [new file]"
 msgstr " [nuovo file]"
 
@@ -1533,7 +1533,7 @@ msgstr "Per&fetto su schermo"
 
 #: pcbnew/tool_modview.cpp:170 pcbnew/menubar_modedit.cpp:229
 #: pcbnew/menubar_pcbframe.cpp:341 eeschema/tool_viewlib.cpp:238
-#: eeschema/menubar.cpp:251 eeschema/menubar_libedit.cpp:176
+#: eeschema/menubar.cpp:243 eeschema/menubar_libedit.cpp:176
 msgid "&Redraw"
 msgstr "Aggio&rna"
 
@@ -1566,7 +1566,7 @@ msgstr "Informazioni su Pcbnew progettazione circuiti stampati"
 
 #: pcbnew/tool_modview.cpp:208 pcbnew/menubar_modedit.cpp:360
 #: pcbnew/menubar_pcbframe.cpp:657 eeschema/tool_viewlib.cpp:269
-#: eeschema/menubar.cpp:501 eeschema/menubar_libedit.cpp:285
+#: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:285
 msgid "&View"
 msgstr "&Visualizza"
 
@@ -1700,24 +1700,24 @@ msgstr "Pista dentro un testo"
 msgid "Pad inside a text"
 msgstr "Piazzola dentro un testo"
 
-#: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:241
+#: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:247
 #: gerbview/menubar.cpp:155 gerbview/menubar.cpp:157 gerbview/options.cpp:89
 #: gerbview/events_called_functions.cpp:381
 msgid "Hide &Layers Manager"
 msgstr "Nascondi &Gestione livelli"
 
-#: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:241
+#: pcbnew/pcbnew_config.cpp:80 pcbnew/dialogs/dialog_general_options.cpp:247
 #: gerbview/menubar.cpp:157 gerbview/options.cpp:89
 #: gerbview/events_called_functions.cpp:381
 msgid "Show &Layers Manager"
 msgstr "Mostra &Gestione livelli"
 
-#: pcbnew/pcbnew_config.cpp:90 pcbnew/dialogs/dialog_general_options.cpp:230
+#: pcbnew/pcbnew_config.cpp:90 pcbnew/dialogs/dialog_general_options.cpp:236
 msgid "Hide Microwave Toolbar"
 msgstr "Nascondi Barra strumenti Microonde"
 
 #: pcbnew/pcbnew_config.cpp:90 pcbnew/menubar_pcbframe.cpp:506
-#: pcbnew/dialogs/dialog_general_options.cpp:230
+#: pcbnew/dialogs/dialog_general_options.cpp:236
 msgid "Show Microwave Toolbar"
 msgstr "Mostra Barra strumenti Microonde"
 
@@ -1754,7 +1754,7 @@ msgstr ""
 msgid "Read Project File"
 msgstr "Leggi file progetto"
 
-#: pcbnew/pcbnew_config.cpp:221 pcbnew/pcbnew_config.cpp:499
+#: pcbnew/pcbnew_config.cpp:221 pcbnew/pcbnew_config.cpp:498
 #: gerbview/excellon_read_drill_file.cpp:199
 #, c-format
 msgid "File %s not found"
@@ -1764,11 +1764,11 @@ msgstr "File %s non trovato"
 msgid "Save Project File"
 msgstr "Salva file progetto"
 
-#: pcbnew/pcbnew_config.cpp:441
+#: pcbnew/pcbnew_config.cpp:440
 msgid "Save Macros File"
 msgstr "Salva file macro"
 
-#: pcbnew/pcbnew_config.cpp:489
+#: pcbnew/pcbnew_config.cpp:488
 msgid "Read Macros File"
 msgstr "Leggi file macro"
 
@@ -2202,9 +2202,9 @@ msgstr "Cambia larghezza pista"
 #: pcbnew/onrightclick.cpp:650 pcbnew/onrightclick.cpp:962
 #: pcbnew/onrightclick.cpp:1014
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:53
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
 #: common/dialogs/dialog_env_var_config_base.cpp:70
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:254
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
@@ -2847,7 +2847,9 @@ msgstr ""
 msgid "cannot handle module text type %s"
 msgstr "Imposssibile elaborare il tipo di testo %s"
 
-#: pcbnew/pcb_parser.cpp:2413
+#: pcbnew/pcb_parser.cpp:2315 pcbnew/pcb_parser.cpp:2321
+#: pcbnew/pcb_parser.cpp:2421 pcbnew/pcb_parser.cpp:2503
+#: pcbnew/pcb_parser.cpp:2567
 #, c-format
 msgid ""
 "invalid net ID in\n"
@@ -2860,7 +2862,7 @@ msgstr ""
 "linea: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_parser.cpp:2862
+#: pcbnew/pcb_parser.cpp:2878
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -3337,7 +3339,7 @@ msgstr "Unità in pollici"
 msgid "Units in millimeters"
 msgstr "Unità in millimetri"
 
-#: pcbnew/tool_pcb.cpp:344 eeschema/tool_lib.cpp:240 eeschema/tool_sch.cpp:298
+#: pcbnew/tool_pcb.cpp:344 eeschema/tool_lib.cpp:240 eeschema/tool_sch.cpp:301
 #: cvpcb/class_DisplayFootprintsFrame.cpp:192 gerbview/toolbars_gerber.cpp:167
 msgid "Change cursor shape"
 msgstr "Cambia dimensione puntatore"
@@ -3768,17 +3770,17 @@ msgid "Select default parameters values in Footprint Editor"
 msgstr "Seleziona i valori dei parametri predefiniti nell'editor impronte"
 
 #: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:656
-#: eeschema/menubar.cpp:500 eeschema/menubar_libedit.cpp:284
+#: eeschema/menubar.cpp:507 eeschema/menubar_libedit.cpp:284
 msgid "&Edit"
 msgstr "&Modifica"
 
 #: pcbnew/menubar_modedit.cpp:361 pcbnew/menubar_pcbframe.cpp:658
-#: eeschema/menubar.cpp:502 eeschema/menubar_libedit.cpp:286
+#: eeschema/menubar.cpp:509 eeschema/menubar_libedit.cpp:286
 msgid "&Place"
 msgstr "&Inserisci"
 
 #: pcbnew/menubar_modedit.cpp:362 pcbnew/menubar_pcbframe.cpp:660
-#: eeschema/menubar.cpp:503 eeschema/menubar_libedit.cpp:287
+#: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:287
 msgid "P&references"
 msgstr "&Opzioni"
 
@@ -4023,7 +4025,7 @@ msgstr "Segmento"
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Elemento grafico: %s, lunghezza %s su %s"
 
-#: pcbnew/pcbnew.cpp:323
+#: pcbnew/pcbnew.cpp:326
 msgid ""
 "You have run Pcbnew for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -4043,7 +4045,7 @@ msgstr ""
 "Consultare la sezione \"Tabella librerie impronte\" della documentazione di "
 "CvPcb per ulteriori informazioni."
 
-#: pcbnew/pcbnew.cpp:336 cvpcb/cvpcb.cpp:184
+#: pcbnew/pcbnew.cpp:339 cvpcb/cvpcb.cpp:184
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -4881,19 +4883,19 @@ msgstr "Ma&cro"
 msgid "Macros save/read operations"
 msgstr "Operazioni di salvataggio/caricamento macro"
 
-#: pcbnew/menubar_pcbframe.cpp:587 eeschema/menubar.cpp:402
+#: pcbnew/menubar_pcbframe.cpp:587 eeschema/menubar.cpp:409
 msgid "&Save Preferences"
 msgstr "&Salva le preferenze"
 
-#: pcbnew/menubar_pcbframe.cpp:588 eeschema/menubar.cpp:403
+#: pcbnew/menubar_pcbframe.cpp:588 eeschema/menubar.cpp:410
 msgid "Save application preferences"
 msgstr "Salva le preferenze dell'applicazione"
 
-#: pcbnew/menubar_pcbframe.cpp:592 eeschema/menubar.cpp:408
+#: pcbnew/menubar_pcbframe.cpp:592 eeschema/menubar.cpp:415
 msgid "Load Prefe&rences"
 msgstr "Carica le p&referenze"
 
-#: pcbnew/menubar_pcbframe.cpp:593 eeschema/menubar.cpp:409
+#: pcbnew/menubar_pcbframe.cpp:593 eeschema/menubar.cpp:416
 msgid "Load application preferences"
 msgstr "Carica le preferenze dell'applicazione"
 
@@ -5251,12 +5253,12 @@ msgstr "Mostra contorni in modalità schizzo"
 msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr "Attenzione: Lo strato superiore e quello inferiore sono identici"
 
-#: pcbnew/netlist.cpp:82 pcbnew/dialogs/dialog_netlist.cpp:427
+#: pcbnew/netlist.cpp:82 pcbnew/dialogs/dialog_netlist.cpp:397
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
 msgstr "Impossibile aprire il file netlist \"%s\"."
 
-#: pcbnew/netlist.cpp:83 pcbnew/dialogs/dialog_netlist.cpp:428
+#: pcbnew/netlist.cpp:83 pcbnew/dialogs/dialog_netlist.cpp:398
 msgid "Netlist Load Error."
 msgstr "Errore caricamento netlist."
 
@@ -5269,12 +5271,12 @@ msgstr ""
 "Errore nel caricamento della netlist.\n"
 "%s"
 
-#: pcbnew/netlist.cpp:94 pcbnew/dialogs/dialog_netlist.cpp:438
+#: pcbnew/netlist.cpp:94 pcbnew/dialogs/dialog_netlist.cpp:408
 #: cvpcb/cvframe.cpp:749
 msgid "Netlist Load Error"
 msgstr "Errore nel caricamento netlist"
 
-#: pcbnew/netlist.cpp:155 pcbnew/dialogs/dialog_netlist.cpp:213
+#: pcbnew/netlist.cpp:155 pcbnew/dialogs/dialog_netlist.cpp:191
 msgid "No footprints"
 msgstr "Nessuna impronta"
 
@@ -5289,10 +5291,11 @@ msgstr "Nessuna impronta definita per il componente \"%s\".\n"
 
 #: pcbnew/netlist.cpp:247
 #, c-format
-msgid "* Warning: component '%s' has footprint '%s' and should be '%s'\n"
+msgid ""
+"* Warning: component '%s': board footprint '%s', netlist footprint '%s'\n"
 msgstr ""
-"* Attenzione: il componente \"%s\" ha impronta \"%s\" e dovrebbe essere \"%s"
-"\"\n"
+"* Attenzione: componente \"%s\": impronta scheda \"%s\", impronta netlist "
+"\"%s\"\n"
 
 #: pcbnew/netlist.cpp:276
 #, c-format
@@ -5711,7 +5714,7 @@ msgstr "Editor scheda"
 
 #: pcbnew/hotkeys.cpp:340
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
-#: eeschema/tool_sch.cpp:162
+#: eeschema/tool_sch.cpp:165
 msgid "Footprint Editor"
 msgstr "Editor impronte"
 
@@ -6922,7 +6925,7 @@ msgstr "Tracciatore"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:111
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:101
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:93
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:180
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_find_base.cpp:45
@@ -6941,7 +6944,7 @@ msgid "Close"
 msgstr "Chiudi"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:120
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:170
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:162
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:190
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
 #: pcbnew/dialogs/dialog_plot_base.cpp:367
@@ -8635,45 +8638,21 @@ msgstr ""
 "riannotazione completa dello schema)"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
-msgid "From netlist"
-msgstr "Dalla netlist"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
-msgid "From separate .cmp file"
-msgstr "Da file .cmp separato"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
-msgid "Footprint Name Source"
-msgstr "Nome sorgente impronta"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
-msgid ""
-"Source of footprints names for component:\n"
-"- the netlist (if you have filled the footprint field of each component  in "
-"schematic)\n"
-"- the .cmp file created by CvPcb"
-msgstr ""
-"Sorgenti di nomi di impronte per componente sono:\n"
-" - la netlist (se si è riempito il campo impronta in ogni componente dello "
-"schema elettrico)\n"
-" - il file .cmp creato da CvPcb"
-
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:53
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:61
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
 msgid "Keep"
 msgstr "Mantieni"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:39
 msgid "Change"
 msgstr "Cambia"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:49
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
 msgid "Exchange Footprint"
 msgstr "Scambia impronta"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:51
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
 msgid ""
 "Keep or change an existing footprint when the netlist gives a different "
 "footprint"
@@ -8681,21 +8660,21 @@ msgstr ""
 "Mantiene o cambia un'impronta esistente quando la netlist indica un'impronta "
 "diversa"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
 msgid "Unconnected Tracks"
 msgstr "Piste non collegate"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
 msgid "Keep or delete bad tracks after a netlist change"
 msgstr ""
 "Mantiene o cancella le piste risultanti errate dopo le modifiche introdotte "
 "da una Lista componenti differente"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 msgid "Extra Footprints"
 msgstr "Impronte extra"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:73
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
@@ -8703,46 +8682,46 @@ msgstr ""
 "Rimuove le impronte trovate sulla scheda ma non nella netlist.\n"
 "Nota: solo le impronte non bloccate verranno rimosse."
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:79
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
 msgid "Single Pad Nets"
 msgstr "Collegamenti a singola piazzola"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:95
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
 msgid "Read Current Netlist"
 msgstr "Leggi netlist corrente"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:97
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:89
 msgid "Read the current netlist and update connections and connectivity info"
 msgstr "Verifica la corrente Lista componenti e aggiorna i collegamenti "
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:104
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
 msgid "Test Footprints"
 msgstr "Impronte di test"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:105
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:97
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr ""
 "Leggi il file netlist corrente ed elenca le impronte mancanti e quelle extra"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:109
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:101
 msgid "Rebuild Board Connectivity"
 msgstr "Aggiorna collegamenti scheda"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:110
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:102
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr ""
 "Aggiorna le ratsnest della scheda (utile dopo una modifica manuale del nome "
 "collegamento piazzola)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:114
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:106
 msgid "Save Messages to File"
 msgstr "Salva i messaggi in un file"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:129
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:121
 msgid "Dry run. Only report changes in message panel"
 msgstr "Esecuzione di prova. Cambiamenti nel pannello messaggi"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:130
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:122
 msgid ""
 "Dry Run:\n"
 "The netlist is read, but no change is actually made on board.\n"
@@ -8754,12 +8733,12 @@ msgstr ""
 "I potenziali cambiamenti sono riportati nel pannello messaggi, per "
 "informazione"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:134
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:126
 #: eeschema/dialogs/dialog_annotate_base.cpp:184
 msgid "Silent mode"
 msgstr "Modalità silenziosa"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:135
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:127
 msgid ""
 "Silent mode:\n"
 "Do not show the warning message before reading the netlist"
@@ -8767,11 +8746,11 @@ msgstr ""
 "Modalità silenziosa\n"
 "Non mostra i messaggi di avvertimento prima di leggere la netlist"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:139
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:131
 msgid "Display all messages"
 msgstr "Mostra tutti i messaggi"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:141
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:133
 msgid ""
 "Messages filter:\n"
 "If checked: show all messages when reading the netlist\n"
@@ -8781,7 +8760,7 @@ msgstr ""
 "Se selezionata: mostra tutti i messaggi durante la lettura della netlist\n"
 "Se non selezionata: mostra solo i messaggi di errore e di avvertimento"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:154
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:146
 msgid "Netlist File:"
 msgstr "File netlist:"
 
@@ -9218,6 +9197,7 @@ msgid "Do not center and warp cursor on zoom"
 msgstr "Non centrare e deformare il puntatore con lo zoom"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:159
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:185
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:183
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
@@ -9231,6 +9211,7 @@ msgid "Use middle mouse button to pan"
 msgstr "Abilita rotellina mouse per panoramica "
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:164
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:190
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:188
 msgid "Use middle mouse button dragging to pan"
 msgstr "Usare la rotellina del mouse per panoramica"
@@ -9256,6 +9237,18 @@ msgstr "Panoramica spostando oggetto"
 msgid "Allows auto pan when creating a track, or moving an item."
 msgstr ""
 "Abilita centratura automatica quando si creano piste o muovono elementi"
+
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:182
+msgid "Advanced/Developer"
+msgstr "Avanzato/Sviluppatore"
+
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:184
+msgid "Use legacy zone filling algorithm"
+msgstr "Usa algoritmo di riempimento zona tradizionale"
+
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:189
+msgid "Dump zone geometry to files when filling"
+msgstr "Scarica la geometria di zona su file durante il riempimento"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:19
 msgid "File name:"
@@ -9318,15 +9311,15 @@ msgstr ""
 msgid "Error : you must choose a layer"
 msgstr "Errore: devi scegliere uno strato"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:86
+#: pcbnew/dialogs/dialog_netlist.cpp:79
 msgid "The project configuration has changed.  Do you want to save it?"
 msgstr "La configurazione del progetto è stata cambiata. Salvarla?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:147
+#: pcbnew/dialogs/dialog_netlist.cpp:139
 msgid "Select Netlist"
 msgstr "Seleziona netlist"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:173
+#: pcbnew/dialogs/dialog_netlist.cpp:157
 msgid ""
 "The changes made by reading the netlist cannot be undone.  Are you sure you "
 "want to read the netlist?"
@@ -9334,68 +9327,66 @@ msgstr ""
 "I cambiamenti effettuati leggendo la netlist non possono essere annullati. "
 "Sicuri di voler leggere la netlist?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:180
+#: pcbnew/dialogs/dialog_netlist.cpp:164
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Lettura file netlist \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:185
-#, c-format
-msgid "Using component footprint link file \"%s\".\n"
-msgstr "Uso del file di collegamento impronte componenti \"%s\".\n"
-
-#: pcbnew/dialogs/dialog_netlist.cpp:191
-#, c-format
-msgid "Using time stamps to select footprints in file \"%s\".\n"
+#: pcbnew/dialogs/dialog_netlist.cpp:168
+msgid "Using time stamps to match components and footprints.\n"
 msgstr ""
-"Uso delle marcature temporali per selezionare un'impronta nel file \"%s\".\n"
+"Uso delle marcature temporali per associare le impronte ai componenti.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:245
+#: pcbnew/dialogs/dialog_netlist.cpp:170
+msgid "Using references to match components and footprints.\n"
+msgstr "Uso dei riferimenti per associare le impronte ai componenti.\n"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:215
 msgid "No duplicate."
 msgstr "Nessun duplicato."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:248
+#: pcbnew/dialogs/dialog_netlist.cpp:218
 msgid "Duplicates:"
 msgstr "Duplicati:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:272
+#: pcbnew/dialogs/dialog_netlist.cpp:242
 msgid "No missing footprints."
 msgstr "Nessuna impronta mancante."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:275
+#: pcbnew/dialogs/dialog_netlist.cpp:245
 msgid "Missing:"
 msgstr "Mancanti:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:291
+#: pcbnew/dialogs/dialog_netlist.cpp:261
 msgid "No extra footprints."
 msgstr "Nessuna impronta extra."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:294
+#: pcbnew/dialogs/dialog_netlist.cpp:264
 msgid "Not in Netlist:"
 msgstr "Assente nella netlist:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:319
+#: pcbnew/dialogs/dialog_netlist.cpp:289
 msgid "Too many errors: some are skipped"
 msgstr "Troppi errori: alcuni verranno saltati"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:323
+#: pcbnew/dialogs/dialog_netlist.cpp:293
 msgid "Check footprints"
 msgstr "Controllo impronte"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:367
+#: pcbnew/dialogs/dialog_netlist.cpp:337
 msgid "Save contents of message window"
 msgstr "Salva i contenuti della finestra messaggi"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:384
+#: pcbnew/dialogs/dialog_netlist.cpp:354
 #, c-format
 msgid "Cannot write message contents to file \"%s\"."
 msgstr "Impossibile scrivere i messaggi nel file file \"%s\"."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:386
+#: pcbnew/dialogs/dialog_netlist.cpp:356
 msgid "File Write Error"
 msgstr "Errore scrittura file"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:437
+#: pcbnew/dialogs/dialog_netlist.cpp:407
 #, c-format
 msgid ""
 "Error loading netlist file:\n"
@@ -12873,12 +12864,12 @@ msgstr ""
 "Impossibile ottenere/scaricare i dati json da: \"%s\"\n"
 "Motivo: \"%s\""
 
-#: common/gestfich.cpp:227
+#: common/gestfich.cpp:226
 #, c-format
 msgid "Command <%s> could not found"
 msgstr "Comando \"%s\" non trovato"
 
-#: common/gestfich.cpp:422
+#: common/gestfich.cpp:421
 #, c-format
 msgid ""
 "Problem while running the PDF viewer\n"
@@ -12887,7 +12878,7 @@ msgstr ""
 "Problema eseguendo il visualizzare il PDF\n"
 "Il comando è \"%s\""
 
-#: common/gestfich.cpp:430
+#: common/gestfich.cpp:429
 #, c-format
 msgid "Unable to find a PDF viewer for <%s>"
 msgstr "Impossibile trovare un visualizzatore PDF per \"%s\""
@@ -14359,6 +14350,27 @@ msgstr "Aggiungi componente"
 msgid "Add power"
 msgstr "Aggiungi alimentazione"
 
+#: eeschema/netform.cpp:109
+msgid "Run command:"
+msgstr "Esegui comando:"
+
+#: eeschema/netform.cpp:113
+#, c-format
+msgid "Command error. Return code %d"
+msgstr "Errore comando. Codice restituito %d"
+
+#: eeschema/netform.cpp:115
+msgid "Success"
+msgstr "Successo"
+
+#: eeschema/netform.cpp:121
+msgid "Info messages:"
+msgstr "Messaggi informativi:"
+
+#: eeschema/netform.cpp:129
+msgid "Error messages:"
+msgstr "Messaggi d'errore:"
+
 #: eeschema/sch_collectors.cpp:432
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
@@ -14492,20 +14504,20 @@ msgstr "Unità %c"
 msgid "Close schematic component viewer"
 msgstr "Chiudu visualizzatore componente dello schema"
 
-#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:481
+#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:488
 msgid "Eesc&hema Manual"
 msgstr "Manuale di Eesc&hema"
 
-#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:482
+#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:489
 msgid "Open Eeschema manual"
 msgstr "Apri il manuale di Eeschema"
 
-#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:494
+#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:501
 #: eeschema/menubar_libedit.cpp:278
 msgid "&About Eeschema"
 msgstr "&Informazioni su Eeschema"
 
-#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:495
+#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:502
 #: eeschema/menubar_libedit.cpp:279
 msgid "About Eeschema schematic designer"
 msgstr "Informazioni sulla creazione schemi elettrici con Eeschema"
@@ -14526,7 +14538,7 @@ msgstr "Modifica etichetta gerarchica"
 msgid "Edit Image"
 msgstr "Modifica immagine"
 
-#: eeschema/onrightclick.cpp:196
+#: eeschema/onrightclick.cpp:196 eeschema/menubar.cpp:258
 msgid "Leave Sheet"
 msgstr "Esci dal foglio"
 
@@ -14999,158 +15011,162 @@ msgstr "Trova e &Sostituisci"
 msgid "Import Footprint Selection"
 msgstr "Importa selezione impronte"
 
-#: eeschema/menubar.cpp:247
+#: eeschema/menubar.cpp:251
 msgid "Show &Hierarchical Navigator"
 msgstr "Mostra navigatore &Gerarchia schema"
 
-#: eeschema/menubar.cpp:248
+#: eeschema/menubar.cpp:252
 msgid "Navigate hierarchical sheets"
 msgstr "Esplora Gerarchia dello schema"
 
 #: eeschema/menubar.cpp:257
+msgid "&Leave Sheet"
+msgstr "Esci da&l foglio"
+
+#: eeschema/menubar.cpp:264
 msgid "&Component"
 msgstr "&Componente"
 
-#: eeschema/menubar.cpp:263
+#: eeschema/menubar.cpp:270
 msgid "&Power Port"
 msgstr "Connessione& di alimentazione"
 
-#: eeschema/menubar.cpp:269
+#: eeschema/menubar.cpp:276
 msgid "&Wire"
 msgstr "&Filo"
 
-#: eeschema/menubar.cpp:275
+#: eeschema/menubar.cpp:282
 msgid "&Bus"
 msgstr "&Bus"
 
-#: eeschema/menubar.cpp:281
+#: eeschema/menubar.cpp:288
 msgid "Wire to Bus &Entry"
 msgstr "&Elemento da filo a bus"
 
-#: eeschema/menubar.cpp:287
+#: eeschema/menubar.cpp:294
 msgid "Bus &to Bus Entry"
 msgstr "Elemen&to da bus a bus "
 
-#: eeschema/menubar.cpp:293
+#: eeschema/menubar.cpp:300
 msgid "&No Connect Flag"
 msgstr "Indicatore di &non connessione "
 
-#: eeschema/menubar.cpp:297
+#: eeschema/menubar.cpp:304
 msgid "&Junction"
 msgstr "&Giunzione"
 
-#: eeschema/menubar.cpp:303
+#: eeschema/menubar.cpp:310
 msgid "&Label"
 msgstr "&Etichetta"
 
-#: eeschema/menubar.cpp:309
+#: eeschema/menubar.cpp:316
 msgid "Gl&obal Label"
 msgstr "Etichetta gl&obale "
 
-#: eeschema/menubar.cpp:317
+#: eeschema/menubar.cpp:324
 msgid "&Hierarchical Label"
 msgstr "Etichetta gerarc&hica"
 
-#: eeschema/menubar.cpp:324
+#: eeschema/menubar.cpp:331
 msgid "Hierarchical &Sheet"
 msgstr "&Foglio gerarchico"
 
-#: eeschema/menubar.cpp:332
+#: eeschema/menubar.cpp:339
 msgid "I&mport Hierarchical Label"
 msgstr "I&mporta etichetta gerarchica"
 
-#: eeschema/menubar.cpp:338
+#: eeschema/menubar.cpp:345
 msgid "Hierarchical Pi&n to Sheet"
 msgstr "Aggiungi pi&n gerarchico al foglio"
 
-#: eeschema/menubar.cpp:344
+#: eeschema/menubar.cpp:351
 msgid "Graphic Pol&yline"
 msgstr "&Polilinea grafica"
 
-#: eeschema/menubar.cpp:350
+#: eeschema/menubar.cpp:357
 msgid "&Graphic Text"
 msgstr "Testo &grafico"
 
-#: eeschema/menubar.cpp:357
+#: eeschema/menubar.cpp:364
 msgid "&Image"
 msgstr "&Immagine"
 
-#: eeschema/menubar.cpp:367 eeschema/menubar_libedit.cpp:230
+#: eeschema/menubar.cpp:374 eeschema/menubar_libedit.cpp:230
 msgid "Component &Libraries"
 msgstr "&Librerie componenti"
 
-#: eeschema/menubar.cpp:368 eeschema/menubar_libedit.cpp:231
+#: eeschema/menubar.cpp:375 eeschema/menubar_libedit.cpp:231
 msgid "Configure component libraries and paths"
 msgstr "Configura librerie componenti e percorsi"
 
-#: eeschema/menubar.cpp:374 eeschema/menubar_libedit.cpp:244
+#: eeschema/menubar.cpp:381 eeschema/menubar_libedit.cpp:244
 msgid "Set &Colors Scheme"
 msgstr "Imposta schema &colori"
 
-#: eeschema/menubar.cpp:375 eeschema/menubar_libedit.cpp:245
+#: eeschema/menubar.cpp:382 eeschema/menubar_libedit.cpp:245
 msgid "Set color preferences"
 msgstr "Imposta le preferenze colori"
 
-#: eeschema/menubar.cpp:385
+#: eeschema/menubar.cpp:392
 msgid "Schematic Editor &Options"
 msgstr "&Opzioni editor degli schemi"
 
-#: eeschema/menubar.cpp:386
+#: eeschema/menubar.cpp:393
 msgid "Set Eeschema preferences"
 msgstr "Imposta le preferenze di Eeschema"
 
-#: eeschema/menubar.cpp:417
+#: eeschema/menubar.cpp:424
 msgid "Library &Editor"
 msgstr "Editor di libreri&e"
 
-#: eeschema/menubar.cpp:422
+#: eeschema/menubar.cpp:429
 msgid "Library &Browser"
 msgstr "Esplora &librerie"
 
-#: eeschema/menubar.cpp:427
+#: eeschema/menubar.cpp:434
 msgid "&Rescue Cached Components"
 msgstr "&Recupera componenti in cache"
 
-#: eeschema/menubar.cpp:428
+#: eeschema/menubar.cpp:435
 msgid ""
 "Find old components in the project cache and rescue them to a new library"
 msgstr ""
 "Trova vecchi componenti nella cache del progetto e li recupera in una nuova "
 "libreria"
 
-#: eeschema/menubar.cpp:435
+#: eeschema/menubar.cpp:442
 msgid "&Annotate Schematic"
 msgstr "&Annota schema"
 
-#: eeschema/menubar.cpp:441
+#: eeschema/menubar.cpp:448
 msgid "Electrical Rules &Checker"
 msgstr "&Controllo Regole Elettriche (ERC)"
 
-#: eeschema/menubar.cpp:442 eeschema/tool_sch.cpp:146
+#: eeschema/menubar.cpp:449 eeschema/tool_sch.cpp:149
 msgid "Perform electrical rules check"
 msgstr "Esegui un controllo regole elettriche"
 
-#: eeschema/menubar.cpp:447
+#: eeschema/menubar.cpp:454
 msgid "Generate &Netlist File"
 msgstr "Genera file &netlist"
 
-#: eeschema/menubar.cpp:448
+#: eeschema/menubar.cpp:455
 msgid "Generate the component netlist file"
 msgstr "Genera il file elenco dei collegamenti componente (Netlist)"
 
-#: eeschema/menubar.cpp:453
+#: eeschema/menubar.cpp:460
 msgid "Generate Bill of &Materials"
 msgstr "Genera la distinta &materiali"
 
-#: eeschema/menubar.cpp:462
+#: eeschema/menubar.cpp:469
 msgid "A&ssign Component Footprint"
 msgstr "A&ssegna impronta al componente"
 
-#: eeschema/menubar.cpp:463
+#: eeschema/menubar.cpp:470
 msgid "Run CvPcb"
 msgstr "Avvia CvPcb"
 
-#: eeschema/menubar.cpp:469
+#: eeschema/menubar.cpp:476
 msgid "&Layout Printed Circuit Board"
 msgstr "Disposi&zione circuito stampato"
 
@@ -15982,7 +15998,7 @@ msgstr ""
 msgid "Show pin table"
 msgstr "Mostra tabella pin"
 
-#: eeschema/tool_lib.cpp:229 eeschema/tool_sch.cpp:286
+#: eeschema/tool_lib.cpp:229 eeschema/tool_sch.cpp:289
 #: gerbview/toolbars_gerber.cpp:151
 msgid "Turn grid off"
 msgstr "Visualizzazione griglia "
@@ -16439,39 +16455,43 @@ msgstr "Trova e sostituisci testo"
 msgid "Navigate schematic hierarchy"
 msgstr "Esplora gerarchia dello schema"
 
-#: eeschema/tool_sch.cpp:149
+#: eeschema/tool_sch.cpp:132
+msgid "Leave sheet"
+msgstr "Esci dal foglio"
+
+#: eeschema/tool_sch.cpp:152
 msgid "Generate netlist"
 msgstr "Genera netlist"
 
-#: eeschema/tool_sch.cpp:167
+#: eeschema/tool_sch.cpp:170
 msgid "Run CvPcb to associate components and footprints"
 msgstr "Avvia CvPcb per associare le impronte ai componenti"
 
-#: eeschema/tool_sch.cpp:171
+#: eeschema/tool_sch.cpp:174
 msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Avvia PcbNew per la creazione del circuito stampato"
 
-#: eeschema/tool_sch.cpp:203
+#: eeschema/tool_sch.cpp:206
 msgid "Ascend/descend hierarchy"
 msgstr "Gerarchia ascendente o discendente"
 
-#: eeschema/tool_sch.cpp:259 eeschema/help_common_strings.h:90
+#: eeschema/tool_sch.cpp:262 eeschema/help_common_strings.h:90
 msgid "Add bitmap image"
 msgstr "Aggiungi immagine bitmap"
 
-#: eeschema/tool_sch.cpp:290
+#: eeschema/tool_sch.cpp:293
 msgid "Set unit to inch"
 msgstr "Unità in pollici"
 
-#: eeschema/tool_sch.cpp:294
+#: eeschema/tool_sch.cpp:297
 msgid "Set unit to mm"
 msgstr "Unità in millimetri"
 
-#: eeschema/tool_sch.cpp:303 eeschema/schframe.cpp:769
+#: eeschema/tool_sch.cpp:306 eeschema/schframe.cpp:772
 msgid "Show hidden pins"
 msgstr "Mostra piedini nascosti"
 
-#: eeschema/tool_sch.cpp:308
+#: eeschema/tool_sch.cpp:311
 msgid "HV orientation for wires and bus"
 msgstr "Orientamento per fili e bus"
 
@@ -16667,40 +16687,40 @@ msgstr "Centro cerchio (%s, %s), raggio %s"
 msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
-#: eeschema/schframe.cpp:758
+#: eeschema/schframe.cpp:761
 msgid "Draw wires and buses in any direction"
 msgstr "Disegna fili e bus in ogni direzione"
 
-#: eeschema/schframe.cpp:759
+#: eeschema/schframe.cpp:762
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 
-#: eeschema/schframe.cpp:768
+#: eeschema/schframe.cpp:771
 msgid "Do not show hidden pins"
 msgstr "Non mostrare i piedini nascosti"
 
-#: eeschema/schframe.cpp:873
+#: eeschema/schframe.cpp:899
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/schframe.cpp:892
+#: eeschema/schframe.cpp:918
 msgid "New Schematic"
 msgstr "Nuovo schema"
 
-#: eeschema/schframe.cpp:905
+#: eeschema/schframe.cpp:931
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
-#: eeschema/schframe.cpp:925
+#: eeschema/schframe.cpp:951
 msgid "Open Schematic"
 msgstr "Apri schema"
 
-#: eeschema/schframe.cpp:1066
+#: eeschema/schframe.cpp:1092
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1294
+#: eeschema/schframe.cpp:1320
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -17378,41 +17398,37 @@ msgstr "PosY"
 msgid "The Y coordinate of the text relative to the component"
 msgstr "Coordinate Y del testo relativo al componente"
 
-#: eeschema/dialogs/dialog_bom.cpp:319
+#: eeschema/dialogs/dialog_bom.cpp:321
 #, c-format
 msgid "Failed to open file '%s'"
 msgstr "Impossibile aprire il file \"%s\""
 
-#: eeschema/dialogs/dialog_bom.cpp:381 eeschema/dialogs/dialog_netlist.cpp:536
-msgid "Save Netlist File"
-msgstr "Salva file netlist"
-
-#: eeschema/dialogs/dialog_bom.cpp:443
+#: eeschema/dialogs/dialog_bom.cpp:448
 msgid "Plugin name in plugin list"
 msgstr "Nome plugin nell'elenco plugin"
 
-#: eeschema/dialogs/dialog_bom.cpp:444
+#: eeschema/dialogs/dialog_bom.cpp:449
 msgid "Plugin name"
 msgstr "Nome plugin"
 
-#: eeschema/dialogs/dialog_bom.cpp:454
+#: eeschema/dialogs/dialog_bom.cpp:459
 msgid "This name already exists. Abort"
 msgstr "Questo nome esiste già. Interrotto"
 
-#: eeschema/dialogs/dialog_bom.cpp:482 eeschema/dialogs/dialog_netlist.cpp:840
+#: eeschema/dialogs/dialog_bom.cpp:487 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "File di plugin:"
 
-#: eeschema/dialogs/dialog_bom.cpp:566
+#: eeschema/dialogs/dialog_bom.cpp:571
 msgid "Plugin file name not found. Cannot edit plugin file"
 msgstr ""
 "Nome file plugin non trovato. Impossibile modificare il file del plugin"
 
-#: eeschema/dialogs/dialog_bom.cpp:576
+#: eeschema/dialogs/dialog_bom.cpp:581
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Nessun editor di testo selezionato. Sceglierne uno."
 
-#: eeschema/dialogs/dialog_bom.cpp:581
+#: eeschema/dialogs/dialog_bom.cpp:586
 msgid "Bom Generation Help"
 msgstr "Aiuto generazione distinta"
 
@@ -17675,6 +17691,10 @@ msgstr "Comando netlist:"
 #: eeschema/dialogs/dialog_netlist.cpp:456
 msgid "Title:"
 msgstr "Titolo:"
+
+#: eeschema/dialogs/dialog_netlist.cpp:536
+msgid "Save Netlist File"
+msgstr "Salva file netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:571
 #, c-format
@@ -18706,7 +18726,7 @@ msgid "Connection type:"
 msgstr "Tipo di connessione:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:22
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:94
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:96
 msgid "General Settings"
 msgstr "Opzioni generali"
 
@@ -18897,43 +18917,43 @@ msgstr "&Informazioni su CvPcb"
 msgid "About CvPcb footprint selector"
 msgstr "Informazioni sul selezionatore di impronte CvPcb"
 
-#: cvpcb/tool_cvpcb.cpp:65
+#: cvpcb/tool_cvpcb.cpp:57
 msgid "Edit footprint library table"
 msgstr "Modifica tabella librerie impronte"
 
-#: cvpcb/tool_cvpcb.cpp:70
+#: cvpcb/tool_cvpcb.cpp:62
 msgid "View selected footprint"
 msgstr "Mostra impronta selezionata"
 
-#: cvpcb/tool_cvpcb.cpp:75
+#: cvpcb/tool_cvpcb.cpp:67
 msgid "Select previous unlinked component"
 msgstr "Seleziona il precedente componente libero"
 
-#: cvpcb/tool_cvpcb.cpp:79
+#: cvpcb/tool_cvpcb.cpp:71
 msgid "Select next unlinked component"
 msgstr "Seleziona il successivo componente libero"
 
-#: cvpcb/tool_cvpcb.cpp:84
+#: cvpcb/tool_cvpcb.cpp:76
 msgid "Perform automatic footprint association"
 msgstr "Esegui automaticamente associazione impronte"
 
-#: cvpcb/tool_cvpcb.cpp:88
+#: cvpcb/tool_cvpcb.cpp:80
 msgid "Delete all associations (links)"
 msgstr "Cancella tutte le associazioni"
 
-#: cvpcb/tool_cvpcb.cpp:93
+#: cvpcb/tool_cvpcb.cpp:85
 msgid "Display footprint documentation"
 msgstr "Mostra le specifiche del componente"
 
-#: cvpcb/tool_cvpcb.cpp:100
+#: cvpcb/tool_cvpcb.cpp:92
 msgid "Filter footprint list by keywords"
 msgstr "Filtra lista componenti per parola chiave"
 
-#: cvpcb/tool_cvpcb.cpp:107
+#: cvpcb/tool_cvpcb.cpp:99
 msgid "Filter footprint list by pin count"
 msgstr "Filtra lista componenti per riferimento"
 
-#: cvpcb/tool_cvpcb.cpp:113
+#: cvpcb/tool_cvpcb.cpp:105
 msgid "Filter footprint list by library"
 msgstr "Filtra lista componenti per libreria"
 
@@ -22131,7 +22151,7 @@ msgstr ""
 "Mostra/nascondi barra strumenti per applicazioni a microonde\n"
 "Caratteristica sperimentale (in sviluppo)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.h:86
+#: pcbnew/dialogs/dialog_netlist_fbp.h:85
 #: eeschema/dialogs/dialog_netlist_base.h:78
 msgid "Netlist"
 msgstr "Netlist"
@@ -22557,12 +22577,9 @@ msgid "Plugins:"
 msgstr "Plugins:"
 
 #: cvpcb/common_help_msg.h:28
-msgid "Open netlist file"
-msgstr "Apri Lista componenti "
-
-#: cvpcb/common_help_msg.h:29
-msgid "Save footprint association changes to netlist"
-msgstr "Salva i cambiamenti nelle associazioni impronte nella netlist"
+msgid "Save footprint association in schematic component footprint fields"
+msgstr ""
+"Salva le associazioni impronte nei campi impronte dei componenti dello schema"
 
 #: cvpcb/dialogs/dialog_display_options_base.h:63
 msgid "Display Options"
