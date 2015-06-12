@@ -319,10 +319,10 @@ public:
      * @param aX is X coordinate of the new point
      * @param aY is Y coordinate of the new point
      */
-    void Append( int aX, int aY )
+    void Append( int aX, int aY, bool aAllowDuplication = false )
     {
         VECTOR2I v( aX, aY );
-        Append( v );
+        Append( v, aAllowDuplication );
     }
 
     /**
@@ -331,12 +331,12 @@ public:
      * Appends a new point at the end of the line chain.
      * @param aP the new point
      */
-    void Append( const VECTOR2I& aP )
+    void Append( const VECTOR2I& aP, bool aAllowDuplication = false )
     {
         if( m_points.size() == 0 )
             m_bbox = BOX2I( aP, VECTOR2I( 0, 0 ) );
 
-        if( m_points.size() == 0 || CPoint( -1 ) != aP )
+        if( m_points.size() == 0 || aAllowDuplication || CPoint( -1 ) != aP )
         {
             m_points.push_back( aP );
             m_bbox.Merge( aP );
