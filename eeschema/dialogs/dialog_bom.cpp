@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras@wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,11 +36,13 @@
 #include <schframe.h>
 
 #include <netlist.h>
+#include <netlist_exporter_generic.h>
 #include <sch_sheet.h>
 #include <invoke_sch_dialog.h>
 #include <dialog_helpers.h>
 #include <dialog_bom_base.h>
 #include <html_messagebox.h>
+#include <reporter.h>
 
 #define BOM_PLUGINS_KEY wxT("bom_plugins")
 #define BOM_PLUGIN_SELECTED_KEY wxT("bom_plugin_selected")
@@ -363,7 +365,7 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
     if( strend == wxNOT_FOUND)
         return;
 
-    // Remove emty line if any
+    // Remove empty line if any
     while( data[strstart] < ' ' )
             strstart++;
 
@@ -377,8 +379,6 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
 void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
 {
     wxFileName  fn;
-    wxString    fileWildcard;
-    wxString    title = _( "Save Netlist File" );
 
     // Calculate the xml netlist filename
     fn = g_RootSheet->GetScreen()->GetFileName();
@@ -389,8 +389,13 @@ void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
     wxString fullfilename = fn.GetFullPath();
     m_parent->ClearMsgPanel();
 
+    wxString reportmsg;
+    WX_STRING_REPORTER reporter( &reportmsg );
+    reporter.SetReportAll( true );
     m_parent->SetNetListerCommand( m_textCtrlCommand->GetValue() );
-    m_parent->CreateNetlist( -1, fullfilename, 0 );
+    m_parent->CreateNetlist( -1, fullfilename, 0, &reporter );
+
+    m_Messages->SetValue( reportmsg );
 }
 
 

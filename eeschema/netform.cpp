@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
@@ -33,6 +33,7 @@
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <schframe.h>
+#include <reporter.h>
 
 #include <netlist.h>
 #include <netlist_exporter.h>
@@ -44,7 +45,7 @@
 
 bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
                                        int aFormat, const wxString& aFullFileName,
-                                       unsigned aNetlistOptions )
+                                       unsigned aNetlistOptions, REPORTER* aReporter )
 {
     bool res = true;
     bool executeCommandLine = false;
@@ -84,16 +85,11 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
     }
 
     res = helper->WriteNetlist( fileName, aNetlistOptions );
+    delete helper;
 
-    if( executeCommandLine )
+    // If user provided a plugin command line, execute it.
+    if( executeCommandLine && res && !m_netListerCommand.IsEmpty() )
     {
-        if( !res )
-            return res;
-
-        // If user provided no plugin command line, return now.
-        if( m_netListerCommand.IsEmpty() )
-            return res;
-
         wxString prj_dir = Prj().GetProjectPath();
 
         // build full command line from user's format string, e.g.:
@@ -105,9 +101,40 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
                 prj_dir.SubString( 0, prj_dir.Len() - 2 )       // strip trailing '/'
                 );
 
-        ProcessExecute( commandLine, wxEXEC_SYNC );
+        if( aReporter )
+        {
+            wxArrayString output, errors;
+            int diag = wxExecute (commandLine, output, errors, wxEXEC_SYNC );
+
+            aReporter->Report( _("Run command:") );
+            *aReporter << wxT("\n") << commandLine << wxT("\n\n");
+
+            if( diag != 0 )
+                aReporter->Report( wxString::Format( _("Command error. Return code %d"), diag ) );
+            else
+                aReporter->Report( _("Success") );
+
+            *aReporter << wxT("\n");
+
+            if( output.GetCount() && aReporter->ReportWarnings() )
+            {
+                *aReporter << wxT("\n") << _("Info messages:") << wxT("\n");
+
+                for( unsigned ii = 0; ii < output.GetCount(); ii++ )
+                    *aReporter << output[ii] << wxT("\n");
+            }
+
+            if( errors.GetCount() && aReporter->ReportErrors() )
+            {
+                *aReporter << wxT("\n") << _("Error messages:") << wxT("\n");
+
+                for( unsigned ii = 0; ii < errors.GetCount(); ii++ )
+                    *aReporter << errors[ii] << wxT("\n");
+            }
+        }
+        else
+            ProcessExecute( commandLine, wxEXEC_SYNC );
     }
 
-    delete helper;
     return res;
 }

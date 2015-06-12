@@ -510,11 +510,14 @@ public:
      *                             else use net numbers (net codes)
      *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
      * </p>
+     * @param aReporter = a REPORTER to report error messages,
+     *          mainly if a command line must be run (can be NULL
      * @return true if success.
      */
     bool CreateNetlist( int             aFormat,
                         const wxString& aFullFileName,
-                        unsigned        aNetlistOptions );
+                        unsigned        aNetlistOptions,
+                        REPORTER* aReporter = NULL );
 
     /**
      * Function  WriteNetListFile
@@ -530,12 +533,15 @@ public:
      *                             else use net numbers (net codes)
      *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
      * </p>
+     * @param aReporter = a REPORTER to report error messages,
+     *          mainly if a command line must be run (can be NULL
      * @return true if success.
      */
     bool WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
                            int             aFormat,
                            const wxString& aFullFileName,
-                           unsigned        aNetlistOptions );
+                           unsigned        aNetlistOptions,
+                           REPORTER*       aReporter = NULL );
 
     /**
      * Function DeleteAnnotation
