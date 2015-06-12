@@ -2310,9 +2310,17 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            pad->SetNetCode( getNetCode( parseInt( "net number" ) ) );
+            if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
+                THROW_IO_ERROR(
+                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                                      GetChars( CurSource() ), CurLineNumber(), CurOffset() )
+                    );
             NeedSYMBOLorNUMBER();
-            assert( FromUTF8() == m_board->FindNet( pad->GetNetCode() )->GetNetname() );
+            if( FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
+                THROW_IO_ERROR(
+                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                        GetChars( CurSource() ), CurLineNumber(), CurOffset() )
+                    );
             NeedRIGHT();
             break;
 
@@ -2490,7 +2498,11 @@ VIA* PCB_PARSER::parseVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net:
-            via->SetNetCode( getNetCode( parseInt( "net number" ) ) );
+            if(! via->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true))
+                THROW_IO_ERROR(
+                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                                      GetChars( CurSource() ), CurLineNumber(), CurOffset() )
+                    );
             NeedRIGHT();
             break;
 
@@ -2550,7 +2562,11 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             if( tmp < 0 )
                 tmp = 0;
 
-            zone->SetNetCode( tmp );
+            if( ! zone->SetNetCode( tmp, /* aNoAssert */ true ) )
+                THROW_IO_ERROR(
+                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                                      GetChars( CurSource() ), CurLineNumber(), CurOffset() )
+                    );
 
             NeedRIGHT();
             break;
