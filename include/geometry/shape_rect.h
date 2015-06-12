@@ -90,34 +90,7 @@ public:
     }
 
     /// @copydoc SHAPE::Collide()
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const
-    {
-        //VECTOR2I pmin = VECTOR2I( std::min( aSeg.a.x, aSeg.b.x ), std::min( aSeg.a.y, aSeg.b.y ) );
-        //VECTOR2I pmax = VECTOR2I( std::max( aSeg.a.x, aSeg.b.x ), std::max( aSeg.a.y, aSeg.b.y ));
-        //BOX2I r( pmin, VECTOR2I( pmax.x - pmin.x, pmax.y - pmin.y ) );
-
-        //if( BBox( 0 ).SquaredDistance( r ) > aClearance * aClearance )
-        //    return false;
-
-        if( BBox( 0 ).Contains( aSeg.A ) || BBox( 0 ).Contains( aSeg.B ) )
-            return true;
-
-        VECTOR2I vts[] = { VECTOR2I( m_p0.x, m_p0.y ),
-                           VECTOR2I( m_p0.x, m_p0.y + m_h ),
-                           VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
-                           VECTOR2I( m_p0.x + m_w, m_p0.y ),
-                           VECTOR2I( m_p0.x, m_p0.y ) };
-
-        for( int i = 0; i < 4; i++ )
-        {
-            SEG s( vts[i], vts[i + 1], i );
-
-            if( s.Distance( aSeg ) <= aClearance )
-                return true;
-        }
-
-        return false;
-    }
+    bool Collide( const SEG& aSeg, int aClearance = 0 ) const;
 
     /**
      * Function GetPosition()
