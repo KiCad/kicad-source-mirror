@@ -49,6 +49,7 @@
 #include <algorithm>
 #include <libgen.h>
 #include <unistd.h>
+#include <boost/ptr_container/ptr_map.hpp>
 
 #include <idf_helpers.h>
 #include <idf_common.h>
@@ -63,6 +64,7 @@ extern char* optarg;
 extern int   optopt;
 
 using namespace std;
+using namespace boost;
 
 #define CLEANUP do { \
 setlocale( LC_ALL, "C" ); \
@@ -122,7 +124,7 @@ bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool
                      bool top, double top_z, double bottom_z, int precision, bool compact );
 inline void TransformPoint( IDF_SEGMENT& seg, double frac, bool bottom,
                             double dX, double dY, double angle );
-VRML_IDS* GetColor( std::map<std::string, VRML_IDS*>& cmap,
+VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap,
                       int& index, const std::string& uid );
 
 
@@ -743,7 +745,7 @@ bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact )
     bool   bottom;
     IDF3::IDF_LAYER lyr;
 
-    std::map< std::string, VRML_IDS*> cmap;  // map colors by outline UID
+    boost::ptr_map< const std::string, VRML_IDS> cmap;  // map colors by outline UID
     VRML_IDS* vcp;
     IDF3_COMP_OUTLINE* pout;
 
@@ -861,14 +863,14 @@ bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact )
 }
 
 
-VRML_IDS* GetColor( std::map<std::string, VRML_IDS*>& cmap, int& index, const std::string& uid )
+VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap, int& index, const std::string& uid )
 {
     static int refnum = 0;
 
     if( index < 2 )
         index = 2;   // 0 and 1 are special (BOARD, UID=NOGEOM_NOPART)
 
-    std::map<std::string, VRML_IDS*>::iterator cit = cmap.find( uid );
+    boost::ptr_map<const std::string, VRML_IDS>::iterator cit = cmap.find( uid );
 
     if( cit == cmap.end() )
     {
@@ -886,7 +888,7 @@ VRML_IDS* GetColor( std::map<std::string, VRML_IDS*>& cmap, int& index, const st
         if( showObjectMapping )
             cout << "* " << ostr.str() << " = '" << uid << "'\n";
 
-        cmap.insert( std::pair<std::string, VRML_IDS*>(uid, id) );
+        cmap.insert( uid, id );
 
         if( index >= NCOLORS )
             index = 2;
@@ -922,7 +924,7 @@ bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file )
     bool   bottom;
     int nvcont;
 
-    std::map< std::string, VRML_IDS*> cmap;  // map colors by outline UID
+    boost::ptr_map< const std::string, VRML_IDS> cmap;  // map colors by outline UID
     VRML_IDS* vcp;
     OTHER_OUTLINE* pout;
 
