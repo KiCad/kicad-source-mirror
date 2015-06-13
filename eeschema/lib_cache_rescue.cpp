@@ -379,6 +379,7 @@ bool SCH_EDIT_FRAME::RescueCacheConflicts( bool aRunningOnDemand )
             rescue_log_item.component->SetPartName( rescue_log_item.old_name );
         }
         wxMessageDialog dlg( this, _( "An error occurred while attempting to rescue components. No changes have been made." ) );
+        dlg.ShowModal();
         return false;
     }
 }
