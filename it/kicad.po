@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-12 22:01+0100\n"
-"PO-Revision-Date: 2015-06-12 22:01+0100\n"
+"POT-Creation-Date: 2015-06-13 19:04+0100\n"
+"PO-Revision-Date: 2015-06-13 19:04+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -128,7 +128,7 @@ msgstr "Avvia Eeschema"
 msgid "Run LibEdit"
 msgstr "Avvia LibEdit"
 
-#: kicad/menubar.cpp:145 kicad/menubar.cpp:372 eeschema/menubar.cpp:477
+#: kicad/menubar.cpp:145 kicad/menubar.cpp:372 eeschema/menubar.cpp:479
 msgid "Run Pcbnew"
 msgstr "Avvia PcbNew"
 
@@ -337,12 +337,12 @@ msgstr "Apri il manuale utente di KiCad"
 
 #: kicad/menubar.cpp:417 pcbnew/tool_modview.cpp:194
 #: pcbnew/menubar_modedit.cpp:346 pcbnew/menubar_pcbframe.cpp:644
-#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:494
+#: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:496
 #: eeschema/menubar_libedit.cpp:269
 msgid "&Getting Started in KiCad"
 msgstr "&Iniziare con KiCad"
 
-#: kicad/menubar.cpp:418 eeschema/menubar.cpp:495
+#: kicad/menubar.cpp:418 eeschema/menubar.cpp:497
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Apri  \"Iniziare con KiCad\", guida introduttiva"
 
@@ -356,7 +356,7 @@ msgstr "Informazioni sul manager dei progetti di KiCad"
 
 #: kicad/menubar.cpp:431 pcbnew/tool_modview.cpp:206
 #: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:655
-#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:506
+#: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:508
 #: eeschema/menubar_libedit.cpp:283 cvpcb/menubar.cpp:135
 #: 3d-viewer/3d_toolbar.cpp:135 gerbview/menubar.cpp:236
 #: pagelayout_editor/menubar.cpp:163
@@ -373,13 +373,13 @@ msgid "&Preferences"
 msgstr "&Preferenze"
 
 #: kicad/menubar.cpp:434 pcbnew/menubar_pcbframe.cpp:662
-#: eeschema/menubar.cpp:511
+#: eeschema/menubar.cpp:513
 msgid "&Tools"
 msgstr "&Strumenti "
 
 #: kicad/menubar.cpp:435 pcbnew/tool_modview.cpp:209
 #: pcbnew/menubar_modedit.cpp:364 pcbnew/menubar_pcbframe.cpp:664
-#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:512
+#: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:514
 #: eeschema/menubar_libedit.cpp:288 cvpcb/menubar.cpp:137
 #: gerbview/menubar.cpp:239 pagelayout_editor/menubar.cpp:165
 msgid "&Help"
@@ -452,7 +452,7 @@ msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
 #: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:994 pcbnew/moduleframe.cpp:756
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1317 cvpcb/cvframe.cpp:702
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1315 cvpcb/cvframe.cpp:702
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -1566,7 +1566,7 @@ msgstr "Informazioni su Pcbnew progettazione circuiti stampati"
 
 #: pcbnew/tool_modview.cpp:208 pcbnew/menubar_modedit.cpp:360
 #: pcbnew/menubar_pcbframe.cpp:657 eeschema/tool_viewlib.cpp:269
-#: eeschema/menubar.cpp:508 eeschema/menubar_libedit.cpp:285
+#: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:285
 msgid "&View"
 msgstr "&Visualizza"
 
@@ -3190,7 +3190,7 @@ msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:942 pcbnew/edit.cpp:1482
 #: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1360
-#: eeschema/schedit.cpp:546 eeschema/libeditframe.cpp:1138
+#: eeschema/schedit.cpp:550 eeschema/libeditframe.cpp:1138
 msgid "Add text"
 msgstr "Aggiungi testo "
 
@@ -3210,7 +3210,7 @@ msgstr "Aggiungi piazzola"
 msgid "Pad settings"
 msgstr "Impostazioni piazzola"
 
-#: pcbnew/modedit.cpp:967 pcbnew/edit.cpp:1494 eeschema/schedit.cpp:582
+#: pcbnew/modedit.cpp:967 pcbnew/edit.cpp:1494 eeschema/schedit.cpp:586
 #: eeschema/libeditframe.cpp:1180 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
@@ -3770,17 +3770,17 @@ msgid "Select default parameters values in Footprint Editor"
 msgstr "Seleziona i valori dei parametri predefiniti nell'editor impronte"
 
 #: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:656
-#: eeschema/menubar.cpp:507 eeschema/menubar_libedit.cpp:284
+#: eeschema/menubar.cpp:509 eeschema/menubar_libedit.cpp:284
 msgid "&Edit"
 msgstr "&Modifica"
 
 #: pcbnew/menubar_modedit.cpp:361 pcbnew/menubar_pcbframe.cpp:658
-#: eeschema/menubar.cpp:509 eeschema/menubar_libedit.cpp:286
+#: eeschema/menubar.cpp:511 eeschema/menubar_libedit.cpp:286
 msgid "&Place"
 msgstr "&Inserisci"
 
 #: pcbnew/menubar_modedit.cpp:362 pcbnew/menubar_pcbframe.cpp:660
-#: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:287
+#: eeschema/menubar.cpp:512 eeschema/menubar_libedit.cpp:287
 msgid "P&references"
 msgstr "&Opzioni"
 
@@ -4883,19 +4883,19 @@ msgstr "Ma&cro"
 msgid "Macros save/read operations"
 msgstr "Operazioni di salvataggio/caricamento macro"
 
-#: pcbnew/menubar_pcbframe.cpp:587 eeschema/menubar.cpp:409
+#: pcbnew/menubar_pcbframe.cpp:587 eeschema/menubar.cpp:411
 msgid "&Save Preferences"
 msgstr "&Salva le preferenze"
 
-#: pcbnew/menubar_pcbframe.cpp:588 eeschema/menubar.cpp:410
+#: pcbnew/menubar_pcbframe.cpp:588 eeschema/menubar.cpp:412
 msgid "Save application preferences"
 msgstr "Salva le preferenze dell'applicazione"
 
-#: pcbnew/menubar_pcbframe.cpp:592 eeschema/menubar.cpp:415
+#: pcbnew/menubar_pcbframe.cpp:592 eeschema/menubar.cpp:417
 msgid "Load Prefe&rences"
 msgstr "Carica le p&referenze"
 
-#: pcbnew/menubar_pcbframe.cpp:593 eeschema/menubar.cpp:416
+#: pcbnew/menubar_pcbframe.cpp:593 eeschema/menubar.cpp:418
 msgid "Load application preferences"
 msgstr "Carica le preferenze dell'applicazione"
 
@@ -5370,12 +5370,12 @@ msgstr ""
 "Un collegamento ad un Via si riferisce al gruppo di piazzole \"%s\" "
 "inesistenti"
 
-#: pcbnew/hotkeys.cpp:67 eeschema/hotkeys.cpp:134
+#: pcbnew/hotkeys.cpp:67 eeschema/hotkeys.cpp:135
 #: pagelayout_editor/hotkeys.cpp:67
 msgid "Mouse Left Click"
 msgstr "Clic sinistro mouse "
 
-#: pcbnew/hotkeys.cpp:69 eeschema/hotkeys.cpp:135
+#: pcbnew/hotkeys.cpp:69 eeschema/hotkeys.cpp:136
 #: pagelayout_editor/hotkeys.cpp:68
 msgid "Mouse Left Double Click"
 msgstr "Doppio clic sinistro mouse"
@@ -5433,7 +5433,7 @@ msgid "Load Board"
 msgstr "Carica scheda"
 
 #: pcbnew/hotkeys.cpp:100 pcbnew/dialogs/dialog_find_base.cpp:38
-#: eeschema/hotkeys.cpp:201
+#: eeschema/hotkeys.cpp:202
 msgid "Find Item"
 msgstr "Trova elemento"
 
@@ -5474,7 +5474,7 @@ msgstr "Trascina pista mantendo l'inclinazione"
 msgid "Place Item"
 msgstr "Piazza elemento"
 
-#: pcbnew/hotkeys.cpp:113 eeschema/hotkeys.cpp:172
+#: pcbnew/hotkeys.cpp:113 eeschema/hotkeys.cpp:173
 msgid "Edit Item"
 msgstr "Modifica elemento"
 
@@ -5482,7 +5482,7 @@ msgstr "Modifica elemento"
 msgid "Flip Item"
 msgstr "Ribalta elemento"
 
-#: pcbnew/hotkeys.cpp:116 eeschema/hotkeys.cpp:171
+#: pcbnew/hotkeys.cpp:116 eeschema/hotkeys.cpp:172
 msgid "Rotate Item"
 msgstr "Ruota elemento"
 
@@ -5511,7 +5511,7 @@ msgstr "Crea array"
 msgid "Copy Item"
 msgstr "Copia elemento"
 
-#: pcbnew/hotkeys.cpp:124 eeschema/hotkeys.cpp:194
+#: pcbnew/hotkeys.cpp:124 eeschema/hotkeys.cpp:195
 msgid "Drag Item"
 msgstr "Trascina elemento"
 
@@ -5578,12 +5578,12 @@ msgid "Zoom Out"
 msgstr "Rimpicciolisci"
 
 #: pcbnew/hotkeys.cpp:181 common/dialogs/dialog_hotkeys_editor_base.cpp:36
-#: eeschema/hotkeys.cpp:123 pagelayout_editor/hotkeys.cpp:89
+#: eeschema/hotkeys.cpp:124 pagelayout_editor/hotkeys.cpp:89
 msgid "Undo"
 msgstr "Annulla"
 
-#: pcbnew/hotkeys.cpp:185 pcbnew/hotkeys.cpp:187 eeschema/hotkeys.cpp:127
-#: eeschema/hotkeys.cpp:129 pagelayout_editor/hotkeys.cpp:90
+#: pcbnew/hotkeys.cpp:185 pcbnew/hotkeys.cpp:187 eeschema/hotkeys.cpp:128
+#: eeschema/hotkeys.cpp:130 pagelayout_editor/hotkeys.cpp:90
 msgid "Redo"
 msgstr "Ripristina"
 
@@ -5703,7 +5703,7 @@ msgstr "Registra macro 9"
 msgid "Call Macro 9"
 msgstr "Richiama macro 9"
 
-#: pcbnew/hotkeys.cpp:338 eeschema/hotkeys.cpp:316
+#: pcbnew/hotkeys.cpp:338 eeschema/hotkeys.cpp:318
 #: pagelayout_editor/hotkeys.cpp:114
 msgid "Common"
 msgstr "Comune"
@@ -13901,11 +13901,11 @@ msgstr "Seleziona componente"
 msgid "Select by Browser"
 msgstr "Visualizzatore librerie"
 
-#: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:167
+#: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:168
 msgid "Mirror X"
 msgstr "Ribalta in X"
 
-#: common/dialogs/dialog_image_editor_base.cpp:36 eeschema/hotkeys.cpp:165
+#: common/dialogs/dialog_image_editor_base.cpp:36 eeschema/hotkeys.cpp:166
 msgid "Mirror Y"
 msgstr "Ribalta in Y"
 
@@ -14278,75 +14278,75 @@ msgstr "Non ci sono etichette indefinite da eliminare nel foglio."
 msgid "Do you wish to cleanup this sheet?"
 msgstr "Desideri ripulire questo foglio?"
 
-#: eeschema/schedit.cpp:506
+#: eeschema/schedit.cpp:510
 msgid "No tool selected"
 msgstr "Nessun strumento selezionato"
 
-#: eeschema/schedit.cpp:510
+#: eeschema/schedit.cpp:514
 msgid "Descend or ascend hierarchy"
 msgstr "Gerarchia discendente o ascendente"
 
-#: eeschema/schedit.cpp:514
+#: eeschema/schedit.cpp:518
 msgid "Add no connect"
 msgstr "Aggiungi non connessione"
 
-#: eeschema/schedit.cpp:518
+#: eeschema/schedit.cpp:522
 msgid "Add wire"
 msgstr "Aggiungi filo"
 
-#: eeschema/schedit.cpp:522
+#: eeschema/schedit.cpp:526
 msgid "Add bus"
 msgstr "Aggiungi Bus"
 
-#: eeschema/schedit.cpp:526
+#: eeschema/schedit.cpp:530
 msgid "Add lines"
 msgstr "Aggiungi linee"
 
-#: eeschema/schedit.cpp:530
+#: eeschema/schedit.cpp:534
 msgid "Add junction"
 msgstr "Aggiungi giunzione"
 
-#: eeschema/schedit.cpp:534
+#: eeschema/schedit.cpp:538
 msgid "Add label"
 msgstr "Aggiungi etichetta"
 
-#: eeschema/schedit.cpp:538
+#: eeschema/schedit.cpp:542
 msgid "Add global label"
 msgstr "Aggiungi etichetta globale"
 
-#: eeschema/schedit.cpp:542
+#: eeschema/schedit.cpp:546
 msgid "Add hierarchical label"
 msgstr "Aggiungi etichetta gerarchica"
 
-#: eeschema/schedit.cpp:550
+#: eeschema/schedit.cpp:554
 msgid "Add image"
 msgstr "Aggiungi immagine"
 
-#: eeschema/schedit.cpp:554
+#: eeschema/schedit.cpp:558
 msgid "Add wire to bus entry"
 msgstr "Aggiungi elemento da filo a bus"
 
-#: eeschema/schedit.cpp:558
+#: eeschema/schedit.cpp:562
 msgid "Add bus to bus entry"
 msgstr "Aggiungi elemento da bus a bus"
 
-#: eeschema/schedit.cpp:562
+#: eeschema/schedit.cpp:566
 msgid "Add sheet"
 msgstr "Aggiungi foglio"
 
-#: eeschema/schedit.cpp:566
+#: eeschema/schedit.cpp:570
 msgid "Add sheet pins"
 msgstr "Aggiungi pin foglio"
 
-#: eeschema/schedit.cpp:570
+#: eeschema/schedit.cpp:574
 msgid "Import sheet pins"
 msgstr "Importa punto di connessione"
 
-#: eeschema/schedit.cpp:574
+#: eeschema/schedit.cpp:578
 msgid "Add component"
 msgstr "Aggiungi componente"
 
-#: eeschema/schedit.cpp:578
+#: eeschema/schedit.cpp:582
 msgid "Add power"
 msgstr "Aggiungi alimentazione"
 
@@ -14504,20 +14504,20 @@ msgstr "Unità %c"
 msgid "Close schematic component viewer"
 msgstr "Chiudu visualizzatore componente dello schema"
 
-#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:488
+#: eeschema/tool_viewlib.cpp:250 eeschema/menubar.cpp:490
 msgid "Eesc&hema Manual"
 msgstr "Manuale di Eesc&hema"
 
-#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:489
+#: eeschema/tool_viewlib.cpp:251 eeschema/menubar.cpp:491
 msgid "Open Eeschema manual"
 msgstr "Apri il manuale di Eeschema"
 
-#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:501
+#: eeschema/tool_viewlib.cpp:262 eeschema/menubar.cpp:503
 #: eeschema/menubar_libedit.cpp:278
 msgid "&About Eeschema"
 msgstr "&Informazioni su Eeschema"
 
-#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:502
+#: eeschema/tool_viewlib.cpp:263 eeschema/menubar.cpp:504
 #: eeschema/menubar_libedit.cpp:279
 msgid "About Eeschema schematic designer"
 msgstr "Informazioni sulla creazione schemi elettrici con Eeschema"
@@ -14538,7 +14538,8 @@ msgstr "Modifica etichetta gerarchica"
 msgid "Edit Image"
 msgstr "Modifica immagine"
 
-#: eeschema/onrightclick.cpp:196 eeschema/menubar.cpp:258
+#: eeschema/onrightclick.cpp:196 eeschema/menubar.cpp:260
+#: eeschema/hotkeys.cpp:120
 msgid "Leave Sheet"
 msgstr "Esci dal foglio"
 
@@ -14756,7 +14757,7 @@ msgstr "Cancella nodo"
 msgid "Delete Connection"
 msgstr "Cancella collegamento"
 
-#: eeschema/onrightclick.cpp:664 eeschema/hotkeys.cpp:138
+#: eeschema/onrightclick.cpp:664 eeschema/hotkeys.cpp:139
 msgid "Begin Wire"
 msgstr "Inizia filo"
 
@@ -14773,21 +14774,21 @@ msgid "Delete Wire"
 msgstr "Cancella filo"
 
 #: eeschema/onrightclick.cpp:695 eeschema/onrightclick.cpp:733
-#: eeschema/hotkeys.cpp:148
+#: eeschema/hotkeys.cpp:149
 msgid "Add Junction"
 msgstr "Aggiungi giunzione"
 
 #: eeschema/onrightclick.cpp:697 eeschema/onrightclick.cpp:735
-#: eeschema/hotkeys.cpp:143
+#: eeschema/hotkeys.cpp:144
 msgid "Add Label"
 msgstr "Aggiungi etichetta"
 
 #: eeschema/onrightclick.cpp:702 eeschema/onrightclick.cpp:740
-#: eeschema/hotkeys.cpp:146
+#: eeschema/hotkeys.cpp:147
 msgid "Add Global Label"
 msgstr "Aggiungi etichetta globale"
 
-#: eeschema/onrightclick.cpp:714 eeschema/hotkeys.cpp:139
+#: eeschema/onrightclick.cpp:714 eeschema/hotkeys.cpp:140
 msgid "Begin Bus"
 msgstr "Inizia Bus"
 
@@ -14867,7 +14868,7 @@ msgstr "Cancella punto di connessione fogli"
 msgid "Window Zoom"
 msgstr "Zoom finestra"
 
-#: eeschema/onrightclick.cpp:840 eeschema/hotkeys.cpp:195
+#: eeschema/onrightclick.cpp:840 eeschema/hotkeys.cpp:196
 msgid "Save Block"
 msgstr "Salva blocco"
 
@@ -15019,154 +15020,154 @@ msgstr "Mostra navigatore &Gerarchia schema"
 msgid "Navigate hierarchical sheets"
 msgstr "Esplora Gerarchia dello schema"
 
-#: eeschema/menubar.cpp:257
+#: eeschema/menubar.cpp:255
 msgid "&Leave Sheet"
 msgstr "Esci da&l foglio"
 
-#: eeschema/menubar.cpp:264
+#: eeschema/menubar.cpp:266
 msgid "&Component"
 msgstr "&Componente"
 
-#: eeschema/menubar.cpp:270
+#: eeschema/menubar.cpp:272
 msgid "&Power Port"
 msgstr "Connessione& di alimentazione"
 
-#: eeschema/menubar.cpp:276
+#: eeschema/menubar.cpp:278
 msgid "&Wire"
 msgstr "&Filo"
 
-#: eeschema/menubar.cpp:282
+#: eeschema/menubar.cpp:284
 msgid "&Bus"
 msgstr "&Bus"
 
-#: eeschema/menubar.cpp:288
+#: eeschema/menubar.cpp:290
 msgid "Wire to Bus &Entry"
 msgstr "&Elemento da filo a bus"
 
-#: eeschema/menubar.cpp:294
+#: eeschema/menubar.cpp:296
 msgid "Bus &to Bus Entry"
 msgstr "Elemen&to da bus a bus "
 
-#: eeschema/menubar.cpp:300
+#: eeschema/menubar.cpp:302
 msgid "&No Connect Flag"
 msgstr "Indicatore di &non connessione "
 
-#: eeschema/menubar.cpp:304
+#: eeschema/menubar.cpp:306
 msgid "&Junction"
 msgstr "&Giunzione"
 
-#: eeschema/menubar.cpp:310
+#: eeschema/menubar.cpp:312
 msgid "&Label"
 msgstr "&Etichetta"
 
-#: eeschema/menubar.cpp:316
+#: eeschema/menubar.cpp:318
 msgid "Gl&obal Label"
 msgstr "Etichetta gl&obale "
 
-#: eeschema/menubar.cpp:324
+#: eeschema/menubar.cpp:326
 msgid "&Hierarchical Label"
 msgstr "Etichetta gerarc&hica"
 
-#: eeschema/menubar.cpp:331
+#: eeschema/menubar.cpp:333
 msgid "Hierarchical &Sheet"
 msgstr "&Foglio gerarchico"
 
-#: eeschema/menubar.cpp:339
+#: eeschema/menubar.cpp:341
 msgid "I&mport Hierarchical Label"
 msgstr "I&mporta etichetta gerarchica"
 
-#: eeschema/menubar.cpp:345
+#: eeschema/menubar.cpp:347
 msgid "Hierarchical Pi&n to Sheet"
 msgstr "Aggiungi pi&n gerarchico al foglio"
 
-#: eeschema/menubar.cpp:351
+#: eeschema/menubar.cpp:353
 msgid "Graphic Pol&yline"
 msgstr "&Polilinea grafica"
 
-#: eeschema/menubar.cpp:357
+#: eeschema/menubar.cpp:359
 msgid "&Graphic Text"
 msgstr "Testo &grafico"
 
-#: eeschema/menubar.cpp:364
+#: eeschema/menubar.cpp:366
 msgid "&Image"
 msgstr "&Immagine"
 
-#: eeschema/menubar.cpp:374 eeschema/menubar_libedit.cpp:230
+#: eeschema/menubar.cpp:376 eeschema/menubar_libedit.cpp:230
 msgid "Component &Libraries"
 msgstr "&Librerie componenti"
 
-#: eeschema/menubar.cpp:375 eeschema/menubar_libedit.cpp:231
+#: eeschema/menubar.cpp:377 eeschema/menubar_libedit.cpp:231
 msgid "Configure component libraries and paths"
 msgstr "Configura librerie componenti e percorsi"
 
-#: eeschema/menubar.cpp:381 eeschema/menubar_libedit.cpp:244
+#: eeschema/menubar.cpp:383 eeschema/menubar_libedit.cpp:244
 msgid "Set &Colors Scheme"
 msgstr "Imposta schema &colori"
 
-#: eeschema/menubar.cpp:382 eeschema/menubar_libedit.cpp:245
+#: eeschema/menubar.cpp:384 eeschema/menubar_libedit.cpp:245
 msgid "Set color preferences"
 msgstr "Imposta le preferenze colori"
 
-#: eeschema/menubar.cpp:392
+#: eeschema/menubar.cpp:394
 msgid "Schematic Editor &Options"
 msgstr "&Opzioni editor degli schemi"
 
-#: eeschema/menubar.cpp:393
+#: eeschema/menubar.cpp:395
 msgid "Set Eeschema preferences"
 msgstr "Imposta le preferenze di Eeschema"
 
-#: eeschema/menubar.cpp:424
+#: eeschema/menubar.cpp:426
 msgid "Library &Editor"
-msgstr "Editor di libreri&e"
+msgstr "Editor libreri&e"
 
-#: eeschema/menubar.cpp:429
+#: eeschema/menubar.cpp:431
 msgid "Library &Browser"
 msgstr "Esplora &librerie"
 
-#: eeschema/menubar.cpp:434
+#: eeschema/menubar.cpp:436
 msgid "&Rescue Cached Components"
 msgstr "&Recupera componenti in cache"
 
-#: eeschema/menubar.cpp:435
+#: eeschema/menubar.cpp:437
 msgid ""
 "Find old components in the project cache and rescue them to a new library"
 msgstr ""
 "Trova vecchi componenti nella cache del progetto e li recupera in una nuova "
 "libreria"
 
-#: eeschema/menubar.cpp:442
+#: eeschema/menubar.cpp:444
 msgid "&Annotate Schematic"
 msgstr "&Annota schema"
 
-#: eeschema/menubar.cpp:448
+#: eeschema/menubar.cpp:450
 msgid "Electrical Rules &Checker"
 msgstr "&Controllo Regole Elettriche (ERC)"
 
-#: eeschema/menubar.cpp:449 eeschema/tool_sch.cpp:149
+#: eeschema/menubar.cpp:451 eeschema/tool_sch.cpp:149
 msgid "Perform electrical rules check"
 msgstr "Esegui un controllo regole elettriche"
 
-#: eeschema/menubar.cpp:454
+#: eeschema/menubar.cpp:456
 msgid "Generate &Netlist File"
 msgstr "Genera file &netlist"
 
-#: eeschema/menubar.cpp:455
+#: eeschema/menubar.cpp:457
 msgid "Generate the component netlist file"
 msgstr "Genera il file elenco dei collegamenti componente (Netlist)"
 
-#: eeschema/menubar.cpp:460
+#: eeschema/menubar.cpp:462
 msgid "Generate Bill of &Materials"
-msgstr "Genera la distinta &materiali"
+msgstr "Genera distinta &materiali"
 
-#: eeschema/menubar.cpp:469
+#: eeschema/menubar.cpp:471
 msgid "A&ssign Component Footprint"
 msgstr "A&ssegna impronta al componente"
 
-#: eeschema/menubar.cpp:470
+#: eeschema/menubar.cpp:472
 msgid "Run CvPcb"
 msgstr "Avvia CvPcb"
 
-#: eeschema/menubar.cpp:476
+#: eeschema/menubar.cpp:478
 msgid "&Layout Printed Circuit Board"
 msgstr "Disposi&zione circuito stampato"
 
@@ -16003,7 +16004,7 @@ msgstr "Mostra tabella pin"
 msgid "Turn grid off"
 msgstr "Visualizzazione griglia "
 
-#: eeschema/libeditframe.cpp:183 eeschema/hotkeys.cpp:318
+#: eeschema/libeditframe.cpp:183 eeschema/hotkeys.cpp:320
 msgid "Library Editor"
 msgstr "Editor delle librerie"
 
@@ -16699,28 +16700,28 @@ msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 msgid "Do not show hidden pins"
 msgstr "Non mostrare i piedini nascosti"
 
-#: eeschema/schframe.cpp:899
+#: eeschema/schframe.cpp:897
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/schframe.cpp:918
+#: eeschema/schframe.cpp:916
 msgid "New Schematic"
 msgstr "Nuovo schema"
 
-#: eeschema/schframe.cpp:931
+#: eeschema/schframe.cpp:929
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
-#: eeschema/schframe.cpp:951
+#: eeschema/schframe.cpp:949
 msgid "Open Schematic"
 msgstr "Apri schema"
 
-#: eeschema/schframe.cpp:1092
+#: eeschema/schframe.cpp:1090
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1320
+#: eeschema/schframe.cpp:1318
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -16738,127 +16739,127 @@ msgstr "Centro arco (%s,%s), raggio %s"
 msgid "Fit on Screen"
 msgstr "Centra sullo schermo"
 
-#: eeschema/hotkeys.cpp:140
+#: eeschema/hotkeys.cpp:141
 msgid "End Line Wire Bus"
 msgstr "Fine linea bus fili"
 
-#: eeschema/hotkeys.cpp:144
+#: eeschema/hotkeys.cpp:145
 msgid "Add Hierarchical Label"
 msgstr "Aggiungi etichetta gerarchica"
 
-#: eeschema/hotkeys.cpp:149
+#: eeschema/hotkeys.cpp:150
 msgid "Add Component"
 msgstr "Aggiungi componente"
 
-#: eeschema/hotkeys.cpp:151
+#: eeschema/hotkeys.cpp:152
 msgid "Add Power"
 msgstr "Aggiungi alimentazione"
 
-#: eeschema/hotkeys.cpp:153
+#: eeschema/hotkeys.cpp:154
 msgid "Add No Connect Flag"
 msgstr "Aggiungi segnale di non connessione"
 
-#: eeschema/hotkeys.cpp:155
+#: eeschema/hotkeys.cpp:156
 msgid "Add Sheet"
 msgstr "Aggiungi foglio"
 
-#: eeschema/hotkeys.cpp:157
+#: eeschema/hotkeys.cpp:158
 msgid "Add Bus Entry"
 msgstr "Aggiungi elemento bus"
 
-#: eeschema/hotkeys.cpp:159
+#: eeschema/hotkeys.cpp:160
 msgid "Add Wire Entry"
 msgstr "Aggiungi elemento filo"
 
-#: eeschema/hotkeys.cpp:161
+#: eeschema/hotkeys.cpp:162
 msgid "Add Graphic PolyLine"
 msgstr "Aggiungi polilinea grafica"
 
-#: eeschema/hotkeys.cpp:163
+#: eeschema/hotkeys.cpp:164
 msgid "Add Graphic Text"
 msgstr "Aggiungi testo grafico"
 
-#: eeschema/hotkeys.cpp:169
+#: eeschema/hotkeys.cpp:170
 msgid "Orient Normal Component"
 msgstr "Componente orientato normalmente"
 
-#: eeschema/hotkeys.cpp:173
+#: eeschema/hotkeys.cpp:174
 msgid "Edit Component Value"
 msgstr "Modifica valore componente"
 
-#: eeschema/hotkeys.cpp:176
+#: eeschema/hotkeys.cpp:177
 msgid "Edit Component Reference"
 msgstr "Modifica riferimento componente"
 
-#: eeschema/hotkeys.cpp:179
+#: eeschema/hotkeys.cpp:180
 msgid "Edit Component Footprint"
 msgstr "Modifica impronta componente"
 
-#: eeschema/hotkeys.cpp:182
+#: eeschema/hotkeys.cpp:183
 msgid "Edit with Component Editor"
 msgstr "Modifica con l'editor dei componenti"
 
-#: eeschema/hotkeys.cpp:186
+#: eeschema/hotkeys.cpp:187
 msgid "Move Schematic Item"
 msgstr "Nuovo elemento schema"
 
-#: eeschema/hotkeys.cpp:190
+#: eeschema/hotkeys.cpp:191
 msgid "Copy Component or Label"
 msgstr "Copia componente o etichetta"
 
-#: eeschema/hotkeys.cpp:196
+#: eeschema/hotkeys.cpp:197
 msgid "Move Block -> Drag Block"
 msgstr "Sposta blocco -> trascina blocco"
 
-#: eeschema/hotkeys.cpp:198
+#: eeschema/hotkeys.cpp:199
 msgid "Repeat Last Item"
 msgstr "Ripeti l'ultimo elemento"
 
-#: eeschema/hotkeys.cpp:199 pagelayout_editor/hotkeys.cpp:85
+#: eeschema/hotkeys.cpp:200 pagelayout_editor/hotkeys.cpp:85
 msgid "Delete Item"
 msgstr "Cancella elemento"
 
-#: eeschema/hotkeys.cpp:202
+#: eeschema/hotkeys.cpp:203
 msgid "Find Next Item"
 msgstr "Trova prossimo elemento"
 
-#: eeschema/hotkeys.cpp:204 eeschema/dialogs/dialog_schematic_find.cpp:48
+#: eeschema/hotkeys.cpp:205 eeschema/dialogs/dialog_schematic_find.cpp:48
 msgid "Find and Replace"
 msgstr "Trova e Sostituisci"
 
-#: eeschema/hotkeys.cpp:206
+#: eeschema/hotkeys.cpp:207
 msgid "Find Next DRC Marker"
 msgstr "Trova prossimo marcatore DRC"
 
-#: eeschema/hotkeys.cpp:210
+#: eeschema/hotkeys.cpp:211
 msgid "Create Pin"
 msgstr "Crea pin"
 
-#: eeschema/hotkeys.cpp:211
+#: eeschema/hotkeys.cpp:212
 msgid "Repeat Pin"
 msgstr "Ripeti pin"
 
-#: eeschema/hotkeys.cpp:212
+#: eeschema/hotkeys.cpp:213
 msgid "Move Library Item"
 msgstr "Sposta elemento libreria"
 
-#: eeschema/hotkeys.cpp:215
+#: eeschema/hotkeys.cpp:216
 msgid "Save Library"
 msgstr "Salva libreria"
 
-#: eeschema/hotkeys.cpp:216
+#: eeschema/hotkeys.cpp:217
 msgid "Save Schematic"
 msgstr "Salva schema"
 
-#: eeschema/hotkeys.cpp:217
+#: eeschema/hotkeys.cpp:218
 msgid "Load Schematic"
 msgstr "Carica schema"
 
-#: eeschema/hotkeys.cpp:317
+#: eeschema/hotkeys.cpp:319
 msgid "Schematic Editor"
 msgstr "Editor schemi elettrici"
 
-#: eeschema/hotkeys.cpp:728
+#: eeschema/hotkeys.cpp:731
 msgid "Add Pin"
 msgstr "Aggiungi pin"
 
