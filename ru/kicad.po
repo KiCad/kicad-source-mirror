@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-13 12:41+0300\n"
-"PO-Revision-Date: 2015-06-13 12:41+0300\n"
+"POT-Creation-Date: 2015-06-13 13:01+0300\n"
+"PO-Revision-Date: 2015-06-13 13:02+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -22372,6 +22372,364 @@ msgstr "Трассировать с шириной начальной дорож
 msgid "Tune Track Length"
 msgstr "Настройка длины дорожки"
 
+#~ msgid ""
+#~ "The Internet forum dedicated to KiCad Russian support, including GOST "
+#~ "support"
+#~ msgstr ""
+#~ "Интернет форум, посвященный русскоязычной поддержке проекта KiCad, "
+#~ "включая поддержку ГОСТ"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count "
+#~ "= %d\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count "
+#~ "= %d\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = "
+#~ "%d\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = "
+#~ "%d\n"
+#~ "\n"
+
+#~ msgid "> %-28.28s PinSheet %-7.7s %s\n"
+#~ msgstr "> %-28.28s PinSheet %-7.7s %s\n"
+
+#~ msgid "#End labels\n"
+#~ msgstr "#End labels\n"
+
+#~ msgid "#Cmp ( order = Reference )"
+#~ msgstr "#Cmp ( порядок = Обозначение )"
+
+#~ msgid " (with SubCmp)"
+#~ msgstr " (с СубКомп)"
+
+#~ msgid "Item count"
+#~ msgstr "количество"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Cmp ( order = Value )"
+#~ msgstr ""
+#~ "\n"
+#~ "#Cmp ( порядок = Значение )"
+
+#~ msgid "#End Cmp\n"
+#~ msgstr "#End Cmp\n"
+
+#~ msgid "Bill of Materials"
+#~ msgstr "Перечень элементов"
+
+#~ msgid "Failed to open file <%s>"
+#~ msgstr "Не удалось открыть файл  <%s>"
+
+#~ msgid ""
+#~ "\n"
+#~ "#End List\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#End List\n"
+
+#~ msgid "List items:"
+#~ msgstr "Перечень элементов:"
+
+#~ msgid "Components by reference"
+#~ msgstr "Компоненты по обозначению"
+
+#~ msgid "Sub components (i.e. U2A, U2B ...)"
+#~ msgstr "Элементы (т.е. DD1.1, DD1.2 ...)"
+
+#~ msgid "Components by value"
+#~ msgstr "Компоненты по значению"
+
+#~ msgid "Hierarchical pins by name"
+#~ msgstr "Иерархия выводов по имени"
+
+#~ msgid "Hierarchical pins by sheet"
+#~ msgstr "Иерархия выводов по листам"
+
+#~ msgid "List"
+#~ msgstr "Список"
+
+#~ msgid "List for spreadsheet import (by ref)"
+#~ msgstr "Импорт в эл.таблицу (по обозн.)"
+
+#~ msgid "List for spreadsheet import (by grouped ref)"
+#~ msgstr "Импорт в эл.таблицу (с груп. по обозн.)"
+
+#~ msgid "List for spreadsheet import (by value)"
+#~ msgstr "Импорт в эл.таблицу (по значению)"
+
+#~ msgid "Output format:"
+#~ msgstr "Формат вывода:"
+
+#~ msgid "Tab"
+#~ msgstr "Tab"
+
+#~ msgid ";"
+#~ msgstr ";"
+
+#~ msgid ","
+#~ msgstr ","
+
+#~ msgid "Field separator for spreadsheet import:"
+#~ msgstr "Разделитель полей для импорта в эл.таблицу:"
+
+#~ msgid "Launch list browser"
+#~ msgstr "Просмотреть список"
+
+#~ msgid "Add to list:"
+#~ msgstr "Добавить в список:"
+
+#~ msgid "Component location"
+#~ msgstr "Обозначение"
+
+#~ msgid "System Fields:"
+#~ msgstr "Общие поля:"
+
+#~ msgid "Users fields:"
+#~ msgstr "Поля пользователя:"
+
+#~ msgid "Field 1"
+#~ msgstr "Поле 1"
+
+#~ msgid "Field 2"
+#~ msgstr "Поле 2"
+
+#~ msgid "Field 3"
+#~ msgstr "Поле 3"
+
+#~ msgid "Field 4"
+#~ msgstr "Поле 4"
+
+#~ msgid "Field 5"
+#~ msgstr "Поле 5"
+
+#~ msgid "Field 6"
+#~ msgstr "Поле 6"
+
+#~ msgid "Field 7"
+#~ msgstr "Поле 7"
+
+#~ msgid "Field 8"
+#~ msgstr "Поле 8"
+
+#~ msgid "All existing user fields"
+#~ msgstr "Все поля пользователя"
+
+#~ msgid "Note"
+#~ msgstr "Примечание"
+
+#~ msgid "For variants"
+#~ msgstr "Для исполнений"
+
+#~ msgid "Editing"
+#~ msgstr "Редактирование"
+
+#~ msgid " note: "
+#~ msgstr " прим.: "
+
+#~ msgid "Editing the component with Reference "
+#~ msgstr "Редактирование компонента с поз.обозначением "
+
+#~ msgid "Group operation is not available in the 'variable part' mode"
+#~ msgstr "Групповая операция не доступна в режиме \"переменная часть\""
+
+#~ msgid ""
+#~ "Group operation is not available because one of the selected components "
+#~ "has different parameters along its variants"
+#~ msgstr ""
+#~ "Групповая операция не доступна, потому что один из выбранных компонентов "
+#~ "имеет различные значения полей в исполнениях компонента"
+
+#~ msgid "The selected components have different parameters. Continue?"
+#~ msgstr "Выбранные компоненты имеют отличающиеся значения полей. Продолжить?"
+
+#~ msgid "Enter a variant"
+#~ msgstr "Введите номер исполнения"
+
+#~ msgid "Add a new variant"
+#~ msgstr "Добавить новое исполнение"
+
+#~ msgid ""
+#~ "Some components were changed outside of the Component Manager.\n"
+#~ "\n"
+#~ "The changes have been transferred back to the Component Manager."
+#~ msgstr ""
+#~ "Некоторые компоненты были изменены вне Менеджера компонентов. \n"
+#~ "\n"
+#~ "Изменения были переданы обратно в Менеджер компонентов."
+
+#~ msgid "Unspecified component reference: "
+#~ msgstr "Не задано поз.обозначение у компонента:"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "The Component Manager does not support components with unspecified "
+#~ "reference.\n"
+#~ "\n"
+#~ "The Component Manager is going to be closed."
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Менеджер компонентов не поддерживает компоненты с незаданным поз."
+#~ "обозначением.\n"
+#~ "\n"
+#~ "Менеджер компонентов будет закрыт."
+
+#~ msgid ""
+#~ "Some components have equal 'Chip Name' and 'Value' attributes!\n"
+#~ "'Value' attributes will be copied to 'Type' ones including their "
+#~ "position, orientation and visibility. After that 'Value' attributes will "
+#~ "be cleared.\n"
+#~ "If some of components do not have 'Type' attribute then such attributes "
+#~ "will be created.\n"
+#~ "Continue?"
+#~ msgstr ""
+#~ "Некоторые компоненты имеют одинаковые 'Chip Name' и 'Value' атрибуты!\n"
+#~ "'Value' атрибут будет скопирован в 'Type' включая позицию, ориентацию и "
+#~ "видимость. После этого атрибут 'Value' будет очищен.\n"
+#~ "Если некоторые компоненты не имеют атрибута 'Type', то он будет создан.\n"
+#~ "Продолжить?"
+
+#~ msgid ""
+#~ "Some components do not have 'Type' attribute!\n"
+#~ "'Type' attributes will be created for such components.\n"
+#~ "Also if some of components have equal 'Chip Name' and 'Value' attributes "
+#~ "then 'Value' attributes will be copied to 'Type' ones including their "
+#~ "position, orientation and visibility. After that 'Value' attributes will "
+#~ "be cleared.\n"
+#~ "Continue?"
+#~ msgstr ""
+#~ "Некоторые компоненты не имеют атрибута 'Type'!\n"
+#~ "Атрибут 'Type' будет создан для этих компонентов.\n"
+#~ "Также, если некоторые компоненты имеют одинаковые 'Chip Name' и 'Value' "
+#~ "атрибуты,\n"
+#~ "то атрибут 'Value' будет скопирован в атрибут 'Type' включая позицию, "
+#~ "ориентацию и видимость. После этого атрибут 'Value' будет очищен.\n"
+#~ "Продолжить?"
+
+#~ msgid "Generate components index"
+#~ msgstr "Сформировать перечень элементов (ПЭ3)"
+
+#~ msgid "Generate specification"
+#~ msgstr "Сформировать спецификацию"
+
+#~ msgid "Remove existing variant"
+#~ msgstr "Удалить существующее исполнение"
+
+#~ msgid "Switch to English"
+#~ msgstr "Перейти в режим генерации КД на английском языке"
+
+#~ msgid "Debug on"
+#~ msgstr "Отладка включена"
+
+#~ msgid "Type:"
+#~ msgstr "Тип:"
+
+#~ msgid "Subtype:"
+#~ msgstr "Подтип:"
+
+#~ msgid "Precision:"
+#~ msgstr "Допуск:"
+
+#~ msgid "Note:"
+#~ msgstr "Примечание:"
+
+#~ msgid "Designation:"
+#~ msgstr "Обозначение:"
+
+#~ msgid "Manufacturer:"
+#~ msgstr "Производитель:"
+
+#~ msgid "Table represantation mode selection"
+#~ msgstr "Выбор режима отображения таблицы"
+
+#~ msgid "Full component list"
+#~ msgstr "Полный список компонентов"
+
+#~ msgid "Constant part"
+#~ msgstr "Постоянная часть"
+
+#~ msgid "Variable part, var. no."
+#~ msgstr "Переменная часть, исп. №"
+
+#~ msgid "Selected component by variant"
+#~ msgstr "Выбранный компонент по исполнениям"
+
+#~ msgid "Generate Bill of &Materials (old implementation)"
+#~ msgstr "Сформировать ПЭ (старый вариант)"
+
+#~ msgid "GOST Tools"
+#~ msgstr "Инструменты ГОСТ"
+
+#~ msgid "Run pcad2kicadsch converter"
+#~ msgstr "Запустить конвертер pcad2kicadsch"
+
+#~ msgid " in part %d"
+#~ msgstr " в элементе %d"
+
+#~ msgid "Unit %d"
+#~ msgstr "Часть %d"
+
+#~ msgid "Convert P-Cad 200x ASCII schematic file"
+#~ msgstr "Конвертировать P-Cad 200x ASCII файл схемы"
+
+#~ msgid "Convert P-Cad 200x ASCII library file"
+#~ msgstr "Конвертировать P-Cad 200x ASCII файл библиотеки"
+
+#~ msgid "Actual input file :"
+#~ msgstr "Текущий входной файл :"
+
+#~ msgid "FileName"
+#~ msgstr "Имя файла"
+
+#~ msgid ""
+#~ "Error loading library.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ошибка загрузки библиотеки.\n"
+#~ "%s"
+
+#~ msgid "Open Library File"
+#~ msgstr "Открыть файл библиотеки"
+
+#~ msgid ""
+#~ "Error loading scheme.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ошибка загрузки схемы.\n"
+#~ "%s"
+
+#~ msgid "Open Schematic File"
+#~ msgstr "Открыть файл схемы"
+
+#~ msgid "Set Track Width"
+#~ msgstr "Установить ширину дорожки"
+
+#~ msgid "List of Materials"
+#~ msgstr "Перечень материалов"
+
+#~ msgid "GOST Component Manager"
+#~ msgstr "ГОСТ Менеджер Компонентов"
+
+#~ msgid "GOST tools"
+#~ msgstr "Инструменты ГОСТ"
+
+#~ msgid "pcad2kicadsch converter"
+#~ msgstr "конвертер pcad2kicadsch"
+
+#~ msgid "PCad to Kicad converter"
+#~ msgstr "Конвертер PCad в Kicad"
+
 #~ msgid "3D Image filename:"
 #~ msgstr "Имя файла 3D изображения:"
 
@@ -22833,9 +23191,6 @@ msgstr "Настройка длины дорожки"
 
 #~ msgid "Footprint Library Wizard"
 #~ msgstr "Мастер библиотеки посадочных мест"
-
-#~ msgid "Set Track Width"
-#~ msgstr "Установить ширину дорожки"
 
 #~ msgid "3&D View"
 #~ msgstr "3D просмотр"
@@ -23919,141 +24274,6 @@ msgstr "Настройка длины дорожки"
 #~ "Угол поворота посадочного места, при повороте через меню или по \"горячей"
 #~ "\" клавише."
 
-#~ msgid "Unit %d"
-#~ msgstr "Часть %d"
-
-#~ msgid " in part %d"
-#~ msgstr " в элементе %d"
-
-#~ msgid "Generate Bill of &Materials (old implementation)"
-#~ msgstr "Сформировать ПЭ (старый вариант)"
-
-#~ msgid "GOST Tools"
-#~ msgstr "Инструменты ГОСТ"
-
-#~ msgid "Run pcad2kicadsch converter"
-#~ msgstr "Запустить конвертер pcad2kicadsch"
-
-#~ msgid "Note"
-#~ msgstr "Примечание"
-
-#~ msgid "For variants"
-#~ msgstr "Для исполнений"
-
-#~ msgid "Editing"
-#~ msgstr "Редактирование"
-
-#~ msgid " note: "
-#~ msgstr " прим.: "
-
-#~ msgid "Editing the component with Reference "
-#~ msgstr "Редактирование компонента с поз.обозначением "
-
-#~ msgid "Group operation is not available in the 'variable part' mode"
-#~ msgstr "Групповая операция не доступна в режиме \"переменная часть\""
-
-#~ msgid ""
-#~ "Group operation is not available because one of the selected components "
-#~ "has different parameters along its variants"
-#~ msgstr ""
-#~ "Групповая операция не доступна, потому что один из выбранных компонентов "
-#~ "имеет различные значения полей в исполнениях компонента"
-
-#~ msgid "The selected components have different parameters. Continue?"
-#~ msgstr "Выбранные компоненты имеют отличающиеся значения полей. Продолжить?"
-
-#~ msgid "Enter a variant"
-#~ msgstr "Введите номер исполнения"
-
-#~ msgid "Add a new variant"
-#~ msgstr "Добавить новое исполнение"
-
-#~ msgid ""
-#~ "Some components were changed outside of the Component Manager.\n"
-#~ "\n"
-#~ "The changes have been transferred back to the Component Manager."
-#~ msgstr ""
-#~ "Некоторые компоненты были изменены вне Менеджера компонентов. \n"
-#~ "\n"
-#~ "Изменения были переданы обратно в Менеджер компонентов."
-
-#~ msgid ""
-#~ "Some components have equal 'Chip Name' and 'Value' attributes!\n"
-#~ "'Value' attributes will be copied to 'Type' ones including their "
-#~ "position, orientation and visibility. After that 'Value' attributes will "
-#~ "be cleared.\n"
-#~ "If some of components do not have 'Type' attribute then such attributes "
-#~ "will be created.\n"
-#~ "Continue?"
-#~ msgstr ""
-#~ "Некоторые компоненты имеют одинаковые 'Chip Name' и 'Value' атрибуты!\n"
-#~ "'Value' атрибут будет скопирован в 'Type' включая позицию, ориентацию и "
-#~ "видимость. После этого атрибут 'Value' будет очищен.\n"
-#~ "Если некоторые компоненты не имеют атрибута 'Type', то он будет создан.\n"
-#~ "Продолжить?"
-
-#~ msgid ""
-#~ "Some components do not have 'Type' attribute!\n"
-#~ "'Type' attributes will be created for such components.\n"
-#~ "Also if some of components have equal 'Chip Name' and 'Value' attributes "
-#~ "then 'Value' attributes will be copied to 'Type' ones including their "
-#~ "position, orientation and visibility. After that 'Value' attributes will "
-#~ "be cleared.\n"
-#~ "Continue?"
-#~ msgstr ""
-#~ "Некоторые компоненты не имеют атрибута 'Type'!\n"
-#~ "Атрибут 'Type' будет создан для этих компонентов.\n"
-#~ "Также, если некоторые компоненты имеют одинаковые 'Chip Name' и 'Value' "
-#~ "атрибуты,\n"
-#~ "то атрибут 'Value' будет скопирован в атрибут 'Type' включая позицию, "
-#~ "ориентацию и видимость. После этого атрибут 'Value' будет очищен.\n"
-#~ "Продолжить?"
-
-#~ msgid "Generate components index"
-#~ msgstr "Сформировать перечень элементов (ПЭ3)"
-
-#~ msgid "Generate specification"
-#~ msgstr "Сформировать спецификацию"
-
-#~ msgid "Remove existing variant"
-#~ msgstr "Удалить существующее исполнение"
-
-#~ msgid "Debug on"
-#~ msgstr "Отладка включена"
-
-#~ msgid "Type:"
-#~ msgstr "Тип:"
-
-#~ msgid "Subtype:"
-#~ msgstr "Подтип:"
-
-#~ msgid "Precision:"
-#~ msgstr "Допуск:"
-
-#~ msgid "Note:"
-#~ msgstr "Примечание:"
-
-#~ msgid "Designation:"
-#~ msgstr "Обозначение:"
-
-#~ msgid "Manufacturer:"
-#~ msgstr "Производитель:"
-
-#~ msgid "Table represantation mode selection"
-#~ msgstr "Выбор режима отображения таблицы"
-
-#~ msgid "Full component list"
-#~ msgstr "Полный список компонентов"
-
-#~ msgid "Constant part"
-#~ msgstr "Постоянная часть"
-
-#~ msgid "Variable part, var. no."
-#~ msgstr "Переменная часть, исп. №"
-
-#~ msgid "Selected component by variant"
-#~ msgstr "Выбранный компонент по исполнениям"
-
 #~ msgid ""
 #~ "This is the reference used in schematic for annotation.\n"
 #~ "Do not use digits in reference."
@@ -24111,142 +24331,6 @@ msgstr "Настройка длины дорожки"
 #~ msgstr "Элементы не взаимозаменяемы"
 
 #~ msgid ""
-#~ "\n"
-#~ "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count "
-#~ "= %d\n"
-#~ msgstr ""
-#~ "\n"
-#~ "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count "
-#~ "= %d\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = "
-#~ "%d\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = "
-#~ "%d\n"
-#~ "\n"
-
-#~ msgid "> %-28.28s PinSheet %-7.7s %s\n"
-#~ msgstr "> %-28.28s PinSheet %-7.7s %s\n"
-
-#~ msgid "#End labels\n"
-#~ msgstr "#End labels\n"
-
-#~ msgid "#Cmp ( order = Reference )"
-#~ msgstr "#Cmp ( порядок = Обозначение )"
-
-#~ msgid " (with SubCmp)"
-#~ msgstr " (с СубКомп)"
-
-#~ msgid "Item count"
-#~ msgstr "количество"
-
-#~ msgid ""
-#~ "\n"
-#~ "#Cmp ( order = Value )"
-#~ msgstr ""
-#~ "\n"
-#~ "#Cmp ( порядок = Значение )"
-
-#~ msgid "#End Cmp\n"
-#~ msgstr "#End Cmp\n"
-
-#~ msgid "Bill of Materials"
-#~ msgstr "Перечень элементов"
-
-#~ msgid ""
-#~ "\n"
-#~ "#End List\n"
-#~ msgstr ""
-#~ "\n"
-#~ "#End List\n"
-
-#~ msgid "List items:"
-#~ msgstr "Перечень элементов:"
-
-#~ msgid "Sub components (i.e. U2A, U2B ...)"
-#~ msgstr "Элементы (т.е. DD1.1, DD1.2 ...)"
-
-#~ msgid "Hierarchical pins by name"
-#~ msgstr "Иерархия выводов по имени"
-
-#~ msgid "Hierarchical pins by sheet"
-#~ msgstr "Иерархия выводов по листам"
-
-#~ msgid "List"
-#~ msgstr "Список"
-
-#~ msgid "List for spreadsheet import (by ref)"
-#~ msgstr "Импорт в эл.таблицу (по обозн.)"
-
-#~ msgid "List for spreadsheet import (by grouped ref)"
-#~ msgstr "Импорт в эл.таблицу (с груп. по обозн.)"
-
-#~ msgid "List for spreadsheet import (by value)"
-#~ msgstr "Импорт в эл.таблицу (по значению)"
-
-#~ msgid "Output format:"
-#~ msgstr "Формат вывода:"
-
-#~ msgid "Tab"
-#~ msgstr "Tab"
-
-#~ msgid ";"
-#~ msgstr ";"
-
-#~ msgid ","
-#~ msgstr ","
-
-#~ msgid "Field separator for spreadsheet import:"
-#~ msgstr "Разделитель полей для импорта в эл.таблицу:"
-
-#~ msgid "Launch list browser"
-#~ msgstr "Просмотреть список"
-
-#~ msgid "Add to list:"
-#~ msgstr "Добавить в список:"
-
-#~ msgid "Component location"
-#~ msgstr "Обозначение"
-
-#~ msgid "System Fields:"
-#~ msgstr "Общие поля:"
-
-#~ msgid "Users fields:"
-#~ msgstr "Поля пользователя:"
-
-#~ msgid "Field 1"
-#~ msgstr "Поле 1"
-
-#~ msgid "Field 2"
-#~ msgstr "Поле 2"
-
-#~ msgid "Field 3"
-#~ msgstr "Поле 3"
-
-#~ msgid "Field 4"
-#~ msgstr "Поле 4"
-
-#~ msgid "Field 5"
-#~ msgstr "Поле 5"
-
-#~ msgid "Field 6"
-#~ msgstr "Поле 6"
-
-#~ msgid "Field 7"
-#~ msgstr "Поле 7"
-
-#~ msgid "Field 8"
-#~ msgstr "Поле 8"
-
-#~ msgid "All existing user fields"
-#~ msgstr "Все поля пользователя"
-
-#~ msgid ""
 #~ "PCB footprint library file <%s> could not be found in the default search "
 #~ "paths."
 #~ msgstr ""
@@ -24257,13 +24341,6 @@ msgstr "Настройка длины дорожки"
 
 #~ msgid "Some files are invalid!"
 #~ msgstr "Некоторые файлы некорректны!"
-
-#~ msgid ""
-#~ "The Internet forum dedicated to KiCad Russian support, including GOST "
-#~ "support"
-#~ msgstr ""
-#~ "Интернет форум, посвященный русскоязычной поддержке проекта KiCad, "
-#~ "включая поддержку ГОСТ"
 
 #~ msgid "footprint library path <%s> does not exist"
 #~ msgstr "путь библиотек посадочных мест <%s> не существует"
@@ -24352,18 +24429,6 @@ msgstr "Настройка длины дорожки"
 #~ msgstr ""
 #~ "Не удалось загрузить библиотеку посадочных мест <%s>:\n"
 #~ "\n"
-
-#~ msgid "GOST tools"
-#~ msgstr "Инструменты ГОСТ"
-
-#~ msgid "pcad2kicadsch converter"
-#~ msgstr "конвертер pcad2kicadsch"
-
-#~ msgid "GOST Component Manager"
-#~ msgstr "ГОСТ Менеджер Компонентов"
-
-#~ msgid "List of Materials"
-#~ msgstr "Перечень материалов"
 
 #~ msgid "Unlock All Modules"
 #~ msgstr "Разблокировать все модули"
@@ -24678,33 +24743,3 @@ msgstr "Настройка длины дорожки"
 
 #~ msgid "The replacement is permitted with"
 #~ msgstr "Разрешается замена на"
-
-#~ msgid "Failed to open file <%s>"
-#~ msgstr "Не удалось открыть файл  <%s>"
-
-#~ msgid "Components by reference"
-#~ msgstr "Компоненты по обозначению"
-
-#~ msgid "Components by value"
-#~ msgstr "Компоненты по значению"
-
-#~ msgid "Unspecified component reference: "
-#~ msgstr "Не задано поз.обозначение у компонента:"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "The Component Manager does not support components with unspecified "
-#~ "reference.\n"
-#~ "\n"
-#~ "The Component Manager is going to be closed."
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Менеджер компонентов не поддерживает компоненты с незаданным поз."
-#~ "обозначением.\n"
-#~ "\n"
-#~ "Менеджер компонентов будет закрыт."
-
-#~ msgid "Switch to English"
-#~ msgstr "Перейти в режим генерации КД на английском языке"
