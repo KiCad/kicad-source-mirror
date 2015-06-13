@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-13 13:01+0300\n"
-"PO-Revision-Date: 2015-06-13 13:02+0300\n"
+"POT-Creation-Date: 2015-06-13 16:28+0300\n"
+"PO-Revision-Date: 2015-06-13 16:30+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -11852,7 +11852,7 @@ msgstr "Графика: %s длина: %s на %s"
 
 #: pcbnew/class_drc_item.cpp:43
 msgid "Unconnected pads"
-msgstr "Неподлюченные конт.пл."
+msgstr "Неподключенные конт.пл."
 
 #: pcbnew/class_drc_item.cpp:45
 msgid "Track near thru-hole"
@@ -16353,7 +16353,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
 msgid "Unconnected Tracks"
-msgstr "Неподлюченные дорожки"
+msgstr "Неподключенные дорожки"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
 msgid "Keep or delete bad tracks after a netlist change"
@@ -22692,6 +22692,12 @@ msgstr "Настройка длины дорожки"
 #~ msgid "FileName"
 #~ msgstr "Имя файла"
 
+#~ msgid "Open lia file"
+#~ msgstr "Открыть lia файл"
+
+#~ msgid "P-Cad 200x ASCII schematic library |*.lia"
+#~ msgstr "P-Cad 200x ASCII библиотека схемы |*.lia"
+
 #~ msgid ""
 #~ "Error loading library.\n"
 #~ "%s"
@@ -22702,6 +22708,18 @@ msgstr "Настройка длины дорожки"
 #~ msgid "Open Library File"
 #~ msgstr "Открыть файл библиотеки"
 
+#~ msgid "Generating output file.... "
+#~ msgstr "Генерация выходного файла.... "
+
+#~ msgid "Done."
+#~ msgstr "Сделано."
+
+#~ msgid "Open sch file"
+#~ msgstr "Открыть sch файл"
+
+#~ msgid "P-Cad 200x ASCII schematic |*.sch"
+#~ msgstr "P-Cad 200x ASCII схема |*.sch"
+
 #~ msgid ""
 #~ "Error loading scheme.\n"
 #~ "%s"
@@ -22711,6 +22729,16 @@ msgstr "Настройка длины дорожки"
 
 #~ msgid "Open Schematic File"
 #~ msgstr "Открыть файл схемы"
+
+#~ msgid "&About pcad2kicadsch ..."
+#~ msgstr "О pcad2kicadsch ..."
+
+#~ msgid ""
+#~ "An utility which allows schematic capture and schematic library file "
+#~ "conversion from P-CAD 200x ASCII to KiCad."
+#~ msgstr ""
+#~ "Утилита, которая позволяет конвертировать файлы схемотехнического "
+#~ "проектирование и библиотеки схемы из P-CAD 200x ASCII в KiCad."
 
 #~ msgid "Set Track Width"
 #~ msgstr "Установить ширину дорожки"
