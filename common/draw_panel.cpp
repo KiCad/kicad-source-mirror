@@ -116,7 +116,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_canStartBlock = -1;       // Command block can start if >= 0
     m_abortRequest = false;
     m_enableMiddleButtonPan = true;
-    m_enableZoomNoCenter = false;
+    m_enableZoomNoCenter = true;
     m_panScrollbarLimits = false;
     m_enableAutoPan = true;
     m_ignoreMouseEvents = false;
@@ -130,7 +130,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     if( cfg )
     {
         cfg->Read( ENBL_MIDDLE_BUTT_PAN_KEY, &m_enableMiddleButtonPan, true );
-        cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
+        cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, true );
         cfg->Read( MIDDLE_BUTT_PAN_LIMITED_KEY, &m_panScrollbarLimits, false );
         cfg->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
     }
@@ -911,7 +911,7 @@ void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
 
 void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 {
-    if( m_ignoreMouseEvents )
+    if( m_ignoreMouseEvents || event.MiddleIsDown() )
         return;
 
     wxRect rect = wxRect( wxPoint( 0, 0 ), GetClientSize() );
@@ -934,8 +934,8 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    bool offCenterReq = event.ControlDown() && event.ShiftDown();
-    offCenterReq = offCenterReq || m_enableZoomNoCenter;
+    bool offCenterReq = !(event.ControlDown() && event.ShiftDown());
+    offCenterReq = offCenterReq && m_enableZoomNoCenter;
 
 #if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
     int axis = event.GetWheelAxis();
@@ -1037,7 +1037,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( !event.IsButton() && !event.Moving() && !event.Dragging() )
         return;
 
-    if( event.RightDown() )
+    if( event.RightUp() )
     {
         OnRightClick( event );
         return;
