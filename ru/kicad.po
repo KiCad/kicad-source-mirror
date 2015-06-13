@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-13 16:28+0300\n"
-"PO-Revision-Date: 2015-06-13 16:30+0300\n"
+"POT-Creation-Date: 2015-06-13 17:00+0300\n"
+"PO-Revision-Date: 2015-06-13 17:00+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: ru_RU\n"
@@ -22567,6 +22567,9 @@ msgstr "Настройка длины дорожки"
 #~ "\n"
 #~ "Изменения были переданы обратно в Менеджер компонентов."
 
+#~ msgid "Unable to open file: "
+#~ msgstr "Не удается открыть файл: "
+
 #~ msgid "Unspecified component reference: "
 #~ msgstr "Не задано поз.обозначение у компонента:"
 
@@ -22664,6 +22667,15 @@ msgstr "Настройка длины дорожки"
 
 #~ msgid "Selected component by variant"
 #~ msgstr "Выбранный компонент по исполнениям"
+
+#~ msgid "Generating component index document..."
+#~ msgstr "Генерация перечня элементов..."
+
+#~ msgid "Please wait a moment"
+#~ msgstr "Пожалуйста подождите"
+
+#~ msgid "Generating specification document..."
+#~ msgstr "Генерация спецификации..."
 
 #~ msgid "Generate Bill of &Materials (old implementation)"
 #~ msgstr "Сформировать ПЭ (старый вариант)"
