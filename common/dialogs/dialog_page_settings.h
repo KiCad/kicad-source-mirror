@@ -72,11 +72,8 @@ public:
 private:
     void initDialog();  // Initialisation of member variables
 
-    // event handler for wxID_OK
+    // event handler for button OK
     void OnOkClick( wxCommandEvent& event );
-
-    // event handler for wxID_CANCEL
-    void OnCancelClick( wxCommandEvent& event );
 
     // event handlers for page size choice
     void OnPaperSizeChoice( wxCommandEvent& event );

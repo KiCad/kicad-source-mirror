@@ -295,17 +295,6 @@ double RoundTo0( double x, double precision )
     return (double) ix / precision;
 }
 
-wxString FormatDateLong( const wxDateTime &aDate )
-{
-    // GetInfo was introduced only on wx 2.9; for portability reason an
-    // hardcoded format is used on wx 2.8
-#if wxCHECK_VERSION( 2, 9, 0 )
-    return aDate.Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );
-#else
-    return aDate.Format( wxT("%d %b %Y") );
-#endif
-}
-
 
 wxConfigBase* GetNewConfig( const wxString& aProgName )
 {

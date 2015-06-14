@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="11" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -20,8 +20,10 @@
         <property name="path">.</property>
         <property name="precompiled_header"></property>
         <property name="relative_path">1</property>
+        <property name="skip_lua_events">1</property>
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
+        <property name="ui_table">UI</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -65,7 +67,7 @@
             <event name="OnHibernate"></event>
             <event name="OnIconize"></event>
             <event name="OnIdle"></event>
-            <event name="OnInitDialog">OnInitDialog</event>
+            <event name="OnInitDialog"></event>
             <event name="OnKeyDown"></event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>

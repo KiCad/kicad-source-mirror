@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -37,26 +37,6 @@ class DIALOG_SHIM;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_CHOICE_PAGE_ORIENTATION 1000
-#define ID_TEXTCTRL_USER_PAGE_SIZE_Y 1001
-#define ID_TEXTCTRL_USER_PAGE_SIZE_X 1002
-#define ID_TEXTCTRL_DATE 1003
-#define ID_BTN_APPLY_DATE 1004
-#define ID_PICKER_DATE 1005
-#define ID_CHECKBOX_DATE 1006
-#define ID_TEXTCTRL_REVISION 1007
-#define ID_CHECKBOX_REVISION 1008
-#define ID_TEXTCTRL_TITLE 1009
-#define ID_TEXTCTRL_COMPANY 1010
-#define ID_CHECKBOX_COMPANY 1011
-#define ID_TEXTCTRL_COMMENT1 1012
-#define ID_CHECKBOX_COMMENT1 1013
-#define ID_TEXTCTRL_COMMENT2 1014
-#define ID_CHECKBOX_COMMENT2 1015
-#define ID_TEXTCTRL_COMMENT3 1016
-#define ID_CHECKBOX_COMMENT3 1017
-#define ID_TEXTCTRL_COMMENT4 1018
-#define ID_CHECKBOX_COMMENT4 1019
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PAGES_SETTINGS_BASE
@@ -113,9 +93,9 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextfilename;
 		wxTextCtrl* m_textCtrlFilePicker;
 		wxButton* m_buttonBrowse;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaperSizeChoice( wxCommandEvent& event ) { event.Skip(); }
@@ -133,7 +113,6 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnComment3TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment4TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnWksFileSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -43,7 +45,6 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnPageSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintPreview( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintButtonClick( wxCommandEvent& event ) { event.Skip(); }

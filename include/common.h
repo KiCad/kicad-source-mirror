@@ -353,14 +353,6 @@ void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSpli
  */
 unsigned GetRunningMicroSecs();
 
-/**
- * Formats a wxDateTime using the long date format (on wx 2.9) or
- * an hardcoded format in wx 2.8; the idea is to avoid like the plague
- * the numeric-only date formats: it's difficult to discriminate between
- * dd/mm/yyyy and mm/dd/yyyy. The output is meant for user consumption
- * so no attempt to parse it should be done
- */
-wxString FormatDateLong( const wxDateTime &aDate );
 
 /**
  * Function SystemDirsAppend

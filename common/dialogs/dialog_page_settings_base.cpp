@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -45,7 +45,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	wxString m_orientationComboBoxChoices[] = { _("Landscape"), _("Portrait") };
 	int m_orientationComboBoxNChoices = sizeof( m_orientationComboBoxChoices ) / sizeof( wxString );
-	m_orientationComboBox = new wxChoice( this, ID_CHOICE_PAGE_ORIENTATION, wxDefaultPosition, wxDefaultSize, m_orientationComboBoxNChoices, m_orientationComboBoxChoices, 0 );
+	m_orientationComboBox = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_orientationComboBoxNChoices, m_orientationComboBoxChoices, 0 );
 	m_orientationComboBox->SetSelection( 0 );
 	bleftSizer->Add( m_orientationComboBox, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
@@ -63,7 +63,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_staticTextHeight->Wrap( -1 );
 	bSizercustHeight->Add( m_staticTextHeight, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_TextUserSizeY = new wxTextCtrl( this, ID_TEXTCTRL_USER_PAGE_SIZE_Y, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
+	m_TextUserSizeY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
 	m_TextUserSizeY->SetMaxLength( 6 ); 
 	m_TextUserSizeY->SetToolTip( _("Custom paper height.") );
 	
@@ -79,7 +79,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_staticTextWidth->Wrap( -1 );
 	bSizercustWidth->Add( m_staticTextWidth, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_TextUserSizeX = new wxTextCtrl( this, ID_TEXTCTRL_USER_PAGE_SIZE_X, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
+	m_TextUserSizeX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
 	m_TextUserSizeX->SetMaxLength( 6 ); 
 	m_TextUserSizeX->SetToolTip( _("Custom paper width.") );
 	
@@ -144,19 +144,19 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerissuedate;
 	bSizerissuedate = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextDate = new wxTextCtrl( this, ID_TEXTCTRL_DATE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextDate = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextDate->SetMaxLength( 0 ); 
 	m_TextDate->SetMinSize( wxSize( 100,-1 ) );
 	
 	bSizerissuedate->Add( m_TextDate, 3, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_ApplyDate = new wxButton( this, ID_BTN_APPLY_DATE, _("<-"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	m_ApplyDate = new wxButton( this, wxID_ANY, _("<<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizerissuedate->Add( m_ApplyDate, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_PickDate = new wxDatePickerCtrl( this, ID_PICKER_DATE, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT );
+	m_PickDate = new wxDatePickerCtrl( this, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT );
 	bSizerissuedate->Add( m_PickDate, 2, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_DateExport = new wxCheckBox( this, ID_CHECKBOX_DATE, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DateExport = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerissuedate->Add( m_DateExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -175,13 +175,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextRevision = new wxTextCtrl( this, ID_TEXTCTRL_REVISION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextRevision = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextRevision->SetMaxLength( 0 ); 
 	m_TextRevision->SetMinSize( wxSize( 100,-1 ) );
 	
 	bSizer9->Add( m_TextRevision, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_RevisionExport = new wxCheckBox( this, ID_CHECKBOX_REVISION, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RevisionExport = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_RevisionExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -200,7 +200,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextTitle = new wxTextCtrl( this, ID_TEXTCTRL_TITLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextTitle->SetMaxLength( 0 ); 
 	m_TextTitle->SetMinSize( wxSize( 360,-1 ) );
 	
@@ -225,13 +225,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextCompany = new wxTextCtrl( this, ID_TEXTCTRL_COMPANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextCompany = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextCompany->SetMaxLength( 0 ); 
 	m_TextCompany->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizer14->Add( m_TextCompany, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_CompanyExport = new wxCheckBox( this, ID_CHECKBOX_COMPANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CompanyExport = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer14->Add( m_CompanyExport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -250,13 +250,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizercmt1;
 	bSizercmt1 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextComment1 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT1, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment1 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextComment1->SetMaxLength( 0 ); 
 	m_TextComment1->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt1->Add( m_TextComment1, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_Comment1Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT1, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Comment1Export = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizercmt1->Add( m_Comment1Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -275,13 +275,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizercmt2;
 	bSizercmt2 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextComment2 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment2 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextComment2->SetMaxLength( 0 ); 
 	m_TextComment2->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt2->Add( m_TextComment2, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_Comment2Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT2, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Comment2Export = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizercmt2->Add( m_Comment2Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -300,13 +300,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizercmt3;
 	bSizercmt3 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextComment3 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT3, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment3 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextComment3->SetMaxLength( 0 ); 
 	m_TextComment3->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt3->Add( m_TextComment3, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_Comment3Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT3, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Comment3Export = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizercmt3->Add( m_Comment3Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -325,13 +325,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizercmt4;
 	bSizercmt4 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TextComment4 = new wxTextCtrl( this, ID_TEXTCTRL_COMMENT4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextComment4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextComment4->SetMaxLength( 0 ); 
 	m_TextComment4->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt4->Add( m_TextComment4, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	m_Comment4Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT4, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Comment4Export = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizercmt4->Add( m_Comment4Export, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -368,14 +368,14 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	bMainSizer->Add( bUpperSizerH, 1, wxEXPAND, 5 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 	
-	bMainSizer->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
@@ -397,8 +397,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_TextComment3->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment3TextUpdated ), NULL, this );
 	m_TextComment4->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment4TextUpdated ), NULL, this );
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnWksFileSelection ), NULL, this );
-	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnOkClick ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_PAGES_SETTINGS_BASE::~DIALOG_PAGES_SETTINGS_BASE()
@@ -419,7 +418,6 @@ DIALOG_PAGES_SETTINGS_BASE::~DIALOG_PAGES_SETTINGS_BASE()
 	m_TextComment3->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment3TextUpdated ), NULL, this );
 	m_TextComment4->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnComment4TextUpdated ), NULL, this );
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnWksFileSelection ), NULL, this );
-	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnOkClick ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnOkClick ), NULL, this );
 	
 }

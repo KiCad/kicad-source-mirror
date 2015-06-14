@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,10 +78,12 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 {
     DIALOG_PAGES_SETTINGS dlg( this );
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
-    int diag = dlg.ShowModal();
 
-    if( m_canvas && diag )
-        m_canvas->Refresh();
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        if( m_canvas )
+            m_canvas->Refresh();
+    }
 }
 
 
@@ -201,6 +203,8 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextComment4->SetValue( m_tb.GetComment4() );
 
 #ifndef EESCHEMA
+    // these options have meaning only for Eeschema.
+    // disable them for other apps
     m_RevisionExport->Show( false );
     m_DateExport->Show( false );
     m_TitleExport->Show( false );
@@ -215,7 +219,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     UpdatePageLayoutExample();
 
     // Make the OK button the default.
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
     m_initialized = true;
 }
 
@@ -229,15 +233,9 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 
         if( LocalPrjConfigChanged() )
             m_parent->SaveProjectSettings( true );
-
-        EndModal( true );
     }
-}
 
-
-void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( false );
+    event.Skip();
 }
 
 
@@ -397,9 +395,19 @@ void DIALOG_PAGES_SETTINGS::OnComment4TextUpdated( wxCommandEvent& event )
     }
 }
 
+
 void DIALOG_PAGES_SETTINGS::OnDateApplyClick( wxCommandEvent& event )
 {
-    m_TextDate->SetValue( FormatDateLong( m_PickDate->GetValue() ) );
+    wxDateTime datetime = m_PickDate->GetValue();
+    wxString date =
+    // We can choose different formats. Only one must be uncommented
+    //
+    //  datetime.Format( wxLocale::GetInfo( wxLOCALE_SHORT_DATE_FMT ) );
+    //  datetime.Format( wxLocale::GetInfo( wxLOCALE_LONG_DATE_FMT ) );
+    //  datetime.Format( wxT("%Y-%b-%d") );
+        datetime.FormatISODate();
+
+    m_TextDate->SetValue( date );
 }
 
 

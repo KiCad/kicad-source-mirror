@@ -177,7 +177,7 @@ void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
     wxFileName  fn;
     wxString    msg;
 
-    // Build CMP file name by changing the extension of NetList filename
+    // Build the .cmp file name from the board name
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
 
@@ -528,7 +528,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    // Calculation file name by changing the extension name to NetList
+    // Build the .cmp file name from the board name
     fn = GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
     wildcard = wxGetTranslation( ComponentFileWildcard );
@@ -561,7 +561,7 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
     if( cmpFile == NULL )
         return false;
 
-    fprintf( cmpFile, "Cmp-Mod V01 Genere par PcbNew le %s\n", TO_UTF8( DateAndTime() ) );
+    fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( DateAndTime() ) );
 
     MODULE* module = aBrd->m_Modules;
     for( ; module != NULL; module = module->Next() )
