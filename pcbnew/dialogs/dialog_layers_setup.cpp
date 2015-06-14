@@ -627,7 +627,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
 
         // Clamp the value between reasonable values
 
-        thickness = Clamp( Millimeter2iu( 0.1 ), thickness, Millimeter2iu( 3.0 ) );
+        thickness = Clamp( Millimeter2iu( 0.1 ), thickness, Millimeter2iu( 10.0 ) );
         m_pcb->GetDesignSettings().SetBoardThickness( thickness );
 
         EndModal( wxID_OK );
