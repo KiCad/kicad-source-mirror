@@ -59,13 +59,33 @@ DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SE
 
 bool DIALOG_TRACK_VIA_SIZE::check()
 {
-    // Wrong input
-    if( m_trackWidth.GetValue() < 0 || m_viaDiameter.GetValue() < 0 || m_viaDrill.GetValue() < 0 )
+    if( m_trackWidth.GetValue() < 0 )
+    {
+        DisplayError( GetParent(), _( "Invalid track width" ) );
+        m_trackWidthText->SetFocus();
         return false;
+    }
 
-    // Via drill should be smaller than via diameter
-    if( m_viaDrill.GetValue() >= m_viaDiameter.GetValue() )
+    if( m_viaDiameter.GetValue() < 0 )
+    {
+        DisplayError( GetParent(), _( "Invalid via diameter" ) );
+        m_viaDiameterText->SetFocus();
         return false;
+    }
+
+    if( m_viaDrill.GetValue() < 0 )
+    {
+        DisplayError( GetParent(), _( "Invalid via drill size" ) );
+        m_viaDrillText->SetFocus();
+        return false;
+    }
+
+    if( m_viaDrill.GetValue() >= m_viaDiameter.GetValue() )
+    {
+        DisplayError( GetParent(), _( "Via drill size has to be smaller than via diameter" ) );
+        m_viaDrillText->SetFocus();
+        return false;
+    }
 
     return true;
 }
@@ -86,11 +106,6 @@ void DIALOG_TRACK_VIA_SIZE::onOkClick( wxCommandEvent& aEvent )
         m_settings.SetCustomViaSize( m_viaDiameter.GetValue() );
         m_settings.SetCustomViaDrill( m_viaDrill.GetValue() );
         EndModal( 1 );
-    }
-    else
-    {
-        DisplayError( GetParent(), _( "Settings are incorrect" ) );
-        m_trackWidthText->SetFocus();
     }
 }
 

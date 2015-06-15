@@ -63,13 +63,16 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_DrawSegmentWidth = Millimeter2iu( DEFAULT_GRAPHIC_THICKNESS );     // current graphic line width (not EDGE layer)
 
     m_EdgeSegmentWidth = Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS );    // current graphic line width (EDGE layer only)
-    m_PcbTextWidth     = Millimeter2iu(DEFAULT_TEXT_PCB_THICKNESS );    // current Pcb (not module) Text width
+    m_PcbTextWidth     = Millimeter2iu( DEFAULT_TEXT_PCB_THICKNESS );    // current Pcb (not module) Text width
 
     m_PcbTextSize       = wxSize( Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ),
                                   Millimeter2iu( DEFAULT_TEXT_PCB_SIZE  ) );  // current Pcb (not module) Text size
 
     m_useCustomTrackVia = false;
     m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );
+    m_customViaSize.m_Diameter = Millimeter2iu( DEFAULT_VIASMINSIZE );
+    m_customViaSize.m_Drill = Millimeter2iu( DEFAULT_VIASMINDRILL );
+
     m_TrackMinWidth     = Millimeter2iu( DEFAULT_TRACKMINWIDTH );   // track min width
     m_ViasMinSize       = Millimeter2iu( DEFAULT_VIASMINSIZE );     // via (not uvia) min diam
     m_ViasMinDrill      = Millimeter2iu( DEFAULT_VIASMINDRILL );    // via (not uvia) min drill diam
@@ -204,14 +207,22 @@ bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
      * are always the Netclass values
      */
     if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
+    {
         lists_sizes_modified = true;
+        m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
+    }
 
-    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
+    if( m_ViasDimensionsList[0].m_Drill != netClass->GetViaDrill() )
+    {
+        lists_sizes_modified = true;
+        m_ViasDimensionsList[0].m_Drill = netClass->GetViaDrill();
+    }
 
     if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
+    {
         lists_sizes_modified = true;
-
-    m_TrackWidthList[0] = netClass->GetTrackWidth();
+        m_TrackWidthList[0] = netClass->GetTrackWidth();
+    }
 
     if( GetViaSizeIndex() >= m_ViasDimensionsList.size() )
         SetViaSizeIndex( m_ViasDimensionsList.size() );

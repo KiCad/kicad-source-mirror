@@ -151,6 +151,7 @@ NETCLASSPTR NETCLASSES::Find( const wxString& aName ) const
 void BOARD::SynchronizeNetsAndNetClasses()
 {
     NETCLASSES& netClasses = m_designSettings.m_NetClasses;
+    NETCLASSPTR defaultNetClass = netClasses.GetDefault();
 
     // set all NETs to the default NETCLASS, then later override some
     // as we go through the NETCLASSes.
@@ -158,7 +159,7 @@ void BOARD::SynchronizeNetsAndNetClasses()
     for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
                 net != netEnd; ++net )
     {
-        net->SetClass( netClasses.GetDefault() );
+        net->SetClass( defaultNetClass );
     }
 
     // Add netclass name and pointer to nets.  If a net is in more than one netclass,
@@ -196,7 +197,7 @@ void BOARD::SynchronizeNetsAndNetClasses()
         netclass->Clear();
     }
 
-    netClasses.GetDefault()->Clear();
+    defaultNetClass->Clear();
 
     for( NETINFO_LIST::iterator net( m_NetInfo.begin() ), netEnd( m_NetInfo.end() );
             net != netEnd; ++net )
@@ -211,6 +212,12 @@ void BOARD::SynchronizeNetsAndNetClasses()
 
         netclass->Add( net->GetNetname() );
     }
+
+    // Set initial values for custom track width & via size to match the default netclass settings
+    m_designSettings.UseCustomTrackViaSize( false );
+    m_designSettings.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
+    m_designSettings.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
+    m_designSettings.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
 }
 
 

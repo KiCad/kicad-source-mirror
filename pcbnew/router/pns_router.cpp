@@ -64,11 +64,11 @@
 static PNS_ROUTER* theRouter;
 
 
-PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER *aRouter ) :
+PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER* aRouter ) :
     m_router( aRouter )
 {
-    BOARD *brd = m_router->GetBoard();
-    PNS_NODE *world = m_router->GetWorld();
+    BOARD* brd = m_router->GetBoard();
+    PNS_NODE* world = m_router->GetWorld();
 
     PNS_TOPOLOGY topo( world );
     m_clearanceCache.resize( brd->GetNetCount() );
