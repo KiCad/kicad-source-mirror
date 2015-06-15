@@ -350,8 +350,11 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 {
     if( PART_SPTR part = m_part.lock() )
     {
+        // Draw pin targets if part is being dragged
+        bool dragging = ( aPanel->GetScreen()->GetCurItem() == this );
+
         part->Draw( aPanel, aDC, m_Pos + aOffset, m_unit, m_convert, aDrawMode, aColor,
-                    m_transform, aDrawPinText, false, false, &m_isDangling );
+                    m_transform, aDrawPinText, false, false, dragging ? NULL : &m_isDangling );
     }
     else    // Use dummy() part if the actual cannot be found.
     {

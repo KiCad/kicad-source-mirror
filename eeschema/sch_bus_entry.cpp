@@ -197,11 +197,15 @@ void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     GRLine( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
             m_End().x + aOffset.x, m_End().y + aOffset.y, GetPenSize(), color );
 
-    if( m_isDanglingStart ) {
+
+    // Draw pin targets if part is being dragged
+    bool dragging = ( aPanel->GetScreen()->GetCurItem() == this );
+
+    if( m_isDanglingStart || dragging ) {
         GRCircle( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, TARGET_BUSENTRY_RADIUS, 0, color );
     }
 
-    if( m_isDanglingEnd ) {
+    if( m_isDanglingEnd || dragging ) {
         GRCircle( clipbox, aDC, m_End().x + aOffset.x, m_End().y + aOffset.y, TARGET_BUSENTRY_RADIUS, 0, color );
     }
 }
