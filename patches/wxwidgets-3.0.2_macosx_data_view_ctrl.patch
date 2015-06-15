@@ -1,0 +1,12 @@
+diff --git a/src/osx/dataview_osx.cpp b/src/osx/dataview_osx.cpp
+index 332d375..492b237 100644
+--- a/src/osx/dataview_osx.cpp
++++ b/src/osx/dataview_osx.cpp
+@@ -378,7 +378,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
+                             const wxValidator& validator,
+                             const wxString& name)
+ {
+-  DontCreatePeer();
+   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
+     return false;
+   SetPeer(::CreateDataView(this,parent,id,pos,size,style,GetExtraStyle()));
