@@ -203,7 +203,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM</property>
+                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                     <property name="proportion">5</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -644,7 +644,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM</property>
+                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                     <property name="proportion">5</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1287,7 +1287,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>

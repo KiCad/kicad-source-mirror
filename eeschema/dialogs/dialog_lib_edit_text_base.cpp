@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -113,7 +113,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bBottomtBoxSizer->Add( m_TextVJustificationOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bPropertiesSizer->Add( bBottomtBoxSizer, 1, wxALIGN_CENTER|wxEXPAND, 5 );
+	bPropertiesSizer->Add( bBottomtBoxSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );

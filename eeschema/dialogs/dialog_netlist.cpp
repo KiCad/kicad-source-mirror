@@ -396,7 +396,7 @@ void NETLIST_DIALOG::InstallPageSpice()
     page->m_CommandStringCtrl->SetInsertionPoint( 1 );
     page->m_LowBoxSizer->Add( page->m_CommandStringCtrl,
                               0,
-                              wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                              wxGROW | wxLEFT | wxRIGHT | wxBOTTOM,
                               5 );
 
     // Add buttons

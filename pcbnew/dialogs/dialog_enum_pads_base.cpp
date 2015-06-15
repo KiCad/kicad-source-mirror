@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -35,7 +35,7 @@ DIALOG_ENUM_PADS_BASE::DIALOG_ENUM_PADS_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_padPrefix = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_padPrefix->SetMaxLength( 4 ); 
-	fgSizer->Add( m_padPrefix, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_padPrefix, 0, wxALL|wxEXPAND, 5 );
 	
 	m_lblPadStartNum = new wxStaticText( this, wxID_ANY, _("First pad number:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblPadStartNum->Wrap( -1 );

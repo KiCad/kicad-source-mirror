@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,10 +57,10 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_buttonNetlist = new wxButton( this, ID_CREATE_BOM, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonNetlist->SetDefault(); 
-	bRightSizer->Add( m_buttonNetlist, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bRightSizer->Add( m_buttonNetlist, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonCancel, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bRightSizer->Add( m_buttonCancel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonHelp = new wxButton( this, ID_HELP, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonHelp, 0, wxALL|wxEXPAND, 5 );
@@ -69,10 +69,10 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bRightSizer->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
 	
 	m_buttonAddPlugin = new wxButton( this, ID_ADD_PLUGIN, _("Add Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonAddPlugin, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bRightSizer->Add( m_buttonAddPlugin, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonDelPlugin = new wxButton( this, ID_REMOVEL_PLUGIN, _("Remove Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonDelPlugin, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bRightSizer->Add( m_buttonDelPlugin, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonEdit = new wxButton( this, wxID_ANY, _("Edit Plugin File"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonEdit, 0, wxALL|wxEXPAND, 5 );

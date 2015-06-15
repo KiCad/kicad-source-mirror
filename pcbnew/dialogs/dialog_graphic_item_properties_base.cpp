@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -96,7 +96,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	
 	m_Angle_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Angle_Ctrl->SetMaxLength( 0 ); 
-	fgUpperRightGridSizer->Add( m_Angle_Ctrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	fgUpperRightGridSizer->Add( m_Angle_Ctrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_AngleUnit = new wxStaticText( this, wxID_ANY, _("0.1 degree"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AngleUnit->Wrap( -1 );
@@ -108,7 +108,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessCtrl->SetMaxLength( 0 ); 
-	fgUpperRightGridSizer->Add( m_ThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgUpperRightGridSizer->Add( m_ThicknessCtrl, 0, wxEXPAND|wxALL, 5 );
 	
 	m_ThicknessTextUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessTextUnit->Wrap( -1 );
@@ -155,7 +155,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_StandardButtonsSizer->AddButton( m_StandardButtonsSizerCancel );
 	m_StandardButtonsSizer->Realize();
 	
-	bMainSizer->Add( m_StandardButtonsSizer, 0, wxALIGN_BOTTOM|wxALIGN_RIGHT|wxALL, 5 );
+	bMainSizer->Add( m_StandardButtonsSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 26 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -94,7 +94,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	bSizerRight->Add( m_textCtrlCurrLayer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerUpper->Add( bSizerRight, 3, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( bSizerRight, 3, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerMain->Add( bSizerUpper, 1, wxALL|wxEXPAND, 5 );

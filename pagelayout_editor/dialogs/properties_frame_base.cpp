@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -30,7 +30,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextType->Wrap( -1 );
 	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizerType->Add( m_staticTextType, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerType->Add( m_staticTextType, 0, wxLEFT|wxRIGHT, 5 );
 	
 	m_textCtrlType = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	bSizerType->Add( m_textCtrlType, 0, wxRIGHT|wxLEFT, 5 );
@@ -45,7 +45,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextPageOpt->Wrap( -1 );
 	m_staticTextPageOpt->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
 	
-	bSizerPageOpt->Add( m_staticTextPageOpt, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerPageOpt->Add( m_staticTextPageOpt, 0, wxLEFT|wxRIGHT, 5 );
 	
 	wxString m_choicePageOptChoices[] = { _("None"), _("Page 1 only"), _("Not on page 1") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
@@ -85,13 +85,13 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	int m_choiceHjustifyNChoices = sizeof( m_choiceHjustifyChoices ) / sizeof( wxString );
 	m_choiceHjustify = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceHjustifyNChoices, m_choiceHjustifyChoices, 0 );
 	m_choiceHjustify->SetSelection( 0 );
-	bSizerJustify->Add( m_choiceHjustify, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 5 );
+	bSizerJustify->Add( m_choiceHjustify, 0, wxEXPAND|wxALL, 5 );
 	
 	m_checkBoxBold = new wxCheckBox( m_swItemProperties, wxID_ANY, _("Bold"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerJustify->Add( m_checkBoxBold, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerFontOpt->Add( bSizerJustify, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerFontOpt->Add( bSizerJustify, 0, 0, 5 );
 	
 	wxBoxSizer* bSizerBoldItalic;
 	bSizerBoldItalic = new wxBoxSizer( wxHORIZONTAL );
@@ -104,13 +104,13 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	int m_choiceVjustifyNChoices = sizeof( m_choiceVjustifyChoices ) / sizeof( wxString );
 	m_choiceVjustify = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVjustifyNChoices, m_choiceVjustifyChoices, 0 );
 	m_choiceVjustify->SetSelection( 1 );
-	bSizerBoldItalic->Add( m_choiceVjustify, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 5 );
+	bSizerBoldItalic->Add( m_choiceVjustify, 0, wxEXPAND|wxALL, 5 );
 	
 	m_checkBoxItalic = new wxCheckBox( m_swItemProperties, wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBoldItalic->Add( m_checkBoxItalic, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerFontOpt->Add( bSizerBoldItalic, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerFontOpt->Add( bSizerBoldItalic, 1, 0, 5 );
 	
 	
 	m_SizerTextOptions->Add( bSizerFontOpt, 0, wxEXPAND, 5 );
@@ -191,7 +191,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_buttonOK = new wxButton( m_swItemProperties, wxID_ANY, _("Accept"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOK->SetDefault(); 
-	bSizerMain->Add( m_buttonOK, 0, wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_buttonOK, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline8 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline8, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -324,7 +324,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_staticTextThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextThickness->Wrap( -1 );
-	bSizerThickness->Add( m_staticTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerThickness->Add( m_staticTextThickness, 0, wxLEFT|wxRIGHT, 5 );
 	
 	m_textCtrlThickness = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerThickness->Add( m_textCtrlThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );

@@ -30,7 +30,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	fgSizer->Add( m_staticTextSize, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TargetSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer->Add( m_TargetSizeCtrl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_TargetSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextSizeUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeUnits->Wrap( -1 );
@@ -41,7 +41,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	fgSizer->Add( m_staticTextThickness, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TargetThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer->Add( m_TargetThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer->Add( m_TargetThicknessCtrl, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticTextThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextThicknessUnits->Wrap( -1 );
@@ -55,10 +55,10 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	int m_TargetShapeNChoices = sizeof( m_TargetShapeChoices ) / sizeof( wxString );
 	m_TargetShape = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TargetShapeNChoices, m_TargetShapeChoices, 0 );
 	m_TargetShape->SetSelection( 0 );
-	fgSizer->Add( m_TargetShape, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_TargetShape, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	fgSizer->Add( 0, 0, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
 	bSizerUpper->Add( fgSizer, 1, wxEXPAND, 5 );
@@ -76,7 +76,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR_BASE::TARGET_PROPERTIES_DIALOG_EDITOR_BASE( wxWi
 	m_sdbSizerButts->AddButton( m_sdbSizerButtsCancel );
 	m_sdbSizerButts->Realize();
 	
-	bSizerMain->Add( m_sdbSizerButts, 0, wxALIGN_RIGHT|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerMain->Add( m_sdbSizerButts, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );

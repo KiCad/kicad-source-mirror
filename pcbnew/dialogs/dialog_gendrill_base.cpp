@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -169,7 +169,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_buttonDrill = new wxButton( this, ID_GEN_DRILL_FILE, _("Drill File"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonDrill->SetDefault(); 
-	bSizerButtons->Add( m_buttonDrill, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizerButtons->Add( m_buttonDrill, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonMap = new wxButton( this, wxID_ANY, _("Map File"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonMap, 0, wxALL|wxEXPAND, 5 );
@@ -178,7 +178,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerButtons->Add( m_buttonReport, 0, wxALL|wxEXPAND, 5 );
 	
 	m_CancelButton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_CancelButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizerButtons->Add( m_CancelButton, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bmiddlerSizer->Add( bSizerButtons, 1, wxEXPAND, 5 );

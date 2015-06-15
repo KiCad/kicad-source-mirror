@@ -187,7 +187,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">25</property>
-                            <property name="flag">wxEXPAND|wxLEFT|wxALIGN_RIGHT</property>
+                            <property name="flag">wxEXPAND|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
@@ -999,7 +999,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">12</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticBitmap" expanded="1">
                                                 <property name="BottomDockable">1</property>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,10 +57,10 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxArrayString m_choiceUnitsChoices;
 	m_choiceUnits = new wxChoice( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitsChoices, 0 );
 	m_choiceUnits->SetSelection( 0 );
-	fgSizer1->Add( m_choiceUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_choiceUnits, 0, wxALL|wxEXPAND, 3 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	m_staticText3 = new wxStaticText( m_panel1, wxID_ANY, _("&Grid size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
@@ -69,7 +69,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxArrayString m_choiceGridSizeChoices;
 	m_choiceGridSize = new wxChoice( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceGridSizeChoices, 0 );
 	m_choiceGridSize->SetSelection( 0 );
-	fgSizer1->Add( m_choiceGridSize, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 3 );
+	fgSizer1->Add( m_choiceGridSize, 0, wxEXPAND|wxALL, 3 );
 	
 	m_staticGridUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticGridUnits->Wrap( -1 );
@@ -80,7 +80,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_staticText51, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinBusWidth = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 1, 100, 1 );
-	fgSizer1->Add( m_spinBusWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinBusWidth, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticBusWidthUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticBusWidthUnits->Wrap( -1 );
@@ -91,7 +91,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_staticText5, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinLineWidth = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 1, 100, 1 );
-	fgSizer1->Add( m_spinLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinLineWidth, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticLineWidthUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticLineWidthUnits->Wrap( -1 );
@@ -102,7 +102,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_staticText7, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinTextSize = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 1000, 0 );
-	fgSizer1->Add( m_spinTextSize, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinTextSize, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticTextSizeUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeUnits->Wrap( -1 );
@@ -113,7 +113,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_staticText9, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatHorizontal = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -5000, 5000, 0 );
-	fgSizer1->Add( m_spinRepeatHorizontal, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinRepeatHorizontal, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticRepeatXUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticRepeatXUnits->Wrap( -1 );
@@ -124,7 +124,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_staticText12, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatVertical = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -5000, 5000, 100 );
-	fgSizer1->Add( m_spinRepeatVertical, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinRepeatVertical, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticRepeatYUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticRepeatYUnits->Wrap( -1 );
@@ -135,17 +135,17 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_staticText16, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatLabel = new wxSpinCtrl( m_panel1, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -10, 10, 1 );
-	fgSizer1->Add( m_spinRepeatLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinRepeatLabel, 0, wxALL|wxEXPAND, 3 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	m_staticText221 = new wxStaticText( m_panel1, wxID_ANY, _("Auto save &time interval:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText221->Wrap( -1 );
 	fgSizer1->Add( m_staticText221, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinAutoSaveInterval = new wxSpinCtrl( m_panel1, ID_M_SPINAUTOSAVEINTERVAL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 10 );
-	fgSizer1->Add( m_spinAutoSaveInterval, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinAutoSaveInterval, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticText23 = new wxStaticText( m_panel1, wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
@@ -165,7 +165,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	bSizer3->Add( fgSizer1, 0, wxALIGN_CENTER|wxEXPAND, 0 );
+	bSizer3->Add( fgSizer1, 0, wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
@@ -223,7 +223,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	templateFieldListCtrl = new wxListView( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
 	templateFieldListCtrl->SetMinSize( wxSize( 500,-1 ) );
 	
-	bSizer6->Add( templateFieldListCtrl, 1, wxALIGN_TOP|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	bSizer6->Add( templateFieldListCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 	
 	wxStaticBoxSizer* fieldSizer;
 	fieldSizer = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Field Settings") ), wxVERTICAL );
@@ -269,7 +269,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bOptionsSizer->Add( m_sdbSizer, 0, wxALIGN_BOTTOM|wxALL|wxEXPAND, 6 );
+	bOptionsSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 6 );
 	
 	
 	mainSizer->Add( bOptionsSizer, 1, wxEXPAND, 12 );

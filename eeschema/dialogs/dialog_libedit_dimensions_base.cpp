@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,7 +38,7 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	int m_choiceGridSizeNChoices = sizeof( m_choiceGridSizeChoices ) / sizeof( wxString );
 	m_choiceGridSize = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceGridSizeNChoices, m_choiceGridSizeChoices, 0 );
 	m_choiceGridSize->SetSelection( 0 );
-	fgSizer1->Add( m_choiceGridSize, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_choiceGridSize, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticGridUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticGridUnits->Wrap( -1 );
@@ -49,6 +49,7 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_CurrentGraphicLineThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CurrentGraphicLineThicknessCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_CurrentGraphicLineThicknessCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticLineWidthUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -60,6 +61,7 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText7, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_CurrentGraphicTextSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CurrentGraphicTextSizeCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_CurrentGraphicTextSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextSizeUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -99,6 +101,7 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText15, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_CurrentPinLenghtCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CurrentPinLenghtCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_CurrentPinLenghtCtrl, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticText161 = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -110,6 +113,7 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	fgSizer1->Add( m_CurrentPinNameSizeText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_CurrentPinNameSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CurrentPinNameSizeCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_CurrentPinNameSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText18 = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -121,6 +125,7 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	fgSizer1->Add( m_CurrentPinNumberSizeText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_CurrentPinNumberSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CurrentPinNumberSizeCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_CurrentPinNumberSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText20 = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -132,12 +137,13 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	fgSizer1->Add( m_staticText16, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 	
 	m_spinRepeatLabel = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 10, 1 );
-	fgSizer1->Add( m_spinRepeatLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer1->Add( m_spinRepeatLabel, 0, wxALL|wxEXPAND, 3 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	mainSizer->Add( fgSizer1, 0, wxALIGN_CENTER|wxEXPAND, 0 );
+	
+	mainSizer->Add( fgSizer1, 0, wxEXPAND, 0 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
@@ -154,9 +160,12 @@ DIALOG_LIBEDIT_DIMENSIONS_BASE::DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bSizerBttons->Add( m_sdbSizer1, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 0 );
 	
+	
 	mainSizer->Add( bSizerBttons, 0, wxALIGN_RIGHT, 5 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();

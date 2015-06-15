@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,16 +44,16 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	bLeftSizer->Add( 0, 0, 0, wxTOP, 15 );
 	
 	m_buttonNetlist = new wxButton( this, ID_CREATE_NETLIST, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_buttonNetlist, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_buttonNetlist, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_buttonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_buttonCancel, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonAddPlugin = new wxButton( this, ID_ADD_PLUGIN, _("Add Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_buttonAddPlugin, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_buttonAddPlugin, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonDelPlugin = new wxButton( this, ID_DEL_PLUGIN, _("Remove Plugin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_buttonDelPlugin, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_buttonDelPlugin, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bLeftSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );

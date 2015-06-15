@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_libedit_dimensions_base__
-#define __dialog_libedit_dimensions_base__
+#ifndef __DIALOG_LIBEDIT_DIMENSIONS_BASE_H__
+#define __DIALOG_LIBEDIT_DIMENSIONS_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -67,7 +68,6 @@ class DIALOG_LIBEDIT_DIMENSIONS_BASE : public wxDialog
 		wxStaticText* m_staticText20;
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_spinRepeatLabel;
-		
 		wxStaticLine* m_staticline1;
 		wxButton* m_buttonSave;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -75,15 +75,16 @@ class DIALOG_LIBEDIT_DIMENSIONS_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnSaveSetupClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnSaveSetupClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 412,349 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 412,349 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIBEDIT_DIMENSIONS_BASE();
 	
 };
 
-#endif //__dialog_libedit_dimensions_base__
+#endif //__DIALOG_LIBEDIT_DIMENSIONS_BASE_H__

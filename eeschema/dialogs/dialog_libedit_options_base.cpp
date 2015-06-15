@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -40,7 +40,7 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxArrayString m_choiceGridSizeChoices;
 	m_choiceGridSize = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceGridSizeChoices, 0 );
 	m_choiceGridSize->SetSelection( 0 );
-	fgSizer->Add( m_choiceGridSize, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 3 );
+	fgSizer->Add( m_choiceGridSize, 0, wxEXPAND|wxALL, 3 );
 	
 	m_staticGridUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticGridUnits->Wrap( -1 );
@@ -51,7 +51,7 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( m_staticText5, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinLineWidth = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 1, 100, 6 );
-	fgSizer->Add( m_spinLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer->Add( m_spinLineWidth, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticLineWidthUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticLineWidthUnits->Wrap( -1 );
@@ -62,7 +62,7 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( m_staticText52, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
 	
 	m_spinPinLength = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 50, 1000, 200 );
-	fgSizer->Add( m_spinPinLength, 0, wxALIGN_CENTER|wxALL|wxEXPAND, 3 );
+	fgSizer->Add( m_spinPinLength, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticPinLengthUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticPinLengthUnits->Wrap( -1 );
@@ -73,7 +73,7 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( m_staticText7, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinPinNumSize = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 1000, 0 );
-	fgSizer->Add( m_spinPinNumSize, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer->Add( m_spinPinNumSize, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticTextSizeUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeUnits->Wrap( -1 );
@@ -84,7 +84,7 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( m_staticText9, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinPinNameSize = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -5000, 5000, 0 );
-	fgSizer->Add( m_spinPinNameSize, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	fgSizer->Add( m_spinPinNameSize, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticRepeatXUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticRepeatXUnits->Wrap( -1 );
@@ -95,7 +95,7 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( m_staticText11, 0, wxALL, 5 );
 	
 	m_spinRepeatHorizontal = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -1000, 1000, 0 );
-	fgSizer->Add( m_spinRepeatHorizontal, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	fgSizer->Add( m_spinRepeatHorizontal, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText12 = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
@@ -131,13 +131,13 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( m_staticText17, 0, wxALL, 5 );
 	
 	m_spinRepeatLabel = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -10, 10, 1 );
-	fgSizer->Add( m_spinRepeatLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer->Add( m_spinRepeatLabel, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	fgSizer->Add( 0, 0, 0, 0, 5 );
 	
 	
-	bSizer3->Add( fgSizer, 0, wxALIGN_CENTER|wxEXPAND, 0 );
+	bSizer3->Add( fgSizer, 0, wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );

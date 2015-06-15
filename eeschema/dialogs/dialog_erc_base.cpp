@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -42,35 +42,35 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxGridSizer* gSizeDiag;
 	gSizeDiag = new wxGridSizer( 3, 2, 0, 0 );
 	
-	m_ErcTotalErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Total:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ErcTotalErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Total:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ErcTotalErrorsText->Wrap( -1 );
-	gSizeDiag->Add( m_ErcTotalErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gSizeDiag->Add( m_ErcTotalErrorsText, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_TotalErrCount = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	gSizeDiag->Add( m_TotalErrCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_WarnErcErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Warnings:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_WarnErcErrorsText = new wxStaticText( m_PanelERC, wxID_ANY, _("Warnings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_WarnErcErrorsText->Wrap( -1 );
-	gSizeDiag->Add( m_WarnErcErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gSizeDiag->Add( m_WarnErcErrorsText, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_LastWarningCount = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	gSizeDiag->Add( m_LastWarningCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_LastErrCountText = new wxStaticText( m_PanelERC, wxID_ANY, _("Errors:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_LastErrCountText = new wxStaticText( m_PanelERC, wxID_ANY, _("Errors:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LastErrCountText->Wrap( -1 );
-	gSizeDiag->Add( m_LastErrCountText, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gSizeDiag->Add( m_LastErrCountText, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_LastErrCount = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	gSizeDiag->Add( m_LastErrCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	sdiagSizer->Add( gSizeDiag, 0, 0, 5 );
+	sdiagSizer->Add( gSizeDiag, 0, wxEXPAND, 5 );
 	
 	m_WriteResultOpt = new wxCheckBox( m_PanelERC, wxID_ANY, _("Create ERC file report"), wxDefaultPosition, wxDefaultSize, 0 );
 	sdiagSizer->Add( m_WriteResultOpt, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	bupperSizer->Add( sdiagSizer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
+	bupperSizer->Add( sdiagSizer, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* bSizerMessages;
 	bSizerMessages = new wxBoxSizer( wxVERTICAL );

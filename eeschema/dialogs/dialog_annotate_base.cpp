@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -47,7 +47,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bscopeOptSizer->Add( m_rbResetButLock, 0, wxALL, 3 );
 	
 	
-	bupperSizer->Add( bscopeOptSizer, 0, wxEXPAND|wxLEFT|wxALIGN_RIGHT, 25 );
+	bupperSizer->Add( bscopeOptSizer, 0, wxEXPAND|wxLEFT, 25 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bupperSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
@@ -71,7 +71,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerXpos->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	annotate_down_right_bitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerXpos->Add( annotate_down_right_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT, 12 );
+	bSizerXpos->Add( annotate_down_right_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 12 );
 	
 	
 	b_orderOptSizer->Add( bSizerXpos, 0, wxEXPAND|wxRIGHT, 5 );
@@ -220,6 +220,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	this->SetSizer( bmainSizer );
 	this->Layout();
+	bmainSizer->Fit( this );
 	
 	// Connect Events
 	m_btnClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnCancelClick ), NULL, this );

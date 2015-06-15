@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -143,7 +143,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	textSizeTextCtrl->SetMaxLength( 0 ); 
 	textSizeTextCtrl->SetToolTip( _("The vertical height of the currently selected field's text in the schematic") );
 	
-	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	m_staticTextUnitSize = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitSize->Wrap( -1 );
@@ -155,7 +155,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	
 	posXTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	posXTextCtrl->SetMaxLength( 0 ); 
-	fgSizerPosSize->Add( posXTextCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgSizerPosSize->Add( posXTextCtrl, 0, wxEXPAND|wxTOP, 5 );
 	
 	m_staticTextUnitPosX = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitPosX->Wrap( -1 );
@@ -169,7 +169,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	posYTextCtrl->SetMaxLength( 0 ); 
 	posYTextCtrl->SetToolTip( _("The Y coordinate of the text relative to the component") );
 	
-	fgSizerPosSize->Add( posYTextCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPosSize->Add( posYTextCtrl, 0, wxEXPAND, 5 );
 	
 	m_staticTextUnitPosY = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitPosY->Wrap( -1 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	wxArrayString m_choicePathFromChoices;
 	m_choicePathFrom = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePathFromChoices, 0 );
 	m_choicePathFrom->SetSelection( 0 );
-	fgSizerLenSkew->Add( m_choicePathFrom, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerLenSkew->Add( m_choicePathFrom, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	fgSizerLenSkew->Add( 0, 0, 0, 0, 5 );
@@ -59,7 +59,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_constraintSource->SetSelection( 1 );
 	m_constraintSource->Enable( false );
 	
-	fgSizerLenSkew->Add( m_constraintSource, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerLenSkew->Add( m_constraintSource, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	fgSizerLenSkew->Add( 0, 0, 0, 0, 5 );
@@ -69,7 +69,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizerLenSkew->Add( m_targetLengthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_targetLengthText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerLenSkew->Add( m_targetLengthText, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerLenSkew->Add( m_targetLengthText, 0, wxALL|wxEXPAND, 5 );
 	
 	m_targetLengthUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_targetLengthUnit->Wrap( -1 );
@@ -98,7 +98,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizer3->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_minAmplText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_minAmplText, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer3->Add( m_minAmplText, 0, wxALL|wxEXPAND, 5 );
 	
 	m_minAmplUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minAmplUnit->Wrap( -1 );
@@ -109,7 +109,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizer3->Add( m_staticText91, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_maxAmplText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_maxAmplText, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer3->Add( m_maxAmplText, 0, wxALL|wxEXPAND, 5 );
 	
 	m_maxAmplUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxAmplUnit->Wrap( -1 );
@@ -120,7 +120,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizer3->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_spacingText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_spacingText, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer3->Add( m_spacingText, 0, wxALL|wxEXPAND, 5 );
 	
 	m_spacingUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_spacingUnit->Wrap( -1 );
@@ -131,7 +131,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizer3->Add( m_staticText13, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_radiusText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_radiusText, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer3->Add( m_radiusText, 0, wxALL|wxEXPAND, 5 );
 	
 	m_radiusUnit = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_radiusUnit->Wrap( -1 );
@@ -149,7 +149,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_miterStyle->SetSelection( 0 );
 	m_miterStyle->Enable( false );
 	
-	fgSizer3->Add( m_miterStyle, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer3->Add( m_miterStyle, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	sbSizer2->Add( fgSizer3, 1, wxEXPAND, 5 );

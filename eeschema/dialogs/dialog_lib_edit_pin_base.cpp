@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -36,7 +36,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	m_textPinName = new wxTextCtrl( this, ID_M_TEXTPINNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPinName->SetMaxLength( 0 ); 
-	fgSizerPins->Add( m_textPinName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizerPins->Add( m_textPinName, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticTextPadName = new wxStaticText( this, ID_M_STATICTEXTPADNAME, _("Pin n&umber:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPadName->Wrap( -1 );
@@ -46,7 +46,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	m_textPadName = new wxTextCtrl( this, ID_M_TEXTPADNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPadName->SetMaxLength( 0 ); 
-	fgSizerPins->Add( m_textPadName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizerPins->Add( m_textPadName, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticTextOrient = new wxStaticText( this, wxID_ANY, _("&Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOrient->Wrap( -1 );
@@ -81,10 +81,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Sharing") ), wxVERTICAL );
 	
 	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Common to all &units in component"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALL, 3 );
 	
 	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALL, 3 );
 	
 	
 	boarderSizer->Add( sbSizerPinSharing, 0, wxEXPAND|wxALL, 5 );
@@ -94,7 +94,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	m_checkShow = new wxCheckBox( this, wxID_ANY, _("&Visible"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkShow->SetValue(true); 
-	sbSizerSchematicProperties->Add( m_checkShow, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	sbSizerSchematicProperties->Add( m_checkShow, 0, wxALL, 3 );
 	
 	
 	boarderSizer->Add( sbSizerSchematicProperties, 0, wxEXPAND|wxALL, 5 );
@@ -120,7 +120,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	m_textPinNameTextSize = new wxTextCtrl( this, ID_M_TEXTPINNAMETEXTSIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPinNameTextSize->SetMaxLength( 0 ); 
-	fgSizerTextsSizes->Add( m_textPinNameTextSize, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizerTextsSizes->Add( m_textPinNameTextSize, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticNameTextSizeUnits = new wxStaticText( this, ID_M_STATICNAMETEXTSIZEUNITS, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticNameTextSizeUnits->Wrap( -1 );
@@ -132,7 +132,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	m_textPadNameTextSize = new wxTextCtrl( this, ID_M_TEXTPADNAMETEXTSIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPadNameTextSize->SetMaxLength( 0 ); 
-	fgSizerTextsSizes->Add( m_textPadNameTextSize, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxEXPAND, 3 );
+	fgSizerTextsSizes->Add( m_textPadNameTextSize, 0, wxTOP|wxBOTTOM|wxEXPAND, 3 );
 	
 	m_staticNumberTextSizeUnits = new wxStaticText( this, ID_M_STATICNUMBERTEXTSIZEUNITS, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticNumberTextSizeUnits->Wrap( -1 );

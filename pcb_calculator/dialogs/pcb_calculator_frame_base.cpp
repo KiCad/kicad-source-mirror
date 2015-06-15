@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -273,7 +273,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_TrackCurrentValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackCurrentValue->SetMaxLength( 0 ); 
-	fgSizerTWprms->Add( m_TrackCurrentValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTWprms->Add( m_TrackCurrentValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText62 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("A"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText62->Wrap( -1 );
@@ -285,7 +285,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_TrackDeltaTValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackDeltaTValue->SetMaxLength( 0 ); 
-	fgSizerTWprms->Add( m_TrackDeltaTValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTWprms->Add( m_TrackDeltaTValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText64 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("deg C"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText64->Wrap( -1 );
@@ -297,12 +297,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_TrackThicknessValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackThicknessValue->SetMaxLength( 0 ); 
-	fgSizerTWprms->Add( m_TrackThicknessValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTWprms->Add( m_TrackThicknessValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_TW_CuThickness_choiceUnitChoices;
 	m_TW_CuThickness_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TW_CuThickness_choiceUnitChoices, 0 );
 	m_TW_CuThickness_choiceUnit->SetSelection( 0 );
-	fgSizerTWprms->Add( m_TW_CuThickness_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTWprms->Add( m_TW_CuThickness_choiceUnit, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText66 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Conductor length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText66->Wrap( -1 );
@@ -347,12 +347,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_ExtTrackWidthValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExtTrackWidthValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results->Add( m_ExtTrackWidthValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results->Add( m_ExtTrackWidthValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_TW_ExtTrackWidth_choiceUnitChoices;
 	m_TW_ExtTrackWidth_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TW_ExtTrackWidth_choiceUnitChoices, 0 );
 	m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
-	fgSizerTW_Results->Add( m_TW_ExtTrackWidth_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results->Add( m_TW_ExtTrackWidth_choiceUnit, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextArea = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Cross-section area"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextArea->Wrap( -1 );
@@ -360,7 +360,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_ExtTrackAreaValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExtTrackAreaValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results->Add( m_ExtTrackAreaValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results->Add( m_ExtTrackAreaValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ExtTrackAreaUnitLabel = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("mm ^ 2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExtTrackAreaUnitLabel->Wrap( -1 );
@@ -372,7 +372,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_ExtTrackResistValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExtTrackResistValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results->Add( m_ExtTrackResistValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results->Add( m_ExtTrackResistValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText84 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText84->Wrap( -1 );
@@ -384,7 +384,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_ExtTrackVDropValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExtTrackVDropValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results->Add( m_ExtTrackVDropValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results->Add( m_ExtTrackVDropValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText83 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Volt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText83->Wrap( -1 );
@@ -396,7 +396,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_ExtTrackLossValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExtTrackLossValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results->Add( m_ExtTrackLossValue, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerTW_Results->Add( m_ExtTrackLossValue, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText791 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Watt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText791->Wrap( -1 );
@@ -423,12 +423,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_IntTrackWidthValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_IntTrackWidthValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results1->Add( m_IntTrackWidthValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results1->Add( m_IntTrackWidthValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_TW_IntTrackWidth_choiceUnitChoices;
 	m_TW_IntTrackWidth_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TW_IntTrackWidth_choiceUnitChoices, 0 );
 	m_TW_IntTrackWidth_choiceUnit->SetSelection( 0 );
-	fgSizerTW_Results1->Add( m_TW_IntTrackWidth_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results1->Add( m_TW_IntTrackWidth_choiceUnit, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextArea1 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Cross-section area"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextArea1->Wrap( -1 );
@@ -436,7 +436,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_IntTrackAreaValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_IntTrackAreaValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results1->Add( m_IntTrackAreaValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results1->Add( m_IntTrackAreaValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_IntTrackAreaUnitLabel = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("mm ^ 2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_IntTrackAreaUnitLabel->Wrap( -1 );
@@ -448,7 +448,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_IntTrackResistValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_IntTrackResistValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results1->Add( m_IntTrackResistValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results1->Add( m_IntTrackResistValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText841 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText841->Wrap( -1 );
@@ -460,7 +460,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_IntTrackVDropValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_IntTrackVDropValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results1->Add( m_IntTrackVDropValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTW_Results1->Add( m_IntTrackVDropValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText831 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Volt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText831->Wrap( -1 );
@@ -472,7 +472,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_IntTrackLossValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_IntTrackLossValue->SetMaxLength( 0 ); 
-	fgSizerTW_Results1->Add( m_IntTrackLossValue, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerTW_Results1->Add( m_IntTrackLossValue, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText7911 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Watt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7911->Wrap( -1 );
@@ -600,7 +600,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bLeftSizer->Add( m_TranslineSelection, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_panelDisplayshape = new wxPanel( m_panelTransline, wxID_ANY, wxDefaultPosition, wxSize( 205,205 ), wxTAB_TRAVERSAL );
-	bLeftSizer->Add( m_panelDisplayshape, 1, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_panelDisplayshape, 1, wxEXPAND, 5 );
 	
 	
 	bSizeTransline->Add( bLeftSizer, 0, wxEXPAND, 5 );
@@ -626,7 +626,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Value_EpsilonR = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Value_EpsilonR->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Value_EpsilonR, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerSubstPrms->Add( m_Value_EpsilonR, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_button_EpsilonR = new wxButton( m_panelTransline, wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	fgSizerSubstPrms->Add( m_button_EpsilonR, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
@@ -637,7 +637,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Value_TanD = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Value_TanD->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Value_TanD, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerSubstPrms->Add( m_Value_TanD, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_button_TanD = new wxButton( m_panelTransline, wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	fgSizerSubstPrms->Add( m_button_TanD, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
@@ -650,7 +650,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Value_Rho = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Value_Rho->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Value_Rho, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Value_Rho, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_button_Rho = new wxButton( m_panelTransline, wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	fgSizerSubstPrms->Add( m_button_Rho, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
@@ -661,7 +661,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Substrate_prm4_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Substrate_prm4_Value->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Substrate_prm4_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm4_Value, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_SubsPrm4_choiceUnitChoices;
 	m_SubsPrm4_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm4_choiceUnitChoices, 0 );
@@ -674,7 +674,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Substrate_prm5_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Substrate_prm5_Value->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Substrate_prm5_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm5_Value, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_SubsPrm5_choiceUnitChoices;
 	m_SubsPrm5_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm5_choiceUnitChoices, 0 );
@@ -687,7 +687,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Substrate_prm6_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Substrate_prm6_Value->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Substrate_prm6_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm6_Value, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_SubsPrm6_choiceUnitChoices;
 	m_SubsPrm6_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm6_choiceUnitChoices, 0 );
@@ -700,7 +700,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Substrate_prm7_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Substrate_prm7_Value->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Substrate_prm7_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm7_Value, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_SubsPrm7_choiceUnitChoices;
 	m_SubsPrm7_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm7_choiceUnitChoices, 0 );
@@ -713,7 +713,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Substrate_prm8_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Substrate_prm8_Value->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Substrate_prm8_Value, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm8_Value, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_SubsPrm8_choiceUnitChoices;
 	m_SubsPrm8_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm8_choiceUnitChoices, 0 );
@@ -726,7 +726,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Substrate_prm9_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Substrate_prm9_Value->SetMaxLength( 0 ); 
-	fgSizerSubstPrms->Add( m_Substrate_prm9_Value, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm9_Value, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_SubsPrm9_choiceUnitChoices;
 	m_SubsPrm9_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm9_choiceUnitChoices, 0 );
@@ -754,7 +754,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Value_Frequency_Ctrl = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Value_Frequency_Ctrl->SetMaxLength( 0 ); 
-	fgSizeCmpPrms->Add( m_Value_Frequency_Ctrl, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizeCmpPrms->Add( m_Value_Frequency_Ctrl, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_choiceUnit_FrequencyChoices;
 	m_choiceUnit_Frequency = new UNIT_SELECTOR_FREQUENCY( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_FrequencyChoices, 0 );
@@ -791,12 +791,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Phys_prm1_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Phys_prm1_Value->SetMaxLength( 0 ); 
-	fgSizerPhysPrms->Add( m_Phys_prm1_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_Phys_prm1_Value, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_choiceUnit_Param1Choices;
 	m_choiceUnit_Param1 = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_Param1Choices, 0 );
 	m_choiceUnit_Param1->SetSelection( 0 );
-	fgSizerPhysPrms->Add( m_choiceUnit_Param1, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_choiceUnit_Param1, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_radioBtnPrm1 = new wxRadioButton( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	fgSizerPhysPrms->Add( m_radioBtnPrm1, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -807,12 +807,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Phys_prm2_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Phys_prm2_Value->SetMaxLength( 0 ); 
-	fgSizerPhysPrms->Add( m_Phys_prm2_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_Phys_prm2_Value, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_choiceUnit_Param2Choices;
 	m_choiceUnit_Param2 = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_Param2Choices, 0 );
 	m_choiceUnit_Param2->SetSelection( 0 );
-	fgSizerPhysPrms->Add( m_choiceUnit_Param2, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_choiceUnit_Param2, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_radioBtnPrm2 = new wxRadioButton( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerPhysPrms->Add( m_radioBtnPrm2, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -823,12 +823,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Phys_prm3_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Phys_prm3_Value->SetMaxLength( 0 ); 
-	fgSizerPhysPrms->Add( m_Phys_prm3_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_Phys_prm3_Value, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxArrayString m_choiceUnit_Param3Choices;
 	m_choiceUnit_Param3 = new UNIT_SELECTOR_LEN( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_Param3Choices, 0 );
 	m_choiceUnit_Param3->SetSelection( 0 );
-	fgSizerPhysPrms->Add( m_choiceUnit_Param3, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_choiceUnit_Param3, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	fgSizerPhysPrms->Add( 0, 0, 0, 0, 5 );
@@ -852,10 +852,10 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerButtons->Add( m_bitmapAnalyse, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_AnalyseButton = new wxButton( m_panelTransline, wxID_ANY, _("Analyze"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_AnalyseButton, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerButtons->Add( m_AnalyseButton, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	m_SynthetizeButton = new wxButton( m_panelTransline, wxID_ANY, _("Synthetize"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_SynthetizeButton, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerButtons->Add( m_SynthetizeButton, 0, wxEXPAND|wxLEFT, 5 );
 	
 	m_bitmapSynthetize = new wxStaticBitmap( m_panelTransline, wxID_ANY, wxBitmap( arrow_top_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_bitmapSynthetize, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -894,12 +894,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Elec_prm2_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Elec_prm2_Value->SetMaxLength( 0 ); 
-	fgSizerResults->Add( m_Elec_prm2_Value, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerResults->Add( m_Elec_prm2_Value, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_choiceUnit_ElecPrm2Choices;
 	m_choiceUnit_ElecPrm2 = new UNIT_SELECTOR_RESISTOR( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_ElecPrm2Choices, 0 );
 	m_choiceUnit_ElecPrm2->SetSelection( 0 );
-	fgSizerResults->Add( m_choiceUnit_ElecPrm2, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerResults->Add( m_choiceUnit_ElecPrm2, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_elec_prm3_label = new wxStaticText( m_panelTransline, wxID_ANY, _("Angle"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_elec_prm3_label->Wrap( -1 );
@@ -907,7 +907,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Elec_prm3_Value = new wxTextCtrl( m_panelTransline, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Elec_prm3_Value->SetMaxLength( 0 ); 
-	fgSizerResults->Add( m_Elec_prm3_Value, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerResults->Add( m_Elec_prm3_Value, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_choiceUnit_ElecPrm3Choices;
 	m_choiceUnit_ElecPrm3 = new UNIT_SELECTOR_ANGLE( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_ElecPrm3Choices, 0 );
@@ -935,7 +935,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Message1 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message1->Wrap( -1 );
-	fgSizerTranslResults->Add( m_Message1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerTranslResults->Add( m_Message1, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_left_message2 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message2->Wrap( -1 );
@@ -951,7 +951,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Message3 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message3->Wrap( -1 );
-	fgSizerTranslResults->Add( m_Message3, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerTranslResults->Add( m_Message3, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_left_message4 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message4->Wrap( -1 );
@@ -959,7 +959,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Message4 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message4->Wrap( -1 );
-	fgSizerTranslResults->Add( m_Message4, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerTranslResults->Add( m_Message4, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_left_message5 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message5->Wrap( -1 );
@@ -967,7 +967,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Message5 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message5->Wrap( -1 );
-	fgSizerTranslResults->Add( m_Message5, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizerTranslResults->Add( m_Message5, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_left_message6 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message6->Wrap( -1 );
@@ -975,7 +975,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Message6 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message6->Wrap( -1 );
-	fgSizerTranslResults->Add( m_Message6, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizerTranslResults->Add( m_Message6, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_left_message7 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message7->Wrap( -1 );
@@ -983,7 +983,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Message7 = new wxStaticText( m_panelTransline, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message7->Wrap( -1 );
-	fgSizerTranslResults->Add( m_Message7, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerTranslResults->Add( m_Message7, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	sbMessagesSizer->Add( fgSizerTranslResults, 1, wxEXPAND, 5 );
@@ -1076,7 +1076,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerAttButt = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonAlcAtt = new wxButton( m_panelAttenuators, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALL, 5 );
 	
 	m_bitmapAnalyse1 = new wxStaticBitmap( m_panelAttenuators, wxID_ANY, wxBitmap( arrow_bottom_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerAttButt->Add( m_bitmapAnalyse1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );

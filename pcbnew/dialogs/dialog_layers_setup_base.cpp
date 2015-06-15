@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -98,7 +98,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bCaptionsSizer->Add( m_TitlePanel, 1, wxEXPAND, 5 );
 	
 	
-	b_layersListSizer->Add( bCaptionsSizer, 0, wxALIGN_CENTER|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	b_layersListSizer->Add( bCaptionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxRAISED_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );
@@ -132,7 +132,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_CrtYdFrontPanel->SetSizer( bSizer611 );
 	m_CrtYdFrontPanel->Layout();
 	bSizer611->Fit( m_CrtYdFrontPanel );
-	m_LayerListFlexGridSizer->Add( m_CrtYdFrontPanel, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdFrontPanel, 1, wxEXPAND, 5 );
 	
 	m_CrtYdFrontStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdFrontStaticText->Wrap( -1 );
@@ -157,7 +157,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_FabFrontPanel->SetSizer( bSizer61 );
 	m_FabFrontPanel->Layout();
 	bSizer61->Fit( m_FabFrontPanel );
-	m_LayerListFlexGridSizer->Add( m_FabFrontPanel, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_FabFrontPanel, 1, wxEXPAND, 5 );
 	
 	m_FabFrontStaticText = new wxStaticText( m_LayersListPanel, ID_FABFRONTCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FabFrontStaticText->Wrap( -1 );
@@ -182,7 +182,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_AdhesFrontPanel->SetSizer( bSizer6 );
 	m_AdhesFrontPanel->Layout();
 	bSizer6->Fit( m_AdhesFrontPanel );
-	m_LayerListFlexGridSizer->Add( m_AdhesFrontPanel, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_AdhesFrontPanel, 1, wxEXPAND, 5 );
 	
 	m_AdhesFrontStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESFRONTCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesFrontStaticText->Wrap( -1 );
@@ -207,7 +207,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_SoldPFrontPanel->SetSizer( bSizer7 );
 	m_SoldPFrontPanel->Layout();
 	bSizer7->Fit( m_SoldPFrontPanel );
-	m_LayerListFlexGridSizer->Add( m_SoldPFrontPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_SoldPFrontPanel, 1, wxEXPAND, 5 );
 	
 	m_SoldPFrontStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SoldPFrontStaticText->Wrap( -1 );
@@ -232,7 +232,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_SilkSFrontPanel->SetSizer( bSizer5 );
 	m_SilkSFrontPanel->Layout();
 	bSizer5->Fit( m_SilkSFrontPanel );
-	m_LayerListFlexGridSizer->Add( m_SilkSFrontPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_SilkSFrontPanel, 1, wxEXPAND, 5 );
 	
 	m_SilkSFrontStaticText = new wxStaticText( m_LayersListPanel, ID_SILKSFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SilkSFrontStaticText->Wrap( -1 );
@@ -257,7 +257,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_MaskFrontPanel->SetSizer( bSizer8 );
 	m_MaskFrontPanel->Layout();
 	bSizer8->Fit( m_MaskFrontPanel );
-	m_LayerListFlexGridSizer->Add( m_MaskFrontPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_MaskFrontPanel, 1, wxEXPAND, 5 );
 	
 	m_MaskFrontStaticText = new wxStaticText( m_LayersListPanel, ID_MASKFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskFrontStaticText->Wrap( -1 );
@@ -285,7 +285,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_FrontPanel->SetSizer( bSizer9 );
 	m_FrontPanel->Layout();
 	bSizer9->Fit( m_FrontPanel );
-	m_LayerListFlexGridSizer->Add( m_FrontPanel, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_FrontPanel, 1, wxEXPAND, 5 );
 	
 	wxString m_FrontChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_FrontChoiceNChoices = sizeof( m_FrontChoiceChoices ) / sizeof( wxString );
@@ -314,7 +314,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In1Panel->SetSizer( bIn1Sizer );
 	m_In1Panel->Layout();
 	bIn1Sizer->Fit( m_In1Panel );
-	m_LayerListFlexGridSizer->Add( m_In1Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In1Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In1ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In1ChoiceNChoices = sizeof( m_In1ChoiceChoices ) / sizeof( wxString );
@@ -343,7 +343,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In2Panel->SetSizer( bIn2Sizer );
 	m_In2Panel->Layout();
 	bIn2Sizer->Fit( m_In2Panel );
-	m_LayerListFlexGridSizer->Add( m_In2Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In2Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In2ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In2ChoiceNChoices = sizeof( m_In2ChoiceChoices ) / sizeof( wxString );
@@ -372,7 +372,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In3Panel->SetSizer( bIn3Sizer );
 	m_In3Panel->Layout();
 	bIn3Sizer->Fit( m_In3Panel );
-	m_LayerListFlexGridSizer->Add( m_In3Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In3Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In3ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In3ChoiceNChoices = sizeof( m_In3ChoiceChoices ) / sizeof( wxString );
@@ -401,7 +401,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In4Panel->SetSizer( bIn4Sizer );
 	m_In4Panel->Layout();
 	bIn4Sizer->Fit( m_In4Panel );
-	m_LayerListFlexGridSizer->Add( m_In4Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In4Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In4ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In4ChoiceNChoices = sizeof( m_In4ChoiceChoices ) / sizeof( wxString );
@@ -430,7 +430,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In5Panel->SetSizer( bIn5Sizer );
 	m_In5Panel->Layout();
 	bIn5Sizer->Fit( m_In5Panel );
-	m_LayerListFlexGridSizer->Add( m_In5Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In5Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In5ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In5ChoiceNChoices = sizeof( m_In5ChoiceChoices ) / sizeof( wxString );
@@ -459,7 +459,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In6Panel->SetSizer( bIn6Sizer );
 	m_In6Panel->Layout();
 	bIn6Sizer->Fit( m_In6Panel );
-	m_LayerListFlexGridSizer->Add( m_In6Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In6Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In6ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In6ChoiceNChoices = sizeof( m_In6ChoiceChoices ) / sizeof( wxString );
@@ -488,7 +488,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In7Panel->SetSizer( bIn7Sizer );
 	m_In7Panel->Layout();
 	bIn7Sizer->Fit( m_In7Panel );
-	m_LayerListFlexGridSizer->Add( m_In7Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In7Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In7ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In7ChoiceNChoices = sizeof( m_In7ChoiceChoices ) / sizeof( wxString );
@@ -546,7 +546,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In9Panel->SetSizer( bIn9Sizer );
 	m_In9Panel->Layout();
 	bIn9Sizer->Fit( m_In9Panel );
-	m_LayerListFlexGridSizer->Add( m_In9Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In9Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In9ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In9ChoiceNChoices = sizeof( m_In9ChoiceChoices ) / sizeof( wxString );
@@ -575,7 +575,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In10Panel->SetSizer( bIn10Sizer );
 	m_In10Panel->Layout();
 	bIn10Sizer->Fit( m_In10Panel );
-	m_LayerListFlexGridSizer->Add( m_In10Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In10Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In10ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In10ChoiceNChoices = sizeof( m_In10ChoiceChoices ) / sizeof( wxString );
@@ -604,7 +604,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In11Panel->SetSizer( bIn11Sizer );
 	m_In11Panel->Layout();
 	bIn11Sizer->Fit( m_In11Panel );
-	m_LayerListFlexGridSizer->Add( m_In11Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In11Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In11ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In11ChoiceNChoices = sizeof( m_In11ChoiceChoices ) / sizeof( wxString );
@@ -633,7 +633,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In12Panel->SetSizer( bIn12Sizer );
 	m_In12Panel->Layout();
 	bIn12Sizer->Fit( m_In12Panel );
-	m_LayerListFlexGridSizer->Add( m_In12Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In12Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In12ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In12ChoiceNChoices = sizeof( m_In12ChoiceChoices ) / sizeof( wxString );
@@ -662,7 +662,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In13Panel->SetSizer( bIn13Sizer );
 	m_In13Panel->Layout();
 	bIn13Sizer->Fit( m_In13Panel );
-	m_LayerListFlexGridSizer->Add( m_In13Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In13Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In13ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In13ChoiceNChoices = sizeof( m_In13ChoiceChoices ) / sizeof( wxString );
@@ -691,7 +691,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In14Panel->SetSizer( bIn14Sizer );
 	m_In14Panel->Layout();
 	bIn14Sizer->Fit( m_In14Panel );
-	m_LayerListFlexGridSizer->Add( m_In14Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In14Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In14ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In14ChoiceNChoices = sizeof( m_In14ChoiceChoices ) / sizeof( wxString );
@@ -720,7 +720,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In15Panel->SetSizer( bIn15Sizer );
 	m_In15Panel->Layout();
 	bIn15Sizer->Fit( m_In15Panel );
-	m_LayerListFlexGridSizer->Add( m_In15Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In15Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In15ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In15ChoiceNChoices = sizeof( m_In15ChoiceChoices ) / sizeof( wxString );
@@ -749,7 +749,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In16Panel->SetSizer( bIn16Sizer );
 	m_In16Panel->Layout();
 	bIn16Sizer->Fit( m_In16Panel );
-	m_LayerListFlexGridSizer->Add( m_In16Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In16Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In16ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In16ChoiceNChoices = sizeof( m_In16ChoiceChoices ) / sizeof( wxString );
@@ -778,7 +778,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In17Panel->SetSizer( bIn17Sizer );
 	m_In17Panel->Layout();
 	bIn17Sizer->Fit( m_In17Panel );
-	m_LayerListFlexGridSizer->Add( m_In17Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In17Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In17ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In17ChoiceNChoices = sizeof( m_In17ChoiceChoices ) / sizeof( wxString );
@@ -807,7 +807,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In18Panel->SetSizer( bIn18Sizer );
 	m_In18Panel->Layout();
 	bIn18Sizer->Fit( m_In18Panel );
-	m_LayerListFlexGridSizer->Add( m_In18Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In18Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In18ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In18ChoiceNChoices = sizeof( m_In18ChoiceChoices ) / sizeof( wxString );
@@ -836,7 +836,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In19Panel->SetSizer( bIn19Sizer );
 	m_In19Panel->Layout();
 	bIn19Sizer->Fit( m_In19Panel );
-	m_LayerListFlexGridSizer->Add( m_In19Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In19Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In19ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In19ChoiceNChoices = sizeof( m_In19ChoiceChoices ) / sizeof( wxString );
@@ -865,7 +865,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In20Panel->SetSizer( bIn20Sizer );
 	m_In20Panel->Layout();
 	bIn20Sizer->Fit( m_In20Panel );
-	m_LayerListFlexGridSizer->Add( m_In20Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In20Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In20ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In20ChoiceNChoices = sizeof( m_In20ChoiceChoices ) / sizeof( wxString );
@@ -894,7 +894,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In21Panel->SetSizer( bIn21Sizer );
 	m_In21Panel->Layout();
 	bIn21Sizer->Fit( m_In21Panel );
-	m_LayerListFlexGridSizer->Add( m_In21Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In21Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In21ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In21ChoiceNChoices = sizeof( m_In21ChoiceChoices ) / sizeof( wxString );
@@ -923,7 +923,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In22Panel->SetSizer( bIn22Sizer );
 	m_In22Panel->Layout();
 	bIn22Sizer->Fit( m_In22Panel );
-	m_LayerListFlexGridSizer->Add( m_In22Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In22Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In22ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In22ChoiceNChoices = sizeof( m_In22ChoiceChoices ) / sizeof( wxString );
@@ -952,7 +952,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In23Panel->SetSizer( bIn23Sizer );
 	m_In23Panel->Layout();
 	bIn23Sizer->Fit( m_In23Panel );
-	m_LayerListFlexGridSizer->Add( m_In23Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In23Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In23ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In23ChoiceNChoices = sizeof( m_In23ChoiceChoices ) / sizeof( wxString );
@@ -981,7 +981,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In24Panel->SetSizer( bIn24Sizer );
 	m_In24Panel->Layout();
 	bIn24Sizer->Fit( m_In24Panel );
-	m_LayerListFlexGridSizer->Add( m_In24Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In24Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In24ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In24ChoiceNChoices = sizeof( m_In24ChoiceChoices ) / sizeof( wxString );
@@ -1010,7 +1010,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In25Panel->SetSizer( bIn25Sizer );
 	m_In25Panel->Layout();
 	bIn25Sizer->Fit( m_In25Panel );
-	m_LayerListFlexGridSizer->Add( m_In25Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In25Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In25ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In25ChoiceNChoices = sizeof( m_In25ChoiceChoices ) / sizeof( wxString );
@@ -1039,7 +1039,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In26Panel->SetSizer( bIn26Sizer );
 	m_In26Panel->Layout();
 	bIn26Sizer->Fit( m_In26Panel );
-	m_LayerListFlexGridSizer->Add( m_In26Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In26Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In26ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In26ChoiceNChoices = sizeof( m_In26ChoiceChoices ) / sizeof( wxString );
@@ -1068,7 +1068,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In27Panel->SetSizer( bIn27Sizer );
 	m_In27Panel->Layout();
 	bIn27Sizer->Fit( m_In27Panel );
-	m_LayerListFlexGridSizer->Add( m_In27Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In27Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In27ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In27ChoiceNChoices = sizeof( m_In27ChoiceChoices ) / sizeof( wxString );
@@ -1097,7 +1097,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In28Panel->SetSizer( bIn28Sizer );
 	m_In28Panel->Layout();
 	bIn28Sizer->Fit( m_In28Panel );
-	m_LayerListFlexGridSizer->Add( m_In28Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In28Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In28ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In28ChoiceNChoices = sizeof( m_In28ChoiceChoices ) / sizeof( wxString );
@@ -1126,7 +1126,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In29Panel->SetSizer( bIn29Sizer );
 	m_In29Panel->Layout();
 	bIn29Sizer->Fit( m_In29Panel );
-	m_LayerListFlexGridSizer->Add( m_In29Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In29Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In29ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In29ChoiceNChoices = sizeof( m_In29ChoiceChoices ) / sizeof( wxString );
@@ -1155,7 +1155,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_In30Panel->SetSizer( bIn30Sizer );
 	m_In30Panel->Layout();
 	bIn30Sizer->Fit( m_In30Panel );
-	m_LayerListFlexGridSizer->Add( m_In30Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_In30Panel, 1, wxEXPAND, 5 );
 	
 	wxString m_In30ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In30ChoiceNChoices = sizeof( m_In30ChoiceChoices ) / sizeof( wxString );
@@ -1187,7 +1187,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_BackPanel->SetSizer( bBackSizer );
 	m_BackPanel->Layout();
 	bBackSizer->Fit( m_BackPanel );
-	m_LayerListFlexGridSizer->Add( m_BackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_BackPanel, 1, wxEXPAND, 5 );
 	
 	wxString m_BackChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_BackChoiceNChoices = sizeof( m_BackChoiceChoices ) / sizeof( wxString );
@@ -1216,7 +1216,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_MaskBackPanel->SetSizer( bSizer24 );
 	m_MaskBackPanel->Layout();
 	bSizer24->Fit( m_MaskBackPanel );
-	m_LayerListFlexGridSizer->Add( m_MaskBackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_MaskBackPanel, 1, wxEXPAND, 5 );
 	
 	m_MaskBackStaticText = new wxStaticText( m_LayersListPanel, ID_MASKBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskBackStaticText->Wrap( -1 );
@@ -1241,7 +1241,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_SilkSBackPanel->SetSizer( bSizer25 );
 	m_SilkSBackPanel->Layout();
 	bSizer25->Fit( m_SilkSBackPanel );
-	m_LayerListFlexGridSizer->Add( m_SilkSBackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_SilkSBackPanel, 1, wxEXPAND, 5 );
 	
 	m_SilkSBackStaticText = new wxStaticText( m_LayersListPanel, ID_SILKSBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SilkSBackStaticText->Wrap( -1 );
@@ -1266,7 +1266,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_SoldPBackPanel->SetSizer( bSizer26 );
 	m_SoldPBackPanel->Layout();
 	bSizer26->Fit( m_SoldPBackPanel );
-	m_LayerListFlexGridSizer->Add( m_SoldPBackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_SoldPBackPanel, 1, wxEXPAND, 5 );
 	
 	m_SoldPBackStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SoldPBackStaticText->Wrap( -1 );
@@ -1291,7 +1291,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_AdhesBackPanel->SetSizer( bSizer27 );
 	m_AdhesBackPanel->Layout();
 	bSizer27->Fit( m_AdhesBackPanel );
-	m_LayerListFlexGridSizer->Add( m_AdhesBackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_AdhesBackPanel, 1, wxEXPAND, 5 );
 	
 	m_AdhesBackStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESBACKCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesBackStaticText->Wrap( -1 );
@@ -1341,7 +1341,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_CrtYdBackPanel->SetSizer( bSizer6111 );
 	m_CrtYdBackPanel->Layout();
 	bSizer6111->Fit( m_CrtYdBackPanel );
-	m_LayerListFlexGridSizer->Add( m_CrtYdBackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdBackPanel, 1, wxEXPAND, 5 );
 	
 	m_CrtYdBackStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDBACKCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdBackStaticText->Wrap( -1 );
@@ -1366,7 +1366,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_PCBEdgesPanel->SetSizer( bSizer28 );
 	m_PCBEdgesPanel->Layout();
 	bSizer28->Fit( m_PCBEdgesPanel );
-	m_LayerListFlexGridSizer->Add( m_PCBEdgesPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_PCBEdgesPanel, 1, wxEXPAND, 5 );
 	
 	m_PCBEdgesStaticText = new wxStaticText( m_LayersListPanel, ID_PCBEDGESCHOICE, _("Board contour"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PCBEdgesStaticText->Wrap( -1 );
@@ -1389,7 +1389,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_MarginPanel->SetSizer( bSizer291 );
 	m_MarginPanel->Layout();
 	bSizer291->Fit( m_MarginPanel );
-	m_LayerListFlexGridSizer->Add( m_MarginPanel, 1, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_MarginPanel, 1, wxEXPAND, 5 );
 	
 	m_MarginStaticText = new wxStaticText( m_LayersListPanel, ID_ECO2CHOICE, _("Edge_Cuts setback"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MarginStaticText->Wrap( -1 );
@@ -1412,7 +1412,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_Eco1Panel->SetSizer( bSizer29 );
 	m_Eco1Panel->Layout();
 	bSizer29->Fit( m_Eco1Panel );
-	m_LayerListFlexGridSizer->Add( m_Eco1Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_Eco1Panel, 1, wxEXPAND, 5 );
 	
 	m_Eco1StaticText = new wxStaticText( m_LayersListPanel, ID_ECO2CHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Eco1StaticText->Wrap( -1 );
@@ -1435,7 +1435,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_Eco2Panel->SetSizer( bSizer30 );
 	m_Eco2Panel->Layout();
 	bSizer30->Fit( m_Eco2Panel );
-	m_LayerListFlexGridSizer->Add( m_Eco2Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_Eco2Panel, 1, wxEXPAND, 5 );
 	
 	m_Eco2StaticText = new wxStaticText( m_LayersListPanel, ID_ECO1CHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Eco2StaticText->Wrap( -1 );
@@ -1460,7 +1460,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_CommentsPanel->SetSizer( bSizer31 );
 	m_CommentsPanel->Layout();
 	bSizer31->Fit( m_CommentsPanel );
-	m_LayerListFlexGridSizer->Add( m_CommentsPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_CommentsPanel, 1, wxEXPAND, 5 );
 	
 	m_CommentsStaticText = new wxStaticText( m_LayersListPanel, ID_COMMENTSCHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CommentsStaticText->Wrap( -1 );
@@ -1485,7 +1485,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_DrawingsPanel->SetSizer( bSizer32 );
 	m_DrawingsPanel->Layout();
 	bSizer32->Fit( m_DrawingsPanel );
-	m_LayerListFlexGridSizer->Add( m_DrawingsPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_DrawingsPanel, 1, wxEXPAND, 5 );
 	
 	m_DrawingsStaticText = new wxStaticText( m_LayersListPanel, ID_DRAWINGSCHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DrawingsStaticText->Wrap( -1 );

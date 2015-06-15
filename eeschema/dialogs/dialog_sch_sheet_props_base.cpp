@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -33,7 +33,7 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_textFileName->SetMaxLength( 0 ); 
 	m_textFileName->SetMinSize( wxSize( 200,-1 ) );
 	
-	fgSizer1->Add( m_textFileName, 5, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer1->Add( m_textFileName, 5, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 3 );
@@ -56,7 +56,7 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	
 	m_textSheetName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSheetName->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_textSheetName, 5, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer1->Add( m_textSheetName, 5, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
@@ -96,7 +96,7 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_staticTextTimeStamp, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_textCtrlTimeStamp, 0, wxEXPAND|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_textCtrlTimeStamp, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	bupperSizer->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );

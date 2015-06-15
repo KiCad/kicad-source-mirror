@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,13 +27,13 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&Search for:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	leftGridSizer->Add( m_staticText1, 0, wxALIGN_BOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
+	leftGridSizer->Add( m_staticText1, 0, wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
 	m_comboFind = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN ); 
 	m_comboFind->SetToolTip( _("Text with optional wildcards") );
 	m_comboFind->SetMinSize( wxSize( 125,-1 ) );
 	
-	leftGridSizer->Add( m_comboFind, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 6 );
+	leftGridSizer->Add( m_comboFind, 1, wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
 	m_staticReplace = new wxStaticText( this, wxID_ANY, _("Replace &with:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticReplace->Wrap( -1 );
@@ -44,7 +44,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_comboReplace = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	m_comboReplace->Hide();
 	
-	leftGridSizer->Add( m_comboReplace, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	leftGridSizer->Add( m_comboReplace, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticDirection = new wxStaticText( this, wxID_ANY, _("Direction:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticDirection->Wrap( -1 );

@@ -106,10 +106,10 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	bButtonsSizer->Add( m_rbFileOpt, 0, wxALL, 5 );
 	
 	m_buttonCreateFile = new wxButton( this, wxID_PRINT_BOARD, _("Plot"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonCreateFile, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bButtonsSizer->Add( m_buttonCreateFile, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bUpperSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );

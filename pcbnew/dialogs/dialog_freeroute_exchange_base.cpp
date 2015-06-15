@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -59,7 +59,7 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	bLeftSizer->Add( bLeftSubSizerSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bUpperSizer->Add( bLeftSizer, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );

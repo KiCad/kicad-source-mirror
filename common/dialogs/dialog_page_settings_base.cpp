@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -67,7 +67,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_TextUserSizeY->SetMaxLength( 6 ); 
 	m_TextUserSizeY->SetToolTip( _("Custom paper height.") );
 	
-	bSizercustHeight->Add( m_TextUserSizeY, 0, wxALIGN_TOP|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizercustHeight->Add( m_TextUserSizeY, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizerCustSize->Add( bSizercustHeight, 1, wxEXPAND, 5 );
@@ -83,7 +83,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_TextUserSizeX->SetMaxLength( 6 ); 
 	m_TextUserSizeX->SetToolTip( _("Custom paper width.") );
 	
-	bSizercustWidth->Add( m_TextUserSizeX, 0, wxALIGN_LEFT|wxALIGN_TOP|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizercustWidth->Add( m_TextUserSizeX, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizerCustSize->Add( bSizercustWidth, 1, wxEXPAND, 5 );
@@ -99,7 +99,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_PageLayoutExampleBitmap->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_PageLayoutExampleBitmap->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	
-	bleftSizer->Add( m_PageLayoutExampleBitmap, 1, wxALIGN_CENTER|wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bleftSizer->Add( m_PageLayoutExampleBitmap, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bUpperSizerH->Add( bleftSizer, 0, wxEXPAND, 5 );

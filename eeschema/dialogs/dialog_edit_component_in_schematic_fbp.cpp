@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -108,7 +108,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	optionsSizer->Add( defaultsButton, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	upperSizer->Add( optionsSizer, 0, wxALIGN_TOP|wxEXPAND|wxALL, 5 );
+	upperSizer->Add( optionsSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* fieldsSizer;
 	fieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields") ), wxHORIZONTAL );
@@ -235,7 +235,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	textSizeTextCtrl->SetMaxLength( 0 ); 
 	textSizeTextCtrl->SetToolTip( _("The size of the currently selected field's text in the schematic") );
 	
-	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	m_staticTextUnitSize = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitSize->Wrap( -1 );
@@ -249,7 +249,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	posXTextCtrl->SetMaxLength( 0 ); 
 	posXTextCtrl->SetToolTip( _("The X coordinate of the text relative to the component") );
 	
-	fgSizerPosSize->Add( posXTextCtrl, 0, wxEXPAND|wxTOP|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPosSize->Add( posXTextCtrl, 0, wxEXPAND|wxTOP, 5 );
 	
 	m_staticTextUnitPosX = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitPosX->Wrap( -1 );
@@ -263,7 +263,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	posYTextCtrl->SetMaxLength( 0 ); 
 	posYTextCtrl->SetToolTip( _("The Y coordinate of the text relative to the component") );
 	
-	fgSizerPosSize->Add( posYTextCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPosSize->Add( posYTextCtrl, 0, wxEXPAND, 5 );
 	
 	m_staticTextUnitPosY = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitPosY->Wrap( -1 );

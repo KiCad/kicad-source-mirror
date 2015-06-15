@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -120,7 +120,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	int m_choiceLayerReferenceNChoices = sizeof( m_choiceLayerReferenceChoices ) / sizeof( wxString );
 	m_choiceLayerReference = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLayerReferenceNChoices, m_choiceLayerReferenceChoices, 0 );
 	m_choiceLayerReference->SetSelection( 0 );
-	fgSizer2->Add( m_choiceLayerReference, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer2->Add( m_choiceLayerReference, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText32 = new wxStaticText( this, wxID_ANY, _("Visibility"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
@@ -149,7 +149,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	int m_choiceLayerValueNChoices = sizeof( m_choiceLayerValueChoices ) / sizeof( wxString );
 	m_choiceLayerValue = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLayerValueNChoices, m_choiceLayerValueChoices, 0 );
 	m_choiceLayerValue->SetSelection( 1 );
-	fgSizer2->Add( m_choiceLayerValue, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer2->Add( m_choiceLayerValue, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextValVisibility = new wxStaticText( this, wxID_ANY, _("Visibility"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextValVisibility->Wrap( -1 );
@@ -177,7 +177,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bSizerMain->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
