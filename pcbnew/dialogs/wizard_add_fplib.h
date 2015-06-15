@@ -100,7 +100,6 @@ public:
         LIBRARY( const wxString& aPath, const wxString& aDescription = wxEmptyString );
         ~LIBRARY()
         {
-            std::cout << "destroyed " << this << std::endl;
         }
 
         ///> Possible states of validation.

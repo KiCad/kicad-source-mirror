@@ -277,8 +277,6 @@ wxString WIZARD_FPLIB_TABLE::LIBRARY::replaceEnv( const wxString& aEnvVar, bool 
     if( !wxGetEnv( aEnvVar, &env_path ) )
         return wxEmptyString;
 
-    std::cout << "replacing (" << env_path << ") " << aEnvVar << " in " << m_path << std::endl;
-
     //return GetRelativePath( m_path, wxString( "$(" + aEnvVar + ")" ) );
 
     wxString result( m_path );
