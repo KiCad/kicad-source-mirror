@@ -51,6 +51,8 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char 
 
     if( shape == '/' )
         m_size.y = -100;
+
+    m_isDanglingStart = m_isDanglingEnd = true;
 }
 
 SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, char shape ) :

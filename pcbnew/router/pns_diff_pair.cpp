@@ -66,8 +66,11 @@ PNS_DP_PRIMITIVE_PAIR::PNS_DP_PRIMITIVE_PAIR( const VECTOR2I& aAnchorP, const VE
 
 PNS_DP_PRIMITIVE_PAIR::PNS_DP_PRIMITIVE_PAIR( const PNS_DP_PRIMITIVE_PAIR& aOther )
 {
+    m_primP = m_primN = NULL;
+
     if( aOther.m_primP )
         m_primP = aOther.m_primP->Clone();
+
     if( aOther.m_primN )
         m_primN = aOther.m_primN->Clone();
 

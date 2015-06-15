@@ -94,7 +94,10 @@ PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER *aRouter ) :
     }
 
     m_overrideEnabled = false;
-    m_defaultClearance = 254000;    // aBoard->m_NetClasses.Find ("Default clearance")->GetClearance();
+    m_defaultClearance = Millimeter2iu( 0.254 );    // aBoard->m_NetClasses.Find ("Default clearance")->GetClearance();
+    m_overrideNetA = 0;
+    m_overrideNetB = 0;
+    m_overrideClearance = 0;
 }
 
 

@@ -515,11 +515,12 @@ bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
 
     aStream >> tmp;
 
-    unsigned int n_polys = atoi( tmp.c_str() );
-    if(n_polys < 0)
+    int n_polys = atoi( tmp.c_str() );
+
+    if( n_polys < 0 )
         return false;
 
-    for( unsigned i = 0; i < n_polys; i++ )
+    for( int i = 0; i < n_polys; i++ )
     {
         ClipperLib::Paths paths;
 
@@ -528,17 +529,18 @@ bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
             return false;
 
         aStream >> tmp;
-        unsigned int n_outlines = atoi( tmp.c_str() );
-        if(n_outlines < 0)
+        int n_outlines = atoi( tmp.c_str() );
+
+        if( n_outlines < 0 )
             return false;
 
-        for( unsigned j = 0; j < n_outlines; j++)
+        for( int j = 0; j < n_outlines; j++ )
         {
             ClipperLib::Path outline;
 
             aStream >> tmp;
-            unsigned int n_vertices = atoi( tmp.c_str() );
-            for( unsigned v = 0; v < n_vertices; v++)
+            int n_vertices = atoi( tmp.c_str() );
+            for( int v = 0; v < n_vertices; v++ )
             {
                 ClipperLib::IntPoint p;
 
