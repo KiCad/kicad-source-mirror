@@ -198,6 +198,15 @@ void EDA_3D_FRAME::CreateMenuBar()
     AddMenuItem( backgrounColorMenu, ID_MENU3D_BGCOLOR_SELECTION,
                  _( "Background Bottom Color" ), KiBitmap( palette_xpm ) );
 
+    AddMenuItem( backgrounColorMenu, ID_MENU3D_SILKSCREEN_COLOR_SELECTION,
+                 _( "Silkscreen Color" ), KiBitmap( palette_xpm ) );
+
+    AddMenuItem( backgrounColorMenu, ID_MENU3D_SOLDERMASK_COLOR_SELECTION,
+                 _( "Solder Mask Color" ), KiBitmap( palette_xpm ) );
+
+    AddMenuItem( backgrounColorMenu, ID_MENU3D_COPPER_COLOR_SELECTION,
+                 _( "Copper/Surface Finish Color" ), KiBitmap( palette_xpm ) );
+
     AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
                  _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
 

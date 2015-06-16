@@ -145,10 +145,37 @@ private:
     double BestZoom();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
-    // Get a S3D_COLOR from a wx colour dialog
-    // return true if a new color is chosen, false if
-    // no change or aborted by user
+    /**
+     * Function Get3DColorFromUser
+     * Get a S3D_COLOR from a wx colour dialog
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
     bool Get3DColorFromUser( S3D_COLOR &color );
+
+    /**
+     * Function Set3DSoldermaskColorFromUser
+     * Set the solder mask color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DSoldermaskColorFromUser();
+
+    /**
+     * Function Set3DCopperColorFromUser
+     * Set the copper color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DCopperColorFromUser();
+
+    /**
+     * Function Set3DSilkScreenColorFromUser
+     * Set the silkscreen color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DSilkScreenColorFromUser();
 
     DECLARE_EVENT_TABLE()
 };
