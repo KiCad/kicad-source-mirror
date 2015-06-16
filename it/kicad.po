@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-15 22:12+0100\n"
-"PO-Revision-Date: 2015-06-15 22:12+0100\n"
+"POT-Creation-Date: 2015-06-16 13:16+0100\n"
+"PO-Revision-Date: 2015-06-16 13:16+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -16810,7 +16810,7 @@ msgstr "Modifica con l'editor dei componenti"
 
 #: eeschema/hotkeys.cpp:187
 msgid "Move Schematic Item"
-msgstr "Nuovo elemento schema"
+msgstr "Sposta elemento dello schema"
 
 #: eeschema/hotkeys.cpp:191
 msgid "Copy Component or Label"
