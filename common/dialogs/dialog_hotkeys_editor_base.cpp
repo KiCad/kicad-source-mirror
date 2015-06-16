@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -37,7 +37,7 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	b_buttonsSizer->Add( m_undoButton, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( b_buttonsSizer, 0, wxALIGN_CENTER|wxALIGN_RIGHT, 5 );
+	bMainSizer->Add( b_buttonsSizer, 0, wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
