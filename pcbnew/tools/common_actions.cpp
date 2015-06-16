@@ -75,23 +75,23 @@ TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
 
 // Edit tool actions
 TOOL_ACTION COMMON_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
-        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
         _( "Open in Footprint Editor" ),
         _( "Opens the selected footprint in the Footprint Editor" ),
         module_editor_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::copyPadToSettings( "pcbnew.InteractiveEdit.copyPadToSettings",
-        AS_CONTEXT, 0,
+        AS_GLOBAL, 0,
         _( "Copy pad settings to Current Settings" ),
         _( "Copies the properties of selected pad to the current template pad settings." ) );
 
 TOOL_ACTION COMMON_ACTIONS::copySettingsToPads( "pcbnew.InteractiveEdit.copySettingsToPads",
-        AS_CONTEXT, 0,
+        AS_GLOBAL, 0,
         _( "Copy Current Settings to pads" ),
         _( "Copies the current template pad settings to the selected pad(s)." ) );
 
-TOOL_ACTION COMMON_ACTIONS::globalEditPads ( "pcbnew.InteractiveEdit.globalPadEdit",
-        AS_CONTEXT, 0,
+TOOL_ACTION COMMON_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
+        AS_GLOBAL, 0,
         _( "Global Pad Edition" ),
         _( "Changes pad properties globally." ), global_options_pad_xpm );
 

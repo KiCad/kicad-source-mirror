@@ -1052,6 +1052,12 @@ void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
 
 int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 {
+    const SELECTION& selection = m_selectionTool->GetSelection();
+    bool unselect = selection.Empty();
+
+    if( !hoverSelection( selection ) )
+        return 0;
+
     MODULE* mod = uniqueSelected<MODULE>();
 
     if( !mod )
@@ -1074,6 +1080,9 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 
     editor->Show( true );
     editor->Raise();        // Iconize( false );
+
+    if( unselect )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     return 0;
 }
