@@ -86,13 +86,10 @@ public:
         REPORTER(),
         m_frame( aFrame ), m_position( aPosition )
     {
-        SetReportAll( true );
-        SetReportWarnings( true );
-        SetReportErrors( true );
         m_hasMessage = false;
     }
 
-    REPORTER& Report( const wxString& aText )
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
     {
         if( !aText.IsEmpty() )
             m_hasMessage = true;
@@ -298,8 +295,6 @@ void EDA_3D_CANVAS::Redraw()
     wxString err_messages;
     WX_STRING_REPORTER errorReporter( &err_messages );
     STATUS_TEXT_REPORTER activityReporter( Parent(), 0 );
-    errorReporter.SetReportAll( false );
-    errorReporter.SetReportWarnings( m_reportWarnings );
 
     // Display build time at the end of build
     unsigned strtime = GetRunningMicroSecs();
@@ -622,7 +617,6 @@ void EDA_3D_CANVAS::Redraw()
     if( !err_messages.IsEmpty() )
         wxLogMessage( err_messages );
 
-    ReportWarnings( false );
 }
 
 
@@ -730,11 +724,13 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-        if( aErrorMessages && aErrorMessages->ReportWarnings() )
+        if( aErrorMessages )
         {
-            *aErrorMessages << msg << wxT("\n") <<
+            msg << wxT("\n") <<
                 _("Unable to calculate the board outlines.\n"
                   "Therefore use the board boundary box.") << wxT("\n\n");
+
+            aErrorMessages->Report( msg, REPORTER::RPT_WARNING );
         }
     }
 
@@ -1082,11 +1078,12 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
     if( !pcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
     {
-        if( aErrorMessages && aErrorMessages->ReportWarnings() )
+        if( aErrorMessages )
         {
-            *aErrorMessages << msg << wxT("\n") <<
+            msg << wxT("\n") <<
                 _("Unable to calculate the board outlines.\n"
                   "Therefore use the board boundary box.") << wxT("\n\n");
+            aErrorMessages->Report( msg, REPORTER::RPT_WARNING );
         }
     }
 
@@ -1432,10 +1429,7 @@ void EDA_3D_CANVAS::CreateDrawGL_List( REPORTER* aErrorMessages, REPORTER* aActi
         glNewList( m_glLists[GL_ID_TECH_LAYERS], GL_COMPILE );
         // when calling BuildTechLayers3DView,
         // do not show warnings, which are the same as buildBoard3DView
-        bool report_warn = aErrorMessages->ReportWarnings();
-        aErrorMessages->SetReportWarnings( false );
         buildTechLayers3DView( aErrorMessages, aActivity );
-        aErrorMessages->SetReportWarnings( report_warn );
         glEndList();
         CheckGLError( __FILE__, __LINE__ );
 

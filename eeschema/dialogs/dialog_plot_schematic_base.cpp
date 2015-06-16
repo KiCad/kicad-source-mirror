@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "wx_html_report_panel.h"
 
 #include "dialog_plot_schematic_base.h"
 
@@ -48,7 +50,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxString m_PaperSizeOptionChoices[] = { _("Schematic size"), _("Force size A4"), _("Force size A") };
 	int m_PaperSizeOptionNChoices = sizeof( m_PaperSizeOptionChoices ) / sizeof( wxString );
 	m_PaperSizeOption = new wxRadioBox( this, wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, m_PaperSizeOptionNChoices, m_PaperSizeOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_PaperSizeOption->SetSelection( 0 );
+	m_PaperSizeOption->SetSelection( 1 );
 	m_paperOptionsSizer->Add( m_PaperSizeOption, 0, wxALL|wxEXPAND, 5 );
 	
 	m_paperHPGLSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxVERTICAL );
@@ -86,7 +88,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF"), _("HPGL") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_plotFormatOpt->SetSelection( 0 );
+	m_plotFormatOpt->SetSelection( 1 );
 	m_optionsSizer->Add( m_plotFormatOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbSizerPlotFormat;
@@ -145,10 +147,10 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_staticText2->Wrap( -1 );
 	bSizer4->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	m_MessagesBox->SetMinSize( wxSize( -1,80 ) );
+	m_MessagesBox = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_MessagesBox->SetMinSize( wxSize( 300,150 ) );
 	
-	bSizer4->Add( m_MessagesBox, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer4->Add( m_MessagesBox, 1, wxEXPAND | wxALL, 5 );
 	
 	
 	bMainSizer->Add( bSizer4, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );

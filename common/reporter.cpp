@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,15 +27,16 @@
 
 #include <macros.h>
 #include <reporter.h>
+#include <wx_html_report_panel.h>
 
-REPORTER& REPORTER::Report( const char* aText )
+REPORTER& REPORTER::Report( const char* aText, REPORTER::SEVERITY aSeverity )
 {
     Report( FROM_UTF8( aText ) );
     return *this;
 }
 
 
-REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText )
+REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText, REPORTER::SEVERITY aSeverity )
 {
     wxCHECK_MSG( m_textCtrl != NULL, *this,
                  wxT( "No wxTextCtrl object defined in WX_TEXT_CTRL_REPORTER." ) );
@@ -44,12 +45,20 @@ REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText )
     return *this;
 }
 
-
-REPORTER& WX_STRING_REPORTER::Report( const wxString& aText )
+REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, REPORTER::SEVERITY aSeverity )
 {
     wxCHECK_MSG( m_string != NULL, *this,
                  wxT( "No wxString object defined in WX_STRING_REPORTER." ) );
 
     *m_string << aText;
+    return *this;
+}
+
+REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    wxCHECK_MSG( m_panel != NULL, *this,
+                 wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
+
+    m_panel->Report( aText, aSeverity );
     return *this;
 }

@@ -35,6 +35,8 @@
 
 class wxString;
 class wxTextCtrl;
+class wxHtmlListbox;
+class WX_HTML_REPORT_PANEL;
 
 
 /**
@@ -47,28 +49,37 @@ class wxTextCtrl;
  * <li> know too much about the caller's UI, i.e. wx. </li>
  * <li> stop after the first error </li>
  * </ul>
- * the reporter has 3 levels (flags) for filtering:
- * no filter
- * report warning
- * report errors
- * They are indicators for the calling code, filtering is not made here
+ * the reporter has 4 severity levels (flags) tagging the messages:
+ * - information
+ * - warning
+ * - error
+ * - action (i.e. indication of changes - add component, change footprint, etc. )
+ * They are indicators for the message formatting and displaying code,
+ * filtering is not made here.
  */
-class REPORTER
-{
-    bool m_reportAll;       // Filter flag: set to true to report all messages
-    bool m_reportWarnings;  // Filter flag: set to true to report warning
-    bool m_reportErrors;    // Filter flag: set to true to report errors
+
+class REPORTER {
 
 public:
+    ///> Severity of the reported messages.
+    enum SEVERITY {
+        RPT_UNDEFINED = 0x0,
+        RPT_INFO      = 0x1,
+        RPT_WARNING   = 0x2,
+        RPT_ERROR     = 0x4,
+        RPT_ACTION    = 0x8
+    };
+
     /**
      * Function Report
      * is a pure virtual function to override in the derived object.
      *
      * @param aText is the string to report.
      */
-    virtual REPORTER& Report( const wxString& aText ) = 0;
 
-    REPORTER& Report( const char* aText );
+    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) = 0;
+
+    REPORTER& Report( const char* aText, SEVERITY aSeverity = RPT_UNDEFINED );
 
     REPORTER& operator <<( const wxString& aText ) { return Report( aText ); }
 
@@ -77,41 +88,6 @@ public:
     REPORTER& operator <<( wxChar aChar ) { return Report( wxString( aChar ) ); }
 
     REPORTER& operator <<( const char* aText ) { return Report( aText ); }
-
-    /**
-     * Returns true if all messages should be reported
-     */
-    bool ReportAll() { return m_reportAll; }
-
-    /**
-     * Returns true if all messages or warning messages should be reported
-     */
-    bool ReportWarnings() { return m_reportAll | m_reportWarnings; }
-
-    /**
-     * Returns true if all messages or error messages should be reported
-     */
-    bool ReportErrors() { return m_reportAll | m_reportErrors; }
-
-    /**
-     * Set the report filter state, for all messages
-     * @param aEnable = filter state (true/false)
-     */
-    void SetReportAll( bool aEnable) { m_reportAll = aEnable; }
-
-    /**
-     * Set the report filter state, for warning messages
-     * note: report can be disable only if m_reportAll = false
-     * @param aEnable = filter state (true/false)
-     */
-    void SetReportWarnings( bool aEnable) { m_reportWarnings = aEnable; }
-
-    /**
-     * Set the report filter state, for error messages
-     * note: report can be disable only if m_reportAll = false
-     * @param aEnable = filter state (true/false)
-     */
-    void SetReportErrors( bool aEnable) { m_reportErrors = aEnable; }
 };
 
 
@@ -128,12 +104,9 @@ public:
         REPORTER(),
         m_textCtrl( aTextCtrl )
     {
-        SetReportAll( true );
-        SetReportWarnings( true );
-        SetReportErrors( true );
     }
 
-    REPORTER& Report( const wxString& aText );
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
 };
 
 
@@ -152,7 +125,26 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText );
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
+};
+
+
+/**
+ * Class WX_HTML_PANEL_REPORTER
+ * is a wrapper for reporting to a wx HTML window
+ */
+class WX_HTML_PANEL_REPORTER : public REPORTER
+{
+    WX_HTML_REPORT_PANEL* m_panel;
+
+public:
+    WX_HTML_PANEL_REPORTER( WX_HTML_REPORT_PANEL* aPanel ) :
+        REPORTER(),
+        m_panel( aPanel )
+    {
+    }
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
 };
 
 #endif     // _REPORTER_H_

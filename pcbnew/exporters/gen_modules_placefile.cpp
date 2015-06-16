@@ -50,6 +50,8 @@
 #include <pcb_plot_params.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_i.h>
+#include <wx_html_report_panel.h>
+
 
 #include <dialog_gen_module_position_file_base.h>
 /*
@@ -107,11 +109,12 @@ private:
     PCB_EDIT_FRAME* m_parent;
     PCB_PLOT_PARAMS m_plotOpts;
     wxConfigBase* m_config;
+    REPORTER* m_reporter;
 
     static int m_unitsOpt;
     static int m_fileOpt;
 
-    void initDialog();
+	void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
     void OnOKButton( wxCommandEvent& event );
 
@@ -136,11 +139,6 @@ private:
     bool ForceAllSmd()
     {
         return m_radioBoxForceSmd->GetSelection() == 1;
-    }
-
-    void AddMessage( const wxString & aMessage )
-    {
-        m_messagesBox->AppendText( aMessage );
     }
 };
 
@@ -241,9 +239,10 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // absolute form). Bail if it fails
     wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
-    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
-    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
+    m_reporter = &m_messagesPanel->Reporter();
+
+    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, m_reporter ) )
     {
         msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
                     GetChars( outputDir.GetPath() ) );
@@ -272,24 +271,27 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
                                                      ForceAllSmd(), side );
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create '%s'" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Unable to create '%s'." ), GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg );
-        AddMessage( msg + wxT("\n") );
+        m_reporter->Report( msg, REPORTER::RPT_ERROR );
         return false;
     }
 
     if( singleFile  )
-        msg.Printf( _( "Place file: '%s'\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Place file: '%s'." ), GetChars( fn.GetFullPath() ) );
     else
-        msg.Printf( _( "Front side (top side) place file: '%s'\n" ),
+        msg.Printf( _( "Front side (top side) place file: '%s'." ),
                     GetChars( fn.GetFullPath() ) );
+    m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-    AddMessage( msg );
-    msg.Printf( _( "Footprint count %d\n" ), fpcount );
-    AddMessage( msg );
+    msg.Printf( _( "Component count: %d." ), fpcount );
+    m_reporter->Report( msg, REPORTER::RPT_INFO );
 
     if( singleFile  )
+    {
+        m_reporter->Report( _( "Componment Placement File generation OK." ), REPORTER::RPT_ACTION );
         return true;
+    }
 
     // Create the Back or Bottom side placement file
     fullcount = fpcount;
@@ -304,8 +306,8 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create '%s'" ), GetChars( fn.GetFullPath() ) );
-        AddMessage( msg + wxT("\n") );
+        msg.Printf( _( "Unable to create file '%s'." ), GetChars( fn.GetFullPath() ) );
+        m_reporter->Report( msg, REPORTER::RPT_ERROR );
         wxMessageBox( msg );
         return false;
     }
@@ -313,18 +315,22 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // Display results
     if( !singleFile )
     {
-        msg.Printf( _( "Back side (bottom side) place file: '%s'\n" ), GetChars( fn.GetFullPath() ) );
-        AddMessage( msg );
-        msg.Printf( _( "Footprint count %d\n" ), fpcount );
-        AddMessage( msg );
+        msg.Printf( _( "Back side (bottom side) place file: '%s'." ), GetChars( fn.GetFullPath() ) );
+        m_reporter->Report( msg, REPORTER::RPT_INFO );
+
+        msg.Printf( _( "Component count: %d." ), fpcount );
+
+        m_reporter->Report( msg, REPORTER::RPT_INFO );
     }
 
     if( !singleFile )
     {
         fullcount += fpcount;
-        msg.Printf( _( "Full footprint count %d\n" ), fullcount );
-        AddMessage( msg );
+        msg.Printf( _( "Full component count: %d\n" ), fullcount );
+        m_reporter->Report( msg, REPORTER::RPT_INFO );
     }
+
+    m_reporter->Report( _( "Componment Placement File generation OK." ), REPORTER::RPT_ACTION );
 
     return true;
 }

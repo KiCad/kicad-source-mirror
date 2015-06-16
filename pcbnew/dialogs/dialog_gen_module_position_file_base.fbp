@@ -47,7 +47,7 @@
             <property name="size">510,351</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Position Files:</property>
+            <property name="title">Generate Component Position Files</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -61,13 +61,13 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">OnClose</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
             <event name="OnIconize"></event>
             <event name="OnIdle"></event>
-            <event name="OnInitDialog"></event>
+            <event name="OnInitDialog">OnInitDialog</event>
             <event name="OnKeyDown"></event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>
@@ -238,7 +238,7 @@
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
-                                                <property name="maxlength"></property>
+                                                <property name="maxlength">0</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size">350,-1</property>
@@ -673,19 +673,16 @@
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxStaticBoxSizer" expanded="1">
-                        <property name="id">wxID_ANY</property>
-                        <property name="label">Messages:</property>
+                    <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
-                        <property name="name">sbSizerMsg</property>
+                        <property name="name">bSizer7</property>
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
-                        <event name="OnUpdateUI"></event>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxEXPAND | wxALL</property>
                             <property name="proportion">1</property>
-                            <object class="wxTextCtrl" expanded="0">
+                            <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -716,12 +713,11 @@
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
-                                <property name="maxlength"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,150</property>
+                                <property name="minimum_size">300,150</property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_messagesBox</property>
+                                <property name="name">m_messagesPanel</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -730,19 +726,13 @@
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">-1,-1</property>
-                                <property name="style">wxTE_MULTILINE|wxTE_READONLY</property>
-                                <property name="subclass"></property>
+                                <property name="size"></property>
+                                <property name="subclass">WX_HTML_REPORT_PANEL; wx_html_report_panel.h</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
-                                <property name="validator_data_type"></property>
-                                <property name="validator_style">wxFILTER_NONE</property>
-                                <property name="validator_type">wxDefaultValidator</property>
-                                <property name="validator_variable"></property>
-                                <property name="value"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style"></property>
+                                <property name="window_style">wxTAB_TRAVERSAL</property>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -765,10 +755,6 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
-                                <event name="OnText"></event>
-                                <event name="OnTextEnter"></event>
-                                <event name="OnTextMaxLen"></event>
-                                <event name="OnTextURL"></event>
                                 <event name="OnUpdateUI"></event>
                             </object>
                         </object>

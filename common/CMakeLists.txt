@@ -130,6 +130,8 @@ set( COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_page_settings_base.cpp
     dialogs/dialog_env_var_config_base.cpp
     dialogs/dialog_env_var_config.cpp
+    dialogs/wx_html_report_panel_base.cpp
+    dialogs/wx_html_report_panel.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS

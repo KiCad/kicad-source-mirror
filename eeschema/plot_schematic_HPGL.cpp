@@ -34,7 +34,7 @@
 #include <project.h>
 
 #include <dialog_plot_schematic.h>
-
+#include <wx_html_report_panel.h>
 
 enum HPGL_PAGEZ_T {
     PAGE_DEFAULT = 0,
@@ -124,7 +124,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
 
     sheetpath = SheetList.GetFirst();
     SCH_SHEET_PATH  list;
-    WX_TEXT_CTRL_REPORTER reporter(m_MessagesBox);
+    REPORTER& reporter = m_MessagesBox->Reporter();
 
     SetHPGLPenWidth();
 
@@ -186,19 +186,23 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
 
             if( Plot_1_Page_HPGL( plotFileName.GetFullPath(), screen, plotPage, plotOffset,
                                 plot_scale, aPlotFrameRef ) )
-                msg.Printf( _( "Plot: '%s' OK\n" ), GetChars( plotFileName.GetFullPath() ) );
-            else    // Error
-                msg.Printf( _( "Unable to create '%s'\n" ), GetChars( plotFileName.GetFullPath() ) );
-
-            m_MessagesBox->AppendText( msg );
+            {
+                msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                reporter.Report( msg, REPORTER::RPT_ACTION );
+            }
+            else
+            {
+                msg.Printf( _( "Unable to create file '%s'.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                reporter.Report( msg, REPORTER::RPT_ERROR );
+            }
 
             if( !aPlotAll )
                 break;
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "HPGL Plotter Exception : '%s'"), GetChars( e.errorText ) );
-            m_MessagesBox->AppendText( msg );
+            msg.Printf( wxT( "HPGL Plotter exception: %s"), GetChars( e.errorText ) );
+            reporter.Report( msg, REPORTER::RPT_ERROR );
         }
 
     }

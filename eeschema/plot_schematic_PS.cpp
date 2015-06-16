@@ -30,10 +30,11 @@
 #include <schframe.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
-#include <dialog_plot_schematic.h>
 #include <project.h>
 #include <reporter.h>
 
+#include <dialog_plot_schematic.h>
+#include <wx_html_report_panel.h>
 
 void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
 {
@@ -107,7 +108,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
         wxFileName outputDir = wxFileName::DirName( outputDirName );
 
         wxString msg;
-        WX_TEXT_CTRL_REPORTER reporter(m_MessagesBox);
+        REPORTER& reporter = m_MessagesBox->Reporter();
 
         try
         {
@@ -119,20 +120,21 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
             if( plotOneSheetPS( plotFileName.GetFullPath(), screen, plotPage, plot_offset,
                                 scale, aPlotFrameRef ) )
             {
-                msg.Printf( _( "Plot: '%s' OK\n" ), GetChars( plotFileName.GetFullPath() ) );
+                msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                reporter.Report( msg, REPORTER::RPT_ACTION );
             }
             else
             {
                 // Error
-                msg.Printf( _( "Unable to create '%s'\n" ), GetChars( plotFileName.GetFullPath() ) );
+                msg.Printf( _( "Unable to create file '%s'.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                reporter.Report( msg, REPORTER::RPT_ERROR );
             }
 
-            m_MessagesBox->AppendText( msg );
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "PS Plotter Exception : '%s'"), GetChars( e.errorText ) );
-            m_MessagesBox->AppendText( msg );
+            msg.Printf( wxT( "PS Plotter exception: %s"), GetChars( e.errorText ) );
+            reporter.Report( msg, REPORTER::RPT_ERROR );
         }
 
         if( !aPlotAll )

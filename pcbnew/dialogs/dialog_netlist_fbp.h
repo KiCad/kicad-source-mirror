@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -26,6 +27,7 @@ class DIALOG_SHIM;
 #include <wx/checkbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/panel.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -64,8 +66,7 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxStaticText* m_staticTextNetfilename;
 		wxTextCtrl* m_NetlistFilenameCtrl;
 		wxButton* m_buttonBrowse;
-		wxStaticText* m_staticText1;
-		wxTextCtrl* m_MessageWindow;
+		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnReadNetlistFileClick( wxCommandEvent& event ) { event.Skip(); }

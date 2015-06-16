@@ -391,7 +391,6 @@ void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
 
     wxString reportmsg;
     WX_STRING_REPORTER reporter( &reportmsg );
-    reporter.SetReportAll( true );
     m_parent->SetNetListerCommand( m_textCtrlCommand->GetValue() );
     m_parent->CreateNetlist( -1, fullfilename, 0, &reporter );
 

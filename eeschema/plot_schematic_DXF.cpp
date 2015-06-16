@@ -30,8 +30,10 @@
 #include <class_sch_screen.h>
 #include <schframe.h>
 #include <sch_sheet_path.h>
-#include <dialog_plot_schematic.h>
 #include <project.h>
+
+#include <dialog_plot_schematic.h>
+#include <wx_html_report_panel.h>
 
 
 void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
@@ -51,7 +53,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 
     sheetpath = SheetList.GetFirst();
     SCH_SHEET_PATH list;
-    WX_TEXT_CTRL_REPORTER reporter(m_MessagesBox);
+    REPORTER& reporter = m_MessagesBox->Reporter();
 
     while( true )
     {
@@ -89,19 +91,19 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 
             if( PlotOneSheetDXF( plotFileName.GetFullPath(), screen, plot_offset, 1.0, aPlotFrameRef ) )
             {
-                msg.Printf( _( "Plot: '%s' OK\n" ), GetChars( plotFileName.GetFullPath() ) );
+                msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                reporter.Report( msg, REPORTER::RPT_ACTION );
             }
             else    // Error
             {
-                msg.Printf( _( "Unable to create '%s'\n" ), GetChars( plotFileName.GetFullPath() ) );
+                msg.Printf( _( "Unable to create file '%s'.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                reporter.Report( msg, REPORTER::RPT_ERROR );
             }
-            m_MessagesBox->AppendText( msg );
-
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "DXF Plotter Exception : '%s'"), GetChars( e.errorText ) );
-            m_MessagesBox->AppendText( msg );
+            msg.Printf( wxT( "DXF Plotter exception: %s"), GetChars( e.errorText ) );
+            reporter.Report( msg, REPORTER::RPT_ERROR );
             schframe->SetCurrentSheet( oldsheetpath );
             schframe->GetCurrentSheet().UpdateAllScreenReferences();
             schframe->SetSheetNumberAndCount();

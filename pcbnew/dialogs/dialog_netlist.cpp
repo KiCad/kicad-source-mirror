@@ -47,6 +47,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_netlist.h>
+#include <wx_html_report_panel.h>
 
 #define NETLIST_SILENTMODE_KEY wxT("SilentMode")
 #define NETLIST_FULLMESSAGES_KEY wxT("NetlistReportAllMsg")
@@ -158,21 +159,20 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
                          "sure you want to read the netlist?" ) ) )
         return;
 
-    wxBusyCursor busy;
     m_MessageWindow->Clear();
+    REPORTER& reporter = m_MessageWindow->Reporter();
+
+    wxBusyCursor busy;
 
     msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
-    m_MessageWindow->AppendText( msg );
+    reporter.Report( msg, REPORTER::RPT_INFO );
 
     if( m_Select_By_Timestamp->GetSelection() == 1 )
         msg = _( "Using time stamps to match components and footprints.\n" );
     else
         msg = _( "Using references to match components and footprints.\n" );
 
-    m_MessageWindow->AppendText( msg );
-
-    WX_TEXT_CTRL_REPORTER reporter( m_MessageWindow );
-    reporter.SetReportAll( m_reportAll );
+    reporter.Report( msg, REPORTER::RPT_INFO );
 
     m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, &reporter,
                               m_ChangeExistingFootprintCtrl->GetSelection() == 1,
@@ -357,13 +357,13 @@ void DIALOG_NETLIST::OnSaveMessagesToFile( wxCommandEvent& aEvent )
         return;
     }
 
-    f.Write( m_MessageWindow->GetValue() );
+    //f.Write( m_MessageWindow->GetValue() );
 }
 
 
 void DIALOG_NETLIST::OnUpdateUISaveMessagesToFile( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( !m_MessageWindow->IsEmpty() );
+    //aEvent.Enable( !m_MessageWindow->IsEmpty() );
 }
 
 
@@ -408,19 +408,6 @@ bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
         return false;
     }
-
-#if defined( DEBUG )
-    {
-        m_MessageWindow->Clear();
-        WX_TEXT_CTRL_REPORTER rpt( m_MessageWindow );
-
-        STRING_FORMATTER sf;
-
-        netlist.Format( "netlist_stuff", &sf, 0 );
-
-        rpt.Report( FROM_UTF8( sf.GetString().c_str() ) );
-    }
-#endif
 
     BOARD* pcb = m_parent->GetBoard();
 

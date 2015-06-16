@@ -46,6 +46,7 @@
 #include <class_board.h>
 #include <dialog_SVG_print_base.h>
 #include <invoke_pcb_dialog.h>
+#include <wx_html_report_panel.h>
 
 
 class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base
@@ -266,7 +267,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
     wxFileName outputDir = wxFileName::DirName( m_outputDirectory );
     wxString boardFilename = m_board->GetFileName();
 
-    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
+    REPORTER& reporter = m_messagesPanel->Reporter();
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
@@ -301,15 +302,15 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
 
         if( CreateSVGFile( fn.GetFullPath(), aOnlyOneFile ) )
         {
-            m_messagesBox->AppendText(
-                    wxString::Format( _( "Plot: '%s' OK\n" ), GetChars( fn.GetFullPath() ) )
-                    );
+            reporter.Report (
+                    wxString::Format( _( "Plot: '%s' OK." ), GetChars( fn.GetFullPath() ) ),
+                    REPORTER::RPT_ACTION );
         }
         else    // Error
         {
-            m_messagesBox->AppendText(
-                    wxString::Format( _( "** Unable to create '%s'**\n" ), GetChars( fn.GetFullPath() ) )
-                    );
+            reporter.Report (
+                    wxString::Format( _( "Unable to create file '%s'." ), GetChars( fn.GetFullPath() ) ),
+                    REPORTER::RPT_ERROR );
         }
 
         if( aOnlyOneFile )

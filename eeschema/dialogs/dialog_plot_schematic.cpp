@@ -38,6 +38,7 @@
 #include <base_units.h>
 #include <sch_sheet.h>
 #include <dialog_plot_schematic.h>
+#include <wx_html_report_panel.h>
 
 // Keys for configuration
 #define PLOT_FORMAT_KEY wxT( "PlotFormat" )
@@ -329,8 +330,6 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
         break;
 
     }
-
-    m_MessagesBox->AppendText( wxT( "****\n" ) );
 }
 
 wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirectoryName,
@@ -346,14 +345,12 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirecto
     if( !EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter ) )
     {
         wxString msg;
-        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
+        msg.Printf( _( "Could not write plot files to folder '%s'." ),
                     GetChars( outputDir.GetPath() ) );
-        msg << wxT( "\n" );
-        aReporter->Report( msg );
+        aReporter->Report( msg, REPORTER::RPT_ERROR );
     }
 
     wxFileName fn( plotFileName );
     fn.SetPath( outputDir.GetFullPath() );
     return fn;
-
 }

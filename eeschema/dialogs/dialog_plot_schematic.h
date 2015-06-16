@@ -100,10 +100,8 @@ private:
     * Everything done, close the plot and restore the environment
     * @param aPlotter the plotter to close and destroy
     * @param aOldsheetpath the stored old sheet path for the current sheet before the plot started
-    * @param aMsg the message which is print to the message box
     */
-    void    restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath,
-                                const wxString& aMsg );
+    void    restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath );
 
     // DXF
     void    CreateDXFFile( bool aPlotAll, bool aPlotFrameRef );

@@ -224,7 +224,7 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 msg.Printf( _( "No footprint defined for component '%s'.\n" ),
                             GetChars( component->GetReference() ) );
-                aReporter->Report( msg );
+                aReporter->Report( msg, REPORTER::RPT_ERROR );
             }
 
             continue;
@@ -273,11 +273,11 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "*** Warning: Component '%s' footprint ID '%s' is not "
-                                   "valid. ***\n" ),
+                    msg.Printf( _( "Component '%s' footprint ID '%s' is not "
+                                   "valid.\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetFPID().Format() ) );
-                    aReporter->Report( msg );
+                    aReporter->Report( msg, REPORTER::RPT_ERROR );
                 }
 
                 continue;
@@ -295,11 +295,11 @@ void PCB_EDIT_FRAME::loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                 if( aReporter )
                 {
                     wxString msg;
-                    msg.Printf( _( "*** Warning: component '%s' footprint '%s' was not found in "
-                                   "any libraries in the footprint library table. ***\n" ),
+                    msg.Printf( _( "Component '%s' footprint '%s' was not found in "
+                                   "any libraries in the footprint library table.\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetFPID().GetFootprintName() ) );
-                    aReporter->Report( msg );
+                    aReporter->Report( msg, REPORTER::RPT_ERROR );
                 }
 
                 continue;

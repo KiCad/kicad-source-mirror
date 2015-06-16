@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2013)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -26,6 +27,7 @@ class DIALOG_SHIM;
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
+#include <wx/panel.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -57,8 +59,7 @@ class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
 		wxRadioBox* m_rbFileOpt;
 		wxButton* m_buttonCreateFile;
 		wxButton* m_buttonQuit;
-		wxStaticText* m_staticText2;
-		wxTextCtrl* m_messagesBox;
+		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }

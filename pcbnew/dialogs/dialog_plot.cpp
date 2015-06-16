@@ -38,7 +38,7 @@
 #include <class_board.h>
 #include <wx/ffile.h>
 #include <dialog_plot.h>
-
+#include <wx_html_report_panel.h>
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
@@ -107,7 +107,7 @@ void DIALOG_PLOT::Init_Dialog()
     // Set units and value for HPGL pen size (this param in in mils).
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
     msg = StringFromValue( g_UserUnit,
-                                 m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
+                           m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay (this param in in mils).
@@ -562,6 +562,8 @@ static bool setInt( int* aResult, int aValue, int aMin, int aMax )
 
 void DIALOG_PLOT::applyPlotSettings()
 {
+    REPORTER&   reporter = m_messagesPanel->Reporter();
+
     PCB_PLOT_PARAMS tempOptions;
 
     tempOptions.SetExcludeEdgeLayer( m_excludeEdgeLayerOpt->GetValue() );
@@ -590,8 +592,8 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = StringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
-        msg.Printf( _( "HPGL pen size constrained!\n" ) );
-        m_messagesBox->AppendText( msg );
+        msg.Printf( _( "HPGL pen size constrained." ) );
+        reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
     // Read HPGL pen overlay (this param is stored in mils)
@@ -603,8 +605,8 @@ void DIALOG_PLOT::applyPlotSettings()
         msg = StringFromValue( g_UserUnit,
                                      tempOptions.GetHPGLPenOverlay() * IU_PER_MILS );
         m_HPGLPenOverlayOpt->SetValue( msg );
-        msg.Printf( _( "HPGL pen overlay constrained!\n" ) );
-        m_messagesBox->AppendText( msg );
+        msg.Printf( _( "HPGL pen overlay constrained." ) );
+        reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
     // Default linewidth
@@ -615,8 +617,8 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = StringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
         m_linesWidth->SetValue( msg );
-        msg.Printf( _( "Default line width constrained!\n" ) );
-        m_messagesBox->AppendText( msg );
+        msg.Printf( _( "Default line width constrained." ) );
+        reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
     // X scale
@@ -628,8 +630,8 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg.Printf( wxT( "%f" ), m_XScaleAdjust );
         m_fineAdjustXscaleOpt->SetValue( msg );
-        msg.Printf( _( "X scale constrained!\n" ) );
-        m_messagesBox->AppendText( msg );
+        msg.Printf( _( "X scale constrained." ) );
+        reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
    ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
@@ -642,8 +644,8 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg.Printf( wxT( "%f" ), m_YScaleAdjust );
         m_fineAdjustYscaleOpt->SetValue( msg );
-        msg.Printf( _( "Y scale constrained!\n" ) );
-        m_messagesBox->AppendText( msg );
+        msg.Printf( _( "Y scale constrained." ) );
+        reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
     ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_Y_FINESCALE_ADJ, m_YScaleAdjust );
@@ -656,13 +658,13 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = StringFromValue( g_UserUnit, m_PSWidthAdjust );
         m_PSFineAdjustWidthOpt->SetValue( msg );
-        msg.Printf( _( "Width correction constrained!\n"
-                       "The reasonable width correction value must be in a range of\n"
-                       " [%+f; %+f] (%s) for current design rules!\n" ),
+        msg.Printf( _( "Width correction constrained. "
+                       "The reasonable width correction value must be in a range of "
+                       " [%+f; %+f] (%s) for current design rules. " ),
                     To_User_Unit( g_UserUnit, m_widthAdjustMinValue ),
                     To_User_Unit( g_UserUnit, m_widthAdjustMaxValue ),
                     ( g_UserUnit == INCHES ) ? wxT( "\"" ) : wxT( "mm" ) );
-        m_messagesBox->AppendText( msg );
+        reporter.Report( msg, REPORTER::RPT_WARNING );
     }
 
     // Store m_PSWidthAdjust in mm in user config
@@ -708,9 +710,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     // Create output directory if it does not exist (also transform it in
     // absolute form). Bail if it fails
-    wxFileName            outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
-    wxString              boardFilename = m_parent->GetBoard()->GetFileName();
-    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
+    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    boardFilename = m_parent->GetBoard()->GetFileName();
+    REPORTER&   reporter = m_messagesPanel->Reporter();
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
@@ -809,13 +811,14 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             plotter->EndPlot();
             delete plotter;
 
-            msg.Printf( _( "Plot file <%s> created" ), GetChars( fn.GetFullPath() ) );
+            msg.Printf( _( "Plot file '%s' created." ), GetChars( fn.GetFullPath() ) );
+            reporter.Report( msg, REPORTER::RPT_ACTION );
         }
         else
-            msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
-
-        msg << wxT( "\n" );
-        m_messagesBox->AppendText( msg );
+        {
+            msg.Printf( _( "Unable to create file '%s'." ), GetChars( fn.GetFullPath() ) );
+            reporter.Report( msg, REPORTER::RPT_ERROR );
+        }
     }
 
     // If no layer selected, we have nothing plotted.

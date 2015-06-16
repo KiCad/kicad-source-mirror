@@ -5,6 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "wx_html_report_panel.h"
+
 #include "dialog_gen_module_position_file_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -29,6 +31,7 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	bSizerdirBrowse = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_outputDirectoryName->SetMaxLength( 0 ); 
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	m_outputDirectoryName->SetMinSize( wxSize( 350,-1 ) );
 	
@@ -74,16 +77,16 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	
 	m_MainSizer->Add( bSizerOptions, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
-	wxStaticBoxSizer* sbSizerMsg;
-	sbSizerMsg = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxVERTICAL );
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
-	m_messagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_MULTILINE|wxTE_READONLY );
-	m_messagesBox->SetMinSize( wxSize( -1,150 ) );
+	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_messagesPanel->SetMinSize( wxSize( 300,150 ) );
 	
-	sbSizerMsg->Add( m_messagesBox, 1, wxEXPAND, 5 );
+	bSizer7->Add( m_messagesPanel, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	m_MainSizer->Add( sbSizerMsg, 1, wxEXPAND, 5 );
+	m_MainSizer->Add( bSizer7, 1, wxEXPAND, 5 );
 	
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
@@ -101,6 +104,8 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnClose ) );
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnInitDialog ) );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOKButton ), NULL, this );
 }
@@ -108,6 +113,8 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 DIALOG_GEN_MODULE_POSITION_BASE::~DIALOG_GEN_MODULE_POSITION_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnClose ) );
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnInitDialog ) );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOKButton ), NULL, this );
 	

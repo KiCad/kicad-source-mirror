@@ -31,9 +31,12 @@
 #include <schframe.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
-#include <dialog_plot_schematic.h>
 #include <project.h>
 
+#include <reporter.h>
+
+#include <dialog_plot_schematic.h>
+#include <wx_html_report_panel.h>
 
 void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 {
@@ -61,7 +64,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
     wxString msg;
     wxFileName plotFileName;
-    WX_TEXT_CTRL_REPORTER reporter(m_MessagesBox);
+    REPORTER& reporter = m_MessagesBox->Reporter();
 
     // First page handling is different
     bool first_page = true;
@@ -97,8 +100,8 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
                 if( !plotter->OpenFile( plotFileName.GetFullPath() ) )
                 {
-                    msg.Printf( _( "Unable to create '%s'\n" ), GetChars( plotFileName.GetFullPath() ) );
-                    m_MessagesBox->AppendText( msg );
+                    msg.Printf( _( "Unable to create file '%s'.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                    reporter.Report( msg, REPORTER::RPT_ERROR );
                     delete plotter;
                     return;
                 }
@@ -113,8 +116,10 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
             catch( const IO_ERROR& e )
             {
                 // Cannot plot PDF file
-                msg.Printf( wxT( "PDF Plotter Exception : <%s>"), GetChars( e.errorText ) );
-                restoreEnvironment(plotter, oldsheetpath, msg);
+                msg.Printf( wxT( "PDF Plotter exception: %s" ), GetChars( e.errorText ) );
+                reporter.Report( msg, REPORTER::RPT_ERROR );
+
+                restoreEnvironment( plotter, oldsheetpath );
                 return;
             }
 
@@ -132,14 +137,17 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     } while( aPlotAll && sheetpath );
 
     // Everything done, close the plot and restore the environment
-    msg.Printf( _( "Plot: <%s> OK\n" ), GetChars( plotFileName.GetFullPath() ) );
-    restoreEnvironment(plotter, oldsheetpath, msg);
+    msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
+    reporter.Report( msg, REPORTER::RPT_ACTION );
+
+
+    restoreEnvironment(plotter, oldsheetpath );
 
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
-                            SCH_SHEET_PATH& aOldsheetpath, const wxString& aMsg )
+                            SCH_SHEET_PATH& aOldsheetpath )
 {
     aPlotter->EndPlot();
     delete aPlotter;
@@ -149,8 +157,6 @@ void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
     m_parent->SetCurrentSheet( aOldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
-
-    m_MessagesBox->AppendText( aMsg );
 }
 
 

@@ -106,30 +106,36 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
             wxArrayString output, errors;
             int diag = wxExecute (commandLine, output, errors, wxEXEC_SYNC );
 
-            aReporter->Report( _("Run command:") );
-            *aReporter << wxT("\n") << commandLine << wxT("\n\n");
+            wxString msg;
+
+            msg << _("Run command:") << wxT("\n") << commandLine << wxT("\n\n");
+
+            aReporter->Report( msg, REPORTER::RPT_ACTION );
 
             if( diag != 0 )
-                aReporter->Report( wxString::Format( _("Command error. Return code %d"), diag ) );
+                aReporter->Report( wxString::Format( _("Command error. Return code %d"), diag ), REPORTER::RPT_ERROR );
             else
-                aReporter->Report( _("Success") );
+                aReporter->Report( _("Success"), REPORTER::RPT_INFO );
 
             *aReporter << wxT("\n");
 
-            if( output.GetCount() && aReporter->ReportWarnings() )
+            if( output.GetCount() )
             {
-                *aReporter << wxT("\n") << _("Info messages:") << wxT("\n");
+                msg << wxT("\n") << _("Info messages:") << wxT("\n");
+                aReporter->Report( msg, REPORTER::RPT_INFO );
 
                 for( unsigned ii = 0; ii < output.GetCount(); ii++ )
-                    *aReporter << output[ii] << wxT("\n");
+                    aReporter->Report( output[ii], REPORTER::RPT_INFO );
             }
 
-            if( errors.GetCount() && aReporter->ReportErrors() )
+            if( errors.GetCount() )
             {
-                *aReporter << wxT("\n") << _("Error messages:") << wxT("\n");
+                msg << wxT("\n") << _("Error messages:") << wxT("\n");
+                aReporter->Report( msg, REPORTER::RPT_INFO );
 
                 for( unsigned ii = 0; ii < errors.GetCount(); ii++ )
-                    *aReporter << errors[ii] << wxT("\n");
+                    aReporter->Report( errors[ii], REPORTER::RPT_ERROR );
+
             }
         }
         else

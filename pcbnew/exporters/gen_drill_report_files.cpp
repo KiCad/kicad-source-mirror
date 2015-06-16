@@ -269,10 +269,10 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                        TextWidth, false, false );
 
-        intervalle  = KiROUND( (( charSize * charScale ) + TextWidth) * 1.2);
+        intervalle = KiROUND( ( ( charSize * charScale ) + TextWidth ) * 1.2 );
 
-        if( intervalle < (plot_diam + (1 * IU_PER_MM / scale) + TextWidth) )
-            intervalle = plot_diam + (1 * IU_PER_MM / scale) + TextWidth;
+        if( intervalle < ( plot_diam + ( 1 * IU_PER_MM / scale ) + TextWidth ) )
+            intervalle = plot_diam + ( 1 * IU_PER_MM / scale ) + TextWidth;
     }
 
     plotter->EndPlot();

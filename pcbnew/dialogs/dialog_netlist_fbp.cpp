@@ -5,6 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "wx_html_report_panel.h"
+
 #include "dialog_netlist_fbp.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -159,14 +161,10 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bLowerSizer->Add( bSizerNetlistFilename, 0, wxEXPAND, 5 );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	bLowerSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_MessageWindow->SetMinSize( wxSize( -300,150 ) );
 	
-	m_MessageWindow = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
-	m_MessageWindow->SetMinSize( wxSize( 300,150 ) );
-	
-	bLowerSizer->Add( m_MessageWindow, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( m_MessageWindow, 1, wxEXPAND | wxALL, 5 );
 	
 	
 	bMainSizer->Add( bLowerSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
