@@ -220,7 +220,7 @@ private:
     {
         const SELECTION& selection = m_selectionTool->GetSelection();
 
-        if( selection.items.GetCount() > 1 )
+        if( selection.items.GetCount() != 1 )
             return NULL;
 
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );

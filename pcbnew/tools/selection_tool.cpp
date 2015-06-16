@@ -1325,16 +1325,8 @@ bool SELECTION_TOOL::SanitizeSelection()
         }
     }
 
-    while( !rejected.empty () )
-    {
-        BOARD_ITEM* item = *rejected.begin();
-        int itemIdx = m_selection.items.FindItem( item );
-
-        if( itemIdx >= 0 )
-            m_selection.items.RemovePicker( itemIdx );
-
-        rejected.erase( item );
-    }
+    BOOST_FOREACH( BOARD_ITEM* item, rejected )
+        unselect( item );
 
     return true;
 }

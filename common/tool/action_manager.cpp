@@ -120,7 +120,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     // different combination
     if( it == m_actionHotKeys.end() )
     {
-        it = m_actionHotKeys.find( key | (mod & ~MD_SHIFT) );
+        it = m_actionHotKeys.find( key | ( mod & ~MD_SHIFT ) );
 
         if( it == m_actionHotKeys.end() )
             return false; // no appropriate action found for the hotkey
