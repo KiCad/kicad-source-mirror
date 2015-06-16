@@ -106,8 +106,11 @@ TOOL_ACTION* ACTION_MANAGER::FindAction( const std::string& aActionName ) const
 
 bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 {
-    int key = std::toupper( aHotKey & ~MD_MODIFIER_MASK );
+    int key = aHotKey & ~MD_MODIFIER_MASK;
     int mod = aHotKey & MD_MODIFIER_MASK;
+
+    if( key >= 'a' && key <= 'z')
+        key = std::toupper(key);
 
     HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( key | mod );
 
@@ -139,7 +142,6 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
             // context actions to run
             assert( global == NULL );       // there should be only one global action per hot key
             global = action;
-
             continue;
         }
 
