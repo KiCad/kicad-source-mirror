@@ -212,7 +212,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
         wxString msg;
 
         msg.Printf( _( "Cannot write report to file '%s'." ),
-                    (const char *)( fn.GetFullPath() ) );
+                    fn.GetFullPath().c_str() );
         wxMessageBox( msg, _( "File save error" ), wxOK | wxICON_ERROR, this );
         return;
     }
