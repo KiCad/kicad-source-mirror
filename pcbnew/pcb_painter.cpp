@@ -71,6 +71,9 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
         m_layerColors[ITEM_GAL_LAYER( i )] = m_legacyColorMap[aSettings->GetItemColor( i )];
     }
 
+    m_layerColors[ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE )]            = m_layerColors[F_SilkS];
+    m_layerColors[ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE )]            = m_layerColors[B_SilkS];
+
     // Default colors for specific layers
     m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]             = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
     m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]             = COLOR4D( 0.0, 0.5, 0.5, 0.8 );

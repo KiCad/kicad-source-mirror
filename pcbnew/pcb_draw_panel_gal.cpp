@@ -135,18 +135,25 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
     m_view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
     m_view->SetRequired( NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
 
+    // Front modules
+    m_view->SetRequired( ITEM_GAL_LAYER( PAD_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
+    m_view->SetRequired( ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
     m_view->SetRequired( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
     m_view->SetRequired( F_Adhes, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
     m_view->SetRequired( F_Paste, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
     m_view->SetRequired( F_Mask, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    m_view->SetRequired( F_CrtYd, ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
+    m_view->SetRequired( F_Fab, ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
 
+    // Back modules
+    m_view->SetRequired( ITEM_GAL_LAYER( PAD_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+    m_view->SetRequired( ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
     m_view->SetRequired( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
     m_view->SetRequired( B_Adhes, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
     m_view->SetRequired( B_Paste, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
     m_view->SetRequired( B_Mask, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-
-    m_view->SetRequired( ITEM_GAL_LAYER( PAD_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
-    m_view->SetRequired( ITEM_GAL_LAYER( PAD_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+    m_view->SetRequired( B_CrtYd, ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+    m_view->SetRequired( B_Fab, ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
 
     m_view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GP_OVERLAY ) );
@@ -160,7 +167,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent windos is a EDA_DRAW_FRAME (or a derived class)
     // which is not always the case (namely when it is used from a wxDialog like the pad editor)
-    EDA_DRAW_FRAME* frame = dynamic_cast <EDA_DRAW_FRAME*> ( aParentWindow );
+    EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );
 
     if( frame )
     {
