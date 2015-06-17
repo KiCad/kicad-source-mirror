@@ -96,6 +96,7 @@ public:
     S3D_COLOR   m_BgColor_Top;
     S3D_COLOR   m_BoardBodyColor;                   // in realistic mode: FR4 board color
     S3D_COLOR   m_SolderMaskColor;                  // in realistic mode: solder mask color
+    S3D_COLOR   m_SolderPasteColor;                 // in realistic mode: solder paste color
     S3D_COLOR   m_SilkScreenColor;                  // in realistic mode: SilkScreen color
     S3D_COLOR   m_CopperColor;                      // in realistic mode: copper color
     wxPoint     m_BoardPos;                         // center board actual position in board units

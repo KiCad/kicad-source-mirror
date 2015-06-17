@@ -50,6 +50,7 @@
 
 class EDA_3D_CANVAS;
 class PCB_BASE_FRAME;
+class wxColourData;
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
@@ -145,10 +146,49 @@ private:
     double BestZoom();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
-    // Get a S3D_COLOR from a wx colour dialog
-    // return true if a new color is chosen, false if
-    // no change or aborted by user
-    bool Get3DColorFromUser( S3D_COLOR &color );
+    /**
+     * Function Set3DColorFromUser
+     * Get a S3D_COLOR from a wx colour dialog
+     * @param aColor is the S3D_COLOR to change
+     * @param aPredefinedColors is a reference to a wxColourData
+     * which contains a few predefined colors
+     * if it is NULL, no predefined colors are used
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DColorFromUser( S3D_COLOR &aColor, wxColourData* aPredefinedColors = NULL );
+
+    /**
+     * Function Set3DSolderMaskColorFromUser
+     * Set the solder mask color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DSolderMaskColorFromUser();
+
+    /**
+     * Function Set3DSolderPasteColorFromUser
+     * Set the solder mask color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DSolderPasteColorFromUser();
+
+    /**
+     * Function Set3DCopperColorFromUser
+     * Set the copper color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DCopperColorFromUser();
+
+    /**
+     * Function Set3DSilkScreenColorFromUser
+     * Set the silkscreen color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DSilkScreenColorFromUser();
 
     DECLARE_EVENT_TABLE()
 };
