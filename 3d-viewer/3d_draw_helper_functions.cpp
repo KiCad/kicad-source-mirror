@@ -149,7 +149,7 @@ void EDA_3D_CANVAS::setGLTechLayersColor( LAYER_NUM aLayer )
         {
         case B_Paste:
         case F_Paste:
-            SetGLColor( DARKGRAY, 0.7 );
+            SetGLColor( GetPrm3DVisu().m_SolderPasteColor, 1 );
             break;
 
         case B_SilkS:

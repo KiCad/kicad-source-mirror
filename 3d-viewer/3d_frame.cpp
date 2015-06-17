@@ -54,6 +54,10 @@ static const wxChar keySMaskColor_Red[]     = wxT( "SMaskColor_Red" );
 static const wxChar keySMaskColor_Green[]   = wxT( "SMaskColor_Green" );
 static const wxChar keySMaskColor_Blue[]    = wxT( "SMaskColor_Blue" );
 
+static const wxChar keySPasteColor_Red[]     = wxT( "SPasteColor_Red" );
+static const wxChar keySPasteColor_Green[]   = wxT( "SPasteColor_Green" );
+static const wxChar keySPasteColor_Blue[]    = wxT( "SPasteColor_Blue" );
+
 static const wxChar keySilkColor_Red[]      = wxT( "SilkColor_Red" );
 static const wxChar keySilkColor_Green[]    = wxT( "SilkColor_Green" );
 static const wxChar keySilkColor_Blue[]     = wxT( "SilkColor_Blue" );
@@ -248,17 +252,25 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyBgColor_Green_Top, &GetPrm3DVisu().m_BgColor_Top.m_Green, 0.8 );
     aCfg->Read( keyBgColor_Blue_Top, &GetPrm3DVisu().m_BgColor_Top.m_Blue, 0.9 );
 
-    aCfg->Read( keySMaskColor_Red, &GetPrm3DVisu().m_SolderMaskColor.m_Red, 100.0*(0.2/255.0) );
-    aCfg->Read( keySMaskColor_Green, &GetPrm3DVisu().m_SolderMaskColor.m_Green, 255.0*(0.2/255.0) );
-    aCfg->Read( keySMaskColor_Blue, &GetPrm3DVisu().m_SolderMaskColor.m_Blue, 180.0*(0.2/255.0) );
+    // m_SolderMaskColor default value = dark grey-green
+    aCfg->Read( keySMaskColor_Red, &GetPrm3DVisu().m_SolderMaskColor.m_Red, 100.0 * 0.2 / 255.0 );
+    aCfg->Read( keySMaskColor_Green, &GetPrm3DVisu().m_SolderMaskColor.m_Green, 255.0 * 0.2 / 255.0 );
+    aCfg->Read( keySMaskColor_Blue, &GetPrm3DVisu().m_SolderMaskColor.m_Blue, 180.0 * 0.2 / 255.0 );
 
+    // m_SolderPasteColor default value = light grey
+    aCfg->Read( keySPasteColor_Red, &GetPrm3DVisu().m_SolderPasteColor.m_Red, 128.0 /255.0 );
+    aCfg->Read( keySPasteColor_Green, &GetPrm3DVisu().m_SolderPasteColor.m_Green, 128.0 /255.0 );
+    aCfg->Read( keySPasteColor_Blue, &GetPrm3DVisu().m_SolderPasteColor.m_Blue, 128.0 /255.0 );
+
+    // m_SilkScreenColor default value = white
     aCfg->Read( keySilkColor_Red, &GetPrm3DVisu().m_SilkScreenColor.m_Red, 0.9 );
     aCfg->Read( keySilkColor_Green, &GetPrm3DVisu().m_SilkScreenColor.m_Green, 0.9 );
     aCfg->Read( keySilkColor_Blue, &GetPrm3DVisu().m_SilkScreenColor.m_Blue, 0.9 );
 
-    aCfg->Read( keyCopperColor_Red, &GetPrm3DVisu().m_CopperColor.m_Red, 255.0*(0.7/255.0) );
-    aCfg->Read( keyCopperColor_Green, &GetPrm3DVisu().m_CopperColor.m_Green, 223.0*(0.7/255.0) );
-    aCfg->Read( keyCopperColor_Blue, &GetPrm3DVisu().m_CopperColor.m_Blue, 0.0*(0.7/255.0) );
+    // m_CopperColor default value = gold
+    aCfg->Read( keyCopperColor_Red, &GetPrm3DVisu().m_CopperColor.m_Red, 255.0 * 0.7 / 255.0 );
+    aCfg->Read( keyCopperColor_Green, &GetPrm3DVisu().m_CopperColor.m_Green, 223.0 * 0.7 / 255.0 );
+    aCfg->Read( keyCopperColor_Blue, &GetPrm3DVisu().m_CopperColor.m_Blue, 0.0 /255.0 );
 
     bool tmp;
     aCfg->Read( keyShowRealisticMode, &tmp, false );
@@ -342,6 +354,10 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keySMaskColor_Red, GetPrm3DVisu().m_SolderMaskColor.m_Red );
     aCfg->Write( keySMaskColor_Green, GetPrm3DVisu().m_SolderMaskColor.m_Green );
     aCfg->Write( keySMaskColor_Blue, GetPrm3DVisu().m_SolderMaskColor.m_Blue );
+
+    aCfg->Write( keySPasteColor_Red, GetPrm3DVisu().m_SolderPasteColor.m_Red );
+    aCfg->Write( keySPasteColor_Green, GetPrm3DVisu().m_SolderPasteColor.m_Green );
+    aCfg->Write( keySPasteColor_Blue, GetPrm3DVisu().m_SolderPasteColor.m_Blue );
 
     aCfg->Write( keySilkColor_Red, GetPrm3DVisu().m_SilkScreenColor.m_Red );
     aCfg->Write( keySilkColor_Green, GetPrm3DVisu().m_SilkScreenColor.m_Green );
@@ -506,12 +522,14 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->TakeScreenshot( event );
         break;
 
-    case ID_MENU3D_BGCOLOR_SELECTION:
-        Get3DColorFromUser( GetPrm3DVisu().m_BgColor );
+    case ID_MENU3D_BGCOLOR_BOTTOM_SELECTION:
+        if( Set3DColorFromUser( GetPrm3DVisu().m_BgColor ) )
+            m_canvas->Refresh( true );
         return;
 
     case ID_MENU3D_BGCOLOR_TOP_SELECTION:
-        Get3DColorFromUser( GetPrm3DVisu().m_BgColor_Top );
+        if( Set3DColorFromUser( GetPrm3DVisu().m_BgColor_Top ) )
+            m_canvas->Refresh( true );
         return;
 
     case ID_MENU3D_SILKSCREEN_COLOR_SELECTION:
@@ -519,7 +537,11 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         return;
 
     case ID_MENU3D_SOLDERMASK_COLOR_SELECTION:
-        Set3DSoldermaskColorFromUser();
+        Set3DSolderMaskColorFromUser();
+        return;
+
+    case ID_MENU3D_SOLDERPASTE_COLOR_SELECTION:
+        Set3DSolderPasteColorFromUser();
         return;
 
     case ID_MENU3D_COPPER_COLOR_SELECTION:
@@ -708,26 +730,29 @@ void EDA_3D_FRAME::OnActivate( wxActivateEvent& event )
 
 /* called to set the background color of the 3D scene
  */
-bool EDA_3D_FRAME::Get3DColorFromUser( S3D_COLOR &color )
+bool EDA_3D_FRAME::Set3DColorFromUser( S3D_COLOR &aColor, wxColourData* aPredefinedColors )
 {
-    wxColour    newcolor, oldcolor;
+    wxColour newcolor, oldcolor;
 
-    oldcolor.Set( KiROUND( color.m_Red * 255 ),
-                  KiROUND( color.m_Green * 255 ),
-                  KiROUND( color.m_Blue * 255 ) );
+    oldcolor.Set( KiROUND( aColor.m_Red * 255 ),
+                  KiROUND( aColor.m_Green * 255 ),
+                  KiROUND( aColor.m_Blue * 255 ) );
 
-    newcolor = wxGetColourFromUser( this, oldcolor );
+    if( aPredefinedColors )
+        newcolor = wxGetColourFromUser( this, oldcolor, wxEmptyString, aPredefinedColors );
+    else
+        newcolor = wxGetColourFromUser( this, oldcolor );
 
     if( !newcolor.IsOk() )     // Cancel command
         return false;
 
     if( newcolor != oldcolor )
     {
-        color.m_Red      = (double) newcolor.Red() / 255.0;
-        color.m_Green    = (double) newcolor.Green() / 255.0;
-        color.m_Blue     = (double) newcolor.Blue() / 255.0;
-        m_canvas->Redraw();
+        aColor.m_Red      = (double) newcolor.Red() / 255.0;
+        aColor.m_Green    = (double) newcolor.Green() / 255.0;
+        aColor.m_Blue     = (double) newcolor.Blue() / 255.0;
     }
+
     return true;
 }
 
@@ -735,67 +760,39 @@ bool EDA_3D_FRAME::Get3DColorFromUser( S3D_COLOR &color )
  */
 bool EDA_3D_FRAME::Set3DSilkScreenColorFromUser()
 {
-    S3D_COLOR& curr_3Dcolor = GetPrm3DVisu().m_SilkScreenColor;
-    wxColour oldcolor;
-    oldcolor.Set( KiROUND( curr_3Dcolor.m_Red * 255 ),
-                  KiROUND( curr_3Dcolor.m_Green * 255 ),
-                  KiROUND( curr_3Dcolor.m_Blue * 255 ) );
+    wxColourData definedColors;
 
-    wxColourData colorData;
+    definedColors.SetCustomColour(0, wxColour(241, 241, 241));      // White
+    definedColors.SetCustomColour(1, wxColour(180, 180, 180 ));     // Gray
 
-    colorData.SetCustomColour(0, wxColour(241, 241, 241));      // White
-    colorData.SetCustomColour(1, wxColour(180, 180, 180 ));     // Gray
+    bool change = Set3DColorFromUser( GetPrm3DVisu().m_SilkScreenColor, &definedColors );
 
-    wxColour newcolor = wxGetColourFromUser( this, oldcolor, wxEmptyString, &colorData);
-
-    if( !newcolor.IsOk() )     // Cancel command
-        return false;
-
-    if( newcolor != oldcolor )
-    {
-        curr_3Dcolor.m_Red      = (double) newcolor.Red() / 255.0;
-        curr_3Dcolor.m_Green    = (double) newcolor.Green() / 255.0;
-        curr_3Dcolor.m_Blue     = (double) newcolor.Blue() / 255.0;
+    if( change )
         NewDisplay(GL_ID_TECH_LAYERS);
-    }
 
-    return true;
+    return change;
 }
 
 
 /* called to set the soldermask color. Sets up a number of default colors
  */
-bool EDA_3D_FRAME::Set3DSoldermaskColorFromUser()
+bool EDA_3D_FRAME::Set3DSolderMaskColorFromUser()
 {
-    S3D_COLOR& curr_3Dcolor = GetPrm3DVisu().m_SolderMaskColor;
-    wxColour oldcolor;
-    oldcolor.Set( KiROUND( curr_3Dcolor.m_Red * 255 ),
-                  KiROUND( curr_3Dcolor.m_Green * 255 ),
-                  KiROUND( curr_3Dcolor.m_Blue * 255 ) );
+    wxColourData definedColors;
 
-    wxColourData colorData;
+    definedColors.SetCustomColour(0, wxColour(20,  51, 36 ));   // Green
+    definedColors.SetCustomColour(1, wxColour(43,  10, 65 ));   // Purple
+    definedColors.SetCustomColour(2, wxColour(117, 19, 21 ));   // Red
+    definedColors.SetCustomColour(3, wxColour(54,  79, 116));   // Light blue
+    definedColors.SetCustomColour(4, wxColour(11,  11, 11 ));   // Black
+    definedColors.SetCustomColour(5, wxColour(241, 241,241));   // White
 
-    colorData.SetCustomColour(0, wxColour(20,  51, 36 )); // Green
-    colorData.SetCustomColour(1, wxColour(43,  10, 65 )); // Purple
-    colorData.SetCustomColour(2, wxColour(117, 19, 21 )); // Red
-    colorData.SetCustomColour(3, wxColour(54,  79, 116)); // Light blue
-    colorData.SetCustomColour(4, wxColour(11,  11, 11 )); // Black
-    colorData.SetCustomColour(5, wxColour(241, 241,241)); // White
+    bool change = Set3DColorFromUser( GetPrm3DVisu().m_SolderMaskColor, &definedColors );
 
-    wxColour newcolor = wxGetColourFromUser( this, oldcolor, wxEmptyString, &colorData);
-
-    if( !newcolor.IsOk() )     // Cancel command
-        return false;
-
-    if( newcolor != oldcolor )
-    {
-        curr_3Dcolor.m_Red      = (double) newcolor.Red() / 255.0;
-        curr_3Dcolor.m_Green    = (double) newcolor.Green() / 255.0;
-        curr_3Dcolor.m_Blue     = (double) newcolor.Blue() / 255.0;
+    if( change )
         NewDisplay(GL_ID_TECH_LAYERS);
-    }
 
-    return true;
+    return change;
 }
 
 
@@ -803,32 +800,36 @@ bool EDA_3D_FRAME::Set3DSoldermaskColorFromUser()
  */
 bool EDA_3D_FRAME::Set3DCopperColorFromUser()
 {
-    S3D_COLOR& curr_3Dcolor = GetPrm3DVisu().m_CopperColor;
-    wxColour oldcolor;
-    oldcolor.Set( KiROUND( curr_3Dcolor.m_Red * 255 ),
-                  KiROUND( curr_3Dcolor.m_Green * 255 ),
-                  KiROUND( curr_3Dcolor.m_Blue * 255 ) );
+    wxColourData definedColors;
 
-    wxColourData colorData;
+    definedColors.SetCustomColour(0, wxColour(255, 223, 0  ));  // Copper
+    definedColors.SetCustomColour(1, wxColour(233, 221, 82 ));  // Gold
+    definedColors.SetCustomColour(2, wxColour(213, 213, 213));  // Silver
 
-    colorData.SetCustomColour(0, wxColour(255, 223, 0  )); // Copper
-    colorData.SetCustomColour(1, wxColour(233, 221, 82 )); // Gold
-    colorData.SetCustomColour(2, wxColour(213, 213, 213)); // Silver
+    bool change = Set3DColorFromUser( GetPrm3DVisu().m_CopperColor, &definedColors );
 
-    wxColour newcolor = wxGetColourFromUser( this, oldcolor, wxEmptyString, &colorData);
-
-    if( !newcolor.IsOk() )     // Cancel command
-        return false;
-
-    if( newcolor != oldcolor )
-    {
-        curr_3Dcolor.m_Red      = (double) newcolor.Red() / 255.0;
-        curr_3Dcolor.m_Green    = (double) newcolor.Green() / 255.0;
-        curr_3Dcolor.m_Blue     = (double) newcolor.Blue() / 255.0;
+    if( change )
         NewDisplay(GL_ID_TECH_LAYERS);
-    }
 
-    return true;
+    return change;
+}
+
+/* called to set the solder paste layer color. Sets up a number of default colors
+ */
+bool EDA_3D_FRAME::Set3DSolderPasteColorFromUser()
+{
+    wxColourData definedColors;
+
+    definedColors.SetCustomColour(0, wxColour(128, 128, 128  ));  // grey
+    definedColors.SetCustomColour(1, wxColour(213, 213, 213));  // Silver
+    definedColors.SetCustomColour(2, wxColour(90, 90, 90));     // grey 2
+
+    bool change = Set3DColorFromUser( GetPrm3DVisu().m_SolderPasteColor, &definedColors );
+
+    if( change )
+        NewDisplay(GL_ID_TECH_LAYERS);
+
+    return change;
 }
 
 
@@ -841,7 +842,7 @@ BOARD* EDA_3D_FRAME::GetBoard()
 INFO3D_VISU& EDA_3D_FRAME::GetPrm3DVisu() const
 {
     // return the INFO3D_VISU which contains the current parameters
-    // to draw the 3D view og the board
+    // to draw the 3D view of the board
     return g_Parm_3D_Visu;
 }
 
