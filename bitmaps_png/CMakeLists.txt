@@ -509,7 +509,9 @@ set( BMAPS_MID
     setcolor_3d_bg
     setcolor_silkscreen
     setcolor_soldermask
+    setcolor_solderpaste
     setcolor_copper
+    setcolor_board_body
     show_dcodenumber
     show_footprint
     show_mod_edge

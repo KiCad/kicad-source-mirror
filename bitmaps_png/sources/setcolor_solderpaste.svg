@@ -12,7 +12,7 @@
    version="1.0"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="setcolor_silkscreen.svg">
+   sodipodi:docname="setcolor_solderpaste.svg">
   <metadata
      id="metadata22">
     <rdf:RDF>
@@ -26,7 +26,30 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs20" />
+     id="defs20">
+    <filter
+       id="d"
+       height="1.212"
+       width="1.059"
+       color-interpolation-filters="sRGB"
+       y="-0.10598"
+       x="-0.029501">
+      <feGaussianBlur
+         stdDeviation="0.52522041"
+         id="feGaussianBlur6253" />
+    </filter>
+    <filter
+       id="c"
+       height="1.212"
+       width="1.059"
+       color-interpolation-filters="sRGB"
+       y="-0.10598"
+       x="-0.029501">
+      <feGaussianBlur
+         stdDeviation="0.52522041"
+         id="feGaussianBlur6250" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -40,15 +63,29 @@
      inkscape:window-height="903"
      id="namedview18"
      showgrid="false"
-     inkscape:zoom="26.226914"
-     inkscape:cx="6.7264303"
-     inkscape:cy="14.512229"
+     inkscape:zoom="18.678403"
+     inkscape:cx="11.292596"
+     inkscape:cy="17.269688"
      inkscape:window-x="459"
      inkscape:window-y="84"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2" />
   <g
-     transform="matrix(0.40560854,0,0,0.39900842,-7.2553604,-86.190908)"
+     id="g4847"
+     transform="matrix(1.0666669,0,0,1.1074787,25.007811,1.6058544)">
+    <path
+       style="opacity:0.775;fill:#caca97;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0"
+       id="path6263"
+       d="m -22.738148,13.006854 h 17.2005132 l 5.733698,7.915097 H -17.00445 l -5.733001,-7.915097 z" />
+    <path
+       style="opacity:0.77916721;fill:#caca97;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0"
+       id="path6265"
+       d="M -22.85202,-0.49365713 H -5.6515069 L 0.0821329,7.4214408 H -17.11838 l -5.732943,-7.91509793 z" />
+  </g>
+  <g
+     transform="matrix(0.30654926,0,0,0.32077945,-4.4295847,-63.811249)"
      id="g4">
     <path
        d="m 56.449,216.89 c -5.0416,0 -19.508,0.83386 -19.483,12.086 10e-4,0.63241 1.3029,2.8338 2.3897,3.0676 8.0459,1.7306 8.4825,7.6906 7.9988,12.393 -0.03696,0.35608 0.62582,2.8379 1.1948,3.4664 4.6144,5.0965 6.1842,7.3315 12.413,7.3315 12.458,0 19.449,-5.8231 19.449,-17.485 0,-11.6619 -11.505,-20.86 -23.963,-20.86 z m -12.612,8.0371 c 1.0477,0.0569 2.2727,0.45585 3.4186,1.1657 2.2917,1.4196 3.426,3.6008 2.5225,4.8468 -0.90355,1.2459 -3.5166,1.0822 -5.8083,-0.33745 -2.2917,-1.4197 -3.3928,-3.5702 -2.4893,-4.8161 0.45177,-0.62298 1.3088,-0.9159 2.3565,-0.85893 z"
@@ -85,16 +122,5 @@
        id="path16"
        inkscape:connector-curvature="0"
        style="fill:#e600ad" />
-  </g>
-  <g
-     transform="matrix(1.0338519,0,0,0.78612486,-4.1187775,7.6531067)"
-     style="font-size:39.34732818999999900px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#187479;fill-opacity:1;stroke:none;font-family:Sans"
-     id="text3415">
-    <path
-       d="m 11.312355,5.591232 -1.4755244,0 C 8.2588349,5.591249 7.4237303,5.6333178 6.8857814,6.0995258 6.401623,6.5119715 5.7330264,7.1706083 5.4102568,8.6409948 l -1.4755246,0 0.4918416,-5.591232 16.7226122,0 0.491841,5.591232 -1.475524,-3e-7 C 19.842716,7.1347445 19.192051,6.5119715 18.689978,6.0995258 18.169944,5.6691813 17.316908,5.591249 15.738929,5.591232 l -1.475525,0 0,13.215639 c 0,1.075905 0.115266,2.254563 0.491842,2.541469 0.32276,0.233113 0.909383,0.944861 1.967366,1.016587 l 0,1.016588 -7.8694645,0 0,-1.016588 c 1.1655565,-0.08966 1.6804525,-0.693815 1.9673665,-1.016587 0.268969,-0.304838 0.447457,-1.394753 0.491841,-2.541469"
-       style="font-size:27.54312897000000100px;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#187479;fill-opacity:1;font-family:Rachana;-inkscape-font-specification:Rachana Bold"
-       id="path3777"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccccccsccccccc" />
   </g>
 </svg>

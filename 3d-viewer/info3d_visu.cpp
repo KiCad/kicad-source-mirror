@@ -68,13 +68,6 @@ INFO3D_VISU::INFO3D_VISU()
     m_BiuTo3Dunits = 1.0;
     zpos_offset = 0.0;
 
-    // Set the body board (FR4) color, in realistic mode
-    #undef LUMINANCE
-    #define LUMINANCE 0.2/255.0
-    m_BoardBodyColor.m_Red = 255.0*LUMINANCE;
-    m_BoardBodyColor.m_Green = 218.0*LUMINANCE;
-    m_BoardBodyColor.m_Blue = 110.0*LUMINANCE;
-
     // default all special item layers Visible
     m_drawFlags.set();
 

@@ -183,6 +183,14 @@ private:
     bool Set3DCopperColorFromUser();
 
     /**
+     * Function Set3DBoardBodyBodyColorFromUser
+     * Set the copper color from a set of colors
+     * @return true if a new color is chosen, false if
+     * no change or aborted by user
+     */
+    bool Set3DBoardBodyColorFromUser();
+
+    /**
      * Function Set3DSilkScreenColorFromUser
      * Set the silkscreen color from a set of colors
      * @return true if a new color is chosen, false if

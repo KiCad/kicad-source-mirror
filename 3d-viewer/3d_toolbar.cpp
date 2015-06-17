@@ -208,10 +208,13 @@ void EDA_3D_FRAME::CreateMenuBar()
                  _( "Solder Mask Color" ), KiBitmap( setcolor_soldermask_xpm ) );
 
     AddMenuItem( setColorMenu, ID_MENU3D_SOLDERPASTE_COLOR_SELECTION,
-                 _( "Solder Paste Color" ), KiBitmap( setcolor_soldermask_xpm ) );
+                 _( "Solder Paste Color" ), KiBitmap( setcolor_solderpaste_xpm ) );
 
     AddMenuItem( setColorMenu, ID_MENU3D_COPPER_COLOR_SELECTION,
                  _( "Copper/Surface Finish Color" ), KiBitmap( setcolor_copper_xpm ) );
+
+    AddMenuItem( setColorMenu, ID_MENU3D_PCB_BODY_COLOR_SELECTION,
+                 _( "Board Body Color" ), KiBitmap( setcolor_board_body_xpm ) );
 
     AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
                  _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );

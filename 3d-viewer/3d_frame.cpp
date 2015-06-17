@@ -66,6 +66,10 @@ static const wxChar keyCopperColor_Red[]    = wxT( "CopperColor_Red" );
 static const wxChar keyCopperColor_Green[]  = wxT( "CopperColor_Green" );
 static const wxChar keyCopperColor_Blue[]   = wxT( "CopperColor_Blue" );
 
+static const wxChar keyBoardBodyColor_Red[] = wxT( "BoardBodyColor_Red" );
+static const wxChar keyBoardBodyColor_Green[]    = wxT( "BoardBodyColor_Green" );
+static const wxChar keyBoardBodyColor_Blue[]= wxT( "BoardBodyColor_Blue" );
+
 static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
 static const wxChar keyRenderShadows[] =        wxT( "Render_Shadows" );
 static const wxChar keyRenderRemoveHoles[] =    wxT( "Render_RemoveHoles" );
@@ -272,6 +276,11 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyCopperColor_Green, &GetPrm3DVisu().m_CopperColor.m_Green, 223.0 * 0.7 / 255.0 );
     aCfg->Read( keyCopperColor_Blue, &GetPrm3DVisu().m_CopperColor.m_Blue, 0.0 /255.0 );
 
+    // m_BoardBodyColor default value = FR4, in realistic mode
+    aCfg->Read( keyBoardBodyColor_Red, &GetPrm3DVisu().m_BoardBodyColor.m_Red, 255.0 * 0.2 / 255.0 );
+    aCfg->Read( keyBoardBodyColor_Green, &GetPrm3DVisu().m_BoardBodyColor.m_Green, 218.0 * 0.2 / 255.0 );
+    aCfg->Read( keyBoardBodyColor_Blue, &GetPrm3DVisu().m_BoardBodyColor.m_Blue, 110.0 * 0.2 /255.0 );
+
     bool tmp;
     aCfg->Read( keyShowRealisticMode, &tmp, false );
     prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
@@ -366,6 +375,10 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyCopperColor_Red, GetPrm3DVisu().m_CopperColor.m_Red );
     aCfg->Write( keyCopperColor_Green, GetPrm3DVisu().m_CopperColor.m_Green );
     aCfg->Write( keyCopperColor_Blue, GetPrm3DVisu().m_CopperColor.m_Blue );
+
+    aCfg->Write( keyBoardBodyColor_Red, GetPrm3DVisu().m_BoardBodyColor.m_Red );
+    aCfg->Write( keyBoardBodyColor_Green, GetPrm3DVisu().m_BoardBodyColor.m_Green );
+    aCfg->Write( keyBoardBodyColor_Blue, GetPrm3DVisu().m_BoardBodyColor.m_Blue );
 
     aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE ) );
 
@@ -546,7 +559,11 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_COPPER_COLOR_SELECTION:
         Set3DCopperColorFromUser();
-        break;;
+        break;
+
+    case ID_MENU3D_PCB_BODY_COLOR_SELECTION:
+        Set3DBoardBodyColorFromUser();
+        break;
 
     case ID_MENU3D_REALISTIC_MODE:
         GetPrm3DVisu().SetFlag( FL_USE_REALISTIC_MODE, isChecked );
@@ -738,10 +755,14 @@ bool EDA_3D_FRAME::Set3DColorFromUser( S3D_COLOR &aColor, wxColourData* aPredefi
                   KiROUND( aColor.m_Green * 255 ),
                   KiROUND( aColor.m_Blue * 255 ) );
 
-    if( aPredefinedColors )
-        newcolor = wxGetColourFromUser( this, oldcolor, wxEmptyString, aPredefinedColors );
-    else
-        newcolor = wxGetColourFromUser( this, oldcolor );
+    wxColourData emptyColorSet;     // Provides a empty predefined set of colors
+                                    // if no color set available to avoid use of an
+                                    // old color set
+
+    if( aPredefinedColors == NULL )
+        aPredefinedColors = &emptyColorSet;
+
+    newcolor = wxGetColourFromUser( this, oldcolor, wxEmptyString, aPredefinedColors );
 
     if( !newcolor.IsOk() )     // Cancel command
         return false;
@@ -762,13 +783,13 @@ bool EDA_3D_FRAME::Set3DSilkScreenColorFromUser()
 {
     wxColourData definedColors;
 
-    definedColors.SetCustomColour(0, wxColour(241, 241, 241));      // White
-    definedColors.SetCustomColour(1, wxColour(180, 180, 180 ));     // Gray
+    definedColors.SetCustomColour(0, wxColour( 241, 241, 241 ) );      // White
+    definedColors.SetCustomColour(1, wxColour( 180, 180, 180 ) );     // Gray
 
     bool change = Set3DColorFromUser( GetPrm3DVisu().m_SilkScreenColor, &definedColors );
 
     if( change )
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_TECH_LAYERS );
 
     return change;
 }
@@ -780,17 +801,17 @@ bool EDA_3D_FRAME::Set3DSolderMaskColorFromUser()
 {
     wxColourData definedColors;
 
-    definedColors.SetCustomColour(0, wxColour(20,  51, 36 ));   // Green
-    definedColors.SetCustomColour(1, wxColour(43,  10, 65 ));   // Purple
-    definedColors.SetCustomColour(2, wxColour(117, 19, 21 ));   // Red
-    definedColors.SetCustomColour(3, wxColour(54,  79, 116));   // Light blue
-    definedColors.SetCustomColour(4, wxColour(11,  11, 11 ));   // Black
-    definedColors.SetCustomColour(5, wxColour(241, 241,241));   // White
+    definedColors.SetCustomColour(0, wxColour( 20,  51, 36 ) );   // Green
+    definedColors.SetCustomColour(1, wxColour( 43,  10, 65 ) );   // Purple
+    definedColors.SetCustomColour(2, wxColour( 117, 19, 21 ) );   // Red
+    definedColors.SetCustomColour(3, wxColour( 54,  79, 116) );   // Light blue
+    definedColors.SetCustomColour(4, wxColour( 11,  11, 11 ) );   // Black
+    definedColors.SetCustomColour(5, wxColour( 241, 241,241) );   // White
 
     bool change = Set3DColorFromUser( GetPrm3DVisu().m_SolderMaskColor, &definedColors );
 
     if( change )
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_TECH_LAYERS );
 
     return change;
 }
@@ -802,17 +823,38 @@ bool EDA_3D_FRAME::Set3DCopperColorFromUser()
 {
     wxColourData definedColors;
 
-    definedColors.SetCustomColour(0, wxColour(255, 223, 0  ));  // Copper
-    definedColors.SetCustomColour(1, wxColour(233, 221, 82 ));  // Gold
-    definedColors.SetCustomColour(2, wxColour(213, 213, 213));  // Silver
+    definedColors.SetCustomColour( 0, wxColour(255, 223, 0  ) );  // Copper
+    definedColors.SetCustomColour( 1, wxColour(233, 221, 82 ) );  // Gold
+    definedColors.SetCustomColour( 2, wxColour(213, 213, 213) );  // Silver
+    definedColors.SetCustomColour( 3, wxColour(160, 160, 160) );  // tin
+
 
     bool change = Set3DColorFromUser( GetPrm3DVisu().m_CopperColor, &definedColors );
 
     if( change )
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_TECH_LAYERS );
 
     return change;
 }
+
+
+/* called to set the board body color. Sets up a number of default colors
+ */
+bool EDA_3D_FRAME::Set3DBoardBodyColorFromUser()
+{
+    wxColourData definedColors;
+
+    definedColors.SetCustomColour( 0, wxColour( 51, 44, 22 ) );  // FR4
+    definedColors.SetCustomColour( 1, wxColour( 120, 120, 10 ) );  // brown
+
+    bool change = Set3DColorFromUser( GetPrm3DVisu().m_BoardBodyColor, &definedColors );
+
+    if( change )
+        NewDisplay( GL_ID_BOARD );
+
+    return change;
+}
+
 
 /* called to set the solder paste layer color. Sets up a number of default colors
  */
@@ -820,14 +862,14 @@ bool EDA_3D_FRAME::Set3DSolderPasteColorFromUser()
 {
     wxColourData definedColors;
 
-    definedColors.SetCustomColour(0, wxColour(128, 128, 128  ));  // grey
-    definedColors.SetCustomColour(1, wxColour(213, 213, 213));  // Silver
-    definedColors.SetCustomColour(2, wxColour(90, 90, 90));     // grey 2
+    definedColors.SetCustomColour(0, wxColour( 128, 128, 128 ) );   // grey
+    definedColors.SetCustomColour(1, wxColour( 213, 213, 213 ) );   // Silver
+    definedColors.SetCustomColour(2, wxColour( 90,  90,  90  ) );   // grey 2
 
     bool change = Set3DColorFromUser( GetPrm3DVisu().m_SolderPasteColor, &definedColors );
 
     if( change )
-        NewDisplay(GL_ID_TECH_LAYERS);
+        NewDisplay( GL_ID_TECH_LAYERS );
 
     return change;
 }
