@@ -150,13 +150,15 @@ private:
      * Function Set3DColorFromUser
      * Get a S3D_COLOR from a wx colour dialog
      * @param aColor is the S3D_COLOR to change
+     * @param aTitle is the title displayed in the colordialog selector
      * @param aPredefinedColors is a reference to a wxColourData
      * which contains a few predefined colors
      * if it is NULL, no predefined colors are used
      * @return true if a new color is chosen, false if
      * no change or aborted by user
      */
-    bool Set3DColorFromUser( S3D_COLOR &aColor, wxColourData* aPredefinedColors = NULL );
+    bool Set3DColorFromUser( S3D_COLOR &aColor, const wxString& aTitle,
+                             wxColourData* aPredefinedColors = NULL );
 
     /**
      * Function Set3DSolderMaskColorFromUser
