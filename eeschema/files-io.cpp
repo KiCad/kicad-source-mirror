@@ -509,6 +509,9 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
     tmp.AssignDir( fn.GetPath() );
 
+    if( !tmp.IsOk() )
+        return false;
+
     if( !IsWritable( tmp ) )
         return false;
 
