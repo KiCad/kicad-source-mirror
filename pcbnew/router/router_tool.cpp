@@ -437,10 +437,15 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
             return false;
     }
 
-
     sizes.SetViaType( aType );
-    m_router->ToggleViaPlacement();
+    if( VIA_MICROVIA == aType )
+    {
+        sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
+    }
+            
     m_router->UpdateSizes( sizes );
+    m_router->ToggleViaPlacement();
 
     m_router->Move( m_endSnapPoint, m_endItem );        // refresh
 
