@@ -271,7 +271,10 @@ public:
     static TOOL_ACTION resetCoords;
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
+    static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION highlightNet;
+    static TOOL_ACTION highlightNetCursor;
+    static TOOL_ACTION drillOrigin;
     static TOOL_ACTION showHelp;
     static TOOL_ACTION toBeDone;
 

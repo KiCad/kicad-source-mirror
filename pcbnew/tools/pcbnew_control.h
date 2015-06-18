@@ -79,6 +79,7 @@ public:
     int ResetCoords( const TOOL_EVENT& aEvent );
     int SwitchCursor( const TOOL_EVENT& aEvent );
     int SwitchUnits( const TOOL_EVENT& aEvent );
+    int DeleteItemCursor( const TOOL_EVENT& aEvent );
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ToBeDone( const TOOL_EVENT& aEvent );
 

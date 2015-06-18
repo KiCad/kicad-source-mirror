@@ -24,6 +24,8 @@
 
 #include "pcbnew_control.h"
 #include "common_actions.h"
+#include "selection_tool.h"
+#include "picker_tool.h"
 
 #include <pcbnew_id.h>
 #include <wxPcbStruct.h>
@@ -34,10 +36,13 @@
 #include <class_draw_panel_gal.h>
 #include <class_pcb_screen.h>
 #include <confirm.h>
+#include <tool/tool_manager.h>
 
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
+
+#include <boost/bind.hpp>
 
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
@@ -437,32 +442,25 @@ int PCBNEW_CONTROL::GridPrev( const TOOL_EVENT& aEvent )
 }
 
 
+static bool setOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame, const VECTOR2D& aPoint )
+{
+    aFrame->SetGridOrigin( wxPoint( aPoint.x, aPoint.y ) );
+    aView->GetGAL()->SetGridOrigin( aPoint );
+    aView->MarkDirty();
+
+    return true;
+}
+
+
 int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 {
-    Activate();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    assert( picker );
+
+    // TODO it will not check the toolbar button in module editor, as it uses a different ID..
     m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    controls->ShowCursor( true );
-    controls->SetSnapping( true );
-    controls->SetAutoPan( true );
-
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        if( evt->IsClick( BUT_LEFT ) )
-        {
-            getView()->GetGAL()->SetGridOrigin( controls->GetCursorPosition() );
-            getView()->MarkDirty();
-        }
-
-        else if( evt->IsCancel() || evt->IsActivate() )
-            break;
-    }
-
-    controls->SetAutoPan( false );
-    controls->SetSnapping( false );
-    controls->ShowCursor( false );
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    picker->SetClickHandler( boost::bind( setOrigin, getView(), m_frame, _1 ) );
+    picker->Activate();
 
     return 0;
 }
@@ -523,6 +521,42 @@ int PCBNEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 }
 
 
+static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
+{
+    SELECTION_TOOL* selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
+    assert( selectionTool );
+
+    aToolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    aToolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+    selectionTool->SanitizeSelection();
+
+    if( selectionTool->GetSelection().Empty() )
+        return true;
+
+    if( IsOK( aToolMgr->GetEditFrame(), _( "Are you sure you want to delete item?" ) ) )
+        aToolMgr->RunAction( COMMON_ACTIONS::remove, true );
+
+    aToolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+
+    return true;
+}
+
+
+int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+{
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    assert( picker );
+
+    // TODO it will not check the toolbar button in the module editor, as it uses a different ID..
+    m_frame->SetToolID( ID_PCB_DELETE_ITEM_BUTT, wxCURSOR_PENCIL, _( "Delete item" ) );
+    picker->SetSnapping( false );
+    picker->SetClickHandler( boost::bind( deleteItem, m_toolMgr, _1 ) );
+    picker->Activate();
+
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 {
     // TODO
@@ -534,7 +568,7 @@ int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 {
-    DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
+    DisplayInfoMessage( m_frame, _( "Not available in OpenGL/Cairo canvases." ) );
 
     return 0;
 }
@@ -589,6 +623,7 @@ void PCBNEW_CONTROL::SetTransitions()
     Go( &PCBNEW_CONTROL::ResetCoords,        COMMON_ACTIONS::resetCoords.MakeEvent() );
     Go( &PCBNEW_CONTROL::SwitchCursor,       COMMON_ACTIONS::switchCursor.MakeEvent() );
     Go( &PCBNEW_CONTROL::SwitchUnits,        COMMON_ACTIONS::switchUnits.MakeEvent() );
+    Go( &PCBNEW_CONTROL::DeleteItemCursor,   COMMON_ACTIONS::deleteItemCursor.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,           COMMON_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,           COMMON_ACTIONS::toBeDone.MakeEvent() );
 }

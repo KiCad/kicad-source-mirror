@@ -72,8 +72,14 @@ public:
     ///> Notifies eeschema about the selected item.
     int SelectionCrossProbe( const TOOL_EVENT& aEvent );
 
+    ///> Places the origin point for drill and pick-and-place files.
+    int DrillOrigin( const TOOL_EVENT& aEvent );
+
     ///> Highlights net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
+
+    ///> Launches a tool to pick the item whose net is going to be highlighted.
+    int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void SetTransitions();

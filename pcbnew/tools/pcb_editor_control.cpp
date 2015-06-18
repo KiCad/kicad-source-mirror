@@ -29,6 +29,7 @@
 #include <tool/tool_manager.h>
 
 #include "selection_tool.h"
+#include "picker_tool.h"
 
 #include <painter.h>
 #include <project.h>
@@ -468,6 +469,26 @@ int PCB_EDITOR_CONTROL::SelectionCrossProbe( const TOOL_EVENT& aEvent )
 }
 
 
+static bool setDrillOrigin( PCB_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
+{
+    aFrame->SetAuxOrigin( wxPoint( aPosition.x, aPosition.y ) );
+
+    return true;
+}
+
+
+int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
+{
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    assert( picker );
+
+    m_frame->SetToolID( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust zero" ) );
+    picker->SetClickHandler( boost::bind( setDrillOrigin, m_frame, _1 ) );
+    picker->Activate();
+
+    return 0;
+}
+
 /**
  * Function highlightNet()
  * Looks for a BOARD_CONNECTED_ITEM in a given spot, and if one is found - it enables
@@ -509,6 +530,19 @@ int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
+{
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    assert( picker );
+
+    m_frame->SetToolID( ID_PCB_HIGHLIGHT_BUTT, wxCURSOR_PENCIL, _( "Highlight net" ) );
+    picker->SetClickHandler( boost::bind( highlightNet, m_toolMgr, _1 ) );
+    picker->Activate();
+
+    return 0;
+}
+
+
 void PCB_EDITOR_CONTROL::SetTransitions()
 {
     // Track & via size control
@@ -529,7 +563,9 @@ void PCB_EDITOR_CONTROL::SetTransitions()
 
     // Other
     Go( &PCB_EDITOR_CONTROL::SelectionCrossProbe, SELECTION_TOOL::SelectedEvent );
+    Go( &PCB_EDITOR_CONTROL::DrillOrigin,         COMMON_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        COMMON_ACTIONS::highlightNet.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  COMMON_ACTIONS::highlightNetCursor.MakeEvent() );
 }
 
 
