@@ -1022,6 +1022,9 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
+    if( m_galCanvasActive == aEnable )
+        return;
+
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
     KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
