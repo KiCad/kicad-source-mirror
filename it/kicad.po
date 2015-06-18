@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-16 23:09+0100\n"
-"PO-Revision-Date: 2015-06-16 23:09+0100\n"
+"POT-Creation-Date: 2015-06-18 13:23+0100\n"
+"PO-Revision-Date: 2015-06-18 13:23+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -18736,7 +18736,7 @@ msgstr "Bianco"
 msgid "Black"
 msgstr "Nero"
 
-#: eeschema/dialogs/dialog_color_config.cpp:193
+#: eeschema/dialogs/dialog_color_config.cpp:193 3d-viewer/3d_toolbar.cpp:196
 msgid "Background Color"
 msgstr "Colore di sfondo "
 
@@ -19452,89 +19452,125 @@ msgstr "Disegna le proprietà del materiale"
 msgid "Show Model Bounding Boxes"
 msgstr "Mostra i perimetri di delimitazione del modello"
 
-#: 3d-viewer/3d_toolbar.cpp:193
+#: 3d-viewer/3d_toolbar.cpp:192
 msgid "Choose Colors"
 msgstr "Scegli i colori"
 
-#: 3d-viewer/3d_toolbar.cpp:196
+#: 3d-viewer/3d_toolbar.cpp:199
 msgid "Background Top Color"
 msgstr "Colore di sfondo in cima"
 
-#: 3d-viewer/3d_toolbar.cpp:199
+#: 3d-viewer/3d_toolbar.cpp:202
 msgid "Background Bottom Color"
 msgstr "Colore di sfondo in fondo"
 
-#: 3d-viewer/3d_toolbar.cpp:202
+#: 3d-viewer/3d_toolbar.cpp:205
+msgid "Silkscreen Color"
+msgstr "Colore serigrafia"
+
+#: 3d-viewer/3d_toolbar.cpp:208 3d-viewer/3d_frame.cpp:815
+msgid "Solder Mask Color"
+msgstr "Colore maschera di saldatura"
+
+#: 3d-viewer/3d_toolbar.cpp:211 3d-viewer/3d_frame.cpp:885
+msgid "Solder Paste Color"
+msgstr "Colore pasta salda"
+
+#: 3d-viewer/3d_toolbar.cpp:214
+msgid "Copper/Surface Finish Color"
+msgstr "Colore rame/finitura superficiale"
+
+#: 3d-viewer/3d_toolbar.cpp:217 3d-viewer/3d_frame.cpp:864
+msgid "Board Body Color"
+msgstr "Colore corpo scheda"
+
+#: 3d-viewer/3d_toolbar.cpp:220
 msgid "Show 3D &Axis"
 msgstr "Mostra assi 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:207
+#: 3d-viewer/3d_toolbar.cpp:225
 msgid "3D Grid"
 msgstr "Griglia 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:208
+#: 3d-viewer/3d_toolbar.cpp:226
 msgid "No 3D Grid"
 msgstr "No griglia 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:209
+#: 3d-viewer/3d_toolbar.cpp:227
 msgid "3D Grid 10 mm"
 msgstr "Griglia 3D 10mm"
 
-#: 3d-viewer/3d_toolbar.cpp:210
+#: 3d-viewer/3d_toolbar.cpp:228
 msgid "3D Grid 5 mm"
 msgstr "Griglia 3D 5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:211
+#: 3d-viewer/3d_toolbar.cpp:229
 msgid "3D Grid 2.5 mm"
 msgstr "Griglia 3D 2.5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:212
+#: 3d-viewer/3d_toolbar.cpp:230
 msgid "3D Grid 1 mm"
 msgstr "Griglia 3D 1 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:228
+#: 3d-viewer/3d_toolbar.cpp:246
 msgid "Show Board Bod&y"
 msgstr "Mostra il corpo sche&da"
 
-#: 3d-viewer/3d_toolbar.cpp:231
+#: 3d-viewer/3d_toolbar.cpp:249
 msgid "Show Copper &Thickness"
 msgstr "Mos&tra lo spessore rame"
 
-#: 3d-viewer/3d_toolbar.cpp:234
+#: 3d-viewer/3d_toolbar.cpp:252
 msgid "Show 3D F&ootprints"
 msgstr "Mostra i m&oduli in 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:237
+#: 3d-viewer/3d_toolbar.cpp:255
 msgid "Show Zone &Filling"
 msgstr "Mostra riempimenti &zone"
 
-#: 3d-viewer/3d_toolbar.cpp:243
+#: 3d-viewer/3d_toolbar.cpp:261
 msgid "Show &Layers"
 msgstr "Mostra g&li strati"
 
-#: 3d-viewer/3d_toolbar.cpp:246
+#: 3d-viewer/3d_toolbar.cpp:264
 msgid "Show &Adhesive Layers"
 msgstr "Mostra gli strati &adesivi"
 
-#: 3d-viewer/3d_toolbar.cpp:249
+#: 3d-viewer/3d_toolbar.cpp:267
 msgid "Show &Silkscreen Layer"
 msgstr "Mostra lo strato &serigrafia"
 
-#: 3d-viewer/3d_toolbar.cpp:252
+#: 3d-viewer/3d_toolbar.cpp:270
 msgid "Show Solder &Mask Layers"
 msgstr "Mostra gli strati &maschera saldatura"
 
-#: 3d-viewer/3d_toolbar.cpp:255
+#: 3d-viewer/3d_toolbar.cpp:273
 msgid "Show Solder &Paste Layers"
 msgstr "Mostra gli strati &pasta salda"
 
-#: 3d-viewer/3d_toolbar.cpp:258
+#: 3d-viewer/3d_toolbar.cpp:276
 msgid "Show &Comments and Drawings Layer"
 msgstr "Mostra strati &commenti ed grafica"
 
-#: 3d-viewer/3d_toolbar.cpp:261
+#: 3d-viewer/3d_toolbar.cpp:279
 msgid "Show &Eco Layers"
 msgstr "Mostra gli strati &eco"
+
+#: 3d-viewer/3d_frame.cpp:539
+msgid "Background Color, Bottom"
+msgstr "Colore di sfondo, basso"
+
+#: 3d-viewer/3d_frame.cpp:544
+msgid "Background Color, Top"
+msgstr "Colore di sfondo, alto"
+
+#: 3d-viewer/3d_frame.cpp:791
+msgid "Silk Screen Color"
+msgstr "Colore serigrafia"
+
+#: 3d-viewer/3d_frame.cpp:838
+msgid "Copper Color"
+msgstr "Colore rame"
 
 #: 3d-viewer/3d_draw.cpp:611
 #, c-format
