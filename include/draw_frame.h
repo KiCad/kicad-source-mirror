@@ -328,6 +328,12 @@ public:
     int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL );
 
     /**
+     * Function GetHotkeyConfig()
+     * Returns a structure containing currently used hotkey mapping.
+     */
+    EDA_HOTKEY_CONFIG* GetHotkeyConfig() const { return m_hotkeysDescrList; }
+
+    /**
      * Function GetHotKeyDescription
      * Searches lists of hot key identifiers (HK_xxx) used in the frame to find a matching
      * hot key descriptor.

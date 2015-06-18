@@ -36,8 +36,9 @@
 #include <class_draw_panel_gal.h>
 #include <class_pcb_screen.h>
 #include <confirm.h>
-#include <tool/tool_manager.h>
+#include <hotkeys_basic.h>
 
+#include <tool/tool_manager.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
@@ -559,8 +560,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 {
-    // TODO
-    DisplayInfoMessage( m_frame, _( "Not implemented yet." ) );
+    DisplayHotkeyList( m_frame, m_frame->GetHotkeyConfig() );
 
     return 0;
 }

@@ -446,7 +446,7 @@ TOOL_ACTION COMMON_ACTIONS::deleteItemCursor( "pcbnew.Control.deleteItemCursor",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::showHelp( "pcbnew.Control.showHelp",
-        AS_GLOBAL, '?',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
