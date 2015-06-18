@@ -33,7 +33,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <draw_frame.h>
+#include <wxBasePcbFrame.h>
 
 #include <boost/bind.hpp>
 
@@ -223,9 +223,8 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
 
     UseColorScheme( aBoard->GetColorsSettings() );
 
-    // We are expecting here the parent frame is a EDA_DRAW_FRAME or a derived class
-    // (usually a BASE_PCB_FRAME, PCB_EDIT_FRAME ...)
-    EDA_DRAW_FRAME* frame = dynamic_cast <EDA_DRAW_FRAME*> ( GetParent() );
+    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
+    SetTopLayer( frame->GetActiveLayer() );
 
     if( frame )
     {
