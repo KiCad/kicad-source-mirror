@@ -132,7 +132,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
         // Grid has to be redrawn only when the NONCACHED target is redrawn
         if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
-                m_gal->DrawGrid();
+            m_gal->DrawGrid();
 
         m_view->Redraw();
     }

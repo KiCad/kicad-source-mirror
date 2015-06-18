@@ -42,6 +42,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
+#include <origin_viewitem.h>
 
 #include <boost/bind.hpp>
 
@@ -49,12 +50,26 @@
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
     TOOL_INTERACTIVE( "pcbnew.Control" ), m_frame( NULL )
 {
+    m_gridOrigin = new KIGFX::ORIGIN_VIEWITEM();
+}
+
+
+PCBNEW_CONTROL::~PCBNEW_CONTROL()
+{
+    delete m_gridOrigin;
 }
 
 
 void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
+
+    if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
+    {
+        m_gridOrigin->SetPosition( getModel<BOARD>()->GetGridOrigin() );
+        getView()->Remove( m_gridOrigin );
+        getView()->Add( m_gridOrigin );
+    }
 }
 
 
@@ -443,10 +458,12 @@ int PCBNEW_CONTROL::GridPrev( const TOOL_EVENT& aEvent )
 }
 
 
-static bool setOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame, const VECTOR2D& aPoint )
+static bool setOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                       KIGFX::ORIGIN_VIEWITEM* aItem, const VECTOR2D& aPoint )
 {
     aFrame->SetGridOrigin( wxPoint( aPoint.x, aPoint.y ) );
     aView->GetGAL()->SetGridOrigin( aPoint );
+    aItem->SetPosition( aPoint );
     aView->MarkDirty();
 
     return true;
@@ -460,7 +477,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
     // TODO it will not check the toolbar button in module editor, as it uses a different ID..
     m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-    picker->SetClickHandler( boost::bind( setOrigin, getView(), m_frame, _1 ) );
+    picker->SetClickHandler( boost::bind( setOrigin, getView(), m_frame, m_gridOrigin, _1 ) );
     picker->Activate();
 
     return 0;

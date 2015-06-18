@@ -32,6 +32,7 @@ set( GAL_SRCS
     draw_panel_gal.cpp
     painter.cpp
     worksheet_viewitem.cpp
+    origin_viewitem.cpp
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
     gal/color4d.cpp

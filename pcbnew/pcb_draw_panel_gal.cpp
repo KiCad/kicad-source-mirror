@@ -165,7 +165,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
     m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( DRC_VISIBLE ) );
 
     // Load display options (such as filled/outline display of items).
-    // Can be made only if the parent windos is a EDA_DRAW_FRAME (or a derived class)
+    // Can be made only if the parent window is an EDA_DRAW_FRAME (or a derived class)
     // which is not always the case (namely when it is used from a wxDialog like the pad editor)
     EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );
 
@@ -212,12 +212,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
         m_view->Add( zone );
 
     // Ratsnest
-    if( m_ratsnest )
-    {
-        m_view->Remove( m_ratsnest );
-        delete m_ratsnest;
-    }
-
+    delete m_ratsnest;
     m_ratsnest = new KIGFX::RATSNEST_VIEWITEM( aBoard->GetRatsnest() );
     m_view->Add( m_ratsnest );
 

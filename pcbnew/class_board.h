@@ -188,7 +188,6 @@ private:
 
     LAYER                   m_Layer[LAYER_ID_COUNT];
 
-    wxPoint                 m_grid_origin;
                                                     // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO         m_highLight;                // current high light data
     HIGH_LIGHT_INFO         m_highLightPrevious;        // a previously stored high light data

@@ -94,15 +94,15 @@ void VIEW::Add( VIEW_ITEM* aItem )
     aItem->ViewGetLayers( layers, layers_count );
     aItem->saveLayers( layers, layers_count );
 
+    if( m_dynamic )
+        aItem->viewAssign( this );
+
     for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
         l.items->Insert( aItem );
         MarkTargetDirty( l.target );
     }
-
-    if( m_dynamic )
-        aItem->viewAssign( this );
 
     aItem->ViewUpdate( VIEW_ITEM::ALL );
 }

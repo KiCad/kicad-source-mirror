@@ -637,16 +637,6 @@ public:
     }
 
     /**
-     * @brief Sets the screen size of the grid origin marker
-     *
-     * @param aSize is the radius of the origin marker, in pixels.
-     */
-    inline void SetGridOriginMarkerSize( int aSize )
-    {
-        gridOriginMarkerSize = aSize;
-    }
-
-    /**
      * @brief Set the threshold for grid drawing.
      *
      * @param aThreshold is the minimum grid cell size (in pixels) for which the grid is drawn.
@@ -875,7 +865,6 @@ protected:
     double             gridLineWidth;          ///< Line width of the grid
     int                gridDrawThreshold;      ///< Minimum screen size of the grid (pixels)
                                                ///< below which the grid is not drawn
-    int                gridOriginMarkerSize;   ///< Grid origin indicator size (pixels)
 
     // Cursor settings
     bool               isCursorEnabled;        ///< Is the cursor enabled?

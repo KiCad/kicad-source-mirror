@@ -56,7 +56,6 @@ GAL::GAL() :
     // Set grid defaults
     SetGridVisibility( true );
     SetGridStyle( GRID_STYLE_LINES );
-    SetGridOriginMarkerSize( 15 );
     SetGridDrawThreshold( 10 );
     SetCoarseGrid( 10 );
     SetGridLineWidth( 0.5 );
@@ -119,19 +118,6 @@ void GAL::DrawGrid()
         return;
 
     SetTarget( TARGET_NONCACHED );
-
-    // Draw the origin marker
-    double originSize = gridOriginMarkerSize / worldScale;
-    SetLayerDepth( GAL::GRID_DEPTH );
-    SetIsFill( false );
-    SetIsStroke( true );
-    SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
-    SetLineWidth( gridLineWidth / worldScale );
-    DrawLine( gridOrigin + VECTOR2D( -originSize, -originSize ),
-              gridOrigin + VECTOR2D( originSize, originSize ) );
-    DrawLine( gridOrigin + VECTOR2D( -originSize, originSize ),
-              gridOrigin + VECTOR2D( originSize, -originSize ) );
-    DrawCircle( gridOrigin, originSize * 0.7 );
 
     // Draw the grid
     // For the drawing the start points, end points and increments have

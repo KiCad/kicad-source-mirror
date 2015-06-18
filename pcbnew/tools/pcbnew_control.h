@@ -27,6 +27,9 @@
 
 #include <tool/tool_interactive.h>
 
+namespace KIGFX {
+    class ORIGIN_VIEWITEM;
+}
 class PCB_BASE_FRAME;
 
 /**
@@ -39,6 +42,7 @@ class PCBNEW_CONTROL : public TOOL_INTERACTIVE
 {
 public:
     PCBNEW_CONTROL();
+    ~PCBNEW_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason );
@@ -89,6 +93,9 @@ public:
 private:
     ///> Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;
+
+    ///> Grid origin marker.
+    KIGFX::ORIGIN_VIEWITEM* m_gridOrigin;
 
     ///> Applies the legacy canvas grid settings for GAL.
     void updateGrid();
