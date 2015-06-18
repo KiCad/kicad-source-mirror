@@ -45,6 +45,7 @@
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
+#include <origin_viewitem.h>
 
 
 class ZONE_CONTEXT_MENU : public CONTEXT_MENU
@@ -64,12 +65,27 @@ public:
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
     TOOL_INTERACTIVE( "pcbnew.EditorControl" ), m_frame( NULL )
 {
+    m_placeOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
+                                                KIGFX::ORIGIN_VIEWITEM::CROSS );
+}
+
+
+PCB_EDITOR_CONTROL::~PCB_EDITOR_CONTROL()
+{
+    delete m_placeOrigin;
 }
 
 
 void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
+
+    if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
+    {
+        m_placeOrigin->SetPosition( getModel<BOARD>()->GetAuxOrigin() );
+        getView()->Remove( m_placeOrigin );
+        getView()->Add( m_placeOrigin );
+    }
 }
 
 
@@ -469,9 +485,12 @@ int PCB_EDITOR_CONTROL::SelectionCrossProbe( const TOOL_EVENT& aEvent )
 }
 
 
-static bool setDrillOrigin( PCB_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
+static bool setDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                            KIGFX::ORIGIN_VIEWITEM* aItem, const VECTOR2D& aPosition )
 {
     aFrame->SetAuxOrigin( wxPoint( aPosition.x, aPosition.y ) );
+    aItem->SetPosition( aPosition );
+    aView->MarkDirty();
 
     return true;
 }
@@ -483,7 +502,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     assert( picker );
 
     m_frame->SetToolID( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust zero" ) );
-    picker->SetClickHandler( boost::bind( setDrillOrigin, m_frame, _1 ) );
+    picker->SetClickHandler( boost::bind( setDrillOrigin, getView(), m_frame, m_placeOrigin, _1 ) );
     picker->Activate();
 
     return 0;

@@ -27,6 +27,9 @@
 
 #include <tool/tool_interactive.h>
 
+namespace KIGFX {
+    class ORIGIN_VIEWITEM;
+}
 class PCB_EDIT_FRAME;
 
 /**
@@ -38,6 +41,7 @@ class PCB_EDITOR_CONTROL : public TOOL_INTERACTIVE
 {
 public:
     PCB_EDITOR_CONTROL();
+    ~PCB_EDITOR_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason );
@@ -87,6 +91,9 @@ public:
 private:
     ///> Pointer to the currently used edit frame.
     PCB_EDIT_FRAME* m_frame;
+
+    ///> Place & drill origin marker.
+    KIGFX::ORIGIN_VIEWITEM* m_placeOrigin;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP;
