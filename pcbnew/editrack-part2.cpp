@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,15 +97,16 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     VIA* via = new VIA( GetBoard() );
     via->SetFlags( IS_NEW );
     via->SetViaType( GetDesignSettings().m_CurrentViaType );
-    via->SetWidth( GetDesignSettings().GetCurrentViaSize());
     via->SetNetCode( GetBoard()->GetHighLightNetCode() );
-    via->SetEnd( g_CurrentTrackSegment->GetEnd() );
-    via->SetStart( g_CurrentTrackSegment->GetEnd() );
+    via->SetPosition( g_CurrentTrackSegment->GetEnd() );
+
+    // for microvias, the size and hole will be changed later.
+    via->SetWidth( GetDesignSettings().GetCurrentViaSize());
+    via->SetDrill( GetDesignSettings().GetCurrentViaDrill() );
 
     // Usual via is from copper to component.
     // layer pair is B_Cu and F_Cu.
     via->SetLayerPair( B_Cu, F_Cu );
-    via->SetDrill( GetDesignSettings().GetCurrentViaDrill() );
 
     LAYER_ID first_layer = GetActiveLayer();
     LAYER_ID last_layer;
@@ -135,13 +136,14 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
                 last_layer = B_Cu;
             else if( first_layer == In1_Cu )
                 last_layer = F_Cu;
-
             // else error: will be removed later
             via->SetLayerPair( first_layer, last_layer );
-            {
-                NETINFO_ITEM* net = via->GetNet();
-                via->SetWidth( net->GetMicroViaSize() );
-            }
+
+            // Update diameter and hole size, which where set previously
+            // for normal vias
+            NETINFO_ITEM* net = via->GetNet();
+            via->SetWidth( net->GetMicroViaSize() );
+            via->SetDrill( net->GetMicroViaDrillSize() );
         }
         break;
 
