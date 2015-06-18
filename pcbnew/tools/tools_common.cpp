@@ -27,6 +27,7 @@
 #include <tool/tool_manager.h>
 
 #include <tools/selection_tool.h>
+#include <tools/picker_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/drawing_tool.h>
 #include <tools/point_editor.h>
@@ -41,6 +42,7 @@
 void registerAllTools( TOOL_MANAGER *aToolManager )
 {
     aToolManager->RegisterTool( new SELECTION_TOOL );
+    aToolManager->RegisterTool( new PICKER_TOOL );
     aToolManager->RegisterTool( new ROUTER_TOOL );
     aToolManager->RegisterTool( new LENGTH_TUNER_TOOL );
     aToolManager->RegisterTool( new EDIT_TOOL );

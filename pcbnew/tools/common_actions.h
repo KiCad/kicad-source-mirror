@@ -267,6 +267,7 @@ public:
 
     // Miscellaneous
     static TOOL_ACTION selectionTool;
+    static TOOL_ACTION pickerTool;
     static TOOL_ACTION resetCoords;
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;

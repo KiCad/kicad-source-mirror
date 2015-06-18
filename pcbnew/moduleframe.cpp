@@ -65,6 +65,7 @@
 #include "tools/pcbnew_control.h"
 #include "tools/module_tools.h"
 #include "tools/placement_tool.h"
+#include "tools/picker_tool.h"
 #include "tools/common_actions.h"
 
 
@@ -946,6 +947,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new MODULE_TOOLS );
     m_toolManager->RegisterTool( new PLACEMENT_TOOL );
+    m_toolManager->RegisterTool( new PICKER_TOOL );
 
     m_toolManager->GetTool<SELECTION_TOOL>()->EditModules( true );
     m_toolManager->GetTool<EDIT_TOOL>()->EditModules( true );

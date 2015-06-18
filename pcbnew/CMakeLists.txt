@@ -284,6 +284,7 @@ set( PCBNEW_CLASS_SRCS
     tools/placement_tool.cpp
     tools/common_actions.cpp
     tools/grid_helper.cpp
+    tools/picker_tool.cpp
     tools/tools_common.cpp
 
     tools/grid_menu.cpp
