@@ -685,9 +685,17 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        TRACK* insertAid;
-        insertAid = ( (TRACK*) aBoardItem )->GetBestInsertPoint( this );
-        m_Track.Insert( (TRACK*) aBoardItem, insertAid );
+        if( aControl & ADD_APPEND )
+        {
+            m_Track.PushBack( (TRACK*) aBoardItem );
+        }
+        else
+        {
+            TRACK* insertAid;
+            insertAid = ( (TRACK*) aBoardItem )->GetBestInsertPoint( this );
+            m_Track.Insert( (TRACK*) aBoardItem, insertAid );
+        }
+
         aBoardItem->SetParent( this );
         break;
 
