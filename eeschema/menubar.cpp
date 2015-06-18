@@ -465,12 +465,15 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
 
-    // Run CvPcb
-    AddMenuItem( toolsMenu,
-                 ID_RUN_CVPCB,
-                 _( "A&ssign Component Footprint" ),
-                 _( "Run CvPcb" ),
-                 KiBitmap( cvpcb_xpm ) );
+    if( !Kiface().IsSingle() )   // only with a functional KIWAY, not single_top
+    {
+        // Run CvPcb
+        AddMenuItem( toolsMenu,
+                     ID_RUN_CVPCB,
+                     _( "A&ssign Component Footprint" ),
+                     _( "Run CvPcb" ),
+                     KiBitmap( cvpcb_xpm ) );
+    }
 
     // Run Pcbnew
     AddMenuItem( toolsMenu,
