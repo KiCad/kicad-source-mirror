@@ -652,7 +652,9 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
     {
         clearSelection();
         select( aItem );
-        getView()->SetCenter( VECTOR2D( aItem->GetPosition() ) );
+        EDA_RECT bbox = aItem->GetBoundingBox();
+        BOX2D viewport( VECTOR2D( bbox.GetOrigin() ), VECTOR2D( bbox.GetSize() ) );
+        getView()->SetViewport( viewport );
 
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( SelectedEvent );
