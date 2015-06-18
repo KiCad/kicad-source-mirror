@@ -32,7 +32,7 @@
 #include <wxPcbStruct.h>
 #include <base_units.h>
 #include <class_board_design_settings.h>
-
+#include <class_draw_panel_gal.h>
 
 /* class DIALOG_DRC_CONTROL: a dialog to set DRC parameters (clearance, min cooper size)
  * and run DRC tests
@@ -344,6 +344,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
              */
 
             m_Parent->CursorGoto( item->GetPointA() );
+            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
             // turn control over to m_Parent, hide this DIALOG_DRC_CONTROL window,
             // no destruction so we can preserve listbox cursor
@@ -396,6 +397,8 @@ void DIALOG_DRC_CONTROL::OnPopupMenu( wxCommandEvent& event )
     if( item )
     {
         m_Parent->CursorGoto( pos );
+        m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+
         Show( false );
     }
 }
@@ -486,6 +489,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
         if( item )
         {
             m_Parent->CursorGoto( item->GetPointA() );
+            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
             Show( false );
 
@@ -519,7 +523,10 @@ void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
         // at the first of the two pads.
         const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
         if( item )
+        {
             m_Parent->CursorGoto( item->GetPointA(), false );
+            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+        }
     }
 
     event.Skip();
@@ -539,7 +546,10 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
         // at the first of the two pads.
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
+        {
             m_Parent->CursorGoto( item->GetPointA(), false );
+            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+        }
     }
 
     event.Skip();
