@@ -73,12 +73,14 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     {
         const VIA *via = static_cast<const VIA *>( aTrackItem );
 
-        if( !via->IsDrillDefault() )
-            initial_drill = via->GetDrillValue();
+        // Get the draill value, regardless it is default or specific
+        initial_drill = via->GetDrillValue();
 
         if( net )
         {
             new_width = net->GetViaSize();
+            new_drill = GetDesignSettings().GetCurrentViaDrill();
+            new_drill = net->GetViaDrillSize();
         }
         else
         {
@@ -89,9 +91,21 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         if( via->GetViaType() == VIA_MICROVIA )
         {
             if( net )
+            {
                 new_width = net->GetMicroViaSize();
+                new_drill = net->GetMicroViaDrillSize();
+            }
             else
                 new_width = GetDesignSettings().GetCurrentMicroViaSize();
+        }
+
+        // Old versions set a drill value <= 0, when the default netclass it used
+        // but it could be better to set the drill value to the actual value
+        // to avoid issues for existing vias, if the default drill value is modified
+        // in the netclass, and not in current vias.
+        if( via->GetDrill() <= 0 )    // means default netclass drill value used
+        {
+            initial_drill  = -1;        // Force drill vias re-initialization
         }
     }
 
@@ -112,10 +126,11 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     {
         change_ok = true;
     }
-    else if( (aTrackItem->Type() == PCB_VIA_T) && (initial_drill != new_drill) )
+    else if( (aTrackItem->Type() == PCB_VIA_T) )
     {
-        // if new width == initial_width: do nothing, unless a via has its drill value changed
-        change_ok = true;
+        // if a via has its drill value changed, force change
+        if( initial_drill != new_drill )
+            change_ok = true;
     }
 
     if( change_ok )

@@ -29,7 +29,7 @@
 
 
 /* Methods of class DRC to initialize drc markers with messages
- * according to items and error ode
+ * according to items and error code
 */
 
 #include <fctsys.h>

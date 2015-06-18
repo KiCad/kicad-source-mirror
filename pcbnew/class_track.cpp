@@ -837,8 +837,24 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     if( displ_opts->m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
     {
         // Display all drill holes requested or Display non default holes requested
-        if( (displ_opts->m_DisplayViaMode == ALL_VIA_HOLE_SHOW)
-          || ( (drill_radius > 0 ) && !IsDrillDefault() ) )
+        bool show_hole = displ_opts->m_DisplayViaMode == ALL_VIA_HOLE_SHOW;
+
+        if( !show_hole )
+        {
+            NETINFO_ITEM* net = GetNet();
+            int drill_class_value = 0;
+            if( net )
+            {
+                if( GetViaType() == VIA_MICROVIA )
+                    drill_class_value = net->GetMicroViaDrillSize();
+                else
+                    drill_class_value = net->GetViaDrillSize();
+            }
+
+            show_hole = GetDrillValue() != drill_class_value;
+        }
+
+        if( show_hole )
         {
             if( fillvia )
             {
@@ -1208,6 +1224,7 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     LAYER_ID top_layer, bottom_layer;
 
     LayerPair( &top_layer, &bottom_layer );
+
     if( board )
         msg = board->GetLayerName( top_layer ) + wxT( "/" )
             + board->GetLayerName( bottom_layer );
@@ -1230,10 +1247,29 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     wxString title = _( "Drill" );
     title += wxT( " " );
 
-    if( m_Drill >= 0 )
+    bool drl_specific = true;
+
+    if( GetBoard() )
+    {
+        NETINFO_ITEM* net = GetNet();
+        int drill_class_value = 0;
+
+        if( net )
+        {
+            if( GetViaType() == VIA_MICROVIA )
+                drill_class_value = net->GetMicroViaDrillSize();
+            else
+                drill_class_value = net->GetViaDrillSize();
+        }
+
+        drl_specific = drill_value != drill_class_value;
+    }
+
+
+    if( drl_specific )
         title += _( "(Specific)" );
     else
-        title += _( "(Default)" );
+        title += _( "(NetClass)" );
 
     aList.push_back( MSG_PANEL_ITEM( title, msg, RED ) );
 }
