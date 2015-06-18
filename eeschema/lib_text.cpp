@@ -388,9 +388,11 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      * and use GetBoundaryBox to know the text coordinate considered as centered
     */
     EDA_RECT bBox = GetBoundingBox();
+    // convert coordinates from draw Y axis to libedit Y axis:
+    bBox.RevertYAxis();
     wxPoint txtpos = bBox.Centre();
 
-    // Calculate pos accordint to mirror/rotation.
+    // Calculate pos according to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
@@ -403,11 +405,10 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      * the bounding box calculations.
      */
 #if 0
-    EDA_RECT grBox;
-    grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
-    grBox.SetEnd( aTransform.TransformCoordinate( bBox.GetEnd() ) );
-    grBox.Move( aOffset );
-    GRRect( clipbox, aDC, grBox, 0, LIGHTMAGENTA );
+    // bBox already uses libedit Y axis.
+    bBox = aTransform.TransformCoordinate( bBox );
+    bBox.Move( aOffset );
+    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -430,17 +431,19 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
     EDA_RECT rect = GetTextBox( -1, -1, true );
+    rect.RevertYAxis();
 
+    // We are using now a bottom to top Y axis.
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();
-    NEGATE( orig.y);
-    NEGATE( end.y);
-
     RotatePoint( &orig, m_Pos, -m_Orient );
     RotatePoint( &end, m_Pos, -m_Orient );
+
     rect.SetOrigin( orig );
     rect.SetEnd( end );
-    rect.Normalize();
+
+    // We are using now a top to bottom Y axis:
+    rect.RevertYAxis();
 
     return rect;
 }

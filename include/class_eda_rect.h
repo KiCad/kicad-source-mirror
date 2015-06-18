@@ -123,6 +123,17 @@ public:
     }
 
     /**
+     * Function RevertYAxis
+     * Mirror the rectangle from the X axis (negate Y pos and size)
+     */
+    void RevertYAxis()
+    {
+        m_Pos.y  = -m_Pos.y;
+        m_Size.y = -m_Size.y;
+        Normalize();
+    }
+
+    /**
      * Function Intersects
      * tests for a common area between rectangles.
      *

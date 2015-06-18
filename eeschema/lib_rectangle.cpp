@@ -237,9 +237,10 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
      * bounding box calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
-    GRRect( clipbox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+    bBox.RevertYAxis();
+    bBox = aTransform.TransformCoordinate( bBox );
+    bBox.Move( aOffset );
+    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -260,9 +261,12 @@ const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 {
     EDA_RECT rect;
 
-    rect.SetOrigin( m_Pos.x, m_Pos.y * -1 );
-    rect.SetEnd( m_End.x, m_End.y * -1 );
-    rect.Inflate( (GetPenSize() / 2) + 1 );
+    rect.SetOrigin( m_Pos );
+    rect.SetEnd( m_End );
+    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+
+    rect.RevertYAxis();
+
     return rect;
 }
 

@@ -32,6 +32,8 @@
 
 #include <wx/gdicmn.h>
 
+class EDA_RECT;
+
 /**
  * Class for tranforming drawing coordinates for a wxDC device context.
  *
@@ -62,7 +64,7 @@ public:
     bool operator!=( const TRANSFORM& aTransform ) const { return !( *this == aTransform ); }
 
    /**
-    * Calculate new coordinate according to the mirror/rotation transform.
+    * Calculate a new coordinate according to the mirror/rotation transform.
     * Useful to calculate actual coordinates of a point
     * from coordinates relative to a component
     * which are given for a non rotated, non mirrored item
@@ -72,6 +74,16 @@ public:
     wxPoint TransformCoordinate( const wxPoint& aPoint ) const;
 
    /**
+    * Calculate a new rect according to the mirror/rotation transform.
+    * Useful to calculate actual coordinates of a point
+    * from coordinates relative to a component
+    * which are given for a non rotated, non mirrored item
+    * @param aRect = The rectangle to transform
+    * @return The transformed rectangle.
+    */
+    EDA_RECT TransformCoordinate( const EDA_RECT& aRect ) const;
+
+    /**
     * Calculate the Inverse mirror/rotation transform.
     * Useful to calculate coordinates relative to a component
     * which must be for a non rotated, non mirrored item

@@ -901,14 +901,11 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
     /* Set to one (1) to draw bounding box around pin to validate bounding
      * box calculation. */
 #if 0
-    EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
-    TRANSFORM transform = DefaultTransform;
-    DefaultTransform = aTransform;
     EDA_RECT  bBox    = GetBoundingBox();
+    bBox.RevertYAxis();
+    bBox = aTransform.TransformCoordinate( bBox );
     bBox.Move( aOffset );
-    //Restore matrix
-    DefaultTransform = transform;
-    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
+    GRRect( aPanel ? aPanel->GetClipBox() : NULL, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -2101,18 +2098,16 @@ const EDA_RECT LIB_PIN::GetBoundingBox() const
         break;
     }
 
-    // Draw Y axis is reversed in schematic:
-    NEGATE( begin.y );
-    NEGATE( end.y );
-
-    wxPoint pos1 = DefaultTransform.TransformCoordinate( m_position );
-    begin += pos1;
-    end += pos1;
+    begin += m_position;
+    end += m_position;
 
     bbox.SetOrigin( begin );
     bbox.SetEnd( end );
     bbox.Normalize();
-    bbox.Inflate( GetPenSize() / 2 );
+    bbox.Inflate( ( GetPenSize() / 2 ) + 1 );
+
+    // Draw Y axis is reversed in schematic:
+    bbox.RevertYAxis();
 
     return bbox;
 }

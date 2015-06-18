@@ -303,11 +303,10 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
      * bounding box calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    EDA_RECT grBox;
-    grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
-    grBox.SetEnd( aTransform.TransformCoordinate( bBox.GetEnd() ) );
-    grBox.Move( aOffset );
-    GRRect( clipbox, aDC, grBox, 0, LIGHTMAGENTA );
+    bBox.RevertYAxis();
+    bBox = aTransform.TransformCoordinate( bBox );
+    bBox.Move( aOffset );
+    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -477,6 +476,8 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     }
 
     EDA_RECT BoundaryBox = GetBoundingBox();
+    BoundaryBox.RevertYAxis();
+
     EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
     EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
     wxPoint textpos = aTransform.TransformCoordinate( BoundaryBox.Centre() )
@@ -509,17 +510,18 @@ const EDA_RECT LIB_FIELD::GetBoundingBox() const
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
     EDA_RECT rect = GetTextBox( -1, -1, true );
+    rect.RevertYAxis();
 
+    // We are using now a bottom to top Y axis.
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();
-    NEGATE( orig.y);
-    NEGATE( end.y);
-
     RotatePoint( &orig, m_Pos, -m_Orient );
     RotatePoint( &end, m_Pos, -m_Orient );
     rect.SetOrigin( orig );
     rect.SetEnd( end );
-    rect.Normalize();
+
+    // We are using now a top to bottom Y axis:
+    rect.RevertYAxis();
 
     return rect;
 }

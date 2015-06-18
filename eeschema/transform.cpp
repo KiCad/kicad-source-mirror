@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #include <trigo.h>
 #include <transform.h>
 #include <common.h>
+#include <class_eda_rect.h>
 
 
 TRANSFORM& TRANSFORM::operator=( const TRANSFORM& aTransform )
@@ -54,6 +55,14 @@ wxPoint TRANSFORM::TransformCoordinate( const wxPoint& aPoint ) const
 {
     return wxPoint( ( x1 * aPoint.x ) + ( y1 * aPoint.y ),
                     ( x2 * aPoint.x ) + ( y2 * aPoint.y ) );
+}
+
+EDA_RECT TRANSFORM::TransformCoordinate( const EDA_RECT& aRect ) const
+{
+    EDA_RECT rect;
+    rect.SetOrigin( TransformCoordinate( aRect.GetOrigin() ) );
+    rect.SetEnd( TransformCoordinate( aRect.GetEnd() ) );
+    return rect;
 }
 
 /*

@@ -423,8 +423,10 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
      * the bounding box calculations. */
 #if 0
     EDA_RECT bBox = GetBoundingBox( aMulti, aConvert );
-    GRRect( aPanel ? aPanel->GetClipBox() : NULL, aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+    bBox.RevertYAxis();
+    bBox = aTransform.TransformCoordinate( bBox );
+    bBox.Move( aOffset );
+    GRRect( aPanel ? aPanel->GetClipBox() : NULL, aDc, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -1141,7 +1143,8 @@ bool LIB_PART::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMsg )
 
 const EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
 {
-    EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+    EDA_RECT bBox;
+    bool initialized = false;
 
     for( unsigned ii = 0; ii < drawings.size(); ii++  )
     {
@@ -1157,7 +1160,13 @@ const EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
         if ( ( item.Type() == LIB_FIELD_T ) && !( ( LIB_FIELD& ) item ).IsVisible() )
             continue;
 
-        bBox.Merge( item.GetBoundingBox() );
+        if( initialized )
+            bBox.Merge( item.GetBoundingBox() );
+        else
+        {
+            bBox = item.GetBoundingBox();
+            initialized = true;
+        }
     }
 
     return bBox;
@@ -1166,7 +1175,8 @@ const EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
 
 const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
-    EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+    EDA_RECT bBox;
+    bool initialized = false;
 
     for( unsigned ii = 0; ii < drawings.size(); ii++  )
     {
@@ -1182,7 +1192,13 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
         if ( item.Type() == LIB_FIELD_T )
             continue;
 
-        bBox.Merge( item.GetBoundingBox() );
+        if( initialized )
+            bBox.Merge( item.GetBoundingBox() );
+        else
+        {
+            bBox = item.GetBoundingBox();
+            initialized = true;
+        }
     }
 
     return bBox;

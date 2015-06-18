@@ -338,7 +338,6 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
      * bounding box calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
     GRRect( aPanel->GetClipBox(), aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
@@ -396,9 +395,11 @@ const EDA_RECT LIB_BEZIER::GetBoundingBox() const
         ymax = std::max( ymax, m_PolyPoints[ii].y );
     }
 
-    rect.SetOrigin( xmin, - ymin );
-    rect.SetEnd( xmax, - ymax );
-    rect.Inflate( m_Width / 2 );
+    rect.SetOrigin( xmin, ymin );
+    rect.SetEnd( xmax, ymax );
+    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+
+    rect.RevertYAxis();
 
     return rect;
 }

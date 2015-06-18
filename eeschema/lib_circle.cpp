@@ -245,8 +245,10 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
      * box calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    GRRect( clipbox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+    bBox.RevertYAxis();
+    bBox = aTransform.TransformCoordinate( bBox );
+    bBox.Move( aOffset );
+    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -255,9 +257,11 @@ const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 {
     EDA_RECT rect;
 
-    rect.SetOrigin( m_Pos.x - m_Radius, ( m_Pos.y - m_Radius ) * -1 );
-    rect.SetEnd( m_Pos.x + m_Radius, ( m_Pos.y + m_Radius ) * -1 );
-    rect.Inflate( m_Width / 2, m_Width / 2 );
+    rect.SetOrigin( m_Pos.x - m_Radius, m_Pos.y - m_Radius );
+    rect.SetEnd( m_Pos.x + m_Radius, m_Pos.y + m_Radius );
+    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+
+    rect.RevertYAxis();
 
     return rect;
 }

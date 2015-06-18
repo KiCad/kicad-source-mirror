@@ -315,9 +315,10 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
      * bounding box calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
-    GRRect( clipbox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+    bBox.RevertYAxis();
+    bBox = aTransform.TransformCoordinate( bBox );
+    bBox.Move( aOffset );
+    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -370,9 +371,11 @@ const EDA_RECT LIB_POLYLINE::GetBoundingBox() const
         ymax = std::max( ymax, m_PolyPoints[ii].y );
     }
 
-    rect.SetOrigin( xmin, ymin * -1 );
-    rect.SetEnd( xmax, ymax * -1 );
-    rect.Inflate( m_Width / 2, m_Width / 2 );
+    rect.SetOrigin( xmin, ymin );
+    rect.SetEnd( xmax, ymax );
+    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+
+    rect.RevertYAxis();
 
     return rect;
 }

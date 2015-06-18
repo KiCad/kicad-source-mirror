@@ -482,8 +482,10 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
      * calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    GRRect( clipbox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+    bBox.RevertYAxis();
+    bBox = aTransform.TransformCoordinate( bBox );
+    bBox.Move( aOffset );
+    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -545,7 +547,7 @@ start(%d, %d), end(%d, %d), radius %d" ),
 
     rect.SetOrigin( minX, minY );
     rect.SetEnd( maxX, maxY );
-    rect.Inflate( m_Width / 2, m_Width / 2 );
+    rect.Inflate( ( GetPenSize()+1 ) / 2 );
 
     return rect;
 }
