@@ -383,6 +383,10 @@ TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_MODULE ),
         _( "Add modules" ), _( "Add modules" ), NULL, AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
+        AS_GLOBAL, 0,
+        "", "" );
+
 
 // Module editor tools
 TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",

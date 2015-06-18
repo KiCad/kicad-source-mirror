@@ -146,7 +146,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( evt->Modifier( MD_CTRL ) && !m_editModules )
             {
-                highlightNet( evt->Position() );
+                m_toolMgr->RunAction( COMMON_ACTIONS::highlightNet, true );
             }
             else
             {
@@ -1001,30 +1001,6 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     }
 
     return false;
-}
-
-
-void SELECTION_TOOL::highlightNet( const VECTOR2I& aPoint )
-{
-    KIGFX::RENDER_SETTINGS* render = getView()->GetPainter()->GetSettings();
-    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
-    GENERAL_COLLECTOR collector;
-    int net = -1;
-
-    // Find a connected item for which we are going to highlight a net
-    collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::PadsTracksOrZones,
-                       wxPoint( aPoint.x, aPoint.y ), guide );
-    bool enableHighlight = ( collector.GetCount() > 0 );
-
-    // Obtain net code for the clicked item
-    if( enableHighlight )
-        net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
-
-    if( enableHighlight != render->GetHighlight() || net != render->GetHighlightNetCode() )
-    {
-        render->SetHighlight( enableHighlight, net );
-        getView()->UpdateAllLayersColor();
-    }
 }
 
 

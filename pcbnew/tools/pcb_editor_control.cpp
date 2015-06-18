@@ -30,6 +30,7 @@
 
 #include "selection_tool.h"
 
+#include <painter.h>
 #include <project.h>
 #include <pcbnew_id.h>
 #include <wxPcbStruct.h>
@@ -39,6 +40,7 @@
 #include <class_module.h>
 #include <class_mire.h>
 #include <ratsnest_data.h>
+#include <collectors.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -466,6 +468,47 @@ int PCB_EDITOR_CONTROL::SelectionCrossProbe( const TOOL_EVENT& aEvent )
 }
 
 
+/**
+ * Function highlightNet()
+ * Looks for a BOARD_CONNECTED_ITEM in a given spot, and if one is found - it enables
+ * highlight for its net.
+ * @param aPoint is the point where an item is expected (world coordinates).
+ */
+static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
+{
+    KIGFX::RENDER_SETTINGS* render = aToolMgr->GetView()->GetPainter()->GetSettings();
+    GENERAL_COLLECTORS_GUIDE guide = static_cast<PCB_BASE_FRAME*>( aToolMgr->GetEditFrame() )->GetCollectorsGuide();
+    BOARD* board = static_cast<BOARD*>( aToolMgr->GetModel() );
+    GENERAL_COLLECTOR collector;
+    int net = -1;
+
+    // Find a connected item for which we are going to highlight a net
+    collector.Collect( board, GENERAL_COLLECTOR::PadsTracksOrZones,
+                       wxPoint( aPosition.x, aPosition.y ), guide );
+    bool enableHighlight = ( collector.GetCount() > 0 );
+
+    // Obtain net code for the clicked item
+    if( enableHighlight )
+        net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
+
+    if( enableHighlight != render->GetHighlight() || net != render->GetHighlightNetCode() )
+    {
+        render->SetHighlight( enableHighlight, net );
+        aToolMgr->GetView()->UpdateAllLayersColor();
+    }
+
+    return true;
+}
+
+
+int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
+{
+    highlightNet( m_toolMgr, getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+
+    return 0;
+}
+
+
 void PCB_EDITOR_CONTROL::SetTransitions()
 {
     // Track & via size control
@@ -484,7 +527,9 @@ void PCB_EDITOR_CONTROL::SetTransitions()
     Go( &PCB_EDITOR_CONTROL::PlaceTarget,        COMMON_ACTIONS::placeTarget.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::PlaceModule,        COMMON_ACTIONS::placeModule.MakeEvent() );
 
+    // Other
     Go( &PCB_EDITOR_CONTROL::SelectionCrossProbe, SELECTION_TOOL::SelectedEvent );
+    Go( &PCB_EDITOR_CONTROL::HighlightNet,        COMMON_ACTIONS::highlightNet.MakeEvent() );
 }
 
 

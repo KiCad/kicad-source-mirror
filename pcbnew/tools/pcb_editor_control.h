@@ -72,6 +72,9 @@ public:
     ///> Notifies eeschema about the selected item.
     int SelectionCrossProbe( const TOOL_EVENT& aEvent );
 
+    ///> Highlights net belonging to the item under the cursor.
+    int HighlightNet( const TOOL_EVENT& aEvent );
+
     ///> Sets up handlers for various events.
     void SetTransitions();
 
