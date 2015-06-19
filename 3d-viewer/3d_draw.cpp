@@ -553,8 +553,13 @@ void EDA_3D_CANVAS::Redraw()
 
     // Grid uses transparency: draw it after all objects
 
-    if( isEnabled( FL_GRID ) && m_glLists[GL_ID_GRID] )
+    if( isEnabled( FL_GRID ) )
+    {
+        if( ! m_glLists[GL_ID_GRID] )
+            CreateDrawGL_List( &errorReporter, &activityReporter );
+
         glCallList( m_glLists[GL_ID_GRID] );
+    }
 
 
     // Draw Board Shadow

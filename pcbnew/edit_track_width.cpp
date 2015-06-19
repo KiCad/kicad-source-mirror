@@ -75,7 +75,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 
         // Micro vias have a size only defined in their netclass
         // (no specific values defined by a table of specific value)
-        // Ensure the netcall is accessible:
+        // Ensure the netclass is accessible:
         if( via->GetViaType() == VIA_MICROVIA && net == NULL )
             net = aTrackItem->GetNet();
 
