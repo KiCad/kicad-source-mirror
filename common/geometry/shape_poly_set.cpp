@@ -447,16 +447,19 @@ void SHAPE_POLY_SET::fractureSingle( ClipperLib::Paths& paths )
     paths.clear();
     Path newPath;
     newPath.push_back(prev);
-    FractureEdge *e;
+    FractureEdge *e, *e_next;
     IntPoint p;
 
-    for( e = root; e->m_next != root; e=e->m_next)
-    {
+    e = root;
+
+    do {
         p = e->m_p1;
         newPath.push_back(p);
         prev = p;
+        e_next = e->m_next;
         delete e;
-    }
+        e = e_next;
+    } while(e->m_next != root);
 
     p = e->m_p1;
 
