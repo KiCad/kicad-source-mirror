@@ -104,7 +104,7 @@ static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA
 static EDA_HOTKEY HkSelLayerAndAddThroughVia( _HKI( "Select Layer and Add Through Via" ),
                                               HK_SEL_LAYER_AND_ADD_THROUGH_VIA, '<' );
 static EDA_HOTKEY HkAddMicroVia( _HKI( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
-static EDA_HOTKEY HkAddBlindBuriedVia( _HKI( "Add Blind/Buried Via" ), HK_ADD_BLIND_BURIED_VIA, 'V' + GR_KB_ALT );
+static EDA_HOTKEY HkAddBlindBuriedVia( _HKI( "Add Blind/Buried Via" ), HK_ADD_BLIND_BURIED_VIA, 'V' + GR_KB_ALT + GR_KB_SHIFT );
 static EDA_HOTKEY HkSelLayerAndAddBlindBuriedVia( _HKI( "Select Layer and Add Blind/Buried Via" ),
                                                   HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA, '<' + GR_KB_ALT );
 static EDA_HOTKEY HkSwitchTrackPosture( _HKI( "Switch Track Posture" ),  HK_SWITCH_TRACK_POSTURE, '/' );
