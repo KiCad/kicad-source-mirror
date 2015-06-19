@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-18 18:56+0100\n"
-"PO-Revision-Date: 2015-06-18 18:56+0100\n"
+"POT-Creation-Date: 2015-06-19 18:40+0100\n"
+"PO-Revision-Date: 2015-06-19 18:40+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -414,7 +414,7 @@ msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nessun modello selezionato. Impossibile generare un nuovo progetto."
 
 #: kicad/prjconfig.cpp:143 pcbnew/router/length_tuner_tool.cpp:173
-#: pcbnew/router/router_tool.cpp:479 common/confirm.cpp:80
+#: pcbnew/router/router_tool.cpp:484 common/confirm.cpp:80
 #: pcbnew/router/router_menus.h:716
 msgid "Error"
 msgstr "Errore"
@@ -2653,12 +2653,12 @@ msgid "Net Code"
 msgstr "Codice collegamento"
 
 #: pcbnew/class_netinfo_item.cpp:113 pcbnew/class_module.cpp:580
-#: pcbnew/class_board.cpp:942
+#: pcbnew/class_board.cpp:950
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
 msgid "Pads"
 msgstr "Piazzole"
 
-#: pcbnew/class_netinfo_item.cpp:133 pcbnew/class_board.cpp:945
+#: pcbnew/class_netinfo_item.cpp:133 pcbnew/class_board.cpp:953
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via"
@@ -5852,103 +5852,103 @@ msgstr "L'elemento token contiene i parameteri %d "
 msgid "This is the default net class."
 msgstr "Questo è il gruppo di collegamenti predefinito"
 
-#: pcbnew/class_board.cpp:948
+#: pcbnew/class_board.cpp:956
 msgid "Track Segments"
 msgstr "Segmenti di pista"
 
-#: pcbnew/class_board.cpp:951
+#: pcbnew/class_board.cpp:959
 msgid "Nodes"
 msgstr "Nodi"
 
-#: pcbnew/class_board.cpp:954
+#: pcbnew/class_board.cpp:962
 msgid "Nets"
 msgstr "Piste"
 
-#: pcbnew/class_board.cpp:962
+#: pcbnew/class_board.cpp:970
 msgid "Links"
 msgstr "Collegamenti"
 
-#: pcbnew/class_board.cpp:965
+#: pcbnew/class_board.cpp:973
 msgid "Connections"
 msgstr "Connessioni"
 
-#: pcbnew/class_board.cpp:968 pcbnew/dialogs/dialog_drc_base.cpp:184
+#: pcbnew/class_board.cpp:976 pcbnew/dialogs/dialog_drc_base.cpp:184
 msgid "Unconnected"
 msgstr "Disconnessi"
 
-#: pcbnew/class_board.cpp:2237
+#: pcbnew/class_board.cpp:2245
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Verifica netlist componenti impronte \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2255
+#: pcbnew/class_board.cpp:2263
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Aggiungi nuovo componente \"%s:%s\" impronta \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2264
+#: pcbnew/class_board.cpp:2272
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile aggiungere nuovo componente \"%s:%s\" a causa dell'impronta "
 "mancante \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2296
+#: pcbnew/class_board.cpp:2304
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Sostituisci il componente \"%s:%s\" impronta \"%s\" con  \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2307
+#: pcbnew/class_board.cpp:2315
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile rimpiazzare il componente \"%s:%s\" a causa dell'impronta "
 "mancante \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2340
+#: pcbnew/class_board.cpp:2348
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Cambiamento riferimento componente \"%s:%s\" in \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2356
+#: pcbnew/class_board.cpp:2364
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Cambiamento valore componente \"%s:%s\" da \"%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2373
+#: pcbnew/class_board.cpp:2381
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Cambiamento percorso componente \"%s:%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2397
+#: pcbnew/class_board.cpp:2405
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Cancellazione componente \"%s:%s\" pin \"%s\" nome collegamento.\n"
 
-#: pcbnew/class_board.cpp:2413
+#: pcbnew/class_board.cpp:2421
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2462
+#: pcbnew/class_board.cpp:2470
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Rimozione componente non usato \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2522
+#: pcbnew/class_board.cpp:2530
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr ""
 "Rimozione collegamento singola piazzola \"%s\" su \"%s\" piazzola \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2579
+#: pcbnew/class_board.cpp:2587
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Componente \"%s\" piazzola \"%s\" non trovato nell'impronta \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2597
+#: pcbnew/class_board.cpp:2605
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr ""
@@ -6603,22 +6603,22 @@ msgstr "** Impossibile creare %s **\n"
 msgid "Create file %s\n"
 msgstr "Crea file %s\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:176
-#: pcbnew/exporters/gen_modules_placefile.cpp:565
+#: pcbnew/exporters/gen_modules_placefile.cpp:177
+#: pcbnew/exporters/gen_modules_placefile.cpp:566
 #: pcbnew/dialogs/dialog_gendrill.cpp:293
 #: pcbnew/dialogs/dialog_SVG_print.cpp:215 pcbnew/dialogs/dialog_plot.cpp:311
 #: eeschema/dialogs/dialog_plot_schematic.cpp:171
 msgid "Select Output Directory"
 msgstr "Seleziona percorso di uscita"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:183
+#: pcbnew/exporters/gen_modules_placefile.cpp:184
 #: pcbnew/dialogs/dialog_gendrill.cpp:300
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222
 msgid "Use a relative path? "
 msgstr "Utilizzare percorso relativo?"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:184
-#: pcbnew/exporters/gen_modules_placefile.cpp:193
+#: pcbnew/exporters/gen_modules_placefile.cpp:185
+#: pcbnew/exporters/gen_modules_placefile.cpp:194
 #: pcbnew/dialogs/dialog_gendrill.cpp:301
 #: pcbnew/dialogs/dialog_gendrill.cpp:312
 #: pcbnew/dialogs/dialog_SVG_print.cpp:223
@@ -6629,7 +6629,7 @@ msgstr "Utilizzare percorso relativo?"
 msgid "Plot Output Directory"
 msgstr "Cartella risultati tracciature"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:192
+#: pcbnew/exporters/gen_modules_placefile.cpp:193
 #: pcbnew/dialogs/dialog_SVG_print.cpp:233
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
@@ -6637,59 +6637,59 @@ msgstr ""
 "Impossibile creare il percorso relativo (volume di destinazione diverso da "
 "quello del file della scheda)! "
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:234
+#: pcbnew/exporters/gen_modules_placefile.cpp:235
 msgid "No modules for automated placement."
 msgstr "Nessun modulo da posizionare automaticamente."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:247
+#: pcbnew/exporters/gen_modules_placefile.cpp:248
 #: pcbnew/dialogs/dialog_plot.cpp:720
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Impossibile scrivere i file di tracciatura nella cartella \"%s\"."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:274
+#: pcbnew/exporters/gen_modules_placefile.cpp:275
 #, c-format
 msgid "Unable to create '%s'."
 msgstr "Impossibile creare \"%s\"."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:281
+#: pcbnew/exporters/gen_modules_placefile.cpp:282
 #, c-format
 msgid "Place file: '%s'."
 msgstr "Piazza il file: \"%s\"."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:283
+#: pcbnew/exporters/gen_modules_placefile.cpp:284
 #, c-format
 msgid "Front side (top side) place file: '%s'."
 msgstr "File posizionamento lato frontale (in cima): \"%s\"."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:287
-#: pcbnew/exporters/gen_modules_placefile.cpp:321
+#: pcbnew/exporters/gen_modules_placefile.cpp:288
+#: pcbnew/exporters/gen_modules_placefile.cpp:322
 #, c-format
 msgid "Component count: %d."
 msgstr "Conteggio componente: %d."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:292
-#: pcbnew/exporters/gen_modules_placefile.cpp:333
+#: pcbnew/exporters/gen_modules_placefile.cpp:293
+#: pcbnew/exporters/gen_modules_placefile.cpp:334
 msgid "Componment Placement File generation OK."
 msgstr "Generazione fine piazzamento componenti OK."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:309
+#: pcbnew/exporters/gen_modules_placefile.cpp:310
 #: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:819
 #, c-format
 msgid "Unable to create file '%s'."
 msgstr "Impossibile creare il file \"%s\"."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:318
+#: pcbnew/exporters/gen_modules_placefile.cpp:319
 #, c-format
 msgid "Back side (bottom side) place file: '%s'."
 msgstr "File posizionamento lato retrostante (in fondo): \"%s\"."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:329
+#: pcbnew/exporters/gen_modules_placefile.cpp:330
 #, c-format
 msgid "Full component count: %d\n"
 msgstr "Conteggio totale componenti: %d\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:579
+#: pcbnew/exporters/gen_modules_placefile.cpp:580
 #, c-format
 msgid ""
 "Footprint report file created:\n"
@@ -6698,11 +6698,11 @@ msgstr ""
 "File di rapporto impronta creato:\n"
 "\"%s\""
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:581
+#: pcbnew/exporters/gen_modules_placefile.cpp:582
 msgid "Footprint Report"
 msgstr "Rapporto impronta"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:586
+#: pcbnew/exporters/gen_modules_placefile.cpp:587
 #, c-format
 msgid "Unable to create '%s'"
 msgstr "Impossibile creare \"%s\""
@@ -12753,11 +12753,11 @@ msgstr "Sbroglio interattivo"
 msgid "Select Track/Via Width"
 msgstr "Seleziona larghezza piste/via"
 
-#: pcbnew/router/router_tool.cpp:622 pcbnew/router/router_menus.h:820
+#: pcbnew/router/router_tool.cpp:627 pcbnew/router/router_menus.h:820
 msgid "Route Track"
 msgstr "Sbroglia pista"
 
-#: pcbnew/router/router_tool.cpp:629 pcbnew/router/router_menus.h:827
+#: pcbnew/router/router_tool.cpp:634 pcbnew/router/router_menus.h:827
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
@@ -14147,7 +14147,7 @@ msgstr "Errore tra etichette gerarchiche e piedini dei fogli"
 
 #: eeschema/class_drc_erc_item.cpp:54
 msgid "A no connect symbol is connected to more than 1 pin"
-msgstr "Simbolo di non connessione connesso a più di 1 piedino"
+msgstr "Un simbolo di non connesso è connesso a più di 1 pin"
 
 #: eeschema/libedit_onrightclick.cpp:118
 msgid "Move Arc"
@@ -14336,7 +14336,7 @@ msgstr "Gerarchia discendente o ascendente"
 
 #: eeschema/schedit.cpp:518
 msgid "Add no connect"
-msgstr "Aggiungi non connessione"
+msgstr "Aggiungi non connesso"
 
 #: eeschema/schedit.cpp:522
 msgid "Add wire"
@@ -15098,7 +15098,7 @@ msgstr "Elemen&to da bus a bus "
 
 #: eeschema/menubar.cpp:302
 msgid "&No Connect Flag"
-msgstr "Indicatore di &non connessione "
+msgstr "Indicatore di &non connesso"
 
 #: eeschema/menubar.cpp:306
 msgid "&Junction"
@@ -15640,7 +15640,7 @@ msgstr "Componente %s, Piedino %s (%s) non connesso (collegamento %d)."
 
 #: eeschema/erc.cpp:314
 msgid "More than 1 pin connected to an UnConnect symbol."
-msgstr "Più di 1 piedino connesso a simbolo di non connessione."
+msgstr "Più di 1 piedino connesso a simbolo di non connesso."
 
 #: eeschema/erc.cpp:342
 #, c-format
@@ -16683,11 +16683,11 @@ msgstr "Campo%d"
 msgid "Field %s %s"
 msgstr "Campo %s %s"
 
-#: eeschema/sch_bus_entry.cpp:335
+#: eeschema/sch_bus_entry.cpp:337
 msgid "Bus to Wire Entry"
 msgstr "Elemento da bus a filo"
 
-#: eeschema/sch_bus_entry.cpp:341
+#: eeschema/sch_bus_entry.cpp:343
 msgid "Bus to Bus Entry"
 msgstr "Elemento da bus a bus "
 
@@ -16799,7 +16799,7 @@ msgstr "Aggiungi alimentazione"
 
 #: eeschema/hotkeys.cpp:154
 msgid "Add No Connect Flag"
-msgstr "Aggiungi segnale di non connessione"
+msgstr "Aggiungi indicatore di non connesso"
 
 #: eeschema/hotkeys.cpp:156
 msgid "Add Sheet"
@@ -18687,7 +18687,7 @@ msgstr "Note"
 
 #: eeschema/dialogs/dialog_color_config.cpp:68
 msgid "No Connect Symbol"
-msgstr "Segnalatore di non connessione "
+msgstr "Simbolo di non connesso"
 
 #: eeschema/dialogs/dialog_color_config.cpp:74
 msgid "Body background"
@@ -19578,12 +19578,12 @@ msgstr "Colore serigrafia"
 msgid "Copper Color"
 msgstr "Colore rame"
 
-#: 3d-viewer/3d_draw.cpp:611
+#: 3d-viewer/3d_draw.cpp:616
 #, c-format
 msgid "Build time %.3f s"
 msgstr "Tempo di costruzione %.3f s"
 
-#: 3d-viewer/3d_draw.cpp:730 3d-viewer/3d_draw.cpp:1084
+#: 3d-viewer/3d_draw.cpp:735 3d-viewer/3d_draw.cpp:1089
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -19591,17 +19591,17 @@ msgstr ""
 "Impossibile calcolare i contorni della scheda.\n"
 "Perciò usa il riquadro delimitatore scheda."
 
-#: 3d-viewer/3d_draw.cpp:768 3d-viewer/3d_draw.cpp:1145
-#: 3d-viewer/3d_draw.cpp:1318
+#: 3d-viewer/3d_draw.cpp:773 3d-viewer/3d_draw.cpp:1150
+#: 3d-viewer/3d_draw.cpp:1323
 #, c-format
 msgid "Build layer %s"
 msgstr "Costruisci lo strato %s"
 
-#: 3d-viewer/3d_draw.cpp:970
+#: 3d-viewer/3d_draw.cpp:975
 msgid "Build board body"
 msgstr "Costruisci il corpo scheda"
 
-#: 3d-viewer/3d_draw.cpp:1585
+#: 3d-viewer/3d_draw.cpp:1590
 msgid "Load 3D Shapes"
 msgstr "Carica forme 3D"
 
@@ -22474,7 +22474,7 @@ msgstr "Piazza elemento da bus a bus"
 
 #: eeschema/help_common_strings.h:59
 msgid "Place not-connected flag"
-msgstr "Piazza segnalatore non connesso"
+msgstr "Piazza indicatore di non connesso"
 
 #: eeschema/help_common_strings.h:61
 msgid "Place net name - local label"
