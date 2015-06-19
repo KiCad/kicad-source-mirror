@@ -24,6 +24,7 @@
 
 #include "selection_conditions.h"
 #include "selection_tool.h"
+#include <class_board_connected_item.h>
 
 #include <boost/bind.hpp>
 
@@ -48,6 +49,18 @@ bool SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
     }
 
     return true;
+}
+
+
+SELECTION_CONDITION SELECTION_CONDITIONS::SameNet()
+{
+    return boost::bind( &SELECTION_CONDITIONS::sameNetFunc, _1 );
+}
+
+
+SELECTION_CONDITION SELECTION_CONDITIONS::SameLayer()
+{
+    return boost::bind( &SELECTION_CONDITIONS::sameLayerFunc, _1 );
 }
 
 
@@ -78,6 +91,63 @@ SELECTION_CONDITION SELECTION_CONDITIONS::MoreThan( int aNumber )
 SELECTION_CONDITION SELECTION_CONDITIONS::LessThan( int aNumber )
 {
     return boost::bind( &SELECTION_CONDITIONS::lessThanFunc, _1, aNumber );
+}
+
+
+bool SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection )
+{
+    if( aSelection.Empty() )
+        return false;
+
+    int netcode = -1;
+
+    for( int i = 0; i < aSelection.Size(); ++i )
+    {
+        const BOARD_CONNECTED_ITEM* item =
+            dynamic_cast<const BOARD_CONNECTED_ITEM*>( aSelection.Item<EDA_ITEM>( i ) );
+
+        if( !item )
+            return false;
+
+        if( netcode < 0 )
+        {
+            netcode = item->GetNetCode();
+
+            if( netcode == NETINFO_LIST::UNCONNECTED )
+                return false;
+        }
+        else if( netcode != item->GetNetCode() )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
+{
+    if( aSelection.Empty() )
+        return false;
+
+    LSET layerSet;
+    layerSet.set();
+
+    for( int i = 0; i < aSelection.Size(); ++i )
+    {
+        const BOARD_ITEM* item = dynamic_cast<const BOARD_ITEM*>( aSelection.Item<EDA_ITEM>( i ) );
+
+        if( !item )
+            return false;
+
+        layerSet &= item->GetLayerSet();
+
+        if( !layerSet.any() )       // there are no common layers left
+            return false;
+    }
+
+    return true;
 }
 
 

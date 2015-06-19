@@ -74,8 +74,28 @@ public:
     static bool OnlyConnectedItems( const SELECTION& aSelection );
 
     /**
+     * Function SameNet
+     * Creates a functor that tests if selection contains items belonging to the same net. If there
+     * are items which are not of BOARD_CONNECTED_ITEM type, the result is false. If all items do
+     * not have any net assigned, the result is negative (technically they have the same netcode,
+     * but in most cases they should not be connected together).
+     * @return Functor testing if selected items are exclusively connected items belonging to
+     * the same net (and netcode > 0).
+     */
+    static SELECTION_CONDITION SameNet();
+
+    /**
+     * Function SameLayer
+     * Creates a functor that tests if selection contains items that belong exclusively to the same
+     * layer. In case of items belonging to multiple layers, it is enough to have a single common
+     * layer with other items.
+     * @return Functor testing if selected items share at least one common layer.
+     */
+    static SELECTION_CONDITION SameLayer();
+
+    /**
      * Function HasType
-     * Creates functor that tests if among the selected items there is at least one of a given type.
+     * Creates a functor that tests if among the selected items there is at least one of a given type.
      * @param aType is the type that is searched.
      * @return Functor testing for presence of items of a given type.
      */
@@ -83,7 +103,7 @@ public:
 
     /**
      * Function OnlyType
-     * Creates functor that tests if the selected items are *only* of given type.
+     * Creates a functor that tests if the selected items are *only* of given type.
      * @param aType is the type that is searched.
      * @return Functor testing if selected items are exclusively of one type..
      */
@@ -91,7 +111,7 @@ public:
 
     /**
      * Function Count
-     * Creates functor that tests if the number of selected items is equal to the value given as
+     * Creates a functor that tests if the number of selected items is equal to the value given as
      * parameter.
      * @param aNumber is the number of expected items.
      * @return Functor testing if the number of selected items is equal aNumber.
@@ -100,7 +120,7 @@ public:
 
     /**
      * Function MoreThan
-     * Creates functor that tests if the number of selected items is greater than the value given
+     * Creates a functor that tests if the number of selected items is greater than the value given
      * as parameter.
      * @param aNumber is the number used for comparison.
      * @return Functor testing if the number of selected items is greater than aNumber.
@@ -109,7 +129,7 @@ public:
 
     /**
      * Function LessThan
-     * Creates functor that tests if the number of selected items is smaller than the value given
+     * Creates a functor that tests if the number of selected items is smaller than the value given
      * as parameter.
      * @param aNumber is the number used for comparison.
      * @return Functor testing if the number of selected items is smaller than aNumber.
@@ -117,6 +137,9 @@ public:
     static SELECTION_CONDITION LessThan( int aNumber );
 
 private:
+    static bool sameNetFunc( const SELECTION& aSelection );
+    static bool sameLayerFunc( const SELECTION& aSelection );
+
     ///> Helper function used by HasType()
     static bool hasTypeFunc( const SELECTION& aSelection, KICAD_T aType );
 
