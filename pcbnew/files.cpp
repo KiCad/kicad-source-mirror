@@ -813,7 +813,9 @@ bool PCB_EDIT_FRAME::doAutoSave()
     wxLogTrace( traceAutoSave,
                 wxT( "Creating auto save file <" + fn.GetFullPath() ) + wxT( ">" ) );
 
-    if( SavePcbFile( fn.GetFullPath(), NO_BACKUP_FILE ) )
+    if( !fn.IsOk() )
+        return false;
+    else if( SavePcbFile( fn.GetFullPath(), NO_BACKUP_FILE ) )
     {
         GetScreen()->SetModify();
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
