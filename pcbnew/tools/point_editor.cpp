@@ -186,7 +186,7 @@ private:
 
 
 POINT_EDITOR::POINT_EDITOR() :
-    TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_dragPoint( NULL ),
+    TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_editedPoint( NULL ),
     m_original( VECTOR2I( 0, 0 ) ), m_altConstrainer( VECTOR2I( 0, 0 ) )
 {
 }
@@ -210,8 +210,10 @@ bool POINT_EDITOR::Init()
         return false;
     }
 
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorBreakOutline,
-                                        POINT_EDITOR::breakOutlineCondition );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorAddCorner,
+                                        POINT_EDITOR::addCornerCondition );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorRemoveCorner,
+                                        boost::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
 
     return true;
 }
@@ -236,7 +238,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             return 0;
 
         view->Add( m_editPoints.get() );
-        m_dragPoint = NULL;
+        m_editedPoint = NULL;
         bool modified = false;
 
         // Main loop: keep receiving events
@@ -254,32 +256,26 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 EDIT_POINT* point = m_editPoints->FindPoint( evt->Position() );
 
-                if( m_dragPoint != point )
-                {
-                    if( point )
-                    {
-                        controls->ShowCursor( true );
-                        controls->SetSnapping( true );
-                        controls->ForceCursorPosition( true, point->GetPosition() );
-                    }
-                    else
-                    {
-                        controls->ShowCursor( false );
-                        controls->SetSnapping( false );
-                        controls->ForceCursorPosition( false );
-                    }
-                }
-
-                m_dragPoint = point;
+                if( m_editedPoint != point )
+                    setEditedPoint( point );
             }
 
-            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorBreakOutline ) )
+            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorAddCorner ) )
             {
-                breakOutline( controls->GetCursorPosition() );
+                addCorner( controls->GetCursorPosition() );
                 updatePoints();
             }
 
-            else if( evt->IsDrag( BUT_LEFT ) && m_dragPoint )
+            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorRemoveCorner ) )
+            {
+                if( m_editedPoint )
+                {
+                    removeCorner( m_editedPoint );
+                    updatePoints();
+                }
+            }
+
+            else if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
             {
                 if( !modified )
                 {
@@ -287,7 +283,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     editFrame->OnModify();
                     editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
                     controls->ForceCursorPosition( false );
-                    m_original = *m_dragPoint;    // Save the original position
+                    m_original = *m_editedPoint;    // Save the original position
                     controls->SetAutoPan( true );
                     modified = true;
                 }
@@ -296,12 +292,12 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
                     setAltConstraint( enableAltConstraint );
 
-                m_dragPoint->SetPosition( controls->GetCursorPosition() );
+                m_editedPoint->SetPosition( controls->GetCursorPosition() );
 
                 if( m_altConstraint )
                     m_altConstraint->Apply();
                 else
-                    m_dragPoint->ApplyConstraint();
+                    m_editedPoint->ApplyConstraint();
 
                 updateItem();
                 updatePoints();
@@ -475,7 +471,7 @@ void POINT_EDITOR::updateItem() const
         // Check which point is currently modified and updated dimension's points respectively
         if( isModified( m_editPoints->Point( DIM_CROSSBARO ) ) )
         {
-            VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetOrigin() );
+            VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetOrigin() );
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
 
             if( featureLine.Cross( crossBar ) > 0 )
@@ -486,7 +482,7 @@ void POINT_EDITOR::updateItem() const
 
         else if( isModified( m_editPoints->Point( DIM_CROSSBARF ) ) )
         {
-            VECTOR2D featureLine( m_dragPoint->GetPosition() - dimension->GetEnd() );
+            VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetEnd() );
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
 
             if( featureLine.Cross( crossBar ) > 0 )
@@ -497,7 +493,7 @@ void POINT_EDITOR::updateItem() const
 
         else if( isModified( m_editPoints->Point( DIM_FEATUREGO ) ) )
         {
-            dimension->SetOrigin( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
+            dimension->SetOrigin( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ) );
             m_editPoints->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARO ),
                                                                              m_editPoints->Point( DIM_FEATUREGO ) ) );
             m_editPoints->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARF ),
@@ -506,7 +502,7 @@ void POINT_EDITOR::updateItem() const
 
         else if( isModified( m_editPoints->Point( DIM_FEATUREDO ) ) )
         {
-            dimension->SetEnd( wxPoint( m_dragPoint->GetPosition().x, m_dragPoint->GetPosition().y ) );
+            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ) );
             m_editPoints->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARO ),
                                                                              m_editPoints->Point( DIM_FEATUREGO ) ) );
             m_editPoints->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARF ),
@@ -610,11 +606,32 @@ void POINT_EDITOR::updatePoints()
 }
 
 
+void POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
+{
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+
+    if( aPoint )
+    {
+        controls->ForceCursorPosition( true, aPoint->GetPosition() );
+        controls->ShowCursor( true );
+        controls->SetSnapping( true );
+    }
+    else
+    {
+        controls->ShowCursor( false );
+        controls->SetSnapping( false );
+        controls->ForceCursorPosition( false );
+    }
+
+    m_editedPoint = aPoint;
+}
+
+
 void POINT_EDITOR::setAltConstraint( bool aEnabled )
 {
     if( aEnabled )
     {
-        EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_dragPoint );
+        EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
 
         if( line )
         {
@@ -625,7 +642,7 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
         {
             // Find a proper constraining point for 45 degrees mode
             m_altConstrainer = get45DegConstrainer();
-            m_altConstraint.reset( new EC_45DEGREE( *m_dragPoint, m_altConstrainer ) );
+            m_altConstraint.reset( new EC_45DEGREE( *m_editedPoint, m_altConstrainer ) );
         }
     }
     else
@@ -649,7 +666,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
             switch( segment->GetShape() )
             {
             case S_SEGMENT:
-                return *( m_editPoints->Next( *m_dragPoint ) );     // select the other end of line
+                return *( m_editPoints->Next( *m_editedPoint ) );     // select the other end of line
 
             case S_ARC:
             case S_CIRCLE:
@@ -673,7 +690,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
             return m_editPoints->Point( DIM_FEATUREGO );
 
         else
-            return EDIT_POINT( m_dragPoint->GetPosition() );      // no constraint
+            return EDIT_POINT( m_editedPoint->GetPosition() );      // no constraint
 
         break;
     }
@@ -687,7 +704,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 }
 
 
-void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
+void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
 {
     EDA_ITEM* item = m_editPoints->GetParent();
     const SELECTION& selection = m_selectionTool->GetSelection();
@@ -736,13 +753,14 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
     else if( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T )
     {
         bool moduleEdge = item->Type() == PCB_MODULE_EDGE_T;
+        PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
 
-        getEditFrame<PCB_BASE_FRAME>()->OnModify();
+        frame->OnModify();
 
         if( moduleEdge )
-            getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( getModel<BOARD>()->m_Modules, UR_MODEDIT );
+            frame->SaveCopyInUndoList( getModel<BOARD>()->m_Modules, UR_MODEDIT );
         else
-            getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+            frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 
@@ -789,6 +807,33 @@ void POINT_EDITOR::breakOutline( const VECTOR2I& aBreakPoint )
 }
 
 
+void POINT_EDITOR::removeCorner( EDIT_POINT* aPoint )
+{
+    EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( item->Type() == PCB_ZONE_AREA_T )
+    {
+        const SELECTION& selection = m_selectionTool->GetSelection();
+        PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        CPolyLine* outline = zone->Outline();
+
+        for( int i = 0; i < outline->GetCornersCount(); ++i )
+        {
+            if( VECTOR2I( outline->GetPos( i ) ) == aPoint->GetPosition() )
+            {
+                frame->OnModify();
+                frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                outline->DeleteCorner( i );
+                setEditedPoint( NULL );
+                break;
+            }
+        }
+    }
+}
+
+
 void POINT_EDITOR::SetTransitions()
 {
     Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::SelectedEvent );
@@ -796,7 +841,7 @@ void POINT_EDITOR::SetTransitions()
 }
 
 
-bool POINT_EDITOR::breakOutlineCondition( const SELECTION& aSelection )
+bool POINT_EDITOR::addCornerCondition( const SELECTION& aSelection )
 {
     if( aSelection.Size() != 1 )
         return false;
@@ -807,4 +852,27 @@ bool POINT_EDITOR::breakOutlineCondition( const SELECTION& aSelection )
     return item->Type() == PCB_ZONE_AREA_T ||
            ( ( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T ) &&
                static_cast<DRAWSEGMENT*>( item )->GetShape() == S_SEGMENT );
+}
+
+
+bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
+{
+    if( !m_editPoints )
+        return false;
+
+    EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( item->Type() != PCB_ZONE_AREA_T )
+        return false;
+
+    ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+
+    if( zone->GetNumCorners() <= 3 )
+        return false;
+
+    // Remove corner does not work with lines
+    if( dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
+        return false;
+
+    return m_editedPoint != NULL;
 }

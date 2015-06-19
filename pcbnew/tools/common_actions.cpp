@@ -499,9 +499,13 @@ TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION COMMON_ACTIONS::pointEditorBreakOutline( "pcbnew.PointEditor.breakOutline",
+TOOL_ACTION COMMON_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
         AS_GLOBAL, 0,
         _( "Create corner" ), _( "Create corner" ), add_corner_xpm );
+
+TOOL_ACTION COMMON_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorner",
+        AS_GLOBAL, 0,
+        _( "Remove corner" ), _( "Remove corner" ), delete_xpm );
 
 // Placement tool
 TOOL_ACTION COMMON_ACTIONS::alignTop( "pcbnew.Place.alignTop",

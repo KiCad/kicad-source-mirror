@@ -63,7 +63,7 @@ private:
     SELECTION_TOOL* m_selectionTool;
 
     ///> Currently edited point, NULL if there is none.
-    EDIT_POINT* m_dragPoint;
+    EDIT_POINT* m_editedPoint;
 
     ///> Original position for the current drag point.
     EDIT_POINT m_original;
@@ -86,10 +86,13 @@ private:
     ///> Updates edit points with item's points.
     void updatePoints();
 
+    ///> Sets the current point being edited. NULL means none.
+    void setEditedPoint( EDIT_POINT* aPoint );
+
     ///> Returns true if aPoint is the currently modified point.
     inline bool isModified( const EDIT_POINT& aPoint ) const
     {
-        return m_dragPoint == &aPoint;
+        return m_editedPoint == &aPoint;
     }
 
     ///> Sets up an alternative constraint (typically enabled upon a modifier key being pressed).
@@ -99,10 +102,16 @@ private:
     EDIT_POINT get45DegConstrainer() const;
 
     ///> Adds a new edit point on a zone outline/line.
-    void breakOutline( const VECTOR2I& aBreakPoint );
+    void addCorner( const VECTOR2I& aPoint );
+
+    ///> Removes a corner.
+    void removeCorner( EDIT_POINT* aPoint );
 
     ///> Condition to display "Create corner" context menu entry.
-    static bool breakOutlineCondition( const SELECTION& aSelection );
+    static bool addCornerCondition( const SELECTION& aSelection );
+
+    ///> Condition to display "Remove corner" context menu entry.
+    bool removeCornerCondition( const SELECTION& aSelection );
 };
 
 #endif

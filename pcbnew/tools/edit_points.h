@@ -67,7 +67,7 @@ public:
      *
      * Returns X coordinate of an EDIT_POINT.
      */
-    int GetX() const
+    inline int GetX() const
     {
         return GetPosition().x;
     }
@@ -77,7 +77,7 @@ public:
      *
      * Returns Y coordinate of an EDIT_POINT.
      */
-    int GetY() const
+    inline int GetY() const
     {
         return GetPosition().y;
     }
@@ -130,7 +130,7 @@ public:
      *
      * Removes previously set constraint.
      */
-    void ClearConstraint()
+    inline void ClearConstraint()
     {
         m_constraint.reset();
     }
@@ -141,7 +141,7 @@ public:
      * Checks if point is constrained.
      * @return True is point is constrained, false otherwise.
      */
-    bool IsConstrained() const
+    inline bool IsConstrained() const
     {
         return m_constraint != NULL;
     }
