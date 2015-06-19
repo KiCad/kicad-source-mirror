@@ -99,6 +99,7 @@ public:
         m_parent( aParent ),
         m_plotOpts( aParent->GetPlotSettings() )
     {
+        m_reporter = &m_messagesPanel->Reporter();
         initDialog();
 
         GetSizer()->SetSizeHints(this);

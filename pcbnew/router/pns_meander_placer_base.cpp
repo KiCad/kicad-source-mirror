@@ -25,6 +25,7 @@
 PNS_MEANDER_PLACER_BASE::PNS_MEANDER_PLACER_BASE( PNS_ROUTER* aRouter ) :
         PNS_PLACEMENT_ALGO( aRouter )
 {
+    m_currentWidth = 0;
 }
 
 
@@ -69,7 +70,7 @@ void PNS_MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin,
     if ( cp == aTuneStart ) // we don't like tuning segments with 0 length
     {
         int idx = aOrigin.FindSegment( cp );
-        if( idx >= 0 ) 
+        if( idx >= 0 )
         {
             const SEG& s = aOrigin.CSegment( idx );
             cp += (s.B - s.A).Resize(2);

@@ -219,12 +219,13 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
     UseColorScheme( aBoard->GetColorsSettings() );
 
     PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
-    SetTopLayer( frame->GetActiveLayer() );
 
     if( frame )
     {
+        SetTopLayer( frame->GetActiveLayer() );
         DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) frame->GetDisplayOptions();
-        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
+        static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
     }
 
     m_view->RecacheAllItems( true );

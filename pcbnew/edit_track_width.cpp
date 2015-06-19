@@ -73,6 +73,12 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     {
         const VIA *via = static_cast<const VIA *>( aTrackItem );
 
+        // Micro vias have a size only defined in their netclass
+        // (no specific values defined by a table of specific value)
+        // Ensure the netcall is accessible:
+        if( via->GetViaType() == VIA_MICROVIA && net == NULL )
+            net = aTrackItem->GetNet();
+
         // Get the draill value, regardless it is default or specific
         initial_drill = via->GetDrillValue();
 
@@ -96,14 +102,16 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                 new_drill = net->GetMicroViaDrillSize();
             }
             else
-                new_width = GetDesignSettings().GetCurrentMicroViaSize();
+            {
+                // Should not occur
+            }
         }
 
         // Old versions set a drill value <= 0, when the default netclass it used
         // but it could be better to set the drill value to the actual value
         // to avoid issues for existing vias, if the default drill value is modified
         // in the netclass, and not in current vias.
-        if( via->GetDrill() <= 0 )    // means default netclass drill value used
+        if( via->GetDrill() <= 0 )      // means default netclass drill value used
         {
             initial_drill  = -1;        // Force drill vias re-initialization
         }
