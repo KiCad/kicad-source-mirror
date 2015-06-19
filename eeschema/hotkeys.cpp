@@ -117,7 +117,7 @@ static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-', 
 
 static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, WXK_BACK,
+static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, GR_KB_ALT + WXK_BACK,
                                 ID_POPUP_SCH_LEAVE_SHEET );
 
 // Undo
@@ -198,6 +198,8 @@ static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t', ID_POPUP_DRAG_BLOCK );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( _HKI( "Delete Item" ), HK_DELETE, WXK_DELETE );
+static EDA_HOTKEY HkDeleteNode( _HKI( "Delete Node" ), HK_DELETE_NODE, WXK_BACK,
+                                ID_POPUP_SCH_DELETE_NODE );
 
 static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL, ID_FIND_ITEMS );
 static EDA_HOTKEY HkFindNextItem( _HKI( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5,
@@ -290,6 +292,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkAddGraphicPolyLine,
     &HkAddGraphicText,
     &HkLeaveSheet,
+    &HkDeleteNode,
     NULL
 };
 
@@ -442,6 +445,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
     case HK_LEAVE_SHEET:
+    case HK_DELETE_NODE:
     case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
     case HK_SAVE_BLOCK:                      // Copy block to paste buffer.
         cmd.SetId( hotKey->m_IdMenuEvent );
