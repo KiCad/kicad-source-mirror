@@ -130,7 +130,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_buttonRightSelAll = new wxButton( m_panelNetClassesEditor, wxID_ANY, _("Select All >>"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonRightSelAll->SetToolTip( _("Select all nets in the right list") );
 	
-	bmiddleSizerNetSelect->Add( m_buttonRightSelAll, 0, wxALIGN_BOTTOM|wxALL, 5 );
+	bmiddleSizerNetSelect->Add( m_buttonRightSelAll, 0, wxALL, 5 );
 	
 	
 	sbSizerNetSelectMain->Add( bmiddleSizerNetSelect, 0, wxALIGN_CENTER_VERTICAL, 5 );

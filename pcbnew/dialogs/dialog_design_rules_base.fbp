@@ -1184,7 +1184,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALIGN_BOTTOM|wxALL</property>
+                                                        <property name="flag">wxALL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxButton" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -1580,7 +1580,7 @@
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                 <property name="proportion">1</property>
-                                                <object class="wxStaticBoxSizer" expanded="0">
+                                                <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Via Options:</property>
                                                     <property name="minimum_size"></property>
