@@ -186,6 +186,13 @@ void CONTEXT_MENU::UpdateAll()
 }
 
 
+TOOL_MANAGER* CONTEXT_MENU::getToolManager()
+{
+    assert( m_tool );
+    return m_tool->GetManager();
+}
+
+
 void CONTEXT_MENU::updateHotKeys()
 {
     for( std::map<int, const TOOL_ACTION*>::const_iterator it = m_toolActions.begin();

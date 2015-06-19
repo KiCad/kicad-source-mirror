@@ -60,6 +60,7 @@ public:
     int ZoneFillAll( const TOOL_EVENT& aEvent );
     int ZoneUnfill( const TOOL_EVENT& aEvent );
     int ZoneUnfillAll( const TOOL_EVENT& aEvent );
+    int ZoneMerge( const TOOL_EVENT& aEvent );
 
     /**
      * Function PlaceTarget()

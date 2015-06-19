@@ -242,6 +242,7 @@ public:
     static TOOL_ACTION zoneFillAll;
     static TOOL_ACTION zoneUnfill;
     static TOOL_ACTION zoneUnfillAll;
+    static TOOL_ACTION zoneMerge;
 
     // Module editor tools
     /// Activation of the drawing tool (placing a PAD)

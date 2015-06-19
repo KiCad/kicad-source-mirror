@@ -374,6 +374,10 @@ TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
         _( "Unfill all" ), _( "Unfill all zones" ) );
 
+TOOL_ACTION COMMON_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
+        AS_GLOBAL, 0,
+        _( "Merge zones" ), _( "Merge zones" ) );
+
 
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
         AS_GLOBAL, 0,

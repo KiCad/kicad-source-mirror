@@ -125,6 +125,7 @@ public:
      */
     void UpdateAll();
 
+    // Helper typedefs
     typedef boost::function<OPT_TOOL_EVENT(const wxMenuEvent&)> MENU_HANDLER;
     typedef boost::function<void()> UPDATE_HANDLER;
 
@@ -144,6 +145,16 @@ public:
     inline void SetUpdateHandler( UPDATE_HANDLER aUpdateHandler )
     {
         m_update_handler = aUpdateHandler;
+    }
+
+protected:
+    ///> Returns an instance of TOOL_MANAGER class.
+    TOOL_MANAGER* getToolManager();
+
+    ///> Returns the corresponding wxMenuItem identifier for a TOOL_ACTION object.
+    static inline int getMenuId( const TOOL_ACTION& aAction )
+    {
+        return aAction.GetId() + ACTION_ID;
     }
 
 private:
@@ -182,12 +193,6 @@ private:
 
     ///> Runs a function on the menu and all its submenus.
     void runOnSubmenus( boost::function<void(CONTEXT_MENU*)> aFunction );
-
-    ///> Returns the corresponding wxMenuItem identifier for a TOOL_ACTION object.
-    static inline int getMenuId( const TOOL_ACTION& aAction )
-    {
-        return aAction.GetId() + ACTION_ID;
-    }
 
     ///> Flag indicating that the menu title was set up.
     bool m_titleSet;
