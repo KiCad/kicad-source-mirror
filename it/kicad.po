@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-19 18:40+0100\n"
-"PO-Revision-Date: 2015-06-19 18:40+0100\n"
+"POT-Creation-Date: 2015-06-20 11:20+0100\n"
+"PO-Revision-Date: 2015-06-20 11:20+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -2278,7 +2278,7 @@ msgstr "Piazza zona"
 msgid "Keepout Area"
 msgstr "Zona proibita"
 
-#: pcbnew/onrightclick.cpp:724 pcbnew/tools/pcb_editor_control.cpp:98
+#: pcbnew/onrightclick.cpp:724 pcbnew/tools/pcb_editor_control.cpp:117
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 msgid "Zones"
 msgstr "Gestisci zona"
@@ -3387,7 +3387,7 @@ msgid "Enable high contrast display mode"
 msgstr "Visualizza con contrasto aumentato "
 
 #: pcbnew/tool_pcb.cpp:427 pcbnew/edit.cpp:1498
-#: pcbnew/tools/pcb_editor_control.cpp:557
+#: pcbnew/tools/pcb_editor_control.cpp:672
 msgid "Highlight net"
 msgstr "Evidenzia collegamento"
 
@@ -3440,8 +3440,8 @@ msgid "Add dimension"
 msgstr "Aggiungi quota"
 
 #: pcbnew/tool_pcb.cpp:465 pcbnew/menubar_pcbframe.cpp:421
-#: pcbnew/edit.cpp:1458 pcbnew/tools/common_actions.cpp:380
-#: pcbnew/tools/pcb_editor_control.cpp:323
+#: pcbnew/edit.cpp:1458 pcbnew/tools/common_actions.cpp:384
+#: pcbnew/tools/pcb_editor_control.cpp:342
 msgid "Add layer alignment target"
 msgstr "Aggiungi marcatore di allineamento strati"
 
@@ -4759,7 +4759,7 @@ msgstr "Sbroglia interattivamente una coppia differenziale"
 msgid "&Tune Track Length"
 msgstr "Regola lunghezza pis&ta"
 
-#: pcbnew/menubar_pcbframe.cpp:452 pcbnew/tools/common_actions.cpp:479
+#: pcbnew/menubar_pcbframe.cpp:452 pcbnew/tools/common_actions.cpp:483
 msgid "Tune length of a single track"
 msgstr "Regola la lunghezza di una singola pista"
 
@@ -4767,7 +4767,7 @@ msgstr "Regola la lunghezza di una singola pista"
 msgid "Tune Differential Pair &Length"
 msgstr "Regola &lunghezza coppia differenziale"
 
-#: pcbnew/menubar_pcbframe.cpp:457 pcbnew/tools/common_actions.cpp:483
+#: pcbnew/menubar_pcbframe.cpp:457 pcbnew/tools/common_actions.cpp:487
 msgid "Tune length of a differential pair"
 msgstr "Regola la lunghezza di una coppia differenziale"
 
@@ -4986,7 +4986,7 @@ msgid "Add tracks"
 msgstr "Aggiungi pista"
 
 #: pcbnew/edit.cpp:1439 pcbnew/edit.cpp:1486
-#: pcbnew/tools/pcb_editor_control.cpp:201
+#: pcbnew/tools/pcb_editor_control.cpp:220
 msgid "Add module"
 msgstr "Aggiungi modulo"
 
@@ -5002,7 +5002,7 @@ msgstr "Attenzione: La visulizzazione delle zone è disabilitata!"
 msgid "Add keepout"
 msgstr "Aggiungi proibita"
 
-#: pcbnew/edit.cpp:1462 pcbnew/tools/pcb_editor_control.cpp:504
+#: pcbnew/edit.cpp:1462 pcbnew/tools/pcb_editor_control.cpp:619
 msgid "Adjust zero"
 msgstr "Regola zero"
 
@@ -5218,7 +5218,7 @@ msgstr "Stampa impronta"
 msgid "Check footprint"
 msgstr "Controlla impronta"
 
-#: pcbnew/tool_modedit.cpp:166 pcbnew/tools/common_actions.cpp:402
+#: pcbnew/tool_modedit.cpp:166 pcbnew/tools/common_actions.cpp:406
 #: pcbnew/tools/module_tools.cpp:86
 msgid "Add pads"
 msgstr "Aggiungi piazzola "
@@ -5434,7 +5434,7 @@ msgid "Load Board"
 msgstr "Carica scheda"
 
 #: pcbnew/hotkeys.cpp:100 pcbnew/dialogs/dialog_find_base.cpp:38
-#: eeschema/hotkeys.cpp:202
+#: eeschema/hotkeys.cpp:204
 msgid "Find Item"
 msgstr "Trova elemento"
 
@@ -5704,7 +5704,7 @@ msgstr "Registra macro 9"
 msgid "Call Macro 9"
 msgstr "Richiama macro 9"
 
-#: pcbnew/hotkeys.cpp:338 eeschema/hotkeys.cpp:318
+#: pcbnew/hotkeys.cpp:338 eeschema/hotkeys.cpp:321
 #: pagelayout_editor/hotkeys.cpp:114
 msgid "Common"
 msgstr "Comune"
@@ -6384,91 +6384,99 @@ msgstr "Svuota tutto"
 msgid "Unfill all zones"
 msgstr "Svuota tutte le zone"
 
-#: pcbnew/tools/common_actions.cpp:384
+#: pcbnew/tools/common_actions.cpp:379
+msgid "Merge zones"
+msgstr "Fondi zone"
+
+#: pcbnew/tools/common_actions.cpp:388
 msgid "Add modules"
 msgstr "Aggiungi moduli"
 
-#: pcbnew/tools/common_actions.cpp:406
+#: pcbnew/tools/common_actions.cpp:410
 msgid "Enumerate pads"
 msgstr "Numera piazzole"
 
-#: pcbnew/tools/common_actions.cpp:410
+#: pcbnew/tools/common_actions.cpp:414
 msgid "Copy items"
 msgstr "Copia elementi"
 
-#: pcbnew/tools/common_actions.cpp:414
+#: pcbnew/tools/common_actions.cpp:418
 msgid "Paste items"
 msgstr "Incolla elementi"
 
-#: pcbnew/tools/common_actions.cpp:459 pcbnew/tools/common_actions.cpp:460
+#: pcbnew/tools/common_actions.cpp:463 pcbnew/tools/common_actions.cpp:464
 msgid "Run push & shove router (single tracks)"
 msgstr "Esegui sbroglio interattivo (P&S) pista singola"
 
-#: pcbnew/tools/common_actions.cpp:464 pcbnew/tools/common_actions.cpp:465
+#: pcbnew/tools/common_actions.cpp:468 pcbnew/tools/common_actions.cpp:469
 msgid "Run push & shove router (differential pairs)"
 msgstr "Esegui sbroglio interattivo (P&S) coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:469 pcbnew/tools/common_actions.cpp:470
+#: pcbnew/tools/common_actions.cpp:473 pcbnew/tools/common_actions.cpp:474
 msgid "Open Interactive Router settings"
 msgstr "Apri impostazioni sbroglio interattivo"
 
-#: pcbnew/tools/common_actions.cpp:474 pcbnew/tools/common_actions.cpp:475
+#: pcbnew/tools/common_actions.cpp:478 pcbnew/tools/common_actions.cpp:479
 msgid "Open Differential Pair Dimension settings"
 msgstr "Apre le impostazioni dimensioni coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:487
+#: pcbnew/tools/common_actions.cpp:491
 msgid "Tune skew of a differential pair"
 msgstr "Regola lo skew di una coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:500
+#: pcbnew/tools/common_actions.cpp:504
 msgid "Create corner"
 msgstr "Crea angolo"
 
-#: pcbnew/tools/common_actions.cpp:505
+#: pcbnew/tools/common_actions.cpp:508
+msgid "Remove corner"
+msgstr "Elimina angolo"
+
+#: pcbnew/tools/common_actions.cpp:513
 msgid "Align items to the top"
 msgstr "Allinea elementi in cima"
 
-#: pcbnew/tools/common_actions.cpp:506
+#: pcbnew/tools/common_actions.cpp:514
 msgid "Aligns selected items to the top edge"
 msgstr "Allinea gli elementi selezionati al bordo superiore"
 
-#: pcbnew/tools/common_actions.cpp:510
+#: pcbnew/tools/common_actions.cpp:518
 msgid "Align items to the bottom"
 msgstr "Allinea elementi in fondo"
 
-#: pcbnew/tools/common_actions.cpp:511
+#: pcbnew/tools/common_actions.cpp:519
 msgid "Aligns selected items to the bottom edge"
 msgstr "Allinea gli elementi selezionati al bordo inferiore"
 
-#: pcbnew/tools/common_actions.cpp:515
+#: pcbnew/tools/common_actions.cpp:523
 msgid "Align items to the left"
 msgstr "Allinea elementi a sinistra"
 
-#: pcbnew/tools/common_actions.cpp:516
+#: pcbnew/tools/common_actions.cpp:524
 msgid "Aligns selected items to the left edge"
 msgstr "Allinea gli elementi selezionati al bordo sinistro"
 
-#: pcbnew/tools/common_actions.cpp:520
+#: pcbnew/tools/common_actions.cpp:528
 msgid "Align items to the right"
 msgstr "Allinea elementi a destra"
 
-#: pcbnew/tools/common_actions.cpp:521
+#: pcbnew/tools/common_actions.cpp:529
 msgid "Aligns selected items to the right edge"
 msgstr "Allinea gli elementi selezionati al bordo destro"
 
-#: pcbnew/tools/common_actions.cpp:525
+#: pcbnew/tools/common_actions.cpp:533
 msgid "Distribute horizontally"
 msgstr "Distribuisci orizzontalmente"
 
-#: pcbnew/tools/common_actions.cpp:526
+#: pcbnew/tools/common_actions.cpp:534
 msgid "Distributes selected items along the horizontal axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
 
-#: pcbnew/tools/common_actions.cpp:530
+#: pcbnew/tools/common_actions.cpp:538
 msgid "Distribute vertically"
 msgstr "Distribuisci verticalmente"
 
-#: pcbnew/tools/common_actions.cpp:531
+#: pcbnew/tools/common_actions.cpp:539
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
 
@@ -6480,11 +6488,11 @@ msgstr "Seleziona..."
 msgid "Zoom"
 msgstr "Zoom"
 
-#: pcbnew/tools/selection_tool.cpp:506
+#: pcbnew/tools/selection_tool.cpp:505
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
 
-#: pcbnew/tools/selection_tool.cpp:735
+#: pcbnew/tools/selection_tool.cpp:734
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
@@ -14798,6 +14806,7 @@ msgid "Break Wire"
 msgstr "Interrompi filo"
 
 #: eeschema/onrightclick.cpp:649 eeschema/onrightclick.cpp:683
+#: eeschema/hotkeys.cpp:201
 msgid "Delete Node"
 msgstr "Cancella nodo"
 
@@ -16052,7 +16061,7 @@ msgstr "Mostra tabella pin"
 msgid "Turn grid off"
 msgstr "Visualizzazione griglia "
 
-#: eeschema/libeditframe.cpp:183 eeschema/hotkeys.cpp:320
+#: eeschema/libeditframe.cpp:183 eeschema/hotkeys.cpp:323
 msgid "Library Editor"
 msgstr "Editor delle librerie"
 
@@ -16861,47 +16870,47 @@ msgstr "Ripeti l'ultimo elemento"
 msgid "Delete Item"
 msgstr "Cancella elemento"
 
-#: eeschema/hotkeys.cpp:203
+#: eeschema/hotkeys.cpp:205
 msgid "Find Next Item"
 msgstr "Trova prossimo elemento"
 
-#: eeschema/hotkeys.cpp:205 eeschema/dialogs/dialog_schematic_find.cpp:48
+#: eeschema/hotkeys.cpp:207 eeschema/dialogs/dialog_schematic_find.cpp:48
 msgid "Find and Replace"
 msgstr "Trova e Sostituisci"
 
-#: eeschema/hotkeys.cpp:207
+#: eeschema/hotkeys.cpp:209
 msgid "Find Next DRC Marker"
 msgstr "Trova prossimo marcatore DRC"
 
-#: eeschema/hotkeys.cpp:211
+#: eeschema/hotkeys.cpp:213
 msgid "Create Pin"
 msgstr "Crea pin"
 
-#: eeschema/hotkeys.cpp:212
+#: eeschema/hotkeys.cpp:214
 msgid "Repeat Pin"
 msgstr "Ripeti pin"
 
-#: eeschema/hotkeys.cpp:213
+#: eeschema/hotkeys.cpp:215
 msgid "Move Library Item"
 msgstr "Sposta elemento libreria"
 
-#: eeschema/hotkeys.cpp:216
+#: eeschema/hotkeys.cpp:218
 msgid "Save Library"
 msgstr "Salva libreria"
 
-#: eeschema/hotkeys.cpp:217
+#: eeschema/hotkeys.cpp:219
 msgid "Save Schematic"
 msgstr "Salva schema"
 
-#: eeschema/hotkeys.cpp:218
+#: eeschema/hotkeys.cpp:220
 msgid "Load Schematic"
 msgstr "Carica schema"
 
-#: eeschema/hotkeys.cpp:319
+#: eeschema/hotkeys.cpp:322
 msgid "Schematic Editor"
 msgstr "Editor schemi elettrici"
 
-#: eeschema/hotkeys.cpp:731
+#: eeschema/hotkeys.cpp:735
 msgid "Add Pin"
 msgstr "Aggiungi pin"
 
