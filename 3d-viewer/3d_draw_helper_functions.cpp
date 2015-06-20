@@ -221,8 +221,8 @@ void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
     wxPoint brd_center_pos = getBoardCenter();
     NEGATE( brd_center_pos.y );
 
-    int     xsize   = std::max( brd_size.x, Millimeter2iu( 100 ) );
-    int     ysize   = std::max( brd_size.y, Millimeter2iu( 100 ) );
+    int     xsize   = std::max( brd_size.x, Millimeter2iu( 100 ) ) * 1.2;
+    int     ysize   = std::max( brd_size.y, Millimeter2iu( 100 ) ) * 1.2;
 
     // Grid limits, in 3D units
     double  xmin    = (brd_center_pos.x - xsize / 2) * scale;
@@ -278,10 +278,12 @@ void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
             break;
     }
 
-    // Draw vertical grid n Z axis
+    // Draw vertical grid on Z axis
     glNormal3f( 0.0, -1.0, 0.0 );
 
     // Draw vertical grid lines (parallel to Z axis)
+    double posy = -brd_center_pos.y * scale;
+
     for( int ii = 0; ; ii++ )
     {
         if( (ii % 5) )
@@ -292,15 +294,18 @@ void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
         double delta = ii * aGriSizeMM * IU_PER_MM;
 
         glBegin( GL_LINES );
-        glVertex3f( (brd_center_pos.x + delta) * scale, -brd_center_pos.y * scale, zmin );
-        glVertex3f( (brd_center_pos.x + delta) * scale, -brd_center_pos.y * scale, zmax );
+        xmax = (brd_center_pos.x + delta) * scale;
+
+        glVertex3f( xmax, posy, zmin );
+        glVertex3f( xmax, posy, zmax );
         glEnd();
 
         if( ii != 0 )
         {
             glBegin( GL_LINES );
-            glVertex3f( (brd_center_pos.x - delta) * scale, -brd_center_pos.y * scale, zmin );
-            glVertex3f( (brd_center_pos.x - delta) * scale, -brd_center_pos.y * scale, zmax );
+            xmin = (brd_center_pos.x - delta) * scale;
+            glVertex3f( xmin, posy, zmin );
+            glVertex3f( xmin, posy, zmax );
             glEnd();
         }
 
@@ -308,7 +313,7 @@ void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
             break;
     }
 
-    // Draw horizontal grid lines on Z axis
+    // Draw horizontal grid lines on Z axis (parallel to X axis)
     for( int ii = 0; ; ii++ )
     {
         if( (ii % 5) )
@@ -322,8 +327,8 @@ void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
         {
             // Draw grid lines on Z axis (positive Z axis coordinates)
             glBegin( GL_LINES );
-            glVertex3f( xmin, -brd_center_pos.y * scale, delta );
-            glVertex3f( xmax, -brd_center_pos.y * scale, delta );
+            glVertex3f( xmin, posy, delta );
+            glVertex3f( xmax, posy, delta );
             glEnd();
         }
 
@@ -331,8 +336,8 @@ void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
         {
             // Draw grid lines on Z axis (negative Z axis coordinates)
             glBegin( GL_LINES );
-            glVertex3f( xmin, -brd_center_pos.y * scale, -delta );
-            glVertex3f( xmax, -brd_center_pos.y * scale, -delta );
+            glVertex3f( xmin, posy, -delta );
+            glVertex3f( xmax, posy, -delta );
             glEnd();
         }
 

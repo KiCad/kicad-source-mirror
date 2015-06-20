@@ -253,6 +253,11 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
 {
     if( tree == NULL )
         return;
+//#define SHOW_CALC_TIME      // uncomment this to show calculation time
+
+#ifdef SHOW_CALC_TIME
+    unsigned starttime =  GetRunningMicroSecs();
+#endif
 
     // We score the list by going through it several time, essentially with a complexity
     // of O(n). For the default library of 2000+ items, this typically takes less than 5ms
@@ -354,6 +359,10 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     // Now: sort all items according to match score, libraries first.
     std::sort( nodes.begin(), nodes.end(), scoreComparator );
 
+#ifdef SHOW_CALC_TIME
+    unsigned sorttime = GetRunningMicroSecs();
+#endif
+
     // Fill the tree with all items that have a match. Re-arranging, adding and removing changed
     // items is pretty complex, so we just re-build the whole tree.
     tree->Freeze();
@@ -392,7 +401,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         if( node->Type == TREE_NODE::TYPE_ALIAS
              && ( node->MatchScore > kLowestDefaultScore || libraries_added == 1 ) )
         {
-            tree->EnsureVisible( node->TreeId );
+            tree->Expand( node->TreeId );
 
             if( first_match == NULL )
                 first_match = node;   // First, highest scoring: the "I am feeling lucky" element.
@@ -414,9 +423,21 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     }
 
     if( first_match )                      // Highest score search match pre-selected.
+    {
         tree->SelectItem( first_match->TreeId );
+        tree->EnsureVisible( first_match->TreeId );
+    }
     else if( preselected_node )            // No search, so history item preselected.
+    {
         tree->SelectItem( preselected_node->TreeId );
+        tree->EnsureVisible( preselected_node->TreeId );
+    }
 
     tree->Thaw();
+
+#ifdef SHOW_CALC_TIME
+    unsigned endtime = GetRunningMicroSecs();
+    wxLogMessage( wxT("sort components %.1f ms,  rebuild tree %.1f ms"),
+                  double(sorttime-starttime)/1000.0, double(endtime-sorttime)/1000.0 );
+#endif
 }
