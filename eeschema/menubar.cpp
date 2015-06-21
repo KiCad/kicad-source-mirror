@@ -40,9 +40,7 @@
 
 #include <help_common_strings.h>
 
-/**
- * @brief (Re)Create the menubar for the schematic frame
- */
+
 void SCH_EDIT_FRAME::ReCreateMenuBar()
 {
     // Create and try to get the current menubar

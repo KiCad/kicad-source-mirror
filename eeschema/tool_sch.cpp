@@ -177,11 +177,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( import_footprint_names_xpm ),
                             HELP_IMPORT_FOOTPRINTS );
 
-    // set icon paddings
-    m_mainToolBar->SetToolBorderPadding(3); // padding
-    m_mainToolBar->SetToolSeparation(0);
-    //m_mainToolBar->SetMargins(0,1); // margins width and height
-
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }
@@ -265,11 +260,6 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
                             KiBitmap( delete_xpm ),
                             HELP_DELETE_ITEMS, wxITEM_CHECK );
 
-    // set icon paddings
-    m_drawToolBar->SetToolBorderPadding(2); // padding
-    m_drawToolBar->SetToolSeparation(0);
-    //m_drawToolBar->SetMargins(1,0); // margins width and height
-
     m_drawToolBar->Realize();
 }
 
@@ -310,10 +300,6 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
                                KiBitmap( lines90_xpm ),
                                _( "HV orientation for wires and bus" ),
                                wxITEM_CHECK );
-
-    // set icon paddings
-    m_optionsToolBar->SetToolBorderPadding(2); // padding
-    m_optionsToolBar->SetToolSeparation(0);
 
     m_optionsToolBar->Realize();
 }
