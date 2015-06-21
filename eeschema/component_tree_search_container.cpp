@@ -99,35 +99,35 @@ bool COMPONENT_TREE_SEARCH_CONTAINER::scoreComparator( const TREE_NODE* a1, cons
 
 
 COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER( PART_LIBS* aLibs )
+    : m_tree( NULL ),
+      m_libraries_added( 0 ),
+      m_components_added( 0 ),
+      m_preselect_unit_number( -1 ),
+      m_libs( aLibs ),
+      m_filter( CMP_FILTER_NONE )
 {
-    tree = NULL,
-    libraries_added = 0,
-    components_added = 0,
-    preselect_unit_number = -1,
-    m_libs = aLibs,
-    m_filter = CMP_FILTER_NONE;
 }
 
 
 COMPONENT_TREE_SEARCH_CONTAINER::~COMPONENT_TREE_SEARCH_CONTAINER()
 {
-    BOOST_FOREACH( TREE_NODE* node, nodes )
+    BOOST_FOREACH( TREE_NODE* node, m_nodes )
         delete node;
-    nodes.clear();
+    m_nodes.clear();
 }
 
 
 void COMPONENT_TREE_SEARCH_CONTAINER::SetPreselectNode( const wxString& aComponentName,
                                                         int aUnit )
 {
-    preselect_node_name = aComponentName.Lower();
-    preselect_unit_number = aUnit;
+    m_preselect_node_name = aComponentName.Lower();
+    m_preselect_unit_number = aUnit;
 }
 
 
 void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( wxTreeCtrl* aTree )
 {
-    tree = aTree;
+    m_tree = aTree;
     UpdateSearchTerm( wxEmptyString );
 }
 
@@ -143,7 +143,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( PART_LIB& aLib )
 
     AddAliasList( aLib.GetName(), all_aliases, &aLib );
 
-    ++libraries_added;
+    ++m_libraries_added;
 }
 
 
@@ -153,7 +153,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
 {
     TREE_NODE* const lib_node = new TREE_NODE( TREE_NODE::TYPE_LIB,  NULL, NULL,
                                                aNodeName, wxEmptyString, wxEmptyString );
-    nodes.push_back( lib_node );
+    m_nodes.push_back( lib_node );
 
     BOOST_FOREACH( const wxString& aName, aAliasNameList )
     {
@@ -194,7 +194,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
 
         TREE_NODE* alias_node = new TREE_NODE( TREE_NODE::TYPE_ALIAS, lib_node,
                                                a, a->GetName(), display_info, search_text );
-        nodes.push_back( alias_node );
+        m_nodes.push_back( alias_node );
 
         if( a->GetPart()->IsMulti() )    // Add all units as sub-nodes.
         {
@@ -207,23 +207,23 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                                                       unitName,
                                                       wxEmptyString, wxEmptyString );
                 unit_node->Unit = u;
-                nodes.push_back( unit_node );
+                m_nodes.push_back( unit_node );
             }
         }
 
-        ++components_added;
+        ++m_components_added;
     }
 }
 
 
 LIB_ALIAS* COMPONENT_TREE_SEARCH_CONTAINER::GetSelectedAlias( int* aUnit )
 {
-    if( tree == NULL )
+    if( m_tree == NULL )
         return NULL;
 
-    const wxTreeItemId& select_id = tree->GetSelection();
+    const wxTreeItemId& select_id = m_tree->GetSelection();
 
-    BOOST_FOREACH( TREE_NODE* node, nodes )
+    BOOST_FOREACH( TREE_NODE* node, m_nodes )
     {
         if( node->MatchScore > 0 && node->TreeId == select_id ) {
             if( aUnit && node->Unit > 0 )
@@ -251,7 +251,7 @@ static int matchPosScore(int aPosition, int aMaximum)
 
 void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch )
 {
-    if( tree == NULL )
+    if( m_tree == NULL )
         return;
 //#define SHOW_CALC_TIME      // uncomment this to show calculation time
 
@@ -264,7 +264,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     // on an i5. Good enough, no index needed.
 
     // Initial AND condition: Leaf nodes are considered to match initially.
-    BOOST_FOREACH( TREE_NODE* node, nodes )
+    BOOST_FOREACH( TREE_NODE* node, m_nodes )
     {
         node->PreviousScore = node->MatchScore;
         node->MatchScore = ( node->Type == TREE_NODE::TYPE_LIB ) ? 0 : kLowestDefaultScore;
@@ -287,7 +287,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     {
         const wxString term = tokenizer.GetNextToken().Lower();
 
-        BOOST_FOREACH( TREE_NODE* node, nodes )
+        BOOST_FOREACH( TREE_NODE* node, m_nodes )
         {
             if( node->Type != TREE_NODE::TYPE_ALIAS )
                 continue;      // Only aliases are actually scored here.
@@ -330,7 +330,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     unsigned highest_score_seen = 0;
     bool any_change = false;
 
-    BOOST_FOREACH( TREE_NODE* node, nodes )
+    BOOST_FOREACH( TREE_NODE* node, m_nodes )
     {
         switch( node->Type )
         {
@@ -357,7 +357,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         return;
 
     // Now: sort all items according to match score, libraries first.
-    std::sort( nodes.begin(), nodes.end(), scoreComparator );
+    std::sort( m_nodes.begin(), m_nodes.end(), scoreComparator );
 
 #ifdef SHOW_CALC_TIME
     unsigned sorttime = GetRunningMicroSecs();
@@ -365,13 +365,13 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
 
     // Fill the tree with all items that have a match. Re-arranging, adding and removing changed
     // items is pretty complex, so we just re-build the whole tree.
-    tree->Freeze();
-    tree->DeleteAllItems();
-    const wxTreeItemId root_id = tree->AddRoot( wxEmptyString );
+    m_tree->Freeze();
+    m_tree->DeleteAllItems();
+    const wxTreeItemId root_id = m_tree->AddRoot( wxEmptyString );
     const TREE_NODE* first_match = NULL;
     const TREE_NODE* preselected_node = NULL;
 
-    BOOST_FOREACH( TREE_NODE* node, nodes )
+    BOOST_FOREACH( TREE_NODE* node, m_nodes )
     {
         if( node->MatchScore == 0 )
             continue;
@@ -392,16 +392,16 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
 #else
         node_text = node->DisplayName + node->DisplayInfo;
 #endif
-        node->TreeId = tree->AppendItem( node->Parent ? node->Parent->TreeId : root_id,
-                                         node_text );
+        node->TreeId = m_tree->AppendItem( node->Parent ? node->Parent->TreeId : root_id,
+                                           node_text );
 
         // If we are a nicely scored alias, we want to have it visible. Also, if there
         // is only a single library in this container, we want to have it unfolded
         // (example: power library).
         if( node->Type == TREE_NODE::TYPE_ALIAS
-             && ( node->MatchScore > kLowestDefaultScore || libraries_added == 1 ) )
+             && ( node->MatchScore > kLowestDefaultScore || m_libraries_added == 1 ) )
         {
-            tree->Expand( node->TreeId );
+            m_tree->Expand( node->TreeId );
 
             if( first_match == NULL )
                 first_match = node;   // First, highest scoring: the "I am feeling lucky" element.
@@ -412,28 +412,28 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         // (by virtue of alphabetical ordering)
         if( preselected_node == NULL
              && node->Type == TREE_NODE::TYPE_ALIAS
-             && node->MatchName == preselect_node_name )
+             && node->MatchName == m_preselect_node_name )
             preselected_node = node;
 
         // Refinement in case we come accross a matching unit node.
         if( preselected_node != NULL && preselected_node->Type == TREE_NODE::TYPE_ALIAS
              && node->Parent == preselected_node
-             && preselect_unit_number >= 1 && node->Unit == preselect_unit_number )
+             && m_preselect_unit_number >= 1 && node->Unit == m_preselect_unit_number )
             preselected_node = node;
     }
 
     if( first_match )                      // Highest score search match pre-selected.
     {
-        tree->SelectItem( first_match->TreeId );
-        tree->EnsureVisible( first_match->TreeId );
+        m_tree->SelectItem( first_match->TreeId );
+        m_tree->EnsureVisible( first_match->TreeId );
     }
     else if( preselected_node )            // No search, so history item preselected.
     {
-        tree->SelectItem( preselected_node->TreeId );
-        tree->EnsureVisible( preselected_node->TreeId );
+        m_tree->SelectItem( preselected_node->TreeId );
+        m_tree->EnsureVisible( preselected_node->TreeId );
     }
 
-    tree->Thaw();
+    m_tree->Thaw();
 
 #ifdef SHOW_CALC_TIME
     unsigned endtime = GetRunningMicroSecs();

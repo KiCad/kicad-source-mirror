@@ -122,20 +122,20 @@ public:
      * Function GetComponentsCount
      * @return the number of components loaded in the tree
      */
-    int GetComponentsCount() { return components_added; }
+    int GetComponentsCount() { return m_components_added; }
 
 
 private:
     struct TREE_NODE;
     static bool scoreComparator( const TREE_NODE* a1, const TREE_NODE* a2 );
 
-    std::vector<TREE_NODE*> nodes;
-    wxTreeCtrl* tree;
-    int libraries_added;
-    int components_added;
+    std::vector<TREE_NODE*> m_nodes;
+    wxTreeCtrl* m_tree;
+    int m_libraries_added;
+    int m_components_added;
 
-    wxString preselect_node_name;
-    int preselect_unit_number;
+    wxString m_preselect_node_name;
+    int m_preselect_unit_number;
 
     PART_LIBS*      m_libs;         // no ownership
 
