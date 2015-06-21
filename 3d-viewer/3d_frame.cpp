@@ -131,10 +131,10 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the status line
-    static const int dims[5] = { -1, 100, 100, 100, 140 };
+    static const int status_dims[4] = { -1, 130, 130, 170 };
 
-    CreateStatusBar( 5 );
-    SetStatusWidths( 5, dims );
+    CreateStatusBar( DIM( status_dims ) );
+    SetStatusWidths( DIM( status_dims ), status_dims );
 
     CreateMenuBar();
     ReCreateMainToolbar();
@@ -157,14 +157,10 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
                     // Normal attributes with values:
                     WX_GL_DEPTH_SIZE, 16,
                     WX_GL_STENCIL_SIZE, 1,
-#if wxCHECK_VERSION( 3, 0, 0 )
                     WX_GL_SAMPLE_BUFFERS, 1,    // Enable multisampling support (antialiasing).
                     WX_GL_SAMPLES, 0,           // Disable AA for the start.
-#endif
                     0 };                        // NULL termination
 
-
-#if wxCHECK_VERSION( 3, 0, 0 )
 
     // Check if the canvas supports multisampling.
     if( EDA_3D_CANVAS::IsDisplaySupported( attrs ) )
@@ -202,7 +198,6 @@ EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
             }
         }
     }
-#endif
 
     m_canvas = new EDA_3D_CANVAS( this, attrs );
 

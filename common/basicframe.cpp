@@ -520,7 +520,6 @@ void EDA_BASE_FRAME::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
     #define __BO_COMPILER ",unknown"
 #endif
 
-#if wxCHECK_VERSION( 2, 9, 0 )
 
 static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
 {
@@ -531,31 +530,10 @@ static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
     " (release,"
 #endif
     __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
-
-#if !wxCHECK_VERSION( 3, 0, 0 )
-    __WX_BO_WXWIN_COMPAT_2_6
-#endif
-
     __WX_BO_WXWIN_COMPAT_2_8 ")"
     ;
 }
 
-#else
-
-static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
-{
-    return
-#ifdef __WXDEBUG__
-    " (debug,"
-#else
-    " (release,"
-#endif
-    __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
-    __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 ")"
-    ;
-}
-
-#endif
 
 void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 {
