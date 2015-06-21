@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 jean-pierre.charras
+ * Copyright (C) 2015 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ void PCB_CALCULATOR_FRAME::SetAttenuator( unsigned aIdx )
         aIdx = m_attenuator_list.size() - 1;
     m_currAttenuator = m_attenuator_list[aIdx];
     TransfAttenuatorDataToPanel();
-    m_Attenuator_Messages->Clear();
+    m_Attenuator_Messages->SetPage( wxEmptyString );
     m_Att_R1_Value->SetValue( wxEmptyString );
     m_Att_R2_Value->SetValue( wxEmptyString );
     m_Att_R3_Value->SetValue( wxEmptyString );
@@ -100,13 +100,17 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorResultsToPanel()
 {
     wxString msg;
 
-    m_Attenuator_Messages->Clear();
+    m_Attenuator_Messages->SetPage( wxEmptyString );
 
     if( m_currAttenuator->m_Error )
     {
-        msg.Printf( _( "Error!\nSet attenuation more than %f dB" ),
+        msg.Printf( _( "Attenuation more than %f dB" ),
                     m_currAttenuator->m_MinimumATT );
-        m_Attenuator_Messages->AppendText( msg );
+        m_Attenuator_Messages->AppendToPage( wxT( "<br><b>Error!</b></br><br><em>" ) );
+        m_Attenuator_Messages->AppendToPage( msg );
+        m_Attenuator_Messages->AppendToPage( wxT( "</em></br>" ) );
+
+        // Display -- as resistor values:
         msg = wxT( "--" );
         m_Att_R1_Value->SetValue( msg );
         m_Att_R2_Value->SetValue( msg );
