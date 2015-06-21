@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -242,7 +242,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxTextCtrl* m_Att_R3_Value;
 		wxStaticText* m_attR3Unit;
 		wxStaticText* m_staticTextAttMsg;
-		wxTextCtrl* m_Attenuator_Messages;
+		wxHtmlWindow* m_Attenuator_Messages;
 		wxPanel* m_panelAttFormula;
 		wxPanel* m_panelColorCode;
 		wxRadioBox* m_rbToleranceSelection;
@@ -293,7 +293,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 	
 	public:
 		
-		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 702,489 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
+		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 753,485 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
 		
 		~PCB_CALCULATOR_FRAME_BASE();
 	

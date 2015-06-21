@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -734,7 +734,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizerSubstPrms->Add( m_SubsPrm9_choiceUnit, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	sbSubstrateBoxSizer->Add( fgSizerSubstPrms, 1, wxEXPAND, 5 );
+	sbSubstrateBoxSizer->Add( fgSizerSubstPrms, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	bMiddleSizer->Add( sbSubstrateBoxSizer, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -762,7 +762,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizeCmpPrms->Add( m_choiceUnit_Frequency, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	sbCmpPrmsSizer->Add( fgSizeCmpPrms, 0, wxEXPAND, 5 );
+	sbCmpPrmsSizer->Add( fgSizeCmpPrms, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	bMiddleSizer->Add( sbCmpPrmsSizer, 0, wxEXPAND|wxTOP, 5 );
@@ -834,7 +834,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizerPhysPrms->Add( 0, 0, 0, 0, 5 );
 	
 	
-	sbRightBoxizer->Add( fgSizerPhysPrms, 0, wxEXPAND, 5 );
+	sbRightBoxizer->Add( fgSizerPhysPrms, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	btranslineRightSizer->Add( sbRightBoxizer, 0, wxBOTTOM|wxEXPAND, 5 );
@@ -915,10 +915,10 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizerResults->Add( m_choiceUnit_ElecPrm3, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	sbElectricalResultsSizer->Add( fgSizerResults, 0, wxEXPAND, 5 );
+	sbElectricalResultsSizer->Add( fgSizerResults, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
-	bRightSizer->Add( sbElectricalResultsSizer, 0, wxEXPAND, 5 );
+	bRightSizer->Add( sbElectricalResultsSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	wxStaticBoxSizer* sbMessagesSizer;
 	sbMessagesSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelTransline, wxID_ANY, _("Results:") ), wxVERTICAL );
@@ -998,7 +998,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelTransline->SetSizer( bSizeTransline );
 	m_panelTransline->Layout();
 	bSizeTransline->Fit( m_panelTransline );
-	m_Notebook->AddPage( m_panelTransline, _("TransLine"), true );
+	m_Notebook->AddPage( m_panelTransline, _("TransLine"), false );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbSizerAtt;
 	sbSizerAtt = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("label") ), wxHORIZONTAL );
@@ -1076,7 +1076,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerAttButt = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonAlcAtt = new wxButton( m_panelAttenuators, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALL, 5 );
+	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapAnalyse1 = new wxStaticBitmap( m_panelAttenuators, wxID_ANY, wxBitmap( arrow_bottom_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerAttButt->Add( m_bitmapAnalyse1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
@@ -1130,7 +1130,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizerAttResults->Add( m_attR3Unit, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	sbSizerAttValues->Add( fgSizerAttResults, 0, wxEXPAND, 5 );
+	sbSizerAttValues->Add( fgSizerAttResults, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
 	bMiddleSizerAtt->Add( sbSizerAttValues, 0, wxEXPAND, 5 );
@@ -1139,8 +1139,8 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_staticTextAttMsg->Wrap( -1 );
 	bMiddleSizerAtt->Add( m_staticTextAttMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_Attenuator_Messages = new wxTextCtrl( m_panelAttenuators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	bMiddleSizerAtt->Add( m_Attenuator_Messages, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_Attenuator_Messages = new wxHtmlWindow( m_panelAttenuators, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER );
+	bMiddleSizerAtt->Add( m_Attenuator_Messages, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	sbSizerAtt->Add( bMiddleSizerAtt, 0, wxEXPAND, 5 );
@@ -1160,7 +1160,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelAttenuators->SetSizer( sbSizerAtt );
 	m_panelAttenuators->Layout();
 	sbSizerAtt->Fit( m_panelAttenuators );
-	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), false );
+	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), true );
 	m_panelColorCode = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelColorCode;
 	bSizerPanelColorCode = new wxBoxSizer( wxHORIZONTAL );
