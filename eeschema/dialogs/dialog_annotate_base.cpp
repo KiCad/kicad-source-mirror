@@ -169,8 +169,8 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizerChoiceClose;
 	bSizerChoiceClose = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_cbAutoCloseDlg = new wxCheckBox( this, wxID_ANY, _("Automatically close this dialog"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerChoiceClose->Add( m_cbAutoCloseDlg, 0, wxALL, 5 );
+	m_cbKeepDlgOpen = new wxCheckBox( this, wxID_ANY, _("Keep this dialog open"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerChoiceClose->Add( m_cbKeepDlgOpen, 0, wxALL, 5 );
 	
 	
 	bSizerChoiceClose->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -181,8 +181,9 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizerChoiceSilentMode;
 	bSizerChoiceSilentMode = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_cbUseSilentMode = new wxCheckBox( this, wxID_ANY, _("Silent mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerChoiceSilentMode->Add( m_cbUseSilentMode, 0, wxALL, 5 );
+	m_cbAskForConfirmation = new wxCheckBox( this, wxID_ANY, _("Always ask for confirmation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbAskForConfirmation->SetValue(true); 
+	bSizerChoiceSilentMode->Add( m_cbAskForConfirmation, 0, wxALL, 5 );
 	
 	
 	bSizerChoiceSilentMode->Add( 0, 0, 1, wxEXPAND, 5 );
