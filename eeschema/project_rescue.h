@@ -56,6 +56,8 @@ enum RESCUE_TYPE
 class RESCUE_CANDIDATE
 {
 public:
+    virtual ~RESCUE_CANDIDATE() {}
+
     /**
      * Function GetRequestedName
      * Get the name that was originally requested in the schematic

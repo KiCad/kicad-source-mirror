@@ -487,10 +487,6 @@ void RESCUER::UndoRescues()
 
 bool SCH_EDIT_FRAME::RescueProject( bool aRunningOnDemand )
 {
-    // Data that will be used throughout the operation
-    std::vector<RESCUE_CANDIDATE>   candidates;
-    wxString                part_name_suffix;
-
     RESCUER rescuer( *this, Prj() );
 
     rescuer.FindCandidates();
