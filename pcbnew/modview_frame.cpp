@@ -96,6 +96,22 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
+/* Note:
+ * FOOTPRINT_VIEWER_FRAME can be build in "modal mode", or as a usual frame.
+ * In modal mode:
+ *  a tool to export the selected footprint is shown in the toolbar
+ *  the style is wxSTAY_ON_TOP on Windows and wxFRAME_FLOAT_ON_PARENT on unix
+ * reason:
+ * the parent is usually the kicad window manager (not easy to change)
+ * On windows, when the frame with stype wxFRAME_FLOAT_ON_PARENT is displayed
+ * its parent frame is brought to the foreground, on the top of the calling frame.
+ * and stays displayed when closing the FOOTPRINT_VIEWER_FRAME frame.
+ * this issue does not happen on unix
+ *
+ * So we use wxSTAY_ON_TOP on Windows, and wxFRAME_FLOAT_ON_PARENT on unix
+ * to simulate a dialog called by ShowModal.
+ */
+
 
 #define FOOTPRINT_VIEWER_FRAME_NAME     wxT( "ModViewFrame" )
 
@@ -104,7 +120,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
             aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
+#ifdef __WINDOWS__
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP :
+#else
                 KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
+#endif
                 KICAD_DEFAULT_DRAWFRAME_STYLE,
             GetFootprintViewerFrameName() )
 {
@@ -257,9 +277,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     Zoom_Automatique( false );
 #endif
 
-    Show( true );
-
     UseGalCanvas( parentFrame->IsGalCanvasActive() );
+
+    if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
+        Show( true );
+
 }
 
 

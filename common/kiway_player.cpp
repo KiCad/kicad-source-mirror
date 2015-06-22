@@ -140,18 +140,6 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
 
 bool KIWAY_PLAYER::Destroy()
 {
-    // Reparent is needed on Windows to leave the modal parent on top with focus
-    // However it works only if the caller is a main frame, not a dialog.
-    // (application crashes if the new parent is a wxDialog
-#ifdef __WINDOWS__
-    if( m_modal_resultant_parent && GetParent() != m_modal_resultant_parent )
-    {
-        EDA_BASE_FRAME* parent = dynamic_cast<EDA_BASE_FRAME*>(m_modal_resultant_parent);
-        if( parent )
-            Reparent( m_modal_resultant_parent );
-    }
-#endif
-
     return EDA_BASE_FRAME::Destroy();
 }
 
