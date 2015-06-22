@@ -20,7 +20,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_lblInfo->Wrap( 500 );
 	bSizerMain->Add( m_lblInfo, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Symbols with cache/library conflicts:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Symbols to update:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
 	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	

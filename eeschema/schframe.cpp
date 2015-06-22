@@ -243,7 +243,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_RUN_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
-    EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueCached )
+    EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
 
     EVT_TOOL( ID_RUN_PCB, SCH_EDIT_FRAME::OnOpenPcbnew )
     EVT_TOOL( ID_RUN_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenPcbModuleEditor )
@@ -1120,9 +1120,9 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     }
 }
 
-void SCH_EDIT_FRAME::OnRescueCached( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnRescueProject( wxCommandEvent& event )
 {
-    RescueCacheConflicts( true );
+    RescueProject( true );
 }
 
 void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )

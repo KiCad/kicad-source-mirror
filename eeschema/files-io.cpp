@@ -43,7 +43,7 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <wildcards_and_files_ext.h>
-#include <lib_cache_rescue.h>
+#include <project_rescue.h>
 #include <eeschema_config.h>
 
 
@@ -307,7 +307,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         UpdateFileHistory( fullFileName );
 
-        // Check to see whether some old, cached library parts need to be rescued
+        // Check to see whether some old library parts need to be rescued
         // Only do this if RescueNeverShow was not set.
         wxConfigBase *config = Kiface().KifaceSettings();
         bool rescueNeverShow = false;
@@ -315,7 +315,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( !rescueNeverShow )
         {
-            if( RescueCacheConflicts( false ) )
+            if( RescueProject( false ) )
             {
                 GetScreen()->CheckComponentsToPartsLinks();
                 GetScreen()->TestDanglingEnds();

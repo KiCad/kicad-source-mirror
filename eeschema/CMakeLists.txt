@@ -114,7 +114,6 @@ set( EESCHEMA_SRCS
     libedit_undo_redo.cpp
     lib_arc.cpp
     lib_bezier.cpp
-    lib_cache_rescue.cpp
     lib_circle.cpp
     lib_collectors.cpp
     lib_draw_item.cpp
@@ -139,6 +138,7 @@ set( EESCHEMA_SRCS
     plot_schematic_PS.cpp
     plot_schematic_PDF.cpp
     plot_schematic_SVG.cpp
+    project_rescue.cpp
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp

@@ -32,7 +32,7 @@
 #include <set>
 #include <vector>
 #include <boost/foreach.hpp>
-#include <lib_cache_rescue.h>
+#include <project_rescue.h>
 #include <eeschema_config.h>
 
 class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
@@ -43,23 +43,18 @@ public:
      * This dialog asks the user which rescuable, cached parts he wants to rescue.
      * Any rejects will be pruned from aCandidates.
      * @param aCaller - the SCH_EDIT_FRAME calling this
-     * @param aCandidates - the list of RESCUE_CANDIDATES
-     * @param aComponents - a vector of all the components in the schematic
+     * @param aRescuer - the active RESCUER instance
      * @param aAskShowAgain - if true, a "Never Show Again" button will be included
      */
-    DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, std::vector<RESCUE_CANDIDATE>& aCandidates,
-            std::vector<SCH_COMPONENT*>& aComponents, bool aAskShowAgain );
+    DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescuer, bool aAskShowAgain );
 
     ~DIALOG_RESCUE_EACH();
 
 private:
     SCH_EDIT_FRAME* m_Parent;
     wxConfigBase*   m_Config;
-    std::vector<RESCUE_CANDIDATE>* m_Candidates;
-    std::vector<SCH_COMPONENT*>* m_Components;
+    RESCUER*        m_Rescuer;
     bool            m_AskShowAgain;
-
-    bool m_insideUpdateEvent;
 
     bool TransferDataToWindow();
     bool TransferDataFromWindow();
@@ -75,31 +70,22 @@ private:
 };
 
 
-DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, std::vector<RESCUE_CANDIDATE>& aCandidates,
-        std::vector<SCH_COMPONENT*>& aComponents, bool aAskShowAgain )
-
+DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescuer,
+            bool aAskShowAgain )
     : DIALOG_RESCUE_EACH_BASE( aParent ),
       m_Parent( aParent ),
-      m_Candidates( &aCandidates ),
-      m_Components( &aComponents ),
-      m_AskShowAgain( aAskShowAgain ),
-      m_insideUpdateEvent( false )
+      m_Rescuer( &aRescuer ),
+      m_AskShowAgain( aAskShowAgain )
 {
     m_Config = Kiface().KifaceSettings();
     m_stdButtonsOK->SetDefault();
 
     // Set the info message, customized to include the proper suffix.
-    wxString info_message;
-    info_message.Printf(
-        _( "This project uses symbols that no longer match the ones in the system libraries.\n"
-           "Using this tool, you can rescue these cached symbols into a new library.\n"
-           "\n"
-           "Choose \"Rescue\" for any parts you would like to save from this project's cache,\n"
-           "or press \"Cancel\" to allow the symbols to be updated to the new versions.\n"
-           "\n"
-           "All rescued components will be renamed with a new suffix of \"-RESCUE-%s\"\n"
-           "to avoid naming conflicts." ),
-        Prj().GetProjectName() );
+    wxString info_message =
+        _( "It looks like this project was made using older schematic component libraries.\n"
+           "Some parts may need to be relinked to a different symbol name, and some symbols\n"
+           "may need to be \"rescued\" into a new library.\n"
+           "The following changes are recommended to update the project.\n" );
     m_lblInfo->SetLabel( info_message );
 }
 
@@ -114,8 +100,9 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_ListOfConflicts->AppendToggleColumn( _( "Rescue symbol" ) );
-    m_ListOfConflicts->AppendTextColumn( _( "Symbol name" ) );
+    m_ListOfConflicts->AppendToggleColumn( _( "Accept" ) );
+    m_ListOfConflicts->AppendTextColumn( _( "Symbol" ) );
+    m_ListOfConflicts->AppendTextColumn( _( "Action" ) );
     m_ListOfInstances->AppendTextColumn( _( "Reference" ) );
     m_ListOfInstances->AppendTextColumn( _( "Value" ) );
     PopulateConflictList();
@@ -136,11 +123,13 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
 void DIALOG_RESCUE_EACH::PopulateConflictList()
 {
     wxVector<wxVariant> data;
-    BOOST_FOREACH( RESCUE_CANDIDATE& each_candidate, *m_Candidates )
+    BOOST_FOREACH( RESCUE_CANDIDATE& each_candidate, m_Rescuer->m_all_candidates )
     {
         data.clear();
         data.push_back( wxVariant( true ) );
-        data.push_back( each_candidate.requested_name );
+        data.push_back( each_candidate.GetRequestedName() );
+        data.push_back( each_candidate.GetActionDescription() );
+
         m_ListOfConflicts->AppendItem( data );
     }
 }
@@ -155,12 +144,12 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     if( row == wxNOT_FOUND )
         row = 0;
 
-    RESCUE_CANDIDATE& selected_part = (*m_Candidates)[row];
+    RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
 
     wxVector<wxVariant> data;
-    BOOST_FOREACH( SCH_COMPONENT* each_component, *m_Components )
+    BOOST_FOREACH( SCH_COMPONENT* each_component, *m_Rescuer->GetComponents() )
     {
-        if( each_component->GetPartName() != selected_part.requested_name )
+        if( each_component->GetPartName() != selected_part.GetRequestedName() )
             continue;
 
         SCH_FIELD* valueField = each_component->GetField( 1 );
@@ -181,9 +170,10 @@ void DIALOG_RESCUE_EACH::OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEven
     if( row == wxNOT_FOUND )
         row = 0;
 
-    RESCUE_CANDIDATE& selected_part = (*m_Candidates)[row];
+    RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
 
-    renderPreview( selected_part.cache_candidate, 0, m_componentViewOld );
+    if( selected_part.GetCacheCandidate() )
+        renderPreview( selected_part.GetCacheCandidate(), 0, m_componentViewOld );
 }
 
 
@@ -194,9 +184,10 @@ void DIALOG_RESCUE_EACH::OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEv
     if( row == wxNOT_FOUND )
         row = 0;
 
-    RESCUE_CANDIDATE& selected_part = (*m_Candidates)[row];
+    RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
 
-    renderPreview( selected_part.lib_candidate, 0, m_componentViewNew );
+    if( selected_part.GetLibCandidate() )
+        renderPreview( selected_part.GetLibCandidate(), 0, m_componentViewNew );
 }
 
 
@@ -269,19 +260,15 @@ bool DIALOG_RESCUE_EACH::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    std::vector<RESCUE_CANDIDATE>::iterator it = m_Candidates->begin();
-    for( size_t index = 0; it != m_Candidates->end(); ++index )
+    for( size_t index = 0; index < m_Rescuer->GetCandidateCount(); ++index )
     {
         wxVariant val;
         m_ListOfConflicts->GetValue( val, index, 0 );
         bool rescue_part = val.GetBool();
 
-        if( !rescue_part )
-            m_Candidates->erase( it );
-        else
-            ++it;
+        if( rescue_part )
+            m_Rescuer->m_chosen_candidates.push_back( &m_Rescuer->m_all_candidates[index] );
     }
-
     return true;
 }
 
@@ -299,7 +286,7 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
     if( resp == wxID_YES )
     {
         m_Config->Write( RESCUE_NEVER_SHOW_KEY, true );
-        m_Candidates->clear();
+        m_Rescuer->m_chosen_candidates.clear();
         Close();
     }
 }
@@ -307,14 +294,13 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 
 void DIALOG_RESCUE_EACH::OnCancelClick( wxCommandEvent& aEvent )
 {
-    m_Candidates->clear();
+    m_Rescuer->m_chosen_candidates.clear();
     DIALOG_RESCUE_EACH_BASE::OnCancelClick( aEvent );
 }
 
 
-int InvokeDialogRescueEach( SCH_EDIT_FRAME* aCaller, std::vector<RESCUE_CANDIDATE>& aCandidates,
-        std::vector<SCH_COMPONENT*>& aComponents, bool aAskShowAgain )
+int InvokeDialogRescueEach( SCH_EDIT_FRAME* aCaller, RESCUER& aRescuer, bool aAskShowAgain )
 {
-    DIALOG_RESCUE_EACH dlg( aCaller, aCandidates, aComponents, aAskShowAgain );
+    DIALOG_RESCUE_EACH dlg( aCaller, aRescuer, aAskShowAgain );
     return dlg.ShowModal();
 }
