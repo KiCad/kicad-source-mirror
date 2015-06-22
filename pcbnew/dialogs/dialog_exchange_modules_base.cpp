@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,6 +38,9 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	m_OldValue->SetMaxLength( 0 ); 
 	bLeftSizer->Add( m_OldValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
+	bLeftSizer->Add( 5, 10, 1, wxEXPAND, 5 );
+	
 	m_staticText8 = new wxStaticText( this, wxID_ANY, _("New footprint"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
 	bLeftSizer->Add( m_staticText8, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -59,22 +62,25 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	bMiddleSizer->Add( m_Selection, 0, wxALL, 5 );
 	
 	
-	bUpperSizer->Add( bMiddleSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bUpperSizer->Add( bMiddleSizer, 0, 0, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_OKbutton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_OKbutton, 0, wxALL|wxEXPAND, 5 );
+	bRightSizer->Add( m_OKbutton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Quitbutton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_Quitbutton, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonCmpList = new wxButton( this, wxID_ANY, _("Rebuild .cmp List"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonCmpList = new wxButton( this, wxID_ANY, _("Export .cmp List"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonCmpList, 0, wxALL|wxEXPAND, 5 );
 	
-	m_Browsebutton = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_Browsebutton, 0, wxALL|wxEXPAND, 5 );
+	m_Browsebutton = new wxButton( this, wxID_ANY, _("Browse FP List"), wxDefaultPosition, wxDefaultSize, 0 );
+	bRightSizer->Add( m_Browsebutton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_buttonFPViewer = new wxButton( this, wxID_ANY, _("FP Viewer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bRightSizer->Add( m_buttonFPViewer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bUpperSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -94,7 +100,6 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_Selection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnSelectionClicked ), NULL, this );
@@ -102,6 +107,7 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	m_Quitbutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnQuit ), NULL, this );
 	m_buttonCmpList->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::RebuildCmpList ), NULL, this );
 	m_Browsebutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::BrowseAndSelectFootprint ), NULL, this );
+	m_buttonFPViewer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
 }
 
 DIALOG_EXCHANGE_MODULE_BASE::~DIALOG_EXCHANGE_MODULE_BASE()
@@ -112,5 +118,6 @@ DIALOG_EXCHANGE_MODULE_BASE::~DIALOG_EXCHANGE_MODULE_BASE()
 	m_Quitbutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnQuit ), NULL, this );
 	m_buttonCmpList->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::RebuildCmpList ), NULL, this );
 	m_Browsebutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::BrowseAndSelectFootprint ), NULL, this );
+	m_buttonFPViewer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
 	
 }

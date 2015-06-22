@@ -76,15 +76,35 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
+/* Note:
+ * LIB_VIEW_FRAME can be build in "modal mode", or as a usual frame.
+ * In modal mode:
+ *  a tool to export the selected symbol is shown in the toolbar
+ *  the style is wxSTAY_ON_TOP on Windows and wxFRAME_FLOAT_ON_PARENT on unix
+ * reason:
+ * the parent is usually the kicad window manager (not easy to change)
+ * On windows, when the frame with stype wxFRAME_FLOAT_ON_PARENT is displayed
+ * its parent frame is brought to the foreground, on the top of the calling frame.
+ * and stays displayed when closing the LIB_VIEW_FRAME frame.
+ * this issue does not happen on unix.
+ *
+ * So we use wxSTAY_ON_TOP on Windows, and wxFRAME_FLOAT_ON_PARENT on unix
+ * to simulate a dialog called by ShowModal.
+ */
+
 #define LIB_VIEW_FRAME_NAME wxT( "ViewlibFrame" )
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
         PART_LIB* aLibrary ) :
     SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
-            aFrameType==FRAME_SCH_VIEWER ?
-                KICAD_DEFAULT_DRAWFRAME_STYLE :
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
+            aFrameType==FRAME_SCH_VIEWER_MODAL ?
+#ifdef __WINDOWS__
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP :
+#else
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
+#endif
+                KICAD_DEFAULT_DRAWFRAME_STYLE,
             GetLibViewerFrameName() )
 {
     wxASSERT( aFrameType==FRAME_SCH_VIEWER || aFrameType==FRAME_SCH_VIEWER_MODAL );
@@ -210,7 +230,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     Zoom_Automatique( false );
 #endif
 
-    Show( true );
+    if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
+        Show( true );
 }
 
 
