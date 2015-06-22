@@ -50,6 +50,7 @@
 
 // a key to store the default Kicad Github libs URL
 #define KICAD_FPLIBS_URL_KEY wxT( "kicad_fplib_url" )
+#define KICAD_FPLIBS_LAST_DOWNLOAD_DIR wxT( "kicad_fplib_last_download_dir" )
 
 // Filters for the file picker
 static const int FILTER_COUNT = 4;
@@ -303,8 +304,19 @@ WIZARD_FPLIB_TABLE::WIZARD_FPLIB_TABLE( wxWindow* aParent ) :
 
     // Restore the Github url
     wxString githubUrl;
+
     wxConfigBase* cfg = Pgm().CommonSettings();
     cfg->Read( KICAD_FPLIBS_URL_KEY, &githubUrl );
+    cfg->Read( KICAD_FPLIBS_LAST_DOWNLOAD_DIR, &m_lastGithubDownloadDirectory );
+
+
+    if( !m_lastGithubDownloadDirectory.IsEmpty() )
+    {
+        setDownloadDir( m_lastGithubDownloadDirectory );
+        m_filePicker->SetPath( m_lastGithubDownloadDirectory );
+    } else {
+        m_lastGithubDownloadDirectory = default_path;
+    }
 
     if( githubUrl.IsEmpty() )
         githubUrl = wxT( "https://github.com/KiCad" );
@@ -531,6 +543,10 @@ void WIZARD_FPLIB_TABLE::OnBrowseButtonClick( wxCommandEvent& aEvent )
     if( !path.IsEmpty() && wxDirExists( path ) )
     {
         setDownloadDir( path );
+
+        wxConfigBase* cfg = Pgm().CommonSettings();
+        cfg->Write( KICAD_FPLIBS_LAST_DOWNLOAD_DIR, path );
+
         updateGithubControls();
     }
 }
@@ -613,6 +629,8 @@ bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
             wxMkdir( libdst_name );
 
         pdlg.Update( ii, libsrc_name );
+        pdlg.Refresh();
+        pdlg.Update();
 
         try
         {

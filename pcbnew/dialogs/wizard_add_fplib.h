@@ -273,4 +273,7 @@ protected:
     // determine what's the real cause of the event. Therefore here we store the number of the
     // selected file type filter.
     int m_selectedFilter;
+
+    // path to the most recently used download directory from Github.
+    wxString m_lastGithubDownloadDirectory;
 };
