@@ -286,7 +286,7 @@ struct CompareEdges
     }
 };
 
-typedef std::multiset<FractureEdge *, CompareEdges> FractureEdgeSet;
+typedef std::vector<FractureEdge*> FractureEdgeSet;
 
 static int processEdge ( FractureEdgeSet& edges, FractureEdge* edge )
 {
@@ -349,32 +349,34 @@ static int processEdge ( FractureEdgeSet& edges, FractureEdge* edge )
         else
             return 0;
 
-        FractureEdge split_1 ( true, (*e_nearest)->m_p1, IntPoint(x_nearest, y) );
-        FractureEdge *lead1 = new FractureEdge(true, IntPoint(x_nearest, y), IntPoint(x, y) );
-        FractureEdge *lead2 = new FractureEdge(true, IntPoint(x, y), IntPoint(x_nearest, y) );
-        FractureEdge *split_2 = new FractureEdge ( true, IntPoint(x_nearest, y), (*e_nearest)->m_p2 );
+        bool connFlag = (*e_nearest)->m_connected;
 
-        edges.insert(split_2);
-        edges.insert(lead1);
-        edges.insert(lead2);
+        FractureEdge split_1 ( connFlag, (*e_nearest)->m_p1, IntPoint(x_nearest, y) );
+        FractureEdge *lead1 = new FractureEdge( connFlag, IntPoint(x_nearest, y), IntPoint(x, y) );
+        FractureEdge *lead2 = new FractureEdge( connFlag, IntPoint(x, y), IntPoint(x_nearest, y) );
+        FractureEdge *split_2 = new FractureEdge ( connFlag, IntPoint(x_nearest, y), (*e_nearest)->m_p2 );
+
+        edges.push_back(split_2);
+        edges.push_back(lead1);
+        edges.push_back(lead2);
 
         FractureEdge* link = (*e_nearest)->m_next;
 
         (*e_nearest)->m_p1 = split_1.m_p1;
         (*e_nearest)->m_p2 = IntPoint(x_nearest, y);
-        (*e_nearest)->m_connected = true;//split_1->m_connected;
+        (*e_nearest)->m_connected = connFlag;
         (*e_nearest)->m_next = lead1;
         lead1->m_next = edge;
 
         FractureEdge *last;
         for(last = edge; last->m_next != edge; last = last->m_next)
         {
-            last->m_connected = true;
+            last->m_connected = connFlag;
             last->m_owner = NULL;
         }
 
         last->m_owner = NULL;
-        last->m_connected = true;
+        last->m_connected = connFlag;
         last->m_next = lead2;
         lead2->m_next = split_2;
         split_2->m_next = link;
@@ -418,7 +420,7 @@ void SHAPE_POLY_SET::fractureSingle( ClipperLib::Paths& paths )
                 fe->m_next = first_edge;
 
             prev = fe;
-            edges.insert ( fe );
+            edges.push_back ( fe );
 
             if(!fe->m_connected)
                 num_unconnected++;
@@ -429,42 +431,39 @@ void SHAPE_POLY_SET::fractureSingle( ClipperLib::Paths& paths )
 
     while(1)
     {
-        bool found = false;
+        int n_unconnected = 0;
+
+        for(FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
+        {
+            if(!(*i)->m_connected)
+                n_unconnected++;
+        }
+
+        if(!n_unconnected)
+            break;
 
         for(FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
         {
             if(!(*i)->m_connected)
             {
-                if (processEdge ( edges, *i ) > 0)
-                    found = true;
+                if (processEdge ( edges, *i ) )
+                    break;
             }
         }
-        if(!found)
-            break;
     }
 
-    IntPoint prev = root->m_p1;
     paths.clear();
     Path newPath;
-    newPath.push_back(prev);
-    FractureEdge *e, *e_next;
-    IntPoint p;
+    FractureEdge *e;
 
-    e = root;
+    for(e = root; e->m_next != root; e = e->m_next )
+        newPath.push_back(e->m_p1);
 
-    do {
-        p = e->m_p1;
-        newPath.push_back(p);
-        prev = p;
-        e_next = e->m_next;
-        delete e;
-        e = e_next;
-    } while(e->m_next != root);
+    newPath.push_back(e->m_p1);
 
-    p = e->m_p1;
+    for(FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
+        delete *i;
 
-    delete e;
-    newPath.push_back(p);
     paths.push_back(newPath);
 }
 
