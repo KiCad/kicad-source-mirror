@@ -62,6 +62,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     COLOR4D color = rs->GetColor( NULL, ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
     int highlightedNet = rs->GetHighlightNetCode();
 
+    // Dynamic ratsnest (for e.g. dragged items)
     for( int i = 1; i < m_data->GetNetCount(); ++i )
     {
         RN_NET& net = m_data->GetNet( i );
@@ -75,8 +76,11 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
         BOOST_FOREACH( const RN_NODE_PTR& node, net.GetSimpleNodes() )
         {
-            RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() &&
-                                                         DIFFERENT_TAG( RN_NODE::TAG_UNCONNECTED ) );
+            // Skipping nodes with higher reference count avoids displaying redundant lines
+            if( node->GetRefCount() > 1 )
+                continue;
+
+            RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() );
 
             if( dest )
             {
@@ -84,9 +88,6 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
                 VECTOR2D end( dest->GetX(), dest->GetY() );
 
                 aGal->DrawLine( origin, end );
-
-                // Avoid duplicate destinations for ratsnest lines by storing already used nodes
-                net.AddBlockedNode( dest );
             }
         }
 

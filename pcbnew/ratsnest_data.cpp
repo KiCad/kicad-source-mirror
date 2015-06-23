@@ -680,6 +680,7 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode, int aN
     closest.sort( boost::bind( sortDistance, boost::cref( aNode ), _1, _2 ) );
 
     // Remove the first node (==aNode), as it is surely located within the smallest distance
+    assert( closest.front() == aNode );
     closest.pop_front();
 
     // Trim the result to the asked size
@@ -704,6 +705,7 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode,
     closest.sort( boost::bind( sortDistance, boost::cref( aNode ), _1, _2 ) );
 
     // Remove the first node (==aNode), as it is surely located within the smallest distance
+    assert( closest.front() == aNode );
     closest.pop_front();
 
     // Filter out by condition
@@ -719,17 +721,15 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode,
 
 void RN_NET::AddSimple( const BOARD_CONNECTED_ITEM* aItem )
 {
-    std::list<RN_NODE_PTR> nodes = GetNodes( aItem );
+    BOOST_FOREACH( RN_NODE_PTR node, GetNodes( aItem ) )
+    {
+        // Block all nodes, so they do not become targets for dynamic ratsnest lines
+        AddBlockedNode( node );
 
-    if( nodes.empty() )
-        return;
-
-    int tag = nodes.front()->GetTag();
-
-    if( m_simpleItems.count( tag ) )
-        return;     // we already have a simple item for this tag
-
-    m_simpleItems[tag] = aItem;
+        // Filter out junctions
+        if( node->GetRefCount() == 1 )
+            m_simpleNodes.insert( node );
+    }
 }
 
 
@@ -816,42 +816,13 @@ void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYP
 }
 
 
-boost::unordered_set<RN_NODE_PTR> RN_NET::GetSimpleNodes() const
-{
-    boost::unordered_set<RN_NODE_PTR> nodes;
-
-    BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_simpleItems | boost::adaptors::map_values )
-    {
-        std::list<RN_NODE_PTR> n = GetNodes( item );
-
-        if( n.empty() )
-            return nodes;
-
-        nodes.insert( n.front() ); // one node is enough, the rest belong to the same item
-        n.front()->SetFlag( true );
-    }
-
-    return nodes;
-}
-
-
 void RN_NET::ClearSimple()
 {
-    BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_simpleItems | boost::adaptors::map_values )
-    {
-        std::list<RN_NODE_PTR> n = GetNodes( item );
-
-        if( n.empty() )
-            return;
-
-        n.front()->SetFlag( false );
-    }
-
     BOOST_FOREACH( const RN_NODE_PTR& node, m_blockedNodes )
         node->SetFlag( false );
 
     m_blockedNodes.clear();
-    m_simpleItems.clear();
+    m_simpleNodes.clear();
 }
 
 

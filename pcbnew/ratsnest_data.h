@@ -506,7 +506,7 @@ public:
      */
     inline void AddBlockedNode( RN_NODE_PTR& aNode )
     {
-        m_blockedNodes.push_back( aNode );
+        m_blockedNodes.insert( aNode );
         aNode->SetFlag( true );
     }
 
@@ -516,7 +516,10 @@ public:
      * ratsnest line per node).
      * @return list of nodes for which ratsnest is drawn in simple mode.
      */
-    boost::unordered_set<RN_NODE_PTR> GetSimpleNodes() const;
+    inline const boost::unordered_set<RN_NODE_PTR>& GetSimpleNodes() const
+    {
+        return m_simpleNodes;
+    }
 
     /**
      * Function ClearSimple()
@@ -556,10 +559,10 @@ protected:
     boost::shared_ptr< std::vector<RN_EDGE_MST_PTR> > m_rnEdges;
 
     ///> List of nodes which will not be used as ratsnest target nodes.
-    std::deque<RN_NODE_PTR> m_blockedNodes;
+    boost::unordered_set<RN_NODE_PTR> m_blockedNodes;
 
-    ///> Map that stores items to be computed in simple mode, keyed by their tags.
-    boost::unordered_map<int, const BOARD_CONNECTED_ITEM*> m_simpleItems;
+    ///> Nodes to be displayed using the simplified ratsnest algorithm.
+    boost::unordered_set<RN_NODE_PTR> m_simpleNodes;
 
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
