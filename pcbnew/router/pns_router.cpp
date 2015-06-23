@@ -196,7 +196,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     solid->SetNet( aPad->GetNetCode() );
     solid->SetParent( aPad );
 
-    wxPoint wx_c = aPad->GetPosition();
+    wxPoint wx_c = aPad->ShapePos();
     wxSize  wx_sz = aPad->GetSize();
 
     VECTOR2I c( wx_c.x, wx_c.y );
