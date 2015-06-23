@@ -43,6 +43,7 @@
 #include <sch_text.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+#include <trigo.h>
 
 
 static void AbortCreateNewLine( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
@@ -50,6 +51,53 @@ static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
 
 static DLIST< SCH_ITEM > s_wires;       // when creating a new set of wires,
                                         // stores here the new wires.
+
+
+/**
+ * In a contiguous list of wires, remove wires that backtrack over the previous
+ * wire. Example:
+ *
+ * Wire is added:
+ * ---------------------------------------->
+ *
+ * A second wire backtracks over it:
+ * -------------------<====================>
+ *
+ * RemoveBacktracks is called:
+ * ------------------->
+ */
+static void RemoveBacktracks( DLIST<SCH_ITEM>& aWires )
+{
+    SCH_LINE* last_line = NULL;
+
+    EDA_ITEM* first = aWires.GetFirst();
+    for( EDA_ITEM* p = first; p; )
+    {
+        SCH_LINE *line = dynamic_cast<SCH_LINE*>( p );
+        if( !line )
+        {
+            wxFAIL_MSG( "RemoveBacktracks() requires SCH_LINE items" );
+            break;
+        }
+        p = line->Next();
+
+        if( last_line )
+        {
+            wxASSERT_MSG( last_line->GetEndPoint() == line->GetStartPoint(),
+                    "RemoveBacktracks() requires contiguous lines" );
+            if( IsPointOnSegment( last_line->GetStartPoint(), line->GetStartPoint(),
+                        line->GetEndPoint() ) )
+            {
+                last_line->SetEndPoint( line->GetEndPoint() );
+                delete s_wires.Remove( line );
+            }
+            else
+                last_line = line;
+        }
+        else
+            last_line = line;
+    }
+}
 
 
 /**
@@ -260,6 +308,9 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     }
 
     SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
+
+    // Remove segments backtracking over others
+    RemoveBacktracks( s_wires );
 
     // Add the new wires
     screen->Append( s_wires );
