@@ -66,7 +66,7 @@ int InvokeDialogRescueEach( SCH_EDIT_FRAME* aCaller, RESCUER& aRescuer, bool aAs
 
 /// Create and show DIALOG_ANNOTATE and return whatever
 /// DIALOG_ANNOTATE::ShowModal() returns.
-int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller );
+int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, wxString message = "" );
 
 /// Create the modeless DIALOG_ERC and show it, return something to
 /// destroy or close it.  The dialog will have ID_DIALOG_ERC from id.h

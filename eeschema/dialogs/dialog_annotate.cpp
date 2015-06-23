@@ -44,6 +44,7 @@
 
 class wxConfigBase;
 
+namespace {
 
 /**
  * Class DIALOG_ANNOTATE
@@ -51,7 +52,7 @@ class wxConfigBase;
 class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE
 {
 public:
-    DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent );
+    DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, wxString message );
 
 
 private:
@@ -96,12 +97,15 @@ private:
     }
 };
 
+}  // anonymous namespace
 
 
-DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
+DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, wxString message )
     : DIALOG_ANNOTATE_BASE( parent )
 {
     m_Parent = parent;
+    m_userMessage->SetLabelText( message );
+    m_userMessage->Show( !message.empty() );
 
     InitValues();
     Layout();
@@ -310,9 +314,9 @@ int DIALOG_ANNOTATE::GetAnnotateAlgo()
 }
 
 
-int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller )
+int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, wxString message )
 {
-    DIALOG_ANNOTATE dlg( aCaller );
+    DIALOG_ANNOTATE dlg( aCaller, message );
 
     return dlg.ShowModal();
 }

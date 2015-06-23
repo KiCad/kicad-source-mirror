@@ -50,6 +50,7 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
+		wxStaticText* m_userMessage;
 		wxStaticText* m_staticTextScope;
 		wxRadioButton* m_rbEntireSchematic;
 		wxRadioButton* m_rbCurrPage;

@@ -44,7 +44,7 @@
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <algorithm>
-
+#include <invoke_sch_dialog.h>
 #include <boost/foreach.hpp>
 
 #define IS_WIRE false
@@ -63,13 +63,10 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
     // Performs some controls:
     if( CheckAnnotate( NULL, 0 ) )
     {
-        if( !IsOK( NULL, _( "Some items are not annotated\n"
-                            "Do you want to annotate schematic?" ) ) )
-            return false;
-
-        // Schematic must be annotated: call Annotate dialog:
-        wxCommandEvent event;
-        OnAnnotate( event );
+        // Schematic must be annotated: call Annotate dialog and tell
+        // the user why that is.
+        InvokeDialogAnnotate( this,  _( "Exporting the netlist requires a "
+                                        "completely\nannotated schematic." ) );
 
         if( CheckAnnotate( NULL, 0 ) )
             return false;

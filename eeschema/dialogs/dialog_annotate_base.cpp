@@ -19,6 +19,12 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxVERTICAL );
 	
+	m_userMessage = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_userMessage->Wrap( 1 );
+	m_userMessage->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bupperSizer->Add( m_userMessage, 0, wxALL, 5 );
+	
 	m_staticTextScope = new wxStaticText( this, wxID_ANY, _("Scope"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextScope->Wrap( -1 );
 	m_staticTextScope->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
