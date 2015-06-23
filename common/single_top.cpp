@@ -143,6 +143,8 @@ struct APP_SINGLE_TOP : public wxApp
 
     int  OnExit()           // overload wxApp virtual
     {
+        Pgm().OnPgmExit();
+
         return wxApp::OnExit();
     }
 
@@ -168,8 +170,6 @@ struct APP_SINGLE_TOP : public wxApp
         {
             wxLogError( wxT( "Unhandled exception of unknown type" ) );
         }
-
-        Pgm().OnPgmExit();
 
         return ret;
     }
