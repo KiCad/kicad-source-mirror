@@ -278,6 +278,11 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
             // OpenProjectFiles() API asks that it report failure to the UI.
             // Nothing further to say here.
 
+            // We've already initialized things at this point, but wx won't call OnExit if
+            // we fail out. Call our own cleanup routine here to ensure the relevant resources
+            // are freed at the right time (if they aren't, segfaults will occur).
+            OnPgmExit();
+
             // Fail the process startup if the file could not be opened,
             // although this is an optional choice, one that can be reversed
             // also in the KIFACE specific OpenProjectFiles() return value.
