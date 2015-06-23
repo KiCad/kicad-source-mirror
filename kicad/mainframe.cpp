@@ -340,24 +340,16 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
 {
-#if 0   // line 171 of modview_frame.cpp breaks this code
-    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, false );
-    if( !frame )
-    {
-        frame = Kiway.Player( FRAME_PCB, true );
-        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
-        frame->Show( true );
-    }
-#else
     KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, true );
 
+    // a pcb frame can be already existing, but not yet used.
+    // this is the case when running the footprint editor, or the footprint viewer first
+    // if the frame is not visible, the board is not yet loaded
     if( !frame->IsVisible() )
     {
         frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
         frame->Show( true );
     }
-
-#endif
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( frame->IsIconized() )

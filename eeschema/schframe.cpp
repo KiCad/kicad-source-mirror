@@ -972,15 +972,22 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
         }
         else
         {
-            KIWAY_PLAYER* player = Kiway().Player( FRAME_PCB, false );  // test open already.
+            KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB, true );
 
-            if( !player )
+            // a pcb frame can be already existing, but not yet used.
+            // this is the case when running the footprint editor, or the footprint viewer first
+            // if the frame is not visible, the board is not yet loaded
+             if( !frame->IsVisible() )
             {
-                player = Kiway().Player( FRAME_PCB, true );
-                player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-                player->Show( true );
+                frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+                frame->Show( true );
             }
-            player->Raise();
+
+            // On Windows, Raise() does not bring the window on screen, when iconized
+            if( frame->IsIconized() )
+                frame->Iconize( false );
+
+            frame->Raise();
         }
     }
     else
