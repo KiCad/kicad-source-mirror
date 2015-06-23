@@ -214,35 +214,38 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 }
 
 
-::VIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR )
+::VIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint,
+            int aNetCode, int aViaDrillDefault )
+    throw( IO_ERROR )
 {
-    ::VIA*    via = 0;
+    ::VIA*  via = 0;
     SHAPE*  shape;
 
     int     shapeCount = aPadstack->Length();
-    int     drillDiam = -1;
+    int     drill_diam_iu = -1;
     int     copperLayerCount = sessionBoard->GetCopperLayerCount();
 
 
     // The drill diameter is encoded in the padstack name if Pcbnew did the DSN export.
-    // It is in mils and is after the colon and before the last '_'
+    // It is after the colon and before the last '_'
     int     drillStartNdx = aPadstack->padstack_id.find( ':' );
 
     if( drillStartNdx != -1 )
     {
         ++drillStartNdx;    // skip over the ':'
+
         int drillEndNdx = aPadstack->padstack_id.rfind( '_' );
         if( drillEndNdx != -1 )
         {
-            std::string diamTxt( aPadstack->padstack_id, drillStartNdx, drillEndNdx-drillStartNdx );
-            const char* sdiamTxt = diamTxt.c_str();
-            double drillMils = strtod( sdiamTxt, 0 );
+            std::string diam_txt( aPadstack->padstack_id,
+                            drillStartNdx, drillEndNdx-drillStartNdx );
 
-            // drillMils is not in the session units, but actual mils so we don't use scale()
-            drillDiam = (int) (drillMils * 10);
-/** @todo: see if we use default netclass or specific value
-*/
-            drillDiam = -1;         // import as default: real drill is the netclass value
+            double drill_um = strtod( diam_txt.c_str(), 0 );
+
+            drill_diam_iu = int( drill_um * (IU_PER_MM / 1000.0) );
+
+            if( drill_diam_iu == aViaDrillDefault )
+                drill_diam_iu = UNDEFINED_DRILL_DIAMETER;
         }
     }
 
@@ -263,7 +266,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
         via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
-        via->SetDrill( drillDiam );
+        via->SetDrill( drill_diam_iu );
         via->SetViaType( VIA_THROUGH );
         via->SetWidth( viaDiam );
         via->SetLayerPair( F_Cu, B_Cu );
@@ -281,7 +284,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
         via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
-        via->SetDrill( drillDiam );
+        via->SetDrill( drill_diam_iu );
         via->SetViaType( VIA_THROUGH );
         via->SetWidth( viaDiam );
         via->SetLayerPair( F_Cu, B_Cu );
@@ -323,7 +326,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
         via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
-        via->SetDrill( drillDiam );
+        via->SetDrill( drill_diam_iu );
 
         if( (topLayerNdx==0 && botLayerNdx==1)
          || (topLayerNdx==copperLayerCount-2 && botLayerNdx==copperLayerCount-1))
@@ -544,9 +547,13 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                              GetChars( psid ) );
             }
 
+            NETCLASSPTR netclass = aBoard->GetDesignSettings().m_NetClasses.GetDefault();
+
+            int via_drill_default = netclass->GetViaDrill();
+
             for( unsigned v=0;  v<wire_via->vertexes.size();  ++v )
             {
-                ::VIA* via = makeVIA( padstack, wire_via->vertexes[v], netCode );
+                ::VIA* via = makeVIA( padstack, wire_via->vertexes[v], netCode, via_drill_default );
                 aBoard->Add( via );
             }
         }

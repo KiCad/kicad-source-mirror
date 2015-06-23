@@ -3831,7 +3831,8 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * instantiates a KiCad VIA on the heap and initializes it with internal
      * values consistent with the given PADSTACK, POINT, and netcode.
      */
-    ::VIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR );
+    ::VIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode, int aViaDrillDefault )
+        throw( IO_ERROR );
 
     //-----</FromSESSION>----------------------------------------------------
 
