@@ -82,7 +82,7 @@ static const double safetyMargin = 0.1;
 static unsigned close_ness(  const wxPoint& aLeft, const wxPoint& aRight )
 {
     // Don't need an accurate distance calculation, just something
-    // approximating it, for relative orering.
+    // approximating it, for relative ordering.
     return unsigned( abs( aLeft.x - aRight.x ) + abs( aLeft.y - aRight.y ) );
 }
 
@@ -101,6 +101,23 @@ inline bool close_enough( const wxPoint& aLeft, const wxPoint& aRight, unsigned 
     // We don't use an accurate distance calculation, just something
     // approximating it, since aLimit is non-exact anyway except when zero.
     return close_ness( aLeft, aRight ) <= aLimit;
+}
+
+
+/**
+ * Function close_st
+ * is a local method of qualifying if either the start of end point of a segment is closest to a point.
+ *
+ * @param aReference is the reference point
+ * @param aFirst is the first point
+ * @param aSecond is the second point
+ * @return bool - true if the the first point is closest to the reference, otherwise false.
+ */
+inline bool close_st( const wxPoint& aReference, const wxPoint& aFirst, const wxPoint& aSecond )
+{
+    // We don't use an accurate distance calculation, just something
+    // approximating to find the closest to the reference.
+    return close_ness( aReference, aFirst ) <= close_ness( aReference, aSecond );
 }
 
 
@@ -955,7 +972,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                 break;
 
             case S_ARC:
-                // freerouter does not yet understand arcs, so approximate
+                // Freerouter does not yet understand arcs, so approximate
                 // an arc with a series of short lines and put those
                 // line segments into the !same! PATH.
                 {
@@ -1024,7 +1041,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 
         // Set maximum proximity threshold for point to point nearness metric for
         // board perimeter only, not interior keepouts yet.
-        prox = Millimeter2iu( 0.01 );   // should be enough to fix rounding issues
+        prox = Millimeter2iu( 0.01 );  // should be enough to fix rounding issues
                                         // is arc start and end point calculations
 
         // Output the Edge.Cuts perimeter as circle or polygon.
@@ -1034,8 +1051,10 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
         }
         else
         {
-            wxPoint startPt = wxPoint( graphic->GetEnd() );
+            // Polygon start point. Arbitrarily chosen end of the
+            // segment and build the poly from here.
 
+            wxPoint startPt = wxPoint( graphic->GetEnd() );
             prevPt = graphic->GetEnd();
             path->AppendPoint( mapPt( prevPt ) );
 
@@ -1050,15 +1069,17 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                     {
                         wxPoint  nextPt;
 
-                        if( !close_enough( prevPt, graphic->GetStart(), prox ) )
+                        // Use the line segment end point furthest away from
+                        // prevPt as we assume the other end to be ON prevPt or
+                        // very close to it.
+
+                        if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
                         {
-                            wxASSERT( close_enough( prevPt, graphic->GetEnd(), prox ) );
-                            nextPt = graphic->GetStart();
+                            nextPt = graphic->GetEnd();
                         }
                         else
                         {
-                            wxASSERT( close_enough( prevPt, graphic->GetStart(), prox ) );
-                            nextPt = graphic->GetEnd();
+                            nextPt = graphic->GetStart();
                         }
 
                         path->AppendPoint( mapPt( nextPt ) );
@@ -1115,27 +1136,39 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                     break;
                 }
 
-                if( close_enough( startPt, prevPt, prox ) )     // the polygon is closed.
-                    break;
+                // Get next closest segment.
 
                 graphic = findPoint( prevPt, &items, prox );
 
+                // If there are no more close segments, check if the board
+                // outline polygon can be closed.
+
                 if( !graphic )
                 {
-                    wxString error = wxString::Format(
-                        _( "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
-                           "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
-                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
-                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
+                    if( close_enough( startPt, prevPt, prox ) )
+                    {
+                        // Close the polygon back to start point
+                        path->AppendPoint( mapPt( startPt ) );
+                    }
+                    else
+                    {
+                        wxString error = wxString::Format(
+                            _( "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm).\n"
+                                  "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
                         );
-                    ThrowIOError( error );
+                        ThrowIOError( error );
+                    }
+                    break;
                 }
             }
         }
 
-        // Output the interior Edge.Cuts graphics as keepouts, using nearness metric
-        // for sloppy graphical items.
-        prox = Millimeter2iu( 0.25 );
+        // Output the interior Edge.Cuts graphics as keepouts, using same nearness
+        // metric as the board edge as otherwise we have trouble completing complex
+        // polygons.
+        prox = Millimeter2iu( 0.05 );
 
         while( items.GetCount() )
         {
@@ -1155,6 +1188,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
             }
             else
             {
+                // Polygon start point. Arbitrarily chosen end of the
+                // segment and build the poly from here.
+
                 wxPoint startPt( graphic->GetEnd() );
                 prevPt = graphic->GetEnd();
                 poly_ko->AppendPoint( mapPt( prevPt ) );
@@ -1168,15 +1204,17 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                         {
                             wxPoint nextPt;
 
-                            if( !close_enough( prevPt, graphic->GetStart(), prox ) )
+                            // Use the line segment end point furthest away from
+                            // prevPt as we assume the other end to be ON prevPt or
+                            // very close to it.
+
+                            if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
                             {
-                                wxASSERT( close_enough( prevPt, graphic->GetEnd(), prox ) );
-                                nextPt = graphic->GetStart();
+                                nextPt = graphic->GetEnd();
                             }
                             else
                             {
-                                wxASSERT( close_enough( prevPt, graphic->GetStart(), prox ) );
-                                nextPt = graphic->GetEnd();
+                                nextPt = graphic->GetStart();
                             }
 
                             prevPt = nextPt;
@@ -1185,7 +1223,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                         break;
 
                     case S_ARC:
-                        // freerouter does not yet understand arcs, so approximate
+                        // Freerouter does not yet understand arcs, so approximate
                         // an arc with a series of short lines and put those
                         // line segments into the !same! PATH.
                         {
@@ -1234,21 +1272,32 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                         break;
                     }
 
-                    if( close_enough( startPt, prevPt, prox ) )
-                        break;
+                    // Get next closest segment.
 
                     graphic = findPoint( prevPt, &items, prox );
 
+                    // If there are no more close segments, check if polygon
+                    // can be closed.
+
                     if( !graphic )
                     {
-                        wxString error = wxString::Format(
-                            _( "Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
-                               "Edit Edge.Cuts interior graphics, making them contiguous polygons each." ),
-                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
-                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
+                        if( close_enough( startPt, prevPt, prox ) )
+                        {
+                            // Close the polygon back to start point
+                            poly_ko->AppendPoint( mapPt( startPt ) );
+                        }
+                        else
+                        {
+                            wxString error = wxString::Format(
+                                _( "Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
+                                   "Edit Edge.Cuts interior graphics, making them contiguous polygons each." ),
+                                GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                                GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
                             );
 
-                        ThrowIOError( error );
+                            ThrowIOError( error );
+                        }
+                        break;
                     }
                 }
             }
