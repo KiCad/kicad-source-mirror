@@ -64,6 +64,7 @@ enum TreeFileType {
     TREE_LEGACY_PCB,        // board file (.brd) legacy format
     TREE_SEXP_PCB,          // board file (.kicad_brd) new s expression format
     TREE_GERBER,            // Gerber  file (.pho, .g*)
+    TREE_HTML,              // HTML file (.htm, *.html)
     TREE_PDF,               // PDF file (.pdf)
     TREE_TXT,               // ascii text file (.txt)
     TREE_NET,               // netlist file (.net)

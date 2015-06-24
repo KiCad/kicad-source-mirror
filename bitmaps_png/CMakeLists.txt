@@ -286,6 +286,7 @@ set( BMAPS_MID
     hierarchy_cursor
     hierarchy_nav
     hotkeys
+    html
     icon_cvpcb_small
     icon_gerbview_small
     icon_txt

@@ -51,6 +51,7 @@ extern const wxString ProjectFileExtension;
 extern const wxString SchematicFileExtension;
 extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
+extern const wxString HtmlFileExtension;
 
 extern const wxString LegacyPcbFileExtension;
 extern const wxString KiCadPcbFileExtension;
@@ -81,6 +82,7 @@ extern const wxString SchematicFileWildcard;
 extern const wxString BoardFileWildcard;
 extern const wxString NetlistFileWildcard;
 extern const wxString GerberFileWildcard;
+extern const wxString HtmlFileWildcard;
 extern const wxString LegacyPcbFileWildcard;
 extern const wxString PcbFileWildcard;
 extern const wxString EaglePcbFileWildcard;

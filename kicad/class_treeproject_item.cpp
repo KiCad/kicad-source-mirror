@@ -49,7 +49,6 @@ TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data
     wxTreeItemData()
 {
     m_parent = parent;
-
     SetType( type );
     SetFileName( data );
     SetRootFile( false );    // true only for the root item of the tree (the project name)
@@ -216,6 +215,10 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
 
     case TREE_GERBER:
         frame->Execute( m_parent, GERBVIEW_EXE, fullFileName );
+        break;
+
+    case TREE_HTML:
+        wxLaunchDefaultBrowser( fullFileName );
         break;
 
     case TREE_PDF:

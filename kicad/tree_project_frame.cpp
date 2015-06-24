@@ -258,6 +258,10 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         ext = GerberFileExtension;
         break;
 
+    case TREE_HTML:
+        ext = HtmlFileExtension;
+        break;
+
     case TREE_PDF:
         ext = PdfFileExtension;
         break;
@@ -334,6 +338,10 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 
     case TREE_GERBER:
         ext = GerberFileWildcard;
+        break;
+
+    case TREE_HTML:
+        ext = HtmlFileWildcard;
         break;
 
     case TREE_PDF:

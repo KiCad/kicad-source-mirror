@@ -43,6 +43,7 @@ const wxString SchematicFileExtension( wxT( "sch" ) );
 const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString ComponentFileExtension( wxT( "cmp" ) );
 const wxString GerberFileExtension( wxT( ".((gbr|(gb|gt)[alops])|pho)" ) );
+const wxString HtmlFileExtension( wxT( "html" ) );
 
 const wxString LegacyPcbFileExtension( wxT( "brd" ) );
 const wxString KiCadPcbFileExtension( wxT( "kicad_pcb" ) );
@@ -93,6 +94,7 @@ const wxString ComponentFileWildcard( _( "KiCad cmp/footprint link files (*.cmp)
 // Wildcard for reports and fabrication documents
 const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl;*.DRL" ) );
 const wxString SVGFileWildcard( _( "SVG files (*.svg)|*.svg;*.SVG" ) );
+const wxString HtmlFileWildcard( _( "HTML files (*.html)|*.htm;*.html" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
 const wxString PSFileWildcard( _( "PostScript files (.ps)|*.ps" ) );
 const wxString ReportFileWildcard = _( "Report files (*.rpt)|*.rpt" );

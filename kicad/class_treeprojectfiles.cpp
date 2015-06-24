@@ -65,6 +65,7 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_LEGACY_PCB
     m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_SFMT_PCB
     m_ImageList->Add( KiBitmap( icon_gerbview_small_xpm ) );    // TREE_GERBER
+    m_ImageList->Add( KiBitmap( html_xpm ) );                   // TREE_HTML
     m_ImageList->Add( KiBitmap( datasheet_xpm ) );              // TREE_PDF
     m_ImageList->Add( KiBitmap( icon_txt_xpm ) );               // TREE_TXT
     m_ImageList->Add( KiBitmap( netlist_xpm ) );                // TREE_NET
