@@ -430,14 +430,10 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPositio
     SCH_NO_CONNECT* no_connect = new SCH_NO_CONNECT( aPosition );
 
     SetRepeatItem( no_connect );
-
-    m_canvas->CrossHairOff( aDC );     // Erase schematic cursor
-    no_connect->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-
-    m_canvas->CrossHairOn( aDC );      // Display schematic cursor
-
     GetScreen()->Append( no_connect );
+    GetScreen()->SchematicCleanUp( m_canvas, aDC );
     OnModify();
+    m_canvas->Refresh();
     SaveCopyInUndoList( no_connect, UR_NEW );
     return no_connect;
 }
