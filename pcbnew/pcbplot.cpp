@@ -55,7 +55,7 @@ const wxString GetGerberExtension( LAYER_NUM aLayer )
             return wxT( "gbl" );
         else
         {
-            return wxT( "gbr" );
+            return wxString::Format( wxT( "g%d" ), aLayer+1 );
         }
     }
     else
@@ -74,11 +74,12 @@ const wxString GetGerberExtension( LAYER_NUM aLayer )
         case B_Mask:        return wxT( "gbs" );
         case F_Mask:        return wxT( "gts" );
 
+        case Edge_Cuts:     return wxT( "gm1" );
+
         case Dwgs_User:
         case Cmts_User:
         case Eco1_User:
         case Eco2_User:
-        case Edge_Cuts:
         default:            return wxT( "gbr" );
         }
     }
