@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-23 23:40+0100\n"
-"PO-Revision-Date: 2015-06-23 23:40+0100\n"
+"POT-Creation-Date: 2015-06-24 23:40+0100\n"
+"PO-Revision-Date: 2015-06-24 23:40+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -526,7 +526,7 @@ msgstr ""
 "\n"
 "Archivio Zip \"%s\" creato (%d byte)"
 
-#: kicad/class_treeproject_item.cpp:112
+#: kicad/class_treeproject_item.cpp:111
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -534,24 +534,24 @@ msgstr ""
 "Cambiando l'estensione del file, cambierà il tipo di file.\n"
 "Continuare?"
 
-#: kicad/class_treeproject_item.cpp:113
+#: kicad/class_treeproject_item.cpp:112
 msgid "Rename File"
 msgstr "Rinomina file"
 
-#: kicad/class_treeproject_item.cpp:122
+#: kicad/class_treeproject_item.cpp:121
 msgid "Unable to rename file ... "
 msgstr "Impossibile rinominare il file ..."
 
-#: kicad/class_treeproject_item.cpp:123
+#: kicad/class_treeproject_item.cpp:122
 msgid "Permission error ?"
 msgstr "Errore di permessi?"
 
-#: kicad/class_treeproject_item.cpp:138
+#: kicad/class_treeproject_item.cpp:137
 #, c-format
 msgid "Do you really want to delete '%s'"
 msgstr "Sicuri di voler cancellare \"%s\"?"
 
-#: kicad/class_treeproject_item.cpp:143
+#: kicad/class_treeproject_item.cpp:142
 msgid "Delete File"
 msgstr "Cancella file"
 
@@ -600,48 +600,48 @@ msgstr ""
 msgid "Create New Directory"
 msgstr "Crea nuova cartella"
 
-#: kicad/tree_project_frame.cpp:673 kicad/tree_project_frame.cpp:680
+#: kicad/tree_project_frame.cpp:681 kicad/tree_project_frame.cpp:688
 msgid "New D&irectory"
 msgstr "&Nuova cartella"
 
-#: kicad/tree_project_frame.cpp:674 kicad/tree_project_frame.cpp:681
+#: kicad/tree_project_frame.cpp:682 kicad/tree_project_frame.cpp:689
 msgid "Create a New Directory"
 msgstr "Crea una nuova cartella"
 
-#: kicad/tree_project_frame.cpp:684
+#: kicad/tree_project_frame.cpp:692
 msgid "&Delete Directory"
 msgstr "&Distruggi cartella"
 
-#: kicad/tree_project_frame.cpp:685 kicad/tree_project_frame.cpp:700
+#: kicad/tree_project_frame.cpp:693 kicad/tree_project_frame.cpp:708
 msgid "Delete the Directory and its content"
 msgstr "Elimina la cartella e il suo contenuto"
 
-#: kicad/tree_project_frame.cpp:691
+#: kicad/tree_project_frame.cpp:699
 msgid "&Edit in a text editor"
 msgstr "Modifica in un &editor di testo"
 
-#: kicad/tree_project_frame.cpp:692
+#: kicad/tree_project_frame.cpp:700
 msgid "Open the file in a Text Editor"
 msgstr "Apri il file in un editor di testo"
 
-#: kicad/tree_project_frame.cpp:695
+#: kicad/tree_project_frame.cpp:703
 msgid "&Rename file"
 msgstr "&Rinomina file"
 
-#: kicad/tree_project_frame.cpp:696
+#: kicad/tree_project_frame.cpp:704
 msgid "Rename file"
 msgstr "Rinomina il file"
 
-#: kicad/tree_project_frame.cpp:699
+#: kicad/tree_project_frame.cpp:707
 msgid "&Delete File"
 msgstr "&Elimina file"
 
-#: kicad/tree_project_frame.cpp:749
+#: kicad/tree_project_frame.cpp:757
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Cambia nome file: \"%s\""
 
-#: kicad/tree_project_frame.cpp:752
+#: kicad/tree_project_frame.cpp:760
 msgid "Change filename"
 msgstr "Cambia il nome al file"
 
@@ -5722,51 +5722,54 @@ msgstr "Editor impronte"
 msgid "Block Operation"
 msgstr "Operazione blocco"
 
-#: pcbnew/specctra_export.cpp:121
+#: pcbnew/specctra_export.cpp:138
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:212
 msgid "Specctra DSN file:"
 msgstr "File Specctra DSN:"
 
-#: pcbnew/specctra_export.cpp:184
+#: pcbnew/specctra_export.cpp:201
 msgid "BOARD exported OK."
 msgstr "Scheda esportata correttamente."
 
-#: pcbnew/specctra_export.cpp:189
+#: pcbnew/specctra_export.cpp:206
 msgid "Unable to export, please fix and try again."
 msgstr "Impossibile esportare la scheda. Correggere e riprovare."
 
-#: pcbnew/specctra_export.cpp:1007 pcbnew/specctra_export.cpp:1110
-#: pcbnew/specctra_export.cpp:1229
+#: pcbnew/specctra_export.cpp:1024 pcbnew/specctra_export.cpp:1131
+#: pcbnew/specctra_export.cpp:1267
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "DRAWSEGMENT tipo %s non supportatato"
 
-#: pcbnew/specctra_export.cpp:1126
-#, c-format
+#: pcbnew/specctra_export.cpp:1156
+#, fuzzy, c-format
 msgid ""
-"Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
+"Unable to find the next boundary segment with an endpoint of (%s mm, %s "
+"mm).\n"
 "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each."
 msgstr ""
-"Impossibile trovare il prossimo segmento con un capo di (%s mm, %s mm).\n"
-"Modificare il perimetro della grafica Edge.Cuts, rendendoli ognuno dei "
+"Impossibile trovare il segmento successivo del bordo con un capo di (%s mm, "
+"%s mm).\n"
+"Modificare le grafiche perimetrali di Edge.Cuts, rendendole ognuna dei "
 "poligoni contigui."
 
-#: pcbnew/specctra_export.cpp:1245
-#, c-format
+#: pcbnew/specctra_export.cpp:1292
+#, fuzzy, c-format
 msgid ""
-"Unable to find the next segment with an endpoint of (%s mm, %s mm).\n"
+"Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
 "Edit Edge.Cuts interior graphics, making them contiguous polygons each."
 msgstr ""
-"Impossibile trovare il successivo segmento con un capo di (%s mm, %s mm).\n"
-"Modificare le grafiche interne a Edge.Cuts, rendendole ognuna poligoni "
+"Impossibile trovare il segmento successivo della zona proibita con un capo "
+"di (%s mm, %s mm).\n"
+"Modificare le grafiche interne a Edge.Cuts, rendendole ognuna dei poligoni "
 "contigui."
 
-#: pcbnew/specctra_export.cpp:1401
+#: pcbnew/specctra_export.cpp:1450
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Il componente con valore \"%s\" ha l'id di riferimento vuoto."
 
-#: pcbnew/specctra_export.cpp:1409
+#: pcbnew/specctra_export.cpp:1458
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Più componenti hanno lo stesso id di riferimento \"%s\"."
@@ -6014,7 +6017,7 @@ msgstr ""
 msgid "Unable to open file '%s'"
 msgstr "Impossibile aprire il file \"%s\""
 
-#: pcbnew/legacy_plugin.cpp:3231 common/richio.cpp:568
+#: pcbnew/legacy_plugin.cpp:3231 common/richio.cpp:588
 #, c-format
 msgid "error writing to file '%s'"
 msgstr "Errore di sistema scrivendo il file '%s'"
@@ -13262,119 +13265,123 @@ msgstr ""
 msgid "Do not show this message again."
 msgstr "Non mostrare più questo messaggio."
 
-#: common/wildcards_and_files_ext.cpp:69
+#: common/wildcards_and_files_ext.cpp:70
 msgid "KiCad drawing symbol file (*.sym)|*.sym"
 msgstr "File di simbolo grafico (*.sym)|*.sym"
 
-#: common/wildcards_and_files_ext.cpp:70
+#: common/wildcards_and_files_ext.cpp:71
 msgid "KiCad component library file (*.lib)|*.lib"
 msgstr "File Libreria Eeschema (*.lib)|*.lib"
 
-#: common/wildcards_and_files_ext.cpp:71
+#: common/wildcards_and_files_ext.cpp:72
 msgid "KiCad project files (*.pro)|*.pro"
 msgstr "Progetto di KiCad (*.pro)|*.pro"
 
-#: common/wildcards_and_files_ext.cpp:72
+#: common/wildcards_and_files_ext.cpp:73
 msgid "KiCad schematic files (*.sch)|*.sch"
 msgstr "Kicad: Schema elettrico (*.sch)|*.sch "
 
-#: common/wildcards_and_files_ext.cpp:73
+#: common/wildcards_and_files_ext.cpp:74
 msgid "KiCad netlist files (*.net)|*.net"
 msgstr "Kicad: Lista componenti (*.net)|*.net"
 
-#: common/wildcards_and_files_ext.cpp:74
+#: common/wildcards_and_files_ext.cpp:75
 msgid "Gerber files (*.pho)|*.pho"
 msgstr "File Gerber (*.pho)|*.pho"
 
-#: common/wildcards_and_files_ext.cpp:75
+#: common/wildcards_and_files_ext.cpp:76
 msgid "KiCad printed circuit board files (*.brd)|*.brd"
 msgstr "Kicad: Circuito stampato (*.brd)|*.brd"
 
-#: common/wildcards_and_files_ext.cpp:76
+#: common/wildcards_and_files_ext.cpp:77
 msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 msgstr "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 
-#: common/wildcards_and_files_ext.cpp:77
+#: common/wildcards_and_files_ext.cpp:78
 msgid "P-Cad 200x ASCII PCB files (*.pcb)|*.pcb"
 msgstr "File P-Cad 200x ASCII PCB (*.pcb)|*.pcb"
 
-#: common/wildcards_and_files_ext.cpp:78
+#: common/wildcards_and_files_ext.cpp:79
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 msgstr "File Pcbew s-expr (*.kicad_pcb)|*.kicad_pcb"
 
-#: common/wildcards_and_files_ext.cpp:79
+#: common/wildcards_and_files_ext.cpp:80
 msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
 msgstr "File impronte Kicad s-expre (*.kicad_mod)|*.kicad_mod"
 
-#: common/wildcards_and_files_ext.cpp:80
+#: common/wildcards_and_files_ext.cpp:81
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
 msgstr "Percorso librerie impronte Kicad s-expre (*.pretty)|*.pretty"
 
-#: common/wildcards_and_files_ext.cpp:81
+#: common/wildcards_and_files_ext.cpp:82
 msgid "Legacy footprint library file (*.mod)|*.mod"
 msgstr "File libreria di impronte PcbNew di vecchio formato (*.mod)|*.mod"
 
-#: common/wildcards_and_files_ext.cpp:82
+#: common/wildcards_and_files_ext.cpp:83
 msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
 msgstr "File libreria XML Eagle ver. 6.x (*.lbr)|*.lbr"
 
-#: common/wildcards_and_files_ext.cpp:83
+#: common/wildcards_and_files_ext.cpp:84
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
 msgstr "File librerie di impronte Geda PCB (*.fp)|*.fp"
 
-#: common/wildcards_and_files_ext.cpp:84
+#: common/wildcards_and_files_ext.cpp:85
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
 msgstr "Kicad: Macro registrata (*.mcr)|*.mcr"
 
-#: common/wildcards_and_files_ext.cpp:85
+#: common/wildcards_and_files_ext.cpp:86
 msgid "Component-footprint link file (*.cmp)|*cmp"
 msgstr "File collegamento componenti-impronte (*.cmp)|*cmp"
 
-#: common/wildcards_and_files_ext.cpp:86
+#: common/wildcards_and_files_ext.cpp:87
 msgid "Page layout descr file (*.kicad_wks)|*kicad_wks"
 msgstr "File di descrizione disposizione pagina (*.kicad_wks)|*kicad_wks"
 
-#: common/wildcards_and_files_ext.cpp:88
+#: common/wildcards_and_files_ext.cpp:89
 msgid "All files (*)|*"
 msgstr "Tuuti i file (*)|*"
 
-#: common/wildcards_and_files_ext.cpp:91
+#: common/wildcards_and_files_ext.cpp:92
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:94
+#: common/wildcards_and_files_ext.cpp:95
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "File di foratura (*.drl)|*.drl"
 
-#: common/wildcards_and_files_ext.cpp:95
+#: common/wildcards_and_files_ext.cpp:96
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "SVG files (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:96
+#: common/wildcards_and_files_ext.cpp:97
+msgid "HTML files (*.html)|*.htm;*.html"
+msgstr "File HTML (*.html)|*.htm;*.html"
+
+#: common/wildcards_and_files_ext.cpp:98
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Documento in formato portabile (*.pdf)|*.pdf"
 
-#: common/wildcards_and_files_ext.cpp:97
+#: common/wildcards_and_files_ext.cpp:99
 msgid "PostScript files (.ps)|*.ps"
 msgstr "File PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:98
+#: common/wildcards_and_files_ext.cpp:100
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "File di rapporto della Verifica Regole Disegno (.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:99
+#: common/wildcards_and_files_ext.cpp:101
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "File posizionamento impronte (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:100
+#: common/wildcards_and_files_ext.cpp:102
 msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
 msgstr "File Vrml e x3d (*.wrl *.x3d)|*.wrl; *.x3d"
 
-#: common/wildcards_and_files_ext.cpp:101
+#: common/wildcards_and_files_ext.cpp:103
 msgid "IDFv3 component files (*.idf)|*.idf"
 msgstr "file componenti IDFv3 (.idf)|*.idf"
 
-#: common/wildcards_and_files_ext.cpp:102
+#: common/wildcards_and_files_ext.cpp:104
 msgid "Text files (*.txt)|*.txt"
 msgstr "File di testo (*.txt)|*.txt"
 
@@ -13535,25 +13542,25 @@ msgstr "Griglia: %.4f mm (%.2f mils)"
 msgid "Grid: %.2f mils (%.4f mm)"
 msgstr "Griglia: %.2f mils (%.4f mm)"
 
-#: common/richio.cpp:187
+#: common/richio.cpp:197
 #, c-format
 msgid "Unable to open filename '%s' for reading"
 msgstr "Impossibile aprire il file di nome \"%s\" in lettura"
 
-#: common/richio.cpp:231 common/richio.cpp:328
+#: common/richio.cpp:241 common/richio.cpp:338
 msgid "Maximum line length exceeded"
 msgstr "Lunghezza massima linea eccedente"
 
-#: common/richio.cpp:293
+#: common/richio.cpp:303
 msgid "Line length exceeded"
 msgstr "Lunghezza linea eccedente"
 
-#: common/richio.cpp:549
+#: common/richio.cpp:569
 #, c-format
 msgid "cannot open or save file '%s'"
 msgstr "impossibile aprire o salvare il file \"%s\""
 
-#: common/richio.cpp:589
+#: common/richio.cpp:609
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER errore di scrittura"
 
