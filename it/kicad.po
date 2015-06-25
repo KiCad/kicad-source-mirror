@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-24 23:40+0100\n"
-"PO-Revision-Date: 2015-06-24 23:40+0100\n"
+"POT-Creation-Date: 2015-06-25 13:11+0100\n"
+"PO-Revision-Date: 2015-06-25 13:11+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -5742,7 +5742,7 @@ msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "DRAWSEGMENT tipo %s non supportatato"
 
 #: pcbnew/specctra_export.cpp:1156
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s "
 "mm).\n"
@@ -5750,19 +5750,18 @@ msgid ""
 msgstr ""
 "Impossibile trovare il segmento successivo del bordo con un capo di (%s mm, "
 "%s mm).\n"
-"Modificare le grafiche perimetrali di Edge.Cuts, rendendole ognuna dei "
-"poligoni contigui."
+"Modificare le grafiche perimetrali di Edge.Cuts, rendendole dei poligoni "
+"contigui."
 
 #: pcbnew/specctra_export.cpp:1292
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
 "Edit Edge.Cuts interior graphics, making them contiguous polygons each."
 msgstr ""
 "Impossibile trovare il segmento successivo della zona proibita con un capo "
 "di (%s mm, %s mm).\n"
-"Modificare le grafiche interne a Edge.Cuts, rendendole ognuna dei poligoni "
-"contigui."
+"Modificare le grafiche interne a Edge.Cuts, rendendole dei poligoni contigui."
 
 #: pcbnew/specctra_export.cpp:1450
 #, c-format
@@ -7894,9 +7893,9 @@ msgid ""
 "- a positive value means a mask bigger than a pad\n"
 "- a negative value means a mask smaller than a pad\n"
 msgstr ""
-"Note per valori tollerenza:\n"
-"- un valore positivo intende la maschera più grande della piazzola\n"
-"- un valore negativo intende la maschera più piccola della piazzola\n"
+"Nota per valori di tolleranza:\n"
+"- un valore positivo significa maschera più grande della piazzola\n"
+"- un valore negativo significa maschera più piccola della piazzola\n"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:40
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:413
@@ -16620,16 +16619,16 @@ msgstr "Errore controllo regole elettroniche"
 msgid "Rename to %s"
 msgstr "Rinomina a %s"
 
-#: eeschema/project_rescue.cpp:378
+#: eeschema/project_rescue.cpp:379
 #, c-format
 msgid "Rescue %s as %s"
 msgstr "Recupera %s come %s"
 
-#: eeschema/project_rescue.cpp:498
+#: eeschema/project_rescue.cpp:501
 msgid "This project has nothing to rescue."
 msgstr "Questo progetto non ha nulla da recuperare."
 
-#: eeschema/project_rescue.cpp:512
+#: eeschema/project_rescue.cpp:515
 msgid "No symbols were rescued."
 msgstr "Nessun simbolo recuperato."
 
