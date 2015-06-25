@@ -1127,14 +1127,16 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     }
 }
 
+
 void SCH_EDIT_FRAME::OnRescueProject( wxCommandEvent& event )
 {
     RescueProject( true );
 }
 
+
 void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 {
-    Close( true );
+    Close( false );
 }
 
 
@@ -1266,7 +1268,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
                 ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
             else
                 wxLogMessage( wxT( "addCurrentItemToList: expected type = SCH_SHEET_PIN_T, actual type = %d" ),
-                            item->Type() );
+                              item->Type() );
         }
     }
     else

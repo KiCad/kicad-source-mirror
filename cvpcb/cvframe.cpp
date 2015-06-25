@@ -235,7 +235,7 @@ void CVPCB_MAINFRAME::OnSize( wxSizeEvent& event )
 
 void CVPCB_MAINFRAME::OnQuit( wxCommandEvent& event )
 {
-    Close( true );
+    Close( false );
 }
 
 

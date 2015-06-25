@@ -567,7 +567,7 @@ void PCB_EDIT_FRAME::ReFillLayerWidget()
 
 void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 {
-    Close( true );
+    Close( false );
 }
 
 
