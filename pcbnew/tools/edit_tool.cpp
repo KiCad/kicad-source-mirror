@@ -377,9 +377,11 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             processChanges( currentChange );
 
-            updateRatsnest( true );
-            getModel<BOARD>()->GetRatsnest()->Recalculate();
             item->ViewUpdate();
+
+            RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+            ratsnest->Update( item );
+            ratsnest->Recalculate();
 
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
         }
