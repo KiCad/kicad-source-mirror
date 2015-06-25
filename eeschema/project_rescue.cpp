@@ -293,6 +293,7 @@ public:
         {
             if( each_component->GetPartName() != m_requested_name ) continue;
             each_component->SetPartName( m_new_name );
+            each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
         }
         return true;
@@ -409,6 +410,7 @@ public:
         {
             if( each_component->GetPartName() != m_requested_name ) continue;
             each_component->SetPartName( m_new_name );
+            each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
         }
         return true;
@@ -481,6 +483,7 @@ void RESCUER::UndoRescues()
     BOOST_FOREACH( RESCUE_LOG& each_logitem, m_rescue_log )
     {
         each_logitem.component->SetPartName( each_logitem.old_name );
+        each_logitem.component->ClearFlags();
     }
 }
 

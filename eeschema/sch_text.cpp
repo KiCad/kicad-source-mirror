@@ -428,7 +428,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
@@ -906,7 +906,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
@@ -1067,7 +1067,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
@@ -1496,7 +1496,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )

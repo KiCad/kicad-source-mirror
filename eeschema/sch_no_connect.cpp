@@ -101,7 +101,7 @@ bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     while( (*line != ' ' ) && *line )
         line++;
 
-    if( sscanf( line, "%s %d %d", name, &m_pos.x, &m_pos.y ) != 3 )
+    if( sscanf( line, "%255s %d %d", name, &m_pos.x, &m_pos.y ) != 3 )
     {
         aErrorMsg.Printf( wxT( "Eeschema file No Connect load error at line %d" ),
                           aLine.LineNumber() );

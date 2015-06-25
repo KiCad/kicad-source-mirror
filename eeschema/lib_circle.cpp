@@ -68,7 +68,7 @@ bool LIB_CIRCLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     char tmp[256];
     char* line = (char*) aLineReader;
 
-    int  cnt = sscanf( line + 2, "%d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
+    int  cnt = sscanf( line + 2, "%d %d %d %d %d %d %255s", &m_Pos.x, &m_Pos.y,
                        &m_Radius, &m_Unit, &m_Convert, &m_Width, tmp );
 
     if( cnt < 6 )

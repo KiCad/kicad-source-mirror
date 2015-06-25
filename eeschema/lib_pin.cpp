@@ -730,7 +730,7 @@ bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     *pinAttrs = 0;
 
-    i = sscanf( line + 2, "%s %s %d %d %d %s %d %d %d %d %s %s", pinName,
+    i = sscanf( line + 2, "%255s %63s %d %d %d %63s %d %d %d %d %63s %63s", pinName,
                 pinNum, &m_position.x, &m_position.y, &m_length, pinOrient, &m_numTextSize,
                 &m_nameTextSize, &m_Unit, &m_Convert, pinType, pinAttrs );
 

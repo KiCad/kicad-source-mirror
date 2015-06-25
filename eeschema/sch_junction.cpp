@@ -86,7 +86,7 @@ bool SCH_JUNCTION::Load( LINE_READER& aLine, wxString& aErrorMsg )
     while( (*line != ' ' ) && *line )
         line++;
 
-    if( sscanf( line, "%s %d %d", name, &m_pos.x, &m_pos.y ) != 3 )
+    if( sscanf( line, "%255s %d %d", name, &m_pos.x, &m_pos.y ) != 3 )
     {
         aErrorMsg.Printf( wxT( "Eeschema file connection load error at line %d, aborted" ),
                           aLine.LineNumber() );

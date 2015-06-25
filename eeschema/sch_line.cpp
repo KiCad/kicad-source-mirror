@@ -174,7 +174,7 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
     while( (*line != ' ' ) && *line )
         line++;
 
-    if( sscanf( line, "%s %s", Name1, Name2 ) != 2  )
+    if( sscanf( line, "%255s %255s", Name1, Name2 ) != 2  )
     {
         aErrorMsg.Printf( wxT( "Eeschema file segment error at line %d, aborted" ),
                           aLine.LineNumber() );

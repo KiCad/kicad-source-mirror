@@ -217,7 +217,7 @@ again." );
             break;
 
         case 'T':                       // It is a text item.
-            if( sscanf( sline, "%s", name1 ) != 1 )
+            if( sscanf( sline, "%255s", name1 ) != 1 )
             {
                 msgDiag.Printf( _( "Eeschema file text load error at line %d" ),
                                 reader.LineNumber() );

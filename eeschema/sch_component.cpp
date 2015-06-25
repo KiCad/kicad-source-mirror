@@ -1148,7 +1148,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             return true;
     }
 
-    if( sscanf( &line[1], "%s %s", name1, name2 ) != 2 )
+    if( sscanf( &line[1], "%255s %255s", name1, name2 ) != 2 )
     {
         aErrorMsg.Printf( wxT( "Eeschema component description error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1354,7 +1354,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             memset( char3, 0, sizeof(char3) );
             int x, y, w, attr;
 
-            if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", char1, &x, &y, &w, &attr,
+            if( ( ii = sscanf( ptcar, "%255s %d %d %d %X %255s %255s", char1, &x, &y, &w, &attr,
                                char2, char3 ) ) < 4 )
             {
                 aErrorMsg.Printf( wxT( "Component Field error line %d, aborted" ),

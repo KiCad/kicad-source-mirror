@@ -160,7 +160,7 @@ bool LIB_FIELD::Load( LINE_READER& aLineReader, wxString& errorMsg )
 
     memset( textVJustify, 0, sizeof( textVJustify ) );
 
-    cnt = sscanf( line, " %d %d %d %c %c %c %s", &m_Pos.x, &m_Pos.y, &m_Size.y,
+    cnt = sscanf( line, " %d %d %d %c %c %c %255s", &m_Pos.x, &m_Pos.y, &m_Size.y,
                   &textOrient, &textVisible, &textHJustify, textVJustify );
 
     if( cnt < 5 )
