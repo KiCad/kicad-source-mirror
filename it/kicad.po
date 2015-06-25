@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-25 13:11+0100\n"
-"PO-Revision-Date: 2015-06-25 13:11+0100\n"
+"POT-Creation-Date: 2015-06-25 13:41+0100\n"
+"PO-Revision-Date: 2015-06-25 13:41+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -4934,7 +4934,7 @@ msgstr "&Scripting Console"
 
 #: pcbnew/menubar_pcbframe.cpp:627 pcbnew/menubar_pcbframe.cpp:663
 msgid "&Design Rules"
-msgstr "&Preferenze"
+msgstr "Regole &di progettazione"
 
 #: pcbnew/menubar_pcbframe.cpp:628
 msgid "Open the design rules editor"
