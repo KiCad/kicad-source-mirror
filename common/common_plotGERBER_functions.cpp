@@ -459,7 +459,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
        && trace_mode == FILLED )
     {
         if( orient == 900 || orient == 2700 ) /* orientation turned 90 deg. */
-            EXCHG( size.x, size.y );
+            std::swap( size.x, size.y );
 
         DPOINT pos_dev = userToDeviceCoordinates( pos );
         selectAperture( size, APERTURE::Oval );
@@ -469,7 +469,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
     {
         if( size.x > size.y )
         {
-            EXCHG( size.x, size.y );
+            std::swap( size.x, size.y );
 
             if( orient < 2700 )
                 orient += 900;
@@ -512,7 +512,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     {
     case 900:
     case 2700:        // rotation of 90 degrees or 270 swaps sizes
-        EXCHG( size.x, size.y );
+        std::swap( size.x, size.y );
 
 	// Pass through
     case 0:

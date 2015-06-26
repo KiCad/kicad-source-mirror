@@ -74,7 +74,7 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
                  wxT( "Cannot swap junction data with invalid item." ) );
 
     SCH_JUNCTION* item = (SCH_JUNCTION*) aItem;
-    EXCHG( m_pos, item->m_pos );
+    std::swap( m_pos, item->m_pos );
 }
 
 
@@ -128,17 +128,13 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
 
 void SCH_JUNCTION::MirrorX( int aXaxis_position )
 {
-    m_pos.y -= aXaxis_position;
-    NEGATE( m_pos.y );
-    m_pos.y += aXaxis_position;
+    MIRROR( m_pos.y, aXaxis_position );
 }
 
 
 void SCH_JUNCTION::MirrorY( int aYaxis_position )
 {
-    m_pos.x -= aYaxis_position;
-    NEGATE( m_pos.x );
-    m_pos.x += aYaxis_position;
+    MIRROR( m_pos.x, aYaxis_position );
 }
 
 

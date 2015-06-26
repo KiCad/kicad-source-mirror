@@ -633,7 +633,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     wxSize size = text->GetSize();
 
     if( text->IsMirrored() )
-        NEGATE( size.x );
+        size.x = -size.x;
 
     EDA_COLOR_T color = BLACK;  // not actually used, but needed by DrawGraphicText
 
@@ -929,7 +929,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module )
         wxSize size = module->GetSize();
 
         if( module->IsMirrored() )
-            NEGATE( size.x );  // Text is mirrored
+            size.x = -size.x;  // Text is mirrored
 
         model_vrml->s_text_layer    = module->GetLayer();
         model_vrml->s_text_width    = module->GetThickness();
@@ -1279,8 +1279,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
             if( isFlipped )
             {
                 rotx += 180.0;
-                NEGATE( roty );
-                NEGATE( rotz );
+                roty = -roty;
+                rotz = -rotz;
             }
 
             // Do some quaternion munching
@@ -1313,9 +1313,9 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
             double offsetz = vrmlm->m_MatPosition.z * IU_PER_MILS * 1000.0;
 
             if( isFlipped )
-                NEGATE( offsetz );
+                offsetz = -offsetz;
             else // In normal mode, Y axis is reversed in Pcbnew.
-                NEGATE( offsety );
+                offsety = -offsety;
 
             RotatePoint( &offsetx, &offsety, aModule->GetOrientation() );
 

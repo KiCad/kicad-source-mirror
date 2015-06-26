@@ -954,7 +954,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     SetLayer( FlipLayer( GetLayer() ) );
 
     // Reverse mirror orientation.
-    NEGATE( m_Orient );
+    m_Orient = -m_Orient;
     NORMALIZE_ANGLE_POS( m_Orient );
 
     // Mirror pads to other side of board about the x axis, i.e. vertically.

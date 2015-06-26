@@ -2085,13 +2085,13 @@ const EDA_RECT LIB_PIN::GetBoundingBox() const
     case PIN_DOWN:
         RotatePoint( &begin, wxPoint( 0, 0 ), 900 );
         RotatePoint( &end, wxPoint( 0, 0 ), 900 );
-        NEGATE( begin.x );
-        NEGATE( end.x );
+        begin.x = -begin.x;
+        end.x = -end.x;
         break;
 
     case PIN_LEFT:
-        NEGATE( begin.x );
-        NEGATE( end.x );
+        begin.x = -begin.x;
+        end.x = -end.x;
         break;
 
     case PIN_RIGHT:

@@ -502,7 +502,7 @@ int CONNECTIONS::Merge_PadsSubNets( int aOldSubNet, int aNewSubNet )
         return 0;
 
     if( (aOldSubNet > 0) && (aOldSubNet < aNewSubNet) )
-        EXCHG( aOldSubNet, aNewSubNet );
+        std::swap( aOldSubNet, aNewSubNet );
 
     // Examine connections between intersecting pads
     for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
@@ -532,7 +532,7 @@ int CONNECTIONS::Merge_SubNets( int aOldSubNet, int aNewSubNet )
         return 0;
 
     if( (aOldSubNet > 0) && (aOldSubNet < aNewSubNet) )
-        EXCHG( aOldSubNet, aNewSubNet );
+        std::swap( aOldSubNet, aNewSubNet );
 
     curr_track = (TRACK*)m_firstTrack;
 

@@ -197,12 +197,12 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         if( !panel->GetPrintMirrored() )
         {
             if( StAngle > EndAngle )
-                EXCHG( StAngle, EndAngle );
+                std::swap( StAngle, EndAngle );
         }
         else    // Mirrored mode: arc orientation is reversed
         {
             if( StAngle < EndAngle )
-                EXCHG( StAngle, EndAngle );
+                std::swap( StAngle, EndAngle );
         }
 
         if( filled )
@@ -311,15 +311,15 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
         pt.y += aCentre.y;
         SetEnd( pt );
 
-        NEGATE( m_Start0.y );
-        NEGATE( m_End0.y );
+        m_Start0.y = -m_Start0.y;
+        m_End0.y = -m_End0.y;
         break;
 
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
         for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
-            NEGATE( m_PolyPoints[ii].y );
+            m_PolyPoints[ii].y = -m_PolyPoints[ii].y;
     }
 
     SetLayer( FlipLayer( GetLayer() ) );

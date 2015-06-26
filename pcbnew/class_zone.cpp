@@ -773,8 +773,7 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 {
     for( unsigned ic = 0; ic < m_Poly->m_CornersList.GetCornersCount(); ic++ )
     {
-        int py = m_Poly->m_CornersList.GetY( ic ) - mirror_ref.y;
-        NEGATE( py );
+        int py = mirror_ref.y - m_Poly->m_CornersList.GetY( ic );
         m_Poly->m_CornersList.SetY( ic, py + mirror_ref.y );
     }
 
@@ -783,19 +782,14 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
     /* mirror filled areas: */
     for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
     {
-        int py = m_FilledPolysList.GetY( ic ) - mirror_ref.y;
-        NEGATE( py );
+        int py = mirror_ref.y - m_FilledPolysList.GetY( ic );
         m_FilledPolysList.SetY( ic, py + mirror_ref.y );
     }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
-        m_FillSegmList[ic].m_Start.y -= mirror_ref.y;
-        NEGATE( m_FillSegmList[ic].m_Start.y );
-        m_FillSegmList[ic].m_Start.y += mirror_ref.y;
-        m_FillSegmList[ic].m_End.y   -= mirror_ref.y;
-        NEGATE( m_FillSegmList[ic].m_End.y );
-        m_FillSegmList[ic].m_End.y += mirror_ref.y;
+        MIRROR( m_FillSegmList[ic].m_Start.y, mirror_ref.y );
+        MIRROR( m_FillSegmList[ic].m_End.y,   mirror_ref.y );
     }
 }
 

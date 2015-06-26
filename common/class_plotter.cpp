@@ -150,7 +150,7 @@ void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int r
     const int delta = 50;   // increment (in 0.1 degrees) to draw circles
 
     if( StAngle > EndAngle )
-        EXCHG( StAngle, EndAngle );
+        std::swap( StAngle, EndAngle );
 
     SetCurrentLineWidth( width );
     /* Please NOTE the different sign due to Y-axis flip */
@@ -406,7 +406,7 @@ void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, double orient
 
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y );
+        std::swap( size.x, size.y );
         orient = AddAngles( orient, 900 );
     }
 

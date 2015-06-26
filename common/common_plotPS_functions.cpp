@@ -98,7 +98,7 @@ void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize,
     // The pad is reduced to an oval by dy > dx
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y );
+        std::swap( size.x, size.y );
         aPadOrient = AddAngles( aPadOrient, 900 );
     }
 
@@ -514,7 +514,7 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
         return;
 
     if( StAngle > EndAngle )
-        EXCHG( StAngle, EndAngle );
+        std::swap( StAngle, EndAngle );
 
     SetCurrentLineWidth( width );
 
@@ -528,7 +528,7 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
         {
             StAngle = 1800.0 -StAngle;
             EndAngle = 1800.0 -EndAngle;
-            EXCHG( StAngle, EndAngle );
+            std::swap( StAngle, EndAngle );
         }
         else
         {

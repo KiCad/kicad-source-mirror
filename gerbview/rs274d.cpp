@@ -252,7 +252,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
          * ---S---
          *  3 | 4
          */
-            NEGATE( center.x);
+            center.x = -center.x;
         }
         else if( (delta.x >= 0) && (delta.y < 0) )
         {
@@ -270,8 +270,8 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
          * ---S---
          *  C | 4
          */
-            NEGATE( center.x);
-            NEGATE( center.y);
+            center.x = -center.x;
+            center.y = -center.y;
         }
         else
         {
@@ -280,7 +280,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
          * ---S---
          *  E | C
          */
-            NEGATE( center.y);
+            center.y = -center.y;
         }
 
         // Due to your draw arc function, we need this:

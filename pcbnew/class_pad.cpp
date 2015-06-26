@@ -285,9 +285,9 @@ void D_PAD::Flip( const wxPoint& aCentre )
 
     SetY( y );
 
-    NEGATE( m_Pos0.y );
-    NEGATE( m_Offset.y );
-    NEGATE( m_DeltaSize.y );
+    m_Pos0.y = -m_Pos0.y;
+    m_Offset.y = -m_Offset.y;
+    m_DeltaSize.y = -m_DeltaSize.y;
 
     SetOrientation( -GetOrientation() );
 

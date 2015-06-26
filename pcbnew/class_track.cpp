@@ -412,7 +412,7 @@ void VIA::SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer )
     }
 
     if( aBottomLayer < aTopLayer )
-        EXCHG( aBottomLayer, aTopLayer );
+        std::swap( aBottomLayer, aTopLayer );
 
     m_Layer = aTopLayer;
     m_BottomLayer = aBottomLayer;
@@ -430,7 +430,7 @@ void VIA::LayerPair( LAYER_ID* top_layer, LAYER_ID* bottom_layer ) const
         t_layer = m_Layer;
 
         if( b_layer < t_layer )
-            EXCHG( b_layer, t_layer );
+            std::swap( b_layer, t_layer );
     }
 
     if( top_layer )
@@ -1502,8 +1502,8 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
                 if( EndPad )
                     Track->SetState( BEGIN_ONPAD, true );
 
-                EXCHG( Track->m_Start, Track->m_End );
-                EXCHG( Track->start, Track->end );
+                std::swap( Track->m_Start, Track->m_End );
+                std::swap( Track->start, Track->end );
                 ok = 1;
                 return ok;
             }
@@ -1546,8 +1546,8 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
                 if( EndPad )
                     Track->SetState( BEGIN_ONPAD, true );
 
-                EXCHG( Track->m_Start, Track->m_End );
-                EXCHG( Track->start, Track->end );
+                std::swap( Track->m_Start, Track->m_End );
+                std::swap( Track->start, Track->end );
                 break;
 
             case 1:

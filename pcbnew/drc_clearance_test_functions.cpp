@@ -213,7 +213,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             refvia->LayerPair( &layer1, &layer2 );
 
             if( layer1 > layer2 )
-                EXCHG( layer1, layer2 );
+                std::swap( layer1, layer2 );
 
             if( layer2 == B_Cu && layer1 == m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
                 err = false;
@@ -416,7 +416,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // Ensure segStartPoint.x <= segEndPoint.x
             if( segStartPoint.x > segEndPoint.x )
-                EXCHG( segStartPoint.x, segEndPoint.x );
+                std::swap( segStartPoint.x, segEndPoint.x );
 
             if( segStartPoint.x > (-w_dist) && segStartPoint.x < (m_segmLength + w_dist) )    /* possible error drc */
             {
@@ -480,7 +480,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // Test if segments are crossing
             if( segStartPoint.y > segEndPoint.y )
-                EXCHG( segStartPoint.y, segEndPoint.y );
+                std::swap( segStartPoint.y, segEndPoint.y );
 
             if( (segStartPoint.y < 0) && (segEndPoint.y > 0) )
             {
@@ -633,7 +633,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
     if( swap_pads )
     {
-        EXCHG( aRefPad, aPad );
+        std::swap( aRefPad, aPad );
         relativePadPos = -relativePadPos;
     }
 
@@ -678,7 +678,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             {
                 if( (pad_angle == 900) || (pad_angle == 2700) )
                 {
-                    EXCHG( size.x, size.y );
+                    std::swap( size.x, size.y );
                 }
 
                 // Test DRC:
@@ -877,7 +877,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
          */
         if( padHalfsize.x > padHalfsize.y )
         {
-            EXCHG( padHalfsize.x, padHalfsize.y );
+            std::swap( padHalfsize.x, padHalfsize.y );
             orient = AddAngles( orient, 900 );
         }
 
@@ -1061,7 +1061,7 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
     int temp;
 
     if( aSegStart.x > aSegEnd.x )
-        EXCHG( aSegStart, aSegEnd );
+        std::swap( aSegStart, aSegEnd );
 
     if( (aSegEnd.x < m_xcliplo) || (aSegStart.x > m_xcliphi) )
     {

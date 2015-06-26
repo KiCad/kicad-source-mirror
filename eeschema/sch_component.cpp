@@ -698,11 +698,11 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
 
-    EXCHG( m_part_name, component->m_part_name );
-    EXCHG( m_part, component->m_part );
-    EXCHG( m_Pos, component->m_Pos );
-    EXCHG( m_unit, component->m_unit );
-    EXCHG( m_convert, component->m_convert );
+    std::swap( m_part_name, component->m_part_name );
+    std::swap( m_part, component->m_part );
+    std::swap( m_Pos, component->m_Pos );
+    std::swap( m_unit, component->m_unit );
+    std::swap( m_convert, component->m_convert );
 
     TRANSFORM tmp = m_transform;
 
@@ -723,7 +723,7 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
         GetField( ii )->SetParent( this );
     }
 
-    EXCHG( m_PathsAndReferences, component->m_PathsAndReferences );
+    std::swap( m_PathsAndReferences, component->m_PathsAndReferences );
 }
 
 
@@ -1472,10 +1472,10 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 
     // H and W must be > 0:
     if( x2 < x1 )
-        EXCHG( x2, x1 );
+        std::swap( x2, x1 );
 
     if( y2 < y1 )
-        EXCHG( y2, y1 );
+        std::swap( y2, y1 );
 
     bBox.SetX( x1 );
     bBox.SetY( y1 );
@@ -1547,9 +1547,7 @@ void SCH_COMPONENT::MirrorY( int aYaxis_position )
     int dx = m_Pos.x;
 
     SetOrientation( CMP_MIRROR_Y );
-    m_Pos.x -= aYaxis_position;
-    NEGATE( m_Pos.x );
-    m_Pos.x += aYaxis_position;
+    MIRROR( m_Pos.x, aYaxis_position );
     dx -= m_Pos.x;     // dx,0 is the move vector for this transform
 
     for( int ii = 0; ii < GetFieldCount(); ii++ )
@@ -1567,9 +1565,7 @@ void SCH_COMPONENT::MirrorX( int aXaxis_position )
     int dy = m_Pos.y;
 
     SetOrientation( CMP_MIRROR_X );
-    m_Pos.y -= aXaxis_position;
-    NEGATE( m_Pos.y );
-    m_Pos.y += aXaxis_position;
+    MIRROR( m_Pos.y, aXaxis_position );
     dy -= m_Pos.y;     // dy,0 is the move vector for this transform
 
     for( int ii = 0; ii < GetFieldCount(); ii++ )

@@ -219,7 +219,7 @@ void EDA_3D_CANVAS::draw3DGrid( double aGriSizeMM )
 
     wxSize  brd_size = getBoardSize();
     wxPoint brd_center_pos = getBoardCenter();
-    NEGATE( brd_center_pos.y );
+    brd_center_pos.y = -brd_center_pos.y;
 
     int     xsize   = std::max( brd_size.x, Millimeter2iu( 100 ) ) * 1.2;
     int     ysize   = std::max( brd_size.y, Millimeter2iu( 100 ) ) * 1.2;

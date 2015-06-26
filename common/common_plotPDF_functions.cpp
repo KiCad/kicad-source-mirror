@@ -223,7 +223,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     const int delta = 50;   // increment (in 0.1 degrees) to draw circles
 
     if( StAngle > EndAngle )
-        EXCHG( StAngle, EndAngle );
+        std::swap( StAngle, EndAngle );
 
     SetCurrentLineWidth( width );
 

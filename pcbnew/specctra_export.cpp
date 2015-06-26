@@ -866,7 +866,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
     int botLayer = kicadLayer2pcb[botLayerNum];
 
     if( topLayer > botLayer )
-        EXCHG( topLayer, botLayer );
+        std::swap( topLayer, botLayer );
 
     return makeVia( aVia->GetWidth(), aVia->GetDrillValue(), topLayer, botLayer );
 }
@@ -1106,7 +1106,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                             wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
 
                             angle = -angle;
-                            EXCHG( start, end );
+                            std::swap( start, end );
                         }
 
                         wxPoint nextPt;
@@ -1241,7 +1241,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                                 wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
 
                                 angle = -angle;
-                                EXCHG( start, end );
+                                std::swap( start, end );
                             }
 
                             wxPoint nextPt;

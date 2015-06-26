@@ -484,7 +484,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         int py = pt_cur_ch->m_PadStart->GetPosition().y;
 
         if( ( ( int( pt_cur_ch->m_PadStart->GetOrientation() ) / 900 ) & 1 ) != 0 )
-            EXCHG( dx, dy );
+            std::swap( dx, dy );
 
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
             goto end_of_route;
@@ -499,7 +499,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         py = pt_cur_ch->m_PadEnd->GetPosition().y;
 
         if( ( ( int( pt_cur_ch->m_PadEnd->GetOrientation() ) / 900) & 1 ) != 0 )
-            EXCHG( dx, dy );
+            std::swap( dx, dy );
 
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
             goto end_of_route;

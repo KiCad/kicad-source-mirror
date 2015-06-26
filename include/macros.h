@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,22 +84,20 @@ static inline const wxChar* GetChars( const wxString& s )
 #endif
 }
 
-// This really needs a function? well, it is used *a lot* of times
-template <class T> inline void NEGATE( T &x ) { x = -x; }
-
 /// # of elements in an array
 #define DIM( x )    unsigned( sizeof(x) / sizeof( (x)[0] ) )    // not size_t
 
-/// Exchange two values
-// std::swap works only with arguments of the same type (which is saner);
-// here the compiler will figure out what to do (I hope to get rid of
-// this soon or late)
-template <class T, class T2> inline void EXCHG( T& a, T2& b )
+
+/**
+ * Function MIRROR
+ * Mirror @a aPoint in @a aMirrorRef.
+ */
+template<typename T>
+void MIRROR( T& aPoint, const T& aMirrorRef )
 {
-    T temp = a;
-    a = b;
-    b = temp;
+    aPoint = -( aPoint - aMirrorRef ) + aMirrorRef;
 }
+
 
 /**
  * Function Clamp

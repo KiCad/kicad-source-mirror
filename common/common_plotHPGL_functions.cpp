@@ -460,7 +460,7 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
      */
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y );
+        std::swap( size.x, size.y );
         orient = AddAngles( orient, 900 );
     }
 

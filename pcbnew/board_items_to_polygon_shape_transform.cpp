@@ -258,7 +258,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
         wxSize size = textmod->GetSize();
 
         if( textmod->IsMirrored() )
-            NEGATE( size.x );
+            size.x = -size.x;
 
         DrawGraphicText( NULL, NULL, textmod->GetTextPosition(), BLACK,
                          textmod->GetShownText(), textmod->GetDrawRotation(), size,
@@ -380,7 +380,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
     wxSize size = GetSize();
 
     if( IsMirrored() )
-        NEGATE( size.x );
+        size.x = -size.x;
 
     s_cornerBuffer = &aCornerBuffer;
     s_textWidth  = GetThickness() + ( 2 * aClearanceValue );
@@ -886,9 +886,9 @@ void    CreateThermalReliefPadPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
             if( dx < dy )
             {
-                EXCHG( dx, dy );
+                std::swap( dx, dy );
                 supp_angle = 900;
-                EXCHG( copper_thickness.x, copper_thickness.y );
+                std::swap( copper_thickness.x, copper_thickness.y );
             }
 
             int deltasize = dx - dy;        // = distance between shape position and the 2 demi-circle ends centre

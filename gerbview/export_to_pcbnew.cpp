@@ -291,8 +291,8 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
     }
 
     // Reverse Y axis:
-    NEGATE( seg_start.y );
-    NEGATE( seg_end.y );
+    seg_start.y = -seg_start.y;
+    seg_end.y = -seg_end.y;
     writePcbLineItem( isArc, seg_start, seg_end, aGbrItem->m_Size.x, aLayer, angle );
 }
 
@@ -327,8 +327,8 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem
     seg_end     = aGbrItem->m_End;
 
     // Reverse Y axis:
-    NEGATE( seg_start.y );
-    NEGATE( seg_end.y );
+    seg_start.y = -seg_start.y;
+    seg_end.y = -seg_end.y;
 
     writeCopperLineItem( seg_start, seg_end, aGbrItem->m_Size.x, aLayer );
 }
@@ -382,8 +382,8 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
                      -RAD2DECIDEG( DELTA_ANGLE * ii ) );
         seg_end = curr_end;
         // Reverse Y axis:
-        NEGATE( seg_start.y );
-        NEGATE( seg_end.y );
+        seg_start.y = -seg_start.y;
+        seg_end.y = -seg_end.y;
         writeCopperLineItem( seg_start, seg_end, aGbrItem->m_Size.x, aLayer );
         curr_start = curr_end;
     }
@@ -393,8 +393,8 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
         seg_start   = curr_start;
         seg_end     = end;
         // Reverse Y axis:
-        NEGATE( seg_start.y );
-        NEGATE( seg_end.y );
+        seg_start.y = -seg_start.y;
+        seg_end.y = -seg_end.y;
         writeCopperLineItem( seg_start, seg_end, aGbrItem->m_Size.x, aLayer );
     }
 }
@@ -419,7 +419,7 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem
     wxPoint via_pos = aGbrItem->m_Start;
     int width   = (aGbrItem->m_Size.x + aGbrItem->m_Size.y) / 2;
     // Reverse Y axis:
-    NEGATE( via_pos.y );
+    via_pos.y = -via_pos.y;
 
     // Layers are Front to Back
     fprintf( m_fp, " (via (at %s %s) (size %s)",

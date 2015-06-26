@@ -477,7 +477,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
     wxSize size = GetSize();
 
     if( IsMirrored() )
-        NEGATE( size.x );
+        size.x = -size.x;
 
     s_cornerBuffer = &aCornerBuffer;
     EDA_COLOR_T color = BLACK;  // not actually used, but needed by DrawGraphicText

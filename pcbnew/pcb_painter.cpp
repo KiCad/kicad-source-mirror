@@ -465,7 +465,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             {
                 orientation += 900.0;
                 size = padsize.x;
-                EXCHG( padsize.x, padsize.y );
+                std::swap( padsize.x, padsize.y );
             }
             else if( padsize.x == padsize.y )
             {

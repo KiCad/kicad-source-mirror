@@ -288,7 +288,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
         end = 0;
 
     if( begin > end )
-        EXCHG( begin, end );
+        std::swap( begin, end );
 
     member = begin;
     tmp = busName;

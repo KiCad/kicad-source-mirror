@@ -606,11 +606,11 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         pad->SetX0( pad->GetPosition().x );
 
         tmp = pad->GetOffset();
-        NEGATE( tmp.x );
+        tmp.x = -tmp.x;
         pad->SetOffset( tmp );
 
         tmpz = pad->GetDelta();
-        NEGATE( tmpz.x );
+        tmpz.x = -tmpz.x;
         pad->SetDelta( tmpz );
 
         pad->SetOrientation( 1800 - pad->GetOrientation() );

@@ -143,7 +143,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
     double rotation;
     if( mapExposure( aParent ) == false )
     {
-        EXCHG(aColor, aAltColor);
+        std::swap( aColor, aAltColor );
     }
 
     switch( primitive_id )

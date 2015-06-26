@@ -111,7 +111,7 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
     wxPoint abPos = aXYPosition + m_imageParams->m_ImageJustifyOffset;
 
     if( m_swapAxis )
-        EXCHG( abPos.x, abPos.y );
+        std::swap( abPos.x, abPos.y );
 
     abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
     abPos.x = KiROUND( abPos.x * m_drawScale.x );
@@ -123,11 +123,11 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
 
     // Negate A axis if mirrored
     if( m_mirrorA )
-        NEGATE( abPos.x );
+        abPos.x = -abPos.x;
 
     // abPos.y must be negated when no mirror, because draw axis is top to bottom
     if( !m_mirrorB )
-        NEGATE( abPos.y );
+        abPos.y = -abPos.y;
     return abPos;
 }
 
@@ -138,10 +138,10 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition ) const
     wxPoint xyPos = aABPosition;
 
     if( m_mirrorA )
-        NEGATE( xyPos.x );
+        xyPos.x = -xyPos.x;
 
     if( !m_mirrorB )
-        NEGATE( xyPos.y );
+        xyPos.y = -xyPos.y;
 
     double rotation = m_lyrRotation * 10 + m_imageParams->m_ImageRotation * 10;
 
@@ -153,7 +153,7 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition ) const
     xyPos  -= m_layerOffset + m_imageParams->m_ImageOffset;
 
     if( m_swapAxis )
-        EXCHG( xyPos.x, xyPos.y );
+        std::swap( xyPos.x, xyPos.y );
 
     return xyPos - m_imageParams->m_ImageJustifyOffset;
 }
@@ -344,7 +344,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( !isDark )
     {
         // draw in background color ("negative" color)
-        EXCHG( color, alt_color );
+        std::swap( color, alt_color );
     }
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -470,7 +470,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
     // make calculations more easy if ensure start.x < end.x
     // (only 2 quadrants to consider)
     if( start.x > end.x )
-        EXCHG( start, end );
+        std::swap( start, end );
 
     // calculate values relative to start point:
     wxPoint delta = end - start;
@@ -481,7 +481,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
     bool change = delta.y < 0;
 
     if( change )
-        NEGATE( delta.y);
+        delta.y = -delta.y;
 
     // Now create the full polygon.
     // Due to previous changes, the shape is always something like
@@ -516,7 +516,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
     for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
     {
         if( change )
-            NEGATE( m_PolyCorners[ii].y);
+            m_PolyCorners[ii].y = -m_PolyCorners[ii].y;
 
          m_PolyCorners[ii] += start;
     }

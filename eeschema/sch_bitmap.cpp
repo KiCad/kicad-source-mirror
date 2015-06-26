@@ -127,8 +127,8 @@ void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
                                    GetChars( aItem->GetClass() ) ) );
 
     SCH_BITMAP* item = (SCH_BITMAP*) aItem;
-    EXCHG( m_Pos, item->m_Pos );
-    EXCHG( m_Image, item->m_Image );
+    std::swap( m_Pos, item->m_Pos );
+    std::swap( m_Image, item->m_Image );
 }
 
 
@@ -223,10 +223,7 @@ wxSize SCH_BITMAP::GetSize() const
  */
 void SCH_BITMAP::MirrorX( int aXaxis_position )
 {
-    m_Pos.y -= aXaxis_position;
-    NEGATE( m_Pos.y );
-    m_Pos.y += aXaxis_position;
-
+    MIRROR( m_Pos.y, aXaxis_position );
     m_Image->Mirror( true );
 }
 
@@ -236,9 +233,7 @@ void SCH_BITMAP::MirrorX( int aXaxis_position )
  */
 void SCH_BITMAP::MirrorY( int aYaxis_position )
 {
-    m_Pos.x -= aYaxis_position;
-    NEGATE( m_Pos.x );
-    m_Pos.x += aYaxis_position;
+    MIRROR( m_Pos.x, aYaxis_position );
     m_Image->Mirror( false );
 }
 

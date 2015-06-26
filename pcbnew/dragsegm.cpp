@@ -126,7 +126,7 @@ void DRAG_SEGM_PICKER::SetTrackEndsCoordinates( wxPoint aOffset )
             RotatePoint(&padoffset, curr_rot_offset);
 
         if( flip )
-            NEGATE( padoffset.y );
+            padoffset.y = -padoffset.y;
 
         m_Track->SetStart( m_Pad_Start->GetPosition() - aOffset + padoffset );
     }
@@ -139,7 +139,7 @@ void DRAG_SEGM_PICKER::SetTrackEndsCoordinates( wxPoint aOffset )
             RotatePoint( &padoffset, curr_rot_offset );
 
         if( flip )
-            NEGATE( padoffset.y );
+            padoffset.y = -padoffset.y;
 
         m_Track->SetEnd( m_Pad_End->GetPosition() - aOffset + padoffset );
     }

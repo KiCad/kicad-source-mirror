@@ -223,7 +223,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
     thickness = pt_texte->GetThickness();
 
     if( pt_texte->IsMirrored() )
-        NEGATE( size.x );  // Text is mirrored
+        size.x = -size.x;  // Text is mirrored
 
     // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
     // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size

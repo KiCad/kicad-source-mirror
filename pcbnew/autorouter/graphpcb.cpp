@@ -114,7 +114,7 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
         // Orientation turned 90 deg.
         if( aPad->GetOrientation() == 900  ||  aPad->GetOrientation() == 2700 )
         {
-            EXCHG( dx, dy );
+            std::swap( dx, dy );
         }
 
         TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy,
@@ -345,7 +345,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color, i
     if( x0 == x1 )  // Vertical.
     {
         if( y1 < y0 )
-            EXCHG( y0, y1 );
+            std::swap( y0, y1 );
 
         dy  = y0 / RoutingMatrix.m_GridRouting;
         lim = y1 / RoutingMatrix.m_GridRouting;
@@ -372,7 +372,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color, i
     if( y0 == y1 )  // Horizontal
     {
         if( x1 < x0 )
-            EXCHG( x0, x1 );
+            std::swap( x0, x1 );
 
         dx  = x0 / RoutingMatrix.m_GridRouting;
         lim = x1 / RoutingMatrix.m_GridRouting;
@@ -401,7 +401,8 @@ void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color, i
     {
         if( x1 < x0 )
         {
-            EXCHG( x1, x0 ); EXCHG( y1, y0 );
+            std::swap( x1, x0 );
+            std::swap( y1, y0 );
         }
 
         dx  = x0 / RoutingMatrix.m_GridRouting;
@@ -438,8 +439,8 @@ void TracePcbLine( int x0, int y0, int x1, int y1, LAYER_NUM layer, int color, i
     {
         if( y1 < y0 )
         {
-            EXCHG( x1, x0 );
-            EXCHG( y1, y0 );
+            std::swap( x1, x0 );
+            std::swap( y1, y0 );
         }
 
         dy  = y0 / RoutingMatrix.m_GridRouting;
@@ -643,8 +644,8 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer
     // Make coordinate ux1 tj > ux0 to simplify calculations
     if( ux1 < ux0 )
     {
-        EXCHG( ux1, ux0 );
-        EXCHG( uy1, uy0 );
+        std::swap( ux1, ux0 );
+        std::swap( uy1, uy0 );
     }
 
     // Calculating the incrementing the Y axis

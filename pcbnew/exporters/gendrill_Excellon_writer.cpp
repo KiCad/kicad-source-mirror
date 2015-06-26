@@ -619,7 +619,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
     if( (aFirstLayer >= 0) && (aLastLayer >= 0) )
     {
         if( aFirstLayer > aLastLayer )
-            EXCHG( aFirstLayer, aLastLayer );
+            std::swap( aFirstLayer, aLastLayer );
     }
 
     if ( aGenerateNPTH_list && aMerge_PTH_NPTH )

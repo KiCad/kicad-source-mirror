@@ -245,21 +245,21 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* aPad, wxDC* DC )
         module->Draw( m_canvas, DC, GR_XOR );
 
     wxSize  sz = aPad->GetSize();
-    EXCHG( sz.x, sz.y );
+    std::swap( sz.x, sz.y );
     aPad->SetSize( sz );
 
     sz = aPad->GetDrillSize();
-    EXCHG( sz.x, sz.y );
+    std::swap( sz.x, sz.y );
     aPad->SetDrillSize( sz );
 
     wxPoint pt = aPad->GetOffset();
-    EXCHG( pt.x, pt.y );
+    std::swap( pt.x, pt.y );
     aPad->SetOffset( pt );
 
     aPad->SetOffset( wxPoint( aPad->GetOffset().x, -aPad->GetOffset().y ) );
 
     sz = aPad->GetDelta();
-    EXCHG( sz.x, sz.y );
+    std::swap( sz.x, sz.y );
     sz.x = -sz.x;
     aPad->SetDelta( sz );
 

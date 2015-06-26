@@ -250,23 +250,15 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
 void SCH_LINE::MirrorX( int aXaxis_position )
 {
-    m_start.y -= aXaxis_position;
-    NEGATE(  m_start.y );
-    m_start.y += aXaxis_position;
-    m_end.y   -= aXaxis_position;
-    NEGATE(  m_end.y );
-    m_end.y += aXaxis_position;
+    MIRROR( m_start.y, aXaxis_position );
+    MIRROR( m_end.y,   aXaxis_position );
 }
 
 
 void SCH_LINE::MirrorY( int aYaxis_position )
 {
-    m_start.x -= aYaxis_position;
-    NEGATE(  m_start.x );
-    m_start.x += aYaxis_position;
-    m_end.x   -= aYaxis_position;
-    NEGATE(  m_end.x );
-    m_end.x += aYaxis_position;
+    MIRROR( m_start.x, aYaxis_position );
+    MIRROR( m_end.x,   aYaxis_position );
 }
 
 
@@ -313,7 +305,7 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     }
     else if( m_end == aLine->m_end )
     {
-        EXCHG( aLine->m_start, aLine->m_end );
+        std::swap( aLine->m_start, aLine->m_end );
     }
     else if( m_end != aLine->m_start )
     {

@@ -1409,7 +1409,7 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
         aEndLayer = aStartLayer;
 
     if( aEndLayer <  aStartLayer )
-        EXCHG( aEndLayer, aStartLayer );
+        std::swap( aEndLayer, aStartLayer );
 
     for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
     {

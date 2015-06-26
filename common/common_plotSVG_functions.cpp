@@ -352,7 +352,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
         return;
 
     if( StAngle > EndAngle )
-        EXCHG( StAngle, EndAngle );
+        std::swap( StAngle, EndAngle );
 
     setFillMode( fill );
     SetCurrentLineWidth( width );
@@ -374,7 +374,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
         {
             StAngle = 1800.0 -StAngle;
             EndAngle = 1800.0 -EndAngle;
-            EXCHG( StAngle, EndAngle );
+            std::swap( StAngle, EndAngle );
         }
         else
         {

@@ -721,7 +721,7 @@ void LIB_FIELD::calcEdit( const wxPoint& aPosition )
 
     if( m_updateText )
     {
-        EXCHG( m_Text, m_savedText );
+        std::swap( m_Text, m_savedText );
         m_updateText = false;
     }
 

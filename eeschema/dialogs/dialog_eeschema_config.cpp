@@ -164,7 +164,7 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonUpClick( wxCommandEvent& event )
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
         int jj = selections[ii];
-        EXCHG( libnames[jj],  libnames[jj-1]);
+        std::swap( libnames[jj],  libnames[jj-1]);
     }
 
     m_ListLibr->Set(libnames);
@@ -198,7 +198,7 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonDownClick( wxCommandEvent& event )
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         int jj = selections[ii];
-        EXCHG( libnames[jj],  libnames[jj+1]);
+        std::swap( libnames[jj],  libnames[jj+1]);
     }
 
     m_ListLibr->Set( libnames );

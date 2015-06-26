@@ -392,7 +392,7 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 
         // Here we have 2 items connected by the same area have 2 differents subnets: merge subnets
         if( (subnet > old_subnet) || ( subnet <= 0) )
-            EXCHG( subnet, old_subnet );
+            std::swap( subnet, old_subnet );
 
         for( unsigned jj = 0; jj < Candidates.size(); jj++ )
         {

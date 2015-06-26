@@ -508,7 +508,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     // If StAngle > EndAngle, it is CW. So transform it to CCW
     if( StAngle > EndAngle )
     {
-        EXCHG( StAngle, EndAngle );
+        std::swap( StAngle, EndAngle );
     }
 
     DPOINT centre_dev = userToDeviceCoordinates( centre );
@@ -536,7 +536,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double 
      * (Oval vertical orientation 0) */
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y );
+        std::swap( size.x, size.y );
         orient = AddAngles( orient, 900 );
     }
 

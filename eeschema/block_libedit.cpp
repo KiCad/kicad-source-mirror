@@ -171,7 +171,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         pt = GetScreen()->m_BlockLocate.Centre();
         pt = GetNearestGridPosition( pt );
-        NEGATE( pt.y );
+        pt.y = -pt.y;
 
         if( GetCurPart() )
         {
@@ -261,7 +261,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = GetScreen()->m_BlockLocate.GetMoveVector();
-        NEGATE( pt.y );
+        pt.y = -pt.y;
 
         if( GetCurPart() )
             GetCurPart()->CopySelectedItems( pt );
@@ -280,7 +280,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
         pt = GetScreen()->m_BlockLocate.Centre();
         pt = GetNearestGridPosition( pt );
-        NEGATE( pt.y );
+        pt.y = -pt.y;
 
         if( GetCurPart() )
         {

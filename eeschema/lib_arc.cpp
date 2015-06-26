@@ -195,7 +195,7 @@ bool LIB_ARC::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM
     // TODO: use aTransMat to calculates parameters
     wxPoint relativePosition = aPosition;
 
-    NEGATE( relativePosition.y );       // reverse Y axis
+    relativePosition.y = -relativePosition.y; // reverse Y axis
 
     int distance = KiROUND( GetLineLength( m_Pos, relativePosition ) );
 
@@ -220,7 +220,7 @@ bool LIB_ARC::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM
     // relative to the start point to end point vector lies
     if( CrossProduct( startEndVector, startRelativePositionVector ) < 0 )
     {
-        EXCHG( crossProductStart, crossProductEnd );
+        std::swap( crossProductStart, crossProductEnd );
     }
 
     // When the cross products have a different sign, the point lies in sector
@@ -294,8 +294,8 @@ void LIB_ARC::MirrorHorizontal( const wxPoint& aCenter )
     m_ArcEnd.x -= aCenter.x;
     m_ArcEnd.x *= -1;
     m_ArcEnd.x += aCenter.x;
-    EXCHG( m_ArcStart, m_ArcEnd );
-    EXCHG( m_t1, m_t2 );
+    std::swap( m_ArcStart, m_ArcEnd );
+    std::swap( m_t1, m_t2 );
     m_t1 = 1800 - m_t1;
     m_t2 = 1800 - m_t2;
     if( m_t1 > 3600 || m_t2 > 3600 )
@@ -321,8 +321,8 @@ void LIB_ARC::MirrorVertical( const wxPoint& aCenter )
     m_ArcEnd.y -= aCenter.y;
     m_ArcEnd.y *= -1;
     m_ArcEnd.y += aCenter.y;
-    EXCHG( m_ArcStart, m_ArcEnd );
-    EXCHG( m_t1, m_t2 );
+    std::swap( m_ArcStart, m_ArcEnd );
+    std::swap( m_t1, m_t2 );
     m_t1 = - m_t1;
     m_t2 = - m_t2;
     if( m_t1 > 3600 || m_t2 > 3600 )
@@ -439,8 +439,8 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
     if( swap )
     {
-        EXCHG( pos1.x, pos2.x );
-        EXCHG( pos1.y, pos2.y );
+        std::swap( pos1.x, pos2.x );
+        std::swap( pos1.y, pos2.y );
     }
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -515,8 +515,8 @@ start(%d, %d), end(%d, %d), radius %d" ),
 
     if( DefaultTransform.MapAngles( &angleStart, &angleEnd ) )
     {
-        EXCHG( endPos.x, startPos.x );
-        EXCHG( endPos.y, startPos.y );
+        std::swap( endPos.x, startPos.x );
+        std::swap( endPos.y, startPos.y );
     }
 
     /* Start with the start and end point of the arc. */

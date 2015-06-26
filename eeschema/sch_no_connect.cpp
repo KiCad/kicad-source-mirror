@@ -63,8 +63,8 @@ void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
                  wxT( "Cannot swap no connect data with invalid item." ) );
 
     SCH_NO_CONNECT* item = (SCH_NO_CONNECT*)aItem;
-    EXCHG( m_pos, item->m_pos );
-    EXCHG( m_size, item->m_size );
+    std::swap( m_pos, item->m_pos );
+    std::swap( m_size, item->m_size );
 }
 
 
@@ -153,17 +153,13 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
 void SCH_NO_CONNECT::MirrorX( int aXaxis_position )
 {
-    m_pos.y -= aXaxis_position;
-    NEGATE(  m_pos.y );
-    m_pos.y += aXaxis_position;
+    MIRROR( m_pos.y, aXaxis_position );
 }
 
 
 void SCH_NO_CONNECT::MirrorY( int aYaxis_position )
 {
-    m_pos.x -= aYaxis_position;
-    NEGATE(  m_pos.x );
-    m_pos.x += aYaxis_position;
+    MIRROR( m_pos.x, aYaxis_position );
 }
 
 

@@ -374,7 +374,7 @@ static int tst_links_between_blocks( NETINFO_ITEM*          aNetinfo,
     min_id = best_link->m_PadEnd->GetSubRatsnest();
 
     if( min_id > subratsnest_id )
-        EXCHG( min_id, subratsnest_id );
+        std::swap( min_id, subratsnest_id );
 
     // Merge the 2 blocks in one sub ratsnest:
     for( unsigned ii = 0; ii < aNetinfo->m_PadInNetList.size(); ii++ )

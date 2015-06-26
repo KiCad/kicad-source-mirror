@@ -350,11 +350,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
     if( m_isFlipped )
     {
         wxPoint pt = m_dummyPad->GetOffset();
-        NEGATE( pt.y );
+        pt.y = -pt.y;
         m_dummyPad->SetOffset( pt );
 
         wxSize sz = m_dummyPad->GetDelta();
-        NEGATE( sz.y );
+        sz.y = -sz.y;
         m_dummyPad->SetDelta( sz );
 
         // flip pad's layers
@@ -457,7 +457,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         angle = m_currentPad->GetOrientation() - module->GetOrientation();
 
         if( m_isFlipped )
-            NEGATE( angle );
+            angle = -angle;
 
         m_dummyPad->SetOrientation( angle );
     }

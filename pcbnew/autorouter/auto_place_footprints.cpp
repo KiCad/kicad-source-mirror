@@ -936,7 +936,7 @@ double compute_Ratsnest_PlaceModule( BOARD* aBrd )
 
         // ttry to have always dx >= dy to calculate the cost of the rastsnet
         if( dx < dy )
-            EXCHG( dx, dy );
+            std::swap( dx, dy );
 
         // Cost of the connection = lenght + penalty due to the slope
         // dx is the biggest lenght relative to the X or Y axis

@@ -225,7 +225,7 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
         TRACK* track = (TRACK*) this;
         TRACK* image = (TRACK*) aImage;
 
-        EXCHG(track->m_Layer, image->m_Layer );
+        std::swap(track->m_Layer, image->m_Layer );
 
         // swap start, end, width and shape for track and image.
         wxPoint exchp = track->GetStart();
@@ -258,7 +258,7 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
             if( viaimage->IsDrillDefault() )
                 itmp = -1;
 
-            EXCHG(itmp, drilltmp );
+            std::swap(itmp, drilltmp );
 
             if( drilltmp > 0 )
                 via->SetDrill( drilltmp );

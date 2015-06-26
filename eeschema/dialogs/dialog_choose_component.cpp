@@ -344,9 +344,7 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART* aComponent, int aUnit )
 
     dc.SetUserScale( scale, scale );
 
-    wxPoint offset =  bBox.Centre();
-    NEGATE( offset.x );
-    NEGATE( offset.y );
+    wxPoint offset = -bBox.Centre();
 
     // Avoid rendering when either dimension is zero
     int width, height;

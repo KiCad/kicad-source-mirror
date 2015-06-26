@@ -238,18 +238,18 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
     SCH_FIELD* item = (SCH_FIELD*) aItem;
 
-    EXCHG( m_Text, item->m_Text );
-    EXCHG( m_Layer, item->m_Layer );
-    EXCHG( m_Pos, item->m_Pos );
-    EXCHG( m_Size, item->m_Size );
-    EXCHG( m_Thickness, item->m_Thickness );
-    EXCHG( m_Orient, item->m_Orient );
-    EXCHG( m_Mirror, item->m_Mirror );
-    EXCHG( m_Attributs, item->m_Attributs );
-    EXCHG( m_Italic, item->m_Italic );
-    EXCHG( m_Bold, item->m_Bold );
-    EXCHG( m_HJustify, item->m_HJustify );
-    EXCHG( m_VJustify, item->m_VJustify );
+    std::swap( m_Text, item->m_Text );
+    std::swap( m_Layer, item->m_Layer );
+    std::swap( m_Pos, item->m_Pos );
+    std::swap( m_Size, item->m_Size );
+    std::swap( m_Thickness, item->m_Thickness );
+    std::swap( m_Orient, item->m_Orient );
+    std::swap( m_Mirror, item->m_Mirror );
+    std::swap( m_Attributs, item->m_Attributs );
+    std::swap( m_Italic, item->m_Italic );
+    std::swap( m_Bold, item->m_Bold );
+    std::swap( m_HJustify, item->m_HJustify );
+    std::swap( m_VJustify, item->m_VJustify );
 }
 
 
@@ -285,12 +285,8 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
 
     // Due to the Y axis direction, we must mirror the bounding box,
     // relative to the text position:
-    begin.y -= pos.y;
-    end.y -= pos.y;
-    NEGATE( begin.y );
-    NEGATE( end.y );
-    begin.y += pos.y;
-    end.y += pos.y;
+    MIRROR( begin.y, pos.y );
+    MIRROR( end.y,   pos.y );
 
     // Now, apply the component transform (mirror/rot)
     begin = parentComponent->GetTransform().TransformCoordinate( begin );

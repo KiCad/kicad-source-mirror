@@ -174,8 +174,8 @@ void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
 
     if( aArcAngle < 0 )
     {
-        EXCHG( arc_start, arc_end );
-        NEGATE( aArcAngle );
+        std::swap( arc_start, arc_end );
+        aArcAngle = -aArcAngle;
     }
 
     // Compute the ends of segments and creates poly

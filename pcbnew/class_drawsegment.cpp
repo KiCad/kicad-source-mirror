@@ -136,9 +136,7 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
     m_End.y  = aCentre.y - (m_End.y - aCentre.y);
 
     if( m_Shape == S_ARC )
-    {
-        NEGATE( m_Angle );
-    }
+        m_Angle = -m_Angle;
 
     SetLayer( FlipLayer( GetLayer() ) );
 }
@@ -294,12 +292,12 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         if( !panel->GetPrintMirrored() )
         {
             if( StAngle > EndAngle )
-                EXCHG( StAngle, EndAngle );
+                std::swap( StAngle, EndAngle );
         }
         else    // Mirrored mode: arc orientation is reversed
         {
             if( StAngle < EndAngle )
-                EXCHG( StAngle, EndAngle );
+                std::swap( StAngle, EndAngle );
         }
 
         if( filled )
