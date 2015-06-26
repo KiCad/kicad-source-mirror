@@ -132,9 +132,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         if( IsGalCanvasActive() )
         {
-            GetGalCanvas()->GetView()->SetCenter( VECTOR2D( module->GetPosition() ) );
-            m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
-            m_toolManager->RunAction( COMMON_ACTIONS::selectItem, true, module );
+            GetToolManager()->RunAction( COMMON_ACTIONS::crossProbeSchToPcb, true, module );
         }
         else
         {

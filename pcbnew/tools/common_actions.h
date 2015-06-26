@@ -279,6 +279,7 @@ public:
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION highlightNetCursor;
     static TOOL_ACTION drillOrigin;
+    static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION showHelp;
     static TOOL_ACTION toBeDone;
 
@@ -287,9 +288,6 @@ public:
 
     /// Find an item and start moving
     static TOOL_ACTION findMove;
-
-    /// Blocks CTRL+F, it is handled by wxWidgets
-    static TOOL_ACTION findDummy;
 
     static TOOL_ACTION editFootprintInFpEditor;
     static TOOL_ACTION copyPadToSettings;

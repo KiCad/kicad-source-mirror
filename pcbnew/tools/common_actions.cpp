@@ -391,6 +391,10 @@ TOOL_ACTION COMMON_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchToPcb",
+        AS_GLOBAL, 0,
+        "", "" );
+
 TOOL_ACTION COMMON_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
         AS_GLOBAL, 0,
         "", "" );

@@ -86,6 +86,7 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
 {
     m_placeOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
                                                 KIGFX::ORIGIN_VIEWITEM::CROSS );
+    m_probingSchToPcb = false;
 }
 
 
@@ -588,13 +589,35 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::SelectionCrossProbe( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
 {
+    if( m_probingSchToPcb )
+    {
+        m_probingSchToPcb = false;
+        return 0;
+    }
+
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
 
     if( selection.Size() == 1 )
         m_frame->SendMessageToEESCHEMA( selection.Item<BOARD_ITEM>( 0 ) );
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
+{
+    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
+
+    if( item )
+    {
+        m_probingSchToPcb = true;
+        getView()->SetCenter( VECTOR2D( item->GetPosition() ) );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, item );
+    }
 
     return 0;
 }
@@ -697,7 +720,8 @@ void PCB_EDITOR_CONTROL::SetTransitions()
     Go( &PCB_EDITOR_CONTROL::PlaceModule,        COMMON_ACTIONS::placeModule.MakeEvent() );
 
     // Other
-    Go( &PCB_EDITOR_CONTROL::SelectionCrossProbe, SELECTION_TOOL::SelectedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch, SELECTION_TOOL::SelectedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb, COMMON_ACTIONS::crossProbeSchToPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         COMMON_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        COMMON_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  COMMON_ACTIONS::highlightNetCursor.MakeEvent() );

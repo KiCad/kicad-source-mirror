@@ -75,7 +75,10 @@ public:
     int PlaceModule( const TOOL_EVENT& aEvent );
 
     ///> Notifies eeschema about the selected item.
-    int SelectionCrossProbe( const TOOL_EVENT& aEvent );
+    int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
+
+    ///> Reacts to selection change in eeschema.
+    int CrossProbeSchToPcb( const TOOL_EVENT& aEvent );
 
     ///> Places the origin point for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
@@ -95,6 +98,9 @@ private:
 
     ///> Place & drill origin marker.
     KIGFX::ORIGIN_VIEWITEM* m_placeOrigin;
+
+    ///> Flag to ignore a single crossprobe message from eeschema.
+    bool m_probingSchToPcb;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP;
