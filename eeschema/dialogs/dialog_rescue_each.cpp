@@ -219,7 +219,7 @@ void DIALOG_RESCUE_EACH::renderPreview( LIB_PART* aComponent, int aUnit, wxPanel
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Find joint bounding box for everything we are about to draw.
-    EDA_RECT bBox = aComponent->GetBoundingBox( aUnit, /* deMorganConvert */ 0 );
+    EDA_RECT bBox = aComponent->GetBoundingBox( aUnit, /* deMorganConvert */ 1 );
     const double xscale = (double) dc_size.x / bBox.GetWidth();
     const double yscale = (double) dc_size.y / bBox.GetHeight();
     const double scale  = std::min( xscale, yscale ) * 0.85;
@@ -235,7 +235,7 @@ void DIALOG_RESCUE_EACH::renderPreview( LIB_PART* aComponent, int aUnit, wxPanel
     if( !width || !height )
         return;
 
-    aComponent->Draw( NULL, &dc, offset, aUnit, /* deMorganConvert */ 0, GR_COPY,
+    aComponent->Draw( NULL, &dc, offset, aUnit, /* deMorganConvert */ 1, GR_COPY,
                       UNSPECIFIED_COLOR, DefaultTransform, true, true, false );
 }
 
