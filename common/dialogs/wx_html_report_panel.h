@@ -64,6 +64,7 @@ private:
 
     typedef std::vector<REPORT_LINE> REPORT_LINES;
 
+    wxString addHeader( const wxString& aBody );
     wxString generateHtml( const REPORT_LINE& aLine );
     wxString generatePlainText( const REPORT_LINE& aLine );
 
