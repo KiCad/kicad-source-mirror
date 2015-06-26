@@ -40,7 +40,7 @@ out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar="\"", quoting=
 def writerow( acsvwriter, columns ):
     utf8row = []
     for col in columns:
-        utf8row.append( str(col).encode('utf8') )
+        utf8row.append( str(col) )
     acsvwriter.writerow( utf8row )
 
 components = net.getInterestingComponents()

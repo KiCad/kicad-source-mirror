@@ -9,7 +9,7 @@
     Generate a HTML BOM list.
     Components are sorted and grouped by ref
     Fields are (if exist)
-    Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+    Ref, Quantity, Value, Symbol, footprint, Description, Vendor
 """
 
 
@@ -26,7 +26,7 @@ html = """
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>KiCad BOM Example 5</title>
+        <title>KiCad BOM grouped by value and footprint </title>
     </head>
     <body>
     <h1><!--SOURCE--></h1>
@@ -60,12 +60,12 @@ def myEqu(self, other):
         result = False
     elif self.getFootprint() != other.getFootprint():
         result = False
-    elif self.getField("Tolerance") != other.getField("Tolerance"):
-        result = False
-    elif self.getField("Manufacturer") != other.getField("Manufacturer"):
-        result = False
-    elif self.getField("Voltage") != other.getField("Voltage"):
-        result = False
+#    elif self.getField("Tolerance") != other.getField("Tolerance"):
+#        result = False
+#    elif self.getField("Manufacturer") != other.getField("Manufacturer"):
+#        result = False
+#    elif self.getField("Voltage") != other.getField("Voltage"):
+#        result = False
 
     return result
 
@@ -97,10 +97,12 @@ html = html.replace('<!--COMPCOUNT-->', "<b>Component Count:</b>" + \
     str(len(components)))
 
 row  = "<tr><th style='width:640px'>Ref</th>" + "<th>Qnty</th>"
-row += "<th>Value</th>" + "<th>Part</th>"
-row +=  "<th>Description</th>"
-#row +=  "<th>Datasheet</th>"
-row += "<th>PartNumber</th>" + "<th>Vendor</th></tr>"
+row += "<th>Value</th>"
+row += "<th>Symbol</th>"
+row += "<th>Footprint</th>"
+row += "<th>Description</th>"
+row += "<th>PartNumber</th>"
+row += "<th>Vendor</th></tr>"
 
 html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 
@@ -120,14 +122,17 @@ for group in grouped:
         refs += component.getRef()
         c = component
 
-    row = "<tr><td>" + refs +"</td><td>" + str(len(group))
-    row += "</td><td>" + c.getValue() + "</td><td>"
-    row += c.getLibName() + ":" + c.getPartName() + "</td><td>"
-    #row += c.getDatasheet() + "</td><td>"
-    row += c.getDescription() + "</td><td>"
-    row += c.getField("PartNumber") + "</td><td>"
-    row += c.getField("Vendor")
-    row += "</td></tr>"
+    row = "<tr>"
+    row += "<td>" + refs +"</td>"
+    row += "<td align=center>" + str(len(group)) + "</td>"
+    row += "<td align=center>" + c.getValue() + "</td>"
+#    row += "<td align=center>" + c.getLibName() + ":" + c.getPartName() + "</td>"
+    row += "<td align=center>" + c.getPartName() + "</td>"
+    row += "<td align=center>" + c.getFootprint() + "</td>"
+    row += "<td align=center>" + c.getDescription() + "</td>"
+    row += "<td align=center>" + c.getField("PartNumber") + "</td>"
+    row += "<td align=center>" + c.getField("Vendor") + "</td>"
+    row += "</tr>"
 
     html = html.replace('<!--TABLEROW-->', row + "<!--TABLEROW-->")
 

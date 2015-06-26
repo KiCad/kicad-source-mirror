@@ -165,6 +165,7 @@ class xmlElement():
 
     def addAttribute(self, attr, value):
         """Add an attribute to this element"""
+        if type(value) != str: value = value.encode('utf-8')
         self.attributes[attr] = value
 
     def setAttribute(self, attr, value):
@@ -220,20 +221,31 @@ class xmlElement():
                 try:
                     if attrmatch != "":
                         if self.attributes[attribute] == attrmatch:
-                            return self.chars
+                            ret = self.chars
+                            if type(ret) != str: ret = ret.encode('utf-8')
+                            return ret
                     else:
-                        return self.attributes[attribute]
+                        ret = self.attributes[attribute]
+                        if type(ret) != str: ret = ret.encode('utf-8')
+                        return ret
                 except AttributeError:
-                    return ""
+                    ret = ""
+                    if type(ret) != str: ret = ret.encode('utf-8')
+                    return ret
             else:
-                return self.chars
+                ret = self.chars
+                if type(ret) != str: ret = ret.encode('utf-8')
+                return ret
 
         for child in self.children:
             ret = child.get(elemName, attribute, attrmatch)
             if ret != "":
+                if type(ret) != str: ret = ret.encode('utf-8')
                 return ret
 
-        return ""
+        ret = ""
+        if type(ret) != str: ret = ret.encode('utf-8')
+        return ret
 
 
 
@@ -345,7 +357,7 @@ class comp():
             v.setChars(value)
 
     def getValue(self):
-        return self.element.get("value").encode( "utf-8" )
+        return self.element.get("value")
 
     def getField(self, name, libraryToo=True):
         """Return the value of a field named name. The component is first
@@ -361,7 +373,7 @@ class comp():
 
         field = self.element.get("field", "name", name)
         if field == "" and libraryToo:
-            field = self.libpart.getField(name).encode( "utf-8" )
+            field = self.libpart.getField(name)
         return field
 
     def getFieldNames(self):
@@ -374,7 +386,7 @@ class comp():
         fields = self.element.getChild('fields')
         if fields:
             for f in fields.getChildren():
-                fieldNames.append( f.get('field','name').encode( "utf-8" ) )
+                fieldNames.append( f.get('field','name') )
         return fieldNames
 
     def getRef(self):
@@ -396,7 +408,7 @@ class comp():
         return self.element.get("tstamp")
 
     def getDescription(self):
-        return self.libpart.getDescription().encode( "utf-8" )
+        return self.libpart.getDescription()
 
 
 class netlist():
@@ -607,7 +619,9 @@ class netlist():
                 ret.append(c)
 
         # Sort first by ref as this makes for easier to read BOM's
-        ret.sort(key=lambda g: g.getRef())
+        def f(v):
+            return re.sub(r'([A-z]+)[0-9]+', r'\1', v) + '%08i' % int(re.sub(r'[A-z]+([0-9]+)', r'\1', v))
+        ret.sort(key=lambda g: f(g.getRef()))
 
         return ret
 
@@ -648,11 +662,13 @@ class netlist():
 
         # Each group is a list of components, we need to sort each list first
         # to get them in order as this makes for easier to read BOM's
+        def f(v):
+            return re.sub(r'([A-z]+)[0-9]+', r'\1', v) + '%08i' % int(re.sub(r'[A-z]+([0-9]+)', r'\1', v))
         for g in groups:
-            g = sorted(g, key=lambda g: g.getRef())
+            g = sorted(g, key=lambda g: f(g.getRef()))
 
         # Finally, sort the groups to order the references alphabetically
-        groups = sorted(groups, key=lambda group: group[0].getRef())
+        groups = sorted(groups, key=lambda group: f(group[0].getRef()))
 
         return groups
 

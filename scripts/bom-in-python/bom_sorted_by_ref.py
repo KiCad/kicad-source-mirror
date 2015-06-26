@@ -40,7 +40,7 @@ def writerow( acsvwriter, columns ):
     utf8row = []
     for col in columns:
         txt=str(col);
-        utf8row.append( txt.encode('utf-8') )
+        utf8row.append( txt )
     acsvwriter.writerow( utf8row )
 
 components = net.getInterestingComponents()
