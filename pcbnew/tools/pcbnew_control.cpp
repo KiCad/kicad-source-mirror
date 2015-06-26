@@ -509,15 +509,12 @@ int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
 {
-    const unsigned int BIG_CURSOR = 4000;
+    const unsigned int BIG_CURSOR = 8000;
     const unsigned int SMALL_CURSOR = 80;
 
-    KIGFX::GAL* gal = getEditFrame<PCB_BASE_FRAME>()->GetGalCanvas()->GetGAL();
-
-    if( gal->GetCursorSize() == BIG_CURSOR )
-        gal->SetCursorSize( SMALL_CURSOR );
-    else
-        gal->SetCursorSize( BIG_CURSOR );
+    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+    KIGFX::GAL* gal = frame->GetGalCanvas()->GetGAL();
+    gal->SetCursorSize( frame->GetCursorShape() ? BIG_CURSOR : SMALL_CURSOR );
 
     return 0;
 }

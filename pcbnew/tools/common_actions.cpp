@@ -644,9 +644,6 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         return COMMON_ACTIONS::highContrastMode.MakeEvent();
 
-    case ID_TB_OPTIONS_SELECT_CURSOR:
-        return COMMON_ACTIONS::switchCursor.MakeEvent();
-
     case ID_FIND_ITEMS:
         return COMMON_ACTIONS::find.MakeEvent();
 

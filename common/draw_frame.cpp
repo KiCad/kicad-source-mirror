@@ -331,6 +331,9 @@ void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
 {
+    if( aEvent.IsChecked() != m_cursorShape && IsGalCanvasActive() )
+        GetToolManager()->RunAction( "pcbnew.Control.switchCursor" );
+
     aEvent.Check( m_cursorShape );
 }
 
@@ -1043,6 +1046,8 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         gal->SetGridVisibility( IsGridVisible() );
         gal->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
         gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
+
+        GetToolManager()->RunAction( "pcbnew.Control.switchCursor" );
     }
     else                // Switch to standard rendering
     {
