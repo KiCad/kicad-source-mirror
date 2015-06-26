@@ -61,7 +61,6 @@
 const wxChar PGM_BASE::workingDirKey[] = wxT( "WorkingDir" );     // public
 
 static const wxChar languageCfgKey[]   = wxT( "LanguageID" );
-static const wxChar kicadFpLibPath[]   = wxT( "KicadFootprintLibraryPath" );
 static const wxChar pathEnvVariables[] = wxT( "EnvironmentVariables" );
 static const wxChar showEnvVarWarningDialog[] = wxT( "ShowEnvVarWarningDialog" );
 static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );

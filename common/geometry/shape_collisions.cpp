@@ -373,8 +373,6 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance ) const
         {
             SEG s( vts[i], vts[i + 1], i );
 
-            int64_t dist = s.Distance( aSeg );
-
             if( s.Distance( aSeg ) < aClearance )
                 return true;
         }
