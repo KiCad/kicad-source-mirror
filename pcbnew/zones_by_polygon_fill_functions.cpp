@@ -31,6 +31,8 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
+#include <class_draw_panel_gal.h>
+#include <ratsnest_data.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
 
@@ -113,6 +115,8 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
     aZone->BuildFilledSolidAreasPolygons( GetBoard() );
+    aZone->ViewUpdate( KIGFX::VIEW_ITEM::ALL );
+    GetBoard()->GetRatsnest()->Update( aZone );
 
     OnModify();
 
