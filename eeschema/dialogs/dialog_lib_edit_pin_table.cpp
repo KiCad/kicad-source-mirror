@@ -526,7 +526,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::Add( Pin* aPin )
 
     case 1:
         m_Members.front()->SetGroup( this );
-        break;
+        // fall through
 
     default:
         aPin->SetGroup( this );
