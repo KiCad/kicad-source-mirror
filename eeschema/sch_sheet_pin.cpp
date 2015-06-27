@@ -50,9 +50,9 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     m_Pos   = pos;
 
     if( parent->IsVerticalOrientation() )
-        SetEdge( 2 );
+        SetEdge( SHEET_TOP_SIDE );
     else
-        SetEdge( 0 );
+        SetEdge( SHEET_LEFT_SIDE );
 
     m_shape = NET_INPUT;
     m_isDangling = true;
@@ -86,13 +86,12 @@ void SCH_SHEET_PIN::SwapData( SCH_ITEM* aItem )
 
     SCH_SHEET_PIN* pin = ( SCH_SHEET_PIN* ) aItem;
     SCH_TEXT::SwapData( (SCH_TEXT*) pin );
-    int tmp;
-    tmp = pin->GetNumber();
+    int tmp = pin->GetNumber();
     pin->SetNumber( GetNumber() );
     SetNumber( tmp );
-    tmp = pin->GetEdge();
+    SHEET_SIDE stmp = pin->GetEdge();
     pin->SetEdge( GetEdge() );
-    SetEdge( tmp );
+    SetEdge( stmp );
 }
 
 
@@ -116,40 +115,45 @@ void SCH_SHEET_PIN::SetNumber( int aNumber )
 }
 
 
-void SCH_SHEET_PIN::SetEdge( int aEdge )
+void SCH_SHEET_PIN::SetEdge( SCH_SHEET_PIN::SHEET_SIDE aEdge )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
 
-    /* use -1 to adjust text orientation without changing edge*/
-    if( aEdge > -1 )
-        m_edge = aEdge;
+    // use SHEET_UNDEFINED_SIDE to adjust text orientation without changing edge
 
-    switch( m_edge )
+    switch( aEdge )
     {
-    case 0:        /* pin on left side*/
+    case SHEET_LEFT_SIDE:
+        m_edge = aEdge;
         m_Pos.x = Sheet->m_pos.x;
         SetOrientation( 2 ); /* Orientation horiz inverse */
         break;
 
-    case 1:        /* pin on right side*/
+    case SHEET_RIGHT_SIDE:
+        m_edge = aEdge;
         m_Pos.x = Sheet->m_pos.x + Sheet->m_size.x;
         SetOrientation( 0 ); /* Orientation horiz normal */
         break;
 
-    case 2:        /* pin on top side*/
+    case SHEET_TOP_SIDE:
+        m_edge = aEdge;
         m_Pos.y = Sheet->m_pos.y;
         SetOrientation( 3 ); /* Orientation vert BOTTOM  */
         break;
 
-    case 3:        /* pin on bottom side*/
+    case SHEET_BOTTOM_SIDE:
+        m_edge = aEdge;
         m_Pos.y = Sheet->m_pos.y + Sheet->m_size.y;
         SetOrientation( 1 ); /* Orientation vert UP  */
+        break;
+
+    default:
         break;
     }
 }
 
 
-int SCH_SHEET_PIN::GetEdge() const
+enum SCH_SHEET_PIN::SHEET_SIDE SCH_SHEET_PIN::GetEdge() const
 {
     return m_edge;
 }
@@ -162,15 +166,15 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
     if( Sheet == NULL )
         return;
 
-    if( m_edge<2 ) /*horizontal sheetpin*/
+    if( m_edge == SHEET_LEFT_SIDE || m_edge == SHEET_RIGHT_SIDE )
     {
         if( Pos.x > ( Sheet->m_pos.x + ( Sheet->m_size.x / 2 ) ) )
         {
-            SetEdge( 1 );
+            SetEdge( SHEET_RIGHT_SIDE );
         }
         else
         {
-            SetEdge( 0 );
+            SetEdge( SHEET_LEFT_SIDE );
         }
 
         m_Pos.y = Pos.y;
@@ -185,11 +189,11 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
     {
         if( Pos.y > ( Sheet->m_pos.y + ( Sheet->m_size.y / 2 ) ) )
         {
-            SetEdge( 3 ); //bottom
+            SetEdge( SHEET_BOTTOM_SIDE ); //bottom
         }
         else
         {
-            SetEdge( 2 ); //top
+            SetEdge( SHEET_TOP_SIDE ); //top
         }
 
         m_Pos.x = Pos.x;
@@ -212,19 +216,20 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 
     switch( m_edge )
     {
-    case 0:     //pin on left side
+    default:
+    case SHEET_LEFT_SIDE:     //pin on left side
         side = 'L';
         break;
 
-    case 1:     //pin on right side
+    case SHEET_RIGHT_SIDE:     //pin on right side
         side = 'R';
         break;
 
-    case 2:      //pin on top side
+    case SHEET_TOP_SIDE:      //pin on top side
         side = 'T';
         break;
 
-    case 3:     //pin on bottom side
+    case SHEET_BOTTOM_SIDE:     //pin on bottom side
         side = 'B';
         break;
     }
@@ -336,20 +341,20 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     switch( sheetSide[0] )
     {
     case 'R' : /* pin on right side */
-        SetEdge( 1 );
+        SetEdge( SHEET_RIGHT_SIDE );
         break;
 
     case 'T' : /* pin on top side */
-        SetEdge( 2 );
+        SetEdge( SHEET_TOP_SIDE );
         break;
 
     case 'B' : /* pin on bottom side */
-        SetEdge( 3 );
+        SetEdge( SHEET_BOTTOM_SIDE );
         break;
 
     case 'L' : /* pin on left side */
     default  :
-        SetEdge( 0 );
+        SetEdge( SHEET_LEFT_SIDE );
         break;
     }
 
@@ -385,12 +390,15 @@ void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
 
     switch( m_edge )
     {
-    case 2:
-        SetEdge( 3 );
+    case SHEET_TOP_SIDE:
+        SetEdge( SHEET_BOTTOM_SIDE );
         break;
 
-    case 3:
-        SetEdge( 2 );
+    case SHEET_BOTTOM_SIDE:
+        SetEdge( SHEET_TOP_SIDE );
+        break;
+
+    default:
         break;
     }
 }
@@ -404,12 +412,15 @@ void SCH_SHEET_PIN::MirrorY( int aYaxis_position )
 
     switch( m_edge )
     {
-    case 0:
-        SetEdge( 1 );
+    case SHEET_LEFT_SIDE:
+        SetEdge( SHEET_RIGHT_SIDE );
         break;
 
-    case 1:
-        SetEdge( 0 );
+    case SHEET_RIGHT_SIDE:
+        SetEdge( SHEET_LEFT_SIDE );
+        break;
+
+    default:
         break;
     }
 }
@@ -421,20 +432,23 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 
     switch( m_edge )
     {
-    case 0:     //pin on left side
-        SetEdge( 3 );
+    case SHEET_LEFT_SIDE:     //pin on left side
+        SetEdge( SHEET_BOTTOM_SIDE );
         break;
 
-    case 1:     //pin on right side
-        SetEdge( 2 );
+    case SHEET_RIGHT_SIDE:     //pin on right side
+        SetEdge( SHEET_TOP_SIDE );
         break;
 
-    case 2:      //pin on top side
-        SetEdge( 0 );
+    case SHEET_TOP_SIDE:      //pin on top side
+        SetEdge( SHEET_LEFT_SIDE );
         break;
 
-    case 3:     //pin on bottom side
-        SetEdge( 1 );
+    case SHEET_BOTTOM_SIDE:     //pin on bottom side
+        SetEdge( SHEET_RIGHT_SIDE );
+        break;
+
+    default:
         break;
     }
 }

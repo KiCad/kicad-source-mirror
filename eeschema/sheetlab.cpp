@@ -58,7 +58,7 @@ const wxSize &SCH_EDIT_FRAME::GetLastSheetPinTextSize()
     return m_lastSheetPinTextSize;
 }
 
-int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
+int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
 {
     if( aSheetPin == NULL )
         return wxID_CANCEL;
@@ -84,9 +84,6 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxID_CANCEL;
 
-    if( aDC )
-        aSheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-
     if( !aSheetPin->IsNew() )
     {
         SaveCopyInUndoList( (SCH_ITEM*) aSheetPin->GetParent(), UR_CHANGED );
@@ -98,8 +95,10 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
                                 ValueFromString( g_UserUnit, dlg.GetTextHeight() ) ) );
     aSheetPin->SetShape( dlg.GetConnectionType() );
 
-    if( aDC )
-        aSheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    OnModify();
+
+    if( aRedraw )
+        m_canvas->Refresh();
 
     return wxID_OK;
 }
@@ -115,7 +114,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     sheetPin->SetSize( GetLastSheetPinTextSize() );
     sheetPin->SetShape( m_lastSheetPinType );
 
-    int response = EditSheetPin( sheetPin, NULL );
+    int response = EditSheetPin( sheetPin, false );
 
     if( sheetPin->GetText().IsEmpty() || (response == wxID_CANCEL) )
     {

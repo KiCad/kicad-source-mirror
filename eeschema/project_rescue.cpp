@@ -367,7 +367,8 @@ public:
           m_cache_candidate( aCacheCandidate ),
           m_lib_candidate( aLibCandidate ) { }
 
-    RESCUE_CACHE_CANDIDATE() {}
+    RESCUE_CACHE_CANDIDATE()
+        : m_cache_candidate( NULL ), m_lib_candidate( NULL ) {}
 
     virtual wxString GetRequestedName() const { return m_requested_name; }
     virtual wxString GetNewName() const { return m_new_name; }

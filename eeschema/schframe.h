@@ -1021,10 +1021,10 @@ private:
      * Function EditSheetPin
      * displays the dialog for editing the parameters of \a aSheetPin.
      * @param aSheetPin The sheet pin item to edit.
-     * @param aDC The device context to draw on.
+     * @param aRedraw = true to refresh the screen
      * @return The user response from the edit dialog.
      */
-    int EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC );
+    int EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw );
 
     /**
      * Function ImportSheetPin

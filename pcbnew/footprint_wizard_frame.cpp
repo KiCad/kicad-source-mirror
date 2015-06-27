@@ -97,16 +97,20 @@ END_EVENT_TABLE()
 FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
         wxWindow* aParent, FRAME_T aFrameType ) :
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Wizard" ),
-            wxDefaultPosition, wxDefaultSize,
-            KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
-            FOOTPRINT_WIZARD_FRAME_NAME )
+                wxDefaultPosition, wxDefaultSize,
+#ifdef __WINDOWS__
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
+#else
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
+#endif
+                FOOTPRINT_WIZARD_FRAME_NAME )
 {
     wxASSERT( aFrameType==FRAME_PCB_FOOTPRINT_WIZARD_MODAL );
 
-    if( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD_MODAL )
-        SetModal( true );
+    // This frame is always show modal:
+    SetModal( true );
 
-    m_configPath    = wxT( "FootprintWizard" );
+    m_configPath    = FOOTPRINT_WIZARD_FRAME_NAME;
     m_showAxis      = true;    // true to draw axis.
 
     // Give an icon

@@ -959,7 +959,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         break;
 
     case SCH_SHEET_PIN_T:
-        EditSheetPin( (SCH_SHEET_PIN*) item, &dc );
+        EditSheetPin( (SCH_SHEET_PIN*) item, true );
         break;
 
     case SCH_TEXT_T:

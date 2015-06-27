@@ -70,14 +70,22 @@ private:
 
     /**
      * Defines the edge of the sheet that the sheet pin is positioned
-     * 0: pin on left side
-     * 1: pin on right side
-     * 2: pin on top side
-     * 3: pin on bottom side
+     * SHEET_LEFT_SIDE = 0: pin on left side
+     * SHEET_RIGHT_SIDE = 1: pin on right side
+     * SHEET_TOP_SIDE = 2: pin on top side
+     * SHEET_BOTTOM_SIDE =3: pin on bottom side
      *
      * For compatibility reasons, this does not follow same values as text orientation.
      */
-    int m_edge;
+    enum SHEET_SIDE
+    {
+        SHEET_LEFT_SIDE = 0,
+        SHEET_RIGHT_SIDE,
+        SHEET_TOP_SIDE,
+        SHEET_BOTTOM_SIDE,
+        SHEET_UNDEFINED_SIDE
+    };
+    SHEET_SIDE m_edge;
 
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
@@ -132,9 +140,9 @@ public:
      */
     void SetNumber( int aNumber );
 
-    void SetEdge( int aEdge );
+    void SetEdge( SHEET_SIDE aEdge );
 
-    int GetEdge() const;
+    SHEET_SIDE GetEdge() const;
 
     /**
      * Function ConstrainOnEdge
