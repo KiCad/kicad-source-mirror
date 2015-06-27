@@ -145,7 +145,16 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
     // are different versions of wxPython installed this can lead to select wrong wxPython
     // version being selected.
     snprintf( cmd, sizeof(cmd), "import wxversion; wxversion.select('%s')", WXPYTHON_VERSION );
-    PyRun_SimpleString( cmd );
+
+    int retv = PyRun_SimpleString( cmd );
+
+    if( retv != 0 )
+    {
+        wxLogError( wxT( "Python error %d occurred running string `%s`" ), retv, cmd );
+        PyErr_Print();
+        Py_Finalize();
+        return false;
+    }
 
     // Load the wxPython core API.  Imports the wx._core_ module and sets a
     // local pointer to a function table located there.  The pointer is used

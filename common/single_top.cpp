@@ -143,8 +143,10 @@ struct APP_SINGLE_TOP : public wxApp
 
     int  OnExit()           // overload wxApp virtual
     {
+        // Fixes segfault when wxPython scripting is enabled.
+#if defined( KICAD_SCRIPTING_WXPYTHON )
         Pgm().OnPgmExit();
-
+#endif
         return wxApp::OnExit();
     }
 
@@ -170,6 +172,11 @@ struct APP_SINGLE_TOP : public wxApp
         {
             wxLogError( wxT( "Unhandled exception of unknown type" ) );
         }
+
+        // Works properly when wxPython scripting is disabled.
+#if !defined( KICAD_SCRIPTING_WXPYTHON )
+        Pgm().OnPgmExit();
+#endif
 
         return ret;
     }
@@ -281,8 +288,9 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
             // We've already initialized things at this point, but wx won't call OnExit if
             // we fail out. Call our own cleanup routine here to ensure the relevant resources
             // are freed at the right time (if they aren't, segfaults will occur).
+#if defined( KICAD_SCRIPTING_WXPYTHON )
             OnPgmExit();
-
+#endif
             // Fail the process startup if the file could not be opened,
             // although this is an optional choice, one that can be reversed
             // also in the KIFACE specific OpenProjectFiles() return value.
