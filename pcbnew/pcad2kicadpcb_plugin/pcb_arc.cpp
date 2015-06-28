@@ -95,11 +95,18 @@ void PCB_ARC::Parse( XNODE*     aNode,
             SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
                          &endX, &endY, aActualConversion );
 
-        double alpha1  = ArcTangente( m_startY - m_positionY, m_startX - m_positionX );
-        double alpha2  = ArcTangente( endY - m_positionY, endX - m_positionX );
-        m_angle = alpha1 - alpha2;
+        if( m_startX == endX && m_startY == endY )
+        {
+            m_angle = 3600;
+        }
+        else
+        {
+            double alpha1  = ArcTangente( m_startY - m_positionY, m_startX - m_positionX );
+            double alpha2  = ArcTangente( endY - m_positionY, endX - m_positionX );
+            m_angle = alpha1 - alpha2;
 
-        NORMALIZE_ANGLE_POS( m_angle );
+            NORMALIZE_ANGLE_POS( m_angle );
+        }
     }
     else if( aNode->GetName() == wxT( "arc" ) )
     {
