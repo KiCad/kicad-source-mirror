@@ -42,25 +42,25 @@
 static int     s_LastShape = '\\';
 
 
-SCH_BUS_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusBusEntry( wxDC* aDC )
+SCH_BUS_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusBusEntry()
 {
     // Create and place a new bus entry at cursor position
     SCH_BUS_BUS_ENTRY* busEntry = new SCH_BUS_BUS_ENTRY( GetCrossHairPosition(), s_LastShape );
 
     busEntry->SetFlags( IS_NEW );
     GetScreen()->SetCurItem( busEntry );
-    addCurrentItemToList( aDC );
+    addCurrentItemToList();
     return busEntry;
 }
 
-SCH_BUS_WIRE_ENTRY* SCH_EDIT_FRAME::CreateBusWireEntry( wxDC* aDC )
+SCH_BUS_WIRE_ENTRY* SCH_EDIT_FRAME::CreateBusWireEntry()
 {
     // Create and place a new bus entry at cursor position
     SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( GetCrossHairPosition(), s_LastShape );
 
     busEntry->SetFlags( IS_NEW );
     GetScreen()->SetCurItem( busEntry );
-    addCurrentItemToList( aDC );
+    addCurrentItemToList();
     return busEntry;
 }
 

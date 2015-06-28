@@ -83,7 +83,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_FIELD_T:
             case SCH_BITMAP_T:
             case SCH_NO_CONNECT_T:
-                addCurrentItemToList( aDC );
+                addCurrentItemToList();
                 return;
 
             case SCH_LINE_T:    // May already be drawing segment.
@@ -138,7 +138,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -155,31 +155,31 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            CreateBusWireEntry( aDC );
+            CreateBusWireEntry();
             m_canvas->SetAutoPanRequest( true );
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
     case ID_BUSTOBUS_ENTRY_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            CreateBusBusEntry( aDC );
+            CreateBusBusEntry();
             m_canvas->SetAutoPanRequest( true );
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -210,7 +210,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -222,7 +222,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -234,7 +234,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -252,7 +252,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -269,7 +269,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -290,7 +290,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else if( (item->Type() == SCH_SHEET_PIN_T) && (item->GetFlags() != 0) )
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -303,7 +303,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -318,7 +318,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList( aDC );
+            addCurrentItemToList();
         }
         break;
 
@@ -363,7 +363,12 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         case SCH_COMPONENT_T:
             EditComponent( (SCH_COMPONENT*) item );
-            m_canvas->MoveCursorToCrossHair();
+            GetCanvas()->MoveCursorToCrossHair();
+
+            if( item->GetFlags() == 0 )
+                GetScreen()->SetCurItem( NULL );
+
+            GetCanvas()->Refresh();
             break;
 
         case SCH_TEXT_T:
@@ -379,7 +384,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         case SCH_FIELD_T:
             EditComponentFieldText( (SCH_FIELD*) item );
-            m_canvas->MoveCursorToCrossHair();
+            GetCanvas()->MoveCursorToCrossHair();
             break;
 
         case SCH_MARKER_T:

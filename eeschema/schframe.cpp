@@ -1196,7 +1196,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
+void SCH_EDIT_FRAME::addCurrentItemToList( bool aRedraw )
 {
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM*   item = screen->GetCurItem();
@@ -1235,11 +1235,14 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
             // the m_mouseCaptureCallback function.
             m_canvas->SetMouseCapture( NULL, NULL );
 
-            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet, aDC ) )
+            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet ) )
             {
                 screen->SetCurItem( NULL );
-                item->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
                 delete item;
+
+                if( aRedraw )
+                    GetCanvas()->Refresh();
+
                 return;
             }
 
@@ -1276,10 +1279,6 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
         SaveUndoItemInUndoList( undoItem );
     }
 
-    // Erase the wire representation before the 'normal' view is drawn.
-    if ( item->IsWireImage() )
-        item->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-
     item->ClearFlags();
     screen->SetModify();
     screen->SetCurItem( NULL );
@@ -1289,13 +1288,8 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
     if( item->IsConnectable() )
         screen->TestDanglingEnds();
 
-    if( aDC )
-    {
-        EDA_CROSS_HAIR_MANAGER( m_canvas, aDC );  // Erase schematic cursor
-        undoItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    }
-
-    m_canvas->Refresh();
+    if( aRedraw )
+        GetCanvas()->Refresh();
 }
 
 

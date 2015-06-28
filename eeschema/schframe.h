@@ -200,9 +200,9 @@ protected:
      * adds the item currently being edited to the schematic and adds the changes to
      * the undo/redo container.
      *
-     * @param aDC A pointer the device context to draw on when not NULL.
+     * @param aRedraw = true (default) to redrw -the screen after adding the item.
      */
-    void addCurrentItemToList( wxDC* aDC );
+    void addCurrentItemToList( bool aRedraw = true );
 
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
@@ -868,8 +868,8 @@ private:
     void UpdateTitle();
 
     // Bus Entry
-    SCH_BUS_WIRE_ENTRY* CreateBusWireEntry( wxDC* DC );
-    SCH_BUS_BUS_ENTRY* CreateBusBusEntry( wxDC* DC );
+    SCH_BUS_WIRE_ENTRY* CreateBusWireEntry();
+    SCH_BUS_BUS_ENTRY* CreateBusBusEntry();
     void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, char entry_shape );
 
     /**
@@ -1002,8 +1002,10 @@ public:
      * <li>and the file name does not exist in the schematic hierarchy or on the file system,
      * the current associated screen file name is changed and saved to disk.</li>
      * </ul> </p>
+     *
+     * Note: the screen is not refresh. The caller is responsible to do that
      */
-    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, wxDC* aDC );
+    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 

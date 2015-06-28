@@ -234,7 +234,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_END_SHEET:
         m_canvas->MoveCursorToCrossHair();
-        addCurrentItemToList( &dc );
+        addCurrentItemToList();
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
@@ -377,7 +377,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         item = screen->GetCurItem();
 
         if( item )
-            addCurrentItemToList( &dc );
+            addCurrentItemToList();
 
         break;
 
@@ -876,8 +876,6 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM* item = screen->GetCurItem();
 
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
     if( item == NULL )
     {
         // If we didn't get here by a hot key, then something has gone wrong.
@@ -955,7 +953,8 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     }
 
     case SCH_SHEET_T:
-        EditSheet( (SCH_SHEET*) item, m_CurrentSheet, &dc );
+        if( EditSheet( (SCH_SHEET*) item, m_CurrentSheet ) )
+            m_canvas->Refresh();
         break;
 
     case SCH_SHEET_PIN_T:
