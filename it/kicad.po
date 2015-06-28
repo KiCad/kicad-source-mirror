@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-26 21:56+0100\n"
-"PO-Revision-Date: 2015-06-26 22:02+0100\n"
+"POT-Creation-Date: 2015-06-28 21:52+0100\n"
+"PO-Revision-Date: 2015-06-28 21:52+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -452,7 +452,7 @@ msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
 #: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:994 pcbnew/moduleframe.cpp:757
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1324 cvpcb/cvframe.cpp:702
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1318 cvpcb/cvframe.cpp:702
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -706,7 +706,7 @@ msgstr "Titolo modello di progetto"
 msgid "Ref."
 msgstr "Rif."
 
-#: pcbnew/class_text_mod.cpp:390 pcbnew/footprint_wizard_frame.cpp:147
+#: pcbnew/class_text_mod.cpp:390 pcbnew/footprint_wizard_frame.cpp:151
 #: pcbnew/class_edge_mod.cpp:261
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
@@ -1346,11 +1346,11 @@ msgstr "Dimensioni non consentite sugli strati in rame o di taglio"
 msgid "Footprint Wizard"
 msgstr "Assistente impronte"
 
-#: pcbnew/footprint_wizard_frame.cpp:146
+#: pcbnew/footprint_wizard_frame.cpp:150
 msgid "Parameter"
 msgstr "Parametro"
 
-#: pcbnew/footprint_wizard_frame.cpp:148
+#: pcbnew/footprint_wizard_frame.cpp:152
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:35
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:28
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:27 common/draw_frame.cpp:492
@@ -1358,29 +1358,29 @@ msgstr "Parametro"
 msgid "Units"
 msgstr "Unità"
 
-#: pcbnew/footprint_wizard_frame.cpp:527 pcbnew/modview_frame.cpp:662
+#: pcbnew/footprint_wizard_frame.cpp:531 pcbnew/modview_frame.cpp:662
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: visualizzatore 3D [%s]"
 
-#: pcbnew/footprint_wizard_frame.cpp:553
+#: pcbnew/footprint_wizard_frame.cpp:557
 msgid "Select wizard to use"
 msgstr "Seleziona l'assistente da usare"
 
-#: pcbnew/footprint_wizard_frame.cpp:558
+#: pcbnew/footprint_wizard_frame.cpp:562
 msgid "Select previous editable item"
 msgstr "Seleziona il precedente elemento modificabile"
 
-#: pcbnew/footprint_wizard_frame.cpp:562
+#: pcbnew/footprint_wizard_frame.cpp:566
 msgid "Select next editable item"
 msgstr "Seleziona il successivo elemento modificabile"
 
-#: pcbnew/footprint_wizard_frame.cpp:567 pcbnew/tool_modview.cpp:76
+#: pcbnew/footprint_wizard_frame.cpp:571 pcbnew/tool_modview.cpp:76
 #: pcbnew/tool_modview.cpp:178 pcbnew/menubar_modedit.cpp:237
 msgid "Show footprint in 3D viewer"
 msgstr "Mostra impronta nel visualizzatore 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:570 pcbnew/tool_modview.cpp:79
+#: pcbnew/footprint_wizard_frame.cpp:574 pcbnew/tool_modview.cpp:79
 #: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:248
 #: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:68
 #: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
@@ -1388,7 +1388,7 @@ msgstr "Mostra impronta nel visualizzatore 3D"
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:575 pcbnew/tool_modview.cpp:84
+#: pcbnew/footprint_wizard_frame.cpp:579 pcbnew/tool_modview.cpp:84
 #: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:250
 #: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:71
 #: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
@@ -1396,21 +1396,21 @@ msgstr "Ingrandisci"
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:580 pcbnew/tool_modview.cpp:89
+#: pcbnew/footprint_wizard_frame.cpp:584 pcbnew/tool_modview.cpp:89
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:252
 #: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:75
 #: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
 msgid "Redraw view"
 msgstr "Aggiorna vista"
 
-#: pcbnew/footprint_wizard_frame.cpp:585 pcbnew/tool_modview.cpp:94
+#: pcbnew/footprint_wizard_frame.cpp:589 pcbnew/tool_modview.cpp:94
 #: pcbnew/tool_modedit.cpp:133 common/zoom.cpp:254
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:87
 msgid "Zoom auto"
 msgstr "Inquadra tutto"
 
-#: pcbnew/footprint_wizard_frame.cpp:596
+#: pcbnew/footprint_wizard_frame.cpp:600
 msgid "Add footprint to board"
 msgstr "Aggiungi impronta alla scheda"
 
@@ -10923,7 +10923,7 @@ msgstr "Dia uvia"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:126
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:136
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:148
-#: common/pgm_base.cpp:110
+#: common/pgm_base.cpp:109
 msgid "Default"
 msgstr "Predefinita"
 
@@ -11192,7 +11192,7 @@ msgstr "Pista 12"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:363
 msgid "Global Design Rules"
-msgstr "Regole globali di disegno "
+msgstr "Regole globali di progettazione"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:205
 msgid "Library Path"
@@ -11834,9 +11834,20 @@ msgstr "C.S. nudo (senza rame o serigrafia)"
 msgid "Meter"
 msgstr "Metro"
 
+#: pcbnew/dialogs/dialog_set_grid.cpp:232
+#, c-format
+msgid "Incorrect grid size (size must be >= %.3f mm and <= %.3f mm)"
+msgstr ""
+"Dimensione griglia errata (la dimensione deve essere >= %.3f mm e <= %.3f mm)"
+
+#: pcbnew/dialogs/dialog_set_grid.cpp:241
+#, c-format
+msgid "Incorrect grid origin (size must be >= %.3f and <= %.f mm)"
+msgstr "Origine griglia errata (la dimensione deve essere >= %.3f e <= %.f mm)"
+
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:23
 msgid "User Defined Grid"
-msgstr "Griglia utente "
+msgstr "Griglia utente"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:63
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:70
@@ -11845,7 +11856,7 @@ msgstr "Griglia utente "
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:247
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:302
 msgid "Origin"
-msgstr "Imposta origine griglia "
+msgstr "Origine"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:71
 msgid "X:"
@@ -12941,7 +12952,7 @@ msgstr "i file fp-lib-table non contengono lib con denominazione \"%s\""
 msgid "Cannot create global library table path '%s'."
 msgstr "Impossibile creare il percorso tabella librerie globale \"%s\"."
 
-#: common/confirm.cpp:75 common/pgm_base.cpp:818 eeschema/symbedit.cpp:111
+#: common/confirm.cpp:75 common/pgm_base.cpp:817 eeschema/symbedit.cpp:111
 msgid "Warning"
 msgstr "Attenzione"
 
@@ -13144,100 +13155,100 @@ msgstr "Errori riscontrati durante il caricamento di impronte"
 msgid "Load Error"
 msgstr "Errore di caricamento"
 
-#: common/pgm_base.cpp:127
+#: common/pgm_base.cpp:126
 msgid "French"
 msgstr "Francese"
 
-#: common/pgm_base.cpp:135
+#: common/pgm_base.cpp:134
 msgid "Finnish"
 msgstr "Finlandese"
 
-#: common/pgm_base.cpp:143
+#: common/pgm_base.cpp:142
 msgid "Spanish"
 msgstr "Spagnolo"
 
-#: common/pgm_base.cpp:151
+#: common/pgm_base.cpp:150
 msgid "Portuguese"
 msgstr "Portoghese"
 
-#: common/pgm_base.cpp:159
+#: common/pgm_base.cpp:158
 msgid "Italian"
 msgstr "Italiano"
 
-#: common/pgm_base.cpp:167
+#: common/pgm_base.cpp:166
 msgid "German"
 msgstr "Tedesco"
 
-#: common/pgm_base.cpp:175
+#: common/pgm_base.cpp:174
 msgid "Greek"
 msgstr "Greco"
 
-#: common/pgm_base.cpp:183
+#: common/pgm_base.cpp:182
 msgid "Slovenian"
 msgstr "Sloveno"
 
-#: common/pgm_base.cpp:191
+#: common/pgm_base.cpp:190
 msgid "Hungarian"
 msgstr "Ungherese"
 
-#: common/pgm_base.cpp:199
+#: common/pgm_base.cpp:198
 msgid "Polish"
 msgstr "Polacco"
 
-#: common/pgm_base.cpp:207
+#: common/pgm_base.cpp:206
 msgid "Czech"
 msgstr "Ceco"
 
-#: common/pgm_base.cpp:215
+#: common/pgm_base.cpp:214
 msgid "Russian"
 msgstr "Russo"
 
-#: common/pgm_base.cpp:223
+#: common/pgm_base.cpp:222
 msgid "Korean"
 msgstr "Coreano"
 
-#: common/pgm_base.cpp:231
+#: common/pgm_base.cpp:230
 msgid "Chinese simplified"
 msgstr "Cinese semplificato"
 
-#: common/pgm_base.cpp:239
+#: common/pgm_base.cpp:238
 msgid "Catalan"
 msgstr "Catalano"
 
-#: common/pgm_base.cpp:247
+#: common/pgm_base.cpp:246
 msgid "Dutch"
 msgstr "Olandese"
 
-#: common/pgm_base.cpp:255
+#: common/pgm_base.cpp:254
 msgid "Japanese"
 msgstr "Giapponese"
 
-#: common/pgm_base.cpp:263
+#: common/pgm_base.cpp:262
 msgid "Bulgarian"
 msgstr "Bulgaro"
 
-#: common/pgm_base.cpp:333
+#: common/pgm_base.cpp:332
 msgid "No default editor found, you must choose it"
 msgstr "Nessun editor predefinito trovato, sceglierne uno"
 
-#: common/pgm_base.cpp:340
+#: common/pgm_base.cpp:339
 msgid "Preferred Editor:"
 msgstr "Editor preferito:"
 
-#: common/pgm_base.cpp:369
+#: common/pgm_base.cpp:368
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s è già in esecuzione. Continuare?"
 
-#: common/pgm_base.cpp:735
+#: common/pgm_base.cpp:734
 msgid "Language"
 msgstr "Lingua"
 
-#: common/pgm_base.cpp:736
+#: common/pgm_base.cpp:735
 msgid "Select application language (only for testing!)"
 msgstr "Seleziona lingua applicazione (solo per prova!)"
 
-#: common/pgm_base.cpp:811
+#: common/pgm_base.cpp:810
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -13246,7 +13257,7 @@ msgstr ""
 "esternamente al processo in esecuzione e verranno temporaneamente "
 "sovrascritti."
 
-#: common/pgm_base.cpp:813
+#: common/pgm_base.cpp:812
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -13260,7 +13271,7 @@ msgstr ""
 "comportamento, rinominare ogni voce in conflitto o rimuovere \n"
 "dal sistema le definizioni delle variabili d'ambiente esterne."
 
-#: common/pgm_base.cpp:820
+#: common/pgm_base.cpp:819
 msgid "Do not show this message again."
 msgstr "Non mostrare più questo messaggio."
 
@@ -15890,7 +15901,7 @@ msgstr "%s Bus da (%s,%s) a (%s,%s)"
 msgid "%s Line on Unknown Layer from (%s,%s) to (%s,%s)"
 msgstr "%s Linea su strato sconosciuto da (%s,%s) a (%s,%s) "
 
-#: eeschema/sch_sheet_pin.cpp:481
+#: eeschema/sch_sheet_pin.cpp:495
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Punto di connessione gerarchico %s"
@@ -16331,22 +16342,22 @@ msgstr "Componente %s, %s"
 msgid "File name is not valid!"
 msgstr "Nome file non valido! Termina"
 
-#: eeschema/sheet.cpp:97
+#: eeschema/sheet.cpp:93
 #, c-format
 msgid "A sheet named \"%s\" already exists."
 msgstr "Un file nominato \"%s\" è già esistente"
 
-#: eeschema/sheet.cpp:134
+#: eeschema/sheet.cpp:126
 #, c-format
 msgid "A file named '%s' already exists in the current schematic hierarchy."
 msgstr "Il file \"%s\" è già esistente nella gerarchia dello schema corrente."
 
-#: eeschema/sheet.cpp:139
+#: eeschema/sheet.cpp:131
 #, c-format
 msgid "A file named '%s' already exists."
 msgstr "Il file con nome \"%s\" esiste già."
 
-#: eeschema/sheet.cpp:142
+#: eeschema/sheet.cpp:134
 msgid ""
 "\n"
 "\n"
@@ -16356,21 +16367,21 @@ msgstr ""
 "\n"
 "Si desidera creare un foglio con il contenuto di questo file?"
 
-#: eeschema/sheet.cpp:171
+#: eeschema/sheet.cpp:160
 msgid "Changing the sheet file name cannot be undone.  "
 msgstr "Impossibile cambiare il nome file del foglio."
 
-#: eeschema/sheet.cpp:179
+#: eeschema/sheet.cpp:168
 #, c-format
 msgid "A file named <%s> already exists in the current schematic hierarchy."
 msgstr " Il file <%s> è già esistente nella corrente gerarchia"
 
-#: eeschema/sheet.cpp:184
+#: eeschema/sheet.cpp:173
 #, c-format
 msgid "A file named <%s> already exists."
 msgstr "Il file nominato <%s> è già esistente"
 
-#: eeschema/sheet.cpp:189
+#: eeschema/sheet.cpp:178
 msgid ""
 "\n"
 "\n"
@@ -16380,7 +16391,7 @@ msgstr ""
 "\n"
 "Si desidera sostituire il foglio con il contenuto di questo file?"
 
-#: eeschema/sheet.cpp:201
+#: eeschema/sheet.cpp:190
 msgid ""
 "This sheet uses shared data in a complex hierarchy.\n"
 "\n"
@@ -16388,11 +16399,11 @@ msgstr ""
 "Questo foglio utilizza dati condivisi in una gerarchia complessa.\n"
 "\n"
 
-#: eeschema/sheet.cpp:202
+#: eeschema/sheet.cpp:191
 msgid "Do you wish to convert it to a simple hierarchical sheet?"
 msgstr "Desideri convertire in un foglio a gerarchia semplificata?"
 
-#: eeschema/sheet.cpp:260 eeschema/block.cpp:488
+#: eeschema/sheet.cpp:248 eeschema/block.cpp:488
 #, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
@@ -16569,7 +16580,7 @@ msgstr "%8.8lX/"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d stampigliature duplicate trovate e sostituite."
 
-#: eeschema/sheetlab.cpp:165
+#: eeschema/sheetlab.cpp:164
 msgid "No new hierarchical labels found."
 msgstr "Nessuna nuova etichetta gerarchica trovata."
 
@@ -16619,16 +16630,16 @@ msgstr "Errore controllo regole elettroniche"
 msgid "Rename to %s"
 msgstr "Rinomina a %s"
 
-#: eeschema/project_rescue.cpp:379
+#: eeschema/project_rescue.cpp:380
 #, c-format
 msgid "Rescue %s as %s"
 msgstr "Recupera %s come %s"
 
-#: eeschema/project_rescue.cpp:501
+#: eeschema/project_rescue.cpp:502
 msgid "This project has nothing to rescue."
 msgstr "Questo progetto non ha nulla da recuperare."
 
-#: eeschema/project_rescue.cpp:515
+#: eeschema/project_rescue.cpp:516
 msgid "No symbols were rescued."
 msgstr "Nessun simbolo recuperato."
 
@@ -16783,7 +16794,7 @@ msgstr "Apri schema"
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1327
+#: eeschema/schframe.cpp:1321
 msgid " [no file]"
 msgstr "[nessun file]"
 
