@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-18 23:12+0900\n"
-"PO-Revision-Date: 2015-06-30 00:17+0900\n"
+"PO-Revision-Date: 2015-06-30 00:19+0900\n"
 "Last-Translator: yoneken <yoneken@kicad.jp>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -10943,7 +10943,7 @@ msgstr "ビアの押しのけ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Jump over obstacles"
-msgstr "障害物を避ける"
+msgstr "障害ジャンプ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Remove redundant tracks"
