@@ -88,7 +88,9 @@ void WX_HTML_REPORT_PANEL::refreshView()
 wxString WX_HTML_REPORT_PANEL::addHeader( const wxString& aBody )
 {
     wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-    wxString s = "<html><body bgcolor=\"" + bgcolor.GetAsString( wxC2S_HTML_SYNTAX ) + "\">";
+    wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    wxString s = "<html><body bgcolor=\"" + bgcolor.GetAsString( wxC2S_HTML_SYNTAX ) +
+                 "\" text=\"" + fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) + "\">";
     s += aBody;
     s += "</body></html>";
 
