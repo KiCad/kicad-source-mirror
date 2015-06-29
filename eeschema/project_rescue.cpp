@@ -330,7 +330,7 @@ public:
             wxString part_name( each_component->GetPartName() );
 
             LIB_PART* cache_match = find_component( part_name, aRescuer.GetLibs(), /* aCached */ true );
-            LIB_PART* lib_match = find_component( part_name, aRescuer.GetLibs(), /* aCached */ false );
+            LIB_PART* lib_match = aRescuer.GetLibs()->FindLibPart( part_name );
 
             // Test whether there is a conflict
             if( !cache_match || !lib_match )
@@ -515,6 +515,10 @@ bool SCH_EDIT_FRAME::RescueProject( bool aRunningOnDemand )
     {
         wxMessageDialog dlg( this, _( "No symbols were rescued." ) );
         dlg.ShowModal();
+
+        // Set the modified flag even on Cancel. Many users seem to instinctively want to Save at
+        // this point, due to the reloading of the symbols, so we'll make the save button active.
+        OnModify();
         return true;
     }
 

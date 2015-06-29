@@ -84,8 +84,9 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
     wxString info_message =
         _( "It looks like this project was made using older schematic component libraries.\n"
            "Some parts may need to be relinked to a different symbol name, and some symbols\n"
-           "may need to be \"rescued\" into a new library.\n"
-           "The following changes are recommended to update the project.\n" );
+           "may need to be \"rescued\" (cloned and renamed) into a new library.\n"
+           "\n"
+           "The following changes are recommended to update the project." );
     m_lblInfo->SetLabel( info_message );
 }
 
