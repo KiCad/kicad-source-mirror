@@ -50,6 +50,12 @@
 wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
             const wxString& aTempfile, const wxString& aFinalFile, const wxString& aProjectPath )
 {
+    // Expand format symbols in the command line:
+    // %B => base filename of selected output file, minus path and extension.
+    // %P => project directory name, without trailing '/' or '\'.
+    // %I => full filename of the input file (the intermediate net file).
+    // %O => complete filename and path (but without extension) of the user chosen output file.
+
     wxString    ret  = aFormatString;
     wxFileName  in   = aTempfile;
     wxFileName  out  = aFinalFile;

@@ -558,6 +558,14 @@ wxString DIALOG_BOM::getPluginFileName(  const wxString& aCommand )
         }
     }
 
+    // Using a format like %P is possible in  plugin name, so expand it
+    wxString prj_dir = Prj().GetProjectPath();
+
+    if( prj_dir.EndsWith( '/' ) || prj_dir.EndsWith( '\\' ) )
+        prj_dir.RemoveLast();
+
+    pluginName.Replace( wxT( "%P" ), prj_dir.GetData(), true );
+
     return pluginName;
 }
 
