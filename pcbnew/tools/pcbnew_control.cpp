@@ -26,6 +26,7 @@
 #include "common_actions.h"
 #include "selection_tool.h"
 #include "picker_tool.h"
+#include "grid_helper.h"
 
 #include <pcbnew_id.h>
 #include <wxPcbStruct.h>
@@ -121,7 +122,7 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
     BOARD* board = getModel<BOARD>();
     board->ComputeBoundingBox();
     BOX2I boardBBox = board->ViewBBox();
-    VECTOR2I screenSize = gal->GetScreenPixelSize();
+    const VECTOR2I& screenSize = gal->GetScreenPixelSize();
 
     if( boardBBox.GetSize().x == 0 || boardBBox.GetSize().y == 0 )
     {
@@ -421,6 +422,108 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 }
 
 
+// Cursor control
+int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
+{
+    long type = aEvent.Parameter<long>();
+    bool fastMove = type & COMMON_ACTIONS::CURSOR_FAST_MOVE;
+    type &= ~COMMON_ACTIONS::CURSOR_FAST_MOVE;
+
+    GRID_HELPER gridHelper( m_frame );
+    VECTOR2D cursor = getViewControls()->GetCursorPosition();
+    VECTOR2I gridSize = gridHelper.GetGrid();
+    VECTOR2D newCursor = gridHelper.Align( cursor );
+    bool warp = true;
+
+    if( fastMove )
+        gridSize = gridSize * 10;
+
+    switch( type )
+    {
+        case COMMON_ACTIONS::CURSOR_UP:
+            newCursor -= VECTOR2D( 0, gridSize.y );
+            break;
+
+        case COMMON_ACTIONS::CURSOR_DOWN:
+            newCursor += VECTOR2D( 0, gridSize.y );
+            break;
+
+        case COMMON_ACTIONS::CURSOR_LEFT:
+            newCursor -= VECTOR2D( gridSize.x, 0 );
+            break;
+
+        case COMMON_ACTIONS::CURSOR_RIGHT:
+            newCursor += VECTOR2D( gridSize.x, 0 );
+            break;
+
+        case COMMON_ACTIONS::CURSOR_CLICK:
+            {
+                TOOL_EVENT evtClick( TC_MOUSE, TA_MOUSE_CLICK, BUT_LEFT );
+                evtClick.SetMousePosition( getViewControls()->GetCursorPosition() );
+                m_toolMgr->ProcessEvent( evtClick );
+                warp = false;
+            }
+            break;
+
+        case COMMON_ACTIONS::CURSOR_DBL_CLICK:
+            {
+                TOOL_EVENT evtDblClick( TC_MOUSE, TA_MOUSE_DBLCLICK, BUT_LEFT );
+                evtDblClick.SetMousePosition( getViewControls()->GetCursorPosition() );
+                m_toolMgr->ProcessEvent( evtDblClick );
+                warp = false;
+            }
+            break;
+    }
+
+    if( warp )
+    {
+        KIGFX::VIEW* view = getView();
+        newCursor = view->ToScreen( newCursor );
+
+        // Pan the screen if required
+        const VECTOR2I& screenSize = view->GetGAL()->GetScreenPixelSize();
+        BOX2I screenBox( VECTOR2I( 0, 0 ), screenSize );
+
+        if( !screenBox.Contains( newCursor ) )
+        {
+            VECTOR2D delta( 0, 0 );
+
+            if( newCursor.x < screenBox.GetLeft() )
+            {
+                delta.x = newCursor.x - screenBox.GetLeft();
+                newCursor.x = screenBox.GetLeft();
+            }
+            else if( newCursor.x > screenBox.GetRight() )
+            {
+                delta.x = newCursor.x - screenBox.GetRight();
+                // -1 is to keep the cursor within the drawing area,
+                // so the cursor coordinates are updated
+                newCursor.x = screenBox.GetRight() - 1;
+            }
+
+            if( newCursor.y < screenBox.GetTop() )
+            {
+                delta.y = newCursor.y - screenBox.GetTop();
+                newCursor.y = screenBox.GetTop();
+            }
+            else if( newCursor.y > screenBox.GetBottom() )
+            {
+                delta.y = newCursor.y - screenBox.GetBottom();
+                // -1 is to keep the cursor within the drawing area,
+                // so the cursor coordinates are updated
+                newCursor.y = screenBox.GetBottom() - 1;
+            }
+
+            view->SetCenter( view->GetCenter() + view->ToWorld( delta, false ) );
+        }
+
+        m_frame->GetGalCanvas()->WarpPointer( newCursor.x, newCursor.y );
+    }
+
+    return 0;
+}
+
+
 // Grid control
 int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 {
@@ -634,6 +737,18 @@ void PCBNEW_CONTROL::SetTransitions()
     Go( &PCBNEW_CONTROL::LayerToggle,        COMMON_ACTIONS::layerToggle.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerAlphaInc,      COMMON_ACTIONS::layerAlphaInc.MakeEvent() );
     Go( &PCBNEW_CONTROL::LayerAlphaDec,      COMMON_ACTIONS::layerAlphaDec.MakeEvent() );
+
+    // Cursor control
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorUp.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorDown.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorLeft.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorRight.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorUpFast.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorDownFast.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorLeftFast.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorRightFast.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorClick.MakeEvent() );
+    Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorDblClick.MakeEvent() );
 
     // Grid control
     Go( &PCBNEW_CONTROL::GridFast1,          COMMON_ACTIONS::gridFast1.MakeEvent() );

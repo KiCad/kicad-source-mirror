@@ -269,6 +269,20 @@ public:
     /// Display module texts as outlines
     static TOOL_ACTION moduleTextOutlines;
 
+    /// Cursor control with keyboard
+    static TOOL_ACTION cursorUp;
+    static TOOL_ACTION cursorDown;
+    static TOOL_ACTION cursorLeft;
+    static TOOL_ACTION cursorRight;
+
+    static TOOL_ACTION cursorUpFast;
+    static TOOL_ACTION cursorDownFast;
+    static TOOL_ACTION cursorLeftFast;
+    static TOOL_ACTION cursorRightFast;
+
+    static TOOL_ACTION cursorClick;
+    static TOOL_ACTION cursorDblClick;
+
     // Miscellaneous
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;
@@ -303,6 +317,10 @@ public:
      * no corresponding TOOL_ACTION.
      */
     static boost::optional<TOOL_EVENT> TranslateLegacyId( int aId );
+
+    ///> Cursor control event types
+    enum CURSOR_EVENT_TYPE { CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
+                             CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_FAST_MOVE = 0x8000 };
 };
 
 void registerAllTools( TOOL_MANAGER* aToolManager );

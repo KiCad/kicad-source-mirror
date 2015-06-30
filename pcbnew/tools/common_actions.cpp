@@ -430,6 +430,33 @@ TOOL_ACTION COMMON_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutline
        "", "" );
 
 
+// Cursor control
+TOOL_ACTION COMMON_ACTIONS::cursorUp( "pcbnew.Control.cursorUp",
+        AS_GLOBAL, WXK_UP, "", "", NULL, AF_NONE, (void*) CURSOR_UP );
+TOOL_ACTION COMMON_ACTIONS::cursorDown( "pcbnew.Control.cursorDown",
+        AS_GLOBAL, WXK_DOWN, "", "" , NULL, AF_NONE, (void*) CURSOR_DOWN );
+TOOL_ACTION COMMON_ACTIONS::cursorLeft( "pcbnew.Control.cursorLeft",
+        AS_GLOBAL, WXK_LEFT, "", "" , NULL, AF_NONE, (void*) CURSOR_LEFT );
+TOOL_ACTION COMMON_ACTIONS::cursorRight( "pcbnew.Control.cursorRight",
+        AS_GLOBAL, WXK_RIGHT, "", "" , NULL, AF_NONE, (void*) CURSOR_RIGHT );
+
+TOOL_ACTION COMMON_ACTIONS::cursorUpFast( "pcbnew.Control.cursorUpFast",
+        AS_GLOBAL, MD_CTRL + WXK_UP, "", "", NULL, AF_NONE, (void*) ( CURSOR_UP | CURSOR_FAST_MOVE ) );
+TOOL_ACTION COMMON_ACTIONS::cursorDownFast( "pcbnew.Control.cursorDownFast",
+        AS_GLOBAL, MD_CTRL + WXK_DOWN, "", "" , NULL, AF_NONE, (void*) ( CURSOR_DOWN | CURSOR_FAST_MOVE ) );
+TOOL_ACTION COMMON_ACTIONS::cursorLeftFast( "pcbnew.Control.cursorLeftFast",
+        AS_GLOBAL, MD_CTRL + WXK_LEFT, "", "" , NULL, AF_NONE, (void*) ( CURSOR_LEFT | CURSOR_FAST_MOVE ) );
+TOOL_ACTION COMMON_ACTIONS::cursorRightFast( "pcbnew.Control.cursorRightFast",
+        AS_GLOBAL, MD_CTRL + WXK_RIGHT, "", "" , NULL, AF_NONE, (void*) ( CURSOR_RIGHT | CURSOR_FAST_MOVE ) );
+
+TOOL_ACTION COMMON_ACTIONS::cursorClick( "pcbnew.Control.cursorClick",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LEFT_CLICK ),
+        "", "", NULL, AF_NONE, (void*) CURSOR_CLICK );
+TOOL_ACTION COMMON_ACTIONS::cursorDblClick( "pcbnew.Control.cursorDblClick",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LEFT_DCLICK ),
+        "", "", NULL, AF_NONE, (void*) CURSOR_DBL_CLICK );
+
+
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
         AS_GLOBAL, 0,
