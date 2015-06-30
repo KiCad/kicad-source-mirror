@@ -39,6 +39,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <class_draw_panel_gal.h>
 #include <tool/tool_manager.h>
+#include <tools/common_actions.h>
 
 // Max values for grid size
 #define MAX_GRID_SIZE ( 50.0 * IU_PER_MM )
@@ -282,8 +283,14 @@ bool PCB_BASE_FRAME::InvokeDialogGrid()
         TOOL_MANAGER* mgr = GetToolManager();
 
         if( mgr && IsGalCanvasActive() )
+        {
             mgr->RunAction( "common.Control.gridPreset", true,
                     screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
+
+            TOOL_EVENT gridOriginUpdate = COMMON_ACTIONS::gridSetOrigin.MakeEvent();
+            gridOriginUpdate.SetParameter( new VECTOR2D( grid_origin ) );
+            mgr->ProcessEvent( gridOriginUpdate );
+        }
 
         m_canvas->Refresh();
 

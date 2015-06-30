@@ -228,7 +228,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_dragging )
             {
                 m_cursor = grid.BestSnapAnchor( evt->Position(), selection.Item<BOARD_ITEM>( 0 ) );
-                getViewControls()->ForceCursorPosition ( true, m_cursor );
+                getViewControls()->ForceCursorPosition( true, m_cursor );
 
                 wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) -
                                    selection.Item<BOARD_ITEM>( 0 )->GetPosition();

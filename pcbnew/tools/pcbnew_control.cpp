@@ -472,13 +472,23 @@ static bool setOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
 
 int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 {
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    assert( picker );
+    VECTOR2D* origin = aEvent.Parameter<VECTOR2D*>();
 
-    // TODO it will not check the toolbar button in module editor, as it uses a different ID..
-    m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-    picker->SetClickHandler( boost::bind( setOrigin, getView(), m_frame, m_gridOrigin, _1 ) );
-    picker->Activate();
+    if( origin )
+    {
+        setOrigin( getView(), m_frame, m_gridOrigin, *origin );
+        delete origin;
+    }
+    else
+    {
+        PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+        assert( picker );
+
+        // TODO it will not check the toolbar button in module editor, as it uses a different ID..
+        m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
+        picker->SetClickHandler( boost::bind( setOrigin, getView(), m_frame, m_gridOrigin, _1 ) );
+        picker->Activate();
+    }
 
     return 0;
 }

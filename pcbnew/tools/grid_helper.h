@@ -43,15 +43,15 @@ public:
     void SetGrid( int aSize );
     void SetOrigin( const VECTOR2I& aOrigin );
 
-    VECTOR2I GetGrid();
-    VECTOR2I GetOrigin();
+    VECTOR2I GetGrid() const;
+    VECTOR2I GetOrigin() const;
 
-    void SetAuxAxes( bool aEnable, const VECTOR2I aOrigin = VECTOR2I( 0, 0 ), bool aEnableDiagonal = false );
+    void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ), bool aEnableDiagonal = false );
 
-    VECTOR2I Align( const VECTOR2I& aPoint );
+    VECTOR2I Align( const VECTOR2I& aPoint ) const;
 
-    VECTOR2I BestDragOrigin ( const VECTOR2I &aMousePos, BOARD_ITEM* aItem );
-    VECTOR2I BestSnapAnchor ( const VECTOR2I &aOrigin, BOARD_ITEM* aDraggedItem );
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, BOARD_ITEM* aItem );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
 
 private:
     enum ANCHOR_FLAGS {
@@ -70,28 +70,28 @@ private:
         int flags;
         BOARD_ITEM* item;
 
-        double Distance( const VECTOR2I& aP )
+        double Distance( const VECTOR2I& aP ) const
         {
             return ( aP - pos ).EuclideanNorm();
         }
 
-        bool CanSnapItem( const BOARD_ITEM* aItem );
+        //bool CanSnapItem( const BOARD_ITEM* aItem ) const;
     };
 
     std::vector<ANCHOR> m_anchors;
 
-    std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea );
+    std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea ) const;
 
-    void addAnchor( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM* aItem = NULL )
+    void addAnchor( const VECTOR2I& aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM* aItem = NULL )
     {
         m_anchors.push_back( ANCHOR( aPos, aFlags, aItem ) );
     }
 
-    ANCHOR* nearestAnchor( VECTOR2I aPos, int aFlags, LSET aMatchLayers );
+    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers );
 
     void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos );
 
-    void clearAnchors ()
+    void clearAnchors()
     {
         m_anchors.clear();
     }
