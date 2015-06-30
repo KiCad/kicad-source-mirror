@@ -1092,6 +1092,9 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     assert( zone->GetNumCorners() > 2 );
 
                     // Finish the zone
+                    if( direction45 )
+                        zone->AppendCorner( cursorPos == origin ? line45.GetStart() : line45.GetEnd() );
+
                     zone->Outline()->CloseLastContour();
                     zone->Outline()->RemoveNullSegments();
 
@@ -1140,6 +1143,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
 
                     // Show options dialog
                     ZONE_EDIT_T dialogResult;
+
                     if( aKeepout )
                         dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneInfo );
                     else
