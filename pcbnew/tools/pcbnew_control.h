@@ -72,6 +72,7 @@ public:
     int LayerAlphaDec( const TOOL_EVENT& aEvent );
 
     int CursorControl( const TOOL_EVENT& aEvent );
+    int PanControl( const TOOL_EVENT& aEvent );
 
     // Grid control
     int GridFast1( const TOOL_EVENT& aEvent );

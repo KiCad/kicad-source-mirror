@@ -524,6 +524,43 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::PanControl( const TOOL_EVENT& aEvent )
+{
+    long type = aEvent.Parameter<long>();
+    KIGFX::VIEW* view = getView();
+    GRID_HELPER gridHelper( m_frame );
+    VECTOR2D center = view->GetCenter();
+    VECTOR2I gridSize = gridHelper.GetGrid() * 10;
+
+    switch( type )
+    {
+        case COMMON_ACTIONS::CURSOR_UP:
+            center -= VECTOR2D( 0, gridSize.y );
+            break;
+
+        case COMMON_ACTIONS::CURSOR_DOWN:
+            center += VECTOR2D( 0, gridSize.y );
+            break;
+
+        case COMMON_ACTIONS::CURSOR_LEFT:
+            center -= VECTOR2D( gridSize.x, 0 );
+            break;
+
+        case COMMON_ACTIONS::CURSOR_RIGHT:
+            center += VECTOR2D( gridSize.x, 0 );
+            break;
+
+        default:
+            assert( false );
+            break;
+    }
+
+    view->SetCenter( center );
+
+    return 0;
+}
+
+
 // Grid control
 int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 {
@@ -749,6 +786,12 @@ void PCBNEW_CONTROL::SetTransitions()
     Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorRightFast.MakeEvent() );
     Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorClick.MakeEvent() );
     Go( &PCBNEW_CONTROL::CursorControl,      COMMON_ACTIONS::cursorDblClick.MakeEvent() );
+
+    // Pan control
+    Go( &PCBNEW_CONTROL::PanControl,         COMMON_ACTIONS::panUp.MakeEvent() );
+    Go( &PCBNEW_CONTROL::PanControl,         COMMON_ACTIONS::panDown.MakeEvent() );
+    Go( &PCBNEW_CONTROL::PanControl,         COMMON_ACTIONS::panLeft.MakeEvent() );
+    Go( &PCBNEW_CONTROL::PanControl,         COMMON_ACTIONS::panRight.MakeEvent() );
 
     // Grid control
     Go( &PCBNEW_CONTROL::GridFast1,          COMMON_ACTIONS::gridFast1.MakeEvent() );

@@ -283,6 +283,12 @@ public:
     static TOOL_ACTION cursorClick;
     static TOOL_ACTION cursorDblClick;
 
+    // Panning with keyboard
+    static TOOL_ACTION panUp;
+    static TOOL_ACTION panDown;
+    static TOOL_ACTION panLeft;
+    static TOOL_ACTION panRight;
+
     // Miscellaneous
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;

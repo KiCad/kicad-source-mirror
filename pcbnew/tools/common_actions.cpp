@@ -456,6 +456,14 @@ TOOL_ACTION COMMON_ACTIONS::cursorDblClick( "pcbnew.Control.cursorDblClick",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LEFT_DCLICK ),
         "", "", NULL, AF_NONE, (void*) CURSOR_DBL_CLICK );
 
+TOOL_ACTION COMMON_ACTIONS::panUp( "pcbnew.Control.panUp",
+        AS_GLOBAL, MD_SHIFT + WXK_UP, "", "", NULL, AF_NONE, (void*) CURSOR_UP );
+TOOL_ACTION COMMON_ACTIONS::panDown( "pcbnew.Control.panDown",
+        AS_GLOBAL, MD_SHIFT + WXK_DOWN, "", "" , NULL, AF_NONE, (void*) CURSOR_DOWN );
+TOOL_ACTION COMMON_ACTIONS::panLeft( "pcbnew.Control.panLeft",
+        AS_GLOBAL, MD_SHIFT + WXK_LEFT, "", "" , NULL, AF_NONE, (void*) CURSOR_LEFT );
+TOOL_ACTION COMMON_ACTIONS::panRight( "pcbnew.Control.panRight",
+        AS_GLOBAL, MD_SHIFT + WXK_RIGHT, "", "" , NULL, AF_NONE, (void*) CURSOR_RIGHT );
 
 // Miscellaneous
 TOOL_ACTION COMMON_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
