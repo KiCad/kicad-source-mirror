@@ -300,6 +300,9 @@ void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControl
 
 void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
 {
+    SetSize( wxSize( aWidth, aHeight ) );
+    screenSize = m_parent->GetClientSize();     // use client size to subtract scrollbars size
+
     // Recreate the bitmaps
     deleteBitmaps();
     allocateBitmaps();
@@ -308,9 +311,6 @@ void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
         compositor->Resize( aWidth, aHeight );
 
     validCompositor = false;
-
-    SetSize( wxSize( aWidth, aHeight ) );
-    screenSize = m_parent->GetClientSize();     // use client size to subtract scrollbars size
 }
 
 
