@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-30 08:54+0100\n"
-"PO-Revision-Date: 2015-06-30 08:54+0100\n"
+"POT-Creation-Date: 2015-06-30 23:41+0100\n"
+"PO-Revision-Date: 2015-06-30 23:41+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -716,7 +716,7 @@ msgstr "Rif."
 #: eeschema/template_fieldnames.cpp:42 eeschema/onrightclick.cpp:423
 #: eeschema/sch_component.cpp:1518 eeschema/lib_field.cpp:581
 #: eeschema/lib_field.cpp:759 eeschema/dialogs/dialog_rescue_each.cpp:108
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:186
 #: eeschema/dialogs/dialog_color_config.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
@@ -755,7 +755,7 @@ msgstr "Tipo"
 
 #: pcbnew/class_text_mod.cpp:403 pcbnew/class_pcb_text.cpp:143
 #: eeschema/lib_pin.cpp:1992
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:985
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:984
 #: gerbview/class_gerber_draw_item.cpp:573
 #: gerbview/class_gerber_draw_item.cpp:574
 msgid "No"
@@ -764,7 +764,7 @@ msgstr "No"
 #: pcbnew/class_text_mod.cpp:405 pcbnew/class_pcb_text.cpp:145
 #: eeschema/lib_pin.cpp:1990
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:983
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:982
 #: gerbview/class_gerber_draw_item.cpp:573
 #: gerbview/class_gerber_draw_item.cpp:574
 msgid "Yes"
@@ -3188,7 +3188,7 @@ msgid "Add circle"
 msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:942 pcbnew/edit.cpp:1482
-#: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1360
+#: pcbnew/tools/drawing_tool.cpp:1245 pcbnew/tools/drawing_tool.cpp:1364
 #: eeschema/schedit.cpp:550 eeschema/libeditframe.cpp:1138
 msgid "Add text"
 msgstr "Aggiungi testo "
@@ -3210,7 +3210,7 @@ msgid "Pad settings"
 msgstr "Impostazioni piazzola"
 
 #: pcbnew/modedit.cpp:967 pcbnew/edit.cpp:1494
-#: pcbnew/tools/pcbnew_control.cpp:566 eeschema/schedit.cpp:586
+#: pcbnew/tools/pcbnew_control.cpp:716 eeschema/schedit.cpp:586
 #: eeschema/libeditframe.cpp:1180 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
@@ -4758,7 +4758,7 @@ msgstr "Sbroglia interattivamente una coppia differenziale"
 msgid "&Tune Track Length"
 msgstr "Regola lunghezza pis&ta"
 
-#: pcbnew/menubar_pcbframe.cpp:452 pcbnew/tools/common_actions.cpp:487
+#: pcbnew/menubar_pcbframe.cpp:452 pcbnew/tools/common_actions.cpp:522
 msgid "Tune length of a single track"
 msgstr "Regola la lunghezza di una singola pista"
 
@@ -4766,7 +4766,7 @@ msgstr "Regola la lunghezza di una singola pista"
 msgid "Tune Differential Pair &Length"
 msgstr "Regola &lunghezza coppia differenziale"
 
-#: pcbnew/menubar_pcbframe.cpp:457 pcbnew/tools/common_actions.cpp:491
+#: pcbnew/menubar_pcbframe.cpp:457 pcbnew/tools/common_actions.cpp:526
 msgid "Tune length of a differential pair"
 msgstr "Regola la lunghezza di una coppia differenziale"
 
@@ -5005,7 +5005,7 @@ msgstr "Aggiungi proibita"
 msgid "Adjust zero"
 msgstr "Regola zero"
 
-#: pcbnew/edit.cpp:1466 pcbnew/tools/pcbnew_control.cpp:479
+#: pcbnew/edit.cpp:1466 pcbnew/tools/pcbnew_control.cpp:628
 msgid "Adjust grid origin"
 msgstr "Imposta origine griglia"
 
@@ -6405,79 +6405,79 @@ msgstr "Copia elementi"
 msgid "Paste items"
 msgstr "Incolla elementi"
 
-#: pcbnew/tools/common_actions.cpp:467 pcbnew/tools/common_actions.cpp:468
+#: pcbnew/tools/common_actions.cpp:502 pcbnew/tools/common_actions.cpp:503
 msgid "Run push & shove router (single tracks)"
 msgstr "Esegui sbroglio interattivo (P&S) pista singola"
 
-#: pcbnew/tools/common_actions.cpp:472 pcbnew/tools/common_actions.cpp:473
+#: pcbnew/tools/common_actions.cpp:507 pcbnew/tools/common_actions.cpp:508
 msgid "Run push & shove router (differential pairs)"
 msgstr "Esegui sbroglio interattivo (P&S) coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:477 pcbnew/tools/common_actions.cpp:478
+#: pcbnew/tools/common_actions.cpp:512 pcbnew/tools/common_actions.cpp:513
 msgid "Open Interactive Router settings"
 msgstr "Apri impostazioni sbroglio interattivo"
 
-#: pcbnew/tools/common_actions.cpp:482 pcbnew/tools/common_actions.cpp:483
+#: pcbnew/tools/common_actions.cpp:517 pcbnew/tools/common_actions.cpp:518
 msgid "Open Differential Pair Dimension settings"
 msgstr "Apre le impostazioni dimensioni coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:495
+#: pcbnew/tools/common_actions.cpp:530
 msgid "Tune skew of a differential pair"
 msgstr "Regola lo skew di una coppia differenziale"
 
-#: pcbnew/tools/common_actions.cpp:508
+#: pcbnew/tools/common_actions.cpp:543
 msgid "Create corner"
 msgstr "Crea angolo"
 
-#: pcbnew/tools/common_actions.cpp:512
+#: pcbnew/tools/common_actions.cpp:547
 msgid "Remove corner"
 msgstr "Elimina angolo"
 
-#: pcbnew/tools/common_actions.cpp:517
+#: pcbnew/tools/common_actions.cpp:552
 msgid "Align items to the top"
 msgstr "Allinea elementi in cima"
 
-#: pcbnew/tools/common_actions.cpp:518
+#: pcbnew/tools/common_actions.cpp:553
 msgid "Aligns selected items to the top edge"
 msgstr "Allinea gli elementi selezionati al bordo superiore"
 
-#: pcbnew/tools/common_actions.cpp:522
+#: pcbnew/tools/common_actions.cpp:557
 msgid "Align items to the bottom"
 msgstr "Allinea elementi in fondo"
 
-#: pcbnew/tools/common_actions.cpp:523
+#: pcbnew/tools/common_actions.cpp:558
 msgid "Aligns selected items to the bottom edge"
 msgstr "Allinea gli elementi selezionati al bordo inferiore"
 
-#: pcbnew/tools/common_actions.cpp:527
+#: pcbnew/tools/common_actions.cpp:562
 msgid "Align items to the left"
 msgstr "Allinea elementi a sinistra"
 
-#: pcbnew/tools/common_actions.cpp:528
+#: pcbnew/tools/common_actions.cpp:563
 msgid "Aligns selected items to the left edge"
 msgstr "Allinea gli elementi selezionati al bordo sinistro"
 
-#: pcbnew/tools/common_actions.cpp:532
+#: pcbnew/tools/common_actions.cpp:567
 msgid "Align items to the right"
 msgstr "Allinea elementi a destra"
 
-#: pcbnew/tools/common_actions.cpp:533
+#: pcbnew/tools/common_actions.cpp:568
 msgid "Aligns selected items to the right edge"
 msgstr "Allinea gli elementi selezionati al bordo destro"
 
-#: pcbnew/tools/common_actions.cpp:537
+#: pcbnew/tools/common_actions.cpp:572
 msgid "Distribute horizontally"
 msgstr "Distribuisci orizzontalmente"
 
-#: pcbnew/tools/common_actions.cpp:538
+#: pcbnew/tools/common_actions.cpp:573
 msgid "Distributes selected items along the horizontal axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
 
-#: pcbnew/tools/common_actions.cpp:542
+#: pcbnew/tools/common_actions.cpp:577
 msgid "Distribute vertically"
 msgstr "Distribuisci verticalmente"
 
-#: pcbnew/tools/common_actions.cpp:543
+#: pcbnew/tools/common_actions.cpp:578
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
 
@@ -6534,11 +6534,11 @@ msgstr "%d elementi duplicati"
 msgid "Zoom: %.2f"
 msgstr "Zoom: %.2f"
 
-#: pcbnew/tools/pcbnew_control.cpp:551
+#: pcbnew/tools/pcbnew_control.cpp:701
 msgid "Are you sure you want to delete item?"
 msgstr "Cancellare l'elemento selezionato?"
 
-#: pcbnew/tools/pcbnew_control.cpp:585
+#: pcbnew/tools/pcbnew_control.cpp:735
 msgid "Not available in OpenGL/Cairo canvases."
 msgstr "Non disponibile in modalità OpenGL/Cairo."
 
@@ -8778,7 +8778,7 @@ msgstr "File netlist:"
 #: eeschema/lib_pin.cpp:1967
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:151
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:181
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:183
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
@@ -11834,16 +11834,17 @@ msgstr "C.S. nudo (senza rame o serigrafia)"
 msgid "Meter"
 msgstr "Metro"
 
-#: pcbnew/dialogs/dialog_set_grid.cpp:232
+#: pcbnew/dialogs/dialog_set_grid.cpp:233
 #, c-format
 msgid "Incorrect grid size (size must be >= %.3f mm and <= %.3f mm)"
 msgstr ""
 "Dimensione griglia errata (la dimensione deve essere >= %.3f mm e <= %.3f mm)"
 
-#: pcbnew/dialogs/dialog_set_grid.cpp:241
+#: pcbnew/dialogs/dialog_set_grid.cpp:242
 #, c-format
-msgid "Incorrect grid origin (size must be >= %.3f and <= %.f mm)"
-msgstr "Origine griglia errata (la dimensione deve essere >= %.3f e <= %.f mm)"
+msgid "Incorrect grid origin (coordinates must be >= %.3f mm and <= %.3f mm)"
+msgstr ""
+"Origine griglia errata (le coordinate devono essere >= %.3f e <= %.3f mm)"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:23
 msgid "User Defined Grid"
@@ -17439,7 +17440,7 @@ msgstr "Valore campo"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:216
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:846
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:845
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:697
 msgid "Show in Browser"
 msgstr "Mostra nell'esploratore"
@@ -18687,7 +18688,7 @@ msgstr ""
 msgid "Remove Fields"
 msgstr "Elimina campo"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:848
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:847
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Assign Footprint"
 msgstr "Assegna impronta"
