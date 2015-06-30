@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-28 21:52+0100\n"
-"PO-Revision-Date: 2015-06-28 21:52+0100\n"
+"POT-Creation-Date: 2015-06-30 08:54+0100\n"
+"PO-Revision-Date: 2015-06-30 08:54+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -715,7 +715,7 @@ msgstr "Rif."
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: eeschema/template_fieldnames.cpp:42 eeschema/onrightclick.cpp:423
 #: eeschema/sch_component.cpp:1518 eeschema/lib_field.cpp:581
-#: eeschema/lib_field.cpp:759 eeschema/dialogs/dialog_rescue_each.cpp:107
+#: eeschema/lib_field.cpp:759 eeschema/dialogs/dialog_rescue_each.cpp:108
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:184
 #: eeschema/dialogs/dialog_color_config.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
@@ -8621,7 +8621,7 @@ msgstr "Anteprima di stampa"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: eeschema/template_fieldnames.cpp:39 eeschema/onrightclick.cpp:428
 #: eeschema/sch_component.cpp:1514 eeschema/lib_field.cpp:574
-#: eeschema/dialogs/dialog_rescue_each.cpp:106
+#: eeschema/dialogs/dialog_rescue_each.cpp:107
 #: eeschema/dialogs/dialog_color_config.cpp:78
 msgid "Reference"
 msgstr "Riferimento"
@@ -13928,40 +13928,40 @@ msgstr "Salva ed esci"
 msgid "Exit without Save"
 msgstr "Esci senza salvare"
 
-#: common/dialogs/wx_html_report_panel.cpp:107
+#: common/dialogs/wx_html_report_panel.cpp:109
 msgid "<b>Error: </b></font><font size=2>"
 msgstr "<b>Errore: </b></font><font size=2>"
 
-#: common/dialogs/wx_html_report_panel.cpp:109
+#: common/dialogs/wx_html_report_panel.cpp:111
 msgid "<b>Warning: </b></font><font size=2>"
 msgstr "<b>Attenzione: </b></font><font size=2>"
 
-#: common/dialogs/wx_html_report_panel.cpp:111
+#: common/dialogs/wx_html_report_panel.cpp:113
 msgid "<b>Info: </b>"
 msgstr "<b>Info: </b>"
 
-#: common/dialogs/wx_html_report_panel.cpp:125
+#: common/dialogs/wx_html_report_panel.cpp:127
 msgid "Error: "
 msgstr "Errore: "
 
-#: common/dialogs/wx_html_report_panel.cpp:127
+#: common/dialogs/wx_html_report_panel.cpp:129
 msgid "Warning: "
 msgstr "Attenzione: "
 
-#: common/dialogs/wx_html_report_panel.cpp:129
+#: common/dialogs/wx_html_report_panel.cpp:131
 msgid "Info: "
 msgstr "Info: "
 
-#: common/dialogs/wx_html_report_panel.cpp:209
+#: common/dialogs/wx_html_report_panel.cpp:211
 msgid "Save report to file"
 msgstr "Salva rapporto su file"
 
-#: common/dialogs/wx_html_report_panel.cpp:226
+#: common/dialogs/wx_html_report_panel.cpp:228
 #, c-format
 msgid "Cannot write report to file '%s'."
 msgstr "Impossibile scrivere rapporto nel file \"%s\"."
 
-#: common/dialogs/wx_html_report_panel.cpp:228
+#: common/dialogs/wx_html_report_panel.cpp:230
 msgid "File save error"
 msgstr "Errore salvataggio file"
 
@@ -16164,11 +16164,11 @@ msgstr ""
 "Pronto\n"
 "Cartella progetto: \"%s\"\n"
 
-#: eeschema/files-io.cpp:352
+#: eeschema/files-io.cpp:353
 msgid "Import Schematic"
 msgstr "Importa schema"
 
-#: eeschema/files-io.cpp:460
+#: eeschema/files-io.cpp:461
 msgid ""
 "This operation cannot be undone. Besides, take into account that "
 "hierarchical sheets will not be appended.\n"
@@ -16180,7 +16180,7 @@ msgstr ""
 "\n"
 "Si desidera salvare il documento prima di procedere?"
 
-#: eeschema/files-io.cpp:484
+#: eeschema/files-io.cpp:485
 #, c-format
 msgid "Directory '%s' is not writable"
 msgstr "Cartella \"%s\" non scrivibile"
@@ -17216,32 +17216,33 @@ msgid ""
 "libraries.\n"
 "Some parts may need to be relinked to a different symbol name, and some "
 "symbols\n"
-"may need to be \"rescued\" into a new library.\n"
-"The following changes are recommended to update the project.\n"
+"may need to be \"rescued\" (cloned and renamed) into a new library.\n"
+"\n"
+"The following changes are recommended to update the project."
 msgstr ""
 "Sembra che questo progetto sia stato fatto usando vecchie librerie di "
 "componenti.\n"
 "Alcune parti potrebbero necessitare di essere ricollegate ad un simbolo con "
 "nome diverso, \n"
-"e potrebbe essere necessario \"recuperare\" alcuni simboli in una nuova "
-"libreria.\n"
-"I seguenti cambiamenti sono raccomandati per aggiornare il progetto.\n"
+"e potrebbe essere necessario \"recuperare\" (clonare e rinominare) alcuni "
+"simboli in una nuova libreria.\n"
+"I seguenti cambiamenti sono raccomandati per aggiornare il progetto."
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:103
+#: eeschema/dialogs/dialog_rescue_each.cpp:104
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:192
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:609
 msgid "Accept"
 msgstr "Accetta "
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:104
+#: eeschema/dialogs/dialog_rescue_each.cpp:105
 msgid "Symbol"
 msgstr "Simbolo"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:105
+#: eeschema/dialogs/dialog_rescue_each.cpp:106
 msgid "Action"
 msgstr "Azione"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:279
+#: eeschema/dialogs/dialog_rescue_each.cpp:280
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -17256,7 +17257,7 @@ msgstr ""
 "componenti\",\n"
 "e lo strumento può essere attivato manualmente dal menu \"Strumenti\"."
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:283
+#: eeschema/dialogs/dialog_rescue_each.cpp:284
 msgid "Rescue Components"
 msgstr "Recupera componenti"
 
@@ -17492,16 +17493,16 @@ msgstr "Questo nome esiste già. Interrotto"
 msgid "Plugin files:"
 msgstr "File di plugin:"
 
-#: eeschema/dialogs/dialog_bom.cpp:570
+#: eeschema/dialogs/dialog_bom.cpp:578
 msgid "Plugin file name not found. Cannot edit plugin file"
 msgstr ""
 "Nome file plugin non trovato. Impossibile modificare il file del plugin"
 
-#: eeschema/dialogs/dialog_bom.cpp:580
+#: eeschema/dialogs/dialog_bom.cpp:588
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Nessun editor di testo selezionato. Sceglierne uno."
 
-#: eeschema/dialogs/dialog_bom.cpp:585
+#: eeschema/dialogs/dialog_bom.cpp:593
 msgid "Bom Generation Help"
 msgstr "Aiuto generazione distinta"
 
