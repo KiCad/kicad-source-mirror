@@ -157,11 +157,13 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     // quasimodal mode for the quasimodal frame support to work.  So don't use
     // the QUASIMODAL macros here.
     int ret = dlg->ShowQuasiModal();
-    (void) ret;     // not used. Make coverity and static analysers quiet.
 
     m_canvas->SetIgnoreMouseEvents( false );
     m_canvas->MoveCursorToCrossHair();
     dlg->Destroy();
+
+    if( ret == wxID_OK )
+        GetCanvas()->Refresh();
 }
 
 
@@ -199,8 +201,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& event )
 {
-    DBG( printf( "OnListItemDeselected()\n" ); )
-
     if( !m_skipCopyFromPanel )
     {
         if( !copyPanelToSelectedField() )
@@ -459,7 +459,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     m_parent->OnModify();
     m_parent->GetScreen()->TestDanglingEnds();
-    m_parent->GetCanvas()->Refresh( true );
 
     EndQuasiModal( wxID_OK );
 }

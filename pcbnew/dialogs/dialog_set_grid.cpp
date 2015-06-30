@@ -239,7 +239,7 @@ void DIALOG_SET_GRID::OnOkClick( wxCommandEvent& event )
 
     if( !success )
     {
-        wxMessageBox( wxString::Format( _( "Incorrect grid origin (size must be >= %.3f and <= %.f mm)" ),
+        wxMessageBox( wxString::Format( _( "Incorrect grid origin (coordinates must be >= %.3f mm and <= %.3f mm)" ),
             -MAX_GRID_OFFSET/IU_PER_MM, MAX_GRID_OFFSET/IU_PER_MM ) );
         return;
     }

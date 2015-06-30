@@ -281,12 +281,6 @@ int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
                     wxProcess *callback = NULL );
 
 
-/*******************/
-/* about_kicad.cpp */
-/*******************/
-void InitKiCadAbout( wxAboutDialogInfo& info );
-
-
 /**************/
 /* common.cpp */
 /**************/
