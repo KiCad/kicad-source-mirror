@@ -107,6 +107,14 @@ int ITEMS_LISTBOX_BASE::GetSelection()
     return GetFirstSelected();
 }
 
+/*  Removes all selection in list
+*/
+void ITEMS_LISTBOX_BASE::DeselectAll()
+{
+    for( int i = 0; i < GetItemCount(); i++ )
+        Select( i, false );
+}
+
 
 CVPCB_MAINFRAME* ITEMS_LISTBOX_BASE::GetParent() const
 {

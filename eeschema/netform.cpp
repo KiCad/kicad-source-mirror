@@ -104,38 +104,41 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
         if( aReporter )
         {
             wxArrayString output, errors;
-            int diag = wxExecute (commandLine, output, errors, wxEXEC_SYNC );
+            int diag = wxExecute( commandLine, output, errors, wxEXEC_SYNC );
 
             wxString msg;
 
-            msg << _("Run command:") << wxT("\n") << commandLine << wxT("\n\n");
+            msg << _( "Run command:" ) << wxT( "\n" ) << commandLine << wxT( "\n\n" );
 
             aReporter->Report( msg, REPORTER::RPT_ACTION );
 
             if( diag != 0 )
-                aReporter->Report( wxString::Format( _("Command error. Return code %d"), diag ), REPORTER::RPT_ERROR );
+                aReporter->Report( wxString::Format(
+                                    _("Command error. Return code %d" ), diag ),
+                                    REPORTER::RPT_ERROR );
             else
-                aReporter->Report( _("Success"), REPORTER::RPT_INFO );
+                aReporter->Report( _( "Success" ), REPORTER::RPT_INFO );
 
             *aReporter << wxT("\n");
 
             if( output.GetCount() )
             {
-                msg << wxT("\n") << _("Info messages:") << wxT("\n");
+                msg.Empty();
+                msg << wxT( "\n" ) << _( "Info messages:" ) << wxT( "\n" );
                 aReporter->Report( msg, REPORTER::RPT_INFO );
 
                 for( unsigned ii = 0; ii < output.GetCount(); ii++ )
-                    aReporter->Report( output[ii], REPORTER::RPT_INFO );
+                    aReporter->Report( output[ii] + wxT( "\n" ), REPORTER::RPT_INFO );
             }
 
             if( errors.GetCount() )
             {
-                msg << wxT("\n") << _("Error messages:") << wxT("\n");
+                msg.Empty();
+                msg << wxT("\n") << _( "Error messages:" ) << wxT( "\n" );
                 aReporter->Report( msg, REPORTER::RPT_INFO );
 
                 for( unsigned ii = 0; ii < errors.GetCount(); ii++ )
-                    aReporter->Report( errors[ii], REPORTER::RPT_ERROR );
-
+                    aReporter->Report( errors[ii] + wxT( "\n" ), REPORTER::RPT_ERROR );
             }
         }
         else

@@ -51,7 +51,16 @@ public:
 
     ~ITEMS_LISTBOX_BASE();
 
+    /**
+     * @return the index of the selected item in lists allowing only one item selected
+     * and the index of the first selected item in lists allowing many selection
+     */
     int                      GetSelection();
+
+    /**
+     * Removes all selection in lists which can have more than one item selected
+     */
+    void DeselectAll();
 
     virtual CVPCB_MAINFRAME* GetParent() const;
 

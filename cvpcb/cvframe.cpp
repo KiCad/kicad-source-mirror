@@ -302,20 +302,27 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
     if( m_netlist.IsEmpty() )
         return;
 
-    long selection = m_compListBox->GetFirstSelected();
+    long first_selected = m_compListBox->GetFirstSelected();
 
-    if( selection < 0 )
-        selection = -1;     // We will start to 0 for the first search , if no item selected
+    if( first_selected < 0 )
+        first_selected = -1;     // We will start to 0 for the first search , if no item selected
 
-    for( unsigned jj = selection+1; jj < m_netlist.GetCount(); jj++ )
+    int candidate = -1;
+
+    for( unsigned jj = first_selected+1; jj < m_netlist.GetCount(); jj++ )
     {
         if( m_netlist.GetComponent( jj )->GetFPID().empty() )
         {
-            m_compListBox->SetSelection( wxNOT_FOUND, false );  // Remove all selections
-            m_compListBox->SetSelection( jj );
-            SendMessageToEESCHEMA();
-            return;
+            candidate = jj;
+            break;
         }
+    }
+
+    if( candidate >= 0 )
+    {
+        m_compListBox->DeselectAll();
+        m_compListBox->SetSelection( candidate );
+        SendMessageToEESCHEMA();
     }
 }
 
@@ -325,23 +332,27 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
     if( m_netlist.IsEmpty() )
         return;
 
-    int selection = m_compListBox->GetFirstSelected();
+    int first_selected = m_compListBox->GetFirstSelected();
 
-    if( selection < 0 )
-        selection = m_compListBox->GetCount();
-    else
-        while( m_compListBox->GetNextSelected( selection ) >= 0 )
-            selection =  m_compListBox->GetNextSelected( selection );
+    if( first_selected < 0 )
+        first_selected = m_compListBox->GetCount();
 
-    for( int kk = selection-1; kk >= 0; kk-- )
+    int candidate = -1;
+
+    for( int jj = first_selected-1; jj >= 0; jj-- )
     {
-        if( m_netlist.GetComponent( kk )->GetFPID().empty() )
+        if( m_netlist.GetComponent( jj )->GetFPID().empty() )
         {
-            m_compListBox->SetSelection( wxNOT_FOUND, false );  // Remove all selections
-            m_compListBox->SetSelection( kk );
-            SendMessageToEESCHEMA();
-            return;
+            candidate = jj;
+            break;
         }
+    }
+
+    if( candidate >= 0 )
+    {
+        m_compListBox->DeselectAll();
+        m_compListBox->SetSelection( candidate );
+        SendMessageToEESCHEMA();
     }
 }
 
@@ -359,12 +370,12 @@ void CVPCB_MAINFRAME::SaveQuitCvpcb( wxCommandEvent& aEvent )
 
 void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 {
-    wxString Line;
-
     if( IsOK( this, _( "Delete selections" ) ) )
     {
         m_skipComponentSelect = true;
-        m_compListBox->SetSelection( 0 );
+
+        // Remove all selections to avoid issues when setting the fpids
+        m_compListBox->DeselectAll();
 
         for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
@@ -373,6 +384,9 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
             m_netlist.GetComponent( i )->SetFPID( fpid );
             SetNewPkg( wxEmptyString );
         }
+
+        // Remove all selections after setting the fpids
+        m_compListBox->DeselectAll();
 
         m_skipComponentSelect = false;
         m_compListBox->SetSelection( 0 );
