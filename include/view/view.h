@@ -282,11 +282,10 @@ public:
 
     /**
      * Function ToScreen()
-     * Converts a world space coordinate to a coordinate in screen space coordinates.
-     * @param aCoord: the coordinate to be transformed.
-     * @param aAbsolute: when true, aCoord is treated as a point, otherwise - as a direction (vector)
+     * Converts a world space one dimensionsal size to a one dimensional size in screen space.
+     * @param aCoord: the size to be transformed.
      */
-    double ToScreen( double aCoord, bool aAbsolute = true ) const;
+    double ToScreen( double aSize ) const;
 
     /**
      * Function GetScreenPixelSize()

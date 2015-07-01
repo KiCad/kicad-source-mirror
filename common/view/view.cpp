@@ -234,11 +234,11 @@ VECTOR2D VIEW::ToScreen( const VECTOR2D& aCoord, bool aAbsolute ) const
 }
 
 
-double VIEW::ToScreen( double aCoord, bool aAbsolute ) const
+double VIEW::ToScreen( double aSize ) const
 {
-    VECTOR2D t( aCoord, 0 );
+    const MATRIX3x3D& matrix = m_gal->GetWorldScreenMatrix();
 
-    return ToScreen( t, aAbsolute ).x;
+    return matrix.GetScale().x * aSize;
 }
 
 
@@ -278,7 +278,7 @@ BOX2D VIEW::GetViewport() const
 
 void VIEW::SetViewport( const BOX2D& aViewport )
 {
-    VECTOR2D ssize  = ToWorld( m_gal->GetScreenPixelSize(), false );
+    VECTOR2D ssize = ToWorld( m_gal->GetScreenPixelSize(), false );
 
     wxASSERT( ssize.x > 0 && ssize.y > 0 );
 
