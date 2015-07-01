@@ -96,6 +96,9 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     Connect( wxEVT_ENTER_WINDOW,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 
+    SetSize( aParent->GetSize() );
+    screenSize = VECTOR2I( aParent->GetSize() );
+
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.8, 0.8, 0.8, 0.1 ) );
 
@@ -536,6 +539,8 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
 
 void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
 {
+    screenSize = VECTOR2I( aWidth, aHeight );
+
 #ifdef RETINA_OPENGL_PATCH
     const float scaleFactor = GetBackingScaleFactor();
 #else
@@ -547,7 +552,6 @@ void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
     isFramebufferInitialized = false;
 
     wxGLCanvas::SetSize( aWidth, aHeight );
-    screenSize = m_parent->GetClientSize();     // use client size to subtract scrollbars size
 }
 
 
