@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-30 23:41+0100\n"
-"PO-Revision-Date: 2015-06-30 23:41+0100\n"
+"POT-Creation-Date: 2015-07-02 13:32+0100\n"
+"PO-Revision-Date: 2015-07-02 13:32+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -451,8 +451,8 @@ msgstr ""
 msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
-#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:994 pcbnew/moduleframe.cpp:757
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1318 cvpcb/cvframe.cpp:702
+#: kicad/prjconfig.cpp:277 pcbnew/pcbframe.cpp:997 pcbnew/moduleframe.cpp:757
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1318 cvpcb/cvframe.cpp:716
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -852,7 +852,7 @@ msgstr "Valore %s di %s"
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
 
-#: pcbnew/pcbframe.cpp:396 pcbnew/pcbframe.cpp:924 pcbnew/moduleframe.cpp:291
+#: pcbnew/pcbframe.cpp:396 pcbnew/pcbframe.cpp:927 pcbnew/moduleframe.cpp:291
 #: gerbview/gerbview_frame.cpp:146 gerbview/events_called_functions.cpp:318
 msgid "Visibles"
 msgstr "Visibili"
@@ -878,7 +878,7 @@ msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
 
-#: pcbnew/pcbframe.cpp:998
+#: pcbnew/pcbframe.cpp:1001
 msgid " [new file]"
 msgstr " [nuovo file]"
 
@@ -1732,8 +1732,8 @@ msgstr ""
 "\"%s\""
 
 #: pcbnew/pcbnew_config.cpp:142 pcbnew/pcbnew_config.cpp:164
-#: pcbnew/moduleframe.cpp:857 pcbnew/moduleframe.cpp:877 cvpcb/cvframe.cpp:443
-#: cvpcb/cvframe.cpp:463
+#: pcbnew/moduleframe.cpp:857 pcbnew/moduleframe.cpp:877 cvpcb/cvframe.cpp:457
+#: cvpcb/cvframe.cpp:477
 msgid "File Save Error"
 msgstr "Errore salvataggio file"
 
@@ -3210,7 +3210,7 @@ msgid "Pad settings"
 msgstr "Impostazioni piazzola"
 
 #: pcbnew/modedit.cpp:967 pcbnew/edit.cpp:1494
-#: pcbnew/tools/pcbnew_control.cpp:716 eeschema/schedit.cpp:586
+#: pcbnew/tools/pcbnew_control.cpp:712 eeschema/schedit.cpp:586
 #: eeschema/libeditframe.cpp:1180 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
@@ -3346,7 +3346,7 @@ msgstr "Cambia dimensione puntatore"
 
 #: pcbnew/tool_pcb.cpp:349 pcbnew/toolbars_update_user_interface.cpp:145
 msgid "Show board ratsnest"
-msgstr "Mostra collegamenti scheda"
+msgstr "Mostra ratsnest scheda"
 
 #: pcbnew/tool_pcb.cpp:352
 msgid "Show footprint ratsnest when moving"
@@ -4379,7 +4379,7 @@ msgstr "Impronte [%d elementi]"
 msgid "No footprint found."
 msgstr "Nessuna impronta trovata."
 
-#: pcbnew/loadcmp.cpp:479 cvpcb/cvframe.cpp:622
+#: pcbnew/loadcmp.cpp:479 cvpcb/cvframe.cpp:636
 msgid "Description: "
 msgstr "Descrizione: "
 
@@ -5005,7 +5005,7 @@ msgstr "Aggiungi proibita"
 msgid "Adjust zero"
 msgstr "Regola zero"
 
-#: pcbnew/edit.cpp:1466 pcbnew/tools/pcbnew_control.cpp:628
+#: pcbnew/edit.cpp:1466 pcbnew/tools/pcbnew_control.cpp:624
 msgid "Adjust grid origin"
 msgstr "Imposta origine griglia"
 
@@ -5263,7 +5263,7 @@ msgstr "Impossibile aprire il file netlist \"%s\"."
 msgid "Netlist Load Error."
 msgstr "Errore caricamento netlist."
 
-#: pcbnew/netlist.cpp:93 cvpcb/cvframe.cpp:748
+#: pcbnew/netlist.cpp:93 cvpcb/cvframe.cpp:762
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -5273,7 +5273,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/netlist.cpp:94 pcbnew/dialogs/dialog_netlist.cpp:408
-#: cvpcb/cvframe.cpp:749
+#: cvpcb/cvframe.cpp:763
 msgid "Netlist Load Error"
 msgstr "Errore nel caricamento netlist"
 
@@ -5944,12 +5944,12 @@ msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr ""
 "Rimozione collegamento singola piazzola \"%s\" su \"%s\" piazzola \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2587
+#: pcbnew/class_board.cpp:2585
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Componente \"%s\" piazzola \"%s\" non trovato nell'impronta \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2605
+#: pcbnew/class_board.cpp:2603
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr ""
@@ -6534,11 +6534,11 @@ msgstr "%d elementi duplicati"
 msgid "Zoom: %.2f"
 msgstr "Zoom: %.2f"
 
-#: pcbnew/tools/pcbnew_control.cpp:701
+#: pcbnew/tools/pcbnew_control.cpp:697
 msgid "Are you sure you want to delete item?"
 msgstr "Cancellare l'elemento selezionato?"
 
-#: pcbnew/tools/pcbnew_control.cpp:735
+#: pcbnew/tools/pcbnew_control.cpp:731
 msgid "Not available in OpenGL/Cairo canvases."
 msgstr "Non disponibile in modalità OpenGL/Cairo."
 
@@ -13608,56 +13608,56 @@ msgstr "Grassetto+corsivo"
 msgid "Marker Info"
 msgstr "Info marcatore"
 
-#: common/hotkeys_basic.cpp:424 common/hotkeys_basic.cpp:453
-#: common/hotkeys_basic.cpp:457
+#: common/hotkeys_basic.cpp:448 common/hotkeys_basic.cpp:477
+#: common/hotkeys_basic.cpp:481
 msgid "Hotkeys List"
 msgstr "Tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:721
+#: common/hotkeys_basic.cpp:745
 msgid "Read Hotkey Configuration File:"
 msgstr "Leggi file configurazione tasti scorciatoia:"
 
-#: common/hotkeys_basic.cpp:751
+#: common/hotkeys_basic.cpp:775
 msgid "Write Hotkey Configuration File:"
 msgstr "Salva file configurazione tasti scorciatoia:"
 
-#: common/hotkeys_basic.cpp:779
+#: common/hotkeys_basic.cpp:803
 msgid "&List Current Keys"
 msgstr "E&lenco tasti correnti"
 
-#: common/hotkeys_basic.cpp:780
+#: common/hotkeys_basic.cpp:804
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Mostra i tasti scorciatoia e i comandi corrispondenti correnti"
 
-#: common/hotkeys_basic.cpp:785
+#: common/hotkeys_basic.cpp:809
 msgid "&Edit Hotkeys"
 msgstr "&Modifica tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:786
+#: common/hotkeys_basic.cpp:810
 msgid "Call the hotkeys editor"
 msgstr "Apri editor tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:793
+#: common/hotkeys_basic.cpp:817
 msgid "E&xport Hotkeys"
 msgstr "E&sporta tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:794
+#: common/hotkeys_basic.cpp:818
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr "Crea file tasti scorciatoia per esportare la configurazione corrente"
 
-#: common/hotkeys_basic.cpp:799
+#: common/hotkeys_basic.cpp:823
 msgid "&Import Hotkeys"
 msgstr "&Importa tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:800
+#: common/hotkeys_basic.cpp:824
 msgid "Load an existing hotkey configuration file"
 msgstr "Carica file configurazione tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:805
+#: common/hotkeys_basic.cpp:829
 msgid "&Hotkeys"
 msgstr "&Tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:806
+#: common/hotkeys_basic.cpp:830
 msgid "Hotkeys configuration and preferences"
 msgstr "Configurazione e preferenze tasti scorciatoia"
 
@@ -14434,20 +14434,20 @@ msgstr "Aggiungi alimentazione"
 msgid "Run command:"
 msgstr "Esegui comando:"
 
-#: eeschema/netform.cpp:116
+#: eeschema/netform.cpp:117
 #, c-format
 msgid "Command error. Return code %d"
 msgstr "Errore comando. Codice restituito %d"
 
-#: eeschema/netform.cpp:118
+#: eeschema/netform.cpp:120
 msgid "Success"
 msgstr "Successo"
 
-#: eeschema/netform.cpp:124
+#: eeschema/netform.cpp:127
 msgid "Info messages:"
 msgstr "Messaggi informativi:"
 
-#: eeschema/netform.cpp:133
+#: eeschema/netform.cpp:137
 msgid "Error messages:"
 msgstr "Messaggi d'errore:"
 
@@ -19060,11 +19060,11 @@ msgstr ""
 "Le associazioni componenti a impronte sono state modificate.\n"
 "Salvare prima di uscire?"
 
-#: cvpcb/cvframe.cpp:364
+#: cvpcb/cvframe.cpp:373
 msgid "Delete selections"
 msgstr "Cancella selezione"
 
-#: cvpcb/cvframe.cpp:439
+#: cvpcb/cvframe.cpp:453
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -19075,7 +19075,7 @@ msgstr ""
 "'%s'\n"
 "%s"
 
-#: cvpcb/cvframe.cpp:459
+#: cvpcb/cvframe.cpp:473
 #, c-format
 msgid ""
 "Error occurred saving the project footprint library table:\n"
@@ -19086,57 +19086,57 @@ msgstr ""
 "'%s'\n"
 "%s"
 
-#: cvpcb/cvframe.cpp:591
+#: cvpcb/cvframe.cpp:605
 #, c-format
 msgid "Components: %d, unassigned: %d"
 msgstr "Componenti: %d, non assegnati: %d"
 
-#: cvpcb/cvframe.cpp:609
+#: cvpcb/cvframe.cpp:623
 msgid "Filter list: "
 msgstr "Elenco filtri:"
 
-#: cvpcb/cvframe.cpp:625
+#: cvpcb/cvframe.cpp:639
 msgid "Key words: "
 msgstr "Parole chiave:"
 
-#: cvpcb/cvframe.cpp:636
+#: cvpcb/cvframe.cpp:650
 msgid "key words"
 msgstr "parole chiave"
 
-#: cvpcb/cvframe.cpp:643
+#: cvpcb/cvframe.cpp:657
 msgid "pin count"
 msgstr "numero piedini"
 
-#: cvpcb/cvframe.cpp:651
+#: cvpcb/cvframe.cpp:665
 msgid "library"
 msgstr "libreria "
 
-#: cvpcb/cvframe.cpp:655
+#: cvpcb/cvframe.cpp:669
 msgid "No filtering"
 msgstr "nessun filtro"
 
-#: cvpcb/cvframe.cpp:657
+#: cvpcb/cvframe.cpp:671
 #, c-format
 msgid "Filtered by %s"
 msgstr "Filtrato per %s"
 
-#: cvpcb/cvframe.cpp:673
+#: cvpcb/cvframe.cpp:687
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
 "Nessuna libreria di impronte è elencata nella tabella delle librerie "
 "corrente."
 
-#: cvpcb/cvframe.cpp:674
+#: cvpcb/cvframe.cpp:688
 msgid "Configuration Error"
 msgstr "Errore di configurazione"
 
-#: cvpcb/cvframe.cpp:697
+#: cvpcb/cvframe.cpp:711
 #, c-format
 msgid "Project: '%s'"
 msgstr "Progetto: \"%s\""
 
-#: cvpcb/cvframe.cpp:705
+#: cvpcb/cvframe.cpp:719
 msgid "[no project]"
 msgstr "[nessun progetto]"
 
