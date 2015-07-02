@@ -49,6 +49,8 @@
 #include "edit_tool.h"
 #include "grid_helper.h"
 
+#include <router/router_tool.h>
+
 #include <dialogs/dialog_create_array.h>
 #include <dialogs/dialog_move_exact.h>
 
@@ -105,11 +107,14 @@ bool EDIT_TOOL::invokeInlineRouter()
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
 
-    if ( !GetSettings().Get("DragInvokesRouter", false ) )
-        return false;
-
     if( track || via )
     {
+        ROUTER_TOOL *theRouter = static_cast<ROUTER_TOOL*> ( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+        assert ( theRouter );
+
+        if( !theRouter->PNSSettings().InlineDragEnabled() )
+            return false;
+
         m_toolMgr->RunAction( COMMON_ACTIONS::routerInlineDrag, true, track ? track : via );
         return true;
     }

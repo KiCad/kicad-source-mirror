@@ -530,7 +530,7 @@ TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.
         _( "Tune skew of a differential pair" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
+        AS_GLOBAL, 0,
         "", "" );
 
 // Point editor

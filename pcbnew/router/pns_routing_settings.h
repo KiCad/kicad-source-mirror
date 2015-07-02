@@ -131,6 +131,9 @@ public:
     TIME_LIMIT WalkaroundTimeLimit() const;
 
 
+    void SetInlineDragEnabled ( bool aEnable ) { m_inlineDragEnabled = aEnable; }
+    bool InlineDragEnabled( ) const { return m_inlineDragEnabled; }
+
 private:
     bool m_shoveVias;
     bool m_startDiagonal;
@@ -142,6 +145,7 @@ private:
     bool m_smoothDraggedSegments;
     bool m_canViolateDRC;
     bool m_freeAngleMode;
+    bool m_inlineDragEnabled;
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;

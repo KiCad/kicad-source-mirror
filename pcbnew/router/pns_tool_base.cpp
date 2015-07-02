@@ -247,7 +247,7 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
     VECTOR2I p = getView()->ToWorld( mp );
     VECTOR2I cp = m_ctls->GetCursorPosition();
     int layer;
-    bool snapEnabled = !aEvent.Modifier( MD_CTRL );
+    bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
     m_router->EnableSnapping( snapEnabled );
 

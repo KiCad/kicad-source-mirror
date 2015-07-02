@@ -40,6 +40,7 @@ PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
     m_smoothDraggedSegments = true;
     m_canViolateDRC = false;
     m_freeAngleMode = false;
+    m_inlineDragEnabled = false;
 }
 
 void PNS_ROUTING_SETTINGS::Save ( TOOL_SETTINGS& aSettings ) const
@@ -58,6 +59,7 @@ void PNS_ROUTING_SETTINGS::Save ( TOOL_SETTINGS& aSettings ) const
     aSettings.Set( "CanViolateDRC", m_canViolateDRC );
     aSettings.Set( "SuggestFinish", m_suggestFinish );
     aSettings.Set( "FreeAngleMode", m_freeAngleMode );
+    aSettings.Set( "InlineDragEnabled", m_inlineDragEnabled );
 }
 
 void PNS_ROUTING_SETTINGS::Load ( const TOOL_SETTINGS& aSettings )
@@ -76,6 +78,7 @@ void PNS_ROUTING_SETTINGS::Load ( const TOOL_SETTINGS& aSettings )
     m_canViolateDRC = aSettings.Get( "CanViolateDRC", false );
     m_suggestFinish = aSettings.Get( "SuggestFinish", false );
     m_freeAngleMode = aSettings.Get( "FreeAngleMode", false );
+    m_inlineDragEnabled = aSettings.Get( "InlineDragEnabled", false );
 }
 
 const DIRECTION_45 PNS_ROUTING_SETTINGS::InitialDirection() const

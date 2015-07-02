@@ -43,6 +43,11 @@ public:
 
     virtual void Reset( RESET_REASON aReason );
 
+    const PNS_ROUTING_SETTINGS& PNSSettings() const
+    {
+        return m_savedSettings;
+    }
+
 protected:
 
     virtual PNS_ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
