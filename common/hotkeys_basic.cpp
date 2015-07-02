@@ -99,7 +99,7 @@ struct hotkey_name_descr
  *        "Space","Ctrl+Space","Alt+Space" or
  *      "Alt+A","Ctrl+F1", ...
  */
-static struct hotkey_name_descr s_Hotkey_Name_List[] =
+static struct hotkey_name_descr hotkeyNameList[] =
 {
     { wxT( "F1" ),           WXK_F1                                                   },
     { wxT( "F2" ),           WXK_F2                                                   },
@@ -130,7 +130,7 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "Left" ),         WXK_LEFT                                                 },
     { wxT( "Right" ),        WXK_RIGHT                                                },
 
-    { wxT( "Return" ),       WXK_RETURN                                                },
+    { wxT( "Return" ),       WXK_RETURN                                               },
 
     { wxT( "Space" ),        WXK_SPACE                                                },
 
@@ -138,16 +138,27 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "" ),             0                                                        }
 };
 
-#define MODIFIER_CTRL   wxT( "Ctrl+" )
-#define MODIFIER_ALT    wxT( "Alt+" )
-#define MODIFIER_SHIFT  wxT( "Shift+" )
+// name of modifier keys.
+// Note: the Ctrl key is Cmd key on Mac OS X.
+// However, in wxWidgets defs, the key WXK_CONTROL is the Cmd key,
+// so the code using WXK_CONTROL should be ok on any system.
+// (on Mac OS X the actual Ctrl key code is WXK_RAW_CONTROL)
+#ifdef __WXMAC__
+#define MODIFIER_CTRL       wxT( "Cmd+" )
+#else
+#define MODIFIER_CTRL       wxT( "Ctrl+" )
+#endif
+#define MODIFIER_CMD_MAC    wxT( "Cmd+" )
+#define MODIFIER_CTRL_BASE  wxT( "Ctrl+" )
+#define MODIFIER_ALT        wxT( "Alt+" )
+#define MODIFIER_SHIFT      wxT( "Shift+" )
 
 
 /**
  * Function KeyNameFromKeyCode
  * return the key name from the key code
  * Only some wxWidgets key values are handled for function key ( see
- * s_Hotkey_Name_List[] )
+ * hotkeyNameList[] )
  * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
  * @param aIsFound = a pointer to a bool to return true if found, or false. an be NULL default)
  * @return the key name in a wxString
@@ -182,15 +193,15 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     {
         for( ii = 0; ; ii++ )
         {
-            if( s_Hotkey_Name_List[ii].m_KeyCode == 0 ) // End of list
+            if( hotkeyNameList[ii].m_KeyCode == 0 ) // End of list
             {
                 keyname = wxT( "<unknown>" );
                 break;
             }
 
-            if( s_Hotkey_Name_List[ii].m_KeyCode == aKeycode )
+            if( hotkeyNameList[ii].m_KeyCode == aKeycode )
             {
-                keyname = s_Hotkey_Name_List[ii].m_Name;
+                keyname = hotkeyNameList[ii].m_Name;
                 found   = true;
                 break;
             }
@@ -349,7 +360,7 @@ wxString KeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId )
  * Function KeyCodeFromKeyName
  * return the key code from its key name
  * Only some wxWidgets key values are handled for function key
- * @param keyname = wxString key name to find in s_Hotkey_Name_List[],
+ * @param keyname = wxString key name to find in hotkeyNameList[],
  *   like F2 or space or an usual (ascii) char.
  * @return the key code
  */
@@ -358,29 +369,42 @@ int KeyCodeFromKeyName( const wxString& keyname )
     int ii, keycode = 0;
 
     // Search for modifiers: Ctrl+ Alt+ and Shift+
+    // Note: on Mac OSX, the Cmd key is equiv here to Ctrl
     wxString key = keyname;
+    wxString prefix;
     int modifier = 0;
+
     while( 1 )
     {
-        if( key.StartsWith( MODIFIER_CTRL ) )
+        prefix.Empty();
+
+        if( key.StartsWith( MODIFIER_CTRL_BASE ) )
         {
             modifier |= GR_KB_CTRL;
-            key.Remove( 0, 5 );
+            prefix = MODIFIER_CTRL_BASE;
+        }
+        else if( key.StartsWith( MODIFIER_CMD_MAC ) )
+        {
+            modifier |= GR_KB_CTRL;
+            prefix = MODIFIER_CMD_MAC;
         }
         else if( key.StartsWith( MODIFIER_ALT ) )
         {
             modifier |= GR_KB_ALT;
-            key.Remove( 0, 4 );
+            prefix = MODIFIER_ALT;
         }
         else if( key.StartsWith( MODIFIER_SHIFT ) )
         {
             modifier |= GR_KB_SHIFT;
-            key.Remove( 0, 6 );
+            prefix = MODIFIER_SHIFT;
         }
         else
         {
             break;
         }
+
+        if( !prefix.IsEmpty() )
+            key.Remove( 0, prefix.Len() );
     }
 
     if( (key.length() == 1) && (key[0] > ' ') && (key[0] < 0x7F) )
@@ -392,12 +416,12 @@ int KeyCodeFromKeyName( const wxString& keyname )
 
     for( ii = 0; ; ii++ )
     {
-        if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )  // End of list reached
+        if( hotkeyNameList[ii].m_KeyCode == 0 )  // End of list reached
             break;
 
-        if( key.CmpNoCase( s_Hotkey_Name_List[ii].m_Name ) == 0 )
+        if( key.CmpNoCase( hotkeyNameList[ii].m_Name ) == 0 )
         {
-            keycode = s_Hotkey_Name_List[ii].m_KeyCode + modifier;
+            keycode = hotkeyNameList[ii].m_KeyCode + modifier;
             break;
         }
     }

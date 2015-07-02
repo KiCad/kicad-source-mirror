@@ -46,7 +46,7 @@
 #define MIN_GRID_SIZE ( 0.001 * IU_PER_MM )
 
 // Min/Max value for grid offset
-#define MAX_GRID_OFFSET (INT_MAX/2)
+#define MAX_GRID_OFFSET double(INT_MAX/2)
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
