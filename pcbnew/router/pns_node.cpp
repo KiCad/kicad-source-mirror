@@ -632,11 +632,6 @@ void PNS_NODE::removeLine( PNS_LINE* aLine )
     assert( segRefs != NULL );
     assert( aLine->Owner() );
 
-    if( (int) segRefs->size() != aLine->SegmentCount() )
-    {
-        //printf("******weird deletion: segrefs %d segcount %d hasloops %d\n", segRefs->size(), aLine->SegmentCount(), aLine->HasLoops());
-    }
-
     BOOST_FOREACH( PNS_SEGMENT* seg, *segRefs )
     {
         removeSegment( seg );
@@ -822,7 +817,6 @@ PNS_LINE* PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex)
     }
 
     assert( pl->SegmentCount() != 0 );
-    assert( pl->SegmentCount() == (int) pl->LinkedSegments()->size() );
 
     return pl;
 }

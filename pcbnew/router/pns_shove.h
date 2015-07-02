@@ -122,7 +122,7 @@ private:
 
     void runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead );
 
-    void pushLine( PNS_LINE* aL );
+    bool pushLine( PNS_LINE* aL );
     void popLine();
 
     PNS_LINE* assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );

@@ -435,8 +435,6 @@ const PNS_ITEMSET PNS_ROUTER::QueryHoverItems( const VECTOR2I& aP )
         return m_world->HitTest( aP );
     else
     {
-        //assert ( m_placer->GetCurrentNode()->checkExists() );
-        //TRACE(0,"query-hover [%p]", m_placer->GetCurrentNode());
         return m_placer->CurrentNode()->HitTest( aP );
     }
 }

@@ -50,8 +50,6 @@ void PNS_SHOVE::replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew )
 
     if( changed_area )
     {
-        assert( !changed_area->Contains( VECTOR2I( 0, 0 ) ) );
-
         m_affectedAreaSum = m_affectedAreaSum ? m_affectedAreaSum->Merge ( *changed_area ) : *changed_area;
     }
 
@@ -339,7 +337,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSegment( PNS_LINE* aCurrent, PNS_S
         int rank = aCurrent->Rank();
         shovedLine->SetRank( rank - 1 );
 
-        pushLine( shovedLine );
+        if (!pushLine( shovedLine ) )
+            rv = SH_INCOMPLETE;
     }
 
 #ifdef DEBUG
@@ -377,7 +376,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingLine( PNS_LINE* aCurrent, PNS_LINE
         int rank = aObstacle->Rank();
         shovedLine->SetRank ( rank );
 
-        pushLine( shovedLine );
+        if( !pushLine( shovedLine ) )
+            rv = SH_INCOMPLETE;
 
     #ifdef DEBUG
         m_logger.NewGroup( "on-colliding-line", m_iter );
@@ -466,7 +466,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE* aCurrent, PNS_SOL
 #endif
 
     popLine();
-    pushLine( walkaroundLine );
+    if ( !pushLine( walkaroundLine ) )
+        return SH_INCOMPLETE;
 
     return SH_OK;
 }
@@ -619,7 +620,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         {
             replaceItems( lp.first, lp.second );
             lp.second->SetRank( aCurrentRank - 1 );
-            pushLine( lp.second );
+            if (! pushLine( lp.second ) )
+                return SH_INCOMPLETE;
         }
         else
             m_currentNode->Remove( lp.first );
@@ -758,7 +760,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onReverseCollidingVia( PNS_LINE* aCurrent, PN
     int currentRank = aCurrent->Rank();
     replaceItems( aCurrent, shoved );
 
-    pushLine( shoved );
+    if ( !pushLine( shoved ) )
+        return SH_INCOMPLETE;
+
     shoved->SetRank( currentRank );
 
     return SH_OK;
@@ -802,21 +806,15 @@ void PNS_SHOVE::unwindStack( PNS_ITEM* aItem )
 }
 
 
-void PNS_SHOVE::pushLine( PNS_LINE* aL )
+bool PNS_SHOVE::pushLine( PNS_LINE* aL )
 {
     if( aL->LinkCount() >= 0 && ( aL->LinkCount() != aL->SegmentCount() ) )
-    {
-        printf("LC: %d SC %d\n", aL->LinkCount(), aL->SegmentCount() );
-        for(int i=0;i<aL->SegmentCount();i++)
-        {
-            SEG s = aL->CLine().CSegment(i);
-            printf("s %d: %d %d %d %d\n", i, s.A.x, s.A.y, s.B.x, s.B.y );
-        }
-        assert( false );
-    }
+        return false;
 
     m_lineStack.push_back( aL );
     m_optimizerQueue.push_back( aL );
+
+    return true;
 }
 
 
@@ -893,7 +891,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
 
                 popLine();
                 st = onCollidingLine( revLine, currentLine );
-                pushLine( revLine );
+                if ( !pushLine( revLine ) )
+                    return SH_INCOMPLETE;
+
                 break;
             }
 
@@ -1024,7 +1024,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
         m_logger.Log( headVia, 0, "head-via" );
     }
 
-    pushLine( head );
+    if ( !pushLine( head ) )
+        return SH_INCOMPLETE;
+
     st = shoveMainLoop();
     runOptimizer( m_currentNode, head );
 
@@ -1095,7 +1097,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
         head->Mark( MK_HEAD );
         head->SetRank( 100000 );
         n++;
-        pushLine( head );
+        if ( !pushLine( head ) )
+            return SH_INCOMPLETE;
 
         PNS_VIA* headVia = NULL;
 
