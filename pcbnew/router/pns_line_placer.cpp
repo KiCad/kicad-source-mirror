@@ -366,7 +366,7 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
     int effort = 0;
     bool rv = true, viaOk;
 
-    viaOk = buildInitialLine ( aP, initTrack );
+    viaOk = buildInitialLine( aP, initTrack );
 
     PNS_WALKAROUND walkaround( m_currentNode, Router() );
 
@@ -402,8 +402,8 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
     PNS_OPTIMIZER::Optimize( &walkFull, effort, m_currentNode );
 
-    if ( m_currentNode->CheckColliding( &walkFull ) )
-		return false;
+    if( m_currentNode->CheckColliding( &walkFull ) )
+        return false;
 
     m_head = walkFull;
     aNewHead = walkFull;
@@ -927,7 +927,7 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest )
     if( !aLatest->SegmentCount() )
         return;
 
-    if (aLatest->CLine().CPoint(0) == aLatest->CLine().CPoint(-1))
+    if ( aLatest->CLine().CPoint( 0 ) == aLatest->CLine().CPoint( -1 ) )
         return;
 
     aNode->Add( aLatest, true );
@@ -1025,14 +1025,18 @@ bool PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead )
 {
     SHAPE_LINE_CHAIN l;
 
-    if(m_p_start == aP)
+    if( m_p_start == aP )
     {
         l.Clear();
-    } else {
+    }
+    else
+    {
         if( Settings().GetFreeAngleMode() && Settings().Mode() == RM_MarkObstacles )
         {
-            l = SHAPE_LINE_CHAIN ( m_p_start, aP );
-        } else {
+            l = SHAPE_LINE_CHAIN( m_p_start, aP );
+        }
+        else
+        {
             l = m_direction.BuildInitialTrace( m_p_start, aP );
         }
 
@@ -1050,12 +1054,12 @@ bool PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead )
     if( !m_placingVia )
         return true;
 
-    PNS_VIA v ( makeVia ( aP ) );
-    v.SetNet ( aHead.Net() );
+    PNS_VIA v( makeVia( aP ) );
+    v.SetNet( aHead.Net() );
 
-    if ( m_currentMode == RM_MarkObstacles )
+    if( m_currentMode == RM_MarkObstacles )
     {
-        aHead.AppendVia ( v );
+        aHead.AppendVia( v );
         return true;
     }
 
@@ -1066,9 +1070,7 @@ bool PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead )
 
     if( v.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
     {
-        SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace(
-                m_p_start,
-                aP + force );
+        SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP + force );
         aHead = PNS_LINE( aHead, line );
 
         v.SetPos( v.Pos() + force );

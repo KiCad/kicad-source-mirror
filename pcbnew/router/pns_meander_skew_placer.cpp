@@ -79,14 +79,14 @@ bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     }
 
     if( m_originPair.Gap() < 0 )
-      m_originPair.SetGap ( Router()->Sizes().DiffPairGap() );
+        m_originPair.SetGap( Router()->Sizes().DiffPairGap() );
 
     if( !m_originPair.PLine().SegmentCount() ||
         !m_originPair.NLine().SegmentCount() )
         return false;
 
-    m_tunedPathP = topo.AssembleTrivialPath ( m_originPair.PLine().GetLink( 0 ) );
-    m_tunedPathN = topo.AssembleTrivialPath ( m_originPair.NLine().GetLink( 0 ) );
+    m_tunedPathP = topo.AssembleTrivialPath( m_originPair.PLine().GetLink( 0 ) );
+    m_tunedPathN = topo.AssembleTrivialPath( m_originPair.NLine().GetLink( 0 ) );
 
     m_world->Remove( m_originLine );
 
@@ -94,9 +94,9 @@ bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_currentEnd = VECTOR2I( 0, 0 );
 
     if ( m_originPair.PLine().Net () == m_originLine->Net() )
-        m_coupledLength = itemsetLength ( m_tunedPathN );
+        m_coupledLength = itemsetLength( m_tunedPathN );
     else
-        m_coupledLength = itemsetLength ( m_tunedPathP );
+        m_coupledLength = itemsetLength( m_tunedPathP );
 
     return true;
 }

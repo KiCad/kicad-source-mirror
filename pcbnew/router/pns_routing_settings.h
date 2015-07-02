@@ -56,8 +56,8 @@ class PNS_ROUTING_SETTINGS
 public:
     PNS_ROUTING_SETTINGS();
 
-    void Load ( const TOOL_SETTINGS& where );
-    void Save ( TOOL_SETTINGS& where ) const;
+    void Load( const TOOL_SETTINGS& where );
+    void Save( TOOL_SETTINGS& where ) const;
 
     ///> Returns the routing mode.
     PNS_MODE Mode() const { return m_routingMode; }
@@ -129,7 +129,6 @@ public:
 
     int WalkaroundIterationLimit() const { return m_walkaroundIterationLimit; };
     TIME_LIMIT WalkaroundTimeLimit() const;
-
 
     void SetInlineDragEnabled ( bool aEnable ) { m_inlineDragEnabled = aEnable; }
     bool InlineDragEnabled( ) const { return m_inlineDragEnabled; }

@@ -99,7 +99,7 @@ bool PNS_DP_MEANDER_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     }
 
     if( m_originPair.Gap() < 0 )
-      m_originPair.SetGap( Router()->Sizes().DiffPairGap() );
+        m_originPair.SetGap( Router()->Sizes().DiffPairGap() );
 
     if( !m_originPair.PLine().SegmentCount() ||
         !m_originPair.NLine().SegmentCount() )
@@ -224,28 +224,28 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     {
         SEG base = baselineSegment( sp );
 
-        DrawDebugSeg ( base, 3 );
+        DrawDebugSeg( base, 3 );
 
-        while(sp.indexP >= curIndexP)
+        while( sp.indexP >= curIndexP )
         {
-            m_result.AddCorner( tunedP.CPoint(curIndexP), tunedN.CPoint(curIndexN) );
+            m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
             curIndexP++;
         }
 
-        while(sp.indexN >= curIndexN)
+        while( sp.indexN >= curIndexN )
         {
-            m_result.AddCorner( tunedP.CPoint(sp.indexP), tunedN.CPoint(curIndexN) );
+            m_result.AddCorner( tunedP.CPoint( sp.indexP ), tunedN.CPoint( curIndexN ) );
             curIndexN++;
         }
 
         m_result.MeanderSegment( base );
     }
 
-    while(curIndexP < tunedP.PointCount() )
-        m_result.AddCorner( tunedP.CPoint(curIndexP++), tunedN.CPoint(curIndexN) );
+    while( curIndexP < tunedP.PointCount() )
+        m_result.AddCorner( tunedP.CPoint( curIndexP++ ), tunedN.CPoint( curIndexN ) );
 
-    while(curIndexN < tunedN.PointCount() )
-        m_result.AddCorner( tunedP.CPoint(-1), tunedN.CPoint(curIndexN++) );
+    while( curIndexN < tunedN.PointCount() )
+        m_result.AddCorner( tunedP.CPoint( -1 ), tunedN.CPoint( curIndexN++ ) );
 
     int dpLen = origPathLength();
 

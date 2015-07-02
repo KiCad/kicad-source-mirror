@@ -50,42 +50,46 @@ EDA_ITEM* TOOL_BASE::getModelInt() const
     return m_toolMgr->GetModel();
 }
 
+
 void TOOL_BASE::attachManager( TOOL_MANAGER* aManager )
 {
     m_toolMgr = aManager;
-    m_toolSettings = TOOL_SETTINGS ( this );
+    m_toolSettings = TOOL_SETTINGS( this );
 }
 
-TOOL_SETTINGS::TOOL_SETTINGS ( TOOL_BASE *aTool )
+
+TOOL_SETTINGS::TOOL_SETTINGS( TOOL_BASE* aTool )
 {
     m_tool = aTool;
 
-    if(!aTool)
+    if( !aTool )
     {
         m_config = NULL;
         return;
     }
 
-	// fixme: make independent of pcbnew (post-stable)
-    PCB_EDIT_FRAME *frame = aTool->getEditFrame<PCB_EDIT_FRAME> ();
+    // fixme: make independent of pcbnew (post-stable)
+    PCB_EDIT_FRAME* frame = aTool->getEditFrame<PCB_EDIT_FRAME>();
 
     m_config = frame->GetSettings();
 }
 
-TOOL_SETTINGS::~TOOL_SETTINGS ()
-{
 
+TOOL_SETTINGS::~TOOL_SETTINGS()
+{
 }
+
 
 TOOL_SETTINGS& TOOL_BASE::GetSettings()
 {
     return m_toolSettings;
 }
 
-wxString TOOL_SETTINGS::getKeyName(const wxString& entryName) const
+
+wxString TOOL_SETTINGS::getKeyName( const wxString& aEntryName ) const
 {
-    wxString key ( m_tool->GetName() );
-    key += wxT(".");
-    key += entryName;
+    wxString key( m_tool->GetName() );
+    key += wxT( "." );
+    key += aEntryName;
     return key;
 }

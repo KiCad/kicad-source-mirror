@@ -43,9 +43,10 @@ PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
     m_inlineDragEnabled = false;
 }
 
-void PNS_ROUTING_SETTINGS::Save ( TOOL_SETTINGS& aSettings ) const
+
+void PNS_ROUTING_SETTINGS::Save( TOOL_SETTINGS& aSettings ) const
 {
-    aSettings.Set( "Mode", (int)m_routingMode );
+    aSettings.Set( "Mode", (int) m_routingMode );
     aSettings.Set( "OptimizerEffort", (int) m_optimizerEffort );
     aSettings.Set( "RemoveLoops", m_removeLoops );
     aSettings.Set( "SmartPads", m_smartPads );
@@ -62,7 +63,8 @@ void PNS_ROUTING_SETTINGS::Save ( TOOL_SETTINGS& aSettings ) const
     aSettings.Set( "InlineDragEnabled", m_inlineDragEnabled );
 }
 
-void PNS_ROUTING_SETTINGS::Load ( const TOOL_SETTINGS& aSettings )
+
+void PNS_ROUTING_SETTINGS::Load( const TOOL_SETTINGS& aSettings )
 {
     m_routingMode = (PNS_MODE) aSettings.Get( "Mode", (int) RM_Walkaround );
     m_optimizerEffort = (PNS_OPTIMIZATION_EFFORT) aSettings.Get( "OptimizerEffort", (int) OE_MEDIUM );
@@ -80,6 +82,7 @@ void PNS_ROUTING_SETTINGS::Load ( const TOOL_SETTINGS& aSettings )
     m_freeAngleMode = aSettings.Get( "FreeAngleMode", false );
     m_inlineDragEnabled = aSettings.Get( "InlineDragEnabled", false );
 }
+
 
 const DIRECTION_45 PNS_ROUTING_SETTINGS::InitialDirection() const
 {

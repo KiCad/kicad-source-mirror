@@ -110,7 +110,7 @@ bool EDIT_TOOL::invokeInlineRouter()
     if( track || via )
     {
         ROUTER_TOOL *theRouter = static_cast<ROUTER_TOOL*> ( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
-        assert ( theRouter );
+        assert( theRouter );
 
         if( !theRouter->PNSSettings().InlineDragEnabled() )
             return false;

@@ -373,7 +373,7 @@ public:
     int RemoveByMarker( int aMarker );
     void SetCollisionFilter( PNS_COLLISION_FILTER* aFilter );
 
-    PNS_ITEM *FindItemByParent ( const BOARD_CONNECTED_ITEM *aParent );
+    PNS_ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM *aParent );
 
 private:
     struct OBSTACLE_VISITOR;

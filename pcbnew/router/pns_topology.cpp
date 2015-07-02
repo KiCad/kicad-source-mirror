@@ -129,6 +129,7 @@ bool PNS_TOPOLOGY::LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRa
     return true;
 }
 
+
 PNS_ITEM* PNS_TOPOLOGY::NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor, int aKindMask )
 {
     std::set<PNS_ITEM*> disconnected;
@@ -320,7 +321,9 @@ int PNS_TOPOLOGY::DpNetPolarity( int aNet )
     return MatchDpSuffix( refName, dummy1, dummy2 );
 }
 
+
 bool commonParallelProjection( SEG n, SEG p, SEG &pClip, SEG& nClip );
+
 
 bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
 {
@@ -334,7 +337,7 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
 
     m_world->AllItemsInNet( coupledNet, coupledItems );
 
-    PNS_SEGMENT *coupledSeg = NULL, *refSeg;
+    PNS_SEGMENT* coupledSeg = NULL, *refSeg;
     int minDist = std::numeric_limits<int>::max();
 
     if( ( refSeg = dyn_cast<PNS_SEGMENT*>( aStart ) ) != NULL )
@@ -365,8 +368,8 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
     if( !coupledSeg )
         return false;
 
-    std::auto_ptr<PNS_LINE> lp ( m_world->AssembleLine( refSeg ) );
-    std::auto_ptr<PNS_LINE> ln ( m_world->AssembleLine( coupledSeg ) );
+    std::auto_ptr<PNS_LINE> lp( m_world->AssembleLine( refSeg ) );
+    std::auto_ptr<PNS_LINE> ln( m_world->AssembleLine( coupledSeg ) );
 
     if( DpNetPolarity( refNet ) < 0 )
     {
@@ -374,13 +377,12 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
     }
 
     int gap = -1 ;
-    if( refSeg->Seg().ApproxParallel( coupledSeg->Seg() ) ) {
-
-      // Segments are parallel -> compute pair gap
-      const VECTOR2I refDir       = refSeg->Anchor(1) - refSeg->Anchor(0);
-      const VECTOR2I displacement = refSeg->Anchor(1) - coupledSeg->Anchor(1);
-      gap = (int) abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp->Width();
-
+    if( refSeg->Seg().ApproxParallel( coupledSeg->Seg() ) )
+    {
+        // Segments are parallel -> compute pair gap
+        const VECTOR2I refDir       = refSeg->Anchor( 1 ) - refSeg->Anchor( 0 );
+        const VECTOR2I displacement = refSeg->Anchor( 1 ) - coupledSeg->Anchor( 1 );
+        gap = (int) abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp->Width();
     }
 
     aPair = PNS_DIFF_PAIR( *lp, *ln );

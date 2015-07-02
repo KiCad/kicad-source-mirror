@@ -395,7 +395,7 @@ public:
 
     void SaveSettings( wxConfigBase* aCfg );    // override virtual
 
-    wxConfigBase *GetSettings() { return config(); };
+    wxConfigBase* GetSettings() { return config(); };
 
     /**
      * Get the last net list read with the net list dialog box.

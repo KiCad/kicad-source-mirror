@@ -38,37 +38,36 @@ class TOOL_BASE;
 class TOOL_SETTINGS
 {
     public:
-        TOOL_SETTINGS ( TOOL_BASE *aTool = NULL );
+        TOOL_SETTINGS ( TOOL_BASE* aTool = NULL );
         ~TOOL_SETTINGS ();
 
         template <class T>
         T Get( const wxString& aName, T aDefaultValue ) const
         {
-            if(!m_config)
+            if( !m_config )
                 return aDefaultValue;
 
             T tmp = aDefaultValue;
 
-            m_config->Read ( getKeyName( aName ), &tmp );
+            m_config->Read( getKeyName( aName ), &tmp );
             return tmp;
         }
 
         template <class T>
         void Set( const wxString& aName, const T &aValue )
         {
-            if(!m_config)
+            if( !m_config )
                 return;
 
-            m_config->Write ( getKeyName( aName ), aValue );
+            m_config->Write( getKeyName( aName ), aValue );
         }
 
     private:
-        wxString getKeyName(const wxString& entryName) const;
+        wxString getKeyName( const wxString& aEntryName ) const;
 
-        wxConfigBase *m_config;
-        TOOL_BASE *m_tool;
+        wxConfigBase* m_config;
+        TOOL_BASE* m_tool;
 
 };
-
 
 #endif

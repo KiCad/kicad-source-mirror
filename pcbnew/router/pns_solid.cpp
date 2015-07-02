@@ -31,7 +31,7 @@
 
 const SHAPE_LINE_CHAIN PNS_SOLID::Hull( int aClearance, int aWalkaroundThickness ) const
 {
-    int cl = aClearance + (aWalkaroundThickness + 1)/ 2;
+    int cl = aClearance + ( aWalkaroundThickness + 1 )/ 2;
 
     switch( m_shape->Type() )
     {
@@ -51,7 +51,7 @@ const SHAPE_LINE_CHAIN PNS_SOLID::Hull( int aClearance, int aWalkaroundThickness
 
     case SH_SEGMENT:
     {
-        SHAPE_SEGMENT* seg = static_cast<SHAPE_SEGMENT*> ( m_shape );
+        SHAPE_SEGMENT* seg = static_cast<SHAPE_SEGMENT*>( m_shape );
         return SegmentHull( *seg, aClearance, aWalkaroundThickness );
     }
 

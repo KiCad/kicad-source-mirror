@@ -337,7 +337,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSegment( PNS_LINE* aCurrent, PNS_S
         int rank = aCurrent->Rank();
         shovedLine->SetRank( rank - 1 );
 
-        if (!pushLine( shovedLine ) )
+        if( !pushLine( shovedLine ) )
             rv = SH_INCOMPLETE;
     }
 
@@ -466,7 +466,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE* aCurrent, PNS_SOL
 #endif
 
     popLine();
-    if ( !pushLine( walkaroundLine ) )
+
+    if( !pushLine( walkaroundLine ) )
         return SH_INCOMPLETE;
 
     return SH_OK;
@@ -620,7 +621,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         {
             replaceItems( lp.first, lp.second );
             lp.second->SetRank( aCurrentRank - 1 );
-            if (! pushLine( lp.second ) )
+
+            if( !pushLine( lp.second ) )
                 return SH_INCOMPLETE;
         }
         else
@@ -1120,7 +1122,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
 
     st = shoveMainLoop();
 
-    if ( st == SH_OK )
+    if( st == SH_OK )
         runOptimizer( m_currentNode, NULL );
 
     m_currentNode->RemoveByMarker( MK_HEAD );
@@ -1169,7 +1171,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
     st = pushVia( aVia, ( aWhere - aVia->Pos() ), 0 );
     st = shoveMainLoop();
 
-    if ( st == SH_OK )
+    if( st == SH_OK )
         runOptimizer( m_currentNode, NULL );
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )

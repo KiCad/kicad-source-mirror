@@ -210,8 +210,9 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     if( aPad->GetShape() == PAD_CIRCLE )
     {
         solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-    } else {
-
+    }
+    else
+    {
         if( orient == 0.0 || orient == 90.0 || orient == 180.0 || orient == 270.0 )
         {
             if( orient == 90.0 || orient == 270.0 )
@@ -262,7 +263,9 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 delete solid;
                 return NULL;
             }
-        } else {
+        }
+        else
+        {
             switch( aPad->GetShape() )
             {
             // PAD_CIRCLE already handled above

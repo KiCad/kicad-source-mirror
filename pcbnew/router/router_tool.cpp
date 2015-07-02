@@ -816,7 +816,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         }
     }
 
-    if(saveUndoBuffer)
+    if( saveUndoBuffer )
     {
         frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
         m_router->ClearUndoBuffer();
