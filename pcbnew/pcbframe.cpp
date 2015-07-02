@@ -532,7 +532,7 @@ void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( NULL, GetGalCanvas()->GetView(),
+    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                    GetGalCanvas()->GetViewControls(), this );
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
@@ -660,6 +660,9 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
 
     if( aEnable )
     {
