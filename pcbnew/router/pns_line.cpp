@@ -313,16 +313,25 @@ bool PNS_LINE::Is45Degree()
 
 const PNS_LINE PNS_LINE::ClipToNearestObstacle( PNS_NODE* aNode ) const
 {
+    const int IterationLimit = 5;
+    int i;
     PNS_LINE l( *this );
 
-    PNS_NODE::OPT_OBSTACLE obs = aNode->NearestObstacle( &l );
-
-    if( obs )
+    for( i = 0; i < IterationLimit; i++ )
     {
-        l.RemoveVia();
-        int p = l.Line().Split( obs->m_ipFirst );
-        l.Line().Remove( p + 1, -1 );
+        PNS_NODE::OPT_OBSTACLE obs = aNode->NearestObstacle( &l );
+
+        if( obs )
+        {
+            l.RemoveVia();
+            int p = l.Line().Split( obs->m_ipFirst );
+            l.Line().Remove( p + 1, -1 );
+        } else
+            break;
     }
+
+    if( i == IterationLimit )
+        l.Line().Clear();
 
     return l;
 }
