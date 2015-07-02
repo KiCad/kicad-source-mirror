@@ -279,7 +279,7 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
     Go( &ROUTER_TOOL::RouteDiffPair, COMMON_ACTIONS::routerActivateDiffPair.MakeEvent() );
     Go( &ROUTER_TOOL::DpDimensionsDialog, COMMON_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent() );
     Go( &ROUTER_TOOL::SettingsDialog, COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
-
+    Go( &ROUTER_TOOL::InlineDrag, COMMON_ACTIONS::routerInlineDrag.MakeEvent() );
 }
 
 
@@ -770,6 +770,62 @@ void ROUTER_TOOL::performDragging()
 
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
+    const BOARD_CONNECTED_ITEM *item = aEvent.Parameter<const BOARD_CONNECTED_ITEM*>();
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
+    VIEW_CONTROLS* ctls = getViewControls();
+
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+
+    Activate();
+
+    m_router->SyncWorld();
+    m_router->SetView( getView() );
+
+    m_startItem = m_router->GetWorld()->FindItemByParent( item );
+
+    VECTOR2I p0 = ctls->GetCursorPosition();
+
+    bool dragStarted = m_router->StartDragging( p0, m_startItem );
+
+    if( !dragStarted )
+        return 0;
+
+    ctls->ForceCursorPosition( false );
+    ctls->SetAutoPan( true );
+
+    bool saveUndoBuffer = true;
+
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        p0 = ctls->GetCursorPosition();
+
+        if( evt->IsCancel() )
+        {
+            saveUndoBuffer = false;
+            break;
+        }
+
+        else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+        {
+            m_router->Move( p0, NULL );
+        }
+        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        {
+            saveUndoBuffer = m_router->FixRoute( p0, NULL );
+            break;
+        }
+    }
+
+    if(saveUndoBuffer)
+    {
+        frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
+        m_router->ClearUndoBuffer();
+        frame->OnModify();
+    }
+
+    ctls->SetAutoPan( false );
+    ctls->ForceCursorPosition( false );
+
     return 0;
 }
 

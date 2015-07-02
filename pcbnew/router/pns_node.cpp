@@ -1241,3 +1241,14 @@ void PNS_NODE::SetCollisionFilter( PNS_COLLISION_FILTER* aFilter )
 {
     m_collisionFilter = aFilter;
 }
+
+PNS_ITEM *PNS_NODE::FindItemByParent ( const BOARD_CONNECTED_ITEM *aParent )
+{
+    PNS_INDEX::NET_ITEMS_LIST* l_cur = m_index->GetItemsForNet( aParent->GetNetCode() );
+
+    BOOST_FOREACH( PNS_ITEM*item, *l_cur )
+        if ( item->Parent() == aParent )
+            return item;
+
+    return NULL;
+}

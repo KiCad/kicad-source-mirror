@@ -105,10 +105,12 @@ bool EDIT_TOOL::invokeInlineRouter()
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
 
+    if ( !GetSettings().Get("DragInvokesRouter", false ) )
+        return false;
+
     if( track || via )
     {
-        //printf("Calling interactive drag\n");
-        m_toolMgr->RunAction( COMMON_ACTIONS::routerInlineDrag, true );
+        m_toolMgr->RunAction( COMMON_ACTIONS::routerInlineDrag, true, track ? track : via );
         return true;
     }
 
@@ -243,57 +245,60 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else    // Prepare to start dragging
             {
-                m_selectionTool->SanitizeSelection();
-
-                if( selection.Empty() )
-                    break;
-
-                // deal with locked items (override lock or abort the operation)
-                SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
-
-                if( lockFlags == SELECTION_LOCKED )
-                    break;
-                else if( lockFlags == SELECTION_LOCK_OVERRIDE )
-                    lockOverride = true;
-
-                // Save items, so changes can be undone
-                if( !isUndoInhibited() )
+                if( !isDragAndDrop || !invokeInlineRouter() )
                 {
-                    editFrame->OnModify();
-                    editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                    m_selectionTool->SanitizeSelection();
+
+                    if( selection.Empty() )
+                        break;
+
+                    // deal with locked items (override lock or abort the operation)
+                    SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
+
+                    if( lockFlags == SELECTION_LOCKED )
+                        break;
+                    else if( lockFlags == SELECTION_LOCK_OVERRIDE )
+                        lockOverride = true;
+
+                    // Save items, so changes can be undone
+                    if( !isUndoInhibited() )
+                    {
+                        editFrame->OnModify();
+                        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                    }
+
+                    VECTOR2I origin;
+
+                    if( evt->IsDrag( BUT_LEFT ) )
+                        mousePos = evt->DragOrigin();
+
+                    //    origin = grid.Align ( evt->DragOrigin() );
+                    //else
+                    origin = grid.Align( mousePos );
+
+                    if( selection.Size() == 1 )
+                    {
+                        // Set the current cursor position to the first dragged item origin, so the
+                        // movement vector could be computed later
+                        m_cursor = grid.BestDragOrigin( mousePos, selection.Item<BOARD_ITEM>( 0 ) );
+                        getViewControls()->ForceCursorPosition( true, m_cursor );
+                        grid.SetAuxAxes( true, m_cursor );
+
+                        VECTOR2I o = VECTOR2I( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
+                        m_offset.x = o.x - m_cursor.x;
+                        m_offset.y = o.y - m_cursor.y;
+                    }
+                    else
+                    {
+                        m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
+                                                             wxPoint( origin.x, origin.y );
+                        getViewControls()->ForceCursorPosition( true, origin );
+                    }
+
+                    controls->SetAutoPan( true );
+                    m_dragging = true;
+                    incUndoInhibit();
                 }
-
-                VECTOR2I origin;
-
-                if( evt->IsDrag( BUT_LEFT ) )
-                    mousePos = evt->DragOrigin();
-
-                //    origin = grid.Align ( evt->DragOrigin() );
-                //else
-                origin = grid.Align( mousePos );
-
-                if( selection.Size() == 1 )
-                {
-                    // Set the current cursor position to the first dragged item origin, so the
-                    // movement vector could be computed later
-                    m_cursor = grid.BestDragOrigin( mousePos, selection.Item<BOARD_ITEM>( 0 ) );
-                    getViewControls()->ForceCursorPosition( true, m_cursor );
-                    grid.SetAuxAxes( true, m_cursor );
-
-                    VECTOR2I o = VECTOR2I( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
-                    m_offset.x = o.x - m_cursor.x;
-                    m_offset.y = o.y - m_cursor.y;
-                }
-                else
-                {
-                    m_offset = static_cast<BOARD_ITEM*>( selection.items.GetPickedItem( 0 ) )->GetPosition() -
-                                                         wxPoint( origin.x, origin.y );
-                    getViewControls()->ForceCursorPosition( true, origin );
-                }
-
-                controls->SetAutoPan( true );
-                m_dragging = true;
-                incUndoInhibit();
             }
 
             selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
