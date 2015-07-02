@@ -97,10 +97,10 @@ protected:
     bool    m_showBorderAndTitleBlock;
 
     /// Choice box to choose the grid size.
-    wxComboBox*     m_gridSelectBox;
+    wxChoice*       m_gridSelectBox;
 
     /// Choice box to choose the zoom value.
-    wxComboBox*     m_zoomSelectBox;
+    wxChoice*       m_zoomSelectBox;
 
     /// The tool bar that contains the buttons for quick access to the application draw
     /// tools.  It typically is located on the right side of the main window.
