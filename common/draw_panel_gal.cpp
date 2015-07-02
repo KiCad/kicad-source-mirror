@@ -60,6 +60,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view       = NULL;
     m_painter    = NULL;
     m_eventDispatcher = NULL;
+    m_lostFocus  = false;
 
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -76,6 +77,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
 
     const wxEventType events[] =
     {
@@ -150,13 +152,6 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
     m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
     m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
     m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-}
-
-
-void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
-{
-    wxPaintEvent redrawEvent;
-    wxPostEvent( this, redrawEvent );
 }
 
 
@@ -315,6 +310,12 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
 
 void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 {
+    if( m_lostFocus )
+    {
+        SetFocus();
+        m_lostFocus = false;
+    }
+
     if( !m_eventDispatcher )
         aEvent.Skip();
     else
@@ -328,4 +329,17 @@ void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
 {
     // Getting focus is necessary in order to receive key events properly
     SetFocus();
+}
+
+
+void EDA_DRAW_PANEL_GAL::onLostFocus( wxFocusEvent& aEvent )
+{
+    m_lostFocus = true;
+}
+
+
+void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
+{
+    wxPaintEvent redrawEvent;
+    wxPostEvent( this, redrawEvent );
 }

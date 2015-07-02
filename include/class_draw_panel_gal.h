@@ -155,6 +155,7 @@ protected:
     void onSize( wxSizeEvent& aEvent );
     void onEvent( wxEvent& aEvent );
     void onEnter( wxEvent& aEvent );
+    void onLostFocus( wxFocusEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
@@ -191,6 +192,10 @@ protected:
 
     /// Processes and forwards events to tools
     TOOL_DISPATCHER*         m_eventDispatcher;
+
+    /// Flag to indicate that focus should be regained on the next mouse event. It is a workaround
+    /// for cases when the panel loses keyboard focus, so it does not react to hotkeys anymore.
+    bool                     m_lostFocus;
 };
 
 #endif
