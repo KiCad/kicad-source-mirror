@@ -247,8 +247,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 
 void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 {
-    wxString msg;
-
     if( m_auxiliaryToolBar )
         return;
 
@@ -259,22 +257,20 @@ void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->AddSeparator();
 
     // Grid selection choice box.
-    m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar,
+    m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_GRID_SELECT,
-                                      wxEmptyString,
                                       wxDefaultPosition, wxDefaultSize,
-                                      0, NULL, wxCB_READONLY );
+                                      0, NULL );
     // Update tool bar to reflect setting.
     updateGridSelectBox();
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     // Zoom selection choice box.
     m_auxiliaryToolBar->AddSeparator();
-    m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar,
+    m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_ZOOM_SELECT,
-                                      wxEmptyString,
                                       wxDefaultPosition, wxDefaultSize,
-                                      0, NULL, wxCB_READONLY );
+                                      0, NULL );
     updateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 

@@ -565,21 +565,18 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     /* Set up toolbar items */
 
     // Creates box to display and choose tracks widths:
-    m_SelTrackWidthBox = new wxComboBox( m_auxiliaryToolBar,
+    m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar,
                                          ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                         wxEmptyString,
                                          wxDefaultPosition, wxDefaultSize,
-                                         0, NULL, wxCB_READONLY );
+                                         0, NULL );
     updateTraceWidthSelectBox();
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
-//    m_auxiliaryToolBar->AddSeparator();
 
     // Creates box to display and choose vias diameters:
-    m_SelViaSizeBox = new wxComboBox( m_auxiliaryToolBar,
+    m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                      wxEmptyString,
                                       wxDefaultPosition, wxDefaultSize,
-                                      0, NULL, wxCB_READONLY );
+                                      0, NULL );
     updateViaSizeSelectBox();
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddSeparator();
@@ -594,21 +591,19 @@ an existing track use its width\notherwise, use current width setting" ),
 
     // Add the box to display and select the current grid size:
     m_auxiliaryToolBar->AddSeparator();
-    m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar,
+    m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_GRID_SELECT,
-                                      wxEmptyString,
                                       wxDefaultPosition, wxDefaultSize,
-                                      0, NULL, wxCB_READONLY );
+                                      0, NULL );
     updateGridSelectBox();
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     //  Add the box to display and select the current Zoom
     m_auxiliaryToolBar->AddSeparator();
-    m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar,
+    m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_ZOOM_SELECT,
-                                      wxEmptyString,
                                       wxDefaultPosition, wxDefaultSize,
-                                      0, NULL, wxCB_READONLY );
+                                      0, NULL );
     updateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
