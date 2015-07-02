@@ -22,6 +22,7 @@
 
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_convex.h>
 
 #include "pns_line.h"
 #include "pns_diff_pair.h"
@@ -659,6 +660,48 @@ PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::circleBreakouts( int aWidth,
 }
 
 
+PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::convexBreakouts( int aWidth,
+        const SHAPE* aShape, bool aPermitDiagonal ) const
+{
+    BREAKOUT_LIST breakouts;
+    const SHAPE_CONVEX* convex = static_cast<const SHAPE_CONVEX*>( aShape );
+
+    BOX2I bbox = convex->BBox( 0 );
+    VECTOR2I p0 = bbox.Centre();
+    // must be large enough to guarantee intersecting the convex polygon
+    int length = bbox.GetSize().EuclideanNorm() / 2 + 5;
+
+    for( int angle = 0; angle < 360; angle += ( aPermitDiagonal ? 45 : 90 ) )
+    {
+        SHAPE_LINE_CHAIN l;
+        VECTOR2I v0( p0 + VECTOR2I( length, 0 ).Rotate( angle * M_PI / 180.0 ) );
+        SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+        int n = convex->Vertices().Intersect( SEG( p0, v0 ), intersections );
+        // if n == 1 intersected a segment
+        // if n == 2 intersected the common point of 2 segments
+        // n == 0 can not happen I think, but...
+        if( n > 0 )
+        {
+            l.Append( p0 );
+
+            // for a breakout distance relative to the distance between
+            // center and polygon edge
+            //l.Append( intersections[0].p + (v0 - p0).Resize( (intersections[0].p - p0).EuclideanNorm() * 0.4 ) );
+
+            // for an absolute breakout distance, e.g. 0.1 mm
+            l.Append( intersections[0].p + (v0 - p0).Resize( 100000 ) );
+
+            // for the breakout right on the polygon edge
+            //l.Append( intersections[0].p );
+
+            breakouts.push_back( l );
+        }
+    }
+
+    return breakouts;
+}
+
+
 PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::rectBreakouts( int aWidth,
         const SHAPE* aShape, bool aPermitDiagonal ) const
 {
@@ -742,6 +785,9 @@ PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::computeBreakouts( int aWidth,
 
         case SH_CIRCLE:
             return circleBreakouts( aWidth, shape, aPermitDiagonal );
+
+        case SH_CONVEX:
+            return convexBreakouts( aWidth, shape, aPermitDiagonal );
 
         default:
             break;

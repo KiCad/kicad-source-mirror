@@ -499,6 +499,26 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP ) const
 }
 
 
+const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const SEG& aSeg, int& dist ) const
+{
+    int nearest = 0;
+
+    dist = INT_MAX;
+    for( int i = 0; i < PointCount(); i++ )
+    {
+        int d = aSeg.LineDistance( CPoint( i ) );
+
+        if( d < dist )
+        {
+            dist = d;
+            nearest = i;
+        }
+    }
+
+    return CPoint( nearest );
+}
+
+
 const std::string SHAPE_LINE_CHAIN::Format() const
 {
     std::stringstream ss;

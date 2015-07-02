@@ -264,6 +264,9 @@ public:
         BOX2I bbox;
         bbox.Compute( m_points );
 
+        if( aClearance != 0 )
+            bbox.Inflate( aClearance );
+
         return bbox;
     }
 
@@ -534,6 +537,17 @@ public:
      * @return the nearest point.
      */
     const VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
+
+    /**
+     * Function NearestPoint()
+     *
+     * Finds a point on the line chain that is closest to the line defined
+     * by the points of segment aSeg, also returns the distance.
+     * @param aSeg Segment defining the line.
+     * @param dist reference receiving the distance to the nearest point.
+     * @return the nearest point.
+     */
+    const VECTOR2I NearestPoint( const SEG& aSeg, int& dist ) const;
 
     /// @copydoc SHAPE::Format()
     const std::string Format() const;

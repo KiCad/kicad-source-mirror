@@ -29,6 +29,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
+#include <geometry/shape_convex.h>
 
 PNS_LOGGER::PNS_LOGGER( )
 {
@@ -170,6 +171,17 @@ void PNS_LOGGER::dumpShape( const SHAPE* aSh )
             const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) aSh;
             m_theLog << "linechain 2 0 " << s->GetSeg().A.x << " " << s->GetSeg().A.y << " " <<
                         s->GetSeg().B.x << " " << s->GetSeg().B.y;
+            break;
+        }
+
+        case SH_CONVEX:
+        {
+            const SHAPE_CONVEX* c = (const SHAPE_CONVEX*) aSh;
+            m_theLog << "convex " << c->PointCount() << " ";
+
+            for( int i = 0; i < c->PointCount(); i++ )
+                m_theLog << c->CPoint( i ).x << " " << c->CPoint( i ).y << " ";
+
             break;
         }
 

@@ -81,6 +81,74 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
 }
 
 
+static void MoveDiagonal( SEG& diagonal, const SHAPE_LINE_CHAIN& vertices, int clearance )
+{
+    int dist;
+
+    vertices.NearestPoint( diagonal, dist );
+    dist -= HULL_MARGIN;
+    VECTOR2I moveBy = (diagonal.A - diagonal.B).Perpendicular().Resize( dist - clearance );
+    diagonal.A += moveBy;
+    diagonal.B += moveBy;
+}
+
+
+const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_CONVEX& convex, int clearance )
+{
+    // this defines the horizontal and vertical lines in the hull octagon
+    BOX2I box = convex.BBox( clearance + HULL_MARGIN );
+    box.Normalize();
+
+    SEG topline = SEG( VECTOR2I( box.GetX(), box.GetY() + box.GetHeight() ),
+                       VECTOR2I( box.GetX() + box.GetWidth(), box.GetY() + box.GetHeight() ) );
+    SEG rightline = SEG( VECTOR2I( box.GetX() + box.GetWidth(), box.GetY() + box.GetHeight() ),
+                         VECTOR2I( box.GetX() + box.GetWidth(), box.GetY() ) );
+    SEG bottomline = SEG( VECTOR2I( box.GetX() + box.GetWidth(), box.GetY() ),
+             box.GetOrigin() );
+    SEG leftline = SEG( box.GetOrigin(), VECTOR2I( box.GetX(), box.GetY() + box.GetHeight() ) );
+
+    const SHAPE_LINE_CHAIN& vertices = convex.Vertices();
+
+    // top right diagonal
+    VECTOR2I corner = box.GetOrigin() + box.GetSize();
+    SEG toprightline = SEG( corner,
+                            corner + VECTOR2I( box.GetHeight(), -box.GetHeight() ) );
+    MoveDiagonal( toprightline, vertices, clearance );
+
+    // bottom right diagonal
+    corner = box.GetOrigin() + VECTOR2I( box.GetWidth(), 0 );
+    SEG bottomrightline = SEG( corner + VECTOR2I( box.GetHeight(), box.GetHeight() ),
+                               corner );
+    MoveDiagonal( bottomrightline, vertices, clearance );
+
+    // bottom left diagonal
+    corner = box.GetOrigin();
+    SEG bottomleftline = SEG( corner,
+                              corner + VECTOR2I( -box.GetHeight(), box.GetHeight() ) );
+    MoveDiagonal( bottomleftline, vertices, clearance );
+
+    // top left diagonal
+    corner = box.GetOrigin() + VECTOR2I( 0, box.GetHeight() );
+    SEG topleftline = SEG( corner + VECTOR2I( -box.GetHeight(), -box.GetHeight() ),
+                           corner );
+    MoveDiagonal( topleftline, vertices, clearance );
+
+    SHAPE_LINE_CHAIN octagon;
+    octagon.SetClosed( true );
+
+    octagon.Append( leftline.IntersectLines( bottomleftline ).get() );
+    octagon.Append( bottomline.IntersectLines( bottomleftline ).get() );
+    octagon.Append( bottomline.IntersectLines( bottomrightline ).get() );
+    octagon.Append( rightline.IntersectLines( bottomrightline ).get() );
+    octagon.Append( rightline.IntersectLines( toprightline ).get() );
+    octagon.Append( topline.IntersectLines( toprightline ).get() );
+    octagon.Append( topline.IntersectLines( topleftline ).get() );
+    octagon.Append( leftline.IntersectLines( topleftline ).get() );
+
+    return octagon;
+}
+
+
 SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg )
 {
     SHAPE_RECT r;

@@ -207,53 +207,137 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     double orient = aPad->GetOrientation() / 10.0;
     bool nonOrtho = false;
 
-    if( orient == 90.0 || orient == 270.0 )
-        sz = VECTOR2I( sz.y, sz.x );
-    else if( orient != 0.0 && orient != 180.0 )
+    if( aPad->GetShape() == PAD_CIRCLE )
     {
-        // rotated pads are replaced by for the moment by circles due to my laziness ;)
-        solid->SetShape( new SHAPE_CIRCLE( c, std::min( sz.x, sz.y ) / 2 ) );
-        nonOrtho = true;
-    }
+        solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
+    } else {
 
-    if( !nonOrtho )
-    {
-        switch( aPad->GetShape() )
+        if( orient == 0.0 || orient == 90.0 || orient == 180.0 || orient == 270.0 )
         {
-        case PAD_CIRCLE:
-            solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-            break;
+            if( orient == 90.0 || orient == 270.0 )
+                sz = VECTOR2I( sz.y, sz.x );
 
-        case PAD_OVAL:
-            if( sz.x == sz.y )
-                solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
-            else
+            switch( aPad->GetShape() )
             {
-                VECTOR2I delta;
 
-                if( sz.x > sz.y )
-                    delta = VECTOR2I( ( sz.x - sz.y ) / 2, 0 );
+            case PAD_OVAL:
+                if( sz.x == sz.y )
+                    solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
                 else
-                    delta = VECTOR2I( 0, ( sz.y - sz.x ) / 2 );
+                {
+                    VECTOR2I delta;
 
-                SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta, c + delta,
-                                                          std::min( sz.x, sz.y ) );
+                    if( sz.x > sz.y )
+                        delta = VECTOR2I( ( sz.x - sz.y ) / 2, 0 );
+                    else
+                        delta = VECTOR2I( 0, ( sz.y - sz.x ) / 2 );
+
+                    SHAPE_SEGMENT* shape = new SHAPE_SEGMENT( c - delta, c + delta,
+                                                              std::min( sz.x, sz.y ) );
+                    solid->SetShape( shape );
+                }
+                break;
+
+            case PAD_RECT:
+                solid->SetShape( new SHAPE_RECT( c - sz / 2, sz.x, sz.y ) );
+                break;
+
+            case PAD_TRAPEZOID:
+            {
+                wxPoint coords[4];
+                aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );
+
+                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                for( int ii = 0; ii < 4; ii++ )
+                {
+                    shape->Append( wx_c + coords[ii] );
+                }
+
                 solid->SetShape( shape );
+                break;
             }
-            break;
 
-        case PAD_RECT:
-            solid->SetShape( new SHAPE_RECT( c - sz / 2, sz.x, sz.y ) );
-            break;
+            default:
+                TRACEn( 0, "unsupported pad shape" );
+                delete solid;
+                return NULL;
+            }
+        } else {
+            switch( aPad->GetShape() )
+            {
+            // PAD_CIRCLE already handled above
 
-        default:
-            TRACEn( 0, "unsupported pad shape" );
-            delete solid;
+            case PAD_OVAL:
+                if( sz.x == sz.y )
+                    solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
+                else
+                {
+                    wxPoint start;
+                    wxPoint end;
+                    wxPoint corner;
 
-            return NULL;
+                    SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+
+                    int w = aPad->BuildSegmentFromOvalShape( start, end, 0.0, wxSize( 0, 0 ) );
+
+                    if( start.y == 0 )
+                        corner = wxPoint( start.x, -(w / 2) );
+                    else
+                        corner = wxPoint( w / 2, start.y );
+                    RotatePoint( &start, aPad->GetOrientation() );
+                    RotatePoint( &corner, aPad->GetOrientation() );
+                    shape->Append( wx_c + corner );
+
+                    for( int rot = 100; rot <= 1800; rot += 100 )
+                    {
+                        wxPoint p( corner );
+                        RotatePoint( &p, start, rot );
+                        shape->Append( wx_c + p );
+                    }
+
+                    if( end.y == 0 )
+                        corner = wxPoint( end.x, w / 2 );
+                    else
+                        corner = wxPoint( -(w / 2), end.y );
+                    RotatePoint( &end, aPad->GetOrientation() );
+                    RotatePoint( &corner, aPad->GetOrientation() );
+                    shape->Append( wx_c + corner );
+
+                    for( int rot = 100; rot <= 1800; rot += 100 )
+                    {
+                        wxPoint p( corner );
+                        RotatePoint( &p, end, rot );
+                        shape->Append( wx_c + p );
+                    }
+
+                    solid->SetShape( shape );
+                }
+                break;
+
+            case PAD_RECT:
+            case PAD_TRAPEZOID:
+            {
+                wxPoint coords[4];
+                aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );
+
+                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                for( int ii = 0; ii < 4; ii++ )
+                {
+                    shape->Append( wx_c + coords[ii] );
+                }
+
+                solid->SetShape( shape );
+                break;
+            }
+
+            default:
+                TRACEn( 0, "unsupported pad shape" );
+                delete solid;
+
+                return NULL;
+            }
         }
     }
-
     return solid;
 }
 

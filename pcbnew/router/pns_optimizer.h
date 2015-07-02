@@ -158,6 +158,7 @@ private:
     BREAKOUT_LIST circleBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST rectBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST ovalBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
+    BREAKOUT_LIST convexBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST computeBreakouts( int aWidth, const PNS_ITEM* aItem, bool aPermitDiagonal ) const;
 
     int smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, int aEndVertex );

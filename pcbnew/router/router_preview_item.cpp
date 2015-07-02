@@ -18,9 +18,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <deque>
 #include <gal/color4d.h>
 
 #include <geometry/shape_rect.h>
+#include <geometry/shape_convex.h>
 
 #include "class_track.h"
 #include <pcb_painter.h>
@@ -233,7 +235,29 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
                 break;
             }
 
-        case SH_CONVEX:
+       case SH_CONVEX:
+       {
+            const SHAPE_CONVEX* c = (const SHAPE_CONVEX*) m_shape;
+            std::deque<VECTOR2D> polygon = std::deque<VECTOR2D>();
+            for( int i = 0; i < c->PointCount(); i++ )
+            {
+                polygon.push_back( c->CDPoint( i ) );
+            }
+            aGal->DrawPolygon( polygon );
+
+            if( m_clearance > 0 )
+            {
+                aGal->SetLayerDepth( ClearanceOverlayDepth );
+                aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
+                aGal->SetIsStroke( true );
+                aGal->SetLineWidth( 2 * m_clearance );
+                // need the implicit last segment to be explicit for DrawPolyline
+                polygon.push_back( c->CDPoint( 0 ) );
+                aGal->DrawPolyline( polygon );
+            }
+            break;
+        }
+
         case SH_POLY_SET:
         case SH_COMPOUND:
             break;          // Not yet in use

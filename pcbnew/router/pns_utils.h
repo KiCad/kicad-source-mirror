@@ -26,6 +26,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_convex.h>
 
 #define HULL_MARGIN 10
 
@@ -38,6 +39,16 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize
 
 const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
                                      int aWalkaroundThickness );
+
+/**
+ * Function ConvexHull()
+ *
+ * Creates an octagonal hull around a convex polygon.
+ * @param convex The convex polygon.
+ * @param clearance The minimum distance between polygon and hull.
+ * @return A closed line chain describing the octagon.
+ */
+const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_CONVEX& convex, int clearance );
 
 SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
 
