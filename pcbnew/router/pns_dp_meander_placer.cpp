@@ -119,14 +119,7 @@ bool PNS_DP_MEANDER_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
 void PNS_DP_MEANDER_PLACER::release()
 {
-    #if 0
-    BOOST_FOREACH(PNS_MEANDER *m, m_meanders)
-    {
-        delete m;
-    }
 
-    m_meanders.clear();
-    #endif
 }
 
 
@@ -161,82 +154,7 @@ const SEG PNS_DP_MEANDER_PLACER::baselineSegment( const PNS_DIFF_PAIR::COUPLED_S
 }
 
 
-#if 0
-PNS_MEANDER_PLACER_BASE::TUNING_STATUS PNS_DP_MEANDER_PLACER::tuneLineLength ( PNS_MEANDERED_LINE& aTuned, int aElongation )
-{
-    int remaining = aElongation;
-    bool finished = false;
-
-    BOOST_FOREACH(PNS_MEANDER_SHAPE *m, aTuned.Meanders())
-    {
-
-        if(m->Type() != MT_CORNER )
-        {
-
-            if(remaining >= 0)
-                remaining -= m->MaxTunableLength() - m->BaselineLength();
-
-            if(remaining < 0)
-            {
-                if(!finished)
-                    {
-                        PNS_MEANDER_TYPE newType;
-
-                        if ( m->Type() == MT_START || m->Type() == MT_SINGLE)
-                            newType = MT_SINGLE;
-                        else
-                            newType = MT_FINISH;
-
-                        m->SetType ( newType );
-                        m->Recalculate( );
-
-                        finished = true;
-                    } else {
-                        m->MakeEmpty();
-                    }
-            }
-        }
-    }
-
-    remaining = aElongation;
-    int meanderCount = 0;
-
-    BOOST_FOREACH(PNS_MEANDER_SHAPE *m, aTuned.Meanders())
-    {
-        if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
-        {
-            if(remaining >= 0)
-            {
-                remaining -= m->MaxTunableLength() - m->BaselineLength();
-                meanderCount ++;
-            }
-        }
-    }
-
-    int balance = 0;
-
-
-    if( meanderCount )
-        balance = -remaining / meanderCount;
-
-    if (balance >= 0)
-    {
-        BOOST_FOREACH(PNS_MEANDER_SHAPE *m, aTuned.Meanders())
-        {
-            if(m->Type() != MT_CORNER && m->Type() != MT_EMPTY)
-            {
-//                int pre = m->MaxTunableLength();
-                m->Resize ( std::max( m->Amplitude() - balance / 2, m_settings.m_minAmplitude ) );
-            }
-        }
-
-    }
-    return TUNED;
-}
-#endif
-
-
-bool pairOrientation( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aPair )
+static bool pairOrientation( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aPair )
 {
     VECTOR2I midp = ( aPair.coupledP.A + aPair.coupledN.A ) / 2;
 
@@ -249,6 +167,8 @@ bool pairOrientation( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aPair )
 bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 {
 //    return false;
+
+    PNS_DIFF_PAIR::COUPLED_SEGMENTS_VEC coupledSegments;
 
     if( m_currentNode )
         delete m_currentNode;
@@ -265,11 +185,9 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     tuned.SetShape( tunedP, tunedN );
 
-    m_coupledSegments.clear();
+    tuned.CoupledSegmentPairs( coupledSegments );
 
-    tuned.CoupledSegmentPairs( m_coupledSegments );
-
-    if( m_coupledSegments.size() == 0 )
+    if( coupledSegments.size() == 0 )
         return false;
 
     //Router()->DisplayDebugLine ( tuned.CP(), 5, 20000 );
@@ -283,7 +201,7 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     int offset = ( tuned.Gap() + tuned.Width() ) / 2;
 
-    if( !pairOrientation( m_coupledSegments[0] ) )
+    if( !pairOrientation( coupledSegments[0] ) )
         offset *= -1;
 
     m_result.SetBaselineOffset( offset );
@@ -300,16 +218,34 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
             Router()->DisplayDebugLine( l->CLine(), 5, 10000 );
     }
 
-    BOOST_FOREACH( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& sp, m_coupledSegments )
+    int curIndexP = 0, curIndexN = 0;
+
+    BOOST_FOREACH( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& sp, coupledSegments )
     {
         SEG base = baselineSegment( sp );
 
-    //    DrawDebugSeg ( base, 3 );
+        DrawDebugSeg ( base, 3 );
 
-        m_result.AddCorner( sp.parentP.A, sp.parentN.A );
+        while(sp.indexP >= curIndexP)
+        {
+            m_result.AddCorner( tunedP.CPoint(curIndexP), tunedN.CPoint(curIndexN) );
+            curIndexP++;
+        }
+
+        while(sp.indexN >= curIndexN)
+        {
+            m_result.AddCorner( tunedP.CPoint(sp.indexP), tunedN.CPoint(curIndexN) );
+            curIndexN++;
+        }
+
         m_result.MeanderSegment( base );
-        m_result.AddCorner( sp.parentP.B, sp.parentN.B );
     }
+
+    while(curIndexP < tunedP.PointCount() )
+        m_result.AddCorner( tunedP.CPoint(curIndexP++), tunedN.CPoint(curIndexN) );
+
+    while(curIndexN < tunedN.PointCount() )
+        m_result.AddCorner( tunedP.CPoint(-1), tunedN.CPoint(curIndexN++) );
 
     int dpLen = origPathLength();
 
@@ -454,6 +390,9 @@ const wxString PNS_DP_MEANDER_PLACER::TuningInfo() const
     status += LengthDoubleToString( (double) m_lastLength, false );
     status += "/";
     status += LengthDoubleToString( (double) m_settings.m_targetLength, false );
+    status += " (gap: ";
+    status += LengthDoubleToString( (double) m_originPair.Gap(), false );
+    status += ")";
 
     return status;
 }

@@ -24,6 +24,7 @@
 #include "pns_joint.h"
 #include "pns_solid.h"
 #include "pns_router.h"
+#include "pns_utils.h"
 
 #include "pns_diff_pair.h"
 #include "pns_topology.h"
@@ -319,6 +320,7 @@ int PNS_TOPOLOGY::DpNetPolarity( int aNet )
     return MatchDpSuffix( refName, dummy1, dummy2 );
 }
 
+bool commonParallelProjection( SEG n, SEG p, SEG &pClip, SEG& nClip );
 
 bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
 {
@@ -345,8 +347,11 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
                 {
                     int dist = s->Seg().Distance( refSeg->Seg() );
 		    		bool isParallel = refSeg->Seg().ApproxParallel( s->Seg() );
+                    SEG p_clip, n_clip;
 
-                    if( dist < minDist  || ( dist == minDist && isParallel ) )
+                    bool isCoupled = commonParallelProjection( refSeg->Seg(), s->Seg(), p_clip, n_clip );
+
+                    if( isParallel && isCoupled && dist < minDist )
                     {
                         minDist = dist;
                         coupledSeg = s;
@@ -368,12 +373,12 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
         std::swap( lp, ln );
     }
 
-    int gap = -1 ;    
+    int gap = -1 ;
     if( refSeg->Seg().ApproxParallel( coupledSeg->Seg() ) ) {
 
       // Segments are parallel -> compute pair gap
       const VECTOR2I refDir       = refSeg->Anchor(1) - refSeg->Anchor(0);
-      const VECTOR2I displacement = refSeg->Anchor(1) - coupledSeg->Anchor(1);    
+      const VECTOR2I displacement = refSeg->Anchor(1) - coupledSeg->Anchor(1);
       gap = (int) abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp->Width();
 
     }

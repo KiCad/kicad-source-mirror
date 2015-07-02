@@ -216,6 +216,12 @@ public:
 
     PNS_PLACEMENT_ALGO *Placer() { return m_placer; }
 
+    void SetGrid( const VECTOR2I& aOrigin, const VECTOR2I& aSize )
+    {
+        m_gridOrigin = aOrigin;
+        m_gridSize = aSize;
+    }
+
 private:
     void movePlacing( const VECTOR2I& aP, PNS_ITEM* aItem );
     void moveDragging( const VECTOR2I& aP, PNS_ITEM* aItem );
@@ -277,6 +283,9 @@ private:
 
     wxString m_toolStatusbarName;
     wxString m_failureReason;
+
+    VECTOR2I m_gridOrigin;
+    VECTOR2I m_gridSize;
 };
 
 #endif
