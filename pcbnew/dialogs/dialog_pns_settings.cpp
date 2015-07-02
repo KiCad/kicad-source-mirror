@@ -42,7 +42,7 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTING
     m_smoothDragged->SetValue( m_settings.SmoothDraggedSegments() );
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
     m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
-
+    m_dragToolMode->SetSelection ( m_settings.InlineDragEnabled() ? 1 : 0 );
 
     SetDefaultItem( m_stdButtonsOK );
     GetSizer()->Fit( this );
@@ -70,7 +70,7 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetSmoothDraggedSegments( m_smoothDragged->GetValue() );
     m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );
     m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
-
+    m_settings.SetInlineDragEnabled( m_dragToolMode->GetSelection () ? true : false );
     EndModal( 1 );
 }
 
