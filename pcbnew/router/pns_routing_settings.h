@@ -26,6 +26,7 @@
 #include "time_limit.h"
 
 class DIRECTION_45;
+class TOOL_SETTINGS;
 
 ///> Routing modes
 enum PNS_MODE
@@ -54,6 +55,9 @@ class PNS_ROUTING_SETTINGS
 {
 public:
     PNS_ROUTING_SETTINGS();
+
+    void Load ( const TOOL_SETTINGS& where );
+    void Save ( TOOL_SETTINGS& where ) const;
 
     ///> Returns the routing mode.
     PNS_MODE Mode() const { return m_routingMode; }
@@ -114,6 +118,10 @@ public:
     bool CanViolateDRC() const { return m_canViolateDRC; }
     void SetCanViolateDRC( bool aViolate ) { m_canViolateDRC = aViolate; }
 
+    bool GetFreeAngleMode() const { return m_freeAngleMode; }
+
+    void SetFreeAngleMode( bool aEnable ) { m_freeAngleMode = aEnable; }
+
     const DIRECTION_45 InitialDirection() const;
 
     int ShoveIterationLimit() const;
@@ -133,6 +141,7 @@ private:
     bool m_jumpOverObstacles;
     bool m_smoothDraggedSegments;
     bool m_canViolateDRC;
+    bool m_freeAngleMode;
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;

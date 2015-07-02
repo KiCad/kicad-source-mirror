@@ -25,6 +25,8 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 
+#include <wxPcbStruct.h> // LAME!
+
 KIGFX::VIEW* TOOL_BASE::getView() const
 {
     return m_toolMgr->GetView();
@@ -46,4 +48,44 @@ wxWindow* TOOL_BASE::getEditFrameInt() const
 EDA_ITEM* TOOL_BASE::getModelInt() const
 {
     return m_toolMgr->GetModel();
+}
+
+void TOOL_BASE::attachManager( TOOL_MANAGER* aManager )
+{
+    m_toolMgr = aManager;
+    m_toolSettings = TOOL_SETTINGS ( this );
+}
+
+TOOL_SETTINGS::TOOL_SETTINGS ( TOOL_BASE *aTool )
+{
+    m_tool = aTool;
+
+    if(!aTool)
+    {
+        m_config = NULL;
+        return;
+    }
+
+	// fixme: make independent of pcbnew (post-stable)
+    PCB_EDIT_FRAME *frame = aTool->getEditFrame<PCB_EDIT_FRAME> ();
+
+    m_config = frame->GetSettings();
+}
+
+TOOL_SETTINGS::~TOOL_SETTINGS ()
+{
+
+}
+
+TOOL_SETTINGS& TOOL_BASE::GetSettings()
+{
+    return m_toolSettings;
+}
+
+wxString TOOL_SETTINGS::getKeyName(const wxString& entryName) const
+{
+    wxString key ( m_tool->GetName() );
+    key += wxT(".");
+    key += entryName;
+    return key;
 }

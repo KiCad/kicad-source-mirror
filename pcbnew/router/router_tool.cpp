@@ -42,6 +42,7 @@
 
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
+#include <tool/tool_settings.h>
 #include <tools/common_actions.h>
 
 #include <ratsnest_data.h>
@@ -260,6 +261,13 @@ public:
 
 ROUTER_TOOL::~ROUTER_TOOL()
 {
+    m_savedSettings.Save( GetSettings() );
+}
+
+bool ROUTER_TOOL::Init()
+{
+    m_savedSettings.Load( GetSettings() );
+    return true;
 }
 
 
@@ -443,7 +451,7 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
         sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
         sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
     }
-            
+
     m_router->UpdateSizes( sizes );
     m_router->ToggleViaPlacement();
 

@@ -41,6 +41,8 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTING
     m_effort->SetValue( m_settings.OptimizerEffort() );
     m_smoothDragged->SetValue( m_settings.SmoothDraggedSegments() );
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
+    m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
+
 
     SetDefaultItem( m_stdButtonsOK );
     GetSizer()->Fit( this );
@@ -67,6 +69,7 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetOptimizerEffort( (PNS_OPTIMIZATION_EFFORT) m_effort->GetValue() );
     m_settings.SetSmoothDraggedSegments( m_smoothDragged->GetValue() );
     m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );
+    m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
 
     EndModal( 1 );
 }

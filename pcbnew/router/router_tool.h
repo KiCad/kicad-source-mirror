@@ -30,6 +30,7 @@ public:
     ROUTER_TOOL();
     ~ROUTER_TOOL();
 
+    bool Init();
     void Reset( RESET_REASON aReason );
 
     int RouteSingleTrace ( const TOOL_EVENT& aEvent );

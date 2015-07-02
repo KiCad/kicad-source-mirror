@@ -29,6 +29,8 @@
 #include <base_struct.h>    // for KICAD_T
 
 #include <tool/tool_event.h>
+#include <tool/tool_settings.h>
+
 #include <tool/delegate.h>
 
 class EDA_ITEM;
@@ -147,8 +149,11 @@ public:
      */
     virtual void SetTransitions() {};
 
+    TOOL_SETTINGS& GetSettings();
+
 protected:
     friend class TOOL_MANAGER;
+    friend class TOOL_SETTINGS;
 
     /**
      * Function attachManager()
@@ -209,6 +214,7 @@ protected:
     ///> (eg. pcbnew.InteractiveSelection).
     std::string m_toolName;
     TOOL_MANAGER* m_toolMgr;
+    TOOL_SETTINGS m_toolSettings;
 
 private:
     // hide the implementation to avoid spreading half of

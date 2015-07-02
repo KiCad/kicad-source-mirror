@@ -33,6 +33,7 @@ public:
     void Restart();
 
     void Set( int aMilliseconds );
+    int Get () const { return m_limitMs; }
 
 private:
     int m_limitMs;

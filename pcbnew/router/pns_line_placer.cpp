@@ -1029,7 +1029,12 @@ bool PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead )
     {
         l.Clear();
     } else {
-        l = m_direction.BuildInitialTrace( m_p_start, aP );
+        if( Settings().GetFreeAngleMode() && Settings().Mode() == RM_MarkObstacles )
+        {
+            l = SHAPE_LINE_CHAIN ( m_p_start, aP );
+        } else {
+            l = m_direction.BuildInitialTrace( m_p_start, aP );
+        }
 
         if( l.SegmentCount() > 1 && m_orthoMode )
         {

@@ -236,7 +236,7 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     m_toolIdIndex[aTool->GetId()] = st;
     m_toolTypes[typeid( *aTool ).name()] = st->theTool;
 
-    aTool->m_toolMgr = this;
+    aTool->attachManager( this );
 
     if( !aTool->Init() )
     {

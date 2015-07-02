@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <tool/tool_settings.h>
+
 #include "pns_routing_settings.h"
 #include "direction.h"
 
@@ -37,8 +39,44 @@ PNS_ROUTING_SETTINGS::PNS_ROUTING_SETTINGS()
     m_jumpOverObstacles = false;
     m_smoothDraggedSegments = true;
     m_canViolateDRC = false;
+    m_freeAngleMode = false;
 }
 
+void PNS_ROUTING_SETTINGS::Save ( TOOL_SETTINGS& aSettings ) const
+{
+    aSettings.Set( "Mode", (int)m_routingMode );
+    aSettings.Set( "OptimizerEffort", (int) m_optimizerEffort );
+    aSettings.Set( "RemoveLoops", m_removeLoops );
+    aSettings.Set( "SmartPads", m_smartPads );
+    aSettings.Set( "ShoveVias", m_shoveVias );
+    aSettings.Set( "StartDiagonal", m_startDiagonal );
+    aSettings.Set( "ShoveTimeLimit", m_shoveTimeLimit.Get() );
+    aSettings.Set( "ShoveIterationLimit", m_shoveIterationLimit );
+    aSettings.Set( "WalkaroundIterationLimit", m_walkaroundIterationLimit );
+    aSettings.Set( "JumpOverObstacles", m_jumpOverObstacles );
+    aSettings.Set( "SmoothDraggedSegments", m_smoothDraggedSegments );
+    aSettings.Set( "CanViolateDRC", m_canViolateDRC );
+    aSettings.Set( "SuggestFinish", m_suggestFinish );
+    aSettings.Set( "FreeAngleMode", m_freeAngleMode );
+}
+
+void PNS_ROUTING_SETTINGS::Load ( const TOOL_SETTINGS& aSettings )
+{
+    m_routingMode = (PNS_MODE) aSettings.Get( "Mode", (int) RM_Walkaround );
+    m_optimizerEffort = (PNS_OPTIMIZATION_EFFORT) aSettings.Get( "OptimizerEffort", (int) OE_MEDIUM );
+    m_removeLoops = aSettings.Get( "RemoveLoops", true );
+    m_smartPads = aSettings.Get( "SmartPads", true );
+    m_shoveVias = aSettings.Get( "ShoveVias", true );
+    m_startDiagonal = aSettings.Get( "StartDiagonal", false );
+    m_shoveTimeLimit.Set( aSettings.Get( "ShoveTimeLimit", 1000 ) );
+    m_shoveIterationLimit = aSettings.Get( "ShoveIterationLimit", 250 );
+    m_walkaroundIterationLimit = aSettings.Get( "WalkaroundIterationLimit", 50 );
+    m_jumpOverObstacles = aSettings.Get( "JumpOverObstacles", false  );
+    m_smoothDraggedSegments = aSettings.Get( "SmoothDraggedSegments", true );
+    m_canViolateDRC = aSettings.Get( "CanViolateDRC", false );
+    m_suggestFinish = aSettings.Get( "SuggestFinish", false );
+    m_freeAngleMode = aSettings.Get( "FreeAngleMode", false );
+}
 
 const DIRECTION_45 PNS_ROUTING_SETTINGS::InitialDirection() const
 {
