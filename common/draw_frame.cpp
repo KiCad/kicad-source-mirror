@@ -1025,9 +1025,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
-    if( m_galCanvasActive == aEnable )
-        return;
-
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
     KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
@@ -1035,12 +1032,16 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     BASE_SCREEN* screen = GetScreen();
 
     // Display the same view after canvas switching
-    if( aEnable )       // Switch to GAL rendering
+    if( aEnable )
     {
-        // Set up viewport
-        double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
-        view->SetScale( zoom );
-        view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+        // Switch to GAL rendering
+        if( !m_galCanvasActive )
+        {
+            // Set up viewport
+            double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
+            view->SetScale( zoom );
+            view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+        }
 
         // Set up grid settings
         gal->SetGridVisibility( IsGridVisible() );
@@ -1049,9 +1050,9 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
         GetToolManager()->RunAction( "pcbnew.Control.switchCursor" );
     }
-    else                // Switch to standard rendering
+    else if( m_galCanvasActive )
     {
-        // Change view settings only if GAL was active previously
+        // Switch to standard rendering
         double zoom = 1.0 / ( zoomFactor * view->GetScale() );
         m_canvas->SetZoom( zoom );
 
