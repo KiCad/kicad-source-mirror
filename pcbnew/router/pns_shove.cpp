@@ -986,7 +986,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
     m_multiLineMode = false;
 
     // empty head? nothing to shove...
-    if( !aCurrentHead.SegmentCount() )
+    if( !aCurrentHead.SegmentCount() && !aCurrentHead.EndsWithVia() )
         return SH_INCOMPLETE;
 
     PNS_LINE* head = clone( &aCurrentHead );
@@ -1183,6 +1183,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
 
 void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
 {
+    if(!aHead->SegmentCount())
+        return;
+
     PNS_OPTIMIZER optimizer( aNode );
     int optFlags = 0, n_passes = 0;
 

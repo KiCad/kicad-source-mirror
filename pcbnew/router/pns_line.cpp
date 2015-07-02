@@ -707,10 +707,7 @@ void PNS_LINE::Reverse()
 
 void PNS_LINE::AppendVia( const PNS_VIA& aVia )
 {
-    if( m_line.PointCount() == 0 )
-        return;
-
-    if( aVia.Pos() == m_line.CPoint( 0 ) )
+    if( m_line.PointCount() > 1 && aVia.Pos() == m_line.CPoint( 0 ) )
     {
         Reverse();
     }

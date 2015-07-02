@@ -254,13 +254,6 @@ private:
     void simplifyNewLine( PNS_NODE* aNode, PNS_SEGMENT* aLatest );
 
     /**
-     * Function handleViaPlacement()
-     *
-     * Attempts to find a spot to place the via at the end of line aHead.
-     */
-    bool handleViaPlacement( PNS_LINE& aHead );
-
-    /**
      * Function checkObtusity()
      *
      * Helper function, checking if segments a and b form an obtuse angle
@@ -347,7 +340,7 @@ private:
 
     const PNS_VIA makeVia ( const VECTOR2I& aP );
 
-    const SHAPE_LINE_CHAIN buildInitialLine( const VECTOR2I& aP );
+    bool buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead );
 
     ///> current routing direction
     DIRECTION_45 m_direction;

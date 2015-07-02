@@ -139,6 +139,16 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
     WALKAROUND_STATUS s_cw = IN_PROGRESS, s_ccw = IN_PROGRESS;
     SHAPE_LINE_CHAIN best_path;
 
+    // special case for via-in-the-middle-of-track placement
+    if( aInitialPath.PointCount() <= 1 )
+    {
+		if(aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(), m_itemMask ) )
+			return STUCK;
+
+        aWalkPath = aInitialPath;
+        return DONE;
+    }
+
     start( aInitialPath );
 
     m_currentObstacle[0] = m_currentObstacle[1] = nearestObstacle( aInitialPath );
