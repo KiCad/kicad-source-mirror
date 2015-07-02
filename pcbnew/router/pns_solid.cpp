@@ -30,7 +30,7 @@
 
 const SHAPE_LINE_CHAIN PNS_SOLID::Hull( int aClearance, int aWalkaroundThickness ) const
 {
-    int cl = aClearance + aWalkaroundThickness / 2;
+    int cl = aClearance + (aWalkaroundThickness + 1)/ 2;
 
     switch( m_shape->Type() )
     {
