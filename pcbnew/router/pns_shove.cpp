@@ -1028,7 +1028,10 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
         return SH_INCOMPLETE;
 
     st = shoveMainLoop();
-    runOptimizer( m_currentNode, head );
+
+
+    if( ( st == SH_OK || st == SH_HEAD_MODIFIED ) && head)
+        runOptimizer( m_currentNode, head );
 
     if( m_newHead && st == SH_OK )
     {
@@ -1116,7 +1119,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
     //m_logger.Log( head, 0, "head" );
 
     st = shoveMainLoop();
-    runOptimizer( m_currentNode, NULL );
+
+    if ( st == SH_OK )
+        runOptimizer( m_currentNode, NULL );
 
     m_currentNode->RemoveByMarker( MK_HEAD );
 
@@ -1163,8 +1168,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
 
     st = pushVia( aVia, ( aWhere - aVia->Pos() ), 0 );
     st = shoveMainLoop();
-    runOptimizer( m_currentNode, NULL );
-    //m_currentNode->RemoveByMarker( MK_HEAD );
+
+    if ( st == SH_OK )
+        runOptimizer( m_currentNode, NULL );
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
@@ -1186,9 +1192,6 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
 
 void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
 {
-    if(!aHead->SegmentCount())
-        return;
-
     PNS_OPTIMIZER optimizer( aNode );
     int optFlags = 0, n_passes = 0;
 
