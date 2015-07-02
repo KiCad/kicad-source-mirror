@@ -344,8 +344,9 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
                 if( s->Layers().Start() == refSeg->Layers().Start() && s->Width() == refSeg->Width() )
                 {
                     int dist = s->Seg().Distance( refSeg->Seg() );
+		    		bool isParallel = refSeg->Seg().ApproxParallel( s->Seg() );
 
-                    if( dist < minDist )
+                    if( dist < minDist  || ( dist == minDist && isParallel ) )
                     {
                         minDist = dist;
                         coupledSeg = s;
@@ -367,9 +368,20 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
         std::swap( lp, ln );
     }
 
+    int gap = -1 ;    
+    if( refSeg->Seg().ApproxParallel( coupledSeg->Seg() ) ) {
+
+      // Segments are parallel -> compute pair gap
+      const VECTOR2I refDir       = refSeg->Anchor(1) - refSeg->Anchor(0);
+      const VECTOR2I displacement = refSeg->Anchor(1) - coupledSeg->Anchor(1);    
+      gap = (int) abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp->Width();
+
+    }
+
     aPair = PNS_DIFF_PAIR( *lp, *ln );
     aPair.SetWidth( lp->Width() );
     aPair.SetLayers( lp->Layers() );
+    aPair.SetGap( gap );
 
     return true;
 }

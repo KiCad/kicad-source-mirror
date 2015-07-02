@@ -78,7 +78,8 @@ bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
         return false;
     }
 
-    m_originPair.SetGap ( Router()->Sizes().DiffPairGap() );
+    if( m_originPair.Gap() < 0 )
+      m_originPair.SetGap ( Router()->Sizes().DiffPairGap() );
 
     if( !m_originPair.PLine().SegmentCount() ||
         !m_originPair.NLine().SegmentCount() )
