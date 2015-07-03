@@ -123,22 +123,31 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
     board->ComputeBoundingBox();
 
     BOX2I boardBBox = board->ViewBBox();
-    VECTOR2I screenSize = galCanvas->GetClientSize();
-    VECTOR2I scrollbarSize = VECTOR2I( galCanvas->GetSize() ) - screenSize;
-    VECTOR2D worldScrollbarSize = view->ToWorld( scrollbarSize, false );
+    VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
 
     if( boardBBox.GetWidth() == 0 || boardBBox.GetHeight() == 0 )
     {
         // Empty view
-        view->SetScale( 17.0 );
-        view->SetCenter( view->ToWorld( VECTOR2D( screenSize + scrollbarSize ) / 2, false ) );
+        view->SetScale( 17.0 );     // works fine for the standard worksheet frame
+
+        VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
+        view->SetCenter( screenSize / 2.0 );
     }
     else
     {
-        // Autozoom to board
-        view->SetViewport( BOX2D( boardBBox.GetOrigin(),
-                                  boardBBox.GetSize() + worldScrollbarSize ) );
+        VECTOR2D vsize = boardBBox.GetSize();
+        VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
+        double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
+                                                    fabs( vsize.y / screenSize.y ) );
+
+        view->SetScale( scale );
+        view->SetCenter( boardBBox.Centre() );
     }
+
+
+    // Take scrollbars into account
+    VECTOR2D worldScrollbarSize = view->ToWorld( scrollbarSize, false );
+    view->SetCenter( view->GetCenter() + worldScrollbarSize / 2.0 );
 
     return 0;
 }
