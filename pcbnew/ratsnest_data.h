@@ -445,7 +445,7 @@ public:
     std::list<RN_NODE_PTR> GetNodes( const BOARD_CONNECTED_ITEM* aItem ) const;
 
     /**
-     * Function GetAllNodes()
+     * Function GetAllItems()
      * Adds all stored items to a list.
      * @param aOutput is the list that will have items added.
      * @param aType determines the type of added items.
@@ -726,6 +726,13 @@ public:
      * @return True if they are connected, false otherwise.
      */
     bool AreConnected( const BOARD_CONNECTED_ITEM* aItem, const BOARD_CONNECTED_ITEM* aOther );
+
+    /**
+     * Function GetUnconnectedCount()
+     * Returns the number of missing connections.
+     * @return Number of missing connections.
+     */
+    int GetUnconnectedCount() const;
 
 protected:
     /**

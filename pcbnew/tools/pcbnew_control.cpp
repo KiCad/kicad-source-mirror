@@ -474,6 +474,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
     if( warp )
     {
         KIGFX::VIEW* view = getView();
+        VECTOR2D worldCursor = newCursor;
         newCursor = view->ToScreen( newCursor );
 
         // Pan the screen if required
@@ -512,6 +513,10 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
 
             view->SetCenter( view->GetCenter() + view->ToWorld( delta, false ) );
         }
+
+        TOOL_EVENT evt( TC_MOUSE, TA_MOUSE_MOTION );
+        evt.SetMousePosition( worldCursor );
+        m_toolMgr->ProcessEvent( evt );
 
         m_frame->GetGalCanvas()->WarpPointer( newCursor.x, newCursor.y );
     }

@@ -34,6 +34,7 @@
 #include <wx/timer.h>
 #include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
+#include <msgpanel.h>
 
 class BOARD;
 class TOOL_DISPATCHER;
@@ -150,6 +151,17 @@ public:
      */
     virtual void SetTopLayer( LAYER_ID aLayer );
 
+    virtual void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
+    {
+        assert( false );
+    }
+
+    /**
+     * Function GetLegacyZoom()
+     * Returns current view scale converted to zoom value used by the legacy canvas.
+     */
+    double GetLegacyZoom() const;
+
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
@@ -161,7 +173,7 @@ protected:
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 
     /// Pointer to the parent window
-    wxWindow*               m_parent;
+    wxWindow*                m_parent;
 
     /// Last timestamp when the panel was refreshed
     wxLongLong               m_lastRefresh;

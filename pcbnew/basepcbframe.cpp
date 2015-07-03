@@ -505,10 +505,11 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
         return;
 
     int current = 0;
+    double zoom = IsGalCanvasActive() ? GetGalCanvas()->GetLegacyZoom() : GetScreen()->GetZoom();
 
     for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {
-        if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
+        if( zoom == GetScreen()->m_ZoomList[i] )
         {
             current = i + 1;
             break;
@@ -545,33 +546,29 @@ void PCB_BASE_FRAME::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
 {
     GetScreen()->SetCurItem( aItem );
 
-    if( aItem )
+    if( aDisplayInfo )
+        UpdateMsgPanel();
+}
+
+
+void PCB_BASE_FRAME::UpdateMsgPanel()
+{
+    BOARD_ITEM* item = GetScreen()->GetCurItem();
+    MSG_PANEL_ITEMS items;
+
+    if( item )
     {
-        if( aDisplayInfo )
-        {
-            MSG_PANEL_ITEMS items;
-            aItem->GetMsgPanelInfo( items );
-            SetMsgPanel( items );
-        }
-
-#if 0 && defined(DEBUG)
-    aItem->Show( 0, std::cout );
-#endif
-
+        item->GetMsgPanelInfo( items );
     }
-    else
+    else       // show general information about the board
     {
-        // we can use either of these two:
-
-        MSG_PANEL_ITEMS items;
-        m_Pcb->GetMsgPanelInfo( items );       // show the BOARD stuff
-        SetMsgPanel( items );
-
-#if 0 && defined(DEBUG)
-        std::cout << "SetCurItem(NULL)\n";
-#endif
-
+        if( IsGalCanvasActive() )
+            GetGalCanvas()->GetMsgPanelInfo( items );
+        else
+            m_Pcb->GetMsgPanelInfo( items );
     }
+
+    SetMsgPanel( items );
 }
 
 
@@ -790,6 +787,12 @@ void PCB_BASE_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     GetScreen()->SetSave();
+
+    if( IsGalCanvasActive() )
+    {
+        UpdateStatusBar();
+        UpdateMsgPanel();
+    }
 }
 
 

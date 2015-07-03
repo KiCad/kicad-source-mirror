@@ -258,6 +258,9 @@ public:
 
     BOARD_ITEM* GetCurItem();
 
+    ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
+    void UpdateMsgPanel();
+
     /**
      * Function GetCollectorsGuide
      * @return GENERAL_COLLECTORS_GUIDE - that considers the global

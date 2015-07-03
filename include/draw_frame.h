@@ -714,6 +714,12 @@ public:
     void SetMsgPanel( EDA_ITEM* aItem );
 
     /**
+     * Function UpdateMsgPanel
+     * redraws the message panel.
+     */
+    virtual void UpdateMsgPanel();
+
+    /**
      * Function PrintPage
      * used to print a page
      * Print the page pointed by current screen, set by the calling print function

@@ -28,6 +28,7 @@
 #include <pcb_painter.h>
 #include <worksheet_viewitem.h>
 #include <ratsnest_viewitem.h>
+#include <ratsnest_data.h>
 
 #include <class_colors_design_settings.h>
 #include <class_board.h>
@@ -359,4 +360,39 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), true );
     m_view->SetLayerVisible( ITEM_GAL_LAYER( WORKSHEET ), true );
     m_view->SetLayerVisible( ITEM_GAL_LAYER( GP_OVERLAY ), true );
+}
+
+
+void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
+{
+    BOARD* board = static_cast<PCB_BASE_FRAME*>( m_parent )->GetBoard();
+    wxString txt;
+    int viasCount = 0;
+    int trackSegmentsCount = 0;
+
+    for( const BOARD_ITEM* item = board->m_Track; item; item = item->Next() )
+    {
+        if( item->Type() == PCB_VIA_T )
+            viasCount++;
+        else
+            trackSegmentsCount++;
+    }
+
+    txt.Printf( wxT( "%d" ), board->GetPadCount() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), txt, DARKGREEN ) );
+
+    txt.Printf( wxT( "%d" ), viasCount );
+    aList.push_back( MSG_PANEL_ITEM( _( "Vias" ), txt, DARKGREEN ) );
+
+    txt.Printf( wxT( "%d" ), trackSegmentsCount );
+    aList.push_back( MSG_PANEL_ITEM( _( "Track Segments" ), txt, DARKGREEN ) );
+
+    txt.Printf( wxT( "%d" ), board->GetNodesCount() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Nodes" ), txt, DARKCYAN ) );
+
+    txt.Printf( wxT( "%d" ), board->GetNetCount() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
+
+    txt.Printf( wxT( "%d" ), board->GetRatsnest()->GetUnconnectedCount() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );
 }

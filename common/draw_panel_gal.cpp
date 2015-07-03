@@ -73,8 +73,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view->SetPainter( m_painter );
     m_view->SetGAL( m_gal );
 
-    m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
-
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
@@ -96,6 +94,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
                  NULL, m_eventDispatcher );
     }
+
+    // View controls is the first in the event handler chain, so the Tool Framework operates
+    // on updated viewport data.
+    m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
@@ -254,6 +256,13 @@ void EDA_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
     m_view->ClearTopLayers();
     m_view->SetTopLayer( aLayer );
     m_view->UpdateAllLayersOrder();
+}
+
+
+double EDA_DRAW_PANEL_GAL::GetLegacyZoom() const
+{
+    double zoomFactor = m_gal->GetWorldScale() / m_gal->GetZoomFactor();
+    return ( 1.0 / ( zoomFactor * m_view->GetScale() ) );
 }
 
 

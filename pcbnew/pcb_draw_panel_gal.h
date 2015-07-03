@@ -77,6 +77,9 @@ public:
      */
     void SyncLayersVisibility( const BOARD* aBoard );
 
+    ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
+    void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList );
+
 protected:
     ///> Currently used worksheet
     KIGFX::WORKSHEET_VIEWITEM* m_worksheet;

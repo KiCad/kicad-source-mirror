@@ -145,7 +145,7 @@ void TOOL_DISPATCHER::ResetState()
 
 KIGFX::VIEW* TOOL_DISPATCHER::getView()
 {
-    return static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->GetView();
+    return static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->GetView();
 }
 
 
@@ -271,7 +271,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         {
             motion = true;
             m_lastMousePos = pos;
-            static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->UpdateStatusBar();
         }
 
         for( unsigned int i = 0; i < m_buttons.size(); i++ )
@@ -325,6 +324,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     // pass the event to the GUI, it might still be interested in it
     aEvent.Skip();
+
+    updateUI();
 }
 
 
@@ -336,4 +337,16 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
         m_toolMgr->ProcessEvent( *evt );
     else
         aEvent.Skip();
+
+    updateUI();
+}
+
+
+void TOOL_DISPATCHER::updateUI()
+{
+    // TODO I don't feel it is the right place for updating UI,
+    // but at the moment I cannot think of a better one..
+    EDA_DRAW_FRAME* frame = static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
+    frame->UpdateStatusBar();
+    frame->UpdateMsgPanel();
 }

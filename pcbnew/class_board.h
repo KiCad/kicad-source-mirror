@@ -58,12 +58,6 @@ class NETLIST;
 class REPORTER;
 class RN_DATA;
 
-namespace KIGFX
-{
-    class RATSNEST_VIEWITEM;
-    class WORKSHEET_VIEWITEM;
-}
-
 
 // non-owning container of item candidates when searching for items on the same track.
 typedef std::vector< TRACK* >   TRACK_PTRS;

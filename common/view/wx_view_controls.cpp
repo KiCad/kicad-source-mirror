@@ -86,11 +86,9 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             m_view->SetCenter( m_lookStartPoint + delta );
             aEvent.StopPropagation();
         }
-        else
-        {
-            aEvent.Skip();
-        }
     }
+
+    aEvent.Skip();
 }
 
 

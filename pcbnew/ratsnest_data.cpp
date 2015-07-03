@@ -985,6 +985,22 @@ bool RN_DATA::AreConnected( const BOARD_CONNECTED_ITEM* aItem, const BOARD_CONNE
 }
 
 
+int RN_DATA::GetUnconnectedCount() const
+{
+    int count = 0;
+
+    for( unsigned i = 0; i < m_nets.size(); ++i )
+    {
+        const std::vector<RN_EDGE_MST_PTR>* unconnected = m_nets[i].GetUnconnected();
+
+        if( unconnected )
+            count += unconnected->size();
+    }
+
+    return count;
+}
+
+
 void RN_NET::processZones()
 {
     for( ZONE_DATA_MAP::iterator it = m_zones.begin(); it != m_zones.end(); ++it )
