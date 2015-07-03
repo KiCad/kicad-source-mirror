@@ -825,6 +825,14 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( shownText, position, orientation );
+
+    // Draw the umbilical line
+    if( aText->IsSelected() && aText->GetType() != TEXTE_MODULE::TEXT_is_DIVERS )
+    {
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+        m_gal->DrawLine( position, aText->GetParent()->GetPosition() );
+    }
 }
 
 
