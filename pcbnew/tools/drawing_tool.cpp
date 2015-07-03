@@ -734,7 +734,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             break;
         }
 
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             if( !started )
             {
@@ -766,18 +766,31 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             }
             else
             {
-                if( aGraphic->GetEnd() != aGraphic->GetStart() )
+                if( aGraphic->GetEnd() == aGraphic->GetStart() ||
+                        ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT ) )
+                                                // User has clicked twice in the same spot
+                {                               // a clear sign that the current drawing is finished
+                    if( direction45 )
+                    {
+                        DRAWSEGMENT* l = static_cast<DRAWSEGMENT*>( line45.Clone() );
+                        l->SetEnd( aGraphic->GetStart() );
+                        m_board->Add( l );
+                        m_frame->OnModify();
+                        m_frame->SaveCopyInUndoList( l, UR_NEW );
+                        m_view->Add( l );
+                        l->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                    }
+
+                    delete aGraphic;            // but only if at least one graphic was created
+                    aGraphic = NULL;            // otherwise - force user to draw more or cancel
+                }
+                else
                 {
                     assert( aGraphic->GetLength() > 0 );
                     assert( aGraphic->GetWidth() > 0 );
 
                     m_view->Add( aGraphic );
                     aGraphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-                }
-                else                            // User has clicked twice in the same spot
-                {                               // a clear sign that the current drawing is finished
-                    delete aGraphic;            // but only if at least one graphic was created
-                    aGraphic = NULL;            // otherwise - force user to draw more or cancel
                 }
 
                 preview.Clear();
@@ -1082,10 +1095,10 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 break;
         }
 
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
-            if( lastCursorPos == cursorPos || ( numPoints > 0 && cursorPos == origin ) )
+            if( evt->IsDblClick( BUT_LEFT ) || lastCursorPos == cursorPos || ( numPoints > 0 && cursorPos == origin ) )
             {
                 if( numPoints > 2 )     // valid zone consists of more than 2 points
                 {
