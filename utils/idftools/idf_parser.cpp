@@ -3522,7 +3522,7 @@ bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, do
     }
 
     double a1 = aOrientation / 180.0 * M_PI;
-    double a2 = a1 + M_PI2;
+    double a2 = a1 + M_PI_2;
     double d1 = aLength / 2.0;
     double d2 = aWidth / 2.0;
     double sa1 = sin( a1 );

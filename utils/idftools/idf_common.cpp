@@ -1137,9 +1137,9 @@ void IDF_SEGMENT::CalcCenterAndRadius( void )
     double h = sqrt( dh2 );
 
     if( angle > 0.0 )
-        offAng += M_PI2;
+        offAng += M_PI_2;
     else
-        offAng -= M_PI2;
+        offAng -= M_PI_2;
 
     if( ( angle > 180.0 ) || ( angle < -180.0 ) )
         offAng += M_PI;

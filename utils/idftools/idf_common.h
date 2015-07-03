@@ -32,18 +32,7 @@
 #include <fstream>
 #include <exception>
 #include <string>
-
-#ifndef M_PI
-#define M_PI 3.1415926535897932384626433832795028841
-#endif
-
-#ifndef M_PI2
-#define M_PI2 ( M_PI / 2.0 )
-#endif
-
-#ifndef M_PI4
-#define M_PI4 ( M_PI / 4.0 )
-#endif
+#include <cmath>
 
 // differences in angle smaller than MIN_ANG are considered equal
 #define MIN_ANG     (0.01)

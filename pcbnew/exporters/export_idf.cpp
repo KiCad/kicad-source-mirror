@@ -331,7 +331,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
                 if( dlength < drill )
                 {
                     std::swap( drill, dlength );
-                    angle += M_PI2;
+                    angle += M_PI_2;
                 }
 
                 // NOTE: KiCad measures a slot's length from end to end

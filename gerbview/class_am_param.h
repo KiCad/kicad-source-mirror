@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+ * Copyright (C) 1992-2015 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,13 +156,13 @@ private:
     int    m_ivalue;            // the integer value, for PUSHPARM type item
 
 public:
-    AM_PARAM_ITEM( parm_item_type aType = NOP, double aValue = 0.0)
+    AM_PARAM_ITEM( parm_item_type aType, double aValue )
     {
         m_type = aType;
         m_dvalue = aValue;
         m_ivalue = 0;
     }
-    AM_PARAM_ITEM( parm_item_type aType = NOP, int aValue = 0)
+    AM_PARAM_ITEM( parm_item_type aType, int aValue )
     {
         m_type = aType;
         m_dvalue = 0.0;
