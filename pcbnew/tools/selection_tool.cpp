@@ -432,8 +432,10 @@ bool SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            // Do not display information about selected item,as there is more than one
-            m_frame->SetCurItem( NULL );
+            if( m_selection.Size() == 1 )
+                m_frame->SetCurItem( m_selection.Item<BOARD_ITEM>( 0 ) );
+            else
+                m_frame->SetCurItem( NULL );
 
             if( !m_selection.Empty() )
             {
