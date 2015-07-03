@@ -470,12 +470,14 @@ void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 
 void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
+    PCB_BASE_FRAME::LoadSettings( aCfg );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     // Ensure some params are valid
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
+    // Usually, graphic items are drawn on F_SilkS or F_Fab layer
+    // Force these layers if not default
     if( ( settings.m_RefDefaultlayer != F_SilkS ) && ( settings.m_RefDefaultlayer != F_Fab ) )
         settings.m_RefDefaultlayer = F_SilkS;
 
@@ -486,7 +488,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
 void FOOTPRINT_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::SaveSettings( aCfg );
+    PCB_BASE_FRAME::SaveSettings( aCfg );
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 }
 
