@@ -506,7 +506,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     SHAPE_POLY_SET solidAreas = convertPolyListToPolySet( tmp );
 
     if(g_DumpZonesWhenFilling)
-        dumper->Write ( &solidAreas, "solid-areas" );
+        dumper->Write( &solidAreas, "solid-areas" );
 
 
     tmp.RemoveAllContours();
@@ -514,17 +514,17 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     SHAPE_POLY_SET holes = convertPolyListToPolySet( tmp );
 
     if(g_DumpZonesWhenFilling)
-        dumper->Write ( &holes, "feature-holes" );
+        dumper->Write( &holes, "feature-holes" );
 
     holes.Simplify();
 
     if (g_DumpZonesWhenFilling)
-        dumper->Write ( &holes, "feature-holes-postsimplify" );
+        dumper->Write( &holes, "feature-holes-postsimplify" );
 
-    solidAreas.Subtract ( holes );
+    solidAreas.Subtract( holes );
 
     if (g_DumpZonesWhenFilling)
-        dumper->Write ( &solidAreas, "solid-areas-minus-holes" );
+        dumper->Write( &solidAreas, "solid-areas-minus-holes" );
 
     m_FilledPolysList.RemoveAllContours();
 
@@ -532,14 +532,14 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     fractured.Fracture();
 
     if (g_DumpZonesWhenFilling)
-        dumper->Write ( &fractured, "fractured" );
+        dumper->Write( &fractured, "fractured" );
 
     m_FilledPolysList =  convertPolySetToPolyList( fractured );
 
     if (g_DumpZonesWhenFilling)
     {
         SHAPE_POLY_SET dupa = convertPolyListToPolySet ( m_FilledPolysList );
-        dumper->Write ( &dupa, "verify-conv" );
+        dumper->Write( &dupa, "verify-conv" );
     }
 
 
@@ -634,7 +634,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     if( polyset_zone_solid_areas.size() == 0 )
         return;
 
- if (g_DumpZonesWhenFilling)
+    if (g_DumpZonesWhenFilling)
         dumper->Write ( convertBoostToPolySet( polyset_zone_solid_areas ), "solid-areas" );
 
     buildFeatureHoleList( aPcb, cornerBufferPolysToSubstract );
@@ -653,7 +653,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
         // Remove holes from initial area.:
         polyset_zone_solid_areas -= polyset_holes;
-      }
+    }
 
     // put solid areas in m_FilledPolysList:
     m_FilledPolysList.RemoveAllContours();
@@ -693,8 +693,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
 
-  if (g_DumpZonesWhenFilling)
-            dumper->Write ( convertBoostToPolySet( polyset_zone_solid_areas ), "complete" );
+    if (g_DumpZonesWhenFilling)
+        dumper->Write ( convertBoostToPolySet( polyset_zone_solid_areas ), "complete" );
 
     cornerBufferPolysToSubstract.RemoveAllContours();
 }

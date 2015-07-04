@@ -464,3 +464,17 @@ void EDA_3D_CANVAS::buildPadShapeThickOutlineAsPolygon( const D_PAD*  aPad,
     }
 }
 
+
+GLfloat Get3DLayer_Z_Orientation( LAYER_NUM aLayer )
+{
+    double nZ = 1.0;
+
+    if( ( aLayer == B_Cu )
+        || ( aLayer == B_Adhes )
+        || ( aLayer == B_Paste )
+        || ( aLayer == B_SilkS )
+        || ( aLayer == B_Mask ) )
+        nZ = -1.0;
+
+    return nZ;
+}

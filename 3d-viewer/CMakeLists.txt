@@ -16,6 +16,7 @@ set(3D-VIEWER_SRCS
     3d_canvas.cpp
     3d_class.cpp
     3d_draw.cpp
+    3d_draw_board_body.cpp
     3d_draw_basic_functions.cpp
     3d_draw_helper_functions.cpp
     3d_frame.cpp
