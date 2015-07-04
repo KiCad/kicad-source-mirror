@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-04 00:02+0100\n"
-"PO-Revision-Date: 2015-07-04 00:02+0100\n"
+"POT-Creation-Date: 2015-07-04 13:43+0100\n"
+"PO-Revision-Date: 2015-07-04 13:43+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -2317,7 +2317,7 @@ msgstr "Riempi zona"
 
 #: pcbnew/onrightclick.cpp:763
 msgid "Remove Filled Areas in Zone"
-msgstr "Rimuovi zona"
+msgstr "Rimuovi aree riempite nella zona"
 
 #: pcbnew/onrightclick.cpp:766
 msgid "Move Zone"
@@ -6096,7 +6096,7 @@ msgstr "SMD"
 
 #: pcbnew/class_pad.cpp:889
 msgid "Conn"
-msgstr "Connessione"
+msgstr "Conn"
 
 #: pcbnew/class_pad.cpp:892
 msgid "Not Plated"
@@ -19892,7 +19892,7 @@ msgstr "Carica file &Gerber "
 msgid ""
 "Load a new Gerber file on the current layer. Previous data will be deleted"
 msgstr ""
-"Carica un nuovo file Gerber nello strato corrente. I precedenti dati "
+"Carica un nuovo file Gerber nello strato corrente. I dati preesistenti "
 "verranno cancellati."
 
 #: gerbview/menubar.cpp:71
@@ -20227,7 +20227,7 @@ msgid ""
 "Load an excellon drill file on the current layer. Previous data will be "
 "deleted"
 msgstr ""
-"Carica un nuovo file Excellon nello strato corrente. I precedenti dati "
+"Carica un nuovo file Excellon nello strato corrente. I dati preesistenti "
 "verranno cancellati."
 
 #: gerbview/toolbars_gerber.cpp:70
