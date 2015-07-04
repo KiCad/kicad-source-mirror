@@ -3507,20 +3507,6 @@ bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, do
     IDF_POINT c[2];     // centers
     IDF_POINT pt[4];
 
-    // make sure the user isn't giving us dud information
-    if( aLength < aWidth )
-        std::swap( aLength, aWidth );
-
-    if( aLength == aWidth )
-    {
-        ostringstream ostr;
-        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-        ostr << "* slot length must not equal width";
-        errormsg = ostr.str();
-
-        return false;
-    }
-
     double a1 = aOrientation / 180.0 * M_PI;
     double a2 = a1 + M_PI_2;
     double d1 = aLength / 2.0;

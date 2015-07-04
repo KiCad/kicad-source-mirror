@@ -328,10 +328,19 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
                 // screen with a LH coordinate system
                 double angle = pad->GetOrientation() / 10.0;
 
+                // NOTE: Since this code assumes the scenario where
+                // GetDrillSize().y is the length but idf_parser.cpp
+                // assumes a length along the X axis, the orientation
+                // must be shifted +90 deg when GetDrillSize().y is
+                // the major axis.
+
                 if( dlength < drill )
                 {
                     std::swap( drill, dlength );
-                    angle += M_PI_2;
+                }
+                else
+                {
+                    angle += 90.0;
                 }
 
                 // NOTE: KiCad measures a slot's length from end to end
