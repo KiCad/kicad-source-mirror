@@ -144,6 +144,10 @@ static struct hotkey_name_descr hotkeyNameList[] =
 // so the code using WXK_CONTROL should be ok on any system.
 // (on Mac OS X the actual Ctrl key code is WXK_RAW_CONTROL)
 #ifdef __WXMAC__
+#define USING_MAC_CMD
+#endif
+
+#ifdef USING_MAC_CMD
 #define MODIFIER_CTRL       wxT( "Cmd+" )
 #else
 #define MODIFIER_CTRL       wxT( "Ctrl+" )
@@ -274,6 +278,12 @@ wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList,
         }
     }
 
+#ifdef USING_MAC_CMD
+    // On OSX, the modifier euqivalent to the Ctrl key of PCs
+    // is the Cmd key, but in code we should use Ctrl as prefix in menus
+    msg.Replace( MODIFIER_CMD_MAC, MODIFIER_CTRL_BASE );
+#endif
+
     return msg;
 }
 
@@ -325,6 +335,12 @@ wxString AddHotkeyName( const wxString&           aText,
             }
         }
     }
+
+#ifdef USING_MAC_CMD
+    // On OSX, the modifier euqivalent to the Ctrl key of PCs
+    // is the Cmd key, but in code we should use Ctrl as prefix in menus
+    msg.Replace( MODIFIER_CMD_MAC, MODIFIER_CTRL_BASE );
+#endif
 
     return msg;
 }
