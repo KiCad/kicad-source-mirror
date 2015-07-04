@@ -107,10 +107,10 @@ struct WXSTRING_HASH : std::unary_function<wxString, std::size_t>
 
         for( wxString::const_iterator it = aString.begin(); it != aString.end(); ++it )
         {
-            hash ^= (unsigned char) *it;
+            unsigned ch = static_cast<unsigned>( *it );
+            hash ^= ch;
             hash *= 16777619;
         }
-
         return hash;
     }
 };

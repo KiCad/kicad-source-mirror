@@ -354,7 +354,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         if( bufferPolys.GetCornersCount() == 0 )
             continue;
 
-#if 0   // Set to 1 to use boost::polygon to subtract holes to copper areas
+#if 1   // Set to 1 to use boost::polygon to subtract holes to copper areas
         // (due to bugs in boost::polygon, this is deprecated and Clipper is used instead
         KI_POLYGON_SET  currLayerPolyset;
         KI_POLYGON_SET  polysetHoles;
