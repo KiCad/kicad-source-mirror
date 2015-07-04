@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-04 22:59+0100\n"
-"PO-Revision-Date: 2015-07-04 22:59+0100\n"
+"POT-Creation-Date: 2015-07-04 23:10+0100\n"
+"PO-Revision-Date: 2015-07-04 23:11+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -3785,7 +3785,7 @@ msgstr "&Inserisci"
 #: pcbnew/menubar_modedit.cpp:362 pcbnew/menubar_pcbframe.cpp:660
 #: eeschema/menubar.cpp:513 eeschema/menubar_libedit.cpp:287
 msgid "P&references"
-msgstr "&Opzioni"
+msgstr "P&referenze"
 
 #: pcbnew/menubar_modedit.cpp:363
 msgid "Di&mensions"
