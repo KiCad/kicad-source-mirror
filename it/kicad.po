@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-04 13:43+0100\n"
-"PO-Revision-Date: 2015-07-04 13:43+0100\n"
+"POT-Creation-Date: 2015-07-04 22:59+0100\n"
+"PO-Revision-Date: 2015-07-04 22:59+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -4448,7 +4448,7 @@ msgstr "Cancella corrente scheda e caricane una nuova"
 
 #: pcbnew/menubar_pcbframe.cpp:95
 msgid "Open a recent opened board"
-msgstr "Apri recente scheda "
+msgstr "Apri scheda aperta recentemente"
 
 #: pcbnew/menubar_pcbframe.cpp:100
 msgid "&Append Board"
@@ -6584,8 +6584,8 @@ msgstr ""
 "Esportazione VRML fallita:\n"
 "Impossibile aggiungere fori ai contorni."
 
-#: pcbnew/exporters/export_vrml.cpp:1435 pcbnew/exporters/export_idf.cpp:576
-#: pcbnew/exporters/export_idf.cpp:585 pcbnew/exporters/export_idf.cpp:593
+#: pcbnew/exporters/export_vrml.cpp:1435 pcbnew/exporters/export_idf.cpp:585
+#: pcbnew/exporters/export_idf.cpp:594 pcbnew/exporters/export_idf.cpp:602
 msgid "IDF Export Failed:\n"
 msgstr "Esportazione IDF fallita:\n"
 
@@ -13628,56 +13628,56 @@ msgstr "Grassetto+corsivo"
 msgid "Marker Info"
 msgstr "Info marcatore"
 
-#: common/hotkeys_basic.cpp:448 common/hotkeys_basic.cpp:477
-#: common/hotkeys_basic.cpp:481
+#: common/hotkeys_basic.cpp:464 common/hotkeys_basic.cpp:493
+#: common/hotkeys_basic.cpp:497
 msgid "Hotkeys List"
 msgstr "Tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:745
+#: common/hotkeys_basic.cpp:761
 msgid "Read Hotkey Configuration File:"
 msgstr "Leggi file configurazione tasti scorciatoia:"
 
-#: common/hotkeys_basic.cpp:775
+#: common/hotkeys_basic.cpp:791
 msgid "Write Hotkey Configuration File:"
 msgstr "Salva file configurazione tasti scorciatoia:"
 
-#: common/hotkeys_basic.cpp:803
+#: common/hotkeys_basic.cpp:819
 msgid "&List Current Keys"
 msgstr "E&lenco tasti correnti"
 
-#: common/hotkeys_basic.cpp:804
+#: common/hotkeys_basic.cpp:820
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Mostra i tasti scorciatoia e i comandi corrispondenti correnti"
 
-#: common/hotkeys_basic.cpp:809
+#: common/hotkeys_basic.cpp:825
 msgid "&Edit Hotkeys"
 msgstr "&Modifica tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:810
+#: common/hotkeys_basic.cpp:826
 msgid "Call the hotkeys editor"
 msgstr "Apri editor tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:817
+#: common/hotkeys_basic.cpp:833
 msgid "E&xport Hotkeys"
 msgstr "E&sporta tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:818
+#: common/hotkeys_basic.cpp:834
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr "Crea file tasti scorciatoia per esportare la configurazione corrente"
 
-#: common/hotkeys_basic.cpp:823
+#: common/hotkeys_basic.cpp:839
 msgid "&Import Hotkeys"
 msgstr "&Importa tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:824
+#: common/hotkeys_basic.cpp:840
 msgid "Load an existing hotkey configuration file"
 msgstr "Carica file configurazione tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:829
+#: common/hotkeys_basic.cpp:845
 msgid "&Hotkeys"
 msgstr "&Tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:830
+#: common/hotkeys_basic.cpp:846
 msgid "Hotkeys configuration and preferences"
 msgstr "Configurazione e preferenze tasti scorciatoia"
 
@@ -18168,7 +18168,7 @@ msgstr "A&spetto"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:22
 msgid "Component library files"
-msgstr "Librerie"
+msgstr "File librerie componenti"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:30
 msgid ""
@@ -18197,7 +18197,7 @@ msgstr "Non caricare la libreria selezionata"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:71
 msgid "User defined search path"
-msgstr "Lista utente dei percorsi ricercati "
+msgstr "Percorsi di ricerca definiti dall'utente"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:79
 msgid ""
@@ -18209,7 +18209,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:108
 msgid "Current search path list"
-msgstr "Lista dei percorsi ricercati"
+msgstr "Elenco percorsi di ricerca corrente"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:113
 msgid ""
@@ -18217,8 +18217,8 @@ msgid ""
 "doc files.\n"
 "Sorted by decreasing priority order."
 msgstr ""
-"Percorsi (predefiniti e personalizzati) utilizzati per caricare le librerie "
-"e le specifiche dei componenti.\n"
+"Percorsi di sistema e utente utilizzati per caricare le librerie e le "
+"specifiche dei componenti.\n"
 "Elencati in ordine decrescente di priorità."
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:123
@@ -19614,6 +19614,24 @@ msgstr "Mostra strati &commenti ed grafica"
 msgid "Show &Eco Layers"
 msgstr "Mostra gli strati &eco"
 
+#: 3d-viewer/3d_draw_board_body.cpp:175 3d-viewer/3d_draw_board_body.cpp:548
+msgid ""
+"Unable to calculate the board outlines.\n"
+"Therefore use the board boundary box."
+msgstr ""
+"Impossibile calcolare i contorni della scheda.\n"
+"Perciò usa il riquadro delimitatore scheda."
+
+#: 3d-viewer/3d_draw_board_body.cpp:213 3d-viewer/3d_draw_board_body.cpp:609
+#: 3d-viewer/3d_draw.cpp:661
+#, c-format
+msgid "Build layer %s"
+msgstr "Costruisci lo strato %s"
+
+#: 3d-viewer/3d_draw_board_body.cpp:434
+msgid "Build board body"
+msgstr "Costruisci il corpo scheda"
+
 #: 3d-viewer/3d_frame.cpp:534
 msgid "Background Color, Bottom"
 msgstr "Colore di sfondo, basso"
@@ -19635,25 +19653,7 @@ msgstr "Colore rame"
 msgid "Build time %.3f s"
 msgstr "Tempo di costruzione %.3f s"
 
-#: 3d-viewer/3d_draw.cpp:735 3d-viewer/3d_draw.cpp:1089
-msgid ""
-"Unable to calculate the board outlines.\n"
-"Therefore use the board boundary box."
-msgstr ""
-"Impossibile calcolare i contorni della scheda.\n"
-"Perciò usa il riquadro delimitatore scheda."
-
-#: 3d-viewer/3d_draw.cpp:773 3d-viewer/3d_draw.cpp:1150
-#: 3d-viewer/3d_draw.cpp:1323
-#, c-format
-msgid "Build layer %s"
-msgstr "Costruisci lo strato %s"
-
-#: 3d-viewer/3d_draw.cpp:975
-msgid "Build board body"
-msgstr "Costruisci il corpo scheda"
-
-#: 3d-viewer/3d_draw.cpp:1590
+#: 3d-viewer/3d_draw.cpp:992
 msgid "Load 3D Shapes"
 msgstr "Carica forme 3D"
 
@@ -19878,15 +19878,15 @@ msgstr "Informazioni piazzole strato saldature (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:150
 msgid "Open Gerber File"
-msgstr "Apri Gerber file"
+msgstr "Apri file Gerber"
 
 #: gerbview/files.cpp:232
 msgid "Open Drill File"
-msgstr "Apri file di foratura"
+msgstr "Apri file forature"
 
 #: gerbview/menubar.cpp:64
 msgid "Load &Gerber File"
-msgstr "Carica file &Gerber "
+msgstr "Carica file &Gerber"
 
 #: gerbview/menubar.cpp:65 gerbview/toolbars_gerber.cpp:62
 msgid ""
@@ -19897,27 +19897,27 @@ msgstr ""
 
 #: gerbview/menubar.cpp:71
 msgid "Load &EXCELLON Drill File"
-msgstr "Carica file &Excellon"
+msgstr "Carica file forature &Excellon"
 
 #: gerbview/menubar.cpp:72
 msgid "Load excellon drill file"
-msgstr "Carica file Excellon"
+msgstr "Carica file forature Excellon"
 
 #: gerbview/menubar.cpp:90
 msgid "Open &Recent Gerber File"
-msgstr "Apri &recente"
+msgstr "Apri file Gerber &recente"
 
 #: gerbview/menubar.cpp:91
 msgid "Open a recent opened Gerber file"
-msgstr "Apri recente "
+msgstr "Apri file Gerber aperto recentemente"
 
 #: gerbview/menubar.cpp:105
 msgid "Open Recent Dri&ll File"
-msgstr "Apri recente file di fora&tura"
+msgstr "Apri fi&le forature recente"
 
 #: gerbview/menubar.cpp:106
 msgid "Open a recent opened drill file"
-msgstr "Apri recente file di foratura "
+msgstr "Apri file forature aperto recentemente"
 
 #: gerbview/menubar.cpp:115
 msgid "Clear &All"
@@ -20304,30 +20304,30 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:215 pcbnew/help_common_strings.h:24
 msgid "Show/hide the layers manager toolbar"
-msgstr "Mostra/Nascondi Gestione livelli"
+msgstr "Mostra/nascondi gestione livelli"
 
 #: gerbview/toolbars_gerber.cpp:287
 msgid "Hide layers manager"
-msgstr "Nascondi Gestione livelli"
+msgstr "Nascondi gestione livelli"
 
 #: gerbview/toolbars_gerber.cpp:289
 msgid "Show layers manager"
-msgstr "Mostra Gestione strati"
+msgstr "Mostra gestione strati"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:89
 msgid ""
 "Choose if you want to print sheets in color, or force the black and white "
 "mode."
-msgstr "Scegliere se si vuole stampare a colori o forzare in bianco e nero."
+msgstr "Scegliere se si vuole stampare a colori o in modalità bianco e nero."
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
 msgid "Full size. Do not show page limits"
-msgstr "Non mostrare la squadratura"
+msgstr "Dimensioni intere. Non mostrare i limiti di pagina"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Full size"
-msgstr "Mostra la squadratura"
+msgstr "Dimensioni intere"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
@@ -20361,7 +20361,7 @@ msgstr "Formato C"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:27
 msgid "Show Page Limits:"
-msgstr "Imposta pagina:"
+msgstr "Mostra i limiti di pagina:"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:37
 msgid "Large"
@@ -20369,7 +20369,7 @@ msgstr "Esteso"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:43
 msgid "Show D codes"
-msgstr "Mostra codici D:"
+msgstr "Mostra D code"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Full size without limits"
@@ -20422,11 +20422,11 @@ msgstr "16 Strati"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:80
 msgid "Store Choice"
-msgstr "Memorizza scelta"
+msgstr "Memorizza scelte"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
 msgid "Get Stored Choice"
-msgstr "Mantieni le informazioni correnti"
+msgstr "Carica scelte memorizzate"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:113
 #: pcbnew/dialogs/dialog_layer_selection_base.h:50
@@ -20484,7 +20484,7 @@ msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:121
 msgid "Load Bitmap"
-msgstr "Carica immagine"
+msgstr "Carica bitmap"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:125
 msgid ""
@@ -20518,7 +20518,7 @@ msgstr "Valore di soglia:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Aggiusta il livello di conversione da scala di grigi a bianco e nero"
+msgstr "Regola il livello di conversione da scala di grigi a bianco e nero"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid "User layer Eco1"
@@ -20568,50 +20568,50 @@ msgstr "Crea un file impronta per PcbNew"
 
 #: new/sch_sweet_parser.cpp:338
 msgid "invalid extends LPID"
-msgstr "?Extends' LPID non valida"
+msgstr "extends LPID non validi"
 
 #: new/sch_sweet_parser.cpp:354
 msgid "'extends' may not have self as any ancestor"
-msgstr "'extends' potrebbe non avere se stessa come precedente"
+msgstr "'extends' potrebbe non avere se stessa come antenato"
 
 #: new/sch_sweet_parser.cpp:364
 msgid "max allowed extends depth exceeded"
-msgstr "Massima profondità consentita 'extends' eccedente"
+msgstr "massima profondità consentita 'extends' eccedente"
 
 #: new/sch_sweet_parser.cpp:392
 msgid "invalid alternates LPID"
-msgstr "Alternativa LPID non valida"
+msgstr "alternativa LPID non valida"
 
 #: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
 #: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
 #: new/sch_sweet_parser.cpp:821
 msgid "undefined pin"
-msgstr "Piedino indefinito"
+msgstr "piedino indefinito"
 
 #: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
 #, c-format
 msgid "undefined pin %s"
-msgstr "Piedino indefinito %s"
+msgstr "piedino indefinito %s"
 
 #: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
 #, c-format
 msgid "pin %s already in pin_merge group %s"
-msgstr "Piedino  %s già presente nel gruppo %s"
+msgstr "piedino  %s già presente nel gruppo pin_merge %s"
 
 #: new/sch_sweet_parser.cpp:903
 #, c-format
 msgid "no pins with signal %s"
-msgstr "Nessun piedino con il segnale %s"
+msgstr "nessun piedino con il segnale %s"
 
 #: new/sch_sweet_parser.cpp:915
 #, c-format
 msgid "signal pin %s already in pin_merge group %s"
-msgstr "Piedino di segnale %s già presente nel gruppo %s"
+msgstr "piedino di segnale %s già presente nel gruppo %s"
 
 #: new/sch_sweet_parser.cpp:998
 #, c-format
 msgid "Unable to find property: %s"
-msgstr "Impossibile trovare le proprietà: %s"
+msgstr "Impossibile trovare la proprietà: %s"
 
 #: new/sch_lpid.cpp:208
 msgid "Illegal character found in LPID string"
@@ -20639,12 +20639,12 @@ msgstr "Parte visiva"
 
 #: new/sweet_editor_panel.cpp:59
 msgid "Parsing Errors"
-msgstr "Errore Parsing"
+msgstr "Errori di analisi"
 
 #: new/sch_lib.cpp:237
 #, c-format
 msgid "part '%s' not found in lib %s"
-msgstr "Parte '%s' non trovata nella libreria %s"
+msgstr "parte '%s' non trovata nella libreria %s"
 
 #: pcb_calculator/transline_ident.cpp:138
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:623
@@ -20662,7 +20662,7 @@ msgstr "TanD"
 
 #: pcb_calculator/transline_ident.cpp:141
 msgid "Tangent delta: dielectric loss factor."
-msgstr "Tangente Delta: Fattore di perdita del dielettrico"
+msgstr "Tangente delta: fattore di perdita del dielettrico."
 
 #: pcb_calculator/transline_ident.cpp:146
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:645
@@ -20674,7 +20674,7 @@ msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(Ohm*meter)"
 msgstr ""
-"Resistività elettrica o resistenza specifica del conduttore (Hom*Metro)"
+"Resistività elettrica o resistenza specifica del conduttore (Ohm*metro)"
 
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:751
@@ -20727,7 +20727,7 @@ msgstr "Perdite del dielettrico"
 #: pcb_calculator/transline_ident.cpp:369
 #: pcb_calculator/transline_ident.cpp:402
 msgid "Skin Depth"
-msgstr "Profondità Effetto pelle"
+msgstr "Profondità effetto pelle"
 
 #: pcb_calculator/transline_ident.cpp:166
 #: pcb_calculator/transline_ident.cpp:203
@@ -20764,7 +20764,7 @@ msgstr "T"
 #: pcb_calculator/transline_ident.cpp:340
 #: pcb_calculator/transline_ident.cpp:377
 msgid "Strip Thickness"
-msgstr "Spessore linea"
+msgstr "Spessore strip"
 
 #: pcb_calculator/transline_ident.cpp:172
 #: pcb_calculator/transline_ident.cpp:342
