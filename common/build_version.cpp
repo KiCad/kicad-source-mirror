@@ -25,17 +25,14 @@
 /* Date for KiCad build version */
 #include <fctsys.h>
 
-#ifdef HAVE_SVN_VERSION
-#include <version.h>    // define the KICAD_BUILD_VERSION
-#endif
+// The include file version.h is always created even if the repo version cannot be
+// determined.  In this case KICAD_BUILD_VERSION will default to "no-bzr".
+#include <version.h>
 
-#ifndef KICAD_BUILD_VERSION
-#   define KICAD_BUILD_VERSION "(after 2015-may-25 BZR unknown)"
-#endif
 
 /**
  * Function GetBuildVersion
- * Return the build date and version
+ * Return the build version string.
  */
 wxString GetBuildVersion()
 {
