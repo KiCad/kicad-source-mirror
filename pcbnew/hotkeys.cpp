@@ -132,11 +132,23 @@ static EDA_HOTKEY HkSetGridOrigin( _HKI( "Set Grid Origin" ), HK_SET_GRID_ORIGIN
 static EDA_HOTKEY HkResetGridOrigin( _HKI( "Reset Grid Origin" ), HK_RESET_GRID_ORIGIN, 'Z' );
 
 static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Default Canvas" ),
-                                   HK_CANVAS_DEFAULT, WXK_F9 );
+                                   HK_CANVAS_DEFAULT,
+#ifdef __WXMAC__
+                                   GR_KB_ALT +
+#endif
+                                   WXK_F9 );
 static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to OpenGL Canvas" ),
-                                  HK_CANVAS_OPENGL, WXK_F11 );
+                                  HK_CANVAS_OPENGL,
+#ifdef __WXMAC__
+                                  GR_KB_ALT +
+#endif
+                                  WXK_F11 );
 static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Cairo Canvas" ),
-                                 HK_CANVAS_CAIRO, WXK_F12 );
+                                 HK_CANVAS_CAIRO,
+#ifdef __WXMAC__
+                                 GR_KB_ALT +
+#endif
+                                 WXK_F12 );
 
 static EDA_HOTKEY HkZoneFillOrRefill( _HKI( "Fill or Refill All Zones" ),
                                  HK_ZONE_FILL_OR_REFILL, 'B' );
