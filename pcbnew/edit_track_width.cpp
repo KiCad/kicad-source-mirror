@@ -85,7 +85,6 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         if( net )
         {
             new_width = net->GetViaSize();
-            new_drill = GetDesignSettings().GetCurrentViaDrill();
             new_drill = net->GetViaDrillSize();
         }
         else

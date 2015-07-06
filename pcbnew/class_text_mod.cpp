@@ -291,7 +291,8 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
     // shade text if high contrast mode is active
-    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
+    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) && displ_opts &&
+        displ_opts->m_ContrastModeDisplay )
     {
         LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 

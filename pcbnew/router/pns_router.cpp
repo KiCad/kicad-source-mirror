@@ -205,7 +205,6 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
     solid->SetPos( c );
 
     double orient = aPad->GetOrientation() / 10.0;
-    bool nonOrtho = false;
 
     if( aPad->GetShape() == PAD_CIRCLE )
     {
