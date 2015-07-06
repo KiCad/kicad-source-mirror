@@ -37,49 +37,52 @@
 
 using namespace ClipperLib;
 
-int SHAPE_POLY_SET::NewOutline ()
+int SHAPE_POLY_SET::NewOutline()
 {
     Path empty_path;
     Paths poly;
-    poly.push_back(empty_path);
-    m_polys.push_back(poly);
+    poly.push_back( empty_path );
+    m_polys.push_back( poly );
     return m_polys.size() - 1;
 }
 
+
 int SHAPE_POLY_SET::NewHole( int aOutline )
 {
-    assert(false);
+    assert( false );
     return -1;
 }
 
-int SHAPE_POLY_SET::AppendVertex ( int x, int y, int aOutline, int aHole )
+
+int SHAPE_POLY_SET::AppendVertex( int x, int y, int aOutline, int aHole )
 {
-    if(aOutline < 0)
+    if( aOutline < 0 )
         aOutline += m_polys.size();
 
     int idx;
 
-    if(aHole < 0)
+    if( aHole < 0 )
         idx = 0;
     else
         idx = aHole + 1;
 
-    assert ( aOutline < (int)m_polys.size() );
-    assert ( idx < (int)m_polys[aOutline].size() );
+    assert( aOutline < (int)m_polys.size() );
+    assert( idx < (int)m_polys[aOutline].size() );
 
     m_polys[aOutline][idx].push_back( IntPoint( x, y ) );
 
     return m_polys[aOutline][idx].size();
 }
 
-int SHAPE_POLY_SET::VertexCount ( int aOutline , int aHole  ) const
+
+int SHAPE_POLY_SET::VertexCount( int aOutline, int aHole ) const
 {
-    if(aOutline < 0)
+    if( aOutline < 0 )
         aOutline += m_polys.size();
 
     int idx;
 
-    if(aHole < 0)
+    if( aHole < 0 )
         idx = 0;
     else
         idx = aHole + 1;
@@ -90,34 +93,36 @@ int SHAPE_POLY_SET::VertexCount ( int aOutline , int aHole  ) const
     return m_polys[aOutline][idx].size();
 }
 
-const VECTOR2I SHAPE_POLY_SET::GetVertex ( int index, int aOutline , int aHole ) const
+
+const VECTOR2I SHAPE_POLY_SET::GetVertex( int index, int aOutline, int aHole ) const
 {
-    if(aOutline < 0)
+    if( aOutline < 0 )
         aOutline += m_polys.size();
 
     int idx;
 
-    if(aHole < 0)
+    if( aHole < 0 )
         idx = 0;
     else
         idx = aHole + 1;
 
-    assert ( aOutline < (int)m_polys.size() );
-    assert ( idx < (int)m_polys[aOutline].size() );
+    assert( aOutline < (int)m_polys.size() );
+    assert( idx < (int)m_polys[aOutline].size() );
 
     IntPoint p = m_polys[aOutline][idx][index];
     return VECTOR2I (p.X, p.Y);
 }
 
+
 int SHAPE_POLY_SET::AddOutline( const SHAPE_LINE_CHAIN& aOutline )
 {
-    assert ( aOutline.IsClosed() );
+    assert( aOutline.IsClosed() );
 
-    Path p = convert ( aOutline );
+    Path p = convert( aOutline );
     Paths poly;
 
     if( !Orientation( p ) )
-        ReversePath(p); // outlines are always CW
+        ReversePath( p ); // outlines are always CW
 
     poly.push_back( p );
 
@@ -126,37 +131,42 @@ int SHAPE_POLY_SET::AddOutline( const SHAPE_LINE_CHAIN& aOutline )
     return m_polys.size() - 1;
 }
 
-int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline  )
+
+int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
 {
     assert ( m_polys.size() );
-    if(aOutline < 0)
+
+    if( aOutline < 0 )
         aOutline += m_polys.size();
 
-    Paths& poly = m_polys[ aOutline ];
+    Paths& poly = m_polys[aOutline];
 
-    assert ( poly.size() );
+    assert( poly.size() );
 
-    Path p = convert ( aHole );
+    Path p = convert( aHole );
+
     if( Orientation( p ) )
-        ReversePath(p); // holes are always CCW
+        ReversePath( p ); // holes are always CCW
 
     poly.push_back( p );
 
     return poly.size() - 1;
 }
 
+
 const ClipperLib::Path SHAPE_POLY_SET::convert( const SHAPE_LINE_CHAIN& aPath )
 {
     Path c_path;
 
-    for(int i = 0; i < aPath.PointCount(); i++)
+    for( int i = 0; i < aPath.PointCount(); i++ )
     {
-        const VECTOR2I& vertex = aPath.CPoint(i);
-        c_path.push_back(ClipperLib::IntPoint ( vertex.x, vertex.y ) );
+        const VECTOR2I& vertex = aPath.CPoint( i );
+        c_path.push_back( ClipperLib::IntPoint( vertex.x, vertex.y ) );
     }
 
     return c_path;
 }
+
 
 void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType type, const SHAPE_POLY_SET& b )
 {
@@ -164,27 +174,29 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType type, const SHAPE_POLY_SET&
 
     c.StrictlySimple( true );
 
-    BOOST_FOREACH ( Paths& subject, m_polys )
+    BOOST_FOREACH( Paths& subject, m_polys )
     {
-         c.AddPaths(subject, ptSubject, true);
+         c.AddPaths( subject, ptSubject, true );
     }
 
-    BOOST_FOREACH ( const Paths& clip, b.m_polys )
+    BOOST_FOREACH( const Paths& clip, b.m_polys )
     {
-        c.AddPaths(clip, ptClip, true);
+        c.AddPaths( clip, ptClip, true );
     }
 
     PolyTree solution;
 
-    c.Execute(type, solution, pftNonZero, pftNonZero);
+    c.Execute( type, solution, pftNonZero, pftNonZero );
 
-    importTree(&solution);
+    importTree( &solution );
 }
+
 
 void SHAPE_POLY_SET::Add( const SHAPE_POLY_SET& b )
 {
     booleanOp( ctUnion, b );
 }
+
 
 void SHAPE_POLY_SET::Subtract( const SHAPE_POLY_SET& b )
 {
@@ -192,7 +204,7 @@ void SHAPE_POLY_SET::Subtract( const SHAPE_POLY_SET& b )
 }
 
 
-void SHAPE_POLY_SET::Erode ( int aFactor )
+void SHAPE_POLY_SET::Erode( int aFactor )
 {
     ClipperOffset c;
 
@@ -201,289 +213,264 @@ void SHAPE_POLY_SET::Erode ( int aFactor )
 
     PolyTree solution;
 
-    c.Execute ( solution, aFactor );
+    c.Execute( solution, aFactor );
 
     m_polys.clear();
 
-    for (PolyNode *n = solution.GetFirst(); n; n = n->GetNext() )
+    for( PolyNode* n = solution.GetFirst(); n; n = n->GetNext() )
     {
         Paths ps;
-        ps.push_back(n->Contour);
-        m_polys.push_back(ps);
+        ps.push_back( n->Contour );
+        m_polys.push_back( ps );
     }
 }
 
-void SHAPE_POLY_SET::importTree ( ClipperLib::PolyTree* tree)
+
+void SHAPE_POLY_SET::importTree( ClipperLib::PolyTree* tree )
 {
     m_polys.clear();
 
-    for (PolyNode *n = tree->GetFirst(); n; n = n->GetNext() )
+    for( PolyNode* n = tree->GetFirst(); n; n = n->GetNext() )
     {
         if( !n->IsHole() )
         {
             Paths paths;
-            paths.push_back(n->Contour);
+            paths.push_back( n->Contour );
 
-            for (unsigned i = 0; i < n->Childs.size(); i++)
-                paths.push_back(n->Childs[i]->Contour);
-            m_polys.push_back(paths);
+            for( unsigned i = 0; i < n->Childs.size(); i++ )
+                paths.push_back( n->Childs[i]->Contour );
+
+            m_polys.push_back( paths );
         }
     }
 }
 
-// Polygon fracturing code. Work in progress.
 
+// Polygon fracturing code. Work in progress.
 struct FractureEdge
 {
-    FractureEdge(bool connected, Path* owner, int index) :
-        m_connected(connected),
-        m_owner(owner),
-        m_next(NULL)
+    FractureEdge( bool connected, Path* owner, int index ) :
+        m_connected( connected ),
+        m_next( NULL )
     {
         m_p1 = (*owner)[index];
         m_p2 = (*owner)[(index + 1) % owner->size()];
     }
 
-    FractureEdge(int64_t y = 0) :
-        m_connected(false),
-        m_owner(NULL),
-        m_next(NULL)
+    FractureEdge( int64_t y = 0 ) :
+        m_connected( false ),
+        m_next( NULL )
     {
         m_p1.Y = m_p2.Y = y;
     }
 
-    FractureEdge(bool connected, const IntPoint& p1, const IntPoint& p2) :
-        m_connected(connected),
-        m_owner(NULL),
-        m_p1(p1),
-        m_p2(p2),
-        m_next(NULL)
+    FractureEdge( bool connected, const IntPoint& p1, const IntPoint& p2 ) :
+        m_connected( connected ),
+        m_p1( p1 ),
+        m_p2( p2 ),
+        m_next( NULL )
     {
-
     }
 
-    bool matches ( int y ) const
+    bool matches( int y ) const
     {
-        int y_min = std::min(m_p1.Y, m_p2.Y);
-        int y_max = std::max(m_p1.Y, m_p2.Y);
+        int y_min = std::min( m_p1.Y, m_p2.Y );
+        int y_max = std::max( m_p1.Y, m_p2.Y );
 
-        return (y >= y_min) && (y <= y_max);
+        return ( y >= y_min ) && ( y <= y_max );
     }
 
     bool m_connected;
-    Path* m_owner;
     IntPoint m_p1, m_p2;
-    FractureEdge *m_next;
+    FractureEdge* m_next;
 };
 
-struct CompareEdges
-{
-    bool operator()(const FractureEdge *a, const FractureEdge *b) const
-    {
-       if( std::min(a->m_p1.Y, a->m_p2.Y) < std::min(b->m_p1.Y, b->m_p2.Y) )
-            return true;
-       return false;
-    }
-};
 
 typedef std::vector<FractureEdge*> FractureEdgeSet;
 
-static int processEdge ( FractureEdgeSet& edges, FractureEdge* edge )
+static int processEdge( FractureEdgeSet& edges, FractureEdge* edge )
 {
-    int n  = 0;
     int64_t x = edge->m_p1.X;
     int64_t y = edge->m_p1.Y;
+    int64_t min_dist = std::numeric_limits<int64_t>::max();
+    int64_t x_nearest = 0;
 
+    FractureEdge* e_nearest = NULL;
 
-    int64_t min_dist_l = std::numeric_limits<int64_t>::max();
-    int64_t min_dist_r = std::numeric_limits<int64_t>::max();
-    int64_t x_nearest_l = 0, x_nearest_r = 0, x_nearest;
-
- // fixme: search edges in sorted multiset
- // FractureEdge comp_min( std::min(edge->m_p1.Y, edge->m_p2.Y) );
- // FractureEdgeSet::iterator e_begin = edges.lower_bound ( &comp_min );
-
-    FractureEdgeSet::iterator e_nearest_l = edges.end(), e_nearest_r = edges.end(), e_nearest;
-
-
-    for(FractureEdgeSet::iterator i = edges.begin() ; i != edges.end(); ++i)
+    for( FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
     {
-        n++;
-        if( (*i)->matches(y) )
+        if( !(*i)->matches( y ) )
+            continue;
+
+        int64_t x_intersect;
+
+        if( (*i)->m_p1.Y == (*i)->m_p2.Y ) // horizontal edge
+            x_intersect = std::max( (*i)->m_p1.X, (*i)->m_p2.X );
+        else
+            x_intersect = (*i)->m_p1.X + rescale((*i)->m_p2.X - (*i)->m_p1.X,
+                                                 y - (*i)->m_p1.Y,   (*i)->m_p2.Y - (*i)->m_p1.Y );
+
+        int64_t dist = ( x - x_intersect );
+
+        if( dist > 0 && dist < min_dist )
         {
-            int64_t x_intersect;
-            if( (*i)->m_p1.Y == (*i)->m_p2.Y ) // horizontal edge
-                x_intersect = std::max ( (*i)->m_p1.X, (*i)->m_p2.X );
-            else
-                x_intersect = (*i)->m_p1.X + rescale((*i)->m_p2.X - (*i)->m_p1.X,   y - (*i)->m_p1.Y,   (*i)->m_p2.Y - (*i)->m_p1.Y );
-
-            int64_t dist = (x - x_intersect);
-
-            if(dist > 0 && dist < min_dist_l)
-            {
-                min_dist_l = dist;
-                x_nearest_l = x_intersect;
-                e_nearest_l = i;
-            }
-
-            if(dist <= 0 && (-dist) < min_dist_r)
-            {
-                min_dist_r = -dist;
-                x_nearest_r = x_intersect;
-                e_nearest_r = i;
-            }
+            min_dist = dist;
+            x_nearest = x_intersect;
+            e_nearest = (*i);
         }
     }
 
-    if(e_nearest_l != edges.end() || e_nearest_r != edges.end())
+    if( e_nearest && e_nearest->m_connected )
     {
-        if( e_nearest_l !=edges.end() && ( (*e_nearest_l)->m_connected || ((*e_nearest_l) ->m_owner != edge->m_owner )))
-        {
-            e_nearest = e_nearest_l;
-            x_nearest = x_nearest_l;
-        }
-        else if( e_nearest_r !=edges.end() && ( (*e_nearest_r)->m_connected || ((*e_nearest_r) ->m_owner != edge->m_owner ) )) {
-            e_nearest = e_nearest_r;
-            x_nearest = x_nearest_r;
-        }
-        else
-            return 0;
+        int count = 0;
 
-        bool connFlag = (*e_nearest)->m_connected;
+        FractureEdge* lead1 = new FractureEdge( true, IntPoint( x_nearest, y), IntPoint( x, y ) );
+        FractureEdge* lead2 = new FractureEdge( true, IntPoint( x, y), IntPoint( x_nearest, y ) );
+        FractureEdge* split_2 = new FractureEdge( true, IntPoint( x_nearest, y ), e_nearest->m_p2 );
 
-        FractureEdge split_1 ( connFlag, (*e_nearest)->m_p1, IntPoint(x_nearest, y) );
-        FractureEdge *lead1 = new FractureEdge( connFlag, IntPoint(x_nearest, y), IntPoint(x, y) );
-        FractureEdge *lead2 = new FractureEdge( connFlag, IntPoint(x, y), IntPoint(x_nearest, y) );
-        FractureEdge *split_2 = new FractureEdge ( connFlag, IntPoint(x_nearest, y), (*e_nearest)->m_p2 );
+        edges.push_back( split_2 );
+        edges.push_back( lead1 );
+        edges.push_back( lead2 );
 
-        edges.push_back(split_2);
-        edges.push_back(lead1);
-        edges.push_back(lead2);
+        FractureEdge* link = e_nearest->m_next;
 
-        FractureEdge* link = (*e_nearest)->m_next;
-
-        (*e_nearest)->m_p1 = split_1.m_p1;
-        (*e_nearest)->m_p2 = IntPoint(x_nearest, y);
-        (*e_nearest)->m_connected = connFlag;
-        (*e_nearest)->m_next = lead1;
+        e_nearest->m_p2 = IntPoint( x_nearest, y );
+        e_nearest->m_next = lead1;
         lead1->m_next = edge;
+        FractureEdge* last;
 
-        FractureEdge *last;
-        for(last = edge; last->m_next != edge; last = last->m_next)
+        for( last = edge; last->m_next != edge; last = last->m_next )
         {
-            last->m_connected = connFlag;
-            last->m_owner = NULL;
+            last->m_connected = true;
+            count++;
         }
 
-        last->m_owner = NULL;
-        last->m_connected = connFlag;
+        last->m_connected = true;
         last->m_next = lead2;
         lead2->m_next = split_2;
         split_2->m_next = link;
 
-        return 1;
+        return count + 1;
     }
 
     return 0;
 }
 
+
 void SHAPE_POLY_SET::fractureSingle( ClipperLib::Paths& paths )
 {
     FractureEdgeSet edges;
-    FractureEdge *root = NULL;
+    FractureEdgeSet border_edges;
+    FractureEdge* root = NULL;
 
     bool first = true;
 
-    if(paths.size() == 1)
+    if( paths.size() == 1 )
         return;
 
     int num_unconnected = 0;
 
-    BOOST_FOREACH(Path& path, paths)
+    BOOST_FOREACH( Path& path, paths )
     {
         int index = 0;
 
         FractureEdge *prev = NULL, *first_edge = NULL;
-        for(unsigned i = 0; i < path.size(); i++)
-        {
-            FractureEdge *fe = new FractureEdge ( first, &path, index++ );
 
-            if(!root)
+        int64_t x_min = std::numeric_limits<int64_t>::max();
+
+        for( unsigned i = 0; i < path.size(); i++ )
+        {
+            if( path[i].X < x_min )
+                x_min = path[i].X;
+        }
+
+        for( unsigned i = 0; i < path.size(); i++ )
+        {
+            FractureEdge* fe = new FractureEdge( first, &path, index++ );
+
+            if( !root )
                 root = fe;
 
-            if(!first_edge)
+            if( !first_edge )
                 first_edge = fe;
-            if(prev)
+
+            if( prev )
                 prev->m_next = fe;
 
-            if(i == path.size() - 1)
+            if( i == path.size() - 1 )
                 fe->m_next = first_edge;
 
             prev = fe;
-            edges.push_back ( fe );
+            edges.push_back( fe );
 
-            if(!fe->m_connected)
+            if( !first )
+            {
+                if( fe->m_p1.X == x_min )
+                    border_edges.push_back( fe );
+            }
+
+            if( !fe->m_connected )
                 num_unconnected++;
         }
 
         first = false; // first path is always the outline
     }
 
-    while(1)
+    // keep connecting holes to the main outline, until there's no holes left...
+    while( num_unconnected > 0 )
     {
-        int n_unconnected = 0;
+        int64_t x_min = std::numeric_limits<int64_t>::max();
+        FractureEdge* smallestX;
 
-        for(FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
+        // find the left-most hole edge and merge with the outline
+        for( FractureEdgeSet::iterator i = border_edges.begin(); i != border_edges.end(); ++i )
         {
-            if(!(*i)->m_connected)
-                n_unconnected++;
-        }
-
-        if(!n_unconnected)
-            break;
-
-        for(FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
-        {
-            if(!(*i)->m_connected)
+            int64_t xt = (*i)->m_p1.X;
+            if( ( xt < x_min ) && ! (*i)->m_connected )
             {
-                if (processEdge ( edges, *i ) )
-                    break;
+                x_min = xt;
+                smallestX = *i;
             }
         }
+
+        num_unconnected -= processEdge( edges, smallestX );
     }
 
     paths.clear();
     Path newPath;
-    FractureEdge *e;
+    FractureEdge* e;
 
-    for(e = root; e->m_next != root; e = e->m_next )
-        newPath.push_back(e->m_p1);
+    for( e = root; e->m_next != root; e = e->m_next )
+        newPath.push_back( e->m_p1 );
 
-    newPath.push_back(e->m_p1);
+    newPath.push_back( e->m_p1 );
 
-    for(FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
+    for( FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
         delete *i;
 
-    paths.push_back(newPath);
+    paths.push_back( newPath );
 }
 
-void SHAPE_POLY_SET::Fracture ()
+
+void SHAPE_POLY_SET::Fracture()
 {
-    BOOST_FOREACH(Paths& paths, m_polys)
+    BOOST_FOREACH( Paths& paths, m_polys )
     {
         fractureSingle( paths );
     }
 }
 
+
 void SHAPE_POLY_SET::Simplify()
 {
-    for (unsigned i = 0; i < m_polys.size(); i++)
+    for( unsigned i = 0; i < m_polys.size(); i++ )
     {
         Paths out;
-        SimplifyPolygons(m_polys[i], out, pftNonZero);
+        SimplifyPolygons( m_polys[i], out, pftNonZero );
         m_polys[i] = out;
     }
 }
+
 
 const std::string SHAPE_POLY_SET::Format() const
 {
@@ -494,9 +481,11 @@ const std::string SHAPE_POLY_SET::Format() const
     for( unsigned i = 0; i < m_polys.size(); i++ )
     {
         ss << "poly " << m_polys[i].size() << "\n";
+
         for( unsigned j = 0; j < m_polys[i].size(); j++)
         {
             ss << m_polys[i][j].size() << "\n";
+
             for( unsigned v = 0; v < m_polys[i][j].size(); v++)
                 ss << m_polys[i][j][v].X << " " << m_polys[i][j][v].Y << "\n";
         }
@@ -506,13 +495,14 @@ const std::string SHAPE_POLY_SET::Format() const
     return ss.str();
 }
 
+
 bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
 {
     std::string tmp;
 
     aStream >> tmp;
 
-    if(tmp != "polyset")
+    if( tmp != "polyset" )
         return false;
 
     aStream >> tmp;
@@ -525,9 +515,9 @@ bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
     for( int i = 0; i < n_polys; i++ )
     {
         ClipperLib::Paths paths;
-
         aStream >> tmp;
-        if(tmp != "poly")
+
+        if( tmp != "poly" )
             return false;
 
         aStream >> tmp;
@@ -546,16 +536,18 @@ bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
             {
                 ClipperLib::IntPoint p;
 
-                aStream >> tmp; p.X = atoi ( tmp.c_str() );
-                aStream >> tmp; p.Y = atoi ( tmp.c_str() );
-                outline.push_back(p);
+                aStream >> tmp; p.X = atoi( tmp.c_str() );
+                aStream >> tmp; p.Y = atoi( tmp.c_str() );
+                outline.push_back( p );
             }
-            paths.push_back(outline);
+            paths.push_back( outline );
         }
-        m_polys.push_back(paths);
+        m_polys.push_back( paths );
     }
+
     return true;
 }
+
 
 const BOX2I SHAPE_POLY_SET::BBox( int aClearance ) const
 {
@@ -569,10 +561,11 @@ const BOX2I SHAPE_POLY_SET::BBox( int aClearance ) const
             for( unsigned v = 0; v < m_polys[i][j].size(); v++)
             {
                 VECTOR2I p( m_polys[i][j][v].X, m_polys[i][j][v].Y );
-                if(first)
-                    bb =  BOX2I(p, VECTOR2I(0, 0));
+
+                if( first )
+                    bb =  BOX2I( p, VECTOR2I( 0, 0 ) );
                 else
-                    bb.Merge (p);
+                    bb.Merge( p );
 
                 first = false;
             }

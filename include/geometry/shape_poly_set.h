@@ -43,26 +43,26 @@
 class SHAPE_POLY_SET : public SHAPE
 {
     public:
-        SHAPE_POLY_SET() : SHAPE (SH_POLY_SET) {};
+        SHAPE_POLY_SET() : SHAPE( SH_POLY_SET ) {};
         ~SHAPE_POLY_SET() {};
 
         ///> Creates a new empty polygon in the set and returns its index
-        int NewOutline ();
+        int NewOutline();
 
         ///> Cretes a new empty hole in the given outline (default: last one) and returns its index
         int NewHole( int aOutline = -1);
 
         ///> Adds a new outline to the set and returns its index
-        int AddOutline ( const SHAPE_LINE_CHAIN& aOutline );
+        int AddOutline( const SHAPE_LINE_CHAIN& aOutline );
 
         ///> Adds a new hole to the given outline (default: last) and returns its index
-        int AddHole ( const SHAPE_LINE_CHAIN& aHole, int aOutline = -1 );
+        int AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline = -1 );
 
         ///> Appends a vertex at the end of the given outline/hole (default: last hole in the last outline)
-        int AppendVertex ( int x, int y, int aOutline = -1, int aHole = -1 );
+        int AppendVertex( int x, int y, int aOutline = -1, int aHole = -1 );
 
         ///> Returns the index-th vertex in a given hole outline within a given outline
-        const VECTOR2I GetVertex ( int index, int aOutline = -1, int aHole = -1) const;
+        const VECTOR2I GetVertex( int index, int aOutline = -1, int aHole = -1) const;
 
         ///> Returns true if any of the outlines is self-intersecting
         bool IsSelfIntersecting();
@@ -71,10 +71,10 @@ class SHAPE_POLY_SET : public SHAPE
         int OutlineCount() const { return m_polys.size(); }
 
         ///> Returns the number of vertices in a given outline/hole
-        int VertexCount ( int aOutline = -1, int aHole = -1 ) const;
+        int VertexCount( int aOutline = -1, int aHole = -1 ) const;
 
         ///> Returns the internal representation (ClipperLib) of a given polygon (outline + holes)
-        const ClipperLib::Paths& GetPoly ( int aIndex ) const
+        const ClipperLib::Paths& GetPoly( int aIndex ) const
         {
             return m_polys[aIndex];
         }
@@ -86,17 +86,17 @@ class SHAPE_POLY_SET : public SHAPE
         void Add( const SHAPE_POLY_SET& b );
 
         ///> Performs smooth outline inflation (Minkowski sum of the outline and a circle of a given radius)
-        void SmoothInflate ( int aFactor );
+        void SmoothInflate( int aFactor );
 
         ///> Performs outline erosion/shrinking
-        void Erode ( int aFactor );
+        void Erode( int aFactor );
 
-        ///> Converts a set of polygons with holes to a singe outline with 'slits'/'fractures' connecting the outer ring
+        ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures" connecting the outer ring
         ///> to the inner holes
-        void Fracture ();
+        void Fracture();
 
         ///> Simplifies the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
-        void Simplify ();
+        void Simplify();
 
         /// @copydoc SHAPE::Format()
         const std::string Format() const;
@@ -113,13 +113,14 @@ class SHAPE_POLY_SET : public SHAPE
 
         const BOX2I BBox( int aClearance = 0 ) const;
 
+        // fixme: add collision support
         bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const { return false; }
         bool Collide( const SEG& aSeg, int aClearance = 0 ) const { return false; }
 
     private:
 
         void fractureSingle( ClipperLib::Paths& paths );
-        void importTree ( ClipperLib::PolyTree* tree);
+        void importTree( ClipperLib::PolyTree* tree);
         void booleanOp( ClipperLib::ClipType type, const SHAPE_POLY_SET& b );
 
         const ClipperLib::Path convert( const SHAPE_LINE_CHAIN& aPath );
