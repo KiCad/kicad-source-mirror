@@ -117,7 +117,7 @@
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
-                        <property name="window_style">wxVSCROLL</property>
+                        <property name="window_style"></property>
                         <event name="OnChar"></event>
                         <event name="OnDataViewCtrlColumnHeaderClick"></event>
                         <event name="OnDataViewCtrlColumnHeaderRightClick">OnColumnHeaderRightClicked</event>

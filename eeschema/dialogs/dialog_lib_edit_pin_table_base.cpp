@@ -16,7 +16,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	wxBoxSizer* top_sizer;
 	top_sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_Pins = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_ROW_LINES|wxDV_VERT_RULES|wxVSCROLL );
+	m_Pins = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_ROW_LINES|wxDV_VERT_RULES );
 	m_Pins->SetMinSize( wxSize( 400,400 ) );
 	
 	top_sizer->Add( m_Pins, 1, wxALL|wxEXPAND, 5 );
