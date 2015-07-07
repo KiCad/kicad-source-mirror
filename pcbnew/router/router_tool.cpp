@@ -44,6 +44,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_settings.h>
 #include <tools/common_actions.h>
+#include <tools/size_menu.h>
 
 #include <ratsnest_data.h>
 
@@ -86,9 +87,9 @@ static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
     _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
     via_microvia_xpm );
 
-static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackWidth",
+static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
     AS_CONTEXT, 'W',
-    _( "Custom Track Width" ),
+    _( "Custom Track/Via Size" ),
     _( "Shows a dialog for changing the track width and via size." ),
     width_track_xpm );
 
@@ -111,21 +112,17 @@ ROUTER_TOOL::ROUTER_TOOL() :
 }
 
 
-class CONTEXT_TRACK_WIDTH_MENU: public CONTEXT_MENU
+class CONTEXT_TRACK_WIDTH_MENU: public CONTEXT_TRACK_VIA_SIZE_MENU
 {
 public:
     CONTEXT_TRACK_WIDTH_MENU()
+        : CONTEXT_TRACK_VIA_SIZE_MENU( true, true ), m_board( NULL )
     {
-        m_board = NULL;
-        SetIcon( width_track_via_xpm );
         SetMenuHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::EventHandler, this, _1 ) );
     }
 
     void SetBoard( BOARD* aBoard )
     {
-        BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-
-        wxString msg;
         m_board = aBoard;
 
         Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom size" ),
@@ -134,44 +131,13 @@ public:
         Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Use the starting track width" ),
                 _( "Route using the width of the starting track." ), wxITEM_CHECK );
 
-        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES, _( "Use netclass values" ),
+        Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES, _( "Use net class values" ),
                 _( "Use track and via sizes from the net class" ), wxITEM_CHECK );
-
-        for( unsigned i = 0; i < bds.m_TrackWidthList.size(); i++ )
-        {
-            msg = _( "Track ");
-            msg << StringFromValue( g_UserUnit, bds.m_TrackWidthList[i], true );
-
-            if( i == 0 )
-                msg << _( " (from netclass)" );
-
-            Append( ID_POPUP_PCB_SELECT_WIDTH1 + i, msg, wxEmptyString, wxITEM_CHECK );
-        }
 
         AppendSeparator();
 
-        for( unsigned i = 0; i < bds.m_ViasDimensionsList.size(); i++ )
-        {
-            msg = _( "Via " );
-            msg << StringFromValue( g_UserUnit, bds.m_ViasDimensionsList[i].m_Diameter, true );
-            wxString drill = StringFromValue( g_UserUnit,
-                                              bds.m_ViasDimensionsList[i].m_Drill,
-                                              true );
-
-            if( bds.m_ViasDimensionsList[i].m_Drill <= 0 )
-            {
-                msg << _( ", drill: default" );
-            }
-            else
-            {
-                msg << _( ", drill: " ) << drill;
-            }
-
-            if( i == 0 )
-                msg << _( " (from netclass)" );
-
-            Append( ID_POPUP_PCB_SELECT_VIASIZE1 + i, msg, wxEmptyString, wxITEM_CHECK );
-        }
+        // Append the list of tracks & via sizes
+        AppendSizes( aBoard );
     }
 
     OPT_TOOL_EVENT EventHandler( const wxMenuEvent& aEvent )
@@ -223,6 +189,7 @@ public:
         return OPT_TOOL_EVENT( COMMON_ACTIONS::trackViaSizeChanged.MakeEvent() );
     }
 
+private:
     BOARD* m_board;
 };
 
