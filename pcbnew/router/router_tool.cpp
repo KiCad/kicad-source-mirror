@@ -828,6 +828,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
+    ctls->ShowCursor( false );
 
     return 0;
 }
