@@ -205,17 +205,17 @@ void CONTEXT_MENU::updateHotKeys()
         {
             int key = action.GetHotKey() & ~MD_MODIFIER_MASK;
             int mod = action.GetHotKey() & MD_MODIFIER_MASK;
-            int flags = wxACCEL_NORMAL;
+            int flags = 0;
             wxMenuItem* item = FindChildItem( id );
 
             if( item )
             {
-                switch( mod )
-                {
-                    case MD_ALT:    flags = wxACCEL_ALT;    break;
-                    case MD_CTRL:   flags = wxACCEL_CTRL;   break;
-                    case MD_SHIFT:  flags = wxACCEL_SHIFT;  break;
-                }
+                flags |= ( mod & MD_ALT ) ? wxACCEL_ALT : 0;
+                flags |= ( mod & MD_CTRL ) ? wxACCEL_CTRL : 0;
+                flags |= ( mod & MD_SHIFT ) ? wxACCEL_SHIFT : 0;
+
+                if( !flags )
+                    flags = wxACCEL_NORMAL;
 
                 wxAcceleratorEntry accel( flags, key, id, item );
                 item->SetAccel( &accel );
