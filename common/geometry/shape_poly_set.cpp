@@ -420,12 +420,13 @@ void SHAPE_POLY_SET::fractureSingle( ClipperLib::Paths& paths )
     while( num_unconnected > 0 )
     {
         int64_t x_min = std::numeric_limits<int64_t>::max();
-        FractureEdge* smallestX;
+        FractureEdge* smallestX = NULL;
 
         // find the left-most hole edge and merge with the outline
         for( FractureEdgeSet::iterator i = border_edges.begin(); i != border_edges.end(); ++i )
         {
             int64_t xt = (*i)->m_p1.X;
+
             if( ( xt < x_min ) && ! (*i)->m_connected )
             {
                 x_min = xt;

@@ -331,6 +331,7 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 default:
                     break;
             }
+            break;
 
         case SH_CIRCLE:
             switch( aB->Type() )
@@ -353,6 +354,7 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 default:
                     break;
             }
+            break;
 
         case SH_LINE_CHAIN:
             switch( aB->Type() )
@@ -375,6 +377,7 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 default:
                     break;
             }
+            break;
 
         case SH_SEGMENT:
             switch( aB->Type() )
@@ -397,6 +400,7 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 default:
                     break;
             }
+            break;
 
         case SH_CONVEX:
             switch( aB->Type() )
@@ -419,6 +423,7 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
                 default:
                     break;
             }
+            break;
 
         default:
             break;

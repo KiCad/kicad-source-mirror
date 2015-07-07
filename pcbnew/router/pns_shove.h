@@ -129,7 +129,7 @@ private:
 
     void replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew );
 
-    template<class T> T* clone ( const T* aItem )
+    template<class T> T* clone( const T* aItem )
     {
         T *cloned = aItem->Clone();
 

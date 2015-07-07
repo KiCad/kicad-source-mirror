@@ -992,6 +992,10 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
         return SH_INCOMPLETE;
 
     PNS_LINE* head = clone( &aCurrentHead );
+
+    if( !head )
+        return SH_INCOMPLETE;
+
     head->ClearSegmentLinks();
 
     m_lineStack.clear();
@@ -1026,13 +1030,13 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
         m_logger.Log( headVia, 0, "head-via" );
     }
 
-    if ( !pushLine( head ) )
+    if( !pushLine( head ) )
         return SH_INCOMPLETE;
 
     st = shoveMainLoop();
 
 
-    if( ( st == SH_OK || st == SH_HEAD_MODIFIED ) && head)
+    if( ( st == SH_OK || st == SH_HEAD_MODIFIED ) )
         runOptimizer( m_currentNode, head );
 
     if( m_newHead && st == SH_OK )
