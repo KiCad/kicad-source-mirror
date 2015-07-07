@@ -657,6 +657,7 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( aType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
             return false;
+
         if( ( aType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
             return false;
 
@@ -673,8 +674,8 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
             return false;
     }
 
-    sizes.SetViaType ( aType );
-    m_router->ToggleViaPlacement( );
+    sizes.SetViaType( aType );
+    m_router->ToggleViaPlacement();
     m_router->UpdateSizes( sizes );
 
     m_router->Move( m_endSnapPoint, m_endItem );        // refresh

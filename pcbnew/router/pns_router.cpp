@@ -664,7 +664,7 @@ void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance 
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_previewItems );
 
     if( aColor >= 0 )
-        pitem->SetColor( KIGFX::COLOR4D ( aColor ) );
+        pitem->SetColor( KIGFX::COLOR4D( aColor ) );
 
     if( aClearance >= 0 )
         pitem->SetClearance( aClearance );
@@ -828,7 +828,7 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         if( !item->OfKind( PNS_ITEM::LINE ) )
             continue;
 
-        const PNS_LINE* l = static_cast <const PNS_LINE*> (item);
+        const PNS_LINE* l = static_cast<const PNS_LINE*>( item );
         DisplayItem( l );
 
         if( l->EndsWithVia() )

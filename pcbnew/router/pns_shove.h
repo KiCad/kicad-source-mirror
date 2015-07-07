@@ -63,7 +63,7 @@ public:
     SHOVE_STATUS ShoveLines( const PNS_LINE& aCurrentHead );
     SHOVE_STATUS ShoveMultiLines( const PNS_ITEMSET& aHeadSet );
 
-    SHOVE_STATUS ShoveDraggingVia( PNS_VIA*aVia, const VECTOR2I& aWhere, PNS_VIA** aNewVia );
+    SHOVE_STATUS ShoveDraggingVia( PNS_VIA* aVia, const VECTOR2I& aWhere, PNS_VIA** aNewVia );
     SHOVE_STATUS ProcessSingleLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle,
                                     PNS_LINE* aShoved );
 
@@ -79,7 +79,7 @@ public:
 
     const PNS_LINE NewHead() const;
 
-    void SetInitialLine ( PNS_LINE* aInitial );
+    void SetInitialLine( PNS_LINE* aInitial );
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
@@ -127,7 +127,7 @@ private:
 
     PNS_LINE* assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );
 
-    void replaceItems( PNS_ITEM *aOld, PNS_ITEM *aNew );
+    void replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew );
 
     template<class T> T* clone ( const T* aItem )
     {
@@ -142,7 +142,7 @@ private:
     SHOVE_STATUS shoveIteration( int aIter );
     SHOVE_STATUS shoveMainLoop();
 
-    int getClearance( PNS_ITEM *aA, PNS_ITEM *aB ) const;
+    int getClearance( PNS_ITEM* aA, PNS_ITEM* aB ) const;
 
     std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<PNS_LINE*>      m_lineStack;

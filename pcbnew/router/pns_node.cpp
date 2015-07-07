@@ -1097,7 +1097,7 @@ void PNS_NODE::GetUpdatedItems( ITEM_VECTOR& aRemoved, ITEM_VECTOR& aAdded )
         return;
 
     BOOST_FOREACH( PNS_ITEM* item, m_override )
-    aRemoved.push_back( item );
+        aRemoved.push_back( item );
 
     for( PNS_INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
         aAdded.push_back( *i );
