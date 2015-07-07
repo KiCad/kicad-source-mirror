@@ -145,7 +145,7 @@ struct PNS_OPTIMIZER::CACHE_VISITOR
 
     bool operator()( PNS_ITEM* aOtherItem )
     {
-        if( !m_mask & aOtherItem->Kind() )
+        if( !( m_mask & aOtherItem->Kind() ) )
             return true;
 
         int clearance = m_node->GetClearance( aOtherItem, m_ourItem );
