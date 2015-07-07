@@ -84,6 +84,9 @@ bool PNS_LINE_PLACER::ToggleVia( bool aEnabled )
 {
     m_placingVia = aEnabled;
 
+    if( !aEnabled )
+        m_head.RemoveVia();
+
     if( !m_idle )
         Move( m_currentEnd, NULL );
 
