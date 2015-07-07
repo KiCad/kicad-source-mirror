@@ -102,10 +102,10 @@ VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
     if( !m_auxAxis )
         return nearest;
 
-    if( std::abs( m_auxAxis->x - aPoint.x) < std::abs( nearest.x - aPoint.x ) )
+    if( std::abs( m_auxAxis->x - aPoint.x ) < std::abs( nearest.x - aPoint.x ) )
         nearest.x = m_auxAxis->x;
 
-    if( std::abs( m_auxAxis->y - aPoint.y) < std::abs( nearest.y - aPoint.y ) )
+    if( std::abs( m_auxAxis->y - aPoint.y ) < std::abs( nearest.y - aPoint.y ) )
         nearest.y = m_auxAxis->y;
 
     return nearest;
@@ -245,10 +245,10 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
                     int r = ( start - end ).EuclideanNorm();
 
                     addAnchor( start, ORIGIN | SNAPPABLE, dseg );
-                    addAnchor( start + VECTOR2I ( -r, 0 ), OUTLINE | SNAPPABLE, dseg );
-                    addAnchor( start + VECTOR2I ( r, 0 ), OUTLINE | SNAPPABLE, dseg );
-                    addAnchor( start + VECTOR2I ( 0, -r ), OUTLINE | SNAPPABLE, dseg);
-                    addAnchor( start + VECTOR2I ( 0, r ), OUTLINE | SNAPPABLE, dseg );
+                    addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, dseg );
+                    addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, dseg );
+                    addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, dseg );
+                    addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, dseg );
                     break;
                 }
 
@@ -293,6 +293,10 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
             addAnchor( origin, ORIGIN, track);
             break;
         }
+
+        case PCB_VIA_T:
+            addAnchor( aItem->GetPosition(), CORNER | SNAPPABLE, aItem );
+            break;
 
         case PCB_ZONE_AREA_T:
         {

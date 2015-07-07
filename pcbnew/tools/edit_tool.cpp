@@ -154,7 +154,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // cumulative translation
     wxPoint totalMovement( 0, 0 );
 
-    GRID_HELPER grid ( editFrame );
+    GRID_HELPER grid( editFrame );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
