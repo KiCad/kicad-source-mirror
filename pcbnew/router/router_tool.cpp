@@ -99,7 +99,7 @@ static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", 
     change_entry_orient_xpm );
 
 static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",
-    AS_CONTEXT, 'D',
+    AS_CONTEXT, 'P',
     _( "Differential Pair Dimensions..." ),
     _( "Sets the width and gap of the currently routed differential pair." ),
     ps_diff_pair_tune_length_xpm );
