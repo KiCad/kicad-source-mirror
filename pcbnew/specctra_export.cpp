@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -283,7 +283,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* item
     int      ndx_min = 0;
 
     // find the point closest to aPoint and perhaps exactly matching aPoint.
-    for( int i = 0; i<items->GetCount(); ++i )
+    for( int i = 0; i < items->GetCount(); ++i )
     {
         DRAWSEGMENT*    graphic = (DRAWSEGMENT*) (*items)[i];
         unsigned        d;
@@ -345,19 +345,24 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* item
     }
 
 #if defined(DEBUG)
-    printf( "Unable to find segment matching point (%d,%d)\n",
-            aPoint.x, aPoint.y );
-
-    for( int i = 0; i< items->GetCount(); ++i )
+    if( items->GetCount() )
     {
-        DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
+        printf( "Unable to find segment matching point (%.6g,%.6g) (seg count %d)\n",
+                IU2um( aPoint.x )/1000, IU2um( aPoint.y )/1000,
+                items->GetCount());
 
-        printf( "type=%s, GetStart()=%d,%d  GetEnd()=%d,%d\n",
-                TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ),
-                graphic->GetStart().x,
-                graphic->GetStart().y,
-                graphic->GetEnd().x,
-                graphic->GetEnd().y );
+        for( int i = 0; i< items->GetCount(); ++i )
+        {
+            DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
+
+            printf( "item %d, type=%s, start=%.6g %.6g  end=%.6g,%.6g\n",
+                    i + 1,
+                    TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ),
+                    IU2um( graphic->GetStart().x )/1000,
+                    IU2um( graphic->GetStart().y )/1000,
+                    IU2um( graphic->GetEnd().x )/1000,
+                    IU2um( graphic->GetEnd().y )/1000 );
+        }
     }
 #endif
 
@@ -924,14 +929,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
     for( int i = 0; i<items.GetCount(); )
     {
         if( items[i]->GetLayer() != Edge_Cuts )
-        {
             items.Remove( i );
-        }
         else    // remove graphics not on Edge_Cuts layer
-        {
-            DBG( items[i]->Show( 0, std::cout );)
             ++i;
-        }
     }
 
     if( items.GetCount() )

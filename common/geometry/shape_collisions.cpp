@@ -310,6 +310,12 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
         case SH_RECT:
             switch( aB->Type() )
             {
+                case SH_RECT:   // RECT to RECT not yet in use in p&s router
+                    // Should be (todo) somethink like:
+                    //return CollCaseReversed<SHAPE_RECT, SHAPE_RECT>( aA, aB, aClearance, aNeedMTV, aMTV );
+                    assert( aB->Type() != SH_RECT );
+                    return true;
+
                 case SH_CIRCLE:
                     return CollCase<SHAPE_RECT, SHAPE_CIRCLE>( aA, aB, aClearance, aNeedMTV, aMTV );
 

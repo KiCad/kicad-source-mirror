@@ -112,6 +112,9 @@ bool DIALOG_SHIM::Show( bool show )
     if( show )
     {
         ret = wxDialog::Show( show );
+#ifdef __WXMAC__
+        wxDialog::Raise();            // More wxWindows brokenness on OS X
+#endif
 
         // classname is key, returns a zeroed out default EDA_RECT if none existed before.
         EDA_RECT r = class_map[ hash_key ];

@@ -2115,10 +2115,12 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
                     m_netCodes.resize( netCode+1 );
 
                 m_netCodes[netCode] = net->GetNet();
+                net = NULL;
             }
             else
             {
                 delete net;
+                net = NULL;     // Avoid double deletion.
             }
 
             return;     // preferred exit

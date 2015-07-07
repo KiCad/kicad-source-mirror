@@ -491,7 +491,8 @@ void DRC::testTracks( bool aShowProgressBar )
     {
         progressDialog = new wxProgressDialog( _( "Track clearances" ), wxEmptyString,
                                                deltamax, m_mainWindow,
-                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT );
+                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
+                                               wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
         progressDialog->Update( 0, wxEmptyString );
     }
 
