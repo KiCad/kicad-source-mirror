@@ -315,6 +315,7 @@ void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
     aViaDrill = netClass->GetViaDrill();
 }
 
+
 void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
 {
 #ifdef DEBUG
@@ -335,7 +336,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
         DIALOG_PNS_SETTINGS settingsDlg( m_frame, m_router->Settings() );
 
         if( settingsDlg.ShowModal() )
-	    {
+        {
             // FIXME: do we need an explicit update?
         }
     }
@@ -658,6 +659,8 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
     m_ctls->SetSnapping( true );
     m_ctls->ShowCursor( true );
+
+    m_startSnapPoint = getViewControls()->GetCursorPosition();
 
     std::auto_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, aMode ) );
     SetContextMenu( ctxMenu.get() );
