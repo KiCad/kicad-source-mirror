@@ -769,6 +769,8 @@ void PNS_LINE_PLACER::initPlacement( bool aSplitSeg )
     m_tail.SetLayer( m_currentLayer );
     m_head.SetWidth( m_sizes.TrackWidth() );
     m_tail.SetWidth( m_sizes.TrackWidth() );
+    m_head.RemoveVia();
+    m_tail.RemoveVia();
 
     m_p_start = m_currentStart;
     m_direction = m_initial_direction;
