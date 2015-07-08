@@ -706,13 +706,14 @@ endif()
 if( APPLE )
     if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         # find wx-X.Y-osx_cocoa path below PYTHON_SITE_PACKAGE_PATH
-        file( GLOB WXPYTHON_PATH ${PYTHON_SITE_PACKAGE_PATH}/wx-?.?-osx_cocoa )
-        if( NOT WXPYTHON_PATH )
+        file( GLOB WXPYTHON_DIR RELATIVE ${PYTHON_SITE_PACKAGE_PATH} ${PYTHON_SITE_PACKAGE_PATH}/wx-?.?-osx_cocoa )
+        if( NOT WXPYTHON_DIR )
             message( FATAL_ERROR "Could not find 'wx-?.?-osx_cocoa' in '${PYTHON_SITE_PACKAGE_PATH}'" )
         endif()
         # copy contents
         add_custom_target( ScriptingWxpythonCopy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy_directory "${WXPYTHON_PATH}" "${PYTHON_DEST}"
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${PYTHON_SITE_PACKAGE_PATH}/${WXPYTHON_DIR}" "${PYTHON_DEST}/${WXPYTHON_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_SITE_PACKAGE_PATH}/wxversion.py" "${PYTHON_DEST}"
             COMMENT "Copying wxPython into ${PYTHON_DEST}"
             )
     endif()
