@@ -193,25 +193,20 @@ inline void ColorSetBrush( wxBrush *aBrush, EDA_COLOR_T aColor )
  * returns a wxWidgets wxColor from a KiCad color index with alpha value.
  * Note that alpha support is not available on every wxWidgets platform.  On
  * such platform the behavior is the same as for wxALPHA_OPAQUE and that
- * means the alpha value has no effect and will be ignored.  wxGtk 2.8.4 is
- * not supporting alpha.
+ * means the alpha value has no effect and will be ignored.
  * @return wxColour - given a KiCad color index with alpha value
  */
 inline wxColour MakeColour( EDA_COLOR_T aColor )
 {
-#if wxCHECK_VERSION(2,8,5)
     int alpha = GetAlpha( aColor );
     alpha = alpha ? alpha : wxALPHA_OPAQUE;
-#endif
     EDA_COLOR_T ndx = ColorGetBase( aColor );
     wxASSERT( ndx > UNSPECIFIED_COLOR && ndx < NBCOLORS );
 
     return wxColour( g_ColorRefs[ndx].m_Red,
                      g_ColorRefs[ndx].m_Green,
                      g_ColorRefs[ndx].m_Blue
-#if wxCHECK_VERSION(2,8,5)
                      ,(unsigned char) alpha
-#endif
         );
 }
 

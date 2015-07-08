@@ -490,12 +490,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     wxString          title = _( "Print" );
     BOARD_PRINTOUT_CONTROLLER      printout( s_Parameters, m_parent, title );
 
-    // Alexander's patch had this removed altogether, waiting for testing.
-#if 0 && !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
-    wxDC*             dc = printout.GetDC();
-    ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
-#endif
-
     if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
