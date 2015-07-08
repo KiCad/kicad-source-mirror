@@ -271,10 +271,11 @@ private:
      * Function testTracks
      * performs the DRC on all tracks.
      * because this test can take a while, a progress bar can be displayed
-     * @param aShowProgressBar = true to show a progrsse bar
+     * @param aActiveWindow = the active window ued as parent for the progress bar
+     * @param aShowProgressBar = true to show a progress bar
      * (Note: it is shown only if there are many tracks)
      */
-    void testTracks( bool aShowProgressBar );
+    void testTracks( wxWindow * aActiveWindow, bool aShowProgressBar );
 
     void testPad2Pad();
 

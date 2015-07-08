@@ -103,7 +103,7 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_doPad2PadTest     = true;     // enable pad to pad clearance tests
     m_doUnconnectedTest = true;     // enable unconnected tests
     m_doZonesTest = true;           // enable zone to items clearance tests
-    m_doKeepoutTest = true;        // enable keepout areas to items clearance tests
+    m_doKeepoutTest = true;         // enable keepout areas to items clearance tests
     m_abortDRC = false;
     m_drcInProgress = false;
 
@@ -220,7 +220,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         wxSafeYield();
     }
 
-    testTracks( true );
+    testTracks( aMessages ? aMessages->GetParent() : m_mainWindow, true );
 
     // Before testing segments and unconnected, refill all zones:
     // this is a good caution, because filled areas can be outdated.
@@ -476,7 +476,7 @@ void DRC::testPad2Pad()
 }
 
 
-void DRC::testTracks( bool aShowProgressBar )
+void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 {
     wxProgressDialog * progressDialog = NULL;
     const int delta = 500;  // This is the number of tests between 2 calls to the
@@ -490,7 +490,7 @@ void DRC::testTracks( bool aShowProgressBar )
     if( aShowProgressBar && deltamax > 3 )
     {
         progressDialog = new wxProgressDialog( _( "Track clearances" ), wxEmptyString,
-                                               deltamax, m_mainWindow,
+                                               deltamax, aActiveWindow,
                                                wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
                                                wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
         progressDialog->Update( 0, wxEmptyString );
@@ -510,6 +510,11 @@ void DRC::testTracks( bool aShowProgressBar )
             {
                 if( !progressDialog->Update( count, wxEmptyString ) )
                     break;  // Aborted by user
+#ifdef __WXMAC__
+                // Work around a dialog z-order issue on OS X
+                if( count == deltamax )
+                    aActiveWindow->Raise();
+#endif
             }
         }
 

@@ -171,7 +171,13 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
     }
 
     if( progressDialog )
+    {
         progressDialog->Update( ii+2, _( "Updating ratsnest..." ) );
+#ifdef __WXMAC__
+        // Work around a dialog z-order issue on OS X
+        aActiveWindow->Raise();
+#endif
+    }
     TestConnections();
 
     // Recalculate the active ratsnest, i.e. the unconnected links
