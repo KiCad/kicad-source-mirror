@@ -176,6 +176,8 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
         return false;
     }
 
+    wxPythonLoaded = true;
+
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
 
