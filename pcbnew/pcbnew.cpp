@@ -286,9 +286,7 @@ static bool scriptingSetup()
     path_frag = wxT( "/usr/local/kicad/bin/scripting/plugins" );
 #endif
 
-    pcbnewInitPythonScripting( TO_UTF8( path_frag ) );
-
-    if( !IsWxPythonLoaded() )
+    if( ! pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
     {
         wxLogError( wxT( "pcbnewInitPythonScripting() failed." ) );
         return false;
