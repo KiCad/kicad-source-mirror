@@ -910,6 +910,7 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
         }
     }
 
+    m_board->GetRatsnest()->Recalculate();
     m_world->Commit( aNode );
 }
 
