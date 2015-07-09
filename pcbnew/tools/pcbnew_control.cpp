@@ -119,6 +119,12 @@ int PCBNEW_CONTROL::ZoomCenter( const TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     view->SetCenter( getViewControls()->GetCursorPosition() );
 
+    if( !getViewControls()->GetEnableZoomNoCenter() )
+    {
+        const VECTOR2I& screenSize = view->GetGAL()->GetScreenPixelSize();
+        m_frame->GetGalCanvas()->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
+    }
+
     return 0;
 }
 
