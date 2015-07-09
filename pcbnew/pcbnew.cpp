@@ -59,6 +59,7 @@
 #include <modview_frame.h>
 #include <footprint_wizard_frame.h>
 
+extern bool IsWxPythonLoaded();
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
@@ -285,9 +286,11 @@ static bool scriptingSetup()
     path_frag = wxT( "/usr/local/kicad/bin/scripting/plugins" );
 #endif
 
-    if( !pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
+    pcbnewInitPythonScripting( TO_UTF8( path_frag ) );
+
+    if( !IsWxPythonLoaded() )
     {
-        wxLogSysError( wxT( "pcbnewInitPythonScripting() failed." ) );
+        wxLogError( wxT( "pcbnewInitPythonScripting() failed." ) );
         return false;
     }
 
@@ -361,6 +364,7 @@ void IFACE::OnKifaceEnd()
     // wxPython will do its own cleanup as part of that process.
     // This should only be called if python was setup correctly.
 
-    pcbnewFinishPythonScripting();
+    if( IsWxPythonLoaded() )
+        pcbnewFinishPythonScripting();
 #endif
 }

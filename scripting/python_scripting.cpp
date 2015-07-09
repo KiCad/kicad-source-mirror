@@ -55,6 +55,13 @@ extern "C" void init_pcbnew( void );
 struct _inittab*    SwigImportInittab;
 static int          SwigNumModules = 0;
 
+static bool wxPythonLoaded = false;      // true if the wxPython scripting layer was successfully loaded
+
+bool IsWxPythonLoaded()
+{
+    return wxPythonLoaded;
+}
+
 
 /* Add a name + initfuction to our SwigImportInittab */
 
@@ -140,11 +147,12 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
 #ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_InitThreads();
 
+#ifndef __WINDOWS__     // import wxversion.py currently not working under winbuilder, and not useful.
     char cmd[1024];
     // Make sure that that the correct version of wxPython is loaded. In systems where there
     // are different versions of wxPython installed this can lead to select wrong wxPython
     // version being selected.
-    snprintf( cmd, sizeof(cmd), "import wxversion; wxversion.select('%s')", WXPYTHON_VERSION );
+    snprintf( cmd, sizeof(cmd), "import wxversion;  wxversion.select('%s')", WXPYTHON_VERSION );
 
     int retv = PyRun_SimpleString( cmd );
 
@@ -155,6 +163,7 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
         Py_Finalize();
         return false;
     }
+#endif      // ifndef __WINDOWS__
 
     // Load the wxPython core API.  Imports the wx._core_ module and sets a
     // local pointer to a function table located there.  The pointer is used
@@ -171,8 +180,8 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
     // Global Interpreter Lock.
 
     g_PythonMainTState = wxPyBeginAllowThreads();
+#endif  // ifdef KICAD_SCRIPTING_WXPYTHON
 
-#endif
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
     {
         char cmd[1024];

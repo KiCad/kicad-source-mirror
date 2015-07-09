@@ -46,6 +46,8 @@
 
 #include <wx/wupdlock.h>
 
+extern bool IsWxPythonLoaded();
+
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
 
@@ -303,12 +305,15 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     // Access to the scripting console
 #if defined(KICAD_SCRIPTING_WXPYTHON)
-    m_mainToolBar->AddSeparator();
+    if( IsWxPythonLoaded() )
+    {
+        m_mainToolBar->AddSeparator();
 
-    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
-                            KiBitmap( py_script_xpm ),
-                            _( "Show/Hide the Python Scripting console" ),
-                            wxITEM_CHECK );
+        m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
+                                KiBitmap( py_script_xpm ),
+                                _( "Show/Hide the Python Scripting console" ),
+                                wxITEM_CHECK );
+    }
 #endif
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
