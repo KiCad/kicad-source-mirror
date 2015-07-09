@@ -61,6 +61,12 @@ public:
     virtual int GetValue() const;
 
     /**
+     * Function Valid
+     * Returns true if the text control contains a real number.
+     */
+    bool Valid() const;
+
+    /**
      * Function Enable
      * Enables/diasables the binded widgets
      */
