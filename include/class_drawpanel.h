@@ -148,7 +148,7 @@ public:
 
     bool GetEnableZoomNoCenter() const { return m_enableZoomNoCenter; }
 
-    void SetEnableZoomNoCenter( bool aEnable ) { m_enableZoomNoCenter = aEnable; }
+    void SetEnableZoomNoCenter( bool aEnable );
 
     bool GetMiddleButtonPanLimited() const { return m_panScrollbarLimits; }
 

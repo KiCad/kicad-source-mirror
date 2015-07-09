@@ -38,6 +38,7 @@
 #include <class_draw_panel_gal.h>
 #include <class_base_screen.h>
 #include <draw_frame.h>
+#include <view/view_controls.h>
 
 #include <kicad_device_context.h>
 
@@ -635,6 +636,15 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
                 wxT( "Clip box: (%d, %d, %d, %d), Draw extents (%d, %d, %d, %d)" ),
                 m_ClipBox.GetX(), m_ClipBox.GetY(), m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
                 DC->MinX(), DC->MinY(), DC->MaxX(), DC->MaxY() );
+}
+
+
+void EDA_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
+{
+    m_enableZoomNoCenter = aEnable;
+
+    if( GetParent()->IsGalCanvasActive() )
+        GetParent()->GetGalCanvas()->GetViewControls()->SetEnableZoomNoCenter( aEnable );
 }
 
 

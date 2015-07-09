@@ -161,6 +161,23 @@ public:
         return m_forceCursorPosition;
     }
 
+    /**
+     * Function SetEnableZoomNoCenter()
+     * Enables or Disables warping the cursor to the center of the drawing i
+     * panel area when zooming.
+     * @param aEnabled is true if the cursor should not be centered and false if
+     * the cursor should be centered.
+     */
+    virtual void SetEnableZoomNoCenter( bool aEnable )
+    {
+        m_enableZoomNoCenter = aEnable;
+    }
+
+    virtual bool GetEnableZoomNoCenter() const
+    {
+        return m_enableZoomNoCenter;
+    }
+
 protected:
     /// Pointer to controlled VIEW.
     VIEW*       m_view;
@@ -191,6 +208,9 @@ protected:
 
     /// How fast is panning when in auto mode
     float       m_autoPanSpeed;
+
+    /// If the cursor should be warped to the center of the view area when zooming
+    bool        m_enableZoomNoCenter;
 };
 } // namespace KIGFX
 

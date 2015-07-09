@@ -84,7 +84,15 @@ int PCBNEW_CONTROL::ZoomInOut( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOut ) )
         zoomScale = 0.7;
 
-    view->SetScale( view->GetScale() * zoomScale, getViewControls()->GetCursorPosition() );
+    if( getViewControls()->GetEnableZoomNoCenter() )
+        view->SetScale( view->GetScale() * zoomScale, getViewControls()->GetCursorPosition() );
+    else
+    {
+        const VECTOR2I& screenSize = view->GetGAL()->GetScreenPixelSize();
+        view->SetCenter( getViewControls()->GetCursorPosition() );
+        view->SetScale( view->GetScale() * zoomScale );
+        m_frame->GetGalCanvas()->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
+    }
 
     return 0;
 }

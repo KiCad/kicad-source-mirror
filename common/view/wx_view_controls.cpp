@@ -151,8 +151,18 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
             zoomScale = ( rotation > 0 ) ? 1.05 : 0.95;
         }
 
-        VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-        m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+        if( GetEnableZoomNoCenter() )
+        {
+            VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
+            m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+        }
+        else
+        {
+            const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
+            m_view->SetCenter( GetCursorPosition() );
+            m_view->SetScale( m_view->GetScale() * zoomScale );
+            m_parentPanel->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
+        }
     }
 
     aEvent.Skip();
