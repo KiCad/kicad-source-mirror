@@ -53,6 +53,7 @@
 
 #include <dialogs/dialog_create_array.h>
 #include <dialogs/dialog_move_exact.h>
+#include <dialogs/dialog_track_via_properties.h>
 
 EDIT_TOOL::EDIT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
@@ -80,12 +81,17 @@ bool EDIT_TOOL::Init()
         return false;
     }
 
+    // Vector storing track & via types, used for specifying 'Properties' menu entry condition
+    m_tracksViasType.push_back( PCB_TRACE_T );
+    m_tracksViasType.push_back( PCB_VIA_T );
+
     // Add context menu entries that are displayed when selection tool is active
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
+    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
+                                            || SELECTION_CONDITIONS::OnlyTypes( m_tracksViasType ) );
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
@@ -340,11 +346,32 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
+    // Shall the selection be cleared at the end?
+    bool unselect = selection.Empty();
+
     if( !hoverSelection( selection, false ) )
         return 0;
 
-    // Properties are displayed when there is only one item selected
-    if( selection.Size() == 1 )
+    // Tracks & vias are treated in a special way:
+    if( ( SELECTION_CONDITIONS::OnlyTypes( m_tracksViasType ) )( selection ) )
+    {
+        DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
+
+        if( dlg.ShowModal() )
+        {
+            RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+
+            editFrame->OnModify();
+            editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+            dlg.Apply();
+
+            selection.ForAll<KIGFX::VIEW_ITEM>( boost::bind( &KIGFX::VIEW_ITEM::ViewUpdate, _1,
+                                                             KIGFX::VIEW_ITEM::ALL ) );
+            selection.ForAll<BOARD_ITEM>( boost::bind( &RN_DATA::Update, ratsnest, _1 ) );
+            ratsnest->Recalculate();
+        }
+    }
+    else if( selection.Size() == 1 ) // Properties are displayed when there is only one item selected
     {
         // Display properties dialog
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
@@ -359,7 +386,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // It is necessary to determine if anything has changed
         PICKED_ITEMS_LIST* lastChange = undoList.empty() ? NULL : undoList.back();
 
-        // Display properties dialog
+        // Display properties dialog provided by the legacy canvas frame
         editFrame->OnEditItemRequest( NULL, item );
 
         PICKED_ITEMS_LIST* currentChange = undoList.empty() ? NULL : undoList.back();
@@ -379,6 +406,9 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         item->SetFlags( flags );
     }
+
+    if( unselect )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     return 0;
 }

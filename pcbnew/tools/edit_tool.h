@@ -149,6 +149,9 @@ private:
     /// Counter of undo inhibitions. When zero, undo is not inhibited.
     int m_undoInhibit;
 
+    // Vector storing track & via types, used for specifying 'Properties' menu entry condition
+    std::vector<KICAD_T> m_tracksViasType;
+
     ///> Removes and frees a single BOARD_ITEM.
     void remove( BOARD_ITEM* aItem );
 

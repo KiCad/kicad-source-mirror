@@ -133,6 +133,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_target_properties_base.cpp
+    dialogs/dialog_track_via_properties.cpp
+    dialogs/dialog_track_via_properties_base.cpp
     dialogs/dialog_track_via_size.cpp
     dialogs/dialog_track_via_size_base.cpp
     footprint_wizard.cpp

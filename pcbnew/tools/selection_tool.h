@@ -71,7 +71,16 @@ struct SELECTION
         return static_cast<T*>( items.GetPickedItem( aIndex ) );
     }
 
+    /// Returns the center point of the selection area bounding box.
     VECTOR2I GetCenter() const;
+
+    /// Runs a function on all selected items.
+    template <typename T>
+    void ForAll( boost::function<void (T*)> aFunction ) const
+    {
+        for( unsigned int i = 0; i < items.GetCount(); ++i )
+            aFunction( Item<T>( i ) );
+    }
 
 private:
     /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
