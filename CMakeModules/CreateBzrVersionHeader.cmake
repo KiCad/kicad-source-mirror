@@ -22,9 +22,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-include( WriteVersionHeader )
-
-macro( create_bzr_version_header )
+macro( create_bzr_version_header _bzr_src_path )
     # If bzr is not found or an error occurs using the bzr commands to determine the repo
     # version, set the build version string to "no-bzr"
     set( KICAD_BUILD_VERSION "no-bzr" )
@@ -38,7 +36,7 @@ macro( create_bzr_version_header )
 
         # Get the tree revision
         execute_process(
-            COMMAND ${Bazaar_EXECUTABLE} revno --tree ${PROJECT_SOURCE_DIR}
+            COMMAND ${Bazaar_EXECUTABLE} revno --tree ${_bzr_src_path}
             OUTPUT_VARIABLE _bzr_TREE_DATE
             RESULT_VARIABLE _bzr_revno_result
             OUTPUT_STRIP_TRAILING_WHITESPACE )
@@ -46,7 +44,7 @@ macro( create_bzr_version_header )
         if( ${_bzr_revno_result} EQUAL 0 )
             # Get more info about that revision
             execute_process(
-                COMMAND ${Bazaar_EXECUTABLE} log -r${_bzr_TREE_DATE} ${PROJECT_SOURCE_DIR}
+                COMMAND ${Bazaar_EXECUTABLE} log -r${_bzr_TREE_DATE} ${_bzr_src_path}
                 OUTPUT_VARIABLE _bzr_LAST_CHANGE_LOG
                 ERROR_VARIABLE _bzr_log_error
                 RESULT_VARIABLE _bzr_log_result
@@ -73,5 +71,5 @@ macro( create_bzr_version_header )
       	set( KICAD_BUILD_VERSION "(${_kicad_bzr_date} BZR ${Kicad_REPO_REVISION})" )
     endif()
 
-    write_version_header( ${KICAD_BUILD_VERSION} )
+    set( KICAD_BUILD_VERSION ${KICAD_BUILD_VERSION} )
 endmacro()

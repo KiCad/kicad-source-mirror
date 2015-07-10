@@ -115,6 +115,23 @@ install( TARGETS lib_kicad
 endif()
 
 
+# KiCad build version string defaults to undefined which forces the build version header
+# command to look for Bazaar to create the version string header.
+set( KICAD_BUILD_VERSION "" CACHE STRING "Version string defined at configuration time." )
+
+# Generate version header file.
+add_custom_target(
+    version_header ALL
+    COMMAND ${CMAKE_COMMAND}
+        -DKICAD_BUILD_VERSION=${KICAD_BUILD_VERSION}
+        -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/version.h
+        -DSRC_PATH=${PROJECT_SOURCE_DIR}
+        -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
+        -P ${CMAKE_MODULE_PATH}/WriteVersionHeader.cmake
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Generating version string header"
+    )
+
 set( COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
     dialog_about/dialog_about.cpp
@@ -259,7 +276,9 @@ set( COMMON_SRCS
     )
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
+add_dependencies( common version_header )
 target_link_libraries( common ${Boost_LIBRARIES} )
+
 
 set( PCB_COMMON_SRCS
     base_screen.cpp

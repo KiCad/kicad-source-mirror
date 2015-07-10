@@ -685,17 +685,6 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
 endif()
 
-# Automagically create version header file if the version string was not defined during
-# the build configuration.  If CreateBzrVersionHeader cannot determine the current repo,
-# version, a version.h file is still created with KICAD_BUILD_VERSION set to "no-bzr".
-if( KICAD_BUILD_VERSION )
-    include( WriteVersionHeader )
-    write_version_header( ${KICAD_BUILD_VERSION} )
-else()
-    include( CreateBzrVersionHeader )
-    create_bzr_version_header()
-endif()
-
 if( EXISTS ${CMAKE_SOURCE_DIR}/include/config.h )
     # This file may exist ( created by an alternate process to the svn test above),
     # e.g. could be created by a checkout script that produces a source tar file.
