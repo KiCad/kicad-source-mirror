@@ -786,6 +786,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         }
     }
 
+    if( m_router->RoutingInProgress() )
+        m_router->StopRouting();
+
     if( saveUndoBuffer )
     {
         frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
