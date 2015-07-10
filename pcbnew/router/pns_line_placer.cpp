@@ -405,7 +405,10 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
     PNS_OPTIMIZER::Optimize( &walkFull, effort, m_currentNode );
 
     if( m_currentNode->CheckColliding( &walkFull ) )
+    {
+        aNewHead = m_head;
         return false;
+    }
 
     m_head = walkFull;
     aNewHead = walkFull;
