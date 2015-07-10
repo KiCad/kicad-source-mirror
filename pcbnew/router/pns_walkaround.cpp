@@ -142,8 +142,8 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
     // special case for via-in-the-middle-of-track placement
     if( aInitialPath.PointCount() <= 1 )
     {
-		if(aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(), m_itemMask ) )
-			return STUCK;
+        if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(), m_itemMask ) )
+            return STUCK;
 
         aWalkPath = aInitialPath;
         return DONE;

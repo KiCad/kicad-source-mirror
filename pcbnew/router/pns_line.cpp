@@ -176,7 +176,7 @@ int PNS_LINE::CountCorners( int aAngles )
 bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                            SHAPE_LINE_CHAIN& aWalk, SHAPE_LINE_CHAIN& aPost, bool aCw ) const
 {
-    const SHAPE_LINE_CHAIN& line ( CLine() );
+    const SHAPE_LINE_CHAIN& line( CLine() );
     VECTOR2I ip_start;
     VECTOR2I ip_end;
 

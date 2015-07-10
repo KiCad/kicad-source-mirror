@@ -66,9 +66,10 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
 {
     m_originLayer = aItem->Layers().Start();
 
-    if( aItem->OfKind ( PNS_ITEM::LINE ) )
+    if( aItem->OfKind( PNS_ITEM::LINE ) )
     {
-        const PNS_LINE* l=static_cast<const PNS_LINE*>( aItem );
+        const PNS_LINE* l = static_cast<const PNS_LINE*>( aItem );
+
         if( !l->SegmentCount() )
             return;
     }

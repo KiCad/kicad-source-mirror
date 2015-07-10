@@ -498,7 +498,7 @@ void ROUTER_TOOL::performRouting()
 {
     bool saveUndoBuffer = true;
 
-    if( !prepareInteractive( ) )
+    if( !prepareInteractive() )
         return;
 
     while( OPT_TOOL_EVENT evt = Wait() )

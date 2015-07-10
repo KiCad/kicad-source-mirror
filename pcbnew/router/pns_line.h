@@ -70,7 +70,7 @@ public:
         m_width = 1;        // Dummy value
     }
 
-    PNS_LINE( const PNS_LINE& aOther ) ;
+    PNS_LINE( const PNS_LINE& aOther );
 
     /**
      * Constructor

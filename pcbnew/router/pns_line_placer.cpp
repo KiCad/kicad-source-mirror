@@ -831,8 +831,7 @@ bool PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     PNS_NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
 
-    if( eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth &&
-            current.SegmentCount() )
+    if( eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth && current.SegmentCount() )
     {
         splitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
 
