@@ -211,10 +211,10 @@ private:
      * segment located at \a aPosition on aLayerMask.
      *  Vias are put in list but their flags BUSY is not set
      * @param aPosition A wxPoint object containing the position of the starting search.
-     * @param aLayerMask The allowed layers for segments to search.
+     * @param aLayerSet The allowed layers for segments to search.
      * @param aList The track list to fill with points of flagged segments.
      */
-    void chainMarkedSegments( wxPoint aPosition, LSET aLayerMask, TRACK_PTRS* aList );
+    void chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK_PTRS* aList );
 
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
