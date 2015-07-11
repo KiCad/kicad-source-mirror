@@ -1350,7 +1350,7 @@ int DRAWING_TOOL::placeTextModule()
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( true );
+    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
