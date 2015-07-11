@@ -1251,8 +1251,7 @@ int DRAWING_TOOL::placeTextModule()
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
-    m_controls->SetAutoPan( true );
-    m_controls->CaptureCursor( true );
+    // do not capture or auto-pan until we start placing some text
 
     Activate();
     m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
@@ -1267,6 +1266,8 @@ int DRAWING_TOOL::placeTextModule()
         {
             preview.Clear();
             preview.ViewUpdate();
+            m_controls->SetAutoPan( false );
+            m_controls->CaptureCursor( false );
             m_controls->ShowCursor( true );
 
             if( !placing || evt->IsActivate() )
@@ -1307,7 +1308,9 @@ int DRAWING_TOOL::placeTextModule()
 
                 if( !placing )
                     continue;
-
+                    
+                m_controls->CaptureCursor( true );
+                m_controls->SetAutoPan( true );
                 m_controls->ShowCursor( false );
                 text->SetParent( m_board->m_Modules );  // it has to set after the settings dialog
                                                         // otherwise the dialog stores it in undo buffer
@@ -1331,6 +1334,8 @@ int DRAWING_TOOL::placeTextModule()
                 m_frame->OnModify();
 
                 preview.Remove( text );
+                m_controls->CaptureCursor( false );
+                m_controls->SetAutoPan( false );
                 m_controls->ShowCursor( true );
 
                 text = new TEXTE_MODULE( NULL );
@@ -1370,8 +1375,7 @@ int DRAWING_TOOL::placeTextPcb()
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
-    m_controls->SetAutoPan( true );
-    m_controls->CaptureCursor( true );
+     // do not capture or auto-pan until we start placing some text
 
     Activate();
     m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
@@ -1391,6 +1395,8 @@ int DRAWING_TOOL::placeTextPcb()
 
                 preview.Clear();
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
                 m_controls->ShowCursor( true );
             }
             else
@@ -1424,6 +1430,8 @@ int DRAWING_TOOL::placeTextPcb()
                 if( text == NULL )
                     continue;
 
+                m_controls->CaptureCursor( true );
+                m_controls->SetAutoPan( true );
                 m_controls->ShowCursor( false );
                 preview.Add( text );
             }
@@ -1441,6 +1449,8 @@ int DRAWING_TOOL::placeTextPcb()
                 m_frame->SaveCopyInUndoList( text, UR_NEW );
 
                 preview.Remove( text );
+                m_controls->CaptureCursor( false );
+                m_controls->SetAutoPan( false );
                 m_controls->ShowCursor( true );
 
                 text = NULL;
