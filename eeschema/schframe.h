@@ -953,7 +953,7 @@ private:
     void EditImage( SCH_BITMAP* aItem );
 
     // Hierarchical Sheet & PinSheet
-    void        InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
+    void        InstallHierarchyFrame( wxPoint& pos );
     SCH_SHEET*  CreateSheet( wxDC* DC );
     void        ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
 

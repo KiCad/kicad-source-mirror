@@ -24,7 +24,7 @@
  */
 
 /**
- * @file hierarch.schframe
+ * @file hierarch.cpp
  */
 
 #include <fctsys.h>
@@ -110,14 +110,13 @@ public:
     SCH_EDIT_FRAME* m_Parent;
     HIERARCHY_TREE* m_Tree;
     int             m_nbsheets;
-    wxDC*           m_DC;
 
 private:
     wxSize m_TreeSize;
     int    maxposx;
 
 public:
-    HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
+    HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint& aPos );
     void BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId* previousmenu );
 
     ~HIERARCHY_NAVIG_DLG();
@@ -135,23 +134,22 @@ BEGIN_EVENT_TABLE( HIERARCHY_NAVIG_DLG, wxDialog )
 END_EVENT_TABLE()
 
 
-void SCH_EDIT_FRAME::InstallHierarchyFrame( wxDC* DC, wxPoint& pos )
+void SCH_EDIT_FRAME::InstallHierarchyFrame( wxPoint& pos )
 {
-    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( this, DC, pos );
+    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( this, pos );
 
     treeframe->ShowModal();
     treeframe->Destroy();
 }
 
 
-HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos ) :
-    wxDialog( parent, -1, _( "Navigator" ), pos, wxSize( 110, 50 ),
+HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint& aPos ) :
+    wxDialog( aParent, wxID_ANY, _( "Navigator" ), aPos, wxSize( 110, 50 ),
     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxTreeItemId cellule;
 
-    m_Parent = parent;
-    m_DC   = DC;
+    m_Parent = aParent;
     m_Tree = new HIERARCHY_TREE( this );
 
     m_nbsheets = 1;
@@ -297,6 +295,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
         screen->m_FirstRedraw = false;
         SetCrossHairPosition( GetScrollCenterPosition() );
         m_canvas->MoveCursorToCrossHair();
+        screen->SchematicCleanUp( GetCanvas(), NULL );
     }
     else
     {
