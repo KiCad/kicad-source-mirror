@@ -1308,7 +1308,7 @@ int DRAWING_TOOL::placeTextModule()
 
                 if( !placing )
                     continue;
-                    
+
                 m_controls->CaptureCursor( true );
                 m_controls->SetAutoPan( true );
                 m_controls->ShowCursor( false );
