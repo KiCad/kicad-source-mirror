@@ -67,7 +67,6 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelStagger;
 		wxTextCtrl* m_entryStagger;
 		wxRadioBox* m_radioBoxGridStaggerType;
-		wxStaticText* m_labelGridStaggerType;
 		wxRadioBox* m_radioBoxGridNumberingAxis;
 		wxCheckBox* m_checkBoxGridReverseNumbering;
 		wxCheckBox* m_checkBoxGridRestartNumbering;
@@ -112,7 +111,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_CREATE_ARRAY, const wxString& title = _("Create array"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 576,428 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_CREATE_ARRAY, const wxString& title = _("Create Array"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_CREATE_ARRAY_BASE();
 	
 };

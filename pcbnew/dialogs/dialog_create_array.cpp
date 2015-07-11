@@ -93,7 +93,6 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrig
     Add( m_entryGridPriNumberingOffset, m_options.m_gridPriNumberingOffset );
     Add( m_entryGridSecNumberingOffset, m_options.m_gridSecNumberingOffset );
 
-
     RestoreConfigToControls();
 
     // Load units into labels
@@ -112,7 +111,9 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrig
     setControlEnablement();
     calculateCircularArrayProperties();
 
+    m_stdButtonsOK->SetDefault();
     Fit();
+    SetMinSize( GetSize() );
 }
 
 
@@ -126,6 +127,7 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
     {
         setControlEnablement();
     }
+
     if( evObj == m_entryCentreX || evObj == m_entryCentreY )
     {
         calculateCircularArrayProperties();

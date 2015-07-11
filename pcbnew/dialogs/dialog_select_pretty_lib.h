@@ -46,7 +46,7 @@ public:
     const wxString GetPath() { return m_libName->GetValue(); }
 
 private:
-    virtual void OnSelectFolder( wxTreeEvent& event );
+    virtual void OnSelectFolder( wxFileDirPickerEvent& event );
 };
 
 

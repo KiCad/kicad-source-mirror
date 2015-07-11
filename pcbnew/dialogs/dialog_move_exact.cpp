@@ -57,7 +57,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent,
 
     m_stdButtonsOK->SetDefault();
 
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
 }
 
 
@@ -110,7 +110,7 @@ void DIALOG_MOVE_EXACT::OnPolarChanged( wxCommandEvent& event )
     {
         // convert to polar coordinates
         double r, q;
-        ToPolarDeg( val.x, val.y, r, q);
+        ToPolarDeg( val.x, val.y, r, q );
 
         PutValueInLocalUnits( *m_xEntry, round( r / 10.0) * 10 );
         m_yEntry->SetValue( wxString::FromDouble( q ) );
@@ -121,8 +121,8 @@ void DIALOG_MOVE_EXACT::OnPolarChanged( wxCommandEvent& event )
         // note - round off the last decimal place (10nm) to prevent
         // (some) rounding causing errors when round-tripping
         // you can never eliminate entirely, however
-        PutValueInLocalUnits( *m_xEntry, KiROUND( val.x / 10.0) * 10 );
-        PutValueInLocalUnits( *m_yEntry, KiROUND( val.y / 10.0) * 10 );
+        PutValueInLocalUnits( *m_xEntry, KiROUND( val.x / 10.0 ) * 10 );
+        PutValueInLocalUnits( *m_yEntry, KiROUND( val.y / 10.0 ) * 10 );
     }
     Layout();
 }
@@ -183,7 +183,7 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
     // for the output, we only deliver a Cartesian vector
     bool ok = GetTranslationInIU( m_translation, m_polarCoords->IsChecked() );
 
-    if ( ok )
+    if( ok )
     {
         // save the settings
         m_options.polarCoords = m_polarCoords->GetValue();
@@ -191,7 +191,7 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
         m_yEntry->GetValue().ToDouble( &m_options.entry2 );
         m_rotEntry->GetValue().ToDouble( &m_options.entryRotation );
 
-        EndModal( wxID_OK);
+        EndModal( wxID_OK );
     }
 }
 
@@ -201,7 +201,7 @@ void DIALOG_MOVE_EXACT::OnTextFocusLost( wxFocusEvent& event )
     wxTextCtrl* obj = static_cast<wxTextCtrl*>( event.GetEventObject() );
 
     if( obj->GetValue().IsEmpty() )
-        obj->SetValue("0");
+        obj->SetValue( "0" );
 
     event.Skip();
 }
