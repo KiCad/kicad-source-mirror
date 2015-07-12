@@ -40,10 +40,13 @@ DIALOG_SELECT_PRETTY_LIB::DIALOG_SELECT_PRETTY_LIB( wxWindow* parent,
 {
     if( !aDefaultPath.IsEmpty() )
         m_dirCtrl->SetPath( aDefaultPath );
+
+    m_sdbSizerOK->SetDefault();
+    GetSizer()->SetSizeHints( this );
 }
 
 
-void DIALOG_SELECT_PRETTY_LIB::OnSelectFolder( wxTreeEvent& event )
+void DIALOG_SELECT_PRETTY_LIB::OnSelectFolder( wxFileDirPickerEvent& event )
 {
     m_libName->SetValue( m_dirCtrl->GetPath() );
 

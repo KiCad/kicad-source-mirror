@@ -20,7 +20,7 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/dirctrl.h>
+#include <wx/filepicker.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
@@ -39,7 +39,7 @@ class DIALOG_SELECT_PRETTY_LIB_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_staticText;
-		wxGenericDirCtrl* m_dirCtrl;
+		wxDirPickerCtrl* m_dirCtrl;
 		wxBoxSizer* m_SizerNewLibName;
 		wxStaticText* m_staticTextDirname;
 		wxTextCtrl* m_libName;
@@ -49,12 +49,12 @@ class DIALOG_SELECT_PRETTY_LIB_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnSelectFolder( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnSelectFolder( wxFileDirPickerEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_SELECT_PRETTY_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Footprint Library Folder"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,300 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SELECT_PRETTY_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select Footprint Library Folder"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SELECT_PRETTY_LIB_BASE();
 	
 };
