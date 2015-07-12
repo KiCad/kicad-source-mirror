@@ -36,7 +36,8 @@ using namespace KIGFX;
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel ) :
-    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ), m_scrollScale( 1.0, 1.0 )
+    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ), m_scrollScale( 1.0, 1.0 ),
+    m_mouseIsInView(false), m_cursorWasDisplayedOnLeave(false)
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
@@ -54,10 +55,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_LEFT_DOWN,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
-#if defined _WIN32 || defined _WIN64
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), NULL, this );
-#endif
     m_parentPanel->Connect( wxEVT_LEAVE_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), NULL, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_THUMBTRACK,
@@ -212,12 +211,28 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 {
+    //If the cursor was enabled when we left, turn it on now
+    m_mouseIsInView = true;
+    m_view->GetGAL()->SetCursorEnabled(m_cursorWasDisplayedOnLeave);
+    
+#if defined _WIN32 || defined _WIN64
     m_parentPanel->SetFocus();
+#endif
 }
 
 
 void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 {
+    // Always hide the cursor when the mouse leaves the window to avoid confusing the user
+    // But we may need to re-enable it, so keep track of whether it was visible
+    m_mouseIsInView = false;
+    m_cursorWasDisplayedOnLeave = m_view->GetGAL()->GetCursorEnabled();
+    m_view->GetGAL()->SetCursorEnabled(false);
+    
+    // If we hid the cursor, redraw the window to get rid of it
+    if(m_cursorWasDisplayedOnLeave)
+        m_view->Redraw();
+    
     if( m_cursorCaptured )
     {
         bool warp = false;
@@ -433,4 +448,16 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
 #endif
             ( viewport.Centre().x - boundary.GetLeft() ) / boundary.GetWidth() * m_scrollScale.x,
             ( viewport.Centre().y - boundary.GetTop() ) / boundary.GetHeight() * m_scrollScale.y );
+}
+
+void WX_VIEW_CONTROLS::ShowCursor( bool aEnabled )
+{
+    // If the mouse is outside the view (on a toolbar etc), don't show the cursor
+    // until the mouse enters the view again. Just remember we want to show it now
+    if(!m_mouseIsInView)
+        m_cursorWasDisplayedOnLeave = aEnabled;
+    
+    // but if it's in the view, we want to show it right now
+    else
+        m_view->GetGAL()->SetCursorEnabled( aEnabled );
 }

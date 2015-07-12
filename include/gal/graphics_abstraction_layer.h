@@ -762,6 +762,16 @@ public:
     {
         isCursorEnabled = aCursorEnabled;
     }
+    
+    /**
+     * @brief Returns the cursor enable state
+     *
+     * @return True if the cursor is being drawn, else false
+     */
+    inline bool GetCursorEnabled() const
+    {
+        return isCursorEnabled;
+    }
 
     /**
      * @brief Set the cursor color.

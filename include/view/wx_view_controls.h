@@ -84,6 +84,13 @@ public:
         if( m_state == AUTO_PANNING )
             m_state = IDLE;
     }
+    
+    /**
+     * Function ShowCursor()
+     * Enables or disables display of cursor.
+     * @param aEnabled decides if the cursor should be shown.
+     */
+    virtual void ShowCursor( bool aEnabled );
 
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
     VECTOR2D GetMousePosition() const;
@@ -140,6 +147,12 @@ private:
 
     /// Ratio used for scaling world coordinates to scrollbar position.
     VECTOR2D    m_scrollScale;
+    
+    /// Indicates whether the mouse is inside the window
+    bool m_mouseIsInView;
+    
+    /// Indicates whether the cursor was being displayed at the time the mouse left the window
+    bool m_cursorWasDisplayedOnLeave;
 };
 } // namespace KIGFX
 
