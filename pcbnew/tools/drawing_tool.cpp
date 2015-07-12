@@ -1254,7 +1254,7 @@ int DRAWING_TOOL::placeTextModule()
     // do not capture or auto-pan until we start placing some text
 
     Activate();
-    m_frame->SetToolID( ID_PCB_ADD_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
+    m_frame->SetToolID( ID_MODEDIT_TEXT_TOOL, wxCURSOR_PENCIL, _( "Add text" ) );
     bool placing = false;
 
     // Main loop: keep receiving events
