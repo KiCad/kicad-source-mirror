@@ -631,7 +631,6 @@ void PLOTTER::Text( const wxPoint&              aPos,
 
     SetCurrentLineWidth( textPensize );
 
-
     if( aColor >= 0 )
         SetColor( aColor );
 
@@ -662,10 +661,7 @@ void PLOTTER::Text( const wxPoint&              aPos,
             DrawGraphicText( NULL, NULL, positions[ii], aColor, txt,
                              aOrient, aSize,
                              aH_justify, aV_justify,
-                             textPensize, aItalic,
-                             aBold,
-                             NULL,
-                             this );
+                             textPensize, aItalic, aBold, NULL, this );
         }
 
         delete multilineText;
@@ -675,10 +671,7 @@ void PLOTTER::Text( const wxPoint&              aPos,
         DrawGraphicText( NULL, NULL, aPos, aColor, aText,
                          aOrient, aSize,
                          aH_justify, aV_justify,
-                         textPensize, aItalic,
-                         aBold,
-                         NULL,
-                         this );
+                         textPensize, aItalic, aBold, NULL, this );
     }
 
     if( aWidth != textPensize )

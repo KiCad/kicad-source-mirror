@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,6 +190,9 @@ void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 void SVG_PLOTTER::SetColor( EDA_COLOR_T color )
 {
     PSLIKE_PLOTTER::SetColor( color );
+
+    if( m_graphics_changed )
+        setSVGPlotStyle();
 }
 
 
@@ -307,19 +310,30 @@ void SVG_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int w
     DPOINT  end_dev = userToDeviceCoordinates( rect.GetEnd() );
     DSIZE  size_dev = end_dev - org_dev;
     // Ensure size of rect in device coordinates is > 0
-    // Inkscape has problems with negative values for width and/or height
+    // I don't know if this is a SVG issue or a Inkscape issue, but
+    // Inkscape has problems with negative or null values for width and/or height, so avoid them
     DBOX rect_dev( org_dev, size_dev);
     rect_dev.Normalize();
 
     setFillMode( fill );
     SetCurrentLineWidth( width );
 
-    fprintf( outputFile,
-             "<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" rx=\"%g\" />\n",
-             rect_dev.GetPosition().x,  rect_dev.GetPosition().y,
-             rect_dev.GetSize().x, rect_dev.GetSize().y,
-             0.0   // radius of rounded corners
-             );
+    // Rectangles having a 0 size value for height or width are just not drawn on Inscape,
+    // so use a line when happens.
+    if( rect_dev.GetSize().x == 0.0 || rect_dev.GetSize().y == 0.0 )    // Draw a line
+        fprintf( outputFile,
+                 "<line x1=\"%g\" y1=\"%g\" x2=\"%g\" y2=\"%g\" />\n",
+                 rect_dev.GetPosition().x, rect_dev.GetPosition().y,
+                 rect_dev.GetEnd().x, rect_dev.GetEnd().y
+                 );
+
+    else
+        fprintf( outputFile,
+                 "<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" rx=\"%g\" />\n",
+                 rect_dev.GetPosition().x, rect_dev.GetPosition().y,
+                 rect_dev.GetSize().x, rect_dev.GetSize().y,
+                 0.0   // radius of rounded corners
+                 );
 }
 
 
