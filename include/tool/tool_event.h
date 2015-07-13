@@ -346,11 +346,11 @@ public:
             if( (bool) m_commandId && (bool) aEvent.m_commandId )
                 return *m_commandId == *aEvent.m_commandId;
         }
-        
+
         // BUGFIX: TA_ANY should match EVERYTHING, even TA_NONE (for TC_MESSAGE)
         if( m_actions == TA_ANY && aEvent.m_actions == TA_NONE && aEvent.m_category == TC_MESSAGE)
             return true;
-        
+
         // BUGFIX: This check must happen after the TC_COMMAND check because otherwise events of
         // the form { TC_COMMAND, TA_NONE } will be incorrectly skipped
         if( !( m_actions & aEvent.m_actions ) )
