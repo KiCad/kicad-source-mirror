@@ -23,16 +23,22 @@
 #
 
 # Automagically create version header file if the version string was not defined during
-# the build configuration.  If CreateBzrVersionHeader cannot determine the current repo,
-# version, a version.h file is still created with KICAD_BUILD_VERSION set to "no-bzr".
+# the build configuration.  If CreateBzrVersionHeader or CreateGitVersionHeader cannot
+# determine the current repo version, a version.h file is still created with
+# KICAD_BUILD_VERSION set to "no-vcs-found".
 if( NOT KICAD_BUILD_VERSION )
     set( _wvh_version_str "no-vcs-found" )
 
-    # If the code is managed by Bazaar, used bzr to determine the version string.
+    # Detect the appropiate VCS and set the version string.
     if( EXISTS "${SRC_PATH}/.bzr" )
         message( STATUS "Using Bazaar to determine build version string." )
         include( ${CMAKE_MODULE_PATH}/CreateBzrVersionHeader.cmake )
         create_bzr_version_header( ${SRC_PATH} )
+        set( _wvh_version_str ${KICAD_BUILD_VERSION} )
+    elseif( EXISTS "${SRC_PATH}/.git" )
+        message( STATUS "Using Git to determine build version string." )
+        include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
+        create_git_version_header( ${SRC_PATH} )
         set( _wvh_version_str ${KICAD_BUILD_VERSION} )
     endif()
 else()
