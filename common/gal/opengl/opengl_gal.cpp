@@ -959,11 +959,11 @@ unsigned int OPENGL_GAL::getNewGroupNumber()
 
 bool OPENGL_GAL::runTest()
 {
-    wxDialog* dialog = new wxDialog( GetParent(), -1, wxT( "opengl test" ),
-                                     wxPoint( 50, 50 ), wxSize( 50, 50 ) );
-    OPENGL_TEST* test = new OPENGL_TEST( dialog, this );
+    wxDialog dlgtest( GetParent(), -1, wxT( "opengl test" ), wxPoint( 50, 50 ), wxSize( 50, 50 ) );
+    OPENGL_TEST* test = new OPENGL_TEST( &dlgtest, this );
 
-    dialog->ShowModal();
+    dlgtest.Raise();         // on Linux, on some windows managers (Unity for instance) this is needed to actually show the dialog
+    dlgtest.ShowModal();
     bool result = test->IsOk();
 
     if( !result )
