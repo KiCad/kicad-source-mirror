@@ -255,6 +255,9 @@ public:
         if( aIndex < 0 )
             aIndex += PointCount();
 
+        if( aIndex >= PointCount() )
+            aIndex -= PointCount();
+
         return m_points[aIndex];
     }
 
@@ -578,6 +581,7 @@ public:
     {
         return false;
     }
+
 private:
     /// array of vertices
     std::vector<VECTOR2I> m_points;

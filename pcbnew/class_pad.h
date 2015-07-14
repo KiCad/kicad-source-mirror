@@ -227,7 +227,7 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
     */
-    void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                int aClearanceValue,
                                                int aCircleToSegmentsCount,
                                                double aCorrectionFactor ) const;
@@ -324,7 +324,7 @@ public:
      * @param aCorrectionFactor = the correction to apply to circles radius to keep
      *        the pad size when the circle is approximated by segments
      */
-    void BuildPadShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
+    void BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
                                wxSize aInflateValue, int aSegmentsPerCircle,
                                double aCorrectionFactor ) const;
 
@@ -339,7 +339,7 @@ public:
      *              (used for round and oblong shapes only(16 to 32 is a good value)
      * @return false if the pad has no hole, true otherwise
      */
-    bool BuildPadDrillShapePolygon( CPOLYGONS_LIST& aCornerBuffer,
+    bool BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
                                     int aInflateValue, int aSegmentsPerCircle ) const;
 
     /**

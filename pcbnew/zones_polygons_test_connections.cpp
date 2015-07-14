@@ -51,8 +51,8 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 bool sort_areas( const ZONE_CONTAINER* ref, const ZONE_CONTAINER* tst )
 {
     if( ref->GetNetCode() == tst->GetNetCode() )
-        return ref->GetFilledPolysList().GetCornersCount() <
-               tst->GetFilledPolysList().GetCornersCount();
+        return ref->GetFilledPolysList().TotalVertices() <
+               tst->GetFilledPolysList().TotalVertices();
     else
         return ref->GetNetCode() < tst->GetNetCode();
 }
@@ -101,7 +101,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
         if( aNetcode >= 0 &&  aNetcode != zone->GetNetCode() )
             continue;
 
-        if( zone->GetFilledPolysList().GetCornersCount() == 0 )
+        if( zone->GetFilledPolysList().IsEmpty() )
             continue;
 
         zones_candidates.push_back( zone );
@@ -156,16 +156,11 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
         }
 
         // test if a candidate is inside a filled area of this zone
-        unsigned indexstart = 0, indexend;
-        const CPOLYGONS_LIST& polysList = zone->GetFilledPolysList();
+        const SHAPE_POLY_SET& polysList = zone->GetFilledPolysList();
 
-        for( indexend = 0; indexend < polysList.GetCornersCount(); indexend++ )
+        for( int outline = 0; outline < polysList.OutlineCount(); outline++ )
         {
-            // end of a filled sub-area found
-            if( polysList.IsEndContour( indexend ) )
-            {
                 subnet++;
-                EDA_RECT bbox = zone->CalculateSubAreaBoundaryBox( indexstart, indexend );
 
                 for( unsigned ic = 0; ic < candidates.size(); ic++ )
                 {
@@ -207,21 +202,13 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
                     bool connected = false;
 
-                    if( bbox.Contains( pos1 ) )
+                    if( polysList.Contains( VECTOR2I( pos1.x, pos1.y ), outline ) )
+                        connected = true;
+
+                    if( !connected && ( pos1 != pos2 ) )
                     {
-                        if( TestPointInsidePolygon( polysList, indexstart,
-                                                    indexend, pos1.x, pos1.y ) )
+                        if( polysList.Contains( VECTOR2I( pos2.x, pos2.y ), outline ) )
                             connected = true;
-                    }
-                    if( !connected && (pos1 != pos2 ) )
-                    {
-                        if( bbox.Contains( pos2 ) )
-                        {
-                            if( TestPointInsidePolygon( polysList,
-                                                        indexstart, indexend,
-                                                        pos2.x, pos2.y ) )
-                                connected = true;
-                        }
                     }
 
                     if( connected )
@@ -247,13 +234,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                         }   // End if ( old_subnet > 0 )
                     }       // End if( connected )
                 }
-
-                // End test candidates for the current filled area
-                indexstart = indexend + 1;  // prepare test next area, starting at indexend+1
-                                            // (if exists).  End read one area in
-                                            // zone->m_FilledPolysList
-            }
-        } // End read all segments in zone
+        }
     } // End read all zones candidates
 }
 

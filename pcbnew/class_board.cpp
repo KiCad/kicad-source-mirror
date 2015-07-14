@@ -2741,8 +2741,8 @@ wxString BOARD::GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
  * return true if success, false if a contour is not valid
  */
 #include <specctra.h>
-bool BOARD::GetBoardPolygonOutlines( CPOLYGONS_LIST& aOutlines,
-                                     CPOLYGONS_LIST& aHoles,
+bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
+                                     SHAPE_POLY_SET& aHoles,
                                      wxString* aErrorText )
 {
     // the SPECCTRA_DB function to extract board outlines:

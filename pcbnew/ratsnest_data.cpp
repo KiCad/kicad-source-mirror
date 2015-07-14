@@ -44,6 +44,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/bind.hpp>
 
+#include <geometry/shape_poly_set.h>
+
 #include <cassert>
 #include <algorithm>
 #include <limits>
@@ -342,11 +344,16 @@ void RN_NET::clearNode( const RN_NODE_PTR& aNode )
 }
 
 
-RN_POLY::RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd,
+RN_POLY::RN_POLY( const SHAPE_POLY_SET* aParent,
+                  int aSubpolygonIndex,
                   RN_LINKS& aConnections, const BOX2I& aBBox ) :
-    m_begin( aBegin ), m_end( aEnd ), m_bbox( aBBox )
+    m_subpolygonIndex( aSubpolygonIndex ),
+    m_bbox( aBBox ),
+    m_parentPolyset( aParent )
 {
-    m_node = aConnections.AddNode( m_begin->x, m_begin->y );
+    const VECTOR2I& p = aParent->CVertex( aSubpolygonIndex, 0 );
+
+    m_node = aConnections.AddNode( p.x, p.y );
 
     // Mark it as not appropriate as a destination of ratsnest edges
     // (edges coming out from a polygon vertex look weird)
@@ -356,48 +363,9 @@ RN_POLY::RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd,
 
 bool RN_POLY::HitTest( const RN_NODE_PTR& aNode ) const
 {
-    long xt = aNode->GetX();
-    long yt = aNode->GetY();
+    VECTOR2I p( aNode->GetX(), aNode->GetY() );
 
-    // If the point lies outside the bounding box, there is no point to check it further
-    if( !m_bbox.Contains( xt, yt ) )
-        return false;
-
-    long xNew, yNew, xOld, yOld, x1, y1, x2, y2;
-    bool inside = false;
-
-    // For the first loop we have to use the last point as the previous point
-    xOld = m_end->x;
-    yOld = m_end->y;
-
-    for( const CPolyPt* point = m_begin; point <= m_end; ++point )
-    {
-        xNew = point->x;
-        yNew = point->y;
-
-        // Swap points if needed, so always x2 >= x1
-        if( xNew > xOld )
-        {
-            x1 = xOld; y1 = yOld;
-            x2 = xNew; y2 = yNew;
-        }
-        else
-        {
-            x1 = xNew; y1 = yNew;
-            x2 = xOld; y2 = yOld;
-        }
-
-        if( ( xNew < xt ) == ( xt <= xOld ) && /* edge "open" at left end */
-          (double)( yt - y1 ) * (double)( x2 - x1 ) < (double)( y2 - y1 ) * (double)( xt - x1 ) )
-        {
-            inside = !inside;
-        }
-
-        xOld = xNew;
-        yOld = yNew;
-    }
-
-    return inside;
+    return m_parentPolyset->Contains( p, m_subpolygonIndex );
 }
 
 
@@ -454,51 +422,14 @@ void RN_NET::AddItem( const TRACK* aTrack )
 void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
 {
     // Prepare a list of polygons (every zone can contain one or more polygons)
-    const std::vector<CPolyPt>& polyPoints = aZone->GetFilledPolysList().GetList();
+    const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList();
 
-    if( polyPoints.size() == 0 )
-        return;
-
-    // Origin and end of bounding box for a polygon
-    VECTOR2I origin( polyPoints[0].x, polyPoints[0].y );
-    VECTOR2I end( polyPoints[0].x, polyPoints[0].y );
-    unsigned int idxStart = 0;
-
-    // Extract polygons from zones
-    for( unsigned int i = 0; i < polyPoints.size(); ++i )
+    for( int i = 0; i < polySet.OutlineCount(); ++i )
     {
-        const CPolyPt& point = polyPoints[i];
+        const SHAPE_LINE_CHAIN& path = polySet.COutline( i );
 
-        if( point.end_contour )
-        {
-            RN_POLY poly = RN_POLY( &polyPoints[idxStart], &point,
-                                    m_links, BOX2I( origin, end - origin ) );
-            poly.GetNode()->AddParent( aZone );
-            m_zones[aZone].m_Polygons.push_back( poly );
-
-            idxStart = i + 1;
-
-            if( idxStart < polyPoints.size() )
-            {
-                origin.x = polyPoints[idxStart].x;
-                origin.y = polyPoints[idxStart].y;
-                end.x = polyPoints[idxStart].x;
-                end.y = polyPoints[idxStart].y;
-            }
-        }
-        else
-        {
-            // Determine bounding box
-            if( point.x < origin.x )
-                origin.x = point.x;
-            else if( point.x > end.x )
-                end.x = point.x;
-
-            if( point.y < origin.y )
-                origin.y = point.y;
-            else if( point.y > end.y )
-                end.y = point.y;
-        }
+        RN_POLY poly = RN_POLY( &polySet, i, m_links, path.BBox() );
+        m_zones[aZone].m_Polygons.push_back( poly );
     }
 
     m_dirty = true;

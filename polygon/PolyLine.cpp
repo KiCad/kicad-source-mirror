@@ -115,85 +115,19 @@ CPolyLine::~CPolyLine()
  * @return the polygon count (always >= 1, because there is at least one polygon)
  * There are new polygons only if the polygon count  is > 1
  */
-#include "clipper.hpp"
 int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 {
-    ClipperLib::Path raw_polygon;
-    ClipperLib::Paths normalized_polygons;
 
-    unsigned corners_count = m_CornersList.GetCornersCount();
+    SHAPE_POLY_SET polySet = ConvertPolyListToPolySet( m_CornersList );
 
-    KI_POLYGON_SET polysholes;
-    KI_POLYGON_WITH_HOLES mainpoly;
-    std::vector<KI_POLY_POINT> cornerslist;
-    KI_POLYGON_WITH_HOLES_SET all_contours;
-    KI_POLYGON poly_tmp;
+    polySet.Simplify();
 
-    // Normalize first contour
-    unsigned ic    = 0;
-    while( ic < corners_count )
-    {
-        const CPolyPt& corner = m_CornersList[ic++];
-        raw_polygon.push_back( ClipperLib::IntPoint( corner.x, corner.y ) );
-
-        if( corner.end_contour )
-            break;
-    }
-
-    ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
-
-    // enter main outline
-    for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
-    {
-        ClipperLib::Path& polygon = normalized_polygons[ii];
-        cornerslist.clear();
-        for( unsigned jj = 0; jj < polygon.size(); jj++ )
-            cornerslist.push_back( KI_POLY_POINT( KiROUND( polygon[jj].X ),
-                                                  KiROUND( polygon[jj].Y ) ) );
-        mainpoly.set( cornerslist.begin(), cornerslist.end() );
-        all_contours.push_back(  mainpoly );
-    }
-
-    // Enter holes
-    while( ic < corners_count )
-    {
-        cornerslist.clear();
-        raw_polygon.clear();
-        normalized_polygons.clear();
-
-        // Normalize current hole and add it to hole list
-        while( ic < corners_count )
-        {
-            const CPolyPt& corner = m_CornersList[ic++];
-            raw_polygon.push_back( ClipperLib::IntPoint( corner.x, corner.y ) );
-
-            if( corner.end_contour )
-            {
-                ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
-                for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
-                {
-                    ClipperLib::Path& polygon = normalized_polygons[ii];
-                    cornerslist.clear();
-                    for( unsigned jj = 0; jj < polygon.size(); jj++ )
-                        cornerslist.push_back( KI_POLY_POINT( KiROUND( polygon[jj].X ),
-                                                              KiROUND( polygon[jj].Y ) ) );
-                    bpl::set_points( poly_tmp, cornerslist.begin(), cornerslist.end() );
-                    polysholes.push_back( poly_tmp );
-                }
-                break;
-            }
-        }
-    }
-    all_contours -= polysholes;
-
-    // copy polygon with holes to destination
     RemoveAllContours();
 
-    #define outlines all_contours
-
-    for( unsigned ii = 0; ii < outlines.size(); ii++ )
+    for( int ii = 0; ii < polySet.OutlineCount(); ii++ )
     {
         CPolyLine* polyline = this;
+
         if( ii > 0 )
         {
             polyline = new CPolyLine;
@@ -201,35 +135,14 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
             aNewPolygonList->push_back( polyline );
         }
 
-        KI_POLYGON_WITH_HOLES& curr_poly = outlines[ii];
-        KI_POLYGON_WITH_HOLES::iterator_type corner = curr_poly.begin();
-        // enter main contour
-        while( corner != curr_poly.end() )
-        {
-            polyline->AppendCorner( corner->x(), corner->y() );
-            corner++;
-        }
-        polyline->CloseLastContour();
+        SHAPE_POLY_SET pnew;
+        pnew.NewOutline();
+        pnew.Polygon( 0 ) = polySet.CPolygon( ii );
 
-        // add holes (set of polygons)
-        KI_POLYGON_WITH_HOLES::iterator_holes_type hole = curr_poly.begin_holes();
-        while( hole != curr_poly.end_holes() )
-        {
-            KI_POLYGON::iterator_type hole_corner = hole->begin();
-            // create area with external contour: Recreate only area edges, NOT holes
-            while( hole_corner != hole->end() )
-            {
-                polyline->AppendCorner( hole_corner->x(), hole_corner->y() );
-                hole_corner++;
-            }
-            polyline->CloseLastContour();
-            hole++;
-        }
-
-        polyline->RemoveNullSegments();
+        polyline->m_CornersList = ConvertPolySetToPolyList( pnew );
     }
 
-    return outlines.size();
+    return polySet.OutlineCount();
 }
 
 /**
@@ -1260,375 +1173,6 @@ int CPolyLine::HitTestForCorner( const wxPoint& aPos, int aDistMax ) const
     return corner;
 }
 
-/*
- * Copy the contours to a KI_POLYGON_WITH_HOLES
- * The first contour is the main outline, others are holes
- */
-void CPOLYGONS_LIST::ExportTo( KI_POLYGON_WITH_HOLES& aPolygoneWithHole ) const
-{
-    unsigned    corners_count = m_cornersList.size();
-
-    std::vector<KI_POLY_POINT> cornerslist;
-    KI_POLYGON  poly;
-
-    // Enter main outline: this is the first contour
-    unsigned    ic = 0;
-
-    while( ic < corners_count )
-    {
-        const CPolyPt& corner = GetCorner( ic++ );
-        cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
-
-        if( corner.end_contour )
-            break;
-    }
-
-    aPolygoneWithHole.set( cornerslist.begin(), cornerslist.end() );
-
-    // Enter holes: they are next contours (when exist)
-    if( ic < corners_count )
-    {
-        KI_POLYGON_SET holePolyList;
-
-        while( ic < corners_count )
-        {
-            cornerslist.clear();
-
-            while( ic < corners_count )
-            {
-                cornerslist.push_back( KI_POLY_POINT( GetX( ic ), GetY( ic ) ) );
-
-                if( IsEndContour( ic++ ) )
-                    break;
-            }
-
-            bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-            holePolyList.push_back( poly );
-        }
-
-        aPolygoneWithHole.set_holes( holePolyList.begin(), holePolyList.end() );
-    }
-}
-
-/**
- * Copy all contours to a KI_POLYGON_SET aPolygons
- * Each contour is copied into a KI_POLYGON, and each KI_POLYGON
- * is append to aPolygons
- */
-void CPOLYGONS_LIST::ExportTo( KI_POLYGON_SET& aPolygons ) const
-{
-    std::vector<KI_POLY_POINT> cornerslist;
-    unsigned    corners_count = GetCornersCount();
-
-    // Count the number of polygons in aCornersBuffer
-    int         polycount = 0;
-
-    for( unsigned ii = 0; ii < corners_count; ii++ )
-    {
-        if( IsEndContour( ii ) )
-            polycount++;
-    }
-
-    aPolygons.reserve( polycount );
-
-    for( unsigned icnt = 0; icnt < corners_count; )
-    {
-        KI_POLYGON  poly;
-        cornerslist.clear();
-
-        unsigned    ii;
-
-        for( ii = icnt; ii < corners_count; ii++ )
-        {
-            cornerslist.push_back( KI_POLY_POINT( GetX( ii ), GetY( ii ) ) );
-
-            if( IsEndContour( ii ) )
-                break;
-        }
-
-        bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-        aPolygons.push_back( poly );
-        icnt = ii + 1;
-    }
-}
-
-/*
- * Copy all contours to a ClipperLib::Paths& aPolygons
- * Each contour is copied into a ClipperLib::Path, and each ClipperLib::Path
- * is append to aPolygons
- */
-void CPOLYGONS_LIST::ExportTo( ClipperLib::Paths& aPolygons ) const
-{
-    unsigned    corners_count = GetCornersCount();
-
-    // Count the number of polygons in aCornersBuffer
-    int         polycount = 0;
-
-    for( unsigned ii = 0; ii < corners_count; ii++ )
-    {
-        if( IsEndContour( ii ) )
-            polycount++;
-    }
-
-    aPolygons.reserve( polycount );
-
-    for( unsigned icnt = 0; icnt < corners_count; )
-    {
-        ClipperLib::Path poly;
-        unsigned    ii;
-
-        for( ii = icnt; ii < corners_count; ii++ )
-        {
-            poly << ClipperLib::IntPoint( GetX( ii ), GetY( ii ) );
-
-            if( IsEndContour( ii ) )
-                break;
-        }
-
-        aPolygons.push_back( poly );
-        icnt = ii + 1;
-    }
-}
-
-
-/* Imports all polygons found in a KI_POLYGON_SET in list
- */
-void CPOLYGONS_LIST::ImportFrom( KI_POLYGON_SET& aPolygons )
-{
-    CPolyPt corner;
-
-    for( unsigned ii = 0; ii < aPolygons.size(); ii++ )
-    {
-        KI_POLYGON& poly = aPolygons[ii];
-
-        for( unsigned jj = 0; jj < poly.size(); jj++ )
-        {
-            KI_POLY_POINT point = *(poly.begin() + jj);
-            corner.x    = point.x();
-            corner.y    = point.y();
-            corner.end_contour = false;
-            AddCorner( corner );
-        }
-
-        CloseLastContour();
-    }
-}
-
-
-/* Imports all polygons found in a ClipperLib::Paths in list
- */
-void CPOLYGONS_LIST::ImportFrom( ClipperLib::Paths& aPolygons )
-{
-    CPolyPt corner;
-
-    for( unsigned ii = 0; ii < aPolygons.size(); ii++ )
-    {
-        ClipperLib::Path& polygon = aPolygons[ii];
-
-        for( unsigned jj = 0; jj < polygon.size(); jj++ )
-        {
-            corner.x    = int( polygon[jj].X );
-            corner.y    = int( polygon[jj].Y );
-            corner.end_contour = false;
-            AddCorner( corner );
-        }
-
-        CloseLastContour();
-    }
-}
-
-/* Inflate the outline stored in m_cornersList.
- * The first polygon is the external outline. It is inflated
- * The other polygons are holes. they are deflated
- * aResult = the Inflated outline
- * aInflateValue = the Inflate value. when < 0, this is a deflate transform
- * aLinkHoles = if true, aResult contains only one polygon,
- * with holes linked by overlapping segments
- *
- * Important Note:
- * Inflating a polygon with acute angles or a non convex polygon gives non optimal shapes
- * for your purposes (creating a clearance area from zones).
- * So when inflating a polygon, we combine it with a "thick outline"
- * with a thickness = aInflateValue*2.
- * the inflated polygon shape is much better to build a polygon
- * from a polygon + clearance area
- *
- * Generic algos (Clipper, Boost Polygon) can inflate polygons, but the result is
- * not always suitable (they work fine only for polygons with non acute angle)
- *
- * To deflate polygons, the same calculation is made, but instead of adding the "thick outline"
- * we substract it.
- */
-#include <convert_basic_shapes_to_polygon.h>
-
-void CPOLYGONS_LIST::InflateOutline( CPOLYGONS_LIST& aResult, int aInflateValue, bool aLinkHoles )
-{
-    KI_POLYGON_SET polyset_outline;
-    ExportTo( polyset_outline );
-
-    // Extract holes (cutout areas) and add them to the hole buffer
-    KI_POLYGON_SET outlineHoles;
-
-    while( polyset_outline.size() > 1 )
-    {
-        outlineHoles.push_back( polyset_outline.back() );
-        polyset_outline.pop_back();
-    }
-
-    // inflate main outline
-    unsigned icnt = 0;
-    int width = std::abs( aInflateValue * 2 );
-
-    if( polyset_outline.size() )
-    {
-        CPOLYGONS_LIST outlines;
-
-        for( ; icnt < GetCornersCount(); icnt++ )
-        {
-            unsigned ii = icnt+1;
-
-            if( IsEndContour( icnt ) )
-                ii = 0;
-
-            TransformRoundedEndsSegmentToPolygon( outlines,
-                            GetPos( icnt ), GetPos( ii ), 16, width );
-
-            if( IsEndContour( icnt ) )
-                break;
-        }
-
-        KI_POLYGON_SET thicklines;
-        outlines.ExportTo( thicklines );
-
-        if( aInflateValue > 0 )     // Inflate main outline
-            polyset_outline += thicklines;
-        else if( aInflateValue < 0 )    // Actually a deflate transform
-            polyset_outline -= thicklines;   // deflate main outline
-
-    }
-
-    // deflate outline holes
-    if( outlineHoles.size() )
-    {
-        int deflateValue = -aInflateValue;
-
-        CPOLYGONS_LIST outlines;
-        icnt += 1;   // points the first point of the first hole
-        unsigned firstpoint = icnt;
-
-        for( ; icnt < GetCornersCount(); icnt++ )
-        {
-            unsigned ii = icnt+1;
-
-            if( IsEndContour( icnt ) || ii >= GetCornersCount() )
-            {
-                ii = firstpoint;
-                firstpoint = icnt+1;
-            }
-
-            TransformRoundedEndsSegmentToPolygon( outlines,
-                            GetPos( icnt ), GetPos( ii ), 16, width );
-        }
-
-        KI_POLYGON_SET thicklines;
-        outlines.ExportTo( thicklines );
-
-        if( deflateValue > 0 )     // Inflate holes
-            outlineHoles += thicklines;
-        else if( deflateValue < 0 )    // deflate holes
-            outlineHoles -= thicklines;
-    }
-
-    // Copy modified polygons
-    if( !aLinkHoles )
-    {
-        aResult.ImportFrom( polyset_outline );
-
-        if( outlineHoles.size() )
-            aResult.ImportFrom( outlineHoles );
-    }
-    else
-    {
-        polyset_outline -= outlineHoles;
-        aResult.ImportFrom( polyset_outline );
-    }
-}
-
-
-/**
- * Function ConvertPolysListWithHolesToOnePolygon
- * converts the outline contours aPolysListWithHoles with holes to one polygon
- * with no holes (only one contour)
- * holes are linked to main outlines by overlap segments, to give only one polygon
- *
- * @param aPolysListWithHoles = the list of corners of contours (haing holes
- * @param aOnePolyList = a polygon with no holes
- */
-void ConvertPolysListWithHolesToOnePolygon( const CPOLYGONS_LIST& aPolysListWithHoles,
-                                            CPOLYGONS_LIST&  aOnePolyList )
-{
-    unsigned corners_count = aPolysListWithHoles.GetCornersCount();
-
-    int      polycount = 0;
-    for( unsigned ii = 0; ii < corners_count; ii++ )
-    {
-        if(  aPolysListWithHoles.IsEndContour( ii ) )
-            polycount++;
-    }
-
-    // If polycount<= 1, there is no holes found, and therefore just copy the polygon.
-    if( polycount <= 1 )
-    {
-        aOnePolyList.Append( aPolysListWithHoles );
-        return;
-    }
-
-    // Holes are found: convert them to only one polygon with overlap segments
-    KI_POLYGON_SET polysholes;
-    KI_POLYGON_SET mainpoly;
-    KI_POLYGON poly_tmp;
-    std::vector<KI_POLY_POINT> cornerslist;
-    corners_count = aPolysListWithHoles.GetCornersCount();
-
-    unsigned ic    = 0;
-    // enter main outline
-    while( ic < corners_count )
-    {
-        const CPolyPt& corner = aPolysListWithHoles.GetCorner( ic++ );
-        cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
-
-        if( corner.end_contour )
-            break;
-    }
-    bpl::set_points( poly_tmp, cornerslist.begin(), cornerslist.end() );
-    mainpoly.push_back( poly_tmp );
-
-    while( ic < corners_count )
-    {
-        cornerslist.clear();
-        {
-            while( ic < corners_count )
-            {
-                const CPolyPt& corner = aPolysListWithHoles.GetCorner( ic++ );
-                cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
-
-                if( corner.end_contour )
-                    break;
-            }
-
-            bpl::set_points( poly_tmp, cornerslist.begin(), cornerslist.end() );
-            polysholes.push_back( poly_tmp );
-        }
-    }
-
-    mainpoly -= polysholes;
-
-    // copy polygon with no holes to destination
-    // Because all holes are now linked to the main outline
-    // by overlapping segments, we should have only one polygon in list
-    wxASSERT( mainpoly.size() == 1 );
-    aOnePolyList.ImportFrom( mainpoly );
-}
 
 /**
  * Function IsPolygonSelfIntersecting
@@ -1724,21 +1268,80 @@ bool CPolyLine::IsPolygonSelfIntersecting()
     return false;
 }
 
-
-/* converts the outline aOnePolyList (only one contour,
- * holes are linked by overlapping segments) to
- * to one main polygon and holes (polygons inside main polygon)
- * aOnePolyList = a only one polygon ( holes are linked )
- * aPolysListWithHoles = the list of corners of contours
- *                       (main outline and holes)
- */
-void ConvertOnePolygonToPolysListWithHoles( const CPOLYGONS_LIST&    aOnePolyList,
-                                            CPOLYGONS_LIST&          aPolysListWithHoles )
+const SHAPE_POLY_SET ConvertPolyListToPolySet( const CPOLYGONS_LIST& aList )
 {
-    ClipperLib::Paths initialPoly;
-    ClipperLib::Paths modifiedPoly;
+    SHAPE_POLY_SET rv;
 
-    aOnePolyList.ExportTo( initialPoly );
-    SimplifyPolygon(initialPoly[0], modifiedPoly );
-    aPolysListWithHoles.ImportFrom( modifiedPoly );
+    unsigned corners_count = aList.GetCornersCount();
+
+    // Enter main outline: this is the first contour
+    unsigned ic = 0;
+
+    if( !corners_count )
+        return rv;
+
+    int index = 0;
+
+    while( ic < corners_count )
+    {
+        int hole = -1;
+
+        if( index == 0 )
+        {
+            rv.NewOutline();
+            hole = -1;
+        }
+        else
+        {
+            hole = rv.NewHole();
+        }
+
+        while( ic < corners_count )
+        {
+            rv.Append( aList.GetX( ic ), aList.GetY( ic ), 0, hole );
+
+            if( aList.IsEndContour( ic ) )
+                break;
+
+            ic++;
+        }
+        ic++;
+
+        index++;
+    }
+
+    return rv;
+}
+
+
+const CPOLYGONS_LIST ConvertPolySetToPolyList(const SHAPE_POLY_SET& aPolyset)
+{
+    CPOLYGONS_LIST list;
+    CPolyPt corner, firstCorner;
+
+    const SHAPE_POLY_SET::POLYGON& poly = aPolyset.CPolygon( 0 );
+
+    for( unsigned int jj = 0; jj < poly.size() ; jj++ )
+    {
+        const SHAPE_LINE_CHAIN& path = poly[jj];
+
+        for( int i = 0; i < path.PointCount(); i++ )
+        {
+            const VECTOR2I &v = path.CPoint( i );
+
+            corner.x    = v.x;
+            corner.y    = v.y;
+            corner.end_contour = false;
+
+            if( i == 0 )
+                firstCorner = corner;
+
+            list.AddCorner( corner );
+        }
+
+        firstCorner.end_contour = true;
+        list.AddCorner( firstCorner );
+    }
+
+    return list;
 }

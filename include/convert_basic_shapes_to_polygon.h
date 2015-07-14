@@ -33,8 +33,8 @@
 #include <fctsys.h>
 #include <trigo.h>
 #include <macros.h>
-#include <PolyLine.h>
 
+#include <geometry/shape_poly_set.h>
 /**
  * Function TransformCircleToPolygon
  * convert a circle to a polygon, using multiple straight lines
@@ -45,9 +45,9 @@
  * Note: the polygon is inside the circle, so if you want to have the polygon
  * outside the circle, you should give aRadius calculated with a correction factor
  */
-void TransformCircleToPolygon( CPOLYGONS_LIST& aCornerBuffer,
-                                           wxPoint aCenter, int aRadius,
-                                           int aCircleToSegmentsCount );
+void TransformCircleToPolygon( SHAPE_POLY_SET&  aCornerBuffer,
+                                                wxPoint aCenter, int aRadius,
+                                                int aCircleToSegmentsCount );
 
 /**
  * Function TransformRoundedEndsSegmentToPolygon
@@ -61,7 +61,7 @@ void TransformCircleToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * Note: the polygon is inside the arc ends, so if you want to have the polygon
  * outside the circle, you should give aStart and aEnd calculated with a correction factor
  */
-void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            wxPoint aStart, wxPoint aEnd,
                                            int aCircleToSegmentsCount,
                                            int aWidth );
@@ -78,7 +78,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aWidth = width (thickness) of the line
  */
-void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                             wxPoint aCentre, wxPoint aStart, double aArcAngle,
                             int aCircleToSegmentsCount, int aWidth );
 
@@ -92,7 +92,7 @@ void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aWidth = width (thickness) of the ring
  */
-void TransformRingToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                             wxPoint aCentre, int aRadius,
                             int aCircleToSegmentsCount, int aWidth );
 

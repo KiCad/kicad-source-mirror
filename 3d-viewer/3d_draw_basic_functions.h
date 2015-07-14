@@ -43,7 +43,7 @@
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
-void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
+void    Draw3D_SolidHorizontalPolyPolygons( const SHAPE_POLY_SET& aPolysList,
                                             int aZpos, int aThickness, double aBiuTo3DUnits,
                                             bool aUseTextures,
                                             float aNormal_Z_Orientation );
@@ -61,7 +61,7 @@ void    Draw3D_SolidHorizontalPolyPolygons( const CPOLYGONS_LIST& aPolysList,
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
-void    Draw3D_SolidHorizontalPolygonWithHoles( const CPOLYGONS_LIST& aPolysList,
+void    Draw3D_SolidHorizontalPolygonWithHoles( const SHAPE_POLY_SET& aPolysList,
                                                 int aZpos, int aThickness, double aBiuTo3DUnits,
                                                 bool aUseTextures,
                                                 float aNormal_Z_Orientation );
