@@ -426,7 +426,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
 
     SHAPE_POLY_SET solidAreas = ConvertPolyListToPolySet( m_smoothedPoly->m_CornersList );
 
-    solidAreas.Inflate( -outline_half_thickness );
+    solidAreas.Inflate( -outline_half_thickness, segsPerCircle );
     solidAreas.Simplify();
 
     SHAPE_POLY_SET holes;
