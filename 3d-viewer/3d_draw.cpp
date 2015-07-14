@@ -637,7 +637,9 @@ void EDA_3D_CANVAS::buildBoard3DAuxLayers( REPORTER* aErrorMessages, REPORTER* a
     double      correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2) );
     BOARD*      pcb = GetBoard();
 
-    SHAPE_POLY_SET  bufferPolys;
+    CPOLYGONS_LIST  bufferPolys;
+
+    bufferPolys.reserve( 5000 );    // Reserve for items not on board
 
     static const LAYER_ID sequence[] = {
         Dwgs_User,
@@ -699,10 +701,12 @@ void EDA_3D_CANVAS::buildBoard3DAuxLayers( REPORTER* aErrorMessages, REPORTER* a
 
         // bufferPolys contains polygons to merge. Many overlaps .
         // Calculate merged polygons and remove pads and vias holes
-        if( bufferPolys.IsEmpty() )
+        if( bufferPolys.GetCornersCount() == 0 )
             continue;
-
-        bufferPolys.Fracture();
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polyset;
+        bufferPolys.ExportTo( polyset );
+        currLayerPolyset += polyset;
 
         int         thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
         int         zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
@@ -714,6 +718,9 @@ void EDA_3D_CANVAS::buildBoard3DAuxLayers( REPORTER* aErrorMessages, REPORTER* a
             zpos += thickness/2;
         else
             zpos -= thickness/2 ;
+
+        bufferPolys.RemoveAllContours();
+        bufferPolys.ImportFrom( currLayerPolyset );
 
         float zNormal = 1.0f; // When using thickness it will draw first the top and then botton (with z inverted)
 

@@ -358,7 +358,7 @@ void EDA_3D_CANVAS::draw3DPadHole( const D_PAD* aPad )
         return;
 
     // Store here the points to approximate hole by segments
-    SHAPE_POLY_SET  holecornersBuffer;
+    CPOLYGONS_LIST  holecornersBuffer;
     int             thickness   = GetPrm3DVisu().GetCopperThicknessBIU();
     int             height      = GetPrm3DVisu().GetLayerZcoordBIU( F_Cu ) -
                                   GetPrm3DVisu().GetLayerZcoordBIU( B_Cu );
@@ -436,7 +436,7 @@ void EDA_3D_CANVAS::draw3DViaHole( const VIA* aVia )
  * Used only to draw pads outlines on silkscreen layers.
  */
 void EDA_3D_CANVAS::buildPadShapeThickOutlineAsPolygon( const D_PAD*  aPad,
-                                                SHAPE_POLY_SET& aCornerBuffer,
+                                                CPOLYGONS_LIST& aCornerBuffer,
                                                 int             aWidth,
                                                 int             aCircleToSegmentsCount,
                                                 double          aCorrectionFactor )
@@ -449,22 +449,17 @@ void EDA_3D_CANVAS::buildPadShapeThickOutlineAsPolygon( const D_PAD*  aPad,
     }
 
     // For other shapes, draw polygon outlines
-    SHAPE_POLY_SET corners;
+    CPOLYGONS_LIST corners;
     aPad->BuildPadShapePolygon( corners, wxSize( 0, 0 ),
                                 aCircleToSegmentsCount, aCorrectionFactor );
 
     // Add outlines as thick segments in polygon buffer
-
-    const SHAPE_LINE_CHAIN& path = corners.COutline( 0 );
-
-    for( int ii = 0; ii < path.PointCount(); ii++ )
+    for( unsigned ii = 0, jj = corners.GetCornersCount() - 1;
+         ii < corners.GetCornersCount(); jj = ii, ii++ )
     {
-        const VECTOR2I& a = path.CPoint( ii );
-        const VECTOR2I& b = path.CPoint( ii + 1 );
-
         TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                              wxPoint( a.x, a.y ),
-                                              wxPoint( b.x, b.y ),
+                                              corners.GetPos( jj ),
+                                              corners.GetPos( ii ),
                                               aCircleToSegmentsCount, aWidth );
     }
 }

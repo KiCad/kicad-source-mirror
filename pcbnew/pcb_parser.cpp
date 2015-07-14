@@ -2540,7 +2540,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     wxString    netnameFromfile;    // the zone net name find in file
 
     // bigger scope since each filled_polygon is concatenated in here
-    SHAPE_POLY_SET pts;
+    CPOLYGONS_LIST pts;
 
     std::auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
 
@@ -2790,14 +2790,13 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                 if( token != T_pts )
                     Expecting( T_pts );
 
-                pts.NewOutline();
-
                 for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
                 {
-                    pts.Append( parseXY() );
+                    pts.Append( CPolyPt( parseXY() ) );
                 }
 
                 NeedRIGHT();
+                pts.CloseLastContour();
             }
             break;
 
@@ -2842,7 +2841,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         zone->Outline()->SetHatch( hatchStyle, hatchPitch, true );
     }
 
-    if( !pts.IsEmpty() )
+    if( pts.GetCornersCount() )
         zone->AddFilledPolysList( pts );
 
     // Ensure keepout and non copper zones do not have a net

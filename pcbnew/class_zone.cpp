@@ -120,7 +120,7 @@ EDA_ITEM* ZONE_CONTAINER::Clone() const
 
 bool ZONE_CONTAINER::UnFill()
 {
-    bool change = ( !m_FilledPolysList.IsEmpty() ) ||
+    bool change = ( m_FilledPolysList.GetCornersCount() > 0 ) ||
                   ( m_FillSegmList.size() > 0 );
 
     m_FilledPolysList.RemoveAllContours();
@@ -228,7 +228,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     if( displ_opts->m_DisplayZonesMode == 1 )     // Do not show filled areas
         return;
 
-    if( m_FilledPolysList.IsEmpty() )  // Nothing to draw
+    if( m_FilledPolysList.GetCornersCount() == 0 )  // Nothing to draw
         return;
 
     BOARD*      brd = GetBoard();
@@ -253,57 +253,69 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
     SetAlpha( &color, 150 );
 
+    CornersTypeBuffer.clear();
+    CornersBuffer.clear();
 
-    for ( int ic = 0; ic < m_FilledPolysList.OutlineCount(); ic++ )
+    // Draw all filled areas
+    int imax = m_FilledPolysList.GetCornersCount() - 1;
+
+    for( int ic = 0; ic <= imax; ic++ )
     {
-        const SHAPE_LINE_CHAIN& path = m_FilledPolysList.COutline( ic );
+        const CPolyPt& corner = m_FilledPolysList.GetCorner( ic );
+        wxPoint  coord( corner.x + offset.x, corner.y + offset.y );
+        CornersBuffer.push_back( coord );
+        CornersTypeBuffer.push_back( (char) corner.m_flags );
 
-        CornersBuffer.clear();
-
-        wxPoint p0;
-
-        for( int j = 0; j < path.PointCount(); j++ )
+        // the last corner of a filled area is found: draw it
+        if( (corner.end_contour) || (ic == imax) )
         {
-            const VECTOR2I& corner = path.CPoint( j );
-
-            wxPoint coord( corner.x + offset.x, corner.y + offset.y );
-
-            if( j == 0 )
-                p0 = coord;
-
-            CornersBuffer.push_back( coord );
-        }
-
-        CornersBuffer.push_back( p0 );
-
-        // Draw outlines:
-        if( ( m_ZoneMinThickness > 1 ) || outline_mode )
-        {
-            int ilim = CornersBuffer.size() - 1;
-
-            for( int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
+            /* Draw the current filled area: draw segments outline first
+             * Curiously, draw segments outline first and after draw filled polygons
+             * with outlines thickness = 0 is a faster than
+             * just draw filled polygons but with outlines thickness = m_ZoneMinThickness
+             * So DO NOT use draw filled polygons with outlines having a thickness  > 0
+             * Note: Extra segments ( added to joint holes with external outline) flagged by
+             * m_flags != 0 are not drawn
+             * Note not all polygon libraries provide a flag for these extra-segments, therefore
+             * the m_flags member can be always 0
+             */
             {
-                int x0 = CornersBuffer[is].x;
-                int y0 = CornersBuffer[is].y;
-                int x1 = CornersBuffer[ie].x;
-                int y1 = CornersBuffer[ie].y;
+                // Draw outlines:
+                if( (m_ZoneMinThickness > 1) || outline_mode )
+                {
+                    int ilim = CornersBuffer.size() - 1;
 
-                // Draw only basic outlines, not extra segments.
-                if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-                    GRCSegm( panel->GetClipBox(), DC,
-                             x0, y0, x1, y1,
-                             m_ZoneMinThickness, color );
-                else
-                    GRFillCSegm( panel->GetClipBox(), DC,
-	                         x0, y0, x1, y1,
-				 m_ZoneMinThickness, color );
+                    for(  int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
+                    {
+                        int x0 = CornersBuffer[is].x;
+                        int y0 = CornersBuffer[is].y;
+                        int x1 = CornersBuffer[ie].x;
+                        int y1 = CornersBuffer[ie].y;
+
+                        // Draw only basic outlines, not extra segments.
+                        if( CornersTypeBuffer[ie] == 0 )
+                        {
+                            if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
+                                GRCSegm( panel->GetClipBox(), DC,
+                                         x0, y0, x1, y1,
+                                         m_ZoneMinThickness, color );
+                            else
+                                GRFillCSegm( panel->GetClipBox(), DC,
+                                             x0, y0, x1, y1,
+                                             m_ZoneMinThickness, color );
+                        }
+                    }
+                }
+
+                // Draw areas:
+                if( m_FillMode == 0 && !outline_mode )
+                    GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0],
+                            true, 0, color, color );
             }
-        }
 
-        // Draw areas:
-        if( m_FillMode == 0 && !outline_mode )
-            GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0],
-                    true, 0, color, color );
+            CornersTypeBuffer.clear();
+            CornersBuffer.clear();
+        }
     }
 
     if( m_FillMode == 1  && !outline_mode )     // filled with segments
@@ -564,7 +576,26 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 {
-    return m_FilledPolysList.Contains( VECTOR2I( aRefPos.x, aRefPos.y ) );
+    unsigned indexstart = 0, indexend;
+    bool     inside     = false;
+
+    for( indexend = 0; indexend < m_FilledPolysList.GetCornersCount(); indexend++ )
+    {
+        if( m_FilledPolysList.IsEndContour( indexend ) )       // end of a filled sub-area found
+        {
+            if( TestPointInsidePolygon( m_FilledPolysList, indexstart, indexend,
+                                        aRefPos.x, aRefPos.y ) )
+            {
+                inside = true;
+                break;
+            }
+
+            // Prepare test of next area which starts after the current index end (if exists)
+            indexstart = indexend + 1;
+        }
+    }
+
+    return inside;
 }
 
 
@@ -643,9 +674,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg.Printf( wxT( "%d" ), (int) m_Poly->m_HatchLines.size() );
     aList.push_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
 
-    if( !m_FilledPolysList.IsEmpty() )
+    if( m_FilledPolysList.GetCornersCount() )
     {
-        msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.TotalVertices() );
+        msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.GetCornersCount() );
         aList.push_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
     }
 }
@@ -663,7 +694,12 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 
     m_Poly->Hatch();
 
-    m_FilledPolysList.Move( VECTOR2I( offset.x, offset.y ) );
+    /* move filled areas: */
+    for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
+    {
+        m_FilledPolysList.SetX( ic, m_FilledPolysList.GetX( ic ) + offset.x );
+        m_FilledPolysList.SetY( ic, m_FilledPolysList.GetY( ic ) + offset.y );
+    }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
@@ -710,8 +746,13 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
     m_Poly->Hatch();
 
     /* rotate filled areas: */
-    for( SHAPE_POLY_SET::ITERATOR ic = m_FilledPolysList.Iterate(); ic; ++ic )
-        RotatePoint( &ic->x, &ic->y, centre.x, centre.y, angle );
+    for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
+    {
+        pos = m_FilledPolysList.GetPos( ic );
+        RotatePoint( &pos, centre, angle );
+        m_FilledPolysList.SetX( ic, pos.x );
+        m_FilledPolysList.SetY( ic, pos.y );
+    }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
@@ -738,10 +779,11 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 
     m_Poly->Hatch();
 
-    for( SHAPE_POLY_SET::ITERATOR ic = m_FilledPolysList.Iterate(); ic; ++ic )
+    /* mirror filled areas: */
+    for( unsigned ic = 0; ic < m_FilledPolysList.GetCornersCount(); ic++ )
     {
-        int py = mirror_ref.y - ic->y;
-        ic->y = py + mirror_ref.y;
+        int py = mirror_ref.y - m_FilledPolysList.GetY( ic );
+        m_FilledPolysList.SetY( ic, py + mirror_ref.y );
     }
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
@@ -854,4 +896,15 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
                  GetChars( GetLayerName() ) );
 
     return msg;
+}
+
+
+/* Copy polygons stored in aKiPolyList to m_FilledPolysList
+ * The previous m_FilledPolysList contents is replaced.
+ */
+void ZONE_CONTAINER::CopyPolygonsFromClipperPathsToFilledPolysList(
+                            ClipperLib::Paths& aClipperPolyList )
+{
+    m_FilledPolysList.RemoveAllContours();
+    m_FilledPolysList.ImportFrom( aClipperPolyList );
 }

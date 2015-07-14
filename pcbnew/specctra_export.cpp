@@ -53,8 +53,6 @@
 
 #include <collectors.h>
 
-#include <geometry/shape_poly_set.h>
-
 #include <specctra.h>
 
 using namespace DSN;
@@ -1332,8 +1330,8 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
  * All contours should be closed, i.e. valid closed polygon vertices
  */
 bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
-                                           SHAPE_POLY_SET& aOutlines,
-                                           SHAPE_POLY_SET& aHoles,
+                                           CPOLYGONS_LIST& aOutlines,
+                                           CPOLYGONS_LIST& aHoles,
                                            wxString* aErrorText )
 {
     bool success = true;
@@ -1349,8 +1347,6 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
     BOUNDARY* boundary = new BOUNDARY( 0 );
     pcb->structure->SetBOUNDARY( boundary );
 
-    aOutlines.NewOutline();
-
     try
     {
         fillBOUNDARY( aBoard, boundary );
@@ -1361,8 +1357,10 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
         {
             corner.x = buffer[ii] * specctra2UIfactor;
             corner.y =  - buffer[ii+1] * specctra2UIfactor;
-            aOutlines.Append( corner.x, corner.y );
+            aOutlines.Append( corner );
         }
+
+        aOutlines.CloseLastContour();
 
         // Export holes, stored as keepouts polygonal shapes.
         // by fillBOUNDARY()
@@ -1373,15 +1371,13 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
             KEEPOUT& keepout = *i;
             PATH* poly_hole = (PATH*)keepout.shape;
             POINTS& plist = poly_hole->GetPoints();
-
-            aHoles.NewOutline();
-
             for( unsigned ii = 0; ii < plist.size(); ii++ )
             {
                 corner.x = plist[ii].x * specctra2UIfactor;
                 corner.y =  - plist[ii].y * specctra2UIfactor;
-                aHoles.Append( corner.x, corner.y );
+                aHoles.Append( corner );
             }
+            aHoles.CloseLastContour();
         }
     }
     catch( const IO_ERROR& ioe )
@@ -1401,24 +1397,23 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
         if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
             bbbox.Inflate( Millimeter2iu( 1.0 ) );
 
-        aOutlines.RemoveAllContours();
-        aOutlines.NewOutline();
-
         corner.x = bbbox.GetOrigin().x;
         corner.y = bbbox.GetOrigin().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( corner );
 
         corner.x = bbbox.GetOrigin().x;
         corner.y = bbbox.GetEnd().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( corner );
 
         corner.x = bbbox.GetEnd().x;
         corner.y = bbbox.GetEnd().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( corner );
 
         corner.x = bbbox.GetEnd().x;
         corner.y = bbbox.GetOrigin().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( corner );
+
+        aOutlines.CloseLastContour();
     }
 
     return success;

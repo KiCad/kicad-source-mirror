@@ -166,6 +166,18 @@ public:
     void TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb );
 
     /**
+     * Function CalculateSubAreaBoundaryBox
+     * Calculates the bounding box of a a filled area ( list of CPolyPt )
+     * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more
+     * polygons or filled areas )
+     * @return an EDA_RECT as bounding box
+     * @param aIndexStart = index of the first corner of a polygon (filled area)
+     *                      in m_FilledPolysList
+     * @param aIndexEnd = index of the last corner of a polygon in m_FilledPolysList
+     */
+    EDA_RECT CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd );
+
+    /**
      * Function IsOnCopperLayer
      * @return true if this zone is on a copper layer, false if on a technical layer
      */
@@ -259,7 +271,7 @@ public:
      * @param aCorrectionFactor = the correction to apply to arcs radius to roughly
      * keep arc radius when approximated by segments
      */
-    void TransformSolidAreasShapesToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+    void TransformSolidAreasShapesToPolygonSet( CPOLYGONS_LIST& aCornerBuffer,
                                                 int             aCircleToSegmentsCount,
                                                 double          aCorrectionFactor );
     /**
@@ -283,7 +295,32 @@ public:
      * AddClearanceAreasPolygonsToPolysList() to add holes for pads and tracks
      * and other items not in net.
      */
-    bool BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET* aOutlineBuffer = NULL );
+    bool BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST* aOutlineBuffer = NULL );
+
+    /**
+     * Function CopyPolygonsFromKiPolygonListToFilledPolysList
+     * Copy polygons stored in aKiPolyList to m_FilledPolysList
+     * The previous m_FilledPolysList contents is replaced.
+     * @param aKiPolyList = a KI_POLYGON_SET containing polygons.
+     */
+    void CopyPolygonsFromKiPolygonListToFilledPolysList( KI_POLYGON_SET& aKiPolyList );
+
+    /**
+     * Function CopyPolygonsFromClipperPathsToFilledPolysList
+     * Copy polygons stored in aKiPolyList to m_FilledPolysList
+     * The previous m_FilledPolysList contents is replaced.
+     * @param aClipperPolyList = a ClipperLib::Paths containing polygons.
+     */
+    void CopyPolygonsFromClipperPathsToFilledPolysList( ClipperLib::Paths& aClipperPolyList );
+
+#if 0   //does not exist in rev 5741.
+    /**
+     * Function CopyPolygonsFromFilledPolysListToKiPolygonList
+     * Copy polygons from m_FilledPolysList to aKiPolyList
+     * @param aKiPolyList = a KI_POLYGON_SET to fill by polygons.
+     */
+    void CopyPolygonsFromFilledPolysListToKiPolygonList( KI_POLYGON_SET& aKiPolyList );
+#endif
 
     /**
      * Function AddClearanceAreasPolygonsToPolysList
@@ -315,7 +352,7 @@ public:
      *          false to use aMinClearanceValue only
      * if both aMinClearanceValue = 0 and aUseNetClearance = false: create the zone outline polygon.
      */
-    void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+    void TransformOutlinesShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                                int                    aMinClearanceValue,
                                                bool                   aUseNetClearance );
     /**
@@ -473,7 +510,7 @@ public:
      * returns a reference to the list of filled polygons.
      * @return Reference to the list of filled polygons.
      */
-    const SHAPE_POLY_SET& GetFilledPolysList() const
+    const CPOLYGONS_LIST& GetFilledPolysList() const
     {
         return m_FilledPolysList;
     }
@@ -482,7 +519,7 @@ public:
      * Function AddFilledPolysList
      * sets the list of filled polygons.
      */
-    void AddFilledPolysList( SHAPE_POLY_SET& aPolysList )
+    void AddFilledPolysList( CPOLYGONS_LIST& aPolysList )
     {
         m_FilledPolysList = aPolysList;
     }
@@ -511,7 +548,7 @@ public:
 
     void AddPolygon( std::vector< wxPoint >& aPolygon );
 
-    void AddFilledPolygon( SHAPE_POLY_SET& aPolygon )
+    void AddFilledPolygon( CPOLYGONS_LIST& aPolygon )
     {
         m_FilledPolysList.Append( aPolygon );
     }
@@ -547,7 +584,7 @@ public:
 
 
 private:
-    void buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeatures );
+    void buildFeatureHoleList( BOARD* aPcb, CPOLYGONS_LIST& aFeatures );
 
     CPolyLine*            m_Poly;                ///< Outline of the zone.
     CPolyLine*            m_smoothedPoly;        // Corner-smoothed version of m_Poly
@@ -615,7 +652,7 @@ private:
      * connecting "holes" with external main outline.  In complex cases an outline
      * described by m_Poly can have many filled areas
      */
-    SHAPE_POLY_SET m_FilledPolysList;
+    CPOLYGONS_LIST m_FilledPolysList;
 };
 
 

@@ -111,7 +111,7 @@ public:
      * to the real clearance value (usually near from 1.0)
      */
     void TransformBoundingBoxWithClearanceToPolygon(
-                    SHAPE_POLY_SET& aCornerBuffer,
+                    CPOLYGONS_LIST& aCornerBuffer,
                     int                    aClearanceValue ) const;
 
     /**
@@ -126,7 +126,7 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+    void TransformShapeWithClearanceToPolygonSet( CPOLYGONS_LIST& aCornerBuffer,
                                                int                aClearanceValue,
                                                int                aCircleToSegmentsCount,
                                                double             aCorrectionFactor ) const;

@@ -49,7 +49,7 @@
 
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
-class SHAPE_POLY_SET;
+class CPOLYGONS_LIST;
 class REPORTER;
 
 class VIA;
@@ -306,7 +306,7 @@ private:
      * Used only to draw pads outlines on silkscreen layers.
      */
     void buildPadShapeThickOutlineAsPolygon( const D_PAD*          aPad,
-                                             SHAPE_POLY_SET& aCornerBuffer,
+                                             CPOLYGONS_LIST& aCornerBuffer,
                                              int             aWidth,
                                              int             aCircleToSegmentsCount,
                                              double          aCorrectionFactor );

@@ -290,26 +290,62 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
         return false;
     }
 
-    SHAPE_POLY_SET mergedOutlines = ConvertPolyListToPolySet( area_ref->Outline()->m_CornersList );
-    SHAPE_POLY_SET areaToMergePoly = ConvertPolyListToPolySet( area_to_combine->Outline()->m_CornersList );
+    // polygons intersect, combine them
+    KI_POLYGON_WITH_HOLES areaRefPoly;
+    KI_POLYGON_WITH_HOLES areaToMergePoly;
+    area_ref->Outline()->m_CornersList.ExportTo( areaRefPoly );
+    area_to_combine->Outline()->m_CornersList.ExportTo(  areaToMergePoly );
 
-    mergedOutlines.BooleanAdd( areaToMergePoly );
-    mergedOutlines.Simplify();
+    KI_POLYGON_WITH_HOLES_SET mergedOutlines;
+    mergedOutlines.push_back( areaRefPoly );
+    mergedOutlines |= areaToMergePoly;
 
     // We should have one polygon with hole
     // We can have 2 polygons with hole, if the 2 initial polygons have only one common corner
     // and therefore cannot be merged (they are dectected as intersecting)
     // but we should never have more than 2 polys
-    if( mergedOutlines.OutlineCount() > 2 )
+    if( mergedOutlines.size() > 2 )
     {
         wxLogMessage(wxT("BOARD::CombineAreas error: more than 2 polys after merging") );
         return false;
     }
 
-    if( mergedOutlines.OutlineCount() > 1 )
+    if( mergedOutlines.size() > 1 )
         return false;
 
-    area_ref->Outline()->m_CornersList = ConvertPolySetToPolyList( mergedOutlines );
+    areaRefPoly = mergedOutlines[0];
+    area_ref->Outline()->RemoveAllContours();
+
+    KI_POLYGON_WITH_HOLES::iterator_type corner = areaRefPoly.begin();
+
+    // create area with external contour: Recreate only area edges, NOT holes
+    area_ref->Outline()->Start( area_ref->GetLayer(), corner->x(), corner->y(),
+                                area_ref->Outline()->GetHatchStyle() );
+
+    while( ++corner != areaRefPoly.end() )
+    {
+        area_ref->Outline()->AppendCorner( corner->x(), corner->y() );
+    }
+
+    area_ref->Outline()->CloseLastContour();
+
+    // add holes (set of polygons)
+    KI_POLYGON_WITH_HOLES::iterator_holes_type hole = areaRefPoly.begin_holes();
+
+    while( hole != areaRefPoly.end_holes() )
+    {
+        KI_POLYGON::iterator_type hole_corner = hole->begin();
+
+        // create area with external contour: Recreate only area edges, NOT holes
+        while( hole_corner != hole->end() )
+        {
+            area_ref->Outline()->AppendCorner( hole_corner->x(), hole_corner->y() );
+            hole_corner++;
+        }
+
+        area_ref->Outline()->CloseLastContour();
+        hole++;
+    }
 
     RemoveArea( aDeletedList, area_to_combine );
 

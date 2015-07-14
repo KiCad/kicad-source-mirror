@@ -336,7 +336,7 @@ public:
      *  default = false
      */
     void TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
-                            SHAPE_POLY_SET& aCornerBuffer,
+                            CPOLYGONS_LIST& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
                             double          aCorrectionFactor,
@@ -361,7 +361,7 @@ public:
      */
     void TransformGraphicShapesWithClearanceToPolygonSet(
                             LAYER_ID aLayer,
-                            SHAPE_POLY_SET& aCornerBuffer,
+                            CPOLYGONS_LIST& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
                             double          aCorrectionFactor );

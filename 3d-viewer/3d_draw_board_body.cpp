@@ -57,8 +57,6 @@
 #include <trackball.h>
 #include <3d_draw_basic_functions.h>
 #include <geometry/shape_poly_set.h>
-#include <geometry/shape_file_io.h>
-
 
 #include <CImage.h>
 #include <reporter.h>
@@ -70,7 +68,6 @@
  */
 GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
 
-#if 0
 
 // FIX ME: these 2 functions are fully duplicate of the same 2 functions in
 // pcbnew/zones_convert_brd_items_to_polygons_with_Boost.cpp
@@ -91,7 +88,7 @@ static const SHAPE_POLY_SET convertPolyListToPolySet(const CPOLYGONS_LIST& aList
 
         while( ic < corners_count )
         {
-            rv.Append( aList.GetX(ic), aList.GetY(ic) );
+            rv.AppendVertex( aList.GetX(ic), aList.GetY(ic) );
             if( aList.IsEndContour( ic ) )
                 break;
 
@@ -131,7 +128,6 @@ static const CPOLYGONS_LIST convertPolySetToPolyList(const SHAPE_POLY_SET& aPoly
     return list;
 }
 
-#endif
 
 void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                       REPORTER* aErrorMessages, REPORTER* aActivity  )
@@ -160,11 +156,13 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                                 // a fine representation
     double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2.0) );
 
-    SHAPE_POLY_SET  bufferPolys;
-    SHAPE_POLY_SET  bufferPcbOutlines;   // stores the board main outlines
-    SHAPE_POLY_SET  bufferZonesPolys;
-    SHAPE_POLY_SET  currLayerHoles, allLayerHoles;                  // Contains holes for the current layer
-                                                                    // + zones when holes are removed from zones
+    CPOLYGONS_LIST  bufferPolys;
+    bufferPolys.reserve( 500000 );              // Reserve for large board: tracks mainly
+                                                // + zones when holes are removed from zones
+
+    CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
+    CPOLYGONS_LIST  allLayerHoles;              // Contains through holes, calculated only once
+    allLayerHoles.reserve( 20000 );
 
     // Build a polygon from edge cut items
     wxString msg;
@@ -181,7 +179,12 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         }
     }
 
-    bool           throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
+    CPOLYGONS_LIST  bufferZonesPolys;
+    bufferZonesPolys.reserve( 300000 );             // Reserve for large board ( copper zones mainly )
+                                                    // when holes are not removed from zones
+
+    CPOLYGONS_LIST  currLayerHoles;                 // Contains holes for the current layer
+    bool            throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
 
     LSET            cu_set = LSET::AllCuMask( GetPrm3DVisu().m_CopperLayersCount );
 
@@ -348,18 +351,47 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
         // bufferPolys contains polygons to merge. Many overlaps .
         // Calculate merged polygons
-        if( bufferPolys.IsEmpty() )
+        if( bufferPolys.GetCornersCount() == 0 )
             continue;
 
+#if 0
+       // Set to 1 to use boost::polygon to subtract holes to copper areas
+        // (due to bugs in boost::polygon, this is deprecated and Clipper is used instead
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polysetHoles;
+
+        // Add polygons, without holes
+        bufferPolys.ExportTo( currLayerPolyset );
+
+        // Add through holes (created only once) in current polygon holes list
+        currLayerHoles.Append( allLayerHoles );
+
+        if( currLayerHoles.GetCornersCount() > 0 )
+            currLayerHoles.ExportTo( polysetHoles );
+
+        // Merge polygons, and remove holes
+        currLayerPolyset -= polysetHoles;
+
+        bufferPolys.RemoveAllContours();
+        bufferPolys.ImportFrom( currLayerPolyset );
+#else
         // Use Clipper lib to subtract holes to copper areas
+        SHAPE_POLY_SET solidAreas = convertPolyListToPolySet( bufferPolys );
+        solidAreas.Simplify();
 
-        bufferPolys.Simplify();
-        currLayerHoles.Simplify();
-        allLayerHoles.Simplify();
-
-        bufferPolys.BooleanSubtract( allLayerHoles );
-        bufferPolys.Fracture();
-
+        // Add through holes (created only once) in current polygon holes list
+        currLayerHoles.Append( allLayerHoles );
+        if( currLayerHoles.GetCornersCount() > 0 )
+        {
+            SHAPE_POLY_SET holes = convertPolyListToPolySet( currLayerHoles );
+            holes.Simplify();
+            solidAreas.Subtract ( holes );
+        }
+        SHAPE_POLY_SET fractured = solidAreas;
+        fractured.Fracture();
+        bufferPolys.RemoveAllContours();
+        bufferPolys = convertPolySetToPolyList( fractured );
+#endif
         int thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
         int zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
 
@@ -389,7 +421,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
         // If holes are not removed from copper zones (for calculation time reasons,
         // the zone polygons are stored in bufferZonesPolys and have to be drawn now:
-        if( !bufferZonesPolys.IsEmpty() )
+        if( bufferZonesPolys.GetCornersCount() )
         {
             Draw3D_SolidHorizontalPolyPolygons( bufferZonesPolys, zpos, thickness,
                                     GetPrm3DVisu().m_BiuTo3Dunits, useTextures,
@@ -458,10 +490,22 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     zpos += (copper_thickness + epsilon) / 2.0f;
     board_thickness -= copper_thickness + epsilon;
 
-    bufferPcbOutlines.BooleanSubtract( allLayerHoles );
-    bufferPcbOutlines.Fracture();
+    KI_POLYGON_SET  currLayerPolyset;
+    KI_POLYGON_SET  polysetHoles;
 
-    if( !bufferPcbOutlines.IsEmpty() )
+    // Add polygons, without holes
+    bufferPcbOutlines.ExportTo( currLayerPolyset );
+
+    // Build holes list
+    allLayerHoles.ExportTo( polysetHoles );
+
+    // remove holes
+    currLayerPolyset -= polysetHoles;
+
+    bufferPcbOutlines.RemoveAllContours();
+    bufferPcbOutlines.ImportFrom( currLayerPolyset );
+
+    if( bufferPcbOutlines.GetCornersCount() )
     {
         Draw3D_SolidHorizontalPolyPolygons( bufferPcbOutlines, zpos + board_thickness / 2.0,
                                             board_thickness, GetPrm3DVisu().m_BiuTo3Dunits, useTextures,
@@ -487,9 +531,12 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
     double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
 
-    SHAPE_POLY_SET bufferPolys;
-    SHAPE_POLY_SET allLayerHoles;              // Contains through holes, calculated only once
-    SHAPE_POLY_SET bufferPcbOutlines;          // stores the board main outlines
+    CPOLYGONS_LIST  bufferPolys;
+    bufferPolys.reserve( 100000 );              // Reserve for large board
+    CPOLYGONS_LIST  allLayerHoles;              // Contains through holes, calculated only once
+    allLayerHoles.reserve( 20000 );
+
+    CPOLYGONS_LIST  bufferPcbOutlines;          // stores the board main outlines
 
     // Build a polygon from edge cut items
     wxString msg;
@@ -533,6 +580,9 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
     }
 
     // draw graphic items, on technical layers
+
+    KI_POLYGON_SET  brdpolysetHoles;
+    allLayerHoles.ExportTo( brdpolysetHoles );
 
     static const LAYER_ID teckLayerList[] = {
         B_Adhes,
@@ -625,33 +675,32 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
         // bufferPolys contains polygons to merge. Many overlaps .
         // Calculate merged polygons and remove pads and vias holes
-        if( bufferPolys.IsEmpty() )
+        if( bufferPolys.GetCornersCount() == 0 )
             continue;
-
-        allLayerHoles.Simplify();
+        KI_POLYGON_SET  currLayerPolyset;
+        KI_POLYGON_SET  polyset;
 
         // Solder mask layers are "negative" layers.
         // Shapes should be removed from the full board area.
         if( layer == B_Mask || layer == F_Mask )
         {
-            SHAPE_POLY_SET cuts = bufferPolys;
-            bufferPolys = bufferPcbOutlines;
-
-            cuts.Append(allLayerHoles);
-            cuts.Simplify();
-
-            bufferPolys.BooleanSubtract( cuts );
+            bufferPcbOutlines.ExportTo( currLayerPolyset );
+            bufferPolys.Append( allLayerHoles );
+            bufferPolys.ExportTo( polyset );
+            currLayerPolyset -= polyset;
         }
         // Remove holes from Solder paste layers and siklscreen
         else if( layer == B_Paste || layer == F_Paste
                  || layer == B_SilkS || layer == F_SilkS  )
         {
-
-            bufferPolys.BooleanSubtract( allLayerHoles );
+            bufferPolys.ExportTo( currLayerPolyset );
+            currLayerPolyset -= brdpolysetHoles;
         }
-
-        bufferPolys.Fracture();
-
+        else    // usuall layers, merge polys built from each item shape:
+        {
+            bufferPolys.ExportTo( polyset );
+            currLayerPolyset += polyset;
+        }
 
         int         thickness = 0;
 
@@ -679,6 +728,8 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
                 zpos -= thickness/2 ;
         }
 
+        bufferPolys.RemoveAllContours();
+        bufferPolys.ImportFrom( currLayerPolyset );
 
         float zNormal = 1.0f; // When using thickness it will draw first the top and then botton (with z inverted)
 

@@ -178,7 +178,7 @@ public:
      * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+    void TransformShapeWithClearanceToPolygon( CPOLYGONS_LIST& aCornerBuffer,
                                                int             aClearanceValue,
                                                int             aCircleToSegmentsCount,
                                                double          aCorrectionFactor ) const;

@@ -27,6 +27,7 @@
  */
 
 #include <fctsys.h>
+#include <polygons_defs.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <trigo.h>

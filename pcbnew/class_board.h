@@ -57,7 +57,7 @@ class MSG_PANEL_ITEM;
 class NETLIST;
 class REPORTER;
 class RN_DATA;
-class SHAPE_POLY_SET;
+
 
 // non-owning container of item candidates when searching for items on the same track.
 typedef std::vector< TRACK* >   TRACK_PTRS;
@@ -600,14 +600,15 @@ public:
      * from lines, arcs and circle items on edge cut layer
      * Any closed outline inside the main outline is a hole
      * All contours should be closed, i.e. have valid vertices to build a closed polygon
-     * @param aPoly The SHAPE_POLY_SET to fill in with outlines/holes.
+     * @param aOutlines The CPOLYGONS_LIST to fill in with main outlines.
+     * @param aHoles The empty CPOLYGONS_LIST to fill in with holes, if any.
      * @param aErrorText = a wxString reference to display an error message
      *          with the coordinate of the point which creates the error
      *          (default = NULL , no message returned on error)
      * @return true if success, false if a contour is not valid
      */
-    bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                  SHAPE_POLY_SET& aHoles,
+    bool GetBoardPolygonOutlines( CPOLYGONS_LIST& aOutlines,
+                                  CPOLYGONS_LIST& aHoles,
                                   wxString* aErrorText = NULL );
 
     /**
@@ -619,9 +620,9 @@ public:
      * or 3D viewer
      * the polygons are not merged.
      * @param aLayer = A copper layer, like B_Cu, etc.
-     * @param aOutlines The SHAPE_POLY_SET to fill in with items outline.
+     * @param aOutlines The CPOLYGONS_LIST to fill in with items outline.
      */
-    void ConvertBrdLayerToPolygonalContours( LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines );
+    void ConvertBrdLayerToPolygonalContours( LAYER_ID aLayer, CPOLYGONS_LIST& aOutlines );
 
     /**
      * Function GetLayerID

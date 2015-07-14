@@ -47,7 +47,7 @@ class D_PAD;
 class VIA;
 class TRACK;
 class ZONE_CONTAINER;
-class SHAPE_POLY_SET;
+class CPolyPt;
 
 ///> Types of items that are handled by the class
 enum RN_ITEM_TYPE
@@ -265,8 +265,7 @@ protected:
 class RN_POLY
 {
 public:
-    RN_POLY( const SHAPE_POLY_SET* aParent,
-             int aSubpolygonIndex,
+    RN_POLY( const CPolyPt* aBegin, const CPolyPt* aEnd,
              RN_LINKS& aConnections, const BOX2I& aBBox );
 
     /**
@@ -288,15 +287,14 @@ public:
     bool HitTest( const RN_NODE_PTR& aNode ) const;
 
 private:
+    ///> Pointer to the first point of polyline bounding the polygon.
+    const CPolyPt* m_begin;
 
-    ///> Index of the outline in the parent polygon set
-    int m_subpolygonIndex;
+    ///> Pointer to the last point of polyline bounding the polygon.
+    const CPolyPt* m_end;
 
     ///> Bounding box of the polygon.
     BOX2I m_bbox;
-
-    ///> Polygon set containing the geometry
-    const SHAPE_POLY_SET* m_parentPolyset;
 
     ///> Node representing a polygon (it has the same coordinates as the first point of its
     ///> bounding polyline.

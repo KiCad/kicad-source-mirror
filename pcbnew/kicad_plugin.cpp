@@ -1617,22 +1617,22 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     }
 
     // Save the PolysList
-    const SHAPE_POLY_SET& fv = aZone->GetFilledPolysList();
+    const CPOLYGONS_LIST& fv = aZone->GetFilledPolysList();
     newLine = 0;
 
-    if( !fv.IsEmpty() )
+    if( fv.GetCornersCount() )
     {
         m_out->Print( aNestLevel+1, "(filled_polygon\n" );
         m_out->Print( aNestLevel+2, "(pts\n" );
 
-        for( SHAPE_POLY_SET::CONST_ITERATOR it = fv.CIterate(); it; ++it )
+        for( unsigned it = 0; it < fv.GetCornersCount();  ++it )
         {
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
-                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+                              FMT_IU( fv.GetX( it ) ).c_str(), FMT_IU( fv.GetY( it ) ).c_str() );
             else
                 m_out->Print( 0, " (xy %s %s)",
-                              FMT_IU( it->x ) .c_str(), FMT_IU( it->y ).c_str() );
+                              FMT_IU( fv.GetX( it ) ).c_str(), FMT_IU( fv.GetY( it ) ).c_str() );
 
             if( newLine < 4 )
             {
@@ -1644,14 +1644,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                 m_out->Print( 0, "\n" );
             }
 
-            if( it.IsEndContour() )
+            if( fv.IsEndContour( it ) )
             {
                 if( newLine != 0 )
                     m_out->Print( 0, "\n" );
 
                 m_out->Print( aNestLevel+2, ")\n" );
 
-                if( !it.IsLastContour() )
+                if( it+1 != fv.GetCornersCount() )
                 {
                     newLine = 0;
                     m_out->Print( aNestLevel+1, ")\n" );
