@@ -88,7 +88,7 @@ void DIALOG_GLOBAL_DELETION::OnCheckDeleteModules( wxCommandEvent& event )
 }
 
 
-void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
+void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 {
     bool gen_rastnest = false;
 
@@ -260,6 +260,4 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
     m_Parent->GetCanvas()->Refresh();
     m_Parent->OnModify();
-
-    EndModal( 1 );
 }
