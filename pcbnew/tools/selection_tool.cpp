@@ -1306,9 +1306,12 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         }
     }
 
-    BOOST_FOREACH( BOARD_ITEM* item, rejected )
+    if( (unsigned) aCollector.GetCount() > rejected.size() )  // do not remove everything
     {
-        aCollector.Remove( item );
+        BOOST_FOREACH( BOARD_ITEM* item, rejected )
+        {
+            aCollector.Remove( item );
+        }
     }
 }
 
@@ -1316,6 +1319,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
 bool SELECTION_TOOL::SanitizeSelection()
 {
     std::set<BOARD_ITEM*> rejected;
+    std::set<BOARD_ITEM*> added;
 
     if( !m_editModules )
     {
@@ -1329,17 +1333,27 @@ bool SELECTION_TOOL::SanitizeSelection()
 
                 // case 1: module (or its pads) are locked
                 if( mod && ( mod->PadsLocked() || mod->IsLocked() ) )
+                {
                     rejected.insert( item );
+
+                    if( !mod->IsLocked() && !mod->IsSelected() )
+                        added.insert( mod );
+                }
 
                 // case 2: multi-item selection contains both the module and its pads - remove the pads
                 if( mod && m_selection.items.FindItem( mod ) >= 0 )
+                {
                     rejected.insert( item );
+                }
             }
         }
     }
 
     BOOST_FOREACH( BOARD_ITEM* item, rejected )
         unselect( item );
+
+    BOOST_FOREACH( BOARD_ITEM* item, added )
+        select( item );
 
     return true;
 }
