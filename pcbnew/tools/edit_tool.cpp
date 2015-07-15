@@ -184,7 +184,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
 
-            if( m_dragging )
+            if( m_dragging && evt->Category() == TC_MOUSE )
             {
                 m_cursor = grid.BestSnapAnchor( evt->Position(), item );
                 getViewControls()->ForceCursorPosition( true, m_cursor );
@@ -198,7 +198,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 updateRatsnest( true );
             }
-            else    // Prepare to start dragging
+            else if( !m_dragging )    // Prepare to start dragging
             {
                 if( !invokeInlineRouter() )
                 {
