@@ -333,6 +333,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.Update();
 
+    Raise();            // On some window managers, this is needed
+    Show( true );
+
     Zoom_Automatique( false );
 }
 

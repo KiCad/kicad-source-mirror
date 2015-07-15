@@ -231,7 +231,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 #endif
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
+    {
+        Raise();
         Show( true );
+    }
 }
 
 

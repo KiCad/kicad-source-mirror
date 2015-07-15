@@ -111,10 +111,8 @@ bool DIALOG_SHIM::Show( bool show )
     // If showing, use previous position and size.
     if( show )
     {
+        wxDialog::Raise();  // Needed on OS X and some other window managers (i.e. Unity)
         ret = wxDialog::Show( show );
-#ifdef __WXMAC__
-        wxDialog::Raise();            // More wxWindows brokenness on OS X
-#endif
 
         // classname is key, returns a zeroed out default EDA_RECT if none existed before.
         EDA_RECT r = class_map[ hash_key ];
