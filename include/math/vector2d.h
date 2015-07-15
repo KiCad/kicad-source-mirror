@@ -228,10 +228,10 @@ public:
     VECTOR2<T> operator/( const T& aFactor ) const;
 
     /// Equality operator
-    const bool operator==( const VECTOR2<T>& aVector ) const;
+    bool operator==( const VECTOR2<T>& aVector ) const;
 
     /// Not equality operator
-    const bool operator!=( const VECTOR2<T>& aVector ) const;
+    bool operator!=( const VECTOR2<T>& aVector ) const;
 
     /// Smaller than operator
     bool operator<( const VECTOR2<T>& aVector ) const;
@@ -503,14 +503,14 @@ bool VECTOR2<T>::operator>=( const VECTOR2<T>& aVector ) const
 
 
 template <class T>
-bool const VECTOR2<T>::operator==( VECTOR2<T> const& aVector ) const
+bool VECTOR2<T>::operator==( VECTOR2<T> const& aVector ) const
 {
     return ( aVector.x == x ) && ( aVector.y == y );
 }
 
 
 template <class T>
-bool const VECTOR2<T>::operator!=( VECTOR2<T> const& aVector ) const
+bool VECTOR2<T>::operator!=( VECTOR2<T> const& aVector ) const
 {
     return ( aVector.x != x ) || ( aVector.y != y );
 }
