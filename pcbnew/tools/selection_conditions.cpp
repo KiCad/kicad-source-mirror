@@ -52,9 +52,9 @@ bool SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
 }
 
 
-SELECTION_CONDITION SELECTION_CONDITIONS::SameNet()
+SELECTION_CONDITION SELECTION_CONDITIONS::SameNet( bool aAllowUnconnected )
 {
-    return boost::bind( &SELECTION_CONDITIONS::sameNetFunc, _1 );
+    return boost::bind( &SELECTION_CONDITIONS::sameNetFunc, _1, aAllowUnconnected );
 }
 
 
@@ -100,26 +100,40 @@ SELECTION_CONDITION SELECTION_CONDITIONS::LessThan( int aNumber )
 }
 
 
-bool SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection )
+bool SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected )
 {
     if( aSelection.Empty() )
         return false;
 
-    int netcode = -1;
+    int netcode = -1;   // -1 stands for 'net code is not yet determined'
 
     for( int i = 0; i < aSelection.Size(); ++i )
     {
+        int current_netcode = -1;
+
         const BOARD_CONNECTED_ITEM* item =
             dynamic_cast<const BOARD_CONNECTED_ITEM*>( aSelection.Item<EDA_ITEM>( i ) );
 
-        if( !item )
-            return false;
+        if( item )
+        {
+            current_netcode = item->GetNetCode();
+        }
+        else
+        {
+            if( !aAllowUnconnected )
+                return false;
+            else
+                // if it is not a BOARD_CONNECTED_ITEM, treat it as if there was no net assigned
+                current_netcode = 0;
+        }
+
+        assert( current_netcode >= 0 );
 
         if( netcode < 0 )
         {
-            netcode = item->GetNetCode();
+            netcode = current_netcode;
 
-            if( netcode == NETINFO_LIST::UNCONNECTED )
+            if( netcode == NETINFO_LIST::UNCONNECTED && !aAllowUnconnected )
                 return false;
         }
         else if( netcode != item->GetNetCode() )

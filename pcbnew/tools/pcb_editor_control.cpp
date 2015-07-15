@@ -73,7 +73,7 @@ private:
         // lines like this make me really think about a better name for SELECTION_CONDITIONS class
         bool mergeEnabled = ( SELECTION_CONDITIONS::MoreThan( 1 ) &&
                               /*SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) &&*/
-                              SELECTION_CONDITIONS::SameNet() &&
+                              SELECTION_CONDITIONS::SameNet( true ) &&
                               SELECTION_CONDITIONS::SameLayer() )( selTool->GetSelection() );
 
         Enable( getMenuId( COMMON_ACTIONS::zoneMerge ), mergeEnabled );

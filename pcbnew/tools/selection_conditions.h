@@ -76,14 +76,13 @@ public:
 
     /**
      * Function SameNet
-     * Creates a functor that tests if selection contains items belonging to the same net. If there
-     * are items which are not of BOARD_CONNECTED_ITEM type, the result is false. If all items do
-     * not have any net assigned, the result is negative (technically they have the same netcode,
-     * but in most cases they should not be connected together).
-     * @return Functor testing if selected items are exclusively connected items belonging to
-     * the same net (and netcode > 0).
+     * Creates a functor that tests if selection contains items belonging to the same net or are
+     * unconnected if aAllowUnconnected == true.
+     * @param aAllowUnconnected determines if unconnected items (with no net code assigned) should
+     * be treated as connected to the same net.
+     * @return Functor testing if selected items are belonging to the same net.
      */
-    static SELECTION_CONDITION SameNet();
+    static SELECTION_CONDITION SameNet( bool aAllowUnconnected = false );
 
     /**
      * Function SameLayer
@@ -146,7 +145,10 @@ public:
     static SELECTION_CONDITION LessThan( int aNumber );
 
 private:
-    static bool sameNetFunc( const SELECTION& aSelection );
+    ///> Helper function used by SameNet()
+    static bool sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected );
+
+    ///> Helper function used by SameLayer()
     static bool sameLayerFunc( const SELECTION& aSelection );
 
     ///> Helper function used by HasType()
