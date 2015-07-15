@@ -151,17 +151,17 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
             zoomScale = ( rotation > 0 ) ? 1.05 : 0.95;
         }
 
-        if( GetEnableZoomNoCenter() )
-        {
-            VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-            m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
-        }
-        else
+        if( IsCursorWarpingEnabled() )
         {
             const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
             m_view->SetCenter( GetCursorPosition() );
             m_view->SetScale( m_view->GetScale() * zoomScale );
             m_parentPanel->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
+        }
+        else
+        {
+            VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
+            m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
         }
     }
 
@@ -339,7 +339,9 @@ VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
 VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
 {
     if( m_forceCursorPosition )
+    {
         return m_forcedPosition;
+    }
     else
     {
         VECTOR2D mousePosition = GetMousePosition();
@@ -348,6 +350,35 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
             return m_view->GetGAL()->GetGridPoint( m_view->ToWorld( mousePosition ) );
         else
             return m_view->ToWorld( mousePosition );
+    }
+}
+
+
+void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates,
+                                    bool aWarpView ) const
+{
+    if( aWorldCoordinates )
+    {
+        const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
+        BOX2I screen( VECTOR2I( 0, 0 ), screenSize );
+        VECTOR2D screenPos = m_view->ToScreen( aPosition );
+
+        if( !screen.Contains( screenPos ) )
+        {
+            if( aWarpView )
+            {
+                m_view->SetCenter( aPosition );
+                m_parentPanel->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
+            }
+        }
+        else
+        {
+            m_parentPanel->WarpPointer( screenPos.x, screenPos.y );
+        }
+    }
+    else
+    {
+        m_parentPanel->WarpPointer( aPosition.x, aPosition.y );
     }
 }
 

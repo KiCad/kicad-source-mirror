@@ -187,7 +187,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
                 m_cursor = grid.BestSnapAnchor( evt->Position(), item );
-                getViewControls()->ForceCursorPosition( true, m_cursor );
+                controls->ForceCursorPosition( true, m_cursor );
 
                 wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) - item->GetPosition();
                 totalMovement += movement;
@@ -222,7 +222,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
                     }
 
-                    m_cursor = getViewControls()->GetCursorPosition();
+                    m_cursor = controls->GetCursorPosition();
 
                     if( selection.Size() == 1 )
                     {
@@ -232,7 +232,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         grid.SetAuxAxes( true, m_cursor );
                     }
 
-                    getViewControls()->ForceCursorPosition( true, m_cursor );
+                    controls->ForceCursorPosition( true, m_cursor );
+                    controls->WarpCursor( m_cursor, true );
+
                     VECTOR2I o = VECTOR2I( item->GetPosition() );
                     m_offset.x = o.x - m_cursor.x;
                     m_offset.y = o.y - m_cursor.y;

@@ -644,7 +644,7 @@ void EDA_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
     m_enableZoomNoCenter = aEnable;
 
     if( GetParent()->IsGalCanvasActive() )
-        GetParent()->GetGalCanvas()->GetViewControls()->SetEnableZoomNoCenter( aEnable );
+        GetParent()->GetGalCanvas()->GetViewControls()->EnableCursorWarping( !aEnable );
 }
 
 

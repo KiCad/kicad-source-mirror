@@ -84,7 +84,7 @@ int PCBNEW_CONTROL::ZoomInOut( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &COMMON_ACTIONS::zoomOut ) )
         zoomScale = 0.7;
 
-    if( getViewControls()->GetEnableZoomNoCenter() )
+    if( !getViewControls()->IsCursorWarpingEnabled() )
         view->SetScale( view->GetScale() * zoomScale, getViewControls()->GetCursorPosition() );
     else
     {
@@ -119,7 +119,7 @@ int PCBNEW_CONTROL::ZoomCenter( const TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     view->SetCenter( getViewControls()->GetCursorPosition() );
 
-    if( !getViewControls()->GetEnableZoomNoCenter() )
+    if( getViewControls()->IsCursorWarpingEnabled() )
     {
         const VECTOR2I& screenSize = view->GetGAL()->GetScreenPixelSize();
         m_frame->GetGalCanvas()->WarpPointer( screenSize.x / 2, screenSize.y / 2 );

@@ -1063,7 +1063,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
 
         // Transfer EDA_DRAW_PANEL settings
-        GetGalCanvas()->GetViewControls()->SetEnableZoomNoCenter( m_canvas->GetEnableZoomNoCenter() );
+        GetGalCanvas()->GetViewControls()->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
 
         GetToolManager()->RunAction( "pcbnew.Control.switchCursor" );
     }

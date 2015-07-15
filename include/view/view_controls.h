@@ -49,7 +49,7 @@ public:
     VIEW_CONTROLS( VIEW* aView ) : m_view( aView ),
         m_forceCursorPosition( false ), m_cursorCaptured( false ), m_snappingEnabled( false ),
         m_grabMouse( false ), m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ),
-        m_autoPanSpeed( 0.15 ), m_enableZoomNoCenter( false )
+        m_autoPanSpeed( 0.15 ), m_warpCursor( false )
     {
     }
 
@@ -106,7 +106,7 @@ public:
     virtual void SetAutoPanMargin( float aMargin )
     {
         m_autoPanMargin = aMargin;
-    };
+    }
 
     /**
      * Function GetMousePosition()
@@ -131,7 +131,7 @@ public:
      * Function ForceCursorPosition()
      * Places the cursor immediately at a given point. Mouse movement is ignored.
      * @param aEnabled enable forced cursor position
-     * @param aPosition the position
+     * @param aPosition the position (world coordinates).
      */
     virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) )
     {
@@ -162,20 +162,35 @@ public:
     }
 
     /**
-     * Function SetEnableZoomNoCenter()
-     * Enables or Disables warping the cursor to the center of the drawing i
-     * panel area when zooming.
-     * @param aEnabled is true if the cursor should not be centered and false if
-     * the cursor should be centered.
+     * Function WarpCursor()
+     * If enabled (@see SetEnableCursorWarping(), warps the cursor to the specified position,
+     * expressed either in the screen coordinates or the world coordinates.
+     * @param aPosition is the position where the cursor should be warped.
+     * @param aWorldCoordinates if true treats aPosition as the world coordinates, otherwise it
+     * uses it as the screen coordinates.
+     * @param aWarpView determines if the view can be warped too (only matters if the position is
+     * specified in the world coordinates and its not visible in the current viewport).
      */
-    virtual void SetEnableZoomNoCenter( bool aEnable )
+    virtual void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
+            bool aWarpView = false ) const = 0;
+
+    /**
+     * Function EnableCursorWarping()
+     * Enables or disables warping the cursor.
+     * @param aEnabled is true if the cursor is allowed to be warped.
+     */
+    void EnableCursorWarping( bool aEnable )
     {
-        m_enableZoomNoCenter = aEnable;
+        m_warpCursor = aEnable;
     }
 
-    virtual bool GetEnableZoomNoCenter() const
+    /**
+     * Function IsCursorWarpingEnabled()
+     * Returns the current setting for cursor warping.
+     */
+    bool IsCursorWarpingEnabled() const
     {
-        return m_enableZoomNoCenter;
+        return m_warpCursor;
     }
 
 protected:
@@ -209,8 +224,8 @@ protected:
     /// How fast is panning when in auto mode
     float       m_autoPanSpeed;
 
-    /// If the cursor should be warped to the center of the view area when zooming
-    bool        m_enableZoomNoCenter;
+    /// If the cursor is allowed to be warped
+    bool        m_warpCursor;
 };
 } // namespace KIGFX
 
