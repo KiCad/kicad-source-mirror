@@ -649,7 +649,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             // Remove filled areas in zone
             ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
-            zone_container->ClearFilledPolysList();
+            zone_container->UnFill();
         }
 
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
