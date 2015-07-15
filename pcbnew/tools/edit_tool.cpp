@@ -131,6 +131,10 @@ bool EDIT_TOOL::invokeInlineRouter()
 
 int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 {
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    VECTOR2I originalCursorPos = controls->GetCursorPosition();
     const SELECTION& selection = m_selectionTool->GetSelection();
 
     // Shall the selection be cleared at the end?
@@ -150,8 +154,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // By default, modified items need to update their geometry
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     controls->ShowCursor( true );
     //controls->SetSnapping( true );
     controls->ForceCursorPosition( false );
@@ -180,14 +182,14 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::editActivate )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
+            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
+
             if( m_dragging )
             {
-                m_cursor = grid.BestSnapAnchor( evt->Position(), selection.Item<BOARD_ITEM>( 0 ) );
+                m_cursor = grid.BestSnapAnchor( evt->Position(), item );
                 getViewControls()->ForceCursorPosition( true, m_cursor );
 
-                wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) -
-                                   selection.Item<BOARD_ITEM>( 0 )->GetPosition();
-
+                wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) - item->GetPosition();
                 totalMovement += movement;
 
                 // Drag items to the current cursor position
@@ -226,12 +228,12 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         // Set the current cursor position to the first dragged item origin, so the
                         // movement vector could be computed later
-                        m_cursor = grid.BestDragOrigin( m_cursor, selection.Item<BOARD_ITEM>( 0 ) );
+                        m_cursor = grid.BestDragOrigin( originalCursorPos, item );
                         grid.SetAuxAxes( true, m_cursor );
                     }
 
                     getViewControls()->ForceCursorPosition( true, m_cursor );
-                    VECTOR2I o = VECTOR2I( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
+                    VECTOR2I o = VECTOR2I( item->GetPosition() );
                     m_offset.x = o.x - m_cursor.x;
                     m_offset.y = o.y - m_cursor.y;
 
