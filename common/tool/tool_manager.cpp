@@ -494,7 +494,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             if( st->waitEvents.Matches( aEvent ) )
             {
                 // By default, only messages are passed further
-                m_passEvent = ( aEvent.m_category == TC_MESSAGE );
+                m_passEvent = ( aEvent.Category() == TC_MESSAGE );
 
                 // got matching event? clear wait list and wake up the coroutine
                 st->wakeupEvent = aEvent;
@@ -563,7 +563,7 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsActivate() )
     {
-        std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.m_commandStr );
+        std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.GetCommandStr() );
 
         if( tool != m_toolNameIndex.end() )
         {

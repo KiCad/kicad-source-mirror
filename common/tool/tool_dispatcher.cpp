@@ -172,7 +172,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
             down = true;
     }
 
-    int mods = decodeModifiers<wxMouseEvent>( static_cast<wxMouseEvent*>( &aEvent ) );
+    int mods = decodeModifiers( static_cast<wxMouseEvent*>( &aEvent ) );
     int args = st->button | mods;
 
     if( down )      // Handle mouse button press
@@ -224,8 +224,8 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         if( t - st->downTimestamp > DragTimeThreshold || st->dragMaxDelta > DragDistanceThreshold )
         {
             evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DRAG, args );
-            evt->SetMouseDragOrigin( st->dragOrigin );
-            evt->SetMouseDelta( m_lastMousePos - st->dragOrigin );
+            evt->setMouseDragOrigin( st->dragOrigin );
+            evt->setMouseDelta( m_lastMousePos - st->dragOrigin );
         }
     }
 
@@ -262,7 +262,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
     {
         wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
-        int mods = decodeModifiers<wxMouseEvent>( me );
+        int mods = decodeModifiers( me );
 
         VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetMousePosition();
         VECTOR2D pos = getView()->ToWorld( screenPos );
@@ -295,7 +295,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         int key = ke->GetKeyCode();
-        int mods = decodeModifiers<wxKeyEvent>( ke );
+        int mods = decodeModifiers( ke );
 
         if( mods & MD_CTRL )
         {

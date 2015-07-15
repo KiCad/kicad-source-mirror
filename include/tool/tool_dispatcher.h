@@ -97,8 +97,7 @@ private:
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
 
     ///> Saves the state of key modifiers (Alt, Ctrl and so on).
-    template <class EventType>
-    static int decodeModifiers( const EventType* aState )
+    static int decodeModifiers( const wxKeyboardState* aState )
     {
         int mods = 0;
 

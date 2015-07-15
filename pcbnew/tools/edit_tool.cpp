@@ -1029,7 +1029,7 @@ bool EDIT_TOOL::hoverSelection( const SELECTION& aSelection, bool aSanitize )
     if( aSanitize )
         m_selectionTool->SanitizeSelection();
 
-    if( aSelection.Empty() )
+    if( aSelection.Empty() )        // TODO is it necessary?
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     return !aSelection.Empty();
