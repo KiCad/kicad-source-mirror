@@ -34,6 +34,7 @@
 
 #include <wx/wx.h>
 #include <wx/uri.h>
+#include <wx/dir.h>
 #include <wx/progdlg.h>
 
 #include <pgm_base.h>
@@ -56,16 +57,16 @@
 static const int FILTER_COUNT = 4;
 static const struct
 {
-    wxString m_Description;
-    wxString m_Extension;
-    bool m_IsFile;
+    wxString m_Description; ///< Description shown in the file picker dialog
+    wxString m_Extension;   ///< In case of folders it stands for extensions of files stored inside
+    bool m_IsFile;          ///< Whether it is a folder or a file
     IO_MGR::PCB_FILE_T m_Plugin;
 } fileFilters[FILTER_COUNT] =
 {
-    { "KiCad (*.pretty folders)",      ".pretty", false,   IO_MGR::KICAD },
-    { "Eagle 6.x (*.lbr)",             ".lbr",    true,    IO_MGR::EAGLE },
-    { "KiCad legacy (*.mod)",          ".mod",    true,    IO_MGR::LEGACY },
-    { "Geda (folder with *.fp files)", "",        false,   IO_MGR::GEDA_PCB },
+    { "KiCad (folder with .kicad_mod files)",   "kicad_mod",   false,   IO_MGR::KICAD },
+    { "Eagle 6.x (*.lbr)",                      "lbr",         true,    IO_MGR::EAGLE },
+    { "KiCad legacy (*.mod)",                   "mod",         true,    IO_MGR::LEGACY },
+    { "Geda (folder with *.fp files)",          "fp",          false,   IO_MGR::GEDA_PCB },
 };
 
 
@@ -81,10 +82,11 @@ static wxString getFilterString()
         if( i != 0 )
             filterInit += ";";
 
-        filterInit += "*" + fileFilters[i].m_Extension;
+        filterInit += "*." + fileFilters[i].m_Extension;
 
         // Rest of the filter string
-        filter += "|" + fileFilters[i].m_Description + "|*" + fileFilters[i].m_Extension;
+        filter += "|" + fileFilters[i].m_Description +
+                  "|" + ( fileFilters[i].m_IsFile ? "*." + fileFilters[i].m_Extension : "" );
     }
 
     return filterInit + filter;
@@ -94,19 +96,39 @@ static wxString getFilterString()
 // Tries to guess the plugin type basing on the path
 static boost::optional<IO_MGR::PCB_FILE_T> getPluginType( const wxString& aPath )
 {
-    if( ( aPath.StartsWith( "http://" ) || aPath.StartsWith( "https://" ) ) && aPath.EndsWith( ".pretty" ) )
+    if( ( aPath.StartsWith( "http://" ) || aPath.StartsWith( "https://" ) ) )
         return boost::optional<IO_MGR::PCB_FILE_T>( IO_MGR::GITHUB );
 
-    wxFileName file( aPath );
+    wxFileName path( aPath );
 
     for( int i = 0; i < FILTER_COUNT; ++i )
     {
-        if( aPath.EndsWith( fileFilters[i].m_Extension ) &&
-                file.FileExists() == fileFilters[i].m_IsFile )
+        bool ok = false;
+
+        if( fileFilters[i].m_IsFile )
+        {
+            ok = path.IsFileReadable() && path.GetExt() == fileFilters[i].m_Extension;
+        }
+        else if( path.IsDirReadable() )
+        {
+            // Plugin expects a directory containing files with a specific extension
+            wxDir dir( aPath );
+
+            if( dir.IsOpened() )
+            {
+                wxString filename;
+
+                dir.GetFirst( &filename, "*." + fileFilters[i].m_Extension, wxDIR_FILES );
+
+                ok = !filename.IsEmpty();
+            }
+        }
+
+        if( ok )
             return boost::optional<IO_MGR::PCB_FILE_T>( fileFilters[i].m_Plugin );
     }
 
-    return boost::optional<IO_MGR::PCB_FILE_T>();
+    return boost::none;
 }
 
 
@@ -115,20 +137,15 @@ static bool passesFilter( const wxString& aFileName, int aFilterIndex )
 {
     wxASSERT( aFilterIndex <= FILTER_COUNT );
     wxFileName file( aFileName );
+    boost::optional<IO_MGR::PCB_FILE_T> result = getPluginType( aFileName );
 
-    if( aFilterIndex == 0 )         // any supported library format
-    {
-        boost::optional<IO_MGR::PCB_FILE_T> result = getPluginType( aFileName );
-        return ( result ? true : false );
-    }
-    else
-    {
-        if( aFileName.EndsWith( fileFilters[aFilterIndex - 1].m_Extension ) &&
-                file.FileExists() == fileFilters[aFilterIndex - 1].m_IsFile )
-            return true;
-    }
+    if( !result )               // does not match any supported plugin
+        return false;
 
-    return false;
+    if( aFilterIndex == 0 )     // any plugin will do
+        return true;
+
+    return ( fileFilters[aFilterIndex - 1].m_Plugin == *result );
 }
 
 
