@@ -260,12 +260,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         m_auimgr.GetPane( m_mainToolBar ).BestSize( tbsize );
     }
 
-#if 0   // no.
-    // Set min size (overwrite params read in LoadPerspective(), if any)
-    m_auimgr.GetPane( m_libList ).MinSize( minsize );
-    m_auimgr.GetPane( m_footprintList ).MinSize( minsize );
-#endif
-
     // after changing something to the aui manager,
     // call Update()() to reflect the changes
     m_auimgr.Update();
