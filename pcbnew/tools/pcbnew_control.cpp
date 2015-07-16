@@ -503,6 +503,8 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
     // Handler cursor movement
     KIGFX::VIEW* view = getView();
     newCursor = view->ToScreen( newCursor );
+    newCursor.x = round( newCursor.x );
+    newCursor.y = round( newCursor.y );
 
     // Pan the screen if required
     const VECTOR2I& screenSize = view->GetGAL()->GetScreenPixelSize();
