@@ -579,31 +579,37 @@ void RN_NET::RemoveItem( const TRACK* aTrack )
 
 void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
 {
-    try
+    ZONE_DATA_MAP::iterator it = m_zones.find( aZone );
+
+    if( it == m_zones.end() )
     {
-        // Remove all subpolygons that make the zone
-        std::deque<RN_POLY>& polygons = m_zones.at( aZone ).m_Polygons;
-        BOOST_FOREACH( RN_POLY& polygon, polygons )
-        {
-            RN_NODE_PTR node = polygon.GetNode();
-            node->RemoveParent( aZone );
-
-            if( m_links.RemoveNode( node ) )
-                clearNode( node );
-        }
-        polygons.clear();
-
-        // Remove all connections added by the zone
-        std::deque<RN_EDGE_MST_PTR>& edges = m_zones.at( aZone ).m_Edges;
-        BOOST_FOREACH( RN_EDGE_PTR edge, edges )
-            m_links.RemoveConnection( edge );
-        edges.clear();
-
-        m_dirty = true;
+        assert( false );
+        return;
     }
-    catch( ... )
+
+    RN_ZONE_DATA& zoneData = it->second;
+
+    // Remove all subpolygons that make the zone
+    std::deque<RN_POLY>& polygons = zoneData.m_Polygons;
+    BOOST_FOREACH( RN_POLY& polygon, polygons )
     {
+        RN_NODE_PTR node = polygon.GetNode();
+        node->RemoveParent( aZone );
+
+        if( m_links.RemoveNode( node ) )
+            clearNode( node );
     }
+    polygons.clear();
+
+    // Remove all connections added by the zone
+    std::deque<RN_EDGE_MST_PTR>& edges = zoneData.m_Edges;
+    BOOST_FOREACH( RN_EDGE_PTR edge, edges )
+        m_links.RemoveConnection( edge );
+    edges.clear();
+
+    m_zones.erase( it );
+
+    m_dirty = true;
 }
 
 
