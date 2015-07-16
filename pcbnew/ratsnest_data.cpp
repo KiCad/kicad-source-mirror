@@ -582,10 +582,7 @@ void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
     ZONE_DATA_MAP::iterator it = m_zones.find( aZone );
 
     if( it == m_zones.end() )
-    {
-        assert( false );
         return;
-    }
 
     RN_ZONE_DATA& zoneData = it->second;
 
