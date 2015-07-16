@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar  9 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -263,7 +263,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	m_labelCircNumStart = new wxStaticText( m_circularPanel, wxID_ANY, _("Numbering start:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircNumStart->Wrap( -1 );
-	bSizer7->Add( m_labelCircNumStart, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	bSizer7->Add( m_labelCircNumStart, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_entryCircNumberingStart = new wxTextCtrl( m_circularPanel, wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer7->Add( m_entryCircNumberingStart, 0, wxALL, 5 );
