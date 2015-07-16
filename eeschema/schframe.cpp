@@ -1005,9 +1005,14 @@ void SCH_EDIT_FRAME::OnOpenPcbModuleEditor( wxCommandEvent& event )
 
         if( fn.IsOk() )
         {
-            KIWAY_PLAYER* player = Kiway().Player( FRAME_PCB_MODULE_EDITOR );
-            player->Show( true );
-            player->Raise();
+            KIWAY_PLAYER* fp_editor = Kiway().Player( FRAME_PCB_MODULE_EDITOR );
+
+            // On Windows, Raise() does not bring the window on screen, when iconized
+            if( fp_editor->IsIconized() )
+                fp_editor->Iconize( false );
+
+            fp_editor->Show( true );
+            fp_editor->Raise();
         }
     }
 }
@@ -1108,6 +1113,10 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
         libeditFrame->Show( true );
     }
+
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( libeditFrame->IsIconized() )
+        libeditFrame->Iconize( false );
 
     libeditFrame->Raise();
 

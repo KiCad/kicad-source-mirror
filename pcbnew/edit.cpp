@@ -206,10 +206,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
             else
             {
-                /* not needed on linux, other platforms need this?
+                // Needed on Windows, other platforms do not use it,
+                // but it creates no issue
                 if( editor->IsIconized() )
                      editor->Iconize( false );
-                */
 
                 editor->Raise();
 
@@ -232,10 +232,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
             else
             {
-                /* not needed on linux, other platforms need this?
+                // Needed on Windows, other platforms do not use it,
+                // but it creates no issue
                 if( viewer->IsIconized() )
                      viewer->Iconize( false );
-                */
 
                 viewer->Raise();
 

@@ -284,6 +284,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
             else
             {
+                // On Windows, Raise() does not bring the window on screen, when iconized
+                if( viewer->IsIconized() )
+                    viewer->Iconize( false );
+
                 viewer->Raise();
 
                 // Raising the window does not set the focus on Linux.  This should work on
