@@ -26,24 +26,34 @@
 # Set where the library repos will go, use a full path
 WORKING_TREES=~/kicad_sources
 
+# Set where gitlab host and namespace are, if gitlab is used
+HOST=githost
+NAMESPACE_ID=2
+NAMESPACE_NAME=kicad
+# Gitlab authentication (find the private token in the user's profile settings)
+USERNAME=user
+TOKEN=secret-token
 
 usage()
 {
     echo ""
     echo " usage:"
     echo ""
-    echo "./library-repos-install.sh <cmd>"
+    echo "./library-repos-install.sh <cmd> <opt>"
     echo "    where <cmd> is one of:"
-    echo "      --install-prerequisites     (install command tools needed here, run once first.)"
-    echo "      --install-or-update         (from github, the library sources.)"
-    echo "      --remove-all-libraries      (remove all *.pretty from $WORKING_TREES/library-repos/. )"
-    echo "      --remove-orphaned-libraries (remove local libraries which have been deleted or renamed at github.)"
-    echo "      --list-libraries            (show the full list of github libraries.)"
-    echo "      --create-bat-file           (cat a windows batch file, redirect to capture to disk.)"
+    echo "      install-prerequisites     (install command tools needed here, run once first.)"
+    echo "      install-or-update         (from github, the library sources.)"
+    echo "      remove-all-libraries      (remove all *.pretty from $WORKING_TREES/library-repos/. )"
+    echo "      remove-orphaned-libraries (remove local libraries which have been deleted or renamed at github.)"
+    echo "      list-libraries            (show the full list of github libraries.)"
+    echo "      create-bat-file           (cat a windows batch file, redirect to capture to disk.)"
     echo ""
-    echo "examples (with --install-prerequisites once first):"
-    echo '    $ ./library-repos-install.sh --install-prerequisites'
-    echo '    $ ./library-repos-install.sh --install-or-update'
+    echo "   where <opt> is one of:"
+    echo "      --gitlab                  (install/update/remove libraries from gitlab mirror.)"
+    echo ""
+    echo "examples (with install-prerequisites once first):"
+    echo '    $ ./library-repos-install.sh install-prerequisites'
+    echo '    $ ./library-repos-install.sh install-or-update'
 }
 
 
@@ -159,11 +169,20 @@ checkout_or_update_libraries()
             # That way those repos can serve as pretty libraries directly if need be.
 
             echo "installing $WORKING_TREES/library-repos/$repo"
-            git clone "https://github.com/KiCad/$repo" "$WORKING_TREES/library-repos/$repo"
+            git clone --mirror "https://github.com/KiCad/$repo" "$WORKING_TREES/library-repos/$repo"
+            if [ "$1" == "--gitlab" ]; then
+                curl --header "PRIVATE-TOKEN: $TOKEN" -H "Content-Type: application/json" -d "{\"name\": \"$repo\",\"path\": \"$repo\",\"namespace_id\": \"$NAMESPACE_ID\",\"public\": \"true\"}" http://$HOST/api/v3/projects
+                cd "$WORKING_TREES/library-repos/$repo"
+                git remote add gitlab git@$HOST:$NAMESPACE_NAME/$repo
+                git push --mirror gitlab
+            fi
         else
             echo "updating $WORKING_TREES/library-repos/$repo"
             cd "$WORKING_TREES/library-repos/$repo"
-            git pull
+            git fetch
+            if [ "$1" == "--gitlab" ]; then
+                git push --mirror gitlab
+            fi
         fi
     done
 }
@@ -197,8 +216,8 @@ remove_orphaned_libraries()
 
     if [ $? -ne 0 ]; then
         echo "Directory $WORKING_TREES/library-repos does not exist."
-        echo "The option --remove-orphaned-libraries should be used only after you've run"
-        echo "the --install-or-update at least once."
+        echo "The command remove-orphaned-libraries should be used only after you've run"
+        echo "the install-or-update at least once."
         exit 2
     fi
 
@@ -210,35 +229,44 @@ remove_orphaned_libraries()
         if ! listcontains "$PRETTY_REPOS" "$mylib"; then
             echo "Removing orphaned local library $WORKING_TREES/library-repos/$mylib"
             rm -rf "$mylib"
+            if [ "$1" == "--gitlab" ]; then
+                curl --header "PRIVATE-TOKEN: $TOKEN" -X DELETE http://$HOST/api/v3/projects/$NAMESPACE_NAME%2F$mylib
+            fi
         fi
     done
 }
 
 
-if [ $# -eq 1 -a "$1" == "--install-or-update" ]; then
-    checkout_or_update_libraries
+if [ "$1" == "install-or-update" ]; then
+    checkout_or_update_libraries $2
     exit
 fi
 
 
-if [ $# -eq 1 -a "$1" == "--remove-orphaned-libraries" ]; then
-    remove_orphaned_libraries
+if [ "$1" == "remove-orphaned-libraries" ]; then
+    remove_orphaned_libraries $2
     exit
 fi
 
 
-if [ $# -eq 1 -a "$1" == "--remove-all-libraries" ]; then
+if [ "$1" == "remove-all-libraries" ]; then
+    if [ "$2" == "--gitlab" ]; then
+        cd $WORKING_TREES/library-repos
+        for mylib in *.pretty; do
+            curl --header "PRIVATE-TOKEN: $TOKEN" -X DELETE http://$HOST/api/v3/projects/$NAMESPACE_NAME%2F$mylib
+        done
+    fi
     rm -rf "$WORKING_TREES/library-repos"
     exit
 fi
 
 
-if [ $# -eq 1 -a "$1" == "--install-prerequisites" ]; then
+if [ $# -eq 1 -a "$1" == "install-prerequisites" ]; then
     install_prerequisites
     exit
 fi
 
-if [ $# -eq 1 -a "$1" == "--list-libraries" ]; then
+if [ $# -eq 1 -a "$1" == "list-libraries" ]; then
 
     # use github API to get repos into PRETTY_REPOS var
     detect_pretty_repos
@@ -255,7 +283,7 @@ if [ $# -eq 1 -a "$1" == "--list-libraries" ]; then
 fi
 
 # may re-direct this output to a disk file for Windows *.BAT file creation.
-if [ $# -eq 1 -a "$1" == "--create-bat-file" ]; then
+if [ $# -eq 1 -a "$1" == "create-bat-file" ]; then
 
     # use github API to get repos into PRETTY_REPOS var
     detect_pretty_repos
