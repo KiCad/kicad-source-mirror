@@ -112,7 +112,7 @@ void DIALOG_MOVE_EXACT::OnPolarChanged( wxCommandEvent& event )
         double r, q;
         ToPolarDeg( val.x, val.y, r, q );
 
-        PutValueInLocalUnits( *m_xEntry, round( r / 10.0) * 10 );
+        PutValueInLocalUnits( *m_xEntry, KiROUND( r / 10.0) * 10 );
         m_yEntry->SetValue( wxString::FromDouble( q ) );
     }
     else

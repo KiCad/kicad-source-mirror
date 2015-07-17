@@ -125,8 +125,8 @@ void GAL::DrawGrid()
     VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
     VECTOR2D worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
-    int gridScreenSizeDense  = round( gridSize.x * worldScale );
-    int gridScreenSizeCoarse = round( gridSize.x * static_cast<double>( gridTick ) * worldScale );
+    int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
+    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
 
     // Compute the line marker or point radius of the grid
     double marker = 2.0 * gridLineWidth / worldScale;
@@ -136,10 +136,10 @@ void GAL::DrawGrid()
     if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) > gridDrawThreshold )
     {
         // Compute grid variables
-        int gridStartX  = round( worldStartPoint.x / gridSize.x );
-        int gridEndX    = round( worldEndPoint.x / gridSize.x );
-        int gridStartY  = round( worldStartPoint.y / gridSize.y );
-        int gridEndY    = round( worldEndPoint.y / gridSize.y );
+        int gridStartX  = KiROUND( worldStartPoint.x / gridSize.x );
+        int gridEndX    = KiROUND( worldEndPoint.x / gridSize.x );
+        int gridStartY  = KiROUND( worldStartPoint.y / gridSize.y );
+        int gridEndY    = KiROUND( worldEndPoint.y / gridSize.y );
 
         assert( gridEndX >= gridStartX );
         assert( gridEndY >= gridStartY );
@@ -231,8 +231,8 @@ void GAL::DrawGrid()
 
 VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
-    return VECTOR2D( round( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
-                     round( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
+    return VECTOR2D( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
+                     KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
 }
 
 const int GAL::MIN_DEPTH = -1024;

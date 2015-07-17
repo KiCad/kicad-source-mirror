@@ -96,8 +96,8 @@ VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
     const VECTOR2D gridOffset( GetOrigin() );
     const VECTOR2D gridSize( GetGrid() );
 
-    VECTOR2I nearest( round( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
-                      round( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
+    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
+                      KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
 
     if( !m_auxAxis )
         return nearest;

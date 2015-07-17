@@ -27,6 +27,8 @@
 
 #include <geometry/seg.h>
 
+#include <common.h>
+
 void EC_VERTICAL::Apply( EDIT_POINT& aHandle )
 {
     VECTOR2I point = aHandle.GetPosition();
@@ -50,7 +52,7 @@ void EC_45DEGREE::Apply( EDIT_POINT& aHandle )
     double angle = lineVector.Angle();
 
     // Find the closest angle, which is a multiple of 45 degrees
-    double newAngle = round( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
+    double newAngle = KiROUND( angle / ( M_PI / 4.0 ) ) * M_PI / 4.0;
     VECTOR2I newLineVector = lineVector.Rotate( newAngle - angle );
 
     aHandle.SetPosition( m_constrainer.GetPosition() + newLineVector );
