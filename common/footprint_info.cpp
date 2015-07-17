@@ -101,12 +101,17 @@ void FOOTPRINT_INFO::load()
 
     std::auto_ptr<MODULE> m( fptable->FootprintLoad( m_nickname, m_fpname ) );
 
-    m_pad_count = m->GetPadCount( DO_NOT_INCLUDE_NPTH );
-    m_keywords  = m->GetKeywords();
-    m_doc       = m->GetDescription();
+    if( m.get() == NULL )    // Should happen only with malformed/broken libraries
+        m_pad_count = 0;
+    else
+    {
+        m_pad_count = m->GetPadCount( DO_NOT_INCLUDE_NPTH );
+        m_keywords  = m->GetKeywords();
+        m_doc       = m->GetDescription();
 
-    // tell ensure_loaded() I'm loaded.
-    m_loaded = true;
+        // tell ensure_loaded() I'm loaded.
+        m_loaded = true;
+    }
 }
 
 
