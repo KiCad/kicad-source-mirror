@@ -124,6 +124,8 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
 void BLOCK_SELECTOR::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
+    if( !aDC )
+        return;
 
     int w = GetWidth();
     int h = GetHeight();
@@ -187,13 +189,14 @@ void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoin
 
     block->SetMoveVector( wxPoint( 0, 0 ) );
 
-    if( aErase )
+    if( aErase && aDC )
         block->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, block->GetColor() );
 
     block->SetLastCursorPosition( aPanel->GetParent()->GetCrossHairPosition() );
     block->SetEnd( aPanel->GetParent()->GetCrossHairPosition() );
 
-    block->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, block->GetColor() );
+    if( aDC )
+        block->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, block->GetColor() );
 
     if( block->GetState() == STATE_BLOCK_INIT )
     {

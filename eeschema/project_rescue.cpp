@@ -275,7 +275,7 @@ public:
           m_new_name( aNewName ),
           m_lib_candidate( aLibCandidate ) { }
 
-    RESCUE_CASE_CANDIDATE() {}
+    RESCUE_CASE_CANDIDATE() { m_lib_candidate = NULL; }
 
     virtual wxString GetRequestedName() const { return m_requested_name; }
     virtual wxString GetNewName() const { return m_new_name; }

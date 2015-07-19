@@ -297,7 +297,8 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             cancelCmd = true;
 
             // undraw block outline
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+            if( DC )
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
         }
         else
         {
@@ -326,7 +327,8 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
             nextcmd = true;
             m_canvas->SetMouseCaptureCallback( drawMovingBlock );
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+            if( DC )
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: // Delete
