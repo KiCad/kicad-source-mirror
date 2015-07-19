@@ -959,15 +959,19 @@ void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 {
-    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+    wxFileName kicad_board = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
 
-    if( fn.IsOk() )
+    if( kicad_board.IsOk() )
     {
-        fn.SetExt( PcbFileExtension );
+        kicad_board.SetExt( PcbFileExtension );
+        wxFileName legacy_board( kicad_board );
+        legacy_board.SetExt( LegacyPcbFileExtension );
+        wxFileName& boardfn = ( !legacy_board.FileExists() || kicad_board.FileExists() ) ?
+                                    kicad_board : legacy_board;
 
         if( Kiface().IsSingle() )
         {
-            wxString filename = QuoteFullPath( fn );
+            wxString filename = QuoteFullPath( boardfn );
             ExecuteFile( this, PCBNEW_EXE, filename );
         }
         else
@@ -979,7 +983,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
             // if the frame is not visible, the board is not yet loaded
              if( !frame->IsVisible() )
             {
-                frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+                frame->OpenProjectFiles( std::vector<wxString>( 1, boardfn.GetFullPath() ) );
                 frame->Show( true );
             }
 
