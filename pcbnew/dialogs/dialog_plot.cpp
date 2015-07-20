@@ -634,7 +634,7 @@ void DIALOG_PLOT::applyPlotSettings()
         reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
-   ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
+    ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
 
     // Y scale
     msg = m_fineAdjustYscaleOpt->GetValue();
