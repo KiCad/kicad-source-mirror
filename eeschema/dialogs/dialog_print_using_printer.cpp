@@ -433,7 +433,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     FitThisSizeToPaper( pageSizeIU );
     fitRect = GetLogicalPaperRect();
 
-    wxLogDebug( wxT( "Fit rectangle: %d, %d, %d" ),
+    wxLogDebug( wxT( "Fit rectangle: x = %d, y = %d, w = %d, h = %d" ),
                   fitRect.x, fitRect.y, fitRect.width, fitRect.height );
 
     // When is the actual paper size does not match the schematic page
