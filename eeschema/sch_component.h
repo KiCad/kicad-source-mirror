@@ -402,12 +402,30 @@ public:
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList );
 
     /**
-     * Test if the component's dangling state has changed for one given pin index.
+     * Test if the component's dangling state has changed for one given pin index. As
+     * a side effect, actually update the dangling status for that pin.
+     *
+     * @param aItemList - list of all DANGLING_END_ITEMs to be tested
+     * @param aLibPins - list of all the LIB_PIN items in this component's symbol
+     * @param aPin - index into aLibPins that identifies the pin to test
+     * @return true if the pin's state has changed.
      */
-    bool IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList, LIB_PINS& aLibPins, unsigned aPin );
+    bool IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList,
+            LIB_PINS& aLibPins, unsigned aPin );
 
+    /**
+     * Test if the component's dangling state has changed for all pins. As a side
+     * effect, actually update the dangling status for all pins (does not short-circuit).
+     *
+     * @param aItemList - list of all DANGLING_END_ITEMs to be tested
+     * @return true if any pin's state has changed.
+     */
     bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList );
 
+    /**
+     * Return whether any pin has dangling status. Does NOT update the internal status,
+     * only checks the existing status.
+     */
     bool IsDangling() const;
 
     wxPoint GetPinPhysicalPosition( LIB_PIN* Pin );

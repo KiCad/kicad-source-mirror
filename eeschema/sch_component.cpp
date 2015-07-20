@@ -1628,9 +1628,11 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &aItemList, LIB_PINS& aLibPins, unsigned aPin )
+bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &aItemList,
+        LIB_PINS& aLibPins, unsigned aPin )
 {
     bool previousState;
+
     if( aPin < m_isDangling.size() )
     {
         previousState = m_isDangling[aPin];
@@ -1646,8 +1648,20 @@ bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &a
 
     BOOST_FOREACH( DANGLING_END_ITEM& each_item, aItemList )
     {
-        if( each_item.GetItem() == aLibPins[aPin] )
+        // Some people like to stack pins on top of each other in a symbol to indicate
+        // internal connection. While technically connected, it is not particularly useful
+        // to display them that way, so skip any pins that are in the same symbol as this
+        // one.
+        //
+        // Do not make this exception for hidden pins, because those actually make internal
+        // connections to a power net.
+        const LIB_PIN* item_pin = dynamic_cast<const LIB_PIN*>( each_item.GetItem() );
+
+        if( item_pin
+          && !item_pin->IsPowerConnection()
+          && std::find( aLibPins.begin(), aLibPins.end(), item_pin) != aLibPins.end() )
             continue;
+
         switch( each_item.GetType() )
         {
         case PIN_END:
@@ -1869,7 +1883,7 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
             aNetListItems.push_back( item );
 
-            if( ( (int) pin->GetType() == (int) PIN_POWER_IN ) && !pin->IsVisible() )
+            if( pin->IsPowerConnection() )
             {
                 // There is an associated PIN_LABEL.
                 item = new NETLIST_OBJECT();
