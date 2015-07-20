@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-07-17 00:32+0900\n"
-"PO-Revision-Date: 2015-07-20 03:21+0900\n"
-"Last-Translator: starfort <starfort@nifty.com>\n"
+"PO-Revision-Date: 2015-07-20 23:02+0900\n"
+"Last-Translator: kinichiro <kinichiro.inoguchi@gmail.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "Eeschema - 回路図エディタ"
 
 #: kicad/commandframe.cpp:70
 msgid "Schematic library editor"
-msgstr "回路図ライブラリエディタ"
+msgstr "コンポーネントライブラリエディタ"
 
 #: kicad/commandframe.cpp:73
 msgid "Pcbnew - Printed circuit board editor"
@@ -70,7 +70,7 @@ msgstr "PCBnew プリント基板エディタ"
 
 #: kicad/commandframe.cpp:76
 msgid "PCB footprint editor"
-msgstr "PCBフットプリントエディタ"
+msgstr "フットプリントエディタ"
 
 #: kicad/commandframe.cpp:79
 msgid "GerbView - Gerber viewer"
@@ -333,7 +333,7 @@ msgstr "回路図エディタ(EESchema)の起動"
 
 #: kicad/menubar.cpp:367
 msgid "Run Library Editor"
-msgstr "ライブラリエディタの起動"
+msgstr "コンポーネントライブラリエディタの起動"
 
 #: kicad/menubar.cpp:372 eeschema/menubar.cpp:480
 msgid "Run Pcbnew"
@@ -357,7 +357,7 @@ msgstr "電気計算ツール(PcbCalculator)の起動"
 
 #: kicad/menubar.cpp:399
 msgid "Run Page Layout Editor"
-msgstr "図枠エディタの起動"
+msgstr "図枠エディタ(Pl_Editor)の起動"
 
 #: kicad/menubar.cpp:412
 msgid "KiCad &Manual"
@@ -13650,7 +13650,7 @@ msgstr "ファイル <%s> が保存できません"
 
 #: eeschema/libeditframe.cpp:183
 msgid "Library Editor"
-msgstr "ライブラリ エディタ"
+msgstr "コンポーネント ライブラリ エディタ"
 
 #: eeschema/libeditframe.cpp:324
 msgid "Save the changes in the library before closing?"
@@ -14045,7 +14045,7 @@ msgstr "Eeschemaの設定"
 
 #: eeschema/menubar.cpp:424
 msgid "Library &Editor"
-msgstr "ライブラリ エディタ(&E)"
+msgstr "コンポーネント ライブラリ エディタ(&E)"
 
 #: eeschema/menubar.cpp:429
 msgid "Library &Browser"
@@ -14159,7 +14159,7 @@ msgstr "終了(&Q)"
 
 #: eeschema/menubar_libedit.cpp:111
 msgid "Quit Library Editor"
-msgstr "ライブラリ エディタの終了"
+msgstr "コンポーネント ライブラリ エディタの終了"
 
 #: eeschema/menubar_libedit.cpp:123
 msgid "Undo last edit"
@@ -14179,7 +14179,7 @@ msgstr "矩形(&R)"
 
 #: eeschema/menubar_libedit.cpp:237
 msgid "Component Editor &Options"
-msgstr "回路図エディタ オプション(&O)"
+msgstr "コンポーネントライブラリエディタ オプション(&O)"
 
 #: eeschema/menubar_libedit.cpp:238
 msgid "Set Component Editor default values and options"
@@ -14336,7 +14336,7 @@ msgstr "コンポーネント削除"
 
 #: eeschema/onrightclick.cpp:470
 msgid "Edit with Library Editor"
-msgstr "ライブラリ エディタで編集"
+msgstr "コンポーネント ライブラリ エディタで編集"
 
 #: eeschema/onrightclick.cpp:477
 msgid "Edit Component"
@@ -21947,7 +21947,7 @@ msgstr "回路図のアノテーション"
 
 #: eeschema/help_common_strings.h:77
 msgid "Library Editor - Create/edit components"
-msgstr "ライブラリ エディタ - コンポーネントの作成と編集"
+msgstr "コンポーネント ライブラリ エディタ - コンポーネントの作成と編集"
 
 #: eeschema/help_common_strings.h:78
 msgid "Library Browser - Browse components"
@@ -22051,7 +22051,7 @@ msgstr "ライブラリ テキスト プロパティ"
 #: eeschema/dialogs/dialog_libedit_dimensions_base.h:85
 #: eeschema/dialogs/dialog_libedit_options_base.h:77
 msgid "Library Editor Options"
-msgstr "ライブラリ エディタ オプション"
+msgstr "コンポーネント ライブラリ エディタ オプション"
 
 #: eeschema/dialogs/dialog_netlist_base.h:119
 msgid "Plugins:"
