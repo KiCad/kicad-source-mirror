@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-07-17 00:32+0900\n"
-"PO-Revision-Date: 2015-07-20 01:11+0900\n"
-"Last-Translator: yoneken <yoneken@kicad.jp>\n"
+"PO-Revision-Date: 2015-07-20 03:21+0900\n"
+"Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /Users/yoneken/workspace/emb/kicad/testing\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.8.2\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
 "X-Poedit-SearchPath-2: eeschema\n"
@@ -10737,7 +10737,7 @@ msgstr "拡張属性を含む"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid "Include extended attributes (X2 Gerber files format) in the Gerber file"
-msgstr ""
+msgstr "ガーバー ファイルに拡張属性を含む (X2 ガーバー ファイル フォーマット)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:240
 msgid "Subtract soldermask from silkscreen"
@@ -10767,6 +10767,8 @@ msgid ""
 "Resolution of coordinates in Gerber files.\n"
 "Use the higher value if possible."
 msgstr ""
+"ガーバー ファイル座標軸の解像度.\n"
+"できるだけ高い値を使うこと."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:259
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
@@ -10817,6 +10819,10 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
 msgstr ""
+"正確な幅で postscript 出力をするためグローバル修正幅を設定.\n"
+"これらの修正幅は配線幅やパッドとビアのサイズの誤差を補正するためのものです.\n"
+"妥当な幅の補正値は次の範囲でなければなりません [-(最小配線幅-1), +(最小クリア"
+"ランス-1)] (0.1 mil 単位)."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:356
 msgid "Force A4 output"
@@ -10981,7 +10987,7 @@ msgstr "インタラクティブなドラッグ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Free angle mode (no shove/walkaround)"
-msgstr ""
+msgstr "自在モード (押しのけ／速度優先探索なし)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:50
 msgid "Shove vias"
@@ -11622,6 +11628,8 @@ msgid ""
 "Unable to calculate the board outlines;\n"
 "fall back to using the board boundary box."
 msgstr ""
+"基板の外形を計算できません;\n"
+"バウンダリボックスの使用に戻ります."
 
 #: pcbnew/exporters/export_vrml.cpp:732
 msgid ""
@@ -11734,6 +11742,12 @@ msgid ""
 "directory <b>must</b> have a <b>.pretty</b> file extension because the "
 "format of the save is pretty.</p>"
 msgstr ""
+"ライブラリへ保存する時に pretty フットプリントとして書き込まれるディレクトリ"
+"へこのプロパティを設定します\n"
+"保存されたものは github リポジトリにある同じ名前のフットプリントより優先され"
+"ます。これらの保存されたフットプリントは、後でアップデートとしてライブラリの"
+"メインテナへ送ることができます. <p>ディレクトリは <b>必ず</b> 拡張子に <b>."
+"pretty</b> を付けること。（保存フォーマットが pretty のため）.</p>"
 
 #: pcbnew/github/github_plugin.cpp:415
 #, c-format
@@ -11741,6 +11755,8 @@ msgid ""
 "option '%s' for Github library '%s' must point to a writable directory "
 "ending with '.pretty'."
 msgstr ""
+"オプション '%s' は Github ライブラリ '%s' 用で、必ず最後に '.pretty' 拡張子を"
+"持つ書込み可能なディレクトリを指さなければなりません."
 
 #: pcbnew/github/github_plugin.cpp:538
 #, c-format
@@ -11815,16 +11831,18 @@ msgid "Starts laying a new track."
 msgstr "新規配線を開始"
 
 #: pcbnew/router/length_tuner_tool.cpp:54
+#, fuzzy
 msgid "Stops laying the current meander."
-msgstr ""
+msgstr "現在の配線を中止する."
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Length Tuning Settings"
 msgstr "配線長の調整設定"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
+#, fuzzy
 msgid "Sets the length tuning parameters for currently routed item."
-msgstr ""
+msgstr "配線長の調整パラメータを設定する"
 
 #: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Increase spacing"
@@ -11952,7 +11970,7 @@ msgstr "配線オプション..."
 
 #: pcbnew/router/pns_tool_base.cpp:61
 msgid "Shows a dialog containing router options."
-msgstr ""
+msgstr "ルーター オプションのダイアログを表示"
 
 #: pcbnew/router/router_tool.cpp:64
 msgid "Stops laying the current track."
@@ -11976,11 +11994,11 @@ msgstr "配線/ビアのドラッグ"
 
 #: pcbnew/router/router_tool.cpp:76
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr ""
+msgstr "配線の最後に貫通ビアを追加する"
 
 #: pcbnew/router/router_tool.cpp:82
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
+msgstr "配線の最後にブラインド/ベリッドビアを追加する"
 
 #: pcbnew/router/router_tool.cpp:87
 msgid "Place Microvia"
@@ -11988,7 +12006,7 @@ msgstr "マイクロビア配置"
 
 #: pcbnew/router/router_tool.cpp:87
 msgid "Adds a microvia at the end of currently routed track."
-msgstr ""
+msgstr "配線の最後にマイクロビアを追加する"
 
 #: pcbnew/router/router_tool.cpp:92
 msgid "Custom Track/Via Size"
@@ -11996,11 +12014,12 @@ msgstr "カスタム配線幅とビアサイズ"
 
 #: pcbnew/router/router_tool.cpp:93
 msgid "Shows a dialog for changing the track width and via size."
-msgstr ""
+msgstr "配線幅とビア サイズ設定のダイアログを表示"
 
 #: pcbnew/router/router_tool.cpp:99
+#, fuzzy
 msgid "Switches posture of the currenly routed track."
-msgstr ""
+msgstr "配線の形を変更する"
 
 #: pcbnew/router/router_tool.cpp:104
 msgid "Differential Pair Dimensions..."
@@ -12008,7 +12027,7 @@ msgstr "差動ペアの寸法"
 
 #: pcbnew/router/router_tool.cpp:105
 msgid "Sets the width and gap of the currently routed differential pair."
-msgstr ""
+msgstr "差動ペア配線の幅とギャップを設定する"
 
 #: pcbnew/router/router_tool.cpp:128
 msgid "Custom size"
@@ -12053,7 +12072,7 @@ msgstr "三叉路の接続"
 
 #: pcbnew/tools/common_actions.cpp:58
 msgid "Selects a connection between two junctions."
-msgstr ""
+msgstr "２つのジャンクション(接続点)間の接続を選択する"
 
 #: pcbnew/tools/common_actions.cpp:62
 msgid "copper connection"
@@ -12078,7 +12097,7 @@ msgstr "アイテムの検索"
 
 #: pcbnew/tools/common_actions.cpp:70
 msgid "Searches the document for an item"
-msgstr ""
+msgstr "アイテムのドキュメントを検索する"
 
 #: pcbnew/tools/common_actions.cpp:79
 msgid "Open in Footprint Editor"
@@ -12095,7 +12114,7 @@ msgstr "パッドの設定を現在の設定にコピー"
 #: pcbnew/tools/common_actions.cpp:86
 msgid ""
 "Copies the properties of selected pad to the current template pad settings."
-msgstr ""
+msgstr "選択したパッドの設定を現在のパッドの設定へコピーする"
 
 #: pcbnew/tools/common_actions.cpp:90
 msgid "Copy Current Settings to pads"
@@ -12103,7 +12122,7 @@ msgstr "このパッドに現在の設定をコピー"
 
 #: pcbnew/tools/common_actions.cpp:91
 msgid "Copies the current template pad settings to the selected pad(s)."
-msgstr ""
+msgstr "現在のパッドを選択したパッドへコピーする"
 
 #: pcbnew/tools/common_actions.cpp:95
 msgid "Global Pad Edition"
@@ -12256,7 +12275,7 @@ msgstr "モジュールの追加"
 #: pcbnew/tools/common_actions.cpp:414
 #, fuzzy
 msgid "Enumerate pads"
-msgstr "パッドを列挙する"
+msgstr "パッドを羅列する"
 
 #: pcbnew/tools/common_actions.cpp:418
 msgid "Copy items"
@@ -12308,7 +12327,7 @@ msgstr "アイテムを下へ整列"
 
 #: pcbnew/tools/common_actions.cpp:558
 msgid "Aligns selected items to the bottom edge"
-msgstr ""
+msgstr "選択したアイテムを下辺へ整列"
 
 #: pcbnew/tools/common_actions.cpp:562
 msgid "Align items to the left"
@@ -12316,7 +12335,7 @@ msgstr "アイテムを左へ整列"
 
 #: pcbnew/tools/common_actions.cpp:563
 msgid "Aligns selected items to the left edge"
-msgstr "選択したアイテムを下辺へ整列"
+msgstr "選択したアイテムを左辺へ整列"
 
 #: pcbnew/tools/common_actions.cpp:567
 msgid "Align items to the right"
@@ -12324,7 +12343,7 @@ msgstr "アイテムを右へ整列"
 
 #: pcbnew/tools/common_actions.cpp:568
 msgid "Aligns selected items to the right edge"
-msgstr ""
+msgstr "選択したアイテムを右辺へ整列"
 
 #: pcbnew/tools/common_actions.cpp:572
 msgid "Distribute horizontally"
@@ -12356,8 +12375,9 @@ msgid "Duplicated %d item(s)"
 msgstr "重複した%dアイテム"
 
 #: pcbnew/tools/module_tools.cpp:206
+#, fuzzy
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
-msgstr ""
+msgstr "羅列するためにマウスの左ボタンを押したままパッド上へカーソルを動かす"
 
 #: pcbnew/tools/module_tools.cpp:323
 msgid "Select reference point"
@@ -12475,6 +12495,8 @@ msgid ""
 "the sheet <%s> or one of it's subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
+"シートの変更ができません。保存先のシートは、既にシート <%s> を持っているか、"
+"階層のどこかで親シートとしてサブシートの一つに持っています."
 
 #: eeschema/class_drc_erc_item.cpp:40
 msgid "ERC err unspecified"
@@ -13818,7 +13840,7 @@ msgstr "新規回路図プロジェクト(&N)"
 
 #: eeschema/menubar.cpp:70
 msgid "Clear current schematic hierarchy and start a new schematic root sheet"
-msgstr ""
+msgstr "現在の回路図階層をクリアし、新しい回路図ルートシートを開始する"
 
 #: eeschema/menubar.cpp:73
 msgid "&Open Schematic Project"
@@ -14035,7 +14057,7 @@ msgstr "キャッシュされたコンポーネントのレスキュー(&R)"
 
 #: eeschema/menubar.cpp:435
 msgid "Find old components in the project and rename/rescue them"
-msgstr ""
+msgstr "プロジェクトにある古いコンポーネントを探してリネーム／レスキューする"
 
 #: eeschema/menubar.cpp:442
 msgid "&Annotate Schematic"
@@ -14161,7 +14183,7 @@ msgstr "回路図エディタ オプション(&O)"
 
 #: eeschema/menubar_libedit.cpp:238
 msgid "Set Component Editor default values and options"
-msgstr ""
+msgstr "コンポーネント エディタにデフォルトの値とオプションを設定する"
 
 #: eeschema/menubar_libedit.cpp:264
 msgid "Open the Eeschema manual"
@@ -14193,6 +14215,8 @@ msgid ""
 "Exporting the netlist requires a completely\n"
 "annotated schematic."
 msgstr ""
+"ネットリストのエクスポートには回路図の完全な\n"
+"アノテーションが必要です."
 
 #: eeschema/netlist.cpp:78
 msgid "Error: duplicate sheet names. Continue?"
@@ -14654,7 +14678,7 @@ msgstr "%s を %s としてレスキュー"
 
 #: eeschema/project_rescue.cpp:502
 msgid "This project has nothing to rescue."
-msgstr ""
+msgstr "このプロジェクトにレスキューは必要ありません."
 
 #: eeschema/project_rescue.cpp:516
 msgid "No symbols were rescued."
@@ -15155,7 +15179,7 @@ msgstr "\"ド・モルガン\" 変換部品として表示"
 
 #: eeschema/tool_lib.cpp:189
 msgid "Show the associated datasheet or document"
-msgstr ""
+msgstr "関連するデータシートまたはドキュメントを表示する"
 
 #: eeschema/tool_lib.cpp:209
 msgid "Edit pins per part or body style (Use carefully!)"
@@ -16183,6 +16207,9 @@ msgid ""
 "lib).\n"
 "The text you entered has been converted to use underscores: %s"
 msgstr ""
+"空白文字の使用は、リファレンスと定数(ライブラリ内のシンボル名)の内部で許され"
+"ていません.\n"
+"入力された文字列内の空白文字はアンダースコアへ変換されます(: %s )"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:137
 #, c-format
@@ -16589,7 +16616,7 @@ msgstr "長さ (&L):"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:67
 msgid "Power component value text cannot be modified!"
-msgstr ""
+msgstr "電源コンポーネントの定数テキストは変更できません！"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
 msgid "Common to all units"
@@ -16977,6 +17004,14 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
+"このプロジェクトは古い回路図用のコンポーネントライブラリを使って作られている"
+"ようです.\n"
+"いくつかの部品は別のシンボル名へ再リンクする必要があると思われ, またいくつか"
+"のシンボルは\n"
+"新しいライブラリへ \"レスキュー\" (クローン化とリネーム) が必要と思われま"
+"す.\n"
+"\n"
+"次の変更はプロジェクトをアップデートするために推奨されるものです."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:104
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:192
@@ -17001,6 +17036,11 @@ msgid ""
 "This setting can be changed from the \"Component Libraries\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
+"このツールを終了しますか？\n"
+"何も変更されません. \n"
+"\n"
+"この設定は \"コンポーネント ライブラリ\" ダイアログから変更でき, \n"
+"ツールは \"ツール\" メニューから実行できます."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:284
 msgid "Rescue Components"
@@ -17349,6 +17389,12 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"始めにフットプリントの検索に新しいフットプリントライブラリテーブルを使うよう "
+"CvPcb を実行します。 CvPcb はデフォルト テーブルをコピーし、あなたのホーム"
+"フォルダへ空のテーブルを作ります。あなたはまず KiCad がデフォルトで含んでいな"
+"い全てのフットプリントを含んだライブラリテーブルを設定しなければなりません。"
+"詳細は CvPcb マニュアルの \"フットプリント ライブラリ テーブル\" の章を参照し"
+"て下さい。"
 
 #: cvpcb/menubar.cpp:69
 msgid "&Save Edits\tCtrl+S"
@@ -17371,6 +17417,8 @@ msgid ""
 "Setup equ files list (.equ files)\n"
 "They are files which give the footprint name from the component value"
 msgstr ""
+"等価ファイル (.equ ファイル)のセットアップ\n"
+"これはコンポーネントの名前からフットプリント名を割り当てるためのファイルです"
 
 #: cvpcb/menubar.cpp:104
 msgid "&Keep Open On Save"
@@ -17411,6 +17459,10 @@ msgid ""
 "required FPID format? (If you answer no, then these assignments will be "
 "cleared out and you will have to re-assign these footprints yourself.)"
 msgstr ""
+"配置されたフットプリントのいくつかは、(ライブラリの別名がない)古い形式です. "
+"CvPcb を使って新しく必要な FPID フォーマットへの変換を試みますか？ (ノーを選"
+"択した場合、これらの配置は消去され、各々のフットプリントを手動で再配置する必"
+"要があります.)"
 
 #: cvpcb/readwrite_dlgs.cpp:229
 #, c-format
@@ -17449,6 +17501,9 @@ msgid ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"次回 Pcbnew にネットリストをインポートする時に正しくアップデートされているた"
+"めには、手動で再配置する必要があります"
 
 #: cvpcb/readwrite_dlgs.cpp:379
 msgid "Edits sent to Eeschema"
@@ -17517,8 +17572,9 @@ msgid "Edit Equ File"
 msgstr "Equファイルの編集"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:65
+#, fuzzy
 msgid "Available environment variables for relative paths:"
-msgstr ""
+msgstr "有効な環境変数(相対パス):"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Absolute path"
@@ -17662,7 +17718,7 @@ msgstr "全てのレイヤを非表示"
 
 #: gerbview/class_gerbview_layer_widget.cpp:165
 msgid "Sort Layers if X2 Mode"
-msgstr ""
+msgstr "X2 モードならレイヤをソートする"
 
 #: gerbview/events_called_functions.cpp:268
 msgid "No editor defined. Please select one"
@@ -17960,6 +18016,9 @@ msgid ""
 "It is perhaps an old RS274D file\n"
 "Therefore the size of items is undefined"
 msgstr ""
+"警告！ このファイルは D-Code 定義を持っていません\n"
+"古い RS274D ファイルだと思われます\n"
+"そのため、アイテムのサイズは未定義です"
 
 #: gerbview/rs274x.cpp:444
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -18721,6 +18780,8 @@ msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
 msgstr ""
+"警告！ あなたが設定したいくつかのパスは、実行中のプロセスへ\n"
+"外部から定義され、現状のものを上書きします."
 
 #: common/pgm_base.cpp:812
 msgid ""
@@ -18730,6 +18791,11 @@ msgid ""
 "behavior, either rename any conflicting entries or remove the\n"
 "external environment variable definition(s) from your system."
 msgstr ""
+"次に kiCad を起動する時, 既に定義されたパスは\n"
+"受け入れられ, パス設定ダイアログでの設定は全て\n"
+"無視されます。このような動作を望まないので\n"
+"あれば、衝突している項目をリネームし, システム\n"
+"の環境変数定義を削除して下さい."
 
 #: common/pgm_base.cpp:819
 msgid "Do not show this message again."
@@ -19035,6 +19101,9 @@ msgid ""
 "Grey enteries are names that have been defined externally as system or user "
 "level environment variables."
 msgstr ""
+"両方のパスへ名前とパスを入力.\n"
+"\n"
+"灰色の項目は、システムまたはユーザー環境変数によって外部で定義された名前です."
 
 #: common/dialogs/dialog_env_var_config_base.cpp:66
 msgid "Add a new entry to the table."
@@ -19475,6 +19544,8 @@ msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
 msgstr ""
+"基板の外形を計算できません;\n"
+"そのためバウンダリボックスを使用します."
 
 #: 3d-viewer/3d_draw_board_body.cpp:435
 msgid "Build board body"
@@ -19518,7 +19589,7 @@ msgstr "クリップボードへ画像をコピー"
 
 #: 3d-viewer/3d_toolbar.cpp:64
 msgid "Set display options, and some layers visibility"
-msgstr "ディスプレイオプションとレイヤー表示方法の設定"
+msgstr "ディスプレイ オプションを設定してレイヤを可視化"
 
 #: 3d-viewer/3d_toolbar.cpp:78
 msgid "Fit in page"
@@ -19601,6 +19672,8 @@ msgid ""
 "Holes inside a copper layer copper zones are shown, but the calculation time "
 "is longer"
 msgstr ""
+"導体レイヤ、導体ゾーンの内部にある穴が表示されていますが、計算時間は長くなり"
+"ます"
 
 #: 3d-viewer/3d_toolbar.cpp:167
 msgid "Render Textures"
@@ -19645,8 +19718,9 @@ msgid "Silkscreen Color"
 msgstr "シルクの色"
 
 #: 3d-viewer/3d_toolbar.cpp:214
+#, fuzzy
 msgid "Copper/Surface Finish Color"
-msgstr ""
+msgstr "導体／表面の Finish 色"
 
 #: 3d-viewer/3d_toolbar.cpp:220
 msgid "Show 3D &Axis"
@@ -19889,6 +19963,8 @@ msgid ""
 "The 2 invisible fields reference and value are always placed on the silk "
 "screen layer."
 msgstr ""
+"外形を配置する基板のレイヤを選択する.\n"
+"２つの不可視フィールド リファレンスと定数は常にシルク レイヤへ置かれます."
 
 #: pcb_calculator/attenuators.cpp:107
 #, c-format
@@ -20145,7 +20221,7 @@ msgstr "導体の荒さ"
 
 #: pcb_calculator/transline_ident.cpp:174
 msgid "mu Rel S"
-msgstr ""
+msgstr "ミュー (比透磁率) S(サブストレート)"
 
 #: pcb_calculator/transline_ident.cpp:175
 msgid "Relative Permeability (mu) of Substrate"
@@ -20161,7 +20237,7 @@ msgstr "サブストレートの比透磁率 (mu)"
 #: pcb_calculator/transline_ident.cpp:407
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:723
 msgid "mu Rel C"
-msgstr ""
+msgstr "ミュー (比透磁率) C(導体)"
 
 #: pcb_calculator/transline_ident.cpp:177
 #: pcb_calculator/transline_ident.cpp:207
@@ -20272,7 +20348,7 @@ msgstr "TMモード"
 #: pcb_calculator/transline_ident.cpp:270
 #: pcb_calculator/transline_ident.cpp:303
 msgid "mu Rel I"
-msgstr ""
+msgstr "ミュー (比透磁率) I(絶縁体)"
 
 #: pcb_calculator/transline_ident.cpp:270
 #: pcb_calculator/transline_ident.cpp:303
@@ -20547,8 +20623,9 @@ msgid "Regulators data file:"
 msgstr "レギュレータデータファイル:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:198
+#, fuzzy
 msgid "The name of the data file which stores known regulators parameters."
-msgstr ""
+msgstr "既存のレギュレータのパラメータで保存されているデータファイル名"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:218
 msgid "Edit Regulator"
@@ -20811,7 +20888,7 @@ msgstr "Ω・mでの抵抗率"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:710
 msgid "mu Rel"
-msgstr ""
+msgstr "ミュー (比透磁率)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:743
 msgid "Component Parameters:"
@@ -21218,7 +21295,7 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:456
 #, c-format
 msgid "Page size: width %.4g height %.4g"
-msgstr ""
+msgstr "ページサイズ: 幅 %.4g 高さ %.4g"
 
 #: pagelayout_editor/pl_editor_frame.cpp:501
 #, c-format
@@ -21520,8 +21597,9 @@ msgid "invalid extends LPID"
 msgstr "不正な拡張 LPID"
 
 #: new/sch_sweet_parser.cpp:354
+#, fuzzy
 msgid "'extends' may not have self as any ancestor"
-msgstr ""
+msgstr "'extends' はいかなる祖先も持っていないようです"
 
 #: new/sch_sweet_parser.cpp:364
 msgid "max allowed extends depth exceeded"
@@ -21550,12 +21628,12 @@ msgstr "ピン %s は既にピングループ %s に存在します。"
 #: new/sch_sweet_parser.cpp:903
 #, c-format
 msgid "no pins with signal %s"
-msgstr ""
+msgstr "信号 %s のピンがありません"
 
 #: new/sch_sweet_parser.cpp:915
 #, c-format
 msgid "signal pin %s already in pin_merge group %s"
-msgstr ""
+msgstr "信号ピン %s は既にピングループ %s に存在します"
 
 #: new/sch_sweet_parser.cpp:998
 #, c-format
@@ -21563,8 +21641,9 @@ msgid "Unable to find property: %s"
 msgstr "プロパティが見つかりませんでした: %s"
 
 #: new/sweet_editor_panel.cpp:31
+#, fuzzy
 msgid "Sweet"
-msgstr ""
+msgstr "甘い"
 
 #: new/sweet_editor_panel.cpp:42
 msgid "Visual Part"
@@ -21998,6 +22077,8 @@ msgstr "回路図 シート プロパティ"
 #: cvpcb/common_help_msg.h:28
 msgid "Save footprint association in schematic component footprint fields"
 msgstr ""
+"回路図のコンポーネントのフットプリント フィールドへ関連付けてフットプリントを"
+"保存する"
 
 #: cvpcb/dialogs/dialog_display_options_base.h:63
 msgid "Display Options"
