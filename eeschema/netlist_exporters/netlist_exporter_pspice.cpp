@@ -64,6 +64,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
         return false;
     }
 
+    ret |= fprintf( f, "* %s\n\n", TO_UTF8( aOutFileName ) );
     ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n",
                     NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
 
@@ -84,7 +85,9 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
     {
         for( EDA_ITEM* item = sheet->LastDrawList(); item; item = item->Next() )
         {
+            size_t l1, l2;
             wxChar ident;
+
             if( item->Type() != SCH_TEXT_T )
                 continue;
 
@@ -104,7 +107,17 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
             text.Remove( 6 );       // text contains 6 char.
             text.MakeLower();
 
-            if( ( text == wxT( "pspice" ) ) || ( text == wxT( "gnucap" ) ) )
+            if( text != wxT( "pspice" ) && text != wxT( "gnucap" ) )
+                continue;
+
+            text = drawText->GetText().Mid( 7 );
+            l1 = text.Length();
+            text.Trim( false );
+            l2 = text.Length();
+
+            if( l1 == l2 )
+                continue;           // no whitespace after ident text
+
             {
                 // Put the Y position as an ascii string, for sort by vertical
                 // position, using usual sort string by alphabetic value
@@ -116,10 +129,9 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
                     ypos >>= 6;
                 }
 
-                text = drawText->GetText().AfterFirst( ' ' );
-
                 // First BUFYPOS_LEN char are the Y position.
                 msg.Printf( wxT( "%s %s" ), bufnum, text.GetData() );
+
                 if( ident == '+' )
                     spiceCommandAtEndFile.Add( msg );
                 else
@@ -131,9 +143,11 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
     // Print texts starting by [.-]pspice , ou [.-]gnucap (of course, without
     // the Y position string)
     nbitems = spiceCommandAtBeginFile.GetCount();
+
     if( nbitems )
     {
         spiceCommandAtBeginFile.Sort();
+
         for( int ii = 0; ii < nbitems; ii++ )
         {
             spiceCommandAtBeginFile[ii].Remove( 0, BUFYPOS_LEN );
@@ -150,11 +164,12 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-        ret |= fprintf( f, "*Sheet Name:%s\n", TO_UTF8( sheet->PathHumanReadable() ) );
+        ret |= fprintf( f, "* Sheet Name: %s\n", TO_UTF8( sheet->PathHumanReadable() ) );
 
         for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, sheet );
+
             if( !comp )
                 break;
 
@@ -165,6 +180,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
             // Check to see if component should be removed from Spice Netlist:
             SCH_FIELD*  netlistEnabledField = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
+
             if( netlistEnabledField )
             {
                 wxString netlistEnabled = netlistEnabledField->GetText();
@@ -178,6 +194,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
             // Check if Alternative Pin Sequence is Available:
             SCH_FIELD*  spiceSeqField = comp->FindField( wxT( "Spice_Node_Sequence" ) );
+
             if( spiceSeqField )
             {
                 // Get String containing the Sequence of Nodes:
@@ -189,16 +206,20 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
                 // Create an Array of Standard Pin Names from part definition:
                 stdPinNameArray.Clear();
+
                 for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
                 {
                     NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
+
                     if( !pin )
                         continue;
+
                     stdPinNameArray.Add( pin->GetPinNumText() );
                 }
 
                 // Get Alt Pin Name Array From User:
                 wxStringTokenizer tkz( nodeSeqIndexLineStr, delimeters );
+
                 while( tkz.HasMoreTokens() )
                 {
                     wxString    pinIndex = tkz.GetNextToken();
@@ -224,7 +245,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
                     RefName = wxT( "X" ) + RefName;
             }
 
-            ret |= fprintf( f, "%s ", TO_UTF8( RefName) );
+            ret |= fprintf( f, "%s ", TO_UTF8( RefName ) );
 
             // Write pin list:
             int activePinIndex = 0;
@@ -336,4 +357,3 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
     return ret >= 0;
 }
-
