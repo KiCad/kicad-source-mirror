@@ -71,16 +71,19 @@ static double SchematicZoomList[] =
 
 
 /* Default grid sizes for the schematic editor.
- * Do NOT add others values (mainly grid values in mm),
- * because they can break the schematic:
- * because wires and pins are considered as connected when the are to the same coordinate
- * we cannot mix coordinates in mils (internal units) and mm
- * (that cannot exactly converted in mils in many cases
- * in fact schematic must only use 50 and 25 mils to place labels, wires and components
- * others values are useful only for graphic items (mainly in library editor)
- * so use integer values in mils only.
+ * Do NOT add others values (mainly grid values in mm), because they
+ * can break the schematic: Because wires and pins are considered as
+ * connected when the are to the same coordinate we cannot mix
+ * coordinates in mils (internal units) and mm (that cannot exactly
+ * converted in mils in many cases).  In fact schematic must only use
+ * 50 and 25 mils to place labels, wires and components others values
+ * are useful only for graphic items (mainly in library editor) so use
+ * integer values in mils only.  The 100 mil grid is added to help
+ * conform to the KiCad Library Convention. Which states: "Using a
+ * 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"
 */
 static GRID_TYPE SchematicGridList[] = {
+    { ID_POPUP_GRID_LEVEL_100, wxRealPoint( 100, 100 ) },
     { ID_POPUP_GRID_LEVEL_50, wxRealPoint( 50, 50 ) },
     { ID_POPUP_GRID_LEVEL_25, wxRealPoint( 25, 25 ) },
     { ID_POPUP_GRID_LEVEL_10, wxRealPoint( 10, 10 ) },
