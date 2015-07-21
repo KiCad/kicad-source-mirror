@@ -258,8 +258,13 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     wxString nameless_prj = NAMELESS_PROJECT  wxT( ".pro" );
 
+    wxLogDebug( wxT( "%s: %s" ),
+                GetChars( wxFileName( prj_filename ).GetFullName() ),
+                GetChars( nameless_prj ) );
+
     // Check if project file exists and if it is not noname.pro
-    if( !wxFileExists( prj_filename ) && !wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) )
+    if( !wxFileExists( prj_filename )
+      && !wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) )
     {
         wxString msg = wxString::Format( _(
                 "KiCad project file '%s' not found" ),
@@ -268,6 +273,12 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
         DisplayError( this, msg );
         return;
     }
+
+    // Either this is the first time kicad has been run or one of the projects in the
+    // history list is no longer valid.  This prevents kicad from automatically creating
+    // a noname.pro file in the same folder as the kicad binary.
+    if( wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) )
+        return;
 
     Prj().ConfigLoad( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
@@ -295,8 +306,9 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     PrintPrjInfo();
 }
 
+
 /* Creates a new project folder, copy a template into this new folder.
- * and open this new projrct as working project
+ * and open this new project as working project
  */
 void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
 {
@@ -307,7 +319,7 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    // Buils the project .pro filename, from the new project folder name
+    // Builds the project .pro filename, from the new project folder name
     wxFileName fn;
     fn.AssignDir( dlg.GetPath() );
     fn.SetName( dlg.GetPath().AfterLast( SEP() ) );
