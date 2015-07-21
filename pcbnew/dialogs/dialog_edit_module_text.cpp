@@ -75,10 +75,7 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
 
     initDlg();
 
-    wxButton* okButton = (wxButton*) FindWindowById( wxID_OK );
-
-    if( okButton )
-        SetDefaultItem( okButton );
+    m_sdbSizer1OK->SetDefault();
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
