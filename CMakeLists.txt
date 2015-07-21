@@ -428,7 +428,7 @@ include( CheckFindPackageResult )
 add_definitions( -DWX_COMPATIBILITY )
 
 # See line 41 of CMakeModules/FindwxWidgets.cmake
-set( wxWidgets_CONFIG_OPTIONS --static=no )
+set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} --static=no )
 
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
