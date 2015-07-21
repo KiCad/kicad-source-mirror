@@ -421,8 +421,15 @@ bool PGM_BASE::initPgm()
         envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
         m_local_env_vars[ envVarName ] = envVarItem;
 
-        wxFileName tmpFileName;
-        tmpFileName.AssignDir( wxString( wxT( DEFAULT_INSTALL_PATH ) ) );
+        wxFileName baseSharePath;
+        baseSharePath.AssignDir( wxString( wxT( DEFAULT_INSTALL_PATH ) ) );
+
+#if !defined( __WXMAC__ )
+        baseSharePath.AppendDir( wxT( "share" ) );
+        baseSharePath.AppendDir( wxT( "kicad" ) );
+#endif
+
+        wxFileName tmpFileName = baseSharePath;
         tmpFileName.AppendDir( wxT( "modules" ) );
         envVarName = wxT( "KISYSMOD" );
         envVarItem.SetValue( tmpFileName.GetPath() );
@@ -431,6 +438,13 @@ bool PGM_BASE::initPgm()
 
         envVarName = wxT( "KISYS3DMOD" );
         tmpFileName.AppendDir( wxT( "packages3d" ) );
+        envVarItem.SetValue( tmpFileName.GetPath() );
+        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
+        m_local_env_vars[ envVarName ] = envVarItem;
+
+        envVarName = wxT( "KICAD_PTEMPLATES" );
+        tmpFileName = baseSharePath;
+        tmpFileName.AppendDir( wxT( "template" ) );
         envVarItem.SetValue( tmpFileName.GetPath() );
         envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
         m_local_env_vars[ envVarName ] = envVarItem;
