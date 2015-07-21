@@ -84,7 +84,8 @@ enum DrawPinOrient {
 
 enum LibPinDrawFlags {
     PIN_DRAW_TEXTS = 1,
-    PIN_DRAW_DANGLING = 2,
+    PIN_DRAW_DANGLING = 2,      // Draw this pin with a 'dangling' indicator
+    PIN_DANGLING_HIDDEN = 4,    // Draw (only!) the dangling indicator if the pin is hidden
 };
 
 
@@ -114,7 +115,8 @@ class LIB_PIN : public LIB_ITEM
      * @param aDrawMode GR_OR, GR_XOR, ...
      * @param aData = used here as uintptr_t containing bitwise OR'd flags:
      *      PIN_DRAW_TEXTS,     -- false to draw only pin shape, useful for fast mode
-     *      PIN_DRAW_DANGLING,
+     *      PIN_DRAW_DANGLING,  -- true to draw the pin with its target
+     *      PIN_DANGLING_HIDDEN -- draw the target even if the pin is hidden
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
@@ -401,7 +403,8 @@ public:
     void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                         int aOrientation, GR_DRAWMODE aDrawMode,
                         EDA_COLOR_T aColor = UNSPECIFIED_COLOR,
-                        bool aDrawDangling = true );
+                        bool aDrawDangling = true,
+                        bool aOnlyTarget = false );
 
     /**
      * Function DrawPinTexts

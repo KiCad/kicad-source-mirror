@@ -1658,7 +1658,7 @@ bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &a
         const LIB_PIN* item_pin = dynamic_cast<const LIB_PIN*>( each_item.GetItem() );
 
         if( item_pin
-          && !item_pin->IsPowerConnection()
+          && ( !item_pin->IsPowerConnection() || !IsInNetlist() )
           && std::find( aLibPins.begin(), aLibPins.end(), item_pin) != aLibPins.end() )
             continue;
 

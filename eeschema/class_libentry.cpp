@@ -384,12 +384,17 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
 
         if( drawItem.Type() == LIB_PIN_T )
         {
+            LIB_PIN& pin = dynamic_cast<LIB_PIN&>( drawItem );
+
             uintptr_t flags = 0;
             if( aShowPinText )
                 flags |= PIN_DRAW_TEXTS;
 
             if( !aPinsDangling || (aPinsDangling->size() > pin_index && (*aPinsDangling)[pin_index] ) )
                 flags |= PIN_DRAW_DANGLING;
+
+            if( pin.IsPowerConnection() && IsPower() )
+                flags |= PIN_DANGLING_HIDDEN;
 
             drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) flags, aTransform );
 

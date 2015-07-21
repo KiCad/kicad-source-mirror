@@ -857,6 +857,20 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
                            void*            aData,
                            const TRANSFORM& aTransform )
 {
+    // aData is used here as a bitfield of flags.
+    uintptr_t flags = (uintptr_t) aData;
+    bool drawPinText = flags & PIN_DRAW_TEXTS;
+    bool drawPinDangling = flags & PIN_DRAW_DANGLING;
+    bool drawDanglingHidden = flags & PIN_DANGLING_HIDDEN;
+
+    LIB_PART* Entry = GetParent();
+
+    /* Calculate pin orient taking in account the component orientation. */
+    int     orient = PinDrawOrient( aTransform );
+
+    /* Calculate the pin position */
+    wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
+
     // Invisible pins are only drawn on request.
     // They are drawn in GetInvisibleItemColor().
     // in schematic, they are drawn only if m_showAllPins is true.
@@ -870,23 +884,18 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
 
         if( frame && frame->IsType( FRAME_SCH ) &&
             ! ((SCH_EDIT_FRAME*)frame)->GetShowAllPins() )
+        {
+            if( drawPinDangling && drawDanglingHidden )
+            {
+                // Draw the target
+                DrawPinSymbol( aPanel, aDC, pos1, orient, aDrawMode, aColor, drawPinDangling,
+                        /* aOnlyTarget */ true );
+            }
             return;
+        }
 
         aColor = GetInvisibleItemColor();
     }
-
-    LIB_PART* Entry = GetParent();
-
-    // aData is used here as a bitfield of flags.
-    uintptr_t flags = (uintptr_t) aData;
-    bool drawPinText = flags & PIN_DRAW_TEXTS;
-    bool drawPinDangling = flags & PIN_DRAW_DANGLING;
-
-    /* Calculate pin orient taking in account the component orientation. */
-    int     orient = PinDrawOrient( aTransform );
-
-    /* Calculate the pin position */
-    wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
 
     /* Drawing from the pin and the special symbol combination */
     DrawPinSymbol( aPanel, aDC, pos1, orient, aDrawMode, aColor, drawPinDangling );
@@ -916,7 +925,8 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                              int             aOrient,
                              GR_DRAWMODE     aDrawMode,
                              EDA_COLOR_T     aColor,
-                             bool            aDrawDangling )
+                             bool            aDrawDangling,
+                             bool            aOnlyTarget )
 {
     int       MapX1, MapY1, x1, y1;
     int       width   = GetPenSize();
@@ -961,6 +971,21 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
         MapX1 = -1;
         break;
     }
+
+    // Draw the pin end target (active end of the pin)
+    BASE_SCREEN* screen = aPanel ? aPanel->GetScreen() : NULL;
+    #define NCSYMB_PIN_DIM TARGET_PIN_RADIUS
+
+    // Draw but do not print the pin end target 1 pixel width
+    if( m_type != PIN_NC && ( screen == NULL || !screen->m_IsPrinting ) )
+    {
+        if( aDrawDangling )
+            GRCircle( clipbox, aDC, posX, posY, TARGET_PIN_RADIUS, 0, color );
+    }
+
+    if( aOnlyTarget )
+        return;
+
 
     if( m_shape & INVERT )
     {
@@ -1079,10 +1104,6 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                   width, color );
     }
 
-    // Draw the pin end target (active end of the pin)
-    BASE_SCREEN* screen = aPanel ? aPanel->GetScreen() : NULL;
-    #define NCSYMB_PIN_DIM TARGET_PIN_RADIUS
-
     if( m_type == PIN_NC )   // Draw a N.C. symbol
     {
         GRLine( clipbox, aDC,
@@ -1093,12 +1114,6 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                 posX + NCSYMB_PIN_DIM, posY - NCSYMB_PIN_DIM,
                 posX - NCSYMB_PIN_DIM, posY + NCSYMB_PIN_DIM,
                 width, color );
-    }
-    // Draw but do not print the pin end target 1 pixel width
-    else if( screen == NULL || !screen->m_IsPrinting )
-    {
-        if( aDrawDangling )
-            GRCircle( clipbox, aDC, posX, posY, TARGET_PIN_RADIUS, 0, color );
     }
 }
 
