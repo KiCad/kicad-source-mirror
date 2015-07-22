@@ -24,6 +24,15 @@
 
 #include "conditional_menu.h"
 
+CONDITIONAL_MENU::~CONDITIONAL_MENU()
+{
+    for( std::list<ENTRY>::iterator it = m_entries.begin(); it != m_entries.end(); ++it )
+    {
+        if( it->Type() == ENTRY::MENU )
+            delete it->Menu();
+    }
+}
+
 
 void CONDITIONAL_MENU::AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                                 int aOrder )

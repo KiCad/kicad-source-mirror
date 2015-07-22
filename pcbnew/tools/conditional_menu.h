@@ -35,6 +35,9 @@ class SELECTION_TOOL;
 class CONDITIONAL_MENU
 {
 public:
+    CONDITIONAL_MENU() {}
+    ~CONDITIONAL_MENU();
+
     ///> Constant to indicate that we do not care about an ENTRY location in the menu.
     static const int ANY_ORDER = -1;
 
@@ -54,7 +57,8 @@ public:
     /**
      * Function AddMenu()
      *
-     * Adds a submenu to the menu.
+     * Adds a submenu to the menu. CONDITIONAL_MENU takes ownership of the added menu, so it will
+     * be freed when the CONDITIONAL_MENU object is destroyed.
      * @param aMenu is the submenu to be added.
      * @param aLabel is the label of added submenu.
      * @param aExpand determines if the added submenu items should be added as individual items
