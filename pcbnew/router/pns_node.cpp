@@ -748,17 +748,15 @@ void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos
         assert( jt );
 
         aCorners[aPos] = jt->Pos();
+        aSegments[aPos] = aCurrent;
+        aPos += ( aScanDirection ? 1 : -1 );
 
-        if( count && guard == p )
+        if( count && guard == p)
         {
             aSegments[aPos] = NULL;
             aGuardHit = true;
             break;
         }
-
-        aSegments[aPos] = aCurrent;
-
-        aPos += ( aScanDirection ? 1 : -1 );
 
         if( !jt->IsLineCorner() || aPos < 0 || aPos == aLimit )
             break;
@@ -796,6 +794,7 @@ PNS_LINE* PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex)
     int n = 0;
 
     PNS_SEGMENT* prev_seg = NULL;
+    bool originSet = false;
 
     for( int i = i_start + 1; i < i_end; i++ )
     {
@@ -807,9 +806,12 @@ PNS_LINE* PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex)
         {
             pl->LinkSegment( segs[i] );
 
-            if( segs[i] == aSeg && aOriginSegmentIndex )
+            // latter condition to avoid loops
+            if( segs[i] == aSeg && aOriginSegmentIndex && !originSet )
+            {
                 *aOriginSegmentIndex = n;
-
+                originSet = true;
+            }
             n++;
         }
 
