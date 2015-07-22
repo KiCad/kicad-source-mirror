@@ -421,7 +421,7 @@ bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
     buildInitialLine( aP, m_head );
     aNewHead = m_head;
-    return m_currentNode->CheckColliding( &m_head );
+    return static_cast<bool>( m_currentNode->CheckColliding( &m_head ) );
 }
 
 

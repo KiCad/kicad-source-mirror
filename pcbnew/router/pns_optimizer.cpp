@@ -383,7 +383,7 @@ bool PNS_OPTIMIZER::checkColliding( PNS_ITEM* aItem, bool aUpdateCache )
 {
     CACHE_VISITOR v( aItem, m_world, m_collisionKindMask );
 
-    return m_world->CheckColliding( aItem );
+    return static_cast<bool>( m_world->CheckColliding( aItem ) );
 
     // something is wrong with the cache, need to investigate.
     m_cache.Query( aItem->Shape(), m_world->GetMaxClearance(), v, false );
@@ -1103,7 +1103,7 @@ bool checkDpColliding( PNS_NODE* aNode, PNS_DIFF_PAIR* aPair, bool aIsP, const S
 {
     PNS_LINE tmp ( aIsP ? aPair->PLine() : aPair->NLine(), aPath );
 
-    return aNode->CheckColliding( &tmp );
+    return static_cast<bool>( aNode->CheckColliding( &tmp ) );
 }
 
 

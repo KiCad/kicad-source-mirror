@@ -89,7 +89,7 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::singleStep( PNS_LINE& aPath,
 
     PNS_LINE walk_path( aPath, path_walk[1] );
 
-    bool alt_collides = m_world->CheckColliding( &walk_path, m_itemMask );
+    bool alt_collides = static_cast<bool>( m_world->CheckColliding( &walk_path, m_itemMask ) );
 
     SHAPE_LINE_CHAIN pnew;
 

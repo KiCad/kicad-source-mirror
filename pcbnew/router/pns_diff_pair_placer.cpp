@@ -117,8 +117,8 @@ bool PNS_DIFF_PAIR_PLACER::rhMarkObstacles( const VECTOR2I& aP )
     if( !routeHead( aP ) )
         return false;
 
-    bool collP = m_currentNode->CheckColliding( &m_currentTrace.PLine() );
-    bool collN = m_currentNode->CheckColliding( &m_currentTrace.NLine() );
+    bool collP = static_cast<bool>( m_currentNode->CheckColliding( &m_currentTrace.PLine() ) );
+    bool collN = static_cast<bool>( m_currentNode->CheckColliding( &m_currentTrace.NLine() ) );
 
     m_fitOk = !( collP || collN ) ;
     return m_fitOk;
