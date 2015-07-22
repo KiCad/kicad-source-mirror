@@ -267,6 +267,7 @@ public:
     void OnMagnify( wxMouseEvent& event );
 #endif
     void OnMouseEvent( wxMouseEvent& event );
+    void OnMouseEntering( wxMouseEvent& aEvent );
     void OnMouseLeaving( wxMouseEvent& event );
     void OnKeyEvent( wxKeyEvent& event );
     void OnCharHook( wxKeyEvent& event );

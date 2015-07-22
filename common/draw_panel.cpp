@@ -70,6 +70,7 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 // Events used by EDA_DRAW_PANEL
 BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
+    EVT_ENTER_WINDOW( EDA_DRAW_PANEL::OnMouseEntering )
     EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
 #ifdef USE_OSX_MAGNIFY_EVENT
     EVT_MAGNIFY( EDA_DRAW_PANEL::OnMagnify )
@@ -187,6 +188,7 @@ BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
     return parentFrame->GetScreen();
 }
 
+
 wxPoint EDA_DRAW_PANEL::ToDeviceXY( const wxPoint& pos )
 {
     wxPoint ret;
@@ -196,6 +198,7 @@ wxPoint EDA_DRAW_PANEL::ToDeviceXY( const wxPoint& pos )
     return ret;
 }
 
+
 wxPoint EDA_DRAW_PANEL::ToLogicalXY( const wxPoint& pos )
 {
     wxPoint ret;
@@ -204,6 +207,7 @@ wxPoint EDA_DRAW_PANEL::ToLogicalXY( const wxPoint& pos )
     ret.y = dc.DeviceToLogicalY( pos.y );
     return ret;
 }
+
 
 void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, EDA_COLOR_T aColor )
 {
@@ -886,6 +890,17 @@ bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
 }
 
 
+void EDA_DRAW_PANEL::OnMouseEntering( wxMouseEvent& aEvent )
+{
+    // This is an ugly hack that fixes some cross hair display bugs when the mouse leaves the
+    // canvas area during middle button mouse panning.
+    if( m_cursorLevel != 0 )
+        m_cursorLevel = 0;
+
+    aEvent.Skip();
+}
+
+
 void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
 {
     if( m_mouseCaptureCallback == NULL )          // No command in progress.
@@ -1151,6 +1166,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( event.MiddleIsDown() && m_enableMiddleButtonPan )
     {
         wxPoint currentPosition = event.GetPosition();
+
         if( m_panScrollbarLimits )
         {
             int x, y;
@@ -1201,7 +1217,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 shouldMoveCursor = true;
             }
 
-            if ( shouldMoveCursor )
+            if( shouldMoveCursor )
                 WarpPointer( currentPosition.x, currentPosition.y );
 
             Scroll( x/ppux, y/ppuy );
@@ -1460,14 +1476,20 @@ void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
     int ppux, ppuy;
     int unitsX, unitsY;
     int maxX, maxY;
+    int tmpX, tmpY;
 
     GetViewStart( &x, &y );
     GetScrollPixelsPerUnit( &ppux, &ppuy );
     GetVirtualSize( &unitsX, &unitsY );
+    tmpX = x;
+    tmpY = y;
     maxX = unitsX;
     maxY = unitsY;
     unitsX /= ppux;
     unitsY /= ppuy;
+
+    wxLogTrace( KICAD_TRACE_COORDS,
+                wxT( "Scroll center position before pan: (%d, %d)" ), tmpX, tmpY );
 
     switch( event.GetId() )
     {
@@ -1491,17 +1513,45 @@ void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
         wxLogDebug( wxT( "Unknown ID %d in EDA_DRAW_PANEL::OnPan()." ), event.GetId() );
     }
 
+    bool updateCenterScrollPos = true;
+
     if( x < 0 )
+    {
         x = 0;
+        updateCenterScrollPos = false;
+    }
 
     if( y < 0 )
+    {
         y = 0;
+        updateCenterScrollPos = false;
+    }
 
     if( x > maxX )
+    {
         x = maxX;
+        updateCenterScrollPos = false;
+    }
 
     if( y > maxY )
+    {
         y = maxY;
+        updateCenterScrollPos = false;
+    }
+
+    // Don't update the scroll position beyond the scroll limits.
+    if( updateCenterScrollPos )
+    {
+        double scale = GetParent()->GetScreen()->GetScalingFactor();
+
+        wxPoint center = GetParent()->GetScrollCenterPosition();
+        center.x += KiROUND( (double) ( x - tmpX ) / scale );
+        center.y += KiROUND( (double) ( y - tmpY ) / scale );
+        GetParent()->SetScrollCenterPosition( center );
+
+        wxLogTrace( KICAD_TRACE_COORDS,
+                    wxT( "Scroll center position after pan: (%d, %d)" ), center.x, center.y );
+    }
 
     Scroll( x/ppux, y/ppuy );
 }
