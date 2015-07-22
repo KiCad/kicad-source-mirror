@@ -53,8 +53,7 @@ PNS_LINE::PNS_LINE( const PNS_LINE& aOther ) :
 
 PNS_LINE::~PNS_LINE()
 {
-    if( m_segmentRefs )
-        delete m_segmentRefs;
+    delete m_segmentRefs;
 }
 
 
