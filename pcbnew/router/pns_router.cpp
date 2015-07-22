@@ -175,7 +175,8 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 if( lmsk[i] )
                 {
                     is_copper = true;
-                    layers = PNS_LAYERSET( i );
+                    if( aPad->GetAttribute() != PAD_HOLE_NOT_PLATED )
+                        layers = PNS_LAYERSET( i );
                     break;
                 }
             }
