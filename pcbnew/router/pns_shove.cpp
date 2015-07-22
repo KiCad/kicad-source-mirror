@@ -1210,7 +1210,7 @@ void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
     for( std::vector<PNS_LINE*>::iterator i = m_optimizerQueue.begin();
              i != m_optimizerQueue.end(); ++i )
     {
-        maxWidth = std::max ( (*i)->Width(), maxWidth );
+        maxWidth = std::max( (*i)->Width(), maxWidth );
     }
 
     if( area )
@@ -1244,7 +1244,7 @@ void PNS_SHOVE::runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead )
     }
 
     if( Settings().SmartPads() )
-        optFlags |= PNS_OPTIMIZER::SMART_PADS ;
+        optFlags |= PNS_OPTIMIZER::SMART_PADS;
 
     optimizer.SetEffortLevel( optFlags );
     optimizer.SetCollisionMask( PNS_ITEM::ANY );

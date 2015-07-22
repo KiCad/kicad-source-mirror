@@ -216,11 +216,11 @@ struct PNS_NODE::OBSTACLE_VISITOR
 
         int clearance = m_extraClearance + m_node->GetClearance( aItem, m_item );
 
-        if( m_node->m_collisionFilter && (*m_node->m_collisionFilter)(aItem, m_item))
+        if( m_node->m_collisionFilter && (*m_node->m_collisionFilter)( aItem, m_item ) )
             return true;
 
         if( aItem->Kind() == PNS_ITEM::LINE )
-            clearance += static_cast<PNS_LINE *>(aItem)->Width() / 2;
+            clearance += static_cast<PNS_LINE*>( aItem )->Width() / 2;
 
         if( !aItem->Collide( m_item, clearance ) )
             return true;
@@ -705,7 +705,7 @@ void PNS_NODE::Remove( PNS_ITEM* aItem )
     {
     case PNS_ITEM::SOLID:
         // fixme: this fucks up the joints, but it's only used for marking colliding obstacles for the moment, so we don't care.
-        doRemove ( aItem );
+        doRemove( aItem );
         break;
 
     case PNS_ITEM::SEGMENT:
@@ -1122,7 +1122,7 @@ void PNS_NODE::Commit( PNS_NODE* aNode )
     if( aNode->isRoot() )
         return;
 
-    BOOST_FOREACH( PNS_ITEM * item, aNode->m_override )
+    BOOST_FOREACH( PNS_ITEM* item, aNode->m_override )
     Remove( item );
 
     for( PNS_INDEX::ITEM_SET::iterator i = aNode->m_index->begin();

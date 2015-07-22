@@ -425,7 +425,7 @@ bool PNS_LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead )
 }
 
 
-bool PNS_LINE_PLACER::rhShoveOnly ( const VECTOR2I& aP, PNS_LINE& aNewHead )
+bool PNS_LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
     PNS_LINE initTrack( m_head );
     PNS_LINE walkSolids, l2;
@@ -965,7 +965,7 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest )
             if( !( line->ContainsSegment( seg ) ) && line->SegmentCount() )
             {
                 aNode->Remove( line );
-                removedCount ++;
+                removedCount++;
             }
         }
 

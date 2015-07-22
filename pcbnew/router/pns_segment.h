@@ -53,14 +53,14 @@ public:
         m_layers = aParentLine.Layers();
         m_marker = aParentLine.Marker();
         m_rank = aParentLine.Rank();
-    };
+    }
 
     static inline bool ClassOf( const PNS_ITEM* aItem )
     {
         return aItem && SEGMENT == aItem->Kind();
     }
 
-    PNS_SEGMENT* Clone( ) const;
+    PNS_SEGMENT* Clone() const;
 
     const SHAPE* Shape() const
     {
@@ -110,7 +110,7 @@ public:
 
     const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness ) const;
 
-    virtual VECTOR2I Anchor(int n) const
+    virtual VECTOR2I Anchor( int n ) const
     {
         if( n == 0 )
             return m_seg.GetSeg().A;
