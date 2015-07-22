@@ -1432,7 +1432,6 @@ int DRAWING_TOOL::placeTextPcb()
 
                 m_controls->CaptureCursor( true );
                 m_controls->SetAutoPan( true );
-                m_controls->ShowCursor( false );
                 preview.Add( text );
             }
             else
@@ -1451,7 +1450,6 @@ int DRAWING_TOOL::placeTextPcb()
                 preview.Remove( text );
                 m_controls->CaptureCursor( false );
                 m_controls->SetAutoPan( false );
-                m_controls->ShowCursor( true );
 
                 text = NULL;
             }
