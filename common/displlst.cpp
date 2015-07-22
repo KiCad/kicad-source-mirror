@@ -236,7 +236,7 @@ void EDA_LIST_DIALOG::onClose( wxCloseEvent& event )
 
 /* Sort alphabetically, case insensitive.
  */
-static int wxCALLBACK MyCompareFunction( long aItem1, long aItem2, long aSortData )
+static int wxCALLBACK MyCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2, wxIntPtr aSortData )
 {
     wxString* component1Name = (wxString*) aItem1;
     wxString* component2Name = (wxString*) aItem2;
