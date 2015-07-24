@@ -113,9 +113,9 @@ public:
      * Returns the current mouse pointer position in screen coordinates. Note, that it may be
      * different from the cursor position if snapping is enabled (@see GetCursorPosition()).
      *
-     * @return The current mouse pointer position in screen coordinates.
+     * @return The current mouse pointer position in the screen coordinates.
      */
-    virtual VECTOR2D GetMousePosition() const = 0;
+    virtual VECTOR2I GetMousePosition() const = 0;
 
     /**
      * Function GetCursorPosition()

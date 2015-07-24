@@ -327,12 +327,12 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 }
 
 
-VECTOR2D WX_VIEW_CONTROLS::GetMousePosition() const
+VECTOR2I WX_VIEW_CONTROLS::GetMousePosition() const
 {
     wxPoint msp = wxGetMousePosition();
     wxPoint winp = m_parentPanel->GetScreenPosition();
 
-    return VECTOR2D( msp.x - winp.x, msp.y - winp.y );
+    return VECTOR2I( msp.x - winp.x, msp.y - winp.y );
 }
 
 

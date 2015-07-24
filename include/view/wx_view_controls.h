@@ -86,7 +86,7 @@ public:
     }
 
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
-    VECTOR2D GetMousePosition() const;
+    VECTOR2I GetMousePosition() const;
 
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
     VECTOR2D GetCursorPosition() const;
