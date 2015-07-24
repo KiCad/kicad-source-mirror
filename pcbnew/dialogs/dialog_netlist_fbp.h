@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -61,7 +61,6 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxStaticLine* m_staticline11;
 		wxCheckBox* m_checkDryRun;
 		wxCheckBox* m_checkBoxSilentMode;
-		wxCheckBox* m_checkBoxFullMessages;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextNetfilename;
 		wxTextCtrl* m_NetlistFilenameCtrl;
@@ -77,7 +76,6 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		virtual void OnSaveMessagesToFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUISaveMessagesToFile( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnClickSilentMode( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnClickFullMessages( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

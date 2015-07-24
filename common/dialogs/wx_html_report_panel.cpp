@@ -170,6 +170,7 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
 
 void WX_HTML_REPORT_PANEL::syncCheckboxes()
 {
+    m_checkBoxShowAll->SetValue( m_showAll );
     m_checkBoxShowWarnings->Enable( !m_showAll );
     m_checkBoxShowWarnings->SetValue( m_severities & REPORTER::RPT_WARNING );
     m_checkBoxShowErrors->Enable( !m_showAll );
@@ -184,9 +185,9 @@ void WX_HTML_REPORT_PANEL::syncCheckboxes()
 void WX_HTML_REPORT_PANEL::onCheckBoxShowWarnings( wxCommandEvent& event )
 {
     if ( event.IsChecked() )
-         m_severities |= REPORTER::RPT_WARNING;
-     else
-         m_severities &= ~REPORTER::RPT_WARNING;
+        m_severities |= REPORTER::RPT_WARNING;
+    else
+        m_severities &= ~REPORTER::RPT_WARNING;
 
      refreshView();
 }
@@ -271,4 +272,24 @@ void WX_HTML_REPORT_PANEL::Clear()
 void WX_HTML_REPORT_PANEL::SetLabel( const wxString& aLabel )
 {
     m_box->GetStaticBox()->SetLabel( aLabel );
+}
+
+
+void WX_HTML_REPORT_PANEL::SetVisibleSeverities( int aSeverities )
+{
+    if( aSeverities < 0 )
+        m_showAll = true;
+    else
+    {
+        m_showAll = false;
+        m_severities = aSeverities;
+    }
+
+    syncCheckboxes();
+}
+
+
+int WX_HTML_REPORT_PANEL::GetVisibleSeverities()
+{
+    return m_showAll ? m_severities | 0x80000000 : m_severities & ~0x80000000;
 }

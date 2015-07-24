@@ -50,7 +50,7 @@
 #include <wx_html_report_panel.h>
 
 #define NETLIST_SILENTMODE_KEY wxT("SilentMode")
-#define NETLIST_FULLMESSAGES_KEY wxT("NetlistReportAllMsg")
+#define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")
 #define NETLIST_DELETESINGLEPADNETS_KEY wxT("NetlistDeleteSinglePadNets")
 
 void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
@@ -58,23 +58,24 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     /* Setup the netlist file name to the last netlist file read,
      * or the board file name if the last filename is empty or last file not existing.
      */
-    wxFileName fn = GetLastNetListRead();
-    wxString lastNetlistName = GetLastNetListRead();
+    wxString netlistName = GetLastNetListRead();
 
-    if( !fn.FileExists() )
+    wxFileName fn = netlistName;
+
+    if( !fn.IsOk() || !fn.FileExists() )
     {
         fn = GetBoard()->GetFileName();
         fn.SetExt( NetlistFileExtension );
-        lastNetlistName = fn.GetFullPath();
+        netlistName = fn.GetFullPath();
     }
 
-    DIALOG_NETLIST dlg( this, DC, lastNetlistName );
+    DIALOG_NETLIST dlg( this, DC, netlistName );
 
     dlg.ShowModal();
 
     // Save project settings if needed.
     // Project settings are saved in the corresponding <board name>.pro file
-    bool configChanged = lastNetlistName != GetLastNetListRead();
+    bool configChanged = !GetLastNetListRead().IsEmpty() && ( netlistName != GetLastNetListRead() );
 
     if( configChanged && !GetBoard()->GetFileName().IsEmpty()
       && IsOK( NULL, _( "The project configuration has changed.  Do you want to save it?" ) ) )
@@ -97,13 +98,15 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     m_parent = aParent;
     m_dc = aDC;
     m_config = Kiface().KifaceSettings();
+
     m_silentMode = m_config->Read( NETLIST_SILENTMODE_KEY, 0l );
-    m_reportAll = m_config->Read( NETLIST_FULLMESSAGES_KEY, 1l );
     bool tmp = m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l );
     m_rbSingleNets->SetSelection( tmp == 0 ? 0 : 1);
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
     m_checkBoxSilentMode->SetValue( m_silentMode );
-    m_checkBoxFullMessages->SetValue( m_reportAll );
+
+    int severities = m_config->Read( NETLIST_FILTER_MESSAGES_KEY, -1l );
+    m_MessageWindow->SetVisibleSeverities( severities );
 
     GetSizer()->SetSizeHints( this );
 }
@@ -111,9 +114,10 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
 DIALOG_NETLIST::~DIALOG_NETLIST()
 {
     m_config->Write( NETLIST_SILENTMODE_KEY, (long) m_silentMode );
-    m_config->Write( NETLIST_FULLMESSAGES_KEY, (long) m_reportAll );
     m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY,
                     (long) m_rbSingleNets->GetSelection() );
+    m_config->Write( NETLIST_FILTER_MESSAGES_KEY,
+                    (long) m_MessageWindow->GetVisibleSeverities() );
 }
 
 
@@ -146,7 +150,6 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
     m_NetlistFilenameCtrl->SetValue( FilesDialog.GetPath() );
 }
 
-
 void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 {
     wxString msg;
@@ -173,6 +176,8 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
         msg = _( "Using references to match components and footprints.\n" );
 
     reporter.Report( msg, REPORTER::RPT_INFO );
+    m_MessageWindow->SetLazyUpdate( true ); // use a "lazy" update to speed up the creation of the report
+                                            // (The window is not updated for each message)
 
     m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, &reporter,
                               m_ChangeExistingFootprintCtrl->GetSelection() == 1,
@@ -181,6 +186,9 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
                               m_Select_By_Timestamp->GetSelection() == 1,
                               m_rbSingleNets->GetSelection() == 1,
                               m_checkDryRun->GetValue() );
+    // The creation of the report was made without window update:
+    // the full page must be displayed
+    m_MessageWindow->Flush();
 }
 
 
@@ -356,8 +364,6 @@ void DIALOG_NETLIST::OnSaveMessagesToFile( wxCommandEvent& aEvent )
         wxMessageBox( msg, _( "File Write Error" ), wxOK | wxICON_ERROR, this );
         return;
     }
-
-    //f.Write( m_MessageWindow->GetValue() );
 }
 
 

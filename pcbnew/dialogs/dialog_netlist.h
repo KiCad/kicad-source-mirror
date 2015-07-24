@@ -41,9 +41,7 @@ private:
     PCB_EDIT_FRAME* m_parent;
     wxDC*           m_dc;
     bool            m_silentMode;   // if true, do not display warning message about undo
-    bool            m_reportAll;    // If true report all messages,
-                                    // false, report only warnings or errors
-    wxConfigBase*       m_config;
+    wxConfigBase*   m_config;
 
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC* aDC, const wxString & aNetlistFullFilename );
@@ -89,10 +87,6 @@ private:
     void OnClickSilentMode( wxCommandEvent& event )
     {
         m_silentMode = m_checkBoxSilentMode->GetValue();
-    }
-    void OnClickFullMessages( wxCommandEvent& event )
-    {
-        m_reportAll = m_checkBoxFullMessages->GetValue();
     }
 
     void OnUpdateUISaveMessagesToFile( wxUpdateUIEvent& aEvent );

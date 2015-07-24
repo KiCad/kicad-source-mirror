@@ -66,12 +66,13 @@ public:
     ///> Forces updating the HTML page, after the report is built in lazy mode
     void Flush();
 
-    void SetVisibleSeverities( int aSeverities )
-    {
-        m_showAll = false;
-        m_severities = aSeverities;
-        syncCheckboxes();
-    }
+    ///> Set the visible severity filter.
+    ///> if aSeverities < 0 the m_showAll option is set
+    void SetVisibleSeverities( int aSeverities );
+
+    ///> @return the visible severity filter.
+    ///> If the m_showAll option is set, the mask is < 0
+    int GetVisibleSeverities();
 
 private:
     struct REPORT_LINE

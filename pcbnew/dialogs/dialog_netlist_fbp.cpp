@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -130,12 +130,6 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bCenterSizer->Add( m_checkBoxSilentMode, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_checkBoxFullMessages = new wxCheckBox( this, wxID_ANY, _("Display all messages"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxFullMessages->SetValue(true); 
-	m_checkBoxFullMessages->SetToolTip( _("Messages filter:\nIf checked: show all messages when reading the netlist\nIf not checked: show only warning or error messages") );
-	
-	bCenterSizer->Add( m_checkBoxFullMessages, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
 	
 	bMainSizer->Add( bCenterSizer, 0, wxALL|wxEXPAND, 5 );
 	
@@ -185,7 +179,6 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_buttonSaveMessages->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnSaveMessagesToFile ), NULL, this );
 	m_buttonSaveMessages->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUISaveMessagesToFile ), NULL, this );
 	m_checkBoxSilentMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
-	m_checkBoxFullMessages->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickFullMessages ), NULL, this );
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 }
 
@@ -202,7 +195,6 @@ DIALOG_NETLIST_FBP::~DIALOG_NETLIST_FBP()
 	m_buttonSaveMessages->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnSaveMessagesToFile ), NULL, this );
 	m_buttonSaveMessages->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NETLIST_FBP::OnUpdateUISaveMessagesToFile ), NULL, this );
 	m_checkBoxSilentMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickSilentMode ), NULL, this );
-	m_checkBoxFullMessages->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnClickFullMessages ), NULL, this );
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
 	
 }
