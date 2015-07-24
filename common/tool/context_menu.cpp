@@ -131,6 +131,9 @@ wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& aLabel, bool aExpand )
 {
     std::list<wxMenuItem*> items;
+    CONTEXT_MENU* menuCopy = new CONTEXT_MENU( *aMenu );
+    m_submenus.push_back( menuCopy );
+    menuCopy->m_parent = this;
 
     if( aExpand )
     {
@@ -146,12 +149,12 @@ std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& a
         {
             wxMenuItem* newItem = new wxMenuItem( this, -1, aLabel, wxEmptyString, wxITEM_NORMAL );
             newItem->SetBitmap( KiBitmap( aMenu->m_icon ) );
-            newItem->SetSubMenu( aMenu );
+            newItem->SetSubMenu( menuCopy );
             items.push_back( Append( newItem ) );
         }
         else
         {
-            items.push_back( AppendSubMenu( aMenu, aLabel ) );
+            items.push_back( AppendSubMenu( menuCopy, aLabel ) );
         }
     }
 

@@ -35,12 +35,13 @@
 #include <boost/foreach.hpp>
 
 PLACEMENT_TOOL::PLACEMENT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL )
+    TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL )
 {
 }
 
 PLACEMENT_TOOL::~PLACEMENT_TOOL()
 {
+    delete m_placementMenu;
 }
 
 
@@ -56,15 +57,15 @@ bool PLACEMENT_TOOL::Init()
     }
 
     // Create a context menu and make it available through selection tool
-    CONTEXT_MENU* menu = new CONTEXT_MENU;
-    menu->Add( COMMON_ACTIONS::alignTop );
-    menu->Add( COMMON_ACTIONS::alignBottom );
-    menu->Add( COMMON_ACTIONS::alignLeft );
-    menu->Add( COMMON_ACTIONS::alignRight );
-    menu->AppendSeparator();
-    menu->Add( COMMON_ACTIONS::distributeHorizontally );
-    menu->Add( COMMON_ACTIONS::distributeVertically );
-    m_selectionTool->GetMenu().AddMenu( menu, _( "Align/distribute" ), false,
+    m_placementMenu = new CONTEXT_MENU;
+    m_placementMenu->Add( COMMON_ACTIONS::alignTop );
+    m_placementMenu->Add( COMMON_ACTIONS::alignBottom );
+    m_placementMenu->Add( COMMON_ACTIONS::alignLeft );
+    m_placementMenu->Add( COMMON_ACTIONS::alignRight );
+    m_placementMenu->AppendSeparator();
+    m_placementMenu->Add( COMMON_ACTIONS::distributeHorizontally );
+    m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
+    m_selectionTool->GetMenu().AddMenu( m_placementMenu, _( "Align/distribute" ), false,
                                         SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     return true;

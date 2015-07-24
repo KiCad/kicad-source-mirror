@@ -592,6 +592,8 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
             st->pendingWait = true;
             st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
 
+            CONTEXT_MENU* m = st->contextMenu;
+
             if( st->contextMenuTrigger == CMENU_NOW )
                 st->contextMenuTrigger = CMENU_OFF;
 
@@ -604,17 +606,19 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
             // Run update handlers
             st->contextMenu->UpdateAll();
 
-            boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *st->contextMenu ) );
+            boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *m ) );
             GetEditFrame()->PopupMenu( menu.get() );
 
             // If nothing was chosen from the context menu, we must notify the tool as well
             if( menu->GetSelected() < 0 )
             {
                 TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, -1 );
+                evt.SetParameter( m );
                 dispatchInternal( evt );
             }
 
             TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
+            evt.SetParameter( m );
             dispatchInternal( evt );
 
             m_viewControls->ForceCursorPosition( forcedCursor, cursorPos );

@@ -23,16 +23,7 @@
  */
 
 #include "conditional_menu.h"
-
-CONDITIONAL_MENU::~CONDITIONAL_MENU()
-{
-    for( std::list<ENTRY>::iterator it = m_entries.begin(); it != m_entries.end(); ++it )
-    {
-        if( it->Type() == ENTRY::MENU )
-            delete it->Menu();
-    }
-}
-
+#include <tool/context_menu.h>
 
 void CONDITIONAL_MENU::AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                                 int aOrder )
@@ -55,12 +46,9 @@ void CONDITIONAL_MENU::AddSeparator( const SELECTION_CONDITION& aCondition, int 
 }
 
 
-CONTEXT_MENU& CONDITIONAL_MENU::Generate( SELECTION& aSelection )
+CONTEXT_MENU* CONDITIONAL_MENU::Generate( SELECTION& aSelection )
 {
-    wxMenuItemList items = m_menu.GetMenuItems();
-
-    for( wxMenuItemList::iterator it = items.begin(); it != items.end(); ++it )
-        m_menu.Remove( (*it) );
+    CONTEXT_MENU* m_menu = new CONTEXT_MENU;
 
     for( std::list<ENTRY>::iterator it = m_entries.begin(); it != m_entries.end(); ++it )
     {
@@ -72,19 +60,19 @@ CONTEXT_MENU& CONDITIONAL_MENU::Generate( SELECTION& aSelection )
         switch( it->Type() )
         {
             case ENTRY::ACTION:
-                m_menu.Add( *it->Action() );
+                m_menu->Add( *it->Action() );
                 break;
 
             case ENTRY::MENU:
-                m_menu.Add( it->Menu(), it->Label(), it->Expand() );
+                m_menu->Add( it->Menu(), it->Label(), it->Expand() );
                 break;
 
             case ENTRY::WXITEM:
-                m_menu.Append( it->wxItem() );
+                m_menu->Append( it->wxItem() );
                 break;
 
             case ENTRY::SEPARATOR:
-                m_menu.AppendSeparator();
+                m_menu->AppendSeparator();
                 break;
 
             default:

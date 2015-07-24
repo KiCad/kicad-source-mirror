@@ -82,6 +82,8 @@ public:
 
 private:
     SELECTION_TOOL* m_selectionTool;
+
+    CONTEXT_MENU* m_placementMenu;
 };
 
 #endif /* PLACEMENT_TOOL_H_ */

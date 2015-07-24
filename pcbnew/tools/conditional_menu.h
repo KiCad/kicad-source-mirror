@@ -25,19 +25,17 @@
 #ifndef CONDITIONAL_MENU_H
 #define CONDITIONAL_MENU_H
 
-#include <tool/context_menu.h>
 #include "selection_conditions.h"
-
 #include <boost/unordered_map.hpp>
+#include <wx/wx.h>
 
 class SELECTION_TOOL;
+class TOOL_ACTION;
+class CONTEXT_MENU;
 
 class CONDITIONAL_MENU
 {
 public:
-    CONDITIONAL_MENU() {}
-    ~CONDITIONAL_MENU();
-
     ///> Constant to indicate that we do not care about an ENTRY location in the menu.
     static const int ANY_ORDER = -1;
 
@@ -89,12 +87,9 @@ public:
      * @param aSelection is selection for which the conditions are checked against.
      * @return Menu filtered by the entry conditions.
      */
-    CONTEXT_MENU& Generate( SELECTION& aSelection );
+    CONTEXT_MENU* Generate( SELECTION& aSelection );
 
 private:
-    ///> Returned menu instance, prepared by Generate() function.
-    CONTEXT_MENU m_menu;
-
     ///> Helper class to organize menu entries.
     class ENTRY
     {

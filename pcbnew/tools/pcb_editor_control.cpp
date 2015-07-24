@@ -82,7 +82,7 @@ private:
 
 
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.EditorControl" ), m_frame( NULL )
+    TOOL_INTERACTIVE( "pcbnew.EditorControl" ), m_frame( NULL ), m_zoneMenu( NULL )
 {
     m_placeOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
                                                 KIGFX::ORIGIN_VIEWITEM::CROSS );
@@ -93,6 +93,7 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
 PCB_EDITOR_CONTROL::~PCB_EDITOR_CONTROL()
 {
     delete m_placeOrigin;
+    delete m_zoneMenu;
 }
 
 
@@ -115,7 +116,8 @@ bool PCB_EDITOR_CONTROL::Init()
 
     if( selTool )
     {
-        selTool->GetMenu().AddMenu( new ZONE_CONTEXT_MENU, _( "Zones" ), false,
+        m_zoneMenu = new ZONE_CONTEXT_MENU;
+        selTool->GetMenu().AddMenu( m_zoneMenu, _( "Zones" ), false,
                                     SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
     }
 

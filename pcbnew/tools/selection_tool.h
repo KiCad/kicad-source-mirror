@@ -38,6 +38,7 @@ class PCB_BASE_FRAME;
 class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
+class SELECT_MENU;
 
 namespace KIGFX
 {
@@ -343,6 +344,11 @@ private:
 
     /// Menu displayed by the tool.
     CONDITIONAL_MENU m_menu;
+
+    // TODO
+    CONTEXT_MENU* m_contextMenu;
+
+    SELECT_MENU* m_selectMenu;
 };
 
 #endif

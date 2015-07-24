@@ -211,9 +211,8 @@ public:
 
         AppendSeparator();
 
-        CONTEXT_TRACK_WIDTH_MENU* trackMenu = new CONTEXT_TRACK_WIDTH_MENU;
-        trackMenu->SetBoard( aBoard );
-        Add( trackMenu, _( "Select Track/Via Width" ) );
+        m_widthMenu.SetBoard( aBoard );
+        Add( &m_widthMenu, _( "Select Track/Via Width" ) );
 
         Add( ACT_CustomTrackWidth );
 
@@ -223,6 +222,9 @@ public:
         AppendSeparator();
         Add( PNS_TOOL_BASE::ACT_RouterOptions );
     }
+
+private:
+    CONTEXT_TRACK_WIDTH_MENU m_widthMenu;
 };
 
 

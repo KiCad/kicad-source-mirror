@@ -71,7 +71,7 @@ public:
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
-        m_editModules( false ), m_locked( true )
+        m_editModules( false ), m_locked( true ), m_contextMenu( NULL ), m_selectMenu( NULL )
 {
     // Do not leave uninitialized members:
     m_preliminary = false;
@@ -81,6 +81,8 @@ SELECTION_TOOL::SELECTION_TOOL() :
 SELECTION_TOOL::~SELECTION_TOOL()
 {
     delete m_selection.group;
+    delete m_contextMenu;
+    delete m_selectMenu;
 }
 
 
@@ -88,7 +90,8 @@ bool SELECTION_TOOL::Init()
 {
     m_selection.group = new KIGFX::VIEW_GROUP;
 
-    m_menu.AddMenu( new SELECT_MENU, _( "Select..." ), false,
+    m_selectMenu = new SELECT_MENU;
+    m_menu.AddMenu( m_selectMenu, _( "Select..." ), false,
             ( SELECTION_CONDITIONS::OnlyType( PCB_VIA_T ) || SELECTION_CONDITIONS::OnlyType( PCB_TRACE_T ) ) &&
             SELECTION_CONDITIONS::Count( 1 ) );
 
@@ -165,10 +168,11 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( emptySelection )
                 selectPoint( evt->Position() );
 
-            CONTEXT_MENU& contextMenu = m_menu.Generate( m_selection );
+            delete m_contextMenu;
+            m_contextMenu = m_menu.Generate( m_selection );
 
-            if( contextMenu.GetMenuItemCount() > 0 )
-                SetContextMenu( &contextMenu, CMENU_NOW );
+            if( m_contextMenu->GetMenuItemCount() > 0 )
+                SetContextMenu( m_contextMenu, CMENU_NOW );
 
             m_preliminary = emptySelection;
         }
@@ -274,6 +278,12 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_preliminary )
                 clearSelection();
+
+            if( evt->Parameter<CONTEXT_MENU*>() == m_contextMenu )
+            {
+                delete m_contextMenu;
+                m_contextMenu = NULL;
+            }
         }
     }
 
