@@ -1145,10 +1145,13 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
             BOARD_ITEM* item = aCollector[i];
+            KICAD_T type = item->Type();
 
-            if ( item->Type() == PCB_MODULE_TEXT_T || item->Type() == PCB_TEXT_T || item->Type() == PCB_LINE_T )
-                if ( silkLayers[item->GetLayer()] )
-                    preferred.insert ( item );
+            if( ( type == PCB_MODULE_TEXT_T || type == PCB_TEXT_T || type == PCB_LINE_T )
+                    && silkLayers[item->GetLayer()] )
+            {
+                preferred.insert( item );
+            }
         }
 
         if( preferred.size() != 0 )
@@ -1164,6 +1167,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
     if( aCollector.CountType( PCB_MODULE_TEXT_T ) > 0 )
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
+        {
             if( TEXTE_MODULE* txt = dyn_cast<TEXTE_MODULE*>( aCollector[i] ) )
             {
                 double textArea = calcArea( txt );
@@ -1185,7 +1189,8 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                         case PCB_LINE_T:
                         case PCB_VIA_T:
                         case PCB_MODULE_T:
-                            if( areaRatio > textToFeatureMinRatio )
+                            if( areaRatio > textToFeatureMinRatio &&
+                                    !txt->GetParent()->ViewBBox().Contains( txt->ViewBBox() ) )
                             {
                                 rejected.insert( txt );
                             }
@@ -1195,6 +1200,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                     }
                 }
             }
+        }
     }
 
     if( aCollector.CountType( PCB_MODULE_T ) > 0 )
@@ -1208,7 +1214,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
             {
                 if( MODULE* mod = dyn_cast<MODULE*>( aCollector[i] ) )
                 {
-                    double normalizedArea = calcRatio( calcArea(mod), maxArea );
+                    double normalizedArea = calcRatio( calcArea( mod ), maxArea );
 
                     if( normalizedArea > footprintAreaRatio )
                     {
@@ -1223,7 +1229,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            if ( D_PAD* pad = dyn_cast<D_PAD*>( aCollector[i] ) )
+            if( D_PAD* pad = dyn_cast<D_PAD*>( aCollector[i] ) )
             {
                 double ratio = pad->GetParent()->PadCoverageRatio();
 
@@ -1244,7 +1250,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                 for( int j = 0; j < aCollector.GetCount(); ++j )
                 {
                     BOARD_ITEM* item = aCollector[j];
-                    double areaRatio = calcRatio ( viaArea, calcArea( item ) );
+                    double areaRatio = calcRatio( viaArea, calcArea( item ) );
 
                     if( item->Type() == PCB_MODULE_T && areaRatio < modulePadMinCoverRatio )
                         rejected.insert( item );
@@ -1267,7 +1273,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         }
     }
 
-    int nTracks = aCollector.CountType ( PCB_TRACE_T );
+    int nTracks = aCollector.CountType( PCB_TRACE_T );
 
     if( nTracks > 0 )
     {
