@@ -639,6 +639,8 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
+        Activate();
+
         PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
         assert( picker );
 
@@ -646,6 +648,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
         picker->SetClickHandler( boost::bind( setOrigin, getView(), m_frame, m_gridOrigin, _1 ) );
         picker->Activate();
+        Wait();
     }
 
     return 0;
@@ -718,8 +721,8 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     if( IsOK( aToolMgr->GetEditFrame(), _( "Are you sure you want to delete item?" ) ) )
         aToolMgr->RunAction( COMMON_ACTIONS::remove, true );
-
-    aToolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    else
+        aToolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     return true;
 }
@@ -727,6 +730,8 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    Activate();
+
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     assert( picker );
 
@@ -735,6 +740,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     picker->SetSnapping( false );
     picker->SetClickHandler( boost::bind( deleteItem, m_toolMgr, _1 ) );
     picker->Activate();
+    Wait();
 
     return 0;
 }

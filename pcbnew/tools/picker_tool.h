@@ -112,6 +112,9 @@ private:
 
     ///> Reinitializes tool to its initial state.
     void reset();
+
+    ///> Applies the requested VIEW_CONTROLS settings.
+    void setControls();
 };
 
 #endif /* PICKER_TOOL_H */

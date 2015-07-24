@@ -642,6 +642,7 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
     }
 
     aState->theTool->SetTransitions();
+    m_viewControls->Reset();
 }
 
 

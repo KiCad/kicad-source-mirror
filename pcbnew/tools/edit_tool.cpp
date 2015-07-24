@@ -158,8 +158,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     m_updateFlag = KIGFX::VIEW_ITEM::GEOMETRY;
 
     controls->ShowCursor( true );
-    //controls->SetSnapping( true );
-    controls->ForceCursorPosition( false );
 
     // cumulative translation
     wxPoint totalMovement( 0, 0 );
@@ -340,9 +338,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     ratsnest->Recalculate();
 
     controls->ShowCursor( false );
-    //controls->SetSnapping( false );
     controls->SetAutoPan( false );
-    controls->ForceCursorPosition( false );
 
     return 0;
 }

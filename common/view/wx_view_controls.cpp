@@ -316,12 +316,12 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
 void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 {
-    VIEW_CONTROLS::SetGrabMouse( aEnabled );
-
-    if( aEnabled )
+    if( aEnabled && !m_grabMouse )
         m_parentPanel->CaptureMouse();
-    else
+    else if( !aEnabled && m_grabMouse )
         m_parentPanel->ReleaseMouse();
+
+    VIEW_CONTROLS::SetGrabMouse( aEnabled );
 }
 
 

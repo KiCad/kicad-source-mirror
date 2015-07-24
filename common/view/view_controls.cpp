@@ -35,3 +35,13 @@ void VIEW_CONTROLS::ShowCursor( bool aEnabled )
     m_view->GetGAL()->SetCursorEnabled( aEnabled );
 }
 
+
+void VIEW_CONTROLS::Reset()
+{
+    SetSnapping( false );
+    SetAutoPan( false );
+    ForceCursorPosition( false );
+    ShowCursor( false );
+    CaptureCursor( false );
+    SetGrabMouse( false );
+}

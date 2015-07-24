@@ -200,6 +200,12 @@ public:
      */
     virtual void CenterOnCursor() const = 0;
 
+    /**
+     * Function Reset()
+     * Restores the default VIEW_CONTROLS settings.
+     */
+    virtual void Reset();
+
 protected:
     /// Pointer to controlled VIEW.
     VIEW*       m_view;

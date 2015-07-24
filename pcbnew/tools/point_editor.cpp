@@ -352,7 +352,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         controls->ShowCursor( false );
         controls->SetAutoPan( false );
         controls->SetSnapping( false );
-        controls->ForceCursorPosition( false );
     }
 
     return 0;
