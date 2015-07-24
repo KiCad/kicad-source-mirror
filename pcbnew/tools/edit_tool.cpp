@@ -383,6 +383,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Display properties dialog
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
 
+        // Store the head of the undo list to compare if anything has changed
         std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
 
         // Some of properties dialogs alter pointers, so we should deselect them

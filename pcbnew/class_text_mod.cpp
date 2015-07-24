@@ -493,6 +493,9 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer ) const
 {
     const int MAX = std::numeric_limits<unsigned int>::max();
 
+    if( !m_view )
+        return 0;
+
     if( m_Type == TEXT_is_VALUE && !m_view->IsLayerVisible( ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ) ) )
         return MAX;
 
