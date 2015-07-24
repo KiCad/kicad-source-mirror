@@ -147,4 +147,22 @@ public:
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
 };
 
+/**
+ * Class NULL_REPORTER
+ *
+ * A singleton reporter that reports to nowhere. Used as to simplify code by
+ * avoiding the reportee to check for a non-NULL reporter object.
+ */
+class NULL_REPORTER : public REPORTER
+{
+    public:
+        NULL_REPORTER()
+        {
+        };
+
+        static REPORTER& GetInstance();
+
+        REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
+};
+
 #endif     // _REPORTER_H_

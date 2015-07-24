@@ -55,6 +55,24 @@ public:
     ///> clears the report panel
     void Clear();
 
+    ///> sets the frame label
+    void SetLabel( const wxString& aLabel );
+
+    ///> Sets the lasy update. If this mode is on, messages are stored but the display
+    ///> is not updated (Updating display can be very time consumming if there are many messages)
+    ///> A call to Flush() will be needed after build the report
+    void SetLazyUpdate( bool aLazyUpdate );
+
+    ///> Forces updating the HTML page, after the report is built in lazy mode
+    void Flush();
+
+    void SetVisibleSeverities( int aSeverities )
+    {
+        m_showAll = false;
+        m_severities = aSeverities;
+        syncCheckboxes();
+    }
+
 private:
     struct REPORT_LINE
     {
@@ -91,6 +109,10 @@ private:
 
     ///> show all messages flag (overrides m_severities)
     bool m_showAll;
+
+    wxString m_html;
+
+    bool m_lazyUpdate;
 };
 
 #endif //__WX_HTML_REPORT_PANEL_H__

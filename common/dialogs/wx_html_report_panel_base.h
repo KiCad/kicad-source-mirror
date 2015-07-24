@@ -34,6 +34,7 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 	private:
 	
 	protected:
+		wxStaticBoxSizer* m_box;
 		wxHtmlWindow* m_htmlView;
 		wxStaticText* m_staticText3;
 		wxCheckBox* m_checkBoxShowAll;

@@ -11,8 +11,7 @@
 
 WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Messages:") ), wxVERTICAL );
+	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Messages:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 1, 0, 0 );
@@ -67,10 +66,10 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	fgSizer4->Add( fgSizer3, 1, wxEXPAND, 5 );
 	
 	
-	sbSizer3->Add( fgSizer4, 1, wxEXPAND|wxALL, 5 );
+	m_box->Add( fgSizer4, 1, wxEXPAND|wxALL, 5 );
 	
 	
-	this->SetSizer( sbSizer3 );
+	this->SetSizer( m_box );
 	this->Layout();
 	
 	// Connect Events

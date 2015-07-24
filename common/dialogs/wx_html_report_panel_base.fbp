@@ -82,9 +82,9 @@
                 <property name="id">wxID_ANY</property>
                 <property name="label">Messages:</property>
                 <property name="minimum_size"></property>
-                <property name="name">sbSizer3</property>
+                <property name="name">m_box</property>
                 <property name="orient">wxVERTICAL</property>
-                <property name="permission">none</property>
+                <property name="permission">protected</property>
                 <event name="OnUpdateUI"></event>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>

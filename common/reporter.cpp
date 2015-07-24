@@ -62,3 +62,20 @@ REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSever
     m_panel->Report( aText, aSeverity );
     return *this;
 }
+
+REPORTER& NULL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    return *this;
+}
+
+REPORTER& NULL_REPORTER::GetInstance()
+{
+    static REPORTER* s_nullReporter = NULL;
+
+    if( !s_nullReporter )
+    {
+        s_nullReporter = new NULL_REPORTER();
+    }
+
+    return *s_nullReporter;
+}
