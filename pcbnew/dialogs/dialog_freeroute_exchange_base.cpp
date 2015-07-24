@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,11 +22,11 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Export/Import to/from FreeRoute:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextMsg = new wxStaticText( this, wxID_ANY, _("Export/Import to/from FreeRoute:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextMsg->Wrap( -1 );
+	m_staticTextMsg->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bLeftSizer->Add( m_staticText2, 0, wxALL, 5 );
+	bLeftSizer->Add( m_staticTextMsg, 0, wxALL, 5 );
 	
 	wxBoxSizer* bLeftSubSizerSizer;
 	bLeftSubSizerSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -37,17 +37,17 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bLeftButtonsSizer;
 	bLeftButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_ExportDSN = new wxButton( this, ID_BUTTON_EXPORT_DSN, _("Export a Specctra Design (*.dsn) File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ExportDSN = new wxButton( this, wxID_ANY, _("Export a Specctra Design (*.dsn) File"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExportDSN->SetToolTip( _("Export a Specctra DSN file (to FreeRouter)") );
 	
 	bLeftButtonsSizer->Add( m_ExportDSN, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonLaunchFreeroute = new wxButton( this, wxID_BUTTON_LAUNCH, _("Export a Specctra Design and Launch FreeRoute"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonLaunchFreeroute = new wxButton( this, wxID_ANY, _("Export a Specctra Design and Launch FreeRoute"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonLaunchFreeroute->SetToolTip( _("FreeRouter can be run only if freeroute.jar is found in Kicad binaries folder") );
 	
 	bLeftButtonsSizer->Add( m_buttonLaunchFreeroute, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonImport = new wxButton( this, wxID_BUTTON_IMPORT, _("Back Import the Specctra Session (*.ses) File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonImport = new wxButton( this, wxID_ANY, _("Back Import the Specctra Session (*.ses) File"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonImport->SetToolTip( _("Merge a session file created by FreeRouter with the current board.") );
 	
 	bLeftButtonsSizer->Add( m_buttonImport, 0, wxALL|wxEXPAND, 5 );
@@ -87,9 +87,7 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	m_ExportDSN->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnExportButtonClick ), NULL, this );
 	m_buttonLaunchFreeroute->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnLaunchButtonClick ), NULL, this );
 	m_buttonImport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnImportButtonClick ), NULL, this );
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizerHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnHelpButtonClick ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnOKButtonClick ), NULL, this );
 }
 
 DIALOG_FREEROUTE_BASE::~DIALOG_FREEROUTE_BASE()
@@ -98,8 +96,6 @@ DIALOG_FREEROUTE_BASE::~DIALOG_FREEROUTE_BASE()
 	m_ExportDSN->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnExportButtonClick ), NULL, this );
 	m_buttonLaunchFreeroute->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnLaunchButtonClick ), NULL, this );
 	m_buttonImport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnImportButtonClick ), NULL, this );
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizerHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnHelpButtonClick ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnOKButtonClick ), NULL, this );
 	
 }

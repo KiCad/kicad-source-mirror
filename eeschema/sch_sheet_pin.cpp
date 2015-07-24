@@ -161,14 +161,16 @@ enum SCH_SHEET_PIN::SHEET_SIDE SCH_SHEET_PIN::GetEdge() const
 
 void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 {
-    SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
+    SCH_SHEET* sheet = (SCH_SHEET*) GetParent();
 
-    if( Sheet == NULL )
+    if( sheet == NULL )
         return;
+
+    wxPoint center = sheet->m_pos + ( sheet->m_size / 2 );
 
     if( m_edge == SHEET_LEFT_SIDE || m_edge == SHEET_RIGHT_SIDE )
     {
-        if( Pos.x > ( Sheet->m_pos.x + ( Sheet->m_size.x / 2 ) ) )
+        if( Pos.x > center.x )
         {
             SetEdge( SHEET_RIGHT_SIDE );
         }
@@ -179,15 +181,15 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 
         m_Pos.y = Pos.y;
 
-        if( m_Pos.y < Sheet->m_pos.y )
-            m_Pos.y = Sheet->m_pos.y;
+        if( m_Pos.y < sheet->m_pos.y )
+            m_Pos.y = sheet->m_pos.y;
 
-        if( m_Pos.y > (Sheet->m_pos.y + Sheet->m_size.y) )
-            m_Pos.y = Sheet->m_pos.y + Sheet->m_size.y;
+        if( m_Pos.y > (sheet->m_pos.y + sheet->m_size.y) )
+            m_Pos.y = sheet->m_pos.y + sheet->m_size.y;
     }
     else /* vertical sheetpin*/
     {
-        if( Pos.y > ( Sheet->m_pos.y + ( Sheet->m_size.y / 2 ) ) )
+        if( Pos.y > center.y )
         {
             SetEdge( SHEET_BOTTOM_SIDE ); //bottom
         }
@@ -198,12 +200,15 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 
         m_Pos.x = Pos.x;
 
-        if( m_Pos.x < Sheet->m_pos.x )
-            m_Pos.x = Sheet->m_pos.x;
+        if( m_Pos.x < sheet->m_pos.x )
+            m_Pos.x = sheet->m_pos.x;
 
-        if( m_Pos.x > (Sheet->m_pos.x + Sheet->m_size.x) )
-            m_Pos.x = Sheet->m_pos.x + Sheet->m_size.x;
+        if( m_Pos.x > (sheet->m_pos.x + sheet->m_size.x) )
+            m_Pos.x = sheet->m_pos.x + sheet->m_size.x;
     }
+
+    printf( "centre %d %d, pos %d %d, pinpos %d %d, edge %d\n",
+        center.x, center.y, Pos.x, Pos.y, m_Pos.x, m_Pos.y, m_edge);
 }
 
 

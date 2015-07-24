@@ -44,9 +44,6 @@
 #endif
 
 
-#define FREEROUTE_RUN_KEY wxT( "freeroute_command" )
-
-
 void PCB_EDIT_FRAME::Access_to_External_Tool( wxCommandEvent& event )
 {
     DIALOG_FREEROUTE dialog( this );
@@ -68,28 +65,16 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
 
 
 
-/* Specific data initialization
- */
-
+// Specific data initialization
 void DIALOG_FREEROUTE::MyInit()
 {
     SetFocus();
     m_freeRouterFound = false;
 
-/*    wxString msg;
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-    cfg->Read( FREEROUTE_RUN_KEY, &msg );
-*/
     wxFileName fileName( FindKicadFile( wxT( "freeroute.jar" ) ), wxPATH_UNIX );
 
     if( fileName.FileExists() )
-    {
         m_freeRouterFound = true;
-        m_buttonLaunchFreeroute->SetLabel( _("Create .dsn File and Launch FreeRouter") );
-    }
-
-    else
-        m_buttonLaunchFreeroute->SetLabel( _("Create .dsn File") );
 
     m_buttonLaunchFreeroute->Enable( m_freeRouterFound );
 
@@ -98,6 +83,7 @@ void DIALOG_FREEROUTE::MyInit()
 const char * s_FreeRouteHelpInfo =
 #include <dialog_freeroute_exchange_help_html.h>
 ;
+
 void DIALOG_FREEROUTE::OnHelpButtonClick( wxCommandEvent& event )
 {
     DIALOG_DISPLAY_HTML_TEXT_BASE help_Dlg( this, wxID_ANY,
@@ -108,16 +94,13 @@ void DIALOG_FREEROUTE::OnHelpButtonClick( wxCommandEvent& event )
     help_Dlg.ShowModal();
 }
 
-/*  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_CREATE_EXPORT_DSN_FILE
- */
+
 void DIALOG_FREEROUTE::OnExportButtonClick( wxCommandEvent& event )
 {
     m_Parent->ExportToSpecctra( event );
 }
 
 
-/*  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_IMPORT_FREEROUTE_DSN_FILE
- */
 void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
 {
     m_Parent->ImportSpecctraSession(  event );
@@ -130,8 +113,7 @@ void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
 }
 
 
-/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RUN_FREEROUTE
- */
+// Run freeroute, if it is available (freeroute.jar found in kicad binaries)
 void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 {
     wxString dsnFile;
@@ -223,18 +205,4 @@ const wxString DIALOG_FREEROUTE::createDSN_File()
     return fullFileName;
 }
 
-
-
-/*  wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
- */
-void DIALOG_FREEROUTE::OnCancelButtonClick( wxCommandEvent& event )
-{
-    EndModal(wxID_CANCEL);
-}
-
-
-void DIALOG_FREEROUTE::OnOKButtonClick( wxCommandEvent& event )
-{
-    EndModal(wxID_OK);
-}
 

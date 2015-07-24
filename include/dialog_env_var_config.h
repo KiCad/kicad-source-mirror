@@ -45,6 +45,7 @@ private:
 protected:
     virtual void OnAddRow( wxCommandEvent& aEvent );
     virtual void OnDeleteSelectedRows( wxCommandEvent& aEvent );
+    virtual void OnHelpRequest( wxCommandEvent& aEvent );
 
 public:
     DIALOG_ENV_VAR_CONFIG( wxWindow* parent, const ENV_VAR_MAP& aEnvVarMap );

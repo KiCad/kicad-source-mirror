@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,9 +27,6 @@ class DIALOG_SHIM;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_BUTTON_EXPORT_DSN 1000
-#define wxID_BUTTON_LAUNCH 1001
-#define wxID_BUTTON_IMPORT 1002
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FREEROUTE_BASE
@@ -39,7 +36,7 @@ class DIALOG_FREEROUTE_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextMsg;
 		wxButton* m_ExportDSN;
 		wxButton* m_buttonLaunchFreeroute;
 		wxButton* m_buttonImport;
@@ -53,9 +50,7 @@ class DIALOG_FREEROUTE_BASE : public DIALOG_SHIM
 		virtual void OnExportButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLaunchButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnImportButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelpButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

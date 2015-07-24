@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -45,8 +45,6 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_grid->SetToolTip( _("Enter the names and paths for each path.\n\nGrey enteries are names that have been defined externally as system or user level environment variables.") );
-	
 	bSizer1->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
 	
 	
@@ -72,6 +70,9 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	
 	bSizer2->Add( m_buttonDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
+	m_buttonHelp = new wxButton( this, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_buttonHelp, 0, wxALL, 5 );
+	
 	
 	mainSizer->Add( bSizer2, 0, wxEXPAND, 5 );
 	
@@ -85,6 +86,7 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	// Connect Events
 	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnAddRow ), NULL, this );
 	m_buttonDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnDeleteSelectedRows ), NULL, this );
+	m_buttonHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnHelpRequest ), NULL, this );
 }
 
 DIALOG_ENV_VAR_CONFIG_BASE::~DIALOG_ENV_VAR_CONFIG_BASE()
@@ -92,5 +94,6 @@ DIALOG_ENV_VAR_CONFIG_BASE::~DIALOG_ENV_VAR_CONFIG_BASE()
 	// Disconnect Events
 	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnAddRow ), NULL, this );
 	m_buttonDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnDeleteSelectedRows ), NULL, this );
+	m_buttonHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnHelpRequest ), NULL, this );
 	
 }

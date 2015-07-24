@@ -486,7 +486,7 @@ void EDA_3D_CANVAS::Redraw()
         glCallList( m_glLists[GL_ID_TECH_LAYERS] );
     }
 
-    if( isEnabled( FL_COMMENTS ) || isEnabled( FL_COMMENTS )  )
+    if( isEnabled( FL_COMMENTS ) || isEnabled( FL_ECO )  )
     {
         if( ! m_glLists[GL_ID_AUX_LAYERS] )
             CreateDrawGL_List( &errorReporter, &activityReporter );

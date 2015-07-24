@@ -77,7 +77,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_END_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
-    case ID_POPUP_IMPORT_GLABEL:
+    case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
     case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
@@ -242,7 +242,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         screen->TestDanglingEnds( m_canvas, &dc );
         break;
 
-    case ID_POPUP_IMPORT_GLABEL:
+    case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
         if( item != NULL && item->Type() == SCH_SHEET_T )
             screen->SetCurItem( ImportSheetPin( (SCH_SHEET*) item, &dc ) );
         break;
@@ -772,10 +772,10 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
     else
         aItem->SetStoredPos( GetCrossHairPosition() - aItem->GetPosition() );
 
-
     OnModify();
-    m_canvas->SetMouseCapture( moveItemWithMouseCursor, abortMoveItem );
+
     GetScreen()->SetCurItem( aItem );
+    m_canvas->SetMouseCapture( moveItemWithMouseCursor, abortMoveItem );
 
     m_canvas->Refresh();
 }

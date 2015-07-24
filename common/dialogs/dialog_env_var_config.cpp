@@ -29,6 +29,7 @@
 #include <dialog_env_var_config.h>
 
 #include <validators.h>
+#include <html_messagebox.h>
 
 
 DIALOG_ENV_VAR_CONFIG::DIALOG_ENV_VAR_CONFIG( wxWindow* aParent, const ENV_VAR_MAP& aEnvVarMap ) :
@@ -229,4 +230,41 @@ void DIALOG_ENV_VAR_CONFIG::OnDeleteSelectedRows( wxCommandEvent& aEvent )
         else
             n++;
     }
+}
+
+
+void DIALOG_ENV_VAR_CONFIG::OnHelpRequest( wxCommandEvent& aEvent )
+{
+    wxString msg = _( "Enter the names and paths for each path.<br><br>"
+                      "<i>Grey enteries are names that have been defined externally</i> "
+                      "as system or user level environment variables." );
+    msg << wxT( "<br><br><b>" );
+    msg << _( "To avoid issues, names accept only upper case letters and digits." );
+    msg << wxT( "</b><br><br>" );
+    msg << _( "<b><i>KIGITHUB</b></i> is often used in Kicad packages to define "
+              "the URL of the repository of our official libraries." );
+    msg << wxT( "<br>" );
+    msg << _( "<b><i>KISYS3DMOD</b></i> is the base path of footprint 3D shapes (.3Dshapes folders)." );
+    msg << wxT( "<br>" );
+    msg << _( "<b><i>KISYSMOD</b></i> is the base path of local footprint libraries (.pretty folders)." );
+    msg << wxT( "<br><br>" );
+    msg << _( "A other environment variable is automatically defined by Kicad (cannot be edited):" );
+    msg << wxT( "<br>" );
+    msg << _( "<b><i>KIPRJMOD</b></i> is the absolute path of the current project" );
+    msg << wxT( "<br>" );
+    msg << _( "For instance, ${KIPRJMOD}/libs/footprints.pretty is the folder "
+              "libs/footprints.pretty located in the current project." );
+    msg << wxT( "<br><br>" );
+    msg << _( "Auxiliary environment variable name used by Kicad if exists:" );
+    msg << wxT( "<br>" );
+    msg << _( "<i>KICAD_PTEMPLATES</i> can be defined if you want to create "
+              "and use project templates (specific folders containing the template files) "
+              "in a given master folder" );
+    msg << wxT( "<br>" );
+    msg << _( "It is the base path of these project template folders" );
+
+    HTML_MESSAGE_BOX dlg( this, _( "Paths Definition" ), wxDefaultPosition,
+                          wxSize( 650, 450 ) );
+    dlg.AddHTML_Text( msg );
+    dlg.ShowModal();
 }

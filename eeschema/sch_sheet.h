@@ -106,10 +106,10 @@ public:
     /**
      * Virtual function IsMovableFromAnchorPoint
      * Return true for items which are moved with the anchor point at mouse cursor
-     *  and false for items moved with no reference to anchor
-     * @return false for a hierarchical sheet pin
+     * and false for items moved with no reference to anchor (usually large items)
+     * @return true for a hierarchical sheet pin
      */
-    bool IsMovableFromAnchorPoint() { return false; }
+    bool IsMovableFromAnchorPoint() { return true; }
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );

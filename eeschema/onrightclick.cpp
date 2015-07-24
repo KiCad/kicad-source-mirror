@@ -787,7 +787,7 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         AddMenuItem( PopMenu, ID_POPUP_SCH_RESIZE_SHEET, _( "Resize Sheet" ),
                      KiBitmap( resize_sheet_xpm ) );
         PopMenu->AppendSeparator();
-        AddMenuItem( PopMenu, ID_POPUP_IMPORT_GLABEL, _( "Import Sheet Pins" ),
+        AddMenuItem( PopMenu, ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN, _( "Import Sheet Pins" ),
                      KiBitmap( import_hierarchical_label_xpm ) );
 
         if( Sheet->HasUndefinedPins() )  // Sheet has pin labels, and can be cleaned
