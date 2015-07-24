@@ -193,6 +193,13 @@ public:
         return m_warpCursor;
     }
 
+    /**
+     * Function CenterOnCursor()
+     * Sets the viewport center to the current cursor position and warps the cursor to the
+     * screen center.
+     */
+    virtual void CenterOnCursor() const = 0;
+
 protected:
     /// Pointer to controlled VIEW.
     VIEW*       m_view;

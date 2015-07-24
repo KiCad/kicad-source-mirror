@@ -95,6 +95,9 @@ public:
     void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
             bool aWarpView = false ) const;
 
+    /// @copydoc VIEW_CONTROLS::CenterOnCursor()
+    void CenterOnCursor() const;
+
     /// Adjusts the scrollbars position to match the current viewport.
     void UpdateScrollbars();
 

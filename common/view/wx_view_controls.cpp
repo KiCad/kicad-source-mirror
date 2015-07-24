@@ -153,10 +153,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 
         if( IsCursorWarpingEnabled() )
         {
-            const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
-            m_view->SetCenter( GetCursorPosition() );
+            CenterOnCursor();
             m_view->SetScale( m_view->GetScale() * zoomScale );
-            m_parentPanel->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
         }
         else
         {
@@ -379,6 +377,19 @@ void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordin
     else
     {
         m_parentPanel->WarpPointer( aPosition.x, aPosition.y );
+    }
+}
+
+
+void WX_VIEW_CONTROLS::CenterOnCursor() const
+{
+    const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
+    VECTOR2I screenCenter( screenSize / 2 );
+
+    if( GetMousePosition() != screenCenter )
+    {
+        m_view->SetCenter( GetCursorPosition() );
+        m_parentPanel->WarpPointer( KiROUND( screenSize.x / 2 ), KiROUND( screenSize.y / 2 ) );
     }
 }
 
