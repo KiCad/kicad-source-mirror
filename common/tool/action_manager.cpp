@@ -109,8 +109,8 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     int key = aHotKey & ~MD_MODIFIER_MASK;
     int mod = aHotKey & MD_MODIFIER_MASK;
 
-    if( key >= 'a' && key <= 'z')
-        key = std::toupper(key);
+    if( key >= 'a' && key <= 'z' )
+        key = std::toupper( key );
 
     HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( key | mod );
 
