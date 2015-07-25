@@ -932,11 +932,6 @@ bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file )
     {
         pout = sc->second;
 
-        if( pout->GetSide() == IDF3::LYR_BOTTOM )
-            bottom = true;
-        else
-            bottom = false;
-
         if( pout->GetThickness() < 0.00000001 && nozeroheights )
         {
             vpcb.Clear();
@@ -946,7 +941,7 @@ bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file )
 
         vcp = GetColor( cmap, cidx, pout->GetOutlineIdentifier() );
 
-        if( !PopulateVRML( vpcb, pout->GetOutlines(), bottom,
+        if( !PopulateVRML( vpcb, pout->GetOutlines(), false,
             board.GetUserScale(), 0, 0, 0 ) )
         {
             return false;
@@ -960,6 +955,11 @@ bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file )
             vpcb.EnsureWinding( nvcont--, true );
 
         vpcb.Tesselate( NULL );
+
+        if( pout->GetSide() == IDF3::LYR_BOTTOM )
+            bottom = true;
+        else
+            bottom = false;
 
         if( bottom )
         {
