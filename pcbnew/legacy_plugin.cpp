@@ -120,11 +120,8 @@ typedef unsigned                LEG_MASK;
 #define LAYER_N_15              14
 #define LAYER_N_FRONT           15
 #define LAST_COPPER_LAYER       LAYER_N_FRONT
-#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER - FIRST_COPPER_LAYER + 1)
 
 #define FIRST_NON_COPPER_LAYER  16
-#define FIRST_TECHNICAL_LAYER   16
-#define FIRST_USER_LAYER        24
 #define ADHESIVE_N_BACK         16
 #define ADHESIVE_N_FRONT        17
 #define SOLDERPASTE_N_BACK      18
@@ -139,14 +136,6 @@ typedef unsigned                LEG_MASK;
 #define ECO2_N                  27
 #define EDGE_N                  28
 #define LAST_NON_COPPER_LAYER   28
-#define LAST_TECHNICAL_LAYER    23
-#define LAST_USER_LAYER         27
-#define NB_PCB_LAYERS           (LAST_NON_COPPER_LAYER + 1)
-#define UNUSED_LAYER_29         29
-#define UNUSED_LAYER_30         30
-#define UNUSED_LAYER_31         31
-#define NB_GERBER_LAYERS        32
-#define NB_LAYERS               32
 
 // Masks to identify a layer by a bit map
 typedef unsigned LAYER_MSK;
@@ -180,17 +169,11 @@ typedef unsigned LAYER_MSK;
 #define ECO2_LAYER              (1 << ECO2_N)
 #define EDGE_LAYER              (1 << EDGE_N)
 
-//      extra bits              0xE0000000
-
 // Helpful global layer masks:
 // ALL_AUX_LAYERS layers are technical layers, ALL_NO_CU_LAYERS has user
 // and edge layers too!
-#define ALL_LAYERS              0x1FFFFFFF              // Pcbnew used 29 layers
-#define FULL_LAYERS             0xFFFFFFFF              // Gerbview used 32 layers
 #define ALL_NO_CU_LAYERS        0x1FFF0000
 #define ALL_CU_LAYERS           0x0000FFFF
-#define INTERNAL_CU_LAYERS      0x00007FFE
-#define EXTERNAL_CU_LAYERS      0x00008001
 #define FRONT_TECH_LAYERS       (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT \
                                     | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
 #define BACK_TECH_LAYERS        (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK \
@@ -318,6 +301,14 @@ inline int layerMaskCountSet( LEG_MASK aMask )
 }
 
 
+// return true if aLegacyLayerNum is a valid copper layer legacy id, therefore
+// top, bottom or inner activated layer
+inline bool is_leg_copperlayer_valid( int aCu_Count, LAYER_NUM aLegacyLayerNum )
+{
+    return ( aLegacyLayerNum == LAYER_N_FRONT ) || ( aLegacyLayerNum < aCu_Count );
+}
+
+
 LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
 {
     int         newid;
@@ -334,7 +325,6 @@ LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
         else
         {
             newid = cu_count - 1 - old;
-
             wxASSERT( newid >= 0 );
         }
     }
@@ -356,8 +346,9 @@ LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
         case ECO2_N:                newid = Eco2_User;  break;
         case EDGE_N:                newid = Edge_Cuts;  break;
         default:
-            wxASSERT( 0 );
-            newid = 0;
+//            wxASSERT( 0 );
+            // Remap all illegal non copper layers to comment layer
+            newid = Cmts_User;
         }
     }
 
@@ -2141,7 +2132,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         $TEXTPCB
         Te "Text example"
         Po 66750 53450 600 800 150 0
-        From 24 1 0 Italic
+        De 24 1 0 Italic
         $EndTEXTPCB
 
         For a multi line text:
@@ -2150,7 +2141,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         Te "Text example"
         Nl "Line 2"
         Po 66750 53450 600 800 150 0
-        From 24 1 0 Italic
+        De 24 1 0 Italic
         $EndTEXTPCB
         Nl "line nn" is a line added to the current text
     */
@@ -2250,7 +2241,11 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             else if( layer_num > LAST_NON_COPPER_LAYER )
                 layer_num = LAST_NON_COPPER_LAYER;
 
-            pcbtxt->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
+            if( layer_num >= FIRST_NON_COPPER_LAYER ||
+                is_leg_copperlayer_valid( m_cu_count, layer_num ) )
+                pcbtxt->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
+            else    // not perfect, but putting this text on front layer is a workaround
+                pcbtxt->SetLayer( F_Cu );
         }
 
         else if( TESTLINE( "$EndTEXTPCB" ) )
@@ -2379,18 +2374,37 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
                 LAYER_ID  back  = leg_layer2new( m_cu_count, (layer_num >> 4) & 0xf );
                 LAYER_ID  front = leg_layer2new( m_cu_count, layer_num & 0xf );
 
-                via->SetLayerPair( front, back );
+                if( is_leg_copperlayer_valid( m_cu_count, back ) &&
+                    is_leg_copperlayer_valid( m_cu_count, front ) )
+                    via->SetLayerPair( front, back );
+                else
+                {
+                    delete via;
+                    newTrack = NULL;
+                }
             }
         }
         else
         {
-            newTrack->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
+            // A few legacy boards can have tracks on non existent layers, because
+            // reducing the number of layers does not remove tracks on removed layers
+            // If happens, skip them
+            if( is_leg_copperlayer_valid( m_cu_count, layer_num ) )
+                newTrack->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
+            else
+            {
+                delete newTrack;
+                newTrack = NULL;
+            }
         }
 
-        newTrack->SetNetCode( getNetCode( net_code ) );
-        newTrack->SetState( flags, true );
+        if( newTrack )
+        {
+            newTrack->SetNetCode( getNetCode( net_code ) );
+            newTrack->SetState( flags, true );
 
-        m_board->Add( newTrack );
+            m_board->Add( newTrack );
+        }
     }
 
     THROW_IO_ERROR( "Missing '$EndTRACK'" );

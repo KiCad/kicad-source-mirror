@@ -1199,6 +1199,17 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
     // IO_ERROR exceptions are left uncaught, they pass upwards from here.
 
+    // Ensure the copper layers count is a multiple of 2
+    // Pcbnew does not like boards with odd layers count
+    // (these boards cannot exist. they actually have a even layers count)
+    int lyrcnt = m_board->GetCopperLayerCount();
+
+    if( (lyrcnt % 2) != 0 )
+    {
+        lyrcnt++;
+        m_board->SetCopperLayerCount( lyrcnt );
+    }
+
     centerBoard();
 
     deleter.release();
@@ -2706,26 +2717,6 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 
     else
     {
-/*
-#define FIRST_NON_COPPER_LAYER  16
-#define B_Adhes         16
-#define F_Adhes        17
-#define B_Paste      18
-#define F_Paste     19
-#define B_SilkS       20
-#define F_SilkS      21
-#define B_Mask       22
-#define F_Mask      23
-#define Dwgs_User                  24
-#define Cmts_User               25
-#define Eco1_User                  26
-#define Eco2_User                  27
-#define Edge_Cuts                  28
-#define LAST_NON_COPPER_LAYER   28
-#define UNUSED_LAYER_29         29
-#define UNUSED_LAYER_30         30
-#define UNUSED_LAYER_31         31
-*/
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
