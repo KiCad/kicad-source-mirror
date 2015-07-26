@@ -189,16 +189,24 @@ void EDA_3D_CANVAS::draw3DAxis()
         glNewList( m_glLists[GL_ID_AXIS], GL_COMPILE );
 
         glEnable( GL_COLOR_MATERIAL );
-        SetGLColor( WHITE );
         glBegin( GL_LINES );
+        SetGLColor( RED );
         glNormal3f( 0.0f, 0.0f, 1.0f );     // Normal is Z axis
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 1.0f, 0.0f, 0.0f );     // X axis
+        glVertex3f( -10.0f, 0.0f, 0.0f );
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, -1.0f, 0.0f );    // Y axis
+        glVertex3f( 10.0f, 0.0f, 0.0f );     // X axis
+        SetGLColor( BLUE );
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, -10.0f, 0.0f );    // Y axis
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, 10.0f, 0.0f );
+        SetGLColor( GREEN );
         glNormal3f( 1.0f, 0.0f, 0.0f );     // Normal is Y axis
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, 0.0f, 0.3f );     // Z axis
+        glVertex3f( 0.0f, 0.0f, -10.0f );
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, 0.0f, 10.0f );     // Z axis
         glEnd();
 
         glEndList();
