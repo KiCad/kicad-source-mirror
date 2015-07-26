@@ -112,7 +112,7 @@ void DisplayHtmlInfoMessage( wxWindow* parent, const wxString& title,
 bool IsOK( wxWindow* aParent, const wxString& aMessage )
 {
     wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
-                         wxYES_NO | wxCENTRE | wxICON_HAND );
+                         wxYES_NO | wxCENTRE | wxICON_QUESTION );
 
     return dlg.ShowModal() == wxID_YES;
 }

@@ -205,7 +205,7 @@ bool PGM_SINGLE_TOP::OnPgmInit( wxApp* aWxApp )
 
     if( !wxIsAbsolutePath( absoluteArgv0 ) )
     {
-        wxLogSysError( wxT( "No meaningful argv[0]" ) );
+        wxLogError( wxT( "No meaningful argv[0]" ) );
         return false;
     }
 

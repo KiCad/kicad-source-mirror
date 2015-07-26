@@ -253,9 +253,22 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
 
     DBG( printf( "%s: using template file '%s' as project file.\n", __func__, TO_UTF8( kicad_pro_template ) );)
 
-    wxCopyFile( kicad_pro_template, aDestination );
+    // Verify aDestination can be created. if this is not the case, wxCopyFile
+    // will generate a crappy log error message, and we *do not want* this kind
+    // of stupid message
+    wxFileName fn( aDestination );
+    bool success = true;
 
-    return true;
+    if( fn.IsOk() && fn.IsDirWritable() )
+        success = wxCopyFile( kicad_pro_template, aDestination );
+    else
+    {
+        wxLogMessage( _( "Cannot create prj file '%s' (Directory not writable)" ),
+                      GetChars( aDestination) );
+        success = false;
+    }
+
+    return success;
 }
 
 

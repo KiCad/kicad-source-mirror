@@ -106,7 +106,7 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
 
     if( !wxIsAbsolutePath( absoluteArgv0 ) )
     {
-        wxLogSysError( wxT( "No meaningful argv[0]" ) );
+        wxLogError( wxT( "No meaningful argv[0]" ) );
         return false;
     }
 
