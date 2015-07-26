@@ -195,18 +195,18 @@ void EDA_3D_CANVAS::draw3DAxis()
         glVertex3f( 0.0f, 0.0f, 0.0f );
         glVertex3f( -10.0f, 0.0f, 0.0f );
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 10.0f, 0.0f, 0.0f );     // X axis
-        SetGLColor( BLUE );
+        glVertex3f( 10.0f, 0.0f, 0.0f );    // X axis
+        SetGLColor( GREEN );
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, -10.0f, 0.0f );    // Y axis
+        glVertex3f( 0.0f, -10.0f, 0.0f );   // Y axis
         glVertex3f( 0.0f, 0.0f, 0.0f );
         glVertex3f( 0.0f, 10.0f, 0.0f );
-        SetGLColor( GREEN );
+        SetGLColor( BLUE );
         glNormal3f( 1.0f, 0.0f, 0.0f );     // Normal is Y axis
         glVertex3f( 0.0f, 0.0f, 0.0f );
         glVertex3f( 0.0f, 0.0f, -10.0f );
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, 0.0f, 10.0f );     // Z axis
+        glVertex3f( 0.0f, 0.0f, 10.0f );    // Z axis
         glEnd();
 
         glEndList();
