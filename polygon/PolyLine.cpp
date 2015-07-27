@@ -120,10 +120,32 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 
     SHAPE_POLY_SET polySet = ConvertPolyListToPolySet( m_CornersList );
 
+    // We are expecting only one main outline, but this main outline can have holes
+    // if holes: combine holes and remove them from the main outline.
+    SHAPE_POLY_SET::POLYGON& outline = polySet.Polygon( 0 );
+    SHAPE_POLY_SET holesBuffer;
+
+    // Move holes stored in outline to holesBuffer:
+    // The first SHAPE_LINE_CHAIN is the main outline, others are holes
+    while( outline.size() > 1 )
+    {
+        holesBuffer.AddOutline( outline.back() );
+        outline.pop_back();
+    }
+
     polySet.Simplify();
+
+    // If any hole, substract it to main outline
+    if( holesBuffer.OutlineCount() )
+    {
+        holesBuffer.Simplify();
+        polySet.BooleanSubtract( holesBuffer );
+    }
 
     RemoveAllContours();
 
+    // Note: we can have more than outline, because a self intersecting outline will be
+    // broken to non intersecting polygons, and removing holes can also create a few polygons
     for( int ii = 0; ii < polySet.OutlineCount(); ii++ )
     {
         CPolyLine* polyline = this;
