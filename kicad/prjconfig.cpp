@@ -165,6 +165,39 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
     // Write settings to project file
     // was: wxGetApp().WriteProjectConfig( aPrjFullFileName, GeneralGroupName, s_KicadManagerParams );
     Prj().ConfigSave( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+
+    // Ensure a "stub" for a schematic root sheet and a board exist.
+    // It will avoid messages from the schematic editor or the board editor to create a new file
+    // And forces the user to create main files under the right name for the project manager
+    wxFileName fn( newProjectName.GetFullPath() );
+    fn.SetExt( SchematicFileExtension );
+
+    // If a <project>.sch file does not exist, create a "stub" file
+    if( !fn.FileExists() )
+    {
+        wxFile file( fn.GetFullPath(), wxFile::write );
+
+        if( file.IsOpened() )
+            file.Write( wxT( "EESchema Schematic File Version 2\n" ) );
+
+        // wxFile dtor will close the file
+    }
+
+    // If a <project>.kicad_pcb or <project>.brd file does not exist,
+    // create a .kicad_pcb "stub" file
+    fn.SetExt( KiCadPcbFileExtension );
+    wxFileName leg_fn( fn );
+    leg_fn.SetExt( LegacyPcbFileExtension );
+
+    if( !fn.FileExists() && !leg_fn.FileExists() )
+    {
+        wxFile file( fn.GetFullPath(), wxFile::write );
+
+        if( file.IsOpened() )
+            file.Write( wxT( "(kicad_pcb (version 4) (host kicad \"dummy file\") )\n" ) );
+
+        // wxFile dtor will close the file
+    }
 }
 
 
