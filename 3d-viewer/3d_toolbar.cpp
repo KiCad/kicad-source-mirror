@@ -134,14 +134,22 @@ void EDA_3D_FRAME::CreateMenuBar()
 
     menuBar->Append( fileMenu, _( "&File" ) );
 
-    fileMenu->Append( ID_MENU_SCREENCOPY_PNG, _( "Create Image (png format)" ) );
-    fileMenu->Append( ID_MENU_SCREENCOPY_JPEG, _( "Create Image (jpeg format)" ) );
+    AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_PNG,
+                 _( "Create Image (png format)" ),
+                 KiBitmap( export_xpm ) );
+    AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_JPEG,
+                 _( "Create Image (jpeg format)" ),
+                 KiBitmap( export_xpm ) );
 
     fileMenu->AppendSeparator();
-    fileMenu->Append( ID_TOOL_SCREENCOPY_TOCLIBBOARD, _( "Copy 3D Image to Clipboard" ) );
+    AddMenuItem( fileMenu, ID_TOOL_SCREENCOPY_TOCLIBBOARD,
+                 _( "Copy 3D Image to Clipboard" ),
+                 KiBitmap( copy_button_xpm ) );
 
     fileMenu->AppendSeparator();
-    fileMenu->Append( wxID_EXIT, _( "&Exit" ) );
+    AddMenuItem( fileMenu, wxID_EXIT,
+                 _( "&Exit" ),
+                 KiBitmap( exit_xpm ) );
 
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
 
