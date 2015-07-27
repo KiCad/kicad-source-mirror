@@ -346,8 +346,7 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
  * It does not know thhick segments, therefore filled polygons with thick outline
  * are converted to inflated polygon by aWidth/2
  */
-#include "clipper.hpp"
-void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
+void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
                             FILL_T aFill, int aWidth)
 {
     if( aCornerList.size() <= 1 )
@@ -392,9 +391,11 @@ void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     // The polygon outline has thickness, and is filled
     // Build and plot the polygon which contains the initial
     // polygon and its thick outline
-    CPOLYGONS_LIST  bufferOutline;
-    CPOLYGONS_LIST  bufferPolybase;
+    SHAPE_POLY_SET  bufferOutline;
+    SHAPE_POLY_SET  bufferPolybase;
     const int circleToSegmentsCount = 16;
+
+    bufferPolybase.NewOutline();
 
     // enter outline as polygon:
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
@@ -406,47 +407,40 @@ void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     // enter the initial polygon:
     for( unsigned ii = 0; ii < aCornerList.size(); ii++ )
     {
-        CPolyPt polypoint( aCornerList[ii].x, aCornerList[ii].y );
-        bufferPolybase.Append( polypoint );
+        bufferPolybase.Append( aCornerList[ii] );
     }
-
-    bufferPolybase.CloseLastContour();
 
     // Merge polygons to build the polygon which contains the initial
     // polygon and its thick outline
-    KI_POLYGON_SET  polysBase;      // Store the main outline and the final outline
-    KI_POLYGON_SET  polysOutline;   // Store the thick segments to draw the outline
-    bufferPolybase.ExportTo( polysBase );
-    bufferOutline.ExportTo( polysOutline );
 
-    polysBase += polysOutline;      // create the outline which contains thick outline
+    bufferPolybase.BooleanAdd( bufferOutline ); // create the outline which contains thick outline
+    bufferPolybase.Fracture();
 
-    // We should have only one polygon in list, now.
-    wxASSERT( polysBase.size() == 1 );
 
-    if( polysBase.size() < 1 )      // should not happen
+    if( bufferPolybase.OutlineCount() < 1 )      // should not happen
         return;
 
-    KI_POLYGON poly = polysBase[0]; // Expected only one polygon here
+    const SHAPE_LINE_CHAIN& path = bufferPolybase.COutline( 0 );
 
-    if( poly.size() < 2 )           // should not happen
+    if( path.PointCount() < 2 )           // should not happen
         return;
 
     // Now, output the final polygon to DXF file:
-    last = poly.size() - 1;
-    KI_POLY_POINT point = *(poly.begin());
-    wxPoint startPoint( point.x(), point.y() );
+    last = path.PointCount() - 1;
+	  VECTOR2I point = path.CPoint( 0 );
+
+    wxPoint startPoint( point.x, point.y );
     MoveTo( startPoint );
 
-    for( unsigned ii = 1; ii < poly.size(); ii++ )
+    for( int ii = 1; ii < path.PointCount(); ii++ )
     {
-        point = *( poly.begin() + ii );
-        LineTo( wxPoint( point.x(), point.y() ) );
+        point = path.CPoint( ii );
+        LineTo( wxPoint( point.x, point.y ) );
     }
 
     // Close polygon, if needed
-    point = *(poly.begin() + last);
-    wxPoint endPoint( point.x(), point.y() );
+    point = path.CPoint( last );
+    wxPoint endPoint( point.x, point.y );
 
     if( endPoint != startPoint )
         LineTo( startPoint );

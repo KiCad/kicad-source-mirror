@@ -40,7 +40,7 @@
 
 void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
 {
-    if( m_FilledPolysList.GetCornersCount() == 0 )
+    if( m_FilledPolysList.IsEmpty() )
         return;
 
     // Build a list of points connected to the net:
@@ -76,74 +76,27 @@ void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
     }
 
     // test if a point is inside
-    unsigned indexstart = 0, indexend;
-    bool     connected  = false;
 
-    for( indexend = 0; indexend < m_FilledPolysList.GetCornersCount(); indexend++ )
+    for( int outline = 0; outline < m_FilledPolysList.OutlineCount(); outline++ )
     {
-        if( m_FilledPolysList[indexend].end_contour )    // end of a filled sub-area found
+        bool connected = false;
+
+        for( unsigned ic = 0; ic < listPointsCandidates.size(); ic++ )
         {
-            EDA_RECT bbox = CalculateSubAreaBoundaryBox( indexstart, indexend );
+            // test if this area is connected to a board item:
+            wxPoint pos = listPointsCandidates[ic];
 
-            for( unsigned ic = 0; ic < listPointsCandidates.size(); ic++ )
+            if( m_FilledPolysList.Contains( VECTOR2I( pos.x, pos.y ), outline ) )
             {
-                // test if this area is connected to a board item:
-                wxPoint pos = listPointsCandidates[ic];
-
-                if( !bbox.Contains( pos ) )
-                    continue;
-
-                if( TestPointInsidePolygon( m_FilledPolysList, indexstart, indexend,
-                                            pos.x, pos.y ) )
-                {
-                    connected = true;
-                    break;
-                }
-            }
-
-            if( connected )                 // this polygon is connected: analyse next polygon
-            {
-                indexstart = indexend + 1;  // indexstart points the first point of the next polygon
-                connected  = false;
-            }
-            else                             // Not connected: remove this polygon
-            {
-                m_FilledPolysList.DeleteCorners( indexstart, indexend );
-                indexend = indexstart;   /* indexstart points the first point of the next polygon
-                                          * because the current poly is removed */
+                connected = true;
+                break;
             }
         }
+
+        if( !connected )                 // this polygon is connected: analyse next polygon
+        {
+            m_FilledPolysList.DeletePolygon( outline );
+            outline--;
+        }
     }
-}
-
-
-EDA_RECT ZONE_CONTAINER::CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd )
-{
-    CPolyPt  start_point, end_point;
-    EDA_RECT bbox;
-
-    start_point = m_FilledPolysList[aIndexStart];
-    end_point   = start_point;
-
-    for( int ii = aIndexStart; ii <= aIndexEnd; ii++ )
-    {
-        CPolyPt ptst = m_FilledPolysList[ii];
-
-        if( start_point.x > ptst.x )
-            start_point.x = ptst.x;
-
-        if( start_point.y > ptst.y )
-            start_point.y = ptst.y;
-
-        if( end_point.x < ptst.x )
-            end_point.x = ptst.x;
-
-        if( end_point.y < ptst.y )
-            end_point.y = ptst.y;
-    }
-
-    bbox.SetOrigin( start_point.x, start_point.y );
-    bbox.SetEnd( wxPoint( end_point.x, end_point.y ) );
-
-    return bbox;
 }

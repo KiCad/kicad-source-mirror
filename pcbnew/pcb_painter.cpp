@@ -885,8 +885,9 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
     // Draw the filling
     if( displayMode != PCB_RENDER_SETTINGS::DZ_HIDE_FILLED )
     {
-        const std::vector<CPolyPt> polyPoints = aZone->GetFilledPolysList().GetList();
-        if( polyPoints.size() == 0 )  // Nothing to draw
+        const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList();
+
+        if( polySet.OutlineCount() == 0 )  // Nothing to draw
             return;
 
         // Set up drawing options
@@ -904,26 +905,28 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
             m_gal->SetIsStroke( true );
         }
 
-        std::vector<CPolyPt>::const_iterator polyIterator;
-        for( polyIterator = polyPoints.begin(); polyIterator != polyPoints.end(); ++polyIterator )
+        for( int i = 0; i < polySet.OutlineCount(); i++ )
         {
-            // Find out all of polygons and then draw them
-            corners.push_back( VECTOR2D( *polyIterator ) );
+            const SHAPE_LINE_CHAIN& outline = polySet.COutline( i );
+			// fixme: GAL drawing API that accepts SHAPEs directly (this fiddling with double<>int conversion
+			// is just a performance hog)
 
-            if( polyIterator->end_contour )
+            for( int j = 0; j < outline.PointCount(); j++ )
+                corners.push_back ( (VECTOR2D) outline.CPoint( j ) );
+
+            corners.push_back( (VECTOR2D) outline.CPoint( 0 ) );
+
+            if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
             {
-                if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
-                {
-                    m_gal->DrawPolygon( corners );
-                    m_gal->DrawPolyline( corners );
-                }
-                else if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_OUTLINED )
-                {
-                    m_gal->DrawPolyline( corners );
-                }
-
-                corners.clear();
+                m_gal->DrawPolygon( corners );
+                m_gal->DrawPolyline( corners );
             }
+            else if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_OUTLINED )
+            {
+                m_gal->DrawPolyline( corners );
+            }
+
+            corners.clear();
         }
     }
 }

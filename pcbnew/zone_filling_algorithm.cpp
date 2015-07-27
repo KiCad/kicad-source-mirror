@@ -54,7 +54,7 @@
  * to add holes for pads and tracks and other items not in net.
  */
 
-bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST* aOutlineBuffer )
+bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET* aOutlineBuffer )
 {
     /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
@@ -92,7 +92,7 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST*
     }
 
     if( aOutlineBuffer )
-        aOutlineBuffer->Append( m_smoothedPoly->m_CornersList );
+        aOutlineBuffer->Append( ConvertPolyListToPolySet( m_smoothedPoly->m_CornersList ) );
 
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area
@@ -105,15 +105,14 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, CPOLYGONS_LIST*
 
         if( IsOnCopperLayer() )
         {
-            if(g_UseOldZoneFillingAlgo)
-                AddClearanceAreasPolygonsToPolysList( aPcb );
-            else
-                AddClearanceAreasPolygonsToPolysList_NG( aPcb );
+            AddClearanceAreasPolygonsToPolysList_NG( aPcb );
         }
         else
         {
             int margin = m_ZoneMinThickness / 2;
-            m_smoothedPoly->m_CornersList.InflateOutline(m_FilledPolysList, -margin, true );
+            m_FilledPolysList = ConvertPolyListToPolySet( m_smoothedPoly->m_CornersList );
+            m_FilledPolysList.Inflate( -margin );
+            m_FilledPolysList.Fracture();
         }
 
         if( m_FillMode )   // if fill mode uses segments, create them:
@@ -135,11 +134,9 @@ static bool SortByXValues( const int& a, const int &b )
 
 int ZONE_CONTAINER::FillZoneAreasWithSegments()
 {
-    int ics, ice;
     int count = 0;
     std::vector <int> x_coordinates;
     bool error = false;
-    int istart, iend; // index of the starting and the endif corner of one filled area in m_FilledPolysList
     int margin = m_ZoneMinThickness * 2 / 10;
     int minwidth = Mils2iu( 2 );
     margin = std::max ( minwidth, margin );
@@ -148,113 +145,100 @@ int ZONE_CONTAINER::FillZoneAreasWithSegments()
 
     // Read all filled areas in m_FilledPolysList
     m_FillSegmList.clear();
-    istart = 0;
-    int end_list =  m_FilledPolysList.GetCornersCount() - 1;
 
-    for( int ic = 0; ic <= end_list; ic++ )
+    for ( int index = 0; index < m_FilledPolysList.OutlineCount(); index++ )
     {
-        CPolyPt* corner = &m_FilledPolysList[ic];
-        if ( corner->end_contour || ( ic == end_list ) )
+        const SHAPE_LINE_CHAIN& outline = m_FilledPolysList.COutline( index );
+        const BOX2I& rect = outline.BBox();
+
+        // Calculate the y limits of the zone
+        for( int refy = rect.GetY(), endy = rect.GetBottom(); refy < endy; refy += step )
         {
-            iend = ic;
-            EDA_RECT rect = CalculateSubAreaBoundaryBox( istart, iend );
+            // find all intersection points of an infinite line with polyline sides
+            x_coordinates.clear();
 
-            // Calculate the y limits of the zone
-            for( int refy = rect.GetY(), endy = rect.GetBottom(); refy < endy; refy += step )
+            for( int v = 0; v < outline.PointCount(); v++ )
             {
-                // find all intersection points of an infinite line with polyline sides
-                x_coordinates.clear();
 
-                for( ics = istart, ice = iend; ics <= iend; ice = ics, ics++ )
-                {
-                    if( m_FilledPolysList[ice].m_flags )
-                        continue;
+                int seg_startX = outline.CPoint( v ).x;
+                int seg_startY = outline.CPoint( v ).y;
+                int seg_endX   = outline.CPoint( v + 1 ).x;
+                int seg_endY   = outline.CPoint( v + 1 ).y;
 
-                    int seg_startX = m_FilledPolysList[ics].x;
-                    int seg_startY = m_FilledPolysList[ics].y;
-                    int seg_endX   = m_FilledPolysList[ice].x;
-                    int seg_endY   = m_FilledPolysList[ice].y;
+                /* Trivial cases: skip if ref above or below the segment to test */
+                if( ( seg_startY > refy ) && ( seg_endY > refy ) )
+                    continue;
 
+                // segment below ref point, or its Y end pos on Y coordinate ref point: skip
+                if( ( seg_startY <= refy ) && (seg_endY <= refy ) )
+                    continue;
 
-                    /* Trivial cases: skip if ref above or below the segment to test */
-                    if( ( seg_startY > refy ) && (seg_endY > refy ) )
-                        continue;
+                /* at this point refy is between seg_startY and seg_endY
+                 * see if an horizontal line at Y = refy is intersecting this segment
+                 */
+                // calculate the x position of the intersection of this segment and the
+                // infinite line this is more easier if we move the X,Y axis origin to
+                // the segment start point:
 
-                    // segment below ref point, or its Y end pos on Y coordinate ref point: skip
-                    if( ( seg_startY <= refy ) && (seg_endY <= refy ) )
-                        continue;
+                seg_endX -= seg_startX;
+                seg_endY -= seg_startY;
+                double newrefy = (double) ( refy - seg_startY );
+                double intersec_x;
 
-                    /* at this point refy is between seg_startY and seg_endY
-                     * see if an horizontal line at Y = refy is intersecting this segment
-                    */
-                    // calculate the x position of the intersection of this segment and the
-                    // infinite line this is more easier if we move the X,Y axis origin to
-                    // the segment start point:
-                    seg_endX -= seg_startX;
-                    seg_endY -= seg_startY;
-                    double newrefy = (double) ( refy - seg_startY );
-                    double intersec_x;
+                if ( seg_endY == 0 )    // horizontal segment on the same line: skip
+                    continue;
 
-                    if ( seg_endY == 0 )    // horizontal segment on the same line: skip
-                        continue;
+                // Now calculate the x intersection coordinate of the horizontal line at
+                // y = newrefy and the segment from (0,0) to (seg_endX,seg_endY) with the
+                // horizontal line at the new refy position the line slope is:
+                // slope = seg_endY/seg_endX; and inv_slope = seg_endX/seg_endY
+                // and the x pos relative to the new origin is:
+                // intersec_x = refy/slope = refy * inv_slope
+                // Note: because horizontal segments are already tested and skipped, slope
+                // exists (seg_end_y not O)
+                double inv_slope = (double) seg_endX / seg_endY;
+                intersec_x = newrefy * inv_slope;
+                x_coordinates.push_back( (int) intersec_x + seg_startX );
+            }
 
-                    // Now calculate the x intersection coordinate of the horizontal line at
-                    // y = newrefy and the segment from (0,0) to (seg_endX,seg_endY) with the
-                    // horizontal line at the new refy position the line slope is:
-                    // slope = seg_endY/seg_endX; and inv_slope = seg_endX/seg_endY
-                    // and the x pos relative to the new origin is:
-                    // intersec_x = refy/slope = refy * inv_slope
-                    // Note: because horizontal segments are already tested and skipped, slope
-                    // exists (seg_end_y not O)
-                    double inv_slope = (double) seg_endX / seg_endY;
-                    intersec_x = newrefy * inv_slope;
-                    x_coordinates.push_back( (int) intersec_x + seg_startX );
-                }
+            // A line scan is finished: build list of segments
 
-                // A line scan is finished: build list of segments
+            // Sort intersection points by increasing x value:
+            // So 2 consecutive points are the ends of a segment
+            sort( x_coordinates.begin(), x_coordinates.end(), SortByXValues );
 
-                // Sort intersection points by increasing x value:
-                // So 2 consecutive points are the ends of a segment
-                sort( x_coordinates.begin(), x_coordinates.end(), SortByXValues );
+            // Create segments
 
-                // Create segments
-
-                if ( !error && ( x_coordinates.size() & 1 ) != 0 )
-                {   // An even number of coordinates is expected, because a segment has 2 ends.
-                    // An if this algorithm always works, it must always find an even count.
-                    wxString msg = wxT("Fill Zone: odd number of points at y = ");
-                    msg << refy;
-                    wxMessageBox(msg );
-                    error = true;
-                }
-
-                if( error )
-                    break;
-
-                int iimax = x_coordinates.size() - 1;
-
-                for( int ii = 0; ii < iimax; ii +=2 )
-                {
-                    wxPoint  seg_start, seg_end;
-                    count++;
-                    seg_start.x = x_coordinates[ii];
-                    seg_start.y = refy;
-                    seg_end.x = x_coordinates[ii+1];
-                    seg_end.y = refy;
-                    SEGMENT segment( seg_start, seg_end );
-                    m_FillSegmList.push_back( segment );
-                }
-            }   //End examine segments in one area
+            if( !error && ( x_coordinates.size() & 1 ) != 0 )
+            {   // An even number of coordinates is expected, because a segment has 2 ends.
+                // An if this algorithm always works, it must always find an even count.
+                wxString msg = wxT( "Fill Zone: odd number of points at y = " );
+                msg << refy;
+                wxMessageBox( msg );
+                error = true;
+            }
 
             if( error )
                 break;
 
-            istart = iend + 1;  // istart points the first corner of the next area
-        }   // End find one end of outline
+            int iimax = x_coordinates.size() - 1;
+
+            for( int ii = 0; ii < iimax; ii += 2 )
+            {
+                wxPoint  seg_start, seg_end;
+                count++;
+                seg_start.x = x_coordinates[ii];
+                seg_start.y = refy;
+                seg_end.x = x_coordinates[ii + 1];
+                seg_end.y = refy;
+                SEGMENT segment( seg_start, seg_end );
+                m_FillSegmList.push_back( segment );
+            }
+        }   //End examine segments in one area
 
         if( error )
             break;
-    }   // End examine all areas
+    }
 
     if( !error )
         m_IsFilled = true;

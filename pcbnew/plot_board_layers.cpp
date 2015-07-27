@@ -542,15 +542,14 @@ static const LAYER_ID plot_seq[] = {
 
 /* Plot outlines of copper, for copper layer
  */
-#include "clipper.hpp"
-void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
+void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
                         LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
 {
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
 
-    CPOLYGONS_LIST outlines;
+    SHAPE_POLY_SET outlines;
 
     for( LSEQ seq = aLayerMask.Seq( plot_seq, DIM( plot_seq ) );  seq;  ++seq )
     {
@@ -559,51 +558,25 @@ void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
         outlines.RemoveAllContours();
         aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines );
 
-        // Merge all overlapping polygons.
-        KI_POLYGON_SET kpolygons;
-        KI_POLYGON_SET ktmp;
-        outlines.ExportTo( ktmp );
-
-        kpolygons += ktmp;
+        outlines.Simplify();
 
         // Plot outlines
         std::vector< wxPoint > cornerList;
 
-        for( unsigned ii = 0; ii < kpolygons.size(); ii++ )
+        // Now we have one or more basic polygons: plot each polygon
+        for( int ii = 0; ii < outlines.OutlineCount(); ii++ )
         {
-            KI_POLYGON polygon = kpolygons[ii];
+            cornerList.clear();
+            const SHAPE_LINE_CHAIN& path = outlines.COutline( ii );
 
-            // polygon contains only one polygon, but it can have holes linked by
-            // overlapping segments.
-            // To plot clean outlines, we have to break this polygon into more polygons with
-            // no overlapping segments, using Clipper, because boost::polygon
-            // does not allow that
-            ClipperLib::Path raw_polygon;
-            ClipperLib::Paths normalized_polygons;
+            for( int jj = 0; jj < path.PointCount(); jj++ )
+                cornerList.push_back( wxPoint( path.CPoint( jj ).x , path.CPoint( jj ).x ) );
 
-            for( unsigned ic = 0; ic < polygon.size(); ic++ )
-            {
-                KI_POLY_POINT corner = *(polygon.begin() + ic);
-                raw_polygon.push_back( ClipperLib::IntPoint( corner.x(), corner.y() ) );
-            }
+            // Ensure the polygon is closed
+            if( cornerList[0] != cornerList[cornerList.size() - 1] )
+                cornerList.push_back( cornerList[0] );
 
-            ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
-
-            // Now we have one or more basic polygons: plot each polygon
-            for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
-            {
-                ClipperLib::Path& polygon = normalized_polygons[ii];
-                cornerList.clear();
-
-                for( unsigned jj = 0; jj < polygon.size(); jj++ )
-                    cornerList.push_back( wxPoint( polygon[jj].X , polygon[jj].Y ) );
-
-                // Ensure the polygon is closed
-                if( cornerList[0] != cornerList[cornerList.size()-1] )
-                    cornerList.push_back( cornerList[0] );
-
-                aPlotter->PlotPoly( cornerList, NO_FILL );
-            }
+            aPlotter->PlotPoly( cornerList, NO_FILL );
         }
 
         // Plot pad holes
@@ -704,8 +677,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // This extra margin is used to merge too close shapes
     // (distance < aMinThickness), and will be removed when creating
     // the actual shapes
-    CPOLYGONS_LIST bufferPolys;   // Contains shapes to plot
-    CPOLYGONS_LIST initialPolys;  // Contains exact shapes to plot
+    SHAPE_POLY_SET areas;   // Contains shapes to plot
+    SHAPE_POLY_SET initialPolys;  // Contains exact shapes to plot
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx ( 1 /cos( PI/circleToSegmentsCount )
@@ -722,7 +695,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
                         circleToSegmentsCount, correction );
         // add shapes inflated by aMinThickness/2
         module->TransformPadsShapesWithClearanceToPolygon( layer,
-                        bufferPolys, inflate,
+                        areas, inflate,
                         circleToSegmentsCount, correction );
     }
 
@@ -754,7 +727,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( !( via_set & aLayerMask ).any() )
                 continue;
 
-            via->TransformShapeWithClearanceToPolygon( bufferPolys, via_margin,
+            via->TransformShapeWithClearanceToPolygon( areas, via_margin,
                     circleToSegmentsCount,
                     correction );
             via->TransformShapeWithClearanceToPolygon( initialPolys, via_clearance,
@@ -771,7 +744,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( zone->GetLayer() != layer )
             continue;
 
-        zone->TransformOutlinesShapeWithClearanceToPolygon( bufferPolys,
+        zone->TransformOutlinesShapeWithClearanceToPolygon( areas,
                     inflate, true );
         zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys,
                     0, true );
@@ -788,56 +761,15 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     zone.SetMinThickness( 0 );      // trace polygons only
     zone.SetLayer ( layer );
 
-    // Now:
-    // 1 - merge polygons which are intersecting, i.e. remove gaps
-    //     having a thickness < aMinThickness
-    // 2 - deflate resulting polygons by aMinThickness/2
-    KI_POLYGON_SET areasToMerge;
-    bufferPolys.ExportTo( areasToMerge );
-    KI_POLYGON_SET initialAreas;
-    initialPolys.ExportTo( initialAreas );
-
-    // Merge polygons: because each shape was created with an extra margin
-    // = aMinThickness/2, shapes too close ( dist < aMinThickness )
-    // will be merged, because they are overlapping
-    KI_POLYGON_SET areas;
-    areas |= areasToMerge;      // Populates with merged polygons
-
-    // Deflate: remove the extra margin, to create the actual shapes
-    // Here I am using polygon:resize, because this function creates better shapes
-    // than deflate algo.
-    // Use here deflate made by Clipper, because:
-    // Clipper is (by far) faster and better, event using arcs to deflate shapes
-    // boost::polygon < 1.56 polygon resize function sometimes crashes when deflating using arcs
-    // boost::polygon >=1.56 polygon resize function just does not work
-    // Note also we combine polygons using boost::polygon, which works better than Clipper,
-    // especially with zones using holes linked to main outlines by overlapping segments
-    CPOLYGONS_LIST tmp;
-    tmp.ImportFrom( areas );
-
-    // Deflate area using Clipper, better than boost::polygon
-    ClipperLib::Paths areasDeflate;
-    tmp.ExportTo( areasDeflate );
-
-    // Deflate areas: they will have the right size after deflate
-    ClipperLib::ClipperOffset offset_engine;
-    circleToSegmentsCount = 16;
-    offset_engine.ArcTolerance = (double)inflate / 3.14 / circleToSegmentsCount;
-    offset_engine.AddPaths( areasDeflate, ClipperLib::jtRound, ClipperLib::etClosedPolygon );
-    offset_engine.Execute( areasDeflate, -inflate );
+    areas.BooleanAdd( initialPolys );
+    areas.Inflate( -inflate, circleToSegmentsCount );
 
     // Combine the current areas to initial areas. This is mandatory because
     // inflate/deflate transform is not perfect, and we want the initial areas perfectly kept
-    tmp.RemoveAllContours();
-    tmp.ImportFrom( areasDeflate );
-    areas.clear();
-    tmp.ExportTo( areas );
+    areas.BooleanAdd( initialPolys );
+    areas.Fracture();
 
-    // Resize slightly changes shapes (the transform is not perfect).
-    // So *ensure* initial shapes are kept
-    areas |= initialAreas;
-
-    zone.CopyPolygonsFromKiPolygonListToFilledPolysList( areas );
+    zone.AddFilledPolysList( areas );
 
     itemplotter.PlotFilledAreas( &zone );
 }

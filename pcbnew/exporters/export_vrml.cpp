@@ -698,11 +698,8 @@ static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
 // board edges and cutouts
 static void export_vrml_board( MODEL_VRML& aModel, BOARD* pcb )
 {
-    CPOLYGONS_LIST  bufferPcbOutlines;      // stores the board main outlines
-    CPOLYGONS_LIST  allLayerHoles;          // Contains through holes, calculated only once
-
-    allLayerHoles.reserve( 20000 );
-
+    SHAPE_POLY_SET  bufferPcbOutlines;      // stores the board main outlines
+    SHAPE_POLY_SET  allLayerHoles;          // Contains through holes, calculated only once
     // Build a polygon from edge cut items
     wxString msg;
 
@@ -715,47 +712,28 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* pcb )
     }
 
     double  scale = aModel.scale;
-
-    int i = 0;
     int seg;
 
-    // deal with the solid outlines
-    int nvert = bufferPcbOutlines.GetCornersCount();
-
-    while( i < nvert )
+    for( int i = 0; i < bufferPcbOutlines.OutlineCount(); i++ )
     {
+        const SHAPE_LINE_CHAIN& outline = bufferPcbOutlines.COutline( i );
+
         seg = aModel.board.NewContour();
 
-        if( seg < 0 )
+        for( int j = 0; j < outline.PointCount(); j++ )
         {
-            msg << wxT( "\n\n" ) <<
-                _( "VRML Export Failed:\nCould not add outline to contours." );
-            wxMessageBox( msg );
+            aModel.board.AddVertex( seg, (double)outline.CPoint(j).x * scale,
+                                        -((double)outline.CPoint(j).y * scale ) );
 
-            return;
-        }
-
-        while( i < nvert )
-        {
-            if( bufferPcbOutlines[i].end_contour )
-                break;
-
-            aModel.board.AddVertex( seg, bufferPcbOutlines[i].x * scale,
-                                    -(bufferPcbOutlines[i].y * scale ) );
-
-            ++i;
         }
 
         aModel.board.EnsureWinding( seg, false );
-        ++i;
     }
 
-    // deal with the holes
-    nvert = allLayerHoles.GetCornersCount();
-
-    i = 0;
-    while( i < nvert )
+    for( int i = 0; i < allLayerHoles.OutlineCount(); i++ )
     {
+        const SHAPE_LINE_CHAIN& outline = allLayerHoles.COutline( i );
+
         seg = aModel.holes.NewContour();
 
         if( seg < 0 )
@@ -767,19 +745,14 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* pcb )
             return;
         }
 
-        while( i < nvert )
+        for( int j = 0; j < outline.PointCount(); j++ )
         {
-            if( allLayerHoles[i].end_contour )
-                break;
+            aModel.holes.AddVertex( seg, (double)outline.CPoint(j).x * scale,
+                                        -((double)outline.CPoint(j).y * scale ) );
 
-            aModel.holes.AddVertex( seg, allLayerHoles[i].x * scale,
-                                    -( allLayerHoles[i].y * scale ) );
-
-            ++i;
         }
 
         aModel.holes.EnsureWinding( seg, true );
-        ++i;
     }
 }
 
@@ -871,9 +844,7 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
 
 static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
 {
-
     double scale = aModel.scale;
-    double x, y;
 
     for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
     {
@@ -890,33 +861,23 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
             zone->BuildFilledSolidAreasPolygons( aPcb );
         }
 
-        const CPOLYGONS_LIST& poly = zone->GetFilledPolysList();
-        int nvert = poly.GetCornersCount();
-        int i = 0;
+        const SHAPE_POLY_SET& poly = zone->GetFilledPolysList();
 
-        while( i < nvert )
+        for( int i = 0; i < poly.OutlineCount(); i++ )
         {
+            const SHAPE_LINE_CHAIN& outline = poly.COutline( i );
+
             int seg = vl->NewContour();
 
-            if( seg < 0 )
-                break;
-
-            while( i < nvert )
+            for( int j = 0; j < outline.PointCount(); j++ )
             {
-                x = poly.GetX(i) * scale;
-                y = -(poly.GetY(i) * scale);
-
-                if( poly.IsEndContour(i) )
-                    break;
-
-                if( !vl->AddVertex( seg, x, y ) )
+                if( !vl->AddVertex( seg, (double)outline.CPoint( j ).x * scale,
+                                         -((double)outline.CPoint( j ).y * scale ) ) )
                     throw( std::runtime_error( vl->GetError() ) );
 
-                ++i;
             }
 
-             vl->EnsureWinding( seg, false );
-            ++i;
+            vl->EnsureWinding( seg, false );
         }
     }
 }

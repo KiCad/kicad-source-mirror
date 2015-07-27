@@ -493,10 +493,9 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
  */
 void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 {
-    const CPOLYGONS_LIST& polysList = aZone->GetFilledPolysList();
-    unsigned imax = polysList.GetCornersCount();
+    const SHAPE_POLY_SET& polysList = aZone->GetFilledPolysList();
 
-    if( imax == 0 )  // Nothing to draw
+    if( polysList.IsEmpty() )
         return;
 
     // We need a buffer to store corners coordinates:
@@ -511,12 +510,12 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
      *
      * in non filled mode the outline is plotted, but not the filling items
      */
-    for( unsigned ic = 0; ic < imax; ic++ )
+    for( SHAPE_POLY_SET::CONST_ITERATOR ic =  polysList.CIterate(); ic; ++ic )
     {
-        wxPoint pos = polysList.GetPos( ic );
+        wxPoint pos( ic->x, ic->y );
         cornerList.push_back( pos );
 
-        if(  polysList.IsEndContour( ic ) )   // Plot the current filled area outline
+        if( ic.IsEndContour() )   // Plot the current filled area outline
         {
             // First, close the outline
             if( cornerList[0] != cornerList[cornerList.size() - 1] )

@@ -43,13 +43,15 @@
  * Note: the polygon is inside the circle, so if you want to have the polygon
  * outside the circle, you should give aRadius calculated with a corrrection factor
  */
-void TransformCircleToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                wxPoint aCenter, int aRadius,
                                int aCircleToSegmentsCount )
 {
     wxPoint corner_position;
     int     delta       = 3600 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
     int     halfstep    = 1800 / aCircleToSegmentsCount;    // the starting value for rot angles
+
+    aCornerBuffer.NewOutline();
 
     for( int ii = 0; ii < aCircleToSegmentsCount; ii++ )
     {
@@ -58,11 +60,8 @@ void TransformCircleToPolygon( CPOLYGONS_LIST& aCornerBuffer,
         int     angle = (ii * delta) + halfstep;
         RotatePoint( &corner_position.x, &corner_position.y, angle );
         corner_position += aCenter;
-        CPolyPt polypoint( corner_position.x, corner_position.y );
-        aCornerBuffer.Append( polypoint );
+        aCornerBuffer.Append( corner_position.x, corner_position.y );
     }
-
-    aCornerBuffer.CloseLastContour();
 }
 
 
@@ -78,7 +77,7 @@ void TransformCircleToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * Note: the polygon is inside the arc ends, so if you want to have the polygon
  * outside the circle, you should give aStart and aEnd calculated with a correction factor
  */
-void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            wxPoint aStart, wxPoint aEnd,
                                            int aCircleToSegmentsCount,
                                            int aWidth )
@@ -87,7 +86,9 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
     wxPoint endp    = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
     wxPoint startp  = aStart;
     wxPoint corner;
-    CPolyPt polypoint;
+    VECTOR2I polypoint;
+
+    aCornerBuffer.NewOutline();
 
     // normalize the position in order to have endp.x >= 0;
     if( endp.x < 0 )
@@ -112,7 +113,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
         corner += startp;
         polypoint.x = corner.x;
         polypoint.y = corner.y;
-        aCornerBuffer.Append( polypoint );
+        aCornerBuffer.Append( polypoint.x, polypoint.y );
     }
 
     // Finish arc:
@@ -121,7 +122,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
     corner += startp;
     polypoint.x = corner.x;
     polypoint.y = corner.y;
-    aCornerBuffer.Append( polypoint );
+    aCornerBuffer.Append( polypoint.x, polypoint.y );
 
     // add left rounded end:
     for( int ii = 0; ii < 1800; ii += delta )
@@ -132,7 +133,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
         corner += startp;
         polypoint.x = corner.x;
         polypoint.y = corner.y;
-        aCornerBuffer.Append( polypoint );
+        aCornerBuffer.Append( polypoint.x, polypoint.y );
     }
 
     // Finish arc:
@@ -141,9 +142,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
     corner += startp;
     polypoint.x = corner.x;
     polypoint.y = corner.y;
-    aCornerBuffer.Append( polypoint );
-
-    aCornerBuffer.CloseLastContour();
+    aCornerBuffer.Append( polypoint.x, polypoint.y );
 }
 
 
@@ -158,7 +157,7 @@ void TransformRoundedEndsSegmentToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aWidth = width (thickness) of the line
  */
-void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                             wxPoint aCentre, wxPoint aStart, double aArcAngle,
                             int aCircleToSegmentsCount, int aWidth )
 {
@@ -208,7 +207,7 @@ void TransformArcToPolygon( CPOLYGONS_LIST& aCornerBuffer,
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aWidth = width (thickness) of the ring
  */
-void TransformRingToPolygon( CPOLYGONS_LIST& aCornerBuffer,
+void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                              wxPoint aCentre, int aRadius,
                              int aCircleToSegmentsCount, int aWidth )
 {
@@ -218,7 +217,8 @@ void TransformRingToPolygon( CPOLYGONS_LIST& aCornerBuffer,
     wxPoint curr_point;
     int     inner_radius    = aRadius - ( aWidth / 2 );
     int     outer_radius    = inner_radius + aWidth;
-    CPolyPt polycorner;
+
+    aCornerBuffer.NewOutline();
 
     // Draw the inner circle of the ring
     for( int ii = 0; ii < 3600; ii += delta )
@@ -227,15 +227,11 @@ void TransformRingToPolygon( CPOLYGONS_LIST& aCornerBuffer,
         curr_point.y    = 0;
         RotatePoint( &curr_point, ii );
         curr_point      += aCentre;
-        polycorner.x    = curr_point.x;
-        polycorner.y    = curr_point.y;
-        aCornerBuffer.Append( polycorner );
+        aCornerBuffer.Append( curr_point.x, curr_point.y );
     }
 
     // Draw the last point of inner circle
-    polycorner.x    = aCentre.x + inner_radius;
-    polycorner.y    = aCentre.y;
-    aCornerBuffer.Append( polycorner );
+    aCornerBuffer.Append( aCentre.x + inner_radius, aCentre.y );
 
     // Draw the outer circle of the ring
     for( int ii = 0; ii < 3600; ii += delta )
@@ -244,18 +240,10 @@ void TransformRingToPolygon( CPOLYGONS_LIST& aCornerBuffer,
         curr_point.y    = 0;
         RotatePoint( &curr_point, -ii );
         curr_point      += aCentre;
-        polycorner.x    = curr_point.x;
-        polycorner.y    = curr_point.y;
-        aCornerBuffer.Append( polycorner );
+        aCornerBuffer.Append( curr_point.x, curr_point.y );
     }
 
     // Draw the last point of outer circle
-    polycorner.x    = aCentre.x + outer_radius;
-    polycorner.y    = aCentre.y;
-    aCornerBuffer.Append( polycorner );
-
-    // Close the polygon
-    polycorner.x = aCentre.x + inner_radius;
-    polycorner.end_contour = true;
-    aCornerBuffer.Append( polycorner );
+    aCornerBuffer.Append( aCentre.x + outer_radius, aCentre.y );
+    aCornerBuffer.Append( aCentre.x + inner_radius, aCentre.y );
 }
