@@ -49,8 +49,9 @@
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
         SHAPE_POLY_SET& aCornerBuffer, int aMinClearanceValue, bool aUseNetClearance )
 {
-    // Creates the zone outline polygon (with linked holes if any)
-    BuildFilledSolidAreasPolygons( NULL, &aCornerBuffer );
+    // Creates the zone outline polygon (with holes if any)
+    SHAPE_POLY_SET polybuffer;
+    BuildFilledSolidAreasPolygons( NULL, &polybuffer );
 
     // add clearance to outline
     int clearance = aMinClearanceValue;
@@ -65,9 +66,10 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.
     if( clearance )
-        aCornerBuffer.Inflate( clearance, 16 );
+        polybuffer.Inflate( clearance, 16 );
 
-    aCornerBuffer.Fracture( );
+    polybuffer.Fracture();
+    aCornerBuffer.Append( polybuffer );
 }
 
 
