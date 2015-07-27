@@ -351,30 +351,13 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         if( bufferPolys.IsEmpty() )
             continue;
 
-        std::auto_ptr<SHAPE_FILE_IO> dumper( new SHAPE_FILE_IO( "poly_dump.txt", true ) );
-
         // Use Clipper lib to subtract holes to copper areas
 
-        dumper->BeginGroup( "clipper-zone" );
-
-        dumper->Write( &bufferPolys, "pre-simplify" );
         bufferPolys.Simplify();
-        dumper->Write( &bufferPolys, "post-simplify" );
-
         currLayerHoles.Simplify();
         allLayerHoles.Simplify();
 
-        //dumper->Write(&bufferPolys, "pre-sub");
-        //dumper->Write(&allLayerHoles, "holes");
-
-        // Add through holes (created only once) in current polygon holes list
-        //bufferPolys.BooleanSubtract( currLayerHoles );
-        //bufferPolys.Simplify();
         bufferPolys.BooleanSubtract( allLayerHoles );
-
-        //dumper->Write(&bufferPolys, "post-sub");
-        dumper->EndGroup();
-
         bufferPolys.Fracture();
 
         int thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );

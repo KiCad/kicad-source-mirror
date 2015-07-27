@@ -251,7 +251,7 @@ class SHAPE_POLY_SET : public SHAPE
         void BooleanSubtract( const SHAPE_POLY_SET& b );
 
         ///> Performs outline inflation/deflation, using round corners.
-        void Inflate ( int aFactor, int aCircleSegmentsCount = 32 );
+        void Inflate( int aFactor, int aCircleSegmentsCount );
 
         ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures" connecting the outer ring
         ///> to the inner holes
