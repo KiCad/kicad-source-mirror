@@ -35,23 +35,14 @@
 #include <cmath>
 #include <vector>
 #include <layers_id_colors_and_visibility.h>
-#include <potracelib.h>
-#include <auxiliary.h>
 #include <common.h>
 
 #include <bitmap2component.h>
+#include <geometry/shape_poly_set.h>
 
-
-// Define some types used here from boost::polygon
-namespace bpl = boost::polygon;         // bpl = boost polygon library
-using namespace bpl::operators;         // +, -, =, ...
-
-typedef int                                coordinate_type;
-
-typedef bpl::polygon_data<coordinate_type> KPolygon;        // define a basic polygon
-typedef std::vector<KPolygon>              KPolygonSet;     // define a set of polygons
-
-typedef bpl::point_data<coordinate_type>   KPolyPoint;      // define a corner of a polygon
+// include this after shape_poly_set.h to avoid redefinition of min, max ...
+#include <potracelib.h>
+#include <auxiliary.h>
 
 /* free a potrace bitmap */
 static void bm_free( potrace_bitmap_t* bm )
@@ -115,7 +106,7 @@ private:
      * write one polygon to output file.
      * Polygon coordinates are expected scaled by the polugon extraction function
      */
-    void OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLayerName );
+    void OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName );
 
 };
 
@@ -321,28 +312,28 @@ void BITMAPCONV_INFO::OuputFileEnd()
  * write one polygon to output file.
  * Polygon coordinates are expected scaled by the polygon extraction function
  */
-void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLayerName )
+void BITMAPCONV_INFO::OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName )
 {
-    unsigned ii, jj;
-    KPolyPoint currpoint;
+    int ii, jj;
+    VECTOR2I currpoint;
 
     int   offsetX = (int)( m_PixmapWidth / 2 * m_ScaleX );
     int   offsetY = (int)( m_PixmapHeight / 2 * m_ScaleY );
 
-    KPolyPoint startpoint = *aPolygon.begin();
+    const VECTOR2I startpoint = aPolygon.CPoint( 0 );
 
     switch( m_Format )
     {
     case POSTSCRIPT_FMT:
         offsetY = (int)( m_PixmapHeight * m_ScaleY );
         fprintf( m_Outfile, "newpath\n%d %d moveto\n",
-                 startpoint.x(), offsetY - startpoint.y() );
+                 startpoint.x, offsetY - startpoint.y );
         jj = 0;
-        for( ii = 1; ii < aPolygon.size(); ii++ )
+        for( ii = 1; ii < aPolygon.PointCount(); ii++ )
         {
-            currpoint = *(aPolygon.begin() + ii);
+            currpoint = aPolygon.CPoint( ii );
             fprintf( m_Outfile, " %d %d lineto",
-                     currpoint.x(), offsetY - currpoint.y() );
+                     currpoint.x, offsetY - currpoint.y );
 
             if( jj++ > 6 )
             {
@@ -356,16 +347,16 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLay
 
     case PCBNEW_KICAD_MOD:
     {
-        double width = 0.1;
+        double width = 0.01;     // outline thickness in mm
         fprintf( m_Outfile, "  (fp_poly (pts" );
 
         jj = 0;
-        for( ii = 0; ii < aPolygon.size(); ii++ )
+        for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
-            currpoint = *( aPolygon.begin() + ii );
+            currpoint = aPolygon.CPoint( ii );
             fprintf( m_Outfile, " (xy %f %f)",
-                    (currpoint.x() - offsetX) / 1e6,
-                    (currpoint.y() - offsetY) / 1e6 );
+                    ( currpoint.x - offsetX ) / 1e6,
+                    ( currpoint.y - offsetY ) / 1e6 );
 
             if( jj++ > 6 )
             {
@@ -375,7 +366,7 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLay
         }
         // Close polygon
         fprintf( m_Outfile, " (xy %f %f) )",
-                (startpoint.x() - offsetX) / 1e6, (startpoint.y() - offsetY) / 1e6 );
+                ( startpoint.x - offsetX ) / 1e6, ( startpoint.y - offsetY ) / 1e6 );
 
         fprintf( m_Outfile, "(layer %s) (width  %f)\n  )\n", aBrdLayerName, width );
 
@@ -386,12 +377,12 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLay
         fprintf( m_Outfile, "  (pts" );
         // Internal units = micron, file unit = mm
         jj = 0;
-        for( ii = 0; ii < aPolygon.size(); ii++ )
+        for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
-            currpoint = *( aPolygon.begin() + ii );
+            currpoint = aPolygon.CPoint( ii );
             fprintf( m_Outfile, " (xy %.3f %.3f)",
-                    (currpoint.x() - offsetX) / 1e3,
-                    (currpoint.y() - offsetY) / 1e3 );
+                    ( currpoint.x - offsetX ) / 1e3,
+                    ( currpoint.y - offsetY ) / 1e3 );
 
             if( jj++ > 4 )
             {
@@ -401,21 +392,21 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLay
         }
         // Close polygon
         fprintf( m_Outfile, " (xy %.3f %.3f) )\n",
-                (startpoint.x() - offsetX) / 1e3, (startpoint.y() - offsetY) / 1e3 );
+                ( startpoint.x - offsetX ) / 1e3, ( startpoint.y - offsetY ) / 1e3 );
         break;
 
     case EESCHEMA_FMT:
-        fprintf( m_Outfile, "P %d 0 0 1", (int) aPolygon.size() + 1 );
-        for( ii = 0; ii < aPolygon.size(); ii++ )
+        fprintf( m_Outfile, "P %d 0 0 1", (int) aPolygon.PointCount() + 1 );
+        for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
-            currpoint = *(aPolygon.begin() + ii);
+            currpoint = aPolygon.CPoint( ii );
             fprintf( m_Outfile, " %d %d",
-                     currpoint.x() - offsetX, currpoint.y() - offsetY );
+                     currpoint.x - offsetX, currpoint.y - offsetY );
         }
 
         // Close polygon
         fprintf( m_Outfile, " %d %d",
-                 startpoint.x() - offsetX, startpoint.y() - offsetY );
+                 startpoint.x - offsetX, startpoint.y - offsetY );
 
         fprintf( m_Outfile, " F\n" );
         break;
@@ -425,16 +416,13 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon, const char * aBrdLay
 
 void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
 {
-    KPolyPoint currpoint;
-
     std::vector <potrace_dpoint_t> cornersBuffer;
 
-    // This KPolygonSet polyset_areas is a complex polygon to draw
-    // and can be complex depending on holes inside this polygon
-    KPolygonSet polyset_areas;
+    // polyset_areas is a set of polygon to draw
+    SHAPE_POLY_SET polyset_areas;
 
-    // This KPolygonSet polyset_holes is the set of holes inside polyset_areas
-    KPolygonSet polyset_holes;
+    // polyset_holes is the set of holes inside polyset_areas outlines
+    SHAPE_POLY_SET polyset_holes;
 
     potrace_dpoint_t( *c )[3];
 
@@ -480,33 +468,24 @@ void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
             main_outline = false;
 
             // build the current main polygon
-            std::vector<KPolyPoint> cornerslist; // a simple boost polygon
+            polyset_areas.NewOutline();
             for( unsigned int i = 0; i < cornersBuffer.size(); i++ )
             {
-                currpoint.x( (coordinate_type) (cornersBuffer[i].x * m_ScaleX) );
-                currpoint.y( (coordinate_type) (cornersBuffer[i].y * m_ScaleY) );
-                cornerslist.push_back( currpoint );
+                polyset_areas.Append( int( cornersBuffer[i].x * m_ScaleX ),
+                                      int( cornersBuffer[i].y * m_ScaleY ) );
             }
-
-            KPolygon poly;
-            bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-            polyset_areas.push_back( poly );
         }
         else
         {
             // Add current hole in polyset_holes
-            std::vector<KPolyPoint> cornerslist; // a simple boost polygon
+            polyset_holes.NewOutline();
             for( unsigned int i = 0; i < cornersBuffer.size(); i++ )
             {
-                currpoint.x( (coordinate_type) (cornersBuffer[i].x * m_ScaleX) );
-                currpoint.y( (coordinate_type) (cornersBuffer[i].y * m_ScaleY) );
-                cornerslist.push_back( currpoint );
+                polyset_holes.Append( int( cornersBuffer[i].x * m_ScaleX ),
+                                      int( cornersBuffer[i].y * m_ScaleY ) );
             }
-
-            KPolygon poly;
-            bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-            polyset_holes.push_back( poly );
         }
+
         cornersBuffer.clear();
 
         /* at the end of a group of a positive path and its negative children, fill.
@@ -514,17 +493,20 @@ void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
         if( paths->next == NULL || paths->next->sign == '+' )
         {
             // Substract holes to main polygon:
-            polyset_areas -= polyset_holes;
+            polyset_areas.Simplify();
+            polyset_holes.Simplify();
+            polyset_areas.BooleanSubtract( polyset_holes );
+            polyset_areas.Fracture();
 
             // Output current resulting polygon(s)
-            for( unsigned ii = 0; ii < polyset_areas.size(); ii++ )
+            for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )
             {
-                KPolygon& poly = polyset_areas[ii];
+                SHAPE_LINE_CHAIN& poly = polyset_areas.Outline( ii );
                 OuputOnePolygon(poly, getBrdLayerName( aModLayer ) );
             }
 
-            polyset_areas.clear();
-            polyset_holes.clear();
+            polyset_areas.RemoveAllContours();
+            polyset_holes.RemoveAllContours();
             main_outline = true;
         }
         paths = paths->next;
