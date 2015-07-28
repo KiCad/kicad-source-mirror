@@ -198,16 +198,18 @@ TOOL_MANAGER* CONTEXT_MENU::getToolManager()
 
 void CONTEXT_MENU::updateHotKeys()
 {
+    TOOL_MANAGER* toolMgr = getToolManager();
+
     for( std::map<int, const TOOL_ACTION*>::const_iterator it = m_toolActions.begin();
             it != m_toolActions.end(); ++it )
     {
         int id = it->first;
         const TOOL_ACTION& action = *it->second;
+        int key = toolMgr->GetHotKey( action ) & ~MD_MODIFIER_MASK;
 
-        if( action.HasHotKey() )
+        if( key )
         {
-            int key = action.GetHotKey() & ~MD_MODIFIER_MASK;
-            int mod = action.GetHotKey() & MD_MODIFIER_MASK;
+            int mod = toolMgr->GetHotKey( action ) & MD_MODIFIER_MASK;
             int flags = 0;
             wxMenuItem* item = FindChildItem( id );
 

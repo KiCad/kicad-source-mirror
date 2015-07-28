@@ -332,6 +332,12 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
 }
 
 
+int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction )
+{
+    return m_actionMgr->GetHotKey( aAction );
+}
+
+
 void TOOL_MANAGER::UpdateHotKeys()
 {
     m_actionMgr->UpdateHotKeys();

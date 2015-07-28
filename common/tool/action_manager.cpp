@@ -37,15 +37,25 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
 {
     // Register known actions
     std::list<TOOL_ACTION*>& actionList = GetActionList();
+
     BOOST_FOREACH( TOOL_ACTION* action, actionList )
-        RegisterAction( action );
+    {
+        if( action->m_id == -1 )
+            action->m_id = MakeActionId( action->m_name );
+
+        RegisterAction( new TOOL_ACTION( *action ) );
+    }
 }
 
 
 ACTION_MANAGER::~ACTION_MANAGER()
 {
-    while( !m_actionIdIndex.empty() )
-        UnregisterAction( m_actionIdIndex.begin()->second );
+    while( !m_actionNameIndex.empty() )
+    {
+        TOOL_ACTION* action = m_actionNameIndex.begin()->second;
+        UnregisterAction( action );
+        delete action;
+    }
 }
 
 
@@ -57,24 +67,19 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 
     // TOOL_ACTIONs must have unique names & ids
     assert( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
-    assert( m_actionIdIndex.find( aAction->m_id ) == m_actionIdIndex.end() );
-
-    if( aAction->m_id == -1 )
-        aAction->m_id = MakeActionId( aAction->m_name );
 
     m_actionNameIndex[aAction->m_name] = aAction;
-    m_actionIdIndex[aAction->m_id] = aAction;
 }
 
 
 void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
 {
     m_actionNameIndex.erase( aAction->m_name );
-    m_actionIdIndex.erase( aAction->m_id );
+    int hotkey = GetHotKey( *aAction );
 
-    if( aAction->HasHotKey() )
+    if( hotkey )
     {
-        std::list<TOOL_ACTION*>& actions = m_actionHotKeys[aAction->m_currentHotKey];
+        std::list<TOOL_ACTION*>& actions = m_actionHotKeys[hotkey];
         std::list<TOOL_ACTION*>::iterator action = std::find( actions.begin(), actions.end(), aAction );
 
         if( action != actions.end() )
@@ -176,19 +181,31 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 }
 
 
+int ACTION_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
+{
+    std::map<int, int>::const_iterator it = m_hotkeys.find( aAction.GetId() );
+
+    if( it == m_hotkeys.end() )
+        return 0;
+
+    return it->second;
+}
+
+
 void ACTION_MANAGER::UpdateHotKeys()
 {
     m_actionHotKeys.clear();
-    std::list<TOOL_ACTION*>& actions = GetActionList();
+    m_hotkeys.clear();
 
-    for( std::list<TOOL_ACTION*>::iterator it = actions.begin(); it != actions.end(); ++it )
+    BOOST_FOREACH( TOOL_ACTION* action, m_actionNameIndex | boost::adaptors::map_values )
     {
-        TOOL_ACTION* aAction = *it;
-
-        int hotkey = processHotKey( aAction, true );
+        int hotkey = processHotKey( action );
 
         if( hotkey > 0 )
-            m_actionHotKeys[hotkey].push_back( aAction );
+        {
+            m_actionHotKeys[hotkey].push_back( action );
+            m_hotkeys[action->GetId()] = hotkey;
+        }
     }
 
 #ifndef NDEBUG
@@ -209,14 +226,9 @@ void ACTION_MANAGER::UpdateHotKeys()
 }
 
 
-int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction, bool aForceUpdate )
+int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction )
 {
-    int hotkey = 0;
-
-    if( aForceUpdate )
-        hotkey = aAction->getDefaultHotKey();
-    else
-        hotkey = aAction->GetHotKey();
+    int hotkey = aAction->getDefaultHotKey();
 
     if( ( hotkey & TOOL_ACTION::LEGACY_HK ) )
     {
@@ -251,8 +263,6 @@ int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction, bool aForceUpdate )
         {
             hotkey = 0;
         }
-
-        aAction->setHotKey( hotkey );
     }
 
     return hotkey;

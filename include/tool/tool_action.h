@@ -88,24 +88,11 @@ public:
     }
 
     /**
-     * Function GetHotKey()
-     * Returns the associated hot key.
-     */
-    int GetHotKey() const
-    {
-        return m_currentHotKey;
-    }
-
-    /**
      * Function HasHotKey()
      * Checks if the action has a hot key assigned.
      *
      * @return True if there is a hot key assigned, false otherwise.
      */
-    bool HasHotKey() const
-    {
-        return m_currentHotKey != 0;
-    }
 
     /**
      * Function MakeEvent()
@@ -190,6 +177,7 @@ public:
 
         return aHotKey | LEGACY_HK;
     }
+
 private:
     friend class ACTION_MANAGER;
 
@@ -200,15 +188,6 @@ private:
         return m_defaultHotKey;
     }
 
-    /// Changes the assigned hot key.
-    void setHotKey( int aHotKey )
-    {
-        // it is not the right moment to use legacy hot key, it should be given in the object definition
-        assert( ( aHotKey & LEGACY_HK ) == 0 );
-
-        m_currentHotKey = aHotKey;
-    }
-
     /// Name of the action (convention is: app.[tool.]action.name)
     std::string m_name;
 
@@ -217,9 +196,6 @@ private:
 
     /// Default hot key that activates the action.
     const int m_defaultHotKey;
-
-    /// Custom assigned hot key that activates the action.
-    int m_currentHotKey;
 
     /// Menu entry text
     wxString m_menuItem;

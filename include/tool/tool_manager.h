@@ -146,6 +146,9 @@ public:
         RunAction( aAction, aNow, (void*) NULL );
     }
 
+    ///> @copydoc ACTION_MANAGER::GetHotKey()
+    int GetHotKey( const TOOL_ACTION& aAction );
+
     ///> @copydoc ACTION_MANAGER::UpdateHotKeys()
     void UpdateHotKeys();
 

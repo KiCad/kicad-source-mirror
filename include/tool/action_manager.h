@@ -91,6 +91,13 @@ public:
     bool RunHotKey( int aHotKey ) const;
 
     /**
+     * Function GetHotKey()
+     * Returns the hot key associated with a given action or 0 if there is none.
+     * @param aAction is the queried action.
+     */
+    int GetHotKey( const TOOL_ACTION& aAction ) const;
+
+    /**
      * Function UpdateHotKeys()
      * Updates TOOL_ACTIONs hot key assignment according to the current frame's Hot Key Editor settings.
      */
@@ -104,7 +111,6 @@ public:
      */
     static std::list<TOOL_ACTION*>& GetActionList()
     {
-        // TODO I am afraid this approach won't work when we reach multitab version of kicad.
         static std::list<TOOL_ACTION*> actionList;
 
         return actionList;
@@ -113,16 +119,10 @@ public:
 private:
     ///> Resolves a reference to legacy hot key settings to a particular hot key.
     ///> @param aAction is the action to be resolved.
-    ///> @param aForceUpdate determines whether it should be resolved only when the current hot key
-    ///> setting contains a reference to legacy settings, or update the hot key basing on the
-    ///> originally assigned reference.
-    int processHotKey( TOOL_ACTION* aAction, bool aForceUpdate = false );
+    int processHotKey( TOOL_ACTION* aAction );
 
     ///> Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;
-
-    ///> Map for indexing actions by their IDs
-    std::map<int, TOOL_ACTION*> m_actionIdIndex;
 
     ///> Map for indexing actions by their names
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
@@ -130,6 +130,9 @@ private:
     ///> Map for indexing actions by their hotkeys
     typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
     HOTKEY_LIST m_actionHotKeys;
+
+    ///> Quick action<->hot key lookup
+    std::map<int, int> m_hotkeys;
 };
 
 #endif /* ACTION_MANAGER_H_ */
