@@ -83,6 +83,7 @@ void PICKER_TOOL::reset()
 {
     m_cursorSnapping = true;
     m_cursorVisible = true;
+    m_cursorCapture = true;
     m_autoPanning = true;
 
     m_picking = false;
@@ -96,5 +97,6 @@ void PICKER_TOOL::setControls()
 
     controls->ShowCursor( m_cursorVisible );
     controls->SetSnapping( m_cursorSnapping );
+    controls->CaptureCursor( m_cursorCapture );
     controls->SetAutoPan( m_autoPanning );
 }

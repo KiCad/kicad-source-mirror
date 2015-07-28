@@ -66,6 +66,12 @@ public:
     inline void SetAutoPanning( bool aEnable ) { m_autoPanning = aEnable; }
 
     /**
+     * Function SetAutoPanning()
+     * Toggles cursor capture mode for the period when the tool is active.
+     */
+    inline void SetCursorCapture( bool aEnable ) { m_cursorCapture = aEnable; }
+
+    /**
      * Function GetPoint()
      * Returns picked point.
      */
@@ -99,6 +105,7 @@ private:
     // Tool settings.
     bool m_cursorSnapping;
     bool m_cursorVisible;
+    bool m_cursorCapture;
     bool m_autoPanning;
 
     ///> Optional mouse click event handler.
