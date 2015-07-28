@@ -592,8 +592,6 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 {
-    bool unselect = m_selection.Empty();
-
     if( !selectCursor( true ) )
         return 0;
 
@@ -601,9 +599,7 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
     {
-        if( unselect )
-            clearSelection();
-
+        clearSelection();
         return 0;
     }
 
@@ -632,8 +628,6 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 {
-    bool unselect = m_selection.Empty();
-
     if( !selectCursor( true ) )
         return 0;
 
@@ -641,9 +635,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
     {
-        if( unselect )
-            clearSelection();
-
+        clearSelection();
         return 0;
     }
 
