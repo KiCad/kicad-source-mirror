@@ -1038,7 +1038,6 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
 
     Activate();
 
-    VECTOR2I lastCursorPos = m_controls->GetCursorPosition();
     VECTOR2I origin;
     int numPoints = 0;
     bool direction45 = false;       // 45 degrees only mode
@@ -1098,7 +1097,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
-            if( evt->IsDblClick( BUT_LEFT ) || lastCursorPos == cursorPos || ( numPoints > 0 && cursorPos == origin ) )
+            if( evt->IsDblClick( BUT_LEFT ) || ( numPoints > 0 && cursorPos == origin ) )
             {
                 if( numPoints > 2 )     // valid zone consists of more than 2 points
                 {
@@ -1207,8 +1206,6 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 ++numPoints;
                 updatePreview = true;
             }
-
-            lastCursorPos = cursorPos;
         }
 
         else if( evt->IsMotion() && numPoints > 0 )
