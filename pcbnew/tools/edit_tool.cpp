@@ -392,21 +392,19 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         item->ClearFlags();
 
         // It is necessary to determine if anything has changed
-        PICKED_ITEMS_LIST* lastChange = undoList.empty() ? NULL : undoList.back();
+        unsigned int oldSize = undoList.size();
 
         // Display properties dialog provided by the legacy canvas frame
         editFrame->OnEditItemRequest( NULL, item );
 
-        PICKED_ITEMS_LIST* currentChange = undoList.empty() ? NULL : undoList.back();
+        for( unsigned int i = oldSize; i < undoList.size(); ++i )
+            processChanges( undoList[i] );
 
-        if( lastChange != currentChange )        // Something has changed
+        if( oldSize != undoList.size() )        // Something has changed
         {
-            processChanges( currentChange );
-
             item->ViewUpdate();
 
             RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
-            ratsnest->Update( item );
             ratsnest->Recalculate();
 
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
@@ -1044,14 +1042,20 @@ bool EDIT_TOOL::hoverSelection( const SELECTION& aSelection, bool aSanitize )
 
 void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
 {
+    KIGFX::VIEW* view = getView();
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+
     for( unsigned int i = 0; i < aList->GetCount(); ++i )
     {
         UNDO_REDO_T operation = aList->GetPickedItemStatus( i );
-        EDA_ITEM* updItem = aList->GetPickedItem( i );
+        BOARD_ITEM* updItem = static_cast<BOARD_ITEM*>( aList->GetPickedItem( i ) );
 
         switch( operation )
         {
         case UR_CHANGED:
+            ratsnest->Update( updItem );
+            // fall through
+
         case UR_MODEDIT:
             updItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
@@ -1059,18 +1063,19 @@ void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
         case UR_DELETED:
             if( updItem->Type() == PCB_MODULE_T )
                 static_cast<MODULE*>( updItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove,
-                                                                             getView(), _1 ) );
+                                                                             view, _1 ) );
 
-            getView()->Remove( updItem );
+            view->Remove( updItem );
+            //ratsnest->Remove( updItem );  // this is done in BOARD::Remove
             break;
 
         case UR_NEW:
             if( updItem->Type() == PCB_MODULE_T )
                 static_cast<MODULE*>( updItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
-                                                                             getView(), _1 ) );
+                                                                             view, _1 ) );
 
-            getView()->Add( updItem );
-            updItem->ViewUpdate();
+            view->Add( updItem );
+            //ratsnest->Add( updItem );     // this is done in BOARD::Add
             break;
 
         default:
