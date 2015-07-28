@@ -238,7 +238,7 @@
                         <event name="OnEraseBackground"></event>
                         <event name="OnHtmlCellClicked"></event>
                         <event name="OnHtmlCellHover"></event>
-                        <event name="OnHtmlLinkClicked"></event>
+                        <event name="OnHtmlLinkClicked">OnHtmlLinkActivated</event>
                         <event name="OnKeyDown"></event>
                         <event name="OnKeyUp"></event>
                         <event name="OnKillFocus"></event>

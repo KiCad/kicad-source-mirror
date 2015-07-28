@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -58,6 +58,7 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPageChange( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void onDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onValidatePath( wxCommandEvent& event ) { event.Skip(); }
 		

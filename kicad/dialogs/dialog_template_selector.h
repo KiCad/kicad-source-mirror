@@ -122,6 +122,7 @@ private:
     void OnPageChange( wxNotebookEvent& event );
     void onDirectoryBrowseClicked( wxCommandEvent& event );
 	void onValidatePath( wxCommandEvent& event );
+	void OnHtmlLinkActivated( wxHtmlLinkEvent& event );
 };
 
 #endif

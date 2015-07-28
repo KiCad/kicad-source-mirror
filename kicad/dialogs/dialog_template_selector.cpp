@@ -271,3 +271,10 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
 
     m_selectedWidget = NULL;
 }
+
+
+void DIALOG_TEMPLATE_SELECTOR::OnHtmlLinkActivated( wxHtmlLinkEvent& event )
+{
+    wxString url = event.GetLinkInfo().GetHref();
+    wxLaunchDefaultBrowser( url);
+}
