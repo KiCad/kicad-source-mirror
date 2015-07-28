@@ -77,6 +77,7 @@
 #endif
 
 #include <pcb_draw_panel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <boost/bind.hpp>
 
 // Keys used in read/write config
@@ -820,9 +821,22 @@ EDA_COLOR_T PCB_EDIT_FRAME::GetGridColor() const
 }
 
 
-void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
+void PCB_EDIT_FRAME::SetGridColor( EDA_COLOR_T aColor )
 {
     GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
+}
+
+
+void PCB_EDIT_FRAME::SetCursorShape( int aCursorShape )
+{
+    const unsigned int BIG_CURSOR = 8000;
+    const unsigned int SMALL_CURSOR = 80;
+
+    EDA_DRAW_FRAME::SetCursorShape( aCursorShape );
+    KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
+
+    if( gal )
+        gal->SetCursorSize( aCursorShape ? BIG_CURSOR : SMALL_CURSOR );
 }
 
 

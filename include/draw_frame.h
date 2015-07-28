@@ -277,7 +277,7 @@ public:
 
     int GetCursorShape() const { return m_cursorShape; }
 
-    void SetCursorShape( int aCursorShape ) { m_cursorShape = aCursorShape; }
+    virtual void SetCursorShape( int aCursorShape ) { m_cursorShape = aCursorShape; }
 
     bool GetShowBorderAndTitleBlock() const { return m_showBorderAndTitleBlock; }
 

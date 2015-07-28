@@ -40,12 +40,7 @@
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <collectors.h>
-
 #include <dialog_general_options.h>
-#include <class_draw_panel_gal.h>
-#include <view/view.h>
-#include <pcb_painter.h>
-#include <base_units.h>
 
 DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent )
@@ -98,7 +93,6 @@ void DIALOG_GENERALOPTIONS::init()
 
     m_UseOldZoneFillingAlgo->SetValue ( g_UseOldZoneFillingAlgo );
     m_DumpZonesWhenFilling->SetValue ( g_DumpZonesWhenFilling );
-
 }
 
 

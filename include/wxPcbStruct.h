@@ -340,7 +340,10 @@ public:
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void SetGridColor(EDA_COLOR_T aColor);
+    virtual void SetGridColor( EDA_COLOR_T aColor );
+
+    ///> @copydoc EDA_DRAW_FRAME::SetCursorShape()
+    virtual void SetCursorShape( int aCursorShape );
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );

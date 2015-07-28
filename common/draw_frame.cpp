@@ -285,7 +285,7 @@ void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     m_canvas->CrossHairOff( &dc );
-    m_cursorShape = !m_cursorShape;
+    SetCursorShape( !GetCursorShape() );
     m_canvas->CrossHairOn( &dc );
 }
 
@@ -327,9 +327,6 @@ void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.IsChecked() != m_cursorShape && IsGalCanvasActive() )
-        GetToolManager()->RunAction( "pcbnew.Control.switchCursor" );
-
     aEvent.Check( m_cursorShape );
 }
 
@@ -1064,7 +1061,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
         // Transfer EDA_DRAW_PANEL settings
         GetGalCanvas()->GetViewControls()->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
-
         GetToolManager()->RunAction( "pcbnew.Control.switchCursor" );
     }
     else if( m_galCanvasActive )
