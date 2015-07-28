@@ -456,6 +456,13 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 // and the source_module (old module) is deleted
                 PICKED_ITEMS_LIST pickList;
 
+                if( pcbframe->IsGalCanvasActive() )
+                {
+                    KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
+                    source_module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+                    view->Remove( source_module );
+                }
+
                 pcbframe->Exchange_Module( source_module, newmodule, &pickList );
                 newmodule->SetTimeStamp( module_in_edit->GetLink() );
 
@@ -472,14 +479,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 pcbframe->SetCrossHairPosition( cursor_pos );
                 newmodule->SetTimeStamp( GetNewTimeStamp() );
                 pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
-
-                if( IsGalCanvasActive() )
-                {
-                    KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
-
-                    newmodule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
-                    view->Add( newmodule );
-                }
             }
 
             newmodule->ClearFlags();
@@ -487,12 +486,16 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             pcbframe->SetCurItem( NULL );
             mainpcb->m_Status_Pcb = 0;
 
-            if( IsGalCanvasActive() )
+            if( pcbframe->IsGalCanvasActive() )
             {
                 RN_DATA* ratsnest = pcbframe->GetBoard()->GetRatsnest();
                 ratsnest->Update( newmodule );
                 ratsnest->Recalculate();
-                GetGalCanvas()->ForceRefresh();
+
+                KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
+                newmodule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                view->Add( newmodule );
+                pcbframe->GetGalCanvas()->ForceRefresh();
             }
         }
         break;
