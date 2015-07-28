@@ -232,6 +232,10 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_cursor = grid.BestDragOrigin( originalCursorPos, item );
                         grid.SetAuxAxes( true, m_cursor );
                     }
+                    else
+                    {
+                        m_cursor = grid.Align( m_cursor );
+                    }
 
                     controls->ForceCursorPosition( true, m_cursor );
                     controls->WarpCursor( m_cursor, true );
