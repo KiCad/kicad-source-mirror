@@ -2316,7 +2316,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
                                       GetChars( CurSource() ), CurLineNumber(), CurOffset() )
                     );
             NeedSYMBOLorNUMBER();
-            if( FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
+            if( m_board && FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
                 THROW_IO_ERROR(
                     wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
                         GetChars( CurSource() ), CurLineNumber(), CurOffset() )
