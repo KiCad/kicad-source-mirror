@@ -65,6 +65,9 @@ wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
     ret.Replace( wxT( "%I" ), in.GetFullPath().GetData(), true );
     ret.Replace( wxT( "%O" ), out.GetFullPath().GetData(), true );
 
+    // Use Unix like notation, which always works
+    ret.Replace( wxT( "\\" ), "/", true );
+
     return ret;
 }
 

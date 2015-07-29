@@ -38,21 +38,6 @@
 #include <erc.h>
 
 
-/* Marker are mainly used to show an ERC error
- * but they could be used to give a specific info
- */
-
-
-const wxChar* NameMarqueurType[] =
-{
-    wxT( "" ),
-    wxT( "ERC" ),
-    wxT( "PCB" ),
-    wxT( "SIMUL" ),
-    wxT( "???" )
-};
-
-
 /********************/
 /* class SCH_MARKER */
 /********************/
@@ -104,7 +89,7 @@ void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     EDA_COLOR_T color = m_Color;
     EDA_COLOR_T tmp   = color;
 
-    if( GetMarkerType() == MARK_ERC )
+    if( GetMarkerType() == MARKER_BASE::MARKER_ERC )
     {
         color = ( GetErrorLevel() == WAR ) ? GetLayerColor( LAYER_ERC_WARN ) :
                                              GetLayerColor( LAYER_ERC_ERR );

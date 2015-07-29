@@ -103,14 +103,15 @@ void DIALOG_ERC::Init()
 
 void DIALOG_ERC::updateMarkerCounts( SCH_SCREENS *screens )
 {
-    int markers = screens->GetMarkerCount();
-    int warnings = screens->GetMarkerCount( WAR );
+    int markers = screens->GetMarkerCount(MARKER_BASE::MARKER_ERC, -1 );
+    int warnings = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC, WAR );
+    int errors = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC, ERR );
 
     wxString num;
     num.Printf( wxT( "%d" ), markers );
     m_TotalErrCount->SetValue( num );
 
-    num.Printf( wxT( "%d" ), markers - warnings );
+    num.Printf( wxT( "%d" ), errors );
     m_LastErrCount->SetValue( num );
 
     num.Printf( wxT( "%d" ), warnings );
@@ -124,7 +125,7 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 {
     SCH_SCREENS ScreenList;
 
-    ScreenList.DeleteAllMarkers( MARK_ERC );
+    ScreenList.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
     updateMarkerCounts( &ScreenList );
 
     m_MarkersList->ClearList();
@@ -364,7 +365,7 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 
             SCH_MARKER* Marker = (SCH_MARKER*) item;
 
-            if( Marker->GetMarkerType() != MARK_ERC )
+            if( Marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
 
             // Add marker without refresh the displayed list:
@@ -450,7 +451,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     SCH_SCREENS screens;
 
     // Erase all previous DRC markers.
-    screens.DeleteAllMarkers( MARK_ERC );
+    screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
@@ -546,7 +547,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
         wxFileDialog dlg( this, _( "ERC File" ), fn.GetPath(), fn.GetFullName(),
                           _( "Electronic rule check file (.erc)|*.erc" ),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

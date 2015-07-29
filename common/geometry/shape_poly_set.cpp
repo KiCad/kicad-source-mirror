@@ -596,11 +596,10 @@ bool SHAPE_POLY_SET::Parse( std::stringstream& aStream )
 const BOX2I SHAPE_POLY_SET::BBox( int aClearance ) const
 {
     BOX2I bb;
-    bool first = true;
 
     for( unsigned i = 0; i < m_polys.size(); i++ )
     {
-        if( first )
+        if( i == 0 )
             bb = m_polys[i][0].BBox();
         else
             bb.Merge( m_polys[i][0].BBox() );

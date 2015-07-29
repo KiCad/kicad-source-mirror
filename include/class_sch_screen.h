@@ -37,6 +37,7 @@
 #include <class_title_block.h>
 #include <class_page_info.h>
 #include <kiway_player.h>
+#include <sch_marker.h>
 
 #include <../eeschema/general.h>
 
@@ -575,17 +576,19 @@ public:
      * the list.
      * @param aMarkerType Type of markers to be deleted.
      */
-    void DeleteAllMarkers( int aMarkerType );
+    void DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType );
 
     /**
      * Function GetMarkerCount
      * returns the number of ERC markers of \a aMarkerType from all of the screens in the list.
      *
-     * @param aMarkerType Indicates the type of marker to count.  A value less then zero
-     *                    indicates all markers are counted.
+     * @param aMarkerType Indicates the type of marker to count. if MARKER_UNSPEC
+     *                    all markers are counted.
+     * @param aSeverity   Indicates the error level of marker to count. -1 to count all markers
+     *                      of the specified type
      * @return int count of the markers found.
      */
-    int GetMarkerCount( int aMarkerType = -1 );
+    int GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType, int aSeverity );
 
 private:
     void AddScreenToList( SCH_SCREEN* aScreen );

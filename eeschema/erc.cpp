@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,8 @@
 #include <sch_marker.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+
+#include <wx/ffile.h>
 
 
 /* ERC tests :
@@ -206,7 +208,7 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                                          ( (SCH_SHEET*) test_item )->GetPosition(),
                                          _( "Duplicate sheet name" ),
                                          ( (SCH_SHEET*) test_item )->GetPosition() );
-                        marker->SetMarkerType( MARK_ERC );
+                        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                         marker->SetErrorLevel( ERR );
                         screen->Append( marker );
                     }
@@ -235,7 +237,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
     marker = new SCH_MARKER();
     marker->SetTimeStamp( GetNewTimeStamp() );
 
-    marker->SetMarkerType( MARK_ERC );
+    marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
     marker->SetErrorLevel( WAR );
     screen = aNetItemRef->m_SheetPath.LastScreen();
     screen->Append( marker );
@@ -508,52 +510,61 @@ int CountPinsInNet( NETLIST_OBJECT_LIST* aList, unsigned aNetStart )
     return count;
 }
 
-
 bool WriteDiagnosticERC( const wxString& aFullFileName )
 {
-    SCH_ITEM*       item;
-    SCH_MARKER*     marker;
-    static FILE*    file;
-    SCH_SHEET_PATH* sheet;
-    wxString        msg;
-    int             count = 0;
+    wxString    msg;
 
-    if( ( file = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
+    wxFFile file( aFullFileName, wxT( "wt" ) );
+
+    if( !file.IsOpened() )
         return false;
 
     msg = _( "ERC report" );
+    msg << wxT(" (") << DateAndTime() << wxT( ", " )
+        << _( "Encoding UTF8" ) << wxT( " )\n" );
 
-    fprintf( file, "%s (%s)\n", TO_UTF8( msg ), TO_UTF8( DateAndTime() ) );
-
+    int err_count = 0;
+    int warn_count = 0;
+    int total_count = 0;
     SCH_SHEET_LIST sheetList;
+    SCH_SHEET_PATH* sheet;
 
     for( sheet = sheetList.GetFirst(); sheet != NULL; sheet = sheetList.GetNext() )
     {
-        msg.Printf( _( "\n***** Sheet %s\n" ), GetChars( sheet->PathHumanReadable() ) );
+        msg << wxString::Format( _( "\n***** Sheet %s\n" ),
+                                 GetChars( sheet->PathHumanReadable() ) );
 
-        fprintf( file, "%s", TO_UTF8( msg ) );
-
-        for( item = sheet->LastDrawList(); item != NULL; item = item->Next() )
+        for( SCH_ITEM* item = sheet->LastDrawList(); item != NULL; item = item->Next() )
         {
             if( item->Type() != SCH_MARKER_T )
                 continue;
 
-            marker = (SCH_MARKER*) item;
+            SCH_MARKER* marker = (SCH_MARKER*) item;
 
-            if( marker->GetMarkerType() != MARK_ERC )
+            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
 
-            if( marker->GetMarkerType() == ERR )
-                count++;
+            total_count++;
 
-            msg = marker->GetReporter().ShowReport();
-            fprintf( file, "%s", TO_UTF8( msg ) );
+            if( marker->GetErrorLevel() == ERR )
+                err_count++;
+
+            if( marker->GetErrorLevel() == WAR )
+                warn_count++;
+
+            msg << marker->GetReporter().ShowReport();
         }
     }
 
-    msg.Printf( _( "\n >> Errors ERC: %d\n" ), count );
-    fprintf( file, "%s", TO_UTF8( msg ) );
-    fclose( file );
+    msg << wxString::Format( _( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ),
+                             total_count, err_count, warn_count );
+
+    // Currently: write report unsing UTF8 (as usual in Kicad).
+    // TODO: see if we can use the current encoding page (mainly for Windows users),
+    // Or other format (HTML?)
+    file.Write( msg );
+
+    // wxFFile dtor will close the file.
 
     return true;
 }
@@ -564,7 +575,7 @@ void TestLabel( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aStar
     unsigned netItemTst = aStartNet;
     int      erc = 1;
 
-    /* Review the list of labels connected to NetItemRef. */
+    // Review the list of labels connected to NetItemRef:
     for( ; ; netItemTst++ )
     {
         if( netItemTst == aNetItemRef )

@@ -34,19 +34,6 @@
 #include <class_marker_base.h>
 
 
-/* Marker are mainly used to show an ERC error
- */
-
-enum TypeMarker {
-    /* Markers type */
-    MARK_UNSPEC,
-    MARK_ERC,
-    MARK_PCB,
-    MARK_SIMUL,
-    MARK_NMAX        /* Lats value: end of list */
-};
-
-
 /* Names for corresponding types of markers: */
 extern const wxChar* NameMarqueurType[];
 

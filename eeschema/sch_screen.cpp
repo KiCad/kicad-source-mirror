@@ -1493,7 +1493,7 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 }
 
 
-void SCH_SCREENS::DeleteAllMarkers( int aMarkerType )
+void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType )
 {
     SCH_ITEM* item;
     SCH_ITEM* nextItem;
@@ -1520,29 +1520,25 @@ void SCH_SCREENS::DeleteAllMarkers( int aMarkerType )
 }
 
 
-int SCH_SCREENS::GetMarkerCount( int aMarkerType )
+int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType, int aSeverity )
 {
-    SCH_ITEM* item;
-    SCH_ITEM* nextItem;
-    SCH_MARKER* marker;
-    SCH_SCREEN* screen;
     int count = 0;
 
-    for( screen = GetFirst(); screen; screen = GetNext() )
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( item = screen->GetDrawItems(); item; item = nextItem )
+        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
         {
-            nextItem = item->Next();
-
             if( item->Type() != SCH_MARKER_T )
                 continue;
 
-            marker = (SCH_MARKER*) item;
+            SCH_MARKER* marker = (SCH_MARKER*) item;
 
-            if( (aMarkerType != -1) && (marker->GetMarkerType() != aMarkerType) )
+            if( ( aMarkerType != MARKER_BASE::MARKER_UNSPEC ) &&
+                ( marker->GetMarkerType() != aMarkerType ) )
                 continue;
 
-            count++;
+            if( aSeverity < 0 || aSeverity == marker->GetErrorLevel() )
+                count++;
         }
     }
 

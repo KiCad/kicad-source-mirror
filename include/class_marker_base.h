@@ -29,12 +29,26 @@
 #include <class_drc_item.h>
 #include <gr_basic.h>
 
+
+/* Marker are mainly used to show an ERC error
+ */
+
+
 class MARKER_BASE
 {
 public:
+    enum TYPEMARKER {   // Marker type: can be used to identify the purpose of the marker
+        MARKER_UNSPEC,
+        MARKER_ERC,
+        MARKER_PCB,
+        MARKER_SIMUL
+    };
+
     wxPoint               m_Pos;                 ///< position of the marker
+
 protected:
-    int                   m_MarkerType;          ///< Can be used as a flag
+    TYPEMARKER            m_MarkerType;          ///< The type of marker (useful to filter markers)
+    int                   m_ErrorLevel;          ///< a flag to specify the severity of the error
     EDA_COLOR_T           m_Color;               ///< color
     EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
                                                  ///< to the position of the shape, used for Hit
@@ -108,34 +122,28 @@ public:
     }
 
     /**
-     * Function to set/get error levels (warning, fatal ..)
-     * this value is stored in m_MarkerType
+     * accessors to set/get error levels (warning, error, fatal error..)
      */
     void SetErrorLevel( int aErrorLevel )
     {
-        m_MarkerType &= ~0xFF00;
-        aErrorLevel  &= 0xFF;
-        m_MarkerType |= aErrorLevel << 8;
+        m_ErrorLevel = aErrorLevel;
     }
 
     int GetErrorLevel() const
     {
-        return (m_MarkerType >> 8) & 0xFF;
+        return m_ErrorLevel;
     }
 
-    /** Functions to set/get marker type (DRC, ERC, or other)
-     * this value is stored in m_MarkerType
+    /** accessors to set/get marker type (DRC, ERC, or other)
      */
-    void SetMarkerType( int aMarkerType )
+    void SetMarkerType( enum TYPEMARKER aMarkerType )
     {
-        m_MarkerType &= ~0xFF;
-        aMarkerType  &= 0xFF;
-        m_MarkerType |= aMarkerType;
+        m_MarkerType = aMarkerType;
     }
 
-    int GetMarkerType() const
+    enum TYPEMARKER GetMarkerType() const
     {
-        return m_MarkerType & 0xFF;
+        return m_MarkerType;
     }
 
     /**

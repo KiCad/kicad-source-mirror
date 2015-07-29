@@ -66,7 +66,8 @@ static const wxPoint MarkerShapeCorners[CORNERS_COUNT] =
 
 void MARKER_BASE::init()
 {
-    m_MarkerType = 0;
+    m_MarkerType = MARKER_UNSPEC;
+    m_ErrorLevel = 0;
     m_Color = RED;
     wxPoint start = MarkerShapeCorners[0];
     wxPoint end = MarkerShapeCorners[0];
