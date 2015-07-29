@@ -375,10 +375,6 @@ wxString GetKicadConfigPath()
 
     cfgpath.AppendDir( wxT( "kicad" ) );
 
-#if !wxCHECK_VERSION( 2, 9, 0 )
-    #define wxS_DIR_DEFAULT  0777
-#endif
-
     if( !cfgpath.DirExists() )
     {
         cfgpath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );

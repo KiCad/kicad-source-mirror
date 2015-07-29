@@ -962,11 +962,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     bool offCenterReq = event.ControlDown() && event.ShiftDown();
     offCenterReq = offCenterReq || m_enableZoomNoCenter;
 
-#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
     int axis = event.GetWheelAxis();
-#else
-    const int axis = 0;
-#endif
 
     // This is a zoom in or out command
     if( event.GetWheelRotation() > 0 )

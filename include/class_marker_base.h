@@ -30,7 +30,7 @@
 #include <gr_basic.h>
 
 
-/* Marker are mainly used to show an ERC error
+/* Marker are mainly used to show a DRC or ERC error or warning
  */
 
 
@@ -43,12 +43,18 @@ public:
         MARKER_PCB,
         MARKER_SIMUL
     };
+    enum MARKER_SEVERITY {  // Severity of the marker: this is the level of error
+        MARKER_SEVERITY_UNSPEC,
+        MARKER_SEVERITY_INFO,
+        MARKER_SEVERITY_WARNING,
+        MARKER_SEVERITY_ERROR
+    };
 
     wxPoint               m_Pos;                 ///< position of the marker
 
 protected:
     TYPEMARKER            m_MarkerType;          ///< The type of marker (useful to filter markers)
-    int                   m_ErrorLevel;          ///< a flag to specify the severity of the error
+    MARKER_SEVERITY       m_ErrorLevel;          ///< Specify the severity of the error
     EDA_COLOR_T           m_Color;               ///< color
     EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
                                                  ///< to the position of the shape, used for Hit
@@ -124,12 +130,12 @@ public:
     /**
      * accessors to set/get error levels (warning, error, fatal error..)
      */
-    void SetErrorLevel( int aErrorLevel )
+    void SetErrorLevel( MARKER_SEVERITY aErrorLevel )
     {
         m_ErrorLevel = aErrorLevel;
     }
 
-    int GetErrorLevel() const
+    MARKER_SEVERITY GetErrorLevel() const
     {
         return m_ErrorLevel;
     }

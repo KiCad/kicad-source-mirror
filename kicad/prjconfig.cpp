@@ -327,14 +327,12 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     m_LeftWin->ReCreateTreePrj();
 
-#ifdef KICAD_USE_FILES_WATCHER
     // Rebuild the list of watched paths.
     // however this is possible only when the main loop event handler is running,
     // so we use it to run the rebuild function.
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_INIT_WATCHED_PATHS );
 
     wxPostEvent( this, cmd );
-#endif
 
     PrintPrjInfo();
 }

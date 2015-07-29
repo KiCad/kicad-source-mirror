@@ -37,6 +37,12 @@
 #include <wx/process.h>
 
 
+/**
+ * @note Do we really need these defined?
+ */
+#define UNIX_STRING_DIR_SEP wxT( "/" )
+#define WIN_STRING_DIR_SEP  wxT( "\\" )
+
 /* Forward class declarations. */
 class EDA_LIST_DIALOG;
 

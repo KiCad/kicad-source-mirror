@@ -584,11 +584,12 @@ public:
      *
      * @param aMarkerType Indicates the type of marker to count. if MARKER_UNSPEC
      *                    all markers are counted.
-     * @param aSeverity   Indicates the error level of marker to count. -1 to count all markers
-     *                      of the specified type
+     * @param aSeverity   Indicates the error level of marker to count.
+     *                  useMARKER_SEVERITY_UNSPEC to count all markersof the specified type
      * @return int count of the markers found.
      */
-    int GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType, int aSeverity );
+    int GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
+                        enum MARKER_BASE::MARKER_SEVERITY aSeverity );
 
 private:
     void AddScreenToList( SCH_SCREEN* aScreen );

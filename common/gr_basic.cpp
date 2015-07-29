@@ -255,15 +255,9 @@ void GRSetBrush( wxDC* DC, EDA_COLOR_T Color, bool fill )
         brush.SetColour( MakeColour( Color ) );
 
         if( fill )
-#if wxCHECK_VERSION( 3, 0, 0 )
             brush.SetStyle( wxBRUSHSTYLE_SOLID );
         else
             brush.SetStyle( wxBRUSHSTYLE_TRANSPARENT );
-#else
-            brush.SetStyle( wxSOLID );
-        else
-            brush.SetStyle( wxTRANSPARENT );
-#endif
 
         DC->SetBrush( brush );
 

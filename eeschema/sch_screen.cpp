@@ -1520,7 +1520,8 @@ void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType )
 }
 
 
-int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType, int aSeverity )
+int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
+                                 enum MARKER_BASE::MARKER_SEVERITY aSeverity )
 {
     int count = 0;
 
@@ -1537,7 +1538,8 @@ int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType, int a
                 ( marker->GetMarkerType() != aMarkerType ) )
                 continue;
 
-            if( aSeverity < 0 || aSeverity == marker->GetErrorLevel() )
+            if( aSeverity == MARKER_BASE::MARKER_SEVERITY_UNSPEC ||
+                aSeverity == marker->GetErrorLevel() )
                 count++;
         }
     }

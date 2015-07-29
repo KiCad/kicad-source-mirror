@@ -30,10 +30,8 @@
 #define TREEPRJ_FRAME_H
 
 #include <kicad.h>
-
-#ifdef KICAD_USE_FILES_WATCHER
 #include <wx/fswatcher.h>
-#endif
+
 
 class TREEPROJECT_ITEM;
 
@@ -50,10 +48,7 @@ public:
 private:
     wxTreeItemId            m_root;
     std::vector<wxString>   m_filters;
-
-#ifdef KICAD_USE_FILES_WATCHER
     wxFileSystemWatcher*    m_watcher; // file system watcher (since wxWidgets 2.9.2)
-#endif
 
 public:
     TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent );
@@ -64,7 +59,6 @@ public:
      */
     void ReCreateTreePrj();
 
-#ifdef KICAD_USE_FILES_WATCHER
     /**
      * Reinit the watched paths
      * Should be called after opening a new project to
@@ -72,7 +66,6 @@ public:
      * Should be called *atfer* the main loop event handler is started
      */
     void FileWatcherReset();
-#endif
 
 protected:
     static wxString                 GetFileExt( TreeFileType type );
@@ -178,14 +171,12 @@ private:
      */
     wxTreeItemId findSubdirTreeItem( const wxString& aSubDir );
 
-#ifdef KICAD_USE_FILES_WATCHER
     /**
      * called when a file or directory is modified/created/deleted
      * The tree project is modified when a file or directory
      * is created/deleted/renamed to reflect the file change
      */
     void OnFileSystemEvent( wxFileSystemWatcherEvent& event );
-#endif
 
     DECLARE_EVENT_TABLE()
 };

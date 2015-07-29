@@ -209,7 +209,7 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                                          _( "Duplicate sheet name" ),
                                          ( (SCH_SHEET*) test_item )->GetPosition() );
                         marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                        marker->SetErrorLevel( ERR );
+                        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
                         screen->Append( marker );
                     }
 
@@ -238,7 +238,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
     marker->SetTimeStamp( GetNewTimeStamp() );
 
     marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-    marker->SetErrorLevel( WAR );
+    marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
     screen = aNetItemRef->m_SheetPath.LastScreen();
     screen->Append( marker );
 
@@ -329,7 +329,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
         if( aDiag == ERR )
         {
-            marker->SetErrorLevel( ERR );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
             errortype = ERCE_PIN_TO_PIN_ERROR;
         }
 
@@ -546,10 +546,10 @@ bool WriteDiagnosticERC( const wxString& aFullFileName )
 
             total_count++;
 
-            if( marker->GetErrorLevel() == ERR )
+            if( marker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
                 err_count++;
 
-            if( marker->GetErrorLevel() == WAR )
+            if( marker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_WARNING )
                 warn_count++;
 
             msg << marker->GetReporter().ShowReport();

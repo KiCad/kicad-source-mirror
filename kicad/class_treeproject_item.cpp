@@ -123,9 +123,7 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
         return false;
     }
 
-#ifndef KICAD_USE_FILES_WATCHER
     SetFileName( newFile );
-#endif
 
     return true;
 }

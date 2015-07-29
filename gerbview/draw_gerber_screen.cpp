@@ -166,12 +166,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     // artifacts can happen with negative items or negative images
 
     wxColour bgColor = MakeColour( gerbFrame->GetDrawBgColor() );
-
-#if wxCHECK_VERSION( 3, 0, 0 )
     wxBrush  bgBrush( bgColor, wxBRUSHSTYLE_SOLID );
-#else
-    wxBrush  bgBrush( bgColor, wxSOLID );
-#endif
 
     int      bitmapWidth, bitmapHeight;
     wxDC*    plotDC = aDC;

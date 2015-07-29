@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,12 +39,6 @@
 
 #include <id.h>
 #include <wxstruct.h>
-
-// With a recent wxWidget, we can use the wxFileSystemWatcherEvent
-// to monitor files add/remove/rename in tree project
-#if wxCHECK_VERSION( 2, 9, 4  )
- #define KICAD_USE_FILES_WATCHER
-#endif
 
 #define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
 
@@ -256,13 +250,12 @@ public:
         void OnTerminate( int pid, int status );
     };
 
-#ifdef KICAD_USE_FILES_WATCHER
     /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS
      * rebuild the list of wahtched paths
      */
     void OnChangeWatchedPaths(wxCommandEvent& aEvent );
-#endif
+
 
     void SetProjectFileName( const wxString& aFullProjectProFileName );
     const wxString GetProjectFileName();

@@ -193,15 +193,9 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
 
         iconDC.SetPen( *wxBLACK_PEN );
         ColorSetBrush( &brush, buttcolor );
-
-#if wxCHECK_VERSION( 3, 0, 0 )
         brush.SetStyle( wxBRUSHSTYLE_SOLID );
-#else
-        brush.SetStyle( wxSOLID );
-#endif
 
         iconDC.SetBrush( brush );
-
         iconDC.SetBackground( *wxGREY_BRUSH );
         iconDC.Clear();
         iconDC.DrawRoundedRectangle( 0, 0, w, h, (double) h / 3 );

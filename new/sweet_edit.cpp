@@ -171,12 +171,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
         wxCMD_LINE_PARAM,
         NULL,
         NULL,
-
-#if wxCHECK_VERSION( 2, 9, 0 )
         "filename of libtable",
-#else
-         wxT( "filename of libtable" ),
-#endif
          wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE
     },
     { wxCMD_LINE_NONE }

@@ -57,12 +57,7 @@ void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
     // Prepare Bitmap
     bmpDC.SelectObject( aLayerbmp );
     brush.SetColour( MakeColour( GetLayerColor( aLayer ) ) );
-
-#if wxCHECK_VERSION( 3, 0, 0 )
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
-#else
-    brush.SetStyle( wxSOLID );
-#endif
 
     bmpDC.SetBrush( brush );
     bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );

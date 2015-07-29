@@ -44,11 +44,11 @@
 
 // Default marquer shape:
 const int      M_SHAPE_SCALE = 6;     // default scaling factor for MarkerShapeCorners coordinates
-const unsigned CORNERS_COUNT = 8;
-/* corners of the default shape
+/* The graphic shape of markers is a polygon.
+ * MarkerShapeCorners contains the coordinates of corners of the polygonal default shape
  * actual coordinates are these values * .m_ScalingFactor
 */
-static const wxPoint MarkerShapeCorners[CORNERS_COUNT] =
+static const wxPoint MarkerShapeCorners[] =
 {
     wxPoint( 0,  0 ),
     wxPoint( 8,  1 ),
@@ -59,6 +59,7 @@ static const wxPoint MarkerShapeCorners[CORNERS_COUNT] =
     wxPoint( 3,  4 ),
     wxPoint( 1,  8 )
 };
+const unsigned CORNERS_COUNT = DIM( MarkerShapeCorners );
 
 /*******************/
 /* Classe MARKER_BASE */
@@ -67,7 +68,7 @@ static const wxPoint MarkerShapeCorners[CORNERS_COUNT] =
 void MARKER_BASE::init()
 {
     m_MarkerType = MARKER_UNSPEC;
-    m_ErrorLevel = 0;
+    m_ErrorLevel = MARKER_SEVERITY_UNSPEC;
     m_Color = RED;
     wxPoint start = MarkerShapeCorners[0];
     wxPoint end = MarkerShapeCorners[0];

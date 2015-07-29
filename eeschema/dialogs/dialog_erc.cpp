@@ -103,9 +103,12 @@ void DIALOG_ERC::Init()
 
 void DIALOG_ERC::updateMarkerCounts( SCH_SCREENS *screens )
 {
-    int markers = screens->GetMarkerCount(MARKER_BASE::MARKER_ERC, -1 );
-    int warnings = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC, WAR );
-    int errors = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC, ERR );
+    int markers = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC,
+                                           MARKER_BASE::MARKER_SEVERITY_UNSPEC );
+    int warnings = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC,
+                                            MARKER_BASE::MARKER_SEVERITY_WARNING );
+    int errors = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC,
+                                          MARKER_BASE::MARKER_SEVERITY_ERROR );
 
     wxString num;
     num.Printf( wxT( "%d" ), markers );

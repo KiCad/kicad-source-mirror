@@ -310,7 +310,7 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName
         return;
     }
 
-    cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
+    cfg->SetPath( wxT( "/" ) );
 
     cfg->Write( wxT( "update" ), DateAndTime() );
 
@@ -324,11 +324,11 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName
     cfg->SetPath( aGroupName );
     cfg->Write( wxT( "version" ), CONFIG_VERSION );
 
-    cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
+    cfg->SetPath( wxT( "/" ) );
 
     wxConfigSaveParams( cfg.get(), aParams, aGroupName );
 
-    cfg->SetPath( UNIX_STRING_DIR_SEP );
+    cfg->SetPath( wxT( "/" ) );
 
     // cfg is deleted here by std::auto_ptr, that saves the *.pro file to disk
 }

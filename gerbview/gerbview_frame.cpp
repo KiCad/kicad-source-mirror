@@ -452,13 +452,8 @@ void GERBVIEW_FRAME::Liste_D_Codes()
         }
     }
 
-#if wxCHECK_VERSION( 2, 9, 4 )
     wxSingleChoiceDialog    dlg( this, wxEmptyString, _( "D Codes" ), list, (void**) NULL,
                                  wxCHOICEDLG_STYLE & ~wxCANCEL );
-#else
-    wxSingleChoiceDialog    dlg( this, wxEmptyString, _( "D Codes" ), list, (char**) NULL,
-                                 wxCHOICEDLG_STYLE & ~wxCANCEL );
-#endif
 
     dlg.ShowModal();
 }

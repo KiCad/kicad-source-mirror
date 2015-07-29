@@ -74,9 +74,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
 
     // Special functions
-#ifdef KICAD_USE_FILES_WATCHER
     EVT_MENU( ID_INIT_WATCHED_PATHS, KICAD_MANAGER_FRAME::OnChangeWatchedPaths )
-#endif
 
     // Button events (in command frame), and menu events equivalent to buttons
     EVT_BUTTON( ID_TO_SCH, KICAD_MANAGER_FRAME::OnRunEeschema )
