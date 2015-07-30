@@ -525,7 +525,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 
     if( containsLocked )
     {
-        if ( IsOK( m_frame, _( "Selection contains locked items. Do you want to continue?" ) ) )
+        if( IsOK( m_frame, _( "Selection contains locked items. Do you want to continue?" ) ) )
         {
             m_locked = false;
             return SELECTION_LOCK_OVERRIDE;
@@ -1079,7 +1079,6 @@ static double calcMinArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
         BOARD_ITEM* item = aCollector[i];
         if( item->Type() == aType )
             best = std::min( best, calcArea( item ) );
-
     }
 
     return best;
@@ -1094,8 +1093,7 @@ static double calcMaxArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
     {
         BOARD_ITEM* item = aCollector[i];
         if( item->Type() == aType )
-            best = std::max(best, calcArea( item ) );
-
+            best = std::max( best, calcArea( item ) );
     }
 
     return best;
@@ -1104,9 +1102,9 @@ static double calcMaxArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
 
 double calcRatio( double a, double b )
 {
-    if ( a == 0.0 && b == 0.0 )
+    if( a == 0.0 && b == 0.0 )
         return 1.0;
-    if ( b == 0.0 )
+    if( b == 0.0 )
         return 10000000.0; // something arbitrarily big for the moment
 
     return a / b;
@@ -1183,9 +1181,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                         case PCB_MODULE_T:
                             if( areaRatio > textToFeatureMinRatio &&
                                     !txt->GetParent()->ViewBBox().Contains( txt->ViewBBox() ) )
-                            {
                                 rejected.insert( txt );
-                            }
                             break;
                         default:
                             break;
@@ -1209,9 +1205,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                     double normalizedArea = calcRatio( calcArea( mod ), maxArea );
 
                     if( normalizedArea > footprintAreaRatio )
-                    {
                         rejected.insert( mod );
-                    }
                 }
             }
         }
@@ -1255,7 +1249,8 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                         if( track->GetNetCode() != via->GetNetCode() )
                             continue;
 
-                        double lenRatio = (double) ( track->GetLength() + track->GetWidth() ) / (double) via->GetWidth();
+                        double lenRatio = (double) ( track->GetLength() + track->GetWidth() ) /
+                                          (double) via->GetWidth();
 
                         if( lenRatio > trackViaLengthRatio )
                             rejected.insert( track );
@@ -1274,27 +1269,29 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         double maxArea = 0.0;
 
         for( int i = 0; i < aCollector.GetCount(); ++i )
-            if ( TRACK *track = dyn_cast<TRACK*> ( aCollector[i] ) )
+        {
+            if( TRACK* track = dyn_cast<TRACK*> ( aCollector[i] ) )
             {
                 maxLength = std::max( track->GetLength(), maxLength );
-                maxLength = std::max( (double)track->GetWidth(), maxLength );
+                maxLength = std::max( (double) track->GetWidth(), maxLength );
 
-                minLength = std::min( std::max ( track->GetLength(), (double)track->GetWidth() ), minLength );
+                minLength = std::min( std::max( track->GetLength(), (double)track->GetWidth() ), minLength );
 
                 double area =  ( track->GetLength() + track->GetWidth() * track->GetWidth() );
                 maxArea = std::max(area, maxArea);
             }
+        }
 
-        if( maxLength > 0.0 && minLength/maxLength < trackTrackLengthRatio && nTracks > 1 )
+        if( maxLength > 0.0 && minLength / maxLength < trackTrackLengthRatio && nTracks > 1 )
         {
             for( int i = 0; i < aCollector.GetCount(); ++i )
              {
                 if( TRACK* track = dyn_cast<TRACK*>( aCollector[i] ) )
                 {
-                    double ratio = std::max( (double) track->GetWidth(), track->GetLength()) / maxLength;
+                    double ratio = std::max( (double) track->GetWidth(), track->GetLength() ) / maxLength;
 
                     if( ratio > trackTrackLengthRatio )
-                        rejected.insert( track) ;
+                        rejected.insert( track );
                 }
             }
         }
@@ -1306,10 +1303,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                 double ratio = maxArea / mod->GetFootprintRect().GetArea();
 
                 if( ratio < modulePadMinCoverRatio )
-                {
-                    //printf("rejectModule\n");
                     rejected.insert( mod );
-                }
             }
         }
     }
@@ -1350,9 +1344,7 @@ bool SELECTION_TOOL::SanitizeSelection()
 
                 // case 2: multi-item selection contains both the module and its pads - remove the pads
                 if( mod && m_selection.items.FindItem( mod ) >= 0 )
-                {
                     rejected.insert( item );
-                }
             }
         }
     }
