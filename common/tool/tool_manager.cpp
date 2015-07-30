@@ -598,6 +598,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
             st->pendingWait = true;
             st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
 
+            // Store the menu pointer in case it is changed by the TOOL when handling menu events
             CONTEXT_MENU* m = st->contextMenu;
 
             if( st->contextMenuTrigger == CMENU_NOW )
@@ -610,7 +611,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
             m_viewControls->ForceCursorPosition( true, m_viewControls->GetCursorPosition() );
 
             // Run update handlers
-            st->contextMenu->UpdateAll();
+            m->UpdateAll();
 
             boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *m ) );
             GetEditFrame()->PopupMenu( menu.get() );

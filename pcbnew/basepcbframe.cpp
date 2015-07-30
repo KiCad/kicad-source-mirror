@@ -509,7 +509,7 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {
-        if( zoom == GetScreen()->m_ZoomList[i] )
+        if( std::fabs( zoom - GetScreen()->m_ZoomList[i] ) < 1e-6 )
         {
             current = i + 1;
             break;

@@ -67,5 +67,5 @@ void ZOOM_MENU::Update()
     const std::vector<double>& zoomList = m_parent->GetScreen()->m_ZoomList;
 
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
-        Check( ID_POPUP_ZOOM_LEVEL_START + i, zoomList[i] == zoom );
+        Check( ID_POPUP_ZOOM_LEVEL_START + i, std::fabs( zoomList[i] - zoom ) < 1e-6 );
 }
