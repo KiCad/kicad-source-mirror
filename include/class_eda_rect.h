@@ -204,6 +204,14 @@ public:
     double GetArea() const;
 
     /**
+     * Function Common
+     * returns the area that is common with another rectangle.
+     * @param aRect is the rectangle to find the common area with.
+     * @return The common area rect or 0-sized rectangle if there is no intersection.
+     */
+    EDA_RECT Common( const EDA_RECT& aRect ) const;
+
+    /**
      * Function GetBoundingBoxRotated
      * @return the bounding box of this, after rotation
      * @param aAngle = the rotation angle in 0.1 deg.

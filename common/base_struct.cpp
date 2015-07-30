@@ -530,6 +530,31 @@ double EDA_RECT::GetArea() const
     return (double) GetWidth() * (double) GetHeight();
 }
 
+
+EDA_RECT EDA_RECT::Common( const EDA_RECT& aRect ) const
+{
+    EDA_RECT r;
+
+    if( Intersects( aRect ) )
+    {
+        wxPoint originA( std::min( GetOrigin().x, GetEnd().x ),
+                         std::min( GetOrigin().y, GetEnd().y ) );
+        wxPoint originB( std::min( aRect.GetOrigin().x, aRect.GetEnd().x ),
+                         std::min( aRect.GetOrigin().y, aRect.GetEnd().y ) );
+        wxPoint endA( std::max( GetOrigin().x, GetEnd().x ),
+                      std::max( GetOrigin().y, GetEnd().y ) );
+        wxPoint endB( std::max( aRect.GetOrigin().x, aRect.GetEnd().x ),
+                      std::max( aRect.GetOrigin().y, aRect.GetEnd().y ) );
+
+
+        r.SetOrigin( wxPoint( std::max( originA.x, originB.x ), std::max( originA.y, originB.y ) ) );
+        r.SetEnd   ( wxPoint( std::min( endA.x, endB.x ),       std::min( endA.y, endB.y ) ) );
+    }
+
+    return r;
+}
+
+
 /* Calculate the bounding box of this, when rotated
  */
 const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )

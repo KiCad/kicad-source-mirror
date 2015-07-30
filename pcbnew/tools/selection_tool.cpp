@@ -1048,22 +1048,24 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
-static double calcArea( BOARD_ITEM* aItem )
+static EDA_RECT getRect( const BOARD_ITEM* aItem )
 {
-    switch( aItem -> Type() )
+    if( aItem->Type() == PCB_MODULE_T )
+        return static_cast<const MODULE*>( aItem )->GetFootprintRect();
+
+    return aItem->GetBoundingBox();
+}
+
+
+static double calcArea( const BOARD_ITEM* aItem )
+{
+    if( aItem->Type() == PCB_TRACE_T )
     {
-        case PCB_MODULE_T:
-            return static_cast <MODULE*>( aItem )->GetFootprintRect().GetArea();
-
-        case PCB_TRACE_T:
-        {
-            TRACK* t = static_cast<TRACK*>( aItem );
-            return ( t->GetWidth() + t->GetLength() ) * t->GetWidth();
-        }
-
-        default:
-            return aItem->GetBoundingBox().GetArea();
+        const TRACK* t = static_cast<const TRACK*>( aItem );
+        return ( t->GetWidth() + t->GetLength() ) * t->GetWidth();
     }
+
+    return getRect( aItem ).GetArea();
 }
 
 
@@ -1100,6 +1102,12 @@ static double calcMaxArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
 }
 
 
+static inline double calcCommonArea( const BOARD_ITEM* aItem, const BOARD_ITEM* aOther )
+{
+    return getRect( aItem ).Common( getRect( aOther ) ).GetArea();
+}
+
+
 double calcRatio( double a, double b )
 {
     if( a == 0.0 && b == 0.0 )
@@ -1123,6 +1131,10 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
     const double trackTrackLengthRatio = 0.3;
     const double textToFeatureMinRatio = 0.2;
     const double textToFootprintMinRatio = 0.4;
+    // If the common area of two compared items is above the following threshold, they cannot
+    // be rejected (it means they overlap and it might be hard to pick one by selecting
+    // its unique area).
+    const double commonAreaRatio = 0.6;
 
     LAYER_ID actLayer = m_frame->GetActiveLayer();
 
@@ -1164,13 +1176,19 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
 
                 for( int j = 0; j < aCollector.GetCount(); ++j )
                 {
-                    BOARD_ITEM* item = aCollector[j];
-                    double areaRatio = calcRatio( textArea, calcArea( item ) );
+                    if( i == j )
+                        continue;
 
-                    if( item->Type() == PCB_MODULE_T && areaRatio < textToFootprintMinRatio )
-                    {
+                    BOARD_ITEM* item = aCollector[j];
+                    double itemArea = calcArea( item );
+                    double areaRatio = calcRatio( textArea, itemArea );
+                    double commonArea = calcCommonArea( txt, item );
+                    double itemCommonRatio = calcRatio( commonArea, itemArea );
+                    double txtCommonRatio = calcRatio( commonArea, textArea );
+
+                    if( item->Type() == PCB_MODULE_T && areaRatio < textToFootprintMinRatio &&
+                            itemCommonRatio < commonAreaRatio )
                         rejected.insert( item );
-                    }
 
                     switch( item->Type() )
                     {
@@ -1179,8 +1197,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                         case PCB_LINE_T:
                         case PCB_VIA_T:
                         case PCB_MODULE_T:
-                            if( areaRatio > textToFeatureMinRatio &&
-                                    !txt->GetParent()->ViewBBox().Contains( txt->ViewBBox() ) )
+                            if( areaRatio > textToFeatureMinRatio && txtCommonRatio < commonAreaRatio )
                                 rejected.insert( txt );
                             break;
                         default:
@@ -1235,6 +1252,9 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
 
                 for( int j = 0; j < aCollector.GetCount(); ++j )
                 {
+                    if( i == j )
+                        continue;
+
                     BOARD_ITEM* item = aCollector[j];
                     double areaRatio = calcRatio( viaArea, calcArea( item ) );
 
