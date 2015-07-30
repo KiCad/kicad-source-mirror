@@ -136,7 +136,7 @@ bool SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aAllow
             if( netcode == NETINFO_LIST::UNCONNECTED && !aAllowUnconnected )
                 return false;
         }
-        else if( netcode != item->GetNetCode() )
+        else if( netcode != current_netcode )
         {
             return false;
         }

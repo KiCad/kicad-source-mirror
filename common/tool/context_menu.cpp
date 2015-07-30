@@ -182,7 +182,15 @@ void CONTEXT_MENU::Clear()
 
 void CONTEXT_MENU::UpdateAll()
 {
-    m_update_handler();
+    try
+    {
+        m_update_handler();
+    }
+    catch( std::exception& e )
+    {
+        std::cerr << "CONTEXT_MENU error running update handler: " << e.what() << std::endl;
+    }
+
     updateHotKeys();
 
     runOnSubmenus( boost::bind( &CONTEXT_MENU::UpdateAll, _1 ) );

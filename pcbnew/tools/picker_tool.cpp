@@ -54,7 +54,17 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             m_picked = controls->GetCursorPosition();
 
             if( m_clickHandler )
-                getNext = (*m_clickHandler)( *m_picked );
+            {
+                try
+                {
+                    getNext = (*m_clickHandler)( *m_picked );
+                }
+                catch( std::exception& e )
+                {
+                    std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
+                    break;
+                }
+            }
 
             if( !getNext )
                 break;
