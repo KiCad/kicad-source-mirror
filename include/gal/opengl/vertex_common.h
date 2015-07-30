@@ -32,6 +32,8 @@
 
 #include <GL/glew.h>
 
+#include <cstddef>
+
 namespace KIGFX
 {
 // Possible types of shaders
