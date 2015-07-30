@@ -435,7 +435,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 
     const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
 
-    if( dlgResult != wxID_OK || m_board->m_Modules == NULL || list.empty() )
+    if( dlgResult != wxID_OK || list.empty() )
         return 0;
 
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
