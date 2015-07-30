@@ -613,9 +613,8 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode, int aN
     // Sort by the distance from aNode
     closest.sort( boost::bind( sortDistance, boost::cref( aNode ), _1, _2 ) );
 
-    // Remove the first node (==aNode), as it is surely located within the smallest distance
-    assert( closest.front() == aNode );
-    closest.pop_front();
+    // aNode should not be returned in the results
+    closest.remove( aNode );
 
     // Trim the result to the asked size
     if( aNumber > 0 )
@@ -638,9 +637,8 @@ std::list<RN_NODE_PTR> RN_NET::GetClosestNodes( const RN_NODE_PTR& aNode,
     // Sort by the distance from aNode
     closest.sort( boost::bind( sortDistance, boost::cref( aNode ), _1, _2 ) );
 
-    // Remove the first node (==aNode), as it is surely located within the smallest distance
-    assert( closest.front() == aNode );
-    closest.pop_front();
+    // aNode should not be returned in the results
+    closest.remove( aNode );
 
     // Filter out by condition
     std::remove_if( closest.begin(), closest.end(), aFilter );
