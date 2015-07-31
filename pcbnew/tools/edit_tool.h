@@ -178,8 +178,12 @@ private:
     ///> the cursor or displays a disambiguation menu if there are multpile items.
     bool hoverSelection( const SELECTION& aSelection, bool aSanitize = true );
 
-    ///> Updates view with the changes in the list.
-    void processChanges( const PICKED_ITEMS_LIST* aList );
+    ///> Processes the current undo buffer since the last change. If the last change does not occur
+    ///> in the current buffer, then the whole list is processed.
+    void processUndoBuffer( const PICKED_ITEMS_LIST* aLastChange );
+
+    ///> Updates items stored in the list.
+    void processPickedList( const PICKED_ITEMS_LIST* aList );
 
     /**
      * Increments the undo inhibit counter. This will indicate that tools

@@ -391,22 +391,23 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         STATUS_FLAGS flags = item->GetFlags();
         item->ClearFlags();
 
-        // It is necessary to determine if anything has changed
-        unsigned int oldSize = undoList.size();
+        // It is necessary to determine if anything has changed, so store the current undo save point
+        PICKED_ITEMS_LIST* undoSavePoint = undoList.empty() ? NULL : undoList.back();
 
         // Display properties dialog provided by the legacy canvas frame
         editFrame->OnEditItemRequest( NULL, item );
 
-        for( unsigned int i = oldSize; i < undoList.size(); ++i )
-            processChanges( undoList[i] );
-
-        if( oldSize != undoList.size() )        // Something has changed
+        if( !undoList.empty() && undoList.back() != undoSavePoint )      // Undo buffer has changed
         {
-            item->ViewUpdate();
+            // Process changes stored after undoSavePoint
+            processUndoBuffer( undoSavePoint );
 
+            // Update the modified item
+            item->ViewUpdate();
             RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
             ratsnest->Recalculate();
 
+            // TODO OBSERVER! I miss you so much..
             m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
         }
 
@@ -1039,8 +1040,31 @@ bool EDIT_TOOL::hoverSelection( const SELECTION& aSelection, bool aSanitize )
     return !aSelection.Empty();
 }
 
+void EDIT_TOOL::processUndoBuffer( const PICKED_ITEMS_LIST* aLastChange )
+{
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    const std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
+    bool process = false;
 
-void EDIT_TOOL::processChanges( const PICKED_ITEMS_LIST* aList )
+    BOOST_FOREACH( const PICKED_ITEMS_LIST* list, undoList )
+    {
+        if( process )
+            processPickedList( list );
+        else if( list == aLastChange )
+            process = true;     // Start processing starting with the next undo save point
+    }
+
+    // If we could not find the requested save point in the current undo list
+    // then the undo list must have been completely altered, so process everything
+    if( !process )
+    {
+        BOOST_FOREACH( const PICKED_ITEMS_LIST* list, undoList )
+            processPickedList( list );
+    }
+}
+
+
+void EDIT_TOOL::processPickedList( const PICKED_ITEMS_LIST* aList )
 {
     KIGFX::VIEW* view = getView();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
