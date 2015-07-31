@@ -485,10 +485,10 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         return;
 
     if( module->Reference().IsSelected() )
-        module->Reference().MoveTransformWithModule( offset );
+        module->Reference().Move( offset );
 
     if( module->Value().IsSelected() )
-        module->Value().MoveTransformWithModule( offset );
+        module->Value().Move( offset );
 
     D_PAD* pad = module->Pads();
 
@@ -511,7 +511,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            static_cast<TEXTE_MODULE*>( item )->MoveTransformWithModule( offset );
+            static_cast<TEXTE_MODULE*>( item )->Move( offset );
             break;
 
         case PCB_MODULE_EDGE_T:
@@ -588,10 +588,10 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         return;
 
     if( module->Reference().IsSelected() || force_all )
-        module->Reference().MirrorTransformWithModule( offset.x );
+        module->Reference().Mirror( offset, false );
 
     if( module->Value().IsSelected() || force_all )
-        module->Value().MirrorTransformWithModule( offset.x );
+        module->Value().Mirror( offset, false );
 
     for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
     {
@@ -625,25 +625,11 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            {
-                EDGE_MODULE* em = (EDGE_MODULE*) item;
-
-                tmp = em->GetStart0();
-                SETMIRROR( tmp.x );
-                em->SetStart0( tmp );
-                em->SetStartX( tmp.x );
-
-                tmp = em->GetEnd0();
-                SETMIRROR( tmp.x );
-                em->SetEnd0( tmp );
-                em->SetEndX( tmp.x );
-
-                em->SetAngle( -em->GetAngle() );
-            }
+            ((EDGE_MODULE*) item)->Mirror( offset, false );
             break;
 
         case PCB_MODULE_TEXT_T:
-            static_cast<TEXTE_MODULE*>( item )->MirrorTransformWithModule( offset.x );
+            static_cast<TEXTE_MODULE*>( item )->Mirror( offset, false );
             break;
 
         default:
@@ -667,10 +653,10 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         return;
 
     if( module->Reference().IsSelected() || force_all )
-        module->Reference().RotateTransformWithModule( offset, 900 );
+        module->Reference().Rotate( offset, 900 );
 
     if( module->Value().IsSelected() || force_all )
-        module->Value().RotateTransformWithModule( offset, 900 );
+        module->Value().Rotate( offset, 900 );
 
     for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
     {
@@ -693,23 +679,11 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-        {
-            EDGE_MODULE* em = (EDGE_MODULE*) item;
-
-            wxPoint tmp = em->GetStart0();
-            ROTATE( tmp );
-            em->SetStart0( tmp );
-
-            tmp = em->GetEnd0();
-            ROTATE( tmp );
-            em->SetEnd0( tmp );
-
-            em->SetDrawCoord();
-        }
-        break;
+            ((EDGE_MODULE*) item)->Rotate( offset, 900 );
+            break;
 
         case PCB_MODULE_TEXT_T:
-            static_cast<TEXTE_MODULE*>( item )->RotateTransformWithModule( offset, 900 );
+            static_cast<TEXTE_MODULE*>( item )->Rotate( offset, 900 );
             break;
 
         default:
@@ -754,14 +728,14 @@ void MoveMarkedItemsExactly( MODULE* module, const wxPoint& centre,
 
     if( module->Reference().IsSelected() || force_all )
     {
-        module->Reference().RotateTransformWithModule( centre, rotation );
-        module->Reference().MoveTransformWithModule( translation );
+        module->Reference().Rotate( centre, rotation );
+        module->Reference().Move( translation );
     }
 
     if( module->Value().IsSelected() || force_all )
     {
-        module->Value().RotateTransformWithModule( centre, rotation );
-        module->Value().MoveTransformWithModule( translation );
+        module->Value().Rotate( centre, rotation );
+        module->Value().Move( translation );
     }
 
     D_PAD* pad = module->Pads();
@@ -797,8 +771,8 @@ void MoveMarkedItemsExactly( MODULE* module, const wxPoint& centre,
         {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
 
-            text->RotateTransformWithModule( centre, rotation );
-            text->MoveTransformWithModule( translation );
+            text->Rotate( centre, rotation );
+            text->Move( translation );
             break;
         }
         case PCB_MODULE_EDGE_T:

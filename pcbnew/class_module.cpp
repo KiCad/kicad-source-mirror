@@ -945,9 +945,7 @@ void MODULE::Flip( const wxPoint& aCentre )
 {
     // Move module to its final position:
     wxPoint finalPos = m_Pos;
-
-    finalPos.y  = aCentre.y - ( finalPos.y - aCentre.y );     /// Mirror the Y position
-
+    MIRROR( finalPos.y, aCentre.y );     /// Mirror the Y position
     SetPosition( finalPos );
 
     // Flip layer
@@ -961,11 +959,9 @@ void MODULE::Flip( const wxPoint& aCentre )
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
         pad->Flip( m_Pos );
 
-    // Mirror reference.
-    m_Reference->FlipWithModule( m_Pos.y );
-
-    // Mirror value.
-    m_Value->FlipWithModule( m_Pos.y );
+    // Mirror reference and value.
+    m_Reference->Flip( m_Pos );
+    m_Value->Flip( m_Pos );
 
     // Reverse mirror module graphics and texts.
     for( EDA_ITEM* item = m_Drawings; item; item = item->Next() )
@@ -977,7 +973,7 @@ void MODULE::Flip( const wxPoint& aCentre )
             break;
 
         case PCB_MODULE_TEXT_T:
-            static_cast<TEXTE_MODULE*>( item )->FlipWithModule( m_Pos.y );
+            static_cast<TEXTE_MODULE*>( item )->Flip( m_Pos );
             break;
 
         default:

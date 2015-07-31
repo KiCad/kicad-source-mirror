@@ -84,28 +84,21 @@ public:
         SetLocalCoord();
     }
 
-    void Move( const wxPoint& aMoveVector )
-    {
-        m_Pos += aMoveVector;
-        SetLocalCoord();
-    }
-
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
-
-    void Flip( const wxPoint& aCentre );
-
-    /// Rotate text during module rotation transform, in footprint editor
-    void RotateTransformWithModule( const wxPoint& aOffset, double aAngle );
+    /// Rotate text, in footprint editor
+    /// (for instance in footprint rotation transform)
+    void Rotate( const wxPoint& aOffset, double aAngle );
 
     /// Flip entity during module flip
-    void FlipWithModule( int aOffset );
+    void Flip( const wxPoint& aCentre );
 
-    /// Mirror text during module mirroring transform, in footprint editor
-    /// the text itself is not mirrored, only position.
-    void MirrorTransformWithModule( int aOffset );
+    /// Mirror text position in footprint edition
+    /// the text itself is not mirrored, and the layer not modified,
+    /// only position is mirrored.
+    /// (use Flip to change layer to its paired and mirror the text in fp editor).
+    void Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis );
 
-    /// move text during module mirroring transform, in footprint editor
-    void MoveTransformWithModule( const wxPoint& aMoveVector );
+    /// move text in move transform, in footprint editor
+    void Move( const wxPoint& aMoveVector );
 
     /// @deprecated it seems (but the type is used to 'protect'
     //  reference and value from deletion, and for identification)

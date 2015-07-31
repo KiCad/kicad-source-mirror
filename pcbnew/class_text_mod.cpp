@@ -55,15 +55,12 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     MODULE* module = static_cast<MODULE*>( m_Parent );
 
     m_Type = text_type;
-
     m_NoShow = false;
-
     // Set text tickness to a default value
     m_Thickness = Millimeter2iu( 0.15 );
-
     SetLayer( F_SilkS );
 
-    // Set position and layer if there is already a parent module
+    // Set position and give a default layer if a valid parent footprint exists
     if( module && ( module->Type() == PCB_MODULE_T ) )
     {
         m_Pos = module->GetPosition();
@@ -73,12 +70,9 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
             SetLayer( B_SilkS );
             m_Mirror = true;
         }
-        else
-        {
-            SetLayer( F_SilkS );
-            m_Mirror = false;
-        }
     }
+
+    SetDrawCoord();
 }
 
 
@@ -89,63 +83,44 @@ TEXTE_MODULE::~TEXTE_MODULE()
 
 void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
+    // Used in footprint edition
+    // Note also in module editor, m_Pos0 = m_Pos
     RotatePoint( &m_Pos, aRotCentre, aAngle );
-
-    m_Orient += aAngle;
-    NORMALIZE_ANGLE_360( m_Orient );
-
+    SetOrientation( GetOrientation() + aAngle );
     SetLocalCoord();
 }
 
 
-void TEXTE_MODULE::Flip(const wxPoint& aCentre )
-{
-    m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
-    SetLayer( FlipLayer( GetLayer() ) );
-    m_Mirror = !m_Mirror;
-}
-
-
-void TEXTE_MODULE::FlipWithModule( int aOffset )
+void TEXTE_MODULE::Flip( const wxPoint& aCentre )
 {
     // flipping the footprint is relative to the X axis
-    m_Pos.y = aOffset - (m_Pos.y - aOffset);
+    MIRROR( m_Pos.y, aCentre.y );
     NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
-    wxPoint tmp = GetPos0();
-    tmp.y = -tmp.y;
-    SetPos0( tmp );
     SetLayer( FlipLayer( GetLayer() ) );
     m_Mirror = IsBackLayer( GetLayer() );
+    SetLocalCoord();
 }
 
 
-void TEXTE_MODULE::MirrorTransformWithModule( int aOffset )
+void TEXTE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 {
     // Used in modedit, to transform the footprint
-    // the mirror is relative to the Y axis
+    // the mirror is around the Y axis or X axis if aMirrorAroundXAxis = true
     // the position is mirrored, but the text itself is not mirrored
-    // Note also in module editor, m_Pos0 = m_Pos
-    m_Pos.x = aOffset - (m_Pos.x - aOffset);
-    m_Pos0 = m_Pos;
+    if( aMirrorAroundXAxis )
+        MIRROR( m_Pos.x, aCentre.x );
+    else
+        MIRROR( m_Pos.x, aCentre.x );
     NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
+    SetLocalCoord();
 }
 
 
-void TEXTE_MODULE::RotateTransformWithModule( const wxPoint& aOffset, double aAngle )
+void TEXTE_MODULE::Move( const wxPoint& aMoveVector )
 {
     // Used in modedit, to transform the footprint
-    // Note also in module editor, m_Pos0 = m_Pos
-    RotatePoint( &m_Pos, aOffset, aAngle );
-    m_Pos0 = m_Pos;
-    SetOrientation( GetOrientation() + aAngle );
-}
-
-void TEXTE_MODULE::MoveTransformWithModule( const wxPoint& aMoveVector )
-{
-    // Used in modedit, to transform the footprint
-    // Note also in module editor, m_Pos0 = m_Pos
     m_Pos0 += aMoveVector;
-    m_Pos = m_Pos0;
+    SetDrawCoord();;
 }
 
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
@@ -329,7 +304,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     DrawGraphicText( panel->GetClipBox(), DC, pos, color, GetShownText(), orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 
-    // Enable these line to draw the bounding box (debug tests purposes only)
+    // Enable these line to draw the bounding box (debug test purpose only)
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
@@ -528,9 +503,8 @@ wxString TEXTE_MODULE::GetShownText() const
 
     if( (m_Type != TEXT_is_DIVERS) || (wxString::npos == m_Text.find('%')) )
         return m_Text;
+
     wxString newbuf;
-
-
     const MODULE *module = static_cast<MODULE*>( GetParent() );
 
     for( wxString::const_iterator it = m_Text.begin();

@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,7 +220,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     case S_POLYGON:
         {
-        // We must compute true coordinates from m_PolyPoints
+        // We must compute absolute coordinates from m_PolyPoints
         // which are relative to module position, orientation 0
         std::vector<wxPoint> points = m_PolyPoints;
 
@@ -300,36 +300,99 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
     default:
     case S_SEGMENT:
         pt = GetStart();
-        pt.y -= aCentre.y;
-        pt.y  = -pt.y;
-        pt.y += aCentre.y;
+        MIRROR( pt.y, aCentre.y );
         SetStart( pt );
 
         pt = GetEnd();
-        pt.y -= aCentre.y;
-        pt.y  = -pt.y;
-        pt.y += aCentre.y;
+        MIRROR( pt.y, aCentre.y );
         SetEnd( pt );
 
-        m_Start0.y = -m_Start0.y;
-        m_End0.y = -m_End0.y;
+        MIRROR( m_Start0.y, 0 );
+        MIRROR( m_End0.y, 0 );
         break;
 
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
         for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
-            m_PolyPoints[ii].y = -m_PolyPoints[ii].y;
+            MIRROR( m_PolyPoints[ii].y, 0 );
     }
 
     SetLayer( FlipLayer( GetLayer() ) );
 }
 
+
+void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
+{
+    // Mirror an edge of the footprint. the layer is not modified
+    // This is a footprint shape modification.
+    wxPoint pt;
+
+    switch( GetShape() )
+    {
+    case S_ARC:
+        SetAngle( -GetAngle() );
+        //Fall through
+    default:
+    case S_SEGMENT:
+        if( aMirrorAroundXAxis )
+        {
+            MIRROR( m_Start0.y, aCentre.y );
+            MIRROR( m_End0.y, aCentre.y );
+        }
+        else
+        {
+            MIRROR( m_Start0.x, aCentre.x );
+            MIRROR( m_End0.x, aCentre.x );
+        }
+            break;
+
+    case S_POLYGON:
+        // polygon corners coordinates are always relative to the
+        // footprint position, orientation 0
+        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+        {
+            if( aMirrorAroundXAxis )
+                MIRROR( m_PolyPoints[ii].y, aCentre.y );
+            else
+                MIRROR( m_PolyPoints[ii].x, aCentre.x );
+        }
+    }
+
+    SetDrawCoord();
+}
+
 void EDGE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    // do the base class rotation
+    // We should rotate the relative coordinates, but to avoid duplicate code,
+    // do the base class rotation of draw coordinates, which is acceptable
+    // because in module editor, m_Pos0 = m_Pos
     DRAWSEGMENT::Rotate( aRotCentre, aAngle );
 
-    // and now work out the new offset
+    // and now update the relative coordinates, which are
+    // the reference in most transforms.
     SetLocalCoord();
+}
+
+
+void EDGE_MODULE::Move( const wxPoint& aMoveVector )
+{
+    // Move an edge of the footprint.
+    // This is a footprint shape modification.
+    m_Start0 += aMoveVector;
+    m_End0   += aMoveVector;
+
+    switch( GetShape() )
+    {
+    default:
+        break;
+
+    case S_POLYGON:
+        // polygon corners coordinates are always relative to the
+        // footprint position, orientation 0
+        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+            m_PolyPoints[ii] += aMoveVector;
+    }
+
+    SetDrawCoord();
 }

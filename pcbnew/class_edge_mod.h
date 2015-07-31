@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,14 +61,36 @@ public:
 
     void Copy( EDGE_MODULE* source );           // copy structure
 
-    void Move( const wxPoint& aMoveVector )
-    {
-        m_Start += aMoveVector;
-        m_End   += aMoveVector;
-        SetLocalCoord();
-    }
+    /**
+     * Move an edge of the footprint.
+     * This is a footprint shape modification.
+     * (should be only called by a footprint editing function)
+     */
+    void Move( const wxPoint& aMoveVector );
 
-    /// Flip entity relative to aCentre
+    /**
+     * Mirror an edge of the footprint.
+     * Do not change the layer
+     * This is a footprint shape modification.
+     * (should be only called by a footprint editing function)
+     */
+    void Mirror( const wxPoint aCentre, bool aMirrorAroundXAxis );
+
+    /**
+     * Rotate an edge of the footprint.
+     * This is a footprint shape modification.
+     * (should be only called by a footprint editing function )
+     */
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
+
+    /**
+     * Flip entity relative to aCentre.
+     * The item is mirrored, and layer changed to the paired corresponding layer
+     * if it is on a paired layer
+     * This function should be called only from MODULE::Flip because there is
+     * not usual to flip an item alone, without flipping the parent footprint.
+     * (consider Mirror for a mirror transform).
+     */
     void Flip( const wxPoint& aCentre );
 
     void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
@@ -77,10 +99,19 @@ public:
     void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_End0; }
 
-    ///> Set relative coordinates.
+    /**
+     * Set relative coordinates from draw coordinates.
+     * Call in only when the geometry ov the footprint is modified
+     * and therefore the relative coordinates have to be updated from
+     * the draw coordinates
+     */
     void SetLocalCoord();
 
-    ///> Set absolute coordinates.
+    /**
+     * Set draw coordinates (absolute values ) from relative coordinates.
+     * Must be called when a relative coordinate has changed, in order
+     * to see the changes on screen
+     */
     void SetDrawCoord();
 
     /* drawing functions */
@@ -100,7 +131,6 @@ public:
 
     EDA_ITEM* Clone() const;
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle ); // override
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
