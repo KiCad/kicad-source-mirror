@@ -385,7 +385,7 @@ void RN_NET::Update()
 
 void RN_NET::AddItem( const D_PAD* aPad )
 {
-    RN_NODE_PTR node = m_links.AddNode( aPad->GetPosition().x, aPad->GetPosition().y );
+    RN_NODE_PTR node = m_links.AddNode( aPad->ShapePos().x, aPad->ShapePos().y );
     node->AddParent( aPad );
     m_pads[aPad] = node;
 
