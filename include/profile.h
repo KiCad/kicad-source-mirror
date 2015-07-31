@@ -31,7 +31,6 @@
 #define __TPROFILE_H
 
 #include <sys/time.h>
-#include <string>
 #include <stdint.h>
 
 /**

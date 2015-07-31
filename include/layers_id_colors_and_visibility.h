@@ -31,7 +31,6 @@
 #ifndef LAYERS_ID_AND_VISIBILITY_H_
 #define LAYERS_ID_AND_VISIBILITY_H_
 
-#include <stdint.h>
 #include <vector>
 #include <bitset>
 #include <wx/string.h>
