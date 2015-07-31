@@ -203,9 +203,6 @@ END_EVENT_TABLE()
 
 #define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
-// Store the canvas mode during a session:
-static enum PCB_DRAW_PANEL_GAL::GalType galmode = PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_MODULE_EDITOR, wxEmptyString,
                          wxDefaultPosition, wxDefaultSize,
@@ -225,9 +222,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     updateTitle();
 
     // Create GAL canvas
+    PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                            galmode != PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE ?
-                                            galmode : PCB_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+                                                            parentFrame->GetGalCanvas()->GetBackend() );
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
@@ -319,7 +316,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
-    UseGalCanvas( galmode != PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    UseGalCanvas( parentFrame->IsGalCanvasActive() );
 
     if( m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).IsShown() )
     {
@@ -915,16 +912,13 @@ void FOOTPRINT_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_MENU_CANVAS_DEFAULT:
-        galmode = PCB_DRAW_PANEL_GAL::GAL_TYPE_NONE;
         break;
 
     case ID_MENU_CANVAS_CAIRO:
-        galmode = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
         use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
         break;
 
     case ID_MENU_CANVAS_OPENGL:
-        galmode = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
         use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
         break;
     }
