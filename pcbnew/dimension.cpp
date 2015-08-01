@@ -48,7 +48,7 @@
 
 /* Local functions */
 static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                           const wxPoint& aPosition, bool aErase );
+                            const wxPoint& aPosition, bool aErase );
 
 static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                const wxPoint& aPosition, bool aErase );
@@ -135,7 +135,7 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
 
     // Configure the layers list selector
     if( !m_Parent->GetBoard()->IsLayerEnabled( aDimension->GetLayer() ) )
-        // Should not happens, because one acnnot select a board item on a
+        // Should not happens, because one cannot select a board item on a
         // not activated layer, but ...
         m_SelLayerBox->ShowNonActivatedLayers( true );
 
@@ -146,11 +146,12 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
 
     if( m_SelLayerBox->SetLayerSelection( aDimension->GetLayer() ) < 0 )
     {
-        wxMessageBox( _("This item has an illegal layer id.\n"
-                        "Now, forced on the drawings layer. Please, fix it") );
+        wxMessageBox( _( "This item has an illegal layer id.\n"
+                         "Now, forced on the drawings layer. Please, fix it" ) );
         m_SelLayerBox->SetLayerSelection( Dwgs_User );
     }
 
+    SetDefaultItem( m_sdbSizerBtsOK );
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -169,8 +170,8 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     if( !m_Parent->GetBoard()->IsLayerEnabled( newlayer ) )
     {
-        wxMessageBox( _( "the layer currently selected is not enabled for this board\n"
-                        "You cannot use it" ) );
+        wxMessageBox( _( "The layer currently selected is not enabled for this board\n"
+                         "You cannot use it" ) );
         return;
     }
 
@@ -213,16 +214,16 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     if( width > maxthickness )
     {
         DisplayError( NULL,
-                      _( "The text thickness is too large for the text size. It will be clamped") );
+                      _( "The text thickness is too large for the text size.  "
+                         "It will be clamped" ) );
         width = maxthickness;
     }
 
     CurrentDimension->SetWidth( width );
     CurrentDimension->Text().SetThickness( width );
-
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
-
     CurrentDimension->SetLayer( newlayer );
+
 #ifndef USE_WX_OVERLAY
     if( m_DC )     // Display new text
     {
@@ -231,6 +232,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 #else
     m_Parent->Refresh();
 #endif
+
     m_Parent->OnModify();
     EndModal( 1 );
 }
@@ -285,7 +287,6 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         aDimension->Text().SetThickness( width );
         aDimension->SetWidth( width );
         aDimension->AdjustDimensionDetails();
-
         aDimension->Draw( m_canvas, aDC, GR_XOR );
 
         m_canvas->SetMouseCapture( BuildDimension, AbortBuildDimension );
@@ -316,7 +317,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
 
 static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                           const wxPoint& aPosition, bool aErase )
+                            const wxPoint& aPosition, bool aErase )
 {
     PCB_SCREEN* screen   = (PCB_SCREEN*) aPanel->GetScreen();
     DIMENSION*  Dimension = (DIMENSION*) screen->GetCurItem();
@@ -377,9 +378,11 @@ void PCB_EDIT_FRAME::DeleteDimension( DIMENSION* aDimension, wxDC* aDC )
     OnModify();
 }
 
+
 /* Initialize parameters to move a pcb text
  */
 static wxPoint initialTextPosition;
+
 void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
 {
     if( aItem == NULL )
@@ -403,7 +406,7 @@ void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
 
 /* Move dimension text following the cursor. */
 static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                            bool aErase )
+                               bool aErase )
 {
     DIMENSION* dimension = (DIMENSION*) aPanel->GetScreen()->GetCurItem();
 
@@ -417,6 +420,7 @@ static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     dimension->Draw( aPanel, aDC, GR_XOR );
 }
+
 
 /*
  * Abort current text edit progress.
@@ -439,6 +443,7 @@ void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     dimension->Draw( aPanel, aDC, GR_OR );
 }
 
+
 /*
  *  Place the current dimension text being moving
  */
@@ -457,6 +462,5 @@ void PCB_EDIT_FRAME::PlaceDimensionText( DIMENSION* aItem, wxDC* DC )
     aItem->Text().SetTextPosition( initialTextPosition );
     SaveCopyInUndoList( aItem, UR_CHANGED );
     aItem->Text().SetTextPosition( tmp );
-
     aItem->ClearFlags();
 }
