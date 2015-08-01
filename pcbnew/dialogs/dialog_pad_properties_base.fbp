@@ -912,7 +912,7 @@
                                                                     <property name="caption"></property>
                                                                     <property name="caption_visible">1</property>
                                                                     <property name="center_pane">0</property>
-                                                                    <property name="choices">&quot;Circular&quot; &quot;Oval&quot; &quot;Rectangular&quot; &quot;Trapezoidal&quot;</property>
+                                                                    <property name="choices">&quot;Circular shape&quot; &quot;Oval shape&quot; &quot;Rectangular shape&quot; &quot;Trapezoidal shape&quot;</property>
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
@@ -4193,7 +4193,7 @@
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">2</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizer10</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -4327,7 +4327,7 @@
                                                                             <property name="caption"></property>
                                                                             <property name="caption_visible">1</property>
                                                                             <property name="center_pane">0</property>
-                                                                            <property name="choices">&quot;Circular&quot; &quot;Oval&quot;</property>
+                                                                            <property name="choices">&quot;Circular hole&quot; &quot;Oval hole&quot;</property>
                                                                             <property name="close_button">1</property>
                                                                             <property name="context_help"></property>
                                                                             <property name="context_menu">1</property>
@@ -5120,7 +5120,7 @@
                                                                             <property name="caption"></property>
                                                                             <property name="caption_visible">1</property>
                                                                             <property name="center_pane">0</property>
-                                                                            <property name="choices">&quot;Front&quot; &quot;Back&quot; &quot;All&quot; &quot;None&quot;</property>
+                                                                            <property name="choices">&quot;Front layer&quot; &quot;Back layer&quot; &quot;All copper layers&quot; &quot;None&quot;</property>
                                                                             <property name="close_button">1</property>
                                                                             <property name="context_help"></property>
                                                                             <property name="context_menu">1</property>

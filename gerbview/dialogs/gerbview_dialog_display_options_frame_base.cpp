@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,7 +22,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_PolarDisplayChoices[] = { _("Rectangular"), _("Polar") };
+	wxString m_PolarDisplayChoices[] = { _("Cartesian coordinates"), _("Polar coordinates") };
 	int m_PolarDisplayNChoices = sizeof( m_PolarDisplayChoices ) / sizeof( wxString );
 	m_PolarDisplay = new wxRadioBox( this, wxID_ANY, _("Coordinates"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
 	m_PolarDisplay->SetSelection( 0 );
@@ -34,7 +34,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_BoxUnits->SetSelection( 0 );
 	bLeftSizer->Add( m_BoxUnits, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_CursorShapeChoices[] = { _("Small"), _("Large") };
+	wxString m_CursorShapeChoices[] = { _("Small cross"), _("Full screen cursor") };
 	int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
 	m_CursorShape = new wxRadioBox( this, wxID_ANY, _("Cursor"), wxDefaultPosition, wxDefaultSize, m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
 	m_CursorShape->SetSelection( 1 );
@@ -83,15 +83,15 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* bLeftBottomSizer;
 	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_OptZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptZoomNoCenter = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
 	bLeftBottomSizer->Add( m_OptZoomNoCenter, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptMiddleButtonPan = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftBottomSizer->Add( m_OptMiddleButtonPan, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_ANY, _("Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptMiddleButtonPanLimited = new wxCheckBox( bLeftBottomSizer->GetStaticBox(), wxID_ANY, _("Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftBottomSizer->Add( m_OptMiddleButtonPanLimited, 0, wxALL, 5 );
 	
 	
