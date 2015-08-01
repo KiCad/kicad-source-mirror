@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-01 16:50+0100\n"
-"PO-Revision-Date: 2015-08-01 16:50+0100\n"
+"POT-Creation-Date: 2015-08-01 17:09+0100\n"
+"PO-Revision-Date: 2015-08-01 17:09+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -10373,7 +10373,7 @@ msgstr "Forma rettangolare"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Trapezoidal shape"
-msgstr "Forma Ttrapezoidale"
+msgstr "Forma trapezoidale"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:107
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:284
