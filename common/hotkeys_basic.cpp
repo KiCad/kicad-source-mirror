@@ -50,7 +50,7 @@
 wxString g_CommonSectionTag( wxT( "[common]" ) );
 
 
-/* Class to handle hotkey commnands. hotkeys have a default value
+/* Class to handle hotkey commands hotkeys have a default value
  * This class allows the real key code changed by user from a key code list
  * file.
  */
@@ -279,7 +279,7 @@ wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList,
     }
 
 #ifdef USING_MAC_CMD
-    // On OSX, the modifier euqivalent to the Ctrl key of PCs
+    // On OSX, the modifier equivalent to the Ctrl key of PCs
     // is the Cmd key, but in code we should use Ctrl as prefix in menus
     msg.Replace( MODIFIER_CMD_MAC, MODIFIER_CTRL_BASE );
 #endif
@@ -337,7 +337,7 @@ wxString AddHotkeyName( const wxString&           aText,
     }
 
 #ifdef USING_MAC_CMD
-    // On OSX, the modifier euqivalent to the Ctrl key of PCs
+    // On OSX, the modifier equivalent to the Ctrl key of PCs
     // is the Cmd key, but in code we should use Ctrl as prefix in menus
     msg.Replace( MODIFIER_CMD_MAC, MODIFIER_CTRL_BASE );
 #endif
@@ -745,7 +745,7 @@ void ParseHotkeyConfig( const wxString&           data,
 
 
 void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
-                                            const wxString& aDefaultShortname )
+                                                 const wxString& aDefaultShortname )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
@@ -759,13 +759,13 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
     wxString  filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
-                                 path,
-                                 fn.GetFullPath(),
-                                 ext,
-                                 mask,
-                                 this,
-                                 wxFD_OPEN,
-                                 true );
+                                           path,
+                                           fn.GetFullPath(),
+                                           ext,
+                                           mask,
+                                           this,
+                                           wxFD_OPEN,
+                                           true );
 
     if( filename.IsEmpty() )
         return;
@@ -775,7 +775,7 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
 
 
 void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
-                                        const wxString& aDefaultShortname )
+                                               const wxString& aDefaultShortname )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
@@ -789,13 +789,13 @@ void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
     wxString filename = EDA_FileSelector( _( "Write Hotkey Configuration File:" ),
-                                 path,
-                                 fn.GetFullPath(),
-                                 ext,
-                                 mask,
-                                 this,
-                                 wxFD_OPEN | wxFD_SAVE,
-                                 true );
+                                          path,
+                                          fn.GetFullPath(),
+                                          ext,
+                                          mask,
+                                          this,
+                                          wxFD_SAVE,
+                                          true );
 
     if( filename.IsEmpty() )
         return;
