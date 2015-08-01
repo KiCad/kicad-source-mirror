@@ -1097,7 +1097,8 @@ int gm_print( FILE* f, greymap_t* gm )
                 }
             }
 
-            fputc( "*#=- "[5 * d / t], f ); /* what a cute trick :) */
+            if( t )
+                fputc( "*#=- "[5 * d / t], f ); /* what a cute trick :) */
         }
 
         fputc( '\n', f );

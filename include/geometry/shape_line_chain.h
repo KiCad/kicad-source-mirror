@@ -254,8 +254,7 @@ public:
     {
         if( aIndex < 0 )
             aIndex += PointCount();
-
-        if( aIndex >= PointCount() )
+        else if( aIndex >= PointCount() )
             aIndex -= PointCount();
 
         return m_points[aIndex];

@@ -95,7 +95,8 @@ void PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
 {
     DIALOG_EXCHANGE_MODULE dialog( this, Module );
 
-    dialog.ShowQuasiModal();
+    int ret = dialog.ShowQuasiModal();
+    (void) ret;     // make coverity quiet.
 }
 
 

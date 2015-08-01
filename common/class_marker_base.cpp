@@ -90,6 +90,7 @@ void MARKER_BASE::init()
 MARKER_BASE::MARKER_BASE( const MARKER_BASE& aMarker )
 {
     m_Pos = aMarker.m_Pos;
+    m_ErrorLevel = aMarker.m_ErrorLevel;
     m_MarkerType = aMarker.m_MarkerType;
     m_Color = aMarker.m_Color;
     m_ShapeBoundingBox = aMarker.m_ShapeBoundingBox;

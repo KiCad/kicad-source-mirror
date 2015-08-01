@@ -647,7 +647,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
 
-     // Plot edge layer and graphic items
+    // Plot edge layer and graphic items
+    // They do not have a solder Mask margin, because they are only graphic items
+    // on this layer (like logos), not actually areas around pads.
     itemplotter.PlotBoardGraphicItems();
 
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
@@ -677,8 +679,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // This extra margin is used to merge too close shapes
     // (distance < aMinThickness), and will be removed when creating
     // the actual shapes
-    SHAPE_POLY_SET areas;   // Contains shapes to plot
-    SHAPE_POLY_SET initialPolys;  // Contains exact shapes to plot
+    SHAPE_POLY_SET areas;           // Contains shapes to plot
+    SHAPE_POLY_SET initialPolys;    // Contains exact shapes to plot
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx ( 1 /cos( PI/circleToSegmentsCount )
@@ -736,7 +738,13 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         }
     }
 
-    // Add filled zone areas
+    // Add filled zone areas.
+#if 0   // Set to 1 if a solder mask margin must be applied to zones on solder mask
+    int zone_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
+#else
+    int zone_margin = 0;
+#endif
+
     for( int ii = 0; ii < aBoard->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = aBoard->GetArea( ii );
@@ -745,9 +753,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
             continue;
 
         zone->TransformOutlinesShapeWithClearanceToPolygon( areas,
-                    inflate, true );
+                    inflate+zone_margin, false );
         zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys,
-                    0, true );
+                    zone_margin, false );
     }
 
     // To avoid a lot of code, use a ZONE_CONTAINER

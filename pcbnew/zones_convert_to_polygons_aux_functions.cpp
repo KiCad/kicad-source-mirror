@@ -56,7 +56,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     // add clearance to outline
     int clearance = aMinClearanceValue;
 
-    if( aUseNetClearance )
+    if( aUseNetClearance && IsOnCopperLayer() )
     {
         clearance = GetClearance();
         if( aMinClearanceValue > clearance )
