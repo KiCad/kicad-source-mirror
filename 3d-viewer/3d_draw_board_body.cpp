@@ -70,68 +70,6 @@
  */
 GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
 
-#if 0
-
-// FIX ME: these 2 functions are fully duplicate of the same 2 functions in
-// pcbnew/zones_convert_brd_items_to_polygons_with_Boost.cpp
-static const SHAPE_POLY_SET convertPolyListToPolySet(const CPOLYGONS_LIST& aList)
-{
-    SHAPE_POLY_SET rv;
-    unsigned    corners_count = aList.GetCornersCount();
-
-    // Enter main outline: this is the first contour
-    unsigned    ic = 0;
-
-    if(!corners_count)
-        return rv;
-
-    while( ic < corners_count )
-    {
-        rv.NewOutline( );
-
-        while( ic < corners_count )
-        {
-            rv.Append( aList.GetX(ic), aList.GetY(ic) );
-            if( aList.IsEndContour( ic ) )
-                break;
-
-            ic++;
-        }
-        ic++;
-    }
-
-    return rv;
-}
-
-
-static const CPOLYGONS_LIST convertPolySetToPolyList(const SHAPE_POLY_SET& aPolyset)
-{
-    CPOLYGONS_LIST list;
-    CPolyPt corner, firstCorner;
-
-    for( int ii = 0; ii < aPolyset.OutlineCount(); ii++ )
-    {
-        for( int jj = 0; jj < aPolyset.VertexCount(ii); jj++ )
-        {
-            VECTOR2I v = aPolyset.GetVertex( jj, ii );
-            corner.x    = v.x;
-            corner.y    = v.y;
-            corner.end_contour = false;
-
-            if(!jj)
-                firstCorner = corner;
-
-            list.AddCorner( corner );
-        }
-
-        firstCorner.end_contour = true;
-        list.AddCorner( firstCorner );
-    }
-
-    return list;
-}
-
-#endif
 
 void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                       REPORTER* aErrorMessages, REPORTER* aActivity  )
@@ -158,7 +96,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                                 // to reduce time calculations
                                                 // for holes and items which do not need
                                                 // a fine representation
-    double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2.0) );
+    double          correctionFactorLQ  = 1.0 / cos( M_PI / (segcountLowQuality * 2.0) );
 
     SHAPE_POLY_SET  bufferPolys;
     SHAPE_POLY_SET  bufferPcbOutlines;   // stores the board main outlines
@@ -173,9 +111,8 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     {
         if( aErrorMessages )
         {
-            msg << wxT("\n") <<
-                _("Unable to calculate the board outlines.\n"
-                  "Therefore use the board boundary box.") << wxT("\n\n");
+            msg << wxT("\n") << _("Unable to calculate the board outlines.\n"
+                                  "Therefore use the board boundary box.") << wxT("\n\n");
 
             aErrorMessages->Report( msg, REPORTER::RPT_WARNING );
         }
@@ -338,7 +275,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
             case PCB_TEXT_T:
                 ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
-                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                    bufferPolys, 0, segcountLowQuality, correctionFactor );
                 break;
 
             default:
@@ -576,7 +513,7 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
             case PCB_TEXT_T:
                 ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
-                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                    bufferPolys, 0, segcountLowQuality, correctionFactorLQ );
                 break;
 
             default:
@@ -605,7 +542,7 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
                         bufferPolys, 0, segcountforcircle, correctionFactor );
 
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
-                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                    bufferPolys, 0, segcountLowQuality, correctionFactorLQ );
         }
 
         // Draw non copper zones
@@ -642,23 +579,23 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
             bufferPolys.BooleanSubtract( cuts );
         }
-        // Remove holes from Solder paste layers and siklscreen
+        // Remove holes from Solder paste layers and silkscreen
         else if( layer == B_Paste || layer == F_Paste
                  || layer == B_SilkS || layer == F_SilkS  )
         {
-
             bufferPolys.BooleanSubtract( allLayerHoles );
         }
 
+        // Convert each polygon with holes to
+        // a polygon with its holes linked to the main outline
         bufferPolys.Fracture();
 
-
-        int         thickness = 0;
+        int thickness = 0;
 
         if( layer != B_Mask && layer != F_Mask )
             thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
 
-        int         zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
+        int zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
 
         if( layer == Edge_Cuts )
         {
