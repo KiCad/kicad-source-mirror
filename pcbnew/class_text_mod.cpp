@@ -111,6 +111,7 @@ void TEXTE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
         MIRROR( m_Pos.y, aCentre.y );
     else
         MIRROR( m_Pos.x, aCentre.x );
+
     NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
     SetLocalCoord();
 }
@@ -118,9 +119,8 @@ void TEXTE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 
 void TEXTE_MODULE::Move( const wxPoint& aMoveVector )
 {
-    // Used in modedit, to transform the footprint
-    m_Pos0 += aMoveVector;
-    SetDrawCoord();;
+    m_Pos += aMoveVector;
+    SetLocalCoord();
 }
 
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
@@ -282,8 +282,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         width = -width;
 
     GRSetDrawMode( DC, draw_mode );
-    wxPoint pos( m_Pos.x - offset.x,
-                 m_Pos.y - offset.y);
+    wxPoint pos = m_Pos - offset;
 
     // Draw the text anchor point
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
