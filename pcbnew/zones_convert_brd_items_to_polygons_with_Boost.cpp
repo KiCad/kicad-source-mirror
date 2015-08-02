@@ -404,7 +404,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     double correctionFactor;
     int outline_half_thickness = m_ZoneMinThickness / 2;
 
-    std::auto_ptr<SHAPE_FILE_IO> dumper( new SHAPE_FILE_IO( "zones_dump.txt", true ) );
+
+    std::auto_ptr<SHAPE_FILE_IO> dumper( new SHAPE_FILE_IO(
+            g_DumpZonesWhenFilling ? "zones_dump.txt" : "", true ) );
 
     // Set the number of segments in arc approximations
     if( m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF  )

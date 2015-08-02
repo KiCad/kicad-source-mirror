@@ -31,7 +31,11 @@
 SHAPE_FILE_IO::SHAPE_FILE_IO( const std::string& aFilename, bool aAppend )
 {
     m_groupActive = false;
-    m_file = fopen ( aFilename.c_str(), aAppend ? "ab" : "wb" );
+
+    if( aFilename.length() )
+        m_file = fopen ( aFilename.c_str(), aAppend ? "ab" : "wb" );
+    else
+        m_file = NULL;
 
     // fixme: exceptions
 }
