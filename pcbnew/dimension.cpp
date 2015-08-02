@@ -151,7 +151,7 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
         m_SelLayerBox->SetLayerSelection( Dwgs_User );
     }
 
-    SetDefaultItem( m_sdbSizerBtsOK );
+    m_sdbSizerBtsOK->SetDefault();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
