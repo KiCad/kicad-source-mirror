@@ -554,6 +554,9 @@ public:
     /// @copydoc SHAPE::Format()
     const std::string Format() const;
 
+    /// @copydoc SHAPE::Parse()
+    bool Parse( std::stringstream& aStream );
+
     bool operator!=( const SHAPE_LINE_CHAIN& aRhs ) const
     {
         if( PointCount() != aRhs.PointCount() )

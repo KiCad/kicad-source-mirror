@@ -559,3 +559,22 @@ SHAPE* SHAPE_LINE_CHAIN::Clone() const
 {
     return new SHAPE_LINE_CHAIN( *this );
 }
+
+bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
+{
+    int n_pts;
+
+    m_points.clear();
+    aStream >> n_pts;
+    aStream >> m_closed;
+
+    for( int i = 0; i < n_pts; i++ )
+    {
+        int x, y;
+        aStream >> x;
+        aStream >> y;
+        m_points.push_back( VECTOR2I( x, y ) );
+    }
+
+    return true;
+}

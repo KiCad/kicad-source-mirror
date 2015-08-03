@@ -38,24 +38,32 @@ class SHAPE;
 class SHAPE_FILE_IO
 {
     public:
-        SHAPE_FILE_IO ( const std::string& aFilename, bool aAppend = false );
-        ~SHAPE_FILE_IO ( );
-
-        void BeginGroup( const std::string aName = "<noname>");
-        void EndGroup( );
-
-        SHAPE *Read();
-
-        void Write ( const SHAPE *aShape, const std::string aName = "<noname>");
-
-        void Write ( const SHAPE &aShape, const std::string aName = "<noname>")
+        enum IO_MODE
         {
-            Write( &aShape, aName );
+            IOM_READ = 0,
+            IOM_APPEND,
+            IOM_WRITE
         };
 
+        SHAPE_FILE_IO( const std::string& aFilename, IO_MODE aMode = IOM_READ );
+        ~SHAPE_FILE_IO();
+
+        void BeginGroup( const std::string aName = "<noname>");
+        void EndGroup();
+
+        SHAPE* Read();
+
+        void Write( const SHAPE* aShape, const std::string aName = "<noname>" );
+
+        void Write( const SHAPE& aShape, const std::string aName = "<noname>" )
+        {
+            Write( &aShape, aName );
+        }
+
     private:
-        FILE *m_file;
+        FILE* m_file;
         bool m_groupActive;
+        IO_MODE m_mode;
 };
 
 #endif
