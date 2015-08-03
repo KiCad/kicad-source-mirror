@@ -382,7 +382,7 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
         // Segments are parallel -> compute pair gap
         const VECTOR2I refDir       = refSeg->Anchor( 1 ) - refSeg->Anchor( 0 );
         const VECTOR2I displacement = refSeg->Anchor( 1 ) - coupledSeg->Anchor( 1 );
-        gap = (int) abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp->Width();
+        gap = (int) std::abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp->Width();
     }
 
     aPair = PNS_DIFF_PAIR( *lp, *ln );
