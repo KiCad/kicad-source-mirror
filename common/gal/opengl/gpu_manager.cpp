@@ -81,10 +81,10 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 // Cached manager
 GPU_CACHED_MANAGER::GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
     GPU_MANAGER( aContainer ), m_buffersInitialized( false ), m_indicesPtr( NULL ),
-    m_verticesBuffer( 0 ), m_indicesBuffer( 0 ), m_indicesSize( 0 )
+    m_verticesBuffer( 0 ), m_indicesBuffer( 0 ), m_indicesSize( 0 ), m_indicesCapacity( 0 )
 {
     // Allocate the biggest possible buffer for indices
-    m_indices.reset( new GLuint[aContainer->GetSize()] );
+    resizeIndices( aContainer->GetSize() );
 }
 
 
@@ -206,11 +206,11 @@ void GPU_CACHED_MANAGER::uploadToGpu()
 
     // Upload vertices coordinates and shader types to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );
-    glBufferData( GL_ARRAY_BUFFER, bufferSize * VertexSize, vertices, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, bufferSize * VertexSize, vertices, GL_STATIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
 
     // Allocate the biggest possible buffer for indices
-    m_indices.reset( new GLuint[bufferSize] );
+    resizeIndices( bufferSize );
 
     if( glGetError() != GL_NO_ERROR )
         DisplayError( NULL, wxT( "Error during data upload to the GPU memory" ) );
@@ -220,6 +220,16 @@ void GPU_CACHED_MANAGER::uploadToGpu()
 
     wxLogDebug( wxT( "Uploading %d vertices to GPU / %.1f ms" ), bufferSize, totalTime.msecs() );
 #endif /* PROFILE */
+}
+
+
+void GPU_CACHED_MANAGER::resizeIndices( unsigned int aNewSize )
+{
+    if( aNewSize > m_indicesCapacity )
+    {
+        m_indicesCapacity = aNewSize;
+        m_indices.reset( new GLuint[m_indicesCapacity] );
+    }
 }
 
 

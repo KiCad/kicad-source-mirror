@@ -172,9 +172,9 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 
     // Dynamic memory freeing, there is no point in holding
     // a large amount of memory when there is no use for it
-    if( m_freeSpace > ( m_currentSize / 2 ) && m_currentSize > m_initialSize )
+    if( m_freeSpace > ( 0.75 * m_currentSize ) && m_currentSize > m_initialSize )
     {
-        resizeContainer( m_currentSize / 2 );
+        resizeContainer( 0.5 * m_currentSize );
     }
 }
 
@@ -229,8 +229,8 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
         }
         else
         {
-            // No: grow to the nearest bigger power of 2
-            result = resizeContainer( getPowerOf2( m_currentSize * 2 + aSize ) );
+            // No: grow to the nearest greater power of 2
+            result = resizeContainer( pow( 2, ceil( log2( m_currentSize * 2 + aSize ) ) ) );
         }
 
         if( !result )
@@ -270,8 +270,7 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
                     (int) m_item, oldChunkOffset, chunkOffset );
 #endif
         // The item was reallocated, so we have to copy all the old data to the new place
-        memcpy( &m_vertices[chunkOffset], &m_vertices[m_chunkOffset],
-                m_itemSize * VertexSize );
+        memcpy( &m_vertices[chunkOffset], &m_vertices[m_chunkOffset], m_itemSize * VertexSize );
 
         // Free the space previously used by the chunk
         wxASSERT( m_itemSize > 0 );
@@ -303,7 +302,7 @@ bool CACHED_CONTAINER::defragment( VERTEX* aTarget )
     wxLogDebug( wxT( "Defragmenting" ) );
 
     prof_counter totalTime;
-    prof_start( &totalTime, false );
+    prof_start( &totalTime );
 #endif
 
     if( aTarget == NULL )
@@ -349,7 +348,7 @@ bool CACHED_CONTAINER::defragment( VERTEX* aTarget )
     prof_end( &totalTime );
 
     wxLogDebug( wxT( "Defragmented the container storing %d vertices / %.1f ms" ),
-                m_currentSize - m_freeSpace, (double) totalTime.value / 1000.0 );
+                m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif
 
     return true;
@@ -363,7 +362,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
 
 #if CACHED_CONTAINER_TEST > 0
     prof_counter totalTime;
-    prof_start( &totalTime, false );
+    prof_start( &totalTime );
 #endif
 
     // Reversed free chunks map - this one stores chunk size with its offset as the key
@@ -409,7 +408,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
 #if CACHED_CONTAINER_TEST > 0
     prof_end( &totalTime );
 
-    wxLogDebug( wxT( "Merged free chunks / %.1f ms" ), (double) totalTime.value / 1000.0 );
+    wxLogDebug( wxT( "Merged free chunks / %.1f ms" ), totalTime.msecs() );
 #endif
 
     test();
@@ -473,21 +472,10 @@ bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
 }
 
 
-unsigned int CACHED_CONTAINER::getPowerOf2( unsigned int aNumber ) const
-{
-    unsigned int power = 1;
-
-    while( power < aNumber && power != 0 )
-        power <<= 1;
-
-    return power;
-}
-
-
 #ifdef CACHED_CONTAINER_TEST
 void CACHED_CONTAINER::showFreeChunks()
 {
-    FreeChunkMap::iterator it;
+    FREE_CHUNK_MAP::iterator it;
 
     wxLogDebug( wxT( "Free chunks:" ) );
 
@@ -505,7 +493,7 @@ void CACHED_CONTAINER::showFreeChunks()
 
 void CACHED_CONTAINER::showReservedChunks()
 {
-    Items::iterator it;
+    ITEMS::iterator it;
 
     wxLogDebug( wxT( "Reserved chunks:" ) );
 
@@ -526,7 +514,7 @@ void CACHED_CONTAINER::test()
 {
     // Free space check
     unsigned int freeSpace = 0;
-    FreeChunkMap::iterator itf;
+    FREE_CHUNK_MAP::iterator itf;
 
     for( itf = m_freeChunks.begin(); itf != m_freeChunks.end(); ++itf )
         freeSpace += getChunkSize( *itf );
@@ -535,7 +523,7 @@ void CACHED_CONTAINER::test()
 
     // Reserved space check
     /*unsigned int reservedSpace = 0;
-    Items::iterator itr;
+    ITEMS::iterator itr;
     for( itr = m_items.begin(); itr != m_items.end(); ++itr )
         reservedSpace += ( *itr )->GetSize();
     reservedSpace += m_itemSize;    // Add the current chunk size

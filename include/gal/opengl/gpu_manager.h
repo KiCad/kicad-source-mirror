@@ -124,6 +124,7 @@ public:
     ///> @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing();
 
+protected:
     /**
      * Function uploadToGpu
      * Rebuilds vertex buffer object using stored VERTEX_ITEMs and sends it to the graphics card
@@ -131,7 +132,9 @@ public:
      */
     virtual void uploadToGpu();
 
-protected:
+    ///> Resizes the indices buffer to aNewSize if necessary
+    void resizeIndices( unsigned int aNewSize );
+
     ///> Buffers initialization flag
     bool m_buffersInitialized;
 
@@ -149,6 +152,9 @@ protected:
 
     ///> Number of indices stored in the indices buffer
     unsigned int m_indicesSize;
+
+    ///> Current indices buffer size
+    unsigned int m_indicesCapacity;
 };
 
 
