@@ -690,7 +690,6 @@ void PNS_LINE_PLACER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, co
             return;
 
         PNS_SEGMENT* s_old = static_cast<PNS_SEGMENT*>( aSeg );
-
         PNS_SEGMENT* s_new[2];
 
         s_new[0] = s_old->Clone();
@@ -814,7 +813,7 @@ bool PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     int eiDepth = -1;
 
     if( aEndItem && aEndItem->Owner() )
-        eiDepth = aEndItem->Owner()->Depth();
+        eiDepth = static_cast<PNS_NODE*>( aEndItem->Owner() )->Depth();
 
     if( m_lastNode )
     {
@@ -839,7 +838,7 @@ bool PNS_LINE_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         splitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
 
         if( Settings().RemoveLoops() )
-            removeLoops( m_lastNode, &current );
+            removeLoops( m_lastNode, current );
     }
 
     updateLeadingRatLine();
@@ -929,22 +928,22 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 }
 
 
-void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest )
+void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
 {
-    if( !aLatest->SegmentCount() )
+    if( !aLatest.SegmentCount() )
         return;
 
-    if ( aLatest->CLine().CPoint( 0 ) == aLatest->CLine().CPoint( -1 ) )
+    if ( aLatest.CLine().CPoint( 0 ) == aLatest.CLine().CPoint( -1 ) )
         return;
 
-    aNode->Add( aLatest, true );
+    aNode->Add( &aLatest, true );
 
-    for( int s = 0; s < aLatest->SegmentCount(); s++ )
+    for( int s = 0; s < aLatest.SegmentCount(); s++ )
     {
-        PNS_SEGMENT* seg = ( *aLatest->LinkedSegments() )[s];
-        PNS_LINE* ourLine = aNode->AssembleLine( seg );
+        PNS_SEGMENT* seg = ( *aLatest.LinkedSegments() )[s];
+        PNS_LINE ourLine = aNode->AssembleLine( seg );
         PNS_JOINT a, b;
-        std::vector<PNS_LINE*> lines;
+        std::vector<PNS_LINE> lines;
 
         aNode->FindLineEnds( ourLine, a, b );
 
@@ -958,42 +957,38 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest )
         int removedCount = 0;
         int total = 0;
 
-        BOOST_FOREACH( PNS_LINE* line, lines )
+        BOOST_FOREACH( PNS_LINE& line, lines )
         {
             total++;
 
-            if( !( line->ContainsSegment( seg ) ) && line->SegmentCount() )
+            if( !( line.ContainsSegment( seg ) ) && line.SegmentCount() )
             {
-                aNode->Remove( line );
+                aNode->Remove( &line );
                 removedCount++;
             }
         }
 
         TRACE( 0, "total segs removed: %d/%d\n", removedCount % total );
-
-        delete ourLine;
     }
 
-    aNode->Remove( aLatest );
+    aNode->Remove( &aLatest );
 }
 
 
 void PNS_LINE_PLACER::simplifyNewLine( PNS_NODE* aNode, PNS_SEGMENT* aLatest )
 {
-    PNS_LINE* l = aNode->AssembleLine( aLatest );
-    SHAPE_LINE_CHAIN simplified ( l->CLine() );
+    PNS_LINE l = aNode->AssembleLine( aLatest );
+    SHAPE_LINE_CHAIN simplified( l.CLine() );
 
     simplified.Simplify();
 
-    if( simplified.PointCount() != l->PointCount() )
+    if( simplified.PointCount() != l.PointCount() )
     {
-        std::auto_ptr<PNS_LINE> lnew( l->Clone() );
-        aNode->Remove( l );
-        lnew->SetShape( simplified );
-        aNode->Add( lnew.get() );
+        PNS_LINE lnew( l );
+        aNode->Remove( &l );
+        lnew.SetShape( simplified );
+        aNode->Add( &lnew );
     }
-
-    delete l;
 }
 
 

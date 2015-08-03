@@ -21,22 +21,40 @@
 #include <boost/foreach.hpp>
 
 #include "pns_itemset.h"
+#include "pns_line.h"
 
-PNS_ITEMSET::PNS_ITEMSET( PNS_ITEM* aInitialItem ) :
-    m_owner( false )
+
+void PNS_ITEMSET::release()
 {
-    if( aInitialItem )
-        m_items.push_back( aInitialItem );
+    BOOST_FOREACH( PNS_ITEM* item, m_items )
+    {
+        if( item->BelongsTo( this ) )
+            delete item;
+    }
+
+    m_items.clear();
 }
 
 
 PNS_ITEMSET::~PNS_ITEMSET()
 {
-    if( m_owner )
-    {
-        BOOST_FOREACH( PNS_ITEM* item, m_items )
-            delete item;
-    }
+    release();
+}
+
+
+void PNS_ITEMSET::Add( const PNS_LINE& aLine )
+{
+    PNS_LINE* copy = aLine.Clone();
+    copy->SetOwner( this );
+    m_items.push_back( copy );
+}
+
+
+void PNS_ITEMSET::Prepend( const PNS_LINE& aLine )
+{
+    PNS_LINE* copy = aLine.Clone();
+    copy->SetOwner( this );
+    m_items.push_front( copy );
 }
 
 

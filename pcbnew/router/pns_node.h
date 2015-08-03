@@ -128,7 +128,7 @@ struct PNS_COLLISION_FILTER {
  * - lightweight cloning/branching (for recursive optimization and shove
  * springback)
  **/
-class PNS_NODE
+class PNS_NODE : public PNS_OBJECT
 {
 public:
     typedef boost::optional<PNS_OBSTACLE>   OPT_OBSTACLE;
@@ -303,7 +303,7 @@ public:
      * @param aOriginSegmentIndex index of aSeg in the resulting line
      * @return the line
      */
-    PNS_LINE* AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex = NULL );
+    const PNS_LINE AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex = NULL );
 
     ///> Prints the contents and joints structure
     void Dump( bool aLong = false );
@@ -335,6 +335,8 @@ public:
      */
     PNS_JOINT* FindJoint( const VECTOR2I& aPos, int aLayer, int aNet );
 
+    void LockJoint( const VECTOR2I& aPos, const PNS_ITEM* aItem, bool aLock );
+
     /**
      * Function FindJoint()
      *
@@ -357,10 +359,10 @@ public:
     ///> finds all lines between a pair of joints. Used by the loop removal procedure.
     int FindLinesBetweenJoints( PNS_JOINT&                  aA,
                                 PNS_JOINT&                  aB,
-                                std::vector<PNS_LINE*>&     aLines );
+                                std::vector<PNS_LINE>&      aLines );
 
     ///> finds the joints corresponding to the ends of line aLine
-    void FindLineEnds( PNS_LINE* aLine, PNS_JOINT& aA, PNS_JOINT& aB );
+    void FindLineEnds( const PNS_LINE& aLine, PNS_JOINT& aA, PNS_JOINT& aB );
 
     ///> Destroys all child nodes. Applicable only to the root node.
     void KillChildren();
@@ -410,6 +412,7 @@ private:
     void doRemove( PNS_ITEM* aItem );
     void unlinkParent();
     void releaseChildren();
+    void releaseGarbage();
 
     bool isRoot() const
     {
@@ -464,6 +467,8 @@ private:
 
     ///> optional collision filtering object
     PNS_COLLISION_FILTER *m_collisionFilter;
+
+    boost::unordered_set<PNS_ITEM*> m_garbageItems;
 };
 
 #endif

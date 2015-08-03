@@ -52,7 +52,7 @@ public:
     };
 
     PNS_JOINT() :
-        PNS_ITEM( JOINT ) {}
+        PNS_ITEM( JOINT ), m_locked( false ) {}
 
     PNS_JOINT( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, int aNet = -1 ) :
         PNS_ITEM( JOINT )
@@ -60,6 +60,7 @@ public:
         m_tag.pos = aPos;
         m_tag.net = aNet;
         m_layers = aLayers;
+        m_locked = false;
     }
 
     PNS_JOINT( const PNS_JOINT& aB ) :
@@ -70,6 +71,7 @@ public:
         m_tag.net = aB.m_tag.net;
         m_linkedItems = aB.m_linkedItems;
         m_layers = aB.m_layers;
+        m_locked = false;
     }
 
     PNS_ITEM* Clone( ) const
@@ -82,6 +84,9 @@ public:
     /// segments of the same net, on the same layer.
     bool IsLineCorner() const
     {
+        if( m_locked )
+            return false;
+
         if( m_linkedItems.Size() != 2 )
             return false;
 
@@ -136,6 +141,17 @@ public:
             return NULL;
 
         return static_cast<PNS_SEGMENT*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
+    }
+
+    PNS_VIA* Via()
+    {
+        BOOST_FOREACH( PNS_ITEM* item, m_linkedItems.Items() )
+        {
+            if( item->OfKind( VIA ) )
+                return static_cast<PNS_VIA*>( item );
+        }
+
+        return NULL;
     }
 
 
@@ -201,12 +217,25 @@ public:
             m_tag.net == rhs.m_tag.net && m_layers.Overlaps( rhs.m_layers );
     }
 
+    void Lock( bool aLock = true )
+    {
+        m_locked = aLock;
+    }
+
+    bool IsLocked() const
+    {
+        return m_locked;
+    }
+
 private:
     ///> hash tag for unordered_multimap
     HASH_TAG m_tag;
 
     ///> list of items linked to this joint
     PNS_ITEMSET m_linkedItems;
+
+    ///> locked (non-movable) flag
+    bool m_locked;
 };
 
 inline bool operator==( PNS_JOINT::HASH_TAG const& aP1, PNS_JOINT::HASH_TAG const& aP2 )

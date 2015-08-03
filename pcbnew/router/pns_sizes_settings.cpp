@@ -49,7 +49,7 @@ int PNS_SIZES_SETTINGS::inheritTrackWidth( PNS_ITEM* aItem )
             return 0;
     }
 
-    PNS_JOINT* jt = aItem->Owner()->FindJoint( p, aItem );
+    PNS_JOINT* jt = static_cast<PNS_NODE*>( aItem->Owner() )->FindJoint( p, aItem );
 
     assert( jt != NULL );
 

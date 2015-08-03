@@ -37,17 +37,17 @@ bool PNS_TOPOLOGY::SimplifyLine( PNS_LINE* aLine )
         return false;
 
     PNS_SEGMENT* root = ( *aLine->LinkedSegments() )[0];
-    std::auto_ptr<PNS_LINE> l( m_world->AssembleLine( root ) );
-    SHAPE_LINE_CHAIN simplified( l->CLine() );
+    PNS_LINE l = m_world->AssembleLine( root );
+    SHAPE_LINE_CHAIN simplified( l.CLine() );
 
     simplified.Simplify();
 
-    if( simplified.PointCount() != l->PointCount() )
+    if( simplified.PointCount() != l.PointCount() )
     {
-        std::auto_ptr<PNS_LINE> lnew( l->Clone() );
-        m_world->Remove( l.get() );
-        lnew->SetShape( simplified );
-        m_world->Add( lnew.get() );
+        PNS_LINE lnew( l );
+        m_world->Remove( &l );
+        lnew.SetShape( simplified );
+        m_world->Add( &lnew );
         return true;
     }
 
@@ -199,13 +199,13 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
         if( !next_seg )
             return false;
 
-        PNS_LINE* l = m_world->AssembleLine( next_seg );
+        PNS_LINE l = m_world->AssembleLine( next_seg );
 
-        VECTOR2I nextAnchor = ( aLeft ? l->CLine().CPoint( -1 ) : l->CLine().CPoint( 0 ) );
+        VECTOR2I nextAnchor = ( aLeft ? l.CLine().CPoint( -1 ) : l.CLine().CPoint( 0 ) );
 
         if( nextAnchor != anchor )
         {
-            l->Reverse();
+            l.Reverse();
         }
 
         if( aLeft )
@@ -219,7 +219,7 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
             aSet.Add( l );
         }
 
-        return followTrivialPath( l, aLeft, aSet, aVisited );
+        return followTrivialPath( &l, aLeft, aSet, aVisited );
     }
 
     return false;
@@ -231,12 +231,12 @@ const PNS_ITEMSET PNS_TOPOLOGY::AssembleTrivialPath( PNS_SEGMENT* aStart )
     PNS_ITEMSET path;
     std::set<PNS_ITEM*> visited;
 
-    PNS_LINE* l = m_world->AssembleLine( aStart );
+    PNS_LINE l = m_world->AssembleLine( aStart );
 
     path.Add( l );
 
-    followTrivialPath( l, false, path, visited );
-    followTrivialPath( l, true, path, visited );
+    followTrivialPath( &l, false, path, visited );
+    followTrivialPath( &l, true, path, visited );
 
     return path;
 }
@@ -362,32 +362,36 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
                 }
             }
         }
-    } else
+    }
+    else
+    {
         return false;
+    }
 
     if( !coupledSeg )
         return false;
 
-    std::auto_ptr<PNS_LINE> lp( m_world->AssembleLine( refSeg ) );
-    std::auto_ptr<PNS_LINE> ln( m_world->AssembleLine( coupledSeg ) );
+    PNS_LINE lp = m_world->AssembleLine( refSeg );
+    PNS_LINE ln = m_world->AssembleLine( coupledSeg );
 
     if( DpNetPolarity( refNet ) < 0 )
     {
         std::swap( lp, ln );
     }
 
-    int gap = -1 ;
+    int gap = -1;
+
     if( refSeg->Seg().ApproxParallel( coupledSeg->Seg() ) )
     {
         // Segments are parallel -> compute pair gap
         const VECTOR2I refDir       = refSeg->Anchor( 1 ) - refSeg->Anchor( 0 );
         const VECTOR2I displacement = refSeg->Anchor( 1 ) - coupledSeg->Anchor( 1 );
-        gap = (int) std::abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp->Width();
+        gap = (int) std::abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp.Width();
     }
 
-    aPair = PNS_DIFF_PAIR( *lp, *ln );
-    aPair.SetWidth( lp->Width() );
-    aPair.SetLayers( lp->Layers() );
+    aPair = PNS_DIFF_PAIR( lp, ln );
+    aPair.SetWidth( lp.Width() );
+    aPair.SetLayers( lp.Layers() );
     aPair.SetGap( gap );
 
     return true;

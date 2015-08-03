@@ -32,42 +32,53 @@
  * Holds a list of board items, that can be filtered against net, kinds,
  * layers, etc.
  **/
+class PNS_LINE;
 
-class PNS_ITEMSET
+class PNS_ITEMSET : public PNS_OBJECT
 {
 public:
     typedef std::deque<PNS_ITEM*> ITEMS;
 
-    PNS_ITEMSET( PNS_ITEM* aInitialItem = NULL );
-
-    PNS_ITEMSET( const PNS_ITEMSET& aOther ):
-        m_owner( false )
+    PNS_ITEMSET( PNS_ITEM* aInitialItem = NULL, bool aBecomeOwner = false )
     {
-        m_items = aOther.m_items;
+        if( aInitialItem )
+        {
+            if( aBecomeOwner )
+                aInitialItem->SetOwner( this );
+
+            m_items.push_back( aInitialItem );
+        }
+    }
+
+    PNS_ITEMSET( const PNS_ITEMSET& aOther )
+    {
+        copyFrom( aOther );
     }
 
     ~PNS_ITEMSET();
 
-    void MakeOwner()
-    {
-        m_owner = true;
-    }
-
     const PNS_ITEMSET& operator=( const PNS_ITEMSET& aOther )
     {
-        m_items = aOther.m_items;
+        copyFrom( aOther );
         return *this;
     }
 
     int Count( int aKindMask = -1 ) const
     {
         int n = 0;
+
         BOOST_FOREACH( PNS_ITEM* item, m_items )
         {
             if( item->Kind() & aKindMask )
                 n++;
         }
+
         return n;
+    }
+
+    bool Empty() const
+    {
+        return m_items.empty();
     }
 
     ITEMS& Items() { return m_items; }
@@ -100,13 +111,22 @@ public:
         return m_items.size();
     }
 
-    void Add( PNS_ITEM* aItem )
+    void Add( const PNS_LINE& aLine );
+    void Prepend( const PNS_LINE& aLine );
+
+    void Add( PNS_ITEM* aItem, bool aBecomeOwner = false )
     {
+        if( aBecomeOwner )
+            aItem->SetOwner( this );
+
         m_items.push_back( aItem );
     }
 
-    void Prepend( PNS_ITEM* aItem )
+    void Prepend( PNS_ITEM* aItem, bool aBecomeOwner = false )
     {
+        if( aBecomeOwner )
+            aItem->SetOwner( this );
+
         m_items.push_front( aItem );
     }
 
@@ -122,6 +142,12 @@ public:
 
     void Clear()
     {
+        BOOST_FOREACH( PNS_ITEM *item, m_items )
+        {
+            if( item->BelongsTo( this ) )
+                delete item;
+        }
+
         m_items.clear();
     }
 
@@ -130,17 +156,53 @@ public:
         return std::find( m_items.begin(), m_items.end(), aItem ) != m_items.end();
     }
 
-    void Erase( const PNS_ITEM* aItem )
+    void Erase( PNS_ITEM* aItem )
     {
         ITEMS::iterator f = std::find( m_items.begin(), m_items.end(), aItem );
 
         if( f != m_items.end() )
             m_items.erase( f );
+
+        if( aItem->BelongsTo( this ) )
+            delete aItem;
     }
 
+    template<class T>
+        T* FindByKind( PNS_ITEM::PnsKind kind, int index = 0 )
+        {
+            int n = 0;
+
+            BOOST_FOREACH( PNS_ITEM* item, m_items )
+            {
+                if( item->OfKind (kind) )
+                {
+                    if( index == n )
+                        return static_cast<T*>( item );
+                    else
+                        n++;
+                }
+            }
+
+            return NULL;
+        }
+
 private:
+    void release();
+
+    void copyFrom( const PNS_ITEMSET& aOther )
+    {
+        release();
+
+        BOOST_FOREACH( PNS_ITEM *item, aOther.m_items )
+        {
+            if( item->BelongsTo( &aOther ) )
+                m_items.push_back( item->Clone() );
+            else
+                m_items.push_back( item );
+        }
+    }
+
     ITEMS m_items;
-    bool m_owner;
 };
 
 #endif

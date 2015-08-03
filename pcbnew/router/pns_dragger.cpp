@@ -30,7 +30,6 @@ PNS_DRAGGER::PNS_DRAGGER( PNS_ROUTER* aRouter ) :
     m_world = NULL;
     m_lastNode = NULL;
     m_mode = SEGMENT;
-    m_draggedLine = NULL;
     m_draggedVia = NULL;
     m_shove = NULL;
     m_draggedSegmentIndex = 0;
@@ -59,7 +58,7 @@ bool PNS_DRAGGER::startDragSegment( const VECTOR2D& aP, PNS_SEGMENT* aSeg )
 
     m_draggedLine = m_world->AssembleLine( aSeg, &m_draggedSegmentIndex );
     m_shove->SetInitialLine( m_draggedLine );
-    m_lastValidDraggedLine = *m_draggedLine;
+    m_lastValidDraggedLine = m_draggedLine;
     m_lastValidDraggedLine.ClearSegmentLinks();
 
     if( ( aP - aSeg->Seg().A ).EuclideanNorm() <= w2 )
@@ -90,12 +89,12 @@ bool PNS_DRAGGER::startDragVia( const VECTOR2D& aP, PNS_VIA* aVia )
         {
             int segIndex;
             PNS_SEGMENT* seg = ( PNS_SEGMENT*) item;
-            std::auto_ptr<PNS_LINE> l( m_world->AssembleLine( seg, &segIndex ) );
+            PNS_LINE l = m_world->AssembleLine( seg, &segIndex );
 
             if( segIndex != 0 )
-                l->Reverse();
+                l.Reverse();
 
-            m_origViaConnections.push_back( *l );
+            m_origViaConnections.Add( l );
         }
     }
 
@@ -139,8 +138,8 @@ bool PNS_DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         case SEGMENT:
         case CORNER:
         {
-            int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine->Width() / 4 : 0;
-            PNS_LINE tmp( *m_draggedLine );
+            int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
+            PNS_LINE tmp( m_draggedLine );
 
             if( m_mode == SEGMENT )
                 tmp.DragSegment( aP, m_draggedSegmentIndex, thresh );
@@ -188,18 +187,21 @@ void PNS_DRAGGER::dumbDragVia( PNS_VIA* aVia, PNS_NODE* aNode, const VECTOR2I& a
     m_lastNode->Remove( aVia );
     m_lastNode->Add( m_draggedVia );
 
-    BOOST_FOREACH( PNS_LINE &l, m_origViaConnections )
+    BOOST_FOREACH( PNS_ITEM* item, m_origViaConnections.Items() )
     {
-        PNS_LINE origLine( l );
-        PNS_LINE* draggedLine = l.Clone();
+        if ( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
+        {
+            PNS_LINE origLine( *l );
+            PNS_LINE draggedLine( *l );
 
-        draggedLine->DragCorner( aP, 0 );
-        draggedLine->ClearSegmentLinks();
+            draggedLine.DragCorner( aP, 0 );
+            draggedLine.ClearSegmentLinks();
 
-        m_draggedItems.Add( draggedLine );             // FIXME: mem leak
+            m_draggedItems.Add( draggedLine );
 
-        m_lastNode->Remove( &origLine );
-        m_lastNode->Add( draggedLine );
+            m_lastNode->Remove( &origLine );
+            m_lastNode->Add( &draggedLine );
+        }
     }
 }
 
@@ -219,8 +221,8 @@ bool PNS_DRAGGER::dragShove( const VECTOR2I& aP )
         case SEGMENT:
         case CORNER:
         {
-            int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine->Width() / 4 : 0;
-            PNS_LINE tmp( *m_draggedLine );
+            int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
+            PNS_LINE tmp( m_draggedLine );
 
             if( m_mode == SEGMENT )
                 tmp.DragSegment( aP, m_draggedSegmentIndex, thresh );

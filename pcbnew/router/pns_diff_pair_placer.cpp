@@ -212,7 +212,7 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk ( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurren
 
         PNS_SHOVE::SHOVE_STATUS sh1;
 
-        sh1 = shove.ProcessSingleLine( &postWalk, &preShove, &postShove );
+        sh1 = shove.ProcessSingleLine( postWalk, preShove, postShove );
 
         if( sh1 != PNS_SHOVE::SH_OK )
             return false;

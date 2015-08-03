@@ -292,7 +292,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     {
         switch( aEvent.KeyCode() )
         {
-            case 'S':
+            case '0':
                 TRACEn( 2, "saving drag/route log...\n" );
                 m_router->DumpLog();
                 break;

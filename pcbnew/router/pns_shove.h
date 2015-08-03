@@ -64,8 +64,8 @@ public:
     SHOVE_STATUS ShoveMultiLines( const PNS_ITEMSET& aHeadSet );
 
     SHOVE_STATUS ShoveDraggingVia( PNS_VIA* aVia, const VECTOR2I& aWhere, PNS_VIA** aNewVia );
-    SHOVE_STATUS ProcessSingleLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle,
-                                    PNS_LINE* aShoved );
+    SHOVE_STATUS ProcessSingleLine( PNS_LINE& aCurrent, PNS_LINE& aObstacle,
+                                    PNS_LINE& aShoved );
 
     void ForceClearance ( bool aEnabled, int aClearance )
     {
@@ -79,12 +79,12 @@ public:
 
     const PNS_LINE NewHead() const;
 
-    void SetInitialLine( PNS_LINE* aInitial );
+    void SetInitialLine( PNS_LINE& aInitial );
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
     typedef boost::optional<PNS_LINE> OPT_LINE;
-    typedef std::pair <PNS_LINE*, PNS_LINE*> LINE_PAIR;
+    typedef std::pair<PNS_LINE, PNS_LINE> LINE_PAIR;
     typedef std::vector<LINE_PAIR> LINE_PAIR_VEC;
 
     struct SPRINGBACK_TAG
@@ -98,21 +98,21 @@ private:
         OPT_BOX2I m_affectedArea;
     };
 
-    SHOVE_STATUS processHullSet( PNS_LINE* aCurrent, PNS_LINE* aObstacle,
-                                 PNS_LINE* aShoved, const HULL_SET& hulls );
+    SHOVE_STATUS processHullSet( PNS_LINE& aCurrent, PNS_LINE& aObstacle,
+                                 PNS_LINE& aShoved, const HULL_SET& hulls );
 
     bool reduceSpringback( const PNS_ITEMSET& aHeadItems );
     bool pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET& aHeadItems,
                                 const PNS_COST_ESTIMATOR& aCost, const OPT_BOX2I& aAffectedArea );
 
-    SHOVE_STATUS walkaroundLoneVia( PNS_LINE* aCurrent, PNS_LINE* aObstacle, PNS_LINE* aShoved );
-    bool checkBumpDirection( PNS_LINE* aCurrent, PNS_LINE* aShoved ) const;
+    SHOVE_STATUS walkaroundLoneVia( PNS_LINE& aCurrent, PNS_LINE& aObstacle, PNS_LINE& aShoved );
+    bool checkBumpDirection( const PNS_LINE& aCurrent, const PNS_LINE& aShoved ) const;
 
-    SHOVE_STATUS onCollidingLine( PNS_LINE* aCurrent, PNS_LINE* aObstacle );
-    SHOVE_STATUS onCollidingSegment( PNS_LINE* aCurrent, PNS_SEGMENT* aObstacleSeg );
-    SHOVE_STATUS onCollidingSolid( PNS_LINE* aCurrent, PNS_SOLID* aObstacleSolid );
+    SHOVE_STATUS onCollidingLine( PNS_LINE& aCurrent, PNS_LINE& aObstacle );
+    SHOVE_STATUS onCollidingSegment( PNS_LINE& aCurrent, PNS_SEGMENT* aObstacleSeg );
+    SHOVE_STATUS onCollidingSolid( PNS_LINE& aCurrent, PNS_SOLID* aObstacleSolid );
     SHOVE_STATUS onCollidingVia( PNS_ITEM* aCurrent, PNS_VIA* aObstacleVia );
-    SHOVE_STATUS onReverseCollidingVia( PNS_LINE* aCurrent, PNS_VIA* aObstacleVia );
+    SHOVE_STATUS onReverseCollidingVia( PNS_LINE& aCurrent, PNS_VIA* aObstacleVia );
     SHOVE_STATUS pushVia( PNS_VIA* aVia, const VECTOR2I& aForce, int aCurrentRank, bool aDryRun = false );
 
     OPT_BOX2I totalAffectedArea() const;
@@ -120,34 +120,25 @@ private:
     void unwindStack( PNS_SEGMENT* aSeg );
     void unwindStack( PNS_ITEM* aItem );
 
-    void runOptimizer( PNS_NODE* aNode, PNS_LINE* aHead );
+    void runOptimizer( PNS_NODE* aNode );
 
-    bool pushLine( PNS_LINE* aL );
+    bool pushLine( const PNS_LINE& aL );
     void popLine();
 
-    PNS_LINE* assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );
+    PNS_LINE assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );
 
     void replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew );
-
-    template<class T> T* clone( const T* aItem )
-    {
-        T *cloned = aItem->Clone();
-
-        m_gcItems.push_back( cloned );
-        return cloned;
-    }
 
     OPT_BOX2I                   m_affectedAreaSum;
 
     SHOVE_STATUS shoveIteration( int aIter );
     SHOVE_STATUS shoveMainLoop();
 
-    int getClearance( PNS_ITEM* aA, PNS_ITEM* aB ) const;
+    int getClearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) const;
 
     std::vector<SPRINGBACK_TAG> m_nodeStack;
-    std::vector<PNS_LINE*>      m_lineStack;
-    std::vector<PNS_LINE*>      m_optimizerQueue;
-    std::vector<PNS_ITEM*>      m_gcItems;
+    std::vector<PNS_LINE>       m_lineStack;
+    std::vector<PNS_LINE>       m_optimizerQueue;
 
     PNS_NODE*                   m_root;
     PNS_NODE*                   m_currentNode;
@@ -161,6 +152,7 @@ private:
     int                         m_iter;
     int m_forceClearance;
     bool m_multiLineMode;
+    void sanityCheck( PNS_LINE* aOld, PNS_LINE* aNew );
 };
 
 #endif // __PNS_SHOVE_H

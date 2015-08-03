@@ -242,7 +242,7 @@ private:
      * Searches aNode for traces concurrent to aLatest and removes them. Updated
      * topology is stored in aNode.
      */
-    void removeLoops( PNS_NODE* aNode, PNS_LINE* aLatest );
+    void removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest );
 
     /**
      * Function simplifyNewLine()

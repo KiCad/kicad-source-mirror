@@ -115,7 +115,9 @@ int PNS_LINE::Marker() const
     if( m_segmentRefs )
     {
         BOOST_FOREACH( PNS_SEGMENT* s, *m_segmentRefs )
+        {
             marker |= s->Marker();
+        }
     }
 
     return marker;
@@ -292,6 +294,9 @@ bool PNS_LINE::Is45Degree()
     for( int i = 0; i < m_line.SegmentCount(); i++ )
     {
         const SEG& s = m_line.CSegment( i );
+
+        if( s.Length() < 10 )
+            continue;
 
         double angle = 180.0 / M_PI *
                        atan2( (double) s.B.y - (double) s.A.y,

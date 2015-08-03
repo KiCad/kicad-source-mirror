@@ -100,7 +100,7 @@ protected:
     ///> Current world state
     PNS_NODE* m_currentNode;
 
-    PNS_LINE* m_originLine;
+    PNS_LINE m_originLine;
     PNS_LINE m_currentTrace;
     PNS_ITEMSET m_tunedPath;
 
