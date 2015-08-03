@@ -32,7 +32,6 @@
 #include <kiface_i.h>
 #include <convert_from_iu.h>
 #include <class_pcb_layer_box_selector.h>
-#include <class_draw_panel_gal.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -181,9 +180,7 @@ bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller )
     {
         const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
         PICKED_ITEMS_LIST picklist;
-
         BOARD* board = aCaller->GetBoard();
-        KIGFX::VIEW* view = aCaller->GetGalCanvas()->GetView();
 
         std::list<BOARD_ITEM*>::const_iterator it, itEnd;
         for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
@@ -193,9 +190,6 @@ bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller )
 
             ITEM_PICKER itemWrapper( item, UR_NEW );
             picklist.PushItem( itemWrapper );
-
-            if( aCaller->IsGalCanvasActive() )
-                view->Add( item );
         }
 
         aCaller->SaveCopyInUndoList( picklist, UR_NEW, wxPoint( 0, 0 ) );
@@ -216,7 +210,6 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
     if( success )
     {
         const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
-        KIGFX::VIEW* view = aCaller->GetGalCanvas()->GetView();
 
         aCaller->SaveCopyInUndoList( aModule, UR_MODEDIT );
         aCaller->OnModify();
@@ -255,9 +248,6 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
                 wxLogDebug( wxT( "type %d currently not handled" ), item->Type() );
                 break;
             }
-
-            if( aCaller->IsGalCanvasActive() && converted )
-                view->Add( converted );
         }
     }
 

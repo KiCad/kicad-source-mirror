@@ -448,52 +448,11 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     std::list<BOARD_ITEM*>::const_iterator it, itEnd;
     for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
     {
-        BOARD_ITEM* item = *it;
-        BOARD_ITEM* converted = NULL;
+        KICAD_T type = (*it)->Type();
+        assert( type == PCB_LINE_T || type == PCB_TEXT_T );
 
-        // Modules use different types for the same things,
-        // so we need to convert imported items to appropriate classes.
-        switch( item->Type() )
-        {
-        case PCB_LINE_T:
-        {
-            if( m_editModules )
-            {
-                converted = new EDGE_MODULE( m_board->m_Modules );
-                *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
-                converted->Move( wxPoint( delta.x, delta.y ) );
-                preview.Add( converted );
-                delete item;
-            }
-            else
-            {
-                preview.Add( item );
-            }
-
-            break;
-        }
-
-        case PCB_TEXT_T:
-        {
-            if( m_editModules )
-            {
-                converted = new TEXTE_MODULE( m_board->m_Modules );
-                *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
-                converted->Move( wxPoint( delta.x, delta.y ) );
-                preview.Add( converted );
-                delete item;
-            }
-            else
-            {
-                preview.Add( item );
-            }
-            break;
-        }
-
-        default:
-            assert( false );    // there is a type that is currently not handled here
-            break;
-        }
+        if( type == PCB_LINE_T || type == PCB_TEXT_T )
+            preview.Add( *it );
     }
 
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( *preview.Begin() );
@@ -549,22 +508,31 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             // Place the drawing
             if( m_editModules )
             {
+                assert( m_board->m_Modules );
                 m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
                 m_board->m_Modules->SetLastEditTime();
 
                 for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-                    m_board->m_Modules->Add( item );
+                    BOARD_ITEM* converted = NULL;
 
+                    // Modules use different types for the same things,
+                    // so we need to convert imported items to appropriate classes.
                     switch( item->Type() )
                     {
-                    case PCB_MODULE_TEXT_T:
-                        static_cast<TEXTE_MODULE*>( item )->SetLocalCoord();
+                    case PCB_TEXT_T:
+                        converted = new TEXTE_MODULE( m_board->m_Modules );
+                        // Copy coordinates, layer, etc.
+                        *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
+                        static_cast<TEXTE_MODULE*>( converted )->SetLocalCoord();
                         break;
 
-                    case PCB_MODULE_EDGE_T:
-                        static_cast<EDGE_MODULE*>( item )->SetLocalCoord();
+                    case PCB_LINE_T:
+                        converted = new EDGE_MODULE( m_board->m_Modules );
+                        // Copy coordinates, layer, etc.
+                        *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
+                        static_cast<EDGE_MODULE*>( converted )->SetLocalCoord();
                         break;
 
                     default:
@@ -572,7 +540,9 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                         break;
                     }
 
-                    m_view->Add( item );
+                    delete item;
+                    m_board->m_Modules->Add( converted );
+                    m_view->Add( converted );
                 }
             }
             else
@@ -594,7 +564,6 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             }
 
             m_frame->OnModify();
-
             break;
         }
     }
