@@ -701,7 +701,7 @@ bool SHAPE_POLY_SET::pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN&
                                 (int64_t)( ipNext.x - aP.x ) * (int64_t)( ip.y - aP.y );
 
                 if( !d )
-                    return -1;
+                    return true;
 
                 if( ( d > 0 ) == ( ipNext.y > ip.y ) )
                     result = 1 - result;
