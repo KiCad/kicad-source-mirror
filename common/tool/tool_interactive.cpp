@@ -66,6 +66,6 @@ void TOOL_INTERACTIVE::goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIS
 
 void TOOL_INTERACTIVE::SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger )
 {
-    aMenu->setTool( this );
+    aMenu->SetTool( this );
     m_toolMgr->ScheduleContextMenu( this, aMenu, aTrigger );
 }

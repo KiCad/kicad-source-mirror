@@ -70,8 +70,8 @@ public:
 
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
-        m_frame( NULL ), m_additive( false ), m_multiple( false ),
-        m_editModules( false ), m_locked( true ), m_contextMenu( NULL ), m_selectMenu( NULL )
+        m_frame( NULL ), m_additive( false ), m_multiple( false ), m_editModules( false ),
+        m_locked( true ), m_menu( this ), m_contextMenu( NULL ), m_selectMenu( NULL )
 {
     // Do not leave uninitialized members:
     m_preliminary = false;
@@ -91,6 +91,8 @@ bool SELECTION_TOOL::Init()
     m_selection.group = new KIGFX::VIEW_GROUP;
 
     m_selectMenu = new SELECT_MENU;
+    m_selectMenu->SetTool( this );
+
     m_menu.AddMenu( m_selectMenu, _( "Select..." ), false,
             ( SELECTION_CONDITIONS::OnlyType( PCB_VIA_T ) || SELECTION_CONDITIONS::OnlyType( PCB_TRACE_T ) ) &&
             SELECTION_CONDITIONS::Count( 1 ) );

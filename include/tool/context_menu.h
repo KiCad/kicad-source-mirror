@@ -147,6 +147,13 @@ public:
         m_update_handler = aUpdateHandler;
     }
 
+    /**
+     * Function SetTool()
+     * Sets a tool that is the creator of the menu.
+     * @param aTool is the tool that created the menu.
+     */
+    void SetTool( TOOL_INTERACTIVE* aTool );
+
 protected:
     ///> Returns an instance of TOOL_MANAGER class.
     TOOL_MANAGER* getToolManager();
@@ -176,13 +183,6 @@ private:
 
     ///> The default menu event handler.
     void onMenuEvent( wxMenuEvent& aEvent );
-
-    /**
-     * Function setTool()
-     * Sets a tool that is the creator of the menu.
-     * @param aTool is the tool that created the menu.
-     */
-    void setTool( TOOL_INTERACTIVE* aTool );
 
     ///> Updates hot key settings for TOOL_ACTIONs in this menu.
     void updateHotKeys();

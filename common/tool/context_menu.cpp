@@ -194,6 +194,14 @@ void CONTEXT_MENU::UpdateAll()
 }
 
 
+void CONTEXT_MENU::SetTool( TOOL_INTERACTIVE* aTool )
+{
+    m_tool = aTool;
+
+    runOnSubmenus( boost::bind( &CONTEXT_MENU::SetTool, _1, aTool ) );
+}
+
+
 TOOL_MANAGER* CONTEXT_MENU::getToolManager()
 {
     assert( m_tool );
@@ -290,14 +298,6 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     // forward the action/update event to the TOOL_MANAGER
     if( evt && m_tool )
         m_tool->GetManager()->ProcessEvent( *evt );
-}
-
-
-void CONTEXT_MENU::setTool( TOOL_INTERACTIVE* aTool )
-{
-    m_tool = aTool;
-
-    runOnSubmenus( boost::bind( &CONTEXT_MENU::setTool, _1, aTool ) );
 }
 
 

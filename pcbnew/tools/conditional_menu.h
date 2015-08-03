@@ -31,6 +31,7 @@
 
 class SELECTION_TOOL;
 class TOOL_ACTION;
+class TOOL_INTERACTIVE;
 class CONTEXT_MENU;
 
 class CONDITIONAL_MENU
@@ -38,6 +39,10 @@ class CONDITIONAL_MENU
 public:
     ///> Constant to indicate that we do not care about an ENTRY location in the menu.
     static const int ANY_ORDER = -1;
+
+    CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool ) :
+        m_tool( aTool )
+    {}
 
     /**
      * Function AddItem()
@@ -208,6 +213,9 @@ private:
 
     ///> List of all menu entries.
     std::list<ENTRY> m_entries;
+
+    ///> tool owning the menu
+    TOOL_INTERACTIVE* m_tool;
 };
 
 #endif /* CONDITIONAL_MENU_H */
