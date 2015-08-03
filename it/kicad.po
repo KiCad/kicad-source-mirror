@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-01 17:09+0100\n"
-"PO-Revision-Date: 2015-08-01 17:09+0100\n"
+"POT-Creation-Date: 2015-08-03 23:55+0100\n"
+"PO-Revision-Date: 2015-08-03 23:55+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -100,211 +100,211 @@ msgstr ""
 "X-Poedit-SearchPath-12: tools\n"
 "X-Poedit-SearchPath-13: pagelayout_editor\n"
 
-#: kicad/menubar.cpp:134 pcbnew/hotkeys.cpp:189 eeschema/hotkeys.cpp:118
+#: kicad/menubar.cpp:136 pcbnew/hotkeys.cpp:189 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:67 pagelayout_editor/hotkeys.cpp:78
 msgid "Help (this window)"
 msgstr "Aiuto (questa finestra)"
 
-#: kicad/menubar.cpp:135
+#: kicad/menubar.cpp:137
 msgid "Load project"
 msgstr "Carica progetto"
 
-#: kicad/menubar.cpp:136
+#: kicad/menubar.cpp:138
 msgid "Save project"
 msgstr "Salva progetto"
 
-#: kicad/menubar.cpp:137 kicad/menubar.cpp:242
+#: kicad/menubar.cpp:139 kicad/menubar.cpp:244
 msgid "New Project"
 msgstr "Nuovo progetto"
 
-#: kicad/menubar.cpp:138
+#: kicad/menubar.cpp:140
 msgid "New Prj From Template"
 msgstr "Nuovo progetto da modello"
 
-#: kicad/menubar.cpp:141 kicad/menubar.cpp:361
+#: kicad/menubar.cpp:143 kicad/menubar.cpp:363
 msgid "Run Eeschema"
 msgstr "Avvia Eeschema"
 
-#: kicad/menubar.cpp:142
+#: kicad/menubar.cpp:144
 msgid "Run LibEdit"
 msgstr "Avvia LibEdit"
 
-#: kicad/menubar.cpp:143 kicad/menubar.cpp:370 eeschema/menubar.cpp:480
+#: kicad/menubar.cpp:145 kicad/menubar.cpp:370 eeschema/menubar.cpp:480
 msgid "Run Pcbnew"
 msgstr "Avvia PcbNew"
 
-#: kicad/menubar.cpp:144
+#: kicad/menubar.cpp:146
 msgid "Run FpEditor"
 msgstr "Avvia FpEdit"
 
-#: kicad/menubar.cpp:145 kicad/menubar.cpp:380
+#: kicad/menubar.cpp:147 kicad/menubar.cpp:378
 msgid "Run Gerbview"
 msgstr "Avvia GerbView"
 
-#: kicad/menubar.cpp:146 kicad/menubar.cpp:385
+#: kicad/menubar.cpp:148 kicad/menubar.cpp:382
 msgid "Run Bitmap2Component"
 msgstr "Avvia Bitmap2Component"
 
-#: kicad/menubar.cpp:148
+#: kicad/menubar.cpp:150
 msgid "Run PcbCalculator"
 msgstr "Avvia PcbCalculator"
 
-#: kicad/menubar.cpp:150
+#: kicad/menubar.cpp:152
 msgid "Run PlEditor"
 msgstr "Avvia PlEditor"
 
-#: kicad/menubar.cpp:166
+#: kicad/menubar.cpp:168
 msgid "Kicad Manager Hotkeys"
 msgstr "Tasti scorciatoia KiCad"
 
-#: kicad/menubar.cpp:211
+#: kicad/menubar.cpp:213
 msgid "&Open Project"
 msgstr "&Apri progetto"
 
-#: kicad/menubar.cpp:213 kicad/menubar.cpp:479
+#: kicad/menubar.cpp:215 kicad/menubar.cpp:476
 msgid "Open existing project"
 msgstr "Apri progetto esistente"
 
-#: kicad/menubar.cpp:222 pcbnew/menubar_pcbframe.cpp:94
+#: kicad/menubar.cpp:224 pcbnew/menubar_pcbframe.cpp:94
 #: eeschema/menubar.cpp:97
 msgid "Open &Recent"
 msgstr "Apri &recente"
 
-#: kicad/menubar.cpp:223
+#: kicad/menubar.cpp:225
 msgid "Open recent schematic project"
 msgstr "Apri progetto di schema recente"
 
-#: kicad/menubar.cpp:229
+#: kicad/menubar.cpp:231
 msgid "&New Project"
 msgstr "&Nuovo progetto"
 
-#: kicad/menubar.cpp:231
+#: kicad/menubar.cpp:233
 msgid "Create new blank project"
 msgstr "Crea un nuovo progetto vuoto"
 
-#: kicad/menubar.cpp:234
+#: kicad/menubar.cpp:236
 msgid "New Project from &Template"
 msgstr "Nuovo proget&to da modello"
 
-#: kicad/menubar.cpp:237
+#: kicad/menubar.cpp:239
 msgid "Create a new project from a template"
 msgstr "Crea un nuovo progetto da un modello"
 
-#: kicad/menubar.cpp:243 kicad/menubar.cpp:470
+#: kicad/menubar.cpp:245 kicad/menubar.cpp:467
 msgid "Create new project"
 msgstr "Crea nuovo progetto"
 
-#: kicad/menubar.cpp:250 pcbnew/menubar_pcbframe.cpp:109
+#: kicad/menubar.cpp:252 pcbnew/menubar_pcbframe.cpp:109
 #: pcbnew/menubar_pcbframe.cpp:557
 msgid "&Save"
 msgstr "&Salva"
 
-#: kicad/menubar.cpp:252 kicad/menubar.cpp:484
+#: kicad/menubar.cpp:254 kicad/menubar.cpp:481
 msgid "Save current project"
 msgstr "Salva il progetto corrente"
 
-#: kicad/menubar.cpp:260
+#: kicad/menubar.cpp:262
 msgid "&Archive"
 msgstr "&Archivia"
 
-#: kicad/menubar.cpp:261
+#: kicad/menubar.cpp:263
 msgid "Archive project files in zip archive"
 msgstr "Comprimi i file del progetto in un archivio zip"
 
-#: kicad/menubar.cpp:267
+#: kicad/menubar.cpp:269
 msgid "&Unarchive"
 msgstr "Rec&upera"
 
-#: kicad/menubar.cpp:268
+#: kicad/menubar.cpp:270
 msgid "Unarchive project files from zip file"
 msgstr "Recupera i file del progetto da un archivio zip"
 
-#: kicad/menubar.cpp:277 pcbnew/menubar_pcbframe.cpp:272
+#: kicad/menubar.cpp:279 pcbnew/menubar_pcbframe.cpp:272
 #: eeschema/menubar.cpp:170 eeschema/dialogs/dialog_erc_base.cpp:110
 #: cvpcb/menubar.cpp:76 gerbview/menubar.cpp:145
 #: pagelayout_editor/menubar.cpp:111
 msgid "&Close"
 msgstr "&Chiudi"
 
-#: kicad/menubar.cpp:278
+#: kicad/menubar.cpp:280
 msgid "Close KiCad"
 msgstr "Chiudi KiCad"
 
-#: kicad/menubar.cpp:287
+#: kicad/menubar.cpp:289
 msgid "Open Text E&ditor"
 msgstr "Apri e&ditor di testo"
 
-#: kicad/menubar.cpp:288
+#: kicad/menubar.cpp:290
 msgid "Launch preferred text editor"
 msgstr "Lancia l'editor di testo preferito"
 
-#: kicad/menubar.cpp:294
+#: kicad/menubar.cpp:296
 msgid "&Open Local File"
 msgstr "Apri file l&ocale"
 
-#: kicad/menubar.cpp:295
+#: kicad/menubar.cpp:297
 msgid "Edit local file"
 msgstr "Modifica file locale"
 
-#: kicad/menubar.cpp:304 pcbnew/menubar_modedit.cpp:318
+#: kicad/menubar.cpp:306 pcbnew/menubar_modedit.cpp:318
 #: pcbnew/menubar_pcbframe.cpp:493 cvpcb/menubar.cpp:89
 msgid "Configure Pa&ths"
 msgstr "Configura &percorsi"
 
-#: kicad/menubar.cpp:305 pcbnew/menubar_modedit.cpp:319
+#: kicad/menubar.cpp:307 pcbnew/menubar_modedit.cpp:319
 #: pcbnew/menubar_pcbframe.cpp:494 cvpcb/menubar.cpp:90
 msgid "Edit path configuration environment variables"
 msgstr "Modifica le variabili d'ambiente dei percorsi"
 
-#: kicad/menubar.cpp:311
+#: kicad/menubar.cpp:313
 msgid "&Set Text Editor"
 msgstr "Impo&sta l'editor di testo"
 
-#: kicad/menubar.cpp:312
+#: kicad/menubar.cpp:314
 msgid "Set your preferred text editor"
 msgstr "Imposta editor di testo preferito"
 
-#: kicad/menubar.cpp:320
+#: kicad/menubar.cpp:322
 msgid "System &Default PDF Viewer"
 msgstr "Visualizzatore PDF pre&definto"
 
-#: kicad/menubar.cpp:321
+#: kicad/menubar.cpp:323
 msgid "Use system default PDF viewer"
 msgstr "Usa il visualizzatore PDF di sistema"
 
-#: kicad/menubar.cpp:329
+#: kicad/menubar.cpp:331
 msgid "&Favourite PDF Viewer"
 msgstr "Visualizzatore PDF pre&ferito"
 
-#: kicad/menubar.cpp:330
+#: kicad/menubar.cpp:332
 msgid "Use favourite PDF viewer"
 msgstr "Usa il visualizzatore PDF preferito"
 
-#: kicad/menubar.cpp:340
+#: kicad/menubar.cpp:342
 msgid "Set &PDF Viewer"
 msgstr "Imposta &Visualizzatore PDF"
 
-#: kicad/menubar.cpp:341
+#: kicad/menubar.cpp:343
 msgid "Set favourite PDF viewer"
 msgstr "Imposta il visualizzatore PDF preferito"
 
-#: kicad/menubar.cpp:346
+#: kicad/menubar.cpp:348
 msgid "&PDF Viewer"
 msgstr "Visualizzatore &PDF"
 
-#: kicad/menubar.cpp:347
+#: kicad/menubar.cpp:349
 msgid "PDF viewer preferences"
 msgstr "Preferenze visualizzatore PDF"
 
-#: kicad/menubar.cpp:365
+#: kicad/menubar.cpp:366
 msgid "Run Library Editor"
 msgstr "Avvia editor librerie"
 
-#: kicad/menubar.cpp:375
+#: kicad/menubar.cpp:374
 msgid "Run Footprint Editor"
 msgstr "Avvia editor impronte"
 
-#: kicad/menubar.cpp:388 kicad/commandframe.cpp:83
+#: kicad/menubar.cpp:385 kicad/commandframe.cpp:83
 msgid ""
 "Bitmap2Component - Convert bitmap images to Eeschema\n"
 "or Pcbnew elements"
@@ -312,50 +312,50 @@ msgstr ""
 "Bitmap2Component - Convertitore di immagini bitmap in elementi Eeschema o "
 "Pcbnew"
 
-#: kicad/menubar.cpp:392
+#: kicad/menubar.cpp:389
 msgid "Run Pcb Calculator"
 msgstr "Avvia Pcb Calculator"
 
-#: kicad/menubar.cpp:394 kicad/commandframe.cpp:87
+#: kicad/menubar.cpp:391 kicad/commandframe.cpp:87
 msgid "Pcb calculator - Calculator for components, track width, etc."
 msgstr "Pcb calculator - Calcolatrice per componenti, larghezza piste, ecc."
 
-#: kicad/menubar.cpp:397
+#: kicad/menubar.cpp:394
 msgid "Run Page Layout Editor"
 msgstr "Avvia editor fogli di lavoro"
 
-#: kicad/menubar.cpp:399 kicad/commandframe.cpp:90
+#: kicad/menubar.cpp:396 kicad/commandframe.cpp:90
 msgid "Pl editor - Worksheet layout editor"
 msgstr "Pl editor - Editor modelli fogli di lavoro"
 
-#: kicad/menubar.cpp:410
+#: kicad/menubar.cpp:407
 msgid "KiCad &Manual"
 msgstr "&Manuale di KiCad"
 
-#: kicad/menubar.cpp:411
+#: kicad/menubar.cpp:408
 msgid "Open KiCad user manual"
 msgstr "Apri il manuale utente di KiCad"
 
-#: kicad/menubar.cpp:415 pcbnew/tool_modview.cpp:194
+#: kicad/menubar.cpp:412 pcbnew/tool_modview.cpp:194
 #: pcbnew/menubar_modedit.cpp:346 pcbnew/menubar_pcbframe.cpp:644
 #: eeschema/tool_viewlib.cpp:255 eeschema/menubar.cpp:497
 #: eeschema/menubar_libedit.cpp:269
 msgid "&Getting Started in KiCad"
 msgstr "&Iniziare con KiCad"
 
-#: kicad/menubar.cpp:416 eeschema/menubar.cpp:498
+#: kicad/menubar.cpp:413 eeschema/menubar.cpp:498
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Apri  \"Iniziare con KiCad\", guida introduttiva"
 
-#: kicad/menubar.cpp:424
+#: kicad/menubar.cpp:421
 msgid "&About KiCad"
 msgstr "&Informazioni su KiCad"
 
-#: kicad/menubar.cpp:425
+#: kicad/menubar.cpp:422
 msgid "About KiCad project manager"
 msgstr "Informazioni sul manager dei progetti di KiCad"
 
-#: kicad/menubar.cpp:429 pcbnew/tool_modview.cpp:206
+#: kicad/menubar.cpp:426 pcbnew/tool_modview.cpp:206
 #: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:655
 #: eeschema/tool_viewlib.cpp:267 eeschema/menubar.cpp:509
 #: eeschema/menubar_libedit.cpp:283 cvpcb/menubar.cpp:135
@@ -364,21 +364,21 @@ msgstr "Informazioni sul manager dei progetti di KiCad"
 msgid "&File"
 msgstr "&File"
 
-#: kicad/menubar.cpp:430
+#: kicad/menubar.cpp:427
 msgid "&Browse"
 msgstr "&Esplora"
 
-#: kicad/menubar.cpp:431 cvpcb/menubar.cpp:136 3d-viewer/3d_toolbar.cpp:154
+#: kicad/menubar.cpp:428 cvpcb/menubar.cpp:136 3d-viewer/3d_toolbar.cpp:154
 #: gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:164
 msgid "&Preferences"
 msgstr "&Preferenze"
 
-#: kicad/menubar.cpp:432 pcbnew/menubar_pcbframe.cpp:662
+#: kicad/menubar.cpp:429 pcbnew/menubar_pcbframe.cpp:662
 #: eeschema/menubar.cpp:514
 msgid "&Tools"
 msgstr "&Strumenti "
 
-#: kicad/menubar.cpp:433 pcbnew/tool_modview.cpp:209
+#: kicad/menubar.cpp:430 pcbnew/tool_modview.cpp:209
 #: pcbnew/menubar_modedit.cpp:364 pcbnew/menubar_pcbframe.cpp:664
 #: eeschema/tool_viewlib.cpp:270 eeschema/menubar.cpp:515
 #: eeschema/menubar_libedit.cpp:288 cvpcb/menubar.cpp:137
@@ -386,15 +386,15 @@ msgstr "&Strumenti "
 msgid "&Help"
 msgstr "&Aiuto"
 
-#: kicad/menubar.cpp:474
+#: kicad/menubar.cpp:471
 msgid "Create new project from template"
 msgstr "Crea nuovo progetto da un modello"
 
-#: kicad/menubar.cpp:492
+#: kicad/menubar.cpp:489
 msgid "Archive all project files"
 msgstr "Archivia tutti i file del progetto"
 
-#: kicad/menubar.cpp:500
+#: kicad/menubar.cpp:497
 msgid "Refresh project tree"
 msgstr "Ricarica l'albero del progetto"
 
@@ -427,15 +427,15 @@ msgstr "Problemi durante la creazione del nuovo progetto da modello!"
 msgid "Template Error"
 msgstr "Errore modello!"
 
-#: kicad/prjconfig.cpp:229
+#: kicad/prjconfig.cpp:234
 msgid "Create New Project"
 msgstr "Crea nuovo progetto"
 
-#: kicad/prjconfig.cpp:234
+#: kicad/prjconfig.cpp:239
 msgid "Open Existing Project"
 msgstr "Apri un progetto esistente"
 
-#: kicad/prjconfig.cpp:260
+#: kicad/prjconfig.cpp:265
 msgid ""
 "The selected directory is not empty.  We recommend you create projects in "
 "their own clean directory.\n"
@@ -446,17 +446,22 @@ msgstr ""
 "progetti in una cartella dedicata e vuota.\n"
 "Creare per il progetto una nuova cartella vuota?"
 
-#: kicad/prjconfig.cpp:303
+#: kicad/prjconfig.cpp:308
 #, c-format
 msgid "KiCad project file '%s' not found"
 msgstr "File progetto di KiCad \"%s\" non trovato"
 
-#: kicad/prjconfig.cpp:321 pcbnew/pcbframe.cpp:1011 pcbnew/moduleframe.cpp:759
+#: kicad/prjconfig.cpp:321
+msgid "To proceed, you can use the File menu to start a new project."
+msgstr ""
+"Per procedere, si può usare il menu File per iniziare un nuovo progetto."
+
+#: kicad/prjconfig.cpp:335 pcbnew/pcbframe.cpp:1011 pcbnew/moduleframe.cpp:759
 #: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1331 cvpcb/cvframe.cpp:716
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
-#: kicad/prjconfig.cpp:347
+#: kicad/prjconfig.cpp:361
 msgid "New Project Folder"
 msgstr "Nuova cartella progetto"
 
@@ -645,25 +650,25 @@ msgstr "Cambia nome file: \"%s\""
 msgid "Change filename"
 msgstr "Cambia il nome al file"
 
-#: kicad/mainframe.cpp:246
+#: kicad/mainframe.cpp:247
 #, c-format
 msgid "%s closed [pid=%d]\n"
 msgstr "%s chiuso [pid=%d]\n"
 
-#: kicad/mainframe.cpp:267
+#: kicad/mainframe.cpp:268
 #, c-format
 msgid "%s opened [pid=%ld]\n"
 msgstr "%s aperto [pid=%ld]\n"
 
-#: kicad/mainframe.cpp:466
+#: kicad/mainframe.cpp:467
 msgid "Text file ("
 msgstr "File di testo ("
 
-#: kicad/mainframe.cpp:469
+#: kicad/mainframe.cpp:470
 msgid "Load File to Edit"
 msgstr "Carica file da modificare"
 
-#: kicad/mainframe.cpp:523
+#: kicad/mainframe.cpp:524
 #, c-format
 msgid ""
 "Project name:\n"
@@ -702,11 +707,11 @@ msgstr "Valida"
 msgid "Project Template Title"
 msgstr "Titolo modello di progetto"
 
-#: pcbnew/class_text_mod.cpp:366
+#: pcbnew/class_text_mod.cpp:365
 msgid "Ref."
 msgstr "Rif."
 
-#: pcbnew/class_text_mod.cpp:366 pcbnew/footprint_wizard_frame.cpp:151
+#: pcbnew/class_text_mod.cpp:365 pcbnew/footprint_wizard_frame.cpp:151
 #: pcbnew/class_edge_mod.cpp:261
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
@@ -723,15 +728,16 @@ msgstr "Rif."
 msgid "Value"
 msgstr "Valore"
 
-#: pcbnew/class_text_mod.cpp:366 pcbnew/class_text_mod.cpp:373
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 eeschema/lib_text.cpp:51
+#: pcbnew/class_text_mod.cpp:365 pcbnew/class_text_mod.cpp:372
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:21 eeschema/lib_text.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:67
 msgid "Text"
 msgstr "Testo"
 
-#: pcbnew/class_text_mod.cpp:370 pcbnew/class_module.cpp:616
+#: pcbnew/class_text_mod.cpp:369 pcbnew/class_module.cpp:616
 #: pcbnew/loadcmp.cpp:436 pcbnew/class_pad.cpp:628
 #: pcbnew/class_edge_mod.cpp:260 eeschema/template_fieldnames.cpp:45
 #: eeschema/onrightclick.cpp:433 eeschema/sch_component.cpp:1536
@@ -739,7 +745,7 @@ msgstr "Testo"
 msgid "Footprint"
 msgstr "Impronta"
 
-#: pcbnew/class_text_mod.cpp:376 pcbnew/class_marker_pcb.cpp:97
+#: pcbnew/class_text_mod.cpp:375 pcbnew/class_marker_pcb.cpp:97
 #: pcbnew/class_zone.cpp:584 pcbnew/class_track.cpp:1142
 #: pcbnew/class_track.cpp:1169 pcbnew/class_track.cpp:1218
 #: pcbnew/class_drawsegment.cpp:366 pcbnew/dialogs/dialog_layers_setup.cpp:346
@@ -753,7 +759,7 @@ msgstr "Impronta"
 msgid "Type"
 msgstr "Tipo"
 
-#: pcbnew/class_text_mod.cpp:379 pcbnew/class_pcb_text.cpp:143
+#: pcbnew/class_text_mod.cpp:378 pcbnew/class_pcb_text.cpp:143
 #: eeschema/lib_pin.cpp:1968
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:984
 #: gerbview/class_gerber_draw_item.cpp:572
@@ -761,7 +767,7 @@ msgstr "Tipo"
 msgid "No"
 msgstr "No"
 
-#: pcbnew/class_text_mod.cpp:381 pcbnew/class_pcb_text.cpp:145
+#: pcbnew/class_text_mod.cpp:380 pcbnew/class_pcb_text.cpp:145
 #: eeschema/lib_pin.cpp:1966
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:982
@@ -770,34 +776,35 @@ msgstr "No"
 msgid "Yes"
 msgstr "Sì"
 
-#: pcbnew/class_text_mod.cpp:383
+#: pcbnew/class_text_mod.cpp:382
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 msgid "Display"
 msgstr "Mostra"
 
-#: pcbnew/class_text_mod.cpp:386 pcbnew/class_pcb_layer_widget.cpp:242
+#: pcbnew/class_text_mod.cpp:385 pcbnew/class_pcb_layer_widget.cpp:242
 #: pcbnew/class_zone.cpp:630 pcbnew/layer_widget.cpp:545
 #: pcbnew/class_track.cpp:1152 pcbnew/class_track.cpp:1179
 #: pcbnew/class_drawsegment.cpp:408 pcbnew/class_module.cpp:568
 #: pcbnew/class_pcb_text.cpp:140 pcbnew/class_pad.cpp:644
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:115
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:144
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:89
 #: gerbview/class_gerbview_layer_widget.cpp:89
 #: gerbview/dialogs/dialog_print_using_printer.cpp:163
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
 msgid "Layer"
 msgstr "Strato"
 
-#: pcbnew/class_text_mod.cpp:389
+#: pcbnew/class_text_mod.cpp:388
 msgid " Yes"
 msgstr " Sì"
 
-#: pcbnew/class_text_mod.cpp:391
+#: pcbnew/class_text_mod.cpp:390
 msgid " No"
 msgstr " No"
 
-#: pcbnew/class_text_mod.cpp:393 pcbnew/modedit_onclick.cpp:292
+#: pcbnew/class_text_mod.cpp:392 pcbnew/modedit_onclick.cpp:292
 #: pcbnew/class_pcb_text.cpp:143 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:100
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
@@ -807,47 +814,45 @@ msgstr " No"
 msgid "Mirror"
 msgstr "Capovolgi"
 
-#: pcbnew/class_text_mod.cpp:396 pcbnew/class_drawsegment.cpp:379
+#: pcbnew/class_text_mod.cpp:395 pcbnew/class_drawsegment.cpp:379
 #: pcbnew/class_drawsegment.cpp:397 pcbnew/class_module.cpp:593
 #: pcbnew/class_pcb_text.cpp:148 pcbnew/class_pad.cpp:679
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
 msgid "Angle"
 msgstr "Angolo"
 
-#: pcbnew/class_text_mod.cpp:399 pcbnew/class_pcb_text.cpp:151
+#: pcbnew/class_text_mod.cpp:398 pcbnew/class_pcb_text.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:64
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
 msgid "Thickness"
 msgstr "Spessore"
 
-#: pcbnew/class_text_mod.cpp:402 pcbnew/class_track.cpp:1157
+#: pcbnew/class_text_mod.cpp:401 pcbnew/class_track.cpp:1157
 #: pcbnew/class_track.cpp:1184 pcbnew/class_drawsegment.cpp:410
 #: pcbnew/class_pcb_text.cpp:154 pcbnew/class_pad.cpp:650
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:48
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:327
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
-#: eeschema/lib_field.cpp:749
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:327 eeschema/lib_field.cpp:749
 msgid "Width"
 msgstr "Larghezza"
 
-#: pcbnew/class_text_mod.cpp:405 pcbnew/class_pcb_text.cpp:157
+#: pcbnew/class_text_mod.cpp:404 pcbnew/class_pcb_text.cpp:157
 #: pcbnew/class_pad.cpp:653 pcbnew/dialogs/dialog_edit_module_text_base.cpp:56
 #: eeschema/lib_field.cpp:752
 msgid "Height"
 msgstr "Altezza"
 
-#: pcbnew/class_text_mod.cpp:417
+#: pcbnew/class_text_mod.cpp:416
 #, c-format
 msgid "Reference %s"
 msgstr "Riferimento %s"
 
-#: pcbnew/class_text_mod.cpp:421
+#: pcbnew/class_text_mod.cpp:420
 #, c-format
 msgid "Value %s of %s"
 msgstr "Valore %s di %s"
 
-#: pcbnew/class_text_mod.cpp:425
+#: pcbnew/class_text_mod.cpp:424
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
@@ -1171,7 +1176,7 @@ msgstr "Ancoraggi"
 msgid "Show footprint and text origins as a cross"
 msgstr "Mostra origine impronte e testi con una crocetta"
 
-#: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:107
+#: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:109
 #: pcbnew/dialogs/dialog_create_array_base.cpp:170
 #: eeschema/dialogs/dialog_color_config.cpp:96
 #: gerbview/class_gerbview_layer_widget.cpp:110
@@ -1325,8 +1330,8 @@ msgstr "Assembly impronte sul fronte scheda"
 msgid "Footprint assembly on board's back"
 msgstr "Assembly impronte sul retro scheda"
 
-#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:745
-#: pcbnew/tools/drawing_tool.cpp:897
+#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:714
+#: pcbnew/tools/drawing_tool.cpp:866
 msgid "Graphic not allowed on Copper layers"
 msgstr "Grafica non consentita sugli strati in rame"
 
@@ -2275,7 +2280,7 @@ msgstr "Piazza zona"
 msgid "Keepout Area"
 msgstr "Zona proibita"
 
-#: pcbnew/onrightclick.cpp:724 pcbnew/tools/pcb_editor_control.cpp:120
+#: pcbnew/onrightclick.cpp:724 pcbnew/tools/pcb_editor_control.cpp:121
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 msgid "Zones"
 msgstr "Gestisci zona"
@@ -3188,7 +3193,7 @@ msgid "Add circle"
 msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:949 pcbnew/edit.cpp:1474
-#: pcbnew/tools/drawing_tool.cpp:1254 pcbnew/tools/drawing_tool.cpp:1378
+#: pcbnew/tools/drawing_tool.cpp:1223 pcbnew/tools/drawing_tool.cpp:1347
 #: eeschema/schedit.cpp:550 eeschema/libeditframe.cpp:1139
 msgid "Add text"
 msgstr "Aggiungi testo "
@@ -3386,7 +3391,7 @@ msgid "Enable high contrast display mode"
 msgstr "Visualizza con contrasto aumentato "
 
 #: pcbnew/tool_pcb.cpp:432 pcbnew/edit.cpp:1490
-#: pcbnew/tools/pcb_editor_control.cpp:702
+#: pcbnew/tools/pcb_editor_control.cpp:703
 msgid "Highlight net"
 msgstr "Evidenzia collegamento"
 
@@ -3440,7 +3445,7 @@ msgstr "Aggiungi quota"
 
 #: pcbnew/tool_pcb.cpp:470 pcbnew/menubar_pcbframe.cpp:421
 #: pcbnew/edit.cpp:1450 pcbnew/tools/common_actions.cpp:384
-#: pcbnew/tools/pcb_editor_control.cpp:345
+#: pcbnew/tools/pcb_editor_control.cpp:346
 msgid "Add layer alignment target"
 msgstr "Aggiungi marcatore di allineamento strati"
 
@@ -3797,20 +3802,19 @@ msgstr ""
 "Questo elemento ha un id strato illegale.\n"
 "Ora, è forzato sullo strato grafico. Prego, sistemarlo."
 
-#: pcbnew/dimension.cpp:172
+#: pcbnew/dimension.cpp:173
 msgid ""
-"the layer currently selected is not enabled for this board\n"
+"The layer currently selected is not enabled for this board\n"
 "You cannot use it"
 msgstr ""
-"Lo strato attualmente selezionato non è abilitato per questa scheda.\n"
-"Non si può usare."
+"Lo strato attualmente selezionato non è abilitato per questa scheda\n"
+"Non si può usare"
 
-#: pcbnew/dimension.cpp:216 pcbnew/dialogs/dialog_pcb_text_properties.cpp:260
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:234
-msgid "The text thickness is too large for the text size. It will be clamped"
+#: pcbnew/dimension.cpp:217
+msgid "The text thickness is too large for the text size.  It will be clamped"
 msgstr ""
 "Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà "
-"tagliato."
+"tagliato"
 
 #: pcbnew/layer_widget.cpp:432
 msgid ""
@@ -5005,7 +5009,7 @@ msgid "Add tracks"
 msgstr "Aggiungi pista"
 
 #: pcbnew/edit.cpp:1431 pcbnew/edit.cpp:1478
-#: pcbnew/tools/pcb_editor_control.cpp:223
+#: pcbnew/tools/pcb_editor_control.cpp:224
 msgid "Add module"
 msgstr "Aggiungi modulo"
 
@@ -5021,7 +5025,7 @@ msgstr "Attenzione: La visulizzazione delle zone è disabilitata!"
 msgid "Add keepout"
 msgstr "Aggiungi proibita"
 
-#: pcbnew/edit.cpp:1454 pcbnew/tools/pcb_editor_control.cpp:646
+#: pcbnew/edit.cpp:1454 pcbnew/tools/pcb_editor_control.cpp:647
 msgid "Adjust zero"
 msgstr "Regola zero"
 
@@ -6352,7 +6356,7 @@ msgstr "Aggiungi una zona piena"
 msgid "Add a keepout area"
 msgstr "Aggiungi una zona proibita"
 
-#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:620
+#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:589
 msgid "Place the footprint anchor"
 msgstr "Piazza ancoraggio impronta"
 
@@ -6508,19 +6512,19 @@ msgstr "Distribuisci verticalmente"
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
 
-#: pcbnew/tools/selection_tool.cpp:94
+#: pcbnew/tools/selection_tool.cpp:96
 msgid "Select..."
 msgstr "Seleziona..."
 
-#: pcbnew/tools/selection_tool.cpp:105
+#: pcbnew/tools/selection_tool.cpp:107
 msgid "Zoom"
 msgstr "Zoom"
 
-#: pcbnew/tools/selection_tool.cpp:528
+#: pcbnew/tools/selection_tool.cpp:530
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
 
-#: pcbnew/tools/selection_tool.cpp:777
+#: pcbnew/tools/selection_tool.cpp:779
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
@@ -7209,6 +7213,13 @@ msgstr "Validazione librerie %d/%d"
 msgid "No layer selected, Please select the text layer"
 msgstr "Nessuno strato selezionato. Selezionare uno strato di testo."
 
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:260
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:234
+msgid "The text thickness is too large for the text size. It will be clamped"
+msgstr ""
+"Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà "
+"tagliato."
+
 #: pcbnew/dialogs/dialog_create_array.cpp:53
 msgid "Numerals (0,1,2,...,9,10)"
 msgstr "Numerali (0,1,2,...,9,10)"
@@ -7229,7 +7240,6 @@ msgstr "Alfabeto, completo di 26 caratteri"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:37
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:88
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:51
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:89
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
 msgid "Layer:"
@@ -9515,6 +9525,7 @@ msgid "Edges Width"
 msgstr "Larghezza bordi"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:79
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:37
 msgid "Text Width"
 msgstr "Larghezza testo"
 
@@ -10279,7 +10290,6 @@ msgid "Bottom/Back Layer"
 msgstr "Stato basso/retro"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:24
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:21
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:126
 msgid "Text:"
 msgstr "Testo:"
@@ -11838,21 +11848,22 @@ msgstr "basso"
 msgid "high"
 msgstr "alto"
 
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:37
-msgid "Size X"
-msgstr "Dimensioni X"
-
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:45
-msgid "Size Y"
-msgstr "Dimensioni Y"
+msgid "Text Height"
+msgstr "Altezza testo"
+
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:513
+msgid "Text Thickness"
+msgstr "Spessore testo"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:61
-msgid "Text position X"
-msgstr "Posizione testo X"
+msgid "Text Position X"
+msgstr "Posizione X testo"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:69
-msgid "Text position Y"
-msgstr "Posizione testo Y"
+msgid "Text Position Y"
+msgstr "Posizione Y testo"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File Name:"
@@ -12591,28 +12602,28 @@ msgstr ""
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Dimensione extra via %d</b>%s &gt; <b>1 pollice!</b><br>"
 
-#: pcbnew/router/pns_meander_placer.cpp:69
+#: pcbnew/router/pns_meander_placer.cpp:68
 #: pcbnew/router/pns_dp_meander_placer.cpp:78
 msgid "Please select a track whose length you want to tune."
 msgstr "Selezionare una pista di cui si vuole regolare la lunghezza."
 
-#: pcbnew/router/pns_meander_placer.cpp:254
+#: pcbnew/router/pns_meander_placer.cpp:252
 #: pcbnew/router/pns_dp_meander_placer.cpp:378
 msgid "Too long: "
 msgstr "Troppo lunga: "
 
-#: pcbnew/router/pns_meander_placer.cpp:257
+#: pcbnew/router/pns_meander_placer.cpp:255
 #: pcbnew/router/pns_dp_meander_placer.cpp:381
 msgid "Too short: "
 msgstr "Troppo corta: "
 
-#: pcbnew/router/pns_meander_placer.cpp:260
+#: pcbnew/router/pns_meander_placer.cpp:258
 #: pcbnew/router/pns_dp_meander_placer.cpp:384
 msgid "Tuned: "
 msgstr "Regolata: "
 
-#: pcbnew/router/pns_meander_placer.cpp:263
-#: pcbnew/router/pns_meander_skew_placer.cpp:154
+#: pcbnew/router/pns_meander_placer.cpp:261
+#: pcbnew/router/pns_meander_skew_placer.cpp:153
 #: pcbnew/router/pns_dp_meander_placer.cpp:387
 msgid "?"
 msgstr "?"
@@ -12621,7 +12632,7 @@ msgstr "?"
 msgid "Please select a differential pair trace you want to tune."
 msgstr "Selezionare una coppia differenziale di piste che si vuole regolare."
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:75
+#: pcbnew/router/pns_meander_skew_placer.cpp:74
 msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
@@ -12631,15 +12642,15 @@ msgstr ""
 "regolazione dello skew. Assicurarsi che i nomi dei collegamenti appartenenti "
 "ad una coppia differenziale non finiscano con _N/_P o con +/-."
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:145
+#: pcbnew/router/pns_meander_skew_placer.cpp:144
 msgid "Too long: skew "
 msgstr "Troppo lungo: skew "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:148
+#: pcbnew/router/pns_meander_skew_placer.cpp:147
 msgid "Too short: skew "
 msgstr "Troppo corto: skew "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:151
+#: pcbnew/router/pns_meander_skew_placer.cpp:150
 msgid "Tuned: skew "
 msgstr "Regolato: skew "
 
@@ -19720,7 +19731,7 @@ msgstr "Mostra strati &commenti ed grafica"
 msgid "Show &Eco Layers"
 msgstr "Mostra gli strati &eco"
 
-#: 3d-viewer/3d_draw_board_body.cpp:177 3d-viewer/3d_draw_board_body.cpp:502
+#: 3d-viewer/3d_draw_board_body.cpp:114 3d-viewer/3d_draw_board_body.cpp:439
 msgid ""
 "Unable to calculate the board outlines.\n"
 "Therefore use the board boundary box."
@@ -19728,13 +19739,13 @@ msgstr ""
 "Impossibile calcolare i contorni della scheda.\n"
 "Perciò usa il riquadro delimitatore scheda."
 
-#: 3d-viewer/3d_draw_board_body.cpp:210 3d-viewer/3d_draw_board_body.cpp:560
+#: 3d-viewer/3d_draw_board_body.cpp:147 3d-viewer/3d_draw_board_body.cpp:497
 #: 3d-viewer/3d_draw.cpp:659
 #, c-format
 msgid "Build layer %s"
 msgstr "Costruisci lo strato %s"
 
-#: 3d-viewer/3d_draw_board_body.cpp:403
+#: 3d-viewer/3d_draw_board_body.cpp:340
 msgid "Build board body"
 msgstr "Costruisci il corpo scheda"
 
@@ -22322,10 +22333,6 @@ msgstr "Dimensione testo Y (mm)"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:500
 msgid "Line Thickness (mm)"
 msgstr "Spessore linea (mm)"
-
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:513
-msgid "Text Thickness"
-msgstr "Spessore testo"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Set to Default"
