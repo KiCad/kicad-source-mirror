@@ -77,7 +77,7 @@ void WX_HTML_REPORT_PANEL::SetLazyUpdate( bool aLazyUpdate )
 
 void WX_HTML_REPORT_PANEL::Flush()
 {
-    m_htmlView->SetPage( m_html );
+    m_htmlView->SetPage( addHeader( m_html ) );
     scrollToBottom();
 }
 
