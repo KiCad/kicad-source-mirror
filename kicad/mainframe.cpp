@@ -50,6 +50,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
     EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size,
                     KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME )
 {
+    m_active_project = false;
     m_leftWinWidth = 60;
     m_manager_Hokeys_Descr = NULL;
 

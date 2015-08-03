@@ -109,9 +109,9 @@ enum id_kicad_frm {
 
     ID_TO_SCH,
     ID_TO_SCH_LIB_EDITOR,
-    ID_TO_CVPCB,
     ID_TO_PCB,
     ID_TO_PCB_FP_EDITOR,
+    ID_TO_CVPCB,
     ID_TO_GERBVIEW,
     ID_TO_BITMAP_CONVERTER,
     ID_TO_PCB_CALCULATOR,
@@ -131,6 +131,7 @@ enum id_kicad_frm {
     // less than ROOM_FOR_KICADMANAGER (see id.h)
     ID_KICADMANAGER_END_LIST
 };
+
 
 /**
  * Class KICAD_MANAGER_FRAME
@@ -219,6 +220,7 @@ public:
 
     void OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
     void OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
+    void OnUpdateRequiresProject( wxUpdateUIEvent& event );
 
     void CreateNewProject( const wxString& aPrjFullFileName, bool aTemplateSelector );
 
@@ -294,6 +296,8 @@ private:
     EDA_HOTKEY_CONFIG* m_manager_Hokeys_Descr;
 
     void language_change( wxCommandEvent& event );
+
+    bool m_active_project;
 };
 
 

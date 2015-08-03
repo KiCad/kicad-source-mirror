@@ -198,6 +198,10 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
 
         // wxFile dtor will close the file
     }
+
+    // Enable the toolbar and menubar buttons and clear the help text.
+    m_active_project = true;
+    m_MessagesBox->Clear();
 }
 
 
@@ -218,11 +222,12 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     ClearMsg();
 
+    bool newProject = ( evt_id == ID_NEW_PROJECT ) ||
+                        ( evt_id == ID_NEW_PROJECT_FROM_TEMPLATE );
+
     if( evt_id != wxID_ANY )
     {
         int  style;
-        bool newProject = ( evt_id == ID_NEW_PROJECT ) ||
-                          ( evt_id == ID_NEW_PROJECT_FROM_TEMPLATE );
 
         if( newProject )
         {
@@ -310,8 +315,17 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     // Either this is the first time kicad has been run or one of the projects in the
     // history list is no longer valid.  This prevents kicad from automatically creating
     // a noname.pro file in the same folder as the kicad binary.
-    if( wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) )
+    if( wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) && !newProject )
+    {
+        m_active_project = false;
+        m_MessagesBox->SetValue( _( "To proceed, you can use the File menu to start a new project." ) );
         return;
+    }
+    else
+    {
+        m_active_project = true;
+        m_MessagesBox->Clear();
+    }
 
     Prj().ConfigLoad( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
@@ -373,4 +387,10 @@ void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
     // was: wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
     //          GeneralGroupName, s_KicadManagerParams );
     Prj().ConfigSave( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+}
+
+
+void KICAD_MANAGER_FRAME::OnUpdateRequiresProject( wxUpdateUIEvent& event )
+{
+    event.Enable( m_active_project );
 }
