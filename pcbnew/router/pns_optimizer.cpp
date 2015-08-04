@@ -27,6 +27,7 @@
 #include "pns_line.h"
 #include "pns_diff_pair.h"
 #include "pns_node.h"
+#include "pns_solid.h"
 #include "pns_optimizer.h"
 #include "pns_utils.h"
 #include "pns_router.h"
@@ -830,6 +831,13 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 
     typedef std::pair<int, SHAPE_LINE_CHAIN> RtVariant;
     std::vector<RtVariant> variants;
+
+    PNS_SOLID* solid = dyn_cast<PNS_SOLID*>( aPad );
+
+    // don't do auto-neckdown for offset pads
+    if( solid && solid->Offset() != VECTOR2I( 0, 0 ) )
+        return -1;
+
 
     BREAKOUT_LIST breakouts = computeBreakouts( aLine->Width(), aPad, true );
 

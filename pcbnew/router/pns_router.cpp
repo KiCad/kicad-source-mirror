@@ -199,11 +199,15 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
     wxPoint wx_c = aPad->ShapePos();
     wxSize  wx_sz = aPad->GetSize();
+    wxPoint offset = aPad->GetOffset();
 
     VECTOR2I c( wx_c.x, wx_c.y );
     VECTOR2I sz( wx_sz.x, wx_sz.y );
 
-    solid->SetPos( c );
+    RotatePoint( &offset, aPad->GetOrientation() );
+
+    solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
+    solid->SetOffset ( VECTOR2I ( offset.x, offset.y ) );
 
     double orient = aPad->GetOrientation() / 10.0;
 

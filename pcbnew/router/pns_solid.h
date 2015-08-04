@@ -88,9 +88,20 @@ public:
         return 1;
     }
 
+    VECTOR2I Offset() const
+    {
+        return m_offset;
+    }
+
+    void SetOffset( const VECTOR2I& aOffset )
+    {
+        m_offset = aOffset;
+    }
+
 private:
     VECTOR2I    m_pos;
     SHAPE*      m_shape;
+    VECTOR2I    m_offset;
 };
 
 #endif
