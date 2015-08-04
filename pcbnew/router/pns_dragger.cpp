@@ -83,6 +83,9 @@ bool PNS_DRAGGER::startDragVia( const VECTOR2D& aP, PNS_VIA* aVia )
     VECTOR2I p0( aVia->Pos() );
     PNS_JOINT* jt = m_world->FindJoint( p0, aVia->Layers().Start(), aVia->Net() );
 
+    if( !jt )
+        return false;
+
     BOOST_FOREACH( PNS_ITEM* item, jt->LinkList() )
     {
         if( item->OfKind( PNS_ITEM::SEGMENT ) )

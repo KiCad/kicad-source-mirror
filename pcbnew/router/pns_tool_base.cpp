@@ -195,48 +195,48 @@ void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
 {
     int tl = getView()->GetTopLayer();
     VECTOR2I cp = m_ctls->GetCursorPosition();
+    VECTOR2I p;
+
     PNS_ITEM* startItem = NULL;
+    bool snapEnabled = true;
 
     if( aEvent.IsMotion() || aEvent.IsClick() )
     {
-        bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
+        snapEnabled = !aEvent.Modifier( MD_SHIFT );
+        p = aEvent.Position();
+    } else {
+        p = cp;
+    }
 
-        VECTOR2I p( aEvent.Position() );
-        startItem = pickSingleItem( p );
-        m_router->EnableSnapping ( snapEnabled );
+    startItem = pickSingleItem( p );
+    m_router->EnableSnapping ( snapEnabled );
 
-        if( !snapEnabled && startItem && !startItem->Layers().Overlaps( tl ) )
-            startItem = NULL;
+    if( !snapEnabled && startItem && !startItem->Layers().Overlaps( tl ) )
+        startItem = NULL;
 
-        if( startItem && startItem->Net() >= 0 )
+    if( startItem && startItem->Net() >= 0 )
+    {
+        bool dummy;
+        VECTOR2I psnap = m_router->SnapToItem( startItem, p, dummy );
+
+        if( snapEnabled )
         {
-            bool dummy;
-            VECTOR2I psnap = m_router->SnapToItem( startItem, p, dummy );
-
-            if( snapEnabled )
-            {
-                m_startSnapPoint = psnap;
-                m_ctls->ForceCursorPosition( true, psnap );
-            }
-            else
-            {
-                m_startSnapPoint = cp;
-                m_ctls->ForceCursorPosition( false );
-            }
-
-//            if( startItem->Layers().IsMultilayer() )
-//                m_startLayer = tl;
-//            else
-//                m_startLayer = startItem->Layers().Start();
-
-            m_startItem = startItem;
+            m_startSnapPoint = psnap;
+            m_ctls->ForceCursorPosition( true, psnap );
         }
         else
         {
-            m_startItem = NULL;
             m_startSnapPoint = cp;
             m_ctls->ForceCursorPosition( false );
         }
+
+        m_startItem = startItem;
+    }
+    else
+    {
+        m_startItem = NULL;
+        m_startSnapPoint = cp;
+        m_ctls->ForceCursorPosition( false );
     }
 }
 

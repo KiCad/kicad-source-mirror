@@ -660,7 +660,10 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
                 performRouting();
         }
         else if( evt->IsAction( &ACT_Drag ) )
+        {
+            updateStartItem( *evt );
             performDragging();
+        }
 
         handleCommonEvents( *evt );
     }
@@ -730,6 +733,8 @@ void ROUTER_TOOL::performDragging()
         // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
         m_needsSync = true;
     }
+
+    m_startItem = NULL;
 
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
