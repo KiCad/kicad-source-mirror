@@ -471,22 +471,14 @@ bool ROUTER_TOOL::prepareInteractive()
 }
 
 
-bool ROUTER_TOOL::finishInteractive( bool aSaveUndoBuffer )
+bool ROUTER_TOOL::finishInteractive()
 {
     m_router->StopRouting();
 
-    if( aSaveUndoBuffer )
-    {
-        // Save the recent changes in the undo buffer
-        m_frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
-        m_router->ClearUndoBuffer();
-        m_frame->OnModify();
-    }
-    else
-    {
-        // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
-        m_needsSync = true;
-    }
+    // Save the recent changes in the undo buffer
+    m_frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
+    m_router->ClearUndoBuffer();
+    m_frame->OnModify();
 
     m_ctls->SetAutoPan( false );
     m_ctls->ForceCursorPosition( false );
@@ -498,8 +490,6 @@ bool ROUTER_TOOL::finishInteractive( bool aSaveUndoBuffer )
 
 void ROUTER_TOOL::performRouting()
 {
-    bool saveUndoBuffer = true;
-
     if( !prepareInteractive() )
         return;
 
@@ -507,11 +497,6 @@ void ROUTER_TOOL::performRouting()
     {
         if( evt->IsCancel() || evt->IsActivate() )
             break;
-        else if( evt->Action() == TA_UNDO_REDO )
-        {
-            saveUndoBuffer = false;
-            break;
-        }
         else if( evt->IsMotion() )
         {
             updateEndItem( *evt );
@@ -565,7 +550,7 @@ void ROUTER_TOOL::performRouting()
         handleCommonEvents( *evt );
     }
 
-    finishInteractive( saveUndoBuffer );
+    finishInteractive();
 }
 
 
@@ -628,6 +613,7 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
     m_ctls->SetSnapping( true );
     m_ctls->ShowCursor( true );
+    frame->UndoRedoBlock( true );
 
     m_startSnapPoint = getViewControls()->GetCursorPosition();
 
@@ -646,8 +632,6 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
         if( evt->IsCancel() || evt->IsActivate() )
             break; // Finish
-        else if( evt->Action() == TA_UNDO_REDO )
-            m_needsSync = true;
         else if( evt->IsMotion() )
             updateStartItem( *evt );
         else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACT_NewTrack ) )
@@ -669,6 +653,7 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
     }
 
     frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    frame->UndoRedoBlock( false );
 
     // Store routing settings till the next invocation
     m_savedSettings = m_router->Settings();
@@ -681,7 +666,6 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 void ROUTER_TOOL::performDragging()
 {
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
-    bool saveUndoBuffer = true;
     VIEW_CONTROLS* ctls = getViewControls();
 
     bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem );
@@ -699,11 +683,6 @@ void ROUTER_TOOL::performDragging()
     {
         if( evt->IsCancel() || evt->IsActivate() )
             break;
-        else if( evt->Action() == TA_UNDO_REDO )
-        {
-            saveUndoBuffer = false;
-            break;
-        }
         else if( evt->IsMotion() )
         {
             updateEndItem( *evt );
@@ -721,18 +700,10 @@ void ROUTER_TOOL::performDragging()
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
 
-    if( saveUndoBuffer )
-    {
-        // Save the recent changes in the undo buffer
-        frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
-        m_router->ClearUndoBuffer();
-        frame->OnModify();
-    }
-    else
-    {
-        // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
-        m_needsSync = true;
-    }
+    // Save the recent changes in the undo buffer
+    frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
+    m_router->ClearUndoBuffer();
+    frame->OnModify();
 
     m_startItem = NULL;
 
@@ -766,6 +737,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     ctls->ForceCursorPosition( false );
     ctls->SetAutoPan( true );
+    frame->UndoRedoBlock( true );
 
     bool saveUndoBuffer = true;
 
@@ -778,7 +750,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             saveUndoBuffer = false;
             break;
         }
-
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             m_router->Move( p0, NULL );
@@ -802,6 +773,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     ctls->SetAutoPan( false );
     ctls->ShowCursor( false );
+    frame->UndoRedoBlock( false );
 
     return 0;
 }

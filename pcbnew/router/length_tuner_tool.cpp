@@ -155,8 +155,6 @@ void LENGTH_TUNER_TOOL::updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup )
 
 void LENGTH_TUNER_TOOL::performTuning()
 {
-    bool saveUndoBuffer = true;
-
     if( m_startItem )
     {
         m_frame->SetActiveLayer( ToLAYER_ID ( m_startItem->Layers().Start() ) );
@@ -187,16 +185,10 @@ void LENGTH_TUNER_TOOL::performTuning()
     m_router->Move( end, NULL );
     updateStatusPopup( statusPopup );
 
-
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsCancel() || evt->IsActivate() )
             break;
-        else if( evt->Action() == TA_UNDO_REDO )
-        {
-            saveUndoBuffer = false;
-            break;
-        }
         else if( evt->IsMotion() )
         {
             end = evt->Position();
@@ -239,21 +231,11 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     m_router->StopRouting();
 
-    if( saveUndoBuffer )
-    {
-        // Save the recent changes in the undo buffer
-        m_frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
-        m_router->ClearUndoBuffer();
-        m_frame->OnModify();
-    }
-    else
-    {
-        // It was interrupted by TA_UNDO_REDO event, so we have to sync the world now
-        m_needsSync = true;
-    }
+    // Save the recent changes in the undo buffer
+    m_frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
+    m_router->ClearUndoBuffer();
+    m_frame->OnModify();
 
-    m_ctls->SetAutoPan( false );
-    m_ctls->ForceCursorPosition( false );
     highlightNet( false );
 }
 
@@ -290,6 +272,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
     m_ctls->SetSnapping( true );
     m_ctls->ShowCursor( true );
+    m_frame->UndoRedoBlock( true );
 
     std::auto_ptr<TUNER_TOOL_MENU> ctxMenu( new TUNER_TOOL_MENU( m_board ) );
     SetContextMenu( ctxMenu.get() );
@@ -306,23 +289,19 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
         if( evt->IsCancel() || evt->IsActivate() )
             break; // Finish
-        else if( evt->Action() == TA_UNDO_REDO )
-            m_needsSync = true;
         else if( evt->IsMotion() )
             updateStartItem( *evt );
         else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACT_StartTuning ) )
         {
             updateStartItem( *evt );
-            performTuning( );
+            performTuning();
         }
 
         handleCommonEvents( *evt );
     }
 
-    // Restore the default settings
-    m_ctls->SetAutoPan( false );
-    m_ctls->ShowCursor( false );
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->UndoRedoBlock( false );
 
     // Store routing settings till the next invocation
     m_savedSettings = m_router->Settings();

@@ -343,7 +343,6 @@ PICKED_ITEMS_LIST* UNDO_REDO_CONTAINER::PopCommand()
         m_CommandsList.pop_back();
         return item;
     }
+
     return NULL;
 }
-
-

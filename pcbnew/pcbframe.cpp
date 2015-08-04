@@ -679,6 +679,9 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
         // Redirect all events to the legacy canvas
         GetGalCanvas()->SetEventDispatcher( NULL );
+
+        // No matter what, reenable undo/redo
+        UndoRedoBlock( false );
     }
 
     enableGALSpecificMenus();

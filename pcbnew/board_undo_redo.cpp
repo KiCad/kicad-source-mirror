@@ -635,6 +635,9 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
 void PCB_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 {
+    if( UndoRedoBlocked() )
+        return;
+
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
@@ -644,6 +647,7 @@ void PCB_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
+
     /* Undo the command */
     PutDataInPreviousState( List, false );
 
@@ -658,6 +662,9 @@ void PCB_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 {
+    if( UndoRedoBlocked() )
+        return;
+
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
 

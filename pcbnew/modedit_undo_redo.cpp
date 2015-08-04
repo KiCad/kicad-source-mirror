@@ -129,12 +129,18 @@ void FOOTPRINT_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 {
+    if( UndoRedoBlocked() )
+        return;
+
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
     // Inform tools that undo command was issued
     TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
     m_toolManager->ProcessEvent( event );
+
+    if( UndoRedoBlocked() )
+        return;
 
     // Save current module state in redo list
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();

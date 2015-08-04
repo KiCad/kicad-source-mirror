@@ -56,8 +56,8 @@ private:
     void switchLayerOnViaPlacement();
     bool onViaCommand( VIATYPE_T aType );
 
-    bool prepareInteractive( );
-    bool finishInteractive( bool aSaveUndoBuffer );
+    bool prepareInteractive();
+    bool finishInteractive();
 };
 
 #endif
