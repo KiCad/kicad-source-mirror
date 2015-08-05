@@ -286,6 +286,19 @@ public:
     int GetAutoSaveInterval() const { return m_spinAutoSaveInterval->GetValue(); }
 
     /**
+     * Function SetMaxUndoItems
+     * Sets the maximum number of undo items
+     * @param aItems the number to set
+     */
+    void SetMaxUndoItems( int aItems ) { m_spinMaxUndoItems->SetValue( aItems ); }
+
+    /**
+     * Function GetMaxUndoItems
+     * Return the current maximum number of undo items
+     */
+    int GetMaxUndoItems() const { return m_spinMaxUndoItems->GetValue(); }
+
+    /**
      * Function SetRefIdSeparator
      * Sets the current RefIdSeparator value in the dialog
      * @param aSep The seperator to use between the reference and the part ID

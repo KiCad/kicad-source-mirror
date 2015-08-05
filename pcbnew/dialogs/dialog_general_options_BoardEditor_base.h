@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -63,6 +63,8 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_MaxShowLinks;
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
+		wxStaticText* m_stMaxUndoItems;
+		wxSpinCtrl* m_spinMaxUndoItems;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;
 		wxCheckBox* m_DrcOn;

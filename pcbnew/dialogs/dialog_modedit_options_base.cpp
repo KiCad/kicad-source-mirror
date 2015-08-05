@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -80,7 +80,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_staticTextTextHSizeUnit, 0, wxALL, 5 );
 	
 	
-	bSizerUpper->Add( fgSizer1, 1, wxEXPAND|wxLEFT, 20 );
+	bSizerUpper->Add( fgSizer1, 0, wxEXPAND|wxLEFT, 20 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerUpper->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
@@ -166,6 +166,32 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerUpper->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
+	m_stGeneral = new wxStaticText( this, wxID_ANY, _("General options:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stGeneral->Wrap( -1 );
+	m_stGeneral->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizerUpper->Add( m_stGeneral, 0, wxALL, 5 );
+	
+	wxFlexGridSizer* fgGeneral;
+	fgGeneral = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgGeneral->AddGrowableCol( 1 );
+	fgGeneral->SetFlexibleDirection( wxBOTH );
+	fgGeneral->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_stMaxUndoItems = new wxStaticText( this, wxID_ANY, _("Maximum undo items (0 = unlimited):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxUndoItems->Wrap( -1 );
+	fgGeneral->Add( m_stMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_spinMaxUndoItems = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65536, 0 );
+	fgGeneral->Add( m_spinMaxUndoItems, 0, wxALL|wxEXPAND, 5 );
+	
+	m_stMaxUndoItemsUnit = new wxStaticText( this, wxID_ANY, _("actions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxUndoItemsUnit->Wrap( -1 );
+	fgGeneral->Add( m_stMaxUndoItemsUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	bSizerUpper->Add( fgGeneral, 0, wxEXPAND|wxLEFT, 20 );
 	
 	
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );

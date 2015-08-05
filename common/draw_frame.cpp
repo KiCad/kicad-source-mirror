@@ -66,6 +66,7 @@ static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
+static const wxString MaxUndoItemsEntry(wxT( "MaxUndoItems" ) );
 
 
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
@@ -674,6 +675,9 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     // m_LastGridSizeId is an offset, expected to be >= 0
     if( m_LastGridSizeId < 0 )
         m_LastGridSizeId = 0;
+
+    GetScreen()->SetMaxUndoItems( aCfg->Read( baseCfgName + MaxUndoItemsEntry,
+                long( DEFAULT_MAX_UNDO_ITEMS ) ) );
 }
 
 
@@ -687,6 +691,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
     aCfg->Write( baseCfgName + GridColorEntryKeyword, ( long ) GetGridColor() );
     aCfg->Write( baseCfgName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
+    aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
 }
 
 

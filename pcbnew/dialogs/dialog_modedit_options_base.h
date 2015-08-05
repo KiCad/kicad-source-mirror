@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,7 @@ class DIALOG_SHIM;
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/choice.h>
+#include <wx/spinctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -67,6 +68,10 @@ class DIALOG_MODEDIT_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextValVisibility;
 		wxChoice* m_choiceVisibleValue;
 		wxStaticLine* m_staticline2;
+		wxStaticText* m_stGeneral;
+		wxStaticText* m_stMaxUndoItems;
+		wxSpinCtrl* m_spinMaxUndoItems;
+		wxStaticText* m_stMaxUndoItemsUnit;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -78,7 +83,7 @@ class DIALOG_MODEDIT_OPTIONS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 502,352 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 504,507 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_MODEDIT_OPTIONS_BASE();
 	
 };

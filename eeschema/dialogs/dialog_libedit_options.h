@@ -85,6 +85,9 @@ public:
     {
         return m_spinRepeatLabel->GetValue();
     }
+
+    void SetMaxUndoItems( int aItems ) { m_spinMaxUndoItems->SetValue( aItems ); }
+    int GetMaxUndoItems() const { return m_spinMaxUndoItems->GetValue(); }
 };
 
 #endif // __DIALOG_LIBEDIT_OPTIONS__

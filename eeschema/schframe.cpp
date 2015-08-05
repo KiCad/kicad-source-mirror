@@ -536,7 +536,6 @@ void SCH_EDIT_FRAME::CreateScreens()
         SetScreen( new SCH_SCREEN( &Kiway() ) );
 
     GetScreen()->SetZoom( 32.0 );
-    GetScreen()->m_UndoRedoCountMax = 10;
 }
 
 

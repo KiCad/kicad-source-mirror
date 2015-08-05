@@ -36,7 +36,10 @@
 #include <block_commande.h>
 #include <common.h>
 #include <id.h>
+#include <climits>
 
+#define DEFAULT_MAX_UNDO_ITEMS 0
+#define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
 
 /**
  * Class GRID_TYPE
@@ -83,6 +86,7 @@ private:
     GRID_TYPE   m_Grid;             ///< Current grid selection.
     wxPoint     m_scrollCenter;     ///< Current scroll center point in logical units.
     wxPoint     m_MousePosition;    ///< Mouse cursor coordinate in logical units.
+    int         m_UndoRedoCountMax; ///< undo/Redo command Max depth
 
     /**
      * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
@@ -208,7 +212,6 @@ public:
     // Undo/redo list of commands
     UNDO_REDO_CONTAINER m_UndoList;         ///< Objects list for the undo command (old data)
     UNDO_REDO_CONTAINER m_RedoList;         ///< Objects list for the redo command (old data)
-    unsigned            m_UndoRedoCountMax; ///< undo/Redo command Max depth
 
     // block control
     BLOCK_SELECTOR      m_BlockLocate;      ///< Block description for block commands
@@ -306,6 +309,19 @@ public:
     int GetRedoCommandCount() const
     {
         return m_RedoList.m_CommandsList.size();
+    }
+
+    int GetMaxUndoItems() const { return m_UndoRedoCountMax; }
+
+    void SetMaxUndoItems( int aMax )
+    {
+        if( aMax >= 0 && aMax < ABS_MAX_UNDO_ITEMS )
+            m_UndoRedoCountMax = aMax;
+        else
+        {
+            wxFAIL_MSG( "Maximum undo items not within limits" );
+            m_UndoRedoCountMax = DEFAULT_MAX_UNDO_ITEMS;
+        }
     }
 
     void SetModify()        { m_FlagModified = true; }

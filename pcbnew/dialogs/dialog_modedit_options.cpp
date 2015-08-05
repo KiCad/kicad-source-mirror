@@ -104,6 +104,8 @@ void DIALOG_MODEDIT_OPTIONS::initValues()
     m_choiceLayerValue->SetSelection( sel );
     sel = m_brdSettings.m_ValueDefaultVisibility ? 0 : 1;
     m_choiceVisibleValue->SetSelection( sel );
+
+    m_spinMaxUndoItems->SetValue( m_parent->GetScreen()->GetMaxUndoItems() );
 }
 
 void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
@@ -128,6 +130,8 @@ void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
     m_brdSettings.m_ValueDefaultVisibility = sel != 1;
 
     m_parent->SetDesignSettings( m_brdSettings );
+
+    m_parent->GetScreen()->SetMaxUndoItems( m_spinMaxUndoItems->GetValue() );
 
     EndModal( wxID_OK );
 }

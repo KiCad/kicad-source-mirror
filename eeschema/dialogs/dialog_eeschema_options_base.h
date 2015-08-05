@@ -95,6 +95,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText221;
 		wxSpinCtrl* m_spinAutoSaveInterval;
 		wxStaticText* m_staticText23;
+		wxStaticText* m_stMaxUndoItems;
+		wxSpinCtrl* m_spinMaxUndoItems;
+		wxStaticText* m_stMaxUndoItemsUnit;
 		wxStaticText* m_staticText26;
 		wxChoice* m_choiceSeparatorRefId;
 		wxStaticLine* m_staticline1;

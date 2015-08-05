@@ -151,15 +151,26 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText23->Wrap( -1 );
 	fgSizer1->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
+	m_stMaxUndoItems = new wxStaticText( m_panel1, wxID_ANY, _("Ma&ximum undo items (0 = unlimited):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxUndoItems->Wrap( -1 );
+	fgSizer1->Add( m_stMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
+	m_spinMaxUndoItems = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65536, 0 );
+	fgSizer1->Add( m_spinMaxUndoItems, 0, wxALL|wxEXPAND, 3 );
+	
+	m_stMaxUndoItemsUnit = new wxStaticText( m_panel1, wxID_ANY, _("actions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxUndoItemsUnit->Wrap( -1 );
+	fgSizer1->Add( m_stMaxUndoItemsUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	m_staticText26 = new wxStaticText( m_panel1, wxID_ANY, _("Part id notation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText26->Wrap( -1 );
-	fgSizer1->Add( m_staticText26, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_staticText26, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 	
 	wxString m_choiceSeparatorRefIdChoices[] = { _("A"), _(".A"), _("-A"), _("_A"), _(".1"), _("-1"), _("_1") };
 	int m_choiceSeparatorRefIdNChoices = sizeof( m_choiceSeparatorRefIdChoices ) / sizeof( wxString );
 	m_choiceSeparatorRefId = new wxChoice( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceSeparatorRefIdNChoices, m_choiceSeparatorRefIdChoices, 0 );
 	m_choiceSeparatorRefId->SetSelection( 0 );
-	fgSizer1->Add( m_choiceSeparatorRefId, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( m_choiceSeparatorRefId, 0, wxALL|wxEXPAND, 3 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );

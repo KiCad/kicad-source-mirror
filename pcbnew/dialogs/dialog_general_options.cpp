@@ -70,6 +70,8 @@ void DIALOG_GENERALOPTIONS::init()
     rotationAngle = AngleToStringDegrees( (double)GetParent()->GetRotationAngle() );
     m_RotationAngle->SetValue( rotationAngle );
 
+    m_spinMaxUndoItems->SetValue( GetParent()->GetScreen()->GetMaxUndoItems() );
+
     wxString timevalue;
     timevalue << GetParent()->GetAutoSaveInterval() / 60;
     m_SaveTime->SetValue( timevalue );
@@ -117,6 +119,8 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     GetParent()->SetCursorShape( m_CursorShape->GetSelection() );
     GetParent()->SetAutoSaveInterval( m_SaveTime->GetValue() * 60 );
     GetParent()->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
+
+    GetParent()->GetScreen()->SetMaxUndoItems( m_spinMaxUndoItems->GetValue() );
 
     /* Updating the combobox to display the active layer. */
     displ_opts->m_MaxLinksShowed = m_MaxShowLinks->GetValue();
