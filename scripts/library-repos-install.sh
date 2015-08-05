@@ -24,7 +24,7 @@
 
 
 # Set where the library repos will go, use a full path
-WORKING_TREES=~/kicad_sources
+WORKING_TREES=${WORKING_TREES:-~/kicad_sources}
 
 
 usage()
@@ -122,10 +122,9 @@ detect_pretty_repos()
     fi
 
     # Use github API to list repos for org KiCad, then subset the JSON reply for only
-    # *.pretty repos
+    # *.pretty repos in the "full_name" variable.
     PRETTY_REPOS=`curl https://api.github.com/orgs/KiCad/repos?per_page=2000 2> /dev/null \
-        | grep full_name | grep pretty \
-        | sed $SED_EREGEXP 's:.+ "KiCad/(.+)",:\1:'`
+        | sed $SED_EREGEXP 's:.+ "full_name".*"KiCad/(.+\.pretty)",:\1:p;d'`
 
     #echo "PRETTY_REPOS:$PRETTY_REPOS"
 
