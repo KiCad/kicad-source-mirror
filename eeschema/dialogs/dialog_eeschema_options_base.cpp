@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -47,7 +47,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	fgSizer1->AddGrowableCol( 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->AddGrowableCol( 2 );
-	fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticText2 = new wxStaticText( m_panel1, wxID_ANY, _("Measurement &units:"), wxDefaultPosition, wxDefaultSize, 0 );
