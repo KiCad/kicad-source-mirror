@@ -245,7 +245,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_GerberOptionsSizer->Add( bSizerGbrOpt, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	wxString m_rbGerberFormatChoices[] = { _("4.5 (unit  mm)"), _("4.6 (unit mm)") };
+	wxString m_rbGerberFormatChoices[] = { _("4.5 (unit mm)"), _("4.6 (unit mm)") };
 	int m_rbGerberFormatNChoices = sizeof( m_rbGerberFormatChoices ) / sizeof( wxString );
 	m_rbGerberFormat = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbGerberFormatNChoices, m_rbGerberFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbGerberFormat->SetSelection( 0 );
