@@ -27,9 +27,13 @@
 
 #include <wxstruct.h>
 #include <kiway_player.h>
+#include <climits>
 
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
+
+#define DEFAULT_MAX_UNDO_ITEMS 0
+#define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
 
 /**
  * Class EDA_DRAW_FRAME
@@ -68,6 +72,8 @@ protected:
     double      m_zoomLevelCoeff;           ///< a suitable value to convert the internal zoom scaling factor
                                             // to a zoom level value which rougly gives 1.0 when the board/schematic
                                             // is at scale = 1
+    int         m_UndoRedoCountMax;         ///< default Undo/Redo command Max depth, to be handed
+                                            // to screens
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;

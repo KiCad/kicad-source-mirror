@@ -66,6 +66,9 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     if( aFullFileName.IsEmpty() )
         return false;
 
+    // Place the undo limit into the screen
+    aScreen->SetMaxUndoItems( m_UndoRedoCountMax );
+
     // If path is relative, this expands it from the project directory.
     wxString fname = Prj().AbsolutePath( aFullFileName );
 

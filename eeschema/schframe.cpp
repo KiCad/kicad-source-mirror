@@ -348,8 +348,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SetSpiceAddReferencePrefix( false );
     SetSpiceUseNetcodeAsNetname( false );
 
-    CreateScreens();
-
     // Give an icon
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_eeschema_xpm ) );
@@ -360,6 +358,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_LastGridSizeId = default_grid;
 
     LoadSettings( config() );
+
+    CreateScreens();
 
     // Ensure m_LastGridSizeId is an offset inside the allowed schematic grid range
     if( !GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
@@ -523,7 +523,9 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( g_RootSheet->GetScreen() == NULL )
     {
-        g_RootSheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
+        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
+        screen->SetMaxUndoItems( m_UndoRedoCountMax );
+        g_RootSheet->SetScreen( screen );
         SetScreen( g_RootSheet->GetScreen() );
     }
 
@@ -533,7 +535,11 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_CurrentSheet->Push( g_RootSheet );
 
     if( GetScreen() == NULL )
-        SetScreen( new SCH_SCREEN( &Kiway() ) );
+    {
+        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
+        screen->SetMaxUndoItems( m_UndoRedoCountMax );
+        SetScreen( screen );
+    }
 
     GetScreen()->SetZoom( 32.0 );
 }

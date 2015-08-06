@@ -755,9 +755,9 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 {
     bool success = true;
 
+    SCH_SCREEN* screen = NULL;
     if( !m_screen )
     {
-        SCH_SCREEN* screen = NULL;
         g_RootSheet->SearchHierarchy( m_fileName, &screen );
 
         if( screen )

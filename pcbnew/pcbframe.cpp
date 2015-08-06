@@ -352,14 +352,15 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
     SetIcon( icon );
 
-    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
-
-    // PCB drawings start in the upper left corner.
-    GetScreen()->m_Center = false;
-
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
+
+    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
+    GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
+
+    // PCB drawings start in the upper left corner.
+    GetScreen()->m_Center = false;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 

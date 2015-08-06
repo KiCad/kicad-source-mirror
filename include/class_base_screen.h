@@ -31,15 +31,12 @@
 #ifndef  CLASS_BASE_SCREEN_H_
 #define  CLASS_BASE_SCREEN_H_
 
+#include <draw_frame.h>
 #include <base_struct.h>
 #include <class_undoredo_container.h>
 #include <block_commande.h>
 #include <common.h>
 #include <id.h>
-#include <climits>
-
-#define DEFAULT_MAX_UNDO_ITEMS 0
-#define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
 
 /**
  * Class GRID_TYPE

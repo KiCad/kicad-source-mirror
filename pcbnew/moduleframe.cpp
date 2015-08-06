@@ -246,10 +246,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize(), true );
 
-    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
-
-    GetScreen()->SetCurItem( NULL );
     LoadSettings( config() );
+    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
+    GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
+    GetScreen()->SetCurItem( NULL );
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );

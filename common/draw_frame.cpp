@@ -676,8 +676,8 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( m_LastGridSizeId < 0 )
         m_LastGridSizeId = 0;
 
-    GetScreen()->SetMaxUndoItems( aCfg->Read( baseCfgName + MaxUndoItemsEntry,
-                long( DEFAULT_MAX_UNDO_ITEMS ) ) );
+    m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry,
+            long( DEFAULT_MAX_UNDO_ITEMS ) );
 }
 
 

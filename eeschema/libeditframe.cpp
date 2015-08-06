@@ -208,12 +208,13 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon.CopyFromBitmap( KiBitmap( libedit_icon_xpm ) );
     SetIcon( icon );
 
+    LoadSettings( config() );
+
     SetScreen( new SCH_SCREEN( aKiway ) );
     GetScreen()->m_Center = true;
+    GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
-
-    LoadSettings( config() );
 
     // Ensure m_LastGridSizeId is an offset inside the allowed schematic range
     if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000 )
