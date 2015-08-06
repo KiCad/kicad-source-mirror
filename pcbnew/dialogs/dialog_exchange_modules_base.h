@@ -64,7 +64,7 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Exchange Footprints"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 421,517 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Change Footprint"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXCHANGE_MODULE_BASE();
 	
 };

@@ -48,6 +48,7 @@
 
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
 
+
 class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
 {
 private:
@@ -78,7 +79,9 @@ private:
     PICKED_ITEMS_LIST m_undoPickList;
 };
 
+
 int DIALOG_EXCHANGE_MODULE::m_selectionMode = 0;
+
 
 DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* Module ) :
     DIALOG_EXCHANGE_MODULE_BASE( parent )
@@ -91,12 +94,11 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* 
 }
 
 
-void PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
+int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
 {
     DIALOG_EXCHANGE_MODULE dialog( this, Module );
 
-    int ret = dialog.ShowQuasiModal();
-    (void) ret;     // make coverity quiet.
+    return dialog.ShowQuasiModal();
 }
 
 
@@ -263,14 +265,14 @@ bool DIALOG_EXCHANGE_MODULE::changeSameFootprints( bool aUseValue )
     {
         check_module_value = true;
         value = m_currentModule->GetValue();
-        msg.Printf( _( "Change modules %s -> %s (for value = %s)?" ),
+        msg.Printf( _( "Change footprint %s -> %s (for value = %s)?" ),
                     GetChars( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) ),
                     GetChars( newmodulename ),
                     GetChars( m_currentModule->GetValue() ) );
     }
     else
     {
-        msg.Printf( _( "Change modules %s -> %s ?" ),
+        msg.Printf( _( "Change footprint %s -> %s ?" ),
                     GetChars( FROM_UTF8( lib_reference.Format().c_str() ) ),
                     GetChars( newmodulename ) );
     }
@@ -325,7 +327,7 @@ bool DIALOG_EXCHANGE_MODULE::changeAllFootprints()
     if( m_parent->GetBoard()->m_Modules == NULL )
         return false;
 
-    if( !IsOK( this, _( "Change ALL modules ?" ) ) )
+    if( !IsOK( this, _( "Are you sure you want to change all footprints?" ) ) )
         return false;
 
     /* The change is done from the last module because the function
@@ -482,6 +484,7 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
         m_NewModule->SetValue( newname );
 }
 
+
 /*
  * Displays the footprint viewer to select a footprint.
  */
@@ -520,7 +523,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Save Component Files" ), pro_dir,
+    wxFileDialog dlg( this, _( "Save Footprint Association File" ), pro_dir,
                       fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -536,6 +539,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 }
+
 
 bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
 {
