@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_LIBEDIT_OPTIONS_BASE</property>
             <property name="pos"></property>
-            <property name="size">492,546</property>
+            <property name="size">487,433</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Library Editor Options</property>
@@ -126,7 +126,7 @@
                                             <property name="proportion">0</property>
                                             <object class="wxFlexGridSizer" expanded="1">
                                                 <property name="cols">3</property>
-                                                <property name="flexible_direction">wxHORIZONTAL</property>
+                                                <property name="flexible_direction">wxBOTH</property>
                                                 <property name="growablecols">0,1,2</property>
                                                 <property name="growablerows"></property>
                                                 <property name="hgap">0</property>
@@ -422,7 +422,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Default &amp;line width:</property>
+                                                        <property name="label">&amp;Default line width:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -676,7 +676,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Default pin length:</property>
+                                                        <property name="label">D&amp;efault pin length:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -930,7 +930,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Default pin num &amp;size:</property>
+                                                        <property name="label">De&amp;fault pin number size:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -1184,7 +1184,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Default pin &amp;name size:</property>
+                                                        <property name="label">Def&amp;ault pin name size:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -1438,7 +1438,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Repeat draw item &amp;horizontal displacement:</property>
+                                                        <property name="label">&amp;Horizontal pitch of repeated items:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -1692,7 +1692,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Repeat draw item &amp;vertical displacement:</property>
+                                                        <property name="label">&amp;Vertical pitch of repeated items:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -1946,7 +1946,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Repeat pin displacement:</property>
+                                                        <property name="label">&amp;Pitch of repeated pins:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -2200,7 +2200,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">&amp;Repeat label increment:</property>
+                                                        <property name="label">&amp;Increment of repeated labels:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -2728,7 +2728,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Show gr&amp;id</property>
+                                                        <property name="label">&amp;Show grid</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>

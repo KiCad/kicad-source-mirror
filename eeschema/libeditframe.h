@@ -201,7 +201,6 @@ public:
     static void EnsureActiveLibExists();
 
     void InstallConfigFrame( wxCommandEvent& event );
-    void InstallDimensionsDialog( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
     void Process_Config( wxCommandEvent& event );

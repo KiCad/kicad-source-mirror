@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Mar 13 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,17 +19,17 @@ DIALOG_CLEANING_OPTIONS_BASE::DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerUpper;
 	bSizerUpper = new wxBoxSizer( wxVERTICAL );
 	
-	m_cleanViasOpt = new wxCheckBox( this, wxID_ANY, _("Delete redundant vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cleanViasOpt = new wxCheckBox( this, wxID_ANY, _("&Delete redundant vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cleanViasOpt->SetToolTip( _("remove vias on pads with a through hole") );
 	
 	bSizerUpper->Add( m_cleanViasOpt, 0, wxALL, 5 );
 	
-	m_mergeSegmOpt = new wxCheckBox( this, wxID_ANY, _("Merge overlapping segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mergeSegmOpt = new wxCheckBox( this, wxID_ANY, _("&Merge overlapping segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mergeSegmOpt->SetToolTip( _("merge aligned track segments, and remove null segments") );
 	
 	bSizerUpper->Add( m_mergeSegmOpt, 0, wxALL, 5 );
 	
-	m_deleteUnconnectedOpt = new wxCheckBox( this, wxID_ANY, _("Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deleteUnconnectedOpt = new wxCheckBox( this, wxID_ANY, _("D&elete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_deleteUnconnectedOpt->SetToolTip( _("delete track segment having a dangling end") );
 	
 	bSizerUpper->Add( m_deleteUnconnectedOpt, 0, wxALL, 5 );

@@ -50,7 +50,6 @@
 
 #include <dialogs/dialog_lib_edit_text.h>
 #include <dialogs/dialog_edit_component_in_lib.h>
-#include <dialogs/dialog_libedit_dimensions.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 
 #include <menus_helpers.h>
@@ -135,7 +134,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
     EVT_MENU( ID_CONFIG_REQ, LIB_EDIT_FRAME::InstallConfigFrame )
     EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_LIBEDIT_DIMENSIONS, LIB_EDIT_FRAME::InstallDimensionsDialog )
 
     // Multiple item selection context menu commands.
     EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, LIB_EDIT_FRAME::OnSelectItem )
@@ -1075,13 +1073,6 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     DisplayCmpDoc();
     OnModify();
     m_canvas->Refresh();
-}
-
-
-void LIB_EDIT_FRAME::InstallDimensionsDialog( wxCommandEvent& event )
-{
-    DIALOG_LIBEDIT_DIMENSIONS dlg( this );
-    dlg.ShowModal();
 }
 
 

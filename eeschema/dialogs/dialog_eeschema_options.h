@@ -347,7 +347,7 @@ public:
      */
     void SetEnableZoomNoCenter( bool enable )
     {
-        m_checkEnableZoomNoCenter->SetValue( enable );
+        m_checkEnableZoomCenter->SetValue( !enable );
     }
 
     /**
@@ -356,7 +356,7 @@ public:
      */
     bool GetEnableZoomNoCenter( void )
     {
-        return m_checkEnableZoomNoCenter->GetValue();
+        return !m_checkEnableZoomCenter->GetValue();
     }
 
     /**

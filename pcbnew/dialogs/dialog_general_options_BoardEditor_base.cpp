@@ -57,39 +57,39 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextmaxlinks = new wxStaticText( this, wxID_ANY, _("Maximum Links:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextmaxlinks = new wxStaticText( this, wxID_ANY, _("&Maximum links:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextmaxlinks->Wrap( -1 );
-	fgSizer1->Add( m_staticTextmaxlinks, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_staticTextmaxlinks, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_MaxShowLinks = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 5, 1 );
 	m_MaxShowLinks->SetToolTip( _("Adjust the number of ratsnets shown from cursor to closest pads") );
 	
-	fgSizer1->Add( m_MaxShowLinks, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_MaxShowLinks, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxTOP, 5 );
 	
-	m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("Auto Save (minutes):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("&Auto save (minutes):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextautosave->Wrap( -1 );
-	fgSizer1->Add( m_staticTextautosave, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_staticTextautosave, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_SaveTime = new wxSpinCtrl( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 60, 0 );
 	m_SaveTime->SetToolTip( _("Delay after the first change to create a backup file of the board on disk.") );
 	
-	fgSizer1->Add( m_SaveTime, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_SaveTime, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_stMaxUndoItems = new wxStaticText( this, wxID_ANY, _("Maximum undo items:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxUndoItems = new wxStaticText( this, wxID_ANY, _("Ma&ximum undo items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxUndoItems->Wrap( -1 );
-	fgSizer1->Add( m_stMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_stMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_spinMaxUndoItems = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65536, 1 );
-	fgSizer1->Add( m_spinMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_spinMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_staticTextRotationAngle = new wxStaticText( this, wxID_ANY, _("Rotation Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotationAngle = new wxStaticText( this, wxID_ANY, _("&Rotation angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotationAngle->Wrap( -1 );
 	fgSizer1->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_RotationAngle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_RotationAngle->SetToolTip( _("Context menu and hot key footprint rotation increment.") );
 	
-	fgSizer1->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
 	bMiddleLeftSizer->Add( fgSizer1, 0, wxEXPAND, 5 );
@@ -97,39 +97,39 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	wxStaticBoxSizer* bMiddleRightBoxSizer;
 	bMiddleRightBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 	
-	m_DrcOn = new wxCheckBox( this, wxID_DRC_ONOFF, _("Enforce design rules when routing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DrcOn = new wxCheckBox( this, wxID_DRC_ONOFF, _("&Enforce design rules when routing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DrcOn->SetValue(true); 
 	m_DrcOn->SetToolTip( _("Enable/disable the DRC control.\nWhen DRC is disable, all connections are allowed.") );
 	
 	bMiddleRightBoxSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
 	
-	m_ShowGlobalRatsnest = new wxCheckBox( this, wxID_GENERAL_RATSNEST, _("Show ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowGlobalRatsnest = new wxCheckBox( this, wxID_GENERAL_RATSNEST, _("&Show ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowGlobalRatsnest->SetValue(true); 
 	m_ShowGlobalRatsnest->SetToolTip( _("Show (or not) the full rastnest.") );
 	
 	bMiddleRightBoxSizer->Add( m_ShowGlobalRatsnest, 0, wxALL, 5 );
 	
-	m_ShowModuleRatsnest = new wxCheckBox( this, wxID_RATSNEST_MODULE, _("Show footprint ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowModuleRatsnest = new wxCheckBox( this, wxID_RATSNEST_MODULE, _("S&how footprint ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowModuleRatsnest->SetToolTip( _("Shows (or not) the local ratsnest relative to a footprint, when moving it.\nThis ratsnest is useful to place a footprint.") );
 	
 	bMiddleRightBoxSizer->Add( m_ShowModuleRatsnest, 0, wxALL, 5 );
 	
-	m_TrackAutodel = new wxCheckBox( this, wxID_TRACK_AUTODEL, _("Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackAutodel = new wxCheckBox( this, wxID_TRACK_AUTODEL, _("&Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackAutodel->SetToolTip( _("Enable/disable the automatic track deletion when recreating a track.") );
 	
 	bMiddleRightBoxSizer->Add( m_TrackAutodel, 0, wxALL, 5 );
 	
-	m_Track_45_Only_Ctrl = new wxCheckBox( this, wxID_TRACKS45, _("Limit tracks to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Track_45_Only_Ctrl = new wxCheckBox( this, wxID_TRACKS45, _("&Limit tracks to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Track_45_Only_Ctrl->SetToolTip( _("If enabled, force tracks directions to H, V or 45 degrees, when creating a track.") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_45_Only_Ctrl, 0, wxALL, 5 );
 	
-	m_Segments_45_Only_Ctrl = new wxCheckBox( this, wxID_SEGMENTS45, _("Limit graphic lines to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Segments_45_Only_Ctrl = new wxCheckBox( this, wxID_SEGMENTS45, _("L&imit graphic lines to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Segments_45_Only_Ctrl->SetToolTip( _("If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers.") );
 	
 	bMiddleRightBoxSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
 	
-	m_Track_DoubleSegm_Ctrl = new wxCheckBox( this, wxID_ANY, _("Use double segmented tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Track_DoubleSegm_Ctrl = new wxCheckBox( this, wxID_ANY, _("&Use double segmented tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Track_DoubleSegm_Ctrl->SetToolTip( _("If enabled, uses two track segments, with 45 degrees angle between them when creating a new track ") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
@@ -162,22 +162,23 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	wxStaticBoxSizer* sbSizer2PAN;
 	sbSizer2PAN = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_ZoomNoCenterOpt = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ZoomNoCenterOpt->SetToolTip( _("Keep the cursor at its current location when zooming") );
+	m_ZoomCenterOpt = new wxCheckBox( this, wxID_ANY, _("Ce&nter and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoomCenterOpt->SetValue(true); 
+	m_ZoomCenterOpt->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
-	sbSizer2PAN->Add( m_ZoomNoCenterOpt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	sbSizer2PAN->Add( m_ZoomCenterOpt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_MiddleButtonPANOpt = new wxCheckBox( this, wxID_ANY, _("Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MiddleButtonPANOpt = new wxCheckBox( this, wxID_ANY, _("Use middle mouse &button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MiddleButtonPANOpt->SetToolTip( _("Use middle mouse button dragging to pan") );
 	
 	sbSizer2PAN->Add( m_MiddleButtonPANOpt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_MIDDLEBUTTONPAN, _("Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_MIDDLEBUTTONPAN, _("Limi&t panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptMiddleButtonPanLimited->SetToolTip( _("Middle mouse button panning limited by current scrollbar size") );
 	
 	sbSizer2PAN->Add( m_OptMiddleButtonPanLimited, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_AutoPANOpt = new wxCheckBox( this, wxID_AUTOPAN, _("Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AutoPANOpt = new wxCheckBox( this, wxID_AUTOPAN, _("&Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AutoPANOpt->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
 	
 	sbSizer2PAN->Add( m_AutoPANOpt, 0, wxALL, 5 );
