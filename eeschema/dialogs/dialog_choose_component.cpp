@@ -379,6 +379,9 @@ static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& ite
 {
     wxTreeItemId nextItem;
 
+    if( !item.IsOk() )
+        return nextItem;    // item is not valid: return a not valid wxTreeItemId
+
     if( tree.IsExpanded( item ) )
     {
         wxTreeItemIdValue dummy;
@@ -386,9 +389,14 @@ static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& ite
     }
     else
     {
+        wxTreeItemId root_cell=  tree.GetRootItem();
+
         // Walk up levels until we find one that has a next sibling.
         for ( wxTreeItemId walk = item; walk.IsOk(); walk = tree.GetItemParent( walk ) )
         {
+            if( walk == root_cell )     // the root cell (not displayed) is reached
+                break;                  // Exit (calling GetNextSibling( root_cell ) crashes.
+
             nextItem = tree.GetNextSibling( walk );
 
             if( nextItem.IsOk() )
