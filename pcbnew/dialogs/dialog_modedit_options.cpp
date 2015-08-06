@@ -31,9 +31,10 @@
 #include <base_units.h>
 
 #include <module_editor_frame.h>
-//#include <class_board.h>
 
 #include <dialog_modedit_options_base.h>
+
+
 class DIALOG_MODEDIT_OPTIONS : public DIALOG_MODEDIT_OPTIONS_BASE
 {
     BOARD_DESIGN_SETTINGS  m_brdSettings;
@@ -55,8 +56,9 @@ DIALOG_MODEDIT_OPTIONS::DIALOG_MODEDIT_OPTIONS( FOOTPRINT_EDIT_FRAME* aParent ) 
 {
     m_parent = aParent;
     m_brdSettings = m_parent->GetDesignSettings();
-    initValues(  );
+    initValues();
 
+    m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
 
     Centre();
@@ -107,6 +109,7 @@ void DIALOG_MODEDIT_OPTIONS::initValues()
 
     m_spinMaxUndoItems->SetValue( m_parent->GetScreen()->GetMaxUndoItems() );
 }
+
 
 void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
 {

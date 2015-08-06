@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -43,7 +43,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_staticTextGrLineUnit->Wrap( -1 );
 	fgSizer1->Add( m_staticTextGrLineUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("Text width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("Text line width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModWidthTitle->Wrap( -1 );
 	fgSizer1->Add( m_TextModWidthTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -55,7 +55,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_staticTextTextWidthUnit->Wrap( -1 );
 	fgSizer1->Add( m_staticTextTextWidthUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text size V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeVTitle->Wrap( -1 );
 	fgSizer1->Add( m_TextModSizeVTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -67,7 +67,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_staticTextTextVSizeUnit->Wrap( -1 );
 	fgSizer1->Add( m_staticTextTextVSizeUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text size H"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeHTitle->Wrap( -1 );
 	fgSizer1->Add( m_TextModSizeHTitle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -91,7 +91,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	bSizerUpper->Add( m_staticText28, 0, wxALL, 5 );
 	
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Leave ref or value blank to use the footprint name as default text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Leave reference or value blank to use the footprint name as default text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
 	bSizerUpper->Add( m_staticTextInfo, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -103,7 +103,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("Ref"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("Reference"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRef->Wrap( -1 );
 	fgSizer2->Add( m_staticTextRef, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
@@ -194,7 +194,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizerUpper->Add( fgGeneral, 0, wxEXPAND|wxLEFT, 20 );
 	
 	
-	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerUpper, 1, wxALL|wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -203,11 +203,12 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerMain->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	// Connect Events
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODEDIT_OPTIONS_BASE::OnCancelClick ), NULL, this );
