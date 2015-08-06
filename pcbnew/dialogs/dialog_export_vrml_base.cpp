@@ -58,7 +58,7 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	
 	bLowerSizer->Add( bSizer4, 3, wxEXPAND, 5 );
 	
-	wxString m_rbSelectUnitsChoices[] = { _("Inch"), _("mm"), _("Meter") };
+	wxString m_rbSelectUnitsChoices[] = { _("mm"), _("0.1 Inch"), _("Inch") };
 	int m_rbSelectUnitsNChoices = sizeof( m_rbSelectUnitsChoices ) / sizeof( wxString );
 	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbSelectUnits->SetSelection( 0 );

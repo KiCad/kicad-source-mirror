@@ -151,8 +151,8 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 
     // The general VRML scale factor
     // Assuming the VRML default unit is the mm
-    // this is the mm to VRML scaling factor for inch, mm and meter
-    double scaleList[3] = { 1.0/25.4, 1, 0.001 };
+    // this is the mm to VRML scaling factor for mm, 0.1 inch, and inch
+    double scaleList[3] = { 1.0, 10.0/25.4, 1.0/25.4 };
 
     // Build default file name
     fn = GetBoard()->GetFileName();

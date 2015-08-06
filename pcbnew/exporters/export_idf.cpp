@@ -398,9 +398,9 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
             throw( std::runtime_error( aIDFBoard.GetError() ) );
 
         double rotz = aModule->GetOrientation()/10.0;
-        double locx = modfile->m_MatPosition.x;
-        double locy = modfile->m_MatPosition.y;
-        double locz = modfile->m_MatPosition.z;
+        double locx = modfile->m_MatPosition.x * 25.4;  // part offsets are in inches
+        double locy = modfile->m_MatPosition.y * 25.4;
+        double locz = modfile->m_MatPosition.z * 25.4;
         double lrot = modfile->m_MatRotation.z;
 
         bool top = ( aModule->GetLayer() == B_Cu ) ? false : true;
