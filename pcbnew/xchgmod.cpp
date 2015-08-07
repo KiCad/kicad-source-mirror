@@ -116,7 +116,20 @@ void DIALOG_EXCHANGE_MODULE::init()
 
     m_OldModule->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
     m_NewModule->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
-    m_OldValue->AppendText( m_currentModule->GetValue() );
+    m_CurrValue->AppendText( m_currentModule->GetValue() );
+    m_CurrReference->AppendText( m_currentModule->GetReference() );
+    m_Selection->SetString( 0, wxString::Format(
+                            _("Change footprint of '%s'" ),
+                            GetChars( m_currentModule->GetReference() ) ) );
+    wxString fpname = m_OldModule->GetValue().AfterLast(':');
+
+    if( fpname.IsEmpty() )    // Happens for old fp names
+        fpname = m_OldModule->GetValue();
+
+    m_Selection->SetString( 1, wxString::Format(
+                            _("Change footprints '%s'" ),
+                            GetChars( fpname.Left( 12 ) ) ) );
+
     m_Selection->SetSelection( m_selectionMode );
 
     // Enable/disable widgets:

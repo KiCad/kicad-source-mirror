@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,18 +28,22 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	
 	m_OldModule = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_OldModule->SetMaxLength( 0 ); 
-	bLeftSizer->Add( m_OldModule, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bLeftSizer->Add( m_OldModule, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Current value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
 	bLeftSizer->Add( m_staticText7, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_OldValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_OldValue->SetMaxLength( 0 ); 
-	bLeftSizer->Add( m_OldValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_CurrValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_CurrValue->SetMaxLength( 0 ); 
+	bLeftSizer->Add( m_CurrValue, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
+	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Current reference"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	bLeftSizer->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	bLeftSizer->Add( 5, 10, 1, wxEXPAND, 5 );
+	m_CurrReference = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	bLeftSizer->Add( m_CurrReference, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText8 = new wxStaticText( this, wxID_ANY, _("New footprint"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
@@ -55,7 +59,7 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bMiddleSizer;
 	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_SelectionChoices[] = { _("Change footprint"), _("Reload footprint"), _("Change footprint and value"), _("Change all footprints") };
+	wxString m_SelectionChoices[] = { _("Change footprint"), _("Change footprints"), _("Change footprints having same value"), _("Update all footprints of the board") };
 	int m_SelectionNChoices = sizeof( m_SelectionChoices ) / sizeof( wxString );
 	m_Selection = new wxRadioBox( this, ID_SELECTION_CLICKED, _("Options"), wxDefaultPosition, wxDefaultSize, m_SelectionNChoices, m_SelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_Selection->SetSelection( 1 );
