@@ -530,6 +530,12 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
     PNS_JOINT* jt = m_currentNode->FindJoint( p0, aVia );
     VECTOR2I p0_pushed( p0 + aForce );
 
+    if( !jt )
+    {
+        TRACEn( 1, "weird, can't find the center-of-via joint\n" );
+        return SH_INCOMPLETE;
+    }
+
     if( jt->IsLocked() )
         return SH_INCOMPLETE;
 
@@ -541,12 +547,6 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
             break;
 
         p0_pushed += aForce.Resize( 2 ); // make sure pushed via does not overlap with any existing joint
-    }
-
-    if( !jt )
-    {
-        TRACEn( 1, "weird, can't find the center-of-via joint\n" );
-        return SH_INCOMPLETE;
     }
 
     PNS_VIA* pushedVia = aVia->Clone();

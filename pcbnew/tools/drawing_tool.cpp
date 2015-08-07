@@ -541,8 +541,12 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     }
 
                     delete item;
-                    m_board->m_Modules->Add( converted );
-                    m_view->Add( converted );
+
+                    if( converted )
+                    {
+                        m_board->m_Modules->Add( converted );
+                        m_view->Add( converted );
+                    }
                 }
             }
             else
