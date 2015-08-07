@@ -639,7 +639,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     // Reset VIEW_CONTROLS only if the most recent tool is finished
-    if( m_activeTools.front() == aState->theTool->GetId() )
+    if( m_activeTools.empty() || m_activeTools.front() == aState->theTool->GetId() )
         m_viewControls->Reset();
 
     if( !aState->Pop() )        // if there are no other contexts saved on the stack

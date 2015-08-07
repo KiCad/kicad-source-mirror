@@ -547,13 +547,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         LoadModuleFromLibrary( GetCurrentLib(), Prj().PcbFootprintLibs(), true );
 
-        if( GetBoard()->m_Modules )
-             GetBoard()->m_Modules->ClearFlags();
-
-        // if either m_Reference or m_Value are gone, reinstall them -
-        // otherwise you cannot see what you are doing on board
         if( GetBoard() && GetBoard()->m_Modules )
         {
+            GetBoard()->m_Modules->ClearFlags();
+
+            // if either m_Reference or m_Value are gone, reinstall them -
+            // otherwise you cannot see what you are doing on board
             TEXTE_MODULE* ref = &GetBoard()->m_Modules->Reference();
             TEXTE_MODULE* val = &GetBoard()->m_Modules->Value();
 
