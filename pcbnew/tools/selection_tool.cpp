@@ -71,7 +71,8 @@ public:
 SELECTION_TOOL::SELECTION_TOOL() :
         TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ), m_additive( false ), m_multiple( false ), m_editModules( false ),
-        m_locked( true ), m_menu( this ), m_contextMenu( NULL ), m_selectMenu( NULL )
+        m_locked( true ), m_menu( this ), m_contextMenu( NULL ), m_selectMenu( NULL ),
+        m_zoomMenu( NULL ), m_gridMenu( NULL )
 {
     // Do not leave uninitialized members:
     m_preliminary = false;
@@ -83,6 +84,8 @@ SELECTION_TOOL::~SELECTION_TOOL()
     delete m_selection.group;
     delete m_contextMenu;
     delete m_selectMenu;
+    delete m_zoomMenu;
+    delete m_gridMenu;
 }
 
 
@@ -104,10 +107,13 @@ bool SELECTION_TOOL::Init()
     m_menu.AddItem( COMMON_ACTIONS::zoomOut , SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen , SELECTION_CONDITIONS::ShowAlways, 1000 );
 
-    m_menu.AddMenu( new ZOOM_MENU( getEditFrame<PCB_BASE_FRAME>() ), _( "Zoom" ),
-            false, SELECTION_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddMenu( new GRID_MENU( getEditFrame<PCB_BASE_FRAME>() ), _( "Grid" ),
-            false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+
+    m_zoomMenu = new ZOOM_MENU( frame );
+    m_menu.AddMenu( m_zoomMenu, _( "Zoom" ), false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    m_gridMenu = new GRID_MENU( frame );
+    m_menu.AddMenu( m_gridMenu, _( "Grid" ), false, SELECTION_CONDITIONS::ShowAlways, 1000 );
 
     return true;
 }
