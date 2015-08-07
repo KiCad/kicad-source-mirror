@@ -52,14 +52,14 @@ class PAINTER;
 class EDA_DRAW_PANEL_GAL : public wxScrolledCanvas
 {
 public:
-    enum GalType {
+    enum GAL_TYPE {
         GAL_TYPE_NONE,      ///< Not used
         GAL_TYPE_OPENGL,    ///< OpenGL implementation
         GAL_TYPE_CAIRO,     ///< Cairo implementation
     };
 
     EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
-                        const wxSize& aSize, GalType aGalType = GAL_TYPE_OPENGL );
+                        const wxSize& aSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
     ~EDA_DRAW_PANEL_GAL();
 
     /**
@@ -67,13 +67,13 @@ public:
      * Switches method of rendering graphics.
      * @param aGalType is a type of rendering engine that you want to use.
      */
-    bool SwitchBackend( GalType aGalType );
+    bool SwitchBackend( GAL_TYPE aGalType );
 
     /**
      * Function GetBackend
      * Returns the type of backend currently used by GAL canvas.
      */
-    inline GalType GetBackend() const
+    inline GAL_TYPE GetBackend() const
     {
         return m_backend;
     }
@@ -200,7 +200,7 @@ protected:
     KIGFX::WX_VIEW_CONTROLS* m_viewControls;
 
     /// Currently used GAL
-    GalType                  m_backend;
+    GAL_TYPE                 m_backend;
 
     /// Processes and forwards events to tools
     TOOL_DISPATCHER*         m_eventDispatcher;

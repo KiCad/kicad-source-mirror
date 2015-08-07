@@ -51,7 +51,7 @@
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
-                                        GalType aGalType ) :
+                                        GAL_TYPE aGalType ) :
     wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize )
 {
     m_parent     = aParentWindow;
@@ -266,7 +266,7 @@ double EDA_DRAW_PANEL_GAL::GetLegacyZoom() const
 }
 
 
-bool EDA_DRAW_PANEL_GAL::SwitchBackend( GalType aGalType )
+bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     // Do not do anything if the currently used GAL is correct
     if( aGalType == m_backend && m_gal != NULL )

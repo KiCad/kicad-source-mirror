@@ -38,7 +38,7 @@ class PCB_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
 public:
     PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
-                        const wxSize& aSize, GalType aGalType = GAL_TYPE_OPENGL );
+                        const wxSize& aSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
 
     virtual ~PCB_DRAW_PANEL_GAL();
 
