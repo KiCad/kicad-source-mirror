@@ -546,7 +546,6 @@ EDA_RECT EDA_RECT::Common( const EDA_RECT& aRect ) const
         wxPoint endB( std::max( aRect.GetOrigin().x, aRect.GetEnd().x ),
                       std::max( aRect.GetOrigin().y, aRect.GetEnd().y ) );
 
-
         r.SetOrigin( wxPoint( std::max( originA.x, originB.x ), std::max( originA.y, originB.y ) ) );
         r.SetEnd   ( wxPoint( std::min( endA.x, endB.x ),       std::min( endA.y, endB.y ) ) );
     }
