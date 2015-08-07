@@ -58,20 +58,9 @@ void TOOL_BASE::attachManager( TOOL_MANAGER* aManager )
 }
 
 
-TOOL_SETTINGS::TOOL_SETTINGS( TOOL_BASE* aTool )
+TOOL_SETTINGS::TOOL_SETTINGS( TOOL_BASE* aTool ) :
+    m_tool( aTool )
 {
-    m_tool = aTool;
-
-    if( !aTool )
-    {
-        m_config = NULL;
-        return;
-    }
-
-    // fixme: make independent of pcbnew (post-stable)
-    PCB_EDIT_FRAME* frame = aTool->getEditFrame<PCB_EDIT_FRAME>();
-
-    m_config = frame->GetSettings();
 }
 
 
@@ -92,4 +81,17 @@ wxString TOOL_SETTINGS::getKeyName( const wxString& aEntryName ) const
     key += wxT( "." );
     key += aEntryName;
     return key;
+}
+
+
+wxConfigBase* TOOL_SETTINGS::getConfigBase() const
+{
+    if( !m_tool )
+        return NULL;
+
+    // fixme: make independent of pcbnew (post-stable)
+    if( PCB_EDIT_FRAME* frame = m_tool->getEditFrame<PCB_EDIT_FRAME>() )
+        return frame->GetSettings();
+
+    return NULL;
 }

@@ -38,34 +38,41 @@ class TOOL_BASE;
 class TOOL_SETTINGS
 {
     public:
-        TOOL_SETTINGS ( TOOL_BASE* aTool = NULL );
-        ~TOOL_SETTINGS ();
+        TOOL_SETTINGS( TOOL_BASE* aTool = NULL );
+        ~TOOL_SETTINGS();
 
-        template <class T>
+        template<class T>
         T Get( const wxString& aName, T aDefaultValue ) const
         {
-            if( !m_config )
+            wxConfigBase* config = getConfigBase();
+
+            if( !config )
                 return aDefaultValue;
 
             T tmp = aDefaultValue;
 
-            m_config->Read( getKeyName( aName ), &tmp );
+            config->Read( getKeyName( aName ), &tmp );
             return tmp;
         }
 
-        template <class T>
+        template<class T>
         void Set( const wxString& aName, const T &aValue )
         {
-            if( !m_config )
+            wxConfigBase* config = getConfigBase();
+
+            if( !config )
                 return;
 
-            m_config->Write( getKeyName( aName ), aValue );
+            config->Write( getKeyName( aName ), aValue );
         }
 
     private:
         wxString getKeyName( const wxString& aEntryName ) const;
 
-        wxConfigBase* m_config;
+        ///> Returns pointer to currently used wxConfigBase. It might be NULL, if there is no
+        ///> TOOL_BASE assigned.
+        wxConfigBase* getConfigBase() const;
+
         TOOL_BASE* m_tool;
 
 };
