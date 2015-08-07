@@ -321,6 +321,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hasAutoSave = true;
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
 
     m_rotationAngle = 900;
 
@@ -329,7 +330,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Create GAL canvas
     SetGalCanvas( new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                          PCB_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
+                  canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE ? EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO : canvasType ) );
 
     SetBoard( new BOARD() );
 
@@ -453,6 +454,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     enableGALSpecificMenus();
 
     Zoom_Automatique( false );
+
+    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
+    {
+        GetGalCanvas()->SwitchBackend( canvasType );
+        UseGalCanvas( true );
+    }
+
 }
 
 

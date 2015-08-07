@@ -56,6 +56,7 @@ public:
         GAL_TYPE_NONE,      ///< Not used
         GAL_TYPE_OPENGL,    ///< OpenGL implementation
         GAL_TYPE_CAIRO,     ///< Cairo implementation
+        GAL_TYPE_LAST       ///< Sentinel, do not use as a parameter
     };
 
     EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,

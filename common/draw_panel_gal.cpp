@@ -291,6 +291,10 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
         case GAL_TYPE_NONE:
             return false;
+
+        default:
+            assert( false );
+            return false;
         }
 
         delete m_gal;

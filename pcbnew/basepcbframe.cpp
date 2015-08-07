@@ -920,23 +920,30 @@ void PCB_BASE_FRAME::SetPrevGrid()
 
 void PCB_BASE_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
 {
-    int id = aEvent.GetId();
     bool use_gal = false;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
 
-    switch( id )
+    switch( aEvent.GetId() )
     {
     case ID_MENU_CANVAS_DEFAULT:
         break;
 
     case ID_MENU_CANVAS_CAIRO:
         use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+
+        if( use_gal )
+            canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
         break;
 
     case ID_MENU_CANVAS_OPENGL:
         use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+
+        if( use_gal )
+            canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
         break;
     }
 
+    SaveCanvasTypeSetting( canvasType );
     UseGalCanvas( use_gal );
 }
 
@@ -971,3 +978,44 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         galCanvas->SetEventDispatcher( NULL );
     }
 }
+
+
+EDA_DRAW_PANEL_GAL::GAL_TYPE PCB_BASE_FRAME::LoadCanvasTypeSetting() const
+{
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
+        cfg->Read( CANVAS_TYPE_KEY, (long*) &canvasType );
+
+    if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
+            || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
+    {
+        assert( false );
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    }
+
+    return canvasType;
+}
+
+
+bool PCB_BASE_FRAME::SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+{
+    if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
+            || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
+    {
+        assert( false );
+        return false;
+    }
+
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
+        return cfg->Write( CANVAS_TYPE_KEY, (long) aCanvasType );
+
+    return false;
+}
+
+
+const wxString PCB_BASE_FRAME::CANVAS_TYPE_KEY = wxT( "canvas_type" );
