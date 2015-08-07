@@ -46,3 +46,13 @@ bool PCB_BASE_EDIT_FRAME::PostCommandMenuEvent( int evt_type )
 
     return false;
 }
+
+
+void PCB_BASE_EDIT_FRAME::UseGalCanvas( bool aEnable )
+{
+    PCB_BASE_FRAME::UseGalCanvas( aEnable );
+
+    // No matter what, reenable undo/redo on switching to the legacy canvas
+    if( !aEnable )
+        UndoRedoBlock( false );
+}

@@ -178,9 +178,9 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_DEFAULT, PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_DEFAULT, PCB_BASE_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_BASE_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::SwitchCanvas )
 
     // Menu Get Design Rules Editor
     EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
@@ -661,59 +661,9 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
-
-    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                   GetGalCanvas()->GetViewControls(), this );
-
-    if( aEnable )
-    {
-        SetBoard( m_Pcb );
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
-        GetGalCanvas()->GetView()->RecacheAllItems( true );
-        GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
-        GetGalCanvas()->StartDrawing();
-    }
-    else
-    {
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
-
-        // Redirect all events to the legacy canvas
-        GetGalCanvas()->SetEventDispatcher( NULL );
-
-        // No matter what, reenable undo/redo
-        UndoRedoBlock( false );
-    }
+    PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
 
     enableGALSpecificMenus();
-}
-
-
-void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
-{
-    int id = aEvent.GetId();
-    bool use_gal = false;
-
-    switch( id )
-    {
-    case ID_MENU_CANVAS_DEFAULT:
-        break;
-
-    case ID_MENU_CANVAS_CAIRO:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-        break;
-
-    case ID_MENU_CANVAS_OPENGL:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-        break;
-    }
-
-    if( !use_gal )
-        Compile_Ratsnest( NULL, true );
-    else
-        GetBoard()->GetRatsnest()->ProcessBoard();
-
-    UseGalCanvas( use_gal );
 }
 
 

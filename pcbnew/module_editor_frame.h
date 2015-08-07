@@ -167,12 +167,6 @@ public:
      */
     void Show3D_Frame( wxCommandEvent& event );
 
-    /**
-     * Function SwitchCanvas
-     * switches currently used canvas (default / Cairo / OpenGL).
-     */
-    void SwitchCanvas( wxCommandEvent& aEvent );
-
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
     void OnVerticalToolbar( wxCommandEvent& aEvent );
 

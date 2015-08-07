@@ -362,15 +362,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::UseGalCanvas( bool aEnable )
-{
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
-
-    if( aEnable )
-        GetGalCanvas()->StartDrawing();
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 {
     m_footprintList->Clear();

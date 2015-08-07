@@ -672,6 +672,15 @@ public:
 
     void ClearSelection();
 
+    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
+    virtual void UseGalCanvas( bool aEnable );
+
+    /**
+     * Function SwitchCanvas
+     * switches currently used canvas (default / Cairo / OpenGL).
+     */
+    void SwitchCanvas( wxCommandEvent& aEvent );
+
     DECLARE_EVENT_TABLE()
 };
 

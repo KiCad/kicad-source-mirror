@@ -69,9 +69,6 @@ public:
      */
     void ReCreateLibraryList();
 
-    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    virtual void UseGalCanvas( bool aEnable );
-
 private:
 
     wxListBox*          m_libList;               // The list of libs names

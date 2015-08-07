@@ -89,6 +89,9 @@ public:
         m_undoRedoBlocked = aBlock;
     }
 
+    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
+    void UseGalCanvas( bool aEnable );
+
 protected:
     /// User defined rotation angle (in tenths of a degree).
     int m_rotationAngle;

@@ -167,9 +167,9 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_DEFAULT, FOOTPRINT_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, FOOTPRINT_EDIT_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, FOOTPRINT_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_DEFAULT, PCB_BASE_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_BASE_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::SwitchCanvas )
 
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
     EVT_UPDATE_UI( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib )
@@ -904,29 +904,6 @@ void FOOTPRINT_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
-{
-    int id = aEvent.GetId();
-    bool use_gal = false;
-
-    switch( id )
-    {
-    case ID_MENU_CANVAS_DEFAULT:
-        break;
-
-    case ID_MENU_CANVAS_CAIRO:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-        break;
-
-    case ID_MENU_CANVAS_OPENGL:
-        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-        break;
-    }
-
-    UseGalCanvas( use_gal );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::setupTools()
 {
     PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
@@ -960,21 +937,8 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
 
 void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+    PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
 
     if( aEnable )
-    {
-        SetBoard( m_Pcb );
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
         updateView();
-        GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
-        GetGalCanvas()->StartDrawing();
-    }
-    else
-    {
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
-
-        // Redirect all events to the legacy canvas
-        GetGalCanvas()->SetEventDispatcher( NULL );
-    }
 }

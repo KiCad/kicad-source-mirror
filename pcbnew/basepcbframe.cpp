@@ -916,3 +916,58 @@ void PCB_BASE_FRAME::SetPrevGrid()
     else
         GetCanvas()->Refresh();
 }
+
+
+void PCB_BASE_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+    bool use_gal = false;
+
+    switch( id )
+    {
+    case ID_MENU_CANVAS_DEFAULT:
+        break;
+
+    case ID_MENU_CANVAS_CAIRO:
+        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+        break;
+
+    case ID_MENU_CANVAS_OPENGL:
+        use_gal = GetGalCanvas()->SwitchBackend( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+        break;
+    }
+
+    UseGalCanvas( use_gal );
+}
+
+
+void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
+
+    if( m_toolManager )
+        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
+                                    GetGalCanvas()->GetViewControls(), this );
+
+    if( aEnable )
+    {
+        SetBoard( m_Pcb );
+
+        if( m_toolManager )
+            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+
+        galCanvas->GetView()->RecacheAllItems( true );
+        galCanvas->SetEventDispatcher( m_toolDispatcher );
+        galCanvas->StartDrawing();
+    }
+    else
+    {
+        if( m_toolManager )
+            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+
+        // Redirect all events to the legacy canvas
+        galCanvas->SetEventDispatcher( NULL );
+    }
+}
