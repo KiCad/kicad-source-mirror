@@ -395,6 +395,10 @@ TOOL_ACTION COMMON_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbS
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION COMMON_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
+        AS_GLOBAL, 0,
+        "", "" );
+
 TOOL_ACTION COMMON_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
         AS_GLOBAL, 0,
         "", "" );
@@ -701,6 +705,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_PCB_HIGHLIGHT_BUTT:
         return COMMON_ACTIONS::highlightNetCursor.MakeEvent();
+
+    case ID_APPEND_FILE:
+        return COMMON_ACTIONS::appendBoard.MakeEvent();
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
