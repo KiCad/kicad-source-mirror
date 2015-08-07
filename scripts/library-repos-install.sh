@@ -169,7 +169,7 @@ checkout_or_update_libraries()
             # That way those repos can serve as pretty libraries directly if need be.
 
             echo "installing $WORKING_TREES/library-repos/$repo"
-            git clone --mirror "https://github.com/KiCad/$repo" "$WORKING_TREES/library-repos/$repo"
+            git clone "https://github.com/KiCad/$repo" "$WORKING_TREES/library-repos/$repo"
             if [ "$1" == "--gitlab" ]; then
                 curl --header "PRIVATE-TOKEN: $TOKEN" -H "Content-Type: application/json" -d "{\"name\": \"$repo\",\"path\": \"$repo\",\"namespace_id\": \"$NAMESPACE_ID\",\"public\": \"true\"}" http://$HOST/api/v3/projects
                 cd "$WORKING_TREES/library-repos/$repo"
