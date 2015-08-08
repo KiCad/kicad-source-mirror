@@ -534,7 +534,10 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
 bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 {
-    return GetScreen()->IsSave();
+    if( GetScreen() )
+        return GetScreen()->IsSave();
+
+    return false;
 }
 
 
