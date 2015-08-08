@@ -516,6 +516,14 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
 
             zip_url += repo.GetPath();      // path comes with a leading '/'
 
+            // This is intented for use with gitlab, for users who wish to self-host
+            // the library repos on a local server. The KIGITHUB path (and thus server name) 
+            // must contain "git" for this code to work.
+            if ( repo.GetServer().Contains("git") )
+            {
+                zip_url += "/repository/archive.zip";
+            }
+
             // Do not modify the path, we cannot anticipate the needs of all
             // servers which are serving up zip files directly.  URL modifications
             // are more generally done in the server, rather than contaminating
