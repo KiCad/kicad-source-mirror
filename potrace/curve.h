@@ -19,8 +19,8 @@ struct privcurve_s
 {
     int  n;         /* number of segments */
     int* tag;       /* tag[n]: POTRACE_CORNER or POTRACE_CURVETO */
-         dpoint_t( * c )[3]; /* c[n][i]: control points.
-                     *  c[n][0] is unused for tag[n]=POTRACE_CORNER */
+    dpoint_t( * c )[3]; /* c[n][i]: control points.
+                         * c[n][0] is unused for tag[n]=POTRACE_CORNER */
 
     /* the remainder of this structure is special to privcurve, and is
      *  used in EPS debug output and special EPS "short coding". These

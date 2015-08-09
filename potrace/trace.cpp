@@ -1238,14 +1238,14 @@ static int opti_penalty( privpath_t* pp,
  *  on failure. */
 static int opticurve( privpath_t* pp, double opttolerance )
 {
-    int      m   = pp->curve.n;
+    int      seg_count = pp->curve.n;   // segment count in pp->curve
     int*     pt  = NULL;    /* pt[m+1] */
     double*  pen = NULL;    /* pen[m+1] */
     int*     len = NULL;    /* len[m+1] */
     opti_t*  opt = NULL;    /* opt[m+1] */
     int      om;
-    int      i, j, r;
-    opti_t   o;
+    int      j, r;
+    opti_t   curve_prms;
     dpoint_t p0;
     int      i1;
     double   area;
@@ -1256,22 +1256,22 @@ static int opticurve( privpath_t* pp, double opttolerance )
     int*     convc = NULL;  /* conv[m]: pre-computed convexities */
     double*  areac = NULL;  /* cumarea[m+1]: cache for fast area computation */
 
-    SAFE_MALLOC( pt, m + 1, int );
-    SAFE_MALLOC( pen, m + 1, double );
-    SAFE_MALLOC( len, m + 1, int );
-    SAFE_MALLOC( opt, m + 1, opti_t );
-    SAFE_MALLOC( convc, m, int );
-    SAFE_MALLOC( areac, m + 1, double );
+    SAFE_MALLOC( pt, seg_count + 1, int );
+    SAFE_MALLOC( pen, seg_count + 1, double );
+    SAFE_MALLOC( len, seg_count + 1, int );
+    SAFE_MALLOC( opt, seg_count + 1, opti_t );
+    SAFE_MALLOC( convc, seg_count, int );
+    SAFE_MALLOC( areac, seg_count + 1, double );
 
     /* pre-calculate convexity: +1 = right turn, -1 = left turn, 0 = corner */
-    for( i = 0; i<m; i++ )
+    for( int i = 0; i<seg_count; i++ )
     {
         if( pp->curve.tag[i] == POTRACE_CURVETO )
         {
             convc[i] =
-                sign( dpara( pp->curve.vertex[mod( i - 1,
-                                                   m )], pp->curve.vertex[i],
-                             pp->curve.vertex[mod( i + 1, m )] ) );
+                sign( dpara( pp->curve.vertex[mod( i - 1, seg_count )],
+                             pp->curve.vertex[i],
+                             pp->curve.vertex[mod( i + 1, seg_count )] ) );
         }
         else
         {
@@ -1283,9 +1283,9 @@ static int opticurve( privpath_t* pp, double opttolerance )
     area     = 0.0;
     areac[0] = 0.0;
     p0 = pp->curve.vertex[0];
-    for( i = 0; i<m; i++ )
+    for( int i = 0; i<seg_count; i++ )
     {
-        i1 = mod( i + 1, m );
+        i1 = mod( i + 1, seg_count );
         if( pp->curve.tag[i1] == POTRACE_CURVETO )
         {
             alpha = pp->curve.alpha[i1];
@@ -1301,34 +1301,43 @@ static int opticurve( privpath_t* pp, double opttolerance )
     pen[0] = 0;
     len[0] = 0;
 
+    // Avoid not initialized value for opt[j] (should not occur, but...)
+    for( j = 0; j<=seg_count; j++ )
+    {
+        opt[j].pen = 0.0;   // penalty
+        opt[j].c[0].x = opt[j].c[1].x = opt[j].c[0].y = opt[j].c[1].y = 0;
+        opt[j].t = opt[j].s = opt[j].alpha = 0.0; // curve parameters
+    }
+
+
     /* Fixme: we always start from a fixed point -- should find the best
      *  curve cyclically ### */
 
-    for( j = 1; j<=m; j++ )
+    for( j = 1; j<=seg_count; j++ )
     {
         /* calculate best path from 0 to j */
         pt[j]  = j - 1;
         pen[j] = pen[j - 1];
         len[j] = len[j - 1] + 1;
 
-        for( i = j - 2; i>=0; i-- )
+        for( int i = j - 2; i>=0; i-- )
         {
-            r = opti_penalty( pp, i, mod( j, m ), &o, opttolerance, convc, areac );
+            r = opti_penalty( pp, i, mod( j, seg_count ), &curve_prms, opttolerance, convc, areac );
             if( r )
             {
                 break;
             }
-            if( len[j] > len[i] + 1 || (len[j] == len[i] + 1 && pen[j] > pen[i] + o.pen) )
+            if( len[j] > len[i] + 1 || (len[j] == len[i] + 1 && pen[j] > pen[i] + curve_prms.pen) )
             {
                 pt[j]  = i;
-                pen[j] = pen[i] + o.pen;
+                pen[j] = pen[i] + curve_prms.pen;
                 len[j] = len[i] + 1;
-                opt[j] = o;
+                opt[j] = curve_prms;
             }
         }
     }
 
-    om = len[m];
+    om = len[seg_count];
     r  = privcurve_init( &pp->ocurve, om );
     if( r )
     {
@@ -1337,19 +1346,19 @@ static int opticurve( privpath_t* pp, double opttolerance )
     SAFE_MALLOC( s, om, double );
     SAFE_MALLOC( t, om, double );
 
-    j = m;
-    for( i = om - 1; i>=0; i-- )
+    j = seg_count;
+    for( int i = om - 1; i>=0; i-- )
     {
         if( pt[j]==j - 1 )
         {
-            pp->ocurve.tag[i]    = pp->curve.tag[mod( j, m )];
-            pp->ocurve.c[i][0]   = pp->curve.c[mod( j, m )][0];
-            pp->ocurve.c[i][1]   = pp->curve.c[mod( j, m )][1];
-            pp->ocurve.c[i][2]   = pp->curve.c[mod( j, m )][2];
-            pp->ocurve.vertex[i] = pp->curve.vertex[mod( j, m )];
-            pp->ocurve.alpha[i]  = pp->curve.alpha[mod( j, m )];
-            pp->ocurve.alpha0[i] = pp->curve.alpha0[mod( j, m )];
-            pp->ocurve.beta[i]   = pp->curve.beta[mod( j, m )];
+            pp->ocurve.tag[i]    = pp->curve.tag[mod( j, seg_count )];
+            pp->ocurve.c[i][0]   = pp->curve.c[mod( j, seg_count )][0];
+            pp->ocurve.c[i][1]   = pp->curve.c[mod( j, seg_count )][1];
+            pp->ocurve.c[i][2]   = pp->curve.c[mod( j, seg_count )][2];
+            pp->ocurve.vertex[i] = pp->curve.vertex[mod( j, seg_count )];
+            pp->ocurve.alpha[i]  = pp->curve.alpha[mod( j, seg_count )];
+            pp->ocurve.alpha0[i] = pp->curve.alpha0[mod( j, seg_count )];
+            pp->ocurve.beta[i]   = pp->curve.beta[mod( j, seg_count )];
             s[i] = t[i] = 1.0;
         }
         else
@@ -1357,10 +1366,9 @@ static int opticurve( privpath_t* pp, double opttolerance )
             pp->ocurve.tag[i]    = POTRACE_CURVETO;
             pp->ocurve.c[i][0]   = opt[j].c[0];
             pp->ocurve.c[i][1]   = opt[j].c[1];
-            pp->ocurve.c[i][2]   = pp->curve.c[mod( j, m )][2];
-            pp->ocurve.vertex[i] = interval( opt[j].s, pp->curve.c[mod( j,
-                                                                        m )][2],
-                                             pp->curve.vertex[mod( j, m )] );
+            pp->ocurve.c[i][2]   = pp->curve.c[mod( j, seg_count )][2];
+            pp->ocurve.vertex[i] = interval( opt[j].s, pp->curve.c[mod( j, seg_count )][2],
+                                             pp->curve.vertex[mod( j, seg_count )] );
             pp->ocurve.alpha[i]  = opt[j].alpha;
             pp->ocurve.alpha0[i] = opt[j].alpha;
             s[i] = opt[j].s;
@@ -1370,7 +1378,7 @@ static int opticurve( privpath_t* pp, double opttolerance )
     }
 
     /* calculate beta parameters */
-    for( i = 0; i<om; i++ )
+    for( int i = 0; i<om; i++ )
     {
         i1 = mod( i + 1, om );
         pp->ocurve.beta[i] = s[i] / (s[i] + t[i1]);
