@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2015 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file pcb_calculator.h
  */
@@ -26,6 +49,16 @@ private:
     bool m_RegulatorListChanged;        // set to true when m_RegulatorList
                                         // was modified, and the corresponging file
                                         // must be rewritten
+
+    enum                                // Which dimension is controlling the track
+    {                                   // width / current calculations:
+        TW_MASTER_CURRENT,              // the maximum current,
+        TW_MASTER_EXT_WIDTH,            // the external trace width,
+        TW_MASTER_INT_WIDTH             // or the internal trace width?
+    } m_TWMode;
+
+    bool m_TWNested;                    // Used to stop events caused by setting the answers.
+
     wxSize          m_FrameSize;
     wxPoint         m_FramePos;
     wxConfigBase*   m_Config;
@@ -37,6 +70,7 @@ private:
     // List ofattenuators: ordered like in dialog menu list
     std::vector <ATTENUATOR *> m_attenuator_list;
     wxString m_lastSelectedRegulatorName;   // last regulator name selected
+
 
 
 public:
@@ -74,12 +108,7 @@ private:
      */
     void SetDataFilename( const wxString & aFilename);
 
-    // tracks width versus current functions:
-    /**
-     * Function OnTWCalculateButt
-     * Called by clicking on the calculate button
-     */
-    void OnTWCalculateButt( wxCommandEvent& event );
+    // Trace width / maximum current capability calculations.
 
     /**
      * Function TW_Init
@@ -94,11 +123,61 @@ private:
     void TW_WriteConfig();
 
     /**
-     * Function TWCalculate
-     * Performs track caracteristics values calculations.
+     * Function OnTWParametersChanged
+     * Called when the user changes the general parameters (i.e., anything that
+     * is not one of the controlling values). This update the calculations.
      */
-    double TWCalculate( double aCurrent, double aThickness, double aDeltaT_C,
+    void OnTWParametersChanged( wxCommandEvent& event );
+
+    /**
+     * Function OnTWCalculateFromCurrent
+     * Called when the user changes the desired maximum current. This sets the
+     * current as the controlling value and performs the calculations.
+     */
+    void OnTWCalculateFromCurrent( wxCommandEvent& event );
+
+    /**
+     * Function OnTWCalculateFromExtWidth
+     * Called when the user changes the desired external trace width. This sets
+     * the external width as the controlling value and performs the calculations.
+     */
+    void OnTWCalculateFromExtWidth( wxCommandEvent& event );
+
+    /**
+     * Function OnTWCalculateFromIntWidth
+     * Called when the user changes the desired internal trace width. This sets
+     * the internal width as the controlling value and performs the calculations.
+     */
+    void OnTWCalculateFromIntWidth( wxCommandEvent& event );
+
+    /**
+     * Function TWCalculateWidth
+     * Calculate track width required based on given current and temperature rise.
+     */
+    double TWCalculateWidth( double aCurrent, double aThickness, double aDeltaT_C,
                     bool aUseInternalLayer );
+
+    /**
+     * Function TWCalculateCurrent
+     * Calculate maximum current based on given width and temperature rise.
+     */
+    double TWCalculateCurrent( double aWidth, double aThickness, double aDeltaT_C,
+                    bool aUseInternalLayer );
+
+    /**
+     * Function TWDisplayValues
+     * Displays the results of a calculation (including resulting values such
+     * as the resistance and power loss).
+     */
+    void TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth,
+                    double aExtThickness, double aIntThickness );
+
+    /**
+     * Function TWUpdateModeDisplay
+     * Updates the fields to show whether the maximum current, external trace
+     * width, or internal trace width is currently the controlling parameter.
+     */
+    void TWUpdateModeDisplay();
 
     // Electrical spacing panel:
     void OnElectricalSpacingUnitsSelection( wxCommandEvent& event );

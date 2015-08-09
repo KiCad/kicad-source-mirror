@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,6 +62,8 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_currTransLineType = DEFAULT_TYPE;
     m_currAttenuator    = NULL;
     m_RegulatorListChanged = false;
+    m_TWMode = TW_MASTER_CURRENT;
+    m_TWNested = false;
     m_Config = GetNewConfig( Pgm().App().GetAppName() );
 
     // Populate transline list ordered like in dialog menu list
