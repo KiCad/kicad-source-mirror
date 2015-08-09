@@ -342,6 +342,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_DELETE_BLOCK:
+        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
+            break;
+
         m_canvas->MoveCursorToCrossHair();
         screen->m_BlockLocate.SetCommand( BLOCK_DELETE );
         screen->m_BlockLocate.SetMessageBlock( this );
@@ -350,6 +353,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_COPY_BLOCK:
+        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
+            break;
+
         m_canvas->MoveCursorToCrossHair();
         screen->m_BlockLocate.SetCommand( BLOCK_COPY );
         screen->m_BlockLocate.SetMessageBlock( this );
@@ -357,6 +363,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_DRAG_BLOCK:
+        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
+            break;
+
         m_canvas->MoveCursorToCrossHair();
         screen->m_BlockLocate.SetCommand( BLOCK_DRAG );
         screen->m_BlockLocate.SetMessageBlock( this );

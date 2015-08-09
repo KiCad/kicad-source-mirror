@@ -88,11 +88,6 @@ void PCB_CALCULATOR_FRAME::OnTWParametersChanged( wxCommandEvent& event )
     case TW_MASTER_INT_WIDTH:
         OnTWCalculateFromIntWidth( event );
         break;
-    default:
-#ifdef DEBUG
-        assert( false );
-#endif
-        break;
     }
 }
 
@@ -105,6 +100,7 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateFromCurrent( wxCommandEvent& event )
         event.StopPropagation();
         return;
     }
+
     m_TWNested = true;
 
     // Update state.
@@ -190,6 +186,7 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateFromIntWidth( wxCommandEvent& event )
         event.StopPropagation();
         return;
     }
+
     m_TWNested = true;
 
     // Update state.
@@ -248,6 +245,7 @@ void PCB_CALCULATOR_FRAME::TWDisplayValues( double aCurrent, double aExtWidth,
         msg.Printf( wxT( "%g" ), aExtWidth / extScale );
         m_ExtTrackWidthValue->SetValue( msg );
     }
+
     if( m_TWMode != TW_MASTER_INT_WIDTH )
     {
         msg.Printf( wxT( "%g" ), aIntWidth / intScale );
