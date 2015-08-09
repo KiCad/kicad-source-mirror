@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 jean-pierre.charras
+ * Copyright (C) 1992-2015 jean-pierre.charras
  * Copyright (C) 1992-2015 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -64,7 +64,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_RegulatorListChanged = false;
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
-    m_Config = GetNewConfig( Pgm().App().GetAppName() );
 
     // Populate transline list ordered like in dialog menu list
     const static TRANSLINE_TYPE_ID tltype_list[8] =
@@ -84,14 +83,15 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_attenuator_list.push_back( new ATTENUATOR_SPLITTER() );
     m_currAttenuator = m_attenuator_list[0];
 
-    ReadConfig();
+    wxConfigBase* config = GetNewConfig( Pgm().App().GetAppName() );
+    LoadSettings( config );
 
     ReadDataFile();
 
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
-    TW_Init();
+    TW_Init( config );
 
     SetAttenuator( m_AttenuatorsSelection->GetSelection() );
 
@@ -121,15 +121,11 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
 {
-    WriteConfig();
-
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         delete m_transline_list[ii];
 
     for( unsigned ii = 0; ii < m_attenuator_list.size(); ii++ )
         delete m_attenuator_list[ii];
-
-    delete m_Config;
 
     /* This needed for OSX: avoids furter OnDraw processing after this
      * destructor and before the native window is destroyed
@@ -144,10 +140,12 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
     {
         if( GetDataFilename().IsEmpty() )
         {
-            int opt = wxMessageBox( _("Data modified, and no data filename to save modifications\n"\
-"Do you want to exit and abandon your change?"),
-                                     _("Regulator list change"),
-                                    wxYES_NO | wxICON_QUESTION );
+            int opt = wxMessageBox(
+                _("Data modified, and no data filename to save modifications\n"\
+                  "Do you want to exit and abandon your change?"),
+                _("Regulator list change"),
+                wxYES_NO | wxICON_QUESTION );
+
             if( opt == wxNO )
                 return;
         }
@@ -157,57 +155,57 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
             {
                 wxString msg;
                 msg.Printf( _("Unable to write file<%s>\n"\
-"Do you want to exit and abandon your change?"), GetDataFilename().c_str() );
+                            "Do you want to exit and abandon your change?"),
+                            GetDataFilename().c_str() );
 
                 int opt = wxMessageBox( msg, _("Write Data File Error"),
-                                        wxYES_NO | wxICON_QUESTION );
+                                        wxYES_NO | wxICON_ERROR );
                 if( opt  == wxNO )
                     return;
             }
         }
     }
 
-    Destroy();
+    event.Skip();
+//    Destroy();
 }
 
-void PCB_CALCULATOR_FRAME::ReadConfig()
+void PCB_CALCULATOR_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    if( m_Config == NULL )
+    if( aCfg == NULL )
         return;
+
+    EDA_BASE_FRAME::LoadSettings( aCfg );
 
     long        ltmp;
     wxString    msg;
-    m_Config->Read( KEYWORD_FRAME_POSX, &m_FramePos.x, -1 );
-    m_Config->Read( KEYWORD_FRAME_POSY, &m_FramePos.y, -1 );
-    m_Config->Read( KEYWORD_FRAME_SIZEX, &m_FrameSize.x, -1 );
-    m_Config->Read( KEYWORD_FRAME_SIZEY, &m_FrameSize.y, -1 );
-    m_Config->Read( KEYWORD_TRANSLINE_SELECTION, &ltmp, (long) DEFAULT_TYPE );
+    aCfg->Read( KEYWORD_TRANSLINE_SELECTION, &ltmp, (long) DEFAULT_TYPE );
     m_currTransLineType = (enum TRANSLINE_TYPE_ID) ltmp;
-    m_Config->Read( KEYWORD_PAGE_SELECTION, &ltmp, 0 );
+    aCfg->Read( KEYWORD_PAGE_SELECTION, &ltmp, 0 );
     m_Notebook->ChangeSelection( ltmp );
-    m_Config->Read( KEYWORD_COLORCODE_SELECTION, &ltmp, 1 );
+    aCfg->Read( KEYWORD_COLORCODE_SELECTION, &ltmp, 1 );
     m_rbToleranceSelection->SetSelection( ltmp );
-    m_Config->Read( KEYWORD_ATTENUATORS_SELECTION, &ltmp, 0 );
+    aCfg->Read( KEYWORD_ATTENUATORS_SELECTION, &ltmp, 0 );
     m_AttenuatorsSelection->SetSelection( ltmp );
-    m_Config->Read( KEYWORD_BRDCLASS_SELECTION, &ltmp, 0 );
+    aCfg->Read( KEYWORD_BRDCLASS_SELECTION, &ltmp, 0 );
     m_BoardClassesUnitsSelector->SetSelection( ltmp );
 
     // Regul panel config:
-    m_Config->Read( KEYWORD_REGUL_R1, &msg, wxT( "10" ) );
+    aCfg->Read( KEYWORD_REGUL_R1, &msg, wxT( "10" ) );
     m_RegulR1Value->SetValue( msg );
-    m_Config->Read( KEYWORD_REGUL_R2, &msg, wxT( "10" ) );
+    aCfg->Read( KEYWORD_REGUL_R2, &msg, wxT( "10" ) );
     m_RegulR2Value->SetValue( msg );
-    m_Config->Read( KEYWORD_REGUL_VREF, &msg, wxT( "3" ) );
+    aCfg->Read( KEYWORD_REGUL_VREF, &msg, wxT( "3" ) );
     m_RegulVrefValue->SetValue( msg );
-    m_Config->Read( KEYWORD_REGUL_VOUT, &msg, wxT( "12" ) );
+    aCfg->Read( KEYWORD_REGUL_VOUT, &msg, wxT( "12" ) );
     m_RegulVoutValue->SetValue( msg );
-    m_Config->Read( KEYWORD_DATAFILE_FILENAME, &msg, wxT( "" ) );
+    aCfg->Read( KEYWORD_DATAFILE_FILENAME, &msg, wxT( "" ) );
     SetDataFilename( msg );
-    m_Config->Read( KEYWORD_REGUL_SELECTED, &msg, wxT( "" ) );
+    aCfg->Read( KEYWORD_REGUL_SELECTED, &msg, wxT( "" ) );
     m_lastSelectedRegulatorName = msg;
-    m_Config->Read( KEYWORD_REGUL_TYPE, &ltmp, 0 );
+    aCfg->Read( KEYWORD_REGUL_TYPE, &ltmp, 0 );
     m_choiceRegType->SetSelection( ltmp );
-    m_Config->Read( KEYWORD_REGUL_LAST_PARAM, &ltmp, 0 );
+    aCfg->Read( KEYWORD_REGUL_LAST_PARAM, &ltmp, 0 );
     wxRadioButton * regprms[3] =
     {   m_rbRegulR1, m_rbRegulR2, m_rbRegulVout
     };
@@ -217,48 +215,39 @@ void PCB_CALCULATOR_FRAME::ReadConfig()
         regprms[ii]->SetValue( ltmp == ii );
 
     // Electrical panel config
-    m_Config->Read( KEYWORD_ELECTRICAL_SPACING_SELECTION, &ltmp, 0 );
+    aCfg->Read( KEYWORD_ELECTRICAL_SPACING_SELECTION, &ltmp, 0 );
     m_ElectricalSpacingUnitsSelector->SetSelection( ltmp );
-    m_Config->Read( KEYWORD_ELECTRICAL_SPACING_VOLTAGE, &msg, wxT( "500" ) );
+    aCfg->Read( KEYWORD_ELECTRICAL_SPACING_VOLTAGE, &msg, wxT( "500" ) );
     m_ElectricalSpacingVoltage->SetValue( msg );
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
-        m_transline_list[ii]->ReadConfig( m_Config );
+        m_transline_list[ii]->ReadConfig( aCfg );
 
     for( unsigned ii = 0; ii < m_attenuator_list.size(); ii++ )
-        m_attenuator_list[ii]->ReadConfig( m_Config );
+        m_attenuator_list[ii]->ReadConfig( aCfg );
 }
 
 
-void PCB_CALCULATOR_FRAME::WriteConfig()
+void PCB_CALCULATOR_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    if( m_Config == NULL )
+    if( aCfg == NULL )
         return;
 
-    if( !IsIconized() )
-    {
-        m_FrameSize = GetSize();
-        m_FramePos  = GetPosition();
+    EDA_BASE_FRAME::SaveSettings( aCfg );
 
-        m_Config->Write( KEYWORD_FRAME_POSX, (long) m_FramePos.x );
-        m_Config->Write( KEYWORD_FRAME_POSY, (long) m_FramePos.y );
-        m_Config->Write( KEYWORD_FRAME_SIZEX, (long) m_FrameSize.x );
-        m_Config->Write( KEYWORD_FRAME_SIZEY, (long) m_FrameSize.y );
-    }
+    aCfg->Write( KEYWORD_TRANSLINE_SELECTION, (long) m_currTransLineType );
+    aCfg->Write( KEYWORD_PAGE_SELECTION, m_Notebook->GetSelection() );
+    aCfg->Write( KEYWORD_COLORCODE_SELECTION, m_rbToleranceSelection->GetSelection() );
+    aCfg->Write( KEYWORD_ATTENUATORS_SELECTION, m_AttenuatorsSelection->GetSelection() );
+    aCfg->Write( KEYWORD_BRDCLASS_SELECTION, m_BoardClassesUnitsSelector->GetSelection() );
 
-    m_Config->Write( KEYWORD_TRANSLINE_SELECTION, (long) m_currTransLineType );
-    m_Config->Write( KEYWORD_PAGE_SELECTION, m_Notebook->GetSelection() );
-    m_Config->Write( KEYWORD_COLORCODE_SELECTION, m_rbToleranceSelection->GetSelection() );
-    m_Config->Write( KEYWORD_ATTENUATORS_SELECTION, m_AttenuatorsSelection->GetSelection() );
-    m_Config->Write( KEYWORD_BRDCLASS_SELECTION, m_BoardClassesUnitsSelector->GetSelection() );
-
-    m_Config->Write( KEYWORD_REGUL_R1, m_RegulR1Value->GetValue() );
-    m_Config->Write( KEYWORD_REGUL_R2, m_RegulR2Value->GetValue() );
-    m_Config->Write( KEYWORD_REGUL_VREF, m_RegulVrefValue->GetValue() );
-    m_Config->Write( KEYWORD_REGUL_VOUT, m_RegulVoutValue->GetValue() );
-    m_Config->Write( KEYWORD_DATAFILE_FILENAME, GetDataFilename() );
-    m_Config->Write( KEYWORD_REGUL_SELECTED, m_lastSelectedRegulatorName );
-    m_Config->Write( KEYWORD_REGUL_TYPE,
+    aCfg->Write( KEYWORD_REGUL_R1, m_RegulR1Value->GetValue() );
+    aCfg->Write( KEYWORD_REGUL_R2, m_RegulR2Value->GetValue() );
+    aCfg->Write( KEYWORD_REGUL_VREF, m_RegulVrefValue->GetValue() );
+    aCfg->Write( KEYWORD_REGUL_VOUT, m_RegulVoutValue->GetValue() );
+    aCfg->Write( KEYWORD_DATAFILE_FILENAME, GetDataFilename() );
+    aCfg->Write( KEYWORD_REGUL_SELECTED, m_lastSelectedRegulatorName );
+    aCfg->Write( KEYWORD_REGUL_TYPE,
                      m_choiceRegType->GetSelection() );
     wxRadioButton * regprms[3] =
     {   m_rbRegulR1, m_rbRegulR2, m_rbRegulVout
@@ -267,24 +256,24 @@ void PCB_CALCULATOR_FRAME::WriteConfig()
     {
         if( regprms[ii]->GetValue() )
         {
-            m_Config->Write( KEYWORD_REGUL_LAST_PARAM, ii );
+            aCfg->Write( KEYWORD_REGUL_LAST_PARAM, ii );
             break;
         }
     }
 
 
-    m_Config->Write( KEYWORD_ELECTRICAL_SPACING_SELECTION,
+    aCfg->Write( KEYWORD_ELECTRICAL_SPACING_SELECTION,
                      m_ElectricalSpacingUnitsSelector->GetSelection() );
-    m_Config->Write( KEYWORD_ELECTRICAL_SPACING_VOLTAGE,
+    aCfg->Write( KEYWORD_ELECTRICAL_SPACING_VOLTAGE,
                      m_ElectricalSpacingVoltage->GetValue() );
 
-    TW_WriteConfig();
+    TW_WriteConfig( aCfg );
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
-        m_transline_list[ii]->WriteConfig( m_Config );
+        m_transline_list[ii]->WriteConfig( aCfg );
 
     for( unsigned ii = 0; ii < m_attenuator_list.size(); ii++ )
-        m_attenuator_list[ii]->WriteConfig( m_Config );
+        m_attenuator_list[ii]->WriteConfig( aCfg );
 }
 
 

@@ -82,9 +82,11 @@ void TRANSLINE_PRM::ReadConfig( wxConfigBase* aConfig )
 {
     if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
         return;
+
     wxString key;
     key.Printf( TRANSLINE_PRM_KEY, (int) m_Id );
     aConfig->Read( key, &m_Value );
+
     key += wxT( "unit" );
     aConfig->Read( key, &m_UnitSelection );
 }
@@ -94,9 +96,11 @@ void TRANSLINE_PRM::WriteConfig( wxConfigBase* aConfig )
 {
     if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
         return;
+
     wxString key;
     key.Printf( TRANSLINE_PRM_KEY, (int) m_Id );
     aConfig->Write( key, m_Value );
+
     key += wxT( "unit" );
     aConfig->Write( key, m_UnitSelection );
 }
@@ -150,6 +154,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     // Default value is in GHz
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_FREQUENCY, FREQUENCY_PRM,
                                _( "Frequency" ), _( "Height of Substrate" ), 1.0, true ) );
+
 
     switch( m_Type )
     {
@@ -352,9 +357,9 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    _( "L" ), _( "Line Length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_E_PRM,
-                                   _( "Z0e (Zdiff)" ), _( "Even-Mode impedance (diff impedance)" ), 50.0, true ) );
+                                   _( "Zeven" ), _( "Even mode impedance (lines driven by common voltages)" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_O_PRM,
-                                   _( "Z0o (Z0)" ), _( "Odd-Mode impedance" ), 50.0, true ) );
+                                   _( "Zodd" ), _( "Odd mode impedance (lines driven by opposite (differential) voltages)" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
                                    _( "Ang_l" ), _( "Electrical length" ), 0.0, true ) );
         break;

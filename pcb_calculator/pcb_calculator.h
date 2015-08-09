@@ -59,13 +59,11 @@ private:
 
     bool m_TWNested;                    // Used to stop events caused by setting the answers.
 
-    wxSize          m_FrameSize;
-    wxPoint         m_FramePos;
-    wxConfigBase*   m_Config;
     enum TRANSLINE_TYPE_ID m_currTransLineType;
     TRANSLINE * m_currTransLine;        // a pointer to the active transline
     // List of translines: ordered like in dialog menu list
     std::vector <TRANSLINE_IDENT *> m_transline_list;
+
     ATTENUATOR * m_currAttenuator;
     // List ofattenuators: ordered like in dialog menu list
     std::vector <ATTENUATOR *> m_attenuator_list;
@@ -88,9 +86,9 @@ private:
     void OnPaintAttenuatorPanel( wxPaintEvent& event );
     void OnPaintAttFormulaPanel( wxPaintEvent& event );
 
-    // Config read-write
-    void ReadConfig();
-    void WriteConfig();
+    // Config read-write, virtual from EDA_BASE_FRAME
+    void LoadSettings( wxConfigBase* aCfg );
+    void SaveSettings( wxConfigBase* aCfg );
 
     // R/W data files:
     bool ReadDataFile();
@@ -114,13 +112,13 @@ private:
      * Function TW_Init
      * Read config and init dialog widgets values
      */
-    void TW_Init();
+    void TW_Init( wxConfigBase* aCfg );
 
     /**
      * Function TW_WriteConfig
      * Write Track width prameters in config
      */
-    void TW_WriteConfig();
+    void TW_WriteConfig( wxConfigBase* aCfg );
 
     /**
      * Function OnTWParametersChanged

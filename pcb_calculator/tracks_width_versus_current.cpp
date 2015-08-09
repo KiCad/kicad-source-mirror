@@ -56,22 +56,22 @@ extern double DoubleFromString( const wxString& TextValue );
 #define KEYWORD_TW_INTTRACK_THICKNESS          wxT( "TW_IntTrack_Thickness" )
 #define KEYWORD_TW_INTTRACK_THICKNESS_UNIT     wxT( "TW_IntTrack_Thickness_Unit" )
 
-void PCB_CALCULATOR_FRAME::TW_WriteConfig()
+void PCB_CALCULATOR_FRAME::TW_WriteConfig( wxConfigBase* aCfg )
 {
     // Save current parameters values in config.
-    m_Config->Write( KEYWORD_TW_CURRENT,                 m_TrackCurrentValue->GetValue() );
-    m_Config->Write( KEYWORD_TW_DELTA_TC,                m_TrackDeltaTValue->GetValue() );
-    m_Config->Write( KEYWORD_TW_TRACK_LEN,               m_TrackLengthValue->GetValue() );
-    m_Config->Write( KEYWORD_TW_TRACK_LEN_UNIT,          m_TW_CuLength_choiceUnit->GetSelection() );
-    m_Config->Write( KEYWORD_TW_RESISTIVITY,             m_TWResistivity->GetValue() );
-    m_Config->Write( KEYWORD_TW_EXTTRACK_WIDTH,          m_ExtTrackWidthValue->GetValue() );
-    m_Config->Write( KEYWORD_TW_EXTTRACK_WIDTH_UNIT,     m_TW_ExtTrackWidth_choiceUnit->GetSelection() );
-    m_Config->Write( KEYWORD_TW_EXTTRACK_THICKNESS,      m_ExtTrackThicknessValue->GetValue() );
-    m_Config->Write( KEYWORD_TW_EXTTRACK_THICKNESS_UNIT, m_ExtTrackThicknessUnit->GetSelection() );
-    m_Config->Write( KEYWORD_TW_INTTRACK_WIDTH,          m_IntTrackWidthValue->GetValue() );
-    m_Config->Write( KEYWORD_TW_INTTRACK_WIDTH_UNIT,     m_TW_IntTrackWidth_choiceUnit->GetSelection() );
-    m_Config->Write( KEYWORD_TW_INTTRACK_THICKNESS,      m_IntTrackThicknessValue->GetValue() );
-    m_Config->Write( KEYWORD_TW_INTTRACK_THICKNESS_UNIT, m_IntTrackThicknessUnit->GetSelection() );
+    aCfg->Write( KEYWORD_TW_CURRENT,                 m_TrackCurrentValue->GetValue() );
+    aCfg->Write( KEYWORD_TW_DELTA_TC,                m_TrackDeltaTValue->GetValue() );
+    aCfg->Write( KEYWORD_TW_TRACK_LEN,               m_TrackLengthValue->GetValue() );
+    aCfg->Write( KEYWORD_TW_TRACK_LEN_UNIT,          m_TW_CuLength_choiceUnit->GetSelection() );
+    aCfg->Write( KEYWORD_TW_RESISTIVITY,             m_TWResistivity->GetValue() );
+    aCfg->Write( KEYWORD_TW_EXTTRACK_WIDTH,          m_ExtTrackWidthValue->GetValue() );
+    aCfg->Write( KEYWORD_TW_EXTTRACK_WIDTH_UNIT,     m_TW_ExtTrackWidth_choiceUnit->GetSelection() );
+    aCfg->Write( KEYWORD_TW_EXTTRACK_THICKNESS,      m_ExtTrackThicknessValue->GetValue() );
+    aCfg->Write( KEYWORD_TW_EXTTRACK_THICKNESS_UNIT, m_ExtTrackThicknessUnit->GetSelection() );
+    aCfg->Write( KEYWORD_TW_INTTRACK_WIDTH,          m_IntTrackWidthValue->GetValue() );
+    aCfg->Write( KEYWORD_TW_INTTRACK_WIDTH_UNIT,     m_TW_IntTrackWidth_choiceUnit->GetSelection() );
+    aCfg->Write( KEYWORD_TW_INTTRACK_THICKNESS,      m_IntTrackThicknessValue->GetValue() );
+    aCfg->Write( KEYWORD_TW_INTTRACK_THICKNESS_UNIT, m_IntTrackThicknessUnit->GetSelection() );
 }
 
 
@@ -407,7 +407,7 @@ double PCB_CALCULATOR_FRAME::TWCalculateCurrent( double aWidth, double aThicknes
 }
 
 
-void PCB_CALCULATOR_FRAME::TW_Init()
+void PCB_CALCULATOR_FRAME::TW_Init( wxConfigBase* aCfg )
 {
     int      tmp;
     wxString msg;
@@ -416,61 +416,57 @@ void PCB_CALCULATOR_FRAME::TW_Init()
     m_TWNested = true;
 
     // Read parameter values.
-    m_Config->Read( KEYWORD_TW_CURRENT,                 &msg, wxT( "1.0" ) );
+    aCfg->Read( KEYWORD_TW_CURRENT,                 &msg, wxT( "1.0" ) );
     m_TrackCurrentValue->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_DELTA_TC,                &msg, wxT( "10.0" ) );
+    aCfg->Read( KEYWORD_TW_DELTA_TC,                &msg, wxT( "10.0" ) );
     m_TrackDeltaTValue->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_TRACK_LEN,               &msg, wxT( "20" ) );
+    aCfg->Read( KEYWORD_TW_TRACK_LEN,               &msg, wxT( "20" ) );
     m_TrackLengthValue->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_TRACK_LEN_UNIT,          &tmp, 0 );
+    aCfg->Read( KEYWORD_TW_TRACK_LEN_UNIT,          &tmp, 0 );
     m_TW_CuLength_choiceUnit->SetSelection( tmp );
-    m_Config->Read( KEYWORD_TW_RESISTIVITY,             &msg, wxT( "1.72e-8" ) );
+    aCfg->Read( KEYWORD_TW_RESISTIVITY,             &msg, wxT( "1.72e-8" ) );
     m_TWResistivity->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_EXTTRACK_WIDTH,          &msg, wxT( "0.2" ) );
+    aCfg->Read( KEYWORD_TW_EXTTRACK_WIDTH,          &msg, wxT( "0.2" ) );
     m_ExtTrackWidthValue->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_EXTTRACK_WIDTH_UNIT,     &tmp, 0 );
+    aCfg->Read( KEYWORD_TW_EXTTRACK_WIDTH_UNIT,     &tmp, 0 );
     m_TW_ExtTrackWidth_choiceUnit->SetSelection( tmp );
-    m_Config->Read( KEYWORD_TW_EXTTRACK_THICKNESS,      &msg, wxT( "0.035" ) );
+    aCfg->Read( KEYWORD_TW_EXTTRACK_THICKNESS,      &msg, wxT( "0.035" ) );
     m_ExtTrackThicknessValue->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_EXTTRACK_THICKNESS_UNIT, &tmp, 0 );
+    aCfg->Read( KEYWORD_TW_EXTTRACK_THICKNESS_UNIT, &tmp, 0 );
     m_ExtTrackThicknessUnit->SetSelection( tmp );
-    m_Config->Read( KEYWORD_TW_INTTRACK_WIDTH,          &msg, wxT( "0.2" ) );
+    aCfg->Read( KEYWORD_TW_INTTRACK_WIDTH,          &msg, wxT( "0.2" ) );
     m_IntTrackWidthValue->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_INTTRACK_WIDTH_UNIT,     &tmp, 0 );
+    aCfg->Read( KEYWORD_TW_INTTRACK_WIDTH_UNIT,     &tmp, 0 );
     m_TW_IntTrackWidth_choiceUnit->SetSelection( tmp );
-    m_Config->Read( KEYWORD_TW_INTTRACK_THICKNESS,      &msg, wxT( "0.035" ) );
+    aCfg->Read( KEYWORD_TW_INTTRACK_THICKNESS,      &msg, wxT( "0.035" ) );
     m_IntTrackThicknessValue->SetValue( msg );
-    m_Config->Read( KEYWORD_TW_INTTRACK_THICKNESS_UNIT, &tmp, 0 );
+    aCfg->Read( KEYWORD_TW_INTTRACK_THICKNESS_UNIT, &tmp, 0 );
     m_IntTrackThicknessUnit->SetSelection( tmp );
 
     // Init formulas text
-    m_htmlWinFormulas->AppendToPage( "<br>" );
-    m_htmlWinFormulas->AppendToPage( _( "If you specify the maximum current, then the trace "
-                                        "widths will be calculated to suit." ) );
-    m_htmlWinFormulas->AppendToPage( "<br>" );
-    m_htmlWinFormulas->AppendToPage( _( "If you specify one of the trace widths, the maximum "
-                                        "current it can handle will be calculated. The width "
-                                        "for the other trace to also handle this current will "
-                                        "then be calculated." ) );
-    m_htmlWinFormulas->AppendToPage( "<br>" );
-    m_htmlWinFormulas->AppendToPage( _( "The controlling value is shown in bold." ) );
-    m_htmlWinFormulas->AppendToPage( "<br><br>" );
-    m_htmlWinFormulas->AppendToPage( _( "The calculations are valid for currents up to 35A "
-                                        "(external) or 17.5A (internal), temperature rises "
-                                        "up to 100 deg C, and widths of up to 400mil (10mm)." ) );
-    m_htmlWinFormulas->AppendToPage( "<br>" );
-    m_htmlWinFormulas->AppendToPage( _( "The formula, from IPC 2221, is" ) );
-    m_htmlWinFormulas->AppendToPage( "<center><b>I = K * dT<sup>0.44</sup> * "
-                                     "(W*H)<sup>0.725</sup></b></center>" );
-    m_htmlWinFormulas->AppendToPage( _( "where:" ) );
-    m_htmlWinFormulas->AppendToPage( "<br><b>I</b> = " );
-    m_htmlWinFormulas->AppendToPage( _( "maximum current in amps" ) );
-    m_htmlWinFormulas->AppendToPage( "<br><b>dT</b> = " );
-    m_htmlWinFormulas->AppendToPage( _( "temperature rise above ambient in deg C" ) );
-    m_htmlWinFormulas->AppendToPage( "<br><b>W,H</b> = " );
-    m_htmlWinFormulas->AppendToPage( _( "width and thickness in mils" ) );
-    m_htmlWinFormulas->AppendToPage( "<br><b>K</b> = " );
-    m_htmlWinFormulas->AppendToPage( _( "0.024 for internal traces or 0.048 for external traces" ) );
+    msg = "<br>";
+    msg << _( "If you specify the maximum current, then the trace "
+              "widths will be calculated to suit." )
+        << "<br>" << _( "If you specify one of the trace widths, the maximum "
+                        "current it can handle will be calculated. The width "
+                        "for the other trace to also handle this current will "
+                        "then be calculated." )
+        << "<br>" << _( "The controlling value is shown in bold." ) << "<br><br>"
+        <<  _( "The calculations are valid for currents up to 35A "
+               "(external) or 17.5A (internal), temperature rises "
+               "up to 100 deg C, and widths of up to 400mil (10mm)." )<< "<br>"
+        << _( "The formula, from IPC 2221, is" )
+        << "<center><b>I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup></b></center>"
+        << _( "where:" ) << "<br><b>I</b> = "
+        << _( "maximum current in amps" )
+        << "<br><b>dT</b> = "
+        << _( "temperature rise above ambient in deg C" )
+        << "<br><b>W,H</b> = "
+        << _( "width and thickness in mils" ) << "<br>"
+        << "<b>K</b> = "
+        << _( "0.024 for internal traces or 0.048 for external traces" );
+
+    m_htmlWinFormulas->AppendToPage( msg );
 
     // Make sure the correct master mode is displayed.
     TWUpdateModeDisplay();
