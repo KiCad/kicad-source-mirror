@@ -101,15 +101,23 @@ static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex
         aProject->SetElem( PROJECT::ELEM_SCH_PART_LIBS, libs );
     }
 
-    PART_LIBS::LibNamesAndPaths( aProject, false, &libPaths, &libNames );
+    try
+    {
+        PART_LIBS::LibNamesAndPaths( aProject, false, &libPaths, &libNames );
 
-    // Make sure the library is not already in the list
-    while( libNames.Index( libName ) != wxNOT_FOUND )
-        libNames.Remove( libName );
+        // Make sure the library is not already in the list
+        while( libNames.Index( libName ) != wxNOT_FOUND )
+            libNames.Remove( libName );
 
-    // Add the library to the list and save
-    libNames.Insert( libName, aIndex );
-    PART_LIBS::LibNamesAndPaths( aProject, true, &libPaths, &libNames );
+        // Add the library to the list and save
+        libNames.Insert( libName, aIndex );
+        PART_LIBS::LibNamesAndPaths( aProject, true, &libPaths, &libNames );
+    }
+    catch( const IO_ERROR& e )
+    {
+        // Could not get or save the current libraries.
+        return false;
+    }
 
     // Save the old libraries in case there is a problem after clear(). We'll
     // put them back in.
