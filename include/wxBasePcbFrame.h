@@ -695,7 +695,7 @@ public:
     bool SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     ///> Key in KifaceSettings to store the canvas type.
-    static const wxString CANVAS_TYPE_KEY;
+    static const wxChar CANVAS_TYPE_KEY[];
 
     DECLARE_EVENT_TABLE()
 };

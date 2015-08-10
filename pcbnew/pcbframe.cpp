@@ -460,7 +460,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         GetGalCanvas()->SwitchBackend( canvasType );
         UseGalCanvas( true );
     }
-
 }
 
 

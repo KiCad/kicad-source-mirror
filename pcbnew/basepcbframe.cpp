@@ -61,6 +61,8 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 
+const wxChar PCB_BASE_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
+
 // Configuration entry names.
 static const wxChar UserGridSizeXEntry[] = wxT( "PcbUserGrid_X" );
 static const wxChar UserGridSizeYEntry[] = wxT( "PcbUserGrid_Y" );
@@ -983,11 +985,11 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
 EDA_DRAW_PANEL_GAL::GAL_TYPE PCB_BASE_FRAME::LoadCanvasTypeSetting() const
 {
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-
     wxConfigBase* cfg = Kiface().KifaceSettings();
 
     if( cfg )
-        cfg->Read( CANVAS_TYPE_KEY, (long*) &canvasType );
+        canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->ReadLong( CANVAS_TYPE_KEY,
+                                                                   EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
             || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
@@ -1016,6 +1018,3 @@ bool PCB_BASE_FRAME::SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 
     return false;
 }
-
-
-const wxString PCB_BASE_FRAME::CANVAS_TYPE_KEY = wxT( "canvas_type" );
