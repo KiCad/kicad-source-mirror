@@ -49,17 +49,17 @@ public:
 
     const BOX2I BBox( int aClearance = 0 ) const
     {
-        return BOX2I( m_seg.A, m_seg.B - m_seg.A ).Inflate( aClearance + (m_width + 1) / 2 );
+        return BOX2I( m_seg.A, m_seg.B - m_seg.A ).Inflate( aClearance + ( m_width + 1 ) / 2 );
     }
 
     bool Collide( const SEG& aSeg, int aClearance = 0 ) const
     {
-        return m_seg.Distance( aSeg ) < (m_width + 1) / 2 + aClearance;
+        return m_seg.Distance( aSeg ) < ( m_width + 1 ) / 2 + aClearance;
     }
 
     bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
     {
-        return m_seg.Distance( aP ) <= (m_width + 1) / 2 + aClearance;
+        return m_seg.Distance( aP ) <= ( m_width + 1 ) / 2 + aClearance;
     }
 
     void SetSeg( const SEG& aSeg )

@@ -166,14 +166,14 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 
     if( m_type == PR_SHAPE )
     {
+        if( !m_shape )
+            return;
+
         aGal->SetLineWidth( m_width );
         aGal->SetStrokeColor( m_color );
         aGal->SetFillColor( m_color );
         aGal->SetIsStroke( m_width ? true : false );
         aGal->SetIsFill( true );
-
-        if( !m_shape )
-            return;
 
         switch( m_shape->Type() )
         {
@@ -187,14 +187,14 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
             case SH_SEGMENT:
             {
                 const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) m_shape;
-                aGal->DrawLine( s->GetSeg().A, s->GetSeg().B );
+                aGal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
 
                 if( m_clearance > 0 )
                 {
                     aGal->SetLayerDepth( ClearanceOverlayDepth );
                     aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
-                    aGal->SetLineWidth( m_width + 2 * m_clearance );
-                    aGal->DrawLine( s->GetSeg().A, s->GetSeg().B );
+                    aGal->SetFillColor( COLOR4D( DARKDARKGRAY ) );
+                    aGal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
                 }
 
                 break;
