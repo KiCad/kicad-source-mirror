@@ -85,11 +85,8 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
 
     // Number of segments to convert a circle to polygon
-    // Boost polygon (at least v1.57 and previous) in very rare cases crashes
-    // when using 16 segments to approximate a circle.
-    // So using 18 segments is a workaround to try to avoid these crashes
-    // ( We already used this trick in plot_board_layers.cpp,
-    // see PlotSolderMaskLayer() )
+    // We use 2 values: the first gives a good shape
+    // the second is used to speed up calculations, when a poor approximation is acceptable (holes)
     const int       segcountforcircle   = 18;
     double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2.0) );
     const int       segcountLowQuality  = 12;   // segments to draw a circle with low quality
@@ -119,22 +116,11 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     }
 
     bool           throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
-
     LSET            cu_set = LSET::AllCuMask( GetPrm3DVisu().m_CopperLayersCount );
-
-#if 1
-    LAYER_ID        cu_seq[MAX_CU_LAYERS];          // preferred sequence, could have called CuStack()
-                                                    // but I assume that's backwards
 
     glNewList( aBoardList, GL_COMPILE );
 
-    for( unsigned i=0; i < DIM( cu_seq ); ++i )
-        cu_seq[i] = ToLAYER_ID( B_Cu - i );
-
-    for( LSEQ cu = cu_set.Seq( cu_seq, DIM(cu_seq) );  cu;  ++cu )
-#else
     for( LSEQ cu = cu_set.CuStack();  cu;  ++cu )
-#endif
     {
         LAYER_ID layer = *cu;
 
@@ -283,6 +269,9 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
             }
         }
 
+        if( !throughHolesListBuilt )
+            allLayerHoles.Simplify();
+
         // bufferPolys contains polygons to merge. Many overlaps .
         // Calculate merged polygons
         if( bufferPolys.IsEmpty() )
@@ -290,12 +279,10 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
         // Use Clipper lib to subtract holes to copper areas
 
-        bufferPolys.Simplify();
+        currLayerHoles.Append(allLayerHoles);
         currLayerHoles.Simplify();
-        allLayerHoles.Simplify();
 
-        bufferPolys.BooleanSubtract( allLayerHoles );
-        bufferPolys.Fracture();
+        bufferPolys.BooleanSubtract( currLayerHoles );
 
         int thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
         int zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
@@ -338,7 +325,6 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
 
     if( aActivity )
         aActivity->Report( _( "Build board body" ) );
-
 
     // Draw plated vertical holes inside the board, but not always. They are drawn:
     // - if the board body is not shown, to show the holes.
@@ -396,7 +382,6 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     board_thickness -= copper_thickness + epsilon;
 
     bufferPcbOutlines.BooleanSubtract( allLayerHoles );
-    bufferPcbOutlines.Fracture();
 
     if( !bufferPcbOutlines.IsEmpty() )
     {
@@ -469,6 +454,8 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
                                                 segcountLowQuality );
     }
 
+    allLayerHoles.Simplify();
+
     // draw graphic items, on technical layers
 
     static const LAYER_ID teckLayerList[] = {
@@ -495,7 +482,6 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
         if( aActivity )
             aActivity->Report( wxString::Format( _( "Build layer %s" ), LSET::Name( layer ) ) );
-
 
         bufferPolys.RemoveAllContours();
 
@@ -565,8 +551,6 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
         if( bufferPolys.IsEmpty() )
             continue;
 
-        allLayerHoles.Simplify();
-
         // Solder mask layers are "negative" layers.
         // Shapes should be removed from the full board area.
         if( layer == B_Mask || layer == F_Mask )
@@ -585,10 +569,6 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
         {
             bufferPolys.BooleanSubtract( allLayerHoles );
         }
-
-        // Convert each polygon with holes to
-        // a polygon with its holes linked to the main outline
-        bufferPolys.Fracture();
 
         int thickness = 0;
 

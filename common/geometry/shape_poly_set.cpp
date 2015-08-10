@@ -206,7 +206,8 @@ const SHAPE_LINE_CHAIN SHAPE_POLY_SET::convertFromClipper( const Path& aPath )
     return lc;
 }
 
-
+#include <common.h>
+#include <wx/wx.h>
 void SHAPE_POLY_SET::booleanOp( ClipType type, const SHAPE_POLY_SET& b )
 {
     Clipper c;
@@ -497,7 +498,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 
 void SHAPE_POLY_SET::Fracture()
 {
-    Simplify(); // remove overlallping holes/degeneracy
+    Simplify(); // remove overlapping holes/degeneracy
 
     BOOST_FOREACH( POLYGON& paths, m_polys )
     {

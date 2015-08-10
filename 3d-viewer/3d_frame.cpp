@@ -644,7 +644,7 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_SOLDER_PASTE_ONOFF:
         GetPrm3DVisu().SetFlag( FL_SOLDERPASTE, isChecked );
-        NewDisplay();
+        NewDisplay( GL_ID_TECH_LAYERS );
         return;
 
     case ID_MENU3D_COMMENTS_ONOFF:
