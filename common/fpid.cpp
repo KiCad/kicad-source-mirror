@@ -97,7 +97,7 @@ static int okRevision( const std::string& aField )
     if( aField.size() >= 4 )
     {
         strcpy( rev, "x/" );
-        strcat( rev, aField.c_str() );
+        strncat( rev, aField.c_str(), sizeof(rev)-strlen(rev)-1 );
 
         if( EndsWithRev( rev, rev + strlen(rev), '/' ) == rev+2 )
             return -1;    // success

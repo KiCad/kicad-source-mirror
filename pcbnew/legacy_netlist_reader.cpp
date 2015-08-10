@@ -108,7 +108,8 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
     wxString name;              // the name of component that was placed in the schematic
     char     line[1024];
 
-    strcpy( line, aText );
+    strncpy( line, aText, sizeof(line)-1 );
+    line[sizeof(line)-1] = '\0';
 
     value = wxT( "~" );
 

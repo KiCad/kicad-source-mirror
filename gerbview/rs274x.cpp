@@ -597,7 +597,10 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
             ReportMessage( _( "Too many include files!!" ) );
             break;
         }
-        strcpy( line, text );
+
+        strncpy( line, text, sizeof(line)-1 );
+        line[sizeof(line)-1] = '\0';
+
         strtok( line, "*%%\n\r" );
         m_FilesList[m_FilesPtr] = m_Current_File;
 
