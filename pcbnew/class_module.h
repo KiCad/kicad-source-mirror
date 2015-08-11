@@ -358,13 +358,17 @@ public:
      *  if aCorrectionFactor = 1.0, the polygon is inside the circle
      *  the radius of circle approximated by segments is
      *  initial radius * aCorrectionFactor
+     * @param aCircleToSegmentsCountForTexts = number of segments to generate
+     *       a circle when building the texts polygonal shapes of the stroke font
+     *       if 0, use the aCircleToSegmentsCount value
      */
     void TransformGraphicShapesWithClearanceToPolygonSet(
                             LAYER_ID aLayer,
                             SHAPE_POLY_SET& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
-                            double          aCorrectionFactor );
+                            double          aCorrectionFactor,
+                            int             aCircleToSegmentsCountForTexts = 0 );
 
     /**
      * Function DrawEdgesOnly

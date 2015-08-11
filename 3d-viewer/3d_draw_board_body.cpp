@@ -70,6 +70,78 @@
  */
 GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
 
+void EDA_3D_CANVAS::buildBoardThroughHolesPolygonList( SHAPE_POLY_SET& allBoardHoles,
+                                                int aSegCountPerCircle, bool aOptimizeLargeCircles )
+{
+    // hole diameter value to change seg count by circle:
+    int small_hole_limit = Millimeter2iu( 1.0 );
+    int copper_thickness = GetPrm3DVisu().GetCopperThicknessBIU();
+
+    BOARD* pcb = GetBoard();
+
+    // Build holes of through vias:
+    for( TRACK* track = pcb->m_Track;  track;  track = track->Next() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        VIA *via = static_cast<VIA*>( track );
+
+        if( via->GetViaType() != VIA_THROUGH )
+            continue;
+
+        int holediameter = via->GetDrillValue();
+        int hole_outer_radius = (holediameter + copper_thickness) / 2;
+
+        TransformCircleToPolygon( allBoardHoles,
+                                  via->GetStart(), hole_outer_radius,
+                                  aSegCountPerCircle );
+    }
+
+    // Build holes of through pads:
+    for( MODULE* footprint = pcb->m_Modules; footprint; footprint = footprint->Next() )
+    {
+        for( D_PAD* pad = footprint->Pads(); pad; pad = pad->Next() )
+        {
+            // Calculate a factor to apply to segcount for large holes ( > 1 mm)
+            // (bigger pad drill size -> more segments) because holes in pads can have
+            // very different sizes and optimizing this segcount gives a better look
+            // Mainly mounting holes have a size bigger than small_hole_limit
+            wxSize padHole = pad->GetDrillSize();
+
+            if( ! padHole.x )       // Not drilled pad like SMD pad
+                continue;
+
+            // we use the hole diameter to calculate the seg count.
+            // for round holes, padHole.x == padHole.y
+            // for oblong holes, the diameter is the smaller of (padHole.x, padHole.y)
+            int diam = std::min( padHole.x, padHole.y );
+            int segcount = aSegCountPerCircle;
+
+            if( diam > small_hole_limit )
+            {
+                double segFactor = (double)diam / small_hole_limit;
+                segcount = (int)(aSegCountPerCircle * segFactor);
+
+                // limit segcount to 48. For a circle this is a very good approx.
+                if( segcount > 48 )
+                    segcount = 48;
+            }
+
+            // The hole in the body is inflated by copper thickness.
+            int inflate = copper_thickness;
+
+            // If not plated, no copper.
+            if( pad->GetAttribute () == PAD_HOLE_NOT_PLATED )
+                inflate = 0;
+
+            pad->BuildPadDrillShapePolygon( allBoardHoles, inflate, segcount );
+        }
+    }
+
+    allBoardHoles.Simplify();
+}
+
 
 void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                       REPORTER* aErrorMessages, REPORTER* aActivity  )
@@ -85,7 +157,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
     bool useTextures = isRealisticMode() && isEnabled( FL_RENDER_TEXTURES );
 
     // Number of segments to convert a circle to polygon
-    // We use 2 values: the first gives a good shape
+    // We use 2 values: the first gives a good shape (for instanes rond pads)
     // the second is used to speed up calculations, when a poor approximation is acceptable (holes)
     const int       segcountforcircle   = 18;
     double          correctionFactor    = 1.0 / cos( M_PI / (segcountforcircle * 2.0) );
@@ -95,11 +167,13 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                                 // a fine representation
     double          correctionFactorLQ  = 1.0 / cos( M_PI / (segcountLowQuality * 2.0) );
 
-    SHAPE_POLY_SET  bufferPolys;
-    SHAPE_POLY_SET  bufferPcbOutlines;   // stores the board main outlines
-    SHAPE_POLY_SET  bufferZonesPolys;
-    SHAPE_POLY_SET  currLayerHoles, allLayerHoles;                  // Contains holes for the current layer
-                                                                    // + zones when holes are removed from zones
+    SHAPE_POLY_SET  bufferPolys;        // copper areas: tracks, pads and filled zones areas
+                                        // when holes are removed from zones
+    SHAPE_POLY_SET  bufferPcbOutlines;  // stores the board main outlines
+    SHAPE_POLY_SET  bufferZonesPolys;   // copper filled zones areas
+                                        // when holes are not removed from zones
+    SHAPE_POLY_SET  currLayerHoles;     // Contains holes for the current layer
+    SHAPE_POLY_SET  allLayerHoles;      // Contains holes for all layers
 
     // Build a polygon from edge cut items
     wxString msg;
@@ -115,7 +189,9 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         }
     }
 
-    bool           throughHolesListBuilt = false;  // flag to build the through hole polygon list only once
+    // Build board holes, with optimization of large holes shape.
+    buildBoardThroughHolesPolygonList( allLayerHoles, segcountLowQuality, true );
+
     LSET            cu_set = LSET::AllCuMask( GetPrm3DVisu().m_CopperLayersCount );
 
     glNewList( aBoardList, GL_COMPILE );
@@ -136,7 +212,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         bufferZonesPolys.RemoveAllContours();
         currLayerHoles.RemoveAllContours();
 
-        // Draw tracks:
+        // Draw track shapes:
         for( TRACK* track = pcb->m_Track;  track;  track = track->Next() )
         {
             if( !track->IsOnLayer( layer ) )
@@ -146,30 +222,27 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                                          0, segcountforcircle,
                                                          correctionFactor );
 
-            // Add via hole
+            // Add blind/buried via holes
             if( track->Type() == PCB_VIA_T )
             {
                 VIA *via = static_cast<VIA*>( track );
-                VIATYPE_T viatype = via->GetViaType();
+
+                if( via->GetViaType() == VIA_THROUGH )
+                    continue;   // already done
+
                 int holediameter = via->GetDrillValue();
                 int thickness = GetPrm3DVisu().GetCopperThicknessBIU();
                 int hole_outer_radius = (holediameter + thickness) / 2;
 
-                if( viatype != VIA_THROUGH )
-                    TransformCircleToPolygon( currLayerHoles,
-                                              via->GetStart(), hole_outer_radius,
-                                              segcountLowQuality );
-                else if( !throughHolesListBuilt )
-                    TransformCircleToPolygon( allLayerHoles,
-                                              via->GetStart(), hole_outer_radius,
-                                              segcountLowQuality );
+                TransformCircleToPolygon( currLayerHoles,
+                                          via->GetStart(), hole_outer_radius,
+                                          segcountLowQuality );
             }
         }
 
-        // draw pads
+        // draw pad shapes
         for( MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
         {
-            int thickness = GetPrm3DVisu().GetCopperThicknessBIU();
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
             module->TransformPadsShapesWithClearanceToPolygon( layer,
@@ -185,44 +258,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                                                      segcountforcircle,
                                                                      correctionFactor );
 
-            // Add pad hole, if any
-            if( !throughHolesListBuilt )
-            {
-                D_PAD* pad = module->Pads();
-
-                for( ; pad; pad = pad->Next() )
-                {
-                    // Calculate a factor to apply to segcount for large holes ( > 1 mm)
-                    // (bigger pad drill size -> more segments) because holes in pads can have
-                    // very different sizes and optimizing this segcount gives a better look
-                    // Mainly mounting holes have a size bigger thon 1 mm
-                    wxSize padHole = pad->GetDrillSize();
-
-                    if( ! padHole.x )       // Not drilled pad like SMD pad
-                        continue;
-
-                    // we use the hole diameter to calculate the seg count.
-                    // for round holes, padHole.x == padHole.y
-                    // for oblong holes, the diameter is the smaller of (padHole.x, padHole.y)
-                    int diam = std::min( padHole.x, padHole.y );
-                    double segFactor = (double)diam / Millimeter2iu( 1.0 );
-
-                    int segcount = (int)(segcountLowQuality * segFactor);
-
-                    // Clamp segcount between segcountLowQuality and 48.
-                    // 48 segm for a circle is a very good approx.
-                    segcount = Clamp( segcountLowQuality, segcount, 48 );
-
-                    // The hole in the body is inflated by copper thickness.
-                    int inflate = thickness;
-
-                    // If not plated, no copper.
-                    if( pad->GetAttribute () == PAD_HOLE_NOT_PLATED )
-                        inflate = 0;
-
-                    pad->BuildPadDrillShapePolygon( allLayerHoles, inflate, segcount );
-                }
-            }
+            // pad holes are already in list.
         }
 
         // Draw copper zones. Note:
@@ -269,31 +305,30 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
             }
         }
 
-        if( !throughHolesListBuilt )
-            allLayerHoles.Simplify();
-
         // bufferPolys contains polygons to merge. Many overlaps .
         // Calculate merged polygons
         if( bufferPolys.IsEmpty() )
             continue;
 
         // Use Clipper lib to subtract holes to copper areas
-
-        currLayerHoles.Append(allLayerHoles);
-        currLayerHoles.Simplify();
-
-        bufferPolys.BooleanSubtract( currLayerHoles );
+        if( currLayerHoles.OutlineCount() )
+        {
+            currLayerHoles.Append(allLayerHoles);
+            currLayerHoles.Simplify();
+            bufferPolys.BooleanSubtract( currLayerHoles );
+        }
+        else
+            bufferPolys.BooleanSubtract( allLayerHoles );
 
         int thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
         int zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
 
         float zNormal = 1.0f; // When using thickness it will draw first the top and then botton (with z inverted)
 
-        // If we are not using thickness, then the znormal must face the layer direction
-        // because it will draw just one plane
+        // If we are not using thickness, then the z-normal has to match the layer direction
+        // because just one plane will be drawn
         if( !thickness )
             zNormal = Get3DLayer_Z_Orientation( layer );
-
 
         if( realistic_mode )
         {
@@ -319,8 +354,6 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
                                     GetPrm3DVisu().m_BiuTo3Dunits, useTextures,
                                     zNormal );
         }
-
-        throughHolesListBuilt = true;
     }
 
     if( aActivity )
@@ -409,6 +442,11 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
     double          correctionFactorLQ = 1.0 / cos( M_PI / (segcountLowQuality * 2) );
 
+    // segments to draw a circle to build texts. Is is used only to build
+    // the shape of each segment of the stroke font, therefore no need to have
+    // many segments per circle.
+    const int       segcountInStrokeFont = 8;
+
     SHAPE_POLY_SET bufferPolys;
     SHAPE_POLY_SET allLayerHoles;              // Contains through holes, calculated only once
     SHAPE_POLY_SET bufferPcbOutlines;          // stores the board main outlines
@@ -427,34 +465,8 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
         }
     }
 
-    int thickness = GetPrm3DVisu().GetCopperThicknessBIU();
-
-    // Add via holes
-    for( VIA* via = GetFirstVia( pcb->m_Track ); via;
-            via = GetFirstVia( via->Next() ) )
-    {
-        VIATYPE_T viatype = via->GetViaType();
-        int holediameter = via->GetDrillValue();
-        int hole_outer_radius = (holediameter + thickness) / 2;
-
-        if( viatype == VIA_THROUGH )
-            TransformCircleToPolygon( allLayerHoles,
-                    via->GetStart(), hole_outer_radius,
-                    segcountLowQuality );
-    }
-
-    // draw pads holes
-    for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
-    {
-        // Add pad hole, if any
-        D_PAD* pad = module->Pads();
-
-        for( ; pad; pad = pad->Next() )
-            pad->BuildPadDrillShapePolygon( allLayerHoles, 0,
-                                                segcountLowQuality );
-    }
-
-    allLayerHoles.Simplify();
+    // Build board holes, with no optimization of large holes shape.
+    buildBoardThroughHolesPolygonList( allLayerHoles, segcountLowQuality, false );
 
     // draw graphic items, on technical layers
 
@@ -494,12 +506,12 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
             {
             case PCB_LINE_T:
                 ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
-                    bufferPolys, 0, segcountforcircle, correctionFactor );
+                        bufferPolys, 0, segcountforcircle, correctionFactor );
                 break;
 
             case PCB_TEXT_T:
                 ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
-                    bufferPolys, 0, segcountLowQuality, correctionFactorLQ );
+                        bufferPolys, 0, segcountLowQuality, 1.0 );
                 break;
 
             default:
@@ -511,6 +523,8 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
         {
             if( layer == F_SilkS || layer == B_SilkS )
             {
+                // On silk screen layers, the pad shape is only the pad outline
+                // never a filled shape
                 D_PAD*  pad = module->Pads();
                 int     linewidth = g_DrawDefaultLineThickness;
 
@@ -527,8 +541,9 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
                 module->TransformPadsShapesWithClearanceToPolygon( layer,
                         bufferPolys, 0, segcountforcircle, correctionFactor );
 
+            // On tech layers, use a poor circle approximation, only for texts (stroke font)
             module->TransformGraphicShapesWithClearanceToPolygonSet( layer,
-                    bufferPolys, 0, segcountLowQuality, correctionFactorLQ );
+                    bufferPolys, 0, segcountforcircle, correctionFactor, segcountInStrokeFont );
         }
 
         // Draw non copper zones

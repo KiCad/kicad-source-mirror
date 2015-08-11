@@ -201,11 +201,12 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
  *  initial radius * aCorrectionFactor
  */
 void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
-                        LAYER_ID aLayer,
+                        LAYER_ID        aLayer,
                         SHAPE_POLY_SET& aCornerBuffer,
-                        int                    aInflateValue,
-                        int                    aCircleToSegmentsCount,
-                        double                 aCorrectionFactor )
+                        int             aInflateValue,
+                        int             aCircleToSegmentsCount,
+                        double          aCorrectionFactor,
+                        int             aCircleToSegmentsCountForTexts )
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
@@ -248,7 +249,12 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
         texts.push_back( &Value() );
 
     s_cornerBuffer = &aCornerBuffer;
-    s_textCircle2SegmentCount = aCircleToSegmentsCount;
+
+    // To allow optimization of circles approximated by segments,
+    // aCircleToSegmentsCountForTexts, when not 0, is used.
+    // if 0 (default value) the aCircleToSegmentsCount is used
+    s_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
+                                aCircleToSegmentsCountForTexts : aCircleToSegmentsCount;
 
     for( unsigned ii = 0; ii < texts.size(); ii++ )
     {

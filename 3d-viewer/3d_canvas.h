@@ -264,6 +264,17 @@ private:
     void   buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* aActivity );
 
     /**
+     * Function buildBoardThroughHolesPolygonList
+     * Helper funtion to build the list of the board through holes polygons
+     * @param allBoardHoles = the SHAPE_POLY_SET to populate
+     * @param aSegCountPerCircle = the number of segments to approximate a circle
+     * @param aOptimizeLargeCircles = true to use more than aSegCountPerCircle
+     *      for large circles (a large circle dimatere is > 1mm )
+     */
+    void buildBoardThroughHolesPolygonList( SHAPE_POLY_SET& allBoardHoles,
+                        int aSegCountPerCircle, bool aOptimizeLargeCircles );
+
+    /**
      * Function buildShadowList
      * Called by CreateDrawGL_List()
      */
