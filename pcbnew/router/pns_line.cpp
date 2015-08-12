@@ -38,16 +38,16 @@ PNS_LINE::PNS_LINE( const PNS_LINE& aOther ) :
         m_line( aOther.m_line ),
         m_width( aOther.m_width )
 {
-        m_net = aOther.m_net;
-        m_movable = aOther.m_movable;
-        m_layers = aOther.m_layers;
-        m_owner = aOther.m_owner;
-        m_via = aOther.m_via;
-        m_hasVia = aOther.m_hasVia;
-        m_marker = aOther.m_marker;
-        m_rank = aOther.m_rank;
+    m_net = aOther.m_net;
+    m_movable = aOther.m_movable;
+    m_layers = aOther.m_layers;
+    m_owner = NULL;
+    m_via = aOther.m_via;
+    m_hasVia = aOther.m_hasVia;
+    m_marker = aOther.m_marker;
+    m_rank = aOther.m_rank;
 
-        copyLinks( &aOther );
+    copyLinks( &aOther );
 }
 
 
@@ -137,7 +137,7 @@ void PNS_LINE::copyLinks( const PNS_LINE* aParent )
 }
 
 
-PNS_SEGMENT* PNS_SEGMENT::Clone( ) const
+PNS_SEGMENT* PNS_SEGMENT::Clone() const
 {
     PNS_SEGMENT* s = new PNS_SEGMENT;
 

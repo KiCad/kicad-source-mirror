@@ -142,7 +142,7 @@ public:
 
     void Clear()
     {
-        BOOST_FOREACH( PNS_ITEM *item, m_items )
+        BOOST_FOREACH( PNS_ITEM* item, m_items )
         {
             if( item->BelongsTo( this ) )
                 delete item;
@@ -168,23 +168,23 @@ public:
     }
 
     template<class T>
-        T* FindByKind( PNS_ITEM::PnsKind kind, int index = 0 )
+    T* FindByKind( PNS_ITEM::PnsKind kind, int index = 0 )
+    {
+        int n = 0;
+
+        BOOST_FOREACH( PNS_ITEM* item, m_items )
         {
-            int n = 0;
-
-            BOOST_FOREACH( PNS_ITEM* item, m_items )
+            if( item->OfKind( kind ) )
             {
-                if( item->OfKind (kind) )
-                {
-                    if( index == n )
-                        return static_cast<T*>( item );
-                    else
-                        n++;
-                }
+                if( index == n )
+                    return static_cast<T*>( item );
+                else
+                    n++;
             }
-
-            return NULL;
         }
+
+        return NULL;
+    }
 
 private:
     void release();
@@ -193,7 +193,7 @@ private:
     {
         release();
 
-        BOOST_FOREACH( PNS_ITEM *item, aOther.m_items )
+        BOOST_FOREACH( PNS_ITEM* item, aOther.m_items )
         {
             if( item->BelongsTo( &aOther ) )
                 m_items.push_back( item->Clone() );

@@ -50,8 +50,9 @@ enum LineMarker {
 class PNS_OBJECT
 {
 public:
-    PNS_OBJECT ():
-        m_owner(NULL) {};
+    PNS_OBJECT():
+        m_owner( NULL ) {}
+
     ~PNS_OBJECT() {};
 
     /**
@@ -83,7 +84,7 @@ public:
     PNS_OBJECT* Owner() const { return m_owner; }
 
 protected:
-    PNS_OBJECT *m_owner;
+    PNS_OBJECT* m_owner;
 };
 
 

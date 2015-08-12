@@ -135,8 +135,8 @@ public:
     typedef std::vector<PNS_ITEM*>          ITEM_VECTOR;
     typedef std::vector<PNS_OBSTACLE>       OBSTACLES;
 
-    PNS_NODE ();
-    ~PNS_NODE ();
+    PNS_NODE();
+    ~PNS_NODE();
 
     ///> Returns the expected clearance between items a and b.
     int GetClearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) const;
@@ -426,7 +426,7 @@ private:
         return m_override.find( aItem ) != m_override.end();
     }
 
-    PNS_SEGMENT *findRedundantSegment ( PNS_SEGMENT* aSeg );
+    PNS_SEGMENT* findRedundantSegment( PNS_SEGMENT* aSeg );
 
     ///> scans the joint map, forming a line starting from segment (current).
     void followLine( PNS_SEGMENT*    aCurrent,
@@ -466,7 +466,7 @@ private:
     int m_depth;
 
     ///> optional collision filtering object
-    PNS_COLLISION_FILTER *m_collisionFilter;
+    PNS_COLLISION_FILTER* m_collisionFilter;
 
     boost::unordered_set<PNS_ITEM*> m_garbageItems;
 };

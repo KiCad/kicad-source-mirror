@@ -78,7 +78,7 @@ const SHAPE_LINE_CHAIN PNS_VIA::Hull( int aClearance, int aWalkaroundThickness )
 }
 
 
-PNS_VIA* PNS_VIA::Clone ( ) const
+PNS_VIA* PNS_VIA::Clone() const
 {
     PNS_VIA* v = new PNS_VIA();
 
