@@ -717,32 +717,62 @@ bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
     return true;
 }
 
+#include <wx/tokenzr.h>
 
 bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     int  i, j;
     char pinAttrs[64];
-    char pinName[256];
-    char pinNum[64];
     char pinOrient[64];
     char pinType[64];
-    char* line = (char*) aLineReader;
 
     *pinAttrs = 0;
 
-    i = sscanf( line + 2, "%255s %63s %d %d %d %63s %d %d %d %d %63s %63s", pinName,
-                pinNum, &m_position.x, &m_position.y, &m_length, pinOrient, &m_numTextSize,
-                &m_nameTextSize, &m_Unit, &m_Convert, pinType, pinAttrs );
+    // We cannot use sscanf, at least on Windows, to parse the pin description.
+    // The reason is the pin name is free, and use UTF8 encoding.
+    // We encourtered issues (Windows specific) to read this name for some UTF8
+    // cyrillic codes
+    // So, read the pin name (and num) after conversion from UTF8, and read the others
+    // parameters (in ASCII) using sscanf
+
+    // the full line starts by "X ". The pin data starts at line + 2.
+    wxString utf8line = FROM_UTF8( aLineReader.Line() + 2 );
+	wxStringTokenizer tokenizer( utf8line, wxT(" \n\r" ) );
+    i = tokenizer.CountTokens();
 
     if( i < 11 )
     {
-        aErrorMsg.Printf( wxT( "pin only had %d parameters of the required 11 or 12" ), i );
+        aErrorMsg.Printf( wxT( "pin had %d parameters of the required 11 or 12" ), i );
         return false;
     }
 
+    // Extract the pinName (UTF8 encoded)
+    m_name = tokenizer.GetNextToken();
+
+    wxString tmp;
+
+    // Extract the pinName (UTF8 encoded accepted, but should be only ASCII8.)
+    tmp = tokenizer.GetNextToken();
+    SetPinNumFromString( tmp );
+
+    // Read other parameters, in pure ASCII
+    char line[1024];
+    tmp = tokenizer.GetString();
+
+    unsigned len = tmp.Length();
+
+    if( len >= sizeof( line ) )     // Should not occur.
+        len = sizeof( line) - 1;
+
+    strncpy( line, TO_UTF8( tmp ), len );
+    line[len] = 0;
+
+    sscanf( line, "%d %d %d %63s %d %d %d %d %63s %63s",
+                &m_position.x, &m_position.y, &m_length, pinOrient, &m_numTextSize,
+                &m_nameTextSize, &m_Unit, &m_Convert, pinType, pinAttrs );
+
+
     m_orientation = pinOrient[0] & 255;
-    strncpy( (char*) &m_number, pinNum, 4 );
-    m_name = FROM_UTF8( pinName );
 
     switch( *pinType & 255 )
     {
