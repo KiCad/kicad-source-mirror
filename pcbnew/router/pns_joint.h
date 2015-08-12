@@ -181,7 +181,7 @@ public:
         return m_linkedItems;
     }
 
-    PNS_ITEMSET Links() const
+    PNS_ITEMSET& Links()
     {
         return m_linkedItems;
     }

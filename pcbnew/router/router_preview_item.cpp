@@ -274,7 +274,7 @@ void ROUTER_PREVIEW_ITEM::Line( const SHAPE_LINE_CHAIN& aLine, int aWidth, int a
     m_width = aWidth;
     m_color = assignColor( aStyle );
     m_type = PR_SHAPE;
-    m_depth = -BaseOverlayDepth;
+    m_depth = -1024;        // TODO gal->GetMinDepth()
     m_shape = aLine.Clone();
 
     ViewSetVisible( true );

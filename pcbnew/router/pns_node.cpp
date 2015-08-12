@@ -82,12 +82,13 @@ PNS_NODE::~PNS_NODE()
     allocNodes.erase( this );
 #endif
 
+    m_joints.clear();
+
     for( PNS_INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
     {
         if( (*i)->BelongsTo( this ) )
             delete *i;
     }
-
 
     releaseGarbage();
     unlinkParent();
