@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-09 13:02+0200\n"
-"PO-Revision-Date: 2015-08-09 13:12+0200\n"
+"PO-Revision-Date: 2015-08-09 14:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: kicad team\n"
 "Language: fr_FR\n"
@@ -10743,7 +10743,7 @@ msgstr "Courant"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:280
 msgid "Temperature rise"
-msgstr "Agmentation de température"
+msgstr "Elévation de température"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:288
 msgid "deg C"
@@ -11407,7 +11407,7 @@ msgstr "courant maximal en ampères"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:463
 msgid "temperature rise above ambient in deg C"
-msgstr "augmentation de la température au-dessus de l'ambiante en deg C"
+msgstr "élévation de la température au-dessus de l'ambiante en deg C"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:465
 msgid "width and thickness in mils"
