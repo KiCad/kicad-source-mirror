@@ -86,6 +86,9 @@ private:
     ///> Updates edit points with item's points.
     void updatePoints();
 
+    ///> Updates which point is being edited.
+    void updateEditedPoint( const TOOL_EVENT& aEvent );
+
     ///> Sets the current point being edited. NULL means none.
     void setEditedPoint( EDIT_POINT* aPoint );
 

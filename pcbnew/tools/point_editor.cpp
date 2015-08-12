@@ -219,6 +219,24 @@ bool POINT_EDITOR::Init()
 }
 
 
+void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
+{
+    EDIT_POINT* point = NULL;
+
+    if( aEvent.IsMotion() )
+    {
+        point = m_editPoints->FindPoint( aEvent.Position() );
+    }
+    else if( aEvent.IsDrag( BUT_LEFT ) )
+    {
+        point = m_editPoints->FindPoint( aEvent.DragOrigin() );
+    }
+
+    if( m_editedPoint != point )
+        setEditedPoint( point );
+}
+
+
 int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
@@ -251,16 +269,11 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 break;
             }
+	
+            if ( !modified )
+                updateEditedPoint( *evt );
 
-            if( evt->IsMotion() )
-            {
-                EDIT_POINT* point = m_editPoints->FindPoint( evt->Position() );
-
-                if( m_editedPoint != point )
-                    setEditedPoint( point );
-            }
-
-            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorAddCorner ) )
+            if( evt->IsAction( &COMMON_ACTIONS::pointEditorAddCorner ) )
             {
                 addCorner( controls->GetCursorPosition() );
                 updatePoints();
