@@ -71,7 +71,14 @@ PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd, bool aInvert )
     BOOST_FOREACH( PNS_ITEM* item, m_items )
 
     if( item->Layers().Overlaps( l ) ^ aInvert )
+    {
         newItems.push_back( item );
+    }
+    else
+    {
+        if( item->BelongsTo( this ) )
+            item->SetOwner( NULL );
+    }
 
     m_items = newItems;
 
@@ -86,7 +93,14 @@ PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask, bool aInvert )
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
         if( item->OfKind( aKindMask ) ^ aInvert )
+        {
             newItems.push_back( item );
+        }
+        else
+        {
+            if( item->BelongsTo( this ) )
+                item->SetOwner( NULL );
+        }
     }
 
     m_items = newItems;
@@ -102,7 +116,14 @@ PNS_ITEMSET& PNS_ITEMSET::FilterMarker( int aMarker, bool aInvert )
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
         if( item->Marker() & aMarker )
+        {
             newItems.push_back( item );
+        }
+        else
+        {
+            if( item->BelongsTo( this ) )
+                item->SetOwner( NULL );
+        }
     }
 
     m_items = newItems;
@@ -118,7 +139,14 @@ PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet, bool aInvert )
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
         if( ( item->Net() == aNet ) ^ aInvert )
+        {
             newItems.push_back( item );
+        }
+        else
+        {
+            if( item->BelongsTo( this ) )
+                item->SetOwner( NULL );
+        }
     }
 
     m_items = newItems;
@@ -133,8 +161,15 @@ PNS_ITEMSET& PNS_ITEMSET::ExcludeItem( const PNS_ITEM* aItem )
 
     BOOST_FOREACH( PNS_ITEM* item, m_items )
     {
-        if( item != aItem )
-            newItems.push_back( item );
+        if( item == aItem )
+        {
+            if( item->BelongsTo( this ) )
+                item->SetOwner( NULL );
+
+            break;
+        }
+
+        newItems.push_back( item );
     }
 
     m_items = newItems;

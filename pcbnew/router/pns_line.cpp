@@ -41,7 +41,7 @@ PNS_LINE::PNS_LINE( const PNS_LINE& aOther ) :
     m_net = aOther.m_net;
     m_movable = aOther.m_movable;
     m_layers = aOther.m_layers;
-    m_owner = NULL;
+    m_owner = aOther.m_owner;
     m_via = aOther.m_via;
     m_hasVia = aOther.m_hasVia;
     m_marker = aOther.m_marker;
@@ -146,7 +146,7 @@ PNS_SEGMENT* PNS_SEGMENT::Clone() const
     s->m_layers = m_layers;
     s->m_marker = m_marker;
     s->m_rank = m_rank;
-    s->m_owner = m_owner;
+    s->m_owner = NULL;
 
     return s;
 }

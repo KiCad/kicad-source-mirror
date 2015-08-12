@@ -53,7 +53,7 @@ public:
     PNS_OBJECT():
         m_owner( NULL ) {}
 
-    ~PNS_OBJECT() {};
+    virtual ~PNS_OBJECT() {}
 
     /**
      * Functon SetOwner()
