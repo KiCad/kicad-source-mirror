@@ -721,7 +721,6 @@ bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
 
 bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
-    int  i, j;
     char pinAttrs[64];
     char pinOrient[64];
     char pinType[64];
@@ -738,11 +737,11 @@ bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     // the full line starts by "X ". The pin data starts at line + 2.
     wxString utf8line = FROM_UTF8( aLineReader.Line() + 2 );
 	wxStringTokenizer tokenizer( utf8line, wxT(" \n\r" ) );
-    i = tokenizer.CountTokens();
+    int prms_count = tokenizer.CountTokens();
 
-    if( i < 11 )
+    if( prms_count < 11 )
     {
-        aErrorMsg.Printf( wxT( "pin had %d parameters of the required 11 or 12" ), i );
+        aErrorMsg.Printf( wxT( "pin had %d parameters of the required 11 or 12" ), prms_count );
         return false;
     }
 
@@ -767,10 +766,15 @@ bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     strncpy( line, TO_UTF8( tmp ), len );
     line[len] = 0;
 
-    sscanf( line, "%d %d %d %63s %d %d %d %d %63s %63s",
+    int cnt = sscanf( line, "%d %d %d %63s %d %d %d %d %63s %63s",
                 &m_position.x, &m_position.y, &m_length, pinOrient, &m_numTextSize,
                 &m_nameTextSize, &m_Unit, &m_Convert, pinType, pinAttrs );
 
+    if( cnt != (prms_count - 2) )
+    {
+        aErrorMsg.Printf( wxT( "pin parameters read issue" ) );
+        return false;
+    }
 
     m_orientation = pinOrient[0] & 255;
 
@@ -825,9 +829,9 @@ bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         return false;
     }
 
-    if( i == 12 )       /* Special Symbol defined */
+    if( prms_count >= 12 )       /* Special Symbol defined */
     {
-        for( j = strlen( pinAttrs ); j > 0; )
+        for( int j = strlen( pinAttrs ); j > 0; )
         {
             switch( pinAttrs[--j] )
             {

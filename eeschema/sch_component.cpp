@@ -1130,8 +1130,11 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 
 bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
+    // Remark: avoid using sscanf to read texts entered by user
+    // which are UTF8 encoded, because sscanf does not work well on Windows
+    // with some UTF8 values.
     int         ii;
-    char        name1[256], name2[256],
+    char        name1[256],
                 char1[256], char2[256], char3[256];
     int         newfmt = 0;
     char*       ptcar;
@@ -1148,7 +1151,20 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             return true;
     }
 
-    if( sscanf( &line[1], "%255s %255s", name1, name2 ) != 2 )
+    // Parse the first line of description:
+    // like "L partname ref" (for instance "L 74LS00 U4"
+    // They are UTF8 texts, so do not use sscanf
+
+    line += 1;
+
+    if( *line == ' ' )
+        line++;
+
+    // line points the first parameter
+    wxString buffer( FROM_UTF8( line ) );
+    wxStringTokenizer tokenizer( buffer, wxT( " \r\n" ) );
+
+    if( tokenizer.CountTokens() < 2 )
     {
         aErrorMsg.Printf( wxT( "Eeschema component description error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1156,18 +1172,15 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    if( strcmp( name1, NULL_STRING ) != 0 )
-    {
-        for( ii = 0; ii < (int) strlen( name1 ); ii++ )
-        {
-            if( name1[ii] == '~' )
-                name1[ii] = ' ';
-        }
+    wxString partname = tokenizer.NextToken();
+    partname.Replace( wxT("~"), wxT(" ") );  // all spaces were replaced by ~ in files.
 
-        SetPartName( FROM_UTF8( name1 ) );
+    if( partname != NULL_STRING )
+    {
+        SetPartName( partname );
 
         if( !newfmt )
-            GetField( VALUE )->SetText( FROM_UTF8( name1 ) );
+            GetField( VALUE )->SetText( partname );
     }
     else
     {
@@ -1177,48 +1190,35 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         GetField( VALUE )->SetVisible( false );
     }
 
-    if( strcmp( name2, NULL_STRING ) != 0 )
+    wxString reference = tokenizer.NextToken();
+    reference.Replace( wxT("~"), wxT(" ") );  // all spaces were replaced by ~ in files.
+    reference.Trim( true );
+    reference.Trim( false );
+
+    if( reference != NULL_STRING )
     {
-        bool isDigit = false;
-
-        for( ii = 0; ii < (int) strlen( name2 ); ii++ )
+        wxString prefix = reference;
+        // Build reference prefix from the actual reference by removing trailing digits
+        // (Perhaps outdated code, only for very old schematic files)
+        while( prefix.Length() )
         {
-            if( name2[ii] == '~' )
-                name2[ii] = ' ';
+            if( ( prefix.Last() < '0' || prefix.Last() > '9') && prefix.Last() != '?' )
+                break;
 
-            // get RefBase from this, too. store in name1.
-            if( name2[ii] >= '0' && name2[ii] <= '9' )
-            {
-                isDigit   = true;
-                name1[ii] = 0;  //null-terminate.
-            }
-
-            if( !isDigit )
-            {
-                name1[ii] = name2[ii];
-            }
+            prefix.RemoveLast();
         }
 
-        name1[ii] = 0; //just in case
-        int  jj;
+        // Avoid a prefix containing trailing/leading spaces
+        prefix.Trim( true );
+        prefix.Trim( false );
 
-        for( jj = 0; jj<ii && name1[jj] == ' '; jj++ )
-            ;
-
-        if( jj == ii )
-        {
-            // blank string.
+        if( prefix.IsEmpty() )
             m_prefix = wxT( "U" );
-        }
         else
-        {
-            m_prefix = FROM_UTF8( &name1[jj] );
-
-            //printf("prefix: %s\n", TO_UTF8(component->m_prefix));
-        }
+            m_prefix = prefix;
 
         if( !newfmt )
-            GetField( REFERENCE )->SetText( FROM_UTF8( name2 ) );
+            GetField( REFERENCE )->SetText( reference );
     }
     else
     {
