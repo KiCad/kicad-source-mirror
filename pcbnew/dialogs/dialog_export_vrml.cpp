@@ -42,6 +42,9 @@
 #define OPTKEY_3DFILES_OPT wxT( "VrmlExportCopyFiles" )
 #define OPTKEY_USE_RELATIVE_PATHS wxT( "VrmlUseRelativePaths" )
 #define OPTKEY_USE_PLAIN_PCB wxT( "VrmlUsePlainPCB" )
+#define OPTKEY_VRML_REF_UNITS wxT( "VrmlRefUnits" )
+#define OPTKEY_VRML_REF_X wxT( "VrmlRefX" )
+#define OPTKEY_VRML_REF_Y wxT( "VrmlRefY" )
 
 
 class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
@@ -53,6 +56,9 @@ private:
     bool            m_copy3DFilesOpt;       // Remember last copy model files option
     bool            m_useRelativePathsOpt;  // Remember last use absolut paths option
     bool            m_usePlainPCBOpt;       // Remember last Plain Board option
+    int             m_RefUnits;             // Remember last units for Reference Point
+    double          m_XRef;                 // Remember last X Reference Point
+    double          m_YRef;                 // Remember last Y Reference Point
 
 public:
     DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
@@ -65,10 +71,20 @@ public:
         m_config->Read( OPTKEY_3DFILES_OPT, &m_copy3DFilesOpt, false );
         m_config->Read( OPTKEY_USE_RELATIVE_PATHS, &m_useRelativePathsOpt, false );
         m_config->Read( OPTKEY_USE_PLAIN_PCB, &m_usePlainPCBOpt, false );
+        m_config->Read( OPTKEY_VRML_REF_UNITS, &m_RefUnits, 0 );
+        m_config->Read( OPTKEY_VRML_REF_X, &m_XRef, 0.0 );
+        m_config->Read( OPTKEY_VRML_REF_Y, &m_YRef, 0.0 );
         m_rbSelectUnits->SetSelection( m_unitsOpt );
         m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
         m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
         m_cbPlainPCB->SetValue( m_usePlainPCBOpt );
+        m_VRML_RefUnitChoice->SetSelection( m_RefUnits );
+        wxString tmpStr;
+        tmpStr << m_XRef;
+        m_VRML_Xref->SetValue( tmpStr );
+        tmpStr = wxT( "" );
+        tmpStr << m_YRef;
+        m_VRML_Yref->SetValue( tmpStr );
         wxButton* okButton = (wxButton*) FindWindowByLabel( wxT( "OK" ) );
 
         if( okButton )
@@ -89,6 +105,9 @@ public:
         m_config->Write( OPTKEY_3DFILES_OPT, m_copy3DFilesOpt );
         m_config->Write( OPTKEY_USE_RELATIVE_PATHS, m_useRelativePathsOpt );
         m_config->Write( OPTKEY_USE_PLAIN_PCB, m_usePlainPCBOpt );
+        m_config->Write( OPTKEY_VRML_REF_UNITS, m_VRML_RefUnitChoice->GetSelection() );
+        m_config->Write( OPTKEY_VRML_REF_X, m_VRML_Xref->GetValue() );
+        m_config->Write( OPTKEY_VRML_REF_Y, m_VRML_Yref->GetValue() );
     };
 
     void SetSubdir( const wxString & aDir )
@@ -104,6 +123,21 @@ public:
     wxFilePickerCtrl* FilePicker()
     {
         return m_filePicker;
+    }
+
+    int GetRefUnitsChoice()
+    {
+        return m_VRML_RefUnitChoice->GetSelection();
+    }
+
+    double GetXRef()
+    {
+        return DoubleValueFromString( UNSCALED_UNITS, m_VRML_Xref->GetValue() );
+    }
+
+    double GetYRef()
+    {
+        return DoubleValueFromString( UNSCALED_UNITS, m_VRML_Yref->GetValue() );
     }
 
     int GetUnits()
@@ -152,7 +186,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     // The general VRML scale factor
     // Assuming the VRML default unit is the mm
     // this is the mm to VRML scaling factor for mm, 0.1 inch, and inch
-    double scaleList[3] = { 1.0, 10.0/25.4, 1.0/25.4 };
+    double scaleList[4] = { 1.0, 0.001, 10.0/25.4, 1.0/25.4 };
 
     // Build default file name
     fn = GetBoard()->GetFileName();
@@ -164,6 +198,16 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 
     if( dlg.ShowModal() != wxID_OK )
         return;
+
+    double aXRef = dlg.GetXRef();
+    double aYRef = dlg.GetYRef();
+
+    if( dlg.GetRefUnitsChoice() == 1 )
+    {
+        // selected reference unit is in inches
+        aXRef *= 25.4;
+        aYRef *= 25.4;
+    }
 
     double scale = scaleList[dlg.GetUnits()];     // final scale export
     bool export3DFiles = dlg.GetCopyFilesOption();
@@ -185,7 +229,8 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     }
 
     if( !ExportVRML_File( fullFilename, scale, export3DFiles, useRelativePaths,
-                          usePlainPCB, modelPath.GetPath() ) )
+                          usePlainPCB, modelPath.GetPath(),
+                          aXRef, aYRef ) )
     {
         wxString msg = _( "Unable to create " ) + fullFilename;
         wxMessageBox( msg );

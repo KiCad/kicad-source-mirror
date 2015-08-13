@@ -1313,7 +1313,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
 
 bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMtoWRMLunit,
                                       bool aExport3DFiles, bool aUseRelativePaths,
-                                      bool aUsePlainPCB, const wxString& a3D_Subdir )
+                                      bool aUsePlainPCB, const wxString& a3D_Subdir,
+                                      double aXRef, double aYRef )
 {
     wxString        msg;
     BOARD*          pcb = GetBoard();
@@ -1346,11 +1347,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 
         output_file << "Transform {\n";
 
-        // compute the offset to center the board on (0, 0, 0)
-        // XXX - NOTE: we should allow the user a GUI option to specify the offset
-        EDA_RECT bbbox = pcb->ComputeBoundingBox();
-
-        model3d.SetOffset( -model3d.scale * bbbox.Centre().x, model3d.scale * bbbox.Centre().y );
+        // board reference point
+        model3d.SetOffset( -aXRef, aYRef );
 
         output_file << "  children [\n";
 

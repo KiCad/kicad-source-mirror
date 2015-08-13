@@ -986,11 +986,14 @@ public:
      *                          converted to a STEP model.
      * @param a3D_Subdir = sub directory where 3D shapes files are copied.  This is only used
      *                     when aExport3DFiles == true
+     * @param aXRef = X value of PCB (0,0) reference point
+     * @param aYRef = Y value of PCB (0,0) reference point
      * @return true if Ok.
      */
     bool ExportVRML_File( const wxString & aFullFileName, double aMMtoWRMLunit,
                           bool aExport3DFiles, bool aUseRelativePaths,
-                          bool aUsePlainPCB, const wxString & a3D_Subdir );
+                          bool aUsePlainPCB, const wxString & a3D_Subdir,
+                          double aXRef, double aYRef );
 
     /**
      * Function ExportToIDF3

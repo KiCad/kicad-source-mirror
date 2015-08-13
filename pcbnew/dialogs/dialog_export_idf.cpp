@@ -34,9 +34,24 @@
 #include <dialog_export_idf_base.h>
 
 #define OPTKEY_IDF_THOU wxT( "IDFExportThou" )
+#define OPTKEY_IDF_REF_UNITS wxT( "IDFRefUnits" )
+#define OPTKEY_IDF_REF_X wxT( "IDFRefX" )
+#define OPTKEY_IDF_REF_Y wxT( "IDFRefY" )
 
 
-bool Export_IDF3( BOARD *aPcb, const wxString & aFullFileName, bool aUseThou );
+/**
+ * Function Export_IDF3
+ * Creates an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
+ *
+ * @param aPcb = a pointer to the board to be exported to IDF
+ * @param aFullFileName = the full filename of the export file
+ * @param aUseThou = set to true if the desired IDF unit is thou (mil)
+ * @param aXRef = the board Reference Point in mm, X value
+ * @param aYRef = the board Reference Point in mm, Y value
+ * @return true if OK
+ */
+bool Export_IDF3( BOARD *aPcb, const wxString & aFullFileName, bool aUseThou,
+                  double aXRef, double aYRef );
 
 
 class DIALOG_EXPORT_IDF3: public DIALOG_EXPORT_IDF3_BASE
@@ -44,7 +59,10 @@ class DIALOG_EXPORT_IDF3: public DIALOG_EXPORT_IDF3_BASE
 private:
     PCB_EDIT_FRAME* m_parent;
     wxConfigBase* m_config;
-    bool m_idfThouOpt;  // remember last preference for units in THOU
+    bool   m_idfThouOpt;    // remember last preference for units in THOU
+    int    m_RefUnits;      // remember last units for Reference Point
+    double m_XRef;          // remember last X Reference Point
+    double m_YRef;          // remember last Y Reference Point
 
 public:
     DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* parent ) :
@@ -56,6 +74,17 @@ public:
         m_idfThouOpt = false;
         m_config->Read( OPTKEY_IDF_THOU, &m_idfThouOpt );
         m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
+        m_config->Read( OPTKEY_IDF_REF_UNITS, &m_RefUnits, 0 );
+        m_config->Read( OPTKEY_IDF_REF_X, &m_XRef, 0.0 );
+        m_config->Read( OPTKEY_IDF_REF_Y, &m_YRef, 0.0 );
+
+        m_IDF_RefUnitChoice->SetSelection( m_RefUnits );
+        wxString tmpStr;
+        tmpStr << m_XRef;
+        m_IDF_Xref->SetValue( tmpStr );
+        tmpStr = wxT( "" );
+        tmpStr << m_YRef;
+        m_IDF_Yref->SetValue( tmpStr );
 
         wxWindow* button = FindWindowByLabel( wxT( "OK" ) );
 
@@ -70,6 +99,9 @@ public:
     {
         m_idfThouOpt = m_rbUnitSelection->GetSelection() == 1;
         m_config->Write( OPTKEY_IDF_THOU, m_idfThouOpt );
+        m_config->Write( OPTKEY_IDF_REF_UNITS, m_IDF_RefUnitChoice->GetSelection() );
+        m_config->Write( OPTKEY_IDF_REF_X, m_IDF_Xref->GetValue() );
+        m_config->Write( OPTKEY_IDF_REF_Y, m_IDF_Yref->GetValue() );
     }
 
     bool GetThouOption()
@@ -81,6 +113,22 @@ public:
     {
         return m_filePickerIDF;
     }
+
+    int GetRefUnitsChoice()
+    {
+        return m_IDF_RefUnitChoice->GetSelection();
+    }
+
+    double GetXRef()
+    {
+        return DoubleValueFromString( UNSCALED_UNITS, m_IDF_Xref->GetValue() );
+    }
+
+    double GetYRef()
+    {
+        return DoubleValueFromString( UNSCALED_UNITS, m_IDF_Yref->GetValue() );
+    }
+
 };
 
 
@@ -103,12 +151,21 @@ void PCB_EDIT_FRAME::ExportToIDF3( wxCommandEvent& event )
         return;
 
     bool thou = dlg.GetThouOption();
+    double aXRef = dlg.GetXRef();
+    double aYRef = dlg.GetYRef();
+
+    if( dlg.GetRefUnitsChoice() == 1 )
+    {
+        // selected reference unit is in inches
+        aXRef *= 25.4;
+        aYRef *= 25.4;
+    }
 
     wxBusyCursor dummy;
 
     wxString fullFilename = dlg.FilePicker()->GetPath();
 
-    if( !Export_IDF3( GetBoard(), fullFilename, thou ) )
+    if( !Export_IDF3( GetBoard(), fullFilename, thou, aXRef, aYRef ) )
     {
         wxString msg = _( "Unable to create " ) + fullFilename;
         wxMessageBox( msg );
