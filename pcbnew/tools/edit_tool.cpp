@@ -1081,7 +1081,7 @@ void EDIT_TOOL::processPickedList( const PICKED_ITEMS_LIST* aList )
             // fall through
 
         case UR_MODEDIT:
-            updItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            updItem->ViewUpdate( KIGFX::VIEW_ITEM::ALL );
             break;
 
         case UR_DELETED:

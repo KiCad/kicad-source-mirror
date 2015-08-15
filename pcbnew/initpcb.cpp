@@ -102,16 +102,17 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
             return false;
     }
 
-    // Clear undo and redo lists
+    // Clear undo and redo lists because we want a full deletion
     GetScreen()->ClearUndoRedoList();
+    GetScreen()->ClrModify();
 
-    // Delete the current footprint
-    GetBoard()->m_Modules.DeleteAll();
-
-    // init pointeurs  et variables
-    GetBoard()->SetFileName( wxEmptyString );
+    BOARD* board = new BOARD;
+    SetBoard( board );
 
     SetCurItem( NULL );
+
+    // clear filename, to avoid overwriting an old file
+    GetBoard()->SetFileName( wxEmptyString );
 
     GetScreen()->InitDataPoints( GetPageSizeIU() );
 

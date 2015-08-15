@@ -23,6 +23,9 @@
  */
 
 #include <pcb_base_edit_frame.h>
+#include <tool/tool_manager.h>
+#include <pcb_draw_panel_gal.h>
+#include <class_board.h>
 
 void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 {
@@ -56,3 +59,29 @@ void PCB_BASE_EDIT_FRAME::UseGalCanvas( bool aEnable )
     if( !aEnable )
         UndoRedoBlock( false );
 }
+
+
+void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
+{
+    bool new_board = ( aBoard != m_Pcb );
+
+    // It has to be done before the previous board is destroyed by SetBoard()
+    if( new_board )
+        GetGalCanvas()->GetView()->Clear();
+
+    PCB_BASE_FRAME::SetBoard( aBoard );
+
+    // update the tool manager with the new board and its view.
+    if( m_toolManager )
+    {
+        PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+        drawPanel->DisplayBoard( aBoard );
+        m_toolManager->SetEnvironment( aBoard, drawPanel->GetView(),
+                                       drawPanel->GetViewControls(), this );
+
+        if( new_board )
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    }
+}
+

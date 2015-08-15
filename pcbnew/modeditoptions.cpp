@@ -83,68 +83,68 @@ void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
 PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) GetDisplayOptions();
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
-    if( m_configSettings.empty() )
-    {
-        // Display options:
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorUnits" ),
-                                                       (int*)&g_UserUnit, MILLIMETRES ) );
-        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorDisplayPolarCoords" ),
-                                                        &displ_opts->m_DisplayPolarCood, false ) );
-        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorPadDisplayMode" ),
-                                                        &displ_opts->m_DisplayPadFill, true ) );
-        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorGraphicLinesDisplayMode" ),
-                                                       &displ_opts->m_DisplayModEdgeFill, FILLED ) );
-        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                       &displ_opts->m_DisplayModTextFill, FILLED ) );
-        m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                       &displ_opts->m_DisplayModTextFill, FILLED ) );
-        m_configSettings.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorTextsRefDefaultText" ),
-                                                       &settings.m_RefDefaultText, wxT( "REF**" ) ) );
+    // Update everything
+    m_configSettings.clear();   // boost::ptr_vector destroys the pointers inside
 
-        // design settings
-        m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorGrlineWidth" ),
-                                                       &settings.m_ModuleSegmentWidth,
-                                                       Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
-                                                       Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
-                                                       NULL, 1/IU_PER_MM ) );
-        m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeH" ),
-                                                       &settings.m_ModuleTextSize.x,
-                                                       Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
-                                                       Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
-                                                       NULL, 1/IU_PER_MM ) );
-        m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeV" ),
-                                                       &settings.m_ModuleTextSize.y,
-                                                       Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
-                                                       Millimeter2iu(0.01), Millimeter2iu( 100.0 ),
-                                                       NULL, 1/IU_PER_MM ) );
-        m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultThickness" ),
-                                                       &settings.m_ModuleTextWidth,
-                                                       Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
-                                                       Millimeter2iu( 0.01 ), Millimeter2iu( 20.0 ),
-                                                       NULL, 1/IU_PER_MM ) );
+    // Display options:
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorUnits" ),
+                                                    (int*)&g_UserUnit, MILLIMETRES ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorDisplayPolarCoords" ),
+                                                    &displ_opts->m_DisplayPolarCood, false ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorPadDisplayMode" ),
+                                                    &displ_opts->m_DisplayPadFill, true ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorGraphicLinesDisplayMode" ),
+                                                    &displ_opts->m_DisplayModEdgeFill, FILLED ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
+                                                    &displ_opts->m_DisplayModTextFill, FILLED ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
+                                                    &displ_opts->m_DisplayModTextFill, FILLED ) );
+    m_configSettings.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorTextsRefDefaultText" ),
+                                                    &settings.m_RefDefaultText, wxT( "REF**" ) ) );
 
-        m_configSettings.push_back( new PARAM_CFG_WXSTRING( true,
-                                        wxT( "FpEditorRefDefaultText" ),
-                                        &settings.m_RefDefaultText, wxT( "REF**" ) ) );
-        m_configSettings.push_back( new PARAM_CFG_BOOL( true,
-                                        wxT( "FpEditorRefDefaultVisibility" ),
-                                        &settings.m_RefDefaultVisibility, true ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorRefDefaultLayer" ),
-                                        &settings.m_RefDefaultlayer,
-                                        int( F_SilkS ), int( F_SilkS ), int( F_Fab ) ) );
+    // design settings
+    m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorGrlineWidth" ),
+                                                    &settings.m_ModuleSegmentWidth,
+                                                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
+                                                    Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
+                                                    NULL, 1/IU_PER_MM ) );
+    m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeH" ),
+                                                    &settings.m_ModuleTextSize.x,
+                                                    Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
+                                                    Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
+                                                    NULL, 1/IU_PER_MM ) );
+    m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultSizeV" ),
+                                                    &settings.m_ModuleTextSize.y,
+                                                    Millimeter2iu( DEFAULT_TEXT_MODULE_SIZE ),
+                                                    Millimeter2iu(0.01), Millimeter2iu( 100.0 ),
+                                                    NULL, 1/IU_PER_MM ) );
+    m_configSettings.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorTextsDefaultThickness" ),
+                                                    &settings.m_ModuleTextWidth,
+                                                    Millimeter2iu( DEFAULT_GR_MODULE_THICKNESS ),
+                                                    Millimeter2iu( 0.01 ), Millimeter2iu( 20.0 ),
+                                                    NULL, 1/IU_PER_MM ) );
 
-        m_configSettings.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorValueDefaultText" ),
-                                                       &settings.m_ValueDefaultText, wxT( "" ) ) );
-        m_configSettings.push_back( new PARAM_CFG_BOOL( true,
-                                        wxT( "FpEditorValueDefaultVisibility" ),
-                                        &settings.m_ValueDefaultVisibility, true ) );
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorValueDefaultLayer" ),
-                                        &settings.m_ValueDefaultlayer,
-                                        int( F_Fab ), int( F_SilkS ), int( F_Fab ) ) );
-    }
+    m_configSettings.push_back( new PARAM_CFG_WXSTRING( true,
+                                    wxT( "FpEditorRefDefaultText" ),
+                                    &settings.m_RefDefaultText, wxT( "REF**" ) ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true,
+                                    wxT( "FpEditorRefDefaultVisibility" ),
+                                    &settings.m_RefDefaultVisibility, true ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorRefDefaultLayer" ),
+                                    &settings.m_RefDefaultlayer,
+                                    int( F_SilkS ), int( F_SilkS ), int( F_Fab ) ) );
+
+    m_configSettings.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorValueDefaultText" ),
+                                                    &settings.m_ValueDefaultText, wxT( "" ) ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true,
+                                    wxT( "FpEditorValueDefaultVisibility" ),
+                                    &settings.m_ValueDefaultVisibility, true ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorValueDefaultLayer" ),
+                                    &settings.m_ValueDefaultlayer,
+                                    int( F_Fab ), int( F_SilkS ), int( F_Fab ) ) );
 
     return m_configSettings;
 }

@@ -92,6 +92,9 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void UseGalCanvas( bool aEnable );
 
+    ///> @copydoc PCB_BASE_FRAME::SetBoard()
+    virtual void SetBoard( BOARD* aBoard );
+
 protected:
     /// User defined rotation angle (in tenths of a degree).
     int m_rotationAngle;

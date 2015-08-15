@@ -476,29 +476,14 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
 void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
-    bool new_board = ( aBoard != m_Pcb );
-
-    PCB_BASE_FRAME::SetBoard( aBoard );
+    PCB_BASE_EDIT_FRAME::SetBoard( aBoard );
 
     if( IsGalCanvasActive() )
     {
-        PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-
-        drawPanel->DisplayBoard( aBoard );
         aBoard->GetRatsnest()->Recalculate();
 
         // reload the worksheet
         SetPageSettings( aBoard->GetPageSettings() );
-
-        // update the tool manager with the new board and its view.
-        if( m_toolManager )
-        {
-            m_toolManager->SetEnvironment( aBoard, drawPanel->GetView(),
-                                           drawPanel->GetViewControls(), this );
-
-            if( new_board )
-                m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        }
     }
 }
 

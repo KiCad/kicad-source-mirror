@@ -213,10 +213,16 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
         m_view->Add( zone );
 
     // Ratsnest
-    delete m_ratsnest;
+    if( m_ratsnest )
+    {
+        m_view->Remove( m_ratsnest );
+        delete m_ratsnest;
+    }
+
     m_ratsnest = new KIGFX::RATSNEST_VIEWITEM( aBoard->GetRatsnest() );
     m_view->Add( m_ratsnest );
 
+    // Display settings
     UseColorScheme( aBoard->GetColorsSettings() );
 
     PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
