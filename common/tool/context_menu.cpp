@@ -312,7 +312,14 @@ void CONTEXT_MENU::runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVE
 
 void CONTEXT_MENU::runOnSubmenus( boost::function<void(CONTEXT_MENU*)> aFunction )
 {
-    std::for_each( m_submenus.begin(), m_submenus.end(), aFunction );
+    try
+    {
+        std::for_each( m_submenus.begin(), m_submenus.end(), aFunction );
+    }
+    catch( std::exception& e )
+    {
+        std::cerr << "CONTEXT_MENU runOnSubmenus error: " << e.what() << std::endl;
+    }
 }
 
 
