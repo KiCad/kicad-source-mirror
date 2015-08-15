@@ -221,7 +221,7 @@ bool POINT_EDITOR::Init()
 
 void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 {
-    EDIT_POINT* point = NULL;
+    EDIT_POINT* point = m_editedPoint;
 
     if( aEvent.IsMotion() )
     {
