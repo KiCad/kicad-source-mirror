@@ -54,68 +54,69 @@ class SHAPE_POLY_SET : public SHAPE
          * Base class for iterating over all vertices in a given SHAPE_POLY_SET
          */
         template <class T>
-        class ITERATOR_TEMPLATE {
-            public:
+        class ITERATOR_TEMPLATE
+        {
+        public:
 
-                bool IsEndContour() const
+            bool IsEndContour() const
+            {
+                return m_currentVertex + 1 == m_poly->CPolygon( m_currentOutline )[0].PointCount();
+            }
+
+            bool IsLastContour() const
+            {
+                return m_currentOutline == m_lastOutline;
+            }
+
+            operator bool() const
+            {
+                return m_currentOutline <= m_lastOutline;
+            }
+
+            void Advance()
+            {
+                m_currentVertex ++;
+
+                if( m_currentVertex >= m_poly->CPolygon( m_currentOutline )[0].PointCount() )
                 {
-                    return m_currentVertex + 1 == m_poly->CPolygon( m_currentOutline )[0].PointCount();
+                    m_currentVertex = 0;
+                    m_currentOutline++;
                 }
+            }
 
-                bool IsLastContour() const
-                {
-                    return m_currentOutline == m_lastOutline;
-                }
+            void operator++( int dummy )
+            {
+                Advance();
+            }
 
-                operator bool() const
-                {
-                    return m_currentOutline <= m_lastOutline;
-                }
+            void operator++()
+            {
+                Advance();
+            }
 
-                void Advance()
-                {
-                    m_currentVertex ++;
+            T& Get()
+            {
+                return m_poly->Polygon( m_currentOutline )[0].Point( m_currentVertex );
+            }
 
-                    if( m_currentVertex >= m_poly->CPolygon( m_currentOutline )[0].PointCount() )
-                    {
-                        m_currentVertex = 0;
-                        m_currentOutline++;
-                    }
-                }
+            T& operator*()
+            {
+                return Get();
+            }
 
-                void operator++( int dummy )
-                {
-                    Advance();
-                }
-
-                void operator++()
-                {
-                    Advance();
-                }
-
-                T& Get()
-                {
-                    return m_poly->Polygon( m_currentOutline )[0].Point( m_currentVertex );
-                }
-
-                T& operator*()
-                {
-                    return Get();
-                }
-
-                T* operator->()
-                {
-                    return &Get();
-                }
+            T* operator->()
+            {
+                return &Get();
+            }
 
 
-            private:
-                friend class SHAPE_POLY_SET;
+        private:
+            friend class SHAPE_POLY_SET;
 
-                SHAPE_POLY_SET* m_poly;
-                int m_currentOutline;
-                int m_lastOutline;
-                int m_currentVertex;
+            SHAPE_POLY_SET* m_poly;
+            int m_currentOutline;
+            int m_lastOutline;
+            int m_currentVertex;
         };
 
         typedef ITERATOR_TEMPLATE<VECTOR2I> ITERATOR;
@@ -245,17 +246,21 @@ class SHAPE_POLY_SET : public SHAPE
 
 
         ///> Performs boolean polyset union
-        void BooleanAdd( const SHAPE_POLY_SET& b );
+        ///> For aFastMode meaning, see function booleanOp
+
+        void BooleanAdd( const SHAPE_POLY_SET& b, bool aFastMode = false );
 
         ///> Performs boolean polyset difference
-        void BooleanSubtract( const SHAPE_POLY_SET& b );
+        ///> For aFastMode meaning, see function booleanOp
+        void BooleanSubtract( const SHAPE_POLY_SET& b, bool aFastMode = false );
 
         ///> Performs outline inflation/deflation, using round corners.
         void Inflate( int aFactor, int aCircleSegmentsCount );
 
         ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures" connecting the outer ring
         ///> to the inner holes
-        void Fracture();
+        ///> For aFastMode meaning, see function booleanOp
+        void Fracture( bool aFastMode = false);
 
         ///> Converts a set of slitted polygons to a set of polygons with holes
         void Unfracture();
@@ -264,7 +269,8 @@ class SHAPE_POLY_SET : public SHAPE
         bool HasHoles() const;
 
         ///> Simplifies the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
-        void Simplify();
+        ///> For aFastMode meaning, see function booleanOp
+        void Simplify( bool aFastMode = false);
 
         /// @copydoc SHAPE::Format()
         const std::string Format() const;
@@ -316,7 +322,20 @@ class SHAPE_POLY_SET : public SHAPE
 
         void fractureSingle( POLYGON& paths );
         void importTree( ClipperLib::PolyTree* tree );
-        void booleanOp( ClipperLib::ClipType type, const SHAPE_POLY_SET& b );
+
+        /** Function booleanOp
+         * this is the engine to execute all polygon boolean transforms
+         * (AND, OR, ... and polygon simplification (merging overlaping  polygons)
+         * @param aType is the transform type ( see ClipperLib::ClipType )
+         * @param aOtherShape is the SHAPE_LINE_CHAIN to combine with me.
+         * @param aFastMode is an option to choos if the result is a weak polygon
+         * or a stricty simple polygon.
+         * if aFastMode is true (default) the result can be a weak polygon
+         * if aFastMode is true (default) the result is (theorically) a strictly
+         *  simple polygon, but calculations can be really significantly time consuming
+         */
+        void booleanOp( ClipperLib::ClipType aType,
+                        const SHAPE_POLY_SET& aOtherShape, bool aFastMode = false );
 
         bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath ) const;
 

@@ -208,11 +208,13 @@ const SHAPE_LINE_CHAIN SHAPE_POLY_SET::convertFromClipper( const Path& aPath )
 
 #include <common.h>
 #include <wx/wx.h>
-void SHAPE_POLY_SET::booleanOp( ClipType type, const SHAPE_POLY_SET& b )
+void SHAPE_POLY_SET::booleanOp( ClipType aType, const SHAPE_POLY_SET& aOtherShape,
+                                bool aFastMode )
 {
     Clipper c;
 
-    c.StrictlySimple( true );
+    if( !aFastMode )
+        c.StrictlySimple( true );
 
     BOOST_FOREACH( const POLYGON& poly, m_polys )
     {
@@ -220,7 +222,7 @@ void SHAPE_POLY_SET::booleanOp( ClipType type, const SHAPE_POLY_SET& b )
             c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptSubject, true );
     }
 
-    BOOST_FOREACH( const POLYGON& poly, b.m_polys )
+    BOOST_FOREACH( const POLYGON& poly, aOtherShape.m_polys )
     {
         for( unsigned int i = 0; i < poly.size(); i++ )
             c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptClip, true );
@@ -228,21 +230,21 @@ void SHAPE_POLY_SET::booleanOp( ClipType type, const SHAPE_POLY_SET& b )
 
     PolyTree solution;
 
-    c.Execute( type, solution, pftNonZero, pftNonZero );
+    c.Execute( aType, solution, pftNonZero, pftNonZero );
 
     importTree( &solution );
 }
 
 
-void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b )
+void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b, bool aFastMode )
 {
-    booleanOp( ctUnion, b );
+    booleanOp( ctUnion, b, aFastMode );
 }
 
 
-void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& b )
+void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& b, bool aFastMode )
 {
-    booleanOp( ctDifference, b );
+    booleanOp( ctDifference, b, aFastMode );
 }
 
 
@@ -496,9 +498,9 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 }
 
 
-void SHAPE_POLY_SET::Fracture()
+void SHAPE_POLY_SET::Fracture( bool aFastMode )
 {
-    Simplify(); // remove overlapping holes/degeneracy
+    Simplify( aFastMode ); // remove overlapping holes/degeneracy
 
     BOOST_FOREACH( POLYGON& paths, m_polys )
     {
@@ -507,11 +509,11 @@ void SHAPE_POLY_SET::Fracture()
 }
 
 
-void SHAPE_POLY_SET::Simplify()
+void SHAPE_POLY_SET::Simplify( bool aFastMode )
 {
     SHAPE_POLY_SET empty;
 
-    booleanOp( ctUnion, empty );
+    booleanOp( ctUnion, empty, aFastMode );
 }
 
 

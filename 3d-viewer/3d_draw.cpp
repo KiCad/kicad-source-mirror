@@ -61,6 +61,7 @@
 #include <reporter.h>
 
 
+extern bool useFastModeForPolygons;
 
 /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
  * Z orientation is 1.0 for all layers but "back" layers:
@@ -702,7 +703,7 @@ void EDA_3D_CANVAS::buildBoard3DAuxLayers( REPORTER* aErrorMessages, REPORTER* a
         if( bufferPolys.IsEmpty() )
             continue;
 
-        bufferPolys.Fracture();
+        bufferPolys.Simplify( useFastModeForPolygons );
 
         int         thickness = GetPrm3DVisu().GetLayerObjectThicknessBIU( layer );
         int         zpos = GetPrm3DVisu().GetLayerZcoordBIU( layer );
