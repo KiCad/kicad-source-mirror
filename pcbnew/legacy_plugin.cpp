@@ -2073,6 +2073,13 @@ void LEGACY_PLUGIN::loadPCB_LINE()
 
 void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
+    /* a net description is something like
+     * $EQUIPOT
+     * Na 5 "/BIT1"
+     * St ~
+     * $EndEQUIPOT
+     */
+
     char  buf[1024];
 
     NETINFO_ITEM*   net = NULL;
@@ -2090,14 +2097,20 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
             netCode = intParse( line + SZ( "Na" ), &data );
 
             ReadDelimitedText( buf, data, sizeof(buf) );
-            net = new NETINFO_ITEM( m_board, FROM_UTF8( buf ), netCode );
+
+            if( net == NULL )
+                net = new NETINFO_ITEM( m_board, FROM_UTF8( buf ), netCode );
+            else
+            {
+                THROW_IO_ERROR( "Two net definitions in  '$EQUIPOT' block" );
+            }
         }
 
         else if( TESTLINE( "$EndEQUIPOT" ) )
         {
             // net 0 should be already in list, so store this net
             // if it is not the net 0, or if the net 0 does not exists.
-            if( net != NULL && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
+            if( net && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
             {
                 m_board->AppendNet( net );
 

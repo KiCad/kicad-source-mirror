@@ -3577,7 +3577,7 @@ bool dxfRW::processPolyline()
                 processVertex( &pl );
             }
         }
-
+        // Fall through
         default:
             pl.parseCode( code, reader );
             break;
@@ -3593,7 +3593,6 @@ bool dxfRW::processVertex( DRW_Polyline* pl )
     DBG( "dxfRW::processVertex" );
     int code;
     DRW_Vertex* v = new DRW_Vertex();
-    bool appended = false;
 
     while( reader->readRec( &code, !binary ) )
     {
@@ -3604,7 +3603,6 @@ bool dxfRW::processVertex( DRW_Polyline* pl )
         case 0:
         {
             pl->appendVertex( v );
-            appended = true;
             nextentity = reader->getString();
             DBG( nextentity ); DBG( "\n" );
 
@@ -3614,14 +3612,10 @@ bool dxfRW::processVertex( DRW_Polyline* pl )
             }
             else if( nextentity == "VERTEX" )
             {
-                if( !appended )
-                    delete v;
-
                 v = new DRW_Vertex();        // another vertex
-                appended = false;
             }
         }
-
+        // Fall through
         default:
             v->parseCode( code, reader );
             break;
