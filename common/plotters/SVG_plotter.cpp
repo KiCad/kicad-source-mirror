@@ -674,7 +674,69 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
     SetColor( aColor );
     SetCurrentLineWidth( aWidth );
 
-    // TODO: see if the postscript native text code can be used in SVG plotter
+    int width = currentPenWidth;
+
+    if( aWidth <= 0 && aBold )
+        width = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
+
+    if( aWidth <= 0 )
+        width = currentPenWidth;
+
+    wxPoint text_pos = aPos;
+    const char *hjust = "start";
+
+    switch( aH_justify )
+    {
+    case GR_TEXT_HJUSTIFY_CENTER:
+        hjust = "middle";
+        break;
+
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        hjust = "end";
+        break;
+
+    case GR_TEXT_HJUSTIFY_LEFT:
+        hjust = "start";
+        break;
+    }
+
+    switch( aV_justify )
+    {
+    case GR_TEXT_VJUSTIFY_CENTER:
+        text_pos.y += aSize.y / 2;
+        break;
+
+    case GR_TEXT_VJUSTIFY_TOP:
+        text_pos.y += aSize.y;
+        break;
+
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        break;
+    }
+
+    wxSize text_size;
+    text_size.x = GraphicTextWidth( aText, aSize, aItalic, width );
+    text_size.y = aSize.x * 4/3; // Hershey font height to em size conversion
+    DPOINT anchor_pos_dev = userToDeviceCoordinates( aPos );
+    DPOINT text_pos_dev = userToDeviceCoordinates( text_pos );
+    DPOINT sz_dev = userToDeviceSize( text_size );
+
+    if( aOrient != 0 ) {
+        fprintf( outputFile,
+                 "<g transform=\"rotate(%g %g %g)\">\n",
+                 - aOrient * 0.1, anchor_pos_dev.x, anchor_pos_dev.y );
+    }
+
+    fprintf( outputFile,
+             "<text x=\"%g\" y=\"%g\"\n"
+             "textLength=\"%g\" font-size=\"%g\" lengthAdjust=\"spacingAndGlyphs\"\n"
+             "text-anchor=\"%s\" opacity=\"0\">%s</text>\n",
+             text_pos_dev.x, text_pos_dev.y,
+             sz_dev.x, sz_dev.y,
+             hjust, TO_UTF8( XmlEsc( aText ) ) );
+
+    if( aOrient != 0 )
+        fputs( "</g>\n", outputFile );
 
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                    aWidth, aItalic, aBold, aMultilineAllowed );
