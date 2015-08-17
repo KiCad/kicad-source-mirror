@@ -33,6 +33,7 @@
 #include <schframe.h>
 #include <wildcards_and_files_ext.h>
 
+#include <cctype>
 #include <boost/foreach.hpp>
 #include <map>
 
@@ -331,7 +332,7 @@ public:
         typedef std::map<wxString, RESCUE_CACHE_CANDIDATE> candidate_map_t;
         candidate_map_t candidate_map;
 
-        wxString part_name_suffix = wxT( "-RESCUE-" ) + aRescuer.GetPrj()->GetProjectName();
+        wxString part_name_suffix = aRescuer.GetPartNameSuffix();
 
         BOOST_FOREACH( SCH_COMPONENT* each_component, *( aRescuer.GetComponents() ) )
         {
@@ -494,6 +495,22 @@ void RESCUER::UndoRescues()
         each_logitem.component->SetPartName( each_logitem.old_name );
         each_logitem.component->ClearFlags();
     }
+}
+
+
+wxString RESCUER::GetPartNameSuffix()
+{
+    wxString suffix = wxT( "-RESCUE-" );
+    wxString pname = GetPrj()->GetProjectName();
+    for( size_t i = 0; i < pname.Len(); ++i )
+    {
+        if( isspace( pname[i].GetValue() ) )
+            suffix.Append( '_' );
+        else
+            suffix.Append( pname[i] );
+    }
+
+    return suffix;
 }
 
 

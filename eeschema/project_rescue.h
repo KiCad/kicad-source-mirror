@@ -162,6 +162,12 @@ public:
     PROJECT* GetPrj() { return m_prj; }
 
     /**
+     * Function GetPartNameSuffix
+     * Return the suffix to add to rescued parts.
+     */
+    wxString GetPartNameSuffix();
+
+    /**
      * Function InvokeDialog
      * Display a dialog to allow the user to select rescues.
      * @param aAskShowAgain - whether the "Never Show Again" button should be visible
