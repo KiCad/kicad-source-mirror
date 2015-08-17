@@ -30,6 +30,9 @@
 #include <kicad_string.h>
 #include <validators.h>
 
+#include <wx/textentry.h>
+#include <wx/log.h>
+
 
 FILE_NAME_CHAR_VALIDATOR::FILE_NAME_CHAR_VALIDATOR( wxString* aValue ) :
     wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
@@ -49,12 +52,12 @@ FILE_NAME_CHAR_VALIDATOR::FILE_NAME_CHAR_VALIDATOR( wxString* aValue ) :
 
 
 FILE_NAME_WITH_PATH_CHAR_VALIDATOR::FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue ) :
-    wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
+    wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST | wxFILTER_EMPTY, aValue )
 {
     // The Windows (DOS) file system forbidden characters already include the forbidden
     // file name characters for both Posix and OSX systems.  The characters *?|"<> are
     // illegal and filtered by the validator, but /\: are valid (\ and : only on Windows.
-    wxString illegalChars = wxFileName::GetForbiddenChars(wxPATH_DOS );
+    wxString illegalChars = wxFileName::GetForbiddenChars( wxPATH_DOS );
     wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
     wxArrayString illegalCharList;
 
@@ -75,39 +78,8 @@ FILE_NAME_WITH_PATH_CHAR_VALIDATOR::FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString
 
 
 ENVIRONMENT_VARIABLE_CHAR_VALIDATOR::ENVIRONMENT_VARIABLE_CHAR_VALIDATOR( wxString* aValue ) :
-    wxTextValidator( wxFILTER_INCLUDE_CHAR_LIST, aValue )
+    wxTextValidator( wxFILTER_INCLUDE_CHAR_LIST | wxFILTER_EMPTY, aValue )
 {
     wxString includeChars( wxT( "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_" ) );
     SetCharIncludes( includeChars );
 }
-
-
-void ENVIRONMENT_VARIABLE_CHAR_VALIDATOR::OnChar( wxKeyEvent& aEvent )
-{
-    wxTextValidator::OnChar( aEvent );
-
-    // Special key or error in valid character check already occurred.
-    if( aEvent.GetSkipped() )
-        return;
-
-    // Check if first character is valid.  Cannot be number.
-    int keyCode = aEvent.GetKeyCode();
-
-    wxString str( (wxUniChar)keyCode, 1 );
-    wxString numbers( wxT( "0123456789" ) );
-
-    if( (m_stringValue->IsEmpty() && numbers.Contains( str ))
-      || (!m_stringValue->IsEmpty() && numbers.Contains( m_stringValue[0])) )
-    {
-        if( !wxValidator::IsSilent() )
-            wxBell();
-
-        // eat message
-        return;
-    }
-    else
-    {
-        aEvent.Skip();
-    }
-}
-

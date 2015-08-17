@@ -46,6 +46,7 @@ public:
     FILE_NAME_CHAR_VALIDATOR( wxString* aValue = NULL );
 };
 
+
 /**
  * Class FILE_NAME_WITH_PATH_CHAR_VALIDATOR
  *
@@ -59,6 +60,7 @@ class FILE_NAME_WITH_PATH_CHAR_VALIDATOR : public wxTextValidator
 public:
     FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = NULL );
 };
+
 
 /**
  * Class ENVIRONMENT_VARIABLE_CHAR_VALIDATOR
@@ -74,9 +76,6 @@ class ENVIRONMENT_VARIABLE_CHAR_VALIDATOR : public wxTextValidator
 {
 public:
     ENVIRONMENT_VARIABLE_CHAR_VALIDATOR( wxString* aValue = NULL );
-
-protected:
-    void OnChar( wxKeyEvent& aEvent );
 };
 
 #endif  // #ifndef VALIDATORS_H

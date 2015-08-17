@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2015 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@
 #include <validators.h>
 #include <html_messagebox.h>
 
+#include <wx/regex.h>
+
 
 DIALOG_ENV_VAR_CONFIG::DIALOG_ENV_VAR_CONFIG( wxWindow* aParent, const ENV_VAR_MAP& aEnvVarMap ) :
     DIALOG_ENV_VAR_CONFIG_BASE( aParent )
@@ -52,11 +54,6 @@ DIALOG_ENV_VAR_CONFIG::DIALOG_ENV_VAR_CONFIG( wxWindow* aParent, const ENV_VAR_M
         editor->SetValidator( pathValidator );
         m_grid->SetCellEditor( (int) row, 1, editor );
     }
-
-    wxButton* okButton = (wxButton*) FindWindowById( wxID_OK );
-
-    if( okButton )
-        SetDefaultItem( okButton );
 }
 
 
@@ -97,8 +94,6 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataToWindow()
 
 bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
 {
-    wxString nums( wxT( "0123456789" ) );
-
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
@@ -115,40 +110,58 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
         if( name.IsEmpty() && value.IsEmpty() )
             continue;
 
-        // Check for empty cells.
+        wxLogDebug( wxT( "Row %d, name: %s, value %s." ), row,
+                    GetChars( name ), GetChars( value ) );
+
+        // Name cannot be empty.
         if( name.IsEmpty() )
         {
-            wxMessageBox( _( "Path configuration name cannot be empty." ), caption,
-                          wxOK | wxICON_ERROR, this );
-            return false;
-        }
-        if( value.IsEmpty() )
-        {
-            wxMessageBox( _( "Path configuration value cannot be empty." ), caption,
-                          wxOK | wxICON_ERROR, this );
+            wxMessageBox( _( "Cannot have duplicate environment variable name cannot be empty." ),
+                          caption, wxOK | wxICON_ERROR, this );
+            m_grid->GoToCell( row, 0 );
+            m_grid->SetGridCursor( row, 0 );
             return false;
         }
 
-        // First character of environment variable name cannot be a number.
-        if( nums.Find( name[0] ) != wxNOT_FOUND )
+        // Value cannot be empty.
+        if( value.IsEmpty() )
         {
-            wxMessageBox( _( "Path configuration names cannot have a number as the first "
-                             "character." ), caption, wxOK | wxICON_ERROR, this );
+            wxMessageBox( _( "Cannot have environment variable value cannot be empty." ), caption,
+                          wxOK | wxICON_ERROR, this );
+            m_grid->GoToCell( row, 1 );
+            m_grid->SetGridCursor( row, 1 );
+            m_grid->SetFocus();
+            return false;
+        }
+
+        // First character of the environment variable name cannot be a digit (0-9).
+        if( name.Left( 1 ).IsNumber() )
+        {
+            wxMessageBox( _( "The first character of an environment variable name cannot be "
+                             "a digit (0-9)." ), caption, wxOK | wxICON_ERROR, this );
+            m_grid->GoToCell( row, 0 );
+            m_grid->SetGridCursor( row, 0 );
+            m_grid->SelectBlock( row, 0, row, 0 );
+            m_grid->SetFocus();
             return false;
         }
 
         // Check for duplicate environment variable names.
         if( envVarNames.Index( name ) != wxNOT_FOUND )
         {
-            wxMessageBox( _( "Cannot have duplicate configuration names." ), caption,
+            wxMessageBox( _( "Cannot have duplicate environment variable names." ), caption,
                           wxOK | wxICON_ERROR, this );
+            m_grid->GoToCell( row, 0 );
+            m_grid->SetGridCursor( row, 0 );
+            m_grid->SelectRow( row );
+            m_grid->SetFocus();
             return false;
         }
 
         envVarNames.Add( name );
     }
 
-    // Add new entries and update any modified entries..
+    // Add new entries and update any modified entries.
     for( row = 0; row < m_grid->GetNumberRows(); row++ )
     {
         wxString name = m_grid->GetCellValue( row, 0 );
@@ -159,7 +172,7 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
         {
             ENV_VAR_ITEM item( value, wxGetEnv( name, NULL ) );
 
-            // Add new envrionment variable.
+            // Add new environment variable.
             m_envVarMap[ name ] = item;
         }
         else if( it->second.GetValue() != value )
@@ -206,13 +219,17 @@ void DIALOG_ENV_VAR_CONFIG::OnAddRow( wxCommandEvent& aEvent )
 
     int row = m_grid->GetNumberRows() - 1;
     wxGridCellTextEditor* editor = new wxGridCellTextEditor;
-    ENVIRONMENT_VARIABLE_CHAR_VALIDATOR envVarValidator;
-    editor->SetValidator( envVarValidator );
+    ENVIRONMENT_VARIABLE_CHAR_VALIDATOR envVarNameValidator;
+    editor->SetValidator( envVarNameValidator );
     m_grid->SetCellEditor( row, 0, editor );
+
     editor = new wxGridCellTextEditor;
     FILE_NAME_WITH_PATH_CHAR_VALIDATOR pathValidator;
     editor->SetValidator( pathValidator );
     m_grid->SetCellEditor( row, 1, editor );
+    m_grid->GoToCell( row, 0 );
+    m_grid->SetGridCursor( row, 0 );
+    m_grid->SetFocus();
 }
 
 
@@ -235,36 +252,34 @@ void DIALOG_ENV_VAR_CONFIG::OnDeleteSelectedRows( wxCommandEvent& aEvent )
 
 void DIALOG_ENV_VAR_CONFIG::OnHelpRequest( wxCommandEvent& aEvent )
 {
-    wxString msg = _( "Enter the names and paths for each path.<br><br>"
-                      "<i>Grey enteries are names that have been defined externally</i> "
-                      "as system or user level environment variables." );
+    wxString msg = _( "Enter the name and path for each environment variable.  Grey entries "
+                      "are names that have been defined externally at the system or user "
+                      "level.  Environment variables defined at the system or user level "
+                      "take precedence over the ones defined in this table.  This means the "
+                      "values in this table are ignored." );
     msg << wxT( "<br><br><b>" );
-    msg << _( "To avoid issues, names accept only upper case letters and digits." );
+    msg << _( "To ensure environment variable names are valid on all platforms, the name field "
+              "will only accept upper case letters, digits, and the underscore characters." );
     msg << wxT( "</b><br><br>" );
-    msg << _( "<b><i>KIGITHUB</b></i> is often used in Kicad packages to define "
-              "the URL of the repository of our official libraries." );
-    msg << wxT( "<br>" );
-    msg << _( "<b><i>KISYS3DMOD</b></i> is the base path of footprint 3D shapes (.3Dshapes folders)." );
-    msg << wxT( "<br>" );
-    msg << _( "<b><i>KISYSMOD</b></i> is the base path of local footprint libraries (.pretty folders)." );
+    msg << _( "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository "
+              "of the official KiCad libraries." );
     msg << wxT( "<br><br>" );
-    msg << _( "A other environment variable is automatically defined by Kicad (cannot be edited):" );
-    msg << wxT( "<br>" );
-    msg << _( "<b><i>KIPRJMOD</b></i> is the absolute path of the current project" );
-    msg << wxT( "<br>" );
-    msg << _( "For instance, ${KIPRJMOD}/libs/footprints.pretty is the folder "
-              "libs/footprints.pretty located in the current project." );
+    msg << _( "<b>KISYS3DMOD</b> is the base path of system footprint 3D "
+              "shapes (.3Dshapes folders)." );
     msg << wxT( "<br><br>" );
-    msg << _( "Auxiliary environment variable name used by Kicad if exists:" );
-    msg << wxT( "<br>" );
-    msg << _( "<i>KICAD_PTEMPLATES</i> can be defined if you want to create "
-              "and use project templates (specific folders containing the template files) "
-              "in a given master folder" );
-    msg << wxT( "<br>" );
-    msg << _( "It is the base path of these project template folders" );
+    msg << _( "<b>KISYSMOD</b> is the base path of locally installed system "
+              "footprint libraries (.pretty folders)." );
+    msg << wxT( "<br><br>" );
+    msg << _( "<b>KIPRJMOD</b> is internally defined by KiCad (cannot be edited) and is set "
+              "to the absolute path of the currently loaded project file.  This environment "
+              "variable can be used to define files and paths relative to the currently loaded "
+              "project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a "
+              "folder containing a project specific footprint library named footprints.pretty." );
+    msg << wxT( "<br><br>" );
+    msg << _( "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to "
+              "create your own project templates folder." );
 
-    HTML_MESSAGE_BOX dlg( this, _( "Paths Definition" ), wxDefaultPosition,
-                          wxSize( 650, 450 ) );
+    HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
     dlg.AddHTML_Text( msg );
     dlg.ShowModal();
 }

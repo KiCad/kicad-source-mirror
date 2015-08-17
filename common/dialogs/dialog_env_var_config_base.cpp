@@ -71,7 +71,7 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	bSizer2->Add( m_buttonDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_buttonHelp = new wxButton( this, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_buttonHelp, 0, wxALL, 5 );
+	bSizer2->Add( m_buttonHelp, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	mainSizer->Add( bSizer2, 0, wxEXPAND, 5 );
