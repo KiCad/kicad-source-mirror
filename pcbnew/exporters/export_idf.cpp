@@ -36,6 +36,7 @@
 #include <idf_parser.h>
 #include <3d_struct.h>
 #include <build_version.h>
+#include <convert_from_iu.h>
 
 #ifndef PCBNEW
 #define PCBNEW                  // needed to define the right value of Millimeter2iu(x)
@@ -540,7 +541,7 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseThou,
     SetLocaleTo_C_standard();
 
     bool ok = true;
-    double scale = 1e-6;    // we must scale internal units to mm for IDF
+    double scale = MM_PER_IU;   // we must scale internal units to mm for IDF
     IDF3::IDF_UNIT idfUnit;
 
     if( aUseThou )

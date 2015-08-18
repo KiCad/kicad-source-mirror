@@ -33,6 +33,9 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	m_staticText2->Wrap( -1 );
 	bSizer3->Add( m_staticText2, 0, wxALL, 5 );
 	
+	m_cbAutoAdjustOffset = new wxCheckBox( this, wxID_ANY, _("Auto Adjust"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+	bSizer3->Add( m_cbAutoAdjustOffset, 0, wxALL, 5 );
+	
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -83,7 +86,7 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	wxString m_rbUnitSelectionChoices[] = { _("Millimeters"), _("Mils") };
 	int m_rbUnitSelectionNChoices = sizeof( m_rbUnitSelectionChoices ) / sizeof( wxString );
 	m_rbUnitSelection = new wxRadioBox( this, wxID_ANY, _("Output Units:"), wxDefaultPosition, wxDefaultSize, m_rbUnitSelectionNChoices, m_rbUnitSelectionChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbUnitSelection->SetSelection( 1 );
+	m_rbUnitSelection->SetSelection( 0 );
 	bSizer2->Add( m_rbUnitSelection, 0, wxALL, 5 );
 	
 	
