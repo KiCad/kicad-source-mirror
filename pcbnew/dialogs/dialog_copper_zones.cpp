@@ -183,27 +183,27 @@ void DIALOG_COPPER_ZONE::initDialog()
 
     switch( m_settings.GetPadConnection() )
     {
-    case THT_THERMAL:               // Thermals only for THT pads
+    case PAD_ZONE_CONN_THT_THERMAL:   // Thermals only for THT pads
         m_PadInZoneOpt->SetSelection( 2 );
         break;
 
-    case PAD_NOT_IN_ZONE:           // Pads are not covered
+    case PAD_ZONE_CONN_NONE:        // Pads are not covered
         m_PadInZoneOpt->SetSelection( 3 );
         break;
 
     default:
-    case THERMAL_PAD:               // Use thermal relief for pads
+    case PAD_ZONE_CONN_THERMAL:     // Use thermal relief for pads
         m_PadInZoneOpt->SetSelection( 1 );
         break;
 
-    case PAD_IN_ZONE:               // pads are covered by copper
+    case PAD_ZONE_CONN_FULL:        // pads are covered by copper
         m_PadInZoneOpt->SetSelection( 0 );
         break;
     }
 
     // Antipad and spokes are significant only for thermals
-    if( m_settings.GetPadConnection() != THERMAL_PAD &&
-        m_settings.GetPadConnection() != THT_THERMAL )
+    if( m_settings.GetPadConnection() != PAD_ZONE_CONN_THERMAL &&
+        m_settings.GetPadConnection() != PAD_ZONE_CONN_THT_THERMAL )
     {
         m_AntipadSizeValue->Enable( false );
         m_CopperWidthValue->Enable( false );
@@ -346,22 +346,22 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     {
     case 3:
         // Pads are not covered
-        m_settings.SetPadConnection( PAD_NOT_IN_ZONE );
+        m_settings.SetPadConnection( PAD_ZONE_CONN_NONE );
         break;
 
     case 2:
         // Use thermal relief for THT pads
-        m_settings.SetPadConnection( THT_THERMAL );
+        m_settings.SetPadConnection( PAD_ZONE_CONN_THT_THERMAL );
         break;
 
     case 1:
         // Use thermal relief for pads
-        m_settings.SetPadConnection( THERMAL_PAD );
+        m_settings.SetPadConnection( PAD_ZONE_CONN_THERMAL );
         break;
 
     case 0:
         // pads are covered by copper
-        m_settings.SetPadConnection( PAD_IN_ZONE );
+        m_settings.SetPadConnection( PAD_ZONE_CONN_FULL );
         break;
     }
 

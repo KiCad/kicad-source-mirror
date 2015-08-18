@@ -74,7 +74,7 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
-    m_ZoneConnection      = UNDEFINED_CONNECTION; // Use parent setting by default
+    m_ZoneConnection      = PAD_ZONE_CONN_INHERITED; // Use parent setting by default
     m_ThermalWidth        = 0;                // Use parent setting by default
     m_ThermalGap          = 0;                // Use parent setting by default
 
@@ -585,7 +585,7 @@ ZoneConnection D_PAD::GetZoneConnection() const
 {
     MODULE* module = (MODULE*) GetParent();
 
-    if( m_ZoneConnection == UNDEFINED_CONNECTION && module )
+    if( m_ZoneConnection == PAD_ZONE_CONN_INHERITED && module )
         return module->GetZoneConnection();
     else
         return m_ZoneConnection;

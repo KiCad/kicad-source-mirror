@@ -433,19 +433,19 @@ void DIALOG_PAD_PROPERTIES::initValues()
     switch( m_dummyPad->GetZoneConnection() )
     {
     default:
-    case UNDEFINED_CONNECTION:
+    case PAD_ZONE_CONN_INHERITED:
         m_ZoneConnectionChoice->SetSelection( 0 );
         break;
 
-    case PAD_IN_ZONE:
+    case PAD_ZONE_CONN_FULL:
         m_ZoneConnectionChoice->SetSelection( 1 );
         break;
 
-    case THERMAL_PAD:
+    case PAD_ZONE_CONN_THERMAL:
         m_ZoneConnectionChoice->SetSelection( 2 );
         break;
 
-    case PAD_NOT_IN_ZONE:
+    case PAD_ZONE_CONN_NONE:
         m_ZoneConnectionChoice->SetSelection( 3 );
         break;
     }
@@ -996,19 +996,19 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     {
     default:
     case 0:
-        aPad->SetZoneConnection( UNDEFINED_CONNECTION );
+        aPad->SetZoneConnection( PAD_ZONE_CONN_INHERITED );
         break;
 
     case 1:
-        aPad->SetZoneConnection( PAD_IN_ZONE );
+        aPad->SetZoneConnection( PAD_ZONE_CONN_FULL );
         break;
 
     case 2:
-        aPad->SetZoneConnection( THERMAL_PAD );
+        aPad->SetZoneConnection( PAD_ZONE_CONN_THERMAL );
         break;
 
     case 3:
-        aPad->SetZoneConnection( PAD_NOT_IN_ZONE );
+        aPad->SetZoneConnection( PAD_ZONE_CONN_NONE );
         break;
     }
 

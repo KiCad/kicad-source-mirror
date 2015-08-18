@@ -2619,15 +2619,15 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                 switch( token )
                 {
                 case T_yes:
-                    zone->SetPadConnection( PAD_IN_ZONE );
+                    zone->SetPadConnection( PAD_ZONE_CONN_FULL );
                     break;
 
                 case T_no:
-                    zone->SetPadConnection( PAD_NOT_IN_ZONE );
+                    zone->SetPadConnection( PAD_ZONE_CONN_NONE );
                     break;
 
                 case T_thru_hole_only:
-                    zone->SetPadConnection( THT_THERMAL );
+                    zone->SetPadConnection( PAD_ZONE_CONN_THT_THERMAL );
                     break;
 
                 case T_clearance:

@@ -67,7 +67,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
-    m_ZoneConnection = UNDEFINED_CONNECTION; // Use zone setting by default
+    m_ZoneConnection = PAD_ZONE_CONN_INHERITED; // Use zone setting by default
     m_ThermalWidth = 0;     // Use zone setting by default
     m_ThermalGap = 0;       // Use zone setting by default
 

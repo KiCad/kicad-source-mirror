@@ -2675,10 +2675,10 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             ZoneConnection popt;
             switch( *padoption )
             {
-            case 'I':   popt = PAD_IN_ZONE;        break;
-            case 'T':   popt = THERMAL_PAD;        break;
-            case 'H':   popt = THT_THERMAL;        break;
-            case 'X':   popt = PAD_NOT_IN_ZONE;    break;
+            case 'I': popt = PAD_ZONE_CONN_FULL;        break;
+            case 'T': popt = PAD_ZONE_CONN_THERMAL;     break;
+            case 'H': popt = PAD_ZONE_CONN_THT_THERMAL; break;
+            case 'X': popt = PAD_ZONE_CONN_NONE;        break;
 
             default:
                 m_error.Printf( wxT( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ),
@@ -3775,7 +3775,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
 
-    if( me->GetZoneConnection() != UNDEFINED_CONNECTION )
+    if( me->GetZoneConnection() != PAD_ZONE_CONN_INHERITED )
         fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
 
     if( me->GetThermalWidth() != 0 )
@@ -3840,7 +3840,7 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
 
-    if( me->GetZoneConnection() != UNDEFINED_CONNECTION )
+    if( me->GetZoneConnection() != PAD_ZONE_CONN_INHERITED )
         fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
 
     if( me->GetThermalWidth() != 0 )
@@ -4016,10 +4016,10 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     switch( me->GetPadConnection() )
     {
     default:
-    case PAD_IN_ZONE:       padoption = 'I';  break;
-    case THERMAL_PAD:       padoption = 'T';  break;
-    case THT_THERMAL:       padoption = 'H';  break; // H is for 'hole' since it reliefs holes only
-    case PAD_NOT_IN_ZONE:   padoption = 'X';  break;
+    case PAD_ZONE_CONN_FULL:        padoption = 'I';  break;
+    case PAD_ZONE_CONN_THERMAL:     padoption = 'T';  break;
+    case PAD_ZONE_CONN_THT_THERMAL: padoption = 'H';  break; // H is for 'hole' since it reliefs holes only
+    case PAD_ZONE_CONN_NONE:        padoption = 'X';  break;
     }
 
     fprintf( m_fp,  "ZClearance %s %c\n",

@@ -169,19 +169,19 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     switch( m_CurrentModule->GetZoneConnection() )
     {
     default:
-    case UNDEFINED_CONNECTION:
+    case PAD_ZONE_CONN_INHERITED:
         m_ZoneConnectionChoice->SetSelection( 0 );
         break;
 
-    case PAD_IN_ZONE:
+    case PAD_ZONE_CONN_FULL:
         m_ZoneConnectionChoice->SetSelection( 1 );
         break;
 
-    case THERMAL_PAD:
+    case PAD_ZONE_CONN_THERMAL:
         m_ZoneConnectionChoice->SetSelection( 2 );
         break;
 
-    case PAD_NOT_IN_ZONE:
+    case PAD_ZONE_CONN_NONE:
         m_ZoneConnectionChoice->SetSelection( 3 );
         break;
     }
@@ -581,19 +581,19 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     {
     default:
     case 0:
-        m_CurrentModule->SetZoneConnection( UNDEFINED_CONNECTION );
+        m_CurrentModule->SetZoneConnection( PAD_ZONE_CONN_INHERITED );
         break;
 
     case 1:
-        m_CurrentModule->SetZoneConnection( PAD_IN_ZONE );
+        m_CurrentModule->SetZoneConnection( PAD_ZONE_CONN_FULL );
         break;
 
     case 2:
-        m_CurrentModule->SetZoneConnection( THERMAL_PAD );
+        m_CurrentModule->SetZoneConnection( PAD_ZONE_CONN_THERMAL );
         break;
 
     case 3:
-        m_CurrentModule->SetZoneConnection( PAD_NOT_IN_ZONE );
+        m_CurrentModule->SetZoneConnection( PAD_ZONE_CONN_NONE );
         break;
     }
 

@@ -192,7 +192,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
                 continue;
             }
 
-            if( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
+            if( GetPadConnection( pad ) == PAD_ZONE_CONN_NONE )
             {
                 int gap = zone_clearance;
                 int thermalGap = GetThermalReliefGap( pad );
@@ -336,12 +336,12 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
         {
             // Rejects non-standard pads with tht-only thermal reliefs
-            if( GetPadConnection( pad ) == THT_THERMAL
+            if( GetPadConnection( pad ) == PAD_ZONE_CONN_THT_THERMAL
              && pad->GetAttribute() != PAD_STANDARD )
                 continue;
 
-            if( GetPadConnection( pad ) != THERMAL_PAD
-             && GetPadConnection( pad ) != THT_THERMAL )
+            if( GetPadConnection( pad ) != PAD_ZONE_CONN_THERMAL
+             && GetPadConnection( pad ) != PAD_ZONE_CONN_THT_THERMAL )
                 continue;
 
             if( !pad->IsOnLayer( GetLayer() ) )

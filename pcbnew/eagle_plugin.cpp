@@ -2611,7 +2611,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     // missing == yes per DTD.
                     bool thermals = !p.thermals || *p.thermals;
-                    zone->SetPadConnection( thermals ? THERMAL_PAD : PAD_IN_ZONE );
+                    zone->SetPadConnection( thermals ? PAD_ZONE_CONN_THERMAL : PAD_ZONE_CONN_FULL );
 
                     int rank = p.rank ? *p.rank : 0;
                     zone->SetPriority( rank );

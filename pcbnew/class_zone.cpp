@@ -781,7 +781,7 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 
 ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
 {
-    if( aPad == NULL || aPad->GetZoneConnection() == UNDEFINED_CONNECTION )
+    if( aPad == NULL || aPad->GetZoneConnection() == PAD_ZONE_CONN_INHERITED )
         return m_PadConnection;
     else
         return aPad->GetZoneConnection();
