@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -39,6 +39,8 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public wxDialog
 	private:
 	
 	protected:
+		wxBoxSizer* m_MainSizer;
+		wxStaticBoxSizer* m_sbTrackSizer;
 		wxStaticText* m_TrackStartXLabel;
 		wxTextCtrl* m_TrackStartXCtrl;
 		wxStaticText* m_TrackStartXUnit;
@@ -58,7 +60,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public wxDialog
 		wxCheckBox* m_trackNetclass;
 		wxStaticText* m_TrackLayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_TrackLayerCtrl;
-		wxStaticText* m_mainSizerAccessor;
+		wxStaticBoxSizer* m_sbViaSizer;
 		wxStaticText* m_ViaXLabel;
 		wxTextCtrl* m_ViaXCtrl;
 		wxStaticText* m_ViaXUnit;
@@ -87,7 +89,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track & Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 576,333 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track & Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 576,311 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_TRACK_VIA_PROPERTIES_BASE();
 	
 };
