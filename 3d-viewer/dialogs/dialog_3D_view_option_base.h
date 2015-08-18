@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,8 +38,10 @@ class DIALOG_SHIM;
 class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
+		wxStaticBitmap* m_bitmapRealisticMode;
+		wxCheckBox* m_checkBoxRealisticMode;
 		wxStaticBitmap* m_bitmapCuThickness;
 		wxCheckBox* m_checkBoxCuThickness;
 		wxStaticBitmap* m_bitmap3Dshapes;
@@ -64,19 +66,19 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCheckRealisticMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowNoneClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_3D_VIEW_OPTIONS_BASE();
-	
+
 };
 
 #endif //__DIALOG_3D_VIEW_OPTION_BASE_H__

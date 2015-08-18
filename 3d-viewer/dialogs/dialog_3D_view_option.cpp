@@ -41,6 +41,7 @@ private:
     void OnShowAllClick( wxCommandEvent& event );
     void OnShowNoneClick( wxCommandEvent& event );
     void OnOKClick( wxCommandEvent& event );
+	void OnCheckRealisticMode( wxCommandEvent& event );
 };
 
 
@@ -72,6 +73,7 @@ DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_FRAME* parent )
 
 void DIALOG_3D_VIEW_OPTIONS::initDialog()
 {
+    m_bitmapRealisticMode->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
     m_bitmapCuThickness->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
     m_bitmap3Dshapes->SetBitmap( KiBitmap( shape_3d_xpm ) );
     m_bitmapAreas->SetBitmap( KiBitmap( add_zone_xpm ) );
@@ -83,6 +85,7 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapECO->SetBitmap( KiBitmap( edit_sheet_xpm ) );
 
     // Check/uncheck checkboxes
+    m_checkBoxRealisticMode->SetValue( m_3Dprms.GetFlag( FL_USE_REALISTIC_MODE ) );
     m_checkBoxCuThickness->SetValue( m_3Dprms.GetFlag( FL_USE_COPPER_THICKNESS ) );
     m_checkBox3Dshapes->SetValue( m_3Dprms.GetFlag( FL_MODULE ) );
     m_checkBoxAreas->SetValue( m_3Dprms.GetFlag( FL_ZONE ) );
@@ -90,10 +93,20 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_checkBoxSolderMask->SetValue( m_3Dprms.GetFlag( FL_SOLDERMASK ) );
     m_checkBoxSolderpaste->SetValue( m_3Dprms.GetFlag( FL_SOLDERPASTE ) );
     m_checkBoxAdhesive->SetValue( m_3Dprms.GetFlag( FL_ADHESIVE ) );
+
     m_checkBoxComments->SetValue( m_3Dprms.GetFlag( FL_COMMENTS ) );
     m_checkBoxECO->SetValue( m_3Dprms.GetFlag( FL_ECO ) );
+    bool enable = !m_3Dprms.GetFlag( FL_USE_REALISTIC_MODE );
+    m_checkBoxComments->Enable( enable );
+    m_checkBoxECO->Enable( enable );
 }
 
+void DIALOG_3D_VIEW_OPTIONS::OnCheckRealisticMode( wxCommandEvent& event )
+{
+    bool enable = !m_checkBoxRealisticMode->GetValue();
+    m_checkBoxComments->Enable( enable );
+    m_checkBoxECO->Enable( enable );
+}
 
 void DIALOG_3D_VIEW_OPTIONS::OnShowAllClick( wxCommandEvent& event )
 {
@@ -127,6 +140,7 @@ void DIALOG_3D_VIEW_OPTIONS::OnShowNoneClick( wxCommandEvent& event )
 
 void DIALOG_3D_VIEW_OPTIONS::OnOKClick( wxCommandEvent& event )
 {
+    m_3Dprms.SetFlag( FL_USE_REALISTIC_MODE, m_checkBoxRealisticMode->GetValue() );
     m_3Dprms.SetFlag( FL_USE_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_3Dprms.SetFlag( FL_MODULE, m_checkBox3Dshapes->GetValue() );
     m_3Dprms.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );

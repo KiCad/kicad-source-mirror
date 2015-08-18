@@ -562,6 +562,8 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_REALISTIC_MODE:
         GetPrm3DVisu().SetFlag( FL_USE_REALISTIC_MODE, isChecked );
+        GetMenuBar()->FindItem( ID_MENU3D_COMMENTS_ONOFF )->Enable( !isChecked );
+        GetMenuBar()->FindItem( ID_MENU3D_ECO_ONOFF )->Enable( !isChecked );
         NewDisplay();
         return;
 

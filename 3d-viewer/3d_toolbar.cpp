@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,6 +280,8 @@ void EDA_3D_FRAME::CreateMenuBar()
     AddMenuItem( layersMenu, ID_MENU3D_SOLDER_PASTE_ONOFF,
            _( "Show Solder &Paste Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
 
+    // Other layers are not "board" layers, and are not shown in realistic mode
+    // These menus will be disabled in in realistic mode
     AddMenuItem( layersMenu, ID_MENU3D_COMMENTS_ONOFF,
            _( "Show &Comments and Drawings Layer" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
 
@@ -301,6 +303,10 @@ void EDA_3D_FRAME::SetMenuBarOptionsState()
     // Set the state of toggle menus according to the current display options
     item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
     item->Check( GetPrm3DVisu().IsRealisticMode() );
+    item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
+    item->Enable( !GetPrm3DVisu().IsRealisticMode() );
+    item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
+    item->Enable( !GetPrm3DVisu().IsRealisticMode() );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHADOWS );
     item->Check( GetPrm3DVisu().GetFlag( FL_RENDER_SHADOWS ) );
