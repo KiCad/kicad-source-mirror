@@ -517,6 +517,7 @@ void ROUTER_TOOL::performRouting()
             // Synchronize the indicated layer
             m_frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
             m_router->Move( m_endSnapPoint, m_endItem );
+            m_startItem = NULL;
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {

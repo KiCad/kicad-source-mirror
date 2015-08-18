@@ -251,7 +251,7 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
 
     m_router->EnableSnapping( snapEnabled );
 
-    if( !snapEnabled || m_router->GetCurrentNet() < 0 || !m_startItem )
+    if( m_router->GetCurrentNet() < 0 )
     {
         m_endItem = NULL;
         m_endSnapPoint = cp;
@@ -265,7 +265,7 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
     else
         layer = m_router->GetCurrentLayer();
 
-    PNS_ITEM* endItem = pickSingleItem( p, m_startItem->Net(), layer );
+    PNS_ITEM* endItem = pickSingleItem( p, m_router->GetCurrentNet(), layer );
 
     if( endItem )
     {
