@@ -41,7 +41,6 @@ PNS_LINE::PNS_LINE( const PNS_LINE& aOther ) :
     m_net = aOther.m_net;
     m_movable = aOther.m_movable;
     m_layers = aOther.m_layers;
-    m_owner = aOther.m_owner;
     m_via = aOther.m_via;
     m_hasVia = aOther.m_hasVia;
     m_marker = aOther.m_marker;
@@ -63,7 +62,6 @@ const PNS_LINE& PNS_LINE::operator=( const PNS_LINE& aOther )
     m_width = aOther.m_width;
     m_net = aOther.m_net;
     m_movable = aOther.m_movable;
-    m_owner = aOther.m_owner;
     m_layers = aOther.m_layers;
     m_via = aOther.m_via;
     m_hasVia = aOther.m_hasVia;
@@ -146,7 +144,6 @@ PNS_SEGMENT* PNS_SEGMENT::Clone() const
     s->m_layers = m_layers;
     s->m_marker = m_marker;
     s->m_rank = m_rank;
-    s->m_owner = NULL;
 
     return s;
 }
@@ -361,6 +358,13 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
     int i;
     int d = 2;
 
+    if( aOrigin.SegmentCount() == 1)
+    {
+        DIRECTION_45 dir( aOrigin.CPoint( 0 ) - aOrigin.CPoint( 1 ) );
+
+        return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, dir.IsDiagonal() );
+    }
+
     if( aOrigin.CSegment( -1 ).Length() > 100000 * 30 ) // fixme: constant/parameter?
         d = 1;
 
@@ -411,7 +415,9 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
         return path;
     }
 
-    return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, true );
+    DIRECTION_45 dir( aOrigin.CPoint( -1 ) - aOrigin.CPoint( -2 ) );
+
+    return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( -1 ), aP, dir.IsDiagonal() );
 }
 
 

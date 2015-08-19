@@ -21,7 +21,7 @@
 #ifndef __PNS_ITEMSET_H
 #define __PNS_ITEMSET_H
 
-#include <deque>
+#include <vector>
 #include <boost/foreach.hpp>
 
 #include "pns_item.h"
@@ -34,32 +34,83 @@
  **/
 class PNS_LINE;
 
-class PNS_ITEMSET : public PNS_OBJECT
+class PNS_ITEMSET
 {
 public:
-    typedef std::deque<PNS_ITEM*> ITEMS;
+    struct ENTRY {
+
+        ENTRY( PNS_ITEM* aItem, bool aOwned = false ) :
+            item( aItem ),
+            owned( aOwned )
+        {}
+
+        ENTRY( const ENTRY& aOther )
+        {
+            owned = aOther.owned;
+
+            if( aOther.owned )
+                item = aOther.item->Clone();
+            else
+                item = aOther.item;
+        }
+
+        ~ENTRY()
+        {
+            if( owned )
+                delete item;
+        }
+
+        bool operator== ( const ENTRY& b ) const
+        {
+            return item == b.item;
+        }
+
+        bool operator< ( const ENTRY& b ) const
+        {
+            return item < b.item;
+        }
+
+        ENTRY& operator= ( const ENTRY& aOther )
+        {
+            owned = aOther.owned;
+
+            if( aOther.owned )
+                item = aOther.item->Clone();
+            else
+                item = aOther.item;
+
+            return *this;
+        }
+
+        operator PNS_ITEM* () const
+        {
+            return item;
+        }
+
+        PNS_ITEM *item;
+        bool owned;
+    };
+
+    typedef std::vector<ENTRY> ENTRIES;
 
     PNS_ITEMSET( PNS_ITEM* aInitialItem = NULL, bool aBecomeOwner = false )
     {
         if( aInitialItem )
         {
-            if( aBecomeOwner )
-                aInitialItem->SetOwner( this );
-
-            m_items.push_back( aInitialItem );
+            m_items.push_back( ENTRY( aInitialItem, aBecomeOwner ) );
         }
     }
 
     PNS_ITEMSET( const PNS_ITEMSET& aOther )
     {
-        copyFrom( aOther );
+        m_items = aOther.m_items;
     }
 
     ~PNS_ITEMSET();
 
     const PNS_ITEMSET& operator=( const PNS_ITEMSET& aOther )
     {
-        copyFrom( aOther );
+        m_items = aOther.m_items;
         return *this;
     }
 
@@ -81,8 +132,8 @@ public:
         return m_items.empty();
     }
 
-    ITEMS& Items() { return m_items; }
-    const ITEMS& CItems() const { return m_items; }
+    ENTRIES& Items() { return m_items; }
+    const ENTRIES& CItems() const { return m_items; }
 
     PNS_ITEMSET& FilterLayers( int aStart, int aEnd = -1, bool aInvert = false );
     PNS_ITEMSET& FilterKinds( int aKindMask, bool aInvert = false );
@@ -114,57 +165,39 @@ public:
     void Add( const PNS_LINE& aLine );
     void Prepend( const PNS_LINE& aLine );
 
+    PNS_ITEM* operator[] ( int index ) const
+    {
+        return m_items[index].item;
+    }
+
     void Add( PNS_ITEM* aItem, bool aBecomeOwner = false )
     {
-        if( aBecomeOwner )
-            aItem->SetOwner( this );
-
-        m_items.push_back( aItem );
+        m_items.push_back( ENTRY( aItem, aBecomeOwner ) );
     }
 
     void Prepend( PNS_ITEM* aItem, bool aBecomeOwner = false )
     {
-        if( aBecomeOwner )
-            aItem->SetOwner( this );
-
-        m_items.push_front( aItem );
-    }
-
-    PNS_ITEM* Get( int index ) const
-    {
-        return m_items[index];
-    }
-
-    PNS_ITEM* operator[] ( int index ) const
-    {
-        return m_items[index];
+         m_items.insert( m_items.begin(), ENTRY( aItem, aBecomeOwner ) );
     }
 
     void Clear()
     {
-        BOOST_FOREACH( PNS_ITEM* item, m_items )
-        {
-            if( item->BelongsTo( this ) )
-                delete item;
-        }
-
         m_items.clear();
     }
 
-    bool Contains( const PNS_ITEM* aItem ) const
+    bool Contains( PNS_ITEM* aItem ) const
     {
-        return std::find( m_items.begin(), m_items.end(), aItem ) != m_items.end();
+        const ENTRY ent( aItem );
+        return std::find( m_items.begin(), m_items.end(), ent ) != m_items.end();
     }
 
     void Erase( PNS_ITEM* aItem )
     {
-        ITEMS::iterator f = std::find( m_items.begin(), m_items.end(), aItem );
+        ENTRY ent( aItem );
+        ENTRIES::iterator f = std::find( m_items.begin(), m_items.end(), ent );
 
         if( f != m_items.end() )
             m_items.erase( f );
-
-        if( aItem->BelongsTo( this ) )
-            delete aItem;
     }
 
     template<class T>
@@ -172,7 +205,7 @@ public:
     {
         int n = 0;
 
-        BOOST_FOREACH( PNS_ITEM* item, m_items )
+        BOOST_FOREACH( const PNS_ITEM* item, m_items )
         {
             if( item->OfKind( kind ) )
             {
@@ -187,22 +220,8 @@ public:
     }
 
 private:
-    void release();
 
-    void copyFrom( const PNS_ITEMSET& aOther )
-    {
-        release();
-
-        BOOST_FOREACH( PNS_ITEM* item, aOther.m_items )
-        {
-            if( item->BelongsTo( &aOther ) )
-                m_items.push_back( item->Clone() );
-            else
-                m_items.push_back( item );
-        }
-    }
-
-    ITEMS m_items;
+    ENTRIES m_items;
 };
 
 #endif

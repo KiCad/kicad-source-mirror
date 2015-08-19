@@ -128,7 +128,7 @@ struct PNS_COLLISION_FILTER {
  * - lightweight cloning/branching (for recursive optimization and shove
  * springback)
  **/
-class PNS_NODE : public PNS_OBJECT
+class PNS_NODE
 {
 public:
     typedef boost::optional<PNS_OBSTACLE>   OPT_OBSTACLE;

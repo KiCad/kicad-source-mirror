@@ -96,9 +96,6 @@ public:
     virtual PNS_LOGGER* Logger();
 
 private:
-    typedef std::pair<PNS_LINE*, PNS_LINE*> LinePair;
-    typedef std::vector<LinePair> LinePairVec;
-
     enum DragMode {
         CORNER = 0,
         SEGMENT,
@@ -122,9 +119,8 @@ private:
     bool        m_dragStatus;
     PNS_MODE    m_currentMode;
     PNS_ITEMSET m_origViaConnections;
-    PNS_ITEMSET m_draggedViaConnections;
-    PNS_VIA*                m_initialVia;
-    PNS_ITEMSET             m_draggedItems;
+    PNS_VIA*    m_initialVia;
+    PNS_ITEMSET m_draggedItems;
 };
 
 #endif

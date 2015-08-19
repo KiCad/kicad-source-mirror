@@ -41,7 +41,7 @@
 class PNS_JOINT : public PNS_ITEM
 {
 public:
-    typedef std::deque<PNS_ITEM*> LINKED_ITEMS;
+    typedef PNS_ITEMSET::ENTRIES LINKED_ITEMS;
 
     ///> Joints are hashed by their position, layers and net.
     ///  Linked items are, obviously, not hashed
@@ -87,10 +87,7 @@ public:
         if( m_locked )
             return false;
 
-        if( m_linkedItems.Size() != 2 )
-            return false;
-
-        if( m_linkedItems[0]->Kind() != SEGMENT || m_linkedItems[1]->Kind() != SEGMENT )
+        if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT ) != 2 )
             return false;
 
         PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*>( m_linkedItems[0] );
@@ -102,18 +99,10 @@ public:
 
     bool IsNonFanoutVia() const
     {
-        if( m_linkedItems.Size() != 3 )
-            return false;
+        int vias = m_linkedItems.Count( VIA );
+        int segs = m_linkedItems.Count( SEGMENT );
 
-        int vias = 0, segs = 0;
-
-        for( int i = 0; i < 3; i++ )
-        {
-            vias += m_linkedItems[i]->Kind() == VIA ? 1 : 0;
-            segs += m_linkedItems[i]->Kind() == SEGMENT ? 1 : 0;
-        }
-
-        return ( vias == 1 && segs == 2 );
+        return ( m_linkedItems.Size() == 3 && vias == 1 && segs == 2 );
     }
 
     ///> Links the joint to a given board item (when it's added to the PNS_NODE)

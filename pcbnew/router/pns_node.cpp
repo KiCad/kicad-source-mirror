@@ -634,14 +634,12 @@ void PNS_NODE::removeLine( PNS_LINE* aLine )
     std::vector<PNS_SEGMENT*>* segRefs = aLine->LinkedSegments();
 
     assert( segRefs != NULL );
-    assert( aLine->Owner() );
 
     BOOST_FOREACH( PNS_SEGMENT* seg, *segRefs )
     {
         removeSegment( seg );
     }
 }
-
 
 void PNS_NODE::removeVia( PNS_VIA* aVia )
 {

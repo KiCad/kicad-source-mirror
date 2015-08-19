@@ -72,7 +72,6 @@ public:
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
-        m_owner = aB.m_owner;
         m_drill = aB.m_drill;
         m_viaType = aB.m_viaType;
     }
