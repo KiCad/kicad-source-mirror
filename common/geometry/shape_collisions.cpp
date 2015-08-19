@@ -282,6 +282,12 @@ static inline bool Collide( const SHAPE_CONVEX& aA, const SHAPE_SEGMENT& aB, int
     return Collide( aA.Vertices(), aB, aClearance, aNeedMTV, aMTV );
 }
 
+static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_RECT& aB, int aClearance,
+                            bool aNeedMTV, VECTOR2I& aMTV )
+{
+    return Collide( aA.Outline(), aB.Outline(), aClearance, aNeedMTV, aMTV );
+}
+
 
 template<class ShapeAType, class ShapeBType>
 inline bool CollCase( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeedMTV, VECTOR2I& aMTV )
@@ -310,11 +316,8 @@ bool CollideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, bool aNeed
         case SH_RECT:
             switch( aB->Type() )
             {
-                case SH_RECT:   // RECT to RECT not yet in use in p&s router
-                    // Should be (todo) somethink like:
-                    //return CollCaseReversed<SHAPE_RECT, SHAPE_RECT>( aA, aB, aClearance, aNeedMTV, aMTV );
-                    assert( aB->Type() != SH_RECT );
-                    return true;
+                case SH_RECT:
+                    return CollCase<SHAPE_RECT, SHAPE_RECT>( aA, aB, aClearance, aNeedMTV, aMTV );
 
                 case SH_CIRCLE:
                     return CollCase<SHAPE_RECT, SHAPE_CIRCLE>( aA, aB, aClearance, aNeedMTV, aMTV );

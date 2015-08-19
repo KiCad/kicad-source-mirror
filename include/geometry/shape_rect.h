@@ -142,6 +142,18 @@ public:
         return true;
     }
 
+    const SHAPE_LINE_CHAIN Outline() const
+    {
+        SHAPE_LINE_CHAIN rv;
+        rv.Append( m_p0 );
+        rv.Append( m_p0.x, m_p0.y + m_w );
+        rv.Append( m_p0.x + m_h, m_p0.y + m_w );
+        rv.Append( m_p0.x + m_h, m_p0.y );
+        rv.Append( m_p0 );
+        rv.SetClosed( true );
+        return rv;
+    }
+
 private:
     ///> Top-left corner
     VECTOR2I m_p0;

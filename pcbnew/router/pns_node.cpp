@@ -185,7 +185,11 @@ struct PNS_NODE::OBSTACLE_VISITOR
     ///> additional clearance
     int m_extraClearance;
 
-    OBSTACLE_VISITOR( PNS_NODE::OBSTACLES& aTab, const PNS_ITEM* aItem, int aKindMask ) :
+    bool m_differentNetsOnly;
+
+    int m_forceClearance;
+
+    OBSTACLE_VISITOR( PNS_NODE::OBSTACLES& aTab, const PNS_ITEM* aItem, int aKindMask, bool aDifferentNetsOnly ) :
         m_node( NULL ),
         m_override( NULL ),
         m_tab( aTab ),
@@ -193,7 +197,9 @@ struct PNS_NODE::OBSTACLE_VISITOR
         m_kindMask( aKindMask ),
         m_limitCount( -1 ),
         m_matchCount( 0 ),
-        m_extraClearance( 0 )
+        m_extraClearance( 0 ),
+        m_differentNetsOnly( aDifferentNetsOnly ),
+        m_forceClearance( -1 )
     {
        if( aItem->Kind() == PNS_ITEM::LINE )
             m_extraClearance += static_cast<const PNS_LINE*>( aItem )->Width() / 2;
@@ -228,7 +234,10 @@ struct PNS_NODE::OBSTACLE_VISITOR
         if( aItem->Kind() == PNS_ITEM::LINE )
             clearance += static_cast<PNS_LINE*>( aItem )->Width() / 2;
 
-        if( !aItem->Collide( m_item, clearance ) )
+        if( m_forceClearance >= 0 )
+            clearance = m_forceClearance;
+
+        if( !aItem->Collide( m_item, clearance, m_differentNetsOnly ) )
             return true;
 
         PNS_OBSTACLE obs;
@@ -248,9 +257,9 @@ struct PNS_NODE::OBSTACLE_VISITOR
 
 
 int PNS_NODE::QueryColliding( const PNS_ITEM* aItem,
-        PNS_NODE::OBSTACLES& aObstacles, int aKindMask, int aLimitCount )
+        PNS_NODE::OBSTACLES& aObstacles, int aKindMask, int aLimitCount, bool aDifferentNetsOnly, int aForceClearance )
 {
-    OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask );
+    OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly );
 
 #ifdef DEBUG
     assert( allocNodes.find( this ) != allocNodes.end() );
@@ -258,7 +267,7 @@ int PNS_NODE::QueryColliding( const PNS_ITEM* aItem,
 
     visitor.SetCountLimit( aLimitCount );
     visitor.SetWorld( this, NULL );
-
+    visitor.m_forceClearance = aForceClearance;
     // first, look for colliding items in the local index
     m_index->Query( aItem, m_maxClearance, visitor );
 
@@ -273,7 +282,9 @@ int PNS_NODE::QueryColliding( const PNS_ITEM* aItem,
 }
 
 
-PNS_NODE::OPT_OBSTACLE PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKindMask )
+PNS_NODE::OPT_OBSTACLE PNS_NODE::NearestObstacle(   const PNS_LINE* aItem,
+                                                    int aKindMask,
+                                                    const std::set<PNS_ITEM*>* aRestrictedSet )
 {
     OBSTACLES obs_list;
     bool found_isects = false;
@@ -293,7 +304,6 @@ PNS_NODE::OPT_OBSTACLE PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKi
     if( aItem->EndsWithVia() )
         n += QueryColliding( &aItem->Via(), obs_list, aKindMask );
 
-    // if(! QueryColliding ( aItem, obs_list, aKindMask ))
     if( !n )
         return OPT_OBSTACLE();
 
@@ -307,6 +317,9 @@ PNS_NODE::OPT_OBSTACLE PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKi
     {
         VECTOR2I ip_first, ip_last;
         int dist_max = INT_MIN;
+
+        if( aRestrictedSet && aRestrictedSet->find( obs.m_item ) == aRestrictedSet->end() )
+            continue;
 
         std::vector<SHAPE_LINE_CHAIN::INTERSECTION> isect_list;
 

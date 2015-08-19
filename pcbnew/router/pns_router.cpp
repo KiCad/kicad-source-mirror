@@ -125,6 +125,9 @@ int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* a
 
     bool linesOnly = aA->OfKind( PNS_ITEM::SEGMENT | PNS_ITEM::LINE ) && aB->OfKind( PNS_ITEM::SEGMENT | PNS_ITEM::LINE );
 
+    if( net_a == net_b )
+        return 0;
+
     if( linesOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
     {
         cl_a = cl_b = m_router->Sizes().DiffPairGap() - 2 * PNS_HULL_MARGIN;
@@ -1039,6 +1042,10 @@ void PNS_ROUTER::DumpLog()
     {
         case DRAG_SEGMENT:
             logger = m_dragger->Logger();
+            break;
+
+        case ROUTE_TRACK:
+            logger = m_placer->Logger();
             break;
 
         default:

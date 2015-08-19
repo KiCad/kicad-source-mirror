@@ -396,3 +396,34 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
 
     return true;
 }
+
+const std::set<PNS_ITEM*> PNS_TOPOLOGY::AssembleCluster( PNS_ITEM* aStart, int aLayer )
+{
+    std::set<PNS_ITEM*> visited;
+    std::deque<PNS_ITEM*> pending;
+
+    pending.push_back( aStart );
+
+    while( !pending.empty() )
+    {
+        PNS_NODE::OBSTACLES obstacles;
+        PNS_ITEM* top = pending.front();
+
+        pending.pop_front();
+
+        visited.insert( top );
+
+        m_world->QueryColliding( top, obstacles, PNS_ITEM::ANY, -1, false, 0 );
+
+        BOOST_FOREACH( PNS_OBSTACLE& obs, obstacles )
+        {
+            if( visited.find( obs.m_item ) == visited.end() && obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
+            {
+                visited.insert( obs.m_item );
+                pending.push_back( obs.m_item );
+            }
+        }
+    }
+
+    return visited;
+}

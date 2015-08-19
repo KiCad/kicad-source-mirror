@@ -184,7 +184,9 @@ public:
     int QueryColliding( const PNS_ITEM* aItem,
                         OBSTACLES&      aObstacles,
                         int             aKindMask = PNS_ITEM::ANY,
-                        int             aLimitCount = -1 );
+                        int             aLimitCount = -1,
+                        bool            aDifferentNetsOnly = true,
+                        int             aForceClearance = -1 );
 
     /**
      * Function NearestObstacle()
@@ -195,8 +197,9 @@ public:
      * @param aKindMask mask of obstacle types to take into account
      * @return the obstacle, if found, otherwise empty.
      */
-    OPT_OBSTACLE NearestObstacle( const PNS_LINE*   aItem,
-                                  int               aKindMask = PNS_ITEM::ANY );
+    OPT_OBSTACLE NearestObstacle( const PNS_LINE*   		 aItem,
+                                  int                		 aKindMask = PNS_ITEM::ANY,
+                                  const std::set<PNS_ITEM*>* aRestrictedSet = NULL );
 
     /**
      * Function CheckColliding()

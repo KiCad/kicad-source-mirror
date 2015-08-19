@@ -184,6 +184,10 @@ public:
     bool IsPlacingVia() const { return m_placingVia; }
 
     void GetModifiedNets( std::vector<int>& aNets ) const;
+
+    PNS_LOGGER* Logger();
+
+
 private:
     /**
      * Function route()

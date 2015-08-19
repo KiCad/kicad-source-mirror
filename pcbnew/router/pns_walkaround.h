@@ -21,6 +21,8 @@
 #ifndef __PNS_WALKAROUND_H
 #define __PNS_WALKAROUND_H
 
+#include <set>
+
 #include "pns_line.h"
 #include "pns_node.h"
 #include "pns_router.h"
@@ -105,6 +107,14 @@ public:
         m_forceWinding = aEnabled;
     }
 
+    void RestrictToSet( bool aEnabled, const std::set<PNS_ITEM*>& aSet )
+    {
+        if( aEnabled )
+            m_restrictedSet = aSet;
+        else
+            m_restrictedSet.clear();
+    }
+
     WALKAROUND_STATUS Route( const PNS_LINE& aInitialPath, PNS_LINE& aWalkPath,
             bool aOptimize = true );
 
@@ -133,6 +143,7 @@ private:
     PNS_NODE::OPT_OBSTACLE m_currentObstacle[2];
     bool m_recursiveCollision[2];
     PNS_LOGGER m_logger;
+    std::set<PNS_ITEM*> m_restrictedSet;
 };
 
 #endif    // __PNS_WALKAROUND_H

@@ -39,6 +39,7 @@
 #include "pns_router.h"
 #include "pns_shove.h"
 #include "pns_utils.h"
+#include "pns_topology.h"
 
 #include "time_limit.h"
 
@@ -242,7 +243,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
         return SH_OK;
     }
 
-    return failingDirCheck ? SH_OK : SH_INCOMPLETE;
+    return SH_INCOMPLETE;
 }
 
 
@@ -277,7 +278,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ProcessSingleLine( PNS_LINE& aCurrent, PNS_LI
         int w = aObstacle.Width();
         int n_segs = aCurrent.SegmentCount();
 
-        int clearance = getClearance( &aCurrent, &aObstacle );
+        int clearance = getClearance( &aCurrent, &aObstacle ) + 1;
 
         HULL_SET hulls;
 
@@ -313,6 +314,18 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSegment( PNS_LINE& aCurrent, PNS_S
 
     SHOVE_STATUS rv = ProcessSingleLine( aCurrent, obstacleLine, shovedLine );
 
+    const double extensionWalkThreshold = 1.0;
+
+    double obsLen = obstacleLine.CLine().Length();
+    double shovedLen = shovedLine.CLine().Length();
+    double extensionFactor = 0.0;
+
+    if( obsLen != 0.0f )
+        extensionFactor = shovedLen / obsLen - 1.0;
+
+    if( extensionFactor > extensionWalkThreshold )
+        return SH_TRY_WALK;
+
     assert( obstacleLine.LayersOverlap( &shovedLine ) );
 
 #ifdef DEBUG
@@ -333,11 +346,11 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSegment( PNS_LINE& aCurrent, PNS_S
             m_newHead = shovedLine;
         }
 
-        sanityCheck( &obstacleLine, &shovedLine );
-        replaceItems( &obstacleLine, &shovedLine );
-
         int rank = aCurrent.Rank();
         shovedLine.SetRank( rank - 1 );
+
+        sanityCheck( &obstacleLine, &shovedLine );
+        replaceItems( &obstacleLine, &shovedLine );
 
         if( !pushLine( shovedLine ) )
             rv = SH_INCOMPLETE;
@@ -380,15 +393,13 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingLine( PNS_LINE& aCurrent, PNS_LINE
         if( !pushLine( shovedLine ) )
         {
             rv = SH_INCOMPLETE;
-            //printf( "pushLine failed\n" );
         }
     }
 
     return rv;
 }
 
-
-PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_SOLID* aObstacleSolid )
+PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_ITEM* aObstacle )
 {
     PNS_WALKAROUND walkaround( m_currentNode, Router() );
     PNS_LINE walkaroundLine( aCurrent );
@@ -411,54 +422,87 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_SOL
             }
         }
 
-        if( via && m_currentNode->CheckColliding( via, aObstacleSolid ) )
-            return onCollidingVia( aObstacleSolid, via );
+        if( via && m_currentNode->CheckColliding( via, aObstacle ) )
+            return onCollidingVia( aObstacle, via );
     }
 
-    walkaround.SetSolidsOnly( true );
-    walkaround.SetIterationLimit ( 8 ); // fixme: make configurable
+    PNS_TOPOLOGY topo( m_currentNode );
+
+    std::set<PNS_ITEM*> cluster = topo.AssembleCluster( aObstacle, aCurrent.Layers().Start() );
+
+#ifdef DEBUG
+    m_logger.NewGroup( "on-colliding-solid-cluster", m_iter );
+    BOOST_FOREACH( PNS_ITEM* item, cluster )
+    {
+        m_logger.Log( item, 0, "cluster-entry" );
+    }
+#endif
+
+    walkaround.SetSolidsOnly( false );
+    walkaround.RestrictToSet( true, cluster );
+    walkaround.SetIterationLimit( 16 ); // fixme: make configurable
 
     int currentRank = aCurrent.Rank();
     int nextRank;
 
-    if( !Settings().JumpOverObstacles() )
+    for( int attempt = 0; attempt < 2; attempt++ )
     {
-        nextRank = currentRank + 10000;
-        walkaround.SetSingleDirection( false );
-    }
-    else
-    {
-        nextRank = currentRank - 1;
-        walkaround.SetSingleDirection( true );
-    }
 
-    if( walkaround.Route( aCurrent, walkaroundLine, false ) != PNS_WALKAROUND::DONE )
-        return SH_INCOMPLETE;
+        if( attempt == 1 || Settings().JumpOverObstacles() )
+        {
+            nextRank = currentRank - 1;
+            walkaround.SetSingleDirection( true );
+        }
+        else
+        {
+            nextRank = currentRank + 10000;
+            walkaround.SetSingleDirection( false );
+        }
 
-    walkaroundLine.ClearSegmentLinks();
-    walkaroundLine.Unmark();
-    walkaroundLine.Line().Simplify();
 
-    if( walkaroundLine.HasLoops() )
-        return SH_INCOMPLETE;
-
-    if( aCurrent.Marker() & MK_HEAD )
-    {
-        walkaroundLine.Mark( MK_HEAD );
-
-        if( m_multiLineMode )
+    	if( walkaround.Route( aCurrent, walkaroundLine, false ) != PNS_WALKAROUND::DONE )
             return SH_INCOMPLETE;
 
-        m_newHead = walkaroundLine;
+        walkaroundLine.ClearSegmentLinks();
+        walkaroundLine.Unmark();
+    	walkaroundLine.Line().Simplify();
+
+    	if( walkaroundLine.HasLoops() )
+            return SH_INCOMPLETE;
+
+    	if( aCurrent.Marker() & MK_HEAD )
+    	{
+            walkaroundLine.Mark( MK_HEAD );
+
+            if( m_multiLineMode )
+                return SH_INCOMPLETE;
+
+            m_newHead = walkaroundLine;
+        }
+
+    	sanityCheck( &aCurrent, &walkaroundLine );
+
+        if( !m_lineStack.empty() )
+        {
+            PNS_LINE lastLine = m_lineStack.front();
+
+            if( m_currentNode->CheckColliding( &lastLine, &walkaroundLine ) )
+            {
+                PNS_LINE dummy ( lastLine );
+
+                if( ProcessSingleLine( walkaroundLine, lastLine, dummy ) == SH_OK )
+                    break;
+            } else
+                break;
+        }
     }
 
-    sanityCheck( &aCurrent, &walkaroundLine );
     replaceItems( &aCurrent, &walkaroundLine );
     walkaroundLine.SetRank( nextRank );
 
 #ifdef DEBUG
     m_logger.NewGroup( "on-colliding-solid", m_iter );
-    m_logger.Log( aObstacleSolid, 0, "obstacle-solid" );
+    m_logger.Log( aObstacle, 0, "obstacle-solid" );
     m_logger.Log( &aCurrent, 1, "current-line" );
     m_logger.Log( &walkaroundLine, 3, "walk-line" );
 #endif
@@ -620,7 +664,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
             replaceItems( &lp.first, &lp.second );
             lp.second.SetRank( aCurrentRank - 1 );
 
-            if( !pushLine( lp.second ) )
+            if( !pushLine( lp.second, true ) )
                 return SH_INCOMPLETE;
         }
         else
@@ -807,12 +851,20 @@ void PNS_SHOVE::unwindStack( PNS_ITEM* aItem )
 }
 
 
-bool PNS_SHOVE::pushLine( const PNS_LINE& aL )
+bool PNS_SHOVE::pushLine( const PNS_LINE& aL, bool aKeepCurrentOnTop )
 {
     if( aL.LinkCount() >= 0 && ( aL.LinkCount() != aL.SegmentCount() ) )
         return false;
 
-    m_lineStack.push_back( aL );
+    if( aKeepCurrentOnTop && m_lineStack.size() > 0)
+    {
+        m_lineStack.insert( m_lineStack.begin() + m_lineStack.size() - 1, aL );
+    }
+    else
+    {
+        m_lineStack.push_back( aL );
+    }
+
     m_optimizerQueue.push_back( aL );
 
     return true;
@@ -919,6 +971,11 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
         case PNS_ITEM::SEGMENT:
             TRACE( 2, "iter %d: collide-segment ", aIter );
             st = onCollidingSegment( currentLine, (PNS_SEGMENT*) ni );
+
+            if( st == SH_TRY_WALK )
+            {
+                st = onCollidingSolid( currentLine, (PNS_SOLID*) ni );
+            }
             break;
 
         case PNS_ITEM::VIA:

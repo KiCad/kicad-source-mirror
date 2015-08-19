@@ -270,18 +270,18 @@ public:
      * @return true, if a collision was found.
      */
     virtual bool Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
-            VECTOR2I& aMTV ) const;
+            VECTOR2I& aMTV,  bool aDifferentNetsOnly = true ) const;
 
     /**
      * Function Collide()
      *
      * A shortcut for PNS_ITEM::Colllide() without MTV stuff.
      */
-    bool Collide( const PNS_ITEM* aOther, int aClearance ) const
+  	bool Collide( const PNS_ITEM* aOther, int aClearance, bool aDifferentNetsOnly = true ) const
     {
         VECTOR2I dummy;
 
-        return Collide( aOther, aClearance, false, dummy );
+        return Collide( aOther, aClearance, false, dummy, aDifferentNetsOnly );
     }
 
     /**
@@ -332,7 +332,7 @@ public:
 
 private:
     bool collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
-            VECTOR2I& aMTV ) const;
+            VECTOR2I& aMTV, bool aDifferentNetsOnly ) const;
 
 protected:
     PnsKind                 m_kind;

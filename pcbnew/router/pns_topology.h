@@ -61,6 +61,8 @@ public:
     const PNS_LINE DpCoupledLine( PNS_LINE* aLine );
     bool AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair );
 
+    const std::set<PNS_ITEM*> AssembleCluster( PNS_ITEM* aStart, int aLayer );
+
 private:
     bool followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& aSet, std::set<PNS_ITEM*>& aVisited );
 

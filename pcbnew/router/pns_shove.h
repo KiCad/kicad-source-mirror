@@ -49,7 +49,8 @@ public:
         SH_OK = 0,
         SH_NULL,
         SH_INCOMPLETE,
-        SH_HEAD_MODIFIED
+        SH_HEAD_MODIFIED,
+        SH_TRY_WALK
     };
 
     PNS_SHOVE( PNS_NODE* aWorld, PNS_ROUTER* aRouter );
@@ -110,7 +111,7 @@ private:
 
     SHOVE_STATUS onCollidingLine( PNS_LINE& aCurrent, PNS_LINE& aObstacle );
     SHOVE_STATUS onCollidingSegment( PNS_LINE& aCurrent, PNS_SEGMENT* aObstacleSeg );
-    SHOVE_STATUS onCollidingSolid( PNS_LINE& aCurrent, PNS_SOLID* aObstacleSolid );
+    SHOVE_STATUS onCollidingSolid( PNS_LINE& aCurrent, PNS_ITEM* aObstacle );
     SHOVE_STATUS onCollidingVia( PNS_ITEM* aCurrent, PNS_VIA* aObstacleVia );
     SHOVE_STATUS onReverseCollidingVia( PNS_LINE& aCurrent, PNS_VIA* aObstacleVia );
     SHOVE_STATUS pushVia( PNS_VIA* aVia, const VECTOR2I& aForce, int aCurrentRank, bool aDryRun = false );
@@ -122,7 +123,7 @@ private:
 
     void runOptimizer( PNS_NODE* aNode );
 
-    bool pushLine( const PNS_LINE& aL );
+    bool pushLine( const PNS_LINE& aL, bool aKeepCurrentOnTop = false );
     void popLine();
 
     PNS_LINE assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );

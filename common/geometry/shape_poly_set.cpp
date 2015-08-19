@@ -206,8 +206,6 @@ const SHAPE_LINE_CHAIN SHAPE_POLY_SET::convertFromClipper( const Path& aPath )
     return lc;
 }
 
-#include <common.h>
-#include <wx/wx.h>
 void SHAPE_POLY_SET::booleanOp( ClipType aType, const SHAPE_POLY_SET& aOtherShape,
                                 bool aFastMode )
 {

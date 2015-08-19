@@ -22,10 +22,10 @@
 #include "pns_line.h"
 
 bool PNS_ITEM::collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
-        VECTOR2I& aMTV ) const
+        VECTOR2I& aMTV, bool aDifferentNetsOnly ) const
 {
     // same nets? no collision!
-    if( m_net == aOther->m_net )
+    if( aDifferentNetsOnly && m_net == aOther->m_net )
         return false;
 
     // check if we are not on completely different layers first
@@ -39,9 +39,9 @@ bool PNS_ITEM::collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeed
 
 
 bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
-        VECTOR2I& aMTV ) const
+        VECTOR2I& aMTV, bool aDifferentNetsOnly ) const
 {
-    if( collideSimple( aOther, aClearance, aNeedMTV, aMTV ) )
+    if( collideSimple( aOther, aClearance, aNeedMTV, aMTV, aDifferentNetsOnly ) )
         return true;
 
     // special case for "head" line with a via attached at the end.
@@ -50,7 +50,7 @@ bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
         const PNS_LINE* line = static_cast<const PNS_LINE*>( aOther );
 
         if( line->EndsWithVia() )
-            return collideSimple( &line->Via(), aClearance - line->Width() / 2, aNeedMTV, aMTV );
+            return collideSimple( &line->Via(), aClearance - line->Width() / 2, aNeedMTV, aMTV, aDifferentNetsOnly );
     }
 
     return false;
