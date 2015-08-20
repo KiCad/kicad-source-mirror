@@ -808,21 +808,6 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_MOVE_MODULE_REQUEST,
                      msg, KiBitmap( move_module_xpm ) );
 
-        msg = AddHotkeyName( _( "Duplicate Footprint" ), g_Board_Editor_Hokeys_Descr,
-                             HK_DUPLICATE_ITEM );
-        AddMenuItem( menu, ID_POPUP_PCB_DUPLICATE_ITEM,
-                     msg, KiBitmap( duplicate_module_xpm ) );
-
-        msg = AddHotkeyName( _("Move Footprint Exactly" ), g_Board_Editor_Hokeys_Descr,
-                             HK_MOVE_ITEM_EXACT );
-        AddMenuItem( menu, ID_POPUP_PCB_MOVE_EXACT,
-                     msg, KiBitmap( move_module_xpm ) );
-
-        msg = AddHotkeyName( _("Create Footprint Array" ), g_Board_Editor_Hokeys_Descr,
-                             HK_CREATE_ARRAY );
-        AddMenuItem( menu, ID_POPUP_PCB_CREATE_ARRAY,
-                     msg, KiBitmap( array_module_xpm ) );
-
         msg = AddHotkeyName( _( "Drag" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM  );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
                      msg, KiBitmap( drag_module_xpm ) );
@@ -855,6 +840,26 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
                              g_Board_Editor_Hokeys_Descr, HK_DELETE );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,
                      msg, KiBitmap( delete_module_xpm ) );
+
+        sub_menu_footprint->AppendSeparator();
+
+        msg = AddHotkeyName( _("Move Footprint Exactly" ), g_Board_Editor_Hokeys_Descr,
+                             HK_MOVE_ITEM_EXACT );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_MOVE_EXACT,
+                     msg, KiBitmap( move_module_xpm ) );
+
+        msg = AddHotkeyName( _( "Duplicate Footprint" ), g_Board_Editor_Hokeys_Descr,
+                             HK_DUPLICATE_ITEM );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DUPLICATE_ITEM,
+                     msg, KiBitmap( duplicate_module_xpm ) );
+
+        msg = AddHotkeyName( _("Create Footprint Array" ), g_Board_Editor_Hokeys_Descr,
+                             HK_CREATE_ARRAY );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_CREATE_ARRAY,
+                     msg, KiBitmap( array_module_xpm ) );
+
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EXCHANGE_FOOTPRINTS,
+                     _( "Exchange Footprint(s)" ), KiBitmap( import_module_xpm ) );
     }
 }
 

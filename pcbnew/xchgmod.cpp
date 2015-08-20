@@ -91,6 +91,7 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* 
     init();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 
@@ -114,17 +115,17 @@ void DIALOG_EXCHANGE_MODULE::init()
 {
     SetFocus();
 
-    m_OldModule->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
-    m_NewModule->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
-    m_CurrValue->AppendText( m_currentModule->GetValue() );
-    m_CurrReference->AppendText( m_currentModule->GetReference() );
+    m_CurrentFootprintFPID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+    m_NewFootprintFPID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+    m_CmpValue->AppendText( m_currentModule->GetValue() );
+    m_CmpReference->AppendText( m_currentModule->GetReference() );
     m_Selection->SetString( 0, wxString::Format(
                             _("Change footprint of '%s'" ),
                             GetChars( m_currentModule->GetReference() ) ) );
-    wxString fpname = m_OldModule->GetValue().AfterLast(':');
+    wxString fpname = m_CurrentFootprintFPID->GetValue().AfterLast(':');
 
     if( fpname.IsEmpty() )    // Happens for old fp names
-        fpname = m_OldModule->GetValue();
+        fpname = m_CurrentFootprintFPID->GetValue();
 
     m_Selection->SetString( 1, wxString::Format(
                             _("Change footprints '%s'" ),
@@ -192,7 +193,7 @@ void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
         break;
     }
 
-    m_NewModule->Enable( enable );
+    m_NewFootprintFPID->Enable( enable );
     m_Browsebutton->Enable( enable );
 }
 
@@ -234,7 +235,7 @@ void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
  */
 bool DIALOG_EXCHANGE_MODULE::changeCurrentFootprint()
 {
-    wxString newmodulename = m_NewModule->GetValue();
+    wxString newmodulename = m_NewFootprintFPID->GetValue();
 
     if( newmodulename == wxEmptyString )
         return false;
@@ -260,7 +261,7 @@ bool DIALOG_EXCHANGE_MODULE::changeSameFootprints( bool aUseValue )
     MODULE*  Module;
     MODULE*  PtBack;
     bool     change = false;
-    wxString newmodulename = m_NewModule->GetValue();
+    wxString newmodulename = m_NewFootprintFPID->GetValue();
     wxString value;
     FPID     lib_reference;
     bool     check_module_value = false;
@@ -483,9 +484,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
 }
 
 
-/*
- * Displays the list of modules in library name and select a footprint.
- */
+// Displays the list of available footprints in library name and select a footprint.
 void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname;
@@ -494,13 +493,11 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
                                          Prj().PcbFootprintLibs() );
 
     if( newname != wxEmptyString )
-        m_NewModule->SetValue( newname );
+        m_NewFootprintFPID->SetValue( newname );
 }
 
 
-/*
- * Displays the footprint viewer to select a footprint.
- */
+// Runs the footprint viewer to select a footprint.
 void DIALOG_EXCHANGE_MODULE::ViewAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname;
@@ -509,7 +506,7 @@ void DIALOG_EXCHANGE_MODULE::ViewAndSelectFootprint( wxCommandEvent& event )
 
     if( frame->ShowModal( &newname, this ) )
     {
-        m_NewModule->SetValue( newname );
+        m_NewFootprintFPID->SetValue( newname );
     }
 
     frame->Destroy();

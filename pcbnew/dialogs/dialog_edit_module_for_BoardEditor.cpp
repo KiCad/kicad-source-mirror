@@ -190,7 +190,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
 void DIALOG_MODULE_BOARD_EDITOR::OnCancelClick( wxCommandEvent& event )
 {
-    ENDQUASIMODAL( -1 );
+    EndModal( PRM_EDITOR_ABORT );
 }
 
 
@@ -202,17 +202,13 @@ void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
         m_Parent->OnModify();
     }
 
-    ENDQUASIMODAL( 2 );
+    EndModal( PRM_EDITOR_WANT_MODEDIT );
 }
 
 
 void DIALOG_MODULE_BOARD_EDITOR::ExchangeModule( wxCommandEvent& event )
 {
-    m_Parent->InstallExchangeModuleFrame( m_CurrentModule );
-
-    // Warning: m_CurrentModule was deleted by exchange module
-    m_Parent->SetCurItem( NULL );
-    ENDQUASIMODAL( 0 );
+    EndModal( PRM_EDITOR_WANT_EXCHANGE_FP );
 }
 
 
@@ -694,7 +690,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_Parent->OnModify();
 
-    ENDQUASIMODAL( 1 );
+    EndModal( PRM_EDITOR_EDIT_OK );
 
     if( m_DC )
     {

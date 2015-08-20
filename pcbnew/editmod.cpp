@@ -51,29 +51,30 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
     if( Module == NULL )
         return;
 
-#ifndef __WXMAC__
-    DIALOG_MODULE_BOARD_EDITOR* dialog = new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
-#else
+#ifdef __WXMAC__
     // avoid Avoid "writes" in the dialog, creates errors with WxOverlay and NSView & Modal
     // Raising an Exception - Fixes #764678
-    DIALOG_MODULE_BOARD_EDITOR* dialog = new DIALOG_MODULE_BOARD_EDITOR( this, Module, NULL );
+    DC = NULL;
 #endif
 
-    int retvalue = dialog->SHOWQUASIMODAL();    /* retvalue =
-                                                 *  -1 if abort,
-                                                 *  0 if exchange module,
-                                                 *  1 for normal edition
-                                                 *  and 2 for a goto editor command
-                                                 */
-    dialog->Destroy();
+    DIALOG_MODULE_BOARD_EDITOR* dlg = new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
+
+    int retvalue = dlg->ShowModal();
+    /* retvalue =
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_ABORT if abort,
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_EXCHANGE_FP if exchange module,
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edition
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_MODEDIT for a goto editor command
+     */
+    dlg->Destroy();
 
 #ifdef __WXMAC__
     // If something edited, push a refresh request
-    if( retvalue == 0 || retvalue == 1 )
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
         m_canvas->Refresh();
 #endif
 
-    if( retvalue == 2 )
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_MODEDIT )
     {
         FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
@@ -82,6 +83,13 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 
         editor->Show( true );
         editor->Raise();        // Iconize( false );
+    }
+
+    if( retvalue == DIALOG_MODULE_BOARD_EDITOR::PRM_EDITOR_WANT_EXCHANGE_FP )
+    {
+        InstallExchangeModuleFrame( Module );
+        // Warning: the current item can be deleted by exchange module
+        SetCurItem( NULL );
     }
 }
 

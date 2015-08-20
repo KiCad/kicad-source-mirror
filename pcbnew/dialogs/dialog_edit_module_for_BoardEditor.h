@@ -27,7 +27,6 @@
 class DIALOG_MODULE_BOARD_EDITOR: public DIALOG_MODULE_BOARD_EDITOR_BASE
 {
 private:
-
     PCB_EDIT_FRAME * m_Parent;
     wxDC * m_DC;
     MODULE* m_CurrentModule;
@@ -41,7 +40,17 @@ private:
     static size_t m_page;     // remember the last open page during session
 
 public:
+    // The dialog can be closed for several reasons.
+    // they are listed here:
+    enum FP_PRM_EDITOR_RETVALUE
+    {
+        PRM_EDITOR_ABORT,
+        PRM_EDITOR_WANT_EXCHANGE_FP,
+        PRM_EDITOR_EDIT_OK,
+        PRM_EDITOR_WANT_MODEDIT
+    };
 
+public:
     // Constructor and destructor
     DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule, wxDC* aDC );
     ~DIALOG_MODULE_BOARD_EDITOR();

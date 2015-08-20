@@ -22,39 +22,23 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Current footprint"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->Wrap( -1 );
-	bLeftSizer->Add( m_staticText6, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextCmpVal = new wxStaticText( this, wxID_ANY, _("Component value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCmpVal->Wrap( -1 );
+	bLeftSizer->Add( m_staticTextCmpVal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_OldModule = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_OldModule->SetMaxLength( 0 ); 
-	bLeftSizer->Add( m_OldModule, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_CmpValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_CmpValue->SetMaxLength( 0 ); 
+	bLeftSizer->Add( m_CmpValue, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Current value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	bLeftSizer->Add( m_staticText7, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTexCmpRef = new wxStaticText( this, wxID_ANY, _("Component reference"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTexCmpRef->Wrap( -1 );
+	bLeftSizer->Add( m_staticTexCmpRef, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_CurrValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_CurrValue->SetMaxLength( 0 ); 
-	bLeftSizer->Add( m_CurrValue, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Current reference"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	bLeftSizer->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_CurrReference = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bLeftSizer->Add( m_CurrReference, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_staticText8 = new wxStaticText( this, wxID_ANY, _("New footprint"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	bLeftSizer->Add( m_staticText8, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_NewModule = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_NewModule->SetMaxLength( 0 ); 
-	bLeftSizer->Add( m_NewModule, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_CmpReference = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	bLeftSizer->Add( m_CmpReference, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bUpperSizer->Add( bLeftSizer, 1, 0, 5 );
+	bUpperSizer->Add( bLeftSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxBoxSizer* bMiddleSizer;
 	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
@@ -66,16 +50,10 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	bMiddleSizer->Add( m_Selection, 0, wxALL, 5 );
 	
 	
-	bUpperSizer->Add( bMiddleSizer, 0, wxALL, 5 );
+	bUpperSizer->Add( bMiddleSizer, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_OKbutton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_OKbutton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_Quitbutton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_Quitbutton, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonCmpList = new wxButton( this, wxID_ANY, _("Export Footprint Association File"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonCmpList, 0, wxALL|wxEXPAND, 5 );
@@ -92,37 +70,67 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	
 	bMainSizer->Add( bUpperSizer, 0, wxALL|wxEXPAND, 5 );
 	
+	m_staticTextCurrFPID = new wxStaticText( this, wxID_ANY, _("Current footprint name (FPID)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCurrFPID->Wrap( -1 );
+	bMainSizer->Add( m_staticTextCurrFPID, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_CurrentFootprintFPID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_CurrentFootprintFPID->SetMaxLength( 0 ); 
+	bMainSizer->Add( m_CurrentFootprintFPID, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticTextNewFPID = new wxStaticText( this, wxID_ANY, _("New footprint name (FPID)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNewFPID->Wrap( -1 );
+	bMainSizer->Add( m_staticTextNewFPID, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_NewFootprintFPID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_NewFootprintFPID->SetMaxLength( 0 ); 
+	bMainSizer->Add( m_NewFootprintFPID, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
 	m_staticTextMsg = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextMsg->Wrap( -1 );
 	bMainSizer->Add( m_staticTextMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_WinMessages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	m_WinMessages->SetMinSize( wxSize( -1,75 ) );
+	m_WinMessages->SetMinSize( wxSize( -1,150 ) );
 	
 	bMainSizer->Add( m_WinMessages, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bSizerButts;
+	bSizerButts = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_Applybutton = new wxButton( this, wxID_OK, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButts->Add( m_Applybutton, 0, wxEXPAND|wxALL, 5 );
+	
+	m_Quitbutton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButts->Add( m_Quitbutton, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	bMainSizer->Add( bSizerButts, 0, wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_Selection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnSelectionClicked ), NULL, this );
-	m_OKbutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnOkClick ), NULL, this );
-	m_Quitbutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnQuit ), NULL, this );
 	m_buttonCmpList->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::RebuildCmpList ), NULL, this );
 	m_Browsebutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::BrowseAndSelectFootprint ), NULL, this );
 	m_buttonFPViewer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
+	m_Applybutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnOkClick ), NULL, this );
+	m_Quitbutton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnQuit ), NULL, this );
 }
 
 DIALOG_EXCHANGE_MODULE_BASE::~DIALOG_EXCHANGE_MODULE_BASE()
 {
 	// Disconnect Events
 	m_Selection->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnSelectionClicked ), NULL, this );
-	m_OKbutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnOkClick ), NULL, this );
-	m_Quitbutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnQuit ), NULL, this );
 	m_buttonCmpList->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::RebuildCmpList ), NULL, this );
 	m_Browsebutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::BrowseAndSelectFootprint ), NULL, this );
 	m_buttonFPViewer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::ViewAndSelectFootprint ), NULL, this );
+	m_Applybutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnOkClick ), NULL, this );
+	m_Quitbutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnQuit ), NULL, this );
 	
 }

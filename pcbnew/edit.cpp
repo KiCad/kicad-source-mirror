@@ -831,6 +831,16 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
+    case ID_POPUP_PCB_EXCHANGE_FOOTPRINTS:
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
+            break;
+
+        InstallExchangeModuleFrame( (MODULE*) GetCurItem() );
+        // Warning: the current item can be deleted by exchange module
+        SetCurItem( NULL );
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
     case ID_POPUP_PCB_EDIT_MODULE_PRMS:
         // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != PCB_MODULE_T )
