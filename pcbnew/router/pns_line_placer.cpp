@@ -943,7 +943,7 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
 
     aNode->Add( &aLatest, true );
 
-    for( int s = 0; s < aLatest.SegmentCount(); s++ )
+    for( int s = 0; s < aLatest.LinkCount(); s++ )
     {
         PNS_SEGMENT* seg = ( *aLatest.LinkedSegments() )[s];
         PNS_LINE ourLine = aNode->AssembleLine( seg );
