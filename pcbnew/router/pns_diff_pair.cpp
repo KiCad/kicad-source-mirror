@@ -282,10 +282,18 @@ void PNS_DP_GATEWAYS::BuildOrthoProjections( PNS_DP_GATEWAYS& aEntries,
 {
     BOOST_FOREACH( PNS_DP_GATEWAY g, aEntries.Gateways() )
     {
-        VECTOR2I dir = ( g.AnchorP() - g.AnchorN() ).Perpendicular();
         VECTOR2I midpoint( ( g.AnchorP() + g.AnchorN() ) / 2 );
-        SEG guide( midpoint, midpoint + dir );
-        VECTOR2I proj = guide.LineProject( aCursorPos );
+        SEG guide_s( midpoint, midpoint + VECTOR2I( 1, 0 ) );
+        SEG guide_d( midpoint, midpoint + VECTOR2I( 1, 1 ) );
+
+        VECTOR2I proj_s = guide_s.LineProject( aCursorPos );
+        VECTOR2I proj_d = guide_d.LineProject( aCursorPos );
+
+        int dist_s = ( proj_s - aCursorPos ).EuclideanNorm();
+        int dist_d = ( proj_d - aCursorPos ).EuclideanNorm();
+
+
+        VECTOR2I proj = ( dist_s < dist_d ? proj_s : proj_d );
 
         PNS_DP_GATEWAYS targets( m_gap );
 
