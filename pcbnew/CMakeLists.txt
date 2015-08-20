@@ -25,6 +25,12 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 endif()
 
 
+if( BUILD_GITHUB_PLUGIN )
+    set( GITHUB_3DLIBRARIES_WIZARD
+            dialogs/wizard_3DShape_Libs_downloader_base.cpp
+            dialogs/wizard_3DShape_Libs_downloader.cpp )
+endif()
+
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
@@ -143,6 +149,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_footprint_wizard_list.cpp
     dialogs/wizard_add_fplib_base.cpp
     dialogs/wizard_add_fplib.cpp
+    ${GITHUB_3DLIBRARIES_WIZARD}
     )
 
 set( PCBNEW_IMPORT_DXF

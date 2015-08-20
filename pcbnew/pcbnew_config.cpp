@@ -174,6 +174,12 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         }
         break;
 
+    case ID_PCB_3DSHAPELIB_WIZARD:
+#ifdef BUILD_GITHUB_PLUGIN
+        Invoke3DShapeLibsDownloaderWizard( this );
+#endif
+        break;
+
     case ID_PCB_MASK_CLEARANCE:
         {
             DIALOG_PADS_MASK_CLEARANCE dlg( this );

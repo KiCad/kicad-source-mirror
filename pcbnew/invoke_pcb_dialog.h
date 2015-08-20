@@ -91,6 +91,16 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal, F
 int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
 
 /**
+ * Function Invoke3DShapeLibsDownloaderWizard
+ * Runs the downloader wizard for easy 3D shape libraries download from
+ * the official Kicad Github repository of *.3Dshape libraries.
+ *
+ * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
+ */
+void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aParent );
+
+
+/**
  * Function InvokePluginOptionsEditor
  * calls DIALOG_FP_PLUGIN_OPTIONS dialog so that plugin options set can be edited.
  *

@@ -494,6 +494,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Edit path configuration environment variables" ),
                  KiBitmap( editor_xpm ) );
 
+#ifdef BUILD_GITHUB_PLUGIN
+    AddMenuItem( configmenu, ID_PCB_3DSHAPELIB_WIZARD,
+                 _( "&3D Shapes Libraries Downloader" ),
+                 _( "Download from Github the 3D shape libraries with wizard" ),
+                 KiBitmap( wizard_add_fplib_small_xpm ) );
+#endif
+
     // Colors and Visibility are also handled by the layers manager toolbar
     AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                  m_show_layer_manager_tools ?

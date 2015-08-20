@@ -615,7 +615,7 @@ void WIZARD_FPLIB_TABLE::getLibsListGithub( wxArrayString& aList )
     }
 
     GITHUB_GETLIBLIST getter( git_url );
-    getter.GetLibraryList( aList );
+    getter.GetFootprintLibraryList( aList );
 
     wxEndBusyCursor();
 }

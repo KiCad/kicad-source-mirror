@@ -51,7 +51,7 @@ set( CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-reorder -Wno-unused-variable -Wno-unused-function -Wno-strict-aliasing" )
 
 set( GITHUB_PLUGIN_SRCS
-    github_plugin.cpp github_getliblist.cpp
+    github_plugin.cpp github_getliblist.cpp html_link_parser.cpp
     )
 
 add_library( github_plugin STATIC ${GITHUB_PLUGIN_SRCS} )

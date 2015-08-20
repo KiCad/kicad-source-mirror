@@ -27,19 +27,58 @@
 
 
 /**
- *   Class GITHUB_GETLIBLIST
- *   implements a portion of pcbnew's PLUGIN interface to provide read only access
- *   to a github repo to extract pretty footprints library list, in json format.
+ * Class GITHUB_GETLIBLIST
+ * implements a portion of pcbnew's PLUGIN interface to provide read only access
+ * to a github repo to extract pretty footprints library list, in json format,
+ * or extract 3D shapes libraries list (.3dshapes folders) and download the 3d shapes files
  *
- *   this plugin simply reads in a zip file of the repo and unzips it from RAM as
- *   needed. Therefore this "Github" plugin is <b>read only for accessing remote
- *   at https://api.github.com/orgs/KiCad/repos</b>
+ * To extract pretty footprints library list, this plugin simply reads in
+ * a zip file of the repo and unzips it from RAM as needed.
+ * Therefore this "Github" plugin is <b>read only for accessing remote
+ * at https://api.github.com/orgs/KiCad/repos</b>
+ *
+ * To extract 3D shapes libraries list (.3dshapes folders) we cannot use api.github.com
+ * to read this list, becuse it is in a subdirectory of https://github.com/KiCad.
+ * The corresponding html page of the server is read, and URLs of all .3dshapes folders
+ * are extracted.
+ * files are then read from https://raw.githubusercontent.com/<lib path>, but not zipped
+ * because they are not accessible in zipped form.
  */
 class GITHUB_GETLIBLIST
 {
 public:
     // -----<API>----------------------------------------------------------
-    bool GetLibraryList( wxArrayString& aList );
+
+    /**
+     * Fills aList by the name of footprint libraries found on the github repo
+     */
+    bool GetFootprintLibraryList( wxArrayString& aList );
+
+    /**
+     * Fills aList by the URL of libraries found on the github repo
+     * @param aList = a reference to a wxArrayString to fill with names
+     * @param aFilter( const wxString& aData ) = a callback funtion to
+     * to filter URLs to put in aList.
+     * If NULL, no URL will be stored in aList
+     */
+    bool Get3DshapesLibsList( wxArrayString* aList,
+                        bool (*aFilter)( const wxString& aData ) );
+
+    /**
+     * @return the buffer which stores all the downloaded raw data
+     */
+    std::string& GetBuffer() { return m_image; }
+
+    /**
+     * Clear the buffer which stores all the downloaded raw data
+     */
+    void ClearBuffer() { m_image.clear(); }
+
+    /**
+     * The library names are expecting ending by .pretty
+     * SetLibraryExt set the extension to aExt
+     */
+    void SetLibraryExt( const wxString& aExt ) { m_libs_ext = aExt; }
 
     // -----</API>---------------------------------------------------------
 
@@ -55,7 +94,7 @@ protected:
      *
      * @param  aRepoURL points to the base of the repo.
      * @param  aFullURLCommand is URL the full URL command (URL+options).
-     * @param  aItemCountMax is the max item count in apage,
+     * @param  aItemCountMax is the max item count in a page,
      *   and is 100 for github repo.
      * @param  aPage is the page number, if there are more than one page in repo.
      * @return bool - true if @a aRepoULR was parseable, else false
@@ -75,8 +114,10 @@ protected:
     bool remote_get_json( std::string* aFullURLCommand, wxString* aMsgError );
 
     wxString m_github_path;     ///< Something like https://api.github.com/orgs/KiCad
-    std::string m_json_image;   ///< image of the text file in its entirety.
-    wxString m_repoURL;         // the URL of the Github repo
+    std::string m_image;        ///< image of the downloaded data in its entirety.
+    wxString m_repoURL;         ///< the URL of the Github repo
+    wxString m_libs_ext;        ///< the extension of the name of libraries (default = .pretty)
+    char m_option_string[64];   ///< option for transfert type, like "application/json"
 };
 
 
