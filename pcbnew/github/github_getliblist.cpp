@@ -75,19 +75,55 @@
 #include <github_getliblist.h>
 #include <macros.h>
 #include <common.h>
+#include <html_link_parser.h>
 
 
 GITHUB_GETLIBLIST::GITHUB_GETLIBLIST( const wxString& aRepoURL )
 {
     m_repoURL = aRepoURL;
+    m_libs_ext =  wxT( ".pretty" );
+    strcpy( m_option_string, "application/json" );
 }
 
 
-bool GITHUB_GETLIBLIST::GetLibraryList( wxArrayString& aList )
+bool GITHUB_GETLIBLIST::Get3DshapesLibsList( wxArrayString* aList,
+                        bool (*aFilter)( const wxString& aData ) )
+{
+    std::string fullURLCommand;
+    strcpy( m_option_string, "text/html" );
+
+    wxString repoURL = m_repoURL;
+
+    wxString errorMsg;
+
+    fullURLCommand = repoURL.utf8_str();
+    bool success = remote_get_json( &fullURLCommand, &errorMsg );
+
+    if( !success )
+    {
+        wxMessageBox( errorMsg );
+        return false;
+    }
+
+    if( aFilter && aList )
+    {
+        //Convert m_image (std::string) to a wxString for HTML_LINK_PARSER
+        wxString buffer( GetBuffer() );
+
+        HTML_LINK_PARSER html_parser( buffer, *aList );
+        html_parser.ParseLinks( aFilter );
+    }
+
+    return true;
+}
+
+
+bool GITHUB_GETLIBLIST::GetFootprintLibraryList( wxArrayString& aList )
 {
     std::string fullURLCommand;
     int page = 1;
     int itemCountMax = 99;              // Do not use a valu > 100, it does not work
+    strcpy( m_option_string, "application/json" );
 
     // Github max items returned is 100 per page
 
@@ -101,12 +137,13 @@ bool GITHUB_GETLIBLIST::GetLibraryList( wxArrayString& aList )
     // The URL lib names are relative to the server name.
     // so add the server name to them.
     wxURI repo( m_repoURL );
-    wxString urlPrefix = wxT( "https://" ) + repo.GetServer() + wxT( "/" );
+    wxString urlPrefix = repo.GetScheme() + wxT( "://" ) + repo.GetServer() + wxT( "/" );
 
     wxString errorMsg;
     const char  sep = ',';      // Separator fields, in json returned file
     wxString    tmp;
     int items_count_per_page = 0;
+    std::string& json_image = GetBuffer();
 
     while( 1 )
     {
@@ -118,9 +155,10 @@ bool GITHUB_GETLIBLIST::GetLibraryList( wxArrayString& aList )
             return false;
         }
 
-        for( unsigned ii = 0; ii < m_json_image.size(); ii++ )
+
+        for( unsigned ii = 0; ii < json_image.size(); ii++ )
         {
-            if( m_json_image[ii] == sep || ii == m_json_image.size() - 1 )
+            if( json_image[ii] == sep || ii == json_image.size() - 1 )
             {
                 if( tmp.StartsWith( wxT( "\"full_name\"" ) ) )
                 {
@@ -129,7 +167,7 @@ bool GITHUB_GETLIBLIST::GetLibraryList( wxArrayString& aList )
                     if( tmp[tmp.Length() - 1] == QUOTE )
                         tmp.RemoveLast();
 
-                    if( tmp.EndsWith( wxT( ".pretty" ) ) )
+                    if( tmp.EndsWith( m_libs_ext ) )
                     {
                         aList.Add( tmp.AfterLast( ':' ) );
                         int idx = aList.GetCount() - 1;
@@ -146,7 +184,7 @@ bool GITHUB_GETLIBLIST::GetLibraryList( wxArrayString& aList )
                 tmp.Clear();
             }
             else
-                tmp << m_json_image[ii];
+                tmp << json_image[ii];
         }
 
         if( items_count_per_page >= itemCountMax )
@@ -154,7 +192,7 @@ bool GITHUB_GETLIBLIST::GetLibraryList( wxArrayString& aList )
             page++;
             repoURL2listURL( m_repoURL, &fullURLCommand, itemCountMax, page );
             items_count_per_page = 0;
-            m_json_image.clear();
+            ClearBuffer();
         }
         else
             break;

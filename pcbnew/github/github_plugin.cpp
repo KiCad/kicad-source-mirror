@@ -592,8 +592,9 @@ bool GITHUB_GETLIBLIST::remote_get_json( std::string* aFullURLCommand, wxString*
     avhttp::http_stream     h( io );
     avhttp::request_opts    options;
 
-    options.insert( "Accept",       "application/json" );
-    options.insert( "User-Agent",   "http://kicad-pcb.org" );   // THAT WOULD BE ME.
+
+    options.insert( "Accept", m_option_string );
+    options.insert( "User-Agent", "http://kicad-pcb.org" );   // THAT WOULD BE ME.
     h.request_options( options );
 
     try
@@ -603,8 +604,8 @@ bool GITHUB_GETLIBLIST::remote_get_json( std::string* aFullURLCommand, wxString*
         h.open( *aFullURLCommand );      // only one file, therefore do it synchronously.
         os << &h;
 
-        // Keep json text file image in RAM.
-        m_json_image = os.str();
+        // Keep downloaded text file image in RAM.
+        m_image = os.str();
 
         // 4 lines, using SSL, top that.
     }
@@ -613,7 +614,7 @@ bool GITHUB_GETLIBLIST::remote_get_json( std::string* aFullURLCommand, wxString*
         // https "GET" has faild, report this to API caller.
         static const char errorcmd[] = "https GET command failed";  // Do not translate this message
 
-        UTF8 fmt( _( "%s\nCannot get/download json data from: '%s'\nReason: '%s'" ) );
+        UTF8 fmt( _( "%s\nCannot get/download data from: '%s'\nReason: '%s'" ) );
 
         std::string msg = StrPrintf( fmt.c_str(),
                 errorcmd,
@@ -625,7 +626,7 @@ bool GITHUB_GETLIBLIST::remote_get_json( std::string* aFullURLCommand, wxString*
 
         if( aMsgError )
         {
-            *aMsgError =  msg;
+            *aMsgError = FROM_UTF8( msg.c_str() );
             return false;
         }
     }
