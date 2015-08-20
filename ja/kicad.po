@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-07-17 00:32+0900\n"
-"PO-Revision-Date: 2015-07-21 23:58+0900\n"
-"Last-Translator: yoneken <yoneken@kicad.jp>\n"
+"PO-Revision-Date: 2015-08-20 04:29+0900\n"
+"Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /Users/yoneken/workspace/emb/kicad/testing\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
 "X-Poedit-SearchPath-2: eeschema\n"
@@ -192,8 +192,7 @@ msgstr "プロジェクトを開く(&O)"
 msgid "Open existing project"
 msgstr "既存のプロジェクトを開く"
 
-#: kicad/menubar.cpp:224 pcbnew/menubar_pcbframe.cpp:94
-#: eeschema/menubar.cpp:97
+#: kicad/menubar.cpp:224 pcbnew/menubar_pcbframe.cpp:94 eeschema/menubar.cpp:97
 msgid "Open &Recent"
 msgstr "最近開いたファイル (&R)"
 
@@ -389,9 +388,8 @@ msgstr "KiCadプロジェクト マネージャーについて"
 #: kicad/menubar.cpp:431 pcbnew/menubar_modedit.cpp:358
 #: pcbnew/menubar_pcbframe.cpp:655 pcbnew/tool_modview.cpp:206
 #: eeschema/menubar.cpp:509 eeschema/menubar_libedit.cpp:283
-#: eeschema/tool_viewlib.cpp:267 cvpcb/menubar.cpp:135
-#: gerbview/menubar.cpp:236 3d-viewer/3d_toolbar.cpp:135
-#: pagelayout_editor/menubar.cpp:163
+#: eeschema/tool_viewlib.cpp:267 cvpcb/menubar.cpp:135 gerbview/menubar.cpp:236
+#: 3d-viewer/3d_toolbar.cpp:135 pagelayout_editor/menubar.cpp:163
 msgid "&File"
 msgstr "ファイル(&F)"
 
@@ -412,8 +410,8 @@ msgstr "ツール(&T)"
 #: kicad/menubar.cpp:435 pcbnew/menubar_modedit.cpp:364
 #: pcbnew/menubar_pcbframe.cpp:664 pcbnew/tool_modview.cpp:209
 #: eeschema/menubar.cpp:515 eeschema/menubar_libedit.cpp:288
-#: eeschema/tool_viewlib.cpp:270 cvpcb/menubar.cpp:137
-#: gerbview/menubar.cpp:239 pagelayout_editor/menubar.cpp:165
+#: eeschema/tool_viewlib.cpp:270 cvpcb/menubar.cpp:137 gerbview/menubar.cpp:239
+#: pagelayout_editor/menubar.cpp:165
 msgid "&Help"
 msgstr "ヘルプ(&H)"
 
@@ -1094,8 +1092,7 @@ msgstr "マーカ @(%d,%d)"
 msgid "Target size %s"
 msgstr "ターゲットサイズ %s"
 
-#: pcbnew/class_module.cpp:561
-#: eeschema/dialogs/dialog_choose_component.cpp:273
+#: pcbnew/class_module.cpp:561 eeschema/dialogs/dialog_choose_component.cpp:273
 msgid "Unknown"
 msgstr "不明"
 
@@ -1974,9 +1971,8 @@ msgstr "警告: ゾーンの表示がOFFになっています!!!"
 msgid "Add keepout"
 msgstr "キープアウト(禁止)エリアの追加"
 
-#: pcbnew/edit.cpp:1450 pcbnew/menubar_pcbframe.cpp:421
-#: pcbnew/tool_pcb.cpp:470 pcbnew/tools/common_actions.cpp:384
-#: pcbnew/tools/pcb_editor_control.cpp:343
+#: pcbnew/edit.cpp:1450 pcbnew/menubar_pcbframe.cpp:421 pcbnew/tool_pcb.cpp:470
+#: pcbnew/tools/common_actions.cpp:384 pcbnew/tools/pcb_editor_control.cpp:343
 msgid "Add layer alignment target"
 msgstr "層合わせマーク(ターゲットマーク)の入力"
 
@@ -2013,8 +2009,8 @@ msgstr "円入力"
 msgid "Add text"
 msgstr "テキストの追加"
 
-#: pcbnew/edit.cpp:1482 pcbnew/menubar_pcbframe.cpp:417
-#: pcbnew/tool_pcb.cpp:467 pcbnew/tools/drawing_tool.cpp:248
+#: pcbnew/edit.cpp:1482 pcbnew/menubar_pcbframe.cpp:417 pcbnew/tool_pcb.cpp:467
+#: pcbnew/tools/drawing_tool.cpp:248
 msgid "Add dimension"
 msgstr "寸法線入力"
 
@@ -3844,8 +3840,8 @@ msgstr "パッドの設定"
 #: eeschema/onrightclick.cpp:186 eeschema/dialogs/dialog_netlist_base.cpp:49
 #: eeschema/dialogs/dialog_netlist_base.cpp:133 gerbview/onrightclick.cpp:59
 #: gerbview/onrightclick.cpp:81
-#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
-#: common/selcolor.cpp:243 common/dialogs/dialog_env_var_config_base.cpp:62
+#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182 common/selcolor.cpp:243
+#: common/dialogs/dialog_env_var_config_base.cpp:62
 #: common/dialogs/dialog_exit_base.cpp:69
 #: common/dialogs/dialog_get_component_base.cpp:52
 #: pagelayout_editor/onrightclick.cpp:115
@@ -6167,12 +6163,11 @@ msgstr "横(X)方向の間隔："
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:55
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:35
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:49
-#: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
-#: common/common.cpp:144 common/common.cpp:202 common/draw_frame.cpp:487
+#: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45 common/common.cpp:144
+#: common/common.cpp:202 common/draw_frame.cpp:487
 #: common/dialogs/dialog_page_settings.cpp:466
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
-#: pcb_calculator/UnitSelector.cpp:38
-#: pagelayout_editor/pl_editor_frame.cpp:467
+#: pcb_calculator/UnitSelector.cpp:38 pagelayout_editor/pl_editor_frame.cpp:467
 msgid "mm"
 msgstr "mm"
 
@@ -7589,8 +7584,8 @@ msgstr "角度"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:116
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:129
-#: pcbnew/dialogs/dialog_modedit_options_base.cpp:158
-#: eeschema/lib_pin.cpp:1955 eeschema/dialogs/dialog_eeschema_options.cpp:55
+#: pcbnew/dialogs/dialog_modedit_options_base.cpp:158 eeschema/lib_pin.cpp:1955
+#: eeschema/dialogs/dialog_eeschema_options.cpp:55
 #: eeschema/dialogs/dialog_eeschema_options.cpp:192
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:245
 msgid "Visible"
@@ -7654,8 +7649,8 @@ msgstr "全てを変更"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:109
-#: common/zoom.cpp:300 common/dialogs/dialog_display_info_HTML_base.cpp:22
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:109 common/zoom.cpp:300
+#: common/dialogs/dialog_display_info_HTML_base.cpp:22
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:33
 msgid "Close"
 msgstr "閉じる"
@@ -7856,8 +7851,7 @@ msgstr "現在選択されている行をひとつ上の行と入れ替え"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
-#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
-#: 3d-viewer/3d_canvas.cpp:438
+#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47 3d-viewer/3d_canvas.cpp:438
 msgid "Move Down"
 msgstr "下へ移動"
 
@@ -13256,8 +13250,7 @@ msgstr "非ロジック"
 msgid "Pin"
 msgstr "ピン"
 
-#: eeschema/lib_pin.cpp:1935
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:144
+#: eeschema/lib_pin.cpp:1935 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:144
 msgid "Number"
 msgstr "ピン番号"
 
@@ -14706,8 +14699,7 @@ msgstr "アイテム %s がシート%s 内に見つかりませんでした"
 msgid "Power symbol"
 msgstr "電源シンボル"
 
-#: eeschema/sch_component.cpp:1523
-#: eeschema/dialogs/dialog_color_config.cpp:103
+#: eeschema/sch_component.cpp:1523 eeschema/dialogs/dialog_color_config.cpp:103
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 msgid "Component"
 msgstr "コンポーネント"
@@ -15666,8 +15658,7 @@ msgstr ""
 "(ド・モルガン)代替ボディスタイル用の図形アイテムをコンポーネントから削除しま"
 "すか？"
 
-#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:456
-#: common/eda_doc.cpp:144
+#: eeschema/dialogs/dialog_edit_component_in_lib.cpp:456 common/eda_doc.cpp:144
 msgid "Doc Files"
 msgstr "ドキュメント ファイル"
 
@@ -17056,11 +17047,11 @@ msgstr "このシンボルのインスタンス"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:47
 msgid "Cached Part:"
-msgstr "キャッシュされた部分:"
+msgstr "キャッシュされた部品:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:64
 msgid "Library Part:"
-msgstr "ライブラリ部分:"
+msgstr "ライブラリの部品:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:84
 msgid "Never Show Again"
@@ -19531,9 +19522,9 @@ msgstr "ビルド時間 %.3f 秒"
 
 #: 3d-viewer/3d_draw.cpp:661 3d-viewer/3d_draw_board_body.cpp:213
 #: 3d-viewer/3d_draw_board_body.cpp:610
-#, c-format
+#, fuzzy, c-format
 msgid "Build layer %s"
-msgstr "ビルド レイヤ %s"
+msgstr "Build レイヤ %s"
 
 #: 3d-viewer/3d_draw.cpp:992
 msgid "Load 3D Shapes"
