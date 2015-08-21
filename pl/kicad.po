@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 15:04+0100\n"
-"PO-Revision-Date: 2015-08-21 23:30+0100\n"
+"POT-Creation-Date: 2015-08-21 23:47+0100\n"
+"PO-Revision-Date: 2015-08-21 23:48+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -10460,12 +10460,12 @@ msgstr "Błąd DRC: punkt początkowy jest wewnątrz lub za blisko innego obszar
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Błąd DRC: zamknięcie tego obszaru wywołuje błąd DRC z innym obszarem"
 
-#: pcbnew/pcbframe.cpp:615
+#: pcbnew/pcbframe.cpp:619
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej '%s' nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:965
+#: pcbnew/pcbframe.cpp:969
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -11190,8 +11190,8 @@ msgid "Tuned: skew "
 msgstr "Dostrojono: odchyłka "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:165
-#: pcbnew/router/pns_dp_meander_placer.cpp:387
-#: pcbnew/router/pns_meander_placer.cpp:261
+#: pcbnew/router/pns_dp_meander_placer.cpp:381
+#: pcbnew/router/pns_meander_placer.cpp:254
 msgid "?"
 msgstr "?"
 
@@ -11212,18 +11212,18 @@ msgstr "Proszę wybrać ścieżkę której długość ma zostać dostrojona."
 msgid "Unable to find complementary differential pair net for length tuning. Make sure the names of the nets belonging to a differential pair end with either _N/_P or +/-."
 msgstr "Nie można znaleźć komplementarnej ścieżki pary różnicowej by móc dostroić długość ścieżek. Sprawdź czy nazwy sieci należących do par różnicowych zawierają _N/_P lub +/-."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:378
-#: pcbnew/router/pns_meander_placer.cpp:252
+#: pcbnew/router/pns_dp_meander_placer.cpp:372
+#: pcbnew/router/pns_meander_placer.cpp:245
 msgid "Too long: "
 msgstr "Zbyt długa:"
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:381
-#: pcbnew/router/pns_meander_placer.cpp:255
+#: pcbnew/router/pns_dp_meander_placer.cpp:375
+#: pcbnew/router/pns_meander_placer.cpp:248
 msgid "Too short: "
 msgstr "Zbyt krótka:"
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:384
-#: pcbnew/router/pns_meander_placer.cpp:258
+#: pcbnew/router/pns_dp_meander_placer.cpp:378
+#: pcbnew/router/pns_meander_placer.cpp:251
 msgid "Tuned: "
 msgstr "Dostrojono:"
 
