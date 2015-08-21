@@ -1049,7 +1049,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     // Display the same view after canvas switching
     if( aEnable )
     {
-        // Switch to GAL rendering
+        // Switch to GAL renderer from legacy
         if( !m_galCanvasActive )
         {
             // Set up viewport
@@ -1070,7 +1070,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     }
     else if( m_galCanvasActive )
     {
-        // Switch to standard rendering
+        // Switch to legacy renderer from GAL
         double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
         // TODO replace it with EDA_DRAW_PANEL_GAL::GetLegacyZoom
         m_canvas->SetZoom( 1.0 / ( zoomFactor * view->GetScale() ) );

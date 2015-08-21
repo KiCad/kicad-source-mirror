@@ -82,6 +82,9 @@ public:
 
     virtual ~OPENGL_GAL();
 
+   /// @copydoc GAL::IsInitialized()
+    virtual bool IsInitialized() const { return IsShownOnScreen(); }
+
     // ---------------
     // Drawing methods
     // ---------------
@@ -362,7 +365,11 @@ private:
     {
     public:
         OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal );
+
         void Render( wxPaintEvent& aEvent );
+        void OnTimeout( wxTimerEvent& aEvent );
+        void OnDialogPaint( wxPaintEvent& aEvent );
+
         inline bool IsTested() const { return m_tested; }
         inline bool IsOk() const { return m_result && m_tested; }
         inline std::string GetError() const { return m_error; }
@@ -375,6 +382,7 @@ private:
         bool m_tested;
         bool m_result;
         std::string m_error;
+        wxTimer m_timeoutTimer;
     };
 
     friend class OPENGL_TEST;

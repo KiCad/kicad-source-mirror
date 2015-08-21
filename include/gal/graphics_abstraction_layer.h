@@ -66,15 +66,18 @@ public:
     GAL();
     virtual ~GAL();
 
+   /// @brief Returns the initalization status for the canvas.
+    virtual bool IsInitialized() const { return true; }
+
     // ---------------
     // Drawing methods
     // ---------------
 
     /// @brief Begin the drawing, needs to be called for every new frame.
-    virtual void BeginDrawing() = 0;
+    virtual void BeginDrawing() {};
 
     /// @brief End the drawing, needs to be called for every new frame.
-    virtual void EndDrawing() = 0;
+    virtual void EndDrawing() {};
 
     /**
      * @brief Draw a line.
@@ -84,7 +87,7 @@ public:
      * @param aStartPoint   is the start point of the line.
      * @param aEndPoint     is the end point of the line.
      */
-    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
+    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
 
     /**
      * @brief Draw a rounded segment.
@@ -95,14 +98,14 @@ public:
      * @param aEndPoint     is the end point of the segment.
      * @param aWidth        is a width of the segment
      */
-    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth ) = 0;
+    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth ) {};
 
     /**
      * @brief Draw a polyline
      *
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
-    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList ) = 0;
+    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList ) {};
 
     /**
      * @brief Draw a circle using world coordinates.
@@ -110,7 +113,7 @@ public:
      * @param aCenterPoint is the center point of the circle.
      * @param aRadius is the radius of the circle.
      */
-    virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) = 0;
+    virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) {};
 
     /**
      * @brief Draw an arc.
@@ -121,7 +124,7 @@ public:
      * @param aEndAngle     is the end angle of the arc.
      */
     virtual void
-    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle ) = 0;
+    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle ) {};
 
     /**
      * @brief Draw a rectangle.
@@ -129,14 +132,14 @@ public:
      * @param aStartPoint   is the start point of the rectangle.
      * @param aEndPoint     is the end point of the rectangle.
      */
-    virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
+    virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
 
     /**
      * @brief Draw a polygon.
      *
      * @param aPointList is the list of the polygon points.
      */
-    virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) = 0;
+    virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) {};
 
     /**
      * @brief Draw a cubic bezier spline.
@@ -147,17 +150,17 @@ public:
      * @param endPoint      is the end point of the spline.
      */
     virtual void DrawCurve( const VECTOR2D& startPoint,    const VECTOR2D& controlPointA,
-                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) = 0;
+                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) {};
 
     // --------------
     // Screen methods
     // --------------
 
     /// @brief Resizes the canvas.
-    virtual void ResizeScreen( int aWidth, int aHeight ) = 0;
+    virtual void ResizeScreen( int aWidth, int aHeight ) {};
 
     /// @brief Shows/hides the GAL canvas
-    virtual bool Show( bool aShow ) = 0;
+    virtual bool Show( bool aShow ) { return true; };
 
     /// @brief Returns GAL canvas size in pixels
     const VECTOR2I& GetScreenPixelSize() const
@@ -166,13 +169,13 @@ public:
     }
 
     /// @brief Force all remaining objects to be drawn.
-    virtual void Flush() = 0;
+    virtual void Flush() {};
 
     /**
      * @brief Clear the screen.
      * @param aColor is the color used for clearing.
      */
-    virtual void ClearScreen( const COLOR4D& aColor ) = 0;
+    virtual void ClearScreen( const COLOR4D& aColor ) {};
 
     // -----------------
     // Attribute setting
@@ -329,34 +332,34 @@ public:
      *
      * @param aTransformation is the ransformation matrix.
      */
-    virtual void Transform( const MATRIX3x3D& aTransformation ) = 0;
+    virtual void Transform( const MATRIX3x3D& aTransformation ) {};
 
     /**
      * @brief Rotate the context.
      *
      * @param aAngle is the rotation angle in radians.
      */
-    virtual void Rotate( double aAngle ) = 0;
+    virtual void Rotate( double aAngle ) {};
 
     /**
      * @brief Translate the context.
      *
      * @param aTranslation is the translation vector.
      */
-    virtual void Translate( const VECTOR2D& aTranslation ) = 0;
+    virtual void Translate( const VECTOR2D& aTranslation ) {};
 
     /**
      * @brief Scale the context.
      *
      * @param aScale is the scale factor for the x- and y-axis.
      */
-    virtual void Scale( const VECTOR2D& aScale ) = 0;
+    virtual void Scale( const VECTOR2D& aScale ) {};
 
     /// @brief Save the context.
-    virtual void Save() = 0;
+    virtual void Save() {};
 
     /// @brief Restore the context.
-    virtual void Restore() = 0;
+    virtual void Restore() {};
 
     // --------------------------------------------
     // Group methods
@@ -370,17 +373,17 @@ public:
      *
      * @return the number of the group.
      */
-    virtual int BeginGroup() = 0;
+    virtual int BeginGroup() { return 0; };
 
     /// @brief End the group.
-    virtual void EndGroup() = 0;
+    virtual void EndGroup() {};
 
     /**
      * @brief Draw the stored group.
      *
      * @param aGroupNumber is the group number.
      */
-    virtual void DrawGroup( int aGroupNumber ) = 0;
+    virtual void DrawGroup( int aGroupNumber ) {};
 
     /**
      * @brief Changes the color used to draw the group.
@@ -388,7 +391,7 @@ public:
      * @param aGroupNumber is the group number.
      * @param aNewColor is the new color.
      */
-    virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) = 0;
+    virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) {};
 
     /**
      * @brief Changes the depth (Z-axis position) of the group.
@@ -396,19 +399,19 @@ public:
      * @param aGroupNumber is the group number.
      * @param aDepth is the new depth.
      */
-    virtual void ChangeGroupDepth( int aGroupNumber, int aDepth ) = 0;
+    virtual void ChangeGroupDepth( int aGroupNumber, int aDepth ) {};
 
     /**
      * @brief Delete the group from the memory.
      *
      * @param aGroupNumber is the group number.
      */
-    virtual void DeleteGroup( int aGroupNumber ) = 0;
+    virtual void DeleteGroup( int aGroupNumber ) {};
 
     /**
      * @brief Delete all data created during caching of graphic items.
      */
-    virtual void ClearCache() = 0;
+    virtual void ClearCache() {};
 
     // --------------------------------------------------------
     // Handling the world <-> screen transformation
@@ -581,33 +584,33 @@ public:
     /**
      * @brief Save the screen contents.
      */
-    virtual void SaveScreen() = 0;
+    virtual void SaveScreen() {};
 
     /**
      * @brief Restore the screen contents.
      */
-    virtual void RestoreScreen() = 0;
+    virtual void RestoreScreen() {};
 
     /**
      * @brief Sets the target for rendering.
      *
      * @param aTarget is the new target for rendering.
      */
-    virtual void SetTarget( RENDER_TARGET aTarget ) = 0;
+    virtual void SetTarget( RENDER_TARGET aTarget ) {};
 
     /**
      * @brief Gets the currently used target for rendering.
      *
      * @return The current rendering target.
      */
-    virtual RENDER_TARGET GetTarget() const = 0;
+    virtual RENDER_TARGET GetTarget() const { return TARGET_CACHED; };
 
     /**
      * @brief Clears the target for rendering.
      *
      * @param aTarget is the target to be cleared.
      */
-    virtual void ClearTarget( RENDER_TARGET aTarget ) = 0;
+    virtual void ClearTarget( RENDER_TARGET aTarget ) {};
 
     // -------------
     // Grid methods
@@ -798,7 +801,7 @@ public:
      *
      * @param aCursorPosition is the cursor position in screen coordinates.
      */
-    virtual void DrawCursor( const VECTOR2D& aCursorPosition ) = 0;
+    virtual void DrawCursor( const VECTOR2D& aCursorPosition ) {};
 
     /**
      * @brief Changes the current depth to deeper, so it is possible to draw objects right beneath
@@ -887,7 +890,7 @@ protected:
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
      */
-    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) = 0;
+    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
 
     /// Possible depth range
     static const int MIN_DEPTH;

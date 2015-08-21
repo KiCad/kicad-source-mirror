@@ -103,6 +103,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_refreshTimer.SetOwner( this );
     m_pendingRefresh = false;
     m_drawing = false;
+    m_drawingEnabled = false;
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
 }
 
@@ -219,21 +220,18 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 
 void EDA_DRAW_PANEL_GAL::StartDrawing()
 {
-    m_drawing = false;
-    m_pendingRefresh = true;
-    Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
-
-    wxPaintEvent redrawEvent;
-    wxPostEvent( this, redrawEvent );
+    // Start querying GAL if it is ready
+    m_refreshTimer.StartOnce( 100 );
 }
 
 
 void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
+    m_drawingEnabled = false;
+    Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
     m_pendingRefresh = false;
     m_drawing = true;
     m_refreshTimer.Stop();
-    Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
 }
 
 
@@ -272,6 +270,8 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     if( aGalType == m_backend && m_gal != NULL )
         return true;
 
+    bool result = true; // assume everything will be fine
+
     // Prevent refreshing canvas during backend switch
     StopDrawing();
 
@@ -289,35 +289,41 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             new_gal = new KIGFX::CAIRO_GAL( this, this, this );
             break;
 
-        case GAL_TYPE_NONE:
-            return false;
-
         default:
             assert( false );
-            return false;
+            // warn about unhandled GAL canvas type, but continue with the fallback option
+
+        case GAL_TYPE_NONE:
+            // KIGFX::GAL is a stub - it actually does cannot display anything, 
+            // but prevents code relying on GAL canvas existence from crashing
+            new_gal = new KIGFX::GAL();
+            break;
         }
-
-        delete m_gal;
-        m_gal = new_gal;
-
-        wxSize size = GetClientSize();
-        m_gal->ResizeScreen( size.GetX(), size.GetY() );
-
-        if( m_painter )
-            m_painter->SetGAL( m_gal );
-
-        if( m_view )
-            m_view->SetGAL( m_gal );
-
-        m_backend = aGalType;
     }
     catch( std::runtime_error& err )
     {
+        new_gal = new KIGFX::GAL();
+        aGalType = GAL_TYPE_NONE;
         DisplayError( m_parent, wxString( err.what() ) );
-        return false;
+        result = false;
     }
 
-    return true;
+    assert( new_gal );
+    delete m_gal;
+    m_gal = new_gal;
+
+    wxSize size = GetClientSize();
+    m_gal->ResizeScreen( size.GetX(), size.GetY() );
+
+    if( m_painter )
+        m_painter->SetGAL( m_gal );
+
+    if( m_view )
+        m_view->SetGAL( m_gal );
+
+    m_backend = aGalType;
+
+    return result;
 }
 
 
@@ -353,6 +359,23 @@ void EDA_DRAW_PANEL_GAL::onLostFocus( wxFocusEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 {
+    if( !m_drawingEnabled )
+    {
+        if( m_gal->IsInitialized() )
+        {
+            m_drawing = false;
+            m_pendingRefresh = true;
+            Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
+            m_drawingEnabled = true;
+        }
+        else
+        {
+            // Try again soon
+            m_refreshTimer.Start( 100, true );
+            return;
+        }
+    }
+
     wxPaintEvent redrawEvent;
     wxPostEvent( this, redrawEvent );
 }

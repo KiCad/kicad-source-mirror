@@ -126,6 +126,9 @@ OPENGL_GAL::~OPENGL_GAL()
 
 void OPENGL_GAL::BeginDrawing()
 {
+    if( !IsShownOnScreen() )
+        return;
+
     SetCurrent( *glContext );
     clientDC = new wxClientDC( this );
 
@@ -978,7 +981,10 @@ OPENGL_GAL::OPENGL_TEST::OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal ) :
                 wxDefaultSize, 0, wxT( "GLCanvas" ) ),
     m_parent( aParent ), m_gal( aGal ), m_tested( false ), m_result( false )
 {
+    m_timeoutTimer.SetOwner( this );
     Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::OPENGL_TEST::Render ) );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( OPENGL_GAL::OPENGL_TEST::OnTimeout ) );
+    m_parent->Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::OPENGL_TEST::OnDialogPaint ), NULL, this );
 }
 
 
@@ -986,6 +992,10 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     if( !m_tested )
     {
+        if( !IsShownOnScreen() )
+            return;
+
+        m_timeoutTimer.Stop();
         m_result = true;    // Assume everything is fine, until proven otherwise
 
         // One test is enough - close the testing dialog when the test is finished
@@ -1055,8 +1065,27 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
 }
 
 
-void OPENGL_GAL::OPENGL_TEST::error(const std::string& aError )
+void OPENGL_GAL::OPENGL_TEST::OnTimeout( wxTimerEvent& aEvent )
 {
+    error( "Could not create OpenGL canvas" );
+    m_parent->EndModal( wxID_NONE );
+}
+
+
+void OPENGL_GAL::OPENGL_TEST::OnDialogPaint( wxPaintEvent& aEvent )
+{
+    // GL canvas may never appear on the screen (e.g. due to missing GL extensions), and the test
+    // will not be run. Therefore give at most a second to perform the test, otherwise we conclude
+    // it has failed.
+    // Also, wxWidgets OnShow event is triggered before a window is shown, therefore here we use
+    // OnPaint event, which is executed when a window is actually visible.
+    m_timeoutTimer.StartOnce( 1000 );
+}
+
+
+void OPENGL_GAL::OPENGL_TEST::error( const std::string& aError )
+{
+    m_timeoutTimer.Stop();
     m_result = false;
     m_tested = true;
     m_error = aError;

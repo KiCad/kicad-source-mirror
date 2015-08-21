@@ -185,6 +185,9 @@ protected:
     /// True if GAL is currently redrawing the view
     bool                     m_drawing;
 
+    /// Flag that determines if VIEW may use GAL for redrawing the screen.
+    bool                     m_drawingEnabled;
+
     /// Timer responsible for preventing too frequent refresh
     wxTimer                  m_refreshTimer;
 
