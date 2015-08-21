@@ -141,9 +141,9 @@ public:
      *
      * Returns the net code of currently routed track.
      */
-    int CurrentNet() const
+    const std::vector<int> CurrentNets() const
     {
-        return m_currentNet;
+        return std::vector<int>( 1, m_currentNet );
     }
 
     /**

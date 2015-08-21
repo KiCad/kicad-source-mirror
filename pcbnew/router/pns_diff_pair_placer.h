@@ -117,14 +117,11 @@ public:
     }
 
     /**
-     * Function CurrentNet()
+     * Function CurrentNets()
      *
      * Returns the net code of currently routed track.
      */
-    int CurrentNet() const
-    {
-        return m_currentNet;
-    }
+    const std::vector<int> CurrentNets() const;
 
     /**
      * Function CurrentLayer()

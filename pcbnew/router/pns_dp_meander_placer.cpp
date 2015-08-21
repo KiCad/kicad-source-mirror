@@ -356,12 +356,6 @@ const VECTOR2I& PNS_DP_MEANDER_PLACER::CurrentEnd() const
 }
 
 
-int PNS_DP_MEANDER_PLACER::CurrentNet() const
-{
-    return m_initialSegment->Net();
-}
-
-
 int PNS_DP_MEANDER_PLACER::CurrentLayer() const
 {
     return m_initialSegment->Layers().Start();
@@ -401,4 +395,12 @@ const wxString PNS_DP_MEANDER_PLACER::TuningInfo() const
 PNS_DP_MEANDER_PLACER::TUNING_STATUS PNS_DP_MEANDER_PLACER::TuningStatus() const
 {
     return m_lastStatus;
+}
+
+const std::vector<int> PNS_DP_MEANDER_PLACER::CurrentNets() const
+{
+    std::vector<int> rv;
+    rv.push_back( m_originPair.NetP() );
+    rv.push_back( m_originPair.NetN() );
+    return rv;
 }

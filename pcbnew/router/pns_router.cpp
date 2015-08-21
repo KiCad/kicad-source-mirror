@@ -1018,11 +1018,12 @@ void PNS_ROUTER::ToggleViaPlacement()
 }
 
 
-int PNS_ROUTER::GetCurrentNet() const
+const std::vector<int> PNS_ROUTER::GetCurrentNets() const
 {
     if( m_placer )
-        return m_placer->CurrentNet();
-    return -1;
+        return m_placer->CurrentNets();
+
+    return std::vector<int>();
 }
 
 

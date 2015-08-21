@@ -129,7 +129,7 @@ public:
     void SetOrthoMode ( bool aEnable );
 
     int GetCurrentLayer() const;
-    int GetCurrentNet() const;
+    const std::vector<int> GetCurrentNets() const;
 
     void DumpLog();
 

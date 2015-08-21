@@ -505,7 +505,7 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
 
     NETINFO_ITEM* netInfoP = brd->FindNet( netNameP );
     NETINFO_ITEM* netInfoN = brd->FindNet( netNameN );
-    
+
     if( !netInfoP || !netInfoN )
         return false;
 
@@ -818,4 +818,13 @@ void PNS_DIFF_PAIR_PLACER::updateLeadingRatLine()
     {
         Router()->DisplayDebugLine( ratLineN, 3, 10000 );
     }
+}
+
+
+const std::vector<int> PNS_DIFF_PAIR_PLACER::CurrentNets() const
+{
+    std::vector<int> rv;
+    rv.push_back( m_netP );
+    rv.push_back( m_netN );
+    return rv;
 }

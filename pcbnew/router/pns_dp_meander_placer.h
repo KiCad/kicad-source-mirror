@@ -92,7 +92,9 @@ public:
 
     const VECTOR2I& CurrentEnd() const;
 
-    int CurrentNet() const;
+    /// @copydoc PNS_PLACEMENT_ALGO::CurrentNets()
+    const std::vector<int> CurrentNets() const;
+
     int CurrentLayer() const;
 
     int totalLength();

@@ -229,13 +229,6 @@ const VECTOR2I& PNS_MEANDER_PLACER::CurrentEnd() const
     return m_currentEnd;
 }
 
-
-int PNS_MEANDER_PLACER::CurrentNet() const
-{
-    return m_initialSegment->Net();
-}
-
-
 int PNS_MEANDER_PLACER::CurrentLayer() const
 {
     return m_initialSegment->Layers().Start();

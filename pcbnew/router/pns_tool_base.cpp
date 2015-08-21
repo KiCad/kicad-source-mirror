@@ -251,7 +251,7 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
 
     m_router->EnableSnapping( snapEnabled );
 
-    if( m_router->GetCurrentNet() < 0 )
+    if( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 )
     {
         m_endItem = NULL;
         m_endSnapPoint = cp;
@@ -265,7 +265,17 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
     else
         layer = m_router->GetCurrentLayer();
 
-    PNS_ITEM* endItem = pickSingleItem( p, m_router->GetCurrentNet(), layer );
+    PNS_ITEM* endItem = NULL;
+
+    std::vector<int> nets = m_router->GetCurrentNets();
+
+    BOOST_FOREACH( int net, nets )
+    {
+        endItem = pickSingleItem( p, net, layer );
+
+        if( endItem )
+            break;
+    }
 
     if( endItem )
     {

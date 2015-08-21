@@ -115,17 +115,17 @@ public:
     /**
      * Function CurrentEnd()
      *
-     * Returns the current end of the line being placed/tuned. It may not be equal
+     * Returns the current end of the line(s) being placed/tuned. It may not be equal
      * to the cursor position due to collisions.
      */
     virtual const VECTOR2I& CurrentEnd() const = 0;
 
     /**
-     * Function CurrentNet()
+     * Function CurrentNets()
      *
-     * Returns the net code of currently routed track.
+     * Returns the net code(s) of currently routed track(s).
      */
-    virtual int CurrentNet() const = 0;
+    virtual const std::vector<int> CurrentNets() const = 0;
 
     /**
      * Function CurrentLayer()
