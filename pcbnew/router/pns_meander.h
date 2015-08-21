@@ -360,6 +360,8 @@ private:
     int m_amplitude;
     ///> offset wrs the base segment (dual only)
     int m_baselineOffset;
+    ///> average radius of meander corners (for correction of DP meanders)
+    int m_meanCornerRadius;
     ///> first point of the meandered line
     VECTOR2I m_p0;
     ///> base segment (unclipped)

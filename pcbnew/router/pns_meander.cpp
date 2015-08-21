@@ -198,13 +198,33 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::circleQuad( VECTOR2D aP, VECTOR2D aDir, bool
 
     const int ArcSegments = Settings().m_cornerArcSegments;
 
+    double radius = (double) aDir.EuclideanNorm();
+    double angleStep = M_PI / 2.0 / (double) ArcSegments;
+
+    double correction = 12.0 * radius * ( 1.0 - cos( angleStep / 2.0 ) );
+
+    if( !m_dual )
+        correction = 0.0;
+    else if( radius < m_meanCornerRadius )
+        correction = 0.0;
+
+    VECTOR2D p = aP;
+    lc.Append( ( int ) p.x, ( int ) p.y );
+
+    VECTOR2D dir_uu = dir_u.Resize( radius - correction );
+    VECTOR2D dir_vv = dir_v.Resize( radius - correction );
+
+    VECTOR2D shift = dir_u.Resize( correction );
+
     for( int i = ArcSegments - 1; i >= 0; i-- )
     {
-        VECTOR2D p;
         double alpha = (double) i / (double) ( ArcSegments - 1 ) * M_PI / 2.0;
-        p = aP + dir_u * cos( alpha ) + dir_v * ( aSide ? -1.0 : 1.0 ) * ( 1.0 - sin( alpha ) );
+        p = aP + shift + dir_uu * cos( alpha ) + dir_vv * ( aSide ? -1.0 : 1.0 ) * ( 1.0 - sin( alpha ) );
         lc.Append( ( int ) p.x, ( int ) p.y );
     }
+
+    p = aP + dir_u + dir_v * ( aSide ? -1.0 : 1.0 );
+    lc.Append( ( int ) p.x, ( int ) p.y );
 
     return lc;
 }
@@ -302,6 +322,8 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
     {
         cr = spc / 2;
     }
+
+    m_meanCornerRadius = cr;
 
     SHAPE_LINE_CHAIN lc;
 

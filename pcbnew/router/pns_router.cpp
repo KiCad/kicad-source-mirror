@@ -72,6 +72,7 @@ PNS_PCBNEW_CLEARANCE_FUNC::PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER* aRouter ) :
 
     PNS_TOPOLOGY topo( world );
     m_clearanceCache.resize( brd->GetNetCount() );
+    m_useDpGap = false;
 
     for( unsigned int i = 0; i < brd->GetNetCount(); i++ )
     {
@@ -128,7 +129,7 @@ int PNS_PCBNEW_CLEARANCE_FUNC::operator()( const PNS_ITEM* aA, const PNS_ITEM* a
     if( net_a == net_b )
         return 0;
 
-    if( linesOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
+    if( m_useDpGap && linesOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
     {
         cl_a = cl_b = m_router->Sizes().DiffPairGap() - 2 * PNS_HULL_MARGIN;
     }
@@ -608,6 +609,8 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
 bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLayer )
 {
+    m_clearanceFunc->UseDpGap( false );
+
     switch( m_mode )
     {
         case PNS_MODE_ROUTE_SINGLE:
@@ -615,6 +618,7 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLa
             break;
         case PNS_MODE_ROUTE_DIFF_PAIR:
             m_placer = new PNS_DIFF_PAIR_PLACER( this );
+            m_clearanceFunc->UseDpGap( true );
             break;
         case PNS_MODE_TUNE_SINGLE:
             m_placer = new PNS_MEANDER_PLACER( this );

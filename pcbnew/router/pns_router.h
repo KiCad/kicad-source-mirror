@@ -272,7 +272,7 @@ private:
     // optHoverItem m_startItem, m_endItem;
 
     PNS_ROUTING_SETTINGS m_settings;
-    PNS_CLEARANCE_FUNC* m_clearanceFunc;
+    PNS_PCBNEW_CLEARANCE_FUNC* m_clearanceFunc;
 
     boost::unordered_set<BOARD_CONNECTED_ITEM*> m_hiddenItems;
 
