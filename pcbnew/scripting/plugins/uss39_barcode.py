@@ -14,158 +14,49 @@
 #  MA 02110-1301, USA.
 
 from __future__ import division
-import pcbnew
+import pcbnew as B
 
 import HelpfulFootprintWizardPlugin
-import PadArray as PA
-import math
-
 
 '''
 Created on Jan 16, 2015
 
 @author: ejohns
+Rewritten by LordBlick
 '''
-from string import ascii_uppercase, digits
+ptd = {
+    '0': '000110100', '1': '100100001', '2': '001100001', '3': '101100000',
+    '4': '000110001', '5': '100110000', '6': '001110000', '7': '000100101',
+    '8': '100100100', '9': '001100100', 'A': '100001001', 'B': '001001001',
+    'C': '101001000', 'D': '000011001', 'E': '100011000', 'F': '001011000',
+    'G': '000001101', 'H': '100001100', 'I': '001001100', 'J': '000011100',
+    'K': '100000011', 'L': '001000011', 'M': '101000010', 'N': '000010011',
+    'O': '100010010', 'P': '001010010', 'Q': '000000111', 'R': '100000110',
+    'S': '001000110', 'T': '000010110', 'U': '110000001', 'V': '011000001',
+    'W': '111000000', 'X': '010010001', 'Y': '110010000', 'Z': '011010000',
+    '-': '010000101', '.': '110000100', ' ': '011000100', '*': '010010100',
+    '$': '010101000', '/': '010100010', '+': '010001010', '%': '000101010'}
 
 class Uss39:
-    """
-    """
-
-    patternDict = {'1': [1, 0, 0, 1, 0, 0, 0, 0, 1],
-                   '2': [0, 0, 1, 1, 0, 0, 0, 0, 1],
-                   '3': [1, 0, 1, 1, 0, 0, 0, 0, 0],
-                   '4': [0, 0, 0, 1, 1, 0, 0, 0, 1],
-                   '5': [1, 0, 0, 1, 1, 0, 0, 0, 0],
-                   '6': [0, 0, 1, 1, 1, 0, 0, 0, 0],
-                   '7': [0, 0, 0, 1, 0, 0, 1, 0, 1],
-                   '8': [1, 0, 0, 1, 0, 0, 1, 0, 0],
-                   '9': [0, 0, 1, 1, 0, 0, 1, 0, 0],
-                   '0': [0, 0, 0, 1, 1, 0, 1, 0, 0],
-                   'A': [1, 0, 0, 0, 0, 1, 0, 0, 1],
-                   'B': [0, 0, 1, 0, 0, 1, 0, 0, 1],
-                   'C': [1, 0, 1, 0, 0, 1, 0, 0, 0],
-                   'D': [0, 0, 0, 0, 1, 1, 0, 0, 1],
-                   'E': [1, 0, 0, 0, 1, 1, 0, 0, 0],
-                   'F': [0, 0, 1, 0, 1, 1, 0, 0, 0],
-                   'G': [0, 0, 0, 0, 0, 1, 1, 0, 1],
-                   'H': [1, 0, 0, 0, 0, 1, 1, 0, 0],
-                   'I': [0, 0, 1, 0, 0, 1, 1, 0, 0],
-                   'J': [0, 0, 0, 0, 1, 1, 1, 0, 0],
-                   'K': [1, 0, 0, 0, 0, 0, 0, 1, 1],
-                   'L': [0, 0, 1, 0, 0, 0, 0, 1, 1],
-                   'M': [1, 0, 1, 0, 0, 0, 0, 1, 0],
-                   'N': [0, 0, 0, 0, 1, 0, 0, 1, 1],
-                   'O': [1, 0, 0, 0, 1, 0, 0, 1, 0],
-                   'P': [0, 0, 1, 0, 1, 0, 0, 1, 0],
-                   'Q': [0, 0, 0, 0, 0, 0, 1, 1, 1],
-                   'R': [1, 0, 0, 0, 0, 0, 1, 1, 0],
-                   'S': [0, 0, 1, 0, 0, 0, 1, 1, 0],
-                   'T': [0, 0, 0, 0, 1, 0, 1, 1, 0],
-                   'U': [1, 1, 0, 0, 0, 0, 0, 0, 1],
-                   'V': [0, 1, 1, 0, 0, 0, 0, 0, 1],
-                   'W': [1, 1, 1, 0, 0, 0, 0, 0, 0],
-                   'X': [0, 1, 0, 0, 1, 0, 0, 0, 1],
-                   'Y': [1, 1, 0, 0, 1, 0, 0, 0, 0],
-                   'Z': [0, 1, 1, 0, 1, 0, 0, 0, 0],
-                   '-': [0, 1, 0, 0, 0, 0, 1, 0, 1],
-                   '.': [1, 1, 0, 0, 0, 0, 1, 0, 0],
-                   ' ': [0, 1, 1, 0, 0, 0, 1, 0, 0],
-                   '*': [0, 1, 0, 0, 1, 0, 1, 0, 0],
-                   '$': [0, 1, 0, 1, 0, 1, 0, 0, 0],
-                   '/': [0, 1, 0, 1, 0, 0, 0, 1, 0],
-                   '+': [0, 1, 0, 0, 0, 1, 0, 1, 0],
-                   '%': [0, 0, 0, 1, 0, 1, 0, 1, 0]}
-
-
-    def makePrintable(self, text):
-        """
-        """
-        output_string = ''
-
-        # Capitalize string
-        text = text.upper()
-
-        # Remove unprintable text
-        for c in text:
-            output_string = output_string + c if self.patternDict.has_key(c) else output_string
-
-        return output_string
-
-    def getPattern(self, c):
-        """
-        """
-        return self.patternDict[c]
-
-    def getBarCodePattern(self, text = None):
-        """
-        """
-
-        text = text if text is not None else self.Text
-        bars = []
-        output_string = ''
-
-        # Reformat text
-        text = self.makePrintable(text)
-
-        # Append start and end characters
-        output_string = '*' + text + '*'
-
-        for c in output_string:
-            bars = bars + self.getPattern(c)
-            # Add intercharacter gap
-            bars.append(0)
-
-        # Remove last intercharacter gap
-        bars = bars[:-1]
-
-        return bars
-
-    def __init__(self, text):
-        """
-        """
+     def __init__(self, text):
         self.Text = self.makePrintable(text)
 
-    def __str__(self):
-        """
-        """
-        return self.Text
+     __str__ = lambda self: self.Text
+     makePrintable = lambda self, text: ''.join((c for c in text.upper() if ptd.has_key(c)))
+
+     def getBarCodePattern(self, text = None):
+        text = text if not(text is None) else self.Text
+        # Reformated text with start and end characters
+        return reduce(lambda a1, a2: a1 + [0] + a2, [map(int, ptd[c]) for c in ("*%s*" % self.makePrintable(text))])
 
 class Uss39Wizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
-    """"""
-
-    def GetName(self):
-        """
-        Return footprint name.
-
-        This is specific to each footprint class, you need to implement
-        this
-        """
-        return 'BARCODE USS-39'
-
-    def GetDescription(self):
-        """
-        Return footprint description.
-
-        This is specific to each footprint class, you need to implement
-        this
-        """
-        return 'USS-39 Barcode'
-
-    def GetReferencePrefix(self):
-        """
-        """
-        return 'BARCODE'
-
-    def GetValue(self):
-        """
-        """
-        return self.module.Value().GetText()
+    GetName = lambda self: 'BARCODE USS-39'
+    GetDescription = lambda self: 'USS-39 Barcode'
+    GetReferencePrefix = lambda self: 'BARCODE'
+    GetValue = lambda self: self.module.Value().GetText()
 
     def GenerateParameterList(self):
-        """"""
         # Silkscreen parameters
-
         self.AddParam("Barcode", "Pixel Width", self.uMM, 0.20)
         self.AddParam("Barcode", "Height", self.uMM, 3.0)
         self.AddParam("Barcode", "Margin", self.uMM, 2.0)
@@ -175,75 +66,54 @@ class Uss39Wizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.AddParam("Caption", "Thickness", self.uMM, 0.12)
 
     def CheckParameters(self):
-        """
-        """
-
         # Reset constants
-        self.CourtyardLineWidth = pcbnew.FromMM(0.05)
-
+        self.CourtyardLineWidth = B.FromMM(0.05)
         # Set bar height to the greater of 6.35mm or 0.15*L
         # Set quiet width to 10*X
-
         # User-defined parameters
-
         # Create barcode object
         self.Barcode = Uss39('=' + str(self.parameters['Barcode']['*Contents']))
         self.X = int(self.parameters['Barcode']['Pixel Width'])
         self.module.Value().SetText( str(self.Barcode) )
-
         self.C = len(str(self.Barcode))
-
         # Inter-character gap
         if self.X < 0.250:
-            self.I = pcbnew.FromMM(3.15)
+            self.I = B.FromMM(3.15)
         else:
-            self.I = (2 * self.X) if (2*self.X) > pcbnew.FromMM(1.35) else pcbnew.FromMM(1.35)
-
+            self.I = (2 * self.X) if (2*self.X) > B.FromMM(1.35) else B.FromMM(1.35)
         # Wide to narrow ratio
-        if self.X >= pcbnew.FromMM(0.508):
-            self.N = pcbnew.FromMM(int((2.0+3.0)/2))
+        if self.X >= B.FromMM(0.508):
+            self.N = B.FromMM(int((2.0+3.0)/2))
         else:
-            self.N = pcbnew.FromMM(int((2.2+3.0)/2))
-
+            self.N = B.FromMM(int((2.2+3.0)/2))
         self.H = self.parameters['Barcode']['Height']
-
-        self.Q = (10 * self.X) if (10 * self.X) >  pcbnew.FromMM(6.35) else pcbnew.FromMM(6.35)
-
+        self.Q = (10 * self.X) if (10 * self.X) >  B.FromMM(6.35) else B.FromMM(6.35)
         self.L = self.I * (1 + self.C) + (self.C + 2) * (6 * self.X + 3 * self.N * self.X) + 2 * self.Q
 
 
     def __drawBar__(self, bit, x):
-        """
-        """
         offset = (bit + 1) * self.X
         return x + offset
 
     def __drawSpace__(self, bit, x):
-        """
-        """
-        self.draw.SetLayer(pcbnew.F_SilkS)
+        self.draw.SetLayer(B.F_SilkS)
         self.draw.SetWidth(self.X)
         self.draw.Line(x, 0, x, self.H)
-
         if (bit == 1):
             self.draw.Line(x + self.X, 0, x + self.X, self.H)
             self.draw.Line(x + self.X/2, 0, x + self.X/2, self.H)
             self.draw.Line(x, 0, x + self.X, 0)
             self.draw.Line(x, self.H, x + self.X, self.H)
-
         offset = (bit + 1) * self.X
         return x + offset
 
     def drawBars(self):
-        """
-        """
         x = 0
         bars = self.Barcode.getBarCodePattern()
         for index in range(0, len(bars), 2):
             # Draw bar
             barBit = bars[index]
             x = self.__drawBar__(barBit, x)
-
             # Draw space
             if index < len(bars)-1:
                 spaceBit = bars[index + 1]
@@ -251,11 +121,8 @@ class Uss39Wizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         return x
 
     def drawQuietZone(self, x0, y0, width, height):
-        """
-        """
-        self.draw.SetLayer(pcbnew.F_SilkS)
+        self.draw.SetLayer(B.F_SilkS)
         self.draw.SetWidth(self.X)
-
 
         for offset in range(0, int(self.Q), int(self.X/2)):
             xoffset = offset + self.X
@@ -266,22 +133,17 @@ class Uss39Wizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
             self.draw.Line(width + xoffset, -yoffset, width+xoffset, self.H+yoffset)
 
     def BuildThisFootprint(self):
-        """
-        """
-
         # Draw bars
         x = self.drawBars()
-
         # Draw quiet zone
         self.drawQuietZone(0, 0, x, self.H)
-
         # Draw courtyard origin
-        self.draw.SetLayer(pcbnew.F_CrtYd)
+        self.draw.SetLayer(B.F_CrtYd)
         self.draw.SetWidth(self.CourtyardLineWidth)
-        ch_lim = pcbnew.FromMM(0.35)
+        ch_lim = B.FromMM(0.35)
         self.draw.Line(-ch_lim, 0, ch_lim, 0)
         self.draw.Line(0, -ch_lim, 0, ch_lim)
-        self.draw.Circle(0, 0, pcbnew.FromMM(0.25))
-        self.module.Value().SetLayer(pcbnew.F_Fab)
+        self.draw.Circle(0, 0, B.FromMM(0.25))
+        self.module.Value().SetLayer(B.F_Fab)
 
 Uss39Wizard().register()
