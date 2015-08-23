@@ -22,10 +22,10 @@ import HelpfulFootprintWizardPlugin as HFPW
 import PadArray as PA
 
 
-class circular_array_wizard(HFPW.HelpfulFootprintWizardPlugin):
+class circular_pad_array_wizard(HFPW.HelpfulFootprintWizardPlugin):
 
     def GetName(self):
-        return "Circular Array"
+        return "Circular Pad Array"
 
     def GetDescription(self):
         return "Circular array of pads"
@@ -74,4 +74,4 @@ class circular_array_wizard(HFPW.HelpfulFootprintWizardPlugin):
         array.AddPadsToModule(self.draw)
 
 
-circular_array_wizard().register()
+circular_pad_array_wizard().register()
