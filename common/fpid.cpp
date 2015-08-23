@@ -29,6 +29,7 @@
 
 #include <macros.h>     // TO_UTF8()
 #include <fpid.h>
+#include <kicad_string.h>
 
 
 static inline bool isDigit( char c )
@@ -122,20 +123,17 @@ int FPID::Parse( const UTF8& aId )
 {
     clear();
 
-    size_t      cnt = aId.length() + 1;
-    char        tmp[cnt];  // C string for speed
-
-    std::strcpy( tmp, aId.c_str() );
-
-    const char* rev = EndsWithRev( tmp, tmp+aId.length(), '/' );
+    const char* buffer = aId.c_str();
+    const char* rev = EndsWithRev( buffer, buffer+aId.length(), '/' );
     size_t      revNdx;
     size_t      partNdx;
     int         offset;
 
     //=====<revision>=========================================
+    // in a FPID like discret:R3/rev4
     if( rev )
     {
-        revNdx = rev - aId.c_str();
+        revNdx = rev - buffer;
 
         // no need to check revision, EndsWithRev did that.
         revision = aId.substr( revNdx );
@@ -165,9 +163,14 @@ int FPID::Parse( const UTF8& aId )
 
     //=====<footprint name>====================================
     if( partNdx >= revNdx )
-        return partNdx;
+        return partNdx;     // Error: no footprint name.
 
-    SetFootprintName( aId.substr( partNdx, revNdx ) );
+    // Be sure the footprint name is valid.
+    // Some chars can be found in board file (in old board files
+    // or converted files from an other EDA tool
+    std::string fpname = aId.substr( partNdx, revNdx-partNdx );
+    ReplaceIllegalFileNameChars( &fpname, '_' );
+    SetFootprintName( UTF8( fpname ) );
 
     return -1;
 }
@@ -224,8 +227,8 @@ int FPID::SetFootprintName( const UTF8& aFootprintName )
 
     if( separation != -1 )
     {
-        nickname = aFootprintName.substr( separation+1 );
-        return separation + (int) nickname.size() + 1;
+        footprint = aFootprintName.substr( 0, separation-1 );
+        return separation;
     }
     else
     {

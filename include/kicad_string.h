@@ -158,11 +158,13 @@ wxString GetIllegalFileNameWxChars();
  * and are replaced with %xx where xx the hexadecimal equivalent of the replaced character.
  * This replacement may not be as elegant as using an underscore ('_') or hyphen ('-') but
  * it guarentees that there will be no naming conflicts when fixing footprint library names.
+ * however, if aReplaceChar is given, it will replace the illegal chars
  *
  * @param aName is a point to a std::string object containing the footprint name to verify.
+ * @param aReplaceChar (if not 0) is the replacement char.
  * @return true if any characters have been replaced in \a aName.
  */
-bool ReplaceIllegalFileNameChars( std::string* aName );
+bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar = 0 );
 
 #ifndef HAVE_STRTOKR
 // common/strtok_r.c optionally:

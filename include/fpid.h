@@ -82,6 +82,7 @@ public:
      */
     int Parse( const UTF8& aId );
 
+
     /**
      * Function GetLibNickname
      * returns the logical library name  portion of a FPID.
@@ -109,6 +110,9 @@ public:
     /**
      * Function SetFootprintName
      * overrides the footprint name portion of the FPID to @a aFootprintName
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the  character offset
+     *               into the parameter at which an error was detected, usually because it
+     *               contained '/'.
      */
     int SetFootprintName( const UTF8& aFootprintName );
 

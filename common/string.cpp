@@ -456,7 +456,7 @@ wxString GetIllegalFileNameWxChars()
 }
 
 
-bool ReplaceIllegalFileNameChars( std::string* aName )
+bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar )
 {
     bool              changed = false;
     std::string       result;
@@ -465,7 +465,11 @@ bool ReplaceIllegalFileNameChars( std::string* aName )
     {
         if( strchr( illegalFileNameChars, *it ) )
         {
-            StrPrintf( &result, "%%%02x", *it );
+            if( aReplaceChar )
+                StrPrintf( &result, "%c", aReplaceChar );
+            else
+                StrPrintf( &result, "%%%02x", *it );
+
             changed = true;
         }
         else

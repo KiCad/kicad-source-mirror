@@ -619,7 +619,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case AP_MACRO:  // lines like %AMMYMACRO*
                     // 5,1,8,0,0,1.08239X$1,22.5*
                     // %
-        ok = ReadApertureMacro( buff, text, m_Current_File );
+        /*ok = */ReadApertureMacro( buff, text, m_Current_File );
         break;
 
     case AP_DEFINITION:
