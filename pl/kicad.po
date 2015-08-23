@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 23:47+0100\n"
-"PO-Revision-Date: 2015-08-21 23:48+0100\n"
+"POT-Creation-Date: 2015-08-23 15:21+0100\n"
+"PO-Revision-Date: 2015-08-23 15:22+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -92,7 +92,7 @@ msgid ""
 "Zip archive <%s> created (%d bytes)"
 msgstr ""
 "\n"
-"Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
+"Utworzono archiwum ZIP: ' %s' (%d bajtów) "
 
 #: kicad/class_treeproject_item.cpp:111
 msgid ""
@@ -5972,7 +5972,7 @@ msgstr ""
 "Błąd %s."
 
 #: pcbnew/modview_frame.cpp:649
-#: pcbnew/footprint_wizard_frame.cpp:531
+#: pcbnew/footprint_wizard_frame.cpp:536
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -6106,23 +6106,23 @@ msgstr "Parametr"
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:557
+#: pcbnew/footprint_wizard_frame.cpp:562
 msgid "Select wizard to use"
 msgstr "Wybierz kreatora"
 
-#: pcbnew/footprint_wizard_frame.cpp:562
+#: pcbnew/footprint_wizard_frame.cpp:567
 msgid "Select previous editable item"
 msgstr "Wybierz poprzedni edytorwalny komponent "
 
-#: pcbnew/footprint_wizard_frame.cpp:566
+#: pcbnew/footprint_wizard_frame.cpp:571
 msgid "Select next editable item"
 msgstr "Wybierz następny edytowalny komponent"
 
-#: pcbnew/footprint_wizard_frame.cpp:571
+#: pcbnew/footprint_wizard_frame.cpp:576
 msgid "Show footprint in 3D viewer"
 msgstr "Pokaż footprint w przeglądarce 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:600
+#: pcbnew/footprint_wizard_frame.cpp:605
 msgid "Add footprint to board"
 msgstr "Wstaw footprint na płytkę"
 
@@ -9426,7 +9426,7 @@ msgstr "(Od)Twórz plik komponentów (*.cmp) dla CvPcb"
 
 #: pcbnew/menubar_pcbframe.cpp:177
 msgid "&BOM File"
-msgstr "Plik materiałowy"
+msgstr "Plik materiałowy (*.csv)"
 
 #: pcbnew/menubar_pcbframe.cpp:178
 msgid "Create a bill of materials from schematic"
@@ -18282,16 +18282,16 @@ msgstr " \""
 msgid " deg"
 msgstr " st."
 
-#: common/fpid.cpp:182
-#: common/fpid.cpp:199
+#: common/fpid.cpp:185
+#: common/fpid.cpp:202
 msgid "Illegal character found in FPID string"
 msgstr "Znaleziono niepoprawny znak w ciągu FPID"
 
-#: common/fpid.cpp:303
+#: common/fpid.cpp:306
 msgid "Illegal character found in logical library name"
 msgstr "Niepoprawny znak w danych o logicznej nazwie biblioteki"
 
-#: common/fpid.cpp:320
+#: common/fpid.cpp:323
 msgid "Illegal character found in revision"
 msgstr "Niepoprawny znak w danych o rewizji"
 
@@ -19714,7 +19714,7 @@ msgstr "Wartości znaczące pokazane są wytłuszczonym drukiem."
 
 #: pcb_calculator/tracks_width_versus_current.cpp:453
 msgid "The calculations are valid for currents up to 35A (external) or 17.5A (internal), temperature rises up to 100 deg C, and widths of up to 400mil (10mm)."
-msgstr "Obliczenia są prawidłowe dla pradów o natężeniach do 35A (warstwy zewnętrzne) lub 17.5A (warstwy wewnęrzne), przyrostów temperatury do 100 °C, szerokości do 400mil (10mm)."
+msgstr "Obliczenia są prawidłowe dla pradów o natężeniach do 35A (warstwy zewnętrzne) lub 17.5A (warstwy wewnętrzne), przyrostów temperatury do 100 °C, szerokości do 400mil (10mm)."
 
 #: pcb_calculator/tracks_width_versus_current.cpp:456
 msgid "The formula, from IPC 2221, is"
@@ -21287,471 +21287,3 @@ msgstr "Kalkulator PCB"
 msgid "New Item"
 msgstr "Nowy element"
 
-#~ msgid "CvPcb - Associate footprint to components"
-#~ msgstr "CvPcb - Przypisuje footprinty komponentom ze schematu"
-
-#~ msgid ""
-#~ "\n"
-#~ " >> Errors ERC: %d\n"
-#~ msgstr ""
-#~ "\n"
-#~ " >> Błędy ERC: %d\n"
-
-#~ msgid "There are no conflicting symbols to rescue from the cache."
-#~ msgstr ""
-#~ "Nie ma żadnych konfliktów pomiędzy symbolami by odzyskać je z pamięci "
-#~ "podręcznej."
-
-#~ msgid ""
-#~ "An error occurred while attempting to rescue components. No changes have "
-#~ "been made."
-#~ msgstr ""
-#~ "Wystąpił błąd podczas próby odzysku komponentów. Żadne zmiany nie zostały "
-#~ "wprowadzone."
-
-#~ msgid "&Rescue Cached Components"
-#~ msgstr "Odzyskaj komponenty z pamięci podręcznej"
-
-#~ msgid ""
-#~ "Some items are not annotated\n"
-#~ "Do you want to annotate schematic?"
-#~ msgstr ""
-#~ "Niektóre elementy nie są ponumerowane\n"
-#~ "Czy chcesz ponumerować schemat?"
-
-#~ msgid "Unable to create '%s'\n"
-#~ msgstr "Nie mogę utworzyć '%s'\n"
-
-#~ msgid "Plot: <%s> OK\n"
-#~ msgstr "Rysunek: <%s> OK\n"
-
-#~ msgid "Error creating file '%s'\n"
-#~ msgstr "Wystąpił błąd podczas tworzenia pliku '%s'\n"
-
-#~ msgid "File '%s' OK\n"
-#~ msgstr "Plik '%s' OK\n"
-
-#~ msgid "Unable to create <%s>\n"
-#~ msgstr "Nie mogę utworzyć <%s>\n"
-
-#~ msgid "Automatically close this dialog"
-#~ msgstr "Automatycznie zamknij"
-
-#~ msgid "Default &bus width:"
-#~ msgstr "Domyślna szerokość &magistrali:"
-
-#~ msgid "Repeat draw item &horizontal displacement:"
-#~ msgstr "Powtarzaj rysowanie elementów z przesunięciem poziomym:"
-
-#~ msgid "Repeat draw item &vertical displacement:"
-#~ msgstr "Powtarzaj rysowanie elementów z przesunięciem pionowym:"
-
-#~ msgid "&Repeat label increment:"
-#~ msgstr "Zmieniaj numer etykiety co:"
-
-#~ msgid "Show gr&id"
-#~ msgstr "Pokaż siatkę"
-
-#~ msgid "Show hi&dden pins"
-#~ msgstr "Pokaż ukryte piny"
-
-#~ msgid "Do not center and &warp cursor on zoom"
-#~ msgstr "Nie centruj i nie przesuwaj kursora przy powiększaniu"
-
-#~ msgid "Use &middle mouse button to pan"
-#~ msgstr "Użyj środkowego klawisza myszy do panoramowania"
-
-#~ msgid "Show p&age limits"
-#~ msgstr "Pokaż granice strony"
-
-#~ msgid "25"
-#~ msgstr "25"
-
-#~ msgid "Current graphic &line width:"
-#~ msgstr "Bieżąca szerokość &linii:"
-
-#~ msgid "Current graphic text &size:"
-#~ msgstr "Bieżący rozmiar tek&stu (grafika):"
-
-#~ msgid "Current &pin lenght:"
-#~ msgstr "Długość bieżącego &pinu:"
-
-#~ msgid "Current pin name size:"
-#~ msgstr "Długość nazwy bieżącego pinu:"
-
-#~ msgid "Current pin number size:"
-#~ msgstr "Rozmiar numeru pinu bieżącego:"
-
-#~ msgid "&Repeat pin number increment:"
-#~ msgstr "Zmieniaj nume&r etykiety co:"
-
-#~ msgid "Save as Default"
-#~ msgstr "Zapisz jako domyślny"
-
-#~ msgid "Repeat pin displacement"
-#~ msgstr "Powtarzaj z przemieszczeniem"
-
-#~ msgid ""
-#~ "This project uses symbols that no longer match the ones in the system "
-#~ "libraries.\n"
-#~ "Using this tool, you can rescue these cached symbols into a new library.\n"
-#~ "\n"
-#~ "Choose \"Rescue\" for any parts you would like to save from this "
-#~ "project's cache,\n"
-#~ "or press \"Cancel\" to allow the symbols to be updated to the new "
-#~ "versions.\n"
-#~ "\n"
-#~ "All rescued components will be renamed with a new suffix of \"-RESCUE-%s"
-#~ "\"\n"
-#~ "to avoid naming conflicts."
-#~ msgstr ""
-#~ "Ten projekt używa symboli, które nie odpowiadają tym znajdujących się w "
-#~ "bibliotekach.\n"
-#~ "Używając tego narzędzia, można odzyskać te symbole z pamięci podręcznej "
-#~ "tworząc nową bibliotekę.\n"
-#~ "\n"
-#~ "Wybierz \"Odzyskaj\" dla dowolnego komponentu, który ma być zachowany z "
-#~ "pamięci podręcznej,\n"
-#~ "lub naciśnij \"Anuluj\" by pozwolić na aktualizację symboli na schemacie "
-#~ "do ich nowych wersji.\n"
-#~ "\n"
-#~ "Wszystkie odzyskane komponenty będą posiadać zmienione nazwy za pomocą "
-#~ "przyrostka \"-RESCUE-%s\"\n"
-#~ "by uniknąć konfliktu nazw."
-
-#~ msgid "Rescue symbol"
-#~ msgstr "Odzyskaj symbol"
-
-#~ msgid "Symbols with cache/library conflicts:"
-#~ msgstr ""
-#~ "Symbole będące w konflikcie pomiędzy biblioteką a pamięcią podręczną:"
-
-#~ msgid "No Modules!"
-#~ msgstr "Brak footprintów!"
-
-#~ msgid "(Default)"
-#~ msgstr "(Domyślny)"
-
-#~ msgid "Cannot open file %s for reading."
-#~ msgstr "Nie mogę otworzyć pliku %s do odczytu."
-
-#~ msgid "Change modules %s -> %s ?"
-#~ msgstr "Zamienić footprinty %s -> %s?"
-
-#~ msgid "Change ALL modules ?"
-#~ msgstr "Zamienić WSZYSTKIE footprinty?"
-
-#~ msgid "Save Component Files"
-#~ msgstr "Zapisz pliki komponentów"
-
-#~ msgid "x Count:"
-#~ msgstr "Ilość x:"
-
-#~ msgid "y Count:"
-#~ msgstr "Ilość y:"
-
-#~ msgid "x Spacing:"
-#~ msgstr "Rozstaw x:"
-
-#~ msgid "y Spacing:"
-#~ msgstr "Rozstaw y:"
-
-#~ msgid "x Offset:"
-#~ msgstr "Przesunięcie x:"
-
-#~ msgid "y Offset:"
-#~ msgstr "Przesunięcie y:"
-
-#~ msgid "x Centre:"
-#~ msgstr "Środek x:"
-
-#~ msgid "y Centre:"
-#~ msgstr "Środek y:"
-
-#~ msgid "Size X"
-#~ msgstr "Rozmiar X"
-
-#~ msgid "Size Y"
-#~ msgstr "Rozmiar Y"
-
-#~ msgid "Change same footprint"
-#~ msgstr "Zamień te same footprinty"
-
-#~ msgid "Change all"
-#~ msgstr "Zamień wszystkie"
-
-#~ msgid "Rebuild .cmp List"
-#~ msgstr "Odtwórz listę .cmp"
-
-#~ msgid "Create .dsn File and Launch FreeRouter"
-#~ msgstr "Utwórz plik .DSN i uruchom FreeRouter"
-
-#~ msgid "Create .dsn File"
-#~ msgstr "Utwórz plik .dsn"
-
-#~ msgid "Polar"
-#~ msgstr "Polarne"
-
-#~ msgid "Text size V"
-#~ msgstr "Pionowy rozmiar tekstu"
-
-#~ msgid "Text size H"
-#~ msgstr "Poziomy rozmiar tekstu"
-
-#~ msgid "Using component footprint link file \"%s\".\n"
-#~ msgstr "Użyty zostanie plik połączeń komponentów z footprintami \"%s\".\n"
-
-#~ msgid "Using time stamps to select footprints in file \"%s\".\n"
-#~ msgstr ""
-#~ "Użyte zostaną odciski czasowe przy wybieraniu footprintów z pliku \"%s"
-#~ "\".\n"
-
-#~ msgid "From netlist"
-#~ msgstr "Z listy sieci"
-
-#~ msgid "From separate .cmp file"
-#~ msgstr "Z oddzielnego pliku .cmp"
-
-#~ msgid "Footprint Name Source"
-#~ msgstr "Źródło nazwy footprintu"
-
-#~ msgid ""
-#~ "Source of footprints names for component:\n"
-#~ "- the netlist (if you have filled the footprint field of each component  "
-#~ "in schematic)\n"
-#~ "- the .cmp file created by CvPcb"
-#~ msgstr ""
-#~ "Źródłem nazw footprintów dla elementów może być:\n"
-#~ "- sama lista sieci (jeśli wypełnione zostały pola Footprint każdgo "
-#~ "symbolu na schemacie),\n"
-#~ "- plik .cmp z nazwami footprintów, tworzony przez CvPcb podczas "
-#~ "przypisywania footprintów."
-
-#~ msgid "Display all messages"
-#~ msgstr "Pokaż wszystkie wiadomości"
-
-#~ msgid ""
-#~ "Messages filter:\n"
-#~ "If checked: show all messages when reading the netlist\n"
-#~ "If not checked: show only warning or error messages"
-#~ msgstr ""
-#~ "Filtr wiadomości:\n"
-#~ "Jeśli opcja ta jest zaznaczona, wszystkie wiadomości podczas odczytywania "
-#~ "listy sieci będą pokazywane.\n"
-#~ "Jeśli opcje ta nie jest zaznaczona, tylko wiadomości zawierające "
-#~ "ostrzeżenia lub błędy będą pokazywane."
-
-#~ msgid "Front"
-#~ msgstr "Gorna"
-
-#~ msgid "** Unable to create '%s'**\n"
-#~ msgstr "** Nie mogę utworzyć '%s' ** \n"
-
-#~ msgid "Settings are incorrect"
-#~ msgstr "Ustawienia są nieprawidłowe"
-
-#~ msgid ""
-#~ "VRML Export Failed:\n"
-#~ "Could not add outline to contours."
-#~ msgstr ""
-#~ "Eksportowanie do VRML się nie powiodło:\n"
-#~ "Nie można dodać obrysu do konturów."
-
-#~ msgid "Footprint count %d\n"
-#~ msgstr "Ilość footprintów %d\n"
-
-#~ msgid "Custom Track Width"
-#~ msgstr "Własna szerkość ścieżki"
-
-#~ msgid " (from netclass)"
-#~ msgstr " (z listy sieci)"
-
-#~ msgid "Not implemented yet."
-#~ msgstr "Obecnie jeszcze nie działa."
-
-#~ msgid "Problem when saving file, exit anyway ?"
-#~ msgstr "Problem podczas zapisu pliku, zakończyć mimo to?"
-
-#~ msgid "Open Net List"
-#~ msgstr "Otwórz plik netlisty"
-
-#~ msgid "Project: '%s'  (netlist: '%s')"
-#~ msgstr "Projekt: '%s' (lista sieci: '%s')"
-
-#~ msgid ""
-#~ "Unable to find netlist file:\n"
-#~ "'%s'\n"
-#~ "\n"
-#~ "Please, create it"
-#~ msgstr ""
-#~ "Nie można odnaleźć listy sieci:\n"
-#~ "'%s'\n"
-#~ "\n"
-#~ "Proszę ją utworzyć."
-
-#~ msgid "Unknown netlist format."
-#~ msgstr "Nieznany format listy sieci"
-
-#~ msgid "&Open Netlist"
-#~ msgstr "Otwórz plik listy sieci"
-
-#~ msgid "Open recent netlist"
-#~ msgstr "Otwórz wcześniej użyty plik listy sieci"
-
-#~ msgid "Save Cmp File &As...\tCtrl+Shift+S"
-#~ msgstr "Zapisz plik .cmp jako...\tCtrl+Shift+S"
-
-#~ msgid "Save Component Footprint Link File"
-#~ msgstr "Zapisz plik łącz komponentów z footprintami (plik .cmp)"
-
-#~ msgid "Unable to create component footprint link file '%s'"
-#~ msgstr "Nie mogę utworzyć pliku łącz komponentów z footprintami '%s'"
-
-#~ msgid "Large"
-#~ msgstr "Duże"
-
-#~ msgid "Path configuration name cannot be empty."
-#~ msgstr "Nazwa w konfiguracji ścieżek dostępu nie może być pusta."
-
-#~ msgid ""
-#~ "Path configuration names cannot have a number as the first character."
-#~ msgstr "Nazwy nie mogą posiadać cyfry na początku."
-
-#~ msgid "<-"
-#~ msgstr "<-"
-
-#~ msgid "<br><b>I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup></b></br>"
-#~ msgstr "<br><b>I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup></b></br>"
-
-#~ msgid "<br>Internal traces : <b>K = 0.024</b></br>"
-#~ msgstr "<br>Ścieżki wewnętrzne : <b>K = 0.024</b></br>"
-
-#~ msgid "<br>External traces: <b>K = 0.048</b></br>"
-#~ msgstr "<br>Ścieżki zewnętrzne : <b>K = 0.048</b></br>"
-
-#~ msgid "<br>where:</br>"
-#~ msgstr "<br>gdzie:</br>"
-
-#~ msgid "Z0e (Zdiff)"
-#~ msgstr "Z0e (Zdiff)"
-
-#~ msgid "Z0o (Z0)"
-#~ msgstr "Z0o (Z0)"
-
-#~ msgid "Odd-Mode impedance"
-#~ msgstr "Impedancja Nieparzysta"
-
-#~ msgid ""
-#~ "Valid max values:\n"
-#~ "35A for external traces and 17.5A for internal.\n"
-#~ "400mil widths.\n"
-#~ "Maximum temperature rise of 100 deg C."
-#~ msgstr ""
-#~ "Dozwolone wartości graniczne:\n"
-#~ "35A dla zewnętrznych ścieżek i 17,5A dla wewnętrznych.\n"
-#~ "Szerokość 400mil.\n"
-#~ "Maksymalny przyrost temperatury 100st. C"
-
-#~ msgid "Cu thickness"
-#~ msgstr "Grubość miedzi"
-
-#~ msgid "Track Characteristics (External Layers):"
-#~ msgstr "Charakterystyki ścieżki (warstwy zewnętrzne):"
-
-#~ msgid "Required trace width"
-#~ msgstr "Żądana szerokość ścieżki"
-
-#~ msgid "Loss"
-#~ msgstr "Straty"
-
-#~ msgid "Track Characteristics (Internal Layers):"
-#~ msgstr "Charakterystyki ścieżki (warstwy wewnętrzne):"
-
-#~ msgid "Conflicts Checking"
-#~ msgstr "Sprawdzanie konfliktów"
-
-#~ msgid "Position Files:"
-#~ msgstr "Pliki położeń footprintów:"
-
-#~ msgid "Allows to specify any track/via size"
-#~ msgstr "Zezwala na wprowadzenie dowolnego rozmiaru ścieżki/przelotki"
-
-#~ msgid "Route using the width of the starting track"
-#~ msgstr "Prowadź ścieżki używając szerokości ścieżki rozpoczynającej"
-
-#~ msgid "Tune Track Length"
-#~ msgstr "Dostrój długość ścieżki"
-
-#~ msgid "Open netlist file"
-#~ msgstr "Otwórz plik listy sieci"
-
-#~ msgid "Save component/footprint link file (.cmp file)"
-#~ msgstr "Zapisuje plik łącz komponentów z footprintami (plik .CMP)"
-
-#~ msgid "Save component/footprint link file (.cmp file) with new name"
-#~ msgstr ""
-#~ "Zapisuje plik łącz komponentów z footprintami (plik .CMP) pod nową nazwą"
-
-#~ msgid "User"
-#~ msgstr "Użytkownika"
-
-#~ msgid "Mur"
-#~ msgstr "Mur"
-
-#~ msgid "MurC"
-#~ msgstr "MurC"
-
-#~ msgid "Quit CvPcb"
-#~ msgstr "Zakończ CvPcb"
-
-#~ msgid "Mirror Y Component"
-#~ msgstr "Odwróć komponent w osi Y"
-
-#~ msgid "Mirror X Component"
-#~ msgstr "Odwróć komponent w osi X"
-
-#~ msgid "E&xit"
-#~ msgstr "&Zakończ"
-
-#~ msgid "Quit GerbView"
-#~ msgstr "Zakończ GerbView"
-
-#~ msgid "Quit KiCad"
-#~ msgstr "Zakończ pracę w programie KiCad"
-
-#~ msgid "Quit Pl_Editor"
-#~ msgstr "Zakończ"
-
-#~ msgid "&About Pl_Editor"
-#~ msgstr "O programie ..."
-
-#~ msgid "Plot: %s OK\n"
-#~ msgstr "Rysunek: %s OK\n"
-
-#~ msgid "HPGL plot files (.plt)|*.plt"
-#~ msgstr "Pliki rysunków HPGL (.plt)|*.plt"
-
-#~ msgid "Gerber files (.pho)|*.pho"
-#~ msgstr "Pliki Gerber (.pho)|*.pho"
-
-#~ msgid "DXF files (.dxf)|*.dxf"
-#~ msgstr "Pliki AutoCAD DXF (.dxf)|*.dxf"
-
-#~ msgid "Quit Pcbnew"
-#~ msgstr "Zakończ Pcbnew"
-
-#~ msgid "Design Rules"
-#~ msgstr "Edytor reguł projektowych"
-
-#~ msgid "&Route"
-#~ msgstr "T&rasowanie"
-
-#~ msgid ""
-#~ "Cannot delete the only remaining pad of the module (modules on PCB must "
-#~ "have at least one pad)."
-#~ msgstr ""
-#~ "Nie można usunąć ostatniego pola lutowniczego footprintu (Footprinty na "
-#~ "PCB muszą posiadać przynajmniej jedno pole)."
-
-#~ msgid "Edit document file"
-#~ msgstr "Dokumentacja footprintu"
