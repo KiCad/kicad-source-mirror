@@ -455,7 +455,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         switch( pad->GetShape() )
         {
         default:
-        case PAD_CIRCLE:
+        case PAD_SHAPE_CIRCLE:
             fprintf( aFile, " ROUND %g\n",
                      pad->GetDrillSize().x / SCALE_FACTOR );
             /* Circle is center, radius */
@@ -465,7 +465,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                     pad->GetSize().x / (SCALE_FACTOR * 2) );
             break;
 
-        case PAD_RECT:
+        case PAD_SHAPE_RECT:
             fprintf( aFile, " RECTANGULAR %g\n",
                      pad->GetDrillSize().x / SCALE_FACTOR );
 
@@ -476,7 +476,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                     dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
             break;
 
-        case PAD_OVAL:     // Create outline by 2 lines and 2 arcs
+        case PAD_SHAPE_OVAL:     // Create outline by 2 lines and 2 arcs
             {
                 // OrCAD Layout call them OVAL or OBLONG - GenCAD call them FINGERs
                 fprintf( aFile, " FINGER %g\n",
@@ -547,7 +547,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             }
             break;
 
-        case PAD_TRAPEZOID:
+        case PAD_SHAPE_TRAPEZOID:
             fprintf( aFile, " POLYGON %g\n",
                      pad->GetDrillSize().x / SCALE_FACTOR );
 

@@ -1225,10 +1225,10 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetShape() )
     {
-    case PAD_CIRCLE:    shape = "circle";       break;
-    case PAD_RECT:      shape = "rect";         break;
-    case PAD_OVAL:      shape = "oval";         break;
-    case PAD_TRAPEZOID: shape = "trapezoid";    break;
+    case PAD_SHAPE_CIRCLE:    shape = "circle";       break;
+    case PAD_SHAPE_RECT:      shape = "rect";         break;
+    case PAD_SHAPE_OVAL:      shape = "oval";         break;
+    case PAD_SHAPE_TRAPEZOID: shape = "trapezoid";    break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"), aPad->GetShape() ) );
@@ -1238,10 +1238,10 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_STANDARD:          type = "thru_hole";      break;
-    case PAD_SMD:               type = "smd";            break;
-    case PAD_CONN:              type = "connect";        break;
-    case PAD_HOLE_NOT_PLATED:   type = "np_thru_hole";   break;
+    case PAD_ATTRIB_STANDARD:          type = "thru_hole";      break;
+    case PAD_ATTRIB_SMD:               type = "smd";            break;
+    case PAD_ATTRIB_CONN:              type = "connect";        break;
+    case PAD_ATTRIB_HOLE_NOT_PLATED:   type = "np_thru_hole";   break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad attribute: %d" ),
@@ -1270,7 +1270,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     {
         m_out->Print( 0, " (drill" );
 
-        if( aPad->GetDrillShape() == PAD_DRILL_OBLONG )
+        if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
             m_out->Print( 0, " oval" );
 
         if( sz.GetWidth() > 0 )

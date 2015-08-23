@@ -73,16 +73,16 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T
 
     switch( aPad->GetShape() )
     {
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         m_plotter->FlashPadCircle( shape_pos, aPad->GetSize().x, aPlotMode );
         break;
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
         m_plotter->FlashPadOval( shape_pos, aPad->GetSize(),
                                  aPad->GetOrientation(), aPlotMode );
         break;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
         {
             wxPoint coord[4];
             aPad->BuildPadPolygon( coord, wxSize(0,0), 0 );
@@ -91,7 +91,7 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T
         }
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
     default:
         m_plotter->FlashPadRect( shape_pos, aPad->GetSize(),
                                  aPad->GetOrientation(), aPlotMode );
@@ -625,14 +625,14 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape,
                            double aOrientation, int aSmallDrill )
 {
     // Small drill marks have no significance when applied to slots
-    if( aSmallDrill && aDrillShape == PAD_DRILL_CIRCLE )
+    if( aSmallDrill && aDrillShape == PAD_DRILL_SHAPE_CIRCLE )
         aDrillSize.x = std::min( aSmallDrill, aDrillSize.x );
 
     // Round holes only have x diameter, slots have both
     aDrillSize.x -= getFineWidthAdj();
     aDrillSize.x = Clamp( 1, aDrillSize.x, aPadSize.x - 1 );
 
-    if( aDrillShape == PAD_DRILL_OBLONG )
+    if( aDrillShape == PAD_DRILL_SHAPE_OBLONG )
     {
         aDrillSize.y -= getFineWidthAdj();
         aDrillSize.y = Clamp( 1, aDrillSize.y, aPadSize.y - 1 );
@@ -669,7 +669,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         const VIA* via = dyn_cast<const VIA*>( pts );
 
         if( via )
-            plotOneDrillMark( PAD_DRILL_CIRCLE, via->GetStart(),
+            plotOneDrillMark( PAD_DRILL_SHAPE_CIRCLE, via->GetStart(),
                     wxSize( via->GetDrillValue(), 0 ),
                     wxSize( via->GetWidth(), 0 ), 0, small_drill );
     }

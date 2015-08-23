@@ -270,8 +270,8 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     pad->SetSize( wxSize( s_inductor_pattern.m_Width, s_inductor_pattern.m_Width ) );
 
     pad->SetLayerSet( LSET( module->GetLayer() ) );
-    pad->SetAttribute( PAD_SMD );
-    pad->SetShape( PAD_CIRCLE );
+    pad->SetAttribute( PAD_ATTRIB_SMD );
+    pad->SetShape( PAD_SHAPE_CIRCLE );
 
     D_PAD* newpad = new D_PAD( *pad );
 
@@ -553,8 +553,8 @@ MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
         pad->SetSize( wxSize( tw, tw ) );
 
         pad->SetPosition( module->GetPosition() );
-        pad->SetShape( PAD_RECT );
-        pad->SetAttribute( PAD_SMD );
+        pad->SetShape( PAD_SHAPE_RECT );
+        pad->SetAttribute( PAD_ATTRIB_SMD );
         pad->SetLayerSet( F_Cu );
 
         Line.Printf( wxT( "%d" ), pad_num );

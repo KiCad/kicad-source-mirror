@@ -67,16 +67,16 @@ D_PAD::D_PAD( MODULE* parent ) :
         m_Pos = GetParent()->GetPosition();
     }
 
-    SetShape( PAD_CIRCLE );                 // Default pad shape is PAD_CIRCLE.
-    SetDrillShape( PAD_DRILL_CIRCLE );      // Default pad drill shape is a circle.
-    m_Attribute           = PAD_STANDARD;   // Default pad type is NORMAL (thru hole)
+    SetShape( PAD_SHAPE_CIRCLE );                   // Default pad shape is PAD_CIRCLE.
+    SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );        // Default pad drill shape is a circle.
+    m_Attribute           = PAD_ATTRIB_STANDARD;    // Default pad type is NORMAL (thru hole)
     m_LocalClearance      = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     m_ZoneConnection      = PAD_ZONE_CONN_INHERITED; // Use parent setting by default
-    m_ThermalWidth        = 0;                // Use parent setting by default
-    m_ThermalGap          = 0;                // Use parent setting by default
+    m_ThermalWidth        = 0;                  // Use parent setting by default
+    m_ThermalGap          = 0;                  // Use parent setting by default
 
     // Set layers mask to default for a standard thru hole pad.
     m_layerMask           = StandardMask();
@@ -110,7 +110,7 @@ LSET D_PAD::ConnSMDMask()
 
 LSET D_PAD::UnplatedHoleMask()
 {
-    // was #define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS ALL_CU_LAYERS |
+    // was #define PAD_ATTRIB_HOLE_NOT_PLATED_DEFAULT_LAYERS ALL_CU_LAYERS |
     // SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
     static LSET saved = LSET::AllCuMask() | LSET( 3, F_SilkS, B_Mask, F_Mask );
     return saved;
@@ -124,19 +124,19 @@ int D_PAD::boundingRadius() const
 
     switch( GetShape() )
     {
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         radius = m_Size.x / 2;
         break;
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
         radius = std::max( m_Size.x, m_Size.y ) / 2;
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         radius = 1 + KiROUND( EuclideanNorm( m_Size ) / 2 );
         break;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
         x = m_Size.x + std::abs( m_DeltaSize.y );   // Remember: m_DeltaSize.y is the m_Size.x change
         y = m_Size.y + std::abs( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
         radius = 1 + KiROUND( hypot( x, y ) / 2 );
@@ -158,12 +158,12 @@ const EDA_RECT D_PAD::GetBoundingBox() const
 
     switch( GetShape() )
     {
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         area.SetOrigin( m_Pos );
         area.Inflate( m_Size.x / 2 );
         break;
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
         //Use the maximal two most distant points and track their rotation
         // (utilise symmetry to avoid four points)
         quadrant1.x =  m_Size.x/2;
@@ -179,7 +179,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         area.SetSize( 2*dx, 2*dy );
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         //Use two corners and track their rotation
         // (utilise symmetry to avoid four points)
         quadrant1.x =  m_Size.x/2;
@@ -195,7 +195,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         area.SetSize( 2*dx, 2*dy );
         break;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
         //Use the four corners and track their rotation
         // (Trapezoids will not be symmetric)
         quadrant1.x =  (m_Size.x + m_DeltaSize.y)/2;
@@ -263,7 +263,7 @@ void D_PAD::SetAttribute( PAD_ATTR_T aAttribute )
 {
     m_Attribute = aAttribute;
 
-    if( aAttribute == PAD_SMD )
+    if( aAttribute == PAD_ATTRIB_SMD )
         m_Drill = wxSize( 0, 0 );
 }
 
@@ -417,7 +417,7 @@ bool D_PAD::IncrementItemReference()
 
 bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
 {
-    bool skip = aSkipUnconnectable && ( GetAttribute() == PAD_HOLE_NOT_PLATED );
+    bool skip = aSkipUnconnectable && ( GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED );
 
     if( !skip )
         SetPadName( GetParent()->GetNextPadName( aFillSequenceGaps ) );
@@ -654,7 +654,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     Line = ::CoordinateToString( (unsigned) m_Drill.x );
 
-    if( GetDrillShape() == PAD_DRILL_CIRCLE )
+    if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
         aList.push_back( MSG_PANEL_ITEM( _( "Drill" ), Line, RED ) );
     }
@@ -741,13 +741,13 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
 
     switch( GetShape() )
     {
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         if( KiROUND( EuclideanNorm( delta ) ) <= dx )
             return true;
 
         break;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
     {
         wxPoint poly[4];
         BuildPadPolygon( poly, wxSize(0,0), 0 );
@@ -755,7 +755,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
         return TestPointInsidePolygon( poly, 4, delta );
     }
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
     {
         RotatePoint( &delta, -m_Orient );
         // An oval pad has the same shape as a segment with rounded ends
@@ -776,7 +776,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
     }
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         RotatePoint( &delta, -m_Orient );
 
         if( (abs( delta.x ) <= dx ) && (abs( delta.y ) <= dy) )
@@ -857,16 +857,16 @@ wxString D_PAD::ShowPadShape() const
 {
     switch( GetShape() )
     {
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         return _( "Circle" );
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
         return _( "Oval" );
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         return _( "Rect" );
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
         return _( "Trap" );
 
     default:
@@ -879,16 +879,16 @@ wxString D_PAD::ShowPadAttr() const
 {
     switch( GetAttribute() )
     {
-    case PAD_STANDARD:
+    case PAD_ATTRIB_STANDARD:
         return _( "Std" );
 
-    case PAD_SMD:
+    case PAD_ATTRIB_SMD:
         return _( "SMD" );
 
-    case PAD_CONN:
+    case PAD_ATTRIB_CONN:
         return _( "Conn" );
 
-    case PAD_HOLE_NOT_PLATED:
+    case PAD_ATTRIB_HOLE_NOT_PLATED:
         return _( "Not Plated" );
 
     default:
@@ -931,7 +931,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 0;
 
     // These types of pads contain a hole
-    if( m_Attribute == PAD_STANDARD || m_Attribute == PAD_HOLE_NOT_PLATED )
+    if( m_Attribute == PAD_ATTRIB_STANDARD || m_Attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
         aLayers[aCount++] = ITEM_GAL_LAYER( PADS_HOLES_VISIBLE );
 
     if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )

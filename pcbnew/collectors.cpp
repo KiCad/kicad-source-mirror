@@ -246,8 +246,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         // for through pads: pads on Front or Back board sides must be seen
         pad = (D_PAD*) item;
 
-        if( (pad->GetAttribute() != PAD_SMD) &&
-            (pad->GetAttribute() != PAD_CONN) )    // a hole is present, so multiple layers
+        if( (pad->GetAttribute() != PAD_ATTRIB_SMD) &&
+            (pad->GetAttribute() != PAD_ATTRIB_CONN) )    // a hole is present, so multiple layers
         {
             // proceed to the common tests below, but without the parent module test,
             // by leaving module==NULL, but having pad != null

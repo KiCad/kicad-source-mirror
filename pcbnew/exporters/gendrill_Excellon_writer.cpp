@@ -673,24 +673,24 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
                 if( ! aGenerateNPTH_list &&
-                    pad->GetAttribute() == PAD_HOLE_NOT_PLATED &&
+                    pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED &&
                     ! aMerge_PTH_NPTH )
                     continue;
 
-                if( aGenerateNPTH_list && pad->GetAttribute() != PAD_HOLE_NOT_PLATED )
+                if( aGenerateNPTH_list && pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
                     continue;
 
                 if( pad->GetDrillSize().x == 0 )
                     continue;
 
-                new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_HOLE_NOT_PLATED);
+                new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED);
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
                 new_hole.m_Hole_Orient    = pad->GetOrientation();
                 new_hole.m_Hole_Shape     = 0;           // hole shape: round
                 new_hole.m_Hole_Diameter  = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
-                if( pad->GetDrillShape() != PAD_DRILL_CIRCLE )
+                if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE )
                     new_hole.m_Hole_Shape = 1; // oval flag set
 
                 new_hole.m_Hole_Size         = pad->GetDrillSize();

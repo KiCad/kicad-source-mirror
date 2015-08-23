@@ -449,7 +449,7 @@ void EDA_3D_CANVAS::buildPadShapeThickOutlineAsPolygon( const D_PAD*  aPad,
                                                 int             aCircleToSegmentsCount,
                                                 double          aCorrectionFactor )
 {
-    if( aPad->GetShape() == PAD_CIRCLE )    // Draw a ring
+    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
     {
         TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(),
                                 aPad->GetSize().x / 2, aCircleToSegmentsCount, aWidth );

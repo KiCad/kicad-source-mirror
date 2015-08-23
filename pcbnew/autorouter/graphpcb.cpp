@@ -92,7 +92,7 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
     dx = aPad->GetSize().x / 2;
     dx += marge;
 
-    if( aPad->GetShape() == PAD_CIRCLE )
+    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
     {
         TraceFilledCircle( shape_pos.x, shape_pos.y, dx,
                            aPad->GetLayerSet(), color, op_logic );
@@ -102,7 +102,7 @@ void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
     dy = aPad->GetSize().y / 2;
     dy += marge;
 
-    if( aPad->GetShape() == PAD_TRAPEZOID )
+    if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )
     {
         dx += abs( aPad->GetDelta().y ) / 2;
         dy += abs( aPad->GetDelta().x ) / 2;

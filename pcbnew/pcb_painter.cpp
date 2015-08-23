@@ -572,7 +572,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     {
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
         size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
-        shape = aPad->GetDrillShape() == PAD_DRILL_OBLONG ? PAD_OVAL : PAD_CIRCLE;
+        shape = aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE;
     }
     else if( aLayer == F_Mask || aLayer == B_Mask )
     {
@@ -604,7 +604,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
     switch( shape )
     {
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
         if( size.y >= size.x )
         {
             m = ( size.y - size.x );
@@ -649,11 +649,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         }
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         m_gal->DrawRectangle( VECTOR2D( -size.x, -size.y ), VECTOR2D( size.x, size.y ) );
         break;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
     {
         std::deque<VECTOR2D> pointList;
         wxPoint corners[4];
@@ -680,7 +680,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     }
     break;
 
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), size.x );
         break;
     }

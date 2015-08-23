@@ -1449,10 +1449,10 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             switch( padchar )
             {
-            case 'C':   padshape = PAD_CIRCLE;      break;
-            case 'R':   padshape = PAD_RECT;        break;
-            case 'O':   padshape = PAD_OVAL;        break;
-            case 'T':   padshape = PAD_TRAPEZOID;   break;
+            case 'C':   padshape = PAD_SHAPE_CIRCLE;      break;
+            case 'R':   padshape = PAD_SHAPE_RECT;        break;
+            case 'O':   padshape = PAD_SHAPE_OVAL;        break;
+            case 'T':   padshape = PAD_SHAPE_TRAPEZOID;   break;
             default:
                 m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'" ),
                                 padchar,
@@ -1500,14 +1500,14 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             BIU offs_x  = biuParse( data, &data );
             BIU offs_y  = biuParse( data, &data );
 
-            PAD_DRILL_SHAPE_T drShape = PAD_DRILL_CIRCLE;
+            PAD_DRILL_SHAPE_T drShape = PAD_DRILL_SHAPE_CIRCLE;
 
             data = strtok_r( (char*) data, delims, &saveptr );
             if( data )  // optional shape
             {
                 if( data[0] == 'O' )
                 {
-                    drShape = PAD_DRILL_OBLONG;
+                    drShape = PAD_DRILL_SHAPE_OBLONG;
 
                     data    = strtok_r( NULL, delims, &saveptr );
                     drill_x = biuParse( data );
@@ -1532,13 +1532,13 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             data = strtok_r( line + SZ( "At" ), delims, &saveptr );
 
             if( !strcmp( data, "SMD" ) )
-                attribute = PAD_SMD;
+                attribute = PAD_ATTRIB_SMD;
             else if( !strcmp( data, "CONN" ) )
-                attribute = PAD_CONN;
+                attribute = PAD_ATTRIB_CONN;
             else if( !strcmp( data, "HOLE" ) )
-                attribute = PAD_HOLE_NOT_PLATED;
+                attribute = PAD_ATTRIB_HOLE_NOT_PLATED;
             else
-                attribute = PAD_STANDARD;
+                attribute = PAD_ATTRIB_STANDARD;
 
             strtok_r( NULL, delims, &saveptr );  // skip BufCar
             data = strtok_r( NULL, delims, &saveptr );
@@ -3689,10 +3689,10 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 
     switch( me->GetShape() )
     {
-    case PAD_CIRCLE:    cshape = 'C';   break;
-    case PAD_RECT:      cshape = 'R';   break;
-    case PAD_OVAL:      cshape = 'O';   break;
-    case PAD_TRAPEZOID: cshape = 'T';   break;
+    case PAD_SHAPE_CIRCLE:    cshape = 'C';   break;
+    case PAD_SHAPE_RECT:      cshape = 'R';   break;
+    case PAD_SHAPE_OVAL:      cshape = 'O';   break;
+    case PAD_SHAPE_TRAPEZOID: cshape = 'T';   break;
 
     default:
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_FORMAT, me->GetShape() ) );
@@ -3732,7 +3732,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
                     fmtBIU( me->GetDrillSize().x ).c_str(),
                     fmtBIUPoint( me->GetOffset() ).c_str() );
 
-    if( me->GetDrillShape() == PAD_DRILL_OBLONG )
+    if( me->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
     {
         fprintf( m_fp, " %c %s", 'O', fmtBIUSize( me->GetDrillSize() ).c_str() );
     }
@@ -3743,10 +3743,10 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 
     switch( me->GetAttribute() )
     {
-    case PAD_STANDARD:          texttype = "STD";       break;
-    case PAD_SMD:               texttype = "SMD";       break;
-    case PAD_CONN:              texttype = "CONN";      break;
-    case PAD_HOLE_NOT_PLATED:   texttype = "HOLE";      break;
+    case PAD_ATTRIB_STANDARD:          texttype = "STD";       break;
+    case PAD_ATTRIB_SMD:               texttype = "SMD";       break;
+    case PAD_ATTRIB_CONN:              texttype = "CONN";      break;
+    case PAD_ATTRIB_HOLE_NOT_PLATED:   texttype = "HOLE";      break;
 
     default:
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_ATTRIBUTE, me->GetAttribute() ) );

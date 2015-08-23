@@ -64,7 +64,7 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
 
         row_len = (pads_per_row - 1) * pad_pitch
 
-        pad_shape = pcbnew.PAD_OVAL if pads["*oval"] else pcbnew.PAD_RECT
+        pad_shape = pcbnew.PAD_SHAPE_OVAL if pads["*oval"] else pcbnew.PAD_SHAPE_RECT
 
         h_pad = PA.PadMaker(self.module).SMDPad(
             pad_width, pad_length, shape=pad_shape)

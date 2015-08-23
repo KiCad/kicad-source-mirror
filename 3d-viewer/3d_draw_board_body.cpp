@@ -141,7 +141,7 @@ void EDA_3D_CANVAS::buildBoardThroughHolesPolygonList( SHAPE_POLY_SET& allBoardH
             int inflate = copper_thickness;
 
             // If not plated, no copper.
-            if( pad->GetAttribute () == PAD_HOLE_NOT_PLATED )
+            if( pad->GetAttribute () == PAD_ATTRIB_HOLE_NOT_PLATED )
                 inflate = 0;
 
             pad->BuildPadDrillShapePolygon( allBoardHoles, inflate, segcount );
@@ -387,7 +387,7 @@ void EDA_3D_CANVAS::buildBoard3DView( GLuint aBoardList, GLuint aBodyOnlyList,
         for( const MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
         {
             for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-                if( pad->GetAttribute () != PAD_HOLE_NOT_PLATED )
+                if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
                     draw3DPadHole( pad );
         }
     }

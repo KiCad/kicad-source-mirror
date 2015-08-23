@@ -164,12 +164,12 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_STANDARD:
+    case PAD_ATTRIB_STANDARD:
         break;
 
-    case PAD_SMD:
-    case PAD_HOLE_NOT_PLATED:
-    case PAD_CONN:
+    case PAD_ATTRIB_SMD:
+    case PAD_ATTRIB_HOLE_NOT_PLATED:
+    case PAD_ATTRIB_CONN:
         {
             LSET lmsk = aPad->GetLayerSet();
             bool is_copper = false;
@@ -179,7 +179,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 if( lmsk[i] )
                 {
                     is_copper = true;
-                    if( aPad->GetAttribute() != PAD_HOLE_NOT_PLATED )
+                    if( aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
                         layers = PNS_LAYERSET( i );
                     break;
                 }
@@ -215,7 +215,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
     double orient = aPad->GetOrientation() / 10.0;
 
-    if( aPad->GetShape() == PAD_CIRCLE )
+    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
     {
         solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
     }
@@ -228,7 +228,7 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
 
             switch( aPad->GetShape() )
             {
-            case PAD_OVAL:
+            case PAD_SHAPE_OVAL:
                 if( sz.x == sz.y )
                     solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
                 else
@@ -246,11 +246,11 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 }
                 break;
 
-            case PAD_RECT:
+            case PAD_SHAPE_RECT:
                 solid->SetShape( new SHAPE_RECT( c - sz / 2, sz.x, sz.y ) );
                 break;
 
-            case PAD_TRAPEZOID:
+            case PAD_SHAPE_TRAPEZOID:
             {
                 wxPoint coords[4];
                 aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );
@@ -275,9 +275,9 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
         {
             switch( aPad->GetShape() )
             {
-            // PAD_CIRCLE already handled above
+            // PAD_SHAPE_CIRCLE already handled above
 
-            case PAD_OVAL:
+            case PAD_SHAPE_OVAL:
                 if( sz.x == sz.y )
                     solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
                 else
@@ -326,8 +326,8 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 }
                 break;
 
-            case PAD_RECT:
-            case PAD_TRAPEZOID:
+            case PAD_SHAPE_RECT:
+            case PAD_SHAPE_TRAPEZOID:
             {
                 wxPoint coords[4];
                 aPad->BuildPadPolygon( coords, wxSize( 0, 0 ), aPad->GetOrientation() );

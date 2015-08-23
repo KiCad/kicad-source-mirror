@@ -93,11 +93,11 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     switch( mp.GetShape() )
     {
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
         aPad->SetDelta( mp.GetDelta() );
         break;
 
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         // ensure size.y == size.x
         aPad->SetSize( wxSize( aPad->GetSize().x, aPad->GetSize().x ) );
         break;
@@ -108,8 +108,8 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     switch( mp.GetAttribute() )
     {
-    case PAD_SMD:
-    case PAD_CONN:
+    case PAD_ATTRIB_SMD:
+    case PAD_ATTRIB_CONN:
         aPad->SetDrillSize( wxSize( 0, 0 ) );
         aPad->SetOffset( wxPoint( 0, 0 ) );
         break;
@@ -178,10 +178,13 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     /* NPTH pads take empty pad number (since they can't be connected),
      * other pads get incremented from the last one edited */
     wxString padName;
-    if( pad->GetAttribute() != PAD_HOLE_NOT_PLATED ) {
+
+    if( pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+    {
         padName = GetNextPadName( GetDesignSettings()
                 .m_Pad_Master.GetPadName() );
     }
+
     pad->SetPadName( padName );
     GetDesignSettings().m_Pad_Master.SetPadName( padName );
 

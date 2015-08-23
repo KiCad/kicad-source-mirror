@@ -700,7 +700,7 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
     {
-        if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+        if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
             continue;
 
         cnt++;

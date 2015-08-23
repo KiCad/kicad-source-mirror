@@ -352,12 +352,12 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
             pad->SetLocalSolderPasteMargin( aPad->GetLocalSolderPasteMargin() );
             pad->SetLocalSolderPasteMarginRatio( aPad->GetLocalSolderPasteMarginRatio() );
 
-            if( pad->GetShape() != PAD_TRAPEZOID )
+            if( pad->GetShape() != PAD_SHAPE_TRAPEZOID )
             {
                 pad->SetDelta( wxSize( 0, 0 ) );
             }
 
-            if( pad->GetShape() == PAD_CIRCLE )
+            if( pad->GetShape() == PAD_SHAPE_CIRCLE )
             {
                 // Ensure pad size.y = pad size.x
                 int size = pad->GetSize().x;
@@ -366,8 +366,8 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
 
             switch( pad->GetAttribute() )
             {
-            case PAD_SMD:
-            case PAD_CONN:
+            case PAD_ATTRIB_SMD:
+            case PAD_ATTRIB_CONN:
                 pad->SetDrillSize( wxSize( 0, 0 ) );
                 pad->SetOffset( wxPoint( 0, 0 ) );
                 break;

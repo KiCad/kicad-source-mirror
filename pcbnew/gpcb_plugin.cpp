@@ -588,8 +588,8 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
             static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
 
-            pad->SetShape( PAD_RECT );
-            pad->SetAttribute( PAD_SMD );
+            pad->SetShape( PAD_SHAPE_RECT );
+            pad->SetAttribute( PAD_ATTRIB_SMD );
             pad->SetLayerSet( pad_front );
 
             if( testFlags( parameters[paramCnt-2], 0x0080, wxT( "onsolder" ) ) )
@@ -636,9 +636,9 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             if( !testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
             {
                 if( pad->GetSize().x == pad->GetSize().y )
-                    pad->SetShape( PAD_ROUND );
+                    pad->SetShape( PAD_SHAPE_CIRCLE );
                 else
-                    pad->SetShape( PAD_OVAL );
+                    pad->SetShape( PAD_SHAPE_OVAL );
             }
 
             module->Add( pad );
@@ -662,14 +662,14 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
 
             D_PAD* pad = new D_PAD( module.get() );
 
-            pad->SetShape( PAD_ROUND );
+            pad->SetShape( PAD_SHAPE_CIRCLE );
 
             static const LSET pad_set = LSET::AllCuMask() | LSET( 3, F_SilkS, F_Mask, B_Mask );
 
             pad->SetLayerSet( pad_set );
 
             if( testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
-                pad->SetShape( PAD_RECT );
+                pad->SetShape( PAD_SHAPE_RECT );
 
             // Read pad number:
             if( paramCnt > 9 )
@@ -707,8 +707,8 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             pad->SetPos0( padPos );
             pad->SetPosition( padPos );
 
-            if( pad->GetShape() == PAD_ROUND  &&  pad->GetSize().x != pad->GetSize().y )
-                pad->SetShape( PAD_OVAL );
+            if( pad->GetShape() == PAD_SHAPE_CIRCLE  &&  pad->GetSize().x != pad->GetSize().y )
+                pad->SetShape( PAD_SHAPE_OVAL );
 
             module->Add( pad );
             continue;

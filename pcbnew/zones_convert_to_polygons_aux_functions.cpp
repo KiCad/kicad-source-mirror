@@ -112,7 +112,7 @@ void BuildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
         {
             // Rejects non-standard pads with tht-only thermal reliefs
             if( aZone->GetPadConnection( pad ) == PAD_ZONE_CONN_THT_THERMAL
-             && pad->GetAttribute() != PAD_STANDARD )
+             && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
                 continue;
 
             if( aZone->GetPadConnection( pad ) != PAD_ZONE_CONN_THERMAL
@@ -173,7 +173,7 @@ void BuildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
             // This is a CIRCLE pad tweak
             // for circle pads, the thermal stubs orientation is 45 deg
             double fAngle = pad->GetOrientation();
-            if( pad->GetShape() == PAD_CIRCLE )
+            if( pad->GetShape() == PAD_SHAPE_CIRCLE )
             {
                 endpoint.x     = KiROUND( endpoint.x * aArcCorrection );
                 endpoint.y     = endpoint.x;

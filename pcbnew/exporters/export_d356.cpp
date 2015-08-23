@@ -134,14 +134,14 @@ static void build_pad_testpoints( BOARD *aPcb,
                 const wxSize& drill = pad->GetDrillSize();
                 rk.drill = std::min( drill.x, drill.y );
                 rk.hole = (rk.drill != 0);
-                rk.smd = pad->GetAttribute() == PAD_SMD;
-                rk.mechanical = (pad->GetAttribute() == PAD_HOLE_NOT_PLATED);
+                rk.smd = pad->GetAttribute() == PAD_ATTRIB_SMD;
+                rk.mechanical = (pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED);
                 rk.x_location = pad->GetPosition().x - origin.x;
                 rk.y_location = origin.y - pad->GetPosition().y;
                 rk.x_size = pad->GetSize().x;
 
                 // Rule: round pads have y = 0
-                if( pad->GetShape() == PAD_CIRCLE )
+                if( pad->GetShape() == PAD_SHAPE_CIRCLE )
                     rk.y_size = 0;
                 else
                     rk.y_size = pad->GetSize().y;

@@ -520,7 +520,7 @@ private:
 
     wxSize      m_Size;             ///< X and Y size ( relative to orient 0)
 
-    PAD_DRILL_SHAPE_T m_drillShape; ///< PAD_DRILL_NONE, PAD_DRILL_CIRCLE, PAD_DRILL_OBLONG
+    PAD_DRILL_SHAPE_T m_drillShape; ///< PAD_DRILL_SHAPE_CIRCLE, PAD_DRILL_SHAPE_OBLONG
 
 
     /**
@@ -548,7 +548,8 @@ private:
     wxPoint     m_Pos0;             ///< Initial Pad position (i.e. pad position relative to the
                                     ///< module anchor, orientation 0)
 
-    PAD_ATTR_T  m_Attribute;        ///< NORMAL, PAD_SMD, PAD_CONN, PAD_HOLE_NOT_PLATED
+    PAD_ATTR_T  m_Attribute;        ///< PAD_ATTRIB_NORMAL, PAD_ATTRIB_SMD,
+                                    ///< PAD_ATTRIB_CONN, PAD_ATTRIB_HOLE_NOT_PLATED
     double      m_Orient;           ///< in 1/10 degrees
 
     int         m_LengthPadToDie;   ///< Length net from pad to die, inside the package

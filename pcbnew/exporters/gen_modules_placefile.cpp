@@ -372,7 +372,7 @@ static bool HasNonSMDPins( MODULE* aModule )
 
     for( pad = aModule->Pads();  pad;  pad = pad->Next() )
     {
-        if( pad->GetAttribute() != PAD_SMD )
+        if( pad->GetAttribute() != PAD_ATTRIB_SMD )
             return true;
     }
 

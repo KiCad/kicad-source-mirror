@@ -291,8 +291,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
                 dummypad.SetSize( pad->GetDrillSize() );
                 dummypad.SetPosition( pad->GetPosition() );
-                dummypad.SetShape( pad->GetDrillShape()  == PAD_DRILL_OBLONG ?
-                                   PAD_OVAL : PAD_CIRCLE );
+                dummypad.SetShape( pad->GetDrillShape()  == PAD_DRILL_SHAPE_OBLONG ?
+                                   PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( pad->GetOrientation() );
 
                 m_padToTestPos = dummypad.GetPosition() - origin;
@@ -584,7 +584,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
     double  pad_angle;
 
-    // Get the clerance between the 2 pads. this is the min distance between aRefPad and aPad
+    // Get the clearance between the 2 pads. this is the min distance between aRefPad and aPad
     int     dist_min = aRefPad->GetClearance( aPad );
 
     // relativePadPos is the aPad shape position relative to the aRefPad shape position
@@ -599,7 +599,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     /* Here, pads are near and DRC depend on the pad shapes
      * We must compare distance using a fine shape analysis
      * Because a circle or oval shape is the easier shape to test, try to have
-     * aRefPad shape type = PAD_CIRCLE or PAD_OVAL.
+     * aRefPad shape type = PAD_SHAPE_CIRCLE or PAD_SHAPE_OVAL.
      * if aRefPad = TRAP. and aPad = RECT, also swap pads
      * Swap aRefPad and aPad if needed
      */
@@ -608,21 +608,21 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
     // swap pads to make comparisons easier
     // priority is aRefPad = ROUND then OVAL then RECT then other
-    if( aRefPad->GetShape() != aPad->GetShape() && aRefPad->GetShape() != PAD_CIRCLE )
+    if( aRefPad->GetShape() != aPad->GetShape() && aRefPad->GetShape() != PAD_SHAPE_CIRCLE )
     {
         // pad ref shape is here oval, rect or trapezoid
         switch( aPad->GetShape() )
         {
-            case PAD_CIRCLE:
+            case PAD_SHAPE_CIRCLE:
                 swap_pads = true;
                 break;
 
-            case PAD_OVAL:
+            case PAD_SHAPE_OVAL:
                 swap_pads = true;
                 break;
 
-            case PAD_RECT:
-                if( aRefPad->GetShape() != PAD_OVAL )
+            case PAD_SHAPE_RECT:
+                if( aRefPad->GetShape() != PAD_SHAPE_OVAL )
                     swap_pads = true;
                 break;
 
@@ -637,16 +637,16 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         relativePadPos = -relativePadPos;
     }
 
-    /* Because pad exchange, aRefPad shape is PAD_CIRCLE or PAD_OVAL,
-     * if one of the 2 pads was a PAD_CIRCLE or PAD_OVAL.
-     * Therefore, if aRefPad is a PAD_RECT or a PAD_TRAPEZOID,
-     * aPad is also a PAD_RECT or a PAD_TRAPEZOID
+    /* Because pad exchange, aRefPad shape is PAD_SHAPE_CIRCLE or PAD_SHAPE_OVAL,
+     * if one of the 2 pads was a PAD_SHAPE_CIRCLE or PAD_SHAPE_OVAL.
+     * Therefore, if aRefPad is a PAD_SHAPE_SHAPE_RECT or a PAD_SHAPE_TRAPEZOID,
+     * aPad is also a PAD_SHAPE_RECT or a PAD_SHAPE_TRAPEZOID
      */
     bool diag = true;
 
     switch( aRefPad->GetShape() )
     {
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
 
         /* One can use checkClearanceSegmToPad to test clearance
          * aRefPad is like a track segment with a null length and a witdth = GetSize().x
@@ -660,12 +660,12 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         diag = checkClearanceSegmToPad( aPad, aRefPad->GetSize().x, dist_min );
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         // pad_angle = pad orient relative to the aRefPad orient
         pad_angle = aRefPad->GetOrientation() + aPad->GetOrientation();
         NORMALIZE_ANGLE_POS( pad_angle );
 
-        if( aPad->GetShape() == PAD_RECT )
+        if( aPad->GetShape() == PAD_SHAPE_RECT )
         {
             wxSize size = aPad->GetSize();
 
@@ -709,7 +709,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                     diag = false;
             }
         }
-        else if( aPad->GetShape() == PAD_TRAPEZOID )
+        else if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )
         {
             wxPoint polyref[4];         // Shape of aRefPad
             wxPoint polycompare[4];     // Shape of aPad
@@ -734,7 +734,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         }
         break;
 
-    case PAD_OVAL:     /* an oval pad is like a track segment */
+    case PAD_SHAPE_OVAL:     /* an oval pad is like a track segment */
     {
         /* Create a track segment with same dimensions as the oval aRefPad
          * and use checkClearanceSegmToPad function to test aPad to aRefPad clearance
@@ -776,11 +776,11 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         break;
     }
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
 
         // at this point, aPad is also a trapezoid, because all other shapes
         // have priority, and are already tested
-        wxASSERT( aPad->GetShape() == PAD_TRAPEZOID );
+        wxASSERT( aPad->GetShape() == PAD_SHAPE_TRAPEZOID );
         {
             wxPoint polyref[4];         // Shape of aRefPad
             wxPoint polycompare[4];     // Shape of aPad
@@ -822,13 +822,13 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     padHalfsize.x = aPad->GetSize().x >> 1;
     padHalfsize.y = aPad->GetSize().y >> 1;
 
-    if( aPad->GetShape() == PAD_TRAPEZOID )     // The size is bigger, due to GetDelta() extra size
+    if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )     // The size is bigger, due to GetDelta() extra size
     {
         padHalfsize.x += std::abs(aPad->GetDelta().y) / 2;   // Remember: GetDelta().y is the GetSize().x change
         padHalfsize.y += std::abs(aPad->GetDelta().x) / 2;   // Remember: GetDelta().x is the GetSize().y change
     }
 
-    if( aPad->GetShape() == PAD_CIRCLE )
+    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
     {
         /* Easy case: just test the distance between segment and pad centre
          * calculate pad coordinates in the X,Y axis with X axis = segment to test
@@ -866,7 +866,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     default:
         return false;
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
     {
         /* an oval is a complex shape, but is a rectangle and 2 circles
          * these 3 basic shapes are more easy to test.
@@ -926,7 +926,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     }
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         // the area to test is a rounded rectangle.
         // this can be done by testing 2 rectangles and 4 circles (the corners)
 
@@ -988,7 +988,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
 
         break;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
     {
         wxPoint poly[4];
         aPad->BuildPadPolygon( poly, wxSize( 0, 0 ), orient );

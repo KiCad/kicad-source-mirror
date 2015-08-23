@@ -51,8 +51,8 @@ class FPCFootprintWizard(FootprintWizardPlugin):
     def smdRectPad(self,module,size,pos,name):
             pad = D_PAD(module)
             pad.SetSize(size)
-            pad.SetShape(PAD_RECT)
-            pad.SetAttribute(PAD_SMD)
+            pad.SetShape(PAD_SHAPE_RECT)
+            pad.SetAttribute(PAD_ATTRIB_SMD)
             pad.SetLayerSet( pad.SMDMask() )
             pad.SetPos0(pos)
             pad.SetPosition(pos)

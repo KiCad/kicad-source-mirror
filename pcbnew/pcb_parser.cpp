@@ -2149,11 +2149,11 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
     switch( token )
     {
     case T_thru_hole:
-        pad->SetAttribute( PAD_STANDARD );
+        pad->SetAttribute( PAD_ATTRIB_STANDARD );
         break;
 
     case T_smd:
-        pad->SetAttribute( PAD_SMD );
+        pad->SetAttribute( PAD_ATTRIB_SMD );
 
         // Default D_PAD object is thru hole with drill.
         // SMD pads have no hole
@@ -2161,7 +2161,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
         break;
 
     case T_connect:
-        pad->SetAttribute( PAD_CONN );
+        pad->SetAttribute( PAD_ATTRIB_CONN );
 
         // Default D_PAD object is thru hole with drill.
         // CONN pads have no hole
@@ -2169,7 +2169,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
         break;
 
     case T_np_thru_hole:
-        pad->SetAttribute( PAD_HOLE_NOT_PLATED );
+        pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
         break;
 
     default:
@@ -2181,19 +2181,19 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
     switch( token )
     {
     case T_circle:
-        pad->SetShape( PAD_CIRCLE );
+        pad->SetShape( PAD_SHAPE_CIRCLE );
         break;
 
     case T_rect:
-        pad->SetShape( PAD_RECT );
+        pad->SetShape( PAD_SHAPE_RECT );
         break;
 
     case T_oval:
-        pad->SetShape( PAD_OVAL );
+        pad->SetShape( PAD_SHAPE_OVAL );
         break;
 
     case T_trapezoid:
-        pad->SetShape( PAD_TRAPEZOID );
+        pad->SetShape( PAD_SHAPE_TRAPEZOID );
         break;
 
     default:
@@ -2257,7 +2257,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
                     switch( token )
                     {
                     case T_oval:
-                        pad->SetDrillShape( PAD_DRILL_OBLONG );
+                        pad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
                         break;
 
                     case T_NUMBER:
@@ -2294,7 +2294,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
                 // other than 0 used to fix a bunch of debug assertions even though it is defined
                 // as a through hole pad.  Wouldn't a though hole pad with no drill be a surface
                 // mount pad (or a conn pad which is a smd pad with no solder paste)?
-                if( ( pad->GetAttribute() != PAD_SMD ) && ( pad->GetAttribute() != PAD_CONN ) )
+                if( ( pad->GetAttribute() != PAD_ATTRIB_SMD ) && ( pad->GetAttribute() != PAD_ATTRIB_CONN ) )
                     pad->SetDrillSize( drillSize );
                 else
                     pad->SetDrillSize( wxSize( 0, 0 ) );

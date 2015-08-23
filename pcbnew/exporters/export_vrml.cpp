@@ -987,14 +987,14 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
 
     switch( aPad->GetShape() )
     {
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
 
         if( !aTinLayer->AddCircle( pad_x, -pad_y, pad_w, false ) )
             throw( std::runtime_error( aTinLayer->GetError() ) );
 
         break;
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
 
         if( !aTinLayer->AddSlot( pad_x, -pad_y, pad_w * 2.0, pad_h * 2.0,
                                  aPad->GetOrientation()/10.0, false ) )
@@ -1002,12 +1002,12 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
 
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         // Just to be sure :D
         pad_dx  = 0;
         pad_dy  = 0;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
     {
         double coord[8] =
         {
@@ -1068,11 +1068,11 @@ static void export_vrml_pad( MODEL_VRML& aModel, BOARD* pcb, D_PAD* aPad )
     {
         bool pth = false;
 
-        if( ( aPad->GetAttribute() != PAD_HOLE_NOT_PLATED )
+        if( ( aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
             && !aModel.plainPCB )
             pth = true;
 
-        if( aPad->GetDrillShape() == PAD_DRILL_OBLONG )
+        if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
         {
             // Oblong hole (slot)
             aModel.holes.AddSlot( hole_x, -hole_y, hole_drill_w * 2.0, hole_drill_h * 2.0,

@@ -166,8 +166,8 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
                 // the pad hole
                 dummypad.SetSize( pad->GetDrillSize() );
                 dummypad.SetOrientation( pad->GetOrientation() );
-                dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_OBLONG ?
-                                   PAD_OVAL : PAD_CIRCLE );
+                dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ?
+                                   PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetPosition( pad->GetPosition() );
 
                 pad = &dummypad;
@@ -337,7 +337,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
         {
             // Rejects non-standard pads with tht-only thermal reliefs
             if( GetPadConnection( pad ) == PAD_ZONE_CONN_THT_THERMAL
-             && pad->GetAttribute() != PAD_STANDARD )
+             && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
                 continue;
 
             if( GetPadConnection( pad ) != PAD_ZONE_CONN_THERMAL

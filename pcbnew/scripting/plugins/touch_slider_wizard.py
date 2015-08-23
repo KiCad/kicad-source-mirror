@@ -46,8 +46,8 @@ class TouchSliderWizard(FootprintWizardPlugin):
     def smdRectPad(self,module,size,pos,name):
             pad = D_PAD(module)
             pad.SetSize(size)
-            pad.SetShape(PAD_RECT)
-            pad.SetAttribute(PAD_SMD)
+            pad.SetShape(PAD_SHAPE_RECT)
+            pad.SetAttribute(PAD_ATTRIB_SMD)
             pad.SetLayerSet(pad.ConnSMDMask())
             pad.SetPos0(pos)
             pad.SetPosition(pos)
@@ -58,8 +58,8 @@ class TouchSliderWizard(FootprintWizardPlugin):
     def smdTrianglePad(self,module,size,pos,name,up_down=1,left_right=0):
             pad = D_PAD(module)
             pad.SetSize(wxSize(size[0],size[1]))
-            pad.SetShape(PAD_TRAPEZOID)
-            pad.SetAttribute(PAD_SMD)
+            pad.SetShape(PAD_SHAPE_TRAPEZOID)
+            pad.SetAttribute(PAD_ATTRIB_SMD)
             pad.SetLayerSet(pad.ConnSMDMask())
             pad.SetPos0(pos)
             pad.SetPosition(pos)

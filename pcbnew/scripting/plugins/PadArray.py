@@ -32,21 +32,21 @@ class PadMaker:
     def __init__(self, module):
         self.module = module
 
-    def THPad(self, w, l, drill, shape=pcbnew.PAD_OVAL):
+    def THPad(self, w, l, drill, shape=pcbnew.PAD_SHAPE_OVAL):
         pad = pcbnew.D_PAD(self.module)
 
         pad.SetSize(pcbnew.wxSize(l, w))
 
         pad.SetShape(shape)
 
-        pad.SetAttribute(pcbnew.PAD_STANDARD)
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_STANDARD)
         pad.SetLayerSet(pad.StandardMask())
         pad.SetDrillSize(pcbnew.wxSize(drill, drill))
 
         return pad
 
     def THRoundPad(self, size, drill):
-        pad = self.THPad(size, size, drill, shape=pcbnew.PAD_CIRCLE)
+        pad = self.THPad(size, size, drill, shape=pcbnew.PAD_SHAPE_CIRCLE)
         return pad
 
     def NPTHRoundPad(self, drill):
@@ -54,26 +54,26 @@ class PadMaker:
 
         pad.SetSize(pcbnew.wxSize(drill, drill))
 
-        pad.SetShape(pcbnew.PAD_CIRCLE)
+        pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
 
-        pad.SetAttribute(pcbnew.PAD_HOLE_NOT_PLATED)
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_HOLE_NOT_PLATED)
         pad.SetLayerSet(pad.UnplatedHoleMask())
         pad.SetDrillSize(pcbnew.wxSize(drill, drill))
         return pad
 
-    def SMDPad(self, w, l, shape=pcbnew.PAD_RECT):
+    def SMDPad(self, w, l, shape=pcbnew.PAD_SHAPE_RECT):
         pad = pcbnew.D_PAD(self.module)
         pad.SetSize(pcbnew.wxSize(l, w))
 
         pad.SetShape(shape)
 
-        pad.SetAttribute(pcbnew.PAD_SMD)
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.SMDMask())
 
         return pad
 
     def SMTRoundPad(self, size):
-        pad = self.SMDPad(size, size, shape=pcbnew.PAD_CIRCLE)
+        pad = self.SMDPad(size, size, shape=pcbnew.PAD_SHAPE_CIRCLE)
         return pad
 
 

@@ -292,7 +292,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         if( drill > 0.0 )
         {
             // plating
-            if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+            if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
                 kplate = IDF3::NPTH;
             else
                 kplate = IDF3::PTH;
@@ -302,7 +302,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
             if( tstr.empty() || !tstr.compare( "0" ) || !tstr.compare( "~" )
                 || ( kplate == IDF3::NPTH )
-                ||( pad->GetDrillShape() == PAD_DRILL_OBLONG ) )
+                ||( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
                 pintype = "MTG";
             else
                 pintype = "PIN";
@@ -315,7 +315,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
             // 5. Assoc. part : BOARD | NOREFDES | PANEL | {"refdes"}
             // 6. type : PIN | VIA | MTG | TOOL | { "other" }
             // 7. owner : MCAD | ECAD | UNOWNED
-            if( ( pad->GetDrillShape() == PAD_DRILL_OBLONG )
+            if( ( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
                 && ( pad->GetDrillSize().x != pad->GetDrillSize().y ) )
             {
                 // NOTE: IDF does not have direct support for slots;

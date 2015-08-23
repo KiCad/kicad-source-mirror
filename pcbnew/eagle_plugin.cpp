@@ -1574,7 +1574,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             m_xpath->push( "hole" );
             EHOLE   e( gr->second );
 
-            // Fabricate a MODULE with a single PAD_HOLE_NOT_PLATED pad.
+            // Fabricate a MODULE with a single PAD_ATTRIB_HOLE_NOT_PLATED pad.
             // Use m_hole_count to gen up a unique name.
 
             MODULE* module = new MODULE( m_board );
@@ -1589,12 +1589,12 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             module->SetPosition( pos );
 
-            // Add a PAD_HOLE_NOT_PLATED pad to this module.
+            // Add a PAD_ATTRIB_HOLE_NOT_PLATED pad to this module.
             D_PAD* pad = new D_PAD( module );
             module->Pads().PushBack( pad );
 
-            pad->SetShape( PAD_ROUND );
-            pad->SetAttribute( PAD_HOLE_NOT_PLATED );
+            pad->SetShape( PAD_SHAPE_CIRCLE );
+            pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
 
             /* pad's position is already centered on module at relative (0, 0)
             wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
@@ -2045,18 +2045,18 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
         switch( *e.shape )
         {
         case EPAD::ROUND:
-            wxASSERT( pad->GetShape()==PAD_CIRCLE );    // verify set in D_PAD constructor
+            wxASSERT( pad->GetShape()==PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
             break;
         case EPAD::OCTAGON:
             // no KiCad octagonal pad shape, use PAD_CIRCLE for now.
             // pad->SetShape( PAD_OCTAGON );
-            wxASSERT( pad->GetShape()==PAD_CIRCLE );    // verify set in D_PAD constructor
+            wxASSERT( pad->GetShape()==PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
             break;
         case EPAD::LONG:
-            pad->SetShape( PAD_OVAL );
+            pad->SetShape( PAD_SHAPE_OVAL );
             break;
         case EPAD::SQUARE:
-            pad->SetShape( PAD_RECT );
+            pad->SetShape( PAD_SHAPE_RECT );
             break;
         case EPAD::OFFSET:
             ;   // don't know what to do here.
@@ -2081,7 +2081,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
         pad->SetSize( wxSize( KiROUND( diameter ), KiROUND( diameter ) ) );
     }
 
-    if( pad->GetShape() == PAD_OVAL )
+    if( pad->GetShape() == PAD_SHAPE_OVAL )
     {
         // The Eagle "long" pad is wider than it is tall,
         // m_elongation is percent elongation
@@ -2322,12 +2322,12 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 {
     EHOLE   e( aTree );
 
-    // we add a PAD_HOLE_NOT_PLATED pad to this module.
+    // we add a PAD_ATTRIB_HOLE_NOT_PLATED pad to this module.
     D_PAD* pad = new D_PAD( aModule );
     aModule->Pads().PushBack( pad );
 
-    pad->SetShape( PAD_ROUND );
-    pad->SetAttribute( PAD_HOLE_NOT_PLATED );
+    pad->SetShape( PAD_SHAPE_CIRCLE );
+    pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
 
     // Mechanical purpose only:
     // no offset, no net name, no pad name allowed
@@ -2362,8 +2362,8 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
     aModule->Pads().PushBack( pad );
 
     pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
-    pad->SetShape( PAD_RECT );
-    pad->SetAttribute( PAD_SMD );
+    pad->SetShape( PAD_SHAPE_RECT );
+    pad->SetAttribute( PAD_ATTRIB_SMD );
 
     // pad's "Position" is not relative to the module's,
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
@@ -2389,14 +2389,14 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
         pad->SetLayerSet( back );
 
     // Optional according to DTD
-    if( e.roundness )    // set set shape to PAD_RECT above, in case roundness is not present
+    if( e.roundness )    // set set shape to PAD_SHAPE_RECT above, in case roundness is not present
     {
         if( *e.roundness >= 75 )       // roundness goes from 0-100% as integer
         {
             if( e.dy == e.dx )
-                pad->SetShape( PAD_ROUND );
+                pad->SetShape( PAD_SHAPE_CIRCLE );
             else
-                pad->SetShape( PAD_OVAL );
+                pad->SetShape( PAD_SHAPE_OVAL );
         }
     }
 

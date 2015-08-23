@@ -379,7 +379,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* item
  */
 static bool isRoundKeepout( D_PAD* aPad )
 {
-    if( aPad->GetShape()==PAD_CIRCLE )
+    if( aPad->GetShape()==PAD_SHAPE_CIRCLE )
     {
         if( aPad->GetDrillSize().x >= aPad->GetSize().x )
             return true;
@@ -472,7 +472,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     switch( aPad->GetShape() )
     {
     default:
-    case PAD_CIRCLE:
+    case PAD_SHAPE_CIRCLE:
         {
             double diameter = scale( aPad->GetSize().x );
 
@@ -500,7 +500,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         break;
 
-    case PAD_RECT:
+    case PAD_SHAPE_RECT:
         {
             double  dx  = scale( aPad->GetSize().x ) / 2.0;
             double  dy  = scale( aPad->GetSize().y ) / 2.0;
@@ -536,7 +536,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         break;
 
-    case PAD_OVAL:
+    case PAD_SHAPE_OVAL:
         {
             double  dx  = scale( aPad->GetSize().x ) / 2.0;
             double  dy  = scale( aPad->GetSize().y ) / 2.0;
@@ -587,7 +587,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         break;
 
-    case PAD_TRAPEZOID:
+    case PAD_SHAPE_TRAPEZOID:
         {
             double  dx  = scale( aPad->GetSize().x ) / 2.0;
             double  dy  = scale( aPad->GetSize().y ) / 2.0;

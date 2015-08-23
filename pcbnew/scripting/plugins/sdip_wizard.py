@@ -135,7 +135,7 @@ class SDIPWizard(RowedFootprint):
         pad_width = self.parameters["Pads"]["pad width"]
         drill = self.parameters["Pads"]["drill size"]
         return PA.PadMaker(self.module).THPad(
-            pad_width, pad_length, drill, shape=pcbnew.PAD_OVAL)
+            pad_width, pad_length, drill, shape=pcbnew.PAD_SHAPE_OVAL)
 
     def DrawBox(self, ssx, ssy):
 
@@ -195,7 +195,7 @@ class SOICWizard(RowedFootprint):
         pad_length = self.parameters["Pads"]["pad length"]
         pad_width = self.parameters["Pads"]["pad width"]
         return PA.PadMaker(self.module).SMDPad(
-            pad_width, pad_length, shape=pcbnew.PAD_RECT)
+            pad_width, pad_length, shape=pcbnew.PAD_SHAPE_RECT)
 
     def DrawBox(self, ssx, ssy):
 

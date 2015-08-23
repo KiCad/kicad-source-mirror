@@ -200,10 +200,10 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     if( !m_isHolePlated && m_hole )
     {
         // mechanical hole
-        pad->SetShape( PAD_CIRCLE );
-        pad->SetAttribute( PAD_HOLE_NOT_PLATED );
+        pad->SetShape( PAD_SHAPE_CIRCLE );
+        pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
 
-        pad->SetDrillShape( PAD_DRILL_CIRCLE );
+        pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
         pad->SetSize( wxSize( m_hole, m_hole ) );
 
@@ -211,7 +211,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     }
     else
     {
-        ( m_hole ) ? padType = PAD_STANDARD : padType = PAD_SMD;
+        ( m_hole ) ? padType = PAD_ATTRIB_STANDARD : padType = PAD_ATTRIB_SMD;
 
         // form layer mask
         for( i = 0; i < (int) m_shapes.GetCount(); i++ )
@@ -237,7 +237,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
             }
         }
 
-        if( padType == PAD_STANDARD )
+        if( padType == PAD_ATTRIB_STANDARD )
             // actually this is a thru-hole pad
             pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
 
@@ -251,21 +251,21 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
             || padShapeName == wxT( "MtHole" ) )
         {
             if( width != height )
-                pad->SetShape( PAD_OVAL );
+                pad->SetShape( PAD_SHAPE_OVAL );
             else
-                pad->SetShape( PAD_CIRCLE );
+                pad->SetShape( PAD_SHAPE_CIRCLE );
         }
         else if( padShapeName == wxT( "Rect" )
                  || padShapeName == wxT( "RndRect" ) )
-            pad->SetShape( PAD_RECT );
+            pad->SetShape( PAD_SHAPE_RECT );
         else if( padShapeName == wxT( "Polygon" ) )
-            pad->SetShape( PAD_RECT ); // approximation
+            pad->SetShape( PAD_SHAPE_RECT ); // approximation
 
         pad->SetSize( wxSize( width, height ) );
         pad->SetDelta( wxSize( 0, 0 ) );
         pad->SetOrientation( m_rotation + aRotation );
 
-        pad->SetDrillShape( PAD_DRILL_CIRCLE );
+        pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
         pad->SetOffset( wxPoint( 0, 0 ) );
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
 

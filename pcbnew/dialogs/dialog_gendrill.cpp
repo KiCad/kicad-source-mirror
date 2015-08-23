@@ -173,11 +173,11 @@ void DIALOG_GENDRILL::InitDisplayParams()
     {
         for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
         {
-            if( pad->GetDrillShape() == PAD_DRILL_CIRCLE )
+            if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
             {
                 if( pad->GetDrillSize().x != 0 )
                 {
-                    if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+                    if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;
                     else
                         m_platedPadsHoleCount++;
@@ -187,7 +187,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
             {
                 if( pad->GetDrillSize().x != 0 && pad->GetDrillSize().y != 0 )
                 {
-                    if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+                    if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;
                     else
                         m_platedPadsHoleCount++;
