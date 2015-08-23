@@ -56,7 +56,7 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         pins = (self.parameters["Pads"]["*row count"]
                 * self.parameters["Pads"]["*column count"])
 
-        return "BGA %d" % pins
+        return "BGA_%d" % pins
 
     def GetReferencePrefix(self):
         return "U"

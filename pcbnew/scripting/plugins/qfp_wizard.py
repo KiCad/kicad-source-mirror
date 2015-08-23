@@ -47,7 +47,7 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.CheckParamBool("Pads", "*oval")
 
     def GetValue(self):
-        return "QFP %d" % self.parameters["Pads"]["*n"]
+        return "QFP_%d" % self.parameters["Pads"]["*n"]
 
     def BuildThisFootprint(self):
 

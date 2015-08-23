@@ -101,7 +101,7 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
 class SDIPWizard(RowedFootprint):
 
     def GetName(self):
-        return "S/DIP"
+        return "S-DIP"
 
     def GetDescription(self):
         return "Single/Dual Inline Package Footprint Wizard"
@@ -128,7 +128,7 @@ class SDIPWizard(RowedFootprint):
         else:  # triple and up aren't really a thing, but call it something!
             name = "xIP"
 
-        return "%s %d" % (name, self.parameters["Pads"]["*n"])
+        return "%s-%d" % (name, self.parameters["Pads"]["*n"])
 
     def GetPad(self):
         pad_length = self.parameters["Pads"]["pad length"]
@@ -177,7 +177,7 @@ class SOICWizard(RowedFootprint):
         return "SOIC, MSOP, SSOP, TSSOP, etc, footprint wizard"
 
     def GetValue(self):
-        return "%s %d" % ("SOIC", self.parameters["Pads"]["*n"])
+        return "%s-%d" % ("SOIC", self.parameters["Pads"]["*n"])
 
     def GenerateParameterList(self):
         RowedFootprint.GenerateParameterList(self)
