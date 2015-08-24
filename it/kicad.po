@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-22 15:22+0100\n"
-"PO-Revision-Date: 2015-08-22 15:22+0100\n"
+"POT-Creation-Date: 2015-08-25 00:21+0100\n"
+"PO-Revision-Date: 2015-08-25 00:21+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1362,29 +1362,29 @@ msgstr "Parametro"
 msgid "Units"
 msgstr "Unità"
 
-#: pcbnew/footprint_wizard_frame.cpp:531 pcbnew/modview_frame.cpp:649
+#: pcbnew/footprint_wizard_frame.cpp:536 pcbnew/modview_frame.cpp:649
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: visualizzatore 3D [%s]"
 
-#: pcbnew/footprint_wizard_frame.cpp:557
+#: pcbnew/footprint_wizard_frame.cpp:562
 msgid "Select wizard to use"
 msgstr "Seleziona l'assistente da usare"
 
-#: pcbnew/footprint_wizard_frame.cpp:562
+#: pcbnew/footprint_wizard_frame.cpp:567
 msgid "Select previous editable item"
 msgstr "Seleziona il precedente elemento modificabile"
 
-#: pcbnew/footprint_wizard_frame.cpp:566
+#: pcbnew/footprint_wizard_frame.cpp:571
 msgid "Select next editable item"
 msgstr "Seleziona il successivo elemento modificabile"
 
-#: pcbnew/footprint_wizard_frame.cpp:571 pcbnew/tool_modview.cpp:76
+#: pcbnew/footprint_wizard_frame.cpp:576 pcbnew/tool_modview.cpp:76
 #: pcbnew/tool_modview.cpp:178 pcbnew/menubar_modedit.cpp:237
 msgid "Show footprint in 3D viewer"
 msgstr "Mostra impronta nel visualizzatore 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:574 pcbnew/tool_modview.cpp:79
+#: pcbnew/footprint_wizard_frame.cpp:579 pcbnew/tool_modview.cpp:79
 #: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:248
 #: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:68
 #: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
@@ -1392,7 +1392,7 @@ msgstr "Mostra impronta nel visualizzatore 3D"
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:579 pcbnew/tool_modview.cpp:84
+#: pcbnew/footprint_wizard_frame.cpp:584 pcbnew/tool_modview.cpp:84
 #: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:250
 #: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:71
 #: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
@@ -1400,21 +1400,21 @@ msgstr "Ingrandisci"
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:584 pcbnew/tool_modview.cpp:89
+#: pcbnew/footprint_wizard_frame.cpp:589 pcbnew/tool_modview.cpp:89
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:252
 #: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:75
 #: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
 msgid "Redraw view"
 msgstr "Aggiorna vista"
 
-#: pcbnew/footprint_wizard_frame.cpp:589 pcbnew/tool_modview.cpp:94
+#: pcbnew/footprint_wizard_frame.cpp:594 pcbnew/tool_modview.cpp:94
 #: pcbnew/tool_modedit.cpp:133 common/zoom.cpp:254
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:87
 msgid "Zoom auto"
 msgstr "Inquadra tutto"
 
-#: pcbnew/footprint_wizard_frame.cpp:600
+#: pcbnew/footprint_wizard_frame.cpp:605
 msgid "Add footprint to board"
 msgstr "Aggiungi impronta alla scheda"
 
@@ -2774,7 +2774,7 @@ msgstr ""
 msgid "Track clearances"
 msgstr "Isolamento piste"
 
-#: pcbnew/pad_edition_functions.cpp:208
+#: pcbnew/pad_edition_functions.cpp:211
 #, c-format
 msgid "Delete Pad (footprint %s %s) ?"
 msgstr "Cancellare piazzola (impronta %s %s)?"
@@ -11951,7 +11951,6 @@ msgid "X Ref:"
 msgstr "Rif X:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
-#, fuzzy
 msgid "meter"
 msgstr "metro"
 
@@ -13099,7 +13098,7 @@ msgstr ""
 "L'opzione \"%s\" per la libreria Github \"%s\" deve puntare ad una cartella "
 "scrivibile con estensione \".pretty\"."
 
-#: pcbnew/github/github_plugin.cpp:538
+#: pcbnew/github/github_plugin.cpp:542
 #, c-format
 msgid ""
 "Unable to parse URL:\n"
@@ -13108,7 +13107,7 @@ msgstr ""
 "Impossibile elaborare l'URL:\n"
 "\"%s\""
 
-#: pcbnew/github/github_plugin.cpp:569
+#: pcbnew/github/github_plugin.cpp:573
 #, c-format
 msgid ""
 "%s\n"
@@ -13121,7 +13120,12 @@ msgstr ""
 "per il percorso di libreria: \"%s\".\n"
 "Motivo: \"%s\""
 
-#: pcbnew/github/github_plugin.cpp:617
+#: pcbnew/github/github_plugin.cpp:588
+#, c-format
+msgid "Exception '%s' in avhttp while open()-ing URI:'%s'"
+msgstr "Eccezione \"%s\" in avhttp durante l'open() dell'URI:\"%s\""
+
+#: pcbnew/github/github_plugin.cpp:629
 #, c-format
 msgid ""
 "%s\n"
@@ -13634,15 +13638,15 @@ msgstr "Zoom: "
 msgid "Grid Select"
 msgstr "Imposta griglia"
 
-#: common/fpid.cpp:182 common/fpid.cpp:199
+#: common/fpid.cpp:185 common/fpid.cpp:202
 msgid "Illegal character found in FPID string"
 msgstr "Carattere non consentito trovato nella stringa LPID "
 
-#: common/fpid.cpp:303
+#: common/fpid.cpp:306
 msgid "Illegal character found in logical library name"
 msgstr "Carattere non consentito trovato nel nome logico della libreria "
 
-#: common/fpid.cpp:320 new/sch_lpid.cpp:440
+#: common/fpid.cpp:323 new/sch_lpid.cpp:440
 msgid "Illegal character found in revision"
 msgstr "Carattere non consentito trovato nella revisione"
 
@@ -14328,13 +14332,11 @@ msgid "Invalid Input"
 msgstr "Valore non valido"
 
 #: common/dialogs/dialog_env_var_config.cpp:119
-#, fuzzy
-msgid "Cannot have duplicate environment variable name cannot be empty."
-msgstr "Impossibile avere nomi di variabile d'ambiente doppi."
+msgid "Environment variable name cannot be empty."
+msgstr "Il nome della variabile d'ambiente non può essere vuoto."
 
 #: common/dialogs/dialog_env_var_config.cpp:129
-#, fuzzy
-msgid "Cannot have environment variable value cannot be empty."
+msgid "Environment variable value cannot be empty."
 msgstr "Il valore della variabile d'ambiente non può essere vuoto."
 
 #: common/dialogs/dialog_env_var_config.cpp:140
