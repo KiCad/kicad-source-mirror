@@ -38,27 +38,31 @@
  * Class PYTHON_CONSOLE_FRAME is a simple derived class from wxMiniFrame
  * to handle the scripting python console
  */
+#define PC_STYLE wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER
+
 class PYTHON_CONSOLE_FRAME : public wxMiniFrame
 {
 private:
     static wxSize m_frameSize;   ///< The size of the frame, stored during a session
     static wxPoint m_framePos;   ///< The position of the frame, stored during a session
+    wxWindow * m_pythonPanel;    ///< the window managed by the python shell
 
 public:
 
     PYTHON_CONSOLE_FRAME( wxWindow* aParent, const wxString& aFramenameId )
         : wxMiniFrame( aParent, wxID_ANY, wxT("Python console"), wxDefaultPosition, wxDefaultSize,
-                       wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER|wxFRAME_FLOAT_ON_PARENT,
-                       aFramenameId )
+                       PC_STYLE | wxFRAME_FLOAT_ON_PARENT, aFramenameId )
     {
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+        SetSizer( sizer );
+        SetMinSize( wxSize( 500, 200 ) );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
-        wxWindow * pythonPanel = CreatePythonShellWindow( this );
-        sizer->Add( pythonPanel, 1, wxEXPAND | wxALL, 5 );
+        m_pythonPanel = CreatePythonShellWindow( this );
+        sizer->Add( m_pythonPanel, 1, wxEXPAND, 0 );
+#else
+        m_pythonPanel = NULL;
 #endif
-        SetSizer( sizer );
-        SetMinSize( wxSize( 400, 200 ) );
 
         if( m_frameSize.x <= 0 || m_frameSize.y <= 0 )
             SetSize( wxSize( 600, 300 ) );
@@ -73,13 +77,15 @@ public:
         Layout();
 
         // Connect Events
-        this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PYTHON_CONSOLE_FRAME::OnClose ) );
+        this->Connect( wxEVT_CLOSE_WINDOW,
+                       wxCloseEventHandler( PYTHON_CONSOLE_FRAME::OnClose ) );
     }
 
     ~PYTHON_CONSOLE_FRAME()
     {
         // Disconnect Events
-        this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PYTHON_CONSOLE_FRAME::OnClose ) );
+        this->Disconnect( wxEVT_CLOSE_WINDOW,
+                          wxCloseEventHandler( PYTHON_CONSOLE_FRAME::OnClose ) );
     }
 
 private:
