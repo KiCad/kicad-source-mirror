@@ -116,7 +116,7 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
         // Name cannot be empty.
         if( name.IsEmpty() )
         {
-            wxMessageBox( _( "Cannot have duplicate environment variable name cannot be empty." ),
+            wxMessageBox( _( "Environment variable name cannot be empty." ),
                           caption, wxOK | wxICON_ERROR, this );
             m_grid->GoToCell( row, 0 );
             m_grid->SetGridCursor( row, 0 );
@@ -126,7 +126,7 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
         // Value cannot be empty.
         if( value.IsEmpty() )
         {
-            wxMessageBox( _( "Cannot have environment variable value cannot be empty." ), caption,
+            wxMessageBox( _( "Environment variable value cannot be empty." ), caption,
                           wxOK | wxICON_ERROR, this );
             m_grid->GoToCell( row, 1 );
             m_grid->SetGridCursor( row, 1 );
