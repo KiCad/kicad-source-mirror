@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-23 15:21+0100\n"
-"PO-Revision-Date: 2015-08-23 15:22+0100\n"
+"POT-Creation-Date: 2015-08-24 23:02+0100\n"
+"PO-Revision-Date: 2015-08-24 23:07+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -7866,7 +7866,7 @@ msgstr "Odstęp"
 msgid "Create Microwave Gap"
 msgstr "Utwórz przerwę dla aplikacji mikrofalowej"
 
-#: pcbnew/pad_edition_functions.cpp:208
+#: pcbnew/pad_edition_functions.cpp:211
 #, c-format
 msgid "Delete Pad (footprint %s %s) ?"
 msgstr "Usunąć pole lut. (footprint %s %s) ?"
@@ -11419,7 +11419,7 @@ msgstr "Ustaw tą właściwość by wskazywała folder gdzie zapisywane będą f
 msgid "option '%s' for Github library '%s' must point to a writable directory ending with '.pretty'."
 msgstr "opcja '%s' dla biblioteki GitHub '%s' musi wskazywać na zapisywalny katalog zakończony przez '.pretty'."
 
-#: pcbnew/github/github_plugin.cpp:538
+#: pcbnew/github/github_plugin.cpp:542
 #, c-format
 msgid ""
 "Unable to parse URL:\n"
@@ -11428,7 +11428,7 @@ msgstr ""
 "Nie mogę rozpoznać adresu URL:\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:569
+#: pcbnew/github/github_plugin.cpp:573
 #, c-format
 msgid ""
 "%s\n"
@@ -11441,7 +11441,12 @@ msgstr ""
 "dla ścieżki biblioteki: '%s'.\n"
 "Powód: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:617
+#: pcbnew/github/github_plugin.cpp:588
+#, c-format
+msgid "Exception '%s' in avhttp while open()-ing URI:'%s'"
+msgstr "Nastąpił wyjątek '%s' w avhttp podczas otwierania linku:'%s'"
+
+#: pcbnew/github/github_plugin.cpp:629
 #, c-format
 msgid ""
 "%s\n"
@@ -19027,12 +19032,12 @@ msgid "Invalid Input"
 msgstr "Błąd wprowadzania"
 
 #: common/dialogs/dialog_env_var_config.cpp:119
-msgid "Cannot have duplicate environment variable name cannot be empty."
-msgstr "Nie mozna dublować zmiennąśrodowiskową, ani nie może ona być pusta."
+msgid "Environment variable name cannot be empty."
+msgstr "Wartość zmiennej środowiskowej nie może być pusta."
 
 #: common/dialogs/dialog_env_var_config.cpp:129
-msgid "Cannot have environment variable value cannot be empty."
-msgstr "Wartość zmiennych środowiskowych nie może być pusta."
+msgid "Environment variable value cannot be empty."
+msgstr "Wartość zmiennej środowiskowej nie może być pusta."
 
 #: common/dialogs/dialog_env_var_config.cpp:140
 msgid "The first character of an environment variable name cannot be a digit (0-9)."
@@ -21287,3 +21292,5 @@ msgstr "Kalkulator PCB"
 msgid "New Item"
 msgstr "Nowy element"
 
+#~ msgid "Cannot have duplicate environment variable name cannot be empty."
+#~ msgstr "Nie mozna dublować zmiennąśrodowiskową, ani nie może ona być pusta."
