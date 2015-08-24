@@ -162,7 +162,12 @@ class SHAPE_POLY_SET : public SHAPE
         int VertexCount( int aOutline = -1, int aHole = -1 ) const;
 
         ///> Returns the number of holes in a given outline
-        int HoleCount( int aOutline ) const;
+        int HoleCount( int aOutline ) const
+        {
+            if( (aOutline > (int)m_polys.size()) || (m_polys[aOutline].size() < 2) )
+                return 0;
+            return m_polys[aOutline].size() - 1;
+        }
 
         ///> Returns the reference to aIndex-th outline in the set
         SHAPE_LINE_CHAIN& Outline( int aIndex )
@@ -247,12 +252,27 @@ class SHAPE_POLY_SET : public SHAPE
 
         ///> Performs boolean polyset union
         ///> For aFastMode meaning, see function booleanOp
-
         void BooleanAdd( const SHAPE_POLY_SET& b, bool aFastMode = false );
 
         ///> Performs boolean polyset difference
         ///> For aFastMode meaning, see function booleanOp
         void BooleanSubtract( const SHAPE_POLY_SET& b, bool aFastMode = false );
+
+        ///> Performs boolean polyset intersection
+        ///> For aFastMode meaning, see function booleanOp
+        void BooleanIntersection( const SHAPE_POLY_SET& b, bool aFastMode = false );
+
+        ///> Performs boolean polyset union between a and b, store the result in it self
+        ///> For aFastMode meaning, see function booleanOp
+        void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode = false );
+
+        ///> Performs boolean polyset difference between a and b, store the result in it self
+        ///> For aFastMode meaning, see function booleanOp
+        void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode = false );
+
+        ///> Performs boolean polyset intersection between a and b, store the result in it self
+        ///> For aFastMode meaning, see function booleanOp
+        void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode = false );
 
         ///> Performs outline inflation/deflation, using round corners.
         void Inflate( int aFactor, int aCircleSegmentsCount );
@@ -260,7 +280,7 @@ class SHAPE_POLY_SET : public SHAPE
         ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures" connecting the outer ring
         ///> to the inner holes
         ///> For aFastMode meaning, see function booleanOp
-        void Fracture( bool aFastMode = false);
+        void Fracture( bool aFastMode = false );
 
         ///> Converts a set of slitted polygons to a set of polygons with holes
         void Unfracture();
@@ -330,11 +350,15 @@ class SHAPE_POLY_SET : public SHAPE
          * @param aOtherShape is the SHAPE_LINE_CHAIN to combine with me.
          * @param aFastMode is an option to choos if the result is a weak polygon
          * or a stricty simple polygon.
-         * if aFastMode is true (default) the result can be a weak polygon
-         * if aFastMode is true (default) the result is (theorically) a strictly
-         *  simple polygon, but calculations can be really significantly time consuming
+         * if aFastMode is true the result can be a weak polygon
+         * if aFastMode is false (default) the result is (theorically) a strictly
+         * simple polygon, but calculations can be really significantly time consuming
          */
         void booleanOp( ClipperLib::ClipType aType,
+                        const SHAPE_POLY_SET& aOtherShape, bool aFastMode = false );
+
+        void booleanOp( ClipperLib::ClipType aType,
+                        const SHAPE_POLY_SET& aShape,
                         const SHAPE_POLY_SET& aOtherShape, bool aFastMode = false );
 
         bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath ) const;

@@ -234,6 +234,36 @@ void SHAPE_POLY_SET::booleanOp( ClipType aType, const SHAPE_POLY_SET& aOtherShap
 }
 
 
+void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType,
+                                const SHAPE_POLY_SET& aShape,
+                                const SHAPE_POLY_SET& aOtherShape,
+                                bool aFastMode )
+{
+    Clipper c;
+
+    if( !aFastMode )
+        c.StrictlySimple( true );
+
+    BOOST_FOREACH( const POLYGON& poly, aShape.m_polys )
+    {
+        for( unsigned int i = 0; i < poly.size(); i++ )
+            c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptSubject, true );
+    }
+
+    BOOST_FOREACH( const POLYGON& poly, aOtherShape.m_polys )
+    {
+        for( unsigned int i = 0; i < poly.size(); i++ )
+            c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptClip, true );
+    }
+
+    PolyTree solution;
+
+    c.Execute( aType, solution, pftNonZero, pftNonZero );
+
+    importTree( &solution );
+}
+
+
 void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b, bool aFastMode )
 {
     booleanOp( ctUnion, b, aFastMode );
@@ -243,6 +273,30 @@ void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b, bool aFastMode )
 void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& b, bool aFastMode )
 {
     booleanOp( ctDifference, b, aFastMode );
+}
+
+
+void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& b, bool aFastMode )
+{
+    booleanOp( ctIntersection, b, aFastMode );
+}
+
+
+void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode )
+{
+    booleanOp( ctUnion, a, b, aFastMode );
+}
+
+
+void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode )
+{
+    booleanOp( ctDifference, a, b, aFastMode );
+}
+
+
+void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode )
+{
+    booleanOp( ctIntersection, a, b, aFastMode );
 }
 
 
