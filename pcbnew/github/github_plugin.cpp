@@ -495,16 +495,20 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
             zip_url += "/zip/master";
 #endif
         }
+
         else
         {
             // This is the generic code path for any server which can serve
-            // up zip files which is not github.com. The schemes tested include:
-            // http and https, I don't know what the avhttp library supports beyond that.
+            // up zip files. The schemes tested include: http and https.
+            // (I don't know what the avhttp library supports beyond that.)
 
             // zip_url goal: "<scheme>://<server>[:<port>]/<path>"
 
             // Remember that <scheme>, <server>, <port> if present, and <path> all came
             // from the lib_path in the fp-lib-table row.
+
+            // This code path is used with the nginx proxy setup, but is useful
+            // beyond that.
 
             zip_url += repo.GetServer();
 
@@ -561,7 +565,7 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 
         // 4 lines, using SSL, top that.
     }
-    catch( boost::system::system_error& e )
+    catch( const boost::system::system_error& e )
     {
         // https "GET" has faild, report this to API caller.
         static const char errorcmd[] = "http GET command failed";  // Do not translate this message
@@ -579,7 +583,15 @@ void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
 
         THROW_IO_ERROR( msg );
     }
+    catch( const exception& exc )
+    {
+        UTF8 error( _( "Exception '%s' in avhttp while open()-ing URI:'%s'" ) );
+
+        string msg = StrPrintf( error.c_str(), exc.what(), zip_url.c_str() );
+        THROW_IO_ERROR( msg );
+    }
 }
+
 
 // This GITHUB_GETLIBLIST method should not be here, but in github_getliblist.cpp !
 // However it is here just because we need to include <avhttp.hpp> to compile it.
