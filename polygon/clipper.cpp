@@ -879,6 +879,9 @@ ClipperBase::ClipperBase() //constructor
 {
   m_CurrentLM = m_MinimaList.begin(); //begin() == end() here
   m_UseFullRange = false;
+
+  //Clear vars to make coverity happy:
+  m_PreserveCollinear = m_HasOpenPaths = false;
 }
 //------------------------------------------------------------------------------
 
@@ -3624,6 +3627,9 @@ ClipperOffset::ClipperOffset(double miterLimit, double arcTolerance)
   this->MiterLimit = miterLimit;
   this->ArcTolerance = arcTolerance;
   m_lowest.X = -1;
+
+  //Clear temp vars to make coverity happy.
+  m_delta = m_sinA = m_sin = m_cos = m_miterLim = m_StepsPerRad = 0.0;
 }
 //------------------------------------------------------------------------------
 

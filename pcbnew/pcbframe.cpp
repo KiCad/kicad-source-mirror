@@ -980,14 +980,13 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
 
     wxWindow * pythonPanelFrame = findPythonConsole();
-    bool pythonPanelShown = false;
+    bool pythonPanelShown = true;
 
     if( pythonPanelFrame == NULL )
         pythonPanelFrame = new PYTHON_CONSOLE_FRAME( this, pythonConsoleNameId() );
     else
-        pythonPanelShown = pythonPanelFrame->IsShown();
+        pythonPanelShown = ! pythonPanelFrame->IsShown();
 
-    pythonPanelShown = ! pythonPanelShown;
     pythonPanelFrame->Show( pythonPanelShown );
 }
 
