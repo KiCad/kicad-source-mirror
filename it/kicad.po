@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-25 00:51+0100\n"
-"PO-Revision-Date: 2015-08-25 00:51+0100\n"
+"POT-Creation-Date: 2015-08-25 12:05+0100\n"
+"PO-Revision-Date: 2015-08-25 12:05+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -6548,22 +6548,22 @@ msgstr "Le selezione contiene elementi bloccati. Continuare?"
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
-#: pcbnew/tools/module_tools.cpp:206
+#: pcbnew/tools/module_tools.cpp:209
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr ""
 "Mantenere premuto il tasto sinistro del mouse e spostare il puntatore sulle "
 "piazzole per enumerarle"
 
-#: pcbnew/tools/module_tools.cpp:323
+#: pcbnew/tools/module_tools.cpp:326
 msgid "Select reference point"
 msgstr "Seleziona il punto di riferimento"
 
-#: pcbnew/tools/module_tools.cpp:374
+#: pcbnew/tools/module_tools.cpp:377
 #, c-format
 msgid "Copied %d item(s)"
 msgstr "Copiati %d elementi"
 
-#: pcbnew/tools/module_tools.cpp:398
+#: pcbnew/tools/module_tools.cpp:401
 msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
@@ -10365,7 +10365,7 @@ msgstr "Strato cima/fronte"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:154
 msgid "Bottom/Back Layer"
-msgstr "Stato basso/retro"
+msgstr "Strato basso/retro"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:24
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:126
