@@ -181,6 +181,9 @@ int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     std::set<D_PAD*> allPads;
     MODULE* module = m_board->m_Modules;
 
+    if( !module || !module->Pads() )
+        return 0;
+
     GENERAL_COLLECTOR collector;
     const KICAD_T types[] = { PCB_PAD_T, EOT };
 
