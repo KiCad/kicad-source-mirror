@@ -63,6 +63,8 @@ public:
                         const wxSize& aSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
     ~EDA_DRAW_PANEL_GAL();
 
+    virtual void SetFocus();
+
     /**
      * Function SwitchBackend
      * Switches method of rendering graphics.

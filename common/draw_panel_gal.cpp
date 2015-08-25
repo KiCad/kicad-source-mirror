@@ -117,6 +117,22 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 }
 
 
+void EDA_DRAW_PANEL_GAL::SetFocus()
+{
+// Windows has a strange manner on bringing up and activating windows
+// containing a GAL canvas just after moving the mouse cursor into its area.
+// Feel free to uncomment or extend the following #ifdef if you experience
+// similar problems on your platform.
+#ifdef __WINDOWS__
+    if( !GetParent()->IsDescendant( wxWindow::FindFocus() ) )
+        return;
+#endif
+
+    wxScrolledCanvas::SetFocus();
+    m_lostFocus = false;
+}
+
+
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     m_pendingRefresh = false;
@@ -330,10 +346,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 {
     if( m_lostFocus )
-    {
         SetFocus();
-        m_lostFocus = false;
-    }
 
     if( !m_eventDispatcher )
         aEvent.Skip();
@@ -348,12 +361,16 @@ void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
 {
     // Getting focus is necessary in order to receive key events properly
     SetFocus();
+
+    aEvent.Skip();
 }
 
 
 void EDA_DRAW_PANEL_GAL::onLostFocus( wxFocusEvent& aEvent )
 {
     m_lostFocus = true;
+
+    aEvent.Skip();
 }
 
 
