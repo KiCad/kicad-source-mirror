@@ -1123,6 +1123,8 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         libeditFrame->Show( true );
     }
 
+    libeditFrame->PushPreferences( m_canvas );
+
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( libeditFrame->IsIconized() )
         libeditFrame->Iconize( false );

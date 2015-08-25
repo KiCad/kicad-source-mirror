@@ -27,6 +27,7 @@
 #include <libeditframe.h>
 #include <base_units.h>
 #include <kiway.h>
+#include <class_drawpanel.h>
 
 // Sttaic members:
 
@@ -50,6 +51,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
 void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, true );
+
+    viewlibFrame->PushPreferences( m_canvas );
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( viewlibFrame->IsIconized() )

@@ -726,6 +726,15 @@ public:
     virtual void UpdateMsgPanel();
 
     /**
+     * Function PushPreferences
+     * Pushes a few preferences from a parent window to a child window.
+     * (i.e. from eeschema to schematic symbol editor)
+     *
+     * @param aParentCanvas is the parent canvas to push preferences from.
+     */
+    void PushPreferences( const EDA_DRAW_PANEL* aParentCanvas );
+
+    /**
      * Function PrintPage
      * used to print a page
      * Print the page pointed by current screen, set by the calling print function

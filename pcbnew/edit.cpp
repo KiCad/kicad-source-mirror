@@ -218,6 +218,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 if( wxWindow::FindFocus() != editor )
                     editor->SetFocus();
             }
+
+            editor->PushPreferences( m_canvas );
         }
         break;
 
@@ -244,6 +246,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 if( wxWindow::FindFocus() != viewer )
                     viewer->SetFocus();
             }
+
+            viewer->PushPreferences( m_canvas );
         }
         break;
 

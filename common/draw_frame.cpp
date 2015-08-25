@@ -745,6 +745,16 @@ void EDA_DRAW_FRAME::UpdateMsgPanel()
         SetMsgPanel( item );
 }
 
+// FIXME: There needs to be a better way for child windows to load preferences.
+//        This function pushes four preferences from a parent window to a child window
+//        i.e. from eeschema to the schematic symbol editor
+void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
+{
+    m_canvas->SetEnableZoomNoCenter( aParentCanvas->GetEnableZoomNoCenter() );
+    m_canvas->SetEnableMiddleButtonPan( aParentCanvas->GetEnableMiddleButtonPan() );
+    m_canvas->SetMiddleButtonPanLimited( aParentCanvas->GetMiddleButtonPanLimited() );
+    m_canvas->SetEnableAutoPan( aParentCanvas->GetEnableAutoPan() );
+}
 
 wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils ) const
 {
