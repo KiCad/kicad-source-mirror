@@ -107,6 +107,11 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     GetScreen()->ClrModify();
 
     BOARD* board = new BOARD;
+
+    // Transfer current design settings
+    if( GetBoard() )
+        board->SetDesignSettings( GetBoard()->GetDesignSettings() );
+
     SetBoard( board );
 
     SetCurItem( NULL );
