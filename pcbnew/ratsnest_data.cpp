@@ -305,6 +305,10 @@ void RN_NET::compute()
             m_rnEdges->push_back( boost::make_shared<RN_EDGE_MST>( *boardNodes.begin(), *last ) );
         }
 
+        // Set tags to nodes as connected
+        BOOST_FOREACH( RN_NODE_PTR node, boardNodes )
+            node->SetTag( 0 );
+
         return;
     }
 
