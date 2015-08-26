@@ -152,7 +152,6 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
 {
     const SHAPE_LINE_CHAIN& obs = aObstacle.CLine();
 
-    bool failingDirCheck = false;
     int attempt;
 
     for( attempt = 0; attempt < 4; attempt++ )
@@ -207,7 +206,6 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
         if( !checkBumpDirection( aCurrent, l ) )
         {
             TRACE( 100, "attempt %d fail direction-check", attempt );
-            failingDirCheck = true;
             aShoved.SetShape( l.CLine() );
 
             continue;
