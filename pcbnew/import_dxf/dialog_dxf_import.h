@@ -46,6 +46,9 @@ private:
     PCB_BASE_FRAME*      m_parent;
     wxConfigBase*        m_config;               // Current config
     DXF2BRD_CONVERTER    m_dxfImporter;
+    int                  m_PCBGridUnits;
+    double               m_PCBGridOffsetX;
+    double               m_PCBGridOffsetY;
 
     static wxString      m_dxfFilename;
     static int           m_offsetSelection;
@@ -55,4 +58,7 @@ private:
     void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
     void OnOKClick( wxCommandEvent& event );
     void OnBrowseDxfFiles( wxCommandEvent& event );
+    void OriginOptionOnUpdateUI( wxUpdateUIEvent& event );
+    int  GetPCBGridUnits( void );
+    void GetPCBGridOffsets( double &aXOffset, double &aYOffset );
 };

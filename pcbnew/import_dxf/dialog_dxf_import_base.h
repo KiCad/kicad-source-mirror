@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,12 +25,15 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
+#include <wx/valtext.h>
+#include <wx/choice.h>
 #include <wx/bmpcbox.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define wxID_ORIGIN_SELECT 1000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DXF_IMPORT_BASE
@@ -44,6 +47,12 @@ class DIALOG_DXF_IMPORT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlFileName;
 		wxButton* m_buttonBrowse;
 		wxRadioBox* m_rbOffsetOption;
+		wxStaticText* m_staticText4;
+		wxTextCtrl* m_DXFPCBXCoord;
+		wxStaticText* m_staticText5;
+		wxTextCtrl* m_DXFPCBYCoord;
+		wxStaticText* m_staticText3;
+		wxChoice* m_DXFPCBGridUnits;
 		wxStaticText* m_staticTextBrdlayer;
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
 		wxStaticLine* m_staticline8;
@@ -53,13 +62,14 @@ class DIALOG_DXF_IMPORT_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnBrowseDxfFiles( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OriginOptionOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import DXF file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 356,273 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import DXF File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DXF_IMPORT_BASE();
 	
 };
