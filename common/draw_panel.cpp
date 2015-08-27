@@ -913,22 +913,23 @@ void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
     // Ensure the cross_hair position is updated,
     // because it will be used to center the screen.
     // We use a position inside the client window
-    wxSize size = GetClientSize();
+    wxRect area( wxPoint( 0, 0 ), GetClientSize() );
     wxPoint cross_hair_pos = event.GetPosition();
-    cross_hair_pos.x = std::min( cross_hair_pos.x, size.x );
-    cross_hair_pos.y = std::min( cross_hair_pos.y, size.x );
-    cross_hair_pos.x = std::max( cross_hair_pos.x, 0 );
-    cross_hair_pos.y = std::max( cross_hair_pos.y, 0 );
 
-    INSTALL_UNBUFFERED_DC( dc, this );
-    cross_hair_pos.x = dc.DeviceToLogicalX( cross_hair_pos.x );
-    cross_hair_pos.y = dc.DeviceToLogicalY( cross_hair_pos.y );
+    // Certain window managers (e.g. awesome wm) incorrectly trigger "on leave" event,
+    // therefore test if the cursor has really left the panel area
+    if( !area.Contains( cross_hair_pos ) )
+    {
+        INSTALL_UNBUFFERED_DC( dc, this );
+        cross_hair_pos.x = dc.DeviceToLogicalX( cross_hair_pos.x );
+        cross_hair_pos.y = dc.DeviceToLogicalY( cross_hair_pos.y );
 
-    GetParent()->SetCrossHairPosition( cross_hair_pos );
+        GetParent()->SetCrossHairPosition( cross_hair_pos );
 
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_POPUP_ZOOM_CENTER );
-    cmd.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( cmd );
+        wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_POPUP_ZOOM_CENTER );
+        cmd.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( cmd );
+    }
 
     event.Skip();
 }
