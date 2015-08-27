@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-27 08:45+0100\n"
-"PO-Revision-Date: 2015-08-27 08:45+0100\n"
+"POT-Creation-Date: 2015-08-27 20:24+0100\n"
+"PO-Revision-Date: 2015-08-27 20:31+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -11145,29 +11145,74 @@ msgstr "Eksportuj plik testowy IPC-D-356"
 msgid "Unable to create "
 msgstr "Nie mogę utworzyć "
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Right top corner"
-msgstr "Prawy górny wierzchołek"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:24
+msgid "File:"
+msgstr "Plik:"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Middle"
-msgstr "Na środku"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Center of page"
+msgstr "Na środku strony"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Centered on page"
-msgstr "Umieść na środku strony"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Upper left corner of page"
+msgstr "Górny lewy róg strony"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Right bottom corner"
-msgstr "Prawy dolny narożnik"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Center left side of page"
+msgstr "Środek lewej krawędzi strony"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:41
-msgid "Origin of DXF Coordinates"
-msgstr "Położenie rysunku DXF"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Lower left corner of page"
+msgstr "Dolny lewy narożnik strony"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:45
-msgid "Board layer for import:"
-msgstr "Rysunek umieszczony na warstwie:"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "User defined position"
+msgstr "Pozycja zdefiniowana przez użytkownika"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
+msgid "Place DXF origin (0,0) point:"
+msgstr "Umiejscowienie punktu odniesienia (0, 0) DXF:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:54
+msgid "X Position:"
+msgstr "Pozycja X:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:58
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:74
+msgid "0.0"
+msgstr "0.0"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:60
+msgid "DXF origin on PCB Grid, X Coordinate"
+msgstr "Położenie rysunku DXF, współrzędna X"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:70
+msgid "Y Position:"
+msgstr "Pozycja Y:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:76
+msgid "DXF origin on PCB Grid, Y Coordinate"
+msgstr "Położenie rysunku DXF, współrzędna Y"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:86
+msgid "Units:"
+msgstr "Jednostki"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
+msgid "inch"
+msgstr "cale"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:94
+msgid "Select PCB grid units"
+msgstr "Wybór jednostek siatki PCB"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:110
+msgid "Layer:"
+msgstr "Warstwa:"
+
+#: pcbnew/import_dxf/dialog_dxf_import.cpp:137
+msgid "Open File"
+msgstr "Otwórz Plik"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:55
 msgid "Please select a differential pair trace you want to tune."
@@ -12049,10 +12094,6 @@ msgid "Side"
 msgstr "Warstwa"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
-msgid "0.0"
-msgstr "0.0"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "+90.0"
 msgstr "+90.0"
 
@@ -12371,10 +12412,6 @@ msgstr "Wpisz tekst jaki umieścić na wybranej warstwie."
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
 msgid "Position X:"
 msgstr "Pozycja X:"
-
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:51
-msgid "Layer:"
-msgstr "Warstwa:"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:55
 msgid "Display:"
@@ -13393,10 +13430,6 @@ msgstr "Ścieżki, przelotki i pola lutownicze są dozwolone. Strefa chroniona j
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:55
 msgid "Inches"
 msgstr "cale"
-
-#: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:57
-msgid "Units:"
-msgstr "Jednostki"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:61
 msgid "One file per side"
@@ -14439,10 +14472,6 @@ msgstr "Ścieżka do modeli 3D footprintów:"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:50
 msgid "Grid Reference Point:"
 msgstr "Punkt Odniesienia Siatki:"
-
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
-msgid "inch"
-msgstr "cale"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:70
 msgid "X Ref:"
@@ -17146,10 +17175,6 @@ msgstr "D Codes"
 #, c-format
 msgid "Layer %d not in use"
 msgstr "Warstwa %d nie jest używana"
-
-#: gerbview/gerbview_frame.cpp:488
-msgid "File:"
-msgstr "Plik:"
 
 #: gerbview/gerbview_frame.cpp:491
 msgid "(with X2 Attributes)"
@@ -21072,8 +21097,8 @@ msgstr ""
 "Pokazuje/ukrywa pasek narzędzi mikrofalowych\n"
 "Jest to funkcja eksperymentalna (ciągle rozwijana)"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.h:62
-msgid "Import DXF file"
+#: pcbnew/import_dxf/dialog_dxf_import_base.h:72
+msgid "Import DXF File"
 msgstr "Importuj plik DXF"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:79
