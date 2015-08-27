@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 23:02+0100\n"
-"PO-Revision-Date: 2015-08-24 23:07+0100\n"
+"POT-Creation-Date: 2015-08-27 08:45+0100\n"
+"PO-Revision-Date: 2015-08-27 08:45+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -2476,7 +2476,7 @@ msgstr "Otwórz schemat"
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1339
+#: eeschema/schframe.cpp:1341
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -7683,93 +7683,93 @@ msgstr "Zapisać zmiany w footprincie przed zamknięciem?"
 msgid "Library is not set, the footprint could not be saved."
 msgstr "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:687
+#: pcbnew/moduleframe.cpp:690
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
-#: pcbnew/moduleframe.cpp:740
+#: pcbnew/moduleframe.cpp:743
 msgid "Footprint Editor "
 msgstr "Edytor Footprintów"
 
-#: pcbnew/moduleframe.cpp:747
+#: pcbnew/moduleframe.cpp:750
 msgid "(no active library)"
 msgstr " (brak aktywnej biblioteki)"
 
-#: pcbnew/moduleframe.cpp:756
+#: pcbnew/moduleframe.cpp:759
 msgid "Footprint Editor (active library: "
 msgstr "Edytor Footprintów (aktywna biblioteka: "
 
-#: pcbnew/edit.cpp:689
-#: pcbnew/edit.cpp:711
-#: pcbnew/edit.cpp:737
-#: pcbnew/edit.cpp:765
-#: pcbnew/edit.cpp:793
-#: pcbnew/edit.cpp:821
+#: pcbnew/edit.cpp:693
+#: pcbnew/edit.cpp:715
+#: pcbnew/edit.cpp:741
+#: pcbnew/edit.cpp:769
+#: pcbnew/edit.cpp:797
+#: pcbnew/edit.cpp:825
 #, c-format
 msgid "Footprint %s found, but it is locked"
 msgstr "Znaleziono footprint %s, ale jest on zablokowany"
 
-#: pcbnew/edit.cpp:893
-#: pcbnew/edit.cpp:912
+#: pcbnew/edit.cpp:897
+#: pcbnew/edit.cpp:916
 #, c-format
 msgid "The parent (%s) of the pad is locked"
 msgstr "Element nadrzędny (%s) dla wyprowadzenia jest zablokowany"
 
-#: pcbnew/edit.cpp:1429
-#: pcbnew/edit.cpp:1431
+#: pcbnew/edit.cpp:1433
+#: pcbnew/edit.cpp:1435
 msgid "Add tracks"
 msgstr "Dodaj ścieżki"
 
-#: pcbnew/edit.cpp:1441
-#: pcbnew/edit.cpp:1488
+#: pcbnew/edit.cpp:1445
+#: pcbnew/edit.cpp:1492
 msgid "Add module"
 msgstr "Dodaj footprint"
 
-#: pcbnew/edit.cpp:1445
+#: pcbnew/edit.cpp:1449
 msgid "Add zones"
 msgstr "Dodaj strefy"
 
-#: pcbnew/edit.cpp:1448
+#: pcbnew/edit.cpp:1452
 msgid "Warning: zone display is OFF!!!"
 msgstr "Ostrzeżenie: Wyświetlanie stref jest WYŁĄCZONE!!!"
 
-#: pcbnew/edit.cpp:1456
+#: pcbnew/edit.cpp:1460
 msgid "Add keepout"
 msgstr "Dodaj strefę chronioną"
 
-#: pcbnew/edit.cpp:1460
+#: pcbnew/edit.cpp:1464
 msgid "Add layer alignment target"
 msgstr "Dodaj element pozycjonujący warstwy"
 
-#: pcbnew/edit.cpp:1464
+#: pcbnew/edit.cpp:1468
 msgid "Adjust zero"
 msgstr "Ustaw zero"
 
-#: pcbnew/edit.cpp:1468
+#: pcbnew/edit.cpp:1472
 msgid "Adjust grid origin"
 msgstr "Dostosuj punkt bazowy siatki"
 
-#: pcbnew/edit.cpp:1472
+#: pcbnew/edit.cpp:1476
 msgid "Add graphic line"
 msgstr "Dodaj linię (grafika)"
 
-#: pcbnew/edit.cpp:1476
+#: pcbnew/edit.cpp:1480
 msgid "Add graphic arc"
 msgstr "Dodaj łuk (grafika)"
 
-#: pcbnew/edit.cpp:1480
+#: pcbnew/edit.cpp:1484
 msgid "Add graphic circle"
 msgstr "Dodaj okrąg (grafika)"
 
-#: pcbnew/edit.cpp:1492
+#: pcbnew/edit.cpp:1496
 msgid "Add dimension"
 msgstr "Dodaj wymiar"
 
-#: pcbnew/edit.cpp:1500
+#: pcbnew/edit.cpp:1504
 msgid "Highlight net"
 msgstr "Podświetl sieć"
 
-#: pcbnew/edit.cpp:1504
+#: pcbnew/edit.cpp:1508
 msgid "Select rats nest"
 msgstr "Wybierz połączenia wspomagające"
 
@@ -10995,20 +10995,20 @@ msgstr ", otwór: domyślny"
 msgid ", drill: "
 msgstr ", otwór:"
 
-#: pcbnew/tools/module_tools.cpp:206
+#: pcbnew/tools/module_tools.cpp:209
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr "Przytrzymaj lewy przycisk myszy i przesuń kursor nad polami lutowniczymi by je ponumerować"
 
-#: pcbnew/tools/module_tools.cpp:323
+#: pcbnew/tools/module_tools.cpp:326
 msgid "Select reference point"
 msgstr "Wybierz punkt odniesienia"
 
-#: pcbnew/tools/module_tools.cpp:374
+#: pcbnew/tools/module_tools.cpp:377
 #, c-format
 msgid "Copied %d item(s)"
 msgstr "Skopiowano pozycji: %d"
 
-#: pcbnew/tools/module_tools.cpp:398
+#: pcbnew/tools/module_tools.cpp:401
 msgid "Invalid clipboard contents"
 msgstr "Niepoprawna zawartość schowka"
 
@@ -21292,5 +21292,3 @@ msgstr "Kalkulator PCB"
 msgid "New Item"
 msgstr "Nowy element"
 
-#~ msgid "Cannot have duplicate environment variable name cannot be empty."
-#~ msgstr "Nie mozna dublować zmiennąśrodowiskową, ani nie może ona być pusta."
