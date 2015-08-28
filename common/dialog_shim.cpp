@@ -26,6 +26,7 @@
 #include <dialog_shim.h>
 #include <kiway_player.h>
 #include <wx/evtloop.h>
+#include <pgm_base.h>
 
 
 /// Toggle a window's "enable" status to disabled, then enabled on destruction.
@@ -68,6 +69,18 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 
     if( h )
         SetKiway( this, &h->Kiway() );
+
+#ifdef __WINDOWS__
+    // On Windows, the app top windows can be brought to the foreground
+    // (at least temporary) in certain circumstances,
+    // for instance when calling an external tool in Eeschema boom generation.
+    // So set the parent KIWAY_PLAYER kicad frame (if exists) to top window
+    // to avoid this annoying behavior
+    KIWAY_PLAYER* parent_kiwayplayer = dynamic_cast<KIWAY_PLAYER*>( aParent );
+
+    if( parent_kiwayplayer )
+        Pgm().App().SetTopWindow( parent_kiwayplayer );
+#endif
 
 #if DLGSHIM_USE_SETFOCUS
     Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SHIM::onInit ) );

@@ -51,6 +51,7 @@ bool LINK_TAGHANDLER::HandleTag(const wxHtmlTag& tag)
 HTML_LINK_PARSER::HTML_LINK_PARSER( const wxString& aSrc, wxArrayString& aUrls )
         : m_src( aSrc ), stringUrls( aUrls )
 {
+    m_filter = NULL;
     AddTagHandler( new LINK_TAGHANDLER(this) );
 }
 

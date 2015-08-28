@@ -1669,9 +1669,18 @@ int VRML2_MODEL_PARSER::read_Normal()
         {
             // Debug
             if( m_normalPerVertex == false )
-                wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Normal m_PerFaceNormalsNormalized.size: %zu" ), m_model->m_PerFaceNormalsNormalized.size() );
+            {
+                wxLogTrace( traceVrmlV2Parser,
+                            m_debugSpacer + wxT( "read_Normal m_PerFaceNormalsNormalized.size: %zu" ),
+                            m_model->m_PerFaceNormalsNormalized.size() );
+            }
             else
-                wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Normal m_PerVertexNormalsNormalized.size: %zu" ), m_model->m_PerVertexNormalsNormalized.size() );
+            {
+                wxLogTrace( traceVrmlV2Parser,
+                            m_debugSpacer + wxT( "read_Normal m_PerVertexNormalsNormalized.size: %zu" ),
+                            m_model->m_PerVertexNormalsNormalized.size() );
+            }
+
             debug_exit();
             wxLogTrace( traceVrmlV2Parser, m_debugSpacer + wxT( "read_Normal exit" ) );
             return 0;

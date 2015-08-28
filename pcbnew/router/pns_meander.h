@@ -114,14 +114,15 @@ public:
         m_dual( aIsDual ),
         m_width( aWidth ),
         m_baselineOffset( 0 )
-     {
+    {
         // Do not leave unitialized members, and keep static analyser quiet:
         m_type = MT_SINGLE;
         m_amplitude = 0;
         m_side = false;
         m_baseIndex = 0;
         m_currentTarget = NULL;
-     }
+        m_meanCornerRadius = 0;
+    }
 
     /**
      * Function SetType()
