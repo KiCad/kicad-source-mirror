@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-25 12:05+0100\n"
-"PO-Revision-Date: 2015-08-25 12:05+0100\n"
+"POT-Creation-Date: 2015-08-30 00:50+0100\n"
+"PO-Revision-Date: 2015-08-30 00:50+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -456,8 +456,8 @@ msgid "To proceed, you can use the File menu to start a new project."
 msgstr ""
 "Per procedere, si può usare il menu File per iniziare un nuovo progetto."
 
-#: kicad/prjconfig.cpp:335 pcbnew/pcbframe.cpp:965 pcbnew/moduleframe.cpp:759
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1336 cvpcb/cvframe.cpp:716
+#: kicad/prjconfig.cpp:335 pcbnew/pcbframe.cpp:965 pcbnew/moduleframe.cpp:762
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1338 cvpcb/cvframe.cpp:716
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -878,7 +878,7 @@ msgstr ""
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:656 pcbnew/hotkeys.cpp:187 pcbnew/moduleframe.cpp:687
+#: pcbnew/pcbframe.cpp:656 pcbnew/hotkeys.cpp:187 pcbnew/moduleframe.cpp:690
 #: cvpcb/class_DisplayFootprintsFrame.cpp:401
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
@@ -1724,7 +1724,7 @@ msgstr "Nascondi Barra strumenti Microonde"
 msgid "Show Microwave Toolbar"
 msgstr "Mostra Barra strumenti Microonde"
 
-#: pcbnew/pcbnew_config.cpp:138 pcbnew/moduleframe.cpp:855
+#: pcbnew/pcbnew_config.cpp:138 pcbnew/moduleframe.cpp:858
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -1736,12 +1736,12 @@ msgstr ""
 "\"%s\""
 
 #: pcbnew/pcbnew_config.cpp:142 pcbnew/pcbnew_config.cpp:164
-#: pcbnew/moduleframe.cpp:859 pcbnew/moduleframe.cpp:879 cvpcb/cvframe.cpp:457
+#: pcbnew/moduleframe.cpp:862 pcbnew/moduleframe.cpp:882 cvpcb/cvframe.cpp:457
 #: cvpcb/cvframe.cpp:477
 msgid "File Save Error"
 msgstr "Errore salvataggio file"
 
-#: pcbnew/pcbnew_config.cpp:160 pcbnew/moduleframe.cpp:875
+#: pcbnew/pcbnew_config.cpp:160 pcbnew/moduleframe.cpp:878
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -3205,7 +3205,7 @@ msgstr "Aggiungi arco"
 msgid "Add circle"
 msgstr "Aggiungi cerchio"
 
-#: pcbnew/modedit.cpp:948 pcbnew/edit.cpp:1484
+#: pcbnew/modedit.cpp:948 pcbnew/edit.cpp:1488
 #: pcbnew/tools/drawing_tool.cpp:1227 pcbnew/tools/drawing_tool.cpp:1351
 #: eeschema/schedit.cpp:559 eeschema/libeditframe.cpp:1131
 msgid "Add text"
@@ -3227,7 +3227,7 @@ msgstr "Aggiungi piazzola"
 msgid "Pad settings"
 msgstr "Impostazioni piazzola"
 
-#: pcbnew/modedit.cpp:973 pcbnew/edit.cpp:1496
+#: pcbnew/modedit.cpp:973 pcbnew/edit.cpp:1500
 #: pcbnew/tools/pcbnew_control.cpp:748 eeschema/schedit.cpp:595
 #: eeschema/libeditframe.cpp:1173 eeschema/help_common_strings.h:48
 msgid "Delete item"
@@ -3403,7 +3403,7 @@ msgstr "Mostra contorni piste"
 msgid "Enable high contrast display mode"
 msgstr "Visualizza con contrasto aumentato "
 
-#: pcbnew/tool_pcb.cpp:432 pcbnew/edit.cpp:1500
+#: pcbnew/tool_pcb.cpp:432 pcbnew/edit.cpp:1504
 #: pcbnew/tools/pcb_editor_control.cpp:703
 msgid "Highlight net"
 msgstr "Evidenzia collegamento"
@@ -3434,14 +3434,14 @@ msgid "Add graphic line or polygon"
 msgstr "Aggiungi linea o poligono grafici"
 
 #: pcbnew/tool_pcb.cpp:457 pcbnew/menubar_modedit.cpp:276
-#: pcbnew/menubar_pcbframe.cpp:406 pcbnew/edit.cpp:1480
+#: pcbnew/menubar_pcbframe.cpp:406 pcbnew/edit.cpp:1484
 #: pcbnew/tool_modedit.cpp:173 pcbnew/tools/drawing_tool.cpp:135
 #: pcbnew/tools/drawing_tool.cpp:155
 msgid "Add graphic circle"
 msgstr "Aggiungi cerchio grafico"
 
 #: pcbnew/tool_pcb.cpp:460 pcbnew/menubar_modedit.cpp:287
-#: pcbnew/menubar_pcbframe.cpp:403 pcbnew/edit.cpp:1476
+#: pcbnew/menubar_pcbframe.cpp:403 pcbnew/edit.cpp:1480
 #: pcbnew/tool_modedit.cpp:176 pcbnew/tools/drawing_tool.cpp:182
 #: pcbnew/tools/drawing_tool.cpp:202
 msgid "Add graphic arc"
@@ -3452,12 +3452,12 @@ msgid "Add text on copper layers or graphic text"
 msgstr "Aggiungi testo sugli strati in rame o di testo"
 
 #: pcbnew/tool_pcb.cpp:467 pcbnew/menubar_pcbframe.cpp:417
-#: pcbnew/edit.cpp:1492 pcbnew/tools/drawing_tool.cpp:248
+#: pcbnew/edit.cpp:1496 pcbnew/tools/drawing_tool.cpp:248
 msgid "Add dimension"
 msgstr "Aggiungi quota"
 
 #: pcbnew/tool_pcb.cpp:470 pcbnew/menubar_pcbframe.cpp:421
-#: pcbnew/edit.cpp:1460 pcbnew/tools/common_actions.cpp:384
+#: pcbnew/edit.cpp:1464 pcbnew/tools/common_actions.cpp:384
 #: pcbnew/tools/pcb_editor_control.cpp:346
 msgid "Add layer alignment target"
 msgstr "Aggiungi marcatore di allineamento strati"
@@ -3626,7 +3626,7 @@ msgstr "&Importa file DXF"
 
 #: pcbnew/menubar_modedit.cpp:134 pcbnew/menubar_pcbframe.cpp:196
 msgid "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer"
-msgstr "Importa nello strato Elementi grafici di  Pcbnew disegno DXF in 2D "
+msgstr "Importa disegno DXF 2D in Pcbnew nello strato Elementi grafici"
 
 #: pcbnew/menubar_modedit.cpp:141 pcbnew/menubar_pcbframe.cpp:237
 #: gerbview/menubar.cpp:135 pagelayout_editor/menubar.cpp:101
@@ -5015,54 +5015,54 @@ msgstr "Sbr&oglia"
 msgid "D&imensions"
 msgstr "D&imensioni"
 
-#: pcbnew/edit.cpp:689 pcbnew/edit.cpp:711 pcbnew/edit.cpp:737
-#: pcbnew/edit.cpp:765 pcbnew/edit.cpp:793 pcbnew/edit.cpp:821
+#: pcbnew/edit.cpp:693 pcbnew/edit.cpp:715 pcbnew/edit.cpp:741
+#: pcbnew/edit.cpp:769 pcbnew/edit.cpp:797 pcbnew/edit.cpp:825
 #, c-format
 msgid "Footprint %s found, but it is locked"
 msgstr "L'impronta %s è stata trovata, ma è bloccata"
 
-#: pcbnew/edit.cpp:893 pcbnew/edit.cpp:912
+#: pcbnew/edit.cpp:897 pcbnew/edit.cpp:916
 #, c-format
 msgid "The parent (%s) of the pad is locked"
 msgstr "La piazzola di origine (%s) è bloccata"
 
-#: pcbnew/edit.cpp:1429 pcbnew/edit.cpp:1431
+#: pcbnew/edit.cpp:1433 pcbnew/edit.cpp:1435
 msgid "Add tracks"
 msgstr "Aggiungi pista"
 
-#: pcbnew/edit.cpp:1441 pcbnew/edit.cpp:1488
+#: pcbnew/edit.cpp:1445 pcbnew/edit.cpp:1492
 #: pcbnew/tools/pcb_editor_control.cpp:224
 msgid "Add module"
 msgstr "Aggiungi modulo"
 
-#: pcbnew/edit.cpp:1445 pcbnew/tools/drawing_tool.cpp:417
+#: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:417
 msgid "Add zones"
 msgstr "Aggiungi zone"
 
-#: pcbnew/edit.cpp:1448
+#: pcbnew/edit.cpp:1452
 msgid "Warning: zone display is OFF!!!"
 msgstr "Attenzione: La visulizzazione delle zone è disabilitata!"
 
-#: pcbnew/edit.cpp:1456 pcbnew/tools/drawing_tool.cpp:425
+#: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:425
 msgid "Add keepout"
 msgstr "Aggiungi proibita"
 
-#: pcbnew/edit.cpp:1464 pcbnew/tools/pcb_editor_control.cpp:647
+#: pcbnew/edit.cpp:1468 pcbnew/tools/pcb_editor_control.cpp:647
 msgid "Adjust zero"
 msgstr "Regola zero"
 
-#: pcbnew/edit.cpp:1468 pcbnew/tools/pcbnew_control.cpp:657
+#: pcbnew/edit.cpp:1472 pcbnew/tools/pcbnew_control.cpp:657
 msgid "Adjust grid origin"
 msgstr "Imposta origine griglia"
 
-#: pcbnew/edit.cpp:1472 pcbnew/tools/drawing_tool.cpp:78
+#: pcbnew/edit.cpp:1476 pcbnew/tools/drawing_tool.cpp:78
 #: pcbnew/tools/drawing_tool.cpp:103
 msgid "Add graphic line"
 msgstr "Aggiungi linea grafica"
 
-#: pcbnew/edit.cpp:1504
+#: pcbnew/edit.cpp:1508
 msgid "Select rats nest"
-msgstr "Seleziona collegamento"
+msgstr "Seleziona rats nest"
 
 #: pcbnew/basepcbframe.cpp:465
 msgid "Display rectangular coordinates"
@@ -5070,7 +5070,7 @@ msgstr "Mostra coordinate rettangolari"
 
 #: pcbnew/basepcbframe.cpp:477
 msgid "Show pads in fill mode"
-msgstr "Mostra piazzole"
+msgstr "Mostra piazzole in modalità piena"
 
 #: pcbnew/basepcbframe.cpp:837 pcbnew/hotkeys.cpp:159 pcbnew/hotkeys.cpp:161
 #: pcbnew/tools/common_actions.cpp:210 eeschema/hotkeys.cpp:89
@@ -5085,7 +5085,7 @@ msgstr "Zoom "
 #: pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "Plugin %s non trovato."
+msgstr "Plugin tipo \"%s\" non trovato."
 
 #: pcbnew/io_mgr.cpp:126
 #, c-format
@@ -5098,12 +5098,12 @@ msgstr "Quote"
 
 #: pcbnew/class_pcb_text.cpp:138
 msgid "PCB Text"
-msgstr "Testo del C.s."
+msgstr "Testo C.S."
 
 #: pcbnew/class_pcb_text.cpp:191
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
-msgstr "Testo\"%s\" su %s della scheda"
+msgstr "Testo C.S. \"%s\" su %s"
 
 #: pcbnew/edgemod.cpp:213
 msgid ""
@@ -5866,15 +5866,15 @@ msgstr "Salvare le modifiche all'impronta prima di chiudere?"
 msgid "Library is not set, the footprint could not be saved."
 msgstr "Nessuna libreria selezionata. L'impronta non può esere salvata."
 
-#: pcbnew/moduleframe.cpp:740
+#: pcbnew/moduleframe.cpp:743
 msgid "Footprint Editor "
 msgstr "Editor impronte"
 
-#: pcbnew/moduleframe.cpp:747
+#: pcbnew/moduleframe.cpp:750
 msgid "(no active library)"
 msgstr "(Nessuna libreria attiva)"
 
-#: pcbnew/moduleframe.cpp:756
+#: pcbnew/moduleframe.cpp:759
 msgid "Footprint Editor (active library: "
 msgstr "Editor impronte (libreria attiva: "
 
@@ -7263,6 +7263,7 @@ msgstr "Alfabeto, completo di 26 caratteri"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:51
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:107
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:110
 msgid "Layer:"
 msgstr "Strato:"
 
@@ -8490,7 +8491,8 @@ msgstr "0"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:187
 #: pcbnew/dialogs/dialog_create_array_base.cpp:198
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98 common/draw_frame.cpp:485
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90 common/draw_frame.cpp:485
 #: common/common.cpp:144 common/common.cpp:202
 #: common/dialogs/dialog_page_settings.cpp:466
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
@@ -9333,12 +9335,14 @@ msgstr "Auto-regola"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:42
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:57
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:60
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:86
 msgid "Units:"
 msgstr "Unità:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:191
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
 #: pcb_calculator/UnitSelector.cpp:42
 msgid "inch"
 msgstr "pollici"
@@ -11542,6 +11546,8 @@ msgid "Side"
 msgstr "Lato"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:58
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:74
 msgid "0.0"
 msgstr "0.0"
 
@@ -13020,35 +13026,58 @@ msgstr ""
 "regolazione della lunghezza. Assicurarsi che i nomi dei collegamenti "
 "appartenenti a una coppia differenziale non finiscano con _N/_P o con +/-."
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:21
-#: eeschema/libedit_plot_component.cpp:74
-#: eeschema/libedit_plot_component.cpp:97
-msgid "Filename:"
-msgstr "Nome file:"
+#: pcbnew/import_dxf/dialog_dxf_import.cpp:137
+msgid "Open File"
+msgstr "Apri file"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Right top corner"
-msgstr "Angolo superiore destro"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:24
+#: gerbview/gerbview_frame.cpp:488
+msgid "File:"
+msgstr "File:"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Middle"
-msgstr "Centrale"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Center of page"
+msgstr "Centro pagina"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Centered on page"
-msgstr "Centrato nella pagina"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Upper left corner of page"
+msgstr "Angolo superiore sinistro pagina"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Right bottom corner"
-msgstr "Angolo inferiore destro"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Center left side of page"
+msgstr "Centrato lato sinistro pagina"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:41
-msgid "Origin of DXF Coordinates"
-msgstr "Origine delle coordinate DXF"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Lower left corner of page"
+msgstr "Angolo inferiore sinistro pagina"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:45
-msgid "Board layer for import:"
-msgstr "Strato scheda da importare:"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "User defined position"
+msgstr "Posizione personalizzata"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
+msgid "Place DXF origin (0,0) point:"
+msgstr "Posiziona punto origine DXF (0,0):"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:54
+msgid "X Position:"
+msgstr "Posizione X:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:60
+msgid "DXF origin on PCB Grid, X Coordinate"
+msgstr "Origine DXF su griglia C.S., coordinata X"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:70
+msgid "Y Position:"
+msgstr "Posizione Y:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:76
+msgid "DXF origin on PCB Grid, Y Coordinate"
+msgstr "Origine DXF su griglia C.S., coordinata Y"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:94
+msgid "Select PCB grid units"
+msgstr "Seleziona unità griglia C.S."
 
 #: pcbnew/github/github_getliblist.cpp:132
 #, c-format
@@ -16166,6 +16195,11 @@ msgstr "Componente \"%s\" salvato nella libreria \"%s\""
 msgid "No component"
 msgstr "Nessun componente"
 
+#: eeschema/libedit_plot_component.cpp:74
+#: eeschema/libedit_plot_component.cpp:97
+msgid "Filename:"
+msgstr "Nome file:"
+
 #: eeschema/libedit_plot_component.cpp:139
 #, c-format
 msgid "Can't save file <%s>"
@@ -17105,7 +17139,7 @@ msgstr "Apri schema"
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1339
+#: eeschema/schframe.cpp:1341
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -20414,10 +20448,6 @@ msgstr "Codici D"
 msgid "Layer %d not in use"
 msgstr "Strato %d non in uso"
 
-#: gerbview/gerbview_frame.cpp:488
-msgid "File:"
-msgstr "File:"
-
 #: gerbview/gerbview_frame.cpp:491
 msgid "(with X2 Attributes)"
 msgstr "(con attributi X2)"
@@ -22709,8 +22739,8 @@ msgstr "Esporta file SVG "
 msgid "Non Copper Zones Properties"
 msgstr "Proprietà zone non in rame"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.h:62
-msgid "Import DXF file"
+#: pcbnew/import_dxf/dialog_dxf_import_base.h:72
+msgid "Import DXF File"
 msgstr "Importa file DXF"
 
 #: common/dialog_about/dialog_about_base.h:51
