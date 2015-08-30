@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,7 +46,7 @@ WIZARD_FPLIB_TABLE_BASE::WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_radioAddGithub = new wxRadioButton( m_wizPage1, wxID_ANY, _("Github repository"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_githubSizer->Add( m_radioAddGithub, 0, wxALL|wxEXPAND, 5 );
 	
-	m_textCtrlGithubURL = new wxTextCtrl( m_wizPage1, wxID_ANY, _("http://github.com/KiCad"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlGithubURL = new wxTextCtrl( m_wizPage1, wxID_ANY, _("https://github.com/KiCad"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlGithubURL->SetMinSize( wxSize( 300,-1 ) );
 	
 	m_githubSizer->Add( m_textCtrlGithubURL, 1, wxALL|wxEXPAND, 5 );
@@ -182,9 +182,9 @@ WIZARD_FPLIB_TABLE_BASE::WIZARD_FPLIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	bSizer1111->Add( m_staticText1121, 0, wxALL|wxEXPAND, 5 );
 	
 	m_listCtrlReview = new wxDataViewListCtrl( m_wizPage3_Review, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_ROW_LINES|wxDV_VERT_RULES );
-	m_dvLibName = m_listCtrlReview->AppendTextColumn( _("Library") ); 
-	m_dvLibStatus = m_listCtrlReview->AppendTextColumn( _("Status") ); 
-	m_dvLibFormat = m_listCtrlReview->AppendTextColumn( _("Format") ); 
+	m_dvLibName = m_listCtrlReview->AppendTextColumn( _("Library") );
+	m_dvLibStatus = m_listCtrlReview->AppendTextColumn( _("Status") );
+	m_dvLibFormat = m_listCtrlReview->AppendTextColumn( _("Format") );
 	bSizer1111->Add( m_listCtrlReview, 1, wxALL|wxEXPAND, 5 );
 	
 	

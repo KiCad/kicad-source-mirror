@@ -1,13 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_scripting_base__
-#define __dialog_scripting_base__
+#ifndef __DIALOG_SCRIPTING_BASE_H__
+#define __DIALOG_SCRIPTING_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/string.h>
 #include <wx/textctrl.h>
 #include <wx/gdicmn.h>
@@ -38,9 +40,10 @@ class DIALOG_SCRIPTING_BASE : public wxFrame
 	
 	public:
 		
-		DIALOG_SCRIPTING_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Scripting Test Window"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		DIALOG_SCRIPTING_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Scripting Test Window"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,468 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		
 		~DIALOG_SCRIPTING_BASE();
 	
 };
 
-#endif //__dialog_scripting_base__
+#endif //__DIALOG_SCRIPTING_BASE_H__

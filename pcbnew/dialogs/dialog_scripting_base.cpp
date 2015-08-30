@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -13,18 +13,20 @@ DIALOG_SCRIPTING_BASE::DIALOG_SCRIPTING_BASE( wxWindow* parent, wxWindowID id, c
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
 	m_txScript = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE );
+	m_txScript->SetMaxLength( 0 ); 
 	m_txScript->SetMinSize( wxSize( 480,500 ) );
 	
-	bSizer4->Add( m_txScript, 0, wxALL, 5 );
+	bSizerMain->Add( m_txScript, 1, wxALL|wxEXPAND, 5 );
 	
 	m_btRun = new wxButton( this, wxID_ANY, wxT("&Run"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_btRun, 0, wxALL, 5 );
+	bSizerMain->Add( m_btRun, 0, wxALL, 5 );
 	
-	this->SetSizer( bSizer4 );
+	
+	this->SetSizer( bSizerMain );
 	this->Layout();
 	
 	this->Centre( wxBOTH );
