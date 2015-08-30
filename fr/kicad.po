@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-28 14:01+0200\n"
-"PO-Revision-Date: 2015-08-28 14:04+0200\n"
+"POT-Creation-Date: 2015-08-30 12:51+0200\n"
+"PO-Revision-Date: 2015-08-30 12:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: kicad team\n"
 "Language: fr_FR\n"
@@ -532,6 +532,7 @@ msgstr "pixels"
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:55
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:35
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:49
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
 msgid "mm"
 msgstr "mm"
 
@@ -6747,7 +6748,6 @@ msgstr "Pas de composants"
 
 #: eeschema/libedit_plot_component.cpp:74
 #: eeschema/libedit_plot_component.cpp:97
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:21
 msgid "Filename:"
 msgstr "Nom Fichier:"
 
@@ -9200,6 +9200,7 @@ msgid "Layer %d not in use"
 msgstr "Couche %d non utilisée"
 
 #: gerbview/gerbview_frame.cpp:488
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:24
 msgid "File:"
 msgstr "Fichier:"
 
@@ -10545,6 +10546,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:191
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
 msgid "inch"
 msgstr "Pouce"
 
@@ -13014,6 +13016,7 @@ msgstr "Rayon de l'arrondi"
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:51
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:107
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:110
 msgid "Layer:"
 msgstr "Couche:"
 
@@ -14107,6 +14110,8 @@ msgid "Side"
 msgstr "Coté"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:58
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:74
 msgid "0.0"
 msgstr "0,0"
 
@@ -14535,6 +14540,7 @@ msgstr "Ajustage Automatique"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:42
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:60
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:57
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:86
 msgid "Units:"
 msgstr "Unités:"
 
@@ -17796,7 +17802,6 @@ msgid "Please select the URL for the 3D libraries to download"
 msgstr "SVP sélectionnez l'URL pour les librairies 3D à télécharger"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
-#: pcbnew/dialogs/wizard_add_fplib_base.cpp:49
 msgid "http://github.com/KiCad"
 msgstr "http://github.com/KiCad"
 
@@ -17914,6 +17919,10 @@ msgstr "Fichiers sur mon ordinateur"
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:46
 msgid "Github repository"
 msgstr "Dépôt Github"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:49
+msgid "https://github.com/KiCad"
+msgstr "https://github.com/KiCad"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:57
 msgid "Save a local copy to:"
@@ -18875,29 +18884,53 @@ msgstr "Appel macro %d"
 msgid "Add key [%c] in macro %d"
 msgstr "Ajout clé [%c] en macro %d"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Right top corner"
-msgstr "Coin droit  haut"
+#: pcbnew/import_dxf/dialog_dxf_import.cpp:137
+msgid "Open File"
+msgstr "Ouverture Fichier"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Middle"
-msgstr "Milieu"
-
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Centered on page"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Center of page"
 msgstr "Centre de la page"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:39
-msgid "Right bottom corner"
-msgstr "Coin bas droite"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Upper left corner of page"
+msgstr "Coin supérieur gauche de la page"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:41
-msgid "Origin of DXF Coordinates"
-msgstr "Origines des Coordonnées DXF"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Center left side of page"
+msgstr "Centre coté gauche de la page"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:45
-msgid "Board layer for import:"
-msgstr "Couche du C.I. pour importation:"
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "Lower left corner of page"
+msgstr "Coin inférieur gauche de la page"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
+msgid "User defined position"
+msgstr "Position définie par l'utilisateur"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
+msgid "Place DXF origin (0,0) point:"
+msgstr "Placer l'origine DXF (0,0) au point:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:54
+msgid "X Position:"
+msgstr "Position X:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:60
+msgid "DXF origin on PCB Grid, X Coordinate"
+msgstr "DXF origine sur la Ggrille PCB, Coordonnée X"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:70
+msgid "Y Position:"
+msgstr "Position Y:"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:76
+msgid "DXF origin on PCB Grid, Y Coordinate"
+msgstr "DXF origine sur la Ggrille PCB, Coordonnée Y"
+
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:94
+msgid "Select PCB grid units"
+msgstr "Sélectionnez unités de grille PCB"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -22899,6 +22932,27 @@ msgstr ""
 "Affiche/cache la toolbar auxiliaire pour applications micro-ondes\n"
 "C'est un outil expérimental (en cours de développement)"
 
-#: pcbnew/import_dxf/dialog_dxf_import_base.h:62
-msgid "Import DXF file"
-msgstr "Importation fichier DXF"
+#: pcbnew/import_dxf/dialog_dxf_import_base.h:72
+msgid "Import DXF File"
+msgstr "Importation Fichier DXF"
+
+#~ msgid "Right top corner"
+#~ msgstr "Coin droit  haut"
+
+#~ msgid "Middle"
+#~ msgstr "Milieu"
+
+#~ msgid "Centered on page"
+#~ msgstr "Centre de la page"
+
+#~ msgid "Right bottom corner"
+#~ msgstr "Coin bas droite"
+
+#~ msgid "Origin of DXF Coordinates"
+#~ msgstr "Origines des Coordonnées DXF"
+
+#~ msgid "Board layer for import:"
+#~ msgstr "Couche du C.I. pour importation:"
+
+#~ msgid "Import DXF file"
+#~ msgstr "Importation fichier DXF"
