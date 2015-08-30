@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-27 20:24+0100\n"
-"PO-Revision-Date: 2015-08-27 20:31+0100\n"
+"POT-Creation-Date: 2015-08-30 19:58+0100\n"
+"PO-Revision-Date: 2015-08-30 19:58+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -4635,19 +4635,19 @@ msgstr "ERC"
 msgid "Reset"
 msgstr "Resetuj"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:252
+#: eeschema/dialogs/dialog_choose_component.cpp:250
 msgid "Description\n"
 msgstr "Opis\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:265
+#: eeschema/dialogs/dialog_choose_component.cpp:263
 msgid "Keywords\n"
 msgstr "Słowa kluczowe\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:273
+#: eeschema/dialogs/dialog_choose_component.cpp:271
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:279
+#: eeschema/dialogs/dialog_choose_component.cpp:277
 msgid "Alias of "
 msgstr "Alias "
 
@@ -14559,7 +14559,7 @@ msgstr "Proszę wybrać adres dla pobrania bibliotek modeli 3D"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
 msgid "http://github.com/KiCad"
-msgstr "http://github.com/KiCad"
+msgstr "https://github.com/KiCad"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:53
 msgid "3D shape local folder:"
@@ -15992,6 +15992,10 @@ msgstr "Pliki na tym komputerze"
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:46
 msgid "Github repository"
 msgstr "Repozytorium GitHub"
+
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:49
+msgid "https://github.com/KiCad"
+msgstr "https://github.com/KiCad"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:57
 msgid "Save a local copy to:"
