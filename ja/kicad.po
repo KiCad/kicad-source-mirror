@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-29 08:50+0900\n"
-"PO-Revision-Date: 2015-08-29 08:51+0900\n"
+"PO-Revision-Date: 2015-08-31 22:44+0900\n"
 "Last-Translator: yoneken <yoneken@kicad.jp>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -500,6 +500,8 @@ msgstr "Kicad プロジェクト ファイル \"%s\" が見つかりませんで
 #: kicad/prjconfig.cpp:321
 msgid "To proceed, you can use the File menu to start a new project."
 msgstr ""
+"続行するために、新規プロジェクトを開始するためのファイルメニューを使用できま"
+"す。"
 
 #: kicad/prjconfig.cpp:335 pcbnew/moduleframe.cpp:762 pcbnew/pcbframe.cpp:965
 #: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1338 cvpcb/cvframe.cpp:716
@@ -645,7 +647,7 @@ msgstr "コンマ区切りファイル (*.csv)|*.csv"
 
 #: pcbnew/build_BOM_from_board.cpp:86
 msgid "Cannot export BOM: there are no footprints in the PCB"
-msgstr ""
+msgstr "部品表 (BOM) をエクスポートできない：基板にフットプリントがありません"
 
 #: pcbnew/build_BOM_from_board.cpp:96
 msgid "Save Bill of Materials"
@@ -788,7 +790,7 @@ msgid "Removing unused component \"%s:%s\".\n"
 msgstr "未使用のコンポーネント \"%s:%s\" を削除しました.\n"
 
 #: pcbnew/class_board.cpp:2576
-#, fuzzy, c-format
+#, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "孤立したパッドを削除：ネット \"%s\" / \"%s\" パッド '%s'\n"
 
@@ -1438,15 +1440,15 @@ msgstr "表示"
 
 #: pcbnew/class_pcb_layer_widget.cpp:333
 msgid "Front copper layer"
-msgstr "トップ導体層"
+msgstr "表面の導体層"
 
 #: pcbnew/class_pcb_layer_widget.cpp:337
 msgid "Back copper layer"
-msgstr "ボトム導体層"
+msgstr "裏面の導体層"
 
 #: pcbnew/class_pcb_layer_widget.cpp:341
 msgid "Inner copper layer"
-msgstr "内部導体層"
+msgstr "内部の導体層"
 
 #: pcbnew/class_pcb_layer_widget.cpp:365
 msgid "Adhesive on board's front"
@@ -1823,7 +1825,6 @@ msgstr ""
 "現在は強制的に描画レイヤにしているため，適切に修正してください．"
 
 #: pcbnew/dimension.cpp:173
-#, fuzzy
 msgid ""
 "The layer currently selected is not enabled for this board\n"
 "You cannot use it"
@@ -1832,7 +1833,6 @@ msgstr ""
 "現在使用することができません"
 
 #: pcbnew/dimension.cpp:217
-#, fuzzy
 msgid "The text thickness is too large for the text size.  It will be clamped"
 msgstr "文字太さが文字サイズに比べて太過ぎるため、文字が潰れてしまいます。"
 
@@ -2381,7 +2381,8 @@ msgstr "未知の PCB_FILE_T の値: %d"
 #, c-format
 msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr ""
-"参照記号 \"%s\" のコンポーネントは、ネットリストから見つかりませんでした。"
+"リファレンス \"%s\" のコンポーネントは、ネットリストから見つかりませんでし"
+"た。"
 
 #: pcbnew/kicad_netlist_reader.cpp:372 pcbnew/pcb_parser.cpp:1673
 #, c-format
@@ -2486,8 +2487,8 @@ msgstr ""
 #: pcbnew/legacy_netlist_reader.cpp:145
 msgid "Cannot parse reference designator in component section of netlist."
 msgstr ""
-"ネットリスト中のコンポーネント情報内の参照記号情報を解釈することが出来ません"
-"でした。"
+"ネットリスト中のコンポーネント情報内のリファレンス情報を解釈することが出来ま"
+"せんでした。"
 
 #: pcbnew/legacy_netlist_reader.cpp:155
 msgid "Cannot parse value in component section of netlist."
@@ -2729,7 +2730,7 @@ msgstr "レガシー フットプリント ファイル (*.emp)|*.emp"
 
 #: pcbnew/librairi.cpp:95
 msgid "GPcb foot print files (*)|*"
-msgstr "Gpcb フットプリント ファイル (*)|*"
+msgstr "GPcb フットプリント ファイル (*)|*"
 
 #: pcbnew/librairi.cpp:624 eeschema/dialogs/dialog_bom_base.cpp:44
 #: eeschema/dialogs/dialog_netlist_base.cpp:115
@@ -3126,7 +3127,7 @@ msgstr "フットプリントエディタでのデフォルト値を選択"
 
 #: pcbnew/menubar_modedit.cpp:341 pcbnew/tool_modview.cpp:189
 msgid "P&cbnew Manual"
-msgstr "Pcbnew マニュアル(&C)"
+msgstr "Pcbnew マニュアル(&c)"
 
 #: pcbnew/menubar_modedit.cpp:342 pcbnew/tool_modview.cpp:190
 msgid "Open the Pcbnew manual"
@@ -3581,14 +3582,12 @@ msgid "Tune skew/phase of a differential pair"
 msgstr "差動ペア配線の遅延(スキュー)/位相を調整"
 
 #: pcbnew/menubar_pcbframe.cpp:499
-#, fuzzy
 msgid "&3D Shapes Libraries Downloader"
-msgstr "コンポーネントの3D形状を表示"
+msgstr "&3D シェイプ・ライブラリ・ダウンローダ"
 
 #: pcbnew/menubar_pcbframe.cpp:500
-#, fuzzy
 msgid "Download from Github the 3D shape libraries with wizard"
-msgstr "フットプリントライブラリ追加ウイザード"
+msgstr "ウィザードで 3D シェイプ・ライブラリを Github からダウンロード"
 
 #: pcbnew/menubar_pcbframe.cpp:507
 msgid "Hide La&yers Manager"
@@ -4856,7 +4855,6 @@ msgid "Create Footprint Array"
 msgstr "フットプリント配列の作成"
 
 #: pcbnew/onrightclick.cpp:862
-#, fuzzy
 msgid "Exchange Footprint(s)"
 msgstr "フットプリントの入れ替え"
 
@@ -5219,7 +5217,7 @@ msgstr "定数 \"%s\" のコンポーネントのリファレンスIDが空で�
 #: pcbnew/specctra_export.cpp:1463
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
-msgstr "複数のコンポーネントが同一の識別ID '%s' を持っています。"
+msgstr "複数のコンポーネントが同一のリファレンスID '%s' を持っています。"
 
 #: pcbnew/specctra_import.cpp:84
 msgid "Merge Specctra Session file:"
@@ -5639,14 +5637,14 @@ msgid "High contrast display mode"
 msgstr "ハイコントラスト表示モード"
 
 #: pcbnew/xchgmod.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Change footprint of '%s'"
-msgstr "フットプリントの変更"
+msgstr "フットプリント '%s' の変更"
 
 #: pcbnew/xchgmod.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Change footprints '%s'"
-msgstr "フットプリントについて"
+msgstr "フットプリント '%s' の変更"
 
 #: pcbnew/xchgmod.cpp:217
 #, c-format
@@ -5659,19 +5657,18 @@ msgid "** Could not create file '%s' ***\n"
 msgstr "** ファイル '%s' が生成できませんでした ***\n"
 
 #: pcbnew/xchgmod.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "Change footprint %s -> %s (for value = %s)?"
-msgstr "モジュールを変更しますか？ %s  → %s (値 = %s)"
+msgstr "フットプリントを変更しますか？ %s → %s (値 = %s)"
 
 #: pcbnew/xchgmod.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Change footprint %s -> %s ?"
-msgstr "フットプリントの変更"
+msgstr "フットプリントを変更しますか？ %s → %s"
 
 #: pcbnew/xchgmod.cpp:344
-#, fuzzy
 msgid "Are you sure you want to change all footprints?"
-msgstr "本当にアイテムを削除して宜しいですか？"
+msgstr "本当に全てのフットプリントを変更して宜しいですか？"
 
 #: pcbnew/xchgmod.cpp:394
 #, c-format
@@ -5683,9 +5680,8 @@ msgid "No footprints!"
 msgstr "フットプリントがありません！"
 
 #: pcbnew/xchgmod.cpp:536
-#, fuzzy
 msgid "Save Footprint Association File"
-msgstr "コンポーネント-フットプリントの関連付けファイルの保存"
+msgstr "フットプリントの関連付けファイルの保存"
 
 #: pcbnew/xchgmod.cpp:547
 #, c-format
@@ -5823,72 +5819,60 @@ msgid "Options"
 msgstr "オプション"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:25
-#, fuzzy
 msgid "Include &footprints"
-msgstr "フットプリントを含む"
+msgstr "フットプリントを含む (&f)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:28
-#, fuzzy
 msgid "Include t&ext items"
-msgstr "文字アイテムを含む"
+msgstr "文字アイテムを含む (&e)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:32
-#, fuzzy
 msgid "Include &locked footprints"
-msgstr "ロックされているフットプリントを含む"
+msgstr "ロックされているフットプリントを含む ( &l)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:35
-#, fuzzy
 msgid "Include &drawings"
-msgstr "図形を含む"
+msgstr "図形を含む (&d)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:38
-#, fuzzy
 msgid "Include &tracks"
-msgstr "配線を含む"
+msgstr "配線を含む (&t)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:41
-#, fuzzy
 msgid "Include &board outline layer"
-msgstr "基板外形レイヤを含む"
+msgstr "基板外形レイヤを含む (&b)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:44
-#, fuzzy
 msgid "Include &zones"
-msgstr "ゾーンを含む"
+msgstr "ゾーンを含む (&z)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:47
-#, fuzzy
 msgid "Draw &selected items while moving"
-msgstr "移動中に選択したアイテムを描画"
+msgstr "移動中に選択したアイテムを描画 (&s)"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:56
-#, fuzzy
 msgid "Include &items on invisible layers"
-msgstr "非表示レイヤのアイテムを含む"
+msgstr "非表示レイヤのアイテムを含む (&i)"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:22
-#, fuzzy
 msgid "&Delete redundant vias"
-msgstr "余分なビアを削除"
+msgstr "余分なビアを削除 (&D)"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:23
 msgid "remove vias on pads with a through hole"
 msgstr "スルーホールパッド上にあるビアを削除"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:27
-#, fuzzy
 msgid "&Merge overlapping segments"
-msgstr "重なっている配線セグメントの統合"
+msgstr "重なっている配線セグメントの統合 (&M)"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:28
 msgid "merge aligned track segments, and remove null segments"
 msgstr "一直線上の配線セグメントをマージし、空のセグメントを削除"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:32
-#, fuzzy
 msgid "D&elete unconnected tracks"
-msgstr "未接続の配線を削除"
+msgstr "未接続の配線を削除 (&e)"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:33
 msgid "delete track segment having a dangling end"
@@ -6269,7 +6253,6 @@ msgid "Columns"
 msgstr "列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:96
-#, fuzzy
 msgid "Stagger Type"
 msgstr "配置シフトのタイプ"
 
@@ -6825,9 +6808,8 @@ msgid "Text Width"
 msgstr "テキスト幅"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:45
-#, fuzzy
 msgid "Text Height"
-msgstr "テキスト高さ:"
+msgstr "テキストの高さ"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:513
@@ -6835,14 +6817,12 @@ msgid "Text Thickness"
 msgstr "テキストの太さ"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:61
-#, fuzzy
 msgid "Text Position X"
-msgstr "テキスト位置 X"
+msgstr "テキストの位置 X"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:69
-#, fuzzy
 msgid "Text Position Y"
-msgstr "テキスト位置 X"
+msgstr "テキストの位置 Y"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:23
 msgid "Tracks and vias:"
@@ -7272,7 +7252,7 @@ msgid ""
 "This is an alternate identifier to the reference."
 msgstr ""
 "コンポーネントを識別するために、固有ID(タイムスタンプ情報)を使用します。\n"
-"これは参照記号を管理する際に使用される情報です。"
+"これはリファレンスを管理する際に使用される情報です。"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
 msgid "Change Footprint(s)"
@@ -7675,58 +7655,48 @@ msgid "First pad number:"
 msgstr "最初のパット番号: "
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:25
-#, fuzzy
 msgid "Component value"
-msgstr "コンポーネントの値:"
+msgstr "コンポーネントの値"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:33
-#, fuzzy
 msgid "Component reference"
-msgstr "コンポーネント \"%s:%s\" の変更.（ \"%s\" を参照する）\n"
+msgstr "コンポーネントのリファレンス"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
 msgid "Change footprint"
 msgstr "フットプリントの変更"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
-#, fuzzy
 msgid "Change footprints"
-msgstr "フットプリントについて"
+msgstr "フットプリントの変更"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
-#, fuzzy
 msgid "Change footprints having same value"
-msgstr "同じフットプリント+値を変更"
+msgstr "同じ値を持つフットプリントを変更"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
-#, fuzzy
 msgid "Update all footprints of the board"
-msgstr "*全てを変更* は基板上のすべてのフットプリントを再読み込みします。\n"
+msgstr "基板上の全てのフットプリントを再読み込み"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:58
-#, fuzzy
 msgid "Export Footprint Association File"
-msgstr "フットプリントを '%s' へ出力しました"
+msgstr "フットプリントの関連付けファイルをエクスポート"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:61
-#, fuzzy
 msgid "List Footprints"
-msgstr "フットプリントについて"
+msgstr "フットプリントのリスト"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:64
-#, fuzzy
 msgid "View Footprints"
-msgstr "フットプリントについて"
+msgstr "フットプリントの表示"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:73
-#, fuzzy
 msgid "Current footprint name (FPID)"
-msgstr "フットプリント名が定義されていません。"
+msgstr "現在のフットプリント名 (FPID)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:81
-#, fuzzy
 msgid "New footprint name (FPID)"
-msgstr "フットプリント名が定義されていません。"
+msgstr "新しいフットプリント名 (FPID)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:104
 msgid "Apply"
@@ -7768,14 +7738,12 @@ msgstr "IDFファイル名の指定"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:32
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:50
-#, fuzzy
 msgid "Grid Reference Point:"
-msgstr "基準点を選択する"
+msgstr "グリッドの基準点"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
-#, fuzzy
 msgid "Auto Adjust"
-msgstr "ゼロ設定"
+msgstr "自動設定"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:42
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:60
@@ -7785,15 +7753,13 @@ msgid "Units:"
 msgstr "単位系:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:58
-#, fuzzy
 msgid "X ref:"
-msgstr "リファレンス"
+msgstr "X ref:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:72
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:78
-#, fuzzy
 msgid "Y Ref:"
-msgstr "リファレンス"
+msgstr "Y Ref:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:86
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
@@ -7809,9 +7775,8 @@ msgstr "Mil"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:88
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:100
-#, fuzzy
 msgid "Output Units:"
-msgstr "単位系:"
+msgstr "出力単位:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File Name:"
@@ -7826,19 +7791,16 @@ msgid "Footprint 3D model path:"
 msgstr "フットプリントの3Dモデルパス:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:70
-#, fuzzy
 msgid "X Ref:"
-msgstr "リファレンス"
+msgstr "X Ref:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
-#, fuzzy
 msgid "meter"
-msgstr "メーター"
+msgstr "メートル"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
-#, fuzzy
 msgid "0.1 Inch"
-msgstr "インチ"
+msgstr "0.1 インチ"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:113
 msgid "Copy 3D model files to 3D model path"
@@ -8410,15 +8372,13 @@ msgstr "レポートファイル"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:25
-#, fuzzy
 msgid "Cartesian coordinates"
-msgstr "座標系の設定"
+msgstr "直交座標"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:25
-#, fuzzy
 msgid "Polar coordinates"
-msgstr "極座標表示"
+msgstr "極座標"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:27
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:27
@@ -8458,18 +8418,16 @@ msgid "Main cursor shape selection (small cross or large cursor)"
 msgstr "メイン カーソル形の選択 (小さなバッテンか大きなカーソルか)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:60
-#, fuzzy
 msgid "&Maximum links:"
-msgstr "最大リンク数:"
+msgstr "最大リンク数 (&M):"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:65
 msgid "Adjust the number of ratsnets shown from cursor to closest pads"
 msgstr "カーソルから最も近いパッドまでに表示されるラッツネットの数を調整"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:69
-#, fuzzy
 msgid "&Auto save (minutes):"
-msgstr "自動保存(分):"
+msgstr "自動保存(分) (&A):"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:74
 msgid ""
@@ -8477,24 +8435,20 @@ msgid ""
 msgstr "ディスク上のボードのバックアップを作成してから初期変更を加える遅延"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:78
-#, fuzzy
 msgid "Ma&ximum undo items:"
-msgstr "最大リンク数:"
+msgstr "最大 undo アイテム数 (&x):"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:85
-#, fuzzy
 msgid "&Rotation angle:"
-msgstr "回転角度:"
+msgstr "回転角度 (&R):"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:90
-#, fuzzy
 msgid "Context menu and hot key footprint rotation increment."
 msgstr "コンテキスト メニューとホットキー フットプリント 回転 増分."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:100
-#, fuzzy
 msgid "&Enforce design rules when routing"
-msgstr "ルーティング中にデザインルールチェックを行う"
+msgstr "ルーティング中にデザインルールチェックを実行 (&E)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:102
 msgid ""
@@ -8505,18 +8459,16 @@ msgstr ""
 "DRCの無効化中はどんな接続でも許可されます。"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:106
-#, fuzzy
 msgid "&Show ratsnest"
-msgstr "ラッツネストを表示"
+msgstr "ラッツネストを表示 (&S)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:108
 msgid "Show (or not) the full rastnest."
 msgstr "全てのラッツネストを表示 (あるいは非表示)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:112
-#, fuzzy
 msgid "S&how footprint ratsnest"
-msgstr "フットプリントに接続されたラッツネストを表示"
+msgstr "フットプリントに接続されたラッツネストを表示 (&h)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:113
 msgid ""
@@ -8527,18 +8479,16 @@ msgstr ""
 "このラッツネストはフットプリントの配置に役立ちます。"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:117
-#, fuzzy
 msgid "&Delete unconnected tracks"
-msgstr "未接続の配線を削除"
+msgstr "未接続の配線を削除 (&D)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:118
 msgid "Enable/disable the automatic track deletion when recreating a track."
 msgstr "配線を引き直した際の自動配線削除を有効化/無効化"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:122
-#, fuzzy
 msgid "&Limit tracks to 45 degrees"
-msgstr "配線時の角度を45度単位に制限"
+msgstr "配線時の角度を45度単位に制限 (&L)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:123
 msgid ""
@@ -8547,9 +8497,8 @@ msgid ""
 msgstr "有効にすると、配線入力時に45度単位で配線します。"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:127
-#, fuzzy
 msgid "L&imit graphic lines to 45 degrees"
-msgstr "グラフィック(ポリゴン)の描画時の角度を45度単位に制限"
+msgstr "グラフィック・ラインの角度を45度単位に制限 (&i)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:128
 msgid ""
@@ -8558,9 +8507,8 @@ msgid ""
 msgstr "有効にすると、テクニカル層のセグメントを45度単位で入力します。"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:132
-#, fuzzy
 msgid "&Use double segmented tracks"
-msgstr "ダブルセグメント配線"
+msgstr "ダブルセグメント配線を使用 (&U)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:133
 msgid ""
@@ -8603,9 +8551,8 @@ msgstr "拡大縮小"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:165
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:193
-#, fuzzy
 msgid "Ce&nter and warp cursor on zoom"
-msgstr "拡大縮小時にカーソルを中心へ移動させない"
+msgstr "拡大縮小時にカーソルを中心へ移動 (&n)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:167
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:194
@@ -8615,9 +8562,8 @@ msgid "Keep the cursor at its current location when zooming"
 msgstr "拡大縮小時に現在のカーソル位置を保持する"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:171
-#, fuzzy
 msgid "Use middle mouse &button to pan"
-msgstr "画面のパンにマウスの中ボタンを使う"
+msgstr "画面のパンにマウスの中ボタンを使用 (&b)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:172
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:199
@@ -8625,9 +8571,8 @@ msgid "Use middle mouse button dragging to pan"
 msgstr "画面のパンにマウスの中ボタンのドラッグを使う"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:176
-#, fuzzy
 msgid "Limi&t panning to scroll size"
-msgstr "パン可能な領域を、スクロールバーサイズ範囲内に制限する"
+msgstr "パン可能な領域を、スクロールバーサイズ範囲内に制限 (&t)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:177
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:204
@@ -8637,9 +8582,8 @@ msgstr ""
 "へ制限します"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:181
-#, fuzzy
 msgid "&Pan while moving object"
-msgstr "オブジェクト移動時に表示領域を移動させる"
+msgstr "オブジェクト移動時に表示領域を移動 (&P)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:182
 msgid "Allows auto pan when creating a track, or moving an item."
@@ -8819,7 +8763,7 @@ msgstr "フットプリントフィールド"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:28
 msgid "Reference designator"
-msgstr "参照記号"
+msgstr "リファレンス記号"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:34
 msgid "User defined"
@@ -9283,7 +9227,7 @@ msgstr "基板厚"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:110
 #, fuzzy
 msgid "CrtYd_Front_later"
-msgstr "表面 実装用ボンド"
+msgstr "CrtYd_Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:124
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1336
@@ -9298,7 +9242,7 @@ msgstr "Off-board、テスト用"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:141
 #, fuzzy
 msgid "Fab_Front_later"
-msgstr "表面 実装用ボンド"
+msgstr "Fab_Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:152
 msgid "If you want a fabrication layer for the front side of the board"
@@ -9710,7 +9654,7 @@ msgstr "ボード裏面に実装用ボンドのレイヤを使用する場合"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1300
 #, fuzzy
 msgid "Fab_Back_later"
-msgstr "裏面レジスト"
+msgstr "Fab_Back_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1311
 msgid "If you want a fabrication layer for the back side of the board"
@@ -9719,7 +9663,7 @@ msgstr "ボード裏面に基板製造用レイヤを使用したい場合"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1325
 #, fuzzy
 msgid "CrtYd_Back_later"
-msgstr "裏面レジスト"
+msgstr "CrtYd_Back_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1350
 msgid "PCB_Edges_later"
@@ -9736,7 +9680,7 @@ msgstr "基板外形"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1375
 #, fuzzy
 msgid "Margin_later"
-msgstr "表面 導体"
+msgstr "Margin_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1394
 msgid "Edge_Cuts setback"
@@ -9835,48 +9779,42 @@ msgid "On new graphic item creation:"
 msgstr "新しいグラフィック アイテムの作成時:"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:34
-#, fuzzy
 msgid "&Graphic line width"
-msgstr "図形ライン幅"
+msgstr "図形ライン幅 (&G)"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:46
-#, fuzzy
 msgid "Text line width"
-msgstr "線幅の設定"
+msgstr "テキスト線幅"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:58
-#, fuzzy
 msgid "Text &height"
-msgstr "テキスト高さ:"
+msgstr "テキストの高さ (&h)"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:70
-#, fuzzy
 msgid "Text &width"
-msgstr "テキスト幅:"
+msgstr "テキストの幅 (&w)"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:88
 msgid "Default values on new footprint creation:"
 msgstr "新規フットプリントのデフォルト値:"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:94
-#, fuzzy
 msgid ""
 "Leave reference or value blank to use the footprint name as default text"
 msgstr ""
-"デフォルトテキストにフットプリント名に使うには、レファレンスまたは定数を空白"
+"デフォルトテキストにフットプリント名に使うには、リファレンスまたは定数を空白"
 "のままにします"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:106
-#, fuzzy
 msgid "&Reference"
-msgstr "リファレンス %s"
+msgstr "リファレンス (&R)"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:111
 msgid ""
 "Default text for reference\n"
 "Leave blank to use the footprint name"
 msgstr ""
-"レファレンスのデフォルトテキストに\n"
+"リファレンスのデフォルトテキストに\n"
 "フットプリント名に使うには空白のままにします"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:119
@@ -9897,9 +9835,8 @@ msgid "Visibility"
 msgstr "表示"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:135
-#, fuzzy
 msgid "V&alue"
-msgstr "定数"
+msgstr "定数 (&a)"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:140
 msgid ""
@@ -9910,20 +9847,18 @@ msgstr ""
 "フットプリント名に使うには空白のままにします"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:170
-#, fuzzy
 msgid "General options:"
-msgstr "全般 オプション"
+msgstr "全般 オプション:"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:182
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:154
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:139
 msgid "Ma&ximum undo items (0 = unlimited):"
-msgstr ""
+msgstr "最大 undo アイテム数 (&x) (0 = 制限なし):"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:189
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:146
-#, fuzzy
 msgid "actions"
 msgstr "アクション"
 
@@ -10001,9 +9936,8 @@ msgid "Missing:"
 msgstr "欠落: "
 
 #: pcbnew/dialogs/dialog_netlist.cpp:269
-#, fuzzy
 msgid "No extra footprints."
-msgstr "フットプリントが見つかりません！"
+msgstr "追加のフットプリントがありません。"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:272
 msgid "Not in Netlist:"
@@ -10316,24 +10250,20 @@ msgid "Shape:"
 msgstr "形状:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-#, fuzzy
 msgid "Circular shape"
-msgstr "3Dシェイプ"
+msgstr "円形シェイプ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-#, fuzzy
 msgid "Oval shape"
-msgstr "3Dシェイプ"
+msgstr "楕円形シェイプ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-#, fuzzy
 msgid "Rectangular shape"
-msgstr "3Dシェイプ"
+msgstr "長方形シェイプ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-#, fuzzy
 msgid "Trapezoidal shape"
-msgstr "3Dシェイプ"
+msgstr "台形シェイプ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
@@ -10425,33 +10355,28 @@ msgid "Front side"
 msgstr "表面"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
-#, fuzzy
 msgid "Circular hole"
-msgstr "スルーホール"
+msgstr "円形穴"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
-#, fuzzy
 msgid "Oval hole"
-msgstr "スルーホール"
+msgstr "楕円穴"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:320
 msgid "Copper:"
 msgstr "導体:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
-#, fuzzy
 msgid "Front layer"
-msgstr "トップ導体層"
+msgstr "表面レイヤ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
-#, fuzzy
 msgid "Back layer"
-msgstr "ボトム導体層"
+msgstr "裏面レイヤ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
-#, fuzzy
 msgid "All copper layers"
-msgstr "全ての導体レイヤを表示"
+msgstr "全ての導体レイヤ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:334
 msgid "Technical Layers"
@@ -10764,15 +10689,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:101
 msgid "Plot footprint values"
-msgstr "フットプリントの値を出力"
+msgstr "フットプリントの値をプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid "Plot footprint references"
-msgstr "フットプリントの参照記号を出力"
+msgstr "フットプリントのリファレンスをプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Force plotting of invisible values/references"
-msgstr "非表示の値や参照記号を強制出力"
+msgstr "非表示の値／リファレンスを強制的にプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid "Force plot invisible values and/or references"
@@ -10922,9 +10847,8 @@ msgid "Remove silkscreen from areas without soldermask"
 msgstr "レジスト剥離エリアに重なるシルクスクリーンを削除"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:248
-#, fuzzy
 msgid "4.5 (unit mm)"
-msgstr "4.5 (mm)"
+msgstr "4.5 (単位 mm)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:248
 msgid "4.6 (unit mm)"
@@ -11649,14 +11573,12 @@ msgid "Via drill:"
 msgstr "ビア ドリル径:"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:208
-#, fuzzy
 msgid "New"
 msgstr "新規"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:208
-#, fuzzy
 msgid "Update"
-msgstr "更新する"
+msgstr "更新"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:295
 #: pcbnew/dialogs/wizard_add_fplib.cpp:557
@@ -11665,25 +11587,23 @@ msgstr "ダウンロードしたライブラリの保存先を指定"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:317
 msgid "KISYS3DMOD path not defined , or not existing"
-msgstr ""
+msgstr "KISYS3DMOD のパスが設定されてないか、存在しません。"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:355
-#, fuzzy
 msgid "Downloading 3D libraries"
-msgstr "フットプリントライブラリのセットアップ"
+msgstr "3D ライブラリをダウンロード"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:459
-#, fuzzy
 msgid "Aborted by user"
-msgstr "%(user)s は %(badges)s を所持している．"
+msgstr "ユーザーによる中断"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:25
 msgid "Welcome to the 3D shape Libraries downloader Wizard!"
-msgstr ""
+msgstr "3D シェイプ・ライブラリ・ダウンローダー・ウィザードへようこそ！"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:35
 msgid "Please select the URL for the 3D libraries to download"
-msgstr ""
+msgstr "ダウンロードする 3D ライブラリの URL を選択して下さい。"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:49
@@ -11692,12 +11612,11 @@ msgstr "http://github.com/KiCad"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:53
 msgid "3D shape local folder:"
-msgstr ""
+msgstr "3D シェイプのローカル・フォルダ:"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:69
-#, fuzzy
 msgid "Default 3D Path"
-msgstr "フットプリントの3Dモデルパス:"
+msgstr "デフォルトの 3D パス"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:81
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:82
@@ -11731,9 +11650,8 @@ msgid "Unselect all"
 msgstr "全て選択解除"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:154
-#, fuzzy
 msgid "Local library folder:"
-msgstr "ライブラリ (.pretty フォルダ)"
+msgstr "ローカル・ライブラリ・フォルダ:"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:158
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:373
@@ -11762,14 +11680,12 @@ msgid "dummy"
 msgstr "ダミー"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:162
-#, fuzzy
 msgid "3D shape libraries to be downloaded:"
-msgstr "コンポーネント ライブラリが読込まれていません"
+msgstr "ダウンロードによる 3D シェイプ・ライブラリ:"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:180
-#, fuzzy
 msgid "Libraries"
-msgstr "グローバルライブラリ"
+msgstr "ライブラリ"
 
 #: pcbnew/dialogs/wizard_add_fplib.cpp:76
 msgid "All supported library formats|"
@@ -11850,7 +11766,7 @@ msgstr "追加するライブラリ："
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:200
 msgid "Where do you wish the new libraries to be added:"
-msgstr "新しいライブラリをどのように追加しますか:"
+msgstr "新しいライブラリをどこへ追加しますか:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:204
 msgid "To global library configuration (visible by all projects)"
@@ -11999,11 +11915,11 @@ msgid ""
 "format of the save is pretty.</p>"
 msgstr ""
 "ライブラリへ保存する時に pretty フットプリントとして書き込まれるディレクトリ"
-"へこのプロパティを設定します\n"
-"保存されたものは github リポジトリにある同じ名前のフットプリントより優先され"
-"ます。これらの保存されたフットプリントは、後でアップデートとしてライブラリの"
-"メインテナへ送ることができます. <p>ディレクトリは <b>必ず</b> 拡張子に <b>."
-"pretty</b> を付けること。（保存フォーマットが pretty のため）.</p>"
+"へこのプロパティを設定します。保存されたものは github リポジトリにある同じ名"
+"前のフットプリントより優先されます。これらの保存されたフットプリントは、後で"
+"アップデートとしてライブラリのメインテナへ送ることができます. <p>ディレクトリ"
+"は <b>必ず</b> 拡張子に <b>.pretty</b> を付けること。（保存フォーマットが "
+"pretty のため）.</p>"
 
 #: pcbnew/github/github_plugin.cpp:415
 #, c-format
@@ -12039,21 +11955,20 @@ msgstr ""
 #: pcbnew/github/github_plugin.cpp:588
 #, c-format
 msgid "Exception '%s' in avhttp while open()-ing URI:'%s'"
-msgstr ""
+msgstr "URI:'%s' を開いているダウンローダ avhttp の '%s' 例外"
 
 #: pcbnew/github/github_plugin.cpp:629
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Cannot get/download data from: '%s'\n"
 "Reason: '%s'"
 msgstr ""
 "%s\n"
-"jsonデータを取得することができませんでした: '%s'\n"
+"データを取得することができませんでした: '%s'\n"
 "理由: '%s'"
 
 #: pcbnew/import_dxf/dialog_dxf_import.cpp:137
-#, fuzzy
 msgid "Open File"
 msgstr "ファイルを開く"
 
@@ -12063,60 +11978,48 @@ msgid "File:"
 msgstr "ファイル:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
-#, fuzzy
 msgid "Center of page"
-msgstr "ページ中央"
+msgstr "ページの中央"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
-#, fuzzy
 msgid "Upper left corner of page"
-msgstr "左下の用紙角"
+msgstr "ページの左上角"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
-#, fuzzy
 msgid "Center left side of page"
-msgstr "左下の用紙角"
+msgstr "ページの左端中央"
 
-# orペア下層
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
-#, fuzzy
 msgid "Lower left corner of page"
-msgstr "左下の用紙角"
+msgstr "ページの左下角"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
-#, fuzzy
 msgid "User defined position"
-msgstr "ユーザ定義"
+msgstr "ユーザ定義の位置"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
-#, fuzzy
 msgid "Place DXF origin (0,0) point:"
-msgstr "グリッドの原点をセット"
+msgstr "DXFの原点座標 (0,0) をセット:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:54
-#, fuzzy
 msgid "X Position:"
-msgstr "ポジション"
+msgstr "X 位置:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:60
-#, fuzzy
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "DXFの原点座標"
+msgstr "基板グリッドの DXF 原点、X 座標"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:70
-#, fuzzy
 msgid "Y Position:"
-msgstr "ポジション"
+msgstr "Y 位置:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:76
-#, fuzzy
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "DXFの原点座標"
+msgstr "基板グリッドの DXF 原点、Y 座標"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:94
-#, fuzzy
 msgid "Select PCB grid units"
-msgstr "Pcb Calculator データファイルの選択"
+msgstr "基板グリッドの単位を選択"
 
 #: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:61
 msgid "New Track"
@@ -12127,18 +12030,16 @@ msgid "Starts laying a new track."
 msgstr "新規配線を開始"
 
 #: pcbnew/router/length_tuner_tool.cpp:54
-#, fuzzy
 msgid "Stops laying the current meander."
-msgstr "現在の配線を終了"
+msgstr "現在の配線を終了する。"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Length Tuning Settings"
 msgstr "配線長の調整設定"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
-#, fuzzy
 msgid "Sets the length tuning parameters for currently routed item."
-msgstr "配線長の調整パラメータを設定する"
+msgstr "作業中の配線長の調整パラメータを設定する。"
 
 #: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Increase spacing"
@@ -12313,9 +12214,8 @@ msgid "Shows a dialog for changing the track width and via size."
 msgstr "配線幅とビア サイズ設定のダイアログを表示"
 
 #: pcbnew/router/router_tool.cpp:99
-#, fuzzy
 msgid "Switches posture of the currenly routed track."
-msgstr "配線の形を変更する"
+msgstr "作業中の配線の形を変更する。"
 
 #: pcbnew/router/router_tool.cpp:104
 msgid "Differential Pair Dimensions..."
@@ -12362,9 +12262,8 @@ msgid "Router Differential Pair"
 msgstr "差動ペアの配線"
 
 #: pcbnew/tools/common_actions.cpp:58
-#, fuzzy
 msgid "trivial connection"
-msgstr "パッド接続:"
+msgstr "ささいな接続"
 
 #: pcbnew/tools/common_actions.cpp:58
 msgid "Selects a connection between two junctions."
@@ -12569,9 +12468,8 @@ msgid "Add modules"
 msgstr "モジュールの追加"
 
 #: pcbnew/tools/common_actions.cpp:418
-#, fuzzy
 msgid "Enumerate pads"
-msgstr "未接続パッド"
+msgstr "パッドの列挙"
 
 #: pcbnew/tools/common_actions.cpp:422
 msgid "Copy items"
@@ -12671,9 +12569,8 @@ msgid "Duplicated %d item(s)"
 msgstr "重複した%dアイテム"
 
 #: pcbnew/tools/module_tools.cpp:209
-#, fuzzy
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
-msgstr "羅列するためにマウスの左ボタンを押したままパッド上へカーソルを動かす"
+msgstr "列挙するためにマウスの左ボタンを押したままパッド上へカーソルを動かす"
 
 #: pcbnew/tools/module_tools.cpp:326
 msgid "Select reference point"
@@ -13128,9 +13025,8 @@ msgid "ERC report"
 msgstr "ERC レポート"
 
 #: eeschema/erc.cpp:524
-#, fuzzy
 msgid "Encoding UTF8"
-msgstr "LDAPエンコーディング"
+msgstr "UTF8 でエンコード"
 
 #: eeschema/erc.cpp:534
 #, c-format
@@ -13147,6 +13043,8 @@ msgid ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
 msgstr ""
+"\n"
+" ** ERC メッセージ: %d  エラー %d  警告 %d\n"
 
 #: eeschema/files-io.cpp:68
 msgid "Schematic Files"
@@ -16614,9 +16512,8 @@ msgid "Hidden"
 msgstr "非表示"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:53
-#, fuzzy
 msgid "&Measurement units:"
-msgstr "計測単位:"
+msgstr "計測単位 (&M):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:65
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:36
@@ -16641,51 +16538,43 @@ msgid "mils"
 msgstr "mil"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:78
-#, fuzzy
 msgid "&Default bus thickness:"
-msgstr "標準の線幅"
+msgstr "デフォルトのバス線幅 (&D):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
-#, fuzzy
 msgid "D&efault line thickness:"
-msgstr "標準の線幅"
+msgstr "デフォルトの線幅 (&e):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:100
-#, fuzzy
 msgid "De&fault text size:"
-msgstr "現在の図形テキストサイズ(&S):"
+msgstr "デフォルトのテキストサイズ (&f):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:111
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:93
-#, fuzzy
 msgid "&Horizontal pitch of repeated items:"
-msgstr "要素は繰り返して配置を行うことが出来ます。"
+msgstr "繰り返し配置の水平間隔 (&H):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:122
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:104
-#, fuzzy
 msgid "&Vertical pitch of repeated items:"
-msgstr "要素は繰り返して配置を行うことが出来ます。"
+msgstr "繰り返し配置の垂直間隔 (&V):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:133
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:129
-#, fuzzy
 msgid "&Increment of repeated labels:"
-msgstr "ラベルのカウントアップリピート(&R):"
+msgstr "繰り返しラベルの増分値 (&I):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:143
-#, fuzzy
 msgid "&Auto-save time interval"
-msgstr "自動保存の間隔:"
+msgstr "自動保存の時間間隔 (&A)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid "minutes"
 msgstr "分"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:165
-#, fuzzy
 msgid "&Part id notation:"
-msgstr "部品IDの表記方法"
+msgstr "部品IDの表記方法 (&P):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:169
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:276
@@ -16718,19 +16607,16 @@ msgstr "_1"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:187
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:159
-#, fuzzy
 msgid "&Show grid"
-msgstr "グリッドの表示"
+msgstr "グリッドの表示 (&S)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:190
-#, fuzzy
 msgid "Sho&w hidden pins"
-msgstr "非表示ピンを表示"
+msgstr "非表示ピンを表示 (&w)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:198
-#, fuzzy
 msgid "&Use middle mouse button to pan"
-msgstr "画面のパンにマウスの中ボタンを使う"
+msgstr "画面のパンにマウスの中ボタンを使う (&U)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:203
 msgid "&Limit panning to scroll size"
@@ -16741,14 +16627,12 @@ msgid "Pan while moving ob&ject"
 msgstr "オブジェクト移動時に表示領域を移動(&J)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:211
-#, fuzzy
 msgid "&Restrict buses and wires to H and V orientation"
-msgstr "バス、配線の90度入力(&O)"
+msgstr "バス、配線を90度入力に制限 (&R)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:214
-#, fuzzy
 msgid "Show page limi&ts"
-msgstr "ページの境界を表示"
+msgstr "ページの境界を表示 (&t)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:227
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:95
@@ -16765,14 +16649,12 @@ msgid "Field Settings"
 msgstr "フィールドの設定"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:242
-#, fuzzy
 msgid "&Name"
-msgstr "%(name)s さん"
+msgstr "名前 (&N)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:249
-#, fuzzy
 msgid "D&efault Value"
-msgstr "初期値: "
+msgstr "デフォルト値 (&e)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:256
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:95
@@ -16780,9 +16662,8 @@ msgid "&Visible"
 msgstr "可視化(&V)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:262
-#, fuzzy
 msgid "&Add"
-msgstr "追加"
+msgstr "追加 (&A)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:272
 msgid "Template Field Names"
@@ -16996,7 +16877,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:44
 msgid "Default reference designator:"
-msgstr "デフォルトの参照記号:"
+msgstr "デフォルトのリファレンス記号:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:48
 msgid "U"
@@ -17039,29 +16920,24 @@ msgid "Pin name inside"
 msgstr "ピン名を内側に配置"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:49
-#, fuzzy
 msgid "&Default line width:"
-msgstr "デフォルトの線幅"
+msgstr "デフォルトの線幅 (&D):"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:60
-#, fuzzy
 msgid "D&efault pin length:"
-msgstr "ピンの標準長さ:"
+msgstr "デフォルトのピンの長さ (&e): "
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:71
-#, fuzzy
 msgid "De&fault pin number size:"
-msgstr "標準のピン番号サイズ(&S): "
+msgstr "デフォルトのピン番号サイズ (&f): "
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:82
-#, fuzzy
 msgid "Def&ault pin name size:"
-msgstr "選択したピンのピン名サイズ"
+msgstr "デフォルトのピン名サイズ (&a):"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:115
-#, fuzzy
 msgid "&Pitch of repeated pins:"
-msgstr "シートピンのインポート"
+msgstr "繰り返しピンのピッチ (&P):"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:119
 msgid "100"
@@ -17452,7 +17328,7 @@ msgstr "現在のシートのみを検索(&S)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:97
 msgid "Replace componen&t reference designators"
-msgstr "コンポーネントの参照記号の置換(&t)"
+msgstr "コンポーネントのリファレンス記号の置換(&t)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:102
 msgid "D&o not warp cursor to found item"
@@ -17865,9 +17741,8 @@ msgid "Edit Equ File"
 msgstr "Equファイルの編集"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:65
-#, fuzzy
 msgid "Available environment variables for relative paths:"
-msgstr "有効な環境変数(相対パス):"
+msgstr "相対パス用の有効な環境変数:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Absolute path"
@@ -19110,9 +18985,10 @@ msgid "Unable to find '%s' template config file."
 msgstr "'%s' テンプレート設定ファイルが見つかりませんでした。"
 
 #: common/project.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create prj file '%s' (Directory not writable)"
-msgstr "プロジェクトファイル '%s' は書き込み禁止されています"
+msgstr ""
+"プロジェクトファイル '%s' を作成できません（ディレクトリは書き込み禁止）"
 
 #: common/richio.cpp:197
 #, c-format
@@ -19383,27 +19259,23 @@ msgid "Invalid Input"
 msgstr "不正な入力"
 
 #: common/dialogs/dialog_env_var_config.cpp:119
-#, fuzzy
 msgid "Environment variable name cannot be empty."
-msgstr "パス設定の内容は空欄にできません。"
+msgstr "環境変数名は空欄にできません。"
 
 #: common/dialogs/dialog_env_var_config.cpp:129
-#, fuzzy
 msgid "Environment variable value cannot be empty."
-msgstr "パス設定の内容は空欄にできません。"
+msgstr "環境変数値は空欄にできません。"
 
 #: common/dialogs/dialog_env_var_config.cpp:140
 msgid ""
 "The first character of an environment variable name cannot be a digit (0-9)."
-msgstr ""
+msgstr "環境変数名の最初の文字に数字 (0-9) は使用できません。"
 
 #: common/dialogs/dialog_env_var_config.cpp:152
-#, fuzzy
 msgid "Cannot have duplicate environment variable names."
-msgstr "重複した名前を持つ設定を持つことは出来ません。"
+msgstr "重複した環境変数名を持つことはできません。"
 
 #: common/dialogs/dialog_env_var_config.cpp:255
-#, fuzzy
 msgid ""
 "Enter the name and path for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -19411,9 +19283,10 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"両方のパスへ名前とパスを入力.\n"
-"\n"
-"灰色の項目は、システムまたはユーザー環境変数によって外部で定義された名前です."
+"各々の環境変数へ名前とパスを入力して下さい。灰色の項目は、システムまたはユー"
+"ザーによって外部で定義された名前です。システムまたはユーザーによって定義され"
+"た環境変数は、このテーブルの定義に優先します。これは、このテーブルの定義が無"
+"視されることを意味します。"
 
 #: common/dialogs/dialog_env_var_config.cpp:261
 msgid ""
@@ -19421,24 +19294,32 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
+"全てのプラットフォームで有効な環境変数名とするため、名前フィールドは大文字、"
+"数字、アンダースコアだけを受け付けます。"
 
 #: common/dialogs/dialog_env_var_config.cpp:264
 msgid ""
 "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository of the "
 "official KiCad libraries."
 msgstr ""
+"<b>KIGITHUB</b> は 、公式 KiCad ライブラリのリポジトリの URL を定義するために"
+"KiCad で使用されます。"
 
 #: common/dialogs/dialog_env_var_config.cpp:267
 msgid ""
 "<b>KISYS3DMOD</b> is the base path of system footprint 3D shapes (.3Dshapes "
 "folders)."
 msgstr ""
+"<b>KISYS3DMOD</b> は、フットプリント 3D シェイプ用のシステムの基本パスです "
+"(.3Dshapes フォルダ)。"
 
 #: common/dialogs/dialog_env_var_config.cpp:270
 msgid ""
 "<b>KISYSMOD</b> is the base path of locally installed system footprint "
 "libraries (.pretty folders)."
 msgstr ""
+"<b>KISYSMOD</b> は、フットプリント・ライブラリ用にローカルでインストールされ"
+"たシステムの基本パスです (.pretty フォルダ)。"
 
 #: common/dialogs/dialog_env_var_config.cpp:273
 msgid ""
@@ -19449,17 +19330,24 @@ msgid ""
 "defined as a folder containing a project specific footprint library named "
 "footprints.pretty."
 msgstr ""
+"<b>KIPRJMOD</b> は、KiCad によって内部定義され（編集できません）、現在読み込"
+"まれているプロジェクト・ファイルの絶対パスがセットされます。この環境変数は、"
+"読み込まれているプロジェクトへの相対的なファイルやパスを定義するために使用で"
+"きます。例えば、${KIPRJMOD}/libs/footprints.pretty は footprints.pretty と名"
+"付けられたプロジェクト固有のフットプリント・ライブラリを含むフォルダとして定"
+"義できます。"
 
 #: common/dialogs/dialog_env_var_config.cpp:279
 msgid ""
 "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to create "
 "your own project templates folder."
 msgstr ""
+"<b>KICAD_PTEMPLATES</b> は、オプションです。独自のプロジェクト・テンプレー"
+"ト・フォルダを作りたい場合に定義します。"
 
 #: common/dialogs/dialog_env_var_config.cpp:282
-#, fuzzy
 msgid "Environment Variable Help"
-msgstr "部品表生成に関するヘルプ"
+msgstr "環境変数に関するヘルプ"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:36
 msgid "Path"
@@ -19891,7 +19779,7 @@ msgstr "ビルド時間 %.3f 秒"
 
 #: 3d-viewer/3d_draw.cpp:660 3d-viewer/3d_draw_board_body.cpp:218
 #: 3d-viewer/3d_draw_board_body.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Build layer %s"
 msgstr "ビルド レイヤ %s"
 
@@ -20064,23 +19952,20 @@ msgid "Choose Colors"
 msgstr "色の選択"
 
 #: 3d-viewer/3d_toolbar.cpp:207
-#, fuzzy
 msgid "Background Top Color"
-msgstr "背景色, 上層"
+msgstr "背景上面色"
 
 #: 3d-viewer/3d_toolbar.cpp:210
-#, fuzzy
 msgid "Background Bottom Color"
-msgstr "背景色, 下層"
+msgstr "背景下面色"
 
 #: 3d-viewer/3d_toolbar.cpp:213
 msgid "Silkscreen Color"
 msgstr "シルクの色"
 
 #: 3d-viewer/3d_toolbar.cpp:222
-#, fuzzy
 msgid "Copper/Surface Finish Color"
-msgstr "導体／表面の Finish 色"
+msgstr "導体／表面の仕上がり色"
 
 #: 3d-viewer/3d_toolbar.cpp:228
 msgid "Show 3D &Axis"
@@ -20155,7 +20040,6 @@ msgid "Show &Eco Layers"
 msgstr "ECOレイヤの表示(&E)"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:30
-#, fuzzy
 msgid "Realistic mode"
 msgstr "リアルモード"
 
@@ -20413,7 +20297,7 @@ msgstr "R1 R2の値が正しくありません"
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit."
-msgstr ""
+msgstr "最大電流を指定した場合、配線幅は適応するように計算されます。"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:448
 msgid ""
@@ -20421,10 +20305,12 @@ msgid ""
 "will be calculated. The width for the other trace to also handle this "
 "current will then be calculated."
 msgstr ""
+"配線幅の一つを指定した場合、流せる最大電流が計算されます。また、この電流を流"
+"すことができるように他の配線幅の計算が行われます。"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:452
 msgid "The controlling value is shown in bold."
-msgstr ""
+msgstr "コントロール値は、ボールド体で表示されます。"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:453
 msgid ""
@@ -20432,35 +20318,32 @@ msgid ""
 "(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
 "(10mm)."
 msgstr ""
+"計算は、電流に対しては 35A（外部）または 17.5A（内部）まで、温度上昇は 100℃ "
+"まで、幅は 400mil (10mm) まで有効です。"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:456
-#, fuzzy
 msgid "The formula, from IPC 2221, is"
-msgstr "<br><em>計算式 (IPC 2221 より) :</em></br><br></br>"
+msgstr "計算式 (IPC 2221 より) は"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:458
-#, fuzzy
 msgid "where:"
-msgstr "<br>場所:</br>"
+msgstr "場所:"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:459
-#, fuzzy
 msgid "maximum current in amps"
-msgstr "<br><b>I</b> = 最大電流（アンペア表記）</br>"
+msgstr "アンペア表記による最大電流"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:461
-#, fuzzy
 msgid "temperature rise above ambient in deg C"
-msgstr "<br><b>dT</b> =℃表記での 周囲からの温度上昇</br>"
+msgstr "℃ 表記による周囲に対する上昇温度"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:463
-#, fuzzy
 msgid "width and thickness in mils"
-msgstr "<br><b>W,H</b> = mil表記での幅と厚さ</br>"
+msgstr "mil 表記による幅と厚さ"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:465
 msgid "0.024 for internal traces or 0.048 for external traces"
-msgstr ""
+msgstr "内層配線 0.024 または外層配線 0.048"
 
 #: pcb_calculator/transline_dlg_funct.cpp:66
 msgid "Relative Dielectric Constants"
@@ -20816,20 +20699,19 @@ msgstr "誘電体損 Odd"
 
 #: pcb_calculator/transline_ident.cpp:360
 msgid "Zeven"
-msgstr ""
+msgstr "Zeven（偶モードインピーダンス）"
 
 #: pcb_calculator/transline_ident.cpp:360
-#, fuzzy
 msgid "Even mode impedance (lines driven by common voltages)"
-msgstr "偶数モードインピーダンス"
+msgstr "偶モードインピーダンス（線路は同じ（同相）電圧で駆動される）"
 
 #: pcb_calculator/transline_ident.cpp:362
 msgid "Zodd"
-msgstr ""
+msgstr "Zodd（奇モードインピーダンス）"
 
 #: pcb_calculator/transline_ident.cpp:362
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr ""
+msgstr "奇モードインピーダンス（線路は逆（差動）電圧で駆動される）"
 
 #: pcb_calculator/transline_ident.cpp:364
 msgid "Electrical length"
@@ -21010,9 +20892,8 @@ msgid "Regulators data file:"
 msgstr "レギュレータデータファイル:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:199
-#, fuzzy
 msgid "The name of the data file which stores known regulators parameters."
-msgstr "既存のレギュレータのパラメータで保存されているデータファイル名"
+msgstr "既存のレギュレータのパラメータで保存されているデータファイル名。"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:219
 msgid "Edit Regulator"
@@ -21043,9 +20924,8 @@ msgid "Regulators"
 msgstr "レギュレータ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:260
-#, fuzzy
 msgid "Parameters"
-msgstr "パラメータ:"
+msgstr "パラメータ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:268
 msgid "Current"
@@ -21064,31 +20944,26 @@ msgid "Conductor length"
 msgstr "導体長"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:305
-#, fuzzy
 msgid "Resistivity"
-msgstr "抵抗分割型"
+msgstr "抵抗率"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:312
-#, fuzzy
 msgid "Ohm-meter"
-msgstr "ミリメートル"
+msgstr "電気抵抗計"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:335
-#, fuzzy
 msgid "External layer traces"
-msgstr "<br>外層: <b>K = 0.048</b></br>"
+msgstr "外層配線"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:343
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:432
-#, fuzzy
 msgid "Trace width"
-msgstr "必要な配線幅"
+msgstr "配線幅"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:356
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:445
-#, fuzzy
 msgid "Trace thickness"
-msgstr "アイテムの太さ: "
+msgstr "配線の銅箔厚"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:369
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
@@ -21112,9 +20987,8 @@ msgstr "電圧降下"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:405
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:494
-#, fuzzy
 msgid "Power loss"
-msgstr "電源入力"
+msgstr "電力損失"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:413
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:502
@@ -21122,9 +20996,8 @@ msgid "Watt"
 msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:424
-#, fuzzy
 msgid "Internal layer traces"
-msgstr "<br>内層 : <b>K = 0.024</b></br>"
+msgstr "内層配線"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:535
 msgid "Voltage > 500V:"
@@ -21735,20 +21608,20 @@ msgstr "用紙の左上角"
 # orペア下層
 #: pagelayout_editor/toolbars_pl_editor.cpp:108
 msgid "Right Bottom page corner"
-msgstr "右下の用紙角"
+msgstr "ページの右下角"
 
 # orペア下層
 #: pagelayout_editor/toolbars_pl_editor.cpp:109
 msgid "Left Bottom page corner"
-msgstr "左下の用紙角"
+msgstr "ページの左下角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:110
 msgid "Right Top page corner"
-msgstr "用紙の右上角"
+msgstr "ページの右上角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:111
 msgid "Left Top page corner"
-msgstr "用紙の左上角"
+msgstr "ページの左上角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:118
 msgid " Origin of coordinates displayed to the status bar"
@@ -22015,9 +21888,8 @@ msgid "Unable to find property: %s"
 msgstr "プロパティが見つかりませんでした: %s"
 
 #: new/sweet_editor_panel.cpp:31
-#, fuzzy
 msgid "Sweet"
-msgstr "甘い"
+msgstr "スイート"
 
 #: new/sweet_editor_panel.cpp:42
 msgid "Visual Part"
@@ -22089,7 +21961,6 @@ msgid "Pad enumeration settings"
 msgstr "パッド配置の設定"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.h:71
-#, fuzzy
 msgid "Change Footprint"
 msgstr "フットプリントの変更"
 
@@ -22215,18 +22086,16 @@ msgid "Track width and via size"
 msgstr "配線幅とビアサイズ"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.h:80
-#, fuzzy
 msgid "Add 3D Shape Libraries Wizard"
-msgstr "フットプリントライブラリ追加ウイザード"
+msgstr "3D シェイプ・ライブラリ・ウイザードを追加"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.h:88
 msgid "Add Footprint Libraries Wizard"
 msgstr "フットプリントの追加ウィザード"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
-#, fuzzy
 msgid "Import DXF File"
-msgstr "DXFファイルのインポート(&I)"
+msgstr "DXFファイルのインポート"
 
 #: eeschema/help_common_strings.h:41
 msgid "Redo last command"
@@ -22442,9 +22311,8 @@ msgid "Plot Schematic"
 msgstr "回路図のプロット"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:65
-#, fuzzy
 msgid "Project Rescue Helper"
-msgstr "キャッシュされたコンポーネントのレスキュー(&R)"
+msgstr "プロジェクト・レスキュー・ヘルパー"
 
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:56
 msgid "Sheet Pin Properties"
