@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-30 00:50+0100\n"
-"PO-Revision-Date: 2015-08-30 00:50+0100\n"
+"POT-Creation-Date: 2015-08-31 21:17+0100\n"
+"PO-Revision-Date: 2015-08-31 21:17+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1362,7 +1362,7 @@ msgstr "Parametro"
 msgid "Units"
 msgstr "Unità"
 
-#: pcbnew/footprint_wizard_frame.cpp:536 pcbnew/modview_frame.cpp:649
+#: pcbnew/footprint_wizard_frame.cpp:536 pcbnew/modview_frame.cpp:644
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: visualizzatore 3D [%s]"
@@ -3193,21 +3193,21 @@ msgstr ""
 "\n"
 "Impossibile inserire questa impronta"
 
-#: pcbnew/modedit.cpp:936 eeschema/libeditframe.cpp:1147
+#: pcbnew/modedit.cpp:936 eeschema/libeditframe.cpp:1141
 msgid "Add line"
 msgstr "Aggiungi linea "
 
-#: pcbnew/modedit.cpp:940 eeschema/libeditframe.cpp:1143
+#: pcbnew/modedit.cpp:940 eeschema/libeditframe.cpp:1137
 msgid "Add arc"
 msgstr "Aggiungi arco"
 
-#: pcbnew/modedit.cpp:944 eeschema/libeditframe.cpp:1139
+#: pcbnew/modedit.cpp:944 eeschema/libeditframe.cpp:1133
 msgid "Add circle"
 msgstr "Aggiungi cerchio"
 
 #: pcbnew/modedit.cpp:948 pcbnew/edit.cpp:1488
 #: pcbnew/tools/drawing_tool.cpp:1227 pcbnew/tools/drawing_tool.cpp:1351
-#: eeschema/schedit.cpp:559 eeschema/libeditframe.cpp:1131
+#: eeschema/schedit.cpp:559 eeschema/libeditframe.cpp:1125
 msgid "Add text"
 msgstr "Aggiungi testo "
 
@@ -3229,7 +3229,7 @@ msgstr "Impostazioni piazzola"
 
 #: pcbnew/modedit.cpp:973 pcbnew/edit.cpp:1500
 #: pcbnew/tools/pcbnew_control.cpp:748 eeschema/schedit.cpp:595
-#: eeschema/libeditframe.cpp:1173 eeschema/help_common_strings.h:48
+#: eeschema/libeditframe.cpp:1167 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
 
@@ -4139,7 +4139,7 @@ msgid "Segs Count"
 msgstr "Conteggio segmenti"
 
 #: pcbnew/class_module.cpp:561
-#: eeschema/dialogs/dialog_choose_component.cpp:273
+#: eeschema/dialogs/dialog_choose_component.cpp:271
 msgid "Unknown"
 msgstr "Sconosciuto"
 
@@ -5180,7 +5180,7 @@ msgstr "Aggiungi forma polinominale "
 msgid "Footprint Library Browser"
 msgstr "Esploratore librerie impronte"
 
-#: pcbnew/modview_frame.cpp:453
+#: pcbnew/modview_frame.cpp:448
 #, c-format
 msgid ""
 "Could not load footprint \"%s\" from library \"%s\".\n"
@@ -5191,12 +5191,12 @@ msgstr ""
 "\n"
 "Errore %s."
 
-#: pcbnew/modview_frame.cpp:707 eeschema/viewlibs.cpp:134
+#: pcbnew/modview_frame.cpp:702 eeschema/viewlibs.cpp:134
 #: eeschema/viewlib_frame.cpp:99
 msgid "Library Browser"
 msgstr "Esploratore librerie"
 
-#: pcbnew/modview_frame.cpp:713 eeschema/viewlibs.cpp:141
+#: pcbnew/modview_frame.cpp:708 eeschema/viewlibs.cpp:141
 #: eeschema/libedit.cpp:65
 msgid "no library selected"
 msgstr "nessuna libreria selezionata"
@@ -9805,9 +9805,8 @@ msgid "Github repository"
 msgstr "Repository Github"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:49
-#: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
-msgid "http://github.com/KiCad"
-msgstr "http://github.com/KiCad"
+msgid "https://github.com/KiCad"
+msgstr "https://github.com/KiCad"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:57
 msgid "Save a local copy to:"
@@ -12037,6 +12036,10 @@ msgstr "Benvenuti nell'assistente allo scaricamento librerie di forme 3D!"
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:35
 msgid "Please select the URL for the 3D libraries to download"
 msgstr "Selezionare l'URL per le librerie 3D da scaricare"
+
+#: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
+msgid "http://github.com/KiCad"
+msgstr "http://github.com/KiCad"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:53
 msgid "3D shape local folder:"
@@ -14512,6 +14515,10 @@ msgstr "Errore tra etichette gerarchiche e piedini dei fogli"
 msgid "A no connect symbol is connected to more than 1 pin"
 msgstr "Un simbolo di non connesso è connesso a più di 1 pin"
 
+#: eeschema/class_drc_erc_item.cpp:56
+msgid "Global label not connected to any other global label"
+msgstr "Etichetta globale non connessa a nessun'altra etichetta globale"
+
 #: eeschema/libedit_onrightclick.cpp:118
 msgid "Move Arc"
 msgstr "Sposta arco"
@@ -15046,7 +15053,7 @@ msgstr "Cancella componente"
 msgid "Convert"
 msgstr "Convertito"
 
-#: eeschema/onrightclick.cpp:451 eeschema/libeditframe.cpp:456
+#: eeschema/onrightclick.cpp:451 eeschema/libeditframe.cpp:450
 #, c-format
 msgid "Unit %s"
 msgstr "Parte %s"
@@ -15984,44 +15991,49 @@ msgstr "Duplica nome foglio"
 msgid "Hierarchical label %s is not connected to a sheet label."
 msgstr "Etichetta gerarchica %s non connessa a nessuna etichetta del foglio."
 
-#: eeschema/erc.cpp:257
+#: eeschema/erc.cpp:261
+#, c-format
+msgid "Global label %s is not connected to any other global label."
+msgstr "Etichetta globale %s non connessa a nessun'altra etichetta globale."
+
+#: eeschema/erc.cpp:270
 #, c-format
 msgid "Sheet label %s is not connected to a hierarchical label."
 msgstr "Etichette del foglio %s non connessa a nessuna etichetta gerarchica"
 
-#: eeschema/erc.cpp:285
+#: eeschema/erc.cpp:297
 #, c-format
 msgid "Pin %s (%s) of component %s is unconnected."
 msgstr "Il piedino %s (%s) del componente %s non è connesso."
 
-#: eeschema/erc.cpp:302
+#: eeschema/erc.cpp:314
 #, c-format
 msgid "Pin %s (%s) of component %s is not driven (Net %d)."
 msgstr "Componente %s, Piedino %s (%s) non connesso (collegamento %d)."
 
-#: eeschema/erc.cpp:316
+#: eeschema/erc.cpp:328
 msgid "More than 1 pin connected to an UnConnect symbol."
 msgstr "Più di 1 piedino connesso a simbolo di non connesso."
 
-#: eeschema/erc.cpp:344
+#: eeschema/erc.cpp:356
 #, c-format
 msgid "Pin %s (%s) of component %s is connected to "
 msgstr "Componente %s, piedino %s (%s) connesso a "
 
-#: eeschema/erc.cpp:349
+#: eeschema/erc.cpp:361
 #, c-format
 msgid "pin %s (%s) of component %s (net %d)."
 msgstr "Componente %s, piedino %s (%s) non connesso (collegamento %d)."
 
-#: eeschema/erc.cpp:522
+#: eeschema/erc.cpp:534
 msgid "ERC report"
 msgstr "Rapporto ERC"
 
-#: eeschema/erc.cpp:524
+#: eeschema/erc.cpp:536
 msgid "Encoding UTF8"
 msgstr "Codifica UTF8"
 
-#: eeschema/erc.cpp:534
+#: eeschema/erc.cpp:546
 #, c-format
 msgid ""
 "\n"
@@ -16030,7 +16042,7 @@ msgstr ""
 "\n"
 "***** Foglio %s\n"
 
-#: eeschema/erc.cpp:559
+#: eeschema/erc.cpp:571
 #, c-format
 msgid ""
 "\n"
@@ -16065,7 +16077,7 @@ msgstr "Cambiare la libreria attiva?"
 msgid "Part name '%s' not found in library '%s'"
 msgstr "Il componente \"%s\" non trovato nella libreria \"%s\""
 
-#: eeschema/libedit.cpp:315 eeschema/libeditframe.cpp:737
+#: eeschema/libedit.cpp:315 eeschema/libeditframe.cpp:731
 msgid "No library specified."
 msgstr "Nessuna libreria specificata."
 
@@ -16414,11 +16426,11 @@ msgstr "Visualizzazione griglia "
 msgid "Library Editor"
 msgstr "Editor delle librerie"
 
-#: eeschema/libeditframe.cpp:323
+#: eeschema/libeditframe.cpp:317
 msgid "Save the changes in the library before closing?"
 msgstr "Salvare le modifiche alla libreria prima di chiudere?"
 
-#: eeschema/libeditframe.cpp:350
+#: eeschema/libeditframe.cpp:344
 #, c-format
 msgid ""
 "Library '%s' was modified!\n"
@@ -16427,35 +16439,35 @@ msgstr ""
 "La libreria \"%s\" è stata modificata!\n"
 "Annullare le modifiche?"
 
-#: eeschema/libeditframe.cpp:724
+#: eeschema/libeditframe.cpp:718
 msgid "No part to save."
 msgstr "Nessun componente da salvare."
 
-#: eeschema/libeditframe.cpp:1116
+#: eeschema/libeditframe.cpp:1110
 msgid "Add pin"
 msgstr "Aggiungi piedino"
 
-#: eeschema/libeditframe.cpp:1120
+#: eeschema/libeditframe.cpp:1114
 msgid "Set pin options"
 msgstr "Imposta opzioni piedino"
 
-#: eeschema/libeditframe.cpp:1135
+#: eeschema/libeditframe.cpp:1129
 msgid "Add rectangle"
 msgstr "Aggiungi rettangolo"
 
-#: eeschema/libeditframe.cpp:1151
+#: eeschema/libeditframe.cpp:1145
 msgid "Set anchor position"
 msgstr "Imposta posizione ancoraggio"
 
-#: eeschema/libeditframe.cpp:1155
+#: eeschema/libeditframe.cpp:1149
 msgid "Import"
 msgstr "Importa"
 
-#: eeschema/libeditframe.cpp:1161 bitmap2component/bitmap2cmp_gui_base.cpp:124
+#: eeschema/libeditframe.cpp:1155 bitmap2component/bitmap2cmp_gui_base.cpp:124
 msgid "Export"
 msgstr "Esporta"
 
-#: eeschema/libeditframe.cpp:1257 eeschema/controle.cpp:165
+#: eeschema/libeditframe.cpp:1251 eeschema/controle.cpp:165
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
 
@@ -18417,15 +18429,15 @@ msgstr "Dimensioni testo n&umero:"
 msgid "&Length:"
 msgstr "&Lunghezza:"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:252
+#: eeschema/dialogs/dialog_choose_component.cpp:250
 msgid "Description\n"
 msgstr "Descrizione\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:265
+#: eeschema/dialogs/dialog_choose_component.cpp:263
 msgid "Keywords\n"
 msgstr "Parole chiave\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:279
+#: eeschema/dialogs/dialog_choose_component.cpp:277
 msgid "Alias of "
 msgstr "Alias di"
 
