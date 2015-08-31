@@ -228,6 +228,11 @@ bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
             return true; //connected!
         }
     }
+    else if( ( at == NET_GLOBLABEL ) && ( bt == NET_GLOBLABEL ) )
+    {
+        if( m_Label == aNetItem->m_Label )
+            return true; //connected!
+    }
 
     return false; //these two are unconnected
 }

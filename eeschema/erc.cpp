@@ -251,18 +251,30 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         {
             msg.Printf( _( "Hierarchical label %s is not connected to a sheet label." ),
                         GetChars( aNetItemRef->m_Label ) );
+            marker->SetData( ERCE_HIERACHICAL_LABEL,
+                             aNetItemRef->m_Start,
+                             msg,
+                             aNetItemRef->m_Start );
+        }
+        else if( (aNetItemRef->m_Type == NET_GLOBLABEL) )
+        {
+            msg.Printf( _( "Global label %s is not connected to any other global label." ),
+                        GetChars( aNetItemRef->m_Label ) );
+            marker->SetData( ERCE_GLOBLABEL,
+                             aNetItemRef->m_Start,
+                             msg,
+                             aNetItemRef->m_Start );
         }
         else
         {
             msg.Printf( _( "Sheet label %s is not connected to a hierarchical label." ),
                         GetChars( aNetItemRef->m_Label ) );
+            marker->SetData( ERCE_HIERACHICAL_LABEL,
+                             aNetItemRef->m_Start,
+                             msg,
+                             aNetItemRef->m_Start );
         }
 
-
-        marker->SetData( ERCE_HIERACHICAL_LABEL,
-                         aNetItemRef->m_Start,
-                         msg,
-                         aNetItemRef->m_Start );
         return;
     }
 

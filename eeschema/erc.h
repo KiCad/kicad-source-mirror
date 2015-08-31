@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2009-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@ extern const wxString CommentERC_V[];
 #define ERCE_PIN_TO_PIN_ERROR     5    // pin connected to an other pin: error level
 #define ERCE_HIERACHICAL_LABEL    6    // mismatch between hierarchical labels and pins sheets
 #define ERCE_NOCONNECT_CONNECTED  7    // a no connect symbol is connected to more than 1 pin
+#define ERCE_GLOBLABEL            8    // global label not connected to any other global label
 
 /* Minimal connection table */
 #define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.

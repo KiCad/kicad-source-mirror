@@ -499,7 +499,6 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         case NET_LABEL:
         case NET_BUSLABELMEMBER:
         case NET_PINLABEL:
-        case NET_GLOBLABEL:
         case NET_GLOBBUSLABELMEMBER:
             break;
 
@@ -507,6 +506,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         case NET_HIERBUSLABELMEMBER:
         case NET_SHEETLABEL:
         case NET_SHEETBUSLABELMEMBER:
+        case NET_GLOBLABEL:
 
             // ERC problems when pin sheets do not match hierarchical labels.
             // Each pin sheet must match a hierarchical label
