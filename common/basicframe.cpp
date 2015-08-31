@@ -227,7 +227,7 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     int maximized = 0;
 
-    wxString baseCfgName = GetName();
+    wxString baseCfgName = ConfigBaseName();
 
     wxString text = baseCfgName + wxT( "Pos_x" );
     aCfg->Read( text, &m_FramePos.x );
@@ -275,7 +275,7 @@ void EDA_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
     if( IsIconized() )
         return;
 
-    wxString baseCfgName = GetName();
+    wxString baseCfgName = ConfigBaseName();
 
     m_FrameSize = GetSize();
     m_FramePos  = GetPosition();

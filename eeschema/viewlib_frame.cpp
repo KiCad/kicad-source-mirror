@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,14 +105,14 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                 KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
 #endif
                 KICAD_DEFAULT_DRAWFRAME_STYLE,
-            GetLibViewerFrameName() )
+            LIB_VIEW_FRAME_NAME )
 {
-    wxASSERT( aFrameType==FRAME_SCH_VIEWER || aFrameType==FRAME_SCH_VIEWER_MODAL );
+    wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
 
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
 
-    m_configPath = wxT( "LibraryViewer" );
+    m_configFrameName = LIB_VIEW_FRAME_NAME;
 
     // Give an icon
     wxIcon  icon;
@@ -240,12 +240,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
-}
-
-
-const wxChar* LIB_VIEW_FRAME::GetLibViewerFrameName()
-{
-    return LIB_VIEW_FRAME_NAME;
 }
 
 
@@ -549,8 +543,6 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetGridColor( GetLayerColor( LAYER_GRID ) );
     SetDrawBgColor( GetLayerColor( LAYER_BACKGROUND ) );
 
-    wxConfigPathChanger cpc( aCfg, m_configPath );
-
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
 
@@ -566,8 +558,6 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
-
-    wxConfigPathChanger cpc( aCfg, m_configPath );
 
     if( m_libListWidth && m_libList )
     {

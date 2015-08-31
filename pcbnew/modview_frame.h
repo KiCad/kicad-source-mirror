@@ -52,13 +52,6 @@ protected:
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
-    /**
-     * Function GetFootprintViewerFrameName (static)
-     * @return the frame name used when creating the frame
-     * used to get a reference to this frame, if exists
-     */
-    static const wxChar* GetFootprintViewerFrameName();
-
     virtual EDA_COLOR_T GetGridColor() const;
 
     /**

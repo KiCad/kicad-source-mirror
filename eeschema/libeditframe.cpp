@@ -179,12 +179,11 @@ END_EVENT_TABLE()
 
 LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
-        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetLibEditFrameName() )
+        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, LIB_EDIT_FRAME_NAME )
 {
     wxASSERT( aParent );
 
     m_showAxis   = true;            // true to draw axis
-    m_configPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
@@ -302,11 +301,6 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     delete m_my_part;
     m_my_part = NULL;
     m_tempCopyComponent = NULL;
-}
-
-const wxChar* LIB_EDIT_FRAME::GetLibEditFrameName()
-{
-    return LIB_EDIT_FRAME_NAME;
 }
 
 

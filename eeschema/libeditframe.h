@@ -56,7 +56,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     wxComboBox*     m_partSelectBox;        ///< a Box to select a part to edit (if any)
     wxComboBox*     m_aliasSelectBox;       ///< a box to select the alias to edit (if any)
 
-    wxString m_configPath;
     wxString m_lastLibImportPath;
     wxString m_lastLibExportPath;
 
@@ -133,13 +132,6 @@ public:
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     ~LIB_EDIT_FRAME();
-
-    /**
-     * Function GetLibEditFrameName (static)
-     * @return the frame name used when creating the frame
-     * used to get a reference to this frame, if exists
-     */
-    static const wxChar* GetLibEditFrameName();
 
     /** The current library being edited, or NULL if none. */
     PART_LIB* GetCurLib();

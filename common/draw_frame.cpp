@@ -658,7 +658,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    wxString baseCfgName = GetName();
+    wxString baseCfgName = ConfigBaseName();
 
     aCfg->Read( baseCfgName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
 
@@ -685,7 +685,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    wxString baseCfgName = GetName();
+    wxString baseCfgName = ConfigBaseName();
 
     aCfg->Write( baseCfgName + CursorShapeEntryKeyword, m_cursorShape );
     aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );

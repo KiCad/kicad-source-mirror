@@ -61,13 +61,6 @@ public:
 
     ~LIB_VIEW_FRAME();
 
-    /**
-     * Function GetLibViewerFrameName (static)
-     * @return the frame name used when creating the frame
-     * used to get a reference to this frame, if exists
-     */
-    static const wxChar* GetLibViewerFrameName();
-
     void OnSize( wxSizeEvent& event );
 
     /**
@@ -178,8 +171,6 @@ private:
     // Filters to build list of libs/list of parts
     bool                m_listPowerCmpOnly;
     wxArrayString       m_allowedLibs;
-
-    wxString            m_configPath;       // subpath for configuration
 
     // TODO(hzeller): looks like these members were chosen to be static to survive different
     // instances of this browser and communicate it to the next instance. This looks like an

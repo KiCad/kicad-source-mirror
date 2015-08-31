@@ -126,14 +126,14 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
                 KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
 #endif
                 KICAD_DEFAULT_DRAWFRAME_STYLE,
-            GetFootprintViewerFrameName() )
+            FOOTPRINT_VIEWER_FRAME_NAME )
 {
     wxASSERT( aFrameType==FRAME_PCB_MODULE_VIEWER || aFrameType==FRAME_PCB_MODULE_VIEWER_MODAL );
 
     if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
         SetModal( true );
 
-    m_configPath = wxT( "FootprintViewer" );
+    m_configFrameName = FOOTPRINT_VIEWER_FRAME_NAME;
     m_showAxis   = true;         // true to draw axis.
 
     // Give an icon
@@ -287,11 +287,6 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
         m_Draw3DFrame->Destroy();
 }
 
-
-const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
-{
-    return FOOTPRINT_VIEWER_FRAME_NAME;
-}
 
 
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )

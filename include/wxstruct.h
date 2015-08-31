@@ -129,6 +129,9 @@ protected:
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
 
+    wxString     m_configFrameName; ///< prefix used in config to identify some params (frame size...)
+                                    ///< if empty, the frame name defined in CTOR is used
+
     wxAuiToolBar* m_mainToolBar;    ///< Standard horizontal Toolbar
 
     wxString     m_AboutTitle;      ///< Name of program displayed in About.
@@ -247,6 +250,23 @@ public:
      * positions and sizes.
      */
     virtual void SaveSettings( wxConfigBase* aCfg );
+
+    /**
+     * Function ConfigBaseName
+     * @return a base name prefix used in Load/Save settings to build
+     * the full name of keys used in config.
+     * This is usually the name of the frame set by CTOR, unless m_configFrameName
+     * contains a base name.
+     * this is the case of frames which can be shown in normal or modal mode.
+     * This is needed because we want only one base name prefix,
+     * regardless the mode used.
+     */
+    wxString ConfigBaseName()
+    {
+        wxString baseCfgName = m_configFrameName.IsEmpty() ? GetName() : m_configFrameName;
+        return baseCfgName;
+    }
+
 
     /**
      * Function SaveProjectSettings
