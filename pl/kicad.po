@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-30 19:58+0100\n"
-"PO-Revision-Date: 2015-08-30 19:58+0100\n"
+"POT-Creation-Date: 2015-09-01 09:14+0100\n"
+"PO-Revision-Date: 2015-09-01 09:18+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -1028,44 +1028,49 @@ msgstr "Podwójna nazwa arkusza"
 msgid "Hierarchical label %s is not connected to a sheet label."
 msgstr "Etykieta hierarchiczna %s nie jest połączona z etykietą arkusza."
 
-#: eeschema/erc.cpp:257
+#: eeschema/erc.cpp:261
+#, c-format
+msgid "Global label %s is not connected to any other global label."
+msgstr "Etykieta ogólna %s nie ma połączenia z inna etykietą ogólną."
+
+#: eeschema/erc.cpp:270
 #, c-format
 msgid "Sheet label %s is not connected to a hierarchical label."
 msgstr "Etykieta arkusza %s nie jest połączona z etykietą hierarchiczną."
 
-#: eeschema/erc.cpp:285
+#: eeschema/erc.cpp:297
 #, c-format
 msgid "Pin %s (%s) of component %s is unconnected."
 msgstr "Pin %s (%s) w symbolu %s nie jest podłączony."
 
-#: eeschema/erc.cpp:302
+#: eeschema/erc.cpp:314
 #, c-format
 msgid "Pin %s (%s) of component %s is not driven (Net %d)."
 msgstr "Pin %s, (%s) symbolu %s nie jest sterowany (Sieć %d)."
 
-#: eeschema/erc.cpp:316
+#: eeschema/erc.cpp:328
 msgid "More than 1 pin connected to an UnConnect symbol."
 msgstr "Więcej niż 1 pin podłączony do symbolu \"Niepołączony\"."
 
-#: eeschema/erc.cpp:344
+#: eeschema/erc.cpp:356
 #, c-format
 msgid "Pin %s (%s) of component %s is connected to "
 msgstr "Pin %s (%s) symbolu %s jest połączony z "
 
-#: eeschema/erc.cpp:349
+#: eeschema/erc.cpp:361
 #, c-format
 msgid "pin %s (%s) of component %s (net %d)."
 msgstr "pin %s (%s) symbolu %s (sieć %d)."
 
-#: eeschema/erc.cpp:522
+#: eeschema/erc.cpp:534
 msgid "ERC report"
 msgstr "Raport ERC"
 
-#: eeschema/erc.cpp:524
+#: eeschema/erc.cpp:536
 msgid "Encoding UTF8"
 msgstr "Kodowanie UTF8"
 
-#: eeschema/erc.cpp:534
+#: eeschema/erc.cpp:546
 #, c-format
 msgid ""
 "\n"
@@ -1074,7 +1079,7 @@ msgstr ""
 "\n"
 "***** Arkusz %s\n"
 
-#: eeschema/erc.cpp:559
+#: eeschema/erc.cpp:571
 #, c-format
 msgid ""
 "\n"
@@ -2063,6 +2068,10 @@ msgstr "Niezgodność etykiet hierarchicznych z arkuszem pinów"
 msgid "A no connect symbol is connected to more than 1 pin"
 msgstr "Symbol \"Niepołączone\" jest połączony do więcej niż jednego pinu"
 
+#: eeschema/class_drc_erc_item.cpp:56
+msgid "Global label not connected to any other global label"
+msgstr "Etykieta ogólna nie jest połączączona do jakielkolwiek innej."
+
 #: eeschema/netlist.cpp:68
 msgid ""
 "Exporting the netlist requires a completely\n"
@@ -2093,11 +2102,11 @@ msgstr "Hierarchiczny pin arkusza %s"
 msgid "Library Editor"
 msgstr "Edytor bibliotek"
 
-#: eeschema/libeditframe.cpp:323
+#: eeschema/libeditframe.cpp:317
 msgid "Save the changes in the library before closing?"
 msgstr "Zapisać zmiany w bibliotece przed zamknięciem?"
 
-#: eeschema/libeditframe.cpp:350
+#: eeschema/libeditframe.cpp:344
 #, c-format
 msgid ""
 "Library '%s' was modified!\n"
@@ -2106,55 +2115,55 @@ msgstr ""
 "Biblioteka '%s' została zmieniona!\n"
 "Porzucić zmiany?"
 
-#: eeschema/libeditframe.cpp:724
+#: eeschema/libeditframe.cpp:718
 msgid "No part to save."
 msgstr "Brak symbolu by zapisać."
 
-#: eeschema/libeditframe.cpp:1116
+#: eeschema/libeditframe.cpp:1110
 msgid "Add pin"
 msgstr "Dodaj pin"
 
-#: eeschema/libeditframe.cpp:1120
+#: eeschema/libeditframe.cpp:1114
 msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
-#: eeschema/libeditframe.cpp:1131
+#: eeschema/libeditframe.cpp:1125
 msgid "Add text"
 msgstr "Dodaj tekst"
 
-#: eeschema/libeditframe.cpp:1135
+#: eeschema/libeditframe.cpp:1129
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1139
+#: eeschema/libeditframe.cpp:1133
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1143
+#: eeschema/libeditframe.cpp:1137
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1147
+#: eeschema/libeditframe.cpp:1141
 msgid "Add line"
 msgstr "Dodaj linię"
 
-#: eeschema/libeditframe.cpp:1151
+#: eeschema/libeditframe.cpp:1145
 msgid "Set anchor position"
 msgstr "Ustaw pozycję zakotwiczenia"
 
-#: eeschema/libeditframe.cpp:1155
+#: eeschema/libeditframe.cpp:1149
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1161
+#: eeschema/libeditframe.cpp:1155
 msgid "Export"
 msgstr "Eksportuj"
 
-#: eeschema/libeditframe.cpp:1173
+#: eeschema/libeditframe.cpp:1167
 msgid "Delete item"
 msgstr "Usuń element"
 
-#: eeschema/libeditframe.cpp:1257
+#: eeschema/libeditframe.cpp:1251
 #: eeschema/controle.cpp:165
 msgid "Clarify Selection"
 msgstr "Sprecyzuj Wybór"
@@ -5960,7 +5969,7 @@ msgstr ""
 msgid "Footprint Library Browser"
 msgstr "Przeglądarka bibliotek footprintów"
 
-#: pcbnew/modview_frame.cpp:453
+#: pcbnew/modview_frame.cpp:448
 #, c-format
 msgid ""
 "Could not load footprint \"%s\" from library \"%s\".\n"
@@ -5971,7 +5980,7 @@ msgstr ""
 "\n"
 "Błąd %s."
 
-#: pcbnew/modview_frame.cpp:649
+#: pcbnew/modview_frame.cpp:644
 #: pcbnew/footprint_wizard_frame.cpp:536
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
