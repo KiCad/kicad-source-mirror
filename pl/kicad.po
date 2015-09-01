@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-01 09:14+0100\n"
-"PO-Revision-Date: 2015-09-01 09:26+0100\n"
+"POT-Creation-Date: 2015-09-01 12:06+0100\n"
+"PO-Revision-Date: 2015-09-01 12:12+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -7356,7 +7356,7 @@ msgstr "Aktualizacja połączeń wspomagających..."
 msgid "Current Board will be lost and this operation cannot be undone. Continue ?"
 msgstr "Bieżąca płytka zostanie utracona i ta operacja nie mozę zostać cofnięta. Kontynuować?"
 
-#: pcbnew/initpcb.cpp:101
+#: pcbnew/initpcb.cpp:102
 msgid "Current Footprint will be lost and this operation cannot be undone. Continue ?"
 msgstr "Bieżący footprint zostanie utracony i ta operacja nie może zostać cofnięta. Kontynuować?"
 
@@ -10474,7 +10474,7 @@ msgstr "Błąd DRC: zamknięcie tego obszaru wywołuje błąd DRC z innym obszar
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej '%s' nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:969
+#: pcbnew/pcbframe.cpp:974
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -11988,77 +11988,85 @@ msgstr "Jeden plik z wszystkimi warstwami"
 msgid "File option:"
 msgstr "Opcje pliku:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:81
+#: pcbnew/dialogs/dialog_netlist.cpp:85
 msgid "The project configuration has changed.  Do you want to save it?"
 msgstr "Konfiguracja projektu została zmieniona. Zapisać ją ?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:144
+#: pcbnew/dialogs/dialog_netlist.cpp:148
 msgid "Select Netlist"
 msgstr "Wybierz listę sieci"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:161
+#: pcbnew/dialogs/dialog_netlist.cpp:164
+msgid "Please, choose a valid netlist file"
+msgstr "Trzeba wybrać prawidłowy plik listy połączeń"
+
+#: pcbnew/dialogs/dialog_netlist.cpp:170
+msgid "The netlist file does not exist"
+msgstr "Pod wskazaną nazwą plik listy połączeń nie istnieje."
+
+#: pcbnew/dialogs/dialog_netlist.cpp:177
 msgid "The changes made by reading the netlist cannot be undone.  Are you sure you want to read the netlist?"
 msgstr "Zmiany wprowadzone podczas odczytania lisy sieci nie mogą zostać cofnięte. Czy chcesz odczytać listę sieci?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:170
+#: pcbnew/dialogs/dialog_netlist.cpp:187
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Wczytuję listę sieci \"%s\".\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:174
+#: pcbnew/dialogs/dialog_netlist.cpp:191
 msgid "Using time stamps to match components and footprints.\n"
 msgstr "Użyj znaczników czasu aby powiązać komponenty i footprinty.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:176
+#: pcbnew/dialogs/dialog_netlist.cpp:193
 msgid "Using references to match components and footprints.\n"
 msgstr "Użyj odznaczników aby powiązać komponenty i footprinty.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:223
+#: pcbnew/dialogs/dialog_netlist.cpp:240
 msgid "No duplicate."
 msgstr "Brak duplikatów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:226
+#: pcbnew/dialogs/dialog_netlist.cpp:243
 msgid "Duplicates:"
 msgstr "Duplikaty:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:250
+#: pcbnew/dialogs/dialog_netlist.cpp:267
 msgid "No missing footprints."
 msgstr "Brak brakujących footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:253
+#: pcbnew/dialogs/dialog_netlist.cpp:270
 msgid "Missing:"
 msgstr "Brakujące:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:269
+#: pcbnew/dialogs/dialog_netlist.cpp:286
 msgid "No extra footprints."
 msgstr "Brak nadmiarowych footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:272
+#: pcbnew/dialogs/dialog_netlist.cpp:289
 msgid "Not in Netlist:"
 msgstr "Brak na liście sieci:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:297
+#: pcbnew/dialogs/dialog_netlist.cpp:314
 msgid "Too many errors: some are skipped"
 msgstr "Zbyt dużo błędów: niektóre zostały pominięte"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:301
+#: pcbnew/dialogs/dialog_netlist.cpp:318
 msgid "Check footprints"
 msgstr "Sprawdź footprinty"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:345
+#: pcbnew/dialogs/dialog_netlist.cpp:362
 msgid "Save contents of message window"
 msgstr "Zapisz zawartość okna z wiadomościami"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:362
+#: pcbnew/dialogs/dialog_netlist.cpp:379
 #, c-format
 msgid "Cannot write message contents to file \"%s\"."
 msgstr "Nie można zapisać zawartości okna wiadomości do pliku \"%s\"."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:364
+#: pcbnew/dialogs/dialog_netlist.cpp:381
 msgid "File Write Error"
 msgstr "Błąd zapisu pliku"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:413
+#: pcbnew/dialogs/dialog_netlist.cpp:430
 #, c-format
 msgid ""
 "Error loading netlist file:\n"
@@ -13667,7 +13675,11 @@ msgstr ""
 msgid "Error : you must choose a layer"
 msgstr "BŁĄD : musisz wybrać warstwę"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:103
+#: pcbnew/dialogs/dialog_global_deletion.cpp:101
+msgid "Are you sure you want to delete the entire board?"
+msgstr "Czy wszystko usunąć z projektu płytki?"
+
+#: pcbnew/dialogs/dialog_global_deletion.cpp:106
 msgid "Are you sure you want to delete the selected items?"
 msgstr "Czy usunąć wybrane elementy?"
 
@@ -14765,7 +14777,7 @@ msgstr "Tylko bieżąca warstwa"
 msgid "Layer Filter"
 msgstr "Filtr warstw"
 
-#: pcbnew/dialogs/dialog_global_deletion_base.cpp:88
+#: pcbnew/dialogs/dialog_global_deletion_base.cpp:100
 msgid "Current layer:"
 msgstr "Bieżąca warstwa:"
 
