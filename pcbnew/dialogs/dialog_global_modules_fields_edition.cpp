@@ -137,6 +137,15 @@ void PCB_EDIT_FRAME::OnResetModuleTextSizes( wxCommandEvent& event )
     DIALOG_GLOBAL_MODULES_FIELDS_EDITION dlg(this);
     dlg.ShowModal();
 
+    if( IsGalCanvasActive() )
+    {
+        for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+        {
+            module->Value().ViewUpdate();
+            module->Reference().ViewUpdate();
+        }
+    }
+
     m_canvas->Refresh();
 }
 
