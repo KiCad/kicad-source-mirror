@@ -55,8 +55,15 @@ CONTEXT_MENU* CONDITIONAL_MENU::Generate( SELECTION& aSelection )
     {
         const SELECTION_CONDITION& cond = it->Condition();
 
-        if( !cond( aSelection ) )
+        try
+        {
+            if( !cond( aSelection ) )
+                continue;
+        }
+        catch( std::exception& e )
+        {
             continue;
+        }
 
         switch( it->Type() )
         {
