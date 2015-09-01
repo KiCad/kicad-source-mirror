@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-01 09:14+0100\n"
-"PO-Revision-Date: 2015-09-01 09:18+0100\n"
+"PO-Revision-Date: 2015-09-01 09:26+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -2070,7 +2070,7 @@ msgstr "Symbol \"Niepołączone\" jest połączony do więcej niż jednego pinu"
 
 #: eeschema/class_drc_erc_item.cpp:56
 msgid "Global label not connected to any other global label"
-msgstr "Etykieta ogólna nie jest połączączona do jakielkolwiek innej."
+msgstr "Etykieta ogólna nie jest połączączona do jakiejkolwiek innej."
 
 #: eeschema/netlist.cpp:68
 msgid ""
