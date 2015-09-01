@@ -663,6 +663,11 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
 
+    if( aEnable && GetBoard() )
+        GetBoard()->GetRatsnest()->ProcessBoard();
+    else
+        Compile_Ratsnest( NULL, true );
+
     enableGALSpecificMenus();
 }
 
