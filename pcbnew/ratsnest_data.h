@@ -279,6 +279,11 @@ public:
         return m_node;
     }
 
+    inline RN_NODE_PTR& GetNode()
+    {
+        return m_node;
+    }
+
     /**
      * Function HitTest()
      * Tests if selected node is located within polygon boundaries.
@@ -545,11 +550,20 @@ protected:
     ///> to make sure that they are not ones with the flag set.
     void validateEdge( RN_EDGE_MST_PTR& aEdge );
 
+    // TODO
+    void removeNode( RN_NODE_PTR& aNode, const BOARD_CONNECTED_ITEM* aParent );
+
+    // TODO
+    void removeEdge( RN_EDGE_MST_PTR& aEdge, const BOARD_CONNECTED_ITEM* aParent );
+
     ///> Removes all ratsnest edges for a given node.
     void clearNode( const RN_NODE_PTR& aNode );
 
     ///> Adds appropriate edges for nodes that are connected by zones.
     void processZones();
+
+    // TODO
+    void processPads();
 
     ///> Recomputes ratsnset from scratch.
     void compute();
@@ -569,6 +583,7 @@ protected:
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
 
+    // TODO
     typedef struct
     {
         ///> Subpolygons belonging to a zone
@@ -578,8 +593,18 @@ protected:
         std::deque<RN_EDGE_MST_PTR> m_Edges;
     } RN_ZONE_DATA;
 
+    // TODO
+    typedef struct
+    {
+        // TODO
+        RN_NODE_PTR m_Node;
+
+        // TODO
+        std::deque<RN_EDGE_MST_PTR> m_Edges;
+    } RN_PAD_DATA;
+
     ///> Helper typedefs
-    typedef boost::unordered_map<const D_PAD*, RN_NODE_PTR> PAD_NODE_MAP;
+    typedef boost::unordered_map<const D_PAD*, RN_PAD_DATA> PAD_NODE_MAP;
     typedef boost::unordered_map<const VIA*, RN_NODE_PTR> VIA_NODE_MAP;
     typedef boost::unordered_map<const TRACK*, RN_EDGE_MST_PTR> TRACK_EDGE_MAP;
     typedef boost::unordered_map<const ZONE_CONTAINER*, RN_ZONE_DATA> ZONE_DATA_MAP;
