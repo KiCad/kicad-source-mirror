@@ -550,10 +550,12 @@ protected:
     ///> to make sure that they are not ones with the flag set.
     void validateEdge( RN_EDGE_MST_PTR& aEdge );
 
-    // TODO
+    ///> Removes a link between a node and a parent,
+    ///> and clears linked edges if it was the last parent.
     void removeNode( RN_NODE_PTR& aNode, const BOARD_CONNECTED_ITEM* aParent );
 
-    // TODO
+    ///> Removes a link between an edge and a parent,
+    ///> and clears its node data if it was the last parent.
     void removeEdge( RN_EDGE_MST_PTR& aEdge, const BOARD_CONNECTED_ITEM* aParent );
 
     ///> Removes all ratsnest edges for a given node.
@@ -562,7 +564,7 @@ protected:
     ///> Adds appropriate edges for nodes that are connected by zones.
     void processZones();
 
-    // TODO
+    ///> Adds additional edges to account for connections made by items located in pads areas.
     void processPads();
 
     ///> Recomputes ratsnset from scratch.
@@ -583,7 +585,7 @@ protected:
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
 
-    // TODO
+    ///> Structure to hold ratsnest data for ZONE_CONTAINER objects.
     typedef struct
     {
         ///> Subpolygons belonging to a zone
@@ -593,13 +595,13 @@ protected:
         std::deque<RN_EDGE_MST_PTR> m_Edges;
     } RN_ZONE_DATA;
 
-    // TODO
+    ///> Structureo to hold ratsnest data for D_PAD objects.
     typedef struct
     {
-        // TODO
+        ///> Node representing the pad.
         RN_NODE_PTR m_Node;
 
-        // TODO
+        ///> Helper nodes that make for connections to items located in the pad area.
         std::deque<RN_EDGE_MST_PTR> m_Edges;
     } RN_PAD_DATA;
 
