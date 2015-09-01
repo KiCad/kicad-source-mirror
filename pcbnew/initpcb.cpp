@@ -41,7 +41,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     if( GetBoard() == NULL )
         return false;
 
-    if( aQuery && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+    if( aQuery && !GetBoard()->IsEmpty() )
     {
         if( !IsOK( this,
                    _( "Current Board will be lost and this operation cannot be undone. Continue ?" ) ) )
@@ -83,6 +83,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     ReCreateLayerBox();
     ReCreateAuxiliaryToolbar();
     ReFillLayerWidget();
+    UpdateTitle();
 
     Zoom_Automatique( false );
 

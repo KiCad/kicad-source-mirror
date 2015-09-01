@@ -66,7 +66,11 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     {
         fn = GetBoard()->GetFileName();
         fn.SetExt( NetlistFileExtension );
-        netlistName = fn.GetFullPath();
+
+        if( fn.GetName().IsEmpty() )
+            netlistName.Clear();
+        else
+            netlistName = fn.GetFullPath();
     }
 
     DIALOG_NETLIST dlg( this, DC, netlistName );
@@ -152,8 +156,20 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 {
-    wxString msg;
     wxString netlistFileName = m_NetlistFilenameCtrl->GetValue();
+    wxFileName fn = netlistFileName;
+
+    if( !fn.IsOk() )
+    {
+        wxMessageBox( _("Please, choose a valid netlist file") );
+        return;
+    }
+
+    if( !fn.FileExists() )
+    {
+        wxMessageBox( _("The netlist file does not exist") );
+        return;
+    }
 
     // Give the user a chance to bail out when making changes from a netlist.
     if( !m_checkDryRun->GetValue() && !m_silentMode
@@ -167,6 +183,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 
     wxBusyCursor busy;
 
+    wxString msg;
     msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
     reporter.Report( msg, REPORTER::RPT_INFO );
 

@@ -94,134 +94,146 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
     m_Parent->SetCurItem( NULL );
 
+    bool delAll = false;
+
     if( m_DelAlls->GetValue() )
     {
-        m_Parent->Clear_Pcb( true );
-    }
-    else
-    {
-        if( !IsOK( this, _( "Are you sure you want to delete the selected items?" ) ) )
+        if( !IsOK( this, _( "Are you sure you want to delete the entire board?" ) ) )
             return;
 
-        BOARD*            pcb = m_Parent->GetBoard();
-        PICKED_ITEMS_LIST pickersList;
-        ITEM_PICKER       itemPicker( NULL, UR_DELETED );
-        BOARD_ITEM*       item;
-        BOARD_ITEM*       nextitem;
-        RN_DATA*          ratsnest = pcb->GetRatsnest();
+        delAll = true;
+    }
+    else if( !IsOK( this, _( "Are you sure you want to delete the selected items?" ) ) )
+            return;
 
-        LSET layers_filter = LSET().set();
+    BOARD*            pcb = m_Parent->GetBoard();
+    PICKED_ITEMS_LIST pickersList;
+    ITEM_PICKER       itemPicker( NULL, UR_DELETED );
+    BOARD_ITEM*       item;
+    BOARD_ITEM*       nextitem;
+    RN_DATA*          ratsnest = pcb->GetRatsnest();
 
-        if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
-            layers_filter = LSET( ToLAYER_ID( m_currentLayer ) );
+    LSET layers_filter = LSET().set();
 
-        if( m_DelZones->GetValue() )
+    if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
+        layers_filter = LSET( ToLAYER_ID( m_currentLayer ) );
+
+    if( delAll || m_DelZones->GetValue() )
+    {
+        int area_index = 0;
+        item = pcb->GetArea( area_index );
+
+        while( item )
         {
-            int area_index = 0;
+            if( delAll || layers_filter[item->GetLayer()] )
+            {
+                itemPicker.SetItem( item );
+                pickersList.PushItem( itemPicker );
+                pcb->Remove( item );
+                item->ViewRelease();
+                ratsnest->Remove( item );
+                gen_rastnest = true;
+            }
+            else
+            {
+                area_index++;
+            }
+
             item = pcb->GetArea( area_index );
+        }
+    }
 
-            while( item )
+    if( delAll || m_DelDrawings->GetValue() || m_DelBoardEdges->GetValue() )
+    {
+        LSET masque_layer;
+
+        if( m_DelDrawings->GetValue() )
+             masque_layer = LSET::AllNonCuMask().set( Edge_Cuts, false );
+
+        if( m_DelBoardEdges->GetValue() )
+             masque_layer.set( Edge_Cuts );
+
+        masque_layer &= layers_filter;
+
+        for( item = pcb->m_Drawings; item; item = nextitem )
+        {
+            nextitem = item->Next();
+
+            if( delAll ||
+                ( item->Type() == PCB_LINE_T && masque_layer[item->GetLayer()] ) )
             {
-                if( layers_filter[item->GetLayer()] )
-                {
-                    itemPicker.SetItem( item );
-                    pickersList.PushItem( itemPicker );
-                    pcb->Remove( item );
-                    item->ViewRelease();
-                    ratsnest->Remove( item );
-                    gen_rastnest = true;
-                }
-                else
-                {
-                    area_index++;
-                }
-
-                item = pcb->GetArea( area_index );
+                itemPicker.SetItem( item );
+                pickersList.PushItem( itemPicker );
+                item->ViewRelease();
+                item->UnLink();
             }
         }
+    }
 
-        if( m_DelDrawings->GetValue() || m_DelBoardEdges->GetValue() )
+    if( delAll || m_DelTexts->GetValue() )
+    {
+        LSET del_text_layers = layers_filter;
+
+        for( item = pcb->m_Drawings; item; item = nextitem )
         {
-            LSET masque_layer;
+            nextitem = item->Next();
 
-            if( m_DelDrawings->GetValue() )
-                 masque_layer = LSET::AllNonCuMask().set( Edge_Cuts, false );
-
-            if( m_DelBoardEdges->GetValue() )
-                 masque_layer.set( Edge_Cuts );
-
-            masque_layer &= layers_filter;
-
-            for( item = pcb->m_Drawings; item; item = nextitem )
+            if( delAll ||
+                ( item->Type() == PCB_TEXT_T && del_text_layers[item->GetLayer()] ) )
             {
-                nextitem = item->Next();
-
-                if( item->Type() == PCB_LINE_T  &&  masque_layer[item->GetLayer()] )
-                {
-                    itemPicker.SetItem( item );
-                    pickersList.PushItem( itemPicker );
-                    item->ViewRelease();
-                    item->UnLink();
-                }
+                itemPicker.SetItem( item );
+                pickersList.PushItem( itemPicker );
+                item->ViewRelease();
+                item->UnLink();
             }
         }
+    }
 
-        if( m_DelTexts->GetValue() )
+    if( delAll || m_DelModules->GetValue() )
+    {
+        for( item = pcb->m_Modules; item; item = nextitem )
         {
-            LSET del_text_layers = layers_filter;
+            nextitem = item->Next();
 
-            for( item = pcb->m_Drawings; item; item = nextitem )
+            bool del_fp = delAll;
+
+            if( layers_filter[item->GetLayer()] &&
+                ( ( m_ModuleFilterNormal->GetValue() && !item->IsLocked() ) ||
+                  ( m_ModuleFilterLocked->GetValue() && item->IsLocked() ) ) )
+                del_fp = true;
+
+            if( del_fp )
             {
-                nextitem = item->Next();
-
-                if( item->Type() == PCB_TEXT_T  &&  del_text_layers[item->GetLayer()] )
-                {
-                    itemPicker.SetItem( item );
-                    pickersList.PushItem( itemPicker );
-                    item->ViewRelease();
-                    item->UnLink();
-                }
+                itemPicker.SetItem( item );
+                pickersList.PushItem( itemPicker );
+                static_cast<MODULE*>( item )->RunOnChildren(
+                        boost::bind( &KIGFX::VIEW_ITEM::ViewRelease, _1 ) );
+                ratsnest->Remove( item );
+                item->ViewRelease();
+                item->UnLink();
+                gen_rastnest = true;
             }
         }
+    }
 
-        if( m_DelModules->GetValue() )
+    if( delAll || m_DelTracks->GetValue() )
+    {
+        STATUS_FLAGS track_mask_filter = 0;
+
+        if( !m_TrackFilterLocked->GetValue() )
+            track_mask_filter |= TRACK_LOCKED;
+
+        if( !m_TrackFilterAR->GetValue() )
+            track_mask_filter |= TRACK_AR;
+
+        TRACK* nexttrack;
+
+        for( TRACK *track = pcb->m_Track; track; track = nexttrack )
         {
-            for( item = pcb->m_Modules; item; item = nextitem )
+            nexttrack = track->Next();
+
+            if( !delAll )
             {
-                nextitem = item->Next();
-
-                if( layers_filter[item->GetLayer()] &&
-                    ( ( m_ModuleFilterNormal->GetValue() && !item->IsLocked() ) ||
-                      ( m_ModuleFilterLocked->GetValue() && item->IsLocked() ) ) )
-                {
-                    itemPicker.SetItem( item );
-                    pickersList.PushItem( itemPicker );
-                    static_cast<MODULE*>( item )->RunOnChildren(
-                            boost::bind( &KIGFX::VIEW_ITEM::ViewRelease, _1 ) );
-                    ratsnest->Remove( item );
-                    item->ViewRelease();
-                    item->UnLink();
-                    gen_rastnest = true;
-                }
-            }
-        }
-
-        if( m_DelTracks->GetValue() )
-        {
-            STATUS_FLAGS track_mask_filter = 0;
-
-            if( !m_TrackFilterLocked->GetValue() )
-                track_mask_filter |= TRACK_LOCKED;
-
-            if( !m_TrackFilterAR->GetValue() )
-                track_mask_filter |= TRACK_AR;
-
-            TRACK* nexttrack;
-
-            for( TRACK *track = pcb->m_Track; track; track = nexttrack )
-            {
-                nexttrack = track->Next();
-
                 if( ( track->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter ) != 0 )
                     continue;
 
@@ -234,29 +246,28 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
                 if( ( track->GetLayerSet() & layers_filter ) == 0 )
                     continue;
-
-                itemPicker.SetItem( track );
-                pickersList.PushItem( itemPicker );
-                track->ViewRelease();
-                ratsnest->Remove( track );
-                track->UnLink();
-                gen_rastnest = true;
             }
+
+            itemPicker.SetItem( track );
+            pickersList.PushItem( itemPicker );
+            track->ViewRelease();
+            ratsnest->Remove( track );
+            track->UnLink();
+            gen_rastnest = true;
         }
-
-        if( pickersList.GetCount() )
-            m_Parent->SaveCopyInUndoList( pickersList, UR_DELETED );
-
-        if( m_DelMarkers->GetValue() )
-            pcb->DeleteMARKERs();
-
-        if( gen_rastnest )
-            m_Parent->Compile_Ratsnest( NULL, true );
-
-        if( m_Parent->IsGalCanvasActive() )
-            pcb->GetRatsnest()->Recalculate();
-
     }
+
+    if( pickersList.GetCount() )
+        m_Parent->SaveCopyInUndoList( pickersList, UR_DELETED );
+
+    if( m_DelMarkers->GetValue() )
+        pcb->DeleteMARKERs();
+
+    if( gen_rastnest )
+        m_Parent->Compile_Ratsnest( NULL, true );
+
+    if( m_Parent->IsGalCanvasActive() )
+        pcb->GetRatsnest()->Recalculate();
 
     m_Parent->GetCanvas()->Refresh();
     m_Parent->OnModify();
