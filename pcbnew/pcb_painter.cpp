@@ -173,18 +173,18 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
             netCode = conItem->GetNetCode();
     }
 
+    // Single net highlight mode
+    if( m_highlightEnabled && netCode == m_highlightNetcode )
+        return m_layerColorsHi[aLayer];
+
     // Return grayish color for non-highlighted layers in the high contrast mode
     if( m_hiContrastEnabled && m_activeLayers.count( aLayer ) == 0 )
         return m_hiContrastColor;
 
-    // Single net highlight mode
+    // Catch the case when highlight and high-contraste modes are enabled
+    // and we are drawing a not highlighted track
     if( m_highlightEnabled )
-    {
-        if( netCode == m_highlightNetcode )
-            return m_layerColorsHi[aLayer];
-        else
-            return m_layerColorsDark[aLayer];
-    }
+        return m_layerColorsDark[aLayer];
 
     // No special modificators enabled
     return m_layerColors[aLayer];
