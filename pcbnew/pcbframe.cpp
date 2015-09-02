@@ -663,7 +663,9 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     if( aEnable )
     {
-        if( ( BOARD* board = GetBoard() ) )
+        BOARD* board = GetBoard();
+
+        if( board )
             board->GetRatsnest()->ProcessBoard();
     }
     else
