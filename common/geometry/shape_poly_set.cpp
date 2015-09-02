@@ -693,11 +693,17 @@ bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex ) const
 {
     // fixme: support holes!
 
+    if( m_polys.size() == 0 ) // empty set?
+        return false;
+
     if( aSubpolyIndex >= 0 )
         return pointInPolygon( aP, m_polys[aSubpolyIndex][0] );
 
     BOOST_FOREACH ( const POLYGON& polys, m_polys )
     {
+        if( polys.size() == 0 )
+            continue;
+
         if( pointInPolygon( aP, polys[0] ) )
             return true;
     }
