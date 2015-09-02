@@ -75,22 +75,16 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 
     // listbox events
     EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
-
-
-#if wxCHECK_VERSION( 3, 0, 0 )
     EVT_GRID_CMD_CELL_CHANGED( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                                FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
-#else
-    EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                              FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
-#endif
-
-    EVT_GRID_CMD_EDITOR_HIDDEN( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                                FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
 
     EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
 
+// Column index to display parameters in m_parameterGrid
+int FOOTPRINT_WIZARD_FRAME::m_columnPrmName = 0;
+int FOOTPRINT_WIZARD_FRAME::m_columnPrmValue = 1;
+int FOOTPRINT_WIZARD_FRAME::m_columnPrmUnit = 2;
 
 #define FOOTPRINT_WIZARD_FRAME_NAME wxT( "FootprintWizard" )
 
@@ -131,6 +125,14 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     LoadSettings( config() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    // Set some display options here, because the FOOTPRINT_WIZARD_FRAME
+    // does not have a config menu to do that:
+    DISPLAY_OPTIONS* disp_opts = (DISPLAY_OPTIONS*) GetDisplayOptions();
+    disp_opts->m_DisplayPadIsol = false;
+    disp_opts->m_DisplayPadNum = true;
+    GetBoard()->SetElementVisibility( PCB_VISIBLE(NO_CONNECTS_VISIBLE), false );
+
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     ReCreateHToolbar();
@@ -147,9 +149,9 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     m_parameterGrid->CreateGrid( 1, 3 );
 
     // Columns
-    m_parameterGrid->SetColLabelValue( 0, _( "Parameter" ) );
-    m_parameterGrid->SetColLabelValue( 1, _( "Value" ) );
-    m_parameterGrid->SetColLabelValue( 2, _( "Units" ) );
+    m_parameterGrid->SetColLabelValue( m_columnPrmName, _( "Parameter" ) );
+    m_parameterGrid->SetColLabelValue( m_columnPrmValue, _( "Value" ) );
+    m_parameterGrid->SetColLabelValue( m_columnPrmUnit, _( "Units" ) );
     m_parameterGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
     m_parameterGrid->AutoSizeColumns();
 
@@ -319,14 +321,13 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     m_parameterGrid->DeleteRows( 0, m_parameterGrid->GetNumberRows() );
     m_parameterGrid->AppendRows( fpList.size() );
 
-    wxString name, value, units;
-    for( unsigned int i = 0; i<fpList.size(); i++ )
+    wxString value, units;
+    for( unsigned int i = 0; i< fpList.size(); i++ )
     {
-        name    = fpList[i];
         value   = fvList[i];
 
-        m_parameterGrid->SetCellValue( i, 0, name );
-        m_parameterGrid->SetReadOnly( i, 0 );
+        m_parameterGrid->SetCellValue( i, m_columnPrmName, fpList[i] );
+        m_parameterGrid->SetReadOnly( i, m_columnPrmName );
 
         if( ptList[i]==wxT( "IU" ) )
         {
@@ -350,6 +351,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
                 units = wxT( "mm" );
             }
 
+            // Use Double2Str to build the string, because useless trailing 0
+            // are removed. The %f format does not remove them
             std::string s = Double2Str( dValue );
             value = FROM_UTF8( s.c_str() );
         }
@@ -358,9 +361,9 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             units = wxT( "" );
         }
 
-        m_parameterGrid->SetCellValue( i, 1, value );
-        m_parameterGrid->SetCellValue( i, 2, units );
-        m_parameterGrid->SetReadOnly( i, 2 );
+        m_parameterGrid->SetCellValue( i, m_columnPrmValue, value );
+        m_parameterGrid->SetCellValue( i, m_columnPrmUnit, units );
+        m_parameterGrid->SetReadOnly( i, m_columnPrmUnit );
     }
 
     m_parameterGrid->AutoSizeColumns();
@@ -596,14 +599,11 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-        if( IsModal() )
-        {
-            // The library browser is called from a "load component" command
-            m_mainToolBar->AddSeparator();
-            m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
-                                    wxEmptyString, KiBitmap( export_footprint_names_xpm ),
-                                    _( "Add footprint to board" ) );
-        }
+        // The footprint wizard always can export the current footprint
+        m_mainToolBar->AddSeparator();
+        m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
+                                wxEmptyString, KiBitmap( export_footprint_names_xpm ),
+                                _( "Export the footprint to the editor" ) );
 
         // after adding the buttons to the toolbar, must call Realize() to
         // reflect the changes
@@ -616,4 +616,5 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 
 void FOOTPRINT_WIZARD_FRAME::ReCreateVToolbar()
 {
+    // Currently, there is no vertical toolbar
 }

@@ -147,10 +147,18 @@ class FootprintWizardParameterManager:
             self._PrintParameterErrors()
             return False
 
+        """
+        Be aware print messages create IO exceptions, because the wizard
+        is run from Pcbnew. And if pcbnew is not run from a console, there is
+        no io channel to read the output of print function.
+        When the buffer is full, a IO exception is thrown.
+        """
+        """
         print ("Building new %s footprint with the following parameters:"
                % self.name)
 
         self._PrintParameterTable()
+        """
         return True
 
     #################################################################

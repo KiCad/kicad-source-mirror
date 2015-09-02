@@ -64,9 +64,11 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aA
 
         if( PyErr_Occurred() )
         {
+#if 1 // defined(DEBUG)
             wxMessageBox( PyErrStringWithTraceback(),
                           wxT( "Exception on python footprint wizard code" ),
                           wxICON_ERROR | wxOK );
+#endif
         }
 
         if( result )
@@ -213,7 +215,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames( int aPage )
     ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
     Py_DECREF( arglist );
 
-    for( unsigned i = 0; i<ret.GetCount(); i++ )
+    for( unsigned i = 0; i < ret.GetCount(); i++ )
     {
         wxString    rest;
         wxString    item = ret[i];
@@ -262,7 +264,6 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues( int aPage )
     PyLOCK          lock;
 
     PyObject*       arglist = Py_BuildValue( "(i)", aPage );
-
     wxArrayString   ret = CallRetArrayStrMethod( "GetParameterValues", arglist );
 
     Py_DECREF( arglist );
@@ -276,7 +277,6 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterErrors( int aPage )
     PyLOCK          lock;
 
     PyObject*       arglist = Py_BuildValue( "(i)", aPage );
-
     wxArrayString   ret = CallRetArrayStrMethod( "GetParameterErrors", arglist );
 
     Py_DECREF( arglist );
@@ -293,9 +293,9 @@ wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& 
 
     PyObject*   py_list = PyList_New( len );
 
-    for( int i = 0; i<len; i++ )
+    for( int i = 0; i < len; i++ )
     {
-        wxString    str     = aValues[i];
+        wxString&    str     = aValues[i];
         PyObject*   py_str  = PyString_FromString( (const char*) str.mb_str() );
         PyList_SetItem( py_list, i, py_str );
     }

@@ -54,6 +54,11 @@ private:
     // Flags
     wxString        m_configPath;           ///< subpath for configuration
 
+    // Column index to display parameters in m_parameterGrid
+    static int      m_columnPrmName;
+    static int      m_columnPrmValue;
+    static int      m_columnPrmUnit;
+
 protected:
     wxString        m_wizardName;           ///< name of the current wizard
     wxString        m_wizardDescription;    ///< description of the wizard
@@ -151,8 +156,11 @@ private:
 
     void                SelectCurrentWizard( wxCommandEvent& event );
 
+    /**
+     * Function ParametersUpdated
+     * Update the footprint python parameters values from the values in grid
+     */
     void                ParametersUpdated( wxGridEvent& event );
-
 
     bool                OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
 

@@ -120,7 +120,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 
 FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_FRAME::GetMyWizard()
 {
-    if( m_wizardName.Length()==0 )
+    if( m_wizardName.Length() == 0 )
         return NULL;
 
     FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARDS::GetWizard( m_wizardName );
@@ -182,10 +182,6 @@ void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
 }
 
 
-/**
- * Function SelectCurrentFootprint
- * Selects the current footprint name and display it
- */
 void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
     int page = m_pageList->GetSelection();
@@ -195,21 +191,29 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
     if( !footprintWizard )
         return;
 
-    if( page<0 )
+    if( page < 0 )
         return;
 
-    int             n = m_parameterGrid->GetNumberRows();
-    wxArrayString   arr;
+    wxArrayString   prmValues = footprintWizard->GetParameterValues( page );
     wxArrayString   ptList = footprintWizard->GetParameterTypes( page );
 
-    for( int i = 0; i < n; i++ )
+    bool            has_changed = false;
+    int             count = m_parameterGrid->GetNumberRows();
+
+    // Skip extra event, useless
+    if( event.GetString() == m_parameterGrid->GetCellValue( event.GetRow(), m_columnPrmValue ) )
+        return;
+
+    for( int prm_id = 0; prm_id < count; ++prm_id )
     {
-        wxString value = m_parameterGrid->GetCellValue( i, 1 );
+        wxString value = m_parameterGrid->GetCellValue( prm_id, m_columnPrmValue );
 
         // if this parameter is expected to be an internal
         // unit convert it back from the user format
-        if( ptList[i]==wxT( "IU" ) )
+        if( ptList[prm_id]==wxT( "IU" ) )
         {
+            // If our locale is set to use, for decimal point, just change it
+            // to be scripting compatible
             LOCALE_IO   toggle;
             double      dValue;
 
@@ -220,18 +224,34 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
                 dValue = dValue / 1000.0;
 
             dValue = From_User_Unit( g_UserUnit, dValue );
-            value.Printf( wxT( "%f" ), dValue );
+
+            // Internal units are int. Print them as int.
+            value.Printf( "%d", KiROUND( dValue ) );
+
+            if(  prmValues[prm_id].EndsWith(".0") )
+            {
+                 prmValues[prm_id].RemoveLast();
+                 prmValues[prm_id].RemoveLast();
+            }
         }
 
-        // If our locale is set to use , for decimal point, just change it
-        // to be scripting compatible
-        arr.Add( value );
+        if( prmValues[prm_id] != value )
+        {
+            has_changed = true;
+            prmValues[prm_id] = value;
+        }
     }
 
-    wxString res = footprintWizard->SetParameterValues( page, arr );
+    if( has_changed )
+    {
+        wxString res = footprintWizard->SetParameterValues( page, prmValues );
 
-    ReloadFootprint();
-    DisplayWizardInfos();
+        if( !res.IsEmpty() )
+            wxMessageBox( res );
+
+        ReloadFootprint();
+        DisplayWizardInfos();
+    }
 }
 
 
