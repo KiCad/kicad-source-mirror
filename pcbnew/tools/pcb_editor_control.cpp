@@ -700,7 +700,11 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     if( enableHighlight )
         net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
 
-    if( enableHighlight != render->GetHighlight() || net != render->GetHighlightNetCode() )
+    // Toggle highlight when the same net was picked
+    if( net > 0 && net == render->GetHighlightNetCode() )
+        enableHighlight = !render->IsHighlightEnabled();
+
+    if( enableHighlight != render->IsHighlightEnabled() || net != render->GetHighlightNetCode() )
     {
         render->SetHighlight( enableHighlight, net );
         aToolMgr->GetView()->UpdateAllLayersColor();

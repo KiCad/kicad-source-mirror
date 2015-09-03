@@ -110,11 +110,11 @@ public:
     }
 
     /**
-     * Function GetHighlight
+     * Function IsHighlightEnabled
      * Returns current highlight setting.
      * @return True if highlight is enabled, false otherwise.
      */
-    inline bool GetHighlight() const
+    inline bool IsHighlightEnabled() const
     {
         return m_highlightEnabled;
     }
@@ -139,7 +139,7 @@ public:
     inline void SetHighlight( bool aEnabled, int aNetcode = -1 )
     {
         m_highlightEnabled = aEnabled;
-        m_highlightNetcode = aNetcode;
+        m_highlightNetcode = aEnabled ? aNetcode : -1;
     }
 
     /**
