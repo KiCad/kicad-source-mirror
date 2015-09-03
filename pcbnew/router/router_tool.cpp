@@ -653,6 +653,10 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
             updateStartItem( *evt );
             performDragging();
         }
+        else if( evt->IsAction( &ACT_PlaceThroughVia ) )
+        {
+            m_toolMgr->RunAction( COMMON_ACTIONS::layerToggle, true );
+        }
 
         handleCommonEvents( *evt );
     }
