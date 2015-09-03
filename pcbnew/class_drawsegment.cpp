@@ -430,6 +430,8 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
     case S_ARC:
     {
         bbox.Merge( m_End );
+        // TODO perhaps the above line can be replaced with this one, so we do not include the center
+        //bbox.SetOrigin( m_End );
         wxPoint end = m_End;
         RotatePoint( &end, m_Start, -m_Angle );
         bbox.Merge( end );
@@ -441,16 +443,26 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         // 3 right-top
         unsigned int quarter = 0;       // assume right-bottom
 
-        if( m_End.y < m_Start.y )       // change to left-top
-            quarter |= 3;
-
-        if( m_End.x < m_Start.x )       // for left side, the LSB is 2nd bit negated
-            quarter ^= 1;
+        if( m_End.x < m_Start.x )
+        {
+            if( m_End.y <= m_Start.y )
+                quarter = 2;
+            else // ( m_End.y > m_Start.y )
+                quarter = 1;
+        }
+        else if( m_End.x >= m_Start.x )
+        {
+            if( m_End.y < m_Start.y )
+                quarter = 3;
+            else if( m_End.x == m_Start.x )
+                quarter = 1;
+        }
 
         int radius = GetRadius();
         int angle = (int) GetArcAngleStart() % 900 + m_Angle;
         bool directionCW = ( m_Angle > 0 );      // Is the direction of arc clockwise?
 
+        // Make the angle positive, so we go clockwise and merge points belonging to the arc
         if( !directionCW )
         {
             angle = 900 - angle;
@@ -487,7 +499,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
             angle -= 900;
         }
     }
-        break;
+    break;
 
     case S_POLYGON:
     {
