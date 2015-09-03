@@ -220,11 +220,11 @@ TOOL_ACTION COMMON_ACTIONS::trackDisplayMode( "pcbnew.Control.trackDisplayMode",
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::padDisplayMode( "pcbnew.Control.padDisplayMode",
-        AS_GLOBAL, 'J',     // TODO temporarily, find a better hot key
+        AS_GLOBAL, 0,
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
-        AS_GLOBAL, 'L',     // TODO temporarily, find a better hot key
+        AS_GLOBAL, 0,
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
@@ -393,6 +393,10 @@ TOOL_ACTION COMMON_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
 
 TOOL_ACTION COMMON_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchToPcb",
         AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::toggleLockModule( "pcbnew.EditorControl.toggleLockModule",
+        AS_GLOBAL, 'L',
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",

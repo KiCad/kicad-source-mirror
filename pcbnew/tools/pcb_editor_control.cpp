@@ -317,6 +317,31 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_EDITOR_CONTROL::ToggleLockModule( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+    bool clearSelection = selection.Empty();
+
+    if( clearSelection )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        if( selection.Item<BOARD_ITEM>( i )->Type() == PCB_MODULE_T )
+        {
+            MODULE* module = selection.Item<MODULE>( i );
+            module->SetLocked( !module->IsLocked() );
+        }
+    }
+
+    if( clearSelection )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+
+    return 0;
+}
+
+
 int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
@@ -730,8 +755,9 @@ void PCB_EDITOR_CONTROL::SetTransitions()
     Go( &PCB_EDITOR_CONTROL::PlaceModule,        COMMON_ACTIONS::placeModule.MakeEvent() );
 
     // Other
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch, SELECTION_TOOL::SelectedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb, COMMON_ACTIONS::crossProbeSchToPcb.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleLockModule,    COMMON_ACTIONS::toggleLockModule.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  SELECTION_TOOL::SelectedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,  COMMON_ACTIONS::crossProbeSchToPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         COMMON_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        COMMON_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  COMMON_ACTIONS::highlightNetCursor.MakeEvent() );

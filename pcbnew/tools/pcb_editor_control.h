@@ -76,6 +76,9 @@ public:
      */
     int PlaceModule( const TOOL_EVENT& aEvent );
 
+    ///> (Un)locks module.
+    int ToggleLockModule( const TOOL_EVENT& aEvent );
+
     ///> Notifies eeschema about the selected item.
     int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
 
