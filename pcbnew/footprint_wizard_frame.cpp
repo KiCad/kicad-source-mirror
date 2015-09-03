@@ -104,7 +104,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     // This frame is always show modal:
     SetModal( true );
 
-    m_configPath    = FOOTPRINT_WIZARD_FRAME_NAME;
     m_showAxis      = true;    // true to draw axis.
 
     // Give an icon
@@ -391,8 +390,6 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    wxConfigPathChanger cpc( aCfg, m_configPath );
-
     aCfg->Read( PARTLIST_WIDTH_KEY, &m_pageListWidth, 100 );
     aCfg->Read( PARAMLIST_WIDTH_KEY, &m_parameterGridWidth, 200 );
 
@@ -409,7 +406,6 @@ void FOOTPRINT_WIZARD_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    wxConfigPathChanger cpc( aCfg, m_configPath );
     aCfg->Write( PARTLIST_WIDTH_KEY, m_pageList->GetSize().x );
     aCfg->Write( PARAMLIST_WIDTH_KEY, m_parameterGrid->GetSize().x );
 }

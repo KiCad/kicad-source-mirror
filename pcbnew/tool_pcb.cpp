@@ -110,7 +110,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     }
 
     Route_Layer_TOP_color =
-        g_ColorsSettings.GetLayerColor( ( ( PCB_SCREEN* ) GetScreen() )->m_Route_Layer_TOP );
+        g_ColorsSettings.GetLayerColor( GetScreen()->m_Route_Layer_TOP );
 
     if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
     {
@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     }
 
     Route_Layer_BOTTOM_color =
-        g_ColorsSettings.GetLayerColor( ( (PCB_SCREEN*) GetScreen() )->m_Route_Layer_BOTTOM );
+        g_ColorsSettings.GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
 
     if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
     {

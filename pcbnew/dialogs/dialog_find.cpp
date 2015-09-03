@@ -74,7 +74,7 @@ void DIALOG_FIND::onButtonCloseClick( wxCommandEvent& aEvent )
 
 void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 {
-    PCB_SCREEN* screen = (PCB_SCREEN*) ( parent->GetScreen() );
+    PCB_SCREEN* screen = parent->GetScreen();
     wxPoint     pos;
 
     foundItem = NULL;
@@ -144,7 +144,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 
 void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
 {
-    PCB_SCREEN* screen = (PCB_SCREEN*) ( parent->GetScreen() );
+    PCB_SCREEN* screen = parent->GetScreen();
     wxPoint     pos;
     foundItem = NULL;
 

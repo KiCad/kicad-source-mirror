@@ -59,7 +59,7 @@ static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
 
 void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
+    PCB_SCREEN* screen = GetScreen();
 
     if( !GetBoard() || !screen )
         return;

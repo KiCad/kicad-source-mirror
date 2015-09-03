@@ -203,7 +203,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
         GetBoard()->Add( textePcb );
         textePcb->SetFlags( IS_NEW );
 
-        LAYER_ID layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+        LAYER_ID layer = GetActiveLayer();
 
         textePcb->SetLayer( layer );
 

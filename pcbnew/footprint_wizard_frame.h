@@ -51,9 +51,6 @@ private:
     wxGrid*         m_parameterGrid;        ///< The list of parameters
     int             m_parameterGridWidth;   ///< size of the grid
 
-    // Flags
-    wxString        m_configPath;           ///< subpath for configuration
-
     // Column index to display parameters in m_parameterGrid
     static int      m_columnPrmName;
     static int      m_columnPrmValue;

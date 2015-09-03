@@ -367,7 +367,7 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 // Note: virtual, overridden in PCB_EDIT_FRAME;
 void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
 {
-    LAYER_ID preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+    LAYER_ID preslayer = GetActiveLayer();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
@@ -583,7 +583,7 @@ BOARD_ITEM* PCB_BASE_FRAME::GetCurItem()
 GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 {
     GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(),
-                                    ( (PCB_SCREEN*)GetScreen())->m_Active_Layer );
+                                    GetActiveLayer() );
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( MOD_TEXT_INVISIBLE ));

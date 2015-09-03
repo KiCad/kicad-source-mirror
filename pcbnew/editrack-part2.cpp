@@ -50,10 +50,10 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
     if( aTrack == NULL )
     {
-        if( GetActiveLayer() != ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
-            SetActiveLayer( ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP );
+        if( GetActiveLayer() != GetScreen()->m_Route_Layer_TOP )
+            SetActiveLayer( GetScreen()->m_Route_Layer_TOP );
         else
-            SetActiveLayer(((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM );
+            SetActiveLayer( GetScreen()->m_Route_Layer_BOTTOM );
 
         UpdateStatusBar();
         return true;

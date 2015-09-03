@@ -619,7 +619,7 @@ public:
      */
     virtual void SetActiveLayer( LAYER_ID aLayer )
     {
-        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+        GetScreen()->m_Active_Layer = aLayer;
     }
 
     /**
@@ -628,7 +628,7 @@ public:
      */
     virtual LAYER_ID GetActiveLayer() const
     {
-        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+        return GetScreen()->m_Active_Layer;
     }
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
