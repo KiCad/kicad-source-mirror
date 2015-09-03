@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-01 12:06+0100\n"
-"PO-Revision-Date: 2015-09-01 12:12+0100\n"
+"POT-Creation-Date: 2015-09-03 12:24+0100\n"
+"PO-Revision-Date: 2015-09-03 12:26+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -5981,7 +5981,7 @@ msgstr ""
 "Błąd %s."
 
 #: pcbnew/modview_frame.cpp:644
-#: pcbnew/footprint_wizard_frame.cpp:536
+#: pcbnew/footprint_wizard_frame.cpp:535
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -6103,37 +6103,37 @@ msgstr ""
 msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr "Nie mogę odnaleźć komponentu z odznacznikem \"%s\" na liście sieci."
 
-#: pcbnew/footprint_wizard_frame.cpp:99
+#: pcbnew/footprint_wizard_frame.cpp:93
 msgid "Footprint Wizard"
 msgstr "Kreator footprintów"
 
-#: pcbnew/footprint_wizard_frame.cpp:150
+#: pcbnew/footprint_wizard_frame.cpp:151
 msgid "Parameter"
 msgstr "Parametr"
 
-#: pcbnew/footprint_wizard_frame.cpp:152
+#: pcbnew/footprint_wizard_frame.cpp:153
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:562
+#: pcbnew/footprint_wizard_frame.cpp:561
 msgid "Select wizard to use"
 msgstr "Wybierz kreatora"
 
-#: pcbnew/footprint_wizard_frame.cpp:567
+#: pcbnew/footprint_wizard_frame.cpp:566
 msgid "Select previous editable item"
 msgstr "Wybierz poprzedni edytorwalny komponent "
 
-#: pcbnew/footprint_wizard_frame.cpp:571
+#: pcbnew/footprint_wizard_frame.cpp:570
 msgid "Select next editable item"
 msgstr "Wybierz następny edytowalny komponent"
 
-#: pcbnew/footprint_wizard_frame.cpp:576
+#: pcbnew/footprint_wizard_frame.cpp:575
 msgid "Show footprint in 3D viewer"
 msgstr "Pokaż footprint w przeglądarce 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:605
-msgid "Add footprint to board"
-msgstr "Wstaw footprint na płytkę"
+#: pcbnew/footprint_wizard_frame.cpp:602
+msgid "Export the footprint to the editor"
+msgstr "Wstaw do edytora footprintów"
 
 #: pcbnew/plugin.cpp:27
 #: pcbnew/io_mgr.cpp:42
@@ -8190,7 +8190,7 @@ msgstr "Krzywa"
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/class_drawsegment.cpp:666
+#: pcbnew/class_drawsegment.cpp:678
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Grafika PCB: %s, długość %s na %s"
@@ -10474,7 +10474,7 @@ msgstr "Błąd DRC: zamknięcie tego obszaru wywołuje błąd DRC z innym obszar
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej '%s' nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:974
+#: pcbnew/pcbframe.cpp:981
 msgid " [new file]"
 msgstr " [nowy plik]"
 
