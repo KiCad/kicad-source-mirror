@@ -59,6 +59,9 @@ protected:
     std::vector<wxPoint>    m_BezierPoints;
     std::vector<wxPoint>    m_PolyPoints;
 
+    // Computes the bounding box for an arc
+    void computeArcBBox( EDA_RECT& aBBox ) const;
+
 public:
     DRAWSEGMENT( BOARD_ITEM* aParent = NULL, KICAD_T idtype = PCB_LINE_T );
 
@@ -241,6 +244,9 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
 
     virtual EDA_ITEM* Clone() const;
+
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
