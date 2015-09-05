@@ -42,7 +42,6 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.AddParam("Pads", "package height", self.uMM, 14)
 
     def CheckParameters(self):
-
         self.CheckParamInt("Pads", "*n", is_multiple_of=4)
         self.CheckParamBool("Pads", "*oval")
 
@@ -50,7 +49,6 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         return "QFP_%d" % self.parameters["Pads"]["*n"]
 
     def BuildThisFootprint(self):
-
         pads = self.parameters["Pads"]
 
         pad_pitch = pads["pad pitch"]
@@ -66,15 +64,12 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
 
         pad_shape = pcbnew.PAD_SHAPE_OVAL if pads["*oval"] else pcbnew.PAD_SHAPE_RECT
 
-        h_pad = PA.PadMaker(self.module).SMDPad(
-            pad_width, pad_length, shape=pad_shape)
-        v_pad = PA.PadMaker(self.module).SMDPad(
-            pad_length, pad_width, shape=pad_shape)
+        h_pad = PA.PadMaker(self.module).SMDPad( pad_width, pad_length, shape=pad_shape)
+        v_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width, shape=pad_shape)
 
         #left row
         pin1Pos = pcbnew.wxPoint(-h_pitch / 2, 0)
-        array = PA.PadLineArray(h_pad, pads_per_row, pad_pitch, True,
-                                pin1Pos)
+        array = PA.PadLineArray(h_pad, pads_per_row, pad_pitch, True, pin1Pos)
         array.SetFirstPadInArray(1)
         array.AddPadsToModule(self.draw)
 

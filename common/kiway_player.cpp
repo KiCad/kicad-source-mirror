@@ -106,14 +106,32 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     SetFocus();
 
     {
-        // exception safe way to disable all frames except the modal one,
+        // We have to disable all frames but the the modal one.
+        // wxWindowDisabler does that, but remember it disables all top level windows
+        // We do not want to disable top level windows which are child off the modal one,
+        // if they are enabled.
+        // An example is an aui toolbar which was moved
+        // or a dialog or an other frame or miniframe opened by the modal one.
+        wxWindowList wlist = GetChildren();
+        std::vector<wxWindow*> enabledTopLevelWindows;
+
+        for( unsigned ii = 0; ii < wlist.size(); ii++ )
+            if( wlist[ii]->IsTopLevel() && wlist[ii]->IsEnabled() )
+                enabledTopLevelWindows.push_back( wlist[ii] );
+
+
+        // exception safe way to disable all top level windows except the modal one,
         // re-enables only those that were disabled on exit
         wxWindowDisabler    toggle( this );
 
-        WX_EVENT_LOOP          event_loop;
+        // Reenable top level windows which are child of the modal one:
+        for( unsigned ii = 0; ii < wlist.size(); ii++ )
 
+        for( unsigned ii = 0; ii < enabledTopLevelWindows.size(); ii++ )
+               enabledTopLevelWindows[ii]->Enable( true );
+
+        WX_EVENT_LOOP event_loop;
         m_modal_loop = &event_loop;
-
         event_loop.Run();
 
     }   // End of scop for some variables.

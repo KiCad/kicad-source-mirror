@@ -115,6 +115,8 @@ if( NOT DEFAULT_INSTALL_PATH )
          "Location of KiCad data files." )
 endif()
 
+message( STATUS "Kicad install dir: <${DEFAULT_INSTALL_PATH}>" )
+
 # Generate build system specific header file.
 include( PerformFeatureChecks )
 perform_feature_checks()
@@ -334,10 +336,17 @@ set( KIFACE_PREFIX  "_" )
 #================================================
 if( NOT APPLE )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
-    set( KICAD_BIN bin
+    set( KICAD_BIN ${CMAKE_INSTALL_PREFIX}/bin
         CACHE PATH "Location of KiCad binaries." )
-    set( KICAD_PLUGINS lib/kicad/plugins
-        CACHE PATH "Location of KiCad plugins." )
+
+    if( WIN32 )
+        set( KICAD_PLUGINS ${KICAD_BIN}/scripting/plugins
+            CACHE PATH "Location of KiCad plugins." )
+    else()
+        set( KICAD_PLUGINS lib/kicad/plugins
+            CACHE PATH "Location of KiCad plugins." )
+    endif()
+
     set( KICAD_DATA share/kicad
         CACHE PATH "Location of KiCad data files." )
     set( KICAD_DOCS share/doc/kicad

@@ -174,6 +174,7 @@ class FootprintWizardPlugin(KiCadPlugin):
         self.name = "Undefined Footprint Wizard plugin"
         self.description = ""
         self.image = ""
+        self.buildmessages = ""
 
     def GetName(self):
         return self.name
@@ -242,12 +243,15 @@ class FootprintWizardPlugin(KiCadPlugin):
         self.parameter_errors = errs
 
 
-    def GetModule(self):
+    def GetFootprint( self ):
         self.BuildFootprint()
         return self.module
 
     def BuildFootprint(self):
         return
+
+    def GetBuildMessages( self ):
+        return self.buildmessages
 
     def Show(self):
         print "Footprint Wizard Name:        ",self.GetName()

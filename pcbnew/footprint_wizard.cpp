@@ -101,7 +101,9 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     GetBoard()->m_Modules.DeleteAll();
 
     // Creates the module
-    MODULE* module = footprintWizard->GetModule();
+    wxString msg;
+    MODULE* module = footprintWizard->GetFootprint( &msg );
+    DisplayBuildMessage( msg );
 
     if( module )
     {
@@ -111,10 +113,19 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     }
     else
     {
-        DBG(printf( "footprintWizard->GetModule() returns NULL\n" );)
+        DBG(printf( "footprintWizard->GetFootprint() returns NULL\n" );)
     }
 
     m_canvas->Refresh();
+}
+
+
+void FOOTPRINT_WIZARD_FRAME::DisplayBuildMessage( wxString& aMessage )
+{
+    m_messagesFrame->ClearScreen();
+
+    if( !aMessage.IsEmpty() )
+        m_messagesFrame->PrintMessage( aMessage );
 }
 
 
@@ -141,7 +152,11 @@ MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 
     if( footprintWizard && m_modal_ret_val )
     {
-        return footprintWizard->GetModule();
+        wxString msg;
+        MODULE * footprint = footprintWizard->GetFootprint( &msg );
+        DisplayBuildMessage( msg );
+
+        return footprint;
     }
 
     return NULL;
