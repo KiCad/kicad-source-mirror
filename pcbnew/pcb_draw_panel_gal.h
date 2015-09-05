@@ -81,6 +81,12 @@ public:
     void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList );
 
 protected:
+    ///> Reassigns layer order to the initial settings.
+    void setDefaultLayerOrder();
+
+    ///> Sets rendering targets & dependencies for layers.
+    void setDefaultLayerDeps();
+
     ///> Currently used worksheet
     KIGFX::WORKSHEET_VIEWITEM* m_worksheet;
 

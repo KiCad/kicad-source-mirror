@@ -53,9 +53,8 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ), ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE ),
     ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
 
-    NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ), F_Mask,
-    NETNAMES_GAL_LAYER( F_Cu ), F_Cu,
-    F_SilkS, F_Paste, F_Adhes,
+    NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ),
+    NETNAMES_GAL_LAYER( F_Cu ), F_Cu, F_Mask, F_SilkS, F_Paste, F_Adhes,
 
     NETNAMES_GAL_LAYER( In1_Cu ),   In1_Cu,
     NETNAMES_GAL_LAYER( In2_Cu ),   In2_Cu,
@@ -88,10 +87,9 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     NETNAMES_GAL_LAYER( In29_Cu ),  In29_Cu,
     NETNAMES_GAL_LAYER( In30_Cu ),  In30_Cu,
 
-    NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ), B_Mask,
-    NETNAMES_GAL_LAYER( B_Cu ), B_Cu,
+    NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ),
+    NETNAMES_GAL_LAYER( B_Cu ), B_Cu, B_Mask, B_Adhes, B_Paste, B_SilkS,
 
-    B_Adhes, B_Paste, B_SilkS,
     ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ),
     ITEM_GAL_LAYER( WORKSHEET )
 };
@@ -105,65 +103,8 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
     m_worksheet = NULL;
     m_ratsnest = NULL;
 
-    // Set rendering order and properties of layers
-    for( LAYER_NUM i = 0; (unsigned) i < sizeof(GAL_LAYER_ORDER) / sizeof(LAYER_NUM); ++i )
-    {
-        LAYER_NUM layer = GAL_LAYER_ORDER[i];
-        wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
-
-        m_view->SetLayerOrder( layer, i );
-
-        if( IsCopperLayer( layer ) )
-        {
-            // Copper layers are required for netname layers
-            m_view->SetRequired( GetNetnameLayer( layer ), layer );
-            m_view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
-        }
-        else if( IsNetnameLayer( layer ) )
-        {
-            // Netnames are drawn only when scale is sufficient (level of details)
-            // so there is no point in caching them
-            m_view->SetLayerTarget( layer, KIGFX::TARGET_NONCACHED );
-            m_view->SetLayerDisplayOnly( layer );
-        }
-    }
-
-    m_view->SetLayerTarget( ITEM_GAL_LAYER( ANCHOR_VISIBLE ), KIGFX::TARGET_NONCACHED );
-    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
-
-    // Some more required layers settings
-    m_view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) );
-    m_view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
-    m_view->SetRequired( NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
-
-    // Front modules
-    m_view->SetRequired( ITEM_GAL_LAYER( PAD_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
-    m_view->SetRequired( ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
-    m_view->SetRequired( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-    m_view->SetRequired( F_Adhes, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-    m_view->SetRequired( F_Paste, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-    m_view->SetRequired( F_Mask, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-    m_view->SetRequired( F_CrtYd, ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
-    m_view->SetRequired( F_Fab, ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
-
-    // Back modules
-    m_view->SetRequired( ITEM_GAL_LAYER( PAD_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
-    m_view->SetRequired( ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
-    m_view->SetRequired( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-    m_view->SetRequired( B_Adhes, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-    m_view->SetRequired( B_Paste, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-    m_view->SetRequired( B_Mask, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-    m_view->SetRequired( B_CrtYd, ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
-    m_view->SetRequired( B_Fab, ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
-
-    m_view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
-    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GP_OVERLAY ) );
-    m_view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
-    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
-
-    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( WORKSHEET ) );
-    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GRID_VISIBLE ) );
-    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( DRC_VISIBLE ) );
+    setDefaultLayerOrder();
+    setDefaultLayerDeps();
 
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent window is an EDA_DRAW_FRAME (or a derived class)
@@ -307,6 +248,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( LAYER_ID aLayer )
 void PCB_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
 {
     m_view->ClearTopLayers();
+    setDefaultLayerOrder();
     m_view->SetTopLayer( aLayer );
 
     if( IsCopperLayer( aLayer ) )
@@ -314,7 +256,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
         // Bring some other layers to the front in case of copper layers and make them colored
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
-        LAYER_NUM layers[] = {
+        const LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ),
                 ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
                 ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
@@ -323,21 +265,43 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
-        {
             m_view->SetTopLayer( layers[i] );
+    }
+
+    const LAYER_NUM frontLayers[] = {
+        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_CrtYd, F_Fab,
+        ITEM_GAL_LAYER( PAD_FR_VISIBLE ), NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), -1
+    };
+
+    const LAYER_NUM backLayers[] = {
+        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_CrtYd, B_Fab,
+        ITEM_GAL_LAYER( PAD_BK_VISIBLE ), NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), -1
+    };
+
+    const LAYER_NUM* extraLayers = NULL;
+
+    // Bring a few more extra layers to the top depending on the selected board side
+    if( IsFrontLayer( aLayer ) )
+        extraLayers = frontLayers;
+    else if( IsBackLayer( aLayer ) )
+        extraLayers = backLayers;
+
+    if( extraLayers )
+    {
+        int topOrder = std::numeric_limits<int>::max();
+        const LAYER_NUM* l = extraLayers;
+
+        while( *l >= 0 )
+        {
+            m_view->SetTopLayer( *l );
+            topOrder = std::min( topOrder, m_view->GetLayerOrder( *l ) );
+            ++l;
         }
 
-        // Pads should be shown too
-        if( aLayer == B_Cu )
-        {
-            m_view->SetTopLayer( ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
-            m_view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ) );
-        }
-        else if( aLayer == F_Cu )
-        {
-            m_view->SetTopLayer( ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
-            m_view->SetTopLayer( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ) );
-        }
+        // Do not cover pads with copper
+        if( !IsCopperLayer( aLayer ) )
+            m_view->SetLayerOrder( aLayer, topOrder - 1 );
+
     }
 
     m_view->UpdateAllLayersOrder();
@@ -401,4 +365,77 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
 
     txt.Printf( wxT( "%d" ), board->GetRatsnest()->GetUnconnectedCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );
+}
+
+
+void PCB_DRAW_PANEL_GAL::setDefaultLayerOrder()
+{
+    for( LAYER_NUM i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
+    {
+        LAYER_NUM layer = GAL_LAYER_ORDER[i];
+        wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
+
+        m_view->SetLayerOrder( layer, i );
+    }
+}
+
+
+void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
+{
+    for( LAYER_NUM i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
+    {
+        LAYER_NUM layer = GAL_LAYER_ORDER[i];
+        wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
+
+        if( IsCopperLayer( layer ) )
+        {
+            // Copper layers are required for netname layers
+            m_view->SetRequired( GetNetnameLayer( layer ), layer );
+            m_view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
+        }
+        else if( IsNetnameLayer( layer ) )
+        {
+            // Netnames are drawn only when scale is sufficient (level of details)
+            // so there is no point in caching them
+            m_view->SetLayerTarget( layer, KIGFX::TARGET_NONCACHED );
+            m_view->SetLayerDisplayOnly( layer );
+        }
+    }
+
+    m_view->SetLayerTarget( ITEM_GAL_LAYER( ANCHOR_VISIBLE ), KIGFX::TARGET_NONCACHED );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
+
+    // Some more required layers settings
+    m_view->SetRequired( ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ) );
+    m_view->SetRequired( ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
+    m_view->SetRequired( NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ) );
+
+    // Front modules
+    m_view->SetRequired( ITEM_GAL_LAYER( PAD_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
+    m_view->SetRequired( ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ), ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
+    m_view->SetRequired( NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    m_view->SetRequired( F_Adhes, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    m_view->SetRequired( F_Paste, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    m_view->SetRequired( F_Mask, ITEM_GAL_LAYER( PAD_FR_VISIBLE ) );
+    m_view->SetRequired( F_CrtYd, ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
+    m_view->SetRequired( F_Fab, ITEM_GAL_LAYER( MOD_FR_VISIBLE ) );
+
+    // Back modules
+    m_view->SetRequired( ITEM_GAL_LAYER( PAD_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+    m_view->SetRequired( ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ), ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+    m_view->SetRequired( NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    m_view->SetRequired( B_Adhes, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    m_view->SetRequired( B_Paste, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    m_view->SetRequired( B_Mask, ITEM_GAL_LAYER( PAD_BK_VISIBLE ) );
+    m_view->SetRequired( B_CrtYd, ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+    m_view->SetRequired( B_Fab, ITEM_GAL_LAYER( MOD_BK_VISIBLE ) );
+
+    m_view->SetLayerTarget( ITEM_GAL_LAYER( GP_OVERLAY ), KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GP_OVERLAY ) );
+    m_view->SetLayerTarget( ITEM_GAL_LAYER( RATSNEST_VISIBLE ), KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
+
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( WORKSHEET ) );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GRID_VISIBLE ) );
+    m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( DRC_VISIBLE ) );
 }
