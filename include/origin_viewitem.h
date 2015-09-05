@@ -42,10 +42,11 @@ class ORIGIN_VIEWITEM : public EDA_ITEM
 {
 public:
     ///> Marker symbol styles
-    enum MARKER_STYLE { NONE, CROSS, X, DOT };
+    enum MARKER_STYLE { NONE, CROSS, X, DOT, CIRCLE_CROSS, CIRCLE_X, CIRCLE_DOT };
 
-    ORIGIN_VIEWITEM( const COLOR4D& aColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 ), MARKER_STYLE aStyle = X,
-                     int aSize = 16, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) );
+    ORIGIN_VIEWITEM( const COLOR4D& aColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 ),
+                     MARKER_STYLE aStyle = CIRCLE_X, int aSize = 16,
+                     const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) );
 
     const BOX2I ViewBBox() const;
 
@@ -69,6 +70,17 @@ public:
     wxString GetClass() const
     {
         return wxT( "ORIGIN_VIEWITEM" );
+    }
+
+    /**
+     * Function SetDrawAtZero()
+     * Set the draw at zero flag. When set the marker will be drawn when it's position is 0,0.
+     * Otherwise it will not be drawn when its position is 0,0
+     * @param aDrawFlag The value to set the draw at zero flag
+     */
+    inline void SetDrawAtZero( bool aDrawFlag )
+    {
+        m_drawAtZero = aDrawFlag;
     }
 
     inline void SetPosition( const VECTOR2D& aPosition )
@@ -123,6 +135,9 @@ protected:
 
     ///> Marker symbol.
     MARKER_STYLE    m_style;
+
+    ///> If set, the marker will be drawn even if its position is 0,0
+    bool            m_drawAtZero;
 };
 
 } // namespace KIGFX

@@ -30,7 +30,7 @@ using namespace KIGFX;
 
 ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const COLOR4D& aColor, MARKER_STYLE aStyle, int aSize, const VECTOR2D& aPosition ) :
     EDA_ITEM( NOT_USED ),   // this item is never added to a BOARD so it needs no type
-    m_position( aPosition ), m_size( aSize ), m_color( aColor ), m_style( aStyle )
+    m_position( aPosition ), m_size( aSize ), m_color( aColor ), m_style( aStyle ), m_drawAtZero( false )
 {
 }
 
@@ -45,8 +45,9 @@ const BOX2I ORIGIN_VIEWITEM::ViewBBox() const
 
 void ORIGIN_VIEWITEM::ViewDraw( int, GAL* aGal ) const
 {
-    // Legacy canvas does not draw markers if they are located in the (0, 0) point
-    if( m_position.x == 0 && m_position.y == 0 )
+    // Nothing to do if the target shouldn't be drawn at 0,0 and that's where the target is. This
+    // mimics the Legacy canvas that doesn't display most targets at 0,0
+    if( !m_drawAtZero && ( m_position.x == 0 ) && ( m_position.y == 0 ) )
         return;
 
     aGal->SetIsStroke( true );
@@ -54,7 +55,10 @@ void ORIGIN_VIEWITEM::ViewDraw( int, GAL* aGal ) const
     aGal->SetLineWidth( 1 );
     aGal->SetStrokeColor( m_color );
     VECTOR2D scaledSize = m_view->ToWorld( VECTOR2D( m_size, m_size ), false );
-    aGal->DrawCircle( m_position, scaledSize.x );
+
+    // Draw a circle around the marker's centre point if the style demands it
+    if( ( m_style == CIRCLE_CROSS ) || ( m_style == CIRCLE_DOT ) || ( m_style == CIRCLE_X ) )
+        aGal->DrawCircle( m_position, scaledSize.x );
 
     switch( m_style )
     {
@@ -62,17 +66,22 @@ void ORIGIN_VIEWITEM::ViewDraw( int, GAL* aGal ) const
             break;
 
         case CROSS:
-            aGal->DrawLine( m_position - VECTOR2D( scaledSize.x, 0 ), m_position + VECTOR2D( scaledSize.x, 0 ) );
-            aGal->DrawLine( m_position - VECTOR2D( 0, scaledSize.y ), m_position + VECTOR2D( 0, scaledSize.y ) );
+        case CIRCLE_CROSS:
+            aGal->DrawLine( m_position - VECTOR2D( scaledSize.x, 0 ),
+                            m_position + VECTOR2D( scaledSize.x, 0 ) );
+            aGal->DrawLine( m_position - VECTOR2D( 0, scaledSize.y ),
+                            m_position + VECTOR2D( 0, scaledSize.y ) );
             break;
 
         case X:
+        case CIRCLE_X:
             aGal->DrawLine( m_position - scaledSize, m_position + scaledSize );
             scaledSize.y = -scaledSize.y;
             aGal->DrawLine( m_position - scaledSize, m_position + scaledSize );
             break;
 
         case DOT:
+        case CIRCLE_DOT:
             aGal->DrawCircle( m_position, scaledSize.x / 4 );
             break;
     }

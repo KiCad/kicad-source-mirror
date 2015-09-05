@@ -26,6 +26,7 @@
 #define MODULE_TOOLS_H
 
 #include <tool/tool_interactive.h>
+#include <origin_viewitem.h>
 
 namespace KIGFX
 {
@@ -44,6 +45,7 @@ class MODULE_TOOLS : public TOOL_INTERACTIVE
 {
 public:
     MODULE_TOOLS();
+    ~MODULE_TOOLS();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason );
@@ -106,6 +108,10 @@ private:
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
     PCB_EDIT_FRAME* m_frame;
+
+    ///> Axis 0 marker
+    KIGFX::ORIGIN_VIEWITEM* m_axisOrigin;
+
 };
 
 #endif
