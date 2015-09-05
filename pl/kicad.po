@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-03 12:24+0100\n"
-"PO-Revision-Date: 2015-09-03 12:26+0100\n"
+"POT-Creation-Date: 2015-09-05 17:35+0100\n"
+"PO-Revision-Date: 2015-09-05 17:38+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -5981,7 +5981,7 @@ msgstr ""
 "Błąd %s."
 
 #: pcbnew/modview_frame.cpp:644
-#: pcbnew/footprint_wizard_frame.cpp:535
+#: pcbnew/footprint_wizard_frame.cpp:542
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -6115,25 +6115,29 @@ msgstr "Parametr"
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:561
+#: pcbnew/footprint_wizard_frame.cpp:568
 msgid "Select wizard to use"
 msgstr "Wybierz kreatora"
 
-#: pcbnew/footprint_wizard_frame.cpp:566
+#: pcbnew/footprint_wizard_frame.cpp:573
 msgid "Select previous editable item"
 msgstr "Wybierz poprzedni edytorwalny komponent "
 
-#: pcbnew/footprint_wizard_frame.cpp:570
+#: pcbnew/footprint_wizard_frame.cpp:577
 msgid "Select next editable item"
 msgstr "Wybierz następny edytowalny komponent"
 
-#: pcbnew/footprint_wizard_frame.cpp:575
+#: pcbnew/footprint_wizard_frame.cpp:582
 msgid "Show footprint in 3D viewer"
 msgstr "Pokaż footprint w przeglądarce 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:602
+#: pcbnew/footprint_wizard_frame.cpp:609
 msgid "Export the footprint to the editor"
 msgstr "Wstaw do edytora footprintów"
+
+#: pcbnew/footprint_wizard_frame.cpp:628
+msgid "Footprint Builder Messages"
+msgstr "Komunikaty Kreatora Footprintu"
 
 #: pcbnew/plugin.cpp:27
 #: pcbnew/io_mgr.cpp:42
@@ -10286,7 +10290,7 @@ msgstr "Wielokąt"
 msgid "no wizard selected"
 msgstr "Nie wybrano kreatora"
 
-#: pcbnew/footprint_wizard.cpp:130
+#: pcbnew/footprint_wizard.cpp:141
 msgid "Couldn't reload footprint wizard"
 msgstr "Nie mogę przeładować kreatora footprintów"
 
@@ -10884,95 +10888,95 @@ msgstr "Połącz strefy"
 msgid "Add modules"
 msgstr "Dodaj footprinty"
 
-#: pcbnew/tools/common_actions.cpp:418
+#: pcbnew/tools/common_actions.cpp:422
 msgid "Enumerate pads"
 msgstr "Ponumeruj pola lutownicze"
 
-#: pcbnew/tools/common_actions.cpp:422
+#: pcbnew/tools/common_actions.cpp:426
 msgid "Copy items"
 msgstr "Kopiuj elementy"
 
-#: pcbnew/tools/common_actions.cpp:426
+#: pcbnew/tools/common_actions.cpp:430
 msgid "Paste items"
 msgstr "Wstaw elementy"
 
-#: pcbnew/tools/common_actions.cpp:506
-#: pcbnew/tools/common_actions.cpp:507
+#: pcbnew/tools/common_actions.cpp:510
+#: pcbnew/tools/common_actions.cpp:511
 msgid "Run push & shove router (single tracks)"
 msgstr "Uruchom router P&S (pojedyncza ścieżka)"
 
-#: pcbnew/tools/common_actions.cpp:511
-#: pcbnew/tools/common_actions.cpp:512
+#: pcbnew/tools/common_actions.cpp:515
+#: pcbnew/tools/common_actions.cpp:516
 msgid "Run push & shove router (differential pairs)"
 msgstr "Uruchom router P&S (pary różnicowe)"
 
-#: pcbnew/tools/common_actions.cpp:516
-#: pcbnew/tools/common_actions.cpp:517
+#: pcbnew/tools/common_actions.cpp:520
+#: pcbnew/tools/common_actions.cpp:521
 msgid "Open Interactive Router settings"
 msgstr "Otwórz ustawienia interaktywnego routera"
 
-#: pcbnew/tools/common_actions.cpp:521
-#: pcbnew/tools/common_actions.cpp:522
+#: pcbnew/tools/common_actions.cpp:525
+#: pcbnew/tools/common_actions.cpp:526
 msgid "Open Differential Pair Dimension settings"
 msgstr "Otwórz ustawienia rozmiarów par różnicowych"
 
-#: pcbnew/tools/common_actions.cpp:534
+#: pcbnew/tools/common_actions.cpp:538
 msgid "Tune skew of a differential pair"
 msgstr "Dostrajanie długości ścieżek pary różnicowej"
 
-#: pcbnew/tools/common_actions.cpp:547
+#: pcbnew/tools/common_actions.cpp:551
 msgid "Create corner"
 msgstr "Utwórz narożnik"
 
-#: pcbnew/tools/common_actions.cpp:551
+#: pcbnew/tools/common_actions.cpp:555
 msgid "Remove corner"
 msgstr "Usuń narożnik"
 
-#: pcbnew/tools/common_actions.cpp:556
+#: pcbnew/tools/common_actions.cpp:560
 msgid "Align items to the top"
 msgstr "Wyrównaj elementy do górnej linii"
 
-#: pcbnew/tools/common_actions.cpp:557
+#: pcbnew/tools/common_actions.cpp:561
 msgid "Aligns selected items to the top edge"
 msgstr "Wyrównuje wybrane elementy do górnej krawędzi"
 
-#: pcbnew/tools/common_actions.cpp:561
+#: pcbnew/tools/common_actions.cpp:565
 msgid "Align items to the bottom"
 msgstr "Wyrównaj elementy do dolnej linii"
 
-#: pcbnew/tools/common_actions.cpp:562
+#: pcbnew/tools/common_actions.cpp:566
 msgid "Aligns selected items to the bottom edge"
 msgstr "Wyrównuje wybrane elementy do dolnej krawędzi"
 
-#: pcbnew/tools/common_actions.cpp:566
+#: pcbnew/tools/common_actions.cpp:570
 msgid "Align items to the left"
 msgstr "Wyrównaj elementy do lewej linii"
 
-#: pcbnew/tools/common_actions.cpp:567
+#: pcbnew/tools/common_actions.cpp:571
 msgid "Aligns selected items to the left edge"
 msgstr "Wyrównuje wybrane elementy do górnej krawędzi"
 
-#: pcbnew/tools/common_actions.cpp:571
+#: pcbnew/tools/common_actions.cpp:575
 msgid "Align items to the right"
 msgstr "Wyrównaj elementy do prawej linii"
 
-#: pcbnew/tools/common_actions.cpp:572
+#: pcbnew/tools/common_actions.cpp:576
 msgid "Aligns selected items to the right edge"
 msgstr "Wyrównuje wybrane elementy do prawej krawędzi"
 
-#: pcbnew/tools/common_actions.cpp:576
+#: pcbnew/tools/common_actions.cpp:580
 msgid "Distribute horizontally"
 msgstr "Rozłóż poziomo"
 
-#: pcbnew/tools/common_actions.cpp:577
+#: pcbnew/tools/common_actions.cpp:581
 msgid "Distributes selected items along the horizontal axis"
 msgstr "Rozkłada wybrane elementy względem poziomej osi"
 
-#: pcbnew/tools/common_actions.cpp:581
+#: pcbnew/tools/common_actions.cpp:585
 msgid "Distribute vertically"
 msgstr "Rozłóż pionowo"
 
-#: pcbnew/tools/common_actions.cpp:582
+#: pcbnew/tools/common_actions.cpp:586
 msgid "Distributes selected items along the vertical axis"
 msgstr "Rozkłada wybrane elementy względem pionowej osi"
 
