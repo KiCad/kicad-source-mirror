@@ -61,7 +61,7 @@ class FootprintWizardParameterManager:
         TODO: Hints are not supported, as there is as yet nowhere to
         put them in the KiCAD interface
         """
-
+        error = ""
         val = None
         if unit == self.uMM:
             val = pcbnew.FromMM(default)
@@ -74,8 +74,8 @@ class FootprintWizardParameterManager:
         elif unit == self.uBool:
             val = "True" if default else "False"  # ugly stringing
         else:
-            print "Warning: Unknown unit type: %s" % unit
-            return
+            error = "Warning: Unknown unit type: %s" % unit
+            return error
 
         if unit in [self.uNatural, self.uBool, self.uString]:
             param = "*%s" % param  # star prefix for natural
@@ -85,12 +85,17 @@ class FootprintWizardParameterManager:
 
         self.parameters[section][param] = val
 
+        return error
+
+
     def _PrintParameterTable(self):
         """
         Pretty-print the parameters we have
         """
+        message = ""
+
         for name, section in self.parameters.iteritems():
-            print "  %s:" % name
+            message += "  %s:" % name
 
             for key, value in section.iteritems():
                 unit = ""
@@ -103,7 +108,10 @@ class FootprintWizardParameterManager:
                 else:
                     value = pcbnew.ToMM(value)
 
-                print "    %s: %s%s" % (key, value, unit)
+                message += "    %s: %s%s\n" % (key, value, unit)
+
+        return message
+
 
     def _ParametersHaveErrors(self):
         """
@@ -121,6 +129,7 @@ class FootprintWizardParameterManager:
         """
         Pretty-print parameters with errors
         """
+        errors = ""
 
         for name, section in self.parameter_errors.iteritems():
             printed_section = False
@@ -128,10 +137,12 @@ class FootprintWizardParameterManager:
             for key, value in section.iteritems():
                 if value:
                     if not printed_section:
-                        print "  %s:" % name
+                        errors += "  %s:" % name
 
-                    print "       %s: %s (have %s)" % (
+                    errors += "       %s: %s (have %s)\n" % (
                         key, value, self.parameters[name][key])
+
+        return errors
 
     def ProcessParameters(self):
         """
@@ -143,22 +154,8 @@ class FootprintWizardParameterManager:
         self.CheckParameters()
 
         if self._ParametersHaveErrors():
-            print "Cannot build footprint: Parameters have errors:"
-            self._PrintParameterErrors()
             return False
 
-        """
-        Be aware print messages create IO exceptions, because the wizard
-        is run from Pcbnew. And if pcbnew is not run from a console, there is
-        no io channel to read the output of print function.
-        When the buffer is full, a IO exception is thrown.
-        """
-        """
-        print ("Building new %s footprint with the following parameters:"
-               % self.name)
-
-        self._PrintParameterTable()
-        """
         return True
 
     #################################################################
@@ -283,17 +280,26 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         """
         raise NotImplementedError
 
-    def BuildFootprint(self):
+    def BuildFootprint( self ):
         """
         Actually make the footprint. We defer all but the setup to
-        the implmenting class
+        the implementing class
         """
+
+        self.buildmessages = ""
 
         self.module = pcbnew.MODULE(None)  # create a new module
         # do it first, so if we return early, we don't segfault KiCad
 
         if not self.ProcessParameters():
+            self.buildmessages = "Cannot build footprint: Parameters have errors:\n"
+            self.buildmessages += self._PrintParameterErrors()
             return
+
+        self.buildmessages = ("Building new %s footprint with the following parameters:\n"
+                   % self.name)
+
+        self.buildmessages += self._PrintParameterTable()
 
         self.draw = FootprintWizardDrawingAids.FootprintWizardDrawingAids(
             self.module)
@@ -312,3 +318,5 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         self.module.Value().SetThickness(thick)
 
         self.BuildThisFootprint()  # implementer's build function
+
+        return

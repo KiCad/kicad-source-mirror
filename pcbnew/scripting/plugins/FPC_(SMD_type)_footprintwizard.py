@@ -62,12 +62,12 @@ class FPCFootprintWizard(FootprintWizardPlugin):
     # This method checks the parameters provided to wizard and set errors
     def CheckParameters(self):
         p = self.parameters
-        pads            = p["Pads"]["*n"]
+        pad_count       = p["Pads"]["*n"]
         errors = ""
-        if (pads<1):
+        if( pad_count < 1 ):
             self.parameter_errors["Pads"]["n"]="Must be positive"
             errors +="Pads/n has wrong value, "
-        p["Pads"]["n"] = int(pads)  # make sure it stays as int (default is float)
+        p["Pads"]["n"] = int( pad_count )  # make sure it stays as int (default is float)
 
         pad_width       = p["Pads"]["width"]
         pad_height      = p["Pads"]["height"]
@@ -82,16 +82,14 @@ class FPCFootprintWizard(FootprintWizardPlugin):
 
     # build the footprint from parameters
     def BuildFootprint(self):
-
-        print "parameters:",self.parameters
-        #self.ClearErrors()
-        #print "errors:",self.parameter_errors
+        self.ClearErrors()
+        self.CheckParameters()
 
         module = MODULE(None) # create a new module
         self.module = module
 
         p = self.parameters
-        pads            = int(p["Pads"]["*n"])
+        pad_count       = int(p["Pads"]["*n"])
         pad_width       = p["Pads"]["width"]
         pad_height      = p["Pads"]["height"]
         pad_pitch       = p["Pads"]["pitch"]
@@ -100,13 +98,13 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         shl_to_pad      = p["Shield"]["shield_to_pad"]
         shl_from_top    = p["Shield"]["from_top"]
 
-        offsetX         = pad_pitch*(pads-1)/2
+        offsetX         = pad_pitch * ( pad_count-1 ) / 2
         size_pad = wxSize(pad_width,pad_height)
         size_shld = wxSize(shl_width,shl_height)
         size_text = wxSize( FromMM( 0.8), FromMM( 0.7) )
         textposy = pad_height/2 + FromMM(1)
 
-        module.SetReference("FPC"+str(pads))   # give it a reference name
+        module.SetReference( "FPC"+str( pad_count ) )   # give it a reference name
         module.Reference().SetPos0(wxPoint(0, textposy))
         module.Reference().SetTextPosition(module.Reference().GetPos0())
         module.Reference().SetSize( size_text )
@@ -121,7 +119,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         module.SetFPID( fpid )
 
         # create a pad array and add it to the module
-        for n in range (0,pads):
+        for n in range ( 0, pad_count ):
             xpos = pad_pitch*n - offsetX
             pad = self.smdRectPad(module,size_pad,wxPoint(xpos,0),str(n+1))
             module.Add(pad)
@@ -131,7 +129,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         xpos = -shl_to_pad-offsetX
         pad_s0_pos = wxPoint(xpos,shl_from_top)
         pad_s0 = self.smdRectPad(module, size_shld, pad_s0_pos, "0")
-        xpos = (pads-1)*pad_pitch+shl_to_pad-offsetX
+        xpos = (pad_count-1) * pad_pitch+shl_to_pad - offsetX
         pad_s1_pos = wxPoint(xpos,shl_from_top)
         pad_s1 = self.smdRectPad(module, size_shld, pad_s1_pos, "0")
 
@@ -147,7 +145,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         # upper line
         posy = -pad_height/2 - linewidth/2 - margin
         xstart = - pad_pitch*0.5-offsetX
-        xend = pad_pitch * pads + xstart;
+        xend = pad_pitch * pad_count + xstart;
         outline.SetStartEnd( wxPoint(xstart, posy), wxPoint( xend, posy) )
         outline.SetLayer(F_SilkS)               #default: not needed
         outline.SetShape(S_SEGMENT)

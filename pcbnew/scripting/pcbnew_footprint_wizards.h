@@ -56,7 +56,7 @@ public:
     wxArrayString   GetParameterErrors( int aPage );
     // must return an empty string or an error description
     wxString        SetParameterValues( int aPage, wxArrayString& aValues );
-    MODULE*         GetModule();
+    MODULE*         GetFootprint( wxString * aMessages );
     void*           GetObject();
 };
 

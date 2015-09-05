@@ -314,11 +314,14 @@ wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& 
 MODULE* PyModule_to_MODULE( PyObject* obj0 );
 
 
-MODULE* PYTHON_FOOTPRINT_WIZARD::GetModule()
+MODULE* PYTHON_FOOTPRINT_WIZARD::GetFootprint( wxString * aMessages )
 {
     PyLOCK      lock;
 
-    PyObject*   result = CallMethod( "GetModule", NULL );
+    PyObject*   result = CallMethod( "GetFootprint", NULL );
+
+    if( aMessages )
+        *aMessages = CallRetStrMethod( "GetBuildMessages", NULL );
 
     if( !result )
         return NULL;
