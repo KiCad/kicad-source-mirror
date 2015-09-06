@@ -251,31 +251,27 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
     setDefaultLayerOrder();
     m_view->SetTopLayer( aLayer );
 
-    if( IsCopperLayer( aLayer ) )
-    {
-        // Bring some other layers to the front in case of copper layers and make them colored
-        // fixme do not like the idea of storing the list of layers here,
-        // should be done in some other way I guess..
-        const LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ), ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ),
-                ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
-                ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
-                ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), Dwgs_User,
-                ITEM_GAL_LAYER( DRC_VISIBLE )
-        };
+    // Layers that should always have on-top attribute enabled
+    const LAYER_NUM layers[] = {
+            ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE ),
+            ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+            ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ), NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE ),
+            ITEM_GAL_LAYER( GP_OVERLAY ), ITEM_GAL_LAYER( RATSNEST_VISIBLE ), Dwgs_User,
+            ITEM_GAL_LAYER( DRC_VISIBLE )
+    };
 
-        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
-            m_view->SetTopLayer( layers[i] );
-    }
+    for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
+        m_view->SetTopLayer( layers[i] );
 
+    // Extra layers that are brought to the top if a F.* or B.* is selected
     const LAYER_NUM frontLayers[] = {
-        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_CrtYd, F_Fab,
-        ITEM_GAL_LAYER( PAD_FR_VISIBLE ), NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), -1
+        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_CrtYd, F_Fab, ITEM_GAL_LAYER( PAD_FR_VISIBLE ),
+        NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE ), NETNAMES_GAL_LAYER( F_Cu ), -1
     };
 
     const LAYER_NUM backLayers[] = {
-        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_CrtYd, B_Fab,
-        ITEM_GAL_LAYER( PAD_BK_VISIBLE ), NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), -1
+        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_CrtYd, B_Fab, ITEM_GAL_LAYER( PAD_BK_VISIBLE ),
+        NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE ), NETNAMES_GAL_LAYER( B_Cu ), -1
     };
 
     const LAYER_NUM* extraLayers = NULL;
@@ -288,20 +284,19 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
 
     if( extraLayers )
     {
-        int topOrder = std::numeric_limits<int>::max();
         const LAYER_NUM* l = extraLayers;
 
         while( *l >= 0 )
-        {
-            m_view->SetTopLayer( *l );
-            topOrder = std::min( topOrder, m_view->GetLayerOrder( *l ) );
-            ++l;
-        }
+            m_view->SetTopLayer( *l++ );
 
-        // Do not cover pads with copper
+        // Move the active layer to the top
         if( !IsCopperLayer( aLayer ) )
-            m_view->SetLayerOrder( aLayer, topOrder - 1 );
-
+            m_view->SetLayerOrder( aLayer, m_view->GetLayerOrder( GAL_LAYER_ORDER[0] ) );
+    }
+    else if( IsCopperLayer( aLayer ) )
+    {
+        // Display labels for copper layers on the top
+        m_view->SetTopLayer( GetNetnameLayer( aLayer ) );
     }
 
     m_view->UpdateAllLayersOrder();
