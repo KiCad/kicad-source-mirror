@@ -178,7 +178,7 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     // Set the working grid size to a reasonable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
 
-    m_Active_Layer       = B_Cu;      // default active layer = bottom layer
+    m_Active_Layer       = F_Cu;     // default active layer = front layer
     m_Route_Layer_TOP    = F_Cu;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = B_Cu;
 
