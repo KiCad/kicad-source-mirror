@@ -120,6 +120,9 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     if( dlg.ShowModal() != wxID_OK )
         return;
 
+    if( IsGalCanvasActive() )
+        Compile_Ratsnest( NULL, false );
+
     wxBusyCursor( dummy );
     TRACKS_CLEANER cleaner( GetBoard() );
 
