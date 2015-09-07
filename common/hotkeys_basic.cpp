@@ -732,11 +732,7 @@ void ParseHotkeyConfig( const wxString&           data,
 
             if( hk_decr->m_InfoMsg == fctname )
             {
-                int code = KeyCodeFromKeyName( keyname );
-
-                if( code )
-                    hk_decr->m_KeyCode = code;
-
+                hk_decr->m_KeyCode = KeyCodeFromKeyName( keyname );
                 break;
             }
         }
