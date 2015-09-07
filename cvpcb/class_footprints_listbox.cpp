@@ -140,7 +140,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     {
         if( aFilterType == UNFILTERED )
         {
-            msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
+            msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
                         GetChars( aList.GetItem( ii ).GetNickname() ),
                         GetChars( aList.GetItem( ii ).GetFootprintName() ) );
             newList.Add( msg );
@@ -159,7 +159,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
           && aComponent->GetNetCount() != aList.GetItem( ii ).GetPadCount() )
             continue;
 
-        msg.Printf( wxT( "%3zu %s:%s" ), newList.GetCount() + 1,
+        msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
                     GetChars( aList.GetItem( ii ).GetNickname() ),
                     GetChars( aList.GetItem( ii ).GetFootprintName() ) );
         newList.Add( msg );

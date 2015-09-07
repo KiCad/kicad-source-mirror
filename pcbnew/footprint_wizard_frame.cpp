@@ -218,7 +218,7 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( m_messagesFrame )
-        m_messagesFrame->CloseMessagesWindow();
+        m_messagesFrame->SaveSettings();
 
     SaveSettings( config() );
 
@@ -655,20 +655,6 @@ FOOTPRINT_WIZARD_MESSAGES::FOOTPRINT_WIZARD_MESSAGES( FOOTPRINT_WIZARD_FRAME* aP
 }
 
 
-void FOOTPRINT_WIZARD_MESSAGES::CloseMessagesWindow()
-{
-    if( !IsIconized() )
-    {
-        m_position = GetPosition();
-        m_size = GetSize();
-    }
-
-    SaveSettings();
-
-    Close();
-}
-
-
 FOOTPRINT_WIZARD_MESSAGES::~FOOTPRINT_WIZARD_MESSAGES()
 {
 }
@@ -692,6 +678,12 @@ void FOOTPRINT_WIZARD_MESSAGES::ClearScreen()
 
 void FOOTPRINT_WIZARD_MESSAGES::SaveSettings()
 {
+    if( !IsIconized() )
+    {
+        m_position = GetPosition();
+        m_size = GetSize();
+    }
+
     m_config->Write( MESSAGE_BOX_POSX_KEY, m_position.x );
     m_config->Write( MESSAGE_BOX_POSY_KEY, m_position.y );
     m_config->Write( MESSAGE_BOX_SIZEX_KEY, m_size.x );

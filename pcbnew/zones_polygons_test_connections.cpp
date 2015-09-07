@@ -388,7 +388,7 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 }
 
 
-/* Compare function used for sorting candidates  by increasing zone zubnet
+/* Compare function used for sorting candidates  by increasing zone subnet
  */
 static bool CmpZoneSubnetValue( const BOARD_CONNECTED_ITEM* a, const BOARD_CONNECTED_ITEM* b )
 {

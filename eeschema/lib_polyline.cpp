@@ -417,10 +417,10 @@ void LIB_POLYLINE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
 wxString LIB_POLYLINE::GetSelectMenuText() const
 {
-    return wxString::Format( _( "Polyline at (%s, %s) with %zu points" ),
+    return wxString::Format( _( "Polyline at (%s, %s) with %d points" ),
                              GetChars( CoordinateToString( m_PolyPoints[0].x ) ),
                              GetChars( CoordinateToString( m_PolyPoints[0].y ) ),
-                             m_PolyPoints.size() );
+                             int( m_PolyPoints.size() ) );
 }
 
 
