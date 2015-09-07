@@ -215,7 +215,7 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
 #ifdef USE_J5_ATTR
     // Creates the TF,.GenerationSoftware. Format is:
     // %TF,.GenerationSoftware,<vendor>,<application name>[,<application version>]*%
-    text.Printf( wxT( "%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
+    text.Printf( wxT( "%%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
     aPlotter->AddLineToHeader( text );
 
     // creates the TF.CreationDate ext:
@@ -230,7 +230,7 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     // we want +(or -) hh:mm
     if( msg.Len() > 3 )
         msg.insert( 3, ":", 1 ),
-    text.Printf( wxT( "%TF.CreationDate,%s%s*%%" ), GetChars( date.FormatISOCombined() ), GetChars( msg ) );
+    text.Printf( wxT( "%%TF.CreationDate,%s%s*%%" ), GetChars( date.FormatISOCombined() ), GetChars( msg ) );
     aPlotter->AddLineToHeader( text );
 
     // Creates the TF,.JobID. Format is (from Gerber file format doc):
@@ -276,7 +276,7 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
 
-    text.Printf( wxT( "%TF.JobID,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
+    text.Printf( wxT( "%%TF.JobID,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
     aPlotter->AddLineToHeader( text );
 #endif
 
