@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-07 13:41+0100\n"
-"PO-Revision-Date: 2015-09-07 13:45+0100\n"
+"POT-Creation-Date: 2015-09-07 19:28+0100\n"
+"PO-Revision-Date: 2015-09-07 19:29+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -1965,10 +1965,10 @@ msgstr "Błąd przy usuwaniu wpisu"
 #: eeschema/libedit.cpp:549
 #, c-format
 msgid ""
-"Select one of %zu components to delete\n"
+"Select one of %d components to delete\n"
 "from library '%s'."
 msgstr ""
-"Wybierz jeden z %zu symboli do usunięcia\n"
+"Wybierz jeden z %d symboli do usunięcia\n"
 "z biblioteki '%s'."
 
 #: eeschema/libedit.cpp:553
@@ -2090,8 +2090,8 @@ msgstr "Brak obiektów"
 
 #: eeschema/netlist.cpp:176
 #, c-format
-msgid "Net count = %zu"
-msgstr "Liczba sieci = %zu"
+msgid "Net count = %d"
+msgstr "Liczba sieci = %d"
 
 #: eeschema/sch_sheet_pin.cpp:500
 #, c-format
@@ -4005,8 +4005,8 @@ msgstr "Punkt Y pozycji %d lini łamanej nie jest ustalona"
 
 #: eeschema/lib_polyline.cpp:420
 #, c-format
-msgid "Polyline at (%s, %s) with %zu points"
-msgstr "Linia łamana na poz. (%s, %s) złożona z %zu węzłów"
+msgid "Polyline at (%s, %s) with %d points"
+msgstr "Linia łamana na poz. (%s, %s) złożona z %d węzłów"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:53
 msgid "&Measurement units:"
