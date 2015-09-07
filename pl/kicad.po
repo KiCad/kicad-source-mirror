@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-05 17:35+0100\n"
-"PO-Revision-Date: 2015-09-05 17:38+0100\n"
+"POT-Creation-Date: 2015-09-07 13:41+0100\n"
+"PO-Revision-Date: 2015-09-07 13:45+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -3261,11 +3261,11 @@ msgstr "nie"
 msgid "yes"
 msgstr "tak"
 
-#: eeschema/sch_bus_entry.cpp:333
+#: eeschema/sch_bus_entry.cpp:335
 msgid "Bus to Wire Entry"
 msgstr "Wejście połączenia do magistrali"
 
-#: eeschema/sch_bus_entry.cpp:339
+#: eeschema/sch_bus_entry.cpp:341
 msgid "Bus to Bus Entry"
 msgstr "Wejście magistrali do magistrali"
 
@@ -5981,7 +5981,7 @@ msgstr ""
 "Błąd %s."
 
 #: pcbnew/modview_frame.cpp:644
-#: pcbnew/footprint_wizard_frame.cpp:542
+#: pcbnew/footprint_wizard_frame.cpp:547
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -6107,35 +6107,35 @@ msgstr "Nie mogę odnaleźć komponentu z odznacznikem \"%s\" na liście sieci."
 msgid "Footprint Wizard"
 msgstr "Kreator footprintów"
 
-#: pcbnew/footprint_wizard_frame.cpp:151
+#: pcbnew/footprint_wizard_frame.cpp:268
 msgid "Parameter"
 msgstr "Parametr"
 
-#: pcbnew/footprint_wizard_frame.cpp:153
+#: pcbnew/footprint_wizard_frame.cpp:270
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:568
-msgid "Select wizard to use"
-msgstr "Wybierz kreatora"
-
 #: pcbnew/footprint_wizard_frame.cpp:573
-msgid "Select previous editable item"
-msgstr "Wybierz poprzedni edytorwalny komponent "
+msgid "Select the wizard script to load and run"
+msgstr "Wybierz skrypt kreatora do uruchomienia"
 
-#: pcbnew/footprint_wizard_frame.cpp:577
-msgid "Select next editable item"
-msgstr "Wybierz następny edytowalny komponent"
+#: pcbnew/footprint_wizard_frame.cpp:578
+msgid "Select previous parameters page"
+msgstr "Wybierz poprzednią stronę parametrów"
 
 #: pcbnew/footprint_wizard_frame.cpp:582
+msgid "Select next parameters page"
+msgstr "Wybierz następną stronę parametrów"
+
+#: pcbnew/footprint_wizard_frame.cpp:587
 msgid "Show footprint in 3D viewer"
 msgstr "Pokaż footprint w przeglądarce 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:609
+#: pcbnew/footprint_wizard_frame.cpp:614
 msgid "Export the footprint to the editor"
 msgstr "Wstaw do edytora footprintów"
 
-#: pcbnew/footprint_wizard_frame.cpp:628
+#: pcbnew/footprint_wizard_frame.cpp:633
 msgid "Footprint Builder Messages"
 msgstr "Komunikaty Kreatora Footprintu"
 
@@ -8194,7 +8194,7 @@ msgstr "Krzywa"
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/class_drawsegment.cpp:678
+#: pcbnew/class_drawsegment.cpp:608
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Grafika PCB: %s, długość %s na %s"
@@ -10290,19 +10290,19 @@ msgstr "Wielokąt"
 msgid "no wizard selected"
 msgstr "Nie wybrano kreatora"
 
-#: pcbnew/footprint_wizard.cpp:141
+#: pcbnew/footprint_wizard.cpp:148
 msgid "Couldn't reload footprint wizard"
 msgstr "Nie mogę przeładować kreatora footprintów"
 
-#: pcbnew/layer_widget.cpp:432
+#: pcbnew/layer_widget.cpp:427
 msgid "Left click to select, middle click for color change, right click for menu"
 msgstr "Kliknij lewym by zaznaczyć, środkowym by zmienić kolor, prawym by wywołać menu"
 
-#: pcbnew/layer_widget.cpp:440
+#: pcbnew/layer_widget.cpp:435
 msgid "Enable this for visibility"
 msgstr "Włącz by była widoczna"
 
-#: pcbnew/layer_widget.cpp:467
+#: pcbnew/layer_widget.cpp:462
 msgid "Middle click for color change"
 msgstr "Zmiana koloru środkowym klawiszem"
 
@@ -10495,8 +10495,8 @@ msgid "New footprint"
 msgstr "Nowy footprint"
 
 #: pcbnew/tool_modedit.cpp:78
-msgid "New footprint using wizard"
-msgstr "Nowy footprint z kreatora footprintów"
+msgid "New footprint using the footprint wizard"
+msgstr "Nowy footprint z użyciem kreatora footprintów"
 
 #: pcbnew/tool_modedit.cpp:84
 msgid "Load footprint from library"
@@ -11008,20 +11008,20 @@ msgstr ", otwór: domyślny"
 msgid ", drill: "
 msgstr ", otwór:"
 
-#: pcbnew/tools/module_tools.cpp:209
+#: pcbnew/tools/module_tools.cpp:229
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr "Przytrzymaj lewy przycisk myszy i przesuń kursor nad polami lutowniczymi by je ponumerować"
 
-#: pcbnew/tools/module_tools.cpp:326
+#: pcbnew/tools/module_tools.cpp:346
 msgid "Select reference point"
 msgstr "Wybierz punkt odniesienia"
 
-#: pcbnew/tools/module_tools.cpp:377
+#: pcbnew/tools/module_tools.cpp:397
 #, c-format
 msgid "Copied %d item(s)"
 msgstr "Skopiowano pozycji: %d"
 
-#: pcbnew/tools/module_tools.cpp:401
+#: pcbnew/tools/module_tools.cpp:421
 msgid "Invalid clipboard contents"
 msgstr "Niepoprawna zawartość schowka"
 
@@ -18167,7 +18167,7 @@ msgstr "Folder wyjściowy '%s' został utworzony.\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "Nie można utworzyć folderu wyjściowego '%s'.\n"
 
-#: common/wxunittext.cpp:199
+#: common/wxunittext.cpp:195
 msgid "default "
 msgstr "domyślny "
 
@@ -18507,15 +18507,15 @@ msgstr "Preferowany edytor:"
 msgid "%s is already running, Continue?"
 msgstr "%s jest już uruchomiony. Kontynuować?"
 
-#: common/pgm_base.cpp:748
+#: common/pgm_base.cpp:744
 msgid "Language"
 msgstr "Język"
 
-#: common/pgm_base.cpp:749
+#: common/pgm_base.cpp:745
 msgid "Select application language (only for testing!)"
 msgstr "Wybierz język aplikacji (tylko do testowania!)"
 
-#: common/pgm_base.cpp:824
+#: common/pgm_base.cpp:820
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -18523,7 +18523,7 @@ msgstr ""
 "Uwaga! Niektóre ścieżki dostępu skonfigurowane tutaj zostały zdefiniowane \n"
 " na zewnątrz dla aktualnie działającego procesu i będą tymczasowo nadpisane."
 
-#: common/pgm_base.cpp:826
+#: common/pgm_base.cpp:822
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -18538,7 +18538,7 @@ msgstr ""
 "należy zmienić nazwy zmiennych systemowych będących w konflikcie\n"
 "lub usunąć je z systemu."
 
-#: common/pgm_base.cpp:833
+#: common/pgm_base.cpp:829
 msgid "Do not show this message again."
 msgstr "Nie pokazuj tej wiadomości ponownie."
 
