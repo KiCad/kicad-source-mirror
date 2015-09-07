@@ -546,8 +546,8 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         return;
     }
 
-    msg.Printf( _( "Select one of %zu components to delete\nfrom library '%s'." ),
-                nameList.GetCount(),
+    msg.Printf( _( "Select one of %d components to delete\nfrom library '%s'." ),
+                int( nameList.GetCount() ),
                 GetChars( lib->GetName() ) );
 
     wxSingleChoiceDialog dlg( this, msg, _( "Delete Part" ), nameList );

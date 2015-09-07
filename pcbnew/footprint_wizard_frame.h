@@ -212,7 +212,6 @@ public:
     ~FOOTPRINT_WIZARD_MESSAGES();
     void PrintMessage( const wxString& aMessage );
     void ClearScreen();
-	void CloseMessagesWindow();
     void SaveSettings();
     void LoadSettings();
 

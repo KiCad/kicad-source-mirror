@@ -173,7 +173,7 @@ NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase()
         return ret.release();
     }
 
-    wxString msg = wxString::Format( _( "Net count = %zu" ), ret->size() );
+    wxString msg = wxString::Format( _( "Net count = %d" ), int( ret->size() ) );
 
     SetStatusText( msg );
 
