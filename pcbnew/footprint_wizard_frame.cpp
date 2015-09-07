@@ -329,7 +329,9 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     wxArrayString   ptList  = footprintWizard->GetParameterTypes( page );
 
     // Dimension the wxGrid
-    m_parameterGrid->DeleteRows( 0, m_parameterGrid->GetNumberRows() );
+    if( m_parameterGrid->GetNumberRows() > 0 )
+        m_parameterGrid->DeleteRows( 0, m_parameterGrid->GetNumberRows() );
+
     m_parameterGrid->AppendRows( fpList.size() );
 
     wxString value, units;
