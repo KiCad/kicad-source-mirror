@@ -235,12 +235,7 @@ void EDA_MSG_PANEL::erase( wxDC* aDC )
     pen.SetColour( color );
 
     brush.SetColour( color );
-
-#if wxCHECK_VERSION( 3, 0, 0 )
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
-#else
-    brush.SetStyle( wxSOLID );
-#endif
 
     aDC->SetPen( pen );
     aDC->SetBrush( brush );

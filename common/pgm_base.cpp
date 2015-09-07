@@ -599,11 +599,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
     delete m_locale;
     m_locale = new wxLocale;
 
-#if wxCHECK_VERSION( 2, 9, 0 )
     if( !m_locale->Init( m_language_id ) )
-#else
-    if( !m_locale->Init( m_language_id, wxLOCALE_CONV_ENCODING ) )
-#endif
     {
         wxLogDebug( wxT( "This language is not supported by the system." ) );
 

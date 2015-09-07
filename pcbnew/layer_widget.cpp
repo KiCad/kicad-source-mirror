@@ -194,12 +194,7 @@ wxBitmap LAYER_WIDGET::makeBitmap( EDA_COLOR_T aColor )
     iconDC.SelectObject( bitmap );
 
     brush.SetColour( MakeColour( aColor ) );
-
-#if wxCHECK_VERSION( 3, 0, 0 )
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
-#else
-    brush.SetStyle( wxSOLID );
-#endif
 
     iconDC.SetBrush( brush );
 

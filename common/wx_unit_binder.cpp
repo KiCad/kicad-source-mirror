@@ -27,9 +27,7 @@
 #include <wx/textctrl.h>
 #include <limits>
 #include <base_units.h>
-#if wxCHECK_VERSION( 2, 9, 0 )
 #include <wx/valnum.h>
-#endif
 
 #include <boost/optional.hpp>
 

@@ -104,6 +104,12 @@ private:
     void                ReCreateParameterList();
 
     /**
+     * Function initParameterGrid
+     * Prepare the grid where parameters are displayed
+     */
+    void                initParameterGrid();
+
+    /**
      * Function SelectFootprintWizard
      * Shows the list of footprint wizards available into the system
      */

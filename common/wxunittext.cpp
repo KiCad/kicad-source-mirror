@@ -28,9 +28,7 @@
 #include <wx/textctrl.h>
 #include <limits>
 #include <base_units.h>
-#if wxCHECK_VERSION( 2, 9, 0 )
 #include <wx/valnum.h>
-#endif
 #include <boost/optional.hpp>
 
 WX_UNIT_TEXT::WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel, double aValue, double aStep ) :
@@ -58,7 +56,6 @@ WX_UNIT_TEXT::WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel, double aV
     SetValue( aValue );
     sizer->Add( m_inputValue, 0, wxALIGN_CENTER_VERTICAL | wxALL );
 
-#if wxCHECK_VERSION( 2, 9, 0 )  // Sorry guys, I am tired of dealing with 2.8 compatibility
     wxFloatingPointValidator<double> validator( 4, NULL, wxNUM_VAL_NO_TRAILING_ZEROES );
     validator.SetRange( 0.0, std::numeric_limits<double>::max() );
     m_inputValue->SetValidator( validator );
@@ -72,7 +69,6 @@ WX_UNIT_TEXT::WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel, double aV
 
     Connect( wxEVT_SPIN_UP, wxSpinEventHandler( WX_UNIT_TEXT::onSpinUpEvent ), NULL, this );
     Connect( wxEVT_SPIN_DOWN, wxSpinEventHandler( WX_UNIT_TEXT::onSpinDownEvent ), NULL, this );
-#endif
 
     sizer->AddSpacer( 5 );
 

@@ -75,7 +75,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 #ifdef KICAD_SCRIPTING
     m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE_FROM_WIZARD, wxEmptyString,
                             KiBitmap( module_wizard_xpm ),
-                            _( "New footprint using wizard" ) );
+                            _( "New footprint using the footprint wizard" ) );
 #endif
 
 
