@@ -1008,21 +1008,18 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenPcbModuleEditor( wxCommandEvent& event )
 {
-    if( !Kiface().IsSingle() )
+    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+
+    if( fn.IsOk() )
     {
-        wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+        KIWAY_PLAYER* fp_editor = Kiway().Player( FRAME_PCB_MODULE_EDITOR );
 
-        if( fn.IsOk() )
-        {
-            KIWAY_PLAYER* fp_editor = Kiway().Player( FRAME_PCB_MODULE_EDITOR );
+        // On Windows, Raise() does not bring the window on screen, when iconized
+        if( fp_editor->IsIconized() )
+            fp_editor->Iconize( false );
 
-            // On Windows, Raise() does not bring the window on screen, when iconized
-            if( fp_editor->IsIconized() )
-                fp_editor->Iconize( false );
-
-            fp_editor->Show( true );
-            fp_editor->Raise();
-        }
+        fp_editor->Show( true );
+        fp_editor->Raise();
     }
 }
 
@@ -1033,45 +1030,20 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 
     fn.SetExt( NetlistFileExtension );
 
-    if( Kiface().IsSingle() )
+    if( prepareForNetlist() )
     {
-        /* the CVPCB executable is now gone, only the *.kiface remains, that is because
-         * CVPCB can now read the netlist ONLY from the Kiway.  This removes cvpcb's
-         * use of the *.cmp file altogether, and also its use of reading the *.net file
-         * from disk.
-        ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
-        */
-    }
-    else
-    {
-#if 0
         KIWAY_PLAYER* player = Kiway().Player( FRAME_CVPCB, false );  // test open already.
 
         if( !player )
         {
             player = Kiway().Player( FRAME_CVPCB, true );
             player->Show( true );
-            player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+            // player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
         }
+
+        sendNetlist();
 
         player->Raise();
-#else
-        if( prepareForNetlist() )
-        {
-            KIWAY_PLAYER* player = Kiway().Player( FRAME_CVPCB, false );  // test open already.
-
-            if( !player )
-            {
-                player = Kiway().Player( FRAME_CVPCB, true );
-                player->Show( true );
-                // player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-            }
-
-            sendNetlist();
-
-            player->Raise();
-        }
-#endif
     }
 }
 
