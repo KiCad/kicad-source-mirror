@@ -725,10 +725,14 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     aToolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
     selectionTool->SanitizeSelection();
 
-    if( selectionTool->GetSelection().Empty() )
+    const SELECTION& selection = selectionTool->GetSelection();
+
+    if( selection.Empty() )
         return true;
 
-    if( IsOK( aToolMgr->GetEditFrame(), _( "Are you sure you want to delete item?" ) ) )
+    bool canBeRemoved = ( selection.Item<EDA_ITEM>( 0 )->Type() != PCB_MODULE_T );
+
+    if( canBeRemoved || IsOK( aToolMgr->GetEditFrame(), _( "Are you sure you want to delete item?" ) ) )
         aToolMgr->RunAction( COMMON_ACTIONS::remove, true );
     else
         aToolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
