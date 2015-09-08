@@ -434,11 +434,11 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case IMAGE_ROTATION:    // command IR0* or IR90* or IR180* or IR270*
         if( strnicmp( text, "0*", 2 ) == 0 )
             m_ImageRotation = 0;
-        if( strnicmp( text, "90*", 2 ) == 0 )
+        else if( strnicmp( text, "90*", 3 ) == 0 )
             m_ImageRotation = 90;
-        if( strnicmp( text, "180*", 2 ) == 0 )
+        else if( strnicmp( text, "180*", 4 ) == 0 )
             m_ImageRotation = 180;
-        if( strnicmp( text, "270*", 2 ) == 0 )
+        else if( strnicmp( text, "270*", 4 ) == 0 )
             m_ImageRotation = 270;
         else
             ReportMessage( _( "RS274X: Command \"IR\" rotation value not allowed" ) );
