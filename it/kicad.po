@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-07 13:15+0100\n"
-"PO-Revision-Date: 2015-09-07 13:20+0200\n"
+"POT-Creation-Date: 2015-09-08 08:03+0100\n"
+"PO-Revision-Date: 2015-09-08 08:03+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1362,29 +1362,29 @@ msgstr "Parametro"
 msgid "Units"
 msgstr "Unità"
 
-#: pcbnew/footprint_wizard_frame.cpp:547 pcbnew/modview_frame.cpp:644
+#: pcbnew/footprint_wizard_frame.cpp:549 pcbnew/modview_frame.cpp:644
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: visualizzatore 3D [%s]"
 
-#: pcbnew/footprint_wizard_frame.cpp:573
+#: pcbnew/footprint_wizard_frame.cpp:575
 msgid "Select the wizard script to load and run"
 msgstr "Seleziona l'assistente script da caricare ed eseguire"
 
-#: pcbnew/footprint_wizard_frame.cpp:578
+#: pcbnew/footprint_wizard_frame.cpp:580
 msgid "Select previous parameters page"
 msgstr "Seleziona la pagina parametri precedente"
 
-#: pcbnew/footprint_wizard_frame.cpp:582
+#: pcbnew/footprint_wizard_frame.cpp:584
 msgid "Select next parameters page"
 msgstr "Seleziona la pagina parametri successiva"
 
-#: pcbnew/footprint_wizard_frame.cpp:587 pcbnew/tool_modview.cpp:76
+#: pcbnew/footprint_wizard_frame.cpp:589 pcbnew/tool_modview.cpp:76
 #: pcbnew/tool_modview.cpp:178 pcbnew/menubar_modedit.cpp:237
 msgid "Show footprint in 3D viewer"
 msgstr "Mostra impronta nel visualizzatore 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:590 pcbnew/tool_modview.cpp:79
+#: pcbnew/footprint_wizard_frame.cpp:592 pcbnew/tool_modview.cpp:79
 #: pcbnew/tool_modedit.cpp:123 common/zoom.cpp:248
 #: eeschema/tool_viewlib.cpp:75 3d-viewer/3d_toolbar.cpp:68
 #: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
@@ -1392,7 +1392,7 @@ msgstr "Mostra impronta nel visualizzatore 3D"
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:595 pcbnew/tool_modview.cpp:84
+#: pcbnew/footprint_wizard_frame.cpp:597 pcbnew/tool_modview.cpp:84
 #: pcbnew/tool_modedit.cpp:126 common/zoom.cpp:250
 #: eeschema/tool_viewlib.cpp:80 3d-viewer/3d_toolbar.cpp:71
 #: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
@@ -1400,25 +1400,25 @@ msgstr "Ingrandisci"
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
 
-#: pcbnew/footprint_wizard_frame.cpp:600 pcbnew/tool_modview.cpp:89
+#: pcbnew/footprint_wizard_frame.cpp:602 pcbnew/tool_modview.cpp:89
 #: pcbnew/tool_modedit.cpp:129 common/zoom.cpp:252
 #: eeschema/tool_viewlib.cpp:85 3d-viewer/3d_toolbar.cpp:75
 #: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
 msgid "Redraw view"
 msgstr "Aggiorna vista"
 
-#: pcbnew/footprint_wizard_frame.cpp:605 pcbnew/tool_modview.cpp:94
+#: pcbnew/footprint_wizard_frame.cpp:607 pcbnew/tool_modview.cpp:94
 #: pcbnew/tool_modedit.cpp:133 common/zoom.cpp:254
 #: eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:87
 msgid "Zoom auto"
 msgstr "Inquadra tutto"
 
-#: pcbnew/footprint_wizard_frame.cpp:614
+#: pcbnew/footprint_wizard_frame.cpp:616
 msgid "Export the footprint to the editor"
 msgstr "Esporta l'impronta all'editor"
 
-#: pcbnew/footprint_wizard_frame.cpp:633
+#: pcbnew/footprint_wizard_frame.cpp:635
 msgid "Footprint Builder Messages"
 msgstr "Messaggi dalla creazione impronte"
 
@@ -13892,51 +13892,51 @@ msgstr "Info marcatore"
 msgid "Hotkeys List"
 msgstr "Tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:761
+#: common/hotkeys_basic.cpp:757
 msgid "Read Hotkey Configuration File:"
 msgstr "Leggi file configurazione tasti scorciatoia:"
 
-#: common/hotkeys_basic.cpp:791
+#: common/hotkeys_basic.cpp:787
 msgid "Write Hotkey Configuration File:"
 msgstr "Salva file configurazione tasti scorciatoia:"
 
-#: common/hotkeys_basic.cpp:819
+#: common/hotkeys_basic.cpp:815
 msgid "&List Current Keys"
 msgstr "E&lenco tasti correnti"
 
-#: common/hotkeys_basic.cpp:820
+#: common/hotkeys_basic.cpp:816
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Mostra i tasti scorciatoia e i comandi corrispondenti correnti"
 
-#: common/hotkeys_basic.cpp:825
+#: common/hotkeys_basic.cpp:821
 msgid "&Edit Hotkeys"
 msgstr "&Modifica tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:826
+#: common/hotkeys_basic.cpp:822
 msgid "Call the hotkeys editor"
 msgstr "Apri editor tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:833
+#: common/hotkeys_basic.cpp:829
 msgid "E&xport Hotkeys"
 msgstr "E&sporta tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:834
+#: common/hotkeys_basic.cpp:830
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr "Crea file tasti scorciatoia per esportare la configurazione corrente"
 
-#: common/hotkeys_basic.cpp:839
+#: common/hotkeys_basic.cpp:835
 msgid "&Import Hotkeys"
 msgstr "&Importa tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:840
+#: common/hotkeys_basic.cpp:836
 msgid "Load an existing hotkey configuration file"
 msgstr "Carica file configurazione tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:845
+#: common/hotkeys_basic.cpp:841
 msgid "&Hotkeys"
 msgstr "&Tasti scorciatoia"
 
-#: common/hotkeys_basic.cpp:846
+#: common/hotkeys_basic.cpp:842
 msgid "Hotkeys configuration and preferences"
 msgstr "Configurazione e preferenze tasti scorciatoia"
 
@@ -16163,10 +16163,10 @@ msgstr "Cancella errore nella voce"
 #: eeschema/libedit.cpp:549
 #, c-format
 msgid ""
-"Select one of %zu components to delete\n"
+"Select one of %d components to delete\n"
 "from library '%s'."
 msgstr ""
-"Seleziona uno di %zu componenti da cancellare\n"
+"Seleziona uno di %d componenti da cancellare\n"
 "dalla libreria \"%s\"."
 
 #: eeschema/libedit.cpp:553
@@ -17113,8 +17113,8 @@ msgstr "Nessun oggetto"
 
 #: eeschema/netlist.cpp:176
 #, c-format
-msgid "Net count = %zu"
-msgstr "Conteggio collegamenti = %zu"
+msgid "Net count = %d"
+msgstr "Numero collegamenti = %d"
 
 #: eeschema/lib_circle.cpp:76
 #, c-format
@@ -17335,8 +17335,8 @@ msgstr "Punto %d della polilinea posizione Y non definita"
 
 #: eeschema/lib_polyline.cpp:420
 #, c-format
-msgid "Polyline at (%s, %s) with %zu points"
-msgstr "Polilinea a (%s, %s) con %zu punti"
+msgid "Polyline at (%s, %s) with %d points"
+msgstr "Polilinea a (%s, %s) con %d punti"
 
 #: eeschema/block.cpp:458
 msgid "No item to paste."
