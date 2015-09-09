@@ -566,17 +566,21 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
         // Now we have one or more basic polygons: plot each polygon
         for( int ii = 0; ii < outlines.OutlineCount(); ii++ )
         {
-            cornerList.clear();
-            const SHAPE_LINE_CHAIN& path = outlines.COutline( ii );
+            for(int kk = 0; kk <= outlines.HoleCount (ii); kk++ )
+            {
+                cornerList.clear();
+                const SHAPE_LINE_CHAIN& path = (kk == 0) ? outlines.COutline( ii ) : outlines.CHole( ii, kk - 1 );
 
-            for( int jj = 0; jj < path.PointCount(); jj++ )
-                cornerList.push_back( wxPoint( path.CPoint( jj ).x , path.CPoint( jj ).x ) );
+                for( int jj = 0; jj < path.PointCount(); jj++ )
+                    cornerList.push_back( wxPoint( path.CPoint( jj ).x , path.CPoint( jj ).y ) );
 
-            // Ensure the polygon is closed
-            if( cornerList[0] != cornerList[cornerList.size() - 1] )
-                cornerList.push_back( cornerList[0] );
 
-            aPlotter->PlotPoly( cornerList, NO_FILL );
+                // Ensure the polygon is closed
+                if( cornerList[0] != cornerList[cornerList.size() - 1] )
+                    cornerList.push_back( cornerList[0] );
+
+                aPlotter->PlotPoly( cornerList, NO_FILL );
+            }
         }
 
         // Plot pad holes
