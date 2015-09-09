@@ -333,13 +333,11 @@ const COLOR4D ROUTER_PREVIEW_ITEM::assignColor( int aStyle ) const
 
     default:
         color = COLOR4D( 0.4, 0.4, 0.4, 1 ); break;
-
-        break;
     }
 
     return color;
 }
 
-const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -200;
-const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -210;
-const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -246;
+const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -300;
+const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -310;
+const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -346;
