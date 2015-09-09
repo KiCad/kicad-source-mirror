@@ -124,6 +124,7 @@ enum VRML_COLOR_INDEX
     VRML_COLOR_TRACK,
     VRML_COLOR_SILK,
     VRML_COLOR_TIN,
+    VRML_COLOR_TRANSPARENT,
     VRML_COLOR_LAST
 };
 
@@ -583,6 +584,7 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
     double  y   = drawseg->GetStart().y * aModel.scale;
     double  xf  = drawseg->GetEnd().x * aModel.scale;
     double  yf  = drawseg->GetEnd().y * aModel.scale;
+    double  r   = sqrt( pow( x - xf, 2 ) + pow( y - yf, 2 ) );
 
     // Items on the edge layer are handled elsewhere; just return
     if( layer == Edge_Cuts )
@@ -600,7 +602,10 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
         break;
 
     case S_CIRCLE:
-        export_vrml_circle( aModel, layer, x, y, xf, yf, w );
+        // Break circles into two 180 arcs to prevent the vrml hole from obscuring objects
+        // within the hole area of the circle.
+        export_vrml_arc( aModel, layer, x, y, x, y-r, w, 180.0 );
+        export_vrml_arc( aModel, layer, x, y, x, y+r, w, 180.0 );
         break;
 
     default:
@@ -671,9 +676,9 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
 static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
 {
     // draw graphic items
-    for( EDA_ITEM* drawing = pcb->m_Drawings; drawing != 0; drawing = drawing->Next() )
+    for( BOARD_ITEM* drawing = pcb->m_Drawings; drawing != 0; drawing = drawing->Next() )
     {
-        LAYER_ID layer = ( (DRAWSEGMENT*) drawing )->GetLayer();
+        LAYER_ID layer = drawing->GetLayer();
 
         if( layer != F_Cu && layer != B_Cu && layer != B_SilkS && layer != F_SilkS )
             continue;
