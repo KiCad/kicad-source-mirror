@@ -69,7 +69,7 @@ void OPENGL_COMPOSITOR::Initialize()
 
     // Use here a size of 24 bits for the depth buffer, 8 bits for the stencil buffer
     // this is required later for anti-aliasing
-    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, m_width, m_height );
+    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT16, m_width, m_height );
     glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT,
                                   GL_RENDERBUFFER_EXT, m_depthBuffer );
 

@@ -41,7 +41,7 @@
 using namespace KIGFX;
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
-const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
+const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 wxGLContext* OPENGL_GAL::glContext = NULL;
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
