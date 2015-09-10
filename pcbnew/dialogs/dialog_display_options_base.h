@@ -69,7 +69,7 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 562,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DISPLAY_OPTIONS_BASE();
 	
 };
