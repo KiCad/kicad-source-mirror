@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 17 2014)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -33,7 +33,7 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	m_staticText2->Wrap( -1 );
 	bSizer3->Add( m_staticText2, 0, wxALL, 5 );
 	
-	m_cbAutoAdjustOffset = new wxCheckBox( this, wxID_ANY, _("Auto Adjust"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+	m_cbAutoAdjustOffset = new wxCheckBox( this, wxID_ANY, _("Adjust automatically"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
 	bSizer3->Add( m_cbAutoAdjustOffset, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer6;
@@ -41,13 +41,13 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	bSizer6->Add( m_staticText5, 0, wxALL, 5 );
+	bSizer6->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	wxString m_IDF_RefUnitChoiceChoices[] = { _("mm"), _("inch") };
 	int m_IDF_RefUnitChoiceNChoices = sizeof( m_IDF_RefUnitChoiceChoices ) / sizeof( wxString );
 	m_IDF_RefUnitChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_IDF_RefUnitChoiceNChoices, m_IDF_RefUnitChoiceChoices, 0 );
 	m_IDF_RefUnitChoice->SetSelection( 0 );
-	bSizer6->Add( m_IDF_RefUnitChoice, 0, wxALL, 5 );
+	bSizer6->Add( m_IDF_RefUnitChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizer3->Add( bSizer6, 1, wxEXPAND, 5 );
@@ -55,13 +55,13 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, _("X ref:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( this, wxID_ANY, _("X Position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	bSizer4->Add( m_staticText3, 0, wxALL, 5 );
+	bSizer4->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_IDF_Xref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_IDF_Xref->SetMaxLength( 8 ); 
-	bSizer4->Add( m_IDF_Xref, 0, wxALL, 5 );
+	bSizer4->Add( m_IDF_Xref, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
@@ -69,19 +69,19 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Y Ref:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Y Position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	bSizer5->Add( m_staticText4, 0, wxALL, 5 );
+	bSizer5->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_IDF_Yref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_IDF_Yref->SetMaxLength( 8 ); 
-	bSizer5->Add( m_IDF_Yref, 0, wxALL, 5 );
+	bSizer5->Add( m_IDF_Yref, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizer3->Add( bSizer5, 1, wxEXPAND, 5 );
 	
 	
-	bSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
+	bSizer2->Add( bSizer3, 1, wxEXPAND|wxLEFT, 5 );
 	
 	wxString m_rbUnitSelectionChoices[] = { _("Millimeters"), _("Mils") };
 	int m_rbUnitSelectionNChoices = sizeof( m_rbUnitSelectionChoices ) / sizeof( wxString );
