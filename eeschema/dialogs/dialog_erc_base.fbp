@@ -10,7 +10,7 @@
         <property name="disconnect_python_events">0</property>
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
-        <property name="event_generation">table</property>
+        <property name="event_generation">connect</property>
         <property name="file">dialog_erc_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
@@ -24,7 +24,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_enum">1</property>
+        <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
             <property name="aui_managed">0</property>
@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_ERC_BASE</property>
             <property name="pos"></property>
-            <property name="size">519,392</property>
+            <property name="size">519,457</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Electrical Rules Checker</property>
@@ -1177,9 +1177,9 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                        <property name="flag">wxALL|wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxListBox" expanded="1">
+                                        <object class="wxHtmlWindow" expanded="1">
                                             <property name="BottomDockable">1</property>
                                             <property name="LeftDockable">1</property>
                                             <property name="RightDockable">1</property>
@@ -1193,7 +1193,6 @@
                                             <property name="caption"></property>
                                             <property name="caption_visible">1</property>
                                             <property name="center_pane">0</property>
-                                            <property name="choices"></property>
                                             <property name="close_button">1</property>
                                             <property name="context_help"></property>
                                             <property name="context_menu">1</property>
@@ -1207,13 +1206,13 @@
                                             <property name="font"></property>
                                             <property name="gripper">0</property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_MAKER_HTMLLISTBOX</property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
                                             <property name="min_size"></property>
                                             <property name="minimize_button">0</property>
-                                            <property name="minimum_size">500,250</property>
+                                            <property name="minimum_size"></property>
                                             <property name="moveable">1</property>
                                             <property name="name">m_MarkersList</property>
                                             <property name="pane_border">1</property>
@@ -1225,29 +1224,26 @@
                                             <property name="resize">Resizable</property>
                                             <property name="show">1</property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
-                                            <property name="subclass">ERC_HTML_LISTBOX; dialog_erc_listbox.h</property>
+                                            <property name="style">wxHW_SCROLLBAR_AUTO</property>
+                                            <property name="subclass">ERC_HTML_LISTFRAME; dialog_erc_listbox.h</property>
                                             <property name="toolbar_pane">0</property>
                                             <property name="tooltip"></property>
-                                            <property name="validator_data_type"></property>
-                                            <property name="validator_style">wxFILTER_NONE</property>
-                                            <property name="validator_type">wxDefaultValidator</property>
-                                            <property name="validator_variable"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style">wxSIMPLE_BORDER</property>
+                                            <property name="window_style">wxSUNKEN_BORDER</property>
                                             <event name="OnChar"></event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
+                                            <event name="OnHtmlCellClicked"></event>
+                                            <event name="OnHtmlCellHover"></event>
+                                            <event name="OnHtmlLinkClicked">OnLeftClickMarkersList</event>
                                             <event name="OnKeyDown"></event>
                                             <event name="OnKeyUp"></event>
                                             <event name="OnKillFocus"></event>
                                             <event name="OnLeaveWindow"></event>
-                                            <event name="OnLeftDClick"></event>
+                                            <event name="OnLeftDClick">OnLeftDblClickMarkersList</event>
                                             <event name="OnLeftDown"></event>
                                             <event name="OnLeftUp"></event>
-                                            <event name="OnListBox">OnLeftClickMarkersList</event>
-                                            <event name="OnListBoxDClick">OnLeftDblClickMarkersList</event>
                                             <event name="OnMiddleDClick"></event>
                                             <event name="OnMiddleDown"></event>
                                             <event name="OnMiddleUp"></event>

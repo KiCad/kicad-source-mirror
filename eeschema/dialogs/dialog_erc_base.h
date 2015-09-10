@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,7 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
-class ERC_HTML_LISTBOX;
+class ERC_HTML_LISTFRAME;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -25,7 +25,7 @@ class ERC_HTML_LISTBOX;
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
-#include <wx/listbox.h>
+#include <wx/html/htmlwin.h>
 #include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
@@ -36,33 +36,18 @@ class ERC_HTML_LISTBOX;
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define ID_ERASE_DRC_MARKERS 1000
+#define ID_ERC_CMP 1001
+#define ID_RESET_MATRIX 1002
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ERC_BASE
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_ERC_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
-		
-		// Private event handlers
-		void _wxFB_OnCloseErcDialog( wxCloseEvent& event ){ OnCloseErcDialog( event ); }
-		void _wxFB_OnLeftClickMarkersList( wxCommandEvent& event ){ OnLeftClickMarkersList( event ); }
-		void _wxFB_OnLeftDblClickMarkersList( wxCommandEvent& event ){ OnLeftDblClickMarkersList( event ); }
-		void _wxFB_OnEraseDrcMarkersClick( wxCommandEvent& event ){ OnEraseDrcMarkersClick( event ); }
-		void _wxFB_OnErcCmpClick( wxCommandEvent& event ){ OnErcCmpClick( event ); }
-		void _wxFB_OnButtonCloseClick( wxCommandEvent& event ){ OnButtonCloseClick( event ); }
-		void _wxFB_OnResetMatrixClick( wxCommandEvent& event ){ OnResetMatrixClick( event ); }
-		
 	
 	protected:
-		enum
-		{
-			ID_MAKER_HTMLLISTBOX = 1000,
-			ID_ERASE_DRC_MARKERS,
-			ID_ERC_CMP,
-			ID_RESET_MATRIX
-		};
-		
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelERC;
 		wxStaticText* m_ErcTotalErrorsText;
@@ -75,7 +60,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		wxStaticText* m_titleMessages;
 		wxTextCtrl* m_MessagesList;
 		wxStaticText* m_textMarkers;
-		ERC_HTML_LISTBOX* m_MarkersList;
+		ERC_HTML_LISTFRAME* m_MarkersList;
 		wxButton* m_buttondelmarkers;
 		wxButton* m_buttonERC;
 		wxButton* m_buttonClose;
@@ -85,8 +70,8 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseErcDialog( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnLeftClickMarkersList( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnLeftDblClickMarkersList( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLeftClickMarkersList( wxHtmlLinkEvent& event ) { event.Skip(); }
+		virtual void OnLeftDblClickMarkersList( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnErcCmpClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
@@ -95,7 +80,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Electrical Rules Checker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,392 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Electrical Rules Checker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,457 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_ERC_BASE();
 	
 };

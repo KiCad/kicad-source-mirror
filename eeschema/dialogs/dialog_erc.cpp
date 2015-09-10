@@ -45,7 +45,6 @@
 #include <lib_pin.h>
 
 #include <dialog_erc.h>
-#include <dialog_erc_listbox.h>
 #include <erc.h>
 #include <id.h>
 
@@ -60,9 +59,7 @@ END_EVENT_TABLE()
 
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
-    DIALOG_ERC_BASE(
-        parent,
-        ID_DIALOG_ERC       // parent looks for this ID explicitly
+    DIALOG_ERC_BASE( parent, ID_DIALOG_ERC  // parent looks for this ID explicitly
         )
 {
     m_parent = parent;
@@ -83,8 +80,10 @@ void DIALOG_ERC::Init()
     m_initialized = false;
 
     for( int ii = 0; ii < PIN_NMAX; ii++ )
+    {
         for( int jj = 0; jj < PIN_NMAX; jj++ )
             m_buttonList[ii][jj] = NULL;
+    }
 
     m_WriteResultOpt->SetValue( m_writeErcFile );
 
@@ -136,6 +135,7 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 }
 
 
+
 /* event handler for Close button
 */
 void DIALOG_ERC::OnButtonCloseClick( wxCommandEvent& event )
@@ -158,7 +158,8 @@ void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
 void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 {
     wxBusyCursor();
-    m_MarkersList->Clear();
+    m_MarkersList->ClearList();
+
     m_MessagesList->Clear();
     wxSafeYield();      // m_MarkersList must be redraw
     wxArrayString messageList;
@@ -169,16 +170,21 @@ void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_ERC::OnLeftClickMarkersList( wxCommandEvent& event )
+void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
 {
+    wxString link = event.GetLinkInfo().GetHref();
+
     m_lastMarkerFound = NULL;
 
-    int index = m_MarkersList->GetSelection();
+    long index;
 
-    if( index < 0 )
+    if( !link.ToLong( &index ) )
         return;
 
-    const SCH_MARKER* marker = m_MarkersList->GetItem( (unsigned) index );
+    const SCH_MARKER* marker = m_MarkersList->GetItem( index );
+
+    if( marker == NULL )
+        return;
 
     // Search for the selected marker
     SCH_SHEET_PATH* sheet;
@@ -224,7 +230,7 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxCommandEvent& event )
 }
 
 
-void DIALOG_ERC::OnLeftDblClickMarkersList( wxCommandEvent& event )
+void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
 {
     // Remember: OnLeftClickMarkersList was called just berfore
     // and therefore m_lastMarkerFound was initialized.
@@ -366,17 +372,16 @@ void DIALOG_ERC::DisplayERC_MarkersList()
             if( item->Type() != SCH_MARKER_T )
                 continue;
 
-            SCH_MARKER* Marker = (SCH_MARKER*) item;
+            SCH_MARKER* marker = (SCH_MARKER*) item;
 
-            if( Marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
+            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
 
-            // Add marker without refresh the displayed list:
-            m_MarkersList->AppendToList( Marker, false );
+            m_MarkersList->AppendToList( marker );
         }
     }
 
-    m_MarkersList->Refresh();
+    m_MarkersList->DisplayList();
 }
 
 

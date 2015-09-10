@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,34 +24,32 @@
 #ifndef DIALOG_ERC_LISTBOX_H
 #define DIALOG_ERC_LISTBOX_H
 
-#include <wx/htmllbox.h>
 #include <vector>
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <sch_marker.h>
+#include <wx/html/htmlwin.h>
 
 /**
- * Class ERC_HTML_LISTBOX
+ * Class ERC_HTML_LISTFRAME
  * is used to display a DRC_ITEM_LIST.
  */
-class ERC_HTML_LISTBOX : public wxHtmlListBox
+class ERC_HTML_LISTFRAME : public wxHtmlWindow
 {
 private:
-    std::vector<SCH_MARKER*> m_MarkerList;  ///< wxHtmlListBox does not own the list, I do
+    std::vector<SCH_MARKER*> m_MarkerListReferences;    // The pointers to markers shown in list
 
 public:
-    ERC_HTML_LISTBOX( wxWindow* parent, wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = 0, const wxString choices[] = NULL,
-                      int unused = 0 ) :
-        wxHtmlListBox( parent, id, pos, size, style )
+    ERC_HTML_LISTFRAME( wxWindow* parent, wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0 ) :
+        wxHtmlWindow( parent, id, pos, size, style | wxHW_NO_SELECTION )
     {
     }
 
-
-    ~ERC_HTML_LISTBOX()
+    ~ERC_HTML_LISTFRAME()
     {
     }
 
@@ -59,17 +57,36 @@ public:
     /**
      * Function AppendToList
      * @param aItem The SCH_MARKER* to add to the current list which will be
-     *  displayed in the wxHtmlListBox
-     * @param aRefresh = true to refresh the display
+     *  later displayed in the wxHtmlWindow
      */
-    void AppendToList( SCH_MARKER* aItem, bool aRefresh = true )
+    void AppendToList( SCH_MARKER* aMarker )
     {
-        m_MarkerList.push_back( aItem);
-        SetItemCount( m_MarkerList.size() );
-        if( aRefresh )
-            Refresh();
+        m_MarkerListReferences.push_back( aMarker );
     }
 
+    /**
+     * Function DisplayList();
+     * Build the Html marker list and show it
+     */
+    void DisplayList()
+    {
+        wxString htmlpage;
+
+        // for each marker, build a link like:
+        // <A HREF="marker_index">text to click</A>
+        // The "text to click" is the error name (first line of the full error text).
+        wxString marker_text;
+
+        for( unsigned ii = 0; ii < m_MarkerListReferences.size(); ii++ )
+        {
+            marker_text.Printf( wxT( "<A HREF=\"%d\">" ), ii );
+            marker_text << m_MarkerListReferences[ii]->GetReporter().ShowHtml();
+            marker_text.Replace( wxT( "<ul>" ), wxT( "</A><ul>" ), false );
+            htmlpage += marker_text;
+        }
+
+        SetPage( htmlpage );
+    }
 
     /**
      * Function GetItem
@@ -77,55 +94,24 @@ public:
      */
     const SCH_MARKER* GetItem( unsigned aIndex )
     {
-        if( m_MarkerList.size() > aIndex )
+        if( m_MarkerListReferences.size() > aIndex )
         {
-            return m_MarkerList[ aIndex ];
+            return m_MarkerListReferences[ aIndex ];
         }
+
         return NULL;
     }
 
 
     /**
-     * Function OnGetItem
-     * returns the html text associated with the DRC_ITEM given by index 'n'.
-     * @param n An index into the list.
-     * @return wxString - the simple html text to show in the listbox.
-     */
-    wxString OnGetItem( size_t n ) const
-    {
-        if( m_MarkerList.size() > n )
-        {
-            const SCH_MARKER* item = m_MarkerList[ n ];
-            if( item )
-                return item->GetReporter().ShowHtml();
-        }
-        return wxString();
-    }
-
-
-    /**
-     * Function OnGetItemMarkup
-     * returns the html text associated with the given index 'n'.
-     * @param n An index into the list.
-     * @return wxString - the simple html text to show in the listbox.
-     */
-    wxString OnGetItemMarkup( size_t n ) const
-    {
-        return OnGetItem( n );
-    }
-
-
-    /**
      * Function ClearList
-     * deletes all items in the list.
+     * deletes all items shown in the list.
      * Does not erase markers in schematic
      */
     void ClearList()
     {
-        m_MarkerList.clear();
-        SetItemCount( 0 );
-        SetSelection( -1 );        // -1 is no selection
-        Refresh();
+        m_MarkerListReferences.clear();
+        SetPage( wxEmptyString );
     }
 };
 
