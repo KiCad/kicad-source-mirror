@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,7 +22,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	wxStaticBoxSizer* sbSizerLeft;
 	sbSizerLeft = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Graphics:") ), wxVERTICAL );
 	
-	m_GraphicSegmWidthTitle = new wxStaticText( this, wxID_ANY, _("Graphic segm Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GraphicSegmWidthTitle = new wxStaticText( this, wxID_ANY, _("Graphic segment width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_GraphicSegmWidthTitle->Wrap( -1 );
 	sbSizerLeft->Add( m_GraphicSegmWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -30,7 +30,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_OptPcbSegmWidth->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbSegmWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_BoardEdgesWidthTitle = new wxStaticText( this, wxID_ANY, _("Board Edges Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BoardEdgesWidthTitle = new wxStaticText( this, wxID_ANY, _("Board edge width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BoardEdgesWidthTitle->Wrap( -1 );
 	sbSizerLeft->Add( m_BoardEdgesWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -38,7 +38,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_OptPcbEdgesWidth->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbEdgesWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_CopperTextWidthTitle = new wxStaticText( this, wxID_ANY, _("Copper Text Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CopperTextWidthTitle = new wxStaticText( this, wxID_ANY, _("Copper text thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CopperTextWidthTitle->Wrap( -1 );
 	sbSizerLeft->Add( m_CopperTextWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -46,7 +46,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_OptPcbTextWidth->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbTextWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_TextSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text Size V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextSizeVTitle->Wrap( -1 );
 	sbSizerLeft->Add( m_TextSizeVTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -54,7 +54,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_OptPcbTextVSize->SetMaxLength( 0 ); 
 	sbSizerLeft->Add( m_OptPcbTextVSize, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_TextSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text Size H"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextSizeHTitle->Wrap( -1 );
 	sbSizerLeft->Add( m_TextSizeHTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -68,7 +68,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	wxStaticBoxSizer* sbSizerMiddle;
 	sbSizerMiddle = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprints:") ), wxVERTICAL );
 	
-	m_EdgeModWidthTitle = new wxStaticText( this, wxID_ANY, _("Edges Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeModWidthTitle = new wxStaticText( this, wxID_ANY, _("Edge width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_EdgeModWidthTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_EdgeModWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -76,7 +76,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_OptModuleEdgesWidth->SetMaxLength( 0 ); 
 	sbSizerMiddle->Add( m_OptModuleEdgesWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("Text Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("Text thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModWidthTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_TextModWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -84,7 +84,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_OptModuleTextWidth->SetMaxLength( 0 ); 
 	sbSizerMiddle->Add( m_OptModuleTextWidth, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text Size V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeVTitle = new wxStaticText( this, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeVTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_TextModSizeVTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -92,7 +92,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	m_OptModuleTextVSize->SetMaxLength( 0 ); 
 	sbSizerMiddle->Add( m_OptModuleTextVSize, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text Size H"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModSizeHTitle = new wxStaticText( this, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModSizeHTitle->Wrap( -1 );
 	sbSizerMiddle->Add( m_TextModSizeHTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -106,7 +106,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	wxStaticBoxSizer* sbSizerRight;
 	sbSizerRight = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General:") ), wxVERTICAL );
 	
-	m_DefaultPenSizeTitle = new wxStaticText( this, wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaultPenSizeTitle = new wxStaticText( this, wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DefaultPenSizeTitle->Wrap( -1 );
 	m_DefaultPenSizeTitle->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	
@@ -122,6 +122,9 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
 	
+	
+	bSizerMain->Add( 0, 0, 0, wxEXPAND, 5 );
+	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
@@ -134,6 +137,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	// Connect Events
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::OnCancelClick ), NULL, this );
