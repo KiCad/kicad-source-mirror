@@ -130,10 +130,10 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg()
     {
     case S_CIRCLE:
         SetTitle( _( "Circle Properties" ) );
-        m_StartPointXLabel->SetLabel( _( "Center X" ) );
-        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
-        m_EndPointXLabel->SetLabel( _( "Point X" ) );
-        m_EndPointYLabel->SetLabel( _( "Point Y" ) );
+        m_StartPointXLabel->SetLabel( _( "Center X:" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y:" ) );
+        m_EndPointXLabel->SetLabel( _( "Point X:" ) );
+        m_EndPointYLabel->SetLabel( _( "Point Y:" ) );
         m_Angle_Text->Show( false );
         m_Angle_Ctrl->Show( false );
         m_AngleUnit->Show( false );
@@ -141,10 +141,10 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg()
 
     case S_ARC:
         SetTitle( _( "Arc Properties" ) );
-        m_StartPointXLabel->SetLabel( _( "Center X" ) );
-        m_StartPointYLabel->SetLabel( _( "Center Y" ) );
-        m_EndPointXLabel->SetLabel( _( "Start Point X" ) );
-        m_EndPointYLabel->SetLabel( _( "Start Point Y" ) );
+        m_StartPointXLabel->SetLabel( _( "Center X:" ) );
+        m_StartPointYLabel->SetLabel( _( "Center Y:" ) );
+        m_EndPointXLabel->SetLabel( _( "Start Point X:" ) );
+        m_EndPointYLabel->SetLabel( _( "Start Point Y:" ) );
 
         // Here the angle is a double, but the UI is still working with integers.
         msg << int( m_item->GetAngle() );
@@ -327,7 +327,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::itemValuesOK()
 
     if( error_msgs.GetCount() )
     {
-        HTML_MESSAGE_BOX dlg( this, _( "Error list" ) );
+        HTML_MESSAGE_BOX dlg( this, _( "Error List" ) );
         dlg.ListSet( error_msgs );
         dlg.ShowModal();
     }
