@@ -912,7 +912,7 @@
                                                                     <property name="caption"></property>
                                                                     <property name="caption_visible">1</property>
                                                                     <property name="center_pane">0</property>
-                                                                    <property name="choices">&quot;Circular shape&quot; &quot;Oval shape&quot; &quot;Rectangular shape&quot; &quot;Trapezoidal shape&quot;</property>
+                                                                    <property name="choices">&quot;Circular&quot; &quot;Oval&quot; &quot;Rectangular&quot; &quot;Trapezoidal&quot;</property>
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
@@ -3342,7 +3342,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Trap. delta dim:</property>
+                                                                    <property name="label">Trapezoid delta:</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -3599,7 +3599,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Trap. direction:</property>
+                                                                    <property name="label">Trapezoid direction:</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -6285,11 +6285,11 @@
                                                             <property name="orient">wxVERTICAL</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
-                                                            <object class="sizeritem" expanded="0">
+                                                            <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
                                                                 <property name="flag">wxEXPAND</property>
                                                                 <property name="proportion">0</property>
-                                                                <object class="wxFlexGridSizer" expanded="0">
+                                                                <object class="wxFlexGridSizer" expanded="1">
                                                                     <property name="cols">3</property>
                                                                     <property name="flexible_direction">wxBOTH</property>
                                                                     <property name="growablecols">1</property>
@@ -8228,7 +8228,7 @@
                             <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                             <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
-                                <property name="minimum_size">100,-1</property>
+                                <property name="minimum_size">200,-1</property>
                                 <property name="name">bSizerDisplayPad</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
@@ -8280,7 +8280,7 @@
                                         <property name="pos"></property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
-                                        <property name="size">200,200</property>
+                                        <property name="size">200,-1</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
