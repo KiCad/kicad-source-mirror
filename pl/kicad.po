@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-07 19:28+0100\n"
-"PO-Revision-Date: 2015-09-07 19:29+0100\n"
+"POT-Creation-Date: 2015-09-11 07:28+0100\n"
+"PO-Revision-Date: 2015-09-11 08:04+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -2481,11 +2481,11 @@ msgstr "Plik '%s' już istnieje. Użyj polecenia Otwórz"
 msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
-#: eeschema/schframe.cpp:1111
+#: eeschema/schframe.cpp:1083
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1341
+#: eeschema/schframe.cpp:1313
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -2773,75 +2773,75 @@ msgstr "Otwórz projekt schematu"
 msgid "Save schematic project"
 msgstr "Zapisz projekt schematu"
 
-#: eeschema/tool_sch.cpp:71
+#: eeschema/tool_sch.cpp:70
 msgid "Page settings"
 msgstr "Ustawienia strony"
 
-#: eeschema/tool_sch.cpp:76
+#: eeschema/tool_sch.cpp:75
 msgid "Print schematic"
 msgstr "Drukuj schemat"
 
-#: eeschema/tool_sch.cpp:82
+#: eeschema/tool_sch.cpp:81
 msgid "Cut selected item"
 msgstr "Wytnij zaznaczony element"
 
-#: eeschema/tool_sch.cpp:85
+#: eeschema/tool_sch.cpp:84
 msgid "Copy selected item"
 msgstr "Kopiuj zaznaczony element"
 
-#: eeschema/tool_sch.cpp:88
+#: eeschema/tool_sch.cpp:87
 msgid "Paste"
 msgstr "Wklej"
 
-#: eeschema/tool_sch.cpp:106
+#: eeschema/tool_sch.cpp:105
 msgid "Find and replace text"
 msgstr "Wyszukuje i zamienia tekst"
 
-#: eeschema/tool_sch.cpp:128
+#: eeschema/tool_sch.cpp:127
 msgid "Navigate schematic hierarchy"
 msgstr "Nawigacja w hierarchii schematu"
 
-#: eeschema/tool_sch.cpp:132
+#: eeschema/tool_sch.cpp:131
 msgid "Leave sheet"
 msgstr "Opuść arkusz"
 
-#: eeschema/tool_sch.cpp:149
+#: eeschema/tool_sch.cpp:148
 msgid "Perform electrical rules check"
 msgstr "Przeprowadza kontrolę reguł projektowych pod względem elektrycznym"
 
-#: eeschema/tool_sch.cpp:152
+#: eeschema/tool_sch.cpp:151
 msgid "Generate netlist"
 msgstr "Generowanie listy sieci"
 
-#: eeschema/tool_sch.cpp:165
+#: eeschema/tool_sch.cpp:162
 msgid "Footprint Editor"
 msgstr "Edytor Footprintów"
 
-#: eeschema/tool_sch.cpp:170
+#: eeschema/tool_sch.cpp:165
 msgid "Run CvPcb to associate components and footprints"
 msgstr "Uruchom CvPcb - Przypisz footprinty komponentom ze schematu"
 
-#: eeschema/tool_sch.cpp:174
+#: eeschema/tool_sch.cpp:168
 msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Uruchom Pcbnew - Stwórz obwód drukowany"
 
-#: eeschema/tool_sch.cpp:201
+#: eeschema/tool_sch.cpp:195
 msgid "Ascend/descend hierarchy"
 msgstr "Hierarchia wznosząca lub opadająca"
 
-#: eeschema/tool_sch.cpp:257
+#: eeschema/tool_sch.cpp:251
 msgid "Add bitmap image"
 msgstr "Dodaj obraz w postaci bitmapy"
 
-#: eeschema/tool_sch.cpp:283
+#: eeschema/tool_sch.cpp:277
 msgid "Set unit to inch"
 msgstr "Wybierz jednostki w calach"
 
-#: eeschema/tool_sch.cpp:287
+#: eeschema/tool_sch.cpp:281
 msgid "Set unit to mm"
 msgstr "Wybierz jednostki w milimetrach"
 
-#: eeschema/tool_sch.cpp:301
+#: eeschema/tool_sch.cpp:295
 msgid "HV orientation for wires and bus"
 msgstr "Orientacja dla połączeń i magistral"
 
@@ -3594,15 +3594,15 @@ msgstr "Generuje listę sieci w celu dalszego jej przetwarzania"
 msgid "Generate Bill of &Materials"
 msgstr "Generuj listę &materiałową"
 
-#: eeschema/menubar.cpp:471
+#: eeschema/menubar.cpp:469
 msgid "A&ssign Component Footprint"
 msgstr "Przypisz footprinty komponentom"
 
-#: eeschema/menubar.cpp:472
+#: eeschema/menubar.cpp:470
 msgid "Run CvPcb"
 msgstr "Uruchom CvPcb"
 
-#: eeschema/menubar.cpp:479
+#: eeschema/menubar.cpp:476
 msgid "&Layout Printed Circuit Board"
 msgstr "Stwórz obwód drukowany"
 
@@ -4380,7 +4380,7 @@ msgid "Power component value text cannot be modified!"
 msgstr "Pole Wartość portu zasilania nie może być zmieniane!"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:77
-#: eeschema/dialogs/dialog_erc_base.cpp:135
+#: eeschema/dialogs/dialog_erc_base.cpp:123
 msgid "Options"
 msgstr "Opcje"
 
@@ -4600,47 +4600,47 @@ msgstr ""
 "\n"
 "Ta operacja usunie istniejącą numerację i nie może zostać cofnięta."
 
-#: eeschema/dialogs/dialog_erc_base.cpp:40
+#: eeschema/dialogs/dialog_erc_base.cpp:30
 msgid "ERC Report:"
 msgstr "Raport ERC:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:45
+#: eeschema/dialogs/dialog_erc_base.cpp:35
 msgid "Total:"
 msgstr "W sumie:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:52
+#: eeschema/dialogs/dialog_erc_base.cpp:42
 msgid "Warnings:"
 msgstr "Ostrzeżenia:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:59
+#: eeschema/dialogs/dialog_erc_base.cpp:49
 msgid "Errors:"
 msgstr "Błędy:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:69
+#: eeschema/dialogs/dialog_erc_base.cpp:59
 msgid "Create ERC file report"
 msgstr "Utwórz plik raportu"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:78
+#: eeschema/dialogs/dialog_erc_base.cpp:68
 msgid "Messages:"
 msgstr "Wiadomości:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:91
+#: eeschema/dialogs/dialog_erc_base.cpp:81
 msgid "Error list:"
 msgstr "Lista błędów:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:103
+#: eeschema/dialogs/dialog_erc_base.cpp:91
 msgid "&Delete Markers"
 msgstr "Usuń znaczniki"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:106
+#: eeschema/dialogs/dialog_erc_base.cpp:94
 msgid "&Run"
 msgstr "Uruchom"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:120
+#: eeschema/dialogs/dialog_erc_base.cpp:108
 msgid "ERC"
 msgstr "ERC"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:125
+#: eeschema/dialogs/dialog_erc_base.cpp:113
 msgid "Reset"
 msgstr "Resetuj"
 
@@ -5642,31 +5642,31 @@ msgstr "Styl"
 msgid "S&hape"
 msgstr "Kształt"
 
-#: eeschema/dialogs/dialog_erc.cpp:207
+#: eeschema/dialogs/dialog_erc.cpp:213
 msgid "Marker not found"
 msgstr "Nie znaleziono znacznika"
 
-#: eeschema/dialogs/dialog_erc.cpp:331
+#: eeschema/dialogs/dialog_erc.cpp:337
 msgid "No error or warning"
 msgstr "Brak błędów lub ostrzeżeń"
 
-#: eeschema/dialogs/dialog_erc.cpp:336
+#: eeschema/dialogs/dialog_erc.cpp:342
 msgid "Generate warning"
 msgstr "Generuj ostrzeżenie"
 
-#: eeschema/dialogs/dialog_erc.cpp:341
+#: eeschema/dialogs/dialog_erc.cpp:347
 msgid "Generate error"
 msgstr "Generuj błąd"
 
-#: eeschema/dialogs/dialog_erc.cpp:446
+#: eeschema/dialogs/dialog_erc.cpp:451
 msgid "Annotation required!"
 msgstr "Wymagana numeracja elementów!"
 
-#: eeschema/dialogs/dialog_erc.cpp:551
+#: eeschema/dialogs/dialog_erc.cpp:556
 msgid "ERC File"
 msgstr "Plik ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:552
+#: eeschema/dialogs/dialog_erc.cpp:557
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Pliki ERC (*.erc)|*.erc"
 
@@ -5981,7 +5981,7 @@ msgstr ""
 "Błąd %s."
 
 #: pcbnew/modview_frame.cpp:644
-#: pcbnew/footprint_wizard_frame.cpp:547
+#: pcbnew/footprint_wizard_frame.cpp:549
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -6115,27 +6115,27 @@ msgstr "Parametr"
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:573
+#: pcbnew/footprint_wizard_frame.cpp:575
 msgid "Select the wizard script to load and run"
 msgstr "Wybierz skrypt kreatora do uruchomienia"
 
-#: pcbnew/footprint_wizard_frame.cpp:578
+#: pcbnew/footprint_wizard_frame.cpp:580
 msgid "Select previous parameters page"
 msgstr "Wybierz poprzednią stronę parametrów"
 
-#: pcbnew/footprint_wizard_frame.cpp:582
+#: pcbnew/footprint_wizard_frame.cpp:584
 msgid "Select next parameters page"
 msgstr "Wybierz następną stronę parametrów"
 
-#: pcbnew/footprint_wizard_frame.cpp:587
+#: pcbnew/footprint_wizard_frame.cpp:589
 msgid "Show footprint in 3D viewer"
 msgstr "Pokaż footprint w przeglądarce 3D"
 
-#: pcbnew/footprint_wizard_frame.cpp:614
+#: pcbnew/footprint_wizard_frame.cpp:616
 msgid "Export the footprint to the editor"
 msgstr "Wstaw do edytora footprintów"
 
-#: pcbnew/footprint_wizard_frame.cpp:633
+#: pcbnew/footprint_wizard_frame.cpp:635
 msgid "Footprint Builder Messages"
 msgstr "Komunikaty Kreatora Footprintu"
 
@@ -10674,11 +10674,11 @@ msgstr "Zaznaczony obszar zawiera zablokowane elementy. Czy chcesz kontynuować?
 msgid "Clarify selection"
 msgstr "Sprecyzuj Wybór"
 
-#: pcbnew/tools/pcbnew_control.cpp:731
+#: pcbnew/tools/pcbnew_control.cpp:735
 msgid "Are you sure you want to delete item?"
 msgstr "Czy usunąć wybrane elementy?"
 
-#: pcbnew/tools/pcbnew_control.cpp:914
+#: pcbnew/tools/pcbnew_control.cpp:918
 msgid "Not available in OpenGL/Cairo canvases."
 msgstr "Nie dostepne dla OpenGL/Cairo."
 
@@ -11025,7 +11025,7 @@ msgstr "Skopiowano pozycji: %d"
 msgid "Invalid clipboard contents"
 msgstr "Niepoprawna zawartość schowka"
 
-#: pcbnew/exporters/export_vrml.cpp:709
+#: pcbnew/exporters/export_vrml.cpp:713
 msgid ""
 "Unable to calculate the board outlines;\n"
 "fall back to using the board boundary box."
@@ -11033,7 +11033,7 @@ msgstr ""
 "Nie można obliczyć obrysu płytki.\n"
 "Użyte zostanie pole obliczone na podstawie zawartości płytki."
 
-#: pcbnew/exporters/export_vrml.cpp:742
+#: pcbnew/exporters/export_vrml.cpp:746
 msgid ""
 "VRML Export Failed:\n"
 "Could not add holes to contours."
@@ -11041,7 +11041,7 @@ msgstr ""
 "Eksportowanie do VRML się nie powiodło:\n"
 "Nie można dodać otworów do konturów."
 
-#: pcbnew/exporters/export_vrml.cpp:1394
+#: pcbnew/exporters/export_vrml.cpp:1398
 msgid "IDF Export Failed:\n"
 msgstr "Eksport do IDF się nie powiódł:\n"
 
@@ -13167,15 +13167,15 @@ msgid "Set all tracks (no via) to their Netclass value"
 msgstr "Ustaw wszystkie ścieżki (nie uwzglęniaj przelotek) do ich klas połączeń"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:23
-msgid "Tracks and vias:"
+msgid "Tracks and Vias:"
 msgstr "Ścieżki i przelotki:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:25
-msgid "Tracks sketch mode"
+msgid "Show tracks in sketch mode"
 msgstr "Pokaż tylko zarys ścieżek"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:28
-msgid "Vias sketch mode"
+msgid "Show vias in sketch mode"
 msgstr "Pokaż tylko zarys przelotek"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:31
@@ -13198,14 +13198,14 @@ msgstr "Pokaż otwory przelotek:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:35
 msgid ""
-"Show (or not) via holes.\n"
+"Show or hide via holes.\n"
 "If Defined Holes is selected, only the non default size holes are shown"
 msgstr ""
 "Pokaż (lub ukryj) otwory przelotek.\n"
-"Jeśli opcja \"Zdefiniowne przelotki\" jest aktywna, pokazywane są tylko otwory niestandardowe"
+"Jeśli opcja \"Zdefiniowane przelotki\" jest zaznaczona, pokazywane są tylko otwory niestandardowe"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:43
-msgid "Routing help:"
+msgid "Routing Help:"
 msgstr "Pomoc w trasowaniu:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:45
@@ -13229,7 +13229,7 @@ msgid "Show Net Names:"
 msgstr "Pokaż nazwy sieci:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:49
-msgid "Show or not net names on pads and/or tracks"
+msgid "Show or hide net names on pads and/or tracks"
 msgstr "Pokazuj (lub nie) nazwy sieci na polach i ścieżkach"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
@@ -13245,12 +13245,12 @@ msgid "New and edited tracks with via area"
 msgstr "Nowe lub wyedytowane ścieżki z polem przelotki"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:55
-msgid "Show Tracks Clearance:"
+msgid "Show Track Clearance:"
 msgstr "Pokaż prześwit ścieżek:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:57
 msgid ""
-"Show( or not) tracks clearance area.\n"
+"Show or hide the track and via clearance area.\n"
 "If New track is selected,  track clearance area is shown only when creating the track."
 msgstr ""
 "Pokazuj (lub ukryj) obszar prześwitu ścieżek.\n"
@@ -13261,16 +13261,16 @@ msgid "Footprints:"
 msgstr "Footprinty:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:70
-msgid "Outlines sketch mode"
-msgstr "Pokaż tylko zarys konturów"
+msgid "Show outlines in sketch mode"
+msgstr "Pokaż tylko zarys szkicu"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:74
-msgid "Texts sketch mode"
+msgid "Show text in sketch mode"
 msgstr "Pokaż tylko zarys tekstu"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:78
-msgid "Pads sketch mode"
-msgstr "Pokaż tylko zarys pól lutowniczych"
+msgid "Show pads in sketch mode"
+msgstr "Pokaż tylko zarys padów"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:81
 msgid "Show pad clearance"
@@ -13281,15 +13281,15 @@ msgid "Show pad number"
 msgstr "Pokaż numer pola"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:88
-msgid "Show pad NoConnect"
-msgstr "Pokaż pola \"Niepołączone\""
+msgid "Show pad no net connection indicator"
+msgstr "Pokazuj pady bez wskaźnika połaczeń"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:96
-msgid "Others:"
+msgid "Other:"
 msgstr "Pozostałe:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:98
-msgid "Graphic items sketch mode"
+msgid "Show graphic items in sketch mode"
 msgstr "Pokaż tylko zarys elementów graficznych"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:102
@@ -14742,7 +14742,7 @@ msgid "Markers"
 msgstr "Znaczniki"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
-msgid "Clear Board"
+msgid "Clear board"
 msgstr "Wyczyść płytkę"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
@@ -15585,12 +15585,8 @@ msgid "Select an IDF export filename"
 msgstr "Wybierz nazwę pliku dla eksportu IDF"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
-msgid "Auto Adjust"
-msgstr "Automatyczna regulacja"
-
-#: pcbnew/dialogs/dialog_export_idf_base.cpp:58
-msgid "X ref:"
-msgstr "Odniesienie X:"
+msgid "Adjust automatically"
+msgstr "Dobierz automatycznie"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:86
 msgid "Mils"
@@ -16737,10 +16733,6 @@ msgstr "Pokaż tylko zarys tekstu"
 msgid "Show outlines in filled mode"
 msgstr "Pokaż szkic jako wypełniony"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:266
-msgid "Show outlines in sketch mode"
-msgstr "Pokaż tylko zarys szkicu"
-
 #: cvpcb/class_DisplayFootprintsFrame.cpp:472
 #, c-format
 msgid "Footprint '%s' not found"
@@ -16920,6 +16912,14 @@ msgstr "Opcje ścieżek:"
 #: cvpcb/dialogs/dialog_display_options_base.cpp:23
 msgid "Draw options"
 msgstr "Opcje rysowania"
+
+#: cvpcb/dialogs/dialog_display_options_base.cpp:25
+msgid "Graphic items sketch mode"
+msgstr "Pokaż tylko zarys elementów graficznych"
+
+#: cvpcb/dialogs/dialog_display_options_base.cpp:28
+msgid "Texts sketch mode"
+msgstr "Pokaż tylko zarys tekstu"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 msgid "Pad sketch mode"
@@ -18360,51 +18360,51 @@ msgstr "Niepoprawny znak w danych o rewizji"
 msgid "Hotkeys List"
 msgstr "Lista skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:761
+#: common/hotkeys_basic.cpp:757
 msgid "Read Hotkey Configuration File:"
 msgstr "Wczytaj plik konfiguracji klawiszy skrótów:"
 
-#: common/hotkeys_basic.cpp:791
+#: common/hotkeys_basic.cpp:787
 msgid "Write Hotkey Configuration File:"
 msgstr "Zapisz plik konfiguracji klawiszy skrótów:"
 
-#: common/hotkeys_basic.cpp:819
+#: common/hotkeys_basic.cpp:815
 msgid "&List Current Keys"
 msgstr "&Lista bieżących skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:820
+#: common/hotkeys_basic.cpp:816
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Wyświetl bieżące skróty klawiszowe i odpowiadające im polecenia"
 
-#: common/hotkeys_basic.cpp:825
+#: common/hotkeys_basic.cpp:821
 msgid "&Edit Hotkeys"
 msgstr "&Edytuj plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:826
+#: common/hotkeys_basic.cpp:822
 msgid "Call the hotkeys editor"
 msgstr "Uruchom edytor skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:833
+#: common/hotkeys_basic.cpp:829
 msgid "E&xport Hotkeys"
 msgstr "Eksportuj plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:834
+#: common/hotkeys_basic.cpp:830
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr "Utwórz plik konfiguracji klawiszy skrótów by wyeksportować bieżącą konfigurację klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:839
+#: common/hotkeys_basic.cpp:835
 msgid "&Import Hotkeys"
 msgstr "&Importuj konfigurację skrótów klawiszowych"
 
-#: common/hotkeys_basic.cpp:840
+#: common/hotkeys_basic.cpp:836
 msgid "Load an existing hotkey configuration file"
 msgstr "Wczytaj istniejący plik konfiguracji klawiszy skrótów"
 
-#: common/hotkeys_basic.cpp:845
+#: common/hotkeys_basic.cpp:841
 msgid "&Hotkeys"
 msgstr "Skróty klawiszowe"
 
-#: common/hotkeys_basic.cpp:846
+#: common/hotkeys_basic.cpp:842
 msgid "Hotkeys configuration and preferences"
 msgstr "Konfiguracja i właściwości skrótów klawiszowych"
 
@@ -21050,7 +21050,7 @@ msgstr "Właściwości symbolu"
 msgid "Sheet Pin Properties"
 msgstr "Właściwości arkusza pinów"
 
-#: eeschema/dialogs/dialog_erc_base.h:98
+#: eeschema/dialogs/dialog_erc_base.h:83
 msgid "Electrical Rules Checker"
 msgstr "Sprawdź poprawność elektryczną (ERC)"
 
@@ -21174,6 +21174,10 @@ msgstr "Kreator Footprintów"
 msgid "Generate Component Position Files"
 msgstr "Stwórz Plik Pozycji Komponentów"
 
+#: pcbnew/dialogs/dialog_display_options_base.h:72
+msgid "Display Options"
+msgstr "Opcje wyświetlania"
+
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:92
 msgid "Track & Via Properties"
 msgstr "Właściwości Ścieżek i Przelotek"
@@ -21294,10 +21298,6 @@ msgstr "Eksport IDFv3"
 msgid "Save footprint association in schematic component footprint fields"
 msgstr "Zapisz położenia footprintów w polach symboli schematów"
 
-#: cvpcb/dialogs/dialog_display_options_base.h:63
-msgid "Display Options"
-msgstr "Opcje wyświetlania"
-
 #: gerbview/dialogs/dialog_show_page_borders_base.h:50
 msgid "Page Borders"
 msgstr "Granice strony"
@@ -21346,3 +21346,23 @@ msgstr "Kalkulator PCB"
 msgid "New Item"
 msgstr "Nowy element"
 
+#~ msgid "Tracks sketch mode"
+#~ msgstr "Pokaż tylko zarys ścieżek"
+
+#~ msgid "Vias sketch mode"
+#~ msgstr "Pokaż tylko zarys przelotek"
+
+#~ msgid "Outlines sketch mode"
+#~ msgstr "Pokaż tylko zarys konturów"
+
+#~ msgid "Pads sketch mode"
+#~ msgstr "Pokaż tylko zarys pól lutowniczych"
+
+#~ msgid "Show pad NoConnect"
+#~ msgstr "Pokaż pola \"Niepołączone\""
+
+#~ msgid "Auto Adjust"
+#~ msgstr "Automatyczna regulacja"
+
+#~ msgid "X ref:"
+#~ msgstr "Odniesienie X:"
