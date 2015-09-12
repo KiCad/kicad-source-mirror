@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-12 13:04+0100\n"
-"PO-Revision-Date: 2015-09-12 13:13+0100\n"
+"POT-Creation-Date: 2015-09-12 22:17+0100\n"
+"PO-Revision-Date: 2015-09-12 22:22+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -5745,8 +5745,8 @@ msgid "Notes"
 msgstr "Notatki"
 
 #: eeschema/dialogs/dialog_color_config.cpp:68
-msgid "No Connect Symbol"
-msgstr "Symbol \"Nie połączone\""
+msgid "No connect symbol"
+msgstr "Symbol braku podłączenia"
 
 #: eeschema/dialogs/dialog_color_config.cpp:74
 msgid "Body background"
@@ -5782,11 +5782,11 @@ msgid "Hierarchical label"
 msgstr "Etykieta hierarchiczna"
 
 #: eeschema/dialogs/dialog_color_config.cpp:94
-msgid "Erc warning"
+msgid "ERC warning"
 msgstr "Ostrzeżenie ERC"
 
 #: eeschema/dialogs/dialog_color_config.cpp:95
-msgid "Erc error"
+msgid "ERC error"
 msgstr "Błąd ERC"
 
 #: eeschema/dialogs/dialog_color_config.cpp:96
@@ -5809,15 +5809,16 @@ msgstr "Czarny"
 msgid "Background Color"
 msgstr "Kolor Tła"
 
-#: eeschema/dialogs/dialog_color_config.cpp:288
+#: eeschema/dialogs/dialog_color_config.cpp:274
 msgid ""
-"Warning:\n"
 "Some items have the same color as the background\n"
-"and they will not be seen on screen"
+"and they will not be seen on the screen.  Are you\n"
+"sure you want to use these colors?"
 msgstr ""
 "Ostrzeżenie:\n"
 "Niektóre z elementów posiadają kolor tła\n"
-"i nie będą widoczne na ekranie"
+"i nie będą widoczne na ekranie, Czy na\n"
+"pewno chcesz uzyć tych kolorów?"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:30
 msgid "Has alternate symbol (DeMorgan)"
@@ -12457,6 +12458,10 @@ msgstr "Grubość:"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:116
 msgid "Orientation (0.1 deg):"
 msgstr "Orientacja (co 0.1 stopnia):"
+
+#: pcbnew/dialogs/dialog_export_vrml.cpp:245
+msgid "Unable to create file "
+msgstr "Nie jest możliwe utworzenie pliku"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:22
 msgid "Search for:"
@@ -21053,7 +21058,7 @@ msgstr "Obraz"
 msgid "Pin Properties"
 msgstr "Właściwości pinu"
 
-#: eeschema/dialogs/dialog_color_config_base.h:52
+#: eeschema/dialogs/dialog_color_config_base.h:47
 msgid "EESchema Colors"
 msgstr "Kolory Eeschema"
 
@@ -21201,7 +21206,7 @@ msgstr "Opcje wyświetlania"
 msgid "Track & Via Properties"
 msgstr "Właściwości Ścieżek i Przelotek"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.h:77
+#: pcbnew/dialogs/dialog_export_vrml_base.h:78
 msgid "VRML Export Options"
 msgstr "Opcje eksportu VRML"
 
@@ -21365,29 +21370,3 @@ msgstr "Kalkulator PCB"
 msgid "New Item"
 msgstr "Nowy element"
 
-#~ msgid "Position X"
-#~ msgstr "Pozycja X"
-
-#~ msgid "Position Y"
-#~ msgstr "Pozycja Y"
-
-#~ msgid "Copper Text Width"
-#~ msgstr "Szerokość tekstu ścieżek"
-
-#~ msgid "Text Size V"
-#~ msgstr "Pionowy rozmiar tekstu"
-
-#~ msgid "Text Size H"
-#~ msgstr "Poziomy rozmiar tekstu"
-
-#~ msgid "Edges Width"
-#~ msgstr "Szerokość krawędzi"
-
-#~ msgid "Circular shape"
-#~ msgstr "Kształt okrągły"
-
-#~ msgid "Oval shape"
-#~ msgstr "Kształt owalny"
-
-#~ msgid "Rectangular shape"
-#~ msgstr "Kształt prostokątny"
