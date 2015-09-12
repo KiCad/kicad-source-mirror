@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-12 22:17+0100\n"
-"PO-Revision-Date: 2015-09-12 22:22+0100\n"
+"POT-Creation-Date: 2015-09-12 22:25+0100\n"
+"PO-Revision-Date: 2015-09-12 22:26+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -4552,8 +4552,8 @@ msgstr ""
 "Ścieżki dostępu (systemowe i użytkownika) używane w wyszukiwaniu i ładowaniu plików bibliotek oraz plików dokumentacyjnych.\n"
 "Posortowane według coraz niższych priorytetów."
 
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:123
-msgid "Check for cache/library conflicts at schematic load"
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:120
+msgid "Check for cache/library conflicts when loading schematic"
 msgstr "Sprawdzaj konflikty pomiędzy biblioteką a pamięcią podręczną podczas ładowania schematu"
 
 #: eeschema/dialogs/dialog_annotate.cpp:195
