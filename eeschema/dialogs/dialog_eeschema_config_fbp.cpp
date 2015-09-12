@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,10 +51,10 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	bRightSizer->Add( m_buttonRemoveLib, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonUp = new wxButton( this, wxID_ANY, _("Up"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonUp, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bRightSizer->Add( m_buttonUp, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_buttonDown = new wxButton( this, wxID_ANY, _("Down"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonDown, 0, wxALL|wxEXPAND, 5 );
+	bRightSizer->Add( m_buttonDown, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizerLibsChoice->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -117,11 +117,11 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	
 	bMainSizer->Add( bSizerLower, 1, wxEXPAND, 5 );
 	
+	m_cbRescue = new wxCheckBox( this, wxID_ANY, _("Check for cache/library conflicts when loading schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMainSizer->Add( m_cbRescue, 0, wxALL, 5 );
+	
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-	
-	m_cbRescue = new wxCheckBox( this, wxID_ANY, _("Check for cache/library conflicts at schematic load"), wxDefaultPosition, wxDefaultSize, 0 );
-	bMainSizer->Add( m_cbRescue, 0, wxALL, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
