@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
  * Copyright (C) 2013 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ private:
     wxConfigBase*   m_config;
     int             m_unitsOpt;             // Remember last units option
     bool            m_copy3DFilesOpt;       // Remember last copy model files option
-    bool            m_useRelativePathsOpt;  // Remember last use absolut paths option
+    bool            m_useRelativePathsOpt;  // Remember last use absolute paths option
     bool            m_usePlainPCBOpt;       // Remember last Plain Board option
     int             m_RefUnits;             // Remember last units for Reference Point
     double          m_XRef;                 // Remember last X Reference Point
@@ -85,11 +85,7 @@ public:
         tmpStr = wxT( "" );
         tmpStr << m_YRef;
         m_VRML_Yref->SetValue( tmpStr );
-        wxButton* okButton = (wxButton*) FindWindowByLabel( wxT( "OK" ) );
-
-        if( okButton )
-            SetDefaultItem( okButton );
-
+        m_sdbSizer1OK->SetDefault();
         GetSizer()->SetSizeHints( this );
         Centre();
 
@@ -165,18 +161,30 @@ public:
         // Making path relative or absolute has no meaning when VRML files are not copied.
         event.Enable( m_cbCopyFiles->GetValue() );
     }
+
+    virtual void OnFileChanged( wxFileDirPickerEvent& event )
+    {
+        // Clicking on file picker button changes the focus to the file picker button which
+        // is not the behavior we want.  Set the focus back to the OK button so the next enter
+        // key press dismisses this dialog with the OK action.
+        m_sdbSizer1OK->SetFocus();
+    }
+
 };
 
 
 void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 {
+    static wxString mruPath;
+    static wxString subDirFor3Dshapes;
     wxFileName fn;
     wxString   projectPath;
 
     if( !wxGetEnv( wxT( "KIPRJMOD" ), &projectPath ) )
         projectPath = wxFileName::GetCwd();
 
-    static wxString subDirFor3Dshapes;
+    if( mruPath.IsEmpty() )
+        mruPath = projectPath;
 
     if( subDirFor3Dshapes.IsEmpty() )
     {
@@ -191,6 +199,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     // Build default file name
     fn = GetBoard()->GetFileName();
     fn.SetExt( wxT( "wrl" ) );
+    fn.SetPath( mruPath );
 
     DIALOG_EXPORT_3DFILE dlg( this );
     dlg.FilePicker()->SetPath( fn.GetFullPath() );
@@ -219,6 +228,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 
     modelPath.AppendDir( dlg.GetSubdir() );
     subDirFor3Dshapes = dlg.GetSubdir();
+    mruPath = dlg.FilePicker()->GetPath();
 
     wxLogDebug( wxT( "Exporting enabled=%d to %s." ),
                 export3DFiles, GetChars( subDirFor3Dshapes ) );
@@ -232,7 +242,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
                           usePlainPCB, modelPath.GetPath(),
                           aXRef, aYRef ) )
     {
-        wxString msg = _( "Unable to create " ) + fullFilename;
+        wxString msg = _( "Unable to create file " ) + fullFilename;
         wxMessageBox( msg );
         return;
     }
