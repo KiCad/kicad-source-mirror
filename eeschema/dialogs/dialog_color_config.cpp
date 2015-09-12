@@ -65,7 +65,7 @@ static COLORBUTTON generalColorButtons[] = {
     { _( "Global label" ),      LAYER_GLOBLABEL },
     { _( "Net name" ),          LAYER_NETNAM },
     { _( "Notes" ),             LAYER_NOTES },
-    { _( "No Connect Symbol" ), LAYER_NOCONNECT },
+    { _( "No connect symbol" ), LAYER_NOCONNECT },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
 
@@ -91,8 +91,8 @@ static COLORBUTTON sheetColorButtons[] = {
 };
 
 static COLORBUTTON miscColorButtons[] = {
-    { _( "Erc warning" ),       LAYER_ERC_WARN },
-    { _( "Erc error" ),         LAYER_ERC_ERR },
+    { _( "ERC warning" ),       LAYER_ERC_WARN },
+    { _( "ERC error" ),         LAYER_ERC_ERR },
     { _( "Grid" ),              LAYER_GRID },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
@@ -204,8 +204,6 @@ void DIALOG_COLOR_CONFIG::CreateControls()
 
     currentColors[ LAYER_BACKGROUND ] =  m_parent->GetDrawBgColor();
 
-//    button->SetFocus();
-
     // Dialog now needs to be resized, but the associated command is found elsewhere.
 }
 
@@ -248,56 +246,51 @@ void DIALOG_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 }
 
 
-bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
+bool DIALOG_COLOR_CONFIG::TransferDataFromWindow()
 {
-    // Update color of background
+    bool warning = false;
+
+    // Check for color conflicts with background color to give user a chance to bail
+    // out before making changes.
+
     EDA_COLOR_T bgcolor = WHITE;
 
     if( m_SelBgColor->GetSelection() > 0 )
         bgcolor =  BLACK;
 
-    m_parent->SetDrawBgColor( bgcolor );
-    currentColors[ LAYER_BACKGROUND ] = bgcolor;
-
-    bool warning = false;
-
     for( LAYERSCH_ID clyr = LAYER_WIRE; clyr < LAYERSCH_ID_COUNT; ++clyr )
     {
-        SetLayerColor( currentColors[ clyr ], clyr );
-
-        if(  bgcolor == GetLayerColor( clyr ) && clyr != LAYER_BACKGROUND )
+        if( bgcolor == currentColors[ clyr ] && clyr != LAYER_BACKGROUND )
+        {
             warning = true;
+            break;
+        }
     }
-
-    m_parent->SetGridColor( GetLayerColor( LAYER_GRID ) );
-
-    if( bgcolor == GetLayerColor( LAYER_GRID ) )
-        warning = true;
-
-    return warning;
-}
-
-
-void DIALOG_COLOR_CONFIG::OnOkClick( wxCommandEvent& event )
-{
-    bool warning = UpdateColorsSettings();
 
     // Prompt the user if an item has the same color as the background
     // because this item cannot be seen:
     if( warning )
-        wxMessageBox( _("Warning:\nSome items have the same color as the background\n"
-                        "and they will not be seen on screen") );
+    {
+        if( wxMessageBox( _( "Some items have the same color as the background\n"
+                             "and they will not be seen on the screen.  Are you\n"
+                             "sure you want to use these colors?" ),
+                          _( "Warning" ),
+                          wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+            return false;
+    }
 
+    // Update color of background
+    m_parent->SetDrawBgColor( bgcolor );
+    currentColors[ LAYER_BACKGROUND ] = bgcolor;
+
+
+    for( LAYERSCH_ID clyr = LAYER_WIRE; clyr < LAYERSCH_ID_COUNT; ++clyr )
+    {
+        SetLayerColor( currentColors[ clyr ], clyr );
+    }
+
+    m_parent->SetGridColor( GetLayerColor( LAYER_GRID ) );
     m_parent->GetCanvas()->Refresh();
 
-    event.Skip();
-}
-
-
-
-
-void DIALOG_COLOR_CONFIG::OnApplyClick( wxCommandEvent& event )
-{
-    UpdateColorsSettings();
-    m_parent->GetCanvas()->Refresh();
+    return true;
 }

@@ -46,14 +46,13 @@ private:
     // Creates the controls and sizers
     void CreateControls();
 
-    bool    UpdateColorsSettings();
     void    SetColor( wxCommandEvent& aEvent );
-    void    OnOkClick( wxCommandEvent& aEvent );
-    void    OnApplyClick( wxCommandEvent& aEvent );
 
 public:
     // Constructors and destructor
     DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent );
+
+    bool TransferDataFromWindow();
 };
 
 #endif    // DIALOG_COLOR_CONFIG_H_

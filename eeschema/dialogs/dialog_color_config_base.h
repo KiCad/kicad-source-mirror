@@ -41,15 +41,10 @@ class DIALOG_COLOR_CONFIG_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
 	
 	public:
 		
-		DIALOG_COLOR_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Colors"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 446,344 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_COLOR_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Colors"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_COLOR_CONFIG_BASE();
 	
 };

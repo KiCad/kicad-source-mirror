@@ -38,18 +38,11 @@ DIALOG_COLOR_CONFIG_BASE::DIALOG_COLOR_CONFIG_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( bmainSizer );
 	this->Layout();
+	bmainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
-	
-	// Connect Events
-	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_CONFIG_BASE::OnApplyClick ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_CONFIG_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_COLOR_CONFIG_BASE::~DIALOG_COLOR_CONFIG_BASE()
 {
-	// Disconnect Events
-	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_CONFIG_BASE::OnApplyClick ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_CONFIG_BASE::OnOkClick ), NULL, this );
-	
 }
