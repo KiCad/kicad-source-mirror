@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-11 07:28+0100\n"
-"PO-Revision-Date: 2015-09-11 08:04+0100\n"
+"POT-Creation-Date: 2015-09-12 13:04+0100\n"
+"PO-Revision-Date: 2015-09-12 13:13+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -12830,20 +12830,20 @@ msgid "Global Design Rules"
 msgstr "Reguły globalne"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:30
-msgid "Start point X"
-msgstr "Pozycja początkowa X"
+msgid "Start point X:"
+msgstr "Wsp. X  początku:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:42
-msgid "Start point Y"
-msgstr "Pozycja początkowa Y"
+msgid "Start point Y:"
+msgstr "Wsp. Y  początku:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:54
-msgid "End point X"
-msgstr "Pozycja końcowa X"
+msgid "End point X:"
+msgstr "Wsp. X końca:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:66
-msgid "End point Y"
-msgstr "Pozycja końcowa Y"
+msgid "End point Y:"
+msgstr "Wsp. Y końca:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:93
 msgid "Arc angle:"
@@ -14474,6 +14474,32 @@ msgstr "Kąt 45 stopni"
 msgid "arc"
 msgstr "Łukowate"
 
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:133
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:144
+msgid "Center X:"
+msgstr "Wsp. X centrum:"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:134
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:145
+msgid "Center Y:"
+msgstr "Wsp. Y centrum:"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:135
+msgid "Point X:"
+msgstr "Współrzędna X:"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:136
+msgid "Point Y:"
+msgstr "Współrzędna Y:"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:146
+msgid "Start Point X:"
+msgstr "Wsp. X  początku:"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:147
+msgid "Start Point Y:"
+msgstr "Wsp. Y  początku:"
+
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:192
 msgid ""
 "This item was on an unknown layer.\n"
@@ -14481,6 +14507,10 @@ msgid ""
 msgstr ""
 "Ten element znajduje się na nieznanej warstwie.\n"
 "Obecnie został przeniesiony na warstwę rysunkową. Proszę to poprawić."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:330
+msgid "Error List"
+msgstr "Lista błędów"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File Name:"
@@ -14562,13 +14592,13 @@ msgstr "Ścieżki"
 msgid "Use net class width"
 msgstr "Użyj szerokości z klas sieci"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:130
-msgid "Position X"
-msgstr "Pozycja X"
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:165
+msgid "Diameter:"
+msgstr "Średnica:"
 
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:142
-msgid "Position Y"
-msgstr "Pozycja Y"
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:177
+msgid "Drill:"
+msgstr "Wiercenie:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Use net class size"
@@ -14984,7 +15014,6 @@ msgid "Aborted by user"
 msgstr "Anulowano"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:37
-#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:79
 msgid "Text Width"
 msgstr "Szerokość tekstu"
 
@@ -15331,34 +15360,32 @@ msgid "Graphics:"
 msgstr "Grafika:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:25
-msgid "Graphic segm Width"
-msgstr "Szerokość segmentu grafiki"
+msgid "Graphic segment width:"
+msgstr "Szerokość segmentu grafiki:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:33
-msgid "Board Edges Width"
-msgstr "Szerokość krawędzi płytki"
+msgid "Board edge width:"
+msgstr "Szerokość krawędzi płytki:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:41
-msgid "Copper Text Width"
-msgstr "Szerokość tekstu ścieżek"
-
-#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:49
-#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:87
-msgid "Text Size V"
-msgstr "Pionowy rozmiar tekstu"
-
-#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:57
-#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:95
-msgid "Text Size H"
-msgstr "Poziomy rozmiar tekstu"
+msgid "Copper text thickness:"
+msgstr "Grubość tekstu warstwy ścieżek:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:71
-msgid "Edges Width"
-msgstr "Szerokość krawędzi"
+msgid "Edge width:"
+msgstr "Szerokość krawędzi:"
+
+#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:79
+msgid "Text thickness:"
+msgstr "Grubość tekstu:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:107
 msgid "General:"
 msgstr "Główne:"
+
+#: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:109
+msgid "Default pen size:"
+msgstr "Domyślny rozmiar pisaka:"
 
 #: pcbnew/dialogs/dialog_set_grid.cpp:233
 #, c-format
@@ -16100,20 +16127,12 @@ msgid "Shape:"
 msgstr "Kształt:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-msgid "Circular shape"
-msgstr "Kształt okrągły"
+msgid "Rectangular"
+msgstr "Prostokątny"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-msgid "Oval shape"
-msgstr "Kształt owalny"
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-msgid "Rectangular shape"
-msgstr "Kształt prostokątny"
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-msgid "Trapezoidal shape"
-msgstr "Kształt  trapezowy"
+msgid "Trapezoidal"
+msgstr "Trapezoidalny"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
 msgid "90"
@@ -16140,12 +16159,12 @@ msgid "Wire length from pad to die on chip ( used to calculate actual track leng
 msgstr "Długość połączenia pomiędzy polem lutowniczym a rdzeniem wewnątrz układu scalonego (używana do obliczeń pełnej długości ścieżki)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:195
-msgid "Trap. delta dim:"
-msgstr "Nachylenie:"
+msgid "Trapezoid delta:"
+msgstr "Nachylenie trapezu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:207
-msgid "Trap. direction:"
-msgstr "Kierunek:"
+msgid "Trapezoid direction:"
+msgstr "Ukierunkowanie trapezu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:225
 msgid "Parent footprint orientation"
@@ -21275,7 +21294,7 @@ msgid "Change Footprint"
 msgstr "Zamień footprint"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.h:71
-msgid "Texts and Drawings"
+msgid "Text and Drawings"
 msgstr "Teksty i rysunki"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:61
@@ -21346,23 +21365,29 @@ msgstr "Kalkulator PCB"
 msgid "New Item"
 msgstr "Nowy element"
 
-#~ msgid "Tracks sketch mode"
-#~ msgstr "Pokaż tylko zarys ścieżek"
+#~ msgid "Position X"
+#~ msgstr "Pozycja X"
 
-#~ msgid "Vias sketch mode"
-#~ msgstr "Pokaż tylko zarys przelotek"
+#~ msgid "Position Y"
+#~ msgstr "Pozycja Y"
 
-#~ msgid "Outlines sketch mode"
-#~ msgstr "Pokaż tylko zarys konturów"
+#~ msgid "Copper Text Width"
+#~ msgstr "Szerokość tekstu ścieżek"
 
-#~ msgid "Pads sketch mode"
-#~ msgstr "Pokaż tylko zarys pól lutowniczych"
+#~ msgid "Text Size V"
+#~ msgstr "Pionowy rozmiar tekstu"
 
-#~ msgid "Show pad NoConnect"
-#~ msgstr "Pokaż pola \"Niepołączone\""
+#~ msgid "Text Size H"
+#~ msgstr "Poziomy rozmiar tekstu"
 
-#~ msgid "Auto Adjust"
-#~ msgstr "Automatyczna regulacja"
+#~ msgid "Edges Width"
+#~ msgstr "Szerokość krawędzi"
 
-#~ msgid "X ref:"
-#~ msgstr "Odniesienie X:"
+#~ msgid "Circular shape"
+#~ msgstr "Kształt okrągły"
+
+#~ msgid "Oval shape"
+#~ msgstr "Kształt owalny"
+
+#~ msgid "Rectangular shape"
+#~ msgstr "Kształt prostokątny"
