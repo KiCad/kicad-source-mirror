@@ -100,8 +100,6 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
 {
     m_wx_app = aWxApp;      // first thing.
 
-    m_bm.Init();
-
     wxString absoluteArgv0 = wxStandardPaths::Get().GetExecutablePath();
 
     if( !wxIsAbsolutePath( absoluteArgv0 ) )
@@ -116,6 +114,8 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
 
     if( !initPgm() )
         return false;
+
+    m_bm.Init();
 
     // Add search paths to feed the PGM_KICAD::SysSearch() function,
     // currenly limited in support to only look for project templates
