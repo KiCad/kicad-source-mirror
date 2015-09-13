@@ -430,6 +430,9 @@ int DRAWING_TOOL::DrawKeepout( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_board->m_Modules )
+        return 0;
+
     DIALOG_DXF_IMPORT dlg( m_frame );
     int dlgResult = dlg.ShowModal();
 
