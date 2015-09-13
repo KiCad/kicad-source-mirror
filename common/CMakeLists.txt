@@ -388,6 +388,7 @@ add_custom_target(
     )
 
 add_dependencies( common netlist_lexer_source_files )
+add_dependencies( pcbcommon netlist_lexer_source_files )
 
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
 make_lexer(
