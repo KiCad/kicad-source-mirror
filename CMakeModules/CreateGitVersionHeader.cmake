@@ -40,18 +40,28 @@ macro( create_git_version_header _git_src_path )
             ${GIT_EXECUTABLE} --no-pager log -1 HEAD
             --pretty=format:%H
             WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_LONG_HASH
+            OUTPUT_VARIABLE _git_LONG_HASH_ORIGIN
             ERROR_VARIABLE _git_log_error
             RESULT_VARIABLE _git_log_result
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 
         if( ${_git_log_result} EQUAL 0 )
+            # Get origin/HEAD hash:
+            execute_process(
+            COMMAND
+            ${GIT_EXECUTABLE} --no-pager log -1 origin/HEAD
+            --pretty=format:%h
+            WORKING_DIRECTORY ${_git_src_path}
+            OUTPUT_VARIABLE _git_SHORT_HASH_ORIGIN
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+            # Get local HEAD hash:
             execute_process(
             COMMAND
             ${GIT_EXECUTABLE} --no-pager log -1 HEAD
             --pretty=format:%h
             WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_SHORT_HASH
+            OUTPUT_VARIABLE _git_SHORT_HASH_LOCAL
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 
             execute_process(
@@ -70,19 +80,29 @@ macro( create_git_version_header _git_src_path )
             OUTPUT_VARIABLE _git_LAST_CHANGE_LOG
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+            # Get origin Repo HEAD (matched official BZR number) Version Number:
+            execute_process(
+            COMMAND
+            ${GIT_EXECUTABLE} rev-list origin/HEAD --count
+            --first-parent
+            WORKING_DIRECTORY ${_git_src_path}
+            OUTPUT_VARIABLE _git_SERIAL_ORIGIN
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+            # Get local Repo HEAD (matched official BZR number) Version Number:
             execute_process(
             COMMAND
             ${GIT_EXECUTABLE} rev-list HEAD --count
             --first-parent
             WORKING_DIRECTORY ${_git_src_path}
-            OUTPUT_VARIABLE _git_SERIAL
+            OUTPUT_VARIABLE _git_SERIAL_LOCAL
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-            message(STATUS "Git hash: ${_git_LONG_HASH}")
+            message(STATUS "Git hash: ${_git_LONG_HASH_ORIGIN}")
 
             if( ${_git_log_result} EQUAL 0 )
                 string( REGEX REPLACE "^(.*\n)?revno: ([^ \n]+).*"
-                        "\\2" Kicad_REPO_REVISION "BZR ${_git_SERIAL}, Git ${_git_SHORT_HASH}" )
+                        "\\2" Kicad_REPO_REVISION "BZR ${_git_SERIAL_ORIGIN}, Git ${_git_SHORT_HASH_ORIGIN}" )
                 string( REGEX REPLACE "^(.*\n)?committer: ([^\n]+).*"
                         "\\2" Kicad_REPO_LAST_CHANGED_AUTHOR "${_git_LAST_COMITTER}")
                 string( REGEX REPLACE "^(.*\n)?timestamp: [a-zA-Z]+ ([^ \n]+).*"
@@ -98,7 +118,13 @@ macro( create_git_version_header _git_src_path )
     if( Kicad_REPO_LAST_CHANGED_DATE )
         string( REGEX REPLACE "^([0-9]+)\\-([0-9]+)\\-([0-9]+)" "\\1-\\2-\\3"
                 _kicad_git_date ${Kicad_REPO_LAST_CHANGED_DATE} )
-        set( KICAD_BUILD_VERSION "(${_kicad_git_date} ${Kicad_REPO_REVISION})" )
+
+        if( ${_git_SHORT_HASH_LOCAL} EQUAL ${_git_SHORT_HASH_ORIGIN} )
+            set( KICAD_BUILD_VERSION "(${_kicad_git_date} ${Kicad_REPO_REVISION})" )
+        else()
+            message(STATUS "Your local git repo is different from the origin")
+            set( KICAD_BUILD_VERSION "(${_kicad_git_date} ${Kicad_REPO_REVISION}-${_git_SHORT_HASH_LOCAL})" )
+        endif()
     endif()
 
     set( KICAD_BUILD_VERSION ${KICAD_BUILD_VERSION} )
