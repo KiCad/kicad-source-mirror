@@ -242,7 +242,8 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
                           usePlainPCB, modelPath.GetPath(),
                           aXRef, aYRef ) )
     {
-        wxString msg = _( "Unable to create file " ) + fullFilename;
+        wxString msg;
+        msg.Printf( _( "Unable to create file '%s'" ), GetChars( fullFilename ) );
         wxMessageBox( msg );
         return;
     }

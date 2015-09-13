@@ -839,8 +839,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GEN_IMPORT_DXF_FILE:
-        InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
-        m_canvas->Refresh();
+        if( GetBoard()->m_Modules )
+        {
+            InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
+            m_canvas->Refresh();
+        }
         break;
 
     default:
