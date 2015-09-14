@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-12 22:25+0100\n"
-"PO-Revision-Date: 2015-09-12 22:26+0100\n"
+"POT-Creation-Date: 2015-09-14 09:24+0100\n"
+"PO-Revision-Date: 2015-09-14 09:25+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -108,7 +108,7 @@ msgstr "Zmień nazwę pliku"
 
 #: kicad/class_treeproject_item.cpp:121
 msgid "Unable to rename file ... "
-msgstr "Nie mogę zmienić nazwy pliku ... "
+msgstr "Zmiana nazwy pliku nie jest możliwa…"
 
 #: kicad/class_treeproject_item.cpp:122
 msgid "Permission error ?"
@@ -646,7 +646,7 @@ msgstr "Pliki obrazów"
 #: eeschema/edit_bitmap.cpp:125
 #, c-format
 msgid "Couldn't load image from <%s>"
-msgstr "Nie mogę załadować obrazu z <%s>"
+msgstr "Nie jest mozliwe załadowanie obrazu z <%s>"
 
 #: eeschema/menubar_libedit.cpp:68
 msgid "&Current Library"
@@ -929,7 +929,7 @@ msgstr "Nazwa pliku:"
 #: eeschema/libedit_plot_component.cpp:139
 #, c-format
 msgid "Can't save file <%s>"
-msgstr "Nie mogę utworzyć pliku <%s>"
+msgstr "Nie można utworzyć pliku <%s>"
 
 #: eeschema/erc.cpp:89
 msgid "Input Pin.........."
@@ -1653,7 +1653,7 @@ msgstr "Plik '%s' nie jest poprawnym plikiem dokumentacji biblioteki."
 #: eeschema/class_library.cpp:1074
 #, c-format
 msgid "Unable to load project's '%s' file"
-msgstr "Nie mogę załadować pliku '%s' należącego do projektu"
+msgstr "Nie można załadować pliku '%s' należącego do projektu"
 
 #: eeschema/class_library.cpp:1165
 #, c-format
@@ -1688,7 +1688,7 @@ msgstr "Pliki schematów"
 #: eeschema/files-io.cpp:98
 #, c-format
 msgid "Could not save backup of file '%s'"
-msgstr "Nie mogę zapisać kopii zapasowej pliku '%s'"
+msgstr "Nie można zapisać kopii zapasowej pliku '%s'"
 
 #: eeschema/files-io.cpp:112
 #, c-format
@@ -2919,7 +2919,7 @@ msgstr "Rysunek: '%s' OK\n"
 #: eeschema/plot_schematic_HPGL.cpp:195
 #, c-format
 msgid "Unable to create file '%s'.\n"
-msgstr "Nie mogę utworzyć pliku '%s'.\n"
+msgstr "Nie można utworzyć pliku '%s'.\n"
 
 #: eeschema/sch_text.cpp:603
 #: eeschema/lib_text.cpp:485
@@ -3750,7 +3750,7 @@ msgstr "Zapisz plik projektu"
 #: eeschema/plot_schematic_SVG.cpp:94
 #, c-format
 msgid "Cannot create file '%s'.\n"
-msgstr "Nie mogę utworzyć pliku '%s'\n"
+msgstr "Utworzenie pliku '%s' nie jest możliwe\n"
 
 #: eeschema/project_rescue.cpp:295
 #, c-format
@@ -4757,7 +4757,7 @@ msgstr "Nie można utworzyć ścieżki względnej (woluminy docelowy i źródło
 #: eeschema/dialogs/dialog_plot_schematic.cpp:348
 #, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
+msgstr "Zapis plików rysowniczych w folderze '%s' nie jest możliwy."
 
 #: eeschema/dialogs/dialog_edit_label.cpp:151
 msgid "Global Label Properties"
@@ -5977,7 +5977,7 @@ msgid ""
 "\n"
 "Error %s."
 msgstr ""
-"Nie mogę załadować footprintu \"%s\" z biblioteki \"%s\".\n"
+"Nie można załadować footprintu \"%s\" z biblioteki \"%s\".\n"
 "\n"
 "Błąd %s."
 
@@ -6069,7 +6069,7 @@ msgstr ""
 #: pcbnew/pcb_parser.cpp:1907
 #, c-format
 msgid "cannot handle module text type %s"
-msgstr "nie mogę obsłużyć tekstu footprintu typu %s"
+msgstr "nieznany opis footprintu typu %s"
 
 #: pcbnew/pcb_parser.cpp:2315
 #: pcbnew/pcb_parser.cpp:2321
@@ -6102,7 +6102,7 @@ msgstr ""
 #: pcbnew/kicad_netlist_reader.cpp:255
 #, c-format
 msgid "Cannot find component with reference \"%s\" in netlist."
-msgstr "Nie mogę odnaleźć komponentu z odznacznikem \"%s\" na liście sieci."
+msgstr "Nie można odnaleźć komponentu z odznacznikem \"%s\" na liście sieci."
 
 #: pcbnew/footprint_wizard_frame.cpp:93
 msgid "Footprint Wizard"
@@ -7065,12 +7065,12 @@ msgstr "To nie jest plik z footprintem"
 #: pcbnew/librairi.cpp:65
 #, c-format
 msgid "Unable to find or load footprint %s from lib path '%s'"
-msgstr "Nie mogę znaleźć lub załadować footprintu %s ze ścieżki bibliotek '%s'"
+msgstr "Nie można znaleźć lub załadować footprintu %s ze ścieżki bibliotek '%s'"
 
 #: pcbnew/librairi.cpp:66
 #, c-format
 msgid "Unable to find or load footprint from path '%s'"
-msgstr "Nie mogę znaleźć lub załadować footprintu ze ścieżki '%s'"
+msgstr "Nie można znaleźć lub załadować footprintu ze ścieżki '%s'"
 
 #: pcbnew/librairi.cpp:67
 #, c-format
@@ -7197,7 +7197,7 @@ msgstr "Biblioteka footprintów '%s' jest tylko do odczytu"
 #: pcbnew/kicad_plugin.cpp:260
 #, c-format
 msgid "Cannot rename temporary file '%s' to footprint library file '%s'"
-msgstr "Nie mogę zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
+msgstr "Nie można zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
 
 #: pcbnew/kicad_plugin.cpp:280
 #, c-format
@@ -7247,7 +7247,7 @@ msgstr "użytkownik nie ma wystarczających uprawnień do usunięcia pliku '%s'"
 #: pcbnew/kicad_plugin.cpp:1907
 #, c-format
 msgid "cannot overwrite library path '%s'"
-msgstr "nie mogę nadpisać biblioteki '%s'"
+msgstr "nie można nadpisać biblioteki '%s'"
 
 #: pcbnew/kicad_plugin.cpp:1932
 #, c-format
@@ -7367,11 +7367,11 @@ msgstr "Bieżący footprint zostanie utracony i ta operacja nie może zostać co
 
 #: pcbnew/move_or_drag_track.cpp:714
 msgid "Unable to drag this segment: too many segments connected"
-msgstr "Nie mogę przeciągnąć tego segmentu: zbyt wiele połączonych segmentów"
+msgstr "Nie można przeciągnąć tego segmentu: zbyt wiele połączonych segmentów"
 
 #: pcbnew/move_or_drag_track.cpp:785
 msgid "Unable to drag this segment: two collinear segments"
-msgstr "Nie mogę przeciągnąć tego segmentu: dwa współliniowe segmenty"
+msgstr "Nie można przeciągnąć tego segmentu: dwa współliniowe segmenty"
 
 #: pcbnew/edgemod.cpp:213
 msgid ""
@@ -7515,7 +7515,7 @@ msgstr ""
 #: pcbnew/legacy_plugin.cpp:3243
 #, c-format
 msgid "Unable to open file '%s'"
-msgstr "Nie mogę otworzyć pliku '%s'"
+msgstr "Nie można otworzyć pliku '%s'"
 
 #: pcbnew/legacy_plugin.cpp:3268
 #, c-format
@@ -7535,12 +7535,12 @@ msgstr "Plik biblioteki starszego typu '%s' jest tylko do odczytu"
 #: pcbnew/legacy_plugin.cpp:4507
 #, c-format
 msgid "Unable to open or create legacy library file '%s'"
-msgstr "Nie mogę otworzyć ani utworzyć biblioteki starszego typu '%s'"
+msgstr "Nie można otworzyć ani utworzyć biblioteki starszego typu '%s'"
 
 #: pcbnew/legacy_plugin.cpp:4533
 #, c-format
 msgid "Unable to rename tempfile '%s' to library file '%s'"
-msgstr "Nie mogę zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
+msgstr "Nie można zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
 
 #: pcbnew/legacy_plugin.cpp:4716
 #, c-format
@@ -7554,32 +7554,32 @@ msgstr "biblioteka '%s' nie może zostać usunięta"
 
 #: pcbnew/legacy_netlist_reader.cpp:121
 msgid "Cannot parse time stamp in component section of netlist."
-msgstr "Nie mogę przetworzyć odcisku czasowego w sekcji komponentów listy sieci."
+msgstr "Nie można przetworzyć znacznika czasowego w sekcji komponentów listy sieci."
 
 #: pcbnew/legacy_netlist_reader.cpp:131
 msgid "Cannot parse footprint name in component section of netlist."
-msgstr "Nie mogę przetworzyć nazwy footprintu w seckcji komponentów listy sieci."
+msgstr "Nie można przetworzyć nazwy footprintu w sekcji komponentów listy sieci."
 
 #: pcbnew/legacy_netlist_reader.cpp:145
 msgid "Cannot parse reference designator in component section of netlist."
-msgstr "Nie mogę przetworzyć odznacznika w sekcji komponentów listy sieci."
+msgstr "Nie można przetworzyć odznacznika w sekcji komponentów listy sieci."
 
 #: pcbnew/legacy_netlist_reader.cpp:155
 msgid "Cannot parse value in component section of netlist."
-msgstr "Nie mogę przetworzyć wartości w sekcji komponentów listy sieci."
+msgstr "Nie można przetworzyć wartości w sekcji komponentów listy sieci."
 
 #: pcbnew/legacy_netlist_reader.cpp:192
 msgid "Cannot parse pin name in component net section of netlist."
-msgstr "Nie mogę przetworzyć nazwy pinu w seckcji komponentów listy sieci."
+msgstr "Nie można przetworzyć nazwy pinu w seckcji komponentów listy sieci."
 
 #: pcbnew/legacy_netlist_reader.cpp:201
 msgid "Cannot parse net name in component net section of netlist."
-msgstr "Nie mogę przetworzyć nazwy sieci w sekcji komponentów listy sieci."
+msgstr "Nie można przetworzyć nazwy sieci w sekcji komponentów listy sieci."
 
 #: pcbnew/legacy_netlist_reader.cpp:249
 #, c-format
 msgid "Cannot find component '%s' in footprint filter section of netlist."
-msgstr "Nie mogę odnależć komponentu '%s' w sekcji filtrów footprintów listy sieci."
+msgstr "Nie można odnależć komponentu '%s' w sekcji filtrów footprintów listy sieci."
 
 #: pcbnew/cross-probing.cpp:66
 #, c-format
@@ -7685,31 +7685,31 @@ msgstr "Słowa kluczowe: %s"
 msgid "Footprint %s on %s"
 msgstr "Footprint %s na %s"
 
-#: pcbnew/moduleframe.cpp:288
+#: pcbnew/moduleframe.cpp:289
 msgid "Visibles"
 msgstr "Widoczność"
 
-#: pcbnew/moduleframe.cpp:500
+#: pcbnew/moduleframe.cpp:501
 msgid "Save the changes to the footprint before closing?"
 msgstr "Zapisać zmiany w footprincie przed zamknięciem?"
 
-#: pcbnew/moduleframe.cpp:521
+#: pcbnew/moduleframe.cpp:522
 msgid "Library is not set, the footprint could not be saved."
 msgstr "Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
 
-#: pcbnew/moduleframe.cpp:690
+#: pcbnew/moduleframe.cpp:691
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
-#: pcbnew/moduleframe.cpp:743
+#: pcbnew/moduleframe.cpp:744
 msgid "Footprint Editor "
 msgstr "Edytor Footprintów"
 
-#: pcbnew/moduleframe.cpp:750
+#: pcbnew/moduleframe.cpp:751
 msgid "(no active library)"
 msgstr " (brak aktywnej biblioteki)"
 
-#: pcbnew/moduleframe.cpp:759
+#: pcbnew/moduleframe.cpp:760
 msgid "Footprint Editor (active library: "
 msgstr "Edytor Footprintów (aktywna biblioteka: "
 
@@ -8065,7 +8065,7 @@ msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 #: pcbnew/class_board.cpp:2318
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
-msgstr "Nie mogę dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
+msgstr "Nie można dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2350
 #, c-format
@@ -8075,7 +8075,7 @@ msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 #: pcbnew/class_board.cpp:2361
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
-msgstr "Nie mogę zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
+msgstr "Nie można zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2394
 #, c-format
@@ -8718,7 +8718,7 @@ msgstr "Plik '%s' został utworzony\n"
 #: pcbnew/xchgmod.cpp:222
 #, c-format
 msgid "** Could not create file '%s' ***\n"
-msgstr "*** Nie mogę utworzyć pliku '%s' ***\n"
+msgstr "*** Nie można utworzyć pliku '%s' ***\n"
 
 #: pcbnew/xchgmod.cpp:282
 #, c-format
@@ -8750,7 +8750,7 @@ msgstr "Zapisz Plik Pozycjonowania Footprintów"
 #: pcbnew/xchgmod.cpp:547
 #, c-format
 msgid "Could not create file '%s'"
-msgstr "Nie mogę utworzyć pliku '%s'"
+msgstr "Nie można utworzyć pliku '%s'"
 
 #: pcbnew/eagle_plugin.cpp:1674
 #, c-format
@@ -8765,7 +8765,7 @@ msgstr "Nie ma obudowy '%s' w bibliotece '%s'"
 #: pcbnew/eagle_plugin.cpp:2797
 #, c-format
 msgid "File '%s' is not readable."
-msgstr "Nie jest możliwe odczytanie pliku '%s'."
+msgstr "Plik '%s' nie jest czytelny."
 
 #: pcbnew/menubar_modedit.cpp:67
 msgid "Set Acti&ve Library"
@@ -9022,7 +9022,7 @@ msgstr "Zapisz listę materiałów"
 #: pcbnew/build_BOM_from_board.cpp:109
 #, c-format
 msgid "Unable to create file <%s>"
-msgstr "Nie mogę utworzyć pliku <%s>"
+msgstr "Nie można utworzyć pliku <%s>"
 
 #: pcbnew/build_BOM_from_board.cpp:116
 msgid "Id"
@@ -9684,7 +9684,7 @@ msgstr "Dostraja długość ścieżki pary różnicowej by zniwelować odchyłk�
 
 #: pcbnew/menubar_pcbframe.cpp:499
 msgid "&3D Shapes Libraries Downloader"
-msgstr "Pobieracz Bibliotek Modeli &3D"
+msgstr "Pobieranie Bibliotek Modeli &3D"
 
 #: pcbnew/menubar_pcbframe.cpp:500
 msgid "Download from Github the 3D shape libraries with wizard"
@@ -9869,7 +9869,7 @@ msgstr "Żadna płytka nie jest obecnie edytowana"
 
 #: pcbnew/modedit.cpp:425
 msgid "Unable to find the footprint source on the main board"
-msgstr "Nie mogę znaleźć źródła footprintu na głównej płytce"
+msgstr "Nie można znaleźć źródła footprintu na głównej płytce"
 
 #: pcbnew/modedit.cpp:426
 msgid ""
@@ -9877,7 +9877,7 @@ msgid ""
 "Cannot update the footprint"
 msgstr ""
 "\n"
-"Nie mogę uaktualnić footprintu"
+"Nie można uaktualnić footprintu"
 
 #: pcbnew/modedit.cpp:435
 msgid "A footprint source was found on the main board"
@@ -9889,17 +9889,17 @@ msgid ""
 "Cannot insert this footprint"
 msgstr ""
 "\n"
-"Nie mogę wstawić tego footprintu"
+"Nie można wstawić tego footprintu"
 
-#: pcbnew/modedit.cpp:952
+#: pcbnew/modedit.cpp:955
 msgid "Place anchor"
 msgstr "Dodaj zakotwiczenie"
 
-#: pcbnew/modedit.cpp:956
+#: pcbnew/modedit.cpp:959
 msgid "Set grid origin"
 msgstr "Ustaw punkt bazowy siatki"
 
-#: pcbnew/modedit.cpp:966
+#: pcbnew/modedit.cpp:969
 msgid "Pad settings"
 msgstr "Właściwości pól lutowniczych"
 
@@ -10293,7 +10293,7 @@ msgstr "Nie wybrano kreatora"
 
 #: pcbnew/footprint_wizard.cpp:148
 msgid "Couldn't reload footprint wizard"
-msgstr "Nie mogę przeładować kreatora footprintów"
+msgstr "Nie można przeładować kreatora footprintów"
 
 #: pcbnew/layer_widget.cpp:427
 msgid "Left click to select, middle click for color change, right click for menu"
@@ -10601,7 +10601,7 @@ msgstr "Eksport płytki udany."
 
 #: pcbnew/specctra_export.cpp:208
 msgid "Unable to export, please fix and try again."
-msgstr "Nie mogę eksportować. Napraw błędy i spróbuj ponownie."
+msgstr "Nie można eksportować. Popraw błędy i spróbuj ponownie."
 
 #: pcbnew/specctra_export.cpp:1026
 #: pcbnew/specctra_export.cpp:1133
@@ -10616,7 +10616,7 @@ msgid ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm).\n"
 "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each."
 msgstr ""
-"Nie mogę odnaleźć następnego segmentu granicznego z punktem końcowym (%s mm, %s mm).\n"
+"Nie można odnaleźć następnego segmentu granicznego z punktem końcowym (%s mm, %s mm).\n"
 "Popraw obrys na warstwie Edge.Cuts, tworząc z niego  figurę zamkniętą."
 
 #: pcbnew/specctra_export.cpp:1294
@@ -10625,7 +10625,7 @@ msgid ""
 "Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
 "Edit Edge.Cuts interior graphics, making them contiguous polygons each."
 msgstr ""
-"Nie mogę odnaleźć następnego segmentu odcinającego z punktem końcowym (%s mm, %s mm).\n"
+"Nie można odnaleźć następnego segmentu odcinającego z punktem końcowym (%s mm, %s mm).\n"
 "Popraw wewnętrzny obrys na warstwie Edge.Cuts, tworząc z niego figurę zamkniętą."
 
 #: pcbnew/specctra_export.cpp:1455
@@ -10655,7 +10655,7 @@ msgstr "Operacje na blokach"
 msgid "Zoom: %.2f"
 msgstr "Powiększenie: %.2f"
 
-#: pcbnew/tools/drawing_tool.cpp:593
+#: pcbnew/tools/drawing_tool.cpp:596
 msgid "Place the footprint anchor"
 msgstr "Ustaw punkt zakotwiczenia footprintu"
 
@@ -11061,12 +11061,12 @@ msgstr "Brak footprintów do automatycznego rozmieszczenia."
 #: pcbnew/exporters/gen_modules_placefile.cpp:248
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
-msgstr "Nie mogę zapisać plików z rysunkami w folderze \"%s\"."
+msgstr "Nie można zapisać plików z rysunkami w folderze \"%s\"."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:275
 #, c-format
 msgid "Unable to create '%s'."
-msgstr "Nie mogę utworzyć '%s'."
+msgstr "Nie można utworzyć '%s'."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:282
 #, c-format
@@ -11092,7 +11092,7 @@ msgstr "Generowanie pliku pozycjonowania komponentów zakończono pomyślnie."
 #: pcbnew/exporters/gen_modules_placefile.cpp:310
 #, c-format
 msgid "Unable to create file '%s'."
-msgstr "Nie mogę utworzyć pliku '%s'."
+msgstr "Nie można utworzyć pliku '%s'."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:319
 #, c-format
@@ -11120,7 +11120,7 @@ msgstr "Raport ilościowy footprintów"
 #: pcbnew/exporters/gen_modules_placefile.cpp:587
 #, c-format
 msgid "Unable to create '%s'"
-msgstr "Nie mogę utworzyć '%s'"
+msgstr "Nie można utworzyć '%s'"
 
 #: pcbnew/exporters/export_gencad.cpp:250
 msgid "GenCAD 1.4 board files (.cad)|*.cad"
@@ -11133,13 +11133,13 @@ msgstr "Zapisz plik płytki GenCAD"
 #: pcbnew/exporters/export_gencad.cpp:267
 #, c-format
 msgid "Unable to create <%s>"
-msgstr "Nie mogę utworzyć <%s>"
+msgstr "Nie można utworzyć <%s>"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:183
 #, c-format
 msgid "** Unable to create %s **\n"
-msgstr "** Nie mogę utworzyć %s ** \n"
+msgstr "** Nie można utworzyć %s ** \n"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:163
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:193
@@ -11157,7 +11157,7 @@ msgstr "Eksportuj plik testowy IPC-D-356"
 
 #: pcbnew/exporters/export_d356.cpp:373
 msgid "Unable to create "
-msgstr "Nie mogę utworzyć "
+msgstr "Nie można utworzyć "
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:24
 msgid "File:"
@@ -11484,7 +11484,7 @@ msgid ""
 "Unable to parse URL:\n"
 "'%s'"
 msgstr ""
-"Nie mogę rozpoznać adresu URL:\n"
+"Nie można rozpoznać adresu URL:\n"
 "'%s'"
 
 #: pcbnew/github/github_plugin.cpp:573
@@ -11496,7 +11496,7 @@ msgid ""
 "Reason: '%s'"
 msgstr ""
 "%s\n"
-"Nie mogę pobrać archiwum Zip: '%s'\n"
+"Nie można pobrać archiwum Zip: '%s'\n"
 "dla ścieżki biblioteki: '%s'.\n"
 "Powód: '%s'"
 
@@ -11513,7 +11513,7 @@ msgid ""
 "Reason: '%s'"
 msgstr ""
 "%s\n"
-"Nie mogę pobrać danych z: '%s'\n"
+"Nie można pobrać danych z: '%s'\n"
 "Powód: '%s'"
 
 #: pcbnew/github/github_getliblist.cpp:132
@@ -11522,7 +11522,7 @@ msgid ""
 "malformed URL:\n"
 "'%s'"
 msgstr ""
-"Nie mogę rozpoznać adresu URL:\n"
+"Nie można rozpoznać adresu URL:\n"
 "'%s'"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:29
@@ -12459,9 +12459,10 @@ msgstr "Grubość:"
 msgid "Orientation (0.1 deg):"
 msgstr "Orientacja (co 0.1 stopnia):"
 
-#: pcbnew/dialogs/dialog_export_vrml.cpp:245
-msgid "Unable to create file "
-msgstr "Nie jest możliwe utworzenie pliku"
+#: pcbnew/dialogs/dialog_export_vrml.cpp:246
+#, c-format
+msgid "Unable to create file '%s'"
+msgstr "Utworzenie pliku '%s' nie jest możliwe"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:22
 msgid "Search for:"
@@ -17037,7 +17038,7 @@ msgstr "Czy zmienić istniejący plik?"
 #: gerbview/export_to_pcbnew.cpp:220
 #, c-format
 msgid "Cannot create file '%s'"
-msgstr "Nie mogę utworzyć pliku '%s'"
+msgstr "Nie można utworzyć pliku '%s'"
 
 #: gerbview/excellon_read_drill_file.cpp:189
 msgid "No room to load file"
@@ -17742,7 +17743,7 @@ msgstr "Nie można skopiować obrazu do schowka"
 
 #: 3d-viewer/3d_canvas.cpp:723
 msgid "Can't save file"
-msgstr "Nie mogę zapisać pliku"
+msgstr "Nie można zapisać pliku"
 
 #: 3d-viewer/3d_toolbar.cpp:52
 msgid "Reload board"
@@ -18136,7 +18137,7 @@ msgstr "Odbij blok"
 #: common/richio.cpp:197
 #, c-format
 msgid "Unable to open filename '%s' for reading"
-msgstr "Nie mogę otworzyć pliku '%s' do odczytu"
+msgstr "Nie można otczytać pliku '%s'"
 
 #: common/richio.cpp:241
 #: common/richio.cpp:338
@@ -18150,7 +18151,7 @@ msgstr "Przekroczona długość linii"
 #: common/richio.cpp:569
 #, c-format
 msgid "cannot open or save file '%s'"
-msgstr "nie mogę otworzyć lub zapisać pliku '%s'"
+msgstr "nie można otworzyć lub zapisać pliku '%s'"
 
 #: common/richio.cpp:609
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
@@ -18179,7 +18180,7 @@ msgstr "w"
 #: common/common.cpp:414
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Nie mogę utworzyć ścieżki bezwzględnej '%s' w odniesieniu do '%s'."
+msgstr "Nie można utworzyć ścieżki bezwzględnej '%s' w odniesieniu do '%s'."
 
 #: common/common.cpp:432
 #, c-format
@@ -18222,7 +18223,7 @@ msgstr ""
 #: common/gestfich.cpp:429
 #, c-format
 msgid "Unable to find a PDF viewer for <%s>"
-msgstr "Nie mogę znaleźć przeglądarki PDF dla <%s>"
+msgstr "Nie można znaleźć przeglądarki PDF dla <%s>"
 
 #: common/wildcards_and_files_ext.cpp:70
 msgid "KiCad drawing symbol file (*.sym)|*.sym"
@@ -18646,7 +18647,7 @@ msgstr "Skopiuj informację o wersji do schowka by wysłać ją razem z raportem
 
 #: common/basicframe.cpp:543
 msgid "Could not open clipboard to write version information."
-msgstr "Nie mogę otworzyć schowka by zapisać informacje o wersji."
+msgstr "Nie można otworzyć schowka by zapisać informacje o wersji."
 
 #: common/basicframe.cpp:544
 msgid "Clipboard Error"
@@ -18687,7 +18688,7 @@ msgstr ""
 #: common/basicframe.cpp:712
 #, c-format
 msgid "Could not create backup file <%s>"
-msgstr "Nie mogę utworzyć pliku kopii zapasowej <%s>"
+msgstr "Nie można utworzyć pliku kopii zapasowej <%s>"
 
 #: common/basicframe.cpp:720
 msgid "The auto save file could not be renamed to the board file name."
@@ -19352,7 +19353,7 @@ msgid ""
 "Unable to write file<%s>\n"
 "Do you want to exit and abandon your change?"
 msgstr ""
-"Nie mogę zapisać pliku <%s>\n"
+"Nie można zapisać pliku <%s>\n"
 "Czy chcesz opuścić program i porzucić zmiany?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:161
@@ -19756,7 +19757,7 @@ msgstr "Czy chcesz załadować ten plik i zastąpić bieżącą listę regulator
 #: pcb_calculator/regulators_funct.cpp:262
 #, c-format
 msgid "Unable to read data file <%s>"
-msgstr "Nie mogę wczytać pliku danych <%s>"
+msgstr "Nie można wczytać pliku danych <%s>"
 
 #: pcb_calculator/regulators_funct.cpp:293
 msgid "This regulator is already in list. Aborted"
@@ -20637,7 +20638,7 @@ msgstr "Plik <%s> został załadowany"
 #: pagelayout_editor/files.cpp:148
 #, c-format
 msgid "Unable to load %s file"
-msgstr "Nie mogę załadować pliku %s"
+msgstr "Nie można załadować pliku %s"
 
 #: pagelayout_editor/files.cpp:130
 #, c-format
@@ -20651,7 +20652,7 @@ msgstr "Otwórz"
 #: pagelayout_editor/files.cpp:163
 #, c-format
 msgid "Unable to write <%s>"
-msgstr "Nie mogę utworzyć <%s>"
+msgstr "Nie można utworzyć <%s>"
 
 #: pagelayout_editor/files.cpp:168
 #: pagelayout_editor/files.cpp:200
@@ -21054,7 +21055,7 @@ msgstr "Niepołączone"
 msgid "Image"
 msgstr "Obraz"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.h:98
+#: eeschema/dialogs/dialog_lib_edit_pin_base.h:99
 msgid "Pin Properties"
 msgstr "Właściwości pinu"
 
