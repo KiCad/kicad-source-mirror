@@ -383,6 +383,11 @@ public:
 
     PNS_ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM *aParent );
 
+    bool HasChildren() const
+    {
+        return !m_children.empty();
+    }
+
 private:
     struct OBSTACLE_VISITOR;
     typedef boost::unordered_multimap<PNS_JOINT::HASH_TAG, PNS_JOINT> JOINT_MAP;
@@ -454,7 +459,7 @@ private:
     PNS_NODE* m_root;
 
     ///> list of nodes branched from this one
-    std::vector<PNS_NODE*> m_children;
+    std::set<PNS_NODE*> m_children;
 
     ///> hash of root's items that have been changed in this node
     boost::unordered_set<PNS_ITEM*> m_override;

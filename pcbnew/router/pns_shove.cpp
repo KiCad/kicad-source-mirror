@@ -963,7 +963,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
         }
     }
     else
-    { // "forward" collisoins
+    { // "forward" collisions
         switch( ni->Kind() )
         {
         case PNS_ITEM::SEGMENT:
@@ -1098,17 +1098,23 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
     }
 
     if( !pushLine( head ) )
+    {
+        delete m_currentNode;
+        m_currentNode = parent;
+
         return SH_INCOMPLETE;
+    }
 
     st = shoveMainLoop();
 
-
-    if( ( st == SH_OK || st == SH_HEAD_MODIFIED ) )
+    if( st == SH_OK )
+    {
         runOptimizer( m_currentNode );
 
-    if( m_newHead && st == SH_OK )
-    {
-        st = SH_HEAD_MODIFIED;
+        if( m_newHead )
+            st = m_currentNode->CheckColliding( &(*m_newHead) ) ? SH_INCOMPLETE : SH_HEAD_MODIFIED;
+        else
+            st = m_currentNode->CheckColliding( &head ) ? SH_INCOMPLETE : SH_OK;
     }
 
     m_currentNode->RemoveByMarker( MK_HEAD );

@@ -71,7 +71,7 @@ public:
         m_tag.net = aB.m_tag.net;
         m_linkedItems = aB.m_linkedItems;
         m_layers = aB.m_layers;
-        m_locked = false;
+        m_locked = aB.m_locked;
     }
 
     PNS_ITEM* Clone( ) const
@@ -193,6 +193,9 @@ public:
             return;
 
         m_layers.Merge( aJoint.m_layers );
+
+        if( aJoint.IsLocked() )
+            m_locked = true;
 
         BOOST_FOREACH( PNS_ITEM* item, aJoint.LinkList() )
         {
