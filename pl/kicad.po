@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-14 09:24+0100\n"
-"PO-Revision-Date: 2015-09-14 09:25+0100\n"
+"PO-Revision-Date: 2015-09-14 09:37+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -18137,7 +18137,7 @@ msgstr "Odbij blok"
 #: common/richio.cpp:197
 #, c-format
 msgid "Unable to open filename '%s' for reading"
-msgstr "Nie można otczytać pliku '%s'"
+msgstr "Nie można odczytać pliku '%s'"
 
 #: common/richio.cpp:241
 #: common/richio.cpp:338
