@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-29 08:50+0900\n"
-"PO-Revision-Date: 2015-09-12 12:47+0900\n"
+"PO-Revision-Date: 2015-09-13 22:02+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -3768,7 +3768,7 @@ msgstr "レイヤのプロパティを設定して有効化"
 #: pcbnew/menubar_pcbframe.cpp:646 eeschema/menubar_libedit.cpp:263
 #: gerbview/menubar.cpp:224 pagelayout_editor/menubar.cpp:151
 msgid "&Contents"
-msgstr "内容(&C)"
+msgstr "目次(&C)"
 
 #: pcbnew/menubar_pcbframe.cpp:647
 msgid "Open the Pcbnew handbook"
