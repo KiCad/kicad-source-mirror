@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-14 09:24+0100\n"
-"PO-Revision-Date: 2015-09-14 09:37+0100\n"
+"POT-Creation-Date: 2015-09-15 21:46+0100\n"
+"PO-Revision-Date: 2015-09-15 21:57+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -544,15 +544,15 @@ msgstr "%s zamknięty [pid=%d]\n"
 msgid "%s opened [pid=%ld]\n"
 msgstr "%s otwarty [pid=%ld]\n"
 
-#: kicad/mainframe.cpp:467
+#: kicad/mainframe.cpp:443
 msgid "Text file ("
 msgstr "Plik tekstowy ("
 
-#: kicad/mainframe.cpp:470
+#: kicad/mainframe.cpp:446
 msgid "Load File to Edit"
 msgstr "Załaduj plik do edycji"
 
-#: kicad/mainframe.cpp:524
+#: kicad/mainframe.cpp:500
 #, c-format
 msgid ""
 "Project name:\n"
@@ -8162,8 +8162,8 @@ msgstr ""
 
 #: pcbnew/loadcmp.cpp:496
 #, c-format
-msgid "Modules [%d items]"
-msgstr "Footprinty [%d pozycji]"
+msgid "Modules [%u items]"
+msgstr "Footprinty [%u elementów]"
 
 #: pcbnew/loadcmp.cpp:500
 msgid "Module"
@@ -17750,8 +17750,7 @@ msgid "Reload board"
 msgstr "Przeładuj płytkę"
 
 #: 3d-viewer/3d_toolbar.cpp:58
-#: 3d-viewer/3d_toolbar.cpp:146
-msgid "Copy 3D Image to Clipboard"
+msgid "Copy 3D image to clipboard"
 msgstr "Kopiuj obraz 3D do schowka"
 
 #: 3d-viewer/3d_toolbar.cpp:64
@@ -17814,6 +17813,10 @@ msgstr "Zapisz obraz w formacie PNG"
 msgid "Create Image (jpeg format)"
 msgstr "Zapisz obraz w formacie JPEG"
 
+#: 3d-viewer/3d_toolbar.cpp:146
+msgid "Copy 3D Image to Clipboard"
+msgstr "Kopiuj obraz 3D do schowka"
+
 #: 3d-viewer/3d_toolbar.cpp:151
 msgid "&Exit"
 msgstr "&Zakończ"
@@ -17843,8 +17846,8 @@ msgid "Render Textures"
 msgstr "Renderuj tekstury"
 
 #: 3d-viewer/3d_toolbar.cpp:176
-msgid "Apply a grid/cloud textures to Board, Solder Mask and Silkscreen"
-msgstr "Dodaj teksturę laminatu do ciała płytki, soldermaski i warstwy opisowej"
+msgid "Apply a grid/cloud textures to board, solder mask and silk screen"
+msgstr "Użyj tekstur siatki/obłoku do wyświetlania płytki, soldermaski i warstwy opisowej"
 
 #: 3d-viewer/3d_toolbar.cpp:180
 msgid "Render Smooth Normals"
@@ -17919,8 +17922,8 @@ msgid "Show Copper &Thickness"
 msgstr "Pokazuj grubość miedzi"
 
 #: 3d-viewer/3d_toolbar.cpp:260
-msgid "Show 3D F&ootprints"
-msgstr "Pokaż &obudowy 3D"
+msgid "Show 3D M&odels"
+msgstr "Pokaż M&odele 3D"
 
 #: 3d-viewer/3d_toolbar.cpp:263
 msgid "Show Zone &Filling"
@@ -17935,8 +17938,8 @@ msgid "Show &Adhesive Layers"
 msgstr "Pokaż w&arstwy kleju"
 
 #: 3d-viewer/3d_toolbar.cpp:275
-msgid "Show &Silkscreen Layer"
-msgstr "Pokaż warstwy &opisowe"
+msgid "Show &Silkscreen Layers"
+msgstr "Pokaż warstwy opi&sowe"
 
 #: 3d-viewer/3d_toolbar.cpp:278
 msgid "Show Solder &Mask Layers"
@@ -17947,8 +17950,8 @@ msgid "Show Solder &Paste Layers"
 msgstr "Pokaż warstwy do nakładania &pasty"
 
 #: 3d-viewer/3d_toolbar.cpp:286
-msgid "Show &Comments and Drawings Layer"
-msgstr "Pokaż warstwę &komentarzy"
+msgid "Show &Comments and Drawing Layers"
+msgstr "Pokaż warstwy komentarzy i opisowe"
 
 #: 3d-viewer/3d_toolbar.cpp:289
 msgid "Show &Eco Layers"
@@ -17963,8 +17966,8 @@ msgid "Show copper thickness"
 msgstr "Pokaż grubość miedzi"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:42
-msgid "Show component 3D shapes"
-msgstr "Pokaż modele 3D"
+msgid "Show 3D Models"
+msgstr "Pokaż Modele 3D"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:54
 msgid "Show silkscreen layers"
