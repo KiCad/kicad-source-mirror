@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -493,7 +493,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprint( BOARD* aPcb )
     for(  ; module;  module = module->Next() )
         listnames.Add( module->GetReference() );
 
-    msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
+    msg.Printf( _( "Modules [%u items]" ), (unsigned) listnames.GetCount() );
 
     wxArrayString headers;
 
