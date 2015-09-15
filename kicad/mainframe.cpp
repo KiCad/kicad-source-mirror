@@ -409,30 +409,6 @@ void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 }
 
 
-// Dead code: Cvpcb can be run only from the schematic editor now,
-// This is due to the fact the footprint field of components in schematics
-// are now always set by Cvpcb.
-// ( The idea is to drop the .cmp files to avoid to have 2 places were
-// footprints are stored, but only one: the schematic )
-/*
-void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
-{
-    wxFileName fn( GetProjectFileName() );
-
-    fn.SetExt( NetlistFileExtension );
-
-    KIWAY_PLAYER* frame = Kiway.Player( FRAME_CVPCB, false );
-    if( !frame )
-    {
-        frame = Kiway.Player( FRAME_CVPCB, true );
-        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-        frame->Show( true );
-    }
-
-    frame->Raise();
-}
-*/
-
 
 #include <wx/filefn.h>
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )

@@ -25,64 +25,64 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizeShowOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_bitmapRealisticMode = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapRealisticMode, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapRealisticMode, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxRealisticMode = new wxCheckBox( this, wxID_ANY, _("Realistic mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxRealisticMode, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxRealisticMode, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapCuThickness = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapCuThickness, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapCuThickness, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxCuThickness = new wxCheckBox( this, wxID_ANY, _("Show copper thickness"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxCuThickness, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxCuThickness, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmap3Dshapes = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmap3Dshapes, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmap3Dshapes, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_checkBox3Dshapes = new wxCheckBox( this, wxID_ANY, _("Show component 3D shapes"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBox3Dshapes, 0, wxALL, 5 );
+	m_checkBox3Dshapes = new wxCheckBox( this, wxID_ANY, _("Show 3D Models"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizeShowOpts->Add( m_checkBox3Dshapes, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapAreas = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapAreas, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapAreas, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxAreas = new wxCheckBox( this, wxID_ANY, _("Show filled areas in zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxAreas, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxAreas, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapSilkscreen = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapSilkscreen, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapSilkscreen, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxSilkscreen = new wxCheckBox( this, wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxSilkscreen, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxSilkscreen, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapSolderMask = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapSolderMask, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapSolderMask, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxSolderMask = new wxCheckBox( this, wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxSolderMask, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxSolderMask, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapSolderPaste = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapSolderPaste, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapSolderPaste, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxSolderpaste = new wxCheckBox( this, wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxSolderpaste, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxSolderpaste, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapAdhesive = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapAdhesive, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapAdhesive, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxAdhesive = new wxCheckBox( this, wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxAdhesive, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxAdhesive, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapComments = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapComments, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapComments, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxComments = new wxCheckBox( this, wxID_ANY, _("Show comments and drawings layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxComments, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxComments, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_bitmapECO = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_bitmapECO, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_bitmapECO, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBoxECO = new wxCheckBox( this, wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizeShowOpts->Add( m_checkBoxECO, 0, wxALL, 5 );
+	fgSizeShowOpts->Add( m_checkBoxECO, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bSizerLeft->Add( fgSizeShowOpts, 1, wxEXPAND, 5 );
