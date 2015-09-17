@@ -298,7 +298,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( editMenu, ID_MENU_PCB_CLEAN,
                  _( "&Cleanup Tracks and Vias" ),
-                 _( "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias" ),
+                 _( "Clean stubs, vias, delete break points, or unconnected tracks to pads and vias" ),
                  KiBitmap( delete_xpm ) );
 
     AddMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
@@ -307,8 +307,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( swap_layer_xpm ) );
 
     AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
-                 _( "&Reset Footprint Field Sizes" ),
-                 _( "Reset text size and width of all footprint fields to current defaults" ),
+                 _( "Set Footp&rint Field Sizes" ),
+                 _( "Set text size and width of footprint fields." ),
                  KiBitmap( reset_text_xpm ) );
 
     //----- View menu -----------------------------------------------------------
