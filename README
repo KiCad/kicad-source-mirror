@@ -1,0 +1,23 @@
+= KiCad GUI translations
+
+This is the repository for the po files that is used for the GUI
+translations for KiCad.
+
+It is cmake equipped to conform with the rest of the installation
+principles for KiCad.
+
+== Depends
+- Cmake
+- Gettext
+
+== How to install
+```
+cd kicad-i18n
+cmake .
+make
+make install
+```
+
+If you want to change the default install prefix to match your KiCad
+build, you can add for
+example use `-DCMAKE_INSTALL_PREFIX=/usr`.

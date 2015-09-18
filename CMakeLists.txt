@@ -12,7 +12,7 @@ foreach( LANG ${LANG_ARRAY} )
                      ${CMAKE_SOURCE_DIR}/${LANG}/kicad.po
                      -o ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo )
 
-    install( DIRECTORY ${CMAKE_BINARY_DIR}/${LANG}
+    install( FILES ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo
              DESTINATION share/kicad/internat
              COMPONENT resources )
 endforeach()
