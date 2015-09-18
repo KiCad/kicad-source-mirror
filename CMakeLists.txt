@@ -4,6 +4,14 @@ project( kicad-i18n NONE )
 
 find_package( Gettext REQUIRED )
 
+if( UNIX AND NOT APPLE )
+set( KICAD_I18N ${CMAKE_INSTALL_PREFIX}/share/locale
+    CACHE PATH "Location of KiCad i18n files." )
+else()
+set( KICAD_I18N ${CMAKE_INSTALL_PREFIX}/share/kicad/internat
+    CACHE PATH "Location of KiCad i18n files." )
+endif()
+
 file(STRINGS LINGUAS LANG_ARRAY REGEX "^[^#].*")
 
 foreach( LANG ${LANG_ARRAY} )
@@ -13,8 +21,14 @@ foreach( LANG ${LANG_ARRAY} )
                      ${CMAKE_SOURCE_DIR}/${LANG}/kicad.po
                      -o ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo )
 
-    install( FILES ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo
-             DESTINATION share/kicad/internat/${LANG}
-             COMPONENT resources )
+    if( UNIX AND NOT APPLE )
+        install( FILES ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo
+                DESTINATION ${KICAD_I18N}/${LANG}/LC_MESSAGES
+                COMPONENT resources )
+    else()
+        install( FILES ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo
+                DESTINATION ${KICAD_I18N}/${LANG}
+                COMPONENT resources )
+    endif()
 endforeach()
 
