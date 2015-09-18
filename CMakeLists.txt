@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.0 )
+cmake_minimum_required( VERSION 2.8.4 FATAL_ERROR )
 
 project( kicad-i18n NONE )
 
@@ -13,7 +13,7 @@ foreach( LANG ${LANG_ARRAY} )
                      -o ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo )
 
     install( FILES ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo
-             DESTINATION share/kicad/internat
+             DESTINATION share/kicad/internat/${LANG}
              COMPONENT resources )
 endforeach()
 
