@@ -4,7 +4,8 @@ project( kicad-i18n NONE )
 
 find_package( Gettext REQUIRED )
 
-set( LANG_ARRAY ca cs de es fi fr hu it ja ko nl pl pt ru sl sv zh_CN )
+file(STRINGS LINGUAS LANG_ARRAY REGEX "^[^#].*")
+
 foreach( LANG ${LANG_ARRAY} )
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${LANG})
 
