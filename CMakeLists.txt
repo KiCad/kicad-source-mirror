@@ -13,7 +13,7 @@ if( UNIX AND KICAD_I18N_UNIX_STRICT_PATH AND NOT APPLE )
     set( KICAD_I18N_PATH ${CMAKE_INSTALL_PREFIX}/share/locale
         CACHE PATH "Location of KiCad i18n files." )
 else()
-    # Default Unix inconvinient locale lookup path
+    # Default Unix inconvenient locale lookup path
     set( KICAD_I18N_PATH share/kicad/internat
         CACHE PATH "Location of KiCad i18n files." )
 endif()
