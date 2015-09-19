@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-15 21:46+0100\n"
-"PO-Revision-Date: 2015-09-15 21:57+0100\n"
+"POT-Creation-Date: 2015-09-19 21:51+0100\n"
+"PO-Revision-Date: 2015-09-19 21:55+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -9575,8 +9575,8 @@ msgid "&Cleanup Tracks and Vias"
 msgstr "Wy&czyść ścieżki i przelotki"
 
 #: pcbnew/menubar_pcbframe.cpp:301
-msgid "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias"
-msgstr "Wyczyść odcinki, przelotki, usuń punkty przerw lub połącz dyndające ścieżki do pól i przelotek"
+msgid "Clean stubs, vias, delete break points, or unconnected tracks to pads and vias"
+msgstr "Wyczyść odcinki, przelotki, usuń przerwy lub niepołączone ścieżki do pól i przelotek"
 
 #: pcbnew/menubar_pcbframe.cpp:305
 msgid "&Swap Layers"
@@ -9587,12 +9587,12 @@ msgid "Swap tracks on copper layers or drawings on other layers"
 msgstr "Zamień ścieżki na warstwach ścieżek lub rysunki na innych warstwach"
 
 #: pcbnew/menubar_pcbframe.cpp:310
-msgid "&Reset Footprint Field Sizes"
-msgstr "P&rzywróć domyślny rozmiar pól footprintów"
+msgid "Set Footp&rint Field Sizes"
+msgstr "Ustaw rozmiar &pola elemenetu PCB"
 
 #: pcbnew/menubar_pcbframe.cpp:311
-msgid "Reset text size and width of all footprint fields to current defaults"
-msgstr "Przywraca rozmiar i szerokość wszystkich pól footprintów do wartości domyślnych"
+msgid "Set text size and width of footprint fields."
+msgstr "Ustaw rozmiar i szerokość tekstu pól elementu PCB"
 
 #: pcbnew/menubar_pcbframe.cpp:349
 msgid "Show board in 3D viewer"
@@ -12389,25 +12389,25 @@ msgstr ""
 msgid "General options:"
 msgstr "Opcje główne:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:407
+#: pcbnew/dialogs/dialog_copper_zones.cpp:408
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
 msgstr "Prześwit musi być mniejszy niż %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:419
+#: pcbnew/dialogs/dialog_copper_zones.cpp:420
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
 msgstr "Minimalna szerokość musi być większa niż %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:457
+#: pcbnew/dialogs/dialog_copper_zones.cpp:458
 msgid "Thermal relief spoke must be greater than the minimum width."
 msgstr "Szerokość łącza połączenia termicznego musi być większa niż minimalna szerokość."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:470
+#: pcbnew/dialogs/dialog_copper_zones.cpp:471
 msgid "No layer selected."
 msgstr "Nie wybrano warstwy."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:481
+#: pcbnew/dialogs/dialog_copper_zones.cpp:482
 msgid "No net selected."
 msgstr "Nie wybrano sieci."
 
@@ -12415,11 +12415,11 @@ msgstr "Nie wybrano sieci."
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
 msgstr "Użyłeś opcji \"Niepołączone\". To spowoduje utworzenie izolowanych obszarów na płytce. Kontynuować?"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:521
+#: pcbnew/dialogs/dialog_copper_zones.cpp:523
 msgid "Chamfer distance"
 msgstr "Długość ścięcia"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:527
+#: pcbnew/dialogs/dialog_copper_zones.cpp:529
 msgid "Fillet radius"
 msgstr "Promień zaokrąglenia"
 
