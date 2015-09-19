@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-19 21:51+0100\n"
-"PO-Revision-Date: 2015-09-19 21:55+0100\n"
+"PO-Revision-Date: 2015-09-19 22:08+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -9588,11 +9588,11 @@ msgstr "Zamień ścieżki na warstwach ścieżek lub rysunki na innych warstwach
 
 #: pcbnew/menubar_pcbframe.cpp:310
 msgid "Set Footp&rint Field Sizes"
-msgstr "Ustaw rozmiar &pola elemenetu PCB"
+msgstr "Ustaw rozmiar &pola elementu PCB"
 
 #: pcbnew/menubar_pcbframe.cpp:311
 msgid "Set text size and width of footprint fields."
-msgstr "Ustaw rozmiar i szerokość tekstu pól elementu PCB"
+msgstr "Ustaw rozmiar i szerokość tekstu pól elementu PCB."
 
 #: pcbnew/menubar_pcbframe.cpp:349
 msgid "Show board in 3D viewer"
