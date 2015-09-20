@@ -26,6 +26,7 @@
 #include <pgm_base.h>
 #include <common.h>
 #include <config.h>     // to define DEFAULT_INSTALL_PATH
+#include <macros.h>
 
 
 /**
@@ -49,6 +50,8 @@ wxString FindFileInSearchPaths( const SEARCH_STACK& aStack,
                 fn.AppendDir( (*aSubdirs)[j] );
         }
 
+        wxLogDebug( wxT( "    %s" ), GetChars( fn.GetFullPath() ) );
+
         if( fn.DirExists() )
         {
             paths.Add( fn.GetPath() );
@@ -68,38 +71,15 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
 
     // It might already be in aSStack, but why depend on other code
     // far away when it's so easy to add it again (to our copy) as the first place to look.
-    // This is CMAKE_INSTALL_PREFIX:
-    ss.AddPaths( wxT( DEFAULT_INSTALL_PATH ), 0 );
 
-    // If there's a KICAD environment variable set, use that guy's path also
-    ss.AddPaths( Pgm().GetKicadEnvVariable(), 0 );
+    // This is CMAKE_INSTALL_PREFIX unless DEFAULT_INSTALL_PATH was defined during
+    // build configuration:
+    ss.AddPaths( wxT( DEFAULT_INSTALL_PATH ), 0 );
 
 #if defined(__WXMAC__)
     ss.AddPaths( GetOSXKicadMachineDataDir() );
     ss.AddPaths( Pgm().GetExecutablePath(), 0 );
-#endif
 
-#if ! defined(__WXMAC__) // && defined(__linux__)
-    // Based on kicad-doc.bzr/CMakeLists.txt, line 20, the help files are
-    // installed into "<CMAKE_INSTALL_PREFIX>/share/doc/kicad/help" for linux.
-    // This is ${KICAD_HELP} var in that CMakeLists.txt file.
-    // Below we account for an international subdirectory.
-    subdirs.Add( wxT( "share" ) );
-    subdirs.Add( wxT( "doc" ) );
-    subdirs.Add( wxT( "kicad" ) );
-    subdirs.Add( wxT( "help" ) );
-#endif
-
-#if ! defined(__WXMAC__) // && defined(__WINDOWS__)
-    // Based on kicad-doc.bzr/CMakeLists.txt, line 35, the help files are
-    // installed into "<CMAKE_INSTALL_PREFIX>/doc/help" for Windows.
-    // This is ${KICAD_HELP} var in that CMakeLists.txt file.
-    // Below we account for an international subdirectory.
-    altsubdirs.Add( wxT( "doc" ) );
-    altsubdirs.Add( wxT( "help" ) );
-#endif
-
-#if defined (__WXMAC__)
     // OS X packages can have the help files in
     // /Library/Application\ Support/kicad/help,
     // and in Contents/SharedSupport/help inside the
@@ -110,6 +90,37 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     altsubdirs.Add( wxT( "SharedSupport" ) );
     altsubdirs.Add( wxT( "help" ) );
 #endif
+
+#if ! defined(__WXMAC__) // && defined(__linux__)
+    // This is the executable path minus the trailing bin directory used on Windows and Linux.
+    wxFileName tmp( Pgm().GetExecutablePath(), wxEmptyString );
+    wxArrayString binDirs = tmp.GetDirs();
+
+    if( !binDirs.IsEmpty() && binDirs[ binDirs.GetCount() - 1 ].CmpNoCase( wxT( "bin" ) ) == 0 )
+        tmp.RemoveLastDir();
+
+    ss.AddPaths( tmp.GetPath(), 0 );
+
+    // Based on kicad-doc.bzr/CMakeLists.txt, line 20, the help files are
+    // installed into "<CMAKE_INSTALL_PREFIX>/share/doc/kicad/help" for linux.
+    // This is ${KICAD_HELP} var in that CMakeLists.txt file.
+    // Below we account for an international subdirectory.
+    subdirs.Add( wxT( "share" ) );
+    subdirs.Add( wxT( "doc" ) );
+    subdirs.Add( wxT( "kicad" ) );
+    subdirs.Add( wxT( "help" ) );
+
+    // Based on kicad-doc.bzr/CMakeLists.txt, line 35, the help files are
+    // installed into "<CMAKE_INSTALL_PREFIX>/doc/help" for Windows.
+    // This is ${KICAD_HELP} var in that CMakeLists.txt file.
+    // Below we account for an international subdirectory.
+    altsubdirs.Add( wxT( "doc" ) );
+    altsubdirs.Add( wxT( "help" ) );
+#endif
+
+    // If there's a KICAD environment variable set, always use that guy's path first.
+    if( !Pgm().GetKicadEnvVariable().IsEmpty() )
+        ss.AddPaths( Pgm().GetKicadEnvVariable(), 0 );
 
     /* Search for a help file.
      *  we *must* find a help file.
@@ -126,14 +137,17 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     // If fails, try to find help file in help/en
     wxArrayString locale_name_dirs;
     locale_name_dirs.Add( i18n->GetCanonicalName() );           // canonical name like fr_FR
+
     // wxLocale::GetName() does not return always the short name
     locale_name_dirs.Add( i18n->GetName().BeforeLast( '_' ) );  // short canonical name like fr
     locale_name_dirs.Add( wxT( "en" ) );                        // default (en)
 
-#if defined(DEBUG) && 0
-    ss.Show( __func__ );
-    printf( "%s: m_help_file:'%s'\n", __func__, TO_UTF8( aBaseName ) );
+#if defined(DEBUG) && 1
+    ss.Show( wxString( __func__ ) );
+    wxLogDebug( wxT( "%s: m_help_file:'%s'" ), __func__, GetChars( aBaseName ) );
 #endif
+
+    wxLogDebug( wxT( "Checking SEARCH_STACK for file %s" ), GetChars( aBaseName ) );
 
     // Help files can be html (.html ext) or pdf (.pdf ext) files.
     // Therefore, <BaseName>.html file is searched and if not found,
