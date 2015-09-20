@@ -13,10 +13,10 @@ principles for KiCad.
 == How to install
 ```
 $ cd kicad-i18n
-$ _PWD=$(pwd)
+$ BUILD_SRC=$(pwd)
 $ mkdir -p ~/tmp/kicad-i18n-build
 $ cd ~/tmp/kicad-i18n-build
-$ cmake ${_PWD}
+$ cmake ${BUILD_SRC}
 $ make
 $ make install
 $ cd ..
