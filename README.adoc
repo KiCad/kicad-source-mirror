@@ -12,12 +12,18 @@ principles for KiCad.
 
 == How to install
 ```
-cd kicad-i18n
-cmake .
-make
-make install
+$ cd kicad-i18n
+$ _PWD=$(pwd)
+$ mkdir -p ~/tmp/kicad-i18n-build
+$ cd ~/tmp/kicad-i18n-build
+$ cmake ${_PWD}
+$ make
+$ make install
 ```
 
 If you want to change the default install prefix to match your KiCad
 build, you can add for
 example use `-DCMAKE_INSTALL_PREFIX=/usr`.
+
+If you occurred some problems, use `cmake --trace` instead `cmake' to
+make build log more verbose, when you fill issue report.
