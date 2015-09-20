@@ -19,7 +19,8 @@ $ cd ~/tmp/kicad-i18n-build
 $ cmake ${_PWD}
 $ make
 $ make install
-$ cd .. rm -rf ~/tmp/kicad-i18n-build
+$ cd ..
+$ rm -rf ~/tmp/kicad-i18n-build
 ```
 
 If you want to change the default install prefix to match your KiCad
