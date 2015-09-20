@@ -22,8 +22,8 @@ $ make install
 ```
 
 If you want to change the default install prefix to match your KiCad
-build, you can add for
-example use `-DCMAKE_INSTALL_PREFIX=/usr`.
+build, you can add for example use:
+`-DCMAKE_INSTALL_PREFIX=/usr`
 
-If you occurred some problems, use `cmake --trace` instead `cmake' to
+If you occurred some problems, use `cmake --trace` instead `cmake` to
 make build log more verbose, when you fill issue report.
