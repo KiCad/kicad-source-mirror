@@ -24,7 +24,7 @@ $ rm -rf ~/tmp/kicad-i18n-build
 ```
 
 If you want to change the default install prefix to match your KiCad
-build, you can add for example use:
+build, you can add `cmake` option for example use:
 ```
 -DCMAKE_INSTALL_PREFIX=/usr
 ```
