@@ -13,7 +13,7 @@ option( KICAD_I18N_UNIX_STRICT_PATH
     OFF
     )
 
-if( UNIX AND KICAD_I18N_UNIX_STRICT_PATH AND NOT APPLE )
+if( UNIX AND KICAD_I18N_UNIX_STRICT_PATH )
     set( KICAD_I18N_PATH ${CMAKE_INSTALL_PREFIX}/share/locale
         CACHE PATH "Location of KiCad i18n files." )
 else()
@@ -31,7 +31,7 @@ foreach( LANG ${LANG_ARRAY} )
                      ${CMAKE_SOURCE_DIR}/${LANG}/kicad.po
                      -o ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo )
 
-    if( UNIX AND KICAD_I18N_UNIX_STRICT_PATH AND NOT APPLE )
+    if( UNIX AND KICAD_I18N_UNIX_STRICT_PATH )
         install( FILES ${CMAKE_BINARY_DIR}/${LANG}/kicad.mo
                 DESTINATION ${KICAD_I18N_PATH}/${LANG}/LC_MESSAGES
                 COMPONENT resources )
