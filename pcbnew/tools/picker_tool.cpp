@@ -93,8 +93,8 @@ void PICKER_TOOL::reset()
 {
     m_cursorSnapping = true;
     m_cursorVisible = true;
-    m_cursorCapture = true;
-    m_autoPanning = true;
+    m_cursorCapture = false;
+    m_autoPanning = false;
 
     m_picking = false;
     m_clickHandler = boost::none;
