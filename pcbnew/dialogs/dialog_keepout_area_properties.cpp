@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-  * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@
 
 #include <wx/wx.h>
 #include <fctsys.h>
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcbnew.h>
@@ -57,7 +56,7 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    wxConfigBase*       m_config;               ///< Current config
+    wxConfigBase*   m_config;               ///< Current config
     ZONE_SETTINGS   m_zonesettings;
     ZONE_SETTINGS*  m_ptr;
 
@@ -102,7 +101,8 @@ ZONE_EDIT_T InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSe
 }
 
 
-DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
+DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* aParent,
+                                                                ZONE_SETTINGS* aSettings ) :
     DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( aParent )
 {
     m_parent = aParent;
@@ -111,10 +111,11 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
 
-    SetReturnCode( ZONE_ABORT );        // Will be changed on button OK ckick
+    SetReturnCode( ZONE_ABORT );        // Will be changed on button OK click
 
     initDialog();
 
+    m_sdbSizerButtonsOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Center();
 }
@@ -183,10 +184,12 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
 }
 
+
 void DIALOG_KEEPOUT_AREA_PROPERTIES::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( ZONE_ABORT );
 }
+
 
 void DIALOG_KEEPOUT_AREA_PROPERTIES::OnOkClick( wxCommandEvent& event )
 {
@@ -196,6 +199,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnOkClick( wxCommandEvent& event )
         EndModal( ZONE_OK );
     }
 }
+
 
 bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
 {
@@ -209,11 +213,11 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
     if( ! m_zonesettings.GetDoNotAllowTracks() &&
         ! m_zonesettings.GetDoNotAllowVias() &&
         ! m_zonesettings.GetDoNotAllowCopperPour() )
-        {
-            DisplayError( NULL,
-                          _("Tracks, vias and pads are allowed. The keepout is useless" ) );
-            return false;
-        }
+    {
+        DisplayError( NULL,
+                      _("Tracks, vias, and pads are allowed. The keepout is useless" ) );
+        return false;
+    }
 
     // Get the layer selection for this zone
     int ii = m_LayerSelectionCtrl->GetFirstSelected();
@@ -225,6 +229,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
     }
 
     m_zonesettings.m_CurrentZone_Layer = ToLAYER_ID( m_layerId[ii] );
+
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:
@@ -255,6 +260,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
 
     return true;
 }
+
 
 wxBitmap DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerBitmap( EDA_COLOR_T aColor )
 {
