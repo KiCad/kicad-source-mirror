@@ -181,7 +181,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             xsheetpath->AddAttribute( sNames, path->PathHumanReadable() );
             xsheetpath->AddAttribute( sTStamps, path->Path() );
 
-            timeStamp.Printf( sTSFmt, comp->GetTimeStamp() );
+            timeStamp.Printf( sTSFmt, (unsigned long)comp->GetTimeStamp() );
             xcomp->AddChild( node( sTStamp, timeStamp ) );
         }
     }

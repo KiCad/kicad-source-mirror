@@ -27,7 +27,7 @@
 
 // This file handle automatic selection of footprints, from .equ files which give
 // a footprint FPID associated to a component value.
-// Thse assiciations have this form:
+// These associations have this form:
 // 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
 
 
@@ -51,7 +51,7 @@
 /*
  * read the string between quotes and put it in aTarget
  * put text in aTarget
- * return a pointer to the last read char (the second quote if Ok)
+ * return a pointer to the last read char (the second quote if OK)
  */
 wxString GetQuotedText( wxString & text )
 {
@@ -78,7 +78,8 @@ bool sortListbyCmpValue( const FOOTPRINT_EQUIVALENCE& ref, const FOOTPRINT_EQUIV
     return ref.m_ComponentValue.Cmp( test.m_ComponentValue ) >= 0;
 }
 
-// read the .equ files and populate the list of equvalents
+
+// read the .equ files and populate the list of equivalents
 int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages )
 {
     char        Line[1024];
@@ -103,7 +104,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 
             if( aErrorMessages )
             {
-                error_msg.Printf( _( "Equ file '%s' could not be found in the "
+                error_msg.Printf( _( "Equivalence file '%s' could not be found in the "
                                      "default search paths." ),
                             GetChars( fn.GetFullName() ) );
 
@@ -124,7 +125,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 
             if( aErrorMessages )
             {
-                error_msg.Printf( _( "Error opening equ file '%s'." ), GetChars( tmp ) );
+                error_msg.Printf( _( "Error opening equivalence file '%s'." ), GetChars( tmp ) );
 
                 if( ! aErrorMessages->IsEmpty() )
                     *aErrorMessages << wxT("\n\n");
@@ -176,7 +177,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         return;
 
     if( buildEquivalenceList( equiv_List, &error_msg ) )
-        wxMessageBox( error_msg, _( "Equ files Load Error" ), wxOK |  wxICON_WARNING, this );
+        wxMessageBox( error_msg, _( "Equivalence File Load Error" ), wxOK |  wxICON_WARNING, this );
 
     // Sort the association list by component value.
     // When sorted, find duplicate definitions (i.e. 2 or more items
@@ -184,10 +185,10 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
     std::sort( equiv_List.begin(), equiv_List.end(), sortListbyCmpValue );
 
     // Display the number of footprint/component equivalences.
-    msg.Printf( _( "%d footprint/cmp equivalences found." ), equiv_List.size() );
+    msg.Printf( _( "%lu footprint/cmp equivalences found." ), (unsigned long)equiv_List.size() );
     SetStatusText( msg, 0 );
 
-    // Now, associe each free component with a footprint, when the association
+    // Now, associate each free component with a footprint, when the association
     // is found in list
     m_skipComponentSelect = true;
     ii = 0;
@@ -206,7 +207,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         // Here a first attempt is made. We can have multiple equivItem of the same value.
         // When happens, using the footprint filter of components can remove the ambiguity by
         // filtering equivItem so one can use multiple equiv_List (for polar and
-        // nonpolar caps for example)
+        // non-polar caps for example)
         for( unsigned idx = 0; idx < equiv_List.size(); idx++ )
         {
             FOOTPRINT_EQUIVALENCE& equivItem = equiv_List[idx];
@@ -274,7 +275,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         // obviously the last chance: there's only one filter matching one footprint
         if( 1 == component->GetFootprintFilters().GetCount() )
         {
-            // we do not need to analyse wildcards: single footprint do not
+            // we do not need to analyze wildcards: single footprint do not
             // contain them and if there are wildcards it just will not match any
             const FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
 
