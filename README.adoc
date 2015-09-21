@@ -17,7 +17,6 @@ $ BUILD_SRC=$(pwd)
 $ mkdir -p ~/tmp/kicad-i18n-build
 $ cd ~/tmp/kicad-i18n-build
 $ cmake ${BUILD_SRC}
-$ make
 $ make install
 $ cd ..
 $ rm -rf ~/tmp/kicad-i18n-build
