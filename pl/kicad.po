@@ -13820,7 +13820,7 @@ msgstr "Kulisowa_Przednia_Po"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:124
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1336
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr "Widoczność rezerwacji obszaru footprintu z przodu(na wierzchu) płytki"
+msgstr "Używaj przedniej(wierzchniej) warstwy rezerwacji obszaru footprintu"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:137
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1346
@@ -13833,7 +13833,7 @@ msgstr "Skladu_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:152
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "Widoczność przedniej(wierzchniej) warstwy składu"
+msgstr "Używaj przedniej(wierzchniej) warstwy składu"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:162
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:187
@@ -13848,7 +13848,7 @@ msgstr "Kleju_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:177
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Widoczność przedniej(wierzchniej) warstwy kleju"
+msgstr "Używaj przedniej(wierzchniej) warstwy kleju"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:191
 msgid "SoldP_Front_later"
@@ -13856,7 +13856,7 @@ msgstr "PastyLut_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:202
 msgid "If you want a solder paster layer for front side of the board"
-msgstr "Widoczność przedniej(wierzchniej) warstwy pasty lutowniczej"
+msgstr "Używaj przedniej(wierzchniej) warstwy pasty lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:212
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:237
@@ -13873,7 +13873,7 @@ msgstr "Nadruku_Przednia_po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:227
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Widoczność przedniej(wierzchniej) warstwy nadruku"
+msgstr "Używaj przedniej(wierzchniej) warstwy nadruku"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:241
 msgid "Mask_Front_later"
@@ -13881,7 +13881,7 @@ msgstr "Maski_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:252
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "Widoczność przedniej(wierzchniej) warstwy maski lutowniczej"
+msgstr "Używaj przedniej(wierzchniej) warstwy maski lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:266
 msgid "Front_later"
@@ -13889,11 +13889,11 @@ msgstr "Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:268
 msgid "Layer name of front (top) copper layer"
-msgstr "Nazwa warstwy przewodzącej z przodu(na wierzchu)"
+msgstr "Nazwa przedniej(wierzchniej) warstwy przewodzącej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:280
 msgid "If you want a front copper layer"
-msgstr "Widoczność warstwy przewodzącej przedniej(wierzchniej)"
+msgstr "Używaj przedniej(wierzchniej) warstwy przewodzącej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:290
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:319
@@ -14200,7 +14200,7 @@ msgstr "Nazwa tylnej(spodniej) warstwy przewodzącej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1182
 msgid "If you want a back copper layer"
-msgstr "Widoczność tylnej(spodniej) warstwy przewodzącej"
+msgstr "Używaj tylnej(spodniej) warstwy przewodzącej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1200
 msgid "Mask_Back_later"
@@ -14208,7 +14208,7 @@ msgstr "Maski_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1211
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Widoczność tylnej(spodniej) warstwy maski lutowniczej"
+msgstr "Używaj tylnej(spodniej) warstwy maski lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1225
 msgid "SilkS_Back_later"
@@ -14216,7 +14216,7 @@ msgstr "Nadruku_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1236
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Widoczność tylnej(spodniej) warstwy nadruku"
+msgstr "Używaj tylnej(spodniej) warstwy nadruku"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1250
 msgid "SoldP_Back_later"
@@ -14224,7 +14224,7 @@ msgstr "PastyLut_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1261
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Widoczność tylnej(spodniej) warstwy pasty lutowniczej"
+msgstr "Używaj tylnej(spodniej) warstwy pasty lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1275
 msgid "Adhes_Back_later"
@@ -14232,7 +14232,7 @@ msgstr "Kleju_Tylna_po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1286
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Widoczność tylnej(spodniej) warstwy kleju"
+msgstr "Używaj tylnej(spodniej) warstwy kleju"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1300
 msgid "Fab_Back_later"
@@ -14240,7 +14240,7 @@ msgstr "Skladu_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1311
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr "Widoczność tylnej(spodniej) warstwy składu"
+msgstr "Używaj tylnej(spodniej) warstwy składu"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1325
 msgid "CrtYd_Back_later"
@@ -14252,7 +14252,7 @@ msgstr "Krawedzi_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1361
 msgid "If you want a board perimeter layer"
-msgstr "Widoczność obrysu"
+msgstr "Używaj warstwy obrysu"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1371
 msgid "Board contour"
@@ -14287,7 +14287,7 @@ msgstr "Komentarzy_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1455
 msgid "If you want a separate layer for comments or notes"
-msgstr "Widoczność warstwy dla komentarzy i notatek"
+msgstr "Używaj warstwy dla komentarzy i notatek"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1469
 msgid "Drawings_later"
@@ -14295,7 +14295,7 @@ msgstr "Rysunkowa_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1480
 msgid "If you want a layer for documentation drawings"
-msgstr "Widoczność warstwy dokumentacji rysunkowej"
+msgstr "Używaj warstwy dokumentacji rysunkowej"
 
 #: pcbnew/dialogs/dialog_drc.cpp:148
 #: pcbnew/dialogs/dialog_drc.cpp:211
