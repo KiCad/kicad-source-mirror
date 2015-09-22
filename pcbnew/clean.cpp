@@ -120,6 +120,7 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     if( dlg.ShowModal() != wxID_OK )
         return;
 
+    // Old model has to be refreshed, GAL normally does not keep updating it
     if( IsGalCanvasActive() )
         Compile_Ratsnest( NULL, false );
 
@@ -128,6 +129,11 @@ void PCB_EDIT_FRAME::Clean_Pcb()
 
     cleaner.CleanupBoard( this, dlg.m_cleanVias, dlg.m_mergeSegments,
                           dlg.m_deleteUnconnectedSegm );
+
+    // There is a chance that some of tracks have changed their nets, so rebuild ratsnest from scratch
+    if( IsGalCanvasActive() )
+        GetBoard()->GetRatsnest()->ProcessBoard();
+
     m_canvas->Refresh( true );
 }
 
