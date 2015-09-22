@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-19 21:51+0100\n"
-"PO-Revision-Date: 2015-09-19 22:08+0100\n"
+"POT-Creation-Date: 2015-09-22 10:56+0100\n"
+"PO-Revision-Date: 2015-09-22 11:10+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -7749,7 +7749,7 @@ msgstr "Ostrzeżenie: Wyświetlanie stref jest WYŁĄCZONE!!!"
 
 #: pcbnew/edit.cpp:1460
 msgid "Add keepout"
-msgstr "Dodaj strefę chronioną"
+msgstr "Dodaj obszar wykluczenia"
 
 #: pcbnew/edit.cpp:1464
 msgid "Add layer alignment target"
@@ -7993,15 +7993,15 @@ msgstr "Średnica otworu mikroprzelotki w klasie połączeń &lt; ograniczenie g
 
 #: pcbnew/class_drc_item.cpp:108
 msgid "Via inside a keepout area"
-msgstr "Przelotka wewnątrz strefy chronionej"
+msgstr "Przelotka wewnątrz obszaru wykluczenia"
 
 #: pcbnew/class_drc_item.cpp:111
 msgid "Track inside a keepout area"
-msgstr "Ścieżka wewnątrz strefy chronionej"
+msgstr "Ścieżka wewnątrz obszaru wykluczenia"
 
 #: pcbnew/class_drc_item.cpp:114
 msgid "Pad inside a keepout area"
-msgstr "Pole lutownicze wewnątrz strefy chronionej"
+msgstr "Pole lutownicze wewnątrz obszaru wykluczenia"
 
 #: pcbnew/class_drc_item.cpp:117
 msgid "Via inside a text"
@@ -8488,7 +8488,7 @@ msgstr "Dodaj strefy"
 
 #: pcbnew/tool_pcb.cpp:450
 msgid "Add keepout areas"
-msgstr "Dodaje strefy chronione"
+msgstr "Dodaje obszary wykluczenia"
 
 #: pcbnew/tool_pcb.cpp:454
 msgid "Add graphic line or polygon"
@@ -9905,7 +9905,7 @@ msgstr "Właściwości pól lutowniczych"
 
 #: pcbnew/sel_layer.cpp:301
 msgid "Warning: The Top Layer and Bottom Layer are same."
-msgstr "Ostrzeżenie: Górna i dolna warstwa są takie same."
+msgstr "Ostrzeżenie: Wierzchnia i Spodnia warstwa są takie same."
 
 #: pcbnew/gpcb_plugin.cpp:85
 #, c-format
@@ -9956,35 +9956,35 @@ msgstr "Pokaż niepołączone jako połączenia wspomagające"
 
 #: pcbnew/class_pcb_layer_widget.cpp:66
 msgid "Pads Front"
-msgstr "Pady na stronie górnej"
+msgstr "Pady z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:66
 msgid "Show footprint pads on board's front"
-msgstr "Pokaż pola lutownicze footprintu na warstwie górnej"
+msgstr "Pokaż pola lutownicze footprintu z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Pads Back"
-msgstr "Pady na stronie dolniej"
+msgstr "Pady z tyłu(na sopdzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Show footprint pads on board's back"
-msgstr "Pokaż pola lutownicze footprintu na warstwie dolnej"
+msgstr "Pokaż pola lutownicze footprintu z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Text Front"
-msgstr "Tekst na stroni górnej"
+msgstr "Tekst z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Show footprint text on board's front"
-msgstr "Pokaż opisy footprintu na warstwie górnej"
+msgstr "Pokaż opisy footprintu z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Text Back"
-msgstr "Tekst na stronie dolniej"
+msgstr "Tekst z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Show footprint text on board's back"
-msgstr "Pokaż opisy footprintu na warstwie dolnej"
+msgstr "Pokaż opisy footprintu z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Hidden Text"
@@ -10020,7 +10020,7 @@ msgstr "Footprinty Góra"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Show footprints that are on board's front"
-msgstr "Pokaż footprinty umieszczone na warstwie górnej"
+msgstr "Pokaż footprinty umieszczone z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Footprints Back"
@@ -10028,7 +10028,7 @@ msgstr "Footprinty Dół"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprints that are on board's back"
-msgstr "Pokaż footprinty umieszczone na warstwie dolnej"
+msgstr "Pokaż footprinty umieszczone z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Values"
@@ -10048,19 +10048,19 @@ msgstr "Pokaż odznaczniki footprintów"
 
 #: pcbnew/class_pcb_layer_widget.cpp:166
 msgid "Show All Copper Layers"
-msgstr "Pokaż wszystkie warstwy sygnałowe"
+msgstr "Pokaż wszystkie warstwy przewodzące"
 
 #: pcbnew/class_pcb_layer_widget.cpp:168
 msgid "Hide All Copper Layers But Active"
-msgstr "Ukryj wszystkie warstwy sygnałowe oprócz aktywnej"
+msgstr "Ukryj wszystkie warstwy przewodzące oprócz aktywnej"
 
 #: pcbnew/class_pcb_layer_widget.cpp:170
 msgid "Always Hide All Copper Layers But Active"
-msgstr "Zawsze ukrywaj wszystkie warstwy sygnałowe oprócz aktywnej"
+msgstr "Zawsze ukrywaj wszystkie warstwy przewodzące oprócz aktywnej"
 
 #: pcbnew/class_pcb_layer_widget.cpp:172
 msgid "Hide All Copper Layers"
-msgstr "Ukryj wszystkie warstwy sygnałowe"
+msgstr "Ukryj wszystkie warstwy przewodzące"
 
 #: pcbnew/class_pcb_layer_widget.cpp:243
 msgid "Render"
@@ -10068,47 +10068,47 @@ msgstr "Pokaż"
 
 #: pcbnew/class_pcb_layer_widget.cpp:333
 msgid "Front copper layer"
-msgstr "Górna warstwa ścieżek"
+msgstr "Warstwa przewodząca z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:337
 msgid "Back copper layer"
-msgstr "Dolna warstwa ścieżek"
+msgstr "Warstwa przewodząca z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:341
 msgid "Inner copper layer"
-msgstr "Wewnętrzna warstwa ścieżek"
+msgstr "Wewnętrzna warstwa przewodząca"
 
 #: pcbnew/class_pcb_layer_widget.cpp:365
 msgid "Adhesive on board's front"
-msgstr "Warstwa kleju na warstwie górnej"
+msgstr "Warstwa kleju z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:366
 msgid "Adhesive on board's back"
-msgstr "Warstwa kleju na warstwie dolnej"
+msgstr "Warstwa kleju z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:367
 msgid "Solder paste on board's front"
-msgstr "Pasta lutownicza na warstwie górnej"
+msgstr "Pasta lutownicza z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:368
 msgid "Solder paste on board's back"
-msgstr "Pasta lutownicza na warstwie dolnej"
+msgstr "Pasta lutownicza z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:369
 msgid "Silkscreen on board's front"
-msgstr "Warstwa opisowa na warstwie górnej"
+msgstr "Warstwa nadruku z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:370
 msgid "Silkscreen on board's back"
-msgstr "Warstwa opisowa na warstwie dolnej"
+msgstr "Warstwa nadruku z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:371
 msgid "Solder mask on board's front"
-msgstr "Maska lutownicza na warstwie górnej"
+msgstr "Maska lutownicza z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:372
 msgid "Solder mask on board's back"
-msgstr "Maska lutownicza na warstwie dolnej"
+msgstr "Maska lutownicza z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:373
 msgid "Explanatory drawings"
@@ -10133,19 +10133,19 @@ msgstr "Zewnętrzny kształt kompletnej płytki"
 
 #: pcbnew/class_pcb_layer_widget.cpp:379
 msgid "Footprint courtyards on board's front"
-msgstr "Obszar zajęty przez footprint na warstwie górnej"
+msgstr "Obszar zajęty przez footprint z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:380
 msgid "Footprint courtyards on board's back"
-msgstr "Obszar zajęty przez footprint na warstwie dolnej"
+msgstr "Obszar zajęty przez footprint z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:381
 msgid "Footprint assembly on board's front"
-msgstr "Informacje montażowe footprintu na warstwie górnej"
+msgstr "Informacje montażowe footprintu z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:382
 msgid "Footprint assembly on board's back"
-msgstr "Informacje montażowe footprintu na warstwie dolnej"
+msgstr "Informacje montażowe footprintu z tyłu(na spodzie)"
 
 #: pcbnew/modules.cpp:66
 msgid "Reference:"
@@ -10464,7 +10464,7 @@ msgstr "Obszar: błąd DRC obrysu"
 
 #: pcbnew/zones_by_polygon.cpp:539
 msgid "Error: a keepout area is allowed only on copper layers"
-msgstr "BŁĄD: strefa chroniona jest dozwolona tylko na wartwach sygnałowych"
+msgstr "BŁĄD: obszar wykluczenia jest dozwolony tylko na warstwach przewodzących"
 
 #: pcbnew/zones_by_polygon.cpp:686
 msgid "DRC error: this start point is inside or too close an other area"
@@ -10835,7 +10835,7 @@ msgstr "Dodaj strefę"
 
 #: pcbnew/tools/common_actions.cpp:163
 msgid "Add a keepout area"
-msgstr "Dodaje strefę chronioną"
+msgstr "Dodaj obszar wykluczenia"
 
 #: pcbnew/tools/common_actions.cpp:176
 msgid "Increase the line width"
@@ -11076,7 +11076,7 @@ msgstr "Plik położeń footprintów: '%s'."
 #: pcbnew/exporters/gen_modules_placefile.cpp:284
 #, c-format
 msgid "Front side (top side) place file: '%s'."
-msgstr "Plik położeń footprintów od strony górnej: '%s'."
+msgstr "Plik położeń footprintów od strony przedniej(wierzchniej): '%s'."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:288
 #: pcbnew/exporters/gen_modules_placefile.cpp:322
@@ -11097,7 +11097,7 @@ msgstr "Nie można utworzyć pliku '%s'."
 #: pcbnew/exporters/gen_modules_placefile.cpp:319
 #, c-format
 msgid "Back side (bottom side) place file: '%s'."
-msgstr "Plik położeń footprintów od strony dolnej: '%s'."
+msgstr "Plik położeń footprintów od strony tylnej(spodniej): '%s'."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:330
 #, c-format
@@ -11543,7 +11543,7 @@ msgstr "Rysuj oznaczenie arkusza na wszystkich warstwach"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:96
 msgid "Plot pads on silkscreen"
-msgstr "Rysuj pola lutownicze na war. opisowej"
+msgstr "Rysuj pola lutownicze na war. nadruku"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid ""
@@ -11551,9 +11551,9 @@ msgid ""
 "When disabled, pads are never plotted on silkscreen layers\n"
 "When enabled, pads are plotted only if they appear on silkscreen layers"
 msgstr ""
-"Włącza/wyłącza wydruk/rysowanie pól lutowniczych na warstwach opisowych\n"
-"Gdy wyłączone, pola lutownicze nie są nigdy rysowane na warstwach opisowych\n"
-"Gdy włączone, pola lutownicze są rysowane tylko jesli występują na warstwach opisowych"
+"Włącza/wyłącza wydruk/rysowanie pól lutowniczych na warstwach nadruku\n"
+"Gdy wyłączone, pola lutownicze nie są nigdy rysowane na warstwach nadruku\n"
+"Gdy włączone, pola lutownicze są rysowane tylko jesli występują na warstwach nadruku"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:101
 msgid "Plot footprint values"
@@ -11718,11 +11718,11 @@ msgstr "Użyj rozszerzonych atrybutów (pliki w formacie X2 Gerber) w pliku Gerb
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:240
 msgid "Subtract soldermask from silkscreen"
-msgstr "Odejmij maskę lutowniczą od warstwy opisowej"
+msgstr "Odejmij maskę lutowniczą od warstwy nadruku"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "Usuń maskę opisową z pól wokół maski lutowniczej"
+msgstr "Usuń maskę nadruku z pól bez maski lutowniczej"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:248
 msgid "4.5 (unit mm)"
@@ -11800,15 +11800,15 @@ msgstr "Generuj plik wierceń"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:410
 msgid "Select Fab Layers"
-msgstr "Zaznacz warstwy techniczne"
+msgstr "Zaznacz warstwy składu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:414
 msgid "Select all Copper Layers"
-msgstr "Zaznacz wszystkie warstwy sygnałowe"
+msgstr "Zaznacz wszystkie warstwy przewodzące"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:418
 msgid "Deselect all Copper Layers"
-msgstr "Odznacz wszystkie warstwy sygnałowe"
+msgstr "Odznacz wszystkie warstwy przewodzące"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:422
 msgid "Select all Layers"
@@ -12105,11 +12105,11 @@ msgstr "Przerwa pomiędzy przelotkami taka sama jak przy ścieżkach"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
 msgid "Top side"
-msgstr "Strona górna"
+msgstr "Wierzch(Przód)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
 msgid "Bottom side"
-msgstr "Strona dolna"
+msgstr "Spód(Tył)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:62
 msgid "Side"
@@ -12366,12 +12366,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:119
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:148
 msgid "SilkScreen"
-msgstr "Warstwa opisowa"
+msgstr "Warstwa nadruku"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:119
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:148
 msgid "Fab. Layer"
-msgstr "Warstwa produkcyjna"
+msgstr "Warstwa Składu"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:135
 msgid "V&alue"
@@ -12520,7 +12520,7 @@ msgid ""
 "It has been moved to the front silk screen layer. Please fix it."
 msgstr ""
 "Ten element znajduje się na nieznanej warstwie.\n"
-"Obecnie został przeniesiony na górną warstwę opisową. Proszę to poprawić."
+"Obecnie został przeniesiony na warstwę nadruku przednią(wierzchnią). Proszę to poprawić."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:227
 msgid "The graphic item will be on a copper layer. This is very dangerous. Are you sure?"
@@ -12869,7 +12869,7 @@ msgstr "Domyślna grubość:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:343
 msgid "Back side (footprint is mirrored)"
-msgstr "Strona dolna (footprint jest obrócony)"
+msgstr "Strona tylna(spodnia) (footprint w odbiciu)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:744
 msgid "Pad size must be greater than zero"
@@ -12885,7 +12885,7 @@ msgstr "Błąd: Pole lutownicze nie posiada warstwy"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:763
 msgid "Error: the pad is not on a copper layer and has a hole"
-msgstr "Błąd: Pole lutownicze nie jest na wartwie sygnałowej i posiada otwór."
+msgstr "Błąd: Pole lutownicze nie jest na warstwie przewodzącej i posiada otwór."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:768
 msgid "For NPTH pad, set pad size value to pad drill value, if you do not want this pad plotted in gerber files"
@@ -13450,9 +13450,9 @@ msgstr "Wygląd obrysów"
 msgid "Zone min thickness value"
 msgstr "Minimalna szerokość strefy"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:214
-msgid "Tracks, vias and pads are allowed. The keepout is useless"
-msgstr "Ścieżki, przelotki i pola lutownicze są dozwolone. Strefa chroniona jest nieprzydatna."
+#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:218
+msgid "Tracks, vias, and pads are allowed. The keepout is useless"
+msgstr "Dozwolono ścieżki, przelotki i wyprowadzenia. Wykluczenie jest zbędne."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:55
 msgid "Inches"
@@ -13723,23 +13723,23 @@ msgstr "Własny"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Front only"
-msgstr "Dwie warstwy, elementy na stronie górnej"
+msgstr "Dwie warstwy, elementy na przedzie(wierzchu)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Back only"
-msgstr "Dwie warstwy, elementy na stronie dolnej"
+msgstr "Dwie warstwy, elementy na tyle(spodzie))"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Front and Back"
-msgstr "Dwie warstwy, elementy po obu stronach"
+msgstr "Dwie warstwy, elementy na przedzie(wierzchu) i tyle(spodzie)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Four layers, parts on Front only"
-msgstr "Cztery warstwy, elementy po stronie górnej"
+msgstr "Cztery warstwy, elementy na przedzie(wierzchu))"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Four layers, parts on Front and Back"
-msgstr "Cztery warstwy, elementy po stronie dolnej"
+msgstr "Cztery warstwy, elementy na przedzie(wierzchu) i tyle(spodzie)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "All layers on"
@@ -13815,12 +13815,12 @@ msgstr "Grubość płytki"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:110
 msgid "CrtYd_Front_later"
-msgstr "CrtYd_Gorna_Po"
+msgstr "Kulisowa_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:124
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1336
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr "Jeśli potrzebna jest warstwa courtyard po stronie górnej płytki"
+msgstr "Widoczność rezerwacji obszaru footprintu na przedzie(wierzchu) płytki"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:137
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1346
@@ -13829,11 +13829,11 @@ msgstr "Poza płytką, testowa"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:141
 msgid "Fab_Front_later"
-msgstr "Produkcyjna_Gorna_Po"
+msgstr "Skladu_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:152
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "Jeśli potrzebna jest warstwa produkcyjna po stronie górnej płytki"
+msgstr "Widoczność przedniej(wierzchniej) warstwy składu"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:162
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:187
@@ -13844,19 +13844,19 @@ msgstr "Poza płytką, produkcyjna"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:166
 msgid "Adhes_Front_later"
-msgstr "Kleju_gorna_Po"
+msgstr "Kleju_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:177
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Jeśli potrzebny jest szablon kleju po stronie górnej płytki"
+msgstr "Widoczność przedniej(wierzchniej) warstwy kleju"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:191
 msgid "SoldP_Front_later"
-msgstr "Maska_Pasty_Gorna_Po"
+msgstr "PastyLut_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:202
 msgid "If you want a solder paster layer for front side of the board"
-msgstr "Jeśli potrzebna jest warstwa pasty lutowniczej po stronie górnej płytki"
+msgstr "Widoczność przedniej(wierzchniej) warstwy pasty lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:212
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:237
@@ -13865,35 +13865,35 @@ msgstr "Jeśli potrzebna jest warstwa pasty lutowniczej po stronie górnej płyt
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1246
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1271
 msgid "On-board, non-copper"
-msgstr "Na płytce, nie jest warstwą miedzi"
+msgstr "Na płytce, nie przewodząca"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:216
 msgid "SilkS_Front_later"
-msgstr "Opisowa_Gorna_Po"
+msgstr "Nadruku_Przednia_po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:227
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Jeśli potrzebna jest warstwa opisowa po stronie górnej płytki"
+msgstr "Widoczność przedniej(wierzchniej) warstwy nadruku"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:241
 msgid "Mask_Front_later"
-msgstr "Maski_Gorna_Po"
+msgstr "Maski_Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:252
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "Jeśli potrzebna jest warstwa maski lutowniczej po stronie górnej płytki"
+msgstr "Widoczność przedniej(wierzchniej) warstwy maski lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:266
 msgid "Front_later"
-msgstr "Gorna_Po"
+msgstr "Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:268
 msgid "Layer name of front (top) copper layer"
-msgstr "Nazwa warstwy sygnałowej na stronie górnej (elementów)"
+msgstr "Nazwa warstwy przewodzącej na przedzie(wierzchu)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:280
 msgid "If you want a front copper layer"
-msgstr "Jeśli potrzebna jest górna warstwa sygnałowa"
+msgstr "Widoczność warstwy przewodzącej przedniej(wierzchniej)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:290
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:319
@@ -14068,183 +14068,183 @@ msgstr "zworek"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1164
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1196
 msgid "Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus."
-msgstr "Typ warstwy sygnałowej dla Freerouter-a. Warstwy zasilania są usuwane z menu warstw Freerouter-a."
+msgstr "Typ warstwy przewodzącej dla Freerouter-a. Warstwy zasilania są usuwane z menu warstw Freerouter-a."
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:298
 msgid "In1"
-msgstr "Wewn1"
+msgstr "Wewnetrzna#1"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:327
 msgid "In2"
-msgstr "Wewn2"
+msgstr "Wewnetrzna#2"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:356
 msgid "In3"
-msgstr "Wewn3"
+msgstr "Wewnetrzna#3"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:385
 msgid "In4"
-msgstr "Wewn4"
+msgstr "Wewnetrzna#4"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:414
 msgid "In5"
-msgstr "Wewn5"
+msgstr "Wewnetrzna#5"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:443
 msgid "In6"
-msgstr "Wewn6"
+msgstr "Wewnetrzna#6"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:472
 msgid "In7"
-msgstr "Wewn7"
+msgstr "Wewnetrzna#7"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:501
 msgid "In8"
-msgstr "Wewn8"
+msgstr "Wewnetrzna#8"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:530
 msgid "In9"
-msgstr "Wewn9"
+msgstr "Wewnetrzna#9"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:559
 msgid "In10"
-msgstr "Wewn10"
+msgstr "Wewnetrzna#10"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:588
 msgid "In11"
-msgstr "Wewn11"
+msgstr "Wewnetrzna#11"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:617
 msgid "In12"
-msgstr "Wewn12"
+msgstr "Wewnetrzna#12"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:646
 msgid "In13"
-msgstr "Wewn13"
+msgstr "Wewnetrzna#13"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:675
 msgid "In14"
-msgstr "Wewn14"
+msgstr "Wewnetrzna#14"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:704
 msgid "In15"
-msgstr "Wewn15"
+msgstr "Wewnetrzna#15"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:733
 msgid "In16"
-msgstr "Wewn16"
+msgstr "Wewnetrzna#16"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:762
 msgid "In17"
-msgstr "Wewn17"
+msgstr "Wewnetrzna#17"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:791
 msgid "In18"
-msgstr "Wewn18"
+msgstr "Wewnetrzna#18"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:820
 msgid "In19"
-msgstr "Wewn19"
+msgstr "Wewnetrzna#19"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:849
 msgid "In20"
-msgstr "Wewn20"
+msgstr "Wewnetrzna#20"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:878
 msgid "In21"
-msgstr "Wewn21"
+msgstr "Wewnetrzna#21"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:907
 msgid "In22"
-msgstr "Wewn22"
+msgstr "Wewnetrzna#22"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:936
 msgid "In23"
-msgstr "Wewn23"
+msgstr "Wewnetrzna#23"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:965
 msgid "In24"
-msgstr "Wewn24"
+msgstr "Wewnetrzna#24"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:994
 msgid "In25"
-msgstr "Wewn25"
+msgstr "Wewnetrzna#25"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1023
 msgid "In26"
-msgstr "Wewn26"
+msgstr "Wewnetrzna#26"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1052
 msgid "In27"
-msgstr "Wewn27"
+msgstr "Wewnetrzna#27"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1081
 msgid "In28"
-msgstr "Wewn28"
+msgstr "Wewnetrzna#28"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1110
 msgid "In29"
-msgstr "Wewn29"
+msgstr "Wewnetrzna#29"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1139
 msgid "In30"
-msgstr "Wewn30"
+msgstr "Wewnetrzna#30"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
 msgid "Back"
-msgstr "Dolna"
+msgstr "Tył(Spód)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1170
 msgid "Layer name of back (bottom) copper layer"
-msgstr "Nazwa warstwy sygnałowej na dolnej stronie (ścieżek)"
+msgstr "Nazwa tylnej(spodniej) warstwy przewodzącej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1182
 msgid "If you want a back copper layer"
-msgstr "Jeśli potrzebna jest dolna warstwa sygnałowa"
+msgstr "Widoczność tylnej(spodniej) warstwy przewodzącej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1200
 msgid "Mask_Back_later"
-msgstr "Maski_Dolna_Po"
+msgstr "Maski_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1211
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Jeśli potrzebna jest warstwa maski lutowniczej po stronie dolnej płytki"
+msgstr "Widoczność tylnej(spodniej) warstwy maski lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1225
 msgid "SilkS_Back_later"
-msgstr "Opisu_Dolna_Po"
+msgstr "Nadruku_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1236
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Jeśli potrzebna jest warstwa opisowa po stronie dolnej płytki"
+msgstr "Widoczność tylnej(spodniej) warstwy nadruku"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1250
 msgid "SoldP_Back_later"
-msgstr "Maska_Pasty_Dolna_Po"
+msgstr "PastyLut_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1261
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Jeśli potrzebna jest warstwa pasty lutowniczej po stronie dolnej płytki"
+msgstr "Widoczność tylnej(spodniej) warstwy pasty lutowniczej"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1275
 msgid "Adhes_Back_later"
-msgstr "Kleju_Dolna_po"
+msgstr "Kleju_Tylna_po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1286
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Jeśli potrzebna jest warstwa kleju po stronie dolnej płytki"
+msgstr "Widoczność tylnej(spodniej) warstwy kleju"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1300
 msgid "Fab_Back_later"
-msgstr "Produkcyjna_Dolna_Po"
+msgstr "Skladu_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1311
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr "Jeśli potrzebna jest warstwa produkcyjna po stronie dolnej płytki"
+msgstr "Widoczność tylnej(spodniej) warstwy składu"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1325
 msgid "CrtYd_Back_later"
-msgstr "CrtYd_Dolna_Po"
+msgstr "Kulisowa_Tylna_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1350
 msgid "PCB_Edges_later"
@@ -14252,7 +14252,7 @@ msgstr "Krawedzi_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1361
 msgid "If you want a board perimeter layer"
-msgstr "Jeśli potrzebna jest warstwa obwodowa"
+msgstr "Widoczność obrysu"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1371
 msgid "Board contour"
@@ -14295,7 +14295,7 @@ msgstr "Rysunkowa_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1480
 msgid "If you want a layer for documentation drawings"
-msgstr "Jeśli potrzebna jest warstwa dla rysunków dodatkowych"
+msgstr "Widoczność warstwy dokumentacji rysunkowej"
 
 #: pcbnew/dialogs/dialog_drc.cpp:148
 #: pcbnew/dialogs/dialog_drc.cpp:211
@@ -14575,7 +14575,7 @@ msgstr "Dla modeli w pliku VRML używane są ścieżki względne wobec tego plik
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:122
 msgid "Plain PCB (no copper or silk)"
-msgstr "Czysta PCB (bez warstw miedzi i opisów)"
+msgstr "Czysta PCB (bez warstw miedzi i nadruku)"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 1"
@@ -14853,7 +14853,7 @@ msgstr "Bieżacy rozmiar tekstu"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:193
 msgid "No layer selected, Please select the text layer"
-msgstr "Warstwa nie została zdefiniowana. Proszę wybrać warstwę opisową"
+msgstr "Brak wyboranej warstwy dla tekstu, Proszę wybrać"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:260
 msgid "The text thickness is too large for the text size. It will be clamped"
@@ -14911,11 +14911,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:116
 msgid "Top/Front Layer"
-msgstr "Warstwa górna/przednia"
+msgstr "Warstwa wierzchnia/przednia"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:154
 msgid "Bottom/Back Layer"
-msgstr "Warstwa dolna/tylna"
+msgstr "Warstwa spodnia/tylna"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:23
 msgid "Plugin Options:"
@@ -15407,21 +15407,29 @@ msgstr "Niewłaściwy punkt początkowy siatki (koordynaty powinny być ≥%.3f 
 msgid "Properties:"
 msgstr "Właściwości:"
 
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:47
+msgid "180, 90, and 45 degrees"
+msgstr "180°, 90° i 45°"
+
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:49
+msgid "Zone Edge Orientation:"
+msgstr "Orientacja krawędzi strefy:"
+
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:55
+msgid "Outline Appearence:"
+msgstr "Wygląd obrysów:"
+
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 msgid "Keepout Options:"
-msgstr "Opcje strefy chronionej:"
+msgstr "Opcje obszaru wykluczenia:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
-msgid "No Tracks"
-msgstr "Ścieżki wykluczone"
+msgid "No tracks"
+msgstr "Bez ścieżek"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:65
-msgid "No Vias"
-msgstr "Przelotki wykluczone"
-
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:68
-msgid "No Copper Pour"
-msgstr "Bez stref wypełnień"
+msgid "No vias"
+msgstr "Bez przelotek"
 
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:119
 #, c-format
@@ -15984,7 +15992,7 @@ msgid ""
 "* If its priority is highter: its outlines are removed from the other layer.\n"
 "* If its priority is equal: a DRC error is set."
 msgstr ""
-"Na każdej warstwie sygnałowej, strefy są wypełniane zgodnie z ich priorytetem.\n"
+"Na każdej warstwie przewodzącej, strefy są wypełniane zgodnie z ich priorytetem.\n"
 "Dlatego też, gdy strefa znajduje się wewnątrz innej strefy:\n"
 "* Jeśli jej priorytet jest wyższy: jej obrysy są usuwane z innej warstwy.\n"
 "* Jeśli jej priorytet jest taki sam: zostaje zgłoszony błąd DRC."
@@ -16186,11 +16194,11 @@ msgstr "Strona płytki:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:245
 msgid "Front side"
-msgstr "Strona górna"
+msgstr "Strona przednia(wierzchnia)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Circular hole"
-msgstr "Otwór  okrągły"
+msgstr "Otwór okrągły"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval hole"
@@ -16202,11 +16210,11 @@ msgstr "Warstwa ścieżek:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 msgid "Front layer"
-msgstr "Warstwa Gorna"
+msgstr "Warstwa przednia(wierzchnia)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 msgid "Back layer"
-msgstr "Warstwa Dolna"
+msgstr "Warstwa tylna(spodnia)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 msgid "All copper layers"
@@ -16218,35 +16226,35 @@ msgstr "Warstwy techniczne"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
 msgid "Front adhesive"
-msgstr "Kleju górna"
+msgstr "Przednia(wierzchnia) kleju"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Back adhesive"
-msgstr "Kleju dolna"
+msgstr "Tylna(spodnia) kleju"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 msgid "Front solder paste"
-msgstr "Pasty górna"
+msgstr "Przednia(wierzchnia) pasty"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:345
 msgid "Back solder paste"
-msgstr "Pasty dolna"
+msgstr "Tylna(spodnia) pasty"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:348
 msgid "Front silk screen"
-msgstr "Opisowa górna"
+msgstr "Przednia(wierzchnia) nadruku"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:351
 msgid "Back silk screen"
-msgstr "Opisowa dolna"
+msgstr "Tylna(spodnia) nadruku"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
 msgid "Front solder mask"
-msgstr "Maski górna"
+msgstr "Przednia(wierzchnia) maski"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:357
 msgid "Back solder mask"
-msgstr "Maski dolna"
+msgstr "Tylna(spodnia) maski"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:360
 msgid "Drafting notes"
@@ -16344,7 +16352,7 @@ msgid ""
 msgstr ""
 "Ostrzeżenie:\n"
 "Te pole lutownicze jest obrócone na płytce.\n"
-"Strony dolna i górna będą zamienione."
+"Strony tylna(spodnia) i przednia(wierzchnia) będą zamienione."
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
 msgid "Footprint Selection"
@@ -16471,7 +16479,7 @@ msgid ""
 "Now, forced on the front silk screen layer. Please, fix it"
 msgstr ""
 "Ten element posiada niepoprawny identyfikator warstwy.\n"
-"Obecnie został przeniesiony na górną warstwę opisową. Proszę to poprawić."
+"Przeniesiono na przednią(wierzchnią) warstwę nadruku. Proszę poprawić."
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "+"
@@ -16813,31 +16821,31 @@ msgstr "Filtruj listę footprintów dla bieżącego komponentu według liczby wy
 msgid "Filter footprint list by library"
 msgstr "Filtruj listę footprintów według wybranej bibioteki"
 
-#: cvpcb/autosel.cpp:106
+#: cvpcb/autosel.cpp:107
 #, c-format
-msgid "Equ file '%s' could not be found in the default search paths."
-msgstr "Plik automatycznego przypisania '%s' nie może zostać odnaleziony w domyślnych ścieżkach przeszukiwań."
+msgid "Equivalence file '%s' could not be found in the default search paths."
+msgstr "Nie odnaleziono pliku powiązań '%s' w domyślnych ścieżkach wyszukiwania."
 
-#: cvpcb/autosel.cpp:127
+#: cvpcb/autosel.cpp:128
 #, c-format
-msgid "Error opening equ file '%s'."
-msgstr "Wystąpił błąd podczas otwierania pliku '%s'."
+msgid "Error opening equivalence file '%s'."
+msgstr "Nastapił błąd otwierania pliku powiązań '%s'."
 
-#: cvpcb/autosel.cpp:179
-msgid "Equ files Load Error"
-msgstr "Błąd odczytu pliku .equ"
+#: cvpcb/autosel.cpp:180
+msgid "Equivalence File Load Error"
+msgstr "Błąd ładowania pliku powiązań"
 
-#: cvpcb/autosel.cpp:187
+#: cvpcb/autosel.cpp:188
 #, c-format
-msgid "%d footprint/cmp equivalences found."
-msgstr "Znaleziono %d par przypisań footprintów."
+msgid "%lu footprint/cmp equivalences found."
+msgstr "Znaleziono %lu powiązań footprint/cmp."
 
-#: cvpcb/autosel.cpp:253
+#: cvpcb/autosel.cpp:254
 #, c-format
 msgid "Component %s: footprint %s not found in any of the project footprint libraries."
 msgstr "Komponent %s: Nie znaleziono footprintu %s w żadnej z bibliotek projektu."
 
-#: cvpcb/autosel.cpp:287
+#: cvpcb/autosel.cpp:288
 msgid "CvPcb Warning"
 msgstr "Ostrzeżenie CvPcb"
 
@@ -17004,7 +17012,7 @@ msgstr "Ukryj wszystkie warstwy oprócz aktywnej"
 
 #: gerbview/class_gerbview_layer_widget.cpp:158
 msgid "Always Hide All Layers But Active"
-msgstr "Zawsze ukrywaj wszystkie warstwy sygnałowe oprócz aktywnej"
+msgstr "Zawsze ukrywaj wszystkie warstwy przewodzące oprócz aktywnej"
 
 #: gerbview/class_gerbview_layer_widget.cpp:161
 msgid "Hide All Layers"
@@ -17508,7 +17516,7 @@ msgstr "Nie eksportuj"
 #: gerbview/select_layers_to_pcb.cpp:424
 msgid "The exported board has not enough copper layers to handle selected inner layers"
 msgstr ""
-"Eksportowana płytka nie posiada wystarczającej ilości warstw sygnałowych \n"
+"Eksportowana płytka nie posiada wystarczającej ilości warstw przewodzących \n"
 "by obsłużyć wybrane warstwy wewnętrzne"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:43
@@ -17576,7 +17584,7 @@ msgstr "Wybór warstw:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:56
 msgid "Copper layers count:"
-msgstr "Ilość warstw sygnałowych:"
+msgstr "Ilość warstw przewodzących:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:60
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:61
@@ -17653,7 +17661,7 @@ msgstr "Kolor Tła na wierzchu"
 
 #: 3d-viewer/3d_frame.cpp:788
 msgid "Silk Screen Color"
-msgstr "Kolor Warstwy Opisowej"
+msgstr "Kolor Warstwy Nadruku"
 
 #: 3d-viewer/3d_frame.cpp:812
 msgid "Solder Mask Color"
@@ -17847,7 +17855,7 @@ msgstr "Renderuj tekstury"
 
 #: 3d-viewer/3d_toolbar.cpp:176
 msgid "Apply a grid/cloud textures to board, solder mask and silk screen"
-msgstr "Użyj tekstur siatki/obłoku do wyświetlania płytki, soldermaski i warstwy opisowej"
+msgstr "Użyj tekstur siatki/obłoku do wyświetlania płytki, soldermaski i warstwy nadruku"
 
 #: 3d-viewer/3d_toolbar.cpp:180
 msgid "Render Smooth Normals"
@@ -17879,7 +17887,7 @@ msgstr "Kolor dolnej części tła"
 
 #: 3d-viewer/3d_toolbar.cpp:213
 msgid "Silkscreen Color"
-msgstr "Kolor Warstwy Opisowej"
+msgstr "Kolor Warstwy Nadruku"
 
 #: 3d-viewer/3d_toolbar.cpp:222
 msgid "Copper/Surface Finish Color"
@@ -17951,11 +17959,11 @@ msgstr "Pokaż warstwy do nakładania &pasty"
 
 #: 3d-viewer/3d_toolbar.cpp:286
 msgid "Show &Comments and Drawing Layers"
-msgstr "Pokaż warstwy komentarzy i opisowe"
+msgstr "Pokaż warstwy komentarzy i nadruku"
 
 #: 3d-viewer/3d_toolbar.cpp:289
 msgid "Show &Eco Layers"
-msgstr "Pokaż warstwy &ECO"
+msgstr "Pokaż warstwy &Ekstra Komentarzy"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Realistic mode"
@@ -17971,7 +17979,7 @@ msgstr "Pokaż Modele 3D"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:54
 msgid "Show silkscreen layers"
-msgstr "Pokaż warstwy opisowe"
+msgstr "Pokaż warstwy nadruku"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:60
 msgid "Show solder mask layers"
@@ -19296,11 +19304,11 @@ msgstr "Ustawia poziom odniesienia dla konwersji obrazów w skali szarości na o
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid "User layer Eco1"
-msgstr "Warstwa użytkownika ECO1"
+msgstr "Warstwa ekstra komentarzy#1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid "User Layer Eco2"
-msgstr "Warstwa użytkownika ECO2"
+msgstr "Warstwa ekstra komentarzy#2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Board Layer for Outline:"
@@ -19312,7 +19320,7 @@ msgid ""
 "The 2 invisible fields reference and value are always placed on the silk screen layer."
 msgstr ""
 "Wybiera warstwę na której umieścić obrys.\n"
-"Dwa niewidoczne pola: odznacznik i wartość są zawsze umieszczane na warstwie opisowej."
+"Dwa niewidoczne pola: odznacznik i wartość są zawsze umieszczane na warstwie nadruku."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:482
 msgid "Create a logo file"
@@ -21284,7 +21292,7 @@ msgstr "Edytor reguł projektowych"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.h:70
 msgid "Keepout Area Properties"
-msgstr "Właściwości strefy chronionej"
+msgstr "Właściwości obszaru wykluczenia"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.h:70
 msgid "Dimension Properties"
@@ -21316,7 +21324,7 @@ msgstr "Właściwości elementu graficznego"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:81
 msgid "Select Copper Layer Pair:"
-msgstr "Wybierz parę warstw sygnałowych:"
+msgstr "Wybierz parę warstw przewodzących:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:62
 msgid "Export IDFv3"
