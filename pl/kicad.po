@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-22 10:56+0100\n"
-"PO-Revision-Date: 2015-09-22 11:10+0100\n"
+"POT-Creation-Date: 2015-09-23 00:17+0100\n"
+"PO-Revision-Date: 2015-09-23 00:19+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -5987,7 +5987,7 @@ msgstr ""
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
 
-#: pcbnew/pcb_parser.cpp:137
+#: pcbnew/pcb_parser.cpp:138
 #, c-format
 msgid ""
 "invalid floating point number in\n"
@@ -6000,7 +6000,7 @@ msgstr ""
 "linia: %d\n"
 "przesunięcie: %d"
 
-#: pcbnew/pcb_parser.cpp:146
+#: pcbnew/pcb_parser.cpp:147
 #, c-format
 msgid ""
 "missing floating point number in\n"
@@ -6013,28 +6013,28 @@ msgstr ""
 "linia: %d\n"
 "przesunięcie: %d"
 
-#: pcbnew/pcb_parser.cpp:405
-#: pcbnew/pcb_parser.cpp:494
+#: pcbnew/pcb_parser.cpp:406
+#: pcbnew/pcb_parser.cpp:495
 #, c-format
 msgid "unknown token \"%s\""
 msgstr "nieznany token \"%s\""
 
-#: pcbnew/pcb_parser.cpp:590
+#: pcbnew/pcb_parser.cpp:591
 #, c-format
 msgid "page type \"%s\" is not valid "
 msgstr "typ strony \"%s\" nie jest poprawny"
 
-#: pcbnew/pcb_parser.cpp:822
+#: pcbnew/pcb_parser.cpp:823
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d, is not in fixed layer hash"
 msgstr "Warstwa '%s' w pliku '%s' w linii %d, nie występuje w stałym kluczu warstw"
 
-#: pcbnew/pcb_parser.cpp:855
+#: pcbnew/pcb_parser.cpp:856
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d nie jest prawidłową liczbą warstw"
 
-#: pcbnew/pcb_parser.cpp:886
+#: pcbnew/pcb_parser.cpp:887
 #, c-format
 msgid ""
 "Layer '%s' in file\n"
@@ -6047,35 +6047,35 @@ msgstr ""
 "w linii %d, pozycja %d\n"
 "nie została zdefiniowana w sekcji warstw"
 
-#: pcbnew/pcb_parser.cpp:1264
+#: pcbnew/pcb_parser.cpp:1265
 #, c-format
 msgid "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d"
 msgstr "zduplikowana nazwa Klasy Sieci '%s' w pliku <%s> w linii %d, przesunięcie %d"
 
-#: pcbnew/pcb_parser.cpp:1673
+#: pcbnew/pcb_parser.cpp:1674
 #: pcbnew/kicad_netlist_reader.cpp:372
 #, c-format
 msgid ""
-"invalid PFID in\n"
+"invalid footprint ID in\n"
 "file: <%s>\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"niepoprawny PFID w:\n"
-"plik: <%s>\n"
-"linia: %d:\n"
-"przesunięcie: %d"
+"nieprawidłowy identyfikator footprintu w\n"
+"pliku: <%s>\n"
+"linia: %d\n"
+"pozycja: %d"
 
-#: pcbnew/pcb_parser.cpp:1907
+#: pcbnew/pcb_parser.cpp:1908
 #, c-format
 msgid "cannot handle module text type %s"
 msgstr "nieznany opis footprintu typu %s"
 
-#: pcbnew/pcb_parser.cpp:2315
-#: pcbnew/pcb_parser.cpp:2321
-#: pcbnew/pcb_parser.cpp:2421
-#: pcbnew/pcb_parser.cpp:2503
-#: pcbnew/pcb_parser.cpp:2567
+#: pcbnew/pcb_parser.cpp:2316
+#: pcbnew/pcb_parser.cpp:2322
+#: pcbnew/pcb_parser.cpp:2422
+#: pcbnew/pcb_parser.cpp:2504
+#: pcbnew/pcb_parser.cpp:2568
 #, c-format
 msgid ""
 "invalid net ID in\n"
@@ -6088,7 +6088,7 @@ msgstr ""
 "linia: %d\n"
 "pozycja: %d"
 
-#: pcbnew/pcb_parser.cpp:2879
+#: pcbnew/pcb_parser.cpp:2880
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -8625,12 +8625,12 @@ msgstr "O programie Pcbnew"
 #: pcbnew/netlist_reader.cpp:182
 #, c-format
 msgid ""
-"invalid PFID in\n"
+"invalid footprint ID in\n"
 "file: <%s>\n"
 "line: %d"
 msgstr ""
-"niepoprawny PFID w:\n"
-"plik: <%s>\n"
+"nieprawidłowy identyfikator footprintu w\n"
+"pliku: <%s>\n"
 "linia: %d"
 
 #: pcbnew/specctra_import.cpp:84
