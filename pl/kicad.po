@@ -9964,7 +9964,7 @@ msgstr "Pokaż pola lutownicze footprintu z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Pads Back"
-msgstr "Pady z tyłu(na sopdzie)"
+msgstr "Pady z tyłu(na spodzie)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Show footprint pads on board's back"
@@ -10016,7 +10016,7 @@ msgstr "Pokaż znacznik na polach, które nie posiadają połączeń"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Footprints Front"
-msgstr "Footprinty Góra"
+msgstr "Footprinty Przód(Wierzch)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Show footprints that are on board's front"
@@ -10024,7 +10024,7 @@ msgstr "Pokaż footprinty umieszczone z przodu(na wierzchu)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Footprints Back"
-msgstr "Footprinty Dół"
+msgstr "Footprinty Tył(Spód)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprints that are on board's back"
@@ -13723,23 +13723,23 @@ msgstr "Własny"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Front only"
-msgstr "Dwie warstwy, elementy na przedzie(wierzchu)"
+msgstr "Dwie warstwy, elementy z przodu(na wierzchu)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Back only"
-msgstr "Dwie warstwy, elementy na tyle(spodzie))"
+msgstr "Dwie warstwy, elementy z tyłu(na spodzie)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Front and Back"
-msgstr "Dwie warstwy, elementy na przedzie(wierzchu) i tyle(spodzie)"
+msgstr "Dwie warstwy, elementy z przodu i tylu(wierzch/spód)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Four layers, parts on Front only"
-msgstr "Cztery warstwy, elementy na przedzie(wierzchu))"
+msgstr "Cztery warstwy, elementy z przodu(na wierzchu)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Four layers, parts on Front and Back"
-msgstr "Cztery warstwy, elementy na przedzie(wierzchu) i tyle(spodzie)"
+msgstr "Cztery warstwy, elementy z przodu i tylu(wierzch/spód)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "All layers on"
@@ -13820,7 +13820,7 @@ msgstr "Kulisowa_Przednia_Po"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:124
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1336
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr "Widoczność rezerwacji obszaru footprintu na przedzie(wierzchu) płytki"
+msgstr "Widoczność rezerwacji obszaru footprintu z przodu(na wierzchu) płytki"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:137
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1346
@@ -13889,7 +13889,7 @@ msgstr "Przednia_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:268
 msgid "Layer name of front (top) copper layer"
-msgstr "Nazwa warstwy przewodzącej na przedzie(wierzchu)"
+msgstr "Nazwa warstwy przewodzącej z przodu(na wierzchu)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:280
 msgid "If you want a front copper layer"
@@ -14287,7 +14287,7 @@ msgstr "Komentarzy_Po"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1455
 msgid "If you want a separate layer for comments or notes"
-msgstr "Jeśli potrzebna jest oddzielna warstwa dla komentarzy i uwag"
+msgstr "Widoczność warstwy dla komentarzy i notatek"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1469
 msgid "Drawings_later"
