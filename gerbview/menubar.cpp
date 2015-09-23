@@ -222,15 +222,21 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu,
                  wxID_HELP,
                  _( "Gerbview &Manual" ),
-                 _( "Open the GerbView handbook" ),
+                 _( "Open the GerbView Manual" ),
                  KiBitmap( help_xpm ) );
+
+    AddMenuItem( helpMenu,
+                 wxID_INDEX,
+                 _( "&Getting Started in KiCad" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
+                 KiBitmap( online_help_xpm ) );
 
     // About GerbView
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
                  _( "&About GerbView" ),
                  _( "About GerbView gerber and drill viewer" ),
-                 KiBitmap( online_help_xpm ) );
+                 KiBitmap( info_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );

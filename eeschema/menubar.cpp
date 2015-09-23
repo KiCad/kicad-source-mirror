@@ -486,7 +486,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu,
                  wxID_HELP,
                  _( "Eeschema &Manual" ),
-                 _( "Open Eeschema manual" ),
+                 _( "Open Eeschema Manual" ),
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu,

@@ -121,9 +121,15 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Manual Contents
-    AddMenuItem( helpMenu, wxID_HELP, _( "&CvPcb Manual" ),
-                 _( "Open CvPcb manual" ),
+    AddMenuItem( helpMenu, wxID_HELP, _( "CvPcb &Manual" ),
+                 _( "Open CvPcb Manual" ),
                  KiBitmap( online_help_xpm ) );
+
+    AddMenuItem( helpMenu,
+                 wxID_INDEX,
+                 _( "&Getting Started in KiCad" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
+                 KiBitmap( help_xpm ) );
 
     // About CvPcb
     AddMenuItem( helpMenu, wxID_ABOUT,
