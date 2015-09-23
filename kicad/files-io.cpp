@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2012 Jean-Pierre Charras
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@
 
 #include <kicad.h>
 
-#define     ZipFileExtension        wxT( "zip" )
-#define     ZipFileWildcard         wxT( "Zip file (*.zip) | *.zip" )
+#define     ZipFileExtension    wxT( "zip" )
+#define     ZipFileWildcard     _( "Zip file (*.zip)|*.zip" )
 
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
