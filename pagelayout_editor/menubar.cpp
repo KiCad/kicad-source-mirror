@@ -148,8 +148,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Contents
     AddMenuItem( helpMenu,
                  wxID_HELP,
-                 _( "Pl_Editor &Manual" ),
-                 _( "Open the Pl_Editor Manual" ),
+                 _( "Page Layout Editor &Manual" ),
+                 _( "Open the Page Layout Editor Manual" ),
                  KiBitmap( help_xpm ) );
 
     AddMenuItem( helpMenu,
