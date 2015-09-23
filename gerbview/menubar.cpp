@@ -221,7 +221,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Contents
     AddMenuItem( helpMenu,
                  wxID_HELP,
-                 _( "&Contents" ),
+                 _( "Gerbview &Manual" ),
                  _( "Open the GerbView handbook" ),
                  KiBitmap( help_xpm ) );
 

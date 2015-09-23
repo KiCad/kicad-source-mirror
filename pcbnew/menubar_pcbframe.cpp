@@ -643,7 +643,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     AddMenuItem( helpMenu, wxID_HELP,
-                 _( "&Contents" ),
+                 _( "Pcbnew &Manual" ),
                  _( "Open the Pcbnew handbook" ),
                  KiBitmap( online_help_xpm ) );
 
