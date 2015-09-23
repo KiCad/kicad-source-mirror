@@ -1666,6 +1666,14 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 }
 
 
+void BOARD::PadDelete( D_PAD* aPad )
+{
+    m_NetInfo.DeletePad( aPad );
+
+    aPad->DeleteStructure();
+}
+
+
 TRACK* BOARD::GetTrack( TRACK* aTrace, const wxPoint& aPosition,
         LSET aLayerMask ) const
 {

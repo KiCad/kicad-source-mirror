@@ -220,7 +220,9 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     EDA_RECT bbox = module->GetBoundingBox();
 
     m_Pcb->m_Status_Pcb = 0;
-    aPad->DeleteStructure();
+
+    GetBoard()->PadDelete( aPad );
+
     // Update the bounding box
     module->CalculateBoundingBox();
 

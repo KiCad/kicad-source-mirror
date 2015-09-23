@@ -1275,6 +1275,14 @@ public:
     D_PAD* GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask );
 
     /**
+     * Function PadDelete
+     * deletes a given bad from the BOARD by removing it from its module and
+     * from the m_NetInfo.  Makes no UI calls.
+     * @param aPad is the pad to delete.
+     */
+    void PadDelete( D_PAD* aPad );
+
+    /**
      * Function GetSortedPadListByXthenYCoord
      * first empties then fills the vector with all pads and sorts them by
      * increasing x coordinate, and for increasing y coordinate for same values of x coordinates.

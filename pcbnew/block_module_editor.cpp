@@ -537,29 +537,27 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
  */
 void DeleteMarkedItems( MODULE* module )
 {
-    BOARD_ITEM* item;
     BOARD_ITEM* next_item;
-    D_PAD*      pad;
     D_PAD*      next_pad;
+    BOARD*      board = module->GetBoard();
 
     if( module == NULL )
         return;
 
-    pad = module->Pads();
-
-    for( ; pad != NULL; pad = next_pad )
+    for( D_PAD* pad = module->Pads();  pad;  pad = next_pad )
     {
         next_pad = pad->Next();
 
         if( !pad->IsSelected() )
             continue;
 
-        pad->DeleteStructure();
+        if( board )
+            board->PadDelete( pad );
+        else
+            pad->DeleteStructure();
     }
 
-    item = module->GraphicalItems();
-
-    for( ; item != NULL; item = next_item )
+    for( BOARD_ITEM* item = module->GraphicalItems();  item;  item = next_item )
     {
         next_item = item->Next();
 
