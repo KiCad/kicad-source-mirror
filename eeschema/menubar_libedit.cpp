@@ -260,8 +260,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Contents
     AddMenuItem( helpMenu,
                  wxID_HELP,
-                 _( "&Contents" ),
-                 _( "Open the Eeschema manual" ),
+                 _( "Eeschema &Manual" ),
+                 _( "Open the Eeschema Manual" ),
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu,
@@ -275,8 +275,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About Eeschema" ),
-                 _( "About Eeschema schematic designer" ),
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

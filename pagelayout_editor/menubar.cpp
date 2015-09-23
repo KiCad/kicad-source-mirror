@@ -148,16 +148,22 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Contents
     AddMenuItem( helpMenu,
                  wxID_HELP,
-                 _( "&Contents" ),
-                 _( "Open the GerbView handbook" ),
+                 _( "Page Layout Editor &Manual" ),
+                 _( "Open the Page Layout Editor Manual" ),
                  KiBitmap( help_xpm ) );
+
+    AddMenuItem( helpMenu,
+                 wxID_INDEX,
+                 _( "&Getting Started in KiCad" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
+                 KiBitmap( online_help_xpm ) );
 
     // About GerbView
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About Page Layout Editor" ),
-                 _( "About page layout description editor" ),
-                 KiBitmap( online_help_xpm ) );
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
+                 KiBitmap( info_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );

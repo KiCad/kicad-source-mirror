@@ -643,8 +643,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     AddMenuItem( helpMenu, wxID_HELP,
-                 _( "&Contents" ),
-                 _( "Open the Pcbnew handbook" ),
+                 _( "Pcbnew &Manual" ),
+                 _( "Open the Pcbnew Manual" ),
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu, wxID_INDEX,
@@ -654,8 +654,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Pcbnew" ),
-                 _( "About Pcbnew printed circuit board designer" ),
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
                  KiBitmap( info_xpm ) );
 
     // Append all menus to the menuBar
