@@ -350,8 +350,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // About Pcbnew
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Pcbnew" ),
-                 _( "About Pcbnew PCB designer" ),
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
                  KiBitmap( info_xpm ) );
 
     // Append menus to the menubar

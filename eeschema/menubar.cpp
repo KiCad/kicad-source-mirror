@@ -498,8 +498,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About Eeschema" ),
-                 _( "About Eeschema schematic designer" ),
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

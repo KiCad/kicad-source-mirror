@@ -133,8 +133,8 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // About CvPcb
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About CvPcb" ),
-                 _( "About CvPcb footprint selector" ),
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

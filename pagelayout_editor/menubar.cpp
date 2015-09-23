@@ -161,8 +161,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // About GerbView
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About Page Layout Editor" ),
-                 _( "About page layout description editor" ),
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
                  KiBitmap( info_xpm ) );
 
     // Append menus to the menubar

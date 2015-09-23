@@ -234,8 +234,8 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // About GerbView
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About GerbView" ),
-                 _( "About GerbView gerber and drill viewer" ),
+                 _( "&About Kicad" ),
+                 _( "About Kicad" ),
                  KiBitmap( info_xpm ) );
 
     // Append menus to the menubar
