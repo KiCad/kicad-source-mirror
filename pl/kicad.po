@@ -1,11 +1,15 @@
+# Copyright (C) 2004-2015 KiCad Translation Team, contributors are
+# mentioned in every translation file „Language-Team” sections.
+# This file is distributed under GNU Free Documentation License.
+# http://www.gnu.org/licenses/fdl-1.3.html
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-23 00:17+0100\n"
-"PO-Revision-Date: 2015-09-23 00:19+0100\n"
+"POT-Creation-Date: 2015-09-24 14:13+0100\n"
+"PO-Revision-Date: 2015-09-24 14:22+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
-"Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
+"Language-Team: Polish KiCAD Translation Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,6 +31,10 @@ msgstr ""
 "X-Poedit-SearchPath-7: bitmap2component\n"
 "X-Poedit-SearchPath-8: pcb_calculator\n"
 "X-Poedit-SearchPath-9: pagelayout_editor\n"
+
+#: kicad/files-io.cpp:46
+msgid "Zip file (*.zip)|*.zip"
+msgstr "Plik ZIP (*.zip)|*.zip"
 
 #: kicad/files-io.cpp:52
 msgid "KiCad project file"
@@ -781,11 +789,11 @@ msgid "Set color preferences"
 msgstr "Ustawienia kolorów"
 
 #: eeschema/menubar_libedit.cpp:263
-msgid "&Contents"
-msgstr "&Zawartość"
+msgid "Eeschema &Manual"
+msgstr "Podręcznik dla Eesche&ma"
 
 #: eeschema/menubar_libedit.cpp:264
-msgid "Open the Eeschema manual"
+msgid "Open the Eeschema Manual"
 msgstr "Otwórz podręcznik programu Eeschema"
 
 #: eeschema/menubar_libedit.cpp:270
@@ -793,12 +801,12 @@ msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr "Otwiera przewodnik dla początkujących zatytułowany \"Pierwsze kroki w programie KiCad\""
 
 #: eeschema/menubar_libedit.cpp:278
-msgid "&About Eeschema"
-msgstr "O progr&amie Eeschema"
+msgid "&About Kicad"
+msgstr "O progr&amie KiCad"
 
 #: eeschema/menubar_libedit.cpp:279
-msgid "About Eeschema schematic designer"
-msgstr "Informacje o  programie edytora schematów Eeschema"
+msgid "About Kicad"
+msgstr "O programie KiCad"
 
 #: eeschema/menubar_libedit.cpp:284
 msgid "&Edit"
@@ -2680,6 +2688,14 @@ msgstr "Otwórz podręcznik programu Eeschema"
 msgid "Open Eeschema manual"
 msgstr "Otwiera podręcznik do programu Eeschema"
 
+#: eeschema/tool_viewlib.cpp:262
+msgid "&About Eeschema"
+msgstr "O progr&amie Eeschema"
+
+#: eeschema/tool_viewlib.cpp:263
+msgid "About Eeschema schematic designer"
+msgstr "Informacje o  programie edytora schematów Eeschema"
+
 #: eeschema/sch_sheet_path.cpp:175
 #, c-format
 msgid "Schematic sheets can only be nested %d levels deep."
@@ -3605,6 +3621,10 @@ msgstr "Uruchom CvPcb"
 #: eeschema/menubar.cpp:476
 msgid "&Layout Printed Circuit Board"
 msgstr "Stwórz obwód drukowany"
+
+#: eeschema/menubar.cpp:489
+msgid "Open Eeschema Manual"
+msgstr "Otwórz podręcznik dla Eeschema"
 
 #: eeschema/sheetlab.cpp:164
 msgid "No new hierarchical labels found."
@@ -8052,72 +8072,72 @@ msgstr "Połączeń"
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_board.cpp:2291
+#: pcbnew/class_board.cpp:2299
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Sprawdzam footprint komponentu z listy sieci \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2309
+#: pcbnew/class_board.cpp:2317
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Dodaję nowy komponent \"%s:%s\" o footprincie \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2318
+#: pcbnew/class_board.cpp:2326
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr "Nie można dodać nowego komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2350
+#: pcbnew/class_board.cpp:2358
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Zamieniam footprint komponentu \"%s:%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2361
+#: pcbnew/class_board.cpp:2369
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr "Nie można zamienić komponentu \"%s:%s\" ponieważ brakuje footprintu \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2394
+#: pcbnew/class_board.cpp:2402
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Zmieniam oznacznik footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2410
+#: pcbnew/class_board.cpp:2418
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Zmieniam wartość footprintu \"%s:%s\" z \"%s\" do \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2427
+#: pcbnew/class_board.cpp:2435
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Zmieniam ścieżkę footprintu \"%s:%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2451
+#: pcbnew/class_board.cpp:2459
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Kasuje nazwę sieci z komponentu \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2467
+#: pcbnew/class_board.cpp:2475
 #, c-format
 msgid "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr "Zmieniam nazwę sieci komponentu \"%s:%s\" pin \"%s\" z \"%s\" na \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2516
+#: pcbnew/class_board.cpp:2524
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Usuwam zbędny komponent \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2576
+#: pcbnew/class_board.cpp:2584
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Usunięcie niepołączonej sieci \"%s\" z \"%s\" pole '%s'\n"
 
-#: pcbnew/class_board.cpp:2631
+#: pcbnew/class_board.cpp:2639
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Komponent '%s', nie znaleziono pola lutowniczego '%s' w footprincie '%s'\n"
 
-#: pcbnew/class_board.cpp:2649
+#: pcbnew/class_board.cpp:2657
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr "W strefie przewodzącej o nazwie sieci '%s' brakuje odpowiednich pól lutowniczych do podłączenia."
@@ -8603,22 +8623,18 @@ msgid "3&D Viewer"
 msgstr "Przeglądarka 3D"
 
 #: pcbnew/tool_modview.cpp:189
-#: pcbnew/menubar_modedit.cpp:341
 msgid "P&cbnew Manual"
 msgstr "Podręcznik programu Pcbnew"
 
 #: pcbnew/tool_modview.cpp:190
-#: pcbnew/menubar_modedit.cpp:342
 msgid "Open the Pcbnew manual"
 msgstr "Otwórz podręcznik programu Pcbnew"
 
 #: pcbnew/tool_modview.cpp:201
-#: pcbnew/menubar_modedit.cpp:353
 msgid "&About Pcbnew"
 msgstr "&O programie Pcbnew"
 
 #: pcbnew/tool_modview.cpp:202
-#: pcbnew/menubar_modedit.cpp:354
 msgid "About Pcbnew PCB designer"
 msgstr "O programie Pcbnew"
 
@@ -8986,6 +9002,14 @@ msgstr "U&stawienia"
 #: pcbnew/menubar_modedit.cpp:324
 msgid "Select default parameters values in Footprint Editor"
 msgstr "Ustala domyślne parametry i wartości dla edytora footprintów"
+
+#: pcbnew/menubar_modedit.cpp:341
+msgid "Pcbnew &Manual"
+msgstr "Podręcznik dla Pcbnew"
+
+#: pcbnew/menubar_modedit.cpp:342
+msgid "Open the Pcbnew Manual"
+msgstr "Otwórz podręcznik programu Pcbnew"
 
 #: pcbnew/menubar_modedit.cpp:363
 msgid "Di&mensions"
@@ -9842,14 +9866,6 @@ msgstr "&Opcje warstw"
 #: pcbnew/menubar_pcbframe.cpp:638
 msgid "Enable and set layer properties"
 msgstr "Włączanie warstw i ustawianie ich właściwości"
-
-#: pcbnew/menubar_pcbframe.cpp:647
-msgid "Open the Pcbnew handbook"
-msgstr "Otwórz podręcznik programu CvPcb"
-
-#: pcbnew/menubar_pcbframe.cpp:658
-msgid "About Pcbnew printed circuit board designer"
-msgstr "O programie Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:666
 msgid "Ro&ute"
@@ -11294,105 +11310,125 @@ msgstr "Opcje trasowania..."
 msgid "Shows a dialog containing router options."
 msgstr "Pokazuje okno dialogowe z opcjami routera."
 
-#: pcbnew/router/router_tool.cpp:61
+#: pcbnew/router/router_tool.cpp:62
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "New Track"
 msgstr "Nowa ścieżka"
 
-#: pcbnew/router/router_tool.cpp:61
+#: pcbnew/router/router_tool.cpp:62
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Starts laying a new track."
 msgstr "Rozpoczyna trasowanie nowej ścieżki."
 
-#: pcbnew/router/router_tool.cpp:64
+#: pcbnew/router/router_tool.cpp:65
 msgid "Stops laying the current track."
 msgstr "Zatrzymuje trasowanie bieżącej ścieżki."
 
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/router/router_tool.cpp:68
 msgid "Auto-end Track"
 msgstr "Automatyczne kończenie ścieżek"
 
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/router/router_tool.cpp:68
 msgid "Automagically finishes currently routed track."
 msgstr "Automatycznie kończy trasowanie bieżącej ścieżki w punkcie docelowym."
 
-#: pcbnew/router/router_tool.cpp:71
+#: pcbnew/router/router_tool.cpp:72
 msgid "Drag Track/Via"
 msgstr "Przeciągnij Ścieżkę/Przelotkę"
 
-#: pcbnew/router/router_tool.cpp:71
+#: pcbnew/router/router_tool.cpp:72
 msgid "Drags a track or a via."
 msgstr "Przeciąga ścieżkę lub przelotkę."
 
-#: pcbnew/router/router_tool.cpp:76
+#: pcbnew/router/router_tool.cpp:77
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr "Dodaje przelotkę na wylot na końcu bieżąco prowadzonej ścieżki."
 
-#: pcbnew/router/router_tool.cpp:82
+#: pcbnew/router/router_tool.cpp:83
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr "Dodaje ślepą lub zagrzebaną przelotkę na końcu bieżąco prowadzonej ścieżki."
 
-#: pcbnew/router/router_tool.cpp:87
+#: pcbnew/router/router_tool.cpp:88
 msgid "Place Microvia"
 msgstr "Wstaw mikroprzelotkę"
 
-#: pcbnew/router/router_tool.cpp:87
+#: pcbnew/router/router_tool.cpp:88
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Dodaje mikroprzelotkę na końcu bieżąco prowadzonej ścieżki."
 
-#: pcbnew/router/router_tool.cpp:92
+#: pcbnew/router/router_tool.cpp:93
 msgid "Custom Track/Via Size"
 msgstr "Własny Rozmiary Ścieżek/Przelotek"
 
-#: pcbnew/router/router_tool.cpp:93
+#: pcbnew/router/router_tool.cpp:94
 msgid "Shows a dialog for changing the track width and via size."
 msgstr "Pokazuje okno dialogowe z możliwością zmiany szerokości ścieżki i rozmiaru przelotki."
 
-#: pcbnew/router/router_tool.cpp:99
+#: pcbnew/router/router_tool.cpp:100
 msgid "Switches posture of the currenly routed track."
 msgstr "Zmienia sposób załamania bieżąco prowadzonej ścieżki."
 
-#: pcbnew/router/router_tool.cpp:104
+#: pcbnew/router/router_tool.cpp:105
 msgid "Differential Pair Dimensions..."
 msgstr "Rozmiary par różnicowych..."
 
-#: pcbnew/router/router_tool.cpp:105
+#: pcbnew/router/router_tool.cpp:106
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr "Ustawia szerokość i prześwit bieżąco prowadzonych ścieżek różnicowych."
 
-#: pcbnew/router/router_tool.cpp:128
+#: pcbnew/router/router_tool.cpp:129
 msgid "Custom size"
 msgstr "Rozmiar użytkownika"
 
-#: pcbnew/router/router_tool.cpp:131
+#: pcbnew/router/router_tool.cpp:132
 msgid "Use the starting track width"
 msgstr "Użyj początkowej szerokości ścieżki"
 
-#: pcbnew/router/router_tool.cpp:132
+#: pcbnew/router/router_tool.cpp:133
 msgid "Route using the width of the starting track."
 msgstr "Prowadź ścieżki używając szerokości ścieżki rozpoczynającej."
 
-#: pcbnew/router/router_tool.cpp:134
+#: pcbnew/router/router_tool.cpp:135
 msgid "Use net class values"
 msgstr "Użyj wartości z klas sieci"
 
-#: pcbnew/router/router_tool.cpp:135
+#: pcbnew/router/router_tool.cpp:136
 msgid "Use track and via sizes from the net class"
 msgstr "Użyj szerokości ścieżek i rozmiarów przelotek z ich klas połączeń"
 
-#: pcbnew/router/router_tool.cpp:202
+#: pcbnew/router/router_tool.cpp:203
 msgid "Interactive Router"
 msgstr "Router Interaktywny"
 
-#: pcbnew/router/router_tool.cpp:215
+#: pcbnew/router/router_tool.cpp:216
 msgid "Select Track/Via Width"
 msgstr "Wybierz szerokość ścieżki/rozmiar przelotki"
 
-#: pcbnew/router/router_tool.cpp:595
+#: pcbnew/router/router_tool.cpp:402
+msgid "Blind/buried vias have to be enabled in the design settings."
+msgstr "Zwykłe/zagrzebane przelotki nalezy właczyć w ustawieniach projektu."
+
+#: pcbnew/router/router_tool.cpp:408
+msgid "Microvias have to be enabled in the design settings."
+msgstr "Mikroprzelotki nalezy właczyć w ustawieniach projektu."
+
+#: pcbnew/router/router_tool.cpp:415
+msgid "Only through vias are allowed on 2 layer boards."
+msgstr "Przelotki permanetne możliwe tylko na płytce dwuwarstwowej."
+
+#: pcbnew/router/router_tool.cpp:422
+msgid "Microvias can be placed only on the outer layers."
+msgstr "Mikroprzelotki mozliwe tylko na zewnęrznych warstwach."
+
+#: pcbnew/router/router_tool.cpp:429
+msgid "Only through vias can be placed between front and bottom layers."
+msgstr "Przelotki permanetne możliwe tylko pomiędzy przodem(wierzchem) a tyłem(spodem)."
+
+#: pcbnew/router/router_tool.cpp:611
 msgid "Route Track"
 msgstr "Trasowanie ścieżek"
 
-#: pcbnew/router/router_tool.cpp:602
+#: pcbnew/router/router_tool.cpp:618
 msgid "Router Differential Pair"
 msgstr "Router par różnicowych"
 
@@ -16890,20 +16926,12 @@ msgid "Save changes to the project configuration file"
 msgstr "Zapisuje zmiany w pliku konfiguracji projektu"
 
 #: cvpcb/menubar.cpp:124
-msgid "&CvPcb Manual"
-msgstr "Podręcznik programu CvPcb"
+msgid "CvPcb &Manual"
+msgstr "Podręcznik dla CvPcb"
 
 #: cvpcb/menubar.cpp:125
-msgid "Open CvPcb manual"
+msgid "Open CvPcb Manual"
 msgstr "Otwiera podręcznik do programu CvPcb"
-
-#: cvpcb/menubar.cpp:130
-msgid "&About CvPcb"
-msgstr "&O programie CvPcb"
-
-#: cvpcb/menubar.cpp:131
-msgid "About CvPcb footprint selector"
-msgstr "O programie CvPcb"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:99
 msgid "No editor defined in Kicad. Please chose it"
@@ -17152,11 +17180,11 @@ msgstr "RS274X: Polecenie KNOCKOUT ignorowane przez GerbView"
 msgid "Too many include files!!"
 msgstr "Dołączono zbyt dużo plików!!!"
 
-#: gerbview/events_called_functions.cpp:268
+#: gerbview/events_called_functions.cpp:269
 msgid "No editor defined. Please select one"
 msgstr "Edytor nie został zdefiniowany. Proszę wybrać"
 
-#: gerbview/events_called_functions.cpp:274
+#: gerbview/events_called_functions.cpp:275
 #, c-format
 msgid "No file loaded on the active layer %d"
 msgstr "Nie załadowano pliku na aktywną warstwę %d"
@@ -17371,19 +17399,15 @@ msgstr "Edytor &tekstu"
 msgid "Select your preferred text editor"
 msgstr "Wybierz preferowany edytor tekstu"
 
+#: gerbview/menubar.cpp:224
+msgid "Gerbview &Manual"
+msgstr "Podręcznik dla Pcbnew"
+
 #: gerbview/menubar.cpp:225
-msgid "Open the GerbView handbook"
+msgid "Open the GerbView Manual"
 msgstr "Otwórz podręcznik GerbView"
 
-#: gerbview/menubar.cpp:231
-msgid "&About GerbView"
-msgstr "O progr&amie GerbView"
-
-#: gerbview/menubar.cpp:232
-msgid "About GerbView gerber and drill viewer"
-msgstr "O przeglądarce plików GerbView"
-
-#: gerbview/menubar.cpp:238
+#: gerbview/menubar.cpp:244
 msgid "&Miscellaneous"
 msgstr "&Różne"
 
@@ -20736,13 +20760,13 @@ msgstr "Podgląd wydruku"
 msgid "&Close Page Layout Editor"
 msgstr "Zamknij edytor układu strony"
 
-#: pagelayout_editor/menubar.cpp:158
-msgid "&About Page Layout Editor"
-msgstr "Pokazuje informacje o programie do edycji układu strony"
+#: pagelayout_editor/menubar.cpp:151
+msgid "Page Layout Editor &Manual"
+msgstr "Podręcznik Edytora Układu Strony"
 
-#: pagelayout_editor/menubar.cpp:159
-msgid "About page layout description editor"
-msgstr "Pokazuje informacje o programie do edycji układu strony"
+#: pagelayout_editor/menubar.cpp:152
+msgid "Open the Page Layout Editor Manual"
+msgstr "Otwórz podręcznik Edytora Układu Strony"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:219
 msgid "Print Page Layout"
