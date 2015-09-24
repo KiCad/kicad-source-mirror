@@ -372,11 +372,11 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     optional<int> newLayer = m_router->Sizes().PairedLayer( cl );
 
-    if( newLayer )
-    {
-        m_router->SwitchLayer( *newLayer );
-        m_frame->SetActiveLayer( ToLAYER_ID( *newLayer ) );
-    }
+    if( !newLayer )
+        newLayer = m_router->Sizes().GetLayerTop();
+
+    m_router->SwitchLayer( *newLayer );
+    m_frame->SetActiveLayer( ToLAYER_ID( *newLayer ) );
 }
 
 
@@ -386,13 +386,13 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 
     const int layerCount = bds.GetCopperLayerCount();
     int currentLayer = m_router->GetCurrentLayer();
+    LAYER_ID pairTop = m_frame->GetScreen()->m_Route_Layer_TOP;
+    LAYER_ID pairBottom = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
 
     PNS_SIZES_SETTINGS sizes = m_router->Sizes();
 
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
     sizes.ClearLayerPairs();
-    sizes.AddLayerPair( m_frame->GetScreen()->m_Route_Layer_TOP,
-                        m_frame->GetScreen()->m_Route_Layer_BOTTOM );
 
     if( !m_router->IsPlacingVia() )
     {
@@ -419,24 +419,56 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
         // Can only place microvias if we're on an outer layer, or directly adjacent to one
         if( ( aType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount - 2 ) )
         {
-            DisplayError( m_frame, _( "Microvias can be placed only on the outer layers." ) );
+            DisplayError( m_frame, _( "Microvias can be placed only between the outer layers " \
+                                      "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
             return false;
         }
+    }
 
-        // Cannot place blind vias with front/back as the layer pair, this doesn't make sense
-        if( ( aType == VIA_BLIND_BURIED ) && ( sizes.GetLayerTop() == F_Cu ) && ( sizes.GetLayerBottom() == B_Cu ) )
-        {
-            DisplayError( m_frame, _( "Only through vias can be placed between front and bottom layers." ) );
-            return false;
-        }
+    // Convert blind/buried via to a through hole one, if it goes through all layers
+    if( aType == VIA_BLIND_BURIED && ( ( currentLayer == B_Cu ) || ( currentLayer == F_Cu ) )
+                                    && ( ( pairTop == B_Cu && pairBottom == F_Cu )
+                                      || ( pairTop == F_Cu && pairBottom == B_Cu ) ) )
+    {
+        aType = VIA_THROUGH;
+    }
+
+    switch( aType )
+    {
+        case VIA_THROUGH:
+            sizes.SetViaDiameter( bds.GetCurrentViaSize() );
+            sizes.SetViaDrill( bds.GetCurrentViaDrill() );
+            sizes.AddLayerPair( F_Cu, B_Cu );
+            break;
+
+        case VIA_MICROVIA:
+            sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
+            sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
+
+            if( currentLayer == F_Cu || currentLayer == In1_Cu )
+                sizes.AddLayerPair( F_Cu, In1_Cu );
+            else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
+                sizes.AddLayerPair( B_Cu, layerCount - 2 );
+            else
+                wxASSERT( false );
+            break;
+
+        case VIA_BLIND_BURIED:
+            sizes.SetViaDiameter( bds.GetCurrentViaSize() );
+            sizes.SetViaDrill( bds.GetCurrentViaDrill() );
+
+            if( currentLayer == pairTop || currentLayer == pairBottom )
+                sizes.AddLayerPair( pairTop, pairBottom );
+            else
+                sizes.AddLayerPair( pairTop, currentLayer );
+            break;
+
+        default:
+            wxASSERT( false );
+            break;
     }
 
     sizes.SetViaType( aType );
-    if( VIA_MICROVIA == aType )
-    {
-        sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
-        sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
-    }
 
     m_router->UpdateSizes( sizes );
     m_router->ToggleViaPlacement();
