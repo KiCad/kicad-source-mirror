@@ -39,6 +39,7 @@
 #include <dialogs/dialog_track_via_size.h>
 #include <base_units.h>
 #include <hotkeys.h>
+#include <confirm.h>
 
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
@@ -397,22 +398,37 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
     {
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( aType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
+        {
+            DisplayError( m_frame, _( "Blind/buried vias have to be enabled in the design settings." ) );
             return false;
+        }
 
         if( ( aType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
+        {
+            DisplayError( m_frame, _( "Microvias have to be enabled in the design settings." ) );
             return false;
+        }
 
-        //Can only place through vias on 2-layer boards
+        // Can only place through vias on 2-layer boards
         if( ( aType != VIA_THROUGH ) && ( layerCount <= 2 ) )
+        {
+            DisplayError( m_frame, _( "Only through vias are allowed on 2 layer boards." ) );
             return false;
+        }
 
-        //Can only place microvias if we're on an outer layer, or directly adjacent to one
-        if( ( aType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount-2 ) )
+        // Can only place microvias if we're on an outer layer, or directly adjacent to one
+        if( ( aType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount - 2 ) )
+        {
+            DisplayError( m_frame, _( "Microvias can be placed only on the outer layers." ) );
             return false;
+        }
 
-        //Cannot place blind vias with front/back as the layer pair, this doesn't make sense
+        // Cannot place blind vias with front/back as the layer pair, this doesn't make sense
         if( ( aType == VIA_BLIND_BURIED ) && ( sizes.GetLayerTop() == F_Cu ) && ( sizes.GetLayerBottom() == B_Cu ) )
+        {
+            DisplayError( m_frame, _( "Only through vias can be placed between front and bottom layers." ) );
             return false;
+        }
     }
 
     sizes.SetViaType( aType );
@@ -463,7 +479,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
-        wxMessageBox( m_router->FailureReason(), _( "Error" ) );
+        DisplayError( m_frame, m_router->FailureReason() );
         highlightNet( false );
         return false;
     }
