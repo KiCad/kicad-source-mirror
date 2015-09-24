@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 14:13+0100\n"
-"PO-Revision-Date: 2015-09-24 14:22+0100\n"
+"POT-Creation-Date: 2015-09-24 19:20+0100\n"
+"PO-Revision-Date: 2015-09-24 19:28+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Translation Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -11417,18 +11417,14 @@ msgid "Only through vias are allowed on 2 layer boards."
 msgstr "Przelotki permanetne możliwe tylko na płytce dwuwarstwowej."
 
 #: pcbnew/router/router_tool.cpp:422
-msgid "Microvias can be placed only on the outer layers."
-msgstr "Mikroprzelotki mozliwe tylko na zewnęrznych warstwach."
+msgid "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the ones directly adjacent to them."
+msgstr "Mikroprzelotki mozliwe tylko pomiędzy zewnęrznymi, bezpośrednio sąsiadujacymi warstwami(F.Cu/B.Cu)."
 
-#: pcbnew/router/router_tool.cpp:429
-msgid "Only through vias can be placed between front and bottom layers."
-msgstr "Przelotki permanetne możliwe tylko pomiędzy przodem(wierzchem) a tyłem(spodem)."
-
-#: pcbnew/router/router_tool.cpp:611
+#: pcbnew/router/router_tool.cpp:643
 msgid "Route Track"
 msgstr "Trasowanie ścieżek"
 
-#: pcbnew/router/router_tool.cpp:618
+#: pcbnew/router/router_tool.cpp:650
 msgid "Router Differential Pair"
 msgstr "Router par różnicowych"
 
