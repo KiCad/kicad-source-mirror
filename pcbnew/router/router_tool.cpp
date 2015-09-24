@@ -474,7 +474,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     sizes.Init( m_board, m_startItem );
     sizes.AddLayerPair( m_frame->GetScreen()->m_Route_Layer_TOP,
-                         m_frame->GetScreen()->m_Route_Layer_BOTTOM );
+                        m_frame->GetScreen()->m_Route_Layer_BOTTOM );
     m_router->UpdateSizes( sizes );
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )

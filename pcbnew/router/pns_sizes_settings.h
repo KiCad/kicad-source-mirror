@@ -37,10 +37,10 @@ public:
         m_trackWidth( 155000 ),
         m_diffPairWidth( 125000 ),
         m_diffPairGap( 180000 ),
-    m_diffPairViaGap ( 180000 ),
+        m_diffPairViaGap( 180000 ),
         m_viaDiameter( 600000 ),
         m_viaDrill( 250000 ),
-        m_diffPairViaGapSameAsTraceGap ( true ),
+        m_diffPairViaGapSameAsTraceGap( true ),
         m_viaType( VIA_THROUGH )
     {};
 
@@ -59,7 +59,7 @@ public:
     int DiffPairGap() const { return m_diffPairGap; }
 
     int DiffPairViaGap() const {
-        if(m_diffPairViaGapSameAsTraceGap)
+        if( m_diffPairViaGapSameAsTraceGap )
             return m_diffPairGap;
         else
             return m_diffPairViaGap;
@@ -73,12 +73,12 @@ public:
     void SetDiffPairViaGap( int aGap ) { m_diffPairViaGap = aGap; }
 
     int ViaDiameter() const { return m_viaDiameter; }
-    void SetViaDiameter( int aDiameter) { m_viaDiameter = aDiameter; }
+    void SetViaDiameter( int aDiameter ) { m_viaDiameter = aDiameter; }
 
     int ViaDrill() const { return m_viaDrill; }
     void SetViaDrill( int aDrill ) { m_viaDrill = aDrill; }
 
-    boost::optional<int> PairedLayer ( int aLayerId )
+    boost::optional<int> PairedLayer( int aLayerId )
     {
         if( m_layerPairs.find(aLayerId) == m_layerPairs.end() )
             return boost::optional<int>();
