@@ -967,6 +967,7 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
 
+        static_cast<PCB_DRAW_PANEL_GAL*>( galCanvas )->SyncLayersVisibility( m_Pcb );
         galCanvas->GetView()->RecacheAllItems( true );
         galCanvas->SetEventDispatcher( m_toolDispatcher );
         galCanvas->StartDrawing();
