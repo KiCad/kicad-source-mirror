@@ -654,7 +654,7 @@ msgstr "Pliki obrazów"
 #: eeschema/edit_bitmap.cpp:125
 #, c-format
 msgid "Couldn't load image from <%s>"
-msgstr "Nie jest mozliwe załadowanie obrazu z <%s>"
+msgstr "Nie jest możliwe załadowanie obrazu z <%s>"
 
 #: eeschema/menubar_libedit.cpp:68
 msgid "&Current Library"
@@ -4821,7 +4821,7 @@ msgid ""
 msgstr ""
 "Została wpisana nowa nazwa dla tego symbolu\n"
 "Alias %s już istnieje!\n"
-"Uaktualnienie tego komponentu nie jest mozliwe"
+"Uaktualnienie tego komponentu nie jest możliwe"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:670
 msgid "Chip Name"
@@ -11418,7 +11418,7 @@ msgstr "Przelotki permanetne możliwe tylko na płytce dwuwarstwowej."
 
 #: pcbnew/router/router_tool.cpp:422
 msgid "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the ones directly adjacent to them."
-msgstr "Mikroprzelotki mozliwe tylko pomiędzy zewnęrznymi, bezpośrednio sąsiadujacymi warstwami(F.Cu/B.Cu)."
+msgstr "Mikroprzelotki możliwe tylko pomiędzy zewnęrznymi, bezpośrednio sąsiadujacymi warstwami(F.Cu/B.Cu)."
 
 #: pcbnew/router/router_tool.cpp:643
 msgid "Route Track"
