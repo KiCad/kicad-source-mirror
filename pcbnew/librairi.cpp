@@ -27,8 +27,10 @@
  * @brief Manage module (footprint) libraries.
  */
 
-#include <fctsys.h>
 #include <wx/ffile.h>
+#include <wx/stdpaths.h>
+
+#include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
@@ -105,7 +107,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     // Some day it might be useful save the last library type selected along with the path.
     static int lastFilterIndex = 0;
 
-    wxString        lastOpenedPathForLoading;
+    wxString        lastOpenedPathForLoading = m_mruPath;
     wxConfigBase*   config = Kiface().KifaceSettings();
 
     if( config )
@@ -308,7 +310,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     if( config )
     {
         wxString    path;
-        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
+        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path, m_mruPath );
         fn.SetPath( path );
     }
 

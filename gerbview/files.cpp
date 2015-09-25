@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,7 +113,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
          * the .gbr (.pho in legacy files) extension is the default used in Pcbnew
          * However there are a lot of other extensions used for gerber files
          * Because the first letter is usually g, we accept g* as extension
-         * (Mainly internal copper layers do not have specific extention,
+         * (Mainly internal copper layers do not have specific extension,
          *  and filenames are like *.g1, *.g2 *.gb1 ...).
          * Now (2014) Ucamco (the company which manager the Gerber format) encourage
          * use of .gbr only and the Gerber X2 file format.
@@ -144,7 +144,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         if( filename.DirExists() )
             currentPath = filename.GetPath();
         else
-            currentPath = wxGetCwd();
+            currentPath = m_mruPath;
 
         wxFileDialog dlg( this,
                           _( "Open Gerber File" ),
@@ -157,13 +157,20 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
             return false;
 
         dlg.GetPaths( filenamesList );
+
+        // @todo Take a closer look at the CWD switching here.  The current working directory
+        // gets changed by wxFileDialog because the wxFD_CHANGE_DIR flag is set.  Is this the
+        // appropriate behavior?  The current working directory is not returned to the previous
+        // value so this may be an issue elsewhere.
         currentPath = wxGetCwd();
+        m_mruPath = currentPath;
     }
     else
     {
         wxFileName filename = aFullFileName;
         filenamesList.Add( aFullFileName );
         currentPath = filename.GetPath();
+        m_mruPath = currentPath;
     }
 
     // Read gerber files: each file is loaded on a new GerbView layer
@@ -208,6 +215,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     return true;
 }
 
+
 bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 {
     wxString   filetypes;
@@ -226,7 +234,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         if( filename.DirExists() )
             currentPath = filename.GetPath();
         else
-            currentPath = wxGetCwd();
+            currentPath = m_mruPath;
 
         wxFileDialog dlg( this,
                           _( "Open Drill File" ),
@@ -240,12 +248,14 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
         dlg.GetPaths( filenamesList );
         currentPath = wxGetCwd();
+        m_mruPath = currentPath;
     }
     else
     {
         wxFileName filename = aFullFileName;
         filenamesList.Add( aFullFileName );
         currentPath = filename.GetPath();
+        m_mruPath = currentPath;
     }
 
     // Read gerber files: each file is loaded on a new GerbView layer
@@ -264,7 +274,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
         if( Read_EXCELLON_File( filename.GetFullPath() ) )
         {
-            // Update the list of recentdrill files.
+            // Update the list of recent drill files.
             UpdateFileHistory( filename.GetFullPath(),  &m_drillFileHistory );
 
             layer = getNextAvailableLayer( layer );

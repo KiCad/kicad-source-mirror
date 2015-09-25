@@ -176,7 +176,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     // Prepare the zip file
     wxString zipfilename = zip.GetFullPath();
 
-    wxFFileOutputStream ostream(zipfilename);
+    wxFFileOutputStream ostream( zipfilename );
     wxZipOutputStream zipstream( ostream );
 
     // Build list of filenames to put in zip archive
@@ -199,11 +199,11 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         curr_fn.MakeRelativeTo( currdirname );
         currFilename = curr_fn.GetFullPath();
 
-        msg.Printf(_( "Archive file <%s>" ), GetChars( currFilename ) );
+        msg.Printf( _( "Archive file <%s>" ), GetChars( currFilename ) );
         PrintMsg( msg );
 
         // Read input file and add it to the zip file:
-        wxFSFile* infile = fsfile.OpenFile(currFilename);
+        wxFSFile* infile = fsfile.OpenFile( currFilename );
 
         if( infile )
         {
@@ -213,20 +213,20 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
             int zippedsize = zipstream.GetSize() - zipBytesCnt;
             zipBytesCnt = zipstream.GetSize();
             PrintMsg( wxT("  ") );
-            msg.Printf( _( "(%d bytes, compressed %d bytes)\n"),
-                        infile->GetStream()->GetSize(), zippedsize );
+            msg.Printf( _( "(%lu bytes, compressed %d bytes)\n" ),
+                        (unsigned long)infile->GetStream()->GetSize(), zippedsize );
             PrintMsg( msg );
             delete infile;
         }
         else
-            PrintMsg( _(" >>Error\n") );
+            PrintMsg( _( " >>Error\n" ) );
     }
 
     zipBytesCnt = ostream.GetSize();
 
     if( zipstream.Close() )
     {
-        msg.Printf( _("\nZip archive <%s> created (%d bytes)" ),
+        msg.Printf( _( "\nZip archive <%s> created (%d bytes)" ),
                     GetChars( zipfilename ), zipBytesCnt );
         PrintMsg( msg );
         PrintMsg( wxT( "\n** end **\n" ) );
@@ -234,7 +234,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     else
     {
         msg.Printf( wxT( "Unable to create archive <%s>, abort\n" ),
-                  GetChars( zipfilename ) );
+                    GetChars( zipfilename ) );
         PrintMsg( msg );
     }
 

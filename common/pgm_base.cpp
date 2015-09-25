@@ -336,9 +336,9 @@ const wxString& PGM_BASE::GetEditorName()
 #ifdef __WINDOWS__
         mask += wxT( ".exe" );
 #endif
-        editorname = EDA_FileSelector( _( "Preferred Editor:" ), wxEmptyString,
-                                       wxEmptyString, wxEmptyString, mask,
-                                       NULL, wxFD_OPEN, true );
+        editorname = EDA_FILE_SELECTOR( _( "Preferred Editor:" ), wxEmptyString,
+                                        wxEmptyString, wxEmptyString, mask,
+                                        NULL, wxFD_OPEN, true );
     }
 
     if( !editorname.IsEmpty() )

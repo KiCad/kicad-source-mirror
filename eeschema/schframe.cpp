@@ -916,7 +916,7 @@ void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 {
 //  wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-    wxString pro_dir = wxGetCwd();
+    wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "New Schematic" ), pro_dir,
                       wxEmptyString, SchematicFileWildcard,
@@ -942,6 +942,7 @@ void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
         wxASSERT_MSG( create_me.IsAbsolute(), wxT( "wxFileDialog returned non-absolute" ) );
 
         OpenProjectFiles( std::vector<wxString>( 1, create_me.GetFullPath() ), KICTL_CREATE );
+        m_mruPath = create_me.GetPath();
     }
 }
 
@@ -949,7 +950,7 @@ void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
 {
 //  wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-    wxString pro_dir = wxGetCwd();
+    wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir,
                       wxEmptyString, SchematicFileWildcard,
@@ -958,6 +959,7 @@ void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
     if( dlg.ShowModal() != wxID_CANCEL )
     {
         OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ) );
+        m_mruPath = Prj().GetProjectPath();
     }
 }
 

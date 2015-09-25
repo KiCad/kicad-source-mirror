@@ -749,12 +749,12 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
 #if 0   // pass in the project dir as an argument
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 #else
-    wxString path = wxGetCwd();
+    wxString path = GetMruPath();
 #endif
     wxFileName fn( aDefaultShortname );
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
-    wxString  filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
+    wxString  filename = EDA_FILE_SELECTOR( _( "Read Hotkey Configuration File:" ),
                                            path,
                                            fn.GetFullPath(),
                                            ext,
@@ -767,6 +767,7 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
         return;
 
     ReadHotkeyConfigFile( filename, aDescList );
+    SetMruPath( wxFileName( filename ).GetPath() );
 }
 
 
@@ -779,24 +780,25 @@ void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
 #if 0
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 #else
-    wxString path = wxGetCwd();
+    wxString path = GetMruPath();
 #endif
     wxFileName fn( aDefaultShortname );
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
-    wxString filename = EDA_FileSelector( _( "Write Hotkey Configuration File:" ),
-                                          path,
-                                          fn.GetFullPath(),
-                                          ext,
-                                          mask,
-                                          this,
-                                          wxFD_SAVE,
-                                          true );
+    wxString filename = EDA_FILE_SELECTOR( _( "Write Hotkey Configuration File:" ),
+                                           path,
+                                           fn.GetFullPath(),
+                                           ext,
+                                           mask,
+                                           this,
+                                           wxFD_SAVE,
+                                           true );
 
     if( filename.IsEmpty() )
         return;
 
     WriteHotkeyConfig( aDescList, &filename );
+    SetMruPath( wxFileName( filename ).GetPath() );
 }
 
 

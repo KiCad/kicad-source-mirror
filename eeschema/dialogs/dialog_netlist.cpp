@@ -837,14 +837,14 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
 #else
     Path = GetOSXKicadDataDir() + wxT( "/plugins" );
 #endif
-    FullFileName = EDA_FileSelector( _( "Plugin files:" ),
-                                     Path,
-                                     FullFileName,
-                                     wxEmptyString,
-                                     Mask,
-                                     this,
-                                     wxFD_OPEN,
-                                     true
+    FullFileName = EDA_FILE_SELECTOR( _( "Plugin files:" ),
+                                      Path,
+                                      FullFileName,
+                                      wxEmptyString,
+                                      Mask,
+                                      this,
+                                      wxFD_OPEN,
+                                      true
                                      );
     if( FullFileName.IsEmpty() )
         return;

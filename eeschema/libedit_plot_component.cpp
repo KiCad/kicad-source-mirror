@@ -71,7 +71,7 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 
             wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 
-            fullFileName = EDA_FileSelector( _( "Filename:" ), pro_dir,
+            fullFileName = EDA_FILE_SELECTOR( _( "Filename:" ), pro_dir,
                                              fn.GetFullName(), file_ext, mask, this,
                                              wxFD_SAVE, true );
 
@@ -94,9 +94,9 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 
             wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 
-            fullFileName = EDA_FileSelector( _( "Filename:" ), pro_dir,
-                                             fn.GetFullName(), file_ext, mask, this,
-                                             wxFD_SAVE, true );
+            fullFileName = EDA_FILE_SELECTOR( _( "Filename:" ), pro_dir,
+                                              fn.GetFullName(), file_ext, mask, this,
+                                              wxFD_SAVE, true );
 
             if( fullFileName.IsEmpty() )
                 return;

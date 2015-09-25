@@ -137,15 +137,14 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 
     name += dsn_ext;
 
-    fullFileName = EDA_FileSelector( _( "Specctra DSN file:" ),
-                                     path,
-                                     name,      // name.ext without path!
-                                     dsn_ext,
-                                     mask,
-                                     this,
-                                     wxFD_SAVE,
-                                     false
-                                     );
+    fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN file:" ),
+                                      path,
+                                      name,      // name.ext without path!
+                                      dsn_ext,
+                                      mask,
+                                      this,
+                                      wxFD_SAVE,
+                                      false );
 
     if( fullFileName == wxEmptyString )
         return;

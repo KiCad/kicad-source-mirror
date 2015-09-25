@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -51,6 +51,8 @@
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 #include <module_editor_frame.h>
 #include <modview_frame.h>
+
+#include <wx/stdpaths.h>
 
 
 //#define     USE_INSTRUMENTATION     true
@@ -114,7 +116,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
     }
     else
     {
-        path = wxGetCwd();
+        path = wxStandardPaths::Get().GetDocumentsDir();
         // leave name empty
     }
 
@@ -309,21 +311,22 @@ void PCB_EDIT_FRAME::Files_io_from_id( int id )
         break;
 
     case ID_NEW_BOARD:
-        {
-            if( !Clear_Pcb( true ) )
-                break;
+    {
+        if( !Clear_Pcb( true ) )
+            break;
 
-            wxFileName fn( wxGetCwd(), wxT( "noname" ), ProjectFileExtension );
+        wxFileName fn( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
+                       ProjectFileExtension );
 
-            Prj().SetProjectFullName( fn.GetFullPath() );
+        Prj().SetProjectFullName( fn.GetFullPath() );
 
-            fn.SetExt( PcbFileExtension );
+        fn.SetExt( PcbFileExtension );
 
-            GetBoard()->SetFileName( fn.GetFullPath() );
-            UpdateTitle();
-            ReCreateLayerBox();
-        }
+        GetBoard()->SetFileName( fn.GetFullPath() );
+        UpdateTitle();
+        ReCreateLayerBox();
         break;
+    }
 
     case ID_SAVE_BOARD:
         if( ! GetBoard()->GetFileName().IsEmpty() )

@@ -33,6 +33,7 @@
 #include <wx/clipbrd.h>
 #include <wx/statline.h>
 #include <wx/platinfo.h>
+#include <wx/stdpaths.h>
 
 #include <build_version.h>
 #include <fctsys.h>
@@ -61,6 +62,8 @@ static const wxChar entryAutoSaveInterval[] = wxT( "AutoSaveInterval" );
 /// Configuration file entry for wxAuiManger perspective.
 static const wxChar entryPerspective[] = wxT( "Perspective" );
 
+/// Configuration file entry for most recently used path.
+static const wxChar entryMruPath[] = wxT( "MostRecentlyUsedPath" );
 
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
@@ -76,7 +79,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_autoSaveState = false;
     m_autoSaveInterval = -1;
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
-
+    m_mruPath = wxStandardPaths::Get().GetDocumentsDir();
     minsize.x = 470;
     minsize.y = 350;
 
@@ -265,6 +268,7 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
         Maximize();
 
     aCfg->Read( baseCfgName + entryPerspective, &m_perspective );
+    aCfg->Read( baseCfgName + entryMruPath, &m_mruPath );
 }
 
 
@@ -309,6 +313,7 @@ void EDA_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
     // printf( "perspective(%s): %s\n",
     //    TO_UTF8( m_FrameName + entryPerspective ), TO_UTF8( perspective ) );
     aCfg->Write( baseCfgName + entryPerspective, perspective );
+    aCfg->Write( baseCfgName + entryMruPath, m_mruPath );
 }
 
 

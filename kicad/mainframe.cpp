@@ -42,6 +42,8 @@
 #include <menus_helpers.h>
 #include <dialog_hotkeys_editor.h>
 
+#include <wx/filefn.h>
+
 
 #define TREE_FRAME_WIDTH_ENTRY     wxT( "LeftWinWidth" )
 
@@ -410,16 +412,12 @@ void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 
 
 
-#include <wx/filefn.h>
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
     // Gerbview is called without any file to open, because we do not know
     // the list and the name of files to open (if any...).
     // however we run it in the path of the project
-    wxString cwd = wxGetCwd();
-    wxSetWorkingDirectory( Prj().GetProjectPath() );
-    Execute( this, GERBVIEW_EXE, wxEmptyString );
-    wxSetWorkingDirectory( cwd );
+    Execute( this, GERBVIEW_EXE, Prj().GetProjectPath() );
 }
 
 

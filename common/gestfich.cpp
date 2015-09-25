@@ -58,26 +58,26 @@ void AddDelimiterString( wxString& string )
 }
 
 
-bool EDA_DirectorySelector( const wxString& Title,
-                            wxString&       Path,
-                            int             flag,
-                            wxWindow*       Frame,
-                            const wxPoint&  Pos )
+bool EDA_PATH_SELECTOR( const wxString& aTitle,
+                        wxString&       aPath,
+                        int             aFlags,
+                        wxWindow*       aParent,
+                        const wxPoint&  aPosition )
 {
     int          ii;
     bool         selected = false;
 
-    wxDirDialog* DirFrame = new wxDirDialog( Frame,
-                                             wxString( Title ),
-                                             Path,
-                                             flag,
-                                             Pos );
+    wxDirDialog* DirFrame = new wxDirDialog( aParent,
+                                             aTitle,
+                                             aPath,
+                                             aFlags,
+                                             aPosition );
 
     ii = DirFrame->ShowModal();
 
     if( ii == wxID_OK )
     {
-        Path     = DirFrame->GetPath();
+        aPath    = DirFrame->GetPath();
         selected = true;
     }
 
@@ -86,21 +86,22 @@ bool EDA_DirectorySelector( const wxString& Title,
 }
 
 
-wxString EDA_FileSelector( const wxString& Title,
-                           const wxString& Path,
-                           const wxString& FileName,
-                           const wxString& Ext,
-                           const wxString& Mask,
-                           wxWindow*       Frame,
-                           int             flag,
-                           const bool      keep_working_directory,
-                           const wxPoint&  Pos )
+wxString EDA_FILE_SELECTOR( const wxString& aTitle,
+                            const wxString& aPath,
+                            const wxString& aFileName,
+                            const wxString& aExtension,
+                            const wxString& aWildcard,
+                            wxWindow*       aParent,
+                            int             aStyle,
+                            const bool      aKeepWorkingDirectory,
+                            const wxPoint&  aPosition,
+                            wxString*       aMruPath )
 {
     wxString fullfilename;
     wxString curr_cwd    = wxGetCwd();
-    wxString defaultname = FileName;
-    wxString defaultpath = Path;
-    wxString dotted_Ext = wxT(".") + Ext;
+    wxString defaultname = aFileName;
+    wxString defaultpath = aPath;
+    wxString dotted_Ext = wxT(".") + aExtension;
 
 #ifdef __WINDOWS__
     defaultname.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -108,7 +109,12 @@ wxString EDA_FileSelector( const wxString& Title,
 #endif
 
     if( defaultpath.IsEmpty() )
-        defaultpath = wxGetCwd();
+    {
+        if( aMruPath == NULL )
+            defaultpath = wxGetCwd();
+        else
+            defaultpath = *aMruPath;
+    }
 
     wxSetWorkingDirectory( defaultpath );
 
@@ -116,23 +122,29 @@ wxString EDA_FileSelector( const wxString& Title,
     printf( "defaultpath=\"%s\" defaultname=\"%s\" Ext=\"%s\" Mask=\"%s\" flag=%d keep_working_directory=%d\n",
             TO_UTF8( defaultpath ),
             TO_UTF8( defaultname ),
-            TO_UTF8( Ext ),
-            TO_UTF8( Mask ),
-            flag,
-            keep_working_directory );
+            TO_UTF8( aExtension ),
+            TO_UTF8( aWildcard ),
+            aStyle,
+            aKeepWorkingDirectory );
 #endif
 
-    fullfilename = wxFileSelector( wxString( Title ),
+    fullfilename = wxFileSelector( aTitle,
                                    defaultpath,
                                    defaultname,
                                    dotted_Ext,
-                                   Mask,
-                                   flag, // open mode wxFD_OPEN, wxFD_SAVE ..
-                                   Frame,
-                                   Pos.x, Pos.y );
+                                   aWildcard,
+                                   aStyle,         // open mode wxFD_OPEN, wxFD_SAVE ..
+                                   aParent,
+                                   aPosition.x, aPosition.y );
 
-    if( keep_working_directory )
+    if( aKeepWorkingDirectory )
         wxSetWorkingDirectory( curr_cwd );
+
+    if( !fullfilename.IsEmpty() && aMruPath )
+    {
+        wxFileName fn = fullfilename;
+        *aMruPath = fn.GetPath();
+    }
 
     return fullfilename;
 }

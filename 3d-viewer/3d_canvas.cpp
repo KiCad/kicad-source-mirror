@@ -651,9 +651,9 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
         mask         = wxT( "*." ) + file_ext;
         fn.SetExt( file_ext );
 
-        FullFileName = EDA_FileSelector( _( "3D Image File Name:" ), fn.GetPath(),
-                                         fn.GetFullName(), file_ext, mask, this,
-                                         wxFD_SAVE | wxFD_OVERWRITE_PROMPT, true );
+        FullFileName = EDA_FILE_SELECTOR( _( "3D Image File Name:" ), fn.GetPath(),
+                                          fn.GetFullName(), file_ext, mask, this,
+                                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT, true );
 
         if( FullFileName.IsEmpty() )
             return;

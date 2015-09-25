@@ -162,7 +162,7 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
         {
             GetFileHistory().RemoveFileFromHistory( 0 );
 
-            wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
+            wxFileName namelessProject( wxStandardPaths::Get().GetDocumentsDir(), NAMELESS_PROJECT,
                                         ProjectFileExtension );
 
             frame->SetProjectFileName( namelessProject.GetFullPath() );
@@ -181,7 +181,7 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
     }
     else	// there is no history
     {
-            wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
+            wxFileName namelessProject( wxStandardPaths::Get().GetDocumentsDir(), NAMELESS_PROJECT,
                                         ProjectFileExtension );
 
             frame->SetProjectFileName( namelessProject.GetFullPath() );

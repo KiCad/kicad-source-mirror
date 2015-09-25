@@ -152,6 +152,8 @@ protected:
 
     wxString     m_perspective;     ///< wxAuiManager perspective.
 
+    wxString     m_mruPath;         ///< Most recently used path.
+
     /**
      * Function onAutoSaveTimer
      * handles the auto save timer event.
@@ -361,6 +363,10 @@ public:
      * If NULL, the main application file history is used.
      */
     void UpdateFileHistory( const wxString& FullFileName, wxFileHistory * aFileHistory = NULL );
+
+    void SetMruPath( const wxString& aPath ) { m_mruPath = aPath; }
+
+    wxString GetMruPath() const { return m_mruPath; }
 
     /**
      * Function ReCreateMenuBar

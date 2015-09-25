@@ -81,15 +81,14 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
     wxFileName::SplitPath( fullFileName, &path, &name, &ext );
     name += sessionExt;
 
-    fullFileName = EDA_FileSelector( _( "Merge Specctra Session file:" ),
-                            path,
-                            name,
-                            sessionExt,
-                            mask,
-                            this,
-                            wxFD_OPEN,
-                            false
-                            );
+    fullFileName = EDA_FILE_SELECTOR( _( "Merge Specctra Session file:" ),
+                                      path,
+                                      name,
+                                      sessionExt,
+                                      mask,
+                                      this,
+                                      wxFD_OPEN,
+                                      false );
 
     if( fullFileName == wxEmptyString )
         return;

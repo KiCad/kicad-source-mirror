@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,8 @@
 #include <dialog_gendrill.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
+
+#include <wx/stdpaths.h>
 
 
 // Keywords for read and write config
@@ -391,7 +393,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     wxString defaultPath = m_plotOpts.GetOutputDirectory();
 
     if( defaultPath.IsEmpty() )
-        defaultPath = ::wxGetCwd();
+        defaultPath = wxStandardPaths::Get().GetDocumentsDir();
 
     wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath,
                       fn.GetFullName(), wxGetTranslation( ReportFileWildcard ),

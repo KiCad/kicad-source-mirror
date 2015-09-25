@@ -349,10 +349,10 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
     fileFilters += wxChar(  '|' );
     fileFilters += wxGetTranslation( IDF3DFileWildcard );
 
-    wxString filename = EDA_FileSelector( _( "3D Shape:" ), initialpath,
-                                          wxEmptyString, wxEmptyString,
-                                          wxGetTranslation( fileFilters ),
-                                          this, wxFD_OPEN, true );
+    wxString filename = EDA_FILE_SELECTOR( _( "3D Shape:" ), initialpath,
+                                           wxEmptyString, wxEmptyString,
+                                           wxGetTranslation( fileFilters ),
+                                           this, wxFD_OPEN, true );
 
     if( filename.IsEmpty() )
         return;

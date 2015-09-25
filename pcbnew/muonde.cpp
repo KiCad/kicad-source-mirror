@@ -844,10 +844,10 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
     static wxString lastpath;       // To remember the last open path during a session
     wxString mask = wxT( "*.*" );
 
-    wxString FullFileName = EDA_FileSelector( _( "Read descr shape file" ),
-                                              lastpath, FullFileName,
-                                              wxEmptyString, mask,
-                                              this, wxFD_OPEN, true );
+    wxString FullFileName = EDA_FILE_SELECTOR( _( "Read descr shape file" ),
+                                               lastpath, FullFileName,
+                                               wxEmptyString, mask,
+                                               this, wxFD_OPEN, true );
     if( FullFileName.IsEmpty() )
         return;
 

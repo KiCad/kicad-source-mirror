@@ -191,10 +191,10 @@ const wxString DIALOG_FREEROUTE::createDSN_File()
     fn.SetExt( dsn_ext );
     wxString mask    = wxT( "*." ) + dsn_ext;
 
-    wxString fullFileName = EDA_FileSelector( _( "Specctra DSN file:" ),
-                                     fn.GetPath(), fn.GetFullName(),
-                                     dsn_ext, mask,
-                                     this, wxFD_SAVE, false );
+    wxString fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN file:" ),
+                                               fn.GetPath(), fn.GetFullName(),
+                                               dsn_ext, mask,
+                                               this, wxFD_SAVE, false );
 
     if( !fullFileName.IsEmpty() )
     {
