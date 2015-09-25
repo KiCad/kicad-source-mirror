@@ -75,14 +75,14 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
     fn.SetExt( ZipFileExtension );
 
-    wxFileDialog dlg( this, _( "Unzip Project" ), fn.GetPath(),
+    wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(),
                       fn.GetFullName(), ZipFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( zipfiledlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg = wxString::Format( _("\nOpen '%s'\n" ), GetChars( dlg.GetPath() ) );
+    wxString msg = wxString::Format( _("\nOpen '%s'\n" ), GetChars( zipfiledlg.GetPath() ) );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -91,13 +91,14 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( dirDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( dirDlg.GetPath() ) );
+    wxString unzipDir = dirDlg.GetPath() + wxT( "/" );
+    msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( unzipDir ) );
     PrintMsg( msg );
 
     wxFileSystem zipfilesys;
 
     zipfilesys.AddHandler( new wxZipFSHandler );
-    zipfilesys.ChangePathTo( dlg.GetPath() + wxT( "#zip:" ) );
+    zipfilesys.ChangePathTo( zipfiledlg.GetPath() + wxT( "#zip:" ), true );
 
     wxFSFile* zipfile = NULL;
     wxString  localfilename = zipfilesys.FindFirst( wxT( "*.*" ) );
@@ -111,13 +112,14 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
             break;
         }
 
-        wxString unzipfilename = localfilename.AfterLast( ':' );
+        wxFileName uzfn = localfilename.AfterLast( ':' );
+        uzfn.MakeAbsolute( unzipDir );
+        wxString unzipfilename = uzfn.GetFullPath();
 
         msg.Printf( _( "Extract file '%s'" ), GetChars( unzipfilename ) );
         PrintMsg( msg );
 
-        wxInputStream*       stream = zipfile->GetStream();
-
+        wxInputStream* stream = zipfile->GetStream();
         wxFFileOutputStream* ofile = new wxFFileOutputStream( unzipfilename );
 
         if( ofile->Ok() )
