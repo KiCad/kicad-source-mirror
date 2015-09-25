@@ -28,6 +28,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
+#include <pgm_base.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <build_version.h>
@@ -192,7 +193,16 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    const unsigned limit = std::min( unsigned( aFileSet.size() ), unsigned( GERBER_DRAWLAYERS_COUNT ) );
+    // The current project path is also a valid command parameter.  Check if a single path
+    // was passed to GerbView and use it as the initial MRU path.
+    if( aFileSet.size() == 1 && !wxFileExists( aFileSet[0] ) && wxDirExists( aFileSet[0] ) )
+    {
+        m_mruPath = aFileSet[0];
+        return true;
+    }
+
+    const unsigned limit = std::min( unsigned( aFileSet.size() ),
+                                     unsigned( GERBER_DRAWLAYERS_COUNT ) );
 
     int layer = 0;
 
