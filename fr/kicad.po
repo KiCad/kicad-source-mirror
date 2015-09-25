@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-23 12:01+0200\n"
-"PO-Revision-Date: 2015-09-23 12:01+0200\n"
+"POT-Creation-Date: 2015-09-25 17:04+0200\n"
+"PO-Revision-Date: 2015-09-25 17:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: kicad team\n"
 "Language: fr_FR\n"
@@ -229,10 +229,10 @@ msgstr "Déplacer vers le bas"
 msgid "Enable/Disable orthographic projection"
 msgstr "Active/Désactive projection orthographique"
 
-#: 3d-viewer/3d_toolbar.cpp:135 cvpcb/menubar.cpp:135 eeschema/menubar.cpp:506
+#: 3d-viewer/3d_toolbar.cpp:135 cvpcb/menubar.cpp:141 eeschema/menubar.cpp:506
 #: eeschema/menubar_libedit.cpp:283 eeschema/tool_viewlib.cpp:267
-#: gerbview/menubar.cpp:236 kicad/menubar.cpp:426
-#: pagelayout_editor/menubar.cpp:163 pcbnew/menubar_modedit.cpp:358
+#: gerbview/menubar.cpp:242 kicad/menubar.cpp:426
+#: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_modedit.cpp:358
 #: pcbnew/menubar_pcbframe.cpp:662 pcbnew/tool_modview.cpp:206
 msgid "&File"
 msgstr "&Fichiers"
@@ -253,8 +253,8 @@ msgstr "Copie Image 3D dans Presse papier"
 msgid "&Exit"
 msgstr "&Quitter"
 
-#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:136 gerbview/menubar.cpp:237
-#: kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:164
+#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:142 gerbview/menubar.cpp:243
+#: kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:170
 msgid "&Preferences"
 msgstr "&Préférences"
 
@@ -916,7 +916,7 @@ msgid "Warning"
 msgstr "Avertissement"
 
 #: common/confirm.cpp:80 kicad/prjconfig.cpp:143
-#: pcbnew/router/length_tuner_tool.cpp:171 pcbnew/router/router_tool.cpp:466
+#: pcbnew/router/length_tuner_tool.cpp:171
 msgid "Error"
 msgstr "Erreur"
 
@@ -1212,7 +1212,7 @@ msgstr "Ajouter une nouvelle entrée à la table"
 #: common/dialogs/dialog_env_var_config_base.cpp:68
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
-#: pagelayout_editor/events_functions.cpp:572
+#: pagelayout_editor/events_functions.cpp:573
 #: pagelayout_editor/onrightclick.cpp:103
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
@@ -2749,25 +2749,44 @@ msgid "Save changes to the project configuration file"
 msgstr "Sauver les changements dans le fichier de configuration du projet"
 
 #: cvpcb/menubar.cpp:124
-msgid "&CvPcb Manual"
-msgstr "Manuel de &CvPcb"
+msgid "CvPcb &Manual"
+msgstr "&Manuel de CvPcb"
 
 #: cvpcb/menubar.cpp:125
-msgid "Open CvPcb manual"
+msgid "Open CvPcb Manual"
 msgstr "Ouvrir la documentation de CvPcb"
 
-#: cvpcb/menubar.cpp:130
-msgid "&About CvPcb"
-msgstr "&Au sujet de CvPcb"
+#: cvpcb/menubar.cpp:130 eeschema/menubar.cpp:494
+#: eeschema/menubar_libedit.cpp:269 eeschema/tool_viewlib.cpp:255
+#: gerbview/menubar.cpp:230 kicad/menubar.cpp:412
+#: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_modedit.cpp:346
+#: pcbnew/menubar_pcbframe.cpp:651 pcbnew/tool_modview.cpp:194
+msgid "&Getting Started in KiCad"
+msgstr "&Démarrer avec KiCad"
 
-#: cvpcb/menubar.cpp:131
-msgid "About CvPcb footprint selector"
-msgstr "Au sujet de CvPcb, le sélecteur de modules"
+#: cvpcb/menubar.cpp:131 eeschema/menubar.cpp:495 gerbview/menubar.cpp:231
+#: kicad/menubar.cpp:413 pagelayout_editor/menubar.cpp:158
+msgid "Open \"Getting Started in KiCad\" guide for beginners"
+msgstr "Ouvrir le guide pour les débutants \"Démarrer avec KiCad\""
 
-#: cvpcb/menubar.cpp:137 eeschema/menubar.cpp:512
+#: cvpcb/menubar.cpp:136 eeschema/menubar.cpp:501
+#: eeschema/menubar_libedit.cpp:278 gerbview/menubar.cpp:237
+#: pagelayout_editor/menubar.cpp:164 pcbnew/menubar_modedit.cpp:353
+#: pcbnew/menubar_pcbframe.cpp:657
+msgid "&About Kicad"
+msgstr "&Au Sujet de Kicad"
+
+#: cvpcb/menubar.cpp:137 eeschema/menubar.cpp:502
+#: eeschema/menubar_libedit.cpp:279 gerbview/menubar.cpp:238
+#: pagelayout_editor/menubar.cpp:165 pcbnew/menubar_modedit.cpp:354
+#: pcbnew/menubar_pcbframe.cpp:658
+msgid "About Kicad"
+msgstr "Au Sujet de Kicad"
+
+#: cvpcb/menubar.cpp:143 eeschema/menubar.cpp:512
 #: eeschema/menubar_libedit.cpp:288 eeschema/tool_viewlib.cpp:270
-#: gerbview/menubar.cpp:239 kicad/menubar.cpp:430
-#: pagelayout_editor/menubar.cpp:165 pcbnew/menubar_modedit.cpp:364
+#: gerbview/menubar.cpp:245 kicad/menubar.cpp:430
+#: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_modedit.cpp:364
 #: pcbnew/menubar_pcbframe.cpp:671 pcbnew/tool_modview.cpp:209
 msgid "&Help"
 msgstr "&Aide"
@@ -7284,34 +7303,14 @@ msgstr "&Editeur de Circuit Imprimé"
 msgid "Run Pcbnew"
 msgstr "Lancer Pcbnew"
 
-#: eeschema/menubar.cpp:488 eeschema/tool_viewlib.cpp:250
-msgid "Eesc&hema Manual"
-msgstr "Documentation de Eesc&hema"
+#: eeschema/menubar.cpp:488 eeschema/menubar_libedit.cpp:263
+#: eeschema/tool_viewlib.cpp:250
+msgid "Eeschema &Manual"
+msgstr "&Manuel de Eeschema"
 
-#: eeschema/menubar.cpp:489 eeschema/tool_viewlib.cpp:251
-msgid "Open Eeschema manual"
+#: eeschema/menubar.cpp:489
+msgid "Open Eeschema Manual"
 msgstr "Ouvrir la documentation de Eeschema"
-
-#: eeschema/menubar.cpp:494 eeschema/menubar_libedit.cpp:269
-#: eeschema/tool_viewlib.cpp:255 kicad/menubar.cpp:412
-#: pcbnew/menubar_modedit.cpp:346 pcbnew/menubar_pcbframe.cpp:651
-#: pcbnew/tool_modview.cpp:194
-msgid "&Getting Started in KiCad"
-msgstr "&Démarrer avec KiCad"
-
-#: eeschema/menubar.cpp:495 kicad/menubar.cpp:413
-msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Ouvrir le guide pour les débutants \"Démarrer avec KiCad\""
-
-#: eeschema/menubar.cpp:501 eeschema/menubar_libedit.cpp:278
-#: eeschema/tool_viewlib.cpp:262
-msgid "&About Eeschema"
-msgstr "&Au Sujet de Eeschema"
-
-#: eeschema/menubar.cpp:502 eeschema/menubar_libedit.cpp:279
-#: eeschema/tool_viewlib.cpp:263
-msgid "About Eeschema schematic designer"
-msgstr "Au sujet de Eeschema (outil de conception schématique)"
 
 #: eeschema/menubar.cpp:507 eeschema/menubar_libedit.cpp:284
 #: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:663
@@ -7432,13 +7431,8 @@ msgstr "&Options de l'Éditeur de Composants"
 msgid "Set Component Editor default values and options"
 msgstr "Ajuster les options et valeurs par défaut de l'Éditeur de Composants"
 
-#: eeschema/menubar_libedit.cpp:263 gerbview/menubar.cpp:224
-#: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_pcbframe.cpp:646
-msgid "&Contents"
-msgstr "&Contenu"
-
 #: eeschema/menubar_libedit.cpp:264
-msgid "Open the Eeschema manual"
+msgid "Open the Eeschema Manual"
 msgstr "Ouvrir la documentation de Eeschema"
 
 #: eeschema/menubar_libedit.cpp:270 eeschema/tool_viewlib.cpp:256
@@ -8580,6 +8574,18 @@ msgstr "&Fermer"
 msgid "Close schematic component viewer"
 msgstr "Fermer le visualisateur de composants schématiques"
 
+#: eeschema/tool_viewlib.cpp:251
+msgid "Open Eeschema manual"
+msgstr "Ouvrir la documentation de Eeschema"
+
+#: eeschema/tool_viewlib.cpp:262
+msgid "&About Eeschema"
+msgstr "&Au Sujet de Eeschema"
+
+#: eeschema/tool_viewlib.cpp:263
+msgid "About Eeschema schematic designer"
+msgstr "Au sujet de Eeschema (outil de conception schématique)"
+
 #: eeschema/viewlib_frame.cpp:99 eeschema/viewlibs.cpp:134
 #: pcbnew/modview_frame.cpp:702
 msgid "Library Browser"
@@ -8769,7 +8775,7 @@ msgid "Get Stored Choice"
 msgstr "Utiliser Choix Mémorisé"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:107
-#: pagelayout_editor/events_functions.cpp:516
+#: pagelayout_editor/events_functions.cpp:517
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:87
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:114
 msgid "Error Init Printer info"
@@ -9050,27 +9056,27 @@ msgstr "Page"
 msgid "Do not center and warp cursor on zoom"
 msgstr "Ne pas centrer et déplacer le curseur en zoomant"
 
-#: gerbview/events_called_functions.cpp:268
+#: gerbview/events_called_functions.cpp:269
 msgid "No editor defined. Please select one"
 msgstr "Pas d'éditeur défini.  Veuillez en sélectionner un"
 
-#: gerbview/events_called_functions.cpp:274
+#: gerbview/events_called_functions.cpp:275
 #, c-format
 msgid "No file loaded on the active layer %d"
 msgstr "Pas de fichier chargé sur la couche active %d"
 
-#: gerbview/events_called_functions.cpp:318 gerbview/gerbview_frame.cpp:146
+#: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:146
 #: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:401 pcbnew/pcbframe.cpp:907
 msgid "Visibles"
 msgstr "Visibles"
 
-#: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:155
+#: gerbview/events_called_functions.cpp:382 gerbview/menubar.cpp:155
 #: gerbview/menubar.cpp:157 gerbview/options.cpp:89
 #: pcbnew/dialogs/dialog_general_options.cpp:243 pcbnew/pcbnew_config.cpp:80
 msgid "Hide &Layers Manager"
 msgstr "Cacher le &Gestionnaire de Couches"
 
-#: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:157
+#: gerbview/events_called_functions.cpp:382 gerbview/menubar.cpp:157
 #: gerbview/options.cpp:89 pcbnew/dialogs/dialog_general_options.cpp:243
 #: pcbnew/pcbnew_config.cpp:80
 msgid "Show &Layers Manager"
@@ -9382,19 +9388,15 @@ msgstr "&Editeur de Texte"
 msgid "Select your preferred text editor"
 msgstr "Choisir son  éditeur de texte préféré"
 
-#: gerbview/menubar.cpp:225 pagelayout_editor/menubar.cpp:152
-msgid "Open the GerbView handbook"
+#: gerbview/menubar.cpp:224
+msgid "Gerbview &Manual"
+msgstr "&Manual de Gerbview"
+
+#: gerbview/menubar.cpp:225
+msgid "Open the GerbView Manual"
 msgstr "Ouvrir la documentation de GerbView"
 
-#: gerbview/menubar.cpp:231
-msgid "&About GerbView"
-msgstr "&Au Sujet de Gerbview"
-
-#: gerbview/menubar.cpp:232
-msgid "About GerbView gerber and drill viewer"
-msgstr "Au sujet de GerbView, visualiseur de fichiers gerber et de perçage"
-
-#: gerbview/menubar.cpp:238
+#: gerbview/menubar.cpp:244
 msgid "&Miscellaneous"
 msgstr "&Divers"
 
@@ -10372,13 +10374,13 @@ msgstr "Cacher la &Grille"
 msgid "Show &Grid"
 msgstr "Afficher la &Grille"
 
-#: pagelayout_editor/menubar.cpp:158
-msgid "&About Page Layout Editor"
-msgstr "&Au sujet de l'Éditeur de Description de Page"
+#: pagelayout_editor/menubar.cpp:151
+msgid "Page Layout Editor &Manual"
+msgstr "$Manuel de l'Éditeur de Description de Page"
 
-#: pagelayout_editor/menubar.cpp:159
-msgid "About page layout description editor"
-msgstr "A sujet de l'éditeur de description de page"
+#: pagelayout_editor/menubar.cpp:152
+msgid "Open the Page Layout Editor Manual"
+msgstr "Ouvrir le manuel d'utilisation de l'Editeur de page"
 
 #: pagelayout_editor/onrightclick.cpp:45 pcbnew/muwave_command.cpp:60
 msgid "Add Line"
@@ -11949,77 +11951,77 @@ msgstr "Connexions"
 msgid "Unconnected"
 msgstr "Non connecté"
 
-#: pcbnew/class_board.cpp:2291
+#: pcbnew/class_board.cpp:2299
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Vérification du composant de la netliste \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2309
+#: pcbnew/class_board.cpp:2317
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Ajout du nouveau composant \"%s:%s\" empreinte \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2318
+#: pcbnew/class_board.cpp:2326
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossible d'ajouter le composant nouveau \"%s:%s\" car l'empreinte \"%s\" "
 "est manquante.\n"
 
-#: pcbnew/class_board.cpp:2350
+#: pcbnew/class_board.cpp:2358
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Remplace composant \"%s:%s\" empreinte \"%s\" par \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2361
+#: pcbnew/class_board.cpp:2369
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossible de remplacer le composant \"%s:%s\" car l'empreinte \"%s\" est "
 "manquante.\n"
 
-#: pcbnew/class_board.cpp:2394
+#: pcbnew/class_board.cpp:2402
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Change référence empreinte \"%s:%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2410
+#: pcbnew/class_board.cpp:2418
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Changement valeur empreinte \"%s:%s\" de \"%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2427
+#: pcbnew/class_board.cpp:2435
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Change le chemin des empreintes \"%s:%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2451
+#: pcbnew/class_board.cpp:2459
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Suppression netname composant \"%s:%s\" pin \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2467
+#: pcbnew/class_board.cpp:2475
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr "Changement composant \"%s:%s\" pin \"%s\"  net de \"%s\" en \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2516
+#: pcbnew/class_board.cpp:2524
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Suppression composant inutilisé \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2576
+#: pcbnew/class_board.cpp:2584
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Suppression net à pad unique \"%s\" sur \"%s\" pad '%s'\n"
 
-#: pcbnew/class_board.cpp:2631
+#: pcbnew/class_board.cpp:2639
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Composant ''%s' pad '%s' non trouvé dans l'empreinte '%s'\n"
 
-#: pcbnew/class_board.cpp:2649
+#: pcbnew/class_board.cpp:2657
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr "Zone cuivre (net name '%s'): le net n'a pas de pad connecté."
@@ -17551,7 +17553,7 @@ msgstr "Des Règles de Conception"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:56
 msgid "Manual"
-msgstr "Manuel"
+msgstr "Manuel "
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:67
 msgid "Target length:"
@@ -18741,7 +18743,7 @@ msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Sélectionner Couche et Ajouter Via Aveugle/Enterrée"
 
 #: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:610
-#: pcbnew/router/router_tool.cpp:98
+#: pcbnew/router/router_tool.cpp:99
 msgid "Switch Track Posture"
 msgstr "Commuter Orientation"
 
@@ -19663,22 +19665,13 @@ msgid "Select default parameters values in Footprint Editor"
 msgstr ""
 "Sélection des valeurs par défaut des  paramètres de l'Éditeur d'Empreintes"
 
-#: pcbnew/menubar_modedit.cpp:341 pcbnew/tool_modview.cpp:189
-msgid "P&cbnew Manual"
-msgstr "Manuel de P&cbnew"
+#: pcbnew/menubar_modedit.cpp:341 pcbnew/menubar_pcbframe.cpp:646
+msgid "Pcbnew &Manual"
+msgstr "$Manuel de Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:342 pcbnew/tool_modview.cpp:190
-msgid "Open the Pcbnew manual"
-msgstr "Ouvrir la documentation de pcbnew"
-
-#: pcbnew/menubar_modedit.cpp:353 pcbnew/menubar_pcbframe.cpp:657
-#: pcbnew/tool_modview.cpp:201
-msgid "&About Pcbnew"
-msgstr "&Au sujet de Pcbnew"
-
-#: pcbnew/menubar_modedit.cpp:354 pcbnew/tool_modview.cpp:202
-msgid "About Pcbnew PCB designer"
-msgstr "Au sujet de Pcbnew, outil de conception de PCB"
+#: pcbnew/menubar_modedit.cpp:342 pcbnew/menubar_pcbframe.cpp:647
+msgid "Open the Pcbnew Manual"
+msgstr "Ouvrir la documentation de Pcbnew"
 
 #: pcbnew/menubar_modedit.cpp:363
 msgid "Di&mensions"
@@ -20261,14 +20254,6 @@ msgstr "&Options Couches"
 #: pcbnew/menubar_pcbframe.cpp:638
 msgid "Enable and set layer properties"
 msgstr "Activer les couches et ajuster leur propriétés"
-
-#: pcbnew/menubar_pcbframe.cpp:647
-msgid "Open the Pcbnew handbook"
-msgstr "Ouvrir la documentation de Pcbnew"
-
-#: pcbnew/menubar_pcbframe.cpp:658
-msgid "About Pcbnew printed circuit board designer"
-msgstr "Au Sujet de Pcbnew outil de conception de C.I."
 
 #: pcbnew/menubar_pcbframe.cpp:666
 msgid "Ro&ute"
@@ -20909,11 +20894,11 @@ msgid "Place Node"
 msgstr "Place nœud"
 
 #: pcbnew/onrightclick.cpp:586 pcbnew/router/length_tuner_tool.cpp:54
-#: pcbnew/router/router_tool.cpp:64
+#: pcbnew/router/router_tool.cpp:65
 msgid "End Track"
 msgstr "Terminer Piste"
 
-#: pcbnew/onrightclick.cpp:590 pcbnew/router/router_tool.cpp:75
+#: pcbnew/onrightclick.cpp:590 pcbnew/router/router_tool.cpp:76
 msgid "Place Through Via"
 msgstr "Placer Via Traversante"
 
@@ -20921,7 +20906,7 @@ msgstr "Placer Via Traversante"
 msgid "Select Layer and Place Through Via"
 msgstr "Sélection Couche  et Place Via Traversante"
 
-#: pcbnew/onrightclick.cpp:600 pcbnew/router/router_tool.cpp:81
+#: pcbnew/onrightclick.cpp:600 pcbnew/router/router_tool.cpp:82
 msgid "Place Blind/Buried Via"
 msgstr "Placer Via Aveugle/Enterrée"
 
@@ -21357,11 +21342,11 @@ msgid ""
 msgstr ""
 "Entrer le module python qui implémente les fonctions du PLUGIN::Footprint*()."
 
-#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:61
+#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:62
 msgid "New Track"
 msgstr "Nouvelle Piste"
 
-#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:61
+#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:62
 msgid "Starts laying a new track."
 msgstr "Démarrer le tracé d'une nouvelle piste."
 
@@ -21510,99 +21495,121 @@ msgstr "Options de Routage..."
 msgid "Shows a dialog containing router options."
 msgstr "Montrer un dialogue pour les options du routeur"
 
-#: pcbnew/router/router_tool.cpp:64
+#: pcbnew/router/router_tool.cpp:65
 msgid "Stops laying the current track."
 msgstr "Arrêter le tracé de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/router/router_tool.cpp:68
 msgid "Auto-end Track"
 msgstr "Finir Automatiquement Piste"
 
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/router/router_tool.cpp:68
 msgid "Automagically finishes currently routed track."
 msgstr "Finit automatiquement la piste en cours de routage."
 
-#: pcbnew/router/router_tool.cpp:71
+#: pcbnew/router/router_tool.cpp:72
 msgid "Drag Track/Via"
 msgstr "Drag Piste/Via"
 
-#: pcbnew/router/router_tool.cpp:71
+#: pcbnew/router/router_tool.cpp:72
 msgid "Drags a track or a via."
 msgstr "Dragger une piste ou une via"
 
-#: pcbnew/router/router_tool.cpp:76
+#: pcbnew/router/router_tool.cpp:77
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr "Ajouter une via traversante à la fin de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:82
+#: pcbnew/router/router_tool.cpp:83
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr "Ajouter une via aveugle ou enterrée à la fin de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:87
+#: pcbnew/router/router_tool.cpp:88
 msgid "Place Microvia"
 msgstr "Placer Microvia"
 
-#: pcbnew/router/router_tool.cpp:87
+#: pcbnew/router/router_tool.cpp:88
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Ajouter une microvia à la fin de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:92
+#: pcbnew/router/router_tool.cpp:93
 msgid "Custom Track/Via Size"
 msgstr "Dim Utilisateur des Pistes/Vias"
 
-#: pcbnew/router/router_tool.cpp:93
+#: pcbnew/router/router_tool.cpp:94
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
 "Montrer un dialogue pour changer la largeur de la piste et la dimension de "
 "la via."
 
-#: pcbnew/router/router_tool.cpp:99
+#: pcbnew/router/router_tool.cpp:100
 msgid "Switches posture of the currenly routed track."
 msgstr "Commute le pliage de la piste en cours de routage."
 
-#: pcbnew/router/router_tool.cpp:104
+#: pcbnew/router/router_tool.cpp:105
 msgid "Differential Pair Dimensions..."
 msgstr "Dimensions de la Paire Différentielle..."
 
-#: pcbnew/router/router_tool.cpp:105
+#: pcbnew/router/router_tool.cpp:106
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr ""
 "Définit la largeur et l'espacement de la paire différentielle actuellement "
 "routée."
 
-#: pcbnew/router/router_tool.cpp:128
+#: pcbnew/router/router_tool.cpp:129
 msgid "Custom size"
 msgstr "Taille utilisateur"
 
-#: pcbnew/router/router_tool.cpp:131
+#: pcbnew/router/router_tool.cpp:132
 msgid "Use the starting track width"
 msgstr "Utiliser la largeur de la piste de départ"
 
-#: pcbnew/router/router_tool.cpp:132
+#: pcbnew/router/router_tool.cpp:133
 msgid "Route using the width of the starting track."
 msgstr "Router en utilisant la largeur de la piste de départ.."
 
-#: pcbnew/router/router_tool.cpp:134
+#: pcbnew/router/router_tool.cpp:135
 msgid "Use net class values"
 msgstr "Utiliser les valeurs de la net classe"
 
-#: pcbnew/router/router_tool.cpp:135
+#: pcbnew/router/router_tool.cpp:136
 msgid "Use track and via sizes from the net class"
 msgstr "Utiliser les dimensions de pistes et vias de leur valeurs en netclasse"
 
-#: pcbnew/router/router_tool.cpp:202
+#: pcbnew/router/router_tool.cpp:203
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
-#: pcbnew/router/router_tool.cpp:215
+#: pcbnew/router/router_tool.cpp:216
 msgid "Select Track/Via Width"
 msgstr "Sélection Largeur Piste/Via"
 
-#: pcbnew/router/router_tool.cpp:595
+#: pcbnew/router/router_tool.cpp:402
+msgid "Blind/buried vias have to be enabled in the design settings."
+msgstr ""
+"Vias aveugles / enterrées doivent être activées dans les paramètres de "
+"conception."
+
+#: pcbnew/router/router_tool.cpp:408
+msgid "Microvias have to be enabled in the design settings."
+msgstr "Les microvias doivent être activées dans les paramètres de conception."
+
+#: pcbnew/router/router_tool.cpp:415
+msgid "Only through vias are allowed on 2 layer boards."
+msgstr "Uniquement les vias traversantes sont admises pour les CI à 2 couches."
+
+#: pcbnew/router/router_tool.cpp:422
+msgid ""
+"Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the "
+"ones directly adjacent to them."
+msgstr ""
+"Les microvias peuvent être placées seulement entre une couche extérieure (F."
+"Cu/B.Cu) et celle adjacente."
+
+#: pcbnew/router/router_tool.cpp:643
 msgid "Route Track"
 msgstr "Router Piste"
 
-#: pcbnew/router/router_tool.cpp:602
+#: pcbnew/router/router_tool.cpp:650
 msgid "Router Differential Pair"
 msgstr "Router Paire Différentielle"
 
@@ -21844,6 +21851,22 @@ msgstr "Fermer le visualisateur d'empreintes"
 #: pcbnew/tool_modview.cpp:177
 msgid "3&D Viewer"
 msgstr "3&D Visualisateur"
+
+#: pcbnew/tool_modview.cpp:189
+msgid "P&cbnew Manual"
+msgstr "Manuel de P&cbnew"
+
+#: pcbnew/tool_modview.cpp:190
+msgid "Open the Pcbnew manual"
+msgstr "Ouvrir la documentation de pcbnew"
+
+#: pcbnew/tool_modview.cpp:201
+msgid "&About Pcbnew"
+msgstr "&Au sujet de Pcbnew"
+
+#: pcbnew/tool_modview.cpp:202
+msgid "About Pcbnew PCB designer"
+msgstr "Au sujet de Pcbnew, outil de conception de PCB"
 
 #: pcbnew/tool_pcb.cpp:52
 msgid ""
@@ -22995,6 +23018,56 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
+
+#~ msgid "Eesc&hema Manual"
+#~ msgstr "Documentation de Eesc&hema"
+
+#~ msgid "Microvias can be placed only on the outer layers."
+#~ msgstr ""
+#~ "Les microviasne  peuvent être placées que sur les couches extérieures."
+
+#~ msgid "Only through vias can be placed between front and bottom layers."
+#~ msgstr ""
+#~ "Seulement les vias traversantes peut être placées entre couches externes."
+
+#~ msgid "&CvPcb Manual"
+#~ msgstr "Manuel de &CvPcb"
+
+#~ msgid "Open CvPcb manual"
+#~ msgstr "Ouvrir la documentation de CvPcb"
+
+#~ msgid "&About CvPcb"
+#~ msgstr "&Au sujet de CvPcb"
+
+#~ msgid "About CvPcb footprint selector"
+#~ msgstr "Au sujet de CvPcb, le sélecteur de modules"
+
+#~ msgid "&Contents"
+#~ msgstr "&Contenu"
+
+#~ msgid "Open the Eeschema manual"
+#~ msgstr "Ouvrir la documentation de Eeschema"
+
+#~ msgid "Open the GerbView handbook"
+#~ msgstr "Ouvrir la documentation de GerbView"
+
+#~ msgid "&About GerbView"
+#~ msgstr "&Au Sujet de Gerbview"
+
+#~ msgid "About GerbView gerber and drill viewer"
+#~ msgstr "Au sujet de GerbView, visualiseur de fichiers gerber et de perçage"
+
+#~ msgid "&About Page Layout Editor"
+#~ msgstr "&Au sujet de l'Éditeur de Description de Page"
+
+#~ msgid "About page layout description editor"
+#~ msgstr "A sujet de l'éditeur de description de page"
+
+#~ msgid "Open the Pcbnew handbook"
+#~ msgstr "Ouvrir la documentation de Pcbnew"
+
+#~ msgid "About Pcbnew printed circuit board designer"
+#~ msgstr "Au Sujet de Pcbnew outil de conception de C.I."
 
 #~ msgid "Equ file '%s' could not be found in the default search paths."
 #~ msgstr ""
