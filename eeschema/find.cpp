@@ -423,7 +423,26 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
     wxString                msg;
     SCH_SHEET_LIST          schematic;
     SCH_FIND_COLLECTOR_DATA data;
+    SCH_FIND_REPLACE_DATA   searchCriteria;
     bool                    warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
+
+    searchCriteria.SetFlags( aEvent.GetFlags() );
+    searchCriteria.SetFindString( aEvent.GetFindString() );
+    searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
+
+    // Refresh the search cache in case something has changed.  This prevents any stale
+    // pointers.
+    if( IsSearchCacheObsolete( searchCriteria ) )
+    {
+        if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+        {
+            m_foundItems.Collect( searchCriteria, m_CurrentSheet );
+        }
+        else
+        {
+            m_foundItems.Collect( searchCriteria );
+        }
+    }
 
     if( m_foundItems.GetItem( data ) != NULL )
     {
