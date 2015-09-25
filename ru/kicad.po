@@ -1,29 +1,34 @@
+# Copyright (C) 2004-2015 KiCad Translation Team, contributors are
+# mentioned in every translation file „Language-Team” sections.
+# This file is distributed under GNU Free Documentation License.
+# http://www.gnu.org/licenses/fdl-1.3.html
 msgid ""
 msgstr ""
-"Project-Id-Version: KiCAD\n"
+"Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 08:34+0300\n"
-"PO-Revision-Date: 2015-09-24 11:14+0300\n"
+"POT-Creation-Date: 2015-09-25 20:35+0300\n"
+"PO-Revision-Date: 2015-09-25 20:35+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
-"Language-Team: KiCAD russian team <andrf@mail.ru>\n"
+"Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
+"Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Poedit-Basepath: /home/eldar/Dev/BUILD/kicad/kicad-source-mirror\n"
+"X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.7.5\n"
-"X-Poedit-SearchPath-0: bitmap2component\n"
-"X-Poedit-SearchPath-1: eeschema\n"
-"X-Poedit-SearchPath-2: cvpcb\n"
-"X-Poedit-SearchPath-3: kicad\n"
-"X-Poedit-SearchPath-4: gerbview\n"
-"X-Poedit-SearchPath-5: common\n"
-"X-Poedit-SearchPath-6: 3d-viewer\n"
-"X-Poedit-SearchPath-7: pcbnew\n"
+"X-Poedit-SearchPath-0: 3d-viewer\n"
+"X-Poedit-SearchPath-1: bitmap2component\n"
+"X-Poedit-SearchPath-2: common\n"
+"X-Poedit-SearchPath-3: cvpcb\n"
+"X-Poedit-SearchPath-4: eeschema\n"
+"X-Poedit-SearchPath-5: gerbview\n"
+"X-Poedit-SearchPath-6: kicad\n"
+"X-Poedit-SearchPath-7: pagelayout_editor\n"
 "X-Poedit-SearchPath-8: pcb_calculator\n"
-"X-Poedit-SearchPath-9: pagelayout_editor\n"
+"X-Poedit-SearchPath-9: pcbnew\n"
 "X-Poedit-SearchPath-10: extra\n"
 
 #: 3d-viewer/3d_canvas.cpp:390
@@ -914,7 +919,7 @@ msgid "Warning"
 msgstr "Предупреждение"
 
 #: common/confirm.cpp:80 kicad/prjconfig.cpp:143
-#: pcbnew/router/length_tuner_tool.cpp:171 pcbnew/router/router_tool.cpp:466
+#: pcbnew/router/length_tuner_tool.cpp:171
 msgid "Error"
 msgstr "Ошибка"
 
@@ -5752,7 +5757,7 @@ msgstr "%s найден, но %s не найден"
 msgid "Component %s not found"
 msgstr "Компонент %s не найден"
 
-#: eeschema/find.cpp:473
+#: eeschema/find.cpp:492
 #, c-format
 msgid "No item found matching %s."
 msgstr "Ничего не найдено для %s."
@@ -18652,7 +18657,7 @@ msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Выбрать слой и добавить слепое/глухое ПО"
 
 #: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:610
-#: pcbnew/router/router_tool.cpp:98
+#: pcbnew/router/router_tool.cpp:99
 msgid "Switch Track Posture"
 msgstr "Изменить положение дорожки"
 
@@ -20776,11 +20781,11 @@ msgid "Place Node"
 msgstr "Разместить узел"
 
 #: pcbnew/onrightclick.cpp:586 pcbnew/router/length_tuner_tool.cpp:54
-#: pcbnew/router/router_tool.cpp:64
+#: pcbnew/router/router_tool.cpp:65
 msgid "End Track"
 msgstr "Закончить дорожку"
 
-#: pcbnew/onrightclick.cpp:590 pcbnew/router/router_tool.cpp:75
+#: pcbnew/onrightclick.cpp:590 pcbnew/router/router_tool.cpp:76
 msgid "Place Through Via"
 msgstr "Разместить сквозное ПО"
 
@@ -20788,7 +20793,7 @@ msgstr "Разместить сквозное ПО"
 msgid "Select Layer and Place Through Via"
 msgstr "Выбрать слой и разместить ПО"
 
-#: pcbnew/onrightclick.cpp:600 pcbnew/router/router_tool.cpp:81
+#: pcbnew/onrightclick.cpp:600 pcbnew/router/router_tool.cpp:82
 msgid "Place Blind/Buried Via"
 msgstr "Разместить слепое/глухое ПО"
 
@@ -21223,11 +21228,11 @@ msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr "Ввод python-модуль, который реализует функцию PLUGIN::Footprint*()."
 
-#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:61
+#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:62
 msgid "New Track"
 msgstr "Новая дорожка"
 
-#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:61
+#: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:62
 msgid "Starts laying a new track."
 msgstr "Начинает прокладку новой дорожки."
 
@@ -21372,96 +21377,119 @@ msgstr "Параметры трассировщика..."
 msgid "Shows a dialog containing router options."
 msgstr "Показывает диалог, содержащий параметры трассировщика."
 
-#: pcbnew/router/router_tool.cpp:64
+#: pcbnew/router/router_tool.cpp:65
 msgid "Stops laying the current track."
 msgstr "Останавливает прокладку текущей дорожки."
 
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/router/router_tool.cpp:68
 msgid "Auto-end Track"
 msgstr "Автоматически закончить дорожку"
 
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/router/router_tool.cpp:68
 msgid "Automagically finishes currently routed track."
 msgstr "Автомагически заканчивает текущую разведенную дорожку."
 
-#: pcbnew/router/router_tool.cpp:71
+#: pcbnew/router/router_tool.cpp:72
 msgid "Drag Track/Via"
 msgstr "Перетащить дорожку/перех.отв."
 
-#: pcbnew/router/router_tool.cpp:71
+#: pcbnew/router/router_tool.cpp:72
 msgid "Drags a track or a via."
 msgstr "Перетаскивает дорожку или перех.отв."
 
-#: pcbnew/router/router_tool.cpp:76
+#: pcbnew/router/router_tool.cpp:77
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr "Добавляет сквозное перех.отв. в конце текущей разведенной дорожки."
 
-#: pcbnew/router/router_tool.cpp:82
+#: pcbnew/router/router_tool.cpp:83
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
 "Добавляет слепое или глухое перех.отв. в конце текущей разведенной дорожки."
 
-#: pcbnew/router/router_tool.cpp:87
+#: pcbnew/router/router_tool.cpp:88
 msgid "Place Microvia"
 msgstr "Разместить микроперех.отв."
 
-#: pcbnew/router/router_tool.cpp:87
+#: pcbnew/router/router_tool.cpp:88
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Добавляет микроперех.отв. в конце текущей разведенной дорожки."
 
-#: pcbnew/router/router_tool.cpp:92
+#: pcbnew/router/router_tool.cpp:93
 msgid "Custom Track/Via Size"
 msgstr "Пользовательский размер дорожки/переходного отверстия"
 
-#: pcbnew/router/router_tool.cpp:93
+#: pcbnew/router/router_tool.cpp:94
 msgid "Shows a dialog for changing the track width and via size."
 msgstr "Показывает диалог для изменения ширины дорожки и размера перех.отв."
 
-#: pcbnew/router/router_tool.cpp:99
+#: pcbnew/router/router_tool.cpp:100
 msgid "Switches posture of the currenly routed track."
 msgstr "Меняет положение текущей разведенной дорожки."
 
-#: pcbnew/router/router_tool.cpp:104
+#: pcbnew/router/router_tool.cpp:105
 msgid "Differential Pair Dimensions..."
 msgstr "Размеры диф.пары..."
 
-#: pcbnew/router/router_tool.cpp:105
+#: pcbnew/router/router_tool.cpp:106
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr "Устанавливает ширину и зазор текущей разведенной диф.пары."
 
-#: pcbnew/router/router_tool.cpp:128
+#: pcbnew/router/router_tool.cpp:129
 msgid "Custom size"
 msgstr "Пользовательский размер"
 
-#: pcbnew/router/router_tool.cpp:131
+#: pcbnew/router/router_tool.cpp:132
 msgid "Use the starting track width"
 msgstr "Использовать ширину дорожки начала"
 
-#: pcbnew/router/router_tool.cpp:132
+#: pcbnew/router/router_tool.cpp:133
 msgid "Route using the width of the starting track."
 msgstr "Трассировать с шириной начальной дорожки."
 
-#: pcbnew/router/router_tool.cpp:134
+#: pcbnew/router/router_tool.cpp:135
 msgid "Use net class values"
 msgstr "Использовать значения класса цепи"
 
-#: pcbnew/router/router_tool.cpp:135
+#: pcbnew/router/router_tool.cpp:136
 msgid "Use track and via sizes from the net class"
 msgstr "Использовать размеры дорожек и переходных отверстий из класса цепи"
 
-#: pcbnew/router/router_tool.cpp:202
+#: pcbnew/router/router_tool.cpp:203
 msgid "Interactive Router"
 msgstr "Интерактивный трассировщик"
 
-#: pcbnew/router/router_tool.cpp:215
+#: pcbnew/router/router_tool.cpp:216
 msgid "Select Track/Via Width"
 msgstr "Выбрать ширину дорожки/перех.отв."
 
-#: pcbnew/router/router_tool.cpp:595
+#: pcbnew/router/router_tool.cpp:402
+msgid "Blind/buried vias have to be enabled in the design settings."
+msgstr ""
+"Слепые/глухие переходные отверстия должны быть разрешены в настройках "
+"проектирования."
+
+#: pcbnew/router/router_tool.cpp:408
+msgid "Microvias have to be enabled in the design settings."
+msgstr ""
+"Переходные микроотверстия должны быть разрешены в настройках проектирования."
+
+#: pcbnew/router/router_tool.cpp:415
+msgid "Only through vias are allowed on 2 layer boards."
+msgstr "Только сквозные переходные отверстия допустимы на 2-х слойных платах."
+
+#: pcbnew/router/router_tool.cpp:422
+msgid ""
+"Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the "
+"ones directly adjacent to them."
+msgstr ""
+"Переходные микроотверстия могут быть размещены только между внешними слоями "
+"(F.Cu/B.Cu) и теми, которые непосредственно прилегают к ним."
+
+#: pcbnew/router/router_tool.cpp:643
 msgid "Route Track"
 msgstr "Трассировать дорожку"
 
-#: pcbnew/router/router_tool.cpp:602
+#: pcbnew/router/router_tool.cpp:650
 msgid "Router Differential Pair"
 msgstr "Трассировка диф.пары"
 
