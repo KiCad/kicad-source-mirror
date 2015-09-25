@@ -267,8 +267,8 @@ void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
 
     if( pid > 0 )
     {
-        wxString msg = wxString::Format( _( "%s opened [pid=%ld]\n" ),
-                GetChars( execFile ), pid );
+        wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ),
+                                         GetChars( execFile ), GetChars( params ), pid );
 
         PrintMsg( msg );
     }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,10 +59,6 @@ static const wxString   cfgShowNegativeObjects( wxT( "ShowNegativeObjectsOpt" ) 
 static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
 
 
-/*************************************/
-/* class GERBVIEW_FRAME for GerbView */
-/*************************************/
-
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME )
@@ -70,9 +66,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
     m_zoomLevelCoeff = ZOOM_FACTOR( 110 );   // Adjusted to roughly displays zoom level = 1
-                                        // when the screen shows a 1:1 image
-                                        // obviously depends on the monitor,
-                                        // but this is an acceptable value
+                                             // when the screen shows a 1:1 image
+                                             // obviously depends on the monitor,
+                                             // but this is an acceptable value
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     SetPageSettings( pageInfo );
@@ -194,22 +190,35 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     // The current project path is also a valid command parameter.  Check if a single path
-    // was passed to GerbView and use it as the initial MRU path.
-    if( aFileSet.size() == 1 && !wxFileExists( aFileSet[0] ) && wxDirExists( aFileSet[0] ) )
+    // rather than a file name was passed to GerbView and use it as the initial MRU path.
+    if( aFileSet.size() > 0 )
     {
-        m_mruPath = aFileSet[0];
-        return true;
-    }
+        wxString path = aFileSet[0];
 
-    const unsigned limit = std::min( unsigned( aFileSet.size() ),
-                                     unsigned( GERBER_DRAWLAYERS_COUNT ) );
+        // For some reason wxApp appears to leave the trailing double quote on quoted
+        // parameters which are required for paths with spaces.  Maybe this should be
+        // pushed back into PGM_SINGLE_TOP::OnPgmInit() but that may cause other issues.
+        // We can't buy a break!
+        if( path.Last() ==  wxChar( '\"' ) )
+            path.RemoveLast();
 
-    int layer = 0;
+        if( !wxFileExists( path ) && wxDirExists( path ) )
+        {
+            wxLogDebug( wxT( "MRU path: %s." ), GetChars( path ) );
+            m_mruPath = path;
+            return true;
+        }
 
-    for( unsigned i=0;  i<limit;  ++i, ++layer )
-    {
-        setActiveLayer( layer );
-        LoadGerberFiles( aFileSet[i] );
+        const unsigned limit = std::min( unsigned( aFileSet.size() ),
+                                         unsigned( GERBER_DRAWLAYERS_COUNT ) );
+
+        int layer = 0;
+
+        for( unsigned i=0;  i<limit;  ++i, ++layer )
+        {
+            setActiveLayer( layer );
+            LoadGerberFiles( aFileSet[i] );
+        }
     }
 
     Zoom_Automatique( true );        // Zoom fit in frame
@@ -271,7 +280,7 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( cfgShowNegativeObjects, &tmp, false );
     SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, tmp );
 
-    // because we have 2 file historues, we must read this one
+    // because we have 2 file histories, we must read this one
     // using a specific path
     aCfg->SetPath( wxT( "drl_files" ) );
     m_drillFileHistory.Load( *aCfg );
@@ -290,7 +299,7 @@ void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
     aCfg->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
     aCfg->Write( cfgShowNegativeObjects,
-                   IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
+                 IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
 
     // Save the drill file history list.
     // Because we have 2 file histories, we must save this one
@@ -321,12 +330,7 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
     syncLayerWidget();
 }
 
-/**
- * Function SetElementVisibility
- * changes the visibility of an element category
- * @param aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
- * @param aNewState = The new visibility state of the element category
- */
+
 void GERBVIEW_FRAME::SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible,
                                            bool aNewState )
 {
@@ -347,6 +351,7 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible,
     default:
         wxLogDebug( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ), aItemIdVisible );
     }
+
     m_LayersManager->SetRenderState( aItemIdVisible, aNewState );
 }
 
@@ -379,12 +384,6 @@ void GERBVIEW_FRAME::syncLayerWidget()
 }
 
 
-/**
- * Function syncLayerBox
- * updates the currently "selected" layer within m_SelLayerBox
- * The currently active layer, as defined by the return value of
- * getActiveLayer().  And updates the colored icon in the toolbar.
- */
 void GERBVIEW_FRAME::syncLayerBox()
 {
     m_SelLayerBox->Resync();
@@ -404,6 +403,7 @@ void GERBVIEW_FRAME::syncLayerBox()
 
     UpdateTitleAndInfo();
 }
+
 
 void GERBVIEW_FRAME::Liste_D_Codes()
 {
@@ -469,15 +469,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 }
 
 
-/*
- * Function UpdateTitleAndInfo
- * displays the short filename (if exists) of the selected layer
- *  on the caption of the main GerbView window
- * displays image name and the last layer name (found in the gerber file: LN <name> command)
- *  in the status bar
- * Note layer name can change when reading a gerber file, and the layer name is the last found.
- * So, show the layer name is not very useful, and can be seen as a debug feature.
- */
+
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
     GERBER_IMAGE*   gerber = g_GERBER_List.GetGbrImage(  getActiveLayer() );
@@ -497,8 +489,10 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 
     text = _( "File:" );
     text << wxT( " " ) << gerber->m_FileName;
+
     if( gerber->m_IsX2_file )
         text << wxT( " " ) << _( "(with X2 Attributes)" );
+
     SetTitle( text );
 
     gerber->DisplayImageInfo();
@@ -525,12 +519,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
        m_auimgr.Update();
 }
 
-/*
- * Function IsElementVisible
- * tests whether a given element category is visible
- * aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
- * return true if the element is visible.
- */
+
 bool GERBVIEW_FRAME::IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible ) const
 {
     switch( aItemIdVisible )
@@ -555,44 +544,18 @@ bool GERBVIEW_FRAME::IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible ) const
 }
 
 
-/**
- * Function SetVisibleAlls
- * Set the status of all layers to VISIBLE
- */
-void GERBVIEW_FRAME::SetVisibleAlls()
-{
-}
-
-/**
- * Function GetVisibleLayers
- * is a proxy function that calls the correspondent function in m_BoardSettings
- * Returns a bit-mask of all the layers that are visible
- * @return int - the visible layers in bit-mapped form.
- */
 long GERBVIEW_FRAME::GetVisibleLayers() const
 {
     return -1;    // TODO
 }
 
 
-/**
- * Function SetVisibleLayers
- * is a proxy function that calls the correspondent function in m_BoardSettings
- * changes the bit-mask of visible layers
- * @param aLayerMask = The new bit-mask of visible layers
- */
 void GERBVIEW_FRAME::SetVisibleLayers( long aLayerMask )
 {
 //    GetGerberLayout()->SetVisibleLayers( aLayerMask );
 }
 
 
-/**
- * Function IsLayerVisible
- * tests whether a given layer is visible
- * @param aLayer = The layer to be tested
- * @return bool - true if the layer is visible.
- */
 bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 {
     if( ! m_DisplayOptions.m_IsPrinting )
@@ -602,11 +565,6 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 }
 
 
-/**
- * Function GetVisibleElementColor
- * returns the color of a pcb visible element.
- * @see enum PCB_VISIBLE
- */
 EDA_COLOR_T GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const
 {
     EDA_COLOR_T color = UNSPECIFIED_COLOR;
@@ -630,9 +588,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVis
     return color;
 }
 
-/*
- * Virtual from EDA_DRAW_FRAME
- */
+
 void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 {
     EDA_DRAW_FRAME::SetGridVisibility( aVisible );
@@ -661,14 +617,6 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible,
     }
 }
 
-/*
- * Function GetNegativeItemsColor
- * returns the color of negative items.
- * This is usually the background color, but can be an other color
- * in order to see negative objects
- * therefore returns the background color if negative items not visible
- * and the color selection of negative items if they are visible
- */
 EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
 {
     if( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) )
@@ -678,41 +626,24 @@ EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
 }
 
 
-/*
- * Function GetLayerColor
- * gets a layer color for any valid layer.
- */
 EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
     return m_colorsSettings->GetLayerColor( aLayer );
 }
 
 
-/**
- * Function SetLayerColor
- * changes a layer color for any valid layer.
- */
 void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 {
     m_colorsSettings->SetLayerColor( aLayer, aColor );
 }
 
 
-/**
- * Function getActiveLayer
- * returns the active layer
- */
 int GERBVIEW_FRAME::getActiveLayer()
 {
     return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
 }
 
 
-/**
- * Function setActiveLayer
- * will change the currently active layer to \a aLayer and also
- * update the PCB_LAYER_WIDGET.
- */
 void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
     ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
@@ -794,19 +725,12 @@ void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
 }
 
 
-/*
- * Function GetGerberLayoutBoundingBox
- * returns the bounding box containing all gerber items.
- */
 EDA_RECT GERBVIEW_FRAME::GetGerberLayoutBoundingBox()
 {
     GetGerberLayout()->ComputeBoundingBox();
     return GetGerberLayout()->GetBoundingBox();
 }
 
-/*
- * Update the status bar information.
- */
 void GERBVIEW_FRAME::UpdateStatusBar()
 {
     EDA_DRAW_FRAME::UpdateStatusBar();
