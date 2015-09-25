@@ -150,15 +150,15 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  wxID_HELP,
                  _( "Page Layout Editor &Manual" ),
                  _( "Open the Page Layout Editor Manual" ),
-                 KiBitmap( help_xpm ) );
+                 KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu,
                  wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( online_help_xpm ) );
+                 KiBitmap( help_xpm ) );
 
-    // About GerbView
+    // About Kicad
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
                  _( "&About Kicad" ),
