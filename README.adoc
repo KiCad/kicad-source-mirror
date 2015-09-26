@@ -11,7 +11,7 @@ principles for KiCad.
 - Gettext
 
 == How to install
-```
+```sh
 $ cd kicad-i18n
 $ BUILD_SRC=$(pwd)
 $ mkdir -p ~/tmp/kicad-i18n-build
