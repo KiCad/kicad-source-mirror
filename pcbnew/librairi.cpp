@@ -76,7 +76,6 @@
 #define FMT_MOD_DELETED     _( "Footprint %s deleted from library '%s'" )
 #define FMT_MOD_CREATE      _( "New Footprint" )
 
-#define FMT_NO_MODULES      _( "No footprints to archive!" )
 #define FMT_MOD_EXISTS      _( "Footprint %s already exists in library '%s'" )
 #define FMT_NO_REF_ABORTED  _( "No footprint name defined." )
 #define FMT_SELECT_LIB      _( "Select Library" )
@@ -387,23 +386,15 @@ bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
 
 wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
 {
-    wxFileName      fn;
-    wxConfigBase*   config = Kiface().KifaceSettings();
-
-    if( config )
-    {
-        wxString    path;
-        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
-        fn.SetPath( path );
-    }
-
     // Kicad cannot write legacy format libraries, only .pretty new format
     // because the legacy format cannot handle current features.
-    // The lib is actually a directory
+    // The footprint library is actually a directory
     wxString wildcard = wxGetTranslation( KiCadFootprintLibPathWildcard );
 
-    // prompt user for libPath
-//    wxDirDialog dlg( this, FMT_CREATE_LIB, fn.GetPath(), wxDD_DEFAULT_STYLE  );
+    // prompt user for footprint library name, ending by ".pretty"
+    // Because there are constraints for the directory name to create,
+    // (the name should have the extension ".pretty", and the folder cannot be inside
+    // a footprint library), we do not use the standard wxDirDialog.
 
     wxString initialPath = wxPathOnly( Prj().GetProjectFullName() );
     DIALOG_SELECT_PRETTY_LIB dlg( this, initialPath );
@@ -411,20 +402,10 @@ wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
     if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
 
-    fn = dlg.GetPath();
+    wxString libPath = dlg.GetFullPrettyLibName();
 
-    if( config )  // Save file path without filename, save user typing.
-    {
-        config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
-    }
-
-    // wildcard's filter index has legacy in position 0.
+    // We can save fp libs only using IO_MGR::KICAD format (.pretty libraries)
     IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD;
-
-    // wxFileDialog does not supply nor enforce the file extension, add it here.
-    fn.SetExt( KiCadFootprintLibPathExtension );
-
-    wxString libPath = fn.GetFullPath();
 
     try
     {
@@ -537,7 +518,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
 {
     if( GetBoard()->m_Modules == NULL )
     {
-        DisplayInfoMessage( this, FMT_NO_MODULES );
+        DisplayInfoMessage( this, _( "No footprints to archive!" ) );
         return;
     }
 
