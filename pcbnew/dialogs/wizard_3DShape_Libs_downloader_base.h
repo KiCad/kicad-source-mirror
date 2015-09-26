@@ -43,14 +43,15 @@ class WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE : public wxWizard
 	private:
 	
 	protected:
-		wxStaticText* m_staticText1;
+		wxStaticText* m_staticTextWelcome;
 		wxStaticText* m_staticText8;
 		wxTextCtrl* m_textCtrlGithubURL;
 		wxStaticText* m_staticText9;
 		wxTextCtrl* m_downloadDir;
 		wxButton* m_btnBrowse;
 		wxButton* m_buttonDefault3DPath;
-		wxStaticText* m_invalidDir;
+		wxStaticBitmap* m_bitmapDirWarn;
+		wxStaticText* m_invalidDirWarningText;
 		wxStaticBitmap* m_bitmapRepo;
 		wxHyperlinkCtrl* m_hyperlinkGithubKicad;
 		wxStaticText* m_staticText112;
@@ -67,6 +68,7 @@ class WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE : public wxWizard
 		virtual void OnWizardFinished( wxWizardEvent& event ) { event.Skip(); }
 		virtual void OnPageChanged( wxWizardEvent& event ) { event.Skip(); }
 		virtual void OnPageChanging( wxWizardEvent& event ) { event.Skip(); }
+		virtual void OnLocalFolderChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDefault3DPathButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectAll3Dlibs( wxCommandEvent& event ) { event.Skip(); }
