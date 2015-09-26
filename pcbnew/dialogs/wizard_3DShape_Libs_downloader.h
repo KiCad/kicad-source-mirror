@@ -74,6 +74,7 @@ public:
     void OnCheckSaveCopy( wxCommandEvent& aEvent );
 	void OnDefault3DPathButtonClick( wxCommandEvent& event );
 	void OnGridLibReviewSize( wxSizeEvent& event );
+    void OnLocalFolderChange( wxCommandEvent& event );
 
 protected:
     // Initialization of wizard pages
@@ -140,7 +141,4 @@ protected:
     wxWizardPageSimple* m_welcomeDlg;
     wxWizardPageSimple* m_githubListDlg;
     wxWizardPageSimple* m_reviewDlg;
-
-    // path to the most recently used download directory from Github.
-    wxString m_lastGithubDownloadDirectory;
 };

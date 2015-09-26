@@ -71,8 +71,9 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER::WIZARD_3DSHAPE_LIBS_DOWNLOADER( wxWindow* aParen
     wxGetEnv( KISYS3DMOD, &default_path );
 
     wxConfigBase* cfg = Pgm().CommonSettings();
-    cfg->Read( KICAD_3DLIBS_LAST_DOWNLOAD_DIR, &m_lastGithubDownloadDirectory, default_path );
-    setDownloadDir( m_lastGithubDownloadDirectory );
+    wxString tmp;
+    cfg->Read( KICAD_3DLIBS_LAST_DOWNLOAD_DIR, &tmp, default_path );
+    setDownloadDir( tmp );
 
     // Restore the Github 3D shapes libs url
     wxString githubUrl;
@@ -411,7 +412,7 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadOneLib( const wxString& aLibURL,
 
     // Github gives the current url of files inside .3dshapes folders like:
     //  "https://github.com/KiCad/kicad-library/blob/master/modules/packages3d/Capacitors_SMD.3dshapes/C_0402.wrl"
-    // which displays a html page showing the file in htmp form.
+    // which displays a html page showing the file in html form.
     //
     // the URL of the corresponding raw file is
     // "https://github.com/KiCad/kicad-library/raw/master/modules/packages3d/Capacitors_SMD.3dshapes/C_0402.wrl"
@@ -420,7 +421,7 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadOneLib( const wxString& aLibURL,
     // when trying to download raw files.
     //  "https://github.com/KiCad/kicad-library/raw/master/modules/packages3d/Capacitors_SMD.3dshapes/C_0402.wrl"
     // would be redirected to:
-    //  "https://codeload.github.com/KiCad/kicad-library/master/modules/packages3d/Capacitors_SMD.3dshapes/C_0402.wrl"
+    //  "https://raw.githubusercontent.com/KiCad/kicad-library/master/modules/packages3d/Capacitors_SMD.3dshapes/C_0402.wrl"
     // So use raw.githubusercontent.com instead of github.com
     // (and removes the "/raw" in path)  speed up the downloads (x2 faster).
     //
@@ -506,9 +507,29 @@ void WIZARD_3DSHAPE_LIBS_DOWNLOADER::updateGithubControls()
 {
     bool valid = wxFileName::IsDirWritable( getDownloadDir() );
 
-    // Do not allow to go further unless there is a valid directory selected
-    m_invalidDir->Show( !valid );
+    // Shows or not the warning text if the target 3d folder does not exist, or is not
+    // writable.
+    m_invalidDirWarningText->Show( !valid );
+    m_bitmapDirWarn->Show( !valid );
+
+    // If the dialog starts with m_invalidDirWarningText and m_bitmapDirWarn not shown
+    // the size and position of the sizer containing these widgets can be incorrect,
+    // until a wxSizeEvent is fired, and the widgets are not shown, or truncated,
+    // at least on Windows. So fire a dummy wxSizeEvent if the size looks bad
+    if( m_invalidDirWarningText->IsShown() && m_invalidDirWarningText->GetSize().x < 2 )
+    {
+        wxSizeEvent event( GetSize() );
+        wxPostEvent( this, event );
+    }
+
+    // Allow to go further only if there is a valid target directory selected
     enableNext( valid );
+}
+
+// Called when the local folder name is edited.
+void WIZARD_3DSHAPE_LIBS_DOWNLOADER::OnLocalFolderChange( wxCommandEvent& event )
+{
+    updateGithubControls();
 }
 
 
