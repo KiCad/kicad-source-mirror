@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-29 08:50+0900\n"
-"PO-Revision-Date: 2015-09-13 22:02+0900\n"
+"PO-Revision-Date: 2015-09-27 04:48+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /Users/yoneken/workspace/emb/kicad/testing\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.5\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
 "X-Poedit-SearchPath-2: eeschema\n"
@@ -160,7 +160,7 @@ msgstr ""
 #: kicad/mainframe.cpp:247
 #, c-format
 msgid "%s closed [pid=%d]\n"
-msgstr " %s の終了 [pid=%d]\n"
+msgstr "%s の終了 [pid=%d]\n"
 
 #: kicad/mainframe.cpp:268
 #, c-format
@@ -498,8 +498,8 @@ msgstr "Kicad プロジェクト ファイル \"%s\" が見つかりませんで
 #: kicad/prjconfig.cpp:321
 msgid "To proceed, you can use the File menu to start a new project."
 msgstr ""
-"続行するために、新規プロジェクトを開始するためのファイルメニューを使用できま"
-"す。"
+"続行するには、新規プロジェクトを開始するためのファイルメニューを使用して下さ"
+"い。"
 
 #: kicad/prjconfig.cpp:335 pcbnew/moduleframe.cpp:762 pcbnew/pcbframe.cpp:965
 #: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1338 cvpcb/cvframe.cpp:716
@@ -3098,11 +3098,11 @@ msgstr "フットプリントのアンカー (基準点) を配置"
 
 #: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:483
 msgid "&Footprint Libraries Wizard"
-msgstr "フットプリント ウィザード(&F)"
+msgstr "フットプリント ライブラリ ウィザード(&F)"
 
 #: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:483
 msgid "Add footprint libraries with wizard"
-msgstr "フットプリントライブラリ追加ウイザード"
+msgstr "ウィザード で フットプリント ライブラリ を追加"
 
 #: pcbnew/menubar_modedit.cpp:312 pcbnew/menubar_pcbframe.cpp:487
 msgid "Footprint Li&braries Manager"
@@ -3111,7 +3111,7 @@ msgstr "フットプリント ライブラリの管理(&B)"
 #: pcbnew/menubar_modedit.cpp:312 pcbnew/menubar_pcbframe.cpp:487
 #: cvpcb/menubar.cpp:83
 msgid "Configure footprint libraries"
-msgstr "フットプリントライブラリの設定"
+msgstr "フットプリント ライブラリの設定"
 
 #: pcbnew/menubar_modedit.cpp:324
 msgid "&Settings"
@@ -3119,7 +3119,7 @@ msgstr "設定(&S)"
 
 #: pcbnew/menubar_modedit.cpp:324
 msgid "Select default parameters values in Footprint Editor"
-msgstr "フットプリントエディタでのデフォルト値を選択"
+msgstr "フットプリント エディタでのデフォルト値を選択"
 
 #: pcbnew/menubar_modedit.cpp:341 pcbnew/tool_modview.cpp:189
 msgid "P&cbnew Manual"
@@ -9217,7 +9217,6 @@ msgid "Board Thickness"
 msgstr "基板厚"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:110
-#, fuzzy
 msgid "CrtYd_Front_later"
 msgstr "CrtYd_Front_later"
 
@@ -9232,7 +9231,6 @@ msgid "Off-board, testing"
 msgstr "Off-board、テスト用"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:141
-#, fuzzy
 msgid "Fab_Front_later"
 msgstr "Fab_Front_later"
 
@@ -9644,7 +9642,6 @@ msgid "If you want an adhesive layer for the back side of the board"
 msgstr "ボード裏面に実装用ボンドのレイヤを使用する場合"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1300
-#, fuzzy
 msgid "Fab_Back_later"
 msgstr "Fab_Back_later"
 
@@ -9653,7 +9650,6 @@ msgid "If you want a fabrication layer for the back side of the board"
 msgstr "ボード裏面に基板製造用レイヤを使用したい場合"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1325
-#, fuzzy
 msgid "CrtYd_Back_later"
 msgstr "CrtYd_Back_later"
 
@@ -9670,7 +9666,6 @@ msgid "Board contour"
 msgstr "基板外形"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1375
-#, fuzzy
 msgid "Margin_later"
 msgstr "Margin_later"
 
@@ -11732,7 +11727,7 @@ msgid ""
 "\n"
 "Please select the source for the libraries to add:"
 msgstr ""
-"フットプリントの追加ウイザードへようこそ！\n"
+"フットプリント ライブラリの追加ウイザードへようこそ！\n"
 "\n"
 "追加するライブラリを選択してください："
 
@@ -12254,9 +12249,8 @@ msgid "Router Differential Pair"
 msgstr "差動ペアの配線"
 
 #: pcbnew/tools/common_actions.cpp:58
-#, fuzzy
 msgid "trivial connection"
-msgstr "自明な接続"
+msgstr "普通の接続"
 
 #: pcbnew/tools/common_actions.cpp:58
 msgid "Selects a connection between two junctions."
@@ -20318,7 +20312,7 @@ msgstr "計算式 (IPC 2221 より) は"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:458
 msgid "where:"
-msgstr "場所:"
+msgstr "ここで:"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:459
 msgid "maximum current in amps"
@@ -21835,9 +21829,8 @@ msgid "invalid extends LPID"
 msgstr "不正な拡張 LPID"
 
 #: new/sch_sweet_parser.cpp:354
-#, fuzzy
 msgid "'extends' may not have self as any ancestor"
-msgstr "'extends' はいかなる祖先も持っていないようです"
+msgstr "'extends' はいかなる先祖も持っていないようです"
 
 #: new/sch_sweet_parser.cpp:364
 msgid "max allowed extends depth exceeded"
@@ -21879,7 +21872,6 @@ msgid "Unable to find property: %s"
 msgstr "プロパティが見つかりませんでした: %s"
 
 #: new/sweet_editor_panel.cpp:31
-#, fuzzy
 msgid "Sweet"
 msgstr "甘い"
 
@@ -22079,11 +22071,11 @@ msgstr "配線幅とビアサイズ"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.h:80
 msgid "Add 3D Shape Libraries Wizard"
-msgstr "3D シェイプ ライブラリ ウイザードを追加"
+msgstr "3D シェイプ ライブラリの追加ウイザード"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.h:88
 msgid "Add Footprint Libraries Wizard"
-msgstr "フットプリントの追加ウィザード"
+msgstr "フットプリント ライブラリの追加ウィザード"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
