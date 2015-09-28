@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-28 17:39+0100\n"
-"PO-Revision-Date: 2015-09-28 17:39+0100\n"
+"POT-Creation-Date: 2015-09-28 17:42+0100\n"
+"PO-Revision-Date: 2015-09-28 17:42+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -14026,7 +14026,7 @@ msgstr "Sviluppatori"
 
 #: common/dialog_about/dialog_about.cpp:87
 msgid "Doc Writers"
-msgstr "Autori della documentazione"
+msgstr "Documentazione"
 
 #: common/dialog_about/dialog_about.cpp:89
 msgid "Artists"
