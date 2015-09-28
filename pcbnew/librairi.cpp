@@ -384,7 +384,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
     return true;
 }
 
-wxString FOOTPRINT_EDIT_FRAME::CreateNewLibrary()
+wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary()
 {
     // Kicad cannot write legacy format libraries, only .pretty new format
     // because the legacy format cannot handle current features.
@@ -514,7 +514,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 }
 
 
-void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
+void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib )
 {
     if( GetBoard()->m_Modules == NULL )
     {
@@ -522,57 +522,59 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aNewModulesOnly )
         return;
     }
 
-    PROJECT&        prj = Prj();
+    wxString footprintName;
 
-    wxString last_nickname = prj.GetRString( PROJECT::PCB_LIB_NICKNAME );
-
-    wxString nickname = SelectLibrary( last_nickname );
-
-    if( !nickname )
-        return;
-
-    prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
-
-    if( !aNewModulesOnly )
+    if( !aStoreInNewLib )
     {
-        wxString msg = wxString::Format( FMT_OK_OVERWRITE, GetChars( nickname ) );
+        // The footprints are saved in an existing .pretty library in the fp lib table
+        PROJECT&        prj = Prj();
+        wxString last_nickname = prj.GetRString( PROJECT::PCB_LIB_NICKNAME );
+        wxString nickname = SelectLibrary( last_nickname );
 
-        if( !IsOK( this, msg ) )
+        if( !nickname )     // Aborted
             return;
-    }
 
-    m_canvas->SetAbortRequest( false );
+        prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
 
-    try
-    {
-        FP_LIB_TABLE* tbl = prj.PcbFootprintLibs();
-
-        // Delete old library if we're replacing it entirely.
-        if( !aNewModulesOnly )
+        try
         {
-            tbl->FootprintLibDelete( nickname );
-            tbl->FootprintLibCreate( nickname );
+            FP_LIB_TABLE* tbl = prj.PcbFootprintLibs();
 
-            for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
+            for( MODULE* curr_fp = GetBoard()->m_Modules; curr_fp; curr_fp = curr_fp->Next() )
             {
-                tbl->FootprintSave( nickname, m, true );
+                if( !curr_fp->GetFPID().GetFootprintName().empty() )      // Can happen with old boards.
+                    tbl->FootprintSave( nickname, curr_fp, false );
             }
         }
-        else
+        catch( const IO_ERROR& ioe )
         {
-            for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
-            {
-                tbl->FootprintSave( nickname, m, false );
-
-                // Check for request to stop backup (ESCAPE key actuated)
-                if( m_canvas->GetAbortRequest() )
-                    break;
-            }
+            DisplayError( this, ioe.errorText );
         }
     }
-    catch( const IO_ERROR& ioe )
+    else
     {
-        DisplayError( this, ioe.errorText );
+        // The footprints are saved in a new .pretty library.
+        // If this library already exists, all previous footprints will be deleted
+        wxString libPath = CreateNewLibrary();
+
+        if( libPath.IsEmpty() )     // Aborted
+            return;
+
+        IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD;
+        PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );
+
+        for( MODULE* curr_fp = GetBoard()->m_Modules; curr_fp; curr_fp = curr_fp->Next() )
+        {
+            try
+            {
+                if( !curr_fp->GetFPID().GetFootprintName().empty() )      // Can happen with old boards.
+                    pi->FootprintSave( libPath, curr_fp );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                DisplayError( this, ioe.errorText );
+            }
+        }
     }
 }
 

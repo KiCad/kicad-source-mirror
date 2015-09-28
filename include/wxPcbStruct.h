@@ -937,11 +937,14 @@ public:
     /**
      * Function ArchiveModulesOnBoard
      * Save modules in a library:
-     * @param aNewModulesOnly:
-     *              true : save modules not already existing in this lib
-     *              false: save all modules
+     * @param aStoreInNewLib:
+     *              true : save modules in a existing lib. Existing footprints will be kept
+     *              or updated.
+     *              This lib should be in fp lib table, and is type is .pretty
+     *              false: save modules in a new lib. It it is an existing lib,
+     *              previous footprints will be removed
      */
-    void ArchiveModulesOnBoard( bool aNewModulesOnly );
+    void ArchiveModulesOnBoard( bool aStoreInNewLib );
 
     /**
      * Function RecreateBOMFileFromBoard

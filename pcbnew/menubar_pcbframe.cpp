@@ -252,14 +252,16 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- archive submenu -----------------------------------------------------
     wxMenu* submenuarchive = new wxMenu();
 
-    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_NEW_MODULES,
-                 _( "&Archive New Footprints" ),
-                 _( "Archive new footprints only in a library (keep other footprints in this lib)" ),
+    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_MODULES_IN_LIBRARY,
+                 _( "&Archive Footprints in a Project Library" ),
+                 _( "Archive footprints in an existing library in footprint Lib table"
+                    "(do not remove other footprints in this lib)" ),
                  KiBitmap( library_update_xpm ) );
 
-    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_ALL_MODULES,
-                 _( "&Create Footprint Archive" ),
-                 _( "Archive all footprints in a library (old library will be deleted)" ),
+    AddMenuItem( submenuarchive, ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES,
+                 _( "&Create Library and Archive Footprints" ),
+                 _( "Archive all footprints in a new library\n"
+                    "(if this library already exists, it will be deleted)" ),
                  KiBitmap( library_xpm ) );
 
     AddMenuItem( filesMenu, submenuarchive,

@@ -348,17 +348,6 @@ public:
     MODULE* Import_Module();
 
     /**
-     * Function CreateNewLibrary
-     * prompts user for a library path, then creates a new footprint library at that
-     * location.  If library exists, user is warned about that, and is given a chance
-     * to abort the new creation, and in that case existing library is first deleted.
-     *
-     * @return wxString - the newly created library path if library was successfully
-     *   created, else wxEmptyString because user aborted or error.
-     */
-    wxString CreateNewLibrary();
-
-    /**
      * Function SaveCurrentModule
      * saves the module which is currently being edited into aLibPath or into the
      * currently selected library if aLibPath is NULL.
