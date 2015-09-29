@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-28 20:19+0300\n"
-"PO-Revision-Date: 2015-09-28 22:28+0300\n"
+"POT-Creation-Date: 2015-09-29 22:49+0300\n"
+"PO-Revision-Date: 2015-09-29 22:58+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -494,7 +494,7 @@ msgstr "Создать файл библиотеки компонентов дл
 
 #: bitmap2component/bitmap2cmp_gui.cpp:598
 msgid "Create a footprint file for Pcbnew"
-msgstr "Создать файл посадочных мест для Pcbnew"
+msgstr "Создать файл посад.мест для Pcbnew"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
@@ -1111,7 +1111,7 @@ msgid ""
 "<b>KISYS3DMOD</b> is the base path of system footprint 3D shapes (.3Dshapes "
 "folders)."
 msgstr ""
-"<b>KISYS3DMOD</b> основной путь к системным 3D формам посадочных мест "
+"<b>KISYS3DMOD</b> основной путь к системным 3D формам посад.мест "
 "(каталоги .3Dshapes)."
 
 #: common/dialogs/dialog_env_var_config.cpp:270
@@ -1120,7 +1120,7 @@ msgid ""
 "libraries (.pretty folders)."
 msgstr ""
 "<b>KISYSMOD</b> основной путь к локально установленным системным библиотекам "
-"посадочных мест (каталоги .pretty)."
+"посад.мест (каталоги .pretty)."
 
 #: common/dialogs/dialog_env_var_config.cpp:273
 msgid ""
@@ -1136,7 +1136,7 @@ msgstr ""
 "окружения может быть использована для того, чтобы определить файлы и пути "
 "относительно текущего загруженного проекта.  Например, ${KIPRJMOD}/libs/"
 "footprints.pretty может быть определен как каталог, содержащий библиотеку "
-"посадочных мест footprints.pretty проекта."
+"посад.мест footprints.pretty проекта."
 
 #: common/dialogs/dialog_env_var_config.cpp:279
 msgid ""
@@ -1741,7 +1741,7 @@ msgstr "Полужирный курсив"
 
 #: common/footprint_info.cpp:320 common/footprint_info.cpp:341
 msgid "Errors were encountered loading footprints"
-msgstr "При загрузке посадочных мест возникли ошибки"
+msgstr "При загрузке посад.мест возникли ошибки"
 
 #: common/footprint_info.cpp:339
 msgid "Load Error"
@@ -1750,7 +1750,7 @@ msgstr "Ошибка загрузки"
 #: common/fp_lib_table.cpp:373
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
-msgstr "'%s' задублирован в библиотеке уникальных имен посадочных мест"
+msgstr "'%s' задублирован в библиотеке уникальных имен посад.мест"
 
 #: common/fp_lib_table.cpp:620
 #, c-format
@@ -2108,15 +2108,15 @@ msgstr "Файлы печатной платы s-формата (*.kicad_pcb)|*.
 
 #: common/wildcards_and_files_ext.cpp:80
 msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
-msgstr "Файлы посадочных мест KiCad s-expre (*.kicad_mod)|*.kicad_mod"
+msgstr "Файлы посад.мест KiCad s-expre (*.kicad_mod)|*.kicad_mod"
 
 #: common/wildcards_and_files_ext.cpp:81
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
-msgstr "Файлы библиотек посадочных мест KiCad s-expre (*.pretty)|*.pretty"
+msgstr "Файлы библиотек посад.мест KiCad s-expre (*.pretty)|*.pretty"
 
 #: common/wildcards_and_files_ext.cpp:82
 msgid "Legacy footprint library file (*.mod)|*.mod"
-msgstr "Файлы библиотек посадочных мест KiCad (*.mod)|*.mod"
+msgstr "Файлы библиотек посад.мест KiCad (*.mod)|*.mod"
 
 #: common/wildcards_and_files_ext.cpp:83
 msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
@@ -2124,7 +2124,7 @@ msgstr "Файлы библиотек Eagle ver. 6.x XML (*.lbr)|*.lbr"
 
 #: common/wildcards_and_files_ext.cpp:84
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
-msgstr "Файл библиотеки посадочных мест Geda PCB (*.fp)|*.fp"
+msgstr "Файл библиотеки посад.мест Geda PCB (*.fp)|*.fp"
 
 #: common/wildcards_and_files_ext.cpp:85
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
@@ -2132,11 +2132,11 @@ msgstr "Файлы записанных макросов KiCad (*.mcr)|*.mcr"
 
 #: common/wildcards_and_files_ext.cpp:86
 msgid "Component-footprint link file (*.cmp)|*cmp"
-msgstr "Файлы соответствия элемент-посадочное место (*.cmp)|*.cmp"
+msgstr "Файл связи компонент-посад.место (*.cmp)|*cmp"
 
 #: common/wildcards_and_files_ext.cpp:87
 msgid "Page layout descr file (*.kicad_wks)|*kicad_wks"
-msgstr "Файл описания листа (*.kicad_wks)|*.kicad_wks"
+msgstr "Файл описания разметки листа (*.kicad_wks)|*kicad_wks"
 
 #: common/wildcards_and_files_ext.cpp:89
 msgid "All files (*)|*"
@@ -2144,7 +2144,7 @@ msgstr "Все файлы (*)|*"
 
 #: common/wildcards_and_files_ext.cpp:92
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
-msgstr "Файлы соответствия элемент/посадочное место (*.cmp)|*.cmp"
+msgstr "Файлы связи компонент/посад.место (*.cmp)|*.cmp"
 
 #: common/wildcards_and_files_ext.cpp:95
 msgid "Drill files (*.drl)|*.drl;*.DRL"
@@ -2172,7 +2172,7 @@ msgstr "Файлы отчета (.rpt)|*.rpt"
 
 #: common/wildcards_and_files_ext.cpp:101
 msgid "Footprint place files (*.pos)|*.pos"
-msgstr "Файлы размещения посадочных мест (*.pos)|*.pos"
+msgstr "Файлы размещения посад.мест (*.pos)|*.pos"
 
 #: common/wildcards_and_files_ext.cpp:102
 msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
@@ -2259,14 +2259,14 @@ msgstr "Ошибка загрузки файла эквивалентности"
 #: cvpcb/autosel.cpp:188
 #, c-format
 msgid "%lu footprint/cmp equivalences found."
-msgstr "%lu эквивалентностей посадочное место/компонент найдено."
+msgstr "Найдено %lu эквивалентностей посад.место/компонент."
 
 #: cvpcb/autosel.cpp:254
 #, c-format
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr "Компонент %s: Посадочное место %s не найдено в библиотеках проекта."
+msgstr "Компонент %s: посад.место %s не найдено в библиотеках проекта."
 
 #: cvpcb/autosel.cpp:288
 msgid "CvPcb Warning"
@@ -2284,7 +2284,7 @@ msgstr "Файл проекта '%s' доступен только для чте
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:75
 msgid "Footprint Viewer"
-msgstr "Просмотр посадочных мест"
+msgstr "Просмотрщик посад.мест"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:466
 #: pcbnew/tool_pcb.cpp:340
@@ -2369,12 +2369,12 @@ msgstr "3D просмотр"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:472
 #, c-format
 msgid "Footprint '%s' not found"
-msgstr "Посадочное место '%s' не найдено"
+msgstr "Посад.место '%s' не найдено"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:488
 #, c-format
 msgid "Footprint: %s"
-msgstr "Посад. место: %s"
+msgstr "Посад.место: %s"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:500
 #, c-format
@@ -2386,7 +2386,7 @@ msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
 msgstr ""
-"Соответствия компонентов и посадочных мест изменены.\n"
+"Связи компонентов и посад.мест изменены.\n"
 "Сохранить перед выходом?"
 
 #: cvpcb/cvframe.cpp:373
@@ -2400,7 +2400,7 @@ msgid ""
 "'%s'\n"
 "%s"
 msgstr ""
-"Ошибка при сохранении глобальной таблицы библиотек посадочных мест:\n"
+"Ошибка при сохранении глобальной таблицы библиотек посад.мест:\n"
 "'%s'\n"
 "%s"
 
@@ -2417,7 +2417,7 @@ msgid ""
 "'%s'\n"
 "%s"
 msgstr ""
-"Ошибка при сохранении таблицы библиотек посадочных мест проекта:\n"
+"Ошибка при сохранении таблицы библиотек посад.мест проекта:\n"
 "'%s'\n"
 "%s"
 
@@ -2463,8 +2463,8 @@ msgstr "Фильтр по %s"
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Нет библиотек посадочных мест в списке файлов таблицы библиотек посадочных "
-"мест данного проекта."
+"Нет библиотек посад.мест печатной платы в списке таблицы библиотек посад."
+"мест текущего проекта."
 
 #: cvpcb/cvframe.cpp:688
 msgid "Configuration Error"
@@ -2500,7 +2500,7 @@ msgstr "Ошибка чтения списка цепей"
 
 #: cvpcb/cvpcb.cpp:57
 msgid "Component/footprint equ files (*.equ)|*.equ"
-msgstr "Файл соответствия компонентов и посадочных мест (*.equ)|*.equ"
+msgstr "Файлы эквивалентностей компонент/посад.место (*.equ)|*.equ"
 
 #: cvpcb/cvpcb.cpp:170
 msgid ""
@@ -2512,10 +2512,10 @@ msgid ""
 "more information."
 msgstr ""
 "Вы запустили CvPcb в первый раз, используя новый метод таблицы библиотек "
-"посадочных мест для нахождения посадочных мест.  Либо CvPcb скопировал "
-"таблицу по умолчанию или создал пустую таблицу в вашей домашней директории.  "
-"Сначала вы должны сконфигурировать таблицу библиотек, включив все посадочные "
-"места не включенные KiCad.  Для большей информации смотрите раздел \"Таблица "
+"посад.мест для нахождения посад.мест.  Либо CvPcb скопировал таблицу по "
+"умолчанию или создал пустую таблицу в вашей домашней директории.  Сначала вы "
+"должны сконфигурировать таблицу библиотек, включив все посад.места не "
+"включенные KiCad.  Для большей информации смотрите раздел \"Таблица "
 "библиотек посадочных мест\" документации CvPcb."
 
 #: cvpcb/cvpcb.cpp:184 pcbnew/pcbnew.cpp:339
@@ -2525,7 +2525,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Не удалось загрузить библиотеку посадочных мест из глобальной таблицы:\n"
+"Не удалось загрузить библиотеку посад.мест из глобальной таблицы:\n"
 "\n"
 "%s"
 
@@ -2544,7 +2544,7 @@ msgstr "Файл '%s' уже присутствует в списке"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Footprint/Component equ files (.equ files)"
-msgstr "Файлы соответствия посадочное место/компонент (файлы .equ)"
+msgstr "Файлы эквивалентностей посад.место/компонент (файлы .equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
@@ -2661,7 +2661,7 @@ msgstr "Соответствие в схеме"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr "Соответствие в Cmp файле"
+msgstr "Cmp файл назначения"
 
 #: cvpcb/menubar.cpp:69
 msgid "&Save Edits\tCtrl+S"
@@ -2706,7 +2706,7 @@ msgid ""
 "They are files which give the footprint name from the component value"
 msgstr ""
 "Установить список файлов equ (файлы .equ)\n"
-"Это файлы, которые дают имя посадочного места из поля значения компонента"
+"Это файлы, которые дают имя посад.места из поля значения компонента"
 
 #: cvpcb/menubar.cpp:104
 msgid "&Keep Open On Save"
@@ -2774,32 +2774,32 @@ msgid ""
 "required FPID format? (If you answer no, then these assignments will be "
 "cleared out and you will have to re-assign these footprints yourself.)"
 msgstr ""
-"Некоторые из назначенных посадочных мест являются устаревшими записями "
+"Некоторые из назначенных посад.мест являются устаревшими записями "
 "(отсутствует уникальное имя библиотеки). Хотите ли вы, чтобы CvPcb "
 "попыталась преобразовать их в новый требуемый формат FPID? (Если вы ответите "
 "нет, данные назначения будут убраны и вы самостоятельно сможете "
-"переназначить эти посадочные места.)"
+"переназначить эти посад.места.)"
 
 #: cvpcb/readwrite_dlgs.cpp:229
 #, c-format
 msgid "Component '%s' footprint '%s' was <b>not found</b> in any library.\n"
 msgstr ""
-"Компонент '%s' с посадочным местом '%s' <b>не найден</b> в библиотеках.\n"
+"Компонент '%s' с посад.местом '%s' <b>не был найден</b> в библиотеках.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:237
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Компонент '%s' с посадочным местом '%s' найден в <b>нескольких</"
+"Компонент '%s' с посад.местом '%s' был найден в <b>нескольких</"
 "b>библиотеках.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:250
 msgid "First check your footprint library table entries."
-msgstr "Сначала проверьте записи своей таблицы библиотек посадочных мест."
+msgstr "Сначала проверьте записи своей таблицы библиотек посад.мест."
 
 #: cvpcb/readwrite_dlgs.cpp:252
 msgid "Problematic Footprint Library Tables"
-msgstr "Проблемные таблицы библиотек посадочных мест"
+msgstr "Проблемные таблицы библиотек посад.мест"
 
 #: cvpcb/readwrite_dlgs.cpp:260
 msgid ""
@@ -2807,8 +2807,7 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
-"Следующие ошибки произошли в попытке преобразовать назначения посадочного "
-"места:\n"
+"Следующие ошибки произошли в попытке преобразовать назначения посад.мест:\n"
 "\n"
 
 #: cvpcb/readwrite_dlgs.cpp:263
@@ -2828,7 +2827,7 @@ msgstr "Изменения направлены в Eeschema"
 
 #: cvpcb/tool_cvpcb.cpp:57
 msgid "Edit footprint library table"
-msgstr "Редактировать таблицу библиотек посадочных мест"
+msgstr "Редактировать таблицу библиотек посад.мест"
 
 #: cvpcb/tool_cvpcb.cpp:62
 msgid "View selected footprint"
@@ -2844,27 +2843,27 @@ msgstr "Выбрать следующий свободный компонент"
 
 #: cvpcb/tool_cvpcb.cpp:76
 msgid "Perform automatic footprint association"
-msgstr "Выполнить автоматический выбор посадочных мест"
+msgstr "Выполнить автоматическое связывание посад.мест"
 
 #: cvpcb/tool_cvpcb.cpp:80
 msgid "Delete all associations (links)"
-msgstr "Удалить все ассоциации (соответствия)"
+msgstr "Удалить все связи (ссылки)"
 
 #: cvpcb/tool_cvpcb.cpp:85
 msgid "Display footprint documentation"
-msgstr "Вывести документацию посадочного места"
+msgstr "Отобразить документацию посад.места"
 
 #: cvpcb/tool_cvpcb.cpp:92
 msgid "Filter footprint list by keywords"
-msgstr "Фильтр посадочных мест по ключевым словам"
+msgstr "Фильтр посад.мест по ключевым словам"
 
 #: cvpcb/tool_cvpcb.cpp:99
 msgid "Filter footprint list by pin count"
-msgstr "Фильтр посадочных мест по количеству выводов"
+msgstr "Фильтр посад.мест по количеству выводов"
 
 #: cvpcb/tool_cvpcb.cpp:105
 msgid "Filter footprint list by library"
-msgstr "Фильтр посадочных мест по библиотеке"
+msgstr "Фильтр посад.мест по библиотеке"
 
 #: eeschema/annotate.cpp:89
 #, c-format
@@ -2873,23 +2872,23 @@ msgstr "%d дубликаты временных меток и найдены и
 
 #: eeschema/backanno.cpp:225
 msgid "Load Component Footprint Link File"
-msgstr "Загрузить файл соответствия компоненты-посадочные места"
+msgstr "Загрузить файл связи компонент-посад.место"
 
 #: eeschema/backanno.cpp:239
 msgid "Keep existing footprint field visibility"
-msgstr "Оставить все поля посадочных мест видимыми"
+msgstr "Оставить все поля посад.мест видимыми"
 
 #: eeschema/backanno.cpp:240
 msgid "Show all footprint fields"
-msgstr "Показать все поля посадочного места"
+msgstr "Показать все поля посад.места"
 
 #: eeschema/backanno.cpp:241
 msgid "Hide all footprint fields"
-msgstr "Скрыть все поля посадочного места"
+msgstr "Скрыть все поля посад.места"
 
 #: eeschema/backanno.cpp:243
 msgid "Select the footprint field visibility setting."
-msgstr "Выбор видимости полей посадочного места"
+msgstr "Выбор настройки видимости полей посад.места."
 
 #: eeschema/backanno.cpp:244
 msgid "Change Visibility"
@@ -2898,7 +2897,7 @@ msgstr "Изменение видимости"
 #: eeschema/backanno.cpp:255
 #, c-format
 msgid "Failed to open component-footprint link file '%s'"
-msgstr "Не удалось открыть файл соответствия компонент-посадочное место '%s'"
+msgstr "Не удалось открыть файл связи компонент-посад.место '%s'"
 
 #: eeschema/block.cpp:458
 msgid "No item to paste."
@@ -3510,21 +3509,21 @@ msgstr "Удалить дополнительное обозначение (по
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:492
 msgid "OK to delete the footprint filter list ?"
-msgstr "ОК для удаления фильтра списка посадочных мест ?"
+msgstr "ОК для удаления фильтра списка посад.мест ?"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:513
 msgid "Add Footprint Filter"
-msgstr "Добавить фильтр посадочных мест"
+msgstr "Добавить фильтр посад.мест"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:513
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:244
 msgid "Footprint Filter"
-msgstr "Фильтр посадочных мест"
+msgstr "Фильтр посад.мест"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:530
 #, c-format
 msgid "Foot print filter <%s> is already defined."
-msgstr "Фильтр посадочного места <%s> уже задан."
+msgstr "Фильтр посад.места <%s> уже определен."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:566
 msgid "Edit footprint filter"
@@ -3679,7 +3678,7 @@ msgstr "Псевдоним"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:210
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 msgid "Footprints"
-msgstr "Посадочные места"
+msgstr "Посад.места"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:212
 msgid ""
@@ -3687,10 +3686,9 @@ msgid ""
 "Footprints names can used jockers.\n"
 "(like sm* to allow all footprints names starting by sm)."
 msgstr ""
-"Список посадочных мест, используемых для компонента.\n"
-"Посадочные места можно задавать шаблоном.\n"
-"(например, sm* позволяет использовать все посадочные места, начинающиеся с "
-"sm)."
+"Список посад.мест, используемых для данного компонента.\n"
+"Посад.места можно задавать шаблоном.\n"
+"(например, sm* позволяет использовать все посад.места, начинающиеся с sm)."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
 #: eeschema/onrightclick.cpp:418
@@ -3759,7 +3757,7 @@ msgstr "Показать в браузере"
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:847
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Assign Footprint"
-msgstr "Назначить посадочное место"
+msgstr "Назначить посад.место"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:982
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
@@ -5935,7 +5933,7 @@ msgstr "Редактировать обозначение компонента"
 
 #: eeschema/hotkeys.cpp:180
 msgid "Edit Component Footprint"
-msgstr "Редактировать посадочное место компонента"
+msgstr "Редактировать посад.место компонента"
 
 #: eeschema/hotkeys.cpp:183
 msgid "Edit with Component Editor"
@@ -6192,7 +6190,7 @@ msgstr "Поле"
 #: pcbnew/class_pad.cpp:628 pcbnew/class_text_mod.cpp:369
 #: pcbnew/loadcmp.cpp:436
 msgid "Footprint"
-msgstr "Посадочное место"
+msgstr "Посад.место"
 
 #: eeschema/lib_field.cpp:595 eeschema/libedit.cpp:510
 #: eeschema/template_fieldnames.cpp:48
@@ -7060,7 +7058,7 @@ msgstr "Поиск и замена"
 
 #: eeschema/menubar.cpp:207
 msgid "Import Footprint Selection"
-msgstr "Импорт выбранного посадочного места"
+msgstr "Импорт выбора посад.места"
 
 #: eeschema/menubar.cpp:229 eeschema/menubar_libedit.cpp:161
 #: eeschema/tool_viewlib.cpp:225 pcbnew/menubar_modedit.cpp:216
@@ -7248,7 +7246,7 @@ msgstr "Сформировать перечень элементов"
 
 #: eeschema/menubar.cpp:469
 msgid "A&ssign Component Footprint"
-msgstr "Назначить посадочные места компонентам"
+msgstr "Назначить посад.места компонентам"
 
 #: eeschema/menubar.cpp:470
 msgid "Run CvPcb"
@@ -7479,7 +7477,7 @@ msgstr "Переместить значение"
 
 #: eeschema/onrightclick.cpp:305
 msgid "Move Footprint Field"
-msgstr "Переместить поле посадочного места"
+msgstr "Переместить поле посад.места"
 
 #: eeschema/onrightclick.cpp:316
 msgid "Rotate Reference"
@@ -7491,7 +7489,7 @@ msgstr "Повернуть значение"
 
 #: eeschema/onrightclick.cpp:318
 msgid "Rotate Footprint Field"
-msgstr "Повернуть поле посадочного места"
+msgstr "Повернуть поле посад.места"
 
 #: eeschema/onrightclick.cpp:319
 msgid "Rotate Field"
@@ -7507,7 +7505,7 @@ msgstr "Править значение"
 
 #: eeschema/onrightclick.cpp:339
 msgid "Edit Footprint Field"
-msgstr "Править поле посадочного места"
+msgstr "Править поле посад.места"
 
 #: eeschema/onrightclick.cpp:343
 msgid "Edit Field"
@@ -8374,15 +8372,15 @@ msgstr "Добавить и удалить поля, править свойст
 
 #: eeschema/tool_lib.cpp:166
 msgid "Test for duplicate and off grid pins"
-msgstr "Тест дублирования выводов и выводов, расположенных не по сетке"
+msgstr "Тест дубликатов выводов и выводов вне сетки"
 
 #: eeschema/tool_lib.cpp:183 eeschema/tool_viewlib.cpp:98
 msgid "Show as \"De Morgan\" normal part"
-msgstr "Показать нормальное обозначение (по де Моргану)"
+msgstr "Показать нормальную часть по \"де Моргану\""
 
 #: eeschema/tool_lib.cpp:185 eeschema/tool_viewlib.cpp:103
 msgid "Show as \"De Morgan\" convert part"
-msgstr "Показать дополнительное обозначение (по де Моргану)"
+msgstr "Показать преобразованную часть по \"де Моргану\""
 
 #: eeschema/tool_lib.cpp:189
 msgid "Show the associated datasheet or document"
@@ -8390,7 +8388,7 @@ msgstr "Показать связанное техническое описан�
 
 #: eeschema/tool_lib.cpp:209
 msgid "Edit pins per part or body style (Use carefully!)"
-msgstr "Править выводы в частях или стиль компонента (использовать осторожно!)"
+msgstr "Править выводы в частях или стиль компонента (Использовать осторожно!)"
 
 #: eeschema/tool_lib.cpp:213
 msgid "Show pin table"
@@ -8453,11 +8451,11 @@ msgstr "Сформировать список цепей"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
 #: pcbnew/hotkeys.cpp:352
 msgid "Footprint Editor"
-msgstr "Редактор посадочных мест"
+msgstr "Редактор посад.мест"
 
 #: eeschema/tool_sch.cpp:165
 msgid "Run CvPcb to associate components and footprints"
-msgstr "Запустить CvPcb для назначение посадочных мест компонентам"
+msgstr "Запустить CvPcb для связи компонентов и посад.мест"
 
 #: eeschema/tool_sch.cpp:168
 msgid "Run Pcbnew to layout printed circuit board"
@@ -9529,7 +9527,7 @@ msgstr "Pcbnew - редактор печатных плат"
 
 #: kicad/commandframe.cpp:76
 msgid "PCB footprint editor"
-msgstr "Редактор посадочных мест"
+msgstr "Редактор посад.мест печатной платы"
 
 #: kicad/commandframe.cpp:79
 msgid "GerbView - Gerber viewer"
@@ -11293,11 +11291,11 @@ msgstr "Неправильный или отсутствует параметр!
 #: pcb_calculator/regulators_funct.cpp:226
 #, c-format
 msgid "PCB Calculator data  file (*.%s)|*.%s"
-msgstr "Файл данных для Pcb Calculator (*.%s)|*.%s"
+msgstr "Файл данных для PCB Calculator (*.%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:231
 msgid "Select a PCB Calculator data file"
-msgstr "Выбор файла данных для Pcb Calculator"
+msgstr "Выбрать файл данных для PCB Calculator"
 
 #: pcb_calculator/regulators_funct.cpp:246
 msgid "Do you want to load this file and replace current regulator list?"
@@ -11731,16 +11729,16 @@ msgstr "Не заблокированные посад.места будут п�
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:172
 msgid "Footprints NOT PLACED will be moved"
-msgstr "Неразмещенные посадочные места будут перемещены"
+msgstr "Не размещенные посад.места будут перемещены"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:281
 #, c-format
 msgid "Place footprint %d of %d"
-msgstr "Размещено посадочное место %d из %d"
+msgstr "Разместить посад.мест %d из %d"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:466
 msgid "No PCB edge found, unknown board size!"
-msgstr "Не указан контур платы — неизвестен ее размер!"
+msgstr "Не указан контур печатной платы, неизвестен размер платы!"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:475
 msgid "Cols"
@@ -11789,7 +11787,7 @@ msgstr "Прервать трассировку?"
 #: pcbnew/autorouter/spread_footprints.cpp:181
 msgid "Could not automatically place footprints. No board outlines detected."
 msgstr ""
-"Не удалось автоматически разместить посадочные места. Не задан контур платы."
+"Не удалось автоматически разместить посад.места. Не обнаружен контур платы."
 
 #: pcbnew/basepcbframe.cpp:465
 msgid "Display rectangular coordinates"
@@ -11814,8 +11812,8 @@ msgstr "Файлы разделенных запятыми значений (*.c
 #: pcbnew/build_BOM_from_board.cpp:86
 msgid "Cannot export BOM: there are no footprints in the PCB"
 msgstr ""
-"Не удается экспортировать перечень элементов: нет посадочных мест на "
-"печатной плате"
+"Не удается экспортировать перечень элементов: нет посад.мест на печатной "
+"плате"
 
 #: pcbnew/build_BOM_from_board.cpp:96
 msgid "Save Bill of Materials"
@@ -11889,31 +11887,31 @@ msgstr "Не подсоединены"
 #: pcbnew/class_board.cpp:2299
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
-msgstr "Проверен компонент из списка цепей посадочное место \"%s:%s:%s\".\n"
+msgstr "Проверка посад.места компонента из списка цепей  \"%s:%s:%s\".\n"
 
 #: pcbnew/class_board.cpp:2317
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
-msgstr "Добавлен компонент \"%s:%s\" посадочное место \"%s\".\n"
+msgstr "Добавление нового компонента \"%s:%s\" с посад.местом \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2326
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
-"Не удалось добавить новый компонент t \"%s:%s\" из-за отсутствия посадочного "
-"места \"%s\".\n"
+"Не удалось добавить новый компонент \"%s:%s\" из-за отсутствия посад.места "
+"\"%s\".\n"
 
 #: pcbnew/class_board.cpp:2358
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
-msgstr "Замена компонента \"%s:%s\" с посадочным местом \"%s\" с \"%s\".\n"
+msgstr "Замена компонента \"%s:%s\" с посад.местом \"%s\" с \"%s\".\n"
 
 #: pcbnew/class_board.cpp:2369
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
-"Не удалось заменить компонент \"%s:%s\" из-за отсутствия посадочного места "
-"\"%s\".\n"
+"Не удалось заменить компонент \"%s:%s\" из-за отсутствия посад.места \"%s"
+"\".\n"
 
 #: pcbnew/class_board.cpp:2402
 #, c-format
@@ -12001,7 +11999,7 @@ msgstr "Отрезок"
 #: pcbnew/class_drawsegment.cpp:608
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
-msgstr "Графика: %s длина: %s на %s"
+msgstr "Pcb графика: %s длина: %s на %s"
 
 #: pcbnew/class_drc_item.cpp:43
 msgid "Unconnected pads"
@@ -12137,7 +12135,7 @@ msgstr "Штамп"
 
 #: pcbnew/class_edge_mod.cpp:264
 msgid "Footprint Layer"
-msgstr "Слой посадочного места"
+msgstr "Слой посад.мест"
 
 #: pcbnew/class_edge_mod.cpp:276
 #, c-format
@@ -12210,7 +12208,7 @@ msgstr "Ключевые слова: %s"
 #: pcbnew/class_module.cpp:799
 #, c-format
 msgid "Footprint %s on %s"
-msgstr "Посадочное место %s на %s"
+msgstr "Посад.место %s на %s"
 
 #: pcbnew/class_netinfo_item.cpp:87
 msgid "Net Name"
@@ -12346,7 +12344,7 @@ msgstr "Конт.пл. сзади"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Show footprint pads on board's back"
-msgstr "Показать конт.пл. сзади платы"
+msgstr "Показать конт.пл. посад.мест сзади платы"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Text Front"
@@ -12394,7 +12392,7 @@ msgstr "Посад.места спереди"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Show footprints that are on board's front"
-msgstr "Показать посад.места спереди платы"
+msgstr "Показать посад.места расположенные спереди платы"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Footprints Back"
@@ -12402,7 +12400,7 @@ msgstr "Посад.места сзади"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprints that are on board's back"
-msgstr "Показать посад.места сзади платы"
+msgstr "Показать посад.места расположенные сзади платы"
 
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Show footprint's values"
@@ -12518,7 +12516,7 @@ msgstr "Размер"
 
 #: pcbnew/class_pcb_text.cpp:138
 msgid "PCB Text"
-msgstr "Текст платы"
+msgstr "Текст печатной платы"
 
 #: pcbnew/class_pcb_text.cpp:191
 #, c-format
@@ -13993,7 +13991,8 @@ msgstr "Сообщения об ошибках:"
 msgid ""
 "MARKERs, double click any to go there in PCB, right click for popup menu"
 msgstr ""
-"МАРКЕРЫ, двойной клик - переход на него в PCB, правый клик - выпадающее меню"
+"МАРКЕРЫ, двойной клик - переход на него на печатной плате, правый клик - "
+"выпадающее меню"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:170
 msgid "Problems / Markers"
@@ -14008,8 +14007,8 @@ msgid ""
 "Use this attribute for most non SMD components\n"
 "Components with this option are not put in the footprint position list file"
 msgstr ""
-"Использовать этот атрибут для не-SMD компонентов.\n"
-"Компоненты с таким атрибутом  не попадут в файл позиций  посадочных мест"
+"Используйте этот атрибут для не-SMD компонентов.\n"
+"Компоненты с таким атрибутом не попадут в файл списка позиций посад.мест"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:286
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:138
@@ -14018,7 +14017,7 @@ msgid ""
 "Only components with this option are put in the footprint position list file"
 msgstr ""
 "Используйте этот атрибут для SMD компонентов.\n"
-"Компоненты только с таким атрибутом  попадут в файл позиций  посадочных мест"
+"Компоненты только с таким атрибутом попадут в файл списка позиций посад.мест"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:289
 msgid ""
@@ -14104,7 +14103,7 @@ msgstr "Путь листа:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
 msgid "Change Footprint(s)"
-msgstr "Изменение посадочного места"
+msgstr "Изменить посад.места"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
@@ -14337,7 +14336,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:79
 msgid "Footprint Name in Library"
-msgstr "Имя посадочного места в библиотеке"
+msgstr "Имя посад.места в библиотеке"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:104
 msgid "Locked"
@@ -14405,7 +14404,7 @@ msgstr "Толщина линии текста больше размера те�
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:19
 #, c-format
 msgid "Footprint %s (%s) orientation %.1f"
-msgstr "Посадочного место %s (%s) - ориентация %.1f "
+msgstr "Посад.место %s (%s) ориентация %.1f"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:72
 msgid "Offset X"
@@ -14437,39 +14436,39 @@ msgstr "Обозначение компонента"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
 msgid "Change footprint"
-msgstr "Изменить посадочное место"
+msgstr "Изменить посад.место"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
 msgid "Change footprints"
-msgstr "Изменить посадочные места"
+msgstr "Изменить посад.места"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
 msgid "Change footprints having same value"
-msgstr "Изменить посадочные места, имеющие такое же значение"
+msgstr "Изменить посад.места, имеющие такое же значение"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
 msgid "Update all footprints of the board"
-msgstr "Обновить все посадочные места на плате"
+msgstr "Обновить все посад.места на плате"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:58
 msgid "Export Footprint Association File"
-msgstr "Экспортировать файл назначения посадочных мест"
+msgstr "Экспортировать файл связи посад.мест"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:61
 msgid "List Footprints"
-msgstr "Список посадочных мест"
+msgstr "Список посад.мест"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:64
 msgid "View Footprints"
-msgstr "Смотреть посадочные места"
+msgstr "Смотреть посад.места"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:73
 msgid "Current footprint name (FPID)"
-msgstr "Текущее имя посадочного места (FPID)"
+msgstr "Текущее имя посад.места (FPID)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:81
 msgid "New footprint name (FPID)"
-msgstr "Новое имя посадочного места (FPID)"
+msgstr "Новое имя посад.места (FPID)"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:104
 msgid "Apply"
@@ -14538,7 +14537,7 @@ msgstr "Сохранить VRML файл платы"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:29
 msgid "Footprint 3D model path:"
-msgstr "Путь 3D модели посадочного места:"
+msgstr "Путь к 3D модели посад.места:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:70
 msgid "X Ref:"
@@ -14570,7 +14569,7 @@ msgstr "Использовать относительные пути файло�
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:122
 msgid "Plain PCB (no copper or silk)"
-msgstr "Только PCB (без меди и шелкографии)"
+msgstr "Чистая печатная плата (без меди и шелкографии)"
 
 #: pcbnew/dialogs/dialog_find.cpp:127
 #, c-format
@@ -14664,7 +14663,7 @@ msgstr "Добавить библиотеку"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:137
 msgid "Add a PCB library row to this table"
-msgstr "Добавить строку PCB-библиотеки в таблицу"
+msgstr "Добавить строку библиотеки печатной платы в таблицу"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:141
 msgid "Remove Library"
@@ -14672,7 +14671,7 @@ msgstr "Удалить библиотеку"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:142
 msgid "Remove a PCB library from this library table"
-msgstr "Удалить строку PCB-библиотеки из таблицы"
+msgstr "Удалить строку библиотеки печатной платы из данной таблицы библиотеки"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:147
 msgid "Move the currently selected row up one position"
@@ -14844,7 +14843,7 @@ msgid ""
 "Creates only one file containing all footprints to place\n"
 msgstr ""
 "Создаются два файла: по файлу на каждую сторону платы или\n"
-"создается один файл со всеми посадочными местами для установки\n"
+"создается один файл, содержащий все посад.места для установки\n"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:69
 msgid "With INSERT attribute set"
@@ -14852,7 +14851,7 @@ msgstr "С атрибутом УСТАНОВЛЕНО"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:69
 msgid "Force INSERT attribute for all SMD footprints"
-msgstr "Использовать атрибут УСТАНОВЛЕНО для всех SMD посадочных мест"
+msgstr "Использовать атрибут УСТАНОВЛЕНО для всех SMD посад.мест"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:71
 msgid "Footprints Selection:"
@@ -15086,8 +15085,7 @@ msgstr "Угол поворота:"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:90
 msgid "Context menu and hot key footprint rotation increment."
-msgstr ""
-"Угол поворота посадочного места через контекстное меню и по горячей клавише."
+msgstr "Угол поворота посад.места через контекстное меню и по горячей клавише."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:100
 msgid "&Enforce design rules when routing"
@@ -15111,16 +15109,15 @@ msgstr "Показать (или нет) все связи."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:112
 msgid "S&how footprint ratsnest"
-msgstr "Показать связи посадочного места"
+msgstr "Показать связи посад.места"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:113
 msgid ""
 "Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
 "This ratsnest is useful to place a footprint."
 msgstr ""
-"Показывает (или нет) локальные связи посадочного места при его "
-"перемещении. \n"
-"Показ локальных связей полезен при расстановке посадочных мест."
+"Показывает (или нет) локальные связи посад.места при его перемещении.\n"
+"Показ локальных связей полезен при расстановке посад.мест."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:117
 msgid "&Delete unconnected tracks"
@@ -15274,11 +15271,11 @@ msgstr "Разблокированные дорожки"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:72
 msgid "Locked footprints"
-msgstr "Заблокированные посадочные места"
+msgstr "Заблокированные посад.места"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:75
 msgid "Unlocked footprints"
-msgstr "Разблокированные посадочные места"
+msgstr "Разблокированные посад.места"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:82
 msgid "All layers"
@@ -15407,8 +15404,8 @@ msgid ""
 "If not void, footprint names should match this filter.\n"
 "A filter can be something like SM* (case insensitive)"
 msgstr ""
-"Редактирование строки фильтра посадочных мест.\n"
-"Если не пусто, то отбираются посадочные места в соответствии с фильтром.\n"
+"Редактирование строки фильтра посад.мест.\n"
+"Если не пусто, то отбираются посад.места в соответствии с фильтром.\n"
 "Фильтр может задаваться в виде SM* (регистронезависимый)"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:57
@@ -16394,8 +16391,8 @@ msgstr "Значения по умолчанию для новых создав�
 msgid ""
 "Leave reference or value blank to use the footprint name as default text"
 msgstr ""
-"Оставьте пустыми обозначение или значение, чтобы использовать имя "
-"посадочного места как текст по умолчанию"
+"Оставьте пустыми обозначение или значение, чтобы использовать имя посад."
+"места как текст по умолчанию"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:106
 msgid "&Reference"
@@ -16406,7 +16403,7 @@ msgid ""
 "Default text for reference\n"
 "Leave blank to use the footprint name"
 msgstr ""
-"Текст поз. по умолчанию\n"
+"Текст обозначения по умолчанию\n"
 "Оставьте пустым для того, чтобы использовать имя посад.места"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:119
@@ -16494,15 +16491,15 @@ msgstr "Прочитать файл списка цепей \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:191
 msgid "Using time stamps to match components and footprints.\n"
-msgstr "Сопоставление компонентов и посадочных мест используя штамп времени.\n"
+msgstr "Сопоставление компонентов и посад.мест используя штамп времени.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:193
 msgid "Using references to match components and footprints.\n"
-msgstr "Сопоставление компонентов и посадочных мест используя обозначения.\n"
+msgstr "Сопоставление компонентов и посад.мест используя обозначения.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:216 pcbnew/netlist.cpp:153
 msgid "No footprints"
-msgstr "Нет посадочных мест"
+msgstr "Нет посад.мест"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:240
 msgid "No duplicate."
@@ -16514,7 +16511,7 @@ msgstr "Дубликаты:"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:267
 msgid "No missing footprints."
-msgstr "Все посадочные места заданы."
+msgstr "Нет пропущенных посад.мест."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:270
 msgid "Missing:"
@@ -16522,7 +16519,7 @@ msgstr "Отсутствуют:"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:286
 msgid "No extra footprints."
-msgstr "Все посадочные места подключены."
+msgstr "Дополнительные посад.места отсутствуют."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:289
 msgid "Not in Netlist:"
@@ -16534,7 +16531,7 @@ msgstr "Слишком много ошибок: некоторые пропущ�
 
 #: pcbnew/dialogs/dialog_netlist.cpp:318
 msgid "Check footprints"
-msgstr "Проверка посадочных мест"
+msgstr "Проверить посад.места"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:362
 msgid "Save contents of message window"
@@ -16569,7 +16566,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
 msgid "Footprint Selection"
-msgstr "Выбор посадочного места"
+msgstr "Выбор посад.места"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
 msgid ""
@@ -16577,9 +16574,10 @@ msgid ""
 "by their reference (U1, R3...) (normal setting)\n"
 "or their time stamp (special setting after a full schematic reannotation)"
 msgstr ""
-"Выбор как идентифицировать посад.места:\n"
-"по обозначениям (DD1, R3...) (нормальная установка)\n"
-"или по врем.штампу (спец. установка после полного переобозначения схемы)"
+"Выбрать как идентифицировать посад.места:\n"
+"по обозначениям (U1, R3...) (нормальная установка)\n"
+"или по их временному штампу (специальная установка после полного "
+"переобозначения схемы)"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
@@ -16594,7 +16592,7 @@ msgstr "Изменить"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
 msgid "Exchange Footprint"
-msgstr "Замена посадочного места"
+msgstr "Замена посад.места"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
 msgid ""
@@ -16614,7 +16612,7 @@ msgstr "Оставлять или удалять плохие дорожки п�
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid "Extra Footprints"
-msgstr "Экстра посадочное место"
+msgstr "Дополнительные посад.места"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
 msgid ""
@@ -16622,7 +16620,7 @@ msgid ""
 "Note: only not locked footprints will be removed"
 msgstr ""
 "Удалять посад.места с платы при отсутствии их в списке цепей\n"
-"Прим: удаляются только не заблокированные посад.места"
+"Примечание: удаляются только не заблокированные посад.места"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:73
 msgid "Single Pad Nets"
@@ -16639,13 +16637,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:98
 msgid "Test Footprints"
-msgstr "Тест посадочных мест"
+msgstr "Тестировать посад.места"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:99
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr ""
-"Прочитать текущий список цепей и список недостающих и дополнительных посад."
-"мест"
+"Прочитать текущий файл списка цепей и список недостающих и дополнительных "
+"посад.мест"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:103
 msgid "Rebuild Board Connectivity"
@@ -16731,11 +16729,11 @@ msgstr "Мин. ширина зоны"
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:119
 #, c-format
 msgid "OK to set footprints orientation to %.1f degrees ?"
-msgstr "OК для установки ориентации посад.места в %.1f градусов ?"
+msgstr "OК для установки ориентации посад.мест в %.1f градусов ?"
 
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:150
 msgid "Bad value for footprints orientation"
-msgstr "Неверное значение ориентации посадочного места"
+msgstr "Неверное значение ориентации посад.мест"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:27
 msgid "New orientation (0.1 degree resolution)"
@@ -16743,11 +16741,11 @@ msgstr "Новая ориентация (с разрешением 0,1°)"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:36
 msgid "Filter to select footprints by reference"
-msgstr "Фильтр выбора посадочных мест по обозначению"
+msgstr "Фильтр выбора посад.мест по обозначению"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:43
 msgid "Include Locked Footprints"
-msgstr "Включить заблокированные посадочные места"
+msgstr "Включить заблокированные посад.места"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:44
 msgid "Force locked footprints to be modified"
@@ -16910,7 +16908,7 @@ msgstr "Направление трапеции:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:225
 msgid "Parent footprint orientation"
-msgstr "Ориентация посадочного места"
+msgstr "Родительская ориентация посад.места"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:233
 msgid "Rotation:"
@@ -17165,11 +17163,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:101
 msgid "Plot footprint values"
-msgstr "Чертить значения(номиналы) посадочных мест"
+msgstr "Чертить значения посад.мест"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid "Plot footprint references"
-msgstr "Чертить обозначения посадочных мест"
+msgstr "Чертить обозначения посад.мест"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Force plotting of invisible values/references"
@@ -17189,7 +17187,7 @@ msgstr "Удалить паяльную маску с перех.отв."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:118
 msgid "Exclude PCB edge layer from other layers"
-msgstr "Исключить содержимое слоя контура платы с остальных слоев"
+msgstr "Исключить содержимое слоя контура печатной платы с остальных слоев"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
 msgid "Exclude contents of the pcb edge layer from all other layers"
@@ -17577,7 +17575,7 @@ msgstr "высокий"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:216
 msgid "Print Footprint"
-msgstr "Печать посадочных мест"
+msgstr "Печать посад.мест"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 1"
@@ -17636,9 +17634,8 @@ msgid ""
 "The footprint library is a folder with a name ending with .pretty\n"
 "Footprints are .kicad_mod files inside this folder."
 msgstr ""
-"Библиотека посадочных мест - это директория с именем оканчивающимся на ."
-"pretty\n"
-"Посадочные места в .kicad_mod файлах внутри этой директории."
+"Библиотека посад.мест - это каталог с именем оканчивающимся на .pretty\n"
+"Посад.места в файлах .kicad_mod внутри этого каталога."
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:25
 msgid "Path base:"
@@ -17885,7 +17882,7 @@ msgid ""
 "\n"
 "Please select the source for the libraries to add:"
 msgstr ""
-"Добро пожаловать в мастер добавления библиотек посадочных мест!\n"
+"Добро пожаловать в Мастер добавления библиотек посад.мест!\n"
 "\n"
 "Пожалуйста выберите источник для добавления библиотек:"
 
@@ -18057,7 +18054,7 @@ msgstr "Толщина контура"
 #: pcbnew/edit.cpp:769 pcbnew/edit.cpp:797 pcbnew/edit.cpp:825
 #, c-format
 msgid "Footprint %s found, but it is locked"
-msgstr "Посадочное место %s найдено, заблокировано"
+msgstr "Посад.место %s найдено, но оно заблокировано"
 
 #: pcbnew/edit.cpp:897 pcbnew/edit.cpp:916
 #, c-format
@@ -18253,7 +18250,7 @@ msgstr ""
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:582
 msgid "Footprint Report"
-msgstr "Отчет о посадочных местах"
+msgstr "Отчет о посад.местах"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:587
 #, c-format
@@ -18306,7 +18303,7 @@ msgstr "безымянный"
 #: pcbnew/files.cpp:410
 #, c-format
 msgid "PCB file '%s' is already open."
-msgstr "Файл платы '%s' уже открыт."
+msgstr "Файл печатной платы '%s' уже открыт."
 
 #: pcbnew/files.cpp:420
 msgid "The current board has been modified.  Do you wish to save the changes?"
@@ -18370,7 +18367,7 @@ msgstr ""
 
 #: pcbnew/footprint_wizard.cpp:78 pcbnew/footprint_wizard_frame.cpp:93
 msgid "Footprint Wizard"
-msgstr "Мастер посадочных мест"
+msgstr "Мастер посад.мест"
 
 #: pcbnew/footprint_wizard.cpp:84
 msgid "no wizard selected"
@@ -18378,7 +18375,7 @@ msgstr "не выбран  мастер"
 
 #: pcbnew/footprint_wizard.cpp:148
 msgid "Couldn't reload footprint wizard"
-msgstr "Не удалось загрузить мастер посадочных мест"
+msgstr "Не удалось загрузить Мастер посад.мест"
 
 #: pcbnew/footprint_wizard_frame.cpp:268
 msgid "Parameter"
@@ -18404,15 +18401,15 @@ msgstr "Выбрать следующую страницу параметров"
 #: pcbnew/footprint_wizard_frame.cpp:589 pcbnew/menubar_modedit.cpp:237
 #: pcbnew/tool_modview.cpp:76 pcbnew/tool_modview.cpp:178
 msgid "Show footprint in 3D viewer"
-msgstr "Просмотр посадочного места в 3D"
+msgstr "Показать посад.место в 3D просмотрщике"
 
 #: pcbnew/footprint_wizard_frame.cpp:616
 msgid "Export the footprint to the editor"
-msgstr "Экспортировать посадочное место в редактор"
+msgstr "Экспортировать посад.место в редактор"
 
 #: pcbnew/footprint_wizard_frame.cpp:635
 msgid "Footprint Builder Messages"
-msgstr "Сообщения Строителя посадочных мест"
+msgstr "Сообщения Строителя посад.мест"
 
 #: pcbnew/github/github_getliblist.cpp:132
 #, c-format
@@ -18431,9 +18428,9 @@ msgid ""
 "is not in the writable portion of this Github library\n"
 "'%s'"
 msgstr ""
-"Посадочное место\n"
+"Посад.место\n"
 "'%s'\n"
-"не попадает в блок для записи в эту Github библиотеку\n"
+"не в блоке записи этой Github библиотеки\n"
 "'%s'"
 
 #: pcbnew/github/github_plugin.cpp:365
@@ -18445,13 +18442,12 @@ msgid ""
 "directory <b>must</b> have a <b>.pretty</b> file extension because the "
 "format of the save is pretty.</p>"
 msgstr ""
-"Установите это свойство в директории, где посадочные места должны быть "
-"записаны как посадочные места при сохранении в эту библиотеку. Что-либо "
-"сохраненное будет иметь приоритет над посадочными местами  с тем же именем в "
-"github repo. Эти сохраненные посадочные места тогда могут быть отправлены "
-"специалисту по обслуживанию библиотеки как обновления. <p>Директория "
-"<b>должна</b> иметь расширение <b>.pretty</b>, так как формат сохранения "
-"pretty.</p>"
+"Установите это свойство в директории, где посад.места должны быть записаны "
+"как посад.места при сохранении в эту библиотеку. Что-либо сохраненное будет "
+"иметь приоритет над посад.местами с тем же именем в github репозитории. Эти "
+"сохраненные посад.места тогда могут быть отправлены специалисту по "
+"обслуживанию библиотеки как обновления. <p>Директория <b>должна</b> иметь "
+"расширение <b>.pretty</b>, так как формат сохранения pretty.</p>"
 
 #: pcbnew/github/github_plugin.cpp:415
 #, c-format
@@ -18509,12 +18505,12 @@ msgstr "Не удается преобразовать \"%s\" в целое"
 #: pcbnew/kicad_plugin.cpp:1757
 #, c-format
 msgid "footprint library path '%s' does not exist"
-msgstr "Путь библиотеки посадочных мест '%s' не существует"
+msgstr "путь к библиотеке посад.мест '%s' не существует"
 
 #: pcbnew/gpcb_plugin.cpp:309
 #, c-format
 msgid "library <%s> has no footprint '%s' to delete"
-msgstr "в библиотеке <%s> нет посадочного места '%s' для удаления"
+msgstr "в библиотеке <%s> нет посад.места '%s' для удаления"
 
 #: pcbnew/gpcb_plugin.cpp:411 pcbnew/pcb_parser.cpp:406
 #: pcbnew/pcb_parser.cpp:495
@@ -18552,7 +18548,7 @@ msgstr "неизвестный файл '%s' найден по пути библ
 #: pcbnew/gpcb_plugin.cpp:1037 pcbnew/kicad_plugin.cpp:1977
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
-msgstr "библиотеку посадочных мест '%s' не удалось удалить"
+msgstr "библиотеку посад.мест '%s' не удалось удалить"
 
 #: pcbnew/highlight.cpp:56
 msgid "Filter Net Names"
@@ -18681,7 +18677,7 @@ msgstr "Копировать элемент"
 
 #: pcbnew/hotkeys.cpp:125 pcbnew/onrightclick.cpp:354
 msgid "Get and Move Footprint"
-msgstr "Найти и переместить посад.место"
+msgstr "Получить и переместить посад.место"
 
 #: pcbnew/hotkeys.cpp:126
 msgid "Lock/Unlock Footprint"
@@ -18749,7 +18745,7 @@ msgstr "Режим отображения дорожек"
 
 #: pcbnew/hotkeys.cpp:226
 msgid "Add Footprint"
-msgstr "Добавить посадочно место"
+msgstr "Добавить посад.место"
 
 #: pcbnew/hotkeys.cpp:229
 msgid "Record Macro 0"
@@ -18893,22 +18889,20 @@ msgstr "Начало DXF на сетке печатной платы, коорд
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:94
 msgid "Select PCB grid units"
-msgstr "Выбрать размерность "
+msgstr "Выбрать размерность сетки печатной платы"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue ?"
 msgstr ""
-"Текущая печатная плата будет утеряна и эту операцию нельзя отменить. "
-"Продолжить?"
+"Текущая плата будет утеряна и эту операцию нельзя отменить. Продолжить?"
 
 #: pcbnew/initpcb.cpp:102 pcbnew/modedit.cpp:340
 msgid ""
 "Current Footprint will be lost and this operation cannot be undone. "
 "Continue ?"
 msgstr ""
-"Текущее посадочное место будет утеряно и эту операцию нельзя отменить. "
-"Продолжить?"
+"Текущее посад.место будет утеряно и эту операцию нельзя отменить. Продолжить?"
 
 #: pcbnew/io_mgr.cpp:42 pcbnew/plugin.cpp:27
 #, c-format
@@ -18938,7 +18932,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"неверный ID посадочного места в\n"
+"неверный ID посад.места в\n"
 "файл: <%s>\n"
 "строка: %d\n"
 "смещение: %d"
@@ -18946,27 +18940,29 @@ msgstr ""
 #: pcbnew/kicad_plugin.cpp:215
 #, c-format
 msgid "Cannot create footprint library path '%s'"
-msgstr "Не удалось создать библиотеку посадочных мест по пути '%s'"
+msgstr "Не удалось создать библиотеку посад.мест в пути '%s'"
 
 #: pcbnew/kicad_plugin.cpp:221
 #, c-format
 msgid "Footprint library path '%s' is read only"
-msgstr "Путь библиотеки посадочных мест '%s' доступен только для чтения"
+msgstr "Путь библиотеки посад.мест '%s' доступен только для чтения"
 
 #: pcbnew/kicad_plugin.cpp:260
 #, c-format
 msgid "Cannot rename temporary file '%s' to footprint library file '%s'"
-msgstr "Не удалось переименовать временный файл '%s' в библиотечный файл '%s'"
+msgstr ""
+"Не удалось переименовать временный файл '%s' в файл библиотеки посад.мест "
+"'%s'"
 
 #: pcbnew/kicad_plugin.cpp:280
 #, c-format
 msgid "Footprint library path '%s' does not exist"
-msgstr "Путь библиотека посадочных мест '%s' не существует"
+msgstr "Путь к библиотеке посад.мест '%s' не существует"
 
 #: pcbnew/kicad_plugin.cpp:327 pcbnew/legacy_plugin.cpp:4703
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
-msgstr "в библиотеке '%s' нет посадочного места '%s' для удаления"
+msgstr "в библиотеке '%s' нет посад.места '%s' для удаления"
 
 #: pcbnew/kicad_plugin.cpp:1234 pcbnew/legacy_plugin.cpp:98
 #, c-format
@@ -18991,7 +18987,7 @@ msgstr "неизвестный тип скругления углов зоны %
 #: pcbnew/kicad_plugin.cpp:1846
 #, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "Неправильное имя файла посадочных мест '%s'."
+msgstr "Неправильное имя файла посад.места '%s'."
 
 #: pcbnew/kicad_plugin.cpp:1852
 #, c-format
@@ -19023,8 +19019,7 @@ msgstr "Не удалось разобрать штамп времени в се
 #: pcbnew/legacy_netlist_reader.cpp:131
 msgid "Cannot parse footprint name in component section of netlist."
 msgstr ""
-"Не удалось разобрать имя посадочного места в секции компонента в списке "
-"цепей."
+"Не удалось разобрать имя посад.места в секции компонента в списке цепей."
 
 #: pcbnew/legacy_netlist_reader.cpp:145
 msgid "Cannot parse reference designator in component section of netlist."
@@ -19048,7 +19043,7 @@ msgstr ""
 #, c-format
 msgid "Cannot find component '%s' in footprint filter section of netlist."
 msgstr ""
-"Не удалось найти компонент '%s' в секции посадочных мест в списке цепей."
+"Не удалось найти компонент '%s' в секции фильтра посад.мест в списке цепей."
 
 #: pcbnew/legacy_plugin.cpp:96
 #, c-format
@@ -19146,11 +19141,11 @@ msgstr "Создание новой библиотеки (.pretty директо
 #: pcbnew/librairi.cpp:63
 #, c-format
 msgid "OK to delete module %s in library '%s'"
-msgstr "Ok для удаления модуля %s в библиотеке '%s'"
+msgstr "OK для удаления модуля %s в библиотеке '%s'"
 
 #: pcbnew/librairi.cpp:64
 msgid "Import Footprint"
-msgstr "Импорт посадочного места"
+msgstr "Импорт посад.места"
 
 #: pcbnew/librairi.cpp:65
 #, c-format
@@ -19159,24 +19154,24 @@ msgstr "Файл '%s' не найден"
 
 #: pcbnew/librairi.cpp:66
 msgid "Not a footprint file"
-msgstr "Файл не посадочных мест"
+msgstr "Файл не посад.мест"
 
 #: pcbnew/librairi.cpp:67
 #, c-format
 msgid "Unable to find or load footprint %s from lib path '%s'"
 msgstr ""
-"Не удалось найти или загрузить посадочное место %s по пути библиотеки '%s'"
+"Не удалось найти или загрузить посад.место %s через путь к библиотеке '%s'"
 
 #: pcbnew/librairi.cpp:68
 #, c-format
 msgid "Unable to find or load footprint from path '%s'"
-msgstr "Не удалось найти или загрузить посадочное место по пути '%s'"
+msgstr "Не удалось найти или загрузить посад.мест в пути '%s'"
 
 #: pcbnew/librairi.cpp:69
 #, c-format
 msgid ""
 "The footprint library '%s' could not be found in any of the search paths."
-msgstr "Библиотека посадочных мест '%s' не найдена по всем путям поиска."
+msgstr "Библиотека посад.мест '%s' не найдена по всем путям поиска."
 
 #: pcbnew/librairi.cpp:70
 #, c-format
@@ -19185,34 +19180,34 @@ msgstr "Библиотека '%s' доступна только для чтен�
 
 #: pcbnew/librairi.cpp:72
 msgid "Export Footprint"
-msgstr "Экспорт посадочного места"
+msgstr "Экспорт посад.места"
 
 #: pcbnew/librairi.cpp:74
 msgid "Enter footprint name:"
-msgstr "Имя посадочного места:"
+msgstr "Введите имя посад.места:"
 
 #: pcbnew/librairi.cpp:75
 #, c-format
 msgid "Footprint exported to file '%s'"
-msgstr "Посадочное место экспортировано в файл '%s'"
+msgstr "Посад.место экспортировано в файл '%s'"
 
 #: pcbnew/librairi.cpp:76
 #, c-format
 msgid "Footprint %s deleted from library '%s'"
-msgstr "Посадочное место %s удалено из библиотеки '%s'"
+msgstr "Посад.место %s удалено из библиотеки '%s'"
 
 #: pcbnew/librairi.cpp:77
 msgid "New Footprint"
-msgstr "Новое посадочное место"
+msgstr "Новое посад.место"
 
 #: pcbnew/librairi.cpp:79
 #, c-format
 msgid "Footprint %s already exists in library '%s'"
-msgstr "Посадочное место %s уже есть в библиотеке '%s'"
+msgstr "Посад.место %s уже существует в библиотеке '%s'"
 
 #: pcbnew/librairi.cpp:80
 msgid "No footprint name defined."
-msgstr "Посадочное место не задано."
+msgstr "Имя посад.места не определено."
 
 #: pcbnew/librairi.cpp:84
 msgid ""
@@ -19223,8 +19218,8 @@ msgid ""
 msgstr ""
 "Запись/изменение legacy библиотек (.mod файлы) не разрешены\n"
 "Сохраните текущую библитеку в новом .pretty формате\n"
-"и измените таблицу библиотек посадочных мест\n"
-"для сохранения посадочного места(из .kicad_mod файла) в .pretty директорию "
+"и обновите вашу таблицу библиотек посад.мест\n"
+"для сохранения вашего посад.места(из .kicad_mod файла) в каталоге .pretty "
 "библиотеки"
 
 #: pcbnew/librairi.cpp:90
@@ -19235,21 +19230,21 @@ msgid ""
 "before deleting a footprint"
 msgstr ""
 "Изменение legacy библиотек (.mod файлы) не разрешено\n"
-"Сохраните текущую библиотеку в новом .pretty формате\n"
-"и измените таблицу библиотек посадочных мест\n"
-"перед удалением посадочного места"
+"Пожалуйста сохраните текущую библиотеку в новом .pretty формате\n"
+"и обновите вашу таблицу библиотек посад.мест\n"
+"перед удалением посад.места"
 
 #: pcbnew/librairi.cpp:95
 msgid "Legacy foot print export files (*.emp)|*.emp"
-msgstr "Файлы экспорта посадочных мест (*.emp)|*.emp"
+msgstr "Файлы экспорта посад.мест (*.emp)|*.emp"
 
 #: pcbnew/librairi.cpp:96
 msgid "GPcb foot print files (*)|*"
-msgstr "GPcb файлы посадочных мест (*)|*"
+msgstr "GPcb файлы посад.мест (*)|*"
 
 #: pcbnew/librairi.cpp:521
 msgid "No footprints to archive!"
-msgstr " Нет посадочных мест для архивирования!"
+msgstr "Нет посад.мест для архивирования!"
 
 #: pcbnew/librairi.cpp:624
 #, c-format
@@ -19285,11 +19280,11 @@ msgid ""
 "in any of the library search paths.  Verify your system is configured "
 "properly so the footprint libraries can be found."
 msgstr ""
-"Не удалось прочитать посадочное место из библиотек(и):\n"
+"Не удалось прочитать посад.место из библиотек(и):\n"
 "\n"
 "%s\n"
-"по всем путям поиска библиотек. Проверьте настройки поиска библиотек в "
-"системе."
+"по всем путям поиска библиотек. Проверьте что ваша система настроена "
+"правильно, так что библиотеки посад.мест. смогут быть найдены."
 
 #: pcbnew/loadcmp.cpp:439
 #, c-format
@@ -19298,7 +19293,7 @@ msgstr "Посад.места [%d шт.]"
 
 #: pcbnew/loadcmp.cpp:456
 msgid "No footprint found."
-msgstr "Посадочное место не найдено."
+msgstr "Посад.место не найдено."
 
 #: pcbnew/loadcmp.cpp:480
 msgid ""
@@ -19320,12 +19315,12 @@ msgstr "Модуль"
 #: pcbnew/loadcmp.cpp:560
 #, c-format
 msgid "Footprint '%s' saved"
-msgstr "Посадочное место '%s' сохранено"
+msgstr "Посад.место '%s' сохранено"
 
 #: pcbnew/loadcmp.cpp:574
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Библиотека посадочных мест '%s' сохранена как '%s'."
+msgstr "Библиотека посад.мест '%s' сохранена как '%s'."
 
 #: pcbnew/menubar_modedit.cpp:67
 msgid "Set Acti&ve Library"
@@ -19349,7 +19344,7 @@ msgstr "Импорт посад.места из файла"
 
 #: pcbnew/menubar_modedit.cpp:83
 msgid "Import footprint from an existing file"
-msgstr "Импорт посадочного места из файла"
+msgstr "Импорт посад.места из существующего файла"
 
 #: pcbnew/menubar_modedit.cpp:88
 msgid "Load Footprint From Current Li&brary"
@@ -19421,7 +19416,7 @@ msgstr "Печать текущего посад.места"
 
 #: pcbnew/menubar_modedit.cpp:151
 msgid "Close footprint editor"
-msgstr "Закрыть редактор посадочных мест"
+msgstr "Закрыть редактор посад.мест"
 
 #: pcbnew/menubar_modedit.cpp:160
 msgid "Undo last action"
@@ -19441,7 +19436,7 @@ msgstr "Редактировать свойства"
 
 #: pcbnew/menubar_modedit.cpp:180
 msgid "Edit footprint properties"
-msgstr "Правка свойств посад.места"
+msgstr "Изменить свойства посад.места"
 
 #: pcbnew/menubar_modedit.cpp:188
 msgid "&User Grid Size"
@@ -19526,15 +19521,15 @@ msgstr "Разместить точку привязки посад.места"
 
 #: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:485
 msgid "&Footprint Libraries Wizard"
-msgstr "Мастер библиотек посадочных мест"
+msgstr "Мастер библиотек посад.мест"
 
 #: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:485
 msgid "Add footprint libraries with wizard"
-msgstr "Добавить библиотеки посадочных мест с помощью мастера"
+msgstr "Добавить библиотеки посад.мест с помощью мастера"
 
 #: pcbnew/menubar_modedit.cpp:312 pcbnew/menubar_pcbframe.cpp:489
 msgid "Footprint Li&braries Manager"
-msgstr "Менеджер библиотек посадочных мест"
+msgstr "Менеджер библиотек посад.мест"
 
 #: pcbnew/menubar_modedit.cpp:324
 msgid "&Settings"
@@ -19623,7 +19618,8 @@ msgstr "Спасти"
 #: pcbnew/menubar_pcbframe.cpp:145
 msgid "Clear board and get last rescue file automatically saved by Pcbnew"
 msgstr ""
-"Очистить плату и загрузить последнюю автоматически сохраненную версию платы"
+"Очистить плату и загрузить последний спасенный файл автоматически "
+"сохраненный Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:152
 msgid "Footprint &Position (.pos) File"
@@ -19631,7 +19627,7 @@ msgstr "Файл позиций посад.мест (.pos)"
 
 #: pcbnew/menubar_pcbframe.cpp:153
 msgid "Generate footprint position file for pick and place"
-msgstr "Сформировать файл позиций посад.мест для установщика"
+msgstr "Сформировать файл позиций посад.мест для захвата и установки"
 
 #: pcbnew/menubar_pcbframe.cpp:157
 msgid "&Drill (.drl) File"
@@ -19799,7 +19795,7 @@ msgstr "Архивировать посад.места"
 
 #: pcbnew/menubar_pcbframe.cpp:270
 msgid "Archive or add footprints in a library file"
-msgstr "Архивировать или добавить посадочные места в файл библиотеки"
+msgstr "Архивировать или добавить посад.места в файл библиотеки"
 
 #: pcbnew/menubar_pcbframe.cpp:274
 msgid "Close Pcbnew"
@@ -19816,7 +19812,7 @@ msgstr "Глобальное удаление"
 
 #: pcbnew/menubar_pcbframe.cpp:298
 msgid "Delete tracks, footprints, texts... on board"
-msgstr "Удалить дорожки, посад.места, тексты... с платы"
+msgstr "Удалить дорожки, посад.места, текст... с платы"
 
 #: pcbnew/menubar_pcbframe.cpp:302
 msgid "&Cleanup Tracks and Vias"
@@ -19840,11 +19836,11 @@ msgstr "Обменять дорожки на медных слоях или тр
 
 #: pcbnew/menubar_pcbframe.cpp:312
 msgid "Set Footp&rint Field Sizes"
-msgstr "Установить размеры полей посадочного места"
+msgstr "Установить размеры полей посад.места"
 
 #: pcbnew/menubar_pcbframe.cpp:313
 msgid "Set text size and width of footprint fields."
-msgstr "Установить размер текста и ширину полей посадочного места."
+msgstr "Установить размер текста и ширину полей посад.места."
 
 #: pcbnew/menubar_pcbframe.cpp:351
 msgid "Show board in 3D viewer"
@@ -19860,11 +19856,11 @@ msgstr "Просмотр списка цепей (с именами и иден�
 
 #: pcbnew/menubar_pcbframe.cpp:384
 msgid "&Footprint"
-msgstr "Посадочное место"
+msgstr "Посад.место"
 
 #: pcbnew/menubar_pcbframe.cpp:387 pcbnew/tool_pcb.cpp:440
 msgid "Add footprints"
-msgstr "Добавить посадочные места"
+msgstr "Добавить посад.места"
 
 #: pcbnew/menubar_pcbframe.cpp:389
 msgid "&Track"
@@ -20144,8 +20140,8 @@ msgid ""
 "Current footprint changes will be lost and this operation cannot be undone. "
 "Continue?"
 msgstr ""
-"Текущие изменения посадочного места будут утеряны и эту операцию нельзя "
-"откатить. Продолжить?"
+"Текущие изменения посад.места будут утеряны и данную операцию нельзя "
+"отменить. Продолжить?"
 
 #: pcbnew/modedit.cpp:400
 msgid "No board currently edited"
@@ -20161,7 +20157,7 @@ msgid ""
 "Cannot update the footprint"
 msgstr ""
 "\n"
-"Невозможно обновить посадочное место"
+"Невозможно обновить посад.место"
 
 #: pcbnew/modedit.cpp:435
 msgid "A footprint source was found on the main board"
@@ -20173,7 +20169,7 @@ msgid ""
 "Cannot insert this footprint"
 msgstr ""
 "\n"
-"Невозможно вставить это посадочное место"
+"Невозможно вставить это посад.место"
 
 #: pcbnew/modedit.cpp:955
 msgid "Place anchor"
@@ -20313,15 +20309,15 @@ msgstr "Установить ширину линии"
 
 #: pcbnew/moduleframe.cpp:501
 msgid "Save the changes to the footprint before closing?"
-msgstr "Сохранить изменения в посадочном месте перед закрытием?"
+msgstr "Сохранить изменения в посад.месте перед закрытием?"
 
 #: pcbnew/moduleframe.cpp:522
 msgid "Library is not set, the footprint could not be saved."
-msgstr "Библиотека не выбрана, посадочное место не удастся сохранить."
+msgstr "Библиотека не выбрана, посад.место не удастся сохранить."
 
 #: pcbnew/moduleframe.cpp:744
 msgid "Footprint Editor "
-msgstr "Редактор посадочных мест"
+msgstr "Редактор посад.мест "
 
 #: pcbnew/moduleframe.cpp:751
 msgid "(no active library)"
@@ -20329,7 +20325,7 @@ msgstr "(нет активной библиотеки)"
 
 #: pcbnew/moduleframe.cpp:760
 msgid "Footprint Editor (active library: "
-msgstr "Редактор посадочных мест (активная библиотека: "
+msgstr "Редактор посад.мест (активная библиотека: "
 
 #: pcbnew/moduleframe.cpp:859 pcbnew/pcbnew_config.cpp:138
 #, c-format
@@ -20338,7 +20334,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Не удалось сохранить глобальную таблицу библиотек посадочных мест:\n"
+"Не удалось сохранить глобальную таблицу библиотек посад.мест:\n"
 "\n"
 "%s"
 
@@ -20349,7 +20345,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Не удалось сохранить таблицу библиотек посадочных мест проекта:\n"
+"Не удалось сохранить таблицу библиотек посад.мест проекта:\n"
 "\n"
 "%s"
 
@@ -20364,7 +20360,7 @@ msgstr "Удалить посад.место %s (значение %s) ?"
 
 #: pcbnew/modview_frame.cpp:120
 msgid "Footprint Library Browser"
-msgstr "Обзор библиотеки посадочных мест"
+msgstr "Обзор библиотеки посад.мест"
 
 #: pcbnew/modview_frame.cpp:448
 #, c-format
@@ -20373,7 +20369,7 @@ msgid ""
 "\n"
 "Error %s."
 msgstr ""
-"Не удалось загрузить посадочное место \"%s\" из библиотеки \"%s\".\n"
+"Не удалось загрузить посад.место \"%s\" из библиотеки \"%s\".\n"
 "\n"
 "Ошибка %s."
 
@@ -20496,20 +20492,20 @@ msgstr "Компоненты"
 #: pcbnew/netlist.cpp:223
 #, c-format
 msgid "No footprint defined for component '%s'.\n"
-msgstr "Не задано посадочное место для компонента '%s'.\n"
+msgstr "Не задано посад.место для компонента '%s'.\n"
 
 #: pcbnew/netlist.cpp:245
 #, c-format
 msgid ""
 "* Warning: component '%s': board footprint '%s', netlist footprint '%s'\n"
 msgstr ""
-"* Предупреждение: компонент '%s': посадочное место на плате '%s', посадочное "
-"место в списке цепей '%s'\n"
+"* Предупреждение: компонент '%s': посад.место на плате '%s', посад.место в "
+"списке цепей '%s'\n"
 
 #: pcbnew/netlist.cpp:274
 #, c-format
 msgid "Component '%s' footprint ID '%s' is not valid.\n"
-msgstr "Компонент '%s' с неправильным ID посадочного места '%s.\n"
+msgstr "Компонент '%s' с неправильным ID посад.места '%s.\n"
 
 #: pcbnew/netlist.cpp:296
 #, c-format
@@ -20517,8 +20513,8 @@ msgid ""
 "Component '%s' footprint '%s' was not found in any libraries in the "
 "footprint library table.\n"
 msgstr ""
-"Компонент '%s' с посадочным местом '%s' не найден в библиотеках таблицы "
-"библиотек.\n"
+"Компонент '%s' с посад.местом '%s' не найден в библиотеках посад.мест "
+"таблицы библиотек.\n"
 
 #: pcbnew/netlist_reader.cpp:182
 #, c-format
@@ -20527,7 +20523,7 @@ msgid ""
 "file: <%s>\n"
 "line: %d"
 msgstr ""
-"неверный ID посадочного места в\n"
+"неверный ID посад.места в\n"
 "файл: <%s>\n"
 "строка: %d"
 
@@ -20558,11 +20554,11 @@ msgstr "Разблокировать посад.место"
 
 #: pcbnew/onrightclick.cpp:166
 msgid "Automatically Place Footprint"
-msgstr "Авт.разместить посад.место"
+msgstr "Авт. разместить посад.место"
 
 #: pcbnew/onrightclick.cpp:173
 msgid "Automatically Route Footprint"
-msgstr "Авт.трассировать посад.место"
+msgstr "Авт. трассировать посад.место"
 
 #: pcbnew/onrightclick.cpp:194
 msgid "Move Drawing"
@@ -20674,7 +20670,7 @@ msgstr "Глобальное перемещение и размещение"
 
 #: pcbnew/onrightclick.cpp:436
 msgid "Unlock All Footprints"
-msgstr "Разблокировать все посадочные места"
+msgstr "Разблокировать все посад.места"
 
 #: pcbnew/onrightclick.cpp:438
 msgid "Lock All Footprints"
@@ -20682,27 +20678,27 @@ msgstr "Заблокировать все посад.места"
 
 #: pcbnew/onrightclick.cpp:441
 msgid "Spread out All Footprints"
-msgstr "Все посадочные места"
+msgstr "Разложить все посад.места"
 
 #: pcbnew/onrightclick.cpp:443
 msgid "Spread out Footprints not Already on Board"
-msgstr "Посадочные места вне платы"
+msgstr "Разложить посад.места, которые еще не на плате"
 
 #: pcbnew/onrightclick.cpp:446
 msgid "Automatically Place All Footprints"
-msgstr "Авт.разместить все модули"
+msgstr "Авт. разместить все посад.места"
 
 #: pcbnew/onrightclick.cpp:448
 msgid "Automatically Place New Footprints"
-msgstr "Авт.разместить новые модули"
+msgstr "Авт. разместить новые посад.места"
 
 #: pcbnew/onrightclick.cpp:450
 msgid "Automatically Place Next Footprints"
-msgstr "Авт.разместить следующий модуль"
+msgstr "Авт. разместить следующие посад.места"
 
 #: pcbnew/onrightclick.cpp:453
 msgid "Orient All Footprints"
-msgstr "Повернуть все посадочные меса"
+msgstr "Ориентировать все посад.места"
 
 #: pcbnew/onrightclick.cpp:460
 msgid "Autoroute"
@@ -20714,11 +20710,11 @@ msgstr "Выбор пары слоев"
 
 #: pcbnew/onrightclick.cpp:465
 msgid "Automatically Route All Footprints"
-msgstr "Авт.разместить все посад.места"
+msgstr "Авт. трассировать все посад.места"
 
 #: pcbnew/onrightclick.cpp:467
 msgid "Reset Unrouted"
-msgstr "Сбросить неразведенные"
+msgstr "Сбросить не трассированные"
 
 #: pcbnew/onrightclick.cpp:497
 msgid "Zoom Block"
@@ -20961,11 +20957,11 @@ msgstr "Дублировать посад.место"
 
 #: pcbnew/onrightclick.cpp:856
 msgid "Create Footprint Array"
-msgstr "Создать массив посадочных мест"
+msgstr "Создать массив посад.мест"
 
 #: pcbnew/onrightclick.cpp:862
 msgid "Exchange Footprint(s)"
-msgstr "Обменять посадочные места"
+msgstr "Обменять посад.места"
 
 #: pcbnew/onrightclick.cpp:902 pcbnew/onrightclick.cpp:1016
 msgid "Reset Size"
@@ -21162,12 +21158,12 @@ msgid ""
 "documentation for more information."
 msgstr ""
 "Вы запустили Pcbnew в первый раз, используя новый метод таблицы библиотек "
-"посадочных мест\n"
-"для нахождения посадочных мест. Либо Pcbnew скопировал таблицу по умолчанию "
-"или создал\n"
+"посад.мест\n"
+"для нахождения посад.мест. Либо Pcbnew скопировал таблицу по умолчанию или "
+"создал\n"
 "пустую таблицу в директории конфигурации kicad. Сначала вы должны "
 "сконфигурировать таблицу\n"
-"библиотек, включив все библиотеки посадочных мест, которые вы хотите "
+"библиотек, включив все библиотеки посад.мест, которые вы хотите "
 "использовать. Для большей\n"
 "информации смотрите раздел \"Таблица библиотек посадочных мест\" "
 "документации CvPcb или Pcbnew."
@@ -21191,7 +21187,7 @@ msgstr "Включить лог <b>отладки</b> для функций  Foo
 
 #: pcbnew/plugin.cpp:122
 msgid "Regular expression <b>footprint name</b> filter."
-msgstr "Регулярное выражение фильтра <b>посадочное место</b>."
+msgstr "Регулярное выражение фильтра <b>имени посад.места</b>."
 
 #: pcbnew/plugin.cpp:126
 msgid ""
@@ -21600,7 +21596,7 @@ msgstr "Создать новую библиотеку и сохранить в 
 
 #: pcbnew/tool_modedit.cpp:65 pcbnew/tool_pcb.cpp:239
 msgid "Open footprint viewer"
-msgstr "Открыть просмотр посадочных мест"
+msgstr "Открыть просмотрщик посад.мест"
 
 #: pcbnew/tool_modedit.cpp:69
 msgid "Delete part from active library"
@@ -21608,15 +21604,15 @@ msgstr "Удалить элемент из активной библиотеки
 
 #: pcbnew/tool_modedit.cpp:73
 msgid "New footprint"
-msgstr "Новое посадочное место"
+msgstr "Новое посад.место"
 
 #: pcbnew/tool_modedit.cpp:78
 msgid "New footprint using the footprint wizard"
-msgstr "Новое посадочное место с использованием мастера"
+msgstr "Новое посад.место с использованием мастера посад.мест"
 
 #: pcbnew/tool_modedit.cpp:84
 msgid "Load footprint from library"
-msgstr "Загрузить посадочное место из библиотеки"
+msgstr "Загрузить посад.место из библиотеки"
 
 #: pcbnew/tool_modedit.cpp:89
 msgid "Load footprint from current board"
@@ -21624,7 +21620,7 @@ msgstr "Загрузить посад.место с текущей платы"
 
 #: pcbnew/tool_modedit.cpp:93
 msgid "Update footprint in current board"
-msgstr "Изменить посад.место на текущей плате"
+msgstr "Обновить посад.место на текущей плате"
 
 #: pcbnew/tool_modedit.cpp:97
 msgid "Insert footprint into current board"
@@ -21632,11 +21628,11 @@ msgstr "Вставить посад.место на текущую плату"
 
 #: pcbnew/tool_modedit.cpp:101
 msgid "Import footprint"
-msgstr "Импорт посадочного места"
+msgstr "Импорт посад.места"
 
 #: pcbnew/tool_modedit.cpp:104
 msgid "Export footprint"
-msgstr "Экспорт посадочного места"
+msgstr "Экспорт посад.места"
 
 #: pcbnew/tool_modedit.cpp:109 pcbnew/help_common_strings.h:15
 msgid "Undo last edition"
@@ -21644,11 +21640,11 @@ msgstr "Отменить последнюю правку"
 
 #: pcbnew/tool_modedit.cpp:116
 msgid "Footprint properties"
-msgstr "Свойства посадочного места"
+msgstr "Свойства посад.места"
 
 #: pcbnew/tool_modedit.cpp:120
 msgid "Print footprint"
-msgstr "Печать посадочного места"
+msgstr "Печать посад.места"
 
 #: pcbnew/tool_modedit.cpp:144
 msgid "Check footprint"
@@ -21689,23 +21685,23 @@ msgstr "Разрешить контрастный режим"
 
 #: pcbnew/tool_modview.cpp:62
 msgid "Select footprint to browse"
-msgstr "Выбор посадочного места для просмотра"
+msgstr "Выбор посад.места для просмотра"
 
 #: pcbnew/tool_modview.cpp:67
 msgid "Display previous footprint"
-msgstr "Показать предыдущее посадочное место"
+msgstr "Отобразить предыдущее посад.место"
 
 #: pcbnew/tool_modview.cpp:71
 msgid "Display next footprint"
-msgstr "Показать следующее посадочное место"
+msgstr "Отобразить следующее посад.место"
 
 #: pcbnew/tool_modview.cpp:104
 msgid "Insert footprint in board"
-msgstr "Добавить посадочное место на плату"
+msgstr "Добавить посад.место на плату"
 
 #: pcbnew/tool_modview.cpp:151
 msgid "Close footprint viewer"
-msgstr "Закрыть просмотр посадочных мест"
+msgstr "Закрыть просмотрщик посад.мест"
 
 #: pcbnew/tool_modview.cpp:177
 msgid "3&D Viewer"
@@ -21725,7 +21721,7 @@ msgstr "О программе Pcbnew"
 
 #: pcbnew/tool_modview.cpp:202
 msgid "About Pcbnew PCB designer"
-msgstr "О программе Pcbnew - проектирование печатных плат"
+msgstr "О Pcbnew проектировщике печатных плат"
 
 #: pcbnew/tool_pcb.cpp:52
 msgid ""
@@ -21749,7 +21745,7 @@ msgstr "Сохранить плату"
 
 #: pcbnew/tool_pcb.cpp:235
 msgid "Open footprint editor"
-msgstr "Открыть редактор посадочных мест"
+msgstr "Открыть редактор посад.мест"
 
 #: pcbnew/tool_pcb.cpp:251
 msgid "Plot (HPGL, PostScript, or GERBER format)"
@@ -21761,8 +21757,7 @@ msgstr "Считать список цепей"
 
 #: pcbnew/tool_pcb.cpp:295
 msgid "Mode footprint: manual and automatic movement and placement"
-msgstr ""
-"Режим посадочных мест: ручное и автоматическое перемещение или размещение"
+msgstr "Режим посад.мест: ручное и автоматическое перемещение или размещение"
 
 #: pcbnew/tool_pcb.cpp:298
 msgid "Mode track: autorouting"
@@ -21885,7 +21880,7 @@ msgstr "Скрыть связи посад.места"
 
 #: pcbnew/toolbars_update_user_interface.cpp:156
 msgid "Show footprint ratsnest"
-msgstr "Показать связи посадочного места"
+msgstr "Показать связи посад.места"
 
 #: pcbnew/toolbars_update_user_interface.cpp:165
 msgid "Disable auto delete old track"
@@ -22055,7 +22050,7 @@ msgstr "Добавить область запрета"
 
 #: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:596
 msgid "Place the footprint anchor"
-msgstr "Разместить точку привязки посадочного места"
+msgstr "Разместить точку привязки посад.места"
 
 #: pcbnew/tools/common_actions.cpp:176
 msgid "Increase the line width"
@@ -22289,12 +22284,12 @@ msgstr "Масштаб: %.2f"
 #: pcbnew/xchgmod.cpp:123
 #, c-format
 msgid "Change footprint of '%s'"
-msgstr "Изменить посадочное место на '%s'"
+msgstr "Изменить посад.место на '%s'"
 
 #: pcbnew/xchgmod.cpp:131
 #, c-format
 msgid "Change footprints '%s'"
-msgstr "Изменить посадочные места '%s'"
+msgstr "Изменить посад.места '%s'"
 
 #: pcbnew/xchgmod.cpp:217
 #, c-format
@@ -22309,29 +22304,29 @@ msgstr "** Не удалось создать файл '%s' ***\n"
 #: pcbnew/xchgmod.cpp:282
 #, c-format
 msgid "Change footprint %s -> %s (for value = %s)?"
-msgstr "Изменить посадочное место %s -> %s (для значений = %s)?"
+msgstr "Изменить посад.место %s -> %s (для значений = %s)?"
 
 #: pcbnew/xchgmod.cpp:289
 #, c-format
 msgid "Change footprint %s -> %s ?"
-msgstr "Изменить посадочное место %s -> %s ?"
+msgstr "Изменить посад.место %s -> %s ?"
 
 #: pcbnew/xchgmod.cpp:344
 msgid "Are you sure you want to change all footprints?"
-msgstr "Вы уверены что хотите изменить все посадочные места?"
+msgstr "Вы уверены что хотите изменить все посад.места?"
 
 #: pcbnew/xchgmod.cpp:394
 #, c-format
 msgid "Change footprint '%s' (from '%s') to '%s'"
-msgstr "Изменено посадочное '%s' (из '%s') на '%s'"
+msgstr "Изменено посад.место '%s' (из '%s') на '%s'"
 
 #: pcbnew/xchgmod.cpp:525
 msgid "No footprints!"
-msgstr "Нет посадочных мест!"
+msgstr "Нет посад.мест!"
 
 #: pcbnew/xchgmod.cpp:536
 msgid "Save Footprint Association File"
-msgstr "Сохранить файл назначения посадочных мест"
+msgstr "Сохранить файл связи посад.мест"
 
 #: pcbnew/xchgmod.cpp:547
 #, c-format
@@ -22416,9 +22411,7 @@ msgstr "Настройки страницы"
 
 #: cvpcb/common_help_msg.h:28
 msgid "Save footprint association in schematic component footprint fields"
-msgstr ""
-"Сохранить сопоставление посадочного места в поле посадочного места схемного "
-"компонента"
+msgstr "Сохранить связь посад.места в поле посад.места схемного компонента"
 
 #: cvpcb/dialogs/dialog_display_options_base.h:63
 #: pcbnew/dialogs/dialog_display_options_base.h:72
@@ -22676,7 +22669,7 @@ msgstr "Параметры стабилизатора"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:304
 msgid "PCB Calculator"
-msgstr "Калькулятор для печатных плат"
+msgstr "PCB Calculator"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.h:73
 msgid "Export SVG file"
@@ -22717,7 +22710,7 @@ msgstr "Настройки нумерации конт.пл."
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.h:71
 msgid "Change Footprint"
-msgstr "Изменить посадочное место"
+msgstr "Изменить посад.место"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:62
 msgid "Export IDFv3"
@@ -22729,11 +22722,11 @@ msgstr "Экспорт параметров VRML"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:51
 msgid "Footprint Wizards"
-msgstr "Мастер посадочных мест"
+msgstr "Мастер посад.мест"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.h:81
 msgid "PCB Library Tables"
-msgstr "Таблицы PCB библиотек"
+msgstr "Таблицы библиотек печатной платы"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.h:62
 msgid "Generate Component Position Files"
@@ -22793,7 +22786,7 @@ msgstr "Свойства не медных зон"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.h:53
 msgid "Footprints Orientation"
-msgstr "Ориентация посад.места"
+msgstr "Ориентация посад.мест"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:167
 msgid "Pad Properties"
@@ -22813,7 +22806,7 @@ msgstr "Параметры интерактивного трассировщик
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.h:59
 msgid "Select Footprint Library Folder"
-msgstr "Выбор директории библиотеки посадочных мест"
+msgstr "Выбор каталога библиотеки посад.мест"
 
 #: pcbnew/dialogs/dialog_set_grid_base.h:70
 msgid "Grid Properties"
@@ -22837,7 +22830,7 @@ msgstr "Добавить Мастер библиотек 3D форм"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.h:88
 msgid "Add Footprint Libraries Wizard"
-msgstr "Мастер добавления библиотек посадочных мест"
+msgstr "Добавить Мастер библиотек посад.мест"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
@@ -22862,24 +22855,6 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Импорт DXF файла"
-
-#~ msgid "&Archive New Footprints"
-#~ msgstr "Архивировать новые посад.места"
-
-#~ msgid ""
-#~ "Archive new footprints only in a library (keep other footprints in this "
-#~ "lib)"
-#~ msgstr ""
-#~ "Архивировать только новые посадочные места в библиотеке\n"
-#~ "(оставляя другие посадочные места в этой библиотеке)"
-
-#~ msgid "&Create Footprint Archive"
-#~ msgstr "Создать архив посадочных мест"
-
-#~ msgid "Archive all footprints in a library (old library will be deleted)"
-#~ msgstr ""
-#~ "Архивировать все посадочные места в библиотеку (старая библиотека будет "
-#~ "удалена)"
 
 #~ msgid ""
 #~ "The Internet forum dedicated to KiCad Russian support, including GOST "
