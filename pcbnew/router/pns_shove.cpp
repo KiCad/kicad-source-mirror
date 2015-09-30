@@ -626,12 +626,12 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         }
     }
 
-    m_draggedViaHeadSet.Add ( pushedVia );
+    m_draggedViaHeadSet.Add( pushedVia );
 
-    if ( aDryRun )
+    if( aDryRun )
         return SH_OK;
 
-    replaceItems ( aVia, pushedVia );
+    replaceItems( aVia, pushedVia );
 
 #ifdef DEBUG
     m_logger.Log( aVia, 0, "obstacle-via" );
@@ -649,7 +649,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         {
             lp.second.Mark( MK_HEAD );
 
-            if ( m_multiLineMode )
+            if( m_multiLineMode )
                 return SH_INCOMPLETE;
 
             m_newHead = lp.second;
@@ -1146,7 +1146,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
 
     PNS_ITEMSET headSet;
 
-    BOOST_FOREACH ( const PNS_ITEM* item, aHeadSet.CItems() )
+    BOOST_FOREACH( const PNS_ITEM* item, aHeadSet.CItems() )
     {
         const PNS_LINE* headOrig = static_cast<const PNS_LINE*>( item );
 
@@ -1169,7 +1169,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
     m_currentNode->ClearRanks();
     int n = 0;
 
-    BOOST_FOREACH ( const PNS_ITEM* item, aHeadSet.CItems() )
+    BOOST_FOREACH( const PNS_ITEM* item, aHeadSet.CItems() )
     {
         const PNS_LINE* headOrig = static_cast<const PNS_LINE*>( item );
         PNS_LINE head( *headOrig );
@@ -1180,7 +1180,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
         head.Mark( MK_HEAD );
         head.SetRank( 100000 );
         n++;
-        if ( !pushLine( head ) )
+
+        if( !pushLine( head ) )
             return SH_INCOMPLETE;
 
         PNS_VIA* headVia = NULL;
