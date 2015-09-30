@@ -101,10 +101,10 @@ def LoadPlugins( plugpath ):
                 plugin_directories.append( os.path.join( singlepath, 'scripting', 'plugins') )
 
     for plugins_dir in plugin_directories:
-        sys.path.append(plugins_dir)
-
         if not os.path.isdir(plugins_dir):
             continue
+
+        sys.path.append(plugins_dir)
 
         for module in os.listdir(plugins_dir):
             if os.path.isdir(plugins_dir+module):
