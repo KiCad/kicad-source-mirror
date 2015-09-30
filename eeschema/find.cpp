@@ -321,20 +321,6 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     {
         if( m_foundItems.GetCount() == 0 )
             return;
-
-        // Refresh the search cache in case something has changed.  This prevents any stale
-        // pointers from crashing Eeschema when the wxEVT_FIND_CLOSE event is handled.
-        if( IsSearchCacheObsolete( searchCriteria ) )
-        {
-            if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
-            {
-                m_foundItems.Collect( searchCriteria, m_CurrentSheet );
-            }
-            else
-            {
-                m_foundItems.Collect( searchCriteria );
-            }
-        }
     }
     else if( IsSearchCacheObsolete( searchCriteria ) )
     {
@@ -367,23 +353,6 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
     SCH_SHEET_PATH*         sheet;
     SCH_SHEET_LIST          schematic;
     SCH_FIND_COLLECTOR_DATA data;
-    SCH_FIND_REPLACE_DATA   searchCriteria;
-
-    searchCriteria.SetFlags( aEvent.GetFlags() );
-    searchCriteria.SetFindString( aEvent.GetFindString() );
-    searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
-
-    if( IsSearchCacheObsolete( searchCriteria ) )
-    {
-        if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
-        {
-            m_foundItems.Collect( searchCriteria, m_CurrentSheet );
-        }
-        else
-        {
-            m_foundItems.Collect( searchCriteria );
-        }
-    }
 
     if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL )
     {
@@ -460,6 +429,20 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
     searchCriteria.SetFlags( aEvent.GetFlags() );
     searchCriteria.SetFindString( aEvent.GetFindString() );
     searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
+
+    // Refresh the search cache in case something has changed.  This prevents any stale
+    // pointers.
+    if( IsSearchCacheObsolete( searchCriteria ) )
+    {
+        if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+        {
+            m_foundItems.Collect( searchCriteria, m_CurrentSheet );
+        }
+        else
+        {
+            m_foundItems.Collect( searchCriteria );
+        }
+    }
 
     if( m_foundItems.GetItem( data ) != NULL )
     {
