@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-27 11:36+0100\n"
-"PO-Revision-Date: 2015-09-27 11:44+0100\n"
+"POT-Creation-Date: 2015-09-30 23:05+0100\n"
+"PO-Revision-Date: 2015-09-30 23:14+0100\n"
 "Last-Translator: LordBlick <LordBlick by gmail>\n"
 "Language-Team: Polish KiCAD Translation Team: Mateusz Skowroński, Krzysztof Kawa, Kerusey Karyu, Daniel Dawid Majewski <LordBlick>\n"
 "Language: pl_PL\n"
@@ -2250,7 +2250,7 @@ msgstr "Znaleziono pin %s ale %s nie został znaleziony"
 msgid "Component %s not found"
 msgstr "Symbol %s nie został znaleziony"
 
-#: eeschema/find.cpp:492
+#: eeschema/find.cpp:515
 #, c-format
 msgid "No item found matching %s."
 msgstr "Nie znaleziono elementu pasującego do %s"
@@ -7175,7 +7175,7 @@ msgstr "Biblioteka '%s' jest tylko do odczytu"
 msgid "No footprints to archive!"
 msgstr "Brak footprintów do archiwizacji!"
 
-#: pcbnew/librairi.cpp:622
+#: pcbnew/librairi.cpp:624
 #, c-format
 msgid ""
 "Error:\n"
@@ -7186,17 +7186,17 @@ msgstr ""
 "Znaleziono jeden z nieprawidłowych znaków '%s'\n"
 "w '%s'"
 
-#: pcbnew/librairi.cpp:683
+#: pcbnew/librairi.cpp:685
 #, c-format
 msgid "Component [%s] replaced in '%s'"
 msgstr "Symbol [%s] zastąpiony przez '%s'"
 
-#: pcbnew/librairi.cpp:684
+#: pcbnew/librairi.cpp:686
 #, c-format
 msgid "Component [%s] added in  '%s'"
 msgstr "Symbol [%s] dodany do '%s'"
 
-#: pcbnew/librairi.cpp:773
+#: pcbnew/librairi.cpp:775
 msgid "Nickname"
 msgstr "Nazwa skrótowa"
 
@@ -8619,8 +8619,9 @@ msgid "3&D Viewer"
 msgstr "Przeglądarka 3D"
 
 #: pcbnew/tool_modview.cpp:189
-msgid "P&cbnew Manual"
-msgstr "Podręcznik programu Pcbnew"
+#: pcbnew/menubar_modedit.cpp:341
+msgid "Pcbnew &Manual"
+msgstr "Podręcznik dla Pcbnew"
 
 #: pcbnew/tool_modview.cpp:190
 msgid "Open the Pcbnew manual"
@@ -8998,10 +8999,6 @@ msgstr "U&stawienia"
 #: pcbnew/menubar_modedit.cpp:324
 msgid "Select default parameters values in Footprint Editor"
 msgstr "Ustala domyślne parametry i wartości dla edytora footprintów"
-
-#: pcbnew/menubar_modedit.cpp:341
-msgid "Pcbnew &Manual"
-msgstr "Podręcznik dla Pcbnew"
 
 #: pcbnew/menubar_modedit.cpp:342
 msgid "Open the Pcbnew Manual"
@@ -9555,319 +9552,323 @@ msgid "Plot board in HPGL, PostScript or Gerber RS-274X format)"
 msgstr "Rysuj PCB (Format HPGL, PostScript lub Gerber RS-274X)"
 
 #: pcbnew/menubar_pcbframe.cpp:256
-msgid "&Archive New Footprints"
-msgstr "&Archiwizuj nowe footprinty"
+msgid "&Archive Footprints in a Project Library"
+msgstr "Zapisz footprint w bibliotece projektu."
 
 #: pcbnew/menubar_pcbframe.cpp:257
-msgid "Archive new footprints only in a library (keep other footprints in this lib)"
-msgstr "Zapisz tylko nowe footprinty w bibliotece (zachowaj pozostałe footprinty w tej bibliotece)"
-
-#: pcbnew/menubar_pcbframe.cpp:261
-msgid "&Create Footprint Archive"
-msgstr "Utwórz ar&chiwum footprintów"
+msgid "Archive footprints in an existing library in footprint Lib table(do not remove other footprints in this lib)"
+msgstr "Zachowaj footprinty w istniejącej bibliotece  ztabeli bibliotek(pozostaw inne footprinty w tej bibliotece)"
 
 #: pcbnew/menubar_pcbframe.cpp:262
-msgid "Archive all footprints in a library (old library will be deleted)"
-msgstr "Zapisz wszystkie footprinty w bibliotece (stara biblioteka zostanie usunięta)"
+msgid "&Create Library and Archive Footprints"
+msgstr "Utwórz nową bibliotekę i zachowaj footprinty"
 
-#: pcbnew/menubar_pcbframe.cpp:267
+#: pcbnew/menubar_pcbframe.cpp:263
+msgid ""
+"Archive all footprints in a new library\n"
+"(if this library already exists, it will be deleted)"
+msgstr ""
+"Zachowaj wszystkie footprinty w nowej bibliotece\n"
+"(jesli istnieje wcześniejsa jej wersja, zostanie usunięta)"
+
+#: pcbnew/menubar_pcbframe.cpp:269
 msgid "Arc&hive Footprints"
 msgstr "Arc&hiwizuj footprinty"
 
-#: pcbnew/menubar_pcbframe.cpp:268
+#: pcbnew/menubar_pcbframe.cpp:270
 msgid "Archive or add footprints in a library file"
 msgstr "Archiwizuje lub dodaje footprinty do pliku biblioteki"
 
-#: pcbnew/menubar_pcbframe.cpp:272
+#: pcbnew/menubar_pcbframe.cpp:274
 msgid "Close Pcbnew"
 msgstr "Zamknij Pcbnew"
 
-#: pcbnew/menubar_pcbframe.cpp:295
+#: pcbnew/menubar_pcbframe.cpp:297
 msgid "&Global Deletions"
 msgstr "Usuwanie &globalne"
 
-#: pcbnew/menubar_pcbframe.cpp:296
+#: pcbnew/menubar_pcbframe.cpp:298
 msgid "Delete tracks, footprints, texts... on board"
 msgstr "Usuń ścieżki, footprinty, teksty... na płytce"
 
-#: pcbnew/menubar_pcbframe.cpp:300
+#: pcbnew/menubar_pcbframe.cpp:302
 msgid "&Cleanup Tracks and Vias"
 msgstr "Wy&czyść ścieżki i przelotki"
 
-#: pcbnew/menubar_pcbframe.cpp:301
+#: pcbnew/menubar_pcbframe.cpp:303
 msgid "Clean stubs, vias, delete break points, or unconnected tracks to pads and vias"
 msgstr "Wyczyść odcinki, przelotki, usuń przerwy lub niepołączone ścieżki do pól i przelotek"
 
-#: pcbnew/menubar_pcbframe.cpp:305
+#: pcbnew/menubar_pcbframe.cpp:307
 msgid "&Swap Layers"
 msgstr "&Zamień warstwy"
 
-#: pcbnew/menubar_pcbframe.cpp:306
+#: pcbnew/menubar_pcbframe.cpp:308
 msgid "Swap tracks on copper layers or drawings on other layers"
 msgstr "Zamień ścieżki na warstwach ścieżek lub rysunki na innych warstwach"
 
-#: pcbnew/menubar_pcbframe.cpp:310
+#: pcbnew/menubar_pcbframe.cpp:312
 msgid "Set Footp&rint Field Sizes"
 msgstr "Ustaw rozmiar &pola elementu PCB"
 
-#: pcbnew/menubar_pcbframe.cpp:311
+#: pcbnew/menubar_pcbframe.cpp:313
 msgid "Set text size and width of footprint fields."
 msgstr "Ustaw rozmiar i szerokość tekstu pól elementu PCB."
 
-#: pcbnew/menubar_pcbframe.cpp:349
+#: pcbnew/menubar_pcbframe.cpp:351
 msgid "Show board in 3D viewer"
 msgstr "Pokaż płytkę w przeglądarce 3D"
 
-#: pcbnew/menubar_pcbframe.cpp:353
+#: pcbnew/menubar_pcbframe.cpp:355
 msgid "&List Nets"
 msgstr "&Lista Sieci"
 
-#: pcbnew/menubar_pcbframe.cpp:353
+#: pcbnew/menubar_pcbframe.cpp:355
 msgid "View a list of nets with names and id's"
 msgstr "Lista sieci (nazwy i identyfikatory)"
 
-#: pcbnew/menubar_pcbframe.cpp:382
+#: pcbnew/menubar_pcbframe.cpp:384
 msgid "&Footprint"
 msgstr "Footprint"
 
-#: pcbnew/menubar_pcbframe.cpp:387
+#: pcbnew/menubar_pcbframe.cpp:389
 msgid "&Track"
 msgstr "Ścieżka"
 
-#: pcbnew/menubar_pcbframe.cpp:393
+#: pcbnew/menubar_pcbframe.cpp:395
 msgid "&Zone"
 msgstr "Strefa"
 
-#: pcbnew/menubar_pcbframe.cpp:396
+#: pcbnew/menubar_pcbframe.cpp:398
 msgid "&Keepout Area"
 msgstr "Strefa chroniona"
 
-#: pcbnew/menubar_pcbframe.cpp:399
+#: pcbnew/menubar_pcbframe.cpp:401
 msgid "Te&xt"
 msgstr "Tekst"
 
-#: pcbnew/menubar_pcbframe.cpp:417
+#: pcbnew/menubar_pcbframe.cpp:419
 msgid "&Dimension"
 msgstr "Wymiary"
 
-#: pcbnew/menubar_pcbframe.cpp:421
+#: pcbnew/menubar_pcbframe.cpp:423
 msgid "La&yer alignment target"
 msgstr "Dodaj element poz&ycjonujący warstwy"
 
-#: pcbnew/menubar_pcbframe.cpp:427
+#: pcbnew/menubar_pcbframe.cpp:429
 msgid "Drill and &Place Offset"
 msgstr "Przesunięcie dla wierceń i ustawień elementów"
 
-#: pcbnew/menubar_pcbframe.cpp:432
+#: pcbnew/menubar_pcbframe.cpp:434
 msgid "&Grid Origin"
 msgstr "Punkt bazowy siatki"
 
-#: pcbnew/menubar_pcbframe.cpp:439
+#: pcbnew/menubar_pcbframe.cpp:441
 msgid "&Single Track"
 msgstr "Pojedyncza ścieżka"
 
-#: pcbnew/menubar_pcbframe.cpp:440
+#: pcbnew/menubar_pcbframe.cpp:442
 msgid "Interactively route a single track"
 msgstr "Router interaktywny dla pojedynczych ścieżek"
 
-#: pcbnew/menubar_pcbframe.cpp:444
+#: pcbnew/menubar_pcbframe.cpp:446
 msgid "&Differential Pair"
 msgstr "Pary różnicowe"
 
-#: pcbnew/menubar_pcbframe.cpp:445
+#: pcbnew/menubar_pcbframe.cpp:447
 msgid "Interactively route a differential pair"
 msgstr "Router interaktywny dla par różnicowych"
 
-#: pcbnew/menubar_pcbframe.cpp:451
+#: pcbnew/menubar_pcbframe.cpp:453
 msgid "&Tune Track Length"
 msgstr "Dostrój długość ścieżki"
 
-#: pcbnew/menubar_pcbframe.cpp:452
+#: pcbnew/menubar_pcbframe.cpp:454
 msgid "Tune length of a single track"
 msgstr "Dostraja długość pojedynczej ścieżki."
 
-#: pcbnew/menubar_pcbframe.cpp:456
+#: pcbnew/menubar_pcbframe.cpp:458
 msgid "Tune Differential Pair &Length"
 msgstr "Dostrajanie długości par różnicowych"
 
-#: pcbnew/menubar_pcbframe.cpp:457
+#: pcbnew/menubar_pcbframe.cpp:459
 msgid "Tune length of a differential pair"
 msgstr "Dostraja długości ścieżek pary różnicowej by pasowały do siebie"
 
-#: pcbnew/menubar_pcbframe.cpp:461
+#: pcbnew/menubar_pcbframe.cpp:463
 msgid "Tune Differential Pair &Skew/Phase"
 msgstr "Dostrajanie odchyleń/fazy par różnicowych"
 
-#: pcbnew/menubar_pcbframe.cpp:462
+#: pcbnew/menubar_pcbframe.cpp:464
 msgid "Tune skew/phase of a differential pair"
 msgstr "Dostraja długość ścieżki pary różnicowej by zniwelować odchyłkę długości/przesunięcia fazowe sygnałów"
 
-#: pcbnew/menubar_pcbframe.cpp:499
+#: pcbnew/menubar_pcbframe.cpp:501
 msgid "&3D Shapes Libraries Downloader"
 msgstr "Pobieranie Bibliotek Modeli &3D"
 
-#: pcbnew/menubar_pcbframe.cpp:500
+#: pcbnew/menubar_pcbframe.cpp:502
 msgid "Download from Github the 3D shape libraries with wizard"
 msgstr "Pobierz biblioteki modeli 3D z Github-a za pomocą kreatora"
 
-#: pcbnew/menubar_pcbframe.cpp:507
+#: pcbnew/menubar_pcbframe.cpp:509
 msgid "Hide La&yers Manager"
 msgstr "Ukryj menadżera warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:507
+#: pcbnew/menubar_pcbframe.cpp:509
 msgid "Show La&yers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:513
+#: pcbnew/menubar_pcbframe.cpp:515
 msgid "Hide Microwa&ve Toolbar"
 msgstr "Schowaj pasek narzędzi mikrofalowych"
 
-#: pcbnew/menubar_pcbframe.cpp:522
+#: pcbnew/menubar_pcbframe.cpp:524
 msgid "&General"
 msgstr "&Główne"
 
-#: pcbnew/menubar_pcbframe.cpp:522
+#: pcbnew/menubar_pcbframe.cpp:524
 msgid "Select general options for Pcbnew"
 msgstr "Główne ustawienia dla Pcbnew"
 
-#: pcbnew/menubar_pcbframe.cpp:527
+#: pcbnew/menubar_pcbframe.cpp:529
 msgid "&Display"
 msgstr "&Wyświetlanie"
 
-#: pcbnew/menubar_pcbframe.cpp:528
+#: pcbnew/menubar_pcbframe.cpp:530
 msgid "Select how items (pads, tracks texts ... ) are displayed"
 msgstr "Wybierz sposób wyświetlania elementów"
 
-#: pcbnew/menubar_pcbframe.cpp:532
+#: pcbnew/menubar_pcbframe.cpp:534
 msgid "&Interactive Routing"
 msgstr "Router interaktywny"
 
-#: pcbnew/menubar_pcbframe.cpp:533
+#: pcbnew/menubar_pcbframe.cpp:535
 msgid "Configure Interactive Routing."
 msgstr "Ustawienia interaktywnego routera"
 
-#: pcbnew/menubar_pcbframe.cpp:540
+#: pcbnew/menubar_pcbframe.cpp:542
 msgid "G&rid"
 msgstr "Siatka"
 
-#: pcbnew/menubar_pcbframe.cpp:540
+#: pcbnew/menubar_pcbframe.cpp:542
 msgid "Adjust user grid dimensions"
 msgstr "Dostosuj siatkę użytkownika"
 
-#: pcbnew/menubar_pcbframe.cpp:544
+#: pcbnew/menubar_pcbframe.cpp:546
 msgid "Te&xts and Drawings"
 msgstr "Teksty i rysunki"
 
-#: pcbnew/menubar_pcbframe.cpp:545
+#: pcbnew/menubar_pcbframe.cpp:547
 msgid "Adjust dimensions for texts and drawings"
 msgstr "Zmieniaj szerokość dla tekstów i rysunków"
 
-#: pcbnew/menubar_pcbframe.cpp:549
+#: pcbnew/menubar_pcbframe.cpp:551
 msgid "&Pads"
 msgstr "&Pola lutownicze"
 
-#: pcbnew/menubar_pcbframe.cpp:549
+#: pcbnew/menubar_pcbframe.cpp:551
 msgid "Adjust default pad characteristics"
 msgstr "Ustaw domyslne właściwości pól lutowniczych"
 
-#: pcbnew/menubar_pcbframe.cpp:553
+#: pcbnew/menubar_pcbframe.cpp:555
 msgid "Pads &Mask Clearance"
 msgstr "Prześwit &maski pól lutowniczych"
 
-#: pcbnew/menubar_pcbframe.cpp:554
+#: pcbnew/menubar_pcbframe.cpp:556
 msgid "Adjust the global clearance between pads and the solder resist mask"
 msgstr "Ustaw globalne ustawienia prześwitów pól lut. i maski lutowniczej"
 
-#: pcbnew/menubar_pcbframe.cpp:558
+#: pcbnew/menubar_pcbframe.cpp:560
 msgid "&Differential Pairs"
 msgstr "Pary różnicowe"
 
-#: pcbnew/menubar_pcbframe.cpp:559
+#: pcbnew/menubar_pcbframe.cpp:561
 msgid "Define the global gap/width for differential pairs."
 msgstr "Określa globalną wartość przerwy/szerokości dla par różnicowych"
 
-#: pcbnew/menubar_pcbframe.cpp:564
+#: pcbnew/menubar_pcbframe.cpp:566
 msgid "Save dimension preferences"
 msgstr "Zapisz ustawienia rozmiarów"
 
-#: pcbnew/menubar_pcbframe.cpp:577
+#: pcbnew/menubar_pcbframe.cpp:579
 msgid "&Save macros"
 msgstr "Zapi&sz makra"
 
-#: pcbnew/menubar_pcbframe.cpp:578
+#: pcbnew/menubar_pcbframe.cpp:580
 msgid "Save macros to file"
 msgstr "Zapisuje makra do pliku"
 
-#: pcbnew/menubar_pcbframe.cpp:582
+#: pcbnew/menubar_pcbframe.cpp:584
 msgid "&Read macros"
 msgstr "Odczytaj mak&ra"
 
-#: pcbnew/menubar_pcbframe.cpp:583
+#: pcbnew/menubar_pcbframe.cpp:585
 msgid "Read macros from file"
 msgstr "Wczytuje makra z pliku"
 
-#: pcbnew/menubar_pcbframe.cpp:587
+#: pcbnew/menubar_pcbframe.cpp:589
 msgid "Ma&cros"
 msgstr "Makro"
 
-#: pcbnew/menubar_pcbframe.cpp:588
+#: pcbnew/menubar_pcbframe.cpp:590
 msgid "Macros save/read operations"
 msgstr "Zapis/odczyt makr"
 
-#: pcbnew/menubar_pcbframe.cpp:607
+#: pcbnew/menubar_pcbframe.cpp:609
 msgid "&Netlist"
 msgstr "Lista sieci"
 
-#: pcbnew/menubar_pcbframe.cpp:608
+#: pcbnew/menubar_pcbframe.cpp:610
 msgid "Read the netlist and update board connectivity"
 msgstr "Wczytaj listę sieci i uaktualnij brakujące połączenia"
 
-#: pcbnew/menubar_pcbframe.cpp:612
+#: pcbnew/menubar_pcbframe.cpp:614
 msgid "&Layer Pair"
 msgstr "Para warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:612
+#: pcbnew/menubar_pcbframe.cpp:614
 msgid "Change the active layer pair"
 msgstr "Zmień aktywną parę warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:616
+#: pcbnew/menubar_pcbframe.cpp:618
 msgid "&DRC"
 msgstr "&DRC"
 
-#: pcbnew/menubar_pcbframe.cpp:620
+#: pcbnew/menubar_pcbframe.cpp:622
 msgid "&FreeRoute"
 msgstr "&FreeRoute"
 
-#: pcbnew/menubar_pcbframe.cpp:621
+#: pcbnew/menubar_pcbframe.cpp:623
 msgid "Fast access to the Web Based FreeROUTE advanced router"
 msgstr "Szybki dostęp do zaawansowanego routera FreeRoute na stronie WWW"
 
-#: pcbnew/menubar_pcbframe.cpp:626
+#: pcbnew/menubar_pcbframe.cpp:628
 msgid "&Scripting Console"
 msgstr "Konsola &Skryptów"
 
-#: pcbnew/menubar_pcbframe.cpp:634
-#: pcbnew/menubar_pcbframe.cpp:670
+#: pcbnew/menubar_pcbframe.cpp:636
+#: pcbnew/menubar_pcbframe.cpp:672
 msgid "&Design Rules"
 msgstr "Reguły projektowe"
 
-#: pcbnew/menubar_pcbframe.cpp:635
+#: pcbnew/menubar_pcbframe.cpp:637
 msgid "Open the design rules editor"
 msgstr "Otwórz edytor reguł projektowych"
 
-#: pcbnew/menubar_pcbframe.cpp:638
+#: pcbnew/menubar_pcbframe.cpp:640
 msgid "&Layers Setup"
 msgstr "&Opcje warstw"
 
-#: pcbnew/menubar_pcbframe.cpp:638
+#: pcbnew/menubar_pcbframe.cpp:640
 msgid "Enable and set layer properties"
 msgstr "Włączanie warstw i ustawianie ich właściwości"
 
-#: pcbnew/menubar_pcbframe.cpp:666
+#: pcbnew/menubar_pcbframe.cpp:668
 msgid "Ro&ute"
 msgstr "Trasowanie"
 
-#: pcbnew/menubar_pcbframe.cpp:668
+#: pcbnew/menubar_pcbframe.cpp:670
 msgid "D&imensions"
 msgstr "Wym&iary"
 
@@ -11266,13 +11267,21 @@ msgstr "Dostrojono: odchyłka "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:588
+#: pcbnew/router/pns_diff_pair_placer.cpp:589
 msgid "Can't start a differential pair  in the middle of nowhere."
 msgstr "Nie można rozpocząć trasowania pary różnicowej z tego miejsca."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:599
+#: pcbnew/router/pns_diff_pair_placer.cpp:598
 msgid "Unable to find complementary differential pair net. Make sure the names of the nets belonging to a differential pair end with either _N/_P or +/-."
 msgstr "Nie można znaleźć komplementarnej ścieżki pary różnicowej. Sprawdź czy nazwy sieci należących do par różnicowych zawierają _N/_P lub +/-."
+
+#: pcbnew/router/pns_diff_pair_placer.cpp:615
+msgid "Current track/via gap setting violates design rules for this net."
+msgstr "Ustawienia odstępu ścieżki/przelotki łamią zasady dla tej sieci."
+
+#: pcbnew/router/pns_diff_pair_placer.cpp:622
+msgid "Current track width setting violates design rules."
+msgstr "Ustawienia szerokości ścieżki łamią zasady projektowe."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:78
 #: pcbnew/router/pns_meander_placer.cpp:68
@@ -12965,7 +12974,7 @@ msgstr "wybierz katalog"
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:34
 msgid "Library folder (.pretty will be added to name, if missing)"
-msgstr "Ścieżka Biblioteki (ewentualnie uzupełniona o „.pretty”)"
+msgstr "Ścieżka Biblioteki (automatycznie uzupełniana o „.pretty”)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:29
 msgid "Horizontal count:"
@@ -17399,7 +17408,7 @@ msgstr "Podręcznik dla Pcbnew"
 msgid "Open the GerbView Manual"
 msgstr "Otwórz podręcznik GerbView"
 
-#: gerbview/menubar.cpp:244
+#: gerbview/menubar.cpp:247
 msgid "&Miscellaneous"
 msgstr "&Różne"
 
