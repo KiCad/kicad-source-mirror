@@ -186,7 +186,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
 
     // Contents
     AddMenuItem( helpMenu, wxID_HELP,
-                 _( "P&cbnew Manual" ),
+                 _( "Pcbnew &Manual" ),
                  _( "Open the Pcbnew manual" ),
                  KiBitmap( online_help_xpm ) );
 

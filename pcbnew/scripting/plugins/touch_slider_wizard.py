@@ -173,7 +173,7 @@ class TouchSliderWizard(FootprintWizardPlugin):
         self.AddFinalPad(pos,touch_width,step_length,touch_clearance,str(steps))
 
     # build the footprint from parameters
-    def BuildFootprint(self):
+    def BuildThisFootprint(self):
 
         module = MODULE(None) # create a new module
         self.module = module

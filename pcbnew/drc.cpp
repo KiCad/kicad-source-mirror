@@ -873,10 +873,13 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
         if( pad->GetPosition().x > x_limit )
             break;
 
-        // No problem if pads are on different copper layers,
+        // No problem if pads which are on copper layers are on different copper layers,
+        // (pads can be only on a technical layer, to build complex pads)
         // but their hole (if any ) can create DRC error because they are on all
         // copper layers, so we test them
-        if( ( pad->GetLayerSet() & layerMask ) == 0 )
+        if( ( pad->GetLayerSet() & layerMask ) == 0 &&
+            ( pad->GetLayerSet() & all_cu ) != 0 &&
+            ( aRefPad->GetLayerSet() & all_cu ) != 0 )
         {
             // if holes are in the same location and have the same size and shape,
             // this can be accepted
