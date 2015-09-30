@@ -591,8 +591,6 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
         return false;
     }
 
-    PNS_DP_PRIMITIVE_PAIR start;
-
     m_currentNode = Router()->GetWorld();
 
     if( !findDpPrimitivePair( aP, aStartItem, m_start ) )
@@ -606,12 +604,32 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_netP = m_start.PrimP()->Net();
     m_netN = m_start.PrimN()->Net();
 
+    // Check if the current track/via gap & track width settings are violated
+    BOARD* brd = Router()->GetBoard();
+    NETCLASSPTR netclassP = brd->FindNet( m_netP )->GetNetClass();
+    NETCLASSPTR netclassN = brd->FindNet( m_netN )->GetNetClass();
+    int clearance = std::min( m_sizes.DiffPairGap(), m_sizes.DiffPairViaGap() );
+
+    if( clearance < netclassP->GetClearance() || clearance < netclassN->GetClearance() )
+    {
+        Router()->SetFailureReason( _( "Current track/via gap setting violates "
+                                       "design rules for this net." ) );
+        return false;
+    }
+
+    if( m_sizes.DiffPairWidth() < brd->GetDesignSettings().m_TrackMinWidth )
+    {
+        Router()->SetFailureReason( _( "Current track width setting violates design rules." ) );
+        return false;
+    }
+
     m_currentStart = p;
     m_currentEnd = p;
     m_placingVia = false;
     m_chainedPlacement = false;
 
     initPlacement( false );
+
     return true;
 }
 
