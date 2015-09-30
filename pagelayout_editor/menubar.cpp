@@ -158,6 +158,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
+    // Separator
+    helpMenu->AppendSeparator();
+
     // About Kicad
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
