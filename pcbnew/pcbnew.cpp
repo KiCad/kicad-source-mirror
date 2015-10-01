@@ -249,7 +249,7 @@ static bool scriptingSetup()
     // which are ( [KICAD_PATH] is an environment variable to define)
     // [KICAD_PATH]/scripting/plugins
     // Add this default search path:
-    path_frag = Pgm().GetExecutablePath() + wxT( "scripting/plugins" );
+    path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting/plugins" );
 
 #elif defined( __WXMAC__ )
     // User plugin folder is ~/Library/Application Support/kicad/scripting/plugins
@@ -272,17 +272,27 @@ static bool scriptingSetup()
               wxT( "Contents/Frameworks/python/site-packages" );
 
     // Original content of $PYTHONPATH
-    if( wxGetenv("PYTHONPATH") != NULL )
+    if( wxGetenv( wxT( "PYTHONPATH" ) ) != NULL )
     {
-        pypath = wxString( wxGetenv("PYTHONPATH") ) + wxT( ":" ) + pypath;
+        pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
     }
 
     // set $PYTHONPATH
     wxSetEnv( "PYTHONPATH", pypath );
 
 #else
+    /* Linux-specific setup */
+    wxString pypath;
+
+    pypath = Pgm().GetExecutablePath() + wxT( "../lib/python2.7/dist-packages" );
+
+    if( !wxIsEmpty( wxGetenv("PYTHONPATH") ) )
+        pypath = wxString( wxGetenv("PYTHONPATH") ) + wxT( ":" ) + pypath;
+
+    wxSetEnv( "PYTHONPATH", pypath );
+
     // Add this default search path:
-    path_frag = wxT( "/usr/local/kicad/bin/scripting/plugins" );
+    path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting/plugins" );
 #endif
 
     if( ! pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
