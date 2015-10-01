@@ -98,7 +98,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
             line = new EDGE_MODULE( m_board->m_Modules );
         }
     }
-    else
+    else // !m_editModules case
     {
         m_frame->SetToolID( ID_PCB_ADD_LINE_BUTT, wxCURSOR_PENCIL, _( "Add graphic line" ) );
 
@@ -150,7 +150,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
             circle = new EDGE_MODULE( m_board->m_Modules );
         }
     }
-    else
+    else // !m_editModules case
     {
         m_frame->SetToolID( ID_PCB_CIRCLE_BUTT, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
 
@@ -197,7 +197,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             arc = new EDGE_MODULE( m_board->m_Modules );
         }
     }
-    else
+    else // !m_editModules case
     {
         m_frame->SetToolID( ID_PCB_ARC_BUTT, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
 
@@ -235,6 +235,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
     DIMENSION* dimension = NULL;
     int width, maxThickness;
+
+    // if one day it is possible to draw dimensions in the footprint editor,
+    // then hereby I'm letting you know that this tool does not handle UR_MODEDIT undo yet
+    assert( !m_editModules );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -552,7 +556,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     }
                 }
             }
-            else
+            else // !m_editModules case
             {
                 PICKED_ITEMS_LIST picklist;
 
@@ -605,6 +609,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         if( evt->IsClick( BUT_LEFT ) )
         {
             m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+            m_board->m_Modules->SetLastEditTime();
 
             // set the new relative internal local coordinates of footprint items
             VECTOR2I cursorPos = m_controls->GetCursorPosition();
@@ -748,17 +753,40 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 {                               // a clear sign that the current drawing is finished
                     if( direction45 )
                     {
-                        DRAWSEGMENT* l = static_cast<DRAWSEGMENT*>( line45.Clone() );
-                        l->SetEnd( aGraphic->GetStart() );
-                        m_board->Add( l );
+                        // Now we have to add the helper line as well
+                        if( m_editModules )
+                        {
+                            EDGE_MODULE* l = new EDGE_MODULE( m_board->m_Modules );
+
+                            // Copy coordinates, layer, etc.
+                            *static_cast<DRAWSEGMENT*>( l ) = line45;
+                            l->SetEnd( aGraphic->GetStart() );
+                            l->SetLocalCoord();
+
+                            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                            m_board->m_Modules->SetLastEditTime();
+                            m_board->m_Modules->GraphicalItems().PushFront( l );
+
+                            m_view->Add( l );
+                            l->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                        }
+                        else
+                        {
+                            DRAWSEGMENT* l = static_cast<DRAWSEGMENT*>( line45.Clone() );
+                            l->SetEnd( aGraphic->GetStart() );
+
+                            m_frame->SaveCopyInUndoList( l, UR_NEW );
+                            m_board->Add( l );
+
+                            m_view->Add( l );
+                            l->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                        }
+
                         m_frame->OnModify();
-                        m_frame->SaveCopyInUndoList( l, UR_NEW );
-                        m_view->Add( l );
-                        l->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                     }
 
-                    delete aGraphic;            // but only if at least one graphic was created
-                    aGraphic = NULL;            // otherwise - force user to draw more or cancel
+                    delete aGraphic;
+                    aGraphic = NULL;
                 }
                 else
                 {
@@ -1004,6 +1032,10 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     DRAWSEGMENT line45;
     DRAWSEGMENT* helperLine = NULL;  // we will need more than one helper line
 
+    // if one day it is possible to draw zones in the footprint editor,
+    // then hereby I'm letting you know that this tool does not handle UR_MODEDIT undo yet
+    assert( !m_editModules );
+
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
@@ -1217,6 +1249,8 @@ int DRAWING_TOOL::placeTextModule()
     TEXTE_MODULE* text = new TEXTE_MODULE( NULL );
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
 
+    assert( m_editModules );
+
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
     m_view->Add( &preview );
@@ -1299,6 +1333,7 @@ int DRAWING_TOOL::placeTextModule()
 
                 // Module has to be saved before any modification is made
                 m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_board->m_Modules->SetLastEditTime();
                 m_board->m_Modules->GraphicalItems().PushFront( text );
 
                 m_view->Add( text );
@@ -1340,6 +1375,8 @@ int DRAWING_TOOL::placeTextModule()
 int DRAWING_TOOL::placeTextPcb()
 {
     TEXTE_PCB* text = NULL;
+
+    assert( !m_editModules );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
