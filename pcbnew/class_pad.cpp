@@ -967,7 +967,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         wxString msg;
         msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
-                GetParent()->GetReference(),
+                GetParent() ? GetParent()->GetReference() : "<null>",
                 GetPadName().IsEmpty() ? "(unnamed)" : GetPadName() );
         wxLogWarning( msg );
     }
