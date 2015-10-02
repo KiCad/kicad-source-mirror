@@ -252,20 +252,31 @@ static bool scriptingSetup()
     path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting/plugins" );
 
 #elif defined( __WXMAC__ )
-    // User plugin folder is ~/Library/Application Support/kicad/scripting/plugins
-    path_frag = GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
+    // TODO:
+    // For scripting currently only the bundle scripting path and the path
+    // defined by $(KICAD_PATH)/scripting/plugins is defined.
+    // These paths are defined here and in kicadplugins.i
+    // In future, probably more paths are of interest:
+    // * User folder (~/Library/Application Support/kicad/scripting/plugins)
+    //   => GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
+    // * Machine folder (/Library/Application Support/kicad/scripting/plugins)
+    //   => GetOSXKicadMachineDataDir() + wxT( "/scripting/plugins" );
+
+    // This path is given to LoadPlugins() from kicadplugins.i, which
+    // only supports one path. Only use bundle scripting path for now.
+    path_frag = GetOSXKicadDataDir() + wxT( "/scripting/plugins" );
 
     // Add default paths to PYTHONPATH
     wxString pypath;
 
-    // User scripting folder (~/Library/Application Support/kicad/scripting/plugins)
-    pypath = GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
-
-    // Machine scripting folder (/Library/Application Support/kicad/scripting/plugins)
-    pypath += wxT( ":" ) + GetOSXKicadMachineDataDir() + wxT( "/scripting/plugins" );
-
     // Bundle scripting folder (<kicad.app>/Contents/SharedSupport/scripting/plugins)
-    pypath += wxT( ":" ) + GetOSXKicadDataDir() + wxT( "/scripting/plugins" );
+    pypath += GetOSXKicadDataDir() + wxT( "/scripting/plugins" );
+
+    // $(KICAD_PATH)/scripting/plugins is always added in kicadplugins.i
+    if( wxGetenv("KICAD_PATH") != NULL )
+    {
+        pypath += wxT( ":" ) + wxString( wxGetenv("KICAD_PATH") );
+    }
 
     // Bundle wxPython folder (<kicad.app>/Contents/Frameworks/python/site-packages)
     pypath += wxT( ":" ) + Pgm().GetExecutablePath() +

@@ -95,10 +95,6 @@ def LoadPlugins(plugpath):
         plugin_directories.append(os.environ['HOME']+'/.kicad_plugins/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
 
-    if sys.platform.startswith('darwin'):
-        for singlepath in sys.path:
-            plugin_directories.append(os.path.join( singlepath, 'scripting', 'plugins'))
-
     for plugins_dir in plugin_directories:
         if not os.path.isdir(plugins_dir):
             continue
