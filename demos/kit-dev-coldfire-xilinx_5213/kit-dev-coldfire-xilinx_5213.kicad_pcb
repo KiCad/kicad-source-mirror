@@ -540,7 +540,7 @@
     (fp_circle (center 0 0) (end -0.254 -0.762) (layer F.SilkS) (width 0.127))
     (pad 1 thru_hole circle (at 0 0 270) (size 1.143 1.143) (drill 0.635) (layers *.Cu *.Mask F.SilkS)
       (net 1 /ALLPST))
-    (model Pin_Array/pin_array_1x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x01.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -566,7 +566,7 @@
       (net 102 GND))
     (pad 2 thru_hole circle (at 1.27 0) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 23 /JTAG_EN))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -637,7 +637,7 @@
       (net 104 VDD))
     (pad 26 thru_hole circle (at 15.24 -1.27 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 107 "Net-(BDM_PORT1-Pad26)"))
-    (model pin_array/pins_array_13x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x13.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -665,7 +665,7 @@
       (net 7 /CLKIN/EXTAL))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -693,7 +693,7 @@
       (net 57 /xilinx/GLCK2))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -721,7 +721,7 @@
       (net 108 "Net-(C3-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -749,7 +749,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -777,7 +777,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -805,7 +805,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -833,7 +833,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -861,7 +861,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -889,7 +889,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -917,7 +917,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -945,7 +945,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -973,7 +973,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1001,7 +1001,7 @@
       (net 102 GND))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1029,7 +1029,7 @@
       (net 109 "Net-(C15-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1059,7 +1059,7 @@
       (net 110 /inout_user/VCCA))
     (pad 2 smd rect (at 1.651 0 90) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 111 GNDA))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -1089,7 +1089,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 1.651 0) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -1117,7 +1117,7 @@
       (net 110 /inout_user/VCCA))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 111 GNDA))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1145,7 +1145,7 @@
       (net 30 /VDDPLL))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1173,7 +1173,7 @@
       (net 30 /VDDPLL))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1201,7 +1201,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1229,7 +1229,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 112 "Net-(C23-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1257,7 +1257,7 @@
       (net 113 "Net-(C24-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 114 "Net-(C24-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1285,7 +1285,7 @@
       (net 115 "Net-(C25-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 116 "Net-(C25-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1313,7 +1313,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1341,7 +1341,7 @@
       (net 117 "Net-(C27-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1369,7 +1369,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1397,7 +1397,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 118 "Net-(C30-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1425,7 +1425,7 @@
       (net 119 "Net-(C31-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 120 "Net-(C31-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1453,7 +1453,7 @@
       (net 121 "Net-(C32-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 122 "Net-(C32-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1481,7 +1481,7 @@
       (net 123 "Net-(C33-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1509,7 +1509,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1537,7 +1537,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 124 "Net-(C35-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1565,7 +1565,7 @@
       (net 125 "Net-(C36-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 126 "Net-(C36-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1588,7 +1588,7 @@
       (net 127 "Net-(C38-Pad1)"))
     (pad 2 thru_hole circle (at 2.54 0 90) (size 1.778 1.778) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model discret/c_vert_c2v10.wrl
+    (model Discret.3dshapes/C2V10.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -1611,7 +1611,7 @@
       (net 104 VDD))
     (pad 2 thru_hole circle (at 2.54 0 90) (size 1.778 1.778) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model discret/c_vert_c2v10.wrl
+    (model Discret.3dshapes/C2V10.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -1639,7 +1639,7 @@
       (net 127 "Net-(C38-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1667,7 +1667,7 @@
       (net 102 GND))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 128 "Net-(C43-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1695,7 +1695,7 @@
       (net 129 "Net-(C44-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 130 "Net-(C44-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1723,7 +1723,7 @@
       (net 131 "Net-(C45-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1751,7 +1751,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1779,7 +1779,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1807,7 +1807,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1835,7 +1835,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1863,7 +1863,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1891,7 +1891,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1919,7 +1919,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1947,7 +1947,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -1975,7 +1975,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -2003,7 +2003,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -2031,7 +2031,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -2059,7 +2059,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Cuivre B.Paste B.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -2089,7 +2089,7 @@
       (net 49 /inout_user/TxD_CAN))
     (pad 4 thru_hole circle (at 1.27 -1.27 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 31 /inout_user/CANRX))
-    (model pin_array/pins_array_2x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2115,7 +2115,7 @@
       (net 32 /inout_user/CAN_H))
     (pad 2 thru_hole circle (at 1.27 0 90) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 133 "Net-(CAN_TERM1-Pad2)"))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2141,7 +2141,7 @@
       (net 102 GND))
     (pad 2 thru_hole circle (at 1.27 0) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 8 /CLKMOD0))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2167,7 +2167,7 @@
       (net 102 GND))
     (pad 2 thru_hole circle (at 1.27 0) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 9 /CLKMOD1))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2188,7 +2188,7 @@
     (fp_circle (center 0 0) (end -0.254 -0.762) (layer F.SilkS) (width 0.127))
     (pad 1 thru_hole circle (at 0 0 270) (size 1.143 1.143) (drill 0.635) (layers *.Cu *.Mask F.SilkS)
       (net 29 /TCLK))
-    (model Pin_Array/pin_array_1x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x01.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2217,7 +2217,7 @@
       (net 36 /inout_user/CTS2/CANH))
     (pad 3 thru_hole circle (at 2.54 0 90) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 134 "Net-(COM_SEL1-Pad3)"))
-    (model pin_array/pins_array_3x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x03.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2246,7 +2246,7 @@
       (net 44 /inout_user/RXD2))
     (pad 3 thru_hole circle (at 2.54 0 90) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 135 "Net-(COM_SEL2-Pad3)"))
-    (model pin_array/pins_array_3x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x03.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2275,7 +2275,7 @@
       (net 48 /inout_user/TXD2/CANL))
     (pad 3 thru_hole circle (at 2.54 0 90) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 136 "Net-(COM_SEL3-Pad3)"))
-    (model pin_array/pins_array_3x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x03.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2301,7 +2301,7 @@
       (net 105 "Net-(BDM_PORT1-Pad6)"))
     (pad 2 thru_hole circle (at 1.27 0 180) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 29 /TCLK))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2330,7 +2330,7 @@
     (pad 1 smd rect (at 0.9525 -0.9525 90) (size 0.9144 0.9144) (layers Composant F.Paste F.Mask)
       (net 22 /IRQ-7))
     (pad 3 smd rect (at -0.9525 -0.9525 90) (size 0.9144 0.9144) (layers Composant F.Paste F.Mask))
-    (model smd/cms_sot23.wrl
+    (model SMD_Packages.3dshapes/ST23AK#1.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1299999952316284 0.1500000059604645 0.1500000059604645))
       (rotate (xyz 0 0 0))
@@ -2359,7 +2359,7 @@
     (pad 1 smd rect (at 0.9525 -0.9525 90) (size 0.9144 0.9144) (layers Composant F.Paste F.Mask)
       (net 106 /inout_user/RSTI-))
     (pad 3 smd rect (at -0.9525 -0.9525 90) (size 0.9144 0.9144) (layers Composant F.Paste F.Mask))
-    (model smd/cms_sot23.wrl
+    (model SMD_Packages.3dshapes/ST23AK#1.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1299999952316284 0.1500000059604645 0.1500000059604645))
       (rotate (xyz 0 0 0))
@@ -2391,7 +2391,7 @@
       (net 102 GND))
     (pad 2 thru_hole rect (at 6.35 0) (size 1.778 1.778) (drill 1.143) (layers *.Cu *.Mask F.SilkS)
       (net 127 "Net-(C38-Pad1)"))
-    (model discret/diode.wrl
+    (model Discret.3dshapes/D3.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.5 0.5 0.5))
       (rotate (xyz 0 0 0))
@@ -2421,7 +2421,7 @@
       (net 138 "Net-(D8-Pad1)"))
     (pad 2 smd rect (at 1.651 0) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2451,7 +2451,7 @@
       (net 139 "Net-(D9-Pad1)"))
     (pad 2 smd rect (at 1.651 0) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2484,7 +2484,7 @@
       (net 140 "Net-(F1-Pad1)"))
     (pad 2 smd rect (at 0 3.175) (size 3.556 4.191) (layers Composant F.Paste F.Mask)
       (net 127 "Net-(C38-Pad1)"))
-    (model smd/smd_fuse_socket.wrl
+    (model Fuse_Holders_and_Fuses.3dshapes/BladeFuse-Mini.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.4000000059604645 0.4000000059604645 0.4000000059604645))
       (rotate (xyz 0 0 90))
@@ -2511,7 +2511,7 @@
       (net 102 GND))
     (pad 2 smd rect (at 1.651 0 180) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 111 GNDA))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2532,7 +2532,7 @@
     (fp_circle (center 0 0) (end -0.254 -0.762) (layer F.SilkS) (width 0.127))
     (pad 1 thru_hole circle (at 0 0 270) (size 1.143 1.143) (drill 0.635) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model Pin_Array/pin_array_1x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x01.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2563,7 +2563,7 @@
       (net 102 GND))
     (pad 3 thru_hole circle (at 2.286 5.08 270) (size 4.8006 4.8006) (drill oval 2.54 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 141 "Net-(J1-Pad3)"))
-    (model connectors/POWER_21.wrl
+    (model Connect.3dshapes/JACK_ALIM.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.800000011920929 0.800000011920929 0.800000011920929))
       (rotate (xyz 0 0 0))
@@ -2590,7 +2590,7 @@
       (net 142 "Net-(L1-Pad1)"))
     (pad 2 smd rect (at 1.651 0) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 110 /inout_user/VCCA))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2617,7 +2617,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 1.651 0 180) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 30 /VDDPLL))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2647,7 +2647,7 @@
       (net 143 "Net-(LED1-Pad1)"))
     (pad 2 smd rect (at 1.651 0 180) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2677,7 +2677,7 @@
       (net 144 "Net-(LED2-Pad1)"))
     (pad 2 smd rect (at 1.651 0 180) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2707,7 +2707,7 @@
       (net 145 "Net-(LED3-Pad1)"))
     (pad 2 smd rect (at 1.651 0 180) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2737,7 +2737,7 @@
       (net 146 "Net-(LED4-Pad1)"))
     (pad 2 smd rect (at 1.651 0 180) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2767,7 +2767,7 @@
       (net 147 "Net-(LED5-Pad1)"))
     (pad 2 smd rect (at 1.651 0 270) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2797,7 +2797,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 1.651 0 270) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 148 "Net-(LEDABRT1-Pad2)"))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -2823,7 +2823,7 @@
       (net 102 GND))
     (pad 2 thru_hole circle (at 1.27 0) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 149 "Net-(LED_EN1-Pad2)"))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2855,7 +2855,7 @@
       (net 104 VDD))
     (pad 3 thru_hole circle (at 1.27 -1.27 270) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model discret/to98.wrl
+    (model Discret.3dshapes/TO92.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2999,7 +2999,7 @@
       (net 104 VDD))
     (pad 60 thru_hole circle (at 36.83 -1.27 180) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model pin_array/pins_array_30x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x30.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3034,7 +3034,7 @@
       (net 61 /xilinx/TCK))
     (pad 6 thru_hole circle (at 6.35 0 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 63 /xilinx/TDO))
-    (model pin_array/pins_array_6x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x06.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3064,7 +3064,7 @@
       (net 170 /inout_user/URTS1))
     (pad 4 thru_hole circle (at 1.27 -1.27 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 179 "Net-(P3-Pad4)"))
-    (model pin_array/pins_array_2x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3166,7 +3166,7 @@
       (net 102 GND))
     (pad 30 thru_hole circle (at 11.43 -1.27 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 92 /xilinx/XIL_D33))
-    (model pin_array/pins_array_20x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x20.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3204,7 +3204,7 @@
       (net 31 /inout_user/CANRX))
     (pad 8 thru_hole circle (at 3.81 -1.27 180) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 183 "Net-(PULUPEN1-Pad8)"))
-    (model pin_array/pins_array_4x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x04.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3233,7 +3233,7 @@
       (net 184 "Net-(Q1-Pad2)"))
     (pad 3 smd rect (at 0 1.016 90) (size 0.9144 0.9144) (layers Composant F.Paste F.Mask)
       (net 185 "Net-(Q1-Pad3)"))
-    (model smd/cms_sot23.wrl
+    (model SMD_Packages.3dshapes/ST23AK#1.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1299999952316284 0.1500000059604645 0.1500000059604645))
       (rotate (xyz 0 0 0))
@@ -3261,7 +3261,7 @@
       (net 57 /xilinx/GLCK2))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 7 /CLKIN/EXTAL))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3289,7 +3289,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 9 /CLKMOD1))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3317,7 +3317,7 @@
       (net 150 /xilinx/IRQ-1))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3345,7 +3345,7 @@
       (net 155 /xilinx/IRQ-2))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3373,7 +3373,7 @@
       (net 164 /xilinx/IRQ-3))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3401,7 +3401,7 @@
       (net 103 "Net-(ABRT_SW1-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 109 "Net-(C15-Pad1)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3429,7 +3429,7 @@
       (net 166 /IRQ-4))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3457,7 +3457,7 @@
       (net 186 "Net-(R9-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3485,7 +3485,7 @@
       (net 20 /IRQ-5))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3513,7 +3513,7 @@
       (net 21 /IRQ-6))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3541,7 +3541,7 @@
       (net 109 "Net-(C15-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3569,7 +3569,7 @@
       (net 22 /IRQ-7))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3597,7 +3597,7 @@
       (net 148 "Net-(LEDABRT1-Pad2)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 137 "Net-(D1-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3625,7 +3625,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 106 /inout_user/RSTI-))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3653,7 +3653,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 23 /JTAG_EN))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3681,7 +3681,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 6 /BKPT-))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3709,7 +3709,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 14 /DSCLK))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3737,7 +3737,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 15 /DSI))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3765,7 +3765,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 16 /DSO))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3793,7 +3793,7 @@
       (net 152 /inout_user/RTS0-))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 184 "Net-(Q1-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3821,7 +3821,7 @@
       (net 185 "Net-(Q1-Pad3)"))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 187 "Net-(R22-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3849,7 +3849,7 @@
       (net 102 GND))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 188 "Net-(R23-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3877,7 +3877,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 8 /CLKMOD0))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3905,7 +3905,7 @@
       (net 29 /TCLK))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3933,7 +3933,7 @@
       (net 143 "Net-(LED1-Pad1)"))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 189 "Net-(R28-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3961,7 +3961,7 @@
       (net 102 GND))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 190 "Net-(R30-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -3989,7 +3989,7 @@
       (net 144 "Net-(LED2-Pad1)"))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 191 "Net-(R31-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4017,7 +4017,7 @@
       (net 145 "Net-(LED3-Pad1)"))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 192 "Net-(R32-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4045,7 +4045,7 @@
       (net 146 "Net-(LED4-Pad1)"))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 193 "Net-(R33-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4073,7 +4073,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 149 "Net-(LED_EN1-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4101,7 +4101,7 @@
       (net 102 GND))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 194 "Net-(R35-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4129,7 +4129,7 @@
       (net 195 "Net-(R36-Pad1)"))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4157,7 +4157,7 @@
       (net 33 /inout_user/CAN_L))
     (pad 2 smd rect (at 0.9525 0 180) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 133 "Net-(CAN_TERM1-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4185,7 +4185,7 @@
       (net 177 /inout_user/RCON-))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4213,7 +4213,7 @@
       (net 196 "Net-(R46-Pad1)"))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 29 /TCLK))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4241,7 +4241,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 183 "Net-(PULUPEN1-Pad8)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4269,7 +4269,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 182 "Net-(PULUPEN1-Pad6)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4297,7 +4297,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 181 "Net-(PULUPEN1-Pad4)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4325,7 +4325,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 90) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 180 "Net-(PULUPEN1-Pad2)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4353,7 +4353,7 @@
       (net 147 "Net-(LED5-Pad1)"))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4381,7 +4381,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0 270) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 61 /xilinx/TCK))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4409,7 +4409,7 @@
       (net 58 /xilinx/LED_TEST1))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 138 "Net-(D8-Pad1)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4437,7 +4437,7 @@
       (net 59 /xilinx/LED_TEST2))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 139 "Net-(D9-Pad1)"))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4468,7 +4468,7 @@
       (net 104 VDD))
     (pad 2 thru_hole circle (at 5.08 0) (size 1.524 1.524) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 56 /xilinx/+3,3V_OUT))
-    (model discret/resistor.wrl
+    (model Discret.3dshapes/R3.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.4000000059604645 0.4000000059604645 0.4000000059604645))
       (rotate (xyz 0 0 0))
@@ -4496,7 +4496,7 @@
       (net 104 VDD))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 33 /inout_user/CAN_L))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4524,7 +4524,7 @@
       (net 102 GND))
     (pad 2 smd rect (at 0.9525 0) (size 0.889 1.397) (layers Composant F.Paste F.Mask)
       (net 32 /inout_user/CAN_H))
-    (model smd/chip_cms.wrl
+    (model SMD_Packages.3dshapes/SMD-1206.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1000000014901161 0.1000000014901161 0.1000000014901161))
       (rotate (xyz 0 0 0))
@@ -4554,7 +4554,7 @@
       (net 187 "Net-(R22-Pad2)"))
     (pad 2 smd rect (at 1.651 0 270) (size 1.524 2.032) (layers Composant F.Paste F.Mask)
       (net 102 GND))
-    (model smd/chip_cms_pol.wrl
+    (model SMD_Packages.3dshapes/SMD-1206_Pol.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.1700000017881393 0.1599999964237213 0.1599999964237213))
       (rotate (xyz 0 0 0))
@@ -4575,7 +4575,7 @@
     (fp_circle (center 0 0) (end -0.254 -0.762) (layer F.SilkS) (width 0.127))
     (pad 1 thru_hole circle (at 0 0 270) (size 1.143 1.143) (drill 0.635) (layers *.Cu *.Mask F.SilkS)
       (net 195 "Net-(R36-Pad1)"))
-    (model Pin_Array/pin_array_1x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x01.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4622,7 +4622,7 @@
     (pad 1 thru_hole rect (at 0 -5.08 90) (size 3.81 2.54) (drill 1.6) (layers *.Cu *.Mask F.SilkS))
     (pad 3 thru_hole rect (at 0 5.08 90) (size 3.81 2.54) (drill 1.6) (layers *.Cu *.Mask F.SilkS)
       (net 141 "Net-(J1-Pad3)"))
-    (model device/switch_toggle_horizontal_right_angle_PC_terminal.wrl
+    (model unused_3d.3dshapes/Device.switch_toggle_horizontal_right_angle_PC_terminal.wrl
       (at (xyz 0.3600000143051148 0 0))
       (scale (xyz 0.6600000262260437 0.6600000262260437 0.6600000262260437))
       (rotate (xyz 0 0 180))
@@ -4643,7 +4643,7 @@
     (fp_circle (center 0 0) (end -0.254 -0.762) (layer F.SilkS) (width 0.127))
     (pad 1 thru_hole circle (at 0 0 270) (size 1.143 1.143) (drill 0.635) (layers *.Cu *.Mask F.SilkS)
       (net 107 "Net-(BDM_PORT1-Pad26)"))
-    (model Pin_Array/pin_array_1x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x01.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4670,7 +4670,7 @@
       (net 141 "Net-(J1-Pad3)"))
     (pad 2 thru_hole circle (at 2.54 0 270) (size 2.54 2.54) (drill 1.524) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model Device/bornier_2.wrl
+    (model Connect.3dshapes/bornier2.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4898,7 +4898,7 @@
       (net 110 /inout_user/VCCA))
     (pad 50 smd rect (at -7.747 5.9944) (size 1.016 0.254) (layers Composant F.Paste F.Mask)
       (net 110 /inout_user/VCCA))
-    (model smd/vqfp100.wrl
+    (model SMD_Packages.3dshapes/VQFP-100.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.3939999938011169 0.3939999938011169 0.4000000059604645))
       (rotate (xyz 0 0 0))
@@ -4929,7 +4929,7 @@
       (net 109 "Net-(C15-Pad1)"))
     (pad 4 smd rect (at 1.016 0.635) (size 0.508 0.3048) (layers Composant F.Paste F.Mask)
       (net 137 "Net-(D1-Pad2)"))
-    (model smd/SOT23_5.wrl
+    (model TO_SOT_Packages_SMD.3dshapes/SOT-23-5.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.07000000029802322 0.09000000357627869 0.07999999821186066))
       (rotate (xyz 0 0 90))
@@ -4987,7 +4987,7 @@
       (net 102 GND))
     (pad 16 smd rect (at -4.445 -2.54 270) (size 0.508 1.143) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/cms_so16.wrl
+    (model SMD_Packages.3dshapes/SO-16-N.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.5 0.300000011920929 0.5))
       (rotate (xyz 0 0 0))
@@ -5041,7 +5041,7 @@
       (net 149 "Net-(LED_EN1-Pad2)"))
     (pad 14 smd rect (at -3.81 -2.54 270) (size 0.508 1.143) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/cms_so14.wrl
+    (model SMD_Packages.3dshapes/SOIC-14_N.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.5 0.300000011920929 0.5))
       (rotate (xyz 0 0 0))
@@ -5099,7 +5099,7 @@
       (net 102 GND))
     (pad 16 smd rect (at -4.445 -2.54 270) (size 0.508 1.143) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/cms_so16.wrl
+    (model SMD_Packages.3dshapes/SO-16-N.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.5 0.300000011920929 0.5))
       (rotate (xyz 0 0 0))
@@ -5142,7 +5142,7 @@
       (net 104 VDD))
     (pad 4 smd rect (at 1.905 2.667 90) (size 0.59944 1.39954) (layers Composant F.Paste F.Mask)
       (net 45 /inout_user/RxD_CAN))
-    (model smd/cms_so8.wrl
+    (model SMD_Packages.3dshapes/SOIC-8-N.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.5 0.3199999928474426 0.5))
       (rotate (xyz 0 0 0))
@@ -5200,7 +5200,7 @@
       (net 102 GND))
     (pad 16 smd rect (at -4.445 -2.54 270) (size 0.508 1.143) (layers Composant F.Paste F.Mask)
       (net 104 VDD))
-    (model smd/cms_so16.wrl
+    (model SMD_Packages.3dshapes/SO-16-N.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.5 0.300000011920929 0.5))
       (rotate (xyz 0 0 0))
@@ -5456,7 +5456,7 @@
       (net 92 /xilinx/XIL_D33))
     (pad 113 smd rect (at 10.9855 6.7437) (size 1.524 0.254) (layers Composant F.Paste F.Mask)
       (net 93 /xilinx/XIL_D34))
-    (model smd/tqfp144.wrl
+    (model SMD_Packages.3dshapes/TQFP-144.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.3939999938011169 0.3939999938011169 0.4000000059604645))
       (rotate (xyz 0 0 0))
@@ -5503,7 +5503,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 39 /inout_user/RTS0))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model conn_DBxx/db9_female_pin90deg.wrl
+    (model Connect.3dshapes/DB9FC.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5550,7 +5550,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 40 /inout_user/RTS1))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model conn_DBxx/db9_female_pin90deg.wrl
+    (model Connect.3dshapes/DB9FC.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5597,7 +5597,7 @@
     (pad 8 thru_hole circle (at 1.397 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 41 /inout_user/RTS2))
     (pad 9 thru_hole circle (at 4.191 -1.27) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS))
-    (model conn_DBxx/db9_female_pin90deg.wrl
+    (model Connect.3dshapes/DB9FC.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5635,7 +5635,7 @@
       (net 197 "Net-(U3-Pad9)"))
     (pad 8 thru_hole circle (at 3.81 -1.27 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 173 /inout_user/UCTS0))
-    (model pin_array/pins_array_4x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x04.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5673,7 +5673,7 @@
       (net 200 "Net-(U5-Pad9)"))
     (pad 8 thru_hole circle (at 3.81 -1.27 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 151 /inout_user/UCTS1))
-    (model pin_array/pins_array_4x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x04.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5711,7 +5711,7 @@
       (net 206 "Net-(U8-Pad12)"))
     (pad 8 thru_hole circle (at 3.81 -1.27 270) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 50 /inout_user/UCTS2))
-    (model pin_array/pins_array_4x2.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_2x04.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5737,7 +5737,7 @@
       (net 104 VDD))
     (pad 2 thru_hole circle (at 1.27 0) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 142 "Net-(L1-Pad1)"))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5785,7 +5785,7 @@
     (pad 4 smd rect (at 1.7018 0) (size 1.0668 2.286) (layers Composant F.Paste F.Mask))
     (pad 5 smd rect (at 3.4036 0) (size 1.0668 2.286) (layers Composant F.Paste F.Mask)
       (net 127 "Net-(C38-Pad1)"))
-    (model smd/dpack_5.wrl
+    (model Discret.3dshapes/TO220.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5806,7 +5806,7 @@
     (fp_circle (center 0 0) (end -0.254 -0.762) (layer F.SilkS) (width 0.127))
     (pad 1 thru_hole circle (at 0 0 270) (size 1.143 1.143) (drill 0.635) (layers *.Cu *.Mask F.SilkS)
       (net 203 "Net-(U7-Pad5)"))
-    (model Pin_Array/pin_array_1x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x01.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5832,7 +5832,7 @@
       (net 104 VDD))
     (pad 2 thru_hole circle (at 1.27 0) (size 1.524 1.524) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 128 "Net-(C43-Pad2)"))
-    (model pin_array/pins_array_2x1.wrl
+    (model Pin_Headers.3dshapes/Pin_Header_Straight_1x02.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5865,7 +5865,7 @@
       (net 7 /CLKIN/EXTAL))
     (pad 2 thru_hole circle (at 2.54 0 270) (size 1.778 1.778) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 57 /xilinx/GLCK2))
-    (model discret/xtal/crystal_hc18u_horizontal.wrl
+    (model Crystals.3dshapes/HC-18UH.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -5894,7 +5894,7 @@
       (net 103 "Net-(ABRT_SW1-Pad1)"))
     (pad 2 thru_hole circle (at -3.81 2.54) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 104 VDD))
-    (model discret/push_buttons/push_butt_4pads.wrl
+    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
       (rotate (xyz 0 0 90))
@@ -5923,7 +5923,7 @@
       (net 108 "Net-(C3-Pad1)"))
     (pad 2 thru_hole circle (at -3.81 2.54 180) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model discret/push_buttons/push_butt_4pads.wrl
+    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
       (rotate (xyz 0 0 90))
@@ -5952,7 +5952,7 @@
       (net 166 /IRQ-4))
     (pad 2 thru_hole circle (at -3.81 2.54) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model discret/push_buttons/push_butt_4pads.wrl
+    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
       (rotate (xyz 0 0 90))
@@ -5981,7 +5981,7 @@
       (net 20 /IRQ-5))
     (pad 2 thru_hole circle (at -3.81 2.54) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model discret/push_buttons/push_butt_4pads.wrl
+    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
       (rotate (xyz 0 0 90))
