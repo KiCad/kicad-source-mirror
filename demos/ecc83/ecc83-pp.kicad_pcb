@@ -137,7 +137,7 @@
       (net 2 "Net-(C1-Pad1)"))
     (pad 2 thru_hole circle (at 2.54 0 90) (size 1.778 1.778) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
-    (model discret/c_vert_c2v10.wrl
+    (model Discret.3dshapes/C2V10.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -164,7 +164,7 @@
       (net 3 "Net-(C2-Pad1)"))
     (pad 2 thru_hole circle (at 2.54 0 90) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 4 "Net-(C2-Pad2)"))
-    (model discret/capa_2pas_5x5mm.wrl
+    (model Discret.3dshapes/C2.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -191,7 +191,7 @@
       (net 1 GND))
     (pad 2 thru_hole circle (at 2 0 270) (size 2 2) (drill 1) (layers *.Cu *.Mask F.SilkS)
       (net 5 "Net-(P1-Pad2)"))
-    (model Device/bornier_2.wrl
+    (model Connect.3dshapes/bornier2.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -218,7 +218,7 @@
       (net 3 "Net-(C2-Pad1)"))
     (pad 2 thru_hole circle (at 2 0 90) (size 2 2) (drill 1) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
-    (model Device/bornier_2.wrl
+    (model Connect.3dshapes/bornier2.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -245,7 +245,7 @@
       (net 2 "Net-(C1-Pad1)"))
     (pad 2 thru_hole circle (at 2 0 90) (size 2 2) (drill 1) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
-    (model Device/bornier_2.wrl
+    (model Connect.3dshapes/bornier2.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -272,7 +272,7 @@
       (net 6 "Net-(P4-Pad1)"))
     (pad 2 thru_hole circle (at 2 0 180) (size 2 2) (drill 1) (layers *.Cu *.Mask F.SilkS)
       (net 7 "Net-(P4-Pad2)"))
-    (model Device/bornier_2.wrl
+    (model Connect.3dshapes/bornier2.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -367,7 +367,7 @@
       (net 8 "Net-(R1-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 270) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 4 "Net-(C2-Pad2)"))
-    (model discret/resistor.wrl
+    (model Discret.3dshapes/R3.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.3 0.3 0.3))
       (rotate (xyz 0 0 0))
@@ -398,7 +398,7 @@
       (net 9 "Net-(R2-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 180) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
-    (model discret/resistor.wrl
+    (model Discret.3dshapes/R3.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.3 0.3 0.3))
       (rotate (xyz 0 0 0))
@@ -429,7 +429,7 @@
       (net 3 "Net-(C2-Pad1)"))
     (pad 2 thru_hole circle (at 3.81 0 90) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
-    (model discret/resistor.wrl
+    (model Discret.3dshapes/R3.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.3 0.3 0.3))
       (rotate (xyz 0 0 0))
@@ -460,7 +460,7 @@
       (net 5 "Net-(P1-Pad2)"))
     (pad 2 thru_hole circle (at 3.81 0 270) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 1 GND))
-    (model discret/resistor.wrl
+    (model Discret.3dshapes/R3.wrl
       (at (xyz 0 0 0))
       (scale (xyz 0.3 0.3 0.3))
       (rotate (xyz 0 0 0))
@@ -495,7 +495,7 @@
       (net 4 "Net-(C2-Pad2)"))
     (pad 9 thru_hole circle (at -3.4544 4.75488) (size 2.032 2.032) (drill 1.016) (layers *.Cu *.Mask F.SilkS)
       (net 7 "Net-(P4-Pad2)"))
-    (model Valves/VALVE-ECC-83-1.wrl
+    (model Valves.3dshapes/VALVE-ECC-83-1.wrl
       (at (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
