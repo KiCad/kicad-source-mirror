@@ -286,10 +286,10 @@ static bool scriptingSetup()
 
     pypath = Pgm().GetExecutablePath() + wxT( "../lib/python2.7/dist-packages" );
 
-    if( !wxIsEmpty( wxGetenv( wxT( "PYTHONPATH" ) ) )
+    if( !wxIsEmpty( wxGetenv( wxT( "PYTHONPATH" ) ) ) )
         pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
 
-        wxSetEnv( wxT( "PYTHONPATH" ), pypath );
+    wxSetEnv( wxT( "PYTHONPATH" ), pypath );
 
     // Add this default search path:
     path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting/plugins" );
