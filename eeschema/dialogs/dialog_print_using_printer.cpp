@@ -76,17 +76,16 @@ private:
 class SCH_PRINTOUT : public wxPrintout
 {
 private:
-    DIALOG_PRINT_USING_PRINTER* m_parent;
+    SCH_EDIT_FRAME* m_parent;
 
 public:
-    SCH_PRINTOUT( DIALOG_PRINT_USING_PRINTER* aParent, const wxString& aTitle ) :
+    SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
     {
         wxASSERT( aParent != NULL );
 
         m_parent = aParent;
     }
-    SCH_EDIT_FRAME* GetSchFrameParent() { return m_parent->GetParent(); }
     bool OnPrintPage( int page );
     bool HasPage( int page );
     bool OnBeginDocument( int startPage, int endPage );
@@ -94,9 +93,9 @@ public:
     void DrawPage( SCH_SCREEN* aScreen );
 };
 
-
 /**
  * Custom schematic print preview frame.
+ * This derived preview frame remember its size and position during a session
  */
 class SCH_PREVIEW_FRAME : public wxPreviewFrame
 {
@@ -106,11 +105,6 @@ public:
                        const wxSize& aSize = wxDefaultSize ) :
         wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
-    }
-
-    DIALOG_PRINT_USING_PRINTER* GetParent()
-    {
-        return ( DIALOG_PRINT_USING_PRINTER* )wxWindow::GetParent();
     }
 
     bool Show( bool show )      // overload
@@ -134,26 +128,17 @@ public:
 
             ret = wxPreviewFrame::Show( show );
         }
+
         return ret;
     }
 
 private:
     static wxPoint  s_pos;
     static wxSize   s_size;
-
-    DECLARE_CLASS( SCH_PREVIEW_FRAME )
-    DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS( SCH_PREVIEW_FRAME )
 };
 
 wxPoint SCH_PREVIEW_FRAME::s_pos;
 wxSize  SCH_PREVIEW_FRAME::s_size;
-
-IMPLEMENT_CLASS( SCH_PREVIEW_FRAME, wxPreviewFrame )
-
-BEGIN_EVENT_TABLE( SCH_PREVIEW_FRAME, wxPreviewFrame )
-    EVT_CLOSE( SCH_PREVIEW_FRAME::OnCloseWindow )
-END_EVENT_TABLE()
 
 
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent ) :
@@ -261,8 +246,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
-    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( this, title ),
-                                                  new SCH_PRINTOUT( this, title ),
+    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( parent, title ),
+                                                  new SCH_PRINTOUT( parent, title ),
                                                   &parent->GetPageSetupData().GetPrintData() );
 
     if( preview == NULL )
@@ -301,7 +286,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
         printDialogData.EnablePageNumbers( true );
 
     wxPrinter printer( &printDialogData );
-    SCH_PRINTOUT printout( this, _( "Print Schematic" ) );
+    SCH_PRINTOUT printout( parent, _( "Print Schematic" ) );
 
     if( !printer.Print( this, &printout, true ) )
     {
@@ -319,7 +304,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
     wxString msg;
-    SCH_EDIT_FRAME* parent = m_parent->GetParent();
+    SCH_EDIT_FRAME* parent = m_parent;
     msg.Printf( _( "Print page %d" ), page );
     parent->ClearMsgPanel();
     parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
@@ -379,7 +364,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
         return false;
 
 #ifdef __WXDEBUG__
-    SCH_EDIT_FRAME* parent = m_parent->GetParent();
+    SCH_EDIT_FRAME* parent = m_parent;
     wxLogDebug( wxT( "Printer name: " ) +
                 parent->GetPageSetupData().GetPrintData().GetPrinterName() );
     wxLogDebug( wxT( "Paper ID: %d" ),
@@ -409,7 +394,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     EDA_RECT oldClipBox;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
-    SCH_EDIT_FRAME* parent = m_parent->GetParent();
+    SCH_EDIT_FRAME* parent = m_parent;
     EDA_DRAW_PANEL* panel = parent->GetCanvas();
 
     wxBusyCursor dummy;
@@ -467,7 +452,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     aScreen->m_IsPrinting = true;
 
-    EDA_COLOR_T bg_color = GetSchFrameParent()->GetDrawBgColor();
+    EDA_COLOR_T bg_color = parent->GetDrawBgColor();
 
     aScreen->Draw( panel, dc, (GR_DRAWMODE) 0 );
 
@@ -475,7 +460,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
         parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
                 IU_PER_MILS, aScreen->GetFileName() );
 
-    GetSchFrameParent()->SetDrawBgColor( bg_color );
+    parent->SetDrawBgColor( bg_color );
     aScreen->m_IsPrinting = false;
     panel->SetClipBox( oldClipBox );
 

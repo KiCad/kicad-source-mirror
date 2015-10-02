@@ -463,6 +463,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
     frame->SetMinSize( wxSize( 550, 350 ) );
+    frame->Center();
 
     frame->Initialize();
 
