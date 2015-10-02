@@ -207,7 +207,7 @@ static bool scriptingSetup()
 
 #if defined( __MINGW32__ )
     // force python environment under Windows:
-    const wxString python_us( "python27_us" );
+    const wxString python_us( wxT( "python27_us" ) );
 
     // Build our python path inside kicad
     wxString kipython =  FindKicadFile( python_us + wxT( "/python.exe" ) );
@@ -281,21 +281,21 @@ static bool scriptingSetup()
     wxSetEnv( "PYTHONPATH", pypath );
 
 #else
-    /* Linux-specific setup */
+    // Linux-specific setup
     wxString pypath;
 
     pypath = Pgm().GetExecutablePath() + wxT( "../lib/python2.7/dist-packages" );
 
-    if( !wxIsEmpty( wxGetenv("PYTHONPATH") ) )
-        pypath = wxString( wxGetenv("PYTHONPATH") ) + wxT( ":" ) + pypath;
+    if( !wxIsEmpty( wxGetenv( wxT( "PYTHONPATH" ) ) )
+        pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
 
-    wxSetEnv( "PYTHONPATH", pypath );
+        wxSetEnv( wxT( "PYTHONPATH" ), pypath );
 
     // Add this default search path:
     path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting/plugins" );
 #endif
 
-    if( ! pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
+    if( !pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
     {
         wxLogError( wxT( "pcbnewInitPythonScripting() failed." ) );
         return false;
