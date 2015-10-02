@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -35,7 +35,6 @@ class NETS_LIST_CTRL;
 #include <wx/textctrl.h>
 #include <wx/statline.h>
 #include <wx/notebook.h>
-#include <wx/html/htmlwin.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -89,11 +88,12 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 		wxGrid* m_gridViaSizeList;
 		wxStaticText* m_staticText8;
 		wxGrid* m_gridTrackWidthList;
-		wxHtmlWindow* m_MessagesList;
-		wxButton* m_buttonOk;
-		wxButton* m_buttonCancel;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnNetClassesNameLeftClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnNetClassesNameRightClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
@@ -105,13 +105,11 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 		virtual void OnLeftSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightCBSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 777,697 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DESIGN_RULES_BASE();
 	
 };
