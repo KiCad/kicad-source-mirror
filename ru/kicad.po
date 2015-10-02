@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-29 22:49+0300\n"
-"PO-Revision-Date: 2015-09-29 22:58+0300\n"
+"POT-Creation-Date: 2015-10-02 20:37+0300\n"
+"PO-Revision-Date: 2015-10-02 21:29+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -242,8 +242,8 @@ msgstr "Вкл/Выкл ортогональную проекцию"
 
 #: 3d-viewer/3d_toolbar.cpp:135 cvpcb/menubar.cpp:141 eeschema/menubar.cpp:506
 #: eeschema/menubar_libedit.cpp:283 eeschema/tool_viewlib.cpp:267
-#: gerbview/menubar.cpp:242 kicad/menubar.cpp:426
-#: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_modedit.cpp:358
+#: gerbview/menubar.cpp:245 kicad/menubar.cpp:426
+#: pagelayout_editor/menubar.cpp:172 pcbnew/menubar_modedit.cpp:358
 #: pcbnew/menubar_pcbframe.cpp:664 pcbnew/tool_modview.cpp:206
 msgid "&File"
 msgstr "Файл"
@@ -264,8 +264,8 @@ msgstr "Копировать 3D изображение в буфер обмен�
 msgid "&Exit"
 msgstr "Выход"
 
-#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:142 gerbview/menubar.cpp:243
-#: kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:170
+#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:142 gerbview/menubar.cpp:246
+#: kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:173
 msgid "&Preferences"
 msgstr "Настройки"
 
@@ -2518,7 +2518,7 @@ msgstr ""
 "включенные KiCad.  Для большей информации смотрите раздел \"Таблица "
 "библиотек посадочных мест\" документации CvPcb."
 
-#: cvpcb/cvpcb.cpp:184 pcbnew/pcbnew.cpp:339
+#: cvpcb/cvpcb.cpp:184 pcbnew/pcbnew.cpp:349
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -2746,23 +2746,23 @@ msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство \"Приступая к работе в KiCad\" для начинающих"
 
 #: cvpcb/menubar.cpp:136 eeschema/menubar.cpp:501
-#: eeschema/menubar_libedit.cpp:278 gerbview/menubar.cpp:237
-#: pagelayout_editor/menubar.cpp:164 pcbnew/menubar_modedit.cpp:353
+#: eeschema/menubar_libedit.cpp:278 gerbview/menubar.cpp:240
+#: pagelayout_editor/menubar.cpp:167 pcbnew/menubar_modedit.cpp:353
 #: pcbnew/menubar_pcbframe.cpp:659
 msgid "&About Kicad"
 msgstr "О Kicad"
 
 #: cvpcb/menubar.cpp:137 eeschema/menubar.cpp:502
-#: eeschema/menubar_libedit.cpp:279 gerbview/menubar.cpp:238
-#: pagelayout_editor/menubar.cpp:165 pcbnew/menubar_modedit.cpp:354
+#: eeschema/menubar_libedit.cpp:279 gerbview/menubar.cpp:241
+#: pagelayout_editor/menubar.cpp:168 pcbnew/menubar_modedit.cpp:354
 #: pcbnew/menubar_pcbframe.cpp:660
 msgid "About Kicad"
 msgstr "О Kicad"
 
 #: cvpcb/menubar.cpp:143 eeschema/menubar.cpp:512
 #: eeschema/menubar_libedit.cpp:288 eeschema/tool_viewlib.cpp:270
-#: gerbview/menubar.cpp:245 kicad/menubar.cpp:430
-#: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_modedit.cpp:364
+#: gerbview/menubar.cpp:248 kicad/menubar.cpp:430
+#: pagelayout_editor/menubar.cpp:174 pcbnew/menubar_modedit.cpp:364
 #: pcbnew/menubar_pcbframe.cpp:673 pcbnew/tool_modview.cpp:209
 msgid "&Help"
 msgstr "Справка"
@@ -5194,7 +5194,7 @@ msgstr "Чертить текущий лист"
 msgid "Plot All Pages"
 msgstr "Чертить все страницы"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:263
+#: eeschema/dialogs/dialog_print_using_printer.cpp:247
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:102
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:237
@@ -5203,20 +5203,20 @@ msgstr "Чертить все страницы"
 msgid "Preview"
 msgstr "Просмотр"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:304
+#: eeschema/dialogs/dialog_print_using_printer.cpp:288
 msgid "Print Schematic"
 msgstr "Печать схемы"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:309
+#: eeschema/dialogs/dialog_print_using_printer.cpp:293
 msgid "An error occurred attempting to print the schematic."
 msgstr "При печати схемы произошла ошибка."
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:310
+#: eeschema/dialogs/dialog_print_using_printer.cpp:294
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:225
 msgid "Printing"
 msgstr "Печать"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:323
+#: eeschema/dialogs/dialog_print_using_printer.cpp:306
 #, c-format
 msgid "Print page %d"
 msgstr "Печать страницы %d"
@@ -5241,7 +5241,7 @@ msgstr "Настройки страницы"
 #: gerbview/dialogs/dialog_print_using_printer.cpp:390
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:105
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:490
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:491
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 #: eeschema/dialogs/dialog_print_using_printer_base.h:56
 #: gerbview/dialogs/dialog_print_using_printer_base.h:73
@@ -5756,7 +5756,7 @@ msgstr "%s найден, но %s не найден"
 msgid "Component %s not found"
 msgstr "Компонент %s не найден"
 
-#: eeschema/find.cpp:492
+#: eeschema/find.cpp:515
 #, c-format
 msgid "No item found matching %s."
 msgstr "Ничего не найдено для %s."
@@ -6782,7 +6782,7 @@ msgstr "Установка параметров вывода"
 
 #: eeschema/libeditframe.cpp:1125 eeschema/schedit.cpp:559
 #: pcbnew/edit.cpp:1488 pcbnew/modedit.cpp:951
-#: pcbnew/tools/drawing_tool.cpp:1230 pcbnew/tools/drawing_tool.cpp:1354
+#: pcbnew/tools/drawing_tool.cpp:1264 pcbnew/tools/drawing_tool.cpp:1391
 msgid "Add text"
 msgstr "Добавить текст"
 
@@ -8750,7 +8750,7 @@ msgstr "Осторожно! Установлен очень маленький �
 #: gerbview/dialogs/dialog_print_using_printer.cpp:340
 #: pcbnew/dialogs/dialog_plot.cpp:827
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:441
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:482
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:483
 msgid "No layer selected"
 msgstr "Слой не выбран"
 
@@ -8762,7 +8762,7 @@ msgstr "Просмотр"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:401
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:221
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:496
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:497
 msgid "There was a problem printing"
 msgstr "Проблема с печатью"
 
@@ -9345,7 +9345,7 @@ msgstr "Руководство Gerbview"
 msgid "Open the GerbView Manual"
 msgstr "Открыть руководство GerbView"
 
-#: gerbview/menubar.cpp:244
+#: gerbview/menubar.cpp:247
 msgid "&Miscellaneous"
 msgstr "Разное"
 
@@ -16331,7 +16331,7 @@ msgid ""
 "Two pad areas nearer than this value will be merged during plotting.\n"
 "This parameter is used only to plot solder mask layers."
 msgstr ""
-"Мин растояние между 2 конт.пл. зон.\n"
+"Мин расстояние между 2 конт.пл. зон.\n"
 "Две конт.пл. зон, расположенные ближе этого значения, при черчении будут "
 "объединены.\n"
 "Этот параметр используется только при черчении слоев паяльной маски."
@@ -17415,7 +17415,7 @@ msgstr "мкм"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
-msgstr "Зазор дорожки:  "
+msgstr "Зазор дорожки:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:49
 msgid "Via gap:"
@@ -17427,7 +17427,7 @@ msgstr "Зазор перех.отв. равен зазору дорожек"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:52
 msgid "Single Track Length Tuning"
-msgstr "Настройка длины дорожки"
+msgstr "Настройка длины одиночной дорожки"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:58
 msgid "Differential Pair Length Tuning"
@@ -18070,7 +18070,7 @@ msgstr "Добавить дорожки"
 msgid "Add module"
 msgstr "Добавить модуль"
 
-#: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:417
+#: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:421
 msgid "Add zones"
 msgstr "Добавить зоны"
 
@@ -18078,7 +18078,7 @@ msgstr "Добавить зоны"
 msgid "Warning: zone display is OFF!!!"
 msgstr "Предупреждение: Отображение зон выключено!!!"
 
-#: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:425
+#: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:429
 msgid "Add keepout"
 msgstr "Добавить область запрета"
 
@@ -18116,7 +18116,7 @@ msgid "Add graphic circle"
 msgstr "Добавить граф.окружность"
 
 #: pcbnew/edit.cpp:1496 pcbnew/menubar_pcbframe.cpp:419
-#: pcbnew/tool_pcb.cpp:467 pcbnew/tools/drawing_tool.cpp:248
+#: pcbnew/tool_pcb.cpp:467 pcbnew/tools/drawing_tool.cpp:252
 msgid "Add dimension"
 msgstr "Добавить размерную линию"
 
@@ -19540,6 +19540,7 @@ msgid "Select default parameters values in Footprint Editor"
 msgstr "Выбрать значения по умолчанию для параметров редактора посад.мест"
 
 #: pcbnew/menubar_modedit.cpp:341 pcbnew/menubar_pcbframe.cpp:648
+#: pcbnew/tool_modview.cpp:189
 msgid "Pcbnew &Manual"
 msgstr "Руководство Pcbnew"
 
@@ -19929,7 +19930,7 @@ msgstr "Интерактивный трассировщик одиночной �
 
 #: pcbnew/menubar_pcbframe.cpp:446
 msgid "&Differential Pair"
-msgstr "Диф. пара"
+msgstr "Диф.пара"
 
 #: pcbnew/menubar_pcbframe.cpp:447
 msgid "Interactively route a differential pair"
@@ -19937,27 +19938,27 @@ msgstr "Интерактивный трассировщик диф.пары"
 
 #: pcbnew/menubar_pcbframe.cpp:453
 msgid "&Tune Track Length"
-msgstr "Настройка длины дорожки"
+msgstr "Настроить длину дорожки"
 
 #: pcbnew/menubar_pcbframe.cpp:454 pcbnew/tools/common_actions.cpp:530
 msgid "Tune length of a single track"
-msgstr "Настройка длины для одиночной дорожки"
+msgstr "Настроить длину одиночной дорожки"
 
 #: pcbnew/menubar_pcbframe.cpp:458
 msgid "Tune Differential Pair &Length"
-msgstr "Настройка длины диф.пары"
+msgstr "Настроить длину диф.пары"
 
 #: pcbnew/menubar_pcbframe.cpp:459 pcbnew/tools/common_actions.cpp:534
 msgid "Tune length of a differential pair"
-msgstr "Настройка длины диф.пары"
+msgstr "Настроить длину диф.пары"
 
 #: pcbnew/menubar_pcbframe.cpp:463
 msgid "Tune Differential Pair &Skew/Phase"
-msgstr "Выравнивание перекоса/фазы диф.пары"
+msgstr "Настроить перекос/фазу диф.пары"
 
 #: pcbnew/menubar_pcbframe.cpp:464
 msgid "Tune skew/phase of a differential pair"
-msgstr "Выравнивание перекоса/разбега фазы в диф.паре"
+msgstr "Настроить перекос/фазу диф.пары"
 
 #: pcbnew/menubar_pcbframe.cpp:501
 msgid "&3D Shapes Libraries Downloader"
@@ -20041,7 +20042,7 @@ msgstr "Диф.пары"
 
 #: pcbnew/menubar_pcbframe.cpp:561
 msgid "Define the global gap/width for differential pairs."
-msgstr "Задание глобальных зазора/ширины для диф.пар."
+msgstr "Определить глобальный зазор/ширину для диф.пар."
 
 #: pcbnew/menubar_pcbframe.cpp:566
 msgid "Save dimension preferences"
@@ -20527,8 +20528,8 @@ msgstr ""
 "файл: <%s>\n"
 "строка: %d"
 
-#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:721
-#: pcbnew/tools/drawing_tool.cpp:873
+#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:726
+#: pcbnew/tools/drawing_tool.cpp:901
 msgid "Graphic not allowed on Copper layers"
 msgstr "Графика не разрешена на медных слоях"
 
@@ -20540,7 +20541,7 @@ msgstr "Дорожки только на медных слоях"
 msgid "Texts not allowed on Edge Cut layer"
 msgstr "Текст не разрешен на слое контура платы"
 
-#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:308
+#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:312
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Размерные линии не разрешены на слоях меди и контура платы"
 
@@ -21146,7 +21147,7 @@ msgstr "Файл автосохранения '%s' не может быть уд
 msgid " [new file]"
 msgstr " [новый файл]"
 
-#: pcbnew/pcbnew.cpp:326
+#: pcbnew/pcbnew.cpp:336
 msgid ""
 "You have run Pcbnew for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -21273,23 +21274,33 @@ msgstr "Настроить длину дорожки"
 
 #: pcbnew/router/length_tuner_tool.cpp:252
 msgid "Tune Diff Pair Length"
-msgstr "Настройка дины диф.пары"
+msgstr "Настроить длину диф.пары"
 
 #: pcbnew/router/length_tuner_tool.cpp:259
 msgid "Tune Diff Pair Skew"
-msgstr "Настройка перекоса диф.пары"
+msgstr "Настроить перекос диф.пары"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:588
+#: pcbnew/router/pns_diff_pair_placer.cpp:589
 msgid "Can't start a differential pair  in the middle of nowhere."
-msgstr "Не удалось начать трассировку диф.пары."
+msgstr "Не могу не где начать трассировку диф.пары."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:599
+#: pcbnew/router/pns_diff_pair_placer.cpp:598
 msgid ""
 "Unable to find complementary differential pair net. Make sure the names of "
 "the nets belonging to a differential pair end with either _N/_P or +/-."
 msgstr ""
 "Не удалось найти второй проводник диф.пары. Проверьте, что имена цепей диф."
-"пары заканчиваются на _N/_P or +/-."
+"пары заканчиваются на _N/_P или +/-."
+
+#: pcbnew/router/pns_diff_pair_placer.cpp:615
+msgid "Current track/via gap setting violates design rules for this net."
+msgstr ""
+"Текущая настройка зазора дорожки/перех.отв. нарушает правила проектирования "
+"для данной цепи."
+
+#: pcbnew/router/pns_diff_pair_placer.cpp:622
+msgid "Current track width setting violates design rules."
+msgstr "Текущая настройка ширины дорожки нарушает правила проектирования."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:78
 #: pcbnew/router/pns_meander_placer.cpp:68
@@ -21303,7 +21314,7 @@ msgid ""
 "_N/_P or +/-."
 msgstr ""
 "Не удалось найти второй проводник диф.пары для настройки длины. Проверьте, "
-"что имена цепей диф.пары заканчиваются на _N/_P or +/-."
+"что имена цепей диф.пары заканчиваются на _N/_P или +/-."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:372
 #: pcbnew/router/pns_meander_placer.cpp:245
@@ -21328,7 +21339,7 @@ msgstr "?"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:55
 msgid "Please select a differential pair trace you want to tune."
-msgstr "Выберите дорожки диф.пары, которую хотите настроить."
+msgstr "Выберите дорожку диф.пары, которую хотите настроить."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:74
 msgid ""
@@ -21337,7 +21348,7 @@ msgid ""
 "_N/_P or +/-."
 msgstr ""
 "Не удалось найти второй проводник диф.пары для настройки перекоса. "
-"Проверьте, что имена цепей диф.пары заканчиваются на _N/_P or +/-."
+"Проверьте, что имена цепей диф.пары заканчиваются на _N/_P или +/-."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:156
 msgid "Too long: skew "
@@ -21707,10 +21718,6 @@ msgstr "Закрыть просмотрщик посад.мест"
 msgid "3&D Viewer"
 msgstr "3D просмотр"
 
-#: pcbnew/tool_modview.cpp:189
-msgid "P&cbnew Manual"
-msgstr "Руководство Pcbnew"
-
 #: pcbnew/tool_modview.cpp:190
 msgid "Open the Pcbnew manual"
 msgstr "Открыть руководство Pcbnew"
@@ -22048,7 +22055,7 @@ msgstr "Добавить зону"
 msgid "Add a keepout area"
 msgstr "Добавить область запрета"
 
-#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:596
+#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:600
 msgid "Place the footprint anchor"
 msgstr "Разместить точку привязки посад.места"
 
@@ -22130,11 +22137,11 @@ msgstr "Открыть параметры интерактивного трас�
 
 #: pcbnew/tools/common_actions.cpp:525 pcbnew/tools/common_actions.cpp:526
 msgid "Open Differential Pair Dimension settings"
-msgstr "Открыть параметры размера диф.пары"
+msgstr "Открыть настройки размера диф.пары"
 
 #: pcbnew/tools/common_actions.cpp:538
 msgid "Tune skew of a differential pair"
-msgstr "Настройка наклона диф.пары"
+msgstr "Настроить перекос диф.пары"
 
 #: pcbnew/tools/common_actions.cpp:551
 msgid "Create corner"
@@ -22850,7 +22857,7 @@ msgid ""
 "This is a experimental feature (under development)"
 msgstr ""
 "Показать/скрыть панель инструментов для СВЧ инструментов\n"
-" Это экспериментальное дополнение (в разработке)"
+"Это экспериментальное дополнение (в разработке)"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
