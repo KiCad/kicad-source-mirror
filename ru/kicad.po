@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-02 20:37+0300\n"
-"PO-Revision-Date: 2015-10-02 21:29+0300\n"
+"POT-Creation-Date: 2015-10-03 12:31+0300\n"
+"PO-Revision-Date: 2015-10-03 15:20+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -271,7 +271,7 @@ msgstr "Настройки"
 
 #: 3d-viewer/3d_toolbar.cpp:157
 msgid "Realistic Mode"
-msgstr "Реальный режим"
+msgstr "Реалистичный режим"
 
 #: 3d-viewer/3d_toolbar.cpp:162
 msgid "Render Options"
@@ -283,15 +283,14 @@ msgstr "Отображать тени"
 
 #: 3d-viewer/3d_toolbar.cpp:169
 msgid "Show Holes in Zones"
-msgstr "Показать отверстия в зонах"
+msgstr "Показать отв. в зонах"
 
 #: 3d-viewer/3d_toolbar.cpp:170
 msgid ""
 "Holes inside a copper layer copper zones are shown, but the calculation time "
 "is longer"
 msgstr ""
-"Отверстия внутри медных зон на медных слоях видимы, время обработки "
-"увеличится"
+"Отв. внутри медных зон на медных слоях видимы, время обработки увеличится"
 
 #: 3d-viewer/3d_toolbar.cpp:175
 msgid "Render Textures"
@@ -356,19 +355,19 @@ msgstr "Без 3D сетки"
 
 #: 3d-viewer/3d_toolbar.cpp:235
 msgid "3D Grid 10 mm"
-msgstr "3D сетка 10мм"
+msgstr "3D сетка 10 мм"
 
 #: 3d-viewer/3d_toolbar.cpp:236
 msgid "3D Grid 5 mm"
-msgstr "3D сетка 5мм"
+msgstr "3D сетка 5 мм"
 
 #: 3d-viewer/3d_toolbar.cpp:237
 msgid "3D Grid 2.5 mm"
-msgstr "3D сетка 2.5мм"
+msgstr "3D сетка 2,5 мм"
 
 #: 3d-viewer/3d_toolbar.cpp:238
 msgid "3D Grid 1 mm"
-msgstr "3D сетка 1мм"
+msgstr "3D сетка 1 мм"
 
 #: 3d-viewer/3d_toolbar.cpp:254
 msgid "Show Board Bod&y"
@@ -456,11 +455,11 @@ msgstr "Показать дополнительные слои"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Show All"
-msgstr "Показать все слои"
+msgstr "Показать все"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Show None"
-msgstr "Не показывать слои"
+msgstr "Скрыть все"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:270 eeschema/edit_bitmap.cpp:103
 #: pagelayout_editor/pl_editor_frame.cpp:635
@@ -875,7 +874,7 @@ msgstr "дюймы"
 
 #: common/common.cpp:175
 msgid "millimeters"
-msgstr "миллиметры"
+msgstr "мм"
 
 #: common/common.cpp:179 eeschema/dialogs/dialog_edit_label_base.cpp:57
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:125
@@ -947,7 +946,7 @@ msgid ""
 "electronic schematics and to design printed circuit boards."
 msgstr ""
 "KiCad EDA Suite — программный комплекс с открытыми исходными текстами, "
-"предназначенный для разработки электрических схем и печатных плат. "
+"предназначенный для разработки электрических схем и печатных плат."
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "KiCad on the web"
@@ -1171,11 +1170,10 @@ msgstr "Путь"
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:30
 #: eeschema/dialogs/dialog_netlist_base.cpp:129
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:378
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
 #: pcbnew/dialogs/wizard_add_fplib.cpp:841 pcbnew/muonde.cpp:800
 msgid "OK"
-msgstr "Oк"
+msgstr "OK"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:60
 #: common/dialogs/dialog_exit_base.cpp:69
@@ -1187,7 +1185,6 @@ msgstr "Oк"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
 #: gerbview/onrightclick.cpp:59 gerbview/onrightclick.cpp:81
 #: pagelayout_editor/onrightclick.cpp:115
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:382
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55
 #: pcbnew/modedit_onclick.cpp:229 pcbnew/modedit_onclick.cpp:272
 #: pcbnew/muonde.cpp:803 pcbnew/onrightclick.cpp:81 pcbnew/onrightclick.cpp:97
@@ -1200,7 +1197,7 @@ msgstr "Отмена"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:38
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:87
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:74
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:73
 msgid "Add"
 msgstr "Добавить"
 
@@ -1366,7 +1363,6 @@ msgstr "Элементы:"
 #: eeschema/dialogs/dialog_erc_base.cpp:68
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:146
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1172
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:368
 #: pcbnew/dialogs/dialog_drc_base.cpp:109
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:190
@@ -1395,7 +1391,7 @@ msgstr "A0 841x1189мм"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "A 8.5x11in"
-msgstr "A 8.5x11дюйм"
+msgstr "A 8,5x11дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "B 11x17in"
@@ -1419,7 +1415,7 @@ msgstr "USLetter 8.5x11дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8.5x14дюйм"
+msgstr "USLegal 8,5x14дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "USLedger 11x17in"
@@ -1544,7 +1540,7 @@ msgid "Issue Date"
 msgstr "Дата создания"
 
 #: common/dialogs/dialog_page_settings_base.cpp:153
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:115
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:112
 msgid "<<<"
 msgstr "<<<"
 
@@ -2289,17 +2285,17 @@ msgstr "Просмотрщик посад.мест"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:466
 #: pcbnew/tool_pcb.cpp:340
 msgid "Display polar coordinates"
-msgstr "Показывать полярные координаты"
+msgstr "Отображать полярные координаты"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:184 eeschema/tool_lib.cpp:232
 #: pcbnew/tool_modedit.cpp:216 pcbnew/tool_pcb.cpp:343
 msgid "Units in inches"
-msgstr "Дюймы"
+msgstr "Единицы измерения в дюймах"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:188 eeschema/tool_lib.cpp:236
 #: pcbnew/tool_modedit.cpp:220 pcbnew/tool_pcb.cpp:346
 msgid "Units in millimeters"
-msgstr "Миллиметры"
+msgstr "Единицы измерения в миллиметрах"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:192 eeschema/tool_lib.cpp:240
 #: eeschema/tool_sch.cpp:285 gerbview/toolbars_gerber.cpp:167
@@ -2314,7 +2310,7 @@ msgstr "Показать конт.пл. в контурном режиме"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:201
 msgid "Show texts in line mode"
-msgstr "Показывать текст в линейном режиме"
+msgstr "Показать текст в режиме линий"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:205
 msgid "Show outlines in line mode"
@@ -2342,11 +2338,11 @@ msgstr "Автомасштаб (Home)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:238
 msgid "3D Display (Alt+3)"
-msgstr "3D вид (Alt+3)"
+msgstr "3D отображение (Alt+3)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:250
 msgid "Show texts in filled mode"
-msgstr "Показывать текст залитым"
+msgstr "Показать текст залитым"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:251
 msgid "Show texts in sketch mode"
@@ -2354,7 +2350,7 @@ msgstr "Показать текст в контурном режиме"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:265
 msgid "Show outlines in filled mode"
-msgstr "Показывать границы залитыми"
+msgstr "Показать границы залитыми"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:266
 #: pcbnew/dialogs/dialog_display_options_base.cpp:70
@@ -2364,7 +2360,7 @@ msgstr "Показать границы в контурном режиме"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:401 pcbnew/hotkeys.cpp:187
 #: pcbnew/moduleframe.cpp:691 pcbnew/pcbframe.cpp:656
 msgid "3D Viewer"
-msgstr "3D просмотр"
+msgstr "Просмотрщик 3D"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:472
 #, c-format
@@ -2518,7 +2514,7 @@ msgstr ""
 "включенные KiCad.  Для большей информации смотрите раздел \"Таблица "
 "библиотек посадочных мест\" документации CvPcb."
 
-#: cvpcb/cvpcb.cpp:184 pcbnew/pcbnew.cpp:349
+#: cvpcb/cvpcb.cpp:184 pcbnew/pcbnew.cpp:360
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -2549,7 +2545,7 @@ msgstr "Файлы эквивалентностей посад.место/ком
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:93
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:79
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:78
 #: pcbnew/tools/common_actions.cpp:129
 msgid "Remove"
 msgstr "Удалить"
@@ -2562,7 +2558,7 @@ msgstr "Выгрузить выбранную библиотеку"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:134
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:40
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:84
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:83
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:67
 msgid "Move Up"
@@ -3798,17 +3794,17 @@ msgstr "0"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:48
 msgid "+90"
-msgstr "+90°"
+msgstr "+90"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:48
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
 msgid "180"
-msgstr "180°"
+msgstr "180"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:48
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
 msgid "-90"
-msgstr "−90°"
+msgstr "-90"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:50
 msgid "Orientation (Degrees)"
@@ -3950,9 +3946,7 @@ msgstr "Вправо"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Horiz. Justify"
-msgstr ""
-"Горизонтальное\n"
-"выравнивание"
+msgstr "Гориз. выравнивание"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
@@ -3969,9 +3963,7 @@ msgstr "Верх"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:64
 msgid "Vert. Justify"
-msgstr ""
-"Вертикальное\n"
-"выравнивание"
+msgstr "Верт. выравнивание"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:167
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
@@ -4212,20 +4204,20 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:110
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:120
 msgid "The text (or value) of the currently selected field"
-msgstr "Текст (или значение) выбранного поля"
+msgstr "Текст (или значение) текущего выбранного поля"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:125
 msgid ""
 "If your datasheet is given as an http:// link, then pressing this button "
 "should bring it up in your webbrowser."
 msgstr ""
-"Если документация доступна по ссылке http://, то нажав эту кнопку можно "
+"Если ваша документация доступна по ссылке http://, то нажав эту кнопку можно "
 "просмотреть ее в браузере."
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:144
 msgid ""
 "The vertical height of the currently selected field's text in the schematic"
-msgstr "Высота текста выбранных полей на схеме"
+msgstr "Верт. высота текущего выбранного текста поля в схематике"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:172
 #, c-format
@@ -4387,12 +4379,12 @@ msgstr "Размер текста по умолчанию:"
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:111
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:93
 msgid "&Horizontal pitch of repeated items:"
-msgstr "Горизонтальный шаг повторения элементов:"
+msgstr "Гориз. шаг повторения элементов:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:122
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:104
 msgid "&Vertical pitch of repeated items:"
-msgstr "Вертикальный шаг повторения элементов:"
+msgstr "Верт. шаг повторения элементов:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:133
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:129
@@ -4491,11 +4483,11 @@ msgstr "Панорамировать при перемещении объект�
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:211
 msgid "&Restrict buses and wires to H and V orientation"
-msgstr "Шины и проводники только в горизонтальной и вертикальной ориентации"
+msgstr "Ограничить шины и проводники в ортогональной ориентации"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:214
 msgid "Show page limi&ts"
-msgstr "Показывать границы страницы"
+msgstr "Показать границы страницы"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:227
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:95
@@ -4752,32 +4744,32 @@ msgstr "Стиль"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 msgid "Align left"
-msgstr "слева"
+msgstr "Выравнять слева"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
 msgid "Align center"
-msgstr "по центру"
+msgstr "Выравнять по центру"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 msgid "Align right"
-msgstr "справа"
+msgstr "Выравнять справа"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:105
 msgid "Horizontal Justify"
-msgstr "Горизонтальное выравнивание"
+msgstr "Гориз. выравнивание"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
 msgid "Align bottom"
-msgstr "снизу"
+msgstr "Выравнять снизу"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
 msgid "Align top"
-msgstr "сверху"
+msgstr "Выравнять сверху"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:111
 msgid "Vertical Justify"
-msgstr "Вертикальное выравнивание"
+msgstr "Верт. выравнивание"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:22
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:97
@@ -4898,7 +4890,7 @@ msgstr "Запустить симулятор"
 #: eeschema/dialogs/dialog_netlist.cpp:443
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
 msgid "Netlist command:"
-msgstr "Команда Netlist:"
+msgstr "Команда списка цепей:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:456
 msgid "Title:"
@@ -5858,7 +5850,7 @@ msgstr "Начать шину"
 
 #: eeschema/hotkeys.cpp:141
 msgid "End Line Wire Bus"
-msgstr "Завершить линию, цепь, шину"
+msgstr "Завершить линию, проводник, шину"
 
 #: eeschema/hotkeys.cpp:144 eeschema/onrightclick.cpp:698
 #: eeschema/onrightclick.cpp:736
@@ -5889,7 +5881,7 @@ msgstr "Добавить питание"
 
 #: eeschema/hotkeys.cpp:154
 msgid "Add No Connect Flag"
-msgstr "Добавить \"Не подключено\""
+msgstr "Добавить флаг \"Не подключено\""
 
 #: eeschema/hotkeys.cpp:156
 msgid "Add Sheet"
@@ -5897,11 +5889,11 @@ msgstr "Добавить лист"
 
 #: eeschema/hotkeys.cpp:158
 msgid "Add Bus Entry"
-msgstr "Добавить вход в шину"
+msgstr "Добавить ввод шины"
 
 #: eeschema/hotkeys.cpp:160
 msgid "Add Wire Entry"
-msgstr "Добавить ввод проводника в шину"
+msgstr "Добавить ввод проводника"
 
 #: eeschema/hotkeys.cpp:162
 msgid "Add Graphic PolyLine"
@@ -5913,7 +5905,7 @@ msgstr "Добавить графический текст"
 
 #: eeschema/hotkeys.cpp:170
 msgid "Orient Normal Component"
-msgstr "Ориентировать компонент"
+msgstr "Ориентировать компонент нормально"
 
 #: eeschema/hotkeys.cpp:172 pcbnew/hotkeys.cpp:116
 msgid "Rotate Item"
@@ -6210,7 +6202,7 @@ msgstr "Поле %s %s"
 #: eeschema/lib_field.cpp:749 pcbnew/class_drawsegment.cpp:410
 #: pcbnew/class_pad.cpp:650 pcbnew/class_pcb_text.cpp:154
 #: pcbnew/class_text_mod.cpp:401 pcbnew/class_track.cpp:1157
-#: pcbnew/class_track.cpp:1184 pcbnew/dialogs/dialog_design_rules_base.cpp:327
+#: pcbnew/class_track.cpp:1184 pcbnew/dialogs/dialog_design_rules_base.cpp:322
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:48
 msgid "Width"
 msgstr "Ширина"
@@ -6729,7 +6721,7 @@ msgstr "Зеркалировать блок --"
 
 #: eeschema/libedit_onrightclick.cpp:344
 msgid "Rotate Block ccw"
-msgstr "Повернуть блок"
+msgstr "Повернуть блок ПЧС"
 
 #: eeschema/libedit_onrightclick.cpp:346 eeschema/onrightclick.cpp:848
 #: pcbnew/onrightclick.cpp:503
@@ -7377,7 +7369,7 @@ msgstr "Дуга"
 #: eeschema/menubar_libedit.cpp:220 pcbnew/menubar_modedit.cpp:281
 #: pcbnew/menubar_pcbframe.cpp:412
 msgid "&Line or Polygon"
-msgstr "Графическая линия или многоугольник"
+msgstr "Линия или полигон"
 
 #: eeschema/menubar_libedit.cpp:237
 msgid "Component Editor &Options"
@@ -7662,7 +7654,7 @@ msgstr "Перетащить соединение"
 
 #: eeschema/onrightclick.cpp:643 eeschema/onrightclick.cpp:691
 msgid "Break Wire"
-msgstr "Разорвать провод"
+msgstr "Разбить проводник"
 
 #: eeschema/onrightclick.cpp:651 eeschema/onrightclick.cpp:685
 msgid "Delete Connection"
@@ -7670,15 +7662,15 @@ msgstr "Удалить соединение"
 
 #: eeschema/onrightclick.cpp:673
 msgid "Wire End"
-msgstr "Закончить провод"
+msgstr "Закончить проводник"
 
 #: eeschema/onrightclick.cpp:678
 msgid "Drag Wire"
-msgstr "Перетащить провод"
+msgstr "Перетащить проводник"
 
 #: eeschema/onrightclick.cpp:681
 msgid "Delete Wire"
-msgstr "Удалить провод"
+msgstr "Удалить проводник"
 
 #: eeschema/onrightclick.cpp:723
 msgid "Bus End"
@@ -7886,7 +7878,7 @@ msgstr "Символы не были спасены."
 
 #: eeschema/sch_bus_entry.cpp:335
 msgid "Bus to Wire Entry"
-msgstr "Ввод проводника в шину"
+msgstr "Ввод шины в проводник"
 
 #: eeschema/sch_bus_entry.cpp:341
 msgid "Bus to Bus Entry"
@@ -8016,19 +8008,19 @@ msgstr "Иерархический вывод листа"
 #: eeschema/sch_text.cpp:736
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:110
 msgid "Horizontal"
-msgstr "Горизонтально"
+msgstr "Гориз."
 
 #: eeschema/sch_text.cpp:740
 msgid "Vertical up"
-msgstr "Вертикально вверх"
+msgstr "Верт. вверх"
 
 #: eeschema/sch_text.cpp:744
 msgid "Horizontal invert"
-msgstr "Горизонтально перевернуто"
+msgstr "Гориз. перевернуто"
 
 #: eeschema/sch_text.cpp:748
 msgid "Vertical down"
-msgstr "Вертикально вниз"
+msgstr "Верт. вниз"
 
 #: eeschema/sch_text.cpp:1009
 #, c-format
@@ -8146,11 +8138,11 @@ msgstr ""
 
 #: eeschema/schframe.cpp:766
 msgid "Draw wires and buses in any direction"
-msgstr "Цепи и шины в любом направлении"
+msgstr "Рисовать проводники и шины в любом направлении"
 
 #: eeschema/schframe.cpp:767
 msgid "Draw horizontal and vertical wires and buses only"
-msgstr "Цепи и шины только вертикально и горизонтально"
+msgstr "Рисовать только гориз. и верт. проводники и шины"
 
 #: eeschema/schframe.cpp:776
 msgid "Do not show hidden pins"
@@ -8467,19 +8459,19 @@ msgstr "Перемещение по иерархии"
 
 #: eeschema/tool_sch.cpp:251 eeschema/help_common_strings.h:90
 msgid "Add bitmap image"
-msgstr "Добавить bitmap изображение"
+msgstr "Добавить растровое изображение"
 
 #: eeschema/tool_sch.cpp:277
 msgid "Set unit to inch"
-msgstr "Измерять в дюймах"
+msgstr "Установить единицы измерения в дюймы"
 
 #: eeschema/tool_sch.cpp:281
 msgid "Set unit to mm"
-msgstr "Измерять в миллиметрах"
+msgstr "Установить единицы измерения в мм"
 
 #: eeschema/tool_sch.cpp:295
 msgid "HV orientation for wires and bus"
-msgstr "Горизонтальная/Вертикальная ориентация для цепей и шин"
+msgstr "Ортогональная ориентация для проводников и шин"
 
 #: eeschema/tool_viewlib.cpp:59 pcbnew/tool_modview.cpp:58
 msgid "Select library to browse"
@@ -8784,13 +8776,13 @@ msgstr "по размеру страницы"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 msgid "Scale 0.5"
-msgstr "Масштаб 0.5"
+msgstr "Масштаб 0,5"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 msgid "Scale 0.7"
-msgstr "Масштаб 0.7"
+msgstr "Масштаб 0,7"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
@@ -8806,7 +8798,7 @@ msgstr "Точный масштаб 1"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 msgid "Scale 1.4"
-msgstr "Масштаб 1.4"
+msgstr "Масштаб 1,4"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
@@ -8835,7 +8827,7 @@ msgstr "Приблиз. масштаб"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:55
 msgid "X Scale Adjust"
-msgstr "Уст. масш. по X"
+msgstr "Установить масштаб по X"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:56
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:61
@@ -8845,7 +8837,7 @@ msgstr "Установка точного масштаба по оси X"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:60
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:65
 msgid "Y Scale Adjust"
-msgstr "Уст масш. по Y"
+msgstr "Установить масштаб по Y"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:66
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:71
@@ -8924,7 +8916,7 @@ msgstr "Размер C"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:27
 msgid "Show Page Limits:"
-msgstr "Показывать границы страницы:"
+msgstr "Показать границы страницы:"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:25
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:25
@@ -8947,7 +8939,7 @@ msgstr "Координаты"
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:25
 msgid "Millimeters"
-msgstr "Миллиметры"
+msgstr "мм"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:37
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:41
@@ -9418,15 +9410,15 @@ msgstr "Инструмент "
 
 #: gerbview/toolbars_gerber.cpp:155
 msgid "Turn polar coordinate on"
-msgstr "Показать полярные координаты"
+msgstr "Включить полярные координаты"
 
 #: gerbview/toolbars_gerber.cpp:159
 msgid "Set units to inches"
-msgstr "Измерять в дюймах"
+msgstr "Установить единицы измерения в дюймы"
 
 #: gerbview/toolbars_gerber.cpp:163
 msgid "Set units to millimeters"
-msgstr "Измерять в миллиметрах"
+msgstr "Установить единицы измерения в мм"
 
 #: gerbview/toolbars_gerber.cpp:172
 msgid "Show spots in sketch mode"
@@ -10341,7 +10333,7 @@ msgstr "Добавить текст"
 
 #: pagelayout_editor/onrightclick.cpp:55
 msgid "Add Bitmap"
-msgstr "Добавить изображение"
+msgstr "Добавить растровое изображение"
 
 #: pagelayout_editor/page_layout_writer.cpp:103
 #: pagelayout_editor/page_layout_writer.cpp:130
@@ -11240,7 +11232,7 @@ msgstr "Ширина дорожек"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1307
 msgid "Min clearance"
-msgstr "Мин зазор"
+msgstr "Мин. зазор"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1308
 msgid "Via: (diam - drill)"
@@ -12007,7 +11999,7 @@ msgstr "Неподключенные конт.пл."
 
 #: pcbnew/class_drc_item.cpp:45
 msgid "Track near thru-hole"
-msgstr "Дорожка близко к отв."
+msgstr "Дорожка близко к сквозному отв."
 
 #: pcbnew/class_drc_item.cpp:47
 msgid "Track near pad"
@@ -12043,7 +12035,7 @@ msgstr "Конт.пл. близко к конт.пл."
 
 #: pcbnew/class_drc_item.cpp:71
 msgid "Via hole > diameter"
-msgstr "Отверстие перех.отв. > диаметра"
+msgstr "Отв. перех.отв. > диаметра"
 
 #: pcbnew/class_drc_item.cpp:73
 msgid "Micro Via: incorrect layer pairs (not adjacent)"
@@ -12234,12 +12226,12 @@ msgstr "В корпусе"
 msgid "Pad"
 msgstr "Конт.пл."
 
-#: pcbnew/class_pad.cpp:633 pcbnew/dialogs/dialog_design_rules.cpp:52
+#: pcbnew/class_pad.cpp:633 pcbnew/dialogs/dialog_design_rules.cpp:53
 msgid "Net"
 msgstr "Цепь"
 
 #: pcbnew/class_pad.cpp:659 pcbnew/class_track.cpp:1247
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:278
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:273
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
 msgstr "Сверло"
@@ -12636,7 +12628,7 @@ msgstr "Глухие/внутр. перех.отв."
 msgid "Layers"
 msgstr "Слои"
 
-#: pcbnew/class_track.cpp:1240 pcbnew/dialogs/dialog_design_rules_base.cpp:277
+#: pcbnew/class_track.cpp:1240 pcbnew/dialogs/dialog_design_rules_base.cpp:272
 msgid "Diameter"
 msgstr "Диаметр"
 
@@ -12844,7 +12836,7 @@ msgstr "Печать зеркально"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:94
 msgid "Print the layer(s) horizontally mirrored"
-msgstr "Печать слоя(слоев) зеркально по горизонтали"
+msgstr "Печать слоя(слоев) зеркально по гориз."
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
 msgid "One file per layer"
@@ -13088,7 +13080,7 @@ msgstr "Терморазгрузка"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 msgid "THT thermal"
-msgstr "Терморазгрузка скв.отв."
+msgstr "Терморазгрузка сквозного отв."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
 msgid "Thermal Reliefs"
@@ -13155,7 +13147,7 @@ msgstr "Любой"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid "H, V, and 45 deg only"
-msgstr "Гориз., верт. и 45°"
+msgstr "Только ортогонально и 45°"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:237
 msgid "Outline style:"
@@ -13197,7 +13189,7 @@ msgstr "Алфавит, все 26 символов"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:29
 msgid "Horizontal count:"
-msgstr "Кол-во по горизонтали:"
+msgstr "Кол-во по гориз.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:33
 #: pcbnew/dialogs/dialog_create_array_base.cpp:40
@@ -13208,23 +13200,23 @@ msgstr "5"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:36
 msgid "Vertical count:"
-msgstr "Кол-во по вертикали:"
+msgstr "Кол-во по верт.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:43
 msgid "Horizontal spacing:"
-msgstr "Интервал по горизонтали:"
+msgstr "Интервал по гориз.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:54
 msgid "Vertical spacing:"
-msgstr "Интервал по вертикали:"
+msgstr "Интервал по верт.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:65
 msgid "Horizontal offset:"
-msgstr "Смещение по горизонтали:"
+msgstr "Смещение по гориз.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:76
 msgid "Vertical offset:"
-msgstr "Смещение по вертикали:"
+msgstr "Смещение по верт.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:87
 msgid "Stagger:"
@@ -13251,11 +13243,11 @@ msgstr "Тип шахматной расстановки"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:106
 msgid "Horizontal, then vertical"
-msgstr "Горизонтально затем вертикально"
+msgstr "Гориз. затем верт."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:106
 msgid "Vertical, then horizontal"
-msgstr "Вертикально затем горизонтально"
+msgstr "Верт. затем гориз."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:108
 msgid "Numbering Direction"
@@ -13297,11 +13289,11 @@ msgstr "Начальное значение:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Horizontal center:"
-msgstr "Центр по горизонтали:"
+msgstr "Центр по гориз.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:191
 msgid "Vertical center:"
-msgstr "Центр по вертикали:"
+msgstr "Центр по верт.:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:202
 msgid "Radius:"
@@ -13358,118 +13350,111 @@ msgstr "Тип нумерации:"
 msgid "Circular"
 msgstr "Круглая"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:53
+#: pcbnew/dialogs/dialog_design_rules.cpp:54
 msgid "Class"
 msgstr "Класс"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:65
+#: pcbnew/dialogs/dialog_design_rules.cpp:66
 msgid "* (Any)"
 msgstr "* (Любые)"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:196
-msgid "<b>Current general settings:</b><br>"
-msgstr "<b>Текущие главные установки:</b><br>"
+#: pcbnew/dialogs/dialog_design_rules.cpp:631
+msgid "Design Rule Setting Error"
+msgstr "Ошибка настройки правила проектирования"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:200
-#, c-format
-msgid "Minimum value for tracks width: <b>%s</b><br>\n"
-msgstr "Минимальная ширина дорожки: <b>%s</b><br>\n"
-
-#: pcbnew/dialogs/dialog_design_rules.cpp:204
-#, c-format
-msgid "Minimum value for vias diameter: <b>%s</b><br>\n"
-msgstr "Минимальный диаметр перех.отв.: <b>%s</b><br>\n"
-
-#: pcbnew/dialogs/dialog_design_rules.cpp:208
-#, c-format
-msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
-msgstr "Минимальный диаметр перех.микроотв.: <b>%s</b><br>\n"
-
-#: pcbnew/dialogs/dialog_design_rules.cpp:648
-msgid "Errors detected, Abort"
-msgstr "Обнаружены ошибки, прервано"
-
-#: pcbnew/dialogs/dialog_design_rules.cpp:666
+#: pcbnew/dialogs/dialog_design_rules.cpp:649
 msgid "New Net Class Name:"
 msgstr "Имя нового класса цепи:"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:686
+#: pcbnew/dialogs/dialog_design_rules.cpp:669
 msgid "This NetClass is already existing, cannot add it; Aborted"
 msgstr "Этот класс цепи уже существует, добавить невозможно; прервано"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:748
+#: pcbnew/dialogs/dialog_design_rules.cpp:731
 msgid "The default Netclass cannot be removed"
 msgstr "Класс цепи по умолчанию не может быть удален"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:930
+#: pcbnew/dialogs/dialog_design_rules.cpp:914
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>ширина дорожки</b> &lt; <b>минимальной ширины дорожки</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:943
+#: pcbnew/dialogs/dialog_design_rules.cpp:926
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
 msgstr ""
 "%s: <b>диаметр перех.отв.</b> &lt; <b>минимального диаметра перех.отв.</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:955
+#: pcbnew/dialogs/dialog_design_rules.cpp:937
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr "%s: <b>сверло перех.отв.</b> &ge; <b>диаметра перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:964
+#: pcbnew/dialogs/dialog_design_rules.cpp:945
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr ""
 "%s: <b>сверло перех.отв.</b> &lt; <b>минимального сверла перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:977
+#: pcbnew/dialogs/dialog_design_rules.cpp:957
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr ""
 "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра перех."
 "микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:989
+#: pcbnew/dialogs/dialog_design_rules.cpp:968
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr ""
 "%s: <b>сверло перех.микроотв.</b> &ge; <b>диаметра перех.микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:998
+#: pcbnew/dialogs/dialog_design_rules.cpp:976
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr ""
 "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла перех.микроотв."
 "</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1019
+#: pcbnew/dialogs/dialog_design_rules.cpp:995
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
 "<b>Экстра размер дорожки %d </b> %s &lt; <b>минимального размера дорожки</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1028
+#: pcbnew/dialogs/dialog_design_rules.cpp:1004
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер дорожки %d </b> %s &gt; <b>1 дюйма!</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1053
+#: pcbnew/dialogs/dialog_design_rules.cpp:1024
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 msgstr ""
 "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера перех."
 "отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1062
+#: pcbnew/dialogs/dialog_design_rules.cpp:1034
+#, c-format
+msgid "<b>No via drill size define in row %d</b><br>"
+msgstr "<b>Нет определения размера сверла перех.отв. в строке %d</b><br>"
+
+#: pcbnew/dialogs/dialog_design_rules.cpp:1044
+#, c-format
+msgid "<b>Extra Via %d Drill</b> %s &lt; <b>Min Via Drill %s</b><br>"
+msgstr ""
+"<b>Экстра сверло перех.отв. %d</b> %s &lt; <b>мин. сверла перех.отв. %s</"
+"b><br>"
+
+#: pcbnew/dialogs/dialog_design_rules.cpp:1053
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr ""
 "<b>Экстра размер перех.отв. %d </b> %s &le; <b>Размера сверла</b> %s<br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1072
+#: pcbnew/dialogs/dialog_design_rules.cpp:1062
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер перех.отв. %d </b>%s &gt; <b>1 дюйма!</b><br>"
@@ -13499,11 +13484,11 @@ msgstr "Сверло перех.микроотв."
 msgid "Net Class parameters"
 msgstr "Параметры класса цепей"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:75
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:74
 msgid "Add another Net Class"
 msgstr "Добавить другой класс цепей"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:80
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:79
 msgid ""
 "Remove the currently select Net Class\n"
 "The default Net Class cannot be removed"
@@ -13511,63 +13496,63 @@ msgstr ""
 "Удалить выбранный класс цепей\n"
 "Класс цепей \"default\" удалить нельзя"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:85
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:84
 msgid "Move the currently selected Net Class up one row"
 msgstr "Переместить выбранный класс цепей вверх"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:96
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:95
 msgid "Membership:"
 msgstr "Состав классов цепей:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:116
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:113
 msgid "Move the selected nets in the right list to the left list"
 msgstr "Переместить выбранные цепи из правого списка в левый"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:120
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:117
 msgid ">>>"
 msgstr ">>>"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:121
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:118
 msgid "Move the selected nets in the left list to the right list"
 msgstr "Переместить выбранные цепи из левого списка в правый"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:125
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:122
 msgid "<< Select All"
 msgstr "<< Выбрать все"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:126
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:123
 msgid "Select all nets in the left list"
 msgstr "Выбрать все цепи в левом списке"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:130
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:127
 msgid "Select All >>"
 msgstr "Выбрать все >>"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:131
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:128
 msgid "Select all nets in the right list"
 msgstr "Выбрать все цепи в правом списке"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:159
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:154
 msgid "Net Classes Editor"
 msgstr "Редактор классов цепей"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:168
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:163
 msgid "Via Options:"
 msgstr "Параметры перех.отв.:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:170
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:165
 msgid "Do not allow blind/buried vias"
 msgstr "Запретить глухие/внутр. перех.отв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:170
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:165
 msgid "Allow blind/buried vias"
 msgstr "Разрешить глухие/внутр. перех.отв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:172
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:167
 msgid "Blind/buried Vias:"
 msgstr "Глухие/внутр. перех.отв.:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:174
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:169
 msgid ""
 "Allows or not blind/buried vias.\n"
 "Do not allow is the usual selection.\n"
@@ -13578,20 +13563,20 @@ msgstr ""
 "Примечание: перех.микроотв. имеют специальный тип глухие перех.отв. и отсюда "
 "не управляемы"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:178
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:173
 msgid "Do not allow micro vias"
 msgstr "Запретить перех.микроотв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:178
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:173
 msgid "Allow micro vias"
 msgstr "Разрешить перех.микроотв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:180
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:175
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:147
 msgid "Micro Vias:"
 msgstr "Перех.микроотв.:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:182
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:177
 msgid ""
 "Allows or do not allow use of micro vias\n"
 "They are very small vias only from an external copper layer to its near "
@@ -13601,32 +13586,32 @@ msgstr ""
 "Они очень маленькие перех.отв., могут быть только с внешнего медного слоя до "
 "ближайшего соседнего"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:190
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:185
 msgid "Minimum Allowed Values:"
 msgstr "Доступные минимальные значения:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:198
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:193
 #: pcbnew/dialogs/dialog_drc_base.cpp:46
 msgid "Min track width"
 msgstr "Мин. ширина дорожки"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:206
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:201
 msgid "Min via diameter"
 msgstr "Мин. диаметр перех.отв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:214
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:209
 msgid "Min via drill dia"
 msgstr "Мин. диаметр сверла перех.отв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:222
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:217
 msgid "Min uvia diameter"
 msgstr "Мин. диаметр перех.микроотв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:230
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:225
 msgid "Min uvia drill dia"
 msgstr "Мин. сверло перех.микроотв."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:250
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:245
 msgid ""
 "Specific via diameters and track widths, which \n"
 "can be used to replace default Netclass values \n"
@@ -13636,115 +13621,115 @@ msgstr ""
 "могут быть использованы для замены значений по умолчанию класса цепи \n"
 "для произвольных перех.отв. и сегментов дорожек."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:258
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:253
 msgid "Custom Via Sizes:"
 msgstr "Пользовательские размеры перех.отв.:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:260
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:255
 msgid "Drill value: a blank or 0 => default Netclass value"
 msgstr "Значение сверла: пустое или 0 => значение из класса цепи по умолчанию"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:284
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:279
 msgid "Via 1"
 msgstr "Перех.отв. 1"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:285
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:280
 msgid "Via 2"
 msgstr "Перех.отв. 2"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:286
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:281
 msgid "Via 3"
 msgstr "Перех.отв. 3"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:287
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:282
 msgid "Via 4"
 msgstr "Перех.отв. 4"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:288
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:283
 msgid "Via 5"
 msgstr "Перех.отв. 5"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:289
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:284
 msgid "Via 6"
 msgstr "Перех.отв. 6"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:290
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:285
 msgid "Via 7"
 msgstr "Перех.отв. 7"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:291
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:286
 msgid "Via 8"
 msgstr "Перех.отв. 8"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:292
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:287
 msgid "Via 9"
 msgstr "Перех.отв. 9"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:293
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:288
 msgid "Via 10"
 msgstr "Перех.отв. 10"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:294
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:289
 msgid "Via 11"
 msgstr "Перех.отв. 11"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:295
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:290
 msgid "Via 12"
 msgstr "Перех.отв. 12"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:308
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:303
 msgid "Custom Track Widths:"
 msgstr "Пользовательская ширина дорожек:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:333
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:328
 msgid "Track 1"
 msgstr "Дорожка 1"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:334
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:329
 msgid "Track 2"
 msgstr "Дорожка 2"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:335
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:330
 msgid "Track 3"
 msgstr "Дорожка 3"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:336
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:331
 msgid "Track 4"
 msgstr "Дорожка 4"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:337
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:332
 msgid "Track 5"
 msgstr "Дорожка 5"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:338
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:333
 msgid "Track 6"
 msgstr "Дорожка 6"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:339
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:334
 msgid "Track 7"
 msgstr "Дорожка 7"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:340
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:335
 msgid "Track 8"
 msgstr "Дорожка 8"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:341
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:336
 msgid "Track 9"
 msgstr "Дорожка 9"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:342
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:337
 msgid "Track 10"
 msgstr "Дорожка 10"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:343
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:338
 msgid "Track 11"
 msgstr "Дорожка 11"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:344
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:339
 msgid "Track 12"
 msgstr "Дорожка 12"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:363
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:358
 msgid "Global Design Rules"
 msgstr "Общие правила проектирования"
 
@@ -13785,7 +13770,7 @@ msgstr "Никогда"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:31
 msgid "Defined holes"
-msgstr "Определенные отверстия"
+msgstr "Определенные отв."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:31
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
@@ -13796,16 +13781,16 @@ msgstr "Всегда"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:33
 msgid "Show Via Holes:"
-msgstr "Показать отверстия перех.отв.:"
+msgstr "Показать отв. перех.отв.:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:35
 msgid ""
 "Show or hide via holes.\n"
 "If Defined Holes is selected, only the non default size holes are shown"
 msgstr ""
-"Показать или скрыть отверстия перех.отв.\n"
-"Если выбраны определенные отверстия, то будут показаны отверстия только с "
-"отличными от него размерами"
+"Показать или скрыть отв. перех.отв.\n"
+"Если выбраны определенные отв., то будут показаны отв. только с отличными от "
+"него размерами"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:43
 msgid "Routing Help:"
@@ -14051,7 +14036,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:482
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:352
 msgid "3D Shape:"
-msgstr "3D вид:"
+msgstr "3D форма:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:508
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:379
@@ -14083,11 +14068,11 @@ msgstr "+90,0"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "-90.0"
-msgstr "−90,0"
+msgstr "-90,0"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "180.0"
-msgstr "180,0°"
+msgstr "180,0"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "Other rotation"
@@ -14959,7 +14944,7 @@ msgstr "Минимальный заголовок"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:91
 msgid "Merge PTH and NPTH holes into one file"
-msgstr "Вывести PTH и NPTH отверстия в один файл"
+msgstr "Объединить метал. и неметал. сквозные отв. в один файл"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Absolute"
@@ -15000,7 +14985,7 @@ msgstr "Величина сверла перех.микроотв."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:133
 msgid "Holes Count:"
-msgstr "Количество отверстий:"
+msgstr "Количество отв.:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:135
 msgid "Plated Pads:"
@@ -15129,7 +15114,7 @@ msgstr "Вкл/Выкл автоматического удаления доро
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:122
 msgid "&Limit tracks to 45 degrees"
-msgstr "Дорожки только 45°"
+msgstr "Ограничить дорожки только под 45°"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:123
 msgid ""
@@ -15137,11 +15122,11 @@ msgid ""
 "track."
 msgstr ""
 "Если включено, то при создании дорожек допустимы направления только "
-"горизонтально, вертикально или 45°."
+"ортогонально или 45°."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:127
 msgid "L&imit graphic lines to 45 degrees"
-msgstr "Графические линии только под 45°"
+msgstr "Ограничить графические линии только под 45°"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:128
 msgid ""
@@ -15149,7 +15134,7 @@ msgid ""
 "segment on technical layers."
 msgstr ""
 "Если включено, то при создании сегментов на технических слоях допустимы "
-"направления только горизонтально, вертикально или 45°."
+"направления только ортогонально или 45°."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:132
 msgid "&Use double segmented tracks"
@@ -15549,7 +15534,7 @@ msgstr "Угол дуги:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:101
 msgid "0.1 degree"
-msgstr "0.1°"
+msgstr "0,1°"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:105
 msgid "Item thickness:"
@@ -15682,7 +15667,7 @@ msgstr "Внешний вид контура:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 msgid "Keepout Options:"
-msgstr "Параметры запрета:"
+msgstr "Параметры области запрета:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
 msgid "No tracks"
@@ -15727,7 +15712,7 @@ msgstr "Группировка слоев"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
 msgid "Custom"
-msgstr "Пользовательский"
+msgstr "Пользовательская"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Front only"
@@ -16323,7 +16308,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:209
 msgid "Solder mask min width:"
-msgstr "Мин ширина паяльной маски:"
+msgstr "Мин. ширина паяльной маски:"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:56
 msgid ""
@@ -16331,7 +16316,7 @@ msgid ""
 "Two pad areas nearer than this value will be merged during plotting.\n"
 "This parameter is used only to plot solder mask layers."
 msgstr ""
-"Мин расстояние между 2 конт.пл. зон.\n"
+"Мин. расстояние между 2 конт.пл. зон.\n"
 "Две конт.пл. зон, расположенные ближе этого значения, при черчении будут "
 "объединены.\n"
 "Этот параметр используется только при черчении слоев паяльной маски."
@@ -16712,7 +16697,7 @@ msgstr "Настройка контура:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:46
 msgid "H, V and 45 deg"
-msgstr "Гориз., верт. и 45°"
+msgstr "Ортогонально и 45°"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
 msgid "Zone Edges Orient"
@@ -16771,7 +16756,7 @@ msgstr "Ошибка: конт.пл. не имеет слоев"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:763
 msgid "Error: the pad is not on a copper layer and has a hole"
-msgstr "Ошибка: конт.пл. не на медном слое и имеет отверстие"
+msgstr "Ошибка: конт.пл. не на медном слое и имеет отв."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:768
 msgid ""
@@ -16792,7 +16777,7 @@ msgstr "Слишком большая разница значения разме
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:799
 msgid "Error: Through hole pad: drill diameter set to 0"
-msgstr "Ошибка: Сквозное отверстие конт.пл.: диаметр сверла установлен в 0"
+msgstr "Ошибка: Сквозное отв. конт.пл.: диаметр сверла установлен в 0"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:804
 msgid ""
@@ -16832,7 +16817,7 @@ msgstr "Соединитель"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "NPTH, Mechanical"
-msgstr "NPTH, механическое"
+msgstr "Неметал. сквозное, механическое"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:64
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:270
@@ -16895,7 +16880,7 @@ msgstr "Длина до конт.пл.:"
 msgid ""
 "Wire length from pad to die on chip ( used to calculate actual track length)"
 msgstr ""
-"Длина провода от конт.пл. до чипа ( используется для вычисления реальной "
+"Длина проводника от конт.пл. до чипа ( используется для вычисления реальной "
 "длины дорожки)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:195
@@ -16924,11 +16909,11 @@ msgstr "Передняя сторона"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Circular hole"
-msgstr "Круглое отверстие"
+msgstr "Круглое отв."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval hole"
-msgstr "Овальное отверстие"
+msgstr "Овальное отв."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:320
 msgid "Copper:"
@@ -17097,7 +17082,7 @@ msgstr "Выравнивание:"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:116
 msgid "Orientation (0.1 deg):"
-msgstr "Ориентация (шаг 0.1°):"
+msgstr "Ориентация (шаг 0,1°):"
 
 #: pcbnew/dialogs/dialog_plot.cpp:595
 msgid "HPGL pen size constrained."
@@ -17175,7 +17160,7 @@ msgstr "Принудительно чертить  невидимые значе
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid "Force plot invisible values and/or references"
-msgstr "Принудительно чертить  невидимые значения и/или обозначения"
+msgstr "Принудительно чертить невидимые значения и/или обозначения"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 msgid "Do not tent vias"
@@ -17211,7 +17196,7 @@ msgstr "Использовать вспомогательные оси как о
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Drill marks:"
-msgstr "Метки отверстий:"
+msgstr "Метки отв.:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 msgid "Small"
@@ -17439,19 +17424,19 @@ msgstr "Настройка перекоса диф.пары"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:66
 msgid "Target skew: "
-msgstr "Разбег: "
+msgstr "Целевой перекос: "
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:20
 msgid "Length/skew"
-msgstr "Длина/разбег"
+msgstr "Длина/перекос"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:28
 msgid "Tune from:"
-msgstr "От: "
+msgstr "Настроить от:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:40
 msgid "Tune to:"
-msgstr "До: "
+msgstr "Настроить до:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:52
 msgid "Constraint:"
@@ -17475,11 +17460,11 @@ msgstr "Змейка"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:96
 msgid "Min amplitude (Amin):"
-msgstr "Мин амплитуда (Amin):"
+msgstr "Мин. амплитуда (Amin):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:107
 msgid "Max amplitude (Amax):"
-msgstr "Макс амплитуда (Amax):"
+msgstr "Макс. амплитуда (Amax):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:118
 msgid "Spacing (s):"
@@ -17487,7 +17472,7 @@ msgstr "Шаг (s):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:129
 msgid "Miter radius (r):"
-msgstr "Радиус скругления(r):"
+msgstr "Радиус скругления (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:140
 msgid "Miter style:"
@@ -17603,7 +17588,7 @@ msgstr "Печать рамки листа"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:106
 msgid "No drill mark"
-msgstr "Не метить отверстие"
+msgstr "Не метить сверла"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:106
 msgid "Small mark"
@@ -17611,7 +17596,7 @@ msgstr "Малая метка"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:106
 msgid "Real drill"
-msgstr "Реальное отверстие"
+msgstr "Реальное сверло"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:108
 msgid "Pads Drill Opt"
@@ -18099,21 +18084,21 @@ msgstr "Установка начальных координат сетки"
 #: pcbnew/edit.cpp:1476 pcbnew/tools/drawing_tool.cpp:78
 #: pcbnew/tools/drawing_tool.cpp:103
 msgid "Add graphic line"
-msgstr "Добавить граф.линию"
+msgstr "Добавить графическую линию"
 
 #: pcbnew/edit.cpp:1480 pcbnew/menubar_modedit.cpp:287
 #: pcbnew/menubar_pcbframe.cpp:405 pcbnew/tool_modedit.cpp:176
 #: pcbnew/tool_pcb.cpp:460 pcbnew/tools/drawing_tool.cpp:182
 #: pcbnew/tools/drawing_tool.cpp:202
 msgid "Add graphic arc"
-msgstr "Добавить граф.дугу"
+msgstr "Добавить графическую дугу"
 
 #: pcbnew/edit.cpp:1484 pcbnew/menubar_modedit.cpp:276
 #: pcbnew/menubar_pcbframe.cpp:408 pcbnew/tool_modedit.cpp:173
 #: pcbnew/tool_pcb.cpp:457 pcbnew/tools/drawing_tool.cpp:135
 #: pcbnew/tools/drawing_tool.cpp:155
 msgid "Add graphic circle"
-msgstr "Добавить граф.окружность"
+msgstr "Добавить графическую окружность"
 
 #: pcbnew/edit.cpp:1496 pcbnew/menubar_pcbframe.cpp:419
 #: pcbnew/tool_pcb.cpp:467 pcbnew/tools/drawing_tool.cpp:252
@@ -18197,7 +18182,7 @@ msgid ""
 "Could not add holes to contours."
 msgstr ""
 "VRML экспорт не удался:\n"
-"Не добавлены отверстия по контуру."
+"Не добавлены отв. по контуру."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:235
 msgid "No modules for automated placement."
@@ -18384,7 +18369,7 @@ msgstr "Параметр"
 #: pcbnew/footprint_wizard_frame.cpp:549 pcbnew/modview_frame.cpp:644
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
-msgstr "Просмотр модуля: 3D вид [%s]"
+msgstr "Просмотр модуля:  Просмотрщик 3D [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:575
 msgid "Select the wizard script to load and run"
@@ -18401,7 +18386,7 @@ msgstr "Выбрать следующую страницу параметров"
 #: pcbnew/footprint_wizard_frame.cpp:589 pcbnew/menubar_modedit.cpp:237
 #: pcbnew/tool_modview.cpp:76 pcbnew/tool_modview.cpp:178
 msgid "Show footprint in 3D viewer"
-msgstr "Показать посад.место в 3D просмотрщике"
+msgstr "Показать посад.место в просмотрщике 3D"
 
 #: pcbnew/footprint_wizard_frame.cpp:616
 msgid "Export the footprint to the editor"
@@ -18877,7 +18862,7 @@ msgstr "Позиция определенная пользователем"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
 msgid "Place DXF origin (0,0) point:"
-msgstr "Разместить начальную точку (0,0) DXF:"
+msgstr "Разместить начальную точку (0;0) DXF:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:60
 msgid "DXF origin on PCB Grid, X Coordinate"
@@ -19464,7 +19449,7 @@ msgstr "Редактировать установки для новых конт
 
 #: pcbnew/menubar_modedit.cpp:236 pcbnew/menubar_pcbframe.cpp:349
 msgid "&3D Viewer"
-msgstr "3D просмотр"
+msgstr "Просмотрщик 3D"
 
 #: pcbnew/menubar_modedit.cpp:243 pcbnew/menubar_pcbframe.cpp:360
 msgid "&Switch canvas to default"
@@ -19501,7 +19486,7 @@ msgstr "Добавить конт.пл."
 #: pcbnew/menubar_modedit.cpp:282 pcbnew/menubar_pcbframe.cpp:413
 #: pcbnew/tool_modedit.cpp:170 pcbnew/tool_pcb.cpp:454
 msgid "Add graphic line or polygon"
-msgstr "Добавить граф.линии или полигоны"
+msgstr "Добавить графическую линию или полигон"
 
 #: pcbnew/menubar_modedit.cpp:292
 msgid "&Text"
@@ -19845,7 +19830,7 @@ msgstr "Установить размер текста и ширину поле�
 
 #: pcbnew/menubar_pcbframe.cpp:351
 msgid "Show board in 3D viewer"
-msgstr "Просмотр печатной платы в 3D"
+msgstr "Просмотр платы в просмотрщике 3D"
 
 #: pcbnew/menubar_pcbframe.cpp:355
 msgid "&List Nets"
@@ -21147,7 +21132,7 @@ msgstr "Файл автосохранения '%s' не может быть уд
 msgid " [new file]"
 msgstr " [новый файл]"
 
-#: pcbnew/pcbnew.cpp:336
+#: pcbnew/pcbnew.cpp:347
 msgid ""
 "You have run Pcbnew for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -21234,19 +21219,19 @@ msgstr ""
 
 #: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Increase spacing"
-msgstr "Увеличить интервал"
+msgstr "Увеличить шаг"
 
 #: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Increase meander spacing by one step."
-msgstr "Увеличить интервал меандра за один шаг."
+msgstr "Увеличить шаг меандра за один шаг."
 
 #: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Decrease spacing"
-msgstr "Уменьшить интервал"
+msgstr "Уменьшить шаг"
 
 #: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Decrease meander spacing by one step."
-msgstr "Уменьшить интервал меандра за один шаг."
+msgstr "Уменьшить шаг меандра за один шаг."
 
 #: pcbnew/router/length_tuner_tool.cpp:66
 msgid "Increase amplitude"
@@ -21356,11 +21341,11 @@ msgstr "Длиннее: перекос "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:159
 msgid "Too short: skew "
-msgstr "Короче: перекос"
+msgstr "Короче: перекос "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:162
 msgid "Tuned: skew "
-msgstr "Настроены: перекос"
+msgstr "Настроен: перекос "
 
 #: pcbnew/router/pns_tool_base.cpp:60
 msgid "Routing Options..."
@@ -21509,8 +21494,9 @@ msgid ""
 "mm).\n"
 "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each."
 msgstr ""
-"Не удалось найти следующий сегмент с конечной точкой в (%s мм, %s мм).\n"
-"Отредактируйте контур на слое контура платы, соединив сегменты неразрывно."
+"Не удалось найти следующий ограничивающий сегмент с конечной точкой в (%s "
+"мм, %s мм).\n"
+"Измените графику контура в Edge.Cuts, сделав из них неразрывные полигоны."
 
 #: pcbnew/specctra_export.cpp:1293
 #, c-format
@@ -21518,8 +21504,9 @@ msgid ""
 "Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
 "Edit Edge.Cuts interior graphics, making them contiguous polygons each."
 msgstr ""
-"Не удалось найти следующий сегмент с конечной точкой в (%s мм, %s мм).\n"
-"Отредактируйте графику на слое контура платы, соединив сегменты неразрывно."
+"Не удалось найти следующий сегмент области запрета с конечной точкой в (%s "
+"мм, %s мм).\n"
+"Измените внутреннюю графику в Edge.Cuts, сделая из них неразрывные полигоны."
 
 #: pcbnew/specctra_export.cpp:1454
 #, c-format
@@ -21716,7 +21703,7 @@ msgstr "Закрыть просмотрщик посад.мест"
 
 #: pcbnew/tool_modview.cpp:177
 msgid "3&D Viewer"
-msgstr "3D просмотр"
+msgstr "Просмотрщик 3D"
 
 #: pcbnew/tool_modview.cpp:190
 msgid "Open the Pcbnew manual"
@@ -22185,19 +22172,19 @@ msgstr "Выравнивает выбранные элементы по прав
 
 #: pcbnew/tools/common_actions.cpp:580
 msgid "Distribute horizontally"
-msgstr "Распределить горизонтально"
+msgstr "Распределить гориз."
 
 #: pcbnew/tools/common_actions.cpp:581
 msgid "Distributes selected items along the horizontal axis"
-msgstr "Распределяет выбранные элементы вдоль горизонтальной оси"
+msgstr "Распределяет выбранные элементы вдоль гориз. оси"
 
 #: pcbnew/tools/common_actions.cpp:585
 msgid "Distribute vertically"
-msgstr "Распределить вертикально"
+msgstr "Распределить верт."
 
 #: pcbnew/tools/common_actions.cpp:586
 msgid "Distributes selected items along the vertical axis"
-msgstr "Распределяет выбранные элементы вдоль вертикальной оси"
+msgstr "Распределяет выбранные элементы вдоль верт. оси"
 
 #: pcbnew/tools/edit_tool.cpp:582
 msgid "Cannot delete component reference."
@@ -22394,7 +22381,7 @@ msgstr "Параметры 3D отображения"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:92
 msgid "Bitmap to Component Converter"
-msgstr "Конвертер bitmap-изображения в компонент"
+msgstr "Конвертер растрового изображения в компонент"
 
 #: common/dialog_about/dialog_about_base.h:51
 msgid "About..."
@@ -22549,7 +22536,7 @@ msgstr "Разместить ввод шины в шину"
 
 #: eeschema/help_common_strings.h:59
 msgid "Place not-connected flag"
-msgstr "Разместить флаг \"не соединено\""
+msgstr "Разместить флаг \"Не подключено\""
 
 #: eeschema/help_common_strings.h:61
 msgid "Place net name - local label"
@@ -22592,7 +22579,7 @@ msgstr "Разместить иерархический вывод на лист
 
 #: eeschema/help_common_strings.h:73
 msgid "Place graphic lines or polygons"
-msgstr "Разместить графические линии или многоугольники"
+msgstr "Разместить графические линии или полигоны"
 
 #: eeschema/help_common_strings.h:74
 msgid "Place text"
@@ -22640,7 +22627,7 @@ msgstr "Добавить дугу в изображение компонента
 
 #: eeschema/help_common_strings.h:89
 msgid "Add lines and polygons to component body"
-msgstr "Добавить линии и многоугольники в изображение компонента"
+msgstr "Добавить линии и полигоны в изображение компонента"
 
 #: eeschema/sch_bitmap.h:127
 msgid "Image"
@@ -22652,7 +22639,7 @@ msgstr "Маркер ERC"
 
 #: eeschema/sch_no_connect.h:88
 msgid "No Connect"
-msgstr "Не соединено"
+msgstr "\"Не подключено\""
 
 #: gerbview/dialogs/dialog_show_page_borders_base.h:50
 msgid "Page Borders"
@@ -22690,7 +22677,7 @@ msgstr "Параметры очистки"
 msgid "Copper Zone Properties"
 msgstr "Свойства медной зоны"
 
-#: pcbnew/dialogs/dialog_design_rules_base.h:114
+#: pcbnew/dialogs/dialog_design_rules_base.h:112
 msgid "Design Rules Editor"
 msgstr "Правка правил проектирования"
 
