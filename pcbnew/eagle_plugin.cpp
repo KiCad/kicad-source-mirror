@@ -785,6 +785,13 @@ struct EPOLYGON
     int         layer;
     opt_double  spacing;
 
+    // KiCad priority is opposite of Eagle rank, that is:
+    //  - Eagle Low rank drawn first
+    //  - KiCad high priority drawn first
+    // So since Eagle has an upper limit we define this, used for the cases
+    // where no rank is specified.
+    static const int    max_priority = 6;
+
     enum {      // for pour
         SOLID,
         HATCH,
@@ -819,6 +826,7 @@ EPOLYGON::EPOLYGON( CPTREE& aPolygon )
     width   = attribs.get<double>( "width" );
     layer   = attribs.get<int>( "layer" );
     spacing = attribs.get_optional<double>( "spacing" );
+    isolate = attribs.get_optional<double>( "isolate" );
 
     opt_string s = attribs.get_optional<string>( "pour" );
     if( s )
@@ -1029,7 +1037,6 @@ void ERULES::parse( CPTREE& aRules )
             rlMinPadTop = parseEagle( attribs.get<string>( "value" ) );
         else if( name == "rlMaxPadTop" )
             rlMaxPadTop = parseEagle( attribs.get<string>( "value" ) );
-
         else if( name == "rvViaOuter" )
             rvViaOuter = attribs.get<double>( "value" );
         else if( name == "rlMinViaOuter" )
@@ -1146,7 +1153,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         // and is not necessarily utf8.
         string filename = (const char*) aFileName.char_str( wxConvFile );
 
-        read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
+        read_xml( filename, doc, xml_parser::no_comments );
 
         m_min_trace    = INT_MAX;
         m_min_via      = INT_MAX;
@@ -1385,7 +1392,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
             wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
-            int     width = kicad( w.width );
 
             if( layer != UNDEFINED_LAYER )
             {
@@ -1409,11 +1415,10 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
                 dseg->SetTimeStamp( timeStamp( gr->second ) );
                 dseg->SetLayer( layer );
-                dseg->SetWidth( width );
+                dseg->SetWidth( Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS ) );
             }
             m_xpath->pop();
         }
-
         else if( gr->first == "text" )
         {
 #if defined(DEBUG)
@@ -1455,10 +1460,8 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
                     if( degrees == 90 || t.rot->spin )
                         pcbtxt->SetOrientation( sign * t.rot->degrees * 10 );
-
                     else if( degrees == 180 )
                         align = ETEXT::TOP_RIGHT;
-
                     else if( degrees == 270 )
                     {
                         pcbtxt->SetOrientation( sign * 90 * 10 );
@@ -1511,7 +1514,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             }
             m_xpath->pop();
         }
-
         else if( gr->first == "circle" )
         {
             m_xpath->push( "circle" );
@@ -1533,11 +1535,10 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             }
             m_xpath->pop();
         }
-
-        // This seems to be a simplified rectangular [copper] zone, cannot find any
-        // net related info on it from the DTD.
         else if( gr->first == "rectangle" )
         {
+            // This seems to be a simplified rectangular [copper] zone, cannot find any
+            // net related info on it from the DTD.
             m_xpath->push( "rectangle" );
 
             ERECT       r( gr->second );
@@ -1568,7 +1569,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             m_xpath->pop();
         }
-
         else if( gr->first == "hole" )
         {
             m_xpath->push( "hole" );
@@ -1611,7 +1611,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             pad->SetLayerSet( LSET::AllCuMask() );
             m_xpath->pop();
         }
-
         else if( gr->first == "frame" )
         {
             // picture this
@@ -1879,21 +1878,18 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
             orient = degrees - m->GetOrientation() / 10;
             txt->SetOrientation( sign * orient * 10 );
         }
-
         else if( degrees == 180 )
         {
             orient = 0 - m->GetOrientation() / 10;
             txt->SetOrientation( sign * orient * 10 );
             align = ETEXT::TOP_RIGHT;
         }
-
         else if( degrees == 270 )
         {
             orient = 90 - m->GetOrientation() / 10;
             align = ETEXT::TOP_RIGHT;
             txt->SetOrientation( sign * orient * 10 );
         }
-
         else
         {
             orient = 90 + degrees - m->GetOrientation() / 10;
@@ -1916,7 +1912,6 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
             ;
         }
     }
-
     else    // the text is per the original package, sans <attribute>
     {
         double degrees = ( txt->GetOrientation() + m->GetOrientation() ) / 10;
@@ -1930,10 +1925,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
             txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
         }
     }
-
-    txt->SetLocalCoord();
 }
-
 
 MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) const
 {
@@ -1989,6 +1981,8 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
         wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
         int     width = kicad( w.width );
 
+        // FIXME: the cap attribute is ignored because kicad can't create lines
+        //        with flat ends.
         EDGE_MODULE* dwg;
         if( !w.curve )
         {
@@ -2117,6 +2111,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
         txt = &aModule->Value();
     else
     {
+        // FIXME: graphical text items are rotated for some reason.
         txt = new TEXTE_MODULE( aModule );
         aModule->GraphicalItems().PushBack( txt );
     }
@@ -2595,25 +2590,41 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     zone->Outline()->CloseLastContour();
 
-                    zone->Outline()->SetHatch( outline_hatch,
-                                               Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ),
-                                               true );
+                    // If pour is set the zone should be hatched,
+                    // set the hatch size from the spacing variable.
+                    if( p.pour )
+                    {
+                        zone->Outline()->SetHatch( outline_hatch,
+                                                   *p.spacing,
+                                                   true );
+                    }
 
                     // clearances, etc.
                     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
                     zone->SetMinThickness( kicad( p.width ) );
 
-                    if( p.spacing )
-                        zone->SetZoneClearance( kicad( *p.spacing ) );
-
-                    if( p.rank )
-                        zone->SetPriority( *p.rank );
+                    // FIXME: KiCad zones have very rounded corners compared to eagle.
+                    //        This means that isolation amounts that work well in eagle
+                    //        tend to make copper intrude in soldermask free areas around pads.
+                    if( p.isolate )
+                    {
+                        zone->SetZoneClearance( kicad( *p.isolate ) );
+                    }
 
                     // missing == yes per DTD.
                     bool thermals = !p.thermals || *p.thermals;
                     zone->SetPadConnection( thermals ? PAD_ZONE_CONN_THERMAL : PAD_ZONE_CONN_FULL );
+                    if( thermals )
+                    {
+                        // FIXME: eagle calculates dimensions for thermal spokes
+                        //        based on what the zone is connecting to.
+                        //        (i.e. width of spoke is half of the smaller side of an smd pad)
+                        //        This is a basic workaround
+                        zone->SetThermalReliefGap( kicad( p.width + 0.05 ) );
+                        zone->SetThermalReliefCopperBridge( kicad( p.width + 0.05 ) );
+                    }
 
-                    int rank = p.rank ? *p.rank : 0;
+                    int rank = p.rank ? *p.rank : p.max_priority;
                     zone->SetPriority( rank );
                 }
 
@@ -2717,6 +2728,26 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 
     else
     {
+/*
+#define FIRST_NON_COPPER_LAYER  16
+#define B_Adhes                 16
+#define F_Adhes                 17
+#define B_Paste                 18
+#define F_Paste                 19
+#define B_SilkS                 20
+#define F_SilkS                 21
+#define B_Mask                  22
+#define F_Mask                  23
+#define Dwgs_User               24
+#define Cmts_User               25
+#define Eco1_User               26
+#define Eco2_User               27
+#define Edge_Cuts               28
+#define LAST_NON_COPPER_LAYER   28
+#define UNUSED_LAYER_29         29
+#define UNUSED_LAYER_30         30
+#define UNUSED_LAYER_31         31
+*/
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
@@ -2844,7 +2875,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             // and is not necessarily utf8.
             string filename = (const char*) aLibPath.char_str( wxConvFile );
 
-            read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
+            read_xml( filename, doc, xml_parser::no_comments );
 
             // clear the cu map and then rebuild it.
             clear_cu_map();
