@@ -30,24 +30,26 @@
 
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <wxPcbStruct.h>
+#include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
 
 #define ROW_NAME 0
 #define ROW_DESCR 1
-
+#define FPWIZARTDLIST_HEIGHT_KEY wxT( "FpWizardListHeight" )
+#define FPWIZARTDLIST_WIDTH_KEY  wxT( "FpWizardListWidth" )
 
 DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     : DIALOG_FOOTPRINT_WIZARD_LIST_BASE( aParent )
 {
     int n_wizards = FOOTPRINT_WIZARDS::GetWizardsCount();
+    m_config = Kiface().KifaceSettings();
 
     // Current wizard selection, empty or first
-    m_FootprintWizard = NULL;
+    m_footprintWizard = NULL;
 
     if( n_wizards )
-        m_FootprintWizard = FOOTPRINT_WIZARDS::GetWizard( 0 );
+        m_footprintWizard = FOOTPRINT_WIZARDS::GetWizard( 0 );
 
     // Choose selection mode and insert the needed rows
 
@@ -71,20 +73,38 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     m_footprintWizardsGrid->ClearSelection();
     m_footprintWizardsGrid->SelectRow( 0, false );
 
-    GetSizer()->SetSizeHints( this );
+    if( m_config )
+    {
+        wxSize size;
+        m_config->Read( FPWIZARTDLIST_WIDTH_KEY, &size.x, -1 );
+        m_config->Read( FPWIZARTDLIST_HEIGHT_KEY, &size.y, -1 );
+        SetSize( size );
+    }
+
     Center();
 }
+
+
+DIALOG_FOOTPRINT_WIZARD_LIST::~DIALOG_FOOTPRINT_WIZARD_LIST()
+{
+    if( m_config && !IsIconized() )
+    {
+        m_config->Write( FPWIZARTDLIST_WIDTH_KEY, GetSize().x );
+        m_config->Write( FPWIZARTDLIST_HEIGHT_KEY, GetSize().y );
+    }
+}
+
 
 
 void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellWizardClick( wxGridEvent& event )
 {
     int click_row = event.GetRow();
-    m_FootprintWizard = FOOTPRINT_WIZARDS::GetWizard( click_row );
+    m_footprintWizard = FOOTPRINT_WIZARDS::GetWizard( click_row );
     m_footprintWizardsGrid->SelectRow( event.GetRow(), false );
 }
 
 
 FOOTPRINT_WIZARD* DIALOG_FOOTPRINT_WIZARD_LIST::GetWizard()
 {
-    return m_FootprintWizard;
+    return m_footprintWizard;
 }
