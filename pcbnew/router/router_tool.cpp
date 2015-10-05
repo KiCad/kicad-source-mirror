@@ -438,7 +438,7 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
         case VIA_THROUGH:
             sizes.SetViaDiameter( bds.GetCurrentViaSize() );
             sizes.SetViaDrill( bds.GetCurrentViaDrill() );
-            sizes.AddLayerPair( F_Cu, B_Cu );
+            sizes.AddLayerPair( pairTop, pairBottom );
             break;
 
         case VIA_MICROVIA:
