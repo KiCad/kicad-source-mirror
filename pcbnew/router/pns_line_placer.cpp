@@ -379,14 +379,14 @@ bool PNS_LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
     switch( Settings().OptimizerEffort() )
     {
-        case OE_LOW:
-            effort = 0;
-            break;
+    case OE_LOW:
+        effort = 0;
+        break;
 
-        case OE_MEDIUM:
-        case OE_FULL:
-            effort = PNS_OPTIMIZER::MERGE_SEGMENTS;
-            break;
+    case OE_MEDIUM:
+    case OE_FULL:
+        effort = PNS_OPTIMIZER::MERGE_SEGMENTS;
+        break;
     }
 
     if( Settings().SmartPads() )
@@ -513,14 +513,14 @@ bool PNS_LINE_PLACER::routeHead( const VECTOR2I& aP, PNS_LINE& aNewHead )
 {
     switch( m_currentMode )
     {
-        case RM_MarkObstacles:
-            return rhMarkObstacles( aP, aNewHead );
-        case RM_Walkaround:
-            return rhWalkOnly( aP, aNewHead );
-        case RM_Shove:
-            return rhShoveOnly( aP, aNewHead );
-        default:
-            break;
+    case RM_MarkObstacles:
+        return rhMarkObstacles( aP, aNewHead );
+    case RM_Walkaround:
+        return rhWalkOnly( aP, aNewHead );
+    case RM_Shove:
+        return rhShoveOnly( aP, aNewHead );
+    default:
+        break;
     }
 
     return false;

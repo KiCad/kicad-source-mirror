@@ -177,92 +177,92 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 
         switch( m_shape->Type() )
         {
-            case SH_LINE_CHAIN:
-            {
-                const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) m_shape;
-                drawLineChain( *l, aGal );
-                break;
-            }
+        case SH_LINE_CHAIN:
+        {
+            const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) m_shape;
+            drawLineChain( *l, aGal );
+            break;
+        }
 
-            case SH_SEGMENT:
-            {
-                const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) m_shape;
-                aGal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
-
-                if( m_clearance > 0 )
-                {
-                    aGal->SetLayerDepth( ClearanceOverlayDepth );
-                    aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
-                    aGal->SetFillColor( COLOR4D( DARKDARKGRAY ) );
-                    aGal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
-                }
-
-                break;
-            }
-
-            case SH_CIRCLE:
-            {
-                const SHAPE_CIRCLE* c = (const SHAPE_CIRCLE*) m_shape;
-                aGal->DrawCircle( c->GetCenter(), c->GetRadius() );
-
-                if( m_clearance > 0 )
-                {
-                    aGal->SetLayerDepth( ClearanceOverlayDepth );
-                    aGal->SetFillColor( COLOR4D( DARKDARKGRAY ) );
-                    aGal->SetIsStroke( false );
-                    aGal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
-                }
-
-                break;
-            }
-
-            case SH_RECT:
-            {
-                const SHAPE_RECT* r = (const SHAPE_RECT*) m_shape;
-                aGal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
-
-                if( m_clearance > 0 )
-                {
-                    aGal->SetLayerDepth( ClearanceOverlayDepth );
-                    VECTOR2I p0( r->GetPosition() ), s( r->GetSize() );
-                    aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
-                    aGal->SetIsStroke( true );
-                    aGal->SetLineWidth( 2 * m_clearance );
-                    aGal->DrawLine( p0, VECTOR2I( p0.x + s.x, p0.y ) );
-                    aGal->DrawLine( p0, VECTOR2I( p0.x, p0.y + s.y ) );
-                    aGal->DrawLine( p0 + s , VECTOR2I( p0.x + s.x, p0.y ) );
-                    aGal->DrawLine( p0 + s, VECTOR2I( p0.x, p0.y + s.y ) );
-                }
-
-                break;
-            }
-
-       case SH_CONVEX:
-       {
-            const SHAPE_CONVEX* c = (const SHAPE_CONVEX*) m_shape;
-            std::deque<VECTOR2D> polygon = std::deque<VECTOR2D>();
-            for( int i = 0; i < c->PointCount(); i++ )
-            {
-                polygon.push_back( c->CDPoint( i ) );
-            }
-            aGal->DrawPolygon( polygon );
+        case SH_SEGMENT:
+        {
+            const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) m_shape;
+            aGal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
 
             if( m_clearance > 0 )
             {
                 aGal->SetLayerDepth( ClearanceOverlayDepth );
                 aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
-                aGal->SetIsStroke( true );
-                aGal->SetLineWidth( 2 * m_clearance );
-                // need the implicit last segment to be explicit for DrawPolyline
-                polygon.push_back( c->CDPoint( 0 ) );
-                aGal->DrawPolyline( polygon );
+                aGal->SetFillColor( COLOR4D( DARKDARKGRAY ) );
+                aGal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
             }
+
             break;
         }
 
-        case SH_POLY_SET:
-        case SH_COMPOUND:
-            break;          // Not yet in use
+        case SH_CIRCLE:
+        {
+            const SHAPE_CIRCLE* c = (const SHAPE_CIRCLE*) m_shape;
+            aGal->DrawCircle( c->GetCenter(), c->GetRadius() );
+
+            if( m_clearance > 0 )
+            {
+                aGal->SetLayerDepth( ClearanceOverlayDepth );
+                aGal->SetFillColor( COLOR4D( DARKDARKGRAY ) );
+                aGal->SetIsStroke( false );
+                aGal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
+            }
+
+            break;
+        }
+
+        case SH_RECT:
+        {
+            const SHAPE_RECT* r = (const SHAPE_RECT*) m_shape;
+            aGal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
+
+            if( m_clearance > 0 )
+            {
+                aGal->SetLayerDepth( ClearanceOverlayDepth );
+                VECTOR2I p0( r->GetPosition() ), s( r->GetSize() );
+                aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
+                aGal->SetIsStroke( true );
+                aGal->SetLineWidth( 2 * m_clearance );
+                aGal->DrawLine( p0, VECTOR2I( p0.x + s.x, p0.y ) );
+                aGal->DrawLine( p0, VECTOR2I( p0.x, p0.y + s.y ) );
+                aGal->DrawLine( p0 + s , VECTOR2I( p0.x + s.x, p0.y ) );
+                aGal->DrawLine( p0 + s, VECTOR2I( p0.x, p0.y + s.y ) );
+            }
+
+            break;
+        }
+
+    case SH_CONVEX:
+    {
+        const SHAPE_CONVEX* c = (const SHAPE_CONVEX*) m_shape;
+        std::deque<VECTOR2D> polygon = std::deque<VECTOR2D>();
+        for( int i = 0; i < c->PointCount(); i++ )
+        {
+            polygon.push_back( c->CDPoint( i ) );
+        }
+        aGal->DrawPolygon( polygon );
+
+        if( m_clearance > 0 )
+        {
+            aGal->SetLayerDepth( ClearanceOverlayDepth );
+            aGal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
+            aGal->SetIsStroke( true );
+            aGal->SetLineWidth( 2 * m_clearance );
+            // need the implicit last segment to be explicit for DrawPolyline
+            polygon.push_back( c->CDPoint( 0 ) );
+            aGal->DrawPolyline( polygon );
+        }
+        break;
+    }
+
+    case SH_POLY_SET:
+    case SH_COMPOUND:
+        break;          // Not yet in use
         }
     }
 }

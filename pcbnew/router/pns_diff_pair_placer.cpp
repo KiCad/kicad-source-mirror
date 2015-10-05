@@ -302,14 +302,14 @@ bool PNS_DIFF_PAIR_PLACER::route( const VECTOR2I& aP )
 {
     switch( m_currentMode )
     {
-        case RM_MarkObstacles:
-            return rhMarkObstacles( aP );
-        case RM_Walkaround:
-            return rhWalkOnly( aP );
-        case RM_Shove:
-            return rhShoveOnly( aP );
-        default:
-            break;
+    case RM_MarkObstacles:
+        return rhMarkObstacles( aP );
+    case RM_Walkaround:
+        return rhWalkOnly( aP );
+    case RM_Shove:
+        return rhShoveOnly( aP );
+    default:
+        break;
     }
 
     return false;
@@ -447,28 +447,28 @@ OPT_VECTOR2I PNS_DIFF_PAIR_PLACER::getDanglingAnchor( PNS_NODE* aNode, PNS_ITEM*
 {
     switch( aItem->Kind() )
     {
-        case PNS_ITEM::VIA:
-        case PNS_ITEM::SOLID:
-            return aItem->Anchor( 0 );
+    case PNS_ITEM::VIA:
+    case PNS_ITEM::SOLID:
+        return aItem->Anchor( 0 );
 
-        case PNS_ITEM::SEGMENT:
-        {
-            PNS_SEGMENT* s =static_cast<PNS_SEGMENT*>( aItem );
+    case PNS_ITEM::SEGMENT:
+    {
+        PNS_SEGMENT* s =static_cast<PNS_SEGMENT*>( aItem );
 
-            PNS_JOINT* jA = aNode->FindJoint( s->Seg().A, s );
-            PNS_JOINT* jB = aNode->FindJoint( s->Seg().B, s );
+        PNS_JOINT* jA = aNode->FindJoint( s->Seg().A, s );
+        PNS_JOINT* jB = aNode->FindJoint( s->Seg().B, s );
 
-            if( jA->LinkCount() == 1 )
-                return s->Seg().A;
-            else if( jB->LinkCount() == 1 )
-                return s->Seg().B;
-            else
-                return OPT_VECTOR2I();
-        }
-
-        default:
+        if( jA->LinkCount() == 1 )
+            return s->Seg().A;
+        else if( jB->LinkCount() == 1 )
+            return s->Seg().B;
+        else
             return OPT_VECTOR2I();
-            break;
+    }
+
+    default:
+        return OPT_VECTOR2I();
+        break;
     }
 }
 

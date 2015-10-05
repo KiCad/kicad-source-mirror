@@ -613,25 +613,25 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLa
 
     switch( m_mode )
     {
-        case PNS_MODE_ROUTE_SINGLE:
-            m_placer = new PNS_LINE_PLACER( this );
-            break;
-        case PNS_MODE_ROUTE_DIFF_PAIR:
-            m_placer = new PNS_DIFF_PAIR_PLACER( this );
-            m_clearanceFunc->UseDpGap( true );
-            break;
-        case PNS_MODE_TUNE_SINGLE:
-            m_placer = new PNS_MEANDER_PLACER( this );
-            break;
-        case PNS_MODE_TUNE_DIFF_PAIR:
-            m_placer = new PNS_DP_MEANDER_PLACER( this );
-            break;
-        case PNS_MODE_TUNE_DIFF_PAIR_SKEW:
-            m_placer = new PNS_MEANDER_SKEW_PLACER( this );
-            break;
+    case PNS_MODE_ROUTE_SINGLE:
+        m_placer = new PNS_LINE_PLACER( this );
+        break;
+    case PNS_MODE_ROUTE_DIFF_PAIR:
+        m_placer = new PNS_DIFF_PAIR_PLACER( this );
+        m_clearanceFunc->UseDpGap( true );
+        break;
+    case PNS_MODE_TUNE_SINGLE:
+        m_placer = new PNS_MEANDER_PLACER( this );
+        break;
+    case PNS_MODE_TUNE_DIFF_PAIR:
+        m_placer = new PNS_DP_MEANDER_PLACER( this );
+        break;
+    case PNS_MODE_TUNE_DIFF_PAIR_SKEW:
+        m_placer = new PNS_MEANDER_SKEW_PLACER( this );
+        break;
 
-        default:
-            return false;
+    default:
+        return false;
     }
 
     m_placer->UpdateSizes ( m_sizes );
@@ -725,16 +725,16 @@ void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
 
     switch( m_state )
     {
-        case ROUTE_TRACK:
-            movePlacing( aP, endItem );
-            break;
+    case ROUTE_TRACK:
+        movePlacing( aP, endItem );
+        break;
 
-        case DRAG_SEGMENT:
-            moveDragging( aP, endItem );
-            break;
+    case DRAG_SEGMENT:
+        moveDragging( aP, endItem );
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 
@@ -934,16 +934,16 @@ bool PNS_ROUTER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     switch( m_state )
     {
-        case ROUTE_TRACK:
-            rv = m_placer->FixRoute( aP, aEndItem );
-            break;
+    case ROUTE_TRACK:
+        rv = m_placer->FixRoute( aP, aEndItem );
+        break;
 
-        case DRAG_SEGMENT:
-            rv = m_dragger->FixRoute();
-            break;
+    case DRAG_SEGMENT:
+        rv = m_dragger->FixRoute();
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     if( rv )
@@ -1003,11 +1003,11 @@ void PNS_ROUTER::SwitchLayer( int aLayer )
 {
     switch( m_state )
     {
-        case ROUTE_TRACK:
-            m_placer->SetLayer( aLayer );
-            break;
-        default:
-            break;
+    case ROUTE_TRACK:
+        m_placer->SetLayer( aLayer );
+        break;
+    default:
+        break;
     }
 }
 
@@ -1045,16 +1045,16 @@ void PNS_ROUTER::DumpLog()
 
     switch( m_state )
     {
-        case DRAG_SEGMENT:
-            logger = m_dragger->Logger();
-            break;
+    case DRAG_SEGMENT:
+        logger = m_dragger->Logger();
+        break;
 
-        case ROUTE_TRACK:
-            logger = m_placer->Logger();
-            break;
+    case ROUTE_TRACK:
+        logger = m_placer->Logger();
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     if( logger )

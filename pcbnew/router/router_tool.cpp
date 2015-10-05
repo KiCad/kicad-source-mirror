@@ -293,10 +293,10 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     {
         switch( aEvent.KeyCode() )
         {
-            case '0':
-                TRACEn( 2, "saving drag/route log...\n" );
-                m_router->DumpLog();
-                break;
+        case '0':
+            TRACEn( 2, "saving drag/route log...\n" );
+            m_router->DumpLog();
+            break;
         }
     }
     else
@@ -435,37 +435,37 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 
     switch( aType )
     {
-        case VIA_THROUGH:
-            sizes.SetViaDiameter( bds.GetCurrentViaSize() );
-            sizes.SetViaDrill( bds.GetCurrentViaDrill() );
-            sizes.AddLayerPair( pairTop, pairBottom );
-            break;
+    case VIA_THROUGH:
+        sizes.SetViaDiameter( bds.GetCurrentViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentViaDrill() );
+        sizes.AddLayerPair( pairTop, pairBottom );
+        break;
 
-        case VIA_MICROVIA:
-            sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
-            sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
+    case VIA_MICROVIA:
+        sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
 
-            if( currentLayer == F_Cu || currentLayer == In1_Cu )
-                sizes.AddLayerPair( F_Cu, In1_Cu );
-            else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
-                sizes.AddLayerPair( B_Cu, layerCount - 2 );
-            else
-                wxASSERT( false );
-            break;
-
-        case VIA_BLIND_BURIED:
-            sizes.SetViaDiameter( bds.GetCurrentViaSize() );
-            sizes.SetViaDrill( bds.GetCurrentViaDrill() );
-
-            if( currentLayer == pairTop || currentLayer == pairBottom )
-                sizes.AddLayerPair( pairTop, pairBottom );
-            else
-                sizes.AddLayerPair( pairTop, currentLayer );
-            break;
-
-        default:
+        if( currentLayer == F_Cu || currentLayer == In1_Cu )
+            sizes.AddLayerPair( F_Cu, In1_Cu );
+        else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
+            sizes.AddLayerPair( B_Cu, layerCount - 2 );
+        else
             wxASSERT( false );
-            break;
+        break;
+
+    case VIA_BLIND_BURIED:
+        sizes.SetViaDiameter( bds.GetCurrentViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentViaDrill() );
+
+        if( currentLayer == pairTop || currentLayer == pairBottom )
+            sizes.AddLayerPair( pairTop, pairBottom );
+        else
+            sizes.AddLayerPair( pairTop, currentLayer );
+        break;
+
+    default:
+        wxASSERT( false );
+        break;
     }
 
     sizes.SetViaType( aType );

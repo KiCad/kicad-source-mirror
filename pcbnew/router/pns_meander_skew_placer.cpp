@@ -152,17 +152,17 @@ const wxString PNS_MEANDER_SKEW_PLACER::TuningInfo() const
 
     switch( m_lastStatus )
     {
-        case TOO_LONG:
-            status = _( "Too long: skew " );
-            break;
-        case TOO_SHORT:
-            status = _( "Too short: skew " );
-            break;
-        case TUNED:
-            status = _( "Tuned: skew " );
-            break;
-        default:
-            return _( "?" );
+    case TOO_LONG:
+        status = _( "Too long: skew " );
+        break;
+    case TOO_SHORT:
+        status = _( "Too short: skew " );
+        break;
+    case TUNED:
+        status = _( "Tuned: skew " );
+        break;
+    default:
+        return _( "?" );
     }
 
     status += LengthDoubleToString( (double) m_lastLength - m_coupledLength, false );

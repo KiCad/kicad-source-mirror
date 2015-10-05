@@ -927,39 +927,39 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
     {
         switch( ni->Kind() )
         {
-            case PNS_ITEM::VIA:
+        case PNS_ITEM::VIA:
+        {
+            PNS_VIA* revVia = (PNS_VIA*) ni;
+            TRACE( 2, "iter %d: reverse-collide-via", aIter );
+
+            if( currentLine.EndsWithVia() && m_currentNode->CheckColliding( &currentLine.Via(), revVia ) )
             {
-                PNS_VIA* revVia = (PNS_VIA*) ni;
-                TRACE( 2, "iter %d: reverse-collide-via", aIter );
-
-                if( currentLine.EndsWithVia() && m_currentNode->CheckColliding( &currentLine.Via(), revVia ) )
-                {
-                    st = SH_INCOMPLETE;
-                }
-                else
-                {
-                    st = onReverseCollidingVia ( currentLine, revVia );
-                }
-
-                break;
+                st = SH_INCOMPLETE;
+            }
+            else
+            {
+                st = onReverseCollidingVia ( currentLine, revVia );
             }
 
-            case PNS_ITEM::SEGMENT:
-            {
-                PNS_SEGMENT* seg = (PNS_SEGMENT*) ni;
-                TRACE( 2, "iter %d: reverse-collide-segment ", aIter );
-                PNS_LINE revLine = assembleLine( seg );
+            break;
+        }
 
-                popLine();
-                st = onCollidingLine( revLine, currentLine );
-                if ( !pushLine( revLine ) )
-                    return SH_INCOMPLETE;
+        case PNS_ITEM::SEGMENT:
+        {
+            PNS_SEGMENT* seg = (PNS_SEGMENT*) ni;
+            TRACE( 2, "iter %d: reverse-collide-segment ", aIter );
+            PNS_LINE revLine = assembleLine( seg );
 
-                break;
-            }
+            popLine();
+            st = onCollidingLine( revLine, currentLine );
+            if ( !pushLine( revLine ) )
+                return SH_INCOMPLETE;
 
-            default:
-                assert( false );
+            break;
+        }
+
+        default:
+            assert( false );
         }
     }
     else

@@ -77,44 +77,44 @@ void PNS_LOGGER::Log ( const PNS_ITEM* aItem, int aKind, const std::string aName
 
     switch( aItem->Kind() )
     {
-        case PNS_ITEM::LINE:
-        {
-            PNS_LINE* l = (PNS_LINE*) aItem;
-            m_theLog << " line ";
-            m_theLog << l->Width() << " " << ( l->EndsWithVia() ? 1 : 0 ) << " ";
-            dumpShape ( l->Shape() );
-            m_theLog << std::endl;
-            break;
-        }
+    case PNS_ITEM::LINE:
+    {
+        PNS_LINE* l = (PNS_LINE*) aItem;
+        m_theLog << " line ";
+        m_theLog << l->Width() << " " << ( l->EndsWithVia() ? 1 : 0 ) << " ";
+        dumpShape ( l->Shape() );
+        m_theLog << std::endl;
+        break;
+    }
 
-        case PNS_ITEM::VIA:
-        {
-            m_theLog << " via 0 0 ";
-            dumpShape ( aItem->Shape() );
-            m_theLog << std::endl;
-            break;
-        }
+    case PNS_ITEM::VIA:
+    {
+        m_theLog << " via 0 0 ";
+        dumpShape ( aItem->Shape() );
+        m_theLog << std::endl;
+        break;
+    }
 
-        case PNS_ITEM::SEGMENT:
-        {
-            PNS_SEGMENT* s =(PNS_SEGMENT*) aItem;
-            m_theLog << " line ";
-            m_theLog << s->Width() << " 0 linechain 2 0 " << s->Seg().A.x << " " <<
-                        s->Seg().A.y << " " << s->Seg().B.x << " " <<s->Seg().B.y << std::endl;
-            break;
-        }
+    case PNS_ITEM::SEGMENT:
+    {
+        PNS_SEGMENT* s =(PNS_SEGMENT*) aItem;
+        m_theLog << " line ";
+        m_theLog << s->Width() << " 0 linechain 2 0 " << s->Seg().A.x << " " <<
+                    s->Seg().A.y << " " << s->Seg().B.x << " " <<s->Seg().B.y << std::endl;
+        break;
+    }
 
-        case PNS_ITEM::SOLID:
-        {
-            PNS_SOLID* s = (PNS_SOLID*) aItem;
-            m_theLog << " solid 0 0 ";
-            dumpShape( s->Shape() );
-            m_theLog << std::endl;
-            break;
-        }
+    case PNS_ITEM::SOLID:
+    {
+        PNS_SOLID* s = (PNS_SOLID*) aItem;
+        m_theLog << " solid 0 0 ";
+        dumpShape( s->Shape() );
+        m_theLog << std::endl;
+        break;
+    }
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 
@@ -140,53 +140,53 @@ void PNS_LOGGER::dumpShape( const SHAPE* aSh )
 {
     switch( aSh->Type() )
     {
-        case SH_LINE_CHAIN:
-        {
-            const SHAPE_LINE_CHAIN* lc = (const SHAPE_LINE_CHAIN*) aSh;
-            m_theLog << "linechain " << lc->PointCount() << " " << ( lc->IsClosed() ? 1 : 0 ) << " ";
+    case SH_LINE_CHAIN:
+    {
+        const SHAPE_LINE_CHAIN* lc = (const SHAPE_LINE_CHAIN*) aSh;
+        m_theLog << "linechain " << lc->PointCount() << " " << ( lc->IsClosed() ? 1 : 0 ) << " ";
 
-            for( int i = 0; i < lc->PointCount(); i++ )
-                m_theLog << lc->CPoint( i ).x << " " << lc->CPoint( i ).y << " ";
+        for( int i = 0; i < lc->PointCount(); i++ )
+            m_theLog << lc->CPoint( i ).x << " " << lc->CPoint( i ).y << " ";
 
-            break;
-        }
+        break;
+    }
 
-        case SH_CIRCLE:
-        {
-            const SHAPE_CIRCLE *c = (const SHAPE_CIRCLE*) aSh;
-            m_theLog << "circle " << c->GetCenter().x << " " << c->GetCenter().y << " " << c->GetRadius();
-            break;
-        }
+    case SH_CIRCLE:
+    {
+        const SHAPE_CIRCLE *c = (const SHAPE_CIRCLE*) aSh;
+        m_theLog << "circle " << c->GetCenter().x << " " << c->GetCenter().y << " " << c->GetRadius();
+        break;
+    }
 
-        case SH_RECT:
-        {
-            const SHAPE_RECT* r = (const SHAPE_RECT*) aSh;
-            m_theLog << "rect " << r->GetPosition().x << " " << r->GetPosition().y << " " <<
-                        r->GetSize().x << " " <<r->GetSize().y;
-            break;
-        }
+    case SH_RECT:
+    {
+        const SHAPE_RECT* r = (const SHAPE_RECT*) aSh;
+        m_theLog << "rect " << r->GetPosition().x << " " << r->GetPosition().y << " " <<
+                    r->GetSize().x << " " <<r->GetSize().y;
+        break;
+    }
 
-        case SH_SEGMENT:
-        {
-            const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) aSh;
-            m_theLog << "linechain 2 0 " << s->GetSeg().A.x << " " << s->GetSeg().A.y << " " <<
-                        s->GetSeg().B.x << " " << s->GetSeg().B.y;
-            break;
-        }
+    case SH_SEGMENT:
+    {
+        const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) aSh;
+        m_theLog << "linechain 2 0 " << s->GetSeg().A.x << " " << s->GetSeg().A.y << " " <<
+                    s->GetSeg().B.x << " " << s->GetSeg().B.y;
+        break;
+    }
 
-        case SH_CONVEX:
-        {
-            const SHAPE_CONVEX* c = (const SHAPE_CONVEX*) aSh;
-            m_theLog << "convex " << c->PointCount() << " ";
+    case SH_CONVEX:
+    {
+        const SHAPE_CONVEX* c = (const SHAPE_CONVEX*) aSh;
+        m_theLog << "convex " << c->PointCount() << " ";
 
-            for( int i = 0; i < c->PointCount(); i++ )
-                m_theLog << c->CPoint( i ).x << " " << c->CPoint( i ).y << " ";
+        for( int i = 0; i < c->PointCount(); i++ )
+            m_theLog << c->CPoint( i ).x << " " << c->CPoint( i ).y << " ";
 
-            break;
-        }
+        break;
+    }
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 
