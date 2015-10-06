@@ -398,7 +398,8 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ), KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
+    m_Draw3DFrame->Raise();     // Needed with some Window Managers
     m_Draw3DFrame->Show( true );
 }
 
