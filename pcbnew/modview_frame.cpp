@@ -631,6 +631,7 @@ void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
 
     m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, wxEmptyString );
     Update3D_Frame( false );
+    m_Draw3DFrame->Raise();     // Needed with some Window Managers
     m_Draw3DFrame->Show( true );
 }
 
