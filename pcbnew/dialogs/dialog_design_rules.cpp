@@ -616,6 +616,9 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
 void DIALOG_DESIGN_RULES::OnNotebookPageChanged( wxNotebookEvent& event )
 {
     s_LastTabSelection = event.GetSelection();
+
+    // Skip() allows OSX to properly refresh controls.
+    event.Skip();
 }
 
 
@@ -646,10 +649,12 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
 {
     wxString          class_name;
 
+    // @todo set validator to ensure net class name is valid rather than all of the checks
+    //       after the OK button has been selected.
     wxTextEntryDialog dlg( this, _( "New Net Class Name:" ), wxEmptyString, class_name );
 
     if( dlg.ShowModal() != wxID_OK )
-        return; // canceled by user
+        return;         // canceled by user
 
     class_name = dlg.GetValue();
     class_name.Trim( true );
@@ -666,7 +671,7 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
 
         if( class_name.CmpNoCase( value ) == 0 )       // Already exists!
         {
-            DisplayError( this, _( "This NetClass is already existing, cannot add it; Aborted" ) );
+            DisplayError( this, _( "Duplicate net class names are not allowed." ) );
             return;
         }
     }
@@ -728,7 +733,7 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
             swapNetClass( classname, NETCLASS::Default );
         }
         else
-            wxMessageBox( _( "The default Netclass cannot be removed" ) );
+            wxMessageBox( _( "The default net class cannot be removed" ) );
     }
 
     if( reinit )
