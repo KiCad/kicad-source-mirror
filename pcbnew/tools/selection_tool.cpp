@@ -812,6 +812,8 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             // User has selected an item, so this one will be returned
             if( id && ( *id > 0 ) )
                 current = ( *aCollector )[*id - 1];
+            else
+                current = NULL;
 
             break;
         }
