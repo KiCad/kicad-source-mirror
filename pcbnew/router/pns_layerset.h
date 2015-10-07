@@ -111,6 +111,16 @@ public:
         return PNS_LAYERSET( 0, 256 ); // fixme: use layer IDs header
     }
 
+    bool operator==( const PNS_LAYERSET& aOther ) const
+    {
+        return ( m_start == aOther.m_start ) && ( m_end == aOther.m_end );
+    }
+
+    bool operator!=( const PNS_LAYERSET& aOther ) const
+    {
+        return ( m_start != aOther.m_start ) || ( m_end != aOther.m_end );
+    }
+
 private:
     int m_start;
     int m_end;

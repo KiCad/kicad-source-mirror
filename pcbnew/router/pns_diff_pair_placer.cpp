@@ -540,7 +540,14 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
 
             double dist = ( *anchor - *refAnchor ).EuclideanNorm();
 
-            if( dist < bestDist )
+            bool shapeMatches = true;
+
+            if( item->OfKind( PNS_ITEM::SOLID ) && item->Layers() != aItem->Layers() )
+            {
+                shapeMatches = false;
+            }
+
+            if( dist < bestDist && shapeMatches )
             {
                 found = true;
                 bestDist = dist;
