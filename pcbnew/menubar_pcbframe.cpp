@@ -219,7 +219,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( three_d_xpm ) );
 
     AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_IDF3,
-                 _( "I&DFv3 Export" ), _( "IDFv3 board and component export" ),
+                 _( "I&DFv3" ), _( "IDFv3 board and component export" ),
                  KiBitmap( export_idf_xpm ) );
 
     AddMenuItem( filesMenu, submenuexport,
