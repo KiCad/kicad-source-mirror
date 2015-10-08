@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-03 12:31+0300\n"
-"PO-Revision-Date: 2015-10-03 15:20+0300\n"
+"POT-Creation-Date: 2015-10-04 19:37+0300\n"
+"PO-Revision-Date: 2015-10-04 19:48+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -6694,7 +6694,7 @@ msgstr "Отмена блока"
 
 #: eeschema/libedit_onrightclick.cpp:328 pcbnew/modedit_onclick.cpp:246
 msgid "Zoom Block (drag middle mouse)"
-msgstr "Масштабировать блок (протяг. средней кнопкой мыши)"
+msgstr "Масштабировать блок (тянуть средней кнопкой мыши)"
 
 #: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:835
 #: gerbview/onrightclick.cpp:76 pcbnew/modedit_onclick.cpp:250
@@ -6721,7 +6721,7 @@ msgstr "Зеркалировать блок --"
 
 #: eeschema/libedit_onrightclick.cpp:344
 msgid "Rotate Block ccw"
-msgstr "Повернуть блок ПЧС"
+msgstr "Повернуть блок против ч.с."
 
 #: eeschema/libedit_onrightclick.cpp:346 eeschema/onrightclick.cpp:848
 #: pcbnew/onrightclick.cpp:503
@@ -7514,25 +7514,25 @@ msgstr "Перетащить компонент"
 
 #: eeschema/onrightclick.cpp:373
 msgid "Rotate Clockwise"
-msgstr "Повернуть по часовой стр."
+msgstr "Повернуть по ч.с."
 
 #: eeschema/onrightclick.cpp:375
 msgid "Rotate Counterclockwise"
-msgstr "Повернуть против часовой стр."
+msgstr "Повернуть против ч.с."
 
 #: eeschema/onrightclick.cpp:377 eeschema/onrightclick.cpp:769
 #: eeschema/onrightclick.cpp:889
 msgid "Mirror --"
-msgstr "Отражение —"
+msgstr "Отражение --"
 
 #: eeschema/onrightclick.cpp:379 eeschema/onrightclick.cpp:771
 #: eeschema/onrightclick.cpp:892
 msgid "Mirror ||"
-msgstr "Отражение |"
+msgstr "Отражение ||"
 
 #: eeschema/onrightclick.cpp:384
 msgid "Orient Component"
-msgstr "Ориентация компонента"
+msgstr "Ориентировать компонент"
 
 #: eeschema/onrightclick.cpp:390
 msgid "Copy Component"
@@ -7698,11 +7698,11 @@ msgstr "Перетащить лист"
 
 #: eeschema/onrightclick.cpp:763
 msgid "Rotate Sheet CW"
-msgstr "Повернуть лист по часовой стрелке"
+msgstr "Повернуть лист по ч.с."
 
 #: eeschema/onrightclick.cpp:766
 msgid "Rotate Sheet CCW"
-msgstr "Повернуть лист против часовой стрелки"
+msgstr "Повернуть лист против ч.с."
 
 #: eeschema/onrightclick.cpp:775
 msgid "Orient Sheet"
@@ -7754,7 +7754,7 @@ msgstr "Перетащить блок"
 
 #: eeschema/onrightclick.cpp:855
 msgid "Rotate Block CCW"
-msgstr "Повернуть блок по часовой стрелке"
+msgstr "Повернуть блок против ч.с."
 
 #: eeschema/onrightclick.cpp:861
 msgid "Copy to Clipboard"
@@ -11986,7 +11986,7 @@ msgstr "Кривая"
 #: pcbnew/class_drawsegment.cpp:388
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Segment"
-msgstr "Отрезок"
+msgstr "Сегмент"
 
 #: pcbnew/class_drawsegment.cpp:608
 #, c-format
@@ -13313,8 +13313,8 @@ msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
-"Вращение против часовой стрелки имеет положительный угол. При 0 будет "
-"произведено деление на \"Кол-во\" равных частей."
+"Вращение против ч.с. имеет положительный угол. При 0 будет произведено "
+"деление на \"Кол-во\" равных частей."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:223
 msgid "Count:"
@@ -22710,7 +22710,7 @@ msgstr "Изменить посад.место"
 msgid "Export IDFv3"
 msgstr "Экспорт IDFv3"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.h:78
+#: pcbnew/dialogs/dialog_export_vrml_base.h:76
 msgid "VRML Export Options"
 msgstr "Экспорт параметров VRML"
 
