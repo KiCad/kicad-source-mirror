@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -265,7 +265,17 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     frame->SetSize( (parent->GetSize() * 2) / 3 );
     frame->Center();
 
-    frame->Initialize();
+    // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
+    // close the frame using the X box in caption, when the preview frame is run
+    // from a dialog
+    frame->SetExtraStyle(frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
+    // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
+    // modal for its caller only.
+    // An other reason is the fact when closing the frame without this option,
+    // all top level frames are reenabled.
+    // With this option, only the parent is reenabled.
+    // Reenabling all top level frames should be made by the parent dialog.
+    frame->InitializeWithModality( wxPreviewFrame_WindowModal );
 
     frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );

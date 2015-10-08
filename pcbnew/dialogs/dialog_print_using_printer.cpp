@@ -465,7 +465,18 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     frame->SetMinSize( wxSize( 550, 350 ) );
     frame->Center();
 
-    frame->Initialize();
+
+    // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
+    // close the frame using the X box in caption, when the preview frame is run
+    // from a dialog
+    frame->SetExtraStyle(frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
+    // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
+    // modal for its caller only.
+    // An other reason is the fact when closing the frame without this option,
+    // all top level frames are reenabled.
+    // With this option, only the parent is reenabled.
+    // Reenabling all top level frames should be made by the parent dialog.
+    frame->InitializeWithModality( wxPreviewFrame_WindowModal );
 
     frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
