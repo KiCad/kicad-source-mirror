@@ -165,7 +165,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
                  _( "&About Kicad" ),
-                 _( "About Kicad" ),
+                 _( "About KiCad" ),
                  KiBitmap( info_xpm ) );
 
     // Append menus to the menubar

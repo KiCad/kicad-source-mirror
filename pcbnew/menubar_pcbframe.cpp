@@ -357,21 +357,21 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Switch canvas to default" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Switch Canvas to Default" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_DEFAULT );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
                  text, _( "Switch the canvas implementation to default" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "Switch canvas to Open&GL" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_OPENGL );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "Switch canvas to &Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Switch Canvas to &Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_CAIRO );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
@@ -532,7 +532,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( configmenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
                  _( "&Interactive Routing" ),
-                 _( "Configure Interactive Routing." ),
+                 _( "Configure the interactive router." ),
                  KiBitmap( add_tracks_xpm ) ); // fixme: icon
 
     //--- dimensions submenu ------------------------------------------------------
@@ -620,13 +620,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
                  _( "&FreeRoute" ),
-                 _( "Fast access to the Web Based FreeROUTE advanced router" ),
+                 _( "Fast access to the web based FreeROUTE advanced router" ),
                  KiBitmap( web_support_xpm ) );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                  _( "&Scripting Console" ),
-                 _( "Show/Hide the Python Scripting console" ),
+                 _( "Show/Hide the Python scripting console" ),
                  KiBitmap( py_script_xpm ) );
 #endif
 
@@ -656,8 +656,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Kicad" ),
-                 _( "About Kicad" ),
+                 _( "&About KiCad" ),
+                 _( "Display the KiCad About dialog" ),
                  KiBitmap( info_xpm ) );
 
     // Append all menus to the menuBar

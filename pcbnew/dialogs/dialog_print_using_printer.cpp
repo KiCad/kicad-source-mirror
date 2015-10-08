@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ static LSET s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
 
-// Define min et max reasonnable values for print scale
+// Define min et max reasonable values for print scale
 #define MIN_SCALE 0.01
 #define MAX_SCALE 100.0
 
@@ -179,11 +179,9 @@ void DIALOG_PRINT_USING_PRINTER::initValues( )
         m_BoxSelectLayer[layer] = new wxCheckBox( this, -1, board->GetLayerName( layer ) );
 
         if( IsCopperLayer( layer ) )
-            m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[layer],
-                                     0, wxGROW | wxALL, 1 );
+            m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[layer], 0, wxGROW | wxALL, 1 );
         else
-            m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[layer],
-                                     0, wxGROW | wxALL, 1 );
+            m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[layer], 0, wxGROW | wxALL, 1 );
 
         layerKey.Printf( OPTKEY_LAYERBASE, layer );
 
@@ -216,7 +214,7 @@ void DIALOG_PRINT_USING_PRINTER::initValues( )
         m_config->Read( OPTKEY_PRINT_PADS_DRILL,  &tmp, PRINT_PARAMETERS::SMALL_DRILL_SHAPE );
         s_Parameters.m_DrillShapeOpt = (PRINT_PARAMETERS::DrillShapeOptT) tmp;
 
-        // Test for a reasonnable scale value. Set to 1 if problem
+        // Test for a reasonable scale value. Set to 1 if problem
         if( s_Parameters.m_XScaleAdjust < MIN_SCALE ||
             s_Parameters.m_YScaleAdjust < MIN_SCALE ||
             s_Parameters.m_XScaleAdjust > MAX_SCALE ||
@@ -335,6 +333,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
             m_config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );
         }
     }
+
     EndModal( 0 );
 }
 
@@ -365,14 +364,17 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
         if( s_Parameters.m_XScaleAdjust > MAX_SCALE ||
             s_Parameters.m_YScaleAdjust > MAX_SCALE )
             DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very large value" ) );
+
         m_FineAdjustXscaleOpt->GetValue().ToDouble( &s_Parameters.m_XScaleAdjust );
     }
+
     if( m_FineAdjustYscaleOpt )
     {
-        // Test for a reasonnable scale value
+        // Test for a reasonable scale value
         if( s_Parameters.m_XScaleAdjust < MIN_SCALE ||
             s_Parameters.m_YScaleAdjust < MIN_SCALE )
             DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very small value" ) );
+
         m_FineAdjustYscaleOpt->GetValue().ToDouble( &s_Parameters.m_YScaleAdjust );
     }
 
@@ -451,7 +453,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     if( preview == NULL )
     {
-        DisplayError( this, wxT( "OnPrintPreview() problem" ) );
+        DisplayError( this, wxT( "An error occurred attempting to show the print preview window." ) );
         return;
     }
 
@@ -465,11 +467,11 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     frame->SetMinSize( wxSize( 550, 350 ) );
     frame->Center();
 
-
     // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
     // close the frame using the X box in caption, when the preview frame is run
     // from a dialog
-    frame->SetExtraStyle(frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
+    frame->SetExtraStyle( frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG );
+
     // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
     // modal for its caller only.
     // An other reason is the fact when closing the frame without this option,
@@ -491,7 +493,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     // because he could think there is a bug in Pcbnew:
     if( s_Parameters.m_PrintMaskLayer == 0 )
     {
-        DisplayError( this, _( "No layer selected" ) );
+        DisplayError( this, _( "No layer selected." ) );
         return;
     }
 
@@ -505,7 +507,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            DisplayError( this, _( "There was a problem printing" ) );
+            DisplayError( this, _( "There was a problem printing." ) );
+
         return;
     }
     else
@@ -513,4 +516,3 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
         *s_PrintData = printer.GetPrintDialogData().GetPrintData();
     }
 }
-

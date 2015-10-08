@@ -23,4 +23,4 @@
 
 #define HELP_SHOW_HIDE_LAYERMANAGER _( "Show/hide the layers manager toolbar" )
 
-#define HELP_SHOW_HIDE_MICROWAVE_TOOLS _( "Show/hide the toolbar for microwave tools\nThis is a experimental feature (under development)" )
+#define HELP_SHOW_HIDE_MICROWAVE_TOOLS _( "Show/hide the microwave toolbar\nThis is a experimental feature (under development)" )

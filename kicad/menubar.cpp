@@ -419,7 +419,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // About
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
-                 _( "About KiCad project manager" ),
+                 _( "About KiCad" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

@@ -498,8 +498,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About Kicad" ),
-                 _( "About Kicad" ),
+                 _( "&About KiCad" ),
+                 _( "About KiCad" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

@@ -240,21 +240,21 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Add canvas selection
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Switch canvas to default" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "&Switch Canvas to Default" ), m_hotkeysDescrList,
                           HK_CANVAS_DEFAULT );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
                  text, _( "Switch the canvas implementation to default" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "Switch canvas to Open&GL" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), m_hotkeysDescrList,
                           HK_CANVAS_OPENGL );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "Switch canvas to &Cairo" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Switch Canvas to &Cairo" ), m_hotkeysDescrList,
                           HK_CANVAS_CAIRO );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
@@ -321,7 +321,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Settings
     AddMenuItem( prefs_menu, wxID_PREFERENCES,
-                 _( "&Settings" ), _( "Select default parameters values in Footprint Editor" ),
+                 _( "&Settings" ), _( "Change the footprint editor settings." ),
                  KiBitmap( preference_xpm ) );
 
     // Language submenu
@@ -350,8 +350,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // About Pcbnew
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Kicad" ),
-                 _( "About Kicad" ),
+                 _( "&About KiCad" ),
+                 _( "About KiCad" ),
                  KiBitmap( info_xpm ) );
 
     // Append menus to the menubar

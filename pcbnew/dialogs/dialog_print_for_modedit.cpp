@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,9 +84,10 @@ void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 
         if( !s_PrintData->Ok() )
         {
-            DisplayError( this, _( "Error Init Printer info" ) );
+            DisplayError( this, _( "An error occurred initializing the printer information." ) );
         }
-        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
+
+        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGH;
     }
 
     if( s_pageSetupData == NULL )
@@ -123,6 +124,7 @@ void DIALOG_PRINT_FOR_MODEDIT::InitValues( )
 {
     // Read the scale adjust option
     int scale_Select = 3; // default selected scale = ScaleList[3] = 1
+
     if( m_config )
     {
         m_config->Read( OPTKEY_PRINT_MODULE_SCALE, &scale_Select );
@@ -143,8 +145,9 @@ void DIALOG_PRINT_FOR_MODEDIT::OnCloseWindow( wxCloseEvent& event )
     if( m_config )
     {
         m_config->Write( OPTKEY_PRINT_MODULE_SCALE, m_ScaleOption->GetSelection() );
-        m_config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
+        m_config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White );
     }
+
     EndModal( 0 );
 }
 
@@ -159,12 +162,7 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPageSetup( wxCommandEvent& event )
 }
 
 
-
 void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
-
-
-/* Open and display a previewer frame for printing
- */
 {
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
     s_Parameters.m_PrintScale = s_scaleList[m_ScaleOption->GetSelection()];
@@ -182,7 +180,7 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
         return;
     }
 
-     // Uses the parent position and size.
+    // Uses the parent position and size.
     // @todo uses last position and size ans store them when exit in m_config
     wxPoint         WPos  = m_parent->GetPosition();
     wxSize          WSize = m_parent->GetSize();
@@ -190,11 +188,11 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
     frame->SetMinSize( wxSize( 550, 350 ) );
 
-
     // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
     // close the frame using the X box in caption, when the preview frame is run
     // from a dialog
-    frame->SetExtraStyle(frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
+    frame->SetExtraStyle( frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG );
+
     // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
     // modal for its caller only.
     // An other reason is the fact when closing the frame without this option,
@@ -229,13 +227,12 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            DisplayError( this, _( "There was a problem printing" ) );
+            DisplayError( this, _( "There was a problem printing." ) );
+
         return;
     }
     else
     {
         *s_PrintData = printer.GetPrintDialogData().GetPrintData();
     }
-
-
 }

@@ -268,7 +268,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
     // close the frame using the X box in caption, when the preview frame is run
     // from a dialog
-    frame->SetExtraStyle(frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
+    frame->SetExtraStyle( frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG );
+
     // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
     // modal for its caller only.
     // An other reason is the fact when closing the frame without this option,
@@ -425,7 +426,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     fitRect = GetLogicalPaperRect();
 
     wxLogDebug( wxT( "Fit rectangle: x = %d, y = %d, w = %d, h = %d" ),
-                  fitRect.x, fitRect.y, fitRect.width, fitRect.height );
+                fitRect.x, fitRect.y, fitRect.width, fitRect.height );
 
     // When is the actual paper size does not match the schematic page
     // size, the drawing is not perfectly centered on X or Y axis.
