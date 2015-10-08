@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2010-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ static wxString HtmlNewline( const unsigned int amount = 1 );
 static void InitKiCadAboutNew( AboutAppInfo& info )
 {
     // Set application specific icon
-    const wxTopLevelWindow* const tlw = wxDynamicCast( Pgm().App().GetTopWindow(), wxTopLevelWindow);
+    const wxTopLevelWindow* const tlw = wxDynamicCast( Pgm().App().GetTopWindow(), wxTopLevelWindow );
 
     if( tlw )
         info.SetIcon( tlw->GetIcon() );
@@ -130,8 +130,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     description << wxT( "<b><u>" ) << _( "Description" ) << wxT( "</u></b>" ); // bold & underlined font for caption
 
     description << wxT( "<p>" ) <<
-    _(
-        "The KiCad EDA Suite is a set of open source applications for the creation of electronic schematics and to design printed circuit boards." )
+    _( "The KiCad EDA Suite is a set of open source applications for the creation of electronic schematics and to design printed circuit boards." )
                 << wxT( "</p>" );
 
     description << wxT( "</p>" );
@@ -142,9 +141,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     // bullet-ed list with some http links
     description << wxT( "<ul>" );
-    description << wxT( "<li>" ) << HtmlHyperlink( wxT(
-                                                      "http://iut-tice.ujf-grenoble.fr/kicad" ),
-                                                  _( "The original site of the initiator of Kicad" ) )
+    description << wxT( "<li>" ) << HtmlHyperlink( wxT( "http://iut-tice.ujf-grenoble.fr/kicad" ),
+                                                   _( "The original site of the initiator of KiCad" ) )
                 << wxT( "</li>" );
     description << wxT( "<li>" ) <<
     HtmlHyperlink( wxT( "https://launchpad.net/kicad" ), _( "Project on Launchpad" ) ) << wxT(
@@ -167,13 +165,11 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     description << wxT( "<li>" ) <<
     HtmlHyperlink( wxT( "https://bugs.launchpad.net/kicad" ),
                   _( "Report bugs if you found any" ) ) << wxT( "</li>" );
-    description << wxT( "<li>" ) << HtmlHyperlink( wxT(
-                                                      "https://blueprints.launchpad.net/kicad" ),
-                                                  _( "File an idea for improvement" ) ) << wxT(
-        "</li>" );
+    description << wxT( "<li>" ) << HtmlHyperlink( wxT( "https://blueprints.launchpad.net/kicad" ),
+                                                   _( "File an idea for improvement" ) ) << wxT( "</li>" );
     description << wxT( "<li>" ) <<
     HtmlHyperlink( wxT( "http://www.kicadlib.org/Kicad_related_links.html" ),
-                  _( "KiCad links to user groups, tutorials and much more" ) ) << wxT( "</li>" );
+                   _( "KiCad links to user groups, tutorials and much more" ) ) << wxT( "</li>" );
     description << wxT( "</ul>" );
 
     description << wxT( "</p>" );
@@ -188,7 +184,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
         << HtmlNewline( 4 )
         << _( "The complete KiCad EDA Suite is released under the" ) << HtmlNewline( 2 )
         << HtmlHyperlink( wxT( "http://www.gnu.org/licenses" ),
-                         _( "GNU General Public License (GPL) version 2 or any later version" ) )
+                          _( "GNU General Public License (GPL) version 2 or any later version" ) )
         << wxT( "</div>" );
 
     info.SetLicense( license );
@@ -303,14 +299,19 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator(
         new Contributor( wxT( "Kenta Yonekura" ),         wxT( "midpika@hotmail.com" ),           wxT( "Japanese (JA)" ), KiBitmapNew( lang_jp_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Manolis Stefanis, Athanasios Vlastos and Milonas Kostas" ),
-                                                          wxT( "milonas.ko@gmail.com" ),          wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
+        new Contributor( wxT( "Manolis Stefanis" ),       wxT( "" ),                              wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
+    info.AddTranslator(
+        new Contributor( wxT( "Athanasios Vlastos" ),     wxT( "" ),                              wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
+    info.AddTranslator(
+        new Contributor( wxT( "Milonas Kostas" ),         wxT( "milonas.ko@gmail.com" ),          wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
+    info.AddTranslator(
+        new Contributor( wxT( "Michail Misirlis" ),       wxT( "mmisirlis@gmail.com" ),           wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Massimo Cioce" ),          wxT( "ciocemax@alice.it" ),             wxT( "Italian (IT)" ),  KiBitmapNew( lang_it_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Marco Ciampa" ),           wxT( "ciampix@libero.it" ),             wxT( "Italian (IT)" ),  KiBitmapNew( lang_it_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Evgeniy Ivanov" ),         wxT( "evgeniy_p_ivanov@yahoo.ca" ),     wxT( "Bulgarian (BG)" ),KiBitmapNew( lang_bg_xpm ) ) );
+        new Contributor( wxT( "Evgeniy Ivanov" ),         wxT( "evgeniy_p_ivanov@yahoo.ca" ),     wxT( "Bulgarian (BG)" ), KiBitmapNew( lang_bg_xpm ) ) );
 
     // TODO: are these all russian translators,
     // placed them here now,
