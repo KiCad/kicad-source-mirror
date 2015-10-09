@@ -95,7 +95,7 @@ PNS_SHOVE::~PNS_SHOVE()
 
 PNS_LINE PNS_SHOVE::assembleLine( const PNS_SEGMENT* aSeg, int* aIndex )
 {
-    return m_currentNode->AssembleLine( const_cast<PNS_SEGMENT*>( aSeg ), aIndex );
+    return m_currentNode->AssembleLine( const_cast<PNS_SEGMENT*>( aSeg ), aIndex, true );
 }
 
 // A dumb function that checks if the shoved line is shoved the right way, e.g.

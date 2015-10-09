@@ -309,7 +309,8 @@ public:
      * @param aOriginSegmentIndex index of aSeg in the resulting line
      * @return the line
      */
-    const PNS_LINE AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex = NULL );
+    const PNS_LINE AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex = NULL,
+                                 bool aStopAtLockedJoints = false );
 
     ///> Prints the contents and joints structure
     void Dump( bool aLong = false );
@@ -446,7 +447,8 @@ private:
                      int             aLimit,
                      VECTOR2I*       aCorners,
                      PNS_SEGMENT**   aSegments,
-                     bool&           aGuardHit );
+                     bool&           aGuardHit,
+                     bool            aStopAtLockedJoints );
 
     ///> hash table with the joints, linking the items. Joints are hashed by
     ///> their position, layer set and net.

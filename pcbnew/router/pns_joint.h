@@ -84,9 +84,6 @@ public:
     /// segments of the same net, on the same layer.
     bool IsLineCorner() const
     {
-        if( m_locked )
-            return false;
-
         if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT ) != 2 )
             return false;
 

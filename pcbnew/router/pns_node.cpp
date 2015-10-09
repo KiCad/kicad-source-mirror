@@ -737,7 +737,8 @@ void PNS_NODE::Remove( PNS_LINE& aLine )
 
 
 void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos,
-        int aLimit, VECTOR2I* aCorners, PNS_SEGMENT** aSegments, bool& aGuardHit )
+        int aLimit, VECTOR2I* aCorners, PNS_SEGMENT** aSegments, bool& aGuardHit,
+		bool aStopAtLockedJoints )
 {
     bool prevReversed = false;
 
@@ -762,7 +763,9 @@ void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos
             break;
         }
 
-        if( !jt->IsLineCorner() || aPos < 0 || aPos == aLimit )
+        bool locked = aStopAtLockedJoints ? jt->IsLocked() : false;
+
+        if( locked || !jt->IsLineCorner() || aPos < 0 || aPos == aLimit )
             break;
 
         aCurrent = jt->NextSegment( aCurrent );
@@ -773,7 +776,7 @@ void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos
 }
 
 
-const PNS_LINE PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex )
+const PNS_LINE PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex, bool aStopAtLockedJoints )
 {
     const int MaxVerts = 1024 * 16;
 
@@ -790,10 +793,10 @@ const PNS_LINE PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentInd
     pl.SetNet( aSeg->Net() );
     pl.SetOwner( this );
 
-    followLine( aSeg, false, i_start, MaxVerts, corners, segs, guardHit );
+    followLine( aSeg, false, i_start, MaxVerts, corners, segs, guardHit, aStopAtLockedJoints );
 
     if( !guardHit )
-        followLine( aSeg, true, i_end, MaxVerts, corners, segs, guardHit );
+        followLine( aSeg, true, i_end, MaxVerts, corners, segs, guardHit, aStopAtLockedJoints );
 
     int n = 0;
 
