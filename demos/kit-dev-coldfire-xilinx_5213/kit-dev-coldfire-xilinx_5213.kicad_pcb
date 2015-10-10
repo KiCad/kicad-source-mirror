@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew "(2014-08-25 BZR 5096)-product")
+(kicad_pcb (version 4) (host pcbnew "(2015-10-08 BZR 6256)-product")
 
   (general
     (links 534)
     (no_connects 0)
-    (area 65.592458 36.781599 237.49 147.510501)
+    (area 66.45592 36.781599 233.50792 151.36432)
     (thickness 1.6)
     (drawings 8)
     (tracks 3535)
@@ -13,6 +13,12 @@
   )
 
   (page A4)
+  (title_block
+    (title "Demo Kicad")
+    (date 2015-10-09)
+    (rev 2)
+  )
+
   (layers
     (0 Composant signal)
     (1 GND_layer power)

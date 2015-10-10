@@ -6,10 +6,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,9 +182,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     {
         m_panelShowPadGal->UseColorScheme( m_board->GetColorsSettings() );
         m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
-#if !wxCHECK_VERSION( 3, 0, 0 )
-        m_panelShowPadGal->SetSize( m_panelShowPad->GetSize() );
-#endif
         m_panelShowPadGal->Show();
         m_panelShowPad->Hide();
         m_panelShowPadGal->GetView()->Add( m_dummyPad );
@@ -256,7 +253,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
         // If drill size has been set, use that. Otherwise default to 1mm.
         dim = m_dummyPad->GetDrillSize().x;
         if( dim == 0 )
-            dim = 1000000;
+            dim = Millimeter2iu( 1.0 );
     }
 
     if( m_dummyPad->GetLocalClearance() > 0 )
@@ -343,6 +340,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
             m_staticModuleSideValue->SetLabel( _( "Back side (footprint is mirrored)" ) );
         }
 
+        //Internal angles are in 0.1 degree
         msg.Printf( wxT( "%.1f" ), module->GetOrientation() / 10.0 );
         m_staticModuleRotValue->SetLabel( msg );
     }
@@ -805,10 +803,13 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
                                "Use SMD pads instead" ) );
         // Fall trough
     case PAD_ATTRIB_SMD:       // SMD and Connector pads (One external copper layer only)
-/*
-        if( padlayers_mask[B_Cu] && padlayers_mask[F_Cu] )
-            error_msgs.Add( _( "Error: only one copper layer allowed for SMD or Connector pads" ) );
-*/
+        {
+        LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
+
+        if( ( padlayers_mask[F_Cu] && padlayers_mask[B_Cu] ) ||
+            innerlayers_mask.count() != 0 )
+            error_msgs.Add( _( "Error: only one external copper layer allowed for SMD or Connector pads" ) );
+        }
         break;
     }
 
@@ -1044,44 +1045,47 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     // Read pad length die
     aPad->SetPadToDieLength( ValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
 
-    // Read pad shape delta size:
-    // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.
-    wxSize delta;
-
-    if( m_trapDeltaDirChoice->GetSelection() == 0 )
-        delta.x = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
-    else
-        delta.y = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
-
-    // Test bad values (be sure delta values are not too large)
+    // For a trapezoid, test delta value (be sure delta is not too large for pad size)
     // remember DeltaSize.x is the Y size variation
     bool   error    = false;
 
-    if( delta.x < 0 && delta.x <= -aPad->GetSize().y )
+    if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )
     {
-        delta.x = -aPad->GetSize().y + 2;
-        error = true;
-    }
+        wxSize delta;
 
-    if( delta.x > 0 && delta.x >= aPad->GetSize().y )
-    {
-        delta.x = aPad->GetSize().y - 2;
-        error = true;
-    }
+        // For a trapezoid, only one of delta.x or delta.y is not 0, depending on
+        // the direction.
+        if( m_trapDeltaDirChoice->GetSelection() == 0 )
+            delta.x = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
+        else
+            delta.y = ValueFromTextCtrl( *m_ShapeDelta_Ctrl );
 
-    if( delta.y < 0 && delta.y <= -aPad->GetSize().x )
-    {
-        delta.y = -aPad->GetSize().x + 2;
-        error = true;
-    }
+        if( delta.x < 0 && delta.x <= -aPad->GetSize().y )
+        {
+            delta.x = -aPad->GetSize().y + 2;
+            error = true;
+        }
 
-    if( delta.y > 0 && delta.y >= aPad->GetSize().x )
-    {
-        delta.y = aPad->GetSize().x - 2;
-        error = true;
-    }
+        if( delta.x > 0 && delta.x >= aPad->GetSize().y )
+        {
+            delta.x = aPad->GetSize().y - 2;
+            error = true;
+        }
 
-    aPad->SetDelta( delta );
+        if( delta.y < 0 && delta.y <= -aPad->GetSize().x )
+        {
+            delta.y = -aPad->GetSize().x + 2;
+            error = true;
+        }
+
+        if( delta.y > 0 && delta.y >= aPad->GetSize().x )
+        {
+            delta.y = aPad->GetSize().x - 2;
+            error = true;
+        }
+
+        aPad->SetDelta( delta );
+    }
 
     // Read pad shape offset:
     x = ValueFromTextCtrl( *m_ShapeOffset_X_Ctrl );
