@@ -454,6 +454,12 @@ bool PNS_LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
     l.Line().Append( l2.CLine() );
     l.Line().Simplify();
 
+    if( l.PointCount() == 0 || l2.PointCount() == 0 )
+    {
+        aNewHead = m_head;
+        return false;
+    }
+
     if( m_placingVia && viaOk )
     {
         PNS_VIA v1( makeVia( l.CPoint( -1 ) ) );
@@ -1036,6 +1042,8 @@ void PNS_LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 bool PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead )
 {
     SHAPE_LINE_CHAIN l;
+
+    printf("H-net %d\n", aHead.Net());
 
     if( m_p_start == aP )
     {
