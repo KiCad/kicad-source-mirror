@@ -208,21 +208,19 @@ Github mirror: https://github.com/KiCad/kicad-source-mirror
 
 # Building KiCad on Linux # {#build_linux}
 
-To full KiCad build on Linux, do the following:
+To perfrom a full build on Linux, run the following commands:
 
-```
-cd kicad_source_tree
-mkdir -p build/release
-mkdir build/debug               # Optional for debug build.
-cd build/release
-cmake -DCMAKE_BUILD_TYPE=Release     \
-      -DKICAD_SCRIPTING=ON           \
-      -DKICAD_SCRIPTING_MODULES=ON   \
-      -DKICAD_SCRIPTING_WXPYTHON=ON  \
-      ../../
-make
-sudo make install
-```
+    cd kicad_source_tree
+    mkdir -p build/release
+    mkdir build/debug               # Optional for debug build.
+    cd build/release
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DKICAD_SCRIPTING=ON \
+          -DKICAD_SCRIPTING_MODULES=ON \
+          -DKICAD_SCRIPTING_WXPYTHON=ON \
+          ../../
+    make
+    sudo make install
 
 If the CMake configuration fails, determine the missing dependencies and install them on your
 system.  By default, CMake sets the install path on Linux to /usr/local.  Use the
@@ -247,14 +245,12 @@ The easiest way to build KiCad using the [MSYS2][] build environment is to use t
 development branch.  To build the KiCad package, run the `msys2_shell.bat` file located in the
 MSYS2 install path and run the following commands:
 
-```
-pacman -S git
-mkdir src
-cd src
-git clone https://github.com/Alexpux/MINGW-packages
-cd MinGW-packages/mingw-w64-kicad-git
-makepkg-mingw -is
-```
+    pacman -S git
+    mkdir src
+    cd src
+    git clone https://github.com/Alexpux/MINGW-packages
+    cd MinGW-packages/mingw-w64-kicad-git
+    makepkg-mingw -is
 
 This will download and install all of the build dependencies, clone the KiCad source mirror
 from Github, create both 32-bit and 64-bit KiCad packages depending on your MSYS setup, and
@@ -268,36 +264,34 @@ method of building KiCad, your task is significantly more involved.  For 64 bit 
 the `mingw64_shell.bat` file located in the MSYS2 install path.  At the command prompt run the
 the following commands:
 
-```
-pacman -S mingw-w64-x86_64-cmake \
-          mingw-w64-x86_64-doxygen \
-          mingw-w64-x86_64-gcc \
-          mingw-w64-x86_64-python2 \
-          mingw-w64-x86_64-pkg-config \
-          mingw-w64-x86_64-swig \
-          mingw-w64-x86_64-boost \
-          mingw-w64-x86_64-cairo \
-          mingw-w64-x86_64-glew \
-          mingw-w64-x86_64-openssl \
-          mingw-w64-x86_64-wxPython \
-          mingw-w64-x86_64-wxWidgets
-cd kicad-source
-mkdir -p build/release
-mkdir build/debug               # Optional for debug build.
-cd build/release
-cmake -DCMAKE_BUILD_TYPE=Release \
-      -G "MSYS Makefiles" \
-      -DCMAKE_PREFIX_PATH=/mingw64 \
-      -DCMAKE_INSTALL_PREFIX=/mingw64 \
-      -DDEFAULT_INSTALL_PATH=/mingw64 \
-      -DOPENSSL_ROOT_DIR=/mingw64 \
-      -DKICAD_SKIP_BOOST=ON \
-      -DKICAD_SCRIPTING=ON \
-      -DKICAD_SCRIPTING_MODULES=ON \
-      -DKICAD_SCRIPTING_WXPYTHON=ON \
-      ../../
-make install
-```
+    pacman -S mingw-w64-x86_64-cmake \
+              mingw-w64-x86_64-doxygen \
+              mingw-w64-x86_64-gcc \
+              mingw-w64-x86_64-python2 \
+              mingw-w64-x86_64-pkg-config \
+              mingw-w64-x86_64-swig \
+              mingw-w64-x86_64-boost \
+              mingw-w64-x86_64-cairo \
+              mingw-w64-x86_64-glew \
+              mingw-w64-x86_64-openssl \
+              mingw-w64-x86_64-wxPython \
+              mingw-w64-x86_64-wxWidgets
+    cd kicad-source
+    mkdir -p build/release
+    mkdir build/debug               # Optional for debug build.
+    cd build/release
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -G "MSYS Makefiles" \
+          -DCMAKE_PREFIX_PATH=/mingw64 \
+          -DCMAKE_INSTALL_PREFIX=/mingw64 \
+          -DDEFAULT_INSTALL_PATH=/mingw64 \
+          -DOPENSSL_ROOT_DIR=/mingw64 \
+          -DKICAD_SKIP_BOOST=ON \
+          -DKICAD_SCRIPTING=ON \
+          -DKICAD_SCRIPTING_MODULES=ON \
+          -DKICAD_SCRIPTING_WXPYTHON=ON \
+          ../../
+    make install
 
 # Building KiCad on OSX # {#build_osx}
 
@@ -307,58 +301,54 @@ building KiCad on OSX, see the [OSX bundle build scripts][].
 
 Download the wxPython source and build using the following commands:
 
-```
-cd path-to-wxwidgets-src
-patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx.patch
-patch -p0 < path-to-kicad-src/wxwidgets-3.0.0_macosx_bug_15908.patch
-patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_soname.patch
-patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_yosemite.patch
-patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_scrolledwindow.patch
-mkdir build
-cd build
-export MAC_OS_X_VERSION_MIN_REQUIRED=10.7
-../configure \
-    --prefix=`pwd`/../wx-bin \
-    --with-opengl \
-    --enable-aui \
-    --enable-utf8 \
-    --enable-html \
-    --enable-stl \
-    --with-libjpeg=builtin \
-    --with-libpng=builtin \
-    --with-regex=builtin \
-    --with-libtiff=builtin \
-    --with-zlib=builtin \
-    --with-expat=builtin \
-    --without-liblzma \
-    --with-macosx-version-min=10.7 \
-    --enable-universal-binary=i386,x86_64 \
-    CC=clang \
-    CXX=clang++
-```
+    cd path-to-wxwidgets-src
+    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx.patch
+    patch -p0 < path-to-kicad-src/wxwidgets-3.0.0_macosx_bug_15908.patch
+    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_soname.patch
+    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_yosemite.patch
+    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_scrolledwindow.patch
+    mkdir build
+    cd build
+    export MAC_OS_X_VERSION_MIN_REQUIRED=10.7
+    ../configure \
+        --prefix=`pwd`/../wx-bin \
+        --with-opengl \
+        --enable-aui \
+        --enable-utf8 \
+        --enable-html \
+        --enable-stl \
+        --with-libjpeg=builtin \
+        --with-libpng=builtin \
+        --with-regex=builtin \
+        --with-libtiff=builtin \
+        --with-zlib=builtin \
+        --with-expat=builtin \
+        --without-liblzma \
+        --with-macosx-version-min=10.7 \
+        --enable-universal-binary=i386,x86_64 \
+        CC=clang \
+        CXX=clang++
 
 Build KiCad using the following commands:
 
-```
-cd kicad-source
-mkdir -p build/release
-mkdir build/debug               # Optional for debug build.
-cd build/release
-cmake -DCMAKE_C_COMPILER=clang \
-      -DCMAKE_CXX_COMPILER=clang++ \
-      -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 \
-      -DwxWidgets_CONFIG_EXECUTABLE=path-to-wx-install/bin/wx-config \
-      -DKICAD_SCRIPTING=ON \
-      -DKICAD_SCRIPTING_MODULES=ON \
-      -DKICAD_SCRIPTING_WXPYTHON=ON \
-      -DPYTHON_EXECUTABLE=path-to-python-exe/python \
-      -DPYTHON_SITE_PACKAGE_PATH=wx/wx-bin/lib/python2.7/site-packages \
-      -DCMAKE_INSTALL_PREFIX=../bin \
-      -DCMAKE_BUILD_TYPE=Release \
-      ../../
-make
-make install
-```
+    cd kicad-source
+    mkdir -p build/release
+    mkdir build/debug               # Optional for debug build.
+    cd build/release
+    cmake -DCMAKE_C_COMPILER=clang \
+          -DCMAKE_CXX_COMPILER=clang++ \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 \
+          -DwxWidgets_CONFIG_EXECUTABLE=path-to-wx-install/bin/wx-config \
+          -DKICAD_SCRIPTING=ON \
+          -DKICAD_SCRIPTING_MODULES=ON \
+          -DKICAD_SCRIPTING_WXPYTHON=ON \
+          -DPYTHON_EXECUTABLE=path-to-python-exe/python \
+          -DPYTHON_SITE_PACKAGE_PATH=wx/wx-bin/lib/python2.7/site-packages \
+          -DCMAKE_INSTALL_PREFIX=../bin \
+          -DCMAKE_BUILD_TYPE=Release \
+          ../../
+    make
+    make install
 
 [download]: http://kicad-pcb.org/download/
 [KiCad website]: http://kicad-pcb.org/
