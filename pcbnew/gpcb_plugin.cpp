@@ -75,21 +75,51 @@ static void inline traceParams( wxArrayString& aParams )
 }
 
 
-static inline long parseInt( const wxString& aValue )
-{
-    long value;
-
-    if( aValue.ToLong( &value ) )
-        return value;
-
-    THROW_IO_ERROR( wxString::Format( _( "Cannot convert \"%s\" to an integer" ),
-                                      aValue.GetData() ) );
-}
-
-
 static inline long parseInt( const wxString& aValue, double aScalar )
 {
-    return KiROUND( parseInt( aValue ) * aScalar );
+    double value = LONG_MAX;
+
+    /*
+     * In 2011 gEDA/pcb introduced values with units, like "10mm" or "200mil".
+     * Unit-less values are still centimils (100000 units per inch), like with
+     * the previous format.
+     *
+     * Distinction between the even older format (mils, 1000 units per inch)
+     * and the pre-2011 format is done in ::parseMODULE already; the
+     * distinction is by wether an object definition opens with '(' or '['.
+     * All values with explicite unit open with a '[' so there's no need to
+     * consider this distinction when parsing them.
+     *
+     * The solution here is to watch for a unit and, if present, convert the
+     * value to centimils. All unit-less values are read unaltered. This way
+     * the code below can contine to consider all read values to be in mils or
+     * centimils. It also matches the strategy gEDA/pcb uses for backwards
+     * compatibility with its own layouts.
+     *
+     * Fortunately gEDA/pcb allows only units 'mil' and 'mm' in files, see
+     * definition of ALLOW_READABLE in gEDA/pcb's pcb_printf.h. So we don't
+     * have to test for all 11 units gEDA/pcb allows in user dialogs.
+     */
+    if( aValue.EndsWith( wxT( "mm" ) ) )
+    {
+        aScalar *= 100000.0 / 25.4;
+    }
+    else if( aValue.EndsWith( wxT( "mil" ) ) )
+    {
+        aScalar *= 100.;
+    }
+
+    // This conversion reports failure on strings as simple as "1000", still
+    // it returns the right result in &value. Thus, ignore the return value.
+    aValue.ToCDouble(&value);
+    if( value == LONG_MAX ) // conversion really failed
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Cannot convert \"%s\" to an integer" ),
+                                          aValue.GetData() ) );
+        return 0;
+    }
+
+    return KiROUND( value * aScalar );
 }
 
 
@@ -455,12 +485,12 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     module->Reference().SetTextPosition( textPos );
     module->Reference().SetPos0( textPos );
 
-    int orientation = parseInt( parameters[paramCnt-4] );
+    int orientation = parseInt( parameters[paramCnt-4], 1.0 );
     module->Reference().SetOrientation( (orientation % 2) ? 900 : 0 );
 
     // Calculate size: default is 40 mils
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
-    int tsize = ( parseInt( parameters[paramCnt-3] ) * TEXT_DEFAULT_SIZE ) / 100;
+    int tsize = parseInt( parameters[paramCnt-3], TEXT_DEFAULT_SIZE ) / 100;
     int thickness = module->Reference().GetSize().x / 6;
 
     tsize = std::max( KiROUND(5 * IU_PER_MILS), tsize ); // Ensure a minimal size = 5 mils
@@ -547,10 +577,10 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             drawSeg->SetStart0( centre );
 
             // Pcbnew start angles are inverted and 180 degrees from Geda PCB angles.
-            double start_angle = ( parseInt( parameters[6] ) * -10.0 ) + 1800.0;
+            double start_angle = parseInt( parameters[6], -10.0 ) + 1800.0;
 
             // Pcbnew delta angle direction is the opposite of Geda PCB delta angles.
-            double sweep_angle = parseInt( parameters[7] ) * -10.0;
+            double sweep_angle = parseInt( parameters[7], -10.0 );
 
             // Geda PCB does not support circles.
             if( sweep_angle == -3600.0 )
