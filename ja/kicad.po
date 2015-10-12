@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-28 23:34+0900\n"
-"PO-Revision-Date: 2015-10-03 21:05+0900\n"
+"PO-Revision-Date: 2015-10-12 11:43+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -20278,7 +20278,7 @@ msgstr "レイヤ ペアの選択"
 
 #: pcbnew/onrightclick.cpp:465
 msgid "Automatically Route All Footprints"
-msgstr "全てのフットプリントを自動配置"
+msgstr "全てのフットプリントを自動配線"
 
 #: pcbnew/onrightclick.cpp:467
 msgid "Reset Unrouted"
@@ -21331,13 +21331,11 @@ msgstr "ネットリストの読込み"
 
 #: pcbnew/tool_pcb.cpp:295
 msgid "Mode footprint: manual and automatic movement and placement"
-msgstr "フットプリントモード：手動/自動での配置と移動 "
+msgstr "フットプリント モード：手動/自動での配置と移動 "
 
 #: pcbnew/tool_pcb.cpp:298
 msgid "Mode track: autorouting"
-msgstr ""
-"トラック モード\n"
-"自動配線"
+msgstr "配線モード: 自動配線"
 
 #: pcbnew/tool_pcb.cpp:304
 msgid "Fast access to the FreeROUTE external advanced router"
