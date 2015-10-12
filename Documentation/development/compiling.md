@@ -4,18 +4,19 @@ of KiCad which can be found at the [download][] page on the [KiCad website][].  
 from source is not for the faint of heart and is not recommended unless you have reasonable
 software development experience.  This document contains the instructions on how to build KiCad
 from source on the supported platforms.  It is not intended as a guide for installing or building
-library dependencies.  Please consult you platforms documentation for installing packages or the
-source code when building the library dependencies.  Currently the supported platforms are Windows
-Versions 7-10, just about any version of Linux, and OSX 10.7-10.10.  You may be able to build
-KiCad on other platforms but it is not supported.  On Windows and Linux the [GNU GCC][] is the
-only supported compiler and on OSX [Clang][] is the only supported compiler.
+[library dependencies](#library_dependencies).  Please consult you platforms documentation for
+installing packages or the source code when building the library dependencies.  Currently the
+supported platforms are Windows Versions 7-10, just about any version of Linux, and OSX
+10.7-10.10.  You may be able to build KiCad on other platforms but it is not supported.  On
+Windows and Linux the [GNU GCC][] is the only supported compiler and on OSX [Clang][] is the
+only supported compiler.
 
 [TOC]
 
 # Development Tools # {#development_tools}
 
-Before you begin building KiCad, there are a few tools required beside your compiler.  Some of
-these tools are required to build from source and some are optional.
+Before you begin building KiCad, there are a few tools required in addition to your compiler.
+Some of these tools are required to build from source and some are optional.
 
 ## CMake Build Configuration Tool ## {#cmake}
 
@@ -24,14 +25,14 @@ these tools are required to build from source and some are optional.
 
 ## Bazaar Version Control System ## {#bazaar}
 
-The official source code repository is hosted on [Launchpad][] and requires [Bazaar][] in order
-to create a branch of the latest source.  Bazaar is optional if you are going to build a stable
-version of KiCad from a source archive.
+The official source code repository is hosted on [Launchpad][] and requires the [Bazaar][] version
+control system in order to create a branch of the latest source.  Bazaar is not required if you are
+going to build a stable version of KiCad from a source archive.
 
 ## GIT Version Control System ## {#git}
 
 If you prefer to use [GIT][] for version control, there is a mirror of the official KiCad
-repository on [Github][].  GIT is optional if you are going to build a stable version of
+repository on [Github][].  GIT is not required if you are going to build a stable version of
 KiCad from a source archive.  Please note that the Github mirror is read only.  Do not submit
 pull requests to Github.  Changes should be sent to the KiCad developer's [mailing list][] as
 an attached patch with [PATCH] at the beginning of the subject.
@@ -182,7 +183,7 @@ enabled by default.
 # Getting the KiCad Source Code ## {#getting_src}
 
 There are several ways to get the KiCad source.  If you want to build the stable version you
-can down load the source archive from the [KiCad Launchpad] developers page.  Use tar or some
+can down load the source archive from the [KiCad Launchpad][] developers page.  Use tar or some
 other archive program to extract the source on your system.  If you are using tar, use the
 following command:
 
@@ -208,7 +209,7 @@ Github mirror: https://github.com/KiCad/kicad-source-mirror
 
 # Building KiCad on Linux # {#build_linux}
 
-To perfrom a full build on Linux, run the following commands:
+To perform a full build on Linux, run the following commands:
 
     cd kicad_source_tree
     mkdir -p build/release
@@ -350,6 +351,22 @@ Build KiCad using the following commands:
     make
     make install
 
+# Known Issues # {#known_issues}
+
+There are some known issues that are platform and/or dependencie specific.  This section provides
+a list of the currently known issues when building KiCad.
+
+## Boost C++ Library Issues ## {#boost_issue}
+
+As of version 5 of [GNU GCC][], using the default configuration of downloading, patching, and
+building of Boost 1.54 will cause the KiCad build to fail.  Therefore a newer version of Boost
+must be used to build KiCad.  If your system has Boost 1.56 or greater installed, you job is
+straight forward.  Configure your KiCad build using `-DKICAD_SKIP_BOOST=ON`.  If your system
+does not have Boost 1.56 or greater installed, you will have to download and [build Boost][]
+from source.  If you are building Boost on windows using [MinGW][] you will have to apply the
+Boost patches in the KiCad source [patch folder][].
+
+
 [download]: http://kicad-pcb.org/download/
 [KiCad website]: http://kicad-pcb.org/
 [KiCad Launchpad]: https://launchpad.net/kicad
@@ -377,3 +394,5 @@ Build KiCad using the following commands:
 [MSYS2 64-bit Installer]: http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20150916.exe
 [PKGBUILD]: https://github.com/Alexpux/MINGW-packages/blob/master/mingw-w64-kicad-git/PKGBUILD
 [OSX bundle build scripts]:http://bazaar.launchpad.net/~adamwolf/+junk/kicad-mac-packaging/files
+[MinGW]: http://mingw.org/
+[build Boost]: http://www.boost.org/doc/libs/1_59_0/more/getting_started/index.html
