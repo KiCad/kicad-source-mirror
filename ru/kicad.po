@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-10 11:45+0300\n"
-"PO-Revision-Date: 2015-10-10 11:45+0300\n"
+"POT-Creation-Date: 2015-10-13 19:05+0300\n"
+"PO-Revision-Date: 2015-10-13 19:14+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -15025,9 +15025,9 @@ msgid ""
 "the space key)\n"
 "to the cursor, in polar coordinates (angle and distance)"
 msgstr ""
-"Активирует отображение относит. координат от точки отсчета (уст. клав. "
-"\"пробел\")\n"
-"в полярных координатах (угол и расстояние)"
+"Активирует отображение относительных координат от точки отсчета к курсору\n"
+"(устанавливается клавишей \"пробел\"), в полярных координатах (угол и "
+"расстояние)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:37
 msgid "Selection of units used to display dimensions and positions of items"
@@ -16731,29 +16731,29 @@ msgstr "Включить заблокированные посад.места"
 msgid "Force locked footprints to be modified"
 msgstr "Непосредственно заблокированные посад.места изменены"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:343
+#: pcbnew/dialogs/dialog_pad_properties.cpp:340
 msgid "Back side (footprint is mirrored)"
 msgstr "Задняя сторона (посад.место зеркально)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:744
+#: pcbnew/dialogs/dialog_pad_properties.cpp:742
 msgid "Pad size must be greater than zero"
 msgstr "Размер конт.пл. должен быть больше нуля"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:750
+#: pcbnew/dialogs/dialog_pad_properties.cpp:748
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr ""
 "Неверное значение сверла конт.пл.: сверло конт.пл. больше, чем размер конт."
 "пл."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:756
+#: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Error: pad has no layer"
 msgstr "Ошибка: конт.пл. не имеет слоев"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:763
+#: pcbnew/dialogs/dialog_pad_properties.cpp:761
 msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Ошибка: конт.пл. не на медном слое и имеет отв."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:768
+#: pcbnew/dialogs/dialog_pad_properties.cpp:766
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
@@ -16762,19 +16762,19 @@ msgstr ""
 "размеру конт.пл., если вы не хотите,чтобы данная конт.пл. не была выведена в "
 "gerber файлы"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:786
+#: pcbnew/dialogs/dialog_pad_properties.cpp:784
 msgid "Incorrect value for pad offset"
 msgstr "Неверное значение смещения конт.пл."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:791
+#: pcbnew/dialogs/dialog_pad_properties.cpp:789
 msgid "Too large value for pad delta size"
 msgstr "Слишком большая разница значения размера конт.пл."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:799
+#: pcbnew/dialogs/dialog_pad_properties.cpp:797
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Ошибка: Сквозное отв. конт.пл.: диаметр сверла установлен в 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:804
+#: pcbnew/dialogs/dialog_pad_properties.cpp:802
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -16782,11 +16782,16 @@ msgstr ""
 "Ошибка: Конт.пл. соединителя не имеет слоя паяльной пасты\n"
 "Вместо этого используйте SMD конт.пл."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:817
+#: pcbnew/dialogs/dialog_pad_properties.cpp:811
+msgid "Error: only one external copper layer allowed for SMD or Connector pads"
+msgstr ""
+"Ошибка: допустим только один медный слой для конт.пл. SMD или соединителя"
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:818
 msgid "Pad setup errors list"
 msgstr "Список ошибок установки конт.пл."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:935
+#: pcbnew/dialogs/dialog_pad_properties.cpp:936
 msgid "Unknown netname, netname not changed"
 msgstr "Неизвестное имя цепи, изменение не выполнено"
 
@@ -18485,56 +18490,56 @@ msgstr ""
 "Не удается получить/загрузить данные из: '%s'\n"
 "Причина: '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:85
+#: pcbnew/gpcb_plugin.cpp:117
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
 msgstr "Не удается преобразовать \"%s\" в целое"
 
-#: pcbnew/gpcb_plugin.cpp:269 pcbnew/gpcb_plugin.cpp:905
+#: pcbnew/gpcb_plugin.cpp:299 pcbnew/gpcb_plugin.cpp:935
 #: pcbnew/kicad_plugin.cpp:1757
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "путь к библиотеке посад.мест '%s' не существует"
 
-#: pcbnew/gpcb_plugin.cpp:309
+#: pcbnew/gpcb_plugin.cpp:339
 #, c-format
 msgid "library <%s> has no footprint '%s' to delete"
 msgstr "в библиотеке <%s> нет посад.места '%s' для удаления"
 
-#: pcbnew/gpcb_plugin.cpp:411 pcbnew/pcb_parser.cpp:406
+#: pcbnew/gpcb_plugin.cpp:441 pcbnew/pcb_parser.cpp:406
 #: pcbnew/pcb_parser.cpp:495
 #, c-format
 msgid "unknown token \"%s\""
 msgstr "неизвестная лексема \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:418
+#: pcbnew/gpcb_plugin.cpp:448
 #, c-format
 msgid "Element token contains %d parameters."
 msgstr "Лексема Element содержит %d параметров."
 
-#: pcbnew/gpcb_plugin.cpp:973 pcbnew/kicad_plugin.cpp:1830
+#: pcbnew/gpcb_plugin.cpp:1003 pcbnew/kicad_plugin.cpp:1830
 #: pcbnew/kicad_plugin.cpp:1895 pcbnew/legacy_plugin.cpp:4648
 #: pcbnew/legacy_plugin.cpp:4693 pcbnew/librairi.cpp:476
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Библиотека '%s' доступна только для чтения"
 
-#: pcbnew/gpcb_plugin.cpp:992 pcbnew/kicad_plugin.cpp:1932
+#: pcbnew/gpcb_plugin.cpp:1022 pcbnew/kicad_plugin.cpp:1932
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "у Вас нет прав на удаление директории '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1000 pcbnew/kicad_plugin.cpp:1940
+#: pcbnew/gpcb_plugin.cpp:1030 pcbnew/kicad_plugin.cpp:1940
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "директория библиотеки '%s' содержит неожиданные поддиректории"
 
-#: pcbnew/gpcb_plugin.cpp:1019 pcbnew/kicad_plugin.cpp:1959
+#: pcbnew/gpcb_plugin.cpp:1049 pcbnew/kicad_plugin.cpp:1959
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "неизвестный файл '%s' найден по пути библиотеки '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1037 pcbnew/kicad_plugin.cpp:1977
+#: pcbnew/gpcb_plugin.cpp:1067 pcbnew/kicad_plugin.cpp:1977
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "библиотеку посад.мест '%s' не удалось удалить"
@@ -21275,7 +21280,7 @@ msgstr "Настроить перекос диф.пары"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:596
 msgid "Can't start a differential pair  in the middle of nowhere."
-msgstr "Не могу не где начать трассировку диф.пары."
+msgstr "Не могу начать трассировку диф.пары."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:605
 msgid ""
