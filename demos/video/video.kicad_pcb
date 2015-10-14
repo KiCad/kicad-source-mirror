@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew "(2015-10-08 BZR 6256)-product")
+(kicad_pcb (version 4) (host pcbnew "(2015-10-12 BZR 6266)-product")
 
   (general
     (links 1575)
@@ -13,6 +13,12 @@
   )
 
   (page A3)
+  (title_block
+    (title "KiCad demo")
+    (date 2015-10-14)
+    (rev 1.A)
+  )
+
   (layers
     (0 Composant signal)
     (1 GND_layer signal)

@@ -468,6 +468,11 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     // Read value
     if( paramCnt > 10 )
         module->SetValue( parameters[5] );
+    // With gEDA/pcb, value is meaningful after instantiation, only, so it's
+    // often empty in bare footprints.
+    if( module->Value().GetText().IsEmpty() )
+        module->Value().SetText( wxT( "Val**" ) );
+
 
     if( paramCnt == 14 )
     {
@@ -482,24 +487,39 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
                            parseInt( parameters[7], conv_unit ) );
     }
 
-    module->Reference().SetTextPosition( textPos );
-    module->Reference().SetPos0( textPos );
-
     int orientation = parseInt( parameters[paramCnt-4], 1.0 );
     module->Reference().SetOrientation( (orientation % 2) ? 900 : 0 );
 
-    // Calculate size: default is 40 mils
+    // Calculate size: default height is 40 mils, width 30 mil.
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
-    int tsize = parseInt( parameters[paramCnt-3], TEXT_DEFAULT_SIZE ) / 100;
-    int thickness = module->Reference().GetSize().x / 6;
+    int thsize = parseInt( parameters[paramCnt-3], TEXT_DEFAULT_SIZE ) / 100;
+    thsize = std::max( (int)( 5 * IU_PER_MILS ), thsize ); // Ensure a minimal size = 5 mils
+    int twsize = thsize * 30 / 40;
+    int thickness = thsize / 8;
 
-    tsize = std::max( KiROUND(5 * IU_PER_MILS), tsize ); // Ensure a minimal size = 5 mils
-    module->Reference().SetSize( wxSize( tsize, tsize ) );
+    // gEDA/pcb aligns top/left, not pcbnew's default, center/center.
+    // Compensate for this by shifting the insertion point instead of the
+    // aligment, because alignment isn't changeable in the GUI.
+    textPos.x = textPos.x + twsize * module->GetReference().Len() / 2;
+    textPos.y += thsize / 2;
+
+    // gEDA/pcb draws a bit too low/left, while pcbnew draws a bit too
+    // high/right. Compensate for similar appearance.
+    textPos.x -= thsize / 10;
+    textPos.y += thsize / 2;
+
+    module->Reference().SetTextPosition( textPos );
+    module->Reference().SetPos0( textPos );
+    module->Reference().SetSize( wxSize( twsize, thsize ) );
     module->Reference().SetThickness( thickness );
+
+    // gEDA/pcb shows only one of value/reference/description at a time. Which
+    // one is selectable by a global menu setting. pcbnew needs reference as
+    // well as value visible, so place the value right below the reference.
     module->Value().SetOrientation( module->Reference().GetOrientation() );
     module->Value().SetSize( module->Reference().GetSize() );
     module->Value().SetThickness( module->Reference().GetThickness() );
-    textPos.y += tsize + thickness;
+    textPos.y += thsize * 13 / 10;  // 130% line height
     module->Value().SetTextPosition( textPos );
     module->Value().SetPos0( textPos );
 
@@ -625,15 +645,15 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             if( testFlags( parameters[paramCnt-2], 0x0080, wxT( "onsolder" ) ) )
                 pad->SetLayerSet( pad_back );
 
-            // Read pad number:
-            if( paramCnt > 10 )
-            {
-                pad->SetPadName( parameters[paramCnt-4] );
-            }
-            else
-            {
-                pad->SetPadName( parameters[paramCnt-3] );
-            }
+            // Set the pad name:
+            // Pcbnew pad name is used for electrical connection calculations.
+            // Accordingly it should be mapped to gEDA's pin/pad number,
+            // which is used for the same purpose.
+            // gEDA also features a pin/pad "name", which is an arbitrary string
+            // and set to the pin name of the netlist on instantiation. Many gEDA
+            // bare footprints use identical strings for name and number, so this
+            // can be a bit confusing.
+            pad->SetPadName( parameters[paramCnt-3] );
 
             int x1 = parseInt( parameters[2], conv_unit );
             int x2 = parseInt( parameters[4], conv_unit );
@@ -646,8 +666,18 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             // Get the pad clearance and the solder mask clearance.
             if( paramCnt == 13 )
             {
-                pad->SetLocalClearance( parseInt( parameters[7], conv_unit ) );
-                pad->SetLocalSolderMaskMargin( parseInt( parameters[8], conv_unit ) );
+                int clearance = parseInt( parameters[7], conv_unit );
+                // One of gEDA's oddities is that clearance between pad and polygon
+                // is given as the gap on both sides of the pad together, so for
+                // KiCad it has to halfed.
+                pad->SetLocalClearance( clearance / 2 );
+
+                // In GEDA, the mask value is the size of the hole in this
+                // solder mask. In Pcbnew, it is a margin, therefore the distance
+                // between the copper and the mask
+                int maskMargin = parseInt( parameters[8], conv_unit );
+                maskMargin = ( maskMargin - width ) / 2;
+                pad->SetLocalSolderMaskMargin( maskMargin );
             }
 
             // Negate angle (due to Y reversed axis) and convert it to internal units
@@ -701,15 +731,11 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             if( testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
                 pad->SetShape( PAD_SHAPE_RECT );
 
-            // Read pad number:
-            if( paramCnt > 9 )
-            {
-                pad->SetPadName( parameters[paramCnt-4] );
-            }
-            else
-            {
-                pad->SetPadName( parameters[paramCnt-3] );
-            }
+            // Set the pad name:
+            // Pcbnew pad name is used for electrical connection calculations.
+            // Accordingly it should be mapped to gEDA's pin/pad number,
+            // which is used for the same purpose.
+            pad->SetPadName( parameters[paramCnt-3] );
 
             wxPoint padPos( parseInt( parameters[2], conv_unit ),
                             parseInt( parameters[3], conv_unit ) );
@@ -723,8 +749,19 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             // Get the pad clearance, solder mask clearance, and drill size.
             if( paramCnt == 12 )
             {
-                pad->SetLocalClearance( parseInt( parameters[5], conv_unit ) );
-                pad->SetLocalSolderMaskMargin( parseInt( parameters[6], conv_unit ) );
+                int clearance = parseInt( parameters[5], conv_unit );
+                // One of gEDA's oddities is that clearance between pad and polygon
+                // is given as the gap on both sides of the pad together, so for
+                // KiCad it has to halfed.
+                pad->SetLocalClearance( clearance / 2 );
+
+                // In GEDA, the mask value is the size of the hole in this
+                // solder mask. In Pcbnew, it is a margin, therefore the distance
+                // between the copper and the mask
+                int maskMargin = parseInt( parameters[6], conv_unit );
+                maskMargin = ( maskMargin - padSize ) / 2;
+                pad->SetLocalSolderMaskMargin( maskMargin );
+
                 drillSize = parseInt( parameters[7], conv_unit );
             }
             else
@@ -744,9 +781,6 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             continue;
         }
     }
-
-    if( module->Value().GetText().IsEmpty() )
-        module->Value().SetText( wxT( "Val**" ) );
 
     // Recalculate the bounding box
     module->CalculateBoundingBox();
