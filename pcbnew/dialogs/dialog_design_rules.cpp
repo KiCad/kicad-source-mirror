@@ -180,12 +180,10 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent ) :
     GetSizer()->SetSizeHints( this );
     m_sdbSizer1OK->SetDefault();
 
-    // Allow tabbing out of grid controls.  Only available on wxWidgets 2.9.5 or later.
-#if wxCHECK_VERSION( 2, 9, 5 )
+    // Allow tabbing out of grid controls.
     m_grid->SetTabBehaviour( wxGrid::Tab_Leave );
     m_gridViaSizeList->SetTabBehaviour( wxGrid::Tab_Leave );
     m_gridTrackWidthList->SetTabBehaviour( wxGrid::Tab_Leave );
-#endif
 
     Center();
 }

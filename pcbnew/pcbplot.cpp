@@ -204,15 +204,15 @@ wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
 }
 
 /* Add some X2 attributes to the file header, as defined in the
- * Gerber file format specification J4 and J5
+ * Gerber file format specification J4 and "Revision 2015.06"
  */
-#define USE_J5_ATTR
+#define USE_REVISION_2015_06_ATTR
 void AddGerberX2Attribute( PLOTTER * aPlotter,
             const BOARD *aBoard, LAYER_NUM aLayer )
 {
     wxString text;
 
-#ifdef USE_J5_ATTR
+#ifdef USE_REVISION_2015_06_ATTR
     // Creates the TF,.GenerationSoftware. Format is:
     // %TF,.GenerationSoftware,<vendor>,<application name>[,<application version>]*%
     text.Printf( wxT( "%%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
@@ -233,8 +233,8 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     text.Printf( wxT( "%%TF.CreationDate,%s%s*%%" ), GetChars( date.FormatISOCombined() ), GetChars( msg ) );
     aPlotter->AddLineToHeader( text );
 
-    // Creates the TF,.JobID. Format is (from Gerber file format doc):
-    // %TF.JobID,<project id>,<project GUID>,<revision id>*%
+    // Creates the TF,.ProjectId. Format is (from Gerber file format doc):
+    // %TF.ProjectId,<project id>,<project GUID>,<revision id>*%
     // <project id> is the name of the project, restricted to basic ASCII symbols only,
     // and comma not accepted
     // All illegal chars will be replaced by underscore
@@ -276,7 +276,7 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
 
-    text.Printf( wxT( "%%TF.JobID,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
+    text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
     aPlotter->AddLineToHeader( text );
 #endif
 
