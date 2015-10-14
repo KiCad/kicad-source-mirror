@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,6 @@
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
-#define PCB_SHOW_FULL_RATSNET_OPT       wxT( "PcbFullRatsnest" )
 #define PCB_MAGNETIC_PADS_OPT           wxT( "PcbMagPadOpt" )
 #define PCB_MAGNETIC_TRACKS_OPT         wxT( "PcbMagTrackOpt" )
 #define SHOW_MICROWAVE_TOOLS            wxT( "ShowMicrowaveTools" )
@@ -740,11 +739,6 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
 
-    long tmp;
-
-    aCfg->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
-    GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, tmp);
-
     aCfg->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
     aCfg->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     aCfg->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
@@ -759,10 +753,7 @@ void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
     // This value is stored in mm )
-    aCfg->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE,
-                   MM_PER_IU * g_DrawDefaultLineThickness );
-    long tmp = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
-    aCfg->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
+    aCfg->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE, MM_PER_IU * g_DrawDefaultLineThickness );
     aCfg->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
     aCfg->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
     aCfg->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );

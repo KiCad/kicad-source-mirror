@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012=2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@
 #include <class_layer_box_selector.h>
 #include <colors_selection.h>
 #include <wxPcbStruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
 
 #include <class_board.h>
 
@@ -87,8 +89,6 @@ static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
 };
 
 
-/* Draw the icon for the "Select layer pair" bitmap tool
- */
 void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
     int        ii, jj;
@@ -199,8 +199,6 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
 }
 
 
-/* Creates or updates the main horizontal toolbar for the board editor
-*/
 void PCB_EDIT_FRAME::ReCreateHToolbar()
 {
     wxString msg;
@@ -411,8 +409,6 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 }
 
 
-/* Create the main vertical right toolbar, showing usual tools
- */
 void PCB_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar )
@@ -533,15 +529,6 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 }
 
 
-/* Creates auxiliary horizontal toolbar
- * displays:
- * existing track width choice
- * selection for auto track width
- * existing via size choice
- * Current strategy (to choose the track and via sizes)
- * grid size choice
- * zoom level choice
- */
 void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 {
     wxString msg;
@@ -590,8 +577,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                                  wxEmptyString,
                                  KiBitmap( auto_track_width_xpm ),
-                                 _( "Auto track width: when starting on \
-an existing track use its width\notherwise, use current width setting" ),
+                                 _( "Auto track width: when starting on an existing track "
+                                    "use its width\notherwise, use current width setting" ),
                                  wxITEM_CHECK );
 
     // Add the box to display and select the current grid size:
@@ -614,7 +601,6 @@ an existing track use its width\notherwise, use current width setting" ),
 
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->Realize();
-//    m_auxiliaryToolBar->AddSeparator();
 }
 
 
@@ -727,5 +713,104 @@ void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
         // the layer box can have its size changed
         // Update the aui manager, to take in account the new size
         m_auimgr.Update();
+    }
+}
+
+
+void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
+{
+    int id = event.GetId();
+    bool state = event.IsChecked();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    switch( id )
+    {
+    case ID_TB_OPTIONS_DRC_OFF:
+        g_Drc_On = !state;
+
+        if( GetToolId() == ID_TRACK_BUTT )
+        {
+            if( g_Drc_On )
+                m_canvas->SetCursor( wxCURSOR_PENCIL );
+            else
+                m_canvas->SetCursor( wxCURSOR_QUESTION_ARROW );
+        }
+        break;
+
+    case ID_TB_OPTIONS_SHOW_RATSNEST:
+        SetElementVisibility( RATSNEST_VISIBLE, state );
+        OnModify();
+
+        if( state && (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
+            Compile_Ratsnest( NULL, true );
+
+        m_canvas->Refresh();
+        break;
+
+    case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
+        displ_opts->m_Show_Module_Ratsnest = state; // TODO: see if we can use the visibility list
+        break;
+
+    case ID_TB_OPTIONS_AUTO_DEL_TRACK:
+        g_AutoDeleteOldTrack = state;
+        break;
+
+    case ID_TB_OPTIONS_SHOW_ZONES:
+        displ_opts->m_DisplayZonesMode = 0;
+        m_canvas->Refresh();
+        break;
+
+    case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
+        displ_opts->m_DisplayZonesMode = 1;
+        m_canvas->Refresh();
+        break;
+
+    case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
+        displ_opts->m_DisplayZonesMode = 2;
+        m_canvas->Refresh();
+        break;
+
+    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
+        displ_opts->m_DisplayViaFill = !state;
+        m_canvas->Refresh();
+        break;
+
+    case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
+        displ_opts->m_DisplayPcbTrackFill = !state;
+        m_canvas->Refresh();
+        break;
+
+    case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
+    {
+        displ_opts->m_ContrastModeDisplay = state;
+        m_canvas->Refresh();
+        break;
+    }
+
+    case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
+        m_show_microwave_tools = state;
+        m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
+        m_auimgr.Update();
+
+        GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
+                                m_show_microwave_tools ?
+                                _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ));
+        break;
+
+    case ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR:
+        // show auxiliary Vertical layers and visibility manager toolbar
+        m_show_layer_manager_tools = state;
+        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+        m_auimgr.Update();
+
+        GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                m_show_layer_manager_tools ?
+                                _( "Hide &Layers Manager" ) : _( "Show &Layers Manager" ) );
+        break;
+
+    default:
+        DisplayError( this,
+                      wxT( "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" ) );
+        break;
     }
 }

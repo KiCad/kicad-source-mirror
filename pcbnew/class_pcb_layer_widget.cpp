@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@
 /// This is a read only template that is copied and modified before adding to LAYER_WIDGET
 const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
 
-#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
+#define RR  LAYER_WIDGET::ROW   // Render Row abbreviation to reduce source width
 
          // text                id                      color       tooltip
     RR( _( "Through Via" ),     VIA_THROUGH_VISIBLE,    WHITE,      _( "Show through vias" ) ),
@@ -85,6 +85,7 @@ static int s_allowed_in_FpEditor[] =
     GRID_VISIBLE, MOD_VALUES_VISIBLE, MOD_REFERENCES_VISIBLE
 };
 
+
 PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner,
                                     int aPointSize, bool aFpEditorMode ) :
         LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
@@ -113,9 +114,6 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
 }
 
 
-/* return true if item aId has meaning in footprint editor mode,
- * i.e. is in s_allowed_in_FpEditor and therefore is shown in render panel
- */
 bool PCB_LAYER_WIDGET::isAllowedInFpMode( int aId )
 {
     for( unsigned ii = 0; ii < DIM( s_allowed_in_FpEditor ); ii++ )
@@ -125,12 +123,7 @@ bool PCB_LAYER_WIDGET::isAllowedInFpMode( int aId )
     return false;
 }
 
-/* return true if item aId has meaning in footprint editor mode,
- * i.e. is in s_allowed_in_FpEditor and therefore is shown in render panel
- * Note: User layers, which are not paired, are not shown in layers manager.
- * However a not listed layer can be reachable in the graphic item proprerties
- * dialog.
- */
+
 bool PCB_LAYER_WIDGET::isLayerAllowedInFpMode( LAYER_ID aLayer )
 {
     static LSET allowed = LSET::AllTechMask();
@@ -140,9 +133,11 @@ bool PCB_LAYER_WIDGET::isLayerAllowedInFpMode( LAYER_ID aLayer )
     return allowed.test( aLayer );
 }
 
+
 void PCB_LAYER_WIDGET::installRightLayerClickHandler()
 {
     int rowCount = GetLayerRowCount();
+
     for( int row=0; row < rowCount; ++row )
     {
         for( int col=0; col<LYR_COLUMN_COUNT; ++col )
@@ -250,7 +245,7 @@ void PCB_LAYER_WIDGET::ReFillRender()
     ClearRenderRows();
 
     // Add "Render" tab rows to LAYER_WIDGET, after setting color and checkbox state.
-    // Because s_render_rows is created static, we must explicitely call
+    // Because s_render_rows is created static, we must explicitly call
     // wxGetTranslation for texts which are internationalized (tool tips
     // and item names)
     for( unsigned row=0;  row<DIM(s_render_rows);  ++row )
@@ -330,15 +325,15 @@ void PCB_LAYER_WIDGET::ReFill()
         switch( layer )
         {
         case F_Cu:
-            dsc = _("Front copper layer");
+            dsc = _( "Front copper layer" );
             break;
 
         case B_Cu:
-            dsc = _("Back copper layer");
+            dsc = _( "Back copper layer" );
             break;
 
         default:
-            dsc = _("Inner copper layer");
+            dsc = _( "Inner copper layer" );
             break;
         }
 
@@ -356,7 +351,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
 
     // technical layers are shown in this order:
-    // Because they are static, wxGetTranslation must be explicitely
+    // Because they are static, wxGetTranslation must be explicitly
     // called for tooltips.
     static const struct {
         LAYER_ID    layerId;
@@ -382,7 +377,7 @@ void PCB_LAYER_WIDGET::ReFill()
         { B_Fab,            _( "Footprint assembly on board's back" ) }
     };
 
-    for( unsigned i=0;  i<DIM(non_cu_seq);  ++i )
+    for( unsigned i=0;  i<DIM( non_cu_seq );  ++i )
     {
         LAYER_ID layer = non_cu_seq[i].layerId;
 
@@ -403,6 +398,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
     installRightLayerClickHandler();
 }
+
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
@@ -468,6 +464,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
     brd->SetVisibleLayers( visibleLayers );
 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
+
     if( galCanvas )
     {
         KIGFX::VIEW* view = galCanvas->GetView();
@@ -490,6 +487,14 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     BOARD*  brd = myframe->GetBoard();
+
+    LSET visibleLayers = brd->GetVisibleLayers();
+    visibleLayers.set( aId, isEnabled );
+
+    // The layer visibility status is saved in the board file so set the board modified
+    // state so the user has the option to save the changes.
+    if( brd->IsElementVisible( aId ) != isEnabled )
+        myframe->OnModify();
 
     brd->SetElementVisibility( aId, isEnabled );
 
