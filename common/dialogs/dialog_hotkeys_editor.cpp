@@ -104,7 +104,7 @@ void HOTKEY_LIST_CTRL::recalculateColumns()
     // to set the column widths
     totalLength = maxInfoMsgLength + maxKeyCodeLength;
 
-    scale = (float) GetClientSize().x / totalLength;
+    scale = (double) GetClientSize().x / totalLength;
 
     SetColumnWidth( 0, int( maxInfoMsgLength*scale ) - 2 );
     SetColumnWidth( 1, int( maxKeyCodeLength*scale ) );
@@ -279,7 +279,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
                                                                  section ) );
     }
 
-    m_OKButton->SetDefault();
+    m_sdbSizerOK->SetDefault();
     Center();
 }
 
@@ -319,11 +319,6 @@ void HOTKEYS_EDITOR_DIALOG::OnOKClicked( wxCommandEvent& event )
     EndModal( wxID_OK );
 }
 
-
-void HOTKEYS_EDITOR_DIALOG::CancelClicked( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
 
 
 void HOTKEYS_EDITOR_DIALOG::UndoClicked( wxCommandEvent& aEvent )
