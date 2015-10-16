@@ -117,7 +117,7 @@ void LENGTH_TUNER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     {
         DIALOG_PNS_SETTINGS settingsDlg( m_frame, m_router->Settings() );
 
-        if( settingsDlg.ShowModal() )
+        if( settingsDlg.ShowModal() == wxID_OK )
         {
             // FIXME: do we need an explicit update?
         }
