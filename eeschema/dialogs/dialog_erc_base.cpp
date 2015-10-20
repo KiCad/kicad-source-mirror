@@ -110,7 +110,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* m_panelMatrixSizer;
 	m_panelMatrixSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_ResetOptButton = new wxButton( m_PanelERCOptions, ID_RESET_MATRIX, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ResetOptButton = new wxButton( m_PanelERCOptions, ID_RESET_MATRIX, _("Initialize to Default"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_panelMatrixSizer->Add( m_ResetOptButton, 0, wxALIGN_RIGHT|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_matrixPanel = new wxPanel( m_PanelERCOptions, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

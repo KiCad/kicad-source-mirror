@@ -246,10 +246,12 @@ void BuildPlotFileName( wxFileName*     aFilename,
 
 
 /**
- * Function GetGerberExtension
+ * Function GetGerberProtelExtension
  * @return the appropriate Gerber file extension for \a aLayer
+ * used by Protel, and still sometimes in use (although the
+ * official Gerber Ext is now .gbr)
  */
-const wxString GetGerberExtension( LAYER_NUM aLayer );
+const wxString GetGerberProtelExtension( LAYER_NUM aLayer );
 
 /**
  * Function GetGerberFileFunctionAttribute

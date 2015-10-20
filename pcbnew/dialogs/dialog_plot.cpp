@@ -790,11 +790,12 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         // Use Gerber Extensions based on layer number
         // (See http://en.wikipedia.org/wiki/Gerber_File)
         if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_useGerberExtensions->GetValue() )
-            file_ext = GetGerberExtension( layer );
+            file_ext = GetGerberProtelExtension( layer );
 
-        // Create file name (from the English layer name for non copper layers).
+        // Create file name (from the English default layer name for non copper layers).
         BuildPlotFileName( &fn, outputDir.GetPath(),
-                           m_board->GetStandardLayerName( layer ),
+//                           m_board->GetStandardLayerName( layer ),
+                           m_board->GetLayerName( layer ),
                            file_ext );
 
         LOCALE_IO toggle;
