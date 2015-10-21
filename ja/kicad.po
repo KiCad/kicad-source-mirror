@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-28 23:34+0900\n"
-"PO-Revision-Date: 2015-10-12 11:43+0900\n"
+"PO-Revision-Date: 2015-10-22 05:00+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../../../Source\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-SearchPath-0: 3d-viewer\n"
 "X-Poedit-SearchPath-1: bitmap2component\n"
 "X-Poedit-SearchPath-2: common\n"
@@ -4583,7 +4583,7 @@ msgstr "ERC ファイル"
 
 #: eeschema/dialogs/dialog_erc.cpp:557
 msgid "Electronic rule check file (.erc)|*.erc"
-msgstr "エレクトリック ルール チェック ファイル (.erc)|*.erc"
+msgstr "エレクトリカル ルール チェック ファイル (.erc)|*.erc"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:30
 msgid "ERC Report:"
@@ -7030,11 +7030,11 @@ msgstr "回路図のアノテーション(&A)"
 
 #: eeschema/menubar.cpp:448
 msgid "Electrical Rules &Checker"
-msgstr "エレクトリックルール チェッカ(ERC) (&C)"
+msgstr "エレクトリカル ルール チェック(ERC) (&C)"
 
 #: eeschema/menubar.cpp:449 eeschema/tool_sch.cpp:148
 msgid "Perform electrical rules check"
-msgstr "エレクトリック ルール チェッカの実行"
+msgstr "エレクトリカル ルール チェックの実行"
 
 #: eeschema/menubar.cpp:454
 msgid "Generate &Netlist File"
@@ -7796,7 +7796,7 @@ msgstr "%s ライン 不明なレイヤ 始点 (%s,%s) 終点 (%s,%s)"
 
 #: eeschema/sch_marker.cpp:142
 msgid "Electronics Rule Check Error"
-msgstr "エレクトリックルール チェッカ (ERC) エラー"
+msgstr "エレクトリカル ルール チェック(ERC) エラー"
 
 #: eeschema/sch_sheet.cpp:828
 msgid "Sheet Name"
@@ -13783,7 +13783,7 @@ msgstr "DRCの起動"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:126
 msgid "Start the Design Rule Checker"
-msgstr "デザインルール チェッカーを起動します"
+msgstr "デザイン ルール チェックを起動します"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:130
 msgid "List Unconnected"
@@ -14921,7 +14921,7 @@ msgstr "コンテキスト メニューとホットキー フットプリント 
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:100
 msgid "&Enforce design rules when routing"
-msgstr "ルーティング中にデザインルールチェックを実行(&E)"
+msgstr "ルーティング中にデザイン ルール チェックを実行(&E)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:102
 msgid ""
@@ -19643,11 +19643,11 @@ msgstr "アクティブなレイヤペアを変更"
 
 #: pcbnew/menubar_pcbframe.cpp:616
 msgid "&DRC"
-msgstr "デザインルール チェック (&D)"
+msgstr "デザイン ルール チェック(&D)"
 
 #: pcbnew/menubar_pcbframe.cpp:617 pcbnew/tool_pcb.cpp:275
 msgid "Perform design rules check"
-msgstr "デザインルール チェックの実行"
+msgstr "デザイン ルール チェックの実行"
 
 #: pcbnew/menubar_pcbframe.cpp:620
 msgid "&FreeRoute"
@@ -21343,7 +21343,7 @@ msgstr "上級なルータである Freerouter へのクイックアクセス"
 
 #: pcbnew/tool_pcb.cpp:335 pcbnew/toolbars_update_user_interface.cpp:136
 msgid "Enable design rule checking"
-msgstr "デザインルール チェックを有効化"
+msgstr "デザイン ルール チェックを有効化"
 
 #: pcbnew/tool_pcb.cpp:354 pcbnew/toolbars_update_user_interface.cpp:145
 msgid "Show board ratsnest"
@@ -21442,7 +21442,7 @@ msgstr "+/- でスイッチします"
 
 #: pcbnew/toolbars_update_user_interface.cpp:135
 msgid "Disable design rule checking"
-msgstr "デザインルール チェックを無効化"
+msgstr "デザイン ルール チェックを無効化"
 
 #: pcbnew/toolbars_update_user_interface.cpp:144
 msgid "Hide board ratsnest"
@@ -22227,7 +22227,7 @@ msgstr "回路図エディタ オプション"
 
 #: eeschema/dialogs/dialog_erc_base.h:83
 msgid "Electrical Rules Checker"
-msgstr "エレクトリックルールチェッカ(ERC)"
+msgstr "エレクトリカル ルール チェック(ERC)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.h:59
 msgid "Drawing Properties"
