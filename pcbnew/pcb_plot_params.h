@@ -90,9 +90,9 @@ private:
     /// Set of layers to plot
     LSET        m_layerSelection;
 
-    /** When plotting gerbers use a conventional set of extensions instead of
-     * appending a suffix to the board name */
-    bool        m_useGerberExtensions;
+    /** When plotting gerbers use a conventional set of Protel extensions
+     * instead of appending a suffix to the board name */
+    bool        m_useGerberProtelExtensions;
 
     /// Include attributes from the Gerber X2 format (chapter 5 in revision J2)
     bool        m_useGerberAttributes;
@@ -232,8 +232,8 @@ public:
     void        SetUseGerberAttributes( bool aUse ) { m_useGerberAttributes = aUse; }
     bool        GetUseGerberAttributes() const { return m_useGerberAttributes; }
 
-    void        SetUseGerberExtensions( bool aUse ) { m_useGerberExtensions = aUse; }
-    bool        GetUseGerberExtensions() const { return m_useGerberExtensions; }
+    void        SetUseGerberProtelExtensions( bool aUse ) { m_useGerberProtelExtensions = aUse; }
+    bool        GetUseGerberProtelExtensions() const { return m_useGerberProtelExtensions; }
 
     void        SetGerberPrecision( int aPrecision );
     int         GetGerberPrecision() const { return m_gerberPrecision; }

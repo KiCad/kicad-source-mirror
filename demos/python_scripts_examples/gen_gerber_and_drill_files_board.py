@@ -43,6 +43,7 @@ popt.SetAutoScale(False)
 popt.SetScale(1)
 popt.SetMirror(False)
 popt.SetUseGerberAttributes(True)
+popt.SetUseGerberProtelExtensions(False)
 popt.SetExcludeEdgeLayer(False);
 popt.SetScale(1)
 popt.SetUseAuxOrigin(True)

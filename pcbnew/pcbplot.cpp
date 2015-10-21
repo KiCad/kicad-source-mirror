@@ -377,7 +377,7 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
         // Gerber format can use specific file ext, depending on layers
         // (now not a good practice, because the official file ext is .gbr)
         if( GetPlotOptions().GetFormat() == PLOT_FORMAT_GERBER &&
-            GetPlotOptions().GetUseGerberExtensions() )
+            GetPlotOptions().GetUseGerberProtelExtensions() )
             fileExt = GetGerberProtelExtension( GetLayer() );
 
         BuildPlotFileName( &fn, outputDirName, aSuffix, fileExt );
