@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-13 19:05+0300\n"
-"PO-Revision-Date: 2015-10-13 19:14+0300\n"
+"POT-Creation-Date: 2015-10-21 12:43+0300\n"
+"PO-Revision-Date: 2015-10-21 12:43+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -425,7 +425,7 @@ msgstr "Показать толщину меди"
 msgid "Show 3D Models"
 msgstr "Показать 3D модели"
 
-#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:48 pcbnew/tool_pcb.cpp:368
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:48 pcbnew/tool_pcb.cpp:366
 msgid "Show filled areas in zones"
 msgstr "Показать заливку в зонах"
 
@@ -1032,8 +1032,7 @@ msgstr "Информация о версии"
 msgid "Lib Version Info"
 msgstr "Информация о версии библиотек"
 
-#: common/dialogs/dialog_display_info_HTML_base.cpp:22
-#: common/dialogs/dialog_hotkeys_editor_base.cpp:33 common/zoom.cpp:300
+#: common/dialogs/dialog_display_info_HTML_base.cpp:22 common/zoom.cpp:300
 #: eeschema/dialogs/dialog_annotate_base.cpp:212
 #: eeschema/dialogs/dialog_bom_base.cpp:62
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
@@ -1167,7 +1166,6 @@ msgstr "Путь"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:56
 #: common/dialogs/dialog_get_component_base.cpp:45
-#: common/dialogs/dialog_hotkeys_editor_base.cpp:30
 #: eeschema/dialogs/dialog_netlist_base.cpp:129
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
@@ -1275,7 +1273,7 @@ msgstr "Команда"
 msgid "Hotkey"
 msgstr "Горячая клавиша"
 
-#: common/dialogs/dialog_hotkeys_editor.cpp:375
+#: common/dialogs/dialog_hotkeys_editor.cpp:370
 #, c-format
 msgid ""
 "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
@@ -1284,7 +1282,7 @@ msgstr ""
 "<%s> уже назначено для \"%s\" в секции \"%s\". Вы уверены в изменении "
 "назначения?"
 
-#: common/dialogs/dialog_hotkeys_editor.cpp:380
+#: common/dialogs/dialog_hotkeys_editor.cpp:375
 msgid "Confirm change"
 msgstr "Подтвердить изменения"
 
@@ -1292,7 +1290,7 @@ msgstr "Подтвердить изменения"
 msgid "Select a row and press a new key combination to alter the binding."
 msgstr "Выбрать строку и нажать новую комбинацию клавиш для назначения"
 
-#: common/dialogs/dialog_hotkeys_editor_base.cpp:36 eeschema/hotkeys.cpp:124
+#: common/dialogs/dialog_hotkeys_editor_base.cpp:39 eeschema/hotkeys.cpp:124
 #: pagelayout_editor/hotkeys.cpp:89 pcbnew/hotkeys.cpp:193
 msgid "Undo"
 msgstr "Отмена"
@@ -1648,7 +1646,7 @@ msgid "Inches"
 msgstr "Дюймы"
 
 #: common/draw_frame.cpp:322 cvpcb/class_DisplayFootprintsFrame.cpp:176
-#: pcbnew/tool_modedit.cpp:208 pcbnew/tool_pcb.cpp:337
+#: pcbnew/tool_modedit.cpp:208 pcbnew/tool_pcb.cpp:335
 msgid "Hide grid"
 msgstr "Скрыть сетку"
 
@@ -2283,28 +2281,28 @@ msgid "Footprint Viewer"
 msgstr "Просмотрщик посад.мест"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:466
-#: pcbnew/tool_pcb.cpp:340
+#: pcbnew/tool_pcb.cpp:338
 msgid "Display polar coordinates"
 msgstr "Отображать полярные координаты"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:184 eeschema/tool_lib.cpp:232
-#: pcbnew/tool_modedit.cpp:216 pcbnew/tool_pcb.cpp:343
+#: pcbnew/tool_modedit.cpp:216 pcbnew/tool_pcb.cpp:341
 msgid "Units in inches"
 msgstr "Ед.изм. в дюймах"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:188 eeschema/tool_lib.cpp:236
-#: pcbnew/tool_modedit.cpp:220 pcbnew/tool_pcb.cpp:346
+#: pcbnew/tool_modedit.cpp:220 pcbnew/tool_pcb.cpp:344
 msgid "Units in millimeters"
 msgstr "Ед.изм. в миллиметрах"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:192 eeschema/tool_lib.cpp:240
 #: eeschema/tool_sch.cpp:285 gerbview/toolbars_gerber.cpp:167
-#: pcbnew/tool_pcb.cpp:349
+#: pcbnew/tool_pcb.cpp:347
 msgid "Change cursor shape"
 msgstr "Изменить форму курсора"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:197 pcbnew/basepcbframe.cpp:476
-#: pcbnew/tool_pcb.cpp:379
+#: pcbnew/tool_pcb.cpp:377
 msgid "Show pads in outline mode"
 msgstr "Показать конт.пл. в контурном режиме"
 
@@ -2358,7 +2356,7 @@ msgid "Show outlines in sketch mode"
 msgstr "Показать границы в контурном режиме"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:401 pcbnew/hotkeys.cpp:187
-#: pcbnew/moduleframe.cpp:691 pcbnew/pcbframe.cpp:656
+#: pcbnew/moduleframe.cpp:691 pcbnew/pcbframe.cpp:655
 msgid "3D Viewer"
 msgstr "Просмотрщик 3D"
 
@@ -2472,7 +2470,7 @@ msgid "Project: '%s'"
 msgstr "Проект: '%s'"
 
 #: cvpcb/cvframe.cpp:716 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1312
-#: kicad/prjconfig.cpp:335 pcbnew/moduleframe.cpp:764 pcbnew/pcbframe.cpp:978
+#: kicad/prjconfig.cpp:335 pcbnew/moduleframe.cpp:764 pcbnew/pcbframe.cpp:969
 msgid " [Read Only]"
 msgstr " [Только чтение]"
 
@@ -4593,9 +4591,8 @@ msgid "ERC"
 msgstr "ERC"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:113
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
-msgid "Reset"
-msgstr "Сброс"
+msgid "Initialize to Default"
+msgstr "Инициализировать по умолчанию"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:34
 msgid "&Width:"
@@ -8129,7 +8126,7 @@ msgstr "Не найдено"
 msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/schframe.cpp:619 pcbnew/pcbframe.cpp:583
+#: eeschema/schframe.cpp:619 pcbnew/pcbframe.cpp:582
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -8618,7 +8615,7 @@ msgstr "AB оси"
 #: gerbview/dialogs/dialog_print_using_printer.cpp:163
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
 #: pcbnew/class_drawsegment.cpp:408 pcbnew/class_module.cpp:568
-#: pcbnew/class_pad.cpp:644 pcbnew/class_pcb_layer_widget.cpp:242
+#: pcbnew/class_pad.cpp:644 pcbnew/class_pcb_layer_widget.cpp:237
 #: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:385
 #: pcbnew/class_track.cpp:1152 pcbnew/class_track.cpp:1179
 #: pcbnew/class_zone.cpp:630
@@ -8630,7 +8627,7 @@ msgid "Layer"
 msgstr "Слой"
 
 #: gerbview/class_gerbview_layer_widget.cpp:90
-#: pcbnew/class_pcb_layer_widget.cpp:243 pcbnew/layer_widget.cpp:560
+#: pcbnew/class_pcb_layer_widget.cpp:238 pcbnew/layer_widget.cpp:560
 msgid "Render"
 msgstr "Отображать"
 
@@ -8724,6 +8721,13 @@ msgstr "Сохранить выбор"
 msgid "Get Stored Choice"
 msgstr "Получить сохраненный выбор"
 
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
+#: pcbnew/dialogs/dialog_move_exact_base.cpp:39
+#: pcbnew/dialogs/dialog_move_exact_base.cpp:53
+#: pcbnew/dialogs/dialog_move_exact_base.cpp:67
+msgid "Reset"
+msgstr "Сброс"
+
 #: gerbview/dialogs/dialog_print_using_printer.cpp:107
 #: pagelayout_editor/events_functions.cpp:517
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:114
@@ -8743,7 +8747,7 @@ msgid "Warning: Scale option set to a very small value"
 msgstr "Осторожно! Установлен очень маленький масштаб"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:340
-#: pcbnew/dialogs/dialog_plot.cpp:827
+#: pcbnew/dialogs/dialog_plot.cpp:828
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:443
 msgid "No layer selected"
 msgstr "Слой не выбран"
@@ -8754,7 +8758,7 @@ msgstr "Слой не выбран"
 msgid "Print Preview"
 msgstr "Просмотр"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:401
+#: gerbview/dialogs/dialog_print_using_printer.cpp:396
 msgid "There was a problem printing"
 msgstr "Проблема с печатью"
 
@@ -9012,19 +9016,18 @@ msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
 #: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:143
-#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:401 pcbnew/pcbframe.cpp:908
+#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:400 pcbnew/pcbframe.cpp:899
 msgid "Visibles"
 msgstr "Видимость"
 
 #: gerbview/events_called_functions.cpp:382 gerbview/menubar.cpp:155
 #: gerbview/menubar.cpp:157 gerbview/options.cpp:89
-#: pcbnew/dialogs/dialog_general_options.cpp:243 pcbnew/pcbnew_config.cpp:80
+#: pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:808
 msgid "Hide &Layers Manager"
 msgstr "Скрыть менеджер слоев"
 
 #: gerbview/events_called_functions.cpp:382 gerbview/menubar.cpp:157
-#: gerbview/options.cpp:89 pcbnew/dialogs/dialog_general_options.cpp:243
-#: pcbnew/pcbnew_config.cpp:80
+#: gerbview/options.cpp:89 pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:808
 msgid "Show &Layers Manager"
 msgstr "Показать менеджер слоев"
 
@@ -10234,7 +10237,7 @@ msgid "Unable to create <%s>"
 msgstr "Не удалось создать <%s>"
 
 #: pagelayout_editor/hotkeys.cpp:79 pagelayout_editor/onrightclick.cpp:97
-#: pcbnew/hotkeys.cpp:117 pcbnew/dialogs/dialog_move_exact_base.h:74
+#: pcbnew/hotkeys.cpp:117 pcbnew/dialogs/dialog_move_exact_base.h:69
 msgid "Move Item"
 msgstr "Переместить элемент"
 
@@ -12398,99 +12401,99 @@ msgstr "Обозначения"
 msgid "Show footprint's references"
 msgstr "Показать обозначения посад.мест"
 
-#: pcbnew/class_pcb_layer_widget.cpp:166
+#: pcbnew/class_pcb_layer_widget.cpp:161
 msgid "Show All Copper Layers"
 msgstr "Показать все медные слои"
 
-#: pcbnew/class_pcb_layer_widget.cpp:168
+#: pcbnew/class_pcb_layer_widget.cpp:163
 msgid "Hide All Copper Layers But Active"
 msgstr "Скрыть все медные слои кроме активного"
 
-#: pcbnew/class_pcb_layer_widget.cpp:170
+#: pcbnew/class_pcb_layer_widget.cpp:165
 msgid "Always Hide All Copper Layers But Active"
 msgstr "Всегда скрывать все медные слои кроме активного"
 
-#: pcbnew/class_pcb_layer_widget.cpp:172
+#: pcbnew/class_pcb_layer_widget.cpp:167
 msgid "Hide All Copper Layers"
 msgstr "Скрыть все медные слои"
 
-#: pcbnew/class_pcb_layer_widget.cpp:333
+#: pcbnew/class_pcb_layer_widget.cpp:328
 msgid "Front copper layer"
 msgstr "Передний медный слой"
 
-#: pcbnew/class_pcb_layer_widget.cpp:337
+#: pcbnew/class_pcb_layer_widget.cpp:332
 msgid "Back copper layer"
 msgstr "Задний медный слой"
 
-#: pcbnew/class_pcb_layer_widget.cpp:341
+#: pcbnew/class_pcb_layer_widget.cpp:336
 msgid "Inner copper layer"
 msgstr "Внутренний медный слой"
 
-#: pcbnew/class_pcb_layer_widget.cpp:365
+#: pcbnew/class_pcb_layer_widget.cpp:360
 msgid "Adhesive on board's front"
 msgstr "Клей спереди платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:366
+#: pcbnew/class_pcb_layer_widget.cpp:361
 msgid "Adhesive on board's back"
 msgstr "Клей сзади платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:367
+#: pcbnew/class_pcb_layer_widget.cpp:362
 msgid "Solder paste on board's front"
 msgstr "Паяльная паста спереди платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:368
+#: pcbnew/class_pcb_layer_widget.cpp:363
 msgid "Solder paste on board's back"
 msgstr "Паяльная паста сзади платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:369
+#: pcbnew/class_pcb_layer_widget.cpp:364
 msgid "Silkscreen on board's front"
 msgstr "Шелкография спереди платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:370
+#: pcbnew/class_pcb_layer_widget.cpp:365
 msgid "Silkscreen on board's back"
 msgstr "Шелкография сзади платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:371
+#: pcbnew/class_pcb_layer_widget.cpp:366
 msgid "Solder mask on board's front"
 msgstr "Паяльная маска спереди платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:372
+#: pcbnew/class_pcb_layer_widget.cpp:367
 msgid "Solder mask on board's back"
 msgstr "Паяльная маска снизу платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:373
+#: pcbnew/class_pcb_layer_widget.cpp:368
 msgid "Explanatory drawings"
 msgstr "Пояснительные рисунки"
 
-#: pcbnew/class_pcb_layer_widget.cpp:374
+#: pcbnew/class_pcb_layer_widget.cpp:369
 msgid "Explanatory comments"
 msgstr "Пояснительные комментарии"
 
-#: pcbnew/class_pcb_layer_widget.cpp:375 pcbnew/class_pcb_layer_widget.cpp:376
+#: pcbnew/class_pcb_layer_widget.cpp:370 pcbnew/class_pcb_layer_widget.cpp:371
 msgid "User defined meaning"
 msgstr "Пользовательского назначения"
 
-#: pcbnew/class_pcb_layer_widget.cpp:377
+#: pcbnew/class_pcb_layer_widget.cpp:372
 msgid "Board's perimeter definition"
 msgstr "Определение контура платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:378
+#: pcbnew/class_pcb_layer_widget.cpp:373
 msgid "Board's edge setback outline"
 msgstr "Ограничительная линия контура платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:379
+#: pcbnew/class_pcb_layer_widget.cpp:374
 msgid "Footprint courtyards on board's front"
 msgstr "Области установки посад.мест спереди платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:380
+#: pcbnew/class_pcb_layer_widget.cpp:375
 msgid "Footprint courtyards on board's back"
 msgstr "Области установки посад.мест сзади платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:381
+#: pcbnew/class_pcb_layer_widget.cpp:376
 msgid "Footprint assembly on board's front"
 msgstr "Монтаж посад.мест спереди платы"
 
-#: pcbnew/class_pcb_layer_widget.cpp:382
+#: pcbnew/class_pcb_layer_widget.cpp:377
 msgid "Footprint assembly on board's back"
 msgstr "Монтаж посад.мест сзади платы"
 
@@ -12753,7 +12756,7 @@ msgstr ""
 msgid "Plot: '%s' OK."
 msgstr "Черчение: '%s' OK."
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:819
+#: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:820
 #: pcbnew/exporters/gen_modules_placefile.cpp:310
 #, c-format
 msgid "Unable to create file '%s'."
@@ -13351,103 +13354,103 @@ msgstr "Класс"
 msgid "* (Any)"
 msgstr "* (Любые)"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:634
+#: pcbnew/dialogs/dialog_design_rules.cpp:632
 msgid "Design Rule Setting Error"
 msgstr "Ошибка настройки правила проектирования"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:654
+#: pcbnew/dialogs/dialog_design_rules.cpp:652
 msgid "New Net Class Name:"
 msgstr "Имя нового класса цепи:"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:674
+#: pcbnew/dialogs/dialog_design_rules.cpp:672
 msgid "Duplicate net class names are not allowed."
 msgstr "Дублирование имен класса цепей не допустимо."
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:736
+#: pcbnew/dialogs/dialog_design_rules.cpp:734
 msgid "The default net class cannot be removed"
 msgstr "Класс цепей default не может быть удален"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:919
+#: pcbnew/dialogs/dialog_design_rules.cpp:917
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>ширина дорожки</b> &lt; <b>минимальной ширины дорожки</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:931
+#: pcbnew/dialogs/dialog_design_rules.cpp:929
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
 msgstr ""
 "%s: <b>диаметр перех.отв.</b> &lt; <b>минимального диаметра перех.отв.</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:942
+#: pcbnew/dialogs/dialog_design_rules.cpp:940
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr "%s: <b>сверло перех.отв.</b> &ge; <b>диаметра перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:950
+#: pcbnew/dialogs/dialog_design_rules.cpp:948
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr ""
 "%s: <b>сверло перех.отв.</b> &lt; <b>минимального сверла перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:962
+#: pcbnew/dialogs/dialog_design_rules.cpp:960
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr ""
 "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра перех."
 "микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:973
+#: pcbnew/dialogs/dialog_design_rules.cpp:971
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr ""
 "%s: <b>сверло перех.микроотв.</b> &ge; <b>диаметра перех.микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:981
+#: pcbnew/dialogs/dialog_design_rules.cpp:979
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr ""
 "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла перех.микроотв."
 "</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1000
+#: pcbnew/dialogs/dialog_design_rules.cpp:998
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
 "<b>Экстра размер дорожки %d </b> %s &lt; <b>минимального размера дорожки</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1009
+#: pcbnew/dialogs/dialog_design_rules.cpp:1007
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер дорожки %d </b> %s &gt; <b>1 дюйма!</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1029
+#: pcbnew/dialogs/dialog_design_rules.cpp:1027
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 msgstr ""
 "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера перех."
 "отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1039
+#: pcbnew/dialogs/dialog_design_rules.cpp:1037
 #, c-format
 msgid "<b>No via drill size define in row %d</b><br>"
 msgstr "<b>Нет определения размера сверла перех.отв. в строке %d</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1049
+#: pcbnew/dialogs/dialog_design_rules.cpp:1047
 #, c-format
 msgid "<b>Extra Via %d Drill</b> %s &lt; <b>Min Via Drill %s</b><br>"
 msgstr ""
 "<b>Экстра сверло перех.отв. %d</b> %s &lt; <b>мин. сверла перех.отв. %s</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1058
+#: pcbnew/dialogs/dialog_design_rules.cpp:1056
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr ""
 "<b>Экстра размер перех.отв. %d </b> %s &le; <b>Размера сверла</b> %s<br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1067
+#: pcbnew/dialogs/dialog_design_rules.cpp:1065
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер перех.отв. %d </b>%s &gt; <b>1 дюйма!</b><br>"
@@ -15010,15 +15013,6 @@ msgstr "Файл карты"
 msgid "Report File"
 msgstr "Файл отчета"
 
-#: pcbnew/dialogs/dialog_general_options.cpp:232 pcbnew/pcbnew_config.cpp:90
-msgid "Hide Microwave Toolbar"
-msgstr "Скрыть СВЧ панель инструментов"
-
-#: pcbnew/dialogs/dialog_general_options.cpp:232
-#: pcbnew/menubar_pcbframe.cpp:515 pcbnew/pcbnew_config.cpp:90
-msgid "Show Microwave Toolbar"
-msgstr "Показать СВЧ панель инструментов"
-
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:29
 msgid ""
 "Activates the display of relative coordinates from relative origin (set by "
@@ -15074,10 +15068,10 @@ msgstr "Соблюдение правил проектирования при т
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:102
 msgid ""
 "Enable/disable the DRC control.\n"
-"When DRC is disable, all connections are allowed."
+"When the DRC control is disabled, all connections are allowed."
 msgstr ""
-"Вкл/Выкл контроль DRC. \n"
-"Когда DRC выключен, разрешены любые соединения."
+"Вкл/Выкл DRC контроль.\n"
+"Когда DRC контроль выключен, разрешены любые соединения."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:106
 msgid "&Show ratsnest"
@@ -15684,19 +15678,19 @@ msgstr "Нижний/задний слой"
 msgid "Enabled"
 msgstr "Включен"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:702
+#: pcbnew/dialogs/dialog_layers_setup.cpp:700
 msgid "Layer name may not be empty"
 msgstr "Имя слоя не может быть пустым"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:709
+#: pcbnew/dialogs/dialog_layers_setup.cpp:707
 msgid "Layer name has an illegal character, one of: '"
 msgstr "Имя слоя содержит недопустимые символы, один из: '"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:716
+#: pcbnew/dialogs/dialog_layers_setup.cpp:714
 msgid "'signal' is a reserved layer name"
 msgstr "signal — зарезервированное имя слоя"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:725
+#: pcbnew/dialogs/dialog_layers_setup.cpp:723
 msgid "Layer name is a duplicate of another"
 msgstr "Имя слоя задублировано с другим"
 
@@ -17119,7 +17113,7 @@ msgstr ""
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Не удалось записать файлы чертежа в директорию <%s>."
 
-#: pcbnew/dialogs/dialog_plot.cpp:814
+#: pcbnew/dialogs/dialog_plot.cpp:815
 #, c-format
 msgid "Plot file '%s' created."
 msgstr "Файл чертежа '%s' создан."
@@ -17486,6 +17480,18 @@ msgstr "45°"
 msgid "arc"
 msgstr "дуга"
 
+#: pcbnew/dialogs/dialog_pns_settings.cpp:36
+msgid "DRC violation: highlight obstacles"
+msgstr "DRC нарушение: подсветить препятствия"
+
+#: pcbnew/dialogs/dialog_pns_settings.cpp:37
+msgid "DRC violation: shove tracks and vias"
+msgstr "DRC нарушение: толкать дорожки и перех.отв."
+
+#: pcbnew/dialogs/dialog_pns_settings.cpp:38
+msgid "DRC violation: walk around obstacles"
+msgstr "DRC нарушение: обходить препятствия"
+
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
 msgstr "Подсветка столкновений"
@@ -17522,39 +17528,104 @@ msgstr "Режим свободного угла (не толкать/обход
 msgid "Shove vias"
 msgstr "Расталкивать перех.отв."
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:55
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
+msgid ""
+"When disabled, vias are treated as un-movable objects and hugged instead of "
+"shoved."
+msgstr ""
+"Когда отключено, перех.отв. рассматриваются как не подвижные объекты и "
+"обхватываются вместо толкания."
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
 msgstr "Перепрыгивать через препятствия"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:58
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
+msgid ""
+"When enabled, the router tries to move colliding traces behind solid "
+"obstacles (e.g. pads) instead of \"reflecting\" back the collision"
+msgstr ""
+"Когда включено, трассировщик пытается двигать сталкивающиеся дорожки за "
+"твердые препятствии (например конт.пл.) вместо того, чтобы \"отражаться\" "
+"обратно столкновению"
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
 msgstr "Удаление лишних дорожек"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
+msgid ""
+"Removes loops while routing (e.g. if the new track ensures same connectivity "
+"as an already existing one, the old track is removed).\n"
+"Loop removal works locally (only between the start and end of the currently "
+"routed trace)."
+msgstr ""
+"Удаляет циклы при трассировке (например, если новая дорожка выполняет то же "
+"соединение как уже существующая, старая дорожка удаляется).\n"
+"Удаление цикла работает локально (только между началом и концом текущей "
+"трассируемой дорожки)."
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 msgid "Automatic neckdown"
 msgstr "Автоматический переход вниз"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:64
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
+msgid ""
+"When enabled, the router tries to break out pads/vias in a clean way, "
+"avoiding acute angles and jagged breakout traces."
+msgstr ""
+"Когда включен, трассировщик пытается вырвать конт.пл./перех.отв. в чистом "
+"виде, избегая острых углов и неровных прорывов дорожек."
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Smooth dragged segments"
 msgstr "Гладко перетаскивать сегменты"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
+msgid ""
+"When enabled, the router attempts to merge several jagged segments into a "
+"single straight one (dragging mode)."
+msgstr ""
+"Когда включено, трассировщик пробует объединить несколько не ровных "
+"сегментов в единую прямую (режим перетаскивания)."
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Allow DRC violations"
 msgstr "Разрешить нарушения DRC"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:70
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
+msgid ""
+"(Highlight collisions mode only) - allows to establish a track even if is "
+"violating the DRC rules."
+msgstr ""
+"(Только режим подсветки столкновений) - позволяет установить дорожку, даже "
+"если это нарушает правила DRC."
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:81
 msgid "Suggest track finish"
 msgstr "Предлагать закончить дорожку"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:81
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Optimizer effort"
 msgstr "Оптимизатор усилия"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
+msgid ""
+"Defines how much time the router shall spend optimizing the routed/shoved "
+"traces.\n"
+"More effort means cleaner routing (but slower), less effort means faster "
+"routing but somewhat jagged traces."
+msgstr ""
+"Определяет сколько времени трассировщик должен тратить на оптимизацию "
+"трассировки/толкания дорожек.\n"
+"Большое усилие означает более чистую трассировку (но медленее), меньшее "
+"усилие означает быструю трассировку, но несколько не ровные дорожки."
+
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:110
 msgid "low"
 msgstr "низкий"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:106
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:119
 msgid "high"
 msgstr "высокий"
 
@@ -17688,22 +17759,22 @@ msgid "+"
 msgstr "+"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:333
-#: pcbnew/dialogs/dialog_track_via_size.cpp:64
+#: pcbnew/dialogs/dialog_track_via_size.cpp:60
 msgid "Invalid track width"
 msgstr "Недопустимая ширина дорожки"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:342
-#: pcbnew/dialogs/dialog_track_via_size.cpp:71
+#: pcbnew/dialogs/dialog_track_via_size.cpp:67
 msgid "Invalid via diameter"
 msgstr "Недопустимый диаметр перех.отв."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:349
-#: pcbnew/dialogs/dialog_track_via_size.cpp:78
+#: pcbnew/dialogs/dialog_track_via_size.cpp:74
 msgid "Invalid via drill size"
 msgstr "Недопустимый размер сверла перех.отв."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:356
-#: pcbnew/dialogs/dialog_track_via_size.cpp:85
+#: pcbnew/dialogs/dialog_track_via_size.cpp:81
 msgid "Via drill size has to be smaller than via diameter"
 msgstr "Размер сверла перех.отв. должен быть меньше, чем диаметр перех.отв."
 
@@ -18077,7 +18148,7 @@ msgid "Add keepout"
 msgstr "Добавить область запрета"
 
 #: pcbnew/edit.cpp:1464 pcbnew/menubar_pcbframe.cpp:423
-#: pcbnew/tool_pcb.cpp:470 pcbnew/tools/common_actions.cpp:384
+#: pcbnew/tool_pcb.cpp:466 pcbnew/tools/common_actions.cpp:384
 #: pcbnew/tools/pcb_editor_control.cpp:371
 msgid "Add layer alignment target"
 msgstr "Добавить миру для совмещения слоев"
@@ -18097,24 +18168,24 @@ msgstr "Добавить графическую линию"
 
 #: pcbnew/edit.cpp:1480 pcbnew/menubar_modedit.cpp:287
 #: pcbnew/menubar_pcbframe.cpp:405 pcbnew/tool_modedit.cpp:176
-#: pcbnew/tool_pcb.cpp:460 pcbnew/tools/drawing_tool.cpp:182
+#: pcbnew/tool_pcb.cpp:456 pcbnew/tools/drawing_tool.cpp:182
 #: pcbnew/tools/drawing_tool.cpp:202
 msgid "Add graphic arc"
 msgstr "Добавить графическую дугу"
 
 #: pcbnew/edit.cpp:1484 pcbnew/menubar_modedit.cpp:276
 #: pcbnew/menubar_pcbframe.cpp:408 pcbnew/tool_modedit.cpp:173
-#: pcbnew/tool_pcb.cpp:457 pcbnew/tools/drawing_tool.cpp:135
+#: pcbnew/tool_pcb.cpp:453 pcbnew/tools/drawing_tool.cpp:135
 #: pcbnew/tools/drawing_tool.cpp:155
 msgid "Add graphic circle"
 msgstr "Добавить графическую окружность"
 
 #: pcbnew/edit.cpp:1496 pcbnew/menubar_pcbframe.cpp:419
-#: pcbnew/tool_pcb.cpp:467 pcbnew/tools/drawing_tool.cpp:252
+#: pcbnew/tool_pcb.cpp:463 pcbnew/tools/drawing_tool.cpp:252
 msgid "Add dimension"
 msgstr "Добавить размерную линию"
 
-#: pcbnew/edit.cpp:1504 pcbnew/tool_pcb.cpp:432
+#: pcbnew/edit.cpp:1504 pcbnew/tool_pcb.cpp:428
 #: pcbnew/tools/pcb_editor_control.cpp:730
 msgid "Highlight net"
 msgstr "Подсветка цепи"
@@ -18495,7 +18566,7 @@ msgstr ""
 msgid "Cannot convert \"%s\" to an integer"
 msgstr "Не удается преобразовать \"%s\" в целое"
 
-#: pcbnew/gpcb_plugin.cpp:299 pcbnew/gpcb_plugin.cpp:935
+#: pcbnew/gpcb_plugin.cpp:299 pcbnew/gpcb_plugin.cpp:969
 #: pcbnew/kicad_plugin.cpp:1757
 #, c-format
 msgid "footprint library path '%s' does not exist"
@@ -18517,29 +18588,29 @@ msgstr "неизвестная лексема \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "Лексема Element содержит %d параметров."
 
-#: pcbnew/gpcb_plugin.cpp:1003 pcbnew/kicad_plugin.cpp:1830
+#: pcbnew/gpcb_plugin.cpp:1037 pcbnew/kicad_plugin.cpp:1830
 #: pcbnew/kicad_plugin.cpp:1895 pcbnew/legacy_plugin.cpp:4648
 #: pcbnew/legacy_plugin.cpp:4693 pcbnew/librairi.cpp:476
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Библиотека '%s' доступна только для чтения"
 
-#: pcbnew/gpcb_plugin.cpp:1022 pcbnew/kicad_plugin.cpp:1932
+#: pcbnew/gpcb_plugin.cpp:1056 pcbnew/kicad_plugin.cpp:1932
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "у Вас нет прав на удаление директории '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1030 pcbnew/kicad_plugin.cpp:1940
+#: pcbnew/gpcb_plugin.cpp:1064 pcbnew/kicad_plugin.cpp:1940
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "директория библиотеки '%s' содержит неожиданные поддиректории"
 
-#: pcbnew/gpcb_plugin.cpp:1049 pcbnew/kicad_plugin.cpp:1959
+#: pcbnew/gpcb_plugin.cpp:1083 pcbnew/kicad_plugin.cpp:1959
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "неизвестный файл '%s' найден по пути библиотеки '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1067 pcbnew/kicad_plugin.cpp:1977
+#: pcbnew/gpcb_plugin.cpp:1101 pcbnew/kicad_plugin.cpp:1977
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "библиотеку посад.мест '%s' не удалось удалить"
@@ -19493,7 +19564,7 @@ msgid "Add pad"
 msgstr "Добавить конт.пл."
 
 #: pcbnew/menubar_modedit.cpp:282 pcbnew/menubar_pcbframe.cpp:413
-#: pcbnew/tool_modedit.cpp:170 pcbnew/tool_pcb.cpp:454
+#: pcbnew/tool_modedit.cpp:170 pcbnew/tool_pcb.cpp:450
 msgid "Add graphic line or polygon"
 msgstr "Добавить графическую линию или полигон"
 
@@ -19736,11 +19807,11 @@ msgstr "Экспорт платы"
 msgid "Page s&ettings"
 msgstr "Настройки страницы"
 
-#: pcbnew/menubar_pcbframe.cpp:233 pcbnew/tool_pcb.cpp:230
+#: pcbnew/menubar_pcbframe.cpp:233 pcbnew/tool_pcb.cpp:228
 msgid "Page settings for paper size and texts"
 msgstr "Настройка страницы (размер листа, надписи)"
 
-#: pcbnew/menubar_pcbframe.cpp:237 pcbnew/tool_pcb.cpp:249
+#: pcbnew/menubar_pcbframe.cpp:237 pcbnew/tool_pcb.cpp:247
 msgid "Print board"
 msgstr "Печать платы"
 
@@ -19797,7 +19868,7 @@ msgid "Close Pcbnew"
 msgstr "Закрыть Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:286 pcbnew/tool_modedit.cpp:188
-#: pcbnew/tool_pcb.cpp:474
+#: pcbnew/tool_pcb.cpp:470
 msgid "Delete items"
 msgstr "Удалить элементы"
 
@@ -19853,7 +19924,7 @@ msgstr "Просмотр списка цепей (с именами и иден�
 msgid "&Footprint"
 msgstr "Посад.место"
 
-#: pcbnew/menubar_pcbframe.cpp:387 pcbnew/tool_pcb.cpp:440
+#: pcbnew/menubar_pcbframe.cpp:387 pcbnew/tool_pcb.cpp:436
 msgid "Add footprints"
 msgstr "Добавить посад.места"
 
@@ -19861,7 +19932,7 @@ msgstr "Добавить посад.места"
 msgid "&Track"
 msgstr "Дорожка"
 
-#: pcbnew/menubar_pcbframe.cpp:392 pcbnew/tool_pcb.cpp:443
+#: pcbnew/menubar_pcbframe.cpp:392 pcbnew/tool_pcb.cpp:439
 msgid "Add tracks and vias"
 msgstr "Добавить дорожки и перех.отв."
 
@@ -19869,7 +19940,7 @@ msgstr "Добавить дорожки и перех.отв."
 msgid "&Zone"
 msgstr "Зона"
 
-#: pcbnew/menubar_pcbframe.cpp:395 pcbnew/tool_pcb.cpp:446
+#: pcbnew/menubar_pcbframe.cpp:395 pcbnew/tool_pcb.cpp:442
 msgid "Add filled zones"
 msgstr "Добавить зоны"
 
@@ -19877,7 +19948,7 @@ msgstr "Добавить зоны"
 msgid "&Keepout Area"
 msgstr "Область запрета"
 
-#: pcbnew/menubar_pcbframe.cpp:398 pcbnew/tool_pcb.cpp:450
+#: pcbnew/menubar_pcbframe.cpp:398 pcbnew/tool_pcb.cpp:446
 msgid "Add keepout areas"
 msgstr "Добавить области запрета"
 
@@ -19885,7 +19956,7 @@ msgstr "Добавить области запрета"
 msgid "Te&xt"
 msgstr "Текст"
 
-#: pcbnew/menubar_pcbframe.cpp:401 pcbnew/tool_pcb.cpp:463
+#: pcbnew/menubar_pcbframe.cpp:401 pcbnew/tool_pcb.cpp:459
 msgid "Add text on copper layers or graphic text"
 msgstr "Добавить текст на медный слой или графический текст"
 
@@ -19901,7 +19972,7 @@ msgstr "Мира для совмещения слоев"
 msgid "Drill and &Place Offset"
 msgstr "Смещение для сверловки и размещения"
 
-#: pcbnew/menubar_pcbframe.cpp:430 pcbnew/tool_pcb.cpp:479
+#: pcbnew/menubar_pcbframe.cpp:430 pcbnew/tool_pcb.cpp:475
 msgid "Place the origin point for drill and place files"
 msgstr "Разместить начало координат в файлах сверловки и размещения"
 
@@ -19910,7 +19981,7 @@ msgid "&Grid Origin"
 msgstr "Начальные координаты сетки"
 
 #: pcbnew/menubar_pcbframe.cpp:435 pcbnew/tool_modedit.cpp:192
-#: pcbnew/tool_pcb.cpp:484
+#: pcbnew/tool_pcb.cpp:480
 msgid "Set the origin point for the grid"
 msgstr "Установка начальной точки для сетки"
 
@@ -19973,6 +20044,11 @@ msgstr "Показать менеджер слоев"
 #: pcbnew/menubar_pcbframe.cpp:515
 msgid "Hide Microwa&ve Toolbar"
 msgstr "Скрыть панель инструментов СВЧ"
+
+#: pcbnew/menubar_pcbframe.cpp:515 pcbnew/pcbnew_config.cpp:90
+#: pcbnew/tool_pcb.cpp:797
+msgid "Show Microwave Toolbar"
+msgstr "Показать СВЧ панель инструментов"
 
 #: pcbnew/menubar_pcbframe.cpp:524
 msgid "&General"
@@ -20086,7 +20162,7 @@ msgstr "Изменить активную пару слоев"
 msgid "&DRC"
 msgstr "DRC"
 
-#: pcbnew/menubar_pcbframe.cpp:619 pcbnew/tool_pcb.cpp:275
+#: pcbnew/menubar_pcbframe.cpp:619 pcbnew/tool_pcb.cpp:273
 msgid "Perform design rules check"
 msgstr "Выполнить проверку правил проектирования"
 
@@ -21136,12 +21212,12 @@ msgstr ""
 "\"%s\"\n"
 "ты должен проверить и редактировать ее (запустить тест DRC)."
 
-#: pcbnew/pcbframe.cpp:619
+#: pcbnew/pcbframe.cpp:618
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Файл автосохранения '%s' не может быть удален!"
 
-#: pcbnew/pcbframe.cpp:982
+#: pcbnew/pcbframe.cpp:973
 msgid " [new file]"
 msgstr " [новый файл]"
 
@@ -21166,6 +21242,10 @@ msgstr ""
 "использовать. Для большей\n"
 "информации смотрите раздел \"Таблица библиотек посадочных мест\" "
 "документации CvPcb или Pcbnew."
+
+#: pcbnew/pcbnew_config.cpp:90 pcbnew/tool_pcb.cpp:797
+msgid "Hide Microwave Toolbar"
+msgstr "Скрыть СВЧ панель инструментов"
 
 #: pcbnew/pcbnew_config.cpp:446
 msgid "Save Macros File"
@@ -21605,7 +21685,7 @@ msgstr "Отмена"
 msgid "Create new library and save current footprint"
 msgstr "Создать новую библиотеку и сохранить в ней текущее посад.место"
 
-#: pcbnew/tool_modedit.cpp:65 pcbnew/tool_pcb.cpp:239
+#: pcbnew/tool_modedit.cpp:65 pcbnew/tool_pcb.cpp:237
 msgid "Open footprint viewer"
 msgstr "Открыть просмотрщик посад.мест"
 
@@ -21690,7 +21770,7 @@ msgstr "Показать текст в контурном режиме"
 msgid "Show Edges Sketch"
 msgstr "Показать контуры в контурном режиме"
 
-#: pcbnew/tool_modedit.cpp:241 pcbnew/tool_pcb.cpp:392
+#: pcbnew/tool_modedit.cpp:241 pcbnew/tool_pcb.cpp:390
 msgid "Enable high contrast display mode"
 msgstr "Разрешить контрастный режим"
 
@@ -21730,7 +21810,7 @@ msgstr "О программе Pcbnew"
 msgid "About Pcbnew PCB designer"
 msgstr "О Pcbnew проектировщике печатных плат"
 
-#: pcbnew/tool_pcb.cpp:52
+#: pcbnew/tool_pcb.cpp:54
 msgid ""
 "Show active layer selections\n"
 "and select layer pair for route and place via"
@@ -21738,103 +21818,103 @@ msgstr ""
 "Показать активный выбор слоев\n"
 "и выбрать пару слоев для трассировки и размещения перех.отв."
 
-#: pcbnew/tool_pcb.cpp:220
+#: pcbnew/tool_pcb.cpp:218
 msgid "New board"
 msgstr "Новая плата"
 
-#: pcbnew/tool_pcb.cpp:222
+#: pcbnew/tool_pcb.cpp:220
 msgid "Open existing board"
 msgstr "Отрыть существующую плату"
 
-#: pcbnew/tool_pcb.cpp:226
+#: pcbnew/tool_pcb.cpp:224
 msgid "Save board"
 msgstr "Сохранить плату"
 
-#: pcbnew/tool_pcb.cpp:235
+#: pcbnew/tool_pcb.cpp:233
 msgid "Open footprint editor"
 msgstr "Открыть редактор посад.мест"
 
-#: pcbnew/tool_pcb.cpp:251
+#: pcbnew/tool_pcb.cpp:249
 msgid "Plot (HPGL, PostScript, or GERBER format)"
 msgstr "Чертить (HPGL, PostScript, или Gerber формат)"
 
-#: pcbnew/tool_pcb.cpp:273
+#: pcbnew/tool_pcb.cpp:271
 msgid "Read netlist"
 msgstr "Считать список цепей"
 
-#: pcbnew/tool_pcb.cpp:295
+#: pcbnew/tool_pcb.cpp:293
 msgid "Mode footprint: manual and automatic movement and placement"
 msgstr "Режим посад.мест: ручное и автоматическое перемещение или размещение"
 
-#: pcbnew/tool_pcb.cpp:298
+#: pcbnew/tool_pcb.cpp:296
 msgid "Mode track: autorouting"
 msgstr "Режим дорожек: автотрассировка"
 
-#: pcbnew/tool_pcb.cpp:304
+#: pcbnew/tool_pcb.cpp:302
 msgid "Fast access to the FreeROUTE external advanced router"
 msgstr "Быстрый доступ к внешнему трассировщику  FreeROUTE"
 
-#: pcbnew/tool_pcb.cpp:314
+#: pcbnew/tool_pcb.cpp:312
 msgid "Show/Hide the Python Scripting console"
 msgstr "Показать/Скрыть консоль Python скриптов"
 
-#: pcbnew/tool_pcb.cpp:335 pcbnew/toolbars_update_user_interface.cpp:136
+#: pcbnew/tool_pcb.cpp:333 pcbnew/toolbars_update_user_interface.cpp:137
 msgid "Enable design rule checking"
 msgstr "Разрешить проверку правил проектирования"
 
-#: pcbnew/tool_pcb.cpp:354 pcbnew/toolbars_update_user_interface.cpp:145
+#: pcbnew/tool_pcb.cpp:352 pcbnew/toolbars_update_user_interface.cpp:146
 msgid "Show board ratsnest"
 msgstr "Показать все связи"
 
-#: pcbnew/tool_pcb.cpp:357
+#: pcbnew/tool_pcb.cpp:355
 msgid "Show footprint ratsnest when moving"
 msgstr "Показать связи посад.места при перемещении"
 
-#: pcbnew/tool_pcb.cpp:363
+#: pcbnew/tool_pcb.cpp:361
 msgid "Enable automatic track deletion"
 msgstr "Вкл. авто удаление дорожки"
 
-#: pcbnew/tool_pcb.cpp:371
+#: pcbnew/tool_pcb.cpp:369
 msgid "Do not show filled areas in zones"
 msgstr "Не показывать заливку в зонах"
 
-#: pcbnew/tool_pcb.cpp:374
+#: pcbnew/tool_pcb.cpp:372
 msgid "Show outlines of filled areas only in zones"
 msgstr "Показать контур только залитых областей в зонах"
 
-#: pcbnew/tool_pcb.cpp:383 pcbnew/toolbars_update_user_interface.cpp:176
+#: pcbnew/tool_pcb.cpp:381 pcbnew/toolbars_update_user_interface.cpp:177
 msgid "Show vias in outline mode"
 msgstr "Показать перех.отв. в контурном режиме"
 
-#: pcbnew/tool_pcb.cpp:387 pcbnew/toolbars_update_user_interface.cpp:187
+#: pcbnew/tool_pcb.cpp:385 pcbnew/toolbars_update_user_interface.cpp:188
 msgid "Show tracks in outline mode"
 msgstr "Показать дорожки в контурном режиме"
 
-#: pcbnew/tool_pcb.cpp:436
+#: pcbnew/tool_pcb.cpp:432
 msgid "Display local ratsnest"
 msgstr "Отображать локальные связи"
 
-#: pcbnew/tool_pcb.cpp:507
+#: pcbnew/tool_pcb.cpp:503
 msgid "Create line of specified length for microwave applications"
 msgstr "Создать линию заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:512
+#: pcbnew/tool_pcb.cpp:508
 msgid "Create gap of specified length for microwave applications"
 msgstr "Создать зазор заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:519
+#: pcbnew/tool_pcb.cpp:515
 msgid "Create stub of specified length for microwave applications"
 msgstr "Создать неоднородность заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:524
+#: pcbnew/tool_pcb.cpp:520
 msgid "Create stub (arc) of specified length for microwave applications"
 msgstr "Создать неоднородность (дугу) заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:529
+#: pcbnew/tool_pcb.cpp:525
 msgid "Create a polynomial shape for microwave applications"
 msgstr "Создать полиномиальную форму для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:593
+#: pcbnew/tool_pcb.cpp:580
 msgid ""
 "Auto track width: when starting on an existing track use its width\n"
 "otherwise, use current width setting"
@@ -21843,77 +21923,77 @@ msgstr ""
 "ее ширину,\n"
 "иначе использовать текущую установку ширины"
 
-#: pcbnew/tool_pcb.cpp:639
+#: pcbnew/tool_pcb.cpp:625
 #, c-format
 msgid "Track: %.3f mm (%.2f mils)"
 msgstr "Дорожка: %.3f мм (%.2f милс)"
 
-#: pcbnew/tool_pcb.cpp:642
+#: pcbnew/tool_pcb.cpp:628
 #, c-format
 msgid "Track: %.2f mils (%.3f mm)"
 msgstr "Дорожка: %.2f милс (%.3f мм)"
 
-#: pcbnew/tool_pcb.cpp:677
+#: pcbnew/tool_pcb.cpp:663
 #, c-format
 msgid "Via: %.2f mm (%.1f mils)"
 msgstr "Перех.отв.: %.2f мм (%.1f милс)"
 
-#: pcbnew/tool_pcb.cpp:680
+#: pcbnew/tool_pcb.cpp:666
 #, c-format
 msgid "Via: %.1f mils (%.2f mm)"
 msgstr "Перех.отв.: %.1f милс (%.2f мм)"
 
-#: pcbnew/tool_pcb.cpp:693
+#: pcbnew/tool_pcb.cpp:679
 #, c-format
 msgid "%.2f mm (%.1f mils)"
 msgstr "%.2f мм (%.1f милс)"
 
-#: pcbnew/tool_pcb.cpp:696
+#: pcbnew/tool_pcb.cpp:682
 #, c-format
 msgid "%.1f mils (%.2f mm)"
 msgstr "%.1f милс (%.2f мм)"
 
-#: pcbnew/tool_pcb.cpp:721
+#: pcbnew/tool_pcb.cpp:707
 msgid "+/- to switch"
 msgstr "+/- для переключения"
 
-#: pcbnew/toolbars_update_user_interface.cpp:135
+#: pcbnew/toolbars_update_user_interface.cpp:136
 msgid "Disable design rule checking"
 msgstr "Запретить проверку правил проектирования"
 
-#: pcbnew/toolbars_update_user_interface.cpp:144
+#: pcbnew/toolbars_update_user_interface.cpp:145
 msgid "Hide board ratsnest"
 msgstr "Скрыть все связи"
 
-#: pcbnew/toolbars_update_user_interface.cpp:155
+#: pcbnew/toolbars_update_user_interface.cpp:156
 msgid "Hide footprint ratsnest"
 msgstr "Скрыть связи посад.места"
 
-#: pcbnew/toolbars_update_user_interface.cpp:156
+#: pcbnew/toolbars_update_user_interface.cpp:157
 msgid "Show footprint ratsnest"
 msgstr "Показать связи посад.места"
 
-#: pcbnew/toolbars_update_user_interface.cpp:165
+#: pcbnew/toolbars_update_user_interface.cpp:166
 msgid "Disable auto delete old track"
 msgstr "Запретить автоудаление старых дорожек"
 
-#: pcbnew/toolbars_update_user_interface.cpp:166
+#: pcbnew/toolbars_update_user_interface.cpp:167
 msgid "Enable auto delete old track"
 msgstr "Разрешить автоудаление старых дорожек"
 
-#: pcbnew/toolbars_update_user_interface.cpp:177
+#: pcbnew/toolbars_update_user_interface.cpp:178
 msgid "Show vias in fill mode"
 msgstr "Показать перех.отв. в режиме заливки"
 
-#: pcbnew/toolbars_update_user_interface.cpp:188
+#: pcbnew/toolbars_update_user_interface.cpp:189
 msgid "Show tracks in fill mode"
 msgstr "Показать дорожки в режиме заливки"
 
-#: pcbnew/toolbars_update_user_interface.cpp:198
+#: pcbnew/toolbars_update_user_interface.cpp:199
 msgid "Normal contrast display mode"
 msgstr "Нормальный режим отображения"
 
-#: pcbnew/toolbars_update_user_interface.cpp:199
+#: pcbnew/toolbars_update_user_interface.cpp:200
 msgid "High contrast display mode"
 msgstr "Контрастный режим отображения"
 
@@ -22811,7 +22891,7 @@ msgstr "Размеры диф.пары"
 msgid "Trace length tuning"
 msgstr "Настройка длин дорожек"
 
-#: pcbnew/dialogs/dialog_pns_settings_base.h:73
+#: pcbnew/dialogs/dialog_pns_settings_base.h:71
 msgid "Interactive Router Settings"
 msgstr "Параметры интерактивного трассировщика"
 
