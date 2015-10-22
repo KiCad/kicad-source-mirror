@@ -460,20 +460,23 @@ void D_PAD::Copy( D_PAD* source )
 }
 
 
-void D_PAD::CopyNetlistSettings( D_PAD* aPad )
+void D_PAD::CopyNetlistSettings( D_PAD* aPad, bool aCopyLocalSettings )
 {
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
 
     aPad->SetNetCode( GetNetCode() );
 
-    aPad->SetLocalClearance( m_LocalClearance );
-    aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
-    aPad->SetLocalSolderPasteMargin( m_LocalSolderPasteMargin );
-    aPad->SetLocalSolderPasteMarginRatio( m_LocalSolderPasteMarginRatio );
-    aPad->SetZoneConnection( m_ZoneConnection );
-    aPad->SetThermalWidth( m_ThermalWidth );
-    aPad->SetThermalGap( m_ThermalGap );
+    if( aCopyLocalSettings )
+    {
+        aPad->SetLocalClearance( m_LocalClearance );
+        aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
+        aPad->SetLocalSolderPasteMargin( m_LocalSolderPasteMargin );
+        aPad->SetLocalSolderPasteMarginRatio( m_LocalSolderPasteMarginRatio );
+        aPad->SetZoneConnection( m_ZoneConnection );
+        aPad->SetThermalWidth( m_ThermalWidth );
+        aPad->SetThermalGap( m_ThermalGap );
+    }
 }
 
 

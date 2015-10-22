@@ -2386,7 +2386,12 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         else
                             newFootprint->SetPath( footprint->GetPath() );
 
-                        footprint->CopyNetlistSettings( newFootprint );
+                        // Copy placement and pad net names.
+                        // optionally, copy or not local settings (like local clearances)
+                        // if the second param is "true", previous values will be used.
+                        // if "false", default library values will be used
+                        footprint->CopyNetlistSettings( newFootprint, true );
+
                         Remove( footprint );
                         Add( newFootprint, ADD_APPEND );
                         footprint = newFootprint;

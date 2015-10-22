@@ -570,15 +570,20 @@ public:
     /**
      * Function CopyNetlistSettings
      * copies the netlist settings to \a aModule.
+     * Used to copy some footprint parameters when replacing a footprint by an other
+     * footprint when reading a netlist, or in exchange footprint dialog
      *
      * The netlist settings are all of the #MODULE settings not define by a #MODULE in
-     * a netlist.  These setting include position, orientation, local clearances, ets.
+     * a netlist.  These setting include placement prms (position, orientation, side)
+     * and optionally local prms( clearances, zone connection type, etc).
      * The reference designator, value, path, and physical geometry settings are not
      * copied.
      *
      * @param aModule is the #MODULE to copy the settings to.
+     * @param aCopyLocalSettings = false to copy only module placement
+     *   true to also copy local prms
      */
-    void CopyNetlistSettings( MODULE* aModule );
+    void CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings );
 
     /**
      * static function IsLibNameValid

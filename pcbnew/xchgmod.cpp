@@ -430,39 +430,18 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
      * when all modules are on board
      */
     PlaceModule( aNewModule, NULL, true );
-    aNewModule->SetPosition( aOldModule->GetPosition() );
 
-    // Flip footprint if needed
-    if( aOldModule->GetLayer() != aNewModule->GetLayer() )
-    {
-        aNewModule->Flip( aNewModule->GetPosition() );
-    }
+    // Copy full placement and pad net names (when possible)
+    // but not local settings like clearances (use library values)
+    aOldModule->CopyNetlistSettings( aNewModule, false );
 
-    // Rotate footprint if needed
-    if( aOldModule->GetOrientation() != aNewModule->GetOrientation() )
-    {
-        Rotate_Module( NULL, aNewModule, aOldModule->GetOrientation(), false );
-    }
-
-    // Update reference and value
+    // Copy reference and value
     aNewModule->SetReference( aOldModule->GetReference() );
     aNewModule->SetValue( aOldModule->GetValue() );
 
     // Updating other parameters
     aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
     aNewModule->SetPath( aOldModule->GetPath() );
-
-    // Update pad netnames (when possible)
-    for( D_PAD* pad = aNewModule->Pads(); pad != NULL; pad = pad->Next() )
-    {
-        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-
-        for( D_PAD* old_pad = aOldModule->Pads(); old_pad != NULL; old_pad = old_pad->Next() )
-        {
-            if( pad->PadNameEqual( old_pad ) )
-                pad->SetNetCode( old_pad->GetNetCode() );
-        }
-    }
 
     if( aUndoPickList )
     {

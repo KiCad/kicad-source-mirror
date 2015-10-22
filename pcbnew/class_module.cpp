@@ -377,7 +377,7 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
 }
 
 
-void MODULE::CopyNetlistSettings( MODULE* aModule )
+void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
 {
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aModule != NULL && aModule != this, wxT( "Cannot copy to NULL or yourself." ) );
@@ -391,20 +391,25 @@ void MODULE::CopyNetlistSettings( MODULE* aModule )
     if( aModule->GetOrientation() != GetOrientation() )
         aModule->Rotate( aModule->GetPosition(), GetOrientation() );
 
-    aModule->SetLocalSolderMaskMargin( GetLocalSolderMaskMargin() );
-    aModule->SetLocalClearance( GetLocalClearance() );
-    aModule->SetLocalSolderPasteMargin( GetLocalSolderPasteMargin() );
-    aModule->SetLocalSolderPasteMarginRatio( GetLocalSolderPasteMarginRatio() );
-    aModule->SetZoneConnection( GetZoneConnection() );
-    aModule->SetThermalWidth( GetThermalWidth() );
-    aModule->SetThermalGap( GetThermalGap() );
+    aModule->SetLocked( IsLocked() );
+
+    if( aCopyLocalSettings )
+    {
+        aModule->SetLocalSolderMaskMargin( GetLocalSolderMaskMargin() );
+        aModule->SetLocalClearance( GetLocalClearance() );
+        aModule->SetLocalSolderPasteMargin( GetLocalSolderPasteMargin() );
+        aModule->SetLocalSolderPasteMarginRatio( GetLocalSolderPasteMarginRatio() );
+        aModule->SetZoneConnection( GetZoneConnection() );
+        aModule->SetThermalWidth( GetThermalWidth() );
+        aModule->SetThermalGap( GetThermalGap() );
+    }
 
     for( D_PAD* pad = Pads();  pad;  pad = pad->Next() )
     {
         D_PAD* newPad = aModule->FindPadByName( pad->GetPadName() );
 
         if( newPad )
-            pad->CopyNetlistSettings( newPad );
+            pad->CopyNetlistSettings( newPad, aCopyLocalSettings );
     }
 
     // Not sure about copying description, keywords, 3D models or any other
