@@ -54,6 +54,8 @@
 #include <gendrill_Excellon_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
+#include <collectors.h>
+
 
 //#include <dialog_gendrill.h>   //  Dialog box for drill file generation
 
@@ -77,71 +79,29 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet(  const wxString& aPlotDirectory
                                             bool aGenDrill, bool aGenMap,
                                             REPORTER * aReporter )
 {
-    wxFileName fn;
-    wxString msg;
+    wxFileName  fn;
+    wxString    msg;
 
-    wxString    layername_extend;   // added to the board filefame to create a full filename
-                                    //(board fileName + layer pair names)
+    std::vector<LAYER_PAIR> hole_sets = getUniqueLayerPairs();
 
-    // If some buried/blind vias are found, drill files are created
-    // layer pair by layer pair for buried vias
-    bool hasBuriedVias = false;
+    // append a pair representing the NPTH set of holes.
+    hole_sets.push_back( LAYER_PAIR( F_Cu, B_Cu ) );
 
-    for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
+    for( std::vector<LAYER_PAIR>::const_iterator it = hole_sets.begin();
+            it != hole_sets.end();  ++it )
     {
-        if( track->Type() == PCB_VIA_T )
-        {
-            const VIA *via = static_cast<const VIA*>( track );
+        LAYER_PAIR  pair = *it;
+        bool        doing_npth = ( it == hole_sets.end() - 1 );
 
-            if( via->GetViaType() == VIA_MICROVIA ||
-                via->GetViaType() == VIA_BLIND_BURIED )
-            {
-                hasBuriedVias = true;
-                break;
-            }
-        }
-    }
-
-
-    int        layer1 = F_Cu;
-    int        layer2 = B_Cu;
-    bool       gen_through_holes = true;
-    bool       gen_NPTH_holes    = false;
-
-    for( ; ; )
-    {
-        BuildHolesList( layer1, layer2, gen_through_holes ? false : true,
-                                       gen_NPTH_holes, m_merge_PTH_NPTH );
+        BuildHolesList( pair, doing_npth, m_merge_PTH_NPTH );
 
         if( GetHolesCount() > 0 ) // has holes?
         {
-            fn = m_pcb->GetFileName();
-            layername_extend.Empty();
-
-            if( gen_NPTH_holes )
-            {
-                layername_extend << wxT( "-NPTH" );
-            }
-            else if( !gen_through_holes )
-            {
-                if( layer1 == F_Cu )
-                    layername_extend << wxT( "-front" );
-                else
-                    layername_extend << wxT( "-inner" ) << layer1;
-
-                if( layer2 == B_Cu )
-                    layername_extend << wxT( "-back" );
-                else
-                    layername_extend << wxT( "-inner" ) << layer2;
-            }
-
-            fn.SetName( fn.GetName() + layername_extend );
-
+            fn = drillFileName( pair, doing_npth );
             fn.SetPath( aPlotDirectory );
 
             if( aGenDrill )
             {
-                fn.SetExt( DrillFileExtension );
                 wxString fullFilename = fn.GetFullPath();
 
                 FILE* file = wxFopen( fullFilename, wxT( "w" ) );
@@ -196,37 +156,9 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet(  const wxString& aPlotDirectory
                 }
             }
         }
-
-        if( gen_NPTH_holes )    // The last drill file was created
-            break;
-
-        if( !hasBuriedVias )
-            gen_NPTH_holes = true;
-        else
-        {
-            if( gen_through_holes )
-                layer2 = layer1 + 1;    // done with through-board holes, prepare generation of first layer pair
-            else
-            {
-                if( layer2 >= B_Cu )    // no more layer pair to consider
-                {
-                    layer1 = F_Cu;
-                    layer2 = B_Cu;
-                    gen_NPTH_holes = true;
-                    continue;
-                }
-
-                layer1++;
-                layer2++;                      // use next layer pair
-
-                if( layer2 == m_pcb->GetCopperLayerCount() - 1 )
-                    layer2 = B_Cu;      // the last layer is always the back layer
-            }
-
-            gen_through_holes = false;
-        }
     }
 }
+
 
 
 /*
@@ -604,25 +536,18 @@ static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
 }
 
 
-void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
-                                      int aLastLayer,
-                                      bool aExcludeThroughHoles,
+void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
                                       bool aGenerateNPTH_list,
                                       bool aMerge_PTH_NPTH )
 {
     HOLE_INFO new_hole;
-    int       hole_value;
 
     m_holeListBuffer.clear();
     m_toolListBuffer.clear();
 
-    if( (aFirstLayer >= 0) && (aLastLayer >= 0) )
-    {
-        if( aFirstLayer > aLastLayer )
-            std::swap( aFirstLayer, aLastLayer );
-    }
+    wxASSERT(  aLayerPair.first < aLayerPair.second );  // fix the caller
 
-    if ( aGenerateNPTH_list && aMerge_PTH_NPTH )
+    if( aGenerateNPTH_list && aMerge_PTH_NPTH )
     {
         return;
     }
@@ -632,14 +557,14 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
     {
         for( VIA* via = GetFirstVia( m_pcb->m_Track ); via; via = GetFirstVia( via->Next() ) )
         {
-            hole_value = via->GetDrillValue();
+            int hole_sz = via->GetDrillValue();
 
-            if( hole_value == 0 )   // Should not occur.
+            if( hole_sz == 0 )   // Should not occur.
                 continue;
 
             new_hole.m_Tool_Reference = -1;         // Flag value for Not initialized
             new_hole.m_Hole_Orient    = 0;
-            new_hole.m_Hole_Diameter  = hole_value;
+            new_hole.m_Hole_Diameter  = hole_sz;
             new_hole.m_Hole_Size.x = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
             new_hole.m_Hole_Shape = 0;              // hole shape: round
@@ -647,29 +572,22 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
 
             via->LayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
 
-            // LayerPair return params with m_Hole_Bottom_Layer > m_Hole_Top_Layer
+            // LayerPair() returns params with m_Hole_Bottom_Layer > m_Hole_Top_Layer
             // Remember: top layer = 0 and bottom layer = 31 for through hole vias
-            // the via should be at least from aFirstLayer to aLastLayer
-            if( (new_hole.m_Hole_Top_Layer > aFirstLayer) && (aFirstLayer >= 0) )
-                continue;   // via above the first layer
-
-            if( (new_hole.m_Hole_Bottom_Layer < aLastLayer) && (aLastLayer >= 0) )
-                continue;   // via below the last layer
-
-            if( aExcludeThroughHoles && (new_hole.m_Hole_Bottom_Layer == B_Cu)
-               && (new_hole.m_Hole_Top_Layer == F_Cu) )
+            // Any captured via should be from aLayerPair.first to aLayerPair.second exactly.
+            if( new_hole.m_Hole_Top_Layer    != aLayerPair.first ||
+                new_hole.m_Hole_Bottom_Layer != aLayerPair.second )
                 continue;
 
             m_holeListBuffer.push_back( new_hole );
         }
     }
 
-    // build hole list for pads (assumed always through holes)
-    if( !aExcludeThroughHoles || aGenerateNPTH_list )
+    if( aLayerPair == LAYER_PAIR( F_Cu, B_Cu ) )
     {
+        // add holes for thru hole pads
         for( MODULE* module = m_pcb->m_Modules;  module;  module = module->Next() )
         {
-            // Read and analyse pads
             for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
                 if( ! aGenerateNPTH_list &&
@@ -706,18 +624,18 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
     sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), CmpHoleDiameterValue );
 
     // build the tool list
-    int        LastHole = -1; /* Set to not initialized (this is a value not used
-                               * for m_holeListBuffer[ii].m_Hole_Diameter) */
+    int        last_hole = -1;  /* Set to not initialized (this is a value not used
+                                 * for m_holeListBuffer[ii].m_Hole_Diameter) */
     DRILL_TOOL new_tool( 0 );
     unsigned   jj;
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        if( m_holeListBuffer[ii].m_Hole_Diameter != LastHole )
+        if( m_holeListBuffer[ii].m_Hole_Diameter != last_hole )
         {
             new_tool.m_Diameter = ( m_holeListBuffer[ii].m_Hole_Diameter );
             m_toolListBuffer.push_back( new_tool );
-            LastHole = new_tool.m_Diameter;
+            last_hole = new_tool.m_Diameter;
         }
 
         jj = m_toolListBuffer.size();
@@ -732,4 +650,101 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
         if( m_holeListBuffer[ii].m_Hole_Shape )
             m_toolListBuffer.back().m_OvalCount++;
     }
+}
+
+
+std::vector<LAYER_PAIR> EXCELLON_WRITER::getUniqueLayerPairs() const
+{
+    wxASSERT( m_pcb );
+
+    static const KICAD_T interesting_stuff_to_collect[] = {
+        PCB_VIA_T,
+        EOT
+    };
+
+    PCB_TYPE_COLLECTOR  vias;
+
+    vias.Collect( m_pcb, interesting_stuff_to_collect );
+
+    std::set< LAYER_PAIR >  unique;
+
+    LAYER_PAIR  layer_pair;
+
+    for( int i = 0; i < vias.GetCount(); ++i )
+    {
+        VIA*  v = (VIA*) vias[i];
+
+        v->LayerPair( &layer_pair.first, &layer_pair.second );
+
+        // only make note of blind buried.
+        // thru hole is placed unconditionally as first in fetched list.
+        if( layer_pair != LAYER_PAIR( F_Cu, B_Cu ) )
+        {
+            unique.insert( layer_pair );
+        }
+    }
+
+    std::vector<LAYER_PAIR>    ret;
+
+    ret.push_back( LAYER_PAIR( F_Cu, B_Cu ) );      // always first in returned list
+
+    for( std::set< LAYER_PAIR >::const_iterator it = unique.begin();  it != unique.end(); ++it )
+        ret.push_back( *it );
+
+    return ret;
+}
+
+
+const std::string EXCELLON_WRITER::layerName( LAYER_ID aLayer ) const
+{
+    // Generic names here.
+    switch( aLayer )
+    {
+    case F_Cu:
+        return "front";
+    case B_Cu:
+        return "back";
+    default:
+        return StrPrintf( "inner%d", aLayer );
+    }
+}
+
+
+const std::string EXCELLON_WRITER::layerPairName( LAYER_PAIR aPair ) const
+{
+    std::string ret = layerName( aPair.first );
+    ret += '-';
+    ret += layerName( aPair.second );
+
+    return ret;
+}
+
+
+const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH ) const
+{
+    wxASSERT( m_pcb );
+
+    wxString    extend;
+
+    if( aNPTH )
+        extend = "-NPTH";
+    else if( aPair == LAYER_PAIR( F_Cu, B_Cu ) )
+    {
+        // extend with nothing
+    }
+    else
+    {
+        extend += '-';
+        extend += layerPairName( aPair );
+    }
+
+    wxFileName  fn = m_pcb->GetFileName();
+
+    fn.SetName( fn.GetName() + extend );
+    fn.SetPath( "" );
+    fn.SetExt( DrillFileExtension );
+
+    wxString ret = fn.GetFullPath();    // show me in debugger
+
+    return ret;
 }

@@ -113,6 +113,9 @@ public: DRILL_PRECISION( int l = 2, int r = 4 )
 };
 
 
+typedef std::pair<LAYER_ID, LAYER_ID>   LAYER_PAIR;
+class OUTPUTFORMATTER;
+
 /**
  * EXCELLON_WRITER is a class mainly used to create Excellon drill files
  * However, this class is also used to create drill maps and drill report
@@ -214,19 +217,18 @@ public:
     /**
      * Function BuildHolesList
      * Create the list of holes and tools for a given board
-     * The list is sorted by increasing drill values
-     * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because
-     * pad holes are always through holes)
-     * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored
-     * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
-     * @param aExcludeThroughHoles Exclude through holes if true.
+     * The list is sorted by increasing drill size.
+     * Only holes included within aLayerPair are listed.
+     * If aLayerPair identifies with [F_Cu, B_Cu], then
+     * pad holes are always included also.
+     *
+     * @param aLayerPair is an inclusive range of layers.
      * @param aGenerateNPTH_list :
      *       true to create NPTH only list (with no plated holes)
      *       false to created plated holes list (with no NPTH )
      * @param aMerge_PTH_NPTH : true to create only one list which contains both PTH and NPTH
      */
-    void BuildHolesList( int aFirstLayer, int aLastLayer,
-                         bool aExcludeThroughHoles,
+    void BuildHolesList( LAYER_PAIR aLayerPair,
                          bool aGenerateNPTH_list,
                          bool aMerge_PTH_NPTH );
 
@@ -345,7 +347,21 @@ private:
      * @param aPlotter = a PLOTTER instance (HPGL, POSTSCRIPT ... plotter).
      */
     bool PlotDrillMarks( PLOTTER* aPlotter );
-};
 
+    /// Get unique layer pairs by examining the micro and blind_buried vias.
+    std::vector<LAYER_PAIR> getUniqueLayerPairs() const;
+
+    /**
+     * Function printToolSummary
+     * prints m_toolListBuffer[] tools to aOut and returns total hole count.
+     */
+    unsigned printToolSummary( OUTPUTFORMATTER& aOut ) const;
+
+    const std::string layerPairName( LAYER_PAIR aPair ) const;
+
+    const std::string layerName( LAYER_ID aLayer ) const;
+
+    const wxString drillFileName( LAYER_PAIR aPair, bool aNPTH ) const;
+};
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_

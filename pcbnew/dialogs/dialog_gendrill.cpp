@@ -390,7 +390,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
     fn.SetExt( ReportFileExtension );
 
-    wxString defaultPath = m_plotOpts.GetOutputDirectory();
+    wxString defaultPath = Prj().AbsolutePath( m_plotOpts.GetOutputDirectory() );
 
     if( defaultPath.IsEmpty() )
         defaultPath = wxStandardPaths::Get().GetDocumentsDir();

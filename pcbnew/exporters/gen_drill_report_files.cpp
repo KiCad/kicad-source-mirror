@@ -284,127 +284,93 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
 
 bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 {
-    m_file = wxFopen( aFullFileName, wxT( "w" ) );
+    FILE_OUTPUTFORMATTER    out( aFullFileName );
 
-    if( m_file == NULL )
-        return false;
+    static const char separator[] =
+        "    =============================================================\n";
+
+    wxASSERT( m_pcb );
 
     unsigned    totalHoleCount;
-    char        line[1024];
-    LAYER_NUM   layer1 = F_Cu;      // First layer of the layer stack
-    LAYER_NUM   layer2 = B_Cu;      // Last layer of the layer stack
-    bool        gen_through_holes   = true;
-    bool        gen_NPTH_holes      = false;
+    wxString    brdFilename = m_pcb->GetFileName();
 
-    wxString brdFilename = m_pcb->GetFileName();
-    fprintf( m_file, "Drill report for %s\n", TO_UTF8( brdFilename ) );
-    fprintf( m_file, "Created on %s\n\n", TO_UTF8( DateAndTime() ) );
+    std::vector<LAYER_PAIR> hole_sets = getUniqueLayerPairs();
 
-    /* build hole lists:
-     * 1 - through holes
-     * 2 - for partial holes only: by layer pair
-     * 3 - Not Plated through holes
-     */
+    out.Print( 0, "Drill report for %s\n", TO_UTF8( brdFilename ) );
+    out.Print( 0, "Created on %s\n\n", TO_UTF8( DateAndTime() ) );
 
-    for( ; ; )
+    // Output the cu layer stackup, so layer name references make sense.
+    out.Print( 0, "Copper Layer Stackup:\n" );
+    out.Print( 0, separator );
+
+    LSET cu = m_pcb->GetEnabledLayers() & LSET::AllCuMask();
+
+    int conventional_layer_num = 1;
+    for( LSEQ seq = cu.Seq();  seq;  ++seq, ++conventional_layer_num )
     {
-        BuildHolesList( layer1, layer2,
-                        gen_through_holes ? false : true, gen_NPTH_holes, false);
-
-        totalHoleCount = 0;
-
-        if( gen_NPTH_holes )
-            sprintf( line, "Drill report for unplated through holes :\n" );
-        else if( gen_through_holes )
-            sprintf( line, "Drill report for plated through holes :\n" );
-        else
-        {
-            // If this is the first partial hole list: print a title
-            if( layer1 == F_Cu )
-                fputs( "Drill report for buried and blind vias :\n\n", m_file );
-
-            sprintf( line, "Holes from layer %s to layer %s :\n",
-                     TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer1 ) ) ),
-                     TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( layer2 ) ) ) );
-        }
-
-        fputs( line, m_file );
-
-        for( unsigned ii = 0; ii < m_toolListBuffer.size(); ii++ )
-        {
-            // List the tool number assigned to each drill,
-            // in mm then in inches.
-            sprintf( line, "    T%d  %2.2fmm  %2.3f\"  ",
-                     ii + 1,
-                     diameter_in_mm( m_toolListBuffer[ii].m_Diameter ),
-                     diameter_in_inches( m_toolListBuffer[ii].m_Diameter ) );
-
-            fputs( line, m_file );
-
-            // Now list how many holes and ovals are associated with each drill.
-            if( ( m_toolListBuffer[ii].m_TotalCount == 1 )
-                && ( m_toolListBuffer[ii].m_OvalCount == 0 ) )
-                sprintf( line, "(1 hole)\n" );
-            else if( m_toolListBuffer[ii].m_TotalCount == 1 )
-                sprintf( line, "(1 hole)  (with 1 slot)\n" );
-            else if( m_toolListBuffer[ii].m_OvalCount == 0 )
-                sprintf( line, "(%d holes)\n", m_toolListBuffer[ii].m_TotalCount );
-            else if( m_toolListBuffer[ii].m_OvalCount == 1 )
-                sprintf( line, "(%d holes)  (with 1 slot)\n",
-                         m_toolListBuffer[ii].m_TotalCount );
-            else // if ( buffer[ii]m_OvalCount > 1 )
-                sprintf( line, "(%d holes)  (with %d slots)\n",
-                         m_toolListBuffer[ii].m_TotalCount,
-                         m_toolListBuffer[ii].m_OvalCount );
-
-            fputs( line, m_file );
-
-            totalHoleCount += m_toolListBuffer[ii].m_TotalCount;
-        }
-
-        if( gen_NPTH_holes )
-            sprintf( line, "\nTotal unplated holes count %u\n\n\n", totalHoleCount );
-        else
-            sprintf( line, "\nTotal plated holes count %u\n\n\n", totalHoleCount );
-
-        fputs( line, m_file );
-
-        if( gen_NPTH_holes )
-        {
-            break;
-        }
-        else
-        {
-            if( m_pcb->GetCopperLayerCount() <= 2 )
-            {
-                gen_NPTH_holes = true;
-                continue;
-            }
-
-            if( gen_through_holes )
-            {   // Prepare the next iteration, which print the not through holes
-                layer2 = layer1 + 1;
-            }
-            else
-            {
-                if( layer2 >= B_Cu )    // no more layer pair to consider
-                {
-                    gen_NPTH_holes = true;
-                    continue;
-                }
-
-                ++layer1;
-                ++layer2;           // use next layer pair
-
-                if( layer2 == m_pcb->GetCopperLayerCount() - 1 )
-                    layer2 = B_Cu; // the last layer is always the bottom layer
-            }
-
-            gen_through_holes = false;
-        }
+        out.Print( 0, "    L%-2d:  %-25s %s\n",
+            conventional_layer_num,
+            TO_UTF8( m_pcb->GetLayerName( *seq ) ),
+            layerName( *seq ).c_str()       // generic layer name
+            );
     }
 
-    fclose( m_file );
+    out.Print( 0, "\n\n" );
+
+    /* output hole lists:
+     * 1 - through holes
+     * 2 - for partial holes only: by layer starting and ending pair
+     * 3 - Non Plated through holes
+     */
+
+    // in this loop are plated only:
+    for( unsigned pair_ndx = 0;  pair_ndx < hole_sets.size();  ++pair_ndx )
+    {
+        LAYER_PAIR  pair = hole_sets[pair_ndx];
+
+        BuildHolesList( pair, false, false );
+
+        if( pair == LAYER_PAIR( F_Cu, B_Cu ) )
+        {
+            out.Print( 0, "Drill file '%s' contains\n",
+                TO_UTF8( drillFileName( pair, false ) ) );
+
+            out.Print( 0, "    plated through holes:\n" );
+            out.Print( 0, separator );
+            totalHoleCount = printToolSummary( out );
+            out.Print( 0, "    Total plated holes count %u\n", totalHoleCount );
+        }
+        else    // blind/buried
+        {
+            out.Print( 0, "Drill file '%s' contains\n",
+                TO_UTF8( drillFileName( pair, false ) ) );
+
+            out.Print( 0, "    holes connecting layer pair: '%s and %s' (%s vias):\n",
+                TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( pair.first ) ) ),
+                TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( pair.second ) ) ),
+                pair.first == F_Cu || pair.second == B_Cu ? "blind" : "buried"
+                );
+
+            out.Print( 0, separator );
+            totalHoleCount = printToolSummary( out );
+            out.Print( 0, "    Total plated holes count %u\n", totalHoleCount );
+        }
+
+        out.Print( 0, "\n\n" );
+    }
+
+    // NPTHoles:
+    BuildHolesList( LAYER_PAIR( F_Cu, B_Cu ), true, false );
+
+    // if( m_toolListBuffer.size() )    nothing wrong with an empty NPTH file.
+    {
+        out.Print( 0, "Drill file '%s' contains\n",
+                    TO_UTF8( drillFileName( LAYER_PAIR( F_Cu, B_Cu ), true ) ) );
+        out.Print( 0, "    unplated through holes:\n" );
+        out.Print( 0, separator );
+        totalHoleCount = printToolSummary( out );
+        out.Print( 0, "    Total unplated holes count %u\n", totalHoleCount );
+    }
 
     return true;
 }
@@ -433,4 +399,42 @@ bool EXCELLON_WRITER::PlotDrillMarks( PLOTTER* aPlotter )
     }
 
     return true;
+}
+
+
+unsigned EXCELLON_WRITER::printToolSummary( OUTPUTFORMATTER& out ) const
+{
+    unsigned totalHoleCount = 0;
+
+    for( unsigned ii = 0; ii < m_toolListBuffer.size(); ii++ )
+    {
+        // List the tool number assigned to each drill,
+        // in mm then in inches.
+        out.Print( 0, "    T%d  %2.2fmm  %2.3f\"  ",
+                 ii + 1,
+                 diameter_in_mm( m_toolListBuffer[ii].m_Diameter ),
+                 diameter_in_inches( m_toolListBuffer[ii].m_Diameter ) );
+
+        // Now list how many holes and ovals are associated with each drill.
+        if( ( m_toolListBuffer[ii].m_TotalCount == 1 )
+            && ( m_toolListBuffer[ii].m_OvalCount == 0 ) )
+            out.Print( 0, "(1 hole)\n" );
+        else if( m_toolListBuffer[ii].m_TotalCount == 1 )
+            out.Print( 0, "(1 hole)  (with 1 slot)\n" );
+        else if( m_toolListBuffer[ii].m_OvalCount == 0 )
+            out.Print( 0, "(%d holes)\n", m_toolListBuffer[ii].m_TotalCount );
+        else if( m_toolListBuffer[ii].m_OvalCount == 1 )
+            out.Print( 0, "(%d holes)  (with 1 slot)\n",
+                     m_toolListBuffer[ii].m_TotalCount );
+        else // if ( buffer[ii]m_OvalCount > 1 )
+            out.Print( 0, "(%d holes)  (with %d slots)\n",
+                     m_toolListBuffer[ii].m_TotalCount,
+                     m_toolListBuffer[ii].m_OvalCount );
+
+        totalHoleCount += m_toolListBuffer[ii].m_TotalCount;
+    }
+
+    out.Print( 0, "\n" );
+
+    return totalHoleCount;
 }
