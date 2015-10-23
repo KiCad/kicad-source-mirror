@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-28 23:34+0900\n"
-"PO-Revision-Date: 2015-10-23 07:07+0900\n"
+"PO-Revision-Date: 2015-10-23 12:09+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -2096,16 +2096,15 @@ msgstr "P-Cad 200x ASCII PCBファイル (*.pcb)|*.pcb"
 
 #: common/wildcards_and_files_ext.cpp:79
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
-msgstr "KiCad s-expre プリント基板ファイル (*.kicad_pcb)|*.kicad_pcb"
+msgstr "KiCad Ｓ式プリント基板ファイル (*.kicad_pcb)|*.kicad_pcb"
 
 #: common/wildcards_and_files_ext.cpp:80
 msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
-msgstr ""
-"Kicadフットプリント s-expre ライブラリ ファイル (*.kicad_mod)|*.kicad_mod"
+msgstr "Kicad フットプリント Ｓ式ライブラリ ファイル (*.kicad_mod)|*.kicad_mod"
 
 #: common/wildcards_and_files_ext.cpp:81
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
-msgstr "Kicadフットプリント s-expre ライブラリ パス  (*.pretty)|*.pretty"
+msgstr "Kicad フットプリント Ｓ式ライブラリ パス  (*.pretty)|*.pretty"
 
 #: common/wildcards_and_files_ext.cpp:82
 msgid "Legacy footprint library file (*.mod)|*.mod"
@@ -2673,7 +2672,7 @@ msgstr "閉じる(&C)"
 
 #: cvpcb/menubar.cpp:76
 msgid "Close CvPcb"
-msgstr "CvPcbの終了"
+msgstr "CvPcb の終了"
 
 #: cvpcb/menubar.cpp:83
 msgid "Footprint Li&braries"
@@ -6840,7 +6839,7 @@ msgstr "HPGL, PostScript, SVGフォーマットのいづれかで回路図シー
 
 #: eeschema/menubar.cpp:171
 msgid "Close Eeschema"
-msgstr "Eeschemaの終了"
+msgstr "Eeschema の終了"
 
 #: eeschema/menubar.cpp:178 eeschema/menubar_libedit.cpp:118
 #: pcbnew/menubar_modedit.cpp:158 pcbnew/menubar_pcbframe.cpp:277
@@ -7054,7 +7053,7 @@ msgstr "コンポーネントにフットプリントを割付け(&S)"
 
 #: eeschema/menubar.cpp:470
 msgid "Run CvPcb"
-msgstr "CVpcb の実行"
+msgstr "CvPcb の実行"
 
 #: eeschema/menubar.cpp:476
 msgid "&Layout Printed Circuit Board"
@@ -7062,7 +7061,7 @@ msgstr "プリント基板のレイアウト(&L)"
 
 #: eeschema/menubar.cpp:477 kicad/menubar.cpp:370
 msgid "Run Pcbnew"
-msgstr "プリント基板エディタ(Pcbnew)を起動"
+msgstr "プリント基板エディタ(Pcbnew) を起動"
 
 #: eeschema/menubar.cpp:488 eeschema/menubar_libedit.cpp:263
 #: eeschema/tool_viewlib.cpp:250
@@ -9084,7 +9083,7 @@ msgstr "ガーバー印刷"
 
 #: gerbview/menubar.cpp:146
 msgid "Close GerbView"
-msgstr "GerbViewの終了"
+msgstr "GerbView の終了"
 
 #: gerbview/menubar.cpp:167
 msgid "&Options"
@@ -9519,7 +9518,7 @@ msgstr "Zipファイルからプロジェクト ファイルを解凍"
 
 #: kicad/menubar.cpp:280
 msgid "Close KiCad"
-msgstr "KiCadの終了"
+msgstr "KiCad の終了"
 
 #: kicad/menubar.cpp:289
 msgid "Open Text E&ditor"
@@ -9579,31 +9578,31 @@ msgstr "PDFビューアの設定"
 
 #: kicad/menubar.cpp:363
 msgid "Run Eeschema"
-msgstr "回路図エディタ(EESchema)を起動"
+msgstr "回路図エディタ(EESchema) を起動"
 
 #: kicad/menubar.cpp:366
 msgid "Run Library Editor"
-msgstr "コンポーネント ライブラリ エディタを起動"
+msgstr "コンポーネント ライブラリ エディタ を起動"
 
 #: kicad/menubar.cpp:374
 msgid "Run Footprint Editor"
-msgstr "フットプリント エディタを起動"
+msgstr "フットプリント エディタ を起動"
 
 #: kicad/menubar.cpp:378
 msgid "Run Gerbview"
-msgstr "ガーバビューア(GerbView)を起動"
+msgstr "ガーバビューア(GerbView) を起動"
 
 #: kicad/menubar.cpp:382
 msgid "Run Bitmap2Component"
-msgstr "画像変換ツール(Bitmap2Component)を起動"
+msgstr "画像変換ツール(Bitmap2Component) を起動"
 
 #: kicad/menubar.cpp:389
 msgid "Run Pcb Calculator"
-msgstr "電気計算ツール(PcbCalculator)を起動"
+msgstr "電気計算ツール(PcbCalculator) を起動"
 
 #: kicad/menubar.cpp:394
 msgid "Run Page Layout Editor"
-msgstr "図枠エディタ(Pl_Editor)を起動"
+msgstr "図枠エディタ(Pl_Editor) を起動"
 
 #: kicad/menubar.cpp:407
 msgid "KiCad &Manual"
@@ -19356,7 +19355,7 @@ msgstr "ライブラリ ファイル中のフットプリントをアーカイ�
 
 #: pcbnew/menubar_pcbframe.cpp:272
 msgid "Close Pcbnew"
-msgstr "Pcbnewの終了"
+msgstr "Pcbnew の終了"
 
 #: pcbnew/menubar_pcbframe.cpp:284 pcbnew/tool_modedit.cpp:188
 #: pcbnew/tool_pcb.cpp:474
@@ -22388,8 +22387,8 @@ msgstr "部品表の生成"
 #: eeschema/help_common_strings.h:81
 msgid "Back-import component footprint fields via CvPcb .cmp file"
 msgstr ""
-"CvPcbの.cmpファイルより、コンポーネント フットプリント フィールド情報をバック"
-"インポート"
+"CvPcb の.cmp ファイルより、コンポーネント フットプリント フィールド情報をバッ"
+"クインポート"
 
 #: eeschema/help_common_strings.h:84
 msgid "Add pins to component"
