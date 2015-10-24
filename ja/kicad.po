@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-28 23:34+0900\n"
-"PO-Revision-Date: 2015-10-23 12:09+0900\n"
+"PO-Revision-Date: 2015-10-24 20:27+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -1996,7 +1996,7 @@ msgid ""
 "externally to the running process and will be temporarily overwritten."
 msgstr ""
 "警告！ あなたが設定したいくつかのパスは、実行中のプロセスへ\n"
-"外部から定義され、現状のものを上書きします."
+"外部から定義され、現在のものを上書きします."
 
 #: common/pgm_base.cpp:822
 msgid ""
@@ -2958,8 +2958,8 @@ msgstr "なし"
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
 msgstr ""
-"フィールド %s は、コンポーネント %s  (ライブラリ %s 中) から削除されようとし"
-"ています。"
+"フィールド %s を コンポーネント %s  (ライブラリ %s ) から削除しようとしまし"
+"た。"
 
 #: eeschema/class_library.cpp:53
 #, c-format
@@ -2974,7 +2974,7 @@ msgstr ""
 #: eeschema/class_library.cpp:300
 #, c-format
 msgid "Cannot add duplicate alias '%s' to library '%s'."
-msgstr "重複したエイリアス'%s'をライブラリ'%s'に追加できません。"
+msgstr "重複したエイリアス '%s' は ライブラリ '%s' に追加できません。"
 
 #: eeschema/class_library.cpp:467
 msgid "The component library file name is not set."
@@ -3170,7 +3170,7 @@ msgstr "全ての回路図、階層を使用(&E)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 msgid "Use the current &page only"
-msgstr "現在のページでのみ使用(&P)"
+msgstr "現在のページのみを使用(&P)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:46
 msgid "&Keep existing annotation"
@@ -3203,15 +3203,15 @@ msgstr "アノテーションの選択"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:121
 msgid "Use first free number in schematic"
-msgstr "回路図中の最初の空き番号から使用する"
+msgstr "回路図中の最初の空き番号から使用"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Start to  sheet number*100 and use first free number"
-msgstr "シートのRef番号を *100から開始し、最初の空き番号から使用する"
+msgstr "シートのRef番号 *100 から開始し、最初の空き番号から使用"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:145
 msgid "Start to  sheet number*1000 and use first free number"
-msgstr "シートのRef番号を *1000 から開始し、最初の空き番号から使用する"
+msgstr "シートのRef番号 *1000 から開始し、最初の空き番号から使用"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:166
 msgid "Dialog"
@@ -4485,23 +4485,23 @@ msgstr "拡大縮小時にカーソルを中心へ移動(&n)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:198
 msgid "&Use middle mouse button to pan"
-msgstr "画面のパンにマウスの中ボタンを使う(&U)"
+msgstr "画面のパンにマウスの中ボタンを使用(&U)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:199
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:172
 msgid "Use middle mouse button dragging to pan"
-msgstr "画面のパンにマウスの中ボタンのドラッグを使う"
+msgstr "画面のパンにマウスの中ボタンのドラッグを使用"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:203
 msgid "&Limit panning to scroll size"
-msgstr "パン可能な領域を、スクロールバーサイズ範囲内に制限する"
+msgstr "パン可能な領域をスクロールバーサイズ範囲内に制限"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:204
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:177
 msgid "Middle mouse button panning limited by current scrollbar size"
 msgstr ""
-"マウス中ボタンによる画面パン時に、移動領域サイズを現在のスクロールバーサイズ"
-"へ制限します"
+"マウス中ボタンによる画面パン時、移動領域サイズを現在のスクロールバーサイズに"
+"制限"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
 msgid "Pan while moving ob&ject"
@@ -5496,47 +5496,47 @@ msgstr "プロジェクト ファイルの保存"
 
 #: eeschema/erc.cpp:89
 msgid "Input Pin.........."
-msgstr "入力ピン.........."
+msgstr "入力ピン・・・・・・・・"
 
 #: eeschema/erc.cpp:90
 msgid "Output Pin........."
-msgstr "出力ピン........."
+msgstr "出力ピン・・・・・・・・"
 
 #: eeschema/erc.cpp:91
 msgid "Bidirectional Pin.."
-msgstr "双方向ピン.."
+msgstr "双方向ピン・・・・・・"
 
 #: eeschema/erc.cpp:92
 msgid "Tri-State Pin......"
-msgstr "トライステートピン......"
+msgstr "トライステートピン・・"
 
 #: eeschema/erc.cpp:93
 msgid "Passive Pin........"
-msgstr "受動ピン........"
+msgstr "パッシブピン・・・・・・"
 
 #: eeschema/erc.cpp:94
 msgid "Unspecified Pin...."
-msgstr "指定なしピン...."
+msgstr "未指定ピン・・・・・・"
 
 #: eeschema/erc.cpp:95
 msgid "Power Input Pin...."
-msgstr "電源入力ピン...."
+msgstr "電源入力ピン・・・・"
 
 #: eeschema/erc.cpp:96
 msgid "Power Output Pin..."
-msgstr "電源出力ピン..."
+msgstr "電源出力ピン・・・・"
 
 #: eeschema/erc.cpp:97
 msgid "Open Collector....."
-msgstr "オープンコレクタ....."
+msgstr "オープンコレクタ・・・"
 
 #: eeschema/erc.cpp:98
 msgid "Open Emitter......."
-msgstr "オープンエミッタ....."
+msgstr "オープンエミッタ・・・"
 
 #: eeschema/erc.cpp:99
 msgid "No Connection......"
-msgstr "未接続....."
+msgstr "未接続・・・・・・・・"
 
 #: eeschema/erc.cpp:105
 msgid "Input Pin"
@@ -5556,11 +5556,11 @@ msgstr "トライステートピン"
 
 #: eeschema/erc.cpp:109
 msgid "Passive Pin"
-msgstr "受動ピン"
+msgstr "パッシブピン"
 
 #: eeschema/erc.cpp:110
 msgid "Unspecified Pin"
-msgstr "指定なしピン"
+msgstr "未指定ピン"
 
 #: eeschema/erc.cpp:111
 msgid "Power Input Pin"
@@ -9403,7 +9403,7 @@ msgstr " *エラー*\n"
 
 #: kicad/files-io.cpp:159
 msgid "Archive Project Files"
-msgstr "プロジェクトファイルをアーカイブする"
+msgstr "プロジェクトファイルをアーカイブ"
 
 #: kicad/files-io.cpp:202
 #, c-format
@@ -9498,7 +9498,7 @@ msgstr "設定の保存(&S)"
 
 #: kicad/menubar.cpp:254 kicad/menubar.cpp:481
 msgid "Save current project"
-msgstr "現在のプロジェクトを保存する"
+msgstr "現在のプロジェクトを保存"
 
 #: kicad/menubar.cpp:262
 msgid "&Archive"
@@ -9506,7 +9506,7 @@ msgstr "アーカイブ(&A)"
 
 #: kicad/menubar.cpp:263
 msgid "Archive project files in zip archive"
-msgstr "プロジェクト ファイルをZipでアーカイブする"
+msgstr "プロジェクト ファイルをZipでアーカイブ"
 
 #: kicad/menubar.cpp:269
 msgid "&Unarchive"
@@ -9550,7 +9550,7 @@ msgstr "システム標準のPDFビューア(&D)"
 
 #: kicad/menubar.cpp:323
 msgid "Use system default PDF viewer"
-msgstr "システムデフォルトのPDFビューアを使用する"
+msgstr "システムデフォルトのPDFビューアを使用"
 
 #: kicad/menubar.cpp:331
 msgid "&Favourite PDF Viewer"
@@ -9558,7 +9558,7 @@ msgstr "お気に入りのPDFビューア(&F)"
 
 #: kicad/menubar.cpp:332
 msgid "Use favourite PDF viewer"
-msgstr "お気に入りのPDFビューアを使用する"
+msgstr "お気に入りのPDFビューアを使用"
 
 #: kicad/menubar.cpp:342
 msgid "Set &PDF Viewer"
@@ -9578,7 +9578,7 @@ msgstr "PDFビューアの設定"
 
 #: kicad/menubar.cpp:363
 msgid "Run Eeschema"
-msgstr "回路図エディタ(EESchema) を起動"
+msgstr "回路図エディタ(Eeschema) を起動"
 
 #: kicad/menubar.cpp:366
 msgid "Run Library Editor"
@@ -9630,7 +9630,7 @@ msgstr "テンプレートから新規プロジェクト作成"
 
 #: kicad/menubar.cpp:489
 msgid "Archive all project files"
-msgstr "プロジェクトの全てのファイルをアーカイブする"
+msgstr "プロジェクトの全てのファイルをアーカイブ"
 
 #: kicad/menubar.cpp:497
 msgid "Refresh project tree"
@@ -13385,7 +13385,7 @@ msgstr "ビア オプション:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:170
 msgid "Do not allow blind/buried vias"
-msgstr "ブラインド/ベリッドビアを使用禁止"
+msgstr "ブラインド/ベリッドビアを禁止"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:170
 msgid "Allow blind/buried vias"
@@ -13408,7 +13408,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:178
 msgid "Do not allow micro vias"
-msgstr "マイクロビアを使用禁止"
+msgstr "マイクロビアを禁止"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:178
 msgid "Allow micro vias"
@@ -14878,8 +14878,8 @@ msgid ""
 "the space key)\n"
 "to the cursor, in polar coordinates (angle and distance)"
 msgstr ""
-"相対原点 (スペース キーでセット) からカーソル位置までの\n"
-"相対座標を極座標表示 (角度及び距離) する"
+"相対座標の原点 (スペース キーでセット) からカーソル位置までの\n"
+"相対座標を極座標表示 (角度及び距離) "
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:37
 msgid "Selection of units used to display dimensions and positions of items"
@@ -19227,7 +19227,7 @@ msgstr "BOM ファイル(&B)"
 
 #: pcbnew/menubar_pcbframe.cpp:178
 msgid "Create a bill of materials from schematic"
-msgstr "回路図からBom(部品表)を作成する"
+msgstr "回路図からBOM(部品表)を作成する"
 
 #: pcbnew/menubar_pcbframe.cpp:182
 msgid "&Fabrication Outputs"
@@ -21898,7 +21898,7 @@ msgstr "本当に全てのフットプリントを変更してもよろしいで
 #: pcbnew/xchgmod.cpp:394
 #, c-format
 msgid "Change footprint '%s' (from '%s') to '%s'"
-msgstr "フットプリント '%s' の値を， '%s' から '%s' に変更"
+msgstr "フットプリント '%s' の値を '%s' から '%s' に変更"
 
 #: pcbnew/xchgmod.cpp:525
 msgid "No footprints!"
