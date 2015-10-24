@@ -203,7 +203,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     // Reason: the FOOTPRINT_WIZARD_FRAME is run as modal;
     // It means the call to FOOTPRINT_WIZARD_FRAME::ShowModal will change the
     // Event Loop Manager, and stop the one created by the dialog.
-    // It does not happen on all W.M., perhaps due to the way or the order events are called
+    // It does not happen on all W.M., perhaps due to the way the order events are called
 //    SelectFootprintWizard();
 }
 
@@ -637,6 +637,7 @@ FOOTPRINT_WIZARD_MESSAGES::FOOTPRINT_WIZARD_MESSAGES( FOOTPRINT_WIZARD_FRAME* aP
                      wxDefaultPosition, wxDefaultSize,
                      wxCAPTION | wxRESIZE_BORDER | wxFRAME_FLOAT_ON_PARENT )
 {
+    m_canClose = false;
 	wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
 	SetSizer( bSizer );
 
@@ -661,6 +662,21 @@ FOOTPRINT_WIZARD_MESSAGES::FOOTPRINT_WIZARD_MESSAGES( FOOTPRINT_WIZARD_FRAME* aP
 FOOTPRINT_WIZARD_MESSAGES::~FOOTPRINT_WIZARD_MESSAGES()
 {
 }
+
+
+BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_MESSAGES, wxMiniFrame )
+    EVT_CLOSE( FOOTPRINT_WIZARD_MESSAGES::OnCloseMsgWindow )
+END_EVENT_TABLE()
+
+
+void FOOTPRINT_WIZARD_MESSAGES::OnCloseMsgWindow( wxCloseEvent& aEvent )
+{
+    if( !m_canClose )
+        aEvent.Veto();
+    else
+        aEvent.Skip();
+}
+
 
 void FOOTPRINT_WIZARD_MESSAGES::PrintMessage( const wxString& aMessage )
 {
@@ -691,6 +707,8 @@ void FOOTPRINT_WIZARD_MESSAGES::SaveSettings()
     m_config->Write( MESSAGE_BOX_POSY_KEY, m_position.y );
     m_config->Write( MESSAGE_BOX_SIZEX_KEY, m_size.x );
     m_config->Write( MESSAGE_BOX_SIZEY_KEY, m_size.y );
+
+    m_canClose = false;     // close event now allowed
 }
 
 
