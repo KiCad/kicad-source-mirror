@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-24 23:47+0100\n"
-"PO-Revision-Date: 2015-10-24 23:47+0100\n"
+"POT-Creation-Date: 2015-10-24 23:55+0100\n"
+"PO-Revision-Date: 2015-10-24 23:56+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -4663,7 +4663,7 @@ msgstr "Esporta scheda in un file formato Scalable Vector Graphics"
 
 #: pcbnew/menubar_pcbframe.cpp:246
 msgid "P&lot"
-msgstr "T&racciatore"
+msgstr "T&raccia"
 
 #: pcbnew/menubar_pcbframe.cpp:247
 msgid "Plot board in HPGL, PostScript or Gerber RS-274X format)"
