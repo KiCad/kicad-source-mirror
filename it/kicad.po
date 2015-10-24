@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-24 23:28+0100\n"
-"PO-Revision-Date: 2015-10-24 23:28+0100\n"
+"POT-Creation-Date: 2015-10-24 23:47+0100\n"
+"PO-Revision-Date: 2015-10-24 23:47+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -6999,7 +6999,7 @@ msgstr "Opzioni file:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:379
 #: pcbnew/dialogs/dialog_plot_base.h:132
 msgid "Plot"
-msgstr "Tracciatore"
+msgstr "Traccia"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:113
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:144
