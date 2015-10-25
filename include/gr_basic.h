@@ -109,15 +109,17 @@ void GRForceBlackPen( bool flagforce );
  */
 bool GetGRForceBlackPenState( void );
 
-void GRLine( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aWidth, EDA_COLOR_T aColor );
-void GRLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width, EDA_COLOR_T Color );
+void GRLine( EDA_RECT* aClipBox, wxDC* aDC,
+             wxPoint aStart, wxPoint aEnd, int aWidth, EDA_COLOR_T aColor );
+void GRLine( EDA_RECT* ClipBox, wxDC* DC,
+             int x1, int y1, int x2, int y2, int width, EDA_COLOR_T Color );
 void GRMixedLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                   int width, EDA_COLOR_T Color );
 void GRDashedLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int  y2,
                    int width, EDA_COLOR_T Color );
-void GRDashedLineTo( EDA_RECT* ClipBox, wxDC* DC, int x2, int y2, int width, EDA_COLOR_T Color );
 void GRMoveTo( int x, int y );
-void GRLineTo( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int width, EDA_COLOR_T Color );
+void GRLineTo( EDA_RECT* ClipBox, wxDC* DC,
+               int x, int y, int width, EDA_COLOR_T Color );
 
 void GRPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[], bool Fill,
              int width, EDA_COLOR_T Color, EDA_COLOR_T BgColor );

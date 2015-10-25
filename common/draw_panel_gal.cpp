@@ -206,12 +206,7 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
 void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 {
     m_eventDispatcher = aEventDispatcher;
-
-#if wxCHECK_VERSION( 3, 0, 0 )
     const wxEventType eventTypes[] = { wxEVT_TOOL };
-#else
-    const wxEventType eventTypes[] = { wxEVT_COMMAND_MENU_SELECTED, wxEVT_COMMAND_TOOL_CLICKED };
-#endif
 
     if( m_eventDispatcher )
     {
@@ -310,7 +305,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             // warn about unhandled GAL canvas type, but continue with the fallback option
 
         case GAL_TYPE_NONE:
-            // KIGFX::GAL is a stub - it actually does cannot display anything, 
+            // KIGFX::GAL is a stub - it actually does cannot display anything,
             // but prevents code relying on GAL canvas existence from crashing
             new_gal = new KIGFX::GAL();
             break;
