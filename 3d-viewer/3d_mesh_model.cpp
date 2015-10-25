@@ -333,6 +333,10 @@ void S3D_MESH::openGL_Render( bool aIsRenderingJustNonTransparentObjects,
 #endif
 */
 
+    if( m_Materials->m_ColorPerVertex == false )
+        if( m_Materials->m_DiffuseColor.size() == m_Point.size() )
+            m_Materials->m_ColorPerVertex = true;
+
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
     {
         if( m_Materials )
