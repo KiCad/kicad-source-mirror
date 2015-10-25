@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-28 23:34+0900\n"
-"PO-Revision-Date: 2015-10-23 12:09+0900\n"
+"PO-Revision-Date: 2015-10-25 07:38+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -1278,8 +1278,8 @@ msgid ""
 "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
 "to change its assignment?"
 msgstr ""
-"<%s>は既に \"%s\" のセクション \"%s\" へ割り当てられています。現在の割り当て"
-"を変更して宜しいですか？"
+"<%s>は既に \"%s\" のセクション \"%s\" へ割り当てられています。本当に現在の割"
+"り当てを変更してもよろしいですか？"
 
 #: common/dialogs/dialog_hotkeys_editor.cpp:380
 msgid "Confirm change"
@@ -1457,7 +1457,7 @@ msgstr "横向き"
 
 #: common/dialogs/dialog_page_settings.cpp:801
 msgid "Select Page Layout Descr File"
-msgstr "図枠ファイルの洗濯"
+msgstr "図枠ファイルの選択"
 
 #: common/dialogs/dialog_page_settings.cpp:819
 #, c-format
@@ -1469,7 +1469,7 @@ msgid ""
 "'%s'"
 msgstr ""
 "図枠ファイルの指定が変更されました。\n"
-"相対パスを使用して図枠ファイルを参照しますか:\n"
+"相対パスを使用して図枠ファイルを参照しますか？:\n"
 "'%s'\n"
 "(以下に代わって) \n"
 "'%s'"
@@ -1996,7 +1996,7 @@ msgid ""
 "externally to the running process and will be temporarily overwritten."
 msgstr ""
 "警告！ あなたが設定したいくつかのパスは、実行中のプロセスへ\n"
-"外部から定義され、現状のものを上書きします."
+"外部から定義され、現在のものを上書きします."
 
 #: common/pgm_base.cpp:822
 msgid ""
@@ -2958,8 +2958,8 @@ msgstr "なし"
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
 msgstr ""
-"フィールド %s は、コンポーネント %s  (ライブラリ %s 中) から削除されようとし"
-"ています。"
+"フィールド %s を コンポーネント %s  (ライブラリ %s ) から削除しようとしまし"
+"た。"
 
 #: eeschema/class_library.cpp:53
 #, c-format
@@ -2974,7 +2974,7 @@ msgstr ""
 #: eeschema/class_library.cpp:300
 #, c-format
 msgid "Cannot add duplicate alias '%s' to library '%s'."
-msgstr "重複したエイリアス'%s'をライブラリ'%s'に追加できません。"
+msgstr "重複したエイリアス '%s' は ライブラリ '%s' に追加できません。"
 
 #: eeschema/class_library.cpp:467
 msgid "The component library file name is not set."
@@ -3170,7 +3170,7 @@ msgstr "全ての回路図、階層を使用(&E)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 msgid "Use the current &page only"
-msgstr "現在のページでのみ使用(&P)"
+msgstr "現在のページのみを使用(&P)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:46
 msgid "&Keep existing annotation"
@@ -3203,15 +3203,15 @@ msgstr "アノテーションの選択"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:121
 msgid "Use first free number in schematic"
-msgstr "回路図中の最初の空き番号から使用する"
+msgstr "回路図中の最初の空き番号から使用"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Start to  sheet number*100 and use first free number"
-msgstr "シートのRef番号を *100から開始し、最初の空き番号から使用する"
+msgstr "シートのRef番号 *100 から開始し、最初の空き番号から使用"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:145
 msgid "Start to  sheet number*1000 and use first free number"
-msgstr "シートのRef番号を *1000 から開始し、最初の空き番号から使用する"
+msgstr "シートのRef番号 *1000 から開始し、最初の空き番号から使用"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:166
 msgid "Dialog"
@@ -3453,7 +3453,7 @@ msgid ""
 msgstr ""
 "いくつかのアイテムは背景色と同じ色となっており、\n"
 "画面上で見えなくなります。本当に\n"
-"これらの色を使用してよろしいですか？"
+"これらの色を使用してもよろしいですか？"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:72
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.h:114
@@ -3522,7 +3522,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:492
 msgid "OK to delete the footprint filter list ?"
-msgstr "フットプリント フィルタの一覧を削除して宜しいですか?"
+msgstr "フットプリント フィルタの一覧を削除しますか?"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:513
 msgid "Add Footprint Filter"
@@ -4485,23 +4485,23 @@ msgstr "拡大縮小時にカーソルを中心へ移動(&n)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:198
 msgid "&Use middle mouse button to pan"
-msgstr "画面のパンにマウスの中ボタンを使う(&U)"
+msgstr "画面のパンにマウスの中ボタンを使用(&U)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:199
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:172
 msgid "Use middle mouse button dragging to pan"
-msgstr "画面のパンにマウスの中ボタンのドラッグを使う"
+msgstr "画面のパンにマウスの中ボタンのドラッグを使用"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:203
 msgid "&Limit panning to scroll size"
-msgstr "パン可能な領域を、スクロールバーサイズ範囲内に制限する"
+msgstr "パン可能な領域をスクロールバーサイズ範囲内に制限"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:204
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:177
 msgid "Middle mouse button panning limited by current scrollbar size"
 msgstr ""
-"マウス中ボタンによる画面パン時に、移動領域サイズを現在のスクロールバーサイズ"
-"へ制限します"
+"マウス中ボタンによる画面パン時、移動領域サイズを現在のスクロールバーサイズに"
+"制限"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
 msgid "Pan while moving ob&ject"
@@ -5496,47 +5496,47 @@ msgstr "プロジェクト ファイルの保存"
 
 #: eeschema/erc.cpp:89
 msgid "Input Pin.........."
-msgstr "入力ピン.........."
+msgstr "入力ピン・・・・・・・・"
 
 #: eeschema/erc.cpp:90
 msgid "Output Pin........."
-msgstr "出力ピン........."
+msgstr "出力ピン・・・・・・・・"
 
 #: eeschema/erc.cpp:91
 msgid "Bidirectional Pin.."
-msgstr "双方向ピン.."
+msgstr "双方向ピン・・・・・・"
 
 #: eeschema/erc.cpp:92
 msgid "Tri-State Pin......"
-msgstr "トライステートピン......"
+msgstr "トライステートピン・・"
 
 #: eeschema/erc.cpp:93
 msgid "Passive Pin........"
-msgstr "受動ピン........"
+msgstr "パッシブピン・・・・・・"
 
 #: eeschema/erc.cpp:94
 msgid "Unspecified Pin...."
-msgstr "指定なしピン...."
+msgstr "未指定ピン・・・・・・"
 
 #: eeschema/erc.cpp:95
 msgid "Power Input Pin...."
-msgstr "電源入力ピン...."
+msgstr "電源入力ピン・・・・"
 
 #: eeschema/erc.cpp:96
 msgid "Power Output Pin..."
-msgstr "電源出力ピン..."
+msgstr "電源出力ピン・・・・"
 
 #: eeschema/erc.cpp:97
 msgid "Open Collector....."
-msgstr "オープンコレクタ....."
+msgstr "オープンコレクタ・・・"
 
 #: eeschema/erc.cpp:98
 msgid "Open Emitter......."
-msgstr "オープンエミッタ....."
+msgstr "オープンエミッタ・・・"
 
 #: eeschema/erc.cpp:99
 msgid "No Connection......"
-msgstr "未接続....."
+msgstr "未接続・・・・・・・・"
 
 #: eeschema/erc.cpp:105
 msgid "Input Pin"
@@ -5556,11 +5556,11 @@ msgstr "トライステートピン"
 
 #: eeschema/erc.cpp:109
 msgid "Passive Pin"
-msgstr "受動ピン"
+msgstr "パッシブピン"
 
 #: eeschema/erc.cpp:110
 msgid "Unspecified Pin"
-msgstr "指定なしピン"
+msgstr "未指定ピン"
 
 #: eeschema/erc.cpp:111
 msgid "Power Input Pin"
@@ -5736,7 +5736,7 @@ msgstr "ディレクトリ '%s' は書き込み禁止されています"
 #, c-format
 msgid "Design rule check marker found in sheet %s at %0.3f%s, %0.3f%s"
 msgstr ""
-"シート %s の %0.3f%s, %0.3f%s にデザイン ルール チェック マーカーが見つかりま"
+"シート %s の %0.3f%s, %0.3f%s にデザインルール チェック マーカーが見つかりま"
 "した。"
 
 #: eeschema/find.cpp:106
@@ -6176,7 +6176,7 @@ msgstr "選択されたコンポーネントは、アクティブなライブラ
 
 #: eeschema/libedit.cpp:170
 msgid "Do you want to change the active library?"
-msgstr "アクティブなライブラリを変更して宜しいですか？"
+msgstr "アクティブなライブラリを変更しますか？"
 
 #: eeschema/libedit.cpp:180
 #, c-format
@@ -6287,7 +6287,7 @@ msgstr "エントリー '%s' が ライブラリ '%s' 中に存在しません�
 #: eeschema/libedit.cpp:569
 #, c-format
 msgid "Delete component '%s' from library '%s' ?"
-msgstr "コンポーネント '%s' をライブラリ '%s' から削除して宜しいですか？"
+msgstr "コンポーネント '%s' をライブラリ '%s' から削除しますか？"
 
 #: eeschema/libedit.cpp:588
 msgid ""
@@ -6319,7 +6319,7 @@ msgstr "コンポーネント '%s' は既にライブラリ '%s' 内に既に存
 #: eeschema/libedit.cpp:721
 #, c-format
 msgid "Part '%s' already exists. Change it?"
-msgstr "コンポーネント '%s' は既に存在します。変更して宜しいですか？"
+msgstr "コンポーネント '%s' は既に存在します。変更してもよろしいですか？"
 
 #: eeschema/libedit.cpp:735
 #, c-format
@@ -9016,7 +9016,7 @@ msgstr "X2 属性"
 
 #: gerbview/init_gbr_drawlayers.cpp:48
 msgid "Current data will be lost?"
-msgstr "現在のデータが失われます、宜しいですか？"
+msgstr "現在のデータは失われます。よろしいですか？"
 
 #: gerbview/init_gbr_drawlayers.cpp:72
 #, c-format
@@ -9030,15 +9030,15 @@ msgstr "ガーバー ファイルを読み込む(&G)"
 #: gerbview/menubar.cpp:65 gerbview/toolbars_gerber.cpp:62
 msgid ""
 "Load a new Gerber file on the current layer. Previous data will be deleted"
-msgstr "現在のレイヤに新規ガーバーファイルを読込み。前のデータが削除されます"
+msgstr "現在のレイヤに新規ガーバーファイルを読み込む。前のデータは削除されます"
 
 #: gerbview/menubar.cpp:71
 msgid "Load &EXCELLON Drill File"
-msgstr "EXCELLON ドリル ファイルの読み込み(&E)"
+msgstr "EXCELLON ドリル ファイルを読み込む(&E)"
 
 #: gerbview/menubar.cpp:72
 msgid "Load excellon drill file"
-msgstr "excellon ドリル ファイルの読込み"
+msgstr "excellon ドリル ファイルを読み込む"
 
 #: gerbview/menubar.cpp:90
 msgid "Open &Recent Gerber File"
@@ -9297,7 +9297,7 @@ msgstr "パーミッション エラー?"
 #: kicad/class_treeproject_item.cpp:135
 #, c-format
 msgid "Do you really want to delete '%s'"
-msgstr "本当に削除してもいいですか？ - '%s'"
+msgstr "本当に削除してもよろしいですか？ - '%s'"
 
 #: kicad/class_treeproject_item.cpp:140
 msgid "Delete File"
@@ -9403,7 +9403,7 @@ msgstr " *エラー*\n"
 
 #: kicad/files-io.cpp:159
 msgid "Archive Project Files"
-msgstr "プロジェクトファイルをアーカイブする"
+msgstr "プロジェクトファイルをアーカイブ"
 
 #: kicad/files-io.cpp:202
 #, c-format
@@ -9498,7 +9498,7 @@ msgstr "設定の保存(&S)"
 
 #: kicad/menubar.cpp:254 kicad/menubar.cpp:481
 msgid "Save current project"
-msgstr "現在のプロジェクトを保存する"
+msgstr "現在のプロジェクトを保存"
 
 #: kicad/menubar.cpp:262
 msgid "&Archive"
@@ -9506,7 +9506,7 @@ msgstr "アーカイブ(&A)"
 
 #: kicad/menubar.cpp:263
 msgid "Archive project files in zip archive"
-msgstr "プロジェクト ファイルをZipでアーカイブする"
+msgstr "プロジェクト ファイルをZipでアーカイブ"
 
 #: kicad/menubar.cpp:269
 msgid "&Unarchive"
@@ -9550,7 +9550,7 @@ msgstr "システム標準のPDFビューア(&D)"
 
 #: kicad/menubar.cpp:323
 msgid "Use system default PDF viewer"
-msgstr "システムデフォルトのPDFビューアを使用する"
+msgstr "システムデフォルトのPDFビューアを使用"
 
 #: kicad/menubar.cpp:331
 msgid "&Favourite PDF Viewer"
@@ -9558,7 +9558,7 @@ msgstr "お気に入りのPDFビューア(&F)"
 
 #: kicad/menubar.cpp:332
 msgid "Use favourite PDF viewer"
-msgstr "お気に入りのPDFビューアを使用する"
+msgstr "お気に入りのPDFビューアを使用"
 
 #: kicad/menubar.cpp:342
 msgid "Set &PDF Viewer"
@@ -9578,7 +9578,7 @@ msgstr "PDFビューアの設定"
 
 #: kicad/menubar.cpp:363
 msgid "Run Eeschema"
-msgstr "回路図エディタ(EESchema) を起動"
+msgstr "回路図エディタ(Eeschema) を起動"
 
 #: kicad/menubar.cpp:366
 msgid "Run Library Editor"
@@ -9630,7 +9630,7 @@ msgstr "テンプレートから新規プロジェクト作成"
 
 #: kicad/menubar.cpp:489
 msgid "Archive all project files"
-msgstr "プロジェクトの全てのファイルをアーカイブする"
+msgstr "プロジェクトの全てのファイルをアーカイブ"
 
 #: kicad/menubar.cpp:497
 msgid "Refresh project tree"
@@ -10095,7 +10095,7 @@ msgstr "新規図枠(&N)"
 
 #: pagelayout_editor/menubar.cpp:65
 msgid "Load Page Layout &File"
-msgstr "図枠ファイルを読み込む(&F)"
+msgstr "図枠ファイルの読み込み(&F)"
 
 #: pagelayout_editor/menubar.cpp:68
 msgid "Load &Default Page Layout"
@@ -10103,7 +10103,7 @@ msgstr "デフォルト図枠の読み込み(&D)"
 
 #: pagelayout_editor/menubar.cpp:85
 msgid "Open &Recent Page Layout File"
-msgstr "最近の図枠ファイルを開く(&R)"
+msgstr "最近開いた図枠ファイル(&R)"
 
 #: pagelayout_editor/menubar.cpp:91
 msgid "&Save Page Layout Design"
@@ -11093,7 +11093,7 @@ msgstr "NPTHパッド(直径-ドリル)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1329
 msgid "Board Classes"
-msgstr "ボードのクラス"
+msgstr "ボード クラス"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:144
 msgid ""
@@ -11582,7 +11582,7 @@ msgstr "セル"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:692
 msgid "OK to abort?"
-msgstr "中止して宜しいですか？"
+msgstr "中止してもよろしいですか？"
 
 #: pcbnew/autorouter/autorout.cpp:90
 msgid "Net not selected"
@@ -11606,7 +11606,8 @@ msgstr "セルの配置"
 
 #: pcbnew/autorouter/move_and_route_event_functions.cpp:133
 msgid "Not locked footprints inside the board will be moved. OK?"
-msgstr "基板内側のロックしていないフットプリントは移動されます。宜しいですか？"
+msgstr ""
+"基板内側のロックしていないフットプリントは移動されます。よろしいですか？"
 
 #: pcbnew/autorouter/move_and_route_event_functions.cpp:139
 msgid "No footprint found!"
@@ -12792,8 +12793,8 @@ msgid ""
 "You have chosen the \"not connected\" option. This will create insulated "
 "copper islands. Are you sure ?"
 msgstr ""
-"\"ネットなし\"オプションが選択されました。浮きパターンを作成します。宜しいで"
-"すか？"
+"\"ネットなし\"オプションが選択されました。浮きパターンを作成します。よろしい"
+"ですか？"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:523
 msgid "Chamfer distance"
@@ -13105,7 +13106,7 @@ msgstr "ナンバリングの方向:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:112
 msgid "Reverse numbering on alternate rows or columns"
-msgstr "行/列方向でナンバリングを入れ替える"
+msgstr "行/列ごとにナンバリングの方向を反転"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:115
 #: pcbnew/dialogs/dialog_create_array_base.cpp:248
@@ -13385,7 +13386,7 @@ msgstr "ビア オプション:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:170
 msgid "Do not allow blind/buried vias"
-msgstr "ブラインド/ベリッドビアを使用禁止"
+msgstr "ブラインド/ベリッドビアを禁止"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:170
 msgid "Allow blind/buried vias"
@@ -13408,7 +13409,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:178
 msgid "Do not allow micro vias"
-msgstr "マイクロビアを使用禁止"
+msgstr "マイクロビアを禁止"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:178
 msgid "Allow micro vias"
@@ -13742,7 +13743,7 @@ msgstr "DRCレポートファイルの保存"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:40
 msgid "By Netclass"
-msgstr "(ネットクラスを使う)"
+msgstr "(ネットクラスを使用)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:48
 msgid "Enter the minimum acceptable value for a track width"
@@ -13782,7 +13783,7 @@ msgstr "DRCの開始"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:126
 msgid "Start the Design Rule Checker"
-msgstr "デザイン ルール チェックを開始します"
+msgstr "デザインルール チェックを開始します"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:130
 msgid "List Unconnected"
@@ -14166,7 +14167,7 @@ msgstr "ライブラリに登録されたフットプリント名"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:104
 msgid "Locked"
-msgstr "ロックする"
+msgstr "ロック"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:146
 msgid "Local Clearance Values"
@@ -14702,7 +14703,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:134
 #: pcbnew/dialogs/dialog_gendrill.cpp:135
 msgid "Use Netclasses values"
-msgstr "ネットクラスの値を使用する"
+msgstr "ネットクラスの値を使用"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:313
 msgid ""
@@ -14792,7 +14793,7 @@ msgstr "最小のヘッダー"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:91
 msgid "Merge PTH and NPTH holes into one file"
-msgstr "PTHとNPTH穴データを一つのファイルにマージします"
+msgstr "PTHとNPTH穴データを一つのファイルにマージ"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Absolute"
@@ -14878,8 +14879,8 @@ msgid ""
 "the space key)\n"
 "to the cursor, in polar coordinates (angle and distance)"
 msgstr ""
-"相対原点 (スペース キーでセット) からカーソル位置までの\n"
-"相対座標を極座標表示 (角度及び距離) する"
+"相対座標の原点 (スペース キーでセット) からカーソル位置までの\n"
+"相対座標を極座標表示 (角度及び距離) "
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:37
 msgid "Selection of units used to display dimensions and positions of items"
@@ -14920,7 +14921,7 @@ msgstr "コンテキスト メニューとホットキー フットプリント 
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:100
 msgid "&Enforce design rules when routing"
-msgstr "ルーティング中にデザイン ルール チェックを実行(&E)"
+msgstr "ルーティング中にデザインルール チェックを実行(&E)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:102
 msgid ""
@@ -15037,15 +15038,15 @@ msgstr "上級者/開発者向け"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:192
 msgid "Dump zone geometry to files when filling"
-msgstr "塗りつぶす時にゾーンのジオメトリをファイルへダンプする"
+msgstr "塗りつぶす時にゾーンのジオメトリをファイルへダンプ"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:101
 msgid "Are you sure you want to delete the entire board?"
-msgstr "本当に基板全体を削除してよろしいですか？"
+msgstr "本当に基板全体を削除してもよろしいですか？"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:106
 msgid "Are you sure you want to delete the selected items?"
-msgstr "選択されたアイテムを削除して宜しいですか？"
+msgstr "選択されたアイテムを削除してもよろしいですか？"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
@@ -15420,8 +15421,8 @@ msgid ""
 "The graphic item will be on a copper layer. This is very dangerous. Are you "
 "sure?"
 msgstr ""
-"図形アイテムを導体層に配置しようとしています。これはとても危険です。宜しいで"
-"すか？"
+"図形アイテムを導体層に配置しようとしています。これはとても危険です。本当に実"
+"行してもよろしいですか？"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:333
 msgid "Error list"
@@ -16480,7 +16481,7 @@ msgstr "メッセージをファイルへ保存"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:123
 msgid "Dry run. Only report changes in message panel"
-msgstr "ドライ・ラン - 実際の変更は行われず、変更点が表示されます。"
+msgstr "ドライ ラン - 実際の変更は行われず、変更点が表示されます。"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:124
 msgid ""
@@ -16488,20 +16489,20 @@ msgid ""
 "The netlist is read, but no change is actually made on board.\n"
 "Changes are only reported in message panel, for info"
 msgstr ""
-"ドライ・ラン:\n"
+"ドライ ラン:\n"
 "ネットリストを読み込みますが、実際の基板上に変更を加えません。\n"
 "変更点は情報として、メッセージパネルに表示されます。"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:128
 msgid "Silent mode"
-msgstr "サイレントモード"
+msgstr "サイレント モード"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:129
 msgid ""
 "Silent mode:\n"
 "Do not show the warning message before reading the netlist"
 msgstr ""
-"サイレントモード:\n"
+"サイレント モード:\n"
 "ネットリストを読み込む前の警告メッセージを表示しません"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:142
@@ -16548,7 +16549,7 @@ msgstr "ゾーンの最小幅"
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:119
 #, c-format
 msgid "OK to set footprints orientation to %.1f degrees ?"
-msgstr "フットプリントの角度を %.1f 度にセットします。宜しいですか?"
+msgstr "フットプリントの角度を %.1f 度にセットします。よろしいですか?"
 
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:150
 msgid "Bad value for footprints orientation"
@@ -16862,7 +16863,7 @@ msgstr "導体エリア"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "From parent footprint"
-msgstr "親のフットプリントより"
+msgstr "親のフットプリントから"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:484
 msgid "Thermal relief width:"
@@ -16992,11 +16993,11 @@ msgstr "非表示の定数/リファレンスを強制的にプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 msgid "Do not tent vias"
-msgstr "ビアにテンティングしない"
+msgstr "ビアのテンティングを禁止"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
 msgid "Remove soldermask on vias"
-msgstr "ビア上の半田マスクを削除する"
+msgstr "ビア上の半田マスクを削除"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:118
 msgid "Exclude PCB edge layer from other layers"
@@ -17016,11 +17017,11 @@ msgstr "ネガ出力"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:129
 msgid "Use auxiliary axis as origin"
-msgstr "補助座標の原点を使用する"
+msgstr "原点に補助座標を使用"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:130
 msgid "Use auxiliary axis as coordinates origin in plot files"
-msgstr "出図ファイルの原点として補助座標を使用します"
+msgstr "プロットの原点に補助座標を使用"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Drill marks:"
@@ -17097,7 +17098,7 @@ msgstr "ガーバーオプション"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid "Use Protel filename extensions"
-msgstr "Protelの拡張子を使用する"
+msgstr "Protelの拡張子を使用"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Use conventional Protel Gerber extensions - .GBL, .GTL, etc..."
@@ -18105,7 +18106,8 @@ msgstr "リカバリ ファイル '%s' が見つかりません。"
 #: pcbnew/files.cpp:282
 #, c-format
 msgid "OK to load recovery or backup file '%s'"
-msgstr "リカバリ - バックアップ ファイル \"%s\" を読み込みます、宜しいですか？"
+msgstr ""
+"リカバリ - バックアップ ファイル \"%s\" を読み込みます。よろしいですか？"
 
 #: pcbnew/files.cpp:342
 msgid "noname"
@@ -18689,7 +18691,7 @@ msgstr "ライブラリ '%s' が削除できませんでした"
 #: pcbnew/librairi.cpp:61
 #, c-format
 msgid "Library '%s' exists, OK to replace ?"
-msgstr "ライブラリ '%s' は既に存在します。置換してよろしいですか？"
+msgstr "ライブラリ '%s' は既に存在します。置換してもよろしいですか？"
 
 #: pcbnew/librairi.cpp:62
 msgid "Create New Library Folder (the .pretty folder is the library)"
@@ -18698,7 +18700,7 @@ msgstr "新しくライブラリのフォルダ (.prettyフォルダはライブ
 #: pcbnew/librairi.cpp:63
 #, c-format
 msgid "OK to delete module %s in library '%s'"
-msgstr "モジュール '%s' をライブラリ '%s' から削除します、宜しいですか？"
+msgstr "モジュール '%s' をライブラリ '%s' から削除します。よろしいですか？"
 
 #: pcbnew/librairi.cpp:64
 msgid "Import Footprint"
@@ -19227,7 +19229,7 @@ msgstr "BOM ファイル(&B)"
 
 #: pcbnew/menubar_pcbframe.cpp:178
 msgid "Create a bill of materials from schematic"
-msgstr "回路図からBom(部品表)を作成する"
+msgstr "回路図からBOM(部品表)を作成する"
 
 #: pcbnew/menubar_pcbframe.cpp:182
 msgid "&Fabrication Outputs"
@@ -19382,7 +19384,7 @@ msgstr "スタブ、ビアのクリーン、切断点やパッドとビアへの
 
 #: pcbnew/menubar_pcbframe.cpp:305
 msgid "&Swap Layers"
-msgstr "レイヤの入替え(&S)"
+msgstr "レイヤの入替(&S)"
 
 #: pcbnew/menubar_pcbframe.cpp:306
 msgid "Swap tracks on copper layers or drawings on other layers"
@@ -19643,11 +19645,11 @@ msgstr "アクティブなレイヤペアを変更"
 
 #: pcbnew/menubar_pcbframe.cpp:616
 msgid "&DRC"
-msgstr "デザイン ルール チェック(&D)"
+msgstr "デザインルール チェック(&D)"
 
 #: pcbnew/menubar_pcbframe.cpp:617 pcbnew/tool_pcb.cpp:275
 msgid "Perform design rules check"
-msgstr "デザイン ルール チェックの実行"
+msgstr "デザインルール チェックの実行"
 
 #: pcbnew/menubar_pcbframe.cpp:620
 msgid "&FreeRoute"
@@ -19655,7 +19657,7 @@ msgstr "&Freerouter"
 
 #: pcbnew/menubar_pcbframe.cpp:621
 msgid "Fast access to the Web Based FreeROUTE advanced router"
-msgstr "上級なルータである Freerouter へのクイックアクセス"
+msgstr "外部ルータ Freerouter とのデータ交換"
 
 #: pcbnew/menubar_pcbframe.cpp:626
 msgid "&Scripting Console"
@@ -19667,11 +19669,11 @@ msgstr "Python スクリプト コンソールの表示/非表示"
 
 #: pcbnew/menubar_pcbframe.cpp:634 pcbnew/menubar_pcbframe.cpp:670
 msgid "&Design Rules"
-msgstr "デザイン ルール(&D)"
+msgstr "デザインルール(&D)"
 
 #: pcbnew/menubar_pcbframe.cpp:635
 msgid "Open the design rules editor"
-msgstr "デザイン ルール エディタを開く"
+msgstr "デザインルール エディタを開く"
 
 #: pcbnew/menubar_pcbframe.cpp:638
 msgid "&Layers Setup"
@@ -20587,15 +20589,15 @@ msgstr "自動幅"
 msgid ""
 "Use the track width when starting on a track, otherwise the current track "
 "width"
-msgstr "現在の配線幅ではなく、配線時の幅を使用する"
+msgstr "現在の配線幅ではなく、通常時の配線幅を使用"
 
 #: pcbnew/onrightclick.cpp:1058
 msgid "Use Netclass Values"
-msgstr "ネットクラスの値を使用する"
+msgstr "ネットクラスの値を使用"
 
 #: pcbnew/onrightclick.cpp:1059
 msgid "Use track and via sizes from their Netclass values"
-msgstr "ネットクラスの値の配線とビア径を使う"
+msgstr "ネットクラスの値の配線とビア径を使用"
 
 #: pcbnew/onrightclick.cpp:1065
 #, c-format
@@ -20604,7 +20606,7 @@ msgstr "配線 %s"
 
 #: pcbnew/onrightclick.cpp:1068 pcbnew/onrightclick.cpp:1094
 msgid " uses NetClass"
-msgstr " ネットクラスを使う"
+msgstr "ネットクラスを使用"
 
 #: pcbnew/onrightclick.cpp:1086
 #, c-format
@@ -21149,7 +21151,7 @@ msgstr "wire_via が失われたパッドスタック \"%s\" を参照してい�
 
 #: pcbnew/swap_layers.cpp:94
 msgid "Swap Layers:"
-msgstr "レイヤの入替え:"
+msgstr "レイヤの入替:"
 
 #: pcbnew/swap_layers.cpp:245 pcbnew/swap_layers.cpp:252
 #: pcbnew/swap_layers.cpp:330
@@ -21339,11 +21341,11 @@ msgstr "配線モード: 自動配線"
 
 #: pcbnew/tool_pcb.cpp:304
 msgid "Fast access to the FreeROUTE external advanced router"
-msgstr "上級なルータである Freerouter へのクイックアクセス"
+msgstr "外部ルータ Freerouter とのデータ交換"
 
 #: pcbnew/tool_pcb.cpp:335 pcbnew/toolbars_update_user_interface.cpp:136
 msgid "Enable design rule checking"
-msgstr "デザイン ルール チェックを有効化"
+msgstr "デザインルール チェックを有効化"
 
 #: pcbnew/tool_pcb.cpp:354 pcbnew/toolbars_update_user_interface.cpp:145
 msgid "Show board ratsnest"
@@ -21442,7 +21444,7 @@ msgstr "+/- でスイッチします"
 
 #: pcbnew/toolbars_update_user_interface.cpp:135
 msgid "Disable design rule checking"
-msgstr "デザイン ルール チェックを無効化"
+msgstr "デザインルール チェックを無効化"
 
 #: pcbnew/toolbars_update_user_interface.cpp:144
 msgid "Hide board ratsnest"
@@ -21898,7 +21900,7 @@ msgstr "本当に全てのフットプリントを変更してもよろしいで
 #: pcbnew/xchgmod.cpp:394
 #, c-format
 msgid "Change footprint '%s' (from '%s') to '%s'"
-msgstr "フットプリント '%s' の値を， '%s' から '%s' に変更"
+msgstr "フットプリント '%s' の値を '%s' から '%s' に変更"
 
 #: pcbnew/xchgmod.cpp:525
 msgid "No footprints!"
