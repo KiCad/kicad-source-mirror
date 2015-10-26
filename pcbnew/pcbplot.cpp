@@ -371,7 +371,9 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
 
     if( EnsureFileDirectoryExists( &outputDir, boardFilename ) )
     {
-        wxFileName fn( boardFilename );
+        // outputDir contains now the full path of plot files
+        m_plotFile = boardFilename;
+        m_plotFile.SetPath( outputDir.GetPath() );
         wxString fileExt = GetDefaultPlotExtension( aFormat );
 
         // Gerber format can use specific file ext, depending on layers
@@ -380,10 +382,11 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
             GetPlotOptions().GetUseGerberProtelExtensions() )
             fileExt = GetGerberProtelExtension( GetLayer() );
 
-        BuildPlotFileName( &fn, outputDirName, aSuffix, fileExt );
+        // Build plot filenames from the board name and layer names:
+        BuildPlotFileName( &m_plotFile, outputDir.GetPath(), aSuffix, fileExt );
 
         m_plotter = StartPlotBoard( m_board, &GetPlotOptions(), ToLAYER_ID( GetLayer() ),
-                                    fn.GetFullPath(), aSheetDesc );
+                                    m_plotFile.GetFullPath(), aSheetDesc );
     }
 
     return( m_plotter != NULL );

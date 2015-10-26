@@ -72,7 +72,9 @@ plot_plan = [
 for layer_info in plot_plan:
     pctl.SetLayer(layer_info[1])
     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
-    pctl.PlotLayer()
+    print 'plot %s' % pctl.GetPlotFileName()
+    if pctl.PlotLayer() == False:
+        print "plot error"
 
 #generate internal copper layers, if any
 lyrcnt = board.GetCopperLayerCount();
@@ -81,7 +83,9 @@ for innerlyr in range ( 1, lyrcnt-1 ):
     pctl.SetLayer(innerlyr)
     lyrname = 'inner%s' % innerlyr
     pctl.OpenPlotfile(lyrname, PLOT_FORMAT_GERBER, "inner")
-    pctl.PlotLayer()
+    print 'plot %s' % pctl.GetPlotFileName()
+    if pctl.PlotLayer() == False:
+        print "plot error"
 
 
 # At the end you have to close the last plot, otherwise you don't know when
@@ -96,8 +100,7 @@ drlwriter.SetMapFileFormat( PLOT_FORMAT_PDF )
 mirror = False
 minimalHeader = False
 offset = wxPoint(0,0)
-mergeNPTH = False
-drlwriter.SetOptions( mirror, minimalHeader, offset, mergeNPTH )
+drlwriter.SetOptions( mirror, minimalHeader, offset )
 
 metricFmt = True
 drlwriter.SetFormat( metricFmt )
@@ -107,5 +110,5 @@ genMap = True
 drlwriter.CreateDrillandMapFilesSet( plotDir, genDrl, genMap );
 
 # One can create a text file to report drill statistics
-rptfn = plotDir + '/drill_report.txt'
+rptfn = pctl.GetPlotDirName() + 'drill_report.txt'
 drlwriter.GenDrillReportFile( rptfn );
