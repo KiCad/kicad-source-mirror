@@ -107,8 +107,10 @@ drlwriter.SetFormat( metricFmt )
 
 genDrl = True
 genMap = True
-drlwriter.CreateDrillandMapFilesSet( plotDir, genDrl, genMap );
+print 'create drill and map files in %s' % pctl.GetPlotDirName()
+drlwriter.CreateDrillandMapFilesSet( pctl.GetPlotDirName(), genDrl, genMap );
 
 # One can create a text file to report drill statistics
-rptfn = pctl.GetPlotDirName() + 'drill_report.txt'
+rptfn = pctl.GetPlotDirName() + 'drill_report.rpt'
+print 'report: %s' % rptfn
 drlwriter.GenDrillReportFile( rptfn );
