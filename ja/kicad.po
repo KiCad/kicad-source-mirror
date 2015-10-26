@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-28 23:34+0900\n"
-"PO-Revision-Date: 2015-10-25 07:38+0900\n"
+"PO-Revision-Date: 2015-10-26 22:13+0900\n"
 "Last-Translator: starfort <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kaoruzen@gmail.com>\n"
 "Language: ja_JP\n"
@@ -4830,11 +4830,11 @@ msgstr "(ド・モルガン) 代替ボディスタイルを使ってコンポー
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:67
 msgid "Create component as power symbol"
-msgstr "電源シンボルとしてコンポーネントを作成する"
+msgstr "電源シンボルとしてコンポーネントを作成"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:70
 msgid "Units are not interchangeable"
-msgstr "変換できない単位です"
+msgstr "ユニットは交換不可"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:85
 msgid "General Pin Settings"
