@@ -328,7 +328,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     {
         LAYER_PAIR  pair = hole_sets[pair_ndx];
 
-        BuildHolesList( pair, false, false );
+        BuildHolesList( pair, false );
 
         if( pair == LAYER_PAIR( F_Cu, B_Cu ) )
         {
@@ -360,7 +360,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     }
 
     // NPTHoles:
-    BuildHolesList( LAYER_PAIR( F_Cu, B_Cu ), true, false );
+    BuildHolesList( LAYER_PAIR( F_Cu, B_Cu ), true );
 
     // if( m_toolListBuffer.size() )    nothing wrong with an empty NPTH file.
     {

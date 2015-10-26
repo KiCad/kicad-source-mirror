@@ -67,7 +67,6 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     m_conversionUnits = 0.0001;
     m_unitsDecimal    = true;
     m_mirror = false;
-    m_merge_PTH_NPTH = false;
     m_minimalHeader = false;
     m_ShortHeader = false;
     m_mapFileFmt = PLOT_FORMAT_PDF;
@@ -75,7 +74,7 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
 }
 
 
-void EXCELLON_WRITER::CreateDrillandMapFilesSet(  const wxString& aPlotDirectory,
+void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                                             bool aGenDrill, bool aGenMap,
                                             REPORTER * aReporter )
 {
@@ -93,7 +92,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet(  const wxString& aPlotDirectory
         LAYER_PAIR  pair = *it;
         bool        doing_npth = ( it == hole_sets.end() - 1 );
 
-        BuildHolesList( pair, doing_npth, m_merge_PTH_NPTH );
+        BuildHolesList( pair, doing_npth );
 
         if( GetHolesCount() > 0 ) // has holes?
         {
@@ -537,8 +536,7 @@ static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
 
 
 void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
-                                      bool aGenerateNPTH_list,
-                                      bool aMerge_PTH_NPTH )
+                                      bool aGenerateNPTH_list )
 {
     HOLE_INFO new_hole;
 
@@ -546,11 +544,6 @@ void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
     m_toolListBuffer.clear();
 
     wxASSERT(  aLayerPair.first < aLayerPair.second );  // fix the caller
-
-    if( aGenerateNPTH_list && aMerge_PTH_NPTH )
-    {
-        return;
-    }
 
     // build hole list for vias
     if( ! aGenerateNPTH_list )  // vias are always plated !
@@ -590,9 +583,7 @@ void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
         {
             for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
-                if( ! aGenerateNPTH_list &&
-                    pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED &&
-                    ! aMerge_PTH_NPTH )
+                if( !aGenerateNPTH_list && pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
                     continue;
 
                 if( aGenerateNPTH_list && pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
