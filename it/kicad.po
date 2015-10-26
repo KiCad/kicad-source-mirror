@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-24 23:55+0100\n"
-"PO-Revision-Date: 2015-10-24 23:56+0100\n"
+"POT-Creation-Date: 2015-10-26 02:03+0100\n"
+"PO-Revision-Date: 2015-10-26 02:03+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -99,6 +99,10 @@ msgstr ""
 "X-Poedit-SearchPath-11: potrace\n"
 "X-Poedit-SearchPath-12: tools\n"
 "X-Poedit-SearchPath-13: pagelayout_editor\n"
+"X-Poedit-SearchPath-14: include\n"
+"X-Poedit-SearchPath-15: lib_dxf\n"
+"X-Poedit-SearchPath-16: patches\n"
+"X-Poedit-SearchPath-17: scripts\n"
 
 #: kicad/menubar.cpp:136 pcbnew/hotkeys.cpp:189 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:67 pagelayout_editor/hotkeys.cpp:78
@@ -14229,7 +14233,7 @@ msgstr "Foglio"
 
 #: common/dialogs/dialog_page_settings_base.cpp:32
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
-#: bitmap2component/bitmap2cmp_gui_base.cpp:66
+#: bitmap2component/bitmap2cmp_gui_base.cpp:66 include/wxunittext.h:50
 msgid "Size:"
 msgstr "&Dimensioni"
 
@@ -23205,6 +23209,54 @@ msgstr "Parametri regolatore"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
 msgstr "Nuovo elemento"
+
+#: include/common.h:307
+#, c-format
+msgid " (%s):"
+msgstr " (%s):"
+
+#: include/class_drc_item.h:164
+#, c-format
+msgid "ErrType(%d): <b>%s</b><ul><li> %s </li></ul>"
+msgstr "Tipoerr(%d): <b>%s</b><ul><li> %s </li></ul>"
+
+#: include/class_drc_item.h:177
+#, c-format
+msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
+msgstr "Tipoerr(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
+
+#: include/class_drc_item.h:185
+#, c-format
+msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
+msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
+
+#: include/kiway_player.h:263
+msgid "This file is already open."
+msgstr "Questo file è già aperto."
+
+#: include/richio.h:77
+#, c-format
+msgid ""
+"IO_ERROR: %s\n"
+"from %s : %s"
+msgstr ""
+"IO_ERROR: %s\n"
+"da %s : %s"
+
+#: include/richio.h:78
+#, c-format
+msgid ""
+"PARSE_ERROR: %s in input/source\n"
+"'%s'\n"
+"line %d\n"
+"offset %d\n"
+"from %s : %s"
+msgstr ""
+"ERRORE_ANALISI: %s in ingresso/sorgente\n"
+"'%s'\n"
+"linea %d\n"
+"scostamento %d\n"
+"da %s : %s"
 
 #~ msgid "About KiCad project manager"
 #~ msgstr "Informazioni sul manager dei progetti di KiCad"
