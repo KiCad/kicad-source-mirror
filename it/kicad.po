@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-26 02:03+0100\n"
-"PO-Revision-Date: 2015-10-26 02:03+0100\n"
+"POT-Creation-Date: 2015-10-27 08:42+0100\n"
+"PO-Revision-Date: 2015-10-27 08:50+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -6658,37 +6658,37 @@ msgstr "Esporta file di test D-356"
 msgid "Unable to create "
 msgstr "Impossibile creare"
 
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:113
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:143
-#: pcbnew/dialogs/dialog_gendrill.cpp:417
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:112
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:142
+#: pcbnew/dialogs/dialog_gendrill.cpp:411
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Impossibile creare %s **\n"
 
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:123
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:122
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:152
 #, c-format
 msgid "Create file %s\n"
 msgstr "Crea file %s\n"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:177
 #: pcbnew/exporters/gen_modules_placefile.cpp:566
-#: pcbnew/dialogs/dialog_gendrill.cpp:295
+#: pcbnew/dialogs/dialog_gendrill.cpp:290
 #: pcbnew/dialogs/dialog_SVG_print.cpp:215 pcbnew/dialogs/dialog_plot.cpp:311
 #: eeschema/dialogs/dialog_plot_schematic.cpp:171
 msgid "Select Output Directory"
 msgstr "Seleziona percorso di uscita"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:184
-#: pcbnew/dialogs/dialog_gendrill.cpp:302
+#: pcbnew/dialogs/dialog_gendrill.cpp:297
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222
 msgid "Use a relative path? "
 msgstr "Utilizzare percorso relativo?"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:185
 #: pcbnew/exporters/gen_modules_placefile.cpp:194
-#: pcbnew/dialogs/dialog_gendrill.cpp:303
-#: pcbnew/dialogs/dialog_gendrill.cpp:314
+#: pcbnew/dialogs/dialog_gendrill.cpp:298
+#: pcbnew/dialogs/dialog_gendrill.cpp:309
 #: pcbnew/dialogs/dialog_SVG_print.cpp:223
 #: pcbnew/dialogs/dialog_SVG_print.cpp:234 pcbnew/dialogs/dialog_plot.cpp:324
 #: pcbnew/dialogs/dialog_plot.cpp:331
@@ -7008,7 +7008,7 @@ msgstr "Traccia"
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:113
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:144
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:180
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
@@ -8973,89 +8973,86 @@ msgstr "Specchia assi Y"
 msgid "Minimal header"
 msgstr "Intestazione minimale"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:91
-msgid "Merge PTH and NPTH holes into one file"
-msgstr "Fondi assieme fori passanti e non passanti in un unico file"
-
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
 msgid "Absolute"
 msgstr "Assolute"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
 msgid "Auxiliary axis"
 msgstr "Assi ausiliari"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:99
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Drill Origin:"
 msgstr "Origine forature:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:101
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 msgstr ""
 "Sceglie l'origine delle coordinate: assolute o relative agli assi ausiliari"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:112
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:109
 msgid "Info:"
 msgstr "Info:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:114
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:111
 msgid "Default Vias Drill:"
 msgstr "Fori via predefiniti:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:116
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:113
 msgid "Via Drill Value"
 msgstr "Valore fori via"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:123
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
 msgid "Micro Vias Drill:"
 msgstr "Fori microvia:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:125
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
 msgid "Micro Via Drill Value"
 msgstr "Valore fori microvia"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:133
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 msgid "Holes Count:"
 msgstr "Conteggio fori:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:135
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:132
 msgid "Plated Pads:"
 msgstr "Piazzole metallizzate:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:139
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:136
 msgid "Not Plated Pads:"
 msgstr "Piazzole non metallizzate:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:143
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:140
 msgid "Through Vias:"
 msgstr "Via passanti:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:147
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:144
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:175
 msgid "Micro Vias:"
 msgstr "Microvia:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:151
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:148
 msgid "Buried Vias:"
 msgstr "Via coperti/interni:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:170
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:167
 msgid "Drill File"
 msgstr "File fori"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:171
 msgid "Map File"
 msgstr "File mappatura"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
 msgid "Report File"
 msgstr "File rapporto"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:190
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:187
 #: pcbnew/dialogs/dialog_drc_base.cpp:109
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
 #: common/dialogs/dialog_list_selector_base.cpp:37
+#: common/dialogs/wx_html_report_panel_base.cpp:14
 #: eeschema/dialogs/dialog_erc_base.cpp:68
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:146
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1172
@@ -9379,12 +9376,12 @@ msgstr "Mils"
 msgid "Output Units:"
 msgstr "Unità di misura in uscita:"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:134
-#: pcbnew/dialogs/dialog_gendrill.cpp:135
+#: pcbnew/dialogs/dialog_gendrill.cpp:130
+#: pcbnew/dialogs/dialog_gendrill.cpp:131
 msgid "Use Netclasses values"
 msgstr "Usa valori netclass"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:313
+#: pcbnew/dialogs/dialog_gendrill.cpp:308
 msgid ""
 "Cannot make path relative.  The target volume is different from board file "
 "volume!"
@@ -9392,11 +9389,11 @@ msgstr ""
 "Impossibile creare un percorso relativo. Il volume di destinazione è diverso "
 "da quello del file della scheda!"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:398
+#: pcbnew/dialogs/dialog_gendrill.cpp:392
 msgid "Save Drill Report File"
 msgstr "Salva file rapporto foratura"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:422
+#: pcbnew/dialogs/dialog_gendrill.cpp:416
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Il file di rapporto %s è stato creato\n"
@@ -12276,6 +12273,7 @@ msgstr "Nuovo orientamento (in decimi di grado)"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:31
 #: common/dialogs/dialog_list_selector_base.cpp:19
+#: common/dialogs/wx_html_report_panel_base.cpp:34
 #: eeschema/dialogs/dialog_choose_component_base.cpp:22
 msgid "Filter:"
 msgstr "Filtro:"
@@ -14214,6 +14212,31 @@ msgstr "Elementi:"
 msgid "Select a row and press a new key combination to alter the binding."
 msgstr ""
 "Seleziona una riga e premi una nuova combinazione di tasti per modificarla."
+
+#: common/dialogs/wx_html_report_panel_base.cpp:38
+#: eeschema/lib_draw_item.cpp:68 eeschema/lib_draw_item.cpp:75
+msgid "All"
+msgstr "Tutti"
+
+#: common/dialogs/wx_html_report_panel_base.cpp:42
+msgid "Warnings"
+msgstr "Avvisi:"
+
+#: common/dialogs/wx_html_report_panel_base.cpp:47 gerbview/readgerb.cpp:182
+msgid "Errors"
+msgstr "Errori"
+
+#: common/dialogs/wx_html_report_panel_base.cpp:52
+msgid "Infos"
+msgstr "Info"
+
+#: common/dialogs/wx_html_report_panel_base.cpp:57
+msgid "Actions"
+msgstr "Azioni"
+
+#: common/dialogs/wx_html_report_panel_base.cpp:62
+msgid "Save report to file..."
+msgstr "Salva rapporto su file..."
 
 #: common/dialogs/dialog_image_editor.cpp:130
 msgid "Incorrect scale number"
@@ -16405,10 +16428,6 @@ msgstr "Testo con soltanto %d parametri degli 8 richiesti"
 #: eeschema/lib_draw_item.cpp:55
 msgid "Undefined"
 msgstr "Indefinito"
-
-#: eeschema/lib_draw_item.cpp:68 eeschema/lib_draw_item.cpp:75
-msgid "All"
-msgstr "Tutti"
 
 #: eeschema/lib_draw_item.cpp:77
 msgid "no"
@@ -20591,10 +20610,6 @@ msgstr "Ordina gli strati se in modalità X2"
 msgid "File <%s> not found"
 msgstr "File \"%s\" non trovato"
 
-#: gerbview/readgerb.cpp:182
-msgid "Errors"
-msgstr "Errori"
-
 #: gerbview/readgerb.cpp:192
 msgid ""
 "Warning: this file has no D-Code definition\n"
@@ -22911,7 +22926,7 @@ msgstr "Proprietà piazzola"
 msgid "Select Footprint Library Folder"
 msgstr "Seleziona cartella libreria impronte"
 
-#: pcbnew/dialogs/dialog_gendrill_base.h:80
+#: pcbnew/dialogs/dialog_gendrill_base.h:79
 msgid "Drill Files Generation"
 msgstr "Generazione file di forature"
 
@@ -23257,36 +23272,3 @@ msgstr ""
 "linea %d\n"
 "scostamento %d\n"
 "da %s : %s"
-
-#~ msgid "About KiCad project manager"
-#~ msgstr "Informazioni sul manager dei progetti di KiCad"
-
-#~ msgid "P&cbnew Manual"
-#~ msgstr "Manuale P&cbnew"
-
-#~ msgid "Select default parameters values in Footprint Editor"
-#~ msgstr "Seleziona i valori dei parametri predefiniti nell'editor impronte"
-
-#~ msgid "About Kicad"
-#~ msgstr "Informazioni su KiCad"
-
-#~ msgid "<b>Current general settings:</b><br>"
-#~ msgstr "<b>Impostazioni generali correnti:</b><br>"
-
-#~ msgid "Minimum value for tracks width: <b>%s</b><br>\n"
-#~ msgstr "Larghezza minima pista: <b>%s</b><br>\n"
-
-#~ msgid "Minimum value for vias diameter: <b>%s</b><br>\n"
-#~ msgstr "Diametro minimo via: <b>%s</b><br>\n"
-
-#~ msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
-#~ msgstr "Diametro minimo microvia: <b>%s</b><br>\n"
-
-#~ msgid "Errors detected, Abort"
-#~ msgstr "Rilevato errore. Annullato"
-
-#~ msgid "This NetClass is already existing, cannot add it; Aborted"
-#~ msgstr "Questa netclass esiste già, non è possibile aggiungerla. Annullato"
-
-#~ msgid "Redraw the screen of the board"
-#~ msgstr "Aggiorna il disegno della scheda"
