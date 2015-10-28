@@ -404,12 +404,17 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
         aModule->SetThermalGap( GetThermalGap() );
     }
 
-    for( D_PAD* pad = Pads();  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
     {
-        D_PAD* newPad = aModule->FindPadByName( pad->GetPadName() );
+        // Fix me: if aCopyLocalSettings == true, for "multiple" pads
+        // (set of pads having the same name/number) this is broken
+        // because we copy settings from the first pad found.
+        // When old and new footprints have very few differences, a better
+        // algo can be used.
+        D_PAD* oldPad = FindPadByName( pad->GetPadName() );
 
-        if( newPad )
-            pad->CopyNetlistSettings( newPad, aCopyLocalSettings );
+        if( oldPad )
+            oldPad->CopyNetlistSettings( pad, aCopyLocalSettings );
     }
 
     // Not sure about copying description, keywords, 3D models or any other
