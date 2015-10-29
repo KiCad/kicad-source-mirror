@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-27 20:21+0100\n"
-"PO-Revision-Date: 2015-10-28 14:22+0100\n"
+"PO-Revision-Date: 2015-10-29 19:41+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -485,7 +485,7 @@ msgstr "Crear una librería de componentes para Eeschema"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:598
 msgid "Create a footprint file for Pcbnew"
-msgstr "Crear un archivo de siluetas para Pcbnew"
+msgstr "Crear un archivo de huellas para Pcbnew"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
@@ -1119,7 +1119,7 @@ msgid ""
 "<b>KISYSMOD</b> is the base path of locally installed system footprint "
 "libraries (.pretty folders)."
 msgstr ""
-"<b>KISYSMOD</b> es la ruta base de las librerías de siluetas instaladas "
+"<b>KISYSMOD</b> es la ruta base de las librerías de huellas instaladas "
 "localmente (carpetas .pretty)."
 
 #: common/dialogs/dialog_env_var_config.cpp:273
@@ -1135,7 +1135,7 @@ msgstr ""
 "contiene la ruta absoluta del proyecto activo. Esta variable de entorno "
 "puede utilizarse para definir archivos y rutas relativas al proyecto activo. "
 "Por ejemplo, ${KIPRJMOD}/libs/footprints.pretty puede definirse como una "
-"carpeta que contiene una librería de siluetas específica al proyecto, de "
+"carpeta que contiene una librería de huellas específica al proyecto, de "
 "nombre footprints.pretty."
 
 #: common/dialogs/dialog_env_var_config.cpp:279
@@ -1766,7 +1766,7 @@ msgstr "Negrita+Cursiva"
 
 #: common/footprint_info.cpp:320 common/footprint_info.cpp:341
 msgid "Errors were encountered loading footprints"
-msgstr "Se han encontrado errores al cargar las siluetas"
+msgstr "Se han encontrado errores al cargar las huellas"
 
 #: common/footprint_info.cpp:339
 msgid "Load Error"
@@ -1775,7 +1775,7 @@ msgstr "Error al cargar"
 #: common/fp_lib_table.cpp:373
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
-msgstr "'%s' es un apodo duplicado de librería de siluetas"
+msgstr "'%s' es un apodo duplicado de librería de huellas"
 
 #: common/fp_lib_table.cpp:620
 #, c-format
@@ -2140,15 +2140,15 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:80
 msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
-msgstr "Archivo s-expre de siluetas de KiCad (*.kicad_mod)|*.kicad_mod"
+msgstr "Archivo s-expre de huellas de KiCad (*.kicad_mod)|*.kicad_mod"
 
 #: common/wildcards_and_files_ext.cpp:81
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
-msgstr "Ruta de librería s-expre de siluetas de KiCad (*.pretty)|*.pretty"
+msgstr "Ruta de librería s-expre de huellas de KiCad (*.pretty)|*.pretty"
 
 #: common/wildcards_and_files_ext.cpp:82
 msgid "Legacy footprint library file (*.mod)|*.mod"
-msgstr "Archivo de siluetas MOD (*.mod)|*.mod"
+msgstr "Archivo de huellas MOD (*.mod)|*.mod"
 
 #: common/wildcards_and_files_ext.cpp:83
 msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
@@ -2156,7 +2156,7 @@ msgstr "Archivo XML de librería de Eagle ver. 6.x (*.lbr)|*.lbr"
 
 #: common/wildcards_and_files_ext.cpp:84
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
-msgstr "Archivo de librería de siluetas de Geda PCB (*.fp)|*.fp"
+msgstr "Archivo de librería de huellas de Geda PCB (*.fp)|*.fp"
 
 #: common/wildcards_and_files_ext.cpp:85
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
@@ -2164,7 +2164,7 @@ msgstr "Macros de KiCad (*.mcr)|*.mcr"
 
 #: common/wildcards_and_files_ext.cpp:86
 msgid "Component-footprint link file (*.cmp)|*cmp"
-msgstr "Archivo de vínculo Componente-Silueta (*.cmp)|*cmp"
+msgstr "Archivo de vínculo Componente-Huella (*.cmp)|*cmp"
 
 #: common/wildcards_and_files_ext.cpp:87
 msgid "Page layout descr file (*.kicad_wks)|*kicad_wks"
@@ -2176,7 +2176,7 @@ msgstr "Todos los archivos (*)|*"
 
 #: common/wildcards_and_files_ext.cpp:92
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
-msgstr "Archivo de vínculo cmp/silueta de KiCad (*.cmp)|*.cmp"
+msgstr "Archivo de vínculo cmp/huella de KiCad (*.cmp)|*.cmp"
 
 #: common/wildcards_and_files_ext.cpp:95
 msgid "Drill files (*.drl)|*.drl;*.DRL"
@@ -2204,7 +2204,7 @@ msgstr "Archivo de informe (*.rpt)|*.rpt"
 
 #: common/wildcards_and_files_ext.cpp:101
 msgid "Footprint place files (*.pos)|*.pos"
-msgstr "Archivo de posición de siluetas (*.pos)|*.pos"
+msgstr "Archivo de posición de huellas (*.pos)|*.pos"
 
 #: common/wildcards_and_files_ext.cpp:102
 msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
@@ -2292,7 +2292,7 @@ msgstr "Error al cargar el archivo de equivalencia."
 #: cvpcb/autosel.cpp:188
 #, c-format
 msgid "%lu footprint/cmp equivalences found."
-msgstr "Encontradas equivalencias para la silueta/cmp %lu."
+msgstr "Encontradas equivalencias para la huella/cmp %lu."
 
 #: cvpcb/autosel.cpp:254
 #, c-format
@@ -2300,7 +2300,7 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
-"Componente %s: no se ha encontrado la silueta %s en ninguna de las librerías "
+"Componente %s: no se ha encontrado la huella %s en ninguna de las librerías "
 "del proyecto."
 
 #: cvpcb/autosel.cpp:288
@@ -2319,7 +2319,7 @@ msgstr "No se puede escribir el archivo de proyecto '%s'"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:75
 msgid "Footprint Viewer"
-msgstr "Visor de siluetas"
+msgstr "Visor de huellas"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:466
 #: pcbnew/tool_pcb.cpp:338
@@ -2345,7 +2345,7 @@ msgstr "Cambiar forma del cursor"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:197 pcbnew/basepcbframe.cpp:476
 #: pcbnew/tool_pcb.cpp:377
 msgid "Show pads in outline mode"
-msgstr "Mostrar isletas en modo contorno"
+msgstr "Mostrar pads en modo boceto"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:201
 msgid "Show texts in line mode"
@@ -2404,12 +2404,12 @@ msgstr "Visualizador 3D"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:473
 #, c-format
 msgid "Footprint '%s' not found"
-msgstr "No se ha encontrado la silueta '%s'"
+msgstr "No se ha encontrado la huella '%s'"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:489
 #, c-format
 msgid "Footprint: %s"
-msgstr "Silueta: %s"
+msgstr "Huella: %s"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:501
 #, c-format
@@ -2421,7 +2421,7 @@ msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
 msgstr ""
-"Se han modificado los vínculos entre los componentes y las siluetas.\n"
+"Se han modificado los vínculos entre los componentes y las huellas.\n"
 "¿Guardar antes de salir?"
 
 #: cvpcb/cvframe.cpp:373
@@ -2435,7 +2435,7 @@ msgid ""
 "'%s'\n"
 "%s"
 msgstr ""
-"Ha ocurrido un error al guardar la tabla de librerías de siluetas global:\n"
+"Ha ocurrido un error al guardar la tabla de librerías de huellas global:\n"
 "'%s'\n"
 "%s"
 
@@ -2452,7 +2452,7 @@ msgid ""
 "'%s'\n"
 "%s"
 msgstr ""
-"Ha ocurrido un error al guardar la tabla de librerías de siluetas del "
+"Ha ocurrido un error al guardar la tabla de librerías de huellas del "
 "proyecto:\n"
 "'%s'\n"
 "%s"
@@ -2498,7 +2498,7 @@ msgstr "Filtrado por %s"
 #: cvpcb/cvframe.cpp:687
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr "No hay librerías de siluetas en la tabla de siluetas activa."
+msgstr "No hay librerías de huellas en la tabla de huellas activa."
 
 #: cvpcb/cvframe.cpp:688
 msgid "Configuration Error"
@@ -2534,7 +2534,7 @@ msgstr "Error al cargar el listado de conexiones"
 
 #: cvpcb/cvpcb.cpp:57
 msgid "Component/footprint equ files (*.equ)|*.equ"
-msgstr "Archivo componente/silueta (*.equ)|*.equ"
+msgstr "Archivo componente/huella (*.equ)|*.equ"
 
 #: cvpcb/cvpcb.cpp:170
 msgid ""
@@ -2546,9 +2546,9 @@ msgid ""
 "more information."
 msgstr ""
 "Es la primera vez que se ejecuta CvPcb utilizando el nuevo método basado en "
-"la tabla de librerías de siluetas. CvPcb ha copiado la tabla por defecto o "
-"ha creado una tabla vacía en su carpeta de usuario. Debe configurar primero "
-"la tabla de librerías para incluir aquellas no incluídas con KiCad. Vea la "
+"la tabla de librerías de huellas. CvPcb ha copiado la tabla por defecto o ha "
+"creado una tabla vacía en su carpeta de usuario. Debe configurar primero la "
+"tabla de librerías para incluir aquellas no incluídas con KiCad. Vea la "
 "sección \"Footprint Library Table\" de la documentación de CvPcb para mayor "
 "información."
 
@@ -2560,7 +2560,7 @@ msgid ""
 "%s"
 msgstr ""
 "Ha ocurrido un error al intentar cargar la tabla global de librerías de "
-"siluetas:\n"
+"huellas:\n"
 "\n"
 "%s"
 
@@ -2579,7 +2579,7 @@ msgstr "El archivo '%s' ya existe en la lista"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Footprint/Component equ files (.equ files)"
-msgstr "Archivo Silueta/Componente (.equ)"
+msgstr "Archivo Huella/Componente (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
@@ -2653,11 +2653,11 @@ msgstr "Modo boceto para texto"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 msgid "Pad sketch mode"
-msgstr "Modo boceto para isletas"
+msgstr "Modo boceto para pads"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:34
 msgid "Show pad &number"
-msgstr "Mostrar &número de isletas"
+msgstr "Mostrar &número de pads"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:41
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:84
@@ -2714,12 +2714,12 @@ msgstr "Cerrar CvPcb"
 
 #: cvpcb/menubar.cpp:83
 msgid "Footprint Li&braries"
-msgstr "Li&brerías de siluetas"
+msgstr "Li&brerías de huellas"
 
 #: cvpcb/menubar.cpp:83 pcbnew/menubar_modedit.cpp:312
 #: pcbnew/menubar_pcbframe.cpp:489
 msgid "Configure footprint libraries"
-msgstr "Configurar librerías de siluetas"
+msgstr "Configurar librerías de huellas"
 
 #: cvpcb/menubar.cpp:89 kicad/menubar.cpp:306 pcbnew/menubar_modedit.cpp:318
 #: pcbnew/menubar_pcbframe.cpp:495
@@ -2741,7 +2741,7 @@ msgid ""
 "They are files which give the footprint name from the component value"
 msgstr ""
 "Configurar la lista de archivos equ (.equ)\n"
-"Son archivos que proporcionan el nombre de la silueta a partir del valor del "
+"Son archivos que proporcionan el nombre de la huella a partir del valor del "
 "componente"
 
 #: cvpcb/menubar.cpp:104
@@ -2811,29 +2811,29 @@ msgstr ""
 "Algunas de las librerías asignadas son entradas obsoletas (no disponen de "
 "alias). ¿Desea que CvPcb intente convertirlas al nuevo formato requerido "
 "FPID? (Si su respuesta es negativa, esas asignaciones serán eliminadas y "
-"deberá reasignar esas siluetas manualmente.)"
+"deberá reasignar esas huellas manualmente.)"
 
 #: cvpcb/readwrite_dlgs.cpp:229
 #, c-format
 msgid "Component '%s' footprint '%s' was <b>not found</b> in any library.\n"
 msgstr ""
-"Para el componente '%s' <b>no se ha encontrado<b> la silueta '%s' en ninguna "
+"Para el componente '%s' <b>no se ha encontrado<b> la huella '%s' en ninguna "
 "librería.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:237
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Para el componente '%s' se ha encontrado la silueta '%s' en <b>varias<b> "
+"Para el componente '%s' se ha encontrado la huella '%s' en <b>varias<b> "
 "librerías.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:250
 msgid "First check your footprint library table entries."
-msgstr "Verifique primero las entradas de la tabla de librerías de siluetas."
+msgstr "Verifique primero las entradas de la tabla de librerías de huellas."
 
 #: cvpcb/readwrite_dlgs.cpp:252
 msgid "Problematic Footprint Library Tables"
-msgstr "Tablas de librerías de siluetas problemáticas"
+msgstr "Tablas de librerías de huellas problemáticas"
 
 #: cvpcb/readwrite_dlgs.cpp:260
 msgid ""
@@ -2842,7 +2842,7 @@ msgid ""
 "\n"
 msgstr ""
 "Han ocurrido los siguientes errores al intentar convertir las asignaciones "
-"de siluetas:\n"
+"de huellas:\n"
 "\n"
 
 #: cvpcb/readwrite_dlgs.cpp:263
@@ -2862,11 +2862,11 @@ msgstr "Los cambios han sido enviados a Eeschema"
 
 #: cvpcb/tool_cvpcb.cpp:57
 msgid "Edit footprint library table"
-msgstr "Editar la tabla de librerías de siluetas"
+msgstr "Editar la tabla de librerías de huellas"
 
 #: cvpcb/tool_cvpcb.cpp:62
 msgid "View selected footprint"
-msgstr "Mostrar silueta seleccionada"
+msgstr "Mostrar huella seleccionada"
 
 #: cvpcb/tool_cvpcb.cpp:67
 msgid "Select previous unlinked component"
@@ -2907,23 +2907,23 @@ msgstr "Se han encontrado %d códigos de tiempo duplicados y se han replazado."
 
 #: eeschema/backanno.cpp:225
 msgid "Load Component Footprint Link File"
-msgstr "Cargar archivo de vinculación de componentes y siluetas"
+msgstr "Cargar archivo de vinculación de componentes y huellas"
 
 #: eeschema/backanno.cpp:239
 msgid "Keep existing footprint field visibility"
-msgstr "Mantener la visibilidad del campo de silueta"
+msgstr "Mantener la visibilidad del campo de huella"
 
 #: eeschema/backanno.cpp:240
 msgid "Show all footprint fields"
-msgstr "Mostrar todos los campos de la silueta"
+msgstr "Mostrar todos los campos de la huella"
 
 #: eeschema/backanno.cpp:241
 msgid "Hide all footprint fields"
-msgstr "Ocultar todos los campos de la silueta"
+msgstr "Ocultar todos los campos de la huella"
 
 #: eeschema/backanno.cpp:243
 msgid "Select the footprint field visibility setting."
-msgstr "Seleccionar los ajustes de visibilidad del campo de la silueta."
+msgstr "Seleccionar los ajustes de visibilidad del campo de la huella."
 
 #: eeschema/backanno.cpp:244
 msgid "Change Visibility"
@@ -2932,7 +2932,7 @@ msgstr "Cambiar visibilidad"
 #: eeschema/backanno.cpp:255
 #, c-format
 msgid "Failed to open component-footprint link file '%s'"
-msgstr "Fallo al intentar abrir el archivo de vínculos componente-silueta '%s'"
+msgstr "Fallo al intentar abrir el archivo de vínculos componente-huella '%s'"
 
 #: eeschema/block.cpp:458
 msgid "No item to paste."
@@ -3553,25 +3553,25 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:492
 msgid "OK to delete the footprint filter list ?"
-msgstr "¿Eliminar el filtro de siluetas?"
+msgstr "¿Eliminar el filtro de huellas?"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:513
 msgid "Add Footprint Filter"
-msgstr "Añadir filtro de siluetas"
+msgstr "Añadir filtro de huellas"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:513
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:244
 msgid "Footprint Filter"
-msgstr "Filtro de siluetas"
+msgstr "Filtro de huellas"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:530
 #, c-format
 msgid "Foot print filter <%s> is already defined."
-msgstr "El filtro de siluetas <%s> ya se ha definido."
+msgstr "El filtro de huellas <%s> ya se ha definido."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:566
 msgid "Edit footprint filter"
-msgstr "Editar filtro de siluetas"
+msgstr "Editar filtro de huellas"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:30
 msgid "Has alternate symbol (DeMorgan)"
@@ -3724,7 +3724,7 @@ msgstr "Alias"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:210
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 msgid "Footprints"
-msgstr "Siluetas"
+msgstr "Huellas"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:212
 msgid ""
@@ -3732,9 +3732,9 @@ msgid ""
 "Footprints names can used jockers.\n"
 "(like sm* to allow all footprints names starting by sm)."
 msgstr ""
-"Un listado de nombres de siluetas que pueden utilizarse con este "
+"Un listado de nombres de huellas que pueden utilizarse con este "
 "compoinente.\n"
-"Los nombres de siluetas pueden utilizar comodines.\n"
+"Los nombres de huellas pueden utilizar comodines.\n"
 "(como sm* para filtrar todos los nombres que comienzan por sm)."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
@@ -3804,7 +3804,7 @@ msgstr "Mostrar en explorador"
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:847
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Assign Footprint"
-msgstr "Asignar silueta"
+msgstr "Asignar huella"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:982
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
@@ -5203,7 +5203,7 @@ msgstr "Color"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:112
 msgid "Black and white"
-msgstr "Blanco y negro"
+msgstr "Monocromo"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:109
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
@@ -5995,7 +5995,7 @@ msgstr "Campo"
 #: pcbnew/class_pad.cpp:631 pcbnew/class_text_mod.cpp:369
 #: pcbnew/loadcmp.cpp:436
 msgid "Footprint"
-msgstr "Silueta"
+msgstr "Huella"
 
 #: eeschema/lib_field.cpp:595 eeschema/libedit.cpp:510
 #: eeschema/template_fieldnames.cpp:48
@@ -6871,7 +6871,7 @@ msgstr "Buscar y reem&plazar"
 
 #: eeschema/menubar.cpp:207
 msgid "Import Footprint Selection"
-msgstr "Importar silueta"
+msgstr "Importar huella"
 
 #: eeschema/menubar.cpp:229 eeschema/menubar_libedit.cpp:161
 #: eeschema/tool_viewlib.cpp:225 pcbnew/menubar_modedit.cpp:216
@@ -7063,7 +7063,7 @@ msgstr "Generar BO&M"
 
 #: eeschema/menubar.cpp:469
 msgid "A&ssign Component Footprint"
-msgstr "A&signar silueta"
+msgstr "A&signar huella"
 
 #: eeschema/menubar.cpp:470
 msgid "Run CvPcb"
@@ -7301,7 +7301,7 @@ msgstr "Mover valor"
 
 #: eeschema/onrightclick.cpp:305
 msgid "Move Footprint Field"
-msgstr "Mover campo de silueta"
+msgstr "Mover campo de huella"
 
 #: eeschema/onrightclick.cpp:316
 msgid "Rotate Reference"
@@ -7313,7 +7313,7 @@ msgstr "Girar valor"
 
 #: eeschema/onrightclick.cpp:318
 msgid "Rotate Footprint Field"
-msgstr "Girar campo de silueta"
+msgstr "Girar campo de huella"
 
 #: eeschema/onrightclick.cpp:319
 msgid "Rotate Field"
@@ -7329,7 +7329,7 @@ msgstr "Editar valor"
 
 #: eeschema/onrightclick.cpp:339
 msgid "Edit Footprint Field"
-msgstr "Editar campo de silueta"
+msgstr "Editar campo de huella"
 
 #: eeschema/onrightclick.cpp:343
 msgid "Edit Field"
@@ -8307,11 +8307,11 @@ msgstr "Generar listado de conexiones"
 #: eeschema/tool_sch.cpp:162
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
 msgid "Footprint Editor"
-msgstr "Editor de siluetas"
+msgstr "Editor de huellas"
 
 #: eeschema/tool_sch.cpp:165
 msgid "Run CvPcb to associate components and footprints"
-msgstr "Ejecutar CvPcb para asociar componentes y siluetas"
+msgstr "Ejecutar CvPcb para asociar componentes y huellas"
 
 #: eeschema/tool_sch.cpp:168
 msgid "Run Pcbnew to layout printed circuit board"
@@ -8831,7 +8831,7 @@ msgstr "Mostrar códigos D"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:161
 msgid "Sketch"
-msgstr "Contorno"
+msgstr "Boceto"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:53
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:59
@@ -8849,7 +8849,7 @@ msgstr "Líneas"
 #: pcbnew/class_board.cpp:951 pcbnew/class_module.cpp:585
 #: pcbnew/class_netinfo_item.cpp:113 pcbnew/pcb_draw_panel_gal.cpp:347
 msgid "Pads"
-msgstr "Isletas"
+msgstr "Pads"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
 #: pcbnew/class_zone.cpp:638
@@ -9182,128 +9182,143 @@ msgid ""
 "It is perhaps an old RS274D file\n"
 "Therefore the size of items is undefined"
 msgstr ""
+"Atención: este archivo no tienen definiciones de códigos D\n"
+"Quizá sea un archivo en codificación RS274D\n"
+"por lo que el tamaño de los elementos no está definido"
 
 #: gerbview/rs274x.cpp:444
 msgid "RS274X: Command \"IR\" rotation value not allowed"
-msgstr ""
+msgstr "RS274X: Valor del giro no permitido en acción \"IR\""
 
 #: gerbview/rs274x.cpp:535
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr ""
+msgstr "RS274X: Acción \"KNOCKOUT\" ignorada por GerbView"
 
 #: gerbview/rs274x.cpp:597
 msgid "Too many include files!!"
-msgstr "Demasiados archivos incluidos!!"
+msgstr "¡Se han incluido demasiados archivos!"
 
 #: gerbview/select_layers_to_pcb.cpp:424
 msgid ""
 "The exported board has not enough copper layers to handle selected inner "
 "layers"
 msgstr ""
+"La placa exportada no tienen la cantidad de capas de cobre suficientes para "
+"manejar el número de capas internas seleccionado."
 
 #: gerbview/toolbars_gerber.cpp:59
 msgid "Erase all layers"
-msgstr ""
+msgstr "Borrar todas las capas"
 
 #: gerbview/toolbars_gerber.cpp:66
 msgid ""
 "Load an excellon drill file on the current layer. Previous data will be "
 "deleted"
 msgstr ""
+"Cargar un archivo Excellon de taladros en la capa activa. La información "
+"anterior se perderá."
 
 #: gerbview/toolbars_gerber.cpp:70
 msgid "Show/hide frame reference and select paper size for printing"
 msgstr ""
+"Mostrar/ocultar el marco de referencia y seleccionar el tamaño de papel para "
+"la impresión"
 
 #: gerbview/toolbars_gerber.cpp:74
 msgid "Print layers"
-msgstr ""
+msgstr "Imprimir capas"
 
 #: gerbview/toolbars_gerber.cpp:101
 msgid "No tool"
-msgstr "Sin Herramienta"
+msgstr "No hay herramienta seleccionada"
 
 #: gerbview/toolbars_gerber.cpp:105
 msgid "Tool "
-msgstr "Herramienta"
+msgstr "Herramienta "
 
 #: gerbview/toolbars_gerber.cpp:155
 msgid "Turn polar coordinate on"
-msgstr ""
+msgstr "Activar coordenadas polares"
 
 #: gerbview/toolbars_gerber.cpp:159
 msgid "Set units to inches"
-msgstr ""
+msgstr "Aplicar unidades en pulgadas"
 
 #: gerbview/toolbars_gerber.cpp:163
 msgid "Set units to millimeters"
-msgstr ""
+msgstr "Aplicar unidades en milímetros"
 
 #: gerbview/toolbars_gerber.cpp:172
 msgid "Show spots in sketch mode"
-msgstr ""
+msgstr "Mostrar puntos en modo boceto"
 
 #: gerbview/toolbars_gerber.cpp:176
 msgid "Show lines in sketch mode"
-msgstr ""
+msgstr "Mostrar líneas en modo boceto"
 
 #: gerbview/toolbars_gerber.cpp:180
 msgid "Show polygons in sketch mode"
-msgstr ""
+msgstr "Mostrar polígonos en modo boceto"
 
 #: gerbview/toolbars_gerber.cpp:185
 msgid "Show negatives objects in ghost color"
-msgstr ""
+msgstr "Mostrar elementos negativos en color difuminado"
 
 #: gerbview/toolbars_gerber.cpp:190
 msgid "Show dcode number"
-msgstr "Mostrar el n° de DCode"
+msgstr "Mostrar el número de código D"
 
 #: gerbview/toolbars_gerber.cpp:196
 msgid ""
 "Show layers in raw mode (could have problems with negative items when more "
 "than one gerber file is shown)"
 msgstr ""
+"Mostrar capas sin procesar (podrían surgir problemas con elementos negativos "
+"al mostrar más de un archivo)"
 
 #: gerbview/toolbars_gerber.cpp:201
 msgid ""
 "Show layers in stacked mode (show negative items without artifacts, "
 "sometimes slow)"
 msgstr ""
+"Mostrar capas apiladas (muestra los elementos negativos sin artefactos, "
+"puede ser lento)"
 
 #: gerbview/toolbars_gerber.cpp:206
 msgid ""
 "Show layers in transparency mode (show negative items without artifacts, "
 "sometimes slow)"
 msgstr ""
+"Mostrar capas en modo transparente (muestra los elementos negativos sin "
+"artefactos, puede ser lento)"
 
 #: gerbview/toolbars_gerber.cpp:215 pcbnew/help_common_strings.h:24
 msgid "Show/hide the layers manager toolbar"
-msgstr ""
+msgstr "Mostrar/ocultar la barra de administración de capas"
 
 #: gerbview/toolbars_gerber.cpp:287
 msgid "Hide layers manager"
-msgstr ""
+msgstr "Ocultar administrador de capas"
 
 #: gerbview/toolbars_gerber.cpp:289
 msgid "Show layers manager"
-msgstr ""
+msgstr "Mostrar administrador de capas"
 
 #: kicad/class_treeproject_item.cpp:111
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
 msgstr ""
-"Si cambia la extensión, cambiará el tipo de archivo.\n"
-"¿Desea Continuar?"
+"El tipo de archivo cambiará al modificar su extensión.\n"
+"¿Desea continuar?"
 
 #: kicad/class_treeproject_item.cpp:112
 msgid "Rename File"
-msgstr "Renombrar Archivo"
+msgstr "Renombrar archivo"
 
 #: kicad/class_treeproject_item.cpp:121
 msgid "Unable to rename file ... "
-msgstr "Imposible renombrar archivo"
+msgstr "Imposible renombrar el archivo... "
 
 #: kicad/class_treeproject_item.cpp:122
 msgid "Permission error ?"
@@ -9312,77 +9327,79 @@ msgstr "¿Error de permisos?"
 #: kicad/class_treeproject_item.cpp:135
 #, c-format
 msgid "Do you really want to delete '%s'"
-msgstr ""
+msgstr "¿Realmente desea eliminar '%s'?"
 
 #: kicad/class_treeproject_item.cpp:140
 msgid "Delete File"
-msgstr "Borrar Campo"
+msgstr "Eliminar archivo"
 
 #: kicad/commandframe.cpp:67
 msgid "Eeschema - Electronic schematic editor"
-msgstr ""
+msgstr "Eeschema - Editor de esquemas electrónicos."
 
 #: kicad/commandframe.cpp:70
 msgid "Schematic library editor"
-msgstr ""
+msgstr "Editor de librerías."
 
 #: kicad/commandframe.cpp:73
 msgid "Pcbnew - Printed circuit board editor"
-msgstr ""
+msgstr "Pcbnew - Editor de placas de circuito impreso."
 
 #: kicad/commandframe.cpp:76
 msgid "PCB footprint editor"
-msgstr ""
+msgstr "Editor de placas de circuito impreso."
 
 #: kicad/commandframe.cpp:79
 msgid "GerbView - Gerber viewer"
-msgstr ""
+msgstr "GerbView - Visor de archivos Gerber."
 
 #: kicad/commandframe.cpp:83 kicad/menubar.cpp:385
 msgid ""
 "Bitmap2Component - Convert bitmap images to Eeschema\n"
 "or Pcbnew elements"
 msgstr ""
+"Bitmap2Component - Convierte imágenes en mapa de bits\n"
+"a elementos de Eeschema o Pcbnew."
 
 #: kicad/commandframe.cpp:87 kicad/menubar.cpp:391
 msgid "Pcb calculator - Calculator for components, track width, etc."
-msgstr ""
+msgstr "Pcb calculator - Calculadora para componentes, anchura de pistas, etc."
 
 #: kicad/commandframe.cpp:90 kicad/menubar.cpp:396
 msgid "Pl editor - Worksheet layout editor"
-msgstr ""
+msgstr "Editor Pl - Editor de la hoja de trabajo"
 
 #: kicad/dialogs/dialog_template_selector.cpp:120
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr ""
+msgstr "<html><h1>Selector de plantilla</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:211
 msgid "Select Templates Directory"
-msgstr ""
+msgstr "Seleccionar la carpeta de plantillas"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:26
 msgid "Templates path"
-msgstr ""
+msgstr "Ruta a las plantillas"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:39
 msgid "Validate"
-msgstr ""
+msgstr "Validar"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:114
 msgid "Project Template Title"
-msgstr ""
+msgstr "Título de la plantilla de proyecto"
 
 #: kicad/files-io.cpp:46
 msgid "Zip file (*.zip)|*.zip"
-msgstr ""
+msgstr "Archivo Zip (*.zip)|*.zip"
 
 #: kicad/files-io.cpp:52
 msgid "KiCad project file"
-msgstr ""
+msgstr "Archivo de proyecto de KiCad"
 
 #: kicad/files-io.cpp:78
 msgid "Unzip Project"
-msgstr ""
+msgstr "Descomprimir proyecto"
 
 #: kicad/files-io.cpp:85
 #, c-format
@@ -9390,20 +9407,22 @@ msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
+"\n"
+"Abrir '%s'\n"
 
 #: kicad/files-io.cpp:88
 msgid "Target Directory"
-msgstr "Directorio Destino"
+msgstr "Directorio destino"
 
 #: kicad/files-io.cpp:95
 #, c-format
 msgid "Unzipping project in '%s'\n"
-msgstr ""
+msgstr "Descomprimiendo proyecto en '%s'\n"
 
 #: kicad/files-io.cpp:119
 #, c-format
 msgid "Extract file '%s'"
-msgstr ""
+msgstr "Extraer archivo '%s'"
 
 #: kicad/files-io.cpp:128
 msgid " OK\n"
@@ -9415,21 +9434,21 @@ msgstr "*ERROR*\n"
 
 #: kicad/files-io.cpp:159
 msgid "Archive Project Files"
-msgstr ""
+msgstr "Archivos de proyecto archivado"
 
 #: kicad/files-io.cpp:202
 #, c-format
 msgid "Archive file <%s>"
-msgstr ""
+msgstr "Archivo <%s>"
 
 #: kicad/files-io.cpp:216
 #, c-format
 msgid "(%lu bytes, compressed %d bytes)\n"
-msgstr ""
+msgstr "(%lu bytes, comprimidos %d bytes)\n"
 
 #: kicad/files-io.cpp:222
 msgid " >>Error\n"
-msgstr ""
+msgstr " >>Error\n"
 
 #: kicad/files-io.cpp:229
 #, c-format
@@ -9437,24 +9456,26 @@ msgid ""
 "\n"
 "Zip archive <%s> created (%d bytes)"
 msgstr ""
+"\n"
+"Archivo Zip <%s> creado (%d bytes)"
 
 #: kicad/mainframe.cpp:249
 #, c-format
 msgid "%s closed [pid=%d]\n"
-msgstr ""
+msgstr "%s cerrado [pid=%d]\n"
 
 #: kicad/mainframe.cpp:270
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
-msgstr ""
+msgstr "%s %s abierto [pid=%ld]\n"
 
 #: kicad/mainframe.cpp:441
 msgid "Text file ("
-msgstr ""
+msgstr "Archivo de texto ("
 
 #: kicad/mainframe.cpp:444
 msgid "Load File to Edit"
-msgstr ""
+msgstr "Abrir archivo para edición"
 
 #: kicad/mainframe.cpp:498
 #, c-format
@@ -9462,42 +9483,44 @@ msgid ""
 "Project name:\n"
 "%s\n"
 msgstr ""
+"Nombre del proyecto:\n"
+"%s\n"
 
 #: kicad/menubar.cpp:213
 msgid "&Open Project"
-msgstr ""
+msgstr "Abrir Pr&oyecto"
 
 #: kicad/menubar.cpp:215 kicad/menubar.cpp:476
 msgid "Open existing project"
-msgstr ""
+msgstr "Abrir un proyecto existente"
 
 #: kicad/menubar.cpp:225
 msgid "Open recent schematic project"
-msgstr ""
+msgstr "Abrir un proyecto de esquema reciente"
 
 #: kicad/menubar.cpp:231
 msgid "&New Project"
-msgstr ""
+msgstr "&Nuevo proyecto"
 
 #: kicad/menubar.cpp:233
 msgid "Create new blank project"
-msgstr ""
+msgstr "Crear un nuevo proyecto en blanco"
 
 #: kicad/menubar.cpp:236
 msgid "New Project from &Template"
-msgstr ""
+msgstr "Nuevo proyecto desde plan&tilla"
 
 #: kicad/menubar.cpp:239
 msgid "Create a new project from a template"
-msgstr ""
+msgstr "Crear un nuevo proyecto desde una plantilla"
 
 #: kicad/menubar.cpp:244
 msgid "New Project"
-msgstr ""
+msgstr "Nuevo proyecto"
 
 #: kicad/menubar.cpp:245 kicad/menubar.cpp:467
 msgid "Create new project"
-msgstr ""
+msgstr "Crear nuevo proyecto"
 
 #: kicad/menubar.cpp:252 pcbnew/menubar_pcbframe.cpp:109
 #: pcbnew/menubar_pcbframe.cpp:566
@@ -9506,131 +9529,132 @@ msgstr "&Guardar"
 
 #: kicad/menubar.cpp:254 kicad/menubar.cpp:481
 msgid "Save current project"
-msgstr ""
+msgstr "Guardar el proyecto activo"
 
 #: kicad/menubar.cpp:262
 msgid "&Archive"
-msgstr ""
+msgstr "Emp&aquetar"
 
 #: kicad/menubar.cpp:263
 msgid "Archive project files in zip archive"
-msgstr ""
+msgstr "Comprimir el proyecto en un archivo Zip para su almacenamiento"
 
 #: kicad/menubar.cpp:269
 msgid "&Unarchive"
-msgstr ""
+msgstr "Desempaq&uetar"
 
 #: kicad/menubar.cpp:270
 msgid "Unarchive project files from zip file"
 msgstr ""
+"Descomprimir un proyecto archivado para su almecenamiento en un archivo Zip"
 
 #: kicad/menubar.cpp:280
 msgid "Close KiCad"
-msgstr ""
+msgstr "Cerrar KiCad"
 
 #: kicad/menubar.cpp:289
 msgid "Open Text E&ditor"
-msgstr ""
+msgstr "Abrir e&ditor de texto"
 
 #: kicad/menubar.cpp:290
 msgid "Launch preferred text editor"
-msgstr ""
+msgstr "Abrir editor de texto preferido"
 
 #: kicad/menubar.cpp:296
 msgid "&Open Local File"
-msgstr ""
+msgstr "Abrir archiv&o local"
 
 #: kicad/menubar.cpp:297
 msgid "Edit local file"
-msgstr ""
+msgstr "Editar archivo local"
 
 #: kicad/menubar.cpp:313
 msgid "&Set Text Editor"
-msgstr ""
+msgstr "&Seleccionar editor de texto"
 
 #: kicad/menubar.cpp:314
 msgid "Set your preferred text editor"
-msgstr ""
+msgstr "Seleccionar el editor de texto preferido"
 
 #: kicad/menubar.cpp:322
 msgid "System &Default PDF Viewer"
-msgstr ""
+msgstr "Visor PDF &del sistema"
 
 #: kicad/menubar.cpp:323
 msgid "Use system default PDF viewer"
-msgstr ""
+msgstr "Utilizar el visor de archivos PDF del sistema"
 
 #: kicad/menubar.cpp:331
 msgid "&Favourite PDF Viewer"
-msgstr ""
+msgstr "Visor PDF &favorito"
 
 #: kicad/menubar.cpp:332
 msgid "Use favourite PDF viewer"
-msgstr ""
+msgstr "Utilizar el visor de archivos PDF favorito"
 
 #: kicad/menubar.cpp:342
 msgid "Set &PDF Viewer"
-msgstr ""
+msgstr "Seleccionar el visor &PDF"
 
 #: kicad/menubar.cpp:343
 msgid "Set favourite PDF viewer"
-msgstr ""
+msgstr "Seleccionar el visor de archivos PDF favorito"
 
 #: kicad/menubar.cpp:348
 msgid "&PDF Viewer"
-msgstr ""
+msgstr "Visor &PDF"
 
 #: kicad/menubar.cpp:349
 msgid "PDF viewer preferences"
-msgstr ""
+msgstr "Preferencias del visor PDF"
 
 #: kicad/menubar.cpp:363
 msgid "Run Eeschema"
-msgstr ""
+msgstr "Abrir Eeschema"
 
 #: kicad/menubar.cpp:366
 msgid "Run Library Editor"
-msgstr ""
+msgstr "Abrir editor de librerías"
 
 #: kicad/menubar.cpp:374
 msgid "Run Footprint Editor"
-msgstr ""
+msgstr "Abrir editor de huellas"
 
 #: kicad/menubar.cpp:378
 msgid "Run Gerbview"
-msgstr ""
+msgstr "Abrir GerbView"
 
 #: kicad/menubar.cpp:382
 msgid "Run Bitmap2Component"
-msgstr ""
+msgstr "Abrir Bitmap2Component"
 
 #: kicad/menubar.cpp:389
 msgid "Run Pcb Calculator"
-msgstr ""
+msgstr "Abrir Pcb Calculator"
 
 #: kicad/menubar.cpp:394
 msgid "Run Page Layout Editor"
-msgstr ""
+msgstr "Abrir Diseñador de Página"
 
 #: kicad/menubar.cpp:407
 msgid "KiCad &Manual"
-msgstr ""
+msgstr "&Manual de KiCad"
 
 #: kicad/menubar.cpp:408
 msgid "Open KiCad user manual"
-msgstr ""
+msgstr "Abrir el manual de usuario de KiCad"
 
 #: kicad/menubar.cpp:427
 msgid "&Browse"
-msgstr "&Examinar"
+msgstr "&Explorar"
 
 #: kicad/menubar.cpp:471
 msgid "Create new project from template"
-msgstr ""
+msgstr "Craer nuevo proyecto desde una plantilla"
 
 #: kicad/menubar.cpp:489
 msgid "Archive all project files"
-msgstr "Archivar los ficheros del proyecto"
+msgstr "Archivar todos los ficheros del proyecto"
 
 #: kicad/menubar.cpp:497
 msgid "Refresh project tree"
@@ -9638,47 +9662,49 @@ msgstr "Actualizar proyecto"
 
 #: kicad/preferences.cpp:66
 msgid "You must choose a PDF viewer before using this option."
-msgstr ""
+msgstr "Debe seleccionarse un visor PDF antes de utilizar esta opción."
 
 #: kicad/preferences.cpp:78
 msgid "Executable files ("
-msgstr ""
+msgstr "Archivos ejecutables ("
 
 #: kicad/preferences.cpp:83
 msgid "Select Preferred Pdf Browser"
-msgstr ""
+msgstr "Seleccionar el visor PDF preferido"
 
 #: kicad/prjconfig.cpp:111
 msgid "System Templates"
-msgstr ""
+msgstr "Plantillas del sistema"
 
 #: kicad/prjconfig.cpp:117
 msgid "User Templates"
-msgstr ""
+msgstr "Plantillas de usuario"
 
 #: kicad/prjconfig.cpp:131
 msgid "Portable Templates"
-msgstr ""
+msgstr "Plantillas transferibles"
 
 #: kicad/prjconfig.cpp:141
 msgid "No project template was selected.  Cannot generate new project."
 msgstr ""
+"No se ha seleccionado una plantilla. No puede generarse un nuevo proyecto."
 
 #: kicad/prjconfig.cpp:154
 msgid "Problem whilst creating new project from template!"
 msgstr ""
+"¡Ha ocurrido un problema al crear un nuevo proyecto desde la plantilla!"
 
 #: kicad/prjconfig.cpp:155
 msgid "Template Error"
-msgstr ""
+msgstr "Error de plantilla"
 
 #: kicad/prjconfig.cpp:234
 msgid "Create New Project"
-msgstr ""
+msgstr "Crear nuevo proyecto"
 
 #: kicad/prjconfig.cpp:239
 msgid "Open Existing Project"
-msgstr ""
+msgstr "Abrir proyecto"
 
 #: kicad/prjconfig.cpp:265
 msgid ""
@@ -9687,19 +9713,23 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
+"La carpeta seleccionada no está vacía. Se recomienda crear los proyectos en "
+"su propia carpeta vacía.\n"
+"\n"
+"¿Desea crear una nueva carpeta vacía para el proyecto?"
 
 #: kicad/prjconfig.cpp:308
 #, c-format
 msgid "KiCad project file '%s' not found"
-msgstr ""
+msgstr "No se ha encontrado el archivo de proyecto de KiCad '%s'"
 
 #: kicad/prjconfig.cpp:321
 msgid "To proceed, you can use the File menu to start a new project."
-msgstr ""
+msgstr "Puede utilizar el menú Archivo para iniciar un nuevo proyecto."
 
 #: kicad/prjconfig.cpp:363
 msgid "New Project Folder"
-msgstr ""
+msgstr "Nueva carpeta de proyecto"
 
 #: kicad/tree_project_frame.cpp:215
 #, c-format
@@ -9707,30 +9737,32 @@ msgid ""
 "Current project directory:\n"
 "%s"
 msgstr ""
+"Carpeta del proyecto activo:\n"
+"%s"
 
 #: kicad/tree_project_frame.cpp:216
 msgid "Create New Directory"
-msgstr "Crear Nuevo Directorio"
+msgstr "Crear carpeta nueva"
 
 #: kicad/tree_project_frame.cpp:677 kicad/tree_project_frame.cpp:684
 msgid "New D&irectory"
-msgstr "Nuevo D&irectorio"
+msgstr "Nueva ca&rpeta"
 
 #: kicad/tree_project_frame.cpp:678 kicad/tree_project_frame.cpp:685
 msgid "Create a New Directory"
-msgstr "Crear Directorio"
+msgstr "Crear una carpeta nueva"
 
 #: kicad/tree_project_frame.cpp:688
 msgid "&Delete Directory"
-msgstr "&Borrar Directorio"
+msgstr "&Eliminar carpeta"
 
 #: kicad/tree_project_frame.cpp:689 kicad/tree_project_frame.cpp:704
 msgid "Delete the Directory and its content"
-msgstr ""
+msgstr "Eliminar la carpeta y todo su contenido"
 
 #: kicad/tree_project_frame.cpp:695
 msgid "&Edit in a text editor"
-msgstr "Abrirl editor de texto"
+msgstr "Abrir en &editor de texto"
 
 #: kicad/tree_project_frame.cpp:696
 msgid "Open the file in a Text Editor"
@@ -9738,128 +9770,128 @@ msgstr "Abrir el archivo con un editor de texto"
 
 #: kicad/tree_project_frame.cpp:699
 msgid "&Rename file"
-msgstr ""
+msgstr "&Renombrar archivo"
 
 #: kicad/tree_project_frame.cpp:700
 msgid "Rename file"
-msgstr ""
+msgstr "Renombrar archivo"
 
 #: kicad/tree_project_frame.cpp:703
 msgid "&Delete File"
-msgstr "&Borrar Archivo"
+msgstr "&Eliminar archivo"
 
 #: kicad/tree_project_frame.cpp:753
 #, c-format
 msgid "Change filename: '%s'"
-msgstr ""
+msgstr "Cambiar nombre de archivo: '%s'"
 
 #: kicad/tree_project_frame.cpp:756
 msgid "Change filename"
-msgstr ""
+msgstr "Cambiar nombre de archivo"
 
 #: new/sch_lib.cpp:237
 #, c-format
 msgid "part '%s' not found in lib %s"
-msgstr ""
+msgstr "no se ha encontrado el componente '%s' en la librería %s"
 
 #: new/sch_lpid.cpp:208
 msgid "Illegal character found in LPID string"
-msgstr ""
+msgstr "Se ha encontrado un carácter ilegal en la cadena LPID"
 
 #: new/sch_lpid.cpp:375
 msgid "Illegal character found in logical lib name"
-msgstr ""
+msgstr "Se ha encontrado un carácter ilegal en el nombre de la librería"
 
 #: new/sch_lpid.cpp:406
 msgid "Illegal character found in category"
-msgstr ""
+msgstr "Se ha encontrado un carácter ilegal en la categoría"
 
 #: new/sch_lpid.cpp:417
 msgid "Illegal character found in base name"
-msgstr ""
+msgstr "Se ha encontrado un carácter ilegal en el nombre"
 
 #: new/sch_sweet_parser.cpp:338
 msgid "invalid extends LPID"
-msgstr ""
+msgstr "extensiones LPID no válidas"
 
 #: new/sch_sweet_parser.cpp:354
 msgid "'extends' may not have self as any ancestor"
-msgstr ""
+msgstr "la \"extensiones\" no deben tenerse a si mismas como ancestros"
 
 #: new/sch_sweet_parser.cpp:364
 msgid "max allowed extends depth exceeded"
-msgstr ""
+msgstr "excedido en número máximo de extensiones"
 
 #: new/sch_sweet_parser.cpp:392
 msgid "invalid alternates LPID"
-msgstr ""
+msgstr "LPID alternativos no válidos"
 
 #: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
 #: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
 #: new/sch_sweet_parser.cpp:821
 msgid "undefined pin"
-msgstr ""
+msgstr "pin sin definir"
 
 #: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
 #, c-format
 msgid "undefined pin %s"
-msgstr ""
+msgstr "pin %s sin definir"
 
 #: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
 #, c-format
 msgid "pin %s already in pin_merge group %s"
-msgstr ""
+msgstr "el pin %s ya se encuentra en el grupo de pines %s"
 
 #: new/sch_sweet_parser.cpp:903
 #, c-format
 msgid "no pins with signal %s"
-msgstr ""
+msgstr "no hay pines con la señal %s"
 
 #: new/sch_sweet_parser.cpp:915
 #, c-format
 msgid "signal pin %s already in pin_merge group %s"
-msgstr ""
+msgstr "el pin %s ya se encuentra en el grupo de pines %s"
 
 #: new/sch_sweet_parser.cpp:998
 #, c-format
 msgid "Unable to find property: %s"
-msgstr ""
+msgstr "No puede encontrarse la propiedad: %s"
 
 #: new/sweet_editor_panel.cpp:31
 msgid "Sweet"
-msgstr ""
+msgstr "Dulce"
 
 #: new/sweet_editor_panel.cpp:42
 msgid "Visual Part"
-msgstr ""
+msgstr "Elemento visual"
 
 #: new/sweet_editor_panel.cpp:59
 msgid "Parsing Errors"
-msgstr ""
+msgstr "Errores de análisis"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:28
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:218
 msgid "Pos X (mm)"
-msgstr ""
+msgstr "Pos X (mm)"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:35
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:231
 msgid "Pos Y (mm)"
-msgstr ""
+msgstr "Pos Y (mm)"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:52
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:96
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:252
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:307
 msgid "Upper Right"
-msgstr ""
+msgstr "Superior derecha"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:52
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:96
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:253
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:308
 msgid "Upper Left"
-msgstr ""
+msgstr "Superior izquierda"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:52
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:96
@@ -9868,207 +9900,209 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:306
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:309
 msgid "Lower Right"
-msgstr ""
+msgstr "Inferior derecha"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:52
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:96
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:255
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:310
 msgid "Lower Left"
-msgstr ""
+msgstr "Inferior izquierda"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:72
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:273
 msgid "End X (mm)"
-msgstr ""
+msgstr "Fin X (mm)"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:79
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:286
 msgid "End Y (mm)"
-msgstr ""
+msgstr "Fin Y (mm)"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:219
 msgid "Print Page Layout"
-msgstr ""
+msgstr "Imprimir diseño de página"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:224
 msgid "An error occurred attempting to print the page layout."
-msgstr ""
+msgstr "Ha ocurrido un error al intentar imprimir el diseño de página."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:44
 msgid "Page 1 option"
-msgstr ""
+msgstr "Opción página 1"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 msgid "Page 1 only"
-msgstr ""
+msgstr "Solo página 1"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 msgid "Not on page 1"
-msgstr ""
+msgstr "No en la página 1"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:80
 msgid "H justification"
-msgstr ""
+msgstr "Justificación H"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:99
 msgid "V justification"
-msgstr ""
+msgstr "Justificación V"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:124
 msgid "Text Width (mm)"
-msgstr ""
+msgstr "Ancho de texto (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:137
 msgid "Text Height (mm)"
-msgstr ""
+msgstr "Alto de texto (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:150
 msgid "Constraints:"
-msgstr ""
+msgstr "Limitaciones:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Max Size X (mm)"
-msgstr ""
+msgstr "X máx (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:173
 msgid "Max Size Y (mm)"
-msgstr ""
+msgstr "Y máx (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:199
 msgid "Comment"
-msgstr ""
+msgstr "Comentario"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
 #: pcbnew/class_pcb_text.cpp:151 pcbnew/class_text_mod.cpp:398
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:64
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 msgid "Thickness"
-msgstr ""
+msgstr "Grosor"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:335
 msgid "Set to 0 to use default"
-msgstr ""
+msgstr "0 asigna el valor por defecto"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:365
 msgid "Bitmap PPI"
-msgstr ""
+msgstr "PPI del mapa de bits"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:378
 msgid "Repeat parameters:"
-msgstr ""
+msgstr "Parámetros de repetición:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:388
 msgid "Repeat count"
-msgstr ""
+msgstr "Número de repeticiones"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 msgid "Text Increment"
-msgstr ""
+msgstr "Incremento del texto"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:419
 msgid "Step X (mm)"
-msgstr ""
+msgstr "Paso X (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:432
 msgid "Step Y (mm)"
-msgstr ""
+msgstr "Paso Y (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:449
 msgid "Item Properties"
-msgstr ""
+msgstr "Propiedades del elemento"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:458
 msgid "Default Values:"
-msgstr ""
+msgstr "Valores por defecto:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:468
 msgid "Text Size X (mm)"
-msgstr ""
+msgstr "Tamaño X del texto (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:481
 msgid "Text Size Y (mm)"
-msgstr ""
+msgstr "Tamaño Y del texto (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:500
 msgid "Line Thickness (mm)"
-msgstr ""
+msgstr "Grosor de línea (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:513
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:53
 msgid "Text Thickness"
-msgstr ""
+msgstr "Grosor del texto"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Set to Default"
-msgstr ""
+msgstr "Aplicar valores por defecto"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:538
 msgid "Page Margins"
-msgstr ""
+msgstr "Márgenes de la página"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:548
 msgid "Left Margin (mm)"
-msgstr ""
+msgstr "Margen izquierdo (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:561
 msgid "Right Margin (mm)"
-msgstr ""
+msgstr "Margen derecho (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:580
 msgid "Top Margin (mm)"
-msgstr ""
+msgstr "Margen superior (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:593
 msgid "Bottom Margin (mm)"
-msgstr ""
+msgstr "Margen inferior (mm)"
 
 #: pagelayout_editor/files.cpp:46
 msgid "Page Layout Description File"
-msgstr ""
+msgstr "Archivo de descripción de diseño de página"
 
 #: pagelayout_editor/files.cpp:51 pagelayout_editor/files.cpp:85
 msgid ""
 "The current page layout has been modified.\n"
 "Do you wish to discard the changes?"
 msgstr ""
+"Se ha modificado el diseño de página.\n"
+"¿Desea descartar los cambios?"
 
 #: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:154
 #, c-format
 msgid "File <%s> loaded"
-msgstr ""
+msgstr "Se ha abierto el archivo <%s>"
 
 #: pagelayout_editor/files.cpp:111 pagelayout_editor/onrightclick.cpp:52
 msgid "Append Page Layout Descr File"
-msgstr ""
+msgstr "Añadir archivo de descripción de diseño de página"
 
 #: pagelayout_editor/files.cpp:122 pagelayout_editor/files.cpp:148
 #, c-format
 msgid "Unable to load %s file"
-msgstr ""
+msgstr "No se ha podido abrir el archivo %s"
 
 #: pagelayout_editor/files.cpp:130
 #, c-format
 msgid "File <%s> inserted"
-msgstr ""
+msgstr "Se ha insertado el archivo <%s>"
 
 #: pagelayout_editor/files.cpp:138
 msgid "Open file"
-msgstr ""
+msgstr "Abrir archivo"
 
 #: pagelayout_editor/files.cpp:163
 #, c-format
 msgid "Unable to write <%s>"
-msgstr ""
+msgstr "No se puede escribir <%s>"
 
 #: pagelayout_editor/files.cpp:168 pagelayout_editor/files.cpp:200
 #, c-format
 msgid "File <%s> written"
-msgstr ""
+msgstr "Se ha escrito el archivo <%s>"
 
 #: pagelayout_editor/files.cpp:175 pagelayout_editor/pl_editor_frame.cpp:243
 msgid "Create file"
-msgstr ""
+msgstr "Crear archivo"
 
 #: pagelayout_editor/files.cpp:194 pagelayout_editor/pl_editor_frame.cpp:255
 #: pcbnew/exporters/export_gencad.cpp:267
@@ -10078,110 +10112,110 @@ msgstr "Imposible crear <%s>"
 
 #: pagelayout_editor/menubar.cpp:62
 msgid "&New Page Layout Design"
-msgstr ""
+msgstr "&Nuevo diseño de página"
 
 #: pagelayout_editor/menubar.cpp:65
 msgid "Load Page Layout &File"
-msgstr ""
+msgstr "Abrir archivo de &diseño de página"
 
 #: pagelayout_editor/menubar.cpp:68
 msgid "Load &Default Page Layout"
-msgstr ""
+msgstr "Abrir diseño de página por &defecto"
 
 #: pagelayout_editor/menubar.cpp:85
 msgid "Open &Recent Page Layout File"
-msgstr ""
+msgstr "Abrir diseño de página &reciente"
 
 #: pagelayout_editor/menubar.cpp:91
 msgid "&Save Page Layout Design"
-msgstr ""
+msgstr "Guardar di&seño de página"
 
 #: pagelayout_editor/menubar.cpp:96
 msgid "Save Page Layout Design &As"
-msgstr ""
+msgstr "Gu&ardar diseño de página como"
 
 #: pagelayout_editor/menubar.cpp:103
 msgid "Print Pre&view"
-msgstr ""
+msgstr "&Vista previa de impresión"
 
 #: pagelayout_editor/menubar.cpp:112
 msgid "&Close Page Layout Editor"
-msgstr ""
+msgstr "&Cerrar editor de diseño de página"
 
 #: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:58
 msgid "&BackGround Black"
-msgstr ""
+msgstr "Fondo &negro"
 
 #: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:59
 msgid "&BackGround White"
-msgstr ""
+msgstr "Fondo &blanco"
 
 #: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:66
 msgid "Hide &Grid"
-msgstr ""
+msgstr "Ocultar &cuadrícula"
 
 #: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:67
 msgid "Show &Grid"
-msgstr ""
+msgstr "Mostrar cuadrícula"
 
 #: pagelayout_editor/menubar.cpp:151
 msgid "Page Layout Editor &Manual"
-msgstr ""
+msgstr "&Manual del editor de diseño de página"
 
 #: pagelayout_editor/menubar.cpp:152
 msgid "Open the Page Layout Editor Manual"
-msgstr ""
+msgstr "Abrir el manual de usuario del editor de diseño de página"
 
 #: pagelayout_editor/onrightclick.cpp:45 pcbnew/muwave_command.cpp:60
 msgid "Add Line"
-msgstr "Añadir Línea"
+msgstr "Añadir línea"
 
 #: pagelayout_editor/onrightclick.cpp:47
 msgid "Add Rectangle"
-msgstr "Añadir Rectángulo"
+msgstr "Añadir rectángulo"
 
 #: pagelayout_editor/onrightclick.cpp:49 pcbnew/tool_modedit.cpp:179
 msgid "Add Text"
-msgstr "Añadir Texto"
+msgstr "Añadir texto"
 
 #: pagelayout_editor/onrightclick.cpp:55
 msgid "Add Bitmap"
-msgstr ""
+msgstr "Añadir mapa de bits"
 
 #: pagelayout_editor/onrightclick.cpp:83
 msgid "Move Start Point"
-msgstr ""
+msgstr "Mover punto inicial"
 
 #: pagelayout_editor/onrightclick.cpp:91
 msgid "Move End Point"
-msgstr ""
+msgstr "Mover punto final"
 
 #: pagelayout_editor/onrightclick.cpp:97
 #: pcbnew/dialogs/dialog_move_exact_base.h:69
 msgid "Move Item"
-msgstr ""
+msgstr "Mover elemento"
 
 #: pagelayout_editor/onrightclick.cpp:111
 msgid "Place Item"
-msgstr ""
+msgstr "Colocar elemento"
 
 #: pagelayout_editor/page_layout_writer.cpp:103
 #: pagelayout_editor/page_layout_writer.cpp:130
 msgid "Error writing page layout descr file"
-msgstr ""
+msgstr "Error al escribir el archivo de descripción de diseño de página"
 
 #: pagelayout_editor/pl_editor.cpp:149
 msgid "pl_editor is already running. Continue?"
-msgstr ""
+msgstr "El editor de diseño de página ya ha sido abierto. ¿Continuar?"
 
 #: pagelayout_editor/pl_editor.cpp:186
 #, c-format
 msgid "Error when loading file <%s>"
-msgstr ""
+msgstr "Error al abrir el archivo <%s>"
 
 #: pagelayout_editor/pl_editor_frame.cpp:114
 msgid "coord origin: Right Bottom page corner"
-msgstr ""
+msgstr "origen de coordenadas: esquina inferior izquierda"
 
 #: pagelayout_editor/pl_editor_frame.cpp:139
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:302
@@ -10191,16 +10225,16 @@ msgstr "Propiedades"
 
 #: pagelayout_editor/pl_editor_frame.cpp:146
 msgid "Design"
-msgstr ""
+msgstr "Diseño"
 
 #: pagelayout_editor/pl_editor_frame.cpp:200
 #, c-format
 msgid "Error when loading file '%s'"
-msgstr ""
+msgstr "Error al abrir el archivo '%s'"
 
 #: pagelayout_editor/pl_editor_frame.cpp:222
 msgid "Save changes in a new file before closing?"
-msgstr ""
+msgstr "¿Guardar los cambios en un archivo nuevo antes de cerrar?"
 
 #: pagelayout_editor/pl_editor_frame.cpp:224
 #, c-format
@@ -10209,41 +10243,45 @@ msgid ""
 "<%s>\n"
 "before closing?"
 msgstr ""
+"¿Guardar los cambios en\n"
+"<%s>\n"
+"antes de cerrar?"
 
 #: pagelayout_editor/pl_editor_frame.cpp:456
 #, c-format
 msgid "Page size: width %.4g height %.4g"
-msgstr ""
+msgstr "Tamaño de página: ancho %.4g alto %.4g"
 
 #: pagelayout_editor/pl_editor_frame.cpp:501
 #, c-format
 msgid "coord origin: %s"
-msgstr ""
+msgstr "origen de coordenadas: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:731
 msgid "(start or end point)"
-msgstr ""
+msgstr "(punto inicial o final)"
 
 #: pagelayout_editor/pl_editor_frame.cpp:735
 msgid "(start point)"
-msgstr ""
+msgstr "(punto inicial)"
 
 #: pagelayout_editor/pl_editor_frame.cpp:738
 msgid "(end point)"
-msgstr ""
+msgstr "(punto final)"
 
 #: pagelayout_editor/pl_editor_frame.cpp:747 pcbnew/controle.cpp:231
 #: pcbnew/modedit.cpp:130
 msgid "Selection Clarification"
-msgstr "Afinar selección"
+msgstr "Esclarecer selección"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:51
 msgid "New page layout design"
-msgstr ""
+msgstr "Nuevo diseño de página"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:54
 msgid "Load a page layout file. Previous data will be deleted"
 msgstr ""
+"Cargar un archivo de diseño de página. La información anterior se eliminará"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:57
 msgid "Save page layout design"
@@ -11781,7 +11819,7 @@ msgstr ""
 
 #: pcbnew/class_drc_item.cpp:43
 msgid "Unconnected pads"
-msgstr "Isletas no conectadas"
+msgstr "Pads no conectadas"
 
 #: pcbnew/class_drc_item.cpp:45
 msgid "Track near thru-hole"
@@ -11789,7 +11827,7 @@ msgstr "Pista cerca de agujero"
 
 #: pcbnew/class_drc_item.cpp:47
 msgid "Track near pad"
-msgstr "Pista cerca de Isleta"
+msgstr "Pista cerca de pad"
 
 #: pcbnew/class_drc_item.cpp:49
 msgid "Track near via"
@@ -11817,7 +11855,7 @@ msgstr "Pistas cruzándose"
 
 #: pcbnew/class_drc_item.cpp:69
 msgid "Pad near pad"
-msgstr "Isleta cerca de Isleta"
+msgstr "Pad cerca de pad"
 
 #: pcbnew/class_drc_item.cpp:71
 msgid "Via hole > diameter"
@@ -12011,7 +12049,7 @@ msgstr ""
 
 #: pcbnew/class_pad.cpp:633
 msgid "Pad"
-msgstr "Isleta"
+msgstr "Pad"
 
 #: pcbnew/class_pad.cpp:636 pcbnew/dialogs/dialog_design_rules.cpp:53
 msgid "Net"
@@ -12681,7 +12719,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:23
 msgid "remove vias on pads with a through hole"
-msgstr "borrar vias en isletas through hole"
+msgstr "borrar vias en pads through hole"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:27
 msgid "&Merge overlapping segments"
@@ -13687,7 +13725,7 @@ msgstr "Lista No Conectados"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
 msgid "List unconnected pads or tracks"
-msgstr "Listar isletas o pistas no conectadas"
+msgstr "Listar pads o pistas no conectadas"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:135
 msgid "Delete All Markers"
@@ -14817,7 +14855,7 @@ msgstr "Al crear Pistas"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:148
 msgid "Magnetic Pads"
-msgstr "Isletas Magnéticas"
+msgstr "Pads magnéticos"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:150
 msgid ""
@@ -15055,7 +15093,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:23
 msgid "Pad Filter :"
-msgstr "Filtro Isletas :"
+msgstr "Filtro pads :"
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:25
 msgid "Do not modify pads having a different shape"
@@ -17211,7 +17249,7 @@ msgstr "Taladro real"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:108
 msgid "Pads Drill Opt"
-msgstr "Taladrado de Isletas"
+msgstr "Taladrado de pads"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:126
 msgid "1 Page per Layer"
@@ -19444,19 +19482,19 @@ msgstr ""
 
 #: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:943
 msgid "Move Pad"
-msgstr "Mover Isleta"
+msgstr "Mover pad"
 
 #: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:948
 msgid "Edit Pad"
-msgstr "Editar Isleta"
+msgstr "Editar pad"
 
 #: pcbnew/modedit_onclick.cpp:315
 msgid "New Pad Settings"
-msgstr "Nuevas Caract. Isletas"
+msgstr "Nuevas caract. pads"
 
 #: pcbnew/modedit_onclick.cpp:317
 msgid "Export Pad Settings"
-msgstr "Exportar Caract. Isletas"
+msgstr "Exportar caract. pads"
 
 #: pcbnew/modedit_onclick.cpp:318
 msgid "Delete Pad"
@@ -19476,7 +19514,7 @@ msgstr ""
 
 #: pcbnew/modedit_onclick.cpp:335
 msgid "Global Pad Settings"
-msgstr "Edición Global de las Isletas"
+msgstr "Edición global de los pads"
 
 #: pcbnew/modedit_onclick.cpp:362
 msgid "Duplicate Text"
@@ -19853,7 +19891,7 @@ msgstr "Borrar Mira de centrado"
 
 #: pcbnew/onrightclick.cpp:354
 msgid "Get and Move Footprint"
-msgstr "Mover módulo (silueta)"
+msgstr "Mover módulo (huella)"
 
 #: pcbnew/onrightclick.cpp:367
 msgid "Fill or Refill All Zones"
@@ -20147,7 +20185,7 @@ msgstr "Borrar Contorno Zona"
 #: pcbnew/onrightclick.cpp:807 pcbnew/onrightclick.cpp:999
 #: pcbnew/tools/common_actions.cpp:100
 msgid "Move"
-msgstr "Mover Isleta"
+msgstr "Mover pad"
 
 #: pcbnew/onrightclick.cpp:811
 msgid "Drag"
@@ -20764,7 +20802,7 @@ msgstr "El fichero tiene una referencia a un componente inexistente \"%s\""
 #: pcbnew/specctra_import.cpp:545
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr "Una pista o via hace referencia a una isleta inexistente \"%s\""
+msgstr "Una pista o via hace referencia a un pad inexistente \"%s\""
 
 #: pcbnew/swap_layers.cpp:94
 msgid "Swap Layers:"
@@ -20862,15 +20900,15 @@ msgstr "Seleccionar forma del cursor"
 
 #: pcbnew/tool_modedit.cpp:229
 msgid "Show Pads Sketch"
-msgstr "Mostrar Isletas en contorno"
+msgstr "Mostrar pads en modo boceto"
 
 #: pcbnew/tool_modedit.cpp:233
 msgid "Show Texts Sketch"
-msgstr "Visualizar Textos en contorno"
+msgstr "Visualizar texto en modo boceto"
 
 #: pcbnew/tool_modedit.cpp:237
 msgid "Show Edges Sketch"
-msgstr "Visualizar Módulos en contorno"
+msgstr "Visualizar Módulos en modo boceto"
 
 #: pcbnew/tool_modedit.cpp:241 pcbnew/tool_pcb.cpp:390
 msgid "Enable high contrast display mode"
