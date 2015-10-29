@@ -510,7 +510,7 @@ if( APPLE )
         MACOSX_PACKAGE_LOCATION Resources
         )
     set( MACOSX_BUNDLE_ICON_FILE pcbnew.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.kicad )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-pcb.kicad )
     set( MACOSX_BUNDLE_NAME pcbnew )
 endif()
 

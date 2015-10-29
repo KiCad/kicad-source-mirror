@@ -18,7 +18,7 @@
     <key>CFBundleExecutable</key>	                <string>kicad</string>
     <key>CFBundleGetInfoString</key>                <string></string>
     <key>CFBundleIconFile</key>	                    <string>kicad.icns</string>
-    <key>CFBundleIdentifier</key>	                <string>org.kicad-eda.kicad</string>
+    <key>CFBundleIdentifier</key>	                <string>org.kicad-pcb.kicad</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
     <key>CFBundleLongVersionString</key>	        <string></string>
     <key>CFBundleName</key>	                        <string>KiCad</string>

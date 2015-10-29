@@ -27,7 +27,7 @@
 	<key>CFBundleIconFile</key>
 	<string>cvpcb.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.kicad-eda.cvpcb</string>
+	<string>org.kicad-pcb.cvpcb</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>

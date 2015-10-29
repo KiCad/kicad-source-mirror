@@ -19,7 +19,7 @@
     <key>CFBundleExecutable</key>                   <string>pl_editor</string>
     <key>CFBundleGetInfoString</key>                <string></string>
     <key>CFBundleIconFile</key>                     <string>pl_editor.icns</string>
-    <key>CFBundleIdentifier</key>                   <string>org.kicad-eda.pl_editor</string>
+    <key>CFBundleIdentifier</key>                   <string>org.kicad-pcb.pl_editor</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
     <key>CFBundleLongVersionString</key>            <string></string>
     <key>CFBundleName</key>                         <string>pl_editor</string>

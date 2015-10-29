@@ -13,7 +13,7 @@
 	<key>CFBundleIconFile</key>
 	<string>bitmap2component.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.kicad-eda.bitmap2component</string>
+	<string>org.kicad-pcb.bitmap2component</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
