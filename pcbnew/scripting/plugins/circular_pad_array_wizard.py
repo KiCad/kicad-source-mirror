@@ -47,10 +47,8 @@ class circular_pad_array_wizard(HFPW.HelpfulFootprintWizardPlugin):
         self.CheckParamBool("Pads", "*number clockwise")
 
     def GetValue(self):
-        return "A"
-
-    def GetReference(self):
-        return ""
+        pins = self.parameters["Pads"]["*n"]
+        return "CPA_%d" % pins
 
     def BuildThisFootprint(self):
 
@@ -72,6 +70,16 @@ class circular_pad_array_wizard(HFPW.HelpfulFootprintWizardPlugin):
         array.SetFirstPadInArray(prm["*first pad number"])
 
         array.AddPadsToModule(self.draw)
+
+        body_radius = (prm['circle diameter'] + prm['pad width'])/2 + self.draw.GetLineTickness()
+        self.draw.Circle(0, 0, body_radius)
+
+        text_size = self.GetTextSize()  # IPC nominal
+        thickness = self.GetTextThickness()
+        textposy = body_radius + self.draw.GetLineTickness()/2 + self.GetTextSize()/2 + thickness
+        self.draw.Value( 0, textposy, text_size )
+        self.draw.Reference( 0, -textposy, text_size )
+
 
 
 circular_pad_array_wizard().register()

@@ -16,7 +16,7 @@
 
 from __future__ import division
 import pcbnew
-
+import FootprintWizardDrawingAids as FpWDA
 import HelpfulFootprintWizardPlugin as HFPW
 
 
@@ -27,9 +27,6 @@ class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
 
     def GetDescription(self):
         return "FPC (SMT connector) Footprint Wizard"
-
-    def GetReferencePrefix(self):
-        return "J"
 
     def GetValue(self):
         pins = self.parameters["Pads"]["*n"]
@@ -77,13 +74,14 @@ class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
         offsetX         = pad_pitch * ( pad_count-1 ) / 2
         size_pad = pcbnew.wxSize( pad_width, pad_height )
         size_shld = pcbnew.wxSize(shl_width, shl_height)
-        size_text = pcbnew.FromMM( 0.8 )
+        size_text = self.GetTextSize()  # IPC nominal
 
-        textposy = pad_height/2 + pcbnew.FromMM(1)
-        self.draw.Value( 0, textposy, size_text )
-
-        textposy = textposy + pcbnew.FromMM( 1.2 )
+        # Gives a position and size to ref and value texts:
+        textposy = pad_height/2 + pcbnew.FromMM(1) + self.GetTextThickness()
         self.draw.Reference( 0, textposy, size_text )
+
+        textposy = textposy + size_text + self.GetTextThickness()
+        self.draw.Value( 0, textposy, size_text )
 
         # create a pad array and add it to the module
         for n in range ( 0, pad_count ):
@@ -103,74 +101,56 @@ class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
         self.module.Add(pad_s0)
         self.module.Add(pad_s1)
 
-        #add outline
-        outline = pcbnew.EDGE_MODULE(self.module)
-        linewidth = pcbnew.FromMM(0.2)
-        outline.SetWidth(linewidth)
-        margin = pcbnew.FromMM(0.2)
+        # add footprint outline
+        linewidth = self.draw.GetLineTickness()
+        margin = linewidth
 
         # upper line
         posy = -pad_height/2 - linewidth/2 - margin
         xstart = - pad_pitch*0.5-offsetX
         xend = pad_pitch * pad_count + xstart;
-        outline.SetStartEnd( pcbnew.wxPoint(xstart, posy), pcbnew.wxPoint( xend, posy) )
-        outline.SetLayer(pcbnew.F_SilkS)               #default: not needed
-        outline.SetShape(pcbnew.S_SEGMENT)
-        self.module.Add(outline)
+        self.draw.Line( xstart, posy, xend, posy )
 
         # lower line
-        outline1 = outline.Duplicate()      #copy all settings from outline
         posy = pad_height/2 + linewidth/2 + margin
-        outline1.SetStartEnd(pcbnew.wxPoint(xstart, posy), pcbnew.wxPoint( xend, posy))
-        self.module.Add(outline1)
+        self.draw.Line(xstart, posy, xend, posy)
 
         # around left mechanical pad (the outline around right pad is mirrored/y axix)
-        outline2 = outline.Duplicate()  # vertical segment
         yend = pad_s0_pos.y + shl_height/2 + margin
-        outline2.SetStartEnd(pcbnew.wxPoint(xstart, posy), pcbnew.wxPoint( xstart, yend))
-        self.module.Add(outline2)
-        outline2_d = pcbnew.EDGE_MODULE(self.module)  # right pad side
-        outline2_d.Copy(outline2)
-        outline2_d.SetStartEnd(pcbnew.wxPoint(-xstart, posy), pcbnew.wxPoint( -xstart, yend))
-        self.module.Add(outline2_d)
+        self.draw.Line(xstart, posy, xstart, yend)
+        self.draw.Line(-xstart, posy, -xstart, yend)
 
-        outline3 = outline.Duplicate()  # horizontal segment below the pad
         posy = yend
         xend = pad_s0_pos.x - (shl_width/2 + linewidth + margin*2)
-        outline3.SetStartEnd(pcbnew.wxPoint(xstart, posy), pcbnew.wxPoint( xend, posy))
-        self.module.Add(outline3)
-        outline3_d = pcbnew.EDGE_MODULE(self.module)  # right pad side
-        outline3_d.Copy(outline3)
-        outline3_d.SetStartEnd(pcbnew.wxPoint(-xstart, posy), pcbnew.wxPoint( -xend, yend))
-        self.module.Add(outline3_d)
+        self.draw.Line(xstart, posy, xend, posy)
 
-        outline4 = outline.Duplicate()  # vertical segment at left of the pad
+        # right pad side
+        self.draw.Line(-xstart, posy, -xend, yend)
+
+        # vertical segment at left of the pad
         xstart = xend
         yend = posy - (shl_height + linewidth + margin*2)
-        outline4.SetStartEnd(pcbnew.wxPoint(xstart, posy), pcbnew.wxPoint( xend, yend))
-        self.module.Add(outline4)
-        outline4_d = outline.Duplicate()  # right pad side
-        outline4_d.SetStartEnd(pcbnew.wxPoint(-xstart, posy), pcbnew.wxPoint( -xend, yend))
-        self.module.Add(outline4_d)
+        self.draw.Line(xstart, posy, xend, yend)
 
-        outline5 = outline.Duplicate()  # horizontal segment above the pad
+        # right pad side
+        self.draw.Line(-xstart, posy, -xend, yend)
+
+        # horizontal segment above the pad
         xstart = xend
         xend = - pad_pitch*0.5-offsetX
         posy = yend
-        outline5.SetStartEnd(pcbnew.wxPoint(xstart, posy), pcbnew.wxPoint( xend, yend))
-        self.module.Add(outline5)
-        outline5_d = outline.Duplicate()  # right pad side
-        outline5_d.SetStartEnd(pcbnew.wxPoint(-xstart, posy), pcbnew.wxPoint( -xend, yend))
-        self.module.Add(outline5_d)
+        self.draw.Line(xstart, posy, xend, yend)
 
-        outline6 = outline.Duplicate()  # vertical segment above the pad
+        # right pad side
+        self.draw.Line(-xstart, posy,-xend, yend)
+
+        # vertical segment above the pad
         xstart = xend
         yend = -pad_height/2 - linewidth/2 - margin
-        outline6.SetStartEnd(pcbnew.wxPoint(xstart, posy), pcbnew.wxPoint( xend, yend))
-        self.module.Add(outline6)
-        outline6_d = outline.Duplicate()  # right pad side
-        outline6_d.SetStartEnd(pcbnew.wxPoint(-xstart, posy), pcbnew.wxPoint( -xend, yend))
-        self.module.Add(outline6_d)
+        self.draw.Line(xstart, posy, xend, yend)
+
+        # right pad side
+        self.draw.Line(-xstart, posy, -xend, yend)
 
 
 FPC_FootprintWizard().register()

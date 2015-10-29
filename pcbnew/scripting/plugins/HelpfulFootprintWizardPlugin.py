@@ -184,7 +184,7 @@ class FootprintWizardParameterManager:
             return
 
         if max_value is not None and (
-                self.parameters[section][param] > min_value):
+                self.parameters[section][param] > max_value):
             self.parameter_errors[section][param] = (
                 "Must be less than or equal to %d" % (max_value))
             return
@@ -241,8 +241,9 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
     def GetValue(self):
         raise NotImplementedError
 
+    # this value come from our KiCad Library Convention 0.11
     def GetReferencePrefix(self):
-        return "U"  # footprints needing wizards of often ICs
+        return "REF"
 
     def GetImage(self):
         return ""
@@ -258,7 +259,7 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         Thicker than IPC guidelines (10% of text height = 0.12mm)
         as 5 wires/mm is a common silk screen limitation
         """
-        return pcbnew.FromMM(0.2)
+        return pcbnew.FromMM(0.15)
 
     def SetModule3DModel(self):
         """

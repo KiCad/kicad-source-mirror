@@ -33,14 +33,13 @@ class RowedGridArray(PA.PadGridArray):
 class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
 
     def GenerateParameterList(self):
-
         # defaults for a DIP package
         self.AddParam("Pads", "n", self.uNatural, 24)
         self.AddParam("Pads", "silk screen inside", self.uBool, False)
         self.AddParam("Pads", "row count", self.uNatural, 2)
 
     def CheckParameters(self):
-        self.CheckParamInt("Pads", "*row count")
+        self.CheckParamInt("Pads", "*row count", min_value=1, max_value=2)
         self.CheckParamInt(
             "Pads", "*n",
             is_multiple_of=self.parameters["Pads"]["*row count"])
@@ -49,11 +48,8 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         self.CheckParamBool("Pads", "*silk screen inside")
 
     def BuildThisFootprint(self):
-
         pads = self.parameters["Pads"]
-
         num_pads = pads["*n"]
-
         pad_length = pads["pad length"]
         pad_width = pads["pad width"]
         row_pitch = pads["row spacing"]
@@ -61,7 +57,6 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         num_rows = pads["*row count"]
 
         pads_per_row = num_pads // num_rows
-
         row_length = pad_pitch * (pads_per_row - 1)  # fenceposts
 
         # add in the pads
@@ -92,7 +87,7 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         self.DrawBox(ssx, ssy)
 
         #reference and value
-        text_size = pcbnew.FromMM(1.2)  # IPC nominal
+        text_size = self.GetTextSize()  # IPC nominal
 
         self.draw.Value(0, - ssy - text_size, text_size)
         self.draw.Reference(0, ssy + text_size, text_size)
@@ -118,15 +113,12 @@ class SDIPWizard(RowedFootprint):
         self.AddParam("Pads", "outline y margin", self.uMM, 1)
 
     def GetValue(self):
-
         rows = self.parameters["Pads"]["*row count"]
 
         if rows == 1:
             name = "SIP"
-        elif rows == 2:
+        else:
             name = "DIP"
-        else:  # triple and up aren't really a thing, but call it something!
-            name = "xIP"
 
         return "%s-%d" % (name, self.parameters["Pads"]["*n"])
 

@@ -26,7 +26,7 @@ class FootprintWizardDrawingAids:
     footprint wizards
 
     A "drawing context" is provided which can be used to set and retain
-    settings such as line width and layer
+    settings such as line tickness and layer
     """
 
     # directions (in degrees, compass-like)
@@ -47,12 +47,21 @@ class FootprintWizardDrawingAids:
 
     xfrmIDENTITY = [1, 0, 0, 0, 1, 0]  # no transform
 
+    # these values come from our KiCad Library Convention 0.11
+    defaultLineThickness = pcbnew.FromMM(0.15)
+
+    def DefaultGraphicLayer(self):
+        return pcbnew.F_SilkS
+
+    def DefaultTextValueLayer(self):
+        return pcbnew.F_Fab
+
     def __init__(self, module):
         self.module = module
         # drawing context defaults
         self.dc = {
-            'layer': pcbnew.F_SilkS,
-            'width': pcbnew.FromMM(0.2),
+            'layer': self.DefaultGraphicLayer(),
+            'lineThickness': self.defaultLineThickness,
             'transforms': [],
             'transform': self.xfrmIDENTITY
         }
@@ -231,18 +240,18 @@ class FootprintWizardDrawingAids:
         return pcbnew.wxPoint(x * mat[0] + y * mat[1] + mat[2],
                               x * mat[3] + y * mat[4] + mat[5])
 
-    def SetWidth(self, width):
+    def SetLineTickness(self, lineThickness):
         """
-        Set the current pen width used for subsequent drawing
+        Set the current pen lineThickness used for subsequent drawing
         operations
         """
-        self.dc['width'] = width
+        self.dc['lineThickness'] = lineThickness
 
-    def GetWidth(self):
+    def GetLineTickness(self):
         """
-        Get the current drawing context width
+        Get the current drawing context line tickness
         """
-        return self.dc['width']
+        return self.dc['lineThickness']
 
     def SetLayer(self, layer):
         """
@@ -251,14 +260,19 @@ class FootprintWizardDrawingAids:
         """
         self.dc['layer'] = layer
 
+    def GetLayer(self):
+        """
+        return the current drawing layer, used drawing operations
+        """
+        return self.dc['layer']
+
     def Line(self, x1, y1, x2, y2):
         """
         Draw a line from (x1, y1) to (x2, y2)
         """
-
         outline = pcbnew.EDGE_MODULE(self.module)
-        outline.SetWidth(self.dc['width'])
-        outline.SetLayer(self.dc['layer'])
+        outline.SetWidth(self.GetLineTickness())
+        outline.SetLayer(self.GetLayer())
         outline.SetShape(pcbnew.S_SEGMENT)
         start = self.TransformPoint(x1, y1)
         end = self.TransformPoint(x2, y2)
@@ -268,8 +282,7 @@ class FootprintWizardDrawingAids:
     def Circle(self, x, y, r, filled=False):
         """
         Draw a circle at (x,y) of radius r
-
-        If filled is true, the width and radius of the line will be set
+        If filled is true, the thickness and radius of the line will be set
         such that the circle appears filled
         """
         circle = pcbnew.EDGE_MODULE(self.module)
@@ -279,7 +292,7 @@ class FootprintWizardDrawingAids:
             circle.SetWidth(r)
             end = self.TransformPoint(x, y + r/2)
         else:
-            circle.SetWidth(self.dc['width'])
+            circle.SetWidth(self.dc['lineThickness'])
             end = self.TransformPoint(x, y + r)
 
         circle.SetLayer(self.dc['layer'])
@@ -297,7 +310,7 @@ class FootprintWizardDrawingAids:
         circular arc (eg a horzontal scale)
         """
         circle = pcbnew.EDGE_MODULE(self.module)
-        circle.SetWidth(self.dc['width'])
+        circle.SetWidth(self.dc['lineThickness'])
 
         center = self.TransformPoint(cx, cy)
         start = self.TransformPoint(sx, sy)
@@ -379,6 +392,7 @@ class FootprintWizardDrawingAids:
         self.module.Value().SetPos0(self.TransformPoint(x, y))
         self.module.Value().SetTextPosition(self.module.Value().GetPos0())
         self.module.Value().SetSize(text_size)
+        self.module.Value().SetLayer(self.DefaultTextValueLayer())
 
     def Box(self, x, y, w, h):
         """

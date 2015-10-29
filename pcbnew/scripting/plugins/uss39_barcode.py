@@ -97,7 +97,7 @@ class Uss39Wizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
 
     def __drawSpace__(self, bit, x):
         self.draw.SetLayer(B.F_SilkS)
-        self.draw.SetWidth(self.X)
+        self.draw.SetLineTickness(self.X)
         self.draw.Line(x, 0, x, self.H)
         if (bit == 1):
             self.draw.Line(x + self.X, 0, x + self.X, self.H)
@@ -122,7 +122,7 @@ class Uss39Wizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
 
     def drawQuietZone(self, x0, y0, width, height):
         self.draw.SetLayer(B.F_SilkS)
-        self.draw.SetWidth(self.X)
+        self.draw.SetLineTickness(self.X)
 
         for offset in range(0, int(self.Q), int(self.X/2)):
             xoffset = offset + self.X
@@ -139,7 +139,7 @@ class Uss39Wizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.drawQuietZone(0, 0, x, self.H)
         # Draw courtyard origin
         self.draw.SetLayer(B.F_CrtYd)
-        self.draw.SetWidth(self.CourtyardLineWidth)
+        self.draw.SetLineTickness(self.CourtyardLineWidth)
         ch_lim = B.FromMM(0.35)
         self.draw.Line(-ch_lim, 0, ch_lim, 0)
         self.draw.Line(0, -ch_lim, 0, ch_lim)

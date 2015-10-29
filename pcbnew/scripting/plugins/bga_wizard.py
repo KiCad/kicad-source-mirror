@@ -38,7 +38,6 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         return "Ball Grid Array Footprint Wizard"
 
     def GenerateParameterList(self):
-
         self.AddParam("Pads", "pad pitch", self.uMM, 1)
         self.AddParam("Pads", "pad size", self.uMM, 0.5)
         self.AddParam("Pads", "row count", self.uNatural, 5)
@@ -47,19 +46,14 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         self.AddParam("Pads", "outline y margin", self.uMM, 1)
 
     def CheckParameters(self):
-
         self.CheckParamInt("Pads", "*row count")
         self.CheckParamInt("Pads", "*column count")
 
     def GetValue(self):
-
         pins = (self.parameters["Pads"]["*row count"]
                 * self.parameters["Pads"]["*column count"])
 
         return "BGA_%d" % pins
-
-    def GetReferencePrefix(self):
-        return "U"
 
     def BuildThisFootprint(self):
 
@@ -90,10 +84,10 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
                                           pads["outline x margin"])
 
         #reference and value
-        text_size = pcbnew.FromMM(1.2)  # IPC nominal
-
-        self.draw.Value(0, - ssy - text_size, text_size)
-        self.draw.Reference(0, ssy + text_size, text_size)
+        text_size = self.GetTextSize()  # IPC nominal
+        ypos = ssy + text_size
+        self.draw.Value(0, ypos, text_size)
+        self.draw.Reference(0, -ypos, text_size)
 
 
 BGAWizard().register()

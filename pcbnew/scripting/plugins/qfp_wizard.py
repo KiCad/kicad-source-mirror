@@ -27,7 +27,7 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         return "QFP"
 
     def GetDescription(self):
-        return "QFP Footprint Wizard"
+        return "Quad Flat Package footprint wizard"
 
     def GenerateParameterList(self):
         self.AddParam("Pads", "n", self.uNatural, 100)
@@ -108,11 +108,10 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.draw.Polyline([(inner, lim_y), (lim_x, lim_y), (lim_x, inner)])
 
         #reference and value
-        text_size = pcbnew.FromMM(1.2)  # IPC nominal
-
+        text_size = self.GetTextSize()  # IPC nominal
         text_offset = v_pitch / 2 + text_size + pad_length / 2
 
-        self.draw.Value(0, -text_offset, text_size)
-        self.draw.Reference(0, text_offset, text_size)
+        self.draw.Value(0, text_offset, text_size)
+        self.draw.Reference(0, -text_offset, text_size)
 
 QFPWizard().register()

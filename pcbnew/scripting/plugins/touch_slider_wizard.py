@@ -24,74 +24,76 @@
 #
 
 from pcbnew import *
+import HelpfulFootprintWizardPlugin as HFPW
 
-class TouchSliderWizard(FootprintWizardPlugin):
-    def __init__(self):
-        FootprintWizardPlugin.__init__(self)
-        self.name = "Touch Slider"
-        self.description = "Capacitive Touch Slider Wizard"
-        self.parameters = {
-             "Pads":
-                {"*steps":4, # not internal (measurement) units preceded by "*"
-                 "*bands":2,
-                 "width":           FromMM(10),
-                 "length":          FromMM(50),
-                 "clearance":       FromMM(1)
-                }
 
-        }
-        self.ClearErrors()
+class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
+
+    def GetName(self):
+        """
+        Return footprint name.
+        This is specific to each footprint class, you need to implement this
+        """
+        return 'Touch Slider'
+
+    def GetDescription(self):
+        """
+        Return footprint description.
+        This is specific to each footprint class, you need to implement this
+        """
+        return 'Capacitive Touch Slider wizard'
+
+    def GetValue(self):
+        steps = int(self.parameters["Pads"]["*steps"])
+        return "TS"+str(steps)
+
+    def GenerateParameterList(self):
+        self.AddParam("Pads", "steps", self.uNatural, 4)
+        self.AddParam("Pads", "bands", self.uNatural, 2)
+        self.AddParam("Pads", "width", self.uMM, 10)
+        self.AddParam("Pads", "length", self.uMM, 50)
+        self.AddParam("Pads", "clearance", self.uMM, 1)
 
     # build a rectangular pad
     def smdRectPad(self,module,size,pos,name):
-            pad = D_PAD(module)
-            pad.SetSize(size)
-            pad.SetShape(PAD_SHAPE_RECT)
-            pad.SetAttribute(PAD_ATTRIB_SMD)
-            pad.SetLayerSet(pad.ConnSMDMask())
-            pad.SetPos0(pos)
-            pad.SetPosition(pos)
-            pad.SetPadName(name)
-            return pad
+        pad = D_PAD(module)
+        pad.SetSize(size)
+        pad.SetShape(PAD_SHAPE_RECT)
+        pad.SetAttribute(PAD_ATTRIB_SMD)
+        pad.SetLayerSet(pad.ConnSMDMask())
+        pad.SetPos0(pos)
+        pad.SetPosition(pos)
+        pad.SetPadName(name)
+        return pad
 
 
     def smdTrianglePad(self,module,size,pos,name,up_down=1,left_right=0):
-            pad = D_PAD(module)
-            pad.SetSize(wxSize(size[0],size[1]))
-            pad.SetShape(PAD_SHAPE_TRAPEZOID)
-            pad.SetAttribute(PAD_ATTRIB_SMD)
-            pad.SetLayerSet(pad.ConnSMDMask())
-            pad.SetPos0(pos)
-            pad.SetPosition(pos)
-            pad.SetPadName(name)
-            pad.SetDelta(wxSize(left_right*size[1],up_down*size[0]))
-            return pad
+        pad = D_PAD(module)
+        pad.SetSize(wxSize(size[0],size[1]))
+        pad.SetShape(PAD_SHAPE_TRAPEZOID)
+        pad.SetAttribute(PAD_ATTRIB_SMD)
+        pad.SetLayerSet(pad.ConnSMDMask())
+        pad.SetPos0(pos)
+        pad.SetPosition(pos)
+        pad.SetPadName(name)
+        pad.SetDelta(wxSize(left_right*size[1],up_down*size[0]))
+        return pad
 
 
     # This method checks the parameters provided to wizard and set errors
     def CheckParameters(self):
-        p = self.parameters
-        steps            = p["Pads"]["*steps"]
-        errors = ""
-        if (steps<1):
-            self.parameter_errors["Pads"]["*steps"]="Must be positive"
-            errors +="Pads/*steps has wrong value"
-        p["Pads"]["*steps"] = int(pads)  # make sure it stays as int (default is float)
+        prms = self.parameters["Pads"]
+        steps = prms["*steps"]
+        bands = prms["*bands"]
 
-        bands            = p["Pads"]["*bands"]
+        if steps < 1:
+            self.parameter_errors["Pads"]["*steps"]="steps must be positive"
+        if bands < 1:
+            self.parameter_errors["Pads"]["*bands"]="bands must be positive"
 
-        if (bands<1):
-            self.parameter_errors["Pads"]["*bands"]="Must be positive"
-            errors +="Pads/*bands has wrong value"
-        p["Pads"]["*bands"] = int(bands)  # make sure it stays as int (default is float)
-
-
-        touch_width       = p["Pads"]["width"]
-        touch_length      = p["Pads"]["length"]
-        touch_clearance   = p["Pads"]["clearance"]
-
-
-        return errors
+        touch_width       = prms["width"]
+        touch_length      = prms["length"]
+        touch_clearance   = prms["clearance"]
 
     # The start pad is made of a rectangular pad plus a couple of
     # triangular pads facing tips on the middle/right of the first
@@ -173,50 +175,31 @@ class TouchSliderWizard(FootprintWizardPlugin):
         self.AddFinalPad(pos,touch_width,step_length,touch_clearance,str(steps))
 
     # build the footprint from parameters
+    # FIX ME: the X and Y position of the footprint can be better.
     def BuildThisFootprint(self):
-
-        module = MODULE(None) # create a new module
-        self.module = module
-
-        p = self.parameters
-        steps             = int(p["Pads"]["*steps"])
-        bands             = int(p["Pads"]["*bands"])
-        touch_width       = p["Pads"]["width"]
-        touch_length      = p["Pads"]["length"]
-        touch_clearance   = p["Pads"]["clearance"]
+        prm = self.parameters["Pads"]
+        steps             = int(prm["*steps"])
+        bands             = int(prm["*bands"])
+        touch_width       = prm["width"]
+        touch_length      = prm["length"]
+        touch_clearance   = prm["clearance"]
 
         step_length = float(touch_length) / float(steps)
 
-        size_text = wxSize( FromMM( 1), FromMM( 1) );
-        module.SetReference("TS"+str(steps))   # give it a reference name
-        module.Reference().SetPos0(wxPointMM(0,-2))
-        module.Reference().SetTextPosition(module.Reference().GetPos0())
-        module.Reference().SetSize( size_text );
-
-        module.SetValue("Val**")   # give it a value
-        module.Value().SetPos0(wxPointMM(0,-3.2))
-        module.Value().SetTextPosition(module.Value().GetPos0())
-        module.Value().SetSize( size_text );
+        t_size = self.GetTextSize()
+        w_text = self.draw.GetLineTickness()
+        ypos = touch_width/(bands*2) + t_size/2 + w_text
+        self.draw.Value(0, -ypos, t_size)
+        ypos += t_size + w_text*2
+        self.draw.Reference(0, -ypos, t_size)
 
         # starting pad
         pos = wxPointMM(0,0)
         band_width = touch_width/bands
 
         for b in range(bands):
-
             self.AddStrip(pos,steps,band_width,step_length,touch_clearance)
-            pos+=wxPoint(0,band_width)
+            pos += wxPoint(0,band_width)
 
-        fpid = FPID(self.module.GetReference())   #the name in library
-        module.SetFPID( fpid )
-
-def register():
-    # create our footprint wizard
-    touch_slider_wizard = TouchSliderWizard()
-
-    # register it into pcbnew
-    touch_slider_wizard.register()
-
-    return touch_slider_wizard
-
+TouchSliderWizard().register()
 
