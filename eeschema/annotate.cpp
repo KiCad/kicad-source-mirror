@@ -56,6 +56,8 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 
     // Update the references for the sheet that is currently being displayed.
     m_CurrentSheet->UpdateAllScreenReferences();
+    GetCanvas()->Refresh();
+    OnModify();
 }
 
 
