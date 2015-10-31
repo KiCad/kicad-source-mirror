@@ -38,8 +38,9 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.AddParam("Pads", "horizontal pitch", self.uMM, 15)
         self.AddParam("Pads", "oval", self.uBool, True)
 
-        self.AddParam("Pads", "package width", self.uMM, 14)
-        self.AddParam("Pads", "package height", self.uMM, 14)
+        self.AddParam("Package", "package width", self.uMM, 14)
+        self.AddParam("Package", "package height", self.uMM, 14)
+        self.AddParam("Package", "courtyard margin", self.uMM, 1)
 
     def CheckParameters(self):
         self.CheckParamInt("Pads", "*n", is_multiple_of=4)
@@ -64,7 +65,8 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
 
         pad_shape = pcbnew.PAD_SHAPE_OVAL if pads["*oval"] else pcbnew.PAD_SHAPE_RECT
 
-        h_pad = PA.PadMaker(self.module).SMDPad( pad_width, pad_length, shape=pad_shape)
+        h_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width,
+                                                 shape=pad_shape, rot_degree=90.0)
         v_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width, shape=pad_shape)
 
         #left row
@@ -75,8 +77,7 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
 
         #bottom row
         pin1Pos = pcbnew.wxPoint(0, v_pitch / 2)
-        array = PA.PadLineArray(v_pad, pads_per_row, pad_pitch, False,
-                                pin1Pos)
+        array = PA.PadLineArray(v_pad, pads_per_row, pad_pitch, False, pin1Pos)
         array.SetFirstPadInArray(pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
@@ -94,8 +95,8 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         array.SetFirstPadInArray(3*pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
-        lim_x = pads["package width"] / 2
-        lim_y = pads["package height"] / 2
+        lim_x = self.parameters["Package"]["package width"] / 2
+        lim_y = self.parameters["Package"]["package height"] / 2
         inner = (row_len / 2) + pad_pitch
 
         #top left - diagonal
@@ -106,6 +107,13 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.draw.Polyline([(-inner, lim_y), (-lim_x, lim_y), (-lim_x, inner)])
         # bottom right
         self.draw.Polyline([(inner, lim_y), (lim_x, lim_y), (lim_x, inner)])
+
+        # Courtyard
+        cmargin = self.parameters["Package"]["courtyard margin"]
+        self.draw.SetLayer(pcbnew.F_CrtYd)
+        sizex = (lim_x + cmargin) * 2 + pad_length
+        sizey = (lim_y + cmargin) * 2 + pad_length
+        self.draw.Box(0, 0, sizex, sizey)
 
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal

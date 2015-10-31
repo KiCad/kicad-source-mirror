@@ -193,7 +193,7 @@ class FootprintWizardDrawingAids:
     def TransformRotation(self, x, y, rot, push=True):
         """
         Set up and return a transform matrix representing a rotation
-        about the pooint (x,y), and optionally push onto the stack
+        about the point (x,y), and optionally push onto the stack
 
         This is performed by a translate-to-origin, rotate, translate-
         back sequence
@@ -368,7 +368,7 @@ class FootprintWizardDrawingAids:
             _PolyLineInternal(pts)
             self.PopTransform()
 
-    def Reference(self, x, y, size):
+    def Reference(self, x, y, size, orientation_degree = 0):
         """
         Draw the module's reference as the given point.
 
@@ -382,8 +382,9 @@ class FootprintWizardDrawingAids:
         self.module.Reference().SetTextPosition(
             self.module.Reference().GetPos0())
         self.module.Reference().SetSize(text_size)
+        self.module.Reference().SetOrientation(orientation_degree*10)   # internal angles are in 0.1 deg
 
-    def Value(self, x, y, size):
+    def Value(self, x, y, size, orientation_degree = 0):
         """
         As for references, draw the module's value
         """
@@ -393,6 +394,7 @@ class FootprintWizardDrawingAids:
         self.module.Value().SetTextPosition(self.module.Value().GetPos0())
         self.module.Value().SetSize(text_size)
         self.module.Value().SetLayer(self.DefaultTextValueLayer())
+        self.module.Value().SetOrientation(orientation_degree*10)   # internal angles are in 0.1 deg
 
     def Box(self, x, y, w, h):
         """
@@ -408,13 +410,15 @@ class FootprintWizardDrawingAids:
 
         self.Polyline(pts)
 
-    def NotchedCircle(self, x, y, r, notch_w, notch_h):
+    def NotchedCircle(self, x, y, r, notch_w, notch_h, rotate=0):
         """
         Circle radus r centred at (x, y) with a raised or depressed notch
         at the top
-
         Notch height is measured from the top of the circle radius
         """
+
+        self.TransformRotation(x, y, rotate)
+
         # find the angle where the notch vertical meets the circle
         angle_intercept = math.asin(notch_w/(2 * r))
 
@@ -433,11 +437,15 @@ class FootprintWizardDrawingAids:
                [-sx, sy]]
 
         self.Polyline(pts)
+        self.PopTransform()
 
-    def NotchedBox(self, x, y, w, h, notchW, notchH):
+    def NotchedBox(self, x, y, w, h, notchW, notchH, rotate=0):
         """
         Draw a box with a notch in the top edge
         """
+
+        self.TransformRotation(x, y, rotate)
+
         # limit to half the overall width
         notchW = min(x + w/2, notchW)
 
@@ -454,6 +462,8 @@ class FootprintWizardDrawingAids:
             (-notchW/2, y - h/2),
             (x - w/2, y - h/2)
         ])
+
+        self.PopTransform()
 
     def BoxWithDiagonalAtCorner(self, x, y, w, h,
                                 setback=pcbnew.FromMM(1.27), flip=flipNone):

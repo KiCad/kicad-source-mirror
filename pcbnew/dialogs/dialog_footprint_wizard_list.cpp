@@ -53,8 +53,8 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
 
     // Choose selection mode and insert the needed rows
 
-    m_footprintWizardsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-    m_footprintWizardsGrid->InsertRows( 0, n_wizards, true );
+    m_footprintGeneratorsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_footprintGeneratorsGrid->InsertRows( 0, n_wizards, true );
 
     // Put all wizards in the list
     for( int i=0; i<n_wizards; i++ )
@@ -64,14 +64,14 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         wxString description = wizard->GetDescription();
         wxString image = wizard->GetImage();
 
-        m_footprintWizardsGrid->SetCellValue( i, ROW_NAME, name );
-        m_footprintWizardsGrid->SetCellValue( i, ROW_DESCR, description );
+        m_footprintGeneratorsGrid->SetCellValue( i, ROW_NAME, name );
+        m_footprintGeneratorsGrid->SetCellValue( i, ROW_DESCR, description );
 
     }
 
     // Select the first row
-    m_footprintWizardsGrid->ClearSelection();
-    m_footprintWizardsGrid->SelectRow( 0, false );
+    m_footprintGeneratorsGrid->ClearSelection();
+    m_footprintGeneratorsGrid->SelectRow( 0, false );
 
     if( m_config )
     {
@@ -96,11 +96,11 @@ DIALOG_FOOTPRINT_WIZARD_LIST::~DIALOG_FOOTPRINT_WIZARD_LIST()
 
 
 
-void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellWizardClick( wxGridEvent& event )
+void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorClick( wxGridEvent& event )
 {
     int click_row = event.GetRow();
     m_footprintWizard = FOOTPRINT_WIZARDS::GetWizard( click_row );
-    m_footprintWizardsGrid->SelectRow( event.GetRow(), false );
+    m_footprintGeneratorsGrid->SelectRow( event.GetRow(), false );
 }
 
 

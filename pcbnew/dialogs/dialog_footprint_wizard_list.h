@@ -41,7 +41,7 @@ public:
     FOOTPRINT_WIZARD* GetWizard();
 
 private:
-    void OnCellWizardClick( wxGridEvent& event );
+    void OnCellFpGeneratorClick( wxGridEvent& event );
 };
 
 #endif  // _DIALOG_FOOTPRINT_WIZARD_LIST_H_

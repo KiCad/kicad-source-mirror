@@ -1,4 +1,4 @@
-update=18/05/2015 09:09:57
+update=30/10/2015 11:04:44
 version=1
 last_client=kicad
 [pcbnew]
@@ -84,5 +84,6 @@ version=1
 version=1
 LibDir=
 [eeschema/libraries]
-LibName1=carte_test_schlib
-LibName2=power
+LibName1=device
+LibName2=carte_test_schlib
+LibName3=power

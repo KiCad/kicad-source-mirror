@@ -81,9 +81,16 @@ class FootprintWizardParameterManager:
             param = "*%s" % param  # star prefix for natural
 
         if section not in self.parameters:
+            if not hasattr(self, 'page_order'):
+                self.page_order = []
+            self.page_order.append(section)
             self.parameters[section] = {}
+            if not hasattr(self, 'parameter_order'):
+                self.parameter_order = {}
+            self.parameter_order[section] = []
 
         self.parameters[section][param] = val
+        self.parameter_order[section].append(param)
 
         return error
 
@@ -95,7 +102,7 @@ class FootprintWizardParameterManager:
         message = ""
 
         for name, section in self.parameters.iteritems():
-            message += "  %s:" % name
+            message += "  %s:\n" % name
 
             for key, value in section.iteritems():
                 unit = ""

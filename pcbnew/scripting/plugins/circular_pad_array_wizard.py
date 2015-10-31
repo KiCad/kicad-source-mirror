@@ -57,9 +57,7 @@ class circular_pad_array_wizard(HFPW.HelpfulFootprintWizardPlugin):
         pad_size = prm['pad width']
 
         pad = PA.PadMaker(self.module).THPad(
-            prm['pad width'],
-            prm['pad width'],
-            prm['drill'])
+            prm['pad width'], prm['pad width'], prm['drill'])
 
         array = PA.PadCircleArray(
             pad, prm['*n'], prm['circle diameter'] / 2,

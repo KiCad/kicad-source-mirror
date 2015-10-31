@@ -156,6 +156,7 @@ class FilePlugin(KiCadPlugin):
         KiCadPlugin.__init__(self)
 
 
+from math import ceil, floor, sqrt
 
 class FootprintWizardPlugin(KiCadPlugin):
     def __init__(self):
@@ -185,43 +186,45 @@ class FootprintWizardPlugin(KiCadPlugin):
         return len(self.parameters)
 
     def GetParameterPageName(self,page_n):
-        return self.parameters.keys()[page_n]
+        return self.page_order[page_n]
 
     def GetParameterNames(self,page_n):
         name = self.GetParameterPageName(page_n)
-        return self.parameters[name].keys()
+        return self.parameter_order[name]
 
     def GetParameterValues(self,page_n):
         name = self.GetParameterPageName(page_n)
-        values = self.parameters[name].values()
-        return map( lambda x: str(x) , values) # list elements as strings
+        names = self.GetParameterNames(page_n)
+        values = [self.parameters[name][n] for n in names]
+        return map(lambda x: str(x), values)  # list elements as strings
 
     def GetParameterErrors(self,page_n):
         self.CheckParameters()
         name = self.GetParameterPageName(page_n)
-        values = self.parameter_errors[name].values()
-        return map( lambda x: str(x) , values) # list elements as strings
+        names = self.GetParameterNames(page_n)
+        values = [self.parameter_errors[name][n] for n in names]
+        return map(lambda x: str(x), values)  # list elements as strings
 
     def CheckParameters(self):
         return ""
 
-    def TryConvertToFloat(self,value):
-        v = value
+    def ConvertValue(self,v):
         try:
-            v = float(value)
+            v = float(v)
         except:
             pass
-
+        if type(v) is float:
+            if ceil(v) == floor(v):
+                v = int(v)
         return v
+
 
     def SetParameterValues(self,page_n,values):
         name = self.GetParameterPageName(page_n)
-        keys = self.parameters[name].keys()
-        n=0
-        for key in keys:
-            val = self.TryConvertToFloat(values[n])
+        keys = self.GetParameterNames(page_n)
+        for n, key in enumerate(keys):
+            val = self.ConvertValue(values[n])
             self.parameters[name][key] = val
-            n+=1
 
 
     def ClearErrors(self):

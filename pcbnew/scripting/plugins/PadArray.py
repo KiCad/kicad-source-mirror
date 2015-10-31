@@ -32,16 +32,14 @@ class PadMaker:
     def __init__(self, module):
         self.module = module
 
-    def THPad(self, w, l, drill, shape=pcbnew.PAD_SHAPE_OVAL):
+    def THPad(self, Vsize, Hsize, drill, shape=pcbnew.PAD_SHAPE_OVAL, rot_degree = 0):
         pad = pcbnew.D_PAD(self.module)
-
-        pad.SetSize(pcbnew.wxSize(l, w))
-
+        pad.SetSize(pcbnew.wxSize(Hsize, Vsize))
         pad.SetShape(shape)
-
         pad.SetAttribute(pcbnew.PAD_ATTRIB_STANDARD)
         pad.SetLayerSet(pad.StandardMask())
         pad.SetDrillSize(pcbnew.wxSize(drill, drill))
+        pad.SetOrientation(rot_degree*10)   # rotation is in 0.1 degrees
 
         return pad
 
@@ -51,24 +49,20 @@ class PadMaker:
 
     def NPTHRoundPad(self, drill):
         pad = pcbnew.D_PAD(self.module)
-
         pad.SetSize(pcbnew.wxSize(drill, drill))
-
         pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
-
         pad.SetAttribute(pcbnew.PAD_ATTRIB_HOLE_NOT_PLATED)
         pad.SetLayerSet(pad.UnplatedHoleMask())
         pad.SetDrillSize(pcbnew.wxSize(drill, drill))
         return pad
 
-    def SMDPad(self, w, l, shape=pcbnew.PAD_SHAPE_RECT):
+    def SMDPad(self, Vsize, Hsize, shape=pcbnew.PAD_SHAPE_RECT, rot_degree=0):
         pad = pcbnew.D_PAD(self.module)
-        pad.SetSize(pcbnew.wxSize(l, w))
-
+        pad.SetSize(pcbnew.wxSize(Hsize, Vsize))
         pad.SetShape(shape)
-
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.SMDMask())
+        pad.SetOrientation(rot_degree*10)   # rotation is in 0.1 degrees
 
         return pad
 
@@ -100,7 +94,6 @@ class PadArray:
         self.pad.GetParent().Add(pad)
 
     def GetPad(self, is_first_pad, pos):
-
         if (self.firstPad and is_first_pad):
             pad = self.firstPad
         else:
@@ -108,7 +101,6 @@ class PadArray:
 
         # create a new pad with same characteristics
         pad = pad.Duplicate()
-
         pad.SetPos0(pos)
         pad.SetPosition(pos)
 
@@ -167,20 +159,55 @@ class PadGridArray(PadArray):
         pin1posY = self.centre.y - self.py * (self.ny - 1) / 2
 
         for x in range(0, self.nx):
-
             posX = pin1posX + (x * self.px)
 
             for y in range(self.ny):
                 posY = pin1posY + (self.py * y)
-
                 pos = dc.TransformPoint(posX, posY)
-
                 pad = self.GetPad(x == 0 and y == 0, pos)
-
                 pad.SetPadName(self.GetName(x,y))
-
                 self.AddPad(pad)
 
+
+class PadZGridArray(PadArray):
+
+    def __init__(self, pad, pad_count, line_count, line_pitch,
+                 pad_pitch, centre=pcbnew.wxPoint(0, 0)):
+        PadArray.__init__(self)
+        # this pad is more of a "context", we will use it as a source of
+        # pad data, but not actually add it
+        self.pad = pad
+        self.pad_count = int(pad_count)
+        self.line_count = int(line_count)
+        self.line_pitch = line_pitch
+        self.pad_pitch = pad_pitch
+        self.centre = centre
+
+
+    # right to left, top to bottom
+    def NamingFunction(self, pad_pos):
+        return self.firstPadNum + pad_pos
+
+    #relocate the pad and add it as many times as we need
+    def AddPadsToModule(self, dc):
+
+        pin1posX = self.centre.x - self.pad_pitch * (self.pad_count - 1) / 2
+        pin1posY = self.centre.y + self.line_pitch * (self.line_count - 1) / 2
+        line = 0
+
+        for padnum in range(0, self.pad_count):
+            posX = pin1posX + (padnum * self.pad_pitch)
+            posY = pin1posY - (self.line_pitch * line)
+
+            pos = dc.TransformPoint(posX, posY)
+            pad = self.GetPad(padnum == 0, pos)
+            pad.SetPadName(self.GetName(padnum))
+            self.AddPad(pad)
+
+            line += 1
+
+            if line >= self.line_count:
+                line = 0
 
 class PadLineArray(PadGridArray):
 
@@ -212,9 +239,7 @@ class PadCircleArray(PadArray):
 
     #relocate the pad and add it as many times as we need
     def AddPadsToModule(self, dc):
-
         for pin in range(0, self.n):
-
             angle = self.angle_offset + (360 / self.n) * pin
 
             if not self.clockwise:
@@ -222,13 +247,9 @@ class PadCircleArray(PadArray):
 
             pos_x = math.sin(angle * math.pi / 180) * self.r
             pos_y = -math.cos(angle  * math.pi / 180) * self.r
-
             pos = dc.TransformPoint(pos_x, pos_y)
-
             pad = self.GetPad(pin == 0, pos)
-
             pad.SetPadName(self.GetName(pin))
-
             self.AddPad(pad)
 
 class PadCustomArray(PadArray):
@@ -239,7 +260,6 @@ class PadCustomArray(PadArray):
     def __init__(self, pad, array):
         PadArray.__init__(self)
         self.pad = pad
-
         self.array = array
 
     def NamingFunction(self, n):
@@ -249,11 +269,7 @@ class PadCustomArray(PadArray):
     def AddPadsToModule(self, dc):
 
         for i in range(len(self.array)):
-
             pos = dc.TransformPoint(self.array[i][0], self.array[i][1])
-
             pad = self.GetPad(i == 0, pos)
-
             pad.SetPadName(self.GetName(i))
-
             self.AddPad(pad)

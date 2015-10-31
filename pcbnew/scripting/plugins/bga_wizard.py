@@ -62,9 +62,7 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         rows = pads["*row count"]
         cols = pads["*column count"]
         pad_size = pads["pad size"]
-
         pad_size = pcbnew.wxSize(pad_size, pad_size)
-
         pad_pitch = pads["pad pitch"]
 
         # add in the pads
@@ -82,6 +80,13 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
 
         self.draw.BoxWithDiagonalAtCorner(0, 0, ssx*2, ssy*2,
                                           pads["outline x margin"])
+
+        # Courtyard
+        cmargin = self.draw.GetLineTickness()
+        self.draw.SetLayer(pcbnew.F_CrtYd)
+        sizex = (ssx + cmargin) * 2
+        sizey = (ssy + cmargin) * 2
+        self.draw.Box(0, 0, sizex, sizey)
 
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal

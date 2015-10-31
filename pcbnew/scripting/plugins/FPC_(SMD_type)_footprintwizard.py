@@ -16,7 +16,7 @@
 
 from __future__ import division
 import pcbnew
-import FootprintWizardDrawingAids as FpWDA
+
 import HelpfulFootprintWizardPlugin as HFPW
 
 

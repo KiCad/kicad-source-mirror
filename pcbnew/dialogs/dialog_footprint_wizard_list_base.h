@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -36,19 +36,19 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxGrid* m_footprintWizardsGrid;
+		wxGrid* m_footprintGeneratorsGrid;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCellWizardClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnCellFpGeneratorClick( wxGridEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Wizards"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 501,273 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Generators"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 501,273 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FOOTPRINT_WIZARD_LIST_BASE();
 	
 };
