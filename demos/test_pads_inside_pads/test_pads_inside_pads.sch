@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 19/12/2011 12:55:30
+EESchema Schematic File Version 2
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,9 +29,10 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-EELAYER 25  0
+LIBS:test_pads_inside_pads-cache
+EELAYER 25 0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
@@ -55,6 +56,8 @@ U 1 1 4EE5056D
 P 4300 1450
 F 0 "P4" H 4380 1450 40  0000 L CNN
 F 1 "CONN_1" H 4300 1505 30  0001 C CNN
+F 2 "Connect:1pin" H 4300 1400 60  0000 C CNN
+F 3 "" H 4300 1450 60  0001 C CNN
 	1    4300 1450
 	1    0    0    -1  
 $EndComp
@@ -64,6 +67,8 @@ U 1 1 4EE5056C
 P 3600 1450
 F 0 "P3" H 3680 1450 40  0000 L CNN
 F 1 "CONN_1" H 3600 1505 30  0001 C CNN
+F 2 "Connect:1pin" H 3600 1500 60  0000 C CNN
+F 3 "" H 3600 1450 60  0001 C CNN
 	1    3600 1450
 	-1   0    0    1   
 $EndComp
@@ -73,6 +78,8 @@ U 1 1 4EDF7CC5
 P 3600 1750
 F 0 "P1" H 3680 1750 40  0000 L CNN
 F 1 "CONN_1" H 3600 1805 30  0001 C CNN
+F 2 "Connect:1pin" H 3600 1800 60  0000 C CNN
+F 3 "" H 3600 1750 60  0001 C CNN
 	1    3600 1750
 	-1   0    0    1   
 $EndComp
@@ -82,6 +89,8 @@ U 1 1 4EDF7CC0
 P 4300 1750
 F 0 "P2" H 4380 1750 40  0000 L CNN
 F 1 "CONN_1" H 4300 1805 30  0001 C CNN
+F 2 "Connect:1pin" H 4300 1700 60  0000 C CNN
+F 3 "" H 4300 1750 60  0001 C CNN
 	1    4300 1750
 	1    0    0    -1  
 $EndComp

@@ -1,24 +1,6 @@
 EESchema Schematic File Version 2
+LIBS:video_schlib
 LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:special
-LIBS:analog_switches
-LIBS:motorola
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:philips
-LIBS:cypress
-LIBS:siliconi
 LIBS:video-cache
 EELAYER 25 0
 EELAYER END
@@ -423,7 +405,7 @@ U 1 1 A9CA7F7F
 P 3850 3700
 F 0 "D1" H 3850 3800 50  0000 C CNN
 F 1 "BAT46" H 3850 3600 50  0000 C CNN
-F 2 "discret:D3" H 3850 3700 60  0001 C CNN
+F 2 "Discret:D3" H 3850 3700 60  0001 C CNN
 F 3 "" H 3850 3700 60  0001 C CNN
 	1    3850 3700
 	1    0    0    -1  
@@ -434,7 +416,7 @@ U 1 1 A9CA7F84
 P 3850 3300
 F 0 "D2" H 3850 3200 50  0000 C CNN
 F 1 "BAT46" H 3850 3400 50  0000 C CNN
-F 2 "discret:D3" H 3850 3300 60  0001 C CNN
+F 2 "Discret:D3" H 3850 3300 60  0001 C CNN
 F 3 "" H 3850 3300 60  0001 C CNN
 	1    3850 3300
 	-1   0    0    1   
@@ -445,7 +427,7 @@ U 1 1 A9CA7F8E
 P 4050 6000
 F 0 "D3" H 4050 6100 60  0000 C CNN
 F 1 "BAT46" H 4050 5900 60  0000 C CNN
-F 2 "discret:D3" H 4050 6000 60  0001 C CNN
+F 2 "Discret:D3" H 4050 6000 60  0001 C CNN
 F 3 "" H 4050 6000 60  0001 C CNN
 	1    4050 6000
 	1    0    0    -1  
@@ -456,7 +438,7 @@ U 1 1 A9CA7F93
 P 4050 5600
 F 0 "D4" H 4050 5700 60  0000 C CNN
 F 1 "BAT46" H 4050 5500 60  0000 C CNN
-F 2 "discret:D3" H 4050 5600 60  0001 C CNN
+F 2 "Discret:D3" H 4050 5600 60  0001 C CNN
 F 3 "" H 4050 5600 60  0001 C CNN
 	1    4050 5600
 	-1   0    0    -1  
@@ -588,7 +570,7 @@ U 1 1 B15DA8C0
 P 5250 2100
 F 0 "X2" H 5250 2250 60  0000 C CNN
 F 1 "30MHz" H 5250 1950 60  0000 C CNN
-F 2 "discret:HC-18UV" H 5250 2100 60  0001 C CNN
+F 2 "Discret:HC-18UV" H 5250 2100 60  0001 C CNN
 F 3 "" H 5250 2100 60  0001 C CNN
 	1    5250 2100
 	1    0    0    -1  

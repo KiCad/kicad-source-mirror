@@ -421,9 +421,9 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
  * to the real clearance value (usually near from 1.0)
  */
 void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        int                    aClearanceValue,
-                                                        int                    aCircleToSegmentsCount,
-                                                        double                 aCorrectionFactor ) const
+                                                        int             aClearanceValue,
+                                                        int             aCircleToSegmentsCount,
+                                                        double          aCorrectionFactor ) const
 {
     // The full width of the lines to create:
     int linewidth = m_Width + (2 * aClearanceValue);
@@ -455,8 +455,6 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         MODULE* module = GetParentModule();     // NULL for items not in footprints
         double orientation = module ? module->GetOrientation() : 0.0;
 
-        aCornerBuffer.NewOutline();
-
         // Build the polygon with the actual position and orientation:
         std::vector< wxPoint> poly;
         poly = GetPolyPoints();
@@ -470,6 +468,13 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         // Generate polygons for the outline + clearance
         // This code is compatible with a polygon with holes linked to external outline
         // by overlapping segments.
+
+        // Insert the initial polygon:
+        aCornerBuffer.NewOutline();
+
+        for( unsigned ii = 0; ii < poly.size(); ii++ )
+            aCornerBuffer.Append( poly[ii].x, poly[ii].y );
+
         if( linewidth )     // Add thick outlines
         {
             CPolyPt corner1( poly[poly.size()-1] );
@@ -486,13 +491,6 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
                 corner1 = corner2;
             }
-        }
-
-        // Polygon for the inside
-        for( unsigned ii = 0; ii < poly.size(); ii++ )
-        {
-            CPolyPt corner( poly[ii] );
-            aCornerBuffer.Append( corner.x, corner.y );
         }
         }
         break;

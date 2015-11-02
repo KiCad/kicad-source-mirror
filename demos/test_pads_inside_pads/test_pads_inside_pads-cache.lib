@@ -1,4 +1,4 @@
-EESchema-LIBRARY Version 2.3  Date: 19/12/2011 12:55:30
+EESchema-LIBRARY Version 2.3
 #encoding utf-8
 #
 # CONN_1
@@ -6,6 +6,8 @@ EESchema-LIBRARY Version 2.3  Date: 19/12/2011 12:55:30
 DEF ~CONN_1 P 0 30 N N 1 F N
 F0 "P" 80 0 40 H V L CNN
 F1 "CONN_1" 0 55 30 H I C CNN
+F2 "" 0 0 60 H V C CNN
+F3 "" 0 0 60 H V C CNN
 DRAW
 C 0 0 31 0 1 0 N
 P 2 0 1 0  -30 0  -50 0 N
