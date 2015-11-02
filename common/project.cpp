@@ -63,9 +63,13 @@ PROJECT::~PROJECT()
 
 void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 {
+    // Compare paths, rather than inodes, to be less surprising to the user.
+    // Create a temporary wxFileName to normalize the path
+    wxFileName candidate_path( aFullPathAndName );
+
     // Edge transitions only.  This is what clears the project
     // data using the Clear() function.
-    if( m_project_name != aFullPathAndName )
+    if( m_project_name.GetFullPath() != candidate_path.GetFullPath() )
     {
         Clear();            // clear the data when the project changes.
 
