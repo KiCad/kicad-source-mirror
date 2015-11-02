@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>pcb_calculator.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.kicad-eda.pcb_calculator</string>
+	<string>org.kicad-pcb.pcb_calculator</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
