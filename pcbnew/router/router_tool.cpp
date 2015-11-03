@@ -46,6 +46,8 @@
 #include <tool/tool_settings.h>
 #include <tools/common_actions.h>
 #include <tools/size_menu.h>
+#include <tools/selection_tool.h>
+#include <tools/edit_tool.h>
 
 #include <ratsnest_data.h>
 
@@ -551,8 +553,8 @@ void ROUTER_TOOL::performRouting()
             break;
         else if( evt->IsMotion() )
         {
-            updateEndItem( *evt );
             m_router->SetOrthoMode( evt->Modifier( MD_CTRL ) );
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsClick( BUT_LEFT ) )
@@ -568,6 +570,7 @@ void ROUTER_TOOL::performRouting()
 
             // Synchronize the indicated layer
             m_frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = NULL;
         }
@@ -586,12 +589,13 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
         {
-            updateEndItem( *evt );
             m_router->SwitchLayer( m_frame->GetActiveLayer() );
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_EndTrack ) )
@@ -733,12 +737,15 @@ void ROUTER_TOOL::performDragging()
     if( m_startItem && m_startItem->Net() >= 0 )
         highlightNet( true, m_startItem->Net() );
 
-    ctls->ForceCursorPosition( false );
     ctls->SetAutoPan( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
+        ctls->ForceCursorPosition( false );
+
+        VECTOR2I p0 = ctls->GetCursorPosition();
+
+       if( evt->IsCancel() || evt->IsActivate() )
             break;
         else if( evt->IsMotion() )
         {

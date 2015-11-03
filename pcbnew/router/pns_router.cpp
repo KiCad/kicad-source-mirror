@@ -35,6 +35,8 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 
+#include <tools/grid_helper.h>
+
 #include "trace.h"
 #include "pns_node.h"
 #include "pns_line_placer.h"
@@ -572,8 +574,8 @@ const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSpli
             anchor = s.B;
         else
         {
-            anchor = s.NearestPoint( aP );
-            aSplitsSegment = true;
+            anchor = m_gridHelper->AlignToSegment ( aP, s );
+            aSplitsSegment = (anchor != s.A && anchor != s.B );
         }
 
         break;

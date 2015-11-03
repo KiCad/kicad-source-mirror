@@ -55,7 +55,9 @@ int PNS_SIZES_SETTINGS::inheritTrackWidth( PNS_ITEM* aItem )
 
     int mval = INT_MAX;
 
-    PNS_ITEMSET linkedSegs = jt->Links().ExcludeItem( aItem ).FilterKinds( PNS_ITEM::SEGMENT );
+
+    PNS_ITEMSET linkedSegs = jt->Links();
+    linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS_ITEM::SEGMENT );
 
     BOOST_FOREACH( PNS_ITEM* item, linkedSegs.Items() )
     {

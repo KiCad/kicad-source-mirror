@@ -803,7 +803,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onReverseCollidingVia( PNS_LINE& aCurrent, PN
     int currentRank = aCurrent.Rank();
     replaceItems( &aCurrent, &shoved );
 
-    if ( !pushLine( shoved ) )
+    if( !pushLine( shoved ) )
         return SH_INCOMPLETE;
 
     shoved.SetRank( currentRank );
@@ -952,7 +952,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
 
             popLine();
             st = onCollidingLine( revLine, currentLine );
-            if ( !pushLine( revLine ) )
+            if( !pushLine( revLine ) )
                 return SH_INCOMPLETE;
 
             break;
@@ -1036,7 +1036,7 @@ OPT_BOX2I PNS_SHOVE::totalAffectedArea() const
 
     if( area )
     {
-        if ( m_affectedAreaSum )
+        if( m_affectedAreaSum )
             area->Merge ( *m_affectedAreaSum );
     } else
         area = m_affectedAreaSum;
@@ -1124,7 +1124,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
-        pushSpringback( m_currentNode, headSet, PNS_COST_ESTIMATOR(), m_affectedAreaSum);
+        pushSpringback( m_currentNode, headSet, PNS_COST_ESTIMATOR(), m_affectedAreaSum );
     }
     else
     {
@@ -1132,6 +1132,13 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
 
         m_currentNode = parent;
         m_newHead = OPT_LINE();
+    }
+
+    if( m_newHead && head.EndsWithVia() )
+    {
+        PNS_VIA v = head.Via();
+        v.SetPos( m_newHead->CPoint( -1 ) );
+        m_newHead->AppendVia(v);
     }
 
     return st;

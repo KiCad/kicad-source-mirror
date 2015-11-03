@@ -32,6 +32,8 @@
 
 #include <layers_id_colors_and_visibility.h>
 
+#include <geometry/seg.h>
+
 class PCB_BASE_FRAME;
 
 class GRID_HELPER {
@@ -49,6 +51,8 @@ public:
     void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ), bool aEnableDiagonal = false );
 
     VECTOR2I Align( const VECTOR2I& aPoint ) const;
+
+    VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, BOARD_ITEM* aItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );

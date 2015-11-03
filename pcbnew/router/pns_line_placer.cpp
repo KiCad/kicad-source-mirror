@@ -949,9 +949,10 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
     if( !aLatest.SegmentCount() )
         return;
 
-    if ( aLatest.CLine().CPoint( 0 ) == aLatest.CLine().CPoint( -1 ) )
+    if( aLatest.CLine().CPoint( 0 ) == aLatest.CLine().CPoint( -1 ) )
         return;
 
+    std::set<PNS_SEGMENT *> toErase;
     aNode->Add( &aLatest, true );
 
     for( int s = 0; s < aLatest.LinkCount(); s++ )
@@ -979,13 +980,18 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
 
             if( !( line.ContainsSegment( seg ) ) && line.SegmentCount() )
             {
-                aNode->Remove( &line );
+                BOOST_FOREACH( PNS_SEGMENT *ss, *line.LinkedSegments() )
+                    toErase.insert( ss );
+
                 removedCount++;
             }
         }
 
         TRACE( 0, "total segs removed: %d/%d\n", removedCount % total );
     }
+
+    BOOST_FOREACH( PNS_SEGMENT *s, toErase )
+        aNode->Remove( s );
 
     aNode->Remove( &aLatest );
 }
@@ -1034,16 +1040,11 @@ void PNS_LINE_PLACER::updateLeadingRatLine()
 void PNS_LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 {
     m_orthoMode = aOrthoMode;
-
-    if( !m_idle )
-        Move( m_currentEnd, NULL );
 }
 
 bool PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead )
 {
     SHAPE_LINE_CHAIN l;
-
-    printf("H-net %d\n", aHead.Net());
 
     if( m_p_start == aP )
     {
