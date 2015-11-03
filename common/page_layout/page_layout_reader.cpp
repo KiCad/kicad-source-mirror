@@ -372,6 +372,10 @@ void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
             readPngdata( aItem );
             break;
 
+        case T_option:
+            readOption( aItem );
+            break;
+
         default:
             Unexpected( CurText() );
             break;

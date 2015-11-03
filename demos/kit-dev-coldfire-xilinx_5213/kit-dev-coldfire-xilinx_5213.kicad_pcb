@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew "(2015-10-08 BZR 6256)-product")
+(kicad_pcb (version 4) (host pcbnew "(2015-11-02 BZR 6292)-product")
 
   (general
     (links 534)
     (no_connects 0)
-    (area 66.45592 36.781599 233.50792 151.36432)
+    (area 70.929499 55.689499 228.790501 147.510501)
     (thickness 1.6)
     (drawings 8)
     (tracks 3535)
@@ -5900,9 +5900,9 @@
       (net 103 "Net-(ABRT_SW1-Pad1)"))
     (pad 2 thru_hole circle (at -3.81 2.54) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 104 VDD))
-    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
+    (model ${KIPRJMOD}/prj.3dshapes/push_butt_4pads.wrl
       (at (xyz 0 0 0))
-      (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
+      (scale (xyz 1.17 1.17 1.17))
       (rotate (xyz 0 0 90))
     )
   )
@@ -5929,9 +5929,9 @@
       (net 108 "Net-(C3-Pad1)"))
     (pad 2 thru_hole circle (at -3.81 2.54 180) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
+    (model ${KIPRJMOD}/prj.3dshapes/push_butt_4pads.wrl
       (at (xyz 0 0 0))
-      (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
+      (scale (xyz 1.17 1.17 1.17))
       (rotate (xyz 0 0 90))
     )
   )
@@ -5958,9 +5958,9 @@
       (net 166 /IRQ-4))
     (pad 2 thru_hole circle (at -3.81 2.54) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
+    (model ${KIPRJMOD}/prj.3dshapes/push_butt_4pads.wrl
       (at (xyz 0 0 0))
-      (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
+      (scale (xyz 1.17 1.17 1.17))
       (rotate (xyz 0 0 90))
     )
   )
@@ -5987,9 +5987,9 @@
       (net 20 /IRQ-5))
     (pad 2 thru_hole circle (at -3.81 2.54) (size 1.397 1.397) (drill 0.8128) (layers *.Cu *.Mask F.SilkS)
       (net 102 GND))
-    (model Buttons_Switches_ThroughHole.3dshapes/SW_PUSH.wrl
+    (model ${KIPRJMOD}/prj.3dshapes/push_butt_4pads.wrl
       (at (xyz 0 0 0))
-      (scale (xyz 1.100000023841858 1.100000023841858 1.100000023841858))
+      (scale (xyz 1.17 1.17 1.17))
       (rotate (xyz 0 0 90))
     )
   )
