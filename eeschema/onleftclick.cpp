@@ -30,7 +30,6 @@
 #include <fctsys.h>
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <schframe.h>
 #include <menus_helpers.h>
 

@@ -43,7 +43,6 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();     // sheetpath is saved here
-    wxPoint         plot_offset;
 
     /* When printing all pages, the printed page is not the current page.  In
      * complex hierarchies, we must update component references and others

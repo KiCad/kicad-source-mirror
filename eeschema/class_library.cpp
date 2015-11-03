@@ -39,7 +39,6 @@
 #include <config_params.h>
 #include <wildcards_and_files_ext.h>
 #include <project_rescue.h>
-//#include <richio.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -487,8 +486,6 @@ bool PART_LIB::Load( wxString& aErrorMsg )
     // There is no header if this is a symbol library.
     if( type == LIBRARY_TYPE_EESCHEMA )
     {
-        wxString tmp;
-
         line = reader.Line();
 
         header = FROM_UTF8( line );
@@ -648,7 +645,6 @@ bool PART_LIB::LoadDocs( wxString& aErrorMsg )
     char       line[8000], * name, * text;
     LIB_ALIAS* entry;
     FILE*      file;
-    wxString   msg;
     wxFileName fn = fileName;
 
     fn.SetExt( DOC_EXT );
@@ -1066,8 +1062,6 @@ void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
     }
     else
     {
-        wxString pro = aProject->GetProjectFullName();
-
         if( !aProject->ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, ca ) )
         {
             wxString msg = wxString::Format( _(

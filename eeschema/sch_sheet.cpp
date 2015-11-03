@@ -601,7 +601,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Text = wxT( "Sheet: " ) + m_name;
     DrawGraphicText( clipbox, aDC, pos_sheetname,
-                     (EDA_COLOR_T) txtcolor, Text, name_orientation,
+                     txtcolor, Text, name_orientation,
                      wxSize( m_sheetNameSize, m_sheetNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, lineWidth,
                      false, false );
@@ -614,7 +614,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Text = wxT( "File: " ) + m_fileName;
     DrawGraphicText( clipbox, aDC, pos_filename,
-                     (EDA_COLOR_T) txtcolor, Text, name_orientation,
+                     txtcolor, Text, name_orientation,
                      wxSize( m_fileNameSize, m_fileNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, lineWidth,
                      false, false );

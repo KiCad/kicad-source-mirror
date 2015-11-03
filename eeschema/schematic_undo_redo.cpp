@@ -121,9 +121,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     ITEM_PICKER itemWrapper( aItem, aCommandType );
-
-    if( aItem )
-        itemWrapper.SetFlags( aItem->GetFlags() );
+    itemWrapper.SetFlags( aItem->GetFlags() );
 
     switch( aCommandType )
     {

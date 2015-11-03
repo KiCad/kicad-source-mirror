@@ -98,11 +98,10 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     strtok( line + 2, " \t\n" );     // Skip field
     strtok( NULL, " \t\n" );         // Skip field
     strtok( NULL, " \t\n" );         // Skip field
-    p = strtok( NULL, " \t\n" );
+    strtok( NULL, " \t\n" );
 
     for( i = 0; i < ccount; i++ )
     {
-        wxPoint point;
         p = strtok( NULL, " \t\n" );
 
         if( p == NULL || sscanf( p, "%d", &pt.x ) != 1 )
@@ -244,7 +243,6 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     {
         aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->PlotPoly( cornerList, FILLED_WITH_BG_BODYCOLOR, 0 );
-        aFill = false;  // body is now filled, do not fill it later.
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
@@ -337,7 +335,7 @@ bool LIB_POLYLINE::HitTest( const wxPoint& aPosition ) const
 
 bool LIB_POLYLINE::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
-    wxPoint ref, start, end;
+    wxPoint start, end;
 
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;

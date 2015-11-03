@@ -52,7 +52,6 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
                                              int aHotKeyCommandId )
 {
     SCH_ITEM*      item;
-    wxString       msg;
     LIB_PIN*       Pin     = NULL;
     SCH_COMPONENT* LibItem = NULL;
     wxPoint        gridPosition = GetNearestGridPosition( aPosition );

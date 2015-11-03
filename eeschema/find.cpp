@@ -65,7 +65,6 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
     SCH_SHEET_LIST     schematic;
     SCH_SHEET_PATH*    sheetFoundIn = NULL;
     bool               wrap = ( event.GetFlags() & FR_SEARCH_WRAP ) != 0;
-    wxRect             clientRect( wxPoint( 0, 0 ), GetClientSize() );
     bool               warpCursor = ( ( event.GetId() == wxEVT_COMMAND_FIND_CLOSE ) ||
                                       !( event.GetFlags() & FR_NO_WARP_CURSOR ) );
 
@@ -118,7 +117,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
     SCH_ITEM*       item = NULL;
     SCH_COMPONENT*  Component = NULL;
-    wxPoint         pos, curpos;
+    wxPoint         pos;
     bool            centerAndRedraw = false;
     bool            notFound = true;
     LIB_PIN*        pin;
@@ -131,7 +130,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
     for( ; sheet != NULL; sheet = sheetList.GetNext() )
     {
-        item = (SCH_ITEM*) sheet->LastDrawList();
+        item = sheet->LastDrawList();
 
         for( ; ( item != NULL ) && ( notFound == true ); item = item->Next() )
         {
@@ -306,10 +305,6 @@ bool SCH_EDIT_FRAME::IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearch
 
 void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 {
-    static wxPoint          itemPosition;  // the actual position of the matched item.
-
-    SCH_SHEET_LIST          schematic;
-    wxString                msg;
     SCH_FIND_REPLACE_DATA   searchCriteria;
     SCH_FIND_COLLECTOR_DATA data;
 

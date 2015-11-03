@@ -105,7 +105,6 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
         wxPoint plot_offset;
 
         wxString outputDirName = m_outputDirectoryName->GetValue();
-        wxFileName outputDir = wxFileName::DirName( outputDirName );
 
         wxString msg;
         REPORTER& reporter = m_MessagesBox->Reporter();

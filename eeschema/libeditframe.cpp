@@ -533,7 +533,7 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnUpdatePinTable( wxUpdateUIEvent& event )
 {
     LIB_PART* part = GetCurPart();
-    event.Enable( part );
+    event.Enable( part != NULL );
 }
 
 void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )

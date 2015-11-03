@@ -167,7 +167,6 @@ void LIB_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    wxFileName fn;
 
     switch( id )
     {

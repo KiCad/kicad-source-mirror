@@ -465,7 +465,7 @@ void SCH_EDIT_FRAME::SetRepeatItem( SCH_ITEM* aItem )
 
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
-    SCH_SCREEN* screen = GetScreen();
+    SCH_SCREEN* screen;
     SCH_SCREENS s_list;
 
     /* Set the sheet count, and the sheet number (1 for root sheet)
