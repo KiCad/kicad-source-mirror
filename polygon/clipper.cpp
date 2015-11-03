@@ -181,6 +181,8 @@ int PolyTree::Total() const
 
 PolyNode::PolyNode(): Childs(), Parent(0), Index(0), m_IsOpen(false)
 {
+    // Avoid uninitialized vars
+    m_endtype = etClosedPolygon;
 }
 //------------------------------------------------------------------------------
 
@@ -884,6 +886,11 @@ ClipperBase::ClipperBase() //constructor
 {
   m_CurrentLM = m_MinimaList.begin(); //begin() == end() here
   m_UseFullRange = false;
+
+  // Avoid uninitialized vars
+  m_PreserveCollinear = false;
+  m_HasOpenPaths = false;
+  m_ActiveEdges = NULL;
 }
 //------------------------------------------------------------------------------
 
@@ -1482,6 +1489,13 @@ Clipper::Clipper(int initOptions) : ClipperBase() //constructor
 #ifdef use_xyz
   m_ZFill = 0;
 #endif
+
+  // Avoid uninitialized vars
+  m_ClipType = ctIntersection;
+  m_SortedEdges = NULL;
+  m_ClipFillType = pftEvenOdd;
+  m_SubjFillType = pftEvenOdd;
+  m_UsingPolyTree = true;
 }
 //------------------------------------------------------------------------------
 
@@ -3781,6 +3795,11 @@ ClipperOffset::ClipperOffset(double miterLimit, double arcTolerance)
   this->MiterLimit = miterLimit;
   this->ArcTolerance = arcTolerance;
   m_lowest.X = -1;
+
+  //Avoid uninitialized vars:
+  m_delta = m_sinA = m_sin = m_cos = 0;
+  m_miterLim = m_StepsPerRad = 0;
+
 }
 //------------------------------------------------------------------------------
 

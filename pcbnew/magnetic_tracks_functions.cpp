@@ -277,8 +277,8 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 double distEnd   = GetLineLength( *curpos, track->GetEnd() );
 
                 // if track not via, or if its a via dragging but not with its adjacent track
-                if( currTrack->Type() != PCB_VIA_T
-                  || ( currTrack->GetStart() != track->GetStart() && currTrack->GetStart() != track->GetEnd() ))
+                if( currTrack->Type() != PCB_VIA_T ||
+                    ( currTrack->GetStart() != track->GetStart() && currTrack->GetStart() != track->GetEnd() ))
                 {
                     double max_dist = currTrack->GetWidth() / 2.0f;
 
