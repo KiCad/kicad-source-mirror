@@ -274,7 +274,7 @@ wxString EDGE_MODULE::GetSelectMenuText() const
 {
     wxString text;
     text.Printf( _( "Graphic (%s) on %s of %s" ),
-            GetChars( ShowShape( (STROKE_T) m_Shape ) ),
+            GetChars( ShowShape( m_Shape ) ),
             GetChars( GetLayerName() ),
             GetChars( ((MODULE*) GetParent())->GetReference() ) );
 
@@ -326,8 +326,6 @@ void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
 {
     // Mirror an edge of the footprint. the layer is not modified
     // This is a footprint shape modification.
-    wxPoint pt;
-
     switch( GetShape() )
     {
     case S_ARC:

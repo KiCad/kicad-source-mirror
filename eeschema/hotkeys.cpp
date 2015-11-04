@@ -337,7 +337,7 @@ struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[] =
 struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag,    common_Hotkey_List,    &commonSectionTitle    },
-    { &schematicSectionTitle, schematic_Hotkey_List, &schematicSectionTitle },
+    { &schematicSectionTag,   schematic_Hotkey_List, &schematicSectionTitle },
     { NULL,                   NULL,                  NULL }
 };
 

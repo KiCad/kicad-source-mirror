@@ -690,7 +690,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
     int             net_code_s, net_code_e;
     bool            isModified = false;
 
-    for( segment = GetBoard()->m_Track;  segment;  segment = (TRACK*) segment->Next() )
+    for( segment = GetBoard()->m_Track;  segment;  segment = segment->Next() )
     {
         segment->SetState( FLAG0, false );
 
@@ -741,7 +741,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
     // Remove tracks having a flagged segment
     for( segment = GetBoard()->m_Track; segment; segment = next )
     {
-        next = (TRACK*) segment->Next();
+        next = segment->Next();
 
         if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
         {

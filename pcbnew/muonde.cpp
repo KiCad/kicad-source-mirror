@@ -508,7 +508,8 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     pt        = aBuffer.back();
     centre    = pt;
     centre.y += radius;
-    gen_arc( aBuffer, pt, centre, 900 * sign );    pt = aBuffer.back();
+    gen_arc( aBuffer, pt, centre, 900 * sign );
+    aBuffer.back();
 
     // Rotate point
     angle += 900;
@@ -970,7 +971,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     pad1->SetX0( offset.x );
     pad1->SetX( pad1->GetPos0().x );
 
-    pad2 = (D_PAD*) pad1->Next();
+    pad2 = pad1->Next();
     pad2->SetX0( offset.x + ShapeSize.x );
     pad2->SetX( pad2->GetPos0().x );
 
@@ -988,7 +989,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     // Init start point coord:
     polyPoints.push_back( wxPoint( offset.x, 0 ) );
 
-    wxPoint first_coordinate, last_coordinate;
+    wxPoint last_coordinate;
 
     for( unsigned ii = 0; ii < PolyEdges.size(); ii++ )  // Copy points
     {
@@ -1001,8 +1002,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     // finish the polygonal shape
     if( last_coordinate.y != 0 )
         polyPoints.push_back( wxPoint( last_coordinate.x, 0 ) );
-
-    first_coordinate.y = polyPoints[1].y;
 
     switch( PolyShapeType )
     {
@@ -1051,7 +1050,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
         return;
     }
 
-    next_pad = (D_PAD*) pad->Next();
+    next_pad = pad->Next();
 
     if( next_pad == NULL )
     {

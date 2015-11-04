@@ -214,7 +214,6 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
 void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                                      wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
 {
-    static std::vector <char>    CornersTypeBuffer;
     static std::vector <wxPoint> CornersBuffer;
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
@@ -356,7 +355,6 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
 {
     GR_DRAWMODE current_gr_mode  = draw_mode;
     bool    is_close_segment = false;
-    wxPoint seg_start, seg_end;
 
     if( !DC )
         return;
@@ -645,7 +643,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     if( !m_FilledPolysList.IsEmpty() )
     {
-        msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.TotalVertices() );
+        msg.Printf( wxT( "%d" ), m_FilledPolysList.TotalVertices() );
         aList.push_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
     }
 }

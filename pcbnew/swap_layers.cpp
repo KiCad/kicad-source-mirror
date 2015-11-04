@@ -29,7 +29,6 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <wxPcbStruct.h>
 #include <dialog_shim.h>
 

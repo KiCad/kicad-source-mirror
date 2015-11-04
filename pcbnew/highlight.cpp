@@ -43,9 +43,6 @@
 #include <collectors.h>
 
 
-#define Pad_fill ( Pad_Fill_Item.State == RUN )
-
-
 void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
 {
     NETINFO_ITEM* net;

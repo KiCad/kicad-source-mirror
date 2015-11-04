@@ -557,7 +557,6 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer
                                                    int             aCircleToSegmentsCount,
                                                    double          aCorrectionFactor ) const
 {
-    wxPoint corner_position;
     double  angle = m_Orient;
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
@@ -1087,7 +1086,6 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
         SHAPE_POLY_SET stub;          // A basic stub ( a rectangle)
         SHAPE_POLY_SET stubs;        // the full stubs shape
-        SHAPE_POLY_SET thermalShape; // the holes in copper zone
 
 
         // We now substract the stubs (connections to the copper zone)

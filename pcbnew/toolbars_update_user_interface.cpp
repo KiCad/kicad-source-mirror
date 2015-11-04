@@ -82,8 +82,6 @@ void PCB_EDIT_FRAME::OnUpdateSelectCustomTrackWidth( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
 {
-    wxString msg;
-
     if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_VIA_SIZE )
     {
         if( m_SelViaSizeBox->GetSelection() != (int) GetDesignSettings().GetViaSizeIndex() )

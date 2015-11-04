@@ -586,7 +586,7 @@ wxSize D_PAD::GetSolderPasteMargin() const
 
 ZoneConnection D_PAD::GetZoneConnection() const
 {
-    MODULE* module = (MODULE*) GetParent();
+    MODULE* module = GetParent();
 
     if( m_ZoneConnection == PAD_ZONE_CONN_INHERITED && module )
         return module->GetZoneConnection();
@@ -597,7 +597,7 @@ ZoneConnection D_PAD::GetZoneConnection() const
 
 int D_PAD::GetThermalWidth() const
 {
-    MODULE* module = (MODULE*) GetParent();
+    MODULE* module = GetParent();
 
     if( m_ThermalWidth == 0 && module )
         return module->GetThermalWidth();
@@ -608,7 +608,7 @@ int D_PAD::GetThermalWidth() const
 
 int D_PAD::GetThermalGap() const
 {
-    MODULE* module = (MODULE*) GetParent();
+    MODULE* module = GetParent();
 
     if( m_ThermalGap == 0 && module )
         return module->GetThermalGap();
@@ -908,15 +908,15 @@ wxString D_PAD::GetSelectMenuText() const
 
     if( padname.IsEmpty() )
     {
-    text.Printf( _( "Pad on %s of %s" ),
-                 GetChars( padlayers ),
-                 GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+        text.Printf( _( "Pad on %s of %s" ),
+                     GetChars( padlayers ),
+                     GetChars(GetParent()->GetReference() ) );
     }
     else
     {
         text.Printf( _( "Pad %s on %s of %s" ),
                      GetChars(GetPadName() ), GetChars( padlayers ),
-                     GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+                     GetChars(GetParent()->GetReference() ) );
     }
 
     return text;

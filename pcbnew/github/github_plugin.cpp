@@ -274,7 +274,7 @@ void GITHUB_PLUGIN::FootprintSave( const wxString& aLibraryPath,
         // even legal, so I spend no time on internationalization here:
 
         string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
-                (const char*) TO_UTF8( aLibraryPath ), PRETTY_DIR );
+                TO_UTF8( aLibraryPath ), PRETTY_DIR );
 
         THROW_IO_ERROR( msg );
     }
@@ -316,7 +316,7 @@ void GITHUB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         // even legal, so I spend no time on internationalization here:
 
         string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
-                (const char*) TO_UTF8( aLibraryPath ), PRETTY_DIR );
+                TO_UTF8( aLibraryPath ), PRETTY_DIR );
 
         THROW_IO_ERROR( msg );
     }

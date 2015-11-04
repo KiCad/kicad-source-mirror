@@ -83,8 +83,6 @@ void KICAD_NETLIST_PARSER::skipCurrent() throw( IO_ERROR, PARSE_ERROR )
 
 void KICAD_NETLIST_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
 {
-    wxString text;
-
     int plevel = 0;     // the count of ')' to read and end of file,
                         // after parsing all sections
 
@@ -286,7 +284,6 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR, boost:
      */
     FPID     fpid;
     wxString footprint;
-    wxString tmp;
     wxString ref;
     wxString value;
     wxString library;

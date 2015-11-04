@@ -750,7 +750,6 @@ void DRC::testTexts()
 
             for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
             {
-                SEG segtest( textShape[jj], textShape[jj+1] );
                 /* In order to make some calculations more easier or faster,
                  * pads and tracks coordinates will be made relative
                  * to the segment origin

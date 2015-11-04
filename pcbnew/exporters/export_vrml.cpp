@@ -1320,7 +1320,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
                                       bool aUsePlainPCB, const wxString& a3D_Subdir,
                                       double aXRef, double aYRef )
 {
-    wxString        msg;
     BOARD*          pcb = GetBoard();
     bool            ok  = true;
 

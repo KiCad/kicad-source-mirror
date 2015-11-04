@@ -389,7 +389,6 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary()
     // Kicad cannot write legacy format libraries, only .pretty new format
     // because the legacy format cannot handle current features.
     // The footprint library is actually a directory
-    wxString wildcard = wxGetTranslation( KiCadFootprintLibPathWildcard );
 
     // prompt user for footprint library name, ending by ".pretty"
     // Because there are constraints for the directory name to create,

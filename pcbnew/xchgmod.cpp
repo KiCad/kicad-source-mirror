@@ -397,9 +397,6 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
                  aNewFootprintFPID.Format().c_str() );
     m_WinMessages->AppendText( line );
 
-    wxString moduleName = aNewFootprintFPID.GetFootprintName();
-    wxString libName    = aNewFootprintFPID.GetLibNickname();
-
     newModule = m_parent->LoadFootprint( aNewFootprintFPID );
 
     if( newModule == NULL )  // New module not found, redraw the old one.

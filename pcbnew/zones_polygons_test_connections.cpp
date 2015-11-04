@@ -365,8 +365,6 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
             continue;
         }
 
-        zone_subnet = old_zone_subnet;
-
         // 2 successive items already from the same cluster: nothing to do
         if( subnet == old_subnet )
             continue;

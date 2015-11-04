@@ -201,7 +201,7 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     if( aPad == NULL )
         return;
 
-    MODULE* module = (MODULE*) aPad->GetParent();
+    MODULE* module = aPad->GetParent();
     module->SetLastEditTime();
 
     // aQuery = true to prompt for confirmation, false to delete silently

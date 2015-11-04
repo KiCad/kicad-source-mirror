@@ -278,7 +278,7 @@ STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 const EDA_RECT TRACK::GetBoundingBox() const
 {
     // end of track is round, this is its radius, rounded up
-    int radius = ( m_Width + 1 ) / 2;
+    int radius;
 
     int ymax;
     int xmax;
@@ -939,7 +939,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
         int ax = 0, ay = radius, bx = 0, by = drill_radius;
         LAYER_ID layer_top, layer_bottom;
 
-        ( (VIA*) this )->LayerPair( &layer_top, &layer_bottom );
+        LayerPair( &layer_top, &layer_bottom );
 
         // lines for the top layer
         RotatePoint( &ax, &ay, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );

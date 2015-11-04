@@ -414,7 +414,6 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
 
     int                   paramCnt;
     double                conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
-    wxPoint               refPos( 0, 0 );
     wxPoint               textPos;
     wxString              msg;
     wxArrayString         parameters;
@@ -476,8 +475,6 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
 
     if( paramCnt == 14 )
     {
-        refPos = wxPoint( parseInt( parameters[6], conv_unit ),
-                          parseInt( parameters[7], conv_unit ) );
         textPos = wxPoint( parseInt( parameters[8], conv_unit ),
                            parseInt( parameters[9], conv_unit ) );
     }

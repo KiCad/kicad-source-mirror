@@ -358,7 +358,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* item
 
             printf( "item %d, type=%s, start=%.6g %.6g  end=%.6g,%.6g\n",
                     i + 1,
-                    TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ),
+                    TO_UTF8( BOARD_ITEM::ShowShape( graphic->GetShape() ) ),
                     IU2um( graphic->GetStart().x )/1000,
                     IU2um( graphic->GetStart().y )/1000,
                     IU2um( graphic->GetEnd().x )/1000,
@@ -816,7 +816,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_ARC:
         default:
             DBG( printf( "makeIMAGE(): unsupported shape %s\n",
-                       TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) ); )
+                       TO_UTF8( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) ); )
             continue;
         }
     }
@@ -1023,7 +1023,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
             default:
                 {
                     wxString error = wxString::Format( _( "Unsupported DRAWSEGMENT type %s" ),
-                        GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) );
+                        GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
                     ThrowIOError( error );
                 }
@@ -1130,7 +1130,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                 default:
                     {
                         wxString error = wxString::Format( _( "Unsupported DRAWSEGMENT type %s" ),
-                            GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) );
+                            GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
                         ThrowIOError( error );
                     }
@@ -1266,7 +1266,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                         {
                             wxString error = wxString::Format(
                                 _( "Unsupported DRAWSEGMENT type %s" ),
-                                GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) );
+                                GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
                             ThrowIOError( error );
                         }
@@ -1439,8 +1439,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     // Unless they are unique, we cannot import the session file which comes
     // back to us later from the router.
     {
-        PCB_TYPE_COLLECTOR  padItems;
-
         items.Collect( aBoard, scanMODULEs );
 
         STRINGSET       refs;       // holds module reference designators

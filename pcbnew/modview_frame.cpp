@@ -666,8 +666,6 @@ EDA_COLOR_T FOOTPRINT_VIEWER_FRAME::GetGridColor() const
 
 void FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList( wxCommandEvent& event )
 {
-    wxString   msg;
-
     switch( event.GetId() )
     {
     case ID_MODVIEW_NEXT:

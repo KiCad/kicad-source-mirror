@@ -485,7 +485,6 @@ void PCB_EDIT_FRAME::SaveMacros()
 
 void PCB_EDIT_FRAME::ReadMacros()
 {
-    wxString str;
     wxFileName fn;
 
     fn = GetBoard()->GetFileName();
@@ -527,7 +526,7 @@ void PCB_EDIT_FRAME::ReadMacros()
             {
                 m_Macros[number].m_Record.clear();
 
-                XNODE *hotkeyNode = (XNODE*) macrosNode->GetChildren();
+                XNODE *hotkeyNode = macrosNode->GetChildren();
 
                 while( hotkeyNode )
                 {
@@ -544,11 +543,11 @@ void PCB_EDIT_FRAME::ReadMacros()
                         m_Macros[number].m_Record.push_back( macros_record );
                     }
 
-                    hotkeyNode = (XNODE*) hotkeyNode->GetNext();
+                    hotkeyNode = hotkeyNode->GetNext();
                 }
             }
         }
 
-        macrosNode = (XNODE*) macrosNode->GetNext();
+        macrosNode = macrosNode->GetNext();
     }
 }

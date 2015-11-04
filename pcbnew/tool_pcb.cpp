@@ -531,8 +531,6 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 
 void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 {
-    wxString msg;
-
     wxWindowUpdateLocker dummy( this );
 
     if( m_auxiliaryToolBar )

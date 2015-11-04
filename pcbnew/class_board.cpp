@@ -2001,7 +2001,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_ID aActiveLayer,
     int     alt_min_dim = 0x7FFFFFFF;
     bool    current_layer_back = IsBackLayer( aActiveLayer );
 
-    for( pt_module = m_Modules;  pt_module;  pt_module = (MODULE*) pt_module->Next() )
+    for( pt_module = m_Modules;  pt_module;  pt_module = pt_module->Next() )
     {
         // is the ref point within the module's bounds?
         if( !pt_module->HitTest( aPosition ) )
@@ -2736,11 +2736,9 @@ wxString BOARD::GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
             usedNumbers.insert( number );
     }
 
-    int nextNum = 1;
-
     if( usedNumbers.size() )
     {
-        nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
+        int nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
         nextRef = wxString::Format( wxT( "%s%i" ), aPrefix, nextNum );
     }
 

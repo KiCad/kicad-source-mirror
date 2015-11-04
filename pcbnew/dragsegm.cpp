@@ -68,14 +68,14 @@ void DRAG_SEGM_PICKER::SetAuxParameters()
 
     if( m_Pad_Start )
     {
-        module = (MODULE *) m_Pad_Start->GetParent();
+        module = m_Pad_Start->GetParent();
         m_PadStartOffset = m_Track->GetStart() - m_Pad_Start->GetPosition();
     }
 
     if( m_Pad_End  )
     {
         if( module == NULL )
-            module = (MODULE *) m_Pad_End->GetParent();
+            module = m_Pad_End->GetParent();
 
         m_PadEndOffset = m_Track->GetEnd() - m_Pad_End->GetPosition();
     }
@@ -104,10 +104,10 @@ void DRAG_SEGM_PICKER::SetTrackEndsCoordinates( wxPoint aOffset )
     bool flip = false;
 
     if( m_Pad_Start )
-        module = (MODULE *) m_Pad_Start->GetParent();
+        module = m_Pad_Start->GetParent();
 
     if( module == NULL && m_Pad_End )
-        module = (MODULE *) m_Pad_End->GetParent();
+        module = m_Pad_End->GetParent();
 
     if( module )
     {

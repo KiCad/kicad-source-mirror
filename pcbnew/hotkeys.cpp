@@ -356,7 +356,7 @@ static wxString moduleEditSectionTitle( _HKI( "Footprint Editor" ) );
 struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[] = {
     { &g_CommonSectionTag,      common_Hotkey_List,         &commonSectionTitle      },
     { &boardEditorSectionTag,   board_edit_Hotkey_List,     &boardEditorSectionTitle },
-    { &moduleEditSectionTitle,  module_edit_Hotkey_List,    &moduleEditSectionTitle  },
+    { &moduleEditSectionTag,  module_edit_Hotkey_List,    &moduleEditSectionTitle  },
     { NULL,                     NULL,                       NULL                       }
 };
 
@@ -372,7 +372,7 @@ struct EDA_HOTKEY_CONFIG g_Board_Editor_Hokeys_Descr[] = {
 // (used to list current hotkeys in the module editor)
 struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[] = {
     { &g_CommonSectionTag,     common_Hotkey_List,      &commonSectionTitle },
-    { &moduleEditSectionTitle, module_edit_Hotkey_List, &moduleEditSectionTitle },
+    { &moduleEditSectionTag, module_edit_Hotkey_List, &moduleEditSectionTitle },
     { NULL,                    NULL,                    NULL }
 };
 

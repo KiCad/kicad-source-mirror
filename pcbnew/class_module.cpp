@@ -321,9 +321,9 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
 
     case PCB_MODULE_EDGE_T:
         if( doAppend )
-            m_Drawings.PushBack( static_cast<BOARD_ITEM*>( aBoardItem ) );
+            m_Drawings.PushBack( aBoardItem );
         else
-            m_Drawings.PushFront( static_cast<BOARD_ITEM*>( aBoardItem ) );
+            m_Drawings.PushFront( aBoardItem );
         break;
 
     case PCB_PAD_T:
@@ -359,7 +359,7 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        return m_Drawings.Remove( static_cast<BOARD_ITEM*>( aBoardItem ) );
+        return m_Drawings.Remove( aBoardItem );
 
     case PCB_PAD_T:
         return m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
@@ -647,10 +647,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
 bool MODULE::HitTest( const wxPoint& aPosition ) const
 {
-    if( m_BoundaryBox.Contains( aPosition ) )
-        return true;
-
-    return false;
+    return m_BoundaryBox.Contains( aPosition );
 }
 
 
@@ -1099,7 +1096,6 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
 void MODULE::SetOrientation( double newangle )
 {
     double  angleChange = newangle - m_Orient;  // change in rotation
-    wxPoint pt;
 
     NORMALIZE_ANGLE_POS( newangle );
 
