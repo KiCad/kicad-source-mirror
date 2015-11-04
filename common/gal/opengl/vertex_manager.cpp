@@ -51,12 +51,20 @@ VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
 
 void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ ) const
 {
+    // flag to avoid hanging by calling DisplayError too many times:
+    static bool show_err = true;
+
     // Obtain the pointer to the vertex in the currently used container
     VERTEX* newVertex = m_container->Allocate( 1 );
 
     if( newVertex == NULL )
     {
-        DisplayError( NULL, wxT( "Vertex allocation error" ) );
+        if( show_err )
+        {
+            DisplayError( NULL, wxT( "VERTEX_MANAGER::Vertex: Vertex allocation error" ) );
+            show_err = false;
+        }
+
         return;
     }
 
@@ -66,12 +74,20 @@ void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ ) const
 
 void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize ) const
 {
+    // flag to avoid hanging by calling DisplayError too many times:
+    static bool show_err = true;
+
     // Obtain pointer to the vertex in currently used container
     VERTEX* newVertex = m_container->Allocate( aSize );
 
     if( newVertex == NULL )
     {
-        DisplayError( NULL, wxT( "Vertex allocation error" ) );
+        if( show_err )
+        {
+            DisplayError( NULL, wxT( "VERTEX_MANAGER::Vertices: Vertex allocation error" ) );
+            show_err = false;
+        }
+
         return;
     }
 
