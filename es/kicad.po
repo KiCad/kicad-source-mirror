@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-27 20:21+0100\n"
-"PO-Revision-Date: 2015-10-30 13:36+0100\n"
+"PO-Revision-Date: 2015-11-05 09:38+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -273,15 +273,15 @@ msgstr "Mostrar sombras"
 
 #: 3d-viewer/3d_toolbar.cpp:169
 msgid "Show Holes in Zones"
-msgstr "Mostras agujeros en zonas"
+msgstr "Mostras orificios en zonas"
 
 #: 3d-viewer/3d_toolbar.cpp:170
 msgid ""
 "Holes inside a copper layer copper zones are shown, but the calculation time "
 "is longer"
 msgstr ""
-"Se muestran los agujeros en las zonas de la capa de cobre, pero el tiempo de "
-"cálculo es mayor"
+"Se muestran los orificios en las zonas de la capa de cobre, pero el tiempo "
+"de cálculo es mayor"
 
 #: 3d-viewer/3d_toolbar.cpp:175
 msgid "Render Textures"
@@ -1873,7 +1873,7 @@ msgstr "&Mostrar atajos de teclado"
 
 #: common/hotkeys_basic.cpp:818
 msgid "Displays the current hotkeys list and corresponding commands"
-msgstr "Miestra la lista de atajos de teclado y los comandos correspondientes"
+msgstr "Muestra la lista de atajos de teclado y los comandos correspondientes"
 
 #: common/hotkeys_basic.cpp:823
 msgid "&Edit Hotkeys"
@@ -11817,39 +11817,40 @@ msgstr "Eliminando el componente no utilizado \"%s:%s\".\n"
 #: pcbnew/class_board.cpp:2590
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
-msgstr ""
+msgstr "Eliminar la red \"%s\" de un solo pad en \"%s\" pad '%s'\n"
 
 #: pcbnew/class_board.cpp:2645
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr ""
+"No se ha encontrado del componente '%s' el pad '%s' en la huella '%s'\n"
 
 #: pcbnew/class_board.cpp:2663
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
-msgstr ""
+msgstr "Zona de cobre (red '%s'): la red no tiene pads conectados."
 
 #: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:870
 msgid "Rect"
-msgstr "Rectangular"
+msgstr "Rect"
 
 #: pcbnew/class_board_item.cpp:46
 msgid "Bezier Curve"
-msgstr ""
+msgstr "Curva Bézier"
 
 #: pcbnew/class_board_item.cpp:47
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Polygon"
-msgstr ""
+msgstr "Polígono"
 
 #: pcbnew/class_dimension.cpp:500
 #, c-format
 msgid "Dimension \"%s\" on %s"
-msgstr ""
+msgstr "Dimensión \"%s\" en %s"
 
 #: pcbnew/class_drawsegment.cpp:364
 msgid "Drawing"
-msgstr ""
+msgstr "Dibujo"
 
 #: pcbnew/class_drawsegment.cpp:368
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
@@ -11858,7 +11859,7 @@ msgstr "Forma"
 
 #: pcbnew/class_drawsegment.cpp:383
 msgid "Curve"
-msgstr ""
+msgstr "Curva"
 
 #: pcbnew/class_drawsegment.cpp:388
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
@@ -11868,15 +11869,15 @@ msgstr "Segmento"
 #: pcbnew/class_drawsegment.cpp:608
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
-msgstr ""
+msgstr "Gráfico placa: %s, longitud %s en %s"
 
 #: pcbnew/class_drc_item.cpp:43
 msgid "Unconnected pads"
-msgstr "Pads no conectadas"
+msgstr "Pads no conectados"
 
 #: pcbnew/class_drc_item.cpp:45
 msgid "Track near thru-hole"
-msgstr "Pista cerca de agujero"
+msgstr "Pista cerca de orificio"
 
 #: pcbnew/class_drc_item.cpp:47
 msgid "Track near pad"
@@ -11884,23 +11885,23 @@ msgstr "Pista cerca de pad"
 
 #: pcbnew/class_drc_item.cpp:49
 msgid "Track near via"
-msgstr "Pista cerca de Via"
+msgstr "Pista cerca de vía"
 
 #: pcbnew/class_drc_item.cpp:51
 msgid "Via near via"
-msgstr "Via cerca de Via"
+msgstr "Vía cerca de vía"
 
 #: pcbnew/class_drc_item.cpp:53
 msgid "Via near track"
-msgstr "Via cerca de Pista"
+msgstr "Vía cerca de pista"
 
 #: pcbnew/class_drc_item.cpp:63
 msgid "Two track ends too close"
-msgstr ""
+msgstr "Dos finales de pista demasiado cerca"
 
 #: pcbnew/class_drc_item.cpp:65
 msgid "Two parallel track segments too close"
-msgstr ""
+msgstr "Dos segmentos de pista paralelos demasiado cerca"
 
 #: pcbnew/class_drc_item.cpp:67
 msgid "Tracks crossing"
@@ -11912,138 +11913,138 @@ msgstr "Pad cerca de pad"
 
 #: pcbnew/class_drc_item.cpp:71
 msgid "Via hole > diameter"
-msgstr "Agujero de Via > diámetro"
+msgstr "Agujero de vía > diámetro"
 
 #: pcbnew/class_drc_item.cpp:73
 msgid "Micro Via: incorrect layer pairs (not adjacent)"
-msgstr "Micro Via: capas no adyacentes"
+msgstr "Micro vía: capas no adyacentes"
 
 #: pcbnew/class_drc_item.cpp:75
 msgid "Copper area inside copper area"
-msgstr "Área de cobre dentro de área de cobre:"
+msgstr "Área de cobre dentro de área de cobre"
 
 #: pcbnew/class_drc_item.cpp:77
 msgid "Copper areas intersect or are too close"
-msgstr "Áreas de cobre superpuestas o muy juntas"
+msgstr "Áreas de cobre superpuestas o demasiado cerca"
 
 #: pcbnew/class_drc_item.cpp:80
 msgid "Copper area belongs a net which has no pads. This is strange"
-msgstr ""
+msgstr "Área de cobre perteneciente a una red sin pads. Es extraño"
 
 #: pcbnew/class_drc_item.cpp:83
 msgid "Hole near pad"
-msgstr ""
+msgstr "Orificio cerca de pad"
 
 #: pcbnew/class_drc_item.cpp:85
 msgid "Hole near track"
-msgstr ""
+msgstr "Orificio cerca de pista"
 
 #: pcbnew/class_drc_item.cpp:87
 msgid "Too small track width"
-msgstr ""
+msgstr "Ancho de pista demasiado pequeño"
 
 #: pcbnew/class_drc_item.cpp:89
 msgid "Too small via size"
-msgstr ""
+msgstr "Tamaño de vía demasiado pequeño"
 
 #: pcbnew/class_drc_item.cpp:91
 msgid "Too small micro via size"
-msgstr ""
+msgstr "Tamaño de micro vía demasiado pequeño"
 
 #: pcbnew/class_drc_item.cpp:95
 msgid "NetClass Track Width &lt; global limit"
-msgstr ""
+msgstr "Ancho de pista Clase de Red &lt; límite global"
 
 #: pcbnew/class_drc_item.cpp:97
 msgid "NetClass Clearance &lt; global limit"
-msgstr ""
+msgstr "Espaciado Clase de Red &lt; límite global"
 
 #: pcbnew/class_drc_item.cpp:99
 msgid "NetClass Via Dia &lt; global limit"
-msgstr ""
+msgstr "Diámetro Vía Clase de Red &lt; límite global"
 
 #: pcbnew/class_drc_item.cpp:101
 msgid "NetClass Via Drill &lt; global limit"
-msgstr ""
+msgstr "Taladro Vía Clase de Red &lt; límite global"
 
 #: pcbnew/class_drc_item.cpp:103
 msgid "NetClass uVia Dia &lt; global limit"
-msgstr ""
+msgstr "Diámetro uVía Clase de Red &lt; límite global"
 
 #: pcbnew/class_drc_item.cpp:105
 msgid "NetClass uVia Drill &lt; global limit"
-msgstr ""
+msgstr "Taladro uVía Clase de Red &lt; límite global"
 
 #: pcbnew/class_drc_item.cpp:108
 msgid "Via inside a keepout area"
-msgstr ""
+msgstr "Vía dentro de área restringida"
 
 #: pcbnew/class_drc_item.cpp:111
 msgid "Track inside a keepout area"
-msgstr ""
+msgstr "Pista dentro de área restringida"
 
 #: pcbnew/class_drc_item.cpp:114
 msgid "Pad inside a keepout area"
-msgstr ""
+msgstr "Pad dentro de área restringida"
 
 #: pcbnew/class_drc_item.cpp:117
 msgid "Via inside a text"
-msgstr ""
+msgstr "Vía sobre texto"
 
 #: pcbnew/class_drc_item.cpp:120
 msgid "Track inside a text"
-msgstr ""
+msgstr "Pista sobre texto"
 
 #: pcbnew/class_drc_item.cpp:123
 msgid "Pad inside a text"
-msgstr ""
+msgstr "Pad sobre texto"
 
 # TimeStamp
 #: pcbnew/class_edge_mod.cpp:263
 msgid "TimeStamp"
-msgstr "Fecha"
+msgstr "Marca de tiempo"
 
 #: pcbnew/class_edge_mod.cpp:264
 msgid "Footprint Layer"
-msgstr ""
+msgstr "Capa de huellas"
 
 #: pcbnew/class_edge_mod.cpp:276
 #, c-format
 msgid "Graphic (%s) on %s of %s"
-msgstr ""
+msgstr "Gráfico (%s) en %s de %s"
 
 #: pcbnew/class_marker_pcb.cpp:97
 msgid "Marker"
-msgstr "Marcadores"
+msgstr "Marcador"
 
 #: pcbnew/class_marker_pcb.cpp:101
 #, c-format
 msgid "ErrType (%d)- %s:"
-msgstr ""
+msgstr "Tipo de error (%d)- %s:"
 
 #: pcbnew/class_marker_pcb.cpp:134
 #, c-format
 msgid "Marker @(%d,%d)"
-msgstr ""
+msgstr "Marcador @(%d,%d)"
 
 #: pcbnew/class_mire.cpp:204
 #, c-format
 msgid "Target size %s"
-msgstr ""
+msgstr "Tamaño destino %s"
 
 #: pcbnew/class_module.cpp:568
 msgid "Last Change"
-msgstr "Ultimo cambio"
+msgstr "Último cambio"
 
 #: pcbnew/class_module.cpp:571
 msgid "Netlist Path"
-msgstr ""
+msgstr "Ruta lista de conexiones"
 
 #: pcbnew/class_module.cpp:595 pcbnew/class_track.cpp:1134
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:191
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:186
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: pcbnew/class_module.cpp:612
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
@@ -12055,50 +12056,50 @@ msgstr "Virtual"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:142
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:100
 msgid "Attributes"
-msgstr "Attributos"
+msgstr "Atributos"
 
 #: pcbnew/class_module.cpp:623
 msgid "No 3D shape"
-msgstr ""
+msgstr "No hay representación 3D"
 
 #: pcbnew/class_module.cpp:634
 msgid "3D-Shape"
-msgstr "Forma 3D"
+msgstr "Representación 3D"
 
 #: pcbnew/class_module.cpp:637
 #, c-format
 msgid "Doc: %s"
-msgstr ""
+msgstr "Doc: %s"
 
 #: pcbnew/class_module.cpp:638
 #, c-format
 msgid "Key Words: %s"
-msgstr ""
+msgstr "Palabras clave: %s"
 
 #: pcbnew/class_module.cpp:804
 #, c-format
 msgid "Footprint %s on %s"
-msgstr ""
+msgstr "Huella %s en %s"
 
 #: pcbnew/class_netinfo_item.cpp:87
 msgid "Net Name"
-msgstr "Nombre Red"
+msgstr "Nombre red"
 
 #: pcbnew/class_netinfo_item.cpp:90
 msgid "Net Code"
-msgstr "Código Red"
+msgstr "Código red"
 
 #: pcbnew/class_netinfo_item.cpp:137
 msgid "Net Length"
-msgstr "Long.Red"
+msgstr "Long. red"
 
 #: pcbnew/class_netinfo_item.cpp:141
 msgid "On Board"
-msgstr ""
+msgstr "En placa"
 
 #: pcbnew/class_netinfo_item.cpp:145
 msgid "In Package"
-msgstr ""
+msgstr "En empaquetado"
 
 #: pcbnew/class_pad.cpp:633
 msgid "Pad"
@@ -12106,7 +12107,7 @@ msgstr "Pad"
 
 #: pcbnew/class_pad.cpp:636 pcbnew/dialogs/dialog_design_rules.cpp:53
 msgid "Net"
-msgstr "Net"
+msgstr "Red"
 
 #: pcbnew/class_pad.cpp:662 pcbnew/class_track.cpp:1247
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:273
@@ -12120,7 +12121,7 @@ msgstr "Taladrado X/Y"
 
 #: pcbnew/class_pad.cpp:690
 msgid "Length in package"
-msgstr ""
+msgstr "Longitud en empaquetado"
 
 #: pcbnew/class_pad.cpp:867 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Oval"
@@ -12128,11 +12129,11 @@ msgstr "Oval"
 
 #: pcbnew/class_pad.cpp:873
 msgid "Trap"
-msgstr ""
+msgstr "Trampa"
 
 #: pcbnew/class_pad.cpp:886
 msgid "Std"
-msgstr ""
+msgstr "Std"
 
 #: pcbnew/class_pad.cpp:889 pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "SMD"
@@ -12144,53 +12145,53 @@ msgstr "Conn"
 
 #: pcbnew/class_pad.cpp:895
 msgid "Not Plated"
-msgstr ""
+msgstr "No plateado"
 
 #: pcbnew/class_pad.cpp:911
 #, c-format
 msgid "Pad on %s of %s"
-msgstr ""
+msgstr "Pad en %s de %s"
 
 #: pcbnew/class_pad.cpp:917
 #, c-format
 msgid "Pad %s on %s of %s"
-msgstr ""
+msgstr "Pad %s en %s de %s"
 
 #: pcbnew/class_pcb_layer_box_selector.cpp:98
 msgid "(not activated)"
-msgstr ""
+msgstr "(sin activar)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:60 pcbnew/class_track.cpp:1214
 msgid "Through Via"
-msgstr "Via pasante"
+msgstr "Vía pasante"
 
 #: pcbnew/class_pcb_layer_widget.cpp:60
 msgid "Show through vias"
-msgstr ""
+msgstr "Mostrar vías pasantes"
 
 #: pcbnew/class_pcb_layer_widget.cpp:61
 msgid "Bl/Buried Via"
-msgstr ""
+msgstr "Vía ciega"
 
 #: pcbnew/class_pcb_layer_widget.cpp:61
 msgid "Show blind or buried vias"
-msgstr ""
+msgstr "Mostras vías ciegas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:62 pcbnew/class_track.cpp:1204
 msgid "Micro Via"
-msgstr "Micro Via"
+msgstr "Micro vía"
 
 #: pcbnew/class_pcb_layer_widget.cpp:62
 msgid "Show micro vias"
-msgstr ""
+msgstr "Mostrar micro vías"
 
 #: pcbnew/class_pcb_layer_widget.cpp:63
 msgid "Non Plated"
-msgstr ""
+msgstr "No plateados"
 
 #: pcbnew/class_pcb_layer_widget.cpp:63
 msgid "Show non plated holes"
-msgstr ""
+msgstr "Mostrar orificios no plateados"
 
 # Chevelu
 #: pcbnew/class_pcb_layer_widget.cpp:64
@@ -12199,47 +12200,47 @@ msgstr "Líneas aéreas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:64
 msgid "Show unconnected nets as a ratsnest"
-msgstr ""
+msgstr "Mostrar redes sin conectar como líneas aéreas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:66
 msgid "Pads Front"
-msgstr ""
+msgstr "Pads frontales"
 
 #: pcbnew/class_pcb_layer_widget.cpp:66
 msgid "Show footprint pads on board's front"
-msgstr ""
+msgstr "Mostrar los pads de las huellas en la parte frontal de la placa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Pads Back"
-msgstr ""
+msgstr "Pads traseros"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Show footprint pads on board's back"
-msgstr ""
+msgstr "Mostrar los pads de las huellas en la parte trasera de la placa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Text Front"
-msgstr ""
+msgstr "Texto frontal"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Show footprint text on board's front"
-msgstr ""
+msgstr "Mostrar texto en la parte frontal de la placa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Text Back"
-msgstr ""
+msgstr "Texto trasero"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Show footprint text on board's back"
-msgstr ""
+msgstr "Mostrar texto en la parte trasera de la placa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Hidden Text"
-msgstr ""
+msgstr "Texto oculto"
 
 #: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Show footprint text marked as invisible"
-msgstr ""
+msgstr "Mostrar texto de huellas marcado como invisible"
 
 #: pcbnew/class_pcb_layer_widget.cpp:73
 msgid "Anchors"
@@ -12247,119 +12248,119 @@ msgstr "Anclas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:73
 msgid "Show footprint and text origins as a cross"
-msgstr ""
+msgstr "Mostrar el origen de huellas y textos como una cruz"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "No-Connects"
-msgstr ""
+msgstr "Sin conectar"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Show a marker on pads which have no net connected"
-msgstr ""
+msgstr "Mostrar un marcador en pads no conectados a una red"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Footprints Front"
-msgstr ""
+msgstr "Huellas frontales"
 
 #: pcbnew/class_pcb_layer_widget.cpp:76
 msgid "Show footprints that are on board's front"
-msgstr ""
+msgstr "Mostrar huellas en la parte frontal de la placa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Footprints Back"
-msgstr ""
+msgstr "Huellas traseras"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprints that are on board's back"
-msgstr ""
+msgstr "Mostrar huellas en la parte trasera de la placa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Show footprint's values"
-msgstr ""
+msgstr "Mostrar los valores de las huellas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "References"
-msgstr ""
+msgstr "Referencias"
 
 #: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "Show footprint's references"
-msgstr ""
+msgstr "Mostrar las referencias de la huellas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:161
 msgid "Show All Copper Layers"
-msgstr ""
+msgstr "Mostrar todas las capas de cobre"
 
 #: pcbnew/class_pcb_layer_widget.cpp:163
 msgid "Hide All Copper Layers But Active"
-msgstr ""
+msgstr "Ocultar todas las capas de cobre"
 
 #: pcbnew/class_pcb_layer_widget.cpp:165
 msgid "Always Hide All Copper Layers But Active"
-msgstr ""
+msgstr "Ocultar siempre todas las capas de cobre excepto la activa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:167
 msgid "Hide All Copper Layers"
-msgstr ""
+msgstr "Ocultar todas las capas de cobre"
 
 #: pcbnew/class_pcb_layer_widget.cpp:328
 msgid "Front copper layer"
-msgstr ""
+msgstr "Capa de cobre frontal"
 
 #: pcbnew/class_pcb_layer_widget.cpp:332
 msgid "Back copper layer"
-msgstr ""
+msgstr "Capa de cobre trasera"
 
 #: pcbnew/class_pcb_layer_widget.cpp:336
 msgid "Inner copper layer"
-msgstr ""
+msgstr "Capa de cobre interna"
 
 #: pcbnew/class_pcb_layer_widget.cpp:360
 msgid "Adhesive on board's front"
-msgstr ""
+msgstr "Adhesivo frontal"
 
 #: pcbnew/class_pcb_layer_widget.cpp:361
 msgid "Adhesive on board's back"
-msgstr ""
+msgstr "Adhesivo trasero"
 
 #: pcbnew/class_pcb_layer_widget.cpp:362
 msgid "Solder paste on board's front"
-msgstr ""
+msgstr "Pasta de soldadura frontal"
 
 #: pcbnew/class_pcb_layer_widget.cpp:363
 msgid "Solder paste on board's back"
-msgstr ""
+msgstr "Pasta de soldadura trasera"
 
 #: pcbnew/class_pcb_layer_widget.cpp:364
 msgid "Silkscreen on board's front"
-msgstr ""
+msgstr "Serigrafía frontal"
 
 #: pcbnew/class_pcb_layer_widget.cpp:365
 msgid "Silkscreen on board's back"
-msgstr ""
+msgstr "Serigrafía trasera"
 
 #: pcbnew/class_pcb_layer_widget.cpp:366
 msgid "Solder mask on board's front"
-msgstr ""
+msgstr "Máscara de soldadura frontal"
 
 #: pcbnew/class_pcb_layer_widget.cpp:367
 msgid "Solder mask on board's back"
-msgstr ""
+msgstr "Máscara de soldadura trasera"
 
 #: pcbnew/class_pcb_layer_widget.cpp:368
 msgid "Explanatory drawings"
-msgstr ""
+msgstr "Dibujos explicativos"
 
 #: pcbnew/class_pcb_layer_widget.cpp:369
 msgid "Explanatory comments"
-msgstr ""
+msgstr "Comentarios explicativos"
 
 #: pcbnew/class_pcb_layer_widget.cpp:370 pcbnew/class_pcb_layer_widget.cpp:371
 msgid "User defined meaning"
-msgstr ""
+msgstr "Significado configurable"
 
 #: pcbnew/class_pcb_layer_widget.cpp:372
 msgid "Board's perimeter definition"
-msgstr ""
+msgstr "Definición del perímetro de la placa"
 
 #: pcbnew/class_pcb_layer_widget.cpp:373
 msgid "Board's edge setback outline"
@@ -12367,32 +12368,32 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:374
 msgid "Footprint courtyards on board's front"
-msgstr ""
+msgstr "Áreas frontales de las huellas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:375
 msgid "Footprint courtyards on board's back"
-msgstr ""
+msgstr "Áreas traseras de las huellas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:376
 msgid "Footprint assembly on board's front"
-msgstr ""
+msgstr "Montaje frontal de las huellas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:377
 msgid "Footprint assembly on board's back"
-msgstr ""
+msgstr "Montaje trasero de las huellas"
 
 #: pcbnew/class_pcb_text.cpp:136
 msgid "Dimension"
-msgstr "Dimensiones"
+msgstr "Dimensión"
 
 #: pcbnew/class_pcb_text.cpp:138
 msgid "PCB Text"
-msgstr "Texto Pcb"
+msgstr "Texto de la placa"
 
 #: pcbnew/class_pcb_text.cpp:191
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
-msgstr ""
+msgstr "Texto \"%s\" en %s de la placa"
 
 #: pcbnew/class_text_mod.cpp:365
 msgid "Ref."
@@ -12402,54 +12403,54 @@ msgstr "Ref."
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
 msgid "Display"
-msgstr "&Visualización..."
+msgstr "Visualización"
 
 #: pcbnew/class_text_mod.cpp:388
 msgid " Yes"
-msgstr ""
+msgstr " Sí"
 
 #: pcbnew/class_text_mod.cpp:390
 msgid " No"
-msgstr ""
+msgstr " No"
 
 #: pcbnew/class_text_mod.cpp:416
 #, c-format
 msgid "Reference %s"
-msgstr ""
+msgstr "Referencia %s"
 
 #: pcbnew/class_text_mod.cpp:420
 #, c-format
 msgid "Value %s of %s"
-msgstr ""
+msgstr "Valor %s de %s"
 
 #: pcbnew/class_text_mod.cpp:424
 #, c-format
 msgid "Text \"%s\" on %s of %s"
-msgstr ""
+msgstr "Texto %s en %s de %s"
 
 #: pcbnew/class_track.cpp:145
 #, c-format
 msgid "Zone (%08lX) [%s] on %s"
-msgstr ""
+msgstr "Zona (%08lX) [%s] en %s"
 
 #: pcbnew/class_track.cpp:176
 #, c-format
 msgid "Blind/Buried Via %s, net[%s] (%d) on layers %s/%s"
-msgstr ""
+msgstr "Vía ciega %s, red[%s] (%d) en las capas %s/%s"
 
 #: pcbnew/class_track.cpp:179
 #, c-format
 msgid "Micro Via %s, Net [%s] (%d) on layers %s/%s"
-msgstr ""
+msgstr "Micro vía %s, red [%s] (%d) en las capas %s/%s"
 
 #: pcbnew/class_track.cpp:183
 #, c-format
 msgid "Via %s net [%s] (%d) on layers %s/%s"
-msgstr ""
+msgstr "Vía %s red [%s] (%d) en las capas %s/%s"
 
 #: pcbnew/class_track.cpp:1050
 msgid "Full Length"
-msgstr ""
+msgstr "Longitud total"
 
 #: pcbnew/class_track.cpp:1053
 msgid "Pad To Die Length"
@@ -12457,33 +12458,33 @@ msgstr ""
 
 #: pcbnew/class_track.cpp:1061
 msgid "NC Name"
-msgstr ""
+msgstr "Nombre NC"
 
 #: pcbnew/class_track.cpp:1062
 msgid "NC Clearance"
-msgstr ""
+msgstr "Espaciado NC"
 
 #: pcbnew/class_track.cpp:1065
 msgid "NC Width"
-msgstr ""
+msgstr "Ancho NC"
 
 #: pcbnew/class_track.cpp:1068
 msgid "NC Via Size"
-msgstr ""
+msgstr "Tamaño vía NC"
 
 #: pcbnew/class_track.cpp:1071
 msgid "NC Via Drill"
-msgstr ""
+msgstr "Tamaño taladro NC"
 
 #: pcbnew/class_track.cpp:1091 pcbnew/class_zone.cpp:615
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 #: pcbnew/zones_by_polygon_fill_functions.cpp:113
 msgid "NetName"
-msgstr "Nombre de Red"
+msgstr "Nombre de red"
 
 #: pcbnew/class_track.cpp:1095 pcbnew/class_zone.cpp:619
 msgid "NetCode"
-msgstr "Código de Red"
+msgstr "Código de red"
 
 #: pcbnew/class_track.cpp:1142
 msgid "Track"
@@ -12491,112 +12492,112 @@ msgstr "Pista"
 
 #: pcbnew/class_track.cpp:1161 pcbnew/class_track.cpp:1188
 msgid "Segment Length"
-msgstr ""
+msgstr "Longitud de segmento"
 
 #: pcbnew/class_track.cpp:1169
 msgid "Zone "
-msgstr ""
+msgstr "Zona "
 
 #: pcbnew/class_track.cpp:1209
 msgid "Blind/Buried Via"
-msgstr "Via ciega/enterrada"
+msgstr "Via ciega"
 
 #: pcbnew/class_track.cpp:1234 pcbnew/dialogs/dialog_layers_setup_base.cpp:86
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_plot_base.cpp:70
 msgid "Layers"
-msgstr ""
+msgstr "Capas"
 
 #: pcbnew/class_track.cpp:1240 pcbnew/dialogs/dialog_design_rules_base.cpp:272
 msgid "Diameter"
-msgstr ""
+msgstr "Diámetro"
 
 #: pcbnew/class_track.cpp:1270
 msgid "(Specific)"
-msgstr ""
+msgstr "(Específico)"
 
 #: pcbnew/class_track.cpp:1272
 msgid "(NetClass)"
-msgstr ""
+msgstr "(Clase de red)"
 
 #: pcbnew/class_track.cpp:1581
 msgid "Not found"
-msgstr ""
+msgstr "No encontrado"
 
 #: pcbnew/class_track.cpp:1589
 #, c-format
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
-msgstr ""
+msgstr "Pista %s, red [%s] (%d) en capa %s, longitud: %s"
 
 #: pcbnew/class_zone.cpp:575
 msgid "Zone Outline"
-msgstr "Límite de Zona"
+msgstr "Contorno de zona"
 
 #: pcbnew/class_zone.cpp:582 pcbnew/class_zone.cpp:818
 msgid "(Cutout)"
-msgstr "(Cortado)"
+msgstr "(Corte)"
 
 #: pcbnew/class_zone.cpp:591
 msgid "No via"
-msgstr ""
+msgstr "No hay vías"
 
 #: pcbnew/class_zone.cpp:594
 msgid "No track"
-msgstr ""
+msgstr "No hay pistas"
 
 #: pcbnew/class_zone.cpp:597
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:68
 msgid "No copper pour"
-msgstr ""
+msgstr "No hay cubierta de cobre"
 
 #: pcbnew/class_zone.cpp:599
 msgid "Keepout"
-msgstr ""
+msgstr "Zona restringida"
 
 #: pcbnew/class_zone.cpp:610
 msgid "<unknown>"
-msgstr ""
+msgstr "<desconocido>"
 
 #: pcbnew/class_zone.cpp:623
 msgid "Priority"
-msgstr ""
+msgstr "Prioridad"
 
 #: pcbnew/class_zone.cpp:627
 msgid "Non Copper Zone"
-msgstr ""
+msgstr "Zona sin cobre"
 
 #: pcbnew/class_zone.cpp:633
 msgid "Corners"
-msgstr "esquinas"
+msgstr "Esquinas"
 
 #: pcbnew/class_zone.cpp:636
 msgid "Segments"
-msgstr ""
+msgstr "Segmentos"
 
 #: pcbnew/class_zone.cpp:640
 msgid "Fill Mode"
-msgstr ""
+msgstr "Modo relleno"
 
 #: pcbnew/class_zone.cpp:644
 msgid "Hatch Lines"
-msgstr ""
+msgstr "Sombreado"
 
 #: pcbnew/class_zone.cpp:649
 msgid "Corner Count"
-msgstr ""
+msgstr "Número de esquinas"
 
 #: pcbnew/class_zone.cpp:821
 msgid "(Keepout)"
-msgstr ""
+msgstr "(Zona restringida)"
 
 #: pcbnew/class_zone.cpp:841
 msgid "** NO BOARD DEFINED **"
-msgstr ""
+msgstr "** NO SE HA DEFINIDO UNA PLACA **"
 
 #: pcbnew/class_zone.cpp:853
 #, c-format
 msgid "Zone Outline %s on %s"
-msgstr ""
+msgstr "Contorno de zona %s en %s"
 
 #: pcbnew/cross-probing.cpp:66
 #, c-format
@@ -12620,55 +12621,59 @@ msgstr "%s pin %s encontrado"
 
 #: pcbnew/deltrack.cpp:158
 msgid "Delete NET?"
-msgstr ""
+msgstr "¿Eliminar red?"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222
 #: pcbnew/dialogs/dialog_gendrill.cpp:297
 #: pcbnew/exporters/gen_modules_placefile.cpp:184
 msgid "Use a relative path? "
-msgstr ""
+msgstr "¿Utilizar una ruta relativa? "
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:233
 #: pcbnew/exporters/gen_modules_placefile.cpp:193
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
+"¡No puede crearse una ruta relativa (la unidad de destino es diferente a la "
+"del archivo)!"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:306
 #, c-format
 msgid "Plot: '%s' OK."
-msgstr ""
+msgstr "Trazar: '%s' OK."
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:820
 #: pcbnew/exporters/gen_modules_placefile.cpp:310
 #, c-format
 msgid "Unable to create file '%s'."
-msgstr ""
+msgstr "No se ha podido crear el archivo '%s'."
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:30
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
+"Introduzca un nombre de archivo si no quiere utilizar el nombre por defecto\n"
+"Solo puede utilizarse al imprimir la hoja activa"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:47
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:25
 msgid "Copper Layers:"
-msgstr ""
+msgstr "Capas de cobre:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:52
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:30
 msgid "Technical Layers:"
-msgstr ""
+msgstr "Capas técnicas:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:61
 msgid "Print SVG options:"
-msgstr ""
+msgstr "Opciones de impresión SVG:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:63
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:84
 msgid "Default pen size"
-msgstr ""
+msgstr "Tamaño del trazo por defecto"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:65
 msgid ""
