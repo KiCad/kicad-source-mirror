@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-04 15:03+0200\n"
-"PO-Revision-Date: 2015-11-04 15:15+0200\n"
+"PO-Revision-Date: 2015-11-05 11:14+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -469,11 +469,11 @@ msgstr "Grid: %.2f mm (%.4f mils)"
 
 #: common/base_units.cpp:160
 msgid " mils"
-msgstr " mils"
+msgstr " mil"
 
 #: common/base_units.cpp:160
 msgid " in"
-msgstr " ιν"
+msgstr " in"
 
 #: common/base_units.cpp:162 common/base_units.cpp:249
 msgid " mm"
@@ -503,7 +503,7 @@ msgid ""
 " or\n"
 "'%s' could not be found."
 msgstr ""
-"Δεν βρέθηκε το αρχείο HTML ή PDF \n"
+"Δεν βρέθηκε το αρχείο html ή pdf \n"
 "'%s'\n"
 " ή\n"
 "'%s'."
@@ -511,7 +511,7 @@ msgstr ""
 #: common/basicframe.cpp:444
 #, c-format
 msgid "Help file '%s' could not be found."
-msgstr "Δεν βρέθηκε το αρχείο βοήθειας %s."
+msgstr "Δεν βρέθηκε το αρχείο βοήθειας '%s'."
 
 #: common/basicframe.cpp:465
 #, c-format
@@ -528,8 +528,7 @@ msgstr "Α&ντιγραφή Πληροφοριών Έκδοσης"
 
 #: common/basicframe.cpp:495
 msgid "Copy the version string to clipboard to send with bug reports"
-msgstr ""
-"Αντιγραφή της έκδοσης στο πρόχειρο για αποστολή μαζί με αναφορές σφαλμάτων"
+msgstr "Αντιγραφή της έκδοσης στο πρόχειρο για αποστολή με αναφορές σφαλμάτων"
 
 #: common/basicframe.cpp:548
 msgid "Could not open clipboard to write version information."
@@ -679,7 +678,7 @@ msgstr "μονάδες"
 
 #: common/common.cpp:198
 msgid "in"
-msgstr "ιν"
+msgstr "in"
 
 #: common/common.cpp:209 pcbnew/dialogs/dialog_create_array_base.cpp:219
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:63
@@ -765,7 +764,7 @@ msgstr "Συμβάλετε στο KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:167
 msgid "Report bugs if you found any"
-msgstr "Αναφέρετε σφάλματα αν βρείτε κάποιο"
+msgstr "Αναφέρετε σφάλματα αν βρείτε κάποια"
 
 #: common/dialog_about/AboutDialog_main.cpp:169
 msgid "File an idea for improvement"
@@ -773,7 +772,7 @@ msgstr "Καταχωρίστε μια ιδέα για βελτίωση"
 
 #: common/dialog_about/AboutDialog_main.cpp:172
 msgid "KiCad links to user groups, tutorials and much more"
-msgstr "Δεσμοί προς ομάδες χρηστών, μαθήματα και πολλά ακόμα"
+msgstr "Σύνδεσμοι προς ομάδες χρηστών, μαθήματα και πολλά ακόμα"
 
 #: common/dialog_about/AboutDialog_main.cpp:185
 msgid "The complete KiCad EDA Suite is released under the"
@@ -852,7 +851,7 @@ msgstr "Το όνομα μίας μεταβλητής περιβάλλοντος
 
 #: common/dialogs/dialog_env_var_config.cpp:129
 msgid "Environment variable value cannot be empty."
-msgstr "Το όνομα μίας μεταβλητής περιβάλλοντος δεν μπορεί να είναι κενό."
+msgstr "Η τιμή μίας μεταβλητής περιβάλλοντος δεν μπορεί να είναι κενή."
 
 #: common/dialogs/dialog_env_var_config.cpp:140
 msgid ""
@@ -886,7 +885,7 @@ msgid ""
 "characters."
 msgstr ""
 "Για να εξασφαλιστεί ότι τα ονόματα μεταβλητών περιβάλλοντος ισχύουν σε όλες "
-"τις πλατφόρμες, το πεδίο του ονόματοςθα δέχεται μόνο κεφαλαία γράμματα, "
+"τις πλατφόρμες, το πεδίο του ονόματος θα δέχεται μόνο κεφαλαία γράμματα, "
 "ψηφία, και τον χαρακτήρα υπογράμμισης _."
 
 #: common/dialogs/dialog_env_var_config.cpp:264
@@ -1041,7 +1040,7 @@ msgstr "Όνομα:"
 
 #: common/dialogs/dialog_get_component_base.cpp:30
 msgid "History list:"
-msgstr "Λίστα Ιστορικού:"
+msgstr "Λίστα ιστορικού:"
 
 #: common/dialogs/dialog_get_component_base.cpp:49
 msgid "Search by Keyword"
@@ -1412,7 +1411,7 @@ msgstr "Προειδοποίηση:"
 
 #: common/dialogs/wx_html_report_panel.cpp:152
 msgid "Info: "
-msgstr "Πληροφορία:"
+msgstr "Πληροφορίες:"
 
 #: common/dialogs/wx_html_report_panel.cpp:233
 msgid "Save report to file"
