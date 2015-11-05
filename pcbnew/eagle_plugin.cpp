@@ -2706,6 +2706,10 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
     <layer number="50" name="ReferenceLS" color="12" fill="1" visible="yes" active="yes"/>
     <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
     <layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+
+    * These layers are used only in eagle schematic.
+    * They should not be found in board files.
+    * They are listed for info only.
     <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
     <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
     <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
@@ -2714,6 +2718,11 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
     <layer number="96" name="Values" color="7" fill="1" visible="no" active="no"/>
     <layer number="97" name="Info" color="7" fill="1" visible="no" active="no"/>
     <layer number="98" name="Guide" color="6" fill="1" visible="no" active="no"/>
+
+    * These layers are user layers
+    <layer number="160" name="???" color="7" fill="1" visible="yes" active="yes"/>
+    <layer number="161" name="???" color="7" fill="1" visible="yes" active="yes"/>
+
     </layers>
 
     */
@@ -2728,26 +2737,6 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 
     else
     {
-/*
-#define FIRST_NON_COPPER_LAYER  16
-#define B_Adhes                 16
-#define F_Adhes                 17
-#define B_Paste                 18
-#define F_Paste                 19
-#define B_SilkS                 20
-#define F_SilkS                 21
-#define B_Mask                  22
-#define F_Mask                  23
-#define Dwgs_User               24
-#define Cmts_User               25
-#define Eco1_User               26
-#define Eco2_User               27
-#define Edge_Cuts               28
-#define LAST_NON_COPPER_LAYER   28
-#define UNUSED_LAYER_29         29
-#define UNUSED_LAYER_30         30
-#define UNUSED_LAYER_31         31
-*/
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
@@ -2775,8 +2764,9 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case 51:    kiLayer = Dwgs_User;        break;
         case 52:    kiLayer = Dwgs_User;        break;
 
-        case 95:    kiLayer = Eco1_User;        break;
-        case 96:    kiLayer = Eco2_User;        break;
+        // thes layers are defined as user layers. put them on ECO layers
+        case 160:   kiLayer = Eco1_User;        break;
+        case 161:   kiLayer = Eco2_User;        break;
         default:
             // some layers do not map to KiCad
             // DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
