@@ -308,14 +308,14 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 
     m_Libraries.clear();
 
-    for( std::set<void*>::iterator it = m_LibParts.begin(); it!=m_LibParts.end();  ++it )
+    for( std::set<LIB_PART*>::iterator it = m_LibParts.begin(); it!=m_LibParts.end();  ++it )
     {
-        LIB_PART*       lcomp = (LIB_PART*     ) *it;
-        PART_LIB*    library = lcomp->GetLib();
+        LIB_PART* lcomp = *it;
+        PART_LIB* library = lcomp->GetLib();
 
         m_Libraries.insert( library );  // inserts component's library if unique
 
-        XNODE*      xlibpart;
+        XNODE* xlibpart;
         xlibparts->AddChild( xlibpart = node( sLibpart ) );
         xlibpart->AddAttribute( sLib, library->GetLogicalName() );
         xlibpart->AddAttribute( sPart, lcomp->GetName()  );
@@ -325,7 +325,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
             wxArrayString aliases = lcomp->GetAliasNames( false );
             if( aliases.GetCount() )
             {
-                XNODE*  xaliases = node( sAliases );
+                XNODE* xaliases = node( sAliases );
                 xlibpart->AddChild( xaliases );
                 for( unsigned i=0;  i<aliases.GetCount();  ++i )
                 {

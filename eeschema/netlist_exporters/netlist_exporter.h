@@ -28,6 +28,7 @@
 
 #include <kicad_string.h>
 
+#include <class_libentry.h>
 #include <class_netlist_object.h>
 #include <lib_pin.h>
 #include <sch_component.h>
@@ -65,6 +66,19 @@ public:
     }
 };
 
+/**
+ * Struct LIB_PART_LESS_THAN
+ * is used by std:set<LIB_PART*> instantiation which uses LIB_PART name as its key.
+ */
+struct LIB_PART_LESS_THAN
+{
+    // a "less than" test on two LIB_PARTs (.m_name wxStrings)
+    bool operator()( LIB_PART* const& libpart1, LIB_PART* const& libpart2 ) const
+    {
+        // Use case specific GetName() wxString compare
+        return libpart1->GetName().Cmp( libpart2->GetName() ) < 0;
+    }
+};
 
 /**
  * Class NETLIST_EXPORTER
@@ -86,10 +100,10 @@ protected:
     /// avoids processing a lib component more than once.
     UNIQUE_STRINGS      m_ReferencesAlreadyFound;
 
+    /// unique library parts used. LIB_PART items are sorted by names
+    std::set<LIB_PART*, LIB_PART_LESS_THAN> m_LibParts;
+
     // share a code generated std::set<void*> to reduce code volume
-
-    std::set<void*>     m_LibParts;     ///< unique library parts used
-
     std::set<void*>     m_Libraries;    ///< unique libraries used
 
     /**
