@@ -183,7 +183,7 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
 
     aVisited.insert( last );
 
-    if( jt->IsNonFanoutVia() )
+    if( jt->IsNonFanoutVia() || jt->IsTraceWidthChange() )
     {
         PNS_ITEM* via = NULL;
         PNS_SEGMENT* next_seg = NULL;
@@ -210,12 +210,16 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
 
         if( aLeft )
         {
-            aSet.Prepend( via );
+            if( via )
+                aSet.Prepend( via );
+
             aSet.Prepend( l );
         }
         else
         {
-            aSet.Add( via );
+            if( via )
+                aSet.Add( via );
+
             aSet.Add( l );
         }
 
