@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-06 10:35+0300\n"
-"PO-Revision-Date: 2015-11-06 10:54+0300\n"
+"PO-Revision-Date: 2015-11-06 11:46+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -3867,14 +3867,14 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:64
 msgid "Converted Shape"
-msgstr "Дополнительно изображение"
+msgstr "Преобразованное изображение"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:65
 msgid ""
 "Use the alternate shape of this component.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
-"Использовать дополнительное обозначение компонента.\n"
+"Использовать альтернативное изображение компонента.\n"
 "Для логических элементов это преобразование по законам де Моргана"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
@@ -4432,7 +4432,7 @@ msgstr "Максимальное число отмен (0 = неограниче
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:146
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:189
 msgid "actions"
-msgstr "действия"
+msgstr "действий"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:165
 msgid "&Part id notation:"
@@ -14256,7 +14256,7 @@ msgstr "%"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:307
 msgid "3D Shape Name"
-msgstr "Имя 3D образа"
+msgstr "Имя 3D формы"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:314
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:248
@@ -14271,27 +14271,27 @@ msgstr "3D масштаб и позиция"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:328
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:262
 msgid "Shape Scale:"
-msgstr "Масштабирование образа:"
+msgstr "Масштабирование формы:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:337
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:271
 msgid "Shape Offset (inch):"
-msgstr "Смещение образа(дюймы):"
+msgstr "Смещение формы (дюймы):"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:346
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:280
 msgid "Shape Rotation (degrees):"
-msgstr "Вращение образа ( ° ):"
+msgstr "Вращение формы ( ° ):"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:359
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:293
 msgid "Add 3D Shape"
-msgstr "Добавить 3D образ"
+msgstr "Добавить 3D форму"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:362
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:296
 msgid "Remove 3D Shape"
-msgstr "Удалить 3D образ"
+msgstr "Удалить 3D форму"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:365
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:299
@@ -14372,7 +14372,7 @@ msgstr "Дюйм"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:241
 msgid "3D Shape Names"
-msgstr "Имя 3D образа"
+msgstr "Имена 3D форм"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:122
 msgid "Value:"
@@ -21655,7 +21655,7 @@ msgstr "Стек площадок перех.отв. сессии не имее�
 #: pcbnew/specctra_import.cpp:303
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr "Неподдерживаемый вид перех.отв.: \"%s\""
+msgstr "Не поддерживаемый вид перех.отв.: %s"
 
 #: pcbnew/specctra_import.cpp:359
 msgid "Session file is missing the \"session\" section"
