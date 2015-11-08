@@ -648,6 +648,7 @@ WARN_LOGFILE           =
 INPUT                  = Documentation/development/coding-style-policy.md \
                          Documentation/development/stable-release-policy.md \
                          Documentation/development/road-map.md \
+                         Documentation/development/compiling.md \
                          kicad \
                          pcbnew \
                          cvpcb \

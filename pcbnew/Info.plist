@@ -21,7 +21,7 @@
     <key>CFBundleExecutable</key>               <string>pcbnew</string>
     <key>CFBundleGetInfoString</key>            <string></string>
     <key>CFBundleIconFile</key>                 <string>pcbnew.icns</string>
-    <key>CFBundleIdentifier</key>               <string>org.kicad-eda.pcbnew</string>
+    <key>CFBundleIdentifier</key>               <string>org.kicad-pcb.pcbnew</string>
     <key>CFBundleInfoDictionaryVersion</key>    <string>6.0</string>
     <key>CFBundleLongVersionString</key>        <string></string>
     <key>CFBundleName</key>                     <string>PCBNew</string>

@@ -241,17 +241,17 @@ const wxString PNS_MEANDER_PLACER::TuningInfo() const
 
     switch ( m_lastStatus )
     {
-        case TOO_LONG:
-            status = _( "Too long: " );
-            break;
-        case TOO_SHORT:
-            status = _( "Too short: " );
-            break;
-        case TUNED:
-            status = _( "Tuned: " );
-            break;
-        default:
-            return _( "?" );
+    case TOO_LONG:
+        status = _( "Too long: " );
+        break;
+    case TOO_SHORT:
+        status = _( "Too short: " );
+        break;
+    case TUNED:
+        status = _( "Tuned: " );
+        break;
+    default:
+        return _( "?" );
     }
 
     status += LengthDoubleToString( (double) m_lastLength, false );

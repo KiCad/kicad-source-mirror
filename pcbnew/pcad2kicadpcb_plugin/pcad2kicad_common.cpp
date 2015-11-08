@@ -163,7 +163,7 @@ int StrToIntUnits( wxString aStr, char aAxe, wxString aActualConversion )
 
 wxString GetAndCutWordWithMeasureUnits( wxString* aStr, wxString aDefaultMeasurementUnit )
 {
-    wxString s1, s2, result;
+    wxString result;
 
     aStr->Trim( false );
     result = wxEmptyString;

@@ -120,6 +120,7 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     if( dlg.ShowModal() != wxID_OK )
         return;
 
+    // Old model has to be refreshed, GAL normally does not keep updating it
     if( IsGalCanvasActive() )
         Compile_Ratsnest( NULL, false );
 
@@ -128,6 +129,11 @@ void PCB_EDIT_FRAME::Clean_Pcb()
 
     cleaner.CleanupBoard( this, dlg.m_cleanVias, dlg.m_mergeSegments,
                           dlg.m_deleteUnconnectedSegm );
+
+    // There is a chance that some of tracks have changed their nets, so rebuild ratsnest from scratch
+    if( IsGalCanvasActive() )
+        GetBoard()->GetRatsnest()->ProcessBoard();
+
     m_canvas->Refresh( true );
 }
 
@@ -684,7 +690,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
     int             net_code_s, net_code_e;
     bool            isModified = false;
 
-    for( segment = GetBoard()->m_Track;  segment;  segment = (TRACK*) segment->Next() )
+    for( segment = GetBoard()->m_Track;  segment;  segment = segment->Next() )
     {
         segment->SetState( FLAG0, false );
 
@@ -735,7 +741,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
     // Remove tracks having a flagged segment
     for( segment = GetBoard()->m_Track; segment; segment = next )
     {
-        next = (TRACK*) segment->Next();
+        next = segment->Next();
 
         if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
         {

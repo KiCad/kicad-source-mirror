@@ -39,12 +39,15 @@
 #include <dialogs/dialog_track_via_size.h>
 #include <base_units.h>
 #include <hotkeys.h>
+#include <confirm.h>
 
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_settings.h>
 #include <tools/common_actions.h>
 #include <tools/size_menu.h>
+#include <tools/selection_tool.h>
+#include <tools/edit_tool.h>
 
 #include <ratsnest_data.h>
 
@@ -88,7 +91,7 @@ static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
     via_microvia_xpm );
 
 static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
-    AS_CONTEXT, 'W',
+    AS_CONTEXT, 'Q',
     _( "Custom Track/Via Size" ),
     _( "Shows a dialog for changing the track width and via size." ),
     width_track_xpm );
@@ -292,10 +295,10 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     {
         switch( aEvent.KeyCode() )
         {
-            case '0':
-                TRACEn( 2, "saving drag/route log...\n" );
-                m_router->DumpLog();
-                break;
+        case '0':
+            TRACEn( 2, "saving drag/route log...\n" );
+            m_router->DumpLog();
+            break;
         }
     }
     else
@@ -304,7 +307,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     {
         DIALOG_PNS_SETTINGS settingsDlg( m_frame, m_router->Settings() );
 
-        if( settingsDlg.ShowModal() )
+        if( settingsDlg.ShowModal() == wxID_OK )
         {
             // FIXME: do we need an explicit update?
         }
@@ -371,11 +374,11 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     optional<int> newLayer = m_router->Sizes().PairedLayer( cl );
 
-    if( newLayer )
-    {
-        m_router->SwitchLayer( *newLayer );
-        m_frame->SetActiveLayer( ToLAYER_ID( *newLayer ) );
-    }
+    if( !newLayer )
+        newLayer = m_router->Sizes().GetLayerTop();
+
+    m_router->SwitchLayer( *newLayer );
+    m_frame->SetActiveLayer( ToLAYER_ID( *newLayer ) );
 }
 
 
@@ -385,42 +388,89 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 
     const int layerCount = bds.GetCopperLayerCount();
     int currentLayer = m_router->GetCurrentLayer();
+    LAYER_ID pairTop = m_frame->GetScreen()->m_Route_Layer_TOP;
+    LAYER_ID pairBottom = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
 
     PNS_SIZES_SETTINGS sizes = m_router->Sizes();
 
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
     sizes.ClearLayerPairs();
-    sizes.AddLayerPair( m_frame->GetScreen()->m_Route_Layer_TOP,
-                        m_frame->GetScreen()->m_Route_Layer_BOTTOM );
 
     if( !m_router->IsPlacingVia() )
     {
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( aType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
+        {
+            DisplayError( m_frame, _( "Blind/buried vias have to be enabled in the design settings." ) );
             return false;
+        }
 
         if( ( aType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
+        {
+            DisplayError( m_frame, _( "Microvias have to be enabled in the design settings." ) );
             return false;
+        }
 
-        //Can only place through vias on 2-layer boards
+        // Can only place through vias on 2-layer boards
         if( ( aType != VIA_THROUGH ) && ( layerCount <= 2 ) )
+        {
+            DisplayError( m_frame, _( "Only through vias are allowed on 2 layer boards." ) );
             return false;
+        }
 
-        //Can only place microvias if we're on an outer layer, or directly adjacent to one
-        if( ( aType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount-2 ) )
+        // Can only place microvias if we're on an outer layer, or directly adjacent to one
+        if( ( aType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount - 2 ) )
+        {
+            DisplayError( m_frame, _( "Microvias can be placed only between the outer layers " \
+                                      "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
             return false;
+        }
+    }
 
-        //Cannot place blind vias with front/back as the layer pair, this doesn't make sense
-        if( ( aType == VIA_BLIND_BURIED ) && ( sizes.GetLayerTop() == F_Cu ) && ( sizes.GetLayerBottom() == B_Cu ) )
-            return false;
+    // Convert blind/buried via to a through hole one, if it goes through all layers
+    if( aType == VIA_BLIND_BURIED && ( ( currentLayer == B_Cu ) || ( currentLayer == F_Cu ) )
+                                    && ( ( pairTop == B_Cu && pairBottom == F_Cu )
+                                      || ( pairTop == F_Cu && pairBottom == B_Cu ) ) )
+    {
+        aType = VIA_THROUGH;
+    }
+
+    switch( aType )
+    {
+    case VIA_THROUGH:
+        sizes.SetViaDiameter( bds.GetCurrentViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentViaDrill() );
+        sizes.AddLayerPair( pairTop, pairBottom );
+        break;
+
+    case VIA_MICROVIA:
+        sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
+
+        if( currentLayer == F_Cu || currentLayer == In1_Cu )
+            sizes.AddLayerPair( F_Cu, In1_Cu );
+        else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
+            sizes.AddLayerPair( B_Cu, layerCount - 2 );
+        else
+            wxASSERT( false );
+        break;
+
+    case VIA_BLIND_BURIED:
+        sizes.SetViaDiameter( bds.GetCurrentViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentViaDrill() );
+
+        if( currentLayer == pairTop || currentLayer == pairBottom )
+            sizes.AddLayerPair( pairTop, pairBottom );
+        else
+            sizes.AddLayerPair( pairTop, currentLayer );
+        break;
+
+    default:
+        wxASSERT( false );
+        break;
     }
 
     sizes.SetViaType( aType );
-    if( VIA_MICROVIA == aType )
-    {
-        sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
-        sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
-    }
 
     m_router->UpdateSizes( sizes );
     m_router->ToggleViaPlacement();
@@ -458,12 +508,12 @@ bool ROUTER_TOOL::prepareInteractive()
 
     sizes.Init( m_board, m_startItem );
     sizes.AddLayerPair( m_frame->GetScreen()->m_Route_Layer_TOP,
-                         m_frame->GetScreen()->m_Route_Layer_BOTTOM );
+                        m_frame->GetScreen()->m_Route_Layer_BOTTOM );
     m_router->UpdateSizes( sizes );
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
-        wxMessageBox( m_router->FailureReason(), _( "Error" ) );
+        DisplayError( m_frame, m_router->FailureReason() );
         highlightNet( false );
         return false;
     }
@@ -503,8 +553,8 @@ void ROUTER_TOOL::performRouting()
             break;
         else if( evt->IsMotion() )
         {
-            updateEndItem( *evt );
             m_router->SetOrthoMode( evt->Modifier( MD_CTRL ) );
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsClick( BUT_LEFT ) )
@@ -520,6 +570,7 @@ void ROUTER_TOOL::performRouting()
 
             // Synchronize the indicated layer
             m_frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = NULL;
         }
@@ -538,12 +589,13 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
         {
-            updateEndItem( *evt );
             m_router->SwitchLayer( m_frame->GetActiveLayer() );
+            updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
         else if( evt->IsAction( &ACT_EndTrack ) )
@@ -685,12 +737,15 @@ void ROUTER_TOOL::performDragging()
     if( m_startItem && m_startItem->Net() >= 0 )
         highlightNet( true, m_startItem->Net() );
 
-    ctls->ForceCursorPosition( false );
     ctls->SetAutoPan( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
+        ctls->ForceCursorPosition( false );
+
+        VECTOR2I p0 = ctls->GetCursorPosition();
+
+       if( evt->IsCancel() || evt->IsActivate() )
             break;
         else if( evt->IsMotion() )
         {

@@ -43,7 +43,7 @@ class SEARCH_STACK : public wxPathList, public PROJECT::_ELEM
 public:
 
 #if defined(DEBUG)
-    void Show( const char* aPrefix ) const;
+    void Show( const wxString& aPrefix ) const;
 #endif
 
     /**

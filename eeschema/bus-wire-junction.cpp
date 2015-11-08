@@ -30,7 +30,6 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <schframe.h>
 
 #include <lib_draw_item.h>
@@ -43,7 +42,6 @@
 #include <sch_text.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
-#include <trigo.h>
 
 
 static void AbortCreateNewLine( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
@@ -208,7 +206,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     }
     else    // A segment is in progress: terminates the current segment and add a new segment.
     {
-        SCH_LINE* prevSegment = (SCH_LINE*) segment->Back();
+        SCH_LINE* prevSegment = segment->Back();
 
         // Be aware prevSegment can be null when the horizontal and vertical lines only switch is off
         // when we create the first segment.

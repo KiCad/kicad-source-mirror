@@ -304,9 +304,8 @@ public:
 
     /**
      * Function GetPads
-     * returns a list of all the pads.  The returned list is not
-     * sorted and contains pointers to PADS, but those pointers do not convey
-     * ownership of the respective PADs.
+     * returns a list of all the pads (so long as buildPadsFullList() has
+     * been recently called).  Returned list contains non-owning pointers.
      * @return std::vector<D_PAD*>& - a full list of pads
     std::vector<D_PAD*>& GetPads()
     {
@@ -324,6 +323,22 @@ public:
             return m_PadsFullList[aIdx];
         else
             return NULL;
+    }
+
+    bool DeletePad( D_PAD* aPad )
+    {
+        std::vector<D_PAD*>::iterator it  = m_PadsFullList.begin();
+        std::vector<D_PAD*>::iterator end = m_PadsFullList.end();
+
+        for( ; it != end;  ++it )
+        {
+            if( *it == aPad )
+            {
+                m_PadsFullList.erase( it );
+                return true;
+            }
+        }
+        return false;
     }
 
     ///> Constant that holds the "unconnected net" number (typically 0)
@@ -409,7 +424,7 @@ public:
 
 private:
     /**
-     * Function DeleteData
+     * Function clear
      * deletes the list of nets (and free memory)
      */
     void clear();

@@ -217,8 +217,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     controls->ShowCursor( true );
     controls->SetSnapping( true );
-    controls->SetAutoPan( true );
-    controls->CaptureCursor( true );
 
     Activate();
     m_frame->SetToolID( ID_PCB_MODULE_BUTT, wxCURSOR_HAND, _( "Add module" ) );
@@ -264,14 +262,13 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         {
             if( !module )
             {
-                // Init the new item attributes
+                // Pick the module to be placed
                 module = m_frame->LoadModuleFromLibrary( wxEmptyString,
                                                          m_frame->Prj().PcbFootprintLibs(),
                                                          true, NULL );
                 if( module == NULL )
                     continue;
 
-                controls->ShowCursor( false );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
                 // Add all the drawable parts to preview
@@ -282,6 +279,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             }
             else
             {
+                // Place the selected module
                 module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
                 view->Add( module );
                 module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -293,9 +291,13 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 preview.Remove( module );
                 module->RunOnChildren( boost::bind( &KIGFX::VIEW_GROUP::Remove, &preview, _1 ) );
                 module = NULL;  // to indicate that there is no module that we currently modify
-
-                controls->ShowCursor( true );
             }
+
+            bool placing = ( module != NULL );
+
+            controls->SetAutoPan( placing );
+            controls->CaptureCursor( placing );
+            controls->ShowCursor( !placing );
         }
 
         else if( module && evt->IsMotion() )
@@ -364,8 +366,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     controls->SetSnapping( true );
-    controls->SetAutoPan( true );
-    controls->CaptureCursor( true );
 
     Activate();
     m_frame->SetToolID( ID_PCB_MIRE_BUTT, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
@@ -424,8 +424,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     delete target;
 
     controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    controls->CaptureCursor( false );
     view->Remove( &preview );
 
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );

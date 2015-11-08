@@ -321,9 +321,9 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
 
     case PCB_MODULE_EDGE_T:
         if( doAppend )
-            m_Drawings.PushBack( static_cast<BOARD_ITEM*>( aBoardItem ) );
+            m_Drawings.PushBack( aBoardItem );
         else
-            m_Drawings.PushFront( static_cast<BOARD_ITEM*>( aBoardItem ) );
+            m_Drawings.PushFront( aBoardItem );
         break;
 
     case PCB_PAD_T:
@@ -359,7 +359,7 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        return m_Drawings.Remove( static_cast<BOARD_ITEM*>( aBoardItem ) );
+        return m_Drawings.Remove( aBoardItem );
 
     case PCB_PAD_T:
         return m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
@@ -377,7 +377,7 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
 }
 
 
-void MODULE::CopyNetlistSettings( MODULE* aModule )
+void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
 {
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aModule != NULL && aModule != this, wxT( "Cannot copy to NULL or yourself." ) );
@@ -391,20 +391,30 @@ void MODULE::CopyNetlistSettings( MODULE* aModule )
     if( aModule->GetOrientation() != GetOrientation() )
         aModule->Rotate( aModule->GetPosition(), GetOrientation() );
 
-    aModule->SetLocalSolderMaskMargin( GetLocalSolderMaskMargin() );
-    aModule->SetLocalClearance( GetLocalClearance() );
-    aModule->SetLocalSolderPasteMargin( GetLocalSolderPasteMargin() );
-    aModule->SetLocalSolderPasteMarginRatio( GetLocalSolderPasteMarginRatio() );
-    aModule->SetZoneConnection( GetZoneConnection() );
-    aModule->SetThermalWidth( GetThermalWidth() );
-    aModule->SetThermalGap( GetThermalGap() );
+    aModule->SetLocked( IsLocked() );
 
-    for( D_PAD* pad = Pads();  pad;  pad = pad->Next() )
+    if( aCopyLocalSettings )
     {
-        D_PAD* newPad = aModule->FindPadByName( pad->GetPadName() );
+        aModule->SetLocalSolderMaskMargin( GetLocalSolderMaskMargin() );
+        aModule->SetLocalClearance( GetLocalClearance() );
+        aModule->SetLocalSolderPasteMargin( GetLocalSolderPasteMargin() );
+        aModule->SetLocalSolderPasteMarginRatio( GetLocalSolderPasteMarginRatio() );
+        aModule->SetZoneConnection( GetZoneConnection() );
+        aModule->SetThermalWidth( GetThermalWidth() );
+        aModule->SetThermalGap( GetThermalGap() );
+    }
 
-        if( newPad )
-            pad->CopyNetlistSettings( newPad );
+    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
+    {
+        // Fix me: if aCopyLocalSettings == true, for "multiple" pads
+        // (set of pads having the same name/number) this is broken
+        // because we copy settings from the first pad found.
+        // When old and new footprints have very few differences, a better
+        // algo can be used.
+        D_PAD* oldPad = FindPadByName( pad->GetPadName() );
+
+        if( oldPad )
+            oldPad->CopyNetlistSettings( pad, aCopyLocalSettings );
     }
 
     // Not sure about copying description, keywords, 3D models or any other
@@ -637,10 +647,7 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
 bool MODULE::HitTest( const wxPoint& aPosition ) const
 {
-    if( m_BoundaryBox.Contains( aPosition ) )
-        return true;
-
-    return false;
+    return m_BoundaryBox.Contains( aPosition );
 }
 
 
@@ -1089,7 +1096,6 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
 void MODULE::SetOrientation( double newangle )
 {
     double  angleChange = newangle - m_Orient;  // change in rotation
-    wxPoint pt;
 
     NORMALIZE_ANGLE_POS( newangle );
 

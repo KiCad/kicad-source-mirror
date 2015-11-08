@@ -1235,12 +1235,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_MENU_ARCHIVE_NEW_MODULES:
-        ArchiveModulesOnBoard( true );
+    case ID_MENU_ARCHIVE_MODULES_IN_LIBRARY:
+        ArchiveModulesOnBoard( false );
         break;
 
-    case ID_MENU_ARCHIVE_ALL_MODULES:
-        ArchiveModulesOnBoard( false );
+    case ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES:
+        ArchiveModulesOnBoard( true );
         break;
 
     case ID_GEN_IMPORT_DXF_FILE:

@@ -40,6 +40,7 @@ class BOARD_ITEM;
 class D_PAD;
 class TRACK;
 class VIA;
+class GRID_HELPER;
 class PNS_NODE;
 class PNS_DIFF_PAIR_PLACER;
 class PNS_PLACEMENT_ALGO;
@@ -105,7 +106,6 @@ public:
     bool FixRoute( const VECTOR2I& aP, PNS_ITEM* aItem );
 
     void StopRouting();
-
 
     int GetClearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) const;
 
@@ -216,10 +216,9 @@ public:
 
     PNS_PLACEMENT_ALGO *Placer() { return m_placer; }
 
-    void SetGrid( const VECTOR2I& aOrigin, const VECTOR2I& aSize )
+    void SetGrid( GRID_HELPER *aGridHelper )
     {
-        m_gridOrigin = aOrigin;
-        m_gridSize = aSize;
+        m_gridHelper = aGridHelper;
     }
 
 private:
@@ -284,8 +283,7 @@ private:
     wxString m_toolStatusbarName;
     wxString m_failureReason;
 
-    VECTOR2I m_gridOrigin;
-    VECTOR2I m_gridSize;
+    GRID_HELPER *m_gridHelper;
 };
 
 #endif

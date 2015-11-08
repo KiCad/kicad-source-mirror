@@ -43,10 +43,15 @@ public:
                               const wxString& aDefaultPath );
     ~DIALOG_SELECT_PRETTY_LIB() {};
 
-    const wxString GetPath() { return m_libName->GetValue(); }
+    /**
+     * @return the full .pretty lib name, which is an absolute path
+     *, ending wityh ".pretty"
+     */
+    const wxString GetFullPrettyLibName();
 
 private:
     virtual void OnSelectFolder( wxFileDirPickerEvent& event );
+	virtual void OnOKButton( wxCommandEvent& event );
 };
 
 

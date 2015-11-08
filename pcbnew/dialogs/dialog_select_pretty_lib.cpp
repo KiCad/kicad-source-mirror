@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
  * footprints are .kicad_mod files inside this folder
  */
 
+#include <wildcards_and_files_ext.h>
 #include <dialog_select_pretty_lib.h>
 #include <project.h>
 
@@ -50,5 +51,24 @@ void DIALOG_SELECT_PRETTY_LIB::OnSelectFolder( wxFileDirPickerEvent& event )
 {
     m_libName->SetValue( m_dirCtrl->GetPath() );
 
+    event.Skip();
+}
+
+
+const wxString DIALOG_SELECT_PRETTY_LIB::GetFullPrettyLibName()
+{
+    wxFileName fn = m_libName->GetValue();
+
+    if( !fn.IsAbsolute() )
+        fn.MakeAbsolute( m_dirCtrl->GetPath() );
+
+    // Enforce the extension:
+    fn.SetExt( KiCadFootprintLibPathExtension );
+
+    return fn.GetFullPath();
+}
+
+void DIALOG_SELECT_PRETTY_LIB::OnOKButton( wxCommandEvent& event )
+{
     event.Skip();
 }

@@ -35,10 +35,6 @@
 
 #include <sch_reference_list.h>
 #include <class_library.h>
-#include <sch_component.h>
-#include <lib_pin.h>
-
-#include <boost/foreach.hpp>
 
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 {
@@ -56,6 +52,8 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 
     // Update the references for the sheet that is currently being displayed.
     m_CurrentSheet->UpdateAllScreenReferences();
+    GetCanvas()->Refresh();
+    OnModify();
 }
 
 

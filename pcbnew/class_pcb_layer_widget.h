@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
 
 /**
  * Class PCB_LAYER_WIDGET
- * is here to implement the abtract functions of LAYER_WIDGET so they
+ * is here to implement the abstract functions of LAYER_WIDGET so they
  * may be tied into the PCB_EDIT_FRAME's data and so we can add a popup
  * menu which is specific to PCBNEW's needs.
  */
@@ -48,7 +48,7 @@ public:
      * @param aParent is the parent window
      * @param aFocusOwner is the window that should be sent the focus after
      * @param aPointSize is the font point size to use within the widget.  This
-     *  effectively sets the overal size of the widget via the row height and bitmap
+     *  effectively sets the overall size of the widget via the row height and bitmap
      *  button sizes.
      * @param aFpEditorMode false for the board editor (default), true for fp editor
      *  when true, some options or layers which cannot be used in editor mode are not
@@ -132,6 +132,10 @@ protected:
 
     /**
      * Function isLayerAllowedInFpMode
+     *
+     * User layers, which are not paired, are not shown in layers manager.  However a not
+     * listed layer can be reachable in the graphic item properties dialog.
+     *
      * @param aLayer is the layer id to test
      * @return true if LAYER_ID aLayer has meaning in footprint editor mode.
      * and therefore is shown in render panel

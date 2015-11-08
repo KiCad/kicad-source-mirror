@@ -170,12 +170,6 @@ void DIALOG_MOVE_EXACT::OnClear( wxCommandEvent& event )
 }
 
 
-void DIALOG_MOVE_EXACT::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_ABORT );
-}
-
-
 void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
 {
     m_rotation = DoubleValueFromString( DEGREES, m_rotEntry->GetValue() );
@@ -191,7 +185,7 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
         m_yEntry->GetValue().ToDouble( &m_options.entry2 );
         m_rotEntry->GetValue().ToDouble( &m_options.entryRotation );
 
-        EndModal( wxID_OK );
+        event.Skip();
     }
 }
 

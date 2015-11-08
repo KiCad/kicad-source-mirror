@@ -219,7 +219,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( three_d_xpm ) );
 
     AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_IDF3,
-                 _( "I&DFv3 Export" ), _( "IDFv3 board and component export" ),
+                 _( "I&DFv3" ), _( "IDFv3 board and component export" ),
                  KiBitmap( export_idf_xpm ) );
 
     AddMenuItem( filesMenu, submenuexport,
@@ -252,14 +252,16 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- archive submenu -----------------------------------------------------
     wxMenu* submenuarchive = new wxMenu();
 
-    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_NEW_MODULES,
-                 _( "&Archive New Footprints" ),
-                 _( "Archive new footprints only in a library (keep other footprints in this lib)" ),
+    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_MODULES_IN_LIBRARY,
+                 _( "&Archive Footprints in a Project Library" ),
+                 _( "Archive footprints in an existing library in footprint Lib table"
+                    "(do not remove other footprints in this lib)" ),
                  KiBitmap( library_update_xpm ) );
 
-    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_ALL_MODULES,
-                 _( "&Create Footprint Archive" ),
-                 _( "Archive all footprints in a library (old library will be deleted)" ),
+    AddMenuItem( submenuarchive, ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES,
+                 _( "&Create Library and Archive Footprints" ),
+                 _( "Archive all footprints in a new library\n"
+                    "(if this library already exists, it will be deleted)" ),
                  KiBitmap( library_xpm ) );
 
     AddMenuItem( filesMenu, submenuarchive,
@@ -298,7 +300,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( editMenu, ID_MENU_PCB_CLEAN,
                  _( "&Cleanup Tracks and Vias" ),
-                 _( "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias" ),
+                 _( "Clean stubs, vias, delete break points, or unconnected tracks to pads and vias" ),
                  KiBitmap( delete_xpm ) );
 
     AddMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
@@ -307,8 +309,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( swap_layer_xpm ) );
 
     AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
-                 _( "&Reset Footprint Field Sizes" ),
-                 _( "Reset text size and width of all footprint fields to current defaults" ),
+                 _( "Set Footp&rint Field Sizes" ),
+                 _( "Set text size and width of footprint fields." ),
                  KiBitmap( reset_text_xpm ) );
 
     //----- View menu -----------------------------------------------------------
@@ -355,21 +357,21 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Switch canvas to default" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Switch Canvas to Default" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_DEFAULT );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
                  text, _( "Switch the canvas implementation to default" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "Switch canvas to Open&GL" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_OPENGL );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
                  KiBitmap( tools_xpm ) );
 
-    text = AddHotkeyName( _( "Switch canvas to &Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Switch Canvas to &Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_CAIRO );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
@@ -530,7 +532,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( configmenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
                  _( "&Interactive Routing" ),
-                 _( "Configure Interactive Routing." ),
+                 _( "Configure the interactive router." ),
                  KiBitmap( add_tracks_xpm ) ); // fixme: icon
 
     //--- dimensions submenu ------------------------------------------------------
@@ -618,13 +620,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
                  _( "&FreeRoute" ),
-                 _( "Fast access to the Web Based FreeROUTE advanced router" ),
+                 _( "Fast access to the web based FreeROUTE advanced router" ),
                  KiBitmap( web_support_xpm ) );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                  _( "&Scripting Console" ),
-                 _( "Show/Hide the Python Scripting console" ),
+                 _( "Show/Hide the Python scripting console" ),
                  KiBitmap( py_script_xpm ) );
 #endif
 
@@ -643,8 +645,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     AddMenuItem( helpMenu, wxID_HELP,
-                 _( "&Contents" ),
-                 _( "Open the Pcbnew handbook" ),
+                 _( "Pcbnew &Manual" ),
+                 _( "Open the Pcbnew Manual" ),
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu, wxID_INDEX,
@@ -654,8 +656,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Pcbnew" ),
-                 _( "About Pcbnew printed circuit board designer" ),
+                 _( "&About KiCad" ),
+                 _( "Display the KiCad About dialog" ),
                  KiBitmap( info_xpm ) );
 
     // Append all menus to the menuBar

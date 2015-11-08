@@ -302,12 +302,6 @@ public:
     void    SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible, bool aNewState );
 
     /**
-     * Function SetVisibleAlls
-     * Set the status of all visible element categories and layers to VISIBLE
-     */
-    void    SetVisibleAlls();
-
-    /**
      * Function SetGridVisibility(), virtual from EDA_DRAW_FRAME
      * It may be overloaded by derived classes
      * @param aVisible = true if the grid must be shown

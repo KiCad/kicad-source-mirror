@@ -39,7 +39,7 @@
 // some define to choose how copper layers widgets are shown
 
 // if defined, display only active copper layers
-// if not displays always 1=the full set (16 layers)
+// if not displays always 1=the full set (32 copper layers)
 #define HIDE_INACTIVE_LAYERS
 
 // if defined, use the layer manager copper layers order (from FRONT to BACK)
@@ -405,7 +405,6 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
         if( ctl )
         {
             wxString lname = m_pcb->GetLayerName( layer );
-
             //D(printf("layerName[%d]=%s\n", layer, TO_UTF8( lname ) );)
 
             if( ctl->IsKindOf( CLASSINFO(wxTextCtrl) ) )
@@ -423,7 +422,6 @@ void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( LSET enabledLayers )
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
     {
         LAYER_ID layer = *seq;
-
         setLayerCheckBox( layer, enabledLayers[layer] );
     }
 }
@@ -614,11 +612,8 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
             if( m_enabledLayers[layer] )
             {
                 name = getLayerName( layer );
-
                 m_pcb->SetLayerName( layer, name );
-
                 LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
-
                 m_pcb->SetLayerType( layer, t );
             }
         }
@@ -695,7 +690,10 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
         // 4) cannot be 'signal'
         // 5) must be unique.
         // 6) cannot have illegal chars in filenames ( some filenames are built from layer names )
-        static const wxString badchars( wxT("%$\" /\\") );
+        //    like : % $ \ " / :
+
+        wxString badchars = wxFileName::GetForbiddenChars(wxPATH_DOS);
+        badchars.Append( '%' );
 
         if( !name )
         {

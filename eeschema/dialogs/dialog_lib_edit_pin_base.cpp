@@ -184,6 +184,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnCloseDialog ) );
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnInitDialog ) );
 	m_textPinName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textPadName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceOrientation->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
@@ -204,6 +205,7 @@ DIALOG_LIB_EDIT_PIN_BASE::~DIALOG_LIB_EDIT_PIN_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnCloseDialog ) );
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnInitDialog ) );
 	m_textPinName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textPadName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceOrientation->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );

@@ -1,24 +1,6 @@
 EESchema Schematic File Version 2
+LIBS:video_schlib
 LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:special
-LIBS:analog_switches
-LIBS:motorola
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:philips
-LIBS:cypress
-LIBS:siliconi
 LIBS:video-cache
 EELAYER 25 0
 EELAYER END

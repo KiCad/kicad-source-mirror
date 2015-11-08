@@ -669,11 +669,9 @@ void PCB_EDIT_FRAME::Block_Delete()
 
 void PCB_EDIT_FRAME::Block_Rotate()
 {
-    wxPoint oldpos;
     wxPoint centre;                     // rotation cent-re for the rotation transform
     int     rotAngle = m_rotationAngle; // rotation angle in 0.1 deg.
 
-    oldpos = GetCrossHairPosition();
     centre = GetScreen()->m_BlockLocate.Centre();
 
     OnModify();
@@ -738,15 +736,12 @@ void PCB_EDIT_FRAME::Block_Rotate()
 void PCB_EDIT_FRAME::Block_Flip()
 {
 #define INVERT( pos ) (pos) = center.y - ( (pos) - center.y )
-    wxPoint memo;
     wxPoint center; // Position of the axis for inversion of all elements
 
     OnModify();
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
     itemsList->m_Status = UR_FLIPPED;
-
-    memo = GetCrossHairPosition();
 
     center = GetScreen()->m_BlockLocate.Centre();
 

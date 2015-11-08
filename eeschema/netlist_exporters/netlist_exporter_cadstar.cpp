@@ -53,7 +53,6 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
-    wxString footprint;
     SCH_SHEET_PATH* sheet;
     EDA_ITEM* DrawList;
     SCH_COMPONENT* component;

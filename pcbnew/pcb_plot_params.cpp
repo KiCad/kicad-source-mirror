@@ -82,44 +82,44 @@ static bool setInt( int* aInt, int aValue, int aMin, int aMax )
 PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
     m_layerSelection( 4, B_Cu, F_Cu, F_SilkS, B_SilkS )
 {
-    m_useGerberExtensions  = false;
-    m_useGerberAttributes  = false;
-    m_gerberPrecision      = gbrDefaultPrecision;
-    m_excludeEdgeLayer     = true;
-    m_lineWidth            = g_DrawDefaultLineThickness;
-    m_plotFrameRef         = false;
-    m_plotViaOnMaskLayer   = false;
-    m_plotMode             = FILLED;
-    m_useAuxOrigin         = false;
-    m_HPGLPenNum           = 1;
-    m_HPGLPenSpeed         = 20;        // this param is always in cm/s
-    m_HPGLPenDiam          = 15;        // in mils
-    m_HPGLPenOvr           = 2;         // in mils
-    m_negative             = false;
-    m_A4Output             = false;
-    m_plotReference        = true;
-    m_plotValue            = true;
-    m_plotInvisibleText    = false;
-    m_plotPadsOnSilkLayer  = false;
-    m_subtractMaskFromSilk = false;
-    m_format               = PLOT_FORMAT_GERBER;
-    m_mirror               = false;
-    m_drillMarks           = SMALL_DRILL_SHAPE;
-    m_autoScale            = false;
-    m_scale                = 1.0;
-    m_scaleSelection       = 1;
-    m_fineScaleAdjustX     = 1.0;
-    m_fineScaleAdjustY     = 1.0;
-    m_widthAdjust          = 0.;
+    m_useGerberProtelExtensions  = false;
+    m_useGerberAttributes        = false;
+    m_gerberPrecision            = gbrDefaultPrecision;
+    m_excludeEdgeLayer           = true;
+    m_lineWidth                  = g_DrawDefaultLineThickness;
+    m_plotFrameRef               = false;
+    m_plotViaOnMaskLayer         = false;
+    m_plotMode                   = FILLED;
+    m_useAuxOrigin               = false;
+    m_HPGLPenNum                 = 1;
+    m_HPGLPenSpeed               = 20;        // this param is always in cm/s
+    m_HPGLPenDiam                = 15;        // in mils
+    m_HPGLPenOvr                 = 2;         // in mils
+    m_negative                   = false;
+    m_A4Output                   = false;
+    m_plotReference              = true;
+    m_plotValue                  = true;
+    m_plotInvisibleText          = false;
+    m_plotPadsOnSilkLayer        = false;
+    m_subtractMaskFromSilk       = false;
+    m_format                     = PLOT_FORMAT_GERBER;
+    m_mirror                     = false;
+    m_drillMarks                 = SMALL_DRILL_SHAPE;
+    m_autoScale                  = false;
+    m_scale                      = 1.0;
+    m_scaleSelection             = 1;
+    m_fineScaleAdjustX           = 1.0;
+    m_fineScaleAdjustY           = 1.0;
+    m_widthAdjust                = 0.;
     m_outputDirectory.clear();
-    m_color                = BLACK;
-    m_referenceColor       = BLACK;
-    m_valueColor           = BLACK;
-    m_textMode             = PLOTTEXTMODE_DEFAULT;
+    m_color                      = BLACK;
+    m_referenceColor             = BLACK;
+    m_valueColor                 = BLACK;
+    m_textMode                   = PLOTTEXTMODE_DEFAULT;
 
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter
-    m_skipNPTH_Pads        = false;
+    m_skipNPTH_Pads              = false;
 }
 
 void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
@@ -147,7 +147,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_layerSelection.FmtHex().c_str() );
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
-                       m_useGerberExtensions ? trueStr : falseStr );
+                       m_useGerberProtelExtensions ? trueStr : falseStr );
 
     if( m_useGerberAttributes ) // save this option only if active,
                                 // to avoid incompatibility with older Pcbnew version
@@ -223,7 +223,7 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
 {
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
-    if( m_useGerberExtensions != aPcbPlotParams.m_useGerberExtensions )
+    if( m_useGerberProtelExtensions != aPcbPlotParams.m_useGerberProtelExtensions )
         return false;
     if( m_useGerberAttributes != aPcbPlotParams.m_useGerberAttributes )
         return false;
@@ -390,7 +390,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_usegerberextensions:
-            aPcbPlotParams->m_useGerberExtensions = parseBool();
+            aPcbPlotParams->m_useGerberProtelExtensions = parseBool();
             break;
 
         case T_usegerberattributes:

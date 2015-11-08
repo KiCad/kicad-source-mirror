@@ -52,7 +52,6 @@ private:
     void OnPolarChanged( wxCommandEvent& event );
     void OnClear( wxCommandEvent& event );
 
-    void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
 
     /**

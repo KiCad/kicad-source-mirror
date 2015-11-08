@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2009 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2009 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ private:
     /**
      * A two column table which gets filled once and never loses any elements, so it is
      * basically constant, except that the NETCUP::clazz member can change for any
-     * given row a NET is moved in and out of a class.  clazz reflects the respective
+     * given row a NET is moved in and out of a class.  class reflects the respective
      * NET's current net class.
      */
     NETCUPS                 m_AllNets;
@@ -85,8 +85,6 @@ private:
 private:
     void OnNetClassesNameLeftClick( wxGridEvent& event ){ event.Skip(); }
     void OnNetClassesNameRightClick( wxGridEvent& event ){ event.Skip(); }
-    void OnCancelButtonClick( wxCommandEvent& event );
-    void OnOkButtonClick( wxCommandEvent& event );
     void OnAddNetclassClick( wxCommandEvent& event );
     void OnRemoveNetclassClick( wxCommandEvent& event );
 
@@ -110,6 +108,8 @@ private:
     void OnRightToLeftCopyButton( wxCommandEvent& event );
     void OnLeftToRightCopyButton( wxCommandEvent& event );
 
+    void OnNotebookPageChanged( wxNotebookEvent& event );
+
     /*
      * Called on clicking the left "select all" button:
      * select all items of the left netname list list box
@@ -125,11 +125,12 @@ private:
     /*
      * Function TestDataValidity
      *
-     * Performs a control of data validity
-     * set the background of a bad cell in RED and display an info message
+     * Performs a check of design rule data validity and displays an error message if errors
+     * are found.
+     * @param aErrorMsg is a pointer to a wxString to copy the error message into.  Can be NULL.
      * @return true if Ok, false if error
      */
-    bool TestDataValidity( );
+    bool TestDataValidity( wxString* aErrorMsg = NULL );
 
     void InitDialogRules();
     void InitGlobalRules();
@@ -160,13 +161,6 @@ private:
     void FillListBoxWithNetNames( NETS_LIST_CTRL* aListCtrl, const wxString& aNetClass );
 
     /**
-     * Function PrintCurrentSettings
-     * Display on m_MessagesList the current global settings:
-     * minimal values for tracks, vias, clearance ...
-     */
-    void PrintCurrentSettings( );
-
-    /**
      * Function swapNetClass
      * replaces one net class name with another in the master list, m_AllNets.
      */
@@ -188,8 +182,9 @@ private:
 
 public:
     DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent );
-    ~DIALOG_DESIGN_RULES( ) { };
+    ~DIALOG_DESIGN_RULES( ) { }
 
+    virtual bool TransferDataFromWindow();
 };
 
 #endif //__dialog_design_rules_h_

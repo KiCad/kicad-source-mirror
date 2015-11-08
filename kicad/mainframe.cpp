@@ -42,6 +42,8 @@
 #include <menus_helpers.h>
 #include <dialog_hotkeys_editor.h>
 
+#include <wx/filefn.h>
+
 
 #define TREE_FRAME_WIDTH_ENTRY     wxT( "LeftWinWidth" )
 
@@ -265,8 +267,8 @@ void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
 
     if( pid > 0 )
     {
-        wxString msg = wxString::Format( _( "%s opened [pid=%ld]\n" ),
-                GetChars( execFile ), pid );
+        wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ),
+                                         GetChars( execFile ), GetChars( params ), pid );
 
         PrintMsg( msg );
     }
@@ -409,41 +411,13 @@ void KICAD_MANAGER_FRAME::OnRunPageLayoutEditor( wxCommandEvent& event )
 }
 
 
-// Dead code: Cvpcb can be run only from the schematic editor now,
-// This is due to the fact the footprint field of components in schematics
-// are now always set by Cvpcb.
-// ( The idea is to drop the .cmp files to avoid to have 2 places were
-// footprints are stored, but only one: the schematic )
-/*
-void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
-{
-    wxFileName fn( GetProjectFileName() );
 
-    fn.SetExt( NetlistFileExtension );
-
-    KIWAY_PLAYER* frame = Kiway.Player( FRAME_CVPCB, false );
-    if( !frame )
-    {
-        frame = Kiway.Player( FRAME_CVPCB, true );
-        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-        frame->Show( true );
-    }
-
-    frame->Raise();
-}
-*/
-
-
-#include <wx/filefn.h>
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
     // Gerbview is called without any file to open, because we do not know
     // the list and the name of files to open (if any...).
     // however we run it in the path of the project
-    wxString cwd = wxGetCwd();
-    wxSetWorkingDirectory( Prj().GetProjectPath() );
-    Execute( this, GERBVIEW_EXE, wxEmptyString );
-    wxSetWorkingDirectory( cwd );
+    Execute( this, GERBVIEW_EXE, Prj().GetProjectPath() );
 }
 
 

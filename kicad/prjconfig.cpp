@@ -240,9 +240,9 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
             style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
         }
 
-        wxString        default_dir = wxGetCwd();
+        wxString        default_dir = GetMruPath();
         wxFileDialog    dlg( this, title, default_dir, wxEmptyString,
-                              ProjectFileWildcard, style );
+                             ProjectFileWildcard, style );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
@@ -333,6 +333,8 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     if( !wxFileName( prj_filename ).IsDirWritable() )
         title += _( " [Read Only]" );
+    else
+        SetMruPath( Prj().GetProjectPath() );    // Only set MRU path if we have write access.
 
     SetTitle( title );
 

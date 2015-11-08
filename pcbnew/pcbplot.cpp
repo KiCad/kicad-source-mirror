@@ -45,7 +45,7 @@
 #include <build_version.h>
 
 
-const wxString GetGerberExtension( LAYER_NUM aLayer )
+const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
 {
     if( IsCopperLayer( aLayer ) )
     {
@@ -204,15 +204,15 @@ wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
 }
 
 /* Add some X2 attributes to the file header, as defined in the
- * Gerber file format specification J4 and J5
+ * Gerber file format specification J4 and "Revision 2015.06"
  */
-#define USE_J5_ATTR
+#define USE_REVISION_2015_06_ATTR
 void AddGerberX2Attribute( PLOTTER * aPlotter,
             const BOARD *aBoard, LAYER_NUM aLayer )
 {
     wxString text;
 
-#ifdef USE_J5_ATTR
+#ifdef USE_REVISION_2015_06_ATTR
     // Creates the TF,.GenerationSoftware. Format is:
     // %TF,.GenerationSoftware,<vendor>,<application name>[,<application version>]*%
     text.Printf( wxT( "%%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
@@ -233,8 +233,8 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     text.Printf( wxT( "%%TF.CreationDate,%s%s*%%" ), GetChars( date.FormatISOCombined() ), GetChars( msg ) );
     aPlotter->AddLineToHeader( text );
 
-    // Creates the TF,.JobID. Format is (from Gerber file format doc):
-    // %TF.JobID,<project id>,<project GUID>,<revision id>*%
+    // Creates the TF,.ProjectId. Format is (from Gerber file format doc):
+    // %TF.ProjectId,<project id>,<project GUID>,<revision id>*%
     // <project id> is the name of the project, restricted to basic ASCII symbols only,
     // and comma not accepted
     // All illegal chars will be replaced by underscore
@@ -276,7 +276,7 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
 
-    text.Printf( wxT( "%%TF.JobID,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
+    text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
     aPlotter->AddLineToHeader( text );
 #endif
 
@@ -286,28 +286,32 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
 }
 
 
-void BuildPlotFileName( wxFileName*     aFilename,
-                        const wxString& aOutputDir,
-                        const wxString& aSuffix,
-                        const wxString& aExtension )
+void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir,
+                        const wxString& aSuffix, const wxString& aExtension )
 {
+    // aFilename contains the base filename only (without path and extension)
+    // when calling this function.
+    // It is expected to be a valid filename (this is usually the board filename)
     aFilename->SetPath( aOutputDir );
 
     // Set the file extension
     aFilename->SetExt( aExtension );
 
-    /* remove leading and trailing spaces if any from the suffix, if
-       something survives add it to the name;
-       also the suffix can contain some not allowed chars in filename (/ \ .),
-       so change them to underscore
-    */
+    // remove leading and trailing spaces if any from the suffix, if
+    // something survives add it to the name;
+    // also the suffix can contain some not allowed chars in filename (/ \ . :),
+    // so change them to underscore
+    // Remember it can be called from a python script, so the illegal chars
+    // have to be filtered here.
     wxString suffix = aSuffix;
     suffix.Trim( true );
     suffix.Trim( false );
 
-    suffix.Replace( wxT("."), wxT("_") );
-    suffix.Replace( wxT("/"), wxT("_") );
-    suffix.Replace( wxT("\\"), wxT("_") );
+    wxString badchars = wxFileName::GetForbiddenChars(wxPATH_DOS);
+    badchars.Append( '%' );
+
+    for( unsigned ii = 0; ii < badchars.Len(); ii++ )
+        suffix.Replace( badchars[ii], wxT("_") );
 
     if( !suffix.IsEmpty() )
         aFilename->SetName( aFilename->GetName() + wxT( "-" ) + suffix );
@@ -367,10 +371,22 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
 
     if( EnsureFileDirectoryExists( &outputDir, boardFilename ) )
     {
-        wxFileName fn( boardFilename );
-        BuildPlotFileName( &fn, outputDirName, aSuffix, GetDefaultPlotExtension( aFormat ) );
+        // outputDir contains now the full path of plot files
+        m_plotFile = boardFilename;
+        m_plotFile.SetPath( outputDir.GetPath() );
+        wxString fileExt = GetDefaultPlotExtension( aFormat );
 
-        m_plotter = StartPlotBoard( m_board, &GetPlotOptions(), ToLAYER_ID( GetLayer() ), fn.GetFullPath(), aSheetDesc );
+        // Gerber format can use specific file ext, depending on layers
+        // (now not a good practice, because the official file ext is .gbr)
+        if( GetPlotOptions().GetFormat() == PLOT_FORMAT_GERBER &&
+            GetPlotOptions().GetUseGerberProtelExtensions() )
+            fileExt = GetGerberProtelExtension( GetLayer() );
+
+        // Build plot filenames from the board name and layer names:
+        BuildPlotFileName( &m_plotFile, outputDir.GetPath(), aSuffix, fileExt );
+
+        m_plotter = StartPlotBoard( m_board, &GetPlotOptions(), ToLAYER_ID( GetLayer() ),
+                                    m_plotFile.GetFullPath(), aSheetDesc );
     }
 
     return( m_plotter != NULL );

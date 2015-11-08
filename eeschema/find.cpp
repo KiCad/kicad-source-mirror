@@ -65,7 +65,6 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
     SCH_SHEET_LIST     schematic;
     SCH_SHEET_PATH*    sheetFoundIn = NULL;
     bool               wrap = ( event.GetFlags() & FR_SEARCH_WRAP ) != 0;
-    wxRect             clientRect( wxPoint( 0, 0 ), GetClientSize() );
     bool               warpCursor = ( ( event.GetId() == wxEVT_COMMAND_FIND_CLOSE ) ||
                                       !( event.GetFlags() & FR_NO_WARP_CURSOR ) );
 
@@ -118,7 +117,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
     SCH_ITEM*       item = NULL;
     SCH_COMPONENT*  Component = NULL;
-    wxPoint         pos, curpos;
+    wxPoint         pos;
     bool            centerAndRedraw = false;
     bool            notFound = true;
     LIB_PIN*        pin;
@@ -131,7 +130,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
     for( ; sheet != NULL; sheet = sheetList.GetNext() )
     {
-        item = (SCH_ITEM*) sheet->LastDrawList();
+        item = sheet->LastDrawList();
 
         for( ; ( item != NULL ) && ( notFound == true ); item = item->Next() )
         {
@@ -306,10 +305,6 @@ bool SCH_EDIT_FRAME::IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearch
 
 void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 {
-    static wxPoint          itemPosition;  // the actual position of the matched item.
-
-    SCH_SHEET_LIST          schematic;
-    wxString                msg;
     SCH_FIND_REPLACE_DATA   searchCriteria;
     SCH_FIND_COLLECTOR_DATA data;
 
@@ -321,6 +316,20 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     {
         if( m_foundItems.GetCount() == 0 )
             return;
+
+        // Refresh the search cache in case something has changed.  This prevents any stale
+        // pointers from crashing Eeschema when the wxEVT_FIND_CLOSE event is handled.
+        if( IsSearchCacheObsolete( searchCriteria ) )
+        {
+            if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+            {
+                m_foundItems.Collect( searchCriteria, m_CurrentSheet );
+            }
+            else
+            {
+                m_foundItems.Collect( searchCriteria );
+            }
+        }
     }
     else if( IsSearchCacheObsolete( searchCriteria ) )
     {
@@ -349,10 +358,32 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 {
+    static int              nextFoundIndex = 0;
     SCH_ITEM*               item;
     SCH_SHEET_PATH*         sheet;
     SCH_SHEET_LIST          schematic;
     SCH_FIND_COLLECTOR_DATA data;
+    SCH_FIND_REPLACE_DATA   searchCriteria;
+
+    searchCriteria.SetFlags( aEvent.GetFlags() );
+    searchCriteria.SetFindString( aEvent.GetFindString() );
+    searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
+
+    if( IsSearchCacheObsolete( searchCriteria ) )
+    {
+        if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+        {
+            m_foundItems.Collect( searchCriteria, m_CurrentSheet );
+        }
+        else
+        {
+            m_foundItems.Collect( searchCriteria );
+        }
+
+        // Restore the next found index on cache refresh.  Prevents single replace events
+        // from starting back at the beginning of the cache.
+        m_foundItems.SetFoundIndex( nextFoundIndex );
+    }
 
     if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL )
     {
@@ -385,7 +416,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
     }
     else
     {
-        SCH_ITEM* item = (SCH_ITEM*) m_foundItems.GetItem( data );
+        item = (SCH_ITEM*) m_foundItems.GetItem( data );
 
         wxCHECK_RET( item != NULL, wxT( "Invalid replace item in find collector list." ) );
 
@@ -408,6 +439,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
         }
 
         m_foundItems.IncrementIndex();
+        nextFoundIndex = m_foundItems.GetFoundIndex();
     }
 
     // End the replace if we are at the end if the list.  This prevents an infinite loop if
@@ -423,7 +455,12 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
     wxString                msg;
     SCH_SHEET_LIST          schematic;
     SCH_FIND_COLLECTOR_DATA data;
+    SCH_FIND_REPLACE_DATA   searchCriteria;
     bool                    warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
+
+    searchCriteria.SetFlags( aEvent.GetFlags() );
+    searchCriteria.SetFindString( aEvent.GetFindString() );
+    searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
 
     if( m_foundItems.GetItem( data ) != NULL )
     {

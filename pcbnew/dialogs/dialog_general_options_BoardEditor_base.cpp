@@ -99,7 +99,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	
 	m_DrcOn = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_DRC_ONOFF, _("&Enforce design rules when routing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DrcOn->SetValue(true); 
-	m_DrcOn->SetToolTip( _("Enable/disable the DRC control.\nWhen DRC is disable, all connections are allowed.") );
+	m_DrcOn->SetToolTip( _("Enable/disable the DRC control.\nWhen the DRC control is disabled, all connections are allowed.") );
 	
 	bMiddleRightBoxSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
 	

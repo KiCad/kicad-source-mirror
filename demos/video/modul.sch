@@ -1,24 +1,6 @@
 EESchema Schematic File Version 2
+LIBS:video_schlib
 LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:special
-LIBS:analog_switches
-LIBS:motorola
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:philips
-LIBS:cypress
-LIBS:siliconi
 LIBS:video-cache
 EELAYER 25 0
 EELAYER END
@@ -748,7 +730,7 @@ U 1 1 22760FA8
 P 2100 5350
 F 0 "CV1" H 2230 5270 50  0000 C CNN
 F 1 "5/30pF" H 2250 5190 50  0000 C CNN
-F 2 "discret:CV3-30PF" H 2100 5350 60  0001 C CNN
+F 2 "Discret:CV3-30PF" H 2100 5350 60  0001 C CNN
 F 3 "" H 2100 5350 60  0001 C CNN
 	1    2100 5350
 	1    0    0    -1  
@@ -937,7 +919,7 @@ U 1 1 22760FA3
 P 2100 4800
 F 0 "X3" V 2300 4900 60  0000 C CNN
 F 1 "4.433618MHz" V 1900 4450 60  0000 C CNN
-F 2 "discret:HC-18UH" H 2100 4800 60  0001 C CNN
+F 2 "Discret:HC-18UH" H 2100 4800 60  0001 C CNN
 F 3 "" H 2100 4800 60  0001 C CNN
 	1    2100 4800
 	0    -1   -1   0   

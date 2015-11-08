@@ -140,11 +140,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     ReCreateHToolbar();
     ReCreateVToolbar();
 
-    wxSize  size = GetClientSize();
-    size.y -= m_MsgFrameHeight + 2;
-
-    wxPoint win_pos( 0, 0 );
-
     if( !aLibrary )
     {
         // Creates the libraries window display
@@ -162,7 +157,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     }
 
     // Creates the component window display
-    win_pos.x = m_libListWidth;
     m_cmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST,
                                wxPoint( 0, 0 ), wxSize(m_cmpListWidth, -1),
                                0, NULL, wxLB_HSCROLL );

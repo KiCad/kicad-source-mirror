@@ -5,8 +5,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>.
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,7 +170,7 @@ bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
         COMPONENT* component = aNetlist->GetComponentByReference( reference );
 
         // The corresponding component could no longer existing in the netlist.  This
-        // can happed when it is removed from schematic and still exists in footprint
+        // can happen when it is removed from schematic and still exists in footprint
         // assignment list.  This is an usual case during the life of a design.
         if( component )
         {
@@ -179,7 +179,7 @@ bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
             if( !footprint.IsEmpty() && fpid.Parse( footprint ) >= 0 )
             {
                 wxString error;
-                error.Printf( _( "invalid PFID in\nfile: <%s>\nline: %d" ),
+                error.Printf( _( "invalid footprint ID in\nfile: <%s>\nline: %d" ),
                               GetChars( m_lineReader->GetSource() ),
                               m_lineReader->LineNumber() );
 
@@ -188,8 +188,8 @@ bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
 
             // For checking purpose, store the existing FPID (if any) in the alternate fpid copy
             // if this existing FPID differs from the FPID read from the .cmp file.
-            // Cvpcb can ask for user to chose the right FPID.
-            // It happens if the FPIT was modified outside CvPcb.
+            // CvPcb can ask for user to chose the right FPID.
+            // It happens if the FPID was modified outside CvPcb.
             if( fpid != component->GetFPID() && !component->GetFPID().empty() )
                 component->SetAltFPID( component->GetFPID() );
 

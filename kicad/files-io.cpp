@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2012 Jean-Pierre Charras
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2015 Jean-Pierre Charras
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@
 
 #include <kicad.h>
 
-#define     ZipFileExtension        wxT( "zip" )
-#define     ZipFileWildcard         wxT( "Zip file (*.zip) | *.zip" )
+#define     ZipFileExtension    wxT( "zip" )
+#define     ZipFileWildcard     _( "Zip file (*.zip)|*.zip" )
 
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
@@ -75,14 +75,14 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
     fn.SetExt( ZipFileExtension );
 
-    wxFileDialog dlg( this, _( "Unzip Project" ), fn.GetPath(),
+    wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(),
                       fn.GetFullName(), ZipFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( zipfiledlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg = wxString::Format( _("\nOpen '%s'\n" ), GetChars( dlg.GetPath() ) );
+    wxString msg = wxString::Format( _("\nOpen '%s'\n" ), GetChars( zipfiledlg.GetPath() ) );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -91,13 +91,14 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( dirDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( dirDlg.GetPath() ) );
+    wxString unzipDir = dirDlg.GetPath() + wxT( "/" );
+    msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( unzipDir ) );
     PrintMsg( msg );
 
     wxFileSystem zipfilesys;
 
     zipfilesys.AddHandler( new wxZipFSHandler );
-    zipfilesys.ChangePathTo( dlg.GetPath() + wxT( "#zip:" ) );
+    zipfilesys.ChangePathTo( zipfiledlg.GetPath() + wxT( "#zip:" ), true );
 
     wxFSFile* zipfile = NULL;
     wxString  localfilename = zipfilesys.FindFirst( wxT( "*.*" ) );
@@ -111,13 +112,14 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
             break;
         }
 
-        wxString unzipfilename = localfilename.AfterLast( ':' );
+        wxFileName uzfn = localfilename.AfterLast( ':' );
+        uzfn.MakeAbsolute( unzipDir );
+        wxString unzipfilename = uzfn.GetFullPath();
 
         msg.Printf( _( "Extract file '%s'" ), GetChars( unzipfilename ) );
         PrintMsg( msg );
 
-        wxInputStream*       stream = zipfile->GetStream();
-
+        wxInputStream* stream = zipfile->GetStream();
         wxFFileOutputStream* ofile = new wxFFileOutputStream( unzipfilename );
 
         if( ofile->Ok() )
@@ -174,7 +176,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     // Prepare the zip file
     wxString zipfilename = zip.GetFullPath();
 
-    wxFFileOutputStream ostream(zipfilename);
+    wxFFileOutputStream ostream( zipfilename );
     wxZipOutputStream zipstream( ostream );
 
     // Build list of filenames to put in zip archive
@@ -197,11 +199,11 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         curr_fn.MakeRelativeTo( currdirname );
         currFilename = curr_fn.GetFullPath();
 
-        msg.Printf(_( "Archive file <%s>" ), GetChars( currFilename ) );
+        msg.Printf( _( "Archive file <%s>" ), GetChars( currFilename ) );
         PrintMsg( msg );
 
         // Read input file and add it to the zip file:
-        wxFSFile* infile = fsfile.OpenFile(currFilename);
+        wxFSFile* infile = fsfile.OpenFile( currFilename );
 
         if( infile )
         {
@@ -211,20 +213,20 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
             int zippedsize = zipstream.GetSize() - zipBytesCnt;
             zipBytesCnt = zipstream.GetSize();
             PrintMsg( wxT("  ") );
-            msg.Printf( _( "(%d bytes, compressed %d bytes)\n"),
-                        infile->GetStream()->GetSize(), zippedsize );
+            msg.Printf( _( "(%lu bytes, compressed %d bytes)\n" ),
+                        (unsigned long)infile->GetStream()->GetSize(), zippedsize );
             PrintMsg( msg );
             delete infile;
         }
         else
-            PrintMsg( _(" >>Error\n") );
+            PrintMsg( _( " >>Error\n" ) );
     }
 
     zipBytesCnt = ostream.GetSize();
 
     if( zipstream.Close() )
     {
-        msg.Printf( _("\nZip archive <%s> created (%d bytes)" ),
+        msg.Printf( _( "\nZip archive <%s> created (%d bytes)" ),
                     GetChars( zipfilename ), zipBytesCnt );
         PrintMsg( msg );
         PrintMsg( wxT( "\n** end **\n" ) );
@@ -232,7 +234,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     else
     {
         msg.Printf( wxT( "Unable to create archive <%s>, abort\n" ),
-                  GetChars( zipfilename ) );
+                    GetChars( zipfilename ) );
         PrintMsg( msg );
     }
 

@@ -480,6 +480,12 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
 
         NewPin = (LIB_PIN*) aPin->Clone();
 
+        // To avoid mistakes, gives this pin a new pin number because
+        // it does no have the save pin number as the master pin
+        // Because we do not know the actual number, give it '??'
+        wxString unknownNum( wxT( "??" ) );
+        NewPin->SetPinNumFromString( unknownNum );
+
         if( aConvert != 0 )
             NewPin->SetConvert( 1 );
 
@@ -491,6 +497,9 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
 
         NewPin = (LIB_PIN*) aPin->Clone();
         NewPin->SetConvert( 2 );
+        // Gives this pin a new pin number
+        // Because we do not know the actual number, give it '??'
+        NewPin->SetPinNumFromString( unknownNum );
 
         if( aPin->GetUnit() != 0 )
             NewPin->SetUnit( ii );

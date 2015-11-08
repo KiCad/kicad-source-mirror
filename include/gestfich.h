@@ -57,32 +57,56 @@ bool OpenPDF( const wxString& file );
 
 void OpenFile( const wxString& file );
 
-bool EDA_DirectorySelector( const wxString& Title,
-                            wxString&       Path,
-                            int             flag,       /* reserve */
-                            wxWindow*       Frame,
-                            const wxPoint&  Pos );
-
-/* Selection file dialog box:
- * Dialog title
- * Default path
- * default filename
- * default filename extension
- * filter for filename list
- * parent frame
- * wxFD_SAVE, wxFD_OPEN ..
- * true = keep the current path
+/**
+ * Function EDA_PATH_SELECTOR
+ *
+ * is a helper function that wraps wxDirDialog.
+ *
+ * @param aTitle is a string to display in the dialog title bar.
+ * @param aPath is a string contain the default path for the path dialog.  This string also
+ *              contains the result of the wxDirDialog when the OK button is used to dismiss
+ *              the dialog.
+ * @param aFlags is the style of the path dialog, wxDD_???.
+ * @param aParaent is the parent window of the dialog.
+ * @param aPosition is the position of the dialog.
+ * @return true if a path was selected.
  */
-wxString EDA_FileSelector( const wxString& Title,
-                           const wxString& Path,
-                           const wxString& FileName,
-                           const wxString& Ext,
-                           const wxString& Mask,
-                           wxWindow*       Frame,
-                           int             flag,
-                           const bool      keep_working_directory,
-                           const wxPoint&  Pos = wxPoint( -1, -1 ) );
+bool EDA_PATH_SELECTOR( const wxString& aTitle,
+                        wxString&       aPath,
+                        int             aFlags,       /* reserve */
+                        wxWindow*       aParent,
+                        const wxPoint&  aPosition = wxDefaultPosition );
 
+/**
+ * Function EDA_FILE_SELECTOR
+ *
+ * is a helper function that wraps a call to wxFileSelector.
+ *
+ * @param aTitle is a string to display in the dialog title bar.
+ * @param aPath is a string contain the default path for the path dialog.
+ * @param aFileName is a string containing the default file name.
+ * @param aExtension is a string containing the default file extension.
+ * @param aWildcard is a string containing the default wildcard.
+ * @param aParaent is the parent window of the dialog.
+ * @param aFlags is the style of the path dialog, wxFD_???.
+ * @param aKeepWorkingDirectory determines if current working directory should be set to the
+ *                              user selected path.
+ * @param aPosition is the position of the dialog.
+ * @param aMruPath is a pointer to a string to copy the path selected by the user when
+ *                 the OK button is pressed to dismiss the dialog.  This can be NULL.
+ * @return the full path and file name of the selected file or wxEmptyString if the user
+ *         pressed the cancel button to dismiss the dialog.
+ */
+wxString EDA_FILE_SELECTOR( const wxString& aTitle,
+                            const wxString& aPath,
+                            const wxString& aFileName,
+                            const wxString& aExtension,
+                            const wxString& aWildcard,
+                            wxWindow*       aParent,
+                            int             aStyle,
+                            const bool      aKeepWorkingDirectory,
+                            const wxPoint&  aPosition = wxDefaultPosition,
+                            wxString*       aMruPath = NULL );
 
 EDA_LIST_DIALOG* GetFileNames( char* Directory, char* Mask );
 

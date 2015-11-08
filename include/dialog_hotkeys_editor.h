@@ -236,14 +236,6 @@ private:
     void OnOKClicked( wxCommandEvent& aEvent );
 
     /**
-     * Function CancelClicked
-     * Close the dialog and make no changes to hotkeys
-     *
-     * @param aEvent is the button press event, unused
-     */
-    void CancelClicked( wxCommandEvent& aEvent );
-
-    /**
      * Function UndoClicked
      * Reinit the hotkeys to the initial state (removes all pending changes)
      *

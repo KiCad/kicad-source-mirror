@@ -44,6 +44,8 @@ public:
     DIALOG_LIB_EDIT_PIN( EDA_DRAW_FRAME* parent, LIB_PIN* aPin );
     ~DIALOG_LIB_EDIT_PIN();
 
+    void OnInitDialog( wxInitDialogEvent& event);
+
     void OnCloseDialog( wxCloseEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnOKButtonClick( wxCommandEvent& event );

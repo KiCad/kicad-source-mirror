@@ -375,26 +375,9 @@ void GRLine( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aW
 }
 
 
-void GRDashedLineTo( EDA_RECT* ClipBox, wxDC* DC, int x2, int y2, int width, EDA_COLOR_T Color )
-{
-    s_DC_lastcolor = UNSPECIFIED_COLOR;
-    GRSetColorPen( DC, Color, width, wxPENSTYLE_SHORT_DASH );
-    WinClipAndDrawLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x2, y2, width );
-    s_DC_lastcolor = UNSPECIFIED_COLOR;
-    GRSetColorPen( DC, Color, width );
-    GRLastMoveToX = x2;
-    GRLastMoveToY = y2;
-}
-
-
-void GRDashedLine( EDA_RECT* ClipBox,
-                   wxDC*     DC,
-                   int       x1,
-                   int       y1,
-                   int       x2,
-                   int       y2,
-                   int       width,
-                   EDA_COLOR_T Color )
+void GRDashedLine( EDA_RECT* ClipBox, wxDC*     DC,
+                   int x1, int y1, int x2, int  y2,
+                   int       width, EDA_COLOR_T Color )
 {
     GRLastMoveToX  = x2;
     GRLastMoveToY  = y2;
@@ -421,12 +404,7 @@ void GRMoveTo( int x, int y )
  */
 void GRLineTo( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int width, EDA_COLOR_T Color )
 {
-    int GRLineToX, GRLineToY;
-
-    GRLineToX = x;
-    GRLineToY = y;
-
-    GRLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, GRLineToX, GRLineToY, width, Color );
+    GRLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x, y, width, Color );
 }
 
 

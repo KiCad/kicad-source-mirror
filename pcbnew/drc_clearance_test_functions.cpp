@@ -272,7 +272,9 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     // Compute the min distance to pads
     if( testPads )
     {
-        for( unsigned ii = 0;  ii<m_pcb->GetPadCount();  ++ii )
+        unsigned pad_count = m_pcb->GetPadCount();
+
+        for( unsigned ii = 0;  ii<pad_count;  ++ii )
         {
             D_PAD* pad = m_pcb->GetPad( ii );
 

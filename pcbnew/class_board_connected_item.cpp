@@ -63,7 +63,8 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 
     if( !aNoAssert )
         assert( m_netinfo );
-    return m_netinfo;
+
+    return ( m_netinfo != NULL );
 }
 
 

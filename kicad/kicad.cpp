@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -162,7 +162,7 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
         {
             GetFileHistory().RemoveFileFromHistory( 0 );
 
-            wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
+            wxFileName namelessProject( wxStandardPaths::Get().GetDocumentsDir(), NAMELESS_PROJECT,
                                         ProjectFileExtension );
 
             frame->SetProjectFileName( namelessProject.GetFullPath() );
@@ -181,7 +181,7 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
     }
     else	// there is no history
     {
-            wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT,
+            wxFileName namelessProject( wxStandardPaths::Get().GetDocumentsDir(), NAMELESS_PROJECT,
                                         ProjectFileExtension );
 
             frame->SetProjectFileName( namelessProject.GetFullPath() );
@@ -249,6 +249,20 @@ KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
  */
 struct APP_KICAD : public wxApp
 {
+#if defined (__LINUX__)
+    APP_KICAD(): wxApp()
+    {
+        // Disable proxy menu in Unity window manager. Only usual menubar works with wxWidgets (at least <= 3.1)
+        // When the proxy menu menubar is enable, some important things for us do not work: menuitems UI events and shortcuts.
+        wxString wm;
+
+        if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
+        {
+            wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
+        }
+    }
+#endif
+
     bool OnInit()           // overload wxApp virtual
     {
         // if( Kiways.OnStart( this ) )

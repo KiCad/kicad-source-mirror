@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,12 +198,13 @@ const wxString SEARCH_STACK::LastVisitedPath( const wxString& aSubPathToSearch )
 
 
 #if defined(DEBUG)
-void SEARCH_STACK::Show( const char* aPrefix ) const
+void SEARCH_STACK::Show( const wxString& aPrefix ) const
 {
-    printf( "%s SEARCH_STACK:\n", aPrefix );
+    wxLogDebug( wxT( "%s SEARCH_STACK:" ), GetChars( aPrefix ) );
+
     for( unsigned i=0;  i<GetCount();  ++i )
     {
-        printf( "  [%2u]:%s\n", i, TO_UTF8( (*this)[i] ) );
+        wxLogDebug( wxT( "  [%2u]:%s" ), i, TO_UTF8( (*this)[i] ) );
     }
 }
 #endif

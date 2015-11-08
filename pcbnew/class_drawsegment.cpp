@@ -357,8 +357,6 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
-    wxString coords;
-
     wxASSERT( m_Parent );
 
     msg = _( "Drawing" );
@@ -606,7 +604,7 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
     wxString temp = ::LengthDoubleToString( GetLength() );
 
     text.Printf( _( "Pcb Graphic: %s, length %s on %s" ),
-                 GetChars( ShowShape( (STROKE_T) m_Shape ) ),
+                 GetChars( ShowShape( m_Shape ) ),
                  GetChars( temp ), GetChars( GetLayerName() ) );
 
     return text;

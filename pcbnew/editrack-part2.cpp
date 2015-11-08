@@ -235,7 +235,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
         if( item->Type() == PCB_PAD_T )
         {
             pt_pad = (D_PAD*) item;
-            Module = (MODULE*) pt_pad->GetParent();
+            Module = pt_pad->GetParent();
         }
 
         if( pt_pad ) // Displaying the ratsnest of the corresponding net.
@@ -277,7 +277,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
                 SetMsgPanel( Module );
                 pt_pad = Module->Pads();
 
-                for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
+                for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
                 {
                     for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
                     {

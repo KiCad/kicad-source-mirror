@@ -144,6 +144,7 @@ void NETINFO_LIST::buildListOfNets()
 
         // Add pad to the appropriate list of pads
         NETINFO_ITEM* net = pad->GetNet();
+
         // it should not be possible for BOARD_CONNECTED_ITEM to return NULL as a result of GetNet()
         wxASSERT( net );
 
@@ -162,6 +163,7 @@ void NETINFO_LIST::buildListOfNets()
     m_Parent->SetAreasNetCodesFromNetNames();
 }
 
+
 #if defined(DEBUG)
 void NETINFO_LIST::Show() const
 {
@@ -175,6 +177,7 @@ void NETINFO_LIST::Show() const
     }
 }
 #endif
+
 
 void NETINFO_LIST::buildPadsFullList()
 {

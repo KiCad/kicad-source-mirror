@@ -141,15 +141,15 @@ bool GetAssociatedDocument( wxWindow* aParent,
 
     if( wxIsWild( fullfilename ) )
     {
-        fullfilename = EDA_FileSelector( _( "Doc Files" ),
-                                         wxPathOnly( fullfilename ),
-                                         fullfilename,
-                                         extension,
-                                         mask,
-                                         aParent,
-                                         wxFD_OPEN,
-                                         true,
-                                         wxPoint( -1, -1 ) );
+        fullfilename = EDA_FILE_SELECTOR( _( "Doc Files" ),
+                                          wxPathOnly( fullfilename ),
+                                          fullfilename,
+                                          extension,
+                                          mask,
+                                          aParent,
+                                          wxFD_OPEN,
+                                          true,
+                                          wxPoint( -1, -1 ) );
         if( fullfilename.IsEmpty() )
             return false;
     }

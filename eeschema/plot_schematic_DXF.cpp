@@ -38,7 +38,7 @@
 
 void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 {
-    SCH_EDIT_FRAME* schframe  = (SCH_EDIT_FRAME*) m_parent;
+    SCH_EDIT_FRAME* schframe  = m_parent;
     SCH_SCREEN*     screen    = schframe->GetScreen();
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();

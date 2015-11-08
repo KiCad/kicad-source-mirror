@@ -31,6 +31,12 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTING
     // "Figure out what's best" is not available yet
     m_mode->Enable( RM_Smart, false );
 
+    // Add tool tip to the mode radio box, one by option
+    // (cannot be made with wxFormBuilder for each item )
+    m_mode->SetItemToolTip( 0, _( "DRC violation: highlight obstacles" ) );
+    m_mode->SetItemToolTip( 1, _( "DRC violation: shove tracks and vias" ) );
+    m_mode->SetItemToolTip( 2, _( "DRC violation: walk around obstacles" ) );
+
     // Load widgets' values from settings
     m_mode->SetSelection( m_settings.Mode() );
     m_shoveVias->SetValue( m_settings.ShoveVias() );
@@ -50,13 +56,6 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTING
 }
 
 
-void DIALOG_PNS_SETTINGS::OnClose( wxCloseEvent& aEvent )
-{
-    // Do nothing, it is result of ESC pressing
-    EndModal( 0 );
-}
-
-
 void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
 {
     // Save widgets' values to settings
@@ -71,12 +70,6 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );
     m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
     m_settings.SetInlineDragEnabled( m_dragToolMode->GetSelection () ? true : false );
-    EndModal( 1 );
-}
 
-
-void DIALOG_PNS_SETTINGS::OnCancelClick( wxCommandEvent& aEvent )
-{
-    // Do nothing
-    EndModal( 0 );
+    aEvent.Skip();      // ends returning wxID_OK (default behavior)
 }

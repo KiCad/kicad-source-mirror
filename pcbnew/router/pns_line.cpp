@@ -417,7 +417,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 
     DIRECTION_45 dir( aOrigin.CPoint( -1 ) - aOrigin.CPoint( -2 ) );
 
-    return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( -1 ), aP, dir.IsDiagonal() );
+    return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP, dir.IsDiagonal() );
 }
 
 

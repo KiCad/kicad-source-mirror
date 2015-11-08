@@ -95,7 +95,7 @@ PNS_SHOVE::~PNS_SHOVE()
 
 PNS_LINE PNS_SHOVE::assembleLine( const PNS_SEGMENT* aSeg, int* aIndex )
 {
-    return m_currentNode->AssembleLine( const_cast<PNS_SEGMENT*>( aSeg ), aIndex );
+    return m_currentNode->AssembleLine( const_cast<PNS_SEGMENT*>( aSeg ), aIndex, true );
 }
 
 // A dumb function that checks if the shoved line is shoved the right way, e.g.
@@ -626,12 +626,12 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         }
     }
 
-    m_draggedViaHeadSet.Add ( pushedVia );
+    m_draggedViaHeadSet.Add( pushedVia );
 
-    if ( aDryRun )
+    if( aDryRun )
         return SH_OK;
 
-    replaceItems ( aVia, pushedVia );
+    replaceItems( aVia, pushedVia );
 
 #ifdef DEBUG
     m_logger.Log( aVia, 0, "obstacle-via" );
@@ -649,7 +649,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         {
             lp.second.Mark( MK_HEAD );
 
-            if ( m_multiLineMode )
+            if( m_multiLineMode )
                 return SH_INCOMPLETE;
 
             m_newHead = lp.second;
@@ -803,7 +803,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onReverseCollidingVia( PNS_LINE& aCurrent, PN
     int currentRank = aCurrent.Rank();
     replaceItems( &aCurrent, &shoved );
 
-    if ( !pushLine( shoved ) )
+    if( !pushLine( shoved ) )
         return SH_INCOMPLETE;
 
     shoved.SetRank( currentRank );
@@ -927,43 +927,43 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
     {
         switch( ni->Kind() )
         {
-            case PNS_ITEM::VIA:
+        case PNS_ITEM::VIA:
+        {
+            PNS_VIA* revVia = (PNS_VIA*) ni;
+            TRACE( 2, "iter %d: reverse-collide-via", aIter );
+
+            if( currentLine.EndsWithVia() && m_currentNode->CheckColliding( &currentLine.Via(), revVia ) )
             {
-                PNS_VIA* revVia = (PNS_VIA*) ni;
-                TRACE( 2, "iter %d: reverse-collide-via", aIter );
-
-                if( currentLine.EndsWithVia() && m_currentNode->CheckColliding( &currentLine.Via(), revVia ) )
-                {
-                    st = SH_INCOMPLETE;
-                }
-                else
-                {
-                    st = onReverseCollidingVia ( currentLine, revVia );
-                }
-
-                break;
+                st = SH_INCOMPLETE;
+            }
+            else
+            {
+                st = onReverseCollidingVia ( currentLine, revVia );
             }
 
-            case PNS_ITEM::SEGMENT:
-            {
-                PNS_SEGMENT* seg = (PNS_SEGMENT*) ni;
-                TRACE( 2, "iter %d: reverse-collide-segment ", aIter );
-                PNS_LINE revLine = assembleLine( seg );
+            break;
+        }
 
-                popLine();
-                st = onCollidingLine( revLine, currentLine );
-                if ( !pushLine( revLine ) )
-                    return SH_INCOMPLETE;
+        case PNS_ITEM::SEGMENT:
+        {
+            PNS_SEGMENT* seg = (PNS_SEGMENT*) ni;
+            TRACE( 2, "iter %d: reverse-collide-segment ", aIter );
+            PNS_LINE revLine = assembleLine( seg );
 
-                break;
-            }
+            popLine();
+            st = onCollidingLine( revLine, currentLine );
+            if( !pushLine( revLine ) )
+                return SH_INCOMPLETE;
 
-            default:
-                assert( false );
+            break;
+        }
+
+        default:
+            assert( false );
         }
     }
     else
-    { // "forward" collisoins
+    { // "forward" collisions
         switch( ni->Kind() )
         {
         case PNS_ITEM::SEGMENT:
@@ -1036,7 +1036,7 @@ OPT_BOX2I PNS_SHOVE::totalAffectedArea() const
 
     if( area )
     {
-        if ( m_affectedAreaSum )
+        if( m_affectedAreaSum )
             area->Merge ( *m_affectedAreaSum );
     } else
         area = m_affectedAreaSum;
@@ -1098,17 +1098,23 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
     }
 
     if( !pushLine( head ) )
+    {
+        delete m_currentNode;
+        m_currentNode = parent;
+
         return SH_INCOMPLETE;
+    }
 
     st = shoveMainLoop();
 
-
-    if( ( st == SH_OK || st == SH_HEAD_MODIFIED ) )
+    if( st == SH_OK )
+    {
         runOptimizer( m_currentNode );
 
-    if( m_newHead && st == SH_OK )
-    {
-        st = SH_HEAD_MODIFIED;
+        if( m_newHead )
+            st = m_currentNode->CheckColliding( &(*m_newHead) ) ? SH_INCOMPLETE : SH_HEAD_MODIFIED;
+        else
+            st = m_currentNode->CheckColliding( &head ) ? SH_INCOMPLETE : SH_OK;
     }
 
     m_currentNode->RemoveByMarker( MK_HEAD );
@@ -1118,7 +1124,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
-        pushSpringback( m_currentNode, headSet, PNS_COST_ESTIMATOR(), m_affectedAreaSum);
+        pushSpringback( m_currentNode, headSet, PNS_COST_ESTIMATOR(), m_affectedAreaSum );
     }
     else
     {
@@ -1126,6 +1132,13 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
 
         m_currentNode = parent;
         m_newHead = OPT_LINE();
+    }
+
+    if( m_newHead && head.EndsWithVia() )
+    {
+        PNS_VIA v = head.Via();
+        v.SetPos( m_newHead->CPoint( -1 ) );
+        m_newHead->AppendVia(v);
     }
 
     return st;
@@ -1140,7 +1153,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
 
     PNS_ITEMSET headSet;
 
-    BOOST_FOREACH ( const PNS_ITEM* item, aHeadSet.CItems() )
+    BOOST_FOREACH( const PNS_ITEM* item, aHeadSet.CItems() )
     {
         const PNS_LINE* headOrig = static_cast<const PNS_LINE*>( item );
 
@@ -1163,7 +1176,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
     m_currentNode->ClearRanks();
     int n = 0;
 
-    BOOST_FOREACH ( const PNS_ITEM* item, aHeadSet.CItems() )
+    BOOST_FOREACH( const PNS_ITEM* item, aHeadSet.CItems() )
     {
         const PNS_LINE* headOrig = static_cast<const PNS_LINE*>( item );
         PNS_LINE head( *headOrig );
@@ -1174,7 +1187,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
         head.Mark( MK_HEAD );
         head.SetRank( 100000 );
         n++;
-        if ( !pushLine( head ) )
+
+        if( !pushLine( head ) )
             return SH_INCOMPLETE;
 
         PNS_VIA* headVia = NULL;

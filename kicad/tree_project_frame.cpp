@@ -42,6 +42,7 @@
 #include <wx/regex.h>
 #include <wx/dir.h>
 #include <wx/imaglist.h>
+#include <wx/stdpaths.h>
 #include <menus_helpers.h>
 #include <stack>
 
@@ -595,7 +596,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
     if( !fn.IsOk() )
     {
         fn.Clear();
-        fn.SetPath( ::wxGetCwd() );
+        fn.SetPath( wxStandardPaths::Get().GetDocumentsDir() );
         fn.SetName( NAMELESS_PROJECT );
         fn.SetExt( ProjectFileExtension );
     }

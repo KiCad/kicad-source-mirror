@@ -272,8 +272,14 @@ public:
 
     void SetForceSearch( bool doSearch = true ) { m_forceSearch = doSearch; }
 
-    int GetLibHash() const          { return m_lib_hash; }
-    void SetLibHash( int aHash )    { m_lib_hash = aHash; }
+    int GetLibHash() const           { return m_lib_hash; }
+    void SetLibHash( int aHash )     { m_lib_hash = aHash; }
+
+    int GetFoundIndex() const        { return m_foundIndex; }
+    void SetFoundIndex( int aIndex )
+    {
+        m_foundIndex = ( (unsigned) aIndex < m_data.size() ) ? aIndex : 0;
+    }
 
     /**
      * Function PassedEnd

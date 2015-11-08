@@ -117,7 +117,7 @@ void SCH_SHEET_PIN::SetNumber( int aNumber )
 
 void SCH_SHEET_PIN::SetEdge( SCH_SHEET_PIN::SHEET_SIDE aEdge )
 {
-    SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
+    SCH_SHEET* Sheet = GetParent();
 
     // use SHEET_UNDEFINED_SIDE to adjust text orientation without changing edge
 
@@ -161,7 +161,7 @@ enum SCH_SHEET_PIN::SHEET_SIDE SCH_SHEET_PIN::GetEdge() const
 
 void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 {
-    SCH_SHEET* sheet = (SCH_SHEET*) GetParent();
+    SCH_SHEET* sheet = GetParent();
 
     if( sheet == NULL )
         return;

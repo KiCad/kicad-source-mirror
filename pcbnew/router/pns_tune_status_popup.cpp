@@ -49,15 +49,15 @@ void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS_ROUTER* aRouter )
 
     switch( placer->TuningStatus() )
     {
-        case PNS_MEANDER_PLACER::TUNED:
-            color = wxColour( 0, 255, 0 );
-            break;
-        case PNS_MEANDER_PLACER::TOO_SHORT:
-            color = wxColour( 255, 128, 128 );
-            break;
-        case PNS_MEANDER_PLACER::TOO_LONG:
-            color = wxColour( 128, 128, 255 );
-            break;
+    case PNS_MEANDER_PLACER::TUNED:
+        color = wxColour( 0, 255, 0 );
+        break;
+    case PNS_MEANDER_PLACER::TOO_SHORT:
+        color = wxColour( 255, 128, 128 );
+        break;
+    case PNS_MEANDER_PLACER::TOO_LONG:
+        color = wxColour( 128, 128, 255 );
+        break;
     }
 
     m_statusLine->SetForegroundColour( color );

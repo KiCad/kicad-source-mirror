@@ -453,15 +453,14 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
     if( !docpath )
         docpath = search->LastVisitedPath( wxT( "doc" ) );
 
-    wxString    fullFileName = EDA_FileSelector( _( "Doc Files" ),
-                                     docpath,
-                                     wxEmptyString,
-                                     wxEmptyString,
-                                     mask,
-                                     this,
-                                     wxFD_OPEN,
-                                     true
-                                     );
+    wxString    fullFileName = EDA_FILE_SELECTOR( _( "Doc Files" ),
+                                                  docpath,
+                                                  wxEmptyString,
+                                                  wxEmptyString,
+                                                  mask,
+                                                  this,
+                                                  wxFD_OPEN,
+                                                  true );
     if( fullFileName.IsEmpty() )
         return;
 

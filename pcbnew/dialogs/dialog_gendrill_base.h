@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  6 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,7 +48,6 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxRadioBox* m_Choice_Drill_Map;
 		wxCheckBox* m_Check_Mirror;
 		wxCheckBox* m_Check_Minimal;
-		wxCheckBox* m_Check_Merge_PTH_NPTH;
 		wxRadioBox* m_Choice_Drill_Offset;
 		wxStaticBoxSizer* m_DefaultViasDrillSizer;
 		wxStaticText* m_ViaDrillValue;

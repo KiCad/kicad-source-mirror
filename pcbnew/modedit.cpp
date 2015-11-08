@@ -411,7 +411,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             {
                 source_module = mainpcb->m_Modules;
 
-                for( ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
+                for( ; source_module != NULL; source_module = source_module->Next() )
                 {
                     if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
                         break;
@@ -839,8 +839,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GEN_IMPORT_DXF_FILE:
-        InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
-        m_canvas->Refresh();
+        if( GetBoard()->m_Modules )
+        {
+            InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
+            m_canvas->Refresh();
+        }
         break;
 
     default:

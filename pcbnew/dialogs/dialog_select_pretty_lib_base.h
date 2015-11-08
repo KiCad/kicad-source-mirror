@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -39,6 +39,7 @@ class DIALOG_SELECT_PRETTY_LIB_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_staticText;
+		wxStaticText* m_staticText3;
 		wxDirPickerCtrl* m_dirCtrl;
 		wxBoxSizer* m_SizerNewLibName;
 		wxStaticText* m_staticTextDirname;
@@ -50,6 +51,7 @@ class DIALOG_SELECT_PRETTY_LIB_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSelectFolder( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnOKButton( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

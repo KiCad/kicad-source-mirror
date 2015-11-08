@@ -26,7 +26,7 @@ class FootprintWizardDrawingAids:
     footprint wizards
 
     A "drawing context" is provided which can be used to set and retain
-    settings such as line width and layer
+    settings such as line tickness and layer
     """
 
     # directions (in degrees, compass-like)
@@ -47,12 +47,21 @@ class FootprintWizardDrawingAids:
 
     xfrmIDENTITY = [1, 0, 0, 0, 1, 0]  # no transform
 
+    # these values come from our KiCad Library Convention 0.11
+    defaultLineThickness = pcbnew.FromMM(0.15)
+
+    def DefaultGraphicLayer(self):
+        return pcbnew.F_SilkS
+
+    def DefaultTextValueLayer(self):
+        return pcbnew.F_Fab
+
     def __init__(self, module):
         self.module = module
         # drawing context defaults
         self.dc = {
-            'layer': pcbnew.F_SilkS,
-            'width': pcbnew.FromMM(0.2),
+            'layer': self.DefaultGraphicLayer(),
+            'lineThickness': self.defaultLineThickness,
             'transforms': [],
             'transform': self.xfrmIDENTITY
         }
@@ -184,7 +193,7 @@ class FootprintWizardDrawingAids:
     def TransformRotation(self, x, y, rot, push=True):
         """
         Set up and return a transform matrix representing a rotation
-        about the pooint (x,y), and optionally push onto the stack
+        about the point (x,y), and optionally push onto the stack
 
         This is performed by a translate-to-origin, rotate, translate-
         back sequence
@@ -231,18 +240,18 @@ class FootprintWizardDrawingAids:
         return pcbnew.wxPoint(x * mat[0] + y * mat[1] + mat[2],
                               x * mat[3] + y * mat[4] + mat[5])
 
-    def SetWidth(self, width):
+    def SetLineTickness(self, lineThickness):
         """
-        Set the current pen width used for subsequent drawing
+        Set the current pen lineThickness used for subsequent drawing
         operations
         """
-        self.dc['width'] = width
+        self.dc['lineThickness'] = lineThickness
 
-    def GetWidth(self):
+    def GetLineTickness(self):
         """
-        Get the current drawing context width
+        Get the current drawing context line tickness
         """
-        return self.dc['width']
+        return self.dc['lineThickness']
 
     def SetLayer(self, layer):
         """
@@ -251,14 +260,19 @@ class FootprintWizardDrawingAids:
         """
         self.dc['layer'] = layer
 
+    def GetLayer(self):
+        """
+        return the current drawing layer, used drawing operations
+        """
+        return self.dc['layer']
+
     def Line(self, x1, y1, x2, y2):
         """
         Draw a line from (x1, y1) to (x2, y2)
         """
-
         outline = pcbnew.EDGE_MODULE(self.module)
-        outline.SetWidth(self.dc['width'])
-        outline.SetLayer(self.dc['layer'])
+        outline.SetWidth(self.GetLineTickness())
+        outline.SetLayer(self.GetLayer())
         outline.SetShape(pcbnew.S_SEGMENT)
         start = self.TransformPoint(x1, y1)
         end = self.TransformPoint(x2, y2)
@@ -268,8 +282,7 @@ class FootprintWizardDrawingAids:
     def Circle(self, x, y, r, filled=False):
         """
         Draw a circle at (x,y) of radius r
-
-        If filled is true, the width and radius of the line will be set
+        If filled is true, the thickness and radius of the line will be set
         such that the circle appears filled
         """
         circle = pcbnew.EDGE_MODULE(self.module)
@@ -279,7 +292,7 @@ class FootprintWizardDrawingAids:
             circle.SetWidth(r)
             end = self.TransformPoint(x, y + r/2)
         else:
-            circle.SetWidth(self.dc['width'])
+            circle.SetWidth(self.dc['lineThickness'])
             end = self.TransformPoint(x, y + r)
 
         circle.SetLayer(self.dc['layer'])
@@ -297,7 +310,7 @@ class FootprintWizardDrawingAids:
         circular arc (eg a horzontal scale)
         """
         circle = pcbnew.EDGE_MODULE(self.module)
-        circle.SetWidth(self.dc['width'])
+        circle.SetWidth(self.dc['lineThickness'])
 
         center = self.TransformPoint(cx, cy)
         start = self.TransformPoint(sx, sy)
@@ -355,7 +368,7 @@ class FootprintWizardDrawingAids:
             _PolyLineInternal(pts)
             self.PopTransform()
 
-    def Reference(self, x, y, size):
+    def Reference(self, x, y, size, orientation_degree = 0):
         """
         Draw the module's reference as the given point.
 
@@ -369,8 +382,9 @@ class FootprintWizardDrawingAids:
         self.module.Reference().SetTextPosition(
             self.module.Reference().GetPos0())
         self.module.Reference().SetSize(text_size)
+        self.module.Reference().SetOrientation(orientation_degree*10)   # internal angles are in 0.1 deg
 
-    def Value(self, x, y, size):
+    def Value(self, x, y, size, orientation_degree = 0):
         """
         As for references, draw the module's value
         """
@@ -379,6 +393,8 @@ class FootprintWizardDrawingAids:
         self.module.Value().SetPos0(self.TransformPoint(x, y))
         self.module.Value().SetTextPosition(self.module.Value().GetPos0())
         self.module.Value().SetSize(text_size)
+        self.module.Value().SetLayer(self.DefaultTextValueLayer())
+        self.module.Value().SetOrientation(orientation_degree*10)   # internal angles are in 0.1 deg
 
     def Box(self, x, y, w, h):
         """
@@ -394,13 +410,15 @@ class FootprintWizardDrawingAids:
 
         self.Polyline(pts)
 
-    def NotchedCircle(self, x, y, r, notch_w, notch_h):
+    def NotchedCircle(self, x, y, r, notch_w, notch_h, rotate=0):
         """
         Circle radus r centred at (x, y) with a raised or depressed notch
         at the top
-
         Notch height is measured from the top of the circle radius
         """
+
+        self.TransformRotation(x, y, rotate)
+
         # find the angle where the notch vertical meets the circle
         angle_intercept = math.asin(notch_w/(2 * r))
 
@@ -419,11 +437,15 @@ class FootprintWizardDrawingAids:
                [-sx, sy]]
 
         self.Polyline(pts)
+        self.PopTransform()
 
-    def NotchedBox(self, x, y, w, h, notchW, notchH):
+    def NotchedBox(self, x, y, w, h, notchW, notchH, rotate=0):
         """
         Draw a box with a notch in the top edge
         """
+
+        self.TransformRotation(x, y, rotate)
+
         # limit to half the overall width
         notchW = min(x + w/2, notchW)
 
@@ -440,6 +462,8 @@ class FootprintWizardDrawingAids:
             (-notchW/2, y - h/2),
             (x - w/2, y - h/2)
         ])
+
+        self.PopTransform()
 
     def BoxWithDiagonalAtCorner(self, x, y, w, h,
                                 setback=pcbnew.FromMM(1.27), flip=flipNone):

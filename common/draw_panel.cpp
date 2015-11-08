@@ -667,12 +667,10 @@ void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
         wxSize  pageSize = GetParent()->GetPageSizeIU();
 
         // Draw the Y axis
-        GRDashedLine( &m_ClipBox, DC, 0, -pageSize.y,
-                      0, pageSize.y, 0, axis_color );
+        GRLine( &m_ClipBox, DC, 0, -pageSize.y, 0, pageSize.y, 0, axis_color );
 
         // Draw the X axis
-        GRDashedLine( &m_ClipBox, DC, -pageSize.x, 0,
-                      pageSize.x, 0, 0, axis_color );
+        GRLine( &m_ClipBox, DC, -pageSize.x, 0, pageSize.x, 0, 0, axis_color );
     }
 
     if( GetParent()->m_showOriginAxis )
@@ -821,20 +819,12 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
     GRSetDrawMode( aDC, aDrawMode );
 
     // Draw the Y axis
-    GRDashedLine( &m_ClipBox, aDC,
-                  origin.x,
-                  -pageSize.y,
-                  origin.x,
-                  pageSize.y,
-                  0, color );
+    GRLine( &m_ClipBox, aDC, origin.x, -pageSize.y,
+            origin.x, pageSize.y, 0, color );
 
     // Draw the X axis
-    GRDashedLine( &m_ClipBox, aDC,
-                  -pageSize.x,
-                  origin.y,
-                  pageSize.x,
-                  origin.y,
-                  0, color );
+    GRLine( &m_ClipBox, aDC, -pageSize.x, origin.y,
+            pageSize.x, origin.y, 0, color );
 }
 
 
@@ -849,20 +839,12 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoi
     GRSetDrawMode( aDC, aDrawMode );
 
     // Draw the Y axis
-    GRDashedLine( &m_ClipBox, aDC,
-                  aGridOrigin.x,
-                  -pageSize.y,
-                  aGridOrigin.x,
-                  pageSize.y,
-                  0, color );
+    GRLine( &m_ClipBox, aDC, aGridOrigin.x, -pageSize.y,
+            aGridOrigin.x, pageSize.y, 0, color );
 
     // Draw the X axis
-    GRDashedLine( &m_ClipBox, aDC,
-                  -pageSize.x,
-                  aGridOrigin.y,
-                  pageSize.x,
-                  aGridOrigin.y,
-                  0, color );
+    GRLine( &m_ClipBox, aDC, -pageSize.x, aGridOrigin.y,
+            pageSize.x, aGridOrigin.y, 0, color );
 }
 
 

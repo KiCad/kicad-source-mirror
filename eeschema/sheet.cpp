@@ -96,7 +96,6 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     }
 
     wxString msg;
-    wxString tmp;
     bool loadFromFile = false;
     SCH_SCREEN* useScreen = NULL;
 
@@ -270,7 +269,6 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                         bool aErase )
 {
-    wxPoint        moveVector;
     BASE_SCREEN*   screen = aPanel->GetScreen();
     SCH_SHEET*     sheet = (SCH_SHEET*) screen->GetCurItem();
 

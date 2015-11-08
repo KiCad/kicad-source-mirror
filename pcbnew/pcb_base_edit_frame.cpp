@@ -58,6 +58,8 @@ void PCB_BASE_EDIT_FRAME::UseGalCanvas( bool aEnable )
     // No matter what, reenable undo/redo on switching to the legacy canvas
     if( !aEnable )
         UndoRedoBlock( false );
+    else
+        static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
 }
 
 

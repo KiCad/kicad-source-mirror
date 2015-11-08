@@ -201,7 +201,7 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     if( aPad == NULL )
         return;
 
-    MODULE* module = (MODULE*) aPad->GetParent();
+    MODULE* module = aPad->GetParent();
     module->SetLastEditTime();
 
     // aQuery = true to prompt for confirmation, false to delete silently
@@ -220,7 +220,9 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     EDA_RECT bbox = module->GetBoundingBox();
 
     m_Pcb->m_Status_Pcb = 0;
-    aPad->DeleteStructure();
+
+    GetBoard()->PadDelete( aPad );
+
     // Update the bounding box
     module->CalculateBoundingBox();
 

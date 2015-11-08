@@ -323,7 +323,6 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
 int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,
                                                       bool            aCreate_Markers )
 {
-    wxString    str;
     int         nerrors = 0;
 
     // iterate through all areas
@@ -508,8 +507,6 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
     if( !aArea->IsOnCopperLayer() )    // Cannot have a Drc error if not on copper layer
         return true;
-
-    wxString str;
 
     wxPoint  start = aArea->GetCornerPosition( aCornerIndex );
     wxPoint  end;

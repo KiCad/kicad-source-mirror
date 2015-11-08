@@ -19,8 +19,8 @@
 #define HELP_ZOOM_IN     _( "Zoom in" )
 #define HELP_ZOOM_OUT    _( "Zoom out" )
 #define HELP_ZOOM_FIT    _( "Zoom to fit the board on the screen" )
-#define HELP_ZOOM_REDRAW _( "Redraw the screen of the board" )
+#define HELP_ZOOM_REDRAW _( "Redraw the current screen" )
 
 #define HELP_SHOW_HIDE_LAYERMANAGER _( "Show/hide the layers manager toolbar" )
 
-#define HELP_SHOW_HIDE_MICROWAVE_TOOLS _( "Show/hide the toolbar for microwave tools\nThis is a experimental feature (under development)" )
+#define HELP_SHOW_HIDE_MICROWAVE_TOOLS _( "Show/hide the microwave toolbar\nThis is a experimental feature (under development)" )

@@ -213,7 +213,7 @@ wxString SCH_SHEET_PATH::Path() const
 
 wxString SCH_SHEET_PATH::PathHumanReadable() const
 {
-    wxString s, t;
+    wxString s;
 
     s = wxT( "/" );
 

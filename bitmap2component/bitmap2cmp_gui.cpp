@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@
 #include <menus_helpers.h>
 #include <kiway.h>
 #include <kiface_i.h>
+
 
 #define KEYWORD_FRAME_POSX          wxT( "Bmconverter_Pos_x" )
 #define KEYWORD_FRAME_POSY          wxT( "Bmconverter_Pos_y" )
@@ -96,7 +97,7 @@ private:
     void OnExport( wxCommandEvent& event );
 
     /**
-     * Generate a schematic library which comtains one component:
+     * Generate a schematic library which contains one component:
      * the logo
      */
     void OnExportEeschema();
@@ -123,9 +124,9 @@ private:
     void OnResolutionChange( wxCommandEvent& event );
 
     // called when texts controls which handle the image resolution
-    // lose the focus, to ensure the rigyht vaules are displayed
+    // lose the focus, to ensure the right values are displayed
     // because the m_imageDPI are clipped to acceptable values, and
-    // the text displayed could be differ duringa text edition
+    // the text displayed could be differ during text edition
     // We are using ChangeValue here to avoid generating a wxEVT_TEXT event.
     void UpdateDPITextValueX( wxMouseEvent& event )
     {
@@ -249,7 +250,7 @@ void BM2CMP_FRAME::OnPaint( wxPaintEvent& event )
     m_BNPicturePanel->PrepareDC( nb_dc );
 
     // OSX crashes with empty bitmaps (on initial refreshes)
-    if(m_Pict_Bitmap.IsOk() && m_Greyscale_Bitmap.IsOk() && m_BN_Bitmap.IsOk())
+    if( m_Pict_Bitmap.IsOk() && m_Greyscale_Bitmap.IsOk() && m_BN_Bitmap.IsOk() )
     {
         pict_dc.DrawBitmap( m_Pict_Bitmap, 0, 0, false );
         greyscale_dc.DrawBitmap( m_Greyscale_Bitmap, 0, 0, false );
@@ -258,19 +259,17 @@ void BM2CMP_FRAME::OnPaint( wxPaintEvent& event )
 }
 
 
-/* Called to load a bitmap file
- */
 void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
 {
     wxFileName  fn( m_BitmapFileName );
     wxString    path = fn.GetPath();
 
-    if( path.IsEmpty() || !wxDirExists(path) )
-        path = wxGetCwd();
+    if( path.IsEmpty() || !wxDirExists( path ) )
+        path = m_mruPath;
 
     wxFileDialog fileDlg( this, _( "Choose Image" ), path, wxEmptyString,
                           _( "Image Files " ) + wxImage::GetImageExtWildcard(),
-                          wxFD_OPEN );
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     int diag = fileDlg.ShowModal();
 
@@ -282,6 +281,8 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
     if( !OpenProjectFiles( std::vector<wxString>( 1, fullFilename ) ) )
         return;
 
+    fn = fullFilename;
+    m_mruPath = fn.GetPath();
     m_buttonExport->Enable( true );
     SetStatusText( fullFilename );
     Refresh();
@@ -349,11 +350,12 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     return true;
 }
 
+
 void BM2CMP_FRAME::updateImageInfo()
 {
     // Note: the image resolution text controls are not modified
     // here, to avoid a race between text change when entered by user and
-    // a text change if it is modifed here.
+    // a text change if it is modified here.
     int h  = m_Pict_Bitmap.GetHeight();
     int w  = m_Pict_Bitmap.GetWidth();
     int nb = m_Pict_Bitmap.GetDepth();
@@ -367,6 +369,7 @@ void BM2CMP_FRAME::updateImageInfo()
     m_SizeYValue_mm->SetLabel( wxString::Format( wxT( "%.1f" ),
         (double) h / m_imageDPI.y * 25.4 ) );
 }
+
 
 void BM2CMP_FRAME::OnResolutionChange( wxCommandEvent& event )
 {
@@ -386,6 +389,7 @@ void BM2CMP_FRAME::OnResolutionChange( wxCommandEvent& event )
 
     updateImageInfo();
 }
+
 
 void BM2CMP_FRAME::Binarize( double aThreshold )
 {
@@ -427,10 +431,10 @@ void BM2CMP_FRAME::NegateGreyscaleImage( )
         }
 }
 
-/* Called on Normal/Negative change option */
+
 void BM2CMP_FRAME::OnOptionsSelection( wxCommandEvent& event )
 {
-    NegateGreyscaleImage( );
+    NegateGreyscaleImage();
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
     Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
     Refresh();
@@ -498,7 +502,7 @@ void BM2CMP_FRAME::OnExportLogo()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File '%s' could not be created" ), GetChars(m_ConvertedFileName) );
+        msg.Printf( _( "File '%s' could not be created." ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
@@ -536,7 +540,7 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
+        msg.Printf( _( "File '%s' could not be created." ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
@@ -554,7 +558,7 @@ void BM2CMP_FRAME::OnExportEeschema()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create a lib file for Eeschema" ),
+    wxFileDialog fileDlg( this, _( "Create a component library file for Eeschema" ),
                           path, wxEmptyString,
                           wxGetTranslation( SchematicLibraryFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -573,7 +577,7 @@ void BM2CMP_FRAME::OnExportEeschema()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
+        msg.Printf( _( "File '%s' could not be created." ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
@@ -589,9 +593,9 @@ void BM2CMP_FRAME::OnExportPcbnew()
     wxString    path = fn.GetPath();
 
     if( path.IsEmpty() || !wxDirExists( path ) )
-        path = ::wxGetCwd();
+        path = m_mruPath;
 
-    wxFileDialog fileDlg( this, _( "Create a footprint file for PcbNew" ),
+    wxFileDialog fileDlg( this, _( "Create a footprint file for Pcbnew" ),
                           path, wxEmptyString,
                           wxGetTranslation( KiCadFootprintLibFileWildcard ),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -610,13 +614,14 @@ void BM2CMP_FRAME::OnExportPcbnew()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File '%s' could not be created" ), GetChars( m_ConvertedFileName ) );
+        msg.Printf( _( "File '%s' could not be created." ), GetChars( m_ConvertedFileName ) );
         wxMessageBox( msg );
         return;
     }
 
     ExportFile( outfile, PCBNEW_KICAD_MOD );
     fclose( outfile );
+    m_mruPath = fn.GetPath();
 }
 
 

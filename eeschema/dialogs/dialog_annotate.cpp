@@ -256,8 +256,6 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
         return;
 
     m_Parent->DeleteAnnotation( GetLevel() ? false : true );
-    m_Parent->GetCanvas()->Refresh();
-
     m_btnClear->Enable( false );
 }
 

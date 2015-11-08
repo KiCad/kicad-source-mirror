@@ -1666,6 +1666,14 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 }
 
 
+void BOARD::PadDelete( D_PAD* aPad )
+{
+    m_NetInfo.DeletePad( aPad );
+
+    aPad->DeleteStructure();
+}
+
+
 TRACK* BOARD::GetTrack( TRACK* aTrace, const wxPoint& aPosition,
         LSET aLayerMask ) const
 {
@@ -1993,7 +2001,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_ID aActiveLayer,
     int     alt_min_dim = 0x7FFFFFFF;
     bool    current_layer_back = IsBackLayer( aActiveLayer );
 
-    for( pt_module = m_Modules;  pt_module;  pt_module = (MODULE*) pt_module->Next() )
+    for( pt_module = m_Modules;  pt_module;  pt_module = pt_module->Next() )
     {
         // is the ref point within the module's bounds?
         if( !pt_module->HitTest( aPosition ) )
@@ -2378,7 +2386,13 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         else
                             newFootprint->SetPath( footprint->GetPath() );
 
-                        footprint->CopyNetlistSettings( newFootprint );
+                        // Copy placement and pad net names.
+                        // optionally, copy or not local settings (like local clearances)
+                        // if the second parameter is "true", previous values will be used.
+                        // if "false", the default library values of the new footprint
+                        // will be used
+                        footprint->CopyNetlistSettings( newFootprint, false );
+
                         Remove( footprint );
                         Add( newFootprint, ADD_APPEND );
                         footprint = newFootprint;
@@ -2722,11 +2736,9 @@ wxString BOARD::GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
             usedNumbers.insert( number );
     }
 
-    int nextNum = 1;
-
     if( usedNumbers.size() )
     {
-        nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
+        int nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
         nextRef = wxString::Format( wxT( "%s%i" ), aPrefix, nextNum );
     }
 

@@ -40,6 +40,7 @@ class BOARD;
 /**
  * Batch plotter state object. Keeps the plot options and handles multiple
  * plot requests
+ * Especially useful in Python scripts
  */
 class PLOT_CONTROLLER
 {
@@ -83,7 +84,27 @@ public:
      */
     bool PlotLayer();
 
-    void SetColorMode( bool aColorMode );
+    /**
+     * @return the current plot full filename, set by OpenPlotfile
+     */
+    const wxString GetPlotFileName() { return m_plotFile.GetFullPath(); }
+
+    /**
+     * @return the current plot full filename, set by OpenPlotfile
+     */
+    const wxString GetPlotDirName() { return m_plotFile.GetPathWithSep(); }
+
+    /**
+     * Plotters can plot in Black and White mode or Color mode
+     * SetColorMode activate/de-actiavte the Color mode.
+     * @param aColorMode = true to activate the plot color mode
+     */
+    void SetColorMode( bool  );
+
+    /**
+     * @return  true if the current plot color mode is Color,
+     *   false if the current plot color mode is Black and White
+     */
     bool GetColorMode();
 
 private:
@@ -99,6 +120,9 @@ private:
 
     /// The board we're plotting
     BOARD* m_board;
+
+    /// The current plot filename, set by OpenPlotfile
+    wxFileName m_plotFile;
 };
 
 #endif

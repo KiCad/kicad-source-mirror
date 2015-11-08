@@ -1499,8 +1499,13 @@ void VRML_LAYER::glEnd( void )
 // set the error message
 void VRML_LAYER::SetGLError( GLenum errorID )
 {
-    error = "";
-    error = (const char*)gluGetString( errorID );
+    const char * msg = (const char*)gluErrorString( errorID );
+
+    // If errorID is an illegal id, gluErrorString returns NULL
+    if( msg )
+        error = msg;
+    else
+        error.clear();
 
     if( error.empty() )
     {

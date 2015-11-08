@@ -411,32 +411,32 @@ void PNS_DP_GATEWAYS::BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool 
 
     switch( shP->Type() )
     {
-        case SH_RECT:
-        {
-            int w = static_cast<const SHAPE_RECT*>( shP )->GetWidth();
-            int h = static_cast<const SHAPE_RECT*>( shP )->GetHeight();
+    case SH_RECT:
+    {
+        int w = static_cast<const SHAPE_RECT*>( shP )->GetWidth();
+        int h = static_cast<const SHAPE_RECT*>( shP )->GetHeight();
 
-            if( w < h )
-                std::swap( w, h );
+        if( w < h )
+            std::swap( w, h );
 
-            orthoFanDistance = w * 3/4;
-            diagFanDistance = ( w - h ) / 2;
-            break;
-        }
+        orthoFanDistance = w * 3/4;
+        diagFanDistance = ( w - h ) / 2;
+        break;
+    }
 
-        case SH_SEGMENT:
-        {
-            int w = static_cast<const SHAPE_SEGMENT*>( shP )->GetWidth();
-            SEG s = static_cast<const SHAPE_SEGMENT*>( shP )->GetSeg();
+    case SH_SEGMENT:
+    {
+        int w = static_cast<const SHAPE_SEGMENT*>( shP )->GetWidth();
+        SEG s = static_cast<const SHAPE_SEGMENT*>( shP )->GetSeg();
 
-            orthoFanDistance = w + ( s.B - s.A ).EuclideanNorm() / 2;
-            diagFanDistance = ( s.B - s.A ).EuclideanNorm() / 2;
-            break;
-        }
+        orthoFanDistance = w + ( s.B - s.A ).EuclideanNorm() / 2;
+        diagFanDistance = ( s.B - s.A ).EuclideanNorm() / 2;
+        break;
+    }
 
-        default:
-            BuildGeneric ( p0_p, p0_n, true );
-            return;
+    default:
+        BuildGeneric ( p0_p, p0_n, true );
+        return;
     }
 
     if( checkDiagonalAlignment( p0_p, p0_n ) )

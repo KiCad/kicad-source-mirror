@@ -22,9 +22,9 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText1 = new wxStaticText( m_wizPage1, wxID_ANY, _("Welcome to the 3D shape Libraries downloader Wizard!"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	bSizer1->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
+	m_staticTextWelcome = new wxStaticText( m_wizPage1, wxID_ANY, _("Welcome to the 3D shape Libraries downloader Wizard!"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWelcome->Wrap( -1 );
+	bSizer1->Add( m_staticTextWelcome, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizer1->Add( 0, 20, 0, 0, 5 );
@@ -44,8 +44,11 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	
 	bSizer19->Add( 0, 10, 0, 0, 5 );
 	
-	wxBoxSizer* bSizerLocalFolder;
-	bSizerLocalFolder = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizerLocalFolder;
+	fgSizerLocalFolder = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerLocalFolder->AddGrowableCol( 0 );
+	fgSizerLocalFolder->SetFlexibleDirection( wxBOTH );
+	fgSizerLocalFolder->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	wxBoxSizer* bSizerDinname;
 	bSizerDinname = new wxBoxSizer( wxVERTICAL );
@@ -58,7 +61,7 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	bSizerDinname->Add( m_downloadDir, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	
-	bSizerLocalFolder->Add( bSizerDinname, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerLocalFolder->Add( bSizerDinname, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxBoxSizer* bSizerButts;
 	bSizerButts = new wxBoxSizer( wxVERTICAL );
@@ -70,19 +73,28 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	bSizerButts->Add( m_buttonDefault3DPath, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerLocalFolder->Add( bSizerButts, 0, wxEXPAND, 5 );
+	fgSizerLocalFolder->Add( bSizerButts, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerWarnMsg;
+	bSizerWarnMsg = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_bitmapDirWarn = new wxStaticBitmap( m_wizPage1, wxID_ANY, wxArtProvider::GetBitmap( wxART_ERROR, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerWarnMsg->Add( m_bitmapDirWarn, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_invalidDirWarningText = new wxStaticText( m_wizPage1, wxID_ANY, _("It is not possible to write in the selected directory.\nPlease choose another one."), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_invalidDirWarningText->Wrap( -1 );
+	m_invalidDirWarningText->SetForegroundColour( wxColour( 255, 0, 0 ) );
+	
+	bSizerWarnMsg->Add( m_invalidDirWarningText, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	
-	bSizer19->Add( bSizerLocalFolder, 0, wxEXPAND, 5 );
+	fgSizerLocalFolder->Add( bSizerWarnMsg, 1, wxEXPAND, 5 );
 	
 	
-	bSizer19->Add( 0, 10, 0, 0, 5 );
+	fgSizerLocalFolder->Add( 10, 40, 0, 0, 5 );
 	
-	m_invalidDir = new wxStaticText( m_wizPage1, wxID_ANY, _("It is not possible to write in the selected directory.\nPlease choose another one."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_invalidDir->Wrap( -1 );
-	m_invalidDir->SetForegroundColour( wxColour( 255, 0, 0 ) );
 	
-	bSizer19->Add( m_invalidDir, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer19->Add( fgSizerLocalFolder, 1, wxEXPAND, 5 );
 	
 	
 	bSizer1->Add( bSizer19, 1, wxEXPAND, 5 );
@@ -210,6 +222,7 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	this->Connect( wxID_ANY, wxEVT_WIZARD_FINISHED, wxWizardEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnWizardFinished ) );
 	this->Connect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGED, wxWizardEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnPageChanged ) );
 	this->Connect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGING, wxWizardEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnPageChanging ) );
+	m_downloadDir->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnLocalFolderChange ), NULL, this );
 	m_btnBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnBrowseButtonClick ), NULL, this );
 	m_buttonDefault3DPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnDefault3DPathButtonClick ), NULL, this );
 	m_btnSelectAll3Dlibs->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnSelectAll3Dlibs ), NULL, this );
@@ -224,6 +237,7 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::~WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE()
 	this->Disconnect( wxID_ANY, wxEVT_WIZARD_FINISHED, wxWizardEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnWizardFinished ) );
 	this->Disconnect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGED, wxWizardEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnPageChanged ) );
 	this->Disconnect( wxID_ANY, wxEVT_WIZARD_PAGE_CHANGING, wxWizardEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnPageChanging ) );
+	m_downloadDir->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnLocalFolderChange ), NULL, this );
 	m_btnBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnBrowseButtonClick ), NULL, this );
 	m_buttonDefault3DPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnDefault3DPathButtonClick ), NULL, this );
 	m_btnSelectAll3Dlibs->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::OnSelectAll3Dlibs ), NULL, this );

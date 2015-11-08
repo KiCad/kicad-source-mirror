@@ -100,8 +100,8 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
 
     m_modal_resultant_parent = aResultantFocusWindow;
 
-    Raise();    // Needed on Ubuntu-14/Unity to display the frame
     Show( true );
+    Raise();    // Needed on sole Window managers to always display the frame
 
     SetFocus();
 
@@ -146,7 +146,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
 
         // have the final say, after wxWindowDisabler reenables my parent and
         // the events settle down, set the focus
-        wxYield();
+        wxSafeYield();
         aResultantFocusWindow->SetFocus();
     }
 

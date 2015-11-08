@@ -32,6 +32,7 @@
 #include "pns_router.h"
 
 class PNS_TUNE_STATUS_POPUP;
+class GRID_HELPER;
 
 class APIEXPORT PNS_TOOL_BASE : public TOOL_INTERACTIVE
 {
@@ -73,6 +74,8 @@ protected:
     PCB_EDIT_FRAME* m_frame;
     KIGFX::VIEW_CONTROLS* m_ctls;
     BOARD* m_board;
+    GRID_HELPER* m_gridHelper;
+
 
 };
 

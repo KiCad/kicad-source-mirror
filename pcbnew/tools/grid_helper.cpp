@@ -112,6 +112,43 @@ VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
 }
 
 
+VECTOR2I GRID_HELPER::AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg )
+{
+    OPT_VECTOR2I pts[6];
+
+    VECTOR2I origin( GetOrigin() );
+    VECTOR2I grid( GetGrid() );
+
+    const VECTOR2D gridOffset( GetOrigin() );
+    const VECTOR2D gridSize( GetGrid() );
+
+    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
+                      KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
+
+    pts[0] = aSeg.A;
+    pts[1] = aSeg.B;
+    pts[2] = aSeg.IntersectLines( SEG( nearest, nearest + VECTOR2I( 1, 0 ) ) );
+    pts[3] = aSeg.IntersectLines( SEG( nearest, nearest + VECTOR2I( 0, 1 ) ) );
+
+    int min_d = std::numeric_limits<int>::max();
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if( pts[i] && aSeg.Contains( *pts[i] ) )
+        {
+            int d = (*pts[i] - aPoint).EuclideanNorm();
+
+            if( d < min_d )
+            {
+                min_d = d;
+                nearest = *pts[i];
+            }
+        }
+    }
+
+    return nearest;
+}
+
 VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aItem )
 {
     clearAnchors();
@@ -135,6 +172,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aIt
     if( nearestCorner )
     {
         double dist = nearestCorner->Distance( aMousePos );
+
         if( dist < minDist )
         {
             minDist = dist;
@@ -145,6 +183,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aIt
     if( nearestOutline )
     {
         double dist = nearestOutline->Distance( aMousePos );
+
         if( minDist > lineSnapMinCornerDistance && dist < minDist )
             best = nearestOutline;
     }

@@ -526,7 +526,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
     m_out->Print( aNestLevel+1, "(zones %d)\n", aBoard->GetNumSegmZone() );
     m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
-    m_out->Print( aNestLevel+1, "(nets %d)\n", (int) m_mapping->GetSize() );
+    m_out->Print( aNestLevel+1, "(nets %d)\n", m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
 
     aBoard->GetPageSettings().Format( m_out, aNestLevel, m_ctl );
@@ -729,7 +729,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     }
 
     // Save the modules.
-    for( MODULE* module = aBoard->m_Modules;  module;  module = (MODULE*) module->Next() )
+    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
         Format( module, aNestLevel );
         m_out->Print( 0, "\n" );
@@ -774,7 +774,7 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    Format( (TEXTE_PCB*) &aDimension->Text(), aNestLevel+1 );
+    Format( &aDimension->Text(), aNestLevel+1 );
 
     m_out->Print( aNestLevel+1, "(feature1 (pts (xy %s %s) (xy %s %s)))\n",
                   FMT_IU( aDimension->m_featureLineDO.x ).c_str(),

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Messages:") ), wxVERTICAL );
+	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 1, 0, 0 );
@@ -20,7 +20,7 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_htmlView = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	m_htmlView = new wxHtmlWindow( m_box->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	m_htmlView->SetFont( wxFont( 10, 70, 90, 90, false, wxEmptyString ) );
 	
 	fgSizer4->Add( m_htmlView, 1, wxEXPAND, 5 );
@@ -31,35 +31,35 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( m_box->GetStaticBox(), wxID_ANY, _("Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	fgSizer3->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 	
-	m_checkBoxShowAll = new wxCheckBox( this, wxID_ANY, wxT("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowAll = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxShowAll->SetValue(true); 
 	fgSizer3->Add( m_checkBoxShowAll, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_checkBoxShowWarnings = new wxCheckBox( this, wxID_ANY, wxT("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowWarnings = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxShowWarnings->Enable( false );
 	
 	fgSizer3->Add( m_checkBoxShowWarnings, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_checkBoxShowErrors = new wxCheckBox( this, wxID_ANY, wxT("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowErrors = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxShowErrors->Enable( false );
 	
 	fgSizer3->Add( m_checkBoxShowErrors, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_checkBoxShowInfos = new wxCheckBox( this, wxID_ANY, wxT("Infos"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowInfos = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Infos"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxShowInfos->Enable( false );
 	
 	fgSizer3->Add( m_checkBoxShowInfos, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_checkBoxShowActions = new wxCheckBox( this, wxID_ANY, wxT("Actions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxShowActions = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Actions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxShowActions->Enable( false );
 	
 	fgSizer3->Add( m_checkBoxShowActions, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_btnSaveReportToFile = new wxButton( this, wxID_ANY, wxT("Save report to file..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnSaveReportToFile = new wxButton( m_box->GetStaticBox(), wxID_ANY, _("Save report to file..."), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_btnSaveReportToFile, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxLEFT, 5 );
 	
 	

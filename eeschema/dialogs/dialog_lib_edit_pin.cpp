@@ -64,6 +64,10 @@ DIALOG_LIB_EDIT_PIN::~DIALOG_LIB_EDIT_PIN()
     delete m_dummyPin;
 }
 
+void DIALOG_LIB_EDIT_PIN::OnInitDialog( wxInitDialogEvent& event )
+{
+    m_textPinName->SetFocus();
+}
 
 /*
  * Draw (on m_panelShowPin) the pin currently edited

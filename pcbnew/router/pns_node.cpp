@@ -111,7 +111,7 @@ PNS_NODE* PNS_NODE::Branch()
 
     TRACE( 0, "PNS_NODE::branch %p (parent %p)", child % this );
 
-    m_children.push_back( child );
+    m_children.insert( child );
 
     child->m_depth = m_depth + 1;
     child->m_parent = this;
@@ -145,15 +145,7 @@ void PNS_NODE::unlinkParent()
     if( isRoot() )
         return;
 
-    for( std::vector<PNS_NODE*>::iterator i = m_parent->m_children.begin();
-         i != m_parent->m_children.end(); ++i )
-    {
-        if( *i == this )
-        {
-            m_parent->m_children.erase( i );
-            return;
-        }
-    }
+    m_parent->m_children.erase( this );
 }
 
 
@@ -745,7 +737,8 @@ void PNS_NODE::Remove( PNS_LINE& aLine )
 
 
 void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos,
-        int aLimit, VECTOR2I* aCorners, PNS_SEGMENT** aSegments, bool& aGuardHit )
+        int aLimit, VECTOR2I* aCorners, PNS_SEGMENT** aSegments, bool& aGuardHit,
+		bool aStopAtLockedJoints )
 {
     bool prevReversed = false;
 
@@ -770,7 +763,9 @@ void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos
             break;
         }
 
-        if( !jt->IsLineCorner() || aPos < 0 || aPos == aLimit )
+        bool locked = aStopAtLockedJoints ? jt->IsLocked() : false;
+
+        if( locked || !jt->IsLineCorner() || aPos < 0 || aPos == aLimit )
             break;
 
         aCurrent = jt->NextSegment( aCurrent );
@@ -781,7 +776,7 @@ void PNS_NODE::followLine( PNS_SEGMENT* aCurrent, bool aScanDirection, int& aPos
 }
 
 
-const PNS_LINE PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex )
+const PNS_LINE PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentIndex, bool aStopAtLockedJoints )
 {
     const int MaxVerts = 1024 * 16;
 
@@ -798,10 +793,10 @@ const PNS_LINE PNS_NODE::AssembleLine( PNS_SEGMENT* aSeg, int* aOriginSegmentInd
     pl.SetNet( aSeg->Net() );
     pl.SetOwner( this );
 
-    followLine( aSeg, false, i_start, MaxVerts, corners, segs, guardHit );
+    followLine( aSeg, false, i_start, MaxVerts, corners, segs, guardHit, aStopAtLockedJoints );
 
     if( !guardHit )
-        followLine( aSeg, true, i_end, MaxVerts, corners, segs, guardHit );
+        followLine( aSeg, true, i_end, MaxVerts, corners, segs, guardHit, aStopAtLockedJoints );
 
     int n = 0;
 
@@ -1125,7 +1120,7 @@ void PNS_NODE::GetUpdatedItems( ITEM_VECTOR& aRemoved, ITEM_VECTOR& aAdded )
 void PNS_NODE::releaseChildren()
 {
     // copy the kids as the PNS_NODE destructor erases the item from the parent node.
-    std::vector<PNS_NODE*> kids = m_children;
+    std::set<PNS_NODE*> kids = m_children;
 
     BOOST_FOREACH( PNS_NODE* node, kids )
     {

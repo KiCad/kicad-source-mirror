@@ -43,6 +43,17 @@ public:
     virtual ~PCB_BASE_EDIT_FRAME() {};
 
     /**
+     * Function CreateNewLibrary
+     * prompts user for a library path, then creates a new footprint library at that
+     * location.  If library exists, user is warned about that, and is given a chance
+     * to abort the new creation, and in that case existing library is first deleted.
+     *
+     * @return wxString - the newly created library path if library was successfully
+     *   created, else wxEmptyString because user aborted or error.
+     */
+    wxString CreateNewLibrary();
+
+    /**
      * Function OnEditItemRequest
      * Install the corresponding dialog editor for the given item
      * @param aDC = the current device context

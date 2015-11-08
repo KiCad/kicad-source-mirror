@@ -5,10 +5,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -397,9 +397,6 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
                  aNewFootprintFPID.Format().c_str() );
     m_WinMessages->AppendText( line );
 
-    wxString moduleName = aNewFootprintFPID.GetFootprintName();
-    wxString libName    = aNewFootprintFPID.GetLibNickname();
-
     newModule = m_parent->LoadFootprint( aNewFootprintFPID );
 
     if( newModule == NULL )  // New module not found, redraw the old one.
@@ -430,39 +427,18 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
      * when all modules are on board
      */
     PlaceModule( aNewModule, NULL, true );
-    aNewModule->SetPosition( aOldModule->GetPosition() );
 
-    // Flip footprint if needed
-    if( aOldModule->GetLayer() != aNewModule->GetLayer() )
-    {
-        aNewModule->Flip( aNewModule->GetPosition() );
-    }
+    // Copy full placement and pad net names (when possible)
+    // but not local settings like clearances (use library values)
+    aOldModule->CopyNetlistSettings( aNewModule, false );
 
-    // Rotate footprint if needed
-    if( aOldModule->GetOrientation() != aNewModule->GetOrientation() )
-    {
-        Rotate_Module( NULL, aNewModule, aOldModule->GetOrientation(), false );
-    }
-
-    // Update reference and value
+    // Copy reference and value
     aNewModule->SetReference( aOldModule->GetReference() );
     aNewModule->SetValue( aOldModule->GetValue() );
 
     // Updating other parameters
     aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
     aNewModule->SetPath( aOldModule->GetPath() );
-
-    // Update pad netnames (when possible)
-    for( D_PAD* pad = aNewModule->Pads(); pad != NULL; pad = pad->Next() )
-    {
-        pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-
-        for( D_PAD* old_pad = aOldModule->Pads(); old_pad != NULL; old_pad = old_pad->Next() )
-        {
-            if( pad->PadNameEqual( old_pad ) )
-                pad->SetNetCode( old_pad->GetNetCode() );
-        }
-    }
 
     if( aUndoPickList )
     {

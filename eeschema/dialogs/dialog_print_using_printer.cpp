@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,17 +76,15 @@ private:
 class SCH_PRINTOUT : public wxPrintout
 {
 private:
-    DIALOG_PRINT_USING_PRINTER* m_parent;
+    SCH_EDIT_FRAME* m_parent;
 
 public:
-    SCH_PRINTOUT( DIALOG_PRINT_USING_PRINTER* aParent, const wxString& aTitle ) :
+    SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
     {
         wxASSERT( aParent != NULL );
-
         m_parent = aParent;
     }
-    SCH_EDIT_FRAME* GetSchFrameParent() { return m_parent->GetParent(); }
     bool OnPrintPage( int page );
     bool HasPage( int page );
     bool OnBeginDocument( int startPage, int endPage );
@@ -94,23 +92,18 @@ public:
     void DrawPage( SCH_SCREEN* aScreen );
 };
 
-
 /**
  * Custom schematic print preview frame.
+ * This derived preview frame remembers its size and position during a session
  */
 class SCH_PREVIEW_FRAME : public wxPreviewFrame
 {
 public:
-    SCH_PREVIEW_FRAME( wxPrintPreview* aPreview, DIALOG_PRINT_USING_PRINTER* aParent,
+    SCH_PREVIEW_FRAME( wxPrintPreview* aPreview, wxWindow* aParent,
                        const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
                        const wxSize& aSize = wxDefaultSize ) :
         wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
-    }
-
-    DIALOG_PRINT_USING_PRINTER* GetParent()
-    {
-        return ( DIALOG_PRINT_USING_PRINTER* )wxWindow::GetParent();
     }
 
     bool Show( bool show )      // overload
@@ -134,26 +127,17 @@ public:
 
             ret = wxPreviewFrame::Show( show );
         }
+
         return ret;
     }
 
 private:
     static wxPoint  s_pos;
     static wxSize   s_size;
-
-    DECLARE_CLASS( SCH_PREVIEW_FRAME )
-    DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS( SCH_PREVIEW_FRAME )
 };
 
 wxPoint SCH_PREVIEW_FRAME::s_pos;
 wxSize  SCH_PREVIEW_FRAME::s_size;
-
-IMPLEMENT_CLASS( SCH_PREVIEW_FRAME, wxPreviewFrame )
-
-BEGIN_EVENT_TABLE( SCH_PREVIEW_FRAME, wxPreviewFrame )
-    EVT_CLOSE( SCH_PREVIEW_FRAME::OnCloseWindow )
-END_EVENT_TABLE()
 
 
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent ) :
@@ -261,8 +245,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
-    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( this, title ),
-                                                  new SCH_PRINTOUT( this, title ),
+    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( parent, title ),
+                                                  new SCH_PRINTOUT( parent, title ),
                                                   &parent->GetPageSetupData().GetPrintData() );
 
     if( preview == NULL )
@@ -281,7 +265,18 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     frame->SetSize( (parent->GetSize() * 2) / 3 );
     frame->Center();
 
-    frame->Initialize();
+    // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
+    // close the frame using the X box in caption, when the preview frame is run
+    // from a dialog
+    frame->SetExtraStyle( frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG );
+
+    // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
+    // modal for its caller only.
+    // An other reason is the fact when closing the frame without this option,
+    // all top level frames are reenabled.
+    // With this option, only the parent is reenabled.
+    // Reenabling all top level frames should be made by the parent dialog.
+    frame->InitializeWithModality( wxPreviewFrame_WindowModal );
 
     frame->Raise(); // Needed on Ubuntu/Unity to display the frame
     frame->Show( true );
@@ -301,7 +296,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
         printDialogData.EnablePageNumbers( true );
 
     wxPrinter printer( &printDialogData );
-    SCH_PRINTOUT printout( this, _( "Print Schematic" ) );
+    SCH_PRINTOUT printout( parent, _( "Print Schematic" ) );
 
     if( !printer.Print( this, &printout, true ) )
     {
@@ -319,23 +314,22 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
     wxString msg;
-    SCH_EDIT_FRAME* parent = m_parent->GetParent();
     msg.Printf( _( "Print page %d" ), page );
-    parent->ClearMsgPanel();
-    parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
+    m_parent->ClearMsgPanel();
+    m_parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
 
-    SCH_SCREEN*     screen       = parent->GetScreen();
-    SCH_SHEET_PATH  oldsheetpath = parent->GetCurrentSheet();
+    SCH_SCREEN*     screen       = m_parent->GetScreen();
+    SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
     SCH_SHEET_PATH  list;
     SCH_SHEET_LIST  SheetList( NULL );
     SCH_SHEET_PATH* sheetpath = SheetList.GetSheet( page - 1 );
 
     if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
     {
-        parent->SetCurrentSheet( list );
-        parent->GetCurrentSheet().UpdateAllScreenReferences();
-        parent->SetSheetNumberAndCount();
-        screen = parent->GetCurrentSheet().LastScreen();
+        m_parent->SetCurrentSheet( list );
+        m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+        m_parent->SetSheetNumberAndCount();
+        screen = m_parent->GetCurrentSheet().LastScreen();
     }
     else
     {
@@ -346,9 +340,9 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
         return false;
 
     DrawPage( screen );
-    parent->SetCurrentSheet( oldsheetpath );
-    parent->GetCurrentSheet().UpdateAllScreenReferences();
-    parent->SetSheetNumberAndCount();
+    m_parent->SetCurrentSheet( oldsheetpath );
+    m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+    m_parent->SetSheetNumberAndCount();
 
     return true;
 }
@@ -379,18 +373,17 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
         return false;
 
 #ifdef __WXDEBUG__
-    SCH_EDIT_FRAME* parent = m_parent->GetParent();
     wxLogDebug( wxT( "Printer name: " ) +
-                parent->GetPageSetupData().GetPrintData().GetPrinterName() );
+                m_parent->GetPageSetupData().GetPrintData().GetPrinterName() );
     wxLogDebug( wxT( "Paper ID: %d" ),
-                parent->GetPageSetupData().GetPrintData().GetPaperId() );
+                m_parent->GetPageSetupData().GetPrintData().GetPaperId() );
     wxLogDebug( wxT( "Color: %d" ),
-                (int) parent->GetPageSetupData().GetPrintData().GetColour() );
-    wxLogDebug( wxT( "Monochrome: %d" ), parent->GetPrintMonochrome() );
+                (int)m_parent->GetPageSetupData().GetPrintData().GetColour() );
+    wxLogDebug( wxT( "Monochrome: %d" ), m_parent->GetPrintMonochrome() );
     wxLogDebug( wxT( "Orientation: %d:" ),
-                parent->GetPageSetupData().GetPrintData().GetOrientation() );
+                m_parent->GetPageSetupData().GetPrintData().GetOrientation() );
     wxLogDebug( wxT( "Quality: %d"),
-                parent->GetPageSetupData().GetPrintData().GetQuality() );
+                m_parent->GetPageSetupData().GetPrintData().GetQuality() );
 #endif
 
     return true;
@@ -409,8 +402,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     EDA_RECT oldClipBox;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
-    SCH_EDIT_FRAME* parent = m_parent->GetParent();
-    EDA_DRAW_PANEL* panel = parent->GetCanvas();
+    EDA_DRAW_PANEL* panel = m_parent->GetCanvas();
 
     wxBusyCursor dummy;
 
@@ -427,14 +419,14 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
 
     // Change scale factor and offset to print the whole page.
-    bool printReference = parent->GetPrintSheetReference();
+    bool printReference = m_parent->GetPrintSheetReference();
 
     pageSizeIU = aScreen->GetPageSettings().GetSizeIU();
     FitThisSizeToPaper( pageSizeIU );
     fitRect = GetLogicalPaperRect();
 
     wxLogDebug( wxT( "Fit rectangle: x = %d, y = %d, w = %d, h = %d" ),
-                  fitRect.x, fitRect.y, fitRect.width, fitRect.height );
+                fitRect.x, fitRect.y, fitRect.width, fitRect.height );
 
     // When is the actual paper size does not match the schematic page
     // size, the drawing is not perfectly centered on X or Y axis.
@@ -462,20 +454,20 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     GRResetPenAndBrush( dc );
 
-    if( parent->GetPrintMonochrome() )
+    if( m_parent->GetPrintMonochrome() )
         GRForceBlackPen( true );
 
     aScreen->m_IsPrinting = true;
 
-    EDA_COLOR_T bg_color = GetSchFrameParent()->GetDrawBgColor();
+    EDA_COLOR_T bg_color = m_parent->GetDrawBgColor();
 
     aScreen->Draw( panel, dc, (GR_DRAWMODE) 0 );
 
     if( printReference )
-        parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
+        m_parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
                 IU_PER_MILS, aScreen->GetFileName() );
 
-    GetSchFrameParent()->SetDrawBgColor( bg_color );
+    m_parent->SetDrawBgColor( bg_color );
     aScreen->m_IsPrinting = false;
     panel->SetClipBox( oldClipBox );
 

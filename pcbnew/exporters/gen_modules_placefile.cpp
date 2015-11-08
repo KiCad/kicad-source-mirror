@@ -171,7 +171,6 @@ void DIALOG_GEN_MODULE_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent&
 {
     // Build the absolute path of current output plot directory
     // to preselect it when opening the dialog.
-    wxFileName  fn( m_outputDirectoryName->GetValue() );
     wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
@@ -595,7 +594,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 {
     D_PAD*   pad;
     char     line[1024];
-    wxString fnFront, msg;
+    wxString msg;
     FILE*    rptfile;
     wxPoint  module_pos;
 
@@ -810,7 +809,6 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile, double aCon
             int endx = PtDrawSegment->GetEnd().x;
             int endy = PtDrawSegment->GetEnd().y;
 
-            radius = Distance( ux0, uy0, dx, dy );
             RotatePoint( &endx,
                          &endy,
                          PtDrawSegment->GetStart().x,

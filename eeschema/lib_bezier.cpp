@@ -93,11 +93,10 @@ bool LIB_BEZIER::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     strtok( line + 2, " \t\n" );     // Skip field
     strtok( NULL, " \t\n" );         // Skip field
     strtok( NULL, " \t\n" );         // Skip field
-    p = strtok( NULL, " \t\n" );
+    strtok( NULL, " \t\n" );
 
     for( i = 0; i < ccount; i++ )
     {
-        wxPoint point;
         p = strtok( NULL, " \t\n" );
 
         if( sscanf( p, "%d", &pt.x ) != 1 )
@@ -289,7 +288,6 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
                               EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                               const TRANSFORM& aTransform )
 {
-    wxPoint              pos1;
     std::vector<wxPoint> PolyPointsTraslated;
 
     EDA_COLOR_T color = GetLayerColor( LAYER_DEVICE );
@@ -358,7 +356,7 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos ) const
 
 bool LIB_BEZIER::HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const
 {
-    wxPoint ref, start, end;
+    wxPoint start, end;
 
     if( aThreshold < 0 )
         aThreshold = GetPenSize() / 2;

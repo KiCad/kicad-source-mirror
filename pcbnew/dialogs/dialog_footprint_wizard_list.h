@@ -31,15 +31,17 @@
 class DIALOG_FOOTPRINT_WIZARD_LIST: public DIALOG_FOOTPRINT_WIZARD_LIST_BASE
 {
 private:
-    FOOTPRINT_WIZARD *m_FootprintWizard;
+    FOOTPRINT_WIZARD* m_footprintWizard;    ///< The selected python script wizard
+    wxConfigBase*     m_config;
 
 public:
-    DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow * parent );
+    DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow * aParent );
+    ~DIALOG_FOOTPRINT_WIZARD_LIST();
 
     FOOTPRINT_WIZARD* GetWizard();
 
 private:
-    void OnCellWizardClick( wxGridEvent& event );
+    void OnCellFpGeneratorClick( wxGridEvent& event );
 };
 
 #endif  // _DIALOG_FOOTPRINT_WIZARD_LIST_H_

@@ -81,9 +81,16 @@ class FootprintWizardParameterManager:
             param = "*%s" % param  # star prefix for natural
 
         if section not in self.parameters:
+            if not hasattr(self, 'page_order'):
+                self.page_order = []
+            self.page_order.append(section)
             self.parameters[section] = {}
+            if not hasattr(self, 'parameter_order'):
+                self.parameter_order = {}
+            self.parameter_order[section] = []
 
         self.parameters[section][param] = val
+        self.parameter_order[section].append(param)
 
         return error
 
@@ -95,7 +102,7 @@ class FootprintWizardParameterManager:
         message = ""
 
         for name, section in self.parameters.iteritems():
-            message += "  %s:" % name
+            message += "  %s:\n" % name
 
             for key, value in section.iteritems():
                 unit = ""
@@ -184,7 +191,7 @@ class FootprintWizardParameterManager:
             return
 
         if max_value is not None and (
-                self.parameters[section][param] > min_value):
+                self.parameters[section][param] > max_value):
             self.parameter_errors[section][param] = (
                 "Must be less than or equal to %d" % (max_value))
             return
@@ -241,8 +248,9 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
     def GetValue(self):
         raise NotImplementedError
 
+    # this value come from our KiCad Library Convention 0.11
     def GetReferencePrefix(self):
-        return "U"  # footprints needing wizards of often ICs
+        return "REF"
 
     def GetImage(self):
         return ""
@@ -258,7 +266,7 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         Thicker than IPC guidelines (10% of text height = 0.12mm)
         as 5 wires/mm is a common silk screen limitation
         """
-        return pcbnew.FromMM(0.2)
+        return pcbnew.FromMM(0.15)
 
     def SetModule3DModel(self):
         """

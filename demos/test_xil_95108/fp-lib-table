@@ -1,0 +1,7 @@
+(fp_lib_table
+  (lib (name Capacitors_SMD)(type KiCad)(uri "$(KISYSMOD)\\Capacitors_SMD.pretty")(options "")(descr ""))
+  (lib (name Sockets_DIP)(type KiCad)(uri "$(KISYSMOD)\\Sockets_DIP.pretty")(options "")(descr ""))
+  (lib (name Pin_Headers)(type KiCad)(uri "$(KISYSMOD)/Pin_Headers.pretty")(options "")(descr ""))
+  (lib (name SMD_Packages)(type KiCad)(uri "$(KISYSMOD)/SMD_Packages.pretty")(options "")(descr ""))
+  (lib (name Sockets)(type KiCad)(uri "$(KISYSMOD)/Sockets.pretty")(options "")(descr ""))
+)

@@ -510,7 +510,7 @@ if( APPLE )
         MACOSX_PACKAGE_LOCATION Resources
         )
     set( MACOSX_BUNDLE_ICON_FILE pcbnew.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.kicad )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-pcb.kicad )
     set( MACOSX_BUNDLE_NAME pcbnew )
 endif()
 
@@ -670,12 +670,13 @@ if( KICAD_SCRIPTING )
             COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
             )
         add_dependencies( ScriptingPcbnewPyCopy ScriptingWxpythonCopy )
-        # scripting plugins
-        install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins/
-            DESTINATION ${KICAD_DATA}/scripting/plugins
-            COMPONENT binary
-            )
     endif()
+
+    # scripting plugins
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins/
+        DESTINATION ${KICAD_DATA}/scripting/plugins
+        FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+    )
 endif()
 
 if( KICAD_SCRIPTING_MODULES )

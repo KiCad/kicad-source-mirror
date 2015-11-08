@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,28 +44,28 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	m_staticTextprops->Wrap( -1 );
 	bSizerRight->Add( m_staticTextprops, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("H, V and 45 deg") };
+	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("180, 90, and 45 degrees") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
-	m_OrientEdgesOpt = new wxRadioBox( this, wxID_ANY, _("Zone Edges Orient"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_OrientEdgesOpt->SetSelection( 0 );
+	m_OrientEdgesOpt = new wxRadioBox( this, wxID_ANY, _("Zone Edge Orientation:"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_OrientEdgesOpt->SetSelection( 1 );
 	bSizerRight->Add( m_OrientEdgesOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
-	m_OutlineAppearanceCtrl = new wxRadioBox( this, wxID_ANY, _("Outlines Appearence"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_OutlineAppearanceCtrl = new wxRadioBox( this, wxID_ANY, _("Outline Appearence:"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_OutlineAppearanceCtrl->SetSelection( 1 );
 	bSizerRight->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerCutoutOpts;
 	sbSizerCutoutOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Keepout Options:") ), wxVERTICAL );
 	
-	m_cbTracksCtrl = new wxCheckBox( this, wxID_ANY, _("No Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTracksCtrl = new wxCheckBox( this, wxID_ANY, _("No tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerCutoutOpts->Add( m_cbTracksCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("No Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("No vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerCutoutOpts->Add( m_cbViasCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("No Copper Pour"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("No copper pour"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerCutoutOpts->Add( m_cbCopperPourCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	
@@ -92,6 +92,7 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
+	m_MainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

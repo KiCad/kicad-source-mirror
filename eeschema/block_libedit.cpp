@@ -87,7 +87,7 @@ int LIB_EDIT_FRAME::BlockCommand( int key )
 bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     int ItemCount = 0;
-    int nextCmd = false;
+    bool nextCmd = false;
     wxPoint pt;
 
     if( GetScreen()->m_BlockLocate.GetCount() )
@@ -323,7 +323,6 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 {
     BLOCK_SELECTOR* block;
     BASE_SCREEN* screen = aPanel->GetScreen();
-    wxPoint move_offset;
     block = &screen->m_BlockLocate;
 
     LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();

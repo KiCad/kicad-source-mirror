@@ -460,20 +460,23 @@ void D_PAD::Copy( D_PAD* source )
 }
 
 
-void D_PAD::CopyNetlistSettings( D_PAD* aPad )
+void D_PAD::CopyNetlistSettings( D_PAD* aPad, bool aCopyLocalSettings )
 {
     // Don't do anything foolish like trying to copy to yourself.
     wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
 
     aPad->SetNetCode( GetNetCode() );
 
-    aPad->SetLocalClearance( m_LocalClearance );
-    aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
-    aPad->SetLocalSolderPasteMargin( m_LocalSolderPasteMargin );
-    aPad->SetLocalSolderPasteMarginRatio( m_LocalSolderPasteMarginRatio );
-    aPad->SetZoneConnection( m_ZoneConnection );
-    aPad->SetThermalWidth( m_ThermalWidth );
-    aPad->SetThermalGap( m_ThermalGap );
+    if( aCopyLocalSettings )
+    {
+        aPad->SetLocalClearance( m_LocalClearance );
+        aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
+        aPad->SetLocalSolderPasteMargin( m_LocalSolderPasteMargin );
+        aPad->SetLocalSolderPasteMarginRatio( m_LocalSolderPasteMarginRatio );
+        aPad->SetZoneConnection( m_ZoneConnection );
+        aPad->SetThermalWidth( m_ThermalWidth );
+        aPad->SetThermalGap( m_ThermalGap );
+    }
 }
 
 
@@ -583,7 +586,7 @@ wxSize D_PAD::GetSolderPasteMargin() const
 
 ZoneConnection D_PAD::GetZoneConnection() const
 {
-    MODULE* module = (MODULE*) GetParent();
+    MODULE* module = GetParent();
 
     if( m_ZoneConnection == PAD_ZONE_CONN_INHERITED && module )
         return module->GetZoneConnection();
@@ -594,7 +597,7 @@ ZoneConnection D_PAD::GetZoneConnection() const
 
 int D_PAD::GetThermalWidth() const
 {
-    MODULE* module = (MODULE*) GetParent();
+    MODULE* module = GetParent();
 
     if( m_ThermalWidth == 0 && module )
         return module->GetThermalWidth();
@@ -605,7 +608,7 @@ int D_PAD::GetThermalWidth() const
 
 int D_PAD::GetThermalGap() const
 {
-    MODULE* module = (MODULE*) GetParent();
+    MODULE* module = GetParent();
 
     if( m_ThermalGap == 0 && module )
         return module->GetThermalGap();
@@ -905,15 +908,15 @@ wxString D_PAD::GetSelectMenuText() const
 
     if( padname.IsEmpty() )
     {
-    text.Printf( _( "Pad on %s of %s" ),
-                 GetChars( padlayers ),
-                 GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+        text.Printf( _( "Pad on %s of %s" ),
+                     GetChars( padlayers ),
+                     GetChars(GetParent()->GetReference() ) );
     }
     else
     {
         text.Printf( _( "Pad %s on %s of %s" ),
                      GetChars(GetPadName() ), GetChars( padlayers ),
-                     GetChars(( (MODULE*) GetParent() )->GetReference() ) );
+                     GetChars(GetParent()->GetReference() ) );
     }
 
     return text;
@@ -967,7 +970,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         wxString msg;
         msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
-                GetParent()->GetReference(),
+                GetParent() ? GetParent()->GetReference() : "<null>",
                 GetPadName().IsEmpty() ? "(unnamed)" : GetPadName() );
         wxLogWarning( msg );
     }

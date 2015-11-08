@@ -220,6 +220,11 @@ private:
     wxPoint m_position;
     wxSize m_size;
     wxConfigBase* m_config;
+    bool m_canClose;        // false to veto a close event, true to allow it
+
+    void OnCloseMsgWindow( wxCloseEvent& aEvent );
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif    // FOOTPRINT_WIZARD_FRM_H_

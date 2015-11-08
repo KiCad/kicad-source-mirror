@@ -27,7 +27,7 @@
 #include <boost/optional.hpp>
 #include <layers_id_colors_and_visibility.h>
 
-class SELECTION;
+struct SELECTION;
 class PCB_BASE_FRAME;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE

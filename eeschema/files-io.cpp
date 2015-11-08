@@ -337,7 +337,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 bool SCH_EDIT_FRAME::AppendOneEEProject()
 {
     wxString    fullFileName;
-    wxString    msg;
 
     SCH_SCREEN* screen = GetScreen();
 

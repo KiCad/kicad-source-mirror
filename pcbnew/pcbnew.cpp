@@ -187,7 +187,7 @@ KIFACE_I& Kiface() { return kiface; }
 // KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
 MY_API( KIFACE* ) KIFACE_GETTER( int* aKIFACEversion, int aKiwayVersion, PGM_BASE* aProgram )
 {
-    process = (PGM_BASE*) aProgram;
+    process = aProgram;
     return &kiface;
 }
 
@@ -207,7 +207,7 @@ static bool scriptingSetup()
 
 #if defined( __MINGW32__ )
     // force python environment under Windows:
-    const wxString python_us( "python27_us" );
+    const wxString python_us( wxT( "python27_us" ) );
 
     // Build our python path inside kicad
     wxString kipython =  FindKicadFile( python_us + wxT( "/python.exe" ) );
@@ -249,43 +249,64 @@ static bool scriptingSetup()
     // which are ( [KICAD_PATH] is an environment variable to define)
     // [KICAD_PATH]/scripting/plugins
     // Add this default search path:
-    path_frag = Pgm().GetExecutablePath() + wxT( "scripting/plugins" );
+    path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting/plugins" );
 
 #elif defined( __WXMAC__ )
-    // User plugin folder is ~/Library/Application Support/kicad/scripting/plugins
-    path_frag = GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
+    // TODO:
+    // For scripting currently only the bundle scripting path and the path
+    // defined by $(KICAD_PATH)/scripting/plugins is defined.
+    // These paths are defined here and in kicadplugins.i
+    // In future, probably more paths are of interest:
+    // * User folder (~/Library/Application Support/kicad/scripting/plugins)
+    //   => GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
+    // * Machine folder (/Library/Application Support/kicad/scripting/plugins)
+    //   => GetOSXKicadMachineDataDir() + wxT( "/scripting/plugins" );
+
+    // This path is given to LoadPlugins() from kicadplugins.i, which
+    // only supports one path. Only use bundle scripting path for now.
+    path_frag = GetOSXKicadDataDir() + wxT( "/scripting/plugins" );
 
     // Add default paths to PYTHONPATH
     wxString pypath;
 
-    // User scripting folder (~/Library/Application Support/kicad/scripting/plugins)
-    pypath = GetOSXKicadUserDataDir() + wxT( "/scripting/plugins" );
-
-    // Machine scripting folder (/Library/Application Support/kicad/scripting/plugins)
-    pypath += wxT( ":" ) + GetOSXKicadMachineDataDir() + wxT( "/scripting/plugins" );
-
     // Bundle scripting folder (<kicad.app>/Contents/SharedSupport/scripting/plugins)
-    pypath += wxT( ":" ) + GetOSXKicadDataDir() + wxT( "/scripting/plugins" );
+    pypath += GetOSXKicadDataDir() + wxT( "/scripting/plugins" );
+
+    // $(KICAD_PATH)/scripting/plugins is always added in kicadplugins.i
+    if( wxGetenv("KICAD_PATH") != NULL )
+    {
+        pypath += wxT( ":" ) + wxString( wxGetenv("KICAD_PATH") );
+    }
 
     // Bundle wxPython folder (<kicad.app>/Contents/Frameworks/python/site-packages)
     pypath += wxT( ":" ) + Pgm().GetExecutablePath() +
               wxT( "Contents/Frameworks/python/site-packages" );
 
     // Original content of $PYTHONPATH
-    if( wxGetenv("PYTHONPATH") != NULL )
+    if( wxGetenv( wxT( "PYTHONPATH" ) ) != NULL )
     {
-        pypath = wxString( wxGetenv("PYTHONPATH") ) + wxT( ":" ) + pypath;
+        pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
     }
 
     // set $PYTHONPATH
     wxSetEnv( "PYTHONPATH", pypath );
 
 #else
+    // Linux-specific setup
+    wxString pypath;
+
+    pypath = Pgm().GetExecutablePath() + wxT( "../lib/python2.7/dist-packages" );
+
+    if( !wxIsEmpty( wxGetenv( wxT( "PYTHONPATH" ) ) ) )
+        pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
+
+    wxSetEnv( wxT( "PYTHONPATH" ), pypath );
+
     // Add this default search path:
-    path_frag = wxT( "/usr/local/kicad/bin/scripting/plugins" );
+    path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting/plugins" );
 #endif
 
-    if( ! pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
+    if( !pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
     {
         wxLogError( wxT( "pcbnewInitPythonScripting() failed." ) );
         return false;

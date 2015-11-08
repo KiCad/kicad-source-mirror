@@ -387,9 +387,9 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
     wxString        abs_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
     wxString        path;
 
-    bool select = EDA_DirectorySelector( _( "Default Path for Libraries" ),
-                                         abs_path, wxDD_DEFAULT_STYLE,
-                                         this, wxDefaultPosition );
+    bool select = EDA_PATH_SELECTOR( _( "Default Path for Libraries" ),
+                                     abs_path, wxDD_DEFAULT_STYLE,
+                                     this, wxDefaultPosition );
 
     if( !select )
         return;

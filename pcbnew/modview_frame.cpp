@@ -631,6 +631,7 @@ void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
 
     m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, wxEmptyString );
     Update3D_Frame( false );
+    m_Draw3DFrame->Raise();     // Needed with some Window Managers
     m_Draw3DFrame->Show( true );
 }
 
@@ -665,8 +666,6 @@ EDA_COLOR_T FOOTPRINT_VIEWER_FRAME::GetGridColor() const
 
 void FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList( wxCommandEvent& event )
 {
-    wxString   msg;
-
     switch( event.GetId() )
     {
     case ID_MODVIEW_NEXT:

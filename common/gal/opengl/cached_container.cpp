@@ -308,11 +308,14 @@ bool CACHED_CONTAINER::defragment( VERTEX* aTarget )
     if( aTarget == NULL )
     {
         // No target was specified, so we have to reallocate our own space
-        aTarget = static_cast<VERTEX*>( malloc( m_currentSize * sizeof( VERTEX ) ) );
+        int size = m_currentSize * sizeof( VERTEX );
+        aTarget = static_cast<VERTEX*>( malloc( size ) );
 
         if( aTarget == NULL )
         {
-            DisplayError( NULL, wxT( "Run out of memory" ) );
+            DisplayError( NULL, wxString::Format(
+                          wxT( "CACHED_CONTAINER::defragment: Run out of memory (malloc %d bytes)" ),
+                          size ) );
             return false;
         }
     }
@@ -432,11 +435,15 @@ bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
         if( reservedSpace() > aNewSize )
             return false;
 
-        newContainer = static_cast<VERTEX*>( malloc( aNewSize * sizeof( VERTEX ) ) );
+        int size = aNewSize * sizeof( VERTEX );
+        newContainer = static_cast<VERTEX*>( malloc( size ) );
 
         if( newContainer == NULL )
         {
-            DisplayError( NULL, wxT( "Run out of memory" ) );
+            DisplayError( NULL, wxString::Format(
+                          wxT( "CACHED_CONTAINER::resizeContainer:\n"
+                               "Run out of memory (malloc %d bytes)" ),
+                          size ) );
             return false;
         }
 
@@ -451,11 +458,15 @@ bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
     else
     {
         // Enlarging container
-        newContainer = static_cast<VERTEX*>( realloc( m_vertices, aNewSize * sizeof( VERTEX ) ) );
+        int size = aNewSize * sizeof( VERTEX );
+        newContainer = static_cast<VERTEX*>( realloc( m_vertices, size ) );
 
         if( newContainer == NULL )
         {
-            DisplayError( NULL, wxT( "Run out of memory" ) );
+            DisplayError( NULL, wxString::Format(
+                          wxT( "CACHED_CONTAINER::resizeContainer:\n"
+                               "Run out of memory (realloc from %d to %d bytes)" ),
+                          m_currentSize * sizeof( VERTEX ), size ) );
             return false;
         }
 

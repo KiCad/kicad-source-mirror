@@ -163,8 +163,6 @@ bool PCB_TARGET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
         return arect.Contains( GetBoundingBox() );
     else
         return GetBoundingBox().Intersects( arect );
-
-    return false;
 }
 
 

@@ -49,13 +49,15 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     m_lastDrawItem = NULL;
 
     wxFileDialog dlg( this, _( "Import Component" ), m_lastLibImportPath,
-                      wxEmptyString, SchematicLibraryFileWildcard,
+                      m_mruPath, SchematicLibraryFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     wxFileName  fn = dlg.GetPath();
+
+    m_mruPath = fn.GetPath();
 
     std::auto_ptr<PART_LIB> lib;
 

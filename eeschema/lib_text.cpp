@@ -307,10 +307,15 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 {
     wxASSERT( plotter != NULL );
 
+    EDA_RECT bBox = GetBoundingBox();
+    // convert coordinates from draw Y axis to libedit Y axis
+    bBox.RevertYAxis();
+    wxPoint txtpos = bBox.Centre();
+
     /* The text orientation may need to be flipped if the
      * transformation matrix causes xy axes to be flipped. */
     int t1  = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
-    wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + offset;
+    wxPoint pos = aTransform.TransformCoordinate( txtpos ) + offset;
 
     // Get color
     EDA_COLOR_T     color;

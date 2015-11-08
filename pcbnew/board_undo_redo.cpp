@@ -310,11 +310,12 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     if( aItem->Type() == PCB_MODULE_TEXT_T )
     {
         aItem = aItem->GetParent();
-        wxASSERT( aItem->Type() == PCB_MODULE_T );
-        aCommandType = UR_CHANGED;
 
         if( aItem == NULL )
             return;
+
+        wxASSERT( aItem->Type() == PCB_MODULE_T );
+        aCommandType = UR_CHANGED;
     }
 
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
@@ -391,10 +392,11 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         if( item->Type() == PCB_MODULE_TEXT_T  || item->Type() == PCB_PAD_T )
         {
             item = item->GetParent();
-            wxASSERT( item->Type() == PCB_MODULE_T );
 
             if( item == NULL )
                 continue;
+
+            wxASSERT( item->Type() == PCB_MODULE_T );
 
             commandToUndo->SetPickedItem( item, ii );
             commandToUndo->SetPickedItemStatus( UR_CHANGED, ii );

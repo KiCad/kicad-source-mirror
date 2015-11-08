@@ -115,6 +115,20 @@ PGM_BASE& Pgm()
  */
 struct APP_SINGLE_TOP : public wxApp
 {
+#if defined (__LINUX__)
+    APP_SINGLE_TOP(): wxApp()
+    {
+        // Disable proxy menu in Unity window manager. Only usual menubar works with wxWidgets (at least <= 3.1)
+        // When the proxy menu menubar is enable, some important things for us do not work: menuitems UI events and shortcuts.
+        wxString wm;
+
+        if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
+        {
+            wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
+        }
+    }
+#endif
+
     bool OnInit()           // overload wxApp virtual
     {
         try

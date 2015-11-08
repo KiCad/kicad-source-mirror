@@ -162,7 +162,7 @@ void DIALOG_PLOT::Init_Dialog()
     }
 
     // Option for using proper Gerber extensions
-    m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberExtensions() );
+    m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberProtelExtensions() );
 
     // Option for including Gerber attributes (from Gerber X2 format) in the output
     m_useGerberAttributes->SetValue( m_plotOpts.GetUseGerberAttributes() );
@@ -673,7 +673,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetFormat( getPlotFormat() );
 
-    tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
+    tempOptions.SetUseGerberProtelExtensions( m_useGerberExtensions->GetValue() );
     tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );
     tempOptions.SetGerberPrecision( m_rbGerberFormat->GetSelection() == 0 ? 5 : 6 );
 
@@ -790,11 +790,12 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         // Use Gerber Extensions based on layer number
         // (See http://en.wikipedia.org/wiki/Gerber_File)
         if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_useGerberExtensions->GetValue() )
-            file_ext = GetGerberExtension( layer );
+            file_ext = GetGerberProtelExtension( layer );
 
-        // Create file name (from the English layer name for non copper layers).
+        // Create file name (from the English default layer name for non copper layers).
         BuildPlotFileName( &fn, outputDir.GetPath(),
-                           m_board->GetStandardLayerName( layer ),
+//                           m_board->GetStandardLayerName( layer ),
+                           m_board->GetLayerName( layer ),
                            file_ext );
 
         LOCALE_IO toggle;
@@ -826,4 +827,3 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     if( !m_plotOpts.GetLayerSelection().any() )
         DisplayError( this, _( "No layer selected" ) );
 }
-

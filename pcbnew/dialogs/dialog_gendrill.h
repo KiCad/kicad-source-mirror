@@ -41,7 +41,6 @@ public:
     static int       m_ZerosFormat;
     static bool      m_MinimalHeader;
     static bool      m_Mirror;
-    static bool      m_Merge_PTH_NPTH;
     static bool      m_DrillOriginIsAuxAxis; /* Axis selection (main / auxiliary)
                                               *  for drill origin coordinates */
     DRILL_PRECISION  m_Precision;           // Selected precision for drill files

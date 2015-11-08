@@ -34,11 +34,9 @@ class DIALOG_PNS_SETTINGS : public DIALOG_PNS_SETTINGS_BASE
 	public:
 		DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTINGS& aSettings );
 
-        virtual void OnClose( wxCloseEvent& aEvent );
-        virtual void OnOkClick( wxCommandEvent& aEvent );
-        virtual void OnCancelClick( wxCommandEvent& aEvent );
-	
 	private:
+        virtual void OnOkClick( wxCommandEvent& aEvent );
+
 		PNS_ROUTING_SETTINGS& m_settings;
 };
 

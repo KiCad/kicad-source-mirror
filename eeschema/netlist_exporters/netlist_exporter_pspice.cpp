@@ -185,9 +185,6 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
             {
                 wxString netlistEnabled = netlistEnabledField->GetText();
 
-                if( netlistEnabled.IsEmpty() )
-                    break;
-
                 if( netlistEnabled.CmpNoCase( disableStr ) == 0 )
                     continue;
             }
@@ -201,37 +198,39 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
                 wxString nodeSeqIndexLineStr = spiceSeqField->GetText();
 
                 // Verify Field Exists and is not empty:
-                if( nodeSeqIndexLineStr.IsEmpty() )
-                    break;
-
-                // Create an Array of Standard Pin Names from part definition:
-                stdPinNameArray.Clear();
-
-                for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
+                if( !nodeSeqIndexLineStr.IsEmpty() )
                 {
-                    NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
 
-                    if( !pin )
-                        continue;
+                    // Create an Array of Standard Pin Names from part definition:
+                    stdPinNameArray.Clear();
 
-                    stdPinNameArray.Add( pin->GetPinNumText() );
-                }
-
-                // Get Alt Pin Name Array From User:
-                wxStringTokenizer tkz( nodeSeqIndexLineStr, delimeters );
-
-                while( tkz.HasMoreTokens() )
-                {
-                    wxString    pinIndex = tkz.GetNextToken();
-                    int         seq;
-
-                    // Find PinName In Standard List assign Standard List Index to Name:
-                    seq = stdPinNameArray.Index(pinIndex);
-
-                    if( seq != wxNOT_FOUND )
+                    for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
                     {
-                        pinSequence.push_back( seq );
+                        NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
+
+                        if( !pin )
+                            continue;
+
+                        stdPinNameArray.Add( pin->GetPinNumText() );
                     }
+
+                    // Get Alt Pin Name Array From User:
+                    wxStringTokenizer tkz( nodeSeqIndexLineStr, delimeters );
+
+                    while( tkz.HasMoreTokens() )
+                    {
+                        wxString    pinIndex = tkz.GetNextToken();
+                        int         seq;
+
+                        // Find PinName In Standard List assign Standard List Index to Name:
+                        seq = stdPinNameArray.Index(pinIndex);
+
+                        if( seq != wxNOT_FOUND )
+                        {
+                            pinSequence.push_back( seq );
+                        }
+                    }
+
                 }
             }
 

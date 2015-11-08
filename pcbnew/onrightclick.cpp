@@ -972,7 +972,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
         menu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Automatically Route Net" ) );
     }
 
-    MODULE* module = (MODULE*) Pad->GetParent();
+    MODULE* module = Pad->GetParent();
 
     if( module )
     {

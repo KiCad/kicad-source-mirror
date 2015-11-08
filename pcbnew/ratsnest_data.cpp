@@ -392,7 +392,7 @@ RN_POLY::RN_POLY( const SHAPE_POLY_SET* aParent,
     m_bbox( aBBox ),
     m_parentPolyset( aParent )
 {
-    const VECTOR2I& p = aParent->CVertex( aSubpolygonIndex, 0 );
+    const VECTOR2I& p = aParent->CVertex( 0, aSubpolygonIndex );
 
     m_node = aConnections.AddNode( p.x, p.y );
 

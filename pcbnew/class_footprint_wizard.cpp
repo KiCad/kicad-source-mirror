@@ -29,7 +29,6 @@
  */
 
 #include "class_footprint_wizard.h"
-#include <stdio.h>
 
 
 FOOTPRINT_WIZARD::~FOOTPRINT_WIZARD()
@@ -77,8 +76,6 @@ int FOOTPRINT_WIZARDS::GetWizardsCount()
 
 void FOOTPRINT_WIZARDS::register_wizard( FOOTPRINT_WIZARD* aWizard )
 {
-    wxString name = aWizard->GetName();
-
     m_FootprintWizards.push_back( aWizard );
 }
 
