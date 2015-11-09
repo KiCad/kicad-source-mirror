@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-04 15:03+0200\n"
-"PO-Revision-Date: 2015-11-05 11:14+0200\n"
+"PO-Revision-Date: 2015-11-09 10:07+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -1069,7 +1069,7 @@ msgid ""
 "to change its assignment?"
 msgstr ""
 "Το <%s> έχει ήδη αντιστοιχιστεί στο \"%s\" στο \"%s\". Είστε σίγουροι ότι "
-"θέλετε να αλλάξετε την αντιστοίχισή του;"
+"θέλετε να αλλάξετε την αντιστοίχησή του;"
 
 #: common/dialogs/dialog_hotkeys_editor.cpp:375
 msgid "Confirm change"
@@ -1222,7 +1222,7 @@ msgstr "Κατακόρυφος"
 #: common/dialogs/dialog_page_settings.cpp:431
 #, c-format
 msgid "Page layout description file <%s> not found. Abort"
-msgstr "Δεν βρέθηκε το αρχείο περιγραφής σχεδίασης <%s>. Ματαίωση"
+msgstr "Δεν βρέθηκε το αρχείο περιγραφής σχεδίασης σελίδας <%s>. Ματαίωση"
 
 #: common/dialogs/dialog_page_settings.cpp:462
 #, c-format
@@ -1232,8 +1232,8 @@ msgid ""
 "%.1f - %.1f %s!\n"
 "Select another custom paper size?"
 msgstr ""
-"Το προσαρμοσμένο μέγεθος χαρτιού που επιλέχθηκε \n"
-"είναι εκτός επιτρεπόμενων ορίων\n"
+"Το προσαρμοσμένο μέγεθος χαρτιού που \n"
+"επιλέχθηκε είναι εκτός επιτρεπόμενων ορίων\n"
 "%.1f - %.1f %s!\n"
 "Επιλογή διαφορετικού προσαρμοσμένου μεγέθους χαρτιού;"
 
@@ -1263,7 +1263,7 @@ msgstr ""
 "Να γίνει χρήση της σχετικής διαδρομής:\n"
 "'%s'\n"
 "αντί για\n"
-"'%s' ;"
+"'%s';"
 
 #: common/dialogs/dialog_page_settings_base.cpp:25
 msgid "Paper"
@@ -1275,7 +1275,7 @@ msgstr "Μέγεθος:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
-msgstr "προσωρινό κειμένου"
+msgstr "προσωρινό κείμενο"
 
 #: common/dialogs/dialog_page_settings_base.cpp:42
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:22
@@ -1433,7 +1433,7 @@ msgstr "Όλα"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:42
 msgid "Warnings"
-msgstr "Προειδοποιήσεις:"
+msgstr "Προειδοποιήσεις"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:47 gerbview/readgerb.cpp:182
 msgid "Errors"
@@ -1555,7 +1555,7 @@ msgstr "Κανονικό"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100
 msgid "Italic"
-msgstr "Πλάγια"
+msgstr "Πλάγιο"
 
 #: common/eda_text.cpp:379
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
@@ -1567,7 +1567,7 @@ msgstr "Έντονο"
 
 #: common/eda_text.cpp:380
 msgid "Bold+Italic"
-msgstr "Έντονα+Πλάγια "
+msgstr "Έντονα+Πλάγια"
 
 #: common/footprint_info.cpp:320 common/footprint_info.cpp:341
 msgid "Errors were encountered loading footprints"
@@ -1591,7 +1591,7 @@ msgstr ""
 #: common/fp_lib_table.cpp:716
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "Αδυναμία δημιουργίας καθολική διαδρομής καταλόγου βιβλιοθήκης '%s'."
+msgstr "Αδυναμία δημιουργίας καθολικής διαδρομής καταλόγου βιβλιοθήκης '%s'."
 
 #: common/fpid.cpp:185 common/fpid.cpp:202
 msgid "Illegal character found in FPID string"
@@ -1648,11 +1648,11 @@ msgstr "Επικόλληση\tCTRL+V"
 
 #: common/grid_tricks.cpp:115
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "Επικόλληση κελιών από πρόχειρο στον πίνακα του τρέχοντος κελιού"
+msgstr "Επικόλληση κελιών από το πρόχειρο το τρέχον κελί του πίνακα"
 
 #: common/grid_tricks.cpp:116
 msgid "Select All\tCTRL+A"
-msgstr "Επιλογή όλων\tCTRL+A"
+msgstr "Επιλογή Όλων\tCTRL+A"
 
 #: common/grid_tricks.cpp:116
 msgid "Select all cells"
@@ -1678,7 +1678,7 @@ msgstr "Προβολή &Τρεχόντων Πλήκτρων"
 #: common/hotkeys_basic.cpp:818
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr ""
-"Προβάλει μια λίστα με τις τρέχουσες συντομεύσεις και τις αντίστοιχες εντολές"
+"Εμφανίζει μια λίστα με τις τρέχουσες συντομεύσεις και τις αντίστοιχες εντολές"
 
 #: common/hotkeys_basic.cpp:823
 msgid "&Edit Hotkeys"
@@ -1832,7 +1832,7 @@ msgstr "&Γλώσσα"
 
 #: common/pgm_base.cpp:745
 msgid "Select application language (only for testing!)"
-msgstr "Επιλέξτε τη γλώσσα της εφαρμογής (μόνο για δοκιμή!)"
+msgstr "Επιλέξτε τη γλώσσα της εφαρμογής (μόνο για δοκιμές!)"
 
 #: common/pgm_base.cpp:820
 msgid ""
@@ -1920,7 +1920,7 @@ msgstr "Σχηματικά αρχεία KiCad (*.sch)|*.sch"
 
 #: common/wildcards_and_files_ext.cpp:74
 msgid "KiCad netlist files (*.net)|*.net"
-msgstr "Αρχεία KiCad λίστας δικτύων (*.sch)|*.sch"
+msgstr "Αρχεία KiCad λίστας δικτύων (*.net)|*.net"
 
 #: common/wildcards_and_files_ext.cpp:75
 msgid "Gerber files (*.pho)|*.pho"
@@ -1945,11 +1945,11 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:80
 msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
-msgstr "Αρχείο KiCad αποτυπώματος s-expre (*.mod)|*.mod"
+msgstr "Αρχείο KiCad αποτυπώματος s-expre (*.kicad_mod)|*.kicad_mod"
 
 #: common/wildcards_and_files_ext.cpp:81
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
-msgstr "Διαδρομή βιβλιοθήκης s-expre αποτυπώματος KiCad (*.pretty)|*.pretty"
+msgstr "Διαδρομή βιβλιοθήκης s-expre αποτυπωμάτων KiCad (*.pretty)|*.pretty"
 
 #: common/wildcards_and_files_ext.cpp:82
 msgid "Legacy footprint library file (*.mod)|*.mod"
@@ -1961,11 +1961,11 @@ msgstr "Αρχεία βιβλιοθήκης XML Eagle εκδ. 6.x (*.lbr)|*.lbr"
 
 #: common/wildcards_and_files_ext.cpp:84
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
-msgstr "Αρχείο βιβλιοθήκης εξαρτημάτων Geda PCB (*.fp)|*."
+msgstr "Αρχείο βιβλιοθήκης εξαρτημάτων Geda PCB (*.fp)|*.fp"
 
 #: common/wildcards_and_files_ext.cpp:85
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
-msgstr "Καταγεγραμμένες μακροεντολές KiCad (*.sch)|*.sch"
+msgstr "Καταγεγραμμένες μακροεντολές KiCad (*.mcr)|*.mcr"
 
 #: common/wildcards_and_files_ext.cpp:86
 msgid "Component-footprint link file (*.cmp)|*cmp"
@@ -2074,7 +2074,7 @@ msgstr "Μεγέθυνση: "
 
 #: common/zoom.cpp:284
 msgid "Grid Select"
-msgstr "Επιλογή πλέγματος"
+msgstr "Επιλογή Πλέγματος"
 
 #: cvpcb/autosel.cpp:107
 #, c-format
