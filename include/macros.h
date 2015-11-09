@@ -77,11 +77,7 @@ static inline wxString FROM_UTF8( const char* cstring )
  */
 static inline const wxChar* GetChars( const wxString& s )
 {
-#if wxCHECK_VERSION( 2, 9, 0 )
     return (const wxChar*) s.c_str();
-#else
-    return s.GetData();
-#endif
 }
 
 /// # of elements in an array
