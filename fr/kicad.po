@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-26 08:15+0100\n"
-"PO-Revision-Date: 2015-10-26 08:16+0100\n"
+"POT-Creation-Date: 2015-11-02 19:47+0100\n"
+"PO-Revision-Date: 2015-11-02 19:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -610,7 +610,7 @@ msgstr "Format"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:498
 #: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:758
 #: gerbview/class_GERBER.cpp:359 gerbview/class_GERBER.cpp:363
-#: gerbview/class_GERBER.cpp:366 pcbnew/class_module.cpp:604
+#: gerbview/class_GERBER.cpp:366 pcbnew/class_module.cpp:609
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
@@ -2912,7 +2912,7 @@ msgstr "Filtrer la liste par le nombre de pad des modules"
 msgid "Filter footprint list by library"
 msgstr "Filtrer la liste des empreintes par la librairie"
 
-#: eeschema/annotate.cpp:89
+#: eeschema/annotate.cpp:91
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d signatures temporelles dupliquées remplacées."
@@ -3351,7 +3351,7 @@ msgstr "Description\n"
 msgid "Keywords\n"
 msgstr "Mots Clés\n"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:271 pcbnew/class_module.cpp:566
+#: eeschema/dialogs/dialog_choose_component.cpp:271 pcbnew/class_module.cpp:571
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -4349,7 +4349,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:43
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:90
-#: pcbnew/class_module.cpp:608
+#: pcbnew/class_module.cpp:613
 msgid "Insert"
 msgstr "Insérer"
 
@@ -6243,7 +6243,7 @@ msgstr "Champ"
 
 #: eeschema/lib_field.cpp:588 eeschema/onrightclick.cpp:433
 #: eeschema/sch_component.cpp:1536 eeschema/template_fieldnames.cpp:45
-#: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:621
+#: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:626
 #: pcbnew/class_pad.cpp:631 pcbnew/class_text_mod.cpp:369
 #: pcbnew/loadcmp.cpp:436
 msgid "Footprint"
@@ -7877,15 +7877,15 @@ msgstr "Supprimer Entrée de Bus"
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Position occupée par une autre pin. Continuer ?"
 
-#: eeschema/pinedit.cpp:665
+#: eeschema/pinedit.cpp:674
 msgid "No pins!"
 msgstr "Pas de Pins!"
 
-#: eeschema/pinedit.cpp:675
+#: eeschema/pinedit.cpp:684
 msgid "Marker Information"
 msgstr "Info Marqueur"
 
-#: eeschema/pinedit.cpp:701
+#: eeschema/pinedit.cpp:710
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
@@ -7894,25 +7894,25 @@ msgstr ""
 "<b>Pin dupliquée %s</b> \"%s\" en position <b>(%.3f, %.3f)</b> en conflit "
 "avec pin %s \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:715 eeschema/pinedit.cpp:757
+#: eeschema/pinedit.cpp:724 eeschema/pinedit.cpp:766
 #, c-format
 msgid " in part %c"
 msgstr " en unité %c"
 
-#: eeschema/pinedit.cpp:721 eeschema/pinedit.cpp:763
+#: eeschema/pinedit.cpp:730 eeschema/pinedit.cpp:772
 msgid "  of converted"
 msgstr "  de converti"
 
-#: eeschema/pinedit.cpp:723 eeschema/pinedit.cpp:765
+#: eeschema/pinedit.cpp:732 eeschema/pinedit.cpp:774
 msgid "  of normal"
 msgstr "  de normal"
 
-#: eeschema/pinedit.cpp:748
+#: eeschema/pinedit.cpp:757
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:774
+#: eeschema/pinedit.cpp:783
 msgid "No off grid or duplicate pins were found."
 msgstr "Pas de  pins doublées ou hors grille trouvées"
 
@@ -8691,7 +8691,7 @@ msgstr "Axes AB"
 #: gerbview/class_gerbview_layer_widget.cpp:89
 #: gerbview/dialogs/dialog_print_using_printer.cpp:163
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
-#: pcbnew/class_drawsegment.cpp:408 pcbnew/class_module.cpp:573
+#: pcbnew/class_drawsegment.cpp:408 pcbnew/class_module.cpp:578
 #: pcbnew/class_pad.cpp:647 pcbnew/class_pcb_layer_widget.cpp:237
 #: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:385
 #: pcbnew/class_track.cpp:1152 pcbnew/class_track.cpp:1179
@@ -9060,7 +9060,7 @@ msgid "Lines"
 msgstr "Lignes"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
-#: pcbnew/class_board.cpp:951 pcbnew/class_module.cpp:585
+#: pcbnew/class_board.cpp:951 pcbnew/class_module.cpp:590
 #: pcbnew/class_netinfo_item.cpp:113 pcbnew/pcb_draw_panel_gal.cpp:347
 msgid "Pads"
 msgstr "Pads"
@@ -11140,7 +11140,7 @@ msgstr "Z"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:938
 #: pcbnew/class_drawsegment.cpp:379 pcbnew/class_drawsegment.cpp:397
-#: pcbnew/class_module.cpp:598 pcbnew/class_pad.cpp:682
+#: pcbnew/class_module.cpp:603 pcbnew/class_pad.cpp:682
 #: pcbnew/class_pcb_text.cpp:148 pcbnew/class_text_mod.cpp:395
 msgid "Angle"
 msgstr "Angle"
@@ -12236,51 +12236,51 @@ msgstr "Marqueur @(%d,%d)"
 msgid "Target size %s"
 msgstr "Mire taille %s"
 
-#: pcbnew/class_module.cpp:568
+#: pcbnew/class_module.cpp:573
 msgid "Last Change"
 msgstr "Dernier Changement"
 
-#: pcbnew/class_module.cpp:571
+#: pcbnew/class_module.cpp:576
 msgid "Netlist Path"
 msgstr "Chemin Netliste "
 
-#: pcbnew/class_module.cpp:595 pcbnew/class_track.cpp:1134
+#: pcbnew/class_module.cpp:600 pcbnew/class_track.cpp:1134
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:191
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:186
 msgid "Status"
 msgstr "Statut"
 
-#: pcbnew/class_module.cpp:612
+#: pcbnew/class_module.cpp:617
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 msgid "Virtual"
 msgstr "Virtuel"
 
-#: pcbnew/class_module.cpp:620
+#: pcbnew/class_module.cpp:625
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:142
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:100
 msgid "Attributes"
 msgstr "Attributs"
 
-#: pcbnew/class_module.cpp:623
+#: pcbnew/class_module.cpp:628
 msgid "No 3D shape"
 msgstr "Pas de forme 3D"
 
-#: pcbnew/class_module.cpp:634
+#: pcbnew/class_module.cpp:639
 msgid "3D-Shape"
 msgstr "Forme 3D"
 
-#: pcbnew/class_module.cpp:637
+#: pcbnew/class_module.cpp:642
 #, c-format
 msgid "Doc: %s"
 msgstr "Doc: %s"
 
-#: pcbnew/class_module.cpp:638
+#: pcbnew/class_module.cpp:643
 #, c-format
 msgid "Key Words: %s"
 msgstr "Mots Clé: %s"
 
-#: pcbnew/class_module.cpp:804
+#: pcbnew/class_module.cpp:809
 #, c-format
 msgid "Footprint %s on %s"
 msgstr "Empreinte %s sur %s"
@@ -17680,6 +17680,8 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
+"Si activé, le routeur tente de d'éviter les pads / vias de manière propre, "
+"en évitant les angles aigus et les petits segments de piste irréguliers."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Smooth dragged segments"
@@ -22990,8 +22992,8 @@ msgid "VRML Export Options"
 msgstr "Options d'Exportation VRML"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:51
-msgid "Footprint Wizards"
-msgstr "Assistants de Création d'Empreinte"
+msgid "Footprint Generators"
+msgstr "Générateurs d'Empreintes"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.h:81
 msgid "PCB Library Tables"
@@ -23124,6 +23126,9 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
+
+#~ msgid "Footprint Wizards"
+#~ msgstr "Assistants de Création d'Empreinte"
 
 #~ msgid "Merge PTH and NPTH holes into one file"
 #~ msgstr "Générer trous métallisés et non métallisés en 1 seul fichier."
