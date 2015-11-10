@@ -70,8 +70,6 @@ static int          xcliplo = 0,
                     ycliphi = 2000;
 
 static EDA_COLOR_T   s_DC_lastcolor = UNSPECIFIED_COLOR;
-static int   s_DC_lastwidth = -1;
-static int   s_DC_lastpenstyle   = -1;
 static EDA_COLOR_T   s_DC_lastbrushcolor = UNSPECIFIED_COLOR;
 static bool  s_DC_lastbrushfill  = false;
 static wxDC* s_DC_lastDC = NULL;
@@ -213,31 +211,27 @@ void GRSetColorPen( wxDC* DC, EDA_COLOR_T Color, int width, wxPenStyle style )
         width = DC->DeviceToLogicalXRel( 1 );
 
     if( s_ForceBlackPen )
-    {
         Color = BLACK;
-    }
 
-    if(   s_DC_lastcolor != Color
-       || s_DC_lastwidth != width
-       || s_DC_lastpenstyle != style
-       || s_DC_lastDC != DC
-       || s_ForceBlackPen )
+    wxColour wx_color = MakeColour( Color );
+    const wxPen& curr_pen = DC->GetPen();
+
+    if( curr_pen.GetColour() != wx_color
+       || curr_pen.GetWidth() != width
+       || curr_pen.GetStyle() != style )
     {
-        wxPen    pen;
-
-        wxColour wx_color = MakeColour( Color );
-
+        wxPen pen;
         pen.SetColour( wx_color );
         pen.SetWidth( width );
         pen.SetStyle( style );
-
         DC->SetPen( pen );
-
-        s_DC_lastcolor    = Color;
-        s_DC_lastwidth    = width;
-        s_DC_lastpenstyle = style;
-        s_DC_lastDC = DC;
     }
+    else
+        // Should be not needed, but on Linux, in printing process
+        // the curr pen settings needs to be sometimes re-initialized
+        // Clearly, this is due to a bug, related to SetBrush(),
+        // but we have to live with it, at least on wxWidgets 3.0
+        DC->SetPen( curr_pen );
 }
 
 
