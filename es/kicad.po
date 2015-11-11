@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-27 20:21+0100\n"
-"PO-Revision-Date: 2015-11-05 09:38+0100\n"
+"PO-Revision-Date: 2015-11-11 10:13+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -273,7 +273,7 @@ msgstr "Mostrar sombras"
 
 #: 3d-viewer/3d_toolbar.cpp:169
 msgid "Show Holes in Zones"
-msgstr "Mostras orificios en zonas"
+msgstr "Mostrar orificios en zonas"
 
 #: 3d-viewer/3d_toolbar.cpp:170
 msgid ""
@@ -858,7 +858,7 @@ msgstr "Voltear bloque"
 
 #: common/block_commande.cpp:109
 msgid "Block Mirror"
-msgstr "Reflejar bloque"
+msgstr "Invertir bloque"
 
 #: common/class_marker_base.cpp:203
 msgid "Marker Info"
@@ -1311,11 +1311,11 @@ msgstr "La escala es demasiado grande para esta imagen"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Mirror X"
-msgstr "Reflejar X"
+msgstr "Invertir X"
 
 #: common/dialogs/dialog_image_editor_base.cpp:36
 msgid "Mirror Y"
-msgstr "Reflejar Y"
+msgstr "Invertir Y"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:174
@@ -2253,7 +2253,7 @@ msgstr "Y"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
 #: pcbnew/tools/common_actions.cpp:206
 msgid "Center"
-msgstr "Centrar"
+msgstr "Central"
 
 #: common/zoom.cpp:254 eeschema/tool_viewlib.cpp:90
 #: gerbview/toolbars_gerber.cpp:86 pagelayout_editor/toolbars_pl_editor.cpp:87
@@ -3868,11 +3868,11 @@ msgstr "Seleccionar si el componente ha de ser girado al representarlo"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
 msgid "Mirror ---"
-msgstr "Espejo ---"
+msgstr "Invertir Y"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
 msgid "Mirror |"
-msgstr "Espejo |"
+msgstr "Invertir X"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
 #: gerbview/class_gerber_draw_item.cpp:574
@@ -3883,7 +3883,7 @@ msgstr "Espejo |"
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:100
 #: pcbnew/modedit_onclick.cpp:292
 msgid "Mirror"
-msgstr "Espejo"
+msgstr "Invertir"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:60
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:66
@@ -3909,7 +3909,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:670
 msgid "Chip Name"
-msgstr "Nombre de chip"
+msgstr "Nombre del componente"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:74
 msgid "The name of the symbol in the library from which this component came"
@@ -3918,7 +3918,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:81
 msgid "Test"
-msgstr "Prueba"
+msgstr "Comprobar"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:84
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:41
@@ -4005,13 +4005,13 @@ msgstr "Justi. horizontal"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Bottom"
-msgstr "Abajo"
+msgstr "Inferior"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Top"
-msgstr "Arriba"
+msgstr "Superior"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:64
@@ -4051,7 +4051,7 @@ msgstr "Cursiva negrita"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:84
 msgid "Style:"
-msgstr "Estilo:"
+msgstr "Estilo"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:186
 msgid "The style of the currently selected field's text in the schemati"
@@ -4129,7 +4129,7 @@ msgstr "unidad"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:244
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:152
 msgid "PosX"
-msgstr "PosX"
+msgstr "Pos. X"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:250
 msgid "The X coordinate of the text relative to the component"
@@ -4138,7 +4138,7 @@ msgstr "La coordenada X del texto con respecto al componente"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:258
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:164
 msgid "PosY"
-msgstr "PosY"
+msgstr "Pos. Y"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:264
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:170
@@ -4191,12 +4191,12 @@ msgstr "&Tamaño:"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53 eeschema/lib_pin.cpp:168
 msgid "Up"
-msgstr "Arriba"
+msgstr "Subir"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56 eeschema/lib_pin.cpp:169
 msgid "Down"
-msgstr "Abajo"
+msgstr "Bajar"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
 msgid "O&rientation"
@@ -4374,7 +4374,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:120
 msgid "Check for cache/library conflicts when loading schematic"
-msgstr "Comprobar conflictos entre la cache y la librería al cargar el esquema"
+msgstr "Comprobar conflictos entre la caché y la librería al cargar el esquema"
 
 #: eeschema/dialogs/dialog_eeschema_options.cpp:51
 msgid "Default Value"
@@ -4583,7 +4583,7 @@ msgstr "&Eliminar"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:272
 msgid "Template Field Names"
-msgstr "Nombres de campo de plantilla"
+msgstr "Campos de la plantilla"
 
 #: eeschema/dialogs/dialog_erc.cpp:213
 msgid "Marker not found"
@@ -6526,11 +6526,11 @@ msgstr "Copiar"
 
 #: eeschema/libedit_onrightclick.cpp:340 eeschema/onrightclick.cpp:849
 msgid "Mirror Block ||"
-msgstr "Volteo horizontal"
+msgstr "Invertir bloque X"
 
 #: eeschema/libedit_onrightclick.cpp:342 eeschema/onrightclick.cpp:852
 msgid "Mirror Block --"
-msgstr "Volteo vertical"
+msgstr "Invertir bloque Y"
 
 #: eeschema/libedit_onrightclick.cpp:344
 msgid "Rotate Block ccw"
@@ -7355,12 +7355,12 @@ msgstr "Girar en sentido anti horario"
 #: eeschema/onrightclick.cpp:377 eeschema/onrightclick.cpp:769
 #: eeschema/onrightclick.cpp:889
 msgid "Mirror --"
-msgstr "Volteo vertical"
+msgstr "Invertir Y"
 
 #: eeschema/onrightclick.cpp:379 eeschema/onrightclick.cpp:771
 #: eeschema/onrightclick.cpp:892
 msgid "Mirror ||"
-msgstr "Volteo horizontal"
+msgstr "Invertir X"
 
 #: eeschema/onrightclick.cpp:384
 msgid "Orient Component"
@@ -7602,7 +7602,7 @@ msgstr "Eliminar pin de hoja"
 
 #: eeschema/onrightclick.cpp:833
 msgid "Window Zoom"
-msgstr ""
+msgstr "Zoom ventana"
 
 #: eeschema/onrightclick.cpp:841
 msgid "Save Block"
@@ -11638,7 +11638,7 @@ msgstr "Colocar celdas"
 
 #: pcbnew/autorouter/move_and_route_event_functions.cpp:133
 msgid "Not locked footprints inside the board will be moved. OK?"
-msgstr "Las huellas no bloqueadas de la placa se moverán."
+msgstr "Las huellas no bloqueadas de la placa se moverán. ¿De acuerdo?"
 
 #: pcbnew/autorouter/move_and_route_event_functions.cpp:139
 msgid "No footprint found!"
@@ -12175,7 +12175,7 @@ msgstr "Vía ciega"
 
 #: pcbnew/class_pcb_layer_widget.cpp:61
 msgid "Show blind or buried vias"
-msgstr "Mostras vías ciegas"
+msgstr "Mostrar vías ciegas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:62 pcbnew/class_track.cpp:1204
 msgid "Micro Via"
@@ -12454,7 +12454,7 @@ msgstr "Longitud total"
 
 #: pcbnew/class_track.cpp:1053
 msgid "Pad To Die Length"
-msgstr ""
+msgstr "Distancia de Pad a die"
 
 #: pcbnew/class_track.cpp:1061
 msgid "NC Name"
@@ -12680,54 +12680,56 @@ msgid ""
 "Selection of the pen size used to draw items which have no pen size "
 "specified."
 msgstr ""
+"Seleccione el tamaño del trazo utilizado para dibujar elementos que no "
+"tienen un tamaño de trazo asignado."
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:75
 msgid "Print mode"
-msgstr ""
+msgstr "Modo de impresión"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
 msgid "Full page with  frame ref"
-msgstr ""
+msgstr "Página completa con marco"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
 msgid "Current page size"
-msgstr ""
+msgstr "Támaño de página actual"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
 msgid "Board area only"
-msgstr ""
+msgstr "Solo área de la placa"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:83
 msgid "SVG Page Size"
-msgstr ""
+msgstr "Tamaño de página SVG"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:87
 msgid "Print board edges"
-msgstr ""
+msgstr "Imprimir bordes de la placa"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
 msgid "Print (or not) the edges layer on others layers"
-msgstr ""
+msgstr "Imprimir (o no) los bordes de la placa en otras capas."
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:93
 msgid "Print mirrored"
-msgstr ""
+msgstr "Imprimir invertida"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:94
 msgid "Print the layer(s) horizontally mirrored"
-msgstr ""
+msgstr "Imprimir las capas vertidas horizontalmente."
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
 msgid "One file per layer"
-msgstr ""
+msgstr "Un archivo por capa"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
 msgid "All in one file"
-msgstr ""
+msgstr "Todo en un archivo"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
 msgid "File option:"
-msgstr ""
+msgstr "Opcion de archivo:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:110
 #: pcbnew/dialogs/dialog_plot_base.cpp:379
@@ -12737,73 +12739,73 @@ msgstr "Trazar"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:25
 msgid "Include &footprints"
-msgstr ""
+msgstr "Incluir &huellas"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:28
 msgid "Include t&ext items"
-msgstr ""
+msgstr "Inluir t&extos"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:32
 msgid "Include &locked footprints"
-msgstr ""
+msgstr "Incluir huellas b&loqueadas"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:35
 msgid "Include &drawings"
-msgstr ""
+msgstr "Incluir &dibujos"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:38
 msgid "Include &tracks"
-msgstr ""
+msgstr "Incluir pis&tas"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:41
 msgid "Include &board outline layer"
-msgstr ""
+msgstr "Incluir capa de &contorno"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:44
 msgid "Include &zones"
-msgstr ""
+msgstr "Incluir &zonas"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:47
 msgid "Draw &selected items while moving"
-msgstr ""
+msgstr "Dibujar elementos &seleccionados al mover"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:56
 msgid "Include &items on invisible layers"
-msgstr ""
+msgstr "Incluir elementos en capas no v&isibles"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:22
 msgid "&Delete redundant vias"
-msgstr ""
+msgstr "Eliminar vías re&dundantes"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:23
 msgid "remove vias on pads with a through hole"
-msgstr "borrar vias en pads through hole"
+msgstr "eliminar vías en pads through hole"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:27
 msgid "&Merge overlapping segments"
-msgstr ""
+msgstr "Fusionar seg&mentos superpuestos"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:28
 msgid "merge aligned track segments, and remove null segments"
-msgstr ""
+msgstr "fusionar segmentos de pista alineados, y eliminar segmentos nulos"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:32
 msgid "D&elete unconnected tracks"
-msgstr ""
+msgstr "Borrar pistas no con&ectadas"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:33
 msgid "delete track segment having a dangling end"
-msgstr ""
+msgstr "borrar segmento de pista con un extremo libre"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:408
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
-msgstr ""
+msgstr "El espaciado debe ser menor de %f\" / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:420
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
-msgstr ""
+msgstr "El ancho mínimo debe ser mayor de %f\" / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:458
 msgid "Thermal relief spoke must be greater than the minimum width."
@@ -13852,6 +13854,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:324
 msgid "Component is locked: it cannot be freely moved or auto placed."
 msgstr ""
+"El componente está bloqueado: no puede moverse libremente ni automáticamente."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:482
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:352
@@ -13922,11 +13925,11 @@ msgstr "Libre"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:146
 msgid "Lock pads"
-msgstr ""
+msgstr "Bloquear pads"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:146
 msgid "Lock module"
-msgstr ""
+msgstr "Bloquear módulo"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:148
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:106
@@ -14721,7 +14724,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:85
 msgid "Mirror y axis"
-msgstr ""
+msgstr "Invertir eje Y"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:88
 msgid "Minimal header"
@@ -15001,7 +15004,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:61
 msgid "Locked tracks"
-msgstr ""
+msgstr "Pistas bloqueadas"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:64
 msgid "Unlocked tracks"
@@ -15009,7 +15012,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:72
 msgid "Locked footprints"
-msgstr ""
+msgstr "Huellas bloqueadas"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:75
 msgid "Unlocked footprints"
@@ -16307,6 +16310,8 @@ msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
 msgstr ""
+"Eliminar huellas de la placa que no están en la lista de conexiones.\n"
+"Nota: se eliminarán únicamente las huellas no bloqueadas."
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:73
 msgid "Single Pad Nets"
@@ -16419,15 +16424,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:43
 msgid "Include Locked Footprints"
-msgstr "Incluir Módulos Bloqueados"
+msgstr "Incluir huellas bloqueadas"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:44
 msgid "Force locked footprints to be modified"
-msgstr ""
+msgstr "Forzar la modificación de huellas bloqueadas"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:340
 msgid "Back side (footprint is mirrored)"
-msgstr ""
+msgstr "Parte trasera (la huella se invierte)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:742
 msgid "Pad size must be greater than zero"
@@ -16735,7 +16740,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70 pcbnew/muonde.cpp:812
 msgid "Mirrored"
-msgstr "Espejo"
+msgstr "Invertido"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:88
 msgid "Justification:"
@@ -16836,7 +16841,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:120
 msgid "Mirrored plot"
-msgstr ""
+msgstr "Trazado invertido"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:123
 msgid "Negative plot"
@@ -17722,7 +17727,7 @@ msgstr ""
 #: pcbnew/edit.cpp:769 pcbnew/edit.cpp:797 pcbnew/edit.cpp:825
 #, c-format
 msgid "Footprint %s found, but it is locked"
-msgstr ""
+msgstr "Se ha encontrado la huella %s, pero está bloqueada"
 
 #: pcbnew/edit.cpp:897 pcbnew/edit.cpp:916
 #, c-format
@@ -19512,7 +19517,7 @@ msgstr "Copiar Bloque (Mayú + arrastrar ratón)"
 
 #: pcbnew/modedit_onclick.cpp:255
 msgid "Mirror Block (alt + drag mouse)"
-msgstr "Espejo Bloque (alt + desplazar ratón)"
+msgstr "Invertir bloque (alt + desplazar ratón)"
 
 #: pcbnew/modedit_onclick.cpp:258
 msgid "Rotate Block (ctrl + drag mouse)"
@@ -19853,7 +19858,7 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:151
 msgid "Lock Footprint"
-msgstr ""
+msgstr "Bloquear huella"
 
 #: pcbnew/onrightclick.cpp:158
 msgid "Unlock Footprint"
@@ -19993,7 +19998,7 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:438
 msgid "Lock All Footprints"
-msgstr ""
+msgstr "Bloquear todas la huellas"
 
 #: pcbnew/onrightclick.cpp:441
 msgid "Spread out All Footprints"
@@ -20146,7 +20151,7 @@ msgstr "Ajust. Flags"
 
 #: pcbnew/onrightclick.cpp:680
 msgid "Locked: Yes"
-msgstr "Bloqueado: Si"
+msgstr "Bloqueado: Sí"
 
 #: pcbnew/onrightclick.cpp:681
 msgid "Locked: No"
@@ -20154,19 +20159,19 @@ msgstr "Bloqueado: No"
 
 #: pcbnew/onrightclick.cpp:690
 msgid "Track Locked: Yes"
-msgstr "Pista Bloqueada: Si"
+msgstr "Pista bloqueada: Sí"
 
 #: pcbnew/onrightclick.cpp:691
 msgid "Track Locked: No"
-msgstr "Pista Bloqueada: No"
+msgstr "Pista bloqueada: No"
 
 #: pcbnew/onrightclick.cpp:693
 msgid "Net Locked: Yes"
-msgstr "Net bloqueada: Si"
+msgstr "Red bloqueada: Sí"
 
 #: pcbnew/onrightclick.cpp:694
 msgid "Net Locked: No"
-msgstr "Net bloqueada: No"
+msgstr "Red bloqueada: No"
 
 #: pcbnew/onrightclick.cpp:708
 msgid "Place Edge Outline"
@@ -21546,7 +21551,7 @@ msgstr ""
 
 #: pcbnew/tools/selection_tool.cpp:536
 msgid "Selection contains locked items. Do you want to continue?"
-msgstr ""
+msgstr "La selección contienen elementos bloqueados. ¿Desea continuar?"
 
 #: pcbnew/tools/selection_tool.cpp:785
 msgid "Clarify selection"
@@ -21731,7 +21736,7 @@ msgstr "Colores EESchema"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:103
 #: eeschema/dialogs/dialog_lib_new_component_base.h:62
 msgid "Component Properties"
-msgstr ""
+msgstr "Propiedades del componente"
 
 #: eeschema/dialogs/dialog_edit_label_base.h:70
 msgid "Text Editor"
@@ -21991,7 +21996,7 @@ msgstr ""
 
 #: kicad/dialogs/dialog_template_selector_base.h:68
 msgid "Project Template Selector"
-msgstr ""
+msgstr "Selector de plantillas de projecto"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
