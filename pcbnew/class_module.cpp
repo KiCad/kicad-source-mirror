@@ -717,6 +717,30 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
+unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+{
+    std::set<int> usedNumbers;
+
+    // Create a set of used pad numbers
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    {
+        if( !aIncludeNPTH )
+        {
+            //remove NPTH
+            if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+            {
+                continue;
+            }
+        }
+
+        int padNumber = getTrailingInt( pad->GetPadName() );
+        usedNumbers.insert( padNumber );
+    }
+
+    return usedNumbers.size();
+}
+
+
 void MODULE::Add3DModel( S3D_MASTER* a3DModel )
 {
     a3DModel->SetParent( this );
