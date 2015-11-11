@@ -487,7 +487,7 @@ public:
     D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
     /**
-     * GetUniPadCount
+     * GetPadCount
      * returns the number of pads.
      *
      * @param aIncludeNPTH includes non-plated through holes when true.  Does not include
