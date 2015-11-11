@@ -461,6 +461,7 @@ PNS_ROUTER::PNS_ROUTER()
     m_currentEndItem = NULL;
     m_snappingEnabled  = false;
     m_violation = false;
+    m_gridHelper = NULL;
 
 }
 

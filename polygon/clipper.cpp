@@ -183,6 +183,7 @@ PolyNode::PolyNode(): Childs(), Parent(0), Index(0), m_IsOpen(false)
 {
     // Avoid uninitialized vars
     m_endtype = etClosedPolygon;
+    m_jointype = jtSquare;
 }
 //------------------------------------------------------------------------------
 

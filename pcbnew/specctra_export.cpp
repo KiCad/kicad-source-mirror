@@ -2005,10 +2005,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( netcode == 0 )
                 continue;
 
-            if( old_netcode != netcode
-            ||  old_width   != track->GetWidth()
-            ||  old_layer   != track->GetLayer()
-            ||  (path && path->points.back() != mapPt(track->GetStart()) )
+            if( old_netcode != netcode ||
+                old_width   != track->GetWidth() ||
+                old_layer   != track->GetLayer() ||
+                (path && path->points.back() != mapPt(track->GetStart()) )
               )
             {
                 old_width   = track->GetWidth();
@@ -2042,7 +2042,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 path->AppendPoint( mapPt( track->GetStart() ) );
             }
 
-            path->AppendPoint( mapPt( track->GetEnd() ) );
+            if( path )  // Should not occur
+                path->AppendPoint( mapPt( track->GetEnd() ) );
         }
     }
 
