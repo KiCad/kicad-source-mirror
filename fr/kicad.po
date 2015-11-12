@@ -367,7 +367,7 @@ msgstr "Montrer le &Corps du C.I."
 
 #: 3d-viewer/3d_toolbar.cpp:257
 msgid "Show Copper &Thickness"
-msgstr "Monter &Epaisseur Cuivre"
+msgstr "Montrer &Epaisseur Cuivre"
 
 #: 3d-viewer/3d_toolbar.cpp:260
 msgid "Show 3D M&odels"
@@ -383,19 +383,19 @@ msgstr "Montrer les &Couches"
 
 #: 3d-viewer/3d_toolbar.cpp:272
 msgid "Show &Adhesive Layers"
-msgstr "Monter les Couches Adhésives"
+msgstr "Montrer les Couches Adhésives"
 
 #: 3d-viewer/3d_toolbar.cpp:275
 msgid "Show &Silkscreen Layers"
-msgstr "Monter les Couches de &Sérigraphie"
+msgstr "Montrer les Couches de &Sérigraphie"
 
 #: 3d-viewer/3d_toolbar.cpp:278
 msgid "Show Solder &Mask Layers"
-msgstr "Monter Couches &Masque de Soudure"
+msgstr "Montrer Couches &Masque de Soudure"
 
 #: 3d-viewer/3d_toolbar.cpp:281
 msgid "Show Solder &Paste Layers"
-msgstr "Monter Couches Masque de &Pâte"
+msgstr "Montrer Couches Masque de &Pâte"
 
 #: 3d-viewer/3d_toolbar.cpp:286
 msgid "Show &Comments and Drawing Layers"
@@ -403,7 +403,7 @@ msgstr "Montrer Couches &Commentaires et Dessins"
 
 #: 3d-viewer/3d_toolbar.cpp:289
 msgid "Show &Eco Layers"
-msgstr "Monter Couches &Eco"
+msgstr "Montrer Couches &Eco"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Realistic mode"
@@ -411,7 +411,7 @@ msgstr "Mode réaliste"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:36
 msgid "Show copper thickness"
-msgstr "Monter l'épaisseur du cuivre"
+msgstr "Montrer l'épaisseur du cuivre"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:42
 msgid "Show 3D Models"
@@ -423,19 +423,19 @@ msgstr "Afficher les surfaces remplies dans les zones"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:54
 msgid "Show silkscreen layers"
-msgstr "Monter les couches de sérigraphie"
+msgstr "Montrer les couches de sérigraphie"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:60
 msgid "Show solder mask layers"
-msgstr "Monter les couches de masque de soudure"
+msgstr "Montrer les couches de masque de soudure"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:66
 msgid "Show solder paste layers"
-msgstr "Monter les couches de pâte à souder"
+msgstr "Montrer les couches de pâte à souder"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:72
 msgid "Show adhesive layers"
-msgstr "Monter les couches adhésives"
+msgstr "Montrer les couches adhésives"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:78
 msgid "Show comments and drawings layers"
@@ -2061,7 +2061,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:829
 msgid "Do not show this message again."
-msgstr "Ne plus monter de message de nouveau."
+msgstr "Ne plus montrer de message de nouveau."
 
 #: common/project.cpp:243
 #, c-format
@@ -8730,7 +8730,7 @@ msgstr "Montrer les objets négatifs dans cette couleur"
 
 #: gerbview/class_gerbview_layer_widget.cpp:152
 msgid "Show All Layers"
-msgstr "Monter Toutes les Couches"
+msgstr "Montrer Toutes les Couches"
 
 #: gerbview/class_gerbview_layer_widget.cpp:155
 msgid "Hide All Layers But Active"
@@ -10509,7 +10509,7 @@ msgid ""
 "Show title block like it will be displayed in applications\n"
 "texts with format are replaced by the full text"
 msgstr ""
-"Monter le bloc titre tel qu'il sera affiché dans les applications\n"
+"Montrer le bloc titre tel qu'il sera affiché dans les applications\n"
 "Les textes avec format seront replacés par le texte complet."
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:99
@@ -10517,7 +10517,7 @@ msgid ""
 "Show title block in edit mode: texts are shown as is:\n"
 "texts with format are displayed with no change"
 msgstr ""
-"Monter le bloc titre en mode édition: les textes sont affichés tels qu'il "
+"Montrer le bloc titre en mode édition: les textes sont affichés tels qu'il "
 "sont:\n"
 "Les textes avec format seront affichés sans changement."
 
@@ -12491,7 +12491,7 @@ msgstr "Afficher les références des modules"
 
 #: pcbnew/class_pcb_layer_widget.cpp:161
 msgid "Show All Copper Layers"
-msgstr "Monter Toutes les Couches Cuivre"
+msgstr "Montrer Toutes les Couches Cuivre"
 
 #: pcbnew/class_pcb_layer_widget.cpp:163
 msgid "Hide All Copper Layers But Active"
@@ -13918,7 +13918,7 @@ msgid ""
 "If New track is selected,  track clearance area is shown only when creating "
 "the track."
 msgstr ""
-"Monter (ou non) la zone d'isolation des pistes.\n"
+"Montrer (ou non) la zone d'isolation des pistes.\n"
 "Si Nouvelle Piste est sélectionné,  la zone d'isolation de la piste est "
 "montrée seulement pendant sa création."
 
