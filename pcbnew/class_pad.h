@@ -105,8 +105,26 @@ public:
 
     MODULE* GetParent() const { return (MODULE*) m_Parent; }
 
+    /**
+     * Set the pad name (sometimes called pad number, although
+     * it can be an array ref like AA12
+     * the pad name is limited to 4 ASCII chars
+     */
     void SetPadName( const wxString& name );    // Change pad name
+
+    /**
+     * @return the pad name
+     * the pad name is limited to 4 ASCII chars
+     */
     const wxString GetPadName() const;
+
+    /**
+     * @return the pad name in a wxUint32 which is possible
+     * because the pad name is limited to 4 ASCII chars
+     * The packed pad name should be used only to compare 2
+     * pad names, not to try to print this name
+     */
+    const wxUint32 GetPackedPadName() const { return m_NumPadName; }
 
     /*!
      * Function IncrementItemReference
