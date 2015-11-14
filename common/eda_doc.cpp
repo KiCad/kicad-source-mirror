@@ -94,15 +94,16 @@ bool GetAssociatedDocument( wxWindow* aParent,
     bool     success = false;
 
     // Is an internet url
-    static const wxChar* url_header[3] = {
+    static const wxChar* url_header[] = {
         wxT( "http:" ),
+        wxT( "https:" ),
         wxT( "ftp:" ),
         wxT( "www." )
     };
 
     for( unsigned ii = 0; ii < DIM(url_header); ii++ )
     {
-        if( aDocName.First( url_header[ii] ) == 0 )   //. seems an internet url
+        if( aDocName.First( url_header[ii] ) == 0 )   // looks like an internet url
         {
             wxLaunchDefaultBrowser( aDocName );
             return true;
