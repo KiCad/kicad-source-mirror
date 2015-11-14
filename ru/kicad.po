@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-06 10:35+0300\n"
-"PO-Revision-Date: 2015-11-06 11:46+0300\n"
+"POT-Creation-Date: 2015-11-14 17:38+0300\n"
+"PO-Revision-Date: 2015-11-14 17:38+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -1721,17 +1721,17 @@ msgstr "Un-terminated delimited string"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "String delimiter must be a single character of ', \", or $"
 
-#: common/eda_doc.cpp:144
+#: common/eda_doc.cpp:145
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:456
 msgid "Doc Files"
 msgstr "Файлы документации"
 
-#: common/eda_doc.cpp:159
+#: common/eda_doc.cpp:160
 #, c-format
 msgid "Doc File '%s' not found"
 msgstr "Файл документации '%s' не найден"
 
-#: common/eda_doc.cpp:202
+#: common/eda_doc.cpp:203
 #, c-format
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "Неизвестный MIME-тип для файла документации <%s>"
@@ -1760,11 +1760,11 @@ msgstr "Полужирный"
 msgid "Bold+Italic"
 msgstr "Полужирный курсив"
 
-#: common/footprint_info.cpp:320 common/footprint_info.cpp:341
+#: common/footprint_info.cpp:324 common/footprint_info.cpp:345
 msgid "Errors were encountered loading footprints"
 msgstr "При загрузке посад.мест возникли ошибки"
 
-#: common/footprint_info.cpp:339
+#: common/footprint_info.cpp:343
 msgid "Load Error"
 msgstr "Ошибка загрузки"
 
@@ -6052,7 +6052,7 @@ msgstr "Дуга имеет только %d параметров из требу
 
 #: eeschema/lib_arc.cpp:565 eeschema/lib_bezier.cpp:415
 #: eeschema/lib_circle.cpp:279 eeschema/lib_polyline.cpp:407
-#: eeschema/lib_rectangle.cpp:256 eeschema/lib_text.cpp:424
+#: eeschema/lib_rectangle.cpp:256 eeschema/lib_text.cpp:429
 #: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:216
 #: pcb_calculator/transline_ident.cpp:248
@@ -6358,7 +6358,7 @@ msgstr "Прямоугольник из (%s, %s) в (%s, %s)"
 msgid "Text only had %d parameters of the required 8"
 msgstr "Текст имеет только %d параметров из требуемых 8"
 
-#: eeschema/lib_text.cpp:485 eeschema/sch_text.cpp:603
+#: eeschema/lib_text.cpp:490 eeschema/sch_text.cpp:603
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Графический текст %s"
@@ -12211,7 +12211,7 @@ msgstr "Документация: %s"
 msgid "Key Words: %s"
 msgstr "Ключевые слова: %s"
 
-#: pcbnew/class_module.cpp:806
+#: pcbnew/class_module.cpp:839
 #, c-format
 msgid "Footprint %s on %s"
 msgstr "Посад.место %s на %s"
