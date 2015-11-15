@@ -45,7 +45,7 @@ msgstr "Įkelti projektą"
 
 #: kicad/menubar.cpp:138
 msgid "Save project"
-msgstr "I6saugoti projektą"
+msgstr "Išsaugoti projektą"
 
 #: kicad/menubar.cpp:139 kicad/menubar.cpp:244
 msgid "New Project"
@@ -199,31 +199,31 @@ msgstr ""
 
 #: kicad/menubar.cpp:322
 msgid "System &Default PDF Viewer"
-msgstr ""
+msgstr "Numatyta PDF programa"
 
 #: kicad/menubar.cpp:323
 msgid "Use system default PDF viewer"
-msgstr ""
+msgstr "Naudoti numatytą PDF programą"
 
 #: kicad/menubar.cpp:331
 msgid "&Favourite PDF Viewer"
-msgstr ""
+msgstr "Pasirinkta PDF programa"
 
 #: kicad/menubar.cpp:332
 msgid "Use favourite PDF viewer"
-msgstr ""
+msgstr "Naudoti pasirinktą PDF programą"
 
 #: kicad/menubar.cpp:342
 msgid "Set &PDF Viewer"
-msgstr ""
+msgstr "Nustatyti PDF programą"
 
 #: kicad/menubar.cpp:343
 msgid "Set favourite PDF viewer"
-msgstr ""
+msgstr "Nustatyti pasirinktą PDF programą"
 
 #: kicad/menubar.cpp:348
 msgid "&PDF Viewer"
-msgstr ""
+msgstr "&PDF programa"
 
 #: kicad/menubar.cpp:349
 msgid "PDF viewer preferences"
@@ -300,11 +300,11 @@ msgstr "Apie KiCad"
 #: 3d-viewer/3d_toolbar.cpp:135 gerbview/menubar.cpp:245
 #: pagelayout_editor/menubar.cpp:172
 msgid "&File"
-msgstr ""
+msgstr "&Failas"
 
 #: kicad/menubar.cpp:427
 msgid "&Browse"
-msgstr ""
+msgstr "Naršyti"
 
 #: kicad/menubar.cpp:428 cvpcb/menubar.cpp:142 3d-viewer/3d_toolbar.cpp:154
 #: gerbview/menubar.cpp:246 pagelayout_editor/menubar.cpp:173
@@ -326,7 +326,7 @@ msgstr "Pagalba"
 
 #: kicad/menubar.cpp:471
 msgid "Create new project from template"
-msgstr ""
+msgstr "Sukurti projektą pagal šabloną"
 
 #: kicad/menubar.cpp:489
 msgid "Archive all project files"
@@ -363,7 +363,7 @@ msgstr ""
 
 #: kicad/prjconfig.cpp:155
 msgid "Template Error"
-msgstr ""
+msgstr "Klaida šablone"
 
 #: kicad/prjconfig.cpp:234
 msgid "Create New Project"
@@ -371,7 +371,7 @@ msgstr "Naujas projektas"
 
 #: kicad/prjconfig.cpp:239
 msgid "Open Existing Project"
-msgstr ""
+msgstr "Atverti esamą projektą"
 
 #: kicad/prjconfig.cpp:265
 msgid ""
@@ -397,7 +397,7 @@ msgstr " [nekeičiamas]"
 
 #: kicad/prjconfig.cpp:363
 msgid "New Project Folder"
-msgstr ""
+msgstr "Naujas katalogas projektui"
 
 #: kicad/files-io.cpp:46
 msgid "Zip file (*.zip)|*.zip"
@@ -405,7 +405,7 @@ msgstr "Zip failas (*.zip)|*.zip"
 
 #: kicad/files-io.cpp:52
 msgid "KiCad project file"
-msgstr ""
+msgstr "KiCad projekto failas"
 
 #: kicad/files-io.cpp:78
 msgid "Unzip Project"
@@ -475,7 +475,7 @@ msgstr ""
 
 #: kicad/class_treeproject_item.cpp:112
 msgid "Rename File"
-msgstr ""
+msgstr "Pervadinti failą"
 
 #: kicad/class_treeproject_item.cpp:121
 msgid "Unable to rename file ... "
@@ -563,15 +563,15 @@ msgstr ""
 
 #: kicad/tree_project_frame.cpp:699
 msgid "&Rename file"
-msgstr ""
+msgstr "Pervadinti failą"
 
 #: kicad/tree_project_frame.cpp:700
 msgid "Rename file"
-msgstr ""
+msgstr "Pervadinti failą"
 
 #: kicad/tree_project_frame.cpp:703
 msgid "&Delete File"
-msgstr ""
+msgstr "Pašalinti failą"
 
 #: kicad/tree_project_frame.cpp:753
 #, c-format
@@ -606,10 +606,12 @@ msgid ""
 "Project name:\n"
 "%s\n"
 msgstr ""
+"Projekto pavadinimas:\n"
+"%s\n"
 
 #: kicad/dialogs/dialog_template_selector.cpp:120
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr ""
+msgstr "<html><h1>Parinkti šabloną</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:211
 msgid "Select Templates Directory"
@@ -628,7 +630,7 @@ msgstr ""
 #: common/dialogs/dialog_page_settings_base.cpp:356
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:210
 msgid "Browse"
-msgstr ""
+msgstr "Naršyti"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:39
 msgid "Validate"
@@ -640,7 +642,7 @@ msgstr ""
 
 #: pcbnew/class_text_mod.cpp:365
 msgid "Ref."
-msgstr ""
+msgstr "Ref."
 
 #: pcbnew/class_text_mod.cpp:365 pcbnew/footprint_wizard_frame.cpp:269
 #: pcbnew/class_edge_mod.cpp:261
@@ -665,7 +667,7 @@ msgstr "Nominalas"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:67
 msgid "Text"
-msgstr ""
+msgstr "Tekstas"
 
 #: pcbnew/class_text_mod.cpp:369 pcbnew/class_module.cpp:621
 #: pcbnew/loadcmp.cpp:436 pcbnew/class_pad.cpp:631
@@ -695,7 +697,7 @@ msgstr "Tipas"
 #: gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: pcbnew/class_text_mod.cpp:380 pcbnew/class_pcb_text.cpp:145
 #: eeschema/lib_pin.cpp:2000
@@ -724,7 +726,7 @@ msgstr "Rodyti"
 #: gerbview/dialogs/dialog_print_using_printer.cpp:163
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
 msgid "Layer"
-msgstr ""
+msgstr "Sluoksnis"
 
 #: pcbnew/class_text_mod.cpp:388
 msgid " Yes"
@@ -742,7 +744,7 @@ msgstr "Ne"
 #: gerbview/class_gerber_draw_item.cpp:574
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:79
 msgid "Mirror"
-msgstr ""
+msgstr "Atspindėti"
 
 #: pcbnew/class_text_mod.cpp:395 pcbnew/class_drawsegment.cpp:379
 #: pcbnew/class_drawsegment.cpp:397 pcbnew/class_module.cpp:598
@@ -756,7 +758,7 @@ msgstr "Kampas"
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
 msgid "Thickness"
-msgstr ""
+msgstr "Storis"
 
 #: pcbnew/class_text_mod.cpp:401 pcbnew/class_track.cpp:1157
 #: pcbnew/class_track.cpp:1184 pcbnew/class_drawsegment.cpp:410
@@ -877,15 +879,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:84
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:174
 msgid "Rotate"
-msgstr ""
+msgstr "Pasukti"
 
 #: pcbnew/modedit_onclick.cpp:294
 msgid "Move Exactly"
-msgstr ""
+msgstr "Tiksliai perkelti"
 
 #: pcbnew/modedit_onclick.cpp:297
 msgid "Edit Footprint"
-msgstr ""
+msgstr "Redaguoti korpusą"
 
 #: pcbnew/modedit_onclick.cpp:300
 msgid "Transform Footprint"
@@ -893,11 +895,11 @@ msgstr "Keisti korpusą"
 
 #: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:943
 msgid "Move Pad"
-msgstr ""
+msgstr "Perkelti aikštelę"
 
 #: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:948
 msgid "Edit Pad"
-msgstr ""
+msgstr "Redaguoti aikštelę"
 
 #: pcbnew/modedit_onclick.cpp:315
 msgid "New Pad Settings"
@@ -909,11 +911,11 @@ msgstr ""
 
 #: pcbnew/modedit_onclick.cpp:318
 msgid "Delete Pad"
-msgstr ""
+msgstr "Naikinti aikštelę"
 
 #: pcbnew/modedit_onclick.cpp:321
 msgid "Duplicate Pad"
-msgstr ""
+msgstr "Kopijuoti aikštelę"
 
 #: pcbnew/modedit_onclick.cpp:324
 msgid "Move Pad Exactly"
@@ -930,16 +932,16 @@ msgstr ""
 #: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:882
 #: eeschema/libedit_onrightclick.cpp:188 eeschema/onrightclick.cpp:597
 msgid "Move Text"
-msgstr ""
+msgstr "Perkelti tekstą"
 
 #: pcbnew/modedit_onclick.cpp:349 pcbnew/onrightclick.cpp:892
 #: eeschema/libedit_onrightclick.cpp:197 eeschema/onrightclick.cpp:605
 msgid "Rotate Text"
-msgstr ""
+msgstr "Pasukti tekstą"
 
 #: pcbnew/modedit_onclick.cpp:362
 msgid "Duplicate Text"
-msgstr ""
+msgstr "Kopijuoti tekstą"
 
 #: pcbnew/modedit_onclick.cpp:367
 msgid "Create Text Array"
@@ -947,7 +949,7 @@ msgstr ""
 
 #: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:886
 msgid "Move Text Exactly"
-msgstr ""
+msgstr "Tiksliai perkelti tekstą"
 
 #: pcbnew/modedit_onclick.cpp:379 pcbnew/onrightclick.cpp:898
 #: eeschema/libedit_onrightclick.cpp:194 eeschema/onrightclick.cpp:96
@@ -966,11 +968,11 @@ msgstr ""
 
 #: pcbnew/modedit_onclick.cpp:401
 msgid "Move Edge"
-msgstr ""
+msgstr "Perkelti kontūrą"
 
 #: pcbnew/modedit_onclick.cpp:405
 msgid "Duplicate Edge"
-msgstr ""
+msgstr "Kopijuoti kontūrą"
 
 #: pcbnew/modedit_onclick.cpp:408
 msgid "Move Edge Exactly"
@@ -1000,7 +1002,7 @@ msgstr "Pašalinti kontūrą"
 
 #: pcbnew/modedit_onclick.cpp:427
 msgid "Global Changes"
-msgstr ""
+msgstr "Globalūs pakeitimai"
 
 #: pcbnew/modedit_onclick.cpp:429
 msgid "Change Body Items Width"
@@ -1016,7 +1018,7 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:60 pcbnew/class_track.cpp:1214
 msgid "Through Via"
-msgstr ""
+msgstr "Ištisinis perėjimas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:60
 msgid "Show through vias"
@@ -1036,7 +1038,7 @@ msgstr "Mikro perėjimas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:62
 msgid "Show micro vias"
-msgstr ""
+msgstr "Rodyti mikro perėjimus"
 
 #: pcbnew/class_pcb_layer_widget.cpp:63
 msgid "Non Plated"
@@ -1056,7 +1058,7 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:66
 msgid "Pads Front"
-msgstr ""
+msgstr "Aikštelės viršuje"
 
 #: pcbnew/class_pcb_layer_widget.cpp:66
 msgid "Show footprint pads on board's front"
@@ -1064,7 +1066,7 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Pads Back"
-msgstr ""
+msgstr "Aikštelės apačioje"
 
 #: pcbnew/class_pcb_layer_widget.cpp:67
 msgid "Show footprint pads on board's back"
@@ -1072,7 +1074,7 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Text Front"
-msgstr ""
+msgstr "Tekstas viršuje"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Show footprint text on board's front"
@@ -1080,7 +1082,7 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Text Back"
-msgstr ""
+msgstr "Tekstas apačioje"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Show footprint text on board's back"
@@ -1117,7 +1119,7 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "No-Connects"
-msgstr ""
+msgstr "Neprijungti"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Show a marker on pads which have no net connected"
@@ -1175,7 +1177,7 @@ msgstr "Slėpti visus vario sluoksnius"
 #: pcbnew/class_pcb_layer_widget.cpp:238 pcbnew/layer_widget.cpp:560
 #: gerbview/class_gerbview_layer_widget.cpp:90
 msgid "Render"
-msgstr ""
+msgstr "Parodyti"
 
 #: pcbnew/class_pcb_layer_widget.cpp:328
 msgid "Front copper layer"
@@ -1280,14 +1282,14 @@ msgstr "Korpuso vedlys"
 
 #: pcbnew/footprint_wizard_frame.cpp:268
 msgid "Parameter"
-msgstr ""
+msgstr "Parametras"
 
 #: pcbnew/footprint_wizard_frame.cpp:270
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:35
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:27 common/draw_frame.cpp:489
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:33
 msgid "Units"
-msgstr ""
+msgstr "Matavimo vienetai:"
 
 #: pcbnew/footprint_wizard_frame.cpp:550 pcbnew/modview_frame.cpp:645
 #, c-format
@@ -1368,7 +1370,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 #: eeschema/lib_pin.cpp:207 gerbview/class_gerber_draw_item.cpp:183
 msgid "Line"
-msgstr ""
+msgstr "Atkarpa"
 
 #: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:870
 msgid "Rect"
