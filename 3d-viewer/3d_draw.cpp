@@ -290,7 +290,7 @@ void EDA_3D_CANVAS::generateFakeShadowsTextures( REPORTER* aErrorMessages, REPOR
 void EDA_3D_CANVAS::Redraw()
 {
     // SwapBuffer requires the window to be shown before calling
-    if( !IsShown() )
+    if( !IsShownOnScreen() )
         return;
 
     wxString err_messages;
