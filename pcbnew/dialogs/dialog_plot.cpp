@@ -149,11 +149,10 @@ void DIALOG_PLOT::Init_Dialog()
     // Could devote a PlotOrder() function in place of UIOrder().
     m_layerList = m_board->GetEnabledLayers().UIOrder();
 
+    // Populate the check list box by all enabled layers names
     for( LSEQ seq = m_layerList;  seq;  ++seq )
     {
         LAYER_ID layer = *seq;
-
-        m_layerList.push_back( layer );
 
         int checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
 

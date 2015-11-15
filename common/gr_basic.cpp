@@ -216,7 +216,7 @@ void GRSetColorPen( wxDC* DC, EDA_COLOR_T Color, int width, wxPenStyle style )
     wxColour wx_color = MakeColour( Color );
     const wxPen& curr_pen = DC->GetPen();
 
-    if( curr_pen.GetColour() != wx_color
+    if( !curr_pen.IsOk() || curr_pen.GetColour() != wx_color
        || curr_pen.GetWidth() != width
        || curr_pen.GetStyle() != style )
     {

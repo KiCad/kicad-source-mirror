@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN (www.cern.ch)
  * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
@@ -249,7 +249,17 @@ void KICAD_MANAGER_FRAME::TERMINATE_HANDLER::OnTerminate( int pid, int status )
     wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ),
             GetChars( appName ), pid );
 
-    ( (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow() )->PrintMsg( msg );
+    wxWindow* window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
+
+    if( window )    // Should always happen.
+    {
+        // Be sure the kicad frame manager is found
+        // This dynamic cast is not really mandatory, but ...
+        KICAD_MANAGER_FRAME* frame = dynamic_cast<KICAD_MANAGER_FRAME*> (window);
+
+        if( frame )
+            frame->PrintMsg( msg );
+    }
 
     delete this;
 }
