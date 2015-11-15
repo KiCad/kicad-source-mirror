@@ -797,7 +797,7 @@ struct EPOLYGON
         HATCH,
         CUTOUT,
     };
-    int         pour = EPOLYGON::SOLID;
+    int         pour;
     opt_double  isolate;
     opt_bool    orphans;
     opt_bool    thermals;
@@ -827,8 +827,10 @@ EPOLYGON::EPOLYGON( CPTREE& aPolygon )
     layer   = attribs.get<int>( "layer" );
     spacing = attribs.get_optional<double>( "spacing" );
     isolate = attribs.get_optional<double>( "isolate" );
-
+    // default pour to solid fill
+    pour    = EPOLYGON::SOLID;
     opt_string s = attribs.get_optional<string>( "pour" );
+
     if( s )
     {
         // (solid | hatch | cutout)
