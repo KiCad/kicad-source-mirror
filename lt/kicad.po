@@ -41,51 +41,51 @@ msgstr "Pagalba šiam langui"
 
 #: kicad/menubar.cpp:137
 msgid "Load project"
-msgstr ""
+msgstr "Įkelti projektą"
 
 #: kicad/menubar.cpp:138
 msgid "Save project"
-msgstr ""
+msgstr "I6saugoti projektą"
 
 #: kicad/menubar.cpp:139 kicad/menubar.cpp:244
 msgid "New Project"
-msgstr ""
+msgstr "Naujas projektas"
 
 #: kicad/menubar.cpp:140
 msgid "New Prj From Template"
-msgstr ""
+msgstr "Naujas projektas pagal šabloną"
 
 #: kicad/menubar.cpp:143 kicad/menubar.cpp:363
 msgid "Run Eeschema"
-msgstr ""
+msgstr "Paleisti Eeschema"
 
 #: kicad/menubar.cpp:144
 msgid "Run LibEdit"
-msgstr ""
+msgstr "Paleisti LibEdit"
 
 #: kicad/menubar.cpp:145 kicad/menubar.cpp:370 eeschema/menubar.cpp:477
 msgid "Run Pcbnew"
-msgstr ""
+msgstr "Paleisti Pcbnew"
 
 #: kicad/menubar.cpp:146
 msgid "Run FpEditor"
-msgstr ""
+msgstr "Paleisti FpEditor"
 
 #: kicad/menubar.cpp:147 kicad/menubar.cpp:378
 msgid "Run Gerbview"
-msgstr ""
+msgstr "Paleisti Gerbview"
 
 #: kicad/menubar.cpp:148 kicad/menubar.cpp:382
 msgid "Run Bitmap2Component"
-msgstr ""
+msgstr "Paleisti Bitmap2Component"
 
 #: kicad/menubar.cpp:150
 msgid "Run PcbCalculator"
-msgstr ""
+msgstr "Paleisti PcbCalculator"
 
 #: kicad/menubar.cpp:152
 msgid "Run PlEditor"
-msgstr ""
+msgstr "Paleisti PlEditor"
 
 #: kicad/menubar.cpp:168
 msgid "Kicad Manager Hotkeys"
@@ -93,31 +93,31 @@ msgstr ""
 
 #: kicad/menubar.cpp:213
 msgid "&Open Project"
-msgstr ""
+msgstr "Atverti projektą"
 
 #: kicad/menubar.cpp:215 kicad/menubar.cpp:476
 msgid "Open existing project"
-msgstr ""
+msgstr "Atverti esamą projektą"
 
 #: kicad/menubar.cpp:224 pcbnew/menubar_pcbframe.cpp:94 eeschema/menubar.cpp:97
 msgid "Open &Recent"
-msgstr ""
+msgstr "Atverti vėliausią ..."
 
 #: kicad/menubar.cpp:225
 msgid "Open recent schematic project"
-msgstr ""
+msgstr "Atverti vėliausią schemos projektą"
 
 #: kicad/menubar.cpp:231
 msgid "&New Project"
-msgstr ""
+msgstr "Naujas projektas"
 
 #: kicad/menubar.cpp:233
 msgid "Create new blank project"
-msgstr ""
+msgstr "Sukurti tuščią projektą"
 
 #: kicad/menubar.cpp:236
 msgid "New Project from &Template"
-msgstr ""
+msgstr "Sukurti projektą pagal šabloną"
 
 #: kicad/menubar.cpp:239
 msgid "Create a new project from a template"
@@ -130,11 +130,11 @@ msgstr "Naujas projektas"
 #: kicad/menubar.cpp:252 pcbnew/menubar_pcbframe.cpp:109
 #: pcbnew/menubar_pcbframe.cpp:566
 msgid "&Save"
-msgstr ""
+msgstr "Išsaugoti"
 
 #: kicad/menubar.cpp:254 kicad/menubar.cpp:481
 msgid "Save current project"
-msgstr ""
+msgstr "Išsaugoti šį projektą"
 
 #: kicad/menubar.cpp:262
 msgid "&Archive"
@@ -157,11 +157,11 @@ msgstr ""
 #: cvpcb/menubar.cpp:76 gerbview/menubar.cpp:145
 #: pagelayout_editor/menubar.cpp:111
 msgid "&Close"
-msgstr ""
+msgstr "Užverti"
 
 #: kicad/menubar.cpp:280
 msgid "Close KiCad"
-msgstr ""
+msgstr "Užverti KiCad"
 
 #: kicad/menubar.cpp:289
 msgid "Open Text E&ditor"
@@ -5923,7 +5923,7 @@ msgstr ""
 
 #: pcbnew/class_edge_mod.cpp:264
 msgid "Footprint Layer"
-msgstr "Korpuso sluoksniai"
+msgstr "Korpuso sluoksnis"
 
 #: pcbnew/class_edge_mod.cpp:276
 #, c-format
@@ -20933,7 +20933,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:466
 msgid "mm ^ 2"
-msgstr ""
+msgstr "mm ^ 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:381
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:470
@@ -21149,7 +21149,7 @@ msgstr "Z"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:958
 msgid "Results:"
-msgstr ""
+msgstr "Rezultatai:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1035
 msgid "TransLine"
@@ -21157,7 +21157,7 @@ msgstr "Perdavimo linijos"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1038
 msgid "label"
-msgstr ""
+msgstr "žyma"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1043
 msgid "PI"
@@ -21181,7 +21181,7 @@ msgstr "Ateniuatoriai:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1059
 msgid "Parameters:"
-msgstr ""
+msgstr "Parametrai:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1067
 msgid "Attenuation"
@@ -21201,7 +21201,7 @@ msgstr "Zin"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1150
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1162
 msgid "Ohms"
-msgstr ""
+msgstr "Omų"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1091
 msgid "Zout"
@@ -21326,7 +21326,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1329
 msgid "Board Classes"
-msgstr ""
+msgstr "Plokštės klasė"
 
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:51
 msgid "Separate sense pin"
@@ -21342,7 +21342,7 @@ msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:146
 msgid "Design"
-msgstr ""
+msgstr "Projektas"
 
 #: pagelayout_editor/pl_editor_frame.cpp:200
 #, c-format
@@ -21722,11 +21722,11 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:449
 msgid "Item Properties"
-msgstr ""
+msgstr "Elemento savybės"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:458
 msgid "Default Values:"
-msgstr ""
+msgstr "Reikšmės pagal nutylėjimą"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:468
 msgid "Text Size X (mm)"
@@ -21746,19 +21746,19 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:538
 msgid "Page Margins"
-msgstr ""
+msgstr "Puslapio paraštės"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:548
 msgid "Left Margin (mm)"
-msgstr ""
+msgstr "Kairioji paraštė (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:561
 msgid "Right Margin (mm)"
-msgstr ""
+msgstr "Dešinioji paraštė (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:580
 msgid "Top Margin (mm)"
-msgstr ""
+msgstr "Viršutinė paraštė (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:593
 msgid "Bottom Margin (mm)"
@@ -21766,7 +21766,7 @@ msgstr "Apatinė paraštė (mm)"
 
 #: kicad/dialogs/dialog_template_selector_base.h:68
 msgid "Project Template Selector"
-msgstr ""
+msgstr "Pasirinkti projekto šabloną"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
@@ -21797,7 +21797,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.h:71
 msgid "Change Footprint"
-msgstr ""
+msgstr "Keisti korpusą"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.h:70
 msgid "Footprint Text Properties"
@@ -21809,7 +21809,7 @@ msgstr "Nustatymai VRML eksportavimui"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.h:68
 msgid "Set Text Size"
-msgstr ""
+msgstr "Teksto dydis"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.h:62
 msgid "Generate Component Position Files"
@@ -21857,7 +21857,7 @@ msgstr "Tinklelio savybės"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:64
 msgid "Differential Pair Dimensions"
-msgstr ""
+msgstr "Diferencinės poros matmenys"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:54
 msgid "Cleaning Options"
@@ -21873,7 +21873,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_design_rules_base.h:112
 msgid "Design Rules Editor"
-msgstr ""
+msgstr "Projektavimo taisyklų redaktorius"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.h:53
 msgid "Footprints Orientation"
@@ -21927,7 +21927,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:62
 msgid "Export IDFv3"
-msgstr ""
+msgstr "Eksportuoti IDFv3"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:51
 msgid "Footprint Wizards"
@@ -21935,7 +21935,7 @@ msgstr "Korpuso vedlys"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:167
 msgid "Pad Properties"
-msgstr ""
+msgstr "Aikštelės savybės"
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.h:59
 msgid "Select Footprint Library Folder"
@@ -21943,7 +21943,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:79
 msgid "Drill Files Generation"
-msgstr ""
+msgstr "Generuoti failus gręžimui"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:69
 msgid "Global Edition of Tracks and Vias"
@@ -21959,7 +21959,7 @@ msgstr ""
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
-msgstr ""
+msgstr "Įkelti DXF failą"
 
 #: common/dialog_about/dialog_about_base.h:51
 msgid "About..."
@@ -21967,7 +21967,7 @@ msgstr "Apie ..."
 
 #: common/dialogs/dialog_env_var_config_base.h:53
 msgid "Path Configuration"
-msgstr ""
+msgstr "Tinkinti kelius"
 
 #: common/dialogs/dialog_image_editor_base.h:64
 msgid "Image Editor"
@@ -21979,7 +21979,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.h:121
 msgid "Page Settings"
-msgstr ""
+msgstr "Puslapio nustatymai"
 
 #: eeschema/help_common_strings.h:41
 msgid "Redo last command"
@@ -22011,7 +22011,7 @@ msgstr ""
 
 #: eeschema/help_common_strings.h:55
 msgid "Place wire"
-msgstr ""
+msgstr "Laidininkas"
 
 #: eeschema/help_common_strings.h:56
 msgid "Place bus"
@@ -22019,7 +22019,7 @@ msgstr "Nauja šyna"
 
 #: eeschema/help_common_strings.h:57
 msgid "Place wire to bus entry"
-msgstr ""
+msgstr "Prijungti laidininką prie šynos"
 
 #: eeschema/help_common_strings.h:58
 msgid "Place bus to bus entry"
