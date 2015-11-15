@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-10 13:22+0200\n"
-"PO-Revision-Date: 2015-11-10 14:08+0200\n"
+"POT-Creation-Date: 2015-11-12 12:18+0200\n"
+"PO-Revision-Date: 2015-11-12 12:18+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -1569,11 +1569,11 @@ msgstr "Έντονο"
 msgid "Bold+Italic"
 msgstr "Έντονα+Πλάγια"
 
-#: common/footprint_info.cpp:320 common/footprint_info.cpp:341
+#: common/footprint_info.cpp:324 common/footprint_info.cpp:345
 msgid "Errors were encountered loading footprints"
 msgstr "Εμφανίστηκαν σφάλματα κατά τη φόρτωση των αποτυπωμάτων"
 
-#: common/footprint_info.cpp:339
+#: common/footprint_info.cpp:343
 msgid "Load Error"
 msgstr "Σφάλμα Φόρτωσης"
 
@@ -2706,7 +2706,7 @@ msgstr "Φίλτράρισμα αποτυπωμάτων με βάση βιβλι
 #: eeschema/annotate.cpp:87
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "Αντικαταστάθηκαν %d διπλές χρονικές σφραγίδες."
+msgstr "Βρέθηκαν και αντικαταστάθηκαν %d διπλές χρονικές σφραγίδες."
 
 #: eeschema/backanno.cpp:225
 msgid "Load Component Footprint Link File"
@@ -2714,7 +2714,7 @@ msgstr "Φόρτωση Αρχείου Σύνδεσης Εξαρτήματος Α
 
 #: eeschema/backanno.cpp:239
 msgid "Keep existing footprint field visibility"
-msgstr "Διατήρηση επιλογών ορατότητας του πεδίου αποτυπώματος."
+msgstr "Διατήρηση επιλογών ορατότητας για το πεδίο αποτυπώματος."
 
 #: eeschema/backanno.cpp:240
 msgid "Show all footprint fields"
@@ -2726,7 +2726,7 @@ msgstr "Απόκρυψη όλων των πεδίων αποτυπώματος"
 
 #: eeschema/backanno.cpp:243
 msgid "Select the footprint field visibility setting."
-msgstr "Ορισμός επιλογών ορατότητας του πεδίου αποτυπώματος."
+msgstr "Eπιλογές ορατότητας του πεδίου αποτυπώματος."
 
 #: eeschema/backanno.cpp:244
 msgid "Change Visibility"
@@ -2736,7 +2736,7 @@ msgstr "Αλλαγή Ορατότητας"
 #, c-format
 msgid "Failed to open component-footprint link file '%s'"
 msgstr ""
-"Δεν ήταν δυνατό το άνοιγμα του αρχείου σύνδεσης εξαρτήματος-αποτυπώματος'%s'."
+"Δεν ήταν δυνατό το άνοιγμα του αρχείου σύνδεσης εξαρτήματος αποτυπώματος'%s'."
 
 #: eeschema/block.cpp:455
 msgid "No item to paste."
@@ -2759,7 +2759,7 @@ msgstr "Ακαθόριστο σφάλμα ΕΗΚ"
 
 #: eeschema/class_drc_erc_item.cpp:42
 msgid "Duplicate sheet names within a given sheet"
-msgstr "Διπλά ονόματα φύλλων σε ένα δεδομένο φύλλο"
+msgstr "Διπλά ονόματα φύλλων στο ίδιο φύλλο"
 
 #: eeschema/class_drc_erc_item.cpp:44
 msgid "Pin not connected (and no connect symbol found on this pin)"
@@ -2770,16 +2770,16 @@ msgstr ""
 #: eeschema/class_drc_erc_item.cpp:46
 msgid "Pin connected to some others pins but no pin to drive it"
 msgstr ""
-"Ο ακροδέκτης έχει συνδεθεί σε κάποιους άλλους ακροδέκτες αλλά δεν υπάρχει "
-"ακροδέκτης να τον οδηγήσει"
+"Ο ακροδέκτης έχει συνδεθεί σε άλλους ακροδέκτες αλλά δεν υπάρχει ακροδέκτης "
+"να τον οδηγήσει"
 
 #: eeschema/class_drc_erc_item.cpp:48
 msgid "Conflict problem between pins. Severity: warning"
-msgstr "Πρόβλημα σύγκρουσης μεταξύ ακροδεκτών. Σοβαρότητα: προειδοποίηση"
+msgstr "Ασυμβατότητα μεταξύ ακροδεκτών. Σοβαρότητα: προειδοποίηση"
 
 #: eeschema/class_drc_erc_item.cpp:50
 msgid "Conflict problem between pins. Severity: error"
-msgstr "Πρόβλημα σύγκρουσης μεταξύ ακροδεκτών. Σοβαρότητα: σφάλμα"
+msgstr "Ασυμβατότητα μεταξύ ακροδεκτών. Σοβαρότητα: σφάλμα"
 
 #: eeschema/class_drc_erc_item.cpp:52
 msgid "Mismatch between hierarchical labels and pins sheets"
@@ -2826,7 +2826,7 @@ msgstr ""
 
 #: eeschema/class_library.cpp:466
 msgid "The component library file name is not set."
-msgstr "Δεν έχει οριστεί το όνομα αρχείου της βιβλιοθήκης εξαρτημάτων"
+msgstr "Δεν έχει οριστεί το όνομα αρχείου της βιβλιοθήκης εξαρτημάτων."
 
 #: eeschema/class_library.cpp:474
 msgid "The file could not be opened."
@@ -2883,7 +2883,9 @@ msgstr "Αδυναμία φόρτωσης αρχείου έργου '%s'"
 msgid ""
 "Part library '%s' failed to load. Error:\n"
 "%s"
-msgstr "Αποτυχία φόρτωσης της βιβλιοθήκης εξαρτημάτων '%s'.Σφάλμα: %s"
+msgstr ""
+"Αποτυχία φόρτωσης της βιβλιοθήκης εξαρτημάτων '%s'.Σφάλμα: \n"
+"%s"
 
 #: eeschema/class_library.cpp:1184
 #, c-format
@@ -3046,7 +3048,7 @@ msgstr "Επιλογή Σχολιασμό"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:121
 msgid "Use first free number in schematic"
-msgstr "Χρήση πρώτου ελεύθερου αριθμού στο σχηματικού"
+msgstr "Χρήση πρώτου ελεύθερου αριθμού στο σχηματικό"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Start to  sheet number*100 and use first free number"
@@ -3095,7 +3097,7 @@ msgstr "Αυτό το όνομα υπάρχει ήδη. Ματαίωση"
 
 #: eeschema/dialogs/dialog_bom.cpp:486 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
-msgstr "Αρχεία Πρόσθετων:"
+msgstr "Αρχεία πρόσθετων:"
 
 #: eeschema/dialogs/dialog_bom.cpp:577
 msgid "Plugin file name not found. Cannot edit plugin file"
@@ -10128,7 +10130,7 @@ msgstr "Τεκμηρίωση: %s"
 msgid "Key Words: %s"
 msgstr "Λέξεις κλειδιά: %s"
 
-#: pcbnew/class_module.cpp:806
+#: pcbnew/class_module.cpp:830
 #, c-format
 msgid "Footprint %s on %s"
 msgstr "Αποτύπωμα %s στο %s"

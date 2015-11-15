@@ -1664,7 +1664,7 @@ msgstr "レポートをファイルに保存..."
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:79
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:91
 msgid "Inches"
-msgstr "インチ"
+msgstr "inch"
 
 #: common/draw_frame.cpp:322 cvpcb/class_DisplayFootprintsFrame.cpp:176
 #: pcbnew/tool_modedit.cpp:208 pcbnew/tool_pcb.cpp:335
@@ -2310,12 +2310,12 @@ msgstr "極座標表示"
 #: cvpcb/class_DisplayFootprintsFrame.cpp:184 eeschema/tool_lib.cpp:232
 #: pcbnew/tool_modedit.cpp:216 pcbnew/tool_pcb.cpp:341
 msgid "Units in inches"
-msgstr "インチ単位"
+msgstr "inch 単位"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:188 eeschema/tool_lib.cpp:236
 #: pcbnew/tool_modedit.cpp:220 pcbnew/tool_pcb.cpp:344
 msgid "Units in millimeters"
-msgstr "ミリメートル単位"
+msgstr "mm 単位"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:192 eeschema/tool_lib.cpp:240
 #: eeschema/tool_sch.cpp:285 gerbview/toolbars_gerber.cpp:167
@@ -8320,11 +8320,11 @@ msgstr "ビットマップ イメージを追加"
 
 #: eeschema/tool_sch.cpp:277
 msgid "Set unit to inch"
-msgstr "単位をインチに設定"
+msgstr "単位を inch に設定"
 
 #: eeschema/tool_sch.cpp:281
 msgid "Set unit to mm"
-msgstr "単位をミリメートルに設定"
+msgstr "単位を mm に設定"
 
 #: eeschema/tool_sch.cpp:295
 msgid "HV orientation for wires and bus"
@@ -9229,11 +9229,11 @@ msgstr "極座標表示に切り替え"
 
 #: gerbview/toolbars_gerber.cpp:159
 msgid "Set units to inches"
-msgstr "単位をインチに設定"
+msgstr "単位を inch に設定"
 
 #: gerbview/toolbars_gerber.cpp:163
 msgid "Set units to millimeters"
-msgstr "単位をミリメートルに設定"
+msgstr "単位を mm に設定"
 
 #: gerbview/toolbars_gerber.cpp:172
 msgid "Show spots in sketch mode"
