@@ -797,7 +797,7 @@ struct EPOLYGON
         HATCH,
         CUTOUT,
     };
-    opt_int     pour;
+    int         pour = EPOLYGON::SOLID;
     opt_double  isolate;
     opt_bool    orphans;
     opt_bool    thermals;
@@ -836,8 +836,6 @@ EPOLYGON::EPOLYGON( CPTREE& aPolygon )
             pour = EPOLYGON::HATCH;
         else if( !s->compare( "cutout" ) )
             pour = EPOLYGON::CUTOUT;
-        else
-            pour = EPOLYGON::SOLID;
     }
 
     orphans  = parseOptionalBool( attribs, "orphans" );
@@ -2434,7 +2432,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             (void) breakhere;
         }
 #endif
-
         // (contactref | polygon | wire | via)*
         for( CITER it = net->second.begin();  it != net->second.end();  ++it )
         {
@@ -2567,8 +2564,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     zone->SetLayer( layer );
                     zone->SetNetCode( netCode );
 
-                    CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
-
                     bool first = true;
                     for( CITER vi = it->second.begin();  vi != it->second.end();  ++vi )
                     {
@@ -2581,7 +2576,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                         if( first )
                         {
                             zone->Outline()->Start( layer,  kicad_x( v.x ), kicad_y( v.y ),
-                                                    outline_hatch );
+                                                    CPolyLine::NO_HATCH);
                             first = false;
                         }
                         else
@@ -2590,14 +2585,19 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     zone->Outline()->CloseLastContour();
 
-                    // If pour is set the zone should be hatched,
-                    // set the hatch size from the spacing variable.
-                    if( p.pour )
+                    // If the pour is a cutout it needs to be set to a keepout
+                    if( p.pour == EPOLYGON::CUTOUT )
                     {
-                        zone->Outline()->SetHatch( outline_hatch,
+                        zone->SetIsKeepout( true );
+                        zone->SetDoNotAllowCopperPour( true );
+                        zone->Outline()->SetHatchStyle( CPolyLine::NO_HATCH );
+                    }
+
+                    // if spacing is set the zone should be hatched
+                    if( p.spacing )
+                        zone->Outline()->SetHatch( CPolyLine::DIAGONAL_EDGE,
                                                    *p.spacing,
                                                    true );
-                    }
 
                     // clearances, etc.
                     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
