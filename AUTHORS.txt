@@ -49,6 +49,7 @@ Polish (PL) Kerusey Karyu <keruseykaryu@o2.pl>
 Portuguese (PT) Renie Marquet <reniemarquet[at]uol-dot-com-dot-br>"
 Russian (RU) Igor Plyatov <plyatov[at]gmail-dot-com>
 Russian (RU) Andrey Fedorushkov <andrf@mail.ru>
+Russian (RU) Eldar Khayrullin <eldar.khayrullin@mail.ru>
 Spanish (ES) Pedro Martin del Valle <pkicad[at]yahoo-dot-es>
 Spanish (ES) Iñigo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
 German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de

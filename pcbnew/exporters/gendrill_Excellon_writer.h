@@ -37,20 +37,22 @@ class BOARD;
 class PLOTTER;
 
 
-/* the DRILL_TOOL class  handles tools used in the excellon drill file */
+// the DRILL_TOOL class  handles tools used in the excellon drill file:
 class DRILL_TOOL
 {
 public:
     int m_Diameter;         // the diameter of the used tool (for oblong, the smaller size)
     int m_TotalCount;       // how many times it is used (round and oblong)
     int m_OvalCount;        // oblong count
+    bool m_Hole_NotPlated;  // Is the hole plated or not plated
 
 public:
-    DRILL_TOOL( int diametre )
+    DRILL_TOOL( int aDiameter, bool a_NotPlated )
     {
-        m_TotalCount = 0;
-        m_OvalCount  = 0;
-        m_Diameter   = diametre;
+        m_TotalCount     = 0;
+        m_OvalCount      = 0;
+        m_Diameter       = aDiameter;
+        m_Hole_NotPlated = a_NotPlated;
     }
 };
 
@@ -73,7 +75,7 @@ public:
     LAYER_ID    m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)
     LAYER_ID    m_Hole_Top_Layer;       // hole starting layer (usually front layer):
                                         // m_Hole_Top_Layer < m_Hole_Bottom_Layer
-    bool        m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file
+    bool        m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file or section
 
 public:
     HOLE_INFO()
@@ -145,6 +147,7 @@ private:
                                                         // (i.e inches or mm)
     bool                     m_mirror;
     wxPoint                  m_offset;                  // Drill offset coordinates
+    bool                     m_merge_PTH_NPTH;          // True to generate only one drill file
     std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
@@ -204,11 +207,12 @@ public:
      * @param aMinimalHeader = true to use a minimal header (no comments, no info)
      * @param aOffset = drill coordinates offset
      */
-    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset )
+    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMerge_PTH_NPTH )
     {
         m_mirror = aMirror;
         m_offset = aOffset;
         m_minimalHeader = aMinimalHeader;
+        m_merge_PTH_NPTH = aMerge_PTH_NPTH;
     }
 
     /**
@@ -349,8 +353,10 @@ private:
     /**
      * Function printToolSummary
      * prints m_toolListBuffer[] tools to aOut and returns total hole count.
+     * @param aOut = the current OUTPUTFORMATTER to print summary
+     * @param aSummaryNPTH = true to print summary for NPTH, false for PTH
      */
-    unsigned printToolSummary( OUTPUTFORMATTER& aOut ) const;
+    unsigned printToolSummary( OUTPUTFORMATTER& aOut, bool aSummaryNPTH ) const;
 
     const std::string layerPairName( LAYER_PAIR aPair ) const;
 

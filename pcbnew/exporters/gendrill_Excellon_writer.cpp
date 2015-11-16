@@ -56,8 +56,11 @@
 #include <reporter.h>
 #include <collectors.h>
 
+// Comment/uncomment this to write or not a comment
+// in drill file when PTH and NPTH are merged to flag
+// tools used for PTH and tools used for NPTH
+// #define WRITE_PTH_NPTH_COMMENT
 
-//#include <dialog_gendrill.h>   //  Dialog box for drill file generation
 
 EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
 {
@@ -67,6 +70,7 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     m_conversionUnits = 0.0001;
     m_unitsDecimal    = true;
     m_mirror = false;
+    m_merge_PTH_NPTH = false;
     m_minimalHeader = false;
     m_ShortHeader = false;
     m_mapFileFmt = PLOT_FORMAT_PDF;
@@ -83,14 +87,16 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 
     std::vector<LAYER_PAIR> hole_sets = getUniqueLayerPairs();
 
-    // append a pair representing the NPTH set of holes.
-    hole_sets.push_back( LAYER_PAIR( F_Cu, B_Cu ) );
+    // append a pair representing the NPTH set of holes, for separate drill files.
+    if( !m_merge_PTH_NPTH )
+        hole_sets.push_back( LAYER_PAIR( F_Cu, B_Cu ) );
 
     for( std::vector<LAYER_PAIR>::const_iterator it = hole_sets.begin();
             it != hole_sets.end();  ++it )
     {
         LAYER_PAIR  pair = *it;
-        bool        doing_npth = ( it == hole_sets.end() - 1 );
+        // For separate drill files, the last layer pair is the NPTH dril file.
+        bool doing_npth = m_merge_PTH_NPTH ? false : ( it == hole_sets.end() - 1 );
 
         BuildHolesList( pair, doing_npth );
 
@@ -185,10 +191,32 @@ int EXCELLON_WRITER::CreateDrillFile( FILE* aFile )
 
     holes_count = 0;
 
+#ifdef WRITE_PTH_NPTH_COMMENT
+    // if PTH_ and NPTH are merged write a comment in drill file at the
+    // beginning of NPTH section
+    bool writePTHcomment  = m_merge_PTH_NPTH;
+    bool writeNPTHcomment = m_merge_PTH_NPTH;
+#endif
+
     /* Write the tool list */
     for( unsigned ii = 0; ii < m_toolListBuffer.size(); ii++ )
     {
         DRILL_TOOL& tool_descr = m_toolListBuffer[ii];
+
+#ifdef WRITE_PTH_NPTH_COMMENT
+            if( writePTHcomment && !tool_descr.m_Hole_NotPlated )
+            {
+                writePTHcomment = false;
+                fprintf( m_file, ";TYPE=PLATED\n" );
+            }
+
+            if( writeNPTHcomment && tool_descr.m_Hole_NotPlated )
+            {
+                writeNPTHcomment = false;
+                fprintf( m_file, ";TYPE=NON_PLATED\n" );
+            }
+#endif
+
         fprintf( m_file, "T%dC%.3f\n", ii + 1,
                  tool_descr.m_Diameter * m_conversionUnits  );
     }
@@ -520,11 +548,14 @@ void EXCELLON_WRITER::WriteEXCELLONEndOfFile()
 
 
 /* Helper function for sorting hole list.
- * Compare function used for sorting holes  by increasing diameter value
- * and X value
+ * Compare function used for sorting holes type type (plated then not plated)
+ * then by increasing diameter value and X value
  */
-static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
+static bool CmpHoleSettings( const HOLE_INFO& a, const HOLE_INFO& b )
 {
+    if( a.m_Hole_NotPlated != b.m_Hole_NotPlated )
+        return b.m_Hole_NotPlated;
+
     if( a.m_Hole_Diameter != b.m_Hole_Diameter )
         return a.m_Hole_Diameter < b.m_Hole_Diameter;
 
@@ -558,6 +589,7 @@ void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
             new_hole.m_Tool_Reference = -1;         // Flag value for Not initialized
             new_hole.m_Hole_Orient    = 0;
             new_hole.m_Hole_Diameter  = hole_sz;
+            new_hole.m_Hole_NotPlated = false;
             new_hole.m_Hole_Size.x = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
             new_hole.m_Hole_Shape = 0;              // hole shape: round
@@ -583,11 +615,14 @@ void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
         {
             for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
-                if( !aGenerateNPTH_list && pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
-                    continue;
+                if( !m_merge_PTH_NPTH )
+                {
+                    if( !aGenerateNPTH_list && pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+                        continue;
 
-                if( aGenerateNPTH_list && pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
-                    continue;
+                    if( aGenerateNPTH_list && pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+                        continue;
+                }
 
                 if( pad->GetDrillSize().x == 0 )
                     continue;
@@ -603,30 +638,35 @@ void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
                     new_hole.m_Hole_Shape = 1; // oval flag set
 
                 new_hole.m_Hole_Size         = pad->GetDrillSize();
-                new_hole.m_Hole_Pos          = pad->GetPosition();               // hole position
+                new_hole.m_Hole_Pos          = pad->GetPosition();  // hole position
                 new_hole.m_Hole_Bottom_Layer = B_Cu;
-                new_hole.m_Hole_Top_Layer    = F_Cu;// pad holes are through holes
+                new_hole.m_Hole_Top_Layer    = F_Cu;    // pad holes are through holes
                 m_holeListBuffer.push_back( new_hole );
             }
         }
     }
 
     // Sort holes per increasing diameter value
-    sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), CmpHoleDiameterValue );
+    sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), CmpHoleSettings );
 
     // build the tool list
-    int        last_hole = -1;  /* Set to not initialized (this is a value not used
-                                 * for m_holeListBuffer[ii].m_Hole_Diameter) */
-    DRILL_TOOL new_tool( 0 );
+    int last_hole = -1;     // Set to not initialized (this is a value not used
+                            // for m_holeListBuffer[ii].m_Hole_Diameter)
+    bool last_notplated_opt = false;
+
+    DRILL_TOOL new_tool( 0, false );
     unsigned   jj;
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        if( m_holeListBuffer[ii].m_Hole_Diameter != last_hole )
+        if( m_holeListBuffer[ii].m_Hole_Diameter != last_hole ||
+            m_holeListBuffer[ii].m_Hole_NotPlated != last_notplated_opt )
         {
-            new_tool.m_Diameter = ( m_holeListBuffer[ii].m_Hole_Diameter );
+            new_tool.m_Diameter = m_holeListBuffer[ii].m_Hole_Diameter;
+            new_tool.m_Hole_NotPlated = m_holeListBuffer[ii].m_Hole_NotPlated;
             m_toolListBuffer.push_back( new_tool );
             last_hole = new_tool.m_Diameter;
+            last_notplated_opt = new_tool.m_Hole_NotPlated;
         }
 
         jj = m_toolListBuffer.size();

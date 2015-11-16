@@ -291,6 +291,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator(
         new Contributor( wxT( "Andrey Fedorushkov" ),     wxT( "andrf@mail.ru" ),                 wxT( "Russian (RU)" ),  KiBitmapNew( lang_ru_xpm ) ) );
     info.AddTranslator(
+        new Contributor( wxT( "Eldar Khayrullin" ),       wxT( "eldar.khayrullin@mail.ru" ),      wxT( "Russian (RU)" ),  KiBitmapNew( lang_ru_xpm ) ) );
+    info.AddTranslator(
         new Contributor( wxT( "Pedro Martin del Valle" ), wxT( "pkicad@yahoo.es" ),               wxT( "Spanish (ES)" ),  KiBitmapNew( lang_es_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Iñigo Zuluaga" ),          wxT( "inigo_zuluaga@yahoo.es" ),        wxT( "Spanish (ES)" ),  KiBitmapNew( lang_es_xpm ) ) );
