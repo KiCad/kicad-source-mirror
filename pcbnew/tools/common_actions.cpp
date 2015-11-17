@@ -385,7 +385,7 @@ TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
 
 TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_MODULE ),
-        _( "Add modules" ), _( "Add modules" ), NULL, AF_ACTIVATE );
+        _( "Add footprints" ), _( "Add footprints" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0,

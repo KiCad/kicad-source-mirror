@@ -231,7 +231,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
                                                          ForceAllSmd(), 2 );
     if( fpcount == 0)
     {
-        wxMessageBox( _( "No modules for automated placement." ) );
+        wxMessageBox( _( "No footprint for automated placement." ) );
         return false;
     }
 

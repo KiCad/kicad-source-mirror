@@ -1905,7 +1905,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         break;          // Default type is user text.
 
     default:
-        THROW_IO_ERROR( wxString::Format( _( "cannot handle module text type %s" ),
+        THROW_IO_ERROR( wxString::Format( _( "cannot handle footprint text type %s" ),
                                           GetChars( FromUTF8() ) ) );
     }
 

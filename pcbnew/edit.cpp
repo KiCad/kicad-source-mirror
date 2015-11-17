@@ -1442,7 +1442,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_PCB_MODULE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add module" ) );
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add footprint" ) );
         break;
 
     case ID_PCB_ZONES_BUTT:
@@ -1489,7 +1489,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_COMPONENT_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Add module" ) );
+        SetToolID( id, wxCURSOR_HAND, _( "Add footprint" ) );
         break;
 
     case ID_PCB_DIMENSION_BUTT:

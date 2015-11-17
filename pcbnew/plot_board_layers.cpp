@@ -113,7 +113,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     {
         if( ! itemplotter.PlotAllTextsModule( module ) )
         {
-             wxLogMessage( _( "Your BOARD has a bad layer number for module %s" ),
+             wxLogMessage( _( "Your BOARD has a bad layer number for footprint %s" ),
                            GetChars( module->GetReference() ) );
         }
     }
@@ -298,7 +298,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         if( ! itemplotter.PlotAllTextsModule( module ) )
         {
-            wxLogMessage( _( "Your BOARD has a bad layer number for module %s" ),
+            wxLogMessage( _( "Your BOARD has a bad layer number for footprint %s" ),
                            GetChars( module->GetReference() ) );
         }
     }

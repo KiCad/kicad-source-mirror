@@ -60,7 +60,7 @@
 
 #define FMT_OK_OVERWRITE    _( "Library '%s' exists, OK to replace ?" )
 #define FMT_CREATE_LIB      _( "Create New Library Folder (the .pretty folder is the library)" )
-#define FMT_OK_DELETE       _( "OK to delete module %s in library '%s'" )
+#define FMT_OK_DELETE       _( "OK to delete footprint %s in library '%s'" )
 #define FMT_IMPORT_MODULE   _( "Import Footprint" )
 #define FMT_FILE_NOT_FOUND  _( "File '%s' not found" )
 #define FMT_NOT_MODULE      _( "Not a footprint file" )

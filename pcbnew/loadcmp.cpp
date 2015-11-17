@@ -493,11 +493,11 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprint( BOARD* aPcb )
     for(  ; module;  module = module->Next() )
         listnames.Add( module->GetReference() );
 
-    msg.Printf( _( "Modules [%u items]" ), (unsigned) listnames.GetCount() );
+    msg.Printf( _( "Footprints [%u items]" ), (unsigned) listnames.GetCount() );
 
     wxArrayString headers;
 
-    headers.Add( _( "Module" ) );
+    headers.Add( _( "Footprint" ) );
 
     std::vector<wxArrayString> itemsToDisplay;
 
