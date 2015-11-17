@@ -10,6 +10,11 @@
 #
 #####################################
 
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
+  echo "Usage: $0 [locale]"
+  exit
+fi
+
 SOURCEDIR=../kicad-source-mirror #Set this first!!!
 
 #Autovars
@@ -30,6 +35,21 @@ done
 xgettext -f $LOCALDIR/POTFILES -k_ -k_HKI --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
 
 rm $LOCALDIR/POTFILES
+
+#check if present in locale list
+validate() { echo $LINGUAS | grep -F -q -w "$1"; }
+
+#If supplied, update only the specified locale
+if [ ! "$1" = "" ] ; then
+  if ! validate "$1"; then
+    echo "Error!"
+    echo "Locale argument \"$1\" not present in current locale list:"
+    for i in $LINGUAS; do echo -n "$i " ; done
+    exit 1
+  else
+    LINGUAS="$1"
+  fi
+fi
 
 for i in $LINGUAS
 do
