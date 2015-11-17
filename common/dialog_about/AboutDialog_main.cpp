@@ -141,20 +141,23 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     // bullet-ed list with some http links
     description << wxT( "<ul>" );
-    description << wxT( "<li>" ) << HtmlHyperlink( wxT( "http://iut-tice.ujf-grenoble.fr/kicad" ),
-                                                   _( "The original site of the initiator of KiCad" ) )
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "http://www.kicad-pcb.org" ),
+                                  _( "The official KiCad site" ) )
                 << wxT( "</li>" );
-    description << wxT( "<li>" ) <<
-    HtmlHyperlink( wxT( "https://launchpad.net/kicad" ), _( "Project on Launchpad" ) ) << wxT(
-        "</li>" );
-    description << wxT( "<li>" ) <<
-    HtmlHyperlink( wxT( "http://www.kicad-pcb.org" ),
-                  _( "The new KiCad site" ) ) << wxT( "</li>" );
-    description << wxT( "<li>" ) <<
-    HtmlHyperlink( wxT( "http://www.kicadlib.org" ),
-                  _( "Repository with additional component libraries" ) ) << wxT( "</li>" );
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "http://iut-tice.ujf-grenoble.fr/kicad" ),
+                                  _( "The original site of the KiCad project founder" ) )
+                << wxT( "</li>" );
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "https://launchpad.net/kicad" ),
+                                  _( "Developer's website on Launchpad" ) )
+                << wxT("</li>" );
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "http://www.kicadlib.org" ),
+                                  _( "Repository with additional component libraries" ) )
+                << wxT( "</li>" );
     description << wxT( "</ul>" );
-
     description << wxT( "</p>" );
 
     description << wxT( "<p>" );
@@ -162,14 +165,18 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     // bullet-ed list with some http links
     description << wxT( "<ul>" );
-    description << wxT( "<li>" ) <<
-    HtmlHyperlink( wxT( "https://bugs.launchpad.net/kicad" ),
-                  _( "Report bugs if you found any" ) ) << wxT( "</li>" );
-    description << wxT( "<li>" ) << HtmlHyperlink( wxT( "https://blueprints.launchpad.net/kicad" ),
-                                                   _( "File an idea for improvement" ) ) << wxT( "</li>" );
-    description << wxT( "<li>" ) <<
-    HtmlHyperlink( wxT( "http://www.kicadlib.org/Kicad_related_links.html" ),
-                   _( "KiCad links to user groups, tutorials and much more" ) ) << wxT( "</li>" );
+    description << wxT( "<li>" )
+                <<HtmlHyperlink( wxT( "https://bugs.launchpad.net/kicad" ),
+                                 _( "Report bugs if you found any" ) )
+                << wxT( "</li>" );
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "https://blueprints.launchpad.net/kicad" ),
+                                  _( "File an idea for improvement" ) )
+                << wxT( "</li>" );
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "http://www.kicadlib.org/Kicad_related_links.html" ),
+                                  _( "KiCad links to user groups, tutorials and much more" ) )
+                << wxT( "</li>" );
     description << wxT( "</ul>" );
 
     description << wxT( "</p>" );
@@ -218,10 +225,6 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddDeveloper(
         new Contributor( wxT( "Jonas Diemer" ),            wxT( "diemer@gmx.de" ) ) );
     info.AddDeveloper(
-        new Contributor( wxT( "Tim Hanson" ),              wxT( "sideskate@gmail.com" ) ) );
-    info.AddDeveloper(
-        new Contributor( wxT( "Hauptmech" ),               wxT( "hauptmech@gmail.com" ) ) );
-    info.AddDeveloper(
         new Contributor( wxT( "Torsten Hüter" ),           wxT( "torstenhtr@gmx.de" ) ) );
     info.AddDeveloper(
         new Contributor( wxT( "Jerry Jacobs" ),            wxT( "xor.gate.engineering@gmail.com" ) ) );
@@ -229,8 +232,6 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
         new Contributor( wxT( "Daniel Majewski" ),         wxT( "lordblick@gmail.com" ) ) );
     info.AddDeveloper(
         new Contributor( wxT( "Lorenzo Marcantonio" ),     wxT( "lomarcan@tin.it" ) ) );
-    info.AddDeveloper(
-        new Contributor( wxT( "Rok Markovic" ),            wxT( "rok@kanardia.eu" ) ) );
     info.AddDeveloper(
         new Contributor( wxT( "Marco Mattila" ),           wxT( "marcom99@gmail.com" ) ) );
     info.AddDeveloper(
@@ -259,6 +260,16 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
         new Contributor( wxT( "Andrew Zonenberg" ),        wxT( "azonenberg@drawersteak.com" ) ) );
     info.AddDeveloper(
         new Contributor( wxT( "Nick Østergaard" ),         wxT( "oe.nick@gmail.com" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Adam Wolfe" ),              wxT( "adamwolf@feelslikeburning.com" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Bernhard Stegmaier" ),      wxT( "stegmaier@sw-systems.de" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Chris Pavlina" ),           wxT( "pavlina.chris@gmail.com" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Mark Roszko" ),             wxT( "mark.roszko@gmail.com" ) ) );
+    info.AddDeveloper(
+        new Contributor( wxT( "Simon Richter" ),           wxT( "Simon.Richter@hogyros.de" ) ) );
 
     // The document writers
     info.AddDocWriter(
@@ -267,6 +278,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
         new Contributor( wxT( "Igor Plyatov" ),            wxT( "plyatov@gmail.com" ) ) );
     info.AddDocWriter(
         new Contributor( wxT( "Fabrizio Tappero" ),        wxT( "fabrizio.tappero@gmail.com" ) ) );
+    info.AddDocWriter(
+        new Contributor( wxT( "Marco Ciampa" ),            wxT( "ciampix@libero.it" ) ) );
 
     /* The translators
      * As category the language to which the translation was done is used

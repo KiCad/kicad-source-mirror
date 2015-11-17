@@ -1,5 +1,5 @@
-* Copyright (C) 1992-2014 Jean-Pierre Charras
-* Copyright (C) 1992-2014 Kicad Developers Team
+* Copyright (C) 1992-2015 Jean-Pierre Charras
+* Copyright (C) 1992-2015 Kicad Developers Team
 * under GNU General Public License (see copyright.txt)
 
 == Main Authors
@@ -16,28 +16,34 @@ Marco Serantoni <marco.serantoni[at]gmail-dot-com>  (OSX maintener)
 Rok Markovic <rok[at]kanardia.eu>
 Tim Hanson <sideskate[at]gmail-dot-com>
 Vesa Solonen <vesa.solonen[at]hut-dot-fi>
-Alexander Zakamaldin <zaka62[at]mail.ru>
-Miguel Angel Ajo Pelayo <miguelangel[at]nbee.es> (Python Scripting)
-Alexander Lunev <al.lunev[at]yahoo.com>  (Pcad to Kicad converter)
-Jacobo Aragunde Perez <jaragunde[at]igalia.com> for Igalia and the CERN
-Brian Sidebotham <brian.sidebotham[at]gmail.com>
-Maciej Sumiński <maciej.suminski[at]cern.ch>
-Tomasz Wlostowski <tomasz.wlostowski[at]cern.ch>
-Henner Zeller <h.zeller[at]acm.org>
-Mark Roszko <mark.roszko[at]gmail.com>
-Daniel Majewski <lordblick[at]gmail.com>
-Konstantin Baranovskiy <baranovskiykonstantin[at]gmail.com>
-Torsten Hüter <torstenhtr[at]gmx.de>
-Nick Østergaard <oe.nick[at]gmail.com>
-Andrew Zonenberg <azonenberg[at]drawersteak.com>
-Cirilo Bernardo <cirilo_bernardo[at]yahoo.com>
+Alexander Zakamaldin <zaka62[at]mail-dot-ru>
+Miguel Angel Ajo Pelayo <miguelangel[at]nbee-dot-es> (Python Scripting)
+Alexander Lunev <al.lunev[at]yahoo-dot-com>  (Pcad to Kicad converter)
+Jacobo Aragunde Perez <jaragunde[at]igalia-dot-com> for Igalia and the CERN
+Brian Sidebotham <brian.sidebotham[at]gmail-dot-com>
+Maciej Sumiński <maciej.suminski[at]cern-dot-ch>
+Tomasz Wlostowski <tomasz.wlostowski[at]cern-dot-ch>
+Henner Zeller <h.zeller[at]acm-dot-org>
+Mark Roszko <mark.roszko[at]gmail-dot-com>
+Daniel Majewski <lordblick[at]gmail-dot-com>
+Konstantin Baranovskiy <baranovskiykonstantin[at]gmail-dot-com>
+Torsten Hüter <torstenhtr[at]gmx-dot-de>
+Nick Østergaard <oe.nick[at]gmail-dot-com>
+Andrew Zonenberg <azonenberg[at]drawersteak-dot-com>
+Cirilo Bernardo <cirilo_bernardo[at]yahoo-dot-com>
+Adam Wolfe <adamwolf[at]feelslikeburning-dot-com>
+Bernhard Stegmaier <stegmaier[at]sw-systems-dot-de>
+Chris Pavlina <pavlina.chris[at]gmail-dot-com>
+Mark Roszko <mark.roszko[at]gmail-dot-com>
+Simon Richter <Simon.Richter[at]hogyros-dot-de>
 
 See also CHANGELOG.txt for contributors.
 
 == Document Writers
-Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab.inpg.fr>
-Igor Plyatov <plyatov[at]gmail.com>
+Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab.inpg-dot-fr>
+Igor Plyatov <plyatov[at]gmail-dot-com>
 Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
+Marco Ciampa <ciampix[at]libero-dot-it>
 
 == Translators
 Czech (CZ) Martin KratoÅ¡ka <martin[at]ok1rr-dot-com>
@@ -53,8 +59,8 @@ Russian (RU) Eldar Khayrullin <eldar.khayrullin@mail.ru>
 Spanish (ES) Pedro Martin del Valle <pkicad[at]yahoo-dot-es>
 Spanish (ES) Iñigo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
 German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de
-Japanese (JA) Kenta Yonekura <midpika@hotmail.com>
-Japanese (JA) yoneken <midpika@hotmail.com>
+Japanese (JA) Kenta Yonekura <midpika@hotmail-dot-com>
+Japanese (JA) yoneken <midpika@hotmail-dot-com>
 
 Remy Halvick, David Briscoe, Dominique Laigle, Paul Burke
 
