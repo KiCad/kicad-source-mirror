@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-16 19:35+0300\n"
-"PO-Revision-Date: 2015-11-16 19:38+0300\n"
+"POT-Creation-Date: 2015-11-17 20:17+0300\n"
+"PO-Revision-Date: 2015-11-17 20:17+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -613,7 +613,7 @@ msgstr "Формат"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:135 common/eda_text.cpp:377
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:498
@@ -1042,7 +1042,7 @@ msgstr "Информация о версии библиотек"
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:113
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:107
 #: pcbnew/dialogs/dialog_find_base.cpp:45
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
@@ -1316,7 +1316,7 @@ msgid "Mirror Y"
 msgstr "Отразить по Y"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:174
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:173
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:84
 #: pcbnew/modedit_onclick.cpp:290 pcbnew/onrightclick.cpp:1007
 #: pcbnew/tools/common_actions.cpp:121
@@ -1365,7 +1365,7 @@ msgstr "Элементы:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1172
 #: pcbnew/dialogs/dialog_drc_base.cpp:109
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:187
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:196
 msgid "Messages:"
 msgstr "Сообщения:"
 
@@ -1737,7 +1737,7 @@ msgid "Unknown MIME type for doc file <%s>"
 msgstr "Неизвестный MIME-тип для файла документации <%s>"
 
 #: common/eda_text.cpp:378
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
@@ -1748,7 +1748,7 @@ msgid "Italic"
 msgstr "Курсив"
 
 #: common/eda_text.cpp:379
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
@@ -2232,8 +2232,8 @@ msgid "Y"
 msgstr "Y"
 
 #: common/zoom.cpp:246
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 #: gerbview/class_GERBER.cpp:363 gerbview/class_GERBER.cpp:366
@@ -2581,7 +2581,7 @@ msgid "Unload the selected library"
 msgstr "Выгрузить выбранную библиотеку"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:134
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:133
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:40
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:83
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
@@ -3389,7 +3389,7 @@ msgid "Reference"
 msgstr "Обозначение"
 
 #: eeschema/dialogs/dialog_color_config.cpp:80
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:114
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:113
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields"
 msgstr "Поля"
@@ -3767,7 +3767,7 @@ msgid "Remove Fields"
 msgstr "Удалить поля"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:845
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:216
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:697
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
 msgid "Show in Browser"
@@ -3882,25 +3882,25 @@ msgstr ""
 msgid "Chip Name"
 msgstr "Имя компонента"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:74
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:73
 msgid "The name of the symbol in the library from which this component came"
 msgstr "Наименование символа в библиотеке, из которой получен компонент"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:81
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:80
 msgid "Test"
 msgstr "Тест"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:84
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:83
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:41
 msgid "Select"
 msgstr "Выбор"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:93
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:92
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 msgid "Timestamp"
 msgstr "Временная метка"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:98
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:97
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:122
 msgid ""
 "An unique ID (a time stamp) to identify the component.\n"
@@ -3909,11 +3909,11 @@ msgstr ""
 "Уникальный ID (временная метка) для идентификации компонента.\n"
 "Это идентификатор, альтернативный обозначения."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:105
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:104
 msgid "Reset to Library Defaults"
 msgstr "Сбросить установки"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:106
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:105
 msgid ""
 "Set position and style of fields and component orientation  to default lib "
 "value.\n"
@@ -3923,32 +3923,32 @@ msgstr ""
 "умолчанию.\n"
 "Тексты полей не изменяются."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:124
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:30
 msgid "Add Field"
 msgstr "Добавить поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:124
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:31
 msgid "Add a new custom field"
 msgstr "Добавить новое поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:128
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:35
 msgid "Delete Field"
 msgstr "Удалить поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:130
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:36
 msgid "Delete one of the optional fields"
 msgstr "Удалить одно из дополнительных полей"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:135
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:134
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:41
 msgid "Move the selected optional fields up one position"
 msgstr "Переместить  выбранное дополнительное поле вверх на одну позицию"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: eeschema/lib_pin.cpp:167
@@ -3957,7 +3957,7 @@ msgstr "Переместить  выбранное дополнительное 
 msgid "Left"
 msgstr "Влево"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: eeschema/lib_pin.cpp:166
@@ -3966,75 +3966,75 @@ msgstr "Влево"
 msgid "Right"
 msgstr "Вправо"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Horiz. Justify"
 msgstr "Гориз. выравнивание"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Bottom"
 msgstr "Вниз"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Top"
 msgstr "Вверх"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:64
 msgid "Vert. Justify"
 msgstr "Верт. выравнивание"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:167
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:166
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:125
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:154
 msgid "Visibility"
 msgstr "Видимость"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:168
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:79
 msgid "Show"
 msgstr "Показать"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:80
 msgid "Check if you want this field visible"
 msgstr "Установите, если хотите видеть это поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:175
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:174
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:85
 msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Установить для поворота текста выбранных полей на 90°"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
 msgid "Bold Italic"
 msgstr "Полужирный курсив"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:84
 msgid "Style:"
 msgstr "Стиль:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:186
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:185
 msgid "The style of the currently selected field's text in the schemati"
 msgstr "Стиль выбранных полей на схеме"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:196
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:195
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:104
 #: eeschema/dialogs/dialog_eeschema_options.cpp:47
 msgid "Field Name"
 msgstr "Имя поля:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:202
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:212
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:200
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:209
 msgid ""
 "The name of the currently selected field\n"
 "Some fixed fields names are not editable"
@@ -4042,12 +4042,12 @@ msgstr ""
 "Имя выбранного поля\n"
 "Некоторые имена полей предопределены и неизменны"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:206
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:204
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:114
 msgid "Field Value"
 msgstr "Значение поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:217
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:214
 msgid ""
 "If your datasheet is an http:// link or a complete file path, then it may "
 "show in your browser by pressing this button."
@@ -4055,20 +4055,20 @@ msgstr ""
 "Если документация имеет ссылку http:// или полный путь, то можно просмотреть "
 "ее в браузере, нажав эту кнопку."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:230
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:227
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:53 eeschema/sch_text.cpp:790
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28 pcbnew/muonde.cpp:822
 msgid "Size"
 msgstr "Размер"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:236
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:232
 msgid "The size of the currently selected field's text in the schematic"
 msgstr "Размер текста выбранных полей на схеме"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:240
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:254
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:268
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:236
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:249
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:262
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:148
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:160
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:174
@@ -4096,21 +4096,21 @@ msgstr "Размер текста выбранных полей на схеме"
 msgid "unit"
 msgstr "ед.изм."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:244
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:240
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:152
 msgid "PosX"
 msgstr "Поз.X"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:250
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:245
 msgid "The X coordinate of the text relative to the component"
 msgstr "Координата X текста относительно компонента"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:258
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:253
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:164
 msgid "PosY"
 msgstr "Поз.Y"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:264
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:258
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:170
 msgid "The Y coordinate of the text relative to the component"
 msgstr "Координата X текста относительно компонента"
@@ -4966,7 +4966,7 @@ msgstr "Обзор плагинов"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:171
 #: pcbnew/dialogs/dialog_SVG_print.cpp:215
-#: pcbnew/dialogs/dialog_gendrill.cpp:290 pcbnew/dialogs/dialog_plot.cpp:310
+#: pcbnew/dialogs/dialog_gendrill.cpp:295 pcbnew/dialogs/dialog_plot.cpp:310
 #: pcbnew/exporters/gen_modules_placefile.cpp:176
 #: pcbnew/exporters/gen_modules_placefile.cpp:565
 msgid "Select Output Directory"
@@ -4986,8 +4986,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:194
 #: pcbnew/dialogs/dialog_SVG_print.cpp:223
 #: pcbnew/dialogs/dialog_SVG_print.cpp:234
-#: pcbnew/dialogs/dialog_gendrill.cpp:298
-#: pcbnew/dialogs/dialog_gendrill.cpp:309 pcbnew/dialogs/dialog_plot.cpp:323
+#: pcbnew/dialogs/dialog_gendrill.cpp:303
+#: pcbnew/dialogs/dialog_gendrill.cpp:314 pcbnew/dialogs/dialog_plot.cpp:323
 #: pcbnew/dialogs/dialog_plot.cpp:330
 #: pcbnew/exporters/gen_modules_placefile.cpp:184
 #: pcbnew/exporters/gen_modules_placefile.cpp:193
@@ -6198,7 +6198,7 @@ msgstr "Поле"
 #: eeschema/sch_component.cpp:1536 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:626
 #: pcbnew/class_pad.cpp:631 pcbnew/class_text_mod.cpp:369
-#: pcbnew/loadcmp.cpp:436
+#: pcbnew/loadcmp.cpp:436 pcbnew/loadcmp.cpp:500
 msgid "Footprint"
 msgstr "Посад.место"
 
@@ -12758,7 +12758,7 @@ msgid "Delete NET?"
 msgstr "Удалить цепь?"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222
-#: pcbnew/dialogs/dialog_gendrill.cpp:297
+#: pcbnew/dialogs/dialog_gendrill.cpp:302
 #: pcbnew/exporters/gen_modules_placefile.cpp:183
 msgid "Use a relative path? "
 msgstr "Использовать относительный путь?"
@@ -13587,7 +13587,7 @@ msgid "Allow micro vias"
 msgstr "Разрешить перех.микроотв."
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:175
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:144
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:153
 msgid "Micro Vias:"
 msgstr "Перех.микроотв.:"
 
@@ -14060,16 +14060,17 @@ msgid "Use a path relative to '%s'?"
 msgstr "Использовать относительный путь для '%s'?"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
-msgid "Top side"
-msgstr "Верхняя сторона"
+msgid "Front"
+msgstr "Передняя"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
-msgid "Bottom side"
-msgstr "Нижняя сторона"
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
+msgid "Back"
+msgstr "Задняя"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:62
-msgid "Side"
-msgstr "Сторона"
+msgid "Board Side"
+msgstr "Сторона платы"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:58
@@ -14090,8 +14091,8 @@ msgid "180.0"
 msgstr "180,0"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
-msgid "Other rotation"
-msgstr "Другой поворот"
+msgid "Other"
+msgstr "Другой"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:72
 msgid "Rotation (in 0.1 degrees):"
@@ -14120,8 +14121,8 @@ msgid "Lock pads"
 msgstr "Заблокировать конт.пл."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:146
-msgid "Lock module"
-msgstr "Заблокировать модуль"
+msgid "Lock footprint"
+msgstr "Заблокировать посад.место"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:148
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:106
@@ -14134,13 +14135,11 @@ msgid "Auto Place"
 msgstr "Авторазмещение"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:161
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:119
-msgid "Rotation 90 degree"
+msgid "Rotate 90 degrees"
 msgstr "Поворот на 90°"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:174
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:132
-msgid "Rotation 180 degree"
+msgid "Rotate 180 degrees"
 msgstr "Поворот на 180°"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:188
@@ -14341,6 +14340,14 @@ msgstr "Имя посад.места в библиотеке"
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:104
 msgid "Locked"
 msgstr "Заблокировано"
+
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:119
+msgid "Rotation 90 degree"
+msgstr "Поворот на 90°"
+
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:132
+msgid "Rotation 180 degree"
+msgstr "Поворот на 180°"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:146
 msgid "Local Clearance Values"
@@ -14869,30 +14876,30 @@ msgstr ""
 "Эта опция принудительно включит ее для компонентов только с SMD конт.пл.\n"
 "Предупреждение: эти опции модифицируют плату."
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:130
-#: pcbnew/dialogs/dialog_gendrill.cpp:131
+#: pcbnew/dialogs/dialog_gendrill.cpp:134
+#: pcbnew/dialogs/dialog_gendrill.cpp:135
 msgid "Use Netclasses values"
 msgstr "Использовать значение класса цепи"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:308
+#: pcbnew/dialogs/dialog_gendrill.cpp:313
 msgid ""
 "Cannot make path relative.  The target volume is different from board file "
 "volume!"
 msgstr ""
 "Не удалось сделать путь относительным. Том назначения и том платы различные!"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:392
+#: pcbnew/dialogs/dialog_gendrill.cpp:399
 msgid "Save Drill Report File"
 msgstr "Сохранить отчет сверловки"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:411
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:112
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:142
+#: pcbnew/dialogs/dialog_gendrill.cpp:419
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:148
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Не удалось создать %s **\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:416
+#: pcbnew/dialogs/dialog_gendrill.cpp:424
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Файл отчета %s создан\n"
@@ -14955,76 +14962,107 @@ msgstr "Параметры файла сверловки:"
 msgid "Mirror y axis"
 msgstr "Зеркалировать по оси Y"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:88
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:86
+msgid ""
+"Not recommanded.\n"
+"Used mostly by users who make themselves the boards."
+msgstr ""
+"Не рекомендовано.\n"
+"Используется в основном пользователями, которые делают платы сами."
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:90
 msgid "Minimal header"
 msgstr "Минимальный заголовок"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:91
+msgid ""
+"Not recommanded.\n"
+"Use it only for board houses which do not accept fully featured headers."
+msgstr ""
+"Не рекомендовано.\n"
+"Используйте только для изготовителя плат, которые не принимают "
+"полнофункциональные заголовки."
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:95
+msgid "Merge PTH and NPTH holes into one file"
+msgstr "Объединить метал. и неметал. сквозные отв. в один файл"
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
+msgid ""
+"Not recommanded.\n"
+"Use it only for board houses which ask for merged PTH and NPTH into onlu one "
+"file"
+msgstr ""
+"Не рекомендовано.\n"
+"Используйте только для изготовителя плат, которые требуют объединить метал. "
+"и неметал. сквозные отв. только в один файл"
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:103
 msgid "Absolute"
 msgstr "Абсолютные"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:103
 msgid "Auxiliary axis"
 msgstr "Вспомогательные оси"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:105
 msgid "Drill Origin:"
 msgstr "Система координат сверловки:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:98
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:107
 msgid ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 msgstr "Выбор координат: абсолютно или относительно координатных осей"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:109
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:118
 msgid "Info:"
 msgstr "Инфо:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:111
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
 msgid "Default Vias Drill:"
 msgstr "Сверло перех.отв. по умолчанию:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:113
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
 msgid "Via Drill Value"
 msgstr "Величина сверла перех.отв."
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:129
 msgid "Micro Vias Drill:"
 msgstr "Сверло перех.микроотв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:131
 msgid "Micro Via Drill Value"
 msgstr "Величина сверла перех.микроотв."
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:130
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:139
 msgid "Holes Count:"
 msgstr "Количество отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:132
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:141
 msgid "Plated Pads:"
 msgstr "Метал. конт.пл.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:136
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:145
 msgid "Not Plated Pads:"
 msgstr "Неметал. конт.пл.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:140
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:149
 msgid "Through Vias:"
 msgstr "Сквозные перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:148
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 msgid "Buried Vias:"
 msgstr "Внутр. перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:167
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:176
 msgid "Drill File"
 msgstr "Файл сверловки"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:171
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:180
 msgid "Map File"
 msgstr "Файл карты"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:183
 msgid "Report File"
 msgstr "Файл отчета"
 
@@ -16182,10 +16220,6 @@ msgstr "In29"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1139
 msgid "In30"
 msgstr "In30"
-
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
-msgid "Back"
-msgstr "Back"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1170
 msgid "Layer name of back (bottom) copper layer"
@@ -18147,8 +18181,8 @@ msgstr "Добавить дорожки"
 
 #: pcbnew/edit.cpp:1445 pcbnew/edit.cpp:1492
 #: pcbnew/tools/pcb_editor_control.cpp:222
-msgid "Add module"
-msgstr "Добавить модуль"
+msgid "Add footprint"
+msgstr "Добавить посад.место"
 
 #: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:421
 msgid "Add zones"
@@ -18280,8 +18314,8 @@ msgstr ""
 "Не добавлены отв. по контуру."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:234
-msgid "No modules for automated placement."
-msgstr "Нет модулей для автоматического размещения."
+msgid "No footprint for automated placement."
+msgstr "Нет посад.мест для автоматического размещения."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:274
 #, c-format
@@ -18337,8 +18371,8 @@ msgstr "Отчет о посад.местах"
 msgid "Unable to create '%s'"
 msgstr "Не удалось создать '%s'"
 
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:122
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:152
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:128
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:158
 #, c-format
 msgid "Create file %s\n"
 msgstr "Создать файл %s\n"
@@ -19148,8 +19182,9 @@ msgstr "Неизвестный тип листа '%s' в строке:%d"
 
 #: pcbnew/legacy_plugin.cpp:1457
 #, c-format
-msgid "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'"
-msgstr "Неизвестная форма конт.пл. '%c=0x%02x' в строке: %d в модуле: '%s'"
+msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'"
+msgstr ""
+"Неизвестная форма конт.пл. '%c=0x%02x' в строке: %d в посад.месте: '%s'"
 
 #: pcbnew/legacy_plugin.cpp:2506
 #, c-format
@@ -19220,8 +19255,8 @@ msgstr "Создание новой библиотеки (.pretty директо
 
 #: pcbnew/librairi.cpp:63
 #, c-format
-msgid "OK to delete module %s in library '%s'"
-msgstr "OK для удаления модуля %s в библиотеке '%s'"
+msgid "OK to delete footprint %s in library '%s'"
+msgstr "OK для удаления посад.места %s в библиотеке '%s'"
 
 #: pcbnew/librairi.cpp:64
 msgid "Import Footprint"
@@ -19385,12 +19420,8 @@ msgstr ""
 
 #: pcbnew/loadcmp.cpp:496
 #, c-format
-msgid "Modules [%u items]"
-msgstr "Модули [%u шт.]"
-
-#: pcbnew/loadcmp.cpp:500
-msgid "Module"
-msgstr "Модуль"
+msgid "Footprints [%u items]"
+msgstr "Посад.мест [%u шт.]"
 
 #: pcbnew/loadcmp.cpp:560
 #, c-format
@@ -19471,8 +19502,8 @@ msgid "S&ave Footprint in New Library"
 msgstr "Сохранить посад.место в новой библиотеке"
 
 #: pcbnew/menubar_modedit.cpp:122
-msgid "Create a new library and save current module into it"
-msgstr "Создать новую библиотеку и сохранить в ней текущий модуль"
+msgid "Create a new library and save current footprint into it"
+msgstr "Создать новую библиотеку и сохранить в ней текущее посад.место"
 
 #: pcbnew/menubar_modedit.cpp:127
 msgid "&Export Footprint"
@@ -19943,6 +19974,7 @@ msgid "&Footprint"
 msgstr "Посад.место"
 
 #: pcbnew/menubar_pcbframe.cpp:387 pcbnew/tool_pcb.cpp:436
+#: pcbnew/tools/common_actions.cpp:388
 msgid "Add footprints"
 msgstr "Добавить посад.места"
 
@@ -21201,8 +21233,8 @@ msgstr "дубликат имени класса цепи '%s' в файле <%s
 
 #: pcbnew/pcb_parser.cpp:1908
 #, c-format
-msgid "cannot handle module text type %s"
-msgstr "не удалось обработать текст модуля типа %s"
+msgid "cannot handle footprint text type %s"
+msgstr "не удалось обработать текст посад.места типа %s"
 
 #: pcbnew/pcb_parser.cpp:2316 pcbnew/pcb_parser.cpp:2322
 #: pcbnew/pcb_parser.cpp:2422 pcbnew/pcb_parser.cpp:2504
@@ -21275,8 +21307,8 @@ msgstr "Читать файл макросов"
 
 #: pcbnew/plot_board_layers.cpp:116 pcbnew/plot_board_layers.cpp:301
 #, c-format
-msgid "Your BOARD has a bad layer number for module %s"
-msgstr "Плата содержит неверный номер слоя в модуле %s"
+msgid "Your BOARD has a bad layer number for footprint %s"
+msgstr "Ваша плата содержит неверное число слоев для посад.места %s"
 
 #: pcbnew/plugin.cpp:118
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -22209,10 +22241,6 @@ msgstr "Отменить заливку всех зон"
 msgid "Merge zones"
 msgstr "Объединение зон"
 
-#: pcbnew/tools/common_actions.cpp:388
-msgid "Add modules"
-msgstr "Добавить модули"
-
 #: pcbnew/tools/common_actions.cpp:422
 msgid "Enumerate pads"
 msgstr "Перенумеровать конт.пл."
@@ -22841,7 +22869,7 @@ msgstr "Таблицы библиотек печатной платы"
 msgid "Generate Component Position Files"
 msgstr "Сгенерировать файлы позиций компонентов"
 
-#: pcbnew/dialogs/dialog_gendrill_base.h:79
+#: pcbnew/dialogs/dialog_gendrill_base.h:80
 msgid "Drill Files Generation"
 msgstr "Создание файлов сверловки"
 
