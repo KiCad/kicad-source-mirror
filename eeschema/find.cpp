@@ -368,6 +368,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
     searchCriteria.SetFlags( aEvent.GetFlags() );
     searchCriteria.SetFindString( aEvent.GetFindString() );
     searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
+    m_foundItems.SetReplaceString( aEvent.GetReplaceString() );
 
     if( IsSearchCacheObsolete( searchCriteria ) )
     {
