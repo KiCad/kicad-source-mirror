@@ -458,7 +458,6 @@ PNS_ROUTER::PNS_ROUTER()
     m_showInterSteps = false;
     m_snapshotIter = 0;
     m_view = NULL;
-    m_currentEndItem = NULL;
     m_snappingEnabled  = false;
     m_violation = false;
     m_gridHelper = NULL;
@@ -646,7 +645,6 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLa
         return false;
 
     m_currentEnd = aP;
-    m_currentEndItem = NULL;
     m_state = ROUTE_TRACK;
     return rv;
 }
@@ -724,7 +722,6 @@ void PNS_ROUTER::DisplayDebugPoint( const VECTOR2I aPos, int aType )
 void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
 {
     m_currentEnd = aP;
-    m_currentEndItem = endItem;
 
     switch( m_state )
     {
@@ -827,7 +824,6 @@ void PNS_ROUTER::UpdateSizes ( const PNS_SIZES_SETTINGS& aSizes )
     if( m_state == ROUTE_TRACK)
     {
         m_placer->UpdateSizes( m_sizes );
-        movePlacing( m_currentEnd, m_currentEndItem );
     }
 }
 
@@ -997,7 +993,6 @@ void PNS_ROUTER::FlipPosture()
     if( m_state == ROUTE_TRACK )
     {
         m_placer->FlipPosture();
-        movePlacing ( m_currentEnd, m_currentEndItem );
     }
 }
 

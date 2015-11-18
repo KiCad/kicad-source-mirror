@@ -263,12 +263,8 @@ private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_previewItems;
 
-    PNS_ITEM* m_currentEndItem;
-
     bool m_snappingEnabled;
     bool m_violation;
-
-    // optHoverItem m_startItem, m_endItem;
 
     PNS_ROUTING_SETTINGS m_settings;
     PNS_PCBNEW_CLEARANCE_FUNC* m_clearanceFunc;

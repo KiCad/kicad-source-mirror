@@ -39,6 +39,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <router/direction.h>
+#include <ratsnest_data.h>
 
 #include <class_board.h>
 #include <class_edge_mod.h>
@@ -1125,6 +1126,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                         static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone );
 
                     zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                    m_board->GetRatsnest()->Update( zone );
 
                     m_frame->OnModify();
                     m_frame->SaveCopyInUndoList( zone, UR_NEW );
