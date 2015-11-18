@@ -312,7 +312,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator(
         new Contributor( wxT( "Rafael Sokolowski" ),      wxT( "rafael.sokolowski@web.de" ),      wxT( "German (DE)" ),   KiBitmapNew( lang_de_xpm ) ) );
     info.AddTranslator(
-        new Contributor( wxT( "Kenta Yonekura" ),         wxT( "midpika@hotmail.com" ),           wxT( "Japanese (JA)" ), KiBitmapNew( lang_jp_xpm ) ) );
+        new Contributor( wxT( "Kenta Yonekura" ),         wxT( "yoneken@kicad.jp" ),              wxT( "Japanese (JA)" ), KiBitmapNew( lang_jp_xpm ) ) );
     info.AddTranslator(
         new Contributor( wxT( "Manolis Stefanis" ),       wxT( "" ),                              wxT( "Greek (el_GR)" ), KiBitmapNew( lang_gr_xpm ) ) );
     info.AddTranslator(
@@ -328,9 +328,6 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator(
         new Contributor( wxT( "Evgeniy Ivanov" ),         wxT( "evgeniy_p_ivanov@yahoo.ca" ),     wxT( "Bulgarian (BG)" ), KiBitmapNew( lang_bg_xpm ) ) );
 
-    // TODO: are these all russian translators,
-    // placed them here now,
-    // or else align them below other language maintainer with mail adress
     info.AddTranslator( new Contributor( wxT( "Remy Halvick" ),         wxEmptyString, wxT( "Others" ) ) );
     info.AddTranslator( new Contributor( wxT( "David Briscoe" ),        wxEmptyString, wxT( "Others" ) ) );
     info.AddTranslator( new Contributor( wxT( "Dominique Laigle" ),     wxEmptyString, wxT( "Others" ) ) );

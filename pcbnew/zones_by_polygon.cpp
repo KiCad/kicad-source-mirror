@@ -345,10 +345,8 @@ void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER*
     SetCurItem( NULL );       // This outline can be deleted when merging outlines
 
     // Combine zones if possible
-    wxBusyCursor dummy;
     GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, aZone );
     m_canvas->Refresh();
-
 
     int ii = GetBoard()->GetAreaIndex( aZone );     // test if aZone exists
 

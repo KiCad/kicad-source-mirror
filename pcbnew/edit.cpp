@@ -744,7 +744,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        if( Delete_Module( (MODULE*) GetCurItem(), &dc, true ) )
+        if( Delete_Module( (MODULE*) GetCurItem(), &dc ) )
         {
             SetCurItem( NULL );
         }
@@ -1268,7 +1268,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
     switch( Item->Type() )
     {
     case PCB_MODULE_T:
-        Delete_Module( (MODULE*) Item, DC, true );
+        Delete_Module( (MODULE*) Item, DC );
         break;
 
     case PCB_DIMENSION_T:

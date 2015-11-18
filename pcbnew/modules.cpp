@@ -249,7 +249,7 @@ void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
 }
 
 
-bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting )
+bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC )
 {
     wxString msg;
 
@@ -257,21 +257,6 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
         return false;
 
     SetMsgPanel( aModule );
-
-    /* Confirm module delete. */
-    if( aAskBeforeDeleting )
-    {
-        msg.Printf( _( "Delete Footprint %s (value %s) ?" ),
-                    GetChars( aModule->GetReference() ),
-                    GetChars( aModule->GetValue() ) );
-
-        if( !IsOK( this, msg ) )
-        {
-            return false;
-        }
-    }
-
-    OnModify();
 
     /* Remove module from list, and put it in undo command list */
     m_Pcb->m_Modules.Remove( aModule );
@@ -284,6 +269,8 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
     // Redraw the full screen to ensure perfect display of board and ratsnest.
     if( aDC )
         m_canvas->Refresh();
+
+    OnModify();
 
     return true;
 }
