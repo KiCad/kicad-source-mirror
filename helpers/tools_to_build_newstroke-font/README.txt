@@ -29,4 +29,4 @@ Usage
 awk -f fontconv.awk symbol.lib font.lib charlist.txt >newstroke_font.h
 
 
-Released under CC-BY licence.
+Released under CC0 licence.
