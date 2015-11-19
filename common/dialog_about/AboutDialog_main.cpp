@@ -400,26 +400,34 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                          wxT( "Others" ) ) );
 
     // Programm credits for icons
-    info.AddArtist( new Contributor( wxT( "Iñigo Zuluagaz" ),
+    info.AddArtist( new Contributor( wxT( "Iñigo Zuluaga" ),
                                      wxT( "inigo_zuluaga@yahoo.es" ),
                                      wxT( "Icons by" ),
-                                     KiBitmapNew( edit_module_xpm ) ) );
-    info.AddArtist( new Contributor( wxT( "Fabrizio Tappero" ),
-                                     wxT( "fabrizio.tappero@gmail.com" ),
-                                     wxT( "New icons by" ),
                                      KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist( new Contributor( wxT( "Konstantin Baranovskiy" ),
                                      wxT( "baranovskiykonstantin@gmail.com" ),
                                      wxT( "New icons by" ),
                                      KiBitmapNew( edit_module_xpm ) ) );
-    info.AddArtist( new Contributor( wxT( "Renie Marquet" ),
-                                     wxT( "reniemarquet@uol.com.br" ),
-                                     wxT( "3D modules by" ),
-                                     KiBitmapNew( three_d_xpm ) ) );
+    info.AddArtist( new Contributor( wxT( "Fabrizio Tappero" ),
+                                     wxT( "fabrizio.tappero@gmail.com" ),
+                                     wxT( "New icons by" ),
+                                     KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist( new Contributor( wxT( "Christophe Boschat" ),
                                      wxT( "nox454@hotmail.fr" ),
-                                     wxT( "3D modules by" ),
+                                     wxT( "3D models by" ),
                                      KiBitmapNew( three_d_xpm ) ) );
+    info.AddArtist( new Contributor( wxT( "Renie Marquet" ),
+                                     wxT( "reniemarquet@uol.com.br" ),
+                                     wxT( "3D models by" ),
+                                     KiBitmapNew( three_d_xpm ) ) );
+
+    // Programm credits for package developers.
+    info.AddPackager( new Contributor( wxT( "Jean-Samuel Reynaud" ),
+                                       wxT( "js.reynaud@gmail.com" ) ) );
+    info.AddPackager( new Contributor( wxT( "Adam Wolfe" ),
+                                       wxT( "adamwolf@feelslikeburning.com" ) ) );
+    info.AddPackager( new Contributor( wxT( "Nick Østergaard" ),
+                                       wxT( "oe.nick@gmail.com" ) ) );
 }
 
 

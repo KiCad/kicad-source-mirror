@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,19 +45,41 @@ public:
     AboutAppInfo() {};
     virtual ~AboutAppInfo() {};
 
-    void AddDeveloper( const Contributor* developer )   { if( developer  != NULL )
-                                                              developers.Add( developer );}
-    void AddDocWriter( const Contributor* docwriter )   { if( docwriter  != NULL )
-                                                              docwriters.Add( docwriter );}
-    void AddArtist( const Contributor* artist )         { if( artist     != NULL )
-                                                              artists.Add( artist );}
-    void AddTranslator( const Contributor* translator ) { if( translator != NULL )
-                                                              translators.Add( translator );}
+    void AddDeveloper( const Contributor* developer )
+    {
+        if( developer != NULL )
+            developers.Add( developer );
+    }
+
+    void AddDocWriter( const Contributor* docwriter )
+    {
+        if( docwriter != NULL )
+            docwriters.Add( docwriter );
+    }
+
+    void AddArtist( const Contributor* artist )
+    {
+        if( artist != NULL )
+            artists.Add( artist );
+    }
+
+    void AddTranslator( const Contributor* translator )
+    {
+        if( translator != NULL )
+            translators.Add( translator );
+    }
+
+    void AddPackager( const Contributor* packager )
+    {
+        if( packager   != NULL )
+            packagers.Add( packager );
+    }
 
     Contributors GetDevelopers()  { return developers; }
     Contributors GetDocWriters()  { return docwriters; }
     Contributors GetArtists()     { return artists; }
     Contributors GetTranslators() { return translators; }
+    Contributors GetPackagers()   { return packagers; }
 
     void SetDescription( const wxString& text ) { description = text; }
     wxString& GetDescription() { return description; }
@@ -79,7 +101,6 @@ public:
         return copyrightText;
     }
 
-
     void SetAppName( const wxString& name ) { appName = name; }
     wxString& GetAppName() { return appName; }
 
@@ -92,12 +113,12 @@ public:
     void SetIcon( const wxIcon& icon ) { appIcon = icon; }
     wxIcon& GetIcon() { return appIcon; }
 
-protected:
 private:
     Contributors developers;
     Contributors docwriters;
     Contributors artists;
     Contributors translators;
+    Contributors packagers;
 
     wxString     description;
     wxString     license;
@@ -109,6 +130,7 @@ private:
 
     wxIcon       appIcon;
 };
+
 
 /**
  * A contributor, a person which was involved in the development of the application
@@ -131,6 +153,7 @@ public:
                  wxBitmap*       icon = NULL ) :
         m_checked( false )
     { m_name = name; m_email = email; m_category = category; m_icon = icon; }
+
     virtual ~Contributor() {}
 
     wxString& GetName()     { return m_name; }
@@ -139,7 +162,7 @@ public:
     wxBitmap* GetIcon()     { return m_icon; }
     void SetChecked( bool status ) { m_checked = status; }
     bool IsChecked() { return m_checked; }
-protected:
+
 private:
     wxString  m_name;
     wxString  m_email;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2010-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,14 +55,20 @@ class dialog_about : public dialog_about_base
 private:
 
     // Icons for the various tabs of wxAuiNotebook
-    wxBitmap     picInformation, picDevelopers, picDocWriters, picArtists, picTranslators,
-                 picLicense;
+    wxBitmap     picInformation;
+    wxBitmap     picDevelopers;
+    wxBitmap     picDocWriters;
+    wxBitmap     picArtists;
+    wxBitmap     picTranslators;
+    wxBitmap     picPackagers;
+    wxBitmap     picLicense;
 
     AboutAppInfo info;
 
 public:
     dialog_about( wxWindow* dlg, AboutAppInfo& appInfo );
     ~dialog_about();
+
 private:
     void             initDialog();
     virtual void     OnClose( wxCloseEvent& event );
@@ -89,4 +95,5 @@ private:
     wxHyperlinkCtrl* CreateHyperlink( wxScrolledWindow* parent, const wxString& email );
     wxStaticBitmap*  CreateStaticBitmap( wxScrolledWindow* parent, wxBitmap* icon );
 };
+
 #endif // DIALOG_ABOUT_H
