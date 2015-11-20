@@ -11,8 +11,15 @@
 #####################################
 
 if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
-  echo "Usage: $0 [locale]"
+  echo "Usage: $0 [-k] [locale]"
+  echo
+  echo "Where -k means keep pot template and not delete it"
   exit
+fi
+
+if [ "$1" = "-k" ] ; then
+  KEEP=1
+  shift
 fi
 
 SOURCEDIR=../kicad-source-mirror #Set this first!!!
@@ -54,8 +61,9 @@ fi
 for i in $LINGUAS
 do
   msgmerge --force-po $LOCALDIR/$i/kicad.po $LOCALDIR/kicad.pot -o $LOCALDIR/$i/kicad.po 2>&1 # >> /dev/null
-#  msgfmt --statistics $LOCALDIR/$i/kicad.po 2>&1 >>/dev/null
+  msgfmt --statistics $LOCALDIR/$i/kicad.po 2>&1 >>/dev/null
 done
 
-#Comment this to create new language template
-rm $LOCALDIR/kicad.pot
+if [ ! "$KEEP" = "1" ]; then
+  rm $LOCALDIR/kicad.pot
+fi
