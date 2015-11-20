@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 22:14+0100\n"
-"PO-Revision-Date: 2015-11-20 12:22+0100\n"
+"PO-Revision-Date: 2015-11-20 12:25+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -11842,7 +11842,7 @@ msgstr "Esporta un file Specctra Design (*.dsn)"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:41
 msgid "Export a Specctra DSN file (to FreeRouter)"
-msgstr "Esporta un file Specctra DNS (a FreeRoute)"
+msgstr "Esporta un file Specctra DSN (a FreeRoute)"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:45
 msgid "Export a Specctra Design and Launch FreeRoute"
