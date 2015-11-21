@@ -518,7 +518,7 @@ msgstr "GerbView - Gerber failų peržiūra"
 
 #: kicad/preferences.cpp:66
 msgid "You must choose a PDF viewer before using this option."
-msgstr "Prie6 tai turite nustatyti PDF programą"
+msgstr "Prieš tai turite nustatyti PDF programą"
 
 #: kicad/preferences.cpp:78
 msgid "Executable files ("
@@ -2772,7 +2772,7 @@ msgstr ""
 #: pcbnew/plot_board_layers.cpp:116 pcbnew/plot_board_layers.cpp:301
 #, c-format
 msgid "Your BOARD has a bad layer number for module %s"
-msgstr ""
+msgstr "Jūsų BOARD modulyje %s neteisingai nurodytas sluoksnio numeris"
 
 #: pcbnew/librairi.cpp:61
 #, c-format
@@ -2868,6 +2868,10 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
+"Nebegalima įrašyti ar modifikuoti senesnio tipo bibliotekų (.mod failai).\n"
+"Išsaugokite biblioteką nauju (.pretty) formatu\n"
+"ir nustatykite korpuso bibliotekų lentelę taip, kad \n"
+"išsaugotų korpusus (.kicad_mod failas) .pretty bibliotekų kataloge"
 
 #: pcbnew/librairi.cpp:90
 msgid ""
@@ -3006,9 +3010,9 @@ msgid "Not Found"
 msgstr ""
 
 #: pcbnew/class_zone.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Outline %s on %s"
-msgstr "Zonos %s kontūras (sluoksnyje) %s"
+msgstr "Zonos %s kontūras %s sluoksnyje"
 
 #: pcbnew/footprint_wizard.cpp:84
 msgid "no wizard selected"
@@ -3372,12 +3376,12 @@ msgstr "Takelis: %.2f mils (%.3f mm)"
 #: pcbnew/tool_pcb.cpp:663
 #, c-format
 msgid "Via: %.2f mm (%.1f mils)"
-msgstr ""
+msgstr "Perėjimas: %.2f mm (%.1f mils)"
 
 #: pcbnew/tool_pcb.cpp:666
 #, c-format
 msgid "Via: %.1f mils (%.2f mm)"
-msgstr ""
+msgstr "Perėjimas: %.1f mils (%.2f mm)"
 
 #: pcbnew/tool_pcb.cpp:679
 #, c-format
@@ -3772,7 +3776,7 @@ msgstr ""
 #: pcbnew/class_track.cpp:145
 #, c-format
 msgid "Zone (%08lX) [%s] on %s"
-msgstr ""
+msgstr "%08lX [%s] zona %s sluoksnyje"
 
 #: pcbnew/class_track.cpp:176
 #, c-format
@@ -3911,6 +3915,14 @@ msgid ""
 "See the \"Footprint Library  Table\" section of the CvPcb or Pcbnew "
 "documentation for more information."
 msgstr ""
+"Jūs pirmą kartą paleidote Pcbnew, naudojančią naują korpusų paieškos "
+"bibliotekose lentelę.\n"
+"Pcbnew arba panaudojo lentelę pagal nutylėjimą, arba sukūrė tuščią lentelę "
+"KiCad konfigūravimo kataloge.\n"
+"Dabar jums reikia į šią lentelę įtraukti visas korpusų bibliotekas, kurias "
+"norėsite naudoti.\n"
+"Detalesnę informaciją rasite CvPcb arba Pcbnew dokumentacijos \"Footprint "
+"Library  Table\" dalyje."
 
 #: pcbnew/pcbnew.cpp:360 cvpcb/cvpcb.cpp:184
 #, c-format
@@ -4838,7 +4850,7 @@ msgstr "Zonos"
 
 #: pcbnew/edit.cpp:1452
 msgid "Warning: zone display is OFF!!!"
-msgstr ""
+msgstr "Dėmesio: zona NERODOMA!!!"
 
 #: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:429
 msgid "Add keepout"
@@ -6362,6 +6374,8 @@ msgid ""
 "VRML Export Failed:\n"
 "Could not add holes to contours."
 msgstr ""
+"Nepavyko eksportuoti VRML:\n"
+"Nepavyko sudėti skylių pagal kontūrus."
 
 #: pcbnew/exporters/export_vrml.cpp:1398 pcbnew/exporters/export_idf.cpp:585
 #: pcbnew/exporters/export_idf.cpp:594 pcbnew/exporters/export_idf.cpp:602
@@ -6989,7 +7003,7 @@ msgstr "180°, 90° ir 45°"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:49
 msgid "Zone Edge Orientation:"
-msgstr ""
+msgstr "Zonos briaunos orientacija:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
@@ -7928,7 +7942,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
 msgid "Width of copper in thermal reliefs."
-msgstr ""
+msgstr "Nustato šiluminių jungčių vario plotį"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:192
 msgid "Priority level:"
@@ -8241,7 +8255,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:55
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
 msgid "X Scale Adjust"
-msgstr ""
+msgstr "Mastelis X kryptimi"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:61
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:56
@@ -8251,7 +8265,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:65
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:60
 msgid "Y Scale Adjust"
-msgstr ""
+msgstr "Mastelis Y kryptimi"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:71
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:66
@@ -8527,7 +8541,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
 msgid "Zeros Format"
-msgstr ""
+msgstr "Nulių formatavimas"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:54
 msgid "Choose EXCELLON numbers notation"
@@ -8839,7 +8853,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:146
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:154
 msgid "When creating tracks"
-msgstr ""
+msgstr "Kuriant takelius"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:146
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:154
@@ -9143,7 +9157,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
 msgid "Zone Edges Orient"
-msgstr ""
+msgstr "Zonos briaunų orientacija"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:54
 msgid "Outlines Appearence"
@@ -9151,7 +9165,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 msgid "Zone min thickness value"
-msgstr ""
+msgstr "Minimalus zonos plotis"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:25
 msgid "Include &footprints"
@@ -10135,6 +10149,8 @@ msgstr ""
 msgid ""
 "Wire length from pad to die on chip ( used to calculate actual track length)"
 msgstr ""
+"Laidininko ilgis nuo korpuso išvado iki kristalo (naudojamas skaičiuojant "
+"tikrąjį takelio ilgį)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:195
 msgid "Trapezoid delta:"
@@ -11237,6 +11253,8 @@ msgid ""
 "You have chosen the \"not connected\" option. This will create insulated "
 "copper islands. Are you sure ?"
 msgstr ""
+"Jūs pasirinkite \"neprijungta\" ir tai sukurs izoliuotas vario zonas. Ar "
+"esate tikri?"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:523
 msgid "Chamfer distance"
@@ -11259,7 +11277,7 @@ msgstr "5"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:36
 msgid "Vertical count:"
-msgstr ""
+msgstr "Kiekis vertikaliai:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:43
 msgid "Horizontal spacing:"
@@ -11275,7 +11293,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:76
 msgid "Vertical offset:"
-msgstr ""
+msgstr "Atstumas vertikalia kryptimi:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:87
 msgid "Stagger:"
@@ -11352,7 +11370,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:191
 msgid "Vertical center:"
-msgstr ""
+msgstr "Centras vertikalia kryptimi:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:202
 msgid "Radius:"
@@ -11548,11 +11566,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:70
 msgid "X Ref:"
-msgstr ""
+msgstr "X Ref:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:78
 msgid "Y Ref:"
-msgstr ""
+msgstr "Y Ref:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
 msgid "meter"
@@ -12089,6 +12107,8 @@ msgid ""
 "Width correction constrained. The reasonable width correction value must be "
 "in a range of  [%+f; %+f] (%s) for current design rules. "
 msgstr ""
+"Apribota pločio korekcija. Priimtina korekcija turi būti [%+f; %+f] (%s) "
+"ribose pagal dabartines projektavimo taisykles. "
 
 #: pcbnew/dialogs/dialog_plot.cpp:815
 #, c-format
@@ -12889,17 +12909,17 @@ msgstr ""
 #: common/basicframe.cpp:647
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
-msgstr ""
+msgstr "Jūs neturite reikiamų teisių rašant į katalogą <%s>"
 
 #: common/basicframe.cpp:652
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
-msgstr ""
+msgstr "Jūs neturite reikiamų teisių rašant failą <%s> į katalogą <%s>."
 
 #: common/basicframe.cpp:657
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
-msgstr ""
+msgstr "Jūs neturite reikiamų teisių rašant failą <%s>"
 
 #: common/basicframe.cpp:689
 #, c-format
@@ -13387,7 +13407,7 @@ msgstr ""
 
 #: common/hotkeys_basic.cpp:788
 msgid "Write Hotkey Configuration File:"
-msgstr ""
+msgstr "Įrašyti sparčiųjų klavišų konfigūracijos failą:"
 
 #: common/hotkeys_basic.cpp:817
 msgid "&List Current Keys"
@@ -14395,7 +14415,7 @@ msgstr ""
 
 #: eeschema/tool_viewlib.cpp:116
 msgid "View component documents"
-msgstr ""
+msgstr "Parodo komponento dokumentaciją"
 
 #: eeschema/tool_viewlib.cpp:124
 msgid "Insert component in schematic"
@@ -15705,7 +15725,7 @@ msgstr ""
 
 #: eeschema/lib_draw_item.cpp:79
 msgid "yes"
-msgstr ""
+msgstr "taip"
 
 #: eeschema/sch_line.cpp:476
 #, c-format
@@ -18176,7 +18196,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:84
 msgid "Wrap around &end of search list"
-msgstr ""
+msgstr "Kartote paiešką nuo sąrašo pradžios"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:88
 msgid "Search all com&ponent fields"
@@ -18676,6 +18696,12 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"Jūs pirmą kartą paleidote CvPcb, naudojančią naują korpusų paieškos "
+"bibliotekose lentelę. CvPcb arba panaudojo lentelę pagal nutylėjimą, arba "
+"sukūrė tuščią lentelę jūsų pradiniame kataloge. Dabar jums reikia į šią "
+"lentelę įtraukti visas korpusų bibliotekas, neįtrauktas į KiCad  paketą. "
+"Detalesnę informaciją rasite CvPcb dokumentacijos \"Footprint Library  Table"
+"\" dalyje."
 
 #: cvpcb/cvframe.cpp:246
 msgid ""
@@ -20507,7 +20533,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:287
 msgid "Waveguide Length"
-msgstr ""
+msgstr "Bangolaidžio ilgis"
 
 #: pcb_calculator/transline_ident.cpp:314
 #: pcb_calculator/transline_ident.cpp:418
@@ -20777,7 +20803,7 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:161
 msgid "Write Data File Error"
-msgstr ""
+msgstr "Klaida įrašant failą"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:62
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1183
