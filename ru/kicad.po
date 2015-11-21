@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-17 20:17+0300\n"
-"PO-Revision-Date: 2015-11-17 20:17+0300\n"
+"POT-Creation-Date: 2015-11-19 21:24+0300\n"
+"PO-Revision-Date: 2015-11-19 21:24+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -930,7 +930,7 @@ msgstr "Информация"
 msgid "Confirmation"
 msgstr "Подтверждение"
 
-#: common/dialog_about/AboutDialog_main.cpp:130
+#: common/dialog_about/AboutDialog_main.cpp:131
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
 #: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1539
@@ -940,7 +940,7 @@ msgstr "Подтверждение"
 msgid "Description"
 msgstr "Описание"
 
-#: common/dialog_about/AboutDialog_main.cpp:133
+#: common/dialog_about/AboutDialog_main.cpp:135
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and to design printed circuit boards."
@@ -948,49 +948,49 @@ msgstr ""
 "KiCad EDA Suite — программный комплекс с открытыми исходными текстами, "
 "предназначенный для разработки электрических схем и печатных плат."
 
-#: common/dialog_about/AboutDialog_main.cpp:140
+#: common/dialog_about/AboutDialog_main.cpp:144
 msgid "KiCad on the web"
 msgstr "KiCad в Интернете"
 
-#: common/dialog_about/AboutDialog_main.cpp:145
-msgid "The original site of the initiator of KiCad"
-msgstr "Оригинальный сайт основоположника KiCad"
-
-#: common/dialog_about/AboutDialog_main.cpp:148
-msgid "Project on Launchpad"
-msgstr "Проект на Launchpad"
-
-#: common/dialog_about/AboutDialog_main.cpp:152
-msgid "The new KiCad site"
-msgstr "Новый сайт KiCad"
+#: common/dialog_about/AboutDialog_main.cpp:151
+msgid "The official KiCad site"
+msgstr "Официальный сайт KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:155
+msgid "The original site of the KiCad project founder"
+msgstr "Оригинальный сайт основателя проекта KiCad"
+
+#: common/dialog_about/AboutDialog_main.cpp:159
+msgid "Developer's website on Launchpad"
+msgstr "Веб-сайт разработчиков на Launchpad"
+
+#: common/dialog_about/AboutDialog_main.cpp:163
 msgid "Repository with additional component libraries"
 msgstr "Хранилище с дополнительными библиотеками компонент"
 
-#: common/dialog_about/AboutDialog_main.cpp:161
+#: common/dialog_about/AboutDialog_main.cpp:170
 msgid "Contribute to KiCad"
 msgstr "Сделать вклад в KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:167
+#: common/dialog_about/AboutDialog_main.cpp:177
 msgid "Report bugs if you found any"
 msgstr "Сообщить о любых ошибках и дефектах"
 
-#: common/dialog_about/AboutDialog_main.cpp:169
+#: common/dialog_about/AboutDialog_main.cpp:181
 msgid "File an idea for improvement"
 msgstr "Файл с идеями для усовершенствования"
 
-#: common/dialog_about/AboutDialog_main.cpp:172
+#: common/dialog_about/AboutDialog_main.cpp:185
 msgid "KiCad links to user groups, tutorials and much more"
 msgstr "KiCad - группы пользователей, руководства и многое другое"
 
-#: common/dialog_about/AboutDialog_main.cpp:185
+#: common/dialog_about/AboutDialog_main.cpp:199
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "Программный комплекс KiCad EDA Suite  распространяется под"
 
-#: common/dialog_about/AboutDialog_main.cpp:187
-msgid "GNU General Public License (GPL) version 2 or any later version"
-msgstr "GNU General Public License (GPL) версия 2 или любая поздняя версия"
+#: common/dialog_about/AboutDialog_main.cpp:201
+msgid "GNU General Public License (GPL) version 3 or any later version"
+msgstr "GNU General Public License (GPL) version 3 или любая поздняя версия"
 
 #: common/dialog_about/dialog_about.cpp:83
 msgid "Information"
@@ -4992,7 +4992,7 @@ msgstr ""
 #: pcbnew/exporters/gen_modules_placefile.cpp:184
 #: pcbnew/exporters/gen_modules_placefile.cpp:193
 msgid "Plot Output Directory"
-msgstr "Выбор выходной директории"
+msgstr "Выходная директория чертежа"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:193
 #: pcbnew/dialogs/dialog_plot.cpp:329
@@ -5020,8 +5020,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
-"Путь для файлов черчения. Может быть относительным или абсолютным к "
-"размещению файла схемы."
+"Целевой путь для файлов чертежа. Может быть абсолютным или относительным к "
+"расположению основного файла схемы."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:37
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:35
@@ -5192,7 +5192,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:115
 msgid "Plot border and title block"
-msgstr "Печатать форматную рамку"
+msgstr "Чертить форматную рамку"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:117
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:30
@@ -5206,7 +5206,7 @@ msgstr "Чертить текущий лист"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Plot All Pages"
-msgstr "Чертить все страницы"
+msgstr "Чертить все листы"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:247
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
@@ -5770,7 +5770,7 @@ msgstr "%s найден, но %s не найден"
 msgid "Component %s not found"
 msgstr "Компонент %s не найден"
 
-#: eeschema/find.cpp:510
+#: eeschema/find.cpp:511
 #, c-format
 msgid "No item found matching %s."
 msgstr "Ничего не найдено для %s."
@@ -6792,7 +6792,7 @@ msgstr "Установка параметров вывода"
 
 #: eeschema/libeditframe.cpp:1125 eeschema/schedit.cpp:559
 #: pcbnew/edit.cpp:1488 pcbnew/modedit.cpp:951
-#: pcbnew/tools/drawing_tool.cpp:1264 pcbnew/tools/drawing_tool.cpp:1391
+#: pcbnew/tools/drawing_tool.cpp:1266 pcbnew/tools/drawing_tool.cpp:1393
 msgid "Add text"
 msgstr "Добавить текст"
 
@@ -14831,7 +14831,7 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Путь для файлов черчения. Может быть относительным или абсолютным к "
+"Целевой путь для файлов чертежа. Может быть абсолютным или относительным к "
 "расположению файла платы."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:61
@@ -18184,7 +18184,7 @@ msgstr "Добавить дорожки"
 msgid "Add footprint"
 msgstr "Добавить посад.место"
 
-#: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:421
+#: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:422
 msgid "Add zones"
 msgstr "Добавить зоны"
 
@@ -18192,7 +18192,7 @@ msgstr "Добавить зоны"
 msgid "Warning: zone display is OFF!!!"
 msgstr "Предупреждение: Отображение зон выключено!!!"
 
-#: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:429
+#: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:430
 msgid "Add keepout"
 msgstr "Добавить область запрета"
 
@@ -18210,27 +18210,27 @@ msgstr "Подстройка нуля"
 msgid "Adjust grid origin"
 msgstr "Установка начальных координат сетки"
 
-#: pcbnew/edit.cpp:1476 pcbnew/tools/drawing_tool.cpp:78
-#: pcbnew/tools/drawing_tool.cpp:103
+#: pcbnew/edit.cpp:1476 pcbnew/tools/drawing_tool.cpp:79
+#: pcbnew/tools/drawing_tool.cpp:104
 msgid "Add graphic line"
 msgstr "Добавить графическую линию"
 
 #: pcbnew/edit.cpp:1480 pcbnew/menubar_modedit.cpp:287
 #: pcbnew/menubar_pcbframe.cpp:405 pcbnew/tool_modedit.cpp:176
-#: pcbnew/tool_pcb.cpp:456 pcbnew/tools/drawing_tool.cpp:182
-#: pcbnew/tools/drawing_tool.cpp:202
+#: pcbnew/tool_pcb.cpp:456 pcbnew/tools/drawing_tool.cpp:183
+#: pcbnew/tools/drawing_tool.cpp:203
 msgid "Add graphic arc"
 msgstr "Добавить графическую дугу"
 
 #: pcbnew/edit.cpp:1484 pcbnew/menubar_modedit.cpp:276
 #: pcbnew/menubar_pcbframe.cpp:408 pcbnew/tool_modedit.cpp:173
-#: pcbnew/tool_pcb.cpp:453 pcbnew/tools/drawing_tool.cpp:135
-#: pcbnew/tools/drawing_tool.cpp:155
+#: pcbnew/tool_pcb.cpp:453 pcbnew/tools/drawing_tool.cpp:136
+#: pcbnew/tools/drawing_tool.cpp:156
 msgid "Add graphic circle"
 msgstr "Добавить графическую окружность"
 
 #: pcbnew/edit.cpp:1496 pcbnew/menubar_pcbframe.cpp:419
-#: pcbnew/tool_pcb.cpp:463 pcbnew/tools/drawing_tool.cpp:252
+#: pcbnew/tool_pcb.cpp:463 pcbnew/tools/drawing_tool.cpp:253
 msgid "Add dimension"
 msgstr "Добавить размерную линию"
 
@@ -20478,11 +20478,6 @@ msgstr ""
 msgid "Search for footprint"
 msgstr "Поиск посад.места"
 
-#: pcbnew/modules.cpp:264
-#, c-format
-msgid "Delete Footprint %s (value %s) ?"
-msgstr "Удалить посад.место %s (значение %s) ?"
-
 #: pcbnew/modview_frame.cpp:120
 msgid "Footprint Library Browser"
 msgstr "Обзор библиотеки посад.мест"
@@ -20652,8 +20647,8 @@ msgstr ""
 "файл: <%s>\n"
 "строка: %d"
 
-#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:726
-#: pcbnew/tools/drawing_tool.cpp:901
+#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:727
+#: pcbnew/tools/drawing_tool.cpp:902
 msgid "Graphic not allowed on Copper layers"
 msgstr "Графика не разрешена на медных слоях"
 
@@ -20665,7 +20660,7 @@ msgstr "Дорожки только на медных слоях"
 msgid "Texts not allowed on Edge Cut layer"
 msgstr "Текст не разрешен на слое контура платы"
 
-#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:312
+#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:313
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Размерные линии не разрешены на слоях меди и контура платы"
 
@@ -21604,11 +21599,11 @@ msgstr ""
 "Перех.микроотв. могут быть размещены только между внешними слоями (F.Cu/B."
 "Cu) и теми, которые непосредственно прилегают к ним."
 
-#: pcbnew/router/router_tool.cpp:647
+#: pcbnew/router/router_tool.cpp:649
 msgid "Route Track"
 msgstr "Трассировать дорожку"
 
-#: pcbnew/router/router_tool.cpp:654
+#: pcbnew/router/router_tool.cpp:656
 msgid "Router Differential Pair"
 msgstr "Трассировка диф.пары"
 
@@ -22189,7 +22184,7 @@ msgstr "Добавить зону"
 msgid "Add a keepout area"
 msgstr "Добавить область запрета"
 
-#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:600
+#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:601
 msgid "Place the footprint anchor"
 msgstr "Разместить точку привязки посад.места"
 
@@ -22484,20 +22479,20 @@ msgstr ""
 msgid "The outline of the duplicated zone fails DRC check!"
 msgstr "Ошибка DRC контура дублируемой зоны!"
 
-#: pcbnew/zones_by_polygon.cpp:366 pcbnew/zones_by_polygon.cpp:424
-#: pcbnew/zones_by_polygon.cpp:811
+#: pcbnew/zones_by_polygon.cpp:364 pcbnew/zones_by_polygon.cpp:422
+#: pcbnew/zones_by_polygon.cpp:809
 msgid "Area: DRC outline error"
 msgstr "Зона: DRC ошибка контура"
 
-#: pcbnew/zones_by_polygon.cpp:539
+#: pcbnew/zones_by_polygon.cpp:537
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "Ошибка: области запрета разрешены только на медных слоях"
 
-#: pcbnew/zones_by_polygon.cpp:686
+#: pcbnew/zones_by_polygon.cpp:684
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "Ошибка DRC: начальная точка внутри или близко к другой зоне"
 
-#: pcbnew/zones_by_polygon.cpp:745
+#: pcbnew/zones_by_polygon.cpp:743
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Ошибка DRC: завершение создания зоны дает ошибку drc с другой зоной"
 
