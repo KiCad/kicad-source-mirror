@@ -72,7 +72,8 @@ public:
      * @param aFilename = the full file name of the file to load
      * @return true if as succeeded
      */
-    virtual bool Load( const wxString& aFilename ) {
+    virtual bool Load( const wxString& aFilename )
+    {
         return false;
     };
 
