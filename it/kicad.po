@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 22:14+0100\n"
-"PO-Revision-Date: 2015-11-20 12:25+0100\n"
+"PO-Revision-Date: 2015-11-22 01:00+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -7731,7 +7731,7 @@ msgstr "Cambia"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
 msgid "Exchange Footprint"
-msgstr "Scambia impronta"
+msgstr "Scambio impronte"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
 msgid ""
