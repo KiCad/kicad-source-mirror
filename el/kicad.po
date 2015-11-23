@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-20 14:55+0200\n"
-"PO-Revision-Date: 2015-11-20 15:29+0200\n"
+"POT-Creation-Date: 2015-11-23 12:05+0200\n"
+"PO-Revision-Date: 2015-11-23 12:08+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -120,31 +120,31 @@ msgstr ""
 msgid "Build board body"
 msgstr "Κατασκευή σώματος πλακέτας"
 
-#: 3d-viewer/3d_frame.cpp:534
+#: 3d-viewer/3d_frame.cpp:539
 msgid "Background Color, Bottom"
 msgstr "Χρώμα Παρασκηνίου, Κάτω"
 
-#: 3d-viewer/3d_frame.cpp:539
+#: 3d-viewer/3d_frame.cpp:544
 msgid "Background Color, Top"
 msgstr "Χρώμα Παρασκηνίου, Επάνω"
 
-#: 3d-viewer/3d_frame.cpp:788
+#: 3d-viewer/3d_frame.cpp:793
 msgid "Silk Screen Color"
 msgstr "Χρώμα Μεταξοτυπίας"
 
-#: 3d-viewer/3d_frame.cpp:812 3d-viewer/3d_toolbar.cpp:216
+#: 3d-viewer/3d_frame.cpp:817 3d-viewer/3d_toolbar.cpp:216
 msgid "Solder Mask Color"
 msgstr "Χρώμα Μάσκας Συγκόλλησης"
 
-#: 3d-viewer/3d_frame.cpp:835
+#: 3d-viewer/3d_frame.cpp:840
 msgid "Copper Color"
 msgstr "Χρώμα Χαλκού"
 
-#: 3d-viewer/3d_frame.cpp:861 3d-viewer/3d_toolbar.cpp:225
+#: 3d-viewer/3d_frame.cpp:866 3d-viewer/3d_toolbar.cpp:225
 msgid "Board Body Color"
 msgstr "Χρώμα Σώματος Πλακέτας"
 
-#: 3d-viewer/3d_frame.cpp:882 3d-viewer/3d_toolbar.cpp:219
+#: 3d-viewer/3d_frame.cpp:887 3d-viewer/3d_toolbar.cpp:219
 msgid "Solder Paste Color"
 msgstr "Χρώμα Πάστας Συγκόλλησης"
 
@@ -3265,9 +3265,7 @@ msgstr "Σφάλμα ΕΗΚ"
 
 #: eeschema/dialogs/dialog_color_config.cpp:96
 #: gerbview/class_gerbview_layer_widget.cpp:110
-#: pcbnew/class_pcb_layer_widget.cpp:74
-#: pcbnew/dialogs/dialog_create_array_base.cpp:170
-#: pcbnew/tools/selection_tool.cpp:116
+#: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:116
 msgid "Grid"
 msgstr "Πλέγμα"
 
@@ -11249,6 +11247,10 @@ msgstr "Δευτερεύων άξονας αρίθμησης:"
 msgid "Numbering start:"
 msgstr "Έναρξη αρίθμησης:"
 
+#: pcbnew/dialogs/dialog_create_array_base.cpp:170
+msgid "Grid Array"
+msgstr "Συστοιχία σε Πλέγμα"
+
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Horizontal center:"
 msgstr "Οριζόντιο κέντρο:"
@@ -11308,9 +11310,8 @@ msgid "Numbering type:"
 msgstr "Είδος αρίθμησης:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:281
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-msgid "Circular"
-msgstr "Κυκλικά"
+msgid "Circular Array"
+msgstr "Συστοιχία σε Κύκλο"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:54
 msgid "Class"
@@ -14889,6 +14890,10 @@ msgstr "Μηχανική τρύπα (NPTH)"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:270
 msgid "Shape:"
 msgstr "Σχήμα:"
+
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+msgid "Circular"
+msgstr "Κυκλικά"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Rectangular"
