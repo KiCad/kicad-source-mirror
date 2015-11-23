@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-23 12:05+0200\n"
-"PO-Revision-Date: 2015-11-23 12:08+0200\n"
+"PO-Revision-Date: 2015-11-23 14:39+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -4540,7 +4540,7 @@ msgstr "Π&ροσανατολισμός"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:58
 msgid "&Electrical type:"
-msgstr "Η&λεκτρικός Τύπος:"
+msgstr "Η&λεκτρικός τύπος:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:60
 msgid "Used by the ERC."
@@ -4628,7 +4628,7 @@ msgstr "Στυλ"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 msgid "Align left"
-msgstr "Αριστερή στοίχιση"
+msgstr "Στοίχιση αριστερά"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
@@ -4637,7 +4637,7 @@ msgstr "Στοίχιση στο κέντρο"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:103
 msgid "Align right"
-msgstr "Δεξιά στοίχιση"
+msgstr "Στοίχιση δεξιά"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:105
 msgid "Horizontal Justify"
@@ -4757,7 +4757,7 @@ msgstr "Προκαθορισμένη μορφή"
 
 #: eeschema/dialogs/dialog_netlist.cpp:381
 msgid "Prefix references 'U' and 'IC' with 'X'"
-msgstr "Πρόθεμα αναφορών 'U' και 'X' για ολοκληρωμένα"
+msgstr "Πρόθεμα 'U' για αναφορές και 'X' για ολοκληρωμένα"
 
 #: eeschema/dialogs/dialog_netlist.cpp:386
 msgid "Use net number as net name"
@@ -4782,7 +4782,7 @@ msgstr "Τίτλος:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:536
 msgid "Save Netlist File"
-msgstr "Αποθήκευση αρχείου Λίστας Δικτύων"
+msgstr "Αποθήκευση Αρχείου Λίστας Δικτύων"
 
 #: eeschema/dialogs/dialog_netlist.cpp:571
 #, c-format
@@ -4803,7 +4803,7 @@ msgstr "Αυτό το πρόσθετο υπάρχει ήδη. Ματαίωση"
 
 #: eeschema/dialogs/dialog_netlist.cpp:810
 msgid "Error. You must provide a command String"
-msgstr "Σφάλμα: Πρέπει να δώσετε μια Εντολή"
+msgstr "Σφάλμα. Πρέπει να δώσετε μια Εντολή"
 
 #: eeschema/dialogs/dialog_netlist.cpp:816
 msgid "Error. You must provide a Title"
@@ -4821,7 +4821,7 @@ msgstr "Χρήση προκαθορισμένου ονόματος δικτύο�
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:70
 msgid "Default Netlist Filename:"
-msgstr "Προκαθορισμένο Όνομα αρχείου Λίστας Δικτύων:"
+msgstr "Προκαθορισμένο Όνομα Αρχείου Λίστας Δικτύων:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:136
 msgid "Browse Plugins"
@@ -4913,7 +4913,7 @@ msgstr "Εξαναγκασμός σε μέγεθος A"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:52
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:58
 msgid "Page Size:"
-msgstr "Μέγεθος σελίδας:"
+msgstr "Μέγεθος Σελίδας:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
@@ -5141,8 +5141,8 @@ msgid ""
 "The following changes are recommended to update the project."
 msgstr ""
 "Φαίνεται ότι αυτό το έργο φτιάχτηκε χρησιμοποιώντας παλαιότερες βιβλιοθήκες "
-"εξαρτημάτων σχηματικού.\n"
-" Κάποια εξαρτήματα μπορεί να χρειαστεί να επανασυνδεθούν με ένα διαφορετικό "
+"εξαρτημάτων.\n"
+"Κάποια εξαρτήματα μπορεί να χρειαστεί να επανασυνδεθούν με ένα διαφορετικό "
 "όνομα, και κάποια σύμβολα\n"
 " μπορεί να χρειαστεί να \"διασωθούν\" (με δημιουργία κλώνων και μετονομασία) "
 "σε μία νέα βιβλιοθήκη.\n"
