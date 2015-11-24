@@ -124,7 +124,7 @@ add_custom_target(
     version_header ALL
     COMMAND ${CMAKE_COMMAND}
         -DKICAD_BUILD_VERSION=${KICAD_BUILD_VERSION}
-        -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/version.h
+        -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.h
         -DSRC_PATH=${PROJECT_SOURCE_DIR}
         -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
         -P ${CMAKE_MODULE_PATH}/WriteVersionHeader.cmake
