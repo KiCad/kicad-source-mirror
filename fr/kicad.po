@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-17 16:44+0100\n"
-"PO-Revision-Date: 2015-11-17 16:45+0100\n"
+"POT-Creation-Date: 2015-11-22 10:23+0100\n"
+"PO-Revision-Date: 2015-11-22 13:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -120,31 +120,31 @@ msgstr ""
 msgid "Build board body"
 msgstr "Génère le corps du PCB"
 
-#: 3d-viewer/3d_frame.cpp:534
+#: 3d-viewer/3d_frame.cpp:539
 msgid "Background Color, Bottom"
 msgstr "Couleur de Fond, Bas"
 
-#: 3d-viewer/3d_frame.cpp:539
+#: 3d-viewer/3d_frame.cpp:544
 msgid "Background Color, Top"
 msgstr "Couleur de Fond, Haut"
 
-#: 3d-viewer/3d_frame.cpp:788
+#: 3d-viewer/3d_frame.cpp:793
 msgid "Silk Screen Color"
 msgstr "Couleur de Sérigraphie"
 
-#: 3d-viewer/3d_frame.cpp:812 3d-viewer/3d_toolbar.cpp:216
+#: 3d-viewer/3d_frame.cpp:817 3d-viewer/3d_toolbar.cpp:216
 msgid "Solder Mask Color"
 msgstr "Couleur Masque de Soudure"
 
-#: 3d-viewer/3d_frame.cpp:835
+#: 3d-viewer/3d_frame.cpp:840
 msgid "Copper Color"
 msgstr "Couleur du Cuivre"
 
-#: 3d-viewer/3d_frame.cpp:861 3d-viewer/3d_toolbar.cpp:225
+#: 3d-viewer/3d_frame.cpp:866 3d-viewer/3d_toolbar.cpp:225
 msgid "Board Body Color"
 msgstr "Couleur du Corps du PCB"
 
-#: 3d-viewer/3d_frame.cpp:882 3d-viewer/3d_toolbar.cpp:219
+#: 3d-viewer/3d_frame.cpp:887 3d-viewer/3d_toolbar.cpp:219
 msgid "Solder Paste Color"
 msgstr "Couleur de Paste à Souder"
 
@@ -930,7 +930,7 @@ msgstr "Infos"
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: common/dialog_about/AboutDialog_main.cpp:130
+#: common/dialog_about/AboutDialog_main.cpp:131
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
 #: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1539
@@ -940,7 +940,7 @@ msgstr "Confirmation"
 msgid "Description"
 msgstr "Description"
 
-#: common/dialog_about/AboutDialog_main.cpp:133
+#: common/dialog_about/AboutDialog_main.cpp:135
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and to design printed circuit boards."
@@ -948,71 +948,75 @@ msgstr ""
 "La suite KiCad est un ensemble d'applications open source pour la création "
 "de schémas électroniques et la conception de circuits imprimés."
 
-#: common/dialog_about/AboutDialog_main.cpp:140
+#: common/dialog_about/AboutDialog_main.cpp:144
 msgid "KiCad on the web"
 msgstr "KiCad sur le web"
 
-#: common/dialog_about/AboutDialog_main.cpp:145
-msgid "The original site of the initiator of KiCad"
-msgstr "Le site original de l'initiateur de KiCad"
-
-#: common/dialog_about/AboutDialog_main.cpp:148
-msgid "Project on Launchpad"
-msgstr "Projet sur Launchpad"
-
-#: common/dialog_about/AboutDialog_main.cpp:152
-msgid "The new KiCad site"
-msgstr "Le nouveau site KiCad"
+#: common/dialog_about/AboutDialog_main.cpp:151
+msgid "The official KiCad site"
+msgstr "Le site officiel de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:155
+msgid "The original site of the KiCad project founder"
+msgstr "Le site d'origine du fondateur du projet KiCad"
+
+#: common/dialog_about/AboutDialog_main.cpp:159
+msgid "Developer's website on Launchpad"
+msgstr "Site des développeurs sur Launchpad"
+
+#: common/dialog_about/AboutDialog_main.cpp:163
 msgid "Repository with additional component libraries"
 msgstr "Dépôt avec des librairies additionnelles"
 
-#: common/dialog_about/AboutDialog_main.cpp:161
+#: common/dialog_about/AboutDialog_main.cpp:170
 msgid "Contribute to KiCad"
 msgstr "Contribuer à KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:167
+#: common/dialog_about/AboutDialog_main.cpp:177
 msgid "Report bugs if you found any"
 msgstr "Rapport de bugs"
 
-#: common/dialog_about/AboutDialog_main.cpp:169
+#: common/dialog_about/AboutDialog_main.cpp:181
 msgid "File an idea for improvement"
 msgstr "Donner une idée pour améliorations"
 
-#: common/dialog_about/AboutDialog_main.cpp:172
+#: common/dialog_about/AboutDialog_main.cpp:185
 msgid "KiCad links to user groups, tutorials and much more"
 msgstr "Liens KiCad vers les groupes d'utilisateurs, tutoriaux et autre"
 
-#: common/dialog_about/AboutDialog_main.cpp:185
+#: common/dialog_about/AboutDialog_main.cpp:199
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "La  Suite complète KiCad EDA est distribuée sous la"
 
-#: common/dialog_about/AboutDialog_main.cpp:187
-msgid "GNU General Public License (GPL) version 2 or any later version"
-msgstr "GNU General Public License (GPL) version 2 ou toute version ultérieure"
+#: common/dialog_about/AboutDialog_main.cpp:201
+msgid "GNU General Public License (GPL) version 3 or any later version"
+msgstr "GNU General Public License (GPL) version 3 ou une version ultérieure"
 
-#: common/dialog_about/dialog_about.cpp:83
+#: common/dialog_about/dialog_about.cpp:84
 msgid "Information"
 msgstr "Information"
 
-#: common/dialog_about/dialog_about.cpp:86
+#: common/dialog_about/dialog_about.cpp:87
 msgid "Developers"
 msgstr "Développeurs"
 
-#: common/dialog_about/dialog_about.cpp:87
+#: common/dialog_about/dialog_about.cpp:88
 msgid "Doc Writers"
 msgstr "Rédaction de Doc"
 
-#: common/dialog_about/dialog_about.cpp:89
+#: common/dialog_about/dialog_about.cpp:90
 msgid "Artists"
 msgstr "Artistes"
 
-#: common/dialog_about/dialog_about.cpp:90
+#: common/dialog_about/dialog_about.cpp:91
 msgid "Translators"
 msgstr "Traducteurs"
 
 #: common/dialog_about/dialog_about.cpp:93
+msgid "Packagers"
+msgstr "Packagers"
+
+#: common/dialog_about/dialog_about.cpp:96
 msgid "License"
 msgstr "Licence"
 
@@ -3458,9 +3462,7 @@ msgstr "ERC erreur"
 
 #: eeschema/dialogs/dialog_color_config.cpp:96
 #: gerbview/class_gerbview_layer_widget.cpp:110
-#: pcbnew/class_pcb_layer_widget.cpp:74
-#: pcbnew/dialogs/dialog_create_array_base.cpp:170
-#: pcbnew/tools/selection_tool.cpp:116
+#: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:116
 msgid "Grid"
 msgstr "Grille"
 
@@ -5817,7 +5819,7 @@ msgstr "%s trouvé mais %s non trouvé"
 msgid "Component %s not found"
 msgstr "Composant %s non trouvé"
 
-#: eeschema/find.cpp:510
+#: eeschema/find.cpp:511
 #, c-format
 msgid "No item found matching %s."
 msgstr "Aucun élément trouvé qui corresponde à %s."
@@ -6839,8 +6841,8 @@ msgid "Set pin options"
 msgstr "Choix options de pin"
 
 #: eeschema/libeditframe.cpp:1125 eeschema/schedit.cpp:559 pcbnew/edit.cpp:1488
-#: pcbnew/modedit.cpp:951 pcbnew/tools/drawing_tool.cpp:1264
-#: pcbnew/tools/drawing_tool.cpp:1391
+#: pcbnew/modedit.cpp:951 pcbnew/tools/drawing_tool.cpp:1266
+#: pcbnew/tools/drawing_tool.cpp:1393
 msgid "Add text"
 msgstr "Ajout de Texte"
 
@@ -13374,6 +13376,10 @@ msgstr "Axe secondaire de numérotation:"
 msgid "Numbering start:"
 msgstr "Numérotation début:"
 
+#: pcbnew/dialogs/dialog_create_array_base.cpp:170
+msgid "Grid Array"
+msgstr "Réseau en Grille"
+
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Horizontal center:"
 msgstr "Centre horizontal :"
@@ -13433,9 +13439,8 @@ msgid "Numbering type:"
 msgstr "Type de numérotation :"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:281
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-msgid "Circular"
-msgstr "Cercle"
+msgid "Circular Array"
+msgstr "Réseau Circulaire"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:54
 msgid "Class"
@@ -16964,6 +16969,10 @@ msgid "Shape:"
 msgstr "Forme:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+msgid "Circular"
+msgstr "Cercle"
+
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Rectangular"
 msgstr "Rectangulaire"
 
@@ -18290,7 +18299,7 @@ msgstr "Addition de pistes"
 msgid "Add footprint"
 msgstr "Ajouter empreinte"
 
-#: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:421
+#: pcbnew/edit.cpp:1449 pcbnew/tools/drawing_tool.cpp:422
 msgid "Add zones"
 msgstr "Addition de zones"
 
@@ -18298,7 +18307,7 @@ msgstr "Addition de zones"
 msgid "Warning: zone display is OFF!!!"
 msgstr "Attention: affichage zones désactivé !!!"
 
-#: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:429
+#: pcbnew/edit.cpp:1460 pcbnew/tools/drawing_tool.cpp:430
 msgid "Add keepout"
 msgstr "Ajout zone interdite"
 
@@ -18315,27 +18324,27 @@ msgstr "Ajuster zéro"
 msgid "Adjust grid origin"
 msgstr "Ajuster origine grille"
 
-#: pcbnew/edit.cpp:1476 pcbnew/tools/drawing_tool.cpp:78
-#: pcbnew/tools/drawing_tool.cpp:103
+#: pcbnew/edit.cpp:1476 pcbnew/tools/drawing_tool.cpp:79
+#: pcbnew/tools/drawing_tool.cpp:104
 msgid "Add graphic line"
 msgstr "Addition de lignes graphiques"
 
 #: pcbnew/edit.cpp:1480 pcbnew/menubar_modedit.cpp:287
 #: pcbnew/menubar_pcbframe.cpp:405 pcbnew/tool_modedit.cpp:176
-#: pcbnew/tool_pcb.cpp:456 pcbnew/tools/drawing_tool.cpp:182
-#: pcbnew/tools/drawing_tool.cpp:202
+#: pcbnew/tool_pcb.cpp:456 pcbnew/tools/drawing_tool.cpp:183
+#: pcbnew/tools/drawing_tool.cpp:203
 msgid "Add graphic arc"
 msgstr "Addition de graphiques (Arc de Cercle)"
 
 #: pcbnew/edit.cpp:1484 pcbnew/menubar_modedit.cpp:276
 #: pcbnew/menubar_pcbframe.cpp:408 pcbnew/tool_modedit.cpp:173
-#: pcbnew/tool_pcb.cpp:453 pcbnew/tools/drawing_tool.cpp:135
-#: pcbnew/tools/drawing_tool.cpp:155
+#: pcbnew/tool_pcb.cpp:453 pcbnew/tools/drawing_tool.cpp:136
+#: pcbnew/tools/drawing_tool.cpp:156
 msgid "Add graphic circle"
 msgstr "Addition de graphiques (Cercle)"
 
 #: pcbnew/edit.cpp:1496 pcbnew/menubar_pcbframe.cpp:419 pcbnew/tool_pcb.cpp:463
-#: pcbnew/tools/drawing_tool.cpp:252
+#: pcbnew/tools/drawing_tool.cpp:253
 msgid "Add dimension"
 msgstr "Ajout des cotes"
 
@@ -20612,11 +20621,6 @@ msgstr ""
 msgid "Search for footprint"
 msgstr "Cherche empreinte"
 
-#: pcbnew/modules.cpp:264
-#, c-format
-msgid "Delete Footprint %s (value %s) ?"
-msgstr "Supprimer Empreinte %s (valeur %s) ?"
-
 #: pcbnew/modview_frame.cpp:120
 msgid "Footprint Library Browser"
 msgstr "Examinateur de Librairies d'Empreintes"
@@ -20785,8 +20789,8 @@ msgstr ""
 "fichier : <%s>\n"
 "ligne : %d"
 
-#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:726
-#: pcbnew/tools/drawing_tool.cpp:901
+#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:727
+#: pcbnew/tools/drawing_tool.cpp:902
 msgid "Graphic not allowed on Copper layers"
 msgstr "Graphique non autorisé sur couches Cuivre"
 
@@ -20798,7 +20802,7 @@ msgstr "Pistes sur Couches Cuivre seulement"
 msgid "Texts not allowed on Edge Cut layer"
 msgstr "Textes non autorisés sur couche Contour"
 
-#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:312
+#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:313
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Cote non autorisée sur couches Cuivre ou Contour"
 
@@ -21747,11 +21751,11 @@ msgstr ""
 "Les microvias peuvent être placées seulement entre une couche extérieure (F."
 "Cu/B.Cu) et celle adjacente."
 
-#: pcbnew/router/router_tool.cpp:647
+#: pcbnew/router/router_tool.cpp:649
 msgid "Route Track"
 msgstr "Router Piste"
 
-#: pcbnew/router/router_tool.cpp:654
+#: pcbnew/router/router_tool.cpp:656
 msgid "Router Differential Pair"
 msgstr "Router Paire Différentielle"
 
@@ -22341,7 +22345,7 @@ msgstr "Ajouter une zone"
 msgid "Add a keepout area"
 msgstr "Ajouter une zone interdite"
 
-#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:600
+#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:601
 msgid "Place the footprint anchor"
 msgstr "Placer le point d'ancrage de l'empreinte"
 
@@ -22637,23 +22641,23 @@ msgstr ""
 msgid "The outline of the duplicated zone fails DRC check!"
 msgstr "Le contour de la zone dupliquée ne passe pas le contrôle DRC!"
 
-#: pcbnew/zones_by_polygon.cpp:366 pcbnew/zones_by_polygon.cpp:424
-#: pcbnew/zones_by_polygon.cpp:811
+#: pcbnew/zones_by_polygon.cpp:364 pcbnew/zones_by_polygon.cpp:422
+#: pcbnew/zones_by_polygon.cpp:809
 msgid "Area: DRC outline error"
 msgstr "Zone: Erreur DRC sur contour"
 
-#: pcbnew/zones_by_polygon.cpp:539
+#: pcbnew/zones_by_polygon.cpp:537
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr ""
 "Erreur: une zone interdite est autorisée seulement sur une couche cuivre"
 
-#: pcbnew/zones_by_polygon.cpp:686
+#: pcbnew/zones_by_polygon.cpp:684
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr ""
 "Erreur DRC: ce point de départ est à l'intérieur d'une autre zone ou trop "
 "proche"
 
-#: pcbnew/zones_by_polygon.cpp:745
+#: pcbnew/zones_by_polygon.cpp:743
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr ""
 "Erreur DRC: la fermeture de cette zone crée une erreur DRC avec une autre "
@@ -23156,6 +23160,22 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
+
+#~ msgid "The original site of the initiator of KiCad"
+#~ msgstr "Le site original de l'initiateur de KiCad"
+
+#~ msgid "Project on Launchpad"
+#~ msgstr "Projet sur Launchpad"
+
+#~ msgid "The new KiCad site"
+#~ msgstr "Le nouveau site KiCad"
+
+#~ msgid "GNU General Public License (GPL) version 2 or any later version"
+#~ msgstr ""
+#~ "GNU General Public License (GPL) version 2 ou toute version ultérieure"
+
+#~ msgid "Delete Footprint %s (value %s) ?"
+#~ msgstr "Supprimer Empreinte %s (valeur %s) ?"
 
 #~ msgid "Top side"
 #~ msgstr "Coté composant"
