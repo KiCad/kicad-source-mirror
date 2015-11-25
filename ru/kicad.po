@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-19 21:24+0300\n"
-"PO-Revision-Date: 2015-11-19 21:24+0300\n"
+"POT-Creation-Date: 2015-11-22 10:51+0300\n"
+"PO-Revision-Date: 2015-11-22 10:54+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -992,33 +992,37 @@ msgstr "Программный комплекс KiCad EDA Suite  распрос�
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) version 3 или любая поздняя версия"
 
-#: common/dialog_about/dialog_about.cpp:83
+#: common/dialog_about/dialog_about.cpp:84
 msgid "Information"
 msgstr "Информация"
 
-#: common/dialog_about/dialog_about.cpp:86
+#: common/dialog_about/dialog_about.cpp:87
 msgid "Developers"
 msgstr "Разработчики"
 
-#: common/dialog_about/dialog_about.cpp:87
+#: common/dialog_about/dialog_about.cpp:88
 msgid "Doc Writers"
 msgstr "Авторы документации"
 
-#: common/dialog_about/dialog_about.cpp:89
+#: common/dialog_about/dialog_about.cpp:90
 msgid "Artists"
 msgstr "Художники"
 
-#: common/dialog_about/dialog_about.cpp:90
+#: common/dialog_about/dialog_about.cpp:91
 msgid "Translators"
 msgstr "Переводчики"
 
 #: common/dialog_about/dialog_about.cpp:93
+msgid "Packagers"
+msgstr "Упаковщики"
+
+#: common/dialog_about/dialog_about.cpp:96
 msgid "License"
 msgstr "Лицензия"
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr "Приложение"
+msgstr "Название приложения"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
@@ -1026,7 +1030,7 @@ msgstr "Информация об авторских правах"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr "Информация о версии"
+msgstr "Информация о версии сборки"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
