@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-23 12:05+0200\n"
-"PO-Revision-Date: 2015-11-24 12:33+0200\n"
+"POT-Creation-Date: 2015-11-25 12:03+0200\n"
+"PO-Revision-Date: 2015-11-25 14:55+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -6156,7 +6156,7 @@ msgid ""
 msgstr ""
 "Όλες οι αλλαγές στο τρέχον εξάρτημα θα χαθούν!\n"
 "\n"
-"Να γίνει εκκαθάριση του τρέχοντος εξαρτήματος από την οθόνη;"
+"Να σβηστεί το τρέχον εξάρτημα από την οθόνη;"
 
 #: eeschema/libedit.cpp:636
 msgid "This new component has no name and cannot be created. Aborted"
@@ -6264,31 +6264,31 @@ msgstr "Σύρσιμο Σημείου Ακμής"
 
 #: eeschema/libedit_onrightclick.cpp:220
 msgid "Line End"
-msgstr "Άκρο γραμμής"
+msgstr "Τέλος Γραμμής"
 
 #: eeschema/libedit_onrightclick.cpp:224
 msgid "Edit Line Options"
-msgstr "Επεξεργασία επιλογών γραμμής"
+msgstr "Επεξεργασία Επιλογών Γραμμής"
 
 #: eeschema/libedit_onrightclick.cpp:230
 msgid "Delete Line "
-msgstr "Διαγραφή γραμμής "
+msgstr "Διαγραφή Γραμμής"
 
 #: eeschema/libedit_onrightclick.cpp:239 pcbnew/onrightclick.cpp:654
 msgid "Delete Segment"
-msgstr "Διαγραφή τμήματος"
+msgstr "Διαγραφή Τμήματος"
 
 #: eeschema/libedit_onrightclick.cpp:250 eeschema/onrightclick.cpp:306
 msgid "Move Field"
-msgstr "Μετακίνηση πεδίου"
+msgstr "Μετακίνηση Πεδίου"
 
 #: eeschema/libedit_onrightclick.cpp:256
 msgid "Field Rotate"
-msgstr "Περιστροφή πεδίου"
+msgstr "Περιστροφή Πεδίου"
 
 #: eeschema/libedit_onrightclick.cpp:258
 msgid "Field Edit"
-msgstr "Επεξεργασία πεδίου"
+msgstr "Επεξεργασία Πεδίου"
 
 #: eeschema/libedit_onrightclick.cpp:283
 msgid "Move Pin "
@@ -6312,52 +6312,52 @@ msgstr "Γενικά"
 
 #: eeschema/libedit_onrightclick.cpp:306
 msgid "Pin Size to selected pins"
-msgstr "Μέγεθος ακροδέκτη για επιλεγμένους ακροδέκτες"
+msgstr "Μέγεθος Ακροδέκτη προς επιλεγμένους ακροδέκτες"
 
 #: eeschema/libedit_onrightclick.cpp:307
 msgid "Pin Size to Others"
-msgstr "Μέγεθος ακροδέκτη για άλλους"
+msgstr "Μέγεθος Ακροδέκτη προς Άλλους"
 
 #: eeschema/libedit_onrightclick.cpp:310
 msgid "Pin Name Size to selected pin"
-msgstr "Μέγεθος ονόματος ακροδέκτη για τον επιλεγμένο ακροδέκτη"
+msgstr "Μέγεθος Ονόματος Ακροδέκτη προς επιλεγμένο ακροδέκτη"
 
 #: eeschema/libedit_onrightclick.cpp:311
 msgid "Pin Name Size to Others"
-msgstr "Μέγεθος ονόματος ακροδέκτη για τους άλλους"
+msgstr "Μέγεθος Ονόματος Ακροδέκτη προς Άλλους"
 
 #: eeschema/libedit_onrightclick.cpp:314
 msgid "Pin Num Size to selected pin"
-msgstr "Μέγεθος αριθμού ακροδέκτη για τον επιλεγμένο ακροδέκτη"
+msgstr "Μέγεθος Αριθμού Ακροδέκτη προς επιλεγμένο ακροδέκτη"
 
 #: eeschema/libedit_onrightclick.cpp:315
 msgid "Pin Num Size to Others"
-msgstr "Μέγεθος αριθμού ακροδέκτη για τους άλλους"
+msgstr "Μέγεθος Αριθμού Ακροδέκτη προς Άλλους"
 
 #: eeschema/libedit_onrightclick.cpp:323 eeschema/onrightclick.cpp:827
 #: gerbview/onrightclick.cpp:73 pcbnew/modedit_onclick.cpp:244
 #: pcbnew/onrightclick.cpp:495
 msgid "Cancel Block"
-msgstr "Ακύρωση μπλοκ"
+msgstr "Ακύρωση Μπλοκ"
 
 #: eeschema/libedit_onrightclick.cpp:328 pcbnew/modedit_onclick.cpp:246
 msgid "Zoom Block (drag middle mouse)"
-msgstr "Μεγέθυνση μπλοκ (σύρσιμο μεσαίου ποντικιού)"
+msgstr "Μεγέθυνση Μπλοκ (σύρσιμο μεσαίου ποντικιού)"
 
 #: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:835
 #: gerbview/onrightclick.cpp:76 pcbnew/modedit_onclick.cpp:250
 #: pcbnew/onrightclick.cpp:499
 msgid "Place Block"
-msgstr "Τοποθέτηση μπλοκ"
+msgstr "Τοποθέτηση Μπλοκ"
 
 #: eeschema/libedit_onrightclick.cpp:337
 msgid "Select Items"
-msgstr "Επιλογή αντικειμένων"
+msgstr "Επιλογή Αντικειμένων"
 
 #: eeschema/libedit_onrightclick.cpp:339 eeschema/onrightclick.cpp:844
 #: pcbnew/onrightclick.cpp:500
 msgid "Copy Block"
-msgstr "Αντιγραφή μπλοκ"
+msgstr "Αντιγραφή Μπλοκ"
 
 #: eeschema/libedit_onrightclick.cpp:340 eeschema/onrightclick.cpp:849
 msgid "Mirror Block ||"
@@ -6369,12 +6369,12 @@ msgstr "Καθρέφτισμα Μπλοκ --"
 
 #: eeschema/libedit_onrightclick.cpp:344
 msgid "Rotate Block ccw"
-msgstr "Περιστροφή μπλοκ αντίθετα της φοράς του ρολογιού"
+msgstr "Περιστροφή Μπλοκ αριστερόστροφα"
 
 #: eeschema/libedit_onrightclick.cpp:346 eeschema/onrightclick.cpp:848
 #: pcbnew/onrightclick.cpp:503
 msgid "Delete Block"
-msgstr "Διαγραφή μπλοκ"
+msgstr "Διαγραφή Μπλοκ"
 
 #: eeschema/libedit_plot_component.cpp:57
 msgid "No component"
@@ -6470,7 +6470,8 @@ msgstr "Όνομα Εξαρτήματος"
 
 #: eeschema/libfield.cpp:58
 msgid "Enter a name to create a new component based on this one."
-msgstr "Δώστε ένα όνομα για να δημιουργηθεί ένα νέο "
+msgstr ""
+"Δώστε ένα όνομα για να δημιουργηθεί ένα νέο εξάρτημα βασισμένο σε αυτό."
 
 #: eeschema/libfield.cpp:62
 #, c-format
@@ -6518,7 +6519,7 @@ msgid ""
 msgstr ""
 "Το τρέχον εξάρτημα έχει ήδη ένα συνώνυμο '%s'.\n"
 "\n"
-"Να αφαιρεθεί αυτό το ψευδώνυμο από το εξάρτημα;"
+"Να αφαιρεθεί αυτό το συνώνυμο από το εξάρτημα;"
 
 #: eeschema/libfield.cpp:144
 #, c-format
@@ -6531,7 +6532,7 @@ msgstr ""
 "Το νέο εξάρτημα περιέχει συνώνυμα που συγκρούονται με καταχωρίσεις στη "
 "βιβλιοθήκη εξαρτημάτων '%s'.\n"
 "\n"
-"Θέλετε να αφαιρέσετε όλα τα προβληματικά ψευδώνυμα από αυτό το εξάρτημα;"
+"Θέλετε να αφαιρέσετε όλα τα προβληματικά συνώνυμα από αυτό το εξάρτημα;"
 
 #: eeschema/load_one_schematic_file.cpp:94
 #, c-format
@@ -6555,7 +6556,7 @@ msgid ""
 "correctly. Please consider updating!"
 msgstr ""
 "Το '%s' δημιουργήθηκε από μια πιο πρόσφατη έκδοση του Eeschema και μπορεί να "
-"μη φορτωθεί σωστά. Παρακαλούμε εξετάστε την αναβάθμιση του προγράμματος!"
+"μη φορτωθεί σωστά. Συνίσταται η αναβάθμιση του προγράμματος!"
 
 #: eeschema/load_one_schematic_file.cpp:139
 msgid ""
@@ -7452,7 +7453,7 @@ msgstr "Σύρσιμο μπλοκ"
 
 #: eeschema/onrightclick.cpp:855
 msgid "Rotate Block CCW"
-msgstr "Περιστροφή Μπλοκ Αριστερόστροδα"
+msgstr "Περιστροφή Μπλοκ Αριστερόστροφα"
 
 #: eeschema/onrightclick.cpp:861
 msgid "Copy to Clipboard"
@@ -18141,7 +18142,7 @@ msgstr "Καθρέφτισμα μπλοκ (alt + σύρσιμο ποντικιο
 
 #: pcbnew/modedit_onclick.cpp:258
 msgid "Rotate Block (ctrl + drag mouse)"
-msgstr "Περιστροφή μπλοκ (ctrl + σύρσιμο ποντικιού)"
+msgstr "Περιστροφή Μπλοκ (ctrl + σύρσιμο ποντικιού)"
 
 #: pcbnew/modedit_onclick.cpp:261
 msgid "Delete Block (shift+ctrl + drag mouse)"
