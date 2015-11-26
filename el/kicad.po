@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-25 12:03+0200\n"
-"PO-Revision-Date: 2015-11-25 14:55+0200\n"
+"PO-Revision-Date: 2015-11-26 15:34+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -35,27 +35,27 @@ msgstr "Σμίκρυνση -"
 
 #: 3d-viewer/3d_canvas.cpp:399
 msgid "Top View"
-msgstr "Επάνω όψη"
+msgstr "Επάνω Όψη"
 
 #: 3d-viewer/3d_canvas.cpp:403
 msgid "Bottom View"
-msgstr "Κάτω όψη"
+msgstr "Κάτω Όψη"
 
 #: 3d-viewer/3d_canvas.cpp:408
 msgid "Right View"
-msgstr "Δεξιά όψη"
+msgstr "Δεξιά Όψη"
 
 #: 3d-viewer/3d_canvas.cpp:412
 msgid "Left View"
-msgstr "Αριστερή όψη"
+msgstr "Αριστερή Όψη"
 
 #: 3d-viewer/3d_canvas.cpp:417
 msgid "Front View"
-msgstr "Μπροστινή όψη"
+msgstr "Μπροστινή Όψη"
 
 #: 3d-viewer/3d_canvas.cpp:421
 msgid "Back View"
-msgstr "Πίσω όψη"
+msgstr "Πίσω Όψη"
 
 #: 3d-viewer/3d_canvas.cpp:426
 msgid "Move left <-"
@@ -6729,7 +6729,7 @@ msgstr "&Σμίκρυνση"
 #: eeschema/tool_viewlib.cpp:233 pcbnew/menubar_modedit.cpp:224
 #: pcbnew/menubar_pcbframe.cpp:338 pcbnew/tool_modview.cpp:165
 msgid "&Fit on Screen"
-msgstr "&Προσαρμογή στην οθόνη"
+msgstr "&Προσαρμογή σε Οθόνη"
 
 #: eeschema/menubar.cpp:241 eeschema/menubar_libedit.cpp:176
 #: eeschema/tool_viewlib.cpp:238 pcbnew/menubar_modedit.cpp:229
@@ -6847,7 +6847,7 @@ msgstr "Ορισμός προτιμήσεων για Eeschema"
 
 #: eeschema/menubar.cpp:409 pcbnew/menubar_pcbframe.cpp:596
 msgid "&Save Preferences"
-msgstr "&Αποθήκευση προτιμήσεων"
+msgstr "&Αποθήκευση Προτιμήσεων"
 
 #: eeschema/menubar.cpp:410 pcbnew/menubar_pcbframe.cpp:597
 msgid "Save application preferences"
@@ -6907,7 +6907,7 @@ msgstr "Αντ&ιστοίχιση Αποτυπωμάτων με Εξαρτήμα
 
 #: eeschema/menubar.cpp:470
 msgid "Run CvPcb"
-msgstr "Εκτέλεση Cvpcb"
+msgstr "Εκτέλεση CvPcb"
 
 #: eeschema/menubar.cpp:476
 msgid "&Layout Printed Circuit Board"
@@ -6960,7 +6960,7 @@ msgstr "Ε&ργαλεία"
 
 #: eeschema/menubar_libedit.cpp:68
 msgid "&Current Library"
-msgstr "&Tρέχουσα Bιβλιοθήκη"
+msgstr "&Τρέχουσα Bιβλιοθήκη"
 
 #: eeschema/menubar_libedit.cpp:69 eeschema/tool_lib.cpp:115
 msgid "Select working library"
@@ -6968,7 +6968,7 @@ msgstr "Επιλογή βιβλιοθήκης εργασίας"
 
 #: eeschema/menubar_libedit.cpp:76
 msgid "&Save Current Library\tCtrl+S"
-msgstr "&Αποθήκευση της τρέχουσας βιβλιοθήκης\tCtrl+S"
+msgstr "&Αποθήκευση Τρέχουσας Βιβλιοθήκης\tCtrl+S"
 
 #: eeschema/menubar_libedit.cpp:77
 msgid "Save the current active library"
@@ -6992,7 +6992,7 @@ msgstr "Δημιουργία αρχείου PNG για το εξάρτημα π�
 
 #: eeschema/menubar_libedit.cpp:100
 msgid "Create S&VG File"
-msgstr "&Δημιουργία Αρχείου &SVG"
+msgstr "Δημιουργία Αρχείου &SVG"
 
 #: eeschema/menubar_libedit.cpp:101
 msgid "Create a SVG file from the current loaded component"
@@ -7004,7 +7004,7 @@ msgstr "Έ&ξοδος"
 
 #: eeschema/menubar_libedit.cpp:111
 msgid "Quit Library Editor"
-msgstr "Έξοδος από τον επεξεργαστή βιβλιοθήκης"
+msgstr "Έξοδος από Επεξεργαστή Βιβλιοθήκης"
 
 #: eeschema/menubar_libedit.cpp:123
 msgid "Undo last edit"
@@ -7048,7 +7048,7 @@ msgstr "Επι&λογές Επεξεργαστή Εξαρτημάτων"
 
 #: eeschema/menubar_libedit.cpp:238
 msgid "Set Component Editor default values and options"
-msgstr "Ορισμός προκαθορισμένων τιμών και επιλογών Επεξεργαστή Εξαρτήματος"
+msgstr "Ορισμός προκαθορισμένων τιμών και επιλογών Επεξεργαστή Εξαρτημάτων"
 
 #: eeschema/menubar_libedit.cpp:264
 msgid "Open the Eeschema Manual"
@@ -7086,7 +7086,7 @@ msgid ""
 "Exporting the netlist requires a completely\n"
 "annotated schematic."
 msgstr ""
-"Η εξαγωγή λίστας δικτύων ένα \n"
+"Η εξαγωγή λίστας δικτύων απαιτεί ένα \n"
 "σχηματικό με ονομασίες σε όλα τα εξαρτήματα."
 
 #: eeschema/netlist.cpp:78
@@ -7156,7 +7156,7 @@ msgstr "Περιστροφή Πεδίου Αποτυπώματος"
 
 #: eeschema/onrightclick.cpp:319
 msgid "Rotate Field"
-msgstr "Περιστροφή πεδίου"
+msgstr "Περιστροφή Πεδίου"
 
 #: eeschema/onrightclick.cpp:331
 msgid "Edit Reference"
@@ -7172,7 +7172,7 @@ msgstr "Επεξεργασία Πεδίου Αποτυπώματος"
 
 #: eeschema/onrightclick.cpp:343
 msgid "Edit Field"
-msgstr "Επεξεργασία πεδίου"
+msgstr "Επεξεργασία Πεδίου"
 
 #: eeschema/onrightclick.cpp:364
 #, c-format
@@ -7259,12 +7259,12 @@ msgstr "Αλλαγή σε Ετικέτα"
 #: eeschema/onrightclick.cpp:512 eeschema/onrightclick.cpp:546
 #: eeschema/onrightclick.cpp:582
 msgid "Change to Text"
-msgstr "Αλλαγή σε κείμενο"
+msgstr "Αλλαγή σε Κείμενο"
 
 #: eeschema/onrightclick.cpp:514 eeschema/onrightclick.cpp:550
 #: eeschema/onrightclick.cpp:586 eeschema/onrightclick.cpp:624
 msgid "Change Type"
-msgstr "Αλλαγή τύπου"
+msgstr "Αλλαγή Τύπου"
 
 #: eeschema/onrightclick.cpp:525
 msgid "Move Hierarchical Label"
@@ -7313,7 +7313,7 @@ msgstr "Διαγραφή Ετικέτας"
 
 #: eeschema/onrightclick.cpp:600
 msgid "Copy Text"
-msgstr "Αντιγραφή κειμένου"
+msgstr "Αντιγραφή Κειμένου"
 
 #: eeschema/onrightclick.cpp:634
 msgid "Delete Junction"
@@ -7329,11 +7329,11 @@ msgstr "Διακοπή Σύρματος"
 
 #: eeschema/onrightclick.cpp:649 eeschema/onrightclick.cpp:683
 msgid "Delete Node"
-msgstr "Διαγραφή κόμβου"
+msgstr "Διαγραφή Κόμβου"
 
 #: eeschema/onrightclick.cpp:651 eeschema/onrightclick.cpp:685
 msgid "Delete Connection"
-msgstr "Διαγραφή σύνδεσης"
+msgstr "Διαγραφή Σύνδεσης"
 
 #: eeschema/onrightclick.cpp:665
 msgid "Begin Wire"
@@ -7369,27 +7369,27 @@ msgstr "Έναρξη Δίαυλου"
 
 #: eeschema/onrightclick.cpp:723
 msgid "Bus End"
-msgstr "Άκρο Δίαυλου"
+msgstr "Τέλος Δίαυλου"
 
 #: eeschema/onrightclick.cpp:728
 msgid "Delete Bus"
-msgstr "Διαγραφή δίαυλου"
+msgstr "Διαγραφή Δίαυλου"
 
 #: eeschema/onrightclick.cpp:731
 msgid "Break Bus"
-msgstr "Διακοπή δίαυλου"
+msgstr "Διακοπή Δίαυλου"
 
 #: eeschema/onrightclick.cpp:752
 msgid "Enter Sheet"
-msgstr "Είσοδος σε φύλλο"
+msgstr "Είσοδος σε Φύλλο"
 
 #: eeschema/onrightclick.cpp:755
 msgid "Move Sheet"
-msgstr "Μετακίνηση φύλλου"
+msgstr "Μετακίνηση Φύλλου"
 
 #: eeschema/onrightclick.cpp:759
 msgid "Drag Sheet"
-msgstr "Σύρσιμο φύλλου"
+msgstr "Σύρσιμο Φύλλου"
 
 #: eeschema/onrightclick.cpp:763
 msgid "Rotate Sheet CW"
@@ -7405,15 +7405,15 @@ msgstr "Προσανατολισμός Φύλλου"
 
 #: eeschema/onrightclick.cpp:780
 msgid "Place Sheet"
-msgstr "Τοποθέτηση φύλλου"
+msgstr "Τοποθέτηση Φύλλου"
 
 #: eeschema/onrightclick.cpp:784
 msgid "Edit Sheet"
-msgstr "Επεξεργασία φύλλου"
+msgstr "Επεξεργασία Φύλλου"
 
 #: eeschema/onrightclick.cpp:787
 msgid "Resize Sheet"
-msgstr "Αλλαγή μεγέθους φύλλου"
+msgstr "Αλλαγή Μεγέθους Φύλλου"
 
 #: eeschema/onrightclick.cpp:790
 msgid "Import Sheet Pins"
@@ -7425,7 +7425,7 @@ msgstr "Εκκαθάριση Ακροδεκτών Φύλλου"
 
 #: eeschema/onrightclick.cpp:798
 msgid "Delete Sheet"
-msgstr "Διαγραφή φύλλου"
+msgstr "Διαγραφή Φύλλου"
 
 #: eeschema/onrightclick.cpp:810
 msgid "Move Sheet Pin"
@@ -7441,15 +7441,15 @@ msgstr "Διαγραφή Ακροδέκτη Φύλλου"
 
 #: eeschema/onrightclick.cpp:833
 msgid "Window Zoom"
-msgstr "Μεγέθυνση παραθύρου"
+msgstr "Μεγέθυνση Παραθύρου"
 
 #: eeschema/onrightclick.cpp:841
 msgid "Save Block"
-msgstr "Αποθήκευση μπλοκ"
+msgstr "Αποθήκευση Μπλοκ"
 
 #: eeschema/onrightclick.cpp:845
 msgid "Drag Block"
-msgstr "Σύρσιμο μπλοκ"
+msgstr "Σύρσιμο Μπλοκ"
 
 #: eeschema/onrightclick.cpp:855
 msgid "Rotate Block CCW"
@@ -7457,15 +7457,15 @@ msgstr "Περιστροφή Μπλοκ Αριστερόστροφα"
 
 #: eeschema/onrightclick.cpp:861
 msgid "Copy to Clipboard"
-msgstr "Αντιγραφή στο πρόχειρο"
+msgstr "Αντιγραφή στο Πρόχειρο"
 
 #: eeschema/onrightclick.cpp:870 pcbnew/onrightclick.cpp:1027
 msgid "Delete Marker"
-msgstr "Διαγραφή σημαδιού"
+msgstr "Διαγραφή Σημαδιού"
 
 #: eeschema/onrightclick.cpp:871 pcbnew/onrightclick.cpp:1029
 msgid "Marker Error Info"
-msgstr "Πληροφορίες σφάλματος σημαδιού"
+msgstr "Πληροφορίες Σφάλματος Σημαδιού"
 
 #: eeschema/onrightclick.cpp:882
 msgid "Move Image"
@@ -7481,7 +7481,7 @@ msgstr "Διαγραφή Εικόνας"
 
 #: eeschema/onrightclick.cpp:913
 msgid "Move Bus Entry"
-msgstr "Μετακίνηση εγγραφής δίαυλου"
+msgstr "Μετακίνηση Εγγραφής Δίαυλου"
 
 #: eeschema/onrightclick.cpp:920
 msgid "Set Bus Entry Shape /"
@@ -7493,7 +7493,7 @@ msgstr "Ορισμός Σχήματος Μετάβασης Δίαυλου \\"
 
 #: eeschema/onrightclick.cpp:925
 msgid "Delete Bus Entry"
-msgstr "Διαγραφή εγγραφής δίαυλου"
+msgstr "Διαγραφή Εγγραφής Δίαυλου"
 
 #: eeschema/pinedit.cpp:249
 msgid "This position is already occupied by another pin. Continue?"
