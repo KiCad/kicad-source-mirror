@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-22 10:51+0300\n"
-"PO-Revision-Date: 2015-11-22 10:54+0300\n"
+"POT-Creation-Date: 2015-11-28 11:36+0300\n"
+"PO-Revision-Date: 2015-11-28 11:49+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -126,31 +126,31 @@ msgstr ""
 msgid "Build board body"
 msgstr "Построение тела платы"
 
-#: 3d-viewer/3d_frame.cpp:534
+#: 3d-viewer/3d_frame.cpp:539
 msgid "Background Color, Bottom"
 msgstr "Цвет фона, низ"
 
-#: 3d-viewer/3d_frame.cpp:539
+#: 3d-viewer/3d_frame.cpp:544
 msgid "Background Color, Top"
 msgstr "Цвет фона, верх"
 
-#: 3d-viewer/3d_frame.cpp:788
+#: 3d-viewer/3d_frame.cpp:793
 msgid "Silk Screen Color"
 msgstr "Цвет шелкографии"
 
-#: 3d-viewer/3d_frame.cpp:812 3d-viewer/3d_toolbar.cpp:216
+#: 3d-viewer/3d_frame.cpp:817 3d-viewer/3d_toolbar.cpp:216
 msgid "Solder Mask Color"
 msgstr "Цвет паяльной маски"
 
-#: 3d-viewer/3d_frame.cpp:835
+#: 3d-viewer/3d_frame.cpp:840
 msgid "Copper Color"
 msgstr "Цвет меди"
 
-#: 3d-viewer/3d_frame.cpp:861 3d-viewer/3d_toolbar.cpp:225
+#: 3d-viewer/3d_frame.cpp:866 3d-viewer/3d_toolbar.cpp:225
 msgid "Board Body Color"
 msgstr "Цвет тела платы"
 
-#: 3d-viewer/3d_frame.cpp:882 3d-viewer/3d_toolbar.cpp:219
+#: 3d-viewer/3d_frame.cpp:887 3d-viewer/3d_toolbar.cpp:219
 msgid "Solder Paste Color"
 msgstr "Цвет паяльной пасты"
 
@@ -3429,9 +3429,7 @@ msgstr "Ошибка ERС"
 
 #: eeschema/dialogs/dialog_color_config.cpp:96
 #: gerbview/class_gerbview_layer_widget.cpp:110
-#: pcbnew/class_pcb_layer_widget.cpp:74
-#: pcbnew/dialogs/dialog_create_array_base.cpp:170
-#: pcbnew/tools/selection_tool.cpp:116
+#: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:116
 msgid "Grid"
 msgstr "Сетка"
 
@@ -13306,6 +13304,10 @@ msgstr "Вторичная ось нумерации:"
 msgid "Numbering start:"
 msgstr "Начальное значение:"
 
+#: pcbnew/dialogs/dialog_create_array_base.cpp:170
+msgid "Grid Array"
+msgstr "Массив по сетке"
+
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Horizontal center:"
 msgstr "Центр по гориз.:"
@@ -13365,9 +13367,8 @@ msgid "Numbering type:"
 msgstr "Тип нумерации:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:281
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-msgid "Circular"
-msgstr "Круглая"
+msgid "Circular Array"
+msgstr "Круговой массив"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:54
 msgid "Class"
@@ -13607,7 +13608,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:185
 msgid "Minimum Allowed Values:"
-msgstr "Доступные минимальные значения:"
+msgstr "Допустимые минимальные значения:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:193
 #: pcbnew/dialogs/dialog_drc_base.cpp:46
@@ -16856,7 +16857,7 @@ msgstr "Тип конт.пл.:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "Through-hole"
-msgstr "Сквозное перех.отв."
+msgstr "Сквозной"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "Connector"
@@ -16864,7 +16865,7 @@ msgstr "Соединитель"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "NPTH, Mechanical"
-msgstr "Неметал. сквозное, механическое"
+msgstr "Неметал. сквозной, механический"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:64
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:270
@@ -16872,12 +16873,16 @@ msgid "Shape:"
 msgstr "Форма:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+msgid "Circular"
+msgstr "Круглая"
+
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Rectangular"
 msgstr "Прямоугольная"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Trapezoidal"
-msgstr "Трапеция"
+msgstr "Трапециевидная"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
