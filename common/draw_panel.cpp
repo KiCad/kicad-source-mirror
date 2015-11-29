@@ -749,6 +749,10 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     }
 }
 
+// Set to 1 to draw auxirilary axis as lines, 0 to draw as target (circle with cross)
+#define DRAW_AXIS_AS_LINES 0
+// Size in pixels of the target shape
+#define AXIS_SIZE_IN_PIXELS 15
 
 void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
@@ -757,11 +761,12 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
     if( origin == wxPoint( 0, 0 ) )
         return;
 
-    EDA_COLOR_T color = DARKRED;
-    wxSize  pageSize = GetParent()->GetPageSizeIU();
+    EDA_COLOR_T color = RED;
 
     GRSetDrawMode( aDC, aDrawMode );
 
+#if DRAW_AXIS_AS_LINES
+    wxSize  pageSize = GetParent()->GetPageSizeIU();
     // Draw the Y axis
     GRLine( &m_ClipBox, aDC, origin.x, -pageSize.y,
             origin.x, pageSize.y, 0, color );
@@ -769,6 +774,21 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
     // Draw the X axis
     GRLine( &m_ClipBox, aDC, -pageSize.x, origin.y,
             pageSize.x, origin.y, 0, color );
+#else
+    int radius = aDC->DeviceToLogicalXRel( AXIS_SIZE_IN_PIXELS );
+    int linewidth = aDC->DeviceToLogicalXRel( 1 );
+
+    GRSetColorPen( aDC, color, linewidth );
+
+    GRLine( &m_ClipBox, aDC, origin.x, origin.y-radius,
+            origin.x, origin.y+radius, 0, color );
+
+    // Draw the + shape
+    GRLine( &m_ClipBox, aDC, origin.x-radius, origin.y,
+            origin.x+radius, origin.y, 0, color );
+
+    GRCircle( &m_ClipBox, aDC, origin, radius, linewidth, color );
+#endif
 }
 
 
@@ -778,10 +798,11 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoi
         return;
 
     EDA_COLOR_T color    = GetParent()->GetGridColor();
-    wxSize      pageSize = GetParent()->GetPageSizeIU();
 
     GRSetDrawMode( aDC, aDrawMode );
 
+#if DRAW_AXIS_AS_LINES
+    wxSize      pageSize = GetParent()->GetPageSizeIU();
     // Draw the Y axis
     GRLine( &m_ClipBox, aDC, aGridOrigin.x, -pageSize.y,
             aGridOrigin.x, pageSize.y, 0, color );
@@ -789,6 +810,21 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoi
     // Draw the X axis
     GRLine( &m_ClipBox, aDC, -pageSize.x, aGridOrigin.y,
             pageSize.x, aGridOrigin.y, 0, color );
+#else
+    int radius = aDC->DeviceToLogicalXRel( AXIS_SIZE_IN_PIXELS );
+    int linewidth = aDC->DeviceToLogicalXRel( 1 );
+
+    GRSetColorPen( aDC, GetParent()->GetGridColor(), linewidth );
+
+    GRLine( &m_ClipBox, aDC, aGridOrigin.x-radius, aGridOrigin.y-radius,
+            aGridOrigin.x+radius, aGridOrigin.y+radius, 0, color );
+
+    // Draw the X shape
+    GRLine( &m_ClipBox, aDC, aGridOrigin.x+radius, aGridOrigin.y-radius,
+            aGridOrigin.x-radius, aGridOrigin.y+radius, 0, color );
+
+    GRCircle( &m_ClipBox, aDC, aGridOrigin, radius, linewidth, color );
+#endif
 }
 
 
