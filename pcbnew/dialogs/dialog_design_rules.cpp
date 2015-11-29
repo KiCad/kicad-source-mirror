@@ -281,6 +281,7 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
     // Fill cells with actual values:
     m_gridViaSizeList->SetCellValue( 0, 0, wxEmptyString );
     m_gridViaSizeList->SetCellValue( 0, 1, wxEmptyString );
+    m_gridTrackWidthList->SetCellValue( 0, 0, wxEmptyString );
 
     // Give a correct size to row labels column
     m_gridViaSizeList->SetRowLabelSize( wxGRID_AUTOSIZE );
