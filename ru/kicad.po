@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-28 11:36+0300\n"
-"PO-Revision-Date: 2015-11-28 11:49+0300\n"
+"POT-Creation-Date: 2015-11-29 20:42+0300\n"
+"PO-Revision-Date: 2015-11-29 20:42+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -31,86 +31,86 @@ msgstr ""
 "X-Poedit-SearchPath-9: pcbnew\n"
 "X-Poedit-SearchPath-10: extra\n"
 
-#: 3d-viewer/3d_canvas.cpp:390
+#: 3d-viewer/3d_canvas.cpp:389
 msgid "Zoom +"
 msgstr "Масштаб +"
 
-#: 3d-viewer/3d_canvas.cpp:394
+#: 3d-viewer/3d_canvas.cpp:393
 msgid "Zoom -"
 msgstr "Масштаб -"
 
-#: 3d-viewer/3d_canvas.cpp:399
+#: 3d-viewer/3d_canvas.cpp:398
 msgid "Top View"
 msgstr "Вид сверху"
 
-#: 3d-viewer/3d_canvas.cpp:403
+#: 3d-viewer/3d_canvas.cpp:402
 msgid "Bottom View"
 msgstr "Вид снизу"
 
-#: 3d-viewer/3d_canvas.cpp:408
+#: 3d-viewer/3d_canvas.cpp:407
 msgid "Right View"
 msgstr "Вид справа"
 
-#: 3d-viewer/3d_canvas.cpp:412
+#: 3d-viewer/3d_canvas.cpp:411
 msgid "Left View"
 msgstr "Вид слева"
 
-#: 3d-viewer/3d_canvas.cpp:417
+#: 3d-viewer/3d_canvas.cpp:416
 msgid "Front View"
 msgstr "Вид спереди"
 
-#: 3d-viewer/3d_canvas.cpp:421
+#: 3d-viewer/3d_canvas.cpp:420
 msgid "Back View"
 msgstr "Вид сзади"
 
-#: 3d-viewer/3d_canvas.cpp:426
+#: 3d-viewer/3d_canvas.cpp:425
 msgid "Move left <-"
 msgstr "Сдвинуть влево <-"
 
-#: 3d-viewer/3d_canvas.cpp:430
+#: 3d-viewer/3d_canvas.cpp:429
 msgid "Move right ->"
 msgstr "Сдвинуть вправо ->"
 
-#: 3d-viewer/3d_canvas.cpp:434
+#: 3d-viewer/3d_canvas.cpp:433
 msgid "Move Up ^"
 msgstr "Сдвинуть вверх ^"
 
-#: 3d-viewer/3d_canvas.cpp:438
+#: 3d-viewer/3d_canvas.cpp:437
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 msgid "Move Down"
 msgstr "Сдвинуть вниз"
 
-#: 3d-viewer/3d_canvas.cpp:518
+#: 3d-viewer/3d_canvas.cpp:517
 #, c-format
 msgid "Zoom: %3.1f"
 msgstr "Масштаб: %3.1f"
 
-#: 3d-viewer/3d_canvas.cpp:654
+#: 3d-viewer/3d_canvas.cpp:653
 msgid "3D Image File Name:"
 msgstr "Имя файла 3D изображения:"
 
-#: 3d-viewer/3d_canvas.cpp:710
+#: 3d-viewer/3d_canvas.cpp:709
 msgid "Failed to copy image to clipboard"
 msgstr "Не удалось скопировать изображение в буфер обмена"
 
-#: 3d-viewer/3d_canvas.cpp:723
+#: 3d-viewer/3d_canvas.cpp:722
 msgid "Can't save file"
 msgstr "Не удалось сохранить файл"
 
-#: 3d-viewer/3d_draw.cpp:617
+#: 3d-viewer/3d_draw.cpp:618
 #, c-format
 msgid "Build time %.3f s"
 msgstr "Время построения %.3f с"
 
-#: 3d-viewer/3d_draw.cpp:660 3d-viewer/3d_draw_board_body.cpp:218
+#: 3d-viewer/3d_draw.cpp:661 3d-viewer/3d_draw_board_body.cpp:218
 #: 3d-viewer/3d_draw_board_body.cpp:505
 #, c-format
 msgid "Build layer %s"
 msgstr "Построение слоя %s"
 
-#: 3d-viewer/3d_draw.cpp:986
+#: 3d-viewer/3d_draw.cpp:987
 msgid "Load 3D Shapes"
 msgstr "Загрузка 3D форм"
 
@@ -1152,7 +1152,7 @@ msgstr ""
 msgid "Environment Variable Help"
 msgstr "Помощь по переменным окружения"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:35
+#: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:183
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
@@ -1164,36 +1164,11 @@ msgstr "Помощь по переменным окружения"
 msgid "Name"
 msgstr "Имя"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:36
+#: common/dialogs/dialog_env_var_config_base.cpp:39
 msgid "Path"
 msgstr "Путь"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:56
-#: common/dialogs/dialog_get_component_base.cpp:45
-#: eeschema/dialogs/dialog_netlist_base.cpp:129
-#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
-#: pcbnew/dialogs/wizard_add_fplib.cpp:841 pcbnew/muonde.cpp:801
-msgid "OK"
-msgstr "OK"
-
-#: common/dialogs/dialog_env_var_config_base.cpp:60
-#: common/dialogs/dialog_exit_base.cpp:69
-#: common/dialogs/dialog_get_component_base.cpp:52 common/selcolor.cpp:237
-#: eeschema/dialogs/dialog_netlist_base.cpp:49
-#: eeschema/dialogs/dialog_netlist_base.cpp:133
-#: eeschema/libedit_onrightclick.cpp:70 eeschema/onrightclick.cpp:153
-#: eeschema/onrightclick.cpp:186
-#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
-#: gerbview/onrightclick.cpp:59 gerbview/onrightclick.cpp:81
-#: pagelayout_editor/onrightclick.cpp:115
-#: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55
-#: pcbnew/modedit_onclick.cpp:229 pcbnew/modedit_onclick.cpp:272
-#: pcbnew/muonde.cpp:804 pcbnew/onrightclick.cpp:81 pcbnew/onrightclick.cpp:97
-msgid "Cancel"
-msgstr "Отмена"
-
-#: common/dialogs/dialog_env_var_config_base.cpp:63
+#: common/dialogs/dialog_env_var_config_base.cpp:59
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:186
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
@@ -1203,11 +1178,11 @@ msgstr "Отмена"
 msgid "Add"
 msgstr "Добавить"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:64
+#: common/dialogs/dialog_env_var_config_base.cpp:60
 msgid "Add a new entry to the table."
 msgstr "Добавить новую запись в таблицу."
 
-#: common/dialogs/dialog_env_var_config_base.cpp:68
+#: common/dialogs/dialog_env_var_config_base.cpp:64
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
 #: pagelayout_editor/events_functions.cpp:573
@@ -1220,14 +1195,9 @@ msgstr "Добавить новую запись в таблицу."
 msgid "Delete"
 msgstr "Удалить"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:69
+#: common/dialogs/dialog_env_var_config_base.cpp:65
 msgid "Remove the selectect entry from the table."
 msgstr "Удалить выделенную запись из таблицы."
-
-#: common/dialogs/dialog_env_var_config_base.cpp:73
-#: eeschema/dialogs/dialog_bom_base.cpp:65
-msgid "Help"
-msgstr "Справка"
 
 #: common/dialogs/dialog_exit_base.cpp:34
 msgid "Save the changes before closing?"
@@ -1245,6 +1215,21 @@ msgstr "Сохранить и выйти"
 msgid "Exit without Save"
 msgstr "Выйти без сохранения"
 
+#: common/dialogs/dialog_exit_base.cpp:69
+#: common/dialogs/dialog_get_component_base.cpp:52 common/selcolor.cpp:237
+#: eeschema/dialogs/dialog_netlist_base.cpp:49
+#: eeschema/dialogs/dialog_netlist_base.cpp:133
+#: eeschema/libedit_onrightclick.cpp:70 eeschema/onrightclick.cpp:153
+#: eeschema/onrightclick.cpp:186
+#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
+#: gerbview/onrightclick.cpp:59 gerbview/onrightclick.cpp:81
+#: pagelayout_editor/onrightclick.cpp:115
+#: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55
+#: pcbnew/modedit_onclick.cpp:229 pcbnew/modedit_onclick.cpp:272
+#: pcbnew/muonde.cpp:804 pcbnew/onrightclick.cpp:81 pcbnew/onrightclick.cpp:97
+msgid "Cancel"
+msgstr "Отмена"
+
 #: common/dialogs/dialog_get_component_base.cpp:22
 #: eeschema/dialogs/dialog_bom_base.cpp:44
 #: eeschema/dialogs/dialog_netlist_base.cpp:115
@@ -1256,6 +1241,14 @@ msgstr "Имя:"
 #: common/dialogs/dialog_get_component_base.cpp:30
 msgid "History list:"
 msgstr "Список истории:"
+
+#: common/dialogs/dialog_get_component_base.cpp:45
+#: eeschema/dialogs/dialog_netlist_base.cpp:129
+#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
+#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
+#: pcbnew/dialogs/wizard_add_fplib.cpp:841 pcbnew/muonde.cpp:801
+msgid "OK"
+msgstr "OK"
 
 #: common/dialogs/dialog_get_component_base.cpp:49
 msgid "Search by Keyword"
@@ -2387,7 +2380,7 @@ msgid "Show outlines in sketch mode"
 msgstr "Показать границы в контурном режиме"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:401 pcbnew/hotkeys.cpp:187
-#: pcbnew/moduleframe.cpp:691 pcbnew/pcbframe.cpp:655
+#: pcbnew/moduleframe.cpp:691 pcbnew/pcbframe.cpp:656
 msgid "3D Viewer"
 msgstr "Просмотрщик 3D"
 
@@ -2501,7 +2494,7 @@ msgid "Project: '%s'"
 msgstr "Проект: '%s'"
 
 #: cvpcb/cvframe.cpp:716 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1312
-#: kicad/prjconfig.cpp:335 pcbnew/moduleframe.cpp:764 pcbnew/pcbframe.cpp:969
+#: kicad/prjconfig.cpp:335 pcbnew/moduleframe.cpp:764 pcbnew/pcbframe.cpp:972
 msgid " [Read Only]"
 msgstr " [Только чтение]"
 
@@ -3290,6 +3283,10 @@ msgstr "Плагины"
 #: eeschema/dialogs/dialog_netlist_base.cpp:46
 msgid "Generate"
 msgstr "Сформировать"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:65
+msgid "Help"
+msgstr "Справка"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 #: eeschema/dialogs/dialog_netlist_base.cpp:52
@@ -8151,7 +8148,7 @@ msgstr "Не найдено"
 msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/schframe.cpp:619 pcbnew/pcbframe.cpp:582
+#: eeschema/schframe.cpp:619 pcbnew/pcbframe.cpp:583
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -9041,7 +9038,7 @@ msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
 #: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:143
-#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:400 pcbnew/pcbframe.cpp:899
+#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:401 pcbnew/pcbframe.cpp:902
 msgid "Visibles"
 msgstr "Видимость"
 
@@ -10622,7 +10619,7 @@ msgstr "Vout"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:127
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:144
 msgid "V"
-msgstr "V"
+msgstr "В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:136
 msgid ""
@@ -11013,7 +11010,7 @@ msgstr "T"
 #: pcb_calculator/transline_ident.cpp:177
 #: pcb_calculator/transline_ident.cpp:347
 msgid "Rough"
-msgstr "Rough"
+msgstr "Шероховатость"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:735
 msgid "mu Rel"
@@ -11677,7 +11674,7 @@ msgstr "Потери в диэлектрике для нечетной моды"
 
 #: pcb_calculator/transline_ident.cpp:360
 msgid "Zeven"
-msgstr "Zчетной"
+msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:360
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -11685,7 +11682,7 @@ msgstr "Импеданс четной моды (линии управляемы 
 
 #: pcb_calculator/transline_ident.cpp:362
 msgid "Zodd"
-msgstr "Zнечетной"
+msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:362
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -13378,103 +13375,103 @@ msgstr "Класс"
 msgid "* (Any)"
 msgstr "* (Любые)"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:632
+#: pcbnew/dialogs/dialog_design_rules.cpp:637
 msgid "Design Rule Setting Error"
 msgstr "Ошибка настройки правила проектирования"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:652
+#: pcbnew/dialogs/dialog_design_rules.cpp:657
 msgid "New Net Class Name:"
 msgstr "Имя нового класса цепи:"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:672
+#: pcbnew/dialogs/dialog_design_rules.cpp:677
 msgid "Duplicate net class names are not allowed."
 msgstr "Дублирование имен класса цепей не допустимо."
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:734
+#: pcbnew/dialogs/dialog_design_rules.cpp:739
 msgid "The default net class cannot be removed"
 msgstr "Класс цепей default не может быть удален"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:917
+#: pcbnew/dialogs/dialog_design_rules.cpp:922
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>ширина дорожки</b> &lt; <b>минимальной ширины дорожки</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:929
+#: pcbnew/dialogs/dialog_design_rules.cpp:934
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
 msgstr ""
 "%s: <b>диаметр перех.отв.</b> &lt; <b>минимального диаметра перех.отв.</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:940
+#: pcbnew/dialogs/dialog_design_rules.cpp:945
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr "%s: <b>сверло перех.отв.</b> &ge; <b>диаметра перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:948
+#: pcbnew/dialogs/dialog_design_rules.cpp:953
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr ""
 "%s: <b>сверло перех.отв.</b> &lt; <b>минимального сверла перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:960
+#: pcbnew/dialogs/dialog_design_rules.cpp:965
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr ""
 "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра перех."
 "микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:971
+#: pcbnew/dialogs/dialog_design_rules.cpp:976
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr ""
 "%s: <b>сверло перех.микроотв.</b> &ge; <b>диаметра перех.микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:979
+#: pcbnew/dialogs/dialog_design_rules.cpp:984
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr ""
 "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла перех.микроотв."
 "</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:998
+#: pcbnew/dialogs/dialog_design_rules.cpp:1003
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
 "<b>Экстра размер дорожки %d </b> %s &lt; <b>минимального размера дорожки</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1007
+#: pcbnew/dialogs/dialog_design_rules.cpp:1012
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер дорожки %d </b> %s &gt; <b>1 дюйма!</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1027
+#: pcbnew/dialogs/dialog_design_rules.cpp:1032
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 msgstr ""
 "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера перех."
 "отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1037
+#: pcbnew/dialogs/dialog_design_rules.cpp:1042
 #, c-format
 msgid "<b>No via drill size define in row %d</b><br>"
 msgstr "<b>Нет определения размера сверла перех.отв. в строке %d</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1047
+#: pcbnew/dialogs/dialog_design_rules.cpp:1052
 #, c-format
 msgid "<b>Extra Via %d Drill</b> %s &lt; <b>Min Via Drill %s</b><br>"
 msgstr ""
 "<b>Экстра сверло перех.отв. %d</b> %s &lt; <b>мин. сверла перех.отв. %s</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1056
+#: pcbnew/dialogs/dialog_design_rules.cpp:1061
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr ""
 "<b>Экстра размер перех.отв. %d </b> %s &le; <b>Размера сверла</b> %s<br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1065
+#: pcbnew/dialogs/dialog_design_rules.cpp:1070
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер перех.отв. %d </b>%s &gt; <b>1 дюйма!</b><br>"
@@ -21266,12 +21263,12 @@ msgstr ""
 "\"%s\"\n"
 "ты должен проверить и редактировать ее (запустить тест DRC)."
 
-#: pcbnew/pcbframe.cpp:618
+#: pcbnew/pcbframe.cpp:619
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Файл автосохранения '%s' не может быть удален!"
 
-#: pcbnew/pcbframe.cpp:973
+#: pcbnew/pcbframe.cpp:976
 msgid " [new file]"
 msgstr " [новый файл]"
 
@@ -22532,9 +22529,9 @@ msgstr "Конвертер растрового изображения в ком
 
 #: common/dialog_about/dialog_about_base.h:51
 msgid "About..."
-msgstr "О ..."
+msgstr "О..."
 
-#: common/dialogs/dialog_env_var_config_base.h:53
+#: common/dialogs/dialog_env_var_config_base.h:56
 msgid "Path Configuration"
 msgstr "Настройка пути"
 
