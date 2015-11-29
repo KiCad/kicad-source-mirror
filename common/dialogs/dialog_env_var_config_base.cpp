@@ -14,10 +14,13 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* mainSizer;
-	mainSizer = new wxBoxSizer( wxHORIZONTAL );
+	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bupperSizer;
+	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxBoxSizer* bleftSizer;
+	bleftSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
@@ -45,48 +48,54 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer1->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
+	bleftSizer->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	mainSizer->Add( bSizer1, 1, wxEXPAND, 5 );
+	bupperSizer->Add( bleftSizer, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxVERTICAL );
-	
-	m_buttonOk = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOk->SetDefault(); 
-	bSizer2->Add( m_buttonOk, 0, wxALL, 5 );
-	
-	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_buttonCancel, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	wxBoxSizer* brightSizer;
+	brightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonAdd = new wxButton( this, wxID_ANY, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonAdd->SetToolTip( _("Add a new entry to the table.") );
 	
-	bSizer2->Add( m_buttonAdd, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	brightSizer->Add( m_buttonAdd, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonDelete = new wxButton( this, wxID_ANY, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonDelete->SetToolTip( _("Remove the selectect entry from the table.") );
 	
-	bSizer2->Add( m_buttonDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-	
-	m_buttonHelp = new wxButton( this, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_buttonHelp, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	brightSizer->Add( m_buttonDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	
-	mainSizer->Add( bSizer2, 0, wxEXPAND, 5 );
+	bupperSizer->Add( brightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	mainSizer->Add( bupperSizer, 1, wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizerHelp = new wxButton( this, wxID_HELP );
+	m_sdbSizer->AddButton( m_sdbSizerHelp );
+	m_sdbSizer->Realize();
+	
+	mainSizer->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
 	// Connect Events
 	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnAddRow ), NULL, this );
 	m_buttonDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnDeleteSelectedRows ), NULL, this );
-	m_buttonHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnHelpRequest ), NULL, this );
+	m_sdbSizerHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnHelpRequest ), NULL, this );
 }
 
 DIALOG_ENV_VAR_CONFIG_BASE::~DIALOG_ENV_VAR_CONFIG_BASE()
@@ -94,6 +103,6 @@ DIALOG_ENV_VAR_CONFIG_BASE::~DIALOG_ENV_VAR_CONFIG_BASE()
 	// Disconnect Events
 	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnAddRow ), NULL, this );
 	m_buttonDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnDeleteSelectedRows ), NULL, this );
-	m_buttonHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnHelpRequest ), NULL, this );
+	m_sdbSizerHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ENV_VAR_CONFIG_BASE::OnHelpRequest ), NULL, this );
 	
 }

@@ -121,10 +121,13 @@ void PCB_CALCULATOR_FRAME::ElectricalSpacingUpdateData( double aUnitScale )
     wxString txt;
     double voltage = 500.0;     // to calculate values at V > 500V
     txt = m_ElectricalSpacingVoltage->GetValue();
+
     if( ! txt.IsEmpty() )
         voltage = DoubleFromString(txt);
+
     if( voltage < 500.0 )
         voltage = 500.0;
+
     txt.Printf( wxT( "%g" ), voltage );
     m_ElectricalSpacingVoltage->SetValue( txt );
 
@@ -145,4 +148,6 @@ void PCB_CALCULATOR_FRAME::ElectricalSpacingUpdateData( double aUnitScale )
         txt.Printf( wxT( "%g" ), spacing / aUnitScale );
         m_gridElectricalSpacingValues->SetCellValue( CLASS_COUNT-1, jj, txt );
     }
+
+    m_gridElectricalSpacingValues->SetRowLabelSize( wxGRID_AUTOSIZE );
 }

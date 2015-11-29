@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2009 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2004-2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2009-2015 KiCad Developers, see change_log.txt for contributors.
  *
@@ -276,11 +276,15 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
     m_gridViaSizeList->AutoSizeColumns( true );
     m_gridTrackWidthList->SetColMinimalWidth( 0, 150 );
     m_gridTrackWidthList->AutoSizeColumns( true );
+    m_gridViaSizeList->SetColMinimalWidth( 1, 150 );
 
     // Fill cells with actual values:
     m_gridViaSizeList->SetCellValue( 0, 0, wxEmptyString );
     m_gridViaSizeList->SetCellValue( 0, 1, wxEmptyString );
-    m_gridTrackWidthList->SetCellValue( 0, 0, wxEmptyString );
+
+    // Give a correct size to row labels column
+    m_gridViaSizeList->SetRowLabelSize( wxGRID_AUTOSIZE );
+    m_gridTrackWidthList->SetRowLabelSize( wxGRID_AUTOSIZE );
 
     for( unsigned ii = 0; ii < m_TracksWidthList.size(); ii++ )
     {

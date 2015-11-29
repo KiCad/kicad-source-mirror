@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 jean-pierre.charras
+ * Copyright (C) 2015 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,5 +137,8 @@ void PCB_CALCULATOR_FRAME::BoardClassesUpdateData( double aUnitScale )
             txt = NOVAL;
         m_gridClassesValuesDisplay->SetCellValue(4, ii, txt );
     }
+
+    m_gridClassesValuesDisplay->SetRowLabelSize( wxGRID_AUTOSIZE );
+    m_gridClassesValuesDisplay->AutoSize();
 }
 
