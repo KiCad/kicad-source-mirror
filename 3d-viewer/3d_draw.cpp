@@ -447,7 +447,7 @@ void EDA_3D_CANVAS::Redraw()
     // Board Body
 
     GLint shininess_value = 32;
-    glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
+    glMateriali( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
 
     if( isEnabled( FL_SHOW_BOARD_BODY ) )
     {
@@ -460,8 +460,9 @@ void EDA_3D_CANVAS::Redraw()
 
     // Board
 
+    // specify material parameters for the lighting model.
     shininess_value = 52;
-    glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
+    glMateriali( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
 
     glm::vec4 specular( GetPrm3DVisu().m_CopperColor.m_Red   * 0.20f,
                         GetPrm3DVisu().m_CopperColor.m_Green * 0.20f,
@@ -477,7 +478,7 @@ void EDA_3D_CANVAS::Redraw()
     // Tech layers
 
     shininess_value = 32;
-    glMateriali ( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
+    glMateriali( GL_FRONT_AND_BACK, GL_SHININESS, shininess_value );
 
     glm::vec4 specularTech( 0.0f, 0.0f, 0.0f, 1.0f );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specularTech.x );

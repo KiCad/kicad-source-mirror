@@ -86,6 +86,7 @@
 #define PCB_MAGNETIC_TRACKS_OPT         wxT( "PcbMagTrackOpt" )
 #define SHOW_MICROWAVE_TOOLS            wxT( "ShowMicrowaveTools" )
 #define SHOW_LAYER_MANAGER_TOOLS        wxT( "ShowLayerManagerTools" )
+#define SHOW_PAGE_LIMITS_KEY            wxT( "ShowPageLimits" )
 
 
 BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
@@ -743,6 +744,7 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     aCfg->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
     aCfg->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
+    aCfg->Read( SHOW_PAGE_LIMITS_KEY, &m_showPageLimits );
 }
 
 
@@ -758,6 +760,7 @@ void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
     aCfg->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );
     aCfg->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
+    aCfg->Write( SHOW_PAGE_LIMITS_KEY, m_showPageLimits );
 }
 
 
