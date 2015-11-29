@@ -382,7 +382,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 }
 
 
-bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
+bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
@@ -474,6 +474,8 @@ bool ROUTER_TOOL::onViaCommand( VIATYPE_T aType )
 
     m_router->UpdateSizes( sizes );
     m_router->ToggleViaPlacement();
+
+    updateEndItem( aEvent );
 
     m_router->Move( m_endSnapPoint, m_endItem );        // refresh
 
@@ -576,15 +578,15 @@ void ROUTER_TOOL::performRouting()
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
-            onViaCommand( VIA_THROUGH );
+            onViaCommand( *evt, VIA_THROUGH );
         }
         else if( evt->IsAction( &ACT_PlaceBlindVia ) )
         {
-            onViaCommand( VIA_BLIND_BURIED );
+            onViaCommand( *evt, VIA_BLIND_BURIED );
         }
         else if( evt->IsAction( &ACT_PlaceMicroVia ) )
         {
-            onViaCommand( VIA_MICROVIA );
+            onViaCommand( *evt, VIA_MICROVIA );
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {

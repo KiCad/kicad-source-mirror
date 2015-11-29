@@ -87,9 +87,6 @@ bool PNS_LINE_PLACER::ToggleVia( bool aEnabled )
     if( !aEnabled )
         m_head.RemoveVia();
 
-    if( !m_idle )
-        Move( m_currentEnd, NULL );
-
     return true;
 }
 
@@ -1021,7 +1018,6 @@ void PNS_LINE_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
     if( !m_idle )
     {
         initPlacement( m_splitSeg );
-        Move ( m_currentEnd, NULL );
     }
 }
 

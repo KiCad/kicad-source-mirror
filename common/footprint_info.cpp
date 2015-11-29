@@ -102,10 +102,14 @@ void FOOTPRINT_INFO::load()
     std::auto_ptr<MODULE> m( fptable->FootprintLoad( m_nickname, m_fpname ) );
 
     if( m.get() == NULL )    // Should happen only with malformed/broken libraries
+    {
         m_pad_count = 0;
+        m_unique_pad_count = 0;
+    }
     else
     {
         m_pad_count = m->GetPadCount( DO_NOT_INCLUDE_NPTH );
+        m_unique_pad_count = m->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
         m_keywords  = m->GetKeywords();
         m_doc       = m->GetDescription();
 

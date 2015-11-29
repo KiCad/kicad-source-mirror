@@ -61,11 +61,12 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
     do
     {
-        PNS_MEANDER_SHAPE* m = new PNS_MEANDER_SHAPE( m_placer, m_width, m_dual );
-        m->SetBaselineOffset( m_baselineOffset );
-        m->SetBaseIndex( aBaseIndex );
+        PNS_MEANDER_SHAPE m( m_placer, m_width, m_dual );
 
-        double thr = (double) m->spacing();
+        m.SetBaselineOffset( m_baselineOffset );
+        m.SetBaseIndex( aBaseIndex );
+
+        double thr = (double) m.spacing();
 
         bool fail = false;
         double remaining = base_len - ( m_last - aBase.A ).EuclideanNorm();
@@ -79,10 +80,10 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
             {
                 for( int i = 0; i < 2; i++ )
                 {
-                    if ( m->Fit( MT_CHECK_START, aBase, m_last, i ) )
+                    if ( m.Fit( MT_CHECK_START, aBase, m_last, i ) )
                     {
                         turning = true;
-                        AddMeander( m );
+                        AddMeander( new PNS_MEANDER_SHAPE( m ) );
                         side = !i;
                         started = true;
                         break;
@@ -95,9 +96,9 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
                     for( int i = 0; i < 2; i++ )
                     {
-                        if ( m->Fit ( MT_SINGLE, aBase, m_last, i ) )
+                        if ( m.Fit ( MT_SINGLE, aBase, m_last, i ) )
                         {
-                            AddMeander( m );
+                            AddMeander( new PNS_MEANDER_SHAPE( m ) );
                             fail = false;
                             started = false;
                             side = !i;
@@ -106,17 +107,17 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
                     }
                 }
             } else {
-                bool rv = m->Fit( MT_CHECK_FINISH, aBase, m_last, side );
+                bool rv = m.Fit( MT_CHECK_FINISH, aBase, m_last, side );
 
                 if( rv )
                 {
-                    m->Fit( MT_TURN, aBase, m_last, side );
-                    AddMeander( m );
+                    m.Fit( MT_TURN, aBase, m_last, side );
+                    AddMeander( new PNS_MEANDER_SHAPE( m ) );
                     started = true;
                 } else {
-                    m->Fit( MT_FINISH, aBase, m_last, side );
+                    m.Fit( MT_FINISH, aBase, m_last, side );
                     started = false;
-                    AddMeander( m );
+                    AddMeander( new PNS_MEANDER_SHAPE( m ) );
                     turning = false;
                 }
 
@@ -124,9 +125,9 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
             }
         } else if( started )
         {
-            bool rv = m->Fit( MT_FINISH, aBase, m_last, side );
+            bool rv = m.Fit( MT_FINISH, aBase, m_last, side );
             if( rv )
-                AddMeander( m );
+                AddMeander( new PNS_MEANDER_SHAPE( m ) );
 
             break;
 

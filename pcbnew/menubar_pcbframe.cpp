@@ -168,11 +168,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
             _( "Generate IPC-D-356 netlist file" ),
             KiBitmap( netlist_xpm ) );
 
-    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_CMP_FILE,
-                 _( "&Component (.cmp) File" ),
-                 _( "(Re)create components file (*.cmp) for CvPcb" ),
-                 KiBitmap( create_cmp_file_xpm ) );
-
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
                  _( "&BOM File" ),
                  _( "Create a bill of materials from schematic" ),
@@ -221,6 +216,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_IDF3,
                  _( "I&DFv3" ), _( "IDFv3 board and component export" ),
                  KiBitmap( export_idf_xpm ) );
+
+    AddMenuItem( submenuexport, ID_PCB_GEN_CMP_FILE,
+                 _( "&Component (.cmp) File" ),
+                 _( "Export component file (*.cmp) for Eeschema footprint field back-annotation" ),
+                 KiBitmap( create_cmp_file_xpm ) );
 
     AddMenuItem( filesMenu, submenuexport,
                  ID_GEN_EXPORT_FILE, _( "E&xport" ),

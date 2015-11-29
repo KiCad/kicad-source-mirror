@@ -416,6 +416,11 @@ public:
         m_baselineOffset = 0;
     }
 
+    ~PNS_MEANDERED_LINE()
+    {
+        Clear();
+    }
+
     /**
      * Function AddCorner()
      *

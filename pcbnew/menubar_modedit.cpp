@@ -119,7 +119,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Save module in new lib
     AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                  _( "S&ave Footprint in New Library" ),
-                 _( "Create a new library and save current module into it" ),
+                 _( "Create a new library and save current footprint into it" ),
                  KiBitmap( new_library_xpm ) );
 
     // Export module

@@ -22,12 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* Date for KiCad build version */
+// Date for KiCad build version
 #include <fctsys.h>
 
 // The include file version.h is always created even if the repo version cannot be
 // determined.  In this case KICAD_BUILD_VERSION will default to "no-bzr".
-#include <version.h>
+#include <kicad_build_version.h>
 
 
 /**

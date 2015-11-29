@@ -54,7 +54,7 @@ private:
 
     int getStartLayer( const PNS_ITEM* aItem );
     void switchLayerOnViaPlacement();
-    bool onViaCommand( VIATYPE_T aType );
+    bool onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType );
 
     bool prepareInteractive();
     bool finishInteractive();

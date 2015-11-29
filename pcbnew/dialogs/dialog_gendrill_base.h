@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,6 +48,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxRadioBox* m_Choice_Drill_Map;
 		wxCheckBox* m_Check_Mirror;
 		wxCheckBox* m_Check_Minimal;
+		wxCheckBox* m_Check_Merge_PTH_NPTH;
 		wxRadioBox* m_Choice_Drill_Offset;
 		wxStaticBoxSizer* m_DefaultViasDrillSizer;
 		wxStaticText* m_ViaDrillValue;
@@ -76,7 +77,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 506,471 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 506,473 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GENDRILL_BASE();
 	
 };

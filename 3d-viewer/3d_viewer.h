@@ -69,10 +69,7 @@ public:
     EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent, const wxString& aTitle,
                   long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
 
-    ~EDA_3D_FRAME()
-    {
-        m_auimgr.UnInit();
-    };
+    ~EDA_3D_FRAME();
 
     PCB_BASE_FRAME* Parent() const { return (PCB_BASE_FRAME*)GetParent(); }
 

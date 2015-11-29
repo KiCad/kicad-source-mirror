@@ -68,7 +68,8 @@ public:
         m_nickname( aNickname ),
         m_fpname( aFootprintName ),
         m_num( 0 ),
-        m_pad_count( 0 )
+        m_pad_count( 0 ),
+        m_unique_pad_count( 0 )
     {
 #if !USE_FPI_LAZY
         load();
@@ -91,6 +92,12 @@ public:
     {
         ensure_loaded();
         return m_pad_count;
+    }
+
+    unsigned GetUniquePadCount()
+    {
+        ensure_loaded();
+        return m_unique_pad_count;
     }
 
     int GetOrderNum()
@@ -121,16 +128,17 @@ private:
     /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
     void load();
 
-    FOOTPRINT_LIST* m_owner;    ///< provides access to FP_LIB_TABLE
+    FOOTPRINT_LIST* m_owner;            ///< provides access to FP_LIB_TABLE
 
     bool        m_loaded;
 
-    wxString    m_nickname;     ///< library as known in FP_LIB_TABLE
-    wxString    m_fpname;       ///< Module name.
-    int         m_num;          ///< Order number in the display list.
-    int         m_pad_count;    ///< Number of pads
-    wxString    m_doc;          ///< Footprint description.
-    wxString    m_keywords;     ///< Footprint keywords.
+    wxString    m_nickname;             ///< library as known in FP_LIB_TABLE
+    wxString    m_fpname;               ///< Module name.
+    int         m_num;                  ///< Order number in the display list.
+    int         m_pad_count;            ///< Number of pads
+    int         m_unique_pad_count;     ///< Number of unique pads
+    wxString    m_doc;                  ///< Footprint description.
+    wxString    m_keywords;             ///< Footprint keywords.
 };
 
 

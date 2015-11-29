@@ -29,11 +29,7 @@
 #include <hashtables.h>
 #include <kiway_player.h>
 
-#if wxMINOR_VERSION == 8 && defined(__WXGTK__)
- #define DLGSHIM_USE_SETFOCUS      1
-#else
- #define DLGSHIM_USE_SETFOCUS      0
-#endif
+#define DLGSHIM_USE_SETFOCUS      0
 
 class WDO_ENABLE_DISABLE;
 class EVENT_LOOP;
@@ -41,13 +37,8 @@ class EVENT_LOOP;
 // These macros are for DIALOG_SHIM only, NOT for KIWAY_PLAYER.  KIWAY_PLAYER
 // has its own support for quasi modal and its platform specific issues are different
 // than for a wxDialog.
-#if wxCHECK_VERSION( 3, 0, 0 )
  #define SHOWQUASIMODAL     ShowQuasiModal
  #define ENDQUASIMODAL      EndQuasiModal
-#else
- #define SHOWQUASIMODAL     ShowModal
- #define ENDQUASIMODAL      EndModal
-#endif
 
 
 /**
@@ -83,11 +74,6 @@ public:
     bool Enable( bool enable ); // override wxDialog::Enable virtual
 
 protected:
-
-#if !wxCHECK_VERSION( 2, 9, 4 )
-    wxWindow* CheckIfCanBeUsedAsParent( wxWindow* parent ) const;
-    wxWindow* GetParentForModalDialog( wxWindow *parent, long style ) const;
-#endif
 
     std::string m_hash_key;     // alternate for class_map when classname re-used.
 

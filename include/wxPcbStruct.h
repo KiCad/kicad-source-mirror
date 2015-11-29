@@ -1105,9 +1105,8 @@ public:
      * The ratsnest and pad list are recalculated
      * @param aModule = footprint to delete
      * @param aDC = currentDevice Context. if NULL: do not redraw new ratsnest
-     * @param aAskBeforeDeleting : if true: ask for confirmation before deleting
      */
-    bool Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting );
+    bool Delete_Module( MODULE* aModule, wxDC* aDC );
 
     /**
      * Function Change_Side_Module

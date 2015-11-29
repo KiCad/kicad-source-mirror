@@ -119,8 +119,7 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
 
     // Free the list of parsers list
     for( unsigned int i = 0; i < m_model_parsers_list.size(); i++ )
-        if( m_model_parsers_list[i] )
-            delete m_model_parsers_list[i];
+        delete m_model_parsers_list[i];
 
 }
 

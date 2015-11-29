@@ -1454,7 +1454,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             case 'O':   padshape = PAD_SHAPE_OVAL;        break;
             case 'T':   padshape = PAD_SHAPE_TRAPEZOID;   break;
             default:
-                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'" ),
+                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'" ),
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),

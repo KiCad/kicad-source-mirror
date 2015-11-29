@@ -724,7 +724,6 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     if( org.y < m_ClipBox.GetY() )
         org.y += KiROUND( gridSize.y );
 
-#if ( defined( __WXMAC__ ) || 1 )
     // Use a pixel based draw to display grid.  There are a lot of calls, so the cost is
     // high and grid is slowly drawn on some platforms.  Please note that this should
     // always be enabled until the bitmap based solution below is fixed.
@@ -748,63 +747,12 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
             aDC->DrawPoint( xpos, KiROUND( y )  );
         }
     }
-#else
-    /* This is fast only if the Blit function is fast.  Not true on all platforms.
-     *
-     * A first grid column is drawn in a temporary bitmap, and after is duplicated using
-     * the Blit function (copy from a screen area to an other screen area).
-     */
-    wxMemoryDC tmpDC;
-    wxBitmap tmpBM( 1, aDC->LogicalToDeviceYRel( m_ClipBox.GetHeight() ) );
-    tmpDC.SelectObject( tmpBM );
-    tmpDC.SetLogicalFunction( wxCOPY );
-    tmpDC.SetBackground( wxBrush( GetBackgroundColour() ) );
-    tmpDC.Clear();
-    tmpDC.SetPen( MakeColour( GetParent()->GetGridColor() ) );
-
-    double usx, usy;
-    int lox, loy, dox, doy;
-
-    aDC->GetUserScale( &usx, &usy );
-    aDC->GetLogicalOrigin( &lox, &loy );
-    aDC->GetDeviceOrigin( &dox, &doy );
-
-    // Create a dummy DC for coordinate translation because the actual DC scale and origin
-    // must be reset in order to work correctly.
-    wxBitmap tmpBitmap( 1, 1 );
-    wxMemoryDC scaleDC( tmpBitmap );
-    scaleDC.SetUserScale( usx, usy );
-    scaleDC.SetLogicalOrigin( lox, loy );
-    scaleDC.SetDeviceOrigin( dox, doy );
-
-    double bottom = ( double ) m_ClipBox.GetBottom();
-
-    // Draw a column of grid points.
-    for( double y = (double) org.y; y <= bottom; y += gridSize.y )
-    {
-        tmpDC.DrawPoint( 0, scaleDC.LogicalToDeviceY( KiROUND( y ) ) );
-    }
-
-    // Reset the device context scale and origin and restore on exit.
-    EDA_BLIT_NORMALIZER blitNorm( aDC );
-
-    // Mask of everything but the grid points.
-    tmpDC.SelectObject( wxNullBitmap );
-    tmpBM.SetMask( new wxMask( tmpBM, GetBackgroundColour() ) );
-    tmpDC.SelectObject( tmpBM );
-
-    double right = m_ClipBox.GetRight();
-
-    // Blit the column for each row of the damaged region.
-    for( double x = (double) org.x; x <= right; x += gridSize.x )
-    {
-        aDC->Blit( scaleDC.LogicalToDeviceX( KiROUND( x ) ),
-                   scaleDC.LogicalToDeviceY( m_ClipBox.GetY() ),
-                   1, tmpBM.GetHeight(), &tmpDC, 0, 0, wxCOPY, true );
-    }
-#endif
 }
 
+// Set to 1 to draw auxirilary axis as lines, 0 to draw as target (circle with cross)
+#define DRAW_AXIS_AS_LINES 0
+// Size in pixels of the target shape
+#define AXIS_SIZE_IN_PIXELS 15
 
 void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
@@ -813,11 +761,12 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
     if( origin == wxPoint( 0, 0 ) )
         return;
 
-    EDA_COLOR_T color = DARKRED;
-    wxSize  pageSize = GetParent()->GetPageSizeIU();
+    EDA_COLOR_T color = RED;
 
     GRSetDrawMode( aDC, aDrawMode );
 
+#if DRAW_AXIS_AS_LINES
+    wxSize  pageSize = GetParent()->GetPageSizeIU();
     // Draw the Y axis
     GRLine( &m_ClipBox, aDC, origin.x, -pageSize.y,
             origin.x, pageSize.y, 0, color );
@@ -825,6 +774,21 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
     // Draw the X axis
     GRLine( &m_ClipBox, aDC, -pageSize.x, origin.y,
             pageSize.x, origin.y, 0, color );
+#else
+    int radius = aDC->DeviceToLogicalXRel( AXIS_SIZE_IN_PIXELS );
+    int linewidth = aDC->DeviceToLogicalXRel( 1 );
+
+    GRSetColorPen( aDC, color, linewidth );
+
+    GRLine( &m_ClipBox, aDC, origin.x, origin.y-radius,
+            origin.x, origin.y+radius, 0, color );
+
+    // Draw the + shape
+    GRLine( &m_ClipBox, aDC, origin.x-radius, origin.y,
+            origin.x+radius, origin.y, 0, color );
+
+    GRCircle( &m_ClipBox, aDC, origin, radius, linewidth, color );
+#endif
 }
 
 
@@ -834,10 +798,11 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoi
         return;
 
     EDA_COLOR_T color    = GetParent()->GetGridColor();
-    wxSize      pageSize = GetParent()->GetPageSizeIU();
 
     GRSetDrawMode( aDC, aDrawMode );
 
+#if DRAW_AXIS_AS_LINES
+    wxSize      pageSize = GetParent()->GetPageSizeIU();
     // Draw the Y axis
     GRLine( &m_ClipBox, aDC, aGridOrigin.x, -pageSize.y,
             aGridOrigin.x, pageSize.y, 0, color );
@@ -845,6 +810,21 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoi
     // Draw the X axis
     GRLine( &m_ClipBox, aDC, -pageSize.x, aGridOrigin.y,
             pageSize.x, aGridOrigin.y, 0, color );
+#else
+    int radius = aDC->DeviceToLogicalXRel( AXIS_SIZE_IN_PIXELS );
+    int linewidth = aDC->DeviceToLogicalXRel( 1 );
+
+    GRSetColorPen( aDC, GetParent()->GetGridColor(), linewidth );
+
+    GRLine( &m_ClipBox, aDC, aGridOrigin.x-radius, aGridOrigin.y-radius,
+            aGridOrigin.x+radius, aGridOrigin.y+radius, 0, color );
+
+    // Draw the X shape
+    GRLine( &m_ClipBox, aDC, aGridOrigin.x+radius, aGridOrigin.y-radius,
+            aGridOrigin.x-radius, aGridOrigin.y+radius, 0, color );
+
+    GRCircle( &m_ClipBox, aDC, aGridOrigin, radius, linewidth, color );
+#endif
 }
 
 

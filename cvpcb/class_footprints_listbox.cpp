@@ -156,7 +156,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
             continue;
 
         if( (aFilterType & BY_PIN_COUNT) && aComponent
-          && aComponent->GetNetCount() != aList.GetItem( ii ).GetPadCount() )
+          && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
             continue;
 
         msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),

@@ -1,23 +1,23 @@
 Copyright template
 
 
-A copyright message which may be added to all source files
-at their top.  There is one line that represents the main copyright holder which
-is its original author.
+A copyright message which may be added to all source files at their top.
+There is one line that represents the main copyright holder which is its
+original author.
 
-Workers who earn partial copyright holder status of a source module
-may choose to document this corresponding work in the CHANGELOG.txt file.
+Workers who earn partial copyright holder status of a source module may
+choose to document this corresponding work in the CHANGELOG.txt file.
 
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 <author>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015 <author>
+ * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,

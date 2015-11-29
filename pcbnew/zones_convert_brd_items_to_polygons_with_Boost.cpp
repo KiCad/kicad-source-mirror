@@ -442,12 +442,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if(g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes" );
 
-    holes.Simplify();
+    holes.Simplify( true );
 
     if (g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes-postsimplify" );
 
-    solidAreas.BooleanSubtract( holes );
+    solidAreas.BooleanSubtract( holes, true );
 
     if (g_DumpZonesWhenFilling)
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );

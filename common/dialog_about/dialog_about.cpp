@@ -37,6 +37,7 @@ dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
     picArtists     = KiBitmap( palette_xpm );
     picTranslators = KiBitmap( language_xpm );
     picLicense     = KiBitmap( tools_xpm );
+    picPackagers   = KiBitmap( zip_xpm );
 
     m_bitmapApp->SetBitmap( info.GetIcon() );
 
@@ -62,7 +63,7 @@ dialog_about::~dialog_about()
 
 wxFlexGridSizer* dialog_about::CreateFlexGridSizer()
 {
-    // three colums with vertical and horizontal extra space of two pixels
+    // three columns with vertical and horizontal extra space of two pixels
     wxFlexGridSizer* fgSizer1 = new wxFlexGridSizer( 3, 2, 2 );
     fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
     fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -89,6 +90,8 @@ void dialog_about::CreateNotebooks()
     CreateNotebookPageByCategory( m_auiNotebook, _( "Artists" ), picArtists, info.GetArtists() );
     CreateNotebookPageByCategory( m_auiNotebook, _( "Translators" ), picTranslators,
                                   info.GetTranslators() );
+    CreateNotebookPageByCategory( m_auiNotebook, _( "Packagers" ), picPackagers,
+                                  info.GetPackagers() );
 
     CreateNotebookHtmlPage( m_auiNotebook, _( "License" ), picLicense, info.GetLicense() );
 }
@@ -142,7 +145,7 @@ void dialog_about::CreateNotebookPage( wxAuiNotebook* parent, const wxString& ca
         }
         else
         {
-            fgSizer1->AddSpacer(5);
+            fgSizer1->AddSpacer( 5 );
         }
     }
 
@@ -232,7 +235,7 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxS
                         fgSizer1->AddSpacer( 5 );
                     }
 
-                    /* this contributor was added to the gui,
+                    /* this contributor was added to the GUI,
                      * thus can be ignored next time
                      */
                     contributor->SetChecked( true );
@@ -309,15 +312,15 @@ void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* parent, const wxString
     // used for all the other widgets
     wxString htmlColor = ( this->GetBackgroundColour() ).GetAsString( wxC2S_HTML_SYNTAX );
 
-    // beginning of html structure
+    // beginning of HTML structure
     htmlPage.Append( wxT( "<html><body bgcolor='" ) + htmlColor + wxT( "'>" ) );
 
     htmlPage.Append( htmlContent );
 
-    // end of html structure indicated by closing tags
+    // end of HTML structure indicated by closing tags
     htmlPage.Append( wxT( "</body></html>" ) );
 
-    // the html page is going to be created with previously created html content
+    // the HTML page is going to be created with previously created HTML content
     wxHtmlWindow* htmlWindow = new wxHtmlWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                                  wxHW_SCROLLBAR_AUTO|wxHW_NO_SELECTION );
 
@@ -332,7 +335,7 @@ void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* parent, const wxString
     htmlWindow->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED,
                          wxHtmlLinkEventHandler( dialog_about::OnHtmlLinkClicked ), NULL, this );
 
-    // no additional space around the html window as it is also the case by the other notebook pages
+    // no additional space around the HTML window as it is also the case by the other notebook pages
     bSizer->Add( htmlWindow, 1, wxALL|wxEXPAND, 0 );
     panel->SetSizer( bSizer );
     panel->Layout();

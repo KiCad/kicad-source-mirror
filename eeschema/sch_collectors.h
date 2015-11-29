@@ -353,6 +353,11 @@ public:
     SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
 
     /**
+     * Update the replace string without changing anything else.
+     */
+    void SetReplaceString( const wxString &aReplaceString );
+
+    /**
      * Function Collect
      * scans \a aSheetPath using this class's Inspector method for items matching
      * \a aFindReplaceData.

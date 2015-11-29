@@ -49,7 +49,7 @@ set( _wvh_write_version_file ON )
 
 # Compare the version argument against the version in the existing header file for a mismatch.
 if( EXISTS ${OUTPUT_FILE} )
-    file( STRINGS ${CMAKE_BINARY_DIR}/version.h _current_version_str
+    file( STRINGS ${OUTPUT_FILE} _current_version_str
         REGEX "^#define[\t ]+KICAD_BUILD_VERSION[\t ]+.*" )
     string( REGEX REPLACE "^#define KICAD_BUILD_VERSION \"([()a-zA-Z0-9 -.]+)\".*"
         "\\1" _wvh_last_version "${_current_version_str}" )
@@ -82,6 +82,6 @@ if( _wvh_write_version_file )
 endif()
 
 # There should always be a valid version.h file.  Otherwise, the build will fail.
-if( NOT EXISTS ${CMAKE_BINARY_DIR}/version.h )
+if( NOT EXISTS ${OUTPUT_FILE} )
     message( FATAL_ERROR "Configuration failed to write file ${OUTPUT_FILE}." )
 endif()

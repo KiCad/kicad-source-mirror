@@ -717,6 +717,39 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
+unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+{
+    std::set<wxUint32> usedNames;
+
+    // Create a set of used pad numbers
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    {
+        // Skip pads not on copper layers (used to build complex
+        // solder paste shapes for instance)
+        if( ( pad->GetLayerSet() & LSET::AllCuMask() ).none() )
+            continue;
+
+        // Skip pads with no name, because they are usually "mechanical"
+        // pads, not "electrical" pads
+        if( pad->GetPadName().IsEmpty() )
+            continue;
+
+        if( !aIncludeNPTH )
+        {
+            // skip NPTH
+            if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+            {
+                continue;
+            }
+        }
+
+        usedNames.insert( pad->GetPackedPadName() );
+    }
+
+    return usedNames.size();
+}
+
+
 void MODULE::Add3DModel( S3D_MASTER* a3DModel )
 {
     a3DModel->SetParent( this );

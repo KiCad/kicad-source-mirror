@@ -503,6 +503,12 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestDat
 }
 
 
+void SCH_FIND_COLLECTOR::SetReplaceString( const wxString &aReplaceString )
+{
+    m_findReplaceData.SetReplaceString( aReplaceString );
+}
+
+
 void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
                                   SCH_SHEET_PATH* aSheetPath )
 {

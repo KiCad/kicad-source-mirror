@@ -88,11 +88,8 @@ private:
 
 class KIWAY_EXPRESS;
 
-#if wxCHECK_VERSION( 2, 9, 4 )
- #define WX_EVENT_LOOP      wxGUIEventLoop
-#else
- #define WX_EVENT_LOOP      wxEventLoop
-#endif
+#define WX_EVENT_LOOP      wxGUIEventLoop
+
 
 class WX_EVENT_LOOP;
 

@@ -497,6 +497,20 @@ public:
     unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T( INCLUDE_NPTH ) ) const;
 
     /**
+     * GetUniquePadCount
+     * returns the number of unique pads.
+     * A complex pad can be built with many pads having the same pad name
+     * to create a complex shape or fragmented solder paste areas.
+     *
+     * GetUniquePadCount calculate the count of not blank pad names
+     *
+     * @param aIncludeNPTH includes non-plated through holes when true.  Does not include
+     *                     non-plated through holes when false.
+     * @return the number of unique pads according to \a aIncludeNPTH.
+     */
+    unsigned GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T( INCLUDE_NPTH ) ) const;
+
+    /**
      * Function GetNextPadName
      * returns the next available pad name in the module
      *
