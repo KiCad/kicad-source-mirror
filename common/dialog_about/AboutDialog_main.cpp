@@ -235,6 +235,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                         wxT( "torstenhtr@gmx.de" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Jerry Jacobs" ),
                                         wxT( "xor.gate.engineering@gmail.com" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Mario Luzeiro" ),
+                                        wxT( "mrluzeiro@ua.pt" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Daniel Majewski" ),
                                         wxT( "lordblick@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Lorenzo Marcantonio" ),
@@ -255,17 +257,19 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                         wxT( "marco.serantoni@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Brian Sidebotham" ),
                                         wxT( "brian.sidebotham@gmail.com" ) ) );
-    info.AddDeveloper( new Contributor( wxT( "Orson (Maciej Sumiński)" ),
-                                        wxT( "maciej.suminski@cern.ch" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Mateusz Skowroński" ),
+                                        wxT( "skowri@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Rafael Sokolowski" ),
                                         wxT( "rafael.sokolowski@web.de" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Vesa Solonen" ),
                                         wxT( "vesa.solonen@hut.fi" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Bernhard Stegmaier" ),
                                         wxT( "stegmaier@sw-systems.de" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Orson (Maciej Sumiński)" ),
+                                        wxT( "maciej.suminski@cern.ch" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Tomasz Wlostowski" ),
                                         wxT( "tomasz.wlostowski@cern.ch" ) ) );
-    info.AddDeveloper( new Contributor( wxT( "Adam Wolfe" ),
+    info.AddDeveloper( new Contributor( wxT( "Adam Wolf" ),
                                         wxT( "adamwolf@feelslikeburning.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Alexander Zakamaldin" ),
                                         wxT( "zaka62@mail.ru" ) ) );
@@ -424,7 +428,9 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     // Programm credits for package developers.
     info.AddPackager( new Contributor( wxT( "Jean-Samuel Reynaud" ),
                                        wxT( "js.reynaud@gmail.com" ) ) );
-    info.AddPackager( new Contributor( wxT( "Adam Wolfe" ),
+    info.AddPackager( new Contributor( wxT( "Bernhard Stegmaier" ),
+                                       wxT( "stegmaier@sw-systems.de" ) ) );
+    info.AddPackager( new Contributor( wxT( "Adam Wolf" ),
                                        wxT( "adamwolf@feelslikeburning.com" ) ) );
     info.AddPackager( new Contributor( wxT( "Nick Østergaard" ),
                                        wxT( "oe.nick@gmail.com" ) ) );

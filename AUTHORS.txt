@@ -32,18 +32,21 @@ Torsten Hüter <torstenhtr[at]gmx-dot-de>
 Nick Østergaard <oe.nick[at]gmail-dot-com>
 Andrew Zonenberg <azonenberg[at]drawersteak-dot-com>
 Cirilo Bernardo <cirilo_bernardo[at]yahoo-dot-com>
-Adam Wolfe <adamwolf[at]feelslikeburning-dot-com>
+Adam Wolf <adamwolf[at]feelslikeburning-dot-com>
 Bernhard Stegmaier <stegmaier[at]sw-systems-dot-de>
 Chris Pavlina <pavlina.chris[at]gmail-dot-com>
 Simon Richter <Simon.Richter[at]hogyros-dot-de>
-
+Mario Luzeiro <mrluzeiro[at]ua-dot-pt>
+Mateusz Skowroński <skowri[at]gmail-dot-com>
 See also CHANGELOG.txt for contributors.
+
 
 == Document Writers
 Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab.inpg-dot-fr>
 Igor Plyatov <plyatov[at]gmail-dot-com>
 Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
 Marco Ciampa <ciampix[at]libero-dot-it>
+Wayne Stambaugh <stambaughw[at]gmail-dot-com
 
 
 == Translators
