@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-17 22:14+0100\n"
-"PO-Revision-Date: 2015-11-22 01:00+0100\n"
+"POT-Creation-Date: 2015-11-22 22:37+0100\n"
+"PO-Revision-Date: 2015-11-22 22:41+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1195,7 +1195,6 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Mostra origine impronte e testi con una crocetta"
 
 #: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:116
-#: pcbnew/dialogs/dialog_create_array_base.cpp:170
 #: eeschema/dialogs/dialog_color_config.cpp:96
 #: gerbview/class_gerbview_layer_widget.cpp:110
 msgid "Grid"
@@ -1348,8 +1347,8 @@ msgstr "Assembly impronte sul fronte scheda"
 msgid "Footprint assembly on board's back"
 msgstr "Assembly impronte sul retro scheda"
 
-#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:726
-#: pcbnew/tools/drawing_tool.cpp:901
+#: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:727
+#: pcbnew/tools/drawing_tool.cpp:902
 msgid "Graphic not allowed on Copper layers"
 msgstr "Grafica non consentita sugli strati in rame"
 
@@ -1361,7 +1360,7 @@ msgstr "Piste solo sugli strati in rame"
 msgid "Texts not allowed on Edge Cut layer"
 msgstr "Testo non consentito su strato di taglio scheda"
 
-#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:312
+#: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:313
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Dimensioni non consentite sugli strati in rame o di taglio"
 
@@ -1448,11 +1447,6 @@ msgstr "Riferimento:"
 #: pcbnew/modules.cpp:66
 msgid "Search for footprint"
 msgstr "Cerca impronte"
-
-#: pcbnew/modules.cpp:264
-#, c-format
-msgid "Delete Footprint %s (value %s) ?"
-msgstr "Cancellare impronta %s (valore %s)?"
 
 #: pcbnew/class_board_item.cpp:42
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
@@ -2108,7 +2102,7 @@ msgstr "Aggiungi una zona piena"
 msgid "Add a keepout area"
 msgstr "Aggiungi una zona proibita"
 
-#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:600
+#: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:601
 msgid "Place the footprint anchor"
 msgstr "Piazza ancoraggio impronta"
 
@@ -2392,39 +2386,39 @@ msgstr "Cancella voce"
 msgid "Not available in OpenGL/Cairo canvases."
 msgstr "Non disponibile in modalità OpenGL/Cairo."
 
-#: pcbnew/tools/drawing_tool.cpp:78 pcbnew/tools/drawing_tool.cpp:103
+#: pcbnew/tools/drawing_tool.cpp:79 pcbnew/tools/drawing_tool.cpp:104
 #: pcbnew/edit.cpp:1476
 msgid "Add graphic line"
 msgstr "Aggiungi linea grafica"
 
-#: pcbnew/tools/drawing_tool.cpp:135 pcbnew/tools/drawing_tool.cpp:155
+#: pcbnew/tools/drawing_tool.cpp:136 pcbnew/tools/drawing_tool.cpp:156
 #: pcbnew/tool_pcb.cpp:453 pcbnew/menubar_modedit.cpp:276
 #: pcbnew/menubar_pcbframe.cpp:408 pcbnew/edit.cpp:1484
 #: pcbnew/tool_modedit.cpp:173
 msgid "Add graphic circle"
 msgstr "Aggiungi cerchio grafico"
 
-#: pcbnew/tools/drawing_tool.cpp:182 pcbnew/tools/drawing_tool.cpp:202
+#: pcbnew/tools/drawing_tool.cpp:183 pcbnew/tools/drawing_tool.cpp:203
 #: pcbnew/tool_pcb.cpp:456 pcbnew/menubar_modedit.cpp:287
 #: pcbnew/menubar_pcbframe.cpp:405 pcbnew/edit.cpp:1480
 #: pcbnew/tool_modedit.cpp:176
 msgid "Add graphic arc"
 msgstr "Aggiungi arco grafico"
 
-#: pcbnew/tools/drawing_tool.cpp:252 pcbnew/tool_pcb.cpp:463
+#: pcbnew/tools/drawing_tool.cpp:253 pcbnew/tool_pcb.cpp:463
 #: pcbnew/menubar_pcbframe.cpp:419 pcbnew/edit.cpp:1496
 msgid "Add dimension"
 msgstr "Aggiungi quota"
 
-#: pcbnew/tools/drawing_tool.cpp:421 pcbnew/edit.cpp:1449
+#: pcbnew/tools/drawing_tool.cpp:422 pcbnew/edit.cpp:1449
 msgid "Add zones"
 msgstr "Aggiungi zone"
 
-#: pcbnew/tools/drawing_tool.cpp:429 pcbnew/edit.cpp:1460
+#: pcbnew/tools/drawing_tool.cpp:430 pcbnew/edit.cpp:1460
 msgid "Add keepout"
 msgstr "Aggiungi proibita"
 
-#: pcbnew/tools/drawing_tool.cpp:1264 pcbnew/tools/drawing_tool.cpp:1391
+#: pcbnew/tools/drawing_tool.cpp:1266 pcbnew/tools/drawing_tool.cpp:1393
 #: pcbnew/modedit.cpp:951 pcbnew/edit.cpp:1488 eeschema/schedit.cpp:559
 #: eeschema/libeditframe.cpp:1125
 msgid "Add text"
@@ -3814,7 +3808,7 @@ msgstr "Denominazione"
 
 #: pcbnew/librairi.cpp:775 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
-#: common/dialog_about/AboutDialog_main.cpp:130 eeschema/viewlibs.cpp:308
+#: common/dialog_about/AboutDialog_main.cpp:131 eeschema/viewlibs.cpp:308
 #: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1539
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -5335,7 +5329,9 @@ msgstr "File elenco &componenti (.cmp)"
 #: pcbnew/menubar_pcbframe.cpp:222
 msgid ""
 "Export component file (*.cmp) for Eeschema footprint field back-annotation"
-msgstr "Esporta file componente (*.cmp) per la back-annotation dei campi impronta in Eeschema"
+msgstr ""
+"Esporta file componente (*.cmp) per la back-annotation dei campi impronta in "
+"Eeschema"
 
 #: pcbnew/menubar_pcbframe.cpp:226
 msgid "E&xport"
@@ -5804,22 +5800,22 @@ msgstr ""
 msgid "The outline of the duplicated zone fails DRC check!"
 msgstr "Il contorno della zona duplicata fallisce il controllo DRC!"
 
-#: pcbnew/zones_by_polygon.cpp:366 pcbnew/zones_by_polygon.cpp:424
-#: pcbnew/zones_by_polygon.cpp:811
+#: pcbnew/zones_by_polygon.cpp:364 pcbnew/zones_by_polygon.cpp:422
+#: pcbnew/zones_by_polygon.cpp:809
 msgid "Area: DRC outline error"
 msgstr "Zona: Errore del contorno nella Verifica regole "
 
-#: pcbnew/zones_by_polygon.cpp:539
+#: pcbnew/zones_by_polygon.cpp:537
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "Errore: le aree proibite sono consentite solo sugli strati in rame"
 
-#: pcbnew/zones_by_polygon.cpp:686
+#: pcbnew/zones_by_polygon.cpp:684
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr ""
 "Errore del Controllo regole: Questo punto iniziale è contenuto o troppo "
 "vicino ad un'altra zona"
 
-#: pcbnew/zones_by_polygon.cpp:745
+#: pcbnew/zones_by_polygon.cpp:743
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr ""
 "Errore del Controllo regole: Chiudere questa zona crea un errore con "
@@ -7982,7 +7978,8 @@ msgid ""
 "Use it only for board houses which do not accept fully featured headers."
 msgstr ""
 "Non raccomandato.\n"
-"Usarlo solo per fabbricanti di circuiti stampati che non accettano intestazioni complete."
+"Usarlo solo per fabbricanti di circuiti stampati che non accettano "
+"intestazioni complete."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:95
 msgid "Merge PTH and NPTH holes into one file"
@@ -7995,7 +7992,8 @@ msgid ""
 "file"
 msgstr ""
 "Non raccomandato.\n"
-"Usato solo per i fabbricanti di circuiti stampati che richiedono fori metallizzati e non in un unico file."
+"Usato solo per i fabbricanti di circuiti stampati che richiedono fori "
+"metallizzati e non in un unico file."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:103
 msgid "Absolute"
@@ -8012,7 +8010,8 @@ msgstr "Origine forature:"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:107
 msgid ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
-msgstr "Sceglie l'origine delle coordinate: assolute o relative all'asse ausiliario"
+msgstr ""
+"Sceglie l'origine delle coordinate: assolute o relative all'asse ausiliario"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:118
 msgid "Info:"
@@ -9572,7 +9571,6 @@ msgid "Shape:"
 msgstr "Forma: "
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
-#: pcbnew/dialogs/dialog_create_array_base.cpp:281
 msgid "Circular"
 msgstr "Tonda "
 
@@ -10939,6 +10937,10 @@ msgstr "Numerazione asse secondario:"
 msgid "Numbering start:"
 msgstr "Avvio numerazione:"
 
+#: pcbnew/dialogs/dialog_create_array_base.cpp:170
+msgid "Grid Array"
+msgstr "Schieramento a griglia"
+
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Horizontal center:"
 msgstr "Centro orizzontale:"
@@ -10984,6 +10986,10 @@ msgstr "Ruota e sposta l'elemento - la multiselezione verrà ruotata assieme."
 #: pcbnew/dialogs/dialog_create_array_base.cpp:252
 msgid "Numbering type:"
 msgstr "Tipo numerazione:"
+
+#: pcbnew/dialogs/dialog_create_array_base.cpp:281
+msgid "Circular Array"
+msgstr "Schieramento circolare"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
@@ -12430,11 +12436,11 @@ msgstr ""
 "I microvia possono essere piazzati sono tra gli strati esterni (F.Cu/B.Cu) e "
 "quelli direttamente adiacenti a questi."
 
-#: pcbnew/router/router_tool.cpp:647
+#: pcbnew/router/router_tool.cpp:649
 msgid "Route Track"
 msgstr "Sbroglia pista"
 
-#: pcbnew/router/router_tool.cpp:654
+#: pcbnew/router/router_tool.cpp:656
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
@@ -13200,7 +13206,8 @@ msgstr "Tipo di foglio \"%s\" sconosciuto alla riga: %d"
 #: pcbnew/legacy_plugin.cpp:1457
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'"
-msgstr "Forma piazzola \"%c=0x%02x\" sconosciuta in riga: %d dell'impronta: \"%s\""
+msgstr ""
+"Forma piazzola \"%c=0x%02x\" sconosciuta in riga: %d dell'impronta: \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:2506
 #, c-format
@@ -14259,31 +14266,35 @@ msgstr "impossibile aprire o salvare il file \"%s\""
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER errore di scrittura"
 
-#: common/dialog_about/dialog_about.cpp:83
+#: common/dialog_about/dialog_about.cpp:84
 msgid "Information"
 msgstr "Informazioni"
 
-#: common/dialog_about/dialog_about.cpp:86
+#: common/dialog_about/dialog_about.cpp:87
 msgid "Developers"
 msgstr "Sviluppatori"
 
-#: common/dialog_about/dialog_about.cpp:87
+#: common/dialog_about/dialog_about.cpp:88
 msgid "Doc Writers"
-msgstr "Documentazione"
+msgstr "Manualistica"
 
-#: common/dialog_about/dialog_about.cpp:89
+#: common/dialog_about/dialog_about.cpp:90
 msgid "Artists"
 msgstr "Artisti"
 
-#: common/dialog_about/dialog_about.cpp:90
+#: common/dialog_about/dialog_about.cpp:91
 msgid "Translators"
 msgstr "Traduttori"
 
 #: common/dialog_about/dialog_about.cpp:93
+msgid "Packagers"
+msgstr "Pacchetti"
+
+#: common/dialog_about/dialog_about.cpp:96
 msgid "License"
 msgstr "Licenza"
 
-#: common/dialog_about/AboutDialog_main.cpp:133
+#: common/dialog_about/AboutDialog_main.cpp:135
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and to design printed circuit boards."
@@ -14291,49 +14302,49 @@ msgstr ""
 "KiCad è un insieme di applicazioni libere per la creazione di schemi "
 "elettrici e circuiti stampati"
 
-#: common/dialog_about/AboutDialog_main.cpp:140
+#: common/dialog_about/AboutDialog_main.cpp:144
 msgid "KiCad on the web"
 msgstr "KiCad sul Web"
 
-#: common/dialog_about/AboutDialog_main.cpp:146
+#: common/dialog_about/AboutDialog_main.cpp:151
 msgid "The official KiCad site"
 msgstr "Il sito ufficiale di KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:150
+#: common/dialog_about/AboutDialog_main.cpp:155
 msgid "The original site of the KiCad project founder"
 msgstr "Sito originale del fondatore del progetto KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:154
+#: common/dialog_about/AboutDialog_main.cpp:159
 msgid "Developer's website on Launchpad"
 msgstr "La pagina web degli sviluppatori su Launchpad"
 
-#: common/dialog_about/AboutDialog_main.cpp:158
+#: common/dialog_about/AboutDialog_main.cpp:163
 msgid "Repository with additional component libraries"
 msgstr "Repository con librerie componenti aggiuntive"
 
-#: common/dialog_about/AboutDialog_main.cpp:164
+#: common/dialog_about/AboutDialog_main.cpp:170
 msgid "Contribute to KiCad"
 msgstr "Contribuire a KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:170
+#: common/dialog_about/AboutDialog_main.cpp:177
 msgid "Report bugs if you found any"
 msgstr "Segnalare i difetti riscontrati"
 
-#: common/dialog_about/AboutDialog_main.cpp:174
+#: common/dialog_about/AboutDialog_main.cpp:181
 msgid "File an idea for improvement"
 msgstr "Suggerire un miglioramento"
 
-#: common/dialog_about/AboutDialog_main.cpp:178
+#: common/dialog_about/AboutDialog_main.cpp:185
 msgid "KiCad links to user groups, tutorials and much more"
 msgstr "Collegamento al gruppo utilizzatori, guide e altro ancora"
 
-#: common/dialog_about/AboutDialog_main.cpp:192
+#: common/dialog_about/AboutDialog_main.cpp:199
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "La suite EDA di KiCad è realizzata secondo la"
 
-#: common/dialog_about/AboutDialog_main.cpp:194
-msgid "GNU General Public License (GPL) version 2 or any later version"
-msgstr "GNU General Public License (GPL) versione 2 o successive"
+#: common/dialog_about/AboutDialog_main.cpp:201
+msgid "GNU General Public License (GPL) version 3 or any later version"
+msgstr "GNU General Public License (GPL) versione 3 o successive"
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
@@ -19612,7 +19623,7 @@ msgstr "%s trovato ma %s non trovato"
 msgid "Component %s not found"
 msgstr "Componente %s non trovato"
 
-#: eeschema/find.cpp:510
+#: eeschema/find.cpp:511
 #, c-format
 msgid "No item found matching %s."
 msgstr "Nessun componente corrisponde a %s."
@@ -20505,11 +20516,11 @@ msgstr "Colore di sfondo in fondo"
 msgid "Silkscreen Color"
 msgstr "Colore serigrafia"
 
-#: 3d-viewer/3d_toolbar.cpp:216 3d-viewer/3d_frame.cpp:812
+#: 3d-viewer/3d_toolbar.cpp:216 3d-viewer/3d_frame.cpp:817
 msgid "Solder Mask Color"
 msgstr "Colore maschera di saldatura"
 
-#: 3d-viewer/3d_toolbar.cpp:219 3d-viewer/3d_frame.cpp:882
+#: 3d-viewer/3d_toolbar.cpp:219 3d-viewer/3d_frame.cpp:887
 msgid "Solder Paste Color"
 msgstr "Colore pasta salda"
 
@@ -20517,7 +20528,7 @@ msgstr "Colore pasta salda"
 msgid "Copper/Surface Finish Color"
 msgstr "Colore rame/finitura superficiale"
 
-#: 3d-viewer/3d_toolbar.cpp:225 3d-viewer/3d_frame.cpp:861
+#: 3d-viewer/3d_toolbar.cpp:225 3d-viewer/3d_frame.cpp:866
 msgid "Board Body Color"
 msgstr "Colore corpo scheda"
 
@@ -20611,19 +20622,19 @@ msgstr "Costruisci lo strato %s"
 msgid "Build board body"
 msgstr "Costruisci il corpo scheda"
 
-#: 3d-viewer/3d_frame.cpp:534
+#: 3d-viewer/3d_frame.cpp:539
 msgid "Background Color, Bottom"
 msgstr "Colore di sfondo, basso"
 
-#: 3d-viewer/3d_frame.cpp:539
+#: 3d-viewer/3d_frame.cpp:544
 msgid "Background Color, Top"
 msgstr "Colore di sfondo, alto"
 
-#: 3d-viewer/3d_frame.cpp:788
+#: 3d-viewer/3d_frame.cpp:793
 msgid "Silk Screen Color"
 msgstr "Colore serigrafia"
 
-#: 3d-viewer/3d_frame.cpp:835
+#: 3d-viewer/3d_frame.cpp:840
 msgid "Copper Color"
 msgstr "Colore rame"
 
@@ -23289,3 +23300,6 @@ msgstr ""
 "linea %d\n"
 "scostamento %d\n"
 "da %s : %s"
+
+#~ msgid "Delete Footprint %s (value %s) ?"
+#~ msgstr "Cancellare impronta %s (valore %s)?"
