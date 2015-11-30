@@ -37,7 +37,7 @@ msgstr ""
 #: kicad/menubar.cpp:136 pcbnew/hotkeys.cpp:189 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:67 pagelayout_editor/hotkeys.cpp:78
 msgid "Help (this window)"
-msgstr "Pagalba šiam langui"
+msgstr "Žinynas (šio lango)"
 
 #: kicad/menubar.cpp:137
 msgid "Load project"
@@ -322,7 +322,7 @@ msgstr "Įrankiai"
 #: eeschema/menubar_libedit.cpp:288 cvpcb/menubar.cpp:143
 #: gerbview/menubar.cpp:248 pagelayout_editor/menubar.cpp:174
 msgid "&Help"
-msgstr "Pagalba"
+msgstr "Žinynas"
 
 #: kicad/menubar.cpp:471
 msgid "Create new project from template"
@@ -9767,7 +9767,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:43
 msgid "Routing Help:"
-msgstr ""
+msgstr "Routing žinynas:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:45
 msgid "Do not show"
@@ -11986,7 +11986,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:90
 msgid "Freeroute Help"
-msgstr "Pagalba apie Freeroute"
+msgstr "Freeroute žinynas"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:111
 msgid "Do you want to rebuild connectivity data ?"
@@ -12871,7 +12871,7 @@ msgstr ""
 "Nepavyko rasti \n"
 "'%s'\n"
 "arba\n"
-"'%s HTML (ar PDF) pagalbos failų'"
+"'%s HTML (ar PDF) žinyno failų'"
 
 #: common/basicframe.cpp:444
 #, c-format
@@ -13713,7 +13713,7 @@ msgstr ""
 #: common/dialogs/dialog_env_var_config_base.cpp:73
 #: eeschema/dialogs/dialog_bom_base.cpp:65
 msgid "Help"
-msgstr "Pagalba"
+msgstr "Žinynas"
 
 #: common/dialogs/dialog_exit_base.cpp:34
 msgid "Save the changes before closing?"
@@ -17269,7 +17269,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:592
 msgid "Bom Generation Help"
-msgstr ""
+msgstr "Bom Generation žinynas"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:72
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.h:114
