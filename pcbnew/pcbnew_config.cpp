@@ -463,7 +463,7 @@ void PCB_EDIT_FRAME::SaveMacros()
 
         for( std::list<MACROS_RECORD>::reverse_iterator i = m_Macros[number].m_Record.rbegin();
              i != m_Macros[number].m_Record.rend();
-             i++ )
+             ++i )
         {
             hkStr.Printf( wxT( "%d" ), i->m_HotkeyCode );
             xStr.Printf( wxT( "%d" ), i->m_Position.x );

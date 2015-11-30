@@ -230,7 +230,7 @@ std::vector<APERTURE>::iterator GERBER_PLOTTER::getAperture( const wxSize&      
         if( (tool->Type == type) && (tool->Size == size) )
             return tool;
 
-        tool++;
+        ++tool;
     }
 
     // Allocate a new aperture
@@ -266,7 +266,7 @@ void GERBER_PLOTTER::writeApertureList()
 
     // Init
     for( std::vector<APERTURE>::iterator tool = apertures.begin();
-         tool != apertures.end(); tool++ )
+         tool != apertures.end(); ++tool )
     {
         // apertude sizes are in inch or mm, regardless the
         // coordinates format

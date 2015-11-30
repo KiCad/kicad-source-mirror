@@ -2670,14 +2670,14 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
       if (dir == dLeftToRight)
       {
           maxIt = m_Maxima.begin();
-          while (maxIt != m_Maxima.end() && *maxIt <= horzEdge->Bot.X) maxIt++;
+          while (maxIt != m_Maxima.end() && *maxIt <= horzEdge->Bot.X) ++maxIt;
           if (maxIt != m_Maxima.end() && *maxIt >= eLastHorz->Top.X)
               maxIt = m_Maxima.end();
       }
       else
       {
           maxRit = m_Maxima.rbegin();
-          while (maxRit != m_Maxima.rend() && *maxRit > horzEdge->Bot.X) maxRit++;
+          while (maxRit != m_Maxima.rend() && *maxRit > horzEdge->Bot.X) ++maxRit;
           if (maxRit != m_Maxima.rend() && *maxRit <= eLastHorz->Top.X)
               maxRit = m_Maxima.rend();
       }
@@ -2704,7 +2704,7 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
                 {
                   if (horzEdge->OutIdx >= 0 && !IsOpen)
                     AddOutPt(horzEdge, IntPoint(*maxIt, horzEdge->Bot.Y));
-                  maxIt++;
+                  ++maxIt;
                 }
             }
             else
@@ -2713,7 +2713,7 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
                 {
                   if (horzEdge->OutIdx >= 0 && !IsOpen)
                     AddOutPt(horzEdge, IntPoint(*maxRit, horzEdge->Bot.Y));
-                  maxRit++;
+                  ++maxRit;
                 }
             }
         };
