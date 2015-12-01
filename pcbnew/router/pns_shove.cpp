@@ -819,7 +819,7 @@ void PNS_SHOVE::unwindStack( PNS_SEGMENT *aSeg )
         if( i->ContainsSegment( aSeg ) )
             i = m_lineStack.erase( i );
         else
-            i++;
+            ++i;
     }
 
     for( std::vector<PNS_LINE>::iterator i = m_optimizerQueue.begin(); i != m_optimizerQueue.end() ; )
@@ -827,7 +827,7 @@ void PNS_SHOVE::unwindStack( PNS_SEGMENT *aSeg )
         if( i->ContainsSegment( aSeg ) )
             i = m_optimizerQueue.erase( i );
         else
-            i++;
+            ++i;
     }
 }
 
@@ -890,7 +890,7 @@ void PNS_SHOVE::popLine( )
         }
 
         if( !found )
-            i++;
+            ++i;
     }
 
     m_lineStack.pop_back();

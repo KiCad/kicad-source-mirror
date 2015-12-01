@@ -92,7 +92,7 @@ bool X3D_MODEL_PARSER::Load( const wxString& aFilename )
 
     for( NODE_LIST::iterator node_it = transforms.begin();
          node_it != transforms.end();
-         node_it++ )
+         ++node_it )
     {
         m_model.reset( new S3D_MESH() );
         childs.push_back( m_model );
@@ -164,7 +164,7 @@ void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
 
     for( NODE_LIST::iterator node = childnodes.begin();
          node != childnodes.end();
-         node++ )
+         ++node )
     {
         readMaterial( *node );
     }
@@ -181,7 +181,7 @@ void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
 
     for( NODE_LIST::iterator node = childnodes.begin();
          node != childnodes.end();
-         node++ )
+         ++node )
     {
         readIndexedFaceSet( *node, properties );
     }
@@ -282,7 +282,7 @@ void X3D_MODEL_PARSER::readMaterial( wxXmlNode* aMatNode )
         wxString vrml_material;
         PROPERTY_MAP::const_iterator p = ++properties.begin();    // skip DEF
 
-        for( ; p != properties.end(); p++ )
+        for( ; p != properties.end(); ++p )
         {
             vrml_material.Append( p->first + wxT( " " ) + p->second + wxT( "\n" ) );
         }

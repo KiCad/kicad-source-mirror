@@ -501,7 +501,7 @@ void SCH_SHEET::CleanupSheet()
         }
 
         if( HLabel == NULL )   // Hlabel not found: delete sheet label.
-            m_pins.erase( i );
+            i = m_pins.erase( i );
         else
             ++i;
     }

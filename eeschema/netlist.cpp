@@ -134,7 +134,7 @@ void NETLIST_OBJECT_LIST::Clear()
 {
     NETLIST_OBJECTS::iterator iter;
 
-    for( iter = begin(); iter != end(); iter++ )
+    for( iter = begin(); iter != end(); ++iter )
     {
         NETLIST_OBJECT* item = *iter;
         delete item;

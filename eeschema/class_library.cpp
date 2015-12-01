@@ -96,7 +96,7 @@ PART_LIB::~PART_LIB()
 
 void PART_LIB::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUpperCase )
 {
-    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  ++it )
     {
         if( aMakeUpperCase )
         {
@@ -117,7 +117,7 @@ void PART_LIB::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUpper
 
 void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames, bool aSort, bool aMakeUpperCase )
 {
-    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  ++it )
     {
         LIB_ALIAS* alias = it->second;
         LIB_PART* root = alias->GetPart();
@@ -195,7 +195,7 @@ void PART_LIB::SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe, bool
 
     LIB_ALIAS_MAP::iterator it;
 
-    for( it = m_amap.begin();  it!=m_amap.end();  it++ )
+    for( it = m_amap.begin();  it!=m_amap.end();  ++it )
     {
         if( aRe.Matches( it->second->GetKeyWords() ) )
             aNames.Add( it->first );
@@ -265,7 +265,7 @@ LIB_PART* PART_LIB::FindPart( const wxString& aName )
 bool PART_LIB::HasPowerParts()
 {
     // return true if at least one power part is found in lib
-    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
+    for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  ++it )
     {
         LIB_ALIAS* alias = it->second;
         LIB_PART* root = alias->GetPart();
@@ -373,7 +373,7 @@ LIB_ALIAS* PART_LIB::RemoveEntry( LIB_ALIAS* aEntry )
         if( m_amap.size() > 1 )
         {
             LIB_ALIAS_MAP::iterator next = it;
-            next++;
+            ++next;
 
             if( next == m_amap.end() )
                 next = m_amap.begin();
@@ -430,7 +430,7 @@ LIB_ALIAS* PART_LIB::GetNextEntry( const wxString& aName )
 
     LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
 
-    it++;
+    ++it;
 
     if( it == m_amap.end() )
         it = m_amap.begin();
@@ -736,7 +736,7 @@ bool PART_LIB::Save( OUTPUTFORMATTER& aFormatter )
     {
         SaveHeader( aFormatter );
 
-        for( LIB_ALIAS_MAP::iterator it=m_amap.begin();  it!=m_amap.end();  it++ )
+        for( LIB_ALIAS_MAP::iterator it=m_amap.begin();  it!=m_amap.end();  ++it )
         {
             if( !it->second->IsRoot() )
                 continue;
@@ -763,7 +763,7 @@ bool PART_LIB::SaveDocs( OUTPUTFORMATTER& aFormatter )
     {
         aFormatter.Print( 0, "%s\n", DOCFILE_IDENT );
 
-        for( LIB_ALIAS_MAP::iterator it=m_amap.begin();  it!=m_amap.end();  it++ )
+        for( LIB_ALIAS_MAP::iterator it=m_amap.begin();  it!=m_amap.end();  ++it )
         {
             if( !it->second->SaveDoc( aFormatter ) )
                 success = false;

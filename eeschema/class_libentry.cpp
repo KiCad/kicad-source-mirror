@@ -537,7 +537,7 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
 
     LIB_ITEMS::iterator i;
 
-    for( i = drawings.begin(); i < drawings.end(); i++ )
+    for( i = drawings.begin(); i != drawings.end(); /* incremented in the content of loop */ )
     {
         if( *i == aItem )
         {
@@ -545,10 +545,12 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
                 aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR,
                              g_XorMode, NULL, DefaultTransform );
 
-            drawings.erase( i );
+            i = drawings.erase( i );
             SetModified();
             break;
         }
+        else
+            ++i;
     }
 }
 
@@ -1486,7 +1488,7 @@ void LIB_PART::DeleteSelectedItems()
         }
 
         if( !item->IsSelected() )
-            item++;
+            ++item;
         else
             item = drawings.erase( item );
     }
@@ -1624,7 +1626,7 @@ void LIB_PART::SetUnitCount( int aCount )
             if( i->m_Unit > aCount )
                 i = drawings.erase( i );
             else
-                i++;
+                ++i;
         }
     }
     else
@@ -1689,7 +1691,7 @@ void LIB_PART::SetConversion( bool aSetConvert )
             if( i->m_Convert > 1 )
                 i = drawings.erase( i );
             else
-                i++;
+                ++i;
         }
     }
 }
@@ -1701,7 +1703,7 @@ wxArrayString LIB_PART::GetAliasNames( bool aIncludeRoot ) const
 
     LIB_ALIASES::const_iterator it;
 
-    for( it=m_aliases.begin();  it<m_aliases.end();  ++it )
+    for( it=m_aliases.begin();  it != m_aliases.end();  ++it )
     {
         if( !aIncludeRoot && (*it)->IsRoot() )
             continue;
@@ -1748,7 +1750,7 @@ void LIB_PART::SetAliases( const wxArrayString& aAliasList )
     // Remove names in the current component that are not in the new alias list.
     LIB_ALIASES::iterator it;
 
-    for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
+    for( it = m_aliases.begin(); it != m_aliases.end(); ++it )
     {
         int index = aAliasList.Index( (*it)->GetName(), false );
 
@@ -1770,7 +1772,7 @@ void LIB_PART::RemoveAlias( const wxString& aName )
 
     LIB_ALIASES::iterator it;
 
-    for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
+    for( it = m_aliases.begin(); it != m_aliases.end(); it++ )
     {
         if( Cmp_KEEPCASE( aName, (*it)->GetName() ) == 0 )
         {

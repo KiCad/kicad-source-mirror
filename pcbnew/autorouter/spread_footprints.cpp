@@ -129,7 +129,7 @@ void spreadRectangles( CRectPlacement& aPlacementArea,
         it->x   = r.x;
         it->y   = r.y;
 
-        it++;
+        ++it;
     }
 }
 
