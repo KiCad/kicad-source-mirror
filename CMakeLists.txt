@@ -62,10 +62,6 @@ option( KICAD_BUILD_DYNAMIC
     "Build dependencies as shared libraries.  Required for wxPython support.  OXS only. (default OFF)."
     )
 
-option( USE_OSX_DEPS_BUILDER
-    "Build dependencies from source instead of dependencies installed on system. OSX only. (default OFF)."
-    )
-
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
 # in KiCad errors.
@@ -459,88 +455,6 @@ check_find_package_result( OPENGL_FOUND "OpenGL" )
 # Handle target used to specify if a target needs wx-widgets or other libraries
 # Always defined, empty if no libraries are to be built
 add_custom_target( lib-dependencies )
-
-# Only download and build all dependencies from source on OSX if the user specifically requests
-# it.  Otherwise, respect the developers wishes to use the dependencies already installed on
-# their system
-if( APPLE AND USE_OSX_DEPS_BUILDER )
-
-    # This should be built in all cases, if swig exec is not available
-    # will be impossible also enable SCRIPTING being for PCBNEW required immediately
-
-    include( download_pcre )
-    include( download_swig )
-
-
-    #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so;.dylib;.dll")
-
-    if( KICAD_BUILD_STATIC AND KICAD_BUILD_DYNAMIC )
-        message(FATAL_ERROR "You can't build STATIC and DYNAMIC together")
-    endif()
-
-    if( KICAD_BUILD_STATIC )
-        message(STATUS "KICAD_BUILD_STATIC set")
-        if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
-            message(FATAL_ERROR "KICAD_SCRIPTING* is not supported with KICAD_BUILD_STATIC, please select KICAD_BUILD_DYNAMIC" )
-        endif()
-    endif()
-
-    if( KICAD_BUILD_DYNAMIC )
-        message(STATUS "KICAD_BUILD_DYNAMIC set")
-    endif()
-
-
-    if( KICAD_SCRIPTING OR KICAD_SCRIPTING_WXPYTHON OR KICAD_SCRIPTING_MODULES )
-
-        message(STATUS "Scripting ENABLED")
-        include( download_wxpython )
-
-        set( SWIG_EXECUTABLE  ${SWIG_ROOT}/bin/swig )
-        set( SWIG_INCLUDE     ${SWIG_ROOT}/include )
-        set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
-
-        if( NOT EXISTS ${SWIG_EXECUTABLE} )
-            set(KICAD_SCRIPTING CACHE OFF FORCE "Disabling KICAD_SCRIPTING")
-            message( STATUS  "KICAD_SCRIPTING Enabled but SWIG not found, please disable and before reenabling execute: make swig")
-            message( FATAL_ERROR "Missing SWIG!")
-        endif()
-        message(STATUS "SWIG_EXECUTABLE: ${SWIG_EXECUTABLE}")
-
-        set( PYTHON_DEST ${LIBWXPYTHON_ROOT}/wxPython/lib/python2.6/site-packages )
-
-        add_dependencies( lib-dependencies libwxpython )
-        add_dependencies( lib-dependencies swig )
-    else()
-        include( download_wxwidgets )
-        add_dependencies( lib-dependencies libwx )
-    endif()
-
-    include( download_libpng )
-    include( download_pkgconfig )
-    set( PKG_CONFIG_EXECUTABLE "${PKGCONFIG_ROOT}/bin/pkg-config" )
-    include( download_glew )
-    set( GLEW_GLEW_LIBRARY "${GLEW_ROOT}/lib/libGLEW.a" )
-    set( GLEW_INCLUDE_DIR  "${GLEW_ROOT}/include" )
-    include( download_pixman )
-    set( PIXMAN_LIBRARY     "${PIXMAN_ROOT}/lib/libpixman-1.a" )
-    include( download_cairo )
-    set( CAIRO_INCLUDE_DIR  "${CAIRO_ROOT}/include/cairo" )
-    set( CAIRO_LIBRARY      "${CAIRO_ROOT}/lib/libcairo.a" )
-
-    add_dependencies( lib-dependencies boost )
-    add_dependencies( lib-dependencies cairo )
-    add_dependencies( lib-dependencies libpng )
-    add_dependencies( lib-dependencies pixman )
-    add_dependencies( lib-dependencies pkgconfig )
-
-    if( KICAD_BUILD_DYNAMIC AND APPLE )
-        add_custom_target( osx_fix_bundles ALL DEPENDS
-            eeschema gerbview kicad pcbnew bitmap2component pcb_calculator pl_editor)
-        add_custom_command(TARGET osx_fix_bundles
-            POST_BUILD COMMAND ${PROJECT_SOURCE_DIR}/scripts/osx_fixbundle.sh ${PROJECT_SOURCE_DIR}
-            COMMENT "Migrating dylibs to bundles")
-    endif()
-endif()
 
 #####################
 # Find GLEW library #
