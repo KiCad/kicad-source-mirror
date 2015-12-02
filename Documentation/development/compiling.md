@@ -258,6 +258,7 @@ from Github, create both 32-bit and 64-bit KiCad packages depending on your MSYS
 install the newly built KiCad packages.  Please note that this build process takes a very
 long time to build even on a fast system.
 
+
 ## MSYS2 the Hard Way ## {#msys2_hard}
 
 If you do not want to create KiCad packages and prefer the traditional `make && make install`
@@ -293,6 +294,32 @@ the following commands:
           -DKICAD_SCRIPTING_WXPYTHON=ON \
           ../../
     make install
+
+For 32-bit builds, run `mingw32_shell.bat` and change `x86_64` to `i686` in the package names and
+change the paths in the cmake configuration from `/mingw64` to `/mingw32`.
+
+
+## Known MSYS2 Build Issues ## {#known_issues_msys2}
+
+There are some known issues that are specific to MSYS2.  This section provides a list of the
+currently known issues when building KiCad using MSYS2.
+
+
+### 64-bit Package of Boost 1.59 ### {#ki_msys2_64bit_boost}
+
+The context library of the x86_64 package of Boost version 1.59 is broken and will cause KiCad
+to crash.  You must downgrade to version 1.47 by running the command:
+
+    pacman -U /var/cache/pacman/pkg/mingw-w64-x86_64-boost-1.57.0-4-any.pkg.tar.xz
+
+If the file mingw-w64-x86_64-boost-1.57.0-4-any.pkg.tar.xz is no longer in your pacman cache,
+you will have to down load it from the [MSYS2 64-bit SourceForge repo][].  You should also
+configure pacman to prevent upgrading the 64-bit Boost package by adding:
+
+    IgnorePkg = mingw-w64-x86_64-boost
+
+to your /etc/pacman.conf file.
+
 
 # Building KiCad on OSX # {#build_osx}
 
@@ -353,8 +380,8 @@ Build KiCad using the following commands:
 
 # Known Issues # {#known_issues}
 
-There are some known issues that are platform and/or dependencie specific.  This section provides
-a list of the currently known issues when building KiCad.
+There are some known issues that effect all platforms.  This section provides a list of the
+currently known issues when building KiCad on any platform.
 
 ## Boost C++ Library Issues ## {#boost_issue}
 
@@ -364,7 +391,7 @@ must be used to build KiCad.  If your system has Boost 1.56 or greater installed
 straight forward.  Configure your KiCad build using `-DKICAD_SKIP_BOOST=ON`.  If your system
 does not have Boost 1.56 or greater installed, you will have to download and [build Boost][]
 from source.  If you are building Boost on windows using [MinGW][] you will have to apply the
-Boost patches in the KiCad source [patch folder][].
+Boost patches in the KiCad source [patches folder][].
 
 
 [download]: http://kicad-pcb.org/download/
@@ -396,3 +423,4 @@ Boost patches in the KiCad source [patch folder][].
 [OSX bundle build scripts]:http://bazaar.launchpad.net/~adamwolf/+junk/kicad-mac-packaging/files
 [MinGW]: http://mingw.org/
 [build Boost]: http://www.boost.org/doc/libs/1_59_0/more/getting_started/index.html
+[MSYS2 64-bit SourceForge repo]: http://sourceforge.net/projects/msys2/files/REPOS/MINGW/x86_64/
