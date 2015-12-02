@@ -885,7 +885,7 @@ struct EELEMENT
     double      x;
     double      y;
     opt_bool    locked;
-    // opt_bool    smashed;
+    opt_bool    smashed;
     opt_erot    rot;
 
     EELEMENT( CPTREE& aElement );
@@ -923,7 +923,7 @@ EELEMENT::EELEMENT( CPTREE& aElement )
 
     // optional
     locked  = parseOptionalBool( attribs, "locked" );
-    // smashed = pasreOptionalBool( attribs, "smashed" );
+    smashed = parseOptionalBool( attribs, "smashed" );
     rot = parseOptionalEROT( attribs );
 }
 
@@ -1664,7 +1664,7 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
 
         if( !r.second
             // && !( m_props && m_props->Value( "ignore_duplicates" ) )
-          )
+            )
         {
             wxString lib = aLibName ? FROM_UTF8( aLibName->c_str() ) : m_lib_path;
             wxString pkg = FROM_UTF8( pack_name.c_str() );
@@ -1707,6 +1707,10 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
     EATTR   name;
     EATTR   value;
+    bool refanceNamePresetInPackageLayout;
+    bool valueNamePresetInPackaggeLayout;
+
+
 
     for( CITER it = aElements.begin();  it != aElements.end();  ++it )
     {
@@ -1728,8 +1732,8 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         if( mi == m_templates.end() )
         {
             wxString emsg = wxString::Format( _( "No '%s' package in library '%s'" ),
-                GetChars( FROM_UTF8( e.package.c_str() ) ),
-                GetChars( FROM_UTF8( e.library.c_str() ) ) );
+                                              GetChars( FROM_UTF8( e.package.c_str() ) ),
+                                              GetChars( FROM_UTF8( e.library.c_str() ) ) );
             THROW_IO_ERROR( emsg );
         }
 
@@ -1757,40 +1761,149 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             }
         }
 
+        refanceNamePresetInPackageLayout = true;
+        valueNamePresetInPackaggeLayout = true;
         m->SetPosition( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
+        // Is >NAME feild set in package layout ?
+        if( m->GetReference().size() == 0 )
+        {
+            m->Reference().SetVisible( false ); // No so no show
+            refanceNamePresetInPackageLayout = false;
+        }
+        // Is >VALUE feild set in package lutout
+        if( m->GetValue().size() == 0 )
+        {
+            m->Value().SetVisible( false );     // No so no show
+            valueNamePresetInPackaggeLayout = false;
+        }
         m->SetReference( FROM_UTF8( e.name.c_str() ) );
         m->SetValue( FROM_UTF8( e.value.c_str() ) );
-        // m->Value().SetVisible( false );
 
-        // initalize these to default values incase the <attribute> elements are not present.
-        m_xpath->push( "attribute", "name" );
-
-        // VALUE and NAME can have something like our text "effects" overrides
-        // in SWEET and new schematic.  Eagle calls these XML elements "attribute".
-        // There can be one for NAME and/or VALUE both.  Features present in the
-        // EATTR override the ones established in the package only if they are
-        // present here (except for rot, which if not present means angle zero).
-        // So the logic is a bit different than in packageText() and in plain text.
-        for( CITER ait = it->second.begin();  ait != it->second.end();  ++ait )
-        {
-            if( ait->first != "attribute" )
-                continue;
-
-            EATTR   a( ait->second );
-
-            if( a.name == "NAME" )
-            {
-                name = a;
-                nameAttr = &name;
-            }
-            else if( a.name == "VALUE" )
-            {
-                value = a;
-                valueAttr = &value;
-            }
+        if( !e.smashed )
+        { // Not smashed so show NAME & VALUE
+            if( valueNamePresetInPackaggeLayout )
+                m->Value().SetVisible( true );  // Only if place holder in package layout
+            if( refanceNamePresetInPackageLayout )
+                m->Reference().SetVisible( true );   // Only if place holder in package layout
         }
+        else if( *e.smashed == true )
+        { // Smasted so set default to no show for NAME and VALUE
+            m->Value().SetVisible( false );
+            m->Reference().SetVisible( false );
 
-        m_xpath->pop();     // "attribute"
+            // initalize these to default values incase the <attribute> elements are not present.
+            m_xpath->push( "attribute", "name" );
+
+            // VALUE and NAME can have something like our text "effects" overrides
+            // in SWEET and new schematic.  Eagle calls these XML elements "attribute".
+            // There can be one for NAME and/or VALUE both.  Features present in the
+            // EATTR override the ones established in the package only if they are
+            // present here (except for rot, which if not present means angle zero).
+            // So the logic is a bit different than in packageText() and in plain text.
+            for( CITER ait = it->second.begin();  ait != it->second.end();  ++ait )
+            {
+
+                if( ait->first != "attribute" )
+                    continue;
+
+                EATTR   a( ait->second );
+
+                if( a.name == "NAME" )
+                {
+                    name = a;
+                    nameAttr = &name;
+
+                    // do we have a display attribute ?
+                    if( a.display  )
+                    {
+                        // Yes!
+                        switch( *a.display )
+                        {
+                        case EATTR::VALUE :
+                            nameAttr->name = e.name;
+                            m->SetReference( e.name );
+                            if( refanceNamePresetInPackageLayout )
+                                m->Reference().SetVisible( true );
+                            break;
+
+                        case EATTR::NAME :
+                            if( refanceNamePresetInPackageLayout )
+                            {
+                                m->SetReference( "NAME" );
+                                m->Reference().SetVisible( true );
+                            }
+                            break;
+
+                        case EATTR::BOTH :
+                            if( refanceNamePresetInPackageLayout )
+                                m->Reference().SetVisible( true );
+                            nameAttr->name =  nameAttr->name + " = " + e.name;
+                            m->SetReference( "NAME = " + e.name );
+                            break;
+
+                        case EATTR::Off :
+                            m->Reference().SetVisible( false );
+                            break;
+
+                        default:
+                            nameAttr->name =  e.name;
+                            if( refanceNamePresetInPackageLayout )
+                                m->Reference().SetVisible( true );
+                        }
+                    }
+                    else
+                        // No display, so default is visable, and show value of NAME
+                        m->Reference().SetVisible( true );
+                }
+                else if( a.name == "VALUE" )
+                {
+                    value = a;
+                    valueAttr = &value;
+
+                    if( a.display  )
+                    {
+                        // Yes!
+                        switch( *a.display )
+                        {
+                        case EATTR::VALUE :
+                            valueAttr->value = e.value;
+                            m->SetValue( e.value );
+                            if( valueNamePresetInPackaggeLayout )
+                                m->Value().SetVisible( true );
+                            break;
+
+                        case EATTR::NAME :
+                            if( valueNamePresetInPackaggeLayout )
+                                m->Value().SetVisible( true );
+                            m->SetValue( "VALUE" );
+                            break;
+
+                        case EATTR::BOTH :
+                            if( valueNamePresetInPackaggeLayout )
+                                m->Value().SetVisible( true );
+                            valueAttr->value = "VALUE = " + e.value;
+                            m->SetValue( "VALUE = " + e.value );
+                            break;
+
+                        case EATTR::Off :
+                            m->Value().SetVisible( false );
+                            break;
+
+                        default:
+                            valueAttr->value =  e.value;
+                            if( valueNamePresetInPackaggeLayout )
+                                m->Value().SetVisible( true );
+                        }
+                    }
+                    else
+                        // No display, so default is visible, and show value of NAME
+                        m->Value().SetVisible( true );
+
+                }
+            }
+
+            m_xpath->pop();     // "attribute"
+        }
 
         orientModuleAndText( m, e, nameAttr, valueAttr );
     }
@@ -1822,8 +1935,9 @@ void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e,
 void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
                             TEXTE_MODULE* txt, const EATTR* aAttr )
 {
+    // Smashed part ?
     if( aAttr )
-    {
+    { // Yes
         const EATTR& a = *aAttr;
 
         if( a.value )
@@ -1892,7 +2006,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
         }
         else
         {
-            orient = 90 + degrees - m->GetOrientation() / 10;
+            orient = 90 - degrees - m->GetOrientation() / 10;
             txt->SetOrientation( sign * orient * 10 );
         }
 
@@ -1912,7 +2026,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
             ;
         }
     }
-    else    // the text is per the original package, sans <attribute>
+    else    // Part is not smash so use Lib default for NAME/VALUE // the text is per the original package, sans <attribute>
     {
         double degrees = ( txt->GetOrientation() + m->GetOrientation() ) / 10;
 
@@ -2041,17 +2155,21 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
         case EPAD::ROUND:
             wxASSERT( pad->GetShape()==PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
             break;
+
         case EPAD::OCTAGON:
             // no KiCad octagonal pad shape, use PAD_CIRCLE for now.
             // pad->SetShape( PAD_OCTAGON );
             wxASSERT( pad->GetShape()==PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
             break;
+
         case EPAD::LONG:
             pad->SetShape( PAD_SHAPE_OVAL );
             break;
+
         case EPAD::SQUARE:
             pad->SetShape( PAD_SHAPE_RECT );
             break;
+
         case EPAD::OFFSET:
             ;   // don't know what to do here.
         }
@@ -2146,10 +2264,8 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
         if( degrees == 90 || t.rot->spin )
             txt->SetOrientation( sign * degrees * 10 );
-
         else if( degrees == 180 )
             align = ETEXT::TOP_RIGHT;
-
         else if( degrees == 270 )
         {
             align = ETEXT::TOP_RIGHT;
