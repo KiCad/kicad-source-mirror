@@ -74,6 +74,7 @@ Load() TODO's
 #include <class_edge_mod.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
+#include <class_dimension.h>
 
 using namespace boost::property_tree;
 using namespace std;
@@ -533,6 +534,54 @@ EATTR::EATTR( CPTREE& aAttribute )
     }
 }
 
+/// Eagle dimension element
+struct EDIMENSION
+{
+    double      x1;
+    double      y1;
+    double      x2;
+    double      y2;
+    double      x3;
+    double      y3;
+    int         layer;
+
+    opt_string dimensionType;
+
+    EDIMENSION( CPTREE& aDimension );
+};
+
+EDIMENSION::EDIMENSION( CPTREE& aDimension )
+{
+    CPTREE& attribs = aDimension.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT dimension EMPTY>
+    <!ATTLIST dimension
+          x1            %Coord;        #REQUIRED
+          y1            %Coord;        #REQUIRED
+          x2            %Coord;        #REQUIRED
+          y2            %Coord;        #REQUIRED
+          x3            %Coord;        #REQUIRED
+          y3            %Coord;        #REQUIRED
+          layer         %Layer;        #REQUIRED
+          dtype         %DimensionType; "parallel"
+          >
+    */
+
+    x1      = attribs.get<double>( "x1" );
+    y1      = attribs.get<double>( "y1" );
+    x2      = attribs.get<double>( "x2" );
+    y2      = attribs.get<double>( "y2" );
+    x3      = attribs.get<double>( "x3" );
+    y3      = attribs.get<double>( "y3" );
+    layer   = attribs.get<int>( "layer" );
+
+    opt_string dimensionType = attribs.get_optional<string>( "dtype" );
+    if(!dimensionType)
+    {
+        // default type is parallel
+    }
+}
 
 /// Eagle text element
 struct ETEXT
@@ -1620,6 +1669,39 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             // could be on a copper layer, could be on another layer.
             // copper layer would be done using netCode=0 type of ZONE_CONTAINER.
         }
+        else if( gr->first == "dimension" )
+        {
+            EDIMENSION d( gr->second );
+
+            DIMENSION* dimension = new DIMENSION( m_board );
+            m_board->Add( dimension, ADD_APPEND );
+
+            dimension->SetLayer( kicad_layer( d.layer ) );
+            // The origin and end are assumed to always be in this order from eagle
+            dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
+            dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
+            dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
+
+            int width = m_board->GetDesignSettings().m_PcbTextWidth;
+            int maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
+
+            if( width > maxThickness )
+                width = maxThickness;
+
+            dimension->Text().SetThickness( width );
+            dimension->SetWidth( width );
+
+            // check which axis the dimension runs in
+            // because the "height" of the dimension is perpendicular to that axis
+            // Note the check is just if two axes are close enough to each other
+            // Eagle appears to have some rounding errors
+            if( fabs( d.x1 - d.x2 ) < 0.05 )
+                dimension->SetHeight( kicad_x( d.x1 - d.x3 ) );
+            else
+                dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
+
+            dimension->AdjustDimensionDetails();
+         }
     }
     m_xpath->pop();
 }
