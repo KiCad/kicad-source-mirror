@@ -1790,7 +1790,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
     EATTR   name;
     EATTR   value;
     bool refanceNamePresetInPackageLayout;
-    bool valueNamePresetInPackaggeLayout;
+    bool valueNamePresetInPackageLayout;
 
 
 
@@ -1844,26 +1844,26 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         }
 
         refanceNamePresetInPackageLayout = true;
-        valueNamePresetInPackaggeLayout = true;
+        valueNamePresetInPackageLayout = true;
         m->SetPosition( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
-        // Is >NAME feild set in package layout ?
+        // Is >NAME field set in package layout ?
         if( m->GetReference().size() == 0 )
         {
             m->Reference().SetVisible( false ); // No so no show
             refanceNamePresetInPackageLayout = false;
         }
-        // Is >VALUE feild set in package lutout
+        // Is >VALUE field set in package layout
         if( m->GetValue().size() == 0 )
         {
             m->Value().SetVisible( false );     // No so no show
-            valueNamePresetInPackaggeLayout = false;
+            valueNamePresetInPackageLayout = false;
         }
         m->SetReference( FROM_UTF8( e.name.c_str() ) );
         m->SetValue( FROM_UTF8( e.value.c_str() ) );
 
         if( !e.smashed )
         { // Not smashed so show NAME & VALUE
-            if( valueNamePresetInPackaggeLayout )
+            if( valueNamePresetInPackageLayout )
                 m->Value().SetVisible( true );  // Only if place holder in package layout
             if( refanceNamePresetInPackageLayout )
                 m->Reference().SetVisible( true );   // Only if place holder in package layout
@@ -1950,18 +1950,18 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
                         case EATTR::VALUE :
                             valueAttr->value = e.value;
                             m->SetValue( e.value );
-                            if( valueNamePresetInPackaggeLayout )
+                            if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
                             break;
 
                         case EATTR::NAME :
-                            if( valueNamePresetInPackaggeLayout )
+                            if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
                             m->SetValue( "VALUE" );
                             break;
 
                         case EATTR::BOTH :
-                            if( valueNamePresetInPackaggeLayout )
+                            if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
                             valueAttr->value = "VALUE = " + e.value;
                             m->SetValue( "VALUE = " + e.value );
@@ -1973,7 +1973,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
                         default:
                             valueAttr->value =  e.value;
-                            if( valueNamePresetInPackaggeLayout )
+                            if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
                         }
                     }
@@ -2940,37 +2940,39 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
-        case 20:    kiLayer = Edge_Cuts;        break;  // eagle says "Dimension" layer, but it's for board perimeter
-        case 21:    kiLayer = F_SilkS;          break;
-        case 22:    kiLayer = B_SilkS;          break;
-        case 25:    kiLayer = F_SilkS;          break;
-        case 26:    kiLayer = B_SilkS;          break;
-        case 27:    kiLayer = F_SilkS;          break;
-        case 28:    kiLayer = B_SilkS;          break;
-        case 29:    kiLayer = F_Mask;           break;
-        case 30:    kiLayer = B_Mask;           break;
-        case 31:    kiLayer = F_Paste;          break;
-        case 32:    kiLayer = B_Paste;          break;
-        case 33:    kiLayer = F_Mask;           break;
-        case 34:    kiLayer = B_Mask;           break;
-        case 35:    kiLayer = F_Adhes;          break;
-        case 36:    kiLayer = B_Adhes;          break;
-        case 49:    kiLayer = Cmts_User;        break;
-        case 50:    kiLayer = Cmts_User;        break;
+        case 20:    kiLayer = Edge_Cuts;    break;  // eagle says "Dimension" layer, but it's for board perimeter
+        case 21:    kiLayer = F_SilkS;      break;
+        case 22:    kiLayer = B_SilkS;      break;
+        case 25:    kiLayer = F_SilkS;      break;
+        case 26:    kiLayer = B_SilkS;      break;
+        case 27:    kiLayer = F_SilkS;      break;
+        case 28:    kiLayer = B_SilkS;      break;
+        case 29:    kiLayer = F_Mask;       break;
+        case 30:    kiLayer = B_Mask;       break;
+        case 31:    kiLayer = F_Paste;      break;
+        case 32:    kiLayer = B_Paste;      break;
+        case 33:    kiLayer = F_Mask;       break;
+        case 34:    kiLayer = B_Mask;       break;
+        case 35:    kiLayer = F_Adhes;      break;
+        case 36:    kiLayer = B_Adhes;      break;
+        case 49:    kiLayer = Cmts_User;    break;
+        case 50:    kiLayer = Cmts_User;    break;
 
         // Packages show the future chip pins on SMD parts using layer 51.
         // This is an area slightly smaller than the PAD/SMD copper area.
-        // Carry those visual aids into the MODULE on the drawing layer, not silkscreen.
-        case 51:    kiLayer = Dwgs_User;        break;
-        case 52:    kiLayer = Dwgs_User;        break;
+        // Carry those visual aids into the MODULE on the fabrication layer,
+        // not silkscreen. This is perhaps not perfect, but there is not a lot
+        // of other suitable paired layers
+        case 51:    kiLayer = F_Fab;        break;
+        case 52:    kiLayer = B_Fab;        break;
 
         // thes layers are defined as user layers. put them on ECO layers
-        case 160:   kiLayer = Eco1_User;        break;
-        case 161:   kiLayer = Eco2_User;        break;
+        case 160:   kiLayer = Eco1_User;    break;
+        case 161:   kiLayer = Eco2_User;    break;
         default:
             // some layers do not map to KiCad
             // DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
-            kiLayer = UNDEFINED_LAYER;          break;
+            kiLayer = UNDEFINED_LAYER;      break;
         }
     }
 
