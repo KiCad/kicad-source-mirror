@@ -1,17 +1,16 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2015 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: render.c 147 2007-04-09 00:44:09Z selinger $ */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <cmath>
+#include <math.h>
 #include <string.h>
 
-#include <render.h>
-#include <greymap.h>
-#include <auxiliary.h>
+#include "render.h"
+#include "greymap.h"
+#include "auxiliary.h"
 
 /* ---------------------------------------------------------------------- */
 /* routines for anti-aliased rendering of curves */
@@ -49,18 +48,22 @@ render_t* render_new( greymap_t* gm )
     render_t* rm;
 
     rm = (render_t*) malloc( sizeof(render_t) );
+
     if( !rm )
     {
         return NULL;
     }
+
     memset( rm, 0, sizeof(render_t) );
     rm->gm = gm;
-    rm->incrow_buf = (int*) malloc( gm->h * sizeof(int) );
+    rm->incrow_buf = (int*) calloc( gm->h, sizeof(int) );
+
     if( !rm->incrow_buf )
     {
         free( rm );
         return NULL;
     }
+
     memset( rm->incrow_buf, 0, gm->h * sizeof(int) );
     return rm;
 }
@@ -82,6 +85,7 @@ void render_close( render_t* rm )
     {
         render_lineto( rm, rm->x0, rm->y0 );
     }
+
     GM_INC( rm->gm, rm->x0i, rm->y0i, (rm->a0 + rm->a1) * 255 );
 
     /* assert (rm->x0i != rm->x1i || rm->y0i != rm->y1i); */
@@ -125,13 +129,16 @@ static void incrow( render_t* rm, int x, int y, int b )
     {
         x = rm->gm->w;
     }
+
     if( rm->incrow_buf[y] == 0 )
     {
         rm->incrow_buf[y] = x + 1; /* store x+1 so that we can use 0 for "vacant" */
         return;
     }
+
     x0 = rm->incrow_buf[y] - 1;
     rm->incrow_buf[y] = 0;
+
     if( x0 < x )
     {
         for( i = x0; i<x; i++ )
@@ -152,30 +159,31 @@ static void incrow( render_t* rm, int x, int y, int b )
 /* render a straight line */
 void render_lineto( render_t* rm, double x2, double y2 )
 {
-    int    x2i, y2i;
+    int x2i, y2i;
     double t0 = 2, s0 = 2;
-    int    sn, tn;
+    int sn, tn;
     double ss = 2, ts = 2;
     double r0, r1;
-    int    i, j;
-    int    rxi, ryi;
-    int    s;
+    int i, j;
+    int rxi, ryi;
+    int s;
 
     x2i = (int) floor( x2 );
     y2i = (int) floor( y2 );
 
-    sn = abs( x2i - rm->x1i );
-    tn = abs( y2i - rm->y1i );
+    sn  = abs( x2i - rm->x1i );
+    tn  = abs( y2i - rm->y1i );
 
     if( sn )
     {
-        s0 = ( (x2>rm->x1 ? rm->x1i + 1 : rm->x1i) - rm->x1 ) / (x2 - rm->x1);
-        ss = fabs( 1.0 / (x2 - rm->x1) );
+        s0  = ( (x2>rm->x1 ? rm->x1i + 1 : rm->x1i) - rm->x1 ) / (x2 - rm->x1);
+        ss  = fabs( 1.0 / (x2 - rm->x1) );
     }
+
     if( tn )
     {
-        t0 = ( (y2>rm->y1 ? rm->y1i + 1 : rm->y1i) - rm->y1 ) / (y2 - rm->y1);
-        ts = fabs( 1.0 / (y2 - rm->y1) );
+        t0  = ( (y2>rm->y1 ? rm->y1i + 1 : rm->y1i) - rm->y1 ) / (y2 - rm->y1);
+        ts  = fabs( 1.0 / (y2 - rm->y1) );
     }
 
     r0 = 0;
@@ -200,11 +208,12 @@ void render_lineto( render_t* rm, double x2, double y2 )
             j++;
             s = 0;
         }
+
         /* render line from r0 to r1 segment of (rm->x1,rm->y1)..(x2,y2) */
 
         /* move point to r1 */
-        rm->a1 +=
-            (r1 - r0) * (y2 - rm->y1) * ( rxi + 1 - ( (r0 + r1) / 2.0 * (x2 - rm->x1) + rm->x1 ) );
+        rm->a1 += (r1 - r0) * (y2 - rm->y1) *
+                  ( rxi + 1 - ( (r0 + r1) / 2.0 * (x2 - rm->x1) + rm->x1 ) );
 
         /* move point across pixel boundary */
         if( s && x2>rm->x1 )
@@ -241,8 +250,9 @@ void render_lineto( render_t* rm, double x2, double y2 )
 
     /* move point to (x2,y2) */
 
-    r1      = 1;
-    rm->a1 += (r1 - r0) * (y2 - rm->y1) * ( rxi + 1 - ( (r0 + r1) / 2.0 * (x2 - rm->x1) + rm->x1 ) );
+    r1 = 1;
+    rm->a1 += (r1 - r0) * (y2 - rm->y1) *
+              ( rxi + 1 - ( (r0 + r1) / 2.0 * (x2 - rm->x1) + rm->x1 ) );
 
     rm->x1i = x2i;
     rm->y1i = y2i;
@@ -254,18 +264,13 @@ void render_lineto( render_t* rm, double x2, double y2 )
 
 
 /* render a Bezier curve. */
-void render_curveto( render_t* rm,
-                     double    x2,
-                     double    y2,
-                     double    x3,
-                     double    y3,
-                     double    x4,
-                     double    y4 )
+void render_curveto( render_t* rm, double x2, double y2, double x3, double y3, double x4,
+        double y4 )
 {
     double x1, y1, dd0, dd1, dd, delta, e2, epsilon, t;
 
-    x1 = rm->x1; /* starting point */
-    y1 = rm->y1;
+    x1  = rm->x1; /* starting point */
+    y1  = rm->y1;
 
     /* we approximate the curve by small line segments. The interval
      *  size, epsilon, is determined on the fly so that the distance
@@ -276,18 +281,18 @@ void render_curveto( render_t* rm,
 
     /* let dd = maximal value of 2nd derivative over curve - this must
      *  occur at an endpoint. */
-    dd0     = sq( x1 - 2 * x2 + x3 ) + sq( y1 - 2 * y2 + y3 );
-    dd1     = sq( x2 - 2 * x3 + x4 ) + sq( y2 - 2 * y3 + y4 );
-    dd      = 6 * sqrt( max( dd0, dd1 ) );
-    e2      = 8 * delta <= dd ? 8 * delta / dd : 1;
+    dd0 = sq( x1 - 2 * x2 + x3 ) + sq( y1 - 2 * y2 + y3 );
+    dd1 = sq( x2 - 2 * x3 + x4 ) + sq( y2 - 2 * y3 + y4 );
+    dd  = 6 * sqrt( max( dd0, dd1 ) );
+    e2  = 8 * delta <= dd ? 8 * delta / dd : 1;
     epsilon = sqrt( e2 ); /* necessary interval size */
 
     for( t = epsilon; t<1; t += epsilon )
     {
         render_lineto( rm, x1 * cu( 1 - t ) + 3 * x2 * sq( 1 - t ) * t + 3 * x3 * (1 - t) * sq(
-                          t ) + x4 * cu( t ),
-                      y1 * cu( 1 - t ) + 3 * y2 * sq( 1 - t ) * t + 3 * y3 * (1 - t) * sq(
-                          t ) + y4 * cu( t ) );
+                        t ) + x4 * cu( t ),
+                y1 * cu( 1 - t ) + 3 * y2 * sq( 1 - t ) * t + 3 * y3 * (1 - t) * sq( t ) + y4 *
+                cu( t ) );
     }
 
     render_lineto( rm, x4, y4 );

@@ -1,11 +1,11 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2015 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
 #ifndef CURVE_H
 #define CURVE_H
 
-#include <auxiliary.h>
+#include "auxiliary.h"
 
 /* vertex is c[1] for tag=POTRACE_CORNER, and the intersection of
  *  .c[-1][2]..c[0] and c[1]..c[2] for tag=POTRACE_CURVETO. alpha is only
@@ -17,29 +17,28 @@
 
 struct privcurve_s
 {
-    int  n;         /* number of segments */
-    int* tag;       /* tag[n]: POTRACE_CORNER or POTRACE_CURVETO */
-    dpoint_t( * c )[3]; /* c[n][i]: control points.
-                         * c[n][0] is unused for tag[n]=POTRACE_CORNER */
-
+    int n;              /* number of segments */
+    int* tag;           /* tag[n]: POTRACE_CORNER or POTRACE_CURVETO */
+    dpoint_t( *c )[3];  /* c[n][i]: control points.
+                         *  c[n][0] is unused for tag[n]=POTRACE_CORNER */
     /* the remainder of this structure is special to privcurve, and is
      *  used in EPS debug output and special EPS "short coding". These
      *  fields are valid only if "alphacurve" is set. */
-    int       alphacurve;   /* have the following fields been initialized? */
-    dpoint_t* vertex;       /* for POTRACE_CORNER, this equals c[1] */
-    double*   alpha;        /* only for POTRACE_CURVETO */
-    double*   alpha0;       /* "uncropped" alpha parameter - for debug output only */
-    double*   beta;
+    int alphacurve;     /* have the following fields been initialized? */
+    dpoint_t*   vertex; /* for POTRACE_CORNER, this equals c[1] */
+    double*     alpha;  /* only for POTRACE_CURVETO */
+    double*     alpha0; /* "uncropped" alpha parameter - for debug output only */
+    double*     beta;
 };
 typedef struct privcurve_s privcurve_t;
 
 struct sums_s
 {
-    double x;
-    double y;
-    double x2;
-    double xy;
-    double y2;
+    double  x;
+    double  y;
+    double  x2;
+    double  xy;
+    double  y2;
 };
 typedef struct sums_s sums_t;
 
@@ -50,26 +49,26 @@ typedef struct sums_s sums_t;
  *  other fields. */
 struct potrace_privpath_s
 {
-    int      len;
+    int len;
     point_t* pt;            /* pt[len]: path as extracted from bitmap */
-    int*     lon;           /* lon[len]: (i,lon[i]) = longest straight line from i */
+    int* lon;               /* lon[len]: (i,lon[i]) = longest straight line from i */
 
-    int     x0, y0;         /* origin for sums */
+    int x0, y0;             /* origin for sums */
     sums_t* sums;           /* sums[len+1]: cache for fast summing */
 
-    int  m;                 /* length of optimal polygon */
+    int m;                  /* length of optimal polygon */
     int* po;                /* po[m]: optimal polygon */
 
-    privcurve_t  curve;     /* curve[m]: array of curve elements */
-    privcurve_t  ocurve;    /* ocurve[om]: array of curve elements */
-    privcurve_t* fcurve; /* final curve: this points to either curve or
-                         *  ocurve. Do not free this separately. */
+    privcurve_t curve;      /* curve[m]: array of curve elements */
+    privcurve_t ocurve;     /* ocurve[om]: array of curve elements */
+    privcurve_t* fcurve;    /* final curve: this points to either curve or
+                             *  ocurve. Do not free this separately. */
 };
 typedef struct potrace_privpath_s potrace_privpath_t;
 
 /* shorter names */
-typedef potrace_privpath_t privpath_t;
-typedef potrace_path_t     path_t;
+typedef potrace_privpath_t  privpath_t;
+typedef potrace_path_t      path_t;
 
 path_t* path_new( void );
 void    path_free( path_t* p );

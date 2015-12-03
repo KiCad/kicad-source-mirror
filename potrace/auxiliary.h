@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2015 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -8,21 +8,23 @@
 #ifndef AUXILIARY_H
 #define AUXILIARY_H
 
+#include <stdlib.h>
+
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 /* ---------------------------------------------------------------------- */
 /* point arithmetic */
 
-#include <potracelib.h>
+#include "potracelib.h"
 
 struct point_s
 {
-    long x;
-    long y;
+    long    x;
+    long    y;
 };
-typedef struct point_s   point_t;
+typedef struct point_s point_t;
 
 typedef potrace_dpoint_t dpoint_t;
 
@@ -31,8 +33,8 @@ static inline dpoint_t dpoint( point_t p )
 {
     dpoint_t res;
 
-    res.x = p.x;
-    res.y = p.y;
+    res.x   = p.x;
+    res.y   = p.y;
     return res;
 }
 
@@ -42,14 +44,13 @@ static inline dpoint_t interval( double lambda, dpoint_t a, dpoint_t b )
 {
     dpoint_t res;
 
-    res.x = a.x + lambda * (b.x - a.x);
-    res.y = a.y + lambda * (b.y - a.y);
+    res.x   = a.x + lambda * (b.x - a.x);
+    res.y   = a.y + lambda * (b.y - a.y);
     return res;
 }
 
 
 /* ---------------------------------------------------------------------- */
-
 /* some useful macros. Note: the "mod" macro works correctly for
  *  negative a. Also note that the test for a>=n, while redundant,
  *  speeds up the mod function by 70% in the average case (significant

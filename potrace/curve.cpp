@@ -1,38 +1,37 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2015 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: curve.c 147 2007-04-09 00:44:09Z selinger $ */
 /* private part of the path and curve data structures */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <potracelib.h>
-#include <lists.h>
-#include <curve.h>
+#include "potracelib.h"
+#include "lists.h"
+#include "curve.h"
 
-#define SAFE_MALLOC( var, n, typ ) \
-    if( ( var = (typ*) malloc( (n)* sizeof(typ) ) ) == NULL ) \
-             goto malloc_error
+#define SAFE_CALLOC( var, n, typ ) \
+    if( ( var = (typ*) calloc( n, sizeof(typ) ) ) == NULL ) \
+        goto calloc_error
 
 /* ---------------------------------------------------------------------- */
 /* allocate and free path objects */
 
 path_t* path_new( void )
 {
-    path_t*     p    = NULL;
+    path_t* p = NULL;
     privpath_t* priv = NULL;
 
-    SAFE_MALLOC( p, 1, path_t );
+    SAFE_CALLOC( p, 1, path_t );
     memset( p, 0, sizeof(path_t) );
-    SAFE_MALLOC( priv, 1, privpath_t );
+    SAFE_CALLOC( priv, 1, privpath_t );
     memset( priv, 0, sizeof(privpath_t) );
     p->priv = priv;
     return p;
 
-malloc_error:
+calloc_error:
     free( p );
     free( priv );
     return NULL;
@@ -65,9 +64,11 @@ void path_free( path_t* p )
             privcurve_free_members( &p->priv->curve );
             privcurve_free_members( &p->priv->ocurve );
         }
+
         free( p->priv );
         /* do not free p->fcurve ! */
     }
+
     free( p );
 }
 
@@ -94,15 +95,15 @@ int privcurve_init( privcurve_t* curve, int n )
 {
     memset( curve, 0, sizeof(privcurve_t) );
     curve->n = n;
-    SAFE_MALLOC( curve->tag, n, int );
-    SAFE_MALLOC( curve->c, n, dpoint3_t );
-    SAFE_MALLOC( curve->vertex, n, dpoint_t );
-    SAFE_MALLOC( curve->alpha, n, double );
-    SAFE_MALLOC( curve->alpha0, n, double );
-    SAFE_MALLOC( curve->beta, n, double );
+    SAFE_CALLOC( curve->tag, n, int );
+    SAFE_CALLOC( curve->c, n, dpoint3_t );
+    SAFE_CALLOC( curve->vertex, n, dpoint_t );
+    SAFE_CALLOC( curve->alpha, n, double );
+    SAFE_CALLOC( curve->alpha0, n, double );
+    SAFE_CALLOC( curve->beta, n, double );
     return 0;
 
-malloc_error:
+calloc_error:
     free( curve->tag );
     free( curve->c );
     free( curve->vertex );
@@ -116,7 +117,7 @@ malloc_error:
 /* copy private to public curve structure */
 void privcurve_to_curve( privcurve_t* pc, potrace_curve_t* c )
 {
-    c->n   = pc->n;
+    c->n = pc->n;
     c->tag = pc->tag;
-    c->c   = pc->c;
+    c->c = pc->c;
 }

@@ -1,8 +1,7 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2015 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: lists.h 147 2007-04-09 00:44:09Z selinger $ */
 
 #ifndef _PS_LISTS_H
 #define _PS_LISTS_H
@@ -33,7 +32,8 @@
  *  trick, we'd have to omit the ";" in such cases. */
 
 #define MACRO_BEGIN do {
-#define MACRO_END   } while( 0 )
+#define MACRO_END   } \
+    while( 0 )
 
 /* ---------------------------------------------------------------------- */
 /* macros for singly-linked lists */
@@ -45,7 +45,8 @@
  *  c, or NULL if not found */
 #define list_find( elt, list, c ) \
     MACRO_BEGIN list_forall( elt, list ) if( c ) \
-        break;MACRO_END
+        break; \
+    MACRO_END
 
 /* like forall, except also set hook for elt. */
 #define list_forall2( elt, list, hook ) \
@@ -54,7 +55,8 @@
 /* same as list_find, except also set hook for elt. */
 #define list_find2( elt, list, c, hook ) \
     MACRO_BEGIN list_forall2( elt, list, hook ) if( c ) \
-        break;MACRO_END
+        break; \
+    MACRO_END
 
 /* same, except only use hook. */
 #define _list_forall_hook( list, hook ) \
@@ -63,7 +65,8 @@
 /* same, except only use hook. Note: c may only refer to *hook, not elt. */
 #define _list_find_hook( list, c, hook ) \
     MACRO_BEGIN _list_forall_hook( list, hook ) if( c ) \
-        break;MACRO_END
+        break; \
+    MACRO_END
 
 /* insert element after hook */
 #define list_insert_athook( elt, hook ) \
@@ -113,7 +116,7 @@
  *  Return NULL if out of bounds.   */
 #define list_nth( elt, list, n )                                \
     MACRO_BEGIN                                                 \
-    int _x; /* only evaluate n once */                          \
+    int _x; /* only evaluate n once */                         \
     for( _x = (n), elt = list; _x && elt; _x--, elt = elt->next ) {}   \
     MACRO_END
 
@@ -121,9 +124,9 @@
  *  Return NULL if out of bounds.   */
 #define list_nth_hook( elt, list, n, hook )                     \
     MACRO_BEGIN                                                 \
-    int _x; /* only evaluate n once */                          \
-    for( _x = (n), elt = list, hook = &list; _x && elt; _x--, hook = &elt->next, elt =\
-             elt->next ) {}   \
+    int _x; /* only evaluate n once */                         \
+    for( _x = (n), elt = list, hook = &list; _x && elt; \
+         _x--, hook = &elt->next, elt = elt->next ) {}   \
     MACRO_END
 
 /* set n to the length of the list */
@@ -142,11 +145,11 @@
     n = 0;                           \
     list_forall( elt, list ) {               \
         if( c ) \
-            break;\
+            break;                    \
         n++;                         \
     }                          \
-    if( !elt ) \
-        n = -1;\
+    if( !elt )                      \
+        n = -1;                        \
     MACRO_END
 
 /* set n to the number of elements in the list that satisfy condition c */
@@ -155,7 +158,7 @@
     n = 0;                           \
     list_forall( elt, list ) {               \
         if( c ) \
-            n++;\
+            n++;                      \
     }                                                      \
     MACRO_END
 
@@ -221,13 +224,14 @@
     do {                                                  \
         _hook1 = &(list);                               \
         while( (a = *_hook1) != NULL && (b = a->next1) != NULL ) {  \
-                                             _elt = b->next1;                          \
-                                             _list_merge_cond( listtype, a, b, cond, *_hook1 );          \
-                                             _hook1  = &( (*_hook1)->next1 );                 \
-                                             *_hook1 = _elt;                               \
-                                         }                                   \
-                                         } while( _hook1 != &(list) );                                  \
-                                         MACRO_END
+            _elt = b->next1;                          \
+            _list_merge_cond( listtype, a, b, cond, *_hook1 );          \
+            _hook1  = &( (*_hook1)->next1 );                 \
+            *_hook1 = _elt;                               \
+        }                                   \
+    } \
+    while( _hook1 != &(list) );                                  \
+    MACRO_END
 
 /* merge two sorted lists. Store result at &result */
 #define _list_merge_cond( listtype, a, b, cond, result )   \
@@ -238,16 +242,19 @@
         if( a==NULL ) {                  \
             *_hook = b;                   \
             break;                        \
-        } else if( b==NULL ) {               \
+        } \
+        else if( b==NULL ) {               \
             *_hook = a;                   \
             break;                        \
-        } else if( cond ) {                  \
-            *_hook = a;                   \
-            _hook  = &(a->next);               \
+        } \
+        else if( cond ) {                  \
+            *_hook  = a;                   \
+            _hook   = &(a->next);               \
             a = a->next;                  \
-        } else {                        \
-            *_hook = b;                   \
-            _hook  = &(b->next);               \
+        } \
+        else {                        \
+            *_hook  = b;                   \
+            _hook   = &(b->next);               \
             b = b->next;                  \
         }                           \
     }                          \
@@ -262,7 +269,8 @@
     elt->next = NULL;                  \
     if( end ) {                         \
         end->next = elt;                     \
-    } else {                           \
+    } \
+    else {                           \
         head = elt;                      \
     }                              \
     end = elt;                         \
@@ -270,7 +278,7 @@
 
 /* let elt be each element of the list, unlinked. At the end, set list=NULL. */
 #define dlist_forall_unlink( elt, head, end ) \
-    for( elt = head;\
+    for( elt = head; \
          elt ? (head = elt->next, elt->next = NULL, elt->prev = NULL), 1 : (end = NULL, 0); \
          elt = head )
 
@@ -282,7 +290,8 @@
         head = head->next;                   \
         if( head ) {                      \
             head->prev = NULL;                 \
-        } else {                         \
+        } \
+        else {                         \
             end = NULL;                    \
         }                            \
         elt->prev = NULL;                    \
