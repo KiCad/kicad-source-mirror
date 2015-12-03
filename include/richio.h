@@ -75,7 +75,7 @@ std::string
 
 
 #define IO_FORMAT       _( "IO_ERROR: %s\nfrom %s : %s" )
-#define PARSE_FORMAT    _( "PARSE_ERROR: %s in input/source\n'%s'\nline %d\noffset %d\nfrom %s : %s" )
+#define PARSE_FORMAT    _( "PARSE_ERROR: %s in input/source\n'%s'\nline %d  offset %d\nfrom %s : %s" )
 
 // references:
 // http://stackoverflow.com/questions/2670816/how-can-i-use-the-compile-time-constant-line-in-a-string

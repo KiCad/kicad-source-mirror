@@ -105,8 +105,12 @@ std::string StrPrintf( const char* format, ... )
 
 void IO_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc, const wxString& aMsg )
 {
+    // The throwers filename is a full filename, depending on Kicad source location.
+    // a short filename will be printed (it is better for user, the full filename has no meaning).
+    wxString srcname = wxString::FromUTF8( aThrowersFile );
+
     errorText.Printf( IO_FORMAT, aMsg.GetData(),
-        wxString::FromUTF8( aThrowersFile ).GetData(),
+        srcname.AfterLast( '/' ).GetData(),
         wxString::FromUTF8( aThrowersLoc ).GetData() );
 }
 
@@ -121,9 +125,13 @@ void PARSE_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc,
     lineNumber = aLineNumber;
     byteIndex  = aByteIndex;
 
+    // The throwers filename is a full filename, depending on Kicad source location.
+    // a short filename will be printed (it is better for user, the full filename has no meaning).
+    wxString srcname = wxString::FromUTF8( aThrowersFile );
+
     errorText.Printf( PARSE_FORMAT, aMsg.GetData(), aSource.GetData(),
         aLineNumber, aByteIndex,
-        wxString::FromUTF8( aThrowersFile ).GetData(),
+        srcname.AfterLast( '/' ).GetData(),
         wxString::FromUTF8( aThrowersLoc ).GetData() );
 }
 
