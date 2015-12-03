@@ -358,7 +358,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     SWAP( aStartAngle, >, aEndAngle );
 
     Save();
-    currentManager->Translate( aCenterPoint.x, aCenterPoint.y, layerDepth );
+    currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
 
     if( isStrokeEnabled )
     {
