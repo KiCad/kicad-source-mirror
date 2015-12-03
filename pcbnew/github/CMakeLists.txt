@@ -1,7 +1,7 @@
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
 #  Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-#  Copyright (C) 2013 Kicad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2013-2015 Kicad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -26,19 +26,13 @@
 #################################################
 include( download_avhttp )
 
-if( MINGW AND NOT OPENSSL_ROOT_DIR )
-    # download, compile and install to scratch dir a recent OPENSSL library and headers
-    include( download_openssl )
-else()
-    find_package( OpenSSL REQUIRED )
-    #message( STATUS "OPENSSL_FOUND:${OPENSSL_FOUND}  OPENSSL_LIBRARIES:${OPENSSL_LIBRARIES}" )
+find_package( OpenSSL REQUIRED )
+#message( STATUS "OPENSSL_FOUND:${OPENSSL_FOUND}  OPENSSL_LIBRARIES:${OPENSSL_LIBRARIES}" )
 
-    # FindOpenSSL.cmake does not set this var into cache, so is not globally visible,
-    # do it here incase some other link image needs these libraries
-    set( OPENSSL_LIBRARIES   "${OPENSSL_LIBRARIES}"   CACHE FILEPATH "OpenSSL link libraries" )
-    set( OPENSSL_INCLUDE_DIR "${OPENSSL_INCLUDE_DIR}" CACHE FILEPATH "OpenSSL include dir" )
-endif()
-
+# FindOpenSSL.cmake does not set this var into cache, so is not globally visible,
+# do it here incase some other link image needs these libraries
+set( OPENSSL_LIBRARIES   "${OPENSSL_LIBRARIES}"   CACHE FILEPATH "OpenSSL link libraries" )
+set( OPENSSL_INCLUDE_DIR "${OPENSSL_INCLUDE_DIR}" CACHE FILEPATH "OpenSSL include dir" )
 
 # These are additions to any inherited from pcbnew dir:
 include_directories( . ${OPENSSL_INCLUDE_DIR} ${AVHTTP_INCLUDE_DIR} )

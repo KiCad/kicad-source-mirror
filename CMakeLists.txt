@@ -54,14 +54,6 @@ option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
     )
 
-option( KICAD_BUILD_STATIC
-    "Build dependencies as static libraries.  OSX only. (default OFF)."
-    )
-
-option( KICAD_BUILD_DYNAMIC
-    "Build dependencies as shared libraries.  Required for wxPython support.  OXS only. (default OFF)."
-    )
-
 # WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
 # as it is known to work with KiCad.  Other versions may contain bugs that may result
 # in KiCad errors.
