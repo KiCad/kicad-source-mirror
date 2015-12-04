@@ -46,6 +46,9 @@ public:
             const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
     ~WX_HTML_REPORT_PANEL();
 
+    ///> Set the min size of the area which displays html messages:
+    void MsgPanelSetMinSize( const wxSize& aMinSize );
+
     ///> returns the reporter object that reports to this panel
     REPORTER& Reporter();
 
