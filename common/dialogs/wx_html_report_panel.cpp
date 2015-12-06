@@ -45,6 +45,13 @@ WX_HTML_REPORT_PANEL::~WX_HTML_REPORT_PANEL()
 }
 
 
+void WX_HTML_REPORT_PANEL::MsgPanelSetMinSize( const wxSize& aMinSize )
+{
+    m_htmlView->SetMinSize( aMinSize );
+    GetSizer()->SetSizeHints( this );
+}
+
+
 REPORTER& WX_HTML_REPORT_PANEL::Reporter()
 {
     return m_reporter;

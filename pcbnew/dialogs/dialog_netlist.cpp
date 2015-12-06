@@ -112,6 +112,8 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     int severities = m_config->Read( NETLIST_FILTER_MESSAGES_KEY, -1l );
     m_MessageWindow->SetVisibleSeverities( severities );
 
+    // Update sizes and sizers:
+    m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 150 ) );
     GetSizer()->SetSizeHints( this );
 }
 
