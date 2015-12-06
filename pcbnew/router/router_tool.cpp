@@ -722,6 +722,9 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
     m_savedSettings = m_router->Settings();
     m_savedSizes = m_router->Sizes();
 
+    // Disable the context menu before it is destroyed
+    SetContextMenu( NULL, CMENU_OFF );
+
     return 0;
 }
 
@@ -744,8 +747,6 @@ void ROUTER_TOOL::performDragging()
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         ctls->ForceCursorPosition( false );
-
-        VECTOR2I p0 = ctls->GetCursorPosition();
 
        if( evt->IsCancel() || evt->IsActivate() )
             break;
