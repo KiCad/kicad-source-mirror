@@ -173,7 +173,8 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
     wxString        fullFileName = GetFileName();
     wxTreeItemId    id = GetId();
 
-    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) Pgm().App().GetTopWindow();
+    KICAD_MANAGER_FRAME* frame = prjframe->m_Parent;
+    wxASSERT( frame );
 
     switch( GetType() )
     {
