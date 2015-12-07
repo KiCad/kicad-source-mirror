@@ -6,7 +6,7 @@
 #include <float.h>
 #include <limits.h>
 #include <common.h>
-
+#include <stdlib.h>     // for abs function
 #include <math_for_graphics.h>
 
 static bool InRange( double x, double xi, double xf );
@@ -464,7 +464,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
     {
         // vertical line segment
         if( InRange( y, yi, yf ) )
-            return std::abs( x - xi );
+            return abs( x - xi );
         else
             return std::min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
     }
@@ -472,7 +472,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
     {
         // horizontal line segment
         if( InRange( x, xi, xf ) )
-            return std::abs( y - yi );
+            return abs( y - yi );
         else
             return std::min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
     }
