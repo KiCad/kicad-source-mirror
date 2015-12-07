@@ -75,6 +75,30 @@ option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this build came." )
 
 
+# Global setting: exports are explicit
+set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
+set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
+
+
+# CMP0063: CMake < 3.3 does not handle hidden visibility for static libraries,
+# and 3.3 is backwards compatible when the minimum version is smaller than 3.3.
+if( POLICY CMP0063 )
+    cmake_policy( GET CMP0063 VISIBILITY_POLICY )
+    if( VISIBILITY_POLICY STREQUAL NEW )
+        message( WARNING "Compatibility code for CMake < 3.3 can be removed, search for CMP0063" )
+    else()
+        cmake_policy( GET CMP0063 NEW )
+    endif()
+else()
+    if( CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY AND NOT APPLE )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY}hidden" )
+    endif()
+    if( CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY_INLINES_HIDDEN AND NOT APPLE )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY_INLINES_HIDDEN}" )
+    endif()
+endif()
+
+
 # All CMake downloads go here.  Suggested is up in the source tree, not in the build dir where they
 # would have to be downloaded over and over again.  The default is to choose a directory that is
 # hidden on linux (starts with a '.') because there is a way to exclude this directory when grepping
@@ -151,14 +175,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     set( CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
     set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
-
-    if( GXX_HAS_VISIBILITY_FLAG AND NOT APPLE )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden" )
-    endif()
-
-    if( GXX_HAS_VISIBILITY_INLINES_FLAG AND NOT APPLE )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden" )
-    endif()
 
     find_package( OpenMP QUIET )
 

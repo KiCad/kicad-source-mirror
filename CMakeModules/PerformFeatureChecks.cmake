@@ -47,8 +47,6 @@ macro( perform_feature_checks )
     include( CheckCXXSourceCompiles )
     include( CheckCXXCompilerFlag )
 
-    check_cxx_compiler_flag( -fvisibility=hidden GXX_HAS_VISIBILITY_FLAG )
-    check_cxx_compiler_flag( -fvisibility-inlines-hidden GXX_HAS_VISIBILITY_INLINES_FLAG )
 
     check_include_file( "malloc.h" HAVE_MALLOC_H )
 
