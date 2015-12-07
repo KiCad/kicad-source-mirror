@@ -376,7 +376,8 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
     for( S3D_MASTER* modfile = aModule->Models(); modfile != 0; modfile = modfile->Next() )
     {
-        if( !modfile->Is3DType( S3D_MASTER::FILE3D_IDF ) )
+        if( !modfile->Is3DType( S3D_MASTER::FILE3D_IDF )
+            || modfile->GetShape3DFullFilename().empty() )
             continue;
 
         if( refdes.empty() )
@@ -408,7 +409,6 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
         if( top )
         {
-            rotz += modfile->m_MatRotation.z;
             locy = -locy;
             RotatePoint( &locx, &locy, aModule->GetOrientation() );
             locy = -locy;
@@ -416,6 +416,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
         if( !top )
         {
+            lrot = -lrot;
             RotatePoint( &locx, &locy, aModule->GetOrientation() );
             locy = -locy;
 
