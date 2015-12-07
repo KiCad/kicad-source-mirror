@@ -6,9 +6,7 @@
 #include <float.h>
 #include <limits.h>
 #include <common.h>
-#include <fctsys.h>
 
-#include <PolyLine.h>
 #include <math_for_graphics.h>
 
 static bool InRange( double x, double xi, double xf );
