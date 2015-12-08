@@ -265,7 +265,7 @@ public:
      * Return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor
      * Usually return true for small items (labels, junctions) and false for
-     * items which can be large (hierarchical sheets, compoments)
+     * items which can be large (hierarchical sheets, components)
      * @return false for a hierarchical sheet
      */
     bool IsMovableFromAnchorPoint() { return false; }
@@ -458,19 +458,6 @@ public:
     bool SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen );
 
     /**
-     * Function LocatePathOfScreen
-     * search the existing hierarchy for an instance of screen "FileName".
-     * don't bother looking at the root sheet - it must be unique,
-     * no other references to its m_screen otherwise there would be
-     * loops in the hierarchy.
-     *
-     * @param aScreen = the SCH_SCREEN* screen that we search for
-     * @param aList = the SCH_SHEET_PATH*  that must be used
-     * @return true if found
-     */
-    bool LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList );
-
-    /**
      * Function CountSheets
      * calculates the number of sheets found in "this"
      * this number includes the full subsheets count
@@ -490,7 +477,7 @@ public:
     {
         m_fileName = aFilename;
         // Filenames are stored using unix notation
-        m_fileName.Replace( wxT("\\"), wxT("/") );
+        m_fileName.Replace( wxT( "\\" ), wxT( "/" ) );
     }
 
     bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );
@@ -555,7 +542,7 @@ public:
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
 
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
-                                 const KICAD_T scanTypes[] );
+                         const KICAD_T scanTypes[] );
 
     wxString GetSelectMenuText() const;
 
@@ -565,6 +552,21 @@ public:
                          SCH_SHEET_PATH*      aSheetPath );
 
     SCH_ITEM& operator=( const SCH_ITEM& aSheet );
+
+    /**
+     * Operator <
+     *
+     * test if a \a aRhs is less than this sheet.
+     *
+     * Sheet comparison order is:
+     * The number of parent sheets of this sheet is less than \a aRhs.
+     * When the number of parent sheets for this sheet are the same as \a aRhs, the time
+     * stamps of each parent sheet are compared from the root sheet to the last sheet.
+     *
+     * @param aRhs is an SCH_SHEET reference to the right hand side of the comparison.
+     * @return true if this #SCH_SHEET is less than \a aRhs.
+     */
+    bool operator<( const SCH_SHEET& aRhs ) const;
 
     wxPoint GetPosition() const { return m_pos; }
 
@@ -577,6 +579,59 @@ public:
     void Plot( PLOTTER* aPlotter );
 
     EDA_ITEM* Clone() const;
+
+    /**
+     * Function GetRootSheet
+     *
+     * returns the root sheet of this SCH_SHEET object.
+     *
+     * The root (top level) sheet can be found by walking up the parent links until the only
+     * sheet that has no parent is found.  The root sheet can be found from any sheet in the
+     * hierarchy.
+     *
+     * @return a SCH_SHEET pointer to the root sheet.
+     */
+    SCH_SHEET* GetRootSheet();
+
+    /**
+     * Function IsRootSheet
+     *
+     * returns true if `this` sheet has no parent which indicates it is the root (top level)
+     * sheet.
+     *
+     * @return true if this is the root sheet, otherwise false.
+     */
+    bool IsRootSheet() const { return GetParent() == NULL; }
+
+    /**
+     * Function GetPath
+     *
+     * recurses up the parent branch up to the root sheet adding a pointer for each
+     * parent sheet to \a aSheetPath.
+     *
+     * @param aSheetPath is a refernce to an #SCH_SHEETS object to populate.
+     */
+    void GetPath( std::vector<const SCH_SHEET*>& aSheetPath ) const;
+
+    /**
+     * Function GetPath
+     *
+     * returns a wxString containing the sheet path of this SCH_SHEET.
+     *
+     * The SCH_SHEET path is a Posix like path containing the hexadecimal time stamps in
+     * the parent order of this SCH_SHEET.  It looks something like /4567FEDC/AA2233DD/.
+     */
+    wxString GetPath() const;
+
+    /**
+     * Function GetHumanReadablePath
+     *
+     * returns a wxString containing the human readable path of this sheet.
+     *
+     * Human readable SCH_SHEET paths are Posix like paths made up of the sheet names
+     * in the parent order of this SCH_SHEET.  It looks something like /sheet1/sheet2.
+     */
+    wxString GetHumanReadablePath() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
@@ -595,6 +650,9 @@ protected:
 };
 
 
-typedef std::vector< SCH_SHEET* > SCH_SHEETS;
+typedef std::vector< SCH_SHEET* >       SCH_SHEETS;
+typedef std::vector< const SCH_SHEET* > SCH_CONST_SHEETS;
+typedef SCH_SHEETS::iterator            SCH_SHEETS_ITER;
+typedef SCH_SHEETS::const_iterator      SCH_SHEETS_CITER;
 
 #endif /* SCH_SHEEET_H */
