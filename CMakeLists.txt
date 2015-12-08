@@ -9,7 +9,7 @@ endif()
 
 project( kicad )
 
-cmake_minimum_required( VERSION 2.8.4 FATAL_ERROR )
+cmake_minimum_required( VERSION 2.8.12 FATAL_ERROR )
 # because of http://public.kitware.com/Bug/view.php?id=10395
 
 # Path to local CMake modules.
@@ -78,6 +78,10 @@ set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this bu
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
+
+
+# Global setting: build everything position independent
+set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
 
 # CMP0063: CMake < 3.3 does not handle hidden visibility for static libraries,
@@ -226,15 +230,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
 
     else()
-        # We build DLL/DSOs from static libraries, so create position independent
-        # code for all cases, since we do not have DLL/DSO specific static
-        # libraries. Subdirectories via add_subdirectores() reference this
-        # variable, and it is either set or empty, empty for Windows.
-        set( PIC_FLAG -fPIC )
-
-        set( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   ${PIC_FLAG}" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PIC_FLAG}" )
-
         if( NOT APPLE )
             # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)
             set( CMAKE_SHARED_LINKER_FLAGS "${TO_LINKER},--no-undefined" )
