@@ -79,8 +79,7 @@ static bool setInt( int* aInt, int aValue, int aMin, int aMax )
 
 // PCB_PLOT_PARAMS
 
-PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
-    m_layerSelection( 4, B_Cu, F_Cu, F_SilkS, B_SilkS )
+PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 {
     m_useGerberProtelExtensions  = false;
     m_useGerberAttributes        = false;
@@ -116,6 +115,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
     m_referenceColor             = BLACK;
     m_valueColor                 = BLACK;
     m_textMode                   = PLOTTEXTMODE_DEFAULT;
+    m_layerSelection = LSET( 2, F_SilkS, B_SilkS) | LSET::AllCuMask();
 
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter
@@ -377,7 +377,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
                     */
 
                     // sorry, use the UI once to fix:
-                    aPcbPlotParams->m_layerSelection = LSET( 4, B_Cu, F_Cu, F_SilkS, B_SilkS );
+                    aPcbPlotParams->m_layerSelection = LSET( 2, F_SilkS, B_SilkS) | LSET::AllCuMask();
                 }
                 else if( cur.find_first_of( "0x" ) == 0 )   // pretty ver. 4.
                 {
