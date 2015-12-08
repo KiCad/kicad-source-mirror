@@ -31,8 +31,8 @@
 #include <3d_mesh_model.h>
 #include <boost/geometry/algorithms/area.hpp>
 #define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/gtc/matrix_transform.hpp>
-#include <gal/opengl/glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__

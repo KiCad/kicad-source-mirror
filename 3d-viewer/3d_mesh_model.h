@@ -34,7 +34,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/glm.hpp>
+#include <glm/glm.hpp>
 #include "3d_struct.h"
 #include "3d_material.h"
 #include "CBBox.h"

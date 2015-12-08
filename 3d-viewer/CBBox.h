@@ -31,7 +31,7 @@
 #define CBBox_h
 
 #define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/glm.hpp>
+#include <glm/glm.hpp>
 #include <3d_types.h>
 
 
