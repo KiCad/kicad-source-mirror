@@ -74,6 +74,7 @@ enum {
 };
 
 wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
+        EVT_SIZE( PANEL_PREV_3D::resize )
         EVT_CHOICE( ID_SET_DIR, PANEL_PREV_3D::SetRootDir )
         EVT_BUTTON( ID_CFG_PATHS, PANEL_PREV_3D::Cfg3DPaths )
         EVT_BUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
@@ -219,7 +220,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
 
     // add preview items
     preview = new wxPanel( this, -1 );
-    preview->SetMinSize( wxSize( 320, 240 ) );
+    preview->SetMinSize( wxSize( 320, 200 ) );
     preview->SetBackgroundColour( wxColor( 0, 0, 0 ));
     vboxPrev->Add( preview, 1, wxEXPAND | wxALIGN_CENTER | wxLEFT | wxRIGHT, 5 );
     // buttons:
@@ -626,9 +627,20 @@ void PANEL_PREV_3D::UpdateWindowUI( long flags )
         modelInfo = info;
         UpdateModelName( m_FileDlg->GetCurrentlySelectedFilename() );
     }
-     */
+    // */
 
     wxPanel::UpdateWindowUI( flags );
+
+    return;
+}
+
+
+void PANEL_PREV_3D::resize( wxSizeEvent &event )
+{
+    event.Skip();
+
+    if( NULL != canvas )
+        canvas->SetSize( preview->GetClientSize() );
 
     return;
 }

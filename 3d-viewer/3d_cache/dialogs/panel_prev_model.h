@@ -90,6 +90,7 @@ private:
 
 private:
     void updateDirChoiceList( void );
+    void resize( wxSizeEvent &event );
 
     wxDECLARE_EVENT_TABLE();
 };

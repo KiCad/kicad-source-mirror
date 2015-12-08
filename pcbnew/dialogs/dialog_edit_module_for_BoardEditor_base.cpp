@@ -310,7 +310,8 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	bSizer18 = new wxBoxSizer( wxVERTICAL );
 	
 	m_3D_ShapeNameListBox = new wxListBox( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE ); 
-	m_3D_ShapeNameListBox->SetMinSize( wxSize( 200,80 ) );
+	m_3D_ShapeNameListBox->SetMinSize( wxSize( 200,110 ) );
+	m_3D_ShapeNameListBox->SetMaxSize( wxSize( -1,110 ) );
 	
 	bSizer18->Add( m_3D_ShapeNameListBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
@@ -330,7 +331,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	bSizer3DButtons->Add( m_buttonRemove, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_buttonEdit = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Edit Filename"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_buttonEdit, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer3DButtons->Add( m_buttonEdit, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	
 	bSizer19->Add( bSizer3DButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -339,12 +340,12 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	sbSizer3->Add( bSizer19, 0, wxEXPAND, 5 );
 	
 	
-	bSizerMain3D->Add( sbSizer3, 1, wxEXPAND, 5 );
+	bSizerMain3D->Add( sbSizer3, 0, wxEXPAND, 5 );
 	
 	bLowerSizer3D = new wxBoxSizer( wxHORIZONTAL );
 	
 	
-	bSizerMain3D->Add( bLowerSizer3D, 0, wxEXPAND, 5 );
+	bSizerMain3D->Add( bLowerSizer3D, 1, wxEXPAND, 5 );
 	
 	
 	m_Panel3D->SetSizer( bSizerMain3D );

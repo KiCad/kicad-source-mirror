@@ -247,7 +247,10 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	wxBoxSizer* bSizer16;
 	bSizer16 = new wxBoxSizer( wxVERTICAL );
 	
-	m_3D_ShapeNameListBox = new wxListBox( sbSizer4->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE ); 
+	m_3D_ShapeNameListBox = new wxListBox( sbSizer4->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,120 ), 0, NULL, wxLB_SINGLE ); 
+	m_3D_ShapeNameListBox->SetMinSize( wxSize( -1,120 ) );
+	m_3D_ShapeNameListBox->SetMaxSize( wxSize( -1,120 ) );
+	
 	bSizer16->Add( m_3D_ShapeNameListBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
@@ -272,12 +275,12 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	sbSizer4->Add( bSizer15, 1, wxEXPAND, 5 );
 	
 	
-	bSizerMain3D->Add( sbSizer4, 1, wxEXPAND, 5 );
+	bSizerMain3D->Add( sbSizer4, 0, wxEXPAND, 5 );
 	
 	bLowerSizer3D = new wxBoxSizer( wxHORIZONTAL );
 	
 	
-	bSizerMain3D->Add( bLowerSizer3D, 0, wxALL|wxEXPAND, 5 );
+	bSizerMain3D->Add( bLowerSizer3D, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	m_Panel3D->SetSizer( bSizerMain3D );
