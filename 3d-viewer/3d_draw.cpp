@@ -56,6 +56,7 @@
 #include <info3d_visu.h>
 #include <trackball.h>
 #include <3d_draw_basic_functions.h>
+#include "3d_rendering/3d_render_ogl_legacy/ogl_legacy_utils.h"
 
 #include <CImage.h>
 #include <reporter.h>
@@ -1128,12 +1129,6 @@ void EDA_3D_CANVAS::render3DComponentShape( MODULE* module,
             shape3D->Render( aIsRenderingJustNonTransparentObjects,
                              aIsRenderingJustTransparentObjects );
 
-            /*
-             * XXX - CB - DEPRECATE THIS - the old renderer will eventually
-             * be replaced anyway so all debugging of 3D Plugins should be
-             * done via the new rendering system
-             */
-#if 0
             if( isEnabled( FL_RENDER_SHOW_MODEL_BBOX ) )
             {
                 // Set the alpha current color to opaque
@@ -1141,11 +1136,8 @@ void EDA_3D_CANVAS::render3DComponentShape( MODULE* module,
                 glGetFloatv( GL_CURRENT_COLOR,currentColor );
                 currentColor[3] = 1.0f;
                 glColor4fv( currentColor );
-
-                CBBOX thisBBox = shape3D->getBBox();
-                thisBBox.GLdebug();
+                OGL_draw_bbox( shape3D->getBBox() );
             }
-#endif
 
             glPopMatrix();
 
