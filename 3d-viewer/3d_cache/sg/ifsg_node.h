@@ -42,9 +42,9 @@
 #ifndef IFSG_NODE_H
 #define IFSG_NODE_H
 
-#include <3d_cache/sg/sg_base.h>
-#include <3d_cache/sg/sg_types.h>
-#include <3d_cache/sg/ifsg_defs.h>
+#include "3d_cache/sg/sg_base.h"
+#include "3d_cache/sg/sg_types.h"
+#include "3d_cache/sg/ifsg_defs.h"
 
 class SGNODE;
 
@@ -52,7 +52,7 @@ class SGNODE;
  * Class IFSG_NODE
  * represents the base class of all DLL-safe Scene Graph nodes
  */
-class SG_DLL IFSG_NODE
+class SGLIB_API IFSG_NODE
 {
 private:
     // hide the copy constructors and assignment operator to avoid accidental misuse

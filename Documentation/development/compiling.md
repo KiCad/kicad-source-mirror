@@ -91,6 +91,11 @@ date and contain the latest security fixes.
 The [OpenGL Extension Wrangler][GLEW] is an OpenGL helper library used by the KiCad graphics
 abstraction library [GAL] and is always required to build KiCad.
 
+## GLM OpenGL Mathematics Library  ## {#glm}
+
+The [OpenGL Mathematics Library][GLM] is an OpenGL helper library used by the KiCad graphics
+abstraction library [GAL] and is always required to build KiCad.
+
 ## GLUT OpenGL Utility Toolkit Library ## {#glut}
 
 The [OpenGL Utility Toolkit][GLUT] is an OpenGL helper library used by the KiCad graphics

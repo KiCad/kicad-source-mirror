@@ -37,7 +37,7 @@
  * Class IFSG_COLORINDEX
  * is the wrapper for SGCOLORINDEX
  */
-class SG_DLL IFSG_COLORINDEX : public IFSG_INDEX
+class SGLIB_API IFSG_COLORINDEX : public IFSG_INDEX
 {
 public:
     IFSG_COLORINDEX( bool create );

@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,19 +22,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/*
+ * Note: this is based on kicad's import_export.h file but is
+ * reproduced here in order to facilitate support of out-of-tree
+ * builds for 3D plugins.
+ */
+
 #ifndef IFSG_DEFS_H
 #define IFSG_DEFS_H
 
-#if defined( MSVC )
-    #if defined( DLL_SGIF )
-        // we are building the library
-        #define SG_DLL __declspec( dllexport )
-    #else
-        // we must be using the library
-        #define SG_DLL __declspec( dllimport )
-    #endif
+#if defined(__MINGW32__) || defined( MSVC )
+    #define APIEXPORT __declspec(dllexport)
+    #define APIIMPORT __declspec(dllimport)
+    #define APILOCAL
+
+#elif defined(__GNUC__) && __GNUC__ >= 4
+    // On ELF, we compile with hidden visibility, so unwrap that for specific symbols:
+    #define APIEXPORT __attribute__ ((visibility("default")))
+    #define APIIMPORT __attribute__ ((visibility("default")))
+    #define APILOCAL  __attribute__ ((visibility("hidden")))
+
 #else
-    #define SG_DLL
+    #pragma message ( "warning: a supported C++ compiler is required" )
+    #define APIEXPORT
+    #define APIIMPORT
+    #define APILOCAL
+#endif
+
+#if defined (COMPILE_SGLIB)
+    #define SGLIB_API APIEXPORT
+#else
+    #define SGLIB_API APIIMPORT
 #endif
 
 #endif  // IFSG_DEFS_H

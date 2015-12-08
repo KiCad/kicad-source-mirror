@@ -37,7 +37,7 @@
  * Class IFSG_NORMALINDEX
  * is the wrapper for SGNORMALINDEX
  */
-class SG_DLL IFSG_NORMALINDEX : public IFSG_INDEX
+class SGLIB_API IFSG_NORMALINDEX : public IFSG_INDEX
 {
 public:
     IFSG_NORMALINDEX( bool create );

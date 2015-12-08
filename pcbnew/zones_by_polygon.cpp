@@ -128,8 +128,7 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
     if( success && ( aZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
     {
         DisplayError( this,
-            _( "The duplicated zone is on the same layer as the initial zone, which has no sense.\n"
-               "Please, choose an other layer for the new zone") );
+            _( "The duplicated zone cannot be on the same layer as the original zone." ) );
         success = false;
     }
 
@@ -158,8 +157,7 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
         if( GetBoard()->GetAreaIndex( newZone ) >= 0
            && GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( newZone, true ) )
         {
-            DisplayError( this,
-                _( "The outline of the duplicated zone fails DRC check!" ) );
+            DisplayInfoMessage( this, _( "Warning: The new zone fails DRC" ) );
         }
 
         UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );

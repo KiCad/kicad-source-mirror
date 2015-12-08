@@ -37,7 +37,7 @@
  * Class IFSG_INDEX
  * is the wrapper for SGINDEX
  */
-class SG_DLL IFSG_INDEX : public IFSG_NODE
+class SGLIB_API IFSG_INDEX : public IFSG_NODE
 {
 public:
     IFSG_INDEX();

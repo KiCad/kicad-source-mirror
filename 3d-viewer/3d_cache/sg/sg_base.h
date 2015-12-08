@@ -30,8 +30,17 @@
 #ifndef SG_BASE_H
 #define SG_BASE_H
 
+#include "import_export.h"
 
-class SGCOLOR
+#ifndef SGLIB_API
+    #if defined (COMPILE_SGLIB)
+        #define SGLIB_API APIEXPORT
+    #else
+        #define SGLIB_API APIIMPORT
+    #endif
+#endif
+
+class SGLIB_API SGCOLOR
 {
 protected:
     float red;
@@ -55,7 +64,7 @@ private:
 };
 
 
-class SGPOINT
+class SGLIB_API SGPOINT
 {
 public:
     double x;
@@ -75,7 +84,7 @@ public:
 };
 
 
-class SGVECTOR
+class SGLIB_API SGVECTOR
 {
 private:
     void normalize( void );

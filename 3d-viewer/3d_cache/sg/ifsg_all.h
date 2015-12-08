@@ -26,13 +26,13 @@
  * collects header files for all SG* wrappers and the API
  */
 
-#include <3d_cache/sg/ifsg_transform.h>
-#include <3d_cache/sg/ifsg_appearance.h>
-#include <3d_cache/sg/ifsg_colors.h>
-#include <3d_cache/sg/ifsg_coords.h>
-#include <3d_cache/sg/ifsg_faceset.h>
-#include <3d_cache/sg/ifsg_colorindex.h>
-#include <3d_cache/sg/ifsg_coordindex.h>
-#include <3d_cache/sg/ifsg_normals.h>
-#include <3d_cache/sg/ifsg_shape.h>
-#include <3d_cache/sg/ifsg_api.h>
+#include "3d_cache/sg/ifsg_transform.h"
+#include "3d_cache/sg/ifsg_appearance.h"
+#include "3d_cache/sg/ifsg_colors.h"
+#include "3d_cache/sg/ifsg_coords.h"
+#include "3d_cache/sg/ifsg_faceset.h"
+#include "3d_cache/sg/ifsg_colorindex.h"
+#include "3d_cache/sg/ifsg_coordindex.h"
+#include "3d_cache/sg/ifsg_normals.h"
+#include "3d_cache/sg/ifsg_shape.h"
+#include "3d_cache/sg/ifsg_api.h"

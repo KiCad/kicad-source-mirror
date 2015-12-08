@@ -37,7 +37,7 @@
  * Class IFSG_NORMALS
  * is the wrapper for the SGNORMALS class
  */
-class SG_DLL IFSG_NORMALS : public IFSG_NODE
+class SGLIB_API IFSG_NORMALS : public IFSG_NODE
 {
 public:
     IFSG_NORMALS( bool create );

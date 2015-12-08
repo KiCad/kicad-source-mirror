@@ -37,7 +37,7 @@
  * Class IFSG_TRANSFORM
  * is the wrapper for the VRML compatible TRANSFORM block class SCENEGRAPH
  */
-class SG_DLL IFSG_TRANSFORM : public IFSG_NODE
+class SGLIB_API IFSG_TRANSFORM : public IFSG_NODE
 {
 public:
     IFSG_TRANSFORM( bool create );

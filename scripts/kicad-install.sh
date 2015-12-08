@@ -112,6 +112,7 @@ install_prerequisites()
             libbz2-dev
             libcairo2-dev
             libglew-dev
+            libglm-dev
             libssl-dev
             libwxgtk3.0-dev
        "
@@ -152,6 +153,7 @@ install_prerequisites()
             doxygen
             cairo-devel
             glew-devel
+            glm
             grep
             openssl-devel
             wxGTK3-devel

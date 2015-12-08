@@ -30,10 +30,13 @@
 #define IFSG_API_H
 
 #include <wx/string.h>
-#include <glm/glm.hpp>
-#include <3d_cache/sg/sg_types.h>
-#include <3d_cache/sg/sg_base.h>
-#include <3d_rendering/c3dmodel.h>
+#include <glm.hpp>
+
+#include "3d_cache/sg/sg_types.h"
+#include "3d_cache/sg/sg_base.h"
+#include "3d_rendering/c3dmodel.h"
+
+#include "ifsg_defs.h"
 
 class SGNODE;
 class SCENEGRAPH;
@@ -51,7 +54,7 @@ namespace S3D
      * @param aNode is any node within the node tree which is to be written
      * @return true on success
      */
-    bool WriteCache( const wxString& aFileName, bool overwrite, SGNODE* aNode );
+    SGLIB_API bool WriteCache( const wxString& aFileName, bool overwrite, SGNODE* aNode );
 
     /**
      * Function ReadCache
@@ -62,7 +65,7 @@ namespace S3D
      * if desired this node can be associated with an IFSG_TRANSFORM wrapper via
      * the IFSG_TRANSFORM::Attach() function.
      */
-    SGNODE* ReadCache( const wxString& aFileName );
+    SGLIB_API SGNODE* ReadCache( const wxString& aFileName );
 
     /**
      * Function WriteVRML
@@ -74,7 +77,7 @@ namespace S3D
      * @param reuse should be set to true to make use of VRML DEF/USE features
      * @return true on success
      */
-    bool WriteVRML( const wxString& filename, bool overwrite, SGNODE* aTopNode,
+    SGLIB_API bool WriteVRML( const wxString& filename, bool overwrite, SGNODE* aTopNode,
                     bool reuse, bool renameNodes );
 
     // NOTE: The following functions are used in combination to create a VRML
@@ -107,7 +110,7 @@ namespace S3D
      *
      * @param aNode may be any valid SGNODE
      */
-    void ResetNodeIndex( SGNODE* aNode );
+    SGLIB_API void ResetNodeIndex( SGNODE* aNode );
 
     /**
      * Function RenameNodes
@@ -116,7 +119,7 @@ namespace S3D
      *
      * @param aNode is a top level node
      */
-    void RenameNodes( SGNODE* aNode );
+    SGLIB_API void RenameNodes( SGNODE* aNode );
 
     /**
      * Function DestroyNode
@@ -124,7 +127,7 @@ namespace S3D
      * to safely delete an SG* node without associating the node with
      * its corresponding IFSG* wrapper.
      */
-    void DestroyNode( SGNODE* aNode );
+    SGLIB_API void DestroyNode( SGNODE* aNode );
 
     // NOTE: The following functions facilitate the creation and destruction
     // of data structures for rendering
@@ -139,44 +142,44 @@ namespace S3D
      *
      * @return an S3DMODEL representation of aNode on success, otherwise NULL
      */
-    S3DMODEL* Prepare( SCENEGRAPH* aNode, const glm::dmat4* aTransform );
+    SGLIB_API S3DMODEL* Prepare( SCENEGRAPH* aNode, const glm::dmat4* aTransform );
 
     /**
      * Function Destroy3DModel
      * frees memory used by an S3DMODEL structure and sets the pointer to
      * the structure to NULL
      */
-    void Destroy3DModel( S3DMODEL** aModel );
+    SGLIB_API void Destroy3DModel( S3DMODEL** aModel );
 
     /**
      * Function Free3DModel
      * frees memory used internally by an S3DMODEL structure
      */
-    void Free3DModel( S3DMODEL& aModel );
+    SGLIB_API void Free3DModel( S3DMODEL& aModel );
 
     /**
      * Function Free3DMesh
      * frees memory used internally by an SMESH structure
      */
-    void Free3DMesh( SMESH& aMesh );
+    SGLIB_API void Free3DMesh( SMESH& aMesh );
 
     /**
      * Function New3DModel
      * creates and initializes an S3DMODEL struct
      */
-    S3DMODEL* New3DModel( void );
+    SGLIB_API S3DMODEL* New3DModel( void );
 
     /**
      * Function Init3DMaterial
      * initializes an SMATERIAL struct
      */
-    void Init3DMaterial( SMATERIAL& aMat );
+    SGLIB_API void Init3DMaterial( SMATERIAL& aMat );
 
     /**
      * Function Init3DMesh
      * creates and initializes an SMESH struct
      */
-    void Init3DMesh( SMESH& aMesh );
+    SGLIB_API void Init3DMesh( SMESH& aMesh );
 };
 
 #endif  // IFSG_API_H

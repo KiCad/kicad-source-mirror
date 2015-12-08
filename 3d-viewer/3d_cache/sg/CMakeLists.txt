@@ -4,7 +4,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/3d-viewer
   )
 
-
 add_library( s3d_sg SHARED
     sg_base.cpp
     sg_node.cpp
@@ -33,10 +32,8 @@ add_library( s3d_sg SHARED
     ifsg_api.cpp
 )
 
-if( MSVC )
-    # Define a flag to expose the appropriate SG_DLL macro at build time
-    target_compile_definitions( s3d_sg PRIVATE -DDLL_SGIF )
-endif()
+# Define a flag to expose the appropriate EXPORT macro at build time
+target_compile_definitions( s3d_sg PRIVATE -DCOMPILE_SGLIB )
 
 target_link_libraries( s3d_sg ${wxWidgets_LIBRARIES} )
 

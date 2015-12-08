@@ -260,7 +260,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     GetScreen()->SetFileName( fullFileName );
     g_RootSheet->SetFileName( fullFileName );
-
+    g_RootSheet->SetName( "root" );
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 

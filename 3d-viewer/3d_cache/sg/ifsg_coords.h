@@ -37,7 +37,7 @@
  * Class IFSG_INDEX
  * is the wrapper for SGCOORDS
  */
-class SG_DLL IFSG_COORDS : public IFSG_NODE
+class SGLIB_API IFSG_COORDS : public IFSG_NODE
 {
 public:
     IFSG_COORDS( bool create );

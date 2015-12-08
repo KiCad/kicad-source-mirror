@@ -37,7 +37,7 @@
  * Class IFSG_FACESET
  * is the wrapper for the SGFACESET class
  */
-class SG_DLL IFSG_FACESET : public IFSG_NODE
+class SGLIB_API IFSG_FACESET : public IFSG_NODE
 {
 public:
     IFSG_FACESET( bool create );

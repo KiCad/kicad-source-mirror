@@ -2,7 +2,7 @@ Contribute to KiCad (under Linux)
 --------------------
 
 1) make sure you have all the dependencies of KiCad:
-    sudo apt-get install debhelper dpatch libx11-dev
+    sudo apt-get install debhelper dpatch libx11-dev libglm-dev
     sudo apt-get install libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev
     sudo apt-get install libwxbase2.8-dev libwxgtk2.8-dev libboost-dev fakeroot
     sudo apt-get install cmake bzr

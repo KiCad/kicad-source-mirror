@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,7 +204,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
                   &m_pos.x, &m_pos.y, &m_size.x, &m_size.y ) != 4 )
         || ( ((char*)aLine)[0] != 'S' ) )
     {
-        aErrorMsg.Printf( wxT( " ** Eeschema file sheet struct error at line %d, aborted\n" ),
+        aErrorMsg.Printf( wxT( " ** Eeschema file sheet error at line %d, aborted\n" ),
                           aLine.LineNumber() );
 
         aErrorMsg << FROM_UTF8( ((char*)aLine) );
@@ -301,7 +301,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( strnicmp( "$End", ((char*)aLine), 4 ) != 0 )
     {
-        aErrorMsg.Printf( wxT( "**Eeschema file end_sheet struct error at line %d, aborted\n" ),
+        aErrorMsg.Printf( wxT( "**Eeschema file end_sheet error at line %d, aborted\n" ),
                           aLine.LineNumber() );
         aErrorMsg << FROM_UTF8( ((char*)aLine) );
         return false;
@@ -474,9 +474,6 @@ int SCH_SHEET::GetMinHeight() const
 }
 
 
-/**
- * Delete sheet labels which do not have corresponding hierarchical label.
- */
 void SCH_SHEET::CleanupSheet()
 {
     SCH_SHEET_PINS::iterator i = m_pins.begin();
@@ -721,44 +718,15 @@ bool SCH_SHEET::SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen
 }
 
 
-bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
-{
-    if( m_screen )
-    {
-        aList->Push( this );
-
-        if( m_screen == aScreen )
-            return true;
-
-        EDA_ITEM* strct = m_screen->GetDrawItems();
-
-        while( strct )
-        {
-            if( strct->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* ss = (SCH_SHEET*) strct;
-
-                if( ss->LocatePathOfScreen( aScreen, aList ) )
-                    return true;
-            }
-
-            strct = strct->Next();
-        }
-
-        aList->Pop();
-    }
-    return false;
-}
-
-
 bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 {
     bool success = true;
 
     SCH_SCREEN* screen = NULL;
+
     if( !m_screen )
     {
-        g_RootSheet->SearchHierarchy( m_fileName, &screen );
+        GetRootSheet()->SearchHierarchy( m_fileName, &screen );
 
         if( screen )
         {
@@ -781,6 +749,11 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
                     if( bs->Type() == SCH_SHEET_T )
                     {
                         SCH_SHEET* sheetstruct = (SCH_SHEET*) bs;
+
+                        // Set the parent to this sheet.  This effectively creates the
+                        // schematic sheet hierarchy eliminating the need to keep a
+                        // copy of the root sheet in order to generate the hierarchy.
+                        sheetstruct->SetParent( this );
 
                         if( !sheetstruct->Load( aFrame ) )
                             success = false;
@@ -813,6 +786,7 @@ int SCH_SHEET::CountSheets()
             }
         }
     }
+
     return count;
 }
 
@@ -827,11 +801,10 @@ void SCH_SHEET::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Sheet Name" ), m_name, CYAN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "File Name" ), m_fileName, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Path" ), GetHumanReadablePath(), DARKMAGENTA ) );
 
-#if 0   // Set to 1 to display the sheet time stamp (mainly for test)
-    wxString msg;
-    msg.Printf( wxT( "%.8X" ), m_TimeStamp );
-    aList.push_back( MSG_PANEL_ITEM( _( "Time Stamp" ), msg, BLUE ) );
+#if 1   // Set to 1 to display the sheet time stamp (mainly for test)
+    aList.push_back( MSG_PANEL_ITEM( _( "Time Stamp" ), GetPath(), BLUE ) );
 #endif
 }
 
@@ -1148,7 +1121,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     Text = m_name;
     size = wxSize( m_sheetNameSize, m_sheetNameSize );
 
-    //pos  = m_pos; pos.y -= 4;
     thickness = GetDefaultLineThickness();
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
@@ -1178,6 +1150,67 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     {
         m_pins[i].Plot( aPlotter );
     }
+}
+
+
+SCH_SHEET* SCH_SHEET::GetRootSheet()
+{
+    EDA_ITEM* parent = GetParent();
+    SCH_SHEET* rootSheet = this;
+
+    while( parent )
+    {
+        // The parent of a SCH_SHEET object can only be another SCH_SHEET object or NULL.
+        wxASSERT_MSG( parent->Type() == SCH_SHEET_T, "SCH_SHEET parent is not a SCH_SHEET" );
+        rootSheet = static_cast<SCH_SHEET*>( parent );
+        parent = parent->GetParent();
+    }
+
+    return rootSheet;
+}
+
+
+void SCH_SHEET::GetPath( SCH_CONST_SHEETS& aSheetPath ) const
+{
+    aSheetPath.insert( aSheetPath.begin(),  const_cast<SCH_SHEET*>( this ) );
+
+    if( GetParent() )
+        static_cast<SCH_SHEET*>( GetParent() )->GetPath( aSheetPath );
+}
+
+
+wxString SCH_SHEET::GetPath() const
+{
+    wxString         tmp;
+    wxString         path = "/";
+    const SCH_SHEET* sheet = this;
+
+    while( sheet->GetParent() )
+    {
+        tmp.Printf( "/%8.8lX", (long unsigned) sheet->GetTimeStamp() );
+
+        // We are walking up the parent stack so prepend each time stamp.
+        path = tmp + path;
+        sheet = static_cast<SCH_SHEET*>( sheet->GetParent() );
+    }
+
+    return path;
+}
+
+
+wxString SCH_SHEET::GetHumanReadablePath() const
+{
+    wxString         path = "/";
+    const SCH_SHEET* sheet = this;
+
+    while( sheet->GetParent() )
+    {
+        // We are walking up the parent stack so prepend each sheet name.
+        path = "/" + sheet->GetName() + path;
+        sheet = static_cast<SCH_SHEET*>( sheet->GetParent() );
+    }
+
+    return path;
 }
 
 
@@ -1211,6 +1244,35 @@ SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
     }
 
     return *this;
+}
+
+
+bool SCH_SHEET::operator<( const SCH_SHEET& aRhs ) const
+{
+    // Don't waste time against comparing the same objects..
+    if( this == &aRhs )
+        return false;
+
+    SCH_CONST_SHEETS lhsPath, rhsPath;
+
+    GetPath( lhsPath );
+    aRhs.GetPath( rhsPath );
+
+    // Shorter paths are less than longer paths.
+    if( lhsPath.size() < rhsPath.size() )
+        return true;
+
+    if( lhsPath.size() > rhsPath.size() )
+        return false;
+
+    // Compare time stamps when path lengths are the same.
+    for( unsigned i = 0;  i < lhsPath.size();  i++ )
+    {
+        if( lhsPath[i]->GetTimeStamp() < rhsPath[i]->GetTimeStamp() )
+            return true;
+    }
+
+    return false;
 }
 
 

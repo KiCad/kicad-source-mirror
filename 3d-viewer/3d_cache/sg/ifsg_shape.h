@@ -37,7 +37,7 @@
  * Class IFSG_SHAPE
  * is the wrapper for the SGSHAPE class
  */
-class SG_DLL IFSG_SHAPE : public IFSG_NODE
+class SGLIB_API IFSG_SHAPE : public IFSG_NODE
 {
 public:
     IFSG_SHAPE( bool create );

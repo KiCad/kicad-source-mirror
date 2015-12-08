@@ -31,8 +31,7 @@
 
 #include <3d_cache/sg/ifsg_node.h>
 
-
-class IFSG_APPEARANCE : public IFSG_NODE
+class SGLIB_API IFSG_APPEARANCE : public IFSG_NODE
 {
 public:
     IFSG_APPEARANCE( bool create );

@@ -132,8 +132,6 @@ else()
 
     set( bootstrap ./bootstrap.sh --with-libraries=${libs_csv} )
     # pass to *both* C and C++ compilers
-    set( BOOST_CFLAGS   "cflags=${PIC_FLAG}" )
-    set( BOOST_CXXFLAGS "cxxflags=${PIC_FLAG}" )
     set( BOOST_INCLUDE  "${BOOST_ROOT}/include" )
     unset( b2_libs )
 endif()
