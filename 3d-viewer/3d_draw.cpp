@@ -1133,20 +1133,19 @@ void EDA_3D_CANVAS::render3DComponentShape( MODULE* module,
              * be replaced anyway so all debugging of 3D Plugins should be
              * done via the new rendering system
              */
-            if( 0 )
+#if 0
+            if( isEnabled( FL_RENDER_SHOW_MODEL_BBOX ) )
             {
-                if( isEnabled( FL_RENDER_SHOW_MODEL_BBOX ) )
-                {
-                    // Set the alpha current color to opaque
-                    float currentColor[4];
-                    glGetFloatv( GL_CURRENT_COLOR,currentColor );
-                    currentColor[3] = 1.0f;
-                    glColor4fv( currentColor );
+                // Set the alpha current color to opaque
+                float currentColor[4];
+                glGetFloatv( GL_CURRENT_COLOR,currentColor );
+                currentColor[3] = 1.0f;
+                glColor4fv( currentColor );
 
-                    CBBOX thisBBox = shape3D->getBBox();
-                    thisBBox.GLdebug();
-                }
+                CBBOX thisBBox = shape3D->getBBox();
+                thisBBox.GLdebug();
             }
+#endif
 
             glPopMatrix();
 
