@@ -16,6 +16,7 @@ include_directories(
     ../pcbnew/dialogs
     ../polygon
     ../common
+    ${GLM_INCLUDE_DIR}
     ${INC_AFTER}
     )
 

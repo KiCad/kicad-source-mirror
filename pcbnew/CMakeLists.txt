@@ -43,6 +43,7 @@ include_directories(
     ../lib_dxf
     ./import_dxf
     ../utils/idftools
+    ${GLM_INCLUDE_DIR}
     ${INC_AFTER}
     )
 

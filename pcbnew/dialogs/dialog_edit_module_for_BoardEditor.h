@@ -23,21 +23,22 @@
  */
 
 #include <dialog_edit_module_for_BoardEditor_base.h>
+#include <3d_struct.h>
+
+class PANEL_PREV_3D;
 
 class DIALOG_MODULE_BOARD_EDITOR: public DIALOG_MODULE_BOARD_EDITOR_BASE
 {
 private:
-    PCB_EDIT_FRAME * m_Parent;
-    wxDC * m_DC;
-    MODULE* m_CurrentModule;
-    TEXTE_MODULE* m_ReferenceCopy;
-    TEXTE_MODULE* m_ValueCopy;
+    PCB_EDIT_FRAME *            m_Parent;
+    wxDC *                      m_DC;
+    MODULE*                     m_CurrentModule;
+    TEXTE_MODULE*               m_ReferenceCopy;
+    TEXTE_MODULE*               m_ValueCopy;
     std::vector <S3D_MASTER*>   m_Shapes3D_list;
-    int m_LastSelected3DShapeIndex;
-    S3DPOINT_VALUE_CTRL * m_3D_Scale;
-    S3DPOINT_VALUE_CTRL * m_3D_Offset;
-    S3DPOINT_VALUE_CTRL * m_3D_Rotation;
-    static size_t m_page;     // remember the last open page during session
+    int                         m_LastSelected3DShapeIndex;
+    static size_t               m_page; // remember the last open page during session
+    PANEL_PREV_3D*              m_PreviewPane;
 
 public:
     // The dialog can be closed for several reasons.

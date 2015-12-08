@@ -50,6 +50,8 @@
 #include <module_editor_frame.h>
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
+#include <3d_cache/dialogs/panel_prev_model.h>
+#include <3d_cache/dialogs/3d_cache_dialogs.h>
 
 size_t DIALOG_MODULE_MODULE_EDITOR::m_page = 0;     // remember the last open page during session
 
@@ -66,6 +68,10 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
+    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, false );
+    m_PreviewPane->SetModelManager( Prj().Get3DCacheManager() );
+    bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
+
     m_FootprintNameCtrl->SetValidator( FILE_NAME_CHAR_VALIDATOR() );
     initModeditProperties();
 
@@ -74,6 +80,7 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
     m_sdbSizerStdButtonsOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
+    Layout();
 }
 
 
@@ -88,9 +95,6 @@ DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
 
     delete m_referenceCopy;
     delete m_valueCopy;
-    delete m_3D_Scale;
-    delete m_3D_Offset;
-    delete m_3D_Rotation;
 }
 
 
@@ -104,7 +108,6 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
-    m_textCtrl3DDefaultPath->SetValue( default_path );
 
     m_lastSelected3DShapeIndex = -1;
 
@@ -166,11 +169,6 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_CostRot90Ctrl->SetValue( m_currentModule->GetPlacementCost90() );
     m_CostRot180Ctrl->SetValue( m_currentModule->GetPlacementCost180() );
 
-    // Initialize 3D parameters
-    m_3D_Scale = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeScale );
-    m_3D_Offset = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeOffset );
-    m_3D_Rotation = new S3DPOINT_VALUE_CTRL( m_Panel3D, m_bSizerShapeRotation );
-
     // Initialize dialog relative to masks clearances
     m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
     m_SolderMaskMarginUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
@@ -220,17 +218,27 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 // Initialize 3D info displayed in dialog box from values in aStruct3DSource
 void DIALOG_MODULE_MODULE_EDITOR::Transfert3DValuesToDisplay( S3D_MASTER * aStruct3DSource )
 {
+    S3D_INFO params;
+
     if( aStruct3DSource )
     {
-        m_3D_Scale->SetValue( aStruct3DSource->m_MatScale );
-        m_3D_Offset->SetValue( aStruct3DSource->m_MatPosition );
-        m_3D_Rotation->SetValue( aStruct3DSource->m_MatRotation );
+        params.filename = aStruct3DSource->GetShape3DName();
+
+        params.scale.x = aStruct3DSource->m_MatScale.x;
+        params.scale.y = aStruct3DSource->m_MatScale.y;
+        params.scale.z = aStruct3DSource->m_MatScale.z;
+
+        params.offset.x = aStruct3DSource->m_MatPosition.x;
+        params.offset.y = aStruct3DSource->m_MatPosition.y;
+        params.offset.z = aStruct3DSource->m_MatPosition.z;
+
+        params.rotation.x = aStruct3DSource->m_MatRotation.x;
+        params.rotation.y = aStruct3DSource->m_MatRotation.y;
+        params.rotation.z = aStruct3DSource->m_MatRotation.z;
     }
-    else
-    {
-        S3DPOINT dummy_vertex( 1.0, 1.0, 1.0 );
-        m_3D_Scale->SetValue( dummy_vertex );
-    }
+
+    m_PreviewPane->SetModelData( &params );
+    return;
 }
 
 
@@ -239,13 +247,26 @@ void DIALOG_MODULE_MODULE_EDITOR::Transfert3DValuesToDisplay( S3D_MASTER * aStru
  */
 void DIALOG_MODULE_MODULE_EDITOR::TransfertDisplayTo3DValues( int aIndexSelection  )
 {
-    if( aIndexSelection >= (int)m_shapes3D_list.size() )
+    if( aIndexSelection >= (int) m_shapes3D_list.size() )
         return;
 
-    S3D_MASTER * struct3DDest = m_shapes3D_list[aIndexSelection];
-    struct3DDest->m_MatScale    = m_3D_Scale->GetValue();
-    struct3DDest->m_MatRotation = m_3D_Rotation->GetValue();
-    struct3DDest->m_MatPosition = m_3D_Offset->GetValue();
+    S3D_MASTER* struct3DDest = m_shapes3D_list[aIndexSelection];
+    S3D_INFO params;
+    m_PreviewPane->GetModelData( &params );
+
+    struct3DDest->m_MatScale.x = params.scale.x;
+    struct3DDest->m_MatScale.y = params.scale.y;
+    struct3DDest->m_MatScale.z = params.scale.z;
+
+    struct3DDest->m_MatRotation.x = params.rotation.x;
+    struct3DDest->m_MatRotation.y = params.rotation.y;
+    struct3DDest->m_MatRotation.z = params.rotation.z;
+
+    struct3DDest->m_MatPosition.x = params.offset.x;
+    struct3DDest->m_MatPosition.y = params.offset.y;
+    struct3DDest->m_MatPosition.z = params.offset.z;
+
+    return;
 }
 
 
@@ -276,21 +297,27 @@ void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
         TransfertDisplayTo3DValues( m_lastSelected3DShapeIndex );
 
     int ii = m_3D_ShapeNameListBox->GetSelection();
-
     if( ii < 0 )
         return;
 
     m_shapes3D_list.erase( m_shapes3D_list.begin() + ii );
     m_3D_ShapeNameListBox->Delete( ii );
 
-    if( m_3D_ShapeNameListBox->GetCount() == 0)
+    if( m_3D_ShapeNameListBox->GetCount() == 0 )
         Transfert3DValuesToDisplay( NULL );
     else
     {
-        m_lastSelected3DShapeIndex = 0;
+        if( ii > 0 )
+            m_lastSelected3DShapeIndex = ii - 1;
+        else
+            m_lastSelected3DShapeIndex = 0;
+
         m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
-        Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
+        Transfert3DValuesToDisplay(
+            m_shapes3D_list[m_lastSelected3DShapeIndex] );
     }
+
+    return;
 }
 
 
@@ -328,81 +355,57 @@ void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
 void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
 {
     PROJECT&        prj = Prj();
-
-    // here, the KISYS3DMOD default path for 3D shape files is expected
-    // to be already defined (when starting Pcbnew, it is defined
-    // from the user defined env variable, or set to a default value)
-    wxFileName fn( wxGetenv( KISYS3DMOD ), wxEmptyString );
-    wxString default3DPath = fn.GetPathWithSep();
+    S3D_INFO model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
+    wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
+    int filter = 0;
 
-    if( !initialpath )
-        initialpath = default3DPath;
-
-#ifdef __WINDOWS__
-    initialpath.Replace( wxT( "/" ), wxT( "\\" ) );
-#endif
-
-    wxString fileFilters = wxGetTranslation( Shapes3DFileWildcard );
-
-    fileFilters += wxChar(  '|' );
-    fileFilters += wxGetTranslation( IDF3DFileWildcard );
-
-    wxString filename = EDA_FILE_SELECTOR( _( "3D Shape:" ), initialpath,
-                                           wxEmptyString, wxEmptyString,
-                                           wxGetTranslation( fileFilters ),
-                                           this, wxFD_OPEN, true );
-
-    if( filename.IsEmpty() )
-        return;
-
-    fn = filename;
-
-    prj.SetRString( PROJECT::VIEWER_3D_PATH, fn.GetPath() );
-
-    /* If the file path is already in the 3D shape file default path
-     * just add the file name relative to this path to the list.
-     * Otherwise, add the file name with a full or relative path.
-     * The relative path, when possible, is preferable
-     * because it preserve use of default path, when the path is a sub path of this path
-     */
-    wxString rootpath = filename.SubString( 0, default3DPath.Length()-1 );
-    bool useRelPath = rootpath.IsSameAs( default3DPath, wxFileName::IsCaseSensitive() );
-
-    if( useRelPath )
-        fn.MakeRelativeTo( default3DPath );
-    else    // Absolute path given, not a subpath of the default path,
-            // therefore ask if the user wants a relative (to the default path) one
+    if( !sidx.empty() )
     {
-        wxString msg;
-        msg.Printf( _( "Use a path relative to '%s'?" ), GetChars( default3DPath ) );
-        int diag = wxMessageBox( msg, _( "Path type" ),
-                                 wxYES_NO | wxICON_QUESTION, this );
+        long tmp;
+        sidx.ToLong( &tmp );
 
-        if( diag == wxYES )     // Make it relative to the default 3D path
-            fn.MakeRelativeTo( default3DPath );
+        if( tmp > 0 && tmp <= 0x7FFFFFFF )
+            filter = (int) tmp;
     }
 
-    filename = fn.GetFullPath();
+    if( !S3D::Select3DModel( m_PreviewPane, Prj().Get3DCacheManager(),
+                             initialpath, filter, &model ) )
+    {
+        return;
+    }
 
-    S3D_MASTER* new3DShape = new S3D_MASTER(NULL);
+    prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
+    sidx = wxString::Format( wxT( "%i" ), filter );
+    prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
+
+    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
 
 #ifdef __WINDOWS__
-    // Store filename in Unix notation
-    filename.Replace( wxT( "\\" ), wxT( "/" ) );
+    // In Kicad files, filenames and paths are stored using Unix notation
+    model.filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-    new3DShape->SetShape3DName( filename );
-    m_shapes3D_list.push_back( new3DShape );
-    m_3D_ShapeNameListBox->Append( filename );
+    new3DShape->SetShape3DName( model.filename );
+    new3DShape->m_MatScale.x = model.scale.x;
+    new3DShape->m_MatScale.y = model.scale.y;
+    new3DShape->m_MatScale.z = model.scale.z;
+    new3DShape->m_MatRotation.x = model.rotation.x;
+    new3DShape->m_MatRotation.y = model.rotation.y;
+    new3DShape->m_MatRotation.z = model.rotation.z;
+    new3DShape->m_MatPosition.x = model.offset.x;
+    new3DShape->m_MatPosition.y = model.offset.y;
+    new3DShape->m_MatPosition.z = model.offset.z;
 
-    if( m_lastSelected3DShapeIndex >= 0 )
-        TransfertDisplayTo3DValues( m_lastSelected3DShapeIndex );
+    m_shapes3D_list.push_back( new3DShape );
+    m_3D_ShapeNameListBox->Append( model.filename );
 
     m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetCount() - 1;
     m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
     Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
+
+    return;
 }
 
 

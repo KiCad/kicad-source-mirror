@@ -4,6 +4,7 @@ include_directories(
     ./dialog_about
     ${CAIRO_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
+    ${GLM_INCLUDE_DIR}
     ../3d-viewer
     ../pcbnew
     ../polygon

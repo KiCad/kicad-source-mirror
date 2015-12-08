@@ -1,0 +1,209 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sg_helpers.h
+ * defines a number of macro functions to aid in repetitious code which
+ * is probably best expressed as a preprocessor macro rather than as
+ * a template. This header also declares a number of functions which are
+ * only of use within the sg_* classes.
+ */
+
+#ifndef SG_HELPERS_H
+#define SG_HELPERS_H
+
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include <3d_cache/sg/sg_base.h>
+#include "sg_types.h"
+
+// Function to drop references within an SGNODE
+// The node being destroyed must remove itself from the object reference's
+// backpointer list in order to avoid a segfault.
+#define DROP_REFS( aType, aList ) do { \
+        std::vector< aType* >::iterator sL = aList.begin(); \
+        std::vector< aType* >::iterator eL = aList.end(); \
+        while( sL != eL ) { \
+            ((SGNODE*)*sL)->delNodeRef( this ); \
+            ++sL; \
+        } \
+        aList.clear(); \
+    } while( 0 )
+
+
+// Function to delete owned objects within an SGNODE
+// The owned object's parent is set to NULL before
+// deletion to avoid a redundant 'unlinkChildNode' call.
+#define DEL_OBJS( aType, aList ) do { \
+        std::vector< aType* >::iterator sL = aList.begin(); \
+        std::vector< aType* >::iterator eL = aList.end(); \
+        while( sL != eL ) { \
+            ((SGNODE*)*sL)->SetParent( NULL, false ); \
+            delete *sL; \
+            ++sL; \
+        } \
+        aList.clear(); \
+    } while( 0 )
+
+
+// Function to unlink a child or reference node when that child or
+// reference node is being destroyed.
+#define UNLINK_NODE( aNodeID, aType, aNode, aOwnedList, aRefList, isChild ) do { \
+        if( aNodeID == aNode->GetNodeType() ) { \
+            std::vector< aType* >* oSL; \
+            std::vector< aType* >::iterator sL; \
+            std::vector< aType* >::iterator eL; \
+            if( isChild ) { \
+                oSL = &aOwnedList; \
+                sL =  aOwnedList.begin(); \
+                eL =  aOwnedList.end(); \
+            } else { \
+                oSL = &aRefList; \
+                sL =  aRefList.begin(); \
+                eL =  aRefList.end(); \
+            } \
+            while( sL != eL ) { \
+                if( (SGNODE*)*sL == aNode ) { \
+                    oSL->erase( sL ); \
+                    return; \
+                } \
+                ++sL; \
+            } \
+            return; \
+        } } while( 0 )
+
+
+// Function to check a node type, check for an existing reference,
+// and add the node type to the reference list if applicable
+#define ADD_NODE( aNodeID, aType, aNode, aOwnedList, aRefList, isChild ) do { \
+    if( aNodeID == aNode->GetNodeType() ) { \
+        std::vector< aType* >::iterator sL; \
+        SGNODE* psg = NULL; \
+        sL = std::find( aOwnedList.begin(), aOwnedList.end(), aNode ); \
+        if( sL != aOwnedList.end() ) return true; \
+        sL = std::find( aRefList.begin(), aRefList.end(), aNode ); \
+        if( sL != aRefList.end() ) return true; \
+        if( isChild ) { \
+            SGNODE* ppn = (SGNODE*)aNode->GetParent(); \
+            if( NULL != ppn ) { \
+                if( this != ppn ) { \
+                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n"; \
+                    std::cerr << " * [BUG] object '" << aNode->GetName(); \
+                    std::cerr << "' has multiple parents '" << ppn->GetName() << "', '"; \
+                    std::cerr << m_Name << "'\n"; \
+                    return false; \
+                } \
+            } \
+            aOwnedList.push_back( (aType*)aNode ); \
+            aNode->SetParent( this, false ); \
+        } else { \
+            if( NULL == aNode->GetParent() ) { \
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n"; \
+                std::cerr << " * [BUG] object '" << aNode->GetName(); \
+                std::cerr << "' has no parent\n"; \
+                std::cerr << " * [INFO] possible copy assignment or copy constructor bug\n"; \
+                return false; \
+            } \
+            aRefList.push_back( (aType*)aNode ); \
+            aNode->addNodeRef( this ); \
+        } \
+        return true; \
+    } } while( 0 )
+
+
+// Function to find a node object given a (non-unique) node name
+#define FIND_NODE( aType, aName, aNodeList, aCallingNode ) do { \
+    std::vector< aType* >::iterator sLA = aNodeList.begin(); \
+    std::vector< aType* >::iterator eLA = aNodeList.end(); \
+    SGNODE* psg = NULL; \
+    while( sLA != eLA ) { \
+        if( (SGNODE*)*sLA != aCallingNode ) { \
+            psg = (SGNODE*) (*sLA)->FindNode( aName, this ); \
+            if( NULL != psg) \
+                return psg; \
+        } \
+        ++sLA; \
+    } } while ( 0 )
+
+namespace S3D
+{
+    //
+    // VRML related functions
+    //
+
+    // formats a floating point number for text output to a VRML file
+    void FormatFloat( std::string& result, double value );
+
+    // format orientation data for VRML output
+    void FormatOrientation( std::string& result, const SGVECTOR& axis, double rotation );
+
+    // format point data for VRML output
+    void FormatPoint( std::string& result, const SGPOINT& point );
+
+    // format vector data for VRML output
+    void FormatVector( std::string& result, const SGVECTOR& aVector );
+
+    // format Color data for VRML output
+    void FormatColor( std::string& result, const SGCOLOR& aColor );
+
+    //
+    // Cache related WRITE functions
+    //
+
+    // write out an XYZ vertex
+    bool WritePoint( std::ofstream& aFile, const SGPOINT& aPoint );
+
+    // write out a unit vector
+    bool WriteVector( std::ofstream& aFile, const SGVECTOR& aVector );
+
+    // write out an RGB color
+    bool WriteColor( std::ofstream& aFile, const SGCOLOR& aColor );
+
+    //
+    // Cache related READ functions
+    //
+
+    /**
+     * Function ReadTag
+     * reads the text tag of a binary cache file which is the
+     * NodeTag and unique ID number combined
+     *
+     * @param aFile is a binary file open for reading
+     * @param aName will hold the tag name on successful return
+     * @return will be the NodeType which the tag represents or
+     * S3D::SGTYPES::SGTYPE_END on failure
+     */
+    S3D::SGTYPES ReadTag( std::ifstream& aFile, std::string& aName );
+
+    // read an XYZ vertex
+    bool ReadPoint( std::ifstream& aFile, SGPOINT& aPoint );
+
+    // read a unit vector
+    bool ReadVector( std::ifstream& aFile, SGVECTOR& aVector );
+
+    // read an RGB color
+    bool ReadColor( std::ifstream& aFile, SGCOLOR& aColor );
+};
+
+#endif  // SG_HELPERS_H

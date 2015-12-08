@@ -45,7 +45,7 @@
 #include <colors_selection.h>
 #include <convert_basic_shapes_to_polygon.h>
 #define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <gal/opengl/opengl_compositor.h>
 #ifdef __WINDOWS__
 #include <GL/glew.h>        // must be included before gl.h

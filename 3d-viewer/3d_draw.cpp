@@ -45,7 +45,7 @@
 #include <colors_selection.h>
 #include <convert_basic_shapes_to_polygon.h>
 #define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <gal/opengl/opengl_compositor.h>
 #ifdef __WINDOWS__
 #include <GL/glew.h>        // must be included before gl.h
@@ -1128,16 +1128,24 @@ void EDA_3D_CANVAS::render3DComponentShape( MODULE* module,
             shape3D->Render( aIsRenderingJustNonTransparentObjects,
                              aIsRenderingJustTransparentObjects );
 
-            if( isEnabled( FL_RENDER_SHOW_MODEL_BBOX ) )
+            /*
+             * XXX - CB - DEPRECATE THIS - the old renderer will eventually
+             * be replaced anyway so all debugging of 3D Plugins should be
+             * done via the new rendering system
+             */
+            if( 0 )
             {
-                // Set the alpha current color to opaque
-                float currentColor[4];
-                glGetFloatv( GL_CURRENT_COLOR,currentColor );
-                currentColor[3] = 1.0f;
-                glColor4fv( currentColor );
+                if( isEnabled( FL_RENDER_SHOW_MODEL_BBOX ) )
+                {
+                    // Set the alpha current color to opaque
+                    float currentColor[4];
+                    glGetFloatv( GL_CURRENT_COLOR,currentColor );
+                    currentColor[3] = 1.0f;
+                    glColor4fv( currentColor );
 
-                CBBOX thisBBox = shape3D->getBBox();
-                thisBBox.GLdebug();
+                    CBBOX thisBBox = shape3D->getBBox();
+                    thisBBox.GLdebug();
+                }
             }
 
             glPopMatrix();

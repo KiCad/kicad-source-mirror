@@ -32,8 +32,8 @@
 #define VERTEX_MANAGER_H_
 
 #define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/gtc/matrix_transform.hpp>
-#include <gal/opengl/glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
 #include <gal/opengl/vertex_common.h>
 #include <gal/color4d.h>
 #include <stack>

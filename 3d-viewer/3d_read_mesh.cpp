@@ -34,7 +34,7 @@
 #include <kicad_string.h>
 #include <pgm_base.h>
 #define GLM_FORCE_RADIANS
-#include <gal/opengl/glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <3d_viewer.h>
 #include <info3d_visu.h>
 #include "3d_struct.h"

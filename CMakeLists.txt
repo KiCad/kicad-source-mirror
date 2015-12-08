@@ -448,17 +448,16 @@ check_find_package_result( OPENGL_FOUND "OpenGL" )
 # Always defined, empty if no libraries are to be built
 add_custom_target( lib-dependencies )
 
-#####################
-# Find GLEW library #
-#####################
+# Find GLEW library
 if( NOT GLEW_FOUND )
     find_package( GLEW )
     check_find_package_result( GLEW_FOUND "GLEW" )
 endif()
 
-######################
-# Find Cairo library #
-######################
+# Find GLM library
+find_package( GLM 0.9.5.4 REQUIRED )
+
+# Find Cairo library
 if( NOT CAIRO_FOUND )
     find_package( Cairo 1.8.1 QUIET )
     check_find_package_result( CAIRO_FOUND "Cairo" )
@@ -813,3 +812,6 @@ if( UNIX AND NOT APPLE )
     include( CPack )
 
 endif()
+
+# 3D plugins
+add_subdirectory( plugins )

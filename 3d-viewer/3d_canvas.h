@@ -45,7 +45,7 @@
 #include <3d_struct.h>
 #include <modelparsers.h>
 #include <class_module.h>
-#include <CBBox.h>
+#include "3d_rendering/3d_render_raytracing/shapes3D/cbbox.h"
 
 class BOARD_DESIGN_SETTINGS;
 class EDA_3D_FRAME;
