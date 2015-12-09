@@ -21,23 +21,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "3d_cache/sg/sg_coordindex.h"
+/**
+ * @file sg_types.h
+ * defines the types of intermediate scene graph objects
+ */
 
+#ifndef SG_TYPES_H
+#define SG_TYPES_H
 
-SGCOORDINDEX::SGCOORDINDEX( SGNODE* aParent ) : SGINDEX( aParent )
+namespace S3D
 {
-    m_SGtype = S3D::SGTYPE_COORDINDEX;
-
-    if( NULL != aParent && S3D::SGTYPE_FACESET == aParent->GetNodeType() )
+    enum SGTYPES
     {
-        m_Parent->AddChildNode( this );
-    }
+        SGTYPE_TRANSFORM = 0,
+        SGTYPE_APPEARANCE,
+        SGTYPE_COLORS,
+        SGTYPE_COLORINDEX,
+        SGTYPE_FACESET,
+        SGTYPE_COORDS,
+        SGTYPE_COORDINDEX,
+        SGTYPE_NORMALS,
+        SGTYPE_SHAPE,
+        SGTYPE_END
+    };
+};
 
-    return;
-}
-
-
-SGCOORDINDEX::~SGCOORDINDEX()
-{
-    return;
-}
+#endif  // SG_TYPES_H

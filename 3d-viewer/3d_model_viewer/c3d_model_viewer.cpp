@@ -32,6 +32,9 @@
 #include "3d_rendering/3d_render_ogl_legacy/ogl_legacy_utils.h"
 #include "common_ogl/ogl_utils.h"
 #include <wx/dcclient.h>
+#include "convert_to_biu.h"
+
+#define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.

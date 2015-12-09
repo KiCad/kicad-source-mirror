@@ -25,8 +25,8 @@
 #include <cstdlib>
 #include <list>
 #include <wx/filename.h>
-#include <3d_cache.h>
 
+#include "3d_cache.h"
 #include "dialog_config_3dpath.h"
 
 enum

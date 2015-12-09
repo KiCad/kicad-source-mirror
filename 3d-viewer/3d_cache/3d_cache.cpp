@@ -42,7 +42,7 @@
 #include "sg/scenegraph.h"
 #include "3d_filename_resolver.h"
 #include "3d_plugin_manager.h"
-#include "sg/ifsg_api.h"
+#include "plugins/3dapi/ifsg_api.h"
 
 
 #define CACHE_CONFIG_NAME wxT( "cache.cfg" )

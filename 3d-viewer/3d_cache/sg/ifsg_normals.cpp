@@ -23,8 +23,8 @@
 
 
 #include <iostream>
-#include <3d_cache/sg/ifsg_normals.h>
-#include <3d_cache/sg/sg_normals.h>
+#include "plugins/3dapi/ifsg_normals.h"
+#include "3d_cache/sg/sg_normals.h"
 
 
 extern char BadObject[];

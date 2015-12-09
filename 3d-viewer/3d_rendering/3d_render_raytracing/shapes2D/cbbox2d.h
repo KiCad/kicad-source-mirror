@@ -30,7 +30,7 @@
 #ifndef _CBBOX2D_H_
 #define _CBBOX2D_H_
 
-#include "3d_xv3d/xv3d_types.h"
+#include "plugins/3dapi/xv3d_types.h"
 #include "3d_rendering/3d_render_raytracing/ray.h"
 
 

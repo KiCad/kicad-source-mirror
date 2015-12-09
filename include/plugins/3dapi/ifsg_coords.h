@@ -22,40 +22,36 @@
  */
 
 /**
- * @file ifsg_transform.h
- * defines the wrapper for the SCENEGRAPH class
+ * @file ifsg_coords.h
+ * defines the coordinate list wrapper
  */
 
 
-#ifndef IFSG_TRANSFORM_H
-#define IFSG_TRANSFORM_H
+#ifndef IFSG_COORDS_H
+#define IFSG_COORDS_H
 
-#include <3d_cache/sg/ifsg_node.h>
+#include "plugins/3dapi/ifsg_node.h"
 
 
 /**
- * Class IFSG_TRANSFORM
- * is the wrapper for the VRML compatible TRANSFORM block class SCENEGRAPH
+ * Class IFSG_INDEX
+ * is the wrapper for SGCOORDS
  */
-class SGLIB_API IFSG_TRANSFORM : public IFSG_NODE
+class SGLIB_API IFSG_COORDS : public IFSG_NODE
 {
 public:
-    IFSG_TRANSFORM( bool create );
-    IFSG_TRANSFORM( SGNODE* aParent );
-    // note: IFSG_TRANSFORM( IFSG_NODE& aParent ) does not exist
-    // since a transform may own another transform and that construct
-    // invites accidental misuse of the copy constructor
+    IFSG_COORDS( bool create );
+    IFSG_COORDS( SGNODE* aParent );
+    IFSG_COORDS( IFSG_NODE& aParent );
 
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
 
-    bool SetScaleOrientation( const SGVECTOR& aScaleAxis, double aAngle );
-    bool SetRotation( const SGVECTOR& aRotationAxis, double aAngle );
-    bool SetScale( const SGPOINT& aScale );
-    bool SetScale( double aScale );
-    bool SetCenter( const SGPOINT& aCenter );
-    bool SetTranslation( const SGPOINT& aTranslation );
+    bool GetCoordsList( size_t& aListSize, SGPOINT*& aCoordsList );
+    bool SetCoordsList( size_t aListSize, const SGPOINT* aCoordsList );
+    bool AddCoord( double aXValue, double aYValue, double aZValue );
+    bool AddCoord( const SGPOINT& aPoint );
 };
 
-#endif  // IFSG_TRANSFORM_H
+#endif  // IFSG_COORDS_H

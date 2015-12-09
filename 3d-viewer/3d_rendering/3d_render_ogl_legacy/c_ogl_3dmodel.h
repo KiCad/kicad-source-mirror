@@ -30,7 +30,7 @@
 #ifndef _C_OGL_3DMODEL_H_
 #define _C_OGL_3DMODEL_H_
 
-#include "3d_rendering/c3dmodel.h"
+#include "plugins/3dapi/c3dmodel.h"
 #include "common_ogl/openGL_includes.h"
 #include "3d_rendering/3d_render_raytracing/shapes3D/cbbox.h"
 

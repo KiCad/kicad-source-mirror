@@ -22,8 +22,8 @@
  */
 
 #include <iostream>
-#include <3d_cache/sg/ifsg_colors.h>
-#include <3d_cache/sg/sg_colors.h>
+#include "plugins/3dapi/ifsg_colors.h"
+#include "3d_cache/sg/sg_colors.h"
 
 
 extern char BadObject[];

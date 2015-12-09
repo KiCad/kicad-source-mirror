@@ -27,9 +27,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <3d_cache/sg/scenegraph.h>
-#include <3d_cache/sg/sg_shape.h>
-#include <3d_cache/sg/sg_helpers.h>
+#include "3d_cache/sg/scenegraph.h"
+#include "3d_cache/sg/sg_shape.h"
+#include "3d_cache/sg/sg_helpers.h"
 
 SCENEGRAPH::SCENEGRAPH( SGNODE* aParent ) : SGNODE( aParent )
 {

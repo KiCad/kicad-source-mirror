@@ -27,8 +27,10 @@
 #include <streambuf>
 #include <iomanip>
 #include <string>
-#include <3d_cache/sg/sg_helpers.h>
-#include <3d_cache/sg/sg_node.h>
+
+#include "3d_cache/sg/sg_helpers.h"
+#include "3d_cache/sg/sg_node.h"
+
 
 // formats a floating point number for text output to a VRML file
 void S3D::FormatFloat( std::string& result, double value )

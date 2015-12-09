@@ -23,8 +23,8 @@
 
 
 #include <iostream>
-#include <3d_cache/sg/ifsg_transform.h>
-#include <3d_cache/sg/scenegraph.h>
+#include "plugins/3dapi/ifsg_transform.h"
+#include "3d_cache/sg/scenegraph.h"
 
 
 extern char BadObject[];

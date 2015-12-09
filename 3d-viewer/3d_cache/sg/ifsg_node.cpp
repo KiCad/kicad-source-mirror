@@ -23,9 +23,9 @@
 
 
 #include <iostream>
-#include <3d_cache/sg/ifsg_node.h>
-#include <3d_cache/sg/sg_node.h>
-#include <3d_cache/sg/ifsg_api.h>
+#include "plugins/3dapi/ifsg_node.h"
+#include "3d_cache/sg/sg_node.h"
+#include "plugins/3dapi/ifsg_api.h"
 
 // collection of common error strings used by the wrappers
 char BadObject[] = " * [BUG] operating on an invalid wrapper (object may have been deleted)";

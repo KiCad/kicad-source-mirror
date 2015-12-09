@@ -41,9 +41,9 @@
     #include <pwd.h>
 #endif
 
-#include <3d_plugin_manager.h>
-#include <plugins/3d/3d_plugin.h>
-#include <3d_cache/sg/scenegraph.h>
+#include "3d_plugin_manager.h"
+#include "plugins/3d/3d_plugin.h"
+#include "3d_cache/sg/scenegraph.h"
 
 class S3D_PLUGIN_ITEM
 {

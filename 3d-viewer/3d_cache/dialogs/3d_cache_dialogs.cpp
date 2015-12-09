@@ -22,10 +22,10 @@
  */
 
 #include <wx/filename.h>
-#include <3d_info.h>
-#include <3d_cache.h>
-#include <sg/ifsg_api.h>
 
+#include "3d_info.h"
+#include "3d_cache.h"
+#include "plugins/3dapi/ifsg_api.h"
 #include "3d_cache_dialogs.h"
 #include "dialog_config_3dpath.h"
 #include "dialog_select_3dmodel.h"

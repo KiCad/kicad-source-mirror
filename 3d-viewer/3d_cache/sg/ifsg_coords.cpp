@@ -22,8 +22,8 @@
  */
 
 #include <iostream>
-#include <3d_cache/sg/ifsg_coords.h>
-#include <3d_cache/sg/sg_coords.h>
+#include "plugins/3dapi/ifsg_coords.h"
+#include "3d_cache/sg/sg_coords.h"
 
 
 extern char BadObject[];

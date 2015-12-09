@@ -31,7 +31,7 @@
 #include <iostream>
 #include <cmath>
 #include <s3d_plugin_tetra.h>
-#include <3d_cache/sg/ifsg_all.h>
+#include <plugins/3dapi/ifsg_all.h>
 
 
 S3D_PLUGIN_TETRA::S3D_PLUGIN_TETRA()

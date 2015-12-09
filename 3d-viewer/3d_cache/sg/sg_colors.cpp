@@ -22,8 +22,8 @@
  */
 
 #include <iostream>
-#include <3d_cache/sg/sg_colors.h>
-#include <3d_cache/sg/sg_helpers.h>
+#include "3d_cache/sg/sg_colors.h"
+#include "3d_cache/sg/sg_helpers.h"
 
 SGCOLORS::SGCOLORS( SGNODE* aParent ) : SGNODE( aParent )
 {

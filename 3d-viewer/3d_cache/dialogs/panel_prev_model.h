@@ -37,8 +37,8 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 
-#include <3d_rendering/c3dmodel.h>
-#include <3d_cache/3d_info.h>
+#include "plugins/3dapi/c3dmodel.h"
+#include "3d_cache/3d_info.h"
 
 class  S3D_CACHE;
 class C3D_MODEL_VIEWER;

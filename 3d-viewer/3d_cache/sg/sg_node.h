@@ -37,9 +37,9 @@
 #include <map>
 #include <glm/glm.hpp>
 
-#include <3d_rendering/c3dmodel.h>
-#include <3d_cache/sg/sg_base.h>
-#include <3d_cache/sg/sg_types.h>
+#include "plugins/3dapi/c3dmodel.h"
+#include "plugins/3dapi/sg_base.h"
+#include "plugins/3dapi/sg_types.h"
 
 class SGNODE;
 class SGAPPEARANCE;

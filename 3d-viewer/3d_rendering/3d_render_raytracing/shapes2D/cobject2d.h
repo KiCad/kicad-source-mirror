@@ -30,7 +30,7 @@
 #ifndef _COBJECT2D_H_
 #define _COBJECT2D_H_
 
-#include "3d_xv3d/xv3d_types.h"
+#include "plugins/3dapi/xv3d_types.h"
 #include "cbbox2d.h"
 #include <string.h>
 

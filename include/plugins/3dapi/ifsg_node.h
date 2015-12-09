@@ -42,9 +42,8 @@
 #ifndef IFSG_NODE_H
 #define IFSG_NODE_H
 
-#include "3d_cache/sg/sg_base.h"
-#include "3d_cache/sg/sg_types.h"
-#include "3d_cache/sg/ifsg_defs.h"
+#include "plugins/3dapi/sg_base.h"
+#include "plugins/3dapi/sg_types.h"
 
 class SGNODE;
 

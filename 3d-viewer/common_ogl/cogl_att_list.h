@@ -30,7 +30,7 @@
 #ifndef _COGL_ATT_LIST_H
 #define _COGL_ATT_LIST_H
 
-//#include <3d_xv3d/xv3d_types.h>
+//#include "plugins/3dapi/xv3d_types.h"
 #include <macros.h>
 #include <wx/glcanvas.h>
 

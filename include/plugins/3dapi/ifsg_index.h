@@ -22,31 +22,50 @@
  */
 
 /**
- * @file ifsg_coordindex.h
- * defines the CoordIndex node wrapper
+ * @file ifsg_index.h
+ * defines the index nodes wrapper
  */
 
 
-#ifndef IFSG_NORMALINDEX_H
-#define IFSG_NORMALINDEX_H
+#ifndef IFSG_INDEX_H
+#define IFSG_INDEX_H
 
-#include <3d_cache/sg/ifsg_index.h>
+#include "plugins/3dapi/ifsg_node.h"
 
 
 /**
- * Class IFSG_NORMALINDEX
- * is the wrapper for SGNORMALINDEX
+ * Class IFSG_INDEX
+ * is the wrapper for SGINDEX
  */
-class SGLIB_API IFSG_NORMALINDEX : public IFSG_INDEX
+class SGLIB_API IFSG_INDEX : public IFSG_NODE
 {
 public:
-    IFSG_NORMALINDEX( bool create );
-    IFSG_NORMALINDEX( SGNODE* aParent );
-    IFSG_NORMALINDEX( IFSG_NODE& aParent );
+    IFSG_INDEX();
 
-    bool Attach( SGNODE* aNode );
-    bool NewNode( SGNODE* aParent );
-    bool NewNode( IFSG_NODE& aParent );
+    virtual bool Attach( SGNODE* aNode ) = 0;
+    virtual bool NewNode( SGNODE* aParent ) = 0;
+    virtual bool NewNode( IFSG_NODE& aParent ) = 0;
+
+    bool GetIndices( size_t& nIndices, int*& aIndexList );
+
+    /**
+     * Function SetIndices
+     * sets the number of indices and creates a copy of the given index data.
+     *
+     * @param nIndices [in] the number of indices to be stored
+     * @param aIndexList [in] the index data
+     */
+    bool SetIndices( size_t nIndices, int* aIndexList );
+
+
+    /**
+     * Function AddIndex
+     * adds a single index to the list
+     *
+     * @param nIndices [in] the number of indices to be stored
+     * @param aIndexList [in] the index data
+     */
+    bool AddIndex( int aIndex );
 };
 
-#endif  // IFSG_NORMALINDEX_H
+#endif  // IFSG_INDEX_H

@@ -35,7 +35,7 @@
 #include "str_rsort.h"
 #include "3d_filename_resolver.h"
 #include "3d_info.h"
-#include <3d_rendering/c3dmodel.h>
+#include "plugins/3dapi/c3dmodel.h"
 
 
 class  S3D_CACHE;

@@ -24,7 +24,7 @@
 
 #include <iostream>
 #include <cmath>
-#include <3d_cache/sg/sg_base.h>
+#include "plugins/3dapi/sg_base.h"
 
 
 SGCOLOR::SGCOLOR()

@@ -22,41 +22,31 @@
  */
 
 /**
- * @file ifsg_appearance.h
- * defines the wrapper of the SGAPPEARANCE class
+ * @file ifsg_coordindex.h
+ * defines the CoordIndex node wrapper
  */
 
-#ifndef IFSG_APPEARANCE_H
-#define IFSG_APPEARANCE_H
 
-#include <3d_cache/sg/ifsg_node.h>
+#ifndef IFSG_NORMALINDEX_H
+#define IFSG_NORMALINDEX_H
 
-class SGLIB_API IFSG_APPEARANCE : public IFSG_NODE
+#include "plugins/3dapi/ifsg_index.h"
+
+
+/**
+ * Class IFSG_NORMALINDEX
+ * is the wrapper for SGNORMALINDEX
+ */
+class SGLIB_API IFSG_NORMALINDEX : public IFSG_INDEX
 {
 public:
-    IFSG_APPEARANCE( bool create );
-    IFSG_APPEARANCE( SGNODE* aParent );
-    IFSG_APPEARANCE( IFSG_NODE& aParent );
+    IFSG_NORMALINDEX( bool create );
+    IFSG_NORMALINDEX( SGNODE* aParent );
+    IFSG_NORMALINDEX( IFSG_NODE& aParent );
 
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
-
-    bool SetEmissive( float aRVal, float aGVal, float aBVal );
-    bool SetEmissive( const SGCOLOR* aRGBColor );
-    bool SetEmissive( const SGCOLOR& aRGBColor );
-
-    bool SetDiffuse( float aRVal, float aGVal, float aBVal );
-    bool SetDiffuse( const SGCOLOR* aRGBColor );
-    bool SetDiffuse( const SGCOLOR& aRGBColor );
-
-    bool SetSpecular( float aRVal, float aGVal, float aBVal );
-    bool SetSpecular( const SGCOLOR* aRGBColor );
-    bool SetSpecular( const SGCOLOR& aRGBColor );
-
-    bool SetAmbient( float aAmbientLight );
-    bool SetShininess( float aShininess );
-    bool SetTransparency( float aTransparency );
 };
 
-#endif  // IFSG_APPEARANCE_H
+#endif  // IFSG_NORMALINDEX_H

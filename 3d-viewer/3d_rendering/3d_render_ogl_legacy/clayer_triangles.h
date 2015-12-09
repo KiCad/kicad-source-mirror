@@ -31,7 +31,7 @@
 #define CLAYER_TRIANGLES_H_
 
 #include "common_ogl/openGL_includes.h"
-#include "3d_xv3d/xv3d_types.h"
+#include "plugins/3dapi/xv3d_types.h"
 #include <vector>
 
 

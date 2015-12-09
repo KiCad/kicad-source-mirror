@@ -27,20 +27,20 @@
 #include <locale.h>
 #include <wx/filename.h>
 #include <wx/string.h>
-#include <3d_cache/sg/ifsg_api.h>
-#include <3d_cache/sg/sg_types.h>
-#include <3d_cache/sg/sg_node.h>
-#include <3d_cache/sg/scenegraph.h>
-#include <3d_cache/sg/sg_appearance.h>
-#include <3d_cache/sg/sg_colorindex.h>
-#include <3d_cache/sg/sg_colors.h>
-#include <3d_cache/sg/sg_coordindex.h>
-#include <3d_cache/sg/sg_coords.h>
-#include <3d_cache/sg/sg_faceset.h>
-#include <3d_cache/sg/sg_normals.h>
-#include <3d_cache/sg/sg_shape.h>
-#include <3d_info.h>
-#include <3d_rendering/c3dmodel.h>
+#include "plugins/3dapi/ifsg_api.h"
+#include "plugins/3dapi/sg_types.h"
+#include "3d_cache/sg/sg_node.h"
+#include "3d_cache/sg/scenegraph.h"
+#include "3d_cache/sg/sg_appearance.h"
+#include "3d_cache/sg/sg_colorindex.h"
+#include "3d_cache/sg/sg_colors.h"
+#include "3d_cache/sg/sg_coordindex.h"
+#include "3d_cache/sg/sg_coords.h"
+#include "3d_cache/sg/sg_faceset.h"
+#include "3d_cache/sg/sg_normals.h"
+#include "3d_cache/sg/sg_shape.h"
+#include "3d_info.h"
+#include "plugins/3dapi/c3dmodel.h"
 
 
 static char BadNode[] = " * [BUG] NULL pointer passed for aNode\n";

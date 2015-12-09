@@ -30,7 +30,7 @@
 #ifndef _HITINFO_H_
 #define _HITINFO_H_
 
-#include "../../3d_xv3d/xv3d_types.h"
+#include "plugins/3dapi/xv3d_types.h"
 #include "raypacket.h"
 
 //#define RAYTRACING_RAY_STATISTICS

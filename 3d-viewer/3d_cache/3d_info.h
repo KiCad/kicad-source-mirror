@@ -34,7 +34,7 @@
 #define INFO_3D_H
 
 #include <wx/string.h>
-#include <3d_cache/sg/sg_base.h>
+#include <plugins/3dapi/sg_base.h>
 
 
 struct S3D_INFO

@@ -22,7 +22,7 @@
  */
 
 #include <iostream>
-#include <3d_cache.h>
+#include "3d_cache.h"
 #include "dialog_select_3dmodel.h"
 #include "panel_prev_model.h"
 

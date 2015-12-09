@@ -29,7 +29,7 @@
 #ifndef SG_COLORINDEX_H
 #define SG_COLORINDEX_H
 
-#include <3d_cache/sg/sg_index.h>
+#include "3d_cache/sg/sg_index.h"
 
 class SGCOLORINDEX : public SGINDEX
 {

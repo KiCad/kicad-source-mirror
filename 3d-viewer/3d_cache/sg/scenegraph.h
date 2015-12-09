@@ -34,7 +34,7 @@
 #define SCENE_GRAPH_H
 
 #include <vector>
-#include <3d_cache/sg/sg_node.h>
+#include "3d_cache/sg/sg_node.h"
 
 class SGSHAPE;
 

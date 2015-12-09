@@ -22,17 +22,36 @@
  */
 
 /**
- * @file ifsg_all.h
- * collects header files for all SG* wrappers and the API
+ * @file ifsg_transform.h
+ * defines the wrapper for the SGNORMALS class
  */
 
-#include "3d_cache/sg/ifsg_transform.h"
-#include "3d_cache/sg/ifsg_appearance.h"
-#include "3d_cache/sg/ifsg_colors.h"
-#include "3d_cache/sg/ifsg_coords.h"
-#include "3d_cache/sg/ifsg_faceset.h"
-#include "3d_cache/sg/ifsg_colorindex.h"
-#include "3d_cache/sg/ifsg_coordindex.h"
-#include "3d_cache/sg/ifsg_normals.h"
-#include "3d_cache/sg/ifsg_shape.h"
-#include "3d_cache/sg/ifsg_api.h"
+
+#ifndef IFSG_NORMALS_H
+#define IFSG_NORMALS_H
+
+#include "plugins/3dapi/ifsg_node.h"
+
+
+/**
+ * Class IFSG_NORMALS
+ * is the wrapper for the SGNORMALS class
+ */
+class SGLIB_API IFSG_NORMALS : public IFSG_NODE
+{
+public:
+    IFSG_NORMALS( bool create );
+    IFSG_NORMALS( SGNODE* aParent );
+    IFSG_NORMALS( IFSG_NODE& aParent );
+
+    bool Attach( SGNODE* aNode );
+    bool NewNode( SGNODE* aParent );
+    bool NewNode( IFSG_NODE& aParent );
+
+    bool GetNormalList( size_t& aListSize, SGVECTOR*& aNormalList );
+    bool SetNormalList( size_t aListSize, const SGVECTOR* aNormalList );
+    bool AddNormal( double aXValue, double aYValue, double aZValue );
+    bool AddNormal( const SGVECTOR& aNormal );
+};
+
+#endif  // IFSG_NORMALS_H

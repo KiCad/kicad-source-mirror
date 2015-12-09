@@ -26,25 +26,19 @@
  * defines an indexed face set for a scenegraph
  */
 
-// BUG:
-// 1. Since we always use Normal Per Vertex we can deprecate SGNORMALINDEX
-// 2. There is no such thing as a Referenced Index so deprecate these
 
 #ifndef SG_FACESET_H
 #define SG_FACESET_H
 
 #include <vector>
-#include <3d_cache/sg/sg_node.h>
+#include "3d_cache/sg/sg_node.h"
 
-// BUG: eliminate NormalIndices; they are not necessary since
-// we use per-vertex normals
 
 class SGCOLORS;
 class SGCOORDS;
 class SGNORMALS;
 class SGCOLORINDEX;
 class SGCOORDINDEX;
-class SGNORMALINDEX;
 
 class SGFACESET : public SGNODE
 {

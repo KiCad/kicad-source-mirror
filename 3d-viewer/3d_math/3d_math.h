@@ -30,7 +30,7 @@
 #ifndef _3D_MATH_H
 #define _3D_MATH_H
 
-#include "3d_xv3d/xv3d_types.h"
+#include "plugins/3dapi/xv3d_types.h"
 
 
 // https://en.wikipedia.org/wiki/Spherical_coordinate_system

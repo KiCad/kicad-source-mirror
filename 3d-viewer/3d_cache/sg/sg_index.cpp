@@ -23,7 +23,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <3d_cache/sg/sg_index.h>
+#include "3d_cache/sg/sg_index.h"
 
 
 SGINDEX::SGINDEX( SGNODE* aParent ) : SGNODE( aParent )

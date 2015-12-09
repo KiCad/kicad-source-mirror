@@ -30,7 +30,7 @@
 #ifndef SG_BASE_H
 #define SG_BASE_H
 
-#include "import_export.h"
+#include "plugins/3dapi/ifsg_defs.h"
 
 #ifndef SGLIB_API
     #if defined (COMPILE_SGLIB)

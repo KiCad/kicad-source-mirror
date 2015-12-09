@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <3d_cache/sg/sg_colorindex.h>
+#include "3d_cache/sg/sg_colorindex.h"
 
 SGCOLORINDEX::SGCOLORINDEX( SGNODE* aParent ) : SGINDEX( aParent )
 {

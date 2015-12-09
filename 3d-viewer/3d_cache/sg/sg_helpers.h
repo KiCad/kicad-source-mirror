@@ -35,8 +35,8 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include <3d_cache/sg/sg_base.h>
-#include "sg_types.h"
+#include "plugins/3dapi/sg_base.h"
+#include "plugins/3dapi/sg_types.h"
 
 // Function to drop references within an SGNODE
 // The node being destroyed must remove itself from the object reference's

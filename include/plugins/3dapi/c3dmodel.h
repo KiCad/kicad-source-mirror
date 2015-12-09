@@ -31,14 +31,7 @@
 #ifndef C3DMODEL_H
 #define C3DMODEL_H
 
-#include "3d_xv3d/xv3d_types.h"
-#include <base_units.h>
-//#include <wx/string.h>
-
-/**
-  * Scale convertion from 3d model units to pcb units
-  */
-#define UNITS3D_TO_UNITSPCB (IU_PER_MM)
+#include "plugins/3dapi/xv3d_types.h"
 
 
 typedef struct

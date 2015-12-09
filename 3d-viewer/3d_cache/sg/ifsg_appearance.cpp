@@ -23,8 +23,8 @@
 
 
 #include <iostream>
-#include <3d_cache/sg/ifsg_appearance.h>
-#include <3d_cache/sg/sg_appearance.h>
+#include "plugins/3dapi/ifsg_appearance.h"
+#include "3d_cache/sg/sg_appearance.h"
 
 
 extern char BadObject[];

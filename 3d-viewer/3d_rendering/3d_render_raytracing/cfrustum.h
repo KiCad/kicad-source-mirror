@@ -30,7 +30,7 @@
 #ifndef _CFRUSTUM_H_
 #define _CFRUSTUM_H_
 
-#include "../../3d_xv3d/xv3d_types.h"
+#include "plugins/3dapi/xv3d_types.h"
 #include "shapes3D/cbbox.h"
 #include "ray.h"
 

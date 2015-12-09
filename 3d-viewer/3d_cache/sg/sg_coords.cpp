@@ -22,8 +22,8 @@
  */
 
 #include <iostream>
-#include <3d_cache/sg/sg_coords.h>
-#include <3d_cache/sg/sg_helpers.h>
+#include "3d_cache/sg/sg_coords.h"
+#include "3d_cache/sg/sg_helpers.h"
 
 
 SGCOORDS::SGCOORDS( SGNODE* aParent ) : SGNODE( aParent )

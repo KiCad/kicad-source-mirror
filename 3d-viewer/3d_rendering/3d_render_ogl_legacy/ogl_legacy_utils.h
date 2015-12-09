@@ -30,7 +30,7 @@
 #ifndef OGL_LEGACY_UTILS_H_
 #define OGL_LEGACY_UTILS_H_
 
-#include "3d_xv3d/xv3d_types.h"
+#include "plugins/3dapi/xv3d_types.h"
 #include "3d_render_raytracing/shapes3D/cbbox.h"
 #include "3d_render_raytracing/shapes2D/croundsegment2d.h"
 

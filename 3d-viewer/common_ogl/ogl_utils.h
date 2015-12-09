@@ -32,7 +32,7 @@
 
 #include <wx/image.h>
 #include "3d_rendering/cimage.h"
-#include "3d_rendering/c3dmodel.h"
+#include "plugins/3dapi/c3dmodel.h"
 
 void OGL_SetMaterial(const SMATERIAL & aMaterial);
 

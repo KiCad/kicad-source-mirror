@@ -22,8 +22,8 @@
  */
 
 #include <iostream>
-#include <3d_cache/sg/sg_normals.h>
-#include <3d_cache/sg/sg_helpers.h>
+#include "3d_cache/sg/sg_normals.h"
+#include "3d_cache/sg/sg_helpers.h"
 
 
 SGNORMALS::SGNORMALS( SGNODE* aParent ) : SGNODE( aParent )

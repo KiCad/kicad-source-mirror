@@ -22,31 +22,31 @@
  */
 
 /**
- * @file ifsg_coordindex.h
- * defines the CoordIndex node wrapper
+ * @file ifsg_colorindex.h
+ * defines the ColorIndex node wrapper
  */
 
 
-#ifndef IFSG_COORDINDEX_H
-#define IFSG_COORDINDEX_H
+#ifndef IFSG_COLORINDEX_H
+#define IFSG_COLORINDEX_H
 
-#include <3d_cache/sg/ifsg_index.h>
+#include "plugins/3dapi/ifsg_index.h"
 
 
 /**
- * Class IFSG_COORDINDEX
- * is the wrapper for SGCOORDINDEX
+ * Class IFSG_COLORINDEX
+ * is the wrapper for SGCOLORINDEX
  */
-class SGLIB_API IFSG_COORDINDEX : public IFSG_INDEX
+class SGLIB_API IFSG_COLORINDEX : public IFSG_INDEX
 {
 public:
-    IFSG_COORDINDEX( bool create );
-    IFSG_COORDINDEX( SGNODE* aParent );
-    IFSG_COORDINDEX( IFSG_NODE& aParent );
+    IFSG_COLORINDEX( bool create );
+    IFSG_COLORINDEX( SGNODE* aParent );
+    IFSG_COLORINDEX( IFSG_NODE& aParent );
 
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
 };
 
-#endif  // IFSG_COORDINDEX_H
+#endif  // IFSG_COLORINDEX_H

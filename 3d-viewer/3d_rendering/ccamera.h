@@ -30,8 +30,8 @@
 #ifndef CCAMERA_H
 #define CCAMERA_H
 
-#include "../3d_xv3d/xv3d_types.h"
-#include "../3d_rendering/3d_render_raytracing/ray.h"
+#include "plugins/3dapi/xv3d_types.h"
+#include "3d_rendering/3d_render_raytracing/ray.h"
 #include <wx/gdicmn.h>                                                          // for wxSize
 #include <vector>
 

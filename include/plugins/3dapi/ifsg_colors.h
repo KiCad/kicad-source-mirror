@@ -22,50 +22,36 @@
  */
 
 /**
- * @file ifsg_index.h
- * defines the index nodes wrapper
+ * @file ifsg_colors.h
+ * defines the color list wrapper
  */
 
 
-#ifndef IFSG_INDEX_H
-#define IFSG_INDEX_H
+#ifndef IFSG_COLORS_H
+#define IFSG_COLORS_H
 
-#include <3d_cache/sg/ifsg_node.h>
+#include "plugins/3dapi/ifsg_node.h"
 
 
 /**
  * Class IFSG_INDEX
- * is the wrapper for SGINDEX
+ * is the wrapper for SGCOLORS
  */
-class SGLIB_API IFSG_INDEX : public IFSG_NODE
+class SGLIB_API IFSG_COLORS : public IFSG_NODE
 {
 public:
-    IFSG_INDEX();
+    IFSG_COLORS( bool create );
+    IFSG_COLORS( SGNODE* aParent );
+    IFSG_COLORS( IFSG_NODE& aParent );
 
-    virtual bool Attach( SGNODE* aNode ) = 0;
-    virtual bool NewNode( SGNODE* aParent ) = 0;
-    virtual bool NewNode( IFSG_NODE& aParent ) = 0;
+    bool Attach( SGNODE* aNode );
+    bool NewNode( SGNODE* aParent );
+    bool NewNode( IFSG_NODE& aParent );
 
-    bool GetIndices( size_t& nIndices, int*& aIndexList );
-
-    /**
-     * Function SetIndices
-     * sets the number of indices and creates a copy of the given index data.
-     *
-     * @param nIndices [in] the number of indices to be stored
-     * @param aIndexList [in] the index data
-     */
-    bool SetIndices( size_t nIndices, int* aIndexList );
-
-
-    /**
-     * Function AddIndex
-     * adds a single index to the list
-     *
-     * @param nIndices [in] the number of indices to be stored
-     * @param aIndexList [in] the index data
-     */
-    bool AddIndex( int aIndex );
+    bool GetColorList( size_t& aListSize, SGCOLOR*& aColorList );
+    bool SetColorList( size_t& aListSize, const SGCOLOR* aColorList );
+    bool AddColor( double aRedValue, double aGreenValue, double aBlueValue );
+    bool AddColor( const SGCOLOR& aColor );
 };
 
-#endif  // IFSG_INDEX_H
+#endif  // IFSG_COLORS_H

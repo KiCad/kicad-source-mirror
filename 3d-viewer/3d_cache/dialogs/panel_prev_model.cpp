@@ -33,10 +33,10 @@
 #include <wx/glcanvas.h>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <3d_cache.h>
-#include <3d_info.h>
-#include <3d_filename_resolver.h>
-#include <3d_cache/sg/ifsg_api.h>
+#include "3d_cache.h"
+#include "3d_info.h"
+#include "3d_filename_resolver.h"
+#include "plugins/3dapi/ifsg_api.h"
 
 #include "panel_prev_model.h"
 #include "dialog_select_3dmodel.h"

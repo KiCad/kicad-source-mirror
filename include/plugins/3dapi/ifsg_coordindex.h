@@ -22,36 +22,31 @@
  */
 
 /**
- * @file ifsg_colors.h
- * defines the color list wrapper
+ * @file ifsg_coordindex.h
+ * defines the CoordIndex node wrapper
  */
 
 
-#ifndef IFSG_COLORS_H
-#define IFSG_COLORS_H
+#ifndef IFSG_COORDINDEX_H
+#define IFSG_COORDINDEX_H
 
-#include <3d_cache/sg/ifsg_node.h>
+#include "plugins/3dapi/ifsg_index.h"
 
 
 /**
- * Class IFSG_INDEX
- * is the wrapper for SGCOLORS
+ * Class IFSG_COORDINDEX
+ * is the wrapper for SGCOORDINDEX
  */
-class SGLIB_API IFSG_COLORS : public IFSG_NODE
+class SGLIB_API IFSG_COORDINDEX : public IFSG_INDEX
 {
 public:
-    IFSG_COLORS( bool create );
-    IFSG_COLORS( SGNODE* aParent );
-    IFSG_COLORS( IFSG_NODE& aParent );
+    IFSG_COORDINDEX( bool create );
+    IFSG_COORDINDEX( SGNODE* aParent );
+    IFSG_COORDINDEX( IFSG_NODE& aParent );
 
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
-
-    bool GetColorList( size_t& aListSize, SGCOLOR*& aColorList );
-    bool SetColorList( size_t& aListSize, const SGCOLOR* aColorList );
-    bool AddColor( double aRedValue, double aGreenValue, double aBlueValue );
-    bool AddColor( const SGCOLOR& aColor );
 };
 
-#endif  // IFSG_COLORS_H
+#endif  // IFSG_COORDINDEX_H

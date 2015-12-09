@@ -22,31 +22,40 @@
  */
 
 /**
- * @file ifsg_shape.h
- * defines the wrapper for the SGSHAPE class
+ * @file ifsg_transform.h
+ * defines the wrapper for the SCENEGRAPH class
  */
 
 
-#ifndef IFSG_SHAPE_H
-#define IFSG_SHAPE_H
+#ifndef IFSG_TRANSFORM_H
+#define IFSG_TRANSFORM_H
 
-#include <3d_cache/sg/ifsg_node.h>
+#include "plugins/3dapi/ifsg_node.h"
 
 
 /**
- * Class IFSG_SHAPE
- * is the wrapper for the SGSHAPE class
+ * Class IFSG_TRANSFORM
+ * is the wrapper for the VRML compatible TRANSFORM block class SCENEGRAPH
  */
-class SGLIB_API IFSG_SHAPE : public IFSG_NODE
+class SGLIB_API IFSG_TRANSFORM : public IFSG_NODE
 {
 public:
-    IFSG_SHAPE( bool create );
-    IFSG_SHAPE( SGNODE* aParent );
-    IFSG_SHAPE( IFSG_NODE& aParent );
+    IFSG_TRANSFORM( bool create );
+    IFSG_TRANSFORM( SGNODE* aParent );
+    // note: IFSG_TRANSFORM( IFSG_NODE& aParent ) does not exist
+    // since a transform may own another transform and that construct
+    // invites accidental misuse of the copy constructor
 
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
+
+    bool SetScaleOrientation( const SGVECTOR& aScaleAxis, double aAngle );
+    bool SetRotation( const SGVECTOR& aRotationAxis, double aAngle );
+    bool SetScale( const SGPOINT& aScale );
+    bool SetScale( double aScale );
+    bool SetCenter( const SGPOINT& aCenter );
+    bool SetTranslation( const SGPOINT& aTranslation );
 };
 
-#endif  // IFSG_SHAPE_H
+#endif  // IFSG_TRANSFORM_H

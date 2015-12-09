@@ -23,13 +23,13 @@
 
 
 #include <iostream>
-#include <3d_cache/sg/sg_faceset.h>
-#include <3d_cache/sg/sg_colors.h>
-#include <3d_cache/sg/sg_coords.h>
-#include <3d_cache/sg/sg_normals.h>
-#include <3d_cache/sg/sg_colorindex.h>
-#include <3d_cache/sg/sg_coordindex.h>
-#include <3d_cache/sg/sg_helpers.h>
+#include "3d_cache/sg/sg_faceset.h"
+#include "3d_cache/sg/sg_colors.h"
+#include "3d_cache/sg/sg_coords.h"
+#include "3d_cache/sg/sg_normals.h"
+#include "3d_cache/sg/sg_colorindex.h"
+#include "3d_cache/sg/sg_coordindex.h"
+#include "3d_cache/sg/sg_helpers.h"
 
 SGFACESET::SGFACESET( SGNODE* aParent ) : SGNODE( aParent )
 {

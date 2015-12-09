@@ -31,7 +31,7 @@
 #define SG_SHAPE_H
 
 #include <vector>
-#include <3d_cache/sg/sg_node.h>
+#include "3d_cache/sg/sg_node.h"
 
 class SGAPPEARANCE;
 class SGFACESET;

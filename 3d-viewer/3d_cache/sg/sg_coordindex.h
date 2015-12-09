@@ -29,7 +29,7 @@
 #ifndef SG_COORDINDEX_H
 #define SG_COORDINDEX_H
 
-#include <3d_cache/sg/sg_index.h>
+#include "3d_cache/sg/sg_index.h"
 
 /**
  * Class SGCOORDINDEX

@@ -22,36 +22,31 @@
  */
 
 /**
- * @file ifsg_transform.h
- * defines the wrapper for the SGNORMALS class
+ * @file ifsg_faceset.h
+ * defines the wrapper for the SGFACESET class
  */
 
 
-#ifndef IFSG_NORMALS_H
-#define IFSG_NORMALS_H
+#ifndef IFSG_FACESET_H
+#define IFSG_FACESET_H
 
-#include <3d_cache/sg/ifsg_node.h>
+#include "plugins/3dapi/ifsg_node.h"
 
 
 /**
- * Class IFSG_NORMALS
- * is the wrapper for the SGNORMALS class
+ * Class IFSG_FACESET
+ * is the wrapper for the SGFACESET class
  */
-class SGLIB_API IFSG_NORMALS : public IFSG_NODE
+class SGLIB_API IFSG_FACESET : public IFSG_NODE
 {
 public:
-    IFSG_NORMALS( bool create );
-    IFSG_NORMALS( SGNODE* aParent );
-    IFSG_NORMALS( IFSG_NODE& aParent );
+    IFSG_FACESET( bool create );
+    IFSG_FACESET( SGNODE* aParent );
+    IFSG_FACESET( IFSG_NODE& aParent );
 
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
-
-    bool GetNormalList( size_t& aListSize, SGVECTOR*& aNormalList );
-    bool SetNormalList( size_t aListSize, const SGVECTOR* aNormalList );
-    bool AddNormal( double aXValue, double aYValue, double aZValue );
-    bool AddNormal( const SGVECTOR& aNormal );
 };
 
-#endif  // IFSG_NORMALS_H
+#endif  // IFSG_FACESET_H

@@ -26,8 +26,9 @@
 #include <cmath>
 #include <cstring>
 #include <algorithm>
-#include <3d_cache/sg/sg_node.h>
-#include <3d_rendering/c3dmodel.h>
+
+#include "3d_cache/sg/sg_node.h"
+#include "plugins/3dapi/c3dmodel.h"
 
 static const std::string node_names[S3D::SGTYPE_END + 1] = {
     "TXFM",

@@ -22,36 +22,31 @@
  */
 
 /**
- * @file ifsg_coords.h
- * defines the coordinate list wrapper
+ * @file ifsg_shape.h
+ * defines the wrapper for the SGSHAPE class
  */
 
 
-#ifndef IFSG_COORDS_H
-#define IFSG_COORDS_H
+#ifndef IFSG_SHAPE_H
+#define IFSG_SHAPE_H
 
-#include <3d_cache/sg/ifsg_node.h>
+#include "plugins/3dapi/ifsg_node.h"
 
 
 /**
- * Class IFSG_INDEX
- * is the wrapper for SGCOORDS
+ * Class IFSG_SHAPE
+ * is the wrapper for the SGSHAPE class
  */
-class SGLIB_API IFSG_COORDS : public IFSG_NODE
+class SGLIB_API IFSG_SHAPE : public IFSG_NODE
 {
 public:
-    IFSG_COORDS( bool create );
-    IFSG_COORDS( SGNODE* aParent );
-    IFSG_COORDS( IFSG_NODE& aParent );
+    IFSG_SHAPE( bool create );
+    IFSG_SHAPE( SGNODE* aParent );
+    IFSG_SHAPE( IFSG_NODE& aParent );
 
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
-
-    bool GetCoordsList( size_t& aListSize, SGPOINT*& aCoordsList );
-    bool SetCoordsList( size_t aListSize, const SGPOINT* aCoordsList );
-    bool AddCoord( double aXValue, double aYValue, double aZValue );
-    bool AddCoord( const SGPOINT& aPoint );
 };
 
-#endif  // IFSG_COORDS_H
+#endif  // IFSG_SHAPE_H

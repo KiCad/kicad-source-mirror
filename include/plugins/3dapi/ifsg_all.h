@@ -22,31 +22,17 @@
  */
 
 /**
- * @file ifsg_faceset.h
- * defines the wrapper for the SGFACESET class
+ * @file ifsg_all.h
+ * collects header files for all SG* wrappers and the API
  */
 
-
-#ifndef IFSG_FACESET_H
-#define IFSG_FACESET_H
-
-#include <3d_cache/sg/ifsg_node.h>
-
-
-/**
- * Class IFSG_FACESET
- * is the wrapper for the SGFACESET class
- */
-class SGLIB_API IFSG_FACESET : public IFSG_NODE
-{
-public:
-    IFSG_FACESET( bool create );
-    IFSG_FACESET( SGNODE* aParent );
-    IFSG_FACESET( IFSG_NODE& aParent );
-
-    bool Attach( SGNODE* aNode );
-    bool NewNode( SGNODE* aParent );
-    bool NewNode( IFSG_NODE& aParent );
-};
-
-#endif  // IFSG_FACESET_H
+#include "plugins/3dapi/ifsg_transform.h"
+#include "plugins/3dapi/ifsg_appearance.h"
+#include "plugins/3dapi/ifsg_colors.h"
+#include "plugins/3dapi/ifsg_coords.h"
+#include "plugins/3dapi/ifsg_faceset.h"
+#include "plugins/3dapi/ifsg_colorindex.h"
+#include "plugins/3dapi/ifsg_coordindex.h"
+#include "plugins/3dapi/ifsg_normals.h"
+#include "plugins/3dapi/ifsg_shape.h"
+#include "plugins/3dapi/ifsg_api.h"
