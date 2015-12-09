@@ -416,6 +416,8 @@ bool PGM_BASE::initPgm()
     {
         wxString envVarName = wxT( "KIGITHUB" );
         ENV_VAR_ITEM envVarItem;
+        wxString envValue;
+        wxFileName tmpFileName;
 
         envVarItem.SetValue( wxString( wxT( "https://github.com/KiCad" ) ) );
         envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
@@ -429,24 +431,51 @@ bool PGM_BASE::initPgm()
         baseSharePath.AppendDir( wxT( "kicad" ) );
 #endif
 
-        wxFileName tmpFileName = baseSharePath;
-        tmpFileName.AppendDir( wxT( "modules" ) );
+        // KISYSMOD
         envVarName = wxT( "KISYSMOD" );
-        envVarItem.SetValue( tmpFileName.GetPath() );
-        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
+        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+        {
+            tmpFileName.AssignDir( envValue );
+            envVarItem.SetDefinedExternally( true );
+        }
+        else
+        {
+            tmpFileName = baseSharePath;
+            tmpFileName.AppendDir( wxT( "modules" ) );
+            envVarItem.SetDefinedExternally( false );
+        }
+        envVarItem.SetValue( tmpFileName.GetFullPath() );
         m_local_env_vars[ envVarName ] = envVarItem;
 
+        // KISYS3DMOD
         envVarName = wxT( "KISYS3DMOD" );
-        tmpFileName.AppendDir( wxT( "packages3d" ) );
-        envVarItem.SetValue( tmpFileName.GetPath() );
-        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
+        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+        {
+            tmpFileName.AssignDir( envValue );
+            envVarItem.SetDefinedExternally( true );
+        }
+        else
+        {
+            tmpFileName.AppendDir( wxT( "packages3d" ) );
+            envVarItem.SetDefinedExternally( false );
+        }
+        envVarItem.SetValue( tmpFileName.GetFullPath() );
         m_local_env_vars[ envVarName ] = envVarItem;
 
+        // KICAD_PTEMPLATES
         envVarName = wxT( "KICAD_PTEMPLATES" );
-        tmpFileName = baseSharePath;
-        tmpFileName.AppendDir( wxT( "template" ) );
-        envVarItem.SetValue( tmpFileName.GetPath() );
-        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
+        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+        {
+            tmpFileName.AssignDir( envValue );
+            envVarItem.SetDefinedExternally( true );
+        }
+        else
+        {
+            tmpFileName = baseSharePath;
+            tmpFileName.AppendDir( wxT( "template" ) );
+            envVarItem.SetDefinedExternally( false );
+        }
+        envVarItem.SetValue( tmpFileName.GetFullPath() );
         m_local_env_vars[ envVarName ] = envVarItem;
     }
 
