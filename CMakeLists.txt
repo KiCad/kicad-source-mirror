@@ -180,20 +180,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     set( CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG" )
     set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG" )
 
-    find_package( OpenMP QUIET )
-
-    if( OPENMP_FOUND )
-        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" )
-        add_definitions( -DUSE_OPENMP )
-
-        # MinGW does not include the OpenMP link library and FindOpenMP.cmake does not
-        # set it either.  Not sure this is the most elegant solution but it works.
-        if( MINGW )
-            set( OPENMP_LIBRARIES gomp )
-        endif()
-    endif()
-
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
@@ -424,6 +410,25 @@ include( ExternalProject )
 # Find libraries that are needed to build KiCad.
 #================================================
 include( CheckFindPackageResult )
+
+#######################
+# Find OpenMP support #
+#######################
+
+find_package( OpenMP QUIET )
+check_find_package_result( OPENMP_FOUND "OpenMP" )
+
+if( OPENMP_FOUND )
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" )
+    add_definitions( -DUSE_OPENMP )
+
+    # MinGW does not include the OpenMP link library and FindOpenMP.cmake does not
+    # set it either.  Not sure this is the most elegant solution but it works.
+    if( MINGW )
+        set( OPENMP_LIBRARIES gomp )
+    endif()
+endif()
 
 ##########################
 # Find wxWidgets library #
