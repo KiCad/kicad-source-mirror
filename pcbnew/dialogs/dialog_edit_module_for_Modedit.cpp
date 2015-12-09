@@ -349,6 +349,10 @@ void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
     new3DShape->SetShape3DName( filename );
     delete m_shapes3D_list[idx];
     m_shapes3D_list[idx] = new3DShape;
+
+    Transfert3DValuesToDisplay( m_shapes3D_list[idx] );
+
+    return;
 }
 
 

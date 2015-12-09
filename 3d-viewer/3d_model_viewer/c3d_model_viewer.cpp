@@ -247,26 +247,26 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    ogl_set_arrow_material();
-
-    glColor3f( 0.9f, 0.0f, 0.0f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                    SFVEC3F( RANGE_SCALE_3D / 1.0f, 0.0f, 0.0f ),
-                    0.2f );
-
-    glColor3f( 0.0f, 0.9f, 0.0f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                    SFVEC3F( 0.0f, RANGE_SCALE_3D / 1.0f, 0.0f ),
-                    0.2f );
-
-    glColor3f( 0.0f, 0.0f, 0.9f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                    SFVEC3F( 0.0f, 0.0f, RANGE_SCALE_3D / 1.0f ),
-                    0.2f );
-
     // Render Model
     if( m_ogl_3dmodel )
     {
+        ogl_set_arrow_material();
+
+        glColor3f( 0.9f, 0.0f, 0.0f );
+        OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
+                        SFVEC3F( RANGE_SCALE_3D / 1.0f, 0.0f, 0.0f ),
+                        0.2f );
+
+        glColor3f( 0.0f, 0.9f, 0.0f );
+        OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
+                        SFVEC3F( 0.0f, RANGE_SCALE_3D / 1.0f, 0.0f ),
+                        0.2f );
+
+        glColor3f( 0.0f, 0.0f, 0.9f );
+        OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
+                        SFVEC3F( 0.0f, 0.0f, RANGE_SCALE_3D / 1.0f ),
+                        0.2f );
+
         glPushMatrix();
 
         double modelunit_to_3d_units_factor = m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;

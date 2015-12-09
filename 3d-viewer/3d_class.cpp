@@ -30,6 +30,11 @@
 #include "3d_viewer.h"
 #include "3d_struct.h"
 #include "modelparsers.h"
+#include <kiway.h>
+#include <3d_cache.h>
+#include <3d_filename_resolver.h>
+
+extern KIWAY* TheKiway;
 
 
 void S3D_MASTER::Insert( S3D_MATERIAL* aMaterial )
@@ -136,22 +141,8 @@ void S3D_MASTER::SetShape3DName( const wxString& aShapeName )
     else
         m_Shape3DFullFilename = m_Shape3DName;
 
-    wxFileName fnFull( m_Shape3DFullFilename );
-
-    if( !( fnFull.IsAbsolute() || m_Shape3DFullFilename.StartsWith( wxT(".") ) ) )
-    {
-        wxString default_path;
-        wxGetEnv( KISYS3DMOD, &default_path );
-
-        if( !( default_path.IsEmpty() ) )
-        {
-
-            if( !default_path.EndsWith( wxT("/") ) && !default_path.EndsWith( wxT("\\") ) )
-                default_path += wxT("/");
-
-            m_Shape3DFullFilename = default_path + m_Shape3DFullFilename;
-        }
-    }
+    m_Shape3DFullFilename = TheKiway->Prj().Get3DCacheManager()->GetResolver()
+        ->ResolvePath( m_Shape3DFullFilename );
 
     return;
 }

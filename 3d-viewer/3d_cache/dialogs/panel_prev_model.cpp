@@ -27,6 +27,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <wx/sizer.h>
+#include <wx/valnum.h>
 #include <wx/choice.h>
 #include <wx/filename.h>
 #include <wx/glcanvas.h>
@@ -63,6 +64,15 @@ static void checkRotation( double& rot )
 enum {
     ID_SET_DIR = wxID_LAST + 1,
     ID_CFG_PATHS,
+    ID_SCALEX,
+    ID_SCALEY,
+    ID_SCALEZ,
+    ID_ROTX,
+    ID_ROTY,
+    ID_ROTZ,
+    ID_OFFX,
+    ID_OFFY,
+    ID_OFFZ,
     ID_3D_ISO,
     ID_3D_UPDATE,
     ID_3D_LEFT,
@@ -76,6 +86,15 @@ enum {
 wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
         EVT_SIZE( PANEL_PREV_3D::resize )
         EVT_CHOICE( ID_SET_DIR, PANEL_PREV_3D::SetRootDir )
+        EVT_TEXT_ENTER( ID_SCALEX, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_SCALEY, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_SCALEZ, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_ROTX, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_ROTY, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_ROTZ, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_OFFX, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_OFFY, PANEL_PREV_3D::updateOrientation )
+        EVT_TEXT_ENTER( ID_OFFZ, PANEL_PREV_3D::updateOrientation )
         EVT_BUTTON( ID_CFG_PATHS, PANEL_PREV_3D::Cfg3DPaths )
         EVT_BUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
         EVT_BUTTON( ID_3D_UPDATE, PANEL_PREV_3D::View3DUpdate )
@@ -95,6 +114,15 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
     m_FileDlg = NULL;
     canvas = NULL;
     model = NULL;
+    xscale = NULL;
+    yscale = NULL;
+    zscale = NULL;
+    xrot = NULL;
+    yrot = NULL;
+    zrot = NULL;
+    xoff = NULL;
+    yoff = NULL;
+    zoff = NULL;
 
     wxBoxSizer* mainBox = new wxBoxSizer( wxVERTICAL );
 
@@ -120,6 +148,13 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
         hboxDirChoice->Add( cfgPaths, 0, wxALL, 5 );
     }
 
+    wxFloatingPointValidator< float > valScale( 6 );
+    valScale.SetRange( 0.001, 100 );
+    wxFloatingPointValidator< float > valRotate( 6 );
+    valRotate.SetRange( -180.0, 180.0 );
+    wxFloatingPointValidator< float > valOffset( 6 );
+
+
     wxStaticBoxSizer* vbScale = new wxStaticBoxSizer( wxVERTICAL, this, _( "Scale" )  );
     wxStaticBoxSizer* vbRotate = new wxStaticBoxSizer( wxVERTICAL, this, _( "Rotation" ) );
     wxStaticBoxSizer* vbOffset = new wxStaticBoxSizer( wxVERTICAL, this, _( "Offset (inches)" ) );
@@ -134,12 +169,12 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
     wxStaticText* txtS1 = new wxStaticText( modScale, -1, wxT( "X:" ) );
     wxStaticText* txtS2 = new wxStaticText( modScale, -1, wxT( "Y:" ) );
     wxStaticText* txtS3 = new wxStaticText( modScale, -1, wxT( "Z:" ) );
-    xscale = new wxTextCtrl( modScale, -1, "1.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
-    yscale = new wxTextCtrl( modScale, -1, "1.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
-    zscale = new wxTextCtrl( modScale, -1, "1.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
+    xscale = new wxTextCtrl( modScale, ID_SCALEX, "1.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valScale );
+    yscale = new wxTextCtrl( modScale, ID_SCALEY, "1.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valScale );
+    zscale = new wxTextCtrl( modScale, ID_SCALEZ, "1.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valScale );
     xscale->SetMaxLength( 9 );
     yscale->SetMaxLength( 9 );
     zscale->SetMaxLength( 9 );
@@ -156,15 +191,15 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
     wxBoxSizer* hbR1 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbR2 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbR3 = new wxBoxSizer( wxHORIZONTAL );
-    wxStaticText* txtR1 = new wxStaticText( modRotate, -1, wxT( "X:" ) );
-    wxStaticText* txtR2 = new wxStaticText( modRotate, -1, wxT( "Y:" ) );
-    wxStaticText* txtR3 = new wxStaticText( modRotate, -1, wxT( "Z:" ) );
-    xrot = new wxTextCtrl( modRotate, -1, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
-    yrot = new wxTextCtrl( modRotate, -1, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
-    zrot = new wxTextCtrl( modRotate, -1, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
+    wxStaticText* txtR1 = new wxStaticText( modRotate, ID_ROTX, wxT( "X:" ) );
+    wxStaticText* txtR2 = new wxStaticText( modRotate, ID_ROTY, wxT( "Y:" ) );
+    wxStaticText* txtR3 = new wxStaticText( modRotate, ID_ROTZ, wxT( "Z:" ) );
+    xrot = new wxTextCtrl( modRotate, ID_ROTX, "0.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valRotate );
+    yrot = new wxTextCtrl( modRotate, ID_ROTY, "0.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valRotate );
+    zrot = new wxTextCtrl( modRotate, ID_ROTZ, "0.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valRotate );
     xrot->SetMaxLength( 9 );
     yrot->SetMaxLength( 9 );
     zrot->SetMaxLength( 9 );
@@ -184,12 +219,12 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
     wxStaticText* txtO1 = new wxStaticText( modOffset, -1, wxT( "X:" ) );
     wxStaticText* txtO2 = new wxStaticText( modOffset, -1, wxT( "Y:" ) );
     wxStaticText* txtO3 = new wxStaticText( modOffset, -1, wxT( "Z:" ) );
-    xoff = new wxTextCtrl( modOffset, -1, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
-    yoff = new wxTextCtrl( modOffset, -1, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
-    zoff = new wxTextCtrl( modOffset, -1, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER );
+    xoff = new wxTextCtrl( modOffset, ID_OFFX, "0.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valOffset );
+    yoff = new wxTextCtrl( modOffset, ID_OFFY, "0.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valOffset );
+    zoff = new wxTextCtrl( modOffset, ID_OFFZ, "0.0", wxDefaultPosition, wxDefaultSize,
+        wxTE_PROCESS_ENTER, valOffset );
     xoff->SetMaxLength( 9 );
     yoff->SetMaxLength( 9 );
     zoff->SetMaxLength( 9 );
@@ -443,29 +478,7 @@ void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
     SGPOINT rotation;
     SGPOINT offset;
 
-    xscale->GetValue().ToDouble( &scale.x );
-    yscale->GetValue().ToDouble( &scale.y );
-    zscale->GetValue().ToDouble( &scale.z );
-
-    if( 0.001 > scale.x || 0.001 > scale.y || 0.001 > scale.z )
-    {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid scale values; setting all to 1.0\n";
-        scale.x = 1.0;
-        scale.y = 1.0;
-        scale.z = 1.0;
-    }
-
-    xrot->GetValue().ToDouble( &rotation.x );
-    yrot->GetValue().ToDouble( &rotation.y );
-    zrot->GetValue().ToDouble( &rotation.z );
-    checkRotation( rotation.x );
-    checkRotation( rotation.y );
-    checkRotation( rotation.z );
-
-    xoff->GetValue().ToDouble( &offset.x );
-    yoff->GetValue().ToDouble( &offset.y );
-    zoff->GetValue().ToDouble( &offset.z );
+    getOrientationVars( scale, rotation, offset );
 
     aModel->scale = scale;
     aModel->offset = offset;
@@ -487,17 +500,17 @@ void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
 
 void PANEL_PREV_3D::SetModelData( S3D_INFO const* aModel )
 {
-    xscale->SetValue( wxString::FromDouble( aModel->scale.x ) );
-    yscale->SetValue( wxString::FromDouble( aModel->scale.y ) );
-    zscale->SetValue( wxString::FromDouble( aModel->scale.z ) );
+    xscale->ChangeValue( wxString::FromDouble( aModel->scale.x ) );
+    yscale->ChangeValue( wxString::FromDouble( aModel->scale.y ) );
+    zscale->ChangeValue( wxString::FromDouble( aModel->scale.z ) );
 
-    xrot->SetValue( wxString::FromDouble( aModel->rotation.x ) );
-    yrot->SetValue( wxString::FromDouble( aModel->rotation.y ) );
-    zrot->SetValue( wxString::FromDouble( aModel->rotation.z ) );
+    xrot->ChangeValue( wxString::FromDouble( aModel->rotation.x ) );
+    yrot->ChangeValue( wxString::FromDouble( aModel->rotation.y ) );
+    zrot->ChangeValue( wxString::FromDouble( aModel->rotation.z ) );
 
-    xoff->SetValue( wxString::FromDouble( aModel->offset.x ) );
-    yoff->SetValue( wxString::FromDouble( aModel->offset.y ) );
-    zoff->SetValue( wxString::FromDouble( aModel->offset.z ) );
+    xoff->ChangeValue( wxString::FromDouble( aModel->offset.x ) );
+    yoff->ChangeValue( wxString::FromDouble( aModel->offset.y ) );
+    zoff->ChangeValue( wxString::FromDouble( aModel->offset.z ) );
 
     modelInfo = *aModel;
     UpdateModelName( aModel->filename );
@@ -556,7 +569,11 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
         std::cout << "[3dv] Update Model: painting black\n";
 #endif
         if( NULL != canvas )
+        {
             canvas->Clear3DModel();
+            canvas->Refresh();
+            canvas->Update();
+        }
 
         if( model )
             S3D::Destroy3DModel( &model );
@@ -641,6 +658,81 @@ void PANEL_PREV_3D::resize( wxSizeEvent &event )
 
     if( NULL != canvas )
         canvas->SetSize( preview->GetClientSize() );
+
+    return;
+}
+
+
+void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
+{
+    // note: process even if the canvas is NULL since the user may
+    // edit the filename to provide a valid file
+    SGPOINT scale;
+    SGPOINT rotation;
+    SGPOINT offset;
+
+    getOrientationVars( scale, rotation, offset );
+
+    modelInfo.scale = scale;
+    modelInfo.offset = offset;
+    modelInfo.rotation = rotation;
+
+    if( NULL == canvas )
+        return;
+
+    canvas->Clear3DModel();
+
+    if( model )
+        S3D::Destroy3DModel( &model );
+
+    SGPOINT rot;
+    SGPOINT trans;
+
+    model = m_ModelManager->Prepare( &modelInfo, rot, trans );
+
+    if( model )
+    {
+        canvas->Set3DModel( *model );
+        canvas->Refresh();
+        canvas->Update();
+    }
+
+    return;
+}
+
+
+void PANEL_PREV_3D::getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOINT& offset )
+{
+    if( NULL == xscale || NULL == yscale || NULL == zscale
+        || NULL == xrot || NULL == yrot || NULL == zrot
+        || NULL == xoff || NULL == yoff || NULL == zoff )
+    {
+        return;
+    }
+
+    xscale->GetValue().ToDouble( &scale.x );
+    yscale->GetValue().ToDouble( &scale.y );
+    zscale->GetValue().ToDouble( &scale.z );
+
+    if( 0.001 > scale.x || 0.001 > scale.y || 0.001 > scale.z )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] invalid scale values; setting all to 1.0\n";
+        scale.x = 1.0;
+        scale.y = 1.0;
+        scale.z = 1.0;
+    }
+
+    xrot->GetValue().ToDouble( &rotation.x );
+    yrot->GetValue().ToDouble( &rotation.y );
+    zrot->GetValue().ToDouble( &rotation.z );
+    checkRotation( rotation.x );
+    checkRotation( rotation.y );
+    checkRotation( rotation.z );
+
+    xoff->GetValue().ToDouble( &offset.x );
+    yoff->GetValue().ToDouble( &offset.y );
+    zoff->GetValue().ToDouble( &offset.z );
 
     return;
 }

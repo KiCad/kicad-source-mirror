@@ -91,6 +91,9 @@ private:
 private:
     void updateDirChoiceList( void );
     void resize( wxSizeEvent &event );
+    void updateOrientation( wxCommandEvent &event );
+
+    void getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOINT& offset );
 
     wxDECLARE_EVENT_TABLE();
 };

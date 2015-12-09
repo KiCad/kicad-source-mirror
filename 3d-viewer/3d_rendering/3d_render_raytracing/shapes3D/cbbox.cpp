@@ -348,7 +348,8 @@ void CBBOX::ApplyTransformation( glm::mat4 aTransformMatrix )
 
 void CBBOX::ApplyTransformationAA( glm::mat4 aTransformMatrix )
 {
-    wxASSERT( IsInitialized() );
+    // XXX - CB - commented out because it spams the legacy renderer
+    // wxASSERT( IsInitialized() );
 
     // apply the transformation matrix for each of vertices of the bounding box
     // and make a union with all vertices
