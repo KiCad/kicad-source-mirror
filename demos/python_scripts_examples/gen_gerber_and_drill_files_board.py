@@ -36,11 +36,11 @@ popt = pctl.GetPlotOptions()
 popt.SetOutputDirectory(plotDir)
 
 # Set some important plot options:
-popt.SetPlotFrameRef(False)
+popt.SetPlotFrameRef(False)     #do not change it
 popt.SetLineWidth(FromMM(0.35))
 
-popt.SetAutoScale(False)
-popt.SetScale(1)
+popt.SetAutoScale(False)        #do not change it
+popt.SetScale(1)                #do not change it
 popt.SetMirror(False)
 popt.SetUseGerberAttributes(True)
 popt.SetUseGerberProtelExtensions(False)
@@ -100,7 +100,10 @@ drlwriter.SetMapFileFormat( PLOT_FORMAT_PDF )
 mirror = False
 minimalHeader = False
 offset = wxPoint(0,0)
-drlwriter.SetOptions( mirror, minimalHeader, offset )
+# False to generate 2 separate drill files (one for plated holes, one for non plated holes)
+# True to generate only one drill file
+mergeNPTH = False
+drlwriter.SetOptions( mirror, minimalHeader, offset, mergeNPTH )
 
 metricFmt = True
 drlwriter.SetFormat( metricFmt )
