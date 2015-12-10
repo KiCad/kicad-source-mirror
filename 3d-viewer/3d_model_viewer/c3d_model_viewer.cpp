@@ -274,14 +274,14 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 
         double modelunit_to_3d_units_factor = m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
 
-        const SFVEC3F model_center = m_ogl_3dmodel->GetBBox().GetCenter();
-        glTranslatef( model_center.x, model_center.y, model_center.z );
-
         glScaled( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor, modelunit_to_3d_units_factor);
+
+        //const SFVEC3F model_center = m_ogl_3dmodel->GetBBox().GetCenter();
+        //glTranslatef( -model_center.x, -model_center.y, -model_center.z );
 
         m_ogl_3dmodel->Draw_opaque();
         //m_ogl_3dmodel->Draw_transparent();
-        //m_ogl_3dmodel->Draw_bboxes();
+        m_ogl_3dmodel->Draw_bboxes();
 
         glPopMatrix();
     }

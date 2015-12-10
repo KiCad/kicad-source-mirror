@@ -33,7 +33,7 @@
 #include "ray.h"
 #include "hitinfo.h"
 
-/// 
+///
 class GLM_ALIGN(CLASS_ALIGNMENT) CMATERIAL
 {
 public:
@@ -63,7 +63,7 @@ public:
     virtual bool isTransparent(Vec3f point){return ((transparentColor.x()>0)||(transparentColor.y()>0)||(transparentColor.z()>0));}
 */
 protected:
-    SFVEC3F m_ambientColor;    
+    SFVEC3F m_ambientColor;
     // NOTE: we will not use diffuse color material here,
     // because it will be stored in object, since there are objects (i.e: triangles)
     // that can have per vertex color

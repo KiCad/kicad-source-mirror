@@ -30,7 +30,7 @@
 #define IFSG_API_H
 
 #include <wx/string.h>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 
 #include "plugins/3dapi/sg_types.h"
 #include "plugins/3dapi/sg_base.h"

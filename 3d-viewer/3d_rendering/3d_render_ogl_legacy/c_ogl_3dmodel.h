@@ -34,7 +34,7 @@
 #include "common_ogl/openGL_includes.h"
 #include "3d_rendering/3d_render_raytracing/shapes3D/cbbox.h"
 
-/// 
+///
 class GLM_ALIGN(CLASS_ALIGNMENT) C_OGL_3DMODEL
 {
 public:

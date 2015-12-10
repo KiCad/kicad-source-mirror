@@ -31,15 +31,15 @@
 #define XV3D_TYPES_H
 
 #define GLM_FORCE_RADIANS
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
-#include <gtx/matrix_major_storage.hpp>
-#include <gtx/matrix_decompose.hpp>
-#include <gtx/quaternion.hpp>
-#include <gtx/fast_square_root.hpp>
-#include <gtx/rotate_vector.hpp>
-//#include <gtx/simd_vec4.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/matrix_major_storage.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/fast_square_root.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+//#include <glm/gtx/simd_vec4.hpp>
 
 typedef glm::uvec2  SFVEC2UI;
 typedef glm::ivec2  SFVEC2I;

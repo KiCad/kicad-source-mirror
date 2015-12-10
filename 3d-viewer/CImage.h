@@ -99,7 +99,7 @@ public:
      * @param aValue value to set the pixel
      */
     void Setpixel( int aX, int aY, unsigned char aValue );
-    
+
     /**
      * Function Getpixel
      * get the pixel value from pixel position, position is clamped in accord with the

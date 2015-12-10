@@ -8,15 +8,16 @@ if( ${CMAKE_MAJOR_VERSION} STREQUAL "2" AND ${CMAKE_MINOR_VERSION} STREQUAL "8"
 endif()
 
 
-find_path( GLM_INCLUDE_DIR glm.hpp PATH_SUFFIXES glm )
+find_path( GLM_INCLUDE_DIR glm/glm.hpp )
 
 
-if( NOT ${GLM_INCLUDE_DIR} STREQUAL "" )
+if( NOT ${GLM_INCLUDE_DIR} STREQUAL "GLM_INCLUDE_DIR-NOTFOUND" )
    
     # attempt to extract the GLM Version information from setup.hpp
-    find_file( GLM_SETUP setup.hpp PATHS ${GLM_INCLUDE_DIR} PATH_SUFFIXES core detail NO_DEFAULT_PATH )
+    find_file( GLM_SETUP setup.hpp PATHS ${GLM_INCLUDE_DIR} PATH_SUFFIXES glm/core glm/detail NO_DEFAULT_PATH )
 
-    if( GLM_SETUP )
+    if( NOT ${GLM_SETUP} STREQUAL "GLM_SETUP-NOTFOUND" )
+    
         # extract the "#define GLM_VERSION*" lines
         file( STRINGS ${GLM_SETUP} _version REGEX "^#define.*GLM_VERSION.*" )
         
@@ -50,14 +51,16 @@ if( NOT ${GLM_INCLUDE_DIR} STREQUAL "" )
         set( GLM_VERSION ${_GLM_VERSION_MAJOR}.${_GLM_VERSION_MINOR}.${_GLM_VERSION_PATCH}.${_GLM_VERSION_REVISION} )
         unset( GLM_SETUP CACHE )
         
-    endif( GLM_SETUP )
+    endif()
     
-endif( NOT ${GLM_INCLUDE_DIR} STREQUAL "" )
+endif()
 
 
 include( FindPackageHandleStandardArgs )
 FIND_PACKAGE_HANDLE_STANDARD_ARGS( GLM
-    REQUIRED_VARS GLM_INCLUDE_DIR
+    REQUIRED_VARS
+        GLM_INCLUDE_DIR
+        GLM_VERSION
     VERSION_VAR GLM_VERSION )
 
     
