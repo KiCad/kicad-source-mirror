@@ -411,12 +411,11 @@ include( ExternalProject )
 #================================================
 include( CheckFindPackageResult )
 
-#######################
-# Find OpenMP support #
-#######################
+#################################
+# Find OpenMP support, optional #
+#################################
 
-find_package( OpenMP QUIET )
-check_find_package_result( OPENMP_FOUND "OpenMP" )
+find_package( OpenMP )
 
 if( OPENMP_FOUND )
     set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" )
