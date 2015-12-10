@@ -131,20 +131,6 @@ int SPECCTRA_DB::findLayerName( const std::string& aLayerName ) const
     return -1;
 }
 
-
-void SPECCTRA_DB::ThrowIOError( const wxString& fmt, ... ) throw( IO_ERROR )
-{
-    wxString    errText;
-    va_list     args;
-
-    va_start( args, fmt );
-    errText.PrintfV( fmt, args );
-    va_end( args );
-
-    THROW_IO_ERROR( errText );
-}
-
-
 void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IO_ERROR )
 {
     T      tok;
