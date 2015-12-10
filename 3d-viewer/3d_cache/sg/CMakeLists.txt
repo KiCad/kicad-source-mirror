@@ -1,6 +1,5 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
-#    ${CMAKE_SOURCE_DIR}/include/gal/opengl
     ${CMAKE_SOURCE_DIR}/3d-viewer
   )
 

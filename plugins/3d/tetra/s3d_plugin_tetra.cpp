@@ -21,14 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- * NOTES:
- *
- * 1. Notice that the plugin class is instantiated as a static; this
- * ensures that it is created an destroyed.
- */
-
-#include <iostream>
 #include <cmath>
 #include <s3d_plugin_tetra.h>
 #include <plugins/3dapi/ifsg_all.h>

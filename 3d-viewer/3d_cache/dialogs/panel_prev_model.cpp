@@ -133,7 +133,9 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
     if( hasFileSelector )
     {
         hboxDirChoice = new wxBoxSizer( wxHORIZONTAL );
-        dirChoices = new wxChoice( this, ID_SET_DIR );
+        dirChoices = new wxChoice( this, ID_SET_DIR, wxDefaultPosition,
+            wxSize( 320, 20 ) );
+        dirChoices->SetMinSize( wxSize( 320, 12 ) );
 
 #ifdef _WIN32
         // Note: On Win32 the native selector box will truncate text
