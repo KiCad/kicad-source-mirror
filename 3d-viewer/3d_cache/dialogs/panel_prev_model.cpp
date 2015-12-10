@@ -369,7 +369,6 @@ void PANEL_PREV_3D::updateDirChoiceList( void )
         dirChoices->Select( 0 );
     }
 
-    Layout();
     return;
 }
 
