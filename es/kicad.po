@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-08 21:44+0100\n"
-"PO-Revision-Date: 2015-12-08 21:44+0100\n"
+"POT-Creation-Date: 2015-12-10 11:06+0100\n"
+"PO-Revision-Date: 2015-12-10 11:06+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -713,7 +713,7 @@ msgstr " \""
 
 #: common/base_units.cpp:253
 msgid " deg"
-msgstr "deg"
+msgstr "grad"
 
 #: common/basicframe.cpp:140
 msgid ""
@@ -748,7 +748,7 @@ msgstr "Archivo ejecutable (%s)|%s"
 
 #: common/basicframe.cpp:468
 msgid "Select Preferred Editor"
-msgstr "Seleccionar el Editor preferido"
+msgstr "Seleccionar el editor preferido"
 
 #: common/basicframe.cpp:494
 msgid "Copy &Version Information"
@@ -896,7 +896,7 @@ msgstr "in"
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:141
 msgid "deg"
-msgstr "deg"
+msgstr "grados"
 
 #: common/common.cpp:414
 #, c-format
@@ -913,7 +913,7 @@ msgstr "Ha sido creada la carpeta de salida '%s'.\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "No puede crearse la carpeta de salida '%s'.\n"
 
-#: common/confirm.cpp:75 common/pgm_base.cpp:827
+#: common/confirm.cpp:75 common/pgm_base.cpp:856
 #: eeschema/dialogs/dialog_color_config.cpp:277 eeschema/symbedit.cpp:111
 msgid "Warning"
 msgstr "Aviso"
@@ -2017,15 +2017,15 @@ msgstr "Editor preferido:"
 msgid "%s is already running, Continue?"
 msgstr "%s ya se está ejecutando, ¿continuar?"
 
-#: common/pgm_base.cpp:744
+#: common/pgm_base.cpp:773
 msgid "Language"
 msgstr "Idioma"
 
-#: common/pgm_base.cpp:745
+#: common/pgm_base.cpp:774
 msgid "Select application language (only for testing!)"
 msgstr "Elegir el idioma de la aplicación (¡solo para comprobar!)"
 
-#: common/pgm_base.cpp:820
+#: common/pgm_base.cpp:849
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -2033,7 +2033,7 @@ msgstr ""
 "¡Atención! Alguna de las rutas que ha definido ya han sido definidas\n"
 "de forma externa al proceso actual y serán sobreescritas temporalmente."
 
-#: common/pgm_base.cpp:822
+#: common/pgm_base.cpp:851
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2047,7 +2047,7 @@ msgstr ""
 "ignoradas. Si su intención no es esa, renombre o elimine las\n"
 "entradas conflictivas en las variables de entorno de su sistema."
 
-#: common/pgm_base.cpp:829
+#: common/pgm_base.cpp:858
 msgid "Do not show this message again."
 msgstr "No mostrar este mensaje de nuevo."
 
@@ -9613,11 +9613,11 @@ msgstr "Abrir Eeschema"
 
 #: kicad/menubar.cpp:366
 msgid "Run Library Editor"
-msgstr "Abrir editor de librerías"
+msgstr "Abrir Editor de librerías"
 
 #: kicad/menubar.cpp:374
 msgid "Run Footprint Editor"
-msgstr "Abrir editor de huellas"
+msgstr "Abrir Editor de huellas"
 
 #: kicad/menubar.cpp:378
 msgid "Run Gerbview"
@@ -9633,7 +9633,7 @@ msgstr "Abrir Pcb Calculator"
 
 #: kicad/menubar.cpp:394
 msgid "Run Page Layout Editor"
-msgstr "Abrir Diseñador de Página"
+msgstr "Abrir Diseñador de página"
 
 #: kicad/menubar.cpp:407
 msgid "KiCad &Manual"
@@ -11430,7 +11430,7 @@ msgstr "S"
 #: pcb_calculator/transline_ident.cpp:250
 #: pcb_calculator/transline_ident.cpp:355
 msgid "Gap Width"
-msgstr "Ancho del espacio"
+msgstr "Ancho del hueco"
 
 #: pcb_calculator/transline_ident.cpp:267
 msgid "ZF(H10) = Ey / Hx"
@@ -12112,7 +12112,7 @@ msgstr "Red"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:273
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
-msgstr "Taladrado"
+msgstr "Taladros"
 
 #: pcbnew/class_pad.cpp:670
 msgid "Drill X / Y"
@@ -12453,7 +12453,7 @@ msgstr "Longitud total"
 
 #: pcbnew/class_track.cpp:1053
 msgid "Pad To Die Length"
-msgstr "Distancia de Pad a die"
+msgstr "Distancia de pad a die"
 
 #: pcbnew/class_track.cpp:1061
 msgid "NC Name"
@@ -12959,6 +12959,7 @@ msgstr "Sólida"
 msgid "Thermal relief"
 msgstr "Alivio térmico"
 
+# Pendiente de contexto
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 msgid "THT thermal"
 msgstr ""
@@ -16615,52 +16616,55 @@ msgid ""
 "Error :\n"
 "you must choose a min thickness value bigger than 0.001 inch (or 0.0254 mm)"
 msgstr ""
+"Error:\n"
+"Debe seleccionar un valor del ancho mínimo mayor que 0,0001 pulgadas (o "
+"0,0254 mm)"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:232
 msgid "Error : you must choose a layer"
-msgstr "Error: se debe elegir una capa"
+msgstr "Error: debe seleccionar una capa"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:30
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:83
 msgid "Layer selection:"
-msgstr "Selección de Capa:"
+msgstr "Selección de capa:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
 msgid "Outlines Options:"
-msgstr ""
+msgstr "Opciones de contorno:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:46
 msgid "H, V and 45 deg"
-msgstr ""
+msgstr "H, V y 45 grados"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
 msgid "Zone Edges Orient"
-msgstr ""
+msgstr "Orientación perímetro de zonas"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:54
 msgid "Outlines Appearence"
-msgstr ""
+msgstr "Aspecto del perímetro"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 msgid "Zone min thickness value"
-msgstr ""
+msgstr "Valor mínimo anchura de zonas"
 
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:119
 #, c-format
 msgid "OK to set footprints orientation to %.1f degrees ?"
-msgstr ""
+msgstr "¿Ajustar la orientación de las huellas a %.1f grados?"
 
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:150
 msgid "Bad value for footprints orientation"
-msgstr "Orientación de módulo: valor erróneo"
+msgstr "Valor erróneo para la orientación de las huellas"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:27
 msgid "New orientation (0.1 degree resolution)"
-msgstr ""
+msgstr "Nueva orientación (0,1 grados de resolución)"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:36
 msgid "Filter to select footprints by reference"
-msgstr ""
+msgstr "Filtro para seleccionar huellas por referencia"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:43
 msgid "Include Locked Footprints"
@@ -16676,84 +16680,89 @@ msgstr "Parte trasera (la huella se invierte)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:742
 msgid "Pad size must be greater than zero"
-msgstr ""
+msgstr "El tamaño del pad debe ser mayor de cero"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:748
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr ""
+msgstr "Valor incorrecto para el taladro: taladro mayor que el pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Error: pad has no layer"
-msgstr ""
+msgstr "Error: el pad no tiene capa asignada"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:761
 msgid "Error: the pad is not on a copper layer and has a hole"
-msgstr ""
+msgstr "Error: el pad no está en una capa de cobre y tiene un agujero"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:766
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
 msgstr ""
+"Para pads NPTH, ajustar el tamaño del pad al valor del taladro, si no quiere "
+"que el pad aparezca en los archivos gerber"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:784
 msgid "Incorrect value for pad offset"
-msgstr ""
+msgstr "Valor incorrecto del desplazamiento del pad"
 
+# Pendiente de contexto
 #: pcbnew/dialogs/dialog_pad_properties.cpp:789
 msgid "Too large value for pad delta size"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:797
 msgid "Error: Through hole pad: drill diameter set to 0"
-msgstr ""
+msgstr "Error: pad pasante: diámetro de taladro ajustado a 0"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:802
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
 msgstr ""
+"Error: Los pads del conector no están en la capa de pasta de soldadura\n"
+"Utilice pads SMD en su lugar"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:811
 msgid "Error: only one external copper layer allowed for SMD or Connector pads"
-msgstr ""
+msgstr "Error: solo se permite una capa externa para pads de conectores o SMD"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:818
 msgid "Pad setup errors list"
-msgstr ""
+msgstr "Lista de errores de ajuste de pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:936
 msgid "Unknown netname, netname not changed"
-msgstr ""
+msgstr "Nombre de red desconocido, no se ha modificado el nombre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:38
 msgid "Pad number:"
-msgstr ""
+msgstr "Número de pad:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Net name:"
-msgstr ""
+msgstr "Nombre de red:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:54
 msgid "Pad type:"
-msgstr ""
+msgstr "Tipo de pad:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "Through-hole"
-msgstr ""
+msgstr "Pasante"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "Connector"
-msgstr ""
+msgstr "Conector"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:58
 msgid "NPTH, Mechanical"
-msgstr ""
+msgstr "Pasante sin platear, mecánico"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:64
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:270
 msgid "Shape:"
-msgstr ""
+msgstr "Forma:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Circular"
@@ -16761,7 +16770,7 @@ msgstr "Circular"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Rectangular"
-msgstr ""
+msgstr "Rectangular"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Trapezoidal"
@@ -16771,25 +16780,25 @@ msgstr "Trapezoidal"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:130
 msgid "Position X:"
-msgstr ""
+msgstr "Posición X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:95
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:142
 msgid "Position Y:"
-msgstr ""
+msgstr "Posición Y:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:107
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:284
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:37
 msgid "Size X:"
-msgstr ""
+msgstr "Tamaño X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:296
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:45
 msgid "Size Y:"
-msgstr ""
+msgstr "Tamaño Y:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
 msgid "90"
@@ -16797,132 +16806,139 @@ msgstr "90"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:153
 msgid "0.1 deg"
-msgstr ""
+msgstr "0,1 grados"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Shape offset X:"
-msgstr ""
+msgstr "Desplazamiento X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:169
 msgid "Shape offset Y:"
-msgstr ""
+msgstr "Desplazamiento Y:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:181
 msgid "Pad to die length:"
-msgstr ""
+msgstr "Distancia pad matriz:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:183
 msgid ""
 "Wire length from pad to die on chip ( used to calculate actual track length)"
 msgstr ""
+"Longitud del hilo desde el pad a la matriz (utilizado para calcular el "
+"tamaño real de la pista)"
 
+# Pendiente de contexto
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:195
 msgid "Trapezoid delta:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:207
 msgid "Trapezoid direction:"
-msgstr ""
+msgstr "Dirección del trapecio:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:225
 msgid "Parent footprint orientation"
-msgstr ""
+msgstr "Orientación del pad padre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:233
 msgid "Rotation:"
-msgstr ""
+msgstr "Rotación:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:241
 msgid "Board side:"
-msgstr ""
+msgstr "Lado de la placa:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:245
 msgid "Front side"
-msgstr ""
+msgstr "Frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Circular hole"
-msgstr ""
+msgstr "Agujero circular"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Oval hole"
-msgstr ""
+msgstr "Agujero oval"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:320
 msgid "Copper:"
-msgstr ""
+msgstr "Cobre:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 msgid "Front layer"
-msgstr ""
+msgstr "Capa frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 msgid "Back layer"
-msgstr ""
+msgstr "Capa trasera"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 msgid "All copper layers"
-msgstr ""
+msgstr "Todas las capas de cobre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:334
 msgid "Technical Layers"
-msgstr ""
+msgstr "Capas técnicas"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
 msgid "Front adhesive"
-msgstr ""
+msgstr "Adhesivo frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Back adhesive"
-msgstr ""
+msgstr "Adhesivo trasera"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 msgid "Front solder paste"
-msgstr ""
+msgstr "Pasta de soldadura frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:345
 msgid "Back solder paste"
-msgstr ""
+msgstr "Pasta de soldadura trasera"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:351
 msgid "Back silk screen"
-msgstr ""
+msgstr "Serigrafía trasera"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:357
 msgid "Back solder mask"
-msgstr ""
+msgstr "Máscara de soldadura trasera"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:360
 msgid "Drafting notes"
-msgstr ""
+msgstr "Notas de boceto"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:363
 msgid "E.C.O.1"
-msgstr ""
+msgstr "E.C.O.1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:366
 msgid "E.C.O.2"
-msgstr ""
+msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:391
 msgid "Clearances"
-msgstr ""
+msgstr "Márgenes"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:399
 msgid "Net pad clearance:"
-msgstr ""
+msgstr "Margen red pad:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:401
 msgid ""
 "This is the local net clearance for  pad.\n"
 "If 0, the footprint local value or the Netclass value is used"
 msgstr ""
+"Este es el margen del pad para la red local.\n"
+"Si es 0, se utiliza el valor local de la huella o de la clase de red"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:415
 msgid ""
 "This is the local clearance between this  pad and the solder mask\n"
 "If 0, the footprint local value or the global value is used"
 msgstr ""
+"Este es el margen local entre el pad y la máscara de soldadura.\n"
+"Si es 0, se utiliza el valor local de la huella o el valor global"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:429
 msgid ""
@@ -16932,6 +16948,11 @@ msgid ""
 "ratio\n"
 "A negative value means a smaller mask size than pad size"
 msgstr ""
+"Este es el margen local entre el pad y la pasta de soldadura.\n"
+"Si es 0, se utiliza el valor de la huella o el global.\n"
+"El valor final del margen es la suma de este valor y la proporción de "
+"margen\n"
+"Un valor negativo significa un tamaño de máscara menor que el del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:443
 msgid ""
@@ -16942,30 +16963,37 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"Este es el valor local de la proporción de margen en tanto por ciento entre "
+"el pad y la pasta de soldadura\n"
+"Un valor de 10 significa que el margen es un 10% del tamaño del pad.\n"
+"Si es 0, se utiliza el valor de la huella o el global.\n"
+"El valor final del margen es la suma de este valor y la proporción de "
+"margen.\n"
+"Un valor negativo significa un tamaño de máscara menor que el del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
 msgid "Copper Zones"
-msgstr ""
+msgstr "Zonas de cobre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "From parent footprint"
-msgstr ""
+msgstr "Como la huella madre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:484
 msgid "Thermal relief width:"
-msgstr ""
+msgstr "Ancho del alivio térmico:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:496
 msgid "Thermal relief gap:"
-msgstr ""
+msgstr "Hueco del alivio térmico:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:514
 msgid "Set fields to 0 to use parent or global values"
-msgstr ""
+msgstr "Ajuste los campos a 0 para utilizar los valores madre o globales"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
 msgid "Local Clearance and Settings"
-msgstr ""
+msgstr "Margen local y ajustes"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:549
 msgid ""
@@ -16973,14 +17001,17 @@ msgid ""
 "This pad is flipped on board.\n"
 "Back and front layers will be swapped."
 msgstr ""
+"Atención:\n"
+"Este pad se encuentra volteado en la placa.\n"
+"Las capas frontal y trasera serán intercambiadas."
 
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:193
 msgid "No layer selected, Please select the text layer"
-msgstr ""
+msgstr "No hay capa seleccionada, por favor, seleccione la capa de texto"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:29
 msgid "Enter the text placed on selected layer."
-msgstr ""
+msgstr "Introduzca el texto emplazado en la capa seleccionada."
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70 pcbnew/muonde.cpp:813
 msgid "Mirrored"
@@ -16988,31 +17019,31 @@ msgstr "Invertido"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:88
 msgid "Justification:"
-msgstr ""
+msgstr "Justificado:"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:116
 msgid "Orientation (0.1 deg):"
-msgstr ""
+msgstr "Orientación (0,1 grados):"
 
 #: pcbnew/dialogs/dialog_plot.cpp:594
 msgid "HPGL pen size constrained."
-msgstr ""
+msgstr "Tamaño del trazo HPGL restringido."
 
 #: pcbnew/dialogs/dialog_plot.cpp:607
 msgid "HPGL pen overlay constrained."
-msgstr ""
+msgstr "Cubierta del trazo HPGL restringida."
 
 #: pcbnew/dialogs/dialog_plot.cpp:619
 msgid "Default line width constrained."
-msgstr ""
+msgstr "Ancho de línea por defecto restringida."
 
 #: pcbnew/dialogs/dialog_plot.cpp:632
 msgid "X scale constrained."
-msgstr ""
+msgstr "Escala X restringida."
 
 #: pcbnew/dialogs/dialog_plot.cpp:646
 msgid "Y scale constrained."
-msgstr ""
+msgstr "Escala Y restringida."
 
 #: pcbnew/dialogs/dialog_plot.cpp:660
 #, c-format
@@ -17020,6 +17051,9 @@ msgid ""
 "Width correction constrained. The reasonable width correction value must be "
 "in a range of  [%+f; %+f] (%s) for current design rules. "
 msgstr ""
+"Corrección del ancho restringida. El valor razonable de la corrección del "
+"ancho debe encontrarse en el rango de [%+f; %+f] (%s) para las reglas de "
+"diseño actuales."
 
 #: pcbnew/dialogs/dialog_plot.cpp:723
 #: pcbnew/exporters/gen_modules_placefile.cpp:247
@@ -19641,7 +19675,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:609
 msgid "&Netlist"
-msgstr "&Netlist"
+msgstr "Lista de re&des"
 
 #: pcbnew/menubar_pcbframe.cpp:610
 msgid "Read the netlist and update board connectivity"
@@ -21094,12 +21128,12 @@ msgstr "En el archivo de la sesión falta la sección \"routes\""
 msgid "Session file is missing the \"library_out\" section"
 msgstr "En el archivo de la sesión falta la sección \"library_out\""
 
-#: pcbnew/specctra_import.cpp:397
+#: pcbnew/specctra_import.cpp:396
 #, c-format
 msgid "Session file has 'reference' to non-existent component \"%s\""
 msgstr "El fichero tiene una referencia a un componente inexistente \"%s\""
 
-#: pcbnew/specctra_import.cpp:545
+#: pcbnew/specctra_import.cpp:543
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "Una pista o via hace referencia a un pad inexistente \"%s\""
@@ -22365,7 +22399,7 @@ msgstr "Orientación módulo"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:167
 msgid "Pad Properties"
-msgstr ""
+msgstr "Propiedades del pad"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:64
 msgid "Differential Pair Dimensions"
