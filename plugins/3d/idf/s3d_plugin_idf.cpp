@@ -98,7 +98,7 @@ int S3D_PLUGIN_IDF::GetNFilters( void ) const
 
 const wxString S3D_PLUGIN_IDF::GetFileFilter( int aIndex ) const
 {
-    if( aIndex < 0 || aIndex >= m_filters.size() )
+    if( aIndex < 0 || aIndex >= (int)m_filters.size() )
         return wxEmptyString;
 
     return m_filters[aIndex];
@@ -115,56 +115,91 @@ bool S3D_PLUGIN_IDF::CanRender( void ) const
 SCENEGRAPH* S3D_PLUGIN_IDF::Load( const wxString& aFileName )
 {
     // load and render the file
-    #warning TO BE IMPLEMENTED
     IDF3_BOARD brd( IDF3::CAD_ELEC );
     IDF3_COMP_OUTLINE* outline = brd.GetComponentOutline( aFileName );
 
     if( NULL == outline )
-        return NULL;
-
-    // render the component outline
-    const std::map< std::string, IDF3_COMPONENT* >*const comp = brd.GetComponents();
-    size_t asize = comp->size();
-
-    if( 1 != asize )
     {
         #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] unexpected number of components: " << asize << "\n";
+            std::cerr << " * [INFO] no outline for file '";
+            std::cerr << aFileName.ToUTF8() << "'\n";
         #endif
         return NULL;
     }
 
-    const std::list< IDF3_COMP_OUTLINE_DATA* >*
-        ip = comp[0].begin()->second->GetOutlinesData();
-
-    asize = ip->size();
-
-    if( 1 != asize )
-    {
-        #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] unexpected number of outlines: " << asize << "\n";
-        #endif
-        return NULL;
-    }
-
-    IDF3_COMP_OUTLINE_DATA* dp = *( ip->begin() );
-    IDF3_COMP_OUTLINE* pout = (IDF3_COMP_OUTLINE*)( dp->GetOutline() );
     VRML_LAYER vpcb;
 
-    if( !PopulateVRML( vpcb, pout->GetOutlines() ) )
+    if( !PopulateVRML( vpcb, outline->GetOutlines() ) )
     {
         #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] no valid outline data\n";
+            std::cerr << " * [INFO] no valid outline data in '";
+            std::cerr << aFileName.ToUTF8() << "'\n";
         #endif
         return NULL;
     }
 
-    // XXX - TO BE IMPLEMENTED
+    vpcb.Tesselate( NULL );
+    std::vector< double > vertices;
+    std::vector< int > indices;
+    double thick = outline->GetThickness();
 
-    return NULL;
+    if( !vpcb.Get3DTriangles( vertices, indices, thick, 0.0 ) )
+    {
+        #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] no vertex data in '";
+            std::cerr << aFileName.ToUTF8() << "'\n";
+        #endif
+        return NULL;
+    }
+
+    std::cerr << "XXX - Got " << vertices.size() / 3 << " vertices and " << indices.size() << " indices\n";
+    std::vector< SGPOINT > vlist;
+    size_t nvert = vertices.size() / 3;
+    size_t j = 0;
+
+    for( size_t i = 0; i < nvert; ++i, j+= 3 )
+        vlist.push_back( SGPOINT( vertices[j], vertices[j+1], vertices[j+2] ) );
+
+    // create the intermediate scenegraph
+    IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( true );
+    IFSG_SHAPE* shape = new IFSG_SHAPE( *tx0 );
+    IFSG_FACESET* face = new IFSG_FACESET( *shape );
+    IFSG_COORDS* cp = new IFSG_COORDS( *face );
+    cp->SetCoordsList( nvert, &vlist[0] );
+    IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );
+    coordIdx->SetIndices( indices.size(), &indices[0] );
+
+    // XXX - TO BE IMPLEMENTED : add correct normals and colors
+    std::vector< SGVECTOR > norms;
+
+    for( size_t i = 0; i < nvert; ++i )
+        norms.push_back( SGVECTOR( 0.0, 0.0, 1.0 ) );
+
+    IFSG_NORMALS* np = new IFSG_NORMALS( *face );
+    np->SetNormalList( nvert, &norms[0] );
+
+    // magenta
+    IFSG_APPEARANCE* material = new IFSG_APPEARANCE( *shape);
+    material->SetSpecular( 1.0, 0.0, 1.0 );
+    material->SetDiffuse( 0.9, 0.0, 0.9 );
+    material->SetAmbient( 0.9 );
+    material->SetShininess( 0.3 );
+
+    SCENEGRAPH* data = (SCENEGRAPH*)tx0->GetRawPtr();
+
+    // delete the API wrappers
+    delete shape;
+    delete face;
+    delete coordIdx;
+    delete material;
+    delete cp;
+    delete np;
+    delete tx0;
+
+    return data;
 }
 
 

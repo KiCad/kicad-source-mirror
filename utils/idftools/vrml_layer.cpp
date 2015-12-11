@@ -1786,3 +1786,173 @@ void VRML_LAYER::SetVertexOffsets( double aXoffset, double aYoffset )
     offsetY = aYoffset;
     return;
 }
+
+
+bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
+    std::vector< int > &aIndexList, double aTopZ, double aBotZ )
+{
+    aVertexList.clear();
+    aIndexList.clear();
+
+    if( ordmap.size() < 3 || outline.empty() )
+        return false;
+
+    if( aTopZ <= aBotZ )
+    {
+        double tmp = aBotZ;
+        aBotZ = aTopZ;
+        aTopZ = tmp;
+    }
+
+    VERTEX_3D* vp = getVertexByIndex( ordmap[0], pholes );
+
+    if( !vp )
+        return false;
+
+    size_t i, j, k;
+    size_t vsize = ordmap.size();
+    j = 0;
+    k = vsize;
+
+    // top vertices
+    for( i = 0; i < vsize; ++i )
+    {
+        vp = getVertexByIndex( ordmap[i], pholes );
+
+        if( !vp )
+        {
+            aVertexList.clear();
+            return false;
+        }
+
+        aVertexList.push_back( vp->x );
+        aVertexList.push_back( vp->y );
+        aVertexList.push_back( aTopZ );
+    }
+
+    // bottom vertices
+    for( i = 0; i < vsize; ++i )
+    {
+        vp = getVertexByIndex( ordmap[i], pholes );
+
+        aVertexList.push_back( vp->x );
+        aVertexList.push_back( vp->y );
+        aVertexList.push_back( aBotZ );
+    }
+
+    // create the index lists .. it is difficult to estimate the list size
+    // a priori so instead we use a vector to help
+
+    bool holes_only = triplets.empty();
+
+    if( !holes_only )
+    {
+        // go through the triplet list and write out the indices based on order
+        std::list< TRIPLET_3D >::const_iterator tbeg = triplets.begin();
+        std::list< TRIPLET_3D >::const_iterator tend = triplets.end();
+
+        while( tbeg != tend )
+        {
+            // top vertices
+            aIndexList.push_back( (int) tbeg->i1 );
+            aIndexList.push_back( (int) tbeg->i2 );
+            aIndexList.push_back( (int) tbeg->i3 );
+
+            // bottom vertices
+            aIndexList.push_back( (int) ( tbeg->i2 + vsize ) );
+            aIndexList.push_back( (int) ( tbeg->i1 + vsize ) );
+            aIndexList.push_back( (int) ( tbeg->i3 + vsize ) );
+
+            ++tbeg;
+        }
+    }
+
+    // compile indices for the walls joining top to bottom
+    int lastPoint;
+    int curPoint;
+    int curContour = 0;
+
+    std::list< std::list< int >* >::const_iterator  obeg = outline.begin();
+    std::list< std::list< int >* >::const_iterator  oend = outline.end();
+    std::list< int >* cp;
+    std::list< int >::const_iterator  cbeg;
+    std::list< int >::const_iterator  cend;
+
+    i = 2;
+    while( obeg != oend )
+    {
+        cp = *obeg;
+
+        if( cp->size() < 3 )
+        {
+            ++obeg;
+            ++curContour;
+            continue;
+        }
+
+        cbeg      = cp->begin();
+        cend      = cp->end();
+        lastPoint = *(cbeg++);
+
+        while( cbeg != cend )
+        {
+            curPoint = *(cbeg++);
+
+            if( !holes_only )
+            {
+                aIndexList.push_back( curPoint );
+                aIndexList.push_back( lastPoint );
+                aIndexList.push_back( (int)( curPoint + vsize ) );
+
+                aIndexList.push_back( (int)( curPoint + vsize ) );
+                aIndexList.push_back( lastPoint );
+                aIndexList.push_back( (int)( lastPoint + vsize ) );
+            }
+            else
+            {
+                aIndexList.push_back( curPoint );
+                aIndexList.push_back( (int)( curPoint + vsize ) );
+                aIndexList.push_back( lastPoint );
+
+                aIndexList.push_back( (int)( curPoint + vsize ) );
+                aIndexList.push_back( (int)( lastPoint + vsize ) );
+                aIndexList.push_back( lastPoint );
+            }
+
+            lastPoint = curPoint;
+        }
+
+        // check if the loop needs to be closed
+        cbeg = cp->begin();
+        cend = --cp->end();
+
+        curPoint = *(cbeg);
+        lastPoint  = *(cend);
+
+        if( !holes_only )
+        {
+            aIndexList.push_back( curPoint );
+            aIndexList.push_back( lastPoint );
+            aIndexList.push_back( (int)( curPoint + vsize ) );
+
+            aIndexList.push_back( (int)( curPoint + vsize ) );
+            aIndexList.push_back( lastPoint );
+            aIndexList.push_back( (int)( lastPoint + vsize ) );
+        }
+        else
+        {
+            aIndexList.push_back( curPoint );
+            aIndexList.push_back( (int)( curPoint + vsize ) );
+            aIndexList.push_back( lastPoint );
+
+            aIndexList.push_back( (int)( curPoint + vsize ) );
+            aIndexList.push_back( (int)( lastPoint + vsize ) );
+            aIndexList.push_back( lastPoint );
+        }
+
+        ++obeg;
+        ++curContour;
+    }
+
+    return true;
+}

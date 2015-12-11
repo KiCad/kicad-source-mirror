@@ -456,6 +456,20 @@ public:
     const std::string& GetError( void );
 
     void SetVertexOffsets( double aXoffset, double aYoffset );
+
+    /**
+     * Function Get3DTriangles
+     * Allocates and populates the 3D vertex and index lists with
+     * triangular vertices which may be used for rendering.
+     *
+     * @param aVertexList will store the vertices
+     * @param aIndexList will store the indices
+     * @param aTopZ is the top plane of the model
+     * @param aBotZ is the bottom plane of the model
+     */
+    bool Get3DTriangles( std::vector< double >& aVertexList,
+        std::vector< int > &aIndexList, double aTopZ, double aBotZ );
+
 };
 
 #endif    // VRML_LAYER_H

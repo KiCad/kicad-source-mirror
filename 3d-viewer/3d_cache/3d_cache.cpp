@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#define GLM_FORCE_RADIANS
+
 #include <iostream>
 #include <fstream>
 #include <cstdio>
@@ -598,21 +600,24 @@ S3DMODEL* S3D_CACHE::Prepare( S3D_INFO const* aModelEntry,
         return NULL;
 
     // create a single transform entity to apply to the models
-    glm::dmat4 t0 = glm::translate( glm::dvec3( 25.4 * aModelEntry->offset.x, 25.4 * aModelEntry->offset.y,
-        25.4 * aModelEntry->offset.z ) );
+    glm::dmat4 t0 = glm::translate( glm::dvec3( 25.4 * aModelEntry->offset.x,
+        25.4 * aModelEntry->offset.y, 25.4 * aModelEntry->offset.z ) );
 
-    glm::dmat4 rX = glm::rotate( aModelEntry->rotation.x, glm::dvec3( 1.0, 0.0, 0.0 ) );
-    glm::dmat4 rY = glm::rotate( -aModelEntry->rotation.y, glm::dvec3( 0.0, 1.0, 0.0 ) );
-    glm::dmat4 rZ = glm::rotate( aModelEntry->rotation.z, glm::dvec3( 0.0, 0.0, 1.0 ) );
+    glm::dmat4 rX = glm::rotate( glm::radians( aModelEntry->rotation.x ),
+        glm::dvec3( 1.0, 0.0, 0.0 ) );
+    glm::dmat4 rY = glm::rotate( glm::radians( -aModelEntry->rotation.y ),
+        glm::dvec3( 0.0, 1.0, 0.0 ) );
+    glm::dmat4 rZ = glm::rotate( glm::radians( aModelEntry->rotation.z ),
+        glm::dvec3( 0.0, 0.0, 1.0 ) );
 
     glm::dmat4 s0 = glm::scale( glm::dvec3( aModelEntry->scale.x, aModelEntry->scale.y,
         aModelEntry->scale.z ) );
 
     glm::dmat4 m0 = rZ * rY * rX * s0 * t0;
 
-    rX = glm::rotate( aRotation.x, glm::dvec3( 1.0, 0.0, 0.0 ) );
-    rY = glm::rotate( aRotation.y, glm::dvec3( 0.0, 1.0, 0.0 ) );
-    rZ = glm::rotate( aRotation.z, glm::dvec3( 0.0, 0.0, 1.0 ) );
+    rX = glm::rotate( glm::radians( aRotation.x ), glm::dvec3( 1.0, 0.0, 0.0 ) );
+    rY = glm::rotate( glm::radians( aRotation.y ), glm::dvec3( 0.0, 1.0, 0.0 ) );
+    rZ = glm::rotate( glm::radians( aRotation.z ), glm::dvec3( 0.0, 0.0, 1.0 ) );
 
     glm::dmat4 t1 = glm::translate( glm::dvec3( aOffset.x, aOffset.y, aOffset.z ) );
 

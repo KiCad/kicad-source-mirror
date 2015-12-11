@@ -155,10 +155,10 @@ SCENEGRAPH* S3D_PLUGIN_TETRA::Load( const wxString& aFileName )
     // the vertex normals in this case are the normalized
     // vertex points
     SGVECTOR norm[4];
-    norm[0] = SGVECTOR( -1.0, 0.0, SQ2 );
-    norm[1] = SGVECTOR( 1.0, 0.0, SQ2 );
-    norm[2] = SGVECTOR( 0.0, -1.0, -SQ2 );
-    norm[3] = SGVECTOR( 0.0, 1.0, -SQ2 );
+    norm[0] = SGVECTOR( -1.0, 0.0, -SQ2 );
+    norm[1] = SGVECTOR( 1.0, 0.0, -SQ2 );
+    norm[2] = SGVECTOR( 0.0, -1.0, SQ2 );
+    norm[3] = SGVECTOR( 0.0, 1.0, SQ2 );
     IFSG_NORMALS* np = new IFSG_NORMALS( *face );
     np->SetNormalList( 4, norm );
 
