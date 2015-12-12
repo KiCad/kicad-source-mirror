@@ -240,10 +240,10 @@ public:
     /**
      * Function ClearAnnotation
      * clears exiting component annotation ( i.i IC23 changed to IC? and part reset to 1)
-     * @param aSheetPath: SCH_SHEET_PATH value: if NULL remove all annotations,
-     *                    else remove annotation relative to this sheetpath
+     * @param aSheet: SCH_SHEET value: if NULL remove all annotations,
+     *                else remove annotation relative to \a aSheet.
      */
-    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
+    void ClearAnnotation( SCH_SHEET* aSheet );
 
     /**
      * Function SetTimeStamp
@@ -329,8 +329,8 @@ public:
 
     void SwapData( SCH_ITEM* aItem );
 
-    // returns a unique ID, in the form of a path.
-    wxString GetPath( const SCH_SHEET_PATH* sheet ) const;
+    // returns a unique ID, in the form of a path determined by \a aSheet.
+    wxString GetPath( const SCH_SHEET* sheet ) const;
 
     /**
      * Function IsReferenceStringValid (static)

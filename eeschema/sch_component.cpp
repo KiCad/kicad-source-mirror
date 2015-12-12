@@ -429,21 +429,21 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
 }
 
 
-wxString SCH_COMPONENT::GetPath( const SCH_SHEET_PATH* sheet ) const
+wxString SCH_COMPONENT::GetPath( const SCH_SHEET* aSheet ) const
 {
-    wxCHECK_MSG( sheet != NULL, wxEmptyString,
+    wxCHECK_MSG( aSheet != NULL, wxEmptyString,
                  wxT( "Cannot get component path with invalid sheet object." ) );
 
     wxString str;
 
     str.Printf( wxT( "%8.8lX" ), (long unsigned) m_TimeStamp );
-    return sheet->Path() + str;
+    return aSheet->GetPath() + str;
 }
 
 
 const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
 {
-    wxString          path = GetPath( sheet );
+    wxString          path = GetPath( sheet->Last() );
     wxString          h_path, h_ref;
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
@@ -505,7 +505,7 @@ bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 
 void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
-    wxString          path = GetPath( sheet );
+    wxString          path = GetPath( sheet->Last() );
 
     bool              notInArray = true;
 
@@ -583,7 +583,7 @@ void SCH_COMPONENT::SetTimeStamp( time_t aNewTimeStamp )
 
 int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
 {
-    wxString          path = GetPath( aSheet );
+    wxString          path = GetPath( aSheet->Last() );
     wxString          h_path, h_multi;
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
@@ -611,7 +611,7 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
 
 void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
-    wxString          path = GetPath( aSheet );
+    wxString          path = GetPath( aSheet->Last() );
 
     bool              notInArray = true;
 
@@ -727,7 +727,7 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 }
 
 
-void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
+void SCH_COMPONENT::ClearAnnotation( SCH_SHEET* aSheet )
 {
     bool           keepMulti = false;
     wxArrayString  reference_fields;
@@ -750,7 +750,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     }
     else
     {   // This is a malformed reference: reinit this reference
-        m_prefix = defRef = wxT("U");        // Set to default ref prefix
+        m_prefix = defRef = wxT( "U" );        // Set to default ref prefix
     }
 
     defRef.Append( wxT( "?" ) );
@@ -759,22 +759,22 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
     // For components with units locked,
     // we cannot remove all annotations: part selection must be kept
-    // For all components: if aSheetPath is not NULL,
+    // For all components: if aSheet is not NULL,
     // remove annotation only for the given path
-    if( keepMulti || aSheetPath )
+    if( keepMulti || aSheet )
     {
         wxString NewHref;
         wxString path;
 
-        if( aSheetPath )
-            path = GetPath( aSheetPath );
+        if( aSheet )
+            path = GetPath( aSheet );
 
         for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
         {
             // Break hierarchical reference in path, ref and multi selection:
             reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
 
-            if( aSheetPath == NULL || reference_fields[0].Cmp( path ) == 0 )
+            if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
             {
                 if( keepMulti )  // Get and keep part selection
                     multi = reference_fields[2];

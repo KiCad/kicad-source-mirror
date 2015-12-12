@@ -755,7 +755,7 @@ int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) 
 }
 
 
-void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
+void SCH_SCREEN::ClearAnnotation( SCH_SHEET* aSheet )
 {
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
@@ -763,7 +763,7 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-            component->ClearAnnotation( aSheetPath );
+            component->ClearAnnotation( aSheet );
 
             // Clear the modified component flag set by component->ClearAnnotation
             // because we do not use it here and we should not leave this flag set,
@@ -1428,13 +1428,6 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
             strct = strct->Next();
         }
     }
-}
-
-
-void SCH_SCREENS::ClearAnnotation()
-{
-    for( size_t i = 0;  i < m_screens.size();  i++ )
-        m_screens[i]->ClearAnnotation( NULL );
 }
 
 

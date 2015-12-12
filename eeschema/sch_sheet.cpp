@@ -1214,6 +1214,25 @@ wxString SCH_SHEET::GetHumanReadablePath() const
 }
 
 
+void SCH_SHEET::ClearAnnotation( bool aIncludeSubSheets )
+{
+    m_screen->ClearAnnotation( this );
+
+    if( aIncludeSubSheets )
+    {
+        SCH_ITEM* item = m_screen->GetDrawItems();
+
+        while( item )
+        {
+            if( item->Type() == SCH_SHEET_T )
+                static_cast<SCH_SHEET*>( item )->ClearAnnotation( aIncludeSubSheets );
+
+            item = item->Next();
+        }
+    }
+}
+
+
 SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
     wxLogDebug( wxT( "Sheet assignment operator." ) );
