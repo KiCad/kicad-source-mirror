@@ -159,21 +159,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     set( CMAKE_C_FLAGS   "-Wall ${CMAKE_C_FLAGS}" )
     set( CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}" )
 
-    # The optimization level is -O1 instead of the usual -O2 level because
-    # boost::polygon has a function (inflate polygon) broken by the -O2 level
-    # with GCC 4.7.0 to 4.7.2 (works fine with  with GCC 4.6 and 4.7.3).
-    # This lower optimization level does not have a significant change on the speed.
-    # See also:
-    #   https://bugs.launchpad.net/kicad/+bug/1056926
-    #   https://svn.boost.org/trac/boost/ticket/7983
-    if( GCC_VERSION VERSION_EQUAL 4.7.0 OR ( GCC_VERSION VERSION_GREATER 4.7.0 AND GCC_VERSION VERSION_LESS 4.7.3 ) )
-        set( CMAKE_C_FLAGS_RELEASE   "-O1" )
-        set( CMAKE_CXX_FLAGS_RELEASE "-O1" )
-    else()
-        set( CMAKE_C_FLAGS_RELEASE   "-O2" )
-        set( CMAKE_CXX_FLAGS_RELEASE "-O2" )
-    endif()
-
     set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
     set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG -Wno-deprecated-declarations" )
 
