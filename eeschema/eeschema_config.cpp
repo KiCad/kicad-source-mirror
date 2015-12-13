@@ -335,6 +335,9 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
     dlg.SetEnableHVBusOrientation( GetForceHVLines() );
     dlg.SetShowPageLimits( m_showPageLimits );
+    dlg.SetAutoplaceFields( m_autoplaceFields );
+    dlg.SetAutoplaceJustify( m_autoplaceJustify );
+    dlg.SetAutoplaceAlign( m_autoplaceAlign );
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
@@ -383,6 +386,9 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
     SetForceHVLines( dlg.GetEnableHVBusOrientation() );
     m_showPageLimits = dlg.GetShowPageLimits();
+    m_autoplaceFields = dlg.GetAutoplaceFields();
+    m_autoplaceJustify = dlg.GetAutoplaceJustify();
+    m_autoplaceAlign = dlg.GetAutoplaceAlign();
 
     // Delete all template fieldnames and then restore them using the template field data from
     // the options dialog
@@ -503,6 +509,9 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 }
 
 
+static const wxChar AutoplaceFieldsEntry[] =        wxT( "AutoplaceFields" );
+static const wxChar AutoplaceJustifyEntry[] =       AUTOPLACE_JUSTIFY_KEY;
+static const wxChar AutoplaceAlignEntry[] =         AUTOPLACE_ALIGN_KEY;
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
@@ -586,6 +595,9 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
+    aCfg->Read( AutoplaceFieldsEntry, &m_autoplaceFields, true );
+    aCfg->Read( AutoplaceJustifyEntry, &m_autoplaceJustify, true );
+    aCfg->Read( AutoplaceAlignEntry, &m_autoplaceAlign, false );
 
     // Load print preview window session settings.
     aCfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
@@ -676,6 +688,9 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
     aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
+    aCfg->Write( AutoplaceFieldsEntry, m_autoplaceFields );
+    aCfg->Write( AutoplaceJustifyEntry, m_autoplaceJustify );
+    aCfg->Write( AutoplaceAlignEntry, m_autoplaceAlign );
 
     // Save print preview window session settings.
     aCfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );

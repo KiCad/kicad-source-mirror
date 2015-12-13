@@ -299,6 +299,23 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
 }
 
 
+bool SCH_FIELD::IsHorizJustifyFlipped() const
+{
+    wxPoint render_center = GetBoundingBox().Centre();
+    wxPoint pos = GetPosition();
+
+    switch( GetHorizJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:
+        return render_center.x < pos.x;
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        return render_center.x > pos.x;
+    default:
+        return false;
+    }
+}
+
+
 bool SCH_FIELD::Save( FILE* aFile ) const
 {
     char hjustify = 'C';

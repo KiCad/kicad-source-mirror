@@ -441,6 +441,42 @@ public:
     bool GetShowPageLimits( void ) { return m_checkPageLimits->GetValue(); }
 
     /**
+     * Function
+     * Set the AutoplaceFields setting in the dialog
+     */
+    void SetAutoplaceFields( bool enable ) { m_checkAutoplaceFields->SetValue( enable ); }
+
+    /**
+     * Function
+     * Return the current AutoplaceFields setting from the dialog
+     */
+    bool GetAutoplaceFields() { return m_checkAutoplaceFields->GetValue(); }
+
+    /**
+     * Function
+     * Set the AutoplaceJustify setting in the dialog
+     */
+    void SetAutoplaceJustify( bool enable ) { m_checkAutoplaceJustify->SetValue( enable ); }
+
+    /**
+     * Function
+     * Return the current AutoplaceJustify setting from the dialog
+     */
+    bool GetAutoplaceJustify() { return m_checkAutoplaceJustify->GetValue(); }
+
+    /**
+     * Function
+     * Set the AutoplaceAlign setting in the dialog
+     */
+    void SetAutoplaceAlign( bool enable ) { m_checkAutoplaceAlign->SetValue( enable ); }
+
+    /**
+     * Function
+     * Return the current AutoplaceAlign setting from the dialog
+     */
+    bool GetAutoplaceAlign() { return m_checkAutoplaceAlign->GetValue(); }
+
+    /**
      * Function SetTemplateFields
      * Set the template field data in the dialog
      *

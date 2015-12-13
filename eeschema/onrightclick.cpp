@@ -394,6 +394,9 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
         AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CMP, msg, KiBitmap( delete_xpm ) );
     }
 
+    msg = AddHotkeyName( _( "Autoplace Fields" ), g_Schematic_Hokeys_Descr, HK_AUTOPLACE_FIELDS );
+    AddMenuItem( PopMenu, ID_AUTOPLACE_FIELDS, msg, KiBitmap( autoplace_fields_xpm ) );
+
     if( libEntry && !libEntry->GetDocFileName().IsEmpty() )
         AddMenuItem( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Doc" ), KiBitmap( datasheet_xpm ) );
 }

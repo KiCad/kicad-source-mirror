@@ -1194,7 +1194,7 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
         if( item.m_Convert > 0 && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
             continue;
 
-        if ( item.Type() == LIB_FIELD_T )
+        if( item.Type() == LIB_FIELD_T )
             continue;
 
         if( initialized )

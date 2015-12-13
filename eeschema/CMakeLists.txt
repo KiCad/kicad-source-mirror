@@ -73,6 +73,7 @@ set( EESCHEMA_DLGS
     )
 
 set( EESCHEMA_SRCS
+    autoplace_fields.cpp
     annotate.cpp
     backanno.cpp
     block.cpp

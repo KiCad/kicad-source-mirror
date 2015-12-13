@@ -217,6 +217,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     }
 
     m_isDangling = aComponent.m_isDangling;
+    m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
 }
 
 
@@ -660,6 +661,16 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 }
 
 
+void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly )
+{
+    BOOST_FOREACH( SCH_FIELD& each_field, m_Fields )
+    {
+        if( !aVisibleOnly || ( each_field.IsVisible() && !each_field.IsVoid() ) )
+            aVector.push_back( &each_field );
+    }
+}
+
+
 SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 {
     int newNdx = m_Fields.size();
@@ -688,6 +699,17 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
         return part->GetPin( number, m_unit, m_convert );
     }
     return NULL;
+}
+
+
+void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
+{
+    if( PART_SPTR part = m_part.lock() )
+    {
+        part->GetPins( aPinsList, m_unit, m_convert );
+    }
+    else
+        wxFAIL_MSG( "Could not obtain PART_SPTR lock" );
 }
 
 

@@ -146,6 +146,10 @@ private:
 
     bool                    m_forceHVLines;       ///< force H or V directions for wires, bus, line
 
+    bool                    m_autoplaceFields;    ///< automatically place component fields
+    bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
+    bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
+
     /// An index to the last find item in the found items list #m_foundItems.
     int         m_foundItemIndex;
 
@@ -763,6 +767,12 @@ public:
 
 
 private:
+
+    /**
+     * Function OnAutoplaceFields
+     * handles the #ID_AUTOPLACE_FIELDS event.
+     */
+    void OnAutoplaceFields( wxCommandEvent& aEvent );
 
     /**
      * Function OnMoveItem
