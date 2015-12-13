@@ -12,6 +12,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/include/gal/opengl
     ${GLEW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}
     ${INC_AFTER}
     )
 
@@ -21,6 +22,7 @@ set( DIR_RAY 3d_rendering/3d_render_raytracing )
 set( DIR_RAY_ACC ${DIR_RAY}/accelerators )
 set( DIR_RAY_2D ${DIR_RAY}/shapes2D )
 set( DIR_RAY_3D ${DIR_RAY}/shapes3D )
+set( DIR_3D_PLUGINS ${CMAKE_SOURCE_DIR}/plugins/ldr )
 
 set(3D-VIEWER_SRCS
     dialogs/dialog_3D_view_option_base.cpp
@@ -45,6 +47,8 @@ set(3D-VIEWER_SRCS
     vrml_v2_modelparser.cpp
     x3dmodelparser.cpp
     CImage.cpp
+    ${DIR_3D_PLUGINS}/pluginldr.cpp
+    ${DIR_3D_PLUGINS}/3d/pluginldr3D.cpp
     3d_cache/3d_cache_wrapper.cpp
     3d_cache/3d_cache.cpp
     3d_cache/3d_plugin_manager.cpp

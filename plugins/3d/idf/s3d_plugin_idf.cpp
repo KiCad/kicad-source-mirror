@@ -25,105 +25,138 @@
 #include <cmath>
 #include <string>
 #include <map>
-#include "s3d_plugin_idf.h"
+#include <wx/string.h>
+#include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
 #include "idf_parser.h"
 #include "vrml_layer.h"
 
+#define PLUGIN_3D_IDF_MAJOR 1
+#define PLUGIN_3D_IDF_MINOR 0
+#define PLUGIN_3D_IDF_REVNO 0
+#define PLUGIN_3D_IDF_PATCH 0
 
-static S3D_PLUGIN_IDF idf_plugin;
+
+KICAD_PLUGIN_EXPORT const char* GetKicadPluginName( void )
+{
+    return "PLUGIN_3D_IDF";
+}
+
+
+KICAD_PLUGIN_EXPORT void GetVersion( unsigned char* Major,
+    unsigned char* Minor, unsigned char* Revision, unsigned char* Patch )
+{
+    if( Major )
+        *Major = PLUGIN_3D_IDF_MAJOR;
+
+    if( Minor )
+        *Minor = PLUGIN_3D_IDF_MINOR;
+
+    if( Revision )
+        *Revision = PLUGIN_3D_IDF_REVNO;
+
+    if( Patch )
+        *Patch = PLUGIN_3D_IDF_PATCH;
+
+    return;
+}
+
+// number of extensions supported
+#ifdef _WIN32
+    #define NEXTS 1
+#else
+    #define NEXTS 2
+#endif
+
+// number of filter sets supported
+#define NFILS 1
+
+static char ext0[] = "idf";
+static char fil0[] = "IDF 2.0/3.0 (*.idf)|*.idf";
 
 #ifndef _WIN32
-extern "C" __attribute__((__visibility__("default"))) S3D_PLUGIN* Get3DPlugin( void )
-{
-    return &idf_plugin;
-}
-#else
-extern "C" __declspec( dllexport ) S3D_PLUGIN* Get3DPlugin( void )
-    {
-        return &idf_plugin;
-    }
+    static char ext1[] = "IDF";
+    static char fil1[] = "IDF 2.0/3.0 (*.idf;*.IDF)|*.idf;*.IDF";
 #endif
+
+static struct FILE_DATA
+{
+    char const* extensions[NEXTS];
+    char const* filters[NFILS];
+
+    FILE_DATA()
+    {
+        extensions[0] = ext0;
+        filters[0] = fil0;
+
+#ifndef _WIN32
+        extensions[1] = ext1;
+        filters[1] = fil1;
+#endif
+
+        return;
+    }
+
+} file_data;
 
 
 static bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items );
 static bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg );
 
 
-S3D_PLUGIN_IDF::S3D_PLUGIN_IDF()
+KICAD_PLUGIN_EXPORT int GetNExtensions( void )
 {
-    m_extensions.push_back( wxString::FromUTF8Unchecked( "idf" ) );
-
-#ifdef _WIN32
-    // assume a case-insensitive file system
-    m_filters.push_back( wxT( "IDF 2.0/3.0 (*.idf)|*.idf" ) );
-#else
-    // assume the filesystem is case sensitive
-    m_extensions.push_back( wxString::FromUTF8Unchecked( "IDF" ) );
-
-    m_filters.push_back( wxT( "IDF 2.0/3.0 (*.idf;*.IDF)|*.idf;*.IDF" ) );
-#endif
-
-
-    return;
+    return NEXTS;
 }
 
 
-S3D_PLUGIN_IDF::~S3D_PLUGIN_IDF()
+KICAD_PLUGIN_EXPORT char const* GetModelExtension( int aIndex )
 {
-    return;
+    if( aIndex < 0 || aIndex >= NEXTS )
+        return NULL;
+
+    return file_data.extensions[aIndex];
 }
 
 
-int S3D_PLUGIN_IDF::GetNExtensions( void ) const
+KICAD_PLUGIN_EXPORT int GetNFilters( void )
 {
-    return (int) m_extensions.size();
+    return NFILS;
 }
 
 
-const wxString S3D_PLUGIN_IDF::GetModelExtension( int aIndex ) const
+KICAD_PLUGIN_EXPORT char const* GetFileFilter( int aIndex )
 {
-    if( aIndex < 0 || aIndex >= (int) m_extensions.size() )
-        return wxString( "" );
+    if( aIndex < 0 || aIndex >= NFILS )
+        return NULL;
 
-    return m_extensions[aIndex];
+    return file_data.filters[aIndex];
 }
 
 
-int S3D_PLUGIN_IDF::GetNFilters( void ) const
-{
-    return (int)m_filters.size();
-}
-
-
-const wxString S3D_PLUGIN_IDF::GetFileFilter( int aIndex ) const
-{
-    if( aIndex < 0 || aIndex >= (int)m_filters.size() )
-        return wxEmptyString;
-
-    return m_filters[aIndex];
-}
-
-
-bool S3D_PLUGIN_IDF::CanRender( void ) const
+KICAD_PLUGIN_EXPORT bool CanRender( void )
 {
     // this plugin supports rendering of IDF component outlines
     return true;
 }
 
 
-SCENEGRAPH* S3D_PLUGIN_IDF::Load( const wxString& aFileName )
+KICAD_PLUGIN_EXPORT SCENEGRAPH* Load( char const* aFileName )
 {
+    if( NULL == aFileName )
+        return NULL;
+
     // load and render the file
     IDF3_BOARD brd( IDF3::CAD_ELEC );
-    IDF3_COMP_OUTLINE* outline = brd.GetComponentOutline( aFileName );
+    IDF3_COMP_OUTLINE* outline =
+        brd.GetComponentOutline( wxString::FromUTF8Unchecked( aFileName ) );
 
     if( NULL == outline )
     {
         #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] no outline for file '";
-            std::cerr << aFileName.ToUTF8() << "'\n";
+            std::cerr << aFileName << "'\n";
         #endif
         return NULL;
     }
@@ -135,7 +168,7 @@ SCENEGRAPH* S3D_PLUGIN_IDF::Load( const wxString& aFileName )
         #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] no valid outline data in '";
-            std::cerr << aFileName.ToUTF8() << "'\n";
+            std::cerr << aFileName << "'\n";
         #endif
         return NULL;
     }
@@ -150,12 +183,11 @@ SCENEGRAPH* S3D_PLUGIN_IDF::Load( const wxString& aFileName )
         #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] no vertex data in '";
-            std::cerr << aFileName.ToUTF8() << "'\n";
+            std::cerr << aFileName << "'\n";
         #endif
         return NULL;
     }
 
-    std::cerr << "XXX - Got " << vertices.size() / 3 << " vertices and " << indices.size() << " indices\n";
     std::vector< SGPOINT > vlist;
     size_t nvert = vertices.size() / 3;
     size_t j = 0;

@@ -44,145 +44,7 @@
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
 #include "3d_cache/sg/scenegraph.h"
-
-class S3D_PLUGIN_ITEM
-{
-private:
-#ifdef _WIN32
-    HMODULE m_dlHandle;
-#else
-    void* m_dlHandle;       // handle to the opened plugin
-#endif
-
-    S3D_PLUGIN* m_plugin;   // pointer to an instance
-    wxString m_pluginName;  // plugin name
-
-public:
-    S3D_PLUGIN_ITEM( const wxString& aPluginPath );
-    ~S3D_PLUGIN_ITEM();
-    bool Open( void );
-    void Close( void );
-    S3D_PLUGIN* GetPlugin( void );
-    const wxString GetPluginName( void );
-};
-
-
-S3D_PLUGIN_ITEM::S3D_PLUGIN_ITEM( const wxString& aPluginPath )
-{
-    m_pluginName = aPluginPath;
-    m_dlHandle = NULL;
-    m_plugin = NULL;
-
-    return;
-}
-
-S3D_PLUGIN_ITEM::~S3D_PLUGIN_ITEM()
-{
-    Close();
-}
-
-bool S3D_PLUGIN_ITEM::Open( void )
-{
-    if( NULL != m_dlHandle )
-        return true;
-
-    if( m_pluginName.IsEmpty() )
-        return false;
-
-    m_plugin = NULL;
-
-#ifdef _WIN32
-    // NOTE: MSWin uses UTF-16 encoding
-    #if defined( UNICODE ) || defined( _UNICODE )
-        m_dlHandle = LoadLibrary( m_pluginName.wc_str() );
-    #else
-        m_dlHandle = LoadLibrary( m_pluginName.ToUTF8() );
-    #endif
-#else
-    m_dlHandle = dlopen( m_pluginName.ToUTF8(), RTLD_LAZY | RTLD_LOCAL );
-#endif
-
-    if( NULL == m_dlHandle )
-    {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * could not open file: '" << m_pluginName.ToUTF8() << "'\n";
-        return false;
-    }
-    else
-    {
-
-#ifdef _WIN32
-        typedef S3D_PLUGIN* (*pPLUGIN)( void );
-        pPLUGIN Get3DPlugin = (pPLUGIN) GetProcAddress( m_dlHandle, "Get3DPlugin" );
-#else
-        S3D_PLUGIN* (*Get3DPlugin)( void );
-        *(void **) (&Get3DPlugin) = dlsym( m_dlHandle, "Get3DPlugin" );
-#endif
-
-        if( NULL == Get3DPlugin )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-
-#ifdef _WIN32
-            std::cerr << " * [INFO] could not find symbol\n";
-#else
-            char* err = dlerror();
-            std::cerr << " * [INFO] could not find symbol: '" << err << "'\n";
-#endif
-
-        }
-        else
-        {
-            // set the 3D Model Plugin object
-            m_plugin = (*Get3DPlugin)();
-            return true;
-        }
-    }
-
-#ifdef _WIN32
-    FreeLibrary( m_dlHandle );
-#else
-    dlclose( m_dlHandle );
-#endif
-
-    m_dlHandle = NULL;
-    return false;
-}
-
-void S3D_PLUGIN_ITEM::Close( void )
-{
-    m_plugin = NULL;
-
-    if( m_dlHandle )
-    {
-
-#ifdef _WIN32
-        FreeLibrary( m_dlHandle );
-#else
-        dlclose( m_dlHandle );
-#endif
-
-        m_dlHandle = NULL;
-    }
-
-    return;
-}
-
-
-S3D_PLUGIN* S3D_PLUGIN_ITEM::GetPlugin( void )
-{
-    if( NULL == m_plugin && !Open() )
-        return NULL;
-
-    return m_plugin;
-}
-
-
-const wxString S3D_PLUGIN_ITEM::GetPluginName( void )
-{
-    return m_pluginName;
-}
-
+#include "plugins/ldr/3d/pluginldr3D.h"
 
 S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 {
@@ -195,14 +57,14 @@ S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 #ifdef DEBUG
     if( !m_ExtMap.empty() )
     {
-        std::multimap< const wxString, S3D_PLUGIN_ITEM* >::const_iterator sM = m_ExtMap.begin();
-        std::multimap< const wxString, S3D_PLUGIN_ITEM* >::const_iterator eM = m_ExtMap.end();
+        std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::const_iterator sM = m_ExtMap.begin();
+        std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::const_iterator eM = m_ExtMap.end();
         std::cout << "* Extension [plugin name]:\n";
 
         while( sM != eM )
         {
             std::cout << "  + '" << sM->first.ToUTF8() << "' [";
-            std::cout << sM->second->GetPluginName().ToUTF8() << "]\n";
+            std::cout << sM->second->GetKicadPluginName() << "]\n";
             ++sM;
         }
 
@@ -239,8 +101,8 @@ S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 
 S3D_PLUGIN_MANAGER::~S3D_PLUGIN_MANAGER()
 {
-    std::list< S3D_PLUGIN_ITEM* >::iterator sP = m_Plugins.begin();
-    std::list< S3D_PLUGIN_ITEM* >::iterator eP = m_Plugins.end();
+    std::list< KICAD_PLUGIN_LDR_3D* >::iterator sP = m_Plugins.begin();
+    std::list< KICAD_PLUGIN_LDR_3D* >::iterator eP = m_Plugins.end();
 
     while( sP != eP )
     {
@@ -271,6 +133,7 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     std::string testpath = std::string( fn.GetPathWithSep().ToUTF8() );
     checkPluginPath( testpath, searchpaths );
 #endif
+
     fn.Assign( wxStandardPaths::Get().GetPluginsDir() );
     fn.AppendDir( wxT( "kicad" ) );
     fn.AppendDir( wxT( "plugins" ) );
@@ -321,42 +184,42 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
 
     while( sPL != ePL )
     {
-        S3D_PLUGIN_ITEM* pp = new S3D_PLUGIN_ITEM( *sPL );
+        KICAD_PLUGIN_LDR_3D* pp = new KICAD_PLUGIN_LDR_3D;
 
-        if( pp )
+        if( pp->Open( sPL->ToUTF8() ) )
         {
-            if( pp->Open() )
-            {
 #ifdef DEBUG
-                std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
-                std::cout << "* [DEBUG] adding plugin\n";
+            std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
+            std::cout << "* [DEBUG] adding plugin\n";
 #endif
-                m_Plugins.push_back( pp );
+            m_Plugins.push_back( pp );
+            int nf = pp->GetNFilters();
 
-                S3D_PLUGIN* lpp = pp->GetPlugin();
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] adding " << nf << " filters\n";
+            #endif
 
-                if( lpp )
-                {
-                    int nf = lpp->GetNFilters();
-
-                    for( int i = 0; i < nf; ++i )
-                        addFilterString( lpp->GetFileFilter( i ) );
-
-                }
-
-                addExtensionMap( pp );
-
-                // close the loaded library
-                pp->Close();
-            }
-            else
+            for( int i = 0; i < nf; ++i )
             {
-#ifdef DEBUG
-                std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
-                std::cout << "* [DEBUG] deleting plugin\n";
-#endif
-                delete pp;
+                char const* cp = pp->GetFileFilter( i );
+
+                if( cp )
+                    addFilterString( wxString::FromUTF8Unchecked( cp ) );
             }
+
+            addExtensionMap( pp );
+
+            // close the loaded library
+            pp->Close();
+        }
+        else
+        {
+#ifdef DEBUG
+            std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
+            std::cout << "* [DEBUG] deleting plugin\n";
+#endif
+            delete pp;
         }
 
         ++sPL;
@@ -523,26 +386,30 @@ void S3D_PLUGIN_MANAGER::addFilterString( const wxString& aFilterString )
 }
 
 
-void S3D_PLUGIN_MANAGER::addExtensionMap( S3D_PLUGIN_ITEM* aPlugin )
+void S3D_PLUGIN_MANAGER::addExtensionMap( KICAD_PLUGIN_LDR_3D* aPlugin )
 {
     // add entries to the extension map
     if( NULL == aPlugin )
         return;
 
-    S3D_PLUGIN* pp = aPlugin->GetPlugin();
+    int nExt = aPlugin->GetNExtensions();
 
-    if( NULL == pp )
-        return;
-
-    int nExt = pp->GetNExtensions();
+    #ifdef DEBUG
+    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    std::cerr << " * [INFO] adding " << nExt << " extensions\n";
+    #endif
 
     for( int i = 0; i < nExt; ++i )
     {
-        wxString ws = pp->GetModelExtension( i );
+        char const* cp = aPlugin->GetModelExtension( i );
+        wxString ws;
+
+        if( cp )
+            ws = wxString::FromUTF8Unchecked( cp );
 
         if( !ws.empty() )
         {
-            m_ExtMap.insert( std::pair< const wxString, S3D_PLUGIN_ITEM* >( ws, aPlugin ) );
+            m_ExtMap.insert( std::pair< const wxString, KICAD_PLUGIN_LDR_3D* >( ws, aPlugin ) );
         }
 
     }
@@ -562,19 +429,17 @@ SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName )
     wxFileName raw( aFileName );
     wxString ext = raw.GetExt();
 
-    std::pair < std::multimap< const wxString, S3D_PLUGIN_ITEM* >::iterator,
-        std::multimap< const wxString, S3D_PLUGIN_ITEM* >::iterator > items;
+    std::pair < std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::iterator,
+        std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::iterator > items;
 
     items = m_ExtMap.equal_range( ext );
-    std::multimap< const wxString, S3D_PLUGIN_ITEM* >::iterator sL = items.first;
+    std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::iterator sL = items.first;
 
     while( sL != items.second )
     {
-        S3D_PLUGIN* pplug = sL->second->GetPlugin();
-
-        if( NULL != pplug && pplug->CanRender() )
+        if( sL->second->CanRender() )
         {
-            SCENEGRAPH* sp = pplug->Load( aFileName );
+            SCENEGRAPH* sp = sL->second->Load( aFileName );
 
             if( NULL != sp )
                 return sp;
@@ -589,8 +454,13 @@ SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName )
 
 void S3D_PLUGIN_MANAGER::ClosePlugins( void )
 {
-    std::list< S3D_PLUGIN_ITEM* >::iterator sP = m_Plugins.begin();
-    std::list< S3D_PLUGIN_ITEM* >::iterator eP = m_Plugins.end();
+    std::list< KICAD_PLUGIN_LDR_3D* >::iterator sP = m_Plugins.begin();
+    std::list< KICAD_PLUGIN_LDR_3D* >::iterator eP = m_Plugins.end();
+
+    #ifdef DEBUG
+    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    std::cerr << " * [INFO] closing " << m_Plugins.size() << " plugins\n";
+    #endif
 
     while( sP != eP )
     {

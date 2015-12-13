@@ -34,7 +34,7 @@
 #include <wx/string.h>
 
 class wxWindow;
-class S3D_PLUGIN_ITEM;
+class KICAD_PLUGIN_LDR_3D;
 struct S3D_INFO;
 class SCENEGRAPH;
 
@@ -42,10 +42,10 @@ class S3D_PLUGIN_MANAGER
 {
 private:
     /// list of discovered plugins
-    std::list< S3D_PLUGIN_ITEM* > m_Plugins;
+    std::list< KICAD_PLUGIN_LDR_3D* > m_Plugins;
 
     /// mapping of extensions to available plugins
-    std::multimap< const wxString, S3D_PLUGIN_ITEM* > m_ExtMap;
+    std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* > m_ExtMap;
 
     /// list of file filters
     std::list< wxString > m_FileFilters;
@@ -66,7 +66,7 @@ private:
     void addFilterString( const wxString& aFilterString );
 
     /// add entries to the extension map
-    void addExtensionMap( S3D_PLUGIN_ITEM* aPlugin );
+    void addExtensionMap( KICAD_PLUGIN_LDR_3D* aPlugin );
 
 public:
     S3D_PLUGIN_MANAGER();

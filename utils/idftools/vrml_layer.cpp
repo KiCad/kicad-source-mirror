@@ -1809,10 +1809,8 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
     if( !vp )
         return false;
 
-    size_t i, j, k;
+    size_t i;
     size_t vsize = ordmap.size();
-    j = 0;
-    k = vsize;
 
     // top vertices
     for( i = 0; i < vsize; ++i )
