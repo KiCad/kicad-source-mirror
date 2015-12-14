@@ -38,7 +38,7 @@ const char* GetKicadPluginName( void )
 }
 
 
-void GetVersion( unsigned char* Major, unsigned char* Minor,
+void GetPluginVersion( unsigned char* Major, unsigned char* Minor,
     unsigned char* Patch, unsigned char* Revision )
 {
     if( Major )

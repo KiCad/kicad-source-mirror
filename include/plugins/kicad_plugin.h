@@ -96,9 +96,9 @@ KICAD_PLUGIN_EXPORT const char* GetKicadPluginName( void );
 
 
 /**
- * Function GetVersion
+ * Function GetPluginVersion
  * retrieves the version of the instantiated plugin for informational
- * purposes. Do not confuse this with GetAPIVersion which is used to
+ * purposes. Do not confuse this with GetClassVersion which is used to
  * determine API compatibility.
  *
  * @param Major will hold the Plugin Major version
@@ -106,7 +106,7 @@ KICAD_PLUGIN_EXPORT const char* GetKicadPluginName( void );
  * @param Patch will hold the Plugin Patch level
  * @param Revision will hold the Plugin Revision
  */
-KICAD_PLUGIN_EXPORT void GetVersion( unsigned char* Major,
+KICAD_PLUGIN_EXPORT void GetPluginVersion( unsigned char* Major,
     unsigned char* Minor, unsigned char* Patch, unsigned char* Revision );
 
 #endif  // KICAD_PLUGIN_H
