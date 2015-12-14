@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-22 22:37+0100\n"
-"PO-Revision-Date: 2015-12-11 12:40+0100\n"
+"PO-Revision-Date: 2015-12-14 01:17+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -17990,7 +17990,7 @@ msgstr "Comune a tutte le &unità nel componente"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:76
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:86
 msgid "Common to all body &styles (DeMorgan)"
-msgstr "Comune a tutti i corpi e &stili (De Morgan)"
+msgstr "Comune a tutti gli &stili di corpi (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:85
 msgid "Fill Style"
