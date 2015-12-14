@@ -281,6 +281,9 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName )
 
     ep->sceneData = m_Plugins->Load3DModel( aFileName );
 
+    if( NULL != ep->sceneData )
+        saveCacheData( ep );
+
     return ep->sceneData;
 }
 
@@ -342,22 +345,22 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     wxString fname = m_CacheDir + bname + wxT( ".3dc" );
 
-    // determine if the file exists and is a regular file
-    struct stat info;
-
-    if( stat( fname.ToUTF8(), &info ) )
-        return false;
-
-    if( !S_ISREG( info.st_mode ) )
+    if( !wxFileName::FileExists( fname ) )
     {
-        std::cerr << " * [3D model] path exists but is not a regular file: '";
+        std::cerr << " * [3D model] cannot open file '";
         std::cerr << fname.ToUTF8() << "'\n";
         return false;
     }
 
-#warning NOT IMPLEMENTED
-    // XXX - proceed with loading the cache data
-    return false;
+    if( NULL != aCacheItem->sceneData )
+        S3D::DestroyNode( (SGNODE*) aCacheItem->sceneData );
+
+    aCacheItem->sceneData = (SCENEGRAPH*)S3D::ReadCache( fname );
+
+    if( NULL == aCacheItem->sceneData )
+        return false;
+
+    return true;
 }
 
 
@@ -412,10 +415,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
         return true;
     }
 
-#warning NOT IMPLEMENTED
-    // XXX - proceed with saving the cache data
-    return false;
-
+    return S3D::WriteCache( fname, true, (SGNODE*)aCacheItem->sceneData );
 }
 
 
