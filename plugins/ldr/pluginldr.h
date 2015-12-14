@@ -110,7 +110,7 @@ public:
      * for plugin compatibility checking.
      */
     virtual void GetLoaderVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Revision, unsigned char* Patch ) const = 0;
+        unsigned char* Patch, unsigned char* Revision ) const = 0;
 
     /**
      * Function Open
@@ -141,18 +141,18 @@ public:
 
     // returns false if no plugin loaded
     bool GetClassVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Revision, unsigned char* Patch );
+        unsigned char* Patch, unsigned char* Revision );
 
     // returns false if the class version check fails or no plugin is loaded
     bool CheckClassVersion( unsigned char Major, unsigned char Minor,
-        unsigned char Revision, unsigned char Patch );
+        unsigned char Patch, unsigned char Revision );
 
     // returns the Plugin Name or NULL if no plugin loaded
     const char* GetKicadPluginName( void );
 
     // returns false if no plugin is loaded
     bool GetVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Revision, unsigned char* Patch );
+        unsigned char* Patch, unsigned char* Revision );
 };
 
 #endif  // PLUGINLDR_H

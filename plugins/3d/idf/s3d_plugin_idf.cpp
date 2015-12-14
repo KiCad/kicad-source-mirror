@@ -33,18 +33,18 @@
 
 #define PLUGIN_3D_IDF_MAJOR 1
 #define PLUGIN_3D_IDF_MINOR 0
-#define PLUGIN_3D_IDF_REVNO 0
 #define PLUGIN_3D_IDF_PATCH 0
+#define PLUGIN_3D_IDF_REVNO 0
 
 
-KICAD_PLUGIN_EXPORT const char* GetKicadPluginName( void )
+const char* GetKicadPluginName( void )
 {
     return "PLUGIN_3D_IDF";
 }
 
 
-KICAD_PLUGIN_EXPORT void GetVersion( unsigned char* Major,
-    unsigned char* Minor, unsigned char* Revision, unsigned char* Patch )
+void GetVersion( unsigned char* Major,
+    unsigned char* Minor, unsigned char* Patch, unsigned char* Revision )
 {
     if( Major )
         *Major = PLUGIN_3D_IDF_MAJOR;
@@ -52,11 +52,11 @@ KICAD_PLUGIN_EXPORT void GetVersion( unsigned char* Major,
     if( Minor )
         *Minor = PLUGIN_3D_IDF_MINOR;
 
-    if( Revision )
-        *Revision = PLUGIN_3D_IDF_REVNO;
-
     if( Patch )
         *Patch = PLUGIN_3D_IDF_PATCH;
+
+    if( Revision )
+        *Revision = PLUGIN_3D_IDF_REVNO;
 
     return;
 }
@@ -72,11 +72,12 @@ KICAD_PLUGIN_EXPORT void GetVersion( unsigned char* Major,
 #define NFILS 1
 
 static char ext0[] = "idf";
-static char fil0[] = "IDF 2.0/3.0 (*.idf)|*.idf";
 
-#ifndef _WIN32
+#ifdef _WIN32
+    static char fil0[] = "IDF 2.0/3.0 (*.idf)|*.idf";
+#else
     static char ext1[] = "IDF";
-    static char fil1[] = "IDF 2.0/3.0 (*.idf;*.IDF)|*.idf;*.IDF";
+    static char fil0[] = "IDF 2.0/3.0 (*.idf;*.IDF)|*.idf;*.IDF";
 #endif
 
 static struct FILE_DATA
@@ -91,7 +92,6 @@ static struct FILE_DATA
 
 #ifndef _WIN32
         extensions[1] = ext1;
-        filters[1] = fil1;
 #endif
 
         return;
@@ -104,13 +104,13 @@ static bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* it
 static bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg );
 
 
-KICAD_PLUGIN_EXPORT int GetNExtensions( void )
+int GetNExtensions( void )
 {
     return NEXTS;
 }
 
 
-KICAD_PLUGIN_EXPORT char const* GetModelExtension( int aIndex )
+char const* GetModelExtension( int aIndex )
 {
     if( aIndex < 0 || aIndex >= NEXTS )
         return NULL;
@@ -119,13 +119,13 @@ KICAD_PLUGIN_EXPORT char const* GetModelExtension( int aIndex )
 }
 
 
-KICAD_PLUGIN_EXPORT int GetNFilters( void )
+int GetNFilters( void )
 {
     return NFILS;
 }
 
 
-KICAD_PLUGIN_EXPORT char const* GetFileFilter( int aIndex )
+char const* GetFileFilter( int aIndex )
 {
     if( aIndex < 0 || aIndex >= NFILS )
         return NULL;
@@ -134,14 +134,14 @@ KICAD_PLUGIN_EXPORT char const* GetFileFilter( int aIndex )
 }
 
 
-KICAD_PLUGIN_EXPORT bool CanRender( void )
+bool CanRender( void )
 {
     // this plugin supports rendering of IDF component outlines
     return true;
 }
 
 
-KICAD_PLUGIN_EXPORT SCENEGRAPH* Load( char const* aFileName )
+SCENEGRAPH* Load( char const* aFileName )
 {
     if( NULL == aFileName )
         return NULL;

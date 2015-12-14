@@ -147,9 +147,9 @@ elseif(NOT GLM_ENABLE_FAST_MATH)
 endif()
 
 if( WIN32 )
-    target_link_libraries( 3d-viewer ${Boost_} ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} s3d_sg )
+    target_link_libraries( 3d-viewer ${Boost_} ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} kicad_3dsg )
 else()
-    target_link_libraries( 3d-viewer ${Boost_} ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} s3d_sg dl )
+    target_link_libraries( 3d-viewer ${Boost_} ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} kicad_3dsg dl )
 endif()
 
 add_subdirectory( 3d_cache )

@@ -1,3 +1,2 @@
-#add_subdirectory( dummy )
-#add_subdirectory( tetra )
+add_subdirectory( demo )
 add_subdirectory( idf )

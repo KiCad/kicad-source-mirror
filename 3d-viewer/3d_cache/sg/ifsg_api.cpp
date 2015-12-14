@@ -39,6 +39,7 @@
 #include "3d_cache/sg/sg_faceset.h"
 #include "3d_cache/sg/sg_normals.h"
 #include "3d_cache/sg/sg_shape.h"
+#include "3d_cache/sg/sg_version.h"
 #include "3d_info.h"
 #include "plugins/3dapi/c3dmodel.h"
 
@@ -408,6 +409,25 @@ void S3D::Init3DMaterial( SMATERIAL& aMat )
 void S3D::Init3DMesh( SMESH& aMesh )
 {
     S3D::INIT_SMESH( aMesh );
+
+    return;
+}
+
+
+void S3D::GetLibVersion( unsigned char* Major, unsigned char* Minor,
+    unsigned char* Patch, unsigned char* Revision )
+{
+    if( Major )
+        *Major = SG_VERSION_MAJOR;
+
+    if( Minor )
+        *Minor = SG_VERSION_MINOR;
+
+    if( Revision )
+        *Revision = SG_VERSION_REVNO;
+
+    if( Patch )
+        *Patch = SG_VERSION_PATCH;
 
     return;
 }

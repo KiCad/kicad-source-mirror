@@ -28,8 +28,8 @@
 #define PLUGIN_CLASS_3D "PLUGIN_3D"
 #define PLUGIN_3D_MAJOR 1
 #define PLUGIN_3D_MINOR 0
-#define PLUGIN_3D_REVISION 0
 #define PLUGIN_3D_PATCH 0
+#define PLUGIN_3D_REVISION 0
 
 
 KICAD_PLUGIN_LDR_3D::KICAD_PLUGIN_LDR_3D()
@@ -182,9 +182,13 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
 void KICAD_PLUGIN_LDR_3D::Close( void )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [INFO] closing plugin\n";
+    if( ok )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] closing plugin\n";
+    }
     #endif
+
     ok = false;
     m_getNExtensions = NULL;
     m_getModelExtension = NULL;
@@ -199,7 +203,7 @@ void KICAD_PLUGIN_LDR_3D::Close( void )
 
 
 void KICAD_PLUGIN_LDR_3D::GetLoaderVersion( unsigned char* Major, unsigned char* Minor,
-    unsigned char* Revision, unsigned char* Patch ) const
+    unsigned char* Patch, unsigned char* Revision ) const
 {
     if( Major )
         *Major = PLUGIN_3D_MAJOR;
@@ -207,11 +211,11 @@ void KICAD_PLUGIN_LDR_3D::GetLoaderVersion( unsigned char* Major, unsigned char*
     if( Minor )
         *Minor = PLUGIN_3D_MINOR;
 
-    if( Revision )
-        *Revision = PLUGIN_3D_REVISION;
-
     if( Patch )
         *Patch = PLUGIN_3D_PATCH;
+
+    if( Revision )
+        *Revision = PLUGIN_3D_REVISION;
 
     return;
 }

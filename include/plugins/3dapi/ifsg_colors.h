@@ -30,6 +30,7 @@
 #ifndef IFSG_COLORS_H
 #define IFSG_COLORS_H
 
+#include <cstdlib>
 #include "plugins/3dapi/ifsg_node.h"
 
 

@@ -135,7 +135,9 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
 #endif
 
     fn.Assign( wxStandardPaths::Get().GetPluginsDir() );
-    fn.AppendDir( wxT( "kicad" ) );
+    #ifndef _WIN32  // suppress 'kicad' subdir since it is redundant on MSWin
+        fn.AppendDir( wxT( "kicad" ) );
+    #endif
     fn.AppendDir( wxT( "plugins" ) );
     fn.AppendDir( wxT( "3d" ) );
     checkPluginPath( std::string( fn.GetPathWithSep().ToUTF8() ), searchpaths );

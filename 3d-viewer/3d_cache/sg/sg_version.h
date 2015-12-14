@@ -22,39 +22,17 @@
  */
 
 /**
- * @file 3d_plugin_tetra.h
- * is a sample plugin which demonstrates the basic use of the SG*
- * classes for the intermediate representation of objects. The plugin
- * accepts any *.wrl filename but does not actually load any files,
- * instead the Load() routine only creates a magenta tetrahedron.
+ * @file sg_version.h
+ * defines the version number of 3DSG library. This file is parsed by
+ * CMake to determine the version number of the 3DSG library.
  */
 
+#ifndef SG_VERSION_H
+#define SG_VERSION_H
 
-#ifndef PLUGIN_3D_TETRA_H
-#define PLUGIN_3D_TETRA_H
+#define SG_VERSION_MAJOR 1
+#define SG_VERSION_MINOR 0
+#define SG_VERSION_PATCH 0
+#define SG_VERSION_REVNO 0
 
-#include <vector>
-#include <plugins/3d/3d_plugin.h>
-
-class SCENEGRAPH;
-
-class S3D_PLUGIN_TETRA : public S3D_PLUGIN
-{
-private:
-    std::vector< wxString > m_extensions;   // supported extensions
-    std::vector< wxString > m_filters;       // file filters
-
-public:
-    S3D_PLUGIN_TETRA();
-    virtual ~S3D_PLUGIN_TETRA();
-
-    virtual int GetNExtensions( void ) const;
-    virtual const wxString GetModelExtension( int aIndex ) const;
-    virtual int GetNFilters( void ) const;
-    virtual const wxString GetFileFilter( int aIndex ) const;
-
-    bool CanRender( void ) const;
-    SCENEGRAPH* Load( const wxString& aFileName );
-};
-
-#endif  // PLUGIN_3D_TETRA_H
+#endif  // SG_VERSION_H

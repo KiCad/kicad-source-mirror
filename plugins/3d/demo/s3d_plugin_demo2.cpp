@@ -22,72 +22,119 @@
  */
 
 #include <cmath>
-#include <s3d_plugin_tetra.h>
-#include <plugins/3dapi/ifsg_all.h>
+#include "plugins/3d/3d_plugin.h"
+#include "plugins/3dapi/ifsg_all.h"
 
 
-S3D_PLUGIN_TETRA::S3D_PLUGIN_TETRA()
+#define PLUGIN_3D_DEMO2_MAJOR 1
+#define PLUGIN_3D_DEMO2_MINOR 0
+#define PLUGIN_3D_DEMO2_PATCH 0
+#define PLUGIN_3D_DEMO2_REVNO 0
+
+
+const char* GetKicadPluginName( void )
 {
-    m_extensions.push_back( wxString::FromUTF8Unchecked( "wrl" ) );
+    return "PLUGIN_3D_DEMO2";
+}
+
+
+void GetVersion( unsigned char* Major, unsigned char* Minor,
+    unsigned char* Patch, unsigned char* Revision )
+{
+    if( Major )
+        *Major = PLUGIN_3D_DEMO2_MAJOR;
+
+    if( Minor )
+        *Minor = PLUGIN_3D_DEMO2_MINOR;
+
+    if( Patch )
+        *Patch = PLUGIN_3D_DEMO2_PATCH;
+
+    if( Revision )
+        *Revision = PLUGIN_3D_DEMO2_REVNO;
+
+    return;
+}
+
+
+// number of extensions supported
+#ifdef _WIN32
+#define NEXTS 1
+#else
+#define NEXTS 2
+#endif
+
+// number of filter sets supported
+#define NFILS 1
+
+static char ext0[] = "wrl";
 
 #ifdef _WIN32
-    // assume a case-insensitive file system
-    m_filters.push_back( wxT( "VRML 1.0/2.0 (*.wrl)|*.wrl" ) );
+static char fil0[] = "VRML 1.0/2.0 (*.wrl)|*.wrl";
 #else
-    // assume the filesystem is case sensitive
-    m_extensions.push_back( wxString::FromUTF8Unchecked( "WRL" ) );
+static char ext1[] = "WRL";
 
-    m_filters.push_back( wxT( "VRML 1.0/2.0 (*.wrl;*.WRL)|*.wrl;*.WRL" ) );
+static char fil0[] = "VRML 1.0/2.0 (*.wrl;*.WRL)|*.wrl;*.WRL";
 #endif
 
 
-    return;
+static struct FILE_DATA
+{
+    char const* extensions[NEXTS];
+    char const* filters[NFILS];
+
+    FILE_DATA()
+    {
+        extensions[0] = ext0;
+        filters[0] = fil0;
+
+#ifndef _WIN32
+        extensions[1] = ext1;
+#endif
+        return;
+    }
+
+} file_data;
+
+
+int GetNExtensions( void )
+{
+    return NEXTS;
 }
 
 
-S3D_PLUGIN_TETRA::~S3D_PLUGIN_TETRA()
+char const* GetModelExtension( int aIndex )
 {
-    return;
+    if( aIndex < 0 || aIndex >= NEXTS )
+        return NULL;
+
+    return file_data.extensions[aIndex];
 }
 
 
-int S3D_PLUGIN_TETRA::GetNExtensions( void ) const
+int GetNFilters( void )
 {
-    return (int) m_extensions.size();
+    return NFILS;
 }
 
 
-const wxString S3D_PLUGIN_TETRA::GetModelExtension( int aIndex ) const
+char const* GetFileFilter( int aIndex )
 {
-    if( aIndex < 0 || aIndex >= (int) m_extensions.size() )
-        return wxString( "" );
+    if( aIndex < 0 || aIndex >= NFILS )
+        return NULL;
 
-    return m_extensions[aIndex];
+    return file_data.filters[aIndex];
 }
 
 
-int S3D_PLUGIN_TETRA::GetNFilters( void ) const
+bool CanRender( void )
 {
-    return (int)m_filters.size();
-}
-
-
-const wxString S3D_PLUGIN_TETRA::GetFileFilter( int aIndex ) const
-{
-    if( aIndex < 0 || aIndex >= (int)m_filters.size() )
-        return wxEmptyString;
-
-    return m_filters[aIndex];
-}
-
-
-bool S3D_PLUGIN_TETRA::CanRender( void ) const
-{
+    // this dummy pretends to render a VRML model
     return true;
 }
 
 
-SCENEGRAPH* S3D_PLUGIN_TETRA::Load( const wxString& aFileName )
+SCENEGRAPH* Load( char const* aFileName )
 {
     // For this demonstration we create a tetrahedron and
     // paint its faces Magenta Red Green Blue. Steps:
@@ -234,18 +281,3 @@ SCENEGRAPH* S3D_PLUGIN_TETRA::Load( const wxString& aFileName )
 
     return (SCENEGRAPH*)data;
 }
-
-
-static S3D_PLUGIN_TETRA plugin_3d_tetra;
-
-#ifndef _WIN32
-extern "C" __attribute__((__visibility__("default"))) S3D_PLUGIN* Get3DPlugin( void )
-{
-    return &plugin_3d_tetra;
-}
-#else
-extern "C" __declspec( dllexport ) S3D_PLUGIN* Get3DPlugin( void )
-    {
-        return &plugin_3d_tetra;
-    }
-#endif

@@ -178,6 +178,9 @@ namespace S3D
      * creates and initializes an SMESH struct
      */
     SGLIB_API void Init3DMesh( SMESH& aMesh );
+
+    SGLIB_API void GetLibVersion( unsigned char* Major, unsigned char* Minor,
+        unsigned char* Patch, unsigned char* Revision );
 };
 
 #endif  // IFSG_API_H

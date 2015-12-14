@@ -341,9 +341,22 @@ if( NOT APPLE )
     if( WIN32 )
         set( KICAD_PLUGINS ${KICAD_BIN}/scripting/plugins
             CACHE PATH "Location of KiCad plugins." )
+
+        set( KICAD_LIB ${KICAD_BIN}
+            CACHE PATH "Location of KiCad shared objects" )
+
+        set( KICAD_USER_PLUGIN ${KICAD_BIN}/plugins
+            CACHE PATH "Location of KiCad user-loaded plugins" )
+
     else()
         set( KICAD_PLUGINS lib/kicad/plugins
             CACHE PATH "Location of KiCad plugins." )
+
+        set( KICAD_LIB ${CMAKE_INSTALL_PREFIX}/lib
+            CACHE PATH "Location of KiCad shared objects" )
+
+        set( KICAD_USER_PLUGIN ${CMAKE_INSTALL_PREFIX}/lib/kicad/plugins
+            CACHE PATH "Location of KiCad user-loaded plugins" )
     endif()
 
     set( KICAD_DATA share/kicad
@@ -359,6 +372,12 @@ else()
     # CMAKE_INSTALL_PREFIX is root of .dmg image
     set( KICAD_BIN ${CMAKE_INSTALL_PREFIX}
         CACHE PATH "Location of KiCad binaries." FORCE )
+
+    set( KICAD_LIB /Applications/kicad.app/Contents/Macos
+        CACHE PATH "Location of KiCad shared objects" FORCE )
+
+    set( KICAD_USER_PLUGIN /Applications/kicad.app/SharedSupport/plugins
+        CACHE PATH "Location of KiCad user-loaded plugins" FORCE )
 
     # some paths to single app bundle
     set( OSX_BUNDLE_MAIN "kicad.app" )
@@ -411,6 +430,8 @@ endif()
 
 mark_as_advanced( KICAD_BIN
     KICAD_PLUGINS
+    KICAD_USER_PLUGIN
+    KICAD_LIB
     KICAD_DATA
     KICAD_DOCS
     KICAD_DEMOS

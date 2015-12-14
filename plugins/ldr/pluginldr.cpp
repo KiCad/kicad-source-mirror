@@ -188,15 +188,15 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
     // perform a universally enforced version check (major number must match)
     unsigned char lMajor;
     unsigned char lMinor;
-    unsigned char lRevno;
     unsigned char lPatch;
+    unsigned char lRevno;
     unsigned char pMajor;
     unsigned char pMinor;
-    unsigned char pRevno;
     unsigned char pPatch;
+    unsigned char pRevno;
 
-    m_getClassVersion( &pMajor, &pMinor, &pRevno, &pPatch );
-    GetLoaderVersion( &lMajor, &lMinor, &lRevno, &lPatch );
+    m_getClassVersion( &pMajor, &pMinor, &pPatch, &pRevno );
+    GetLoaderVersion( &lMajor, &lMinor, &lPatch, &lRevno );
 
     // major version changes by definition are incompatible and
     // that is enforced here.
@@ -211,12 +211,12 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
         return false;
     }
 
-    if( !m_checkClassVersion( lMajor, lMinor, lRevno, lPatch ) )
+    if( !m_checkClassVersion( lMajor, lMinor, lPatch, lRevno ) )
     {
         std::ostringstream ostr;
-        ostr << "Plugin Version (" << pMajor << "." << pMinor << "." << pRevno << "." << pPatch;
+        ostr << "Plugin Version (" << pMajor << "." << pMinor << "." << pPatch << "." << pRevno;
         ostr << ") does not support Loader Version (" << pMajor << "." << pMinor;
-        ostr << "." << pRevno << "." << pPatch << ")";
+        ostr << "." << pPatch << "." << pRevno << ")";
 
         m_error = ostr.str();
         close();
@@ -307,7 +307,7 @@ char const* KICAD_PLUGIN_LDR::GetKicadPluginClass( void )
 
 
 bool KICAD_PLUGIN_LDR::GetClassVersion( unsigned char* Major, unsigned char* Minor,
-    unsigned char* Revision, unsigned char* Patch )
+    unsigned char* Patch, unsigned char* Revision )
 {
     m_error.clear();
 
@@ -317,16 +317,16 @@ bool KICAD_PLUGIN_LDR::GetClassVersion( unsigned char* Major, unsigned char* Min
     if( Minor )
         *Minor = 0;
 
-    if( Revision )
-        *Revision = 0;
-
     if( Patch )
         *Patch = 0;
 
+    if( Revision )
+        *Revision = 0;
+
     unsigned char major;
     unsigned char minor;
-    unsigned char revno;
     unsigned char patch;
+    unsigned char revno;
 
     if( !ok && !reopen() )
     {
@@ -344,7 +344,7 @@ bool KICAD_PLUGIN_LDR::GetClassVersion( unsigned char* Major, unsigned char* Min
         return false;
     }
 
-    m_getClassVersion( &major, &minor, &revno, &patch );
+    m_getClassVersion( &major, &minor, &patch, &revno );
 
     if( Major )
         *Major = major;
@@ -352,18 +352,18 @@ bool KICAD_PLUGIN_LDR::GetClassVersion( unsigned char* Major, unsigned char* Min
     if( Minor )
         *Minor = minor;
 
-    if( Revision )
-        *Revision = revno;
-
     if( Patch )
         *Patch = patch;
+
+    if( Revision )
+        *Revision = revno;
 
     return true;
 }
 
 
 bool KICAD_PLUGIN_LDR::CheckClassVersion( unsigned char Major, unsigned char Minor,
-    unsigned char Revision, unsigned char Patch )
+    unsigned char Patch, unsigned char Revision )
 {
     m_error.clear();
 
@@ -383,7 +383,7 @@ bool KICAD_PLUGIN_LDR::CheckClassVersion( unsigned char Major, unsigned char Min
         return NULL;
     }
 
-    return m_checkClassVersion( Major, Minor, Revision, Patch );
+    return m_checkClassVersion( Major, Minor, Patch, Revision );
 }
 
 
@@ -412,7 +412,7 @@ const char* KICAD_PLUGIN_LDR::GetKicadPluginName( void )
 
 
 bool KICAD_PLUGIN_LDR::GetVersion( unsigned char* Major, unsigned char* Minor,
-    unsigned char* Revision, unsigned char* Patch )
+    unsigned char* Patch, unsigned char* Revision )
 {
     m_error.clear();
 
@@ -432,7 +432,7 @@ bool KICAD_PLUGIN_LDR::GetVersion( unsigned char* Major, unsigned char* Minor,
         return false;
     }
 
-    m_getVersion( Major, Minor, Revision, Patch );
+    m_getVersion( Major, Minor, Patch, Revision );
 
     return true;
 }

@@ -67,7 +67,7 @@ KICAD_PLUGIN_EXPORT char const* GetKicadPluginClass( void );
  * @param Patch will hold the Plugin Class Patch level
  */
 KICAD_PLUGIN_EXPORT void GetClassVersion( unsigned char* Major,
-    unsigned char* Minor, unsigned char* Revision, unsigned char* Patch );
+    unsigned char* Minor, unsigned char* Patch, unsigned char* Revision );
 
 /**
  * Function CheckClassVersion
@@ -80,7 +80,7 @@ KICAD_PLUGIN_EXPORT void GetClassVersion( unsigned char* Major,
  * of the return value of this function.
  */
 KICAD_PLUGIN_EXPORT bool CheckClassVersion( unsigned char Major,
-    unsigned char Minor, unsigned char Revision, unsigned char Patch );
+    unsigned char Minor, unsigned char Patch, unsigned char Revision );
 
 /**
  * Function GetKicadPluginName
@@ -103,10 +103,10 @@ KICAD_PLUGIN_EXPORT const char* GetKicadPluginName( void );
  *
  * @param Major will hold the Plugin Major version
  * @param Minor will hold the Plugin Minor version
- * @param Revision will hold the Plugin Revision
  * @param Patch will hold the Plugin Patch level
+ * @param Revision will hold the Plugin Revision
  */
 KICAD_PLUGIN_EXPORT void GetVersion( unsigned char* Major,
-    unsigned char* Minor, unsigned char* Revision, unsigned char* Patch );
+    unsigned char* Minor, unsigned char* Patch, unsigned char* Revision );
 
 #endif  // KICAD_PLUGIN_H
