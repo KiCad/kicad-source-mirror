@@ -41,6 +41,7 @@
 #include <pgm_base.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
+#include <ratsnest_data.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -590,6 +591,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         wxBusyCursor dummy;    // Displays an Hourglass while building connectivity
         Compile_Ratsnest( NULL, true );
+        GetBoard()->GetRatsnest()->ProcessBoard();
     }
 
     SetMsgPanel( GetBoard() );

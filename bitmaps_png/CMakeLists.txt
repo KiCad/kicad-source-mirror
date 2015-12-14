@@ -160,6 +160,7 @@ set( BMAPS_MID
     auto_associe
     auto_delete_track
     auto_track_width
+    autoplace_fields
     axis3d_back
     axis3d_bottom
     axis3d_front

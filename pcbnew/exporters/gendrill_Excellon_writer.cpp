@@ -6,8 +6,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +101,9 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 
         BuildHolesList( pair, doing_npth );
 
-        if( GetHolesCount() > 0 ) // has holes?
+        // The file is created if it has holes, or if it is the non plated drill file
+        // to be sure the NPTH file is up to date in separate files mode.
+        if( GetHolesCount() > 0 || doing_npth )
         {
             fn = drillFileName( pair, doing_npth );
             fn.SetPath( aPlotDirectory );

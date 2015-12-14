@@ -269,7 +269,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 break;
             }
-	
+
             if ( !modified )
                 updateEditedPoint( *evt );
 

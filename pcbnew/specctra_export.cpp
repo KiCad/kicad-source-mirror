@@ -1025,7 +1025,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                     wxString error = wxString::Format( _( "Unsupported DRAWSEGMENT type %s" ),
                         GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
-                    ThrowIOError( error );
+                    THROW_IO_ERROR( error );
                 }
                 break;
             }
@@ -1132,7 +1132,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                         wxString error = wxString::Format( _( "Unsupported DRAWSEGMENT type %s" ),
                             GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
-                        ThrowIOError( error );
+                        THROW_IO_ERROR( error );
                     }
                     break;
                 }
@@ -1159,7 +1159,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                             GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
                             GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
                         );
-                        ThrowIOError( error );
+                        THROW_IO_ERROR( error );
                     }
                     break;
                 }
@@ -1268,7 +1268,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                                 _( "Unsupported DRAWSEGMENT type %s" ),
                                 GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
-                            ThrowIOError( error );
+                            THROW_IO_ERROR( error );
                         }
                         break;
                     }
@@ -1296,7 +1296,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                                 GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
                             );
 
-                            ThrowIOError( error );
+                            THROW_IO_ERROR( error );
                         }
                         break;
                     }
@@ -1449,16 +1449,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             if( module->GetReference() == wxEmptyString )
             {
-                ThrowIOError( _( "Component with value of '%s' has empty reference id." ),
-                                GetChars( module->GetValue() ) );
+                THROW_IO_ERROR( wxString::Format( _( "Component with value of '%s' has empty reference id." ),
+                                                  GetChars( module->GetValue() ) ) );
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
             STRINGSET_PAIR refpair = refs.insert( TO_UTF8( module->GetReference() ) );
             if( !refpair.second )      // insert failed
             {
-                ThrowIOError( _( "Multiple components have identical reference IDs of '%s'." ),
-                      GetChars( module->GetReference() ) );
+                THROW_IO_ERROR( wxString::Format( _( "Multiple components have identical reference IDs of '%s'." ),
+                                                  GetChars( module->GetReference() ) ) );
             }
         }
     }
@@ -2235,4 +2235,3 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
 }
 
 }       // namespace DSN
-

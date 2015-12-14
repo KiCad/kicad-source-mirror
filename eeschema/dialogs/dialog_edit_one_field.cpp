@@ -298,6 +298,19 @@ void DIALOG_SCH_EDIT_ONE_FIELD::TransfertDataToField( bool aIncludeText )
 
     m_field->SetItalic( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 );
     m_field->SetBold( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 );
+
+    // Because field autoplace can change justification, check whether this has
+    // been changed, and clear the autoplace flag if so.
+    EDA_TEXT_HJUSTIFY_T old_hjust = m_field->GetHorizJustify();
+    EDA_TEXT_VJUSTIFY_T old_vjust = m_field->GetVertJustify();
+
+    if( old_hjust != m_textHjustify || old_vjust != m_textVjustify )
+    {
+        EDA_ITEM *parent = m_field->GetParent();
+        if( SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( parent ) )
+            component->ClearFieldsAutoplaced();
+    }
+
     m_field->SetHorizJustify( m_textHjustify );
     m_field->SetVertJustify( m_textVjustify );
 }

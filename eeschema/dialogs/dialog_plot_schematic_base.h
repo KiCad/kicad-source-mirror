@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,7 +68,6 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxButton* m_buttonPlotCurrent;
 		wxButton* m_buttonPlotAll;
 		wxButton* m_buttonQuit;
-		wxStaticText* m_staticText2;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;
 		
 		// Virtual event handlers, overide them in your derived class

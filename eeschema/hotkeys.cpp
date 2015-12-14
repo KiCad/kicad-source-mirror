@@ -219,6 +219,10 @@ static EDA_HOTKEY HkSaveLib( _HKI( "Save Library" ), HK_SAVE_LIB, 'S' + GR_KB_CT
 static EDA_HOTKEY HkSaveSchematic( _HKI( "Save Schematic" ), HK_SAVE_SCH, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkLoadSchematic( _HKI( "Load Schematic" ), HK_LOAD_SCH, 'L' + GR_KB_CTRL );
 
+// Autoplace fields
+static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
+                                        ID_AUTOPLACE_FIELDS );
+
 // List of common hotkey descriptors
 static EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -292,6 +296,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkAddGraphicPolyLine,
     &HkAddGraphicText,
     &HkLeaveSheet,
+    &HkAutoplaceFields,
     &HkDeleteNode,
     NULL
 };
@@ -580,6 +585,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
     case HK_ROTATE:                         // Rotate schematic item.
     case HK_EDIT_COMPONENT_WITH_LIBEDIT:    // Call Libedit and load the current component
+    case HK_AUTOPLACE_FIELDS:               // Autoplace all fields around component
         {
             // force a new item search on hot keys at current position,
             // if there is no currently edited item,

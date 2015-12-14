@@ -290,8 +290,6 @@ int KICAD_PLUGIN_LDR_3D::GetNFilters( void )
         return 0;
     }
 
-    int n = m_getNFilters();
-
     return m_getNFilters();
 }
 

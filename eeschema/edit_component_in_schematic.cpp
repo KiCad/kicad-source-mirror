@@ -137,6 +137,10 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     {
         dlg.TransfertDataToField( /* aIncludeText = */ !( fieldNdx == VALUE && part->IsPower() ) );
         OnModify();
+
+        if( m_autoplaceFields )
+            component->AutoAutoplaceFields( GetScreen() );
+
         m_canvas->Refresh();
     }
 

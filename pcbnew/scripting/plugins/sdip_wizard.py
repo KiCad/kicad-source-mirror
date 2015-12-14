@@ -232,6 +232,11 @@ class SOICWizard(RowedFootprint):
         #  |1 2 3 4 |
         #  \---------
 
-        self.draw.BoxWithDiagonalAtCorner(0, 0, ssx*2, ssy*2, pcbnew.FromMM(1))
+        setback = pcbnew.FromMM(0.8)
+
+        if setback > ssy:
+            setback = ssy
+
+        self.draw.BoxWithDiagonalAtCorner(0, 0, ssx*2, ssy*2, setback, self.draw.flipY)
 
 SOICWizard().register()

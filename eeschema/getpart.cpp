@@ -242,6 +242,10 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     SetMsgPanel( items );
     component->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     component->SetFlags( IS_NEW );
+
+    if( m_autoplaceFields )
+        component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
     PrepareMoveItem( (SCH_ITEM*) component, aDC );
 
     return component;
@@ -268,29 +272,11 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-    // Erase the previous component in it's current orientation.
-
-    m_canvas->CrossHairOff( &dc );
-
-    if( component->GetFlags() )
-        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
-    else
-    {
-        component->SetFlags( IS_MOVED );    // do not redraw the component
-        m_canvas->RefreshDrawingRect( component->GetBoundingBox() );
-        component->ClearFlags( IS_MOVED );
-    }
-
     component->SetOrientation( aOrientation );
-
-    /* Redraw the component in the new position. */
-    if( component->GetFlags() )
-        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
-    else
-        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     m_canvas->CrossHairOn( &dc );
     GetScreen()->TestDanglingEnds( m_canvas, &dc );
+    m_canvas->Refresh();
     OnModify();
 }
 
@@ -344,13 +330,11 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
         component->ClearFlags();
         component->SetFlags( flags );   // Restore m_Flag modified by SetUnit()
 
-        /* Redraw the component in the new position. */
-        if( flags )
-            component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-        else
-            component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        if( m_autoplaceFields )
+            component->AutoAutoplaceFields( GetScreen() );
 
         screen->TestDanglingEnds( m_canvas, &dc );
+        m_canvas->Refresh();
         OnModify();
     }
 }

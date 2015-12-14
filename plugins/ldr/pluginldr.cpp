@@ -21,14 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <dlfcn.h>
-#include <pwd.h>
-#endif
-
 #include <sstream>
 #include <iostream>
 

@@ -109,6 +109,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkAutoPan;
 		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_checkPageLimits;
+		wxCheckBox* m_checkAutoplaceFields;
+		wxCheckBox* m_checkAutoplaceJustify;
+		wxCheckBox* m_checkAutoplaceAlign;
 		wxPanel* m_panel2;
 		wxListView* templateFieldListCtrl;
 		wxStaticText* fieldNameLabel;

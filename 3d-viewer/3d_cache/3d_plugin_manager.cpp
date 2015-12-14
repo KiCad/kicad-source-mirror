@@ -81,7 +81,6 @@ S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
         std::list< wxString >::const_iterator sFF = m_FileFilters.begin();
         std::list< wxString >::const_iterator eFF = m_FileFilters.end();
         std::cout << "* File filters:\n";
-        int i = 0;
 
         while( sFF != eFF )
         {

@@ -103,6 +103,7 @@ public:
     int GetHeight() const { return m_Size.y; }
     int GetRight() const { return m_Pos.x + m_Size.x; }
     int GetLeft() const { return m_Pos.x; }
+    int GetTop() const { return m_Pos.y; }
     int GetBottom() const { return m_Pos.y + m_Size.y; }    // Y axis from top to bottom
 
     void SetOrigin( const wxPoint& pos ) { m_Pos = pos; }

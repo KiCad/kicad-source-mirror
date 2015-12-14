@@ -30,18 +30,24 @@
 #ifndef PLUGINLDR_H
 #define PLUGINLDR_H
 
-#include <dlfcn.h>
 #include <string>
 #include <wx/string.h>
 
 // helper functions to link functions
 #ifdef _WIN32
+
+#include <windows.h>
 #define LINK_ITEM( funcPtr, funcType, funcName ) \
     funcPtr = (funcType) GetProcAddress( m_dlHandle, funcName );
+
 #else
+
+#include <dlfcn.h>
 #define LINK_ITEM( funcPtr, funcType, funcName ) \
     *(void**) (&funcPtr) = dlsym( m_dlHandle, funcName );
+
 #endif
+
 
 // typedefs of the functions exported by the 3D Plugin Class
 typedef char const* (*GET_PLUGIN_CLASS) ( void );

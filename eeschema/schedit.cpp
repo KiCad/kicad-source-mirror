@@ -765,6 +765,13 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
             SetUndoItem( aItem );
     }
 
+    if( aItem->Type() == SCH_FIELD_T && aItem->GetParent()->Type() == SCH_COMPONENT_T )
+    {
+        // Now that we're moving a field, they're no longer autoplaced.
+        SCH_COMPONENT *parent = dynamic_cast<SCH_COMPONENT*>( aItem->GetParent() );
+        parent->ClearFieldsAutoplaced();
+    }
+
     aItem->SetFlags( IS_MOVED );
 
     // For some items, moving the cursor to anchor is not good
@@ -826,14 +833,22 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     switch( item->Type() )
     {
     case SCH_COMPONENT_T:
-        if( aEvent.GetId() == ID_SCH_ROTATE_CLOCKWISE )
-            OrientComponent( CMP_ROTATE_CLOCKWISE );
-        else if( aEvent.GetId() == ID_SCH_ROTATE_COUNTERCLOCKWISE )
-            OrientComponent( CMP_ROTATE_COUNTERCLOCKWISE );
-        else
-            wxFAIL_MSG( wxT( "Unknown rotate item command ID." ) );
+        {
+            SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( item );
+            if( aEvent.GetId() == ID_SCH_ROTATE_CLOCKWISE )
+                OrientComponent( CMP_ROTATE_CLOCKWISE );
+            else if( aEvent.GetId() == ID_SCH_ROTATE_COUNTERCLOCKWISE )
+                OrientComponent( CMP_ROTATE_COUNTERCLOCKWISE );
+            else
+                wxFAIL_MSG( wxT( "Unknown rotate item command ID." ) );
 
-        break;
+            if( m_autoplaceFields )
+                component->AutoAutoplaceFields( GetScreen() );
+
+            m_canvas->Refresh();
+
+            break;
+        }
 
     case SCH_TEXT_T:
     case SCH_LABEL_T:
@@ -846,6 +861,12 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     case SCH_FIELD_T:
         m_canvas->MoveCursorToCrossHair();
         RotateField( (SCH_FIELD*) item, &dc );
+        if( item->GetParent()->Type() == SCH_COMPONENT_T )
+        {
+            // Now that we're moving a field, they're no longer autoplaced.
+            SCH_COMPONENT *parent = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
+            parent->ClearFieldsAutoplaced();
+        }
         break;
 
     case SCH_BITMAP_T:
@@ -1126,16 +1147,24 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     switch( item->Type() )
     {
     case SCH_COMPONENT_T:
-        if( aEvent.GetId() == ID_SCH_MIRROR_X )
-            OrientComponent( CMP_MIRROR_X );
-        else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
-            OrientComponent( CMP_MIRROR_Y );
-        else if( aEvent.GetId() == ID_SCH_ORIENT_NORMAL )
-            OrientComponent( CMP_NORMAL );
-        else
-            wxFAIL_MSG( wxT( "Invalid orient schematic component command ID." ) );
+        {
+            SCH_COMPONENT *component = dynamic_cast<SCH_COMPONENT*>( item );
+            if( aEvent.GetId() == ID_SCH_MIRROR_X )
+                OrientComponent( CMP_MIRROR_X );
+            else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
+                OrientComponent( CMP_MIRROR_Y );
+            else if( aEvent.GetId() == ID_SCH_ORIENT_NORMAL )
+                OrientComponent( CMP_NORMAL );
+            else
+                wxFAIL_MSG( wxT( "Invalid orient schematic component command ID." ) );
 
-        break;
+            if( m_autoplaceFields )
+                component->AutoAutoplaceFields( GetScreen() );
+
+            m_canvas->Refresh();
+
+            break;
+        }
 
     case SCH_BITMAP_T:
         if( aEvent.GetId() == ID_SCH_MIRROR_X )

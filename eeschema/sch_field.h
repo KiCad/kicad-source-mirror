@@ -103,6 +103,13 @@ public:
     const EDA_RECT GetBoundingBox() const;    // Virtual
 
     /**
+     * Function IsHorizJustifyFlipped
+     * Returns whether the field will be rendered with the horizontal justification
+     * inverted due to rotation or mirroring of the parent.
+     */
+    bool IsHorizJustifyFlipped() const;
+
+    /**
      * Function IsVoid
      * returns true if the field is either empty or holds "~".
      */
@@ -131,7 +138,7 @@ public:
      */
     bool IsVisible() const
     {
-        return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
+        return !( m_Attributs & TEXT_NO_VISIBLE );
     }
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,

@@ -197,8 +197,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
     if( layerNdx == -1 )
     {
         wxString layerName = FROM_UTF8( aPath->layer_id.c_str() );
-        ThrowIOError( _("Session file uses invalid layer id \"%s\""),
-                        GetChars( layerName ) );
+        THROW_IO_ERROR( wxString::Format( _("Session file uses invalid layer id \"%s\""),
+                                          GetChars( layerName ) ) );
     }
 
     TRACK* track = new TRACK( sessionBoard );
@@ -250,15 +250,15 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
     if( shapeCount == 0 )
     {
-        ThrowIOError( _( "Session via padstack has no shapes" ) );
+        THROW_IO_ERROR( _( "Session via padstack has no shapes" ) );
     }
     else if( shapeCount == 1 )
     {
         shape = (SHAPE*) (*aPadstack)[0];
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
-            ThrowIOError( _( "Unsupported via shape: %s"),
-                     GetChars( GetTokenString( type ) ) );
+            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s"),
+                                              GetChars( GetTokenString( type ) ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -275,8 +275,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
         shape = (SHAPE*) (*aPadstack)[0];
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
-            ThrowIOError( _( "Unsupported via shape: %s"),
-                     GetChars( GetTokenString( type ) ) );
+            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s"),
+                                              GetChars( GetTokenString( type ) ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -300,8 +300,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
             shape = (SHAPE*) (*aPadstack)[i];
             DSN_T type = shape->shape->Type();
             if( type != T_circle )
-                ThrowIOError( _( "Unsupported via shape: %s"),
-                         GetChars( GetTokenString( type ) ) );
+                THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s"),
+                                                  GetChars( GetTokenString( type ) ) ) );
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
@@ -309,8 +309,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
             if( layerNdx == -1 )
             {
                 wxString layerName = FROM_UTF8( circle->layer_id.c_str() );
-                ThrowIOError( _("Session file uses invalid layer id \"%s\""),
-                                GetChars( layerName ) );
+                THROW_IO_ERROR( wxString::Format( _("Session file uses invalid layer id \"%s\""),
+                                                  GetChars( layerName ) ) );
             }
 
             if( layerNdx > topLayerNdx )
@@ -356,18 +356,18 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
     sessionBoard = aBoard;      // not owned here
 
     if( !session )
-        ThrowIOError( _("Session file is missing the \"session\" section") );
+        THROW_IO_ERROR( _("Session file is missing the \"session\" section") );
 
     /* Dick 16-Jan-2012: session need not have a placement section.
     if( !session->placement )
-        ThrowIOError( _("Session file is missing the \"placement\" section") );
+        THROW_IO_ERROR( _("Session file is missing the \"placement\" section") );
     */
 
     if( !session->route )
-        ThrowIOError( _("Session file is missing the \"routes\" section") );
+        THROW_IO_ERROR( _("Session file is missing the \"routes\" section") );
 
     if( !session->route->library )
-        ThrowIOError( _("Session file is missing the \"library_out\" section") );
+        THROW_IO_ERROR( _("Session file is missing the \"library_out\" section") );
 
     // delete all the old tracks and vias
     aBoard->m_Track.DeleteAll();
@@ -393,9 +393,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 MODULE* module = aBoard->FindModuleByReference( reference );
                 if( !module )
                 {
-                    ThrowIOError(
-                       _("Session file has 'reference' to non-existent component \"%s\""),
-                       GetChars( reference ) );
+                    THROW_IO_ERROR( wxString::Format( _("Session file has 'reference' to non-existent component \"%s\""),
+                                                      GetChars( reference ) ) );
                 }
 
                 if( !place->hasVertex )
@@ -478,11 +477,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                     'wire'.
 
                 wxString netId = FROM_UTF8( wire->net_id.c_str() );
-                ThrowIOError(
-                    _("Unsupported wire shape: \"%s\" for net: \"%s\""),
-                    DLEX::GetTokenString(shape).GetData(),
-                    netId.GetData()
-                    );
+                THROW_IO_ERROR( wxString::Format( _("Unsupported wire shape: \"%s\" for net: \"%s\""),
+                                                    DLEX::GetTokenString(shape).GetData(),
+                                                    netId.GetData()
+                    ) );
                 */
             }
             else
@@ -542,8 +540,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 // wire_via to text and put that text into the exception.
                 wxString psid( FROM_UTF8( wire_via->GetPadstackId().c_str() ) );
 
-                ThrowIOError( _("A wire_via references a missing padstack \"%s\""),
-                             GetChars( psid ) );
+                THROW_IO_ERROR( wxString::Format( _("A wire_via references a missing padstack \"%s\""),
+                                                  GetChars( psid ) ) );
             }
 
             NETCLASSPTR netclass = aBoard->GetDesignSettings().m_NetClasses.GetDefault();
@@ -561,4 +559,3 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
 
 
 } // namespace DSN
-

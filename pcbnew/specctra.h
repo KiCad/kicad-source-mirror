@@ -3919,8 +3919,6 @@ public:
      */
     void LoadSESSION( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer );
 
-    void ThrowIOError( const wxString& fmt, ... ) throw( IO_ERROR );
-
     /**
      * Function ExportPCB
      * writes the internal PCB instance out as a SPECTRA DSN format file.
