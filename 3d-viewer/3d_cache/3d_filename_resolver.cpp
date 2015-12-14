@@ -38,7 +38,7 @@ bool S3D_FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
     if( aConfigDir.empty() )
         return false;
 
-    wxFileName cfgdir( aConfigDir, "" );
+    wxFileName cfgdir( aConfigDir, wxT( "" ) );
     cfgdir.Normalize();
 
     if( false == cfgdir.DirExists() )
@@ -56,7 +56,7 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
     if( aProjDir.empty() )
         return false;
 
-    wxFileName projdir( aProjDir, "" );
+    wxFileName projdir( aProjDir, wxT( "" ) );
     projdir.Normalize();
 
     if( false == projdir.DirExists() )
@@ -248,7 +248,7 @@ bool S3D_FILENAME_RESOLVER::addPath( const wxString& aPath )
     if( aPath.empty() )
         return false;
 
-    wxFileName path( aPath, "" );
+    wxFileName path( aPath, wxT( "" ) );
     path.Normalize();
 
     if( !path.DirExists() )
@@ -382,7 +382,8 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     if( m_Paths.empty() || 1 == m_Paths.size() )
         return false;
 
-    wxString cfgname = m_ConfigDir + S3D_RESOLVER_CONFIG;
+    wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );
+    wxString cfgname = cfgpath.GetFullPath();
     std::ofstream cfgFile;
 
     cfgFile.open( cfgname.ToUTF8(), std::ios_base::trunc );
@@ -403,7 +404,7 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
 
     while( sPL != ePL )
     {
-        cfgFile << "\"" << (*sPL).ToUTF8() << "\"\n";
+        cfgFile << "\"" << sPL->ToUTF8() << "\"\n";
         ++sPL;
     }
 
@@ -429,7 +430,7 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
     while( sL != eL )
     {
-        wxFileName fpath( *sL, "" );
+        wxFileName fpath( *sL, wxT( "" ) );
         wxString fps = fpath.GetPathWithSep();
 
         if( std::string::npos != fname.find( fps ) )

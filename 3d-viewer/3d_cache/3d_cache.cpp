@@ -424,42 +424,51 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     if( !m_ConfigDir.empty() )
         return false;
 
-    wxFileName cfgdir( aConfigDir, "" );
+    wxFileName cfgdir( aConfigDir, wxT( "" ) );
     cfgdir.Normalize();
 
-    if( cfgdir.DirExists() )
+    if( !cfgdir.DirExists() )
     {
-        m_ConfigDir = cfgdir.GetPath();
-
-        // inform the file resolver of the config directory
-        if( !m_FNResolver->Set3DConfigDir( m_ConfigDir ) )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * could not set 3D Config Directory on filename resolver\n";
-            std::cerr << " * config directory: '" << m_ConfigDir.ToUTF8() << "'\n";
-        }
-
-        cfgdir.AppendDir( wxT( "cache" ) );
+        cfgdir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
         if( !cfgdir.DirExists() )
         {
-            cfgdir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-            if( !cfgdir.DirExists() )
-            {
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * failed to create 3D cache directory\n";
-                std::cerr << " * cache directory: '";
-                std::cerr << cfgdir.GetPath().ToUTF8() << "'\n";
-                return false;
-            }
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * failed to create 3D configuration directory\n";
+            std::cerr << " * config directory: '";
+            std::cerr << cfgdir.GetPath().ToUTF8() << "'\n";
+            return false;
         }
-
-        m_CacheDir = cfgdir.GetPathWithSep();
-        return true;
     }
 
-    return false;
+    m_ConfigDir = cfgdir.GetPath();
+
+    // inform the file resolver of the config directory
+    if( !m_FNResolver->Set3DConfigDir( m_ConfigDir ) )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * could not set 3D Config Directory on filename resolver\n";
+        std::cerr << " * config directory: '" << m_ConfigDir.ToUTF8() << "'\n";
+    }
+
+    cfgdir.AppendDir( wxT( "cache" ) );
+
+    if( !cfgdir.DirExists() )
+    {
+        cfgdir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+        if( !cfgdir.DirExists() )
+        {
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * failed to create 3D cache directory\n";
+            std::cerr << " * cache directory: '";
+            std::cerr << cfgdir.GetPath().ToUTF8() << "'\n";
+            return false;
+        }
+    }
+
+    m_CacheDir = cfgdir.GetPathWithSep();
+    return true;
 }
 
 
