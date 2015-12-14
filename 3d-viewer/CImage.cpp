@@ -80,11 +80,11 @@ bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
     default:
         break;
     }
-    
+
     if( (x < 0) || (x >= (int)m_width) ||
         (y < 0) || (y >= (int)m_height) )
         return false;
-    
+
     *aXo = x;
     *aYo = y;
 
@@ -127,7 +127,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
     else
     {
         if ( (aImgA == NULL) || (aImgB == NULL) )
-            return; 
+            return;
     }
 
     switch(aOperation)
@@ -202,7 +202,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
             m_pixels[it] = aImgA->m_pixels[it] ^ aImgB->m_pixels[it];
         }
     break;
-    
+
     case COPY_BLEND50:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
@@ -253,7 +253,7 @@ static const S_FILTER FILTERS[] =   {
         7,
         255
     },
-    
+
     // Blur
     {
     {   { 3,  5,  7,  5,  3},
@@ -378,7 +378,7 @@ void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
     #ifdef USE_OPENMP
     #pragma omp parallel for
     #endif /* USE_OPENMP */
-    
+
     for( int iy = 0; iy < (int)m_height; iy++)
     {
         for( int ix = 0; ix < (int)m_width; ix++ )
@@ -394,7 +394,7 @@ void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
                     v += pixelv * factor;
                 }
             }
-            
+
             v /= filter.div;
 
             v += filter.offset;
@@ -421,7 +421,7 @@ void CIMAGE::SetPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
 void CIMAGE::SaveAsPNG( wxString aFileName ) const
 {
     unsigned char* pixelbuffer = (unsigned char*) malloc( m_wxh * 3 );
-   
+
     wxImage image( m_width, m_height );
 
     for( unsigned int i = 0; i < m_wxh; i++)

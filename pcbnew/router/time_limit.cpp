@@ -22,7 +22,7 @@
 
 #include "time_limit.h"
 
-TIME_LIMIT::TIME_LIMIT( int aMilliseconds ) : 
+TIME_LIMIT::TIME_LIMIT( int aMilliseconds ) :
 	m_limitMs( aMilliseconds )
 {
     Restart();

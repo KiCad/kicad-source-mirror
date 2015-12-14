@@ -109,7 +109,7 @@ void CBBOX::Union( const S3D_VERTEX &aPoint )
         m_max.x =  glm::max( m_max.x, aPoint.x );
         m_max.y =  glm::max( m_max.y, aPoint.y );
         m_max.z =  glm::max( m_max.z, aPoint.z );
-    }   
+    }
 }
 
 
@@ -117,7 +117,7 @@ void CBBOX::Union( const CBBOX &aBBox )
 {
     if( aBBox.m_initialized == false )
         return;
-    
+
     if( !m_initialized )
     {
         // Initialize the bounding box with the given bounding box
@@ -159,7 +159,7 @@ void CBBOX::Scale( float aScale )
 {
     if( m_initialized == false )
         return;
-    
+
     S3D_VERTEX scaleV  = S3D_VERTEX( aScale, aScale, aScale );
     S3D_VERTEX centerV = GetCenter();
 
@@ -168,7 +168,7 @@ void CBBOX::Scale( float aScale )
 }
 
 
-bool CBBOX::OverlapsBox( const CBBOX &aBBox ) const 
+bool CBBOX::OverlapsBox( const CBBOX &aBBox ) const
 {
     if( aBBox.m_initialized == false )
         return false;
@@ -181,7 +181,7 @@ bool CBBOX::OverlapsBox( const CBBOX &aBBox ) const
 }
 
 
-bool CBBOX::Inside( const S3D_VERTEX &aPoint ) const 
+bool CBBOX::Inside( const S3D_VERTEX &aPoint ) const
 {
     if( m_initialized == false )
         return false;
@@ -192,7 +192,7 @@ bool CBBOX::Inside( const S3D_VERTEX &aPoint ) const
 }
 
 
-float CBBOX::Volume() const 
+float CBBOX::Volume() const
 {
     if( m_initialized == false )
         return 0.0f;
@@ -206,7 +206,7 @@ void CBBOX::ApplyTransformation( glm::mat4 aTransformMatrix )
 {
     if( m_initialized == false )
         return;
-    
+
     S3D_VERTEX v1 = S3D_VERTEX( aTransformMatrix * glm::vec4( m_min.x, m_min.y, m_min.z, 1.0f ) );
     S3D_VERTEX v2 = S3D_VERTEX( aTransformMatrix * glm::vec4( m_max.x, m_max.y, m_max.z, 1.0f ) );
 
@@ -237,7 +237,7 @@ void CBBOX::ApplyTransformationAA( glm::mat4 aTransformMatrix )
 }
 
 
-void CBBOX::GLdebug() const 
+void CBBOX::GLdebug() const
 {
     if( m_initialized == false )
         return;

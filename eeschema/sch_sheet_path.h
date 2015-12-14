@@ -137,8 +137,8 @@ public:
      * Function Cmp
      * Compare if this is the same sheet path as aSheetPathToTest
      * @param aSheetPathToTest = sheet path to compare
-     * @return 1 if this sheet path has more sheets than aSheetPathToTest, 
-     *   -1 if this sheet path has fewer sheets than aSheetPathToTest, 
+     * @return 1 if this sheet path has more sheets than aSheetPathToTest,
+     *   -1 if this sheet path has fewer sheets than aSheetPathToTest,
      *   or 0 if same
      */
     int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;

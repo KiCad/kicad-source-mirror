@@ -60,7 +60,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
  * if b > DBL_MAX/10, assume vertical line at x = a
  * returns closest point on line in xpp, ypp
  */
-double GetPointToLineDistance( double a, double b, int x, int y, 
+double GetPointToLineDistance( double a, double b, int x, int y,
                                double * xp=NULL, double * yp=NULL );
 
 inline double Distance( double x1, double y1, double x2, double y2 )

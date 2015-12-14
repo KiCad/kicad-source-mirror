@@ -688,7 +688,7 @@ void DIALOG_PLOT::applyPlotSettings()
     // If someone enables more copper layers they will be selected by default.
     selectedLayers = selectedLayers | disabledCopperLayers;
     tempOptions.SetLayerSelection( selectedLayers );
-    
+
     tempOptions.SetNegative( m_plotPSNegativeOpt->GetValue() );
     tempOptions.SetA4Output( m_forcePSA4OutputOpt->GetValue() );
 
@@ -786,7 +786,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     for( LSEQ seq = m_plotOpts.GetLayerSelection().UIOrder();  seq;  ++seq )
     {
         LAYER_ID layer = *seq;
-        
+
         // All copper layers that are disabled are actually selected
         // This is due to wonkyness in automatically selecting copper layers
         // for plotting when adding more than two layers to a board.
@@ -795,7 +795,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         // This skips a copper layer if it is actually disabled on the board.
         if( ( LSET::AllCuMask() & ~m_board->GetEnabledLayers() )[layer] )
             continue;
-        
+
         // Pick the basename from the board file
         wxFileName fn( boardFilename );
 
