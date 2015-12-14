@@ -21,13 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- * NOTES:
- *
- * 1. Notice that the plugin class is instantiated as a static; this
- * ensures that it created an destroyed.
- */
-
 #include <iostream>
 #include "plugins/3d/3d_plugin.h"
 
