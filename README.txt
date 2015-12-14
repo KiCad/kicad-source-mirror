@@ -11,9 +11,9 @@ CMakeList.txt       - CMAKE build tool script
 COPYRIGHT.txt       - A copy of the GNU General Public License Version 2
 CTestConfig.cmake   - Support for CTest and CDash testing tools
 Doxyfile            - Doxygen config file for Kicad
-INSTALL.txt         - The release (binairy) installation instructions
+INSTALL.txt         - The release (binary) installation instructions
 TODO.txt            - Todo list
-uncrustify.cfg      - Uncrustify config file for uncrustify sorces formatting tool
+uncrustify.cfg      - Uncrustify config file for uncrustify sources formatting tool
 
 Subdirectories
 --------------
@@ -30,7 +30,7 @@ eeschema       - Sourcecode of the schematic editor
 gerbview       - Sourcecode of the gerber viewer
 helpers        - Helper tools and utilities for development
 include        - Interfaces to the common library
-internat       - Internationalisation files
+internat       - Internationalization files
 kicad          - Sourcecode of the project manager
 packaging      - Files for packaging on Windows and Mac OSX
 pcbnew         - Sourcecode of the printed circuit board editor
