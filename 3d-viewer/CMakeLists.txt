@@ -6,6 +6,7 @@ include_directories(
     ../pcbnew
     ../polygon
     ${GLEW_INCLUDE_DIR}
+    ${GLM_INCLUDE_DIR}
     ${INC_AFTER}
     )
 
