@@ -35,8 +35,13 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <vector>
 #include "plugins/3dapi/sg_base.h"
 #include "plugins/3dapi/sg_types.h"
+
+class SGNORMALS;
+class SGCOORDS;
+class SGCOORDINDEX;
 
 // Function to drop references within an SGNODE
 // The node being destroyed must remove itself from the object reference's
@@ -148,6 +153,29 @@
 
 namespace S3D
 {
+    //
+    // Normals calculations from triangles
+    //
+
+    /*
+     * Function CalcTriangleNormals
+     * takes an array of 3D coordinates and its corresponding index set and calculates
+     * the normals assuming that indices are given in CCW order. Care must be taken in
+     * using this function to ensure that:
+     * (a) all coordinates are indexed; unindexed coordinates are assigned normal(0,0,1);
+     * when dealing with VRML models which may list and reuse one large coordinate set it
+     * is necessary to gather all index sets and perform this operation only once.
+     * (b) index sets must represent triangles (multiple of 3 indices) and must not be
+     * degenerate - that is all indices and coordinates in a triad must be unique.
+     *
+     * @param coords is the array of 3D vertices
+     * @param index is the array of 3x vertex indices (triads)
+     * @param norms is an empty array which holds the normals corresponding to each vector
+     * @return true on success; otherwise false.
+     */
+    bool CalcTriangleNormals( std::vector< SGPOINT > coords, std::vector< int >& index,
+        std::vector< SGVECTOR >& norms );
+
     //
     // VRML related functions
     //

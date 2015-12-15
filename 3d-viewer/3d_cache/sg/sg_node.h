@@ -76,10 +76,10 @@ namespace S3D
 class SGNODE
 {
 private:
-    std::list< SGNODE* > m_BackPointers;    // nodes which hold a reference to this
     SGNODE** m_Association;                 // handle to the instance held by a wrapper
 
 protected:
+    std::list< SGNODE* > m_BackPointers;    // nodes which hold a reference to this
     SGNODE* m_Parent;       // pointer to parent node; may be NULL for top level transform
     S3D::SGTYPES m_SGtype;  // type of SG node
     std::string m_Name;     // name to use for referencing the entity by name

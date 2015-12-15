@@ -55,6 +55,13 @@ public:
     void AddCoord( double aXValue, double aYValue, double aZValue );
     void AddCoord( const SGPOINT& aPoint );
 
+    /**
+     * Function CalcNormals
+     * calculates normals for this coordinate list and sets the
+     * normals list in the parent SGFACESET
+     */
+    bool CalcNormals( void );
+
     void ReNameNodes( void );
     bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );
 

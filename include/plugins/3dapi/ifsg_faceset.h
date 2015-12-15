@@ -47,6 +47,8 @@ public:
     bool Attach( SGNODE* aNode );
     bool NewNode( SGNODE* aParent );
     bool NewNode( IFSG_NODE& aParent );
+
+    bool CalcNormals( void );
 };
 
 #endif  // IFSG_FACESET_H

@@ -84,7 +84,7 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
     LINK_ITEM( m_getClassVersion, GET_CLASS_VERSION, "GetClassVersion" );
     LINK_ITEM( m_checkClassVersion, CHECK_CLASS_VERSION , "CheckClassVersion" );
     LINK_ITEM( m_getPluginName, GET_PLUGIN_NAME, "GetKicadPluginName" );
-    LINK_ITEM( m_getVersion, GET_VERSION, "GetVersion" );
+    LINK_ITEM( m_getVersion, GET_VERSION, "GetPluginVersion" );
 
     #ifdef DEBUG
         bool fail = false;

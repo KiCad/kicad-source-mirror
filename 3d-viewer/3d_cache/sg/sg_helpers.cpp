@@ -27,6 +27,8 @@
 #include <streambuf>
 #include <iomanip>
 #include <string>
+#include <utility>
+#include <map>
 
 #include "3d_cache/sg/sg_helpers.h"
 #include "3d_cache/sg/sg_node.h"
@@ -303,6 +305,195 @@ bool S3D::ReadColor( std::ifstream& aFile, SGCOLOR& aColor )
 
     if( aFile.fail() )
         return false;
+
+    return true;
+}
+
+
+struct TRIAD
+{
+    int p1;
+    int p2;
+    int p3;
+};
+
+
+bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
+    std::vector< int >& index, std::vector< SGVECTOR >& norms )
+{
+    size_t vsize = coords.size();
+
+    if( vsize < 3 )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] invalid vertex set (fewer than 3 vertices)\n";
+        #endif
+
+        return false;
+    }
+
+    size_t isize = index.size();
+
+    if( 0 != isize % 3 || index.empty() )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] invalid index set (not multiple of 3)\n";
+        #endif
+
+        return false;
+    }
+
+    if( !norms.empty() )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] normals set is not empty\n";
+        #endif
+
+        return false;
+    }
+
+    std::map< int, std::list< TRIAD > >vmap;
+
+    int p1, p2, p3;
+
+    // create the map of indices to facet sets
+    for( size_t i = 0; i < isize; )
+    {
+        p1 = index[i++];
+        p2 = index[i++];
+        p3 = index[i++];
+
+        if( p1 < 0 || p1 >= vsize || p2 < 0 || p2 >= vsize ||
+            p3 < 0 || p3 >= vsize )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] invalid index set; index out of bounds\n";
+            #endif
+
+            return false;
+        }
+
+        // ignore degenerate triangle indices; note that it is still possible to
+        // have degenerate vertices and these may cause problems
+        if( p1 == p2 || p2 == p3 || p3 == p1 )
+            continue;
+
+        TRIAD tri;
+        tri.p1 = p1;
+        tri.p2 = p2;
+        tri.p3 = p3;
+
+        std::map< int, std::list< TRIAD > >::iterator ip = vmap.find( p1 );
+
+        if( ip != vmap.end() )
+        {
+            ip->second.push_back( tri );
+        }
+        else
+        {
+            vmap.insert( std::pair < int, std::list < TRIAD > > ( p1, std::list < TRIAD >( 1, tri ) ) );
+        }
+
+        ip = vmap.find( p2 );
+
+        if( ip != vmap.end() )
+        {
+            ip->second.push_back( tri );
+        }
+        else
+        {
+            vmap.insert( std::pair < int, std::list < TRIAD > > ( p2, std::list < TRIAD >( 1, tri ) ) );
+        }
+
+        ip = vmap.find( p2 );
+
+        if( ip != vmap.end() )
+        {
+            ip->second.push_back( tri );
+        }
+        else
+        {
+            vmap.insert( std::pair < int, std::list < TRIAD > > ( p3, std::list < TRIAD >( 1, tri ) ) );
+        }
+    }
+
+    std::map< int, std::list< TRIAD > >::iterator sM = vmap.begin();
+    std::map< int, std::list< TRIAD > >::iterator eM = vmap.end();
+    size_t idx = 0;
+
+    while( sM != eM )
+    {
+        size_t item = sM->first;
+
+        // assign any skipped coordinates a normal of (0,0,1)
+        while( item > idx )
+        {
+            norms.push_back( SGVECTOR( 0, 0, 1 ) );
+            ++idx;
+        }
+
+        std::list< TRIAD >::iterator sT = sM->second.begin();
+        std::list< TRIAD >::iterator eT = sM->second.end();
+
+        double nx = 0.0;
+        double ny = 0.0;
+        double nz = 0.0;
+
+        // XXX - TODO:
+        // eliminate equal face normals in order to prevent distortion of the true vertex normal
+
+        while( sT != eT )
+        {
+            double x0, x1, x2;
+            double y0, y1, y2;
+            double z0, z1, z2;
+
+            x1 = coords[sT->p2].x - coords[sT->p1].x;
+            y1 = coords[sT->p2].y - coords[sT->p1].y;
+            z1 = coords[sT->p2].z - coords[sT->p1].z;
+
+            x2 = coords[sT->p3].x - coords[sT->p1].x;
+            y2 = coords[sT->p3].y - coords[sT->p1].y;
+            z2 = coords[sT->p3].z - coords[sT->p1].z;
+
+            x0 = (y1 * z2) - (z1 * y2);
+            y0 = (z1 * x2) - (x1 * z2);
+            z0 = (x1 * y2) - (y1 * x2);
+
+            double m = sqrt( x0*x0 + y0*y0 + z0*z0 );
+
+            // add the normal to the normal accumulated for this facet
+
+            if( m < 1e-12 )
+            {
+                nz += 1.0;
+            }
+            else
+            {
+                nx += ( x0 / m );
+                ny += ( y0 / m );
+                nz += ( z0 / m );
+            }
+
+            ++sT;
+        }
+
+        norms.push_back( SGVECTOR( nx, ny, nz ) );
+
+        ++idx;
+        ++sM;
+    }
+
+    if( norms.size() != coords.size() )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] number of normals does not equal number of vertices\n";
+        return false;
+    }
 
     return true;
 }

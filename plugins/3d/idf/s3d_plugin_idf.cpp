@@ -204,14 +204,13 @@ SCENEGRAPH* Load( char const* aFileName )
     IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );
     coordIdx->SetIndices( indices.size(), &indices[0] );
 
-    // XXX - TO BE IMPLEMENTED : add correct normals and colors
-    std::vector< SGVECTOR > norms;
-
-    for( size_t i = 0; i < nvert; ++i )
-        norms.push_back( SGVECTOR( 0.0, 0.0, 1.0 ) );
-
-    IFSG_NORMALS* np = new IFSG_NORMALS( *face );
-    np->SetNormalList( nvert, &norms[0] );
+    if( !face->CalcNormals() )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] cannot calculate normals\n";
+        #endif
+    }
 
     // magenta
     IFSG_APPEARANCE* material = new IFSG_APPEARANCE( *shape);
@@ -222,13 +221,20 @@ SCENEGRAPH* Load( char const* aFileName )
 
     SCENEGRAPH* data = (SCENEGRAPH*)tx0->GetRawPtr();
 
+    // XXX - DEBUG - WRITE OUT IDF FILE TO CONFIRM NORMALS
+    wxFileName fn( aFileName );
+    wxString fnam = fn.GetName();
+    fnam.append( wxT(".wrl") );
+    std::cerr << "XXX: FILE NAME: " << fnam.ToUTF8() << "\n";
+    S3D::WriteVRML( fnam, true, (SGNODE*)(data), true, true );
+
+
     // delete the API wrappers
     delete shape;
     delete face;
     delete coordIdx;
     delete material;
     delete cp;
-    delete np;
     delete tx0;
 
     return data;

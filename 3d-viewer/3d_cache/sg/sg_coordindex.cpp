@@ -41,3 +41,14 @@ SGCOORDINDEX::~SGCOORDINDEX()
 {
     return;
 }
+
+
+void SGCOORDINDEX::GatherCoordIndices( std::vector< int >& aIndexList )
+{
+    if( index.empty() )
+        return;
+
+    aIndexList.insert( aIndexList.end(), index.begin(), index.end() );
+
+    return;
+}

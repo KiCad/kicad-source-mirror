@@ -1030,3 +1030,34 @@ bool SGFACESET::validate( void )
     valid = true;
     return true;
 }
+
+
+void SGFACESET::GatherCoordIndices( std::vector< int >& aIndexList )
+{
+    if( m_CoordIndices )
+        m_CoordIndices->GatherCoordIndices( aIndexList );
+
+    return;
+}
+
+
+bool SGFACESET::CalcNormals( void )
+{
+    if( m_RCoords )
+    {
+        SGFACESET* fp = (SGFACESET*) m_RCoords->GetParent();
+
+        if( !fp )
+            return false;
+
+        return fp->CalcNormals();
+    }
+
+    if( NULL == m_Coords || m_Coords->coords.empty() )
+        return false;
+
+    if( m_Normals && !m_Normals->norms.empty( ) )
+        return true;
+
+    return m_Coords->CalcNormals();
+}

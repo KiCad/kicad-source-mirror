@@ -76,11 +76,20 @@ public:
     bool AddRefNode( SGNODE* aNode );
     bool AddChildNode( SGNODE* aNode );
 
+    bool CalcNormals( void );
+
     void ReNameNodes( void );
     bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );
 
     bool WriteCache( std::ofstream& aFile, SGNODE* parentNode );
     bool ReadCache( std::ifstream& aFile, SGNODE* parentNode );
+
+    /**
+     * Function GatherCoordIndices
+     * adds all internal coordinate indices to the given list
+     * in preparation for a normals calculation
+     */
+    void GatherCoordIndices( std::vector< int >& aIndexList );
 };
 
 /*

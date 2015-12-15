@@ -159,3 +159,12 @@ bool IFSG_FACESET::NewNode( IFSG_NODE& aParent )
 
     return NewNode( np );
 }
+
+
+bool IFSG_FACESET::CalcNormals( void )
+{
+    if( m_node )
+        return ((SGFACESET*)m_node)->CalcNormals();
+
+    return false;
+}

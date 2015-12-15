@@ -46,6 +46,13 @@ class SGCOORDINDEX : public SGINDEX
 public:
     SGCOORDINDEX( SGNODE* aParent );
     virtual ~SGCOORDINDEX();
+
+    /**
+     * Function GatherCoordIndices
+     * adds all coordinate indices to the given list
+     * in preparation for a normals calculation
+     */
+    void GatherCoordIndices( std::vector< int >& aIndexList );
 };
 
 #endif  // SG_COORDINDEX_H

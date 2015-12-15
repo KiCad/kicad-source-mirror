@@ -24,6 +24,8 @@
 #include <iostream>
 #include "3d_cache/sg/sg_coords.h"
 #include "3d_cache/sg/sg_helpers.h"
+#include "3d_cache/sg/sg_normals.h"
+#include "3d_cache/sg/sg_faceset.h"
 
 
 SGCOORDS::SGCOORDS( SGNODE* aParent ) : SGNODE( aParent )
@@ -311,4 +313,38 @@ bool SGCOORDS::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     }
 
     return true;
+}
+
+
+bool SGCOORDS::CalcNormals( void )
+{
+    if( NULL == m_Parent )
+        return false;
+
+    // the parent and all references must have indices; collect all
+    // indices into one std::vector<>
+    std::vector< int > ilist;
+    ((SGFACESET*)m_Parent)->GatherCoordIndices( ilist );
+
+    std::list< SGNODE* >::iterator sB = m_BackPointers.begin();
+    std::list< SGNODE* >::iterator eB = m_BackPointers.end();
+
+    while( sB != eB )
+    {
+        SGFACESET* fp = (SGFACESET*)(*sB);
+        fp->GatherCoordIndices( ilist );
+        ++sB;
+    }
+
+    SGNORMALS* np = ((SGFACESET*)m_Parent)->m_Normals;
+
+    if( !np )
+        np = new SGNORMALS( m_Parent );
+
+    if( S3D::CalcTriangleNormals( coords, ilist, np->norms )  )
+        return true;
+
+    delete np;
+
+    return false;
 }
