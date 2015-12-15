@@ -52,13 +52,13 @@
 
 /** @brief Kicad can use case sensitive or case insensitive comparisons for labels
  * Currently, it uses case insensitive.
- * Can be changed by defining LABEL_KEEPCASE (uncomment next line).
+ * Can be changed by defining LABEL_CASE_SENSITIVE (uncomment next line).
  */
-//#define LABEL_KEEPCASE
+//#define LABEL_CASE_SENSITIVE
 /// Compiler controlled string compare function, either case independent or not:
 inline int CmpLabel_KEEPCASE( const wxString& aString1, const wxString& aString2 )
 {
-#ifdef LABEL_KEEPCASE
+#ifdef LABEL_CASE_SENSITIVE
     // case specificity, the normal behavior:
     return aString1.Cmp( aString2 );
 #else

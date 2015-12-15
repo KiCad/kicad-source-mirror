@@ -154,7 +154,7 @@ public:
         }
 
         // Move the fields
-        for( int field_idx = 0; field_idx < m_fields.size(); ++field_idx )
+        for( unsigned field_idx = 0; field_idx < m_fields.size(); ++field_idx )
         {
             SCH_FIELD* field = m_fields[field_idx];
 

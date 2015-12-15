@@ -413,9 +413,9 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     // Merge polygons to build the polygon which contains the initial
     // polygon and its thick outline
 
-    bufferPolybase.BooleanAdd( bufferOutline ); // create the outline which contains thick outline
-    bufferPolybase.Fracture();
-
+    // create the outline which contains thick outline:
+    bufferPolybase.BooleanAdd( bufferOutline, SHAPE_POLY_SET::PM_FAST );
+    bufferPolybase.Fracture( SHAPE_POLY_SET::PM_FAST );
 
     if( bufferPolybase.OutlineCount() < 1 )      // should not happen
         return;
