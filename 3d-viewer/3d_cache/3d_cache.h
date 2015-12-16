@@ -183,14 +183,14 @@ public:
     void ClosePlugins( void );
 
 /**
- * Function Prepare
+ * Function GetModel
  * attempts to load the scene data for a model and to translate it
  * into an S3D_MODEL structure for display by a renderer
  *
  * @param aModelFileName is the full path to the model to be loaded
  * @return is a pointer to the render data or NULL if not available
  */
-    S3DMODEL* Prepare( const wxString& aModelFileName );
+    S3DMODEL* GetModel( const wxString& aModelFileName );
 };
 
 #endif  // CACHE_3D_H

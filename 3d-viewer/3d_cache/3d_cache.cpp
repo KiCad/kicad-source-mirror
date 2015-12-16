@@ -626,7 +626,7 @@ void S3D_CACHE::ClosePlugins( void )
 }
 
 
-S3DMODEL* S3D_CACHE::Prepare( const wxString& aModelFileName )
+S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
 {
     S3D_CACHE_ENTRY* cp = NULL;
     SCENEGRAPH* sp = load( aModelFileName, &cp );
@@ -644,7 +644,7 @@ S3DMODEL* S3D_CACHE::Prepare( const wxString& aModelFileName )
     if( cp->renderData )
         return cp->renderData;
 
-    S3DMODEL* mp = S3D::Prepare( sp );
+    S3DMODEL* mp = S3D::GetModel( sp );
     cp->renderData = mp;
 
     return mp;

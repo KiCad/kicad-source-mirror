@@ -304,7 +304,7 @@ SGNODE* S3D::ReadCache( const wxString& aFileName )
 }
 
 
-S3DMODEL* S3D::Prepare( SCENEGRAPH* aNode )
+S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
 {
     if( NULL == aNode )
         return NULL;

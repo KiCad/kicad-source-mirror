@@ -581,7 +581,7 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
             return;
     }
 
-    model = m_ModelManager->Prepare( modelInfo.filename );
+    model = m_ModelManager->GetModel( modelInfo.filename );
 
     if( NULL == model )
     {
@@ -679,7 +679,7 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 
     canvas->Clear3DModel();
 
-    model = m_ModelManager->Prepare( modelInfo.filename );
+    model = m_ModelManager->GetModel( modelInfo.filename );
 
     if( model )
     {

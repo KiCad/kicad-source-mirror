@@ -130,13 +130,13 @@ namespace S3D
     // of data structures for rendering
 
     /**
-     * Function Prepare
+     * Function GetModel
      * creates an S3DMODEL representation of aNode (raw data, no transforms)
      *
      * @param aNode is the node to be transcribed into an S3DMODEL representation
      * @return an S3DMODEL representation of aNode on success, otherwise NULL
      */
-    SGLIB_API S3DMODEL* Prepare( SCENEGRAPH* aNode );
+    SGLIB_API S3DMODEL* GetModel( SCENEGRAPH* aNode );
 
     /**
      * Function Destroy3DModel
