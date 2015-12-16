@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-15 07:12+0100\n"
-"PO-Revision-Date: 2015-12-15 07:12+0100\n"
+"POT-Creation-Date: 2015-12-16 11:13+0100\n"
+"PO-Revision-Date: 2015-12-16 15:10+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -1262,7 +1262,7 @@ msgstr "Listar todos"
 
 #: common/dialogs/dialog_get_component_base.cpp:58
 msgid "Select by Browser"
-msgstr "Seleccionar por explorador"
+msgstr "Explorar"
 
 #: common/dialogs/dialog_hotkeys_editor.cpp:45
 msgid "Command"
@@ -2353,7 +2353,7 @@ msgstr "Mostrar contornos en modo línea"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:220
 msgid "Display options"
-msgstr "Mostrar opciones"
+msgstr "Opciones de visualización"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:225
 msgid "Zoom in (F1)"
@@ -2373,7 +2373,7 @@ msgstr "Zoom automático (Home)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:238
 msgid "3D Display (Alt+3)"
-msgstr "Representación 3D (Alt+3)"
+msgstr "Visualización 3D (Alt+3)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:250
 msgid "Show texts in filled mode"
@@ -2882,7 +2882,7 @@ msgstr "Eliminar todas las vinculaciones"
 
 #: cvpcb/tool_cvpcb.cpp:85
 msgid "Display footprint documentation"
-msgstr "Mostrar documentación"
+msgstr "Mostrar documentación de huellas"
 
 #: cvpcb/tool_cvpcb.cpp:92
 msgid "Filter footprint list by keywords"
@@ -4544,15 +4544,16 @@ msgstr "Mos&trar límites de página"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:217
 msgid "Automatically place component fields"
-msgstr ""
+msgstr "Posicionamiento automático de los campos del componente"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:220
 msgid "Allow field autoplace to change justification"
-msgstr ""
+msgstr "Permitir cambiar la justificación en posicionamiento automático"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:223
 msgid "Always align autoplaced fields to the 50 mil grid"
 msgstr ""
+"Alinear los campos posicionados automáticamente en una cuadrícula de 50 mils"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:236
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:95
@@ -7069,7 +7070,7 @@ msgstr "Genera el archivo con la lista de redes"
 
 #: eeschema/menubar.cpp:460
 msgid "Generate Bill of &Materials"
-msgstr "Generar BO&M"
+msgstr "Generar Lista de &materiales"
 
 #: eeschema/menubar.cpp:469
 msgid "A&ssign Component Footprint"
@@ -8361,11 +8362,11 @@ msgstr "Seleccionar componente a examinar"
 
 #: eeschema/tool_viewlib.cpp:68
 msgid "Display previous component"
-msgstr "Muestra el componente anterior"
+msgstr "Mostrar el componente anterior"
 
 #: eeschema/tool_viewlib.cpp:72
 msgid "Display next component"
-msgstr "Muestra el siguiente componente"
+msgstr "Mostrar el siguiente componente"
 
 #: eeschema/tool_viewlib.cpp:116
 msgid "View component documents"
@@ -18593,120 +18594,126 @@ msgstr "el usuario no tiene permiso para eliminar la carpeta '%s'"
 #: pcbnew/gpcb_plugin.cpp:1061 pcbnew/kicad_plugin.cpp:1940
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
-msgstr ""
+msgstr "la carpeta de librerías '%s' tiene subcarpetas no esperadas"
 
 #: pcbnew/gpcb_plugin.cpp:1080 pcbnew/kicad_plugin.cpp:1959
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr ""
+"se ha encontrado el archivo inesperado '%s' en la ruta de librerías '%s'"
 
 #: pcbnew/gpcb_plugin.cpp:1098 pcbnew/kicad_plugin.cpp:1977
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
-msgstr ""
+msgstr "no puede eliminarse la librería de huellas '%s'"
 
 #: pcbnew/highlight.cpp:53
 msgid "Filter Net Names"
-msgstr ""
+msgstr "Filtrar nombre de redes"
 
 #: pcbnew/highlight.cpp:53
 msgid "Net Filter"
-msgstr ""
+msgstr "FIltro de redes"
 
 #: pcbnew/highlight.cpp:76
 msgid "Select Net"
-msgstr ""
+msgstr "Seleccionar red"
 
 #: pcbnew/hotkeys_board_editor.cpp:63
 #, c-format
 msgid "Recording macro %d"
-msgstr ""
+msgstr "Grabando macro %d"
 
 #: pcbnew/hotkeys_board_editor.cpp:70
 #, c-format
 msgid "Macro %d recorded"
-msgstr ""
+msgstr "Se ha grabado la macro %d"
 
+# Pendiente de contexto
 #: pcbnew/hotkeys_board_editor.cpp:82
 #, c-format
 msgid "Call macro %d"
-msgstr ""
+msgstr "Cargar macro %d"
 
 #: pcbnew/hotkeys_board_editor.cpp:160
 #, c-format
 msgid "Add key [%c] in macro %d"
-msgstr ""
+msgstr "Añadir tecla [%c] a la macro %d"
 
 #: pcbnew/import_dxf/dialog_dxf_import.cpp:137
 msgid "Open File"
-msgstr ""
+msgstr "Abrir archivo"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "Center of page"
-msgstr ""
+msgstr "Centro de la página"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "Upper left corner of page"
-msgstr ""
+msgstr "Esquina superior izquierda de la página"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "Center left side of page"
-msgstr ""
+msgstr "Lado central izquierdo de la página"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "Lower left corner of page"
-msgstr ""
+msgstr "Esquina inferior izquierda de la página"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "User defined position"
-msgstr ""
+msgstr "Posición definida por el usuario"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
 msgid "Place DXF origin (0,0) point:"
-msgstr ""
+msgstr "Situar origen (0,0) DXF:"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:60
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr ""
+msgstr "Origen DXF en la cuadrícula, Coordenada X"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:76
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr ""
+msgstr "Origen DXF en la cuadrícula, Coordenada Y"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:94
 msgid "Select PCB grid units"
-msgstr ""
+msgstr "Seleccionar unidades de la cuadrícula"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue ?"
 msgstr ""
+"Se perderá la placa activa y esta operación no puede deshacerse. ¿Continuar?"
 
 #: pcbnew/initpcb.cpp:102 pcbnew/modedit.cpp:340
 msgid ""
 "Current Footprint will be lost and this operation cannot be undone. "
 "Continue ?"
 msgstr ""
+"Se perderá la huella activa y esta operación no puede deshacerse. ¿Continuar?"
 
 #: pcbnew/io_mgr.cpp:42 pcbnew/plugin.cpp:27
 #, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
-msgstr ""
+msgstr "El plugin '%s' no implementa la función '%s'."
 
 #: pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type '%s' is not found."
-msgstr ""
+msgstr "No se ha encontrado el tipo de plugin '%s'."
 
 #: pcbnew/io_mgr.cpp:126
 #, c-format
 msgid "Unknown PCB_FILE_T value: %d"
-msgstr ""
+msgstr "Valor PCB_FILE_T desconocido: %d"
 
 #: pcbnew/kicad_netlist_reader.cpp:253
 #, c-format
 msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr ""
+"No puede encontrarse un componente con referencia \"%s\" en la lista de "
+"redes."
 
 #: pcbnew/kicad_netlist_reader.cpp:369 pcbnew/pcb_parser.cpp:1674
 #, c-format
@@ -18716,108 +18723,130 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"ID de huella no válido en el\n"
+"archivo: <%s>\n"
+"línea: %d\n"
+"posición: %d"
 
 #: pcbnew/kicad_plugin.cpp:215
 #, c-format
 msgid "Cannot create footprint library path '%s'"
-msgstr ""
+msgstr "No puede crearse la ruta de librería de huellas '%s'"
 
 #: pcbnew/kicad_plugin.cpp:221
 #, c-format
 msgid "Footprint library path '%s' is read only"
-msgstr ""
+msgstr "La ruta de librería de huellas '%s' es de solo lectura"
 
 #: pcbnew/kicad_plugin.cpp:260
 #, c-format
 msgid "Cannot rename temporary file '%s' to footprint library file '%s'"
 msgstr ""
+"No puede renombrase el archivo temporal '%s' a la librería de huellas '%s'"
 
 #: pcbnew/kicad_plugin.cpp:280
 #, c-format
 msgid "Footprint library path '%s' does not exist"
-msgstr ""
+msgstr "No ecxiste la ruta de librería de huellas '%s'"
 
 #: pcbnew/kicad_plugin.cpp:327 pcbnew/legacy_plugin.cpp:4703
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
-msgstr ""
+msgstr "la librería '%s' no contiene la huella a borrar '%s'"
 
 #: pcbnew/kicad_plugin.cpp:1234 pcbnew/legacy_plugin.cpp:98
 #, c-format
 msgid "unknown pad type: %d"
-msgstr ""
+msgstr "tipo de pad desconocido: %d"
 
 #: pcbnew/kicad_plugin.cpp:1247 pcbnew/legacy_plugin.cpp:99
 #, c-format
 msgid "unknown pad attribute: %d"
-msgstr ""
+msgstr "atributo de pad desconocido: %d"
 
 #: pcbnew/kicad_plugin.cpp:1429
 #, c-format
 msgid "unknown via type %d"
-msgstr ""
+msgstr "tipo de vía desconocido %d"
 
 #: pcbnew/kicad_plugin.cpp:1560
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr ""
+msgstr "tipo de suavizado de esquinas de zona desconocido %d"
 
 #: pcbnew/kicad_plugin.cpp:1846
 #, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr ""
+msgstr "El nombre del archivo de huellas '%s' no es válido."
 
 #: pcbnew/kicad_plugin.cpp:1852
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
-msgstr ""
+msgstr "el usuario no tiene permiso de escritura para borrar el archivo '%s'"
 
 #: pcbnew/kicad_plugin.cpp:1907
 #, c-format
 msgid "cannot overwrite library path '%s'"
-msgstr ""
+msgstr "no puede sobreescribirse la ruta de librería '%s'"
 
 #: pcbnew/layer_widget.cpp:427
 msgid ""
 "Left click to select, middle click for color change, right click for menu"
 msgstr ""
+"Botón izquierdo para seleccionar, botón central para cambiar el color, botón "
+"derecho para menú"
 
+# Pendiente de contexto
 #: pcbnew/layer_widget.cpp:435
 msgid "Enable this for visibility"
-msgstr ""
+msgstr "Active esto para visibilidad"
 
 #: pcbnew/layer_widget.cpp:462
 msgid "Middle click for color change"
-msgstr ""
+msgstr "Botón central para cambio de color"
 
 #: pcbnew/legacy_netlist_reader.cpp:121
 msgid "Cannot parse time stamp in component section of netlist."
 msgstr ""
+"No puede interpretarse la marca de tiempo en la sección de componentes de la "
+"lista de redes."
 
 #: pcbnew/legacy_netlist_reader.cpp:131
 msgid "Cannot parse footprint name in component section of netlist."
 msgstr ""
+"No puede interpretarse el nombre de huella en la sección de componentes de "
+"la lista de redes."
 
 #: pcbnew/legacy_netlist_reader.cpp:145
 msgid "Cannot parse reference designator in component section of netlist."
 msgstr ""
+"No puede interpretarse la referencia en la sección de componentes de la "
+"lista de redes."
 
 #: pcbnew/legacy_netlist_reader.cpp:155
 msgid "Cannot parse value in component section of netlist."
 msgstr ""
+"No puede interpretarse el valor en la sección de componentes de la lista de "
+"redes."
 
 #: pcbnew/legacy_netlist_reader.cpp:192
 msgid "Cannot parse pin name in component net section of netlist."
 msgstr ""
+"No puede interpretarse el nombre de pin en la sección de componentes de la "
+"lista de redes."
 
 #: pcbnew/legacy_netlist_reader.cpp:201
 msgid "Cannot parse net name in component net section of netlist."
 msgstr ""
+"No puede interpretarseel nombre de red en la sección de componentes de la "
+"lista de redes."
 
 #: pcbnew/legacy_netlist_reader.cpp:249
 #, c-format
 msgid "Cannot find component '%s' in footprint filter section of netlist."
 msgstr ""
+"No puede encontrarse el componente '%s' en la sección de filtro de "
+"componentes de la lista de reds."
 
 #: pcbnew/legacy_plugin.cpp:96
 #, c-format
@@ -18826,26 +18855,29 @@ msgid ""
 "I only support format version <= %d.\n"
 "Please upgrade Pcbnew to load this file."
 msgstr ""
+"El archivo '%s' tiene una versión de formato: %d.\n"
+"Solo admito versiones de formato <= %d.\n"
+"Por favor actualice Pcbnew para cargar este archivo."
 
 #: pcbnew/legacy_plugin.cpp:97
 #, c-format
 msgid "unknown graphic type: %d"
-msgstr ""
+msgstr "tipo gráfico desconocido: %d"
 
 #: pcbnew/legacy_plugin.cpp:761
 #, c-format
 msgid "Unknown sheet type '%s' on line:%d"
-msgstr ""
+msgstr "Tipo de hoja '%s' desconocido en la línea: %d"
 
 #: pcbnew/legacy_plugin.cpp:1457
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'"
-msgstr ""
+msgstr "Forma de pad '%c=0x%02x' desconocida en la línea: %d de la huella: %s'"
 
 #: pcbnew/legacy_plugin.cpp:2506
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
-msgstr ""
+msgstr "nombre de clase '%s' duplicado"
 
 #: pcbnew/legacy_plugin.cpp:3033 pcbnew/legacy_plugin.cpp:3070
 #, c-format
@@ -18853,6 +18885,8 @@ msgid ""
 "invalid float number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
+"número decimal no válido en el archivo: '%s'\n"
+"línea: %d, posición: %d"
 
 #: pcbnew/legacy_plugin.cpp:3042 pcbnew/legacy_plugin.cpp:3078
 #, c-format
@@ -18860,124 +18894,128 @@ msgid ""
 "missing float number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
+"falta número decimal en el archivo: '%s'\n"
+"línea: %d, posición: %d"
 
 #: pcbnew/legacy_plugin.cpp:3243
 #, c-format
 msgid "Unable to open file '%s'"
-msgstr ""
+msgstr "No puede abrirse el archivo '%s'"
 
 #: pcbnew/legacy_plugin.cpp:4350
 #, c-format
 msgid "File '%s' is empty or is not a legacy library"
-msgstr ""
+msgstr "El archivo '%s' está vacío o no es una librería antigua"
 
 #: pcbnew/legacy_plugin.cpp:4488
 #, c-format
 msgid "Legacy library file '%s' is read only"
-msgstr ""
+msgstr "El archivo de librería antigua '%s' es de solo lectura"
 
 #: pcbnew/legacy_plugin.cpp:4507
 #, c-format
 msgid "Unable to open or create legacy library file '%s'"
-msgstr ""
+msgstr "No puede abrirse o crearse el archivo de librería antigua '%s'"
 
 #: pcbnew/legacy_plugin.cpp:4533
 #, c-format
 msgid "Unable to rename tempfile '%s' to library file '%s'"
-msgstr ""
+msgstr "No puede renombrarse el archivo temporal '%s' a la librería '%s'"
 
 #: pcbnew/legacy_plugin.cpp:4716
 #, c-format
 msgid "library '%s' already exists, will not create a new"
-msgstr ""
+msgstr "ya existe la librería '%s', no se creará una nueva"
 
 #: pcbnew/legacy_plugin.cpp:4745
 #, c-format
 msgid "library '%s' cannot be deleted"
-msgstr ""
+msgstr "no puede eliminarse la librería '%s'"
 
 #: pcbnew/librairi.cpp:61
 #, c-format
 msgid "Library '%s' exists, OK to replace ?"
-msgstr ""
+msgstr "Ya existe la librería '%s'. ¿Reemplazar?"
 
 #: pcbnew/librairi.cpp:62
 msgid "Create New Library Folder (the .pretty folder is the library)"
-msgstr ""
+msgstr "Crear nueva carpeta de librerías (la carpeta .pretty es la librería)"
 
 #: pcbnew/librairi.cpp:63
 #, c-format
 msgid "OK to delete footprint %s in library '%s'"
-msgstr ""
+msgstr "De acuerdo con eliminar la huella %s de la librería '%s'"
 
 #: pcbnew/librairi.cpp:64
 msgid "Import Footprint"
-msgstr ""
+msgstr "Importar huella"
 
 #: pcbnew/librairi.cpp:65
 #, c-format
 msgid "File '%s' not found"
-msgstr ""
+msgstr "No se ha encontrado el archivo '%s'"
 
 #: pcbnew/librairi.cpp:66
 msgid "Not a footprint file"
-msgstr ""
+msgstr "No es un archivo de huellas"
 
 #: pcbnew/librairi.cpp:67
 #, c-format
 msgid "Unable to find or load footprint %s from lib path '%s'"
-msgstr ""
+msgstr "No puede encontrarse o cargar la huella %s de la ruta de librería '%s'"
 
 #: pcbnew/librairi.cpp:68
 #, c-format
 msgid "Unable to find or load footprint from path '%s'"
-msgstr ""
+msgstr "No se puede encontrar o cargar la huella de la ruta '%s'"
 
 #: pcbnew/librairi.cpp:69
 #, c-format
 msgid ""
 "The footprint library '%s' could not be found in any of the search paths."
 msgstr ""
+"No se puede encontrar la librería de huellas '%s' en ninguna de las rutas de "
+"búsqueda."
 
 #: pcbnew/librairi.cpp:70
 #, c-format
 msgid "Library '%s' is read only, not writable"
-msgstr ""
+msgstr "La librería '%s' es de solo lectura, no puede escribirse"
 
 #: pcbnew/librairi.cpp:72
 msgid "Export Footprint"
-msgstr ""
+msgstr "Exportar huella"
 
 #: pcbnew/librairi.cpp:73
 msgid "Save Footprint"
-msgstr ""
+msgstr "Guardar huella"
 
 #: pcbnew/librairi.cpp:74
 msgid "Enter footprint name:"
-msgstr ""
+msgstr "Introduzca el nombre de huella:"
 
 #: pcbnew/librairi.cpp:75
 #, c-format
 msgid "Footprint exported to file '%s'"
-msgstr ""
+msgstr "Huella exportada al archivo '%s'"
 
 #: pcbnew/librairi.cpp:76
 #, c-format
 msgid "Footprint %s deleted from library '%s'"
-msgstr ""
+msgstr "Huella %s eliminada de la librería '%s'"
 
 #: pcbnew/librairi.cpp:77
 msgid "New Footprint"
-msgstr ""
+msgstr "Nueva huella"
 
 #: pcbnew/librairi.cpp:79
 #, c-format
 msgid "Footprint %s already exists in library '%s'"
-msgstr ""
+msgstr "La huella %s ya existe en la librería '%s'"
 
 #: pcbnew/librairi.cpp:80
 msgid "No footprint name defined."
-msgstr ""
+msgstr "No se ha definido un nombre de huella."
 
 #: pcbnew/librairi.cpp:84
 msgid ""
@@ -18986,6 +19024,11 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
+"No se permite escribir/modificar librerías antiguas\n"
+"Por favor, guarde la librería activa en el nuevo formato .pretty\n"
+"y actualice su tabla de librerías de huellas\n"
+"para guardar la huella (un archivo .kicad_mod) en la carpeta de librería ."
+"pretty"
 
 #: pcbnew/librairi.cpp:90
 msgid ""
@@ -18994,18 +19037,22 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
+"No se permite modificar librerías antiguas\n"
+"Por favor, guarde la librería activa en el nuevo formato .pretty\n"
+"y actualice su tabla de librerías de huellas\n"
+"antes de eliminar la huella"
 
 #: pcbnew/librairi.cpp:95
 msgid "Legacy foot print export files (*.emp)|*.emp"
-msgstr ""
+msgstr "Archivos de exportación de huellas antiguas (*.emp)|*.emp"
 
 #: pcbnew/librairi.cpp:96
 msgid "GPcb foot print files (*)|*"
-msgstr ""
+msgstr "Archivos de huellas GPcb (*)|*"
 
 #: pcbnew/librairi.cpp:520
 msgid "No footprints to archive!"
-msgstr ""
+msgstr "¡No hay huellas para archivar!"
 
 #: pcbnew/librairi.cpp:623
 #, c-format
@@ -19014,20 +19061,23 @@ msgid ""
 "one of invalid chars '%s' found\n"
 "in '%s'"
 msgstr ""
+"Error:\n"
+"se ha encontrado uno de los caracteres no válidos: '%s'\n"
+"en '%s'"
 
 #: pcbnew/librairi.cpp:684
 #, c-format
 msgid "Component [%s] replaced in '%s'"
-msgstr ""
+msgstr "Se ha reemplazado el componente [%s] en '%s'"
 
 #: pcbnew/librairi.cpp:685
 #, c-format
 msgid "Component [%s] added in  '%s'"
-msgstr ""
+msgstr "Se ha añadido el componente [%s] en '%s'"
 
 #: pcbnew/loadcmp.cpp:175
 msgid "Load Footprint"
-msgstr ""
+msgstr "Cargar huella"
 
 #: pcbnew/loadcmp.cpp:386
 #, c-format
@@ -19038,212 +19088,220 @@ msgid ""
 "in any of the library search paths.  Verify your system is configured "
 "properly so the footprint libraries can be found."
 msgstr ""
+"No se ha podido leer ninguna huella del/los archivo/s:\n"
+"\n"
+"%s\n"
+"en ninguna de las rutas de búsqueda. Verifique que su sistema esté\n"
+"correctamente configurado para que puedan encontrarse las librerías de "
+"huellas."
 
 #: pcbnew/loadcmp.cpp:439
 #, c-format
 msgid "Footprints [%d items]"
-msgstr ""
+msgstr "Huellas [%d elementos]"
 
 #: pcbnew/loadcmp.cpp:456
 msgid "No footprint found."
-msgstr ""
+msgstr "No se han encontrado huellas."
 
 #: pcbnew/loadcmp.cpp:480
 msgid ""
 "\n"
 "Key words: "
 msgstr ""
+"\n"
+"Palabras clave: "
 
 #: pcbnew/loadcmp.cpp:496
 #, c-format
 msgid "Footprints [%u items]"
-msgstr ""
+msgstr "Huellas [%u elementos]"
 
 #: pcbnew/loadcmp.cpp:560
 #, c-format
 msgid "Footprint '%s' saved"
-msgstr ""
+msgstr "Se ha guardado la huella '%s'"
 
 #: pcbnew/loadcmp.cpp:574
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr ""
+msgstr "Se ha guardado la librería de huellas '%s' como '%s'."
 
 #: pcbnew/menubar_modedit.cpp:67
 msgid "Set Acti&ve Library"
-msgstr ""
+msgstr "Seleccionar librería a&ctiva"
 
 #: pcbnew/menubar_modedit.cpp:68 pcbnew/tool_modedit.cpp:55
 msgid "Select active library"
-msgstr ""
+msgstr "Seleccionar la librería activa"
 
 #: pcbnew/menubar_modedit.cpp:74
 msgid "&New Footprint"
-msgstr ""
+msgstr "&Nueva huella"
 
 #: pcbnew/menubar_modedit.cpp:74
 msgid "Create new footprint"
-msgstr ""
+msgstr "Crear una huella nueva"
 
 #: pcbnew/menubar_modedit.cpp:82
 msgid "&Import Footprint From File"
-msgstr ""
+msgstr "&Importar huella desde archivo"
 
 #: pcbnew/menubar_modedit.cpp:83
 msgid "Import footprint from an existing file"
-msgstr ""
+msgstr "Importar huella desde un archivo existente"
 
 #: pcbnew/menubar_modedit.cpp:88
 msgid "Load Footprint From Current Li&brary"
-msgstr ""
+msgstr "Cargar huella desde la li&brería activa"
 
 #: pcbnew/menubar_modedit.cpp:89
 msgid "Open a footprint from library"
-msgstr ""
+msgstr "Abrir una huella de la librería"
 
 #: pcbnew/menubar_modedit.cpp:94
 msgid "Load Footprint From &Current Board"
-msgstr ""
+msgstr "Cargar una huella desde la pla&ca activa"
 
 #: pcbnew/menubar_modedit.cpp:95
 msgid "Load a footprint from the current board"
-msgstr ""
+msgstr "Cargar una huella desde la placa activa"
 
 #: pcbnew/menubar_modedit.cpp:100
 msgid "&Load Footprint"
-msgstr ""
+msgstr "Cargar hue&lla"
 
 #: pcbnew/menubar_modedit.cpp:101
 msgid "Load footprint"
-msgstr ""
+msgstr "Cargar huella"
 
 #: pcbnew/menubar_modedit.cpp:107
 msgid "Save &Current Library As..."
-msgstr ""
+msgstr "Guardar librería a&ctiva como..."
 
 #: pcbnew/menubar_modedit.cpp:108
 msgid "Save entire current library under a new name."
-msgstr ""
+msgstr "Guardar toda la librería actual bajo un nuevo nombre"
 
 #: pcbnew/menubar_modedit.cpp:112
 msgid "&Save Footprint in Active Library"
-msgstr ""
+msgstr "&Guardar huella en la librería activa"
 
 #: pcbnew/menubar_modedit.cpp:116 pcbnew/tool_modedit.cpp:58
 msgid "Save footprint in active library"
-msgstr ""
+msgstr "Guardar huella en la librería activa"
 
 #: pcbnew/menubar_modedit.cpp:121
 msgid "S&ave Footprint in New Library"
-msgstr ""
+msgstr "Gu&ardar huella en una nueva librería"
 
 #: pcbnew/menubar_modedit.cpp:122
 msgid "Create a new library and save current footprint into it"
-msgstr ""
+msgstr "Crear una librería nueva y guardar la huella activa en ella"
 
 #: pcbnew/menubar_modedit.cpp:127
 msgid "&Export Footprint"
-msgstr ""
+msgstr "&Exportar huella"
 
 #: pcbnew/menubar_modedit.cpp:128
 msgid "Save currently loaded footprint into file"
-msgstr ""
+msgstr "Guardar la huella activa en un archivo"
 
 #: pcbnew/menubar_modedit.cpp:133
 msgid "&Import DXF File"
-msgstr ""
+msgstr "&Importar archivo DXF"
 
 #: pcbnew/menubar_modedit.cpp:134 pcbnew/menubar_pcbframe.cpp:191
 msgid "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer"
-msgstr ""
+msgstr "Importar un dibujo 2D en formato DXF en Pcbnew en la capa de dibujo"
 
 #: pcbnew/menubar_modedit.cpp:142
 msgid "Print current footprint"
-msgstr ""
+msgstr "Imprimir huella activa"
 
 #: pcbnew/menubar_modedit.cpp:151
 msgid "Close footprint editor"
-msgstr ""
+msgstr "Cerrar Editor de huellas"
 
 #: pcbnew/menubar_modedit.cpp:160
 msgid "Undo last action"
-msgstr ""
+msgstr "Deshacer última acción"
 
 #: pcbnew/menubar_modedit.cpp:166
 msgid "Redo last action"
-msgstr ""
+msgstr "Rehacer última acción"
 
 #: pcbnew/menubar_modedit.cpp:171
 msgid "Delete objects with eraser"
-msgstr ""
+msgstr "Eliminar objetos con el borrador"
 
 #: pcbnew/menubar_modedit.cpp:179
 msgid "Edit &Properties"
-msgstr ""
+msgstr "Editar %propiedades"
 
 #: pcbnew/menubar_modedit.cpp:180
 msgid "Edit footprint properties"
-msgstr ""
+msgstr "Editar las propiedades de la huella"
 
 #: pcbnew/menubar_modedit.cpp:188
 msgid "&User Grid Size"
-msgstr ""
+msgstr "Cuadrícula de &usuario"
 
 #: pcbnew/menubar_modedit.cpp:188
 msgid "Adjust user grid"
-msgstr ""
+msgstr "Ajustar el tamaño de la cuadrícula de usuario"
 
 #: pcbnew/menubar_modedit.cpp:193
 msgid "&Size and Width"
-msgstr ""
+msgstr "Tama&ño y ancho"
 
 #: pcbnew/menubar_modedit.cpp:194
 msgid "Adjust width for texts and drawings"
-msgstr "Ajusta las dimensiones de textos y gráficos"
+msgstr "Ajustar las dimensiones de textos y gráficos"
 
 #: pcbnew/menubar_modedit.cpp:199
 msgid "&Pad Setting"
-msgstr ""
+msgstr "Opciones de &pad"
 
 #: pcbnew/menubar_modedit.cpp:199
 msgid "Edit settings for new pads"
-msgstr ""
+msgstr "Editar las opciones para los nuevos pads"
 
 #: pcbnew/menubar_modedit.cpp:236 pcbnew/menubar_pcbframe.cpp:349
 msgid "&3D Viewer"
-msgstr ""
+msgstr "Visor &3D"
 
 #: pcbnew/menubar_modedit.cpp:243 pcbnew/menubar_pcbframe.cpp:360
 msgid "&Switch Canvas to Default"
-msgstr ""
+msgstr "Cambiar al lienzo por &defecto"
 
 #: pcbnew/menubar_modedit.cpp:247 pcbnew/menubar_pcbframe.cpp:364
 msgid "Switch the canvas implementation to default"
-msgstr ""
+msgstr "Cambiar el lienzo al implementado por defecto"
 
 #: pcbnew/menubar_modedit.cpp:250 pcbnew/menubar_pcbframe.cpp:367
 msgid "Switch Canvas to Open&GL"
-msgstr ""
+msgstr "Cambiar lienzo a Open&GL"
 
 #: pcbnew/menubar_modedit.cpp:254 pcbnew/menubar_pcbframe.cpp:371
 msgid "Switch the canvas implementation to OpenGL"
-msgstr ""
+msgstr "Cambiar el lienzo al implementado con OpenGL"
 
 #: pcbnew/menubar_modedit.cpp:257 pcbnew/menubar_pcbframe.cpp:374
 msgid "Switch Canvas to &Cairo"
-msgstr ""
+msgstr "Cambiar lienzo a &Cairo"
 
 #: pcbnew/menubar_modedit.cpp:261 pcbnew/menubar_pcbframe.cpp:378
 msgid "Switch the canvas implementation to Cairo"
-msgstr ""
+msgstr "Cambiar el lienzo al implementado con Cairo"
 
 #: pcbnew/menubar_modedit.cpp:269
 msgid "&Pad"
-msgstr ""
+msgstr "&Pad"
 
 #: pcbnew/menubar_modedit.cpp:269 pcbnew/modedit.cpp:965
 msgid "Add pad"
-msgstr ""
+msgstr "Añadir pad"
 
 #: pcbnew/menubar_modedit.cpp:282 pcbnew/menubar_pcbframe.cpp:413
 #: pcbnew/tool_modedit.cpp:170 pcbnew/tool_pcb.cpp:450
@@ -19252,52 +19310,52 @@ msgstr "Añadir línea o polígono gráfico"
 
 #: pcbnew/menubar_modedit.cpp:292
 msgid "&Text"
-msgstr ""
+msgstr "&Texto"
 
 #: pcbnew/menubar_modedit.cpp:292
 msgid "Add graphic text"
-msgstr "Añadir texto gráfico (comentario)"
+msgstr "Añadir texto gráfico"
 
 #: pcbnew/menubar_modedit.cpp:299
 msgid "A&nchor"
-msgstr ""
+msgstr "A&ncla"
 
 #: pcbnew/menubar_modedit.cpp:300
 msgid "Place footprint reference anchor"
-msgstr ""
+msgstr "Colocar ancla de referencia de la huella"
 
 #: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:485
 msgid "&Footprint Libraries Wizard"
-msgstr ""
+msgstr "Asistente de librerías de &huellas"
 
 #: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:485
 msgid "Add footprint libraries with wizard"
-msgstr ""
+msgstr "Añadir librerías de huellas con el asistente"
 
 #: pcbnew/menubar_modedit.cpp:312 pcbnew/menubar_pcbframe.cpp:489
 msgid "Footprint Li&braries Manager"
-msgstr ""
+msgstr "Administrador de li&brerías de huellas"
 
 #: pcbnew/menubar_modedit.cpp:324
 msgid "&Settings"
-msgstr ""
+msgstr "Opcione&s"
 
 #: pcbnew/menubar_modedit.cpp:324
 msgid "Change the footprint editor settings."
-msgstr ""
+msgstr "Cambiar las opciones del editor de huellas."
 
 #: pcbnew/menubar_modedit.cpp:341 pcbnew/menubar_pcbframe.cpp:648
 #: pcbnew/tool_modview.cpp:189
 msgid "Pcbnew &Manual"
-msgstr ""
+msgstr "&Manual de Pcbnew"
 
 #: pcbnew/menubar_modedit.cpp:342 pcbnew/menubar_pcbframe.cpp:649
 msgid "Open the Pcbnew Manual"
-msgstr ""
+msgstr "Abrir el manual de Pcbnew"
 
 #: pcbnew/menubar_modedit.cpp:363
 msgid "Di&mensions"
-msgstr ""
+msgstr "Di&mensiones"
 
 #: pcbnew/menubar_pcbframe.cpp:68
 msgid "&New"
@@ -19305,7 +19363,7 @@ msgstr "&Nuevo"
 
 #: pcbnew/menubar_pcbframe.cpp:69
 msgid "Clear current board and initialize a new one"
-msgstr ""
+msgstr "Eliminar la placa activa e inicializar una nueva"
 
 #: pcbnew/menubar_pcbframe.cpp:72
 msgid "&Open"
@@ -19313,11 +19371,11 @@ msgstr "&Abrir"
 
 #: pcbnew/menubar_pcbframe.cpp:74
 msgid "Delete current board and load new board"
-msgstr ""
+msgstr "Eliminar la placa activa y cargar una nueva"
 
 #: pcbnew/menubar_pcbframe.cpp:95
 msgid "Open a recent opened board"
-msgstr ""
+msgstr "Abrir una placa utilizada recientemente"
 
 #: pcbnew/menubar_pcbframe.cpp:100
 msgid "&Append Board"
@@ -19328,46 +19386,50 @@ msgid ""
 "Append another Pcbnew board to the current loaded board. Available only when "
 "Pcbnew runs in stand alone mode"
 msgstr ""
+"Añadir otra placa de Pcbnew a la placa activa. Solo disponible cuando Pcbnew "
+"se utiliza en modo independiente"
 
 #: pcbnew/menubar_pcbframe.cpp:111
 msgid "Save current board"
-msgstr "Guarda el circuito impreso actual"
+msgstr "Guarda la placa activa"
 
 #: pcbnew/menubar_pcbframe.cpp:121
 msgid "Sa&ve As..."
-msgstr ""
+msgstr "Guardar c&omo..."
 
 #: pcbnew/menubar_pcbframe.cpp:123
 msgid "Save the current board as..."
-msgstr ""
+msgstr "Guardar la placa activa como..."
 
 #: pcbnew/menubar_pcbframe.cpp:130
 msgid "Sa&ve Copy As..."
-msgstr ""
+msgstr "Guardar co&pia como..."
 
 #: pcbnew/menubar_pcbframe.cpp:132
 msgid "Save a copy of the current board as..."
-msgstr ""
+msgstr "Guardar una copia de la placa activa como..."
 
 #: pcbnew/menubar_pcbframe.cpp:139
 msgid "Revert to Las&t"
-msgstr ""
+msgstr "Volver a la an&terior"
 
 #: pcbnew/menubar_pcbframe.cpp:140
 msgid "Clear board and get previous backup version of board"
-msgstr ""
+msgstr "Eliminar la placa activa y volver a la copia de respaldo anterior"
 
 #: pcbnew/menubar_pcbframe.cpp:144
 msgid "Resc&ue"
-msgstr ""
+msgstr "Rec&uperar"
 
 #: pcbnew/menubar_pcbframe.cpp:145
 msgid "Clear board and get last rescue file automatically saved by Pcbnew"
 msgstr ""
+"Eliminar la placa activa y cargar en último archivo de recuperación guardado "
+"automáticamente por Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:152
 msgid "Footprint &Position (.pos) File"
-msgstr ""
+msgstr "Archivo de &posición de huellas (.pos)"
 
 #: pcbnew/menubar_pcbframe.cpp:153
 msgid "Generate footprint position file for pick and place"
@@ -19403,7 +19465,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:173
 msgid "Create a bill of materials from schematic"
-msgstr ""
+msgstr "Crear una lista de materiales a partir del esquema"
 
 #: pcbnew/menubar_pcbframe.cpp:177
 msgid "&Fabrication Outputs"
@@ -19734,15 +19796,15 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:529
 msgid "&Display"
-msgstr ""
+msgstr "&Mostrar"
 
 #: pcbnew/menubar_pcbframe.cpp:530
 msgid "Select how items (pads, tracks texts ... ) are displayed"
-msgstr ""
+msgstr "Seleccionar cómo se muestran los elementos (pads, pistas, texto,...)"
 
 #: pcbnew/menubar_pcbframe.cpp:534
 msgid "&Interactive Routing"
-msgstr ""
+msgstr "Enrutado &interactivo"
 
 #: pcbnew/menubar_pcbframe.cpp:535
 msgid "Configure the interactive router."
@@ -19874,7 +19936,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:660
 msgid "Display the KiCad About dialog"
-msgstr ""
+msgstr "Muestra el diálogo Acerca de KiCad"
 
 #: pcbnew/menubar_pcbframe.cpp:668
 msgid "Ro&ute"
@@ -19948,19 +20010,19 @@ msgstr "Borrar Bloque (shift+ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:264
 msgid "Move Block Exactly"
-msgstr ""
+msgstr "Mover bloque exactamente"
 
 #: pcbnew/modedit_onclick.cpp:294
 msgid "Move Exactly"
-msgstr ""
+msgstr "Mover exactamente"
 
 #: pcbnew/modedit_onclick.cpp:297
 msgid "Edit Footprint"
-msgstr ""
+msgstr "Editar huella"
 
 #: pcbnew/modedit_onclick.cpp:300
 msgid "Transform Footprint"
-msgstr ""
+msgstr "Transformar huella"
 
 #: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:943
 msgid "Move Pad"
@@ -19972,63 +20034,63 @@ msgstr "Editar pad"
 
 #: pcbnew/modedit_onclick.cpp:315
 msgid "New Pad Settings"
-msgstr "Nuevas caract. pads"
+msgstr "Opciones de nuevo pad"
 
 #: pcbnew/modedit_onclick.cpp:317
 msgid "Export Pad Settings"
-msgstr "Exportar caract. pads"
+msgstr "Exportar opciones de pad"
 
 #: pcbnew/modedit_onclick.cpp:318
 msgid "Delete Pad"
-msgstr ""
+msgstr "Eliminar pad"
 
 #: pcbnew/modedit_onclick.cpp:321
 msgid "Duplicate Pad"
-msgstr ""
+msgstr "Duplicar pad"
 
 #: pcbnew/modedit_onclick.cpp:324
 msgid "Move Pad Exactly"
-msgstr ""
+msgstr "Mover pad exactamente"
 
 #: pcbnew/modedit_onclick.cpp:327
 msgid "Create Pad Array"
-msgstr ""
+msgstr "Crear matriz de pads"
 
 #: pcbnew/modedit_onclick.cpp:335
 msgid "Global Pad Settings"
-msgstr "Edición global de los pads"
+msgstr "Opciones globales de pad"
 
 #: pcbnew/modedit_onclick.cpp:362
 msgid "Duplicate Text"
-msgstr ""
+msgstr "Duplicar texto"
 
 #: pcbnew/modedit_onclick.cpp:367
 msgid "Create Text Array"
-msgstr ""
+msgstr "Crear matriz de texto"
 
 #: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:886
 msgid "Move Text Exactly"
-msgstr ""
+msgstr "Mover texto exactamente"
 
 #: pcbnew/modedit_onclick.cpp:396
 msgid "End edge"
-msgstr "Fin contorno"
+msgstr "Finalizar contorno"
 
 #: pcbnew/modedit_onclick.cpp:401
 msgid "Move Edge"
-msgstr ""
+msgstr "Mover contorno"
 
 #: pcbnew/modedit_onclick.cpp:405
 msgid "Duplicate Edge"
-msgstr ""
+msgstr "Duplicar contorno"
 
 #: pcbnew/modedit_onclick.cpp:408
 msgid "Move Edge Exactly"
-msgstr ""
+msgstr "Mover contorno exactamente"
 
 #: pcbnew/modedit_onclick.cpp:411
 msgid "Create Edge Array"
-msgstr ""
+msgstr "Crear matriz de contornos"
 
 #: pcbnew/modedit_onclick.cpp:415
 msgid "Place edge"
@@ -20036,43 +20098,44 @@ msgstr "Colocar contorno"
 
 #: pcbnew/modedit_onclick.cpp:422
 msgid "Delete Edge"
-msgstr ""
+msgstr "Eliminar contorno"
 
 #: pcbnew/modedit_onclick.cpp:427
 msgid "Global Changes"
-msgstr ""
+msgstr "Cambios globales"
 
+# Pendiente de contexto
 #: pcbnew/modedit_onclick.cpp:429
 msgid "Change Body Items Width"
-msgstr ""
+msgstr "Cambiar ancho de elementos del cuerpo"
 
 #: pcbnew/modedit_onclick.cpp:431
 msgid "Change Body Items Layer"
-msgstr ""
+msgstr "Cambiar capa de elementos del cuerpo"
 
 #: pcbnew/modedit_onclick.cpp:469
 msgid "Set Line Width"
-msgstr ""
+msgstr "Ajustar ancho de línea"
 
 #: pcbnew/moduleframe.cpp:501
 msgid "Save the changes to the footprint before closing?"
-msgstr ""
+msgstr "¿Guardar los cambios de la huella antes de cerrar?"
 
 #: pcbnew/moduleframe.cpp:522
 msgid "Library is not set, the footprint could not be saved."
-msgstr ""
+msgstr "No se ha seleccionado librería, no puede guardarse la huella."
 
 #: pcbnew/moduleframe.cpp:745
 msgid "Footprint Editor "
-msgstr ""
+msgstr "Editor de huellas "
 
 #: pcbnew/moduleframe.cpp:752
 msgid "(no active library)"
-msgstr ""
+msgstr "(no hay librería activa)"
 
 #: pcbnew/moduleframe.cpp:761
 msgid "Footprint Editor (active library: "
-msgstr ""
+msgstr "Editor de huellas (librería activa): "
 
 #: pcbnew/moduleframe.cpp:860 pcbnew/pcbnew_config.cpp:138
 #, c-format
@@ -20081,6 +20144,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Ha ocurrido un error al guardar la tabla de librerías de huellas global:\n"
+"\n"
+"%s"
 
 #: pcbnew/moduleframe.cpp:880 pcbnew/pcbnew_config.cpp:160
 #, c-format
@@ -20089,14 +20155,18 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Ha ocurrido un error al guardar la tabla de librerías de huellas específicas "
+"del proyecto:\n"
+"\n"
+"%s"
 
 #: pcbnew/modules.cpp:66
 msgid "Search for footprint"
-msgstr ""
+msgstr "Buscar huella"
 
 #: pcbnew/modview_frame.cpp:120
 msgid "Footprint Library Browser"
-msgstr ""
+msgstr "Explorador de librerías de huellas"
 
 #: pcbnew/modview_frame.cpp:448
 #, c-format
@@ -20105,10 +20175,13 @@ msgid ""
 "\n"
 "Error %s."
 msgstr ""
+"No puede cargarse la huella \"%s\" desde la librería \"%s\".\n"
+"\n"
+"Error %s."
 
 #: pcbnew/move_or_drag_track.cpp:714
 msgid "Unable to drag this segment: too many segments connected"
-msgstr "Imposible arrastrar este segmento: varios segmentos conectados"
+msgstr "Imposible arrastrar este segmento: demasiados segmentos conectados"
 
 #: pcbnew/move_or_drag_track.cpp:785
 msgid "Unable to drag this segment: two collinear segments"
@@ -20198,45 +20271,48 @@ msgstr "Esta huella solo tienen un pad"
 msgid "Gap:"
 msgstr "Espacio:"
 
+# Mejorable
 #: pcbnew/muonde.cpp:1068
 msgid "Create Microwave Gap"
-msgstr ""
+msgstr "Crear espacio de microondas"
 
 #: pcbnew/muwave_command.cpp:64
 msgid "Add Gap"
-msgstr "Añadir Gap"
+msgstr "Añadir espacio"
 
 #: pcbnew/muwave_command.cpp:68
 msgid "Add Stub"
-msgstr "Añadir Terminación"
+msgstr "Añadir terminación"
 
 #: pcbnew/muwave_command.cpp:72
 msgid "Add Arc Stub"
-msgstr "Añadir Terminación (arco)"
+msgstr "Añadir terminación de arco"
 
 #: pcbnew/muwave_command.cpp:76
 msgid "Add Polynomial Shape"
-msgstr "Añadir Forma polinomial"
+msgstr "Añadir forma polinomial"
 
 #: pcbnew/netlist.cpp:176
 msgid "Components"
-msgstr "Comp."
+msgstr "Componentes"
 
 #: pcbnew/netlist.cpp:223
 #, c-format
 msgid "No footprint defined for component '%s'.\n"
-msgstr ""
+msgstr "No se ha definido huella para el componente '%s'.\n"
 
 #: pcbnew/netlist.cpp:245
 #, c-format
 msgid ""
 "* Warning: component '%s': board footprint '%s', netlist footprint '%s'\n"
 msgstr ""
+"* Atención: componente '%s': huella en placa '%s', huella en lista de redes "
+"'%s'\n"
 
 #: pcbnew/netlist.cpp:274
 #, c-format
 msgid "Component '%s' footprint ID '%s' is not valid.\n"
-msgstr ""
+msgstr "El componente '%s' tiene un ID de huella '%s' no válido.\n"
 
 #: pcbnew/netlist.cpp:296
 #, c-format
@@ -20244,6 +20320,8 @@ msgid ""
 "Component '%s' footprint '%s' was not found in any libraries in the "
 "footprint library table.\n"
 msgstr ""
+"No se ha encontrado para el componente '%s' la huella '%s' en ninguna "
+"librería de la tabla de librerías de huellas.\n"
 
 #: pcbnew/netlist_reader.cpp:182
 #, c-format
@@ -20252,15 +20330,18 @@ msgid ""
 "file: <%s>\n"
 "line: %d"
 msgstr ""
+"ID de huella no válido en\n"
+"archivo: <%s>\n"
+"línea: %d"
 
 #: pcbnew/onleftclick.cpp:252 pcbnew/tools/drawing_tool.cpp:727
 #: pcbnew/tools/drawing_tool.cpp:902
 msgid "Graphic not allowed on Copper layers"
-msgstr ""
+msgstr "Los gráficos no están permitidos en las capas de cobre"
 
 #: pcbnew/onleftclick.cpp:276
 msgid "Tracks on Copper layers only "
-msgstr "Pistas solo en capas de cobre"
+msgstr "Pistas solo en capas de cobre "
 
 #: pcbnew/onleftclick.cpp:335
 msgid "Texts not allowed on Edge Cut layer"
@@ -20344,11 +20425,11 @@ msgstr "Borrar Dimensión"
 
 #: pcbnew/onrightclick.cpp:296
 msgid "Move Target"
-msgstr "Mover Mira de centrado"
+msgstr "Mover mira de centrado"
 
 #: pcbnew/onrightclick.cpp:301
 msgid "Move Target Exactly"
-msgstr ""
+msgstr "Mover mira exactamente"
 
 #: pcbnew/onrightclick.cpp:306
 msgid "Duplicate Target"
@@ -20376,31 +20457,31 @@ msgstr "Llenar todas las  zonas"
 
 #: pcbnew/onrightclick.cpp:371
 msgid "Remove Filled Areas in All Zones"
-msgstr ""
+msgstr "Eliminar relleno de todas las zonas"
 
 #: pcbnew/onrightclick.cpp:379 pcbnew/onrightclick.cpp:385
 #: pcbnew/onrightclick.cpp:403 pcbnew/onrightclick.cpp:416
 #: pcbnew/onrightclick.cpp:481 pcbnew/onrightclick.cpp:574
 msgid "Select Working Layer"
-msgstr "Capa de Trabajo ..."
+msgstr "Seleccionar capa de trabajo"
 
 #: pcbnew/onrightclick.cpp:393 pcbnew/onrightclick.cpp:473
 #: pcbnew/onrightclick.cpp:521
 msgid "Begin Track"
-msgstr ""
+msgstr "Comenzar pista"
 
 #: pcbnew/onrightclick.cpp:399 pcbnew/onrightclick.cpp:477
 #: pcbnew/onrightclick.cpp:645
 msgid "Select Track Width"
-msgstr "Seleccionar Ancho de Pista"
+msgstr "Seleccionar ancho de pista"
 
 #: pcbnew/onrightclick.cpp:405
 msgid "Select Layer Pair for Vias"
-msgstr ""
+msgstr "Seleccionar par de capas para las vías"
 
 #: pcbnew/onrightclick.cpp:424
 msgid "Footprint Documentation"
-msgstr ""
+msgstr "Documentación de las huellas"
 
 #: pcbnew/onrightclick.cpp:434
 msgid "Global Spread and Place"
@@ -20408,7 +20489,7 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:436
 msgid "Unlock All Footprints"
-msgstr ""
+msgstr "Desbloquear todas las huellas"
 
 #: pcbnew/onrightclick.cpp:438
 msgid "Lock All Footprints"
@@ -20416,39 +20497,39 @@ msgstr "Bloquear todas la huellas"
 
 #: pcbnew/onrightclick.cpp:441
 msgid "Spread out All Footprints"
-msgstr ""
+msgstr "Esparcir todas las huellas"
 
 #: pcbnew/onrightclick.cpp:443
 msgid "Spread out Footprints not Already on Board"
-msgstr ""
+msgstr "Esparcir todas las huellas que no están ya en la placa"
 
 #: pcbnew/onrightclick.cpp:446
 msgid "Automatically Place All Footprints"
-msgstr ""
+msgstr "Colocar automáticamente todas las huellas"
 
 #: pcbnew/onrightclick.cpp:448
 msgid "Automatically Place New Footprints"
-msgstr ""
+msgstr "Colocar automáticamente las huellas nuevas"
 
 #: pcbnew/onrightclick.cpp:450
 msgid "Automatically Place Next Footprints"
-msgstr ""
+msgstr "Colocar automáticamente las huellas siguientes"
 
 #: pcbnew/onrightclick.cpp:453
 msgid "Orient All Footprints"
-msgstr ""
+msgstr "Orientar todas las huellas"
 
 #: pcbnew/onrightclick.cpp:460
 msgid "Autoroute"
-msgstr "Autorrutado"
+msgstr "Enrutado automático"
 
 #: pcbnew/onrightclick.cpp:462
 msgid "Select Layer Pair"
-msgstr ""
+msgstr "Seleccionar el par de capas"
 
 #: pcbnew/onrightclick.cpp:465
 msgid "Automatically Route All Footprints"
-msgstr ""
+msgstr "Enrutar automáticamente todas las huellas"
 
 #: pcbnew/onrightclick.cpp:467
 msgid "Reset Unrouted"
@@ -20456,39 +20537,39 @@ msgstr "Reiniciar no enrutadas"
 
 #: pcbnew/onrightclick.cpp:497
 msgid "Zoom Block"
-msgstr ""
+msgstr "Zoom bloque"
 
 #: pcbnew/onrightclick.cpp:501
 msgid "Flip Block"
-msgstr ""
+msgstr "Voltear bloque"
 
 #: pcbnew/onrightclick.cpp:502
 msgid "Rotate Block"
-msgstr "Girar Bloque"
+msgstr "Girar bloque"
 
 #: pcbnew/onrightclick.cpp:528
 msgid "Drag Via"
-msgstr "Arrastrar Vía"
+msgstr "Arrastrar vía"
 
 #: pcbnew/onrightclick.cpp:537
 msgid "Move Node"
-msgstr "Mover Nodo"
+msgstr "Mover nodo"
 
 #: pcbnew/onrightclick.cpp:543
 msgid "Drag Segments, Keep Slope"
-msgstr ""
+msgstr "Arrastrar segmentos, mantener inclinación"
 
 #: pcbnew/onrightclick.cpp:548
 msgid "Drag Segment"
-msgstr "Arrastar Segmento"
+msgstr "Arrastar segmento"
 
 #: pcbnew/onrightclick.cpp:553
 msgid "Duplicate Track"
-msgstr ""
+msgstr "Duplicar pista"
 
 #: pcbnew/onrightclick.cpp:558
 msgid "Move Track Exactly"
-msgstr ""
+msgstr "Mover pista exactamente"
 
 #: pcbnew/onrightclick.cpp:563
 msgid "Create Track Array"
@@ -20687,7 +20768,7 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:832
 msgid "Edit with Footprint Editor"
-msgstr ""
+msgstr "Editar con el Editor de huellas"
 
 #: pcbnew/onrightclick.cpp:839
 msgid "Delete Footprint"
@@ -21369,7 +21450,7 @@ msgstr ""
 
 #: pcbnew/tool_modedit.cpp:212
 msgid "Display Polar Coord ON"
-msgstr "Activar Coordenadas Polares"
+msgstr "Mostrar Coordenadas Polares"
 
 #: pcbnew/tool_modedit.cpp:224
 msgid "Change Cursor Shape"
@@ -21389,7 +21470,7 @@ msgstr "Visualizar Módulos en modo boceto"
 
 #: pcbnew/tool_modedit.cpp:241 pcbnew/tool_pcb.cpp:390
 msgid "Enable high contrast display mode"
-msgstr ""
+msgstr "Activar modo de pantalla de alto contraste"
 
 #: pcbnew/tool_modview.cpp:62
 msgid "Select footprint to browse"
@@ -21397,11 +21478,11 @@ msgstr ""
 
 #: pcbnew/tool_modview.cpp:67
 msgid "Display previous footprint"
-msgstr ""
+msgstr "Mostrar la huella anterior"
 
 #: pcbnew/tool_modview.cpp:71
 msgid "Display next footprint"
-msgstr ""
+msgstr "Mostrar la huella siguiente"
 
 #: pcbnew/tool_modview.cpp:104
 msgid "Insert footprint in board"
@@ -21449,7 +21530,7 @@ msgstr ""
 
 #: pcbnew/tool_pcb.cpp:233
 msgid "Open footprint editor"
-msgstr ""
+msgstr "Abrir Editor de huellas"
 
 #: pcbnew/tool_pcb.cpp:249
 msgid "Plot (HPGL, PostScript, or GERBER format)"
@@ -21509,7 +21590,7 @@ msgstr ""
 
 #: pcbnew/tool_pcb.cpp:432
 msgid "Display local ratsnest"
-msgstr ""
+msgstr "Mostrar la red local"
 
 #: pcbnew/tool_pcb.cpp:503
 msgid "Create line of specified length for microwave applications"
@@ -21614,11 +21695,11 @@ msgstr ""
 
 #: pcbnew/toolbars_update_user_interface.cpp:197
 msgid "Normal contrast display mode"
-msgstr ""
+msgstr "Modo de pantalla de contraste normal"
 
 #: pcbnew/toolbars_update_user_interface.cpp:198
 msgid "High contrast display mode"
-msgstr ""
+msgstr "Modo de pantalla de alto contraste"
 
 #: pcbnew/tools/common_actions.cpp:58
 msgid "trivial connection"
@@ -21654,11 +21735,11 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:79
 msgid "Open in Footprint Editor"
-msgstr ""
+msgstr "Abrir en el Editor de huellas"
 
 #: pcbnew/tools/common_actions.cpp:80
 msgid "Opens the selected footprint in the Footprint Editor"
-msgstr ""
+msgstr "Abre la huella seleccionada en el Editor de huellas"
 
 #: pcbnew/tools/common_actions.cpp:85
 msgid "Copy pad settings to Current Settings"
@@ -21731,7 +21812,7 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:133
 msgid "Displays item properties dialog"
-msgstr ""
+msgstr "Diálogo de propiedades de elemento"
 
 #: pcbnew/tools/common_actions.cpp:139
 msgid "Draw a line"
@@ -21759,7 +21840,7 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:163
 msgid "Add a keepout area"
-msgstr ""
+msgstr "Añadir área restringida"
 
 #: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:601
 msgid "Place the footprint anchor"
@@ -21922,20 +22003,20 @@ msgstr ""
 msgid "Duplicated %d item(s)"
 msgstr ""
 
-#: pcbnew/tools/module_tools.cpp:229
+#: pcbnew/tools/module_tools.cpp:228
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr ""
 
-#: pcbnew/tools/module_tools.cpp:346
+#: pcbnew/tools/module_tools.cpp:345
 msgid "Select reference point"
 msgstr ""
 
-#: pcbnew/tools/module_tools.cpp:397
+#: pcbnew/tools/module_tools.cpp:396
 #, c-format
 msgid "Copied %d item(s)"
 msgstr ""
 
-#: pcbnew/tools/module_tools.cpp:421
+#: pcbnew/tools/module_tools.cpp:420
 msgid "Invalid clipboard contents"
 msgstr ""
 
@@ -22063,7 +22144,7 @@ msgstr "Zona: Error de DRC"
 
 #: pcbnew/zones_by_polygon.cpp:535
 msgid "Error: a keepout area is allowed only on copper layers"
-msgstr ""
+msgstr "Error: solo se permiten áreas restringidas en capas decobre"
 
 #: pcbnew/zones_by_polygon.cpp:682
 msgid "DRC error: this start point is inside or too close an other area"
@@ -22077,35 +22158,35 @@ msgstr "Error DRC: esta área da error drc con otra área"
 #: pcbnew/zones_by_polygon_fill_functions.cpp:46
 #, c-format
 msgid "Filling zone %d out of %d (net %s)..."
-msgstr ""
+msgstr "Rellenando zona %d de %d (red %s)..."
 
 #: pcbnew/zones_by_polygon_fill_functions.cpp:140
 msgid "Fill All Zones"
-msgstr ""
+msgstr "Rellenar todas las zonas"
 
 #: pcbnew/zones_by_polygon_fill_functions.cpp:146
 msgid "Starting zone fill..."
-msgstr ""
+msgstr "Iniciando relleno de zonas..."
 
 #: pcbnew/zones_by_polygon_fill_functions.cpp:175
 msgid "Updating ratsnest..."
-msgstr ""
+msgstr "Actualizando redes..."
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.h:79
 msgid "3D Display Options"
-msgstr ""
+msgstr "Opciones de visualización 3D"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:92
 msgid "Bitmap to Component Converter"
-msgstr ""
+msgstr "Conversor de Bitmap a Componente"
 
 #: common/dialog_about/dialog_about_base.h:51
 msgid "About..."
-msgstr ""
+msgstr "Acerca de..."
 
 #: common/dialogs/dialog_env_var_config_base.h:56
 msgid "Path Configuration"
-msgstr ""
+msgstr "Configuración de rutas"
 
 #: common/dialogs/dialog_hotkeys_editor_base.h:53
 msgid "Hotkeys Editor"
@@ -22113,15 +22194,17 @@ msgstr "Editor de atajos de teclado"
 
 #: common/dialogs/dialog_image_editor_base.h:64
 msgid "Image Editor"
-msgstr ""
+msgstr "Editor de imágenes"
 
 #: common/dialogs/dialog_page_settings_base.h:121
 msgid "Page Settings"
-msgstr ""
+msgstr "Opciones de página"
 
 #: cvpcb/common_help_msg.h:28
 msgid "Save footprint association in schematic component footprint fields"
 msgstr ""
+"Guardar la asociación de huella en el campo de huellas del componente del "
+"esquema"
 
 #: cvpcb/dialogs/dialog_display_options_base.h:63
 #: pcbnew/dialogs/dialog_display_options_base.h:72
@@ -22130,11 +22213,11 @@ msgstr "Opciones de visualización"
 
 #: eeschema/dialogs/dialog_annotate_base.h:89
 msgid "Annotate Schematic"
-msgstr ""
+msgstr "Anotar esquema"
 
 #: eeschema/dialogs/dialog_bom_base.h:93
 msgid "Bill of Material"
-msgstr ""
+msgstr "Lista de materiales"
 
 #: eeschema/dialogs/dialog_color_config_base.h:47
 msgid "EESchema Colors"
@@ -22155,7 +22238,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:142
 msgid "Schematic Editor Options"
-msgstr ""
+msgstr "Opciones del Editor de esquemas"
 
 #: eeschema/dialogs/dialog_erc_base.h:83
 msgid "Electrical Rules Checker"
@@ -22313,15 +22396,15 @@ msgstr ""
 
 #: eeschema/help_common_strings.h:79
 msgid "Generate bill of materials and/or cross references"
-msgstr ""
+msgstr "Crear una lista de materiales y/o referencias cruzadas"
 
 #: eeschema/help_common_strings.h:81
 msgid "Back-import component footprint fields via CvPcb .cmp file"
-msgstr ""
+msgstr "Reimportar los campos de huellas desde un archivo .cmp de CvPcb"
 
 #: eeschema/help_common_strings.h:84
 msgid "Add pins to component"
-msgstr ""
+msgstr "Añadir "
 
 #: eeschema/help_common_strings.h:85
 msgid "Add text to component body"
@@ -22494,43 +22577,44 @@ msgstr "Borrar elementos"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:69
 msgid "Global Edition of Tracks and Vias"
-msgstr ""
+msgstr "Edición global de pistas y vías"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.h:68
 msgid "Set Text Size"
-msgstr ""
+msgstr "Ajustar tamaño del texto"
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.h:58
 msgid "Global Pads Edition"
-msgstr ""
+msgstr "Edición global de pads"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:79
 msgid "Graphic Item Properties"
-msgstr ""
+msgstr "Propiedades de elemento gráfico"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.h:71
 msgid "Text and Drawings"
-msgstr ""
+msgstr "Texto y dibujos"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.h:70
 msgid "Keepout Area Properties"
-msgstr ""
+msgstr "Propiedades de área restringida"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:81
 msgid "Select Copper Layer Pair:"
-msgstr ""
+msgstr "Seleccionar par de capas de cobre:"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.h:418
 msgid "Layer Setup"
-msgstr ""
+msgstr "Opciones de capa"
 
+# Pendiente de contexto
 #: pcbnew/dialogs/dialog_mask_clearance_base.h:74
 msgid "Pads Mask Clearance"
-msgstr ""
+msgstr "Margen pads máscara"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.h:86
 msgid "Footprint Editor Options"
-msgstr ""
+msgstr "Opciones del Editor de huellas"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:67
 msgid "Non Copper Zones Properties"
