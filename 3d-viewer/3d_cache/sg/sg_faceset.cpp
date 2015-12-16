@@ -1041,7 +1041,7 @@ void SGFACESET::GatherCoordIndices( std::vector< int >& aIndexList )
 }
 
 
-bool SGFACESET::CalcNormals( void )
+bool SGFACESET::CalcNormals( SGNODE** aPtr )
 {
     if( m_RCoords )
     {
@@ -1050,7 +1050,7 @@ bool SGFACESET::CalcNormals( void )
         if( !fp )
             return false;
 
-        return fp->CalcNormals();
+        return fp->CalcNormals( aPtr );
     }
 
     if( NULL == m_Coords || m_Coords->coords.empty() )
@@ -1059,5 +1059,5 @@ bool SGFACESET::CalcNormals( void )
     if( m_Normals && !m_Normals->norms.empty( ) )
         return true;
 
-    return m_Coords->CalcNormals();
+    return m_Coords->CalcNormals( aPtr );
 }

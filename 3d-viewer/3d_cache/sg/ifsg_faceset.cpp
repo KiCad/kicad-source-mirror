@@ -161,10 +161,10 @@ bool IFSG_FACESET::NewNode( IFSG_NODE& aParent )
 }
 
 
-bool IFSG_FACESET::CalcNormals( void )
+bool IFSG_FACESET::CalcNormals( SGNODE** aPtr )
 {
     if( m_node )
-        return ((SGFACESET*)m_node)->CalcNormals();
+        return ((SGFACESET*)m_node)->CalcNormals( aPtr );
 
     return false;
 }

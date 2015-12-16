@@ -76,7 +76,7 @@ public:
     bool AddRefNode( SGNODE* aNode );
     bool AddChildNode( SGNODE* aNode );
 
-    bool CalcNormals( void );
+    bool CalcNormals( SGNODE** aPtr );
 
     void ReNameNodes( void );
     bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );

@@ -289,12 +289,9 @@ void SGVECTOR::normalize( void )
     double dx = vx * vx;
     double dy = vy * vy;
     double dz = vz * vz;
-    double dv2 = dx + dy + dz;
+    double dv2 = sqrt( dx + dy + dz );
 
-    // note: placing the limit at 1e-14 ensures that
-    // models representing mm to 1e-4 precision can
-    // be accepted before the calculations blow up
-    if( (dx + dy + dz) < 1e-14 )
+    if( (dx + dy + dz) < 1e-8 )
     {
         // use the default; the numbers are too small
         // to be believable
@@ -304,13 +301,9 @@ void SGVECTOR::normalize( void )
         return;
     }
 
-    dx /= dv2;
-    dy /= dv2;
-    dz /= dv2;
-
-    vx = sqrt( dx );
-    vy = sqrt( dy );
-    vz = sqrt( dz );
+    vx /= dv2;
+    vy /= dv2;
+    vz /= dv2;
 
     return;
 }

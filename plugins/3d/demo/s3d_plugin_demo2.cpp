@@ -199,15 +199,13 @@ SCENEGRAPH* Load( char const* aFileName )
     int cidx[12] = { 0, 3, 1, 0, 2, 3, 1, 3, 2, 0, 1, 2 };
     coordIdx->SetIndices( 3, cidx );
 
-    // the vertex normals in this case are the normalized
-    // vertex points
-    SGVECTOR norm[4];
-    norm[0] = SGVECTOR( -1.0, 0.0, -SQ2 );
-    norm[1] = SGVECTOR( 1.0, 0.0, -SQ2 );
-    norm[2] = SGVECTOR( 0.0, -1.0, SQ2 );
-    norm[3] = SGVECTOR( 0.0, 1.0, SQ2 );
-    IFSG_NORMALS* np = new IFSG_NORMALS( *face );
-    np->SetNormalList( 4, norm );
+    // note: track the sets of faces since all faces need to be
+    // instantiated before we can calculate the normals list;
+    // this is due to the need for all vertices to be referenced
+    // in the index lists; however we have a single coordinate
+    // list and 4 associated vertex lists so the requirement is
+    // not met until all faces are instantiated.
+    SGNODE* face1 = face->GetRawPtr();
 
     // create an appearance; appearances are owned by shapes
     // magenta
@@ -221,9 +219,9 @@ SCENEGRAPH* Load( char const* aFileName )
     shape->NewNode( *tx1 );
     face->NewNode( *shape );
     face->AddRefNode( *cp );
-    face->AddRefNode( *np );
     coordIdx->NewNode( *face );
     coordIdx->SetIndices( 3, &cidx[3] );
+    SGNODE* face2 = face->GetRawPtr();
     // red
     material->NewNode( *shape );
     material->SetSpecular( 1.0, 0.0, 0.0 );
@@ -235,9 +233,9 @@ SCENEGRAPH* Load( char const* aFileName )
     shape->NewNode( *tx1 );
     face->NewNode( *shape );
     face->AddRefNode( *cp );
-    face->AddRefNode( *np );
     coordIdx->NewNode( *face );
     coordIdx->SetIndices( 3, &cidx[6] );
+    SGNODE* face3 = face->GetRawPtr();
     // green
     material->NewNode( *shape );
     material->SetSpecular( 0.0, 1.0, 0.0 );
@@ -249,9 +247,9 @@ SCENEGRAPH* Load( char const* aFileName )
     shape->NewNode( *tx1 );
     face->NewNode( *shape );
     face->AddRefNode( *cp );
-    face->AddRefNode( *np );
     coordIdx->NewNode( *face );
     coordIdx->SetIndices( 3, &cidx[9] );
+    SGNODE* face4 = face->GetRawPtr();
     // blue
     material->NewNode( *shape );
     material->SetSpecular( 0.0, 0.0, 1.0 );
@@ -259,6 +257,21 @@ SCENEGRAPH* Load( char const* aFileName )
     material->SetAmbient( 0.9 );
     material->SetShininess( 0.3 );
 
+    // note: now that the faces are instantiated we
+    // can calculate the per-vertex normals
+    SGNODE* np;
+    face->Attach( face1 );
+    face->CalcNormals( &np );
+
+    if( np )
+    {
+        face->Attach( face2 );
+        face->AddRefNode( np );
+        face->Attach( face3 );
+        face->AddRefNode( np );
+        face->Attach( face4 );
+        face->AddRefNode( np );
+    }
 
     // create a copy of the entire tetrahedron shifted Z+2 and rotated 2/3PI
     IFSG_TRANSFORM* tx2 = new IFSG_TRANSFORM( tx0->GetRawPtr() );
@@ -274,7 +287,6 @@ SCENEGRAPH* Load( char const* aFileName )
     delete coordIdx;
     delete material;
     delete cp;
-    delete np;
     delete tx0;
     delete tx1;
     delete tx2;

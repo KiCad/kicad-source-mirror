@@ -32,7 +32,8 @@
 
 #include "3d_cache/sg/sg_helpers.h"
 #include "3d_cache/sg/sg_node.h"
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 // formats a floating point number for text output to a VRML file
 void S3D::FormatFloat( std::string& result, double value )
@@ -310,12 +311,48 @@ bool S3D::ReadColor( std::ifstream& aFile, SGCOLOR& aColor )
 }
 
 
-struct TRIAD
+static bool degenerate( glm::dvec3* pts )
 {
-    int p1;
-    int p2;
-    int p3;
+    double dx, dy, dz;
+
+    dx = pts[1].x - pts[0].x;
+    dy = pts[1].y - pts[0].y;
+    dz = pts[1].z - pts[0].z;
+
+    if( ( dx*dx + dy*dy + dz*dz ) < 1e-15 )
+        return true;
+
+    dx = pts[2].x - pts[0].x;
+    dy = pts[2].y - pts[0].y;
+    dz = pts[2].z - pts[0].z;
+
+    if( ( dx*dx + dy*dy + dz*dz ) < 1e-15 )
+        return true;
+
+    dx = pts[2].x - pts[1].x;
+    dy = pts[2].y - pts[1].y;
+    dz = pts[2].z - pts[1].z;
+
+    if( ( dx*dx + dy*dy + dz*dz ) < 1e-15 )
+        return true;
+
+    return false;
 };
+
+
+static void calcTriad( glm::dvec3* pts, glm::dvec3& tri )
+{
+    if( degenerate( pts ) )
+    {
+        tri = glm::dvec3( 0.0, 0.0, 0.0 );
+        return;
+    }
+
+    // normal * 2 * area
+    tri = cross( pts[1] - pts[0], pts[2] - pts[0] );
+
+    return;
+}
 
 
 bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
@@ -355,7 +392,7 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
         return false;
     }
 
-    std::map< int, std::list< TRIAD > >vmap;
+    std::map< int, std::list< glm::dvec3 > >vmap;
 
     int p1, p2, p3;
 
@@ -377,17 +414,14 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
             return false;
         }
 
-        // ignore degenerate triangle indices; note that it is still possible to
-        // have degenerate vertices and these may cause problems
-        if( p1 == p2 || p2 == p3 || p3 == p1 )
-            continue;
+        glm::dvec3 tri;
+        glm::dvec3 trip[3];
+        trip[0] = glm::dvec3( coords[p1].x, coords[p1].y, coords[p1].z );
+        trip[1] = glm::dvec3( coords[p2].x, coords[p2].y, coords[p2].z );
+        trip[2] = glm::dvec3( coords[p3].x, coords[p3].y, coords[p3].z );
+        calcTriad( trip, tri );
 
-        TRIAD tri;
-        tri.p1 = p1;
-        tri.p2 = p2;
-        tri.p3 = p3;
-
-        std::map< int, std::list< TRIAD > >::iterator ip = vmap.find( p1 );
+        std::map< int, std::list< glm::dvec3 > >::iterator ip = vmap.find( p1 );
 
         if( ip != vmap.end() )
         {
@@ -395,7 +429,8 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
         }
         else
         {
-            vmap.insert( std::pair < int, std::list < TRIAD > > ( p1, std::list < TRIAD >( 1, tri ) ) );
+            vmap.insert( std::pair < int, std::list < glm::dvec3 > >
+                ( p1, std::list < glm::dvec3 >( 1, tri ) ) );
         }
 
         ip = vmap.find( p2 );
@@ -406,10 +441,11 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
         }
         else
         {
-            vmap.insert( std::pair < int, std::list < TRIAD > > ( p2, std::list < TRIAD >( 1, tri ) ) );
+            vmap.insert( std::pair < int, std::list < glm::dvec3 > >
+                ( p2, std::list < glm::dvec3 >( 1, tri ) ) );
         }
 
-        ip = vmap.find( p2 );
+        ip = vmap.find( p3 );
 
         if( ip != vmap.end() )
         {
@@ -417,12 +453,13 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
         }
         else
         {
-            vmap.insert( std::pair < int, std::list < TRIAD > > ( p3, std::list < TRIAD >( 1, tri ) ) );
+            vmap.insert( std::pair < int, std::list < glm::dvec3 > >
+                ( p3, std::list < glm::dvec3 >( 1, tri ) ) );
         }
     }
 
-    std::map< int, std::list< TRIAD > >::iterator sM = vmap.begin();
-    std::map< int, std::list< TRIAD > >::iterator eM = vmap.end();
+    std::map< int, std::list< glm::dvec3 > >::iterator sM = vmap.begin();
+    std::map< int, std::list< glm::dvec3 > >::iterator eM = vmap.end();
     size_t idx = 0;
 
     while( sM != eM )
@@ -436,53 +473,17 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
             ++idx;
         }
 
-        std::list< TRIAD >::iterator sT = sM->second.begin();
-        std::list< TRIAD >::iterator eT = sM->second.end();
-
-        double nx = 0.0;
-        double ny = 0.0;
-        double nz = 0.0;
-
-        // XXX - TODO:
-        // eliminate equal face normals in order to prevent distortion of the true vertex normal
+        std::list< glm::dvec3 >::iterator sT = sM->second.begin();
+        std::list< glm::dvec3 >::iterator eT = sM->second.end();
+        glm::dvec3 norm( 0.0, 0.0, 0.0 );
 
         while( sT != eT )
         {
-            double x0, x1, x2;
-            double y0, y1, y2;
-            double z0, z1, z2;
-
-            x1 = coords[sT->p2].x - coords[sT->p1].x;
-            y1 = coords[sT->p2].y - coords[sT->p1].y;
-            z1 = coords[sT->p2].z - coords[sT->p1].z;
-
-            x2 = coords[sT->p3].x - coords[sT->p1].x;
-            y2 = coords[sT->p3].y - coords[sT->p1].y;
-            z2 = coords[sT->p3].z - coords[sT->p1].z;
-
-            x0 = (y1 * z2) - (z1 * y2);
-            y0 = (z1 * x2) - (x1 * z2);
-            z0 = (x1 * y2) - (y1 * x2);
-
-            double m = sqrt( x0*x0 + y0*y0 + z0*z0 );
-
-            // add the normal to the normal accumulated for this facet
-
-            if( m < 1e-12 )
-            {
-                nz += 1.0;
-            }
-            else
-            {
-                nx += ( x0 / m );
-                ny += ( y0 / m );
-                nz += ( z0 / m );
-            }
-
+            norm += *sT;
             ++sT;
         }
 
-        norms.push_back( SGVECTOR( nx, ny, nz ) );
+        norms.push_back( SGVECTOR( norm.x, norm.y, norm.z ) );
 
         ++idx;
         ++sM;

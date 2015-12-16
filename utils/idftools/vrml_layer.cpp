@@ -1344,28 +1344,32 @@ bool VRML_LAYER::addTriplet( VERTEX_3D* p0, VERTEX_3D* p1, VERTEX_3D* p2 )
 {
     double  dx0 = p1->x - p0->x;
     double  dx1 = p2->x - p0->x;
+    double  dx2 = p2->x - p1->x;
 
     double  dy0 = p1->y - p0->y;
     double  dy1 = p2->y - p0->y;
+    double  dy2 = p2->y - p1->y;
+
+    dx0 *= dx0;
+    dx1 *= dx1;
+    dx2 *= dx2;
+
+    dy0 *= dy0;
+    dy1 *= dy1;
+    dy2 *= dy2;
 
     // this number is chosen because we shall only write 9 decimal places
     // at most on the VRML output
     double err = 0.000000001;
 
-    // test if the triangles are degenerate (parallel sides)
-
-    if( dx0 < err && dx0 > -err && dx1 < err && dx1 > -err )
+    // test if the triangles are degenerate (equal points)
+    if( ( dx0 + dy0 ) < err )
         return false;
 
-    if( dy0 < err && dy0 > -err && dy1 < err && dy1 > -err )
+    if( ( dx1 + dy1 ) < err )
         return false;
 
-    double  sl0 = dy0 / dx0;
-    double  sl1 = dy1 / dx1;
-
-    double dsl = sl1 - sl0;
-
-    if( dsl < err && dsl > -err )
+    if( ( dx2 + dy2 ) < err )
         return false;
 
     triplets.push_back( TRIPLET_3D( p0->o, p1->o, p2->o ) );

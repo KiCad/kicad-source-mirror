@@ -204,7 +204,7 @@ SCENEGRAPH* Load( char const* aFileName )
     IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );
     coordIdx->SetIndices( indices.size(), &indices[0] );
 
-    if( !face->CalcNormals() )
+    if( !face->CalcNormals( NULL ) )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";

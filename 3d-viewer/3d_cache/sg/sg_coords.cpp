@@ -316,8 +316,11 @@ bool SGCOORDS::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 }
 
 
-bool SGCOORDS::CalcNormals( void )
+bool SGCOORDS::CalcNormals( SGNODE** aPtr )
 {
+    if( aPtr )
+        *aPtr = NULL;
+
     if( NULL == m_Parent )
         return false;
 
@@ -342,7 +345,12 @@ bool SGCOORDS::CalcNormals( void )
         np = new SGNORMALS( m_Parent );
 
     if( S3D::CalcTriangleNormals( coords, ilist, np->norms )  )
+    {
+        if( aPtr )
+            *aPtr = np;
+
         return true;
+    }
 
     delete np;
 
