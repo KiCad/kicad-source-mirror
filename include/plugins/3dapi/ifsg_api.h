@@ -30,7 +30,6 @@
 #define IFSG_API_H
 
 #include <wx/string.h>
-#include <glm/glm.hpp>
 
 #include "plugins/3dapi/sg_types.h"
 #include "plugins/3dapi/sg_base.h"
@@ -132,15 +131,12 @@ namespace S3D
 
     /**
      * Function Prepare
-     * creates an S3DMODEL representation of aNode transformed by aTransform.
+     * creates an S3DMODEL representation of aNode (raw data, no transforms)
      *
      * @param aNode is the node to be transcribed into an S3DMODEL representation
-     * @param aTransform is the transform (Translation * Rotation * Scale) to apply
-     * to the representation of aNode; it must be a pointer to a glm::dmat4 entity
-     *
      * @return an S3DMODEL representation of aNode on success, otherwise NULL
      */
-    SGLIB_API S3DMODEL* Prepare( SCENEGRAPH* aNode, const glm::dmat4* aTransform );
+    SGLIB_API S3DMODEL* Prepare( SCENEGRAPH* aNode );
 
     /**
      * Function Destroy3DModel

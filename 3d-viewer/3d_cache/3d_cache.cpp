@@ -134,12 +134,14 @@ public:
 
     unsigned char md5sum[16];
     SCENEGRAPH* sceneData;
+    S3DMODEL*   renderData;
 };
 
 
 S3D_CACHE_ENTRY::S3D_CACHE_ENTRY()
 {
     sceneData = NULL;
+    renderData = NULL;
     memset( md5sum, 0, 16 );
 }
 
@@ -148,6 +150,9 @@ S3D_CACHE_ENTRY::~S3D_CACHE_ENTRY()
 {
     if( NULL != sceneData )
         delete sceneData;
+
+    if( NULL != renderData )
+        S3D::Destroy3DModel( &renderData );
 }
 
 
@@ -197,8 +202,11 @@ S3D_CACHE::~S3D_CACHE()
 }
 
 
-SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile )
+SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCachePtr )
 {
+    if( aCachePtr )
+        *aCachePtr = NULL;
+
     wxString full3Dpath = m_FNResolver->ResolvePath( aModelFile );
 
     if( full3Dpath.empty() )
@@ -214,15 +222,29 @@ SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile )
     mi = m_CacheMap.find( full3Dpath );
 
     if( mi != m_CacheMap.end() )
+    {
+        if( NULL != aCachePtr )
+            *aCachePtr = mi->second;
+
         return mi->second->sceneData;
+    }
 
     // a cache item does not exist; search the Filename->Cachename map
-    return checkCache( full3Dpath );
+    return checkCache( full3Dpath, aCachePtr );
 }
 
 
-SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName )
+SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile )
 {
+    return load( aModelFile );
+}
+
+
+SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** aCachePtr )
+{
+    if( aCachePtr )
+        *aCachePtr = NULL;
+
     unsigned char md5sum[16];
 
     if( !getMD5( aFileName, md5sum ) || m_CacheDir.empty() )
@@ -245,6 +267,10 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName )
         else
         {
             std::cerr << " * [3D Model] [0] added cached name '" << aFileName.ToUTF8() << "'\n";
+
+            if( aCachePtr )
+                *aCachePtr = ep;
+
         }
 
         return NULL;
@@ -267,6 +293,9 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName )
     {
         std::cerr << " * [3D Model] [1] added cached name '" << aFileName.ToUTF8() << "'\n";
     }
+
+    if( aCachePtr )
+        *aCachePtr = ep;
 
     ep->SetMD5( md5sum );
 
@@ -596,41 +625,27 @@ void S3D_CACHE::ClosePlugins( void )
     return;
 }
 
-// notes:
-// 1. aModelEntry:
-//    + rotation: degrees, model space X, Y, Z; rotations are specified in sequence
-//
-S3DMODEL* S3D_CACHE::Prepare( S3D_INFO const* aModelEntry,
-    const SGPOINT& aRotation, const SGPOINT& aOffset )
+
+S3DMODEL* S3D_CACHE::Prepare( const wxString& aModelFileName )
 {
-    SCENEGRAPH* sp = Load( aModelEntry->filename );
+    S3D_CACHE_ENTRY* cp = NULL;
+    SCENEGRAPH* sp = load( aModelFileName, &cp );
 
     if( !sp )
         return NULL;
 
-    // create a single transform entity to apply to the models
-    glm::dmat4 t0 = glm::translate( glm::dvec3( 25.4 * aModelEntry->offset.x,
-        25.4 * aModelEntry->offset.y, 25.4 * aModelEntry->offset.z ) );
+    if( !cp )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] model loaded with no associated S3D_CACHE_ENTRY\n";
+        return NULL;
+    }
 
-    glm::dmat4 rX = glm::rotate( glm::radians( aModelEntry->rotation.x ),
-        glm::dvec3( 1.0, 0.0, 0.0 ) );
-    glm::dmat4 rY = glm::rotate( glm::radians( -aModelEntry->rotation.y ),
-        glm::dvec3( 0.0, 1.0, 0.0 ) );
-    glm::dmat4 rZ = glm::rotate( glm::radians( aModelEntry->rotation.z ),
-        glm::dvec3( 0.0, 0.0, 1.0 ) );
+    if( cp->renderData )
+        return cp->renderData;
 
-    glm::dmat4 s0 = glm::scale( glm::dvec3( aModelEntry->scale.x, aModelEntry->scale.y,
-        aModelEntry->scale.z ) );
+    S3DMODEL* mp = S3D::Prepare( sp );
+    cp->renderData = mp;
 
-    glm::dmat4 m0 = rZ * rY * rX * s0 * t0;
-
-    rX = glm::rotate( glm::radians( aRotation.x ), glm::dvec3( 1.0, 0.0, 0.0 ) );
-    rY = glm::rotate( glm::radians( aRotation.y ), glm::dvec3( 0.0, 1.0, 0.0 ) );
-    rZ = glm::rotate( glm::radians( aRotation.z ), glm::dvec3( 0.0, 0.0, 1.0 ) );
-
-    glm::dmat4 t1 = glm::translate( glm::dvec3( aOffset.x, aOffset.y, aOffset.z ) );
-
-    glm::dmat4 m1 = t1 * rZ * rY * rX * m0;
-
-    return S3D::Prepare( sp, &m1 );
+    return mp;
 }

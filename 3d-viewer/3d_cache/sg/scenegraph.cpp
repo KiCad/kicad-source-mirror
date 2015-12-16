@@ -582,7 +582,12 @@ bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform,
     rotation_axis.GetVector( rX, rY, rZ );
     glm::dmat4 rM = glm::rotate( glm::degrees( rotation_angle ), glm::dvec3( rX, rY, rZ ) );
     glm::dmat4 tM = glm::translate( glm::dvec3( translation.x, translation.y, translation.z ) );
-    glm::dmat4 tx0 = (*aTransform) * tM * rM;
+    glm::dmat4 tx0;
+
+    if( NULL != aTransform )
+        tx0  = (*aTransform) * tM * rM;
+    else
+        tx0  = tM * rM;
 
     bool ok = true;
 

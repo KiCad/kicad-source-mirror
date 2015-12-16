@@ -325,8 +325,7 @@ PANEL_PREV_3D::~PANEL_PREV_3D()
         canvas->Update();
     }
 
-    if( model )
-        S3D::Destroy3DModel( &model );
+    model = NULL;
 
     return;
 }
@@ -576,16 +575,13 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
             canvas->Update();
         }
 
-        if( model )
-            S3D::Destroy3DModel( &model );
+        model = NULL;
 
         if( currentModelFile.empty() )
             return;
     }
 
-    SGPOINT rot;
-    SGPOINT trans;
-    model = m_ModelManager->Prepare( &modelInfo, rot, trans );
+    model = m_ModelManager->Prepare( modelInfo.filename );
 
     if( NULL == model )
     {
@@ -683,13 +679,7 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 
     canvas->Clear3DModel();
 
-    if( model )
-        S3D::Destroy3DModel( &model );
-
-    SGPOINT rot;
-    SGPOINT trans;
-
-    model = m_ModelManager->Prepare( &modelInfo, rot, trans );
+    model = m_ModelManager->Prepare( modelInfo.filename );
 
     if( model )
     {

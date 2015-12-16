@@ -304,8 +304,14 @@ SGNODE* S3D::ReadCache( const wxString& aFileName )
 }
 
 
-S3DMODEL* S3D::Prepare( SCENEGRAPH* aNode, const glm::dmat4* aTransform )
+S3DMODEL* S3D::Prepare( SCENEGRAPH* aNode )
 {
+    if( NULL == aNode )
+        return NULL;
+
+    if( aNode->GetNodeType() != S3D::SGTYPE_TRANSFORM )
+        return NULL;
+
     S3D::MATLIST materials;
     std::vector< SMESH > meshes;
 
@@ -324,7 +330,7 @@ S3DMODEL* S3D::Prepare( SCENEGRAPH* aNode, const glm::dmat4* aTransform )
     materials.matorder.push_back( &app );
     materials.matmap.insert( std::pair< SGAPPEARANCE const*, int >( &app, 0 ) );
 
-    if( aNode->Prepare( aTransform, materials, meshes ) )
+    if( aNode->Prepare( NULL, materials, meshes ) )
     {
         if( meshes.empty() )
             return NULL;

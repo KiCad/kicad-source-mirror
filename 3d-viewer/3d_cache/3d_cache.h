@@ -82,18 +82,10 @@ private:
      * @param aFileName [in] is a partial or full file path; a partial path is accepted
      * so that a cached model may be used in cases where the user has moved or deleted
      * the original model file.
-     * @param aModelEntry [in, out] is the model entry for which we are retrieving
-     * scene data.
-     * @param aMD5Sum [in] is an optional MD5 sum; if this parameter is supplied and its value
-     * differs from the cached file then the function will fail and the flag aMD5Mismatch
-     * will be set to true. If the parameter is not supplied then the cache model is used
-     * if available and with no regard to the MD5 sum.
-     * @param aMD5Mismatch [out] if the function succeeds then this flag is set to false;
-     * the flag is set true if aMD5Sum is specified and differs from the cached object's
-     * md5sum.
+     * @param [out] if not NULL will hold a pointer to the cache entry for the model
      * @return on success a pointer to a SCENEGRAPH, otherwise NULL
      */
-    SCENEGRAPH* checkCache( const wxString& aFileName );
+    SCENEGRAPH* checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** aCachePtr = NULL );
 
     /**
      * Function getMD5
@@ -110,6 +102,9 @@ private:
 
     // save scene data to a cache file
     bool saveCacheData( S3D_CACHE_ENTRY* aCacheItem );
+
+    // the real load function (can supply a cache entry pointer to member functions)
+    SCENEGRAPH* load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCachePtr = NULL );
 
 public:
     S3D_CACHE();
@@ -192,23 +187,10 @@ public:
  * attempts to load the scene data for a model and to translate it
  * into an S3D_MODEL structure for display by a renderer
  *
- * @param aModelEntry is the structure containing the model name,
- * scale, offset, and rotation. Note that by kicad convention the
- * operations are Offset-Scale-Rotation, the Y value of the offset
- * is negative (Left-hand coordinate system), and the units of the
- * offset is inches. Application of the Offset, Scale. Rotation
- * within the aModelEntry structure places the model into a nominal
- * (0, 0, 0) position and orientation. Final positioning of the
- * model instance is determined by the aOffset, aAxis, and aAngle
- * parameters.
- * @ aRotation is a X, Y, Z rotation to calculate the final orientation
- * of the model instance
- * @param aOffset is an offset to apply to obtain the final position
- * of the model instance; this offset is applied after the aAxis/aAngle
- * orientation in the common Rotation-Scale-Translation order of transforms.
+ * @param aModelFileName is the full path to the model to be loaded
+ * @return is a pointer to the render data or NULL if not available
  */
-    S3DMODEL* Prepare( S3D_INFO const* aModelEntry,
-        const SGPOINT& aRotation, const SGPOINT& aOffset );
+    S3DMODEL* Prepare( const wxString& aModelFileName );
 };
 
 #endif  // CACHE_3D_H
