@@ -37,6 +37,89 @@
 #define PLUGIN_3D_IDF_REVNO 0
 
 
+static SGNODE* getColor( IFSG_SHAPE& shape )
+{
+    IFSG_APPEARANCE material( shape );
+
+    static int idx = 0;
+
+    switch( idx )
+    {
+    case 0:
+        // magenta
+        material.SetSpecular( 0.8, 0.0, 0.8 );
+        material.SetDiffuse( 0.6, 0.0, 0.6 );
+        material.SetAmbient( 0.9 );
+        material.SetShininess( 0.3 );
+
+        ++idx;
+        break;
+
+    case 1:
+        // red
+        material.SetSpecular( 0.69, 0.14, 0.14 );
+        material.SetDiffuse( 0.69, 0.14, 0.14 );
+        material.SetAmbient( 0.9 );
+        material.SetShininess( 0.3 );
+
+        ++idx;
+        break;
+
+    case 2:
+        // orange
+        material.SetSpecular( 1.0, 0.44, 0.0 );
+        material.SetDiffuse( 1.0, 0.44, 0.0 );
+        material.SetAmbient( 0.9 );
+        material.SetShininess( 0.3 );
+
+        ++idx;
+        break;
+
+    case 3:
+        // yellow
+        material.SetSpecular( 0.93, 0.94, 0.16 );
+        material.SetDiffuse( 0.93, 0.94, 0.16 );
+        material.SetAmbient( 0.9 );
+        material.SetShininess( 0.3 );
+
+        ++idx;
+        break;
+
+    case 4:
+        // green
+        material.SetSpecular( 0.13, 0.81, 0.22 );
+        material.SetDiffuse( 0.13, 0.81, 0.22 );
+        material.SetAmbient( 0.9 );
+        material.SetShininess( 0.3 );
+
+        ++idx;
+        break;
+
+    case 5:
+        // blue
+        material.SetSpecular( 0.1, 0.11, 0.88 );
+        material.SetDiffuse( 0.1, 0.11, 0.88 );
+        material.SetAmbient( 0.9 );
+        material.SetShininess( 0.3 );
+
+        ++idx;
+        break;
+
+    default:
+        // violet
+        material.SetSpecular( 0.32, 0.07, 0.64 );
+        material.SetDiffuse( 0.32, 0.07, 0.64 );
+        material.SetAmbient( 0.9 );
+        material.SetShininess( 0.3 );
+
+        idx = 0;
+        break;
+    }
+
+    return material.GetRawPtr();
+};
+
+
 const char* GetKicadPluginName( void )
 {
     return "PLUGIN_3D_IDF";
@@ -213,27 +296,22 @@ SCENEGRAPH* Load( char const* aFileName )
     }
 
     // magenta
-    IFSG_APPEARANCE* material = new IFSG_APPEARANCE( *shape);
-    material->SetSpecular( 1.0, 0.0, 1.0 );
-    material->SetDiffuse( 0.9, 0.0, 0.9 );
-    material->SetAmbient( 0.9 );
-    material->SetShininess( 0.3 );
-
+    getColor( *shape );
     SCENEGRAPH* data = (SCENEGRAPH*)tx0->GetRawPtr();
 
-    // XXX - DEBUG - WRITE OUT IDF FILE TO CONFIRM NORMALS
+    // DEBUG: WRITE OUT IDF FILE TO CONFIRM NORMALS
+    #ifdef DEBUG
     wxFileName fn( aFileName );
-    wxString fnam = fn.GetName();
-    fnam.append( wxT(".wrl") );
-    std::cerr << "XXX: FILE NAME: " << fnam.ToUTF8() << "\n";
-    S3D::WriteVRML( fnam, true, (SGNODE*)(data), true, true );
+    wxString output = fn.GetName();
+    output.append( wxT(".wrl") );
+    S3D::WriteVRML( output, true, (SGNODE*)(data), true, true );
+    #endif
 
 
     // delete the API wrappers
     delete shape;
     delete face;
     delete coordIdx;
-    delete material;
     delete cp;
     delete tx0;
 

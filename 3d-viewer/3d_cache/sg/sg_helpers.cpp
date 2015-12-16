@@ -33,7 +33,7 @@
 #include "3d_cache/sg/sg_helpers.h"
 #include "3d_cache/sg/sg_node.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+
 
 // formats a floating point number for text output to a VRML file
 void S3D::FormatFloat( std::string& result, double value )
@@ -344,6 +344,7 @@ static void calcTriad( glm::dvec3* pts, glm::dvec3& tri )
 {
     if( degenerate( pts ) )
     {
+        // degenerate points should contribute nothing to the result
         tri = glm::dvec3( 0.0, 0.0, 0.0 );
         return;
     }
