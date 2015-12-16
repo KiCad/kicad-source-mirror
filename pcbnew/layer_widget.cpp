@@ -865,13 +865,13 @@ class MYFRAME : public wxFrame
             */
         }
 
-        bool OnLayerSelect( LAYER aLayer )
+        bool OnLayerSelect( LAYER_NUM aLayer )
         {
             printf( "OnLayerSelect( aLayer:%d )\n", aLayer );
             return true;
         }
 
-        void OnLayerVisible( LAYER aLayer, bool isVisible, bool isFinal )
+        void OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
         {
             printf( "OnLayerVisible( aLayer:%d, isVisible:%d isFinal:%d)\n", aLayer, isVisible, isFinal );
         }
@@ -910,7 +910,7 @@ public:
 
         // add some render rows
         static const LAYER_WIDGET::ROW renderRows[] = {
-            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, -1, wxT("Spock here") ),
+            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, UNSPECIFIED_COLOR, wxT("Spock here") ),
             LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ),
             LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, wxT("My eyes are upon you") ),
         };
