@@ -212,16 +212,16 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer2->Add( m_checkHVOrientation, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
 	m_checkPageLimits = new wxCheckBox( m_panel1, wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_checkPageLimits, 0, wxALL|wxEXPAND, 3 );
+	bSizer2->Add( m_checkPageLimits, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 3 );
 	
 	m_checkAutoplaceFields = new wxCheckBox( m_panel1, wxID_ANY, _("Automatically place component fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_checkAutoplaceFields, 0, wxALL, 3 );
+	bSizer2->Add( m_checkAutoplaceFields, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 3 );
 	
 	m_checkAutoplaceJustify = new wxCheckBox( m_panel1, wxID_ANY, _("Allow field autoplace to change justification"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_checkAutoplaceJustify, 0, wxALL, 3 );
+	bSizer2->Add( m_checkAutoplaceJustify, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 3 );
 	
 	m_checkAutoplaceAlign = new wxCheckBox( m_panel1, wxID_ANY, _("Always align autoplaced fields to the 50 mil grid"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_checkAutoplaceAlign, 0, wxALL, 3 );
+	bSizer2->Add( m_checkAutoplaceAlign, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 3 );
 	
 	
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 0 );
