@@ -613,9 +613,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             return;
     }
 
-    SCH_SHEET_LIST sheetList;
-
-    if( sheetList.IsModified() )
+    if( g_RootSheet->IsModified() )
     {
         wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
         wxString msg = wxString::Format( _(
@@ -666,7 +664,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             wxRemoveFile( fn.GetFullPath() );
     }
 
-    sheetList.ClearModifyStatus();
+    g_RootSheet->ClearModifyStatus();
 
     wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
 
@@ -786,16 +784,13 @@ void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 {
-    SCH_SHEET_LIST sheetList;
-
-    aEvent.Enable( sheetList.IsModified() );
+    aEvent.Enable( g_RootSheet->IsModified() );
 }
 
 
 void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetScreen()->IsModify() );
-
 }
 
 
