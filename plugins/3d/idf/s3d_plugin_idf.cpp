@@ -37,6 +37,10 @@
 #define PLUGIN_3D_IDF_REVNO 0
 
 
+static SCENEGRAPH* loadIDFOutline( const wxString& aFileName );
+static SCENEGRAPH* loadIDFBoard( const wxString& aFileName );
+
+
 static SGNODE* getColor( IFSG_SHAPE& shape )
 {
     IFSG_APPEARANCE material( shape );
@@ -146,21 +150,25 @@ void GetPluginVersion( unsigned char* Major,
 
 // number of extensions supported
 #ifdef _WIN32
-    #define NEXTS 1
-#else
     #define NEXTS 2
+#else
+    #define NEXTS 4
 #endif
 
 // number of filter sets supported
-#define NFILS 1
+#define NFILS 2
 
 static char ext0[] = "idf";
+static char ext1[] = "emn";
 
 #ifdef _WIN32
-    static char fil0[] = "IDF 2.0/3.0 (*.idf)|*.idf";
+    static char fil0[] = "IDF (*.idf)|*.idf";
+    static char fil0[] = "IDF BRD v2/v3 (*.emn)|*.emn";
 #else
-    static char ext1[] = "IDF";
-    static char fil0[] = "IDF 2.0/3.0 (*.idf;*.IDF)|*.idf;*.IDF";
+    static char ext2[] = "IDF";
+    static char ext3[] = "EMN";
+    static char fil0[] = "IDF (*.idf;*.IDF)|*.idf;*.IDF";
+    static char fil1[] = "IDF BRD (*.emn;*.EMN)|*.emn;*.EMN";
 #endif
 
 static struct FILE_DATA
@@ -171,10 +179,13 @@ static struct FILE_DATA
     FILE_DATA()
     {
         extensions[0] = ext0;
+        extensions[1] = ext1;
         filters[0] = fil0;
+        filters[1] = fil1;
 
 #ifndef _WIN32
-        extensions[1] = ext1;
+        extensions[2] = ext2;
+        extensions[3] = ext3;
 #endif
 
         return;
@@ -183,8 +194,8 @@ static struct FILE_DATA
 } file_data;
 
 
-static bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items );
-static bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg );
+static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items );
+static bool addSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg );
 
 
 int GetNExtensions( void )
@@ -229,156 +240,26 @@ SCENEGRAPH* Load( char const* aFileName )
     if( NULL == aFileName )
         return NULL;
 
-    // load and render the file
-    IDF3_BOARD brd( IDF3::CAD_ELEC );
-    IDF3_COMP_OUTLINE* outline =
-        brd.GetComponentOutline( wxString::FromUTF8Unchecked( aFileName ) );
+    wxFileName fname;
+    fname.Assign( wxString::FromUTF8Unchecked( aFileName ) );
 
-    if( NULL == outline )
+    wxString ext = fname.GetExt();
+
+    if( !ext.Cmp( wxT( "idf" ) ) || !ext.Cmp( wxT( "IDF" ) ) )
     {
-        #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] no outline for file '";
-            std::cerr << aFileName << "'\n";
-        #endif
-        return NULL;
+        return loadIDFOutline( fname.GetFullPath() );
     }
 
-    VRML_LAYER vpcb;
-
-    if( !PopulateVRML( vpcb, outline->GetOutlines() ) )
+    if( !ext.Cmp( wxT( "emn" ) ) || !ext.Cmp( wxT( "EMN" ) ) )
     {
-        #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] no valid outline data in '";
-            std::cerr << aFileName << "'\n";
-        #endif
-        return NULL;
+        return loadIDFBoard( fname.GetFullPath() );
     }
 
-    vpcb.Tesselate( NULL );
-    std::vector< double > vertices;
-    std::vector< int > idxPlane;
-    std::vector< int > idxSide;
-    double thick = outline->GetThickness();
-
-    if( !vpcb.Get3DTriangles( vertices, idxPlane, idxSide, thick, 0.0 ) )
-    {
-        #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] no vertex data in '";
-            std::cerr << aFileName << "'\n";
-        #endif
-        return NULL;
-    }
-
-    if( ( idxPlane.size() % 3 ) || ( idxSide.size() % 3 ) )
-    {
-        #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)\n";
-        #endif
-        return NULL;
-    }
-
-    std::vector< SGPOINT > vlist;
-    size_t nvert = vertices.size() / 3;
-    size_t j = 0;
-
-    for( size_t i = 0; i < nvert; ++i, j+= 3 )
-        vlist.push_back( SGPOINT( vertices[j], vertices[j+1], vertices[j+2] ) );
-
-    // create the intermediate scenegraph
-    IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( true );               // tx0 = top level Transform
-    IFSG_SHAPE* shape = new IFSG_SHAPE( *tx0 );                     // shape will hold (a) all vertices and (b) a local list of normals
-    IFSG_FACESET* face = new IFSG_FACESET( *shape );                // this face shall represent the top and bottom planes
-    IFSG_COORDS* cp = new IFSG_COORDS( *face );                     // coordinates for all faces
-    cp->SetCoordsList( nvert, &vlist[0] );
-    IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );       // coordinate indices for top and bottom planes only
-    coordIdx->SetIndices( idxPlane.size(), &idxPlane[0] );
-    IFSG_NORMALS* norms = new IFSG_NORMALS( *face );                // normals for the top and bottom planes
-
-    // number of TOP (and bottom) vertices
-    j = nvert / 2;
-
-    // set the TOP normals
-    for( size_t i = 0; i < j; ++i )
-        norms->AddNormal( 0.0, 0.0, 1.0 );
-
-    // set the BOTTOM normals
-    for( size_t i = 0; i < j; ++i )
-        norms->AddNormal( 0.0, 0.0, -1.0 );
-
-    // assign a color from the rotating palette
-    SGNODE* modelColor = getColor( *shape );
-
-    // create a second shape describing the vertical walls of the IDF extrusion
-    // using per-vertex-per-face-normals
-    shape->NewNode( *tx0 );
-    shape->AddRefNode( modelColor );    // set the color to be the same as the top/bottom
-    face->NewNode( *shape );
-    cp->NewNode( *face );               // new vertex list
-    norms->NewNode( *face );            // new normals list
-    coordIdx->NewNode( *face );         // new index list
-
-    // populate the new per-face vertex list and its indices and normals
-    std::vector< int >::iterator sI = idxSide.begin();
-    std::vector< int >::iterator eI = idxSide.end();
-
-    size_t sidx = 0;    // index to the new coord set
-    SGPOINT p1, p2, p3;
-    SGVECTOR vnorm;
-
-    while( sI != eI )
-    {
-        p1 = vlist[*sI];
-        cp->AddCoord( p1 );
-        ++sI;
-
-        p2 = vlist[*sI];
-        cp->AddCoord( p2 );
-        ++sI;
-
-        p3 = vlist[*sI];
-        cp->AddCoord( p3 );
-        ++sI;
-
-        vnorm.SetVector( S3D::CalcTriNorm( p1, p2, p3 ) );
-        norms->AddNormal( vnorm );
-        norms->AddNormal( vnorm );
-        norms->AddNormal( vnorm );
-
-        coordIdx->AddIndex( (int)sidx );
-        ++sidx;
-        coordIdx->AddIndex( (int)sidx );
-        ++sidx;
-        coordIdx->AddIndex( (int)sidx );
-        ++sidx;
-    }
-
-    SCENEGRAPH* data = (SCENEGRAPH*)tx0->GetRawPtr();
-
-    // DEBUG: WRITE OUT IDF FILE TO CONFIRM NORMALS
-    #ifdef DEBUG
-    wxFileName fn( aFileName );
-    wxString output = fn.GetName();
-    output.append( wxT(".wrl") );
-    S3D::WriteVRML( output, true, (SGNODE*)(data), true, true );
-    #endif
-
-
-    // delete the API wrappers
-    delete shape;
-    delete face;
-    delete coordIdx;
-    delete cp;
-    delete tx0;
-
-    return data;
+    return NULL;
 }
 
 
-static bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items )
+static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items )
 {
     // empty outlines are not unusual so we fail quietly
     if( items->size() < 1 )
@@ -426,7 +307,7 @@ static bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* it
         {
             lseg = **sseg;
 
-            if( !AddSegment( model, &lseg, nvcont, iseg ) )
+            if( !addSegment( model, &lseg, nvcont, iseg ) )
             {
                 #ifdef DEBUG
                     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -447,7 +328,7 @@ static bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* it
 }
 
 
-static bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg )
+static bool addSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg )
 {
     // note: in all cases we must add all but the last point in the segment
     // to avoid redundant points
@@ -479,4 +360,179 @@ static bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg
         return false;
 
     return true;
+}
+
+
+static SCENEGRAPH* loadIDFOutline( const wxString& aFileName )
+{
+    // load and render the file
+    IDF3_BOARD brd( IDF3::CAD_ELEC );
+    SCENEGRAPH* data = NULL;
+
+    try
+    {
+        IDF3_COMP_OUTLINE* outline =
+            brd.GetComponentOutline( aFileName );
+
+        if( NULL == outline )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] no outline for file '";
+            std::cerr << aFileName << "'\n";
+            #endif
+            return NULL;
+        }
+
+        VRML_LAYER vpcb;
+
+        if( !getOutlineModel( vpcb, outline->GetOutlines() ) )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] no valid outline data in '";
+            std::cerr << aFileName << "'\n";
+            #endif
+            return NULL;
+        }
+
+        vpcb.Tesselate( NULL );
+        std::vector< double > vertices;
+        std::vector< int > idxPlane;
+        std::vector< int > idxSide;
+        double thick = outline->GetThickness();
+
+        if( !vpcb.Get3DTriangles( vertices, idxPlane, idxSide, thick, 0.0 ) )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] no vertex data in '";
+            std::cerr << aFileName << "'\n";
+            #endif
+            return NULL;
+        }
+
+        if( ( idxPlane.size() % 3 ) || ( idxSide.size() % 3 ) )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)\n";
+            #endif
+            return NULL;
+        }
+
+        std::vector< SGPOINT > vlist;
+        size_t nvert = vertices.size() / 3;
+        size_t j = 0;
+
+        for( size_t i = 0; i < nvert; ++i, j+= 3 )
+            vlist.push_back( SGPOINT( vertices[j], vertices[j+1], vertices[j+2] ) );
+
+        // create the intermediate scenegraph
+        IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( true );               // tx0 = top level Transform
+        IFSG_SHAPE* shape = new IFSG_SHAPE( *tx0 );                     // shape will hold (a) all vertices and (b) a local list of normals
+        IFSG_FACESET* face = new IFSG_FACESET( *shape );                // this face shall represent the top and bottom planes
+        IFSG_COORDS* cp = new IFSG_COORDS( *face );                     // coordinates for all faces
+        cp->SetCoordsList( nvert, &vlist[0] );
+        IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );       // coordinate indices for top and bottom planes only
+        coordIdx->SetIndices( idxPlane.size(), &idxPlane[0] );
+        IFSG_NORMALS* norms = new IFSG_NORMALS( *face );                // normals for the top and bottom planes
+
+        // number of TOP (and bottom) vertices
+        j = nvert / 2;
+
+        // set the TOP normals
+        for( size_t i = 0; i < j; ++i )
+            norms->AddNormal( 0.0, 0.0, 1.0 );
+
+        // set the BOTTOM normals
+        for( size_t i = 0; i < j; ++i )
+            norms->AddNormal( 0.0, 0.0, -1.0 );
+
+        // assign a color from the rotating palette
+        SGNODE* modelColor = getColor( *shape );
+
+        // create a second shape describing the vertical walls of the IDF extrusion
+        // using per-vertex-per-face-normals
+        shape->NewNode( *tx0 );
+        shape->AddRefNode( modelColor );    // set the color to be the same as the top/bottom
+        face->NewNode( *shape );
+        cp->NewNode( *face );               // new vertex list
+        norms->NewNode( *face );            // new normals list
+        coordIdx->NewNode( *face );         // new index list
+
+        // populate the new per-face vertex list and its indices and normals
+        std::vector< int >::iterator sI = idxSide.begin();
+        std::vector< int >::iterator eI = idxSide.end();
+
+        size_t sidx = 0;    // index to the new coord set
+        SGPOINT p1, p2, p3;
+        SGVECTOR vnorm;
+
+        while( sI != eI )
+        {
+            p1 = vlist[*sI];
+            cp->AddCoord( p1 );
+            ++sI;
+
+            p2 = vlist[*sI];
+            cp->AddCoord( p2 );
+            ++sI;
+
+            p3 = vlist[*sI];
+            cp->AddCoord( p3 );
+            ++sI;
+
+            vnorm.SetVector( S3D::CalcTriNorm( p1, p2, p3 ) );
+            norms->AddNormal( vnorm );
+            norms->AddNormal( vnorm );
+            norms->AddNormal( vnorm );
+
+            coordIdx->AddIndex( (int)sidx );
+            ++sidx;
+            coordIdx->AddIndex( (int)sidx );
+            ++sidx;
+            coordIdx->AddIndex( (int)sidx );
+            ++sidx;
+        }
+
+        data = (SCENEGRAPH*)tx0->GetRawPtr();
+
+        // delete the API wrappers
+        delete shape;
+        delete face;
+        delete coordIdx;
+        delete cp;
+        delete tx0;
+    }
+    catch( const IDF_ERROR& e )
+    {
+        std::cerr << e.what() << "\n";
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] cannot load the outline '" << aFileName.ToUTF8() << "'\n";
+        return NULL;
+    }
+    catch( ... )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] cannot load the outline '" << aFileName.ToUTF8() << "'\n";
+        return NULL;
+    }
+
+    // DEBUG: WRITE OUT IDF FILE TO CONFIRM NORMALS
+    #ifdef DEBUG
+    wxFileName fn( aFileName );
+    wxString output = fn.GetName();
+    output.append( wxT(".wrl") );
+    S3D::WriteVRML( output, true, (SGNODE*)(data), true, true );
+    #endif
+
+    return data;
+}
+
+
+static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
+{
+    // XXX - TO BE IMPLEMENTED
+    return NULL;
 }

@@ -2724,18 +2724,41 @@ bool IDF3_BOARD::ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutl
 
     wxFileName brdname( aFullFileName );
     wxFileName libname( aFullFileName );
+    wxString ext = brdname.GetExt();
+
+    if( !ext.Cmp( "EMN" ) )
+    {
+        libname.SetExt( wxT( "EMP" ) );
+    }
+    else if( !ext.Cmp( "emn" ) )
+    {
+        libname.SetExt( wxT( "emp" ) );
+    }
+    else
+    {
+        ostringstream ostr;
+        ostr << "\n* invalid file name: '" << aFullFileName.ToUTF8() << "'";
+
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+    }
+
 
     brdname.SetExt( wxT( "emn" ) );
-    libname.SetExt( wxT( "emp" ) );
 
     std::string bfname = TO_UTF8( aFullFileName );
+
+    if( !wxFileExists( bfname ) )
+    {
+        brdname.SetExt( wxT( "EMN" ) );
+        libname.SetExt( wxT( "EMP" ) );
+    }
 
     try
     {
         if( !brdname.IsOk() )
         {
             ostringstream ostr;
-            ostr << "\n* invalid file name: '" << bfname << "'";
+            ostr << "\n* invalid file name: '" << aFullFileName.ToUTF8() << "'";
 
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
@@ -2743,7 +2766,7 @@ bool IDF3_BOARD::ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutl
         if( !brdname.FileExists() )
         {
             ostringstream ostr;
-            ostr << "\n* no such file: '" << bfname << "'";
+            ostr << "\n* no such file: '" << aFullFileName.ToUTF8() << "'";
 
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
