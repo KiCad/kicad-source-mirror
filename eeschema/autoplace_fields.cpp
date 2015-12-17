@@ -63,9 +63,11 @@
 #include <vector>
 #include <algorithm>
 
-#define FIELD_V_SPACING 100
+#define FIELD_PADDING 10            // arbitrarily chosen for aesthetics
+#define FIELD_PADDING_ALIGNED 18    // aligns 50 mil text to a 100 mil grid
+#define WIRE_V_SPACING 100
 #define HPADDING 25
-#define VPADDING 50
+#define VPADDING 25
 
 /**
  * Function round_n
@@ -127,7 +129,7 @@ public:
         Kiface().KifaceSettings()->Read( AUTOPLACE_ALIGN_KEY, &m_align_to_grid, false );
 
         m_comp_bbox = m_component->GetBodyBoundingBox();
-        m_fbox_size = ComputeFBoxSize();
+        m_fbox_size = ComputeFBoxSize( /* aDynamic */ true );
 
         m_power_symbol = ! m_component->IsInNetlist();
 
@@ -143,17 +145,16 @@ public:
      */
     void DoAutoplace( bool aManual )
     {
+        bool force_wire_spacing = false;
         SIDE field_side = choose_side_for_fields( aManual );
         wxPoint fbox_pos = field_box_placement( field_side );
         EDA_RECT field_box( fbox_pos, m_fbox_size );
 
         if( aManual )
-        {
-            fbox_pos = fit_fields_between_wires( field_box, field_side );
-            field_box.SetOrigin( fbox_pos );
-        }
+            force_wire_spacing = fit_fields_between_wires( &field_box, field_side );
 
         // Move the fields
+        int last_y_coord = field_box.GetTop();
         for( unsigned field_idx = 0; field_idx < m_fields.size(); ++field_idx )
         {
             SCH_FIELD* field = m_fields[field_idx];
@@ -163,7 +164,7 @@ public:
 
             wxPoint pos(
                 field_horiz_placement( field, field_box ),
-                field_box.GetY() + (FIELD_V_SPACING * field_idx) );
+                field_vert_placement( field, field_box, &last_y_coord, !force_wire_spacing ) );
 
             if( m_align_to_grid )
             {
@@ -179,29 +180,40 @@ public:
 protected:
     /**
      * Compute and return the size of the fields' bounding box.
+     * @param aDynamic - if true, use dynamic spacing
      */
-    wxSize ComputeFBoxSize()
+    wxSize ComputeFBoxSize( bool aDynamic )
     {
         int max_field_width = 0;
+        int total_height = 0;
+
         BOOST_FOREACH( SCH_FIELD* field, m_fields )
         {
             int field_width;
+            int field_height;
 
             if( m_component->GetTransform().y1 )
             {
                 field->SetOrientation( TEXT_ORIENT_VERT );
-                field_width = field->GetBoundingBox().GetHeight();
             }
             else
             {
                 field->SetOrientation( TEXT_ORIENT_HORIZ );
-                field_width = field->GetBoundingBox().GetWidth();
             }
 
+            field_width = field->GetBoundingBox().GetWidth();
+            field_height = field->GetBoundingBox().GetHeight();
+
             max_field_width = std::max( max_field_width, field_width );
+
+            if( aDynamic )
+                total_height += field_height + get_field_padding();
+            else
+                total_height += WIRE_V_SPACING;
+
         }
 
-        return wxSize( max_field_width, int( FIELD_V_SPACING * (m_fields.size() - 1) ) );
+        return wxSize( max_field_width, total_height );
     }
 
 
@@ -519,16 +531,16 @@ protected:
     /**
      * Function fit_fields_between_wires
      * Shift a field box up or down a bit to make the fields fit between some wires.
-     * Returns the new position of the field bounding box.
+     * Returns true if a shift was made.
      */
-    wxPoint fit_fields_between_wires( const EDA_RECT& aBox, SIDE aSide )
+    bool fit_fields_between_wires( EDA_RECT* aBox, SIDE aSide )
     {
         if( aSide != SIDE_TOP && aSide != SIDE_BOTTOM )
-            return aBox.GetPosition();
+            return false;
 
-        std::vector<SCH_ITEM*> colliders = filtered_colliders( aBox );
+        std::vector<SCH_ITEM*> colliders = filtered_colliders( *aBox );
         if( colliders.empty() )
-            return aBox.GetPosition();
+            return false;
 
         // Find the offset of the wires for proper positioning
         int offset = 0;
@@ -537,24 +549,28 @@ protected:
         {
             SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
             if( !line )
-                return aBox.GetPosition();
+                return false;
             wxPoint start = line->GetStartPoint(), end = line->GetEndPoint();
             if( start.y != end.y )
-                return aBox.GetPosition();
+                return false;
 
-            int this_offset = (3 * FIELD_V_SPACING / 2) - ( start.y % FIELD_V_SPACING );
+            int this_offset = (3 * WIRE_V_SPACING / 2) - ( start.y % WIRE_V_SPACING );
             if( offset == 0 )
                 offset = this_offset;
             else if( offset != this_offset )
-                return aBox.GetPosition();
+                return false;
         }
 
         if( aSide == SIDE_TOP )
             offset = -offset;
 
-        wxPoint pos = aBox.GetPosition();
-        pos.y = round_n( pos.y - offset, FIELD_V_SPACING, aSide == SIDE_BOTTOM ) + offset;
-        return pos;
+        wxPoint pos = aBox->GetPosition();
+        pos.y = round_n( pos.y - offset, WIRE_V_SPACING, aSide == SIDE_BOTTOM ) + offset;
+
+        // Compensate for padding
+        pos.y += WIRE_V_SPACING / 2;
+        aBox->SetOrigin( pos );
+        return true;
     }
 
 
@@ -595,6 +611,59 @@ protected:
         }
 
         return field_xcoord;
+    }
+
+    /**
+     * Function field_vert_placement
+     * Place a field vertically. Because field vertical placements accumulate,
+     * this takes a pointer to a vertical position accumulator.
+     *
+     * @param aField - the field to place.
+     * @param aFieldBox - box in which fields will be placed.
+     * @param aPosAccum - pointer to a position accumulator
+     * @param aDynamic - use dynamic spacing
+     *
+     * @return Correct field vertical position
+     */
+    int field_vert_placement( SCH_FIELD *aField, const EDA_RECT &aFieldBox, int *aPosAccum,
+            bool aDynamic )
+    {
+        int field_height;
+        int padding;
+
+        if( aDynamic )
+        {
+            if( m_component->GetTransform().y1 )
+                field_height = aField->GetBoundingBox().GetWidth();
+            else
+                field_height = aField->GetBoundingBox().GetHeight();
+            field_height = aField->GetBoundingBox().GetHeight();
+
+            padding = get_field_padding();
+        }
+        else
+        {
+            field_height = WIRE_V_SPACING / 2;
+            padding = WIRE_V_SPACING / 2;
+        }
+
+        int placement = *aPosAccum + padding / 2 + field_height / 2;
+
+        *aPosAccum += padding + field_height;
+
+        return placement;
+    }
+
+    /**
+     * Function get_field_padding
+     * Return the desired padding between fields.
+     */
+    int get_field_padding()
+    {
+        if( m_align_to_grid )
+            return FIELD_PADDING_ALIGNED;
+        else
+            return FIELD_PADDING;
     }
 
 };
