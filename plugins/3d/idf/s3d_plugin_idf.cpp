@@ -258,15 +258,25 @@ SCENEGRAPH* Load( char const* aFileName )
 
     vpcb.Tesselate( NULL );
     std::vector< double > vertices;
-    std::vector< int > indices;
+    std::vector< int > idxPlane;
+    std::vector< int > idxSide;
     double thick = outline->GetThickness();
 
-    if( !vpcb.Get3DTriangles( vertices, indices, thick, 0.0 ) )
+    if( !vpcb.Get3DTriangles( vertices, idxPlane, idxSide, thick, 0.0 ) )
     {
         #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] no vertex data in '";
             std::cerr << aFileName << "'\n";
+        #endif
+        return NULL;
+    }
+
+    if( ( idxPlane.size() % 3 ) || ( idxSide.size() % 3 ) )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)\n";
         #endif
         return NULL;
     }
@@ -279,24 +289,73 @@ SCENEGRAPH* Load( char const* aFileName )
         vlist.push_back( SGPOINT( vertices[j], vertices[j+1], vertices[j+2] ) );
 
     // create the intermediate scenegraph
-    IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( true );
-    IFSG_SHAPE* shape = new IFSG_SHAPE( *tx0 );
-    IFSG_FACESET* face = new IFSG_FACESET( *shape );
-    IFSG_COORDS* cp = new IFSG_COORDS( *face );
+    IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( true );               // tx0 = top level Transform
+    IFSG_SHAPE* shape = new IFSG_SHAPE( *tx0 );                     // shape will hold (a) all vertices and (b) a local list of normals
+    IFSG_FACESET* face = new IFSG_FACESET( *shape );                // this face shall represent the top and bottom planes
+    IFSG_COORDS* cp = new IFSG_COORDS( *face );                     // coordinates for all faces
     cp->SetCoordsList( nvert, &vlist[0] );
-    IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );
-    coordIdx->SetIndices( indices.size(), &indices[0] );
+    IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );       // coordinate indices for top and bottom planes only
+    coordIdx->SetIndices( idxPlane.size(), &idxPlane[0] );
+    IFSG_NORMALS* norms = new IFSG_NORMALS( *face );                // normals for the top and bottom planes
 
-    if( !face->CalcNormals( NULL ) )
+    // number of TOP (and bottom) vertices
+    j = nvert / 2;
+
+    // set the TOP normals
+    for( size_t i = 0; i < j; ++i )
+        norms->AddNormal( 0.0, 0.0, 1.0 );
+
+    // set the BOTTOM normals
+    for( size_t i = 0; i < j; ++i )
+        norms->AddNormal( 0.0, 0.0, -1.0 );
+
+    // assign a color from the rotating palette
+    SGNODE* modelColor = getColor( *shape );
+
+    // create a second shape describing the vertical walls of the IDF extrusion
+    // using per-vertex-per-face-normals
+    shape->NewNode( *tx0 );
+    shape->AddRefNode( modelColor );    // set the color to be the same as the top/bottom
+    face->NewNode( *shape );
+    cp->NewNode( *face );               // new vertex list
+    norms->NewNode( *face );            // new normals list
+    coordIdx->NewNode( *face );         // new index list
+
+    // populate the new per-face vertex list and its indices and normals
+    std::vector< int >::iterator sI = idxSide.begin();
+    std::vector< int >::iterator eI = idxSide.end();
+
+    size_t sidx = 0;    // index to the new coord set
+    SGPOINT p1, p2, p3;
+    SGVECTOR vnorm;
+
+    while( sI != eI )
     {
-        #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] cannot calculate normals\n";
-        #endif
+        p1 = vlist[*sI];
+        cp->AddCoord( p1 );
+        ++sI;
+
+        p2 = vlist[*sI];
+        cp->AddCoord( p2 );
+        ++sI;
+
+        p3 = vlist[*sI];
+        cp->AddCoord( p3 );
+        ++sI;
+
+        vnorm.SetVector( S3D::CalcTriNorm( p1, p2, p3 ) );
+        norms->AddNormal( vnorm );
+        norms->AddNormal( vnorm );
+        norms->AddNormal( vnorm );
+
+        coordIdx->AddIndex( (int)sidx );
+        ++sidx;
+        coordIdx->AddIndex( (int)sidx );
+        ++sidx;
+        coordIdx->AddIndex( (int)sidx );
+        ++sidx;
     }
 
-    // magenta
-    getColor( *shape );
     SCENEGRAPH* data = (SCENEGRAPH*)tx0->GetRawPtr();
 
     // DEBUG: WRITE OUT IDF FILE TO CONFIRM NORMALS

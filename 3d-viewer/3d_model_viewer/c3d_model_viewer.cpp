@@ -281,7 +281,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 
         m_ogl_3dmodel->Draw_opaque();
         //m_ogl_3dmodel->Draw_transparent();
-        m_ogl_3dmodel->Draw_bboxes();
+        //m_ogl_3dmodel->Draw_bboxes();
 
         glPopMatrix();
     }

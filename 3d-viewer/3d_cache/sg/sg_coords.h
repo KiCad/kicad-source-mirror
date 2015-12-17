@@ -32,6 +32,8 @@
 #include <vector>
 #include "3d_cache/sg/sg_node.h"
 
+class SGFACESET;
+
 class SGCOORDS : public SGNODE
 {
 public:
@@ -60,7 +62,7 @@ public:
      * calculates normals for this coordinate list and sets the
      * normals list in the parent SGFACESET
      */
-    bool CalcNormals( SGNODE** aPtr );
+    bool CalcNormals( SGFACESET* callingNode, SGNODE** aPtr = NULL );
 
     void ReNameNodes( void );
     bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );

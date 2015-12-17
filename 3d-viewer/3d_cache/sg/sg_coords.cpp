@@ -316,33 +316,48 @@ bool SGCOORDS::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 }
 
 
-bool SGCOORDS::CalcNormals( SGNODE** aPtr )
+bool SGCOORDS::CalcNormals( SGFACESET* callingNode, SGNODE** aPtr )
 {
     if( aPtr )
         *aPtr = NULL;
 
-    if( NULL == m_Parent )
+    if( NULL == m_Parent || NULL == callingNode )
         return false;
 
     // the parent and all references must have indices; collect all
     // indices into one std::vector<>
     std::vector< int > ilist;
-    ((SGFACESET*)m_Parent)->GatherCoordIndices( ilist );
+    SGNORMALS* np = NULL;
 
-    std::list< SGNODE* >::iterator sB = m_BackPointers.begin();
-    std::list< SGNODE* >::iterator eB = m_BackPointers.end();
-
-    while( sB != eB )
+    if( callingNode == m_Parent )
     {
-        SGFACESET* fp = (SGFACESET*)(*sB);
-        fp->GatherCoordIndices( ilist );
-        ++sB;
+        ((SGFACESET*)m_Parent)->GatherCoordIndices( ilist );
+
+        std::list< SGNODE* >::iterator sB = m_BackPointers.begin();
+        std::list< SGNODE* >::iterator eB = m_BackPointers.end();
+
+        while( sB != eB )
+        {
+            SGFACESET* fp = (SGFACESET*)(*sB);
+            fp->GatherCoordIndices( ilist );
+            ++sB;
+        }
+
+        np = ((SGFACESET*)m_Parent)->m_Normals;
+
+        if( !np )
+            np = new SGNORMALS( m_Parent );
+
     }
+    else
+    {
+        callingNode->GatherCoordIndices( ilist );
+        np = callingNode->m_Normals;
 
-    SGNORMALS* np = ((SGFACESET*)m_Parent)->m_Normals;
+        if( !np )
+            np = new SGNORMALS( callingNode );
 
-    if( !np )
-        np = new SGNORMALS( m_Parent );
+    }
 
     if( S3D::CalcTriangleNormals( coords, ilist, np->norms )  )
     {

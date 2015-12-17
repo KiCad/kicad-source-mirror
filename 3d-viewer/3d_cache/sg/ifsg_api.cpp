@@ -40,6 +40,7 @@
 #include "3d_cache/sg/sg_normals.h"
 #include "3d_cache/sg/sg_shape.h"
 #include "3d_cache/sg/sg_version.h"
+#include "3d_cache/sg/sg_helpers.h"
 #include "3d_info.h"
 #include "plugins/3dapi/c3dmodel.h"
 
@@ -436,4 +437,25 @@ void S3D::GetLibVersion( unsigned char* Major, unsigned char* Minor,
         *Patch = SG_VERSION_PATCH;
 
     return;
+}
+
+
+SGVECTOR S3D::CalcTriNorm( const SGPOINT& p1, const SGPOINT& p2, const SGPOINT& p3 )
+{
+    glm::dvec3 tri = glm::dvec3( 0.0, 0.0, 0.0 );
+    glm::dvec3 pts[3];
+
+    pts[0] = glm::dvec3( p1.x, p1.y, p1.z );
+    pts[1] = glm::dvec3( p2.x, p2.y, p2.z );
+    pts[2] = glm::dvec3( p3.x, p3.y, p3.z );
+
+    // degenerate points are given a default 0, 0, 1 normal
+    if( S3D::degenerate( pts ) )
+        return SGVECTOR( 0.0, 0.0, 1.0 );
+
+    // normal
+    tri = cross( pts[1] - pts[0], pts[2] - pts[0] );
+    normalize( tri );
+
+    return SGVECTOR( tri.x, tri.y, tri.z );
 }

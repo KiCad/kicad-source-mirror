@@ -136,33 +136,31 @@ bool CanRender( void )
 
 SCENEGRAPH* Load( char const* aFileName )
 {
-    // For this demonstration we create a tetrahedron and
-    // paint its faces Magenta Red Green Blue. Steps:
-    // * Create a top level transform tx0 which represent the VRML file
-    // * Create a child transform tx1, parent tx0, to define the tetrahedron
-    //    + Create 'shape' to define one facet
-    //    ++ Create a 'face' to hold vertices and indices
-    //    +++ Create 'cp' which is the coordinate list
-    //    +++ Create 'np' which is the per-vertex normals list
-    //    +++ Create 'coordIndex' which is the (triangular) vertex index list
-    //        for facet1 of the tetrahedron
-    //    ++ Create a 'material' to define the appearance of 'shape'
-    //    **
-    //    + shape->NewNode() to define next facet
-    //    ++ face->NewNode() for a new facet
-    //    +++ Add Ref to 'cp' for coordinate list
-    //    +++ Add Ref to 'np' for normals list
-    //    +++ coordIndex->NewNode() for vertex index list of new facet
-    //    ++ material->NewNode() for material of new facet
-    //    + repeat twice from ** to produce last 2 facets
-    // * Create a child transform tx2, parent tx0, for a referenced tetrahedron
-    //    + Set a translation and rotation so that this is distinct from tx1
-    //    + Add Reference to tx1
-    // ALL DONE: we now have:
-    // tx0
-    //  - contains tx1 which contains all elements of a tetrahedron
-    //  - contains tx0 which contains a reference to tx1 and offsets it so
-    //    that it renders in a different position
+    // For this demonstration we create a tetrahedron (tx1) consisting of a SCENEGRAPH
+    // (VRML Transform) which in turn contains 4 SGSHAPE (VRML Shape) objects
+    // representing each of the sides of the tetrahedron. Each Shape is associated
+    // with a color (SGAPPEARANCE) and a SGFACESET (VRML Geometry->indexedFaceSet).
+    // Each SGFACESET is associated with a vertex list (SGCOORDS), a per-vertex normals
+    // list (SGNORMALS), and a coordinate index (SGCOORDINDEX). One shape is used to
+    // represent each face so that we may use per-vertex-per-face normals.
+    //
+    // The tetrahedron in turn is a child of a top level SCENEGRAPH (tx0) which has
+    // a second SCENEGRAPH child (tx2) which is a transformation of the tetrahedron tx1
+    // (rotation + translation). This demonstrates the reuse of components within
+    // the model heirarchy.
+
+    // define the vertices of the tetrahedron
+    // face 1: 0, 3, 1
+    // face 2: 0, 2, 3
+    // face 3: 1, 3, 2
+    // face 4: 0, 1, 2
+    double SQ2 = sqrt( 0.5 );
+    SGPOINT vert[4];
+    vert[0] = SGPOINT( 1.0, 0.0, -SQ2 );
+    vert[1] = SGPOINT( -1.0, 0.0, -SQ2 );
+    vert[2] = SGPOINT( 0.0, 1.0, SQ2 );
+    vert[3] = SGPOINT( 0.0, -1.0, SQ2 );
+
 
     // create the top level transform; this will hold all other
     // scenegraph objects; a transform may hold other transforms and
@@ -172,7 +170,7 @@ SCENEGRAPH* Load( char const* aFileName )
     // create the transform which will house the shapes
     IFSG_TRANSFORM* tx1 = new IFSG_TRANSFORM( tx0->GetRawPtr() );
 
-    // add a shape which we will use to define a tetrahedron; shapes
+    // add a shape which we will use to define one face of the tetrahedron; shapes
     // hold facesets and appearances
     IFSG_SHAPE* shape = new IFSG_SHAPE( *tx1 );
 
@@ -182,30 +180,19 @@ SCENEGRAPH* Load( char const* aFileName )
 
     IFSG_FACESET* face = new IFSG_FACESET( *shape );
 
-    // define the vertices of the tetrahedron
-    double SQ2 = sqrt( 0.5 );
-    SGPOINT vert[4];
-    vert[0] = SGPOINT( 1.0, 0.0, -SQ2 );
-    vert[1] = SGPOINT( -1.0, 0.0, -SQ2 );
-    vert[2] = SGPOINT( 0.0, 1.0, SQ2 );
-    vert[3] = SGPOINT( 0.0, -1.0, SQ2 );
     IFSG_COORDS* cp = new IFSG_COORDS( *face );
-    cp->SetCoordsList( 4, vert );
+    cp->AddCoord( vert[0] );
+    cp->AddCoord( vert[3] );
+    cp->AddCoord( vert[1] );
+
     // coordinate indices - note: enforce triangles;
     // in real plugins where it is not necessarily possible
     // to determine which side a triangle is visible from,
     // 2 point orders must be specified for each triangle
     IFSG_COORDINDEX* coordIdx = new IFSG_COORDINDEX( *face );
-    int cidx[12] = { 0, 3, 1, 0, 2, 3, 1, 3, 2, 0, 1, 2 };
-    coordIdx->SetIndices( 3, cidx );
-
-    // note: track the sets of faces since all faces need to be
-    // instantiated before we can calculate the normals list;
-    // this is due to the need for all vertices to be referenced
-    // in the index lists; however we have a single coordinate
-    // list and 4 associated vertex lists so the requirement is
-    // not met until all faces are instantiated.
-    SGNODE* face1 = face->GetRawPtr();
+    coordIdx->AddIndex( 0 );
+    coordIdx->AddIndex( 1 );
+    coordIdx->AddIndex( 2 );
 
     // create an appearance; appearances are owned by shapes
     // magenta
@@ -215,63 +202,98 @@ SCENEGRAPH* Load( char const* aFileName )
     material->SetAmbient( 0.9 );
     material->SetShininess( 0.3 );
 
+    // normals
+    IFSG_NORMALS* np = new IFSG_NORMALS( *face );
+    SGVECTOR nval = S3D::CalcTriNorm( vert[0], vert[3], vert[1] );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+
+    //
     // Shape2
+    // Note: we reuse the IFSG* wrappers to create and manipulate new
+    // data structures.
+    //
     shape->NewNode( *tx1 );
     face->NewNode( *shape );
-    face->AddRefNode( *cp );
     coordIdx->NewNode( *face );
-    coordIdx->SetIndices( 3, &cidx[3] );
-    SGNODE* face2 = face->GetRawPtr();
-    // red
+    cp->NewNode( *face );
+    np->NewNode( *face );
+    // vertices
+    cp->AddCoord( vert[0] );
+    cp->AddCoord( vert[2] );
+    cp->AddCoord( vert[3] );
+    // indices
+    coordIdx->AddIndex( 0 );
+    coordIdx->AddIndex( 1 );
+    coordIdx->AddIndex( 2 );
+    // normals
+    nval = S3D::CalcTriNorm( vert[0], vert[2], vert[3] );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+    // color (red)
     material->NewNode( *shape );
     material->SetSpecular( 1.0, 0.0, 0.0 );
     material->SetDiffuse( 0.9, 0.0, 0.0 );
     material->SetAmbient( 0.9 );
     material->SetShininess( 0.3 );
 
+    //
     // Shape3
+    //
     shape->NewNode( *tx1 );
     face->NewNode( *shape );
-    face->AddRefNode( *cp );
     coordIdx->NewNode( *face );
-    coordIdx->SetIndices( 3, &cidx[6] );
-    SGNODE* face3 = face->GetRawPtr();
-    // green
+    cp->NewNode( *face );
+    np->NewNode( *face );
+    // vertices
+    cp->AddCoord( vert[1] );
+    cp->AddCoord( vert[3] );
+    cp->AddCoord( vert[2] );
+    // indices
+    coordIdx->AddIndex( 0 );
+    coordIdx->AddIndex( 1 );
+    coordIdx->AddIndex( 2 );
+    // normals
+    nval = S3D::CalcTriNorm( vert[1], vert[3], vert[2] );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+    // color (green)
     material->NewNode( *shape );
     material->SetSpecular( 0.0, 1.0, 0.0 );
     material->SetDiffuse( 0.0, 0.9, 0.0 );
     material->SetAmbient( 0.9 );
     material->SetShininess( 0.3 );
 
+    //
     // Shape4
+    //
     shape->NewNode( *tx1 );
     face->NewNode( *shape );
-    face->AddRefNode( *cp );
     coordIdx->NewNode( *face );
-    coordIdx->SetIndices( 3, &cidx[9] );
-    SGNODE* face4 = face->GetRawPtr();
-    // blue
+    cp->NewNode( *face );
+    np->NewNode( *face );
+    // vertices
+    cp->AddCoord( vert[0] );
+    cp->AddCoord( vert[1] );
+    cp->AddCoord( vert[2] );
+    // indices
+    coordIdx->AddIndex( 0 );
+    coordIdx->AddIndex( 1 );
+    coordIdx->AddIndex( 2 );
+    // normals
+    nval = S3D::CalcTriNorm( vert[0], vert[1], vert[2] );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+    np->AddNormal( nval );
+    // color (blue)
     material->NewNode( *shape );
     material->SetSpecular( 0.0, 0.0, 1.0 );
     material->SetDiffuse( 0.0, 0.0, 0.9 );
     material->SetAmbient( 0.9 );
     material->SetShininess( 0.3 );
-
-    // note: now that the faces are instantiated we
-    // can calculate the per-vertex normals
-    SGNODE* np;
-    face->Attach( face1 );
-    face->CalcNormals( &np );
-
-    if( np )
-    {
-        face->Attach( face2 );
-        face->AddRefNode( np );
-        face->Attach( face3 );
-        face->AddRefNode( np );
-        face->Attach( face4 );
-        face->AddRefNode( np );
-    }
 
     // create a copy of the entire tetrahedron shifted Z+2 and rotated 2/3PI
     IFSG_TRANSFORM* tx2 = new IFSG_TRANSFORM( tx0->GetRawPtr() );
@@ -287,6 +309,7 @@ SCENEGRAPH* Load( char const* aFileName )
     delete coordIdx;
     delete material;
     delete cp;
+    delete np;
     delete tx0;
     delete tx1;
     delete tx2;

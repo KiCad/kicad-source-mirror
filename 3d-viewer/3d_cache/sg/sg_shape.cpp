@@ -605,7 +605,7 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
         return true;
     }
 
-    if( NULL == m_Appearance )
+    if( NULL == pa )
     {
         m.m_MaterialIdx = 0;
     }

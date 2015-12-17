@@ -32,7 +32,6 @@
 
 #include "3d_cache/sg/sg_helpers.h"
 #include "3d_cache/sg/sg_node.h"
-#include <glm/glm.hpp>
 
 
 // formats a floating point number for text output to a VRML file
@@ -311,7 +310,7 @@ bool S3D::ReadColor( std::ifstream& aFile, SGCOLOR& aColor )
 }
 
 
-static bool degenerate( glm::dvec3* pts )
+bool S3D::degenerate( glm::dvec3* pts )
 {
     double dx, dy, dz;
 
@@ -342,7 +341,7 @@ static bool degenerate( glm::dvec3* pts )
 
 static void calcTriad( glm::dvec3* pts, glm::dvec3& tri )
 {
-    if( degenerate( pts ) )
+    if( S3D::degenerate( pts ) )
     {
         // degenerate points should contribute nothing to the result
         tri = glm::dvec3( 0.0, 0.0, 0.0 );

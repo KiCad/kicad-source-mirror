@@ -38,6 +38,7 @@
 #include <vector>
 #include "plugins/3dapi/sg_base.h"
 #include "plugins/3dapi/sg_types.h"
+#include <glm/glm.hpp>
 
 class SGNORMALS;
 class SGCOORDS;
@@ -153,6 +154,8 @@ class SGCOORDINDEX;
 
 namespace S3D
 {
+    bool degenerate( glm::dvec3* pts );
+
     //
     // Normals calculations from triangles
     //

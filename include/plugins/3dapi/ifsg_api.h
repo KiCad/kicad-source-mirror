@@ -43,6 +43,12 @@ struct S3D_POINT;
 namespace S3D
 {
     /**
+     * Function CalcTriNorm
+     * returns the normal vector of a triangle described by vertices p1, p2, p3
+     */
+    SGLIB_API SGVECTOR CalcTriNorm( const SGPOINT& p1, const SGPOINT& p2, const SGPOINT& p3 );
+
+    /**
      * Function WriteCache
      * writes the SGNODE tree to a binary cache file
      *

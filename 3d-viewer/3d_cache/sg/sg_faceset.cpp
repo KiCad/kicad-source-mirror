@@ -1043,21 +1043,19 @@ void SGFACESET::GatherCoordIndices( std::vector< int >& aIndexList )
 
 bool SGFACESET::CalcNormals( SGNODE** aPtr )
 {
+    SGCOORDS* coords = m_Coords;
+
     if( m_RCoords )
-    {
-        SGFACESET* fp = (SGFACESET*) m_RCoords->GetParent();
+        coords = m_RCoords;
 
-        if( !fp )
-            return false;
-
-        return fp->CalcNormals( aPtr );
-    }
-
-    if( NULL == m_Coords || m_Coords->coords.empty() )
+    if( NULL == coords || coords->coords.empty() )
         return false;
 
     if( m_Normals && !m_Normals->norms.empty( ) )
         return true;
 
-    return m_Coords->CalcNormals( aPtr );
+    if( m_RNormals && !m_RNormals->norms.empty( ) )
+        return true;
+
+    return coords->CalcNormals( this, aPtr );
 }

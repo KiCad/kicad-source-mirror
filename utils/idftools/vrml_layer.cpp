@@ -1793,10 +1793,12 @@ void VRML_LAYER::SetVertexOffsets( double aXoffset, double aYoffset )
 
 
 bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
-    std::vector< int > &aIndexList, double aTopZ, double aBotZ )
+    std::vector< int > &aIndexPlane, std::vector< int > &aIndexSide,
+    double aTopZ, double aBotZ )
 {
     aVertexList.clear();
-    aIndexList.clear();
+    aIndexPlane.clear();
+    aIndexSide.clear();
 
     if( ordmap.size() < 3 || outline.empty() )
         return false;
@@ -1853,20 +1855,24 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
         std::list< TRIPLET_3D >::const_iterator tbeg = triplets.begin();
         std::list< TRIPLET_3D >::const_iterator tend = triplets.end();
 
+        std::vector< int > aIndexBot;
+
         while( tbeg != tend )
         {
             // top vertices
-            aIndexList.push_back( (int) tbeg->i1 );
-            aIndexList.push_back( (int) tbeg->i2 );
-            aIndexList.push_back( (int) tbeg->i3 );
+            aIndexPlane.push_back( (int) tbeg->i1 );
+            aIndexPlane.push_back( (int) tbeg->i2 );
+            aIndexPlane.push_back( (int) tbeg->i3 );
 
             // bottom vertices
-            aIndexList.push_back( (int) ( tbeg->i2 + vsize ) );
-            aIndexList.push_back( (int) ( tbeg->i1 + vsize ) );
-            aIndexList.push_back( (int) ( tbeg->i3 + vsize ) );
+            aIndexBot.push_back( (int) ( tbeg->i2 + vsize ) );
+            aIndexBot.push_back( (int) ( tbeg->i1 + vsize ) );
+            aIndexBot.push_back( (int) ( tbeg->i3 + vsize ) );
 
             ++tbeg;
         }
+
+        aIndexPlane.insert( aIndexPlane.end(), aIndexBot.begin(), aIndexBot.end() );
     }
 
     // compile indices for the walls joining top to bottom
@@ -1902,23 +1908,23 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
 
             if( !holes_only )
             {
-                aIndexList.push_back( curPoint );
-                aIndexList.push_back( lastPoint );
-                aIndexList.push_back( (int)( curPoint + vsize ) );
+                aIndexSide.push_back( curPoint );
+                aIndexSide.push_back( lastPoint );
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
 
-                aIndexList.push_back( (int)( curPoint + vsize ) );
-                aIndexList.push_back( lastPoint );
-                aIndexList.push_back( (int)( lastPoint + vsize ) );
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
+                aIndexSide.push_back( lastPoint );
+                aIndexSide.push_back( (int)( lastPoint + vsize ) );
             }
             else
             {
-                aIndexList.push_back( curPoint );
-                aIndexList.push_back( (int)( curPoint + vsize ) );
-                aIndexList.push_back( lastPoint );
+                aIndexSide.push_back( curPoint );
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
+                aIndexSide.push_back( lastPoint );
 
-                aIndexList.push_back( (int)( curPoint + vsize ) );
-                aIndexList.push_back( (int)( lastPoint + vsize ) );
-                aIndexList.push_back( lastPoint );
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
+                aIndexSide.push_back( (int)( lastPoint + vsize ) );
+                aIndexSide.push_back( lastPoint );
             }
 
             lastPoint = curPoint;
@@ -1933,23 +1939,23 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
 
         if( !holes_only )
         {
-            aIndexList.push_back( curPoint );
-            aIndexList.push_back( lastPoint );
-            aIndexList.push_back( (int)( curPoint + vsize ) );
+            aIndexSide.push_back( curPoint );
+            aIndexSide.push_back( lastPoint );
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
 
-            aIndexList.push_back( (int)( curPoint + vsize ) );
-            aIndexList.push_back( lastPoint );
-            aIndexList.push_back( (int)( lastPoint + vsize ) );
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
+            aIndexSide.push_back( lastPoint );
+            aIndexSide.push_back( (int)( lastPoint + vsize ) );
         }
         else
         {
-            aIndexList.push_back( curPoint );
-            aIndexList.push_back( (int)( curPoint + vsize ) );
-            aIndexList.push_back( lastPoint );
+            aIndexSide.push_back( curPoint );
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
+            aIndexSide.push_back( lastPoint );
 
-            aIndexList.push_back( (int)( curPoint + vsize ) );
-            aIndexList.push_back( (int)( lastPoint + vsize ) );
-            aIndexList.push_back( lastPoint );
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
+            aIndexSide.push_back( (int)( lastPoint + vsize ) );
+            aIndexSide.push_back( lastPoint );
         }
 
         ++obeg;

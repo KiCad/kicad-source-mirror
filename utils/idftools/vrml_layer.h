@@ -463,12 +463,14 @@ public:
      * triangular vertices which may be used for rendering.
      *
      * @param aVertexList will store the vertices
-     * @param aIndexList will store the indices
+     * @param aIndexPlane will store the indices for the top + bottom planes
+     * @param aIndexSide will store the indices for the vertical wall
      * @param aTopZ is the top plane of the model
      * @param aBotZ is the bottom plane of the model
      */
     bool Get3DTriangles( std::vector< double >& aVertexList,
-        std::vector< int > &aIndexList, double aTopZ, double aBotZ );
+        std::vector< int > &aIndexPlane, std::vector< int > &aIndexSide,
+        double aTopZ, double aBotZ );
 
 };
 
