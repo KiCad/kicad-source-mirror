@@ -163,7 +163,7 @@ static char ext1[] = "emn";
 
 #ifdef _WIN32
     static char fil0[] = "IDF (*.idf)|*.idf";
-    static char fil0[] = "IDF BRD v2/v3 (*.emn)|*.emn";
+    static char fil1[] = "IDF BRD v2/v3 (*.emn)|*.emn";
 #else
     static char ext2[] = "IDF";
     static char ext3[] = "EMN";
