@@ -229,7 +229,7 @@
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style">wxSUNKEN_BORDER|wxTAB_TRAVERSAL</property>
+                                <property name="window_style">wxTAB_TRAVERSAL</property>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -1538,7 +1538,7 @@
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style">wxSUNKEN_BORDER|wxTAB_TRAVERSAL</property>
+                                <property name="window_style">wxTAB_TRAVERSAL</property>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
