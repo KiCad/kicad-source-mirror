@@ -524,7 +524,8 @@ bool SCH_EDIT_FRAME::RescueProject( bool aRunningOnDemand )
     {
         if( aRunningOnDemand )
         {
-            wxMessageDialog dlg( this, _( "This project has nothing to rescue." ) );
+            wxMessageDialog dlg( this, _( "This project has nothing to rescue." ),
+                    _( "Project Rescue Helper" ) );
             dlg.ShowModal();
         }
         return true;
@@ -538,7 +539,8 @@ bool SCH_EDIT_FRAME::RescueProject( bool aRunningOnDemand )
     // have clicked cancel by mistake, and should have some indication of that.
     if( !rescuer.GetChosenCandidateCount() )
     {
-        wxMessageDialog dlg( this, _( "No symbols were rescued." ) );
+        wxMessageDialog dlg( this, _( "No symbols were rescued." ),
+                _( "Project Rescue Helper" ) );
         dlg.ShowModal();
 
         // Set the modified flag even on Cancel. Many users seem to instinctively want to Save at
