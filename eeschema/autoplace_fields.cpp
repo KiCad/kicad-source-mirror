@@ -561,14 +561,24 @@ protected:
                 return false;
         }
 
-        if( aSide == SIDE_TOP )
-            offset = -offset;
+        // At this point we are recomputing the field box size. Do not
+        // return false after this point.
+        m_fbox_size = ComputeFBoxSize( /* aDynamic */ false );
 
         wxPoint pos = aBox->GetPosition();
-        pos.y = round_n( pos.y - offset, WIRE_V_SPACING, aSide == SIDE_BOTTOM ) + offset;
 
-        // Compensate for padding
-        pos.y += WIRE_V_SPACING / 2;
+        // Remove the existing padding to get a bit more space to work with
+        if( aSide == SIDE_BOTTOM )
+        {
+            pos.y = m_comp_bbox.GetBottom() - get_field_padding();
+        }
+        else
+        {
+            pos.y = m_comp_bbox.GetTop() - m_fbox_size.y + get_field_padding();
+        }
+
+        pos.y = round_n( pos.y, WIRE_V_SPACING, aSide == SIDE_BOTTOM );
+
         aBox->SetOrigin( pos );
         return true;
     }
