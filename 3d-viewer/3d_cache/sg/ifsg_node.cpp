@@ -48,6 +48,18 @@ IFSG_NODE::~IFSG_NODE()
 }
 
 
+void IFSG_NODE::Destroy( void )
+{
+    if( m_node )
+        m_node->DisassociateWrapper( &m_node );
+
+    delete m_node;
+    m_node = NULL;
+
+    return;
+}
+
+
 SGNODE* IFSG_NODE::GetRawPtr( void )
 {
     return m_node;

@@ -2737,9 +2737,10 @@ bool IDF3_BOARD::ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutl
     else
     {
         ostringstream ostr;
-        ostr << "\n* invalid file name: '" << aFullFileName.ToUTF8() << "'";
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << "* [INFO] invalid file name: '" << aFullFileName.ToUTF8() << "'";
 
-        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        errormsg = ostr.str();
     }
 
 

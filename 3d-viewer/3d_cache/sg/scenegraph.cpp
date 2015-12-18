@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#define GLM_FORCE_RADIANS
 
 #include <iostream>
 #include <glm/gtx/transform.hpp>
@@ -580,7 +581,7 @@ bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform,
     // calculate the accumulated transform
     double rX, rY, rZ;
     rotation_axis.GetVector( rX, rY, rZ );
-    glm::dmat4 rM = glm::rotate( glm::degrees( rotation_angle ), glm::dvec3( rX, rY, rZ ) );
+    glm::dmat4 rM = glm::rotate( rotation_angle, glm::dvec3( rX, rY, rZ ) );
     glm::dmat4 tM = glm::translate( glm::dvec3( translation.x, translation.y, translation.z ) );
     glm::dmat4 tx0;
 

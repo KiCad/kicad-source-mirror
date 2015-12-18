@@ -31,6 +31,7 @@
  *  #VRML V2.0 utf8
  */
 
+#include <locale.h>
 #include <fstream>
 #include <iostream>
 #include <cmath>

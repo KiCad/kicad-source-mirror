@@ -253,6 +253,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     // Render Model
     if( m_ogl_3dmodel )
     {
+        /*
         ogl_set_arrow_material();
 
         glColor3f( 0.9f, 0.0f, 0.0f );
@@ -269,6 +270,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
         OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
                         SFVEC3F( 0.0f, 0.0f, RANGE_SCALE_3D / 1.0f ),
                         0.2f );
+        */
 
         glPushMatrix();
 
