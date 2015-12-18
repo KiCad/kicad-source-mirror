@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-16 11:13+0100\n"
-"PO-Revision-Date: 2015-12-16 15:10+0100\n"
+"PO-Revision-Date: 2015-12-18 12:59+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -72,7 +72,7 @@ msgstr "Mover arriba  ^"
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 msgid "Move Down"
-msgstr "Mover abajo"
+msgstr "Bajar"
 
 #: 3d-viewer/3d_canvas.cpp:517
 #, c-format
@@ -4358,7 +4358,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:108
 msgid "Current search path list"
-msgstr "Lista de rutas de búsqueda actuales"
+msgstr "Lista de rutas de búsqueda activas"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:113
 msgid ""
@@ -5525,7 +5525,7 @@ msgstr "¡El campo del valor no puede estar vacío! No se realiza el cambio"
 
 #: eeschema/eeschema_config.cpp:261 pcbnew/pcbnew_config.cpp:217
 msgid "Read Project File"
-msgstr "Cargar archivo de proyecto"
+msgstr "Abrir archivo proyecto"
 
 #: eeschema/eeschema_config.cpp:498 pcbnew/pcbnew_config.cpp:300
 msgid "Save Project File"
@@ -5533,27 +5533,27 @@ msgstr "Guardar archivo de proyecto"
 
 #: eeschema/erc.cpp:89
 msgid "Input Pin.........."
-msgstr "Pin de entrada........."
+msgstr "Pin de entrada......................."
 
 #: eeschema/erc.cpp:90
 msgid "Output Pin........."
-msgstr "Pin de salida........."
+msgstr "Pin de salida.........................."
 
 #: eeschema/erc.cpp:91
 msgid "Bidirectional Pin.."
-msgstr "Pin bidireccional.."
+msgstr "Pin bidireccional......................"
 
 #: eeschema/erc.cpp:92
 msgid "Tri-State Pin......"
-msgstr "Pin triestado......"
+msgstr "Pin triestado.........................."
 
 #: eeschema/erc.cpp:93
 msgid "Passive Pin........"
-msgstr "Pin pasivo........"
+msgstr "Pin pasivo............................."
 
 #: eeschema/erc.cpp:94
 msgid "Unspecified Pin...."
-msgstr "Pin sin especificar...."
+msgstr "Pin sin especificar...................."
 
 #: eeschema/erc.cpp:95
 msgid "Power Input Pin...."
@@ -5561,19 +5561,19 @@ msgstr "Pin de entrada de alimentación...."
 
 #: eeschema/erc.cpp:96
 msgid "Power Output Pin..."
-msgstr "Pin de salida de alimentación..."
+msgstr "Pin de salida de alimentación......."
 
 #: eeschema/erc.cpp:97
 msgid "Open Collector....."
-msgstr "Colector abierto....."
+msgstr "Colector abierto......................"
 
 #: eeschema/erc.cpp:98
 msgid "Open Emitter......."
-msgstr "Emisor abierto......."
+msgstr "Emisor abierto........................"
 
 #: eeschema/erc.cpp:99
 msgid "No Connection......"
-msgstr "Sin conectar......"
+msgstr "Sin conectar.........................."
 
 #: eeschema/erc.cpp:105
 msgid "Input Pin"
@@ -6910,7 +6910,7 @@ msgstr "Actualizar vista"
 
 #: eeschema/menubar.cpp:249
 msgid "Show &Hierarchical Navigator"
-msgstr "Mostrar explorador de &jerarquía"
+msgstr "Mostrar Explorador de &jerarquía"
 
 #: eeschema/menubar.cpp:250
 msgid "Navigate hierarchical sheets"
@@ -7010,7 +7010,7 @@ msgstr "Preferencias de color"
 
 #: eeschema/menubar.cpp:392
 msgid "Schematic Editor &Options"
-msgstr "&Opciones del editor de esquemas"
+msgstr "&Opciones del Editor de esquemas"
 
 #: eeschema/menubar.cpp:393
 msgid "Set Eeschema preferences"
@@ -7070,7 +7070,7 @@ msgstr "Genera el archivo con la lista de redes"
 
 #: eeschema/menubar.cpp:460
 msgid "Generate Bill of &Materials"
-msgstr "Generar Lista de &materiales"
+msgstr "Generar lista de &materiales"
 
 #: eeschema/menubar.cpp:469
 msgid "A&ssign Component Footprint"
@@ -7243,7 +7243,7 @@ msgstr "Error de comando. Código: %d"
 
 #: eeschema/netform.cpp:120
 msgid "Success"
-msgstr "Éxito"
+msgstr "La operación se ha llevado a cabo correctamente"
 
 #: eeschema/netform.cpp:127
 msgid "Info messages:"
@@ -8309,7 +8309,7 @@ msgstr "Buscar y reemplazar texto"
 
 #: eeschema/tool_sch.cpp:127
 msgid "Navigate schematic hierarchy"
-msgstr "Explorar la jerarquía del esquema"
+msgstr "Explorar jerarquía"
 
 #: eeschema/tool_sch.cpp:131
 msgid "Leave sheet"
@@ -13682,7 +13682,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:43
 msgid "Routing Help:"
-msgstr "Ayuda de ruteado:"
+msgstr "Ayuda de enrutado:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:45
 msgid "Do not show"
@@ -17395,11 +17395,11 @@ msgstr "Losgitud/desvío"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:28
 msgid "Tune from:"
-msgstr "Ajustar desde:"
+msgstr "Afinar desde:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:40
 msgid "Tune to:"
-msgstr "Ajustar a:"
+msgstr "Afinar a:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:52
 msgid "Constraint:"
@@ -19433,35 +19433,35 @@ msgstr "Archivo de &posición de huellas (.pos)"
 
 #: pcbnew/menubar_pcbframe.cpp:153
 msgid "Generate footprint position file for pick and place"
-msgstr ""
+msgstr "Generar archivo de posicionamiento de huellas para máquinas Pick&Place"
 
 #: pcbnew/menubar_pcbframe.cpp:157
 msgid "&Drill (.drl) File"
-msgstr ""
+msgstr "Archivo de tala&dros (.drl)"
 
 #: pcbnew/menubar_pcbframe.cpp:158
 msgid "Generate excellon2 drill file"
-msgstr ""
+msgstr "Generar archivo de taladros excellon2"
 
 #: pcbnew/menubar_pcbframe.cpp:162
 msgid "&Footprint (.rpt) Report"
-msgstr ""
+msgstr "In&forme de huellas (.rpt)"
 
 #: pcbnew/menubar_pcbframe.cpp:163
 msgid "Create a report of all footprints on the current board"
-msgstr ""
+msgstr "Crear un informe de todas las huellas de la placa"
 
 #: pcbnew/menubar_pcbframe.cpp:167
 msgid "IPC-D-356 Netlist File"
-msgstr ""
+msgstr "Archivo de listado de redes IPC-D-356"
 
 #: pcbnew/menubar_pcbframe.cpp:168
 msgid "Generate IPC-D-356 netlist file"
-msgstr ""
+msgstr "Generar archivo de listado de redes IPC-D-356"
 
 #: pcbnew/menubar_pcbframe.cpp:172
 msgid "&BOM File"
-msgstr ""
+msgstr "Archivo de lista de materiales (&BOM)"
 
 #: pcbnew/menubar_pcbframe.cpp:173
 msgid "Create a bill of materials from schematic"
@@ -19469,11 +19469,11 @@ msgstr "Crear una lista de materiales a partir del esquema"
 
 #: pcbnew/menubar_pcbframe.cpp:177
 msgid "&Fabrication Outputs"
-msgstr ""
+msgstr "Archivos de &fabricación"
 
 #: pcbnew/menubar_pcbframe.cpp:178
 msgid "Generate files for fabrication"
-msgstr ""
+msgstr "Generar archvos de fabricación"
 
 #: pcbnew/menubar_pcbframe.cpp:185
 msgid "&Specctra Session"
@@ -19485,249 +19485,259 @@ msgstr "Importar enrutado \"Specctra Session\" (*.ses)"
 
 #: pcbnew/menubar_pcbframe.cpp:190
 msgid "&DXF File"
-msgstr ""
+msgstr "Archivo &DXF"
 
 #: pcbnew/menubar_pcbframe.cpp:195
 msgid "&Import"
-msgstr ""
+msgstr "&Importar"
 
 #: pcbnew/menubar_pcbframe.cpp:196
 msgid "Import files"
-msgstr "Importar Archivos:"
+msgstr "Importar archivos"
 
 #: pcbnew/menubar_pcbframe.cpp:203
 msgid "&Specctra DSN"
-msgstr ""
+msgstr "&Specctra DSN"
 
 #: pcbnew/menubar_pcbframe.cpp:204
 msgid "Export the current board to a \"Specctra DSN\" file"
-msgstr ""
+msgstr "Exportar la placa activa a un archivo \"Specctra DSN\""
 
 #: pcbnew/menubar_pcbframe.cpp:208
 msgid "&GenCAD"
-msgstr "&GenCAD ..."
+msgstr "&GenCAD"
 
 #: pcbnew/menubar_pcbframe.cpp:208
 msgid "Export GenCAD format"
-msgstr ""
+msgstr "Exportar formato GenCAD"
 
 #: pcbnew/menubar_pcbframe.cpp:212
 msgid "&VRML"
-msgstr ""
+msgstr "&VRML"
 
 #: pcbnew/menubar_pcbframe.cpp:213
 msgid "Export a VRML board representation"
-msgstr ""
+msgstr "Exportar una representación VRML de la placa"
 
 #: pcbnew/menubar_pcbframe.cpp:217
 msgid "I&DFv3"
-msgstr ""
+msgstr "I&DFv3"
 
 #: pcbnew/menubar_pcbframe.cpp:217
 msgid "IDFv3 board and component export"
-msgstr ""
+msgstr "Exportar placa y componentes como IDFv3"
 
 #: pcbnew/menubar_pcbframe.cpp:221
 msgid "&Component (.cmp) File"
-msgstr ""
+msgstr "Archivo de &componentes (.cmp)"
 
 #: pcbnew/menubar_pcbframe.cpp:222
 msgid ""
 "Export component file (*.cmp) for Eeschema footprint field back-annotation"
 msgstr ""
+"Exportar archivo de componentes (.cmp) para asignar valores al campo de "
+"huellas en Eeschema"
 
 #: pcbnew/menubar_pcbframe.cpp:226
 msgid "E&xport"
-msgstr ""
+msgstr "E&xportar"
 
 #: pcbnew/menubar_pcbframe.cpp:227
 msgid "Export board"
-msgstr "Exporta el C.I."
+msgstr "Exportar la placa"
 
 #: pcbnew/menubar_pcbframe.cpp:232
 msgid "Page s&ettings"
-msgstr ""
+msgstr "Opcion&es de página"
 
 #: pcbnew/menubar_pcbframe.cpp:233 pcbnew/tool_pcb.cpp:228
 msgid "Page settings for paper size and texts"
-msgstr ""
+msgstr "Opciones de página para ajustar tamaño del papel y el texto"
 
 #: pcbnew/menubar_pcbframe.cpp:237 pcbnew/tool_pcb.cpp:247
 msgid "Print board"
-msgstr ""
+msgstr "Imprimir placa"
 
 #: pcbnew/menubar_pcbframe.cpp:241
 msgid "Export SV&G"
-msgstr ""
+msgstr "Exportar SV&G"
 
 #: pcbnew/menubar_pcbframe.cpp:242
 msgid "Export a board file in Scalable Vector Graphics format"
-msgstr ""
+msgstr "Exportar la placa a un archivo en formato Scalable Vector Graphics"
 
 #: pcbnew/menubar_pcbframe.cpp:246
 msgid "P&lot"
-msgstr ""
+msgstr "Tra&zar"
 
 #: pcbnew/menubar_pcbframe.cpp:247
 msgid "Plot board in HPGL, PostScript or Gerber RS-274X format)"
-msgstr ""
+msgstr "Trazar la placa en formato HPLG, PostScript o Gerber RS-274X"
 
 #: pcbnew/menubar_pcbframe.cpp:256
 msgid "&Archive Footprints in a Project Library"
-msgstr ""
+msgstr "&Archivar las huellas en una librería de proyecto"
 
 #: pcbnew/menubar_pcbframe.cpp:257
 msgid ""
 "Archive footprints in an existing library in footprint Lib table(do not "
 "remove other footprints in this lib)"
 msgstr ""
+"Archivar las huellas en una librería existente en la tabla de librerías de "
+"huellas (no elimina otras huellas de la librería)"
 
 #: pcbnew/menubar_pcbframe.cpp:262
 msgid "&Create Library and Archive Footprints"
-msgstr ""
+msgstr "&Crear librería y archivar huellas"
 
 #: pcbnew/menubar_pcbframe.cpp:263
 msgid ""
 "Archive all footprints in a new library\n"
 "(if this library already exists, it will be deleted)"
 msgstr ""
+"Archiva todas las huellas en un alibrería nueva\n"
+"(si la librería ya existe, será eliminada)"
 
 #: pcbnew/menubar_pcbframe.cpp:269
 msgid "Arc&hive Footprints"
-msgstr ""
+msgstr "Arc&hivar huellas"
 
 #: pcbnew/menubar_pcbframe.cpp:270
 msgid "Archive or add footprints in a library file"
-msgstr ""
+msgstr "Archivar o añadir huellas en una librería"
 
 #: pcbnew/menubar_pcbframe.cpp:274
 msgid "Close Pcbnew"
-msgstr ""
+msgstr "Cerrar Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:286 pcbnew/tool_modedit.cpp:188
 #: pcbnew/tool_pcb.cpp:470
 msgid "Delete items"
-msgstr "Borrar elemento"
+msgstr "Borrar elementos"
 
 #: pcbnew/menubar_pcbframe.cpp:297
 msgid "&Global Deletions"
-msgstr ""
+msgstr "Borrados &globales"
 
 #: pcbnew/menubar_pcbframe.cpp:298
 msgid "Delete tracks, footprints, texts... on board"
-msgstr ""
+msgstr "Eliminar pistas, huellas, textos,... de la placa"
 
 #: pcbnew/menubar_pcbframe.cpp:302
 msgid "&Cleanup Tracks and Vias"
-msgstr ""
+msgstr "&Optimizar pistas y vías"
 
 #: pcbnew/menubar_pcbframe.cpp:303
 msgid ""
 "Clean stubs, vias, delete break points, or unconnected tracks to pads and "
 "vias"
 msgstr ""
+"Optimizar terminaciones, vías, eliminar puntos de ruptura o pistas sin "
+"conectar a pads o vías"
 
 #: pcbnew/menubar_pcbframe.cpp:307
 msgid "&Swap Layers"
-msgstr ""
+msgstr "Intercambiar pi&stas"
 
 #: pcbnew/menubar_pcbframe.cpp:308
 msgid "Swap tracks on copper layers or drawings on other layers"
-msgstr ""
+msgstr "Intercambiar pistas en capas de cobre o dibujos en otras capas"
 
 #: pcbnew/menubar_pcbframe.cpp:312
 msgid "Set Footp&rint Field Sizes"
-msgstr ""
+msgstr "Ajusta&r tamaño de campo de huellas"
 
 #: pcbnew/menubar_pcbframe.cpp:313
 msgid "Set text size and width of footprint fields."
-msgstr ""
+msgstr "Ajustar el tamaño del texto y ancho de los campos de huellas"
 
 #: pcbnew/menubar_pcbframe.cpp:351
 msgid "Show board in 3D viewer"
-msgstr ""
+msgstr "Mostrar placa en Visor 3D"
 
 #: pcbnew/menubar_pcbframe.cpp:355
 msgid "&List Nets"
-msgstr ""
+msgstr "&Listar redes"
 
 #: pcbnew/menubar_pcbframe.cpp:355
 msgid "View a list of nets with names and id's"
-msgstr ""
+msgstr "Ver un listado de redes con nombres e identificadores"
 
 #: pcbnew/menubar_pcbframe.cpp:384
 msgid "&Footprint"
-msgstr ""
+msgstr "&Huella"
 
 #: pcbnew/menubar_pcbframe.cpp:387 pcbnew/tool_pcb.cpp:436
 #: pcbnew/tools/common_actions.cpp:388
 msgid "Add footprints"
-msgstr ""
+msgstr "Añadir huellas"
 
 #: pcbnew/menubar_pcbframe.cpp:389
 msgid "&Track"
-msgstr ""
+msgstr "Pis&ta"
 
 #: pcbnew/menubar_pcbframe.cpp:392 pcbnew/tool_pcb.cpp:439
 msgid "Add tracks and vias"
-msgstr "Añadir Pista o Vía"
+msgstr "Añadir pistas o vías"
 
 #: pcbnew/menubar_pcbframe.cpp:395
 msgid "&Zone"
-msgstr ""
+msgstr "&Zona"
 
 #: pcbnew/menubar_pcbframe.cpp:395 pcbnew/tool_pcb.cpp:442
 msgid "Add filled zones"
-msgstr ""
+msgstr "Añadir zonas de relleno"
 
 #: pcbnew/menubar_pcbframe.cpp:398
 msgid "&Keepout Area"
-msgstr "Área res%tringida"
+msgstr "Área restrin&gida"
 
 #: pcbnew/menubar_pcbframe.cpp:398 pcbnew/tool_pcb.cpp:446
 msgid "Add keepout areas"
-msgstr ""
+msgstr "Añadir áreas restringidas"
 
 #: pcbnew/menubar_pcbframe.cpp:401
 msgid "Te&xt"
-msgstr ""
+msgstr "Te&xto"
 
 #: pcbnew/menubar_pcbframe.cpp:401 pcbnew/tool_pcb.cpp:459
 msgid "Add text on copper layers or graphic text"
-msgstr ""
+msgstr "Añadir texto en capas de cobre o texto gráfico"
 
 #: pcbnew/menubar_pcbframe.cpp:419
 msgid "&Dimension"
-msgstr ""
+msgstr "&Dimensión"
 
 #: pcbnew/menubar_pcbframe.cpp:423
 msgid "La&yer alignment target"
-msgstr ""
+msgstr "&Mira de alineación de capa"
 
 #: pcbnew/menubar_pcbframe.cpp:429
 msgid "Drill and &Place Offset"
-msgstr ""
+msgstr "Desplazamiento para taladrado y &posicionamiento"
 
 #: pcbnew/menubar_pcbframe.cpp:430 pcbnew/tool_pcb.cpp:475
 msgid "Place the origin point for drill and place files"
 msgstr ""
+"Situar el punto de origen para los archivos de taladrado y posicionamiento"
 
 #: pcbnew/menubar_pcbframe.cpp:434
 msgid "&Grid Origin"
-msgstr ""
+msgstr "Ori&gen de cuadrícula"
 
 #: pcbnew/menubar_pcbframe.cpp:435 pcbnew/tool_modedit.cpp:192
 #: pcbnew/tool_pcb.cpp:480
 msgid "Set the origin point for the grid"
-msgstr ""
+msgstr "Situar el punto de origen de la cuadrícula"
 
+# ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/menubar_pcbframe.cpp:441
 msgid "&Single Track"
-msgstr "Pi&sta simple"
+msgstr "Pi&sta única"
 
 #: pcbnew/menubar_pcbframe.cpp:442
 msgid "Interactively route a single track"
-msgstr ""
+msgstr "Enrutar interactivamente una única pista"
 
 #: pcbnew/menubar_pcbframe.cpp:446
 msgid "&Differential Pair"
@@ -19735,31 +19745,31 @@ msgstr "Par &differencial"
 
 #: pcbnew/menubar_pcbframe.cpp:447
 msgid "Interactively route a differential pair"
-msgstr ""
+msgstr "Enrutar interactivamente un par diferencial de pistas"
 
 #: pcbnew/menubar_pcbframe.cpp:453
 msgid "&Tune Track Length"
-msgstr ""
+msgstr "Afinar longi&tud de pista"
 
 #: pcbnew/menubar_pcbframe.cpp:454 pcbnew/tools/common_actions.cpp:530
 msgid "Tune length of a single track"
-msgstr ""
+msgstr "Afinar la longitud de una única pista"
 
 #: pcbnew/menubar_pcbframe.cpp:458
 msgid "Tune Differential Pair &Length"
-msgstr ""
+msgstr "Afinar la &longitud de par diferencial"
 
 #: pcbnew/menubar_pcbframe.cpp:459 pcbnew/tools/common_actions.cpp:534
 msgid "Tune length of a differential pair"
-msgstr ""
+msgstr "Afinar la longitud de un par diferencial de pistas"
 
 #: pcbnew/menubar_pcbframe.cpp:463
 msgid "Tune Differential Pair &Skew/Phase"
-msgstr ""
+msgstr "Afinar de&svío/fase de par diferencial"
 
 #: pcbnew/menubar_pcbframe.cpp:464
 msgid "Tune skew/phase of a differential pair"
-msgstr ""
+msgstr "Afinar desvío/fase de par diferencial"
 
 #: pcbnew/menubar_pcbframe.cpp:501
 msgid "&3D Shapes Libraries Downloader"
@@ -19771,32 +19781,33 @@ msgstr "Descargar con el asistente librerías de modelos 3D desde Github"
 
 #: pcbnew/menubar_pcbframe.cpp:509
 msgid "Hide La&yers Manager"
-msgstr ""
+msgstr "O&cultar administrador de capas"
 
 #: pcbnew/menubar_pcbframe.cpp:509
 msgid "Show La&yers Manager"
-msgstr ""
+msgstr "Mostrar a&dministrador de capas"
 
 #: pcbnew/menubar_pcbframe.cpp:515
 msgid "Hide Microwa&ve Toolbar"
-msgstr ""
+msgstr "Ocultar barra de micro&ondas"
 
 #: pcbnew/menubar_pcbframe.cpp:515 pcbnew/pcbnew_config.cpp:90
 #: pcbnew/tool_pcb.cpp:795
 msgid "Show Microwave Toolbar"
-msgstr ""
+msgstr "Mostrar barra de microondas"
 
 #: pcbnew/menubar_pcbframe.cpp:524
 msgid "&General"
-msgstr ""
+msgstr "&General"
 
 #: pcbnew/menubar_pcbframe.cpp:524
 msgid "Select general options for Pcbnew"
-msgstr ""
+msgstr "Seleccionar opciones generales de Pcbnew"
 
+# Pendiente de contexto
 #: pcbnew/menubar_pcbframe.cpp:529
 msgid "&Display"
-msgstr "&Mostrar"
+msgstr "&Visualización"
 
 #: pcbnew/menubar_pcbframe.cpp:530
 msgid "Select how items (pads, tracks texts ... ) are displayed"
@@ -19808,75 +19819,75 @@ msgstr "Enrutado &interactivo"
 
 #: pcbnew/menubar_pcbframe.cpp:535
 msgid "Configure the interactive router."
-msgstr ""
+msgstr "Configuración de enrutado interactivo."
 
 #: pcbnew/menubar_pcbframe.cpp:542
 msgid "G&rid"
-msgstr ""
+msgstr "Cuad&rícula"
 
 #: pcbnew/menubar_pcbframe.cpp:542
 msgid "Adjust user grid dimensions"
-msgstr ""
+msgstr "Ajustar las dimensiones de la cuadrícula de usuario"
 
 #: pcbnew/menubar_pcbframe.cpp:546
 msgid "Te&xts and Drawings"
-msgstr ""
+msgstr "Te&xtos y dibujos"
 
 #: pcbnew/menubar_pcbframe.cpp:547
 msgid "Adjust dimensions for texts and drawings"
-msgstr ""
+msgstr "Ajustar las dimensiones de los textos y dibujos"
 
 #: pcbnew/menubar_pcbframe.cpp:551
 msgid "&Pads"
-msgstr ""
+msgstr "&Pads"
 
 #: pcbnew/menubar_pcbframe.cpp:551
 msgid "Adjust default pad characteristics"
-msgstr ""
+msgstr "Ajustar las características por defecto de los pads"
 
 #: pcbnew/menubar_pcbframe.cpp:555
 msgid "Pads &Mask Clearance"
-msgstr ""
+msgstr "Margen Pads/&Máscara"
 
 #: pcbnew/menubar_pcbframe.cpp:556
 msgid "Adjust the global clearance between pads and the solder resist mask"
-msgstr ""
+msgstr "Ajustar el margen global entre los pads y la máscara de soldadura."
 
 #: pcbnew/menubar_pcbframe.cpp:560
 msgid "&Differential Pairs"
-msgstr ""
+msgstr "Par &diferencial"
 
 #: pcbnew/menubar_pcbframe.cpp:561
 msgid "Define the global gap/width for differential pairs."
-msgstr ""
+msgstr "Definir el espaciado/ancho global para los pares diferenciales."
 
 #: pcbnew/menubar_pcbframe.cpp:566
 msgid "Save dimension preferences"
-msgstr ""
+msgstr "Guardar preferencias de dimensiones"
 
 #: pcbnew/menubar_pcbframe.cpp:579
 msgid "&Save macros"
-msgstr ""
+msgstr "Guardar macro&s"
 
 #: pcbnew/menubar_pcbframe.cpp:580
 msgid "Save macros to file"
-msgstr ""
+msgstr "Guardar macros a archivo"
 
 #: pcbnew/menubar_pcbframe.cpp:584
 msgid "&Read macros"
-msgstr ""
+msgstr "Lee&r macros"
 
 #: pcbnew/menubar_pcbframe.cpp:585
 msgid "Read macros from file"
-msgstr ""
+msgstr "Leer macros desde archivo"
 
 #: pcbnew/menubar_pcbframe.cpp:589
 msgid "Ma&cros"
-msgstr ""
+msgstr "Ma&cros"
 
 #: pcbnew/menubar_pcbframe.cpp:590
 msgid "Macros save/read operations"
-msgstr ""
+msgstr "Operación de guardado/lectura de macros"
 
 #: pcbnew/menubar_pcbframe.cpp:609
 msgid "&Netlist"
@@ -19884,55 +19895,55 @@ msgstr "Lista de re&des"
 
 #: pcbnew/menubar_pcbframe.cpp:610
 msgid "Read the netlist and update board connectivity"
-msgstr ""
+msgstr "Leer la lista de redes y actualizar la conectividad de la placa"
 
 #: pcbnew/menubar_pcbframe.cpp:614
 msgid "&Layer Pair"
-msgstr ""
+msgstr "&Par de capas"
 
 #: pcbnew/menubar_pcbframe.cpp:614
 msgid "Change the active layer pair"
-msgstr ""
+msgstr "Cambiar el par activo de capas"
 
 #: pcbnew/menubar_pcbframe.cpp:618
 msgid "&DRC"
-msgstr ""
+msgstr "&DCR"
 
 #: pcbnew/menubar_pcbframe.cpp:619 pcbnew/tool_pcb.cpp:273
 msgid "Perform design rules check"
-msgstr ""
+msgstr "Comprobación de las reglas de diseño."
 
 #: pcbnew/menubar_pcbframe.cpp:622
 msgid "&FreeRoute"
-msgstr ""
+msgstr "&Freeroute"
 
 #: pcbnew/menubar_pcbframe.cpp:623
 msgid "Fast access to the web based FreeROUTE advanced router"
-msgstr ""
+msgstr "Aceso rápido al enrutador avanzado Freeroute."
 
 #: pcbnew/menubar_pcbframe.cpp:628
 msgid "&Scripting Console"
-msgstr ""
+msgstr "Consola de &scripts"
 
 #: pcbnew/menubar_pcbframe.cpp:629
 msgid "Show/Hide the Python scripting console"
-msgstr ""
+msgstr "Mostrar/ocultar la consola de scripts de Python"
 
 #: pcbnew/menubar_pcbframe.cpp:636 pcbnew/menubar_pcbframe.cpp:672
 msgid "&Design Rules"
-msgstr ""
+msgstr "Reglas de &diseño"
 
 #: pcbnew/menubar_pcbframe.cpp:637
 msgid "Open the design rules editor"
-msgstr ""
+msgstr "Abrir el Editor de reglas de diseño"
 
 #: pcbnew/menubar_pcbframe.cpp:640
 msgid "&Layers Setup"
-msgstr ""
+msgstr "Con&figurar capas"
 
 #: pcbnew/menubar_pcbframe.cpp:640
 msgid "Enable and set layer properties"
-msgstr ""
+msgstr "Activar y ajustar las propiedades de la capa"
 
 #: pcbnew/menubar_pcbframe.cpp:660
 msgid "Display the KiCad About dialog"
@@ -19940,25 +19951,27 @@ msgstr "Muestra el diálogo Acerca de KiCad"
 
 #: pcbnew/menubar_pcbframe.cpp:668
 msgid "Ro&ute"
-msgstr ""
+msgstr "Enr&utar"
 
 #: pcbnew/menubar_pcbframe.cpp:670
 msgid "D&imensions"
-msgstr ""
+msgstr "D&imensiones"
 
 #: pcbnew/modedit.cpp:185
 msgid ""
 "Current footprint changes will be lost and this operation cannot be undone. "
 "Continue?"
 msgstr ""
+"Los cambios realizados a la huella se perderán y esta operación no puede "
+"deshacerse. ¿Continuar?"
 
 #: pcbnew/modedit.cpp:400
 msgid "No board currently edited"
-msgstr ""
+msgstr "No se está editando ninguna placa"
 
 #: pcbnew/modedit.cpp:425
 msgid "Unable to find the footprint source on the main board"
-msgstr ""
+msgstr "No puede encontrarse el origen de la huella en la placa principal"
 
 #: pcbnew/modedit.cpp:426
 msgid ""
@@ -19966,11 +19979,11 @@ msgid ""
 "Cannot update the footprint"
 msgstr ""
 "\n"
-"No se puede actualizar el módulo"
+"No se puede actualizar la huella"
 
 #: pcbnew/modedit.cpp:435
 msgid "A footprint source was found on the main board"
-msgstr ""
+msgstr "Se ha encontrado un origen de la huella en la placa principal"
 
 #: pcbnew/modedit.cpp:436
 msgid ""
@@ -19978,23 +19991,23 @@ msgid ""
 "Cannot insert this footprint"
 msgstr ""
 "\n"
-"No se puede insertar este módulo"
+"No se puede insertar esta huella"
 
 #: pcbnew/modedit.cpp:955
 msgid "Place anchor"
-msgstr "Colocar Ancla"
+msgstr "Situar ancla"
 
 #: pcbnew/modedit.cpp:959
 msgid "Set grid origin"
-msgstr ""
+msgstr "Ajustar el origen de la cuadrícula"
 
 #: pcbnew/modedit.cpp:969 pcbnew/tool_modedit.cpp:138
 msgid "Pad settings"
-msgstr ""
+msgstr "Opciones de pad"
 
 #: pcbnew/modedit_onclick.cpp:252
 msgid "Copy Block (shift + drag mouse)"
-msgstr "Copiar Bloque (Mayú + arrastrar ratón)"
+msgstr "Copiar bloque (shift + arrast ratón)"
 
 #: pcbnew/modedit_onclick.cpp:255
 msgid "Mirror Block (alt + drag mouse)"
@@ -20002,11 +20015,11 @@ msgstr "Invertir bloque (alt + desplazar ratón)"
 
 #: pcbnew/modedit_onclick.cpp:258
 msgid "Rotate Block (ctrl + drag mouse)"
-msgstr "Rotar Bloque (ctrl + arrast ratón)"
+msgstr "Girar bloque (ctrl + arrast ratón)"
 
 #: pcbnew/modedit_onclick.cpp:261
 msgid "Delete Block (shift+ctrl + drag mouse)"
-msgstr "Borrar Bloque (shift+ctrl + drag mouse)"
+msgstr "Eliminar bloque (shift + ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:264
 msgid "Move Block Exactly"
@@ -20345,11 +20358,11 @@ msgstr "Pistas solo en capas de cobre "
 
 #: pcbnew/onleftclick.cpp:335
 msgid "Texts not allowed on Edge Cut layer"
-msgstr ""
+msgstr "No se permiten textos en la capa de perímetro"
 
 #: pcbnew/onleftclick.cpp:384 pcbnew/tools/drawing_tool.cpp:313
 msgid "Dimension not allowed on Copper or Edge Cut layers"
-msgstr ""
+msgstr "No se permitaen dimensiones en las capas de cobre o de perímetro"
 
 #: pcbnew/onrightclick.cpp:151
 msgid "Lock Footprint"
@@ -20357,75 +20370,75 @@ msgstr "Bloquear huella"
 
 #: pcbnew/onrightclick.cpp:158
 msgid "Unlock Footprint"
-msgstr ""
+msgstr "Desbloquear huella"
 
 #: pcbnew/onrightclick.cpp:166
 msgid "Automatically Place Footprint"
-msgstr ""
+msgstr "Colocar huella automáticamente"
 
 #: pcbnew/onrightclick.cpp:173
 msgid "Automatically Route Footprint"
-msgstr ""
+msgstr "Enrutar huella automáticamente"
 
 #: pcbnew/onrightclick.cpp:194
 msgid "Move Drawing"
-msgstr "Mover Dibujo"
+msgstr "Mover dibujo"
 
 #: pcbnew/onrightclick.cpp:199
 msgid "Duplicate Drawing"
-msgstr ""
+msgstr "Duplicar dibujo"
 
 #: pcbnew/onrightclick.cpp:204
 msgid "Move Drawing Exactly"
-msgstr ""
+msgstr "Mover dibujo exactamente"
 
 #: pcbnew/onrightclick.cpp:209
 msgid "Create Drawing Array"
-msgstr ""
+msgstr "Crear matriz de dibujos"
 
 #: pcbnew/onrightclick.cpp:214
 msgid "Edit Drawing"
-msgstr "Editar Dibujo"
+msgstr "Editar dibujo"
 
 #: pcbnew/onrightclick.cpp:224
 msgid "Delete All Drawings on Layer"
-msgstr ""
+msgstr "Eliminar todos los dibujos de la capa"
 
 #: pcbnew/onrightclick.cpp:231
 msgid "Delete Zone Filling"
-msgstr "Borrar Relleno de Zona"
+msgstr "Eliminar relleno de zonas"
 
 #: pcbnew/onrightclick.cpp:238
 msgid "Close Zone Outline"
-msgstr "Cerrar límite de Zona"
+msgstr "Cerrar límite de zona"
 
 #: pcbnew/onrightclick.cpp:240
 msgid "Delete Last Corner"
-msgstr "Borrar última Esquina"
+msgstr "Eliminar última esquina"
 
 #: pcbnew/onrightclick.cpp:266
 msgid "Edit Dimension"
-msgstr "&Dimensiones"
+msgstr "Editar dimensión"
 
 #: pcbnew/onrightclick.cpp:270
 msgid "Move Dimension Text"
-msgstr ""
+msgstr "Mover texto de dimensión"
 
 #: pcbnew/onrightclick.cpp:275
 msgid "Duplicate Dimension"
-msgstr ""
+msgstr "Duplicar dimensión"
 
 #: pcbnew/onrightclick.cpp:280
 msgid "Move Dimension Exactly"
-msgstr ""
+msgstr "Mover dimensión exactamente"
 
 #: pcbnew/onrightclick.cpp:285
 msgid "Delete Dimension"
-msgstr "Borrar Dimensión"
+msgstr "Eliminar dimensión"
 
 #: pcbnew/onrightclick.cpp:296
 msgid "Move Target"
-msgstr "Mover mira de centrado"
+msgstr "Mover mira alineación"
 
 #: pcbnew/onrightclick.cpp:301
 msgid "Move Target Exactly"
@@ -20433,27 +20446,27 @@ msgstr "Mover mira exactamente"
 
 #: pcbnew/onrightclick.cpp:306
 msgid "Duplicate Target"
-msgstr ""
+msgstr "Duplicar mira"
 
 #: pcbnew/onrightclick.cpp:311
 msgid "Create Target Array"
-msgstr ""
+msgstr "Crear matriz de miras"
 
 #: pcbnew/onrightclick.cpp:316
 msgid "Edit Target"
-msgstr "Editar Mira de centrado"
+msgstr "Editar mira de alineación"
 
 #: pcbnew/onrightclick.cpp:320
 msgid "Delete Target"
-msgstr "Borrar Mira de centrado"
+msgstr "Borrar mira de alineación"
 
 #: pcbnew/onrightclick.cpp:354
 msgid "Get and Move Footprint"
-msgstr "Mover módulo (huella)"
+msgstr "Obtener y mover huella"
 
 #: pcbnew/onrightclick.cpp:367
 msgid "Fill or Refill All Zones"
-msgstr "Llenar todas las  zonas"
+msgstr "Llenar o rellenar todas las  zonas"
 
 #: pcbnew/onrightclick.cpp:371
 msgid "Remove Filled Areas in All Zones"
@@ -20485,7 +20498,7 @@ msgstr "Documentación de las huellas"
 
 #: pcbnew/onrightclick.cpp:434
 msgid "Global Spread and Place"
-msgstr ""
+msgstr "Esparcir y posicionar global"
 
 #: pcbnew/onrightclick.cpp:436
 msgid "Unlock All Footprints"
@@ -20573,28 +20586,28 @@ msgstr "Mover pista exactamente"
 
 #: pcbnew/onrightclick.cpp:563
 msgid "Create Track Array"
-msgstr ""
+msgstr "Crear matriz de pistas"
 
 #: pcbnew/onrightclick.cpp:569
 msgid "Break Track"
-msgstr "Pista interrumpida"
+msgstr "Dividir pista"
 
 #: pcbnew/onrightclick.cpp:579
 msgid "Place Node"
-msgstr "Colocar Nodo"
+msgstr "Colocar nodo"
 
 #: pcbnew/onrightclick.cpp:586 pcbnew/router/length_tuner_tool.cpp:54
 #: pcbnew/router/router_tool.cpp:67
 msgid "End Track"
-msgstr "Terminar Pistas"
+msgstr "Terminar pista"
 
 #: pcbnew/onrightclick.cpp:590 pcbnew/router/router_tool.cpp:78
 msgid "Place Through Via"
-msgstr ""
+msgstr "Situar vía pasante"
 
 #: pcbnew/onrightclick.cpp:593
 msgid "Select Layer and Place Through Via"
-msgstr ""
+msgstr "Seleccionar capa y situar vía pasante"
 
 #: pcbnew/onrightclick.cpp:600 pcbnew/router/router_tool.cpp:84
 msgid "Place Blind/Buried Via"
@@ -20604,41 +20617,42 @@ msgstr "Situar vía ciega/enterrada"
 msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Seleccionar capa y situar vía ciega/enterrada"
 
+# Pendiente de contexto
 #: pcbnew/onrightclick.cpp:610 pcbnew/router/router_tool.cpp:101
 msgid "Switch Track Posture"
 msgstr ""
 
 #: pcbnew/onrightclick.cpp:618
 msgid "Place Micro Via"
-msgstr "Colocar MicroVia"
+msgstr "Situar microvía"
 
 #: pcbnew/onrightclick.cpp:629
 msgid "Change Via Size and Drill"
-msgstr ""
+msgstr "Cmabiar tamaño y taladro de vía"
 
 #: pcbnew/onrightclick.cpp:635
 msgid "Change Segment Width"
-msgstr "Cambio Anchura Segmento"
+msgstr "Cambiar ancho de segmento"
 
 #: pcbnew/onrightclick.cpp:639
 msgid "Change Track Width"
-msgstr "Cambiar Anchura Pista"
+msgstr "Cambiar ancho de pista"
 
 #: pcbnew/onrightclick.cpp:654
 msgid "Delete Via"
-msgstr "Borrar Via"
+msgstr "Eliminar vía"
 
 #: pcbnew/onrightclick.cpp:661
 msgid "Delete Track"
-msgstr "Borrar Pista"
+msgstr "Eliminar pista"
 
 #: pcbnew/onrightclick.cpp:663
 msgid "Delete Net"
-msgstr "Borrar Net"
+msgstr "Eliminar red"
 
 #: pcbnew/onrightclick.cpp:672
 msgid "Edit All Tracks and Vias"
-msgstr ""
+msgstr "Editar todas las pistas y vías"
 
 #: pcbnew/onrightclick.cpp:678
 msgid "Set Flags"
@@ -21538,7 +21552,7 @@ msgstr "Trazar HPGL,  POSTSCRIPT o GERBER"
 
 #: pcbnew/tool_pcb.cpp:271
 msgid "Read netlist"
-msgstr ""
+msgstr "Leer lista de redes"
 
 #: pcbnew/tool_pcb.cpp:293
 msgid "Mode footprint: manual and automatic movement and placement"
@@ -21605,14 +21619,14 @@ msgstr ""
 #: pcbnew/tool_pcb.cpp:515
 msgid "Create stub of specified length for microwave applications"
 msgstr ""
-"Creación de terminaciones de pistas de longitud específica (para "
-"aplicaciones micro-ondas)"
+"Creación de terminaciones de pistas de longitud específica para aplicaciones "
+"microondas"
 
 #: pcbnew/tool_pcb.cpp:520
 msgid "Create stub (arc) of specified length for microwave applications"
 msgstr ""
-"Creación de Terminación (arco) de longitud específica (para aplicaciones "
-"micro-ondas)"
+"Creación de terminación (arco) de longitud específica para aplicaciones "
+"microondas"
 
 #: pcbnew/tool_pcb.cpp:525
 msgid "Create a polynomial shape for microwave applications"
@@ -22242,7 +22256,7 @@ msgstr "Opciones del Editor de esquemas"
 
 #: eeschema/dialogs/dialog_erc_base.h:83
 msgid "Electrical Rules Checker"
-msgstr ""
+msgstr "Control de las reglas eléctricas (ERC)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.h:59
 msgid "Drawing Properties"
@@ -22267,7 +22281,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_netlist_base.h:78
 #: pcbnew/dialogs/dialog_netlist_fbp.h:84
 msgid "Netlist"
-msgstr "Netlist"
+msgstr "Lista de redes"
 
 #: eeschema/dialogs/dialog_netlist_base.h:119
 msgid "Plugins:"
@@ -22279,7 +22293,7 @@ msgstr "Trazar esquema"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:65
 msgid "Project Rescue Helper"
-msgstr ""
+msgstr "Asistente para la recuperación de proyectos"
 
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:56
 msgid "Sheet Pin Properties"
@@ -22295,7 +22309,7 @@ msgstr "Rehacer última acción"
 
 #: eeschema/help_common_strings.h:45
 msgid "Fit schematic sheet on screen"
-msgstr "Ajustar esquema a la página"
+msgstr "Ajustar a página"
 
 #: eeschema/help_common_strings.h:46
 msgid "Redraw schematic view"
