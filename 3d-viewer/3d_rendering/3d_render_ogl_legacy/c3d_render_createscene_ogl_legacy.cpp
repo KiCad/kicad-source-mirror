@@ -28,8 +28,8 @@
  */
 
 #include "c3d_render_ogl_legacy.h"
-
 #include "ogl_legacy_utils.h"
+#include "geometry/shape_poly_set.h"
 
 #include "../3d_render_raytracing/shapes2D/cpolygon2d.h"
 #include "../3d_render_raytracing/shapes2D/ctriangle2d.h"
@@ -98,7 +98,7 @@ void C3D_RENDER_OGL_LEGACY::reload()
         const SHAPE_POLY_SET boardPoly = m_settings.GetBoardPoly();
         SHAPE_POLY_SET boardPolyCopy = boardPoly;
 
-        boardPolyCopy.Simplify( true );
+        boardPolyCopy.Simplify( SHAPE_POLY_SET::PM_FAST );
 
         if( boardPolyCopy.OutlineCount() == 1 )
         {

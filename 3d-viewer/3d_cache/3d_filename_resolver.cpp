@@ -182,7 +182,23 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     // first attempt to use the name as specified:
     wxString aResolvedName;
-    wxString fname = aFileName;
+    wxString fname;
+
+    // normalize paths with "${VARNAME}" to support legacy behavior
+    if( aFileName.StartsWith( wxT( "${" ) ) )
+    {
+        wxFileName tmp( aFileName );
+
+        if( tmp.Normalize() )
+            fname = tmp.GetFullPath();
+        else
+            fname = aFileName;
+
+    }
+    else
+    {
+        fname = aFileName;
+    }
 
 #ifdef _WIN32
     // translate from KiCad's internal UNIX-like path to MSWin paths
