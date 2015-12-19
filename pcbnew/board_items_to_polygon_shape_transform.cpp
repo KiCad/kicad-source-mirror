@@ -1137,9 +1137,9 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         }
 
         stubs.Append( stub );
-        stubs.Simplify();
+        stubs.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-        antipad.BooleanSubtract( stubs );
+        antipad.BooleanSubtract( stubs, SHAPE_POLY_SET::PM_FAST );
         aCornerBuffer.Append( antipad );
 
         break;

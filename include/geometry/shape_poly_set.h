@@ -249,30 +249,45 @@ class SHAPE_POLY_SET : public SHAPE
             return CIterate( 0, OutlineCount() - 1 );
         }
 
+        /** operations on polygons use a aFastMode param
+         * if aFastMode is PM_FAST (true) the result can be a weak polygon
+         * if aFastMode is PM_STRICTLY_SIMPLE (false) (default) the result is (theorically) a strictly
+         * simple polygon, but calculations can be really significantly time consuming
+         * Most of time PM_FAST is preferable.
+         * PM_STRICTLY_SIMPLE can be used in critical cases (Gerber output for instance)
+         */
+        enum POLYGON_MODE
+        {
+            PM_FAST = true,
+            PM_STRICTLY_SIMPLE = false
+        };
 
         ///> Performs boolean polyset union
         ///> For aFastMode meaning, see function booleanOp
-        void BooleanAdd( const SHAPE_POLY_SET& b, bool aFastMode = false );
+        void BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
 
         ///> Performs boolean polyset difference
         ///> For aFastMode meaning, see function booleanOp
-        void BooleanSubtract( const SHAPE_POLY_SET& b, bool aFastMode = false );
+        void BooleanSubtract( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
 
         ///> Performs boolean polyset intersection
         ///> For aFastMode meaning, see function booleanOp
-        void BooleanIntersection( const SHAPE_POLY_SET& b, bool aFastMode = false );
+        void BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
 
         ///> Performs boolean polyset union between a and b, store the result in it self
         ///> For aFastMode meaning, see function booleanOp
-        void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode = false );
+        void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+                         POLYGON_MODE aFastMode );
 
         ///> Performs boolean polyset difference between a and b, store the result in it self
         ///> For aFastMode meaning, see function booleanOp
-        void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode = false );
+        void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+                              POLYGON_MODE aFastMode );
 
         ///> Performs boolean polyset intersection between a and b, store the result in it self
         ///> For aFastMode meaning, see function booleanOp
-        void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode = false );
+        void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+                                  POLYGON_MODE aFastMode );
 
         ///> Performs outline inflation/deflation, using round corners.
         void Inflate( int aFactor, int aCircleSegmentsCount );
@@ -280,7 +295,7 @@ class SHAPE_POLY_SET : public SHAPE
         ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures" connecting the outer ring
         ///> to the inner holes
         ///> For aFastMode meaning, see function booleanOp
-        void Fracture( bool aFastMode = false );
+        void Fracture( POLYGON_MODE aFastMode );
 
         ///> Converts a set of slitted polygons to a set of polygons with holes
         void Unfracture();
@@ -290,7 +305,7 @@ class SHAPE_POLY_SET : public SHAPE
 
         ///> Simplifies the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
         ///> For aFastMode meaning, see function booleanOp
-        void Simplify( bool aFastMode = false);
+        void Simplify( POLYGON_MODE aFastMode );
 
         /// @copydoc SHAPE::Format()
         const std::string Format() const;
@@ -348,18 +363,18 @@ class SHAPE_POLY_SET : public SHAPE
          * (AND, OR, ... and polygon simplification (merging overlaping  polygons)
          * @param aType is the transform type ( see ClipperLib::ClipType )
          * @param aOtherShape is the SHAPE_LINE_CHAIN to combine with me.
-         * @param aFastMode is an option to choos if the result is a weak polygon
+         * @param aFastMode is an option to choose if the result can be a weak polygon
          * or a stricty simple polygon.
-         * if aFastMode is true the result can be a weak polygon
-         * if aFastMode is false (default) the result is (theorically) a strictly
+         * if aFastMode is PM_FAST the result can be a weak polygon
+         * if aFastMode is PM_STRICTLY_SIMPLE (default) the result is (theorically) a strictly
          * simple polygon, but calculations can be really significantly time consuming
          */
         void booleanOp( ClipperLib::ClipType aType,
-                        const SHAPE_POLY_SET& aOtherShape, bool aFastMode = false );
+                        const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
 
         void booleanOp( ClipperLib::ClipType aType,
                         const SHAPE_POLY_SET& aShape,
-                        const SHAPE_POLY_SET& aOtherShape, bool aFastMode = false );
+                        const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
 
         bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath ) const;
 

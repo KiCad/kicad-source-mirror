@@ -437,20 +437,11 @@ public:
     SCH_SHEET_PATH* GetSheetByPath( const wxString aPath, bool aHumanReadable = true );
 
     /**
-     * Function IsModified
-     * checks the entire hierarchy for any modifications.
-     * @returns True if the hierarchy is modified otherwise false.
-     */
-    bool IsModified();
-
-    /**
      * Function IsAutoSaveRequired
      * checks the entire hierarchy for any modifications that require auto save.
      * @return True if the hierarchy is modified otherwise false.
      */
     bool IsAutoSaveRequired();
-
-    void ClearModifyStatus();
 
     /**
      * Function AnnotatePowerSymbols

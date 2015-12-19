@@ -68,7 +68,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     if( clearance )
         polybuffer.Inflate( clearance, 16 );
 
-    polybuffer.Fracture();
+    polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( polybuffer );
 }
 

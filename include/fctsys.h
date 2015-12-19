@@ -27,14 +27,6 @@
 
 #include <wx/wx.h>
 
-/**
- * @note This appears to already be included in the OSX build of wxWidgets.
- *       Will someone with OSX please remove this and see if it compiles?
- */
-#ifdef __WXMAC__
-#include <Carbon/Carbon.h>
-#endif
-
 #ifdef DEBUG
 #define DBG(x)        x
 #else

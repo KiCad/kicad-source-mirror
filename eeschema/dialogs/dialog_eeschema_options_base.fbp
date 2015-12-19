@@ -3577,7 +3577,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">3</property>
-                                                                <property name="flag">wxALL|wxEXPAND</property>
+                                                                <property name="flag">wxEXPAND|wxLEFT|wxTOP|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxCheckBox" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -3663,9 +3663,9 @@
                                                                     <event name="OnUpdateUI"></event>
                                                                 </object>
                                                             </object>
-                                                            <object class="sizeritem" expanded="1">
+                                                            <object class="sizeritem" expanded="0">
                                                                 <property name="border">3</property>
-                                                                <property name="flag">wxALL</property>
+                                                                <property name="flag">wxEXPAND|wxLEFT|wxTOP|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxCheckBox" expanded="1">
                                                                     <property name="BottomDockable">1</property>
@@ -3751,9 +3751,9 @@
                                                                     <event name="OnUpdateUI"></event>
                                                                 </object>
                                                             </object>
-                                                            <object class="sizeritem" expanded="1">
+                                                            <object class="sizeritem" expanded="0">
                                                                 <property name="border">3</property>
-                                                                <property name="flag">wxALL</property>
+                                                                <property name="flag">wxEXPAND|wxLEFT|wxTOP|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxCheckBox" expanded="1">
                                                                     <property name="BottomDockable">1</property>
@@ -3839,9 +3839,9 @@
                                                                     <event name="OnUpdateUI"></event>
                                                                 </object>
                                                             </object>
-                                                            <object class="sizeritem" expanded="1">
+                                                            <object class="sizeritem" expanded="0">
                                                                 <property name="border">3</property>
-                                                                <property name="flag">wxALL</property>
+                                                                <property name="flag">wxEXPAND|wxLEFT|wxTOP|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxCheckBox" expanded="1">
                                                                     <property name="BottomDockable">1</property>

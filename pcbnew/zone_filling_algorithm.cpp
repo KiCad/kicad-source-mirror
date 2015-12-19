@@ -112,7 +112,7 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET*
             int margin = m_ZoneMinThickness / 2;
             m_FilledPolysList = ConvertPolyListToPolySet( m_smoothedPoly->m_CornersList );
             m_FilledPolysList.Inflate( -margin, 16 );
-            m_FilledPolysList.Fracture();
+            m_FilledPolysList.Fracture( SHAPE_POLY_SET::PM_FAST );
         }
 
         if( m_FillMode )   // if fill mode uses segments, create them:

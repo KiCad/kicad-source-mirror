@@ -1233,6 +1233,42 @@ void SCH_SHEET::ClearAnnotation( bool aIncludeSubSheets )
 }
 
 
+bool SCH_SHEET::IsModified() const
+{
+    if( m_screen->IsModify() )
+        return true;
+
+    bool      retv = false;
+    SCH_ITEM* item = m_screen->GetDrawItems();
+
+    while( item && !retv )
+    {
+        if( item->Type() == SCH_SHEET_T )
+            retv = static_cast<SCH_SHEET*>( item )->IsModified();
+
+        item = item->Next();
+    }
+
+    return retv;
+}
+
+
+void SCH_SHEET::ClearModifyStatus()
+{
+    m_screen->ClrModify();
+
+    SCH_ITEM* item = m_screen->GetDrawItems();
+
+    while( item )
+    {
+        if( item->Type() == SCH_SHEET_T )
+            static_cast<SCH_SHEET*>( item )->m_screen->ClrModify();
+
+        item = item->Next();
+    }
+}
+
+
 SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
     wxLogDebug( wxT( "Sheet assignment operator." ) );

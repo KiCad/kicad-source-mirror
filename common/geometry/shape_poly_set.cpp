@@ -207,11 +207,11 @@ const SHAPE_LINE_CHAIN SHAPE_POLY_SET::convertFromClipper( const Path& aPath )
 }
 
 void SHAPE_POLY_SET::booleanOp( ClipType aType, const SHAPE_POLY_SET& aOtherShape,
-                                bool aFastMode )
+                                POLYGON_MODE aFastMode )
 {
     Clipper c;
 
-    if( !aFastMode )
+    if( aFastMode == PM_STRICTLY_SIMPLE )
         c.StrictlySimple( true );
 
     BOOST_FOREACH( const POLYGON& poly, m_polys )
@@ -237,11 +237,11 @@ void SHAPE_POLY_SET::booleanOp( ClipType aType, const SHAPE_POLY_SET& aOtherShap
 void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType,
                                 const SHAPE_POLY_SET& aShape,
                                 const SHAPE_POLY_SET& aOtherShape,
-                                bool aFastMode )
+                                POLYGON_MODE aFastMode )
 {
     Clipper c;
 
-    if( !aFastMode )
+    if( aFastMode == PM_STRICTLY_SIMPLE )
         c.StrictlySimple( true );
 
     BOOST_FOREACH( const POLYGON& poly, aShape.m_polys )
@@ -264,37 +264,37 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType,
 }
 
 
-void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b, bool aFastMode )
+void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
     booleanOp( ctUnion, b, aFastMode );
 }
 
 
-void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& b, bool aFastMode )
+void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
     booleanOp( ctDifference, b, aFastMode );
 }
 
 
-void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& b, bool aFastMode )
+void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
     booleanOp( ctIntersection, b, aFastMode );
 }
 
 
-void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode )
+void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
     booleanOp( ctUnion, a, b, aFastMode );
 }
 
 
-void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode )
+void SHAPE_POLY_SET::BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
     booleanOp( ctDifference, a, b, aFastMode );
 }
 
 
-void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, bool aFastMode )
+void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
 {
     booleanOp( ctIntersection, a, b, aFastMode );
 }
@@ -550,7 +550,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 }
 
 
-void SHAPE_POLY_SET::Fracture( bool aFastMode )
+void SHAPE_POLY_SET::Fracture( POLYGON_MODE aFastMode )
 {
     Simplify( aFastMode ); // remove overlapping holes/degeneracy
 
@@ -561,7 +561,7 @@ void SHAPE_POLY_SET::Fracture( bool aFastMode )
 }
 
 
-void SHAPE_POLY_SET::Simplify( bool aFastMode )
+void SHAPE_POLY_SET::Simplify( POLYGON_MODE aFastMode )
 {
     SHAPE_POLY_SET empty;
 

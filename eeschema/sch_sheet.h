@@ -635,6 +635,20 @@ public:
 
     void ClearAnnotation( bool aIncludeSubSheets = false );
 
+    /**
+     * Function IsModified
+     * checks the sheet and any of it's sub-sheets (hierarchy) for any modifications.
+     * @return true if the hierarchy is modified otherwise false.
+     */
+    bool IsModified() const;
+
+    /**
+     * Function ClearModifyStatus
+     *
+     * clears the modification flag for everything in the sheet and all sub-sheets.
+     */
+    void ClearModifyStatus();
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif

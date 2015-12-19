@@ -44,6 +44,11 @@
  *      - shapes are smoothed.
  */
 
+// Polygon calculations can use fast mode or force strickly simple polygons after calculations
+// Forcing strickly simple polygons is time consuming, and we have not see issues in fast mode
+// so we use fast mode
+#define POLY_CALC_MODE SHAPE_POLY_SET::PM_FAST
+
 #include <cmath>
 #include <sstream>
 
@@ -429,7 +434,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     SHAPE_POLY_SET solidAreas = ConvertPolyListToPolySet( m_smoothedPoly->m_CornersList );
 
     solidAreas.Inflate( -outline_half_thickness, segsPerCircle );
-    solidAreas.Simplify();
+    solidAreas.Simplify( POLY_CALC_MODE );
 
     SHAPE_POLY_SET holes;
 
@@ -442,18 +447,18 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if(g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes" );
 
-    holes.Simplify( true );
+    holes.Simplify( POLY_CALC_MODE );
 
     if (g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes-postsimplify" );
 
-    solidAreas.BooleanSubtract( holes, true );
+    solidAreas.BooleanSubtract( holes, POLY_CALC_MODE );
 
     if (g_DumpZonesWhenFilling)
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
 
     SHAPE_POLY_SET fractured = solidAreas;
-    fractured.Fracture();
+    fractured.Fracture( POLY_CALC_MODE );
 
     if (g_DumpZonesWhenFilling)
         dumper->Write( &fractured, "fractured" );
@@ -475,16 +480,16 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     // remove copper areas corresponding to not connected stubs
     if( !thermalHoles.IsEmpty() )
     {
-        thermalHoles.Simplify();
+        thermalHoles.Simplify( POLY_CALC_MODE );
         // Remove unconnected stubs
-        solidAreas.BooleanSubtract( thermalHoles );
+        solidAreas.BooleanSubtract( thermalHoles, POLY_CALC_MODE );
 
         if( g_DumpZonesWhenFilling )
             dumper->Write( &thermalHoles, "thermal-holes" );
 
         // put these areas in m_FilledPolysList
         SHAPE_POLY_SET fractured = solidAreas;
-        fractured.Fracture();
+        fractured.Fracture( POLY_CALC_MODE );
 
         if( g_DumpZonesWhenFilling )
             dumper->Write ( &fractured, "fractured" );
