@@ -30,7 +30,7 @@
 #include "3d_cache/sg/sg_node.h"
 #include "plugins/3dapi/c3dmodel.h"
 
-static const std::string node_names[S3D::SGTYPE_END + 1] = {
+static const std::string node_names[V2_END + 1] = {
     "TXFM",
     "APP",
     "COL",
