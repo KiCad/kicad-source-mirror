@@ -437,13 +437,6 @@ public:
     SCH_SHEET_PATH* GetSheetByPath( const wxString aPath, bool aHumanReadable = true );
 
     /**
-     * Function IsAutoSaveRequired
-     * checks the entire hierarchy for any modifications that require auto save.
-     * @return True if the hierarchy is modified otherwise false.
-     */
-    bool IsAutoSaveRequired();
-
-    /**
      * Function AnnotatePowerSymbols
      * clear and annotates the entire hierarchy of the sheet path list.
      * @param aLib the library list to use

@@ -684,18 +684,6 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 }
 
 
-bool SCH_SHEET_LIST::IsAutoSaveRequired()
-{
-    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
-    {
-        if( sheet->LastScreen() && sheet->LastScreen()->IsSave() )
-            return true;
-    }
-
-    return false;
-}
-
-
 void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
 {
     int ref = 1;
