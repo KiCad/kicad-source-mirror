@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -37,6 +37,7 @@
 #include <schframe.h>
 #include <invoke_sch_dialog.h>
 #include <project.h>
+#include <kiface_i.h>
 
 #include <netlist.h>
 #include <class_netlist_object.h>
@@ -48,9 +49,18 @@
 #include <erc.h>
 #include <id.h>
 
+extern int           DiagErc[PIN_NMAX][PIN_NMAX];
+extern int           DefaultDiagErc[PIN_NMAX][PIN_NMAX];
 
-bool DIALOG_ERC::m_writeErcFile = false;
 
+
+bool DIALOG_ERC::m_writeErcFile = false;            // saved only for the current session
+bool DIALOG_ERC::m_TestSimilarLabels = true;        // Save in project config
+bool DIALOG_ERC::m_diagErcTableInit = false;        // saved only for the current session
+bool DIALOG_ERC::m_tstUniqueGlobalLabels = true;    // saved only for the current session
+
+// Control identifiers for events
+#define ID_MATRIX_0 1800
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
     EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PIN_NMAX * PIN_NMAX ) - 1,
@@ -72,6 +82,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
 DIALOG_ERC::~DIALOG_ERC()
 {
+    m_TestSimilarLabels = m_cbTestSimilarLabels->GetValue();
+    m_tstUniqueGlobalLabels = m_cbTestUniqueGlbLabels->GetValue();
 }
 
 
@@ -86,6 +98,8 @@ void DIALOG_ERC::Init()
     }
 
     m_WriteResultOpt->SetValue( m_writeErcFile );
+    m_cbTestSimilarLabels->SetValue( m_TestSimilarLabels );
+    m_cbTestUniqueGlbLabels->SetValue( m_tstUniqueGlobalLabels );
 
     SCH_SCREENS screens;
     updateMarkerCounts( &screens );
@@ -232,7 +246,7 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
 
 void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
 {
-    // Remember: OnLeftClickMarkersList was called just berfore
+    // Remember: OnLeftClickMarkersList was called just before
     // and therefore m_lastMarkerFound was initialized.
     // (NULL if not found)
     if( m_lastMarkerFound )
@@ -257,10 +271,10 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     wxSize bitmap_size = dummy->GetSize();
     delete dummy;
 
-    if( !DiagErcTableInit )
+    if( !m_diagErcTableInit )
     {
         memcpy( DiagErc, DefaultDiagErc, sizeof(DefaultDiagErc) );
-        DiagErcTableInit = true;
+        m_diagErcTableInit = true;
     }
 
     wxPoint pos;
@@ -389,6 +403,10 @@ void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 {
     memcpy( DiagErc, DefaultDiagErc, sizeof( DiagErc ) );
     ReBuildMatrixPanel();
+    m_TestSimilarLabels = true;
+    m_cbTestSimilarLabels->SetValue( m_TestSimilarLabels );
+    m_tstUniqueGlobalLabels = true;
+    m_cbTestUniqueGlbLabels->SetValue( m_tstUniqueGlobalLabels );
 }
 
 
@@ -432,13 +450,9 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 {
     wxFileName fn;
 
-    if( !DiagErcTableInit )
-    {
-        memcpy( DiagErc, DefaultDiagErc, sizeof( DefaultDiagErc ) );
-        DiagErcTableInit = true;
-    }
-
     m_writeErcFile = m_WriteResultOpt->GetValue();
+    m_TestSimilarLabels = m_cbTestSimilarLabels->GetValue();
+    m_tstUniqueGlobalLabels = m_cbTestUniqueGlbLabels->GetValue();
 
     // Build the whole sheet list in hierarchy (sheet, not screen)
     SCH_SHEET_LIST sheets;
@@ -511,12 +525,14 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         case NET_HIERBUSLABELMEMBER:
         case NET_SHEETLABEL:
         case NET_SHEETBUSLABELMEMBER:
-        case NET_GLOBLABEL:
-
             // ERC problems when pin sheets do not match hierarchical labels.
             // Each pin sheet must match a hierarchical label
             // Each hierarchical label must match a pin sheet
-            TestLabel( objectsConnectedList.get(), net, nextNet );
+            objectsConnectedList->TestforNonOrphanLabel( net, nextNet );
+            break;
+        case NET_GLOBLABEL:
+            if( m_tstUniqueGlobalLabels )
+                objectsConnectedList->TestforNonOrphanLabel( net, nextNet );
             break;
 
         case NET_NOCONNECT:
@@ -524,7 +540,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             // ERC problems when a noconnect symbol is connected to more than one pin.
             MinConn = NET_NC;
 
-            if( CountPinsInNet( objectsConnectedList.get(), nextNet ) > 1 )
+            if( objectsConnectedList->CountPinsInNet( nextNet ) > 1 )
                 Diagnose( objectsConnectedList->GetItem( net ), NULL, MinConn, UNC );
 
             break;
@@ -538,6 +554,11 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
         lastNet = net;
     }
+
+    // Test similar labels (i;e. labels which are identical when
+    // using case insensitive comparisons)
+    if( m_TestSimilarLabels )
+        objectsConnectedList->TestforSimilarLabels();
 
     // Displays global results:
     updateMarkerCounts( &screens );
