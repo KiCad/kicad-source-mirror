@@ -11,9 +11,9 @@ CMakeList.txt       - CMAKE build tool script
 COPYRIGHT.txt       - A copy of the GNU General Public License Version 2
 CTestConfig.cmake   - Support for CTest and CDash testing tools
 Doxyfile            - Doxygen config file for Kicad
-INSTALL.txt         - The release (binairy) installation instructions
+INSTALL.txt         - The release (binary) installation instructions
 TODO.txt            - Todo list
-uncrustify.cfg      - Uncrustify config file for uncrustify sorces formatting tool
+uncrustify.cfg      - Uncrustify config file for uncrustify sources formatting tool
 
 Subdirectories
 --------------
