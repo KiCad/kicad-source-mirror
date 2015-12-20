@@ -56,14 +56,55 @@ static PICKED_ITEMS_LIST s_PickedList;                  /* a picked list to
                                                          * and dragged tracks
                                                          */
 
-/* Get a module name from user and return a pointer to the corresponding module
+/*
+ * Get a footprint ref from user and return a pointer to the corresponding footprint
+ *
+ * DIALOG_GET_FOOTPRINT_BY_NAME is a helper dialog to select afootprint by its ref
  */
-MODULE* PCB_BASE_FRAME::GetModuleByName()
-{
-    wxString          moduleName;
-    MODULE*           module = NULL;
+#include <dialog_get_footprint_by_name_base.h>
 
-    wxTextEntryDialog dlg( this, _( "Reference:" ), _( "Search for footprint" ), moduleName );
+class DIALOG_GET_FOOTPRINT_BY_NAME: public DIALOG_GET_FOOTPRINT_BY_NAME_BASE
+{
+public:
+    DIALOG_GET_FOOTPRINT_BY_NAME( PCB_BASE_FRAME* aParent, wxArrayString& aFpList ) :
+        DIALOG_GET_FOOTPRINT_BY_NAME_BASE( aParent )
+    {
+        m_sdbSizerOK->SetDefault();
+        m_choiceFpList->Append( aFpList );
+
+        // Dialog should not shrink beyond it's minimal size.
+        GetSizer()->SetSizeHints( this );
+    }
+
+    // returns the selected text (fp reference)
+    const wxString GetValue()
+    {
+        return m_SearchTextCtrl->GetValue();
+    }
+
+private:
+    // Called when selecting an item from the item list
+	void OnSelectFootprint( wxCommandEvent& aEvent )
+    {
+        if( m_choiceFpList->GetSelection() >= 0 )
+            m_SearchTextCtrl->SetValue(
+                m_choiceFpList->GetString( m_choiceFpList->GetSelection() ).BeforeFirst( ' ' ) );
+    }
+};
+
+
+MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
+{
+    wxString        moduleName;
+    MODULE*         module = NULL;
+    wxArrayString   fplist;
+
+    for( MODULE* fp = GetBoard()->m_Modules; fp; fp = fp->Next() )
+        fplist.Add( fp->GetReference() + wxT("    ( ") + fp->GetValue() + wxT(" )") );
+
+    fplist.Sort();
+
+    DIALOG_GET_FOOTPRINT_BY_NAME dlg( this, fplist );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL;    //Aborted by user

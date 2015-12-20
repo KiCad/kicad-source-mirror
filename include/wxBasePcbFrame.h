@@ -283,12 +283,17 @@ public:
      * puts up a dialog and allows the user to pick a library, for unspecified use.
      *
      * @param aNicknameExisting is the current choice to highlight
-     *
      * @return wxString - the library or wxEmptyString on abort.
      */
     wxString SelectLibrary( const wxString& aNicknameExisting );
 
-    MODULE* GetModuleByName();
+    /**
+     * Function GetFootprintFromBoardByReference
+     * @return a reference to the footprint found by its refence
+     * on the curent board. the reference is entered by the user from
+     * a dialog (by awxTextCtlr, or a list of available references)
+     */
+    MODULE* GetFootprintFromBoardByReference();
 
     /**
      * Function OnModify

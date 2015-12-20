@@ -88,6 +88,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_gen_module_position_file_base.cpp
     dialogs/dialog_general_options.cpp
     dialogs/dialog_general_options_BoardEditor_base.cpp
+    dialogs/dialog_get_footprint_by_name_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
     dialogs/dialog_global_modules_fields_edition.cpp
