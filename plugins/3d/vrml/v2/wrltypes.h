@@ -44,7 +44,7 @@ enum WRLVERSION
 // These are used to look up node names and to quickly
 // determine what routine to invoke to read a section of
 // a file.
-enum WRLNODES
+enum WRL2NODES
 {
     WRL2_BASE = 0,  // not really a VRML node but we need a top level virtual node
     WRL2_BEGIN,
@@ -102,7 +102,8 @@ enum WRLNODES
     WRL2_VIEWPOINT,
     WRL2_VISIBILITYSENSOR,
     WRL2_WORLDINFO,
-    WRL2_END
+    WRL2_INVALID,
+    WRL2_END = WRL2_INVALID
 };
 
 

@@ -57,12 +57,20 @@ class WRL2NODE
 {
 protected:
     WRL2NODE* m_Parent;     // pointer to parent node; may be NULL for top level node
-    WRL2TYPES m_Type;       // type of VRML node
+    WRL2NODES m_Type;       // type of VRML node
     std::string m_Name;     // name to use for referencing the node by name
 
     std::list< WRL2NODE* > m_BackPointers;  // nodes which hold a reference to this
 
 public:
+
+    /**
+     * Function getNodeTypeID
+     * returns the ID based on the given aNodeName or WRL2_INVALID (WRL2_END)
+     * if no such node name exists
+     */
+    WRL2NODES getNodeTypeID( const std::string aNodeName );
+
     /**
      * Function unlinkChild
      * removes references to an owned child; it is invoked by the child upon destruction
@@ -110,7 +118,7 @@ public:
      * Function GetNodeType
      * returns the type of this node instance
      */
-    WRL2TYPES GetNodeType( void ) const;
+    WRL2NODES GetNodeType( void ) const;
 
     /**
      * Function GetParent
@@ -133,7 +141,7 @@ public:
     virtual const char* GetName( void );
     virtual bool SetName(const char *aName);
 
-    const char * GetNodeTypeName( WRL::V2TYPES aNodeType ) const;
+    const char* GetNodeTypeName( WRL2NODES aNodeType ) const;
 
     /**
      * Function FindNode searches the tree of linked nodes and returns a

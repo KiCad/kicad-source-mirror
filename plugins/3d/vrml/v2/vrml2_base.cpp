@@ -27,9 +27,9 @@
 #include "vrml2_helpers.h"
 
 
-WRL2BASE::WRL2BASE( WRL2NODE* aParent ) : WRL2NODE()
+WRL2BASE::WRL2BASE() : WRL2NODE()
 {
-    m_Type = V2_BASE;
+    m_Type = WRL2_BASE;
     return;
 }
 
@@ -46,7 +46,7 @@ WRL2BASE::~WRL2BASE()
         ++sC;
     }
 
-    sC.clear();
+    m_Children.clear();
     return;
 }
 
@@ -56,8 +56,10 @@ bool WRL2BASE::SetParent( WRL2NODE* aParent )
 {
     #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] attempting to extract name from virtual base node\n";
+    std::cerr << " * [BUG] attempting to set parent on WRL2BASE node\n";
     #endif
+
+    return false;
 }
 
 
@@ -134,6 +136,37 @@ bool WRL2BASE::SetName(const char *aName)
 }
 
 
+void WRL2BASE::unlinkChildNode( const WRL2NODE* aNode )
+{
+    std::list< WRL2NODE* >::iterator sL = m_Children.begin();
+    std::list< WRL2NODE* >::iterator eL = m_Children.end();
+
+    while( sL != eL )
+    {
+        if( *sL == aNode )
+        {
+            m_Children.erase( sL );
+            return;
+        }
+
+        ++sL;
+    }
+
+    return;
+}
+
+
+void WRL2BASE::unlinkRefNode( const WRL2NODE* aNode )
+{
+    #ifdef DEBUG
+    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    std::cerr << " * [BUG] WRL2BASE was invoked to unlink a referenced node\n";
+    #endif
+
+    return;
+}
+
+
 bool WRL2BASE::Read( WRLPROC& proc )
 {
     if( proc.GetVRMLType() != VRML_V2 )
@@ -146,15 +179,148 @@ bool WRL2BASE::Read( WRLPROC& proc )
     }
 
     std::string glob;
+    bool hasComma = false;
+    WRL2NODES ntype;
 
-    while( proc.ReadGlob( glob ) )
+    while( proc.ReadName( glob ) )
     {
-        // XXX - Process node name
+        // Process node name:
+        // the names encountered at this point should be one of the
+        // built-in node names or one of:
+        // DEF, USE
+        // PROTO, EXTERNPROTO
+        // ROUTE
+        // any PROTO or EXTERNPROTO defined name
+        // since we do not support PROTO or EXTERNPROTO, any unmatched names are
+        // assumed to be defined via PROTO/EXTERNPROTO and deleted according to
+        // a typical pattern.
+        if( !glob.compare( "USE" ) )
+        {
+            // XXX - implement
+        }
 
+        if( !glob.compare( "DEF" ) )
+        {
+            // XXX - implement
+        }
 
-        xxx;
-    } while( !glob.empty() );
+        if( !glob.compare( "PROTO" ) )
+        {
+            // XXX - implement
+        }
 
+        if( !glob.compare( "EXTERNPROTO" ) )
+        {
+            // XXX - implement
+        }
+
+        if( !glob.compare( "ROUTE" ) )
+        {
+            // XXX - implement
+        }
+
+        ntype = getNodeTypeID( glob );
+
+        switch( ntype )
+        {
+        //
+        // items to be implemented:
+        //
+        case WRL2_APPEARANCE:
+            // note:
+            break;
+
+        case WRL2_BOX:
+            break;
+
+        case WRL2_COLOR:
+            break;
+
+        case WRL2_CONE:
+            break;
+
+        case WRL2_COORDINATE:
+            break;
+
+        case WRL2_CYLINDER:
+            break;
+
+        case WRL2_ELEVATIONGRID:
+            break;
+
+        case WRL2_EXTRUSION:
+            break;
+
+        case WRL2_INDEXEDFACESET:
+            break;
+
+        case WRL2_MATERIAL:
+            break;
+
+        case WRL2_NORMAL:
+            break;
+
+        case WRL2_SHAPE:
+            break;
+
+        case WRL2_SPHERE:
+            break;
+
+        case WRL2_TRANSFORM:
+        case WRL2_GROUP:
+            break;
+
+        //
+        // items not implemented or for optional future implementation:
+        //
+        case WRL2_ANCHOR:
+        case WRL2_AUDIOCLIP:
+        case WRL2_BACKGROUND:
+        case WRL2_BILLBOARD:
+        case WRL2_COLLISION:
+        case WRL2_COLORINTERPOLATOR:
+        case WRL2_COORDINATEINTERPOLATOR:
+        case WRL2_CYLINDERSENSOR:
+        case WRL2_DIRECTIONALLIGHT:
+        case WRL2_FOG:
+        case WRL2_FONTSTYLE:
+        case WRL2_IMAGETEXTURE:
+        case WRL2_INDEXEDLINESET:
+        case WRL2_INLINE:
+        case WRL2_LOD:
+        case WRL2_MOVIETEXTURE:
+        case WRL2_NAVIGATIONINFO:
+        case WRL2_NORMALINTERPOLATOR:
+        case WRL2_ORIENTATIONINTERPOLATOR:
+        case WRL2_PIXELTEXTURE:
+        case WRL2_PLANESENSOR:
+        case WRL2_POINTLIGHT:
+        case WRL2_POINTSET:
+        case WRL2_POSITIONINTERPOLATOR:
+        case WRL2_PROXIMITYSENSOR:
+        case WRL2_SCALARINTERPOLATOR:
+        case WRL2_SCRIPT:
+        case WRL2_SOUND:
+        case WRL2_SPHERESENSOR:
+        case WRL2_SPOTLIGHT:
+        case WRL2_SWITCH:
+        case WRL2_TEXT:
+        case WRL2_TEXTURECOORDINATE:
+        case WRL2_TEXTURETRANSFORM:
+        case WRL2_TIMESENSOR:
+        case WRL2_TOUCHSENSOR:
+        case WRL2_VIEWPOINT:
+        case WRL2_VISIBILITYSENSOR:
+        case WRL2_WORLDINFO:
+        case WRL2_INVALID:
+        default:    // any nodes which may have been defined via PROTO/EXTERNPROTO
+            break;
+        }
+
+        //xxx;
+    };
+
+    // XXX - determine why ReadName failed
 
     // XXX -
     #warning TO BE IMPLEMENTED

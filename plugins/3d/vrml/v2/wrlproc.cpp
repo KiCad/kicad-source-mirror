@@ -826,6 +826,15 @@ bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
         return false;
     }
 
+    if( std::string::npos != tmp.find( "0x" ) )
+    {
+        #warning TO BE IMPLEMENTED
+        // XXX - handle the case of a hex value.
+        // Rules: "0x" + "0-9, A-F" - pay attention to capitalization;
+        // if we encounter defective hex values (using 'a-f') we may
+        // consider relaxing the requirements.
+    }
+
     std::istringstream istr;
     istr.str( tmp );
 

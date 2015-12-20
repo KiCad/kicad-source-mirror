@@ -32,12 +32,12 @@
 
 // Function to find a node object given a (non-unique) node name
 #define FIND_NODE( aName, aNodeList, aCallingNode ) do { \
-    std::vector< aType* >::iterator sLA = aNodeList.begin(); \
-    std::vector< aType* >::iterator eLA = aNodeList.end(); \
+    std::list< WRL2NODE* >::iterator sLA = aNodeList.begin(); \
+    std::list< WRL2NODE* >::iterator eLA = aNodeList.end(); \
     WRL2NODE* psg = NULL; \
     while( sLA != eLA ) { \
         if( (WRL2NODE*)*sLA != aCallingNode ) { \
-            psg = (WRL2NODE*) (*sLA)->FindNode( aName, this ); \
+            psg = (*sLA)->FindNode( aName, this ); \
             if( NULL != psg) \
                 return psg; \
         } \

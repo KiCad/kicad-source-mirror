@@ -48,6 +48,11 @@
 
 #include "vrml2_node.h"
 
+// BUG: there are no referenced nodes; however it is indeed
+// possible for the BASE node to have reference nodes, for example:
+// DEF BLAH Transform{}
+// USE BLAH
+// The code must be adjusted to respond to unlink requests and addNodeRef requests
 
 /**
  * Class WRL2BASE
