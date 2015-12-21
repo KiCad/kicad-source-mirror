@@ -76,9 +76,6 @@ public:
     int m_FastGrid1;                // 1st fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
     int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
 
-    EDA_3D_FRAME* m_Draw3DFrame;
-
-
 protected:
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
@@ -110,6 +107,11 @@ public:
             long aStyle, const wxString& aFrameName );
 
     ~PCB_BASE_FRAME();
+
+    /**
+     * @return a reference to the 3D viewer frame, when exists, or NULL
+     */
+    EDA_3D_FRAME* Get3DViewerFrame();
 
     /**
      * Function LoadFootprint

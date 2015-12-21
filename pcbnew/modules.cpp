@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@
 
 #include <pcbnew.h>
 #include <drag.h>
-
+#include <dialog_get_footprint_by_name.h>
 
 static void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            const wxPoint& aPosition, bool aErase );
@@ -56,42 +56,6 @@ static PICKED_ITEMS_LIST s_PickedList;                  /* a picked list to
                                                          * and dragged tracks
                                                          */
 
-/*
- * Get a footprint ref from user and return a pointer to the corresponding footprint
- *
- * DIALOG_GET_FOOTPRINT_BY_NAME is a helper dialog to select afootprint by its ref
- */
-#include <dialog_get_footprint_by_name_base.h>
-
-class DIALOG_GET_FOOTPRINT_BY_NAME: public DIALOG_GET_FOOTPRINT_BY_NAME_BASE
-{
-public:
-    DIALOG_GET_FOOTPRINT_BY_NAME( PCB_BASE_FRAME* aParent, wxArrayString& aFpList ) :
-        DIALOG_GET_FOOTPRINT_BY_NAME_BASE( aParent )
-    {
-        m_sdbSizerOK->SetDefault();
-        m_choiceFpList->Append( aFpList );
-
-        // Dialog should not shrink beyond it's minimal size.
-        GetSizer()->SetSizeHints( this );
-    }
-
-    // returns the selected text (fp reference)
-    const wxString GetValue()
-    {
-        return m_SearchTextCtrl->GetValue();
-    }
-
-private:
-    // Called when selecting an item from the item list
-	void OnSelectFootprint( wxCommandEvent& aEvent )
-    {
-        if( m_choiceFpList->GetSelection() >= 0 )
-            m_SearchTextCtrl->SetValue(
-                m_choiceFpList->GetString( m_choiceFpList->GetSelection() ).BeforeFirst( ' ' ) );
-    }
-};
-
 
 MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 {
@@ -99,6 +63,7 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     MODULE*         module = NULL;
     wxArrayString   fplist;
 
+    // Build list of available fp references, to display them in dialog
     for( MODULE* fp = GetBoard()->m_Modules; fp; fp = fp->Next() )
         fplist.Add( fp->GetReference() + wxT("    ( ") + fp->GetValue() + wxT(" )") );
 
@@ -106,8 +71,8 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 
     DIALOG_GET_FOOTPRINT_BY_NAME dlg( this, fplist );
 
-    if( dlg.ShowModal() != wxID_OK )
-        return NULL;    //Aborted by user
+    if( dlg.ShowModal() != wxID_OK )    //Aborted by user
+        return NULL;
 
     moduleName = dlg.GetValue();
     moduleName.Trim( true );

@@ -597,8 +597,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetMsgPanel( GetBoard() );
 
     // Refresh the 3D view, if any
-    if( m_Draw3DFrame )
-        m_Draw3DFrame->NewDisplay();
+    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame )
+        draw3DFrame->NewDisplay();
 
 #if 0 && defined(DEBUG)
     // Output the board object tree to stdout, but please run from command prompt:

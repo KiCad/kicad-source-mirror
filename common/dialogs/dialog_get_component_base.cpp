@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  5 2013)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -14,7 +14,10 @@ DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindow
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bSizerMain;
-	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizerUpper;
+	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxBoxSizer* bSizerLeft;
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
@@ -34,23 +37,16 @@ DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindow
 	m_historyList = new wxListBox( this, ID_SEL_BY_LISTBOX, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	m_historyList->SetMinSize( wxSize( 200,100 ) );
 	
-	bSizerLeft->Add( m_historyList, 1, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( m_historyList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerMain->Add( bSizerLeft, 1, wxEXPAND, 5 );
+	bSizerUpper->Add( bSizerLeft, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetDefault(); 
-	bSizerRight->Add( m_buttonOK, 0, wxALL|wxEXPAND, 5 );
-	
 	m_buttonKW = new wxButton( this, ID_ACCEPT_KEYWORD, _("Search by Keyword"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_buttonKW, 0, wxALL|wxEXPAND, 5 );
-	
-	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonCancel, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonList = new wxButton( this, ID_LIST_ALL, _("List All"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_buttonList, 0, wxALL|wxEXPAND, 5 );
@@ -59,32 +55,46 @@ DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindow
 	bSizerRight->Add( m_buttonBrowse, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerMain->Add( bSizerRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerUpper->Add( bSizerRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
+	
+	bSizerMain->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
 	// Connect Events
 	m_historyList->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
-	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
 	m_buttonKW->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
-	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::OnCancel ), NULL, this );
 	m_buttonList->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::GetExtraSelection ), NULL, this );
+	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::OnCancel ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
 }
 
 DIALOG_GET_COMPONENT_BASE::~DIALOG_GET_COMPONENT_BASE()
 {
 	// Disconnect Events
 	m_historyList->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
-	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
 	m_buttonKW->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
-	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::OnCancel ), NULL, this );
 	m_buttonList->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::GetExtraSelection ), NULL, this );
+	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::OnCancel ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GET_COMPONENT_BASE::Accept ), NULL, this );
 	
 }

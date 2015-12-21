@@ -116,7 +116,7 @@ END_EVENT_TABLE()
 EDA_3D_FRAME::EDA_3D_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent,
         const wxString& aTitle, long style ) :
     KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle,
-            wxDefaultPosition, wxDefaultSize, style, wxT( "Frame3D" ) )
+            wxDefaultPosition, wxDefaultSize, style, VIEWER3D_FRAMENAME )
 {
     m_canvas        = NULL;
     m_reloadRequest = false;
@@ -235,9 +235,6 @@ void EDA_3D_FRAME::Exit3DFrame( wxCommandEvent& event )
 
 void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    if( Parent() )
-        Parent()->m_Draw3DFrame = NULL;
-
     Destroy();
 }
 

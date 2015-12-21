@@ -910,7 +910,8 @@ COMPONENT* CVPCB_MAINFRAME::GetSelectedComponent()
 DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFpViewerFrame()
 {
     // returns the Footprint Viewer frame, if exists, or NULL
-    return (DISPLAY_FOOTPRINTS_FRAME*) wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME );
+    return dynamic_cast<DISPLAY_FOOTPRINTS_FRAME*>
+            ( wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME ) );
 }
 
 

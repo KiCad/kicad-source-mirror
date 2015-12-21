@@ -39,6 +39,8 @@
 #include <base_units.h>
 #include <msgpanel.h>
 
+#include <3d_viewer.h>
+
 #include <pcbnew.h>
 #include <fp_lib_table.h>
 #include <pcbnew_id.h>
@@ -98,7 +100,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_Pcb                 = NULL;
-    m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
 
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
     m_UserGridUnit        = INCHES;
@@ -120,6 +121,14 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     delete m_Collector;
     delete m_Pcb;
+}
+
+
+EDA_3D_FRAME* PCB_BASE_FRAME::Get3DViewerFrame()
+{
+    // return the 3D viewer frame, when exists, or NULL
+    return dynamic_cast<EDA_3D_FRAME*>
+        ( wxWindow::FindWindowByName( VIEWER3D_FRAMENAME ) );
 }
 
 

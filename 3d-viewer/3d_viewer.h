@@ -54,6 +54,8 @@ class wxColourData;
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
+#define VIEWER3D_FRAMENAME wxT( "Viewer3DFrameName" )
+
 
 class EDA_3D_FRAME : public KIWAY_PLAYER
 {
