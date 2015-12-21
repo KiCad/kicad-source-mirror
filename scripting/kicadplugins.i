@@ -78,21 +78,59 @@ def ReloadPlugins():
             ReloadPlugin(k)
 
 
-def LoadPlugins(plugpath):
+def LoadPlugins(bundlepath=None):
+    """
+    Initialise Scripting/Plugin python environment and load plugins.
+
+    Arguments:
+    scriptpath -- The path to the bundled scripts.
+                  The bunbled Plugins are relative to this path, in the
+                  "plugins" subdirectory.
+
+    NOTE: These are all of the possible "default" search paths for kicad
+          python scripts.  These paths will ONLY be added to the python
+          search path ONLY IF they already exist.
+
+        The Scripts bundled with the KiCad installation:
+            <bundlepath>/
+            <bundlepath>/plugins/
+
+        The Scripts relative to the KiCad search path environment variable:
+            [KICAD_PATH]/scripting/
+            [KICAD_PATH]/scripting/plugins/
+
+        The Scripts relative to the KiCad Users configuration:
+            <kicad_config_path>/scripting/
+            <kicad_config_path>/scripting/plugins/
+
+        And on Linux ONLY, extra paths relative to the users home directory:
+            ~/.kicad_plugins/
+            ~/.kicad/scripting/
+            ~/.kicad/scripting/plugins/
+    """
     import os
     import sys
+    import pcbnew
 
     kicad_path = os.environ.get('KICAD_PATH')
+    config_path = pcbnew.GetKicadConfigPath()
     plugin_directories=[]
 
-    if plugpath:
-        plugin_directories.append(plugpath)
+    if bundlepath:
+        plugin_directories.append(bundlepath)
+        plugin_directories.append(os.path.join(bundlepath, 'plugins'))
 
     if kicad_path:
+        plugin_directories.append(os.path.join(kicad_path, 'scripting'))
         plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins'))
+
+    if config_path:
+        plugin_directories.append(os.path.join(config_path, 'scripting'))
+        plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins'))
 
     if sys.platform.startswith('linux'):
         plugin_directories.append(os.environ['HOME']+'/.kicad_plugins/')
+        plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
 
     for plugins_dir in plugin_directories:

@@ -70,8 +70,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/common_actions.h>
 
-#include <scripting/python_console_frame.h>
-
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
 #endif
@@ -984,9 +982,6 @@ void PCB_EDIT_FRAME::UpdateTitle()
 }
 
 
-wxSize PYTHON_CONSOLE_FRAME::m_frameSize;   ///< The size of the PYTHON_CONSOLE_FRAME frame, stored during a session
-wxPoint PYTHON_CONSOLE_FRAME::m_framePos;   ///< The position ofPYTHON_CONSOLE_FRAME  the frame, stored during a session
-
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
 
@@ -994,7 +989,7 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
     bool pythonPanelShown = true;
 
     if( pythonPanelFrame == NULL )
-        pythonPanelFrame = new PYTHON_CONSOLE_FRAME( this, pythonConsoleNameId() );
+        pythonPanelFrame = CreatePythonShellWindow( this, pythonConsoleNameId() );
     else
         pythonPanelShown = ! pythonPanelFrame->IsShown();
 
