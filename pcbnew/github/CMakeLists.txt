@@ -24,28 +24,15 @@
 
 # Download avhttp and install the headers, not actually compiled
 #################################################
-include( download_avhttp )
-
-find_package( OpenSSL REQUIRED )
-#message( STATUS "OPENSSL_FOUND:${OPENSSL_FOUND}  OPENSSL_LIBRARIES:${OPENSSL_LIBRARIES}" )
-
-# FindOpenSSL.cmake does not set this var into cache, so is not globally visible,
-# do it here incase some other link image needs these libraries
-set( OPENSSL_LIBRARIES   "${OPENSSL_LIBRARIES}"   CACHE FILEPATH "OpenSSL link libraries" )
-set( OPENSSL_INCLUDE_DIR "${OPENSSL_INCLUDE_DIR}" CACHE FILEPATH "OpenSSL include dir" )
 
 # These are additions to any inherited from pcbnew dir:
-include_directories( . ${OPENSSL_INCLUDE_DIR} ${AVHTTP_INCLUDE_DIR} )
+include_directories( . )
 
 # Tell AVHTTP we have SSL.
-add_definitions( -DAVHTTP_ENABLE_OPENSSL )
-
-# tone down the compiler warnings for avhttp header library:
-set( CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-reorder -Wno-unused-variable -Wno-unused-function -Wno-strict-aliasing" )
-
 set( GITHUB_PLUGIN_SRCS
-    github_plugin.cpp github_getliblist.cpp html_link_parser.cpp
+    github_plugin.cpp 
+    github_getliblist.cpp
+    html_link_parser.cpp
     )
 
 add_library( github_plugin STATIC ${GITHUB_PLUGIN_SRCS} )
@@ -53,7 +40,7 @@ add_library( github_plugin STATIC ${GITHUB_PLUGIN_SRCS} )
 # No, you don't get github without boost and openssl. Boost_LIBRARIES now moved up
 # into CMakeLists.txt for pcbnew and cvpcb:
 target_link_libraries( github_plugin
-    ${OPENSSL_LIBRARIES}
+    common
     )
 
 if( MINGW )
@@ -64,9 +51,4 @@ if( MINGW )
 endif()
 
 add_dependencies( github_plugin boost )
-add_dependencies( github_plugin avhttp )
-
-if( MINGW AND NOT OPENSSL_ROOT_DIR )
-    add_dependencies( github_plugin openssl )
-endif()
 

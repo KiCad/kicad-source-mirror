@@ -5,6 +5,7 @@ include_directories(
     ${CAIRO_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
+    ${CURL_INCLUDE_DIRS}
     ../3d-viewer
     ../pcbnew
     ../polygon
@@ -254,6 +255,9 @@ endif()
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
+    kicad_curl/kicad_curl.cpp
+    kicad_curl/kicad_curl_easy.cpp
+
     view/view.cpp
     view/view_item.cpp
     view/view_group.cpp
@@ -279,7 +283,7 @@ set( COMMON_SRCS
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
 add_dependencies( common version_header )
-target_link_libraries( common ${Boost_LIBRARIES} )
+target_link_libraries( common ${Boost_LIBRARIES} ${CURL_LIBRARIES} )
 
 
 set( PCB_COMMON_SRCS

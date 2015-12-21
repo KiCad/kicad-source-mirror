@@ -38,8 +38,7 @@ I have lost my enthusiasm for local caching until a faster time stamp retrieval
 mechanism can be found, or github gets more servers.  But note that the occasionally
 slow response is the exception rather than the norm.  Normally the response is
 down around a 1/3 of a second.  The information we would use is in the header
-named "Last-Modified" as seen below.  This would need parsing, but avhttp may
-offer some help there, if not, then boost async probably does.
+named "Last-Modified" as seen below. 
 
 
 HTTP/1.1 200 OK
@@ -64,20 +63,7 @@ X-GitHub-Request-Id: 411087C2:659E:50FD6E6:52E67F66
 Vary: Accept-Encoding
 
 */
-
-
-#ifndef WIN32_LEAN_AND_MEAN
-// when WIN32_LEAN_AND_MEAN is defined, some useless includes in <window.h>
-// are skipped, and this avoid some compil issues
-#define WIN32_LEAN_AND_MEAN
-#endif
-
-#ifdef WIN32
- // defines needed by avhttp
- // Minimal Windows version is XP: Google for _WIN32_WINNT
- #define _WIN32_WINNT   0x0501
- #define WINVER         0x0501
-#endif
+#include <kicad_curl/kicad_curl_easy.h> /* Include before any wx file */
 
 #include <sstream>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -88,10 +74,6 @@ Vary: Accept-Encoding
 #include <wx/uri.h>
 
 #include <fctsys.h>
-// Under Windows Mingw/msys, avhttp.hpp should be included after fctsys.h
-// in fact after wx/wx.h, included by fctsys.h,
-// to avoid issues (perhaps due to incompatible defines)
-#include <avhttp.hpp>                       // chinese SSL magic
 
 #include <io_mgr.h>
 #include <richio.h>
@@ -102,6 +84,7 @@ Vary: Accept-Encoding
 #include <macros.h>
 #include <fp_lib_table.h>       // ExpandSubstitutions()
 #include <github_getliblist.h>
+
 
 using namespace std;
 
@@ -431,7 +414,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
         m_gh_cache = new GH_CACHE();
 
         // INIT_LOGGER( "/tmp", "test.log" );
-        remote_get_zip( aLibraryPath );
+        remoteGetZip( aLibraryPath );
         // UNINIT_LOGGER();
 
         m_lib_path = aLibraryPath;
@@ -460,7 +443,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 }
 
 
-bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
+bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string& aZipURL )
 {
     // e.g. "https://github.com/liftoff-sr/pretty_footprints"
     //D(printf("aRepoURL:%s\n", TO_UTF8( aRepoURL ) );)
@@ -470,12 +453,12 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
     if( repo.HasServer() && repo.HasPath() )
     {
         // scheme might be "http" or if truly github.com then "https".
-        wxString zip_url = repo.GetScheme();
-
-        zip_url += "://";
+        wxString zip_url;
 
         if( repo.GetServer() == "github.com" )
         {
+            //codeload.github.com only supports https
+            zip_url = "https://";
 #if 0       // A proper code path would be this one, but it is not the fastest.
             zip_url += repo.GetServer();
             zip_url += repo.GetPath();      // path comes with a leading '/'
@@ -488,8 +471,6 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
 
             // In order to bypass this redirect, saving time, we use the
             // redirected URL on first attempt to save one HTTP GET hit.
-            // avhttp would do the redirect behind the scenes normally, but that would
-            // be slower than doing this bypass.
             zip_url += "codeload.github.com";
             zip_url += repo.GetPath();      // path comes with a leading '/'
             zip_url += "/zip/master";
@@ -498,9 +479,11 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
 
         else
         {
+            zip_url = repo.GetScheme();
+            zip_url += "://";
+
             // This is the generic code path for any server which can serve
             // up zip files. The schemes tested include: http and https.
-            // (I don't know what the avhttp library supports beyond that.)
 
             // zip_url goal: "<scheme>://<server>[:<port>]/<path>"
 
@@ -526,124 +509,48 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, string* aZipURL )
             // this code path with the needs of one particular inflexible server.
         }
 
-        *aZipURL = zip_url.utf8_str();
+        aZipURL = zip_url.utf8_str();
         return true;
     }
     return false;
 }
 
 
-void GITHUB_PLUGIN::remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR )
+void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
 {
-    string  zip_url;
+    std::string  zip_url;
 
-    if( !repoURL_zipURL( aRepoURL, &zip_url ) )
+    if( !repoURL_zipURL( aRepoURL, zip_url ) )
     {
         wxString msg = wxString::Format( _( "Unable to parse URL:\n'%s'" ), GetChars( aRepoURL ) );
         THROW_IO_ERROR( msg );
     }
 
-    boost::asio::io_service io;
-    avhttp::http_stream     h( io );
-    avhttp::request_opts    options;
+    wxLogDebug( wxT( "Attempting to download: " ) + zip_url );
 
-    options.insert( "Accept",       "application/zip" );
-    options.insert( "User-Agent",   "http://kicad-pcb.org" );   // THAT WOULD BE ME.
-    h.request_options( options );
+    KICAD_CURL_EASY kcurl;
+
+    kcurl.SetURL(zip_url.c_str());
+    kcurl.SetUserAgent("KiCad-EDA");
+    kcurl.SetHeader("Accept", "application/zip");
+    kcurl.SetFollowRedirects(true);
 
     try
     {
-        ostringstream os;
-
-        h.open( zip_url );      // only one file, therefore do it synchronously.
-        os << &h;
-
-        // Keep zip file byte image in RAM.  That plus the MODULE_MAP will constitute
-        // the cache.  We don't cache the MODULEs per se, we parse those as needed from
-        // this zip file image.
-        m_zip_image = os.str();
-
-        // 4 lines, using SSL, top that.
+        kcurl.Perform();
+        m_zip_image.assign(kcurl.GetBuffer()->payload, kcurl.GetBuffer()->size);
     }
-    catch( const boost::system::system_error& e )
+    catch( const IO_ERROR& ioe )
     {
-        // https "GET" has faild, report this to API caller.
-        static const char errorcmd[] = "http GET command failed";  // Do not translate this message
-
         UTF8 fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
 
-        string msg = StrPrintf( fmt.c_str(),
-                errorcmd,
-                // Report both secret zip_url and Lib Path, to user.  The secret
-                // zip_url may go bad at some point in future if github changes
-                // their server architecture.  Then fix repoURL_zipURL() to reflect
-                // new architecture.
-                zip_url.c_str(), TO_UTF8( aRepoURL ),
-                e.what() );
+        std::string msg = StrPrintf( fmt.c_str(), 
+                                     zip_url.c_str(), 
+                                     TO_UTF8( aRepoURL ),
+                                     TO_UTF8( ioe.errorText ) );
 
         THROW_IO_ERROR( msg );
     }
-    catch( const exception& exc )
-    {
-        UTF8 error( _( "Exception '%s' in avhttp while open()-ing URI:'%s'" ) );
-
-        string msg = StrPrintf( error.c_str(), exc.what(), zip_url.c_str() );
-        THROW_IO_ERROR( msg );
-    }
-}
-
-
-// This GITHUB_GETLIBLIST method should not be here, but in github_getliblist.cpp !
-// However it is here just because we need to include <avhttp.hpp> to compile it.
-// and when we include avhttp in two .cpp files, the link fails because it detects duplicate
-// avhttp functions.
-// So until it is fixed, this code is here.
-bool GITHUB_GETLIBLIST::remote_get_json( std::string* aFullURLCommand, wxString* aMsgError )
-{
-    boost::asio::io_service io;
-    avhttp::http_stream     h( io );
-    avhttp::request_opts    options;
-
-
-    options.insert( "Accept", m_option_string );
-    options.insert( "User-Agent", "http://kicad-pcb.org" );   // THAT WOULD BE ME.
-    h.request_options( options );
-
-    try
-    {
-        std::ostringstream os;
-
-        h.open( *aFullURLCommand );      // only one file, therefore do it synchronously.
-        os << &h;
-
-        // Keep downloaded text file image in RAM.
-        m_image = os.str();
-
-        // 4 lines, using SSL, top that.
-    }
-    catch( boost::system::system_error& e )
-    {
-        // https "GET" has faild, report this to API caller.
-        static const char errorcmd[] = "https GET command failed";  // Do not translate this message
-
-        UTF8 fmt( _( "%s\nCannot get/download data from: '%s'\nReason: '%s'" ) );
-
-        std::string msg = StrPrintf( fmt.c_str(),
-                errorcmd,
-                // Report secret list_url to user.  The secret
-                // list_url may go bad at some point in future if github changes
-                // their server architecture.  Then fix repoURL_zipURL() to reflect
-                // new architecture.
-                aFullURLCommand->c_str(), e.what() );
-
-        if( aMsgError )
-        {
-            *aMsgError = FROM_UTF8( msg.c_str() );
-            return false;
-        }
-    }
-
-    return true;
 }
 
 #if 0 && defined(STANDALONE)

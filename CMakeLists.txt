@@ -457,6 +457,9 @@ endif()
 # Find GLM library
 find_package( GLM 0.9.5.4 REQUIRED )
 
+# Find CURL library
+find_package( CURL REQUIRED )
+
 # Find Cairo library
 if( NOT CAIRO_FOUND )
     find_package( Cairo 1.8.1 QUIET )
