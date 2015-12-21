@@ -227,6 +227,7 @@ EDA_3D_FRAME::~EDA_3D_FRAME()
     m_auimgr.UnInit();
 }
 
+
 void EDA_3D_FRAME::Exit3DFrame( wxCommandEvent& event )
 {
     Close( true );

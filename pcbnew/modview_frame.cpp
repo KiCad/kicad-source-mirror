@@ -645,7 +645,7 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
     EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame == NULL )
-         return;
+        return;
 
     wxString frm3Dtitle = wxString::Format(
                 _( "ModView: 3D Viewer [%s]" ),
