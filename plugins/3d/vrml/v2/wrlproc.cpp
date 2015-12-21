@@ -292,8 +292,25 @@ bool WRLPROC::ReadName( std::string& aName )
 
     while( m_buf[m_linepos] > 0x20 && m_linepos < ssize )
     {
-        if( '[' == m_buf[m_linepos] || '{' == m_buf[m_linepos] )
-            return true;
+        if( '[' == m_buf[m_linepos] || '{' == m_buf[m_linepos]
+            || '.' == m_buf[m_linepos] || '#' == m_buf[m_linepos] )
+        {
+            if( !aName.empty() )
+            {
+                return true;
+            }
+            else
+            {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
+                ostr << " * [INFO] failed on file '" << m_filename << "'\n";
+                ostr << " * [INFO] line " << m_fileline << ", column " << m_linepos;
+                ostr << " -- invalid name";
+                m_error = ostr.str();
+
+                return false;
+            }
+        }
 
         if( m_badchars.find( m_buf[m_linepos] ) != std::string::npos )
         {

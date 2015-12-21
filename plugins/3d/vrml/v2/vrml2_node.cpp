@@ -266,3 +266,9 @@ WRL2NODES WRL2NODE::getNodeTypeID( const std::string aNodeName )
 
     return WRL2_INVALID;
 }
+
+
+const char* WRL2NODE::GetError( void )
+{
+    return m_error.c_str();
+}

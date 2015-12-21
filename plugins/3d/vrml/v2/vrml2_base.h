@@ -68,6 +68,7 @@ public:
     // functions inherited from WRL2NODE
     void unlinkChildNode( const WRL2NODE* aNode );
     void unlinkRefNode( const WRL2NODE* aNode );
+    bool isDangling( void );
 
 public:
     WRL2BASE();

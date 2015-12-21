@@ -61,6 +61,7 @@ protected:
     std::string m_Name;     // name to use for referencing the node by name
 
     std::list< WRL2NODE* > m_BackPointers;  // nodes which hold a reference to this
+    std::string m_error;
 
 public:
 
@@ -106,6 +107,15 @@ public:
      * @param aNode is the node holding a reference to this object
      */
     void delNodeRef( WRL2NODE* aNode );
+
+    /**
+     * Function isDangling
+     * returns true if the object does not have a parent which is a logical
+     * container for the object - for example if a Shape has a parent which
+     * is a Base node. This function is used to determine whether an object
+     * should be moved to a different parent during the VRML to SG* translation.
+     */
+    virtual bool isDangling( void ) = 0;
 
 public:
     WRL2NODE();
@@ -157,6 +167,8 @@ public:
     virtual bool AddRefNode( WRL2NODE* aNode ) = 0;
 
     virtual bool AddChildNode( WRL2NODE* aNode ) = 0;
+
+    const char* GetError( void );
 };
 
 #endif  // VRML2_NODE_H

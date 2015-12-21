@@ -206,7 +206,13 @@ bool WRL2BASE::Read( WRLPROC& proc )
 
         if( !glob.compare( "PROTO" ) )
         {
-            // XXX - implement
+            if( !proc.ReadName( glob ) || !proc.ReadName( glob ) || !proc.DiscardList() )
+            {
+                #ifdef DEBUG
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << proc.GetError() <<  "\n";
+                #endif
+            }
         }
 
         if( !glob.compare( "EXTERNPROTO" ) )
@@ -324,5 +330,11 @@ bool WRL2BASE::Read( WRLPROC& proc )
 
     // XXX -
     #warning TO BE IMPLEMENTED
+    return false;
+}
+
+
+bool WRL2BASE::isDangling( void )
+{
     return false;
 }
