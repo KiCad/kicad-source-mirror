@@ -369,7 +369,7 @@ void IFACE::OnKifaceEnd()
 {
     end_common();
 
-#if KICAD_SCRIPTING_WXPYTHON
+#if defined( KICAD_SCRIPTING_WXPYTHON )
     // Restore the thread state and tell Python to cleanup after itself.
     // wxPython will do its own cleanup as part of that process.
     // This should only be called if python was setup correctly.

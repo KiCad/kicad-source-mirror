@@ -207,10 +207,12 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
 
+#if defined( KICAD_SCRIPTING_WXPYTHON )
     // has meaning only with KICAD_SCRIPTING_WXPYTHON enabled
     EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                    PCB_EDIT_FRAME::OnUpdateScriptingConsoleState )
+#endif
 
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
@@ -982,6 +984,8 @@ void PCB_EDIT_FRAME::UpdateTitle()
 }
 
 
+#if defined( KICAD_SCRIPTING_WXPYTHON )
+
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
 
@@ -995,6 +999,8 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 
     pythonPanelFrame->Show( pythonPanelShown );
 }
+
+#endif
 
 
 void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )

@@ -1552,6 +1552,8 @@ public:
     // Autoplacement:
     void OnPlaceOrRouteFootprints( wxCommandEvent& event );
 
+#if defined( KICAD_SCRIPTING_WXPYTHON )
+
     /**
      * Function ScriptingConsoleEnableDisable
      * enables or disabled the scripting console
@@ -1559,6 +1561,8 @@ public:
     void ScriptingConsoleEnableDisable( wxCommandEvent& aEvent );
 
     void OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent );
+
+#endif
 
     void OnSelectAutoPlaceMode( wxCommandEvent& aEvent );
 
