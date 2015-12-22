@@ -84,21 +84,41 @@ them when a new project is created.
 Installation from source code
 -----------------------------
 
+Currently the only supported compilers are GCC on linux and windows and clang on OS X.
+
 Some dependencies must be satisfied for the correct installation of KiCad:
 
-wxWidgets           >= 3.0.0         http://www.wxwidgets.org/
+wxWidgets            >= 3.0.0          http://www.wxwidgets.org/
 
-CMake               >= 2.8.4         http://www.cmake.org/
+CMake                >= 2.8.4          http://www.cmake.org/
 
-Boost C++ Libraries:
+Boost C++ Libraries: >= 1.54           http://www.boost.org/
     files used by kicad are autmatically downloaded and patched if needed
-    from boost site ( http://www.boost.org/ )
+    from boost site.
 
-OpenGL
-  Linux:   Mesa 3D Graphics Library  http://www.mesa3d.org/
+OpenGL               >= 2.1
+  Linux:   Mesa 3D Graphics Library    http://www.mesa3d.org/
   Windows: built-in
 
-Zlib Compression Library             http://www.zlib.net/
+Zlib Compression Library               http://www.zlib.net/
+
+cairo                                  http://cairographics.org/
+
+GLEW                                   http://glew.sourceforge.net/
+
+libcurl                                http://curl.haxx.se/
+
+OpenMP               (optional)        http://openmp.org/
+
+GLM                  >= 9.5.4          http://glm.g-truc.net/
+
+pkg-config                             http://pkgconfig.freedesktop.org/
+
+Doxygen              (optional)        http://www.stack.nl/~dimitri/doxygen/index.html
+
+python               >= 2.6 (optional) http://python.org/
+
+wxPython             (optional)        http://www.wxpython.org/
 
 In source-tree-build are mostly unwanted, so make a subdir called "build" and
 change to it.
