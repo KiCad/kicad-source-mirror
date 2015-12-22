@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 10:04+0100\n"
-"PO-Revision-Date: 2015-12-22 12:30+0100\n"
+"POT-Creation-Date: 2015-12-22 14:37+0100\n"
+"PO-Revision-Date: 2015-12-22 14:55+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -5775,7 +5775,8 @@ msgstr "Imposta larghezza"
 
 #: pcbnew/zones_by_polygon.cpp:131
 msgid "The duplicated zone cannot be on the same layer as the original zone."
-msgstr "La zona duplicata non può stare sullo stesso strato della zona originale"
+msgstr ""
+"La zona duplicata non può stare sullo stesso strato della zona originale"
 
 #: pcbnew/zones_by_polygon.cpp:160
 msgid "Warning: The new zone fails DRC"
@@ -5792,7 +5793,8 @@ msgstr "Errore: le aree proibite sono consentite solo sugli strati in rame"
 
 #: pcbnew/zones_by_polygon.cpp:682
 msgid "DRC error: this start point is inside or too close an other area"
-msgstr "Errore DRC: questo punto iniziale è dentro o troppo vicino ad un'altra zona"
+msgstr ""
+"Errore DRC: questo punto iniziale è dentro o troppo vicino ad un'altra zona"
 
 #: pcbnew/zones_by_polygon.cpp:741
 msgid "DRC error: closing this area creates a drc error with an other area"
@@ -14251,15 +14253,15 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER errore di scrittura"
 
 #: common/dialog_about/dialog_about.cpp:84
 msgid "Information"
-msgstr "Informazioni"
+msgstr "Info"
 
 #: common/dialog_about/dialog_about.cpp:87
 msgid "Developers"
-msgstr "Sviluppatori"
+msgstr "Sviluppo"
 
 #: common/dialog_about/dialog_about.cpp:88
 msgid "Doc Writers"
-msgstr "Manualistica"
+msgstr "Manuali"
 
 #: common/dialog_about/dialog_about.cpp:90
 msgid "Artists"
@@ -14976,11 +14978,14 @@ msgstr "Etichetta globale non connessa a nessun'altra etichetta globale"
 
 #: eeschema/class_drc_erc_item.cpp:58
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr "Le etichette sono simili (differenze solo nei caratteri maiuscoli/minuscoli)"
+msgstr ""
+"Le etichette sono simili (differenze solo nei caratteri maiuscoli/minuscoli)"
 
 #: eeschema/class_drc_erc_item.cpp:60
 msgid "Global labels are similar (lower/upper case difference only)"
-msgstr "Le etichette globali sono simili (differenze solo nei caratteri maiuscoli/minuscoli)"
+msgstr ""
+"Le etichette globali sono simili (differenze solo nei caratteri maiuscoli/"
+"minuscoli)"
 
 #: eeschema/libedit_onrightclick.cpp:118
 msgid "Move Arc"
@@ -18251,7 +18256,9 @@ msgstr "Controllo etichette simili"
 msgid ""
 "Similar labels are labels (inside a sheet) which differs only by upper/lower "
 "case"
-msgstr "Le etichette simili sono etichette (dentro un foglio) che differiscono solo per le maiuscole/minuscole"
+msgstr ""
+"Le etichette simili sono etichette (dentro un foglio) che differiscono solo "
+"per le maiuscole/minuscole"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:138
 msgid "Test unique global labels"
@@ -18262,7 +18269,8 @@ msgid ""
 "Global labels are used to connect signals across the full hierarchy.\n"
 "They are expected to be at least two labels with the same name."
 msgstr ""
-"Le etichette globali vengono usate per connettere segnali attraverso la completa gerarchia.\n"
+"Le etichette globali vengono usate per connettere segnali attraverso la "
+"completa gerarchia.\n"
 "Ci si aspetta che siano almeno due con lo stesso nome."
 
 #: eeschema/dialogs/dialog_edit_label.cpp:151
