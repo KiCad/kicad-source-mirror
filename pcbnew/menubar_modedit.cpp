@@ -240,11 +240,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Add canvas selection
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Switch Canvas to Default" ), m_hotkeysDescrList,
-                          HK_CANVAS_DEFAULT );
+    text = AddHotkeyName( _( "&Switch Canvas to Legacy" ), m_hotkeysDescrList,
+                          HK_CANVAS_LEGACY );
 
-    AddMenuItem( viewMenu, ID_MENU_CANVAS_DEFAULT,
-                 text, _( "Switch the canvas implementation to default" ),
+    AddMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
+                 text, _( "Switch the canvas implementation to legacy" ),
                  KiBitmap( tools_xpm ) );
 
     text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), m_hotkeysDescrList,

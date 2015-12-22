@@ -131,8 +131,8 @@ static EDA_HOTKEY HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ),
 static EDA_HOTKEY HkSetGridOrigin( _HKI( "Set Grid Origin" ), HK_SET_GRID_ORIGIN, 'S' );
 static EDA_HOTKEY HkResetGridOrigin( _HKI( "Reset Grid Origin" ), HK_RESET_GRID_ORIGIN, 'Z' );
 
-static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Default Canvas" ),
-                                   HK_CANVAS_DEFAULT,
+static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Canvas" ),
+                                   HK_CANVAS_LEGACY,
 #ifdef __WXMAC__
                                    GR_KB_ALT +
 #endif
