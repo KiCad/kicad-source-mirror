@@ -70,8 +70,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/common_actions.h>
 
-#include <scripting/python_console_frame.h>
-
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
 #endif
@@ -209,10 +207,12 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
 
+#if defined( KICAD_SCRIPTING_WXPYTHON )
     // has meaning only with KICAD_SCRIPTING_WXPYTHON enabled
     EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                    PCB_EDIT_FRAME::OnUpdateScriptingConsoleState )
+#endif
 
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
@@ -637,26 +637,28 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
-    if( m_Draw3DFrame )
+    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame )
     {
         // Raising the window does not show the window on Windows if iconized.
         // This should work on any platform.
-        if( m_Draw3DFrame->IsIconized() )
-             m_Draw3DFrame->Iconize( false );
+        if( draw3DFrame->IsIconized() )
+             draw3DFrame->Iconize( false );
 
-        m_Draw3DFrame->Raise();
+        draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.
-        if( wxWindow::FindFocus() != m_Draw3DFrame )
-            m_Draw3DFrame->SetFocus();
+        if( wxWindow::FindFocus() != draw3DFrame )
+            draw3DFrame->SetFocus();
 
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
-    m_Draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
-    m_Draw3DFrame->Raise();     // Needed with some Window Managers
-    m_Draw3DFrame->Show( true );
+    draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
+    draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
+    draw3DFrame->Raise();     // Needed with some Window Managers
+    draw3DFrame->Show( true );
 }
 
 
@@ -937,8 +939,10 @@ void PCB_EDIT_FRAME::OnModify( )
 {
     PCB_BASE_FRAME::OnModify();
 
-    if( m_Draw3DFrame )
-        m_Draw3DFrame->ReloadRequest();
+    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame )
+        draw3DFrame->ReloadRequest();
 }
 
 
@@ -980,8 +984,7 @@ void PCB_EDIT_FRAME::UpdateTitle()
 }
 
 
-wxSize PYTHON_CONSOLE_FRAME::m_frameSize;   ///< The size of the PYTHON_CONSOLE_FRAME frame, stored during a session
-wxPoint PYTHON_CONSOLE_FRAME::m_framePos;   ///< The position ofPYTHON_CONSOLE_FRAME  the frame, stored during a session
+#if defined( KICAD_SCRIPTING_WXPYTHON )
 
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 {
@@ -990,12 +993,17 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
     bool pythonPanelShown = true;
 
     if( pythonPanelFrame == NULL )
-        pythonPanelFrame = new PYTHON_CONSOLE_FRAME( this, pythonConsoleNameId() );
+        pythonPanelFrame = CreatePythonShellWindow( this, pythonConsoleNameId() );
     else
         pythonPanelShown = ! pythonPanelFrame->IsShown();
 
-    pythonPanelFrame->Show( pythonPanelShown );
+    if( pythonPanelFrame )
+        pythonPanelFrame->Show( pythonPanelShown );
+    else
+        wxMessageBox( wxT( "Error: unable to create the Python Console" ) );
 }
+
+#endif
 
 
 void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )

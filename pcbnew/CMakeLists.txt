@@ -88,6 +88,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_gen_module_position_file_base.cpp
     dialogs/dialog_general_options.cpp
     dialogs/dialog_general_options_BoardEditor_base.cpp
+    dialogs/dialog_get_footprint_by_name_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
     dialogs/dialog_global_modules_fields_edition.cpp
@@ -676,6 +677,12 @@ if( KICAD_SCRIPTING )
     # scripting plugins
     install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins/
         DESTINATION ${KICAD_DATA}/scripting/plugins
+        FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+    )
+
+    # scripting python shell
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/kicad_pyshell/
+        DESTINATION ${KICAD_DATA}/scripting/kicad_pyshell
         FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
     )
 endif()

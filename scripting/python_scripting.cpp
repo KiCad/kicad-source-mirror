@@ -136,7 +136,7 @@ static void swigSwitchPythonBuiltin()
 
 PyThreadState* g_PythonMainTState;
 
-bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
+bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 {
     swigAddBuiltin();           // add builtin functions
     swigAddModules();           // add our own modules
@@ -191,7 +191,7 @@ bool pcbnewInitPythonScripting( const char * aUserPluginsPath )
         snprintf( cmd, sizeof(cmd), "import sys, traceback\n"
                       "sys.path.append(\".\")\n"
                       "import pcbnew\n"
-                      "pcbnew.LoadPlugins(\"%s\")", aUserPluginsPath );
+                      "pcbnew.LoadPlugins(\"%s\")", aUserScriptingPath );
         PyRun_SimpleString( cmd );
     }
 
@@ -227,19 +227,14 @@ void RedirectStdio()
 }
 
 
-wxWindow* CreatePythonShellWindow( wxWindow* parent )
+wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId )
 {
-    const char* pycrust_panel =
-        "import wx\n"
-        "from wx.py import shell, version\n"
-        "\n"
-        "intro = \"PyCrust %s - KiCAD Python Shell\" % version.VERSION\n"
+    const char* pcbnew_pyshell =
+        "import kicad_pyshell\n"
         "\n"
         "def makeWindow(parent):\n"
-        "    pycrust = shell.Shell(parent, -1, introText=intro)\n"
-        "    return pycrust\n"
+        "    return kicad_pyshell.makePcbnewShellWindow(parent)\n"
         "\n";
-
 
     wxWindow*   window = NULL;
     PyObject*   result;
@@ -257,7 +252,7 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent )
     Py_DECREF( builtins );
 
     // Execute the code to make the makeWindow function we defined above
-    result = PyRun_String( pycrust_panel, Py_file_input, globals, globals );
+    result = PyRun_String( pcbnew_pyshell, Py_file_input, globals, globals );
 
     // Was there an exception?
     if( !result )
@@ -297,6 +292,8 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent )
 
         wxASSERT_MSG( success, _T( "Returned object was not a wxWindow!" ) );
         Py_DECREF( result );
+
+        window->SetName( aFramenameId );
     }
 
     // Release the python objects we still have

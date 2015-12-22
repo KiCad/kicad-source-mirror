@@ -51,6 +51,7 @@
 #include <dialogs/dialog_eeschema_options.h>
 #include <dialogs/dialog_libedit_options.h>
 #include <dialogs/dialog_schematic_find.h>
+#include <dialog_erc.h>
 
 #include <wildcards_and_files_ext.h>
 
@@ -438,16 +439,18 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
     */
 
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
-                                                         &m_netListFormat) );
+                                            &m_netListFormat) );
     m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceForceRefPrefix" ),
-                                                    &m_spiceNetlistAddReferencePrefix, false ) );
+                                            &m_spiceNetlistAddReferencePrefix, false ) );
     m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceUseNetNumbers" ),
-                                                    &m_spiceNetlistUseNetcodeAsNetname, false ) );
+                                            &m_spiceNetlistUseNetcodeAsNetname, false ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
-                                                      &s_defaultTextSize,
-                                                      DEFAULT_SIZE_TEXT, 5,
-                                                      1000 ) );
+                                            &s_defaultTextSize,
+                                            DEFAULT_SIZE_TEXT, 5, 1000 ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_TestSimilarLabels" ),
+                                            &DIALOG_ERC::m_TestSimilarLabels, true ) );
 
     return m_projectFileParams;
 }

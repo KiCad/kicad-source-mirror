@@ -63,9 +63,9 @@ bool WRL2BASE::SetParent( WRL2NODE* aParent )
 }
 
 
-WRL2NODE* WRL2BASE::FindNode( const char *aNodeName, const WRL2NODE *aCaller )
+WRL2NODE* WRL2BASE::FindNode( const std::string& aNodeName, const WRL2NODE *aCaller )
 {
-    if( NULL == aNodeName || 0 == aNodeName[0] )
+    if( aNodeName.empty() )
         return NULL;
 
     if( !m_Name.compare( aNodeName ) )
@@ -178,158 +178,13 @@ bool WRL2BASE::Read( WRLPROC& proc )
         return false;
     }
 
-    std::string glob;
-    bool hasComma = false;
-    WRL2NODES ntype;
+    WRL2NODE* node = NULL;
 
-    while( proc.ReadName( glob ) )
-    {
-        // Process node name:
-        // the names encountered at this point should be one of the
-        // built-in node names or one of:
-        // DEF, USE
-        // PROTO, EXTERNPROTO
-        // ROUTE
-        // any PROTO or EXTERNPROTO defined name
-        // since we do not support PROTO or EXTERNPROTO, any unmatched names are
-        // assumed to be defined via PROTO/EXTERNPROTO and deleted according to
-        // a typical pattern.
-        if( !glob.compare( "USE" ) )
-        {
-            // XXX - implement
-        }
+    while( !readNode( proc, this, node ) );
 
-        if( !glob.compare( "DEF" ) )
-        {
-            // XXX - implement
-        }
+    if( proc.eof() )
+        return true;
 
-        if( !glob.compare( "PROTO" ) )
-        {
-            if( !proc.ReadName( glob ) || !proc.ReadName( glob ) || !proc.DiscardList() )
-            {
-                #ifdef DEBUG
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << proc.GetError() <<  "\n";
-                #endif
-            }
-        }
-
-        if( !glob.compare( "EXTERNPROTO" ) )
-        {
-            // XXX - implement
-        }
-
-        if( !glob.compare( "ROUTE" ) )
-        {
-            // XXX - implement
-        }
-
-        ntype = getNodeTypeID( glob );
-
-        switch( ntype )
-        {
-        //
-        // items to be implemented:
-        //
-        case WRL2_APPEARANCE:
-            // note:
-            break;
-
-        case WRL2_BOX:
-            break;
-
-        case WRL2_COLOR:
-            break;
-
-        case WRL2_CONE:
-            break;
-
-        case WRL2_COORDINATE:
-            break;
-
-        case WRL2_CYLINDER:
-            break;
-
-        case WRL2_ELEVATIONGRID:
-            break;
-
-        case WRL2_EXTRUSION:
-            break;
-
-        case WRL2_INDEXEDFACESET:
-            break;
-
-        case WRL2_MATERIAL:
-            break;
-
-        case WRL2_NORMAL:
-            break;
-
-        case WRL2_SHAPE:
-            break;
-
-        case WRL2_SPHERE:
-            break;
-
-        case WRL2_TRANSFORM:
-        case WRL2_GROUP:
-            break;
-
-        //
-        // items not implemented or for optional future implementation:
-        //
-        case WRL2_ANCHOR:
-        case WRL2_AUDIOCLIP:
-        case WRL2_BACKGROUND:
-        case WRL2_BILLBOARD:
-        case WRL2_COLLISION:
-        case WRL2_COLORINTERPOLATOR:
-        case WRL2_COORDINATEINTERPOLATOR:
-        case WRL2_CYLINDERSENSOR:
-        case WRL2_DIRECTIONALLIGHT:
-        case WRL2_FOG:
-        case WRL2_FONTSTYLE:
-        case WRL2_IMAGETEXTURE:
-        case WRL2_INDEXEDLINESET:
-        case WRL2_INLINE:
-        case WRL2_LOD:
-        case WRL2_MOVIETEXTURE:
-        case WRL2_NAVIGATIONINFO:
-        case WRL2_NORMALINTERPOLATOR:
-        case WRL2_ORIENTATIONINTERPOLATOR:
-        case WRL2_PIXELTEXTURE:
-        case WRL2_PLANESENSOR:
-        case WRL2_POINTLIGHT:
-        case WRL2_POINTSET:
-        case WRL2_POSITIONINTERPOLATOR:
-        case WRL2_PROXIMITYSENSOR:
-        case WRL2_SCALARINTERPOLATOR:
-        case WRL2_SCRIPT:
-        case WRL2_SOUND:
-        case WRL2_SPHERESENSOR:
-        case WRL2_SPOTLIGHT:
-        case WRL2_SWITCH:
-        case WRL2_TEXT:
-        case WRL2_TEXTURECOORDINATE:
-        case WRL2_TEXTURETRANSFORM:
-        case WRL2_TIMESENSOR:
-        case WRL2_TOUCHSENSOR:
-        case WRL2_VIEWPOINT:
-        case WRL2_VISIBILITYSENSOR:
-        case WRL2_WORLDINFO:
-        case WRL2_INVALID:
-        default:    // any nodes which may have been defined via PROTO/EXTERNPROTO
-            break;
-        }
-
-        //xxx;
-    };
-
-    // XXX - determine why ReadName failed
-
-    // XXX -
-    #warning TO BE IMPLEMENTED
     return false;
 }
 
@@ -337,4 +192,281 @@ bool WRL2BASE::Read( WRLPROC& proc )
 bool WRL2BASE::isDangling( void )
 {
     return false;
+}
+
+
+bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent )
+{
+    if( !aParent )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] invoked with NULL parent\n";
+        #endif
+
+        return false;
+    }
+
+    std::string glob;
+
+    if( !proc.ReadName( glob ) )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << proc.GetError() <<  "\n";
+        #endif
+
+        return false;
+    }
+
+    WRL2NODE* ref = aParent->FindNode( glob, NULL );
+
+    // return 'true' - the file may be defective but it may still be somewhat OK
+    if( NULL == ref )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] node '" << glob << "' not found\n";
+        #endif
+
+        return true;
+    }
+
+    if( !aParent->AddRefNode( ref ) )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] failed to add node '" << glob << "' (";
+        std::cerr << ref->GetNodeTypeName( ref->GetNodeType() ) << ") to parent of type ";
+        std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() ) << "\n";
+        #endif
+
+        return false;
+    }
+
+    return true;
+}
+
+
+bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent )
+{
+    // XXX - TO BE IMPLEMENTED
+    return false;
+}
+
+
+bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL == aNode )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] invalid node handle (NULL)\n";
+        #endif
+
+        return false;
+    }
+
+    if( NULL == aParent )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] invalid parent pointer (NULL)\n";
+        #endif
+
+        return false;
+    }
+
+    *aNode = NULL;
+
+    std::string glob;
+    bool hasComma = false;
+    WRL2NODES ntype;
+
+    if( !proc.ReadName( glob ) )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << proc.GetError() <<  "\n";
+        #endif
+
+        return false;
+    }
+
+    // Process node name:
+    // the names encountered at this point should be one of the
+    // built-in node names or one of:
+    // DEF, USE
+    // PROTO, EXTERNPROTO
+    // ROUTE
+    // any PROTO or EXTERNPROTO defined name
+    // since we do not support PROTO or EXTERNPROTO, any unmatched names are
+    // assumed to be defined via PROTO/EXTERNPROTO and deleted according to
+    // a typical pattern.
+    if( !glob.compare( "USE" ) )
+    {
+        if( !implementUse( aParent ) )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+            #endif
+
+            return false;
+        }
+
+        return true;
+    }
+
+    if( !glob.compare( "DEF" ) )
+    {
+        // XXX - implement
+        implementDef( aParent );
+    }
+
+    if( !glob.compare( "PROTO" ) )
+    {
+        if( !proc.ReadName( glob ) || !proc.DiscardList() )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+            #endif
+
+            return false;
+        }
+
+        return true;
+    }
+
+    if( !glob.compare( "EXTERNPROTO" ) )
+    {
+        if( !proc.ReadName( glob ) || !proc.ReadName( glob ) || !proc.DiscardList() )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+            #endif
+
+            return false;
+        }
+
+        return true;
+    }
+
+    if( !glob.compare( "ROUTE" ) )
+    {
+        if( !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+            #endif
+
+            return false;
+        }
+
+        return true;
+    }
+
+    ntype = getNodeTypeID( glob );
+
+    switch( ntype )
+    {
+        //
+        // items to be implemented:
+        //
+    case WRL2_APPEARANCE:
+        // note:
+        break;
+
+    case WRL2_BOX:
+        break;
+
+    case WRL2_COLOR:
+        break;
+
+    case WRL2_CONE:
+        break;
+
+    case WRL2_COORDINATE:
+        break;
+
+    case WRL2_CYLINDER:
+        break;
+
+    case WRL2_ELEVATIONGRID:
+        break;
+
+    case WRL2_EXTRUSION:
+        break;
+
+    case WRL2_INDEXEDFACESET:
+        break;
+
+    case WRL2_MATERIAL:
+        break;
+
+    case WRL2_NORMAL:
+        break;
+
+    case WRL2_SHAPE:
+        break;
+
+    case WRL2_SPHERE:
+        break;
+
+    case WRL2_TRANSFORM:
+    case WRL2_GROUP:
+        break;
+
+        //
+        // items not implemented or for optional future implementation:
+        //
+    case WRL2_ANCHOR:
+    case WRL2_AUDIOCLIP:
+    case WRL2_BACKGROUND:
+    case WRL2_BILLBOARD:
+    case WRL2_COLLISION:
+    case WRL2_COLORINTERPOLATOR:
+    case WRL2_COORDINATEINTERPOLATOR:
+    case WRL2_CYLINDERSENSOR:
+    case WRL2_DIRECTIONALLIGHT:
+    case WRL2_FOG:
+    case WRL2_FONTSTYLE:
+    case WRL2_IMAGETEXTURE:
+    case WRL2_INDEXEDLINESET:
+    case WRL2_INLINE:
+    case WRL2_LOD:
+    case WRL2_MOVIETEXTURE:
+    case WRL2_NAVIGATIONINFO:
+    case WRL2_NORMALINTERPOLATOR:
+    case WRL2_ORIENTATIONINTERPOLATOR:
+    case WRL2_PIXELTEXTURE:
+    case WRL2_PLANESENSOR:
+    case WRL2_POINTLIGHT:
+    case WRL2_POINTSET:
+    case WRL2_POSITIONINTERPOLATOR:
+    case WRL2_PROXIMITYSENSOR:
+    case WRL2_SCALARINTERPOLATOR:
+    case WRL2_SCRIPT:
+    case WRL2_SOUND:
+    case WRL2_SPHERESENSOR:
+    case WRL2_SPOTLIGHT:
+    case WRL2_SWITCH:
+    case WRL2_TEXT:
+    case WRL2_TEXTURECOORDINATE:
+    case WRL2_TEXTURETRANSFORM:
+    case WRL2_TIMESENSOR:
+    case WRL2_TOUCHSENSOR:
+    case WRL2_VIEWPOINT:
+    case WRL2_VISIBILITYSENSOR:
+    case WRL2_WORLDINFO:
+    case WRL2_INVALID:
+    default:    // any nodes which may have been defined via PROTO/EXTERNPROTO
+        break;
+    }
+
+    // XXX - TO BE IMPLEMENTED
+    return NULL;
 }

@@ -649,6 +649,13 @@ public:
      */
     void ClearModifyStatus();
 
+    /**
+     * Function IsAutoSaveRequired
+     * checks the entire hierarchy for any modifications that require auto save.
+     * @return True if the hierarchy is modified otherwise false.
+     */
+    bool IsAutoSaveRequired();
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif

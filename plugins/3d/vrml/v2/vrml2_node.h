@@ -162,13 +162,13 @@ public:
      * @param aCaller is a pointer to the node invoking this function
      * @return is a valid node pointer on success, otherwise NULL
      */
-    virtual WRL2NODE* FindNode( const char *aNodeName, const WRL2NODE *aCaller ) = 0;
+    virtual WRL2NODE* FindNode( const std::string& aNodeName, const WRL2NODE *aCaller ) = 0;
 
     virtual bool AddRefNode( WRL2NODE* aNode ) = 0;
 
     virtual bool AddChildNode( WRL2NODE* aNode ) = 0;
 
-    const char* GetError( void );
+    std::string GetError( void );
 };
 
 #endif  // VRML2_NODE_H

@@ -2144,3 +2144,18 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
     ++m_linepos;
     return true;
 }
+
+
+bool WRLPROC::eof( void )
+{
+    if( !m_file.is_open() )
+        return false;
+
+    return m_file.eof();
+}
+
+
+std::string WRLPROC::GetError( void )
+{
+    return m_error;
+}

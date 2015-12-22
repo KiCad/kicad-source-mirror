@@ -24,14 +24,14 @@
  * Initializes the Python engine inside pcbnew
  */
 
-bool        pcbnewInitPythonScripting( const char * aUserPluginsPath );
+bool        pcbnewInitPythonScripting( const char * aUserScriptingPath );
 void        pcbnewFinishPythonScripting();
 
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
 
 void        RedirectStdio();
-wxWindow*   CreatePythonShellWindow( wxWindow* parent );
+wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
 
 class PyLOCK
 {

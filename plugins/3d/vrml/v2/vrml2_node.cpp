@@ -268,7 +268,7 @@ WRL2NODES WRL2NODE::getNodeTypeID( const std::string aNodeName )
 }
 
 
-const char* WRL2NODE::GetError( void )
+std::string WRL2NODE::GetError( void )
 {
-    return m_error.c_str();
+    return m_error;
 }

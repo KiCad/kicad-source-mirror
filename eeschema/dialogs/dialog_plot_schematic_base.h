@@ -51,6 +51,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_outputDirectoryName;
 		wxButton* m_browseButton;
 		wxBoxSizer* m_optionsSizer;
+		wxRadioBox* m_plotFormatOpt;
 		wxStaticBoxSizer* m_paperOptionsSizer;
 		wxRadioBox* m_PaperSizeOption;
 		wxStaticBoxSizer* m_paperHPGLSizer;
@@ -59,7 +60,6 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxRadioBox* m_plotOriginOpt;
 		wxStaticText* m_penHPLGWidthTitle;
 		wxTextCtrl* m_penHPGLWidthCtrl;
-		wxRadioBox* m_plotFormatOpt;
 		wxStaticText* m_defaultLineWidthTitle;
 		wxTextCtrl* m_DefaultLineSizeCtrl;
 		wxRadioBox* m_ModeColorOption;
@@ -73,8 +73,8 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnHPGLPageSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotFormatSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnHPGLPageSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPlotCurrentClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPlotAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }

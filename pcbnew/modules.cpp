@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@
 
 #include <pcbnew.h>
 #include <drag.h>
-
+#include <dialog_get_footprint_by_name.h>
 
 static void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            const wxPoint& aPosition, bool aErase );
@@ -56,17 +56,23 @@ static PICKED_ITEMS_LIST s_PickedList;                  /* a picked list to
                                                          * and dragged tracks
                                                          */
 
-/* Get a module name from user and return a pointer to the corresponding module
- */
-MODULE* PCB_BASE_FRAME::GetModuleByName()
+
+MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 {
-    wxString          moduleName;
-    MODULE*           module = NULL;
+    wxString        moduleName;
+    MODULE*         module = NULL;
+    wxArrayString   fplist;
 
-    wxTextEntryDialog dlg( this, _( "Reference:" ), _( "Search for footprint" ), moduleName );
+    // Build list of available fp references, to display them in dialog
+    for( MODULE* fp = GetBoard()->m_Modules; fp; fp = fp->Next() )
+        fplist.Add( fp->GetReference() + wxT("    ( ") + fp->GetValue() + wxT(" )") );
 
-    if( dlg.ShowModal() != wxID_OK )
-        return NULL;    //Aborted by user
+    fplist.Sort();
+
+    DIALOG_GET_FOOTPRINT_BY_NAME dlg( this, fplist );
+
+    if( dlg.ShowModal() != wxID_OK )    //Aborted by user
+        return NULL;
 
     moduleName = dlg.GetValue();
     moduleName.Trim( true );

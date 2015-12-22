@@ -70,6 +70,13 @@ public:
     void unlinkRefNode( const WRL2NODE* aNode );
     bool isDangling( void );
 
+    // handle cases of USE / DEF
+    bool implementUse( WRLPROC& proc, WRL2NODE* aParent );
+    bool implementDef( WRLPROC& proc, WRL2NODE* aParent );
+
+    // read in a VRML node
+    bool readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+
 public:
     WRL2BASE();
     virtual ~WRL2BASE();
@@ -81,7 +88,7 @@ public:
     // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc );
     bool SetParent( WRL2NODE* aParent );
-    WRL2NODE* FindNode( const char *aNodeName, const WRL2NODE *aCaller );
+    WRL2NODE* FindNode( const std::string& aNodeName, const WRL2NODE *aCaller );
     bool AddRefNode( WRL2NODE* aNode );
     bool AddChildNode( WRL2NODE* aNode );
 };

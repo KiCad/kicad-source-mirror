@@ -1179,12 +1179,9 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 {
     // In case this event happens before g_RootSheet is initialized which does happen
     // on mingw64 builds.
-
     if( g_RootSheet != NULL )
     {
-        SCH_SHEET_LIST sheetList;
-
-        return sheetList.IsAutoSaveRequired();
+        return g_RootSheet->IsAutoSaveRequired();
     }
 
     return false;

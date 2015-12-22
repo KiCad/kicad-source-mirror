@@ -23,6 +23,7 @@ class ERC_HTML_LISTFRAME;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/html/htmlwin.h>
@@ -56,6 +57,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_LastWarningCount;
 		wxStaticText* m_LastErrCountText;
 		wxTextCtrl* m_LastErrCount;
+		wxStaticLine* m_staticline1;
 		wxCheckBox* m_WriteResultOpt;
 		wxStaticText* m_titleMessages;
 		wxTextCtrl* m_MessagesList;
@@ -66,7 +68,12 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		wxButton* m_buttonClose;
 		wxPanel* m_PanelERCOptions;
 		wxButton* m_ResetOptButton;
+		wxStaticText* m_staticText8;
 		wxPanel* m_matrixPanel;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_staticText9;
+		wxCheckBox* m_cbTestSimilarLabels;
+		wxCheckBox* m_cbTestUniqueGlbLabels;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseErcDialog( wxCloseEvent& event ) { event.Skip(); }
@@ -80,7 +87,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Electrical Rules Checker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,457 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Electrical Rules Checker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,464 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_ERC_BASE();
 	
 };

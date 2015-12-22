@@ -703,7 +703,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      // get module by name and move it
-        SetCurItem( GetModuleByName() );
+        SetCurItem( GetFootprintFromBoardByReference() );
         module = (MODULE*) GetCurItem();
 
         if( module == NULL )

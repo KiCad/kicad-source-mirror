@@ -210,8 +210,10 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
 FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 {
-    if( m_Draw3DFrame )
-        m_Draw3DFrame->Destroy();
+    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame )
+        draw3DFrame->Destroy();
 }
 
 
@@ -513,26 +515,28 @@ bool FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
 
 void FOOTPRINT_WIZARD_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
-    if( m_Draw3DFrame )
+    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame )
     {
         // Raising the window does not show the window on Windows if iconized.
         // This should work on any platform.
-        if( m_Draw3DFrame->IsIconized() )
-            m_Draw3DFrame->Iconize( false );
+        if( draw3DFrame->IsIconized() )
+            draw3DFrame->Iconize( false );
 
-        m_Draw3DFrame->Raise();
+        draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.
-        if( wxWindow::FindFocus() != m_Draw3DFrame )
-            m_Draw3DFrame->SetFocus();
+        if( wxWindow::FindFocus() != draw3DFrame )
+            draw3DFrame->SetFocus();
 
         return;
     }
 
-    m_Draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, wxEmptyString );
+    draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, wxEmptyString );
     Update3D_Frame( false );
-    m_Draw3DFrame->Raise();     // Needed with some Window Managers
-    m_Draw3DFrame->Show( true );
+    draw3DFrame->Raise();     // Needed with some Window Managers
+    draw3DFrame->Show( true );
 }
 
 
@@ -543,20 +547,22 @@ void FOOTPRINT_WIZARD_FRAME::Show3D_Frame( wxCommandEvent& event )
  */
 void FOOTPRINT_WIZARD_FRAME::Update3D_Frame( bool aForceReloadFootprint )
 {
-    if( m_Draw3DFrame == NULL )
+    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+
+    if( draw3DFrame == NULL )
         return;
 
     wxString frm3Dtitle;
     frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), GetChars( m_wizardName ) );
-    m_Draw3DFrame->SetTitle( frm3Dtitle );
+    draw3DFrame->SetTitle( frm3Dtitle );
 
     if( aForceReloadFootprint )
     {
-        m_Draw3DFrame->ReloadRequest();
+        draw3DFrame->ReloadRequest();
 
         // Force 3D screen refresh immediately
         if( GetBoard()->m_Modules )
-            m_Draw3DFrame->NewDisplay();
+            draw3DFrame->NewDisplay();
     }
 }
 

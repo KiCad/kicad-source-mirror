@@ -67,8 +67,12 @@ public:
 
     bool Open( const std::string& aFileName );
     void Close();
+    bool eof( void );
 
+    // return the VRML Version
     WRLVERSION GetVRMLType( void );
+
+    std::string GetError( void );
 
     // helper routines
 

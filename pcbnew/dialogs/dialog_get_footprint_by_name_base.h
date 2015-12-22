@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_GET_COMPONENT_BASE_H__
-#define __DIALOG_GET_COMPONENT_BASE_H__
+#ifndef __DIALOG_GET_FOOTPRINT_BY_NAME_BASE_H__
+#define __DIALOG_GET_FOOTPRINT_BY_NAME_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -21,50 +21,42 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/listbox.h>
+#include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_SEL_BY_LISTBOX 1000
-#define ID_ACCEPT_KEYWORD 1001
-#define ID_LIST_ALL 1002
-#define ID_EXTRA_TOOL 1003
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_GET_COMPONENT_BASE
+/// Class DIALOG_GET_FOOTPRINT_BY_NAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GET_COMPONENT_BASE : public DIALOG_SHIM
+class DIALOG_GET_FOOTPRINT_BY_NAME_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
-		wxStaticText* m_staticTextName;
-		wxTextCtrl* m_textCmpNameCtrl;
-		wxStaticText* m_staticTextHistory;
-		wxListBox* m_historyList;
-		wxButton* m_buttonKW;
-		wxButton* m_buttonList;
-		wxButton* m_buttonBrowse;
+		wxStaticText* m_staticTextRef;
+		wxTextCtrl* m_SearchTextCtrl;
+		wxStaticText* m_staticTextRef1;
+		wxChoice* m_choiceFpList;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void Accept( wxCommandEvent& event ) { event.Skip(); }
-		virtual void GetExtraSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,285 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_GET_COMPONENT_BASE();
+		DIALOG_GET_FOOTPRINT_BY_NAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Search for footprint"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 341,176 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_GET_FOOTPRINT_BY_NAME_BASE();
 	
 };
 
-#endif //__DIALOG_GET_COMPONENT_BASE_H__
+#endif //__DIALOG_GET_FOOTPRINT_BY_NAME_BASE_H__

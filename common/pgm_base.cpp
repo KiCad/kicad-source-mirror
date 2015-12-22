@@ -30,6 +30,7 @@
  *        (locale handling)
  */
 
+#include <kicad_curl/kicad_curl.h> /* Include before any wx file */
 #include <fctsys.h>
 #include <wx/html/htmlwin.h>
 #include <wx/fs_zip.h>
@@ -282,6 +283,7 @@ PGM_BASE::PGM_BASE()
 PGM_BASE::~PGM_BASE()
 {
     destroy();
+    KICAD_CURL::Cleanup();
 }
 
 
@@ -492,6 +494,13 @@ bool PGM_BASE::initPgm()
     // Always show filters on Open dialog to be able to choose plugin
     wxSystemOptions::SetOption( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1 );
 #endif
+
+    // Initialize CURL
+    wxLogDebug( wxT( "Using %s" ), KICAD_CURL::GetVersion() );
+    if( !KICAD_CURL::Init() )
+    {
+        wxLogDebug( wxT( "Error initializing libcurl" ) );
+    }
 
     return true;
 }

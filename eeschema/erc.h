@@ -31,7 +31,7 @@
 #define _ERC_H
 
 
-class EDA_DRAW_PANEL;
+//class EDA_DRAW_PANEL;
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
 
@@ -58,6 +58,8 @@ extern const wxString CommentERC_V[];
 #define ERCE_HIERACHICAL_LABEL    6    // mismatch between hierarchical labels and pins sheets
 #define ERCE_NOCONNECT_CONNECTED  7    // a no connect symbol is connected to more than 1 pin
 #define ERCE_GLOBLABEL            8    // global label not connected to any other global label
+#define ERCE_SIMILAR_LABELS       9    // 2 labels are equal fir case insensitive comparisons
+#define ERCE_SIMILAR_GLBL_LABELS  10   // 2 labels are equal fir case insensitive comparisons
 
 /* Minimal connection table */
 #define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.
@@ -73,14 +75,14 @@ extern const wxString CommentERC_V[];
  *
  * @param aFullFileName A wxString object containing the file name and path.
  */
-extern bool WriteDiagnosticERC( const wxString& aFullFileName );
+bool WriteDiagnosticERC( const wxString& aFullFileName );
 
 /**
  * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef
  * or between aNetItemRef and aNetItemTst.
  *  if MinConn < 0: this is an error on labels
  */
-extern void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
+void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
                       int MinConnexion, int Diag );
 
 /**
@@ -92,26 +94,9 @@ extern void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
  * @param aMinConnexion = a pointer to a variable to store the minimal connection
  * found( NOD, DRV, NPI, NET_NC)
  */
-extern void TestOthersItems( NETLIST_OBJECT_LIST* aList,
+void TestOthersItems( NETLIST_OBJECT_LIST* aList,
                              unsigned aNetItemRef, unsigned aNetStart,
                              int* aMinConnexion );
-
-/**
- * Counts number of pins connected on the same net.
- * Used to find all pins conected to a no connect symbol
- * @return the pin count of the net starting at aNetStart
- * @param aNetStart = index in list of net objects of the first item
- * @param aList = a reference to the list of connected objects
- */
-int CountPinsInNet( NETLIST_OBJECT_LIST* aList, unsigned aNetStart );
-
-
-/**
- * Function TestLabel
- * performs an ERC on a sheet labels to verify that it is connected to a corresponding
- * sub sheet global label.
- */
-extern void TestLabel( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aStartNet );
 
 /**
  * Function TestDuplicateSheetNames( )
@@ -121,7 +106,7 @@ extern void TestLabel( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigne
  * @param aCreateMarker: true = create error markers in schematic,
  *                       false = calculate error count only
  */
-extern int TestDuplicateSheetNames( bool aCreateMarker );
+int TestDuplicateSheetNames( bool aCreateMarker );
 
 
 #endif  // _ERC_H

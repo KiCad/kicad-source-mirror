@@ -76,9 +76,6 @@ public:
     int m_FastGrid1;                // 1st fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
     int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
 
-    EDA_3D_FRAME* m_Draw3DFrame;
-
-
 protected:
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
@@ -110,6 +107,11 @@ public:
             long aStyle, const wxString& aFrameName );
 
     ~PCB_BASE_FRAME();
+
+    /**
+     * @return a reference to the 3D viewer frame, when exists, or NULL
+     */
+    EDA_3D_FRAME* Get3DViewerFrame();
 
     /**
      * Function LoadFootprint
@@ -283,12 +285,17 @@ public:
      * puts up a dialog and allows the user to pick a library, for unspecified use.
      *
      * @param aNicknameExisting is the current choice to highlight
-     *
      * @return wxString - the library or wxEmptyString on abort.
      */
     wxString SelectLibrary( const wxString& aNicknameExisting );
 
-    MODULE* GetModuleByName();
+    /**
+     * Function GetFootprintFromBoardByReference
+     * @return a reference to the footprint found by its refence
+     * on the curent board. the reference is entered by the user from
+     * a dialog (by awxTextCtlr, or a list of available references)
+     */
+    MODULE* GetFootprintFromBoardByReference();
 
     /**
      * Function OnModify

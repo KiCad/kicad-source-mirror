@@ -103,7 +103,7 @@ protected:
             int aItemCountMax, int aPage = 1 );
 
     /**
-     * Function remote_get_json
+     * Function remoteGetJSON
      * Download a json text from a github repo.  The text image
      * is received into the m_input_stream.
      * @param aFullURLCommand the full command, i.e. the url with options like
@@ -111,7 +111,7 @@ protected:
      * @param aMsgError a pointer to a wxString which can store an error message
      * @return true if OK, false if error (which an error message in *aMsgError
      */
-    bool remote_get_json( std::string* aFullURLCommand, wxString* aMsgError );
+    bool remoteGetJSON( const std::string& aFullURLCommand, wxString* aMsgError );
 
     wxString m_github_path;     ///< Something like https://api.github.com/orgs/KiCad
     std::string m_image;        ///< image of the downloaded data in its entirety.
