@@ -538,7 +538,8 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
     try
     {
         kcurl.Perform();
-        m_zip_image.assign(kcurl.GetBuffer()->payload, kcurl.GetBuffer()->size);
+        m_zip_image.reserve( kcurl.GetBuffer()->Size );
+        m_zip_image.assign( kcurl.GetBuffer()->Payload, kcurl.GetBuffer()->Size );
     }
     catch( const IO_ERROR& ioe )
     {

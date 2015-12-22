@@ -78,14 +78,6 @@ specific patches required to build a working Boost library.  These patches can b
 [patches folder][] in the KiCad source.  These patches are named by the platform name they should
 be applied against.
 
-## OpenSSL Secure Socket Layer Library ## {#openssl}
-
-The [OpenSSL][] library is only required when the KiCad build is configured with the Github plugin
-enabled.  See the [KiCad Build Configuration Options](#build_opts)` section for more information.
-Please note that KiCad will download and build version 1.0.1e of OpenSSL by default.  You should
-probably use the version of OpenSSL installed on your system as it will most likely be more up to
-date and contain the latest security fixes.
-
 ## GLEW OpenGL Extension Wrangler Library ## {#glew}
 
 The [OpenGL Extension Wrangler][GLEW] is an OpenGL helper library used by the KiCad graphics
@@ -280,7 +272,7 @@ the following commands:
               mingw-w64-x86_64-boost \
               mingw-w64-x86_64-cairo \
               mingw-w64-x86_64-glew \
-              mingw-w64-x86_64-openssl \
+              mingw-w64-x86_64-curl \
               mingw-w64-x86_64-wxPython \
               mingw-w64-x86_64-wxWidgets
     cd kicad-source
@@ -292,7 +284,6 @@ the following commands:
           -DCMAKE_PREFIX_PATH=/mingw64 \
           -DCMAKE_INSTALL_PREFIX=/mingw64 \
           -DDEFAULT_INSTALL_PATH=/mingw64 \
-          -DOPENSSL_ROOT_DIR=/mingw64 \
           -DKICAD_SKIP_BOOST=ON \
           -DKICAD_SCRIPTING=ON \
           -DKICAD_SCRIPTING_MODULES=ON \
@@ -415,7 +406,6 @@ Boost patches in the KiCad source [patches folder][].
 [wxWidgets]: http://wxwidgets.org/
 [patches folder]: http://bazaar.launchpad.net/~kicad-product-committers/kicad/product/files/head:/patches/
 [Boost]: http://www.boost.org/
-[OpenSSL]: https://www.openssl.org/
 [GLEW]: http://glew.sourceforge.net/
 [GLUT]: https://www.opengl.org/resources/libraries/glut/
 [Cairo]: http://cairographics.org/

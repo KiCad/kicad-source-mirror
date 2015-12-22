@@ -209,7 +209,7 @@ bool GITHUB_GETLIBLIST::repoURL2listURL( const wxString& aRepoURL,
 bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxString* aMsgError )
 {
     KICAD_CURL_EASY kcurl;
-    
+
     wxLogDebug( wxT( "Attempting to download: " ) + aFullURLCommand );
 
     kcurl.SetURL(aFullURLCommand);
@@ -220,7 +220,8 @@ bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxStr
     try
     {
         kcurl.Perform();
-        m_image.assign(kcurl.GetBuffer()->payload, kcurl.GetBuffer()->size);
+        m_image.reserve( kcurl.GetBuffer()->Size );
+        m_image.assign( kcurl.GetBuffer()->Payload, kcurl.GetBuffer()->Size );
         return true;
     }
     catch( const IO_ERROR& ioe )

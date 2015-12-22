@@ -75,6 +75,13 @@ public:
      */
     static std::string GetVersion();
 
+    /**
+     * Function GetSimpleVersion
+     * Reports back curl version only and SSL library support
+     *
+     * @return std::string - Generated version string
+     */
+    static std::string GetSimpleVersion();
 private:
     static bool m_initialized;
 };

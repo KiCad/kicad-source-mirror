@@ -51,4 +51,30 @@ std::string KICAD_CURL::GetVersion()
 }
 
 
+std::string KICAD_CURL::GetSimpleVersion()
+{
+    curl_version_info_data *info = curl_version_info(CURLVERSION_NOW);
+
+    std::string res;
+
+    if( info->version )
+    {
+        res += "libcurl version: " + std::string(info->version);
+    }
+
+    res += " (";
+    if( info->features & CURL_VERSION_SSL )
+    {
+        res += "with SSL - ";
+        res += std::string(info->ssl_version);
+    }
+    else
+    {
+        res += "without SSL";
+    }
+    res += ")";
+
+    return res;
+}
+
 bool KICAD_CURL::m_initialized = false;

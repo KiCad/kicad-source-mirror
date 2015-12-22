@@ -28,6 +28,7 @@
  * @brief EDA_BASE_FRAME class implementation.
  */
 
+#include <kicad_curl/kicad_curl.h> /* Include before any wx file */
 #include <wx/aboutdlg.h>
 #include <wx/fontdlg.h>
 #include <wx/clipbrd.h>
@@ -572,6 +573,8 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     msg_version << wxT( "Boost version: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
                 << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
                 << ( BOOST_VERSION % 100 ) << wxT( "\n" );
+
+    msg_version <<  KICAD_CURL::GetSimpleVersion() << wxT( "\n" );
 
     msg_version << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
 #ifdef USE_WX_GRAPHICS_CONTEXT
