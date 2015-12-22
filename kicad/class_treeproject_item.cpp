@@ -224,12 +224,9 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         OpenPDF( fullFileName );
         break;
 
-/*  No, use a text editor.  Netlists can only be handled sanely now from within
-    eeschema's launcher for the *.kiface, NOT THE EXE which is now gone.
     case TREE_NET:
-        frame->Execute( m_parent, CVPCB_EXE, fullFileName );
+        // Nothing to do ( can be read only by Pcbnew, or by a text editor)
         break;
-*/
 
     case TREE_TXT:
         {

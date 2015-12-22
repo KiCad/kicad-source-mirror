@@ -740,7 +740,8 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
     EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
-        draw3DFrame->ReloadRequest();}
+        draw3DFrame->ReloadRequest();
+}
 
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()

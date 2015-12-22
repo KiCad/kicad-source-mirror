@@ -99,7 +99,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 #endif
                 FOOTPRINT_WIZARD_FRAME_NAME )
 {
-    wxASSERT( aFrameType==FRAME_PCB_FOOTPRINT_WIZARD_MODAL );
+    wxASSERT( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD_MODAL );
 
     // This frame is always show modal:
     SetModal( true );

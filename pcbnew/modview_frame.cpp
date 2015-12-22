@@ -113,7 +113,8 @@ END_EVENT_TABLE()
  */
 
 
-#define FOOTPRINT_VIEWER_FRAME_NAME     wxT( "ModViewFrame" )
+#define FOOTPRINT_VIEWER_FRAME_NAME         wxT( "ModViewFrame" )
+#define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
 
 
 FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType ) :
@@ -126,14 +127,22 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
                 KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
 #endif
                 KICAD_DEFAULT_DRAWFRAME_STYLE,
-            FOOTPRINT_VIEWER_FRAME_NAME )
+
+            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
+                                FOOTPRINT_VIEWER_FRAME_NAME_MODAL
+                                : FOOTPRINT_VIEWER_FRAME_NAME )
 {
-    wxASSERT( aFrameType==FRAME_PCB_MODULE_VIEWER || aFrameType==FRAME_PCB_MODULE_VIEWER_MODAL );
+    wxASSERT( aFrameType==FRAME_PCB_MODULE_VIEWER ||
+              aFrameType==FRAME_PCB_MODULE_VIEWER_MODAL );
 
     if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
         SetModal( true );
 
+    // Force the frame name used in config. the footprint viewer frame has a name
+    // depending on aFrameType (needed to identify the frame by wxWidgets),
+    // but only one configuration is preferable.
     m_configFrameName = FOOTPRINT_VIEWER_FRAME_NAME;
+
     m_showAxis   = true;         // true to draw axis.
 
     // Give an icon

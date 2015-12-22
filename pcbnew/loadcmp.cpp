@@ -196,13 +196,13 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         return NULL;
     }
 
-    if( dlg.IsKeyword() )                          // Selection by keywords
+    if( dlg.IsKeyword() )       // Selection by keywords
     {
         allowWildSeach = false;
         keys = moduleName;
         moduleName = SelectFootprint( this, libName, wxEmptyString, keys, aTable );
 
-        if( moduleName.IsEmpty() )                 // Cancel command
+        if( moduleName.IsEmpty() )  // Cancel command
         {
             m_canvas->MoveCursorToCrossHair();
             return NULL;
