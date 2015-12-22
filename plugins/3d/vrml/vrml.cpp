@@ -41,6 +41,7 @@
 #include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
 #include "wrlproc.h"
+#include "vrml2_base.h"
 
 
 #define PLUGIN_VRML_MAJOR 1
@@ -185,7 +186,17 @@ SCENEGRAPH* Load( char const* aFileName )
     if( proc.GetVRMLType() == VRML_V1 )
         std::cout << "XXX: Processing VRML 1.0 file\n";
     else
+    {
         std::cout << "XXX: Processing VRML 2.0 file\n";
+        WRL2BASE* bp = new WRL2BASE;
+
+        if( !bp->Read( proc ) )
+            std::cout << "XXX: load failed\n";
+        else
+            std::cout << "XXX: load completed\n";
+
+        delete bp;
+    }
 
     return NULL;
 }

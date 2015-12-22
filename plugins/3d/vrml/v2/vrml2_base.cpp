@@ -117,7 +117,7 @@ bool WRL2BASE::Read( WRLPROC& proc )
 
     WRL2NODE* node = NULL;
 
-    while( !ReadNode( proc, this, &node ) );
+    while( ReadNode( proc, this, &node ) );
 
     if( proc.eof() )
         return true;
@@ -382,6 +382,8 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     ntype = getNodeTypeID( glob );
     size_t line = 0;
     size_t column = 0;
+    proc.GetFilePosData( line, column );
+    std::cerr << "XXX: Processing node '" << glob << "' ID: " << ntype << "\n";
 
     switch( ntype )
     {
@@ -390,61 +392,159 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         //
     case WRL2_APPEARANCE:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_BOX:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_COLOR:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_CONE:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_COORDINATE:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_CYLINDER:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_ELEVATIONGRID:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_EXTRUSION:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_INDEXEDFACESET:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_MATERIAL:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_NORMAL:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_SHAPE:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_SPHERE:
         // XXX - IMPLEMENT
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
         break;
 
     case WRL2_TRANSFORM:
     case WRL2_GROUP:
-
-        if( !readTransform( proc, aParent, aNode ) )
+        if( !proc.DiscardNode() )
+        {
+            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
             return false;
+        }
+        else
+            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+
+        //if( !readTransform( proc, aParent, aNode ) )
+        //    return false;
 
         break;
 

@@ -114,6 +114,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     while( true )
     {
         if( proc.Peek() == '}' )
+            return true;
 
         if( !proc.ReadName( glob ) )
         {
@@ -124,6 +125,15 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
             return false;
         }
+
+        // expecting one of:
+        // center
+        // children
+        // rotation
+        // scale
+        // ScaleOrientation
+
+        // XXX - TO BE IMPLEMENTED
     }
 
     // XXX - TO BE IMPLEMENTED

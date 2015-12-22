@@ -159,16 +159,20 @@ bool WRLPROC::getRawLine( void )
     if( !m_buf.empty() )
         return true;
 
+    m_linepos = 0;
+
     if( m_file.bad() )
     {
         m_error = "bad stream";
         return false;
     }
 
-    GETLINE;
-    m_linepos = 0;
+    if( m_file.eof() )
+        return false;
 
-    if( m_file.bad() && !m_file.eof() )
+    GETLINE;
+
+    if( m_file.bad() && m_buf.empty() )
         return false;
 
     if( VRML_V1 == m_fileVersion && !m_buf.empty() )
@@ -198,7 +202,7 @@ bool WRLPROC::EatSpace( void )
         m_buf.clear();
 
 RETRY:
-    while( m_buf.empty() && !m_file.bad() )
+    while( m_buf.empty() && !m_file.bad() && !m_file.eof() )
         getRawLine();
 
     // buffer may be empty if we have reached EOF or encountered IO errors
@@ -264,6 +268,10 @@ bool WRLPROC::ReadGlob( std::string& aGlob, bool* hasComma )
 
             return true;
         }
+
+        if( '{' == m_buf[m_linepos] || '}' == m_buf[m_linepos]
+            || '[' == m_buf[m_linepos] || ']' == m_buf[m_linepos] )
+            return true;
 
         aGlob.append( 1, m_buf[m_linepos++] );
     }
@@ -353,6 +361,7 @@ bool WRLPROC::DiscardNode( void )
         ostr << ", column " << m_linepos;
         m_error = ostr.str();
 
+        std::cerr << m_error << "\n";
         return false;
     }
 
@@ -403,7 +412,7 @@ bool WRLPROC::DiscardNode( void )
         // note: if we have a ']' we must skip it and test the next non-blank character;
         // this ensures that we don't miss a '}' in cases where the braces are not
         // separated by space. if we had proceeded to ReadGlob() we could have had a problem.
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_linepos] || '[' == m_buf[m_linepos] )
         {
             ++m_linepos;
             continue;
@@ -518,7 +527,7 @@ bool WRLPROC::DiscardList( void )
         // note: if we have a '}' we must skip it and test the next non-blank character;
         // this ensures that we don't miss a ']' in cases where the braces are not
         // separated by space. if we had proceeded to ReadGlob() we could have had a problem.
-        if( '}' == m_buf[m_linepos] )
+        if( '}' == m_buf[m_linepos] || '{' == m_buf[m_linepos] )
         {
             ++m_linepos;
             continue;
