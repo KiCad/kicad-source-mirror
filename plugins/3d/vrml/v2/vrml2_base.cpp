@@ -24,7 +24,7 @@
 #include <iostream>
 
 #include "vrml2_base.h"
-#include "vrml2_helpers.h"
+#include "vrml2_transform.h"
 
 
 WRL2BASE::WRL2BASE() : WRL2NODE()
@@ -36,17 +36,6 @@ WRL2BASE::WRL2BASE() : WRL2NODE()
 
 WRL2BASE::~WRL2BASE()
 {
-    std::list< WRL2NODE* >::iterator sC = m_Children.begin();
-    std::list< WRL2NODE* >::iterator eC = m_Children.end();
-
-    while( sC != eC )
-    {
-        (*sC)->SetParent( NULL );
-        delete (*sC);
-        ++sC;
-    }
-
-    m_Children.clear();
     return;
 }
 
@@ -63,70 +52,18 @@ bool WRL2BASE::SetParent( WRL2NODE* aParent )
 }
 
 
-WRL2NODE* WRL2BASE::FindNode( const std::string& aNodeName, const WRL2NODE *aCaller )
-{
-    if( aNodeName.empty() )
-        return NULL;
-
-    if( !m_Name.compare( aNodeName ) )
-        return this;
-
-    FIND_NODE( aNodeName, m_Children, this );
-
-    return NULL;
-}
-
-
-bool WRL2BASE::AddRefNode( WRL2NODE* aNode )
-{
-    #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] attempting to add reference node to WRL2BASE\n";
-    #endif
-
-    return false;
-}
-
-
-bool WRL2BASE::AddChildNode( WRL2NODE* aNode )
-{
-    if( aNode->GetNodeType() == WRL2_BASE )
-    {
-        #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] attempting to add a base node to another base node\n";
-        #endif
-        return false;
-    }
-
-    std::list< WRL2NODE* >::iterator sC = m_Children.begin();
-    std::list< WRL2NODE* >::iterator eC = m_Children.end();
-
-    while( sC != eC )
-    {
-        if( *sC == aNode )
-            return false;
-    }
-
-    aNode->SetParent( this );
-    m_Children.push_back( aNode );
-
-    return true;
-}
-
-
-const char* WRL2BASE::GetName( void )
+std::string WRL2BASE::GetName( void )
 {
     #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] attempting to extract name from virtual base node\n";
     #endif
-    return NULL;
-    return NULL;
+
+    return std::string( "" );
 }
 
 
-bool WRL2BASE::SetName(const char *aName)
+bool WRL2BASE::SetName( const std::string& aName )
 {
     #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -180,7 +117,7 @@ bool WRL2BASE::Read( WRLPROC& proc )
 
     WRL2NODE* node = NULL;
 
-    while( !readNode( proc, this, node ) );
+    while( !ReadNode( proc, this, &node ) );
 
     if( proc.eof() )
         return true;
@@ -195,8 +132,18 @@ bool WRL2BASE::isDangling( void )
 }
 
 
-bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent )
+bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
+    if( NULL == aNode )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] invalid node handle (NULL)\n";
+        #endif
+
+        return false;
+    }
+
     if( !aParent )
     {
         #ifdef DEBUG
@@ -207,6 +154,7 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent )
         return false;
     }
 
+    *aNode = NULL;
     std::string glob;
 
     if( !proc.ReadName( glob ) )
@@ -244,18 +192,13 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent )
         return false;
     }
 
+    *aNode = ref;
+
     return true;
 }
 
 
-bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent )
-{
-    // XXX - TO BE IMPLEMENTED
-    return false;
-}
-
-
-bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
     if( NULL == aNode )
     {
@@ -280,7 +223,65 @@ bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     *aNode = NULL;
 
     std::string glob;
-    bool hasComma = false;
+
+    if( !proc.ReadName( glob ) )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << proc.GetError() <<  "\n";
+        #endif
+
+        return false;
+    }
+
+    size_t line, column;
+    proc.GetFilePosData( line, column );
+
+    if( ReadNode( proc, aParent, aNode ) )
+    {
+        if( *aNode && !(*aNode)->SetName( glob ) )
+        {
+            #ifdef DEBUG
+            size_t line, column;
+            proc.GetFilePosData( line, column );
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad formatting (invalid name) at line";
+            std::cerr << line << ", column " << column << "\n";
+            #endif
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL == aNode )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] invalid node handle (NULL)\n";
+        #endif
+
+        return false;
+    }
+
+    if( NULL == aParent )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] invalid parent pointer (NULL)\n";
+        #endif
+
+        return false;
+    }
+
+    *aNode = NULL;
+
+    std::string glob;
     WRL2NODES ntype;
 
     if( !proc.ReadName( glob ) )
@@ -305,7 +306,7 @@ bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     // a typical pattern.
     if( !glob.compare( "USE" ) )
     {
-        if( !implementUse( aParent ) )
+        if( !implementUse( proc, aParent, aNode ) )
         {
             #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -320,8 +321,17 @@ bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
     if( !glob.compare( "DEF" ) )
     {
-        // XXX - implement
-        implementDef( aParent );
+        if( !implementDef( proc, aParent, aNode ) )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+            #endif
+
+            return false;
+        }
+
+        return true;
     }
 
     if( !glob.compare( "PROTO" ) )
@@ -370,6 +380,8 @@ bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     }
 
     ntype = getNodeTypeID( glob );
+    size_t line = 0;
+    size_t column = 0;
 
     switch( ntype )
     {
@@ -377,52 +389,68 @@ bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // items to be implemented:
         //
     case WRL2_APPEARANCE:
-        // note:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_BOX:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_COLOR:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_CONE:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_COORDINATE:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_CYLINDER:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_ELEVATIONGRID:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_EXTRUSION:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_INDEXEDFACESET:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_MATERIAL:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_NORMAL:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_SHAPE:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_SPHERE:
+        // XXX - IMPLEMENT
         break;
 
     case WRL2_TRANSFORM:
     case WRL2_GROUP:
+
+        if( !readTransform( proc, aParent, aNode ) )
+            return false;
+
         break;
 
-        //
-        // items not implemented or for optional future implementation:
-        //
+    //
+    // items not implemented or for optional future implementation:
+    //
     case WRL2_ANCHOR:
     case WRL2_AUDIOCLIP:
     case WRL2_BACKGROUND:
@@ -463,10 +491,57 @@ bool WRL2BASE::readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     case WRL2_VISIBILITYSENSOR:
     case WRL2_WORLDINFO:
     case WRL2_INVALID:
-    default:    // any nodes which may have been defined via PROTO/EXTERNPROTO
+    default:
+
+        proc.GetFilePosData( line, column );
+
+        if( !proc.DiscardNode() )
+        {
+            #ifdef DEBUG
+            std::cerr << proc.GetError() << "\n";
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] could not discard node at line " << line;
+            std::cerr << ", column " << column << "\n";
+            #endif
+
+            return false;
+        }
+
         break;
     }
 
-    // XXX - TO BE IMPLEMENTED
-    return NULL;
+    return true;
+}
+
+
+bool WRL2BASE::readTransform( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2TRANSFORM* np = new WRL2TRANSFORM( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
+{
+    // this function makes no sense in the base node
+    #ifdef DEBUG
+    std::cerr << proc.GetError() << "\n";
+    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    std::cerr << " * [BUG] this method must never be invoked on a WR2BASE object\n";
+    #endif
+
+    return false;
 }

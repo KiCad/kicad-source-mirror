@@ -29,8 +29,9 @@
 #include <cctype>
 #include <iostream>
 #include <algorithm>
-#include "vrml2_node.h"
 
+#include "vrml2_node.h"
+#include "vrml2_helpers.h"
 
 
 static std::set< std::string > badNames;
@@ -139,6 +140,18 @@ WRL2NODE::~WRL2NODE()
         ++sBP;
     }
 
+    m_Refs.clear();
+    std::list< WRL2NODE* >::iterator sC = m_Children.begin();
+    std::list< WRL2NODE* >::iterator eC = m_Children.end();
+
+    while( sC != eC )
+    {
+        (*sC)->SetParent( NULL );
+        delete (*sC);
+        ++sC;
+    }
+
+    m_Children.clear();
     return;
 }
 
@@ -189,20 +202,14 @@ WRL2NODE* WRL2NODE::GetParent( void )
 }
 
 
-const char* WRL2NODE::GetName( void )
+std::string WRL2NODE::GetName( void )
 {
-    return m_Name.c_str();
+    return m_Name;
 }
 
 
-bool WRL2NODE::SetName(const char *aName)
+bool WRL2NODE::SetName( const std::string& aName )
 {
-    if( NULL == aName || '\0' == aName[0] )
-    {
-        m_Name.clear();
-        return true;
-    }
-
     std::set< std::string >::iterator item = badNames.find( aName );
 
     if( item != badNames.end() )
@@ -224,12 +231,11 @@ bool WRL2NODE::SetName(const char *aName)
         return false;
     }
 
-    std::string tmpstr( aName );
     #define BAD_CHARS1 "\"\'#+,-.\\[]{}\x00\x01\x02\x03\x04\x05\x06\x09\x0A\x0B\x0C\x0D\x0E\x0F"
     #define BAD_CHARS2 "\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F"
 
-    if( std::string::npos != tmpstr.find_first_of( BAD_CHARS1 )
-        || std::string::npos != tmpstr.find_first_of( BAD_CHARS2 ) )
+    if( std::string::npos != aName.find_first_of( BAD_CHARS1 )
+        || std::string::npos != aName.find_first_of( BAD_CHARS2 ) )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -271,4 +277,97 @@ WRL2NODES WRL2NODE::getNodeTypeID( const std::string aNodeName )
 std::string WRL2NODE::GetError( void )
 {
     return m_error;
+}
+
+
+WRL2NODE* WRL2NODE::FindNode( const std::string& aNodeName, const WRL2NODE *aCaller )
+{
+    if( aNodeName.empty() )
+        return NULL;
+
+    if( !m_Name.compare( aNodeName ) )
+        return this;
+
+    FIND_NODE( aNodeName, m_Children, this );
+
+    return NULL;
+}
+
+
+bool WRL2NODE::SetParent( WRL2NODE* aParent )
+{
+    if( aParent == m_Parent )
+        return true;
+
+    if( NULL != m_Parent )
+        m_Parent->unlinkChildNode( this );
+
+    m_Parent = aParent;
+
+    if( NULL != m_Parent )
+        m_Parent->AddChildNode( this );
+
+    return true;
+}
+
+
+bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
+{
+    if( aNode->GetNodeType() == WRL2_BASE )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] attempting to add a base node to another node\n";
+        #endif
+        return false;
+    }
+
+    std::list< WRL2NODE* >::iterator sC = m_Children.begin();
+    std::list< WRL2NODE* >::iterator eC = m_Children.end();
+
+    while( sC != eC )
+    {
+        if( *sC == aNode )
+            return false;
+    }
+
+    aNode->SetParent( this );
+    m_Children.push_back( aNode );
+
+    return true;
+}
+
+
+bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] NULL passed as node pointer\n";
+        #endif
+        return false;
+    }
+
+    if( aNode->GetNodeType() == WRL2_BASE )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] attempting to add a base node ref to another base node\n";
+        #endif
+        return false;
+    }
+
+    std::list< WRL2NODE* >::iterator sR = m_Refs.begin();
+    std::list< WRL2NODE* >::iterator eR = m_Refs.end();
+
+    while( sR != eR )
+    {
+        if( *sR == aNode )
+            return false;
+    }
+
+    m_Refs.push_back( aNode );
+
+    return true;
 }

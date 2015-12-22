@@ -56,11 +56,6 @@ private:
     // parameters are updated as appropriate.
     bool getRawLine( void );
 
-    // eatSpace discards all leading white space from the current m_linepos
-    // and continues until a non-empty line is found which contains non-blank
-    // characters
-    bool eatSpace( void );
-
 public:
     WRLPROC();
     ~WRLPROC();
@@ -72,9 +67,18 @@ public:
     // return the VRML Version
     WRLVERSION GetVRMLType( void );
 
-    std::string GetError( void );
 
     // helper routines
+    std::string GetError( void );
+    bool GetFilePosData( size_t& line, size_t& column );
+    // eatSpace discards all leading white space from the current m_linepos
+    // and continues until a non-empty line is found which contains non-blank
+    // characters
+    bool EatSpace( void );
+    // Peek returns the next non-white char in the file or '\0' on failure
+    char Peek( void );
+    // Pop removes the current char from the buffer
+    void Pop( void );
 
     // read up to the next whitespace or comma
     bool ReadGlob( std::string& aGlob, bool* hasComma = NULL );

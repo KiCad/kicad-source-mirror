@@ -192,7 +192,7 @@ bool WRLPROC::getRawLine( void )
 }
 
 
-bool WRLPROC::eatSpace( void )
+bool WRLPROC::EatSpace( void )
 {
     if( m_linepos >= m_buf.size() )
         m_buf.clear();
@@ -240,7 +240,7 @@ bool WRLPROC::ReadGlob( std::string& aGlob, bool* hasComma )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -278,7 +278,7 @@ bool WRLPROC::ReadName( std::string& aName )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -333,7 +333,7 @@ bool WRLPROC::ReadName( std::string& aName )
 
 bool WRLPROC::DiscardNode( void )
 {
-    if( !eatSpace() )
+    if( !EatSpace() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -365,7 +365,7 @@ bool WRLPROC::DiscardNode( void )
 
     while( lvl > 0 )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -448,7 +448,7 @@ bool WRLPROC::DiscardNode( void )
 
 bool WRLPROC::DiscardList( void )
 {
-    if( !eatSpace() )
+    if( !EatSpace() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -480,7 +480,7 @@ bool WRLPROC::DiscardList( void )
 
     while( lvl > 0 )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -572,7 +572,7 @@ bool WRLPROC::ReadString( std::string& aSFString )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << "invalid VRML file; expecting string at line " << ifline << " but found nothing";
@@ -671,7 +671,7 @@ bool WRLPROC::ReadString( std::string& aSFString )
 
 bool WRLPROC::ReadSFBool( bool& aSFBool )
 {
-    if( !eatSpace() )
+    if( !EatSpace() )
         return false;
 
     size_t fileline = m_fileline;
@@ -752,7 +752,7 @@ bool WRLPROC::ReadSFFloat( float& aSFFloat, bool* hasComma )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -817,7 +817,7 @@ bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -894,7 +894,7 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -984,7 +984,7 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1073,7 +1073,7 @@ bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1157,7 +1157,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1184,7 +1184,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
             return false;
         }
 
-        if( m_linepos >= m_buf.size() && !eatSpace() )
+        if( m_linepos >= m_buf.size() && !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1231,7 +1231,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
             return false;
         }
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1249,7 +1249,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
 
         aMFString.push_back( lstr );
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1283,7 +1283,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1310,7 +1310,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1348,7 +1348,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         if( ']' == m_buf[m_linepos] )
@@ -1371,7 +1371,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1391,7 +1391,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
                 lcomma = true;
         }
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1437,7 +1437,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1464,7 +1464,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1502,7 +1502,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         if( ']' == m_buf[m_linepos] )
@@ -1525,7 +1525,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
                 return false;
 
             if( ']' == m_buf[m_linepos] )
@@ -1535,7 +1535,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
                 lcomma = true;
         }
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1581,7 +1581,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1608,7 +1608,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1646,7 +1646,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         if( ']' == m_buf[m_linepos] )
@@ -1669,7 +1669,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
                 return false;
 
             if( ']' == m_buf[m_linepos] )
@@ -1679,7 +1679,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
                 lcomma = true;
         }
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1725,7 +1725,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1752,7 +1752,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1790,7 +1790,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         if( ']' == m_buf[m_linepos] )
@@ -1813,7 +1813,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
                 return false;
 
             if( ']' == m_buf[m_linepos] )
@@ -1823,7 +1823,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
                 lcomma = true;
         }
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1869,7 +1869,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -1896,7 +1896,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1934,7 +1934,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         if( ']' == m_buf[m_linepos] )
@@ -1957,7 +1957,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
                 return false;
 
             if( ']' == m_buf[m_linepos] )
@@ -1967,7 +1967,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
                 lcomma = true;
         }
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -2013,7 +2013,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
@@ -2040,7 +2040,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -2078,7 +2078,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
 
     while( true )
     {
-        if( !eatSpace() )
+        if( !EatSpace() )
             return false;
 
         if( ']' == m_buf[m_linepos] )
@@ -2101,7 +2101,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
 
         if( !lcomma )
         {
-            if( !eatSpace() )
+            if( !EatSpace() )
                 return false;
 
             if( ']' == m_buf[m_linepos] )
@@ -2111,7 +2111,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
                 lcomma = true;
         }
 
-        if( !eatSpace() )
+        if( !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -2158,4 +2158,58 @@ bool WRLPROC::eof( void )
 std::string WRLPROC::GetError( void )
 {
     return m_error;
+}
+
+
+bool WRLPROC::GetFilePosData( size_t& line, size_t& column )
+{
+    if( !m_file.is_open() )
+    {
+        line = 0;
+        column = 0;
+        return false;
+    }
+
+    line = m_fileline;
+    column = m_linepos;
+
+    return true;
+}
+
+
+char WRLPROC::Peek( void )
+{
+    if( !m_file.is_open() )
+    {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
+        ostr << " * [BUG] no open file";
+        m_error = ostr.str();
+
+        return '\0';
+    }
+
+    if( !EatSpace() )
+    {
+        if( m_error.empty() )
+        {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
+            ostr << " * [INFO] failed to read data from file\n";
+            m_error = ostr.str();
+        }
+
+        return false;
+    }
+
+    return m_buf[m_linepos];
+}
+
+
+void WRLPROC::Pop( void )
+{
+    if( m_linepos < m_buf.size() )
+        ++m_linepos;
+
+    return;
 }

@@ -5,6 +5,7 @@ add_library( s3d_plugin_vrml MODULE
         v2/wrlproc.cpp
         v2/vrml2_node.cpp
         v2/vrml2_base.cpp
+        v2/vrml2_transform.cpp
         )
 
 target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )

@@ -48,6 +48,7 @@
 
 #include "wrlproc.h"
 
+class WRL2BASE;
 
 /**
  * Class WRL2NODE
@@ -61,6 +62,8 @@ protected:
     std::string m_Name;     // name to use for referencing the node by name
 
     std::list< WRL2NODE* > m_BackPointers;  // nodes which hold a reference to this
+    std::list< WRL2NODE* > m_Children;      // nodes owned by this node
+    std::list< WRL2NODE* > m_Refs;          // nodes referenced by this node
     std::string m_error;
 
 public:
@@ -122,7 +125,7 @@ public:
     virtual ~WRL2NODE();
 
     // read data via the given file processor
-    virtual bool Read( WRLPROC& proc ) = 0;
+    virtual bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) = 0;
 
     /**
      * Function GetNodeType
@@ -146,10 +149,10 @@ public:
      * the given node is not allowed to be a parent to
      * the derived object.
      */
-    virtual bool SetParent( WRL2NODE* aParent ) = 0;
+    virtual bool SetParent( WRL2NODE* aParent );
 
-    virtual const char* GetName( void );
-    virtual bool SetName(const char *aName);
+    virtual std::string GetName( void );
+    virtual bool SetName( const std::string& aName );
 
     const char* GetNodeTypeName( WRL2NODES aNodeType ) const;
 
@@ -162,11 +165,11 @@ public:
      * @param aCaller is a pointer to the node invoking this function
      * @return is a valid node pointer on success, otherwise NULL
      */
-    virtual WRL2NODE* FindNode( const std::string& aNodeName, const WRL2NODE *aCaller ) = 0;
+    virtual WRL2NODE* FindNode( const std::string& aNodeName, const WRL2NODE *aCaller );
 
-    virtual bool AddRefNode( WRL2NODE* aNode ) = 0;
+    bool AddChildNode( WRL2NODE* aNode );
 
-    virtual bool AddChildNode( WRL2NODE* aNode ) = 0;
+    virtual bool AddRefNode( WRL2NODE* aNode );
 
     std::string GetError( void );
 };

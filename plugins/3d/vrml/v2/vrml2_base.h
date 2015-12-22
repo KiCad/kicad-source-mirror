@@ -48,11 +48,6 @@
 
 #include "vrml2_node.h"
 
-// BUG: there are no referenced nodes; however it is indeed
-// possible for the BASE node to have reference nodes, for example:
-// DEF BLAH Transform{}
-// USE BLAH
-// The code must be adjusted to respond to unlink requests and addNodeRef requests
 
 /**
  * Class WRL2BASE
@@ -60,9 +55,6 @@
  */
 class WRL2BASE : public WRL2NODE
 {
-protected:
-    std::list< WRL2NODE* > m_Children;      // nodes owned by this node
-
 public:
 
     // functions inherited from WRL2NODE
@@ -71,26 +63,28 @@ public:
     bool isDangling( void );
 
     // handle cases of USE / DEF
-    bool implementUse( WRLPROC& proc, WRL2NODE* aParent );
-    bool implementDef( WRLPROC& proc, WRL2NODE* aParent );
+    bool implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
-    // read in a VRML node
-    bool readNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readTransform( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
 public:
     WRL2BASE();
     virtual ~WRL2BASE();
 
+    // function to read entire VRML file
+    bool Read( WRLPROC& proc );
+
+    // read in a VRML node
+    bool ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+
     // overrides
-    virtual const char* GetName( void );
-    virtual bool SetName(const char *aName);
+    virtual std::string GetName( void );
+    virtual bool SetName( const std::string& aName );
 
     // functions inherited from WRL2NODE
-    bool Read( WRLPROC& proc );
+    bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool SetParent( WRL2NODE* aParent );
-    WRL2NODE* FindNode( const std::string& aNodeName, const WRL2NODE *aCaller );
-    bool AddRefNode( WRL2NODE* aNode );
-    bool AddChildNode( WRL2NODE* aNode );
 };
 
 #endif  // VRML2_BASE_H
