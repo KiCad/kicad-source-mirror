@@ -292,6 +292,9 @@ void D_PAD::Flip( const wxPoint& aCentre )
     SetOrientation( -GetOrientation() );
 
     // flip pads layers
+    // PADS items are currently on all copper layers, or
+    // currently, only on Front or Back layers.
+    // So the copper layers count is not taken in account
     SetLayerSet( FlipLayerMask( m_layerMask ) );
 
     // m_boundingRadius = -1;  the shape has not been changed
@@ -335,16 +338,11 @@ const wxPoint D_PAD::ShapePos() const
     if( m_Offset.x == 0 && m_Offset.y == 0 )
         return m_Pos;
 
-    wxPoint shape_pos;
-    int     dX, dY;
+    wxPoint loc_offset = m_Offset;
 
-    dX = m_Offset.x;
-    dY = m_Offset.y;
+    RotatePoint( &loc_offset, m_Orient );
 
-    RotatePoint( &dX, &dY, m_Orient );
-
-    shape_pos.x = m_Pos.x + dX;
-    shape_pos.y = m_Pos.y + dY;
+    wxPoint shape_pos = m_Pos + loc_offset;
 
     return shape_pos;
 }
@@ -352,26 +350,10 @@ const wxPoint D_PAD::ShapePos() const
 
 const wxString D_PAD::GetPadName() const
 {
-#if 0   // m_Padname is not ASCII and not UTF8, it is LATIN1 basically, whatever
-        // 8 bit font is supported in KiCad plotting and drawing.
-
-    // Return pad name as wxString, assume it starts as a non-terminated
-    // utf8 character sequence
-
-    char    temp[sizeof(m_Padname)+1];      // a place to terminate with '\0'
-
-    strncpy( temp, m_Padname, sizeof(m_Padname) );
-
-    temp[sizeof(m_Padname)] = 0;
-
-    return FROM_UTF8( temp );
-#else
-
     wxString name;
 
     StringPadName( name );
     return name;
-#endif
 }
 
 
@@ -988,7 +970,7 @@ unsigned int D_PAD::ViewGetLOD( int aLayer ) const
         if( ( m_Size.x == 0 ) && ( m_Size.y == 0 ) )
             return UINT_MAX;
 
-        return ( 100000000 / std::max( m_Size.x, m_Size.y ) );
+        return ( Millimeter2iu( 100 ) / std::max( m_Size.x, m_Size.y ) );
     }
 
     // Other layers are shown without any conditions

@@ -138,6 +138,8 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
     if( m_Shape == S_ARC )
         m_Angle = -m_Angle;
 
+    // DRAWSEGMENT items are not allowed on copper layers, so
+    // copper layers count is not taken in accoun in Flip transform
     SetLayer( FlipLayer( GetLayer() ) );
 }
 

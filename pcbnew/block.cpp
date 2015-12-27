@@ -752,6 +752,7 @@ void PCB_EDIT_FRAME::Block_Flip()
         itemsList->SetPickedItemStatus( UR_FLIPPED, ii );
         item->Flip( center );
 
+        // If a connected item is flipped, the ratsnest is no more OK
         switch( item->Type() )
         {
         case PCB_MODULE_T:
@@ -759,9 +760,8 @@ void PCB_EDIT_FRAME::Block_Flip()
             m_Pcb->m_Status_Pcb = 0;
             break;
 
-        // Move and rotate the track segments
-        case PCB_TRACE_T:       // a track segment (segment on a copper layer)
-        case PCB_VIA_T:         // a via (like track segment on a copper layer)
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
             m_Pcb->m_Status_Pcb = 0;
             break;
 

@@ -244,7 +244,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                           HK_CANVAS_LEGACY );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
-                 text, _( "Switch the canvas implementation to legacy" ),
+                 text, _( "Switch the canvas implementation to Legacy" ),
                  KiBitmap( tools_xpm ) );
 
     text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), m_hotkeysDescrList,

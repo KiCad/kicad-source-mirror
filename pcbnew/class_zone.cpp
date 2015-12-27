@@ -722,7 +722,8 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( FlipLayer( GetLayer() ) );
+    int copperLayerCount = GetBoard()->GetCopperLayerCount();
+    SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
 }
 
 
