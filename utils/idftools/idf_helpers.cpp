@@ -83,7 +83,8 @@ bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString,
     if( idx < 0 || idx >= len )
         return false;
 
-    while( isspace( aLine[idx] ) && idx < len ) ++idx;
+    while( idx < len && isspace( aLine[idx] ) )
+        ++idx;
 
     if( idx == len )
     {
@@ -95,7 +96,7 @@ bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString,
     {
         hasQuotes = true;
         ++idx;
-        while( aLine[idx] != '"' && idx < len )
+        while( idx < len && aLine[idx] != '"' )
             ostr << aLine[idx++];
 
         if( idx == len )
@@ -112,7 +113,7 @@ bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString,
     {
         hasQuotes = false;
 
-        while( !isspace( aLine[idx] ) && idx < len )
+        while( idx < len && !isspace( aLine[idx] ) )
             ostr << aLine[idx++];
 
     }

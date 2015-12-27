@@ -2720,8 +2720,6 @@ bool IDF3_BOARD::ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutl
     // 2. Check if a file with extension 'emp' exists and read it
     // 3. Open the specified filename and read it
 
-    std::string fname = TO_UTF8( aFullFileName );
-
     wxFileName brdname( aFullFileName );
     wxFileName libname( aFullFileName );
 
@@ -3124,8 +3122,6 @@ bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, bool aUnitMM, bool aF
     // 1. Check that the file extension is 'emn'
     // 2. Write the *.emn file according to the IDFv3 spec
     // 3. Write the *.emp file according to the IDFv3 spec
-
-    std::string fname = TO_UTF8( aFullFileName );
 
     wxFileName brdname( aFullFileName );
     wxFileName libname( aFullFileName );

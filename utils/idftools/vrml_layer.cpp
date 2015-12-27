@@ -1592,9 +1592,6 @@ int VRML_LAYER::checkNContours( bool holes )
     if( contours.empty() )
         return 0;
 
-    std::list<int>::const_iterator  begin;
-    std::list<int>::const_iterator  end;
-
     for( size_t i = 0; i < contours.size(); ++i )
     {
         if( contours[i]->size() < 3 )
