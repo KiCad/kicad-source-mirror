@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Dec 19 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,6 @@ class wxListView;
 #include <wx/icon.h>
 #include <wx/listctrl.h>
 #include <wx/textctrl.h>
-#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
@@ -69,9 +68,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		};
 		
 		wxNotebook* m_notebook;
-		wxPanel* m_panel1;
-		wxStaticText* m_staticText2;
-		wxChoice* m_choiceUnits;
+		wxPanel* m_panel5;
 		wxStaticText* m_staticText3;
 		wxChoice* m_choiceGridSize;
 		wxStaticText* m_staticGridUnits;
@@ -81,9 +78,19 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText5;
 		wxSpinCtrl* m_spinLineWidth;
 		wxStaticText* m_staticLineWidthUnits;
-		wxStaticText* m_staticText7;
-		wxSpinCtrl* m_spinTextSize;
-		wxStaticText* m_staticTextSizeUnits;
+		wxStaticText* m_staticText26;
+		wxChoice* m_choiceSeparatorRefId;
+		wxStaticText* m_staticText221;
+		wxSpinCtrl* m_spinAutoSaveInterval;
+		wxStaticText* m_staticText23;
+		wxStaticLine* m_staticline3;
+		wxCheckBox* m_checkShowGrid;
+		wxCheckBox* m_checkHVOrientation;
+		wxCheckBox* m_checkShowHiddenPins;
+		wxCheckBox* m_checkPageLimits;
+		wxPanel* m_panel3;
+		wxStaticText* m_staticText2;
+		wxChoice* m_choiceUnits;
 		wxStaticText* m_staticText9;
 		wxSpinCtrl* m_spinRepeatHorizontal;
 		wxStaticText* m_staticRepeatXUnits;
@@ -92,26 +99,21 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticRepeatYUnits;
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_spinRepeatLabel;
-		wxStaticText* m_staticText221;
-		wxSpinCtrl* m_spinAutoSaveInterval;
-		wxStaticText* m_staticText23;
+		wxStaticText* m_staticText7;
+		wxSpinCtrl* m_spinTextSize;
+		wxStaticText* m_staticTextSizeUnits;
 		wxStaticText* m_stMaxUndoItems;
 		wxSpinCtrl* m_spinMaxUndoItems;
-		wxStaticText* m_stMaxUndoItemsUnit;
-		wxStaticText* m_staticText26;
-		wxChoice* m_choiceSeparatorRefId;
-		wxStaticLine* m_staticline1;
-		wxCheckBox* m_checkShowGrid;
-		wxCheckBox* m_checkShowHiddenPins;
+		wxStaticText* m_staticText22;
+		wxStaticLine* m_staticline2;
+		wxCheckBox* m_checkAutoplaceFields;
+		wxCheckBox* m_checkAutoplaceJustify;
+		wxCheckBox* m_checkAutoplaceAlign;
+		wxPanel* m_panel4;
 		wxCheckBox* m_checkEnableZoomCenter;
 		wxCheckBox* m_checkEnableMiddleButtonPan;
 		wxCheckBox* m_checkMiddleButtonPanLimited;
 		wxCheckBox* m_checkAutoPan;
-		wxCheckBox* m_checkHVOrientation;
-		wxCheckBox* m_checkPageLimits;
-		wxCheckBox* m_checkAutoplaceFields;
-		wxCheckBox* m_checkAutoplaceJustify;
-		wxCheckBox* m_checkAutoplaceAlign;
 		wxPanel* m_panel2;
 		wxListView* templateFieldListCtrl;
 		wxStaticText* fieldNameLabel;
