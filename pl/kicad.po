@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-29 16:20+0100\n"
-"PO-Revision-Date: 2015-11-29 16:26+0100\n"
+"PO-Revision-Date: 2015-12-29 15:13+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu, Daniel Dawid Majewski\n"
@@ -22174,15 +22174,15 @@ msgstr "Wyświetlaj w trybie wysokiego kontrastu"
 
 #: pcbnew/tools/common_actions.cpp:58
 msgid "trivial connection"
-msgstr "banalne połączenie"
+msgstr "Od węzła do węzła"
 
 #: pcbnew/tools/common_actions.cpp:58
 msgid "Selects a connection between two junctions."
-msgstr "Wybiera połączenie pomiędzy dwoma łączami."
+msgstr "Wybiera połączenie pomiędzy dwoma węzłami."
 
 #: pcbnew/tools/common_actions.cpp:62
 msgid "copper connection"
-msgstr "łącze"
+msgstr "Połączenia na war. miedzi"
 
 #: pcbnew/tools/common_actions.cpp:62
 msgid "Selects whole copper connection."
@@ -22190,7 +22190,7 @@ msgstr "Wybiera wszystkie połączenia."
 
 #: pcbnew/tools/common_actions.cpp:66
 msgid "whole net"
-msgstr "cała sieć"
+msgstr "Cała sieć"
 
 #: pcbnew/tools/common_actions.cpp:66
 msgid "Selects all tracks & vias belonging to the same net."
