@@ -189,7 +189,7 @@ following command:
 If you are contributing directly to the KiCad project on Launchpad, you can create a local
 branch on your machine by using the following command:
 
-    bzr branch lp:repo_to_branch
+    bzr branch https://code.launchpad.net/~kicad-product-committers/kicad/product kicad_source
 
 If you prefer to use [GIT][] as you version control system, you can clone the KiCad mirror on
 Github using the following command:
@@ -198,7 +198,7 @@ Github using the following command:
 
 Here is a list of source links:
 
-Stable release archive: https://launchpad.net/kicad/4.0/4.0.0-rc1/+download/kicad-4.0.0-rc1.tar.xz
+Stable release archive: https://launchpad.net/kicad/4.0/4.0.1/+download/kicad-4.0.1.tar.xz
 
 Development branch: https://code.launchpad.net/~kicad-product-committers/kicad/product
 
@@ -208,7 +208,7 @@ Github mirror: https://github.com/KiCad/kicad-source-mirror
 
 To perform a full build on Linux, run the following commands:
 
-    cd kicad_source_tree
+    cd <your kicad source mirror>
     mkdir -p build/release
     mkdir build/debug               # Optional for debug build.
     cd build/release
@@ -304,7 +304,7 @@ currently known issues when building KiCad using MSYS2.
 ### 64-bit Package of Boost 1.59 ### {#ki_msys2_64bit_boost}
 
 The context library of the x86_64 package of Boost version 1.59 is broken and will cause KiCad
-to crash.  You must downgrade to version 1.47 by running the command:
+to crash.  You must downgrade to version 1.57 by running the command:
 
     pacman -U /var/cache/pacman/pkg/mingw-w64-x86_64-boost-1.57.0-4-any.pkg.tar.xz
 
