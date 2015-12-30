@@ -124,7 +124,7 @@ public:
     WRL2NODE();
     virtual ~WRL2NODE();
 
-    // read data via the given file processor
+    // read data via the given file processor and WRL2BASE object
     virtual bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) = 0;
 
     /**

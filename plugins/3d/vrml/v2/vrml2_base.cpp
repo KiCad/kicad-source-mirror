@@ -383,7 +383,9 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     size_t line = 0;
     size_t column = 0;
     proc.GetFilePosData( line, column );
-    std::cerr << "XXX: Processing node '" << glob << "' ID: " << ntype << "\n";
+    #ifdef DEBUG
+    std::cerr << " * [INFO] Processing node '" << glob << "' ID: " << ntype << "\n";
+    #endif
 
     switch( ntype )
     {
@@ -394,154 +396,249 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_BOX:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_COLOR:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_CONE:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_COORDINATE:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_CYLINDER:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_ELEVATIONGRID:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_EXTRUSION:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_INDEXEDFACESET:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_MATERIAL:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_NORMAL:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        #endif
+
         break;
 
     case WRL2_SHAPE:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_SPHERE:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
+
         break;
 
     case WRL2_TRANSFORM:
     case WRL2_GROUP:
         if( !proc.DiscardNode() )
         {
-            std::cerr << "XXX: FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #ifdef DEBUG
+            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
+            #endif
             return false;
         }
+        #ifdef DEBUG
         else
-            std::cerr << "XXX: OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        {
+            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
+        }
+        #endif
 
         //if( !readTransform( proc, aParent, aNode ) )
         //    return false;
@@ -597,7 +694,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         if( !proc.DiscardNode() )
         {
-            #ifdef DEBUG
+        #ifdef DEBUG
             std::cerr << proc.GetError() << "\n";
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] could not discard node at line " << line;
@@ -640,7 +737,7 @@ bool WRL2BASE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     #ifdef DEBUG
     std::cerr << proc.GetError() << "\n";
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this method must never be invoked on a WR2BASE object\n";
+    std::cerr << " * [BUG] this method must never be invoked on a WRL2BASE object\n";
     #endif
 
     return false;
