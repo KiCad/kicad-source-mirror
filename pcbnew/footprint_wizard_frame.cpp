@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
- * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at  wanadoo.fr
+ * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
@@ -95,7 +95,8 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 #ifdef __WINDOWS__
                 KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
 #else
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
+                aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+                          : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
 #endif
                 FOOTPRINT_WIZARD_FRAME_NAME )
 {

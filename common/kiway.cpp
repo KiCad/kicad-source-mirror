@@ -62,7 +62,7 @@ void KIWAY::player_destroy_handler( wxWindowDestroyEvent& event )
 {
     wxWindow* w = event.GetWindow();
 
-    for( unsigned i=0; i<DIM(m_player);  ++i )
+    for( unsigned i=0; i < KIWAY_PLAYER_COUNT;  ++i )
     {
         // if destroying one of our flock, then mark it as deceased.
         if( (wxWindow*) m_player[i] == w )
@@ -273,7 +273,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFrameType.
-    if( unsigned( aFrameType ) >= DIM( m_player ) )
+    if( unsigned( aFrameType ) >= KIWAY_PLAYER_COUNT )
     {
         // @todo : throw an exception here for python's benefit, at least that
         // way it gets some explanatory text.
@@ -316,7 +316,7 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFrameType.
-    if( unsigned( aFrameType ) >= DIM( m_player ) )
+    if( unsigned( aFrameType ) >= KIWAY_PLAYER_COUNT )
     {
         // @todo : throw an exception here for python's benefit, at least that
         // way it gets some explanatory text.
@@ -344,7 +344,7 @@ bool KIWAY::PlayersClose( bool doForce )
 {
     bool ret = true;
 
-    for( unsigned i=0; i < DIM( m_player );  ++i )
+    for( unsigned i=0; i < KIWAY_PLAYER_COUNT;  ++i )
     {
         ret = ret && PlayerClose( FRAME_T( i ), doForce );
     }
@@ -383,7 +383,7 @@ void KIWAY::SetLanguage( int aLanguage )
     }
 #endif
 
-    for( unsigned i=0;  i < DIM( m_player );  ++i )
+    for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
     {
         KIWAY_PLAYER* frame = m_player[i];
 

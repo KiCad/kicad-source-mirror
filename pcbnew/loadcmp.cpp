@@ -142,14 +142,13 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
     if( viewer )
         viewer->Destroy();
 
+    // Creates the modal Lib browser:
     viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
 
     wxString    fpid;
 
     int ret = viewer->ShowModal( &fpid, this );
     (void) ret;     // make static analyser quiet
-
-    //DBG(printf("%s: fpid:'%s'\n", __func__, TO_UTF8( fpid ) );)
 
     viewer->Destroy();
 

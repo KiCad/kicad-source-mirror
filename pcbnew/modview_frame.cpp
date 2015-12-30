@@ -97,11 +97,11 @@ END_EVENT_TABLE()
 
 
 /* Note:
- * FOOTPRINT_VIEWER_FRAME can be build in "modal mode", or as a usual frame.
+ * FOOTPRINT_VIEWER_FRAME can be created in "modal mode", or as a usual frame.
  * In modal mode:
  *  a tool to export the selected footprint is shown in the toolbar
  *  the style is wxSTAY_ON_TOP on Windows and wxFRAME_FLOAT_ON_PARENT on unix
- * reason:
+ * Reason:
  * the parent is usually the kicad window manager (not easy to change)
  * On windows, when the frame with stype wxFRAME_FLOAT_ON_PARENT is displayed
  * its parent frame is brought to the foreground, on the top of the calling frame.
@@ -109,7 +109,7 @@ END_EVENT_TABLE()
  * this issue does not happen on unix
  *
  * So we use wxSTAY_ON_TOP on Windows, and wxFRAME_FLOAT_ON_PARENT on unix
- * to simulate a dialog called by ShowModal.
+ * to force FOOTPRINT_VIEWER_FRAME to stay on parent when it is Modal.
  */
 
 
@@ -122,12 +122,13 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
             wxDefaultPosition, wxDefaultSize,
             aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
 #ifdef __WINDOWS__
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP :
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
 #else
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
+                    aParent ?
+                        KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+                        : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
 #endif
-                KICAD_DEFAULT_DRAWFRAME_STYLE,
-
+                : KICAD_DEFAULT_DRAWFRAME_STYLE,
             aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
                                 FOOTPRINT_VIEWER_FRAME_NAME_MODAL
                                 : FOOTPRINT_VIEWER_FRAME_NAME )
@@ -631,7 +632,7 @@ void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
         // Raising the window does not show the window on Windows if iconized.
         // This should work on any platform.
         if( draw3DFrame->IsIconized() )
-             draw3DFrame->Iconize( false );
+            draw3DFrame->Iconize( false );
 
         draw3DFrame->Raise();
 
