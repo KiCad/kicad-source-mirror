@@ -117,7 +117,7 @@ bool WRL2BASE::Read( WRLPROC& proc )
 
     WRL2NODE* node = NULL;
 
-    while( ReadNode( proc, this, &node ) );
+    while( ReadNode( proc, this, &node ) && !proc.eof() );
 
     if( proc.eof() )
         return true;
@@ -287,8 +287,11 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     if( !proc.ReadName( glob ) )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << proc.GetError() <<  "\n";
+        if( !proc.eof() )
+        {
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+        }
         #endif
 
         return false;

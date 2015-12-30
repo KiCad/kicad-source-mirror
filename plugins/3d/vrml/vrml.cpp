@@ -184,16 +184,30 @@ SCENEGRAPH* Load( char const* aFileName )
         return NULL;
 
     if( proc.GetVRMLType() == VRML_V1 )
-        std::cout << "XXX: Processing VRML 1.0 file\n";
+    {
+        #ifdef DEBUG
+        std::cout << " * [INFO] Processing VRML 1.0 file\n";
+        #endif
+    }
     else
     {
-        std::cout << "XXX: Processing VRML 2.0 file\n";
+        #ifdef DEBUG
+        std::cout << " * [INFO] Processing VRML 2.0 file\n";
+        #endif
         WRL2BASE* bp = new WRL2BASE;
 
         if( !bp->Read( proc ) )
-            std::cout << "XXX: load failed\n";
+        {
+            #ifdef DEBUG
+            std::cout << " * [INFO] load failed\n";
+            #endif
+        }
         else
-            std::cout << "XXX: load completed\n";
+        {
+            #ifdef DEBUG
+            std::cout << " * [INFO] load completed\n";
+            #endif
+        }
 
         delete bp;
     }
