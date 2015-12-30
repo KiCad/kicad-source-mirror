@@ -339,7 +339,8 @@ void TRACK::Flip( const wxPoint& aCentre )
 {
     m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y   = aCentre.y - (m_End.y - aCentre.y);
-    SetLayer( FlipLayer( GetLayer() ) );
+    int copperLayerCount = GetBoard()->GetCopperLayerCount();
+    SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
 }
 
 
@@ -347,6 +348,17 @@ void VIA::Flip( const wxPoint& aCentre )
 {
     m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y   = aCentre.y - (m_End.y - aCentre.y);
+
+    if( GetViaType() != VIA_THROUGH )
+    {
+        int copperLayerCount = GetBoard()->GetCopperLayerCount();
+        LAYER_ID top_layer;
+        LAYER_ID bottom_layer;
+        LayerPair( &top_layer, &bottom_layer );
+        top_layer = FlipLayer( top_layer, copperLayerCount );
+        bottom_layer = FlipLayer( bottom_layer, copperLayerCount );
+        SetLayerPair( top_layer, bottom_layer );
+    }
 }
 
 

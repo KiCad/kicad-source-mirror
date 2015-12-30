@@ -142,14 +142,13 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
     if( viewer )
         viewer->Destroy();
 
+    // Creates the modal Lib browser:
     viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
 
     wxString    fpid;
 
     int ret = viewer->ShowModal( &fpid, this );
     (void) ret;     // make static analyser quiet
-
-    //DBG(printf("%s: fpid:'%s'\n", __func__, TO_UTF8( fpid ) );)
 
     viewer->Destroy();
 
@@ -196,13 +195,13 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         return NULL;
     }
 
-    if( dlg.IsKeyword() )                          // Selection by keywords
+    if( dlg.IsKeyword() )       // Selection by keywords
     {
         allowWildSeach = false;
         keys = moduleName;
         moduleName = SelectFootprint( this, libName, wxEmptyString, keys, aTable );
 
-        if( moduleName.IsEmpty() )                 // Cancel command
+        if( moduleName.IsEmpty() )  // Cancel command
         {
             m_canvas->MoveCursorToCrossHair();
             return NULL;

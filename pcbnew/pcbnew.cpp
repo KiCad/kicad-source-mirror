@@ -149,7 +149,7 @@ static struct IFACE : public KIFACE_I
             break;
 
         default:
-            ;
+            break;
         }
 
         return frame;

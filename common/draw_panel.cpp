@@ -725,8 +725,9 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
         org.y += KiROUND( gridSize.y );
 
     // Use a pixel based draw to display grid.  There are a lot of calls, so the cost is
-    // high and grid is slowly drawn on some platforms.  Please note that this should
-    // always be enabled until the bitmap based solution below is fixed.
+    // high and grid is slowly drawn on some platforms. An other way using blit transfert was used,
+    // a long time ago, but it did not give very good results.
+    // The better way is highly dependent on the platform and the graphic card.
 #ifndef __WXMAC__
     GRSetColorPen( aDC, GetParent()->GetGridColor() );
 #else
@@ -996,7 +997,7 @@ void EDA_DRAW_PANEL::OnMagnify( wxMouseEvent& event )
 
 void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 {
-    int          localrealbutt = 0, localbutt = 0;
+    int          localbutt = 0;
     BASE_SCREEN* screen = GetScreen();
 
     if( !screen )
@@ -1030,12 +1031,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( m_ignoreMouseEvents )
         return;
 
-    if( event.LeftIsDown() )
-        localrealbutt |= GR_M_LEFT_DOWN;
-
-    if( event.MiddleIsDown() )
-        localrealbutt |= GR_M_MIDDLE_DOWN;
-
     if( event.LeftDown() )
         localbutt = GR_M_LEFT_DOWN;
 
@@ -1044,8 +1039,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     if( event.MiddleDown() )
         localbutt = GR_M_MIDDLE_DOWN;
-
-    localrealbutt |= localbutt;     // compensation default wxGTK
 
     INSTALL_UNBUFFERED_DC( DC, this );
     DC.SetBackground( *wxBLACK_BRUSH );

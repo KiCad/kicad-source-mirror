@@ -441,7 +441,7 @@ LSEQ LSET::SeqStackupBottom2Top() const
 }
 
 
-LAYER_ID FlipLayer( LAYER_ID aLayerId )
+LAYER_ID FlipLayer( LAYER_ID aLayerId, int aCopperLayersCount )
 {
     switch( aLayerId )
     {
@@ -466,14 +466,28 @@ LAYER_ID FlipLayer( LAYER_ID aLayerId )
     case B_Fab:             return F_Fab;
     case F_Fab:             return B_Fab;
 
-    // No change for the other layers
-    default:
+    default:    // change internal layer if aCopperLayersCount is >= 4
+        if( IsCopperLayer( aLayerId ) && aCopperLayersCount >= 4 )
+        {
+            // internal copper layers count is aCopperLayersCount-2
+            LAYER_ID fliplayer = LAYER_ID(aCopperLayersCount - 2 - ( aLayerId - In1_Cu ) );
+            // Ensure fliplayer has a value which does not crash pcbnew:
+            if( fliplayer < F_Cu )
+                fliplayer = F_Cu;
+
+            if( fliplayer > B_Cu )
+                fliplayer = B_Cu;
+
+            return fliplayer;
+        }
+
+        // No change for the other layers
         return aLayerId;
     }
 }
 
 
-LSET FlipLayerMask( LSET aMask )
+LSET FlipLayerMask( LSET aMask, int aCopperLayersCount )
 {
     // layers on physical outside of a board:
     const static LSET and_mask( 16,     // !! update count
@@ -536,6 +550,25 @@ LSET FlipLayerMask( LSET aMask )
 
     if( aMask[F_Fab] )
         newMask.set( B_Fab );
+
+    if( aCopperLayersCount >= 4 )   // Internal layers exist
+    {
+        LSET internalMask = aMask & ~LSET::InternalCuMask();
+
+        if( internalMask != LSET::InternalCuMask() )
+        {   // the mask does not include all internal layers. Therefore
+            // the flipped mask for internal copper layers must be built
+            int innerLayerCnt = aCopperLayersCount -2;
+
+            for( int ii = 0; ii < innerLayerCnt; ii++ )
+            {
+                if( internalMask[innerLayerCnt - ii + In1_Cu] )
+                    newMask.set( ii + In1_Cu );
+                else
+                    newMask.reset( ii + In1_Cu );
+            }
+        }
+    }
 
     return newMask;
 }

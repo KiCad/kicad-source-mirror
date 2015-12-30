@@ -854,11 +854,12 @@ bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
 
     if( std::string::npos != tmp.find( "0x" ) )
     {
-        #warning TO BE IMPLEMENTED
-        // XXX - handle the case of a hex value.
-        // Rules: "0x" + "0-9, A-F" - pay attention to capitalization;
-        // if we encounter defective hex values (using 'a-f') we may
-        // consider relaxing the requirements.
+        // Rules: "0x" + "0-9, A-F" - VRML is case sensitive but in
+        // this instance we do no enforce case.
+        std::stringstream sstr;
+        sstr << std::hex << tmp;
+        sstr >> aSFInt32;
+        return true;
     }
 
     std::istringstream istr;
@@ -2183,6 +2184,12 @@ bool WRLPROC::GetFilePosData( size_t& line, size_t& column )
     column = m_linepos;
 
     return true;
+}
+
+
+std::string WRLPROC::GetFileName( void )
+{
+    return m_filename;
 }
 
 

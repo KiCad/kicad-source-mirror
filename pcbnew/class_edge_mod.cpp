@@ -318,6 +318,10 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
             MIRROR( m_PolyPoints[ii].y, 0 );
     }
 
+    // DRAWSEGMENT items are not usually on copper layers, but
+    // it can happen in microwave apps.
+    // However, currently, only on Front or Back layers.
+    // So the copper layers count is not taken in account
     SetLayer( FlipLayer( GetLayer() ) );
 }
 

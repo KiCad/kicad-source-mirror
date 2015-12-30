@@ -878,11 +878,9 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
 
 SCH_SHEET* SCH_SHEET_LIST::FindSheetByName( const wxString& aSheetName )
 {
-    SCH_SHEET* sheet = NULL;
-
     for( int i = 0; i < m_count; i++ )
     {
-        sheet = m_list[i].FindSheetByName( aSheetName );
+        SCH_SHEET* sheet = m_list[i].FindSheetByName( aSheetName );
 
         if( sheet )
             return sheet;

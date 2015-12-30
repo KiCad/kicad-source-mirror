@@ -616,16 +616,24 @@ inline bool IsBackLayer( LAYER_ID aLayerId )
 /**
  * Function FlippedLayerNumber
  * @return the layer number after flipping an item
- * some (not all) layers: external copper, Mask, Paste, and solder
+ * some (not all) layers: external copper, and paired layers( Mask, Paste, solder ... )
  * are swapped between front and back sides
+ * internal layers are flipped only if the copper layers count is known
+ * @param aLayer = the LAYER_ID to flip
+ * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
+ *  internal layers will be not flipped because the layer count is not known
  */
-LAYER_ID FlipLayer( LAYER_ID oldlayer );
+LAYER_ID FlipLayer( LAYER_ID aLayerId, int aCopperLayersCount = 0 );
 
 /**
  * Calculate the mask layer when flipping a footprint
  * BACK and FRONT copper layers, mask, paste, solder layers are swapped
+ * internal layers are flipped only if the copper layers count is known
+ * @param aMask = the LSET to flip
+ * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
+ *  internal layers will be not flipped because the layer count is not known
  */
-LSET FlipLayerMask( LSET aMask );
+LSET FlipLayerMask( LSET aMask, int aCopperLayersCount = 0 );
 
 /**
  * Return a string (to be shown to the user) describing a layer mask.

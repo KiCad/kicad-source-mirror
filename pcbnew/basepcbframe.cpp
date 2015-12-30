@@ -936,7 +936,7 @@ void PCB_BASE_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
 
     switch( aEvent.GetId() )
     {
-    case ID_MENU_CANVAS_DEFAULT:
+    case ID_MENU_CANVAS_LEGACY:
         break;
 
     case ID_MENU_CANVAS_CAIRO:

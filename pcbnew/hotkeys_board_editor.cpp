@@ -586,8 +586,8 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         evt_type = ID_MENU_CANVAS_OPENGL;
         break;
 
-    case HK_CANVAS_DEFAULT:
-        evt_type = ID_MENU_CANVAS_DEFAULT;
+    case HK_CANVAS_LEGACY:
+        evt_type = ID_MENU_CANVAS_LEGACY;
         break;
     case HK_ZONE_FILL_OR_REFILL:
         evt_type = ID_POPUP_PCB_FILL_ALL_ZONES;

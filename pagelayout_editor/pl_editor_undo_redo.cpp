@@ -105,7 +105,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList( wxCommandEvent& event )
     lastcmd = GetScreen()->PopCommandFromRedoList();
 
     wrapper = lastcmd->PopItem();
-    copyItem = (PL_ITEM_LAYOUT*)wrapper.GetItem();
+    copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
     pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
     delete copyItem;
 
@@ -136,7 +136,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList( wxCommandEvent& event )
     lastcmd = GetScreen()->PopCommandFromUndoList();
 
     wrapper = lastcmd->PopItem();
-    copyItem = (PL_ITEM_LAYOUT*)wrapper.GetItem();
+    copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
     pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
     delete copyItem;
 
@@ -156,6 +156,6 @@ void PL_EDITOR_FRAME::RemoveLastCommandInUndoList()
     PICKED_ITEMS_LIST* lastcmd = GetScreen()->PopCommandFromUndoList();
 
     ITEM_PICKER wrapper = lastcmd->PopItem();
-    PL_ITEM_LAYOUT* copyItem = (PL_ITEM_LAYOUT*)wrapper.GetItem();
+    PL_ITEM_LAYOUT* copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
     delete copyItem;
 }

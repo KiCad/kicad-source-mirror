@@ -58,6 +58,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent,
     m_stdButtonsOK->SetDefault();
 
     GetSizer()->SetSizeHints( this );
+    Layout();
 }
 
 

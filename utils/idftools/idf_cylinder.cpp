@@ -578,7 +578,7 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
 
     fprintf( fp, ".END_ELECTRICAL\n" );
     fclose( fp );
-    return;
+
     return;
 }
 

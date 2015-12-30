@@ -179,7 +179,8 @@ void TEXTE_PCB::Rotate( const wxPoint& aRotCentre, double aAngle )
 void TEXTE_PCB::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
-    SetLayer( FlipLayer( GetLayer() ) );
+    int copperLayerCount = GetBoard()->GetCopperLayerCount();
+    SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
     m_Mirror = !m_Mirror;
 }
 

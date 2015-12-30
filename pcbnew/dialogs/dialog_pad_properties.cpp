@@ -275,7 +275,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     {
         dim = m_dummyPad->GetDrillSize().y;
         if( dim == 0 )
-            dim = 1000000;
+            dim = Millimeter2iu( 0.1 );
     }
 
     if( m_dummyPad->GetLocalClearance() > 0 )
@@ -731,6 +731,7 @@ void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 bool DIALOG_PAD_PROPERTIES::padValuesOK()
 {
     bool error = transferDataToPad( m_dummyPad );
+    bool skip_tstoffset = false;    // the offset prm is not always tested
 
     wxArrayString error_msgs;
     wxString msg;
@@ -746,6 +747,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         (m_dummyPad->GetSize().y < m_dummyPad->GetDrillSize().y) )
     {
         error_msgs.Add(  _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
+        skip_tstoffset = true;  // offset prm will be not tested because if the drill value
+                                // is incorrect the offset prm is always seen as incorrect, even if it is 0
     }
 
     LSET padlayers_mask = m_dummyPad->GetLayerSet();
@@ -772,16 +775,19 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         }
     }
 
-    wxPoint max_size;
-    max_size.x = std::abs( m_dummyPad->GetOffset().x );
-    max_size.y = std::abs( m_dummyPad->GetOffset().y );
-    max_size.x += m_dummyPad->GetDrillSize().x / 2;
-    max_size.y += m_dummyPad->GetDrillSize().y / 2;
-
-    if( ( m_dummyPad->GetSize().x / 2 < max_size.x ) ||
-        ( m_dummyPad->GetSize().y / 2 < max_size.y ) )
+    if( !skip_tstoffset )
     {
-        error_msgs.Add( _( "Incorrect value for pad offset" ) );
+        wxPoint max_size;
+        max_size.x = std::abs( m_dummyPad->GetOffset().x );
+        max_size.y = std::abs( m_dummyPad->GetOffset().y );
+        max_size.x += m_dummyPad->GetDrillSize().x / 2;
+        max_size.y += m_dummyPad->GetDrillSize().y / 2;
+
+        if( ( m_dummyPad->GetSize().x / 2 < max_size.x ) ||
+            ( m_dummyPad->GetSize().y / 2 < max_size.y ) )
+        {
+            error_msgs.Add( _( "Incorrect value for pad offset" ) );
+        }
     }
 
     if( error )

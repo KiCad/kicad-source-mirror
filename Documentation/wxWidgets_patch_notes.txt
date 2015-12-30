@@ -1,12 +1,9 @@
 --== notes about wxWidgets problems ==--
-Last Revised: 02-jul-2015
+Last Revised: 28-dec-2015
 
 Kicad needs wxWidgets, the multi platform G.U.I toolkit.
 
-use *only* wxWidgets
->= 3.0.1 On Windows
->= 3.0.2 on Linux (prevision versions have bugs which crash Kicad)
->= 3.0.2 on OSX (which need patches: see patches/wxwidgets-3.0.0_macosx_xxx)
+use *only* wxWidgets >= 3.0.2
 
 Known bug on Windows:
 Postscript printers print tracks like thin line.
@@ -14,7 +11,7 @@ It happens only for PS drivers, and PDF printer.
 Other drivers (PCL for instance) work fine,
 so it is unlikely a bug inside Kicad/wxWidgets
 
-On 3.0.2 Window version 64 bits:
+Window version :
 The mirror mode gives a blank sheet.
 This is a bug in wxWidgets 3.0.2
 wxWidgets 3.0.2 must be patched (see patches/wxWidgets-3.0.2-msw-dc-orientation-fix.patch) and rebuilt.

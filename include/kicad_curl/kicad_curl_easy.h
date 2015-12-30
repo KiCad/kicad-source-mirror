@@ -52,8 +52,8 @@
  */
 struct KICAD_EASY_CURL_BUFFER
 {
-    char* payload;
-    size_t size;
+    char* Payload;
+    size_t Size;
 };
 
 
@@ -142,7 +142,7 @@ public:
      * @param aArg is the argument being passed to CURL, ensure it is the right type per manual
      * @return CURLcode - CURL error code, will return CURLE_OK unless a problem was encountered
      */
-    template <typename T> CURLcode SetOption( CURLoption aOption, T aArg ) 
+    template <typename T> CURLcode SetOption( CURLoption aOption, T aArg )
     { 
         return curl_easy_setopt( m_CURL, aOption, aArg ); 
     }

@@ -67,8 +67,6 @@ private:
     wxListBox*          m_libList;               // The list of libs names
     wxListBox*          m_footprintList;         // The list of footprint names
 
-    wxString            m_configPath;            // subpath for configuration
-
     const wxString      getCurNickname();
     void                setCurNickname( const wxString& aNickname );
 

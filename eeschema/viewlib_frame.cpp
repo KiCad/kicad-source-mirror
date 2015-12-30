@@ -93,6 +93,7 @@ END_EVENT_TABLE()
  */
 
 #define LIB_VIEW_FRAME_NAME wxT( "ViewlibFrame" )
+#define LIB_VIEW_FRAME_NAME_MODAL wxT( "ViewlibFrameModal" )
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
         PART_LIB* aLibrary ) :
@@ -100,18 +101,23 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
             wxDefaultPosition, wxDefaultSize,
             aFrameType==FRAME_SCH_VIEWER_MODAL ?
 #ifdef __WINDOWS__
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP :
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
 #else
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT :
+                aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+                          : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
 #endif
-                KICAD_DEFAULT_DRAWFRAME_STYLE,
-            LIB_VIEW_FRAME_NAME )
+                : KICAD_DEFAULT_DRAWFRAME_STYLE,
+            aFrameType == FRAME_SCH_VIEWER_MODAL ?
+                          LIB_VIEW_FRAME_NAME_MODAL : LIB_VIEW_FRAME_NAME )
 {
     wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
 
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
 
+    // Force the frame name used in config. the lib viewer frame has a name
+    // depending on aFrameType (needed to identify the frame by wxWidgets),
+    // but only one configuration is preferable.
     m_configFrameName = LIB_VIEW_FRAME_NAME;
 
     // Give an icon

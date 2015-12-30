@@ -39,6 +39,15 @@
  */
 class WRL2TRANSFORM : public WRL2NODE
 {
+private:
+    WRLVEC3F    center;
+    WRLVEC3F    scale;
+    WRLVEC3F    translation;
+    WRLROTATION rotation;
+    WRLROTATION scaleOrientation;
+    WRLVEC3F    bboxCenter;
+    WRLVEC3F    bboxSize;
+
 public:
 
     // functions inherited from WRL2NODE

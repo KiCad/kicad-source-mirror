@@ -71,6 +71,7 @@ public:
     // helper routines
     std::string GetError( void );
     bool GetFilePosData( size_t& line, size_t& column );
+    std::string GetFileName( void );
     // eatSpace discards all leading white space from the current m_linepos
     // and continues until a non-empty line is found which contains non-blank
     // characters

@@ -43,8 +43,8 @@ KICAD_CURL_EASY::KICAD_CURL_EASY()
         THROW_IO_ERROR( "Unable to initialize CURL session" );
     }
 
-    m_Buffer.payload = (char*)malloc( 1 );
-    m_Buffer.size = 0;
+    m_Buffer.Payload = (char*)malloc( 1 );
+    m_Buffer.Size = 0;
 
     curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
     curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void *)&m_Buffer );
@@ -53,7 +53,7 @@ KICAD_CURL_EASY::KICAD_CURL_EASY()
 
 KICAD_CURL_EASY::~KICAD_CURL_EASY()
 {
-    free(m_Buffer.payload);
+    free(m_Buffer.Payload);
     curl_easy_cleanup(m_CURL);
 }
 
@@ -110,27 +110,27 @@ static size_t write_callback( void *contents, size_t size, size_t nmemb, void *u
     struct KICAD_EASY_CURL_BUFFER *p = ( struct KICAD_EASY_CURL_BUFFER * ) userp;
 
     /* expand buffer */
-    p->payload = (char *) realloc( p->payload, p->size + realsize + 1 );
+    p->Payload = (char *) realloc( p->Payload, p->Size + realsize + 1 );
 
     /* check buffer */
-    if ( p->payload == NULL )
+    if ( p->Payload == NULL )
     {
         wxLogError( wxT( "Failed to expand buffer in curl_callback" ) );
 
         /* free buffer */
-        free( p->payload );
+        free( p->Payload );
 
         return -1;
     }
 
     /* copy contents to buffer */
-    memcpy( &(p->payload[p->size]), contents, realsize );
+    memcpy( &(p->Payload[p->Size]), contents, realsize );
 
     /* set new buffer size */
-    p->size += realsize;
+    p->Size += realsize;
 
     /* ensure null termination */
-    p->payload[p->size] = 0;
+    p->Payload[p->Size] = 0;
 
     /* return size */
     return realsize;
@@ -144,11 +144,11 @@ void KICAD_CURL_EASY::Perform()
         curl_easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
     }
 
-    if( m_Buffer.size > 0 )
+    if( m_Buffer.Size > 0 )
     {
-        free( m_Buffer.payload );
-        m_Buffer.payload = (char*)malloc( 1 );
-        m_Buffer.size = 0;
+        free( m_Buffer.Payload );
+        m_Buffer.Payload = (char*)malloc( 1 );
+        m_Buffer.Size = 0;
     }
 
     CURLcode res = curl_easy_perform( m_CURL );

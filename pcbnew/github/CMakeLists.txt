@@ -20,11 +20,6 @@
 #  or you may write to the Free Software Foundation, Inc.,
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-
-
-# Download avhttp and install the headers, not actually compiled
-#################################################
-
 # These are additions to any inherited from pcbnew dir:
 include_directories( . )
 
@@ -37,8 +32,6 @@ set( GITHUB_PLUGIN_SRCS
 
 add_library( github_plugin STATIC ${GITHUB_PLUGIN_SRCS} )
 
-# No, you don't get github without boost and openssl. Boost_LIBRARIES now moved up
-# into CMakeLists.txt for pcbnew and cvpcb:
 target_link_libraries( github_plugin
     common
     )

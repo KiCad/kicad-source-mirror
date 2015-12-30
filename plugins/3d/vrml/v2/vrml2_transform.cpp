@@ -78,12 +78,31 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
      *      exposedField    MFNode      children            []
      *      exposedField    SFRotation  rotation            0 0 1 0
      *      exposedField    SFVec3f     scale               1 1 1
-     *      exposedField    SFRotation  ScaleOrientation    0 0 1 0
+     *      exposedField    SFRotation  scaleOrientation    0 0 1 0
      *      exposedField    SFVec3f     translation         0 0 0
      *      field           SFVec3f     bboxCenter          0 0 0
      *      field           SFVec3f     bboxSize            0 0 0
      * }
      */
+
+    center.x = 0.0;
+    center.y = 0.0;
+    center.z = 0.0;
+
+    translation = center;
+    bboxCenter = center;
+    bboxSize = center;
+
+    rotation.x = 0.0;
+    rotation.y = 0.0;
+    rotation.z = 1.0;
+    rotation.w = 0.0;
+
+    scaleOrientation = rotation;
+
+    scale.x = 1.0;
+    scale.y = 1.0;
+    scale.z = 1.0;
 
     // XXX - TO BE IMPLEMENTED
     // XXX - at the moment this is half-assed code; it needs to be checked and expanded
@@ -114,7 +133,10 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     while( true )
     {
         if( proc.Peek() == '}' )
-            return true;
+        {
+            proc.Pop();
+            break;
+        }
 
         if( !proc.ReadName( glob ) )
         {
@@ -132,12 +154,46 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         // rotation
         // scale
         // ScaleOrientation
+        // translation
 
-        // XXX - TO BE IMPLEMENTED
-    }
+        if( !glob.compare( "center" ) )
+        {
+            // XXX -
+        }
+        else if( !glob.compare( "rotation" ) )
+        {
+            // XXX -
+        }
+        else if( !glob.compare( "scale" ) )
+        {
+            // XXX -
+        }
+        else if( !glob.compare( "scaleOrientation" ) )
+        {
+            // XXX -
+        }
+        else if( !glob.compare( "translation" ) )
+        {
+            // XXX -
+        }
+        else if( !glob.compare( "children" ) )
+        {
+            // XXX -
+        }
+        else
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad Transform at line " << line << ", column ";
+            std::cerr << column << "\n";
+            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+            #endif
 
-    // XXX - TO BE IMPLEMENTED
-    return false;
+            return false;
+        }
+    }   // while( true ) -- reading contents of Transform{}
+
+    return true;
 }
 
 
