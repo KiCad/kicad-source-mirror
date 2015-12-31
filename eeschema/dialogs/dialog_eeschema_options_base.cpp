@@ -13,11 +13,6 @@ BEGIN_EVENT_TABLE( DIALOG_EESCHEMA_OPTIONS_BASE, DIALOG_SHIM )
 	EVT_SIZE( DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnSize )
 	EVT_CHOICE( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnChooseUnits )
 	EVT_CHECKBOX( xwID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnMiddleBtnPanEnbl )
-	EVT_LIST_ITEM_DESELECTED( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnTemplateFieldDeselected )
-	EVT_LIST_ITEM_SELECTED( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnTemplateFieldSelected )
-	EVT_TEXT_ENTER( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnEnterKey )
-	EVT_TEXT_ENTER( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnEnterKey )
-	EVT_CHECKBOX( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnVisibleFieldClick )
 	EVT_BUTTON( wxID_ADD_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnAddButtonClick )
 	EVT_BUTTON( wxID_DELETE_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnDeleteButtonClick )
 END_EVENT_TABLE()
@@ -292,39 +287,39 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
-	templateFieldListCtrl = new wxListView( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	templateFieldListCtrl->SetMinSize( wxSize( 500,-1 ) );
+	m_fieldGrid = new wxGrid( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	bSizer11->Add( templateFieldListCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	// Grid
+	m_fieldGrid->CreateGrid( 0, 3 );
+	m_fieldGrid->EnableEditing( true );
+	m_fieldGrid->EnableGridLines( true );
+	m_fieldGrid->EnableDragGridSize( false );
+	m_fieldGrid->SetMargins( 0, 0 );
 	
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer4->AddGrowableCol( 1 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	// Columns
+	m_fieldGrid->SetColSize( 0, 150 );
+	m_fieldGrid->SetColSize( 1, 150 );
+	m_fieldGrid->SetColSize( 2, 75 );
+	m_fieldGrid->EnableDragColMove( false );
+	m_fieldGrid->EnableDragColSize( true );
+	m_fieldGrid->SetColLabelSize( 30 );
+	m_fieldGrid->SetColLabelValue( 0, _("Name") );
+	m_fieldGrid->SetColLabelValue( 1, _("Default Value") );
+	m_fieldGrid->SetColLabelValue( 2, _("Visible") );
+	m_fieldGrid->SetColLabelValue( 3, _("Name") );
+	m_fieldGrid->SetColLabelValue( 4, wxEmptyString );
+	m_fieldGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
-	fieldNameLabel = new wxStaticText( m_panel2, wxID_ANY, _("Na&me"), wxDefaultPosition, wxDefaultSize, 0 );
-	fieldNameLabel->Wrap( -1 );
-	fgSizer4->Add( fieldNameLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	// Rows
+	m_fieldGrid->EnableDragRowSize( true );
+	m_fieldGrid->SetRowLabelSize( 80 );
+	m_fieldGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
-	fieldNameTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	fgSizer4->Add( fieldNameTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	// Label Appearance
 	
-	fieldDefaultValueLabel = new wxStaticText( m_panel2, wxID_ANY, _("Defa&ult Value"), wxDefaultPosition, wxDefaultSize, 0 );
-	fieldDefaultValueLabel->Wrap( -1 );
-	fgSizer4->Add( fieldDefaultValueLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-	
-	fieldDefaultValueTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	fgSizer4->Add( fieldDefaultValueTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-	
-	fieldVisibleCheckbox = new wxCheckBox( m_panel2, wxID_ANY, _("&Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( fieldVisibleCheckbox, 0, wxALL, 5 );
-	
-	
-	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	bSizer11->Add( fgSizer4, 0, wxEXPAND, 5 );
+	// Cell Defaults
+	m_fieldGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer11->Add( m_fieldGrid, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizer6->Add( bSizer11, 1, wxEXPAND, 5 );

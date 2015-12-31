@@ -12,7 +12,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
-class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -30,8 +29,7 @@ class wxListView;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/listctrl.h>
-#include <wx/textctrl.h>
+#include <wx/grid.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
@@ -50,10 +48,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		void _wxFB_OnSize( wxSizeEvent& event ){ OnSize( event ); }
 		void _wxFB_OnChooseUnits( wxCommandEvent& event ){ OnChooseUnits( event ); }
 		void _wxFB_OnMiddleBtnPanEnbl( wxCommandEvent& event ){ OnMiddleBtnPanEnbl( event ); }
-		void _wxFB_OnTemplateFieldDeselected( wxListEvent& event ){ OnTemplateFieldDeselected( event ); }
-		void _wxFB_OnTemplateFieldSelected( wxListEvent& event ){ OnTemplateFieldSelected( event ); }
-		void _wxFB_OnEnterKey( wxCommandEvent& event ){ OnEnterKey( event ); }
-		void _wxFB_OnVisibleFieldClick( wxCommandEvent& event ){ OnVisibleFieldClick( event ); }
 		void _wxFB_OnAddButtonClick( wxCommandEvent& event ){ OnAddButtonClick( event ); }
 		void _wxFB_OnDeleteButtonClick( wxCommandEvent& event ){ OnDeleteButtonClick( event ); }
 		
@@ -115,12 +109,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkMiddleButtonPanLimited;
 		wxCheckBox* m_checkAutoPan;
 		wxPanel* m_panel2;
-		wxListView* templateFieldListCtrl;
-		wxStaticText* fieldNameLabel;
-		wxTextCtrl* fieldNameTextCtrl;
-		wxStaticText* fieldDefaultValueLabel;
-		wxTextCtrl* fieldDefaultValueTextCtrl;
-		wxCheckBox* fieldVisibleCheckbox;
+		wxGrid* m_fieldGrid;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -131,10 +120,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnChooseUnits( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTemplateFieldDeselected( wxListEvent& event ) { event.Skip(); }
-		virtual void OnTemplateFieldSelected( wxListEvent& event ) { event.Skip(); }
-		virtual void OnEnterKey( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnVisibleFieldClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		

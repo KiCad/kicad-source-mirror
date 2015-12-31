@@ -42,40 +42,17 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     // Dialog should not shrink beyond it's minimal size.
     GetSizer()->SetSizeHints( this );
 
-    wxListItem col0;
-    col0.SetId( 0 );
-    col0.SetText( _( "Field Name" ) );
-
-    wxListItem col1;
-    col1.SetId( 1 );
-    col1.SetText( _( "Default Value" ) );
-
-    wxListItem col2;
-    col2.SetId( 2 );
-    col2.SetText( _( "Visible" ) );
-
-    templateFieldListCtrl->InsertColumn( 0, col0 );
-    templateFieldListCtrl->InsertColumn( 1, col1 );
-    templateFieldListCtrl->InsertColumn( 2, col2 );
-
-    templateFieldListCtrl->SetColumnWidth( 0, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
-    templateFieldListCtrl->SetColumnWidth( 1, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
-    templateFieldListCtrl->SetColumnWidth( 2, templateFieldListCtrl->GetSize().GetWidth() / 3.5 );
-
-    // Invalid field selected
-    selectedField = -1;
+    // wxformbuilder doesn't seem to let us set minimal sizes. Copy the default
+    // sizes into the minimal sizes, then, and autosize:
+    for( int i = 0; i < m_fieldGrid->GetNumberCols(); ++i )
+    {
+        m_fieldGrid->SetColMinimalWidth( i, m_fieldGrid->GetColSize( i ) );
+        m_fieldGrid->AutoSizeColLabelSize( i );
+    }
 
     // Make sure we select the first tab of the options tab page
     m_notebook->SetSelection( 0 );
 
-    // Connect the edit controls for the template field names to the kill focus event which
-    // doesn't propogate, hence the need to connect it here.
-
-    fieldNameTextCtrl->Connect( wxEVT_KILL_FOCUS,
-            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
-
-    fieldDefaultValueTextCtrl->Connect( wxEVT_KILL_FOCUS,
-            wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
 }
 
 
@@ -161,86 +138,42 @@ void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& aGridSizes, int aGridId
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::RefreshTemplateFieldView( void )
-{
-    // Loop through the template fieldnames and add them to the list control
-    // or just change texts if room exists
-    long itemindex = 0;
-    wxString tmp;
-
-    for( TEMPLATE_FIELDNAMES::iterator fld = templateFields.begin();
-            fld != templateFields.end(); ++fld, itemindex++ )
-    {
-        if( templateFieldListCtrl->GetItemCount() <= itemindex )
-        {
-            templateFieldListCtrl->InsertItem(
-                templateFieldListCtrl->GetItemCount(), fld->m_Name );
-        }
-
-        wxListItem litem;
-        litem.SetId( itemindex );
-        templateFieldListCtrl->GetItem( litem );
-
-        litem.SetColumn( 0 );
-        if( litem.GetText() != fld->m_Name )
-            templateFieldListCtrl->SetItem( itemindex, 0, fld->m_Name );
-
-        litem.SetColumn( 1 );
-        if( litem.GetText() != fld->m_Value )
-            templateFieldListCtrl->SetItem( itemindex, 1, fld->m_Value );
-
-        tmp = ( fld->m_Visible == true ) ? _( "Visible" ) : _( "Hidden" );
-
-        litem.SetColumn( 2 );
-        if(  litem.GetText() != tmp )
-            templateFieldListCtrl->SetItem( itemindex, 2, tmp );
-    }
-
-    // Remove extra items:
-    while( templateFieldListCtrl->GetItemCount() > itemindex )
-    {
-        templateFieldListCtrl->DeleteItem( itemindex );
-    }
-
-}
-
-
-void DIALOG_EESCHEMA_OPTIONS::SelectTemplateField( int aItem )
-{
-    // Only select valid items!
-    if( ( aItem < 0 ) || ( aItem >= templateFieldListCtrl->GetItemCount() ) )
-        return;
-
-    // Make sure we select the new item in list control
-    if( templateFieldListCtrl->GetFirstSelected() != aItem )
-        templateFieldListCtrl->Select( aItem, true );
-}
-
-
 void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 {
-    // If there is currently a valid selection, copy the edit panel to the
-    // selected field so as not to lose the data
-    if( fieldSelectionValid( selectedField ) )
-        copyPanelToSelected();
+    // If a single row is selected, insert after that row.
+    int selected_row = -1;
+    int n_found = 0;
+
+    for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
+    {
+        bool this_row_selected = false;
+        for( int col = 0; col < m_fieldGrid->GetNumberCols(); ++col )
+        {
+            if( m_fieldGrid->IsInSelection( row, col ) )
+                this_row_selected = true;
+        }
+        if( this_row_selected )
+        {
+            selected_row = row;
+            ++n_found;
+        }
+    }
+
+    TransferDataFromWindow();
+
+    TEMPLATE_FIELDNAMES::iterator pos;
+
+    if( n_found == 1 )
+        pos = templateFields.begin() + selected_row + 1;
+    else
+        pos = templateFields.end();
 
     // Add a new fieldname to the fieldname list
     TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( "Fieldname" );
     newFieldname.m_Value = wxT( "Value" );
     newFieldname.m_Visible = false;
-    templateFields.push_back( newFieldname );
-
-    // Select the newly added field and then copy that data to the edit panel.
-    // Make sure any previously selected state is cleared and then select the
-    // new field
-    selectedField = templateFields.size() - 1;
-
-    // Update the display to reflect the new data
-    RefreshTemplateFieldView();
-    copySelectedToPanel();
-
-    // Make sure we select the new item
-    SelectTemplateField( selectedField );
+    templateFields.insert( pos, newFieldname );
+    TransferDataToWindow();
 
     event.Skip();
 }
@@ -248,97 +181,79 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
 
 void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
 {
-    // If there is currently a valid selection, delete the template field from
-    // the template field list
-    if( fieldSelectionValid( selectedField ) )
+    // wxGrid has a somewhat complex way of detemining selection.
+    // This is pretty much the easiest way to do it, here.
+
+    std::vector<bool> rows_to_delete( templateFields.size(), false );
+
+    for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
-        // Delete the fieldname from the fieldname list
-        templateFields.erase( templateFields.begin() + selectedField );
-
-        // If the selectedField is still not in the templateField range now,
-        // make sure we stay in range and when there are no fields present
-        // move to -1
-        if( selectedField >= int( templateFields.size() ) )
-            selectedField = templateFields.size() - 1;
-
-        // Update the display to reflect the new data
-        RefreshTemplateFieldView();
-
-        copySelectedToPanel();
-
-        // Make sure after the refresh that the selected item is correct
-        SelectTemplateField( selectedField );
+        for( int col = 0; col < m_fieldGrid->GetNumberCols(); ++col )
+        {
+            if( m_fieldGrid->IsInSelection( row, col ) )
+                rows_to_delete[row] = true;
+        }
     }
+
+    TransferDataFromWindow();
+
+    int n_rows = m_fieldGrid->GetNumberRows();
+    for( int count = 0; count < n_rows; ++count )
+    {
+        // Iterate backwards, unsigned-friendly way for future
+        int row = n_rows - count - 1;
+        if( rows_to_delete[row] )
+        {
+            templateFields.erase( templateFields.begin() + row );
+        }
+    }
+
+    TransferDataToWindow();
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::copyPanelToSelected( void )
+bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
 {
-    if( !fieldSelectionValid( selectedField ) )
-        return;
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
 
-    // Update the template field from the edit panel
-    templateFields[selectedField].m_Name = fieldNameTextCtrl->GetValue();
-    templateFields[selectedField].m_Value = fieldDefaultValueTextCtrl->GetValue();
-    templateFields[selectedField].m_Visible = fieldVisibleCheckbox->GetValue();
+    m_fieldGrid->Freeze();
+    if( m_fieldGrid->GetNumberRows() )
+        m_fieldGrid->DeleteRows( 0, m_fieldGrid->GetNumberRows() );
+    m_fieldGrid->AppendRows( templateFields.size() );
+
+    for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
+    {
+        m_fieldGrid->SetCellValue( row, 0, templateFields[row].m_Name );
+        m_fieldGrid->SetCellValue( row, 1, templateFields[row].m_Value );
+        m_fieldGrid->SetCellValue( row, 2,
+                templateFields[row].m_Visible ? wxT( "1" ) : wxEmptyString );
+
+        // Set cell properties
+        m_fieldGrid->SetCellAlignment( row, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+        m_fieldGrid->SetCellAlignment( row, 1, wxALIGN_LEFT, wxALIGN_CENTRE );
+
+        // Render the Visible column as a check box
+        m_fieldGrid->SetCellEditor( row, 2, new wxGridCellBoolEditor() );
+        m_fieldGrid->SetCellRenderer( row, 2, new wxGridCellBoolRenderer() );
+        m_fieldGrid->SetCellAlignment( row, 2, wxALIGN_CENTRE, wxALIGN_CENTRE );
+    }
+    m_fieldGrid->AutoSizeRows();
+    m_fieldGrid->Thaw();
+
+    return true;
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus( wxFocusEvent& event )
+bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
 {
-    // Update the data + UI
-    copyPanelToSelected();
-    RefreshTemplateFieldView();
-    SelectTemplateField( selectedField );
-
-    event.Skip();
-}
-
-void DIALOG_EESCHEMA_OPTIONS::OnEnterKey( wxCommandEvent& event )
-{
-    // Process the event produced when the user presses enter key
-    // in template fieldname text control or template fieldvalue text control
-    // Validate the current name or value, and switch focus to the other param
-    // (value or name)
-    copyPanelToSelected();
-    RefreshTemplateFieldView();
-
-    if( fieldNameTextCtrl->HasFocus() )
-        fieldDefaultValueTextCtrl->SetFocus();
-    else
-        fieldNameTextCtrl->SetFocus();
-}
-
-
-void DIALOG_EESCHEMA_OPTIONS::OnVisibleFieldClick( wxCommandEvent& event )
-{
-    // Process the event produced when the user click on
-    // the check box which controls the field visibility
-    copyPanelToSelected();
-    RefreshTemplateFieldView();
-}
-
-void DIALOG_EESCHEMA_OPTIONS::copySelectedToPanel( void )
-{
-    if( !fieldSelectionValid( selectedField ) )
-        return;
-
-    // Update the panel data from the selected template field
-    fieldNameTextCtrl->SetValue( templateFields[selectedField].m_Name );
-    fieldDefaultValueTextCtrl->SetValue( templateFields[selectedField].m_Value );
-    fieldVisibleCheckbox->SetValue( templateFields[selectedField].m_Visible );
-}
-
-
-void DIALOG_EESCHEMA_OPTIONS::OnTemplateFieldSelected( wxListEvent& event )
-{
-    // Before getting the new field data, make sure we save the old!
-    copyPanelToSelected();
-
-    // Now update the selected field and copy the data from the field to the
-    // edit panel
-    selectedField = event.GetIndex();
-    copySelectedToPanel();
+    for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
+    {
+        templateFields[row].m_Name = m_fieldGrid->GetCellValue( row, 0 );
+        templateFields[row].m_Value = m_fieldGrid->GetCellValue( row, 1 );
+        templateFields[row].m_Visible = ( m_fieldGrid->GetCellValue( row, 2 ) != wxEmptyString );
+    }
+    return true;
 }
 
 
@@ -347,18 +262,8 @@ void DIALOG_EESCHEMA_OPTIONS::SetTemplateFields( const TEMPLATE_FIELDNAMES& aFie
     // Set the template fields object
     templateFields = aFields;
 
-    // select the last field ( will set selectedField to -1 if no field ):
-    selectedField = templateFields.size()-1;
-
     // Build and refresh the view
-    RefreshTemplateFieldView();
-
-    if( selectedField >= 0 )
-    {
-        copySelectedToPanel();
-        SelectTemplateField( selectedField );
-    }
-
+    TransferDataToWindow();
 }
 
 
