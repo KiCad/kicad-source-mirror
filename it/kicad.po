@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-31 15:26+0100\n"
-"PO-Revision-Date: 2015-12-31 16:58+0100\n"
+"POT-Creation-Date: 2015-12-31 18:04+0100\n"
+"PO-Revision-Date: 2015-12-31 18:05+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -2373,7 +2373,7 @@ msgstr "Cancella voce"
 
 #: pcbnew/tools/pcbnew_control.cpp:918
 msgid "Not available in OpenGL/Cairo canvases."
-msgstr "Non disponibile in modalità OpenGL/Cairo."
+msgstr "Non disponibile con schermo OpenGL/Cairo."
 
 #: pcbnew/tools/drawing_tool.cpp:79 pcbnew/tools/drawing_tool.cpp:104
 #: pcbnew/edit.cpp:1476
@@ -4403,27 +4403,27 @@ msgstr "Visualizzatore &3D"
 
 #: pcbnew/menubar_modedit.cpp:243 pcbnew/menubar_pcbframe.cpp:360
 msgid "&Switch Canvas to Legacy"
-msgstr "Imposta &schermo tradizionale"
+msgstr "Passa a &schermo classico"
 
 #: pcbnew/menubar_modedit.cpp:247 pcbnew/menubar_pcbframe.cpp:364
 msgid "Switch the canvas implementation to Legacy"
-msgstr "Imposta lo schermo all'implementazione tradizionale"
+msgstr "Seleziona la modalità dello schermo classica"
 
 #: pcbnew/menubar_modedit.cpp:250 pcbnew/menubar_pcbframe.cpp:367
 msgid "Switch Canvas to Open&GL"
-msgstr "Imposta schermo a Open&GL"
+msgstr "Passa a schermo Open&GL"
 
 #: pcbnew/menubar_modedit.cpp:254 pcbnew/menubar_pcbframe.cpp:371
 msgid "Switch the canvas implementation to OpenGL"
-msgstr "Imposta lo schermo all'implementazione OpenGL"
+msgstr "Seleziona la modalità dello schermo OpenGL"
 
 #: pcbnew/menubar_modedit.cpp:257 pcbnew/menubar_pcbframe.cpp:374
 msgid "Switch Canvas to &Cairo"
-msgstr "Imposta schermo a &Cairo"
+msgstr "Passa a schermo &Cairo"
 
 #: pcbnew/menubar_modedit.cpp:261 pcbnew/menubar_pcbframe.cpp:378
 msgid "Switch the canvas implementation to Cairo"
-msgstr "Imposta lo schermo all'implementazione Cairo"
+msgstr "Seleziona la modalità dello schermo Cairo"
 
 #: pcbnew/menubar_modedit.cpp:269
 msgid "&Pad"
@@ -5533,7 +5533,7 @@ msgid "Select general options for Pcbnew"
 msgstr "Seleziona le opzioni generali per Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:529
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:137
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:133
 msgid "&Display"
 msgstr "&Viste"
 
@@ -7430,8 +7430,8 @@ msgstr "Orientamento"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:116
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:129
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:158
-#: eeschema/lib_pin.cpp:2004 eeschema/dialogs/dialog_eeschema_options.cpp:55
-#: eeschema/dialogs/dialog_eeschema_options.cpp:192
+#: eeschema/lib_pin.cpp:2004
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:309
 msgid "Visible"
 msgstr "Visibile"
 
@@ -7820,6 +7820,8 @@ msgstr "File netlist:"
 #: common/dialogs/dialog_env_var_config_base.cpp:38 eeschema/libedit.cpp:477
 #: eeschema/lib_pin.cpp:1977
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:151
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:307
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:310
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:186
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
@@ -8140,7 +8142,7 @@ msgstr ""
 "modifica "
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:78
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:205
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:201
 msgid "Ma&ximum undo items:"
 msgstr "Limite ma&x annullamenti:"
 
@@ -8293,7 +8295,7 @@ msgid "Ce&nter and warp cursor on zoom"
 msgstr "Ce&ntra e sposta il puntatore con lo zoom"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:167
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:261
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:257
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
 msgid "Keep the cursor at its current location when zooming"
@@ -8304,7 +8306,7 @@ msgid "Use middle mouse &button to pan"
 msgstr "Usa il tasto &centrale del mouse per il pan"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:172
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:266
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:262
 msgid "Use middle mouse button dragging to pan"
 msgstr "Usa il tasto centrale del mouse per trascinare il pan"
 
@@ -8313,13 +8315,14 @@ msgid "Limi&t panning to scroll size"
 msgstr "Limi&ta il pan alle dimensioni di scorrimento"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:177
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:271
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:267
 msgid "Middle mouse button panning limited by current scrollbar size"
 msgstr ""
 "Pan con il tasto centrale del mouse limitato dalle dimensioni correnti delle "
 "barre di scorrimento"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:181
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:271
 msgid "&Pan while moving object"
 msgstr "&Pan mentre si sposta un oggetto"
 
@@ -12706,15 +12709,15 @@ msgstr "Imposta origine griglia"
 
 #: pcbnew/hotkeys.cpp:134
 msgid "Switch to Legacy Canvas"
-msgstr "Modalità schermo classica"
+msgstr "Passa a schermo classico"
 
 #: pcbnew/hotkeys.cpp:140
 msgid "Switch to OpenGL Canvas"
-msgstr "Modalità schermo OpenGL"
+msgstr "Passa a schermo OpenGL"
 
 #: pcbnew/hotkeys.cpp:146
 msgid "Switch to Cairo Canvas"
-msgstr "Modalità schermo Cairo"
+msgstr "Passa a schermo Cairo"
 
 #: pcbnew/hotkeys.cpp:164 eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:63
 #: pagelayout_editor/hotkeys.cpp:73
@@ -17638,7 +17641,7 @@ msgid "Rescue Components"
 msgstr "Recupera componenti"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:36
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:50
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:45
 msgid "&Grid size:"
 msgstr "&Dimensione griglia:"
 
@@ -17650,12 +17653,12 @@ msgstr "&Dimensione griglia:"
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:100
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:111
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:125
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:59
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:169
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:180
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:201
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:54
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:65
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:76
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:165
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:176
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:197
 msgid "mils"
 msgstr "mils"
 
@@ -17676,12 +17679,12 @@ msgid "Def&ault pin name size:"
 msgstr "Dimensione nome pin predefinit&a:"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:93
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:162
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:158
 msgid "&Horizontal pitch of repeated items:"
 msgstr "Passo &orizzontale per gli elementi ripetuti:"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:104
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:173
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:169
 msgid "&Vertical pitch of repeated items:"
 msgstr "Passo &verticale per gli elementi ripetuti:"
 
@@ -17698,12 +17701,12 @@ msgid "50"
 msgstr "50"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:129
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:184
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:180
 msgid "&Increment of repeated labels:"
 msgstr "&Incremento delle etichette ripetute:"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:159
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:118
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:113
 msgid "&Show grid"
 msgstr "Mo&stra griglia"
 
@@ -17784,7 +17787,6 @@ msgstr "Selezionare se si vuole ruotare il campo di testo di 90 gradi"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:104
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:195
-#: eeschema/dialogs/dialog_eeschema_options.cpp:47
 msgid "Field Name"
 msgstr "Campo selezionato"
 
@@ -18457,7 +18459,6 @@ msgid "Schematic Properties"
 msgstr "Proprietà schema"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:95
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:320
 msgid "&Visible"
 msgstr "&Visibile"
 
@@ -18591,136 +18592,128 @@ msgstr ""
 msgid "Check for cache/library conflicts when loading schematic"
 msgstr "Controllo conflitti cache/libreria al caricamento dello schema"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:63
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:58
 msgid "&Bus thickness:"
 msgstr "Spessore &bus:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:74
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:69
 msgid "&Line thickness:"
 msgstr "Spessore &linea:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:85
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:80
 msgid "&Part ID notation:"
 msgstr "Notazione id &parte:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:84
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:276
 msgid "A"
 msgstr "A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:84
 msgid ".A"
 msgstr ".A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:84
 msgid "-A"
 msgstr "-A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:84
 msgid "_A"
 msgstr "_A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:84
 msgid ".1"
 msgstr ".1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:84
 msgid "-1"
 msgstr "-1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:84
 msgid "_1"
 msgstr "_1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:98
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:93
 msgid "&Auto-save time interval"
 msgstr "Cadenza salvataggio &automatico"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:105
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:100
 msgid "minutes"
 msgstr "minuti"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:121
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:116
 msgid "&Restrict buses and wires to H and V orientation"
 msgstr "Blocca l'o&rientamento bus e fili a ortogonale"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:124
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:119
 msgid "S&how hidden pins"
 msgstr "M&ostra piedini nascosti"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:127
-msgid "Sho&w page limi&ts"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:122
+msgid "Show page limi&ts"
 msgstr "Mostra limi&ti di pagina"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:146
 msgid "&Measurement units:"
 msgstr "Unità di &misura:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:194
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:190
 msgid "Def&ault text size:"
 msgstr "Dimensioni testo pre&definite:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:212
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
 msgid "(0 = unlimited)"
 msgstr "(0 = senza limiti)"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:225
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:221
 msgid "A&utomatically place component fields"
 msgstr "Piazza a&utomaticamente campi componente"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:228
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:224
 msgid "A&llow field autoplace to change justification"
 msgstr "Permette all'autopiazzamento campi di modificare la giustificazione"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:227
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr "Allinea sempre campi autopiazzati alla &griglia da 50 mil"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:241
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:237
 msgid "&Editing"
 msgstr "&Modifica"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:260
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:256
 msgid "Cen&ter and warp cursor on zoom"
 msgstr "Cen&tra e sposta il puntatore con lo zoom"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:265
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:261
 msgid "&Use middle mouse button to pan"
 msgstr "&Usa il tasto centrale del mouse per il pan"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:270
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:266
 msgid "&Limit panning to scroll size"
 msgstr "&Limita panoramica alle dimensioni scorrimento"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:275
-msgid "&Pan while moving ob&ject"
-msgstr "Sposta la vista spostando gli og&getti"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:285
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:281
 msgid "Co&ntrols"
 msgstr "Co&ntrolli"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:287
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:283
 msgid "User defined field names for schematic components. "
 msgstr "Campi nomi definiti dall'utente per i componenti dello schema."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:306
-msgid "Na&me"
-msgstr "No&me"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:308
+msgid "Default Value"
+msgstr "Valore predefinito"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:313
-msgid "Defa&ult Value"
-msgstr "&Valore predefinito"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:335
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:331
 msgid "&Add"
 msgstr "&Aggiungi"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:338
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:334
 msgid "De&lete"
 msgstr "Cance&lla"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:351
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:347
 msgid "Default &Fields"
 msgstr "Campi prede&finiti"
 
@@ -19267,14 +19260,6 @@ msgstr "Mostra testo nome pin"
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:117
 msgid "Pin name inside"
 msgstr "Nome pin interno"
-
-#: eeschema/dialogs/dialog_eeschema_options.cpp:51
-msgid "Default Value"
-msgstr "Valore predefinito"
-
-#: eeschema/dialogs/dialog_eeschema_options.cpp:192
-msgid "Hidden"
-msgstr "Nascosto"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:37
 msgid "Plugins"
@@ -19995,7 +19980,7 @@ msgstr "Colori"
 msgid "Pin Table"
 msgstr "Tabella pin"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.h:144
+#: eeschema/dialogs/dialog_eeschema_options_base.h:129
 msgid "Schematic Editor Options"
 msgstr "Opzioni editor schemi"
 
