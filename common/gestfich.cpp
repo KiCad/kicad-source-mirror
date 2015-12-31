@@ -44,17 +44,11 @@
 
 void AddDelimiterString( wxString& string )
 {
-    wxString text;
-
-    if( !string.StartsWith( wxT( "\"" ) ) )
-        text = wxT( "\"" );
-
-    text += string;
-
-    if( (text.Last() != '"' ) || (text.length() <= 1) )
-        text += wxT( "\"" );
-
-    string = text;
+    if ( string.length() > 0 && !string.StartsWith( wxT( "\"" ) ) )
+    {
+        string.Prepend( "\"" );
+        string.Append( "\"" );
+    }
 }
 
 
@@ -347,90 +341,34 @@ wxString KicadDatasPath()
 }
 
 
-bool OpenPDF( const wxString& file )
+bool OpenPDF( const wxString& filename )
 {
     wxString command;
-    wxString filename = file;
-    wxString type;
-    bool     success = false;
 
     Pgm().ReadPdfBrowserInfos();
 
     if( !Pgm().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
     {
         AddDelimiterString( filename );
-        command = Pgm().GetPdfBrowserName() + wxT( " " ) + filename;
+        command = AddDelimiterString( Pgm().GetPdfBrowserName() ) + wxT( " " ) + filename;
     }
     else
     {
-        wxFileType* filetype = NULL;
-        wxFileType::MessageParameters params( filename, type );
-        filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
-
-        if( filetype )
-            success = filetype->GetOpenCommand( &command, params );
-
+        wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
+        command = filetype->GetOpenCommand( filename );
         delete filetype;
-
-#ifndef __WINDOWS__
-
-        // Bug ? under linux wxWidgets returns acroread as PDF viewer, even if
-        // it does not exist.
-        if( command.StartsWith( wxT( "acroread" ) ) ) // Workaround
-            success = false;
-#endif
-
-        if( success && !command.IsEmpty() )
-        {
-            success = ProcessExecute( command );
-
-            if( success )
-                return success;
-        }
-
-        success = false;
-        command.clear();
-
-        if( !success )
-        {
-#if !defined(__WINDOWS__)
-            AddDelimiterString( filename );
-
-            // here is a list of PDF viewers candidates
-            static const wxChar* tries[] =
-            {
-                wxT( "/usr/bin/evince" ),
-                wxT( "/usr/bin/okular" ),
-                wxT( "/usr/bin/gpdf" ),
-                wxT( "/usr/bin/konqueror" ),
-                wxT( "/usr/bin/kpdf" ),
-                wxT( "/usr/bin/xpdf" ),
-                wxT( "/usr/bin/open" ),     // BSD and OSX file & dir opener
-                wxT( "/usr/bin/xdg-open" ), // Freedesktop file & dir opener
-            };
-
-            for( unsigned ii = 0;  ii<DIM(tries);  ii++ )
-            {
-                if( wxFileExists( tries[ii] ) )
-                {
-                    command = tries[ii];
-                    command += wxT( ' ' );
-                    command += filename;
-                    break;
-                }
-            }
-#endif
-        }
     }
 
-    if( !command.IsEmpty() )
+    if ( !command.IsEmpty() )
     {
-        success = ProcessExecute( command );
-
-        if( !success )
+        if ( ProcessExecute( command ) )
+        {
+            return true;
+        }
+        else
         {
             wxString msg;
-            msg.Printf( _( "Problem while running the PDF viewer\nCommand is '%s'" ),
+            msg.Printf( _( "Problem while running the PDF viewer\n Command is '%s'" ),
                         GetChars( command ) );
             DisplayError( NULL, msg );
         }
@@ -440,10 +378,9 @@ bool OpenPDF( const wxString& file )
         wxString msg;
         msg.Printf( _( "Unable to find a PDF viewer for <%s>" ), GetChars( filename ) );
         DisplayError( NULL, msg );
-        success = false;
     }
 
-    return success;
+    return false;
 }
 
 
