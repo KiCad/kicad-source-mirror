@@ -44,10 +44,10 @@
 
 void AddDelimiterString( wxString& string )
 {
-    if ( string.length() > 0 && !string.StartsWith( wxT( "\"" ) ) )
+    if ( !string.StartsWith( wxT( "\"" ) ) )
     {
-        string.Prepend( "\"" );
-        string.Append( "\"" );
+        string.Prepend ( wxT( "\"" ) );
+        string.Append ( wxT( "\"" ) );
     }
 }
 
@@ -221,6 +221,8 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 #ifdef __WXMAC__
     else
     {
+        AddDelimiterString( fullFileName );
+
         if( !param.IsEmpty() )
             fullFileName += wxT( " " ) + param;
 
@@ -341,16 +343,17 @@ wxString KicadDatasPath()
 }
 
 
-bool OpenPDF( const wxString& filename )
+bool OpenPDF( const wxString& file )
 {
     wxString command;
+    wxString filename = file;
 
     Pgm().ReadPdfBrowserInfos();
 
     if( !Pgm().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
     {
         AddDelimiterString( filename );
-        command = AddDelimiterString( Pgm().GetPdfBrowserName() ) + wxT( " " ) + filename;
+        command = Pgm().GetPdfBrowserName() + wxT( " " ) + filename;
     }
     else
     {
