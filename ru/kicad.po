@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-31 09:43+0300\n"
-"PO-Revision-Date: 2015-12-31 10:00+0300\n"
+"POT-Creation-Date: 2015-12-31 10:06+0300\n"
+"PO-Revision-Date: 2015-12-31 10:06+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -23087,51 +23087,6 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Импорт DXF файла"
-
-#~ msgid "&Default bus thickness:"
-#~ msgstr "Толщина шины по умолчанию:"
-
-#~ msgid "D&efault line thickness:"
-#~ msgstr "Толщина линии по умолчанию:"
-
-#~ msgid "De&fault text size:"
-#~ msgstr "Размер текста по умолчанию:"
-
-#~ msgid "&Part id notation:"
-#~ msgstr "Обозначение элемента компонента:"
-
-#~ msgid "Sho&w hidden pins"
-#~ msgstr "Показать скрытые выводы"
-
-#~ msgid "Pan while moving ob&ject"
-#~ msgstr "Панорамировать при перемещении объекта"
-
-#~ msgid "Show page limi&ts"
-#~ msgstr "Показать границы страницы"
-
-#~ msgid "Automatically place component fields"
-#~ msgstr "Автоматически разместить поля компонентов"
-
-#~ msgid "Allow field autoplace to change justification"
-#~ msgstr "Разрешить при авто-размещении поля изменять выравнивание"
-
-#~ msgid "Always align autoplaced fields to the 50 mil grid"
-#~ msgstr "Всегда выравнивать авто-размещенные поля по сетке 50 мил"
-
-#~ msgid "Field Settings"
-#~ msgstr "Настройки поля"
-
-#~ msgid "&Name"
-#~ msgstr "Имя"
-
-#~ msgid "D&efault Value"
-#~ msgstr "Значение по умолчанию"
-
-#~ msgid "Template Field Names"
-#~ msgstr "Шаблон имен полей"
-
-#~ msgid "Switch the canvas implementation to legacy"
-#~ msgstr "Переключить реализацию отображения на устаревшее"
 
 #~ msgid ""
 #~ "The Internet forum dedicated to KiCad Russian support, including GOST "
