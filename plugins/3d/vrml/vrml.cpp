@@ -176,6 +176,7 @@ SCENEGRAPH* Load( char const* aFileName )
         return NULL;
 
     LOCALESWITCH switcher;
+    SCENEGRAPH* scene = NULL;
 
     // VRML file processor
     WRLPROC proc;
@@ -207,10 +208,12 @@ SCENEGRAPH* Load( char const* aFileName )
             #ifdef DEBUG
             std::cout << " * [INFO] load completed\n";
             #endif
+
+            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL );
         }
 
         delete bp;
     }
 
-    return NULL;
+    return scene;
 }

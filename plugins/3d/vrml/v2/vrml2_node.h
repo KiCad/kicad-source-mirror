@@ -49,6 +49,7 @@
 #include "wrlproc.h"
 
 class WRL2BASE;
+class SGNODE;
 
 /**
  * Class WRL2NODE
@@ -65,6 +66,8 @@ protected:
     std::list< WRL2NODE* > m_Children;      // nodes owned by this node
     std::list< WRL2NODE* > m_Refs;          // nodes referenced by this node
     std::string m_error;
+
+    SGNODE* m_topNode;  // the SGNODE representation of the display data
 
 public:
 
@@ -173,6 +176,16 @@ public:
     virtual bool AddRefNode( WRL2NODE* aNode );
 
     std::string GetError( void );
+
+    /**
+     * Function TranslateToSG
+     * produces a representation of the data using the intermediate
+     * scenegraph structures of the kicad_3dsg library.
+     *
+     * @param aParent is a pointer to the parent SG node
+     * @return is non-NULL on success
+     */
+    virtual SGNODE* TranslateToSG( SGNODE* aParent ) = 0;
 };
 
 #endif  // VRML2_NODE_H

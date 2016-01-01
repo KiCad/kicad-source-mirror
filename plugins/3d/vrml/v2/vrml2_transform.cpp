@@ -333,3 +333,10 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
     return true;
 }
+
+
+SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
+{
+    // XXX - TO IMPLEMENT
+    return NULL;
+}

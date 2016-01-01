@@ -285,3 +285,10 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     return true;
 }
+
+
+SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent )
+{
+    // XXX - TO IMPLEMENT
+    return NULL;
+}

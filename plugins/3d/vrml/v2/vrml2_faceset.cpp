@@ -558,3 +558,10 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     return true;
 }
+
+
+SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent )
+{
+    // XXX - TO IMPLEMENT
+    return NULL;
+}

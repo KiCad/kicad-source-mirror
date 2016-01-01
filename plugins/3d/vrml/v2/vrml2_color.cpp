@@ -187,3 +187,10 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     return false;
 }
+
+
+SGNODE* WRL2COLOR::TranslateToSG( SGNODE* aParent )
+{
+    // XXX - TO IMPLEMENT
+    return NULL;
+}

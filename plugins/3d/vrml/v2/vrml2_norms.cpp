@@ -187,3 +187,10 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     return false;
 }
+
+
+SGNODE* WRL2NORMS::TranslateToSG( SGNODE* aParent )
+{
+    // XXX - TO IMPLEMENT
+    return NULL;
+}

@@ -32,6 +32,7 @@
 #include "vrml2_coords.h"
 #include "vrml2_norms.h"
 #include "vrml2_color.h"
+#include "plugins/3dapi/ifsg_all.h"
 
 
 WRL2BASE::WRL2BASE() : WRL2NODE()
@@ -761,4 +762,69 @@ bool WRL2BASE::readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         *aNode = (WRL2NODE*) np;
 
     return true;
+}
+
+
+SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
+{
+    if( m_Children.empty() )
+        return NULL;
+
+    if( m_topNode )
+        return m_topNode;
+
+    IFSG_TRANSFORM topNode( aParent );
+
+    std::list< WRL2NODE* >::iterator sC = m_Children.begin();
+    std::list< WRL2NODE* >::iterator eC = m_Children.end();
+    WRL2NODES type;
+
+    // Include only Shape and Transform nodes in the top node
+    bool test = false;  // set to true if there are any subnodes for display
+
+    while( sC != eC )
+    {
+        type = (*sC)->GetNodeType();
+
+        switch( type )
+        {
+        case WRL2_SHAPE:
+            // wrap the shape in a transform
+            do
+            {
+                IFSG_TRANSFORM wrapper( topNode.GetRawPtr() );
+                SGNODE* pshape = (*sC)->TranslateToSG( wrapper.GetRawPtr() );
+
+                if( NULL != pshape )
+                    test = true;
+                else
+                    wrapper.Destroy();
+
+            } while( 0 );
+
+            break;
+
+        case WRL2_TRANSFORM:
+
+            if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr() ) )
+                test = true;
+
+            break;
+
+        default:
+            break;
+        }
+
+        ++ sC;
+    }
+
+    if( false == test )
+    {
+        topNode.Destroy();
+        return NULL;
+    }
+
+    m_topNode = topNode.GetRawPtr();
+
+    return m_topNode;
 }

@@ -346,3 +346,10 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     return true;
 }
+
+
+SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
+{
+    // XXX - TO IMPLEMENT
+    return NULL;
+}

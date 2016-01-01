@@ -91,6 +91,7 @@ public:
     // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool SetParent( WRL2NODE* aParent );
+    SGNODE* TranslateToSG( SGNODE* aParent );
 };
 
 #endif  // VRML2_BASE_H

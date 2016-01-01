@@ -32,6 +32,7 @@
 #include "vrml2_node.h"
 
 class WRL2BASE;
+class SGNODE;
 
 /**
  * Class WRL2APPEARANCE
@@ -63,6 +64,7 @@ public:
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool AddRefNode( WRL2NODE* aNode );
     bool AddChildNode( WRL2NODE* aNode );
+    SGNODE* TranslateToSG( SGNODE* aParent );
 };
 
 #endif  // VRML2_APPEARANCE_H

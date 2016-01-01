@@ -187,3 +187,10 @@ bool WRL2COORDS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     return false;
 }
+
+
+SGNODE* WRL2COORDS::TranslateToSG( SGNODE* aParent )
+{
+    // XXX - TO IMPLEMENT
+    return NULL;
+}
