@@ -100,6 +100,8 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent  ) :
     m_localPrjConfigChanged = false;
     m_pagelayout = NULL;
 
+    m_PickDate->SetValue( wxDateTime::Now() );
+
     initDialog();
 
     GetSizer()->SetSizeHints( this );
