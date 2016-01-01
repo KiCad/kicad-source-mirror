@@ -44,7 +44,7 @@
 
 void AddDelimiterString( wxString& string )
 {
-    if ( !string.StartsWith( wxT( "\"" ) ) )
+    if( !string.StartsWith( wxT( "\"" ) ) )
     {
         string.Prepend ( wxT( "\"" ) );
         string.Append ( wxT( "\"" ) );
@@ -358,13 +358,16 @@ bool OpenPDF( const wxString& file )
     else
     {
         wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
-        command = filetype->GetOpenCommand( filename );
+
+        if( filetype )
+            command = filetype->GetOpenCommand( filename );
+
         delete filetype;
     }
 
-    if ( !command.IsEmpty() )
+    if( !command.IsEmpty() )
     {
-        if ( ProcessExecute( command ) )
+        if( ProcessExecute( command ) )
         {
             return true;
         }
