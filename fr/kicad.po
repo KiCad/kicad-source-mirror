@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-31 10:54+0100\n"
-"PO-Revision-Date: 2015-12-31 10:59+0100\n"
+"POT-Creation-Date: 2016-01-01 17:33+0100\n"
+"PO-Revision-Date: 2016-01-01 17:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1160,6 +1160,8 @@ msgstr "Aide sur Variables d'Environnement"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:186
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:305
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:308
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:151 eeschema/lib_pin.cpp:1977
 #: eeschema/libedit.cpp:477
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
@@ -2672,7 +2674,7 @@ msgid "Do not center and warp cusor on zoom"
 msgstr "Ne pas centrer et déplacer le curseur en zoomant"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:261
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:255
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:167
 msgid "Keep the cursor at its current location when zooming"
@@ -4074,7 +4076,6 @@ msgstr "Le style du texte du champ actuellement sélectionné"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:195
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:104
-#: eeschema/dialogs/dialog_eeschema_options.cpp:47
 msgid "Field Name"
 msgstr "Nom Champ"
 
@@ -4392,33 +4393,17 @@ msgid "Check for cache/library conflicts when loading schematic"
 msgstr ""
 "Vérifier les conflits entre cache et librairies au chargement du schéma"
 
-#: eeschema/dialogs/dialog_eeschema_options.cpp:51
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-#: eeschema/dialogs/dialog_eeschema_options.cpp:55
-#: eeschema/dialogs/dialog_eeschema_options.cpp:192 eeschema/lib_pin.cpp:2004
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:116
-#: pcbnew/dialogs/dialog_modedit_options_base.cpp:129
-#: pcbnew/dialogs/dialog_modedit_options_base.cpp:158
-msgid "Visible"
-msgstr "Visible"
-
-#: eeschema/dialogs/dialog_eeschema_options.cpp:192
-msgid "Hidden"
-msgstr "Invisible"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:50
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:43
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:36
 msgid "&Grid size:"
 msgstr "Dim &Grille:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:59
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:169
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:180
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:201
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:52
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:63
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:74
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:152
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:163
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:184
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:45
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:56
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:67
@@ -4430,182 +4415,184 @@ msgstr "Dim &Grille:"
 msgid "mils"
 msgstr "mils"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:63
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:56
 msgid "&Bus thickness:"
 msgstr "Épaisseur &Bus:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:74
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:67
 msgid "&Line thickness:"
 msgstr "Epaisseur de &Ligne:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:85
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:78
 msgid "&Part ID notation:"
 msgstr "Notation pour &Part ID:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:276
 msgid "A"
 msgstr "A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
 msgid ".A"
 msgstr ".A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
 msgid "-A"
 msgstr "-A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
 msgid "_A"
 msgstr "_A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
 msgid ".1"
 msgstr ".1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
 msgid "-1"
 msgstr "-1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
 msgid "_1"
 msgstr "_1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:98
-msgid "&Auto-save time interval"
-msgstr "&Intervalle de sauvegarde automatique"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:105
-msgid "minutes"
-msgstr "minutes"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:118
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:100
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:159
 msgid "&Show grid"
 msgstr "&Afficher la Grille"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:121
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:103
 msgid "&Restrict buses and wires to H and V orientation"
 msgstr "&Limiter orientation  bus et fils à H et V"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:124
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:106
 msgid "S&how hidden pins"
 msgstr "Afficher les pins &invisibles"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:127
-msgid "Sho&w page limi&ts"
-msgstr "Afficher limi&tes de page"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:109
+msgid "Show page limi&ts"
+msgstr " Afficher limi&tes de page"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:137
-#: pcbnew/menubar_pcbframe.cpp:529
-msgid "&Display"
-msgstr "&Affichage"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:120
+#: pcbnew/class_text_mod.cpp:382
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
+msgid "Display"
+msgstr "Affichage"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:133
 msgid "&Measurement units:"
 msgstr "&Unités de mesure:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:162
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:145
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:93
 msgid "&Horizontal pitch of repeated items:"
 msgstr "Pas &horizontal pour la répétition d'éléments:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:173
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:156
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:104
 msgid "&Vertical pitch of repeated items:"
 msgstr "Pas &vertical pour la répétition d'éléments:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:184
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:167
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:129
 msgid "&Increment of repeated labels:"
 msgstr "&Incrémentation des labels en répétition:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:194
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:177
 msgid "Def&ault text size:"
-msgstr "Taille  par déf&aut des textes:"
+msgstr "&Taille  par défaut des textes:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:205
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:188
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:78
 msgid "Ma&ximum undo items:"
 msgstr "Ma&ximum de niveaux d'annulation:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:212
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:195
 msgid "(0 = unlimited)"
 msgstr "(0 = non limité)"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:225
-msgid "A&utomatically place component fields"
-msgstr "Placer &automatiquement les champs des composants"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:199
+msgid "&Auto-save time interval"
+msgstr "&Intervalle de sauvegarde automatique"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:228
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:206
+msgid "minutes"
+msgstr "minutes"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:219
+msgid "A&utomatically place component fields"
+msgstr "Placer a&utomatiquement les champs des composants"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:222
 msgid "A&llow field autoplace to change justification"
 msgstr "&Autoriser le changement de justification des champs autoplacés"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:231
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:225
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr "&Toujours aligner champs autoplacés sur la grille de 50 mil"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:241
-msgid "&Editing"
-msgstr "&Editions"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:235
+msgid "Editing"
+msgstr "Edition"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:260
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:254
 msgid "Cen&ter and warp cursor on zoom"
 msgstr "Ce&ntrer et déplacer le curseur en zoomant"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:265
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:259
 msgid "&Use middle mouse button to pan"
 msgstr "&Utiliser le bouton du milieu de la souris pour recadrer l'affichage"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:266
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:260
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:172
 msgid "Use middle mouse button dragging to pan"
 msgstr "Utilise le bouton du milieu de la souris pour recadrer l'affichage"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:270
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:264
 msgid "&Limit panning to scroll size"
 msgstr "&Limiter le panning à la taille du \"scroll\" maximum"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:271
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:265
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:177
 msgid "Middle mouse button panning limited by current scrollbar size"
 msgstr "Panning par bouton souris limité par la taille du scrollbar courant"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:275
-msgid "&Pan while moving ob&ject"
-msgstr "&Pan lors du déplacement d'ob&jets"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:269
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:181
+msgid "&Pan while moving object"
+msgstr "&Pan lors du déplacement d'objets"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:285
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:279
 msgid "Co&ntrols"
 msgstr "Co&ntroles"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:287
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:281
 msgid "User defined field names for schematic components. "
 msgstr ""
 "Noms de champs définis par l'utilisateur pour les composants schématiques"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:306
-msgid "Na&me"
-msgstr "No&m"
+msgid "Default Value"
+msgstr "Valeur par Défaut"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:313
-msgid "Defa&ult Value"
-msgstr "Valeur par Défa&ut"
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:307
+#: eeschema/lib_pin.cpp:2004
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:116
+#: pcbnew/dialogs/dialog_modedit_options_base.cpp:129
+#: pcbnew/dialogs/dialog_modedit_options_base.cpp:158
+msgid "Visible"
+msgstr "Visible"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:320
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:95
-msgid "&Visible"
-msgstr "&Visible"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:335
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:329
 msgid "&Add"
 msgstr "&Ajouter"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:338
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:332
 msgid "De&lete"
 msgstr "&Supprimer"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:351
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:345
 msgid "Default &Fields"
 msgstr "&Champs par Défault"
 
@@ -4776,6 +4763,10 @@ msgstr "&Style graphique:"
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:93
 msgid "Schematic Properties"
 msgstr "Propriétés pour le Schéma"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:95
+msgid "&Visible"
+msgstr "&Visible"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:117
 msgid "N&ame text size:"
@@ -12703,12 +12694,6 @@ msgstr "Texte Pcb \"%s\" on %s"
 msgid "Ref."
 msgstr "Réf."
 
-#: pcbnew/class_text_mod.cpp:382
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
-msgid "Display"
-msgstr "Affichage"
-
 #: pcbnew/class_text_mod.cpp:388
 msgid " Yes"
 msgstr "Oui"
@@ -15408,10 +15393,6 @@ msgstr "Utiliser le bouton du &milieu de la souris pour recadrer l'affichage"
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:176
 msgid "Limi&t panning to scroll size"
 msgstr "Limi&ter le panning à la taille du \"scroll\" maximum"
-
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:181
-msgid "&Pan while moving object"
-msgstr "&Pan lors du déplacement d'objets"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:182
 msgid "Allows auto pan when creating a track, or moving an item."
@@ -20354,6 +20335,10 @@ msgstr "&Général "
 msgid "Select general options for Pcbnew"
 msgstr "Sélection options générales pour Pcbnew"
 
+#: pcbnew/menubar_pcbframe.cpp:529
+msgid "&Display"
+msgstr "&Affichage"
+
 #: pcbnew/menubar_pcbframe.cpp:530
 msgid "Select how items (pads, tracks texts ... ) are displayed"
 msgstr ""
@@ -22837,7 +22822,7 @@ msgstr "Éditeur de Texte"
 msgid "Field Properties"
 msgstr "Propriétés des Champs"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.h:144
+#: eeschema/dialogs/dialog_eeschema_options_base.h:129
 msgid "Schematic Editor Options"
 msgstr "Options de l'Éditeur de Schématique"
 
@@ -23254,223 +23239,8 @@ msgstr ""
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
 
-#~ msgid "&Default bus thickness:"
-#~ msgstr "Épaiss. bus par &défaut:"
-
-#~ msgid "D&efault line thickness:"
-#~ msgstr "&Épaisseur ligne par défaut:"
-
-#~ msgid "De&fault text size:"
-#~ msgstr "Taille des &textes par défaut:"
-
-#~ msgid "&Part id notation:"
-#~ msgstr "Notation pour &part id:"
-
-#~ msgid "Sho&w hidden pins"
-#~ msgstr "Afficher les pins &invisibles"
-
-#~ msgid "Pan while moving ob&ject"
-#~ msgstr "Pan lors du déplacement d'&objets"
-
-#~ msgid "Show page limi&ts"
-#~ msgstr " Afficher limi&tes de page"
-
-#~ msgid "Automatically place component fields"
-#~ msgstr "Placer automatiquement les champs des composants"
-
-#~ msgid "Allow field autoplace to change justification"
-#~ msgstr "Permettre le changement de justification des champs"
-
-#~ msgid "Always align autoplaced fields to the 50 mil grid"
-#~ msgstr "Toujours aligner champs autoplacés sur la grille de 50 mil"
-
-#~ msgid "Field Settings"
-#~ msgstr "Propriétés du Champ"
-
-#~ msgid "&Name"
-#~ msgstr "&Nom"
-
-#~ msgid "D&efault Value"
-#~ msgstr "Val&eur par Défaut:"
-
-#~ msgid "Template Field Names"
-#~ msgstr "Noms des Champs Modèles"
-
-#~ msgid "Switch the canvas implementation to legacy"
-#~ msgstr "Commuter l'affichage sur mode de base"
-
-#~ msgid "Exception '%s' in avhttp while open()-ing URI:'%s'"
-#~ msgstr "Exception '%s' en avhttp while open()-ing URI:'%s'"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "Cannot get/download data from: '%s'\n"
-#~ "Reason: '%s'"
-#~ msgstr ""
-#~ "%s\n"
-#~ "Ne peut pas obtenir/télécharger les données de: '%s'\n"
-#~ "raison: '%s'"
-
-#~ msgid "Switch to Default Canvas"
-#~ msgstr "Commuter sur l'Affichage par Défaut"
-
-#~ msgid "&Switch Canvas to Default"
-#~ msgstr "Commuter l'affichage &sur Défaut"
-
-#~ msgid "Switch the canvas implementation to default"
-#~ msgstr "Commuter l'affichage sur l'utilisation de l'affichage par défaut"
-
-#~ msgid ""
-#~ "The duplicated zone is on the same layer as the initial zone, which has "
-#~ "no sense.\n"
-#~ "Please, choose an other layer for the new zone"
-#~ msgstr ""
-#~ "La zone dupliquée est sur la même couche que la zone initiale, ce qui n'a "
-#~ "aucun sens. \n"
-#~ "SVP, choisir une autre couche pour la nouvelle zone"
-
-#~ msgid "The outline of the duplicated zone fails DRC check!"
-#~ msgstr "Le contour de la zone dupliquée ne passe pas le contrôle DRC!"
-
-#~ msgid "The original site of the initiator of KiCad"
-#~ msgstr "Le site original de l'initiateur de KiCad"
-
-#~ msgid "Project on Launchpad"
-#~ msgstr "Projet sur Launchpad"
-
-#~ msgid "The new KiCad site"
-#~ msgstr "Le nouveau site KiCad"
-
-#~ msgid "GNU General Public License (GPL) version 2 or any later version"
-#~ msgstr ""
-#~ "GNU General Public License (GPL) version 2 ou toute version ultérieure"
-
-#~ msgid "Delete Footprint %s (value %s) ?"
-#~ msgstr "Supprimer Empreinte %s (valeur %s) ?"
-
-#~ msgid "Top side"
-#~ msgstr "Coté composant"
-
-#~ msgid "Bottom side"
-#~ msgstr "Coté soudure"
-
-#~ msgid "Side"
-#~ msgstr "Coté"
-
-#~ msgid "Other rotation"
-#~ msgstr "Autre rotation"
-
-#~ msgid "Add module"
-#~ msgstr "Addition de modules"
-
-#~ msgid "Your BOARD has a bad layer number for module %s"
-#~ msgstr "Votre PCB a un mauvais numéro de couche  pour le module %s"
-
-#~ msgid "No modules for automated placement."
-#~ msgstr "Pas de module pour placement automatisé"
-
-#~ msgid "Unknown padshape '%c=0x%02x' on line: %d of module: '%s'"
-#~ msgstr "Forme de pad '%c=0x%02x' inconnue ligne: %d, module:'%s'"
-
-#~ msgid "OK to delete module %s in library '%s'"
-#~ msgstr "Ok pour effacer module %s en librairie '%s'"
-
-#~ msgid "Modules [%u items]"
-#~ msgstr "Modules [%u items]"
-
-#~ msgid "Module"
-#~ msgstr "Module"
-
-#~ msgid "Create a new library and save current module into it"
-#~ msgstr "Créer une nouvelle librairie et y sauver le composant"
-
-#~ msgid "cannot handle module text type %s"
-#~ msgstr "ne peut gérer le texte module type %s"
-
-#~ msgid "Add modules"
-#~ msgstr "Addition de Modules"
-
-#~ msgid "Lock module"
-#~ msgstr "Verrouiller module"
-
-#~ msgid "(Re)create components file (*.cmp) for CvPcb"
-#~ msgstr "(Re)créer le fichier de composants (*.cmp) pour CvPcb"
-
-#~ msgid "Footprint Wizards"
-#~ msgstr "Assistants de Création d'Empreinte"
-
-#~ msgid ""
-#~ "Enable/disable the DRC control.\n"
-#~ "When DRC is disable, all connections are allowed."
-#~ msgstr ""
-#~ "Active/désactive le contrôle DRC (Design Rule Check).\n"
-#~ "Lorsque de DRC est désactivé, toutes les connexions sont autorisées."
-
-#~ msgid ""
-#~ "select how the router handles DRC violation (shoving, walking around, "
-#~ "etc.)"
-#~ msgstr ""
-#~ "Sélectionner comment le routeur gère les violations de DRC (pousser, "
-#~ "contourner, etc..)"
-
-#~ msgid "The original site of the initiator of Kicad"
-#~ msgstr "Le site de l'initiateur de Kicad"
-
-#~ msgid "About Kicad"
-#~ msgstr "Au Sujet de Kicad"
-
-#~ msgid "About KiCad project manager"
-#~ msgstr "Au sujet de KiCad, gestionnaire de projet"
-
-#~ msgid "&Switch canvas to default"
-#~ msgstr "&Commuter l'affichage sur Défaut"
-
-#~ msgid "Switch canvas to Open&GL"
-#~ msgstr "Commuter l'affichage sur Open&GL"
-
-#~ msgid "Switch canvas to &Cairo"
-#~ msgstr "Commuter l'affichage sur Cair&o"
-
-#~ msgid "Select default parameters values in Footprint Editor"
-#~ msgstr ""
-#~ "Sélection des valeurs par défaut des  paramètres de l'Éditeur d'Empreintes"
-
-#~ msgid "Configure Interactive Routing."
-#~ msgstr "Configurer le router interactif."
-
-#~ msgid "Fast access to the Web Based FreeROUTE advanced router"
-#~ msgstr "Accès rapide au routeur avancé  FreeROUTE sur le Web"
-
-#~ msgid ""
-#~ "Show/hide the toolbar for microwave tools\n"
-#~ "This is a experimental feature (under development)"
-#~ msgstr ""
-#~ "Affiche/cache la toolbar auxiliaire pour applications micro-ondes\n"
-#~ "C'est un outil expérimental (en cours de développement)"
-
-#~ msgid "<b>Current general settings:</b><br>"
-#~ msgstr "<b>Réglages généraux courants:</b><br>"
-
-#~ msgid "Minimum value for tracks width: <b>%s</b><br>\n"
-#~ msgstr "Valeur minimum pour la largeur de piste: <b>%s</b><br>\n"
-
-#~ msgid "Minimum value for vias diameter: <b>%s</b><br>\n"
-#~ msgstr "Valeur minimum pour le diamètre de via: <b>%s</b><br>\n"
-
-#~ msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
-#~ msgstr "Valeur minimum pour le diamètre de microvia: <b>%s</b><br>\n"
-
-#~ msgid "Errors detected, Abort"
-#~ msgstr "Erreurs détectées, Abandon"
-
-#~ msgid "This NetClass is already existing, cannot add it; Aborted"
-#~ msgstr "Cette NetClass existe déjà, et ne peut être ajoutée; Abandon"
-
-#~ msgid "The default Netclass cannot be removed"
-#~ msgstr "La Netclass par défaut ne peut être supprimée"
-
-#~ msgid "I&DFv3 Export"
-#~ msgstr "I&DFv3 Export"
-
-#~ msgid "Redraw the screen of the board"
-#~ msgstr "Rafraîchir l'écran du circuit imprimé"
+#~ msgid "&Editing"
+#~ msgstr "&Editions"
+
+#~ msgid "&Pan while moving ob&ject"
+#~ msgstr "&Pan lors du déplacement d'ob&jets"
