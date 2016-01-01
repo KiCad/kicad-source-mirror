@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,26 +22,41 @@
  */
 
 /**
- * @file vrml2_helpers.h
- * helper functions for VRML2 processing
+ * @file vrml2_color.h
  */
 
-#ifndef VRML2_HELPERS_H
-#define VRML2_HELPERS_H
 
+#ifndef VRML2_COLOR_H
+#define VRML2_COLOR_H
 
-// Function to find a node object given a (non-unique) node name
-#define FIND_NODE( aName, aNodeList, aCallingNode ) do { \
-    std::list< WRL2NODE* >::iterator sLA = aNodeList.begin(); \
-    std::list< WRL2NODE* >::iterator eLA = aNodeList.end(); \
-    WRL2NODE* psg = NULL; \
-    while( sLA != eLA ) { \
-        if( (WRL2NODE*)*sLA != aCallingNode ) { \
-            psg = (*sLA)->FindNode( aName, this ); \
-            if( NULL != psg) \
-                return psg; \
-        } \
-        ++sLA; \
-    } } while ( 0 )
+#include <vector>
 
-#endif  // VRML2_HELPERS_H
+#include "vrml2_node.h"
+
+class WRL2BASE;
+
+/**
+ * Class WRL2COLOR
+ */
+class WRL2COLOR : public WRL2NODE
+{
+private:
+    std::vector< WRLVEC3F > colors;
+
+public:
+
+    // functions inherited from WRL2NODE
+    bool isDangling( void );
+
+public:
+    WRL2COLOR();
+    WRL2COLOR( WRL2NODE* aParent );
+    virtual ~WRL2COLOR();
+
+    // functions inherited from WRL2NODE
+    bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
+    bool AddRefNode( WRL2NODE* aNode );
+    bool AddChildNode( WRL2NODE* aNode );
+};
+
+#endif  // VRML2_COLOR_H

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,13 @@
 
 #include "vrml2_base.h"
 #include "vrml2_transform.h"
+#include "vrml2_shape.h"
+#include "vrml2_appearance.h"
+#include "vrml2_material.h"
+#include "vrml2_faceset.h"
+#include "vrml2_coords.h"
+#include "vrml2_norms.h"
+#include "vrml2_color.h"
 
 
 WRL2BASE::WRL2BASE() : WRL2NODE()
@@ -73,37 +80,6 @@ bool WRL2BASE::SetName( const std::string& aName )
 }
 
 
-void WRL2BASE::unlinkChildNode( const WRL2NODE* aNode )
-{
-    std::list< WRL2NODE* >::iterator sL = m_Children.begin();
-    std::list< WRL2NODE* >::iterator eL = m_Children.end();
-
-    while( sL != eL )
-    {
-        if( *sL == aNode )
-        {
-            m_Children.erase( sL );
-            return;
-        }
-
-        ++sL;
-    }
-
-    return;
-}
-
-
-void WRL2BASE::unlinkRefNode( const WRL2NODE* aNode )
-{
-    #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] WRL2BASE was invoked to unlink a referenced node\n";
-    #endif
-
-    return;
-}
-
-
 bool WRL2BASE::Read( WRLPROC& proc )
 {
     if( proc.GetVRMLType() != VRML_V2 )
@@ -128,21 +104,15 @@ bool WRL2BASE::Read( WRLPROC& proc )
 
 bool WRL2BASE::isDangling( void )
 {
+    // the base node is never dangling
     return false;
 }
 
 
 bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid node handle (NULL)\n";
-        #endif
-
-        return false;
-    }
+    if( NULL != aNode )
+        *aNode = NULL;
 
     if( !aParent )
     {
@@ -154,7 +124,6 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
         return false;
     }
 
-    *aNode = NULL;
     std::string glob;
 
     if( !proc.ReadName( glob ) )
@@ -192,7 +161,8 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
         return false;
     }
 
-    *aNode = ref;
+    if( NULL != aNode )
+        *aNode = ref;
 
     return true;
 }
@@ -200,15 +170,8 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
 bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid node handle (NULL)\n";
-        #endif
-
-        return false;
-    }
+    if( NULL != aNode )
+        *aNode = NULL;
 
     if( NULL == aParent )
     {
@@ -220,9 +183,8 @@ bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
         return false;
     }
 
-    *aNode = NULL;
-
     std::string glob;
+    WRL2NODE* lnode = NULL;
 
     if( !proc.ReadName( glob ) )
     {
@@ -237,9 +199,12 @@ bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
     size_t line, column;
     proc.GetFilePosData( line, column );
 
-    if( ReadNode( proc, aParent, aNode ) )
+    if( ReadNode( proc, aParent, &lnode ) )
     {
-        if( *aNode && !(*aNode)->SetName( glob ) )
+        if( NULL != aNode )
+            *aNode = lnode;
+
+        if( lnode && !lnode->SetName( glob ) )
         {
             #ifdef DEBUG
             size_t line, column;
@@ -251,23 +216,24 @@ bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
             return false;
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 
 bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid node handle (NULL)\n";
-        #endif
+    // This function reads a node and stores a pointer to it in aNode.
+    // A value 'true' is returned if a node is successfully read or,
+    // if the node is not supported, successfully discarded. Callers
+    // must always check the value of aNode when the function returns
+    // 'true' since it will be NULL if the node type is not supported.
 
-        return false;
-    }
+    if( NULL != aNode )
+        *aNode = NULL;
 
     if( NULL == aParent )
     {
@@ -278,8 +244,6 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         return false;
     }
-
-    *aNode = NULL;
 
     std::string glob;
     WRL2NODES ntype;
@@ -307,6 +271,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     // since we do not support PROTO or EXTERNPROTO, any unmatched names are
     // assumed to be defined via PROTO/EXTERNPROTO and deleted according to
     // a typical pattern.
+
     if( !glob.compare( "USE" ) )
     {
         if( !implementUse( proc, aParent, aNode ) )
@@ -396,20 +361,9 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         // items to be implemented:
         //
     case WRL2_APPEARANCE:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readAppearance( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
         break;
 
@@ -432,20 +386,9 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         break;
 
     case WRL2_COLOR:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readColor( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
         break;
 
@@ -468,20 +411,9 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         break;
 
     case WRL2_COORDINATE:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readCoords( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
         break;
 
@@ -540,72 +472,30 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         break;
 
     case WRL2_INDEXEDFACESET:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readFaceSet( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
         break;
 
     case WRL2_MATERIAL:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readMaterial( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
         break;
 
     case WRL2_NORMAL:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readNorms( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG
-        else
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        #endif
 
         break;
 
     case WRL2_SHAPE:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readShape( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
         break;
 
@@ -629,22 +519,9 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
     case WRL2_TRANSFORM:
     case WRL2_GROUP:
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
-            return false;
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
-        //if( !readTransform( proc, aParent, aNode ) )
-        //    return false;
+        if( !readTransform( proc, aParent, aNode ) )
+            return false;
 
         break;
 
@@ -697,7 +574,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         if( !proc.DiscardNode() )
         {
-        #ifdef DEBUG
+            #ifdef DEBUG
             std::cerr << proc.GetError() << "\n";
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] could not discard node at line " << line;
@@ -711,6 +588,19 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     }
 
     return true;
+}
+
+
+bool WRL2BASE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
+{
+    // this function makes no sense in the base node
+    #ifdef DEBUG
+    std::cerr << proc.GetError() << "\n";
+    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    std::cerr << " * [BUG] this method must never be invoked on a WRL2BASE object\n";
+    #endif
+
+    return false;
 }
 
 
@@ -734,14 +624,141 @@ bool WRL2BASE::readTransform( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode
 }
 
 
-bool WRL2BASE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
+bool WRL2BASE::readShape( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 {
-    // this function makes no sense in the base node
-    #ifdef DEBUG
-    std::cerr << proc.GetError() << "\n";
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this method must never be invoked on a WRL2BASE object\n";
-    #endif
+    if( NULL != aNode )
+        *aNode = NULL;
 
-    return false;
+    WRL2SHAPE* np = new WRL2SHAPE( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readAppearance( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2APPEARANCE* np = new WRL2APPEARANCE( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readMaterial( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2MATERIAL* np = new WRL2MATERIAL( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readFaceSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2FACESET* np = new WRL2FACESET( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readCoords( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2COORDS* np = new WRL2COORDS( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2NORMS* np = new WRL2NORMS( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2COLOR* np = new WRL2COLOR( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
 }

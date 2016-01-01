@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@
 #include <algorithm>
 
 #include "vrml2_node.h"
-#include "vrml2_helpers.h"
 
 
 static std::set< std::string > badNames;
@@ -146,8 +145,8 @@ WRL2NODE::~WRL2NODE()
 
     while( sC != eC )
     {
-        (*sC)->SetParent( NULL );
-        delete (*sC);
+        (*sC)->SetParent( NULL, false );
+        delete *sC;
         ++sC;
     }
 
@@ -158,6 +157,10 @@ WRL2NODE::~WRL2NODE()
 
 void WRL2NODE::addNodeRef( WRL2NODE* aNode )
 {
+    // the parent node must never be added as a backpointer
+    if( aNode == m_Parent )
+        return;
+
     std::list< WRL2NODE* >::iterator np =
         std::find( m_BackPointers.begin(), m_BackPointers.end(), aNode );
 
@@ -239,7 +242,7 @@ bool WRL2NODE::SetName( const std::string& aName )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid node name '" << *item;
+        std::cerr << " * [INFO] invalid node name '" << aName;
         std::cerr<< "' (contains invalid character)\n";
         #endif
         return false;
@@ -253,11 +256,14 @@ bool WRL2NODE::SetName( const std::string& aName )
 
 const char* WRL2NODE::GetNodeTypeName( WRL2NODES aNodeType ) const
 {
-    if( aNodeType < WRL2_BEGIN || aNodeType >= WRL2_END )
-        return NULL;
+    if( aNodeType < WRL2_BASE || aNodeType >= WRL2_END )
+        return "*INVALID_TYPE*";
+
+    if( aNodeType == WRL2_BASE )
+        return "*VIRTUAL_BASE*";
 
     NODEMAP::iterator it = nodenames.begin();
-    advance( it, aNodeType );
+    advance( it, (aNodeType - WRL2_BEGIN) );
 
     return it->first.c_str();
 }
@@ -288,18 +294,37 @@ WRL2NODE* WRL2NODE::FindNode( const std::string& aNodeName, const WRL2NODE *aCal
     if( !m_Name.compare( aNodeName ) )
         return this;
 
-    FIND_NODE( aNodeName, m_Children, this );
+    std::list< WRL2NODE* >::iterator sLA = m_Children.begin();
+    std::list< WRL2NODE* >::iterator eLA = m_Children.end();
+
+    WRL2NODE* psg = NULL;
+
+    while( sLA != eLA )
+    {
+        if( *sLA != aCaller )
+        {
+            psg = (*sLA)->FindNode( aNodeName, this );
+
+            if( NULL != psg)
+                return psg;
+
+        }
+        ++sLA;
+    }
+
+    if( NULL != m_Parent && aCaller != m_Parent )
+        return m_Parent->FindNode( aNodeName, this );
 
     return NULL;
 }
 
 
-bool WRL2NODE::SetParent( WRL2NODE* aParent )
+bool WRL2NODE::SetParent( WRL2NODE* aParent, bool doUnlink )
 {
     if( aParent == m_Parent )
         return true;
 
-    if( NULL != m_Parent )
+    if( NULL != m_Parent && doUnlink )
         m_Parent->unlinkChildNode( this );
 
     m_Parent = aParent;
@@ -329,6 +354,8 @@ bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
     {
         if( *sC == aNode )
             return false;
+
+        ++sC;
     }
 
     aNode->SetParent( this );
@@ -370,4 +397,44 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
     m_Refs.push_back( aNode );
 
     return true;
+}
+
+
+void WRL2NODE::unlinkChildNode( const WRL2NODE* aNode )
+{
+    std::list< WRL2NODE* >::iterator sL = m_Children.begin();
+    std::list< WRL2NODE* >::iterator eL = m_Children.end();
+
+    while( sL != eL )
+    {
+        if( *sL == aNode )
+        {
+            m_Children.erase( sL );
+            return;
+        }
+
+        ++sL;
+    }
+
+    return;
+}
+
+
+void WRL2NODE::unlinkRefNode( const WRL2NODE* aNode )
+{
+    std::list< WRL2NODE* >::iterator sL = m_Refs.begin();
+    std::list< WRL2NODE* >::iterator eL = m_Refs.end();
+
+    while( sL != eL )
+    {
+        if( *sL == aNode )
+        {
+            m_Refs.erase( sL );
+            return;
+        }
+
+        ++sL;
+    }
+
+    return;
 }

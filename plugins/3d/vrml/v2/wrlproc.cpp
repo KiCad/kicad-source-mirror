@@ -2215,7 +2215,7 @@ char WRLPROC::Peek( void )
             m_error = ostr.str();
         }
 
-        return false;
+        return '\0';
     }
 
     return m_buf[m_linepos];

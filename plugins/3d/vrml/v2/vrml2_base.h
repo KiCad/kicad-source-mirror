@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,18 +55,24 @@
  */
 class WRL2BASE : public WRL2NODE
 {
-public:
-
-    // functions inherited from WRL2NODE
-    void unlinkChildNode( const WRL2NODE* aNode );
-    void unlinkRefNode( const WRL2NODE* aNode );
-    bool isDangling( void );
-
+private:
     // handle cases of USE / DEF
     bool implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
     bool readTransform( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readShape( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readAppearance( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readMaterial( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readFaceSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readCoords( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+
+public:
+
+    // functions inherited from WRL2NODE
+    bool isDangling( void );
 
 public:
     WRL2BASE();

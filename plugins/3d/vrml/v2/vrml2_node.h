@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,7 @@ public:
      *
      * @param aNode is the child which is being deleted
      */
-    virtual void unlinkChildNode( const WRL2NODE* aNode ) = 0;
+    void unlinkChildNode( const WRL2NODE* aNode );
 
     /**
      * Function unlinkRef
@@ -91,7 +91,7 @@ public:
      *
      * @param aNode is the node which is being deleted
      */
-    virtual void unlinkRefNode( const WRL2NODE* aNode ) = 0;
+    void unlinkRefNode( const WRL2NODE* aNode );
 
     /**
      * Function addNodeRef
@@ -145,11 +145,12 @@ public:
      * sets the parent WRL2NODE of this object.
      *
      * @param aParent [in] is the desired parent node
+     * @param doUnlink indicates that the child must be unlinked from the parent
      * @return true if the operation succeeds; false if
      * the given node is not allowed to be a parent to
      * the derived object.
      */
-    virtual bool SetParent( WRL2NODE* aParent );
+    virtual bool SetParent( WRL2NODE* aParent, bool doUnlink = true );
 
     virtual std::string GetName( void );
     virtual bool SetName( const std::string& aName );
@@ -167,7 +168,7 @@ public:
      */
     virtual WRL2NODE* FindNode( const std::string& aNodeName, const WRL2NODE *aCaller );
 
-    bool AddChildNode( WRL2NODE* aNode );
+    virtual bool AddChildNode( WRL2NODE* aNode );
 
     virtual bool AddRefNode( WRL2NODE* aNode );
 

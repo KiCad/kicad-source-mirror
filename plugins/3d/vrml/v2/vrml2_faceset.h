@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,32 +22,50 @@
  */
 
 /**
- * @file vrml2_transform.h
+ * @file vrml2_faceset.h
  */
 
 
-#ifndef VRML2_TRANSFORM_H
-#define VRML2_TRANSFORM_H
+#ifndef VRML2_FACESET_H
+#define VRML2_FACESET_H
+
+#include <vector>
 
 #include "vrml2_node.h"
 
 class WRL2BASE;
 
 /**
- * Class WRL2TRANSFORM
+ * Class WRL2FACESET
  */
-class WRL2TRANSFORM : public WRL2NODE
+class WRL2FACESET : public WRL2NODE
 {
 private:
-    WRLVEC3F    center;
-    WRLVEC3F    scale;
-    WRLVEC3F    translation;
-    WRLROTATION rotation;
-    WRLROTATION scaleOrientation;
-    WRLVEC3F    bboxCenter;
-    WRLVEC3F    bboxSize;
+    WRL2NODE* color;
+    WRL2NODE* coord;
+    WRL2NODE* normal;
+    WRL2NODE* texCoord;
 
-    bool readChildren( WRLPROC& proc, WRL2BASE* aTopNode );
+    bool ccw;
+    bool colorPerVertex;
+    bool convex;
+    bool normalPerVertex;
+    bool solid;
+
+    std::vector< int > colorIndex;
+    std::vector< int > coordIndex;
+    std::vector< int > normalIndex;
+
+    float creaseAngle;
+
+
+    /**
+     * Function checkNodeType
+     * returns true if the node type is a valid subnode of FaceSet
+     */
+    bool checkNodeType( WRL2NODES aType );
+
+    void setDefaults( void );
 
 public:
 
@@ -55,13 +73,14 @@ public:
     bool isDangling( void );
 
 public:
-    WRL2TRANSFORM();
-    WRL2TRANSFORM( WRL2NODE* aNode );
-    virtual ~WRL2TRANSFORM();
+    WRL2FACESET();
+    WRL2FACESET( WRL2NODE* aParent );
+    virtual ~WRL2FACESET();
 
     // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool AddRefNode( WRL2NODE* aNode );
+    bool AddChildNode( WRL2NODE* aNode );
 };
 
-#endif  // VRML2_TRANSFORM_H
+#endif  // VRML2_FACESET_H

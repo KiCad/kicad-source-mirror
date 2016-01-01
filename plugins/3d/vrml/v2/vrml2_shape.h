@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,32 +22,31 @@
  */
 
 /**
- * @file vrml2_transform.h
+ * @file vrml2_shape.h
  */
 
 
-#ifndef VRML2_TRANSFORM_H
-#define VRML2_TRANSFORM_H
+#ifndef VRML2_SHAPE_H
+#define VRML2_SHAPE_H
 
 #include "vrml2_node.h"
 
 class WRL2BASE;
 
 /**
- * Class WRL2TRANSFORM
+ * Class WRL2SHAPE
  */
-class WRL2TRANSFORM : public WRL2NODE
+class WRL2SHAPE : public WRL2NODE
 {
 private:
-    WRLVEC3F    center;
-    WRLVEC3F    scale;
-    WRLVEC3F    translation;
-    WRLROTATION rotation;
-    WRLROTATION scaleOrientation;
-    WRLVEC3F    bboxCenter;
-    WRLVEC3F    bboxSize;
+    WRL2NODE* appearance;
+    WRL2NODE* geometry;
 
-    bool readChildren( WRLPROC& proc, WRL2BASE* aTopNode );
+    /**
+     * Function checkNodeType
+     * returns true if the node type is an appearance or geometry class
+     */
+    bool checkNodeType( WRL2NODES aType );
 
 public:
 
@@ -55,13 +54,14 @@ public:
     bool isDangling( void );
 
 public:
-    WRL2TRANSFORM();
-    WRL2TRANSFORM( WRL2NODE* aNode );
-    virtual ~WRL2TRANSFORM();
+    WRL2SHAPE();
+    WRL2SHAPE( WRL2NODE* aParent );
+    virtual ~WRL2SHAPE();
 
     // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool AddRefNode( WRL2NODE* aNode );
+    bool AddChildNode( WRL2NODE* aNode );
 };
 
-#endif  // VRML2_TRANSFORM_H
+#endif  // VRML2_SHAPE_H
