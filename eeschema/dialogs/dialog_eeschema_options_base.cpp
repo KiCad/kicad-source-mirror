@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,8 +28,6 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_notebook->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
 	m_panel5 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer82;
 	bSizer82 = new wxBoxSizer( wxVERTICAL );
@@ -90,17 +88,6 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_staticText221 = new wxStaticText( m_panel5, wxID_ANY, _("&Auto-save time interval"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText221->Wrap( -1 );
-	fgSizer32->Add( m_staticText221, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
-	
-	m_spinAutoSaveInterval = new wxSpinCtrl( m_panel5, ID_M_SPINAUTOSAVEINTERVAL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 10 );
-	fgSizer32->Add( m_spinAutoSaveInterval, 0, wxALL|wxEXPAND, 3 );
-	
-	m_staticText23 = new wxStaticText( m_panel5, wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText23->Wrap( -1 );
-	fgSizer32->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
-	
 	
 	bSizer82->Add( fgSizer32, 0, wxALL|wxEXPAND, 5 );
 	
@@ -130,7 +117,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel5->SetSizer( bSizer82 );
 	m_panel5->Layout();
 	bSizer82->Fit( m_panel5 );
-	m_notebook->AddPage( m_panel5, _("&Display"), false );
+	m_notebook->AddPage( m_panel5, _("Display"), true );
 	m_panel3 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -209,6 +196,17 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText22->Wrap( -1 );
 	fgSizer3->Add( m_staticText22, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
 	
+	m_staticText221 = new wxStaticText( m_panel3, wxID_ANY, _("&Auto-save time interval"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText221->Wrap( -1 );
+	fgSizer3->Add( m_staticText221, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	
+	m_spinAutoSaveInterval = new wxSpinCtrl( m_panel3, ID_M_SPINAUTOSAVEINTERVAL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 10 );
+	fgSizer3->Add( m_spinAutoSaveInterval, 0, wxALL|wxEXPAND, 3 );
+	
+	m_staticText23 = new wxStaticText( m_panel3, wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText23->Wrap( -1 );
+	fgSizer3->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	
 	
 	bSizer8->Add( fgSizer3, 0, wxALL|wxEXPAND, 5 );
 	
@@ -234,7 +232,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel3->SetSizer( bSizer8 );
 	m_panel3->Layout();
 	bSizer8->Fit( m_panel3 );
-	m_notebook->AddPage( m_panel3, _("&Editing"), false );
+	m_notebook->AddPage( m_panel3, _("Editing"), false );
 	m_panel4 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxVERTICAL );
@@ -278,7 +276,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel4->SetSizer( bSizer81 );
 	m_panel4->Layout();
 	bSizer81->Fit( m_panel4 );
-	m_notebook->AddPage( m_panel4, _("Co&ntrols"), true );
+	m_notebook->AddPage( m_panel4, _("Co&ntrols"), false );
 	m_panel2 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	

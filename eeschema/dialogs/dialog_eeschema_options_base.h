@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -74,9 +74,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticLineWidthUnits;
 		wxStaticText* m_staticText26;
 		wxChoice* m_choiceSeparatorRefId;
-		wxStaticText* m_staticText221;
-		wxSpinCtrl* m_spinAutoSaveInterval;
-		wxStaticText* m_staticText23;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkShowGrid;
 		wxCheckBox* m_checkHVOrientation;
@@ -99,6 +96,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_stMaxUndoItems;
 		wxSpinCtrl* m_spinMaxUndoItems;
 		wxStaticText* m_staticText22;
+		wxStaticText* m_staticText221;
+		wxSpinCtrl* m_spinAutoSaveInterval;
+		wxStaticText* m_staticText23;
 		wxStaticLine* m_staticline2;
 		wxCheckBox* m_checkAutoplaceFields;
 		wxCheckBox* m_checkAutoplaceJustify;
