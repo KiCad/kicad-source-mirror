@@ -1,10 +1,14 @@
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/v2 )
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/v2
+)
 
 #add_definitions( -DDEBUG_VRML2=3 )
+#add_definitions( -DDEBUG_VRML1=3 )
 
 add_library( s3d_plugin_vrml MODULE
         vrml.cpp
-        v2/wrlproc.cpp
+        wrlproc.cpp
         v2/vrml2_node.cpp
         v2/vrml2_base.cpp
         v2/vrml2_transform.cpp
