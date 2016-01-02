@@ -299,7 +299,8 @@ SCENEGRAPH* Load( char const* aFileName )
     if( data )
     {
         wxFileName fn( aFileName );
-        wxString output = fn.GetName();
+        wxString output = wxT( "z" );
+        output.append( fn.GetName() );
         output.append( wxT(".wrl") );
         S3D::WriteVRML( output, true, (SGNODE*)(data), true, true );
     }

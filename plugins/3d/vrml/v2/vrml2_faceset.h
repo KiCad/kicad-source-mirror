@@ -82,7 +82,7 @@ public:
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool AddRefNode( WRL2NODE* aNode );
     bool AddChildNode( WRL2NODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent );
+    SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
 };
 
 #endif  // VRML2_FACESET_H

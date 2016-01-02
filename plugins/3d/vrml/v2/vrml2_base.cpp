@@ -765,13 +765,13 @@ bool WRL2BASE::readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 }
 
 
-SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
+SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
     if( m_Children.empty() )
         return NULL;
 
-    if( m_topNode )
-        return m_topNode;
+    if( m_sgNode )
+        return m_sgNode;
 
     IFSG_TRANSFORM topNode( aParent );
 
@@ -793,7 +793,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
             do
             {
                 IFSG_TRANSFORM wrapper( topNode.GetRawPtr() );
-                SGNODE* pshape = (*sC)->TranslateToSG( wrapper.GetRawPtr() );
+                SGNODE* pshape = (*sC)->TranslateToSG( wrapper.GetRawPtr(), calcNormals );
 
                 if( NULL != pshape )
                     test = true;
@@ -806,7 +806,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
 
         case WRL2_TRANSFORM:
 
-            if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr() ) )
+            if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr(), calcNormals ) )
                 test = true;
 
             break;
@@ -824,7 +824,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
         return NULL;
     }
 
-    m_topNode = topNode.GetRawPtr();
+    m_sgNode = topNode.GetRawPtr();
 
-    return m_topNode;
+    return m_sgNode;
 }

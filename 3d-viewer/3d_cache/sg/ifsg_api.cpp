@@ -459,3 +459,30 @@ SGVECTOR S3D::CalcTriNorm( const SGPOINT& p1, const SGPOINT& p2, const SGPOINT& 
 
     return SGVECTOR( tri.x, tri.y, tri.z );
 }
+
+
+S3D::SGTYPES S3D::GetSGNodeType( SGNODE* aNode )
+{
+    if( NULL == aNode )
+        return SGTYPE_END;
+
+    return aNode->GetNodeType();
+}
+
+
+SGNODE* S3D::GetSGNodeParent( SGNODE* aNode )
+{
+    if( NULL == aNode )
+        return NULL;
+
+    return aNode->GetParent();
+}
+
+
+bool S3D::AddSGNodeRef( SGNODE* aParent, SGNODE* aChild )
+{
+    if( NULL == aParent || NULL == aChild )
+        return false;
+
+    return aParent->AddRefNode( aChild );
+}

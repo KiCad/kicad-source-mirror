@@ -189,8 +189,23 @@ bool WRL2COORDS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2COORDS::TranslateToSG( SGNODE* aParent )
+void WRL2COORDS::GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize )
 {
-    // XXX - TO IMPLEMENT
+    if( points.size() < 3 )
+    {
+        aCoordList = NULL;
+        aListSize = 0;
+        return;
+    }
+
+    aCoordList = &points[0];
+    aListSize = points.size();
+    return;
+}
+
+
+SGNODE* WRL2COORDS::TranslateToSG( SGNODE* aParent, bool calcNormals )
+{
+    // any data manipulation must be performed by the parent node
     return NULL;
 }

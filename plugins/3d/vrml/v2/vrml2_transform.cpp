@@ -25,6 +25,7 @@
 
 #include "vrml2_base.h"
 #include "vrml2_transform.h"
+#include "plugins/3dapi/ifsg_all.h"
 
 
 WRL2TRANSFORM::WRL2TRANSFORM() : WRL2NODE()
@@ -335,8 +336,79 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
+SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    // XXX - TO IMPLEMENT
-    return NULL;
+    if( m_Children.empty() && m_Refs.empty() )
+        return NULL;
+
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
+
+    if( m_sgNode )
+    {
+        if( NULL != aParent && aParent != S3D::GetSGNodeParent( m_sgNode )
+            && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+        {
+            return NULL;
+        }
+
+        return m_sgNode;
+    }
+
+    IFSG_TRANSFORM txNode( aParent );
+
+    std::list< WRL2NODE* >::iterator sC = m_Children.begin();
+    std::list< WRL2NODE* >::iterator eC = m_Children.end();
+    WRL2NODES type;
+
+    // Include only Shape and Transform nodes in a Transform node
+    bool test = false;  // set to true if there are any subnodes for display
+
+    while( sC != eC )
+    {
+        type = (*sC)->GetNodeType();
+
+        switch( type )
+        {
+        case WRL2_SHAPE:
+        case WRL2_TRANSFORM:
+
+            if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr(), calcNormals ) )
+                test = true;
+
+            break;
+
+        default:
+            break;
+        }
+
+        ++ sC;
+    }
+
+    if( false == test )
+    {
+        txNode.Destroy();
+        return NULL;
+    }
+
+    txNode.SetScale( SGPOINT( scale.x, scale.y, scale.z ) );
+    txNode.SetCenter( SGPOINT( center.x, center.y, center.z ) );
+    txNode.SetTranslation( SGPOINT( translation.x, translation.y, translation.z ) );
+    txNode.SetScaleOrientation( SGVECTOR( scaleOrientation.x, scaleOrientation.y,
+        scaleOrientation.z ), scaleOrientation.w );
+    txNode.SetRotation( SGVECTOR( rotation.x, rotation.y, rotation.z), rotation.w );
+
+    m_sgNode = txNode.GetRawPtr();
+
+    return m_sgNode;
 }

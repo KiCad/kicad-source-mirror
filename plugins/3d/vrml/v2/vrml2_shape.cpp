@@ -26,6 +26,7 @@
 
 #include "vrml2_base.h"
 #include "vrml2_shape.h"
+#include "plugins/3dapi/ifsg_all.h"
 
 
 WRL2SHAPE::WRL2SHAPE() : WRL2NODE()
@@ -311,8 +312,62 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
+SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    // XXX - TO IMPLEMENT
-    return NULL;
+    if( NULL == appearance && NULL == geometry )
+        return NULL;
+
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] Shape does not have a Transform parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
+
+    if( m_sgNode )
+    {
+        if( NULL != aParent && aParent != S3D::GetSGNodeParent( m_sgNode )
+            && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+        {
+            return NULL;
+        }
+
+        return m_sgNode;
+    }
+
+    IFSG_SHAPE shNode( aParent );
+
+    SGNODE* pShape = shNode.GetRawPtr();
+    SGNODE* pApp = appearance->TranslateToSG( pShape, calcNormals );
+    SGNODE* pGeom = geometry->TranslateToSG( pShape, calcNormals );
+
+    if( NULL == pApp || NULL == pGeom )
+    {
+        if( pGeom )
+        {
+            IFSG_FACESET tmp( false );
+            tmp.Attach( pGeom );
+            tmp.Destroy();
+        }
+
+        if( pApp )
+        {
+            IFSG_APPEARANCE tmp( false );
+            tmp.Attach( pApp );
+            tmp.Destroy();
+        }
+
+        shNode.Destroy();
+        return NULL;
+    }
+
+    m_sgNode = shNode.GetRawPtr();
+
+    return m_sgNode;
 }

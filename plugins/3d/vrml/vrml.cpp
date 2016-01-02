@@ -209,11 +209,24 @@ SCENEGRAPH* Load( char const* aFileName )
             std::cout << " * [INFO] load completed\n";
             #endif
 
-            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL );
+            // XXX - for now we recalculate all normals per-vertex per-facet
+            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, true );
         }
 
         delete bp;
     }
+
+    // DEBUG: WRITE OUT VRML2 FILE TO CONFIRM STRUCTURE
+    #ifdef DEBUG
+    if( scene )
+    {
+        wxFileName fn( wxString::FromUTF8Unchecked( aFileName ) );
+        wxString output = wxT( "_" );
+        output.append( fn.GetName() );
+        output.append( wxT(".wrl") );
+        S3D::WriteVRML( output, true, (SGNODE*)(scene), true, true );
+    }
+    #endif
 
     return scene;
 }

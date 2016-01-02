@@ -26,6 +26,7 @@
 
 #include "vrml2_base.h"
 #include "vrml2_appearance.h"
+#include "plugins/3dapi/ifsg_all.h"
 
 
 WRL2APPEARANCE::WRL2APPEARANCE() : WRL2NODE()
@@ -348,8 +349,51 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
+SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    // XXX - TO IMPLEMENT
-    return NULL;
+    if( NULL == material && NULL == texture )
+        return NULL;
+
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
+
+    if( m_sgNode )
+    {
+        if( NULL != aParent && aParent != S3D::GetSGNodeParent( m_sgNode )
+            && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+        {
+            return NULL;
+        }
+
+        return m_sgNode;
+    }
+
+    if( NULL != texture )
+    {
+        // use a default gray appearance
+        IFSG_APPEARANCE matNode( aParent );
+        matNode.SetEmissive( 0.0, 0.0, 0.0 );
+        matNode.SetSpecular( 0.65, 0.65, 0.65 );
+        matNode.SetDiffuse( 0.65, 0.65, 0.65 );
+        matNode.SetAmbient( 0.99 );
+        matNode.SetShininess( 0.2 );
+        matNode.SetTransparency( 0.0 );
+        m_sgNode = matNode.GetRawPtr();
+
+        return m_sgNode;
+    }
+
+    m_sgNode = material->TranslateToSG( aParent, calcNormals );
+
+    return m_sgNode;
 }

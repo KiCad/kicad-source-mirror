@@ -189,7 +189,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2COLOR::TranslateToSG( SGNODE* aParent )
+SGNODE* WRL2COLOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
     // XXX - TO IMPLEMENT
     return NULL;

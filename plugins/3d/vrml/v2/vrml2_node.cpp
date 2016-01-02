@@ -42,7 +42,7 @@ static NODEMAP nodenames;
 
 WRL2NODE::WRL2NODE()
 {
-    m_topNode = NULL;
+    m_sgNode = NULL;
     m_Parent = NULL;
     m_Type = WRL2_END;
 

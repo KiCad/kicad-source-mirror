@@ -58,7 +58,9 @@ public:
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool AddRefNode( WRL2NODE* aNode );
     bool AddChildNode( WRL2NODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent );
+    SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+
+    void GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize );
 };
 
 #endif  // VRML2_COORDS_H

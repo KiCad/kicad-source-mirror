@@ -67,7 +67,7 @@ protected:
     std::list< WRL2NODE* > m_Refs;          // nodes referenced by this node
     std::string m_error;
 
-    SGNODE* m_topNode;  // the SGNODE representation of the display data
+    SGNODE* m_sgNode;  // the SGNODE representation of the display data
 
 public:
 
@@ -185,7 +185,7 @@ public:
      * @param aParent is a pointer to the parent SG node
      * @return is non-NULL on success
      */
-    virtual SGNODE* TranslateToSG( SGNODE* aParent ) = 0;
+    virtual SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals ) = 0;
 };
 
 #endif  // VRML2_NODE_H

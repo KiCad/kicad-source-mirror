@@ -26,7 +26,8 @@
 
 #include "vrml2_base.h"
 #include "vrml2_faceset.h"
-
+#include "vrml2_coords.h"
+#include "plugins/3dapi/ifsg_all.h"
 
 
 WRL2FACESET::WRL2FACESET() : WRL2NODE()
@@ -560,8 +561,197 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent )
+SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    // XXX - TO IMPLEMENT
-    return NULL;
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
+
+    if( m_sgNode )
+    {
+        if( NULL != aParent && aParent != S3D::GetSGNodeParent( m_sgNode )
+            && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+        {
+            return NULL;
+        }
+
+        return m_sgNode;
+    }
+
+    size_t vsize = coordIndex.size();
+
+    if( NULL == coord || vsize < 3 )
+        return NULL;
+
+    // create the index list and make sure we have >3 points
+    size_t idx;
+    int i1 = coordIndex[0];
+    int i2 = coordIndex[1];
+    int i3 = coordIndex[2];
+
+    WRLVEC3F* pcoords;
+    size_t coordsize;
+    ((WRL2COORDS*) coord)->GetCoords( pcoords, coordsize );
+
+    if( coordsize < 3 )
+        return NULL;
+
+    // check that all indices are valid
+    for( idx = 0; idx < vsize; ++idx )
+    {
+        if( coordIndex[idx] < 0 )
+            continue;
+
+        if( coordIndex[idx] >= (int)coordsize )
+            return NULL;
+    }
+
+    // if the indices are defective just give up
+    if( i1 < 0 || i2 < 0 || i3 < 0
+        || i1 == i2 || i1 == i3 || i2 == i3 )
+        return NULL;
+
+    std::vector< SGPOINT > lCPts;   // coordinate points for SG node
+    std::vector< int > lCIdx;       // coordinate index list for SG node (must be triads)
+    std::vector< SGVECTOR > lCNorm; // per-vertex normals
+    std::vector< int > faces;       // tracks the number of polygons for the entire set
+    int nfaces = 0;                 // number of triangles for each face in the list
+
+    // assuming convex polygons, create triangles for the SG node
+    for( idx = 3; idx < vsize; )
+    {
+        lCIdx.push_back( i1 );
+
+        if( ccw )
+        {
+            lCIdx.push_back( i2 );
+            lCIdx.push_back( i3 );
+        }
+        else
+        {
+            lCIdx.push_back( i3 );
+            lCIdx.push_back( i2 );
+        }
+
+        ++nfaces;
+        i2 = i3;
+        i3 = coordIndex[idx++];
+
+        while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
+        {
+            if( i3 < 0 )
+            {
+                faces.push_back( nfaces );
+                nfaces = 0;
+            }
+
+            i1 = i2;
+            i2 = i3;
+            i3 = coordIndex[idx++];
+
+            // any invalid polygons shall void the entire faceset; this is a requirement
+            // to ensure correct handling of the normals
+            if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+                return NULL;
+        }
+    }
+
+    if( lCIdx.empty() )
+        return NULL;
+
+    if( calcNormals || NULL == normal )
+    {
+        // create a vertex list for per-face per-vertex normals
+        std::vector< int >::iterator sI = lCIdx.begin();
+        std::vector< int >::iterator eI = lCIdx.end();
+
+        while( sI != eI )
+        {
+            lCPts.push_back( SGPOINT( pcoords[*sI].x, pcoords[*sI].y, pcoords[*sI].z ) );
+            ++sI;
+        }
+
+        for( size_t i = 0; i < lCPts.size(); i += 3 )
+        {
+            SGVECTOR sv = S3D::CalcTriNorm( lCPts[i], lCPts[i+1], lCPts[i+2] );
+            lCNorm.push_back( sv );
+            lCNorm.push_back( sv );
+            lCNorm.push_back( sv );
+        }
+
+    }
+    else
+    {
+        // XXX - TO IMPLEMENT
+        return NULL;
+        /*
+            // use the vertex list as is
+            if( normalPerVertex )
+            {
+                // normalPerVertex = TRUE
+                // rules:
+                //  + if normalIndex is not EMPTY, it is used to select a normal for each vertex
+                //  + if normalIndex is EMPTY, the normal list is used in order per vertex
+
+                if( normalIndex.empty() )
+                {
+                    for( size_t i = 0; i < coordsize; ++i )
+                    {
+                        lCPts.push_back( SGPOINT( pcoords[i].x, pcoords[i].y, pcoords[i].z ) );
+
+                        // XXX - TO IMPLEMENT
+                    }
+                }
+                else
+                {
+                    // XXX - TO IMPLEMENT: index the normals
+                }
+            }
+            else
+            {
+                // normalPerVertex = FALSE
+                // rules:
+                //  + if normalIndex is not EMPTY, it is used to select a normal for each face
+                //  + if normalIndex is EMPTY, the normal list is used in order per face
+
+            }
+        //*/
+    }
+
+    // XXX - TO IMPLEMENT: Per-vertex colors
+
+    IFSG_FACESET fsNode( aParent );
+    IFSG_COORDS cpNode( fsNode );
+    cpNode.SetCoordsList( lCPts.size(), &lCPts[0] );
+    IFSG_COORDINDEX ciNode( fsNode );
+
+    if( calcNormals || NULL == normal )
+    {
+        for( int i = 0; i < (int)lCPts.size(); ++i )
+            ciNode.AddIndex( i );
+    }
+    else
+    {
+        ciNode.SetIndices( lCIdx.size(), &lCIdx[0] );
+    }
+
+    IFSG_NORMALS nmNode( fsNode );
+    nmNode.SetNormalList( lCNorm.size(), &lCNorm[0] );
+
+    std::cerr << "XXX: [face] NPts : " << lCPts.size() << "\n";
+    std::cerr << "XXX: [face] NNorm: " << lCNorm.size() << "\n";
+    std::cerr << "XXX: [face] NIdx : " << lCIdx.size() << "\n";
+
+    m_sgNode = fsNode.GetRawPtr();
+
+    return m_sgNode;
 }

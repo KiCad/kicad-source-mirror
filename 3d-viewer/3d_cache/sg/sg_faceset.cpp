@@ -953,7 +953,8 @@ bool SGFACESET::validate( void )
     {
 #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad model; number of normals does not match number of vertices\n";
+        std::cerr << " * [INFO] bad model; number of normals (" << nNorms;
+        std::cerr << ") does not match number of vertices (" << nCoords << ")\n";
 #endif
         validated = true;
         valid = false;

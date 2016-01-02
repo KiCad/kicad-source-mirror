@@ -42,6 +42,11 @@ struct S3D_POINT;
 
 namespace S3D
 {
+    // functions to extract information from SGNODE pointers
+    SGLIB_API S3D::SGTYPES GetSGNodeType( SGNODE* aNode );
+    SGLIB_API SGNODE* GetSGNodeParent( SGNODE* aNode );
+    SGLIB_API bool AddSGNodeRef( SGNODE* aParent, SGNODE* aChild );
+
     /**
      * Function CalcTriNorm
      * returns the normal vector of a triangle described by vertices p1, p2, p3
