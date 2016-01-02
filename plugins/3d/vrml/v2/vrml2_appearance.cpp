@@ -56,7 +56,7 @@ WRL2APPEARANCE::WRL2APPEARANCE( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2APPEARANCE::~WRL2APPEARANCE()
 {
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << " * [INFO] Destroying Appearance with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
@@ -99,7 +99,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 {
     if( NULL == aNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed for aNode\n";
         #endif
@@ -111,7 +111,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected child node '";
         std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
@@ -124,7 +124,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
     {
         if( NULL != material )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple material nodes\n";
             #endif
@@ -139,7 +139,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
     {
         if( NULL != textureTransform )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple textureTransform nodes\n";
             #endif
@@ -152,7 +152,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 
     if( NULL != texture )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple texture nodes\n";
         #endif
@@ -168,7 +168,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 {
     if( NULL == aNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed for aNode\n";
         #endif
@@ -180,7 +180,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected child node '";
         std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
@@ -193,7 +193,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
     {
         if( NULL != material )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple material nodes\n";
             #endif
@@ -208,7 +208,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
     {
         if( NULL != textureTransform )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple textureTransform nodes\n";
             #endif
@@ -221,7 +221,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 
     if( NULL != texture )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple texture nodes\n";
         #endif
@@ -237,7 +237,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
     if( NULL == aTopNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
@@ -251,7 +251,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -261,7 +261,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( '{' != tok )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << proc.GetError() << "\n";
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
@@ -284,7 +284,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -303,7 +303,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read material information\n";
                 #endif
@@ -314,7 +314,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read texture information\n";
                 #endif
@@ -325,7 +325,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read textureTransform information\n";
                 #endif
@@ -334,7 +334,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         }
         else
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad Appearance at line " << line << ", column ";
             std::cerr << column << "\n";
@@ -358,7 +358,7 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
         std::cerr << ptype << ")\n";

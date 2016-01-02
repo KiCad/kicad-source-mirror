@@ -185,7 +185,7 @@ void WRL2NODE::delNodeRef( WRL2NODE* aNode )
         return;
     }
 
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] delNodeRef() did not find its target\n";
     #endif
@@ -218,7 +218,7 @@ bool WRL2NODE::SetName( const std::string& aName )
 
     if( item != badNames.end() )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << *item << "' (matches restricted word)\n";
         #endif
@@ -228,7 +228,7 @@ bool WRL2NODE::SetName( const std::string& aName )
 
     if( isdigit( aName[0] ) )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << *item << "' (begins with digit)\n";
         #endif
@@ -241,7 +241,7 @@ bool WRL2NODE::SetName( const std::string& aName )
     if( std::string::npos != aName.find_first_of( BAD_CHARS1 )
         || std::string::npos != aName.find_first_of( BAD_CHARS2 ) )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << aName;
         std::cerr<< "' (contains invalid character)\n";
@@ -341,7 +341,7 @@ bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
 {
     if( aNode->GetNodeType() == WRL2_BASE )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] attempting to add a base node to another node\n";
         #endif
@@ -370,7 +370,7 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
 {
     if( NULL == aNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed as node pointer\n";
         #endif
@@ -379,7 +379,7 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
 
     if( aNode->GetNodeType() == WRL2_BASE )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] attempting to add a base node ref to another base node\n";
         #endif

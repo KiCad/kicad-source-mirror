@@ -49,7 +49,7 @@ WRL2COLOR::WRL2COLOR( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2COLOR::~WRL2COLOR()
 {
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << " * [INFO] Destroying Color node\n";
     #endif
     return;
@@ -71,7 +71,7 @@ bool WRL2COLOR::AddRefNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] AddRefNode is not applicable\n";
     #endif
@@ -84,7 +84,7 @@ bool WRL2COLOR::AddChildNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] AddChildNode is not applicable\n";
     #endif
@@ -102,7 +102,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -112,7 +112,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( '{' != tok )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << proc.GetError() << "\n";
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
@@ -133,7 +133,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( !proc.ReadName( glob ) )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << proc.GetError() <<  "\n";
         #endif
@@ -148,7 +148,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     {
         if( !proc.ReadMFVec3f( colors ) )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] invalid color set at line " << line << ", column ";
             std::cerr << column << "\n";
@@ -160,7 +160,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     }
     else
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad Color at line " << line << ", column ";
         std::cerr << column << "\n";
@@ -178,7 +178,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     proc.GetFilePosData( line, column );
 
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [INFO] bad Color at line " << line << ", column ";
     std::cerr << column << " (no closing brace)\n";

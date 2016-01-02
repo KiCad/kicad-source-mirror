@@ -52,7 +52,7 @@ WRL2MATERIAL::WRL2MATERIAL( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2MATERIAL::~WRL2MATERIAL()
 {
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << " * [INFO] Destroying Material node\n";
     #endif
 
@@ -96,7 +96,7 @@ bool WRL2MATERIAL::AddRefNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] AddRefNode is not applicable\n";
     #endif
@@ -109,7 +109,7 @@ bool WRL2MATERIAL::AddChildNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] AddChildNode is not applicable\n";
     #endif
@@ -122,7 +122,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
     if( NULL == aTopNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
@@ -136,7 +136,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -146,7 +146,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( '{' != tok )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << proc.GetError() << "\n";
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
@@ -169,7 +169,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -191,7 +191,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( specularColor ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid specularColor at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -205,7 +205,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( diffuseColor ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid diffuseColor at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -219,7 +219,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( emissiveColor ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid emissiveColor at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -233,7 +233,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFFloat( shininess ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid shininess at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -247,7 +247,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFFloat( transparency ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid transparency at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -261,7 +261,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFFloat( ambientIntensity ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid ambientIntensity at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -273,7 +273,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         }
         else
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad Material at line " << line << ", column ";
             std::cerr << column << "\n";
@@ -294,7 +294,7 @@ SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] Material does not have a Shape parent (parent ID: ";
         std::cerr << ptype << ")\n";

@@ -54,7 +54,7 @@ WRL2FACESET::WRL2FACESET( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2FACESET::~WRL2FACESET()
 {
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << " * [INFO] Destroying IndexedFaceSet with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
@@ -120,7 +120,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
 {
     if( NULL == aNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed for aNode\n";
         #endif
@@ -132,7 +132,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected child node '";
         std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
@@ -145,7 +145,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
     {
         if( NULL != color )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple color nodes\n";
             #endif
@@ -160,7 +160,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
     {
         if( NULL != coord )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
             #endif
@@ -175,7 +175,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
     {
         if( NULL != normal )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple normal nodes\n";
             #endif
@@ -188,7 +188,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
 
     if( WRL2_TEXTURECOORDINATE != type )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] unexpected code branch\n";
         #endif
@@ -197,7 +197,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
 
     if( NULL != texCoord )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple texCoord nodes\n";
         #endif
@@ -213,7 +213,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
 {
     if( NULL == aNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed for aNode\n";
         #endif
@@ -225,7 +225,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
 
     if( !checkNodeType( type ) )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected child node '";
         std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
@@ -238,7 +238,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
     {
         if( NULL != color )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple color nodes\n";
             #endif
@@ -253,7 +253,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
     {
         if( NULL != coord )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
             #endif
@@ -268,7 +268,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
     {
         if( NULL != normal )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple normal nodes\n";
             #endif
@@ -281,7 +281,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
 
     if( WRL2_TEXTURECOORDINATE != type )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] unexpected code branch\n";
         #endif
@@ -290,7 +290,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
 
     if( NULL != texCoord )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple texCoord nodes\n";
         #endif
@@ -312,7 +312,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -322,7 +322,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( '{' != tok )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << proc.GetError() << "\n";
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
@@ -345,7 +345,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -378,7 +378,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFBool( ccw ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid ccw at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -392,7 +392,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFBool( colorPerVertex ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid colorPerVertex at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -406,7 +406,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFBool( convex ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid convex at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -420,7 +420,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFBool( normalPerVertex ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid normalPerVertex at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -434,7 +434,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFBool( solid ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid solid at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -448,7 +448,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFFloat( creaseAngle ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid creaseAngle at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -462,7 +462,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadMFInt( colorIndex ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid colorIndex at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -476,7 +476,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadMFInt( coordIndex ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid coordIndex at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -490,7 +490,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadMFInt( normalIndex ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid normalIndex at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -504,7 +504,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read color node information\n";
                 #endif
@@ -515,7 +515,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read coord node information\n";
                 #endif
@@ -526,7 +526,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read normal node information\n";
                 #endif
@@ -537,7 +537,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read texCoord node information\n";
                 #endif
@@ -546,7 +546,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         }
         else
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad IndexedFaceSet at line " << line << ", column ";
             std::cerr << column << "\n";
@@ -567,7 +567,7 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
         std::cerr << ptype << ")\n";
@@ -746,10 +746,6 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     IFSG_NORMALS nmNode( fsNode );
     nmNode.SetNormalList( lCNorm.size(), &lCNorm[0] );
-
-    std::cerr << "XXX: [face] NPts : " << lCPts.size() << "\n";
-    std::cerr << "XXX: [face] NNorm: " << lCNorm.size() << "\n";
-    std::cerr << "XXX: [face] NIdx : " << lCIdx.size() << "\n";
 
     m_sgNode = fsNode.GetRawPtr();
 

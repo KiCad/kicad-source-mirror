@@ -49,7 +49,7 @@ WRL2TRANSFORM::WRL2TRANSFORM( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2TRANSFORM::~WRL2TRANSFORM()
 {
-    #ifdef DEBUG
+    #ifdef DEBUG_VRML2
     std::cerr << " * [INFO] Destroying Transform with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
@@ -87,7 +87,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( NULL == aTopNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
@@ -120,7 +120,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -130,7 +130,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( '{' != tok )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << proc.GetError() << "\n";
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
@@ -153,7 +153,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -175,7 +175,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( center ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid center at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -189,7 +189,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( rotation ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid rotation at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -203,7 +203,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( scale ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid scale at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -217,7 +217,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( scaleOrientation ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid scaleOrientation at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -231,7 +231,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( translation ) )
             {
-                #ifdef DEBUG
+                #ifdef DEBUG_VRML2
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid translation at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -248,7 +248,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         }
         else
         {
-            #ifdef DEBUG
+            #ifdef DEBUG_VRML2
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad Transform at line " << line << ", column ";
             std::cerr << column << "\n";
@@ -267,7 +267,7 @@ bool WRL2TRANSFORM::AddRefNode( WRL2NODE* aNode )
 {
     if( NULL == aNode )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed as node pointer\n";
         #endif
@@ -300,7 +300,7 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -345,7 +345,7 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
-        #ifdef DEBUG
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
         std::cerr << ptype << ")\n";
@@ -374,25 +374,31 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
     // Include only Shape and Transform nodes in a Transform node
     bool test = false;  // set to true if there are any subnodes for display
 
-    while( sC != eC )
+    for( int i = 0; i < 2; ++i )
     {
-        type = (*sC)->GetNodeType();
-
-        switch( type )
+        while( sC != eC )
         {
-        case WRL2_SHAPE:
-        case WRL2_TRANSFORM:
+            type = (*sC)->GetNodeType();
 
-            if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr(), calcNormals ) )
-                test = true;
+            switch( type )
+            {
+            case WRL2_SHAPE:
+            case WRL2_TRANSFORM:
 
-            break;
+                if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr(), calcNormals ) )
+                    test = true;
 
-        default:
-            break;
+                break;
+
+            default:
+                break;
+            }
+
+            ++ sC;
         }
 
-        ++ sC;
+        sC = m_Refs.begin();
+        eC = m_Refs.end();
     }
 
     if( false == test )
