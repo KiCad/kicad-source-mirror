@@ -111,7 +111,11 @@ bool WRLPROC::Open( const std::string& aFileName )
         // square brackets []
         // curly braces {}
         // backslash
-        m_badchars = "'\"#,.+-[]\\{}";
+        // XXX: NOTE: badchars should include '-' but due to my bad model naming scheme
+        // in the VRML model generator, I have allowed '-'. Other VRML parsers seem to
+        // accept '-'.
+        //m_badchars = "'\"#,.+-[]\\{}";
+        m_badchars = "'\"#,.+[]\\{}";
         return true;
     }
 
@@ -327,6 +331,18 @@ bool WRLPROC::ReadName( std::string& aName )
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << m_fileline << ", column " << m_linepos;
             ostr << " -- invalid character in name";
+            m_error = ostr.str();
+
+            return false;
+        }
+
+        if( aName.empty() && m_buf[m_linepos] >= '0' && m_buf[m_linepos] <= '9' )
+        {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
+            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
+            ostr << " * [INFO] line " << m_fileline << ", column " << m_linepos;
+            ostr << " -- name must not start with a digit";
             m_error = ostr.str();
 
             return false;

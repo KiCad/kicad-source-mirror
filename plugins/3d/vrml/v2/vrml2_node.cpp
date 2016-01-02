@@ -235,7 +235,10 @@ bool WRL2NODE::SetName( const std::string& aName )
         return false;
     }
 
-    #define BAD_CHARS1 "\"\'#+,-.\\[]{}\x00\x01\x02\x03\x04\x05\x06\x09\x0A\x0B\x0C\x0D\x0E\x0F"
+    // XXX: NOTE: in VRML2 the '-' is invalid; however there are some bad models which contain '-' in
+    // a name and many VRML parsers seem to accept them. In VRML1 the '-' is allowed.
+    // #define BAD_CHARS1 "\"\'#+,-.\\[]{}\x00\x01\x02\x03\x04\x05\x06\x09\x0A\x0B\x0C\x0D\x0E\x0F"
+    #define BAD_CHARS1 "\"\'#+,.\\[]{}\x00\x01\x02\x03\x04\x05\x06\x09\x0A\x0B\x0C\x0D\x0E\x0F"
     #define BAD_CHARS2 "\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F"
 
     if( std::string::npos != aName.find_first_of( BAD_CHARS1 )
