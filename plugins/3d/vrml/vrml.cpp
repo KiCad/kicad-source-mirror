@@ -221,7 +221,13 @@ SCENEGRAPH* Load( char const* aFileName )
     if( scene )
     {
         wxFileName fn( wxString::FromUTF8Unchecked( aFileName ) );
-        wxString output = wxT( "_" );
+        wxString output;
+
+        if( proc.GetVRMLType() == VRML_V1 )
+            output = wxT( "_vrml1-" );
+        else
+            output = wxT( "_vrml2-" );
+
         output.append( fn.GetName() );
         output.append( wxT(".wrl") );
         S3D::WriteVRML( output, true, (SGNODE*)(scene), true, true );
