@@ -49,7 +49,7 @@ WRL2TRANSFORM::WRL2TRANSFORM( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2TRANSFORM::~WRL2TRANSFORM()
 {
-    #ifdef DEBUG_VRML2
+    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     std::cerr << " * [INFO] Destroying Transform with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
@@ -120,7 +120,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -130,7 +130,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( '{' != tok )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << proc.GetError() << "\n";
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
@@ -153,7 +153,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -175,7 +175,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( center ) )
             {
-                #ifdef DEBUG_VRML2
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid center at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -189,7 +189,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( rotation ) )
             {
-                #ifdef DEBUG_VRML2
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid rotation at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -203,7 +203,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( scale ) )
             {
-                #ifdef DEBUG_VRML2
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid scale at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -217,7 +217,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( scaleOrientation ) )
             {
-                #ifdef DEBUG_VRML2
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid scaleOrientation at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -231,7 +231,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( translation ) )
             {
-                #ifdef DEBUG_VRML2
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] invalid translation at line " << line << ", column ";
                 std::cerr << column << "\n";
@@ -248,7 +248,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         }
         else
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad Transform at line " << line << ", column ";
             std::cerr << column << "\n";
@@ -300,7 +300,7 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";

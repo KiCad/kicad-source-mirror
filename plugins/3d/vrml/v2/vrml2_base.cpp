@@ -87,7 +87,7 @@ bool WRL2BASE::Read( WRLPROC& proc )
     {
         #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] no open file or file is not a VRML2 file\n";
+        std::cerr << " * [BUG] no open file or file is not a VRML2 file\n";
         #endif
         return false;
     }
@@ -129,7 +129,7 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
     if( !proc.ReadName( glob ) )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << proc.GetError() <<  "\n";
         #endif
@@ -142,7 +142,7 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
     // return 'true' - the file may be defective but it may still be somewhat OK
     if( NULL == ref )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] node '" << glob << "' not found\n";
         #endif
@@ -152,7 +152,7 @@ bool WRL2BASE::implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
     if( !aParent->AddRefNode( ref ) )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] failed to add node '" << glob << "' (";
         std::cerr << ref->GetNodeTypeName( ref->GetNodeType() ) << ") to parent of type ";
@@ -189,7 +189,7 @@ bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
     if( !proc.ReadName( glob ) )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << proc.GetError() <<  "\n";
         #endif
@@ -207,7 +207,7 @@ bool WRL2BASE::implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode 
 
         if( lnode && !lnode->SetName( glob ) )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             size_t line, column;
             proc.GetFilePosData( line, column );
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -251,7 +251,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
     if( !proc.ReadName( glob ) )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         if( !proc.eof() )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -277,7 +277,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !implementUse( proc, aParent, aNode ) )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -292,7 +292,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !implementDef( proc, aParent, aNode ) )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -307,7 +307,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !proc.ReadName( glob ) || !proc.DiscardList() )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -322,7 +322,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !proc.ReadName( glob ) || !proc.ReadName( glob ) || !proc.DiscardList() )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -337,7 +337,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     {
         if( !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << proc.GetError() <<  "\n";
             #endif
@@ -352,7 +352,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     size_t line = 0;
     size_t column = 0;
     proc.GetFilePosData( line, column );
-    #ifdef DEBUG_VRML2
+    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     std::cerr << " * [INFO] Processing node '" << glob << "' ID: " << ntype << "\n";
     #endif
 
@@ -575,7 +575,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         if( !proc.DiscardNode() )
         {
-            #ifdef DEBUG_VRML2
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << proc.GetError() << "\n";
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] could not discard node at line " << line;

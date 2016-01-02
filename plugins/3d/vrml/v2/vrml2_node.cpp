@@ -218,7 +218,7 @@ bool WRL2NODE::SetName( const std::string& aName )
 
     if( item != badNames.end() )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << *item << "' (matches restricted word)\n";
         #endif
@@ -228,7 +228,7 @@ bool WRL2NODE::SetName( const std::string& aName )
 
     if( isdigit( aName[0] ) )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << *item << "' (begins with digit)\n";
         #endif
@@ -244,7 +244,7 @@ bool WRL2NODE::SetName( const std::string& aName )
     if( std::string::npos != aName.find_first_of( BAD_CHARS1 )
         || std::string::npos != aName.find_first_of( BAD_CHARS2 ) )
     {
-        #ifdef DEBUG_VRML2
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << aName;
         std::cerr<< "' (contains invalid character)\n";
