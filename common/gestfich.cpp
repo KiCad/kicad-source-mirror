@@ -28,19 +28,18 @@
  * @brief Functions for file management
  */
 
-// For compilers that support precompilation, includes "wx.h".
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <confirm.h>
-
-#include <common.h>
-#include <macros.h>
-#include <gestfich.h>
-
 #include <wx/mimetype.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
 
+// For compilers that support precompilation, includes "wx.h".
+#include <fctsys.h>
+#include <pgm_base.h>
+#include <confirm.h>
+#include <common.h>
+#include <macros.h>
+
+#include <gestfich.h>
 
 void AddDelimiterString( wxString& string )
 {
