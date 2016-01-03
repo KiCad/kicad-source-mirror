@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 #include <general.h>
 #include <class_library.h>
 #include <sch_component.h>
+#include <sch_sheet_path.h>
 
 #include <dialog_edit_one_field.h>
 
@@ -101,7 +102,7 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
             // Test if the reference string is valid:
             if( SCH_COMPONENT::IsReferenceStringValid( newtext ) )
             {
-                component->SetRef( m_CurrentSheet, newtext );
+                component->SetRef( m_CurrentSheet->Last(), newtext );
             }
             else
             {

@@ -245,43 +245,6 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 }
 
 
-void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
-{
-    int ref = 1;
-
-    if( aReference )
-        ref = *aReference;
-
-    for( EDA_ITEM* item = LastDrawList();  item;  item = item->Next() )
-    {
-        if( item->Type() != SCH_COMPONENT_T )
-                continue;
-
-        SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
-        LIB_PART*       part = aLibs->FindLibPart( component->GetPartName() );
-
-        if( !part || !part->IsPower() )
-            continue;
-
-        wxString refstr = component->GetPrefix();
-
-        //str will be "C?" or so after the ClearAnnotation call.
-        while( refstr.Last() == '?' )
-            refstr.RemoveLast();
-
-        if( !refstr.StartsWith( wxT( "#" ) ) )
-            refstr = wxT( "#" ) + refstr;
-
-        refstr << wxT( "0" ) << ref;
-        component->SetRef( this, refstr );
-        ref++;
-    }
-
-    if( aReference )
-        *aReference = ref;
-}
-
-
 void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
 {
     // Search to sheet path number:
@@ -681,15 +644,6 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     }
 
     m_currList.Pop();
-}
-
-
-void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
-{
-    int ref = 1;
-
-    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
-        path->AnnotatePowerSymbols( aLibs, &ref );
 }
 
 

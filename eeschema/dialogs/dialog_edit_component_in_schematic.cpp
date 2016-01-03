@@ -42,6 +42,7 @@
 #include <sch_base_frame.h>
 #include <class_library.h>
 #include <sch_component.h>
+#include <sch_sheet_path.h>
 #include <dialog_helpers.h>
 #include <dialog_edit_component_in_schematic_fbp.h>
 
@@ -458,7 +459,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_cmp->SetRef( &m_parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
+    m_cmp->SetRef( m_parent->GetCurrentSheet().Last(), m_FieldsBuf[REFERENCE].GetText() );
 
     m_parent->OnModify();
     m_parent->GetScreen()->TestDanglingEnds();

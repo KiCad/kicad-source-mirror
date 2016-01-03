@@ -35,6 +35,7 @@
 #include <sch_text.h>
 
 
+class PART_LIBS;
 class LINE_READER;
 class SCH_SCREEN;
 class SCH_SHEET;
@@ -655,6 +656,17 @@ public:
      * @return True if the hierarchy is modified otherwise false.
      */
     bool IsAutoSaveRequired();
+
+    /**
+     * Function AnnotatePowerSymbols
+     * annotates the power symbols only starting at \a aReference in the sheet path.
+     * @param aLibs the library list to use
+     * @param aReference A pointer to the number for the reference designator of the
+     *                   first power symbol to be annotated.  If the pointer is NULL
+     *                   the annotation starts at 1.  The number is incremented for
+     *                   each power symbol in the sheet that is annotated.
+     */
+    void AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

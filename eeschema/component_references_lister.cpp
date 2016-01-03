@@ -694,7 +694,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 }
 
 
-SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComponent,
+SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
                               SCH_SHEET_PATH& aSheetPath )
 {
     wxASSERT( aComponent != NULL && aLibComponent != NULL );
@@ -710,7 +710,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComp
     m_SheetNum  = 0;
 
     if( aComponent->GetRef( &aSheetPath ).IsEmpty() )
-        aComponent->SetRef( &aSheetPath, wxT( "DefRef?" ) );
+        aComponent->SetRef( aSheetPath.Last(), wxT( "DefRef?" ) );
 
     SetRef( aComponent->GetRef( &aSheetPath ) );
 
@@ -730,7 +730,7 @@ void SCH_REFERENCE::Annotate()
     else
         m_Ref = TO_UTF8( GetRef() << m_NumRef );
 
-    m_RootCmp->SetRef( &m_SheetPath, FROM_UTF8( m_Ref.c_str() ) );
+    m_RootCmp->SetRef( m_SheetPath.Last(), FROM_UTF8( m_Ref.c_str() ) );
     m_RootCmp->SetUnit( m_Unit );
     m_RootCmp->SetUnitSelection( &m_SheetPath, m_Unit );
 }
