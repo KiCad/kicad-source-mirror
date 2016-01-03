@@ -84,26 +84,25 @@ enum {
 };
 
 wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
-        EVT_SIZE( PANEL_PREV_3D::resize )
-        EVT_CHOICE( ID_SET_DIR, PANEL_PREV_3D::SetRootDir )
-        EVT_TEXT_ENTER( ID_SCALEX, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_SCALEY, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_SCALEZ, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_ROTX, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_ROTY, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_ROTZ, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_OFFX, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_OFFY, PANEL_PREV_3D::updateOrientation )
-        EVT_TEXT_ENTER( ID_OFFZ, PANEL_PREV_3D::updateOrientation )
-        EVT_BUTTON( ID_CFG_PATHS, PANEL_PREV_3D::Cfg3DPaths )
-        EVT_BUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
-        EVT_BUTTON( ID_3D_UPDATE, PANEL_PREV_3D::View3DUpdate )
-        EVT_BUTTON( ID_3D_LEFT, PANEL_PREV_3D::View3DLeft )
-        EVT_BUTTON( ID_3D_RIGHT, PANEL_PREV_3D::View3DRight )
-        EVT_BUTTON( ID_3D_FRONT, PANEL_PREV_3D::View3DFront )
-        EVT_BUTTON( ID_3D_BACK, PANEL_PREV_3D::View3DBack )
-        EVT_BUTTON( ID_3D_TOP, PANEL_PREV_3D::View3DTop )
-        EVT_BUTTON( ID_3D_BOTTOM, PANEL_PREV_3D::View3DBottom )
+    EVT_CHOICE( ID_SET_DIR, PANEL_PREV_3D::SetRootDir )
+    EVT_TEXT_ENTER( ID_SCALEX, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_SCALEY, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_SCALEZ, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_ROTX, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_ROTY, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_ROTZ, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_OFFX, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_OFFY, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT_ENTER( ID_OFFZ, PANEL_PREV_3D::updateOrientation )
+    EVT_BUTTON( ID_CFG_PATHS, PANEL_PREV_3D::Cfg3DPaths )
+    EVT_BUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
+    EVT_BUTTON( ID_3D_UPDATE, PANEL_PREV_3D::View3DUpdate )
+    EVT_BUTTON( ID_3D_LEFT, PANEL_PREV_3D::View3DLeft )
+    EVT_BUTTON( ID_3D_RIGHT, PANEL_PREV_3D::View3DRight )
+    EVT_BUTTON( ID_3D_FRONT, PANEL_PREV_3D::View3DFront )
+    EVT_BUTTON( ID_3D_BACK, PANEL_PREV_3D::View3DBack )
+    EVT_BUTTON( ID_3D_TOP, PANEL_PREV_3D::View3DTop )
+    EVT_BUTTON( ID_3D_BOTTOM, PANEL_PREV_3D::View3DBottom )
 wxEND_EVENT_TABLE()
 
 
@@ -616,7 +615,9 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
             std::cout << "[3dv] Update Model: canvas creation FAILED\n";
         #endif
 
-        canvas->SetSize( preview->GetClientSize() );
+        wxSizer* ws = new wxBoxSizer( wxHORIZONTAL );
+        ws->Add( canvas, 10, wxEXPAND );
+        preview->SetSizerAndFit( ws );
     }
 
     canvas->Set3DModel( *model );
@@ -644,17 +645,6 @@ void PANEL_PREV_3D::UpdateWindowUI( long flags )
     // */
 
     wxPanel::UpdateWindowUI( flags );
-
-    return;
-}
-
-
-void PANEL_PREV_3D::resize( wxSizeEvent &event )
-{
-    event.Skip();
-
-    if( NULL != canvas )
-        canvas->SetSize( preview->GetClientSize() );
 
     return;
 }

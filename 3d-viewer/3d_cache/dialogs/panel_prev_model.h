@@ -88,9 +88,9 @@ private:
     S3DMODEL* model;
     S3D_INFO  modelInfo;
 
+
 private:
     void updateDirChoiceList( void );
-    void resize( wxSizeEvent &event );
     void updateOrientation( wxCommandEvent &event );
 
     void getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOINT& offset );
