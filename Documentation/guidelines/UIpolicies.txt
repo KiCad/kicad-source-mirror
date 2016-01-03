@@ -15,6 +15,53 @@ Capitalization:
     idea use this capitalization in source code comments as well to prevent
     confusion of new contributors.
 
+    Two styles of capitalization are used in GNOME user interface elements:
+
+    Header capitalization
+    Capitalize all words in the element, with the following exceptions:
+        Articles: a, an, the.
+        Conjunctions: and, but, for, not, so, yet ...
+        Prepositions of three or fewer letters: at, for, by, in, to ...
+
+    Sentence capitalization
+        Capitalize the first letter of the first word, and any other words
+        normally capitalized in sentences,such as application names.
+
+    The following table indicates the capitalization style to use for each
+    type of user interface element.
+
+    Table 8-3 Capitalization Style Guidelines for User Interface Elements
+
+    Element 	                             Style
+
+    Check box labels 	                     Sentence
+    Command button labels 	                 Header
+    Column heading labels 	                 Header
+    Desktop background object labels 	     Header
+    Dialog messages 	                     Sentence
+    Drop-down combination box labels 	     Sentence
+    Drop-down list box labels 	             Sentence
+    Field labels 	                         Sentence
+    Filenames 	                             Sentence
+    Graphic equivalent text:
+    for example, Alt text on web pages 	     Sentence
+    Group box or frame labels 	             Header
+    Items in drop-down combination boxes,
+    drop-down list boxes, and list boxes 	 Sentence
+    List box labels 	                     Sentence
+    Menu items 	                             Header
+    Menu items in applications 	             Header
+    Menu titles in applications 	         Header
+    Radio button labels 	                 Sentence
+    Slider labels 	                         Sentence
+    Spin box labels 	                     Sentence
+    Tabbed section titles 	                 Header
+    Text box labels 	                     Sentence
+    Titlebar labels 	                     Header
+    Toolbar button labels 	                 Header
+    Tooltips 	                             Sentence
+    Webpage titles and navigational elements Header
+
 
 Dialogs:
 
@@ -72,6 +119,7 @@ Dialogs:
     Note that the font used by end users is not something that you control from
     within the dialog, but for testing purposes please do not exceed this dialog
     size should the user have selected a font size of 13 points.
+
 
 Quoting:
     Filenames, paths or other text should be with single quotes ''.  e.g.:
