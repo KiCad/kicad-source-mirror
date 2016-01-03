@@ -54,14 +54,6 @@ option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
     )
 
-# WARNING: KiCad developers strongly advise you to build Boost with supplied patches,
-# as it is known to work with KiCad.  Other versions may contain bugs that may result
-# in KiCad errors.
-option( KICAD_SKIP_BOOST
-    "Skip building downloaded Boost library components, use Boost from your system."
-    )
-mark_as_advanced( KICAD_SKIP_BOOST )    # Normal builders should build Boost.
-
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -102,13 +94,6 @@ else()
     endif()
 endif()
 
-
-# All CMake downloads go here.  Suggested is up in the source tree, not in the build dir where they
-# would have to be downloaded over and over again.  The default is to choose a directory that is
-# hidden on linux (starts with a '.') because there is a way to exclude this directory when grepping
-# the source tree.
-set( DOWNLOAD_DIR ${PROJECT_SOURCE_DIR}/.downloads-by-cmake
-    CACHE PATH "Location of KiCad downloads, suggested is a dir common to all builds, i.e. global." )
 
 # Add option to add user directories for linker, if any
 LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
@@ -282,7 +267,6 @@ else()
 endif()
 
 
-
 # KIFACE_SUFFIX is the file extension used for top level program modules which
 # implement the KIFACE interface.  A valid suffix starts with a period '.'.
 
@@ -396,9 +380,9 @@ include( ExternalProject )
 #================================================
 include( CheckFindPackageResult )
 
-#################################
-# Find OpenMP support, optional #
-#################################
+#
+# Find OpenMP support, optional
+#
 
 find_package( OpenMP )
 
@@ -414,9 +398,10 @@ if( OPENMP_FOUND )
     endif()
 endif()
 
-##########################
-# Find wxWidgets library #
-##########################
+#
+# Find wxWidgets library, required
+#
+
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
@@ -432,11 +417,10 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
 
-#######################
-# Find OpenGL library #
-#######################
-find_package( OpenGL QUIET )
-check_find_package_result( OPENGL_FOUND "OpenGL" )
+#
+# Find OpenGL library, required
+#
+find_package( OpenGL REQUIRED )
 
 # Dick 5-Feb-2014:
 # Marco: We cannot use both ExternalProject_Add() add and find_package()
@@ -448,46 +432,36 @@ check_find_package_result( OPENGL_FOUND "OpenGL" )
 # Always defined, empty if no libraries are to be built
 add_custom_target( lib-dependencies )
 
-# Find GLEW library
+#
+# Find GLEW library, required
+#
 if( NOT GLEW_FOUND )
-    find_package( GLEW )
+    find_package( GLEW REQUIRED )
     check_find_package_result( GLEW_FOUND "GLEW" )
 endif()
 
-# Find GLM library
-find_package( GLM 0.9.5.4 REQUIRED )
+#
+# Find GLM library, required
+#
+find_package( GLM 0.9.5.1 REQUIRED )
 
-# Find CURL library
+#
+# Find CURL library, required for github plugin
+#
 find_package( CURL REQUIRED )
 
-# Find Cairo library
-if( NOT CAIRO_FOUND )
-    find_package( Cairo 1.8.1 QUIET )
-    check_find_package_result( CAIRO_FOUND "Cairo" )
-endif()
+#
+# Find Cairo library, required
+#
+find_package( Cairo 1.12.1 REQUIRED )
 
-# Download boost and possibly build parts of it
-#################################################
-if( KICAD_SKIP_BOOST )
-    find_package( Boost 1.54.0 REQUIRED COMPONENTS context date_time filesystem iostreams locale
-                                                   program_options regex system thread )
-
-    if( NOT Boost_FOUND )
-        message( FATAL_ERROR "Boost 1.54+ libraries are required." )
-    endif()
-
-    # Keeps CMake from complaining about undefined boost dependencies even though Boost was
-    # found.  Sigh!!!!!
-    add_custom_target( boost )
-
-    message( WARNING "
-WARNING: You decided to skip building boost library.
-KiCad developers strongly advise you to build the bundled boost library, as it is known to work with KiCad.
-Other versions may contain bugs that may result in KiCad errors." )
-else()
-    add_dependencies( lib-dependencies boost )
-    include( download_boost )
-endif()
+#
+# Find Boost library, required.
+#
+# Note: Prior to Boost 1.59, the Boost context library is not built when compiling on windows
+#       with GCC.  You must patch the Boost sources.
+find_package( Boost 1.54.0 REQUIRED COMPONENTS context date_time filesystem iostreams locale
+                                               program_options regex system thread )
 
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
@@ -664,38 +638,6 @@ add_subdirectory( utils )
 add_subdirectory( qa )
 
 #add_subdirectory( new )
-
-
-# Make all libs and executables depend on ExternalProject_Add( boost ),
-# except perhaps bitmap lib.  This allows a multi-threaded build to succeed.
-add_dependencies( pcbnew boost )
-add_dependencies( eeschema boost )
-add_dependencies( cvpcb_kiface boost )
-add_dependencies( gal boost )
-add_dependencies( common boost )
-add_dependencies( pcbcommon boost )
-add_dependencies( 3d-viewer boost )
-add_dependencies( pcad2kicadpcb boost )
-add_dependencies( polygon boost )
-add_dependencies( pl_editor boost )
-add_dependencies( pnsrouter boost )
-
-
-if( KICAD_BUILD_STATIC OR KICAD_BUILD_DYNAMIC )
-    add_dependencies( pcbnew lib-dependencies )
-    add_dependencies( eeschema lib-dependencies )
-    add_dependencies( cvpcb_kiface lib-dependencies )
-    add_dependencies( common lib-dependencies )
-    add_dependencies( gal lib-dependencies )
-    add_dependencies( pcbcommon lib-dependencies )
-    add_dependencies( 3d-viewer lib-dependencies )
-    add_dependencies( pcad2kicadpcb lib-dependencies )
-    add_dependencies( pl_editor lib-dependencies )
-    add_dependencies( pnsrouter lib-dependencies )
-endif()
-
-if( KICAD_BUILD_DYNAMIC )
-endif()
 
 #############
 # Resources #
