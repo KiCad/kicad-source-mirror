@@ -397,3 +397,45 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     return m_sgNode;
 }
+
+
+void WRL2APPEARANCE::unlinkChildNode( const WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+        return;
+
+    if( aNode->GetParent() == this )
+    {
+        if( aNode == material )
+            material = NULL;
+        else if( aNode == texture )
+            texture = NULL;
+        else if( aNode == textureTransform )
+            textureTransform = NULL;
+
+    }
+
+    WRL2NODE::unlinkChildNode( aNode );
+    return;
+}
+
+
+void WRL2APPEARANCE::unlinkRefNode( const WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+        return;
+
+    if( aNode->GetParent() != this )
+    {
+        if( aNode == material )
+            material = NULL;
+        else if( aNode == texture )
+            texture = NULL;
+        else if( aNode == textureTransform )
+            textureTransform = NULL;
+
+    }
+
+    WRL2NODE::unlinkRefNode( aNode );
+    return;
+}

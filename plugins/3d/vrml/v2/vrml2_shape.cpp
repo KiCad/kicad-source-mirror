@@ -371,3 +371,41 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     return m_sgNode;
 }
+
+
+void WRL2SHAPE::unlinkChildNode( const WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+        return;
+
+    if( aNode->GetParent() == this )
+    {
+        if( aNode == appearance )
+            appearance = NULL;
+        else if( aNode == geometry )
+            geometry = NULL;
+
+    }
+
+    WRL2NODE::unlinkChildNode( aNode );
+    return;
+}
+
+
+void WRL2SHAPE::unlinkRefNode( const WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+        return;
+
+    if( aNode->GetParent() != this )
+    {
+        if( aNode == appearance )
+            appearance = NULL;
+        else if( aNode == geometry )
+            geometry = NULL;
+
+    }
+
+    WRL2NODE::unlinkRefNode( aNode );
+    return;
+}

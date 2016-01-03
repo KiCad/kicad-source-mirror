@@ -85,7 +85,7 @@ public:
      *
      * @param aNode is the child which is being deleted
      */
-    void unlinkChildNode( const WRL2NODE* aNode );
+    virtual void unlinkChildNode( const WRL2NODE* aNode );
 
     /**
      * Function unlinkRef
@@ -94,7 +94,7 @@ public:
      *
      * @param aNode is the node which is being deleted
      */
-    void unlinkRefNode( const WRL2NODE* aNode );
+    virtual void unlinkRefNode( const WRL2NODE* aNode );
 
     /**
      * Function addNodeRef
@@ -141,7 +141,7 @@ public:
      * returns a pointer to the parent SGNODE of this object
      * or NULL if the object has no parent (ie. top level transform)
      */
-    WRL2NODE* GetParent( void );
+    WRL2NODE* GetParent( void ) const;
 
     /**
      * Function SetParent

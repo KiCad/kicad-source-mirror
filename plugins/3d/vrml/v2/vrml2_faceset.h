@@ -73,6 +73,11 @@ public:
     // functions inherited from WRL2NODE
     bool isDangling( void );
 
+
+    // overloads
+    void unlinkChildNode( const WRL2NODE* aNode );
+    void unlinkRefNode( const WRL2NODE* aNode );
+
 public:
     WRL2FACESET();
     WRL2FACESET( WRL2NODE* aParent );

@@ -200,7 +200,7 @@ WRL2NODES WRL2NODE::GetNodeType( void ) const
 }
 
 
-WRL2NODE* WRL2NODE::GetParent( void )
+WRL2NODE* WRL2NODE::GetParent( void ) const
 {
     return m_Parent;
 }

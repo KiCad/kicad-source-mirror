@@ -751,3 +751,49 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     return m_sgNode;
 }
+
+
+void WRL2FACESET::unlinkChildNode( const WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+        return;
+
+    if( aNode->GetParent() == this )
+    {
+        if( aNode == color )
+            color = NULL;
+        else if( aNode == coord )
+            coord = NULL;
+        else if( aNode == normal )
+            normal = NULL;
+        else if( aNode == texCoord )
+            texCoord = NULL;
+
+    }
+
+    WRL2NODE::unlinkChildNode( aNode );
+    return;
+}
+
+
+void WRL2FACESET::unlinkRefNode( const WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+        return;
+
+    if( aNode->GetParent() != this )
+    {
+        if( aNode == color )
+            color = NULL;
+        else if( aNode == coord )
+            coord = NULL;
+        else if( aNode == normal )
+            normal = NULL;
+        else if( aNode == texCoord )
+            texCoord = NULL;
+
+    }
+
+    WRL2NODE::unlinkRefNode( aNode );
+    return;
+}

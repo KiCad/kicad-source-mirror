@@ -36,6 +36,8 @@ SCENEGRAPH::SCENEGRAPH( SGNODE* aParent ) : SGNODE( aParent )
 {
     m_SGtype = S3D::SGTYPE_TRANSFORM;
     rotation_angle = 0.0;
+    scale_angle = 0.0;
+
     scale.x = 1.0;
     scale.y = 1.0;
     scale.z = 1.0;
@@ -580,15 +582,31 @@ bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform,
 {
     // calculate the accumulated transform
     double rX, rY, rZ;
+    // rotation
     rotation_axis.GetVector( rX, rY, rZ );
     glm::dmat4 rM = glm::rotate( rotation_angle, glm::dvec3( rX, rY, rZ ) );
+    // translation
     glm::dmat4 tM = glm::translate( glm::dvec3( translation.x, translation.y, translation.z ) );
+    // center
+    glm::dmat4 cM = glm::translate( glm::dvec3( center.x, center.y, center.z ) );
+    glm::dmat4 ncM = glm::translate( glm::dvec3( -center.x, -center.y, -center.z ) );
+    // scale
+    glm::dmat4 sM = glm::scale( glm::dmat4( 1.0 ), glm::dvec3( scale.x, scale.y, scale.z ) );
+    // scaleOrientation
+    scale_axis.GetVector( rX, rY, rZ );
+    glm::dmat4 srM = glm::rotate( scale_angle, glm::dvec3( rX, rY, rZ ) );
+    glm::dmat4 nsrM = glm::rotate( -scale_angle, glm::dvec3( rX, rY, rZ ) );
+
+    // resultant point:
+    // P' = T x C x R x SR x S x -SR x -C x P
+    // resultant transform:
+    // tx0 = tM * cM * rM * srM * sM * nsrM * ncM
     glm::dmat4 tx0;
 
     if( NULL != aTransform )
-        tx0  = (*aTransform) * tM * rM;
+        tx0  = (*aTransform) * tM * cM * rM * srM * sM * nsrM * ncM;
     else
-        tx0  = tM * rM;
+        tx0  = tM * cM * rM * srM * sM * nsrM * ncM;
 
     bool ok = true;
 

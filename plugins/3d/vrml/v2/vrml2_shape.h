@@ -49,6 +49,10 @@ private:
      */
     bool checkNodeType( WRL2NODES aType );
 
+    // overloads
+    void unlinkChildNode( const WRL2NODE* aNode );
+    void unlinkRefNode( const WRL2NODE* aNode );
+
 public:
 
     // functions inherited from WRL2NODE
