@@ -32,6 +32,7 @@
 #include "vrml2_coords.h"
 #include "vrml2_norms.h"
 #include "vrml2_color.h"
+#include "vrml2_box.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -369,20 +370,9 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         break;
 
     case WRL2_BOX:
-        // XXX - IMPLEMENT
-        if( !proc.DiscardNode() )
-        {
-            #ifdef DEBUG_VRML2
-            std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
-            #endif
+
+        if( !readBox( proc, aParent, aNode ) )
             return false;
-        }
-        #ifdef DEBUG_VRML2
-        else
-        {
-            std::cerr << " * [INFO] OK: discard " << glob << " node at l" << line << ", c" << column << "\n";
-        }
-        #endif
 
         break;
 
@@ -751,6 +741,26 @@ bool WRL2BASE::readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         *aNode = NULL;
 
     WRL2COLOR* np = new WRL2COLOR( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2BOX* np = new WRL2BOX( aParent );
 
     if( !np->Read( proc, this ) )
     {

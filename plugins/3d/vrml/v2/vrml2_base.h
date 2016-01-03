@@ -68,6 +68,7 @@ private:
     bool readCoords( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
 public:
 
