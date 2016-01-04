@@ -197,6 +197,9 @@ SCENEGRAPH* Load( char const* aFileName )
         #endif
         WRL2BASE* bp = new WRL2BASE;
 
+        // allow Inline{} files to be included
+        bp->SetEnableInline( true );
+
         if( !bp->Read( proc ) )
         {
             #ifdef DEBUG

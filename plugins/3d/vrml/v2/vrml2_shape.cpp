@@ -65,9 +65,13 @@ WRL2SHAPE::~WRL2SHAPE()
 
 bool WRL2SHAPE::isDangling( void )
 {
-    // this node is dangling unless it has a parent of type WRL2_TRANSFORM
+    // this node is dangling unless it has a parent of type:
+    // WRL2_TRANSFORM
+    // WRL2_SWITCH
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_TRANSFORM )
+    if( NULL == m_Parent
+        || ( m_Parent->GetNodeType() != WRL2_TRANSFORM
+        && m_Parent->GetNodeType() != WRL2_SWITCH ) )
         return true;
 
     return false;
@@ -332,10 +336,18 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( m_sgNode )
     {
-        if( NULL != aParent && aParent != S3D::GetSGNodeParent( m_sgNode )
-            && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+        if( NULL != aParent )
         {
-            return NULL;
+            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
+                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
         }
 
         return m_sgNode;

@@ -486,3 +486,23 @@ bool S3D::AddSGNodeRef( SGNODE* aParent, SGNODE* aChild )
 
     return aParent->AddRefNode( aChild );
 }
+
+
+bool S3D::AddSGNodeChild( SGNODE* aParent, SGNODE* aChild )
+{
+    if( NULL == aParent || NULL == aChild )
+        return false;
+
+    return aParent->AddChildNode( aChild );
+}
+
+
+void S3D::AssociateSGNodeWrapper( SGNODE* aObject, SGNODE** aRefPtr )
+{
+    if( NULL == aObject || NULL == aRefPtr || aObject != *aRefPtr )
+        return;
+
+    aObject->AssociateWrapper( aRefPtr );
+
+    return;
+}

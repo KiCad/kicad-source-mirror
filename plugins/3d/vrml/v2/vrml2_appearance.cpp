@@ -369,10 +369,18 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( m_sgNode )
     {
-        if( NULL != aParent && aParent != S3D::GetSGNodeParent( m_sgNode )
-            && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+        if( NULL != aParent )
         {
-            return NULL;
+            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
+                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
         }
 
         return m_sgNode;

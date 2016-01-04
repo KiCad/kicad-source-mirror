@@ -19,6 +19,7 @@ add_library( s3d_plugin_vrml MODULE
         v2/vrml2_norms.cpp
         v2/vrml2_color.cpp
         v2/vrml2_box.cpp
+        v2/vrml2_switch.cpp
         )
 
 target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )

@@ -113,9 +113,10 @@ bool WRLPROC::Open( const std::string& aFileName )
         // backslash
         // XXX: NOTE: badchars should include '-' but due to my bad model naming scheme
         // in the VRML model generator, I have allowed '-'. Other VRML parsers seem to
-        // accept '-'.
+        // accept '-'. FreeCAD produces names with '+' in them so '+' has been allowed
+        // as well; '+' is not even valid for VRML1.
         //m_badchars = "'\"#,.+-[]\\{}";
-        m_badchars = "'\"#,.+[]\\{}";
+        m_badchars = "'\"#,.[]\\{}";
         return true;
     }
 
@@ -305,7 +306,8 @@ bool WRLPROC::ReadName( std::string& aName )
     while( m_buf[m_linepos] > 0x20 && m_linepos < ssize )
     {
         if( '[' == m_buf[m_linepos] || '{' == m_buf[m_linepos]
-            || '.' == m_buf[m_linepos] || '#' == m_buf[m_linepos] )
+            || '.' == m_buf[m_linepos] || '#' == m_buf[m_linepos]
+            || ',' == m_buf[m_linepos] )
         {
             if( !aName.empty() )
             {

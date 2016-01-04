@@ -314,6 +314,9 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
         if( !aTopNode->ReadNode( proc, this, NULL ) )
             return false;
 
+        if( proc.Peek() == ',' )
+            proc.Pop();
+
         return true;
     }
 
@@ -330,6 +333,10 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !aTopNode->ReadNode( proc, this, NULL ) )
             return false;
+
+        if( proc.Peek() == ',' )
+            proc.Pop();
+
     }
 
     return true;
@@ -338,6 +345,12 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
 SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
+    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+    std::cerr << " * [INFO] Translating Transform with " << m_Children.size();
+    std::cerr << " children, " << m_Refs.size() << " references and ";
+    std::cerr << m_BackPointers.size() << " backpointers\n";
+    #endif
+
     if( m_Children.empty() && m_Refs.empty() )
         return NULL;
 
@@ -356,10 +369,18 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( m_sgNode )
     {
-        if( NULL != aParent && aParent != S3D::GetSGNodeParent( m_sgNode )
-            && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+        if( NULL != aParent )
         {
-            return NULL;
+            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
+                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
         }
 
         return m_sgNode;
@@ -371,7 +392,11 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
     std::list< WRL2NODE* >::iterator eC = m_Children.end();
     WRL2NODES type;
 
-    // Include only Shape and Transform nodes in a Transform node
+    // Include only the following in a Transform node:
+    // Shape
+    // Switch
+    // Transform
+    // Inline
     bool test = false;  // set to true if there are any subnodes for display
 
     for( int i = 0; i < 2; ++i )
@@ -383,6 +408,8 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
             switch( type )
             {
             case WRL2_SHAPE:
+            case WRL2_SWITCH:
+            case WRL2_INLINE:
             case WRL2_TRANSFORM:
 
                 if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr(), calcNormals ) )

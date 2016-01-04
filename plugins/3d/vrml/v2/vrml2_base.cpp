@@ -33,11 +33,13 @@
 #include "vrml2_norms.h"
 #include "vrml2_color.h"
 #include "vrml2_box.h"
+#include "vrml2_switch.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
 WRL2BASE::WRL2BASE() : WRL2NODE()
 {
+    m_useInline = false;
     m_Type = WRL2_BASE;
     return;
 }
@@ -58,6 +60,44 @@ bool WRL2BASE::SetParent( WRL2NODE* aParent )
     #endif
 
     return false;
+}
+
+
+void WRL2BASE::SetEnableInline( bool enable )
+{
+    m_useInline = enable;
+    return;
+}
+
+
+bool WRL2BASE::GetEnableInline( void )
+{
+    return  m_useInline;
+}
+
+
+SGNODE* WRL2BASE::AddInlineData( const std::string& aName, WRL2INLINE* aObject )
+{
+    std::map< std::string, WRL2INLINE* >::iterator dp = m_inlineModels.find( aName );
+    // XXX;
+    // qwerty;
+    return NULL;
+}
+
+
+SGNODE* WRL2BASE::GetInlineData( const std::string& aName, WRL2INLINE* aObject )
+{
+    // XXX;
+    // qwerty;
+    return NULL;
+}
+
+
+void WRL2BASE::DelInlineData( const std::string& aName, WRL2INLINE* aObject )
+{
+    // XXX;
+    // qwerty;
+    return;
 }
 
 
@@ -508,6 +548,13 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
+    case WRL2_SWITCH:
+
+        if( !readSwitch( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     case WRL2_TRANSFORM:
     case WRL2_GROUP:
 
@@ -549,7 +596,6 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     case WRL2_SOUND:
     case WRL2_SPHERESENSOR:
     case WRL2_SPOTLIGHT:
-    case WRL2_SWITCH:
     case WRL2_TEXT:
     case WRL2_TEXTURECOORDINATE:
     case WRL2_TEXTURETRANSFORM:
@@ -775,13 +821,62 @@ bool WRL2BASE::readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 }
 
 
+bool WRL2BASE::readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2SWITCH* np = new WRL2SWITCH( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
 SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
     if( m_Children.empty() )
         return NULL;
 
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    {
+        #ifdef DEBUG_VRML2
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] WRL2BASE does not have a Transform parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
+
     if( m_sgNode )
+    {
+        if( NULL != aParent )
+        {
+            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
+                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+        }
+
         return m_sgNode;
+    }
 
     IFSG_TRANSFORM topNode( aParent );
 
@@ -815,6 +910,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
             break;
 
         case WRL2_TRANSFORM:
+        case WRL2_SWITCH:
 
             if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr(), calcNormals ) )
                 test = true;

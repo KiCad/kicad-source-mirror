@@ -46,6 +46,8 @@ namespace S3D
     SGLIB_API S3D::SGTYPES GetSGNodeType( SGNODE* aNode );
     SGLIB_API SGNODE* GetSGNodeParent( SGNODE* aNode );
     SGLIB_API bool AddSGNodeRef( SGNODE* aParent, SGNODE* aChild );
+    SGLIB_API bool AddSGNodeChild( SGNODE* aParent, SGNODE* aChild );
+    SGLIB_API void AssociateSGNodeWrapper( SGNODE* aObject, SGNODE** aRefPtr );
 
     /**
      * Function CalcTriNorm

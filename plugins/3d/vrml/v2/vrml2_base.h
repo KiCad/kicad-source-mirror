@@ -45,9 +45,12 @@
 
 #include <list>
 #include <string>
+#include <map>
 
 #include "vrml2_node.h"
 
+class SGNODE;
+class WRL2INLINE;
 
 /**
  * Class WRL2BASE
@@ -56,6 +59,8 @@
 class WRL2BASE : public WRL2NODE
 {
 private:
+    bool m_useInline;
+
     // handle cases of USE / DEF
     bool implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
@@ -69,6 +74,9 @@ private:
     bool readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+
+    std::map< std::string, WRL2INLINE* > m_inlineModels;
 
 public:
 
@@ -78,6 +86,15 @@ public:
 public:
     WRL2BASE();
     virtual ~WRL2BASE();
+
+    // function to enable/disable Inline{} expansion
+    void SetEnableInline( bool enable );
+    bool GetEnableInline( void );
+
+    // functions to manipulate Inline{} objects
+    SGNODE* AddInlineData( const std::string& aName, WRL2INLINE* aObject );
+    SGNODE* GetInlineData( const std::string& aName, WRL2INLINE* aObject );
+    void DelInlineData( const std::string& aName, WRL2INLINE* aObject );
 
     // function to read entire VRML file
     bool Read( WRLPROC& proc );
