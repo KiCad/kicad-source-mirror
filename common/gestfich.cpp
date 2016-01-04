@@ -373,7 +373,7 @@ bool OpenPDF( const wxString& file )
         else
         {
             wxString msg;
-            msg.Printf( _( "Problem while running the PDF viewer\n Command is '%s'" ),
+            msg.Printf( _( "Problem while running the PDF viewer\nCommand is '%s'" ),
                         GetChars( command ) );
             DisplayError( NULL, msg );
         }
