@@ -46,7 +46,7 @@ developers.
 - None
 
 **Status:**
-- Initial planning stages.
+- Completed.  See the [KiCad Stable Release Policy]() for mor information.
 
 
 ## Website Improvements ## {#website_improvements}
@@ -64,7 +64,8 @@ of the many separate websites currently in used.
 - None
 
 **Status:**
-- No progress.
+- Completed.  See the [KiCad Website source repository](https://github.com/KiCad/kicad-website)
+  for the new website [Asciidoc](http://www.methods.co.nz/asciidoc/) source.
 
 
 # General # {#general}
@@ -92,8 +93,7 @@ Eeschema and Pcbnew to run under a single process.
 - None
 
 **Status:**
-- Stage 1 code released.
-- Stage 2 in process.
+- Completed.
 
 ## User Interface Modernization ## {#wxaui}
 **Goal:**
@@ -149,7 +149,7 @@ to reduce the build footprint.
 - None
 
 **Status:**
-- Initial concept discussions.
+- In progress.
 
 ## Platform Binary Installers ## {#installers}
 **Goal:**
@@ -165,7 +165,9 @@ Provide quality installers for all supported platforms.
 - None
 
 **Status**
-- No progress
+- Completed for both stable release and nightly builds.  See the [package
+  download page](http://kicad-pcb.org/download/) at the [KiCad Website][
+  kicad-website].
 
 
 # Common Library # {#common_lib}
@@ -203,7 +205,8 @@ clean up code base.
 - Remove any unused geometry library code.
 
 **Dependencies:**
-- None
+- Completed.  The Boost polygon library was dropped in favor of the [Clipper
+  polygon library](http://www.angusj.com/delphi/clipper.php)
 
 **Status:**
 - In progress as part of push and shove router.
@@ -222,7 +225,7 @@ provided by version 3 can be utilized.
 - wxWidgets 3 is widely available on Linux distributions.
 
 **Status:**
-- Build now requires 3.0.0 or greater.
+- Completed.  Build now requires 3.0.0 or greater.
 
 ## Linux Printing Improvements ## {#linux_print}
 **Goal:**
@@ -301,7 +304,7 @@ managing and manipulating the schematic.
 - None
 
 **Status:**
-- No progress.
+- In progress.
 
 ## Hierarchical Sheet Design ## {#hierarchy_fix}
 **Goal:**
@@ -317,7 +320,7 @@ fly every time sheet information is required.
 - None
 
 **Status:**
-- No progress.
+- In progress.
 
 ## Schematic and Component Library Plugin ## {#sch_plugin}
 **Goal:**
@@ -463,7 +466,8 @@ to launch an separate program.
 - [Convert to a single process application](#kiway).
 
 **Status:**
-- Initial library conversion committed to product branch.
+- Completed.  CvPcb is now launched as a child window of Eeschema and the
+  intermediate component assignment file (*.cmp) has been eliminated.
 
 
 # Pcbnew: Circuit Board Editor # {#pcbnew}
@@ -480,7 +484,7 @@ Unify all board editing tools under a single framework.
 - Remove all duplicate legacy editing tools.
 
 **Dependencies:**
-- None
+- In progress.
 
 **Status:**
 - Initial porting work in progress.
@@ -521,7 +525,10 @@ available in OpenCascade.
 - [Dynamic library plugin](#plugin_base).
 
 **Status:**
-- No progress.
+- 3D Viewer work in progress.  There is also now and external tool [KiCadStepUp]
+  (http://sourceforge.net/projects/kicadstepup/) which allows [FreeCAD]
+  (http://www.freecadweb.org/) to create parametric models from KiCad board
+  files.
 
 ## Push and Shove Router Improvements ## {#ps_router_improvements}
 **Goal:**
@@ -536,7 +543,7 @@ Add features such as matched length and microwave tools to the P&S router.
 - None
 
 **Status:**
-- Match trace length work in progress.
+- Match trace length implemented.
 
 ## Layer Improvements ## {#pcb_layers}
 **Goal:**
@@ -743,7 +750,9 @@ formatting for more uniform formatting across all user documentation.
 - None
 
 **Status:**
-- Started with this document.
+- Completed.  The documentation has been converted from ODT to [Asciidoc]
+  [asciidoc].  The [documentation](http://kicad-pcb.org/help/documentation/)
+  can be found on the [KiCad website][kicad-website].
 
 ## Grammar Check ## {#doc_grammar}
 **Goal:**
@@ -787,7 +796,10 @@ involved with the project.
 - None.
 
 **Status:**
-- No progress.
+- In progress.  Most of the developer documentation has been convert to
+  [Doxygen markdown](http://www.stack.nl/~dimitri/doxygen/manual/markdown.html)
+  and the [output][kicad-docs] is rebuilt automatically when a commit is
+  made to the KiCad repo.
 
 
 # Unit Testing # {#unittest}
@@ -832,3 +844,6 @@ Provide quality circuit simulation capabilities similar to commercial products.
 
 **Status:**
 - No progress.
+
+[kicad-website]:http://kicad-pcb.org/
+[kicad-docs]:http://ci.kicad-pcb.org/job/kicad-doxygen/ws/Documentation/doxygen/html/index.html

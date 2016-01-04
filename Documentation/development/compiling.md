@@ -32,9 +32,9 @@ going to build a stable version of KiCad from a source archive.
 ## GIT Version Control System ## {#git}
 
 If you prefer to use [GIT][] for version control, there is a mirror of the official KiCad
-repository on [Github][].  GIT is not required if you are going to build a stable version of
-KiCad from a source archive.  Please note that the Github mirror is read only.  Do not submit
-pull requests to Github.  Changes should be sent to the KiCad developer's [mailing list][] as
+repository on [GitHub][].  GIT is not required if you are going to build a stable version of
+KiCad from a source archive.  Please note that the GitHub mirror is read only.  Do not submit
+pull requests to GitHub.  Changes should be sent to the KiCad developer's [mailing list][] as
 an attached patch with [PATCH] at the beginning of the subject.
 
 ## Doxygen Code Documentation Generator ## {#doxygen_section}
@@ -111,6 +111,12 @@ When building KiCad with wxPython support, make sure the version of the wxWidget
 the version of wxPython installed on your system are the same.  Mismatched versions have been
 known to cause runtime issues.
 
+## Curl Multi-Protocol File Transfer Library ## {#curl}
+
+The [Curl Multi-Protocol File Transfer Library][libcurl] is used to provide secure internet
+file transfer access for the [GitHub][] plug in.  This library only needs to be installed if
+the GitHub plug build option is enabled.
+
 # KiCad Build Configuration Options # {#build_opts}
 
 KiCad has many build options that can be configured to build different options depending on
@@ -148,16 +154,6 @@ supplied by KiCad.  This option is disabled by default.
 The KICAD_SCRIPTING_WXPYTHON option is used to enable building the wxPython interface into
 Pcbnew including the wxPython console.  This option is disabled by default.
 
-## Build with Static Libraries ## {#static_lib_opt}
-
-The KICAD_BUILD_STATIC option is used to build KiCad with static libraries.  This option is
-used for OSX builds only and is disabled by default.
-
-## Build with Dynamic Libraries ## {#dynamic_lib_opt}
-
-The KICAD_BUILD_DYNAMIC option is used to build KiCad with dynamic libraries.  This option is
-used for OSX only and is disabled by default.
-
 ## Build with System Boost  ## {#boost_opt}
 
 The KICAD_SKIP_BOOST option allow you to use the Boost libraries installed on your system to
@@ -172,9 +168,9 @@ The USE_OSX_DEPS_BUILDER option forces the build configuration to download and b
 required dependencies to build KiCad on OSX.  This option is not longer maintained and most
 likely is broken.  Use it at your own peril.
 
-## Github Plugin ## {#github_opt}
+## GitHub Plugin ## {#github_opt}
 
-The BUILD_GITHUB_PLUGIN option is used to control if the Github plugin is built.  This option is
+The BUILD_GITHUB_PLUGIN option is used to control if the GitHub plug in is built.  This option is
 enabled by default.
 
 # Getting the KiCad Source Code ## {#getting_src}
@@ -192,7 +188,7 @@ branch on your machine by using the following command:
     bzr branch https://code.launchpad.net/~kicad-product-committers/kicad/product kicad_source
 
 If you prefer to use [GIT][] as you version control system, you can clone the KiCad mirror on
-Github using the following command:
+GitHub using the following command:
 
     git clone https://github.com/KiCad/kicad-source-mirror
 
@@ -202,7 +198,7 @@ Stable release archive: https://launchpad.net/kicad/4.0/4.0.1/+download/kicad-4.
 
 Development branch: https://code.launchpad.net/~kicad-product-committers/kicad/product
 
-Github mirror: https://github.com/KiCad/kicad-source-mirror
+GitHub mirror: https://github.com/KiCad/kicad-source-mirror
 
 # Building KiCad on Linux # {#build_linux}
 
@@ -251,7 +247,7 @@ MSYS2 install path and run the following commands:
     makepkg-mingw -is
 
 This will download and install all of the build dependencies, clone the KiCad source mirror
-from Github, create both 32-bit and 64-bit KiCad packages depending on your MSYS setup, and
+from GitHub, create both 32-bit and 64-bit KiCad packages depending on your MSYS setup, and
 install the newly built KiCad packages.  Please note that this build process takes a very
 long time to build even on a fast system.
 
@@ -284,7 +280,6 @@ the following commands:
           -DCMAKE_PREFIX_PATH=/mingw64 \
           -DCMAKE_INSTALL_PREFIX=/mingw64 \
           -DDEFAULT_INSTALL_PATH=/mingw64 \
-          -DKICAD_SKIP_BOOST=ON \
           -DKICAD_SCRIPTING=ON \
           -DKICAD_SCRIPTING_MODULES=ON \
           -DKICAD_SCRIPTING_WXPYTHON=ON \
@@ -399,7 +394,7 @@ Boost patches in the KiCad source [patches folder][].
 [Launchpad]: https://code.launchpad.net/~kicad-product-committers/kicad/product
 [Bazaar]: http://bazaar.canonical.com/en/
 [GIT]: https://git-scm.com/
-[Github]: https://github.com/KiCad/kicad-source-mirror
+[GitHub]: https://github.com/KiCad/kicad-source-mirror
 [Doxygen]: http://www.stack.nl/~dimitri/doxygen/
 [mailing list]: https://launchpad.net/~kicad-developers
 [SWIG]: http://www.swig.org/
@@ -419,3 +414,4 @@ Boost patches in the KiCad source [patches folder][].
 [MinGW]: http://mingw.org/
 [build Boost]: http://www.boost.org/doc/libs/1_59_0/more/getting_started/index.html
 [MSYS2 64-bit SourceForge repo]: http://sourceforge.net/projects/msys2/files/REPOS/MINGW/x86_64/
+[libcurl]: http://curl.haxx.se/libcurl/

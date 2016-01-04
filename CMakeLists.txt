@@ -453,7 +453,7 @@ find_package( CURL REQUIRED )
 #
 # Find Cairo library, required
 #
-find_package( Cairo 1.12.1 REQUIRED )
+find_package( Cairo 1.8.8 REQUIRED )
 
 #
 # Find Boost library, required.
