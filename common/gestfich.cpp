@@ -28,33 +28,26 @@
  * @brief Functions for file management
  */
 
-// For compilers that support precompilation, includes "wx.h".
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <confirm.h>
-
-#include <common.h>
-#include <macros.h>
-#include <gestfich.h>
-
 #include <wx/mimetype.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
 
+// For compilers that support precompilation, includes "wx.h".
+#include <fctsys.h>
+#include <pgm_base.h>
+#include <confirm.h>
+#include <common.h>
+#include <macros.h>
+
+#include <gestfich.h>
 
 void AddDelimiterString( wxString& string )
 {
-    wxString text;
-
     if( !string.StartsWith( wxT( "\"" ) ) )
-        text = wxT( "\"" );
-
-    text += string;
-
-    if( (text.Last() != '"' ) || (text.length() <= 1) )
-        text += wxT( "\"" );
-
-    string = text;
+    {
+        string.Prepend ( wxT( "\"" ) );
+        string.Append ( wxT( "\"" ) );
+    }
 }
 
 
@@ -227,6 +220,8 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 #ifdef __WXMAC__
     else
     {
+        AddDelimiterString( fullFileName );
+
         if( !param.IsEmpty() )
             fullFileName += wxT( " " ) + param;
 
@@ -351,8 +346,6 @@ bool OpenPDF( const wxString& file )
 {
     wxString command;
     wxString filename = file;
-    wxString type;
-    bool     success = false;
 
     Pgm().ReadPdfBrowserInfos();
 
@@ -363,71 +356,21 @@ bool OpenPDF( const wxString& file )
     }
     else
     {
-        wxFileType* filetype = NULL;
-        wxFileType::MessageParameters params( filename, type );
-        filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
+        wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
 
         if( filetype )
-            success = filetype->GetOpenCommand( &command, params );
+            command = filetype->GetOpenCommand( filename );
 
         delete filetype;
-
-#ifndef __WINDOWS__
-
-        // Bug ? under linux wxWidgets returns acroread as PDF viewer, even if
-        // it does not exist.
-        if( command.StartsWith( wxT( "acroread" ) ) ) // Workaround
-            success = false;
-#endif
-
-        if( success && !command.IsEmpty() )
-        {
-            success = ProcessExecute( command );
-
-            if( success )
-                return success;
-        }
-
-        success = false;
-        command.clear();
-
-        if( !success )
-        {
-#if !defined(__WINDOWS__)
-            AddDelimiterString( filename );
-
-            // here is a list of PDF viewers candidates
-            static const wxChar* tries[] =
-            {
-                wxT( "/usr/bin/evince" ),
-                wxT( "/usr/bin/okular" ),
-                wxT( "/usr/bin/gpdf" ),
-                wxT( "/usr/bin/konqueror" ),
-                wxT( "/usr/bin/kpdf" ),
-                wxT( "/usr/bin/xpdf" ),
-                wxT( "/usr/bin/open" ),     // BSD and OSX file & dir opener
-                wxT( "/usr/bin/xdg-open" ), // Freedesktop file & dir opener
-            };
-
-            for( unsigned ii = 0;  ii<DIM(tries);  ii++ )
-            {
-                if( wxFileExists( tries[ii] ) )
-                {
-                    command = tries[ii];
-                    command += wxT( ' ' );
-                    command += filename;
-                    break;
-                }
-            }
-#endif
-        }
     }
 
     if( !command.IsEmpty() )
     {
-        success = ProcessExecute( command );
-
-        if( !success )
+        if( ProcessExecute( command ) )
+        {
+            return true;
+        }
+        else
         {
             wxString msg;
             msg.Printf( _( "Problem while running the PDF viewer\nCommand is '%s'" ),
@@ -440,10 +383,9 @@ bool OpenPDF( const wxString& file )
         wxString msg;
         msg.Printf( _( "Unable to find a PDF viewer for <%s>" ), GetChars( filename ) );
         DisplayError( NULL, msg );
-        success = false;
     }
 
-    return success;
+    return false;
 }
 
 
