@@ -318,7 +318,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
 SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    if( NULL == appearance && NULL == geometry )
+    if( NULL == appearance || NULL == geometry )
         return NULL;
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
