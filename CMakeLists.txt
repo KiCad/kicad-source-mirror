@@ -254,7 +254,7 @@ if( KICAD_SCRIPTING_WXPYTHON )
     add_definitions( -DKICAD_SCRIPTING_WXPYTHON )
 endif()
 
-if( USE_WX_GRAPHICS_CONTEXT )
+if( USE_WX_GRAPHICS_CONTEXT OR APPLE )
     add_definitions( -DUSE_WX_GRAPHICS_CONTEXT )
 endif()
 
