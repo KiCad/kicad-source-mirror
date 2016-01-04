@@ -154,20 +154,6 @@ supplied by KiCad.  This option is disabled by default.
 The KICAD_SCRIPTING_WXPYTHON option is used to enable building the wxPython interface into
 Pcbnew including the wxPython console.  This option is disabled by default.
 
-## Build with System Boost  ## {#boost_opt}
-
-The KICAD_SKIP_BOOST option allow you to use the Boost libraries installed on your system to
-be used instead of downloading Boost 1.54 and building a custom version specifically for
-building KiCad.  It is high recommended that you enable this option on Linux and use Boost
-version 1.56 or greater.  On other platforms you mileage may vary.  This option is disabled
-by default.
-
-## OSX Dependency Builder ## {#osx_deps_opt}
-
-The USE_OSX_DEPS_BUILDER option forces the build configuration to download and build the
-required dependencies to build KiCad on OSX.  This option is not longer maintained and most
-likely is broken.  Use it at your own peril.
-
 ## GitHub Plugin ## {#github_opt}
 
 The BUILD_GITHUB_PLUGIN option is used to control if the GitHub plug in is built.  This option is
@@ -415,3 +401,4 @@ Boost patches in the KiCad source [patches folder][].
 [build Boost]: http://www.boost.org/doc/libs/1_59_0/more/getting_started/index.html
 [MSYS2 64-bit SourceForge repo]: http://sourceforge.net/projects/msys2/files/REPOS/MINGW/x86_64/
 [libcurl]: http://curl.haxx.se/libcurl/
+[GLM]: http://glm.g-truc.net/
