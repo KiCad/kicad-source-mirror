@@ -90,7 +90,26 @@ public:
     bool TransferDataFromControl();
 
     /**
-     * Function CanSetKey
+     * Function ResolveKeyConflicts
+     * Check if we can set a hotkey, this will prompt the user if there
+     * is a conflict between keys. The key code should have already been
+     * checked that it's not for the same entry as its currently in or else
+     * it'll prompt the change on itself.
+     * The function will do conflict detection depending on aSectionTag.
+     * g_CommonSectionTag means the key code must be checked with all sections.
+     * While other tags means the key code only must be checked with the aSectionTag
+     * section and g_CommonSectionTag section.
+     *
+     * @param aKey is the key code that wants to be set
+     * @param aSectionTag is the section tag that the key code came from
+     *
+     * @return True if the user accepted the overwrite or no conflict existed
+     */
+    bool ResolveKeyConflicts( long aKey, const wxString& aSectionTag );
+
+
+    /**
+     * Function CheckKeyConflicts
      * Check whether the given key conflicts with anything in this HOTKEY_LIST_CTRL.
      *
      * @param aKey - key to check
@@ -98,7 +117,7 @@ public:
      * @param aConfKey - if not NULL, outparam holding the key this one conflicts with
      * @param aConfSect - if not NULL, outparam holding the section this one conflicts with
      */
-    bool CanSetKey( long aKey, const wxString& aSectionTag,
+    bool CheckKeyConflicts( long aKey, const wxString& aSectionTag,
             EDA_HOTKEY** aConfKey, EDA_HOTKEY_CONFIG** aConfSect );
 
     /**
@@ -152,59 +171,8 @@ protected:
      * @param aEvent is the key press event, the keycode is retrieved from it
      */
     void OnChar( wxKeyEvent& aEvent );
-
-    /**
-     * Function OnSize
-     * Sizing update handler to recompute the column widths dynamically.
-     */
-    void OnSize( wxSizeEvent& aEvent );
 };
 
-/**
- * Class HOTKEY_SECTION_PAGE
- * is a class to contain the contents of a hotkey editor tab page.
- */
-class HOTKEY_SECTION_PAGE : public wxPanel
-{
-public:
-private:
-    HOTKEY_LIST_CTRL *m_hotkeyList;
-    HOTKEYS_EDITOR_DIALOG* m_dialog;
-
-public:
-    /** Constructor to create a setup page for one netlist format.
-     * Used in Netlist format Dialog box creation
-     * @param parent = wxNotebook * parent
-     * @param title = title (name) of the notebook page
-     * @param id_NetType = netlist type id
-     */
-    HOTKEY_SECTION_PAGE( HOTKEYS_EDITOR_DIALOG* aDialog, wxNotebook* aParent,
-                         const wxString& aTitle,
-                         EDA_HOTKEY_CONFIG* aSection );
-    ~HOTKEY_SECTION_PAGE() {};
-
-    /**
-     * Function Restore
-     * Resets the hotkeys back to their original unedited state
-     */
-    void Restore();
-
-    /**
-     * Function GetHotkeyCtrl
-     * Accessor to retrieve hotkey configuration control assigned to a tab control page
-     *
-     * @return Pointer to hotkey configuration control
-     */
-    HOTKEY_LIST_CTRL* GetHotkeyCtrl() { return m_hotkeyList; }
-
-    /**
-     * Function GetDialog
-     * Returns pointer to parent dialog window
-     *
-     * @return Pointer to parent dialog window
-     */
-    HOTKEYS_EDITOR_DIALOG* GetDialog() { return m_dialog; }
-};
 
 /**
  * Class HOTKEYS_EDITOR_DIALOG
@@ -217,7 +185,7 @@ protected:
     EDA_BASE_FRAME* m_parent;
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
 
-    std::vector<HOTKEY_SECTION_PAGE*> m_hotkeySectionPages;
+    HOTKEY_LIST_CTRL* m_hotkeyListCtrl;
 
     bool TransferDataToWindow();
     bool TransferDataFromWindow();
@@ -226,24 +194,6 @@ public:
     HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
 
     ~HOTKEYS_EDITOR_DIALOG() {};
-
-    /**
-     * Function CanSetKey
-     * Check if we can set a hotkey, this will prompt the user if there
-     * is a conflict between keys. The key code should have already been
-     * checked that it's not for the same entry as its currently in or else
-     * it'll prompt the change on itself.
-     * The function will do conflict detection depending on aSectionTag.
-     * g_CommonSectionTag means the key code must be checked with all sections.
-     * While other tags means the key code only must be checked with the aSectionTag
-     * section and g_CommonSectionTag section.
-     *
-     * @param aKey is the key code that wants to be set
-     * @param aSectionTag is the section tag that the key code came from
-     *
-     * @return True if the user accepted the overwrite or no conflict existed
-     */
-    bool CanSetKey( long aKey, const wxString& aSectionTag );
 
 private:
 

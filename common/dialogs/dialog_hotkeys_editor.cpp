@@ -28,8 +28,6 @@
 #include <common.h>
 #include <confirm.h>
 
-#include <wx/dataview.h>
-
 #include <dialog_hotkeys_editor.h>
 
 
@@ -57,13 +55,6 @@ HOTKEY_LIST_CTRL::HOTKEY_LIST_CTRL( wxWindow *aParent, const HOTKEYS_SECTIONS& a
     SetColumnWidth( 1, 100 );
 
     Bind( wxEVT_CHAR, &HOTKEY_LIST_CTRL::OnChar, this );
-    Bind( wxEVT_SIZE, &HOTKEY_LIST_CTRL::OnSize, this );
-}
-
-
-void HOTKEY_LIST_CTRL::OnSize( wxSizeEvent& aEvent )
-{
-    aEvent.Skip();
 }
 
 
@@ -121,8 +112,8 @@ void HOTKEY_LIST_CTRL::OnChar( wxKeyEvent& aEvent )
             if( exists && data->GetHotkey().m_KeyCode != key )
             {
                 wxString tag = data->GetSectionTag();
-                HOTKEY_SECTION_PAGE* parent = static_cast<HOTKEY_SECTION_PAGE*>( m_parent );
-                bool canUpdate = parent->GetDialog()->CanSetKey( key, tag );
+                HOTKEYS_EDITOR_DIALOG* parent = static_cast<HOTKEYS_EDITOR_DIALOG*>( m_parent );
+                bool canUpdate = ResolveKeyConflicts( key, tag );
 
                 if( canUpdate )
                 {
@@ -203,20 +194,26 @@ bool HOTKEY_LIST_CTRL::TransferDataToControl()
     m_items.clear();
     m_hotkeys.clear();
 
-    for( size_t i_list = 0; i_list < m_sections.size(); ++i_list )
+    HOTKEYS_SECTIONS::iterator sec_it;
+    size_t sec_index = 0;
+    for( sec_it = m_sections.begin(); sec_it != m_sections.end(); ++sec_it, ++sec_index )
     {
-        LoadSection( m_sections[i_list].second );
-        wxString section_tag = *( m_sections[i_list].second->m_SectionTag );
+        LoadSection( sec_it->second );
+        wxString section_tag = *( sec_it->second->m_SectionTag );
 
-        HOTKEY_LIST& each_list = m_hotkeys[i_list];
-        for( size_t i_hotkey = 0; i_hotkey < each_list.size(); ++i_hotkey )
+        // Create parent item
+        wxTreeListItem parent = AppendItem( GetRootItem(), sec_it->first );
+
+        HOTKEY_LIST& each_list = m_hotkeys[sec_index];
+        HOTKEY_LIST::iterator hk_it;
+        for( hk_it = each_list.begin(); hk_it != each_list.end(); ++hk_it )
         {
-            EDA_HOTKEY* hotkey_descr = &each_list[i_hotkey];
-
-            wxTreeListItem item = AppendItem( GetRootItem(), wxEmptyString );
-            SetItemData( item, new DIALOG_HOTKEY_CLIENT_DATA( hotkey_descr, section_tag ) );
+            wxTreeListItem item = AppendItem( parent, wxEmptyString );
+            SetItemData( item, new DIALOG_HOTKEY_CLIENT_DATA( &*hk_it, section_tag ) );
             m_items.push_back( item );
         }
+
+        Expand( parent );
     }
 
     UpdateFromClientData();
@@ -253,7 +250,41 @@ bool HOTKEY_LIST_CTRL::TransferDataFromControl()
 }
 
 
-bool HOTKEY_LIST_CTRL::CanSetKey( long aKey, const wxString& aSectionTag,
+bool HOTKEY_LIST_CTRL::ResolveKeyConflicts( long aKey, const wxString& aSectionTag )
+{
+    EDA_HOTKEY* conflictingKey = NULL;
+    EDA_HOTKEY_CONFIG* conflictingSection = NULL;
+
+    CheckKeyConflicts( aKey, aSectionTag, &conflictingKey, &conflictingSection );
+
+    if( conflictingKey != NULL )
+    {
+        wxString info = wxGetTranslation( conflictingKey->m_InfoMsg );
+        wxString msg = wxString::Format(
+            _( "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
+               "to change its assignment?" ),
+            KeyNameFromKeyCode( aKey ), GetChars( info ),
+            *(conflictingSection->m_Title) );
+
+        wxMessageDialog dlg( m_parent, msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
+
+        if( dlg.ShowModal() == wxID_YES )
+        {
+            conflictingKey->m_KeyCode = 0;
+            UpdateFromClientData();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool HOTKEY_LIST_CTRL::CheckKeyConflicts( long aKey, const wxString& aSectionTag,
         EDA_HOTKEY** aConfKey, EDA_HOTKEY_CONFIG** aConfSect )
 {
     EDA_HOTKEY* conflictingKey = NULL;
@@ -300,39 +331,6 @@ bool HOTKEY_LIST_CTRL::CanSetKey( long aKey, const wxString& aSectionTag,
 }
 
 
-HOTKEY_SECTION_PAGE::HOTKEY_SECTION_PAGE( HOTKEYS_EDITOR_DIALOG* aDialog,
-                                          wxNotebook*     aParent,
-                                          const wxString& aTitle,
-                                          EDA_HOTKEY_CONFIG* aSection ) :
-    wxPanel( aParent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER ),
-    m_dialog( aDialog )
-{
-    aParent->AddPage( this, aTitle );
-
-	wxBoxSizer* bMainSizer = new wxBoxSizer( wxVERTICAL );
-
-	SetSizer( bMainSizer );
-
-    HOTKEYS_SECTION section( aTitle, aSection );
-    HOTKEYS_SECTIONS sections;
-    sections.push_back( section );
-
-	m_hotkeyList = new HOTKEY_LIST_CTRL( this, sections );
-	bMainSizer->Add( m_hotkeyList, 1, wxALL|wxEXPAND, 5 );
-
-	Layout();
-	bMainSizer->Fit( this );
-}
-
-
-void HOTKEY_SECTION_PAGE::Restore()
-{
-    m_hotkeyList->TransferDataToControl();
-
-    Update();
-}
-
-
 void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
 {
     HOTKEYS_EDITOR_DIALOG dialog( aParent, aHotkeys );
@@ -354,12 +352,16 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
 {
     EDA_HOTKEY_CONFIG* section;
 
+    HOTKEYS_SECTIONS sections;
     for( section = m_hotkeys; section->m_HK_InfoList; section++ )
     {
-        m_hotkeySectionPages.push_back( new HOTKEY_SECTION_PAGE( this, m_hotkeySections,
-                                                                 wxGetTranslation( *section->m_Title ),
-                                                                 section ) );
+        HOTKEYS_SECTION sec( wxGetTranslation( *section->m_Title ), section );
+        sections.push_back( sec );
     }
+
+    m_hotkeyListCtrl = new HOTKEY_LIST_CTRL( this, sections );
+    m_mainSizer->Insert( 1, m_hotkeyListCtrl, wxSizerFlags( 1 ).Expand().Border( wxALL, 5 ) );
+    Layout();
 
     m_sdbSizerOK->SetDefault();
     Center();
@@ -371,12 +373,8 @@ bool HOTKEYS_EDITOR_DIALOG::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
-    for( i = m_hotkeySectionPages.begin(); i != m_hotkeySectionPages.end(); ++i )
-    {
-        if( !(*i)->GetHotkeyCtrl()->TransferDataToControl() )
-            return false;
-    }
+    if( !m_hotkeyListCtrl->TransferDataToControl() )
+        return false;
 
     return true;
 }
@@ -387,12 +385,8 @@ bool HOTKEYS_EDITOR_DIALOG::TransferDataFromWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
-    for( i = m_hotkeySectionPages.begin(); i != m_hotkeySectionPages.end(); ++i )
-    {
-        if( !(*i)->GetHotkeyCtrl()->TransferDataFromControl() )
-            return false;
-    }
+    if( !m_hotkeyListCtrl->TransferDataFromControl() )
+        return false;
 
     // save the hotkeys
     m_parent->WriteHotkeyConfig( m_hotkeys );
@@ -403,56 +397,6 @@ bool HOTKEYS_EDITOR_DIALOG::TransferDataFromWindow()
 
 void HOTKEYS_EDITOR_DIALOG::ResetClicked( wxCommandEvent& aEvent )
 {
-    std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
-
-    for( i = m_hotkeySectionPages.begin(); i != m_hotkeySectionPages.end(); ++i )
-    {
-        (*i)->Restore();
-    }
+    m_hotkeyListCtrl->TransferDataToControl();
 }
 
-
-bool HOTKEYS_EDITOR_DIALOG::CanSetKey( long aKey, const wxString& aSectionTag )
-{
-    std::vector<HOTKEY_SECTION_PAGE*>::iterator i;
-
-    EDA_HOTKEY* conflictingKey = NULL;
-    EDA_HOTKEY_CONFIG* conflictingSection = NULL;
-    HOTKEY_LIST_CTRL *conflictingCtrl = NULL;
-
-    for( i = m_hotkeySectionPages.begin(); i != m_hotkeySectionPages.end(); ++i )
-    {
-        HOTKEY_LIST_CTRL *ctrl = (*i)->GetHotkeyCtrl();
-
-        if ( !ctrl->CanSetKey( aKey, aSectionTag, &conflictingKey, &conflictingSection ) )
-        {
-            conflictingCtrl = ctrl;
-            break;
-        }
-    }
-
-    if( conflictingKey != NULL )
-    {
-        wxString info = wxGetTranslation( conflictingKey->m_InfoMsg );
-        wxString msg = wxString::Format(
-            _( "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
-               "to change its assignment?" ),
-            KeyNameFromKeyCode( aKey ), GetChars( info ),
-            *(conflictingSection->m_Title) );
-
-        wxMessageDialog dlg( this, msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
-
-        if( dlg.ShowModal() == wxID_YES )
-        {
-            conflictingKey->m_KeyCode = 0;
-            conflictingCtrl->UpdateFromClientData();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return true;
-}

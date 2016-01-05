@@ -13,16 +13,11 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxVERTICAL );
+	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Select a row and press a new key combination to alter the binding."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( 400 );
-	bMainSizer->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
-	
-	m_hotkeySections = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bMainSizer->Add( m_hotkeySections, 1, wxEXPAND | wxALL, 5 );
+	m_mainSizer->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* b_buttonsSizer;
 	b_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -43,10 +38,10 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	b_buttonsSizer->Add( m_sdbSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	
-	bMainSizer->Add( b_buttonsSizer, 0, wxALIGN_RIGHT|wxEXPAND, 5 );
+	m_mainSizer->Add( b_buttonsSizer, 0, wxALIGN_RIGHT|wxEXPAND, 5 );
 	
 	
-	this->SetSizer( bMainSizer );
+	this->SetSizer( m_mainSizer );
 	this->Layout();
 	
 	// Connect Events
