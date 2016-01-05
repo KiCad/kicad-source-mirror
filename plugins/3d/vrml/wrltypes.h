@@ -40,7 +40,53 @@ enum WRLVERSION
 };
 
 
-// VRML Node Types
+// VRML1 Node Types
+// These are used to look up node names and to quickly
+// determine what routine to invoke to read a section of
+// a file.
+enum WRL1NODES
+{
+    WRL1_BASE = 0,  // not really a VRML node but we need a top level virtual node
+    WRL1_BEGIN,
+    WRL1_ASCIITEXT = WRL1_BEGIN,
+    WRL1_CONE,
+    WRL1_COORDINATE3,
+    WRL1_CUBE,
+    WRL1_CYLINDER,
+    WRL1_DIRECTIONALLIGHT,
+    WRL1_FONTSTYLE,
+    WRL1_INDEXEDFACESET,
+    WRL1_INDEXEDLINESET,
+    WRL1_INFO,
+    WRL1_LOD,
+    WRL1_MATERIAL,
+    WRL1_MATERIALBINDING,
+    WRL1_MATRIXTRANSFORM,
+    WRL1_NORMAL,
+    WRL1_NORMALBINDING,
+    WRL1_ORTHOCAMERA,
+    WRL1_PERSPECTIVECAMERA,
+    WRL1_POINTLIGHT,
+    WRL1_POINTSET,
+    WRL1_ROTATION,
+    WRL1_SCALE,
+    WRL1_SEPARATOR,
+    WRL1_SHAPEHINTS,
+    WRL1_SPHERE,
+    WRL1_SPOTLIGHT,
+    WRL1_SWITCH,
+    WRL1_TEXTURE2,
+    WRL1_TEXTURE2TRANSFORM,
+    WRL1_TEXTURECOORDINATE2,
+    WRL1_TRANSFORM,
+    WRL1_TRANSLATION,
+    WRL1_WWWANCHOR,
+    WRL1_WWWINLINE,
+    WRL1_INVALID,
+    WRL1_END = WRL1_INVALID
+};
+
+// VRML2 Node Types
 // These are used to look up node names and to quickly
 // determine what routine to invoke to read a section of
 // a file.

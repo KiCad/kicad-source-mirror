@@ -418,7 +418,7 @@ public:
     /**
      * Set the reference, for the given sheet path.
      */
-    void SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref );
+    void SetRef( const SCH_SHEET* aSheet, const wxString& ref );
 
     /**
      * Function AddHierarchicalReference

@@ -18,8 +18,6 @@ add_executable( idfrect idf_rect.cpp )
 add_executable( dxf2idf dxf2idfmain.cpp dxf2idf.cpp )
 add_executable( idf2vrml idf2vrml.cpp )
 
-add_dependencies( idf2vrml boost )
-
 target_link_libraries( dxf2idf lib_dxf idf3 ${wxWidgets_LIBRARIES} )
 
 target_link_libraries( idf2vrml idf3 ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )

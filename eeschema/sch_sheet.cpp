@@ -37,6 +37,7 @@
 #include <kicad_string.h>
 #include <msgpanel.h>
 
+#include <class_library.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
@@ -1291,6 +1292,43 @@ void SCH_SHEET::ClearModifyStatus()
 
         item = item->Next();
     }
+}
+
+
+void SCH_SHEET::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
+{
+    int ref = 1;
+
+    if( aReference )
+        ref = *aReference;
+
+    for( EDA_ITEM* item = m_screen->GetDrawItems();  item;  item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
+        SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
+        LIB_PART*       part = aLibs->FindLibPart( component->GetPartName() );
+
+        if( !part || !part->IsPower() )
+            continue;
+
+        wxString refstr = component->GetPrefix();
+
+        //str will be "C?" or so after the ClearAnnotation call.
+        while( refstr.Last() == '?' )
+            refstr.RemoveLast();
+
+        if( !refstr.StartsWith( wxT( "#" ) ) )
+            refstr = wxT( "#" ) + refstr;
+
+        refstr << wxT( "0" ) << ref;
+        component->SetRef( this, refstr );
+        ref++;
+    }
+
+    if( aReference )
+        *aReference = ref;
 }
 
 

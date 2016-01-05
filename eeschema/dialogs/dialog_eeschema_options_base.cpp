@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 19 2015)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -13,11 +13,6 @@ BEGIN_EVENT_TABLE( DIALOG_EESCHEMA_OPTIONS_BASE, DIALOG_SHIM )
 	EVT_SIZE( DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnSize )
 	EVT_CHOICE( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnChooseUnits )
 	EVT_CHECKBOX( xwID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnMiddleBtnPanEnbl )
-	EVT_LIST_ITEM_DESELECTED( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnTemplateFieldDeselected )
-	EVT_LIST_ITEM_SELECTED( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnTemplateFieldSelected )
-	EVT_TEXT_ENTER( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnEnterKey )
-	EVT_TEXT_ENTER( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnEnterKey )
-	EVT_CHECKBOX( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnVisibleFieldClick )
 	EVT_BUTTON( wxID_ADD_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnAddButtonClick )
 	EVT_BUTTON( wxID_DELETE_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnDeleteButtonClick )
 END_EVENT_TABLE()
@@ -33,8 +28,6 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_notebook->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
 	m_panel5 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer82;
 	bSizer82 = new wxBoxSizer( wxVERTICAL );
@@ -49,7 +42,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_staticText3 = new wxStaticText( m_panel5, wxID_ANY, _("&Grid size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	fgSizer32->Add( m_staticText3, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizer32->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	wxArrayString m_choiceGridSizeChoices;
 	m_choiceGridSize = new wxChoice( m_panel5, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceGridSizeChoices, 0 );
@@ -73,7 +66,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_staticText5 = new wxStaticText( m_panel5, wxID_ANY, _("&Line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	fgSizer32->Add( m_staticText5, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizer32->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinLineWidth = new wxSpinCtrl( m_panel5, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 1, 100, 1 );
 	fgSizer32->Add( m_spinLineWidth, 0, wxALL|wxEXPAND, 3 );
@@ -95,17 +88,6 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_staticText221 = new wxStaticText( m_panel5, wxID_ANY, _("&Auto-save time interval"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText221->Wrap( -1 );
-	fgSizer32->Add( m_staticText221, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
-	
-	m_spinAutoSaveInterval = new wxSpinCtrl( m_panel5, ID_M_SPINAUTOSAVEINTERVAL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 10 );
-	fgSizer32->Add( m_spinAutoSaveInterval, 0, wxALL|wxEXPAND, 3 );
-	
-	m_staticText23 = new wxStaticText( m_panel5, wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText23->Wrap( -1 );
-	fgSizer32->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
-	
 	
 	bSizer82->Add( fgSizer32, 0, wxALL|wxEXPAND, 5 );
 	
@@ -124,7 +106,8 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_checkShowHiddenPins = new wxCheckBox( m_panel5, wxID_ANY, _("S&how hidden pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer92->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
-	m_checkPageLimits = new wxCheckBox( m_panel5, wxID_ANY, _("Sho&w page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkPageLimits = new wxCheckBox( m_panel5, wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkPageLimits->SetValue(true); 
 	bSizer92->Add( m_checkPageLimits, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 3 );
 	
 	
@@ -134,7 +117,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel5->SetSizer( bSizer82 );
 	m_panel5->Layout();
 	bSizer82->Fit( m_panel5 );
-	m_notebook->AddPage( m_panel5, _("&Display"), false );
+	m_notebook->AddPage( m_panel5, _("Display"), true );
 	m_panel3 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -149,7 +132,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_staticText2 = new wxStaticText( m_panel3, wxID_ANY, _("&Measurement units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	fgSizer3->Add( m_staticText2, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizer3->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	wxArrayString m_choiceUnitsChoices;
 	m_choiceUnits = new wxChoice( m_panel3, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitsChoices, 0 );
@@ -161,7 +144,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_staticText9 = new wxStaticText( m_panel3, wxID_ANY, _("&Horizontal pitch of repeated items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	fgSizer3->Add( m_staticText9, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizer3->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatHorizontal = new wxSpinCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -5000, 5000, 0 );
 	fgSizer3->Add( m_spinRepeatHorizontal, 0, wxALL|wxEXPAND, 3 );
@@ -172,7 +155,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_staticText12 = new wxStaticText( m_panel3, wxID_ANY, _("&Vertical pitch of repeated items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	fgSizer3->Add( m_staticText12, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizer3->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatVertical = new wxSpinCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -5000, 5000, 100 );
 	fgSizer3->Add( m_spinRepeatVertical, 0, wxALL|wxEXPAND, 3 );
@@ -183,7 +166,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_staticText16 = new wxStaticText( m_panel3, wxID_ANY, _("&Increment of repeated labels:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
-	fgSizer3->Add( m_staticText16, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizer3->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatLabel = new wxSpinCtrl( m_panel3, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -10, 10, 1 );
 	fgSizer3->Add( m_spinRepeatLabel, 0, wxALL|wxEXPAND, 3 );
@@ -193,7 +176,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_staticText7 = new wxStaticText( m_panel3, wxID_ANY, _("Def&ault text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
-	fgSizer3->Add( m_staticText7, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizer3->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinTextSize = new wxSpinCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 1000, 0 );
 	fgSizer3->Add( m_spinTextSize, 0, wxALL|wxEXPAND, 3 );
@@ -212,6 +195,17 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText22 = new wxStaticText( m_panel3, wxID_ANY, _("(0 = unlimited)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
 	fgSizer3->Add( m_staticText22, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
+	
+	m_staticText221 = new wxStaticText( m_panel3, wxID_ANY, _("&Auto-save time interval"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText221->Wrap( -1 );
+	fgSizer3->Add( m_staticText221, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	
+	m_spinAutoSaveInterval = new wxSpinCtrl( m_panel3, ID_M_SPINAUTOSAVEINTERVAL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 10 );
+	fgSizer3->Add( m_spinAutoSaveInterval, 0, wxALL|wxEXPAND, 3 );
+	
+	m_staticText23 = new wxStaticText( m_panel3, wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText23->Wrap( -1 );
+	fgSizer3->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	
 	bSizer8->Add( fgSizer3, 0, wxALL|wxEXPAND, 5 );
@@ -238,7 +232,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel3->SetSizer( bSizer8 );
 	m_panel3->Layout();
 	bSizer8->Fit( m_panel3 );
-	m_notebook->AddPage( m_panel3, _("&Editing"), false );
+	m_notebook->AddPage( m_panel3, _("Editing"), false );
 	m_panel4 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxVERTICAL );
@@ -272,7 +266,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	bSizer91->Add( m_checkMiddleButtonPanLimited, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 	
-	m_checkAutoPan = new wxCheckBox( m_panel4, wxID_ANY, _("&Pan while moving ob&ject"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkAutoPan = new wxCheckBox( m_panel4, wxID_ANY, _("&Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer91->Add( m_checkAutoPan, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
 	
@@ -292,39 +286,39 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
-	templateFieldListCtrl = new wxListView( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	templateFieldListCtrl->SetMinSize( wxSize( 500,-1 ) );
+	m_fieldGrid = new wxGrid( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	bSizer11->Add( templateFieldListCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	// Grid
+	m_fieldGrid->CreateGrid( 0, 3 );
+	m_fieldGrid->EnableEditing( true );
+	m_fieldGrid->EnableGridLines( true );
+	m_fieldGrid->EnableDragGridSize( false );
+	m_fieldGrid->SetMargins( 0, 0 );
 	
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer4->AddGrowableCol( 1 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	// Columns
+	m_fieldGrid->SetColSize( 0, 150 );
+	m_fieldGrid->SetColSize( 1, 150 );
+	m_fieldGrid->SetColSize( 2, 75 );
+	m_fieldGrid->EnableDragColMove( false );
+	m_fieldGrid->EnableDragColSize( true );
+	m_fieldGrid->SetColLabelSize( 30 );
+	m_fieldGrid->SetColLabelValue( 0, _("Name") );
+	m_fieldGrid->SetColLabelValue( 1, _("Default Value") );
+	m_fieldGrid->SetColLabelValue( 2, _("Visible") );
+	m_fieldGrid->SetColLabelValue( 3, _("Name") );
+	m_fieldGrid->SetColLabelValue( 4, wxEmptyString );
+	m_fieldGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
-	fieldNameLabel = new wxStaticText( m_panel2, wxID_ANY, _("Na&me"), wxDefaultPosition, wxDefaultSize, 0 );
-	fieldNameLabel->Wrap( -1 );
-	fgSizer4->Add( fieldNameLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	// Rows
+	m_fieldGrid->EnableDragRowSize( true );
+	m_fieldGrid->SetRowLabelSize( 80 );
+	m_fieldGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
-	fieldNameTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	fgSizer4->Add( fieldNameTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	// Label Appearance
 	
-	fieldDefaultValueLabel = new wxStaticText( m_panel2, wxID_ANY, _("Defa&ult Value"), wxDefaultPosition, wxDefaultSize, 0 );
-	fieldDefaultValueLabel->Wrap( -1 );
-	fgSizer4->Add( fieldDefaultValueLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-	
-	fieldDefaultValueTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	fgSizer4->Add( fieldDefaultValueTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-	
-	fieldVisibleCheckbox = new wxCheckBox( m_panel2, wxID_ANY, _("&Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( fieldVisibleCheckbox, 0, wxALL, 5 );
-	
-	
-	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	bSizer11->Add( fgSizer4, 0, wxEXPAND, 5 );
+	// Cell Defaults
+	m_fieldGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer11->Add( m_fieldGrid, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizer6->Add( bSizer11, 1, wxEXPAND, 5 );
@@ -348,7 +342,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Default &Fields"), true );
+	m_notebook->AddPage( m_panel2, _("Default &Fields"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	

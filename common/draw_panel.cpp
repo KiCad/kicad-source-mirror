@@ -728,24 +728,51 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     // high and grid is slowly drawn on some platforms. An other way using blit transfert was used,
     // a long time ago, but it did not give very good results.
     // The better way is highly dependent on the platform and the graphic card.
-#ifndef __WXMAC__
-    GRSetColorPen( aDC, GetParent()->GetGridColor() );
-#else
-    // On mac (Cocoa), a point isn't a pixel and being of size 1 don't survive to antialiasing
-    GRSetColorPen( aDC, GetParent()->GetGridColor(), aDC->DeviceToLogicalXRel(2) );
-#endif
-
     int xpos;
     double right = ( double ) m_ClipBox.GetRight();
     double bottom = ( double ) m_ClipBox.GetBottom();
 
-    for( double x = (double) org.x; x <= right; x += gridSize.x )
+#if defined( __WXMAC__ ) && defined( USE_WX_GRAPHICS_CONTEXT )
+    wxGCDC *gcdc = wxDynamicCast( aDC, wxGCDC );
+    if( gcdc )
     {
-        xpos = KiROUND( x );
+        wxGraphicsContext *gc = gcdc->GetGraphicsContext();
 
-        for( double y = (double) org.y; y <= bottom; y += gridSize.y )
+        // Grid point size
+        const int gsz = 1;
+        const double w = aDC->DeviceToLogicalXRel( gsz );
+        const double h = aDC->DeviceToLogicalYRel( gsz );
+
+        // Use our own pen
+        wxPen pen( MakeColour( GetParent()->GetGridColor() ), h );
+        pen.SetCap( wxCAP_BUTT );
+        gc->SetPen( pen );
+
+        // draw grid
+        wxGraphicsPath path = gc->CreatePath();
+        for( double x = (double) org.x - w/2.0; x <= right - w/2.0; x += gridSize.x )
         {
-            aDC->DrawPoint( xpos, KiROUND( y )  );
+            for( double y = (double) org.y; y <= bottom; y += gridSize.y )
+            {
+                path.MoveToPoint( x, y );
+                path.AddLineToPoint( x+w, y );
+            }
+        }
+        gc->StrokePath( path );
+    }
+    else
+#endif
+    {
+        GRSetColorPen( aDC, GetParent()->GetGridColor() );
+
+        for( double x = (double) org.x; x <= right; x += gridSize.x )
+        {
+            xpos = KiROUND( x );
+
+            for( double y = (double) org.y; y <= bottom; y += gridSize.y )
+            {
+                aDC->DrawPoint( xpos, KiROUND( y )  );
+            }
         }
     }
 }

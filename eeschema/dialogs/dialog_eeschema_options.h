@@ -40,33 +40,6 @@ protected:
     /** @brief The template fieldnames for this dialog */
     TEMPLATE_FIELDNAMES templateFields;
 
-    /** @brief The current row selected in the template fieldname wxListCtrl which is also in the
-     * edit panel
-     * selectedField = -1 when no valid item selected
-     */
-    int selectedField;
-
-    /** @brief return true if aFieldId is a valid field selection
-     */
-    bool fieldSelectionValid( int aFieldId )
-    {
-        return ( aFieldId >= 0 ) && ( aFieldId < int( templateFields.size() ) );
-    }
-
-    /**
-     * Function OnEnterKey (virtual)
-     * Process the wxWidgets @a event produced when the user presses enter key
-     * in template fieldname text control or template fieldvalue text control
-     */
-    void OnEnterKey( wxCommandEvent& event );
-
-    /**
-     * Function OnVisibleFieldClick (virtual)
-     * Process the wxWidgets @a event produced when the user click on
-     * the check box which controls the field visibility
-     */
-    void OnVisibleFieldClick( wxCommandEvent& event );
-
     /**
      * Function OnAddButtonClick
      * Process the wxWidgets @a event produced when the user presses the Add buton for the
@@ -90,65 +63,16 @@ protected:
     void OnDeleteButtonClick( wxCommandEvent& event );
 
     /**
-     * Function OnEditControlKillFocus
-     * This Focus Event Handler should be connected to any controls in the template field edit box
-     * so that any loss of focus results in the data being saved to the currently selected template
-     * field
-     *
-     * @param event The wxWidgets produced event information
-     *
-     * Copies data from the edit box to the selected field template
+     * Function TransferDataToWindow
+     * Transfer data into the GUI.
      */
-    void OnEditControlKillFocus( wxFocusEvent& event );
+    bool TransferDataToWindow();
 
     /**
-     * Function copyPanelToSelected
-     * Copies the data from the edit panel to the selected template fieldname
+     * Function TransferDataFromWindow
+     * Transfer data out of the GUI.
      */
-    void copyPanelToSelected( void );
-
-    /**
-     * Function copySelectedToPanel
-     * Copies the data from the selected template fieldname and fills in the edit panel
-     */
-    void copySelectedToPanel( void );
-
-    /**
-     * Function OnTemplateFieldSelected
-     * Event handler for the wxListCtrl containing the template fieldnames
-     *
-     * @param event The event information provided by wxWidgets
-     *
-     * Processes data exchange between the edit panel and the selected template fieldname
-     */
-    void OnTemplateFieldSelected( wxListEvent& event );
-
-    /**
-     * Function RefreshTemplateFieldView
-     * Refresh the template fieldname wxListCtrl
-     *
-     * Deletes all data from the wxListCtrl and then re-polpulates the control with the data in
-     * the template fieldnames.
-     *
-     * Use any time the template field data has changed
-     */
-    void RefreshTemplateFieldView( void );
-
-    /**
-     * Function SelectTemplateField
-     * Selects @a aItem from the wxListCtrl populated with the template fieldnames
-     *
-     * @param aItem The item index of the row to be selected
-     *
-     * When RefreshTemplateFieldView() is used the selection is lost because all of the items are
-     * removed from the wxListCtrl and then the control is re-populated. This function can be used
-     * to re-select an item that was previously selected so that the selection is not lost.
-     *
-     * <b>NOTE:</b> This function first sets the ignoreSelection flag before making the selection.
-     * This means the class can select something in the wxListCtrl without causing further
-     * selection events.
-     */
-    void SelectTemplateField( int aItem );
+    bool TransferDataFromWindow();
 
 public:
     /**

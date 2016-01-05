@@ -214,6 +214,9 @@ std::string WRL2NODE::GetName( void )
 
 bool WRL2NODE::SetName( const std::string& aName )
 {
+    if( aName.empty() )
+        return false;
+
     std::set< std::string >::iterator item = badNames.find( aName );
 
     if( item != badNames.end() )

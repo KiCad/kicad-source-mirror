@@ -22,12 +22,11 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-if (UNIX)
-  find_package(PkgConfig)
-  if (PKG_CONFIG_FOUND)
+find_package(PkgConfig)
+
+if(PKG_CONFIG_FOUND)
     pkg_check_modules(_CAIRO cairo)
-  endif (PKG_CONFIG_FOUND)
-endif (UNIX)
+endif (PKG_CONFIG_FOUND)
 
 SET(_CAIRO_ROOT_HINTS
   $ENV{CAIRO}
@@ -54,7 +53,7 @@ FIND_PATH(CAIRO_INCLUDE_DIR
     "include/cairo"
 )
 
-IF(WIN32 AND NOT CYGWIN)
+IF(NOT PKGCONFIG_FOUND AND WIN32 AND NOT CYGWIN)
   # MINGW should go here too
   IF(MSVC)
     # Implementation details:
@@ -93,7 +92,7 @@ IF(WIN32 AND NOT CYGWIN)
   ELSEIF(MINGW)
     # same player, for MingW
     FIND_LIBRARY(CAIRO
-      NAMES        
+      NAMES
         cairo
       ${_CAIRO_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
@@ -113,12 +112,12 @@ IF(WIN32 AND NOT CYGWIN)
       ${_CAIRO_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
         lib
-    ) 
+    )
 
     MARK_AS_ADVANCED(CAIRO)
     set( CAIRO_LIBRARIES ${CAIRO} )
   ENDIF(MSVC)
-ELSE(WIN32 AND NOT CYGWIN)
+ELSE()
 
   FIND_LIBRARY(CAIRO_LIBRARY
     NAMES
@@ -129,40 +128,39 @@ ELSE(WIN32 AND NOT CYGWIN)
     PATH_SUFFIXES
       "lib"
       "local/lib"
-  ) 
+  )
 
   MARK_AS_ADVANCED(CAIRO_LIBRARY)
 
   # compat defines
   SET(CAIRO_LIBRARIES ${CAIRO_LIBRARY})
 
-ENDIF(WIN32 AND NOT CYGWIN)
+ENDIF()
 
- # if (CAIRO_INCLUDE_DIR) 
-    # file(READ "${CAIRO_INCLUDE_DIR}/gcore/gdal_version.h" _wxgisgdal_VERSION_H_CONTENTS)
-    # string(REGEX REPLACE ".*#  define[ \t]+GDAL_RELEASE_NAME[ \t]+\"([0-9A-Za-z.]+)\".*"
-    # "\\1" CAIRO_VERSION ${_wxgisgdal_VERSION_H_CONTENTS})
-    # set(CAIRO_VERSION ${CAIRO_VERSION} CACHE INTERNAL "The version number for wxgisgdal libraries")
- # endif (CAIRO_INCLUDE_DIR)
+#message( STATUS "Cairo_FIND_VERSION=${Cairo_FIND_VERSION}.")
+#message( STATUS "CAIRO_INCLUDE_DIR=${CAIRO_INCLUDE_DIR}.")
+
+# Fetch version from cairo-version.h if a version was requested by find_package()
+if(CAIRO_INCLUDE_DIR AND Cairo_FIND_VERSION)
+  file(READ "${CAIRO_INCLUDE_DIR}/cairo-version.h" _CAIRO_VERSION_H_CONTENTS)
+  string(REGEX REPLACE "^(.*\n)?#define[ \t]+CAIRO_VERSION_MAJOR[ \t]+([0-9]+).*"
+         "\\2" CAIRO_VERSION_MAJOR ${_CAIRO_VERSION_H_CONTENTS})
+  string(REGEX REPLACE "^(.*\n)?#define[ \t]+CAIRO_VERSION_MINOR[ \t]+([0-9]+).*"
+         "\\2" CAIRO_VERSION_MINOR ${_CAIRO_VERSION_H_CONTENTS})
+  string(REGEX REPLACE "^(.*\n)?#define[ \t]+CAIRO_VERSION_MICRO[ \t]+([0-9]+).*"
+         "\\2" CAIRO_VERSION_MICRO ${_CAIRO_VERSION_H_CONTENTS})
+  set(CAIRO_VERSION ${CAIRO_VERSION_MAJOR}.${CAIRO_VERSION_MINOR}.${CAIRO_VERSION_MICRO}
+      CACHE INTERNAL "The version number for Cairo libraries")
+endif()
 
 include(FindPackageHandleStandardArgs)
 
-# if (CAIRO_VERSION)
-  # find_package_handle_standard_args(CAIRO
-    # REQUIRED_VARS
-      # CAIRO_LIBRARIES
-      # CAIRO_INCLUDE_DIR
-    # VERSION_VAR
-      # CAIRO_VERSION
-    # FAIL_MESSAGE
-      # "Could NOT find CAIRO, try to set the path to CAIRO root folder in the system variable CAIRO_ROOT_DIR"
-  # )
-# else (CAIRO_VERSION)
-  find_package_handle_standard_args(CAIRO "Could NOT find CAIRO, try to set the path to CAIRO root folder in the system variable CAIRO"
+find_package_handle_standard_args(Cairo
+  REQUIRED_VARS
     CAIRO_LIBRARIES
     CAIRO_INCLUDE_DIR
-  )
-# endif (CAIRO_VERSION)
+  VERSION_VAR
+    CAIRO_VERSION
+)
 
 MARK_AS_ADVANCED(CAIRO_INCLUDE_DIR CAIRO_LIBRARIES)
-
