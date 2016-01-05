@@ -52,6 +52,9 @@ private:
     bool implementDef( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
 
     bool readSeparator( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
+    bool readSwitch( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
+    bool readMaterial( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
+    bool readMatBinding( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
 
     std::map< std::string, WRL1INLINE* > m_inlineModels;
 

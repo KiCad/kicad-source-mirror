@@ -57,6 +57,7 @@ public:
 
 
 class WRL1BASE;
+class WRL1MATERIAL;
 class SGNODE;
 
 
@@ -64,19 +65,16 @@ class SGNODE;
 // during translation / rendering
 struct WRL1STATUS
 {
-    // XXX - as much as possible do not use pointers and if
-    // pointers are necessary, use the specialized rather
-    // than base pointers
     // material
-    WRL1NODE* mat;
-    // material binding
-    WRL1NODE* matbind;
+    WRL1MATERIAL* mat;
     // normals
     WRL1NODE* norm;
-    // normal binding
-    WRL1NODE* normbind;
     // coordinate3
     WRL1NODE* coord;
+    // material binding
+    WRL1_BINDING matbind;
+    // normal binding
+    WRL1_BINDING normbind;
     // transform
     glm::dmat4 txmatrix;
 
@@ -89,9 +87,9 @@ struct WRL1STATUS
     void Init()
     {
         mat = NULL;
-        matbind = NULL;
+        matbind = BIND_OVERALL;
         norm = NULL;
-        normbind = NULL;
+        normbind = BIND_DEFAULT;
         coord = NULL;
         txmatrix = glm::scale( glm::dmat4( 1.0 ), glm::dvec3( 1.0 ) );
         return;

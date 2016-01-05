@@ -86,6 +86,20 @@ enum WRL1NODES
     WRL1_END = WRL1_INVALID
 };
 
+// VRML1 Material/Normal Binding values
+enum WRL1_BINDING
+{
+    BIND_DEFAULT = 0,
+    BIND_OVERALL,
+    BIND_PER_PART,
+    BIND_PER_PART_INDEXED,
+    BIND_PER_FACE,
+    BIND_PER_FACE_INDEXED,
+    BIND_PER_VERTEX,
+    BIND_PER_VERTEX_INDEXED,
+    BIND_END
+};
+
 // VRML2 Node Types
 // These are used to look up node names and to quickly
 // determine what routine to invoke to read a section of

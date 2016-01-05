@@ -51,7 +51,7 @@ WRL1SEPARATOR::WRL1SEPARATOR( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 WRL1SEPARATOR::~WRL1SEPARATOR()
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] Destroying Transform with " << m_Children.size();
+    std::cerr << " * [INFO] Destroying Separator with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
@@ -62,23 +62,6 @@ WRL1SEPARATOR::~WRL1SEPARATOR()
 // functions inherited from WRL1NODE
 bool WRL1SEPARATOR::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 {
-    /*
-     * Structure of a Transform node (p.120):
-     *
-     * Transform {
-     *      eventIn         MFNode      addChildren
-     *      eventIn         MFNode      removeChildren
-     *      exposedField    SFVec3f     center              0 0 0
-     *      exposedField    MFNode      children            []
-     *      exposedField    SFRotation  rotation            0 0 1 0
-     *      exposedField    SFVec3f     scale               1 1 1
-     *      exposedField    SFRotation  scaleOrientation    0 0 1 0
-     *      exposedField    SFVec3f     translation         0 0 0
-     *      field           SFVec3f     bboxCenter          0 0 0
-     *      field           SFVec3f     bboxSize            0 0 0
-     * }
-     */
-
     if( NULL == aTopNode )
     {
         #ifdef DEBUG_VRML1
@@ -150,14 +133,16 @@ bool WRL1SEPARATOR::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
 SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    std::cerr << " * [INFO] Translating Separator with " << m_Children.size();
+    std::cerr << " children, " << m_Refs.size() << " references and ";
+    std::cerr << m_BackPointers.size() << " backpointers (total ";
+    std::cerr << m_Items.size() << " items)\n";
+    #endif
+
     return NULL;
 
     /*
-    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] Translating Transform with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
-    #endif
 
     if( m_Children.empty() && m_Refs.empty() )
         return NULL;
@@ -168,7 +153,7 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
     {
         #ifdef DEBUG_VRML1
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
+        std::cerr << " * [BUG] Separator does not have a Separator parent (parent ID: ";
         std::cerr << ptype << ")\n";
         #endif
 
@@ -200,10 +185,10 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
     std::list< WRL1NODE* >::iterator eC = m_Children.end();
     WRL1NODES type;
 
-    // Include only the following in a Transform node:
+    // Include only the following in a Separator node:
     // Shape
     // Switch
-    // Transform
+    // Separator
     // Inline
     bool test = false;  // set to true if there are any subnodes for display
 

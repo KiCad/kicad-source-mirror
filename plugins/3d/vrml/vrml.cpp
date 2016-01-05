@@ -41,6 +41,7 @@
 #include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
 #include "wrlproc.h"
+#include "vrml1_base.h"
 #include "vrml2_base.h"
 
 
@@ -189,12 +190,36 @@ SCENEGRAPH* Load( char const* aFileName )
         #ifdef DEBUG
         std::cout << " * [INFO] Processing VRML 1.0 file\n";
         #endif
+
+        WRL1BASE* bp = new WRL1BASE;
+
+        // allow Inline{} files to be included
+        bp->SetEnableInline( true );
+
+        if( !bp->Read( proc ) )
+        {
+            #ifdef DEBUG
+            std::cout << " * [INFO] load failed\n";
+            #endif
+        }
+        else
+        {
+            #ifdef DEBUG
+            std::cout << " * [INFO] load completed\n";
+            #endif
+
+            // for now we recalculate all normals per-vertex per-face
+            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, true );
+        }
+
+        delete bp;
     }
     else
     {
         #ifdef DEBUG
         std::cout << " * [INFO] Processing VRML 2.0 file\n";
         #endif
+
         WRL2BASE* bp = new WRL2BASE;
 
         // allow Inline{} files to be included
@@ -212,7 +237,7 @@ SCENEGRAPH* Load( char const* aFileName )
             std::cout << " * [INFO] load completed\n";
             #endif
 
-            // XXX - for now we recalculate all normals per-vertex per-facet
+            // for now we recalculate all normals per-vertex per-face
             scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, true );
         }
 

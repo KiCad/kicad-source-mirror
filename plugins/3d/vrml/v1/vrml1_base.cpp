@@ -25,6 +25,8 @@
 
 #include "vrml1_base.h"
 #include "vrml1_separator.h"
+#include "vrml1_material.h"
+#include "vrml1_matbinding.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -123,19 +125,82 @@ bool WRL1BASE::Read( WRLPROC& proc )
     {
         #ifdef DEBUG_VRML1
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] no open file or file is not a VRML2 file\n";
+        std::cerr << " * [BUG] no open file or file is not a VRML1 file\n";
         #endif
         return false;
     }
 
-    WRL1NODE* node = NULL;
+    std::string glob;
+    WRL1NODES ntype;
 
-    while( ReadNode( proc, this, &node ) && !proc.eof() );
+    if( !proc.ReadName( glob ) )
+    {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        if( !proc.eof() )
+        {
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+        }
+        #endif
 
-    if( proc.eof() )
-        return true;
+        return false;
+    }
 
-    return false;
+    // Process node name: only Separator, Switch and DEF are acceptable;
+    // WWWAnchor and LOD will not be supported
+    if( !glob.compare( "DEF" ) )
+    {
+        // read the name and discard it; we must not add it to the dictionary
+        // because that invites the possibility of a circular reference
+
+        for( int i = 0; i < 2; ++i )
+        {
+            if( !proc.ReadName( glob ) )
+            {
+                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << proc.GetError() <<  "\n";
+                #endif
+
+                return false;
+            }
+        }
+    }
+
+    ntype = getNodeTypeID( glob );
+    size_t line = 0;
+    size_t column = 0;
+    proc.GetFilePosData( line, column );
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    std::cerr << " * [INFO] Processing node '" << glob << "' ID: " << ntype << "\n";
+    #endif
+
+    if( ntype != WRL1_SEPARATOR && ntype != WRL1_SWITCH )
+    {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] bad file - top node is not a Separator or Switch\n";
+        #endif
+
+        return false;
+    }
+
+    switch( ntype )
+    {
+    case WRL1_SEPARATOR:
+
+        if( !readSeparator( proc, this, NULL ) )
+            return false;
+
+        break;
+
+    default:
+
+        if( !readSwitch( proc, this, NULL ) )
+            return false;
+    }
+
+    return true;
 }
 
 
@@ -340,12 +405,33 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
     switch( ntype )
     {
-        //
-        // items to be implemented:
-        //
+    //
+    // items to be implemented:
+    //
     case WRL1_SEPARATOR:
 
         if( !readSeparator( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
+    case WRL1_SWITCH:
+
+        if( !readSwitch( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
+    case WRL1_MATERIAL:
+
+        if( !readMaterial( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
+    case WRL1_MATERIALBINDING:
+
+        if( !readMatBinding( proc, aParent, aNode ) )
             return false;
 
         break;
@@ -409,12 +495,90 @@ bool WRL1BASE::readSeparator( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode
 }
 
 
+bool WRL1BASE::readSwitch( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    return false;
+    // XXX - TO BE IMPLEMENTED
+
+    /*
+    WRL1SWITCH* np = new WRL1SWITCH( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
+    */
+}
+
+
+bool WRL1BASE::readMaterial( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL1MATERIAL* np = new WRL1MATERIAL( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
+}
+
+
+bool WRL1BASE::readMatBinding( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL1MATBINDING* np = new WRL1MATBINDING( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
+}
+
+
 SGNODE* WRL1BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    std::cerr << " * [INFO] Translating VRML1 Base with " << m_Items.size();
+    std::cerr << " items\n";
+    #endif
+
     if( m_Items.empty() )
         return NULL;
 
-    // XXX - TO BE IMPLEMENTED
+    if( m_Items.size() != 1 )
+    {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] Bad VRML file, >1 top level transform (";
+        std::cerr << m_Items.size() << ")\n";
+        #endif
 
-    return NULL;
+        return NULL;
+    }
+
+    return (*m_Items.begin())->TranslateToSG( NULL, true );
 }

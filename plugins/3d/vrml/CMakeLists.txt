@@ -1,5 +1,6 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/v1
     ${CMAKE_CURRENT_SOURCE_DIR}/v2
 )
 
@@ -23,6 +24,8 @@ add_library( s3d_plugin_vrml MODULE
         v1/vrml1_node.cpp
         v1/vrml1_base.cpp
         v1/vrml1_separator.cpp
+        v1/vrml1_material.cpp
+        v1/vrml1_matbinding.cpp
         )
 
 target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
