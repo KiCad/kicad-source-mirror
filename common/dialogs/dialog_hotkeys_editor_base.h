@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,8 +21,8 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/notebook.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -38,14 +38,13 @@ class HOTKEYS_EDITOR_DIALOG_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText1;
 		wxNotebook* m_hotkeySections;
+		wxButton* m_resetButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		wxButton* m_undoButton;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOKClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void UndoClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ResetClicked( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

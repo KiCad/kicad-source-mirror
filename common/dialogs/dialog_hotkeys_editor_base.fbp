@@ -262,39 +262,13 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_RIGHT</property>
+                    <property name="flag">wxALIGN_RIGHT|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">b_buttonsSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
-                        <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
-                            <property name="proportion">0</property>
-                            <object class="wxStdDialogButtonSizer" expanded="1">
-                                <property name="Apply">0</property>
-                                <property name="Cancel">1</property>
-                                <property name="ContextHelp">0</property>
-                                <property name="Help">0</property>
-                                <property name="No">0</property>
-                                <property name="OK">1</property>
-                                <property name="Save">0</property>
-                                <property name="Yes">0</property>
-                                <property name="minimum_size"></property>
-                                <property name="name">m_sdbSizer</property>
-                                <property name="permission">protected</property>
-                                <event name="OnApplyButtonClick"></event>
-                                <event name="OnCancelButtonClick"></event>
-                                <event name="OnContextHelpButtonClick"></event>
-                                <event name="OnHelpButtonClick"></event>
-                                <event name="OnNoButtonClick"></event>
-                                <event name="OnOKButtonClick">OnOKClicked</event>
-                                <event name="OnSaveButtonClick"></event>
-                                <event name="OnYesButtonClick"></event>
-                            </object>
-                        </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
@@ -327,8 +301,8 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_UNDO</property>
-                                <property name="label">Undo</property>
+                                <property name="id">wxID_RESET</property>
+                                <property name="label">Reset</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -336,7 +310,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_undoButton</property>
+                                <property name="name">m_resetButton</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -357,7 +331,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">UndoClicked</event>
+                                <event name="OnButtonClick">ResetClicked</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -381,6 +355,42 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">1</property>
+                            <object class="spacer" expanded="1">
+                                <property name="height">0</property>
+                                <property name="permission">protected</property>
+                                <property name="width">0</property>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
+                            <property name="proportion">0</property>
+                            <object class="wxStdDialogButtonSizer" expanded="1">
+                                <property name="Apply">0</property>
+                                <property name="Cancel">1</property>
+                                <property name="ContextHelp">0</property>
+                                <property name="Help">0</property>
+                                <property name="No">0</property>
+                                <property name="OK">1</property>
+                                <property name="Save">0</property>
+                                <property name="Yes">0</property>
+                                <property name="minimum_size"></property>
+                                <property name="name">m_sdbSizer</property>
+                                <property name="permission">protected</property>
+                                <event name="OnApplyButtonClick"></event>
+                                <event name="OnCancelButtonClick"></event>
+                                <event name="OnContextHelpButtonClick"></event>
+                                <event name="OnHelpButtonClick"></event>
+                                <event name="OnNoButtonClick"></event>
+                                <event name="OnOKButtonClick"></event>
+                                <event name="OnSaveButtonClick"></event>
+                                <event name="OnYesButtonClick"></event>
                             </object>
                         </object>
                     </object>
