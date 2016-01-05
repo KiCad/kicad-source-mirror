@@ -329,6 +329,10 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
 
     aPluginList.push_back( wxpath );
 
+    #ifdef DEBUG
+    std::cerr << " * [INFO] found 3D plugin '" << wxpath.ToUTF8() << "'\n";
+    #endif
+
     return;
 }
 
@@ -339,6 +343,10 @@ void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
     // check the existence of a path and add it to the path search list
     if( aPath.empty() )
         return;
+
+    #ifdef DEBUG
+    std::cerr << " * [INFO] checking for 3D plugins in '" << aPath << "'\n";
+    #endif
 
     wxFileName path( wxFileName::DirName( aPath ) );
     path.Normalize();
