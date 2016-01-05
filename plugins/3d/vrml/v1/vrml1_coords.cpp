@@ -50,7 +50,7 @@ WRL1COORDS::WRL1COORDS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1COORDS::~WRL1COORDS()
 {
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     std::cerr << " * [INFO] Destroying Coordinate3 node\n";
     #endif
     return;
@@ -61,7 +61,7 @@ bool WRL1COORDS::AddRefNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML2
+    #ifdef DEBUG_VRML1
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] AddRefNode is not applicable\n";
     #endif
@@ -74,7 +74,7 @@ bool WRL1COORDS::AddChildNode( WRL1NODE* aNode )
 {
     // this node may not own or reference any other node
 
-    #ifdef DEBUG_VRML2
+    #ifdef DEBUG_VRML1
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] AddChildNode is not applicable\n";
     #endif
@@ -92,7 +92,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( proc.eof() )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
@@ -102,7 +102,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( '{' != tok )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         std::cerr << proc.GetError() << "\n";
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
@@ -123,7 +123,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     if( !proc.ReadName( glob ) )
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << proc.GetError() <<  "\n";
         #endif
@@ -138,7 +138,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     {
         if( !proc.ReadMFVec3f( points ) )
         {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] invalid point set at line " << line << ", column ";
             std::cerr << column << "\n";
@@ -150,7 +150,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     }
     else
     {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad Coordinate at line " << line << ", column ";
         std::cerr << column << "\n";
@@ -168,7 +168,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     proc.GetFilePosData( line, column );
 
-    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [INFO] bad Coordinate at line " << line << ", column ";
     std::cerr << column << " (no closing brace)\n";
