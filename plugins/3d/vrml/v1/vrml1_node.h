@@ -58,6 +58,7 @@ public:
 
 class WRL1BASE;
 class WRL1MATERIAL;
+class WRL1COORDS;
 class SGNODE;
 
 
@@ -70,7 +71,7 @@ struct WRL1STATUS
     // normals
     WRL1NODE* norm;
     // coordinate3
-    WRL1NODE* coord;
+    WRL1COORDS* coord;
     // material binding
     WRL1_BINDING matbind;
     // normal binding

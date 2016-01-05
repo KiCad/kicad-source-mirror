@@ -146,6 +146,28 @@ bool WRL1MATBINDING::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             return false;
         }
 
+        if( glob.compare( "value" ) )
+        {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad MaterialBinding at line " << line << ", column ";
+            std::cerr << column << " (did not find keyword 'value')\n";
+            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+            #endif
+
+            return false;
+        }
+
+        if( !proc.ReadName( glob ) )
+        {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << proc.GetError() <<  "\n";
+            #endif
+
+            return false;
+        }
+
         // expecting one of:
         // DEFAULT
         // OVERALL
@@ -194,7 +216,7 @@ bool WRL1MATBINDING::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad Material at line " << line << ", column ";
+            std::cerr << " * [INFO] bad MaterialBinding at line " << line << ", column ";
             std::cerr << column << "\n";
             std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
             #endif

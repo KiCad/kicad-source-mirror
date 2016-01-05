@@ -26,6 +26,7 @@ add_library( s3d_plugin_vrml MODULE
         v1/vrml1_separator.cpp
         v1/vrml1_material.cpp
         v1/vrml1_matbinding.cpp
+        v1/vrml1_coords.cpp
         )
 
 target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )

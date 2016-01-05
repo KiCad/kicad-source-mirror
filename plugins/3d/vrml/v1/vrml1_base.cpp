@@ -27,6 +27,7 @@
 #include "vrml1_separator.h"
 #include "vrml1_material.h"
 #include "vrml1_matbinding.h"
+#include "vrml1_coords.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -436,6 +437,13 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
         break;
 
+    case WRL1_COORDINATE3:
+
+        if( !readCoords( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     //
     // items not implemented or for optional future implementation:
     //
@@ -546,6 +554,26 @@ bool WRL1BASE::readMatBinding( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNod
         *aNode = NULL;
 
     WRL1MATBINDING* np = new WRL1MATBINDING( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
+}
+
+
+bool WRL1BASE::readCoords( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL1COORDS* np = new WRL1COORDS( m_dictionary, aParent );
 
     if( !np->Read( proc, this ) )
     {
