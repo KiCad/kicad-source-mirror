@@ -28,6 +28,8 @@
 #include "vrml1_material.h"
 #include "vrml1_matbinding.h"
 #include "vrml1_coords.h"
+#include "vrml1_switch.h"
+#include "vrml1_faceset.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -444,6 +446,13 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
         break;
 
+    case WRL1_INDEXEDFACESET:
+
+        if( !readFaceSet( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     //
     // items not implemented or for optional future implementation:
     //
@@ -462,6 +471,12 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
             return false;
         }
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        else
+        {
+            std::cerr << " * [INFO] discarded node (currently unsupported)\n";
+        }
+        #endif
 
         break;
     }
@@ -505,13 +520,6 @@ bool WRL1BASE::readSeparator( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode
 
 bool WRL1BASE::readSwitch( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 {
-    if( NULL != aNode )
-        *aNode = NULL;
-
-    return false;
-    // XXX - TO BE IMPLEMENTED
-
-    /*
     WRL1SWITCH* np = new WRL1SWITCH( m_dictionary, aParent );
 
     if( !np->Read( proc, this ) )
@@ -524,7 +532,6 @@ bool WRL1BASE::readSwitch( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
         *aNode = (WRL1NODE*) np;
 
     return true;
-    */
 }
 
 
@@ -574,6 +581,26 @@ bool WRL1BASE::readCoords( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
         *aNode = NULL;
 
     WRL1COORDS* np = new WRL1COORDS( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
+}
+
+
+bool WRL1BASE::readFaceSet( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL1FACESET* np = new WRL1FACESET( m_dictionary, aParent );
 
     if( !np->Read( proc, this ) )
     {

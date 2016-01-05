@@ -53,7 +53,7 @@ WRL2SWITCH::WRL2SWITCH( WRL2NODE* aParent ) : WRL2NODE()
 WRL2SWITCH::~WRL2SWITCH()
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Destroying Transform with " << m_Children.size();
+    std::cerr << " * [INFO] Destroying Switch with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
@@ -289,7 +289,7 @@ SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent, bool calcNormals )
     {
         #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
+        std::cerr << " * [BUG] Switch does not have a Transform parent (parent ID: ";
         std::cerr << ptype << ")\n";
         #endif
 
