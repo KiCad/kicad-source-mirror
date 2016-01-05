@@ -429,7 +429,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     wxPoint rotatePoint = getModificationPoint( selection );
@@ -479,7 +479,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     wxPoint flipPoint = getModificationPoint( selection );
@@ -524,7 +524,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     // Get a copy of the selected items set
@@ -649,7 +649,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     wxPoint translation;
