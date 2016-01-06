@@ -32,7 +32,6 @@
 #include "3d_cache/sg/sg_node.h"
 #include "3d_cache/sg/scenegraph.h"
 #include "3d_cache/sg/sg_appearance.h"
-#include "3d_cache/sg/sg_colorindex.h"
 #include "3d_cache/sg/sg_colors.h"
 #include "3d_cache/sg/sg_coordindex.h"
 #include "3d_cache/sg/sg_coords.h"

@@ -25,7 +25,6 @@
 #include <iostream>
 #include "plugins/3dapi/ifsg_index.h"
 #include "3d_cache/sg/sg_coordindex.h"
-#include "3d_cache/sg/sg_colorindex.h"
 
 
 extern char BadObject[];
