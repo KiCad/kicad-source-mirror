@@ -51,7 +51,7 @@ public:
     bool AddChildNode( SGNODE* aNode );
 
     bool GetColorList( size_t& aListSize, SGCOLOR*& aColorList );
-    void SetColorList( size_t& aListSize, const SGCOLOR* aColorList );
+    void SetColorList( size_t aListSize, const SGCOLOR* aColorList );
     void AddColor( double aRedValue, double aGreenValue, double aBlueValue );
     void AddColor( const SGCOLOR& aColor );
 

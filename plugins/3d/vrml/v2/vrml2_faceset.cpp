@@ -855,6 +855,7 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     {
         IFSG_COLORS nmColor( fsNode );
         nmColor.SetColorList( lColors.size(), &lColors[0] );
+        std::cerr << "XXX: colors: " << lColors.size() << "\n";
     }
 
     m_sgNode = fsNode.GetRawPtr();

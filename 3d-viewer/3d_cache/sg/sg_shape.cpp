@@ -654,7 +654,8 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
         {
             #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad model; not enough colors per vertex\n";
+            std::cerr << " * [INFO] bad model; not enough colors per vertex (";
+            std::cerr << nColors << " vs " << nCoords << ")\n";
             #endif
             return true;
         }
@@ -698,7 +699,7 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
 
     if( pc )
     {
-        SFVEC3F* lColors = new SFVEC3F[vertices.size()];
+        lColors = new SFVEC3F[vertices.size()];
         m.m_Color = lColors;
     }
 

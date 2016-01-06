@@ -216,8 +216,8 @@ void WRL2COLOR::GetColor( int aIndex, float& red, float& green, float& blue )
     }
 
     red = colors[aIndex].x;
-    green = colors[aIndex].x;
-    blue = colors[aIndex].x;
+    green = colors[aIndex].y;
+    blue = colors[aIndex].z;
 
     return;
 }

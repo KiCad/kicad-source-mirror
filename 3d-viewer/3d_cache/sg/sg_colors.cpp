@@ -131,7 +131,7 @@ bool SGCOLORS::AddChildNode( SGNODE* aNode )
 
 bool SGCOLORS::GetColorList( size_t& aListSize, SGCOLOR*& aColorList )
 {
-    if( colors.size() )
+    if( colors.empty() )
     {
         aListSize = 0;
         aColorList = NULL;
@@ -144,7 +144,7 @@ bool SGCOLORS::GetColorList( size_t& aListSize, SGCOLOR*& aColorList )
 }
 
 
-void SGCOLORS::SetColorList( size_t& aListSize, const SGCOLOR* aColorList )
+void SGCOLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
 {
     colors.clear();
 
@@ -153,6 +153,8 @@ void SGCOLORS::SetColorList( size_t& aListSize, const SGCOLOR* aColorList )
 
     for( size_t i = 0; i < aListSize; ++i )
         colors.push_back( aColorList[i] );
+
+    std::cerr << "XXX: ncolors: " << colors.size() << "\n";
 
     return;
 }
@@ -212,6 +214,8 @@ bool SGCOLORS::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
     for( size_t i = 0; i < n; )
     {
         S3D::FormatColor( tmp, colors[i] );
+        float r,g,b;
+        colors[i].GetColor(r, g, b);
         aFile << tmp ;
         ++i;
 
