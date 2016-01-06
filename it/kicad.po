@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-31 18:04+0100\n"
-"PO-Revision-Date: 2015-12-31 18:05+0100\n"
+"PO-Revision-Date: 2016-01-06 23:44+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -16042,7 +16042,7 @@ msgstr "&Controllo Regole Elettriche (ERC)"
 
 #: eeschema/menubar.cpp:449 eeschema/tool_sch.cpp:148
 msgid "Perform electrical rules check"
-msgstr "Esegui un controllo regole elettriche"
+msgstr "Esegui controllo regole elettriche"
 
 #: eeschema/menubar.cpp:454
 msgid "Generate &Netlist File"
