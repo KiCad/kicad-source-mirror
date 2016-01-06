@@ -683,26 +683,64 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         WRL2COLOR* cn = (WRL2COLOR*) color;
         SGCOLOR pc1, pc2, pc3;
         WRLVEC3F tc;
-        cn->GetColor( 0, tc.x, tc.y, tc.z );
-        pc1.SetColor( tc.x, tc.y, tc.z );
-
 
         if( colorPerVertex )
         {
             cIndex = 3;
-            cn->GetColor( 1, tc.x, tc.y, tc.z );
-            pc2.SetColor( tc.x, tc.y, tc.z );
-            cn->GetColor( 2, tc.x, tc.y, tc.z );
-            pc3.SetColor( tc.x, tc.y, tc.z );
+
+            if( colorIndex.empty() )
+            {
+                cn->GetColor( 0, tc.x, tc.y, tc.z );
+                pc1.SetColor( tc.x, tc.y, tc.z );
+                cn->GetColor( 1, tc.x, tc.y, tc.z );
+                pc2.SetColor( tc.x, tc.y, tc.z );
+                cn->GetColor( 2, tc.x, tc.y, tc.z );
+                pc3.SetColor( tc.x, tc.y, tc.z );
+            }
+            else
+            {
+                if( colorIndex.size() < coordIndex.size() )
+                {
+                    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    std::cerr << " * [INFO] bad file; colorIndex.size() < coordIndex.size() ";
+                    std::cerr << column << "\n";
+                    std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    #endif
+                    return NULL;
+                }
+
+                cn->GetColor( colorIndex[0], tc.x, tc.y, tc.z );
+                pc1.SetColor( tc.x, tc.y, tc.z );
+                cn->GetColor( colorIndex[1], tc.x, tc.y, tc.z );
+                pc2.SetColor( tc.x, tc.y, tc.z );
+                cn->GetColor( colorIndex[2], tc.x, tc.y, tc.z );
+                pc3.SetColor( tc.x, tc.y, tc.z );
+            }
         }
         else
         {
             cIndex = 1;
-            pc2.SetColor( tc.x, tc.y, tc.z );
-            pc3.SetColor( tc.x, tc.y, tc.z );
+
+            if( colorIndex.empty() )
+            {
+                cn->GetColor( 0, tc.x, tc.y, tc.z );
+                pc1.SetColor( tc.x, tc.y, tc.z );
+                pc2.SetColor( tc.x, tc.y, tc.z );
+                pc3.SetColor( tc.x, tc.y, tc.z );
+            }
+            else
+            {
+                cn->GetColor( colorIndex[0], tc.x, tc.y, tc.z );
+                pc1.SetColor( tc.x, tc.y, tc.z );
+                pc2.SetColor( tc.x, tc.y, tc.z );
+                pc3.SetColor( tc.x, tc.y, tc.z );
+            }
         }
 
         // assuming convex polygons, create triangles for the SG node
+        int cMaxIdx = (int) colorIndex.size();
+
         for( idx = 3; idx < vsize; )
         {
             lCIdx.push_back( i1 );
@@ -729,7 +767,12 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
             {
                 pc1.SetColor( pc2 );
                 pc2.SetColor( pc3 );
-                cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+
+                if( colorIndex.empty() || cIndex >= cMaxIdx )
+                    cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                else
+                    cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
+
                 pc3.SetColor( tc.x, tc.y, tc.z );
             }
 
@@ -742,7 +785,11 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
                     if( !colorPerVertex )
                     {
-                        cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                        if( colorIndex.empty() || cIndex >= cMaxIdx )
+                            cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                        else
+                            cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
+
                         pc1.SetColor( tc.x, tc.y, tc.z );
                         pc2.SetColor( tc.x, tc.y, tc.z );
                         pc3.SetColor( tc.x, tc.y, tc.z );
@@ -757,7 +804,12 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 {
                     pc1.SetColor( pc2 );
                     pc2.SetColor( pc3 );
-                    cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+
+                    if( colorIndex.empty() || cIndex >= cMaxIdx )
+                        cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                    else
+                        cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
+
                     pc3.SetColor( tc.x, tc.y, tc.z );
                 }
 
@@ -831,8 +883,6 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         //*/
     }
 
-    // XXX - TO IMPLEMENT: Per-vertex colors
-
     IFSG_FACESET fsNode( aParent );
     IFSG_COORDS cpNode( fsNode );
     cpNode.SetCoordsList( lCPts.size(), &lCPts[0] );
@@ -855,7 +905,6 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     {
         IFSG_COLORS nmColor( fsNode );
         nmColor.SetColorList( lColors.size(), &lColors[0] );
-        std::cerr << "XXX: colors: " << lColors.size() << "\n";
     }
 
     m_sgNode = fsNode.GetRawPtr();

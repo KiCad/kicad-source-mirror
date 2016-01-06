@@ -111,7 +111,7 @@ bool WRLPROC::Open( const std::string& aFileName )
         // square brackets []
         // curly braces {}
         // backslash
-        // XXX: NOTE: badchars should include '-' but due to my bad model naming scheme
+        // NOTE: badchars should include '-' but due to my bad model naming scheme
         // in the VRML model generator, I have allowed '-'. Other VRML parsers seem to
         // accept '-'. FreeCAD produces names with '+' in them so '+' has been allowed
         // as well; '+' is not even valid for VRML1.

@@ -154,8 +154,6 @@ void SGCOLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
     for( size_t i = 0; i < aListSize; ++i )
         colors.push_back( aColorList[i] );
 
-    std::cerr << "XXX: ncolors: " << colors.size() << "\n";
-
     return;
 }
 
