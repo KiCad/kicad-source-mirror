@@ -44,6 +44,8 @@ class WRL1FACESET : public WRL1NODE
 private:
     std::vector< int > coordIndex;
     std::vector< int > matIndex;
+    std::vector< int > normIndex;
+    std::vector< int > texIndex;
 
 public:
     WRL1FACESET( NAMEREGISTER* aDictionary );

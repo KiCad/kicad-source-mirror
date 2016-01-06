@@ -35,7 +35,6 @@ SGFACESET::SGFACESET( SGNODE* aParent ) : SGNODE( aParent )
 {
     m_SGtype = S3D::SGTYPE_FACESET;
     m_Colors = NULL;
-    m_ColorIndices = NULL;
     m_Coords = NULL;
     m_CoordIndices = NULL;
     m_Normals = NULL;
@@ -107,13 +106,6 @@ SGFACESET::~SGFACESET()
         m_Normals = NULL;
     }
 
-    if( m_ColorIndices )
-    {
-        m_ColorIndices->SetParent( NULL, false );
-        delete m_ColorIndices;
-        m_ColorIndices = NULL;
-    }
-
     if( m_CoordIndices )
     {
         m_CoordIndices->SetParent( NULL, false );
@@ -168,14 +160,6 @@ SGNODE* SGFACESET::FindNode(const char *aNodeName, const SGNODE *aCaller)
     if( m_Colors )
     {
         np = m_Colors->FindNode( aNodeName, this );
-
-        if( np )
-            return np;
-    }
-
-    if( m_ColorIndices )
-    {
-        np = m_ColorIndices->FindNode( aNodeName, this );
 
         if( np )
             return np;
@@ -238,12 +222,6 @@ void SGFACESET::unlinkNode( const SGNODE* aNode, bool isChild )
         if( aNode == m_Normals )
         {
             m_Normals = NULL;
-            return;
-        }
-
-        if( aNode == m_ColorIndices )
-        {
-            m_ColorIndices = NULL;
             return;
         }
 
@@ -377,21 +355,6 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         return true;
     }
 
-    if( S3D::SGTYPE_COLORINDEX == aNode->GetNodeType() )
-    {
-        if( m_ColorIndices )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] assigning multiple ColorIndex nodes\n";
-            return false;
-        }
-
-        m_ColorIndices = (SGCOLORINDEX*)aNode;
-        m_ColorIndices->SetParent( this );
-
-        return true;
-    }
-
     if( S3D::SGTYPE_COORDINDEX == aNode->GetNodeType() )
     {
         if( m_CoordIndices )
@@ -439,9 +402,6 @@ void SGFACESET::ReNameNodes( void )
     // rename all Colors and Indices
     if( m_Colors )
         m_Colors->ReNameNodes();
-
-    if( m_ColorIndices )
-        m_ColorIndices->ReNameNodes();
 
     // rename all Coordinates and Indices
     if( m_Coords )
@@ -510,9 +470,6 @@ bool SGFACESET::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
     if( m_RColors )
         m_RColors->WriteVRML( aFile, aReuseFlag );
 
-    if( m_ColorIndices )
-        m_ColorIndices->WriteVRML( aFile, aReuseFlag );
-
     aFile << "}\n";
 
     return true;
@@ -553,7 +510,7 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     }
 
     aFile << "[" << GetName() << "]";
-    #define NITEMS 8
+    #define NITEMS 7
     bool items[NITEMS];
     int i;
 
@@ -588,10 +545,6 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( NULL != m_RColors )
         items[i] = true;
 
-    ++i;
-    if( NULL != m_ColorIndices )
-        items[i] = true;
-
     for( int i = 0; i < NITEMS; ++i )
         aFile.write( (char*)&items[i], sizeof(bool) );
 
@@ -616,9 +569,6 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( items[6] )
         aFile << "[" << m_RColors->GetName() << "]";
 
-    if( items[7] )
-        m_ColorIndices->WriteCache( aFile, this );
-
     if( aFile.fail() )
         return false;
 
@@ -629,7 +579,7 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 {
     if( m_Coords || m_RCoords || m_CoordIndices
-        || m_Colors || m_RColors || m_ColorIndices
+        || m_Colors || m_RColors
         || m_Normals || m_RNormals )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -637,7 +587,7 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         return false;
     }
 
-    #define NITEMS 8
+    #define NITEMS 7
     bool items[NITEMS];
 
     for( int i = 0; i < NITEMS; ++i )
@@ -838,28 +788,6 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         m_RColors->addNodeRef( this );
     }
 
-    if( items[7] )
-    {
-        if( S3D::SGTYPE_COLORINDEX != S3D::ReadTag( aFile, name ) )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad color index tag at position ";
-            std::cerr << aFile.tellg() << "\n";
-            return false;
-        }
-
-        m_ColorIndices = new SGCOLORINDEX( this );
-        m_ColorIndices->SetName( name.c_str() );
-
-        if( !m_ColorIndices->ReadCache( aFile, this ) )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data while reading color index '";
-            std::cerr << name << "'\n";
-            return false;
-        }
-    }
-
     if( aFile.fail() )
         return false;
 
@@ -969,62 +897,10 @@ bool SGFACESET::validate( void )
 
     if( NULL != pColors )
     {
-        if( NULL == m_ColorIndices )
-        {
-#ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad model; no color indices\n";
-#endif
-            validated = true;
-            valid = false;
-            return false;
-        }
-
-        // we must have at least 1 color in the list
+        // we must have at least as many colors as vertices
         size_t nColor = 0;
         SGCOLOR* pColor = NULL;
         pColors->GetColorList( nColor, pColor );
-
-        if( nColor < 1 )
-        {
-#ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad model; no colors\n";
-#endif
-            validated = true;
-            valid = false;
-            return false;
-        }
-
-        size_t nCLIdx = 0;
-        int* pCLIdx = NULL;
-        m_ColorIndices->GetIndices( nCLIdx, pCLIdx );
-
-        if( nCLIdx != nCoords )
-        {
-#ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad model; color indices do not match number of vertices\n";
-#endif
-            validated = true;
-            valid = false;
-            return false;
-        }
-
-        // check that color[n] >= 0 and < nColors
-        for( size_t i = 0; i < nCLIdx; ++i )
-        {
-            if( pCLIdx[i] < 0 || pCLIdx[i] >= nCLIdx )
-            {
-#ifdef DEBUG
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] bad model; color index out of bounds\n";
-#endif
-                validated = true;
-                valid = false;
-                return false;
-            }
-        }
     }
 
     validated = true;

@@ -616,8 +616,12 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
         #endif
 
         wxSizer* ws = new wxBoxSizer( wxHORIZONTAL );
-        ws->Add( canvas, 10, wxEXPAND );
-        preview->SetSizerAndFit( ws );
+        canvas->Set3DModel( *model );
+        ws->Add( canvas, 1, wxEXPAND );
+        preview->SetSizer( ws );
+        preview->Layout();
+        ws->FitInside( preview );
+        return;
     }
 
     canvas->Set3DModel( *model );

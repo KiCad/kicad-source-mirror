@@ -220,6 +220,8 @@ public:
 
     const char* GetNodeTypeName( WRL1NODES aNodeType ) const;
 
+    size_t GetNItems( void ) const;
+
     /**
      * Function FindNode searches the tree of linked nodes and returns a
      * reference to the current node with the given name. The reference

@@ -286,6 +286,12 @@ WRL1NODES WRL1NODE::getNodeTypeID( const std::string aNodeName )
 }
 
 
+size_t WRL1NODE::GetNItems( void ) const
+{
+    return m_Items.size();
+}
+
+
 std::string WRL1NODE::GetError( void )
 {
     return m_error;

@@ -189,7 +189,8 @@ SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, bool calcNormals )
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     std::cerr << " * [INFO] Translating Switch with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    std::cerr << m_BackPointers.size() << " backpointers (total ";
+    std::cerr << m_Items.size() << " items)\n";
     #endif
 
     if( m_Items.empty() )
@@ -201,7 +202,12 @@ SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, bool calcNormals )
     std::list< WRL1NODE* >::iterator ip = m_Items.begin();
     std::advance( ip, whichChild );
 
-    m_current = *( m_Parent->GetCurrentSettings() );
+    IFSG_TRANSFORM txNode( aParent );
+
+    if( WRL1_BASE != m_Parent->GetNodeType() )
+        m_current = *( m_Parent->GetCurrentSettings() );
+    else
+        m_current.Init();
 
     return (*ip)->TranslateToSG( aParent, calcNormals );
 }

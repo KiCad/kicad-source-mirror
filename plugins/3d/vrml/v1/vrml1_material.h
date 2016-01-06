@@ -30,10 +30,12 @@
 #define VRML1_MATERIAL_H
 
 #include <vector>
+#include <map>
 #include "vrml1_node.h"
 
 class WRL1BASE;
 class SGNODE;
+struct SGCOLOR;
 
 /**
  * Class WRL1MATERIAL
@@ -48,7 +50,10 @@ private:
     std::vector< float >    shininess;
     std::vector< float >    transparency;
 
+    SGNODE* colors[2];
+
     void setDefaults( void );
+    void checkRange( float& aValue );
 
 public:
     WRL1MATERIAL( NAMEREGISTER* aDictionary );
@@ -61,7 +66,18 @@ public:
     bool AddChildNode( WRL1NODE* aNode );
     SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
 
-    // XXX - requires a function to create/retrieve a color
+    /**
+     * Function GetAppearance
+     * returns an SGAPPEARANCE node representing the appearance
+     * for an IndexedFaceSet
+     */
+    SGNODE* GetAppearance( int aIndex );
+
+    /**
+     * Function GetColor
+     * computes an SGCOLOR representing the appearance of a vertex or face
+     */
+    void GetColor( SGCOLOR* aColor, int aIndex );
 };
 
 #endif  // VRML1_MATERIAL_H

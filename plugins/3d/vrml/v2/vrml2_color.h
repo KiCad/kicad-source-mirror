@@ -59,6 +59,18 @@ public:
     bool AddRefNode( WRL2NODE* aNode );
     bool AddChildNode( WRL2NODE* aNode );
     SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+
+    /**
+     * Function HasColors
+     * returns true if the color set is non-empty
+     */
+    bool HasColors( void );
+
+    /**
+     * Function GetColor
+     * retrieves the given color (or default 0.8, 0.8, 0.8 if index is invalid)
+     */
+    void GetColor( int aIndex, float& red, float& green, float& blue );
 };
 
 #endif  // VRML2_COLOR_H

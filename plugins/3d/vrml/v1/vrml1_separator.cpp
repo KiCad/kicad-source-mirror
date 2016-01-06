@@ -140,20 +140,26 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
     std::cerr << m_Items.size() << " items)\n";
     #endif
 
-    return NULL;
+    if( !m_Parent )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] Separator has no parent\n";
 
-    /*
-
-    if( m_Children.empty() && m_Refs.empty() )
         return NULL;
+    }
+
+    if( WRL1_BASE != m_Parent->GetNodeType() )
+        m_current = *( m_Parent->GetCurrentSettings() );
+    else
+        m_current.Init();
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
     if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
-        #ifdef DEBUG_VRML1
+        #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Separator does not have a Separator parent (parent ID: ";
+        std::cerr << " * [BUG] Separator does not have a Transform parent (parent ID: ";
         std::cerr << ptype << ")\n";
         #endif
 
@@ -162,80 +168,38 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( m_sgNode )
     {
-        if( NULL != aParent )
-        {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
-                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
-            {
-                return NULL;
-            }
-            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
-                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
-            {
-                return NULL;
-            }
-        }
+        if( NULL == aParent )
+            return NULL;
+
+        if( !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            return NULL;
 
         return m_sgNode;
     }
 
     IFSG_TRANSFORM txNode( aParent );
+    bool hasContent = false;
 
-    std::list< WRL1NODE* >::iterator sC = m_Children.begin();
-    std::list< WRL1NODE* >::iterator eC = m_Children.end();
-    WRL1NODES type;
+    std::list< WRL1NODE* >::iterator sI = m_Items.begin();
+    std::list< WRL1NODE* >::iterator eI = m_Items.end();
 
-    // Include only the following in a Separator node:
-    // Shape
-    // Switch
-    // Separator
-    // Inline
-    bool test = false;  // set to true if there are any subnodes for display
+    SGNODE* node = txNode.GetRawPtr();
 
-    for( int i = 0; i < 2; ++i )
+    while( sI != eI )
     {
-        while( sC != eC )
-        {
-            type = (*sC)->GetNodeType();
+        if( NULL != (*sI)->TranslateToSG( node, calcNormals ) )
+            hasContent = true;
 
-            switch( type )
-            {
-            case WRL1_SHAPE:
-            case WRL1_SWITCH:
-            case WRL1_INLINE:
-            case WRL1_SEPARATOR:
-
-                if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr(), calcNormals ) )
-                    test = true;
-
-                break;
-
-            default:
-                break;
-            }
-
-            ++ sC;
-        }
-
-        sC = m_Refs.begin();
-        eC = m_Refs.end();
+        ++sI;
     }
 
-    if( false == test )
+    if( !hasContent )
     {
         txNode.Destroy();
         return NULL;
     }
 
-    txNode.SetScale( SGPOINT( scale.x, scale.y, scale.z ) );
-    txNode.SetCenter( SGPOINT( center.x, center.y, center.z ) );
-    txNode.SetTranslation( SGPOINT( translation.x, translation.y, translation.z ) );
-    txNode.SetScaleOrientation( SGVECTOR( scaleOrientation.x, scaleOrientation.y,
-        scaleOrientation.z ), scaleOrientation.w );
-    txNode.SetRotation( SGVECTOR( rotation.x, rotation.y, rotation.z), rotation.w );
+    m_sgNode = node;
 
-    m_sgNode = txNode.GetRawPtr();
-
-    return m_sgNode;
-    */
+    return node;
 }

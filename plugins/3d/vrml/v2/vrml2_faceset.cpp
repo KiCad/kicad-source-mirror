@@ -27,6 +27,7 @@
 #include "vrml2_base.h"
 #include "vrml2_faceset.h"
 #include "vrml2_coords.h"
+#include "vrml2_color.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -632,44 +633,139 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     std::vector< int > lCIdx;       // coordinate index list for SG node (must be triads)
     std::vector< SGVECTOR > lCNorm; // per-vertex normals
     std::vector< int > faces;       // tracks the number of polygons for the entire set
+    std::vector< SGCOLOR > lColors; // colors points (if any) for SG node
     int nfaces = 0;                 // number of triangles for each face in the list
 
-    // assuming convex polygons, create triangles for the SG node
-    for( idx = 3; idx < vsize; )
+    if( NULL == color )
     {
-        lCIdx.push_back( i1 );
-
-        if( ccw )
+        // assuming convex polygons, create triangles for the SG node
+        for( idx = 3; idx < vsize; )
         {
-            lCIdx.push_back( i2 );
-            lCIdx.push_back( i3 );
-        }
-        else
-        {
-            lCIdx.push_back( i3 );
-            lCIdx.push_back( i2 );
-        }
+            lCIdx.push_back( i1 );
 
-        ++nfaces;
-        i2 = i3;
-        i3 = coordIndex[idx++];
-
-        while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
-        {
-            if( i3 < 0 )
+            if( ccw )
             {
-                faces.push_back( nfaces );
-                nfaces = 0;
+                lCIdx.push_back( i2 );
+                lCIdx.push_back( i3 );
+            }
+            else
+            {
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i2 );
             }
 
-            i1 = i2;
+            ++nfaces;
             i2 = i3;
             i3 = coordIndex[idx++];
 
-            // any invalid polygons shall void the entire faceset; this is a requirement
-            // to ensure correct handling of the normals
-            if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
-                return NULL;
+            while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
+            {
+                if( i3 < 0 )
+                {
+                    faces.push_back( nfaces );
+                    nfaces = 0;
+                }
+
+                i1 = i2;
+                i2 = i3;
+                i3 = coordIndex[idx++];
+
+                // any invalid polygons shall void the entire faceset; this is a requirement
+                // to ensure correct handling of the normals
+                if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+                    return NULL;
+            }
+        }
+    }
+    else
+    {
+        int cIndex;
+        WRL2COLOR* cn = (WRL2COLOR*) color;
+        SGCOLOR pc1, pc2, pc3;
+        WRLVEC3F tc;
+        cn->GetColor( 0, tc.x, tc.y, tc.z );
+        pc1.SetColor( tc.x, tc.y, tc.z );
+
+
+        if( colorPerVertex )
+        {
+            cIndex = 3;
+            cn->GetColor( 1, tc.x, tc.y, tc.z );
+            pc2.SetColor( tc.x, tc.y, tc.z );
+            cn->GetColor( 2, tc.x, tc.y, tc.z );
+            pc3.SetColor( tc.x, tc.y, tc.z );
+        }
+        else
+        {
+            cIndex = 1;
+            pc2.SetColor( tc.x, tc.y, tc.z );
+            pc3.SetColor( tc.x, tc.y, tc.z );
+        }
+
+        // assuming convex polygons, create triangles for the SG node
+        for( idx = 3; idx < vsize; )
+        {
+            lCIdx.push_back( i1 );
+            lColors.push_back( pc1 );
+            lColors.push_back( pc2 );
+            lColors.push_back( pc3 );
+
+            if( ccw )
+            {
+                lCIdx.push_back( i2 );
+                lCIdx.push_back( i3 );
+            }
+            else
+            {
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i2 );
+            }
+
+            ++nfaces;
+            i2 = i3;
+            i3 = coordIndex[idx++];
+
+            if( colorPerVertex && i1 >= 0 && i2 >= 0 && i3 >= 0 )
+            {
+                pc1.SetColor( pc2 );
+                pc2.SetColor( pc3 );
+                cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                pc3.SetColor( tc.x, tc.y, tc.z );
+            }
+
+            while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
+            {
+                if( i3 < 0 )
+                {
+                    faces.push_back( nfaces );
+                    nfaces = 0;
+
+                    if( !colorPerVertex )
+                    {
+                        cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                        pc1.SetColor( tc.x, tc.y, tc.z );
+                        pc2.SetColor( tc.x, tc.y, tc.z );
+                        pc3.SetColor( tc.x, tc.y, tc.z );
+                    }
+                }
+
+                i1 = i2;
+                i2 = i3;
+                i3 = coordIndex[idx++];
+
+                if( colorPerVertex )
+                {
+                    pc1.SetColor( pc2 );
+                    pc2.SetColor( pc3 );
+                    cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                    pc3.SetColor( tc.x, tc.y, tc.z );
+                }
+
+                // any invalid polygons shall void the entire faceset; this is a requirement
+                // to ensure correct handling of the normals
+                if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+                    return NULL;
+            }
         }
     }
 
@@ -755,6 +851,12 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     IFSG_NORMALS nmNode( fsNode );
     nmNode.SetNormalList( lCNorm.size(), &lCNorm[0] );
 
+    if( !lColors.empty() )
+    {
+        IFSG_COLORS nmColor( fsNode );
+        nmColor.SetColorList( lColors.size(), &lColors[0] );
+    }
+
     m_sgNode = fsNode.GetRawPtr();
 
     return m_sgNode;
@@ -804,4 +906,13 @@ void WRL2FACESET::unlinkRefNode( const WRL2NODE* aNode )
 
     WRL2NODE::unlinkRefNode( aNode );
     return;
+}
+
+
+bool WRL2FACESET::HasColors( void )
+{
+    if( NULL == color )
+        return false;
+
+    return ((WRL2COLOR*) color)->HasColors();
 }

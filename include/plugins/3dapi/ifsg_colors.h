@@ -50,7 +50,7 @@ public:
     bool NewNode( IFSG_NODE& aParent );
 
     bool GetColorList( size_t& aListSize, SGCOLOR*& aColorList );
-    bool SetColorList( size_t& aListSize, const SGCOLOR* aColorList );
+    bool SetColorList( size_t aListSize, const SGCOLOR* aColorList );
     bool AddColor( double aRedValue, double aGreenValue, double aBlueValue );
     bool AddColor( const SGCOLOR& aColor );
 };

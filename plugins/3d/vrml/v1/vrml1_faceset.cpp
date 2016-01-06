@@ -27,6 +27,7 @@
 #include "vrml1_base.h"
 #include "vrml1_faceset.h"
 #include "vrml1_coords.h"
+#include "vrml1_material.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -172,6 +173,34 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 return false;
             }
         }
+        else if( !glob.compare( "normalIndex" ) )
+        {
+            if( !proc.ReadMFInt( normIndex ) )
+            {
+                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [INFO] invalid normalIndex at line " << line << ", column ";
+                std::cerr << column << "\n";
+                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                #endif
+                return false;
+            }
+        }
+        else if( !glob.compare( "textureCoordIndex" ) )
+        {
+            if( !proc.ReadMFInt( texIndex ) )
+            {
+                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [INFO] invalid textureCoordIndex at line " << line << ", column ";
+                std::cerr << column << "\n";
+                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                #endif
+                return false;
+            }
+        }
         else
         {
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
@@ -191,38 +220,73 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
 SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    #ifdef NOGO
-    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
-
-    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
-    {
-        #ifdef DEBUG_VRML1
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
-        std::cerr << ptype << ")\n";
-        #endif
-
-        return NULL;
-    }
-
     if( m_sgNode )
     {
-        if( NULL != aParent )
-        {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
-                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
-            {
-                return NULL;
-            }
-            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
-                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
-            {
-                return NULL;
-            }
-        }
+        if( NULL != aParent && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            return NULL;
 
         return m_sgNode;
     }
+
+    if( m_Parent )
+    {
+        WRL1STATUS* cp = m_Parent->GetCurrentSettings();
+
+        if( NULL != cp )
+            m_current = *cp;
+        else
+            return NULL;
+
+    }
+    else
+    {
+        return NULL;
+    }
+
+    if( NULL == m_current.coord || NULL == m_current.mat )
+        return NULL;
+
+    // 1. create the vertex/normals/colors lists
+    std::vector< SGPOINT > vlist;
+    std::vector< SGVECTOR > nlist;
+    std::vector< SGCOLOR > colorlist;
+    SGCOLOR partColor;
+    SGNODE* sgcolor = NULL;
+    int nface = 1;
+
+    switch( m_current.matbind )
+    {
+    case BIND_OVERALL:
+
+        // use the first (non-default) appearance definition
+        sgcolor = m_current.mat->GetAppearance( 1 );
+        break;
+
+    case BIND_PER_FACE:
+    case BIND_PER_VERTEX:
+    case BIND_PER_FACE_INDEXED:
+    case BIND_PER_VERTEX_INDEXED:
+
+        // take the first color definition from the material
+        m_current.mat->GetColor( &partColor, 1 );
+        break;
+
+    default:
+
+        // use the default appearance definition
+        sgcolor = m_current.mat->GetAppearance( 0 );
+        break;
+    }
+
+    WRLVEC3F* pts;
+    size_t npts;
+    m_current.coord->GetCoords( pts, npts );
+
+    //while()
+    //qwerty;
+
+
+    #ifdef NOGO
 
     size_t vsize = coordIndex.size();
 

@@ -15,13 +15,11 @@ add_library( kicad_3dsg SHARED
     sg_coords.cpp
     sg_normals.cpp
     sg_index.cpp
-    sg_colorindex.cpp
     sg_coordindex.cpp
     ifsg_node.cpp
     ifsg_transform.cpp
     ifsg_appearance.cpp
     ifsg_index.cpp
-    ifsg_colorindex.cpp
     ifsg_coordindex.cpp
     ifsg_colors.cpp
     ifsg_coords.cpp

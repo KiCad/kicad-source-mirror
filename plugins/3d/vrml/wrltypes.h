@@ -87,14 +87,15 @@ enum WRL1NODES
 };
 
 // VRML1 Material/Normal Binding values
+// note: PART/FACE have the same meaning in the specification
 enum WRL1_BINDING
 {
     BIND_DEFAULT = 0,
     BIND_OVERALL,
     BIND_PER_PART,
+    BIND_PER_FACE = BIND_PER_PART,
     BIND_PER_PART_INDEXED,
-    BIND_PER_FACE,
-    BIND_PER_FACE_INDEXED,
+    BIND_PER_FACE_INDEXED = BIND_PER_PART_INDEXED,
     BIND_PER_VERTEX,
     BIND_PER_VERTEX_INDEXED,
     BIND_END

@@ -173,7 +173,7 @@ bool IFSG_COLORS::GetColorList( size_t& aListSize, SGCOLOR*& aColorList )
 }
 
 
-bool IFSG_COLORS::SetColorList( size_t& aListSize, const SGCOLOR* aColorList )
+bool IFSG_COLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
 {
     if( NULL == m_node )
     {

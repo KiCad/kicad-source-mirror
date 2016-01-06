@@ -27,6 +27,7 @@
 #include "vrml2_base.h"
 #include "vrml2_shape.h"
 #include "plugins/3dapi/ifsg_all.h"
+#include "vrml2_faceset.h"
 
 
 WRL2SHAPE::WRL2SHAPE() : WRL2NODE()
@@ -318,8 +319,19 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
 SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    if( NULL == appearance || NULL == geometry )
+    // XXX - TO BE IMPLEMENTED:
+    if( NULL == geometry )
         return NULL;
+
+    // if there is no appearance, make use of the per vertex colors if available
+    if( NULL == appearance )
+    {
+        if( WRL2_INDEXEDFACESET != geometry->GetNodeType() )
+            return NULL;
+
+        if( !((WRL2FACESET*)geometry)->HasColors() )
+            return NULL;
+    }
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
@@ -356,10 +368,13 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
     IFSG_SHAPE shNode( aParent );
 
     SGNODE* pShape = shNode.GetRawPtr();
-    SGNODE* pApp = appearance->TranslateToSG( pShape, calcNormals );
     SGNODE* pGeom = geometry->TranslateToSG( pShape, calcNormals );
+    SGNODE* pApp = NULL;
 
-    if( NULL == pApp || NULL == pGeom )
+    if( NULL != appearance )
+        pApp = appearance->TranslateToSG( pShape, calcNormals );
+
+    if( ( NULL != appearance && NULL == pApp ) || NULL == pGeom )
     {
         if( pGeom )
         {

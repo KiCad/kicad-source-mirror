@@ -51,7 +51,6 @@ private:
 public:
     // owned objects
     SGCOLORS*       m_Colors;
-    SGCOLORINDEX*   m_ColorIndices;
     SGCOORDS*       m_Coords;
     SGCOORDINDEX*   m_CoordIndices;
     SGNORMALS*      m_Normals;

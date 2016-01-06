@@ -88,6 +88,12 @@ public:
     bool AddRefNode( WRL2NODE* aNode );
     bool AddChildNode( WRL2NODE* aNode );
     SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+
+    /**
+     * Function HasColors
+     * returns true if the face set has a color node
+     */
+    bool HasColors( void );
 };
 
 #endif  // VRML2_FACESET_H

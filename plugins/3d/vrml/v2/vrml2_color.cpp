@@ -194,3 +194,30 @@ SGNODE* WRL2COLOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
     // any data manipulation must be performed by the parent node
     return NULL;
 }
+
+
+bool WRL2COLOR::HasColors( void )
+{
+    if( colors.empty() )
+        return false;
+
+    return true;
+}
+
+
+void WRL2COLOR::GetColor( int aIndex, float& red, float& green, float& blue )
+{
+    if( aIndex < 0 || aIndex >= colors.size() )
+    {
+        red = 0.8;
+        green = 0.8;
+        blue = 0.8;
+        return;
+    }
+
+    red = colors[aIndex].x;
+    green = colors[aIndex].x;
+    blue = colors[aIndex].x;
+
+    return;
+}

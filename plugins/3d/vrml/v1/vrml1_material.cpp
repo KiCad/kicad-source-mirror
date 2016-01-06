@@ -57,6 +57,13 @@ WRL1MATERIAL::~WRL1MATERIAL()
     std::cerr << " * [INFO] Destroying Material node\n";
     #endif
 
+    // destroy any orphaned color nodes
+    for( int i = 0; i < 2; ++i )
+    {
+        if( NULL != colors[i] && NULL == S3D::GetSGNodeParent( colors[i] ) )
+                S3D::DestroyNode( colors[i] );
+    }
+
     return;
 }
 
@@ -83,6 +90,9 @@ void WRL1MATERIAL::setDefaults( void )
 
     shininess.push_back( 0.2 );
     transparency.push_back( 0.0 );
+
+    colors[0] = NULL;
+    colors[1] = NULL;
 
     return;
 }
@@ -296,4 +306,210 @@ SGNODE* WRL1MATERIAL::TranslateToSG( SGNODE* aParent, bool calcNormals )
     }
 
     return NULL;
+}
+
+
+SGNODE* WRL1MATERIAL::GetAppearance( int aIndex )
+{
+    // invalid indices result in the default colors
+    if( aIndex != 0 && aIndex != 1 )
+        aIndex = 0;
+
+    if( NULL != colors[ aIndex ] )
+        return colors[ aIndex ];
+
+    IFSG_APPEARANCE app( true );
+
+    float red, green, blue, val;
+
+    if( aIndex > (int)transparency.size() )
+        val = transparency[0];
+    else
+        val = transparency[aIndex];
+
+    checkRange( val );
+    app.SetTransparency( val );
+
+    if( aIndex > (int)shininess.size() )
+        val = shininess[0];
+    else
+        val = shininess[aIndex];
+
+    checkRange( val );
+    app.SetShininess( val );
+
+    if( aIndex > (int)ambientColor.size() )
+    {
+        red = ambientColor[0].x;
+        green = ambientColor[0].y;
+        blue = ambientColor[0].z;
+    }
+    else
+    {
+        red = ambientColor[aIndex].x;
+        green = ambientColor[aIndex].y;
+        blue = ambientColor[aIndex].z;
+    }
+
+    checkRange( red );
+    checkRange( green );
+    checkRange( blue );
+    val = (red + green + blue)/3.0;
+    app.SetAmbient( val );
+
+    if( aIndex > (int)diffuseColor.size() )
+    {
+        red = diffuseColor[0].x;
+        green = diffuseColor[0].y;
+        blue = diffuseColor[0].z;
+    }
+    else
+    {
+        red = diffuseColor[aIndex].x;
+        green = diffuseColor[aIndex].y;
+        blue = diffuseColor[aIndex].z;
+    }
+
+    checkRange( red );
+    checkRange( green );
+    checkRange( blue );
+    app.SetDiffuse( red, green, blue );
+
+    if( aIndex > (int)emissiveColor.size() )
+    {
+        red = emissiveColor[0].x;
+        green = emissiveColor[0].y;
+        blue = emissiveColor[0].z;
+    }
+    else
+    {
+        red = emissiveColor[aIndex].x;
+        green = emissiveColor[aIndex].y;
+        blue = emissiveColor[aIndex].z;
+    }
+
+    checkRange( red );
+    checkRange( green );
+    checkRange( blue );
+    app.SetEmissive( red, green, blue );
+
+    if( aIndex > (int)specularColor.size() )
+    {
+        red = specularColor[0].x;
+        green = specularColor[0].y;
+        blue = specularColor[0].z;
+    }
+    else
+    {
+        red = specularColor[aIndex].x;
+        green = specularColor[aIndex].y;
+        blue = specularColor[aIndex].z;
+    }
+
+    checkRange( red );
+    checkRange( green );
+    checkRange( blue );
+    app.SetSpecular( red, green, blue );
+
+    colors[aIndex] = app.GetRawPtr();
+
+    return colors[aIndex];
+}
+
+
+void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
+{
+    if( NULL == aColor )
+        return;
+
+    // Calculate the color based on the given index.
+    // If the index points to a valid diffuse and emissive colors,
+    // take the higher value of each component.
+
+    float red, blue, green;
+    float eRed, eBlue, eGreen;
+
+    if( aIndex <= 0 || ( aIndex >= (int)diffuseColor.size()
+        && aIndex >= (int)emissiveColor.size() ) )
+    {
+        // If the index is out of bounds, use the default diffuse color.
+        red = diffuseColor[0].x;
+        green = diffuseColor[0].y;
+        blue = diffuseColor[0].z;
+
+        checkRange( red );
+        checkRange( green );
+        checkRange( blue );
+
+        aColor->SetColor( red, green, blue );
+        return;
+    }
+
+    if( aIndex >= (int)diffuseColor.size() )
+    {
+        red = emissiveColor[aIndex].x;
+        green = emissiveColor[aIndex].y;
+        blue = emissiveColor[aIndex].z;
+
+        checkRange( red );
+        checkRange( green );
+        checkRange( blue );
+
+        aColor->SetColor( red, green, blue );
+        return;
+    }
+
+    if( aIndex >= (int)emissiveColor.size() )
+    {
+        red = diffuseColor[aIndex].x;
+        green = diffuseColor[aIndex].y;
+        blue = diffuseColor[aIndex].z;
+
+        checkRange( red );
+        checkRange( green );
+        checkRange( blue );
+
+        aColor->SetColor( red, green, blue );
+        return;
+    }
+
+    red = diffuseColor[aIndex].x;
+    green = diffuseColor[aIndex].y;
+    blue = diffuseColor[aIndex].z;
+
+    eRed = emissiveColor[aIndex].x;
+    eGreen = emissiveColor[aIndex].y;
+    eBlue = emissiveColor[aIndex].z;
+
+    checkRange( red );
+    checkRange( green );
+    checkRange( blue );
+
+    checkRange( eRed );
+    checkRange( eGreen );
+    checkRange( eBlue );
+
+    if( eRed > red )
+        red = eRed;
+
+    if( eGreen > green )
+        green = eGreen;
+
+    if( eBlue > blue )
+        blue = eBlue;
+
+    aColor->SetColor( red, green, blue );
+
+    return;
+}
+
+
+void WRL1MATERIAL::checkRange( float& aValue )
+{
+    if( aValue < 0.0 )
+        aValue = 0.0;
+    else if( aValue > 1.0 )
+        aValue = 1.0;
+
+    return;
 }

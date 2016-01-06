@@ -31,7 +31,6 @@
 #include "plugins/3dapi/ifsg_colors.h"
 #include "plugins/3dapi/ifsg_coords.h"
 #include "plugins/3dapi/ifsg_faceset.h"
-#include "plugins/3dapi/ifsg_colorindex.h"
 #include "plugins/3dapi/ifsg_coordindex.h"
 #include "plugins/3dapi/ifsg_normals.h"
 #include "plugins/3dapi/ifsg_shape.h"

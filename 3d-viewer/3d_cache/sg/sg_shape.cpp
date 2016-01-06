@@ -624,7 +624,6 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
     }
 
     SGCOLORS* pc = pf->m_Colors;
-    SGCOLORINDEX* cidx = pf->m_ColorIndices;
     SGCOORDS* pv = pf->m_Coords;
     SGCOORDINDEX* vidx = pf->m_CoordIndices;
     SGNORMALS* pn = pf->m_Normals;
@@ -642,6 +641,24 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
     size_t nCoords = 0;
     SGPOINT* pCoords = NULL;
     pv->GetCoordsList( nCoords, pCoords );
+
+    size_t nColors = 0;
+    SGCOLOR* pColors = NULL;
+
+    if( pc )
+    {
+        // check the vertex colors
+        pc->GetColorList( nColors, pColors );
+
+        if( nColors < nCoords )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad model; not enough colors per vertex\n";
+            #endif
+            return true;
+        }
+    }
 
     // set the vertex indices
     size_t nvidx = 0;
@@ -673,17 +690,39 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
         return true;
     }
 
-    // construct the final vertex list
+    // construct the final vertex/color list
+    SFVEC3F* lColors = NULL;
     SFVEC3F* lCoords = new SFVEC3F[ vertices.size() ];
+    double red, green, blue;
     int ti, ii;
 
-    for( size_t i = 0; i < vertices.size(); ++i )
+    if( pc )
     {
-        ti = vertices[i];
-        glm::dvec4 pt( pCoords[ti].x, pCoords[ti].y, pCoords[ti].z, 1.0 );
-        pt = (*aTransform) * pt;
+        SFVEC3F* lColors = new SFVEC3F[vertices.size()];
+        m.m_Color = lColors;
+    }
 
-        lCoords[i] = SFVEC3F( pt.x, pt.y, pt.z );
+
+    if( pc )
+    {
+        for( size_t i = 0; i < vertices.size(); ++i )
+        {
+            ti = vertices[i];
+            glm::dvec4 pt( pCoords[ti].x, pCoords[ti].y, pCoords[ti].z, 1.0 );
+            pt = (*aTransform) * pt;
+            pColors[ti].GetColor( lColors[i].x, lColors[i].y, lColors[i].z );
+            lCoords[i] = SFVEC3F( pt.x, pt.y, pt.z );
+        }
+    }
+    else
+    {
+        for( size_t i = 0; i < vertices.size(); ++i )
+        {
+            ti = vertices[i];
+            glm::dvec4 pt( pCoords[ti].x, pCoords[ti].y, pCoords[ti].z, 1.0 );
+            pt = (*aTransform) * pt;
+            lCoords[i] = SFVEC3F( pt.x, pt.y, pt.z );
+        }
     }
 
     m.m_VertexSize = (unsigned int) vertices.size();
@@ -718,30 +757,6 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
     }
 
     m.m_Normals = lNorms;
-
-    // use per-vertex colors if available
-    if( pc )
-    {
-        size_t ncidx = 0;
-        int*   lcidx = NULL;
-        cidx->GetIndices( ncidx, lcidx );
-
-        // set the vertex colors
-        size_t nColors = 0;
-        SGCOLOR* pColors = NULL;
-        pc->GetColorList( nColors, pColors );
-        SFVEC3F* lColors = new SFVEC3F[ vertices.size() ];
-        double red, green, blue;
-
-        for( size_t i = 0; i < vertices.size(); ++i )
-        {
-            ti = vertices[i];
-            pColors[ lcidx[ti] ].GetColor( lColors[i].x, lColors[i].y, lColors[i].z );
-        }
-
-        m.m_Color = lColors;
-    }
-
     meshes.push_back( m );
 
     return true;
