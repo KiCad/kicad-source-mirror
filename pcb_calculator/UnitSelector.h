@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,6 +69,21 @@ public:
      * Function GetUnitScale
      * @return the scaling factor to convert users units
      * to normalized units (meter)
+     */
+    virtual double GetUnitScale();
+};
+
+class UNIT_SELECTOR_THICKNESS: public UNIT_SELECTOR
+{
+public:
+    UNIT_SELECTOR_THICKNESS( wxWindow *parent, wxWindowID id,
+                  const wxPoint& pos, const wxSize& size,
+                  const wxArrayString& choices, long style = 0 );
+
+    /**
+     * Function GetUnitScale
+     * @return the scaling factor to convert users units
+     * to normalized units (meter) including oz/ft^2
      */
     virtual double GetUnitScale();
 };

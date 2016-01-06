@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Aug 23 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -362,7 +362,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizerTW_Results->Add( m_ExtTrackThicknessValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxArrayString m_ExtTrackThicknessUnitChoices;
-	m_ExtTrackThicknessUnit = new UNIT_SELECTOR_LEN( sbSizerTW_Result->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ExtTrackThicknessUnitChoices, 0 );
+	m_ExtTrackThicknessUnit = new UNIT_SELECTOR_THICKNESS( sbSizerTW_Result->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ExtTrackThicknessUnitChoices, 0 );
 	m_ExtTrackThicknessUnit->SetSelection( 0 );
 	fgSizerTW_Results->Add( m_ExtTrackThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
@@ -451,7 +451,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizerTW_Results1->Add( m_IntTrackThicknessValue, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	wxArrayString m_IntTrackThicknessUnitChoices;
-	m_IntTrackThicknessUnit = new UNIT_SELECTOR_LEN( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_IntTrackThicknessUnitChoices, 0 );
+	m_IntTrackThicknessUnit = new UNIT_SELECTOR_THICKNESS( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_IntTrackThicknessUnitChoices, 0 );
 	m_IntTrackThicknessUnit->SetSelection( 0 );
 	fgSizerTW_Results1->Add( m_IntTrackThicknessUnit, 0, wxALL, 5 );
 	

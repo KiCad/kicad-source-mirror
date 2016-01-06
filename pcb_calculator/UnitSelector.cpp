@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ UNIT_SELECTOR_LEN::UNIT_SELECTOR_LEN( wxWindow *parent, wxWindowID id,
 /*
  * Function GetUnitScale
  * return the scaling factor to convert users units
- * to normalized units (meter )
+ * to normalized units (meter)
  */
 double UNIT_SELECTOR_LEN::GetUnitScale()
 {
@@ -57,6 +57,40 @@ double UNIT_SELECTOR_LEN::GetUnitScale()
     case 2: return UNIT_CM;     break;
     case 3: return UNIT_MIL;    break;
     case 4: return UNIT_INCH;   break;
+    }
+    return 1.0;
+}
+
+
+UNIT_SELECTOR_THICKNESS::UNIT_SELECTOR_THICKNESS( wxWindow *parent, wxWindowID id,
+                  const wxPoint& pos, const wxSize& size,
+                  const wxArrayString& choices, long style )
+                : UNIT_SELECTOR( parent, id, pos, size, choices, style )
+{
+    Append( _( "mm" ) );
+    Append( _( "um" ) );
+    Append( _( "cm" ) );
+    Append( _( "mil" ) );
+    Append( _( "inch" ) );
+    Append( _( "oz/ft^2" ) );
+};
+
+
+/*
+ * Function GetUnitScale
+ * return the scaling factor to convert users units
+ * to normalized units (meter) including copper oz/ft^2
+ */
+double UNIT_SELECTOR_THICKNESS::GetUnitScale()
+{
+    switch( GetCurrentSelection() )
+    {
+    case 0: return UNIT_MM;     break;
+    case 1: return UNIT_MICRON; break;
+    case 2: return UNIT_CM;     break;
+    case 3: return UNIT_MIL;    break;
+    case 4: return UNIT_INCH;   break;
+    case 5: return UNIT_OZSQFT; break;
     }
     return 1.0;
 }
