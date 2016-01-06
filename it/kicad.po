@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-31 18:04+0100\n"
-"PO-Revision-Date: 2016-01-06 23:44+0100\n"
+"PO-Revision-Date: 2016-01-06 23:49+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -18227,7 +18227,7 @@ msgstr "Errori:"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:62
 msgid "Create ERC file report"
-msgstr "Crea file di rapporto del Controllo regole"
+msgstr "Crea file di rapporto ERC"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:84
 msgid "Error list:"
@@ -19921,7 +19921,7 @@ msgstr "Aggiungi linee e poligoni al corpo del componente"
 
 #: eeschema/sch_marker.h:100
 msgid "ERC Marker"
-msgstr "Evidenziatore"
+msgstr "Evidenziatore ERC"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.h:99
 msgid "Pin Properties"
