@@ -266,7 +266,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     case BIND_OVERALL:
 
         // use the first (non-default) appearance definition
-        sgcolor = m_current.mat->GetAppearance( 1 );
+        sgcolor = m_current.mat->GetAppearance( 0 );
         break;
 
     case BIND_PER_FACE:
@@ -290,7 +290,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     default:
 
         // use the default appearance definition
-        sgcolor = m_current.mat->GetAppearance( 0 );
+        sgcolor = m_current.mat->GetAppearance( -1 );
         break;
     }
 
@@ -365,9 +365,9 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         {
         case BIND_PER_VERTEX:
             cIndex = 3;
-            m_current.mat->GetColor( &pc1, 1 );
-            m_current.mat->GetColor( &pc2, 2 );
-            m_current.mat->GetColor( &pc3, 3 );
+            m_current.mat->GetColor( &pc1, 0 );
+            m_current.mat->GetColor( &pc2, 1 );
+            m_current.mat->GetColor( &pc3, 2 );
             break;
 
         case BIND_PER_VERTEX_INDEXED:
@@ -383,14 +383,14 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 return NULL;
             }
 
-            m_current.mat->GetColor( &pc1, matIndex[0] + 1 );
-            m_current.mat->GetColor( &pc2, matIndex[1] + 1 );
-            m_current.mat->GetColor( &pc3, matIndex[2] + 1 );
+            m_current.mat->GetColor( &pc1, matIndex[0] );
+            m_current.mat->GetColor( &pc2, matIndex[1] );
+            m_current.mat->GetColor( &pc3, matIndex[2] );
             break;
 
         case BIND_PER_FACE:
             cIndex = 1;
-            m_current.mat->GetColor( &pc1, 1 );
+            m_current.mat->GetColor( &pc1, 0 );
             pc2.SetColor( pc1 );
             pc3.SetColor( pc1 );
             break;
@@ -398,7 +398,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         default:
             // BIND_PER_FACE_INDEXED
             cIndex = 1;
-            m_current.mat->GetColor( &pc1, matIndex[0] + 1 );
+            m_current.mat->GetColor( &pc1, matIndex[0] );
             pc2.SetColor( pc1 );
             pc3.SetColor( pc1 );
             break;
@@ -438,11 +438,11 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
                 if( noidx || cIndex >= cMaxIdx )
                 {
-                    m_current.mat->GetColor( &pc3, cIndex + 1 );
+                    m_current.mat->GetColor( &pc3, cIndex );
                     ++cIndex;
                 }
                 else
-                    m_current.mat->GetColor( &pc3, matIndex[cIndex++] + 1 );
+                    m_current.mat->GetColor( &pc3, matIndex[cIndex++] );
 
             }
 
@@ -456,12 +456,9 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                     if( !colorPerVertex )
                     {
                         if( noidx || cIndex >= cMaxIdx )
-                        {
-                            m_current.mat->GetColor( &pc1, cIndex + 1 );
-                            ++cIndex;
-                        }
+                            m_current.mat->GetColor( &pc1, cIndex++ );
                         else
-                            m_current.mat->GetColor( &pc1, matIndex[cIndex++] + 1 );
+                            m_current.mat->GetColor( &pc1, matIndex[cIndex++] );
 
                         pc2.SetColor( pc1 );
                         pc3.SetColor( pc1 );
@@ -478,12 +475,9 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                     pc2.SetColor( pc3 );
 
                     if( noidx || cIndex >= cMaxIdx )
-                    {
-                        m_current.mat->GetColor( &pc3, cIndex + 1 );
-                        ++cIndex;
-                    }
+                        m_current.mat->GetColor( &pc3, cIndex );
                     else
-                        m_current.mat->GetColor( &pc3, matIndex[cIndex++] + 1 );
+                        m_current.mat->GetColor( &pc3, matIndex[cIndex++] );
 
                 }
 
@@ -519,14 +513,21 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     } while( 0 );
 
-    // XXX - create the hierarchy:
-    // Transform
-    //   + Shape
-    //     + (option) Appearance
-    //     + FaceSet
-    #ifdef NOGO
-    #endif
-    IFSG_FACESET fsNode( aParent );
+    // create the hierarchy:
+    // Shape
+    //   + (option) Appearance
+    //   + FaceSet
+    IFSG_SHAPE shapeNode( aParent );
+
+    if( sgcolor )
+    {
+        if( NULL == S3D::GetSGNodeParent( sgcolor ) )
+            shapeNode.AddChildNode( sgcolor );
+        else
+            shapeNode.AddRefNode( sgcolor );
+    }
+
+    IFSG_FACESET fsNode( shapeNode );
     IFSG_COORDS cpNode( fsNode );
     cpNode.SetCoordsList( lCPts.size(), &lCPts[0] );
     IFSG_COORDINDEX ciNode( fsNode );

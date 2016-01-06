@@ -52,7 +52,6 @@ private:
 
     SGNODE* colors[2];
 
-    void setDefaults( void );
     void checkRange( float& aValue );
 
 public:
