@@ -703,9 +703,7 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 {
                     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    std::cerr << " * [INFO] bad file; colorIndex.size() < coordIndex.size() ";
-                    std::cerr << column << "\n";
-                    std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    std::cerr << " * [INFO] bad file; colorIndex.size() < coordIndex.size()\n";
                     #endif
                     return NULL;
                 }

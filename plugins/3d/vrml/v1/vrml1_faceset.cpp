@@ -246,13 +246,20 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     if( NULL == m_current.coord || NULL == m_current.mat )
         return NULL;
 
+    WRLVEC3F* pcoords;
+    size_t coordsize;
+
+    m_current.coord->GetCoords( pcoords, coordsize );
+    size_t vsize = coordIndex.size();
+
+    if( coordsize < 3 || vsize < 3 )
+        return NULL;
+
     // 1. create the vertex/normals/colors lists
     std::vector< SGPOINT > vlist;
     std::vector< SGVECTOR > nlist;
     std::vector< SGCOLOR > colorlist;
-    SGCOLOR partColor;
     SGNODE* sgcolor = NULL;
-    int nface = 1;
 
     switch( m_current.matbind )
     {
@@ -264,11 +271,20 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     case BIND_PER_FACE:
     case BIND_PER_VERTEX:
+        break;
+
     case BIND_PER_FACE_INDEXED:
+
+        if( matIndex.empty() )
+            return NULL;
+
+        break;
+
     case BIND_PER_VERTEX_INDEXED:
 
-        // take the first color definition from the material
-        m_current.mat->GetColor( &partColor, 1 );
+        if( matIndex.size() < 3 )
+            return NULL;
+
         break;
 
     default:
@@ -278,33 +294,11 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         break;
     }
 
-    WRLVEC3F* pts;
-    size_t npts;
-    m_current.coord->GetCoords( pts, npts );
-
-    //while()
-    //qwerty;
-
-
-    #ifdef NOGO
-
-    size_t vsize = coordIndex.size();
-
-    if( NULL == coord || vsize < 3 )
-        return NULL;
-
     // create the index list and make sure we have >3 points
     size_t idx;
     int i1 = coordIndex[0];
     int i2 = coordIndex[1];
     int i3 = coordIndex[2];
-
-    WRLVEC3F* pcoords;
-    size_t coordsize;
-    ((WRL1COORDS*) coord)->GetCoords( pcoords, coordsize );
-
-    if( coordsize < 3 )
-        return NULL;
 
     // check that all indices are valid
     for( idx = 0; idx < vsize; ++idx )
@@ -325,53 +319,187 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     std::vector< int > lCIdx;       // coordinate index list for SG node (must be triads)
     std::vector< SGVECTOR > lCNorm; // per-vertex normals
     std::vector< int > faces;       // tracks the number of polygons for the entire set
+    std::vector< SGCOLOR > lColors; // colors points (if any) for SG node
     int nfaces = 0;                 // number of triangles for each face in the list
 
-    // assuming convex polygons, create triangles for the SG node
-    for( idx = 3; idx < vsize; )
+    if( BIND_OVERALL == m_current.matbind || BIND_DEFAULT == m_current.matbind )
     {
-        lCIdx.push_back( i1 );
-
-        if( ccw )
+        // no color list
+        // assuming convex polygons, create triangles for the SG node
+        for( idx = 3; idx < vsize; )
         {
+            lCIdx.push_back( i1 );
             lCIdx.push_back( i2 );
             lCIdx.push_back( i3 );
-        }
-        else
-        {
-            lCIdx.push_back( i3 );
-            lCIdx.push_back( i2 );
-        }
 
-        ++nfaces;
-        i2 = i3;
-        i3 = coordIndex[idx++];
-
-        while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
-        {
-            if( i3 < 0 )
-            {
-                faces.push_back( nfaces );
-                nfaces = 0;
-            }
-
-            i1 = i2;
+            ++nfaces;
             i2 = i3;
             i3 = coordIndex[idx++];
 
-            // any invalid polygons shall void the entire faceset; this is a requirement
-            // to ensure correct handling of the normals
-            if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+            while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
+            {
+                if( i3 < 0 )
+                {
+                    faces.push_back( nfaces );
+                    nfaces = 0;
+                }
+
+                i1 = i2;
+                i2 = i3;
+                i3 = coordIndex[idx++];
+
+                // any invalid polygons shall void the entire faceset; this is a requirement
+                // to ensure correct handling of the normals
+                if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+                    return NULL;
+            }
+        }
+    }
+    else
+    {
+        // the entity requires a color list
+        int cIndex;
+        SGCOLOR pc1, pc2, pc3;
+
+        switch( m_current.matbind )
+        {
+        case BIND_PER_VERTEX:
+            cIndex = 3;
+            m_current.mat->GetColor( &pc1, 1 );
+            m_current.mat->GetColor( &pc2, 2 );
+            m_current.mat->GetColor( &pc3, 3 );
+            break;
+
+        case BIND_PER_VERTEX_INDEXED:
+            cIndex = 3;
+
+            if( matIndex.size() < vsize )
+            {
+                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [INFO] bad file; colorIndex.size() < coordIndex.size()\n";
+                #endif
+
                 return NULL;
+            }
+
+            m_current.mat->GetColor( &pc1, matIndex[0] + 1 );
+            m_current.mat->GetColor( &pc2, matIndex[1] + 1 );
+            m_current.mat->GetColor( &pc3, matIndex[2] + 1 );
+            break;
+
+        case BIND_PER_FACE:
+            cIndex = 1;
+            m_current.mat->GetColor( &pc1, 1 );
+            pc2.SetColor( pc1 );
+            pc3.SetColor( pc1 );
+            break;
+
+        default:
+            // BIND_PER_FACE_INDEXED
+            cIndex = 1;
+            m_current.mat->GetColor( &pc1, matIndex[0] + 1 );
+            pc2.SetColor( pc1 );
+            pc3.SetColor( pc1 );
+            break;
+        }
+
+        // assuming convex polygons, create triangles for the SG node
+        int cMaxIdx = (int) matIndex.size();
+
+        bool colorPerVertex = false;
+
+        if( BIND_PER_VERTEX == m_current.matbind
+            || BIND_PER_VERTEX_INDEXED == m_current.matbind )
+            colorPerVertex = true;
+
+        bool noidx = false;
+
+        if( matIndex.empty() )
+            noidx = true;
+
+        for( idx = 3; idx < vsize; )
+        {
+            lCIdx.push_back( i1 );
+            lCIdx.push_back( i2 );
+            lCIdx.push_back( i3 );
+            lColors.push_back( pc1 );
+            lColors.push_back( pc2 );
+            lColors.push_back( pc3 );
+
+            ++nfaces;
+            i2 = i3;
+            i3 = coordIndex[idx++];
+
+            if( colorPerVertex && i1 >= 0 && i2 >= 0 && i3 >= 0 )
+            {
+                pc1.SetColor( pc2 );
+                pc2.SetColor( pc3 );
+
+                if( noidx || cIndex >= cMaxIdx )
+                {
+                    m_current.mat->GetColor( &pc3, cIndex + 1 );
+                    ++cIndex;
+                }
+                else
+                    m_current.mat->GetColor( &pc3, matIndex[cIndex++] + 1 );
+
+            }
+
+            while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
+            {
+                if( i3 < 0 )
+                {
+                    faces.push_back( nfaces );
+                    nfaces = 0;
+
+                    if( !colorPerVertex )
+                    {
+                        if( noidx || cIndex >= cMaxIdx )
+                        {
+                            m_current.mat->GetColor( &pc1, cIndex + 1 );
+                            ++cIndex;
+                        }
+                        else
+                            m_current.mat->GetColor( &pc1, matIndex[cIndex++] + 1 );
+
+                        pc2.SetColor( pc1 );
+                        pc3.SetColor( pc1 );
+                    }
+                }
+
+                i1 = i2;
+                i2 = i3;
+                i3 = coordIndex[idx++];
+
+                if( colorPerVertex )
+                {
+                    pc1.SetColor( pc2 );
+                    pc2.SetColor( pc3 );
+
+                    if( noidx || cIndex >= cMaxIdx )
+                    {
+                        m_current.mat->GetColor( &pc3, cIndex + 1 );
+                        ++cIndex;
+                    }
+                    else
+                        m_current.mat->GetColor( &pc3, matIndex[cIndex++] + 1 );
+
+                }
+
+                // any invalid polygons shall void the entire faceset; this is a requirement
+                // to ensure correct handling of the normals
+                if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+                    return NULL;
+            }
         }
     }
 
     if( lCIdx.empty() )
         return NULL;
 
-    if( calcNormals || NULL == normal )
-    {
-        // create a vertex list for per-face per-vertex normals
+    // create a vertex list for per-face per-vertex normals
+    do {
         std::vector< int >::iterator sI = lCIdx.begin();
         std::vector< int >::iterator eI = lCIdx.end();
 
@@ -389,69 +517,33 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
             lCNorm.push_back( sv );
         }
 
-    }
-    else
-    {
-        // XXX - TO IMPLEMENT
-        return NULL;
-        /*
-            // use the vertex list as is
-            if( normalPerVertex )
-            {
-                // normalPerVertex = TRUE
-                // rules:
-                //  + if normalIndex is not EMPTY, it is used to select a normal for each vertex
-                //  + if normalIndex is EMPTY, the normal list is used in order per vertex
+    } while( 0 );
 
-                if( normalIndex.empty() )
-                {
-                    for( size_t i = 0; i < coordsize; ++i )
-                    {
-                        lCPts.push_back( SGPOINT( pcoords[i].x, pcoords[i].y, pcoords[i].z ) );
-
-                        // XXX - TO IMPLEMENT
-                    }
-                }
-                else
-                {
-                    // XXX - TO IMPLEMENT: index the normals
-                }
-            }
-            else
-            {
-                // normalPerVertex = FALSE
-                // rules:
-                //  + if normalIndex is not EMPTY, it is used to select a normal for each face
-                //  + if normalIndex is EMPTY, the normal list is used in order per face
-
-            }
-        //*/
-    }
-
-    // XXX - TO IMPLEMENT: Per-vertex colors
-
+    // XXX - create the hierarchy:
+    // Transform
+    //   + Shape
+    //     + (option) Appearance
+    //     + FaceSet
+    #ifdef NOGO
+    #endif
     IFSG_FACESET fsNode( aParent );
     IFSG_COORDS cpNode( fsNode );
     cpNode.SetCoordsList( lCPts.size(), &lCPts[0] );
     IFSG_COORDINDEX ciNode( fsNode );
 
-    if( calcNormals || NULL == normal )
-    {
-        for( int i = 0; i < (int)lCPts.size(); ++i )
-            ciNode.AddIndex( i );
-    }
-    else
-    {
-        ciNode.SetIndices( lCIdx.size(), &lCIdx[0] );
-    }
+    for( int i = 0; i < (int)lCPts.size(); ++i )
+        ciNode.AddIndex( i );
 
     IFSG_NORMALS nmNode( fsNode );
     nmNode.SetNormalList( lCNorm.size(), &lCNorm[0] );
 
+    if( !lColors.empty() )
+    {
+        IFSG_COLORS nmColor( fsNode );
+        nmColor.SetColorList( lColors.size(), &lColors[0] );
+    }
+
     m_sgNode = fsNode.GetRawPtr();
 
     return m_sgNode;
-    #endif
-
-    return NULL;
 }
