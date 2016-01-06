@@ -269,6 +269,15 @@ KIWAY::FACE_T KIWAY::KifaceType( FRAME_T aFrameType )
 }
 
 
+KIWAY_PLAYER* KIWAY::GetPlayerFrame( FRAME_T aFrameType )
+{
+    if( unsigned( aFrameType ) >= KIWAY_PLAYER_COUNT )
+        return NULL;
+
+    return m_player[aFrameType];
+}
+
+
 KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
 {
     // Since this will be called from python, cannot assume that code will
@@ -283,8 +292,10 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
     }
 
     // return the previously opened window
-    if( m_player[aFrameType] )
-        return m_player[aFrameType];
+    KIWAY_PLAYER* frame = GetPlayerFrame( aFrameType );
+
+    if( frame )
+        return frame;
 
     if( doCreate )
     {
@@ -296,7 +307,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
 
         if( kiface )
         {
-            KIWAY_PLAYER* frame = (KIWAY_PLAYER*) kiface->CreateWindow(
+            frame = (KIWAY_PLAYER*) kiface->CreateWindow(
                     m_top,
                     aFrameType,
                     this,
@@ -325,18 +336,18 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
         return false;
     }
 
-    if( m_player[aFrameType] )
-    {
-        if( m_player[aFrameType]->Close( doForce ) )
-        {
-            m_player[aFrameType] = 0;
-            return true;
-        }
+    KIWAY_PLAYER* frame =  GetPlayerFrame( aFrameType );
 
-        return false;
+    if( frame == NULL ) // Already closed
+        return true;
+
+    if( frame->Close( doForce ) )
+    {
+        m_player[aFrameType] = 0;
+        return true;
     }
 
-    return true;    // window is closed already.
+    return false;
 }
 
 
@@ -377,7 +388,8 @@ void KIWAY::SetLanguage( int aLanguage )
     // the array below.
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
     {
-        EDA_BASE_FRAME* top = (EDA_BASE_FRAME*) m_top;
+        EDA_BASE_FRAME* top = dynamic_cast<EDA_BASE_FRAME*>( m_top );
+
         if( top )
             top->ShowChangedLanguage();
     }
@@ -385,7 +397,7 @@ void KIWAY::SetLanguage( int aLanguage )
 
     for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
     {
-        KIWAY_PLAYER* frame = m_player[i];
+        KIWAY_PLAYER* frame = GetPlayerFrame( ( FRAME_T )i );
 
         if( frame )
         {

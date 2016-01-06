@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,8 +262,8 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     // Close module display frame
-    if( GetFpViewerFrame() )
-        GetFpViewerFrame()->Close( true );
+    if( GetFootprintViewerFrame() )
+        GetFootprintViewerFrame()->Close( true );
 
     m_modified = false;
 
@@ -495,7 +495,7 @@ void CVPCB_MAINFRAME::OnKeepOpenOnSave( wxCommandEvent& event )
 void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
-    GetFpViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
+    GetFootprintViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
 }
 
 
@@ -569,7 +569,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
             if ( ii >= 0 )
                 m_footprintListBox->SetSelection( ii, false );
 
-            if( GetFpViewerFrame() )
+            if( GetFootprintViewerFrame() )
             {
                 CreateScreenCmp();
             }
@@ -781,7 +781,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
 
 void CVPCB_MAINFRAME::CreateScreenCmp()
 {
-    DISPLAY_FOOTPRINTS_FRAME* fpframe = GetFpViewerFrame();
+    DISPLAY_FOOTPRINTS_FRAME* fpframe = GetFootprintViewerFrame();
 
     if( !fpframe )
     {
@@ -907,7 +907,7 @@ COMPONENT* CVPCB_MAINFRAME::GetSelectedComponent()
 }
 
 
-DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFpViewerFrame()
+DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame()
 {
     // returns the Footprint Viewer frame, if exists, or NULL
     return dynamic_cast<DISPLAY_FOOTPRINTS_FRAME*>
