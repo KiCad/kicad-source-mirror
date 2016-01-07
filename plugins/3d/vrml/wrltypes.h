@@ -101,6 +101,13 @@ enum WRL1_BINDING
     BIND_END
 };
 
+enum WRL1_ORDER
+{
+    ORD_UNKNOWN = 0,
+    ORD_CLOCKWISE,
+    ORD_CCW
+};
+
 // VRML2 Node Types
 // These are used to look up node names and to quickly
 // determine what routine to invoke to read a section of

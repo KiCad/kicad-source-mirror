@@ -78,6 +78,8 @@ struct WRL1STATUS
     WRL1_BINDING normbind;
     // transform
     glm::mat4 txmatrix;
+    // winding order of vertices
+    WRL1_ORDER order;
 
     WRL1STATUS()
     {
@@ -93,6 +95,7 @@ struct WRL1STATUS
         normbind = BIND_DEFAULT;
         coord = NULL;
         txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
+        order = ORD_UNKNOWN;
         return;
     }
 };

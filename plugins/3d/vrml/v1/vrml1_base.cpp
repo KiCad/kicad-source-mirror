@@ -31,6 +31,7 @@
 #include "vrml1_switch.h"
 #include "vrml1_faceset.h"
 #include "vrml1_transform.h"
+#include "vrml1_shapehints.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -466,6 +467,13 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
         break;
 
+    case WRL1_SHAPEHINTS:
+
+        if( !readShapeHints( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     //
     // items not implemented or for optional future implementation:
     //
@@ -635,6 +643,26 @@ bool WRL1BASE::readTransform( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode
         *aNode = NULL;
 
     WRL1TRANSFORM* np = new WRL1TRANSFORM( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
+}
+
+
+bool WRL1BASE::readShapeHints( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL1SHAPEHINTS* np = new WRL1SHAPEHINTS( m_dictionary, aParent );
 
     if( !np->Read( proc, this ) )
     {

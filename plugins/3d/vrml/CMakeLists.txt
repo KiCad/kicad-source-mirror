@@ -4,7 +4,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/v2
 )
 
-add_definitions( -DDEBUG_VRML1=2 -DDEBUG_VRML2=2 )
+add_definitions( -DDEBUG_VRML1=3 -DDEBUG_VRML2=3 )
 
 add_library( s3d_plugin_vrml MODULE
         vrml.cpp
@@ -32,6 +32,7 @@ add_library( s3d_plugin_vrml MODULE
         v1/vrml1_switch.cpp
         v1/vrml1_faceset.cpp
         v1/vrml1_transform.cpp
+        v1/vrml1_shapehints.cpp
         )
 
 target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )

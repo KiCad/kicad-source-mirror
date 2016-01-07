@@ -328,9 +328,29 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         // assuming convex polygons, create triangles for the SG node
         for( idx = 3; idx < vsize; )
         {
-            lCIdx.push_back( i1 );
-            lCIdx.push_back( i2 );
-            lCIdx.push_back( i3 );
+            switch( m_current.order )
+            {
+            case ORD_CCW:
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i2 );
+                lCIdx.push_back( i3 );
+                break;
+
+            case ORD_CLOCKWISE:
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i2 );
+                break;
+
+            default:
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i2 );
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i2 );
+                break;
+            }
 
             ++nfaces;
             i2 = i3;
@@ -423,12 +443,41 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
         for( idx = 3; idx < vsize; )
         {
-            lCIdx.push_back( i1 );
-            lCIdx.push_back( i2 );
-            lCIdx.push_back( i3 );
-            lColors.push_back( pc1 );
-            lColors.push_back( pc2 );
-            lColors.push_back( pc3 );
+            switch( m_current.order )
+            {
+            case ORD_CCW:
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i2 );
+                lCIdx.push_back( i3 );
+                lColors.push_back( pc1 );
+                lColors.push_back( pc2 );
+                lColors.push_back( pc3 );
+                break;
+
+            case ORD_CLOCKWISE:
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i2 );
+                lColors.push_back( pc1 );
+                lColors.push_back( pc3 );
+                lColors.push_back( pc2 );
+                break;
+
+            default:
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i2 );
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i1 );
+                lCIdx.push_back( i3 );
+                lCIdx.push_back( i2 );
+                lColors.push_back( pc1 );
+                lColors.push_back( pc2 );
+                lColors.push_back( pc3 );
+                lColors.push_back( pc1 );
+                lColors.push_back( pc3 );
+                lColors.push_back( pc2 );
+                break;
+            }
 
             ++nfaces;
             i2 = i3;
@@ -511,12 +560,43 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
             ++sI;
         }
 
-        for( size_t i = 0; i < lCPts.size(); i += 3 )
+        switch( m_current.order )
         {
-            SGVECTOR sv = S3D::CalcTriNorm( lCPts[i], lCPts[i+1], lCPts[i+2] );
-            lCNorm.push_back( sv );
-            lCNorm.push_back( sv );
-            lCNorm.push_back( sv );
+        case ORD_CCW:
+
+            for( size_t i = 0; i < lCPts.size(); i += 3 )
+            {
+                SGVECTOR sv = S3D::CalcTriNorm( lCPts[i], lCPts[i+1], lCPts[i+2] );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+            }
+            break;
+
+        case ORD_CLOCKWISE:
+
+            for( size_t i = 0; i < lCPts.size(); i += 3 )
+            {
+                SGVECTOR sv = S3D::CalcTriNorm( lCPts[i], lCPts[i+2], lCPts[i+1] );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+            }
+            break;
+
+        default:
+
+            for( size_t i = 0; i < lCPts.size(); i += 6 )
+            {
+                SGVECTOR sv = S3D::CalcTriNorm( lCPts[i], lCPts[i+1], lCPts[i+2] );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+                lCNorm.push_back( sv );
+            }
+            break;
         }
 
     } while( 0 );
