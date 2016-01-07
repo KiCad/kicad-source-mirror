@@ -1159,6 +1159,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     // Get the current default settings for zones
                     ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
                     zoneInfo.m_CurrentZone_Layer = m_frame->GetScreen()->m_Active_Layer;
+                    zoneInfo.SetIsKeepout(aKeepout);
 
                     m_controls->SetAutoPan( true );
                     m_controls->CaptureCursor( true );
