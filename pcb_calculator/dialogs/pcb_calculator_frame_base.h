@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 23 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -112,6 +112,9 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticText65;
 		wxTextCtrl* m_ExtTrackThicknessValue;
 		UNIT_SELECTOR_THICKNESS* m_ExtTrackThicknessUnit;
+		wxStaticLine* m_staticline3;
+		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticTextArea;
 		wxStaticText* m_ExtTrackAreaValue;
 		wxStaticText* m_ExtTrackAreaUnitLabel;

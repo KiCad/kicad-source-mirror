@@ -115,16 +115,14 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateFromCurrent( wxCommandEvent& event )
     double extThickness = std::abs( DoubleFromString( m_ExtTrackThicknessValue->GetValue() ) );
     double intThickness = std::abs( DoubleFromString( m_IntTrackThicknessValue->GetValue() ) );
     double deltaT_C     = std::abs( DoubleFromString( m_TrackDeltaTValue->GetValue() ) );
-    double extTrackWidth;
-    double intTrackWidth;
 
-    // Normalize units.
+    // Normalize by units.
     extThickness *= m_ExtTrackThicknessUnit->GetUnitScale();
     intThickness *= m_IntTrackThicknessUnit->GetUnitScale();
 
     // Calculate the widths.
-    extTrackWidth = TWCalculateWidth( current, extThickness, deltaT_C, false );
-    intTrackWidth = TWCalculateWidth( current, intThickness, deltaT_C, true );
+    double extTrackWidth = TWCalculateWidth( current, extThickness, deltaT_C, false );
+    double intTrackWidth = TWCalculateWidth( current, intThickness, deltaT_C, true );
 
     // Update the display.
     TWDisplayValues( current, extTrackWidth, intTrackWidth, extThickness, intThickness );
@@ -355,6 +353,11 @@ void PCB_CALCULATOR_FRAME::TWUpdateModeDisplay()
 
     m_staticTextIntWidth->SetFont( labelfont );
     m_IntTrackWidthValue->SetFont( controlfont );
+
+    // Text sizes have changed when the font weight was changes
+    // So, run the page layout to reflect the changes
+    wxWindow* page = m_Notebook->GetPage ( 1 );
+    page->GetSizer()->Layout();
 }
 
 /* calculate track width for external or internal layers
