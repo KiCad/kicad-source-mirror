@@ -413,7 +413,7 @@ public:
      * Function GetRef
      * returns the reference, for the given sheet path.
      */
-    const wxString GetRef( const SCH_SHEET_PATH* sheet );
+    const wxString GetRef( const SCH_SHEET* sheet );
 
     /**
      * Set the reference, for the given sheet path.
@@ -433,7 +433,7 @@ public:
                                    int             aMulti );
 
     // returns the unit selection, for the given sheet path.
-    int GetUnitSelection( SCH_SHEET_PATH* aSheet );
+    int GetUnitSelection( SCH_SHEET* aSheet );
 
     // Set the unit selection, for the given sheet path.
     void SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );

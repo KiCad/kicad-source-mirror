@@ -30,6 +30,7 @@
 #include <class_sch_screen.h>
 #include <schframe.h>
 #include <sch_sheet_path.h>
+#include <sch_sheet.h>
 #include <project.h>
 
 #include <dialog_plot_schematic.h>
@@ -67,7 +68,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
                 schframe->SetCurrentSheet( list );
-                schframe->GetCurrentSheet().UpdateAllScreenReferences();
+                schframe->GetCurrentSheet().Last()->UpdateAllScreenReferences();
                 schframe->SetSheetNumberAndCount();
                 screen = schframe->GetCurrentSheet().LastScreen();
             }
@@ -105,7 +106,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
             msg.Printf( wxT( "DXF Plotter exception: %s"), GetChars( e.errorText ) );
             reporter.Report( msg, REPORTER::RPT_ERROR );
             schframe->SetCurrentSheet( oldsheetpath );
-            schframe->GetCurrentSheet().UpdateAllScreenReferences();
+            schframe->GetCurrentSheet().Last()->UpdateAllScreenReferences();
             schframe->SetSheetNumberAndCount();
             return;
         }
@@ -116,7 +117,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
     }
 
     schframe->SetCurrentSheet( oldsheetpath );
-    schframe->GetCurrentSheet().UpdateAllScreenReferences();
+    schframe->GetCurrentSheet().Last()->UpdateAllScreenReferences();
     schframe->SetSheetNumberAndCount();
 }
 
@@ -125,7 +126,7 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
                                              SCH_SCREEN*        aScreen,
                                              wxPoint            aPlotOffset,
                                              double             aScale,
-                                             bool aPlotFrameRef )
+                                             bool               aPlotFrameRef )
 {
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
 

@@ -442,9 +442,9 @@ wxString SCH_COMPONENT::GetPath( const SCH_SHEET* aSheet ) const
 }
 
 
-const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
+const wxString SCH_COMPONENT::GetRef( const SCH_SHEET* aSheet )
 {
-    wxString          path = GetPath( sheet->Last() );
+    wxString          path = GetPath( aSheet );
     wxString          h_path, h_ref;
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
@@ -471,7 +471,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
     // all have the same component references, but perhaps this is best.
     if( !GetField( REFERENCE )->GetText().IsEmpty() )
     {
-        SetRef( sheet->Last(), GetField( REFERENCE )->GetText() );
+        SetRef( aSheet, GetField( REFERENCE )->GetText() );
         return GetField( REFERENCE )->GetText();
     }
 
@@ -479,12 +479,6 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
 }
 
 
-/* Function IsReferenceStringValid (static function)
- * Tests for an acceptable reference string
- * An acceptable reference string must support unannotation
- * i.e starts by letter
- * returns true if OK
- */
 bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 {
     wxString text = aReferenceString;
@@ -582,9 +576,9 @@ void SCH_COMPONENT::SetTimeStamp( time_t aNewTimeStamp )
 }
 
 
-int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
+int SCH_COMPONENT::GetUnitSelection( SCH_SHEET* aSheet )
 {
-    wxString          path = GetPath( aSheet->Last() );
+    wxString          path = GetPath( aSheet );
     wxString          h_path, h_multi;
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
@@ -1534,7 +1528,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
         if( m_currentSheetPath )
             aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
-                                             GetRef( m_currentSheetPath ),
+                                             GetRef( m_currentSheetPath->Last() ),
                                              DARKCYAN ) );
 
         wxString msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
@@ -1884,7 +1878,7 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         {
             wxASSERT( pin->Type() == LIB_PIN_T );
 
-            if( pin->GetUnit() && ( pin->GetUnit() != GetUnitSelection( aSheetPath ) ) )
+            if( pin->GetUnit() && ( pin->GetUnit() != GetUnitSelection( aSheetPath->Last() ) ) )
                 continue;
 
             if( pin->GetConvert() && ( pin->GetConvert() != GetConvert() ) )

@@ -115,7 +115,8 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
 
         // Power symbols and other components which have the reference starting
         // with "#" are not included in netlist (pseudo or virtual components)
-        ref = comp->GetRef( aSheetPath );
+        ref = comp->GetRef( aSheetPath->Last() );
+
         if( ref[0] == wxChar( '#' ) )
             continue;
 
@@ -173,7 +174,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*   
 
         // Power symbols and other components which have the reference starting
         // with "#" are not included in netlist (pseudo or virtual components)
-        ref = comp->GetRef( aSheetPath );
+        ref = comp->GetRef( aSheetPath->Last() );
 
         if( ref[0] == wxChar( '#' ) )
             continue;
@@ -206,7 +207,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*   
         {
             LIB_PINS pins;      // constructed once here
 
-            part->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
+            part->GetPins( pins, comp->GetUnitSelection( aSheetPath->Last() ), comp->GetConvert() );
 
             for( size_t i = 0; i < pins.size(); i++ )
             {
@@ -322,10 +323,10 @@ void NETLIST_EXPORTER::eraseDuplicatePins()
 
 
 void NETLIST_EXPORTER::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
-                                         LIB_PART*       aEntry,
-                                         SCH_SHEET_PATH* aSheetPath )
+                                                    LIB_PART*       aEntry,
+                                                    SCH_SHEET_PATH* aSheetPath )
 {
-    wxString    ref = aComponent->GetRef( aSheetPath );
+    wxString    ref = aComponent->GetRef( aSheetPath->Last() );
     wxString    ref2;
 
     SCH_SHEET_LIST sheetList;
@@ -339,11 +340,11 @@ void NETLIST_EXPORTER::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
 
             SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
 
-            ref2 = comp2->GetRef( sheet );
+            ref2 = comp2->GetRef( sheet->Last() );
             if( ref2.CmpNoCase( ref ) != 0 )
                 continue;
 
-            int unit2 = comp2->GetUnitSelection( sheet );  // slow
+            int unit2 = comp2->GetUnitSelection( sheet->Last() );  // slow
 
             for( LIB_PIN* pin = aEntry->GetNextPin();  pin;  pin = aEntry->GetNextPin( pin ) )
             {

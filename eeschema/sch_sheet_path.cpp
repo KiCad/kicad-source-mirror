@@ -227,24 +227,6 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 }
 
 
-void SCH_SHEET_PATH::UpdateAllScreenReferences()
-{
-    EDA_ITEM* t = LastDrawList();
-
-    while( t )
-    {
-        if( t->Type() == SCH_COMPONENT_T )
-        {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) t;
-            component->GetField( REFERENCE )->SetText( component->GetRef( this ) );
-            component->UpdateUnit( component->GetUnitSelection( this ) );
-        }
-
-        t = t->Next();
-    }
-}
-
-
 void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
 {
     // Search to sheet path number:
@@ -266,7 +248,7 @@ void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aRefer
 
             // Skip pseudo components, which have a reference starting with #.  This mainly
             // affects power symbols.
-            if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
+            if( !aIncludePowerSymbols && component->GetRef( Last() )[0] == wxT( '#' ) )
                 continue;
 
             LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
@@ -301,7 +283,7 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_RE
 
         // Skip pseudo components, which have a reference starting with #.  This mainly
         // affects power symbols.
-        if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
+        if( !aIncludePowerSymbols && component->GetRef( Last() )[0] == wxT( '#' ) )
             continue;
 
         LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );

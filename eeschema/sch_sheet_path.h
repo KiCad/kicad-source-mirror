@@ -216,17 +216,6 @@ public:
     bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
 
     /**
-     * Function UpdateAllScreenReferences
-     * updates the reference and the m_Multi parameter (part selection) for all
-     * components on a screen depending on the actual sheet path.
-     * Mandatory in complex hierarchies because sheets use the same screen
-     * (basic schematic)
-     * but with different references and part selections according to the
-     * displayed sheet
-     */
-    void UpdateAllScreenReferences();
-
-    /**
      * Function GetComponents
      * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
      * @param aLibs the library list to use

@@ -357,7 +357,7 @@ wxString NETLIST_OBJECT::GetShortNetName() const
         if( link )  // Should be always true
         {
             netName = wxT("Net-(");
-            netName << link->GetRef( &m_netNameCandidate->m_SheetPath );
+            netName << link->GetRef( m_netNameCandidate->m_SheetPath.Last() );
             netName << wxT("-Pad")
                     << LIB_PIN::PinStringNum( m_netNameCandidate->m_PinNum )
                     << wxT(")");

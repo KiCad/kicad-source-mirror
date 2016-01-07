@@ -131,7 +131,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // an element.
 
             xcomps->AddChild( xcomp = node( sComponent ) );
-            xcomp->AddAttribute( sRef, comp->GetRef( path ) );
+            xcomp->AddAttribute( sRef, comp->GetRef( path->Last() ) );
 
             xcomp->AddChild( node( sValue, comp->GetField( VALUE )->GetText() ) );
 
@@ -467,7 +467,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
         comp = nitem->GetComponentParent();
 
         // Get the reference for the net name and the main parent component
-        ref = comp->GetRef( &nitem->m_SheetPath );
+        ref = comp->GetRef( nitem->m_SheetPath.Last() );
+
         if( ref[0] == wxChar( '#' ) )
             continue;
 
@@ -529,7 +530,8 @@ bool NETLIST_EXPORTER_GENERIC::writeListOfNets( FILE* f, NETLIST_OBJECT_LIST& aO
         comp = nitem->GetComponentParent();
 
         // Get the reference for the net name and the main parent component
-        ref = comp->GetRef( &nitem->m_SheetPath );
+        ref = comp->GetRef( nitem->m_SheetPath.Last() );
+
         if( ref[0] == wxChar( '#' ) )
             continue;                 // Pseudo component (Like Power symbol)
 

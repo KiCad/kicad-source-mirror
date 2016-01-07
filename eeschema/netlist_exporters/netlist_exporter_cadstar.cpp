@@ -93,7 +93,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
                 footprint = wxT( "$noname" );
             */
 
-            msg = component->GetRef( sheet );
+            msg = component->GetRef( sheet->Last() );
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
@@ -159,7 +159,8 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
             continue;
 
         Cmp = nitem->GetComponentParent();
-        wxString refstr = Cmp->GetRef( &nitem->m_SheetPath );
+        wxString refstr = Cmp->GetRef( nitem->m_SheetPath.Last() );
+
         if( refstr[0] == '#' )
             continue;  // Power supply symbols.
 
