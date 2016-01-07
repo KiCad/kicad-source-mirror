@@ -1435,18 +1435,6 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
         if( ']' == m_buf[m_linepos] )
             break;
 
-        if( !lcomma )
-        {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
-            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
-            ostr << " * [INFO] comma missing in delimited list";
-            m_error = ostr.str();
-
-            return false;
-        }
     }
 
     ++m_linepos;
@@ -1579,18 +1567,6 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
         if( ']' == m_buf[m_linepos] )
             break;
 
-        if( !lcomma )
-        {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
-            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
-            ostr << " * [INFO] comma missing in delimited list";
-            m_error = ostr.str();
-
-            return false;
-        }
     }
 
     ++m_linepos;
@@ -1723,18 +1699,6 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
         if( ']' == m_buf[m_linepos] )
             break;
 
-        if( !lcomma )
-        {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
-            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
-            ostr << " * [INFO] comma missing in delimited list";
-            m_error = ostr.str();
-
-            return false;
-        }
     }
 
     ++m_linepos;
@@ -1867,18 +1831,6 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
         if( ']' == m_buf[m_linepos] )
             break;
 
-        if( !lcomma )
-        {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
-            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
-            ostr << " * [INFO] comma missing in delimited list";
-            m_error = ostr.str();
-
-            return false;
-        }
     }
 
     ++m_linepos;
@@ -2011,18 +1963,6 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
         if( ']' == m_buf[m_linepos] )
             break;
 
-        if( !lcomma )
-        {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
-            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
-            ostr << " * [INFO] comma missing in delimited list";
-            m_error = ostr.str();
-
-            return false;
-        }
     }
 
     ++m_linepos;
@@ -2155,18 +2095,6 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
         if( ']' == m_buf[m_linepos] )
             break;
 
-        if( !lcomma )
-        {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
-            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
-            ostr << " * [INFO] comma missing in delimited list";
-            m_error = ostr.str();
-
-            return false;
-        }
     }
 
     ++m_linepos;

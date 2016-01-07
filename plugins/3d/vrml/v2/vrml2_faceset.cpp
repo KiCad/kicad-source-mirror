@@ -690,11 +690,11 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
             if( colorIndex.empty() )
             {
-                cn->GetColor( 0, tc.x, tc.y, tc.z );
+                cn->GetColor( coordIndex[0], tc.x, tc.y, tc.z );
                 pc1.SetColor( tc.x, tc.y, tc.z );
-                cn->GetColor( 1, tc.x, tc.y, tc.z );
+                cn->GetColor( coordIndex[1], tc.x, tc.y, tc.z );
                 pc2.SetColor( tc.x, tc.y, tc.z );
-                cn->GetColor( 2, tc.x, tc.y, tc.z );
+                cn->GetColor( coordIndex[2], tc.x, tc.y, tc.z );
                 pc3.SetColor( tc.x, tc.y, tc.z );
             }
             else
@@ -759,20 +759,28 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
             ++nfaces;
             i2 = i3;
-            i3 = coordIndex[idx++];
 
             if( colorPerVertex && i1 >= 0 && i2 >= 0 && i3 >= 0 )
             {
                 pc1.SetColor( pc2 );
                 pc2.SetColor( pc3 );
 
-                if( colorIndex.empty() || cIndex >= cMaxIdx )
-                    cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                if( colorIndex.empty() )
+                {
+                    cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
+                    pc1.SetColor( tc.x, tc.y, tc.z );
+                    cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
+                    pc2.SetColor( tc.x, tc.y, tc.z );
+                    cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
+                    pc3.SetColor( tc.x, tc.y, tc.z );
+                }
                 else
                     cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
 
                 pc3.SetColor( tc.x, tc.y, tc.z );
             }
+
+            i3 = coordIndex[idx++];
 
             while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
             {
@@ -796,20 +804,28 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
                 i1 = i2;
                 i2 = i3;
-                i3 = coordIndex[idx++];
 
                 if( colorPerVertex )
                 {
                     pc1.SetColor( pc2 );
                     pc2.SetColor( pc3 );
 
-                    if( colorIndex.empty() || cIndex >= cMaxIdx )
-                        cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
+                    if( colorIndex.empty() )
+                    {
+                        cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
+                        pc1.SetColor( tc.x, tc.y, tc.z );
+                        cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
+                        pc2.SetColor( tc.x, tc.y, tc.z );
+                        cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
+                        pc3.SetColor( tc.x, tc.y, tc.z );
+                    }
                     else
                         cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
 
                     pc3.SetColor( tc.x, tc.y, tc.z );
                 }
+
+                i3 = coordIndex[idx++];
 
                 // any invalid polygons shall void the entire faceset; this is a requirement
                 // to ensure correct handling of the normals

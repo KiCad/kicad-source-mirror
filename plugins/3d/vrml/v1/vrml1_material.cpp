@@ -31,6 +31,8 @@
 
 WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
+    colors[0] = NULL;
+    colors[1] = NULL;
     m_Type = WRL1_MATERIAL;
     return;
 }
@@ -39,6 +41,8 @@ WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary 
 WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
+    colors[0] = NULL;
+    colors[1] = NULL;
     m_Type = WRL1_MATERIAL;
     m_Parent = aParent;
 
@@ -475,6 +479,32 @@ void WRL1MATERIAL::checkRange( float& aValue )
         aValue = 0.0;
     else if( aValue > 1.0 )
         aValue = 1.0;
+
+    return;
+}
+
+
+void WRL1MATERIAL::Reclaim( SGNODE* aColor )
+{
+    if( NULL == aColor )
+        return;
+
+    if( aColor == colors[0] )
+    {
+        if( NULL == S3D::GetSGNodeParent( aColor ) )
+        {
+            colors[0] = NULL;
+            S3D::DestroyNode( aColor );
+        }
+
+        return;
+    }
+
+    if( aColor == colors[1] && NULL == S3D::GetSGNodeParent( aColor ) )
+    {
+        colors[1] = NULL;
+        S3D::DestroyNode( aColor );
+    }
 
     return;
 }

@@ -25,25 +25,25 @@
 #include <iostream>
 
 #include "vrml2_base.h"
-#include "vrml2_shape.h"
+#include "vrml2_lineset.h"
+#include "vrml2_coords.h"
+#include "vrml2_color.h"
 #include "plugins/3dapi/ifsg_all.h"
-#include "vrml2_faceset.h"
 
 
-WRL2SHAPE::WRL2SHAPE() : WRL2NODE()
+WRL2LINESET::WRL2LINESET() : WRL2NODE()
 {
-    appearance = NULL;
-    geometry = NULL;
-    m_Type = WRL2_SHAPE;
+    setDefaults();
+    m_Type = WRL2_INDEXEDLINESET;
+
     return;
 }
 
 
-WRL2SHAPE::WRL2SHAPE( WRL2NODE* aParent ) : WRL2NODE()
+WRL2LINESET::WRL2LINESET( WRL2NODE* aParent ) : WRL2NODE()
 {
-    appearance = NULL;
-    geometry = NULL;
-    m_Type = WRL2_SHAPE;
+    setDefaults();
+    m_Type = WRL2_INDEXEDLINESET;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -53,10 +53,10 @@ WRL2SHAPE::WRL2SHAPE( WRL2NODE* aParent ) : WRL2NODE()
 }
 
 
-WRL2SHAPE::~WRL2SHAPE()
+WRL2LINESET::~WRL2LINESET()
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Destroying Shape with " << m_Children.size();
+    std::cerr << " * [INFO] Destroying IndexedLineSet with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
@@ -64,144 +64,24 @@ WRL2SHAPE::~WRL2SHAPE()
 }
 
 
-bool WRL2SHAPE::isDangling( void )
+void WRL2LINESET::setDefaults( void )
 {
-    // this node is dangling unless it has a parent of type:
-    // WRL2_TRANSFORM
-    // WRL2_SWITCH
-
-    if( NULL == m_Parent
-        || ( m_Parent->GetNodeType() != WRL2_TRANSFORM
-        && m_Parent->GetNodeType() != WRL2_SWITCH ) )
-        return true;
-
-    return false;
+    color = NULL;
+    coord = NULL;
+    colorPerVertex = true;
 }
 
 
-bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
+bool WRL2LINESET::checkNodeType( WRL2NODES aType )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aNode\n";
-        #endif
+    // nodes must be one of:
+    // Color
+    // Coordinate
 
-        return false;
-    }
-
-    WRL2NODES type = aNode->GetNodeType();
-
-    if( !checkNodeType( type ) )
-    {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected child node '";
-        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
-        #endif
-
-        return false;
-    }
-
-    if( WRL2_APPEARANCE == type )
-    {
-        if( NULL != appearance )
-        {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple appearance nodes\n";
-            #endif
-            return false;
-        }
-
-        appearance = aNode;
-        return WRL2NODE::AddRefNode( aNode );
-    }
-
-    if( NULL != geometry )
-    {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple geometry nodes\n";
-        #endif
-        return false;
-    }
-
-    geometry = aNode;
-    return WRL2NODE::AddRefNode( aNode );
-}
-
-
-bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
-{
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aNode\n";
-        #endif
-
-        return false;
-    }
-
-    WRL2NODES type = aNode->GetNodeType();
-
-    if( !checkNodeType( type ) )
-    {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected child node '";
-        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
-        #endif
-
-        return false;
-    }
-
-    if( WRL2_APPEARANCE == type )
-    {
-        if( NULL != appearance )
-        {
-            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple appearance nodes\n";
-            #endif
-            return false;
-        }
-
-        appearance = aNode;
-        return WRL2NODE::AddChildNode( aNode );
-    }
-
-    if( NULL != geometry )
-    {
-        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple geometry nodes\n";
-        #endif
-        return false;
-    }
-
-    geometry = aNode;
-    return WRL2NODE::AddChildNode( aNode );
-}
-
-
-bool WRL2SHAPE::checkNodeType( WRL2NODES aType )
-{
     switch( aType )
     {
-    case WRL2_APPEARANCE:
-    case WRL2_BOX:
-    case WRL2_CONE:
-    case WRL2_CYLINDER:
-    case WRL2_ELEVATIONGRID:
-    case WRL2_EXTRUSION:
-    case WRL2_INDEXEDFACESET:
-    case WRL2_INDEXEDLINESET:
-    case WRL2_POINTSET:
-    case WRL2_SPHERE:
-    case WRL2_TEXT:
+    case WRL2_COLOR:
+    case WRL2_COORDINATE:
         break;
 
     default:
@@ -213,17 +93,138 @@ bool WRL2SHAPE::checkNodeType( WRL2NODES aType )
 }
 
 
-bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
+bool WRL2LINESET::isDangling( void )
 {
-    if( NULL == aTopNode )
+    // this node is dangling unless it has a parent of type WRL2_SHAPE
+
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_SHAPE )
+        return true;
+
+    return false;
+}
+
+
+bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
+{
+    if( NULL == aNode )
     {
         #ifdef DEBUG_VRML2
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] aTopNode is NULL\n";
+        std::cerr << " * [BUG] NULL passed for aNode\n";
         #endif
+
         return false;
     }
 
+    WRL2NODES type = aNode->GetNodeType();
+
+    if( !checkNodeType( type ) )
+    {
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] bad file format; unexpected child node '";
+        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
+        #endif
+
+        return false;
+    }
+
+    if( WRL2_COLOR == type )
+    {
+        if( NULL != color )
+        {
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad file format; multiple color nodes\n";
+            #endif
+            return false;
+        }
+
+        color = aNode;
+        return WRL2NODE::AddRefNode( aNode );
+    }
+
+    if( WRL2_COORDINATE == type )
+    {
+        if( NULL != coord )
+        {
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
+            #endif
+            return false;
+        }
+
+        coord = aNode;
+        return WRL2NODE::AddRefNode( aNode );
+    }
+
+    return WRL2NODE::AddRefNode( aNode );
+}
+
+
+bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
+{
+    if( NULL == aNode )
+    {
+        #ifdef DEBUG_VRML2
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] NULL passed for aNode\n";
+        #endif
+
+        return false;
+    }
+
+    WRL2NODES type = aNode->GetNodeType();
+
+    if( !checkNodeType( type ) )
+    {
+        #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [INFO] bad file format; unexpected child node '";
+        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
+        #endif
+
+        return false;
+    }
+
+    if( WRL2_COLOR == type )
+    {
+        if( NULL != color )
+        {
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad file format; multiple color nodes\n";
+            #endif
+            return false;
+        }
+
+        color = aNode;
+        return WRL2NODE::AddChildNode( aNode );
+    }
+
+    if( WRL2_COORDINATE == type )
+    {
+        if( NULL != coord )
+        {
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
+            #endif
+            return false;
+        }
+
+        coord = aNode;
+        return WRL2NODE::AddChildNode( aNode );
+    }
+
+    return WRL2NODE::AddChildNode( aNode );
+}
+
+
+
+bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
+{
     size_t line, column;
     proc.GetFilePosData( line, column );
 
@@ -273,29 +274,77 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         }
 
         // expecting one of:
-        // appearance
-        // geometry
+        // [node]
+        // color
+        // coord
+        // [bool]
+        // colorPerVertex
+        // [ vector<int> ]
+        // colorIndex
+        // coordIndex
 
         proc.GetFilePosData( line, column );
 
-        if( !glob.compare( "appearance" ) )
+        if( !glob.compare( "colorPerVertex" ) )
         {
-            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            if( !proc.ReadSFBool( colorPerVertex ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read appearance information\n";
+                std::cerr << " * [INFO] invalid colorPerVertex at line " << line << ", column ";
+                std::cerr << column << "\n";
+                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
                 return false;
             }
         }
-        else if( !glob.compare( "geometry" ) )
+        else if( !glob.compare( "colorIndex" ) )
+        {
+            if( !proc.ReadMFInt( colorIndex ) )
+            {
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [INFO] invalid colorIndex at line " << line << ", column ";
+                std::cerr << column << "\n";
+                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                #endif
+                return false;
+            }
+        }
+        else if( !glob.compare( "coordIndex" ) )
+        {
+            if( !proc.ReadMFInt( coordIndex ) )
+            {
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [INFO] invalid coordIndex at line " << line << ", column ";
+                std::cerr << column << "\n";
+                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                #endif
+                return false;
+            }
+        }
+        else if( !glob.compare( "color" ) )
         {
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read geometry information\n";
+                std::cerr << " * [INFO] could not read color node information\n";
+                #endif
+                return false;
+            }
+        }
+        else if( !glob.compare( "coord" ) )
+        {
+            if( !aTopNode->ReadNode( proc, this, NULL ) )
+            {
+                #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [INFO] could not read coord node information\n";
                 #endif
                 return false;
             }
@@ -304,114 +353,37 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad Shape at line " << line << ", column ";
+            std::cerr << " * [INFO] bad IndexedLineSet at line " << line << ", column ";
             std::cerr << column << "\n";
             std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
             #endif
 
             return false;
         }
-    }   // while( true ) -- reading contents of Shape{}
+    }   // while( true ) -- reading contents of IndexedLineSet{}
 
     return true;
 }
 
 
-SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2LINESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 {
-    if( NULL == geometry )
-        return NULL;
-
-    bool vcolors = ((WRL2FACESET*)geometry)->HasColors();
-
-    // if there is no appearance, make use of the per vertex colors if available
-    if( NULL == appearance )
-    {
-        if( WRL2_INDEXEDFACESET != geometry->GetNodeType() )
-            return NULL;
-
-        if( !vcolors )
-            return NULL;
-    }
-
-    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
-
-    if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
-    {
-        #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Shape does not have a Transform parent (parent ID: ";
-        std::cerr << ptype << ")\n";
-        #endif
-
-        return NULL;
-    }
-
-    if( m_sgNode )
-    {
-        if( NULL != aParent )
-        {
-            if( NULL == S3D::GetSGNodeParent( m_sgNode )
-                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
-            {
-                return NULL;
-            }
-            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
-                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
-            {
-                return NULL;
-            }
-        }
-
-        return m_sgNode;
-    }
-
-    IFSG_SHAPE shNode( aParent );
-
-    SGNODE* pShape = shNode.GetRawPtr();
-    SGNODE* pGeom = geometry->TranslateToSG( pShape, calcNormals );
-    SGNODE* pApp = NULL;
-
-    if( NULL != appearance )
-        pApp = appearance->TranslateToSG( pShape, calcNormals );
-
-    if( ( NULL != appearance && NULL == pApp ) || NULL == pGeom )
-    {
-        if( pGeom )
-        {
-            IFSG_FACESET tmp( false );
-            tmp.Attach( pGeom );
-            tmp.Destroy();
-        }
-
-        if( pApp )
-        {
-            IFSG_APPEARANCE tmp( false );
-            tmp.Attach( pApp );
-            tmp.Destroy();
-        }
-
-        shNode.Destroy();
-        return NULL;
-    }
-
-    m_sgNode = shNode.GetRawPtr();
-
-    return m_sgNode;
+    // note: there are no plans to support drawing of lines
+    return NULL;
 }
 
 
-void WRL2SHAPE::unlinkChildNode( const WRL2NODE* aNode )
+void WRL2LINESET::unlinkChildNode( const WRL2NODE* aNode )
 {
     if( NULL == aNode )
         return;
 
     if( aNode->GetParent() == this )
     {
-        if( aNode == appearance )
-            appearance = NULL;
-        else if( aNode == geometry )
-            geometry = NULL;
+        if( aNode == color )
+            color = NULL;
+        else if( aNode == coord )
+            coord = NULL;
 
     }
 
@@ -420,20 +392,29 @@ void WRL2SHAPE::unlinkChildNode( const WRL2NODE* aNode )
 }
 
 
-void WRL2SHAPE::unlinkRefNode( const WRL2NODE* aNode )
+void WRL2LINESET::unlinkRefNode( const WRL2NODE* aNode )
 {
     if( NULL == aNode )
         return;
 
     if( aNode->GetParent() != this )
     {
-        if( aNode == appearance )
-            appearance = NULL;
-        else if( aNode == geometry )
-            geometry = NULL;
+        if( aNode == color )
+            color = NULL;
+        else if( aNode == coord )
+            coord = NULL;
 
     }
 
     WRL2NODE::unlinkRefNode( aNode );
     return;
+}
+
+
+bool WRL2LINESET::HasColors( void )
+{
+    if( NULL == color )
+        return false;
+
+    return ((WRL2COLOR*) color)->HasColors();
 }

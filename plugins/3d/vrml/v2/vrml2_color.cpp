@@ -221,3 +221,19 @@ void WRL2COLOR::GetColor( int aIndex, float& red, float& green, float& blue )
 
     return;
 }
+
+
+void WRL2COLOR::GetColors( WRLVEC3F*& aColorList, size_t& aListSize)
+{
+    if( colors.empty() )
+    {
+        aColorList = NULL;
+        aListSize = 0;
+        return;
+    }
+
+    aColorList = &colors[0];
+    aListSize = colors.size();
+
+    return;
+}

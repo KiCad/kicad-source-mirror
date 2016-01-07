@@ -263,12 +263,6 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     switch( m_current.matbind )
     {
-    case BIND_OVERALL:
-
-        // use the first (non-default) appearance definition
-        sgcolor = m_current.mat->GetAppearance( 0 );
-        break;
-
     case BIND_PER_FACE:
     case BIND_PER_VERTEX:
         break;
@@ -289,8 +283,8 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     default:
 
-        // use the default appearance definition
-        sgcolor = m_current.mat->GetAppearance( -1 );
+        // use the first appearance definition
+        sgcolor = m_current.mat->GetAppearance( 0 );
         break;
     }
 
@@ -307,13 +301,19 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
             continue;
 
         if( coordIndex[idx] >= (int)coordsize )
+        {
+            m_current.mat->Reclaim( sgcolor );
             return NULL;
+        }
     }
 
     // if the indices are defective just give up
     if( i1 < 0 || i2 < 0 || i3 < 0
         || i1 == i2 || i1 == i3 || i2 == i3 )
+    {
+        m_current.mat->Reclaim( sgcolor );
         return NULL;
+    }
 
     std::vector< SGPOINT > lCPts;   // coordinate points for SG node
     std::vector< int > lCIdx;       // coordinate index list for SG node (must be triads)
@@ -351,7 +351,10 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 // any invalid polygons shall void the entire faceset; this is a requirement
                 // to ensure correct handling of the normals
                 if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+                {
+                    m_current.mat->Reclaim( sgcolor );
                     return NULL;
+                }
             }
         }
     }
@@ -490,7 +493,10 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     }
 
     if( lCIdx.empty() )
+    {
+        m_current.mat->Reclaim( sgcolor );
         return NULL;
+    }
 
     // create a vertex list for per-face per-vertex normals
     do {

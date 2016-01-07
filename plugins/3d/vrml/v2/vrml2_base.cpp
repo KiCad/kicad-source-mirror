@@ -29,6 +29,8 @@
 #include "vrml2_appearance.h"
 #include "vrml2_material.h"
 #include "vrml2_faceset.h"
+#include "vrml2_lineset.h"
+#include "vrml2_pointset.h"
 #include "vrml2_coords.h"
 #include "vrml2_norms.h"
 #include "vrml2_color.h"
@@ -509,6 +511,20 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
+    case WRL2_INDEXEDLINESET:
+
+        if( !readLineSet( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
+    case WRL2_POINTSET:
+
+        if( !readPointSet( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     case WRL2_MATERIAL:
 
         if( !readMaterial( proc, aParent, aNode ) )
@@ -578,7 +594,6 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     case WRL2_FOG:
     case WRL2_FONTSTYLE:
     case WRL2_IMAGETEXTURE:
-    case WRL2_INDEXEDLINESET:
     case WRL2_INLINE:
     case WRL2_LOD:
     case WRL2_MOVIETEXTURE:
@@ -588,7 +603,6 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     case WRL2_PIXELTEXTURE:
     case WRL2_PLANESENSOR:
     case WRL2_POINTLIGHT:
-    case WRL2_POINTSET:
     case WRL2_POSITIONINTERPOLATOR:
     case WRL2_PROXIMITYSENSOR:
     case WRL2_SCALARINTERPOLATOR:
@@ -727,6 +741,46 @@ bool WRL2BASE::readFaceSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         *aNode = NULL;
 
     WRL2FACESET* np = new WRL2FACESET( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readLineSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2LINESET* np = new WRL2LINESET( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
+bool WRL2BASE::readPointSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL2POINTSET* np = new WRL2POINTSET( aParent );
 
     if( !np->Read( proc, this ) )
     {

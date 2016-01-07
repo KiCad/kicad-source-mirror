@@ -70,6 +70,8 @@ private:
     bool readAppearance( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readMaterial( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readFaceSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readLineSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readPointSet( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readCoords( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readNorms( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );

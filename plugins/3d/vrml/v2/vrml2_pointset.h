@@ -22,12 +22,12 @@
  */
 
 /**
- * @file vrml2_color.h
+ * @file vrml2_pointset.h
  */
 
 
-#ifndef VRML2_COLOR_H
-#define VRML2_COLOR_H
+#ifndef VRML2_POINTSET_H
+#define VRML2_POINTSET_H
 
 #include <vector>
 
@@ -37,22 +37,36 @@ class WRL2BASE;
 class SGNODE;
 
 /**
- * Class WRL2COLOR
+ * Class WRL2POINTSET
  */
-class WRL2COLOR : public WRL2NODE
+class WRL2POINTSET : public WRL2NODE
 {
 private:
-    std::vector< WRLVEC3F > colors;
+    WRL2NODE* color;
+    WRL2NODE* coord;
+
+    /**
+     * Function checkNodeType
+     * returns true if the node type is a valid subnode of PointSet
+     */
+    bool checkNodeType( WRL2NODES aType );
+
+    void setDefaults( void );
 
 public:
 
     // functions inherited from WRL2NODE
     bool isDangling( void );
 
+
+    // overloads
+    void unlinkChildNode( const WRL2NODE* aNode );
+    void unlinkRefNode( const WRL2NODE* aNode );
+
 public:
-    WRL2COLOR();
-    WRL2COLOR( WRL2NODE* aParent );
-    virtual ~WRL2COLOR();
+    WRL2POINTSET();
+    WRL2POINTSET( WRL2NODE* aParent );
+    virtual ~WRL2POINTSET();
 
     // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
@@ -62,21 +76,9 @@ public:
 
     /**
      * Function HasColors
-     * returns true if the color set is non-empty
+     * returns true if the face set has a color node
      */
     bool HasColors( void );
-
-    /**
-     * Function GetColor
-     * retrieves the given color (or default 0.8, 0.8, 0.8 if index is invalid)
-     */
-    void GetColor( int aIndex, float& red, float& green, float& blue );
-
-    /**
-     * Function GetColors
-     * retrieves the current list of colors
-     */
-    void GetColors( WRLVEC3F*& aColorList, size_t& aListSize);
 };
 
-#endif  // VRML2_COLOR_H
+#endif  // VRML2_POINTSET_H

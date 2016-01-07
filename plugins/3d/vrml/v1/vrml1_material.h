@@ -77,6 +77,12 @@ public:
      * computes an SGCOLOR representing the appearance of a vertex or face
      */
     void GetColor( SGCOLOR* aColor, int aIndex );
+
+    /**
+     * Function Reclaim
+     * will destroy the given color node if it does not have a parent
+     */
+    void Reclaim( SGNODE* aColor );
 };
 
 #endif  // VRML1_MATERIAL_H

@@ -399,7 +399,7 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
     while( sR != eR )
     {
         if( *sR == aNode )
-            return false;
+            return true;
 
         ++sR;
     }
