@@ -44,9 +44,11 @@ WRL1BASE::WRL1BASE() : WRL1NODE( NULL )
 
 WRL1BASE::~WRL1BASE()
 {
-    if( m_dictionary )
-        delete m_dictionary;
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    std::cerr << " * [INFO] Destroying virtual base node\n";
+    #endif
 
+    cancelDict();
     return;
 }
 
@@ -474,7 +476,8 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         else
         {
-            std::cerr << " * [INFO] discarded node (currently unsupported)\n";
+            std::cerr << " * [INFO] discarded node '" << glob << "' at line ";
+            std::cerr << line << ", col " << column << " (currently unsupported)\n";
         }
         #endif
 

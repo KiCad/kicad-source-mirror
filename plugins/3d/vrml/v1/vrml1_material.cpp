@@ -62,8 +62,17 @@ WRL1MATERIAL::~WRL1MATERIAL()
     // destroy any orphaned color nodes
     for( int i = 0; i < 2; ++i )
     {
-        if( NULL != colors[i] && NULL == S3D::GetSGNodeParent( colors[i] ) )
+        if( NULL != colors[i] )
+        {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+            std::cerr << " * [INFO] Destroying SGCOLOR #" << i << "\n";
+            #endif
+            if( NULL == S3D::GetSGNodeParent( colors[i] ) )
                 S3D::DestroyNode( colors[i] );
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+            std::cerr << " * [INFO] destroyed SGCOLOR #" << i << "\n";
+            #endif
+        }
     }
 
     return;

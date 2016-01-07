@@ -303,6 +303,12 @@ SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent, bool calcNormals )
         return NULL;
     }
 
+    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+    std::cerr << " * [INFO] Translating Material with " << m_Children.size();
+    std::cerr << " children, " << m_Refs.size() << " references and ";
+    std::cerr << m_BackPointers.size() << " backpointers\n";
+    #endif
+
     if( m_sgNode )
     {
         if( NULL != aParent )

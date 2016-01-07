@@ -132,6 +132,12 @@ protected:
     NAMEREGISTER* m_dictionary;
 
 public:
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    static std::string tabs;
+    #endif
+
+    // cancel the dictionary pointer; for internal use only
+    void cancelDict( void );
 
     /**
      * Function GetCurrentSettings

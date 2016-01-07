@@ -322,7 +322,30 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
     if( NULL == geometry )
         return NULL;
 
-    bool vcolors = ((WRL2FACESET*)geometry)->HasColors();
+    WRL2NODES geomType = geometry->GetNodeType();
+
+    switch( geomType )
+    {
+    case WRL2_INDEXEDLINESET:
+    case WRL2_POINTSET:
+    case WRL2_TEXT:
+        return NULL;
+        break;
+
+    default:
+        break;
+    }
+
+    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
+    std::cerr << " * [INFO] Translating Shape with " << m_Children.size();
+    std::cerr << " children, " << m_Refs.size() << " references and ";
+    std::cerr << m_BackPointers.size() << " backpointers\n";
+    #endif
+
+    bool vcolors = false;
+
+    if( WRL2_INDEXEDFACESET == geometry->GetNodeType() )
+        vcolors = ((WRL2FACESET*)geometry)->HasColors();
 
     // if there is no appearance, make use of the per vertex colors if available
     if( NULL == appearance )
@@ -406,14 +429,10 @@ void WRL2SHAPE::unlinkChildNode( const WRL2NODE* aNode )
     if( NULL == aNode )
         return;
 
-    if( aNode->GetParent() == this )
-    {
-        if( aNode == appearance )
-            appearance = NULL;
-        else if( aNode == geometry )
-            geometry = NULL;
-
-    }
+    if( aNode == appearance )
+        appearance = NULL;
+    else if( aNode == geometry )
+        geometry = NULL;
 
     WRL2NODE::unlinkChildNode( aNode );
     return;
@@ -425,14 +444,10 @@ void WRL2SHAPE::unlinkRefNode( const WRL2NODE* aNode )
     if( NULL == aNode )
         return;
 
-    if( aNode->GetParent() != this )
-    {
-        if( aNode == appearance )
-            appearance = NULL;
-        else if( aNode == geometry )
-            geometry = NULL;
-
-    }
+    if( aNode == appearance )
+        appearance = NULL;
+    else if( aNode == geometry )
+        geometry = NULL;
 
     WRL2NODE::unlinkRefNode( aNode );
     return;

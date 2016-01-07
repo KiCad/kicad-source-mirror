@@ -346,6 +346,9 @@ bool WRL2NODE::SetParent( WRL2NODE* aParent, bool doUnlink )
 
 bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
 {
+    if( aNode == NULL )
+        return false;
+
     if( aNode->GetNodeType() == WRL2_BASE )
     {
         #ifdef DEBUG_VRML2
@@ -366,8 +369,10 @@ bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
         ++sC;
     }
 
-    aNode->SetParent( this );
     m_Children.push_back( aNode );
+
+    if( aNode->GetParent() != this )
+        aNode->SetParent( this );
 
     return true;
 }

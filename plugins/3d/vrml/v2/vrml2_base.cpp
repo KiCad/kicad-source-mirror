@@ -634,6 +634,13 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
             return false;
         }
+        #ifdef DEBUG_VRML2
+        else
+        {
+            std::cerr << " * [INFO] OK: discard unsupported " << glob << " node at l";
+            std::cerr << line << ", c" << column << "\n";
+        }
+        #endif
 
         break;
     }

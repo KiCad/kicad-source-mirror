@@ -84,6 +84,7 @@ typedef std::pair< std::string, WRL1NODES > NODEITEM;
 typedef std::map< std::string, WRL1NODES > NODEMAP;
 static NODEMAP nodenames;
 
+std::string WRL1NODE::tabs = "";
 
 WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 {
@@ -136,8 +137,17 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 
 WRL1NODE::~WRL1NODE()
 {
-    if( m_dictionary && !m_Name.empty() )
-        m_dictionary->DelName( m_Name, this );
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    std::cerr << " * [INFO] ^^ Destroying Type " << m_Type << " with " << m_Children.size();
+    std::cerr << " children, " << m_Refs.size() << " references and ";
+    std::cerr << m_BackPointers.size() << " backpointers\n";
+    #endif
+
+    m_Items.clear();
+
+    // XXX - the dictionary may be bad - don't use it
+    //if( m_dictionary && !m_Name.empty() )
+    //    m_dictionary->DelName( m_Name, this );
 
     if( m_Parent )
         m_Parent->unlinkChildNode( this );
@@ -145,31 +155,100 @@ WRL1NODE::~WRL1NODE()
     std::list< WRL1NODE* >::iterator sBP = m_BackPointers.begin();
     std::list< WRL1NODE* >::iterator eBP = m_BackPointers.end();
 
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    int acc = 0;
+    #endif
+
     while( sBP != eBP )
     {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+        ++acc;
+        std::cerr << " * [INFO] " << tabs << "Type " << m_Type << " is Unlinking ref #";
+        std::cerr << acc << "\n";
+        #endif
         (*sBP)->unlinkRefNode( this );
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+        std::cerr << " * [INFO] " << tabs << "Type " << m_Type << " has unlinked ref #";
+        std::cerr << acc << "\n";
+        #endif
         ++sBP;
     }
 
     m_Refs.clear();
+
     std::list< WRL1NODE* >::iterator sC = m_Children.begin();
     std::list< WRL1NODE* >::iterator eC = m_Children.end();
 
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    std::string otabs = tabs;
+    tabs.append( "    " );
+    #endif
+
     while( sC != eC )
     {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+        ++acc;
+        std::cerr << " * [INFO] " << otabs << "Type " << m_Type << " is Deleting child #";
+        std::cerr << acc << "\n";
+        #endif
         (*sC)->SetParent( NULL, false );
-        delete *sC;
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+        std::cerr << " * [INFO] " << otabs << "Type " << m_Type << " has unlinked child #";
+        std::cerr << acc << "\n";
+        #endif
+        //delete *sC;
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+        std::cerr << " * [INFO] " << otabs << "Type " << m_Type << " has deleted child #";
+        std::cerr << acc << "\n";
+        #endif
         ++sC;
     }
+
+    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
+    tabs = otabs;
+    #endif
 
     m_Children.clear();
     return;
 }
 
 
+void WRL1NODE::cancelDict( void )
+{
+    std::list< WRL1NODE* >::iterator sC = m_Children.begin();
+    std::list< WRL1NODE* >::iterator eC = m_Children.end();
+
+    while( sC != eC )
+    {
+        (*sC)->cancelDict();
+        ++sC;
+    }
+
+    if( m_Type == WRL1_BASE && NULL != m_dictionary )
+        delete m_dictionary;
+
+    m_dictionary = NULL;
+    return;
+}
+
+
 void WRL1NODE::addNodeRef( WRL1NODE* aNode )
 {
-    // note: for VRML1 we allow even parent nodes to be held as references
+    // the parent node must never be added as a backpointer
+    if( aNode == m_Parent )
+        return;
+
+    std::list< WRL1NODE* >::iterator sR = m_BackPointers.begin();
+    std::list< WRL1NODE* >::iterator eR = m_BackPointers.end();
+
+    while( sR != eR )
+    {
+        if( *sR == aNode )
+            return;
+
+        ++sR;
+    }
+
     m_BackPointers.push_back( aNode );
 
     return;
@@ -179,7 +258,7 @@ void WRL1NODE::addNodeRef( WRL1NODE* aNode )
 void WRL1NODE::delNodeRef( WRL1NODE* aNode )
 {
     std::list< WRL1NODE* >::iterator np =
-        std::find( m_BackPointers.begin(), m_BackPointers.end(), aNode );
+    std::find( m_BackPointers.begin(), m_BackPointers.end(), aNode );
 
     if( np != m_BackPointers.end() )
     {
@@ -346,9 +425,11 @@ bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
         ++sC;
     }
 
-    aNode->SetParent( this );
     m_Children.push_back( aNode );
     addItem( aNode );
+
+    if( aNode->GetParent() != this )
+        aNode->SetParent( this );
 
     return true;
 }
@@ -394,13 +475,12 @@ void WRL1NODE::unlinkChildNode( const WRL1NODE* aNode )
         if( *sL == aNode )
         {
             m_Children.erase( sL );
+            delItem( aNode );
             return;
         }
 
         ++sL;
     }
-
-    delItem( aNode );
 
     return;
 }
@@ -416,13 +496,12 @@ void WRL1NODE::unlinkRefNode( const WRL1NODE* aNode )
         if( *sL == aNode )
         {
             m_Refs.erase( sL );
+            delItem( aNode );
             return;
         }
 
         ++sL;
     }
-
-    delItem( aNode );
 
     return;
 }

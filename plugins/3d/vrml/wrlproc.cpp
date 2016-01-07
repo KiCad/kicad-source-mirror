@@ -1131,17 +1131,15 @@ bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma )
             return false;
         }
 
-        if( lComma && i != 2 )
+        // ignore any commas
+        if( !lComma )
         {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
-            ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
-            ostr << " * [INFO] comma encountered in space delimited triplet";
-            m_error = ostr.str();
+            if( !EatSpace() )
+                return false;
 
-            return false;
+            if( Peek() == ',' )
+                Pop();
+
         }
 
         std::istringstream istr;
@@ -1680,7 +1678,10 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
                 break;
 
             if( ',' == m_buf[m_linepos] )
+            {
                 lcomma = true;
+                Pop();
+            }
         }
 
         if( !EatSpace() )
