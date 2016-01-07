@@ -84,7 +84,9 @@ typedef std::pair< std::string, WRL1NODES > NODEITEM;
 typedef std::map< std::string, WRL1NODES > NODEMAP;
 static NODEMAP nodenames;
 
+#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
 std::string WRL1NODE::tabs = "";
+#endif
 
 WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 {
@@ -356,6 +358,11 @@ WRL1STATUS* WRL1NODE::GetCurrentSettings( void )
 
 WRL1NODES WRL1NODE::getNodeTypeID( const std::string aNodeName )
 {
+    // 'Group' is a special case; it has been deprecated
+    // but otherwise is similar enough to Separator.
+    if( !aNodeName.compare( "Group" ) )
+        return WRL1_SEPARATOR;
+
     NODEMAP::iterator it = nodenames.find( aNodeName );
 
     if( nodenames.end() != it )
