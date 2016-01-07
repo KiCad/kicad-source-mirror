@@ -33,7 +33,7 @@
 #include <wx/filedlg.h>
 
 class S3D_CACHE;
-class S3D_INFO;
+struct S3D_INFO;
 
 class DLG_SEL_3DMODEL : public wxFileDialog
 {
