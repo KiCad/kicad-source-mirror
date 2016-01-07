@@ -37,7 +37,7 @@ IFSG_TRANSFORM::IFSG_TRANSFORM( bool create )
     m_node = NULL;
 
     if( !create )
-        return ;
+        return;
 
     m_node = new SCENEGRAPH( NULL );
 

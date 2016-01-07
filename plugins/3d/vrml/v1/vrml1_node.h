@@ -77,7 +77,7 @@ struct WRL1STATUS
     // normal binding
     WRL1_BINDING normbind;
     // transform
-    glm::dmat4 txmatrix;
+    glm::mat4 txmatrix;
 
     WRL1STATUS()
     {
@@ -92,7 +92,7 @@ struct WRL1STATUS
         norm = NULL;
         normbind = BIND_DEFAULT;
         coord = NULL;
-        txmatrix = glm::scale( glm::dmat4( 1.0 ), glm::dvec3( 1.0 ) );
+        txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
         return;
     }
 };

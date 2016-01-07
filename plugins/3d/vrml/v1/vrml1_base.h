@@ -57,6 +57,7 @@ private:
     bool readMatBinding( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readCoords( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readFaceSet( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
+    bool readTransform( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
 
     std::map< std::string, WRL1INLINE* > m_inlineModels;
 

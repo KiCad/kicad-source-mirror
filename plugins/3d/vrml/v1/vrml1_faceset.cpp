@@ -505,7 +505,9 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
         while( sI != eI )
         {
-            lCPts.push_back( SGPOINT( pcoords[*sI].x, pcoords[*sI].y, pcoords[*sI].z ) );
+            glm::vec4 pt = glm::vec4( pcoords[*sI].x, pcoords[*sI].y, pcoords[*sI].z, 0.0 );
+            pt = m_current.txmatrix * pt;
+            lCPts.push_back( SGPOINT( pt.x, pt.y, pt.z ) );
             ++sI;
         }
 

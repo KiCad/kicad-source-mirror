@@ -30,6 +30,7 @@
 #include "vrml1_coords.h"
 #include "vrml1_switch.h"
 #include "vrml1_faceset.h"
+#include "vrml1_transform.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -455,6 +456,16 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
         break;
 
+    case WRL1_TRANSFORM:
+    case WRL1_TRANSLATION:
+    case WRL1_ROTATION:
+    case WRL1_SCALE:
+
+        if( !readTransform( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     //
     // items not implemented or for optional future implementation:
     //
@@ -604,6 +615,26 @@ bool WRL1BASE::readFaceSet( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
         *aNode = NULL;
 
     WRL1FACESET* np = new WRL1FACESET( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
+}
+
+
+bool WRL1BASE::readTransform( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL1TRANSFORM* np = new WRL1TRANSFORM( m_dictionary, aParent );
 
     if( !np->Read( proc, this ) )
     {
