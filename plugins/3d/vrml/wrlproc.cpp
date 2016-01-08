@@ -214,7 +214,7 @@ RETRY:
     if( m_buf.empty() )
         return false;
 
-    // eliminate leading white space (including control characters)
+    // eliminate leading white space (including control characters and comments)
     while( m_linepos < m_buf.size() )
     {
         if( m_buf[m_linepos] > 0x20 )
@@ -223,7 +223,7 @@ RETRY:
         ++m_linepos;
     }
 
-    if( m_linepos == m_buf.size() )
+    if( m_linepos == m_buf.size() || '#' == m_buf[m_linepos] )
     {
         // lines consisting entirely of white space are not unusual
         m_buf.clear();
