@@ -151,10 +151,9 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
 
     wxFloatingPointValidator< float > valScale( 6 );
     valScale.SetRange( 0.001, 100 );
-    wxFloatingPointValidator< float > valRotate( 6 );
+    wxFloatingPointValidator< float > valRotate( 2 );
     valRotate.SetRange( -180.0, 180.0 );
     wxFloatingPointValidator< float > valOffset( 6 );
-
 
     wxStaticBoxSizer* vbScale = new wxStaticBoxSizer( wxVERTICAL, this, _( "Scale" )  );
     wxStaticBoxSizer* vbRotate = new wxStaticBoxSizer( wxVERTICAL, this, _( "Rotation" ) );
