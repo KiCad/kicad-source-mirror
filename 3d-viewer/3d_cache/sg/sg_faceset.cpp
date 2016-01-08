@@ -289,9 +289,14 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
     {
         if( m_Colors || m_RColors )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] assigning multiple Colors nodes\n";
-            return false;
+            if( aNode != m_Colors && aNode != m_RColors )
+            {
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [BUG] assigning multiple Colors nodes\n";
+                return false;
+            }
+
+            return true;
         }
 
         if( isChild )
@@ -312,9 +317,14 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
     {
         if( m_Coords || m_RCoords )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] assigning multiple Coords nodes\n";
-            return false;
+            if( aNode != m_Coords && aNode != m_RCoords )
+            {
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [BUG] assigning multiple Coords nodes\n";
+                return false;
+            }
+
+            return true;
         }
 
         if( isChild )
@@ -335,9 +345,14 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
     {
         if( m_Normals || m_RNormals )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] assigning multiple Normals nodes\n";
-            return false;
+            if( aNode != m_Normals && aNode != m_RNormals )
+            {
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [BUG] assigning multiple Normals nodes\n";
+                return false;
+            }
+
+            return true;
         }
 
         if( isChild )
@@ -358,9 +373,14 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
     {
         if( m_CoordIndices )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] assigning multiple CoordIndex nodes\n";
-            return false;
+            if( aNode != m_CoordIndices )
+            {
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [BUG] assigning multiple CoordIndex nodes\n";
+                return false;
+            }
+
+            return true;
         }
 
         m_CoordIndices = (SGCOORDINDEX*)aNode;
