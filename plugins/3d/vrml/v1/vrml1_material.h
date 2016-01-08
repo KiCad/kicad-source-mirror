@@ -63,7 +63,7 @@ public:
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
     bool AddRefNode( WRL1NODE* aNode );
     bool AddChildNode( WRL1NODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
 
     /**
      * Function GetAppearance

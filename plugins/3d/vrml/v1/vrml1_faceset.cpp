@@ -218,33 +218,46 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 }
 
 
-SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-    if( m_sgNode )
+    // note: m_sgNode is unused because we cannot manage everything
+    // with a single reused transform due to the fact that VRML1
+    // may use a MatrixTransformation entity which is impossible to
+    // decompose into Rotate,Scale,Transform via an anlytic expression.
+    if( !m_Parent )
     {
-        if( NULL != aParent && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
-            return NULL;
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] bad model: no parent node\n";
+        #endif
 
-        return m_sgNode;
-    }
-
-    if( m_Parent )
-    {
-        WRL1STATUS* cp = m_Parent->GetCurrentSettings();
-
-        if( NULL != cp )
-            m_current = *cp;
-        else
-            return NULL;
-
+        return NULL;
     }
     else
     {
-        return NULL;
+        if( NULL == sp )
+        {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+            std::cerr << " * [INFO] bad model: no base data given\n";
+            #endif
+
+            return NULL;
+        }
     }
 
+    m_current = *sp;
+
     if( NULL == m_current.coord || NULL == m_current.mat )
+    {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        if( NULL == m_current.coord )
+            std::cerr << " * [INFO] bad model: no vertex set\n";
+
+        if( NULL == m_current.mat )
+            std::cerr << " * [INFO] bad model: no material set\n";
+        #endif
+
         return NULL;
+    }
 
     WRLVEC3F* pcoords;
     size_t coordsize;
@@ -253,7 +266,13 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     size_t vsize = coordIndex.size();
 
     if( coordsize < 3 || vsize < 3 )
+    {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] bad model: coordsize, indexsize = " << coordsize;
+        std::cerr << ", " << vsize << "\n";
+        #endif
         return NULL;
+    }
 
     // 1. create the vertex/normals/colors lists
     std::vector< SGPOINT > vlist;
@@ -270,14 +289,25 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     case BIND_PER_FACE_INDEXED:
 
         if( matIndex.empty() )
+        {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+            std::cerr << " * [INFO] bad model: per face indexed but no indices\n";
+            #endif
             return NULL;
+        }
 
         break;
 
     case BIND_PER_VERTEX_INDEXED:
 
         if( matIndex.size() < 3 )
+        {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+            std::cerr << " * [INFO] bad model: per vertex indexed but indexsize = ";
+            std::cerr << matIndex.size() << "\n";
+            #endif
             return NULL;
+        }
 
         break;
 
@@ -302,6 +332,11 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
         if( coordIndex[idx] >= (int)coordsize )
         {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+            std::cerr << " * [INFO] bad model: index out of bounds (index = ";
+            std::cerr << coordIndex[idx] << ", npts = " << coordsize << ")\n";
+            #endif
+
             m_current.mat->Reclaim( sgcolor );
             return NULL;
         }
@@ -311,6 +346,11 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     if( i1 < 0 || i2 < 0 || i3 < 0
         || i1 == i2 || i1 == i3 || i2 == i3 )
     {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] bad model: defective indices: " << i1;
+        std::cerr << ", " << i2 << ", " << i3 << "\n";
+        #endif
+
         m_current.mat->Reclaim( sgcolor );
         return NULL;
     }
@@ -326,7 +366,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     {
         // no color list
         // assuming convex polygons, create triangles for the SG node
-        for( idx = 3; idx < vsize; )
+        for( idx = 3; idx <= vsize; )
         {
             switch( m_current.order )
             {
@@ -354,6 +394,10 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
             ++nfaces;
             i2 = i3;
+
+            if( idx == vsize )
+                break;
+
             i3 = coordIndex[idx++];
 
             while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
@@ -372,10 +416,18 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 // to ensure correct handling of the normals
                 if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
                 {
+                    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+                    std::cerr << " * [INFO] bad model: defective indices: " << i1;
+                    std::cerr << ", " << i2 << ", " << i3 << "\n";
+                    #endif
+
                     m_current.mat->Reclaim( sgcolor );
                     return NULL;
                 }
             }
+
+            if( i1 < 0 || i2 < 0 || i3 < 0 )
+                break;
         }
     }
     else
@@ -441,7 +493,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         if( matIndex.empty() )
             noidx = true;
 
-        for( idx = 3; idx < vsize; )
+        for( idx = 3; idx <= vsize; )
         {
             switch( m_current.order )
             {
@@ -481,6 +533,10 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
             ++nfaces;
             i2 = i3;
+
+            if( idx == vsize )
+                break;
+
             i3 = coordIndex[idx++];
 
             if( colorPerVertex && i1 >= 0 && i2 >= 0 && i3 >= 0 )
@@ -489,10 +545,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 pc2.SetColor( pc3 );
 
                 if( noidx || cIndex >= cMaxIdx )
-                {
-                    m_current.mat->GetColor( &pc3, cIndex );
-                    ++cIndex;
-                }
+                    m_current.mat->GetColor( &pc3, cIndex++ );
                 else
                     m_current.mat->GetColor( &pc3, matIndex[cIndex++] );
 
@@ -527,7 +580,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                     pc2.SetColor( pc3 );
 
                     if( noidx || cIndex >= cMaxIdx )
-                        m_current.mat->GetColor( &pc3, cIndex );
+                        m_current.mat->GetColor( &pc3, cIndex++ );
                     else
                         m_current.mat->GetColor( &pc3, matIndex[cIndex++] );
 
@@ -536,13 +589,27 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 // any invalid polygons shall void the entire faceset; this is a requirement
                 // to ensure correct handling of the normals
                 if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
+                {
+                    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+                    std::cerr << " * [INFO] bad model: defective indices: " << i1;
+                    std::cerr << ", " << i2 << ", " << i3 << "\n";
+                    #endif
+
                     return NULL;
+                }
             }
+
+            if( i1 < 0 || i2 < 0 || i3 < 0 )
+                break;
         }
     }
 
     if( lCIdx.empty() )
     {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] bad model: no points in final index list\n";
+        #endif
+
         m_current.mat->Reclaim( sgcolor );
         return NULL;
     }
@@ -554,7 +621,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
         while( sI != eI )
         {
-            glm::vec4 pt = glm::vec4( pcoords[*sI].x, pcoords[*sI].y, pcoords[*sI].z, 0.0 );
+            glm::vec4 pt = glm::vec4( pcoords[*sI].x, pcoords[*sI].y, pcoords[*sI].z, 1.0 );
             pt = m_current.txmatrix * pt;
             lCPts.push_back( SGPOINT( pt.x, pt.y, pt.z ) );
             ++sI;
@@ -592,6 +659,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 lCNorm.push_back( sv );
                 lCNorm.push_back( sv );
                 lCNorm.push_back( sv );
+                sv = S3D::CalcTriNorm( lCPts[i], lCPts[i+2], lCPts[i+1] );
                 lCNorm.push_back( sv );
                 lCNorm.push_back( sv );
                 lCNorm.push_back( sv );
@@ -632,7 +700,5 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         nmColor.SetColorList( lColors.size(), &lColors[0] );
     }
 
-    m_sgNode = fsNode.GetRawPtr();
-
-    return m_sgNode;
+    return fsNode.GetRawPtr();
 }

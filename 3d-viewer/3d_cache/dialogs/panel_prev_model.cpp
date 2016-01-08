@@ -682,6 +682,7 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
         canvas->Update();
     }
 
+    event.Skip();
     return;
 }
 

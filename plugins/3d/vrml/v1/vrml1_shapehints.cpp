@@ -245,19 +245,21 @@ bool WRL1SHAPEHINTS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 }
 
 
-SGNODE* WRL1SHAPEHINTS::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL1SHAPEHINTS::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
     // note: this is not fully implemented since it is unlikely we shall
     // ever make use of the fields shapeType, faceType, and creaseAngle
 
-    if( m_Parent )
+    if( NULL == sp )
     {
-        WRL1STATUS* cp = m_Parent->GetCurrentSettings();
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] bad model: no base data given\n";
+        #endif
 
-        if( NULL != cp )
-            cp->order = m_order;
-
+        return NULL;
     }
+
+    sp->order = m_order;
 
     return NULL;
 }

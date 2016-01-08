@@ -21,29 +21,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+// note: this was copied from the vrml1_separator class. the difference
+// between a separator and a group is that a group propagates its
+// current settings to its parent. While it would be possible to
+// implement the separator as a derived class, it is easy enough to
+// simply duplicate the code
+
 #include <iostream>
-#include <iterator>
 
 #include "vrml1_base.h"
-#include "vrml1_switch.h"
+#include "vrml1_group.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
-WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
+WRL1GROUP::WRL1GROUP( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_SWITCH;
-    whichChild = -1;
-
+    m_Type = WRL1_GROUP;
     return;
 }
 
 
-WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
+WRL1GROUP::WRL1GROUP( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_SWITCH;
+    m_Type = WRL1_GROUP;
     m_Parent = aParent;
-    whichChild = -1;
 
     if( NULL != m_Parent )
         m_Parent->AddChildNode( this );
@@ -52,10 +54,10 @@ WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 }
 
 
-WRL1SWITCH::~WRL1SWITCH()
+WRL1GROUP::~WRL1GROUP()
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] Destroying Switch with " << m_Children.size();
+    std::cerr << " * [INFO] Destroying Group with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
@@ -64,17 +66,8 @@ WRL1SWITCH::~WRL1SWITCH()
 
 
 // functions inherited from WRL1NODE
-bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
+bool WRL1GROUP::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 {
-    /*
-     * Structure of a Switch node:
-     *
-     * Switch {
-     *      exposedField    SFInt32     whichChild     -1
-     *      children
-     * }
-     */
-
     if( NULL == aTopNode )
     {
         #ifdef DEBUG_VRML1
@@ -116,50 +109,10 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
     while( true )
     {
-        char pchar = proc.Peek();
-
-        if( pchar == '}' )
+        if( proc.Peek() == '}' )
         {
             proc.Pop();
             break;
-        }
-        else if ( pchar == 'w' )
-        {
-            if( !proc.ReadName( glob ) )
-            {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << proc.GetError() <<  "\n";
-                #endif
-
-                return false;
-            }
-
-            if( !glob.compare( "whichChild" ) )
-            {
-                if( !proc.ReadSFInt( whichChild ) )
-                {
-                    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    std::cerr << " * [INFO] invalid whichChild at line " << line << ", column ";
-                    std::cerr << column << "\n";
-                    std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                    std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
-                    #endif
-                    return false;
-                }
-
-                continue;
-            }
-
-            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] invalid Switch at line " << line << ", column ";
-            std::cerr << column << " (expected 'whichChild')\n";
-            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-            #endif
-
-            return false;
         }
 
         proc.GetFilePosData( line, column );
@@ -178,39 +131,82 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         if( proc.Peek() == ',' )
             proc.Pop();
 
-    }   // while( true ) -- reading contents of Switch{}
+    }   // while( true ) -- reading contents of Group{}
 
     return true;
 }
 
 
-SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
+SGNODE* WRL1GROUP::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] Translating Switch with " << m_Children.size();
+    std::cerr << " * [INFO] Translating Group with " << m_Children.size();
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers (total ";
     std::cerr << m_Items.size() << " items)\n";
     #endif
 
-    if( m_Items.empty() )
-        return NULL;
+    std::cerr << "XXX: GROUP!!!!!!!!!!\n";
 
-    if( whichChild < 0 || whichChild >= (int)m_Items.size() )
-        return NULL;
+    if( !m_Parent )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] Group has no parent\n";
 
-    if( sp == NULL )
+        return NULL;
+    }
+
+    if( WRL1_BASE != m_Parent->GetNodeType() )
+    {
+        if( NULL == sp )
+        {
+            #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+            std::cerr << " * [INFO] bad model: no base data given\n";
+            #endif
+
+            return NULL;
+        }
+    }
+    else
     {
         m_current.Init();
         sp = &m_current;
     }
 
-    std::list< WRL1NODE* >::iterator ip = m_Items.begin();
-    std::advance( ip, whichChild );
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
+    {
+        #ifdef DEBUG_VRML1
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] Group does not have a Transform parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
 
     IFSG_TRANSFORM txNode( aParent );
+    bool hasContent = false;
 
-    SGNODE* np = (*ip)->TranslateToSG( aParent, sp );
+    std::list< WRL1NODE* >::iterator sI = m_Items.begin();
+    std::list< WRL1NODE* >::iterator eI = m_Items.end();
 
-    return np;
+    SGNODE* node = txNode.GetRawPtr();
+
+    while( sI != eI )
+    {
+        if( NULL != (*sI)->TranslateToSG( node, sp ) )
+            hasContent = true;
+
+        ++sI;
+    }
+
+    if( !hasContent )
+    {
+        txNode.Destroy();
+        return NULL;
+    }
+
+    return node;
 }

@@ -24,6 +24,7 @@
 #include <iostream>
 
 #include "vrml1_base.h"
+#include "vrml1_group.h"
 #include "vrml1_separator.h"
 #include "vrml1_material.h"
 #include "vrml1_matbinding.h"
@@ -182,11 +183,11 @@ bool WRL1BASE::Read( WRLPROC& proc )
     std::cerr << " * [INFO] Processing node '" << glob << "' ID: " << ntype << "\n";
     #endif
 
-    if( ntype != WRL1_SEPARATOR && ntype != WRL1_SWITCH )
+    if( ntype != WRL1_SEPARATOR && ntype != WRL1_SWITCH && ntype != WRL1_GROUP )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file - top node is not a Separator or Switch\n";
+        std::cerr << " * [INFO] bad file - top node is not a Separator, Switch, or Group\n";
         #endif
 
         return false;
@@ -197,6 +198,13 @@ bool WRL1BASE::Read( WRLPROC& proc )
     case WRL1_SEPARATOR:
 
         if( !readSeparator( proc, this, NULL ) )
+            return false;
+
+        break;
+
+    case WRL1_GROUP:
+
+        if( !readGroup( proc, this, NULL ) )
             return false;
 
         break;
@@ -412,9 +420,13 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
     switch( ntype )
     {
-    //
-    // items to be implemented:
-    //
+    case WRL1_GROUP:
+
+        if( !readGroup( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     case WRL1_SEPARATOR:
 
         if( !readSeparator( proc, aParent, aNode ) )
@@ -517,6 +529,26 @@ bool WRL1BASE::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     #endif
 
     return false;
+}
+
+
+bool WRL1BASE::readGroup( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    WRL1GROUP* np = new WRL1GROUP( m_dictionary, aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL1NODE*) np;
+
+    return true;
 }
 
 
@@ -677,7 +709,7 @@ bool WRL1BASE::readShapeHints( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNod
 }
 
 
-SGNODE* WRL1BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL1BASE::TranslateToSG( SGNODE* aParent, WRL1STATUS* /*sp*/ )
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     std::cerr << " * [INFO] Translating VRML1 Base with " << m_Items.size();
@@ -697,5 +729,5 @@ SGNODE* WRL1BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
         return NULL;
     }
 
-    return (*m_Items.begin())->TranslateToSG( NULL, true );
+    return (*m_Items.begin())->TranslateToSG( NULL, NULL );
 }

@@ -104,6 +104,7 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
         nodenames.insert( NODEITEM( "Cylinder", WRL1_CYLINDER ) );
         nodenames.insert( NODEITEM( "DirectionalLight", WRL1_DIRECTIONALLIGHT ) );
         nodenames.insert( NODEITEM( "FontStyle", WRL1_FONTSTYLE ) );
+        nodenames.insert( NODEITEM( "Group", WRL1_GROUP ) );
         nodenames.insert( NODEITEM( "IndexedFaceSet", WRL1_INDEXEDFACESET ) );
         nodenames.insert( NODEITEM( "IndexedLineSet", WRL1_INDEXEDLINESET ) );
         nodenames.insert( NODEITEM( "Info", WRL1_INFO ) );
@@ -350,19 +351,8 @@ const char* WRL1NODE::GetNodeTypeName( WRL1NODES aNodeType ) const
 }
 
 
-WRL1STATUS* WRL1NODE::GetCurrentSettings( void )
-{
-    return &m_current;
-}
-
-
 WRL1NODES WRL1NODE::getNodeTypeID( const std::string aNodeName )
 {
-    // 'Group' is a special case; it has been deprecated
-    // but otherwise is similar enough to Separator.
-    if( !aNodeName.compare( "Group" ) )
-        return WRL1_SEPARATOR;
-
     NODEMAP::iterator it = nodenames.find( aNodeName );
 
     if( nodenames.end() != it )

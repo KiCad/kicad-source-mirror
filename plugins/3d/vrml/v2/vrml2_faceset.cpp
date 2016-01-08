@@ -646,7 +646,7 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     if( NULL == color )
     {
         // assuming convex polygons, create triangles for the SG node
-        for( idx = 3; idx < vsize; )
+        for( idx = 3; idx <= vsize; )
         {
             lCIdx.push_back( i1 );
 
@@ -663,6 +663,10 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
             ++nfaces;
             i2 = i3;
+
+            if( idx == vsize )
+                break;
+
             i3 = coordIndex[idx++];
 
             while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
@@ -682,6 +686,9 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
                     return NULL;
             }
+
+            if( i1 < 0 || i2 < 0 || i3 < 0 )
+                break;
         }
     }
     else
@@ -746,7 +753,7 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         // assuming convex polygons, create triangles for the SG node
         int cMaxIdx = (int) colorIndex.size();
 
-        for( idx = 3; idx < vsize; )
+        for( idx = 3; idx <= vsize; )
         {
             lCIdx.push_back( i1 );
             lColors.push_back( pc1 );
@@ -786,6 +793,9 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
                 pc3.SetColor( tc.x, tc.y, tc.z );
             }
+
+            if( idx == vsize )
+                break;
 
             i3 = coordIndex[idx++];
 
@@ -839,6 +849,9 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                 if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
                     return NULL;
             }
+
+            if( i1 < 0 || i2 < 0 || i3 < 0 )
+                break;
         }
     }
 

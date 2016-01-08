@@ -53,7 +53,7 @@ public:
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
     bool AddRefNode( WRL1NODE* aNode );
     bool AddChildNode( WRL1NODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
 
     void GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize );
 };

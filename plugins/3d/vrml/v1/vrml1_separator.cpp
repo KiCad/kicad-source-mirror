@@ -131,7 +131,7 @@ bool WRL1SEPARATOR::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 }
 
 
-SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     std::cerr << " * [INFO] Translating Separator with " << m_Children.size();
@@ -148,8 +148,8 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
         return NULL;
     }
 
-    if( WRL1_BASE != m_Parent->GetNodeType() )
-        m_current = *( m_Parent->GetCurrentSettings() );
+    if( sp != NULL )
+        m_current = *sp;
     else
         m_current.Init();
 
@@ -157,24 +157,13 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
-        #ifdef DEBUG_VRML2
+        #ifdef DEBUG_VRML1
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] Separator does not have a Transform parent (parent ID: ";
         std::cerr << ptype << ")\n";
         #endif
 
         return NULL;
-    }
-
-    if( m_sgNode )
-    {
-        if( NULL == aParent )
-            return NULL;
-
-        if( !S3D::AddSGNodeRef( aParent, m_sgNode ) )
-            return NULL;
-
-        return m_sgNode;
     }
 
     IFSG_TRANSFORM txNode( aParent );
@@ -187,7 +176,7 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     while( sI != eI )
     {
-        if( NULL != (*sI)->TranslateToSG( node, calcNormals ) )
+        if( NULL != (*sI)->TranslateToSG( node, &m_current ) )
             hasContent = true;
 
         ++sI;
@@ -198,8 +187,6 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, bool calcNormals )
         txNode.Destroy();
         return NULL;
     }
-
-    m_sgNode = node;
 
     return node;
 }

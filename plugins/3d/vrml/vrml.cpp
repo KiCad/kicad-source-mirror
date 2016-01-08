@@ -208,8 +208,7 @@ SCENEGRAPH* Load( char const* aFileName )
             std::cout << " * [INFO] load completed\n";
             #endif
 
-            // for now we recalculate all normals per-vertex per-face
-            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, true );
+            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, NULL );
         }
 
         delete bp;

@@ -4,7 +4,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/v2
 )
 
-add_definitions( -DDEBUG_VRML1=3 -DDEBUG_VRML2=3 )
+add_definitions( -DDEBUG_VRML1=2 -DDEBUG_VRML2=2 )
 
 add_library( s3d_plugin_vrml MODULE
         vrml.cpp
@@ -25,6 +25,7 @@ add_library( s3d_plugin_vrml MODULE
         v2/vrml2_switch.cpp
         v1/vrml1_node.cpp
         v1/vrml1_base.cpp
+        v1/vrml1_group.cpp
         v1/vrml1_separator.cpp
         v1/vrml1_material.cpp
         v1/vrml1_matbinding.cpp

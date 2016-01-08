@@ -275,16 +275,18 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 }
 
 
-SGNODE* WRL1MATERIAL::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL1MATERIAL::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-    if( m_Parent )
+    if( NULL == sp )
     {
-        WRL1STATUS* cp = m_Parent->GetCurrentSettings();
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] bad model: no base data given\n";
+        #endif
 
-        if( NULL != cp )
-            cp->mat = this;
-
+        return NULL;
     }
+
+    sp->mat = this;
 
     return NULL;
 }

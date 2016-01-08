@@ -51,6 +51,7 @@ private:
     bool implementUse( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool implementDef( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
 
+    bool readGroup( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readSeparator( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readSwitch( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readMaterial( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
@@ -88,7 +89,7 @@ public:
     // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
     bool SetParent( WRL1NODE* aParent );
-    SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
 };
 
 #endif  // VRML1_BASE_H

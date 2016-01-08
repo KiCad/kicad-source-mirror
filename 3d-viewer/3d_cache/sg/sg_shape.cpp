@@ -230,9 +230,14 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
     {
         if( m_Appearance || m_RAppearance )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] assigning multiple Appearance nodes\n";
-            return false;
+            if( aNode != m_Appearance && aNode != m_RAppearance )
+            {
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [BUG] assigning multiple Appearance nodes\n";
+                return false;
+            }
+
+            return true;
         }
 
         if( isChild )
@@ -253,9 +258,14 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
     {
         if( m_FaceSet || m_RFaceSet )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] assigning multiple FaceSet nodes\n";
-            return false;
+            if( aNode != m_FaceSet && aNode != m_RFaceSet )
+            {
+                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::cerr << " * [BUG] assigning multiple FaceSet nodes\n";
+                return false;
+            }
+
+            return true;
         }
 
         if( isChild )

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,41 +22,31 @@
  */
 
 /**
- * @file vrml1_faceset.h
+ * @file vrml1_group.h
  */
 
 
-#ifndef VRML1_FACESET_H
-#define VRML1_FACESET_H
+#ifndef VRML1_GROUP_H
+#define VRML1_GROUP_H
 
-#include <vector>
-
-#include "vrml2_node.h"
+#include "vrml1_node.h"
 
 class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1FACESET
+ * Class WRL1GROUP
  */
-class WRL1FACESET : public WRL1NODE
+class WRL1GROUP : public WRL1NODE
 {
-private:
-    std::vector< int > coordIndex;
-    std::vector< int > matIndex;
-    std::vector< int > normIndex;
-    std::vector< int > texIndex;
-
 public:
-    WRL1FACESET( NAMEREGISTER* aDictionary );
-    WRL1FACESET( NAMEREGISTER* aDictionary, WRL1NODE* aParent );
-    virtual ~WRL1FACESET();
+    WRL1GROUP( NAMEREGISTER* aDictionary );
+    WRL1GROUP( NAMEREGISTER* aDictionary, WRL1NODE* aNode );
+    virtual ~WRL1GROUP();
 
     // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
-    bool AddRefNode( WRL1NODE* aNode );
-    bool AddChildNode( WRL1NODE* aNode );
     SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
 };
 
-#endif  // VRML1_FACESET_H
+#endif  // VRML1_GROUP_H

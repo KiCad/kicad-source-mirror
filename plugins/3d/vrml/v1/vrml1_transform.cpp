@@ -269,18 +269,22 @@ bool WRL1TRANSFORM::AddChildNode( WRL1NODE* aNode )
 }
 
 
-SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
     if( NULL == m_Parent )
         return NULL;
 
-    if( WRL2_BASE == m_Parent->GetNodeType() )
+    if( WRL1_BASE == m_Parent->GetNodeType() )
         return NULL;
 
-    WRL1STATUS* cp = m_Parent->GetCurrentSettings();
+    if( NULL == sp )
+    {
+        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+        std::cerr << " * [INFO] bad model: no base data given\n";
+        #endif
 
-    if( NULL == cp )
         return NULL;
+    }
 
     // rotation
     float rX, rY, rZ, rW;
@@ -313,7 +317,7 @@ SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
 
     // resultant transform:
     // tx' = tM * cM * rM * srM * sM * nsrM * ncM
-    cp->txmatrix = cp->txmatrix * tM * cM * rM * srM * sM * nsrM * ncM;
+    sp->txmatrix = sp->txmatrix * tM * cM * rM * srM * sM * nsrM * ncM;
 
     return NULL;
 }

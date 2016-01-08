@@ -49,7 +49,7 @@ public:
 
     // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
-    SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
 };
 
 #endif  // VRML1_SWITCH_H

@@ -33,7 +33,6 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include <list>
 #include <map>
@@ -143,13 +142,6 @@ public:
     void cancelDict( void );
 
     /**
-     * Function GetCurrentSettings
-     * is used by children to retrieve and perhaps modify the
-     * current settings of the parent
-     */
-    WRL1STATUS* GetCurrentSettings( void );
-
-    /**
      * Function getNodeTypeID
      * returns the ID based on the given aNodeName or WRL1_INVALID (WRL1_END)
      * if no such node name exists
@@ -255,7 +247,7 @@ public:
      * @param aParent is a pointer to the parent SG node
      * @return is non-NULL on success
      */
-    virtual SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals ) = 0;
+    virtual SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) = 0;
 };
 
 #endif  // VRML1_NODE_H
