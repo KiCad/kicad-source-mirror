@@ -643,10 +643,6 @@ protected:
 
         if( aDynamic )
         {
-            if( m_component->GetTransform().y1 )
-                field_height = aField->GetBoundingBox().GetWidth();
-            else
-                field_height = aField->GetBoundingBox().GetHeight();
             field_height = aField->GetBoundingBox().GetHeight();
 
             padding = get_field_padding();
