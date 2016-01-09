@@ -584,8 +584,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 {
     int     dist;
 
-    double  pad_angle;
-
     // Get the clearance between the 2 pads. this is the min distance between aRefPad and aPad
     int     dist_min = aRefPad->GetClearance( aPad );
 
@@ -662,80 +660,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         diag = checkClearanceSegmToPad( aPad, aRefPad->GetSize().x, dist_min );
         break;
 
-    case PAD_SHAPE_RECT:
-        // pad_angle = pad orient relative to the aRefPad orient
-        pad_angle = aRefPad->GetOrientation() + aPad->GetOrientation();
-        NORMALIZE_ANGLE_POS( pad_angle );
-
-        if( aPad->GetShape() == PAD_SHAPE_RECT )
-        {
-            wxSize size = aPad->GetSize();
-
-            // The trivial case is if both rects are rotated by multiple of 90 deg
-            // Most of time this is the case, and the test is fast
-            if( ( (aRefPad->GetOrientation() == 0) || (aRefPad->GetOrientation() == 900)
-                 || (aRefPad->GetOrientation() == 1800) || (aRefPad->GetOrientation() == 2700) )
-               && ( (aPad->GetOrientation() == 0) || (aPad->GetOrientation() == 900) || (aPad->GetOrientation() == 1800)
-                   || (aPad->GetOrientation() == 2700) ) )
-            {
-                if( (pad_angle == 900) || (pad_angle == 2700) )
-                {
-                    std::swap( size.x, size.y );
-                }
-
-                // Test DRC:
-                diag = false;
-                RotatePoint( &relativePadPos, aRefPad->GetOrientation() );
-                relativePadPos.x = std::abs( relativePadPos.x );
-                relativePadPos.y = std::abs( relativePadPos.y );
-
-                if( ( relativePadPos.x - ( (size.x + aRefPad->GetSize().x) / 2 ) ) >= dist_min )
-                    diag = true;
-
-                if( ( relativePadPos.y - ( (size.y + aRefPad->GetSize().y) / 2 ) ) >= dist_min )
-                    diag = true;
-            }
-            else    // at least one pad has any other orient. Test is more tricky
-            {   // Use the trapezoid2trapezoidDRC which also compare 2 rectangles with any orientation
-                wxPoint polyref[4];         // Shape of aRefPad
-                wxPoint polycompare[4];     // Shape of aPad
-                aRefPad->BuildPadPolygon( polyref, wxSize( 0, 0 ), aRefPad->GetOrientation() );
-                aPad->BuildPadPolygon( polycompare, wxSize( 0, 0 ), aPad->GetOrientation() );
-
-                // Move aPad shape to relativePadPos
-                for( int ii = 0; ii < 4; ii++ )
-                    polycompare[ii] += relativePadPos;
-
-                // And now test polygons:
-                if( !trapezoid2trapezoidDRC( polyref, polycompare, dist_min ) )
-                    diag = false;
-            }
-        }
-        else if( aPad->GetShape() == PAD_SHAPE_TRAPEZOID )
-        {
-            wxPoint polyref[4];         // Shape of aRefPad
-            wxPoint polycompare[4];     // Shape of aPad
-            aRefPad->BuildPadPolygon( polyref, wxSize( 0, 0 ), aRefPad->GetOrientation() );
-            aPad->BuildPadPolygon( polycompare, wxSize( 0, 0 ), aPad->GetOrientation() );
-
-            // Move aPad shape to relativePadPos
-            for( int ii = 0; ii < 4; ii++ )
-                polycompare[ii] += relativePadPos;
-
-            // And now test polygons:
-            if( !trapezoid2trapezoidDRC( polyref, polycompare, dist_min ) )
-                diag = false;
-        }
-        else
-        {
-            // Should not occur, because aPad and aRefPad are swapped
-            // to have only aPad shape RECT or TRAP and aRefPad shape TRAP or RECT.
-            wxLogDebug( wxT( "DRC::checkClearancePadToPad: unexpected pad ref RECT @ %d, %d to pad shape %d @ %d, %d"),
-                aRefPad->GetPosition().x, aRefPad->GetPosition().y,
-                aPad->GetShape(), aPad->GetPosition().x, aPad->GetPosition().y );
-        }
-        break;
-
     case PAD_SHAPE_OVAL:     /* an oval pad is like a track segment */
     {
         /* Create a track segment with same dimensions as the oval aRefPad
@@ -779,10 +703,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     }
 
     case PAD_SHAPE_TRAPEZOID:
-
-        // at this point, aPad is also a trapezoid, because all other shapes
-        // have priority, and are already tested
-        wxASSERT( aPad->GetShape() == PAD_SHAPE_TRAPEZOID );
+    case PAD_SHAPE_RECT:
         {
             wxPoint polyref[4];         // Shape of aRefPad
             wxPoint polycompare[4];     // Shape of aPad
