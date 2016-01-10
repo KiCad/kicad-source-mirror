@@ -283,7 +283,10 @@ set( COMMON_SRCS
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
 add_dependencies( common version_header )
-target_link_libraries( common ${Boost_LIBRARIES} ${CURL_LIBRARIES} )
+target_link_libraries( common
+    ${Boost_LIBRARIES}
+#    ${CURL_LIBRARIES}      we dynamically link to this ON DEMAND, not at load time
+    )
 
 
 set( PCB_COMMON_SRCS

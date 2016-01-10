@@ -44,12 +44,27 @@
 #include <curl/curl.h>
 #include <string>
 
+// CURL_EXTERN expands to dllimport on MinGW which causes gcc warnings.  This really should
+// expand to nothing on MinGW.
+#if defined( __MINGW32__)
+#  if defined( CURL_EXTERN )
+#    undef CURL_EXTERN
+#    define CURL_EXTERN
+#  endif
+#endif
+
+
+struct DYN_LOOKUP;
+
+
 /**
  * Class KICAD_CURL
  * simple wrapper class to call curl_global_init and curl_global_cleanup for KiCad.
  */
 class KICAD_CURL
 {
+    friend class KICAD_CURL_EASY;
+
 public:
     /**
      * Function Init
@@ -57,8 +72,9 @@ public:
      * and before any curl functions that perform requests.
      *
      * @return bool - True if successful, false if CURL returned an error
+     * @throw IO_ERROR on failure, hopefully with helpful text in it.
      */
-    static bool Init();
+    static void Init();
 
     /**
      * Function Cleanup
@@ -71,9 +87,14 @@ public:
      * Function GetVersion
      * wrapper for curl_version(). Reports back a short string of loaded libraries.
      *
-     * @return std::string - String reported by libcurl
+     * @return const char* - String reported by libcurl and owned by it.
+     * @throw IO_ERROR on failure, hopefully with helpful text in it.
      */
-    static std::string GetVersion();
+    static const char* GetVersion()
+    {
+        return KICAD_CURL::version();
+    }
+
 
     /**
      * Function GetSimpleVersion
@@ -83,7 +104,25 @@ public:
      */
     static std::string GetSimpleVersion();
 private:
-    static bool m_initialized;
+
+    // Alphabetically:
+    // dynamically looked up libcurl function pointers whose prototypes were
+    // taken from the system's libcurl headers.
+
+    static void         (CURL_EXTERN * easy_cleanup)    ( CURL* curl );
+    static CURL*        (CURL_EXTERN * easy_init)       ( void );
+    static CURLcode     (CURL_EXTERN * easy_perform)    ( CURL* curl );
+    static CURLcode     (CURL_EXTERN * easy_setopt)     ( CURL* curl, CURLoption option, ... );
+    static const char*  (CURL_EXTERN * easy_strerror)   ( CURLcode );
+    static CURLcode     (CURL_EXTERN * global_init)     ( long flags );
+    static void         (CURL_EXTERN * global_cleanup)  ( void );
+    static curl_slist*  (CURL_EXTERN * slist_append)    ( curl_slist*, const char* );
+    static void         (CURL_EXTERN * slist_free_all)  ( curl_slist* );
+    static char*        (CURL_EXTERN * version)         ( void );
+    static curl_version_info_data* (CURL_EXTERN * version_info) (CURLversion);
+
+    /// A tuple of ASCII function names and pointers to pointers to functions
+    static const DYN_LOOKUP dyn_funcs[];
 };
 
 #endif // KICAD_CURL_H_
