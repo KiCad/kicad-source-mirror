@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,8 +139,15 @@ void PCB_EDIT_FRAME::OnPlaceOrRouteFootprints( wxCommandEvent& event )
             DisplayError( this, _( "No footprint found!" ) );
             return;
         }
+        else
+        {
+            MODULE* footprint = GetBoard()->m_Modules;
+            std::vector<MODULE*> footprintList;
+            for( ; footprint != NULL; footprint = footprint->Next() )
+                footprintList.push_back( footprint );
 
-        SpreadFootprints( id == ID_POPUP_PCB_SPREAD_NEW_MODULES );
+            SpreadFootprints( &footprintList, id == ID_POPUP_PCB_SPREAD_NEW_MODULES, true );
+        }
         break;
 
     case ID_POPUP_PCB_AUTOROUTE_ALL_MODULES:
