@@ -1216,10 +1216,10 @@ public:
      * of the via.
      * </p>
      * @param aPosition The wxPoint to HitTest() against.
-     * @param aLayer The layer to search.  Use -1 for a don't care.
+     * @param aLayer The layer to search.  Use -1 (LAYER_ID::UNDEFINED_LAYER) for a don't care.
      * @return VIA* A point a to the VIA object if found, else NULL.
      */
-    VIA* GetViaByPosition( const wxPoint& aPosition, LAYER_ID aLayer = LAYER_ID::UNDEFINED_LAYER ) const;
+    VIA* GetViaByPosition( const wxPoint& aPosition, LAYER_ID aLayer = LAYER_ID( -1 ) ) const;
 
     /**
      * Function GetPad

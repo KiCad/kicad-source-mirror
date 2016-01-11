@@ -460,7 +460,7 @@ find_package( Cairo 1.8.8 REQUIRED )
 #
 # Note: Prior to Boost 1.59, the Boost context library is not built when compiling on windows
 #       with GCC.  You must patch the Boost sources.
-find_package( Boost 1.54.0 REQUIRED COMPONENTS context coroutine system thread )
+find_package( Boost 1.54.0 REQUIRED COMPONENTS context system thread )
 
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
