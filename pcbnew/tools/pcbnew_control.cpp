@@ -479,7 +479,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
         case COMMON_ACTIONS::CURSOR_CLICK:              // fall through
         case COMMON_ACTIONS::CURSOR_DBL_CLICK:
         {
-            TOOL_ACTIONS action;
+            TOOL_ACTIONS action = TA_NONE;
             int modifiers = 0;
 
             modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
