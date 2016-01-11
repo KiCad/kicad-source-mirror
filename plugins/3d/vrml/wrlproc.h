@@ -34,21 +34,22 @@
 #include <string>
 #include <vector>
 
+#include "richio.h"
 #include "wrltypes.h"
 
 class WRLPROC
 {
 private:
-    std::ifstream m_file;
-    std::string m_filename;     // name of the open file
-    size_t m_filepos;           // position in the file
-    size_t m_fileline;          // line being processed
-    size_t m_linepos;           // position within 'buf'
+    LINE_READER* m_file;
     std::string m_buf;          // string being parsed
+    bool m_eof;
+    unsigned int m_fileline;
+    unsigned int m_bufpos;
 
     WRLVERSION m_fileVersion;   // VRML file version
     std::string m_error;        // error message
     std::string m_badchars;     // characters forbidden in VRML{1|2} names
+    std::string m_filename;
 
     // getRawLine reads a single non-blank line and in the case of a VRML1 file
     // it checks for invalid characters (bit 8 set). If m_buf is not empty and
@@ -57,11 +58,9 @@ private:
     bool getRawLine( void );
 
 public:
-    WRLPROC();
+    WRLPROC( LINE_READER* aLineReader );
     ~WRLPROC();
 
-    bool Open( const std::string& aFileName );
-    void Close();
     bool eof( void );
 
     // return the VRML Version

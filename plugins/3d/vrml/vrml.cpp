@@ -38,6 +38,7 @@
 #include <string>
 #include <wx/string.h>
 #include <wx/filename.h>
+#include "richio.h"
 #include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
 #include "wrlproc.h"
@@ -179,11 +180,25 @@ SCENEGRAPH* Load( char const* aFileName )
     LOCALESWITCH switcher;
     SCENEGRAPH* scene = NULL;
 
-    // VRML file processor
-    WRLPROC proc;
+    FILE_LINE_READER* modelFile = NULL;
 
-    if( !proc.Open( std::string( fname.ToUTF8() ) ) )
+    try
+    {
+        // set the max char limit to 8MB; if a VRML file contains
+        // longer lines then perhaps it shouldn't be used
+        modelFile = new FILE_LINE_READER( fname, 0, 8388608 );
+    }
+    catch( IO_ERROR &e )
+    {
+        #ifdef DEBUG
+        std::cout << " * [INFO] load failed: input line too long\n";
+        #endif
         return NULL;
+    }
+
+
+    // VRML file processor
+    WRLPROC proc( modelFile );
 
     if( proc.GetVRMLType() == VRML_V1 )
     {
@@ -242,6 +257,9 @@ SCENEGRAPH* Load( char const* aFileName )
 
         delete bp;
     }
+
+    if( NULL != modelFile )
+        delete modelFile;
 
     // DEBUG: WRITE OUT VRML2 FILE TO CONFIRM STRUCTURE
     #if defined( DEBUG_VRML1 ) || defined( DEBUG_VRML2 )

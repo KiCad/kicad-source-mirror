@@ -23,66 +23,50 @@
 
 #include <iostream>
 #include <sstream>
+#include <wx/string.h>
 #include "wrlproc.h"
 
 #define GETLINE do {\
-    m_filepos = m_file.tellg(); \
-    std::getline( m_file, m_buf ); \
-    ++m_fileline; \
-    } while( 0 )
+    try { \
+        char* cp = m_file->ReadLine(); \
+        if( NULL == cp ) { \
+            m_eof = true; \
+            m_buf.clear(); \
+        } else { \
+            m_buf = cp; \
+            m_bufpos = 0; \
+        } \
+        m_fileline = m_file->LineNumber(); \
+    } catch( ... ) { \
+        m_error = " * [INFO] input line too long"; \
+        m_eof = true; \
+        m_buf.clear(); \
+    } } while( 0 )
 
 
-WRLPROC::WRLPROC()
+WRLPROC::WRLPROC( LINE_READER* aLineReader )
 {
-    m_filepos = 0;
-    m_fileline = 0;
-    m_linepos = 0;
     m_fileVersion = VRML_INVALID;
-
-    return;
-}
-
-
-WRLPROC::~WRLPROC()
-{
-    Close();
-    return;
-}
-
-
-bool WRLPROC::Open( const std::string& aFileName )
-{
-    if( m_file.is_open() )
-    {
-        m_error = "attempting to open a new file while one is still open";
-        #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] " << m_error << "\n";
-        #endif
-        return false;
-    }
-
-    // initialize some internal variables; this is necessary since
-    // the values may be set differently if there have been previous
-    // failed calls to Open().
-    m_error.clear();
-    m_filename = aFileName;
-    m_filepos = 0;
+    m_eof = false;
     m_fileline = 0;
-    m_linepos = 0;
-    m_file.open( aFileName.c_str() );
+    m_bufpos = 0;
 
-    if( !m_file.is_open() )
+    if( NULL == aLineReader )
     {
-        m_error = "could not open file '";
-        m_error.append( aFileName );
-        m_error.append( 1, '\'' );
-        return false;
+        m_eof = true;
+        return;
     }
+
+    m_error.clear();
+    m_file = aLineReader;
+    m_filename = m_file->GetSource().ToUTF8();
 
     m_buf.clear();
     GETLINE;
-    m_linepos = 0;
+
+    if( m_eof )
+        return;
+
     m_buf = m_buf.substr( 0, 16 );
 
     if( m_buf.find( "#VRML V1.0 ascii"  ) == 0 )
@@ -95,7 +79,7 @@ bool WRLPROC::Open( const std::string& aFileName )
         // plus
         // period
         m_badchars = "\"'\\{}+.";
-        return true;
+        return;
     }
 
     if( m_buf.find( "#VRML V2.0 utf8" ) == 0 )
@@ -117,33 +101,24 @@ bool WRLPROC::Open( const std::string& aFileName )
         // as well; '+' is not even valid for VRML1.
         //m_badchars = "'\"#,.+-[]\\{}";
         m_badchars = "'\"#,.[]\\{}";
-        return true;
+        return;
     }
 
-    m_file.close();
     m_buf.clear();
     m_fileVersion = VRML_INVALID;
+    m_eof = true;
+
     m_error = "not a valid VRML file: '";
-    m_error.append( aFileName );
+    m_error.append( m_filename );
     m_error.append( 1, '\'' );
     m_badchars.clear();
 
-    return false;
+    return;
 }
 
 
-void WRLPROC::Close()
+WRLPROC::~WRLPROC()
 {
-    m_file.close();
-    m_buf.clear();
-    m_filepos = 0;
-    m_fileline = 0;
-    m_linepos = 0;
-    m_fileVersion = VRML_INVALID;
-    m_filename.clear();
-    m_error.clear();
-    m_badchars.clear();
-
     return;
 }
 
@@ -152,33 +127,29 @@ bool WRLPROC::getRawLine( void )
 {
     m_error.clear();
 
-    if( !m_file.is_open() )
+    if( !m_file )
     {
         m_error = "no open file";
         return false;
     }
 
-    if( m_linepos >= m_buf.size() )
+    if( m_bufpos >= m_buf.size() )
         m_buf.clear();
 
     if( !m_buf.empty() )
         return true;
 
-    m_linepos = 0;
-
-    if( m_file.bad() )
-    {
-        m_error = "bad stream";
-        return false;
-    }
-
-    if( m_file.eof() )
+    if( m_eof )
         return false;
 
     GETLINE;
 
-    if( m_file.bad() && m_buf.empty() )
+    if( m_eof && m_buf.empty() )
         return false;
+
+    // strip the EOL characters
+    while( !m_buf.empty() && ( *m_buf.rbegin() == '\r' || *m_buf.rbegin() == '\n' ) )
+        m_buf.erase( --m_buf.end() );
 
     if( VRML_V1 == m_fileVersion && !m_buf.empty() )
     {
@@ -203,11 +174,17 @@ bool WRLPROC::getRawLine( void )
 
 bool WRLPROC::EatSpace( void )
 {
-    if( m_linepos >= m_buf.size() )
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
+    if( m_bufpos >= m_buf.size() )
         m_buf.clear();
 
 RETRY:
-    while( m_buf.empty() && !m_file.bad() && !m_file.eof() )
+    while( m_buf.empty() && !m_eof )
         getRawLine();
 
     // buffer may be empty if we have reached EOF or encountered IO errors
@@ -215,15 +192,15 @@ RETRY:
         return false;
 
     // eliminate leading white space (including control characters and comments)
-    while( m_linepos < m_buf.size() )
+    while( m_bufpos < m_buf.size() )
     {
-        if( m_buf[m_linepos] > 0x20 )
+        if( m_buf[m_bufpos] > 0x20 )
             break;
 
-        ++m_linepos;
+        ++m_bufpos;
     }
 
-    if( m_linepos == m_buf.size() || '#' == m_buf[m_linepos] )
+    if( m_bufpos == m_buf.size() || '#' == m_buf[m_bufpos] )
     {
         // lines consisting entirely of white space are not unusual
         m_buf.clear();
@@ -244,6 +221,12 @@ bool WRLPROC::ReadGlob( std::string& aGlob, bool* hasComma )
 {
     aGlob.clear();
 
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( NULL != hasComma )
         *hasComma = false;
 
@@ -253,7 +236,7 @@ bool WRLPROC::ReadGlob( std::string& aGlob, bool* hasComma )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -261,24 +244,24 @@ bool WRLPROC::ReadGlob( std::string& aGlob, bool* hasComma )
 
     size_t ssize = m_buf.size();
 
-    while( m_buf[m_linepos] > 0x20 && m_linepos < ssize )
+    while( m_buf[m_bufpos] > 0x20 && m_bufpos < ssize )
     {
-        if( ',' == m_buf[m_linepos] )
+        if( ',' == m_buf[m_bufpos] )
         {
             // the comma is a special instance of blank space
             if( NULL != hasComma )
                 *hasComma = true;
 
-            ++m_linepos;
+            ++m_bufpos;
 
             return true;
         }
 
-        if( '{' == m_buf[m_linepos] || '}' == m_buf[m_linepos]
-            || '[' == m_buf[m_linepos] || ']' == m_buf[m_linepos] )
+        if( '{' == m_buf[m_bufpos] || '}' == m_buf[m_bufpos]
+            || '[' == m_buf[m_bufpos] || ']' == m_buf[m_bufpos] )
             return true;
 
-        aGlob.append( 1, m_buf[m_linepos++] );
+        aGlob.append( 1, m_buf[m_bufpos++] );
     }
 
     return true;
@@ -289,13 +272,19 @@ bool WRLPROC::ReadName( std::string& aName )
 {
     aName.clear();
 
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     while( true )
     {
         if( !EatSpace() )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -303,11 +292,11 @@ bool WRLPROC::ReadName( std::string& aName )
 
     size_t ssize = m_buf.size();
 
-    while( m_buf[m_linepos] > 0x20 && m_linepos < ssize )
+    while( m_buf[m_bufpos] > 0x20 && m_bufpos < ssize )
     {
-        if( '[' == m_buf[m_linepos] || '{' == m_buf[m_linepos]
-            || '.' == m_buf[m_linepos] || '#' == m_buf[m_linepos]
-            || ',' == m_buf[m_linepos] )
+        if( '[' == m_buf[m_bufpos] || '{' == m_buf[m_bufpos]
+            || '.' == m_buf[m_bufpos] || '#' == m_buf[m_bufpos]
+            || ',' == m_buf[m_bufpos] )
         {
             if( !aName.empty() )
             {
@@ -318,7 +307,7 @@ bool WRLPROC::ReadName( std::string& aName )
                 std::ostringstream ostr;
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-                ostr << " * [INFO] line " << m_fileline << ", column " << m_linepos;
+                ostr << " * [INFO] line " << m_fileline << ", column " << m_bufpos;
                 ostr << " -- invalid name";
                 m_error = ostr.str();
 
@@ -326,31 +315,31 @@ bool WRLPROC::ReadName( std::string& aName )
             }
         }
 
-        if( m_badchars.find( m_buf[m_linepos] ) != std::string::npos )
+        if( m_badchars.find( m_buf[m_bufpos] ) != std::string::npos )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << m_fileline << ", column " << m_linepos;
+            ostr << " * [INFO] line " << m_fileline << ", column " << m_bufpos;
             ostr << " -- invalid character in name";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( aName.empty() && m_buf[m_linepos] >= '0' && m_buf[m_linepos] <= '9' )
+        if( aName.empty() && m_buf[m_bufpos] >= '0' && m_buf[m_bufpos] <= '9' )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-            ostr << " * [INFO] line " << m_fileline << ", column " << m_linepos;
+            ostr << " * [INFO] line " << m_fileline << ", column " << m_bufpos;
             ostr << " -- name must not start with a digit";
             m_error = ostr.str();
 
             return false;
         }
 
-        aName.append( 1, m_buf[m_linepos++] );
+        aName.append( 1, m_buf[m_bufpos++] );
     }
 
     return true;
@@ -359,6 +348,12 @@ bool WRLPROC::ReadName( std::string& aName )
 
 bool WRLPROC::DiscardNode( void )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( !EatSpace() )
     {
         std::ostringstream ostr;
@@ -370,13 +365,13 @@ bool WRLPROC::DiscardNode( void )
         return false;
     }
 
-    if( '{' != m_buf[m_linepos] )
+    if( '{' != m_buf[m_bufpos] )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-        ostr << " * [INFO] expecting character '{' at line " << m_linepos;
-        ostr << ", column " << m_linepos;
+        ostr << " * [INFO] expecting character '{' at line " << m_fileline;
+        ostr << ", column " << m_bufpos;
         m_error = ostr.str();
 
         std::cerr << m_error << "\n";
@@ -384,9 +379,9 @@ bool WRLPROC::DiscardNode( void )
     }
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
-    ++m_linepos;
+    ++m_bufpos;
     size_t lvl = 1;
     std::string tmp;
 
@@ -398,7 +393,7 @@ bool WRLPROC::DiscardNode( void )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -406,23 +401,23 @@ bool WRLPROC::DiscardNode( void )
         }
 
         // comments must be skipped
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
         {
-            m_linepos = 0;
+            m_bufpos = 0;
             m_buf.clear();
             continue;
         }
 
-        if( '{' == m_buf[m_linepos] )
+        if( '{' == m_buf[m_bufpos] )
         {
-            ++m_linepos;
+            ++m_bufpos;
             ++lvl;
             continue;
         }
 
-        if( '}' == m_buf[m_linepos] )
+        if( '}' == m_buf[m_bufpos] )
         {
-            ++m_linepos;
+            ++m_bufpos;
             --lvl;
             continue;
         }
@@ -430,15 +425,15 @@ bool WRLPROC::DiscardNode( void )
         // note: if we have a ']' we must skip it and test the next non-blank character;
         // this ensures that we don't miss a '}' in cases where the braces are not
         // separated by space. if we had proceeded to ReadGlob() we could have had a problem.
-        if( ']' == m_buf[m_linepos] || '[' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] || '[' == m_buf[m_bufpos] )
         {
-            ++m_linepos;
+            ++m_bufpos;
             continue;
         }
 
         // strings are handled as a special case since they may contain
         // control characters and braces
-        if( '"' == m_buf[m_linepos] )
+        if( '"' == m_buf[m_bufpos] )
         {
             if( !ReadString( tmp ) )
             {
@@ -446,7 +441,7 @@ bool WRLPROC::DiscardNode( void )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] " << m_error;
                 m_error = ostr.str();
 
@@ -461,7 +456,7 @@ bool WRLPROC::DiscardNode( void )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -475,6 +470,12 @@ bool WRLPROC::DiscardNode( void )
 
 bool WRLPROC::DiscardList( void )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( !EatSpace() )
     {
         std::ostringstream ostr;
@@ -486,22 +487,22 @@ bool WRLPROC::DiscardList( void )
         return false;
     }
 
-    if( '[' != m_buf[m_linepos] )
+    if( '[' != m_buf[m_bufpos] )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
-        ostr << " * [INFO] expecting character '[' at line " << m_linepos;
-        ostr << ", column " << m_linepos;
+        ostr << " * [INFO] expecting character '[' at line " << m_fileline;
+        ostr << ", column " << m_bufpos;
         m_error = ostr.str();
 
         return false;
     }
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
-    ++m_linepos;
+    ++m_bufpos;
     size_t lvl = 1;
     std::string tmp;
 
@@ -513,7 +514,7 @@ bool WRLPROC::DiscardList( void )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -521,23 +522,23 @@ bool WRLPROC::DiscardList( void )
         }
 
         // comments must be skipped
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
         {
-            m_linepos = 0;
+            m_bufpos = 0;
             m_buf.clear();
             continue;
         }
 
-        if( '[' == m_buf[m_linepos] )
+        if( '[' == m_buf[m_bufpos] )
         {
-            ++m_linepos;
+            ++m_bufpos;
             ++lvl;
             continue;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
         {
-            ++m_linepos;
+            ++m_bufpos;
             --lvl;
             continue;
         }
@@ -545,15 +546,15 @@ bool WRLPROC::DiscardList( void )
         // note: if we have a '}' we must skip it and test the next non-blank character;
         // this ensures that we don't miss a ']' in cases where the braces are not
         // separated by space. if we had proceeded to ReadGlob() we could have had a problem.
-        if( '}' == m_buf[m_linepos] || '{' == m_buf[m_linepos] )
+        if( '}' == m_buf[m_bufpos] || '{' == m_buf[m_bufpos] )
         {
-            ++m_linepos;
+            ++m_bufpos;
             continue;
         }
 
         // strings are handled as a special case since they may contain
         // control characters and braces
-        if( '"' == m_buf[m_linepos] )
+        if( '"' == m_buf[m_bufpos] )
         {
             if( !ReadString( tmp ) )
             {
@@ -561,7 +562,7 @@ bool WRLPROC::DiscardList( void )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] " << m_error;
                 m_error = ostr.str();
 
@@ -576,7 +577,7 @@ bool WRLPROC::DiscardList( void )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -594,6 +595,12 @@ bool WRLPROC::ReadString( std::string& aSFString )
     // In VRML2 all strings must be quoted
     aSFString.clear();
 
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     // remember the line number in case of errors
     size_t ifline = m_fileline;
 
@@ -609,13 +616,13 @@ bool WRLPROC::ReadString( std::string& aSFString )
         }
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
     }
 
-    if( VRML_V2 == m_fileVersion && '"' != m_buf[m_linepos] )
+    if( VRML_V2 == m_fileVersion && '"' != m_buf[m_bufpos] )
     {
         m_error = "invalid VRML2 file (string not quoted)";
         return false;
@@ -623,7 +630,7 @@ bool WRLPROC::ReadString( std::string& aSFString )
 
     ifline = m_fileline;
 
-    if( '"' != m_buf[m_linepos] )
+    if( '"' != m_buf[m_bufpos] )
     {
         if( !ReadGlob( aSFString ) )
         {
@@ -645,9 +652,9 @@ bool WRLPROC::ReadString( std::string& aSFString )
 
     while( true )
     {
-        ++m_linepos;
+        ++m_bufpos;
 
-        if( m_linepos >= m_buf.size() )
+        if( m_bufpos >= m_buf.size() )
         {
             aSFString.append( 1, '\n' );
 
@@ -663,7 +670,7 @@ bool WRLPROC::ReadString( std::string& aSFString )
             }
         }
 
-        if( '\\' == m_buf[m_linepos] )
+        if( '\\' == m_buf[m_bufpos] )
         {
             if( isesc )
             {
@@ -678,7 +685,7 @@ bool WRLPROC::ReadString( std::string& aSFString )
             continue;
         }
 
-        if( '"' ==  m_buf[m_linepos] )
+        if( '"' ==  m_buf[m_bufpos] )
         {
             if( isesc )
                 aSFString.append( 1, '"' );
@@ -690,7 +697,7 @@ bool WRLPROC::ReadString( std::string& aSFString )
         isesc = false;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     return true;
 }
@@ -702,7 +709,7 @@ bool WRLPROC::ReadSFBool( bool& aSFBool )
         return false;
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
     std::string tmp;
 
     if( !ReadGlob( tmp ) )
@@ -722,7 +729,7 @@ bool WRLPROC::ReadSFBool( bool& aSFBool )
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
         ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-        ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+        ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
         ostr << " * [INFO] expected one of 0, 1, TRUE, FALSE but got '" << tmp << "'\n";
         m_error = ostr.str();
 
@@ -735,8 +742,14 @@ bool WRLPROC::ReadSFBool( bool& aSFBool )
 
 bool WRLPROC::ReadSFColor( WRLVEC3F& aSFColor, bool* hasComma )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
     if( NULL != hasComma )
         *hasComma = false;
@@ -753,7 +766,7 @@ bool WRLPROC::ReadSFColor( WRLVEC3F& aSFColor, bool* hasComma )
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
         ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-        ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+        ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
         ostr << " * [INFO] invalid RGB value in color triplet";
         m_error = ostr.str();
 
@@ -769,13 +782,19 @@ bool WRLPROC::ReadSFColor( WRLVEC3F& aSFColor, bool* hasComma )
 
 bool WRLPROC::ReadSFFloat( float& aSFFloat, bool* hasComma )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( NULL != hasComma )
         *hasComma = false;
 
     aSFFloat = 0.0;
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
     while( true )
     {
@@ -783,7 +802,7 @@ bool WRLPROC::ReadSFFloat( float& aSFFloat, bool* hasComma )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -798,7 +817,7 @@ bool WRLPROC::ReadSFFloat( float& aSFFloat, bool* hasComma )
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
         ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-        ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+        ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
         ostr << " * [INFO] " << m_error;
         m_error = ostr.str();
 
@@ -818,7 +837,7 @@ bool WRLPROC::ReadSFFloat( float& aSFFloat, bool* hasComma )
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
         ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-        ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+        ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
         ostr << " * [INFO] invalid character in SFFloat";
         m_error = ostr.str();
 
@@ -834,13 +853,19 @@ bool WRLPROC::ReadSFFloat( float& aSFFloat, bool* hasComma )
 
 bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( NULL != hasComma )
         *hasComma = false;
 
     aSFInt32 = 0;
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
     while( true )
     {
@@ -848,7 +873,7 @@ bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -863,7 +888,7 @@ bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
         ostr << " * [INFO] line " << fileline<< ", char " << linepos << " -- ";
-        ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+        ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
         ostr << " * [INFO] " << m_error;
         m_error = ostr.str();
 
@@ -893,7 +918,7 @@ bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [INFO] failed on file '" << m_filename << "'\n";
         ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-        ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+        ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
         ostr << " * [INFO] invalid character in SFInt";
         m_error = ostr.str();
 
@@ -909,6 +934,12 @@ bool WRLPROC::ReadSFInt( int& aSFInt32, bool* hasComma )
 
 bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( NULL != hasComma )
         *hasComma = false;
 
@@ -918,7 +949,7 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
     aSFRotation.w = 0.0;
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
     while( true )
     {
@@ -926,7 +957,7 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -945,7 +976,7 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -958,7 +989,7 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in space delimited quartet";
             m_error = ostr.str();
 
@@ -978,7 +1009,7 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] invalid character in space delimited quartet";
             m_error = ostr.str();
 
@@ -1001,6 +1032,12 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma )
 
 bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( NULL != hasComma )
         *hasComma = false;
 
@@ -1008,7 +1045,7 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
     aSFVec2f.y = 0.0;
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
     while( true )
     {
@@ -1016,7 +1053,7 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -1035,7 +1072,7 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1048,7 +1085,7 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in space delimited pair";
             m_error = ostr.str();
 
@@ -1068,7 +1105,7 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] invalid character in space delimited pair";
             m_error = ostr.str();
 
@@ -1089,6 +1126,12 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma )
 
 bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma )
 {
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
+
     if( NULL != hasComma )
         *hasComma = false;
 
@@ -1097,7 +1140,7 @@ bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma )
     aSFVec3f.z = 0.0;
 
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
 
     while( true )
     {
@@ -1105,7 +1148,7 @@ bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -1124,7 +1167,7 @@ bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1155,7 +1198,7 @@ bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] invalid character in space delimited triplet";
             m_error = ostr.str();
 
@@ -1179,7 +1222,13 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
 {
     aMFString.clear();
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
+
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
 
     while( true )
     {
@@ -1187,7 +1236,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
@@ -1195,7 +1244,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
 
     std::string lstr;
 
-    if( m_buf[m_linepos] != '[' )
+    if( m_buf[m_bufpos] != '[' )
     {
         if( !ReadString( lstr ) )
         {
@@ -1203,33 +1252,33 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
             return false;
         }
 
-        if( m_linepos >= m_buf.size() && !EatSpace() )
+        if( m_bufpos >= m_buf.size() && !EatSpace() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ',' == m_buf[m_linepos] )
+        if( ',' == m_buf[m_bufpos] )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in undelimited list";
             m_error = ostr.str();
 
@@ -1240,7 +1289,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
         return true;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     while( true )
     {
@@ -1250,7 +1299,7 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1263,15 +1312,15 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ',' == m_buf[m_linepos] )
-            ++m_linepos;
+        if( ',' == m_buf[m_bufpos] )
+            ++m_bufpos;
 
         aMFString.push_back( lstr );
 
@@ -1281,19 +1330,19 @@ bool WRLPROC::ReadMFString( std::vector< std::string >& aMFString )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] problems encountered while reading list";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
     }
 
-    ++m_linepos;
+    ++m_bufpos;
     return true;
 }
 
@@ -1302,7 +1351,13 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
 {
     aMFColor.clear();
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
+
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
 
     WRLVEC3F lcolor;
     bool lcomma = false;
@@ -1313,13 +1368,13 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
     }
 
-    if( m_buf[m_linepos] != '[' )
+    if( m_buf[m_bufpos] != '[' )
     {
         if( !ReadSFColor( lcolor, &lcomma ) )
         {
@@ -1327,7 +1382,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1342,14 +1397,14 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] could not check characters after the string";
                 m_error = ostr.str();
 
                 return false;
             }
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1359,7 +1414,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in undelimited list";
             m_error = ostr.str();
 
@@ -1370,14 +1425,14 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
         return true;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     while( true )
     {
         if( !EatSpace() )
             return false;
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
         if( !ReadSFColor( lcolor, &lcomma ) )
@@ -1386,7 +1441,7 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1403,17 +1458,17 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] could not check characters after the string";
                 m_error = ostr.str();
 
                 return false;
             }
 
-            if( ']' == m_buf[m_linepos] )
+            if( ']' == m_buf[m_bufpos] )
                 break;
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1423,19 +1478,19 @@ bool WRLPROC::ReadMFColor( std::vector< WRLVEC3F >& aMFColor )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
     }
 
-    ++m_linepos;
+    ++m_bufpos;
     return true;
 }
 
@@ -1444,7 +1499,13 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
 {
     aMFFloat.clear();
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
+
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
 
     float temp;
     bool lcomma = false;
@@ -1455,13 +1516,13 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
     }
 
-    if( m_buf[m_linepos] != '[' )
+    if( m_buf[m_bufpos] != '[' )
     {
         if( !ReadSFFloat( temp, &lcomma ) )
         {
@@ -1469,7 +1530,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1484,14 +1545,14 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] could not check characters after the string";
                 m_error = ostr.str();
 
                 return false;
             }
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1501,7 +1562,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in undelimited list";
             m_error = ostr.str();
 
@@ -1512,14 +1573,14 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
         return true;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     while( true )
     {
         if( !EatSpace() )
             return false;
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
         if( !ReadSFFloat( temp, &lcomma ) )
@@ -1528,7 +1589,7 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1542,10 +1603,10 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
             if( !EatSpace() )
                 return false;
 
-            if( ']' == m_buf[m_linepos] )
+            if( ']' == m_buf[m_bufpos] )
                 break;
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1555,19 +1616,19 @@ bool WRLPROC::ReadMFFloat( std::vector< float >& aMFFloat )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
     }
 
-    ++m_linepos;
+    ++m_bufpos;
     return true;
 }
 
@@ -1576,7 +1637,13 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
 {
     aMFInt32.clear();
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
+
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
 
     int temp;
     bool lcomma = false;
@@ -1587,13 +1654,13 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
     }
 
-    if( m_buf[m_linepos] != '[' )
+    if( m_buf[m_bufpos] != '[' )
     {
         if( !ReadSFInt( temp, &lcomma ) )
         {
@@ -1601,7 +1668,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1616,14 +1683,14 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] could not check characters after the string";
                 m_error = ostr.str();
 
                 return false;
             }
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1633,7 +1700,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in undelimited list";
             m_error = ostr.str();
 
@@ -1644,14 +1711,14 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
         return true;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     while( true )
     {
         if( !EatSpace() )
             return false;
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
         if( !ReadSFInt( temp, &lcomma ) )
@@ -1660,7 +1727,7 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1674,10 +1741,10 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
             if( !EatSpace() )
                 return false;
 
-            if( ']' == m_buf[m_linepos] )
+            if( ']' == m_buf[m_bufpos] )
                 break;
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
             {
                 lcomma = true;
                 Pop();
@@ -1690,19 +1757,19 @@ bool WRLPROC::ReadMFInt( std::vector< int >& aMFInt32 )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
     }
 
-    ++m_linepos;
+    ++m_bufpos;
     return true;
 }
 
@@ -1711,7 +1778,13 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
 {
     aMFRotation.clear();
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
+
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
 
     WRLROTATION lrot;
     bool lcomma = false;
@@ -1722,13 +1795,13 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
     }
 
-    if( m_buf[m_linepos] != '[' )
+    if( m_buf[m_bufpos] != '[' )
     {
         if( !ReadSFRotation( lrot, &lcomma ) )
         {
@@ -1736,7 +1809,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1751,14 +1824,14 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] could not check characters after the string";
                 m_error = ostr.str();
 
                 return false;
             }
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1768,7 +1841,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in undelimited list";
             m_error = ostr.str();
 
@@ -1779,14 +1852,14 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
         return true;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     while( true )
     {
         if( !EatSpace() )
             return false;
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
         if( !ReadSFRotation( lrot, &lcomma ) )
@@ -1795,7 +1868,7 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1809,10 +1882,10 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
             if( !EatSpace() )
                 return false;
 
-            if( ']' == m_buf[m_linepos] )
+            if( ']' == m_buf[m_bufpos] )
                 break;
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1822,19 +1895,19 @@ bool WRLPROC::ReadMFRotation( std::vector< WRLROTATION >& aMFRotation )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
     }
 
-    ++m_linepos;
+    ++m_bufpos;
     return true;
 }
 
@@ -1843,7 +1916,13 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
 {
     aMFVec2f.clear();
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
+
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
 
     WRLVEC2F lvec2f;
     bool lcomma = false;
@@ -1854,13 +1933,13 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
     }
 
-    if( m_buf[m_linepos] != '[' )
+    if( m_buf[m_bufpos] != '[' )
     {
         if( !ReadSFVec2f( lvec2f, &lcomma ) )
         {
@@ -1868,7 +1947,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1883,14 +1962,14 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] could not check characters after the string";
                 m_error = ostr.str();
 
                 return false;
             }
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1900,7 +1979,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in undelimited list";
             m_error = ostr.str();
 
@@ -1911,14 +1990,14 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
         return true;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     while( true )
     {
         if( !EatSpace() )
             return false;
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
         if( !ReadSFVec2f( lvec2f, &lcomma ) )
@@ -1927,7 +2006,7 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -1941,10 +2020,10 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
             if( !EatSpace() )
                 return false;
 
-            if( ']' == m_buf[m_linepos] )
+            if( ']' == m_buf[m_bufpos] )
                 break;
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -1954,19 +2033,19 @@ bool WRLPROC::ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
     }
 
-    ++m_linepos;
+    ++m_bufpos;
     return true;
 }
 
@@ -1975,7 +2054,13 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
 {
     aMFVec3f.clear();
     size_t fileline = m_fileline;
-    size_t linepos = m_linepos;
+    size_t linepos = m_bufpos;
+
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return false;
+    }
 
     WRLVEC3F lvec3f;
     bool lcomma = false;
@@ -1986,13 +2071,13 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
             return false;
 
         // if the text is the start of a comment block, clear the buffer and loop
-        if( '#' == m_buf[m_linepos] )
+        if( '#' == m_buf[m_bufpos] )
             m_buf.clear();
         else
             break;
     }
 
-    if( m_buf[m_linepos] != '[' )
+    if( m_buf[m_bufpos] != '[' )
     {
         if( !ReadSFVec3f( lvec3f, &lcomma ) )
         {
@@ -2000,7 +2085,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -2015,14 +2100,14 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
                 ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
                 ostr << " * [INFO] failed on file '" << m_filename << "'\n";
                 ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-                ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+                ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
                 ostr << " * [INFO] could not check characters after the string";
                 m_error = ostr.str();
 
                 return false;
             }
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -2032,7 +2117,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] comma encountered in undelimited list";
             m_error = ostr.str();
 
@@ -2043,14 +2128,14 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
         return true;
     }
 
-    ++m_linepos;
+    ++m_bufpos;
 
     while( true )
     {
         if( !EatSpace() )
             return false;
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
         if( !ReadSFVec3f( lvec3f, &lcomma ) )
@@ -2059,7 +2144,7 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] " << m_error;
             m_error = ostr.str();
 
@@ -2073,10 +2158,10 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
             if( !EatSpace() )
                 return false;
 
-            if( ']' == m_buf[m_linepos] )
+            if( ']' == m_buf[m_bufpos] )
                 break;
 
-            if( ',' == m_buf[m_linepos] )
+            if( ',' == m_buf[m_bufpos] )
                 lcomma = true;
         }
 
@@ -2086,29 +2171,26 @@ bool WRLPROC::ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f )
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
             ostr << " * [INFO] failed on file '" << m_filename << "'\n";
             ostr << " * [INFO] line " << fileline << ", char " << linepos << " -- ";
-            ostr << "line " << m_fileline << ", char " << m_linepos << "\n";
+            ostr << "line " << m_fileline << ", char " << m_bufpos << "\n";
             ostr << " * [INFO] could not check characters after the string";
             m_error = ostr.str();
 
             return false;
         }
 
-        if( ']' == m_buf[m_linepos] )
+        if( ']' == m_buf[m_bufpos] )
             break;
 
     }
 
-    ++m_linepos;
+    ++m_bufpos;
     return true;
 }
 
 
 bool WRLPROC::eof( void )
 {
-    if( !m_file.is_open() )
-        return false;
-
-    return m_file.eof();
+    return m_eof;
 }
 
 
@@ -2120,7 +2202,7 @@ std::string WRLPROC::GetError( void )
 
 bool WRLPROC::GetFilePosData( size_t& line, size_t& column )
 {
-    if( !m_file.is_open() )
+    if( !m_file )
     {
         line = 0;
         column = 0;
@@ -2128,7 +2210,7 @@ bool WRLPROC::GetFilePosData( size_t& line, size_t& column )
     }
 
     line = m_fileline;
-    column = m_linepos;
+    column = m_bufpos;
 
     return true;
 }
@@ -2136,19 +2218,24 @@ bool WRLPROC::GetFilePosData( size_t& line, size_t& column )
 
 std::string WRLPROC::GetFileName( void )
 {
-    return m_filename;
+    if( !m_file )
+    {
+        m_error = "no open file";
+        return "";
+    }
+
+    return std::string( m_file->GetSource().ToUTF8() );
 }
 
 
 char WRLPROC::Peek( void )
 {
-    if( !m_file.is_open() )
+    if( !m_file )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
         ostr << " * [BUG] no open file";
         m_error = ostr.str();
-
         return '\0';
     }
 
@@ -2165,14 +2252,14 @@ char WRLPROC::Peek( void )
         return '\0';
     }
 
-    return m_buf[m_linepos];
+    return m_buf[m_bufpos];
 }
 
 
 void WRLPROC::Pop( void )
 {
-    if( m_linepos < m_buf.size() )
-        ++m_linepos;
+    if( m_bufpos < m_buf.size() )
+        ++m_bufpos;
 
     return;
 }
