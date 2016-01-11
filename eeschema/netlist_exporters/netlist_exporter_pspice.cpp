@@ -235,7 +235,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
             }
 
             //Get Standard Reference Designator:
-            wxString RefName = comp->GetRef( sheet );
+            wxString RefName = comp->GetRef( sheet->Last() );
 
             //Conditionally add Prefix only for devices that begin with U or IC:
             if( aUsePrefix )

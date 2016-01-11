@@ -426,11 +426,11 @@ if( KICAD_SCRIPTING_MODULES )
         pcad2kicadpcb
         lib_dxf
         idf3
-        ${GITHUB_PLUGIN_LIBRARIES}
         polygon
         bitmaps
         gal
         ${wxWidgets_LIBRARIES}
+        ${GITHUB_PLUGIN_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         ${PYTHON_LIBRARIES}
         ${PCBNEW_EXTRA_LIBS}
@@ -594,8 +594,8 @@ target_link_libraries( pcbnew_kiface
     gal
     lib_dxf
     idf3
-    ${GITHUB_PLUGIN_LIBRARIES}
     ${wxWidgets_LIBRARIES}
+    ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}      # must follow GITHUB

@@ -4,7 +4,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -380,12 +380,19 @@ private:
         return false;
     }
 
+    /**
+     * @return the reference of the KIWAY_PLAYER having the type aFrameType
+     * if exists, or NULL if this KIWAY_PLAYER was not yet created, or was closed
+     */
+    KIWAY_PLAYER* GetPlayerFrame( FRAME_T aFrameType );
+
     static KIFACE*  m_kiface[KIWAY_FACE_COUNT];
     static int      m_kiface_version[KIWAY_FACE_COUNT];
 
     PGM_BASE*       m_program;
     int             m_ctl;
-    wxFrame*        m_top;
+    wxFrame*        m_top;      // Usually m_top is the Project manager
+
 
     KIWAY_PLAYER*   m_player[KIWAY_PLAYER_COUNT];     // from frame_type.h
 

@@ -28,6 +28,7 @@
 #include <fctsys.h>
 #include <plot_common.h>
 #include <class_sch_screen.h>
+#include <sch_sheet.h>
 #include <schframe.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
@@ -77,7 +78,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
                 m_parent->SetCurrentSheet( list );
-                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+                m_parent->GetCurrentSheet().Last()->UpdateAllScreenReferences();
                 m_parent->SetSheetNumberAndCount();
                 screen = m_parent->GetCurrentSheet().LastScreen();
             }
@@ -154,7 +155,7 @@ void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
 
     // Restore the previous sheet
     m_parent->SetCurrentSheet( aOldsheetpath );
-    m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+    m_parent->GetCurrentSheet().Last()->UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
 }
 

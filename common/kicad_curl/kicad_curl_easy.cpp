@@ -30,134 +30,70 @@
 #include <sstream>
 #include <richio.h>
 
-static size_t write_callback (void *contents, size_t size, size_t nmemb, void *userp);
 
-
-KICAD_CURL_EASY::KICAD_CURL_EASY()
-    : m_headers( NULL )
+static size_t write_callback( void* contents, size_t size, size_t nmemb, void* userp )
 {
-    m_CURL = curl_easy_init();
+    size_t realsize = size * nmemb;
 
-    if( m_CURL == NULL )
+    std::string* p = (std::string*) userp;
+
+    p->append( (const char*) contents, realsize );
+
+    return realsize;
+}
+
+
+KICAD_CURL_EASY::KICAD_CURL_EASY() :
+    m_headers( NULL )
+{
+    // Call KICAD_CURL::Init() from in here everytime, but only the first time
+    // will incur any overhead.  This strategy ensures that libcurl is never loaded
+    // unless it is needed.
+
+    KICAD_CURL::Init();
+
+    // Do not catch exception from KICAD_CURL::Init() at this level.
+    // Instantiation of this instance will fail if Init() throws, thus ensuring
+    // that this instance cannot be subsequently used.
+    // Caller needs a try catch around KICAD_CURL_EASY instantiation.
+
+    m_CURL = KICAD_CURL::easy_init();
+
+    if( !m_CURL )
     {
         THROW_IO_ERROR( "Unable to initialize CURL session" );
     }
 
-    m_Buffer.Payload = (char*)malloc( 1 );
-    m_Buffer.Size = 0;
-
-    curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
-    curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void *)&m_Buffer );
+    KICAD_CURL::easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
+    KICAD_CURL::easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void*) &m_buffer );
 }
 
 
 KICAD_CURL_EASY::~KICAD_CURL_EASY()
 {
-    free(m_Buffer.Payload);
-    curl_easy_cleanup(m_CURL);
-}
+    if( m_headers )
+        KICAD_CURL::slist_free_all( m_headers );
 
-
-bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
-{
-    if( SetOption<const char *>( CURLOPT_URL, aURL.c_str() ) == CURLE_OK )
-    {
-        return true;
-    }
-    return false;
-}
-
-
-bool KICAD_CURL_EASY::SetUserAgent( const std::string& aAgent )
-{
-    if( SetOption<const char *>( CURLOPT_USERAGENT, aAgent.c_str() ) == CURLE_OK )
-    {
-        return true;
-    }
-    return false;
-}
-
-
-bool KICAD_CURL_EASY::SetFollowRedirects( bool aFollow )
-{
-    if( SetOption<long>( CURLOPT_FOLLOWLOCATION , (aFollow ? 1 : 0) ) == CURLE_OK )
-    {
-        return true;
-    }
-    return false;
-}
-
-
-void KICAD_CURL_EASY::SetHeader( const std::string& aName, const std::string& aValue )
-{
-    std::string header = aName + ':' + aValue;
-    m_headers = curl_slist_append( m_headers, header.c_str() );
-}
-
-
-std::string KICAD_CURL_EASY::GetErrorText(CURLcode code)
-{
-    return curl_easy_strerror(code);
-}
-
-
-static size_t write_callback( void *contents, size_t size, size_t nmemb, void *userp )
-{
-    /* calculate buffer size */
-    size_t realsize = size * nmemb;
-
-    /* cast pointer to fetch struct */
-    struct KICAD_EASY_CURL_BUFFER *p = ( struct KICAD_EASY_CURL_BUFFER * ) userp;
-
-    /* expand buffer */
-    p->Payload = (char *) realloc( p->Payload, p->Size + realsize + 1 );
-
-    /* check buffer */
-    if ( p->Payload == NULL )
-    {
-        wxLogError( wxT( "Failed to expand buffer in curl_callback" ) );
-
-        /* free buffer */
-        free( p->Payload );
-
-        return -1;
-    }
-
-    /* copy contents to buffer */
-    memcpy( &(p->Payload[p->Size]), contents, realsize );
-
-    /* set new buffer size */
-    p->Size += realsize;
-
-    /* ensure null termination */
-    p->Payload[p->Size] = 0;
-
-    /* return size */
-    return realsize;
+    KICAD_CURL::easy_cleanup( m_CURL );
 }
 
 
 void KICAD_CURL_EASY::Perform()
 {
-    if( m_headers != NULL )
+    if( m_headers )
     {
-        curl_easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
+        KICAD_CURL::easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
     }
 
-    if( m_Buffer.Size > 0 )
-    {
-        free( m_Buffer.Payload );
-        m_Buffer.Payload = (char*)malloc( 1 );
-        m_Buffer.Size = 0;
-    }
+    // bonus: retain worst case memory allocation, should re-use occur
+    m_buffer.clear();
 
-    CURLcode res = curl_easy_perform( m_CURL );
+    CURLcode res = KICAD_CURL::easy_perform( m_CURL );
+
     if( res != CURLE_OK )
     {
-        wxString msg = wxString::Format(
-            _( "CURL Request Failed: %s" ),
-            GetErrorText( res ) );
-
+        std::string msg = StrPrintf( "curl_easy_perform()=%d: %s",
+                            res, GetErrorText( res ).c_str() );
         THROW_IO_ERROR( msg );
     }
 }

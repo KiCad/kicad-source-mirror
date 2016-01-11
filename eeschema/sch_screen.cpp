@@ -1116,7 +1116,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
 
         component = (SCH_COMPONENT*) item;
 
-        if( aReference.CmpNoCase( component->GetRef( aSheetPath ) ) == 0 )
+        if( aReference.CmpNoCase( component->GetRef( aSheetPath->Last() ) ) == 0 )
         {
             // Found: Init Footprint Field
 

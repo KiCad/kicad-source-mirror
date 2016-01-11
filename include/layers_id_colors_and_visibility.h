@@ -54,9 +54,6 @@ typedef int     LAYER_NUM;
  * One of these cannot be "incremented".
  */
 enum LAYER_ID
-#if __cplusplus >= 201103L
-    : unsigned char
-#endif
 {
     F_Cu,           // 0
     In1_Cu,
@@ -116,12 +113,12 @@ enum LAYER_ID
     B_Fab,
     F_Fab,
 
-    LAYER_ID_COUNT
+    LAYER_ID_COUNT,
+
+    UNDEFINED_LAYER = -1,
+    UNSELECTED_LAYER = -2,
 };
 
-
-#define UNDEFINED_LAYER     LAYER_ID(-1)
-#define UNSELECTED_LAYER    LAYER_ID(-2)
 
 #define MAX_CU_LAYERS       (B_Cu - F_Cu + 1)
 

@@ -727,7 +727,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     }
 #endif
 
-    m_FieldsBuf[REFERENCE].SetText( m_cmp->GetRef( &m_parent->GetCurrentSheet() ) );
+    m_FieldsBuf[REFERENCE].SetText( m_cmp->GetRef( m_parent->GetCurrentSheet().Last() ) );
 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {

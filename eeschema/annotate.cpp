@@ -50,7 +50,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
     }
 
     // Update the references for the sheet that is currently being displayed.
-    m_CurrentSheet->UpdateAllScreenReferences();
+    m_CurrentSheet->Last()->UpdateAllScreenReferences();
     GetCanvas()->Refresh();
     OnModify();
 }
@@ -176,7 +176,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     OnModify();
 
     // Update on screen references, that can be modified by previous calculations:
-    m_CurrentSheet->UpdateAllScreenReferences();
+    m_CurrentSheet->Last()->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
     m_canvas->Refresh( true );

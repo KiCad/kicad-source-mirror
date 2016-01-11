@@ -27,7 +27,7 @@
 /*
  * KICAD_CURL_EASY.h must included before wxWidgets because on Windows,
  * wxWidgets ends up including windows.h before winsocks2.h inside curl
- * this causes build warnings 
+ * this causes build warnings
  * Because we are before wx, we must explicitly define we are building with unicode
  * wxWidgets defaults to supporting unicode now, so this should be safe.
  */
@@ -42,19 +42,9 @@
 #endif
 
 
-#include <curl/curl.h>
 #include <string>
-
-/**
- * Struct KICAD_EASY_CURL_BUFFER
- * is a struct used for storing the libcurl received data in its callbacks.
- * Do not use directly, KICAD_CURL_EASY uses it.
- */
-struct KICAD_EASY_CURL_BUFFER
-{
-    char* Payload;
-    size_t Size;
-};
+#include <curl/curl.h>
+#include <kicad_curl/kicad_curl.h>
 
 
 /**
@@ -67,9 +57,10 @@ struct KICAD_EASY_CURL_BUFFER
  * Here is a small example usage:
  * @code
  *   KICAD_CURL_EASY curl;
- *   curl.SetURL("http://github.com");
- *   curl.SetUserAgent("KiCad-EDA");
- *   curl.SetHeader("Accept", "application/json");
+ *
+ *   curl.SetURL( "http://github.com" );
+ *   curl.SetUserAgent( <http-client-indentifier> );
+ *   curl.SetHeader( "Accept", "application/json" );
  *   curl.Perform();
  * @endcode
  */
@@ -95,7 +86,11 @@ public:
      * @param aName is the left hand side of the header, i.e. Accept without the colon
      * @param aValue is the right hand side of the header, i.e. application/json
      */
-    void SetHeader( const std::string& aName, const std::string& aValue );
+    void SetHeader( const std::string& aName, const std::string& aValue )
+    {
+        std::string header = aName + ':' + aValue;
+        m_headers = KICAD_CURL::slist_append( m_headers, header.c_str() );
+    }
 
     /**
      * Function SetUserAgent
@@ -104,7 +99,14 @@ public:
      * @param aAgent is the string to set for the user agent
      * @return bool - True if successful, false if not
      */
-    bool SetUserAgent( const std::string& aAgent );
+    bool SetUserAgent( const std::string& aAgent )
+    {
+        if( SetOption<const char*>( CURLOPT_USERAGENT, aAgent.c_str() ) == CURLE_OK )
+        {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Function SetURL
@@ -113,7 +115,14 @@ public:
      * @param aURL is the URL
      * @return bool - True if successful, false if not
      */
-    bool SetURL( const std::string& aURL );
+    bool SetURL( const std::string& aURL )
+    {
+        if( SetOption<const char *>( CURLOPT_URL, aURL.c_str() ) == CURLE_OK )
+        {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Function SetFollowRedirects
@@ -123,16 +132,26 @@ public:
      * @param aFollow is a boolean where true will enable following redirects
      * @return bool - True if successful, false if not
      */
-    bool SetFollowRedirects( bool aFollow );
+    bool SetFollowRedirects( bool aFollow )
+    {
+        if( SetOption<long>( CURLOPT_FOLLOWLOCATION , (aFollow ? 1 : 0) ) == CURLE_OK )
+        {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Function GetErrorText
      * fetches CURL's "friendly" error string for a given error code
      *
      * @param aCode is CURL error code
-     * @return std::string - the corresponding error string for the given code
+     * @return const std::string - the corresponding error string for the given code
      */
-    std::string GetErrorText( CURLcode aCode );
+    const std::string GetErrorText( CURLcode aCode )
+    {
+        return KICAD_CURL::easy_strerror( aCode );
+    }
 
     /**
      * Function SetOption
@@ -143,24 +162,23 @@ public:
      * @return CURLcode - CURL error code, will return CURLE_OK unless a problem was encountered
      */
     template <typename T> CURLcode SetOption( CURLoption aOption, T aArg )
-    { 
-        return curl_easy_setopt( m_CURL, aOption, aArg ); 
+    {
+        return KICAD_CURL::easy_setopt( m_CURL, aOption, aArg );
     }
 
     /**
      * Function GetBuffer
-     * returns a const pointer to the data buffer
-     *
-     * @return KICAD_EASY_CURL_BUFFER* - pointer to buffer
+     * returns a const reference to the recevied data buffer
      */
-    const KICAD_EASY_CURL_BUFFER* GetBuffer()
+    const std::string& GetBuffer()
     {
-        return &m_Buffer;
+        return m_buffer;
     }
+
 private:
-    CURL *m_CURL;
-    struct curl_slist *m_headers;
-    struct KICAD_EASY_CURL_BUFFER m_Buffer;
+    CURL*           m_CURL;
+    curl_slist*     m_headers;
+    std::string     m_buffer;
 };
 
 #endif // KICAD_CURL_EASY_H_

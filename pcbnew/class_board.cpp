@@ -10,7 +10,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2259,13 +2259,14 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
 
 
 void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
-                            REPORTER* aReporter )
+                            std::vector<MODULE*>* aNewFootprints, REPORTER* aReporter )
 {
     unsigned       i;
     wxPoint        bestPosition;
     wxString       msg;
     D_PAD*         pad;
     MODULE*        footprint;
+    std::vector<MODULE*> newFootprints;
 
     if( !IsEmpty() )
     {
@@ -2340,6 +2341,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 footprint->SetParent( this );
                 footprint->SetPosition( bestPosition );
                 footprint->SetTimeStamp( GetNewTimeStamp() );
+                newFootprints.push_back( footprint );
                 Add( footprint, ADD_APPEND );
             }
         }
@@ -2666,6 +2668,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             }
         }
     }
+
+    std::swap( newFootprints, *aNewFootprints );
 }
 
 

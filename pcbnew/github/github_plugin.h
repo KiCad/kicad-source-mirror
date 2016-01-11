@@ -210,7 +210,7 @@ protected:
      * @param  aZipURL is where to put the zip file URL.
      * @return bool - true if @a aRepoULR was parseable, else false
      */
-    static bool repoURL_zipURL( const wxString& aRepoURL, std::string& aZipURL );
+    static bool repoURL_zipURL( const wxString& aRepoURL, std::string* aZipURL );
 
     /**
      * Function remoteGetZip

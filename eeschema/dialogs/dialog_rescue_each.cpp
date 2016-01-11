@@ -34,6 +34,8 @@
 #include <boost/foreach.hpp>
 #include <project_rescue.h>
 #include <eeschema_config.h>
+#include <sch_sheet_path.h>
+
 
 class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
 {
@@ -156,7 +158,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
         SCH_FIELD* valueField = each_component->GetField( 1 );
 
         data.clear();
-        data.push_back( each_component->GetRef( & m_Parent->GetCurrentSheet() ) );
+        data.push_back( each_component->GetRef( m_Parent->GetCurrentSheet().Last() ) );
         data.push_back( valueField ? valueField->GetText() : wxT( "" ) );
         m_ListOfInstances->AppendItem( data );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,6 +16,7 @@ class UNIT_SELECTOR_ANGLE;
 class UNIT_SELECTOR_FREQUENCY;
 class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_RESISTOR;
+class UNIT_SELECTOR_THICKNESS;
 
 #include "kiway_player.h"
 #include <wx/string.h>
@@ -110,7 +111,10 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		UNIT_SELECTOR_LEN* m_TW_ExtTrackWidth_choiceUnit;
 		wxStaticText* m_staticText65;
 		wxTextCtrl* m_ExtTrackThicknessValue;
-		UNIT_SELECTOR_LEN* m_ExtTrackThicknessUnit;
+		UNIT_SELECTOR_THICKNESS* m_ExtTrackThicknessUnit;
+		wxStaticLine* m_staticline3;
+		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticTextArea;
 		wxStaticText* m_ExtTrackAreaValue;
 		wxStaticText* m_ExtTrackAreaUnitLabel;
@@ -128,7 +132,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		UNIT_SELECTOR_LEN* m_TW_IntTrackWidth_choiceUnit;
 		wxStaticText* m_staticText652;
 		wxTextCtrl* m_IntTrackThicknessValue;
-		UNIT_SELECTOR_LEN* m_IntTrackThicknessUnit;
+		UNIT_SELECTOR_THICKNESS* m_IntTrackThicknessUnit;
 		wxStaticText* m_staticTextArea1;
 		wxStaticText* m_IntTrackAreaValue;
 		wxStaticText* m_IntTrackAreaUnitLabel;

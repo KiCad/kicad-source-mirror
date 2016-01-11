@@ -1332,6 +1332,24 @@ void SCH_SHEET::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
 }
 
 
+void SCH_SHEET::UpdateAllScreenReferences()
+{
+    EDA_ITEM* t = m_screen->GetDrawItems();
+
+    while( t )
+    {
+        if( t->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) t;
+            component->GetField( REFERENCE )->SetText( component->GetRef( this ) );
+            component->UpdateUnit( component->GetUnitSelection( this ) );
+        }
+
+        t = t->Next();
+    }
+}
+
+
 SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
     wxLogDebug( wxT( "Sheet assignment operator." ) );

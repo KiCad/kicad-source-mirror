@@ -768,7 +768,7 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
     if( aItem->Type() == SCH_FIELD_T && aItem->GetParent()->Type() == SCH_COMPONENT_T )
     {
         // Now that we're moving a field, they're no longer autoplaced.
-        SCH_COMPONENT *parent = dynamic_cast<SCH_COMPONENT*>( aItem->GetParent() );
+        SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( aItem->GetParent() );
         parent->ClearFieldsAutoplaced();
     }
 
@@ -834,7 +834,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     {
     case SCH_COMPONENT_T:
         {
-            SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
             if( aEvent.GetId() == ID_SCH_ROTATE_CLOCKWISE )
                 OrientComponent( CMP_ROTATE_CLOCKWISE );
             else if( aEvent.GetId() == ID_SCH_ROTATE_COUNTERCLOCKWISE )
@@ -864,7 +864,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         if( item->GetParent()->Type() == SCH_COMPONENT_T )
         {
             // Now that we're moving a field, they're no longer autoplaced.
-            SCH_COMPONENT *parent = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
+            SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
             parent->ClearFieldsAutoplaced();
         }
         break;
@@ -1148,7 +1148,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     {
     case SCH_COMPONENT_T:
         {
-            SCH_COMPONENT *component = dynamic_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT *component = static_cast<SCH_COMPONENT*>( item );
             if( aEvent.GetId() == ID_SCH_MIRROR_X )
                 OrientComponent( CMP_MIRROR_X );
             else if( aEvent.GetId() == ID_SCH_MIRROR_Y )

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 #define UNIT_MICRON 1e-6        // um to meter
 #define UNIT_INCH (1e-2*2.54)   // inch to meter
 #define UNIT_MIL (1e-5*2.54)    // mil (or thou) to meter
+#define UNIT_OZSQFT (34.40*UNIT_MICRON) // 1 oz/ft^2 is 34.30 microns nominal, 30.90 minimum
 
 #define UNIT_GHZ 1e9
 #define UNIT_MHZ 1e6

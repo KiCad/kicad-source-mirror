@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,24 +38,33 @@
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
 #include <wx/button.h>
-#include <wx/listctrl.h>
+#include <wx/treelist.h>
 #include <wx/dialog.h>
 #include <wx/grid.h>
+
+#include <vector>
+#include <utility>
 
 #include <hotkeys_basic.h>
 #include <draw_frame.h>
 #include <../common/dialogs/dialog_hotkeys_editor_base.h>
 
+typedef std::pair<wxString, struct EDA_HOTKEY_CONFIG*> HOTKEYS_SECTION;
+typedef std::vector<HOTKEYS_SECTION> HOTKEYS_SECTIONS;
+
+typedef std::vector<EDA_HOTKEY> HOTKEY_LIST;
+
 class HOTKEYS_EDITOR_DIALOG;
+class DIALOG_HOTKEY_CLIENT_DATA;
 
 /**
  * Class HOTKEY_LIST_CTRL
  * is a class to contain the contents of a hotkey editor tab page.
  */
-class HOTKEY_LIST_CTRL : public wxListCtrl
+class HOTKEY_LIST_CTRL : public wxTreeListCtrl
 {
 public:
-    HOTKEY_LIST_CTRL( wxWindow* aParent, struct EDA_HOTKEY_CONFIG* aSection );
+    HOTKEY_LIST_CTRL( wxWindow* aParent, const HOTKEYS_SECTIONS& aSections );
     ~HOTKEY_LIST_CTRL() {};
 
     /**
@@ -67,35 +76,83 @@ public:
     void DeselectRow( int aRow );
 
     /**
-     * Function GetHotkeys
-     * Access to return the vector used for the list control data. This will contain the
-     * "live" state of the user's configuration.
-     *
-     * @return Pointer to vector of hotkey settings
+     * Function TransferDataToControl
+     * Load the hotkey data into the control.
+     * @return true iff the operation was successful
      */
-    std::vector< EDA_HOTKEY* >& GetHotkeys() { return m_hotkeys; }
+    bool TransferDataToControl();
 
     /**
-     * Function RestoreFrom
-     * Restores list control hotkey keycodes to the keycodes present in the
-     * given hotkey configuration array.
+     * Function TransferDataFromControl
+     * Save the hotkey data from the control.
+     * @return true iff the operation was successful
+     */
+    bool TransferDataFromControl();
+
+    /**
+     * Function ResolveKeyConflicts
+     * Check if we can set a hotkey, this will prompt the user if there
+     * is a conflict between keys. The key code should have already been
+     * checked that it's not for the same entry as its currently in or else
+     * it'll prompt the change on itself.
+     * The function will do conflict detection depending on aSectionTag.
+     * g_CommonSectionTag means the key code must be checked with all sections.
+     * While other tags means the key code only must be checked with the aSectionTag
+     * section and g_CommonSectionTag section.
+     *
+     * @param aKey is the key code that wants to be set
+     * @param aSectionTag is the section tag that the key code came from
+     *
+     * @return True if the user accepted the overwrite or no conflict existed
+     */
+    bool ResolveKeyConflicts( long aKey, const wxString& aSectionTag );
+
+
+    /**
+     * Function CheckKeyConflicts
+     * Check whether the given key conflicts with anything in this HOTKEY_LIST_CTRL.
+     *
+     * @param aKey - key to check
+     * @param aSectionTag - section tag of the key
+     * @param aConfKey - if not NULL, outparam holding the key this one conflicts with
+     * @param aConfSect - if not NULL, outparam holding the section this one conflicts with
+     */
+    bool CheckKeyConflicts( long aKey, const wxString& aSectionTag,
+            EDA_HOTKEY** aConfKey, EDA_HOTKEY_CONFIG** aConfSect );
+
+    /**
+     * Function UpdateFromClientData
+     * Update all visible items from the data stored in their client data objects.
+     */
+    void UpdateFromClientData();
+
+private:
+    HOTKEYS_SECTIONS m_sections;
+    std::vector< HOTKEY_LIST > m_hotkeys;
+    std::vector< wxTreeListItem > m_items;
+
+    /**
+     * Function GetSelHKClientData
+     * Return the DIALOG_HOTKEY_CLIENT_DATA for the item being edited, or NULL if none is selected.
+     */
+    DIALOG_HOTKEY_CLIENT_DATA* GetSelHKClientData();
+
+    /**
+     * Function GetHKClientData
+     * Return the DIALOG_HOTKEY_CLIENT_DATA for the given item, or NULL if invalid.
+     */
+    DIALOG_HOTKEY_CLIENT_DATA* GetHKClientData( wxTreeListItem aItem );
+
+protected:
+    /**
+     * Function LoadSection
+     * Generates a HOTKEY_LIST from the given hotkey configuration array and
+     * pushes it to m_hotkeys.
      *
      * @param aSection is a pointer to the hotkey configuration array
      */
-    void RestoreFrom( struct EDA_HOTKEY_CONFIG* aSection );
+    void LoadSection( struct EDA_HOTKEY_CONFIG* aSection );
 
-private:
-    int m_curEditingRow;
-    wxString* m_sectionTag;
-    std::vector< EDA_HOTKEY* > m_hotkeys;
-
-    /**
-     * Function recalculateColumns
-     * Adjusts the width of grid columns in proportion of the max text length of both
-     */
-    void recalculateColumns();
-
-protected:
     /**
      * Function OnGetItemText
      * Returns the requested row, column data to the list control.
@@ -114,81 +171,8 @@ protected:
      * @param aEvent is the key press event, the keycode is retrieved from it
      */
     void OnChar( wxKeyEvent& aEvent );
-
-    /**
-     * Function OnListItemSelected
-     * Item selection handler which is used to record what index is selected to alter
-     * update with the key press
-     *
-     * @param aEvent is the button press event, unused
-     */
-    void OnListItemSelected( wxListEvent& aEvent );
-
-    /**
-     * Function OnSize
-     * Sizing update handler to recompute the column widths dynamically and maximize them.
-     * Due to wxWidget's broken autosizing support (it's completely inconsistent across
-     * platforms), we just do it based on a scale of
-     *
-     * @param aEvent is the button press event, unused
-     */
-    void OnSize( wxSizeEvent& aEvent );
 };
 
-/**
- * Class HOTKEY_SECTION_PAGE
- * is a class to contain the contents of a hotkey editor tab page.
- */
-class HOTKEY_SECTION_PAGE : public wxPanel
-{
-public:
-private:
-    EDA_HOTKEY_CONFIG*  m_hotkeySection;
-    HOTKEY_LIST_CTRL *m_hotkeyList;
-    HOTKEYS_EDITOR_DIALOG* m_dialog;
-
-public:
-    /** Constructor to create a setup page for one netlist format.
-     * Used in Netlist format Dialog box creation
-     * @param parent = wxNotebook * parent
-     * @param title = title (name) of the notebook page
-     * @param id_NetType = netlist type id
-     */
-    HOTKEY_SECTION_PAGE( HOTKEYS_EDITOR_DIALOG* aDialog, wxNotebook* aParent,
-                         const wxString& aTitle,
-                         EDA_HOTKEY_CONFIG* aSection );
-    ~HOTKEY_SECTION_PAGE() {};
-
-    /**
-     * Function Restore
-     * Resets the hotkeys back to their original unedited state
-     */
-    void Restore();
-
-    /**
-     * Function GetHotkeys
-     * Accessor to retrieve hotkeys list from list control
-     *
-     * @return Pointer to vector used for list control data
-     */
-    std::vector< EDA_HOTKEY* >& GetHotkeys() { return m_hotkeyList->GetHotkeys(); }
-
-    /**
-     * Function GetHotkeySection
-     * Accessor to retrieve hotkey configuration array assigned to a tab control page
-     *
-     * @return Pointer to hotkey configuration array
-     */
-    EDA_HOTKEY_CONFIG* GetHotkeySection() { return m_hotkeySection; }
-
-    /**
-     * Function GetDialog
-     * Returns pointer to parent dialog window
-     *
-     * @return Pointer to parent dialog window
-     */
-    HOTKEYS_EDITOR_DIALOG* GetDialog() { return m_dialog; }
-};
 
 /**
  * Class HOTKEYS_EDITOR_DIALOG
@@ -201,47 +185,25 @@ protected:
     EDA_BASE_FRAME* m_parent;
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
 
-    std::vector<HOTKEY_SECTION_PAGE*> m_hotkeySectionPages;
+    HOTKEY_LIST_CTRL* m_hotkeyListCtrl;
+
+    bool TransferDataToWindow();
+    bool TransferDataFromWindow();
 
 public:
     HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );
 
     ~HOTKEYS_EDITOR_DIALOG() {};
 
-    /**
-     * Function CanSetKey
-     * Check if we can set a hotkey, this will prompt the user if there
-     * is a conflict between keys. The key code should have already been
-     * checked that it's not for the same entry as its currently in or else
-     * it'll prompt the change on itself.
-     * The function will do conflict detection depending on aSectionTag.
-     * g_CommonSectionTag means the key code must be checked with all sections.
-     * While other tags means the key code only must be checked with the aSectionTag
-     * section and g_CommonSectionTag section.
-     *
-     * @param aKey is the key code that wants to be set
-     * @param aSectionTag is the section tag that the key code came from
-     *
-     * @return True if the user accepted the overwrite or no conflict existed
-     */
-    bool CanSetKey( long aKey, const wxString* aSectionTag );
-
 private:
-    /**
-     * Function OnOKClicked
-     * Close the dialog and make save all changes to hotkeys
-     *
-     * @param aEvent is the button press event, unused
-     */
-    void OnOKClicked( wxCommandEvent& aEvent );
 
     /**
-     * Function UndoClicked
+     * Function ResetClicked
      * Reinit the hotkeys to the initial state (removes all pending changes)
      *
      * @param aEvent is the button press event, unused
      */
-    void UndoClicked( wxCommandEvent& aEvent );
+    void ResetClicked( wxCommandEvent& aEvent );
 };
 
 /**

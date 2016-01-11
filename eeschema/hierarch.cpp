@@ -285,7 +285,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     // update the References
-    m_CurrentSheet->UpdateAllScreenReferences();
+    m_CurrentSheet->Last()->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
     m_canvas->SetCanStartBlock( -1 );
 

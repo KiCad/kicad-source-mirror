@@ -61,10 +61,9 @@ Access-Control-Expose-Headers: ETag, Link, X-RateLimit-Limit, X-RateLimit-Remain
 Access-Control-Allow-Origin: *
 X-GitHub-Request-Id: 411087C2:659E:50FD6E6:52E67F66
 Vary: Accept-Encoding
-
 */
-#include <kicad_curl/kicad_curl_easy.h> /* Include before any wx file */
 
+#include <kicad_curl/kicad_curl_easy.h>     // Include before any wx file
 #include <sstream>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <set>
@@ -122,7 +121,7 @@ GITHUB_PLUGIN::~GITHUB_PLUGIN()
 
 const wxString GITHUB_PLUGIN::PluginName() const
 {
-    return wxT( "Github" );
+    return "Github";
 }
 
 
@@ -391,7 +390,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 
                 if( !wx_pretty_fn.IsOk() ||
                     !wx_pretty_fn.IsDirWritable() ||
-                    wx_pretty_fn.GetExt() != wxT( "pretty" )
+                    wx_pretty_fn.GetExt() != "pretty"
                   )
                 {
                     wxString msg = wxString::Format(
@@ -408,7 +407,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
         }
 
         // operator==( wxString, wxChar* ) does not exist, construct wxString once here.
-        const wxString    kicad_mod( wxT( "kicad_mod" ) );
+        const wxString    kicad_mod( "kicad_mod" );
 
         //D(printf("%s: this:%p  m_lib_path:'%s'  aLibraryPath:'%s'\n", __func__, this, TO_UTF8( m_lib_path), TO_UTF8(aLibraryPath) );)
         m_gh_cache = new GH_CACHE();
@@ -443,7 +442,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 }
 
 
-bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string& aZipURL )
+bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string* aZipURL )
 {
     // e.g. "https://github.com/liftoff-sr/pretty_footprints"
     //D(printf("aRepoURL:%s\n", TO_UTF8( aRepoURL ) );)
@@ -509,7 +508,7 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string& aZipU
             // this code path with the needs of one particular inflexible server.
         }
 
-        aZipURL = zip_url.utf8_str();
+        *aZipURL = zip_url.utf8_str();
         return true;
     }
     return false;
@@ -520,7 +519,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
 {
     std::string  zip_url;
 
-    if( !repoURL_zipURL( aRepoURL, zip_url ) )
+    if( !repoURL_zipURL( aRepoURL, &zip_url ) )
     {
         wxString msg = wxString::Format( _( "Unable to parse URL:\n'%s'" ), GetChars( aRepoURL ) );
         THROW_IO_ERROR( msg );
@@ -528,27 +527,30 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
 
     wxLogDebug( wxT( "Attempting to download: " ) + zip_url );
 
-    KICAD_CURL_EASY kcurl;
+    KICAD_CURL_EASY kcurl;      // this can THROW_IO_ERROR
 
-    kcurl.SetURL(zip_url.c_str());
-    kcurl.SetUserAgent("KiCad-EDA");
-    kcurl.SetHeader("Accept", "application/zip");
-    kcurl.SetFollowRedirects(true);
+    kcurl.SetURL( zip_url.c_str() );
+    kcurl.SetUserAgent( "http://kicad-pcb.org" );
+    kcurl.SetHeader( "Accept", "application/zip" );
+    kcurl.SetFollowRedirects( true );
 
     try
     {
         kcurl.Perform();
-        m_zip_image.reserve( kcurl.GetBuffer()->Size );
-        m_zip_image.assign( kcurl.GetBuffer()->Payload, kcurl.GetBuffer()->Size );
+        m_zip_image = kcurl.GetBuffer();
     }
     catch( const IO_ERROR& ioe )
     {
+        // https "GET" has faild, report this to API caller.
+        static const char errorcmd[] = "http GET command failed";  // Do not translate this message
+
         UTF8 fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
 
         std::string msg = StrPrintf( fmt.c_str(),
                                      zip_url.c_str(),
                                      TO_UTF8( aRepoURL ),
-                                     TO_UTF8( ioe.errorText ) );
+                                     TO_UTF8( ioe.errorText )
+                                     );
 
         THROW_IO_ERROR( msg );
     }
@@ -575,7 +577,7 @@ int main( int argc, char** argv )
     try
     {
         wxArrayString fps = gh.FootprintEnumerate(
-                wxT( "https://github.com/liftoff-sr/pretty_footprints" ),
+                "https://github.com/liftoff-sr/pretty_footprints",
                 NULL
                 );
 

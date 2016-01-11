@@ -7,7 +7,7 @@
  * Copyright (C) 1992-2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     NETLIST         netlist;
     KIGFX::VIEW*    view = GetGalCanvas()->GetView();
     BOARD*          board = GetBoard();
+    std::vector<MODULE*> newFootprints;
 
     netlist.SetIsDryRun( aIsDryRun );
     netlist.SetFindByTimeStamp( aSelectByTimeStamp );
@@ -113,11 +114,23 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     netlist.SortByReference();
-    board->ReplaceNetlist( netlist, aDeleteSinglePadNets, aReporter );
+    board->ReplaceNetlist( netlist, aDeleteSinglePadNets, &newFootprints, aReporter );
+   
 
     // If it was a dry run, nothing has changed so we're done.
     if( netlist.IsDryRun() )
         return;
+
+    if( IsGalCanvasActive() )
+    {
+        SpreadFootprints( &newFootprints, false, false );
+
+        BOOST_FOREACH( MODULE* footprint, newFootprints )
+        {
+            m_toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
+        }
+        m_toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
+    }
 
     OnModify();
 

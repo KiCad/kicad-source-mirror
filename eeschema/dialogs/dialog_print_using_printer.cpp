@@ -327,7 +327,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
     {
         m_parent->SetCurrentSheet( list );
-        m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+        m_parent->GetCurrentSheet().Last()->UpdateAllScreenReferences();
         m_parent->SetSheetNumberAndCount();
         screen = m_parent->GetCurrentSheet().LastScreen();
     }
@@ -341,7 +341,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
 
     DrawPage( screen );
     m_parent->SetCurrentSheet( oldsheetpath );
-    m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+    m_parent->GetCurrentSheet().Last()->UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
 
     return true;

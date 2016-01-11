@@ -7,8 +7,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -701,7 +701,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent
 
     m_RootCmp   = aComponent;
     m_Entry     = aLibComponent;
-    m_Unit      = aComponent->GetUnitSelection( &aSheetPath );
+    m_Unit      = aComponent->GetUnitSelection( aSheetPath.Last() );
     m_SheetPath = aSheetPath;
     m_IsNew     = false;
     m_Flag      = 0;
@@ -709,10 +709,10 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent
     m_CmpPos    = aComponent->GetPosition();
     m_SheetNum  = 0;
 
-    if( aComponent->GetRef( &aSheetPath ).IsEmpty() )
+    if( aComponent->GetRef( aSheetPath.Last() ).IsEmpty() )
         aComponent->SetRef( aSheetPath.Last(), wxT( "DefRef?" ) );
 
-    SetRef( aComponent->GetRef( &aSheetPath ) );
+    SetRef( aComponent->GetRef( aSheetPath.Last() ) );
 
     m_NumRef = -1;
 

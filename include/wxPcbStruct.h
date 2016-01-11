@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1587,12 +1587,17 @@ public:
      * Function SpreadFootprints
      * Footprints (after loaded by reading a netlist for instance) are moved
      * to be in a small free area (outside the current board) without overlapping.
-     * @param aFootprintsOutsideBoardOnly: true to move only
-     * footprints outside the board outlines
-     * (they are outside if the position of a footprint is outside
-     * the board outlines bounding box
+     * @param aFootprints: a list of footprints to be spread out.
+     * @param aMoveFootprintsOutsideBoardOnly: true to move only
+     *        footprints outside the board outlines
+     *        (they are outside if the position of a footprint is outside
+     *        the board outlines bounding box).
+     * @param aCheckForBoardEdges: true to try to place footprints outside of
+     *        board edges.
      */
-    void SpreadFootprints( bool aFootprintsOutsideBoardOnly );
+    void SpreadFootprints( std::vector<MODULE*>* aFootprints,
+                           bool                  aMoveFootprintsOutsideBoardOnly,
+                           bool                  aCheckForBoardEdges );
 
     /**
      * Function AutoPlaceModule

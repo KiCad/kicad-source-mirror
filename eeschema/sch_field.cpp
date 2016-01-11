@@ -402,7 +402,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
         wxCHECK_MSG( component != NULL, false,
                      wxT( "No component associated with field" ) + text );
 
-        text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
+        text = component->GetRef( ((SCH_SHEET_PATH*) aAuxData)->Last() );
 
         if( component->GetUnitCount() > 1 )
             text << LIB_PART::SubReference( component->GetUnit() );
@@ -440,7 +440,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         wxCHECK_MSG( component != NULL, false,
                      wxT( "No component associated with field" ) + text );
 
-        text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
+        text = component->GetRef( ((SCH_SHEET_PATH*) aAuxData)->Last() );
 
         // if( component->GetUnitCount() > 1 )
         //     text << LIB_PART::SubReference( component->GetUnit() );

@@ -41,7 +41,7 @@
  *  JP Charras.
  */
 
-#include <kicad_curl/kicad_curl_easy.h> /* Include before any wx file */
+#include <kicad_curl/kicad_curl_easy.h>     // Include before any wx file
 #include <wx/uri.h>
 
 #include <github_getliblist.h>
@@ -62,6 +62,7 @@ bool GITHUB_GETLIBLIST::Get3DshapesLibsList( wxArrayString* aList,
                         bool (*aFilter)( const wxString& aData ) )
 {
     std::string fullURLCommand;
+
     strcpy( m_option_string, "text/html" );
 
     wxString repoURL = m_repoURL;
@@ -95,6 +96,7 @@ bool GITHUB_GETLIBLIST::GetFootprintLibraryList( wxArrayString& aList )
     std::string fullURLCommand;
     int page = 1;
     int itemCountMax = 99;              // Do not use a valu > 100, it does not work
+
     strcpy( m_option_string, "application/json" );
 
     // Github max items returned is 100 per page
@@ -212,16 +214,15 @@ bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxStr
 
     wxLogDebug( wxT( "Attempting to download: " ) + aFullURLCommand );
 
-    kcurl.SetURL(aFullURLCommand);
-    kcurl.SetUserAgent("KiCad-EDA");
-    kcurl.SetHeader("Accept", m_option_string);
-    kcurl.SetFollowRedirects(true);
+    kcurl.SetURL( aFullURLCommand );
+    kcurl.SetUserAgent( "http://kicad-pcb.org" );
+    kcurl.SetHeader( "Accept", m_option_string );
+    kcurl.SetFollowRedirects( true );
 
     try
     {
         kcurl.Perform();
-        m_image.reserve( kcurl.GetBuffer()->Size );
-        m_image.assign( kcurl.GetBuffer()->Payload, kcurl.GetBuffer()->Size );
+        m_image = kcurl.GetBuffer();
         return true;
     }
     catch( const IO_ERROR& ioe )
@@ -229,8 +230,8 @@ bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxStr
         if( aMsgError )
         {
             UTF8 fmt( _( "Error fetching JSON data from URL '%s'.\nReason: '%s'" ) );
-            
-            std::string msg = StrPrintf( fmt.c_str(), 
+
+            std::string msg = StrPrintf( fmt.c_str(),
                                          aFullURLCommand.c_str(),
                                          TO_UTF8( ioe.errorText ) );
 

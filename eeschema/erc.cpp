@@ -290,7 +290,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
     cmp_ref = wxT( "?" );
 
     if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
-        cmp_ref = aNetItemRef->GetComponentParent()->GetRef( &aNetItemRef->m_SheetPath );
+        cmp_ref = aNetItemRef->GetComponentParent()->GetRef( aNetItemRef->m_SheetPath.Last() );
 
     if( aNetItemTst == NULL )
     {
@@ -311,7 +311,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         {
             if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
                 cmp_ref = aNetItemRef->GetComponentParent()->GetRef(
-                    &aNetItemRef->m_SheetPath );
+                    aNetItemRef->m_SheetPath.Last() );
 
             msg.Printf( _( "Pin %s (%s) of component %s is not driven (Net %d)." ),
                         GetChars( string_pinnum ),
@@ -353,7 +353,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         alt_cmp = wxT( "?" );
 
         if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
-            alt_cmp = aNetItemTst->GetComponentParent()->GetRef( &aNetItemTst->m_SheetPath );
+            alt_cmp = aNetItemTst->GetComponentParent()->GetRef( aNetItemTst->m_SheetPath.Last() );
 
         msg.Printf( _( "Pin %s (%s) of component %s is connected to " ),
                     GetChars( string_pinnum ),
@@ -426,9 +426,9 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList,
                             continue;
 
                         if( ( (SCH_COMPONENT*) aList->GetItem( aNetItemRef )->
-                             m_Link )->GetRef( &aList->GetItem( aNetItemRef )-> m_SheetPath ) !=
+                              m_Link )->GetRef( aList->GetItem( aNetItemRef )->m_SheetPath.Last() ) !=
                             ( (SCH_COMPONENT*) aList->GetItem( duplicate )->m_Link )
-                           ->GetRef( &aList->GetItem( duplicate )->m_SheetPath ) )
+                          ->GetRef( aList->GetItem( duplicate )->m_SheetPath.Last() ) )
                             continue;
 
                         // Same component and same pin. Do dot create error for this pin
