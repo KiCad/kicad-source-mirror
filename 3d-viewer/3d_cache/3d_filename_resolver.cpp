@@ -463,6 +463,14 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
         ++sL;
     }
 
+#ifdef _WIN32
+    // it is strange to convert an MSWin full path to use the
+    // UNIX separator but this is done for consistency and can
+    // be helpful even when transferring project files from
+    // MSWin to *NIX.
+    fname.Replace( wxT( "\\" ), wxT( "/" ) );
+#endif
+
     return fname;
 }
 
