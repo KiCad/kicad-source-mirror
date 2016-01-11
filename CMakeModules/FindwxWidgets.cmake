@@ -163,18 +163,6 @@ set(wxWidgets_LIBRARIES    "")
 set(wxWidgets_LIBRARY_DIRS "")
 set(wxWidgets_CXX_FLAGS    "")
 
-# Using SYSTEM with INCLUDE_DIRECTORIES in conjunction with wxWidgets on
-# the Mac produces compiler errors. Set wxWidgets_INCLUDE_DIRS_NO_SYSTEM
-# to prevent UsewxWidgets.cmake from using SYSTEM.
-#
-# See cmake mailing list discussions for more info:
-#   http://www.cmake.org/pipermail/cmake/2008-April/021115.html
-#   http://www.cmake.org/pipermail/cmake/2008-April/021146.html
-#
-if(APPLE)
-  set(wxWidgets_INCLUDE_DIRS_NO_SYSTEM 1)
-endif(APPLE)
-
 # DEPRECATED: This is a patch to support the DEPRECATED use of
 # wxWidgets_USE_LIBS.
 #
