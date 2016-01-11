@@ -60,7 +60,7 @@ HOTKEY_LIST_CTRL::HOTKEY_LIST_CTRL( wxWindow *aParent, const HOTKEYS_SECTIONS& a
 
 void HOTKEY_LIST_CTRL::DeselectRow( int aRow )
 {
-    wxASSERT( aRow >= 0 && aRow < m_items.size() );
+    wxASSERT( aRow >= 0 && aRow < (int)m_items.size() );
     Unselect( m_items[aRow] );
 }
 
@@ -112,7 +112,6 @@ void HOTKEY_LIST_CTRL::OnChar( wxKeyEvent& aEvent )
             if( exists && data->GetHotkey().m_KeyCode != key )
             {
                 wxString tag = data->GetSectionTag();
-                HOTKEYS_EDITOR_DIALOG* parent = static_cast<HOTKEYS_EDITOR_DIALOG*>( m_parent );
                 bool canUpdate = ResolveKeyConflicts( key, tag );
 
                 if( canUpdate )

@@ -1219,7 +1219,7 @@ public:
      * @param aLayer The layer to search.  Use -1 for a don't care.
      * @return VIA* A point a to the VIA object if found, else NULL.
      */
-    VIA* GetViaByPosition( const wxPoint& aPosition, LAYER_ID aLayer = UNDEFINED_LAYER ) const;
+    VIA* GetViaByPosition( const wxPoint& aPosition, LAYER_ID aLayer = LAYER_ID::UNDEFINED_LAYER ) const;
 
     /**
      * Function GetPad
