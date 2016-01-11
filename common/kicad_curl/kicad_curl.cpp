@@ -104,7 +104,7 @@ void KICAD_CURL::Init()
             {
                 // Failure: error reporting UI was done via wxLogSysError().
                 std::string msg = StrPrintf( "%s not wxDynamicLibrary::Load()ed",
-                                             canonicalName );
+                                             static_cast< const char *>( canonicalName.mb_str() ) );
                 THROW_IO_ERROR( msg );
             }
 
@@ -120,9 +120,8 @@ void KICAD_CURL::Init()
                     // No further reporting required here.
 
                     std::string msg = StrPrintf( "%s has no function %s",
-                            static_cast<const char*>( canonicalName ),
-                            dyn_funcs[i].name
-                            );
+                                                 static_cast<const char*>( canonicalName.mb_str() ),
+                                                 dyn_funcs[i].name );
 
                     THROW_IO_ERROR( msg );
                 }
