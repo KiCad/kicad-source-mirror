@@ -35,13 +35,6 @@
 #include <wx/filename.h>
 #include <wx/dynlib.h>
 
-#ifdef _WIN32
-    #include <windows.h>
-#else
-    #include <dlfcn.h>
-    #include <pwd.h>
-#endif
-
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
 #include "3d_cache/sg/scenegraph.h"
