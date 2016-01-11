@@ -33,6 +33,7 @@
 #include <wx/config.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
+#include <wx/dynlib.h>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -241,63 +242,31 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
 void S3D_PLUGIN_MANAGER::listPlugins( const wxString& aPath,
     std::list< wxString >& aPluginList )
 {
-    // list potential plugins given a search paths
-    // note on typical plugin names:
-    // Linux: *.so, *.so.* (note: *.so.* will not be supported)
-    // MSWin: *.dll
-    // OSX: *.dylib, *.bundle
+    // list potential plugins given a search path
 
-    std::list< wxString > nameFilter;   // filter to apply to files
+    wxString nameFilter;                // filter for user-loadable libraries (aka modules)
     wxString lName;                     // stores name of enumerated files
     wxString fName;                     // full name of file
-
-#ifdef __linux
-
-    nameFilter.push_back( wxString::FromUTF8Unchecked( "*.so" ) );
-
-#elif defined _WIN32
-
-    nameFilter.push_back( wxString::FromUTF8Unchecked( "*.dll" ) );
-
-#elif defined __APPLE__
-
-    nameFilter.push_back( wxString::FromUTF8Unchecked( "*.dylib" ) );
-    nameFilter.push_back( wxString::FromUTF8Unchecked( "*.bundle" ) );
-
-#else
-
-    // note: we need to positively identify a supported OS here
-    // and add suffixes which may be used for 3D model plugins
-    // on the specific OS
-    #warning NOT IMPLEMENTED
-
-#endif
-
     wxDir wd;
     wd.Open( aPath );
 
     if( !wd.IsOpened() )
         return;
 
+    nameFilter = wxT( "*" );
+    nameFilter.Append( wxDynamicLibrary::GetDllExt( wxDL_MODULE ) );
     wxString lp = wd.GetNameWithSep();
-    std::list< wxString >::iterator sExt = nameFilter.begin();
-    std::list< wxString >::iterator eExt = nameFilter.end();
 
-    while( sExt != eExt )
+    if( wd.GetFirst( &lName, nameFilter, wxDIR_FILES ) )
     {
-        if( wd.GetFirst( &lName, *sExt, wxDIR_FILES ) )
+        fName = lp + lName;
+        checkPluginName( fName, aPluginList );
+
+        while( wd.GetNext( &lName ) )
         {
             fName = lp + lName;
             checkPluginName( fName, aPluginList );
-
-            while( wd.GetNext( &lName ) )
-            {
-                fName = lp + lName;
-                checkPluginName( fName, aPluginList );
-            }
         }
-
-        ++sExt;
     }
 
     wd.Close();

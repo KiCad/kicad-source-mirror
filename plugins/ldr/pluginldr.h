@@ -32,22 +32,11 @@
 
 #include <string>
 #include <wx/string.h>
+#include <wx/dynload.h>
 
-// helper functions to link functions
-#ifdef _WIN32
-
-#include <windows.h>
+// helper function to link functions in the plugin
 #define LINK_ITEM( funcPtr, funcType, funcName ) \
-    funcPtr = (funcType) GetProcAddress( m_dlHandle, funcName );
-
-#else
-
-#include <dlfcn.h>
-#define LINK_ITEM( funcPtr, funcType, funcName ) \
-    *(void**) (&funcPtr) = dlsym( m_dlHandle, funcName );
-
-#endif
-
+    funcPtr = (funcType) m_PluginLoader.GetSymbol( wxT( funcName ) )
 
 // typedefs of the functions exported by the 3D Plugin Class
 typedef char const* (*GET_PLUGIN_CLASS) ( void );
@@ -99,12 +88,8 @@ protected:
      */
     bool reopen( void );
 
-    // handle to the opened plugin
-    #ifdef _WIN32
-    HMODULE m_dlHandle;
-    #else
-    void* m_dlHandle;
-    #endif
+    // the plugin loader
+    wxPluginManager m_PluginLoader;
 
 public:
     KICAD_PLUGIN_LDR();

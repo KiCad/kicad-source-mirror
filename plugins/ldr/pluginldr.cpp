@@ -23,6 +23,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <wx/dynload.h>
 
 #include "pluginldr.h"
 
@@ -35,7 +36,6 @@ KICAD_PLUGIN_LDR::KICAD_PLUGIN_LDR()
     m_checkClassVersion = NULL;
     m_getPluginName = NULL;
     m_getVersion = NULL;
-    m_dlHandle = NULL;
 
     return;
 }
@@ -60,18 +60,9 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
 
     m_fileName.clear();
 
-#ifdef _WIN32
-    // NOTE: MSWin uses UTF-16 encoding
-    #if defined( UNICODE ) || defined( _UNICODE )
-        m_dlHandle = LoadLibrary( aFullFileName.wc_str() );
-    #else
-        m_dlHandle = LoadLibrary( aFullFileName.ToUTF8() );
-    #endif
-#else
-    m_dlHandle = dlopen( aFullFileName.ToUTF8(), RTLD_LAZY | RTLD_LOCAL );
-#endif
+    m_PluginLoader.Load( aFullFileName, wxDL_LAZY );
 
-    if( NULL == m_dlHandle )
+    if( !m_PluginLoader.IsLoaded() )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -238,18 +229,7 @@ void KICAD_PLUGIN_LDR::close( void )
     m_checkClassVersion = NULL;
     m_getPluginName = NULL;
     m_getVersion = NULL;
-
-    if( NULL != m_dlHandle )
-    {
-
-#ifdef _WIN32
-        FreeLibrary( m_dlHandle );
-#else
-        dlclose( m_dlHandle );
-#endif
-
-        m_dlHandle = NULL;
-    }
+    m_PluginLoader.Unload();
 
     return;
 }
