@@ -47,10 +47,9 @@ private:
 
 public:
     DLG_CFG_3DPATH( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver );
+    virtual bool TransferDataFromWindow();
 
 private:
-    void OnExit( wxCommandEvent& event );
-    void OnOK( wxCommandEvent& event );
     void EditPath( wxCommandEvent& event );
     void AddPath( wxCommandEvent& event );
     void DeletePath( wxCommandEvent& event );

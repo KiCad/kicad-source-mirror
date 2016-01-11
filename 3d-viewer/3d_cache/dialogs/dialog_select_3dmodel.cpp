@@ -38,11 +38,6 @@ static wxWindow* mkPreviewPanel( wxWindow* aParent )
     return (wxWindow*)pp;
 }
 
-wxBEGIN_EVENT_TABLE( DLG_SEL_3DMODEL, wxFileDialog )
-        EVT_BUTTON( wxID_OK, DLG_SEL_3DMODEL::OnOK )
-        EVT_BUTTON( wxID_CANCEL, DLG_SEL_3DMODEL::OnExit )
-wxEND_EVENT_TABLE()
-
 
 DLG_SEL_3DMODEL::DLG_SEL_3DMODEL( wxWindow* aParent, S3D_CACHE* aManager,
     const wxString& aDefaultDir, int aFilterIndex )
@@ -81,28 +76,6 @@ DLG_SEL_3DMODEL::DLG_SEL_3DMODEL( wxWindow* aParent, S3D_CACHE* aManager,
         if( aFilterIndex >= 0 && aFilterIndex < (int)fl->size() )
             SetFilterIndex( aFilterIndex );
     }
-
-    return;
-}
-
-
-void DLG_SEL_3DMODEL::OnExit( wxCommandEvent& event )
-{
-    if( IsModal() )
-        EndModal( wxID_EXIT );
-    else
-        Close( true );
-
-    return;
-}
-
-
-void DLG_SEL_3DMODEL::OnOK( wxCommandEvent& event )
-{
-    if( IsModal() )
-        EndModal( wxID_OK );
-    else
-        Close( true );
 
     return;
 }

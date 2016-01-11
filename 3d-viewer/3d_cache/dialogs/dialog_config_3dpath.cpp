@@ -39,8 +39,6 @@ enum
 
 
 wxBEGIN_EVENT_TABLE( DLG_CFG_3DPATH, wxDialog )
-    EVT_BUTTON( wxID_OK, DLG_CFG_3DPATH::OnOK )
-    EVT_BUTTON( wxID_CANCEL, DLG_CFG_3DPATH::OnExit )
     EVT_BUTTON( btnEditPath, DLG_CFG_3DPATH::EditPath )
     EVT_BUTTON( btnAddPath, DLG_CFG_3DPATH::AddPath )
     EVT_BUTTON( btnDeletePath, DLG_CFG_3DPATH::DeletePath )
@@ -130,28 +128,12 @@ DLG_CFG_3DPATH::DLG_CFG_3DPATH( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResol
 }
 
 
-void DLG_CFG_3DPATH::OnExit( wxCommandEvent& event )
+bool DLG_CFG_3DPATH::TransferDataFromWindow()
 {
-    if( IsModal() )
-        EndModal( wxID_EXIT );
-    else
-        Close( true );
+    if( resolver && resolver->UpdatePathList( m_paths ) )
+        return true;
 
-    return;
-}
-
-
-void DLG_CFG_3DPATH::OnOK( wxCommandEvent& event )
-{
-    if( resolver )
-        resolver->UpdatePathList( m_paths );
-
-    if( IsModal() )
-        EndModal( wxID_OK );
-    else
-        Close( true );
-
-    return;
+    return false;
 }
 
 

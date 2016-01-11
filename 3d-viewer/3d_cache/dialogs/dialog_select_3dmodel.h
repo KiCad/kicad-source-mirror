@@ -46,12 +46,6 @@ public:
 
     // Retrieve model data
     void GetModelData( S3D_INFO* aModel );
-
-private:
-    void OnExit( wxCommandEvent& event );
-    void OnOK( wxCommandEvent& event );
-
-    wxDECLARE_EVENT_TABLE();
 };
 
 #endif  // DIALOG_SELECT_3DMODEL_H
