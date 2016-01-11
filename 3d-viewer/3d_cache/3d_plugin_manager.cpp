@@ -451,7 +451,7 @@ SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName )
     {
         if( sL->second->CanRender() )
         {
-            SCENEGRAPH* sp = sL->second->Load( aFileName );
+            SCENEGRAPH* sp = sL->second->Load( aFileName.ToUTF8() );
 
             if( NULL != sp )
                 return sp;
