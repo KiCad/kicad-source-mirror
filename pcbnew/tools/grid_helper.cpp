@@ -116,9 +116,6 @@ VECTOR2I GRID_HELPER::AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg )
 {
     OPT_VECTOR2I pts[6];
 
-    VECTOR2I origin( GetOrigin() );
-    VECTOR2I grid( GetGrid() );
-
     const VECTOR2D gridOffset( GetOrigin() );
     const VECTOR2D gridSize( GetGrid() );
 
