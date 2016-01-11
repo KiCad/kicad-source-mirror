@@ -32,7 +32,7 @@
 
 #include <string>
 #include <wx/string.h>
-#include <wx/dynload.h>
+#include <wx/dynlib.h>
 
 // helper function to link functions in the plugin
 #define LINK_ITEM( funcPtr, funcType, funcName ) \
@@ -89,7 +89,7 @@ protected:
     bool reopen( void );
 
     // the plugin loader
-    wxPluginManager m_PluginLoader;
+    wxDynamicLibrary m_PluginLoader;
 
 public:
     KICAD_PLUGIN_LDR();
