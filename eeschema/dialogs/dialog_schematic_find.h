@@ -157,6 +157,7 @@ protected:
     void OnClose( wxCloseEvent& aEvent );
     void OnUpdateFindUI( wxUpdateUIEvent& aEvent );
     void OnUpdateReplaceUI( wxUpdateUIEvent& aEvent );
+    void OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent );
     void OnUpdateWholeWordUI( wxUpdateUIEvent& aEvent );
     void OnUpdateWildcardUI( wxUpdateUIEvent& aEvent );
 

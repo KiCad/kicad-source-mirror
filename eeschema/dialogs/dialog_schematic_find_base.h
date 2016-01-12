@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,6 +68,7 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 		virtual void OnUpdateFindUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnReplace( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateReplaceUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnUpdateReplaceAllUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		
 	

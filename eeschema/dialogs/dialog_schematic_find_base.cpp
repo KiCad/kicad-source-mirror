@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -146,7 +146,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_buttonReplace->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
 	m_buttonReplace->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceUI ), NULL, this );
 	m_buttonReplaceAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
-	m_buttonReplaceAll->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceUI ), NULL, this );
+	m_buttonReplaceAll->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceAllUI ), NULL, this );
 	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnCancel ), NULL, this );
 }
 
@@ -163,7 +163,7 @@ DIALOG_SCH_FIND_BASE::~DIALOG_SCH_FIND_BASE()
 	m_buttonReplace->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
 	m_buttonReplace->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceUI ), NULL, this );
 	m_buttonReplaceAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
-	m_buttonReplaceAll->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceUI ), NULL, this );
+	m_buttonReplaceAll->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateReplaceAllUI ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnCancel ), NULL, this );
 	
 }
