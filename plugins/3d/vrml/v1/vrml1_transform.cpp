@@ -55,6 +55,7 @@ WRL1TRANSFORM::~WRL1TRANSFORM()
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
+
     return;
 }
 
@@ -79,6 +80,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
+
         return false;
     }
 
@@ -111,6 +113,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -167,6 +170,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -181,6 +185,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -195,6 +200,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -209,6 +215,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -223,6 +230,7 @@ bool WRL1TRANSFORM::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }

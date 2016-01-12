@@ -148,9 +148,8 @@ WRL1NODE::~WRL1NODE()
 
     m_Items.clear();
 
-    // XXX - the dictionary may be bad - don't use it
-    //if( m_dictionary && !m_Name.empty() )
-    //    m_dictionary->DelName( m_Name, this );
+    if( m_dictionary && !m_Name.empty() )
+        m_dictionary->DelName( m_Name, this );
 
     if( m_Parent )
         m_Parent->unlinkChildNode( this );
@@ -307,6 +306,7 @@ bool WRL1NODE::SetName( const std::string& aName )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << aName << "' (begins with digit)\n";
         #endif
+
         return false;
     }
 
@@ -324,6 +324,7 @@ bool WRL1NODE::SetName( const std::string& aName )
         std::cerr << " * [INFO] invalid node name '" << aName;
         std::cerr<< "' (contains invalid character)\n";
         #endif
+
         return false;
     }
 
@@ -408,6 +409,7 @@ bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] attempting to add a base node to another node\n";
         #endif
+
         return false;
     }
 
@@ -440,6 +442,7 @@ bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed as node pointer\n";
         #endif
+
         return false;
     }
 
@@ -449,6 +452,7 @@ bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] attempting to add a base node ref to another base node\n";
         #endif
+
         return false;
     }
 

@@ -61,6 +61,7 @@ WRL1GROUP::~WRL1GROUP()
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
+
     return;
 }
 
@@ -74,6 +75,7 @@ bool WRL1GROUP::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
+
         return false;
     }
 
@@ -89,6 +91,7 @@ bool WRL1GROUP::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -146,12 +149,12 @@ SGNODE* WRL1GROUP::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     std::cerr << m_Items.size() << " items)\n";
     #endif
 
-    std::cerr << "XXX: GROUP!!!!!!!!!!\n";
-
     if( !m_Parent )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] Group has no parent\n";
+        #endif
 
         return NULL;
     }

@@ -120,6 +120,7 @@ bool WRL2BASE::SetName( const std::string& aName )
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] attempting to set name on virtual base node\n";
     #endif
+
     return false;
 }
 
@@ -132,6 +133,7 @@ bool WRL2BASE::Read( WRLPROC& proc )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] no open file or file is not a VRML2 file\n";
         #endif
+
         return false;
     }
 
@@ -395,6 +397,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     size_t line = 0;
     size_t column = 0;
     proc.GetFilePosData( line, column );
+
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     std::cerr << " * [INFO] Processing node '" << glob << "' ID: " << ntype << "\n";
     #endif
@@ -432,6 +435,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             #ifdef DEBUG_VRML2
             std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
             #endif
+
             return false;
         }
         #ifdef DEBUG_VRML2
@@ -457,6 +461,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             #ifdef DEBUG_VRML2
             std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
             #endif
+
             return false;
         }
         #ifdef DEBUG_VRML2
@@ -475,6 +480,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             #ifdef DEBUG_VRML2
             std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
             #endif
+
             return false;
         }
         #ifdef DEBUG_VRML2
@@ -493,6 +499,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             #ifdef DEBUG_VRML2
             std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
             #endif
+
             return false;
         }
         #ifdef DEBUG_VRML2
@@ -553,6 +560,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
             #ifdef DEBUG_VRML2
             std::cerr << " * [INFO] FAIL: discard " << glob << " node at l" << line << ", c" << column << "\n";
             #endif
+
             return false;
         }
         #ifdef DEBUG_VRML2

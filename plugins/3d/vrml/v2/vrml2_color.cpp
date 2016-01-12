@@ -52,6 +52,7 @@ WRL2COLOR::~WRL2COLOR()
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     std::cerr << " * [INFO] Destroying Color node\n";
     #endif
+
     return;
 }
 
@@ -107,6 +108,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -155,6 +157,7 @@ bool WRL2COLOR::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
             std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
             #endif
+
             return false;
         }
     }

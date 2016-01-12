@@ -95,8 +95,9 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
         if( !m_getNExtensions )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * incompatible plugin: " << aFullFileName.ToUTF8() << "\n";
-            std::cerr << " * missing function: GetNExtensions\n";
+            wxString errmsg = _( "incompatible plugin (missing function 'GetNExtensions')" );
+            std::cerr << errmsg.ToUTF8() << "\n";
+            std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
             fail = true;
         }
 
@@ -105,11 +106,16 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             if( !fail )
             {
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * incompatible plugin: " << aFullFileName.ToUTF8() << "\n";
+                wxString errmsg = _( "incompatible plugin (missing function 'GetModelExtension')" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
                 fail = true;
             }
-
-            std::cerr << " * missing function: GetModelExtension\n";
+            else
+            {
+                wxString errmsg = _( "missing function 'GetModelExtension'" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+            }
         }
 
         if( !m_getNFilters )
@@ -117,11 +123,16 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             if( !fail )
             {
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * incompatible plugin: " << aFullFileName.ToUTF8() << "\n";
+                wxString errmsg = _( "incompatible plugin (missing function 'GetNFilters')" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
                 fail = true;
             }
-
-            std::cerr << " * missing function: GetNFilters\n";
+            else
+            {
+                wxString errmsg = _( "missing function 'GetNFilters'" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+            }
         }
 
         if( !m_getFileFilter )
@@ -129,11 +140,16 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             if( !fail )
             {
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * incompatible plugin: " << aFullFileName.ToUTF8() << "\n";
+                wxString errmsg = _( "incompatible plugin (missing function 'GetFileFilter')" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
                 fail = true;
             }
-
-            std::cerr << " * missing function: GetFileFilter\n";
+            else
+            {
+                wxString errmsg = _( "missing function 'GetFileFilter'" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+            }
         }
 
         if( !m_canRender )
@@ -141,11 +157,16 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             if( !fail )
             {
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * incompatible plugin: " << aFullFileName.ToUTF8() << "\n";
+                wxString errmsg = _( "incompatible plugin (missing function 'CanRender')" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
                 fail = true;
             }
-
-            std::cerr << " * missing function: CanRender\n";
+            else
+            {
+                wxString errmsg = _( "missing function 'CanRender'" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+            }
         }
 
         if( !m_load )
@@ -153,11 +174,16 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             if( !fail )
             {
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * incompatible plugin: " << aFullFileName.ToUTF8() << "\n";
+                wxString errmsg = _( "incompatible plugin (missing function 'Load')" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
                 fail = true;
             }
-
-            std::cerr << " * missing function: Load\n";
+            else
+            {
+                wxString errmsg = _( "missing function 'Load'" );
+                std::cerr << errmsg.ToUTF8() << "\n";
+            }
         }
 
     #endif
@@ -237,8 +263,12 @@ int KICAD_PLUGIN_LDR_3D::GetNExtensions( void )
     if( NULL == m_getNExtensions )
     {
         m_error = "[BUG] GetNExtensions is not linked";
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * " << m_error << "\n";
+        #endif
+
         return 0;
     }
 
@@ -261,8 +291,12 @@ char const* KICAD_PLUGIN_LDR_3D::GetModelExtension( int aIndex )
     if( NULL == m_getModelExtension )
     {
         m_error = "[BUG] GetModelExtension is not linked";
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * " << m_error << "\n";
+        #endif
+
         return NULL;
     }
 
@@ -285,8 +319,12 @@ int KICAD_PLUGIN_LDR_3D::GetNFilters( void )
     if( NULL == m_getNFilters )
     {
         m_error = "[BUG] GetNFilters is not linked";
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * " << m_error << "\n";
+        #endif
+
         return 0;
     }
 
@@ -309,8 +347,12 @@ char const* KICAD_PLUGIN_LDR_3D::GetFileFilter( int aIndex )
     if( NULL == m_getFileFilter )
     {
         m_error = "[BUG] GetFileFilter is not linked";
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * " << m_error << "\n";
+        #endif
+
         return NULL;
     }
 
@@ -333,8 +375,12 @@ bool KICAD_PLUGIN_LDR_3D::CanRender( void )
     if( NULL == m_canRender )
     {
         m_error = "[BUG] CanRender is not linked";
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * " << m_error << "\n";
+        #endif
+
         return false;
     }
 
@@ -357,8 +403,12 @@ SCENEGRAPH* KICAD_PLUGIN_LDR_3D::Load( char const* aFileName )
     if( NULL == m_load )
     {
         m_error = "[BUG] Load is not linked";
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * " << m_error << "\n";
+        #endif
+
         return NULL;
     }
 

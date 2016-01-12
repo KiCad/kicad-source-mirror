@@ -599,10 +599,12 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
     // note: if the IDF model is defective no outline substitutes shall be made
     if( !brd.ReadFile( aFileName, true ) )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] Failed to read IDF file:\n";
         std::cerr << brd.GetError() << "\n\n";
         std::cerr << " * [INFO] IDF file '" << aFileName.ToUTF8() << "'\n";
+        #endif
 
         return NULL;
     }

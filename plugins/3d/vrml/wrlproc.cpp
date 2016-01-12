@@ -374,7 +374,10 @@ bool WRLPROC::DiscardNode( void )
         ostr << ", column " << m_bufpos;
         m_error = ostr.str();
 
+        #ifdef DEBUG
         std::cerr << m_error << "\n";
+        #endif
+
         return false;
     }
 

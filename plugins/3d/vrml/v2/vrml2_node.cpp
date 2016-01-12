@@ -225,6 +225,7 @@ bool WRL2NODE::SetName( const std::string& aName )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << *item << "' (matches restricted word)\n";
         #endif
+
         return false;
     }
 
@@ -235,6 +236,7 @@ bool WRL2NODE::SetName( const std::string& aName )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] invalid node name '" << *item << "' (begins with digit)\n";
         #endif
+
         return false;
     }
 
@@ -253,6 +255,7 @@ bool WRL2NODE::SetName( const std::string& aName )
         std::cerr << " * [INFO] invalid node name '" << aName;
         std::cerr<< "' (contains invalid character)\n";
         #endif
+
         return false;
     }
 
@@ -355,6 +358,7 @@ bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] attempting to add a base node to another node\n";
         #endif
+
         return false;
     }
 
@@ -386,6 +390,7 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed as node pointer\n";
         #endif
+
         return false;
     }
 
@@ -395,6 +400,7 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] attempting to add a base node ref to another base node\n";
         #endif
+
         return false;
     }
 

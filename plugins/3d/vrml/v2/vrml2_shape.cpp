@@ -60,6 +60,7 @@ WRL2SHAPE::~WRL2SHAPE()
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
+
     return;
 }
 
@@ -112,6 +113,7 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple appearance nodes\n";
             #endif
+
             return false;
         }
 
@@ -125,6 +127,7 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple geometry nodes\n";
         #endif
+
         return false;
     }
 
@@ -166,6 +169,7 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple appearance nodes\n";
             #endif
+
             return false;
         }
 
@@ -177,8 +181,9 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple geometry nodes\n";
+        std::cerr << " * [INFO] bad file format; multiple geometry nodes\n";
         #endif
+
         return false;
     }
 
@@ -221,6 +226,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
+
         return false;
     }
 
@@ -236,6 +242,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -286,6 +293,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read appearance information\n";
                 #endif
+
                 return false;
             }
         }
@@ -297,6 +305,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read geometry information\n";
                 #endif
+
                 return false;
             }
         }

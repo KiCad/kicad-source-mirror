@@ -67,8 +67,10 @@ WRL1MATERIAL::~WRL1MATERIAL()
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
             std::cerr << " * [INFO] Destroying SGCOLOR #" << i << "\n";
             #endif
+
             if( NULL == S3D::GetSGNodeParent( colors[i] ) )
                 S3D::DestroyNode( colors[i] );
+
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
             std::cerr << " * [INFO] destroyed SGCOLOR #" << i << "\n";
             #endif
@@ -113,6 +115,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
+
         return false;
     }
 
@@ -128,6 +131,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -185,6 +189,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -199,6 +204,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -213,6 +219,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -227,6 +234,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -241,6 +249,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -255,6 +264,7 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }

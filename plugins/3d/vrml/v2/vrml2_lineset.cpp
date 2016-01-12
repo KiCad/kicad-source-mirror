@@ -60,6 +60,7 @@ WRL2LINESET::~WRL2LINESET()
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
+
     return;
 }
 
@@ -137,6 +138,7 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple color nodes\n";
             #endif
+
             return false;
         }
 
@@ -152,6 +154,7 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
             #endif
+
             return false;
         }
 
@@ -196,6 +199,7 @@ bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple color nodes\n";
             #endif
+
             return false;
         }
 
@@ -211,6 +215,7 @@ bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
             #endif
+
             return false;
         }
 
@@ -237,6 +242,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -296,6 +302,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -310,6 +317,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -324,6 +332,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -335,6 +344,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read color node information\n";
                 #endif
+
                 return false;
             }
         }
@@ -346,6 +356,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read coord node information\n";
                 #endif
+
                 return false;
             }
         }

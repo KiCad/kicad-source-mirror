@@ -57,6 +57,7 @@ WRL2SWITCH::~WRL2SWITCH()
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
+
     return;
 }
 
@@ -86,6 +87,7 @@ bool WRL2SWITCH::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is NULL\n";
         #endif
+
         return false;
     }
 
@@ -101,6 +103,7 @@ bool WRL2SWITCH::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -154,6 +157,7 @@ bool WRL2SWITCH::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -187,6 +191,7 @@ bool WRL2SWITCH::AddRefNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed as node pointer\n";
         #endif
+
         return false;
     }
 
@@ -221,6 +226,7 @@ bool WRL2SWITCH::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -280,6 +286,7 @@ SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent, bool calcNormals )
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
         std::cerr << " * [INFO] Switch translation: no choices\n";
         #endif
+
         return NULL;
     }
 

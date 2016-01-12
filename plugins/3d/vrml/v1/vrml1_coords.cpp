@@ -53,6 +53,7 @@ WRL1COORDS::~WRL1COORDS()
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
     std::cerr << " * [INFO] Destroying Coordinate3 node\n";
     #endif
+
     return;
 }
 
@@ -97,6 +98,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -145,6 +147,7 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
             std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
             #endif
+
             return false;
         }
     }

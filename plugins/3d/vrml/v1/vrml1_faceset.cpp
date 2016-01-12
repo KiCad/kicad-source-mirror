@@ -59,6 +59,7 @@ WRL1FACESET::~WRL1FACESET()
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
+
     return;
 }
 
@@ -103,6 +104,7 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -156,6 +158,7 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -170,6 +173,7 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -184,6 +188,7 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -198,6 +203,7 @@ bool WRL1FACESET::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -271,6 +277,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
         std::cerr << " * [INFO] bad model: coordsize, indexsize = " << coordsize;
         std::cerr << ", " << vsize << "\n";
         #endif
+
         return NULL;
     }
 
@@ -293,6 +300,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             std::cerr << " * [INFO] bad model: per face indexed but no indices\n";
             #endif
+
             return NULL;
         }
 
@@ -306,6 +314,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             std::cerr << " * [INFO] bad model: per vertex indexed but indexsize = ";
             std::cerr << matIndex.size() << "\n";
             #endif
+
             return NULL;
         }
 

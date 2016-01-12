@@ -191,7 +191,7 @@ SCENEGRAPH* Load( char const* aFileName )
     catch( IO_ERROR &e )
     {
         #ifdef DEBUG
-        std::cout << " * [INFO] load failed: input line too long\n";
+        std::cerr << " * [INFO] load failed: input line too long\n";
         #endif
         return NULL;
     }
@@ -203,7 +203,7 @@ SCENEGRAPH* Load( char const* aFileName )
     if( proc.GetVRMLType() == VRML_V1 )
     {
         #ifdef DEBUG
-        std::cout << " * [INFO] Processing VRML 1.0 file\n";
+        std::cerr << " * [INFO] Processing VRML 1.0 file\n";
         #endif
 
         WRL1BASE* bp = new WRL1BASE;
@@ -214,13 +214,13 @@ SCENEGRAPH* Load( char const* aFileName )
         if( !bp->Read( proc ) )
         {
             #ifdef DEBUG
-            std::cout << " * [INFO] load failed\n";
+            std::cerr << " * [INFO] load failed\n";
             #endif
         }
         else
         {
             #ifdef DEBUG
-            std::cout << " * [INFO] load completed\n";
+            std::cerr << " * [INFO] load completed\n";
             #endif
 
             scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, NULL );
@@ -231,7 +231,7 @@ SCENEGRAPH* Load( char const* aFileName )
     else
     {
         #ifdef DEBUG
-        std::cout << " * [INFO] Processing VRML 2.0 file\n";
+        std::cerr << " * [INFO] Processing VRML 2.0 file\n";
         #endif
 
         WRL2BASE* bp = new WRL2BASE;
@@ -242,13 +242,13 @@ SCENEGRAPH* Load( char const* aFileName )
         if( !bp->Read( proc ) )
         {
             #ifdef DEBUG
-            std::cout << " * [INFO] load failed\n";
+            std::cerr << " * [INFO] load failed\n";
             #endif
         }
         else
         {
             #ifdef DEBUG
-            std::cout << " * [INFO] load completed\n";
+            std::cerr << " * [INFO] load completed\n";
             #endif
 
             // for now we recalculate all normals per-vertex per-face

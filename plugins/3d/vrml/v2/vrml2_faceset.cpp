@@ -60,6 +60,7 @@ WRL2FACESET::~WRL2FACESET()
     std::cerr << " children, " << m_Refs.size() << " references and ";
     std::cerr << m_BackPointers.size() << " backpointers\n";
     #endif
+
     return;
 }
 
@@ -150,6 +151,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple color nodes\n";
             #endif
+
             return false;
         }
 
@@ -165,6 +167,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
             #endif
+
             return false;
         }
 
@@ -180,6 +183,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple normal nodes\n";
             #endif
+
             return false;
         }
 
@@ -193,6 +197,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] unexpected code branch\n";
         #endif
+
         return false;
     }
 
@@ -202,6 +207,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple texCoord nodes\n";
         #endif
+
         return false;
     }
 
@@ -243,6 +249,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple color nodes\n";
             #endif
+
             return false;
         }
 
@@ -258,6 +265,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
             #endif
+
             return false;
         }
 
@@ -273,6 +281,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple normal nodes\n";
             #endif
+
             return false;
         }
 
@@ -286,6 +295,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] unexpected code branch\n";
         #endif
+
         return false;
     }
 
@@ -295,6 +305,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad file format; multiple texCoord nodes\n";
         #endif
+
         return false;
     }
 
@@ -318,6 +329,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         std::cerr << " * [INFO] bad file format; unexpected eof at line ";
         std::cerr << line << ", column " << column << "\n";
         #endif
+
         return false;
     }
 
@@ -386,6 +398,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -400,6 +413,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -414,6 +428,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -428,6 +443,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -442,6 +458,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -456,6 +473,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -470,6 +488,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -484,6 +503,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -498,6 +518,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
                 std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
                 #endif
+
                 return false;
             }
         }
@@ -509,6 +530,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read color node information\n";
                 #endif
+
                 return false;
             }
         }
@@ -520,6 +542,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read coord node information\n";
                 #endif
+
                 return false;
             }
         }
@@ -531,6 +554,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read normal node information\n";
                 #endif
+
                 return false;
             }
         }
@@ -542,6 +566,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [INFO] could not read texCoord node information\n";
                 #endif
+
                 return false;
             }
         }
@@ -719,6 +744,7 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
                     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                     std::cerr << " * [INFO] bad file; colorIndex.size() < coordIndex.size()\n";
                     #endif
+
                     return NULL;
                 }
 

@@ -168,6 +168,11 @@ bool S3D::WritePoint( std::ofstream& aFile, const SGPOINT& aPoint )
     aFile.write( (char*)&aPoint.x, sizeof(aPoint.x) );
     aFile.write( (char*)&aPoint.y, sizeof(aPoint.y) );
     aFile.write( (char*)&aPoint.z, sizeof(aPoint.z) );
+
+    if( aFile.fail() )
+        return false;
+
+    return true;
 }
 
 
