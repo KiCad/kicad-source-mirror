@@ -3320,7 +3320,7 @@ void IDF3_COMP_OUTLINE::readData( std::ifstream& aLibFile, const std::string& aH
     // check RECORD 4
     while( aLibFile.good() && !FetchIDFLine( aLibFile, iline, comment, pos ) );
 
-    if( ( !aLibFile.good() && aLibFile.eof() ) || iline.empty() )
+    if( ( !aLibFile.good() && aLibFile.eof() ) && iline.empty() )
     {
         ostringstream ostr;
 
