@@ -23,6 +23,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <wx/translation.h>
 #include "plugins/ldr/3d/pluginldr3D.h"
 
 #define PLUGIN_CLASS_3D "PLUGIN_3D"
