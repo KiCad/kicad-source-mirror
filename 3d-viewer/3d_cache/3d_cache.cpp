@@ -101,8 +101,10 @@ static bool isMD5null( const unsigned char* aMD5Sum )
 {
     if( NULL == aMD5Sum )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed for aMD5Sum\n";
+        #endif
         return false;
     }
 
@@ -160,8 +162,10 @@ void S3D_CACHE_ENTRY::SetMD5( const unsigned char* aMD5Sum )
 {
     if( NULL == aMD5Sum )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL passed for aMD5Sum\n";
+        #endif
         return;
     }
 
@@ -258,16 +262,17 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
         if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
             ( aFileName, ep ) ).second == false )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [BUG] duplicate entry in map file; key = ";
             std::cerr << aFileName.ToUTF8() << "\n";
+            #endif
+
             m_CacheList.pop_back();
             delete ep;
         }
         else
         {
-            std::cerr << " * [3D Model] [0] added cached name '" << aFileName.ToUTF8() << "'\n";
-
             if( aCachePtr )
                 *aCachePtr = ep;
 
@@ -282,16 +287,15 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
                                ( aFileName, ep ) ).second == false )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] duplicate entry in map file; key = ";
         std::cerr << aFileName.ToUTF8() << "\n";
+        #endif
+
         m_CacheList.pop_back();
         delete ep;
         return NULL;
-    }
-    else
-    {
-        std::cerr << " * [3D Model] [1] added cached name '" << aFileName.ToUTF8() << "'\n";
     }
 
     if( aCachePtr )
@@ -321,25 +325,28 @@ bool S3D_CACHE::getMD5( const wxString& aFileName, unsigned char* aMD5Sum )
 {
     if( aFileName.empty() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] empty filename\n";
+        #endif
+
         return false;
     }
 
     if( NULL == aMD5Sum )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aMD5Sum\n";
+        #endif
+
         return false;
     }
 
     FILE* fp = fopen( aFileName.ToUTF8(), "rb" );
 
     if( !fp )
-    {
-        std::cerr << " * [3dmodel] could not open file '" << aFileName.ToUTF8() << "'\n";
         return false;
-    }
 
     struct md5_ctx msum;
     md5_init_ctx( &msum );
@@ -348,7 +355,10 @@ bool S3D_CACHE::getMD5( const wxString& aFileName, unsigned char* aMD5Sum )
 
     if( 0 != res )
     {
+        #ifdef DEBUG
         std::cerr << " * [3dmodel] md5 calculation failed on file '" << aFileName.ToUTF8() << "'\n";
+        #endif
+
         return false;
     }
 
@@ -362,13 +372,18 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     if( bname.empty() )
     {
+        #ifdef DEBUG
         std::cerr << " * [3D model] cannot load cached model; no md5 hash available\n";
+        #endif
+
         return false;
     }
 
     if( m_CacheDir.empty() )
     {
-        std::cerr << " * [3D model] cannot load cached model; config directory unknown\n";
+        wxString errmsg = _( "cannot load cached model; config directory unknown" );
+        std::cerr << " * [3D model] " << errmsg.ToUTF8() << "\n";
+
         return false;
     }
 
@@ -376,7 +391,8 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     if( !wxFileName::FileExists( fname ) )
     {
-        std::cerr << " * [3D model] cannot open file '";
+        wxString errmsg = _( "cannot open file" );
+        std::cerr << " * [3D model] " << errmsg.ToUTF8() << " '";
         std::cerr << fname.ToUTF8() << "'\n";
         return false;
     }
@@ -397,15 +413,21 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
 {
     if( NULL == aCacheItem )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * NULL passed for aCacheItem\n";
+        #endif
+
         return false;
     }
 
     if( NULL == aCacheItem->sceneData )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * aCacheItem has no valid scene data\n";
+        #endif
+
         return false;
     }
 
@@ -413,13 +435,18 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     if( bname.empty() )
     {
+        #ifdef DEBUG
         std::cerr << " * [3D model] cannot load cached model; no md5 hash available\n";
+        #endif
+
         return false;
     }
 
     if( m_CacheDir.empty() )
     {
-        std::cerr << " * [3D model] cannot load cached model; config directory unknown\n";
+        wxString errmsg = _( "cannot load cached model; config directory unknown" );
+        std::cerr << " * [3D model] " << errmsg.ToUTF8() << "\n";
+
         return false;
     }
 
@@ -435,8 +462,10 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
         if( !S_ISREG( info.st_mode ) )
         {
-            std::cerr << " * [3D model] path exists but is not a regular file: '";
+            wxString errmsg = _( "path exists but is not a regular file" );
+            std::cerr << " * [3D model] " << errmsg.ToUTF8() << " '";
             std::cerr << fname.ToUTF8() << "'\n";
+
             return false;
         }
 
@@ -463,9 +492,12 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
         if( !cfgdir.DirExists() )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * failed to create 3D configuration directory\n";
-            std::cerr << " * config directory: '";
+            wxString errmsg = _( "failed to create 3D configuration directory" );
+            std::cerr << " * " << errmsg.ToUTF8() << "\n";
+            errmsg = _( "config directory" );
+            std::cerr << " * " << errmsg.ToUTF8() << " '";
             std::cerr << cfgdir.GetPath().ToUTF8() << "'\n";
+
             return false;
         }
     }
@@ -475,9 +507,11 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     // inform the file resolver of the config directory
     if( !m_FNResolver->Set3DConfigDir( m_ConfigDir ) )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * could not set 3D Config Directory on filename resolver\n";
         std::cerr << " * config directory: '" << m_ConfigDir.ToUTF8() << "'\n";
+        #endif
     }
 
     cfgdir.AppendDir( wxT( "cache" ) );
@@ -489,9 +523,12 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
         if( !cfgdir.DirExists() )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * failed to create 3D cache directory\n";
-            std::cerr << " * cache directory: '";
+            wxString errmsg = _( "failed to create 3D cache directory" );
+            std::cerr << " * " << errmsg.ToUTF8() << "\n";
+            errmsg = _( "cache directory" );
+            std::cerr << " * " << errmsg.ToUTF8() << " '";
             std::cerr << cfgdir.GetPath().ToUTF8() << "'\n";
+
             return false;
         }
     }
@@ -543,8 +580,10 @@ wxString S3D_CACHE::Get3DConfigDir( bool createDefault )
 
     if( !cfgpath.DirExists() )
     {
+        wxString errmsg = _( "failed to create 3D configuration directory" );
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * failed to create 3D configuration directory\n";
+        std::cerr << " * " << errmsg.ToUTF8() << "\n";
+
         return wxT( "" );
     }
 
@@ -636,8 +675,11 @@ S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
 
     if( !cp )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] model loaded with no associated S3D_CACHE_ENTRY\n";
+        #endif
+
         return NULL;
     }
 

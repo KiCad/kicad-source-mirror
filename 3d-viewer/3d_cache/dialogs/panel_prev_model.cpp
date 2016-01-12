@@ -24,8 +24,8 @@
 #include <3d_model_viewer/c3d_model_viewer.h>
 #include <3d_rendering/3d_render_ogl_legacy/c_ogl_3dmodel.h>
 #include <common_ogl/cogl_att_list.h>
-#include <iostream>
 #include <cstdlib>
+#include <wx/log.h>
 #include <wx/sizer.h>
 #include <wx/valnum.h>
 #include <wx/choice.h>
@@ -701,8 +701,9 @@ void PANEL_PREV_3D::getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOI
 
     if( 0.001 > scale.x || 0.001 > scale.y || 0.001 > scale.z )
     {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid scale values; setting all to 1.0\n";
+        wxString errmsg = _("[INFO] invalid scale values; setting all to 1.0");
+        wxLogMessage( "%s", errmsg.ToUTF8() );
+
         scale.x = 1.0;
         scale.y = 1.0;
         scale.z = 1.0;

@@ -58,8 +58,12 @@ IFSG_COORDINDEX::IFSG_COORDINDEX( SGNODE* aParent )
     {
         delete m_node;
         m_node = NULL;
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << WrongParent << "\n";
+        #endif
+
         return;
     }
 
@@ -75,8 +79,11 @@ IFSG_COORDINDEX::IFSG_COORDINDEX( IFSG_NODE& aParent )
 
     if( !pp )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
+        #endif
+
         return;
     }
 
@@ -84,8 +91,11 @@ IFSG_COORDINDEX::IFSG_COORDINDEX( IFSG_NODE& aParent )
 
     if( !m_node->SetParent( pp ) )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << WrongParent << "\n";
+        #endif
+
         delete m_node;
         m_node = NULL;
         return;
@@ -128,10 +138,13 @@ bool IFSG_COORDINDEX::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] invalid SGNODE parent (";
         std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
         std::cerr << ") to SGCOORDINDEX\n";
+        #endif
+
         delete m_node;
         m_node = NULL;
         return false;
@@ -149,8 +162,11 @@ bool IFSG_COORDINDEX::NewNode( IFSG_NODE& aParent )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
+        #endif
+
         return false;
     }
 

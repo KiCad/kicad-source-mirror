@@ -251,8 +251,10 @@ void SGFACESET::unlinkNode( const SGNODE* aNode, bool isChild )
         }
     }
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] unlinkNode() did not find its target\n";
+    #endif
 
     return;
 }
@@ -277,8 +279,11 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
 {
     if( NULL == aNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aNode\n";
+        #endif
+
         return false;
     }
 
@@ -291,8 +296,11 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Colors && aNode != m_RColors )
             {
+                #ifdef DEBUG
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [BUG] assigning multiple Colors nodes\n";
+                #endif
+
                 return false;
             }
 
@@ -319,8 +327,11 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Coords && aNode != m_RCoords )
             {
+                #ifdef DEBUG
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [BUG] assigning multiple Coords nodes\n";
+                #endif
+
                 return false;
             }
 
@@ -347,8 +358,11 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Normals && aNode != m_RNormals )
             {
+                #ifdef DEBUG
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [BUG] assigning multiple Normals nodes\n";
+                #endif
+
                 return false;
             }
 
@@ -375,8 +389,11 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_CoordIndices )
             {
+                #ifdef DEBUG
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [BUG] assigning multiple CoordIndex nodes\n";
+                #endif
+
                 return false;
             }
 
@@ -389,10 +406,12 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         return true;
     }
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] object '" << aNode->GetName();
     std::cerr << "' (type " << aNode->GetNodeType();
     std::cerr << ") is not a valid type for this object (" << aNode->GetNodeType() << ")\n";
+    #endif
 
     return false;
 }
@@ -501,8 +520,11 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     {
         if( NULL == m_Parent )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [BUG] corrupt data; m_aParent is NULL\n";
+            #endif
+
             return false;
         }
 
@@ -516,15 +538,21 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
     if( parentNode != m_Parent )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        #endif
+
         return false;
     }
 
     if( !aFile.good() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad stream\n";
+        #endif
+
         return false;
     }
 
@@ -601,8 +629,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         || m_Colors || m_RColors
         || m_Normals || m_RNormals )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] non-empty node\n";
+        #endif
+
         return false;
     }
 
@@ -615,9 +646,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     if( ( items[0] && items[1] ) || ( items[3] && items[4] )
         || ( items[5] && items[6] ) )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] corrupt data; multiple item definitions at position ";
         std::cerr << aFile.tellg() << "\n";
+        #endif
+
         return false;
     }
 
@@ -627,9 +661,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COORDS != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad child coords tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -638,9 +675,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !m_Coords->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading coords '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -649,9 +689,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COORDS != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad ref coords tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -659,17 +702,23 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: cannot find ref coords '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
         if( S3D::SGTYPE_COORDS != np->GetNodeType() )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: type is not SGCOORDS '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
@@ -681,9 +730,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COORDINDEX != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad coord index tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -692,9 +744,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !m_CoordIndices->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading coord index '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -703,9 +758,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_NORMALS != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad child normals tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -714,9 +772,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !m_Normals->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading normals '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -725,9 +786,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_NORMALS != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad ref normals tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -735,17 +799,23 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: cannot find ref normals '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
         if( S3D::SGTYPE_NORMALS != np->GetNodeType() )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: type is not SGNORMALS '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
@@ -757,9 +827,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COLORS != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad child colors tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -768,9 +841,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !m_Colors->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading colors '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -779,9 +855,12 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COLORS != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad ref colors tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -789,17 +868,23 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: cannot find ref colors '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
         if( S3D::SGTYPE_COLORS != np->GetNodeType() )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: type is not SGCOLORS '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 

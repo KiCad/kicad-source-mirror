@@ -79,8 +79,11 @@ void SGCOLOR::GetColor( SGCOLOR* aColor ) const
 {
     if( NULL == aColor )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aColor\n";
+        #endif
+
         return;
     }
 
@@ -117,8 +120,11 @@ bool SGCOLOR::SetColor( const SGCOLOR* aColor )
 {
     if( NULL == aColor )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aColor\n";
+        #endif
+
         return false;
     }
 
@@ -209,8 +215,11 @@ void SGPOINT::GetPoint( SGPOINT* aPoint )
 {
     if( NULL == aPoint )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aPoint\n";
+        #endif
+
         return;
     }
 

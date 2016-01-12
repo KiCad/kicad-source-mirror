@@ -166,8 +166,10 @@ void SGNODE::delNodeRef( SGNODE* aNode )
         return;
     }
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] delNodeRef() did not find its target\n";
+    #endif
 
     return;
 }
@@ -177,15 +179,21 @@ void SGNODE::AssociateWrapper( SGNODE** aWrapperRef )
 {
     if( NULL == aWrapperRef )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL handle\n";
+        #endif
+
         return;
     }
 
     if( *aWrapperRef != this )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] handle value does not match this object's pointer\n";
+        #endif
+
         return;
     }
 
@@ -194,8 +202,11 @@ void SGNODE::AssociateWrapper( SGNODE** aWrapperRef )
     if( m_Association )
     {
         *m_Association = NULL;
+
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [WARNING] association being broken with previous wrapper\n";
+        #endif
     }
 
     m_Association = aWrapperRef;
@@ -210,13 +221,17 @@ void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef )
 
     if( !aWrapperRef )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] invalid handle value aWrapperRef\n";
+        #endif
+
         return;
     }
 
     if( *aWrapperRef != *m_Association || aWrapperRef != m_Association )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] *aWrapperRef (" << *aWrapperRef;
         std::cerr << ") does not match *m_Association (" << *m_Association << ") in type ";
@@ -224,6 +239,8 @@ void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef )
         std::cerr << " * [INFO] OR aWrapperRef(" << aWrapperRef << ") != m_Association(";
         std::cerr << m_Association << ")\n";
         std::cerr << " * [INFO] node name: " << GetName() << "\n";
+        #endif
+
         return;
     }
 
@@ -248,6 +265,7 @@ bool S3D::GetMatIndex( MATLIST& aList, SGNODE* aNode, int& aIndex )
 
     if( NULL == aNode || S3D::SGTYPE_APPEARANCE != aNode->GetNodeType() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
 
         if( NULL == aNode )
@@ -259,6 +277,7 @@ bool S3D::GetMatIndex( MATLIST& aList, SGNODE* aNode, int& aIndex )
             std::cerr << " * [BUG] invalid node type (" << aNode->GetNodeType();
             std::cerr << "), expected " << S3D::SGTYPE_APPEARANCE << "\n";
         }
+        #endif
 
         return false;
     }

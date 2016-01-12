@@ -160,14 +160,6 @@ bool S3D_FILENAME_RESOLVER::UpdatePathList( std::vector< wxString >& aPathList )
     for( size_t i = 0; i < nI; ++i )
         addPath( aPathList[i] );
 
-#ifdef DEBUG
-    std::cerr << "* S3D_FILENAME_RESOLVER::UpdatePathList()\n";
-    std::cerr << "NItems: " << aPathList.size() << "\n";
-
-    for( size_t i = 0; i < aPathList.size(); ++i )
-        std::cerr << "Item #" << i << ": " << aPathList[i].ToUTF8() << "\n";
-#endif
-
     return writePathList();
 }
 
@@ -235,7 +227,8 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         ++sPL;
     }
 
-    std::cerr << " * [3D Model] filename could not be resolved: '";
+    wxString errmsg = _( "filename could not be resolved" );
+    std::cerr << " * [3D Model] " << errmsg.ToUTF8() << " '";
     std::cerr << aFileName.ToUTF8() << "'\n";
 
     return wxEmptyString;
@@ -269,7 +262,9 @@ bool S3D_FILENAME_RESOLVER::addPath( const wxString& aPath )
 
     if( !path.DirExists() )
     {
-        std::cerr << " * [3D Model] invalid path: '" << path.GetPath().ToUTF8() << "'\n";
+        wxString errmsg = _( "invalid path" );
+        std::cerr << " * [3D Model] " << errmsg.ToUTF8() << " '" << path.GetPath().ToUTF8() << "'\n";
+
         return false;
     }
 
@@ -295,7 +290,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     if( m_ConfigDir.empty() )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * 3D configuration directory is unknown\n";
+        wxString errmsg = _( "3D configuration directory is unknown" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n";
         return false;
     }
 
@@ -311,7 +307,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     if( !wxFileName::Exists( cfgname ) )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * no 3D configuration file: '";
+        wxString errmsg = _( "no 3D configuration file" );
+        std::cerr << " * " << errmsg.ToUTF8() << " '";
         std::cerr << cfgname.ToUTF8() << "'\n";
         return false;
     }
@@ -321,7 +318,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     if( !cfgFile.is_open() )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * could not open configuration file '" << cfgname.ToUTF8() << "'\n";
+        wxString errmsg = _( "could not open configuration file" );
+        std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
         return false;
     }
 
@@ -347,8 +345,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
         if( std::string::npos == spos )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * bad config entry in config file '" << cfgname.ToUTF8() << "'\n";
-            std::cerr << "   line " << lineno << " [missing opening quote mark]\n";
+            wxString errmsg = _( "missing opening quote mark in config file" );
+            std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
         }
 
         cfgLine.erase( 0, spos + 1 );
@@ -358,8 +356,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
         if( std::string::npos == spos )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * bad config entry in config file '" << cfgname.ToUTF8() << "'\n";
-            std::cerr << "   line " << lineno << " [missing closing quote mark]\n";
+            wxString errmsg = _( "missing closing quote mark in config file" );
+            std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
         }
 
         cfgLine.erase( spos );
@@ -367,9 +365,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
         if( !addPath( cfgLine ) )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * bad config entry in config file '" << cfgname.ToUTF8() << "'\n";
-            std::cerr << "   line " << lineno << " [not a valid path]: '";
-            std::cerr << cfgLine << "'\n";
+            wxString errmsg = _( "invalid path in config file" );
+            std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
             mod = true;
         }
     }
@@ -391,7 +388,8 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     if( m_ConfigDir.empty() )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * 3D configuration directory is unknown\n";
+        wxString errmsg = _( "3D configuration directory is unknown" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n";
         return false;
     }
 
@@ -407,7 +405,8 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     if( !cfgFile.is_open() )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * could not open configuration file '" << cfgname.ToUTF8() << "'\n";
+        wxString errmsg = _( "could not open configuration file " );
+        std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
         return false;
     }
 

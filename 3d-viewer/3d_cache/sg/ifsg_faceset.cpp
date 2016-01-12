@@ -58,8 +58,12 @@ IFSG_FACESET::IFSG_FACESET( SGNODE* aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -74,11 +78,13 @@ IFSG_FACESET::IFSG_FACESET( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
+    #ifdef DEBUG
     if( ! pp )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
     }
+    #endif
 
     m_node = new SGFACESET( NULL );
 
@@ -88,8 +94,12 @@ IFSG_FACESET::IFSG_FACESET( IFSG_NODE& aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -131,10 +141,13 @@ bool IFSG_FACESET::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] invalid SGNODE parent (";
         std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
         std::cerr << ") to SGFACESET\n";
+        #endif
+
         delete m_node;
         m_node = NULL;
         return false;
@@ -152,8 +165,11 @@ bool IFSG_FACESET::NewNode( IFSG_NODE& aParent )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
+        #endif
+
         return false;
     }
 

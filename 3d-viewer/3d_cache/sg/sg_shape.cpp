@@ -196,8 +196,10 @@ void SGSHAPE::unlinkNode( const SGNODE* aNode, bool isChild )
         }
     }
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] unlinkNode() did not find its target\n";
+    #endif
 
     return;
 }
@@ -221,8 +223,11 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
 {
     if( NULL == aNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aNode\n";
+        #endif
+
         return false;
     }
 
@@ -232,8 +237,11 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Appearance && aNode != m_RAppearance )
             {
+                #ifdef DEBUG
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [BUG] assigning multiple Appearance nodes\n";
+                #endif
+
                 return false;
             }
 
@@ -260,8 +268,11 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_FaceSet && aNode != m_RFaceSet )
             {
+                #ifdef DEBUG
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 std::cerr << " * [BUG] assigning multiple FaceSet nodes\n";
+                #endif
+
                 return false;
             }
 
@@ -282,9 +293,12 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
         return true;
     }
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] object '" << aNode->GetName();
     std::cerr << "' is not a valid type for this object (" << aNode->GetNodeType() << ")\n";
+    #endif
+
     return false;
 }
 
@@ -373,8 +387,11 @@ bool SGSHAPE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     {
         if( NULL == m_Parent )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [BUG] corrupt data; m_aParent is NULL\n";
+            #endif
+
             return false;
         }
 
@@ -388,15 +405,21 @@ bool SGSHAPE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
     if( parentNode != m_Parent )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        #endif
+
         return false;
     }
 
     if( !aFile.good() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad stream\n";
+        #endif
+
         return false;
     }
 
@@ -450,8 +473,11 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 {
     if( m_Appearance || m_RAppearance || m_FaceSet || m_RFaceSet )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] non-empty node\n";
+        #endif
+
         return false;
     }
 
@@ -463,9 +489,12 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
     if( ( items[0] && items[1] ) || ( items[2] && items[3] ) )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] corrupt data; multiple item definitions at position ";
         std::cerr << aFile.tellg() << "\n";
+        #endif
+
         return false;
     }
 
@@ -475,9 +504,12 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_APPEARANCE != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad child apperance tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -486,9 +518,12 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !m_Appearance->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading appearance '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -497,9 +532,12 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_APPEARANCE != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad ref appearance tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -507,17 +545,23 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: cannot find ref appearance '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
         if( S3D::SGTYPE_APPEARANCE != np->GetNodeType() )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: type is not SGAPPEARANCE '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
@@ -529,9 +573,12 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_FACESET != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad child face set tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -540,9 +587,12 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !m_FaceSet->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading face set '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -551,9 +601,12 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_FACESET != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad ref face set tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -561,17 +614,23 @@ bool SGSHAPE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: cannot find ref face set '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
         if( S3D::SGTYPE_FACESET != np->GetNodeType() )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: type is not SGFACESET '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 

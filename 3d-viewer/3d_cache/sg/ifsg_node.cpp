@@ -70,8 +70,11 @@ S3D::SGTYPES IFSG_NODE::GetNodeType( void ) const
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return S3D::SGTYPE_END;
     }
 
@@ -83,8 +86,11 @@ SGNODE* IFSG_NODE::GetParent( void ) const
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return NULL;
     }
 
@@ -96,8 +102,11 @@ bool IFSG_NODE::SetParent( SGNODE* aParent )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -109,8 +118,11 @@ const char* IFSG_NODE::GetName( void )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return NULL;
     }
 
@@ -122,8 +134,11 @@ bool IFSG_NODE::SetName( const char *aName )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -136,8 +151,11 @@ const char * IFSG_NODE::GetNodeTypeName( S3D::SGTYPES aNodeType ) const
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return NULL;
     }
 
@@ -149,8 +167,11 @@ SGNODE* IFSG_NODE::FindNode( const char *aNodeName )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return NULL;
     }
 
@@ -162,8 +183,11 @@ bool IFSG_NODE::AddRefNode( SGNODE* aNode )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -175,8 +199,11 @@ bool IFSG_NODE::AddRefNode( IFSG_NODE& aNode )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -184,8 +211,11 @@ bool IFSG_NODE::AddRefNode( IFSG_NODE& aNode )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadOperand << "\n";
+        #endif
+
         return false;
     }
 
@@ -197,8 +227,11 @@ bool IFSG_NODE::AddChildNode( SGNODE* aNode )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -210,8 +243,11 @@ bool IFSG_NODE::AddChildNode( IFSG_NODE& aNode )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -219,8 +255,11 @@ bool IFSG_NODE::AddChildNode( IFSG_NODE& aNode )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadOperand << "\n";
+        #endif
+
         return false;
     }
 

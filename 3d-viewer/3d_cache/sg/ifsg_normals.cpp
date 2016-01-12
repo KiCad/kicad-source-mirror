@@ -59,8 +59,12 @@ IFSG_NORMALS::IFSG_NORMALS( SGNODE* aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -75,11 +79,13 @@ IFSG_NORMALS::IFSG_NORMALS( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
+    #ifdef DEBUG
     if( ! pp )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
     }
+    #endif
 
     m_node = new SGNORMALS( NULL );
 
@@ -89,8 +95,12 @@ IFSG_NORMALS::IFSG_NORMALS( IFSG_NODE& aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -132,10 +142,13 @@ bool IFSG_NORMALS::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] invalid SGNODE parent (";
         std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
         std::cerr << ") to SGNORMALS\n";
+        #endif
+
         delete m_node;
         m_node = NULL;
         return false;
@@ -153,8 +166,11 @@ bool IFSG_NORMALS::NewNode( IFSG_NODE& aParent )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
+        #endif
+
         return false;
     }
 
@@ -166,8 +182,11 @@ bool IFSG_NORMALS::GetNormalList( size_t& aListSize, SGVECTOR*& aNormalList )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -179,8 +198,11 @@ bool IFSG_NORMALS::SetNormalList( size_t aListSize, const SGVECTOR* aNormalList 
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -193,8 +215,11 @@ bool IFSG_NORMALS::AddNormal( double aXValue, double aYValue, double aZValue )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -207,8 +232,11 @@ bool IFSG_NORMALS::AddNormal( const SGVECTOR& aNormal )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 

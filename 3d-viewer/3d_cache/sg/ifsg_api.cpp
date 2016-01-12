@@ -44,7 +44,9 @@
 #include "plugins/3dapi/c3dmodel.h"
 
 
+#ifdef DEBUG
 static char BadNode[] = " * [BUG] NULL pointer passed for aNode\n";
+#endif
 
 static void formatMaterial( SMATERIAL& mat, SGAPPEARANCE const* app )
 {
@@ -111,15 +113,21 @@ bool S3D::WriteVRML( const wxString& filename, bool overwrite, SGNODE* aTopNode,
 
     if( NULL == aTopNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aTopNode\n";
+        #endif
+
         return false;
     }
 
     if( S3D::SGTYPE_TRANSFORM != aTopNode->GetNodeType() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] aTopNode is not a SCENEGRAPH object\n";
+        #endif
+
         return false;
     }
 
@@ -131,7 +139,8 @@ bool S3D::WriteVRML( const wxString& filename, bool overwrite, SGNODE* aTopNode,
     if( !op.is_open() )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] failed to open file '" << filename.ToUTF8() << "'\n";
+        wxString errmsg = _( "failed to open file" );
+        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename.ToUTF8() << "'\n";
         return false;
     }
 
@@ -152,8 +161,11 @@ bool S3D::WriteVRML( const wxString& filename, bool overwrite, SGNODE* aTopNode,
     }
 
     op.close();
+
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [INFO] problems encountered writing file '" << filename.ToUTF8() << "'\n";
+    wxString errmsg = _( "problems encountered writing file" );
+    std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename.ToUTF8() << "'\n";
+
     return false;
 }
 
@@ -162,8 +174,11 @@ void S3D::ResetNodeIndex( SGNODE* aNode )
 {
     if( NULL == aNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadNode;
+        #endif
+
         return;
     }
 
@@ -177,8 +192,11 @@ void S3D::RenameNodes( SGNODE* aNode )
 {
     if( NULL == aNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadNode;
+        #endif
+
         return;
     }
 
@@ -192,8 +210,11 @@ void S3D::DestroyNode( SGNODE* aNode )
 {
     if( NULL == aNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadNode;
+        #endif
+
         return;
     }
 
@@ -207,8 +228,11 @@ bool S3D::WriteCache( const wxString& aFileName, bool overwrite, SGNODE* aNode )
 {
     if( NULL == aNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadNode;
+        #endif
+
         return false;
     }
 
@@ -218,7 +242,8 @@ bool S3D::WriteCache( const wxString& aFileName, bool overwrite, SGNODE* aNode )
         if( !overwrite )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] file exists; not overwriting: '";
+            wxString errmsg = _( "file exists; not overwriting" );
+            std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
             std::cerr << aFileName.ToUTF8() << "'\n";
             return false;
         }
@@ -227,7 +252,8 @@ bool S3D::WriteCache( const wxString& aFileName, bool overwrite, SGNODE* aNode )
         if( !wxFileName::FileExists( aFileName ) )
         {
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] specified path is a directory: '";
+            wxString errmsg = _( "specified path is a directory" );
+            std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
             std::cerr << aFileName.ToUTF8() << "'\n";
             return false;
         }
@@ -240,19 +266,22 @@ bool S3D::WriteCache( const wxString& aFileName, bool overwrite, SGNODE* aNode )
     if( !output.is_open() )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] failed to open file '" << aFileName.ToUTF8() << "'\n";
+        wxString errmsg = _( "failed to open file" );
+        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '" << aFileName.ToUTF8() << "'\n";
         return false;
     }
 
     bool rval = aNode->WriteCache( output, NULL );
     output.close();
 
+    #ifdef DEBUG
     if( !rval )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] problems encountered writing cache file '";
         std::cerr << aFileName.ToUTF8() << "'\n";
     }
+    #endif
 
     return rval;
 }
@@ -263,7 +292,8 @@ SGNODE* S3D::ReadCache( const wxString& aFileName )
     if( !wxFileName::FileExists( aFileName ) )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] no such file: '";
+        wxString errmsg = _( "no such file" );
+        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
         std::cerr << aFileName.ToUTF8() << "'\n";
     }
 
@@ -271,8 +301,10 @@ SGNODE* S3D::ReadCache( const wxString& aFileName )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] failed to instantiate SCENEGRAPH\n";
+        #endif
         return NULL;
     }
 
@@ -283,7 +315,8 @@ SGNODE* S3D::ReadCache( const wxString& aFileName )
     {
         delete np;
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] failed to open file '";
+        wxString errmsg = _( "failed to open file" );
+        std::cerr << " * [INFO] " << " '";
         std::cerr << aFileName.ToUTF8() << "'\n";
         return NULL;
     }
@@ -295,7 +328,8 @@ SGNODE* S3D::ReadCache( const wxString& aFileName )
     {
         delete np;
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] problems encountered reading cache file '";
+        wxString errmsg = _( "problems encountered reading cache file" );
+        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
         std::cerr << aFileName.ToUTF8() << "'\n";
         return NULL;
     }

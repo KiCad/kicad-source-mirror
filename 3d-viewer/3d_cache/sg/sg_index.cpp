@@ -94,32 +94,44 @@ SGNODE* SGINDEX::FindNode(const char *aNodeName, const SGNODE *aCaller)
 
 void SGINDEX::unlinkChildNode( const SGNODE* aCaller )
 {
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    #endif
+
     return;
 }
 
 
 void SGINDEX::unlinkRefNode( const SGNODE* aCaller )
 {
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    #endif
+
     return;
 }
 
 
 bool SGINDEX::AddRefNode( SGNODE* aNode )
 {
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] this node does not accept children or refs\n";
+    #endif
+
     return false;
 }
 
 
 bool SGINDEX::AddChildNode( SGNODE* aNode )
 {
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] this node does not accept children or refs\n";
+    #endif
+
     return false;
 }
 
@@ -188,8 +200,11 @@ bool SGINDEX::writeCoordIndex( std::ofstream& aFile )
 
     if( n % 3 )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] coord index is not divisible by three (violates triangle constraint)\n";
+        #endif
+
         return false;
     }
 
@@ -271,8 +286,11 @@ bool SGINDEX::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     {
         if( NULL == m_Parent )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [BUG] corrupt data; m_aParent is NULL\n";
+            #endif
+
             return false;
         }
 
@@ -286,15 +304,21 @@ bool SGINDEX::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
     if( parentNode != m_Parent )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        #endif
+
         return false;
     }
 
     if( !aFile.good() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad stream\n";
+        #endif
+
         return false;
     }
 
@@ -316,8 +340,11 @@ bool SGINDEX::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 {
     if( !index.empty() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] non-empty node\n";
+        #endif
+
         return false;
     }
 

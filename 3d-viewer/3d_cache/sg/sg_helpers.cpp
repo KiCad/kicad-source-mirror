@@ -208,9 +208,12 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
 
     if( '[' != schar )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] corrupt data; missing left bracket at position ";
         std::cerr << aFile.tellg() << "\n";
+        #endif
+
         return S3D::SGTYPE_END;
     }
 
@@ -225,8 +228,11 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
 
     if( schar != ']' )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] corrupt data; could not find right bracket\n";
+        #endif
+
         return S3D::SGTYPE_END;
     }
 
@@ -235,9 +241,12 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
 
     if( std::string::npos == upos )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] corrupt data; no underscore in name '";
         std::cerr << name << "'\n";
+        #endif
+
         return S3D::SGTYPE_END;
     }
 
@@ -260,9 +269,12 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
             return types[i];
     }
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [INFO] corrupt data; no node type matching '";
     std::cerr << name << "'\n";
+    #endif
+
     return S3D::SGTYPE_END;
 }
 
@@ -491,8 +503,11 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
 
     if( norms.size() != coords.size() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] number of normals does not equal number of vertices\n";
+        #endif
+
         return false;
     }
 

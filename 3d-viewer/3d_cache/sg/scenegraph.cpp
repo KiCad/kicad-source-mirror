@@ -132,8 +132,10 @@ void SCENEGRAPH::unlinkNode( const SGNODE* aNode, bool isChild )
     UNLINK_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms, isChild );
     UNLINK_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] unlinkNode() did not find its target\n";
+    #endif
 
     return;
 }
@@ -157,17 +159,23 @@ bool SCENEGRAPH::addNode( SGNODE* aNode, bool isChild )
 {
     if( NULL == aNode )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] NULL pointer passed for aNode\n";
+        #endif
+
         return false;
     }
 
     ADD_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms, isChild );
     ADD_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
 
+    #ifdef DEBUG
     std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
     std::cerr << " * [BUG] object '" << aNode->GetName();
     std::cerr << "' is not a valid type for this object (" << aNode->GetNodeType() << ")\n";
+    #endif
+
     return false;
 }
 
@@ -333,8 +341,11 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
     if( parentNode != m_Parent )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        #endif
+
         return false;
     }
 
@@ -347,8 +358,11 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
     if( aFile.fail() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] bad stream\n";
+        #endif
+
         return false;
     }
 
@@ -378,8 +392,11 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     {
         if( !m_Transforms[i]->WriteCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad stream while writing child transforms\n";
+            #endif
+
             return false;
         }
     }
@@ -395,8 +412,11 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     {
         if( !m_Shape[i]->WriteCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] bad stream while writing child shapes\n";
+            #endif
+
             return false;
         }
     }
@@ -418,8 +438,11 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     if( !m_Transforms.empty() || !m_RTransforms.empty()
         || !m_Shape.empty() || !m_RShape.empty() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] non-empty node\n";
+        #endif
+
         return false;
     }
 
@@ -430,9 +453,12 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         // we need to read the tag and verify its type
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; tag mismatch at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -465,9 +491,12 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad child transform tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -476,9 +505,12 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !sp->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading transform '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -488,9 +520,12 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad ref transform tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -498,17 +533,23 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !sp )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: cannot find ref transform '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
         if( S3D::SGTYPE_TRANSFORM != sp->GetNodeType() )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: type is not TRANSFORM '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
@@ -520,9 +561,12 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_SHAPE != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad child shape tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -531,9 +575,12 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !sp->ReadCache( aFile, this ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data while reading shape '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
     }
@@ -543,9 +590,12 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_SHAPE != S3D::ReadTag( aFile, name ) )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data; bad ref shape tag at position ";
             std::cerr << aFile.tellg() << "\n";
+            #endif
+
             return false;
         }
 
@@ -553,17 +603,23 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
         if( !sp )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: cannot find ref shape '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 
         if( S3D::SGTYPE_SHAPE != sp->GetNodeType() )
         {
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << " * [INFO] corrupt data: type is not SGSHAPE '";
             std::cerr << name << "'\n";
+            #endif
+
             return false;
         }
 

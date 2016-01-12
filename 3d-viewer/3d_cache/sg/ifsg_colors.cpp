@@ -57,8 +57,12 @@ IFSG_COLORS::IFSG_COLORS( SGNODE* aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -73,11 +77,13 @@ IFSG_COLORS::IFSG_COLORS( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
+    #ifdef DEBUG
     if( ! pp )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
     }
+    #endif
 
     m_node = new SGCOLORS( NULL );
 
@@ -87,8 +93,12 @@ IFSG_COLORS::IFSG_COLORS( IFSG_NODE& aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -130,10 +140,13 @@ bool IFSG_COLORS::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] invalid SGNODE parent (";
         std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
         std::cerr << ") to SGCOLORS\n";
+        #endif
+
         delete m_node;
         m_node = NULL;
         return false;
@@ -151,8 +164,11 @@ bool IFSG_COLORS::NewNode( IFSG_NODE& aParent )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
+        #endif
+
         return false;
     }
 
@@ -164,8 +180,11 @@ bool IFSG_COLORS::GetColorList( size_t& aListSize, SGCOLOR*& aColorList )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -177,8 +196,11 @@ bool IFSG_COLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -192,8 +214,11 @@ bool IFSG_COLORS::AddColor( double aRedValue, double aGreenValue, double aBlueVa
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -207,8 +232,11 @@ bool IFSG_COLORS::AddColor( const SGCOLOR& aColor )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 

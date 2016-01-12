@@ -59,8 +59,12 @@ IFSG_APPEARANCE::IFSG_APPEARANCE( SGNODE* aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -75,11 +79,13 @@ IFSG_APPEARANCE::IFSG_APPEARANCE( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
+    #ifdef DEBUG
     if( ! pp )
     {
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
     }
+    #endif
 
     m_node = new SGAPPEARANCE( NULL );
 
@@ -89,8 +95,12 @@ IFSG_APPEARANCE::IFSG_APPEARANCE( IFSG_NODE& aParent )
         {
             delete m_node;
             m_node = NULL;
+
+            #ifdef DEBUG
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             std::cerr << WrongParent << "\n";
+            #endif
+
             return;
         }
 
@@ -132,10 +142,13 @@ bool IFSG_APPEARANCE::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] invalid SGNODE parent (";
         std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
         std::cerr << ") to SGAPPEARANCE\n";
+        #endif
+
         delete m_node;
         m_node = NULL;
         return false;
@@ -153,8 +166,11 @@ bool IFSG_APPEARANCE::NewNode( IFSG_NODE& aParent )
 
     if( NULL == np )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadParent << "\n";
+        #endif
+
         return false;
     }
 
@@ -166,8 +182,11 @@ bool IFSG_APPEARANCE::SetEmissive( float aRVal, float aGVal, float aBVal )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -179,8 +198,11 @@ bool IFSG_APPEARANCE::SetEmissive( const SGCOLOR* aRGBColor )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -192,8 +214,11 @@ bool IFSG_APPEARANCE::SetEmissive( const SGCOLOR& aRGBColor )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -205,8 +230,11 @@ bool IFSG_APPEARANCE::SetDiffuse( float aRVal, float aGVal, float aBVal )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -218,8 +246,11 @@ bool IFSG_APPEARANCE::SetDiffuse( const SGCOLOR* aRGBColor )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -231,8 +262,11 @@ bool IFSG_APPEARANCE::SetDiffuse( const SGCOLOR& aRGBColor )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -244,8 +278,11 @@ bool IFSG_APPEARANCE::SetSpecular( float aRVal, float aGVal, float aBVal )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -257,8 +294,11 @@ bool IFSG_APPEARANCE::SetSpecular( const SGCOLOR* aRGBColor )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -270,8 +310,11 @@ bool IFSG_APPEARANCE::SetSpecular( const SGCOLOR& aRGBColor )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
@@ -283,15 +326,21 @@ bool IFSG_APPEARANCE::SetAmbient( float aAmbientLight )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
     if( aAmbientLight < 0 || aAmbientLight > 1.0 )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] ambient intensity out of range [0..1]\n";
+        #endif
+
         return false;
     }
 
@@ -304,15 +353,21 @@ bool IFSG_APPEARANCE::SetShininess( float aShininess )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
     if( aShininess < 0 || aShininess > 1.0 )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] shininess out of range [0..1]\n";
+        #endif
+
         return false;
     }
 
@@ -326,15 +381,21 @@ bool IFSG_APPEARANCE::SetTransparency( float aTransparency )
 {
     if( NULL == m_node )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << BadObject << "\n";
+        #endif
+
         return false;
     }
 
     if( aTransparency < 0 || aTransparency > 1.0 )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] shininess out of range [0..1]\n";
+        #endif
+
         return false;
     }
 
