@@ -48,7 +48,6 @@
 #include <id.h>
 #include <build_version.h>
 #include <hotkeys_basic.h>
-#include <online_help.h>
 #include <gestfich.h>
 #include <menus_helpers.h>
 #include <confirm.h>

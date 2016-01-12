@@ -40,7 +40,6 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <online_help.h>
 #include <id.h>
 #include <eda_doc.h>
 #include <wxstruct.h>

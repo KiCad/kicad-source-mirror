@@ -35,7 +35,6 @@
 #include <kiway.h>
 #include <pgm_kicad.h>
 #include <tree_project_frame.h>
-#include <online_help.h>
 #include <wildcards_and_files_ext.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <hotkeys_basic.h>
