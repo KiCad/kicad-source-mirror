@@ -1,8 +1,3 @@
-/**
- * @file class_bitmap_base.h
- *
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -30,6 +25,10 @@
 #ifndef _BITMAP_BASE_H_
 #define _BITMAP_BASE_H_
 
+/**
+ * @file class_bitmap_base.h
+ *
+ */
 
 class PLOTTER;
 

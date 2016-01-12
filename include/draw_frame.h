@@ -1,5 +1,3 @@
-#ifndef EDA_DRAW_FRAME_H_
-#define EDA_DRAW_FRAME_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,6 +22,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef DRAW_FRAME_H_
+#define DRAW_FRAME_H_
 
 #include <wxstruct.h>
 #include <kiway_player.h>
@@ -809,4 +810,4 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-#endif  // EDA_DRAW_FRAME_H_
+#endif  // DRAW_FRAME_H_

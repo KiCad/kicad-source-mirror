@@ -1,6 +1,3 @@
-/**
- * @file convert_basic_shapes_to_polygon.h
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,6 +24,10 @@
 
 #ifndef CONVERT_BASIC_SHAPES_TO_POLYGON_H
 #define CONVERT_BASIC_SHAPES_TO_POLYGON_H
+
+/**
+ * @file convert_basic_shapes_to_polygon.h
+ */
 
 #include <vector>
 

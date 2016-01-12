@@ -1,5 +1,3 @@
-#ifndef HASHTABLES_H_
-#define HASHTABLES_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -23,6 +21,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef HASHTABLES_H_
+#define HASHTABLES_H_
 
 #include <base_struct.h>
 #include <wx/string.h>

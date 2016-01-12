@@ -1,6 +1,3 @@
-#ifndef KIWAY_PLAYER_H_
-#define KIWAY_PLAYER_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,6 +21,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef KIWAY_PLAYER_H_
+#define KIWAY_PLAYER_H_
 
 #include <wx/frame.h>
 #include <vector>

@@ -1,7 +1,3 @@
-/**
- * @file trigo.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -25,9 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #ifndef TRIGO_H
 #define TRIGO_H
+
+/**
+ * @file trigo.h
+ */
+
 #include <math.h>
 #include <wx/gdicmn.h> // For wxPoint
 
