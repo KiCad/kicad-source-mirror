@@ -75,13 +75,32 @@ wxString PinNumbers::GetSummary() const
     if( i == end() )
         return ret;
 
-    ret = *i;
-    ++i;
+    const_iterator begin_of_range = i;
+    const_iterator last;
 
-    for( ; i != end(); ++i )
+    for( ;; )
     {
+        last = i;
+        ++i;
+
+        int rc = ( i != end() ) ? Compare( *last, *i ) : -2;
+
+        assert( rc == -1 || rc == -2 );
+
+        if( rc == -1 )
+            // adjacent elements
+            continue;
+
+        ret += *begin_of_range;
+        if( begin_of_range != last )
+        {
+            ret += '-';
+            ret += *last;
+        }
+        if( i == end() )
+            break;
+        begin_of_range = i;
         ret += ',';
-        ret += *i;
     }
 
     return ret;
@@ -104,10 +123,10 @@ int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
             return 0;
 
         if( comp1.empty() )
-            return -1;
+            return -2;
 
         if( comp2.empty() )
-            return 1;
+            return 2;
 
         wxUniChar c1    = comp1[0];
         wxUniChar c2    = comp2[0];
@@ -133,18 +152,28 @@ int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
                 comp2.ToDouble( &val2 );
 
                 if( val1 < val2 )
-                    return -1;
+                {
+                    if( val1 == val2 - 1 )
+                        return -1;
+                    else
+                        return -2;
+                }
 
                 if( val1 > val2 )
-                    return 1;
+                {
+                    if( val1 == val2 + 1 )
+                        return 1;
+                    else
+                        return 2;
+                }
             }
             else
-                return -1;
+                return -2;
         }
         else
         {
             if( isdigit( c2 ) || c2 == '-' || c2 == '+' )
-                return 1;
+                return 2;
 
             int res = comp1.Cmp( comp2 );
 
