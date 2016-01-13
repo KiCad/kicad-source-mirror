@@ -340,7 +340,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
 
-        m_cmp->SetUnitSelection( &m_parent->GetCurrentSheet(), unit_selection );
+        m_cmp->SetUnitSelection( m_parent->GetCurrentSheet().Last(), unit_selection );
         m_cmp->SetUnit( unit_selection );
     }
 

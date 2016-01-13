@@ -41,6 +41,7 @@
 #include <general.h>
 #include <class_library.h>
 #include <sch_component.h>
+#include <sch_sheet_path.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
@@ -325,7 +326,7 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
             component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
 
         /* Update the unit number. */
-        component->SetUnitSelection( m_CurrentSheet, unit );
+        component->SetUnitSelection( m_CurrentSheet->Last(), unit );
         component->SetUnit( unit );
         component->ClearFlags();
         component->SetFlags( flags );   // Restore m_Flag modified by SetUnit()

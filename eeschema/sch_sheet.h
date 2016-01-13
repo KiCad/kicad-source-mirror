@@ -44,6 +44,7 @@ class SCH_SHEET_PATH;
 class DANGLING_END_ITEM;
 class SCH_EDIT_FRAME;
 class NETLIST_OBJECT_LIST;
+class SCH_REFERENCE_LIST;
 
 
 #define MIN_SHEET_WIDTH  500
@@ -243,6 +244,11 @@ class SCH_SHEET : public SCH_ITEM
 
     /// The size of the sheet.
     wxSize m_size;
+
+    /// The sheet number ordered by file load.
+    // @todo: At some point this should really be a sheet number assigned by the user rather
+    //        than assigned in the order the sheets were parsed and loaded.
+    int m_number;
 
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -569,6 +575,8 @@ public:
      */
     bool operator<( const SCH_SHEET& aRhs ) const;
 
+    int operator-( const SCH_SHEET& aRhs ) const;
+
     wxPoint GetPosition() const { return m_pos; }
 
     void SetPosition( const wxPoint& aPosition );
@@ -678,6 +686,19 @@ public:
      * displayed sheet
      */
     void UpdateAllScreenReferences();
+
+    /**
+     * Function GetComponents
+     * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
+     *
+     * @param aLibs the library list to use
+     * @param aReferences List of references to populate.
+     * @param aIncludePowerSymbols : false to only get normal components.
+     * @param aIncludeSubSheets true includes components of all sub-sheets and false includes
+     *                          only the components in this sheet.
+     */
+    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
+                        bool aIncludePowerSymbols = true, bool aIncludeSubSheets = true );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

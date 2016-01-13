@@ -1,9 +1,10 @@
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +33,7 @@
 #define CLASS_DRAWSHEET_PATH_H
 
 #include <base_struct.h>
+#include <sch_reference_list.h>
 
 
 /** Info about complex hierarchies handling:
@@ -82,17 +84,11 @@ class SCH_SCREEN;
 class SCH_MARKER;
 class SCH_SHEET;
 class SCH_ITEM;
-class SCH_REFERENCE_LIST;
 class PART_LIBS;
+
 
 #define SHEET_NOT_FOUND          -1
 
-
-/**
- * Type SCH_MULTI_UNIT_REFERENCE_MAP
- * is used to create a map of reference designators for multi-unit parts.
- */
-typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
 
 /**
  * Class SCH_SHEET_PATH
@@ -216,16 +212,6 @@ public:
     bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
 
     /**
-     * Function GetComponents
-     * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
-     * @param aLibs the library list to use
-     * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols : false to only get normal components.
-     */
-    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                        bool aIncludePowerSymbols = true  );
-
-    /**
      * Function GetMultiUnitComponents
      * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
      * multi-unit parts in the sheet. The map key for each element will be the
@@ -234,7 +220,7 @@ public:
      * @param aRefList Map of reference designators to reference lists
      * @param aIncludePowerSymbols : false to only get normal components.
      */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
                                  bool aIncludePowerSymbols = true );
 
     /**
@@ -415,17 +401,6 @@ public:
     SCH_SHEET_PATH* GetSheetByPath( const wxString aPath, bool aHumanReadable = true );
 
     /**
-     * Function GetComponents
-     * adds a SCH_REFERENCE() object to \a aReferences for each component in the list
-     * of sheets.
-     * @param aLibs the library list to use
-     * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols Set to false to only get normal components.
-     */
-    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                        bool aIncludePowerSymbols = true  );
-
-    /**
      * Function GetMultiUnitComponents
      * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
      * multi-unit parts in the list of sheets. The map key for each element will be the
@@ -434,8 +409,8 @@ public:
      * @param aRefList Map of reference designators to reference lists
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-            bool aIncludePowerSymbols = true );
+    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+                                 bool aIncludePowerSymbols = true );
 
     /**
      * Function FindNextItem
