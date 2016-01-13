@@ -43,6 +43,8 @@ public:
     void    CalculateGrouping();
     void    Refresh();
 
+    PinNumbers GetAllPinNumbers();
+
 #ifdef REASSOCIATE_HACK
     void SetWidget( wxDataViewCtrl* aWidget ) { m_Widget = aWidget; }
 #endif
@@ -176,6 +178,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent,
     m_Pins->AppendColumn( col2 );
     m_Pins->AppendColumn( col3 );
 
+    UpdateSummary();
+
     GetSizer()->SetSizeHints(this);
     Centre();
 }
@@ -183,6 +187,14 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent,
 
 DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 {
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::UpdateSummary()
+{
+    PinNumbers pins = m_Model->GetAllPinNumbers();
+
+    m_Summary->SetValue( pins.GetSummary() );
 }
 
 
@@ -374,6 +386,21 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Refresh()
     }
 
 #endif
+}
+
+
+PinNumbers DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetAllPinNumbers()
+{
+    PinNumbers ret;
+
+    for( std::list<Pin>::const_iterator i = m_Pins.begin(); i != m_Pins.end(); ++i )
+    {
+        wxVariant var;
+        i->GetValue( var, PIN_NUMBER );
+        ret.insert( var.GetString() );
+    }
+
+    return ret;
 }
 
 

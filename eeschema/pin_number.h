@@ -34,6 +34,8 @@ typedef wxString PinNumber;
 class PinNumbers
 {
 public:
+    wxString GetSummary() const;
+
     static int Compare( PinNumber const &lhs, PinNumber const &rhs );
 
 private:

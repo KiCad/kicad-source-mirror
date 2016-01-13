@@ -21,6 +21,9 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	
 	top_sizer->Add( m_Pins, 1, wxALL|wxEXPAND, 5 );
 	
+	m_Summary = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxNO_BORDER );
+	top_sizer->Add( m_Summary, 0, wxALL|wxEXPAND, 5 );
+	
 	m_Buttons = new wxStdDialogButtonSizer();
 	m_ButtonsOK = new wxButton( this, wxID_OK );
 	m_Buttons->AddButton( m_ButtonsOK );

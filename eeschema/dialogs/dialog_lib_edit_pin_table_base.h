@@ -20,6 +20,7 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -36,6 +37,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxDataViewCtrl* m_Pins;
+		wxTextCtrl* m_Summary;
 		wxStdDialogButtonSizer* m_Buttons;
 		wxButton* m_ButtonsOK;
 		

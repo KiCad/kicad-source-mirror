@@ -67,6 +67,27 @@ wxString GetNextComponent( const wxString& str, wxString::size_type& cursor )
 }
 
 
+wxString PinNumbers::GetSummary() const
+{
+    wxString ret;
+
+    const_iterator i = begin();
+    if( i == end() )
+        return ret;
+
+    ret = *i;
+    ++i;
+
+    for( ; i != end(); ++i )
+    {
+        ret += ',';
+        ret += *i;
+    }
+
+    return ret;
+}
+
+
 int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
 {
     wxString::size_type cursor1 = 0;
