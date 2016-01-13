@@ -387,7 +387,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetValue( wxVariant& aValu
     }
     else
     {
-        std::set<wxString, PinNumbers::less> values;
+        PinNumbers values;
 
         for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
         {
