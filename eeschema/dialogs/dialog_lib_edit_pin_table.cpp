@@ -284,17 +284,6 @@ unsigned int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetChildren( const wxData
 }
 
 
-namespace {
-class CompareLess
-{
-public:
-    bool operator()( const wxString& lhs, const wxString& rhs )
-    {
-        return PinNumbers::Compare( lhs, rhs ) == -1;
-    }
-};
-}
-
 int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Compare( const wxDataViewItem& aItem1,
         const wxDataViewItem& aItem2,
         unsigned int aCol,
@@ -398,7 +387,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetValue( wxVariant& aValu
     }
     else
     {
-        std::set<wxString, CompareLess> values;
+        std::set<wxString, PinNumbers::less> values;
 
         for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
         {
