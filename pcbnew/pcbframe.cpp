@@ -786,7 +786,19 @@ EDA_COLOR_T PCB_EDIT_FRAME::GetGridColor() const
 
 void PCB_EDIT_FRAME::SetGridColor( EDA_COLOR_T aColor )
 {
+
     GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
+
+    if( IsGalCanvasActive() )
+    {
+        StructColors c = g_ColorRefs[ aColor ];
+        KIGFX::COLOR4D color(  (double) c.m_Red / 255.0,
+                        (double) c.m_Green / 255.0,
+                        (double) c.m_Blue / 255.0,
+                        0.7 );
+
+         GetGalCanvas()->GetGAL()->SetGridColor( color );
+    }
 }
 
 

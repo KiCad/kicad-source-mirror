@@ -480,6 +480,13 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
+
+    if( myframe->GetGalCanvas() )
+    {
+        KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
+        view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->GetBoard()->GetColorsSettings() );
+    }
+
     myframe->GetCanvas()->Refresh();
 }
 
