@@ -2,6 +2,8 @@
 
 #include "lib_pin.h"
 
+#include "pin_number.h"
+
 #include <boost/algorithm/string/join.hpp>
 #include <queue>
 
@@ -283,118 +285,12 @@ unsigned int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetChildren( const wxData
 
 
 namespace {
-wxString GetNextComponent( const wxString& str, wxString::size_type& cursor )
-{
-    if( str.size() <= cursor )
-        return wxEmptyString;
-
-    wxString::size_type begin = cursor;
-
-    wxUniChar c = str[cursor];
-
-    if( isdigit( c ) || c == '+' || c == '-' )
-    {
-        // number, possibly with sign
-        while( ++cursor < str.size() )
-        {
-            c = str[cursor];
-
-            if( isdigit( c ) || c == 'v' || c == 'V' )
-                continue;
-            else
-                break;
-        }
-    }
-    else
-    {
-        while( ++cursor < str.size() )
-        {
-            c = str[cursor];
-
-            if( isdigit( c ) )
-                break;
-            else
-                continue;
-        }
-    }
-
-    return str.substr( begin, cursor - begin );
-}
-
-
-int ComparePinNames( const wxString& lhs, const wxString& rhs )
-{
-    wxString::size_type cursor1 = 0;
-    wxString::size_type cursor2 = 0;
-
-    wxString comp1, comp2;
-
-    for( ; ; )
-    {
-        comp1 = GetNextComponent( lhs, cursor1 );
-        comp2 = GetNextComponent( rhs, cursor2 );
-
-        if( comp1.empty() && comp2.empty() )
-            return 0;
-
-        if( comp1.empty() )
-            return -1;
-
-        if( comp2.empty() )
-            return 1;
-
-        wxUniChar c1    = comp1[0];
-        wxUniChar c2    = comp2[0];
-
-        if( isdigit( c1 ) || c1 == '-' || c1 == '+' )
-        {
-            if( isdigit( c2 ) || c2 == '-' || c2 == '+' )
-            {
-                // numeric comparison
-                wxString::size_type v1 = comp1.find_first_of( "vV" );
-
-                if( v1 != wxString::npos )
-                    comp1[v1] = '.';
-
-                wxString::size_type v2 = comp2.find_first_of( "vV" );
-
-                if( v2 != wxString::npos )
-                    comp2[v2] = '.';
-
-                double val1, val2;
-
-                comp1.ToDouble( &val1 );
-                comp2.ToDouble( &val2 );
-
-                if( val1 < val2 )
-                    return -1;
-
-                if( val1 > val2 )
-                    return 1;
-            }
-            else
-                return -1;
-        }
-        else
-        {
-            if( isdigit( c2 ) || c2 == '-' || c2 == '+' )
-                return 1;
-
-            int res = comp1.Cmp( comp2 );
-
-            if( res != 0 )
-                return res;
-        }
-    }
-}
-
-
 class CompareLess
 {
 public:
     bool operator()( const wxString& lhs, const wxString& rhs )
     {
-        return ComparePinNames( lhs, rhs ) == -1;
+        return PinNumbers::Compare( lhs, rhs ) == -1;
     }
 };
 }
@@ -413,7 +309,7 @@ int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Compare( const wxDataViewItem& aIt
     GetValue( var2, aItem2, aCol );
     wxString str2 = var2.GetString();
 
-    int res = ComparePinNames( str1, str2 );
+    int res = PinNumbers::Compare( str1, str2 );
 
     if( res == 0 )
         res = ( aItem1.GetID() < aItem2.GetID() ) ? -1 : 1;
