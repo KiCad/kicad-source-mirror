@@ -563,7 +563,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_FLIP_ITEM:
-        OnHotkeyRotateItem( HK_FLIP_ITEM );
+        OnHotkeyFlipItem( HK_FLIP_ITEM );
         break;
 
     case HK_MOVE_ITEM_EXACT:
@@ -1026,11 +1026,66 @@ TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
     return track;
 }
 
+
+bool PCB_EDIT_FRAME::OnHotkeyFlipItem( int aIdCommand )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool        itemCurrentlyEdited = item && item->GetFlags();
+    int         evt_type = 0; // Used to post a wxCommandEvent on demand
+
+    wxASSERT( aIdCommand == HK_FLIP_ITEM );
+
+    if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    {
+        evt_type = ID_POPUP_FLIP_BLOCK;
+    }
+    else
+    {
+        if( !itemCurrentlyEdited )
+            item = PcbGeneralLocateAndDisplay();
+
+        if( item == NULL )
+            return false;
+
+        SetCurItem( item );
+
+        switch( item->Type() )
+        {
+        case PCB_MODULE_T:
+            evt_type = ID_POPUP_PCB_CHANGE_SIDE_MODULE;
+            break;
+
+        case PCB_TEXT_T:
+            evt_type = ID_POPUP_PCB_FLIP_TEXTEPCB;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        GetEventHandler()->ProcessEvent( evt );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool        itemCurrentlyEdited = item && item->GetFlags();
     int         evt_type = 0; // Used to post a wxCommandEvent on demand
+
+    wxASSERT( aIdCommand == HK_ROTATE_ITEM );
 
     // Allows block rotate operation on hot key.
     if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
@@ -1050,25 +1105,15 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
         switch( item->Type() )
         {
         case PCB_MODULE_T:
-            if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
-                evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
-
-            if( aIdCommand == HK_FLIP_ITEM )                        // move to other side
-                evt_type = ID_POPUP_PCB_CHANGE_SIDE_MODULE;
+            evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
             break;
 
         case PCB_TEXT_T:
-            if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
-                evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
-            else if( aIdCommand == HK_FLIP_ITEM )
-                evt_type = ID_POPUP_PCB_FLIP_TEXTEPCB;
-
+            evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
             break;
 
         case PCB_MODULE_TEXT_T:
-            if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
-                evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
-
+            evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
             break;
 
         default:
