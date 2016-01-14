@@ -67,7 +67,7 @@ enum E_FILTER {
 /// 5x5 Filter struct parameters
 typedef struct {
     signed char    kernel[5][5];
-    unsigned char  div;
+    unsigned int   div;
     unsigned char  offset;
 }S_FILTER;
 
