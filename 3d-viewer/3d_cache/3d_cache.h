@@ -88,14 +88,14 @@ private:
     SCENEGRAPH* checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** aCachePtr = NULL );
 
     /**
-     * Function getMD5
-     * calculates the MD5 hash of the given file
+     * Function getSHA1
+     * calculates the SHA1 hash of the given file
      *
      * @param aFileName [in] is a fully qualified path to the model file
-     * @param aMD5Sum [out] is a 16-byte character array to hold the MD5 hash
-     * @return true if the md5 hash was calculated; otherwise false
+     * @param aSHA1Sum [out] is a 20-byte character array to hold the SHA1 hash
+     * @return true if the sha1 hash was calculated; otherwise false
      */
-    bool getMD5( const wxString& aFileName, unsigned char* aMD5Sum );
+    bool getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum );
 
     // load scene data from a cache file
     bool loadCacheData( S3D_CACHE_ENTRY* aCacheItem );

@@ -25,20 +25,22 @@
 
 #include <iostream>
 #include <fstream>
-#include <cstdio>
 #include <string>
 #include <utility>
+#include <iterator>
+#include <cstdio>
 
 #include <wx/filename.h>
 #include <wx/utils.h>
 #include <wx/stdpaths.h>
+
+#include <boost/uuid/sha1.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "md5.h"
 #include "3d_cache.h"
 #include "3d_info.h"
 #include "sg/scenegraph.h"
@@ -49,18 +51,27 @@
 
 #define CACHE_CONFIG_NAME wxT( "cache.cfg" )
 
+void display(unsigned char* hash)
+{
+    std::cout << "SHA1: " << std::hex;
+    for(int i = 0; i < 20; ++i)
+    {
+        std::cout << ((hash[i] & 0x000000F0) >> 4)
+        <<  (hash[i] & 0x0000000F);
+    }
+    std::cout << std::endl; // Das wars
+}
 
-
-static const wxString md5ToWXString( const unsigned char* aMD5Sum )
+static const wxString sha1ToWXString( const unsigned char* aSHA1Sum )
 {
     unsigned char uc;
     unsigned char tmp;
-    char          md5[33];
+    char          sha1[41];
     int           j = 0;
 
-    for( int i = 0; i < 16; ++i )
+    for( int i = 0; i < 20; ++i )
     {
-        uc = aMD5Sum[i];
+        uc = aSHA1Sum[i];
         tmp = uc / 16;
 
         if( tmp > 9 )
@@ -68,7 +79,7 @@ static const wxString md5ToWXString( const unsigned char* aMD5Sum )
         else
             tmp += 48;
 
-        md5[j++] = tmp;
+        sha1[j++] = tmp;
         tmp = uc % 16;
 
         if( tmp > 9 )
@@ -76,20 +87,21 @@ static const wxString md5ToWXString( const unsigned char* aMD5Sum )
         else
             tmp += 48;
 
-        md5[j++] = tmp;
+        sha1[j++] = tmp;
     }
 
-    md5[j] = 0;
+    sha1[j] = 0;
+    std::cerr << "XXX: SHA1: " << sha1 << "\n";
 
-    return wxString::FromUTF8Unchecked( md5 );
+    return wxString::FromUTF8Unchecked( sha1 );
 }
 
 
-static bool md5matches( const unsigned char* md5a, const unsigned char* md5b )
+static bool sha1Matches( const unsigned char* sha1a, const unsigned char* sha1b )
 {
-    for( int i = 0; i < 16; ++i )
+    for( int i = 0; i < 20; ++i )
     {
-        if( md5a[i] != md5b[i] )
+        if( sha1a[i] != sha1b[i] )
             return false;
     }
 
@@ -97,20 +109,20 @@ static bool md5matches( const unsigned char* md5a, const unsigned char* md5b )
 }
 
 
-static bool isMD5null( const unsigned char* aMD5Sum )
+static bool isSHA1null( const unsigned char* aSHA1Sum )
 {
-    if( NULL == aMD5Sum )
+    if( NULL == aSHA1Sum )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aMD5Sum\n";
+        std::cerr << " * [BUG] NULL passed for aSHA1Sum\n";
         #endif
         return false;
     }
 
-    for( int i = 0; i < 16; ++i )
+    for( int i = 0; i < 20; ++i )
     {
-        if( 0 != aMD5Sum[i] )
+        if( 0 != aSHA1Sum[i] )
             return false;
     }
 
@@ -125,16 +137,16 @@ private:
     S3D_CACHE_ENTRY( const S3D_CACHE_ENTRY& source );
     S3D_CACHE_ENTRY& operator=( const S3D_CACHE_ENTRY& source );
 
-    wxString m_CacheBaseName;  // base name of cache file (an MD5 sum)
+    wxString m_CacheBaseName;  // base name of cache file (a SHA1 digest)
 
 public:
     S3D_CACHE_ENTRY();
     ~S3D_CACHE_ENTRY();
 
-    void SetMD5( const unsigned char* aMD5Sum );
+    void SetSHA1( const unsigned char* aSHA1Sum );
     const wxString GetCacheBaseName( void );
 
-    unsigned char md5sum[16];
+    unsigned char sha1sum[20];
     SCENEGRAPH* sceneData;
     S3DMODEL*   renderData;
 };
@@ -144,7 +156,7 @@ S3D_CACHE_ENTRY::S3D_CACHE_ENTRY()
 {
     sceneData = NULL;
     renderData = NULL;
-    memset( md5sum, 0, 16 );
+    memset( sha1sum, 0, 20 );
 }
 
 
@@ -158,18 +170,18 @@ S3D_CACHE_ENTRY::~S3D_CACHE_ENTRY()
 }
 
 
-void S3D_CACHE_ENTRY::SetMD5( const unsigned char* aMD5Sum )
+void S3D_CACHE_ENTRY::SetSHA1( const unsigned char* aSHA1Sum )
 {
-    if( NULL == aMD5Sum )
+    if( NULL == aSHA1Sum )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aMD5Sum\n";
+        std::cerr << " * [BUG] NULL passed for aSHA1Sum\n";
         #endif
         return;
     }
 
-    memcpy( md5sum, aMD5Sum, 16 );
+    memcpy( sha1sum, aSHA1Sum, 20 );
     return;
 }
 
@@ -177,7 +189,7 @@ void S3D_CACHE_ENTRY::SetMD5( const unsigned char* aMD5Sum )
 const wxString S3D_CACHE_ENTRY::GetCacheBaseName( void )
 {
     if( m_CacheBaseName.empty() )
-        m_CacheBaseName = md5ToWXString( md5sum );
+        m_CacheBaseName = sha1ToWXString( sha1sum );
 
     return m_CacheBaseName;
 }
@@ -249,9 +261,9 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     if( aCachePtr )
         *aCachePtr = NULL;
 
-    unsigned char md5sum[16];
+    unsigned char sha1sum[20];
 
-    if( !getMD5( aFileName, md5sum ) || m_CacheDir.empty() )
+    if( !getSHA1( aFileName, sha1sum ) || m_CacheDir.empty() )
     {
         // just in case we can't get an MD5 sum (for example, on access issues)
         // or we do not have a configured cache file directory, we create an
@@ -301,7 +313,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     if( aCachePtr )
         *aCachePtr = ep;
 
-    ep->SetMD5( md5sum );
+    ep->SetSHA1( sha1sum );
 
     wxString bname = ep->GetCacheBaseName();
     wxString cachename = m_CacheDir + bname + wxT( ".3dc" );
@@ -321,7 +333,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 }
 
 
-bool S3D_CACHE::getMD5( const wxString& aFileName, unsigned char* aMD5Sum )
+bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
 {
     if( aFileName.empty() )
     {
@@ -333,7 +345,7 @@ bool S3D_CACHE::getMD5( const wxString& aFileName, unsigned char* aMD5Sum )
         return false;
     }
 
-    if( NULL == aMD5Sum )
+    if( NULL == aSHA1Sum )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -344,23 +356,32 @@ bool S3D_CACHE::getMD5( const wxString& aFileName, unsigned char* aMD5Sum )
     }
 
     FILE* fp = fopen( aFileName.ToUTF8(), "rb" );
+    boost::uuids::detail::sha1 dblock;
+    unsigned char block[4096];
+    size_t bsize = 0;
 
-    if( !fp )
-        return false;
+    while( ( bsize = fread( &block, 1, 4096, fp ) ) > 0 )
+        dblock.process_bytes( block, bsize );
 
-    struct md5_ctx msum;
-    md5_init_ctx( &msum );
-    int res = md5_stream( fp, aMD5Sum );
     fclose( fp );
+    unsigned int digest[5];
+    dblock.get_digest( digest );
 
-    if( 0 != res )
+    // ensure MSB order
+    for( int i = 0; i < 5; ++i )
     {
-        #ifdef DEBUG
-        std::cerr << " * [3dmodel] md5 calculation failed on file '" << aFileName.ToUTF8() << "'\n";
-        #endif
-
-        return false;
+        int idx = i << 2;
+        unsigned int tmp = digest[i];
+        aSHA1Sum[idx+3] = tmp & 0xff;
+        tmp >>= 8;
+        aSHA1Sum[idx+2] = tmp & 0xff;
+        tmp >>= 8;
+        aSHA1Sum[idx+1] = tmp & 0xff;
+        tmp >>= 8;
+        aSHA1Sum[idx] = tmp & 0xff;
     }
+
+    display( aSHA1Sum );
 
     return true;
 }
@@ -436,7 +457,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( bname.empty() )
     {
         #ifdef DEBUG
-        std::cerr << " * [3D model] cannot load cached model; no md5 hash available\n";
+        std::cerr << " * [3D model] cannot load cached model; no hash available\n";
         #endif
 
         return false;

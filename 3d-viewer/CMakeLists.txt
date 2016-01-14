@@ -53,7 +53,6 @@ set(3D-VIEWER_SRCS
     3d_cache/3d_cache.cpp
     3d_cache/3d_plugin_manager.cpp
     3d_cache/3d_filename_resolver.cpp
-    3d_cache/md5.cpp
     ${DIR_DLG}/3d_cache_dialogs.cpp
     ${DIR_DLG}/dialog_config_3dpath.cpp
     ${DIR_DLG}/dialog_select_3dmodel.cpp
