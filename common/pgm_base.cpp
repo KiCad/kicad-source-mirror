@@ -30,7 +30,6 @@
  *        (locale handling)
  */
 
-#include <kicad_curl/kicad_curl.h> /* Include before any wx file */
 #include <fctsys.h>
 #include <wx/html/htmlwin.h>
 #include <wx/fs_zip.h>
@@ -288,8 +287,6 @@ PGM_BASE::~PGM_BASE()
 void PGM_BASE::destroy()
 {
     // unlike a normal destructor, this is designed to be called more than once safely:
-
-    KICAD_CURL::Cleanup();
 
     delete m_common_settings;
     m_common_settings = 0;

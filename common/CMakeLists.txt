@@ -12,6 +12,12 @@ include_directories(
     ${INC_AFTER}
     )
 
+
+if( NOT APPLE )     # windows and linux use openssl under curl
+    find_package( OpenSSL REQUIRED )
+endif()
+
+
 # Generate header files containing shader programs
 # Order of input files is significant
 add_custom_command(
@@ -285,7 +291,8 @@ add_dependencies( common lib-dependencies )
 add_dependencies( common version_header )
 target_link_libraries( common
     ${Boost_LIBRARIES}
-#    ${CURL_LIBRARIES}      we dynamically link to this ON DEMAND, not at load time
+    ${CURL_LIBRARIES}
+    ${OPENSSL_LIBRARIES}        # empty on Apple
     )
 
 
