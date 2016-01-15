@@ -319,9 +319,9 @@ int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Compare( const wxDataViewItem& aIt
 void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::SetGroupingColumn( int aCol )
 {
     if( m_GroupingColumn == aCol )
-        return;
-
-    m_GroupingColumn = aCol;
+        m_GroupingColumn = NONE;
+    else
+        m_GroupingColumn = aCol;
 
     Cleared();
     CalculateGrouping();
