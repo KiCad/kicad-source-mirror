@@ -498,5 +498,5 @@ wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetString( unsigned int 
         }
     }
 
-    return wxT("");
+    return wxEmptyString;
 }
