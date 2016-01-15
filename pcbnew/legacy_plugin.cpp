@@ -241,32 +241,6 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 using namespace std;    // auto_ptr
 
 
-static inline const char* ShowVertJustify( EDA_TEXT_VJUSTIFY_T vertical )
-{
-    const char* rs;
-    switch( vertical )
-    {
-    case GR_TEXT_VJUSTIFY_TOP:      rs = "T";   break;
-    case GR_TEXT_VJUSTIFY_CENTER:   rs = "C";   break;
-    case GR_TEXT_VJUSTIFY_BOTTOM:   rs = "B";   break;
-    default:                        rs = "?";   break;
-    }
-    return rs;
-}
-
-static inline const char* ShowHorizJustify( EDA_TEXT_HJUSTIFY_T horizontal )
-{
-    const char* rs;
-    switch( horizontal )
-    {
-    case GR_TEXT_HJUSTIFY_LEFT:     rs = "L";   break;
-    case GR_TEXT_HJUSTIFY_CENTER:   rs = "C";   break;
-    case GR_TEXT_HJUSTIFY_RIGHT:    rs = "R";   break;
-    default:                        rs = "?";   break;
-    }
-    return rs;
-}
-
 static EDA_TEXT_HJUSTIFY_T horizJustify( const char* horizontal )
 {
     if( !strcmp( "L", horizontal ) )
@@ -3160,6 +3134,35 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 #if 0
 
 //-----<BOARD Save Functions>---------------------------------------------------
+
+
+static inline const char* ShowVertJustify( EDA_TEXT_VJUSTIFY_T vertical )
+{
+    const char* rs;
+    switch( vertical )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:      rs = "T";   break;
+    case GR_TEXT_VJUSTIFY_CENTER:   rs = "C";   break;
+    case GR_TEXT_VJUSTIFY_BOTTOM:   rs = "B";   break;
+    default:                        rs = "?";   break;
+    }
+    return rs;
+}
+
+
+static inline const char* ShowHorizJustify( EDA_TEXT_HJUSTIFY_T horizontal )
+{
+    const char* rs;
+    switch( horizontal )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:     rs = "L";   break;
+    case GR_TEXT_HJUSTIFY_CENTER:   rs = "C";   break;
+    case GR_TEXT_HJUSTIFY_RIGHT:    rs = "R";   break;
+    default:                        rs = "?";   break;
+    }
+    return rs;
+}
+
 
 #define SPBUFZ  50      // wire all usages of this together.
 
