@@ -56,8 +56,8 @@
 #include <wx/stdpaths.h>
 
 
-//#define     USE_INSTRUMENTATION     true
-#define     USE_INSTRUMENTATION     false
+//#define     USE_INSTRUMENTATION     1
+#define     USE_INSTRUMENTATION     0
 
 
 static const wxChar backupSuffix[]   = wxT( "-bak" );
