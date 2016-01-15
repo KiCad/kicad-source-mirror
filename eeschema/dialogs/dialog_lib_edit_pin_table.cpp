@@ -71,6 +71,9 @@ private:
     mutable std::list<Pin> m_Pins;
     mutable std::map<wxString, Group> m_Groups;
 
+    // like GetValue, but always returns a string
+    wxString GetString( const wxDataViewItem&, unsigned int ) const;
+
 #ifdef REASSOCIATE_HACK
     wxDataViewCtrl* m_Widget;
 #endif
@@ -80,6 +83,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Item
 {
 public:
     virtual void            GetValue( wxVariant& aValue, unsigned int aCol ) const = 0;
+    virtual wxString        GetString( unsigned int aCol ) const = 0;
     virtual wxDataViewItem  GetParent() const = 0;
     virtual bool            IsContainer() const = 0;
     virtual unsigned int    GetChildren( wxDataViewItemArray& ) const = 0;
@@ -92,7 +96,7 @@ public:
     Group( unsigned int aGroupingColumn ) : m_GroupingColumn( aGroupingColumn ) {}
 
     virtual void            GetValue( wxVariant& aValue, unsigned int aCol ) const;
-
+    virtual wxString        GetString( unsigned int aCol ) const;
     virtual wxDataViewItem  GetParent() const { return wxDataViewItem(); }
     virtual bool            IsContainer() const { return true; }
     virtual unsigned int    GetChildren( wxDataViewItemArray& aItems ) const
@@ -120,7 +124,7 @@ public:
             LIB_PIN* aBacking ) : m_Model( aModel ), m_Backing( aBacking ), m_Group( 0 ) {}
 
     virtual void GetValue( wxVariant& aValue, unsigned int aCol ) const;
-
+    virtual wxString        GetString( unsigned int aCol ) const;
     virtual wxDataViewItem GetParent() const { return wxDataViewItem( m_Group ); }
     virtual bool IsContainer() const { return false; }
     virtual unsigned int GetChildren( wxDataViewItemArray& ) const { return 0; }
@@ -301,15 +305,8 @@ int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Compare( const wxDataViewItem& aIt
         unsigned int aCol,
         bool aAscending ) const
 {
-    wxVariant var1;
-
-    GetValue( var1, aItem1, aCol );
-    wxString str1 = var1.GetString();
-
-    wxVariant var2;
-    GetValue( var2, aItem2, aCol );
-    wxString str2 = var2.GetString();
-
+    wxString str1 = GetString( aItem1, aCol );
+    wxString str2 = GetString( aItem2, aCol );
     int res = PinNumbers::Compare( str1, str2 );
 
     if( res == 0 )
@@ -342,8 +339,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::CalculateGrouping()
 
         for( std::list<Pin>::iterator i = m_Pins.begin(); i != m_Pins.end(); ++i )
         {
-            i->GetValue( value, m_GroupingColumn );
-            wxString str = value.GetString();
+            wxString str = i->GetString( m_GroupingColumn );
             std::map<wxString, Group>::iterator j = m_Groups.find( str );
 
             if( j == m_Groups.end() )
@@ -394,13 +390,17 @@ PinNumbers DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetAllPinNumbers()
     PinNumbers ret;
 
     for( std::list<Pin>::const_iterator i = m_Pins.begin(); i != m_Pins.end(); ++i )
-    {
-        wxVariant var;
-        i->GetValue( var, PIN_NUMBER );
-        ret.insert( var.GetString() );
-    }
+        ret.insert( i->GetString( PIN_NUMBER ) );
 
     return ret;
+}
+
+
+wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetString( const wxDataViewItem& aItem, unsigned int aCol ) const
+{
+    assert( aItem.IsOk() );
+
+    return reinterpret_cast<Item const*>( aItem.GetID() )->GetString( aCol );
 }
 
 
@@ -408,23 +408,27 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetValue( wxVariant& aValu
         unsigned int aCol ) const
 {
     if( aCol == m_GroupingColumn )
-    {
         // shortcut
         m_Members.front()->GetValue( aValue, aCol );
-    }
     else
-    {
-        PinNumbers values;
+        aValue = GetString( aCol );
+}
 
-        for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
-        {
-            wxVariant value;
-            (*i)->GetValue( value, aCol );
-            values.insert( value.GetString() );
-        }
 
-        aValue = boost::algorithm::join( values, "," );
-    }
+wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetString( unsigned int aCol ) const
+{
+    if( aCol == m_GroupingColumn )
+        return m_Members.front()->GetString( aCol );
+
+    PinNumbers values;
+
+    for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
+        values.insert( (*i)->GetString( aCol ) );
+
+    if( values.size() > 1 )
+        return boost::algorithm::join( values, "," );
+    else
+        return m_Members.front()->GetString( aCol );
 }
 
 
@@ -451,14 +455,18 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::Add( Pin* aPin )
 void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetValue( wxVariant& aValue,
         unsigned int aCol ) const
 {
+    aValue = GetString( aCol );
+}
+
+
+wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetString( unsigned int aCol ) const
+{
     switch( aCol )
     {
     case PIN_NUMBER:
-        aValue = m_Backing->GetNumberString();
-        break;
+        return m_Backing->GetNumberString();
 
     case PIN_NAME:
-    {
         if( m_Model.m_UnitCount > 1 )
         {
             wxString name;
@@ -471,26 +479,24 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetValue( wxVariant& aValue,
 
             name << ':';
             name << m_Backing->GetName();
-            aValue = name;
+            return name;
         }
         else
         {
-            aValue = m_Backing->GetName();
+            return m_Backing->GetName();
         }
-    }
-    break;
 
     case PIN_TYPE:
-        aValue = m_Backing->GetElectricalTypeName();
-        break;
+        return m_Backing->GetElectricalTypeName();
 
     case PIN_POSITION:
         {
             wxPoint position = m_Backing->GetPosition();
             wxString value;
             value << "(" << position.x << "," << position.y << ")";
-            aValue = value;
+            return value;
         }
-        break;
     }
+
+    return wxT("");
 }
