@@ -224,6 +224,9 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     tname.Replace( wxT( "/" ), wxT( "\\" ) );
     #endif
 
+    // this case covers full paths and paths relative to
+    // the current working directory (which is not necessarily
+    // the current project directory)
     if( wxFileName::FileExists( tname ) )
     {
         wxFileName tmp( tname );
@@ -232,8 +235,6 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             tname = tmp.GetFullPath();
 
         m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
-
-        std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
 
         return tname;
     }
@@ -252,12 +253,8 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             tname = tmp.GetFullPath();
             m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
 
-            std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
-
             return tname;
         }
-
-        std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
 
         // XXX - no such path - consider showing the user a pop-up message
         return wxEmptyString;
@@ -266,7 +263,9 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
     std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
 
-    // check the path relative to the current dir
+    // check the path relative to the current project directory;
+    // note: this is not necessarily the same as the current working
+    // directory, which has already been checked
     do
     {
         wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
@@ -281,8 +280,6 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
             m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
 
-            std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
-
             return tname;
         }
     } while( 0 );
@@ -294,8 +291,6 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     if( !SplitAlias( aFileName, alias, relpath ) )
     {
-        std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
-
         // XXX - no such path - consider showing the user a pop-up message
         return wxEmptyString;
     }
@@ -316,16 +311,12 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
                 m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
 
-                std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
-
                 return tname;
             }
         }
 
         ++sPL;
     }
-
-    std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
 
     // XXX - no such path - consider showing the user a pop-up message
     wxString errmsg = _( "filename could not be resolved" );
