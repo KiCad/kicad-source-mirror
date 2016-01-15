@@ -378,7 +378,7 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
     {
         pluginType = IO_MGR::LEGACY;
     }
-    else if( fn.GetExt() == IO_MGR::GetFileExtension( IO_MGR::IO_MGR::PCAD ) )
+    else if( fn.GetExt() == IO_MGR::GetFileExtension( IO_MGR::PCAD ) )
     {
         pluginType = IO_MGR::PCAD;
     }
