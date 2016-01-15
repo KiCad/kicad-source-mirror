@@ -100,9 +100,9 @@ DLG_CFG_3DPATH::DLG_CFG_3DPATH( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResol
 
     if( resolver )
     {
-        const std::list< wxString >* pl = resolver->GetPaths();
-        std::list< wxString >::const_iterator sL = pl->begin();
-        std::list< wxString >::const_iterator eL = pl->end();
+        const std::list< S3D_ALIAS >* pl = resolver->GetPaths();
+        std::list< S3D_ALIAS >::const_iterator sL = pl->begin();
+        std::list< S3D_ALIAS >::const_iterator eL = pl->end();
 
         // always skip the first entry which is the current project dir
         if( sL != eL )
@@ -113,7 +113,7 @@ DLG_CFG_3DPATH::DLG_CFG_3DPATH( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResol
         while( sL != eL )
         {
             m_paths.push_back( *sL );
-            pathList->InsertItem( i, *sL );
+            pathList->InsertItem( i, sL->m_alias );
             ++i;
             ++sL;
         }
@@ -130,8 +130,10 @@ DLG_CFG_3DPATH::DLG_CFG_3DPATH( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResol
 
 bool DLG_CFG_3DPATH::TransferDataFromWindow()
 {
-    if( resolver && resolver->UpdatePathList( m_paths ) )
-        return true;
+    // NOTE: This dialog is to be deprecated
+
+    //if( resolver && resolver->UpdatePathList( m_paths ) )
+    //    return true;
 
     return false;
 }
@@ -139,6 +141,9 @@ bool DLG_CFG_3DPATH::TransferDataFromWindow()
 
 void DLG_CFG_3DPATH::EditPath( wxCommandEvent& event )
 {
+    // NOTE: This dialog is to be deprecated
+
+    /*
     long nItem = pathList->GetFirstSelected();
     wxString tmpname = m_paths[ nItem ];
 
@@ -164,6 +169,7 @@ void DLG_CFG_3DPATH::EditPath( wxCommandEvent& event )
     }
 
     delete dd;
+    */
 
     return;
 }
@@ -171,6 +177,9 @@ void DLG_CFG_3DPATH::EditPath( wxCommandEvent& event )
 
 void DLG_CFG_3DPATH::AddPath( wxCommandEvent& event )
 {
+    // NOTE: This dialog is to be deprecated
+
+    /*
     wxDirDialog* dd = new wxDirDialog( this, _( "Add a 3D model directory" ) );
 
     if( wxID_OK == dd->ShowModal() )
@@ -188,6 +197,7 @@ void DLG_CFG_3DPATH::AddPath( wxCommandEvent& event )
     }
 
     delete dd;
+    */
 
     return;
 }
@@ -195,6 +205,9 @@ void DLG_CFG_3DPATH::AddPath( wxCommandEvent& event )
 
 void DLG_CFG_3DPATH::DeletePath( wxCommandEvent& event )
 {
+    // NOTE: This dialog is to be deprecated
+
+    /*
     long nItem = pathList->GetFirstSelected();
 
     if( -1 == nItem )
@@ -216,6 +229,7 @@ void DLG_CFG_3DPATH::DeletePath( wxCommandEvent& event )
         deleteButton->Enable( false );
         pathList->Select( -1 );
     }
+    */
 
     return;
 }

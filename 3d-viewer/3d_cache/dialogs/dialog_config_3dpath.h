@@ -43,7 +43,7 @@ private:
     wxButton* deleteButton;
 
     S3D_FILENAME_RESOLVER* resolver;
-    std::vector< wxString > m_paths;
+    std::vector< S3D_ALIAS > m_paths;
 
 public:
     DLG_CFG_3DPATH( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver );

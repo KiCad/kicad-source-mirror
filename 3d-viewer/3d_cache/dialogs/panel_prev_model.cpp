@@ -350,14 +350,14 @@ void PANEL_PREV_3D::updateDirChoiceList( void )
     if( NULL == m_FileDlg || NULL == m_ModelManager || NULL == dirChoices )
         return;
 
-    std::list< wxString > const* md = m_ModelManager->GetResolver()->GetPaths();
-    std::list< wxString >::const_iterator sL = md->begin();
-    std::list< wxString >::const_iterator eL = md->end();
+    std::list< S3D_ALIAS > const* md = m_ModelManager->GetResolver()->GetPaths();
+    std::list< S3D_ALIAS >::const_iterator sL = md->begin();
+    std::list< S3D_ALIAS >::const_iterator eL = md->end();
     std::vector< wxString > cl;
 
     while( sL != eL )
     {
-        cl.push_back( *sL );
+        cl.push_back( sL->m_pathexp );
         ++sL;
     }
 

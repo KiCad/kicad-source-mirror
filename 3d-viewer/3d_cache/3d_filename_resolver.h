@@ -39,26 +39,22 @@
 #include <wx/string.h>
 #include "str_rsort.h"
 
+struct S3D_ALIAS
+{
+    wxString m_alias;           // alias to the base path
+    wxString m_pathvar;         // base path as stored in the config file
+    wxString m_pathexp;         // expanded base path
+    wxString m_description;     // description of the aliased path
+};
 
 class S3D_FILENAME_RESOLVER
 {
 private:
     wxString m_ConfigDir;           // 3D configuration directory
-    std::list< wxString > m_Paths;  // list of base paths to search from
+    std::list< S3D_ALIAS > m_Paths; // list of base paths to search from
     // mapping of (short) file names to resolved names
     std::map< wxString, wxString, S3D::rsort_wxString > m_NameMap;
-
-    /**
-     * Function checkRealPath
-     * checks if a file exists, is a regular file, and retrieves
-     * the canonical name and extension.
-     *
-     * @param aFileName [in] is the file name and path to be checked
-     * @param aResolvedName [out] is the canonical resolved filename
-     * @param aFileExtension [out] is the file's extension string
-     * @return true if the file was found and is a regular file
-     */
-    bool checkRealPath( const wxString& aFileName, wxString& aResolvedName );
+    int m_errflags;
 
     /**
      * Function createPathList
@@ -75,10 +71,10 @@ private:
      * Function addPath
      * checks that a path is valid and adds it to the search list
      *
-     * @param aPath is the path to be checked and added
+     * @param aPath is the alias set to be checked and added
      * @return true if aPath is valid
      */
-    bool addPath( const wxString& aPath );
+    bool addPath( const S3D_ALIAS& aPath );
 
     /**
      * Function readPathList
@@ -99,6 +95,8 @@ private:
     bool writePathList( void );
 
 public:
+    S3D_FILENAME_RESOLVER();
+
     /**
      * Function Set3DConfigDir
      * sets the user's configuration directory
@@ -127,7 +125,7 @@ public:
      * clears the current path list and substitutes the given path
      * list, updating the path configuration file on success.
      */
-    bool UpdatePathList( std::vector< wxString >& aPathList );
+    bool UpdatePathList( std::vector< S3D_ALIAS >& aPathList );
 
     /**
      * Function ResolvePath
@@ -159,7 +157,15 @@ public:
      *
      * @return pointer to the internal path list
      */
-    const std::list< wxString >* GetPaths( void );
+    const std::list< S3D_ALIAS >* GetPaths( void );
+
+    /**
+     * Function SplitAlias
+     * returns true if the given name contains an alias and
+     * populates the string anAlias with the alias and aRelPath
+     * with the relative path.
+     */
+    bool SplitAlias( const wxString& aFileName, wxString& anAlias, wxString& aRelPath );
 };
 
 #endif  // FILENAME_RESOLVER_3D_H

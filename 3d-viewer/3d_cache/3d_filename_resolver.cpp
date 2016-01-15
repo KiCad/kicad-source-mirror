@@ -25,12 +25,27 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 #include <wx/filename.h>
 #include <wx/utils.h>
+#include <wx/msgdlg.h>
 
 #include "3d_filename_resolver.h"
 
 #define S3D_RESOLVER_CONFIG wxT( "3Dresolver.cfg" )
+
+// flag bits used to track different one-off messages to users
+#define ERRFLG_NODIR    (1)
+#define ERRFLG_RELPATH  (2)
+
+
+static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult );
+
+
+S3D_FILENAME_RESOLVER::S3D_FILENAME_RESOLVER()
+{
+    m_errflags = 0;
+}
 
 
 bool S3D_FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
@@ -69,7 +84,13 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
 
     if( m_Paths.empty() )
     {
-        m_Paths.push_back( path );
+        S3D_ALIAS al;
+        al.m_alias = _( "(DEFAULT)" );
+        al.m_pathvar = _( "${PROJDIR}" );
+        al.m_pathexp = path;
+        al.m_description = _( "Current project directory" );
+        m_Paths.push_back( al );
+        m_NameMap.clear();
 
         if( flgChanged )
             *flgChanged = true;
@@ -77,10 +98,9 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
     }
     else
     {
-        if( m_Paths.front().Cmp( path ) )
+        if( m_Paths.front().m_pathexp.Cmp( path ) )
         {
-            m_Paths.pop_front();
-            m_Paths.push_front( path );
+            m_Paths.front().m_pathexp = path;
             m_NameMap.clear();
 
             if( flgChanged )
@@ -95,7 +115,8 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
 
 #ifdef DEBUG
     std::cout << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cout << " * [INFO] changed project dir to " << m_Paths.front().ToUTF8() << "\n";
+    std::cout << " * [INFO] changed project dir to ";
+    std::cout << m_Paths.front().m_pathexp.ToUTF8() << "\n";
 #endif
 
     return true;
@@ -107,7 +128,7 @@ wxString S3D_FILENAME_RESOLVER::GetProjectDir( void )
     if( m_Paths.empty() )
         return wxEmptyString;
 
-    return m_Paths.front();
+    return m_Paths.front().m_pathexp;
 }
 
 
@@ -122,11 +143,27 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
     // default; since CWD is not necessarily what we really want,
     // the user may change this later with a call to SetProjectDir()
 
-    if( !addPath( wxFileName::GetCwd() ) )
-        m_Paths.push_back( wxEmptyString );
+    S3D_ALIAS lpath;
+    lpath.m_alias = _( "(DEFAULT)" );
+    lpath.m_pathvar = _( "(PROJECT DIR)" );
+    lpath.m_pathexp = wxFileName::GetCwd();
+    lpath.m_description = _( "Current project directory" );
+    m_Paths.push_back( lpath );
 
-    if( wxGetEnv( wxT( "KISYS3DMOD" ), &kmod ) )
-        addPath( kmod );
+    if( wxGetEnv( wxT( "KISYS3DMOD" ), &kmod ) && !kmod.empty() )
+    {
+        wxFileName tmp( kmod );
+        wxString kpath = tmp.GetFullPath();
+
+        if( tmp.Normalize() && lpath.m_pathexp.Cmp( kpath ) )
+        {
+            lpath.m_alias = wxT( "KISYS3DMOD" );
+            lpath.m_pathvar = wxT( "${KISYS3DMOD}" );
+            lpath.m_pathexp = kpath;
+            lpath.m_description = _( "Legacy 3D environment path" );
+            addPath( lpath );
+        }
+    }
 
     if( !m_ConfigDir.empty() )
         readPathList();
@@ -136,12 +173,12 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
 
 #ifdef DEBUG
     std::cout << " * [3D model] search paths:\n";
-    std::list< wxString >::const_iterator sPL = m_Paths.begin();
-    std::list< wxString >::const_iterator ePL = m_Paths.end();
+    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
+    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
-        std::cout << "   + '" << (*sPL).ToUTF8() << "'\n";
+        std::cout << "   + '" << (*sPL).m_pathexp.ToUTF8() << "'\n";
         ++sPL;
     }
 #endif
@@ -150,7 +187,7 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
 }
 
 
-bool S3D_FILENAME_RESOLVER::UpdatePathList( std::vector< wxString >& aPathList )
+bool S3D_FILENAME_RESOLVER::UpdatePathList( std::vector< S3D_ALIAS >& aPathList )
 {
     while( m_Paths.size() > 1 )
         m_Paths.pop_back();
@@ -172,61 +209,125 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     if( m_Paths.empty() )
         createPathList();
 
-    // first attempt to use the name as specified:
-    wxString aResolvedName;
-    wxString fname;
+    // look up the filename in the internal filename map
+    std::map< wxString, wxString, S3D::rsort_wxString >::iterator mi;
+    mi = m_NameMap.find( aFileName );
 
-    // normalize paths with "${VARNAME}" to support legacy behavior
+    if( mi != m_NameMap.end() )
+        return mi->second;
+
+    // first attempt to use the name as specified:
+    wxString tname = aFileName;
+
+    #ifdef _WIN32
+    // translate from KiCad's internal UNIX-like path to MSWin paths
+    tname.Replace( wxT( "/" ), wxT( "\\" ) );
+    #endif
+
+    if( wxFileName::FileExists( tname ) )
+    {
+        wxFileName tmp( tname );
+
+        if( tmp.Normalize() )
+            tname = tmp.GetFullPath();
+
+        m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+
+        std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
+
+        return tname;
+    }
+
+    // at this point aFileName:
+    // a. is a legacy ${} shortened name
+    // b. an aliased shortened name
+    // c. cannot be determined
+
     if( aFileName.StartsWith( wxT( "${" ) ) )
     {
         wxFileName tmp( aFileName );
 
         if( tmp.Normalize() )
-            fname = tmp.GetFullPath();
-        else
-            fname = aFileName;
+        {
+            tname = tmp.GetFullPath();
+            m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
 
+            std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
+
+            return tname;
+        }
+
+        std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
+
+        // XXX - no such path - consider showing the user a pop-up message
+        return wxEmptyString;
     }
-    else
+
+    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
+    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+
+    // check the path relative to the current dir
+    do
     {
-        fname = aFileName;
+        wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
+        wxString fullPath = fpath.GetPathWithSep() + tname;
+
+        if( wxFileName::FileExists( fullPath ) )
+        {
+            wxFileName tmp( fullPath );
+
+            if( tmp.Normalize() )
+                tname = tmp.GetFullPath();
+
+            m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+
+            std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
+
+            return tname;
+        }
+    } while( 0 );
+
+    ++sPL;
+
+    wxString alias;         // the alias portion of the short filename
+    wxString relpath;       // the path relative to the alias
+
+    if( !SplitAlias( aFileName, alias, relpath ) )
+    {
+        std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
+
+        // XXX - no such path - consider showing the user a pop-up message
+        return wxEmptyString;
     }
-
-#ifdef _WIN32
-    // translate from KiCad's internal UNIX-like path to MSWin paths
-    fname.Replace( wxT( "/" ), wxT( "\\" ) );
-#endif
-
-    if( checkRealPath( fname, aResolvedName ) )
-        return aResolvedName;
-
-    // look up the filename in the internal filename map
-    std::map< wxString, wxString, S3D::rsort_wxString >::iterator mi;
-    mi = m_NameMap.find( fname );
-
-    if( mi != m_NameMap.end() )
-        return mi->second;
-
-    std::list< wxString >::const_iterator sPL = m_Paths.begin();
-    std::list< wxString >::const_iterator ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
-        wxFileName fpath( wxFileName::DirName( *sPL ) );
-        wxFileName filename( fname );
-
-        // we can only attempt a search if the filename is incomplete
-        if( filename.IsRelative() )
+        if( !sPL->m_alias.Cmp( alias ) )
         {
-            wxString fullPath = fpath.GetPathWithSep() + fname;
+            wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
+            wxString fullPath = fpath.GetPathWithSep() + relpath;
 
-            if( checkRealPath( fullPath, aResolvedName ) )
-                return aResolvedName;
+            if( wxFileName::FileExists( fullPath ) )
+            {
+                wxFileName tmp( fullPath );
+
+                if( tmp.Normalize() )
+                    tname = tmp.GetFullPath();
+
+                m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+
+                std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
+
+                return tname;
+            }
         }
 
         ++sPL;
     }
 
+    std::cerr << "XXX: RESOLVER LINE " << __LINE__ << "\n";
+
+    // XXX - no such path - consider showing the user a pop-up message
     wxString errmsg = _( "filename could not be resolved" );
     std::cerr << " * [3D Model] " << errmsg.ToUTF8() << " '";
     std::cerr << aFileName.ToUTF8() << "'\n";
@@ -235,52 +336,113 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 }
 
 
-bool S3D_FILENAME_RESOLVER::checkRealPath( const wxString& aFileName,
-    wxString& aResolvedName )
+bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
 {
-    aResolvedName.clear();
-    wxFileName fname( aFileName );
-    fname.Normalize();
-
-    if( !fname.FileExists() )
+    if( aPath.m_alias.empty() || aPath.m_pathvar.empty() )
         return false;
 
-    aResolvedName = fname.GetFullPath();
-    m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, aResolvedName ) );
-
-    return true;
-}
-
-
-bool S3D_FILENAME_RESOLVER::addPath( const wxString& aPath )
-{
-    if( aPath.empty() )
-        return false;
-
-    wxFileName path( aPath, wxT( "" ) );
+    wxFileName path( aPath.m_pathvar, wxT( "" ) );
     path.Normalize();
 
-    if( !path.DirExists() )
-    {
-        wxString errmsg = _( "invalid path" );
-        std::cerr << " * [3D Model] " << errmsg.ToUTF8() << " '" << path.GetPath().ToUTF8() << "'\n";
+    S3D_ALIAS tpath = aPath;
 
-        return false;
-    }
+    if( !path.DirExists() )
+        tpath.m_pathexp.clear();
+    else
+        tpath.m_pathexp = path.GetFullPath();
 
     wxString pname = path.GetPath();
-    std::list< wxString >::const_iterator sPL = m_Paths.begin();
-    std::list< wxString >::const_iterator ePL = m_Paths.end();
+    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
+    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
-        if( !pname.Cmp( *sPL ) )
-            return true;
+        if( !sPL->m_pathvar.empty() && !tpath.m_pathvar.empty()
+            && !tpath.m_pathvar.Cmp( sPL->m_pathvar ) )
+        {
+            wxString msg = _T( "This alias: " );
+            msg.append( tpath.m_alias );
+            msg.append( wxT( "\n" ) );
+            msg.append( _T( "This path: " ) );
+            msg.append( tpath.m_pathvar );
+            msg.append( wxT( "\n" ) );
+            msg.append( _T( "Existing alias: " ) );
+            msg.append( sPL->m_alias );
+            msg.append( wxT( "\n" ) );
+            msg.append( _T( "Existing path: " ) );
+            msg.append( sPL->m_pathvar );
+            wxMessageBox( msg, _T( "Bad alias (duplicate path)" ) );
+
+            return false;
+        }
+
+        if( !sPL->m_pathexp.empty() && !tpath.m_pathexp.empty() )
+        {
+            if( !tpath.m_pathexp.Cmp( sPL->m_pathexp ) )
+            {
+                wxString msg = _T( "This alias: " );
+                msg.append( tpath.m_alias );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "Existing alias: " ) );
+                msg.append( sPL->m_alias );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "This path: " ) );
+                msg.append( tpath.m_pathexp );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "Existing path: " ) );
+                msg.append( sPL->m_pathexp );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "This full path: " ) );
+                msg.append( tpath.m_pathexp );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "Existing full path: " ) );
+                msg.append( sPL->m_pathexp );
+                wxMessageBox( msg, _T( "Bad alias (duplicate path)" ) );
+
+                return false;
+            }
+
+            if( tpath.m_pathexp.find( sPL->m_pathexp ) != wxString::npos
+                || sPL->m_pathexp.find( tpath.m_pathexp ) != wxString::npos )
+            {
+                wxString msg = _T( "This alias: " );
+                msg.append( tpath.m_alias );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "This path: " ) );
+                msg.append( tpath.m_pathexp );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "Existing alias: " ) );
+                msg.append( sPL->m_alias );
+                msg.append( wxT( "\n" ) );
+                msg.append( _T( "Existing path: " ) );
+                msg.append( sPL->m_pathexp );
+                wxMessageBox( msg, _T( "Bad alias (common path)" ) );
+
+                return false;
+            }
+        }
+
+        if( !tpath.m_alias.Cmp( sPL->m_alias ) )
+        {
+            wxString msg = _T( "Alias: " );
+            msg.append( tpath.m_alias );
+            msg.append( wxT( "\n" ) );
+            msg.append( _T( "This path: " ) );
+            msg.append( tpath.m_pathvar );
+            msg.append( wxT( "\n" ) );
+            msg.append( _T( "Existing path: " ) );
+            msg.append( sPL->m_pathvar );
+            wxMessageBox( msg, _T( "Bad alias (duplicate name)" ) );
+
+            return false;
+        }
 
         ++sPL;
     }
 
-    m_Paths.push_back( pname );
+    // Note: at this point we may still have duplicated paths
+
+    m_Paths.push_back( tpath );
     return true;
 }
 
@@ -324,7 +486,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     }
 
     int lineno = 0;
-    bool mod = false;   // set to true if there are non-existent paths in the file
+    S3D_ALIAS al;
+    size_t idx;
 
     while( cfgFile.good() )
     {
@@ -340,41 +503,21 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
             continue;
         }
 
-        std::string::size_type spos = cfgLine.find_first_of( '"', 0 );
+        idx = 0;
 
-        if( std::string::npos == spos )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = _( "missing opening quote mark in config file" );
-            std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
-        }
+        if( !getHollerith( cfgLine, idx, al.m_alias ) )
+            continue;
 
-        cfgLine.erase( 0, spos + 1 );
+        if( !getHollerith( cfgLine, idx, al.m_pathvar ) )
+            continue;
 
-        spos = cfgLine.find_last_of( '"' );
+        if( !getHollerith( cfgLine, idx, al.m_description ) )
+            continue;
 
-        if( std::string::npos == spos )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = _( "missing closing quote mark in config file" );
-            std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
-        }
-
-        cfgLine.erase( spos );
-
-        if( !addPath( cfgLine ) )
-        {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = _( "invalid path in config file" );
-            std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
-            mod = true;
-        }
+        addPath( al );
     }
 
     cfgFile.close();
-
-    if( mod )
-        writePathList();
 
     if( m_Paths.size() != nitems )
         return true;
@@ -410,16 +553,22 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
         return false;
     }
 
-    std::list< wxString >::const_iterator sPL = m_Paths.begin();
-    std::list< wxString >::const_iterator ePL = m_Paths.end();
+    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
+    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
 
-    // the first entry is the current project dir; we never add a project dir
-    // to the path list in the configuration file
+    // the first entry is the current project dir; we never add the implicit
+    // project dir to the path list in the configuration file
     ++sPL;
+    std::string tstr;
 
     while( sPL != ePL )
     {
-        cfgFile << "\"" << sPL->ToUTF8() << "\"\n";
+        tstr = sPL->m_alias.ToUTF8();
+        cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
+        tstr = sPL->m_pathvar.ToUTF8();
+        cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
+        tstr = sPL->m_description.ToUTF8();
+        cfgFile << "\"" << tstr.size() << ":" << tstr << "\"\n";
         ++sPL;
     }
 
@@ -440,23 +589,56 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
     if( m_Paths.empty() )
         createPathList();
 
-    std::list< wxString >::const_iterator sL = m_Paths.begin();
-    std::list< wxString >::const_iterator eL = m_Paths.end();
+    std::list< S3D_ALIAS >::const_iterator sL = m_Paths.begin();
+    std::list< S3D_ALIAS >::const_iterator eL = m_Paths.end();
+    size_t idx;
+
+    // test for files within the current project directory
+    if( !sL->m_pathexp.empty() )
+    {
+        wxFileName fpath( sL->m_pathexp, wxT( "" ) );
+        wxString fps = fpath.GetPathWithSep();
+
+        idx = fname.find( fps );
+
+        if( std::string::npos != idx && 0 == idx  )
+        {
+            fname = fname.substr( fps.size() );
+            return fname;
+        }
+    }
+
+    ++sL;
 
     while( sL != eL )
     {
-        wxFileName fpath( *sL, wxT( "" ) );
-        wxString fps = fpath.GetPathWithSep();
+        if( sL->m_pathexp.empty() )
+        {
+            ++sL;
+            continue;
+        }
 
-        if( std::string::npos != fname.find( fps ) )
+        wxFileName fpath( sL->m_pathexp, wxT( "" ) );
+        wxString fps = fpath.GetPathWithSep();
+        wxString tname;
+
+        idx = fname.find( fps );
+
+        if( std::string::npos != idx && 0 == idx  )
         {
             fname = fname.substr( fps.size() );
 
-#ifdef _WIN32
+            #ifdef _WIN32
+            // ensure only the '/' separator is used in the internal name
             fname.Replace( wxT( "\\" ), wxT( "/" ) );
-#endif
+            #endif
 
-            return fname;
+            tname = ":";
+            tname.append( sL->m_alias );
+            tname.append( ":" );
+            tname.append( fname );
+
+            return tname;
         }
 
         ++sL;
@@ -475,7 +657,114 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
 
 
-const std::list< wxString >* S3D_FILENAME_RESOLVER::GetPaths( void )
+const std::list< S3D_ALIAS >* S3D_FILENAME_RESOLVER::GetPaths( void )
 {
     return &m_Paths;
+}
+
+
+bool S3D_FILENAME_RESOLVER::SplitAlias( const wxString& aFileName,
+    wxString& anAlias, wxString& aRelPath )
+{
+    anAlias.clear();
+    aRelPath.clear();
+
+    if( !aFileName.StartsWith( wxT( ":" ) ) )
+        return false;
+
+    size_t tagpos = aFileName.find( wxT( ":" ), 1 );
+
+    if( wxString::npos ==  tagpos || 1 == tagpos )
+        return false;
+
+    if( tagpos + 1 >= aFileName.length() )
+        return false;
+
+    anAlias = aFileName.substr( 1, tagpos - 1 );
+    aRelPath = aFileName.substr( tagpos + 1 );
+
+    return true;
+}
+
+
+static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult )
+{
+    aResult.clear();
+
+    if( aIndex < 0 || aIndex >= aString.size() )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = _( "bad Hollerith string on line" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'\n";
+
+        return false;
+    }
+
+    size_t i2 = aString.find( '"', aIndex );
+
+    if( std::string::npos == i2 )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = _( "missing opening quote mark in config file" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'\n";
+
+        return false;
+    }
+
+    ++i2;
+
+    if( i2 >= aString.size() )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = _( "invalid entry (unexpected end of line)" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'\n";
+
+        return false;
+    }
+
+    std::string tnum;
+
+    while( aString[i2] >= '0' && aString[i2] <= '9' )
+        tnum.append( 1, aString[i2++] );
+
+    if( tnum.empty() || aString[i2++] != ':' )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = _( "bad Hollerith string on line" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'\n";
+
+        return false;
+    }
+
+    std::istringstream istr;
+    istr.str( tnum );
+    size_t nchars;
+    istr >> nchars;
+
+    if( (i2 + nchars) >= aString.size() )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = _( "invalid entry (unexpected end of line)" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'\n";
+
+        return false;
+    }
+
+    if( nchars > 0 )
+    {
+        aResult = aString.substr( i2, nchars );
+        i2 += nchars;
+    }
+
+    if( aString[i2] != '"' )
+    {
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = _( "missing closing quote mark in config file" );
+        std::cerr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'\n";
+
+        return false;
+    }
+
+    aIndex = i2 + 1;
+    return true;
 }

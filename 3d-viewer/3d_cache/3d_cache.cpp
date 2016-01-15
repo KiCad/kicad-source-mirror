@@ -51,16 +51,6 @@
 
 #define CACHE_CONFIG_NAME wxT( "cache.cfg" )
 
-void display(unsigned char* hash)
-{
-    std::cout << "SHA1: " << std::hex;
-    for(int i = 0; i < 20; ++i)
-    {
-        std::cout << ((hash[i] & 0x000000F0) >> 4)
-        <<  (hash[i] & 0x0000000F);
-    }
-    std::cout << std::endl; // Das wars
-}
 
 static const wxString sha1ToWXString( const unsigned char* aSHA1Sum )
 {
@@ -91,7 +81,6 @@ static const wxString sha1ToWXString( const unsigned char* aSHA1Sum )
     }
 
     sha1[j] = 0;
-    std::cerr << "XXX: SHA1: " << sha1 << "\n";
 
     return wxString::FromUTF8Unchecked( sha1 );
 }
@@ -265,7 +254,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 
     if( !getSHA1( aFileName, sha1sum ) || m_CacheDir.empty() )
     {
-        // just in case we can't get an MD5 sum (for example, on access issues)
+        // just in case we can't get an hash digest (for example, on access issues)
         // or we do not have a configured cache file directory, we create an
         // entry to prevent further attempts at loading the file
         S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
@@ -380,8 +369,6 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
         tmp >>= 8;
         aSHA1Sum[idx] = tmp & 0xff;
     }
-
-    display( aSHA1Sum );
 
     return true;
 }
@@ -711,4 +698,29 @@ S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
     cp->renderData = mp;
 
     return mp;
+}
+
+
+wxString S3D_CACHE::GetModelHash( const wxString& aModelFileName )
+{
+    wxString full3Dpath = m_FNResolver->ResolvePath( aModelFileName );
+
+    if( full3Dpath.empty() || !wxFileName::FileExists( full3Dpath ) )
+        return wxEmptyString;
+
+    // check cache if file is already loaded
+    std::map< wxString, S3D_CACHE_ENTRY*, S3D::rsort_wxString >::iterator mi;
+    mi = m_CacheMap.find( full3Dpath );
+
+    if( mi != m_CacheMap.end() )
+        return mi->second->GetCacheBaseName();
+
+    // a cache item does not exist; search the Filename->Cachename map
+    S3D_CACHE_ENTRY* cp = NULL;
+    checkCache( full3Dpath, &cp );
+
+    if( NULL != cp )
+        return cp->GetCacheBaseName();
+
+    return wxEmptyString;
 }
