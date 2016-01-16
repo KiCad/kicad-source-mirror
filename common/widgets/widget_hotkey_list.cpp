@@ -116,15 +116,17 @@ public:
         wxStaticText* cmd_label_0 = new wxStaticText( panel, wxID_ANY, _( "Command:" ) );
         fgsizer->Add( cmd_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
-        wxStaticText* cmd_label_1 = new wxStaticText( panel, wxID_ANY, aName );
+        wxStaticText* cmd_label_1 = new wxStaticText( panel, wxID_ANY, wxEmptyString );
         cmd_label_1->SetFont( cmd_label_1->GetFont().Bold().MakeLarger() );
+        cmd_label_1->SetLabel( aName );
         fgsizer->Add( cmd_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
         wxStaticText* key_label_0 = new wxStaticText( panel, wxID_ANY, _( "Current key:" ) );
         fgsizer->Add( key_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
-        wxStaticText* key_label_1 = new wxStaticText( panel, wxID_ANY, aCurrentKey );
+        wxStaticText* key_label_1 = new wxStaticText( panel, wxID_ANY, wxEmptyString );
         key_label_1->SetFont( key_label_1->GetFont().Bold().MakeLarger() );
+        key_label_1->SetLabel( aCurrentKey );
         fgsizer->Add( key_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
         sizer->Add( fgsizer, 1, wxEXPAND );
