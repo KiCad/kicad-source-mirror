@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,9 +34,14 @@
 #include <dialog_eeschema_options_base.h>
 #include <template_fieldnames.h>
 
+class WIDGET_HOTKEY_LIST;
+class SCH_EDIT_FRAME;
+
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
 protected:
+    WIDGET_HOTKEY_LIST* m_hotkeyListCtrl;
+
     /** @brief The template fieldnames for this dialog */
     TEMPLATE_FIELDNAMES templateFields;
 
@@ -80,7 +85,9 @@ public:
      *
      * @param parent The dialog's parent
      */
-    DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
+    DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent );
+
+    virtual SCH_EDIT_FRAME* GetParent();
 
     /**
      * Function GetUnitsSelection

@@ -1,8 +1,3 @@
-/**
- * @file menus_helpers.h
- * @brief Usefull macros and inline functions to create menus items
- * in menubars or popup menus
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,6 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef MENUS_HELPERS_H_
+#define MENUS_HELPERS_H_
+
+/**
+ * @file menus_helpers.h
+ * @brief Usefull macros and inline functions to create menus items
+ * in menubars or popup menus
+ */
 
 #include <bitmaps.h>
 
@@ -203,3 +206,5 @@ static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
 
     return item;
 };
+
+#endif // MENUS_HELPERS_H_

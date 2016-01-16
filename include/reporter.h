@@ -1,13 +1,3 @@
-#ifndef _REPORTER_H_
-#define _REPORTER_H_
-
-/**
- * @file reporter.h
- * @author Wayne Stambaugh
- * @note A special thanks to Dick Hollenbeck who came up with the idea that inspired
- *       me to write this.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -32,6 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef _REPORTER_H_
+#define _REPORTER_H_
+
+/**
+ * @file reporter.h
+ * @author Wayne Stambaugh
+ * @note A special thanks to Dick Hollenbeck who came up with the idea that inspired
+ *       me to write this.
+ */
 
 class wxString;
 class wxTextCtrl;

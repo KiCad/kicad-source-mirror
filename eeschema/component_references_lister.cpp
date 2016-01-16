@@ -36,8 +36,9 @@
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <schframe.h>
-#include <sch_reference_list.h>
 #include <sch_component.h>
+#include <sch_sheet.h>
+#include <sch_reference_list.h>
 
 #include <boost/foreach.hpp>
 
@@ -68,6 +69,7 @@ bool SCH_REFERENCE_LIST::sortByXPosition( const SCH_REFERENCE& item1,
 
     return ii < 0;
 }
+
 
 bool SCH_REFERENCE_LIST::sortByYPosition( const SCH_REFERENCE& item1,
                                           const SCH_REFERENCE& item2 )
@@ -132,13 +134,16 @@ bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
 bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
                                           const SCH_REFERENCE& item2 )
 {
-    int ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
+    wxCHECK( item1.m_Sheet != NULL && item2.m_Sheet != NULL, false );
+
+    int ii = *item1.m_Sheet - *item2.m_Sheet;
 
     if( ii == 0 )
         ii = item1.m_TimeStamp - item2.m_TimeStamp;
 
     return ii < 0;
 }
+
 
 int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit )
 {
@@ -286,7 +291,7 @@ int SCH_REFERENCE_LIST::CreateFirstFreeRefId( std::vector<int>& aIdList, int aFi
 
 
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
-      SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap )
+                                   SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap )
 {
     if ( componentFlatList.size() == 0 )
         return;
@@ -332,9 +337,11 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
 
         // Check whether this component is in aLockedUnitMap.
         SCH_REFERENCE_LIST* lockedList = NULL;
+
         BOOST_FOREACH( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair, aLockedUnitMap )
         {
             unsigned n_refs = pair.second.GetCount();
+
             for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
             {
                 SCH_REFERENCE &thisRef = pair.second[thisRefI];
@@ -414,22 +421,29 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
         if( lockedList != NULL )
         {
             unsigned n_refs = lockedList->GetCount();
+
             for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
             {
                 SCH_REFERENCE &thisRef = (*lockedList)[thisRefI];
+
                 if( thisRef.IsSameInstance( componentFlatList[ii] ) )
                 {
                     // This is the component we're currently annotating. Hold the unit!
                     componentFlatList[ii].m_Unit = thisRef.m_Unit;
                 }
 
-                if( thisRef.CompareValue( componentFlatList[ii] ) != 0 ) continue;
-                if( thisRef.CompareLibName( componentFlatList[ii] ) != 0 ) continue;
+                if( thisRef.CompareValue( componentFlatList[ii] ) != 0 )
+                    continue;
+
+                if( thisRef.CompareLibName( componentFlatList[ii] ) != 0 )
+                    continue;
 
                 // Find the matching component
                 for( unsigned jj = ii + 1; jj < componentFlatList.size(); jj++ )
                 {
-                    if( ! thisRef.IsSameInstance( componentFlatList[jj] ) ) continue;
+                    if( ! thisRef.IsSameInstance( componentFlatList[jj] ) )
+                        continue;
+
                     componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
                     componentFlatList[jj].m_Unit = thisRef.m_Unit;
                     componentFlatList[jj].m_IsNew = false;
@@ -438,13 +452,12 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
                 }
             }
         }
-
         else
         {
             /* search for others units of this component.
-            * we search for others parts that have the same value and the same
-            * reference prefix (ref without ref number)
-            */
+             * we search for others parts that have the same value and the same
+             * reference prefix (ref without ref number)
+             */
             for( Unit = 1; Unit <= NumberOfUnits; Unit++ )
             {
                 if( componentFlatList[ii].m_Unit == Unit )
@@ -498,7 +511,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 
     SortByRefAndValue();
 
-    // Spiit reference designators into name (prefix) and number: IC1 becomes IC, and 1.
+    // Split reference designators into name (prefix) and number: IC1 becomes IC, and 1.
     SplitReferences();
 
     // count not yet annotated items or annotation error.
@@ -668,14 +681,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
     for( int ii = 0; ( ii < imax ) && ( error < 4 ); ii++ )
     {
         if(  ( componentFlatList[ii].m_TimeStamp != componentFlatList[ii + 1].m_TimeStamp )
-          || ( componentFlatList[ii].GetSheetPath() != componentFlatList[ii + 1].GetSheetPath() )  )
+          || ( componentFlatList[ii].GetSheet() != componentFlatList[ii + 1].GetSheet() )  )
             continue;
 
         // Same time stamp found.
         wxString full_path;
 
         full_path.Printf( wxT( "%s%8.8X" ),
-                          GetChars( componentFlatList[ii].GetSheetPath().Path() ),
+                          GetChars( componentFlatList[ii].GetSheet()->GetPath() ),
                           componentFlatList[ii].m_TimeStamp );
 
         msg.Printf( _( "Duplicate time stamp (%s) for %s%d and %s%d" ),
@@ -695,24 +708,24 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 
 
 SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
-                              SCH_SHEET_PATH& aSheetPath )
+                              SCH_SHEET* aSheet )
 {
     wxASSERT( aComponent != NULL && aLibComponent != NULL );
 
     m_RootCmp   = aComponent;
     m_Entry     = aLibComponent;
-    m_Unit      = aComponent->GetUnitSelection( aSheetPath.Last() );
-    m_SheetPath = aSheetPath;
+    m_Unit      = aComponent->GetUnitSelection( aSheet );
+    m_Sheet     = aSheet;
     m_IsNew     = false;
     m_Flag      = 0;
     m_TimeStamp = aComponent->GetTimeStamp();
     m_CmpPos    = aComponent->GetPosition();
     m_SheetNum  = 0;
 
-    if( aComponent->GetRef( aSheetPath.Last() ).IsEmpty() )
-        aComponent->SetRef( aSheetPath.Last(), wxT( "DefRef?" ) );
+    if( aComponent->GetRef( aSheet ).IsEmpty() )
+        aComponent->SetRef( aSheet, wxT( "DefRef?" ) );
 
-    SetRef( aComponent->GetRef( aSheetPath.Last() ) );
+    SetRef( aComponent->GetRef( aSheet ) );
 
     m_NumRef = -1;
 
@@ -730,9 +743,9 @@ void SCH_REFERENCE::Annotate()
     else
         m_Ref = TO_UTF8( GetRef() << m_NumRef );
 
-    m_RootCmp->SetRef( m_SheetPath.Last(), FROM_UTF8( m_Ref.c_str() ) );
+    m_RootCmp->SetRef( m_Sheet, FROM_UTF8( m_Ref.c_str() ) );
     m_RootCmp->SetUnit( m_Unit );
-    m_RootCmp->SetUnitSelection( &m_SheetPath, m_Unit );
+    m_RootCmp->SetUnitSelection( m_Sheet, m_Unit );
 }
 
 
@@ -766,7 +779,7 @@ void SCH_REFERENCE::Split()
     {
         while( ll >= 0 )
         {
-            if( (refText[ll] <= ' ' ) || isdigit( refText[ll] ) )
+            if( ( refText[ll] <= ' ' ) || isdigit( refText[ll] ) )
                 ll--;
             else
             {

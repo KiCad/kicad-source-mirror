@@ -1802,7 +1802,7 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
-                                <event name="OnUpdateUI">OnUpdateReplaceUI</event>
+                                <event name="OnUpdateUI">OnUpdateReplaceAllUI</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">

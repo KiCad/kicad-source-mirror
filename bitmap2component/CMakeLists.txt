@@ -2,7 +2,6 @@
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ../potrace
-    ../common
     ../polygon
     ${INC_AFTER}
     )

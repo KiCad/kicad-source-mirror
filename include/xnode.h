@@ -1,6 +1,3 @@
-#ifndef XATTR_H_
-#define XATTR_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,6 +21,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef XNODE_H_
+#define XNODE_H_
 
 #include <richio.h>
 
@@ -97,4 +97,4 @@ public:
 
 };
 
-#endif  // XATTR_H_
+#endif  // XNODE_H_

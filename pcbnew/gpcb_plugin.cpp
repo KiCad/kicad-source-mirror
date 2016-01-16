@@ -54,11 +54,7 @@
  */
 static const wxString traceFootprintLibrary( wxT( "GedaPcbFootprintLib" ) );
 
-
-static const char delims[] = " \t\r\n";
-
-static bool inline isSpace( int c ) { return strchr( delims, c ) != 0; }
-
+#ifdef DEBUG
 static void inline traceParams( wxArrayString& aParams )
 {
     wxString tmp;
@@ -73,7 +69,7 @@ static void inline traceParams( wxArrayString& aParams )
 
     wxLogTrace( traceFootprintLibrary, tmp );
 }
-
+#endif
 
 static inline long parseInt( const wxString& aValue, double aScalar )
 {

@@ -89,7 +89,7 @@ public:
     void SetHeader( const std::string& aName, const std::string& aValue )
     {
         std::string header = aName + ':' + aValue;
-        m_headers = KICAD_CURL::slist_append( m_headers, header.c_str() );
+        m_headers = curl_slist_append( m_headers, header.c_str() );
     }
 
     /**
@@ -150,7 +150,7 @@ public:
      */
     const std::string GetErrorText( CURLcode aCode )
     {
-        return KICAD_CURL::easy_strerror( aCode );
+        return curl_easy_strerror( aCode );
     }
 
     /**
@@ -163,7 +163,7 @@ public:
      */
     template <typename T> CURLcode SetOption( CURLoption aOption, T aArg )
     {
-        return KICAD_CURL::easy_setopt( m_CURL, aOption, aArg );
+        return curl_easy_setopt( m_CURL, aOption, aArg );
     }
 
     /**

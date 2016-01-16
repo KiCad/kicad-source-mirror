@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +30,14 @@
 #include <class_base_screen.h>
 
 #include <dialog_eeschema_options.h>
+#include <widgets/widget_hotkey_list.h>
+#include <schframe.h>
+#include <hotkeys.h>
 
-#include "wx/settings.h"
+#include <wx/settings.h>
 
-DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
+
+DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
 {
     m_choiceUnits->SetFocus();
@@ -50,9 +54,29 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
         m_fieldGrid->AutoSizeColLabelSize( i );
     }
 
+    // Embed the hotkeys list
+    HOTKEY_SECTIONS sections = WIDGET_HOTKEY_LIST::GenSections( g_Eeschema_Hokeys_Descr );
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, sections );
+    m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
+
     // Make sure we select the first tab of the options tab page
     m_notebook->SetSelection( 0 );
 
+    // Lay out all child pages
+    // No, I don't know why this->Layout() doesn't propagate through to these,
+    // but at least on MSW, it does not.
+    for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
+    {
+        m_notebook->GetPage( i )->Layout();
+    }
+
+    Layout();
+}
+
+
+SCH_EDIT_FRAME* DIALOG_EESCHEMA_OPTIONS::GetParent()
+{
+    return static_cast<SCH_EDIT_FRAME*>( DIALOG_EESCHEMA_OPTIONS_BASE::GetParent() );
 }
 
 
@@ -147,11 +171,13 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         bool this_row_selected = false;
+
         for( int col = 0; col < m_fieldGrid->GetNumberCols(); ++col )
         {
             if( m_fieldGrid->IsInSelection( row, col ) )
                 this_row_selected = true;
         }
+
         if( this_row_selected )
         {
             selected_row = row;
@@ -198,10 +224,12 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
     TransferDataFromWindow();
 
     int n_rows = m_fieldGrid->GetNumberRows();
+
     for( int count = 0; count < n_rows; ++count )
     {
         // Iterate backwards, unsigned-friendly way for future
         int row = n_rows - count - 1;
+
         if( rows_to_delete[row] )
         {
             templateFields.erase( templateFields.begin() + row );
@@ -217,9 +245,14 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    if( !m_hotkeyListCtrl->TransferDataToControl() )
+        return false;
+
     m_fieldGrid->Freeze();
+
     if( m_fieldGrid->GetNumberRows() )
         m_fieldGrid->DeleteRows( 0, m_fieldGrid->GetNumberRows() );
+
     m_fieldGrid->AppendRows( templateFields.size() );
 
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
@@ -238,21 +271,34 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
         m_fieldGrid->SetCellRenderer( row, 2, new wxGridCellBoolRenderer() );
         m_fieldGrid->SetCellAlignment( row, 2, wxALIGN_CENTRE, wxALIGN_CENTRE );
     }
+
     m_fieldGrid->AutoSizeRows();
     m_fieldGrid->Thaw();
 
+    Layout();
     return true;
 }
 
 
 bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
 {
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    if( !m_hotkeyListCtrl->TransferDataFromControl() )
+        return false;
+
+    // Refresh hotkeys
+    GetParent()->ReCreateMenuBar();
+    GetParent()->Refresh();
+
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
-        templateFields[row].m_Name = m_fieldGrid->GetCellValue( row, 0 );
+        templateFields[row].m_Name  = m_fieldGrid->GetCellValue( row, 0 );
         templateFields[row].m_Value = m_fieldGrid->GetCellValue( row, 1 );
         templateFields[row].m_Visible = ( m_fieldGrid->GetCellValue( row, 2 ) != wxEmptyString );
     }
+
     return true;
 }
 
@@ -271,4 +317,3 @@ TEMPLATE_FIELDNAMES DIALOG_EESCHEMA_OPTIONS::GetTemplateFields( void )
 {
     return templateFields;
 }
-

@@ -233,7 +233,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel3->Layout();
 	bSizer8->Fit( m_panel3 );
 	m_notebook->AddPage( m_panel3, _("Editing"), false );
-	m_panel4 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_controlsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxVERTICAL );
 	
@@ -248,35 +248,51 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	bSizer81->Add( fgSizer31, 0, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer91;
-	bSizer91 = new wxBoxSizer( wxVERTICAL );
+	m_controlsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_checkEnableZoomCenter = new wxCheckBox( m_panel4, wxID_ANY, _("Cen&ter and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText20 = new wxStaticText( m_controlsPanel, wxID_ANY, _("Hotkeys:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText20->Wrap( -1 );
+	bSizer13->Add( m_staticText20, 1, wxALL, 5 );
+	
+	m_staticText21 = new wxStaticText( m_controlsPanel, wxID_ANY, _("Double-click to edit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21->Wrap( -1 );
+	bSizer13->Add( m_staticText21, 0, wxALL, 5 );
+	
+	
+	m_controlsSizer->Add( bSizer13, 0, wxEXPAND, 5 );
+	
+	m_panelHotkeys = new wxPanel( m_controlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_controlsSizer->Add( m_panelHotkeys, 1, wxEXPAND | wxALL, 5 );
+	
+	m_checkEnableZoomCenter = new wxCheckBox( m_controlsPanel, wxID_ANY, _("Cen&ter and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkEnableZoomCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
-	bSizer91->Add( m_checkEnableZoomCenter, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
+	m_controlsSizer->Add( m_checkEnableZoomCenter, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 	
-	m_checkEnableMiddleButtonPan = new wxCheckBox( m_panel4, xwID_ANY, _("&Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkEnableMiddleButtonPan = new wxCheckBox( m_controlsPanel, xwID_ANY, _("&Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkEnableMiddleButtonPan->SetToolTip( _("Use middle mouse button dragging to pan") );
 	
-	bSizer91->Add( m_checkEnableMiddleButtonPan, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
+	m_controlsSizer->Add( m_checkEnableMiddleButtonPan, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 	
-	m_checkMiddleButtonPanLimited = new wxCheckBox( m_panel4, wxID_ANY, _("&Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkMiddleButtonPanLimited = new wxCheckBox( m_controlsPanel, wxID_ANY, _("&Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkMiddleButtonPanLimited->SetToolTip( _("Middle mouse button panning limited by current scrollbar size") );
 	
-	bSizer91->Add( m_checkMiddleButtonPanLimited, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
+	m_controlsSizer->Add( m_checkMiddleButtonPanLimited, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 	
-	m_checkAutoPan = new wxCheckBox( m_panel4, wxID_ANY, _("&Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer91->Add( m_checkAutoPan, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
-	
-	
-	bSizer81->Add( bSizer91, 0, wxALL|wxEXPAND, 5 );
+	m_checkAutoPan = new wxCheckBox( m_controlsPanel, wxID_ANY, _("&Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_controlsSizer->Add( m_checkAutoPan, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
 	
-	m_panel4->SetSizer( bSizer81 );
-	m_panel4->Layout();
-	bSizer81->Fit( m_panel4 );
-	m_notebook->AddPage( m_panel4, _("Co&ntrols"), false );
+	bSizer81->Add( m_controlsSizer, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	m_controlsPanel->SetSizer( bSizer81 );
+	m_controlsPanel->Layout();
+	bSizer81->Fit( m_controlsPanel );
+	m_notebook->AddPage( m_controlsPanel, _("Controls"), false );
 	m_panel2 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
@@ -342,9 +358,12 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Default &Fields"), false );
+	m_notebook->AddPage( m_panel2, _("Default Fields"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -353,7 +372,10 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bOptionsSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 6 );
+	bSizer12->Add( m_sdbSizer, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bOptionsSizer->Add( bSizer12, 0, wxBOTTOM|wxEXPAND, 5 );
 	
 	
 	mainSizer->Add( bOptionsSizer, 1, wxEXPAND, 12 );

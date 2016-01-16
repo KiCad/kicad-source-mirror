@@ -87,7 +87,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName, uns
             {
                 if( part->GetFootPrints().GetCount() != 0 )    // Put in list
                 {
-                    cmpList.push_back( SCH_REFERENCE( comp, part, *path ) );
+                    cmpList.push_back( SCH_REFERENCE( comp, part, path->Last() ) );
                 }
             }
 

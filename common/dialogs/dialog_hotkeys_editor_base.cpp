@@ -15,9 +15,12 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	
 	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Select a row and press a new key combination to alter the binding."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Double-click to edit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( 400 );
 	m_mainSizer->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
+	
+	m_panelHotkeys = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_mainSizer->Add( m_panelHotkeys, 1, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* b_buttonsSizer;
 	b_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );

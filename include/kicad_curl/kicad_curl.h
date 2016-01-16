@@ -92,7 +92,7 @@ public:
      */
     static const char* GetVersion()
     {
-        return KICAD_CURL::version();
+        return curl_version();
     }
 
 
@@ -103,26 +103,6 @@ public:
      * @return std::string - Generated version string
      */
     static std::string GetSimpleVersion();
-private:
-
-    // Alphabetically:
-    // dynamically looked up libcurl function pointers whose prototypes were
-    // taken from the system's libcurl headers.
-
-    static void         (CURL_EXTERN * easy_cleanup)    ( CURL* curl );
-    static CURL*        (CURL_EXTERN * easy_init)       ( void );
-    static CURLcode     (CURL_EXTERN * easy_perform)    ( CURL* curl );
-    static CURLcode     (CURL_EXTERN * easy_setopt)     ( CURL* curl, CURLoption option, ... );
-    static const char*  (CURL_EXTERN * easy_strerror)   ( CURLcode );
-    static CURLcode     (CURL_EXTERN * global_init)     ( long flags );
-    static void         (CURL_EXTERN * global_cleanup)  ( void );
-    static curl_slist*  (CURL_EXTERN * slist_append)    ( curl_slist*, const char* );
-    static void         (CURL_EXTERN * slist_free_all)  ( curl_slist* );
-    static char*        (CURL_EXTERN * version)         ( void );
-    static curl_version_info_data* (CURL_EXTERN * version_info) (CURLversion);
-
-    /// A tuple of ASCII function names and pointers to pointers to functions
-    static const DYN_LOOKUP dyn_funcs[];
 };
 
 #endif // KICAD_CURL_H_

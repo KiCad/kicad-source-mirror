@@ -1,5 +1,3 @@
-#ifndef TITLE_BLOCK_H_
-#define TITLE_BLOCK_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -22,6 +20,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef CLASS_TITLE_BLOCK_H_
+#define CLASS_TITLE_BLOCK_H_
 
 #include <wx/string.h>
 
@@ -162,4 +163,4 @@ private:
     }
 };
 
-#endif // TITLE_BLOCK_H_
+#endif // CLASS_TITLE_BLOCK_H_

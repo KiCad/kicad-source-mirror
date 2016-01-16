@@ -432,11 +432,11 @@ public:
                                    const wxString& aRef,
                                    int             aMulti );
 
-    // returns the unit selection, for the given sheet path.
+    // returns the unit selection, for the given sheet.
     int GetUnitSelection( SCH_SHEET* aSheet );
 
-    // Set the unit selection, for the given sheet path.
-    void SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
+    // Set the unit selection, for the given sheet.
+    void SetUnitSelection( SCH_SHEET* aSheet, int aUnitSelection );
 
     // Geometric transforms (used in block operations):
 

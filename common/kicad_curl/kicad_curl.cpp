@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -26,56 +27,106 @@
 #include <wx/dynlib.h>
 
 #include <macros.h>
+#include <fctsys.h>
 #include <kicad_curl/kicad_curl.h>
 #include <ki_mutex.h>       // MUTEX and MUTLOCK
 #include <richio.h>
+
+
 
 // These are even more private than class members, and since there is only
 // one instance of KICAD_CURL ever, these statics are hidden here to simplify the
 // client (API) header file.
 static volatile bool s_initialized;
 
-static MUTEX s_lock;
+static MUTEX s_lock;        // for s_initialized
 
+// Assume that on these platforms libcurl uses OpenSSL
+#if defined(__linux__) || defined(_WIN32)
 
-void        (CURL_EXTERN * KICAD_CURL::easy_cleanup)    ( CURL* curl );
-CURL*       (CURL_EXTERN * KICAD_CURL::easy_init)       ( void );
-CURLcode    (CURL_EXTERN * KICAD_CURL::easy_perform)    ( CURL* curl );
-CURLcode    (CURL_EXTERN * KICAD_CURL::easy_setopt)     ( CURL* curl, CURLoption option, ... );
-const char* (CURL_EXTERN * KICAD_CURL::easy_strerror)   ( CURLcode );
-CURLcode    (CURL_EXTERN * KICAD_CURL::global_init)     ( long flags );
-void        (CURL_EXTERN * KICAD_CURL::global_cleanup)  ( void );
-curl_slist* (CURL_EXTERN * KICAD_CURL::slist_append)    ( curl_slist*, const char* );
-void        (CURL_EXTERN * KICAD_CURL::slist_free_all)  ( curl_slist* );
-char*       (CURL_EXTERN * KICAD_CURL::version)         ( void );
-curl_version_info_data* (CURL_EXTERN * KICAD_CURL::version_info) (CURLversion);
+#include <openssl/crypto.h>
 
+static MUTEX* s_crypto_locks;
 
-struct DYN_LOOKUP
+static void lock_callback( int mode, int type, const char* file, int line )
 {
-    const char* name;
-    void**      address;
-};
+    (void)file;
+    (void)line;
 
-// May need to modify "name" for each platform according to how libcurl is built on
-// that platform and the spelling or partial mangling of C function names.  On linux
-// there is no mangling.
-#define DYN_PAIR( basename )    { "curl_" #basename, (void**) &KICAD_CURL::basename }
+    wxASSERT( s_crypto_locks && unsigned( type ) < unsigned( CRYPTO_num_locks() ) );
+
+    //DBG( printf( "%s: mode=0x%x type=%d file=%s line=%d\n", __func__, mode, type, file, line );)
+
+    if( mode & CRYPTO_LOCK )
+    {
+        s_crypto_locks[ type ].lock();
+    }
+    else
+    {
+        s_crypto_locks[ type ].unlock();
+    }
+}
 
 
-const DYN_LOOKUP KICAD_CURL::dyn_funcs[] = {
-    DYN_PAIR( easy_cleanup ),
-    DYN_PAIR( easy_init ),
-    DYN_PAIR( easy_perform ),
-    DYN_PAIR( easy_setopt ),
-    DYN_PAIR( easy_strerror ),
-    DYN_PAIR( global_init ),
-    DYN_PAIR( global_cleanup ),
-    DYN_PAIR( slist_append ),
-    DYN_PAIR( slist_free_all ),
-    DYN_PAIR( version ),
-    DYN_PAIR( version_info ),
-};
+static void init_locks()
+{
+    s_crypto_locks = new MUTEX[ CRYPTO_num_locks() ];
+
+    // From http://linux.die.net/man/3/crypto_set_id_callback:
+
+    /*
+
+    OpenSSL can safely be used in multi-threaded applications provided that at
+    least two callback functions are set, locking_function and threadid_func.
+
+    locking_function(int mode, int n, const char *file, int line) is needed to
+    perform locking on shared data structures. (Note that OpenSSL uses a number
+    of global data structures that will be implicitly shared whenever multiple
+    threads use OpenSSL.) Multi-threaded applications will crash at random if it
+    is not set.
+
+    threadid_func( CRYPTO_THREADID *id) is needed to record the
+    currently-executing thread's identifier into id. The implementation of this
+    callback should not fill in id directly, but should use
+    CRYPTO_THREADID_set_numeric() if thread IDs are numeric, or
+    CRYPTO_THREADID_set_pointer() if they are pointer-based. If the application
+    does not register such a callback using CRYPTO_THREADID_set_callback(), then
+    a default implementation is used - on Windows and BeOS this uses the
+    system's default thread identifying APIs, and on all other platforms it uses
+    the address of errno. The latter is satisfactory for thread-safety if and
+    only if the platform has a thread-local error number facility.
+
+    Dick: "sounds like CRYPTO_THREADID_set_callback() is not mandatory on our
+    2 OpenSSL platforms."
+
+    */
+
+    CRYPTO_set_locking_callback( &lock_callback );
+}
+
+
+static void kill_locks()
+{
+    CRYPTO_set_locking_callback( NULL );
+
+    delete[] s_crypto_locks;
+
+    s_crypto_locks = NULL;
+}
+
+#else
+
+inline void init_locks()    { /* dummy */ }
+inline void kill_locks()    { /* dummy */ }
+
+#endif
+
+/// At process termination, using atexit() keeps the CURL stuff out of the
+/// singletops and PGM_BASE.
+static void at_terminate()
+{
+    KICAD_CURL::Cleanup();
+}
 
 
 void KICAD_CURL::Init()
@@ -89,56 +140,14 @@ void KICAD_CURL::Init()
 
         if( !s_initialized )
         {
-            // dynamically load the library.
-            wxDynamicLibrary dso;
-            wxString canonicalName = dso.CanonicalizeName( wxT( "curl" ) );
-
-            // This is an ugly hack for MinGW builds.  We should probably use something
-            // like objdump to get the actual library file name from the link file.
-#if defined( __MINGW32__ )
-            canonicalName = dso.CanonicalizeName( wxT( "curl-4" ) );
-            canonicalName = wxT( "lib" ) + canonicalName;
-#endif
-
-            if( !dso.Load( canonicalName, wxDL_NOW | wxDL_GLOBAL ) )
-            {
-                // Failure: error reporting UI was done via wxLogSysError().
-                std::string msg = StrPrintf( "%s not wxDynamicLibrary::Load()ed",
-                                             static_cast< const char *>( canonicalName.mb_str() ) );
-                THROW_IO_ERROR( msg );
-            }
-
-            // get addresses.
-
-            for( unsigned i=0; i < DIM(dyn_funcs); ++i )
-            {
-                *dyn_funcs[i].address = dso.GetSymbol( dyn_funcs[i].name );
-
-                if( *dyn_funcs[i].address == NULL )
-                {
-                    // Failure: error reporting UI was done via wxLogSysError().
-                    // No further reporting required here.
-
-                    std::string msg = StrPrintf( "%s has no function %s",
-                                                 static_cast<const char*>( canonicalName.mb_str() ),
-                                                 dyn_funcs[i].name );
-
-                    THROW_IO_ERROR( msg );
-                }
-            }
-
-            if( KICAD_CURL::global_init( CURL_GLOBAL_ALL ) != CURLE_OK )
+            if( curl_global_init( CURL_GLOBAL_ALL ) != CURLE_OK )
             {
                 THROW_IO_ERROR( "curl_global_init() failed." );
             }
 
-            wxLogDebug( "Using %s", GetVersion() );
+            init_locks();
 
-            // Tell dso's wxDynamicLibrary destructor not to Unload() the program image,
-            // since everything is fine before this.  In those cases where THROW_IO_ERROR
-            // is called, dso is destroyed and the DSO/DLL is unloaded before returning in
-            // those error cases.
-            (void) dso.Detach();
+            wxLogDebug( "Using %s", GetVersion() );
 
             s_initialized = true;
         }
@@ -169,14 +178,11 @@ void KICAD_CURL::Cleanup()
 
         if( s_initialized )
         {
+            curl_global_cleanup();
 
-            KICAD_CURL::global_cleanup();
+            kill_locks();
 
-            // dyn_funcs are not good for anything now, assuming process is ending soon here.
-            for( unsigned i=0; i < DIM(dyn_funcs);  ++i )
-            {
-                *dyn_funcs[i].address = 0;
-            }
+            atexit( &at_terminate );
 
             s_initialized = false;
         }
@@ -189,7 +195,7 @@ std::string KICAD_CURL::GetSimpleVersion()
     if( !s_initialized )
         Init();
 
-    curl_version_info_data *info = KICAD_CURL::version_info( CURLVERSION_NOW );
+    curl_version_info_data* info = curl_version_info( CURLVERSION_NOW );
 
     std::string res;
 

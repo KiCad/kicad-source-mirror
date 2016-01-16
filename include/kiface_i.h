@@ -1,6 +1,3 @@
-#ifndef KIFACE_I_H_
-#define KIFACE_I_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef KIFACE_I_H_
+#define KIFACE_I_H_
 
 #include <kiway.h>
 #include <bin_mod.h>

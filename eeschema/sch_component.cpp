@@ -606,9 +606,9 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET* aSheet )
 }
 
 
-void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection )
+void SCH_COMPONENT::SetUnitSelection( SCH_SHEET* aSheet, int aUnitSelection )
 {
-    wxString          path = GetPath( aSheet->Last() );
+    wxString          path = GetPath( aSheet );
 
     bool              notInArray = true;
 

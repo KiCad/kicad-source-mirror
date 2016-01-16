@@ -30,18 +30,18 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <wildcards_and_files_ext.h>
-
-#include <bitmap2cmp_gui_base.h>
-#include <bitmap2component.h>
-
-#include <potracelib.h>
 #include <bitmap_io.h>
-
 #include <colors_selection.h>
 #include <build_version.h>
 #include <menus_helpers.h>
 #include <kiway.h>
 #include <kiface_i.h>
+
+#include <potracelib.h>
+
+#include "bitmap2component.h"
+
+#include "bitmap2cmp_gui_base.h"
 
 
 #define KEYWORD_FRAME_POSX          wxT( "Bmconverter_Pos_x" )

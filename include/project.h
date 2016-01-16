@@ -1,5 +1,3 @@
-#ifndef PROJECT_H_
-#define PROJECT_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -22,6 +20,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef PROJECT_H_
+#define PROJECT_H_
 
 #include <vector>
 #include <wx/string.h>

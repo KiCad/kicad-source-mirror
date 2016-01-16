@@ -73,7 +73,7 @@ extern int MaxNodes;    /* maximum number of nodes opened at one time */
 
 
 /* Structures useful to the generation of board as bitmap. */
-typedef char MATRIX_CELL;
+typedef unsigned char MATRIX_CELL;
 typedef int  DIST_CELL;
 typedef char DIR_CELL;
 

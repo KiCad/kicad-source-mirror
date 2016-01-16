@@ -302,6 +302,12 @@ void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_P
 
 void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount )
 {
+    // A static table to avoid repetitive calculations of the coefficient
+    // 1.0 - cos( M_PI/aCircleSegmentsCount)
+    // aCircleSegmentsCount is most of time <= 64 and usually 8, 12, 16, 32
+    #define SEG_CNT_MAX 64
+    static double arc_tolerance_factor[SEG_CNT_MAX+1];
+
     ClipperOffset c;
 
     BOOST_FOREACH( const POLYGON& poly, m_polys )
@@ -312,7 +318,27 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount )
 
     PolyTree solution;
 
-    c.ArcTolerance = fabs( (double) aFactor ) / M_PI / aCircleSegmentsCount;
+    // Calculate the arc tolerance (arc error) from the seg count by circle.
+    // the seg count is nn = M_PI / acos(1.0 - c.ArcTolerance / abs(aFactor))
+    // see:
+    // www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Classes/ClipperOffset/Properties/ArcTolerance.htm
+
+    if( aCircleSegmentsCount < 6 )  // avoid incorrect aCircleSegmentsCount values
+        aCircleSegmentsCount = 6;
+
+    double coeff;
+
+    if( aCircleSegmentsCount > SEG_CNT_MAX || arc_tolerance_factor[aCircleSegmentsCount] == 0 )
+    {
+        coeff = 1.0 - cos( M_PI/aCircleSegmentsCount);
+
+        if( aCircleSegmentsCount <= SEG_CNT_MAX )
+            arc_tolerance_factor[aCircleSegmentsCount] = coeff;
+    }
+    else
+        coeff = arc_tolerance_factor[aCircleSegmentsCount];
+
+    c.ArcTolerance = std::abs( aFactor ) * coeff;
 
     c.Execute( solution, aFactor );
 

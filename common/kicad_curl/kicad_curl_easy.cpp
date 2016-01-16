@@ -52,29 +52,24 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
 
     KICAD_CURL::Init();
 
-    // Do not catch exception from KICAD_CURL::Init() at this level.
-    // Instantiation of this instance will fail if Init() throws, thus ensuring
-    // that this instance cannot be subsequently used.
-    // Caller needs a try catch around KICAD_CURL_EASY instantiation.
-
-    m_CURL = KICAD_CURL::easy_init();
+    m_CURL = curl_easy_init();
 
     if( !m_CURL )
     {
         THROW_IO_ERROR( "Unable to initialize CURL session" );
     }
 
-    KICAD_CURL::easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
-    KICAD_CURL::easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void*) &m_buffer );
+    curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
+    curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void*) &m_buffer );
 }
 
 
 KICAD_CURL_EASY::~KICAD_CURL_EASY()
 {
     if( m_headers )
-        KICAD_CURL::slist_free_all( m_headers );
+        curl_slist_free_all( m_headers );
 
-    KICAD_CURL::easy_cleanup( m_CURL );
+    curl_easy_cleanup( m_CURL );
 }
 
 
@@ -82,13 +77,13 @@ void KICAD_CURL_EASY::Perform()
 {
     if( m_headers )
     {
-        KICAD_CURL::easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
+        curl_easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
     }
 
     // bonus: retain worst case memory allocation, should re-use occur
     m_buffer.clear();
 
-    CURLcode res = KICAD_CURL::easy_perform( m_CURL );
+    CURLcode res = curl_easy_perform( m_CURL );
 
     if( res != CURLE_OK )
     {

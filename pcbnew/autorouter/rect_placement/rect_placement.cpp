@@ -180,7 +180,6 @@ bool CRectPlacement::AddAtEmptySpot( TRect& r )
     return bFound;
 }
 
-#include <stdio.h>
 // --------------------------------------------------------------------------------
 // Name        : AddAtEmptySpotAutoGrow
 // Description : Add a rectangle of the given size, growing our area if needed
