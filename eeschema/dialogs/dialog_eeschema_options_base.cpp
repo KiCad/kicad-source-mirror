@@ -118,7 +118,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel5->SetSizer( bSizer82 );
 	m_panel5->Layout();
 	bSizer82->Fit( m_panel5 );
-	m_notebook->AddPage( m_panel5, _("Display"), false );
+	m_notebook->AddPage( m_panel5, _("Display"), true );
 	m_panel3 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -293,7 +293,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_controlsPanel->SetSizer( bSizer81 );
 	m_controlsPanel->Layout();
 	bSizer81->Fit( m_controlsPanel );
-	m_notebook->AddPage( m_controlsPanel, _("Co&ntrols"), true );
+	m_notebook->AddPage( m_controlsPanel, _("Controls"), false );
 	m_panel2 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
@@ -359,7 +359,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Default &Fields"), false );
+	m_notebook->AddPage( m_panel2, _("Default Fields"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	
