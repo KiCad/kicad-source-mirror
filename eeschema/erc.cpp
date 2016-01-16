@@ -248,8 +248,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     if( aMinConn < 0 )
     {
-        if( (aNetItemRef->m_Type == NET_HIERLABEL)
-            || (aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER) )
+        if( aNetItemRef->m_Type == NET_HIERLABEL || aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER )
         {
             msg.Printf( _( "Hierarchical label %s is not connected to a sheet label." ),
                         GetChars( aNetItemRef->m_Label ) );
@@ -258,7 +257,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
                              msg,
                              aNetItemRef->m_Start );
         }
-        else if( (aNetItemRef->m_Type == NET_GLOBLABEL) )
+        else if( aNetItemRef->m_Type == NET_GLOBLABEL )
         {
             msg.Printf( _( "Global label %s is not connected to any other global label." ),
                         GetChars( aNetItemRef->m_Label ) );
