@@ -230,40 +230,15 @@ void WIDGET_HOTKEY_LIST::OnActivated( wxTreeListEvent& aEvent )
 
     if( hkdata )
     {
-        long key = key_event.GetKeyCode();
+        long key = MapKeypressToKeycode( key_event );
 
-        switch( key )
+        if( key == 0 )
         {
-        case WXK_ESCAPE:
+            // key: Escape
             UnselectAll();
-            break;
-
-        default:
-            if( key >= 'a' && key <= 'z' ) // convert to uppercase
-                key = key + ('A' - 'a');
-
-            // Remap Ctrl A (=1+GR_KB_CTRL) to Ctrl Z(=26+GR_KB_CTRL)
-            // to GR_KB_CTRL+'A' .. GR_KB_CTRL+'Z'
-            if( key_event.ControlDown() && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
-                key += 'A' - 1;
-
-            /* Disallow shift for keys that have two keycodes on them (e.g. number and
-             * punctuation keys) leaving only the "letter keys" of A-Z.
-             * Then, you can have, e.g. Ctrl-5 and Ctrl-% (GB layout)
-             * and Ctrl-( and Ctrl-5 (FR layout).
-             * Otherwise, you'd have to have to say Ctrl-Shift-5 on a FR layout
-             */
-            bool keyIsLetter = key >= 'A' && key <= 'Z';
-
-            if( key_event.ShiftDown() && ( keyIsLetter || key > 256 ) )
-                key |= GR_KB_SHIFT;
-
-            if( key_event.ControlDown() )
-                key |= GR_KB_CTRL;
-
-            if( key_event.AltDown() )
-                key |= GR_KB_ALT;
-
+        }
+        else
+        {
             // See if this key code is handled in hotkeys names list
             bool exists;
             KeyNameFromKeyCode( key, &exists );
@@ -485,4 +460,43 @@ bool WIDGET_HOTKEY_LIST::TransferDataFromControl()
     }
 
     return true;
+}
+
+long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
+{
+    long key = aEvent.GetKeyCode();
+
+    if( key == WXK_ESCAPE )
+    {
+        return 0;
+    }
+    else
+    {
+        if( key >= 'a' && key <= 'z' ) // convert to uppercase
+            key = key + ('A' - 'a');
+
+        // Remap Ctrl A (=1+GR_KB_CTRL) to Ctrl Z(=26+GR_KB_CTRL)
+        // to GR_KB_CTRL+'A' .. GR_KB_CTRL+'Z'
+        if( aEvent.ControlDown() && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
+            key += 'A' - 1;
+
+        /* Disallow shift for keys that have two keycodes on them (e.g. number and
+            * punctuation keys) leaving only the "letter keys" of A-Z.
+            * Then, you can have, e.g. Ctrl-5 and Ctrl-% (GB layout)
+            * and Ctrl-( and Ctrl-5 (FR layout).
+            * Otherwise, you'd have to have to say Ctrl-Shift-5 on a FR layout
+            */
+        bool keyIsLetter = key >= 'A' && key <= 'Z';
+
+        if( aEvent.ShiftDown() && ( keyIsLetter || key > 256 ) )
+            key |= GR_KB_SHIFT;
+
+        if( aEvent.ControlDown() )
+            key |= GR_KB_CTRL;
+
+        if( aEvent.AltDown() )
+            key |= GR_KB_ALT;
+
+        return key;
+    }
 }

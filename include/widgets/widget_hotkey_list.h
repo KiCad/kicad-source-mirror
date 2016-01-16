@@ -164,6 +164,12 @@ public:
      * @return true iff the operation was successful
      */
     bool TransferDataFromControl();
+
+    /**
+     * Static method MapKeypressToKeycode
+     * Map a keypress event to the correct key code for use as a hotkey.
+     */
+    static long MapKeypressToKeycode( const wxKeyEvent& aEvent );
 };
 
 #endif // __widget_hotkey_list__
