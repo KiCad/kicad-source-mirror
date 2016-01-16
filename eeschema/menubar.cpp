@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2014 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -398,23 +398,38 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
-    // Hotkey submenu
-    AddHotkeyConfigMenu( preferencesMenu );
+    // Import/export
+    wxMenu* importExportSubmenu = new wxMenu();
 
-    // Separator
-    preferencesMenu->AppendSeparator();
-
-    AddMenuItem( preferencesMenu,
+    AddMenuItem( importExportSubmenu,
                  ID_CONFIG_SAVE,
                  _( "&Save Preferences" ),
                  _( "Save application preferences" ),
-                 KiBitmap( save_setup_xpm ) );
+                 wxNullBitmap );
 
-    AddMenuItem( preferencesMenu,
+    AddMenuItem( importExportSubmenu,
                  ID_CONFIG_READ,
                  _( "Load Prefe&rences" ),
                  _( "Load application preferences" ),
-                 KiBitmap( read_setup_xpm ) );
+                 wxNullBitmap );
+
+    AddMenuItem( importExportSubmenu,
+                 ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
+                 _( "E&xport Hotkeys" ),
+                 _( "Create a hotkey configuration file to export the current hotkeys" ),
+                 wxNullBitmap );
+
+    AddMenuItem( importExportSubmenu,
+                 ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
+                 _( "&Import Hotkeys" ),
+                 _( "Load an existing hotkey configuration file" ),
+                 wxNullBitmap );
+
+    AddMenuItem( preferencesMenu, importExportSubmenu,
+                 wxID_ANY,
+                 _( "&Import and export" ),
+                 _( "Import and export settings" ),
+                 KiBitmap( save_setup_xpm ) );
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;

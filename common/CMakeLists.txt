@@ -1,6 +1,7 @@
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
+    ./widgets
     ./dialog_about
     ${CAIRO_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
@@ -144,6 +145,9 @@ set( COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
     dialog_about/dialog_about.cpp
     dialog_about/dialog_about_base.cpp
+    )
+
+set( COMMON_DLG_SRCS
     dialogs/dialog_display_info_HTML_base.cpp
     dialogs/dialog_exit_base.cpp
     dialogs/dialog_image_editor.cpp
@@ -160,6 +164,10 @@ set( COMMON_ABOUT_DLG_SRCS
     dialogs/wx_html_report_panel.cpp
     )
 
+set( COMMON_WIDGET_SRCS
+    widgets/widget_hotkey_list.cpp
+    )
+
 set( COMMON_PAGE_LAYOUT_SRCS
     page_layout/title_block_shapes.cpp
     page_layout/class_worksheet_dataitem.cpp
@@ -173,6 +181,8 @@ set( COMMON_PAGE_LAYOUT_SRCS
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
+    ${COMMON_DLG_SRCS}
+    ${COMMON_WIDGET_SRCS}
     ${COMMON_PAGE_LAYOUT_SRCS}
     base_struct.cpp
     basicframe.cpp

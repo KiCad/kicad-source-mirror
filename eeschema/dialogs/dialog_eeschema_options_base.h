@@ -103,7 +103,11 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkAutoplaceFields;
 		wxCheckBox* m_checkAutoplaceJustify;
 		wxCheckBox* m_checkAutoplaceAlign;
-		wxPanel* m_panel4;
+		wxPanel* m_controlsPanel;
+		wxBoxSizer* m_controlsSizer;
+		wxStaticText* m_staticText20;
+		wxStaticText* m_staticText21;
+		wxPanel* m_panelHotkeys;
 		wxCheckBox* m_checkEnableZoomCenter;
 		wxCheckBox* m_checkEnableMiddleButtonPan;
 		wxCheckBox* m_checkMiddleButtonPanLimited;

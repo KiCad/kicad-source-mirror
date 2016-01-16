@@ -20,6 +20,7 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/dialog.h>
@@ -37,6 +38,7 @@ class HOTKEYS_EDITOR_DIALOG_BASE : public DIALOG_SHIM
 	protected:
 		wxBoxSizer* m_mainSizer;
 		wxStaticText* m_staticText1;
+		wxPanel* m_panelHotkeys;
 		wxButton* m_resetButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
