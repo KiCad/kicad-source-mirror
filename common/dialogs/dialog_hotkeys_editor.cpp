@@ -28,6 +28,7 @@ void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
     HOTKEYS_EDITOR_DIALOG dialog( aParent, aHotkeys );
 
     int diag = dialog.ShowModal();
+
     if( diag == wxID_OK )
     {
         aParent->ReCreateMenuBar();
@@ -36,8 +37,8 @@ void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
 }
 
 
-HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
-                                              EDA_HOTKEY_CONFIG* aHotkeys ) :
+HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent,
+        EDA_HOTKEY_CONFIG* aHotkeys ) :
     HOTKEYS_EDITOR_DIALOG_BASE( aParent ),
     m_hotkeys( aHotkeys )
 {
@@ -83,4 +84,3 @@ void HOTKEYS_EDITOR_DIALOG::ResetClicked( wxCommandEvent& aEvent )
 {
     m_hotkeyListCtrl->TransferDataToControl();
 }
-

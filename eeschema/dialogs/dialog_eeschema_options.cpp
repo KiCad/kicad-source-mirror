@@ -31,10 +31,10 @@
 
 #include <dialog_eeschema_options.h>
 #include <widgets/widget_hotkey_list.h>
-#include "../schframe.h"
-#include "hotkeys.h"
+#include <schframe.h>
+#include <hotkeys.h>
 
-#include "wx/settings.h"
+#include <wx/settings.h>
 
 /**
  * Menu IDs for the import/export menu.
@@ -46,6 +46,7 @@ enum IMP_EXP_MENU_IDS
     ID_IMPORT_HOTKEYS,
     ID_EXPORT_HOTKEYS
 };
+
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
@@ -82,6 +83,7 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     {
         m_notebook->GetPage( i )->Layout();
     }
+
     Layout();
 }
 
@@ -117,20 +119,24 @@ void DIALOG_EESCHEMA_OPTIONS::OnMenu( wxCommandEvent& aEvent )
         aEvent.SetId( ID_CONFIG_READ );
         GetParent()->Process_Config( aEvent );
         break;
+
     case ID_EXPORT_PREFS:
         aEvent.SetId( ID_CONFIG_SAVE );
         GetParent()->Process_Config( aEvent );
         break;
+
     case ID_IMPORT_HOTKEYS:
         aEvent.SetId( ID_PREFERENCES_HOTKEY_IMPORT_CONFIG );
         GetParent()->Process_Config( aEvent );
         break;
+
     case ID_EXPORT_HOTKEYS:
         aEvent.SetId( ID_PREFERENCES_HOTKEY_EXPORT_CONFIG );
         GetParent()->Process_Config( aEvent );
         break;
+
     default:
-        wxFAIL_MSG("Unexpected menu ID");
+        wxFAIL_MSG( "Unexpected menu ID" );
     }
 }
 
@@ -226,11 +232,13 @@ void DIALOG_EESCHEMA_OPTIONS::OnAddButtonClick( wxCommandEvent& event )
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         bool this_row_selected = false;
+
         for( int col = 0; col < m_fieldGrid->GetNumberCols(); ++col )
         {
             if( m_fieldGrid->IsInSelection( row, col ) )
                 this_row_selected = true;
         }
+
         if( this_row_selected )
         {
             selected_row = row;
@@ -277,10 +285,12 @@ void DIALOG_EESCHEMA_OPTIONS::OnDeleteButtonClick( wxCommandEvent& event )
     TransferDataFromWindow();
 
     int n_rows = m_fieldGrid->GetNumberRows();
+
     for( int count = 0; count < n_rows; ++count )
     {
         // Iterate backwards, unsigned-friendly way for future
         int row = n_rows - count - 1;
+
         if( rows_to_delete[row] )
         {
             templateFields.erase( templateFields.begin() + row );
@@ -300,8 +310,10 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
         return false;
 
     m_fieldGrid->Freeze();
+
     if( m_fieldGrid->GetNumberRows() )
         m_fieldGrid->DeleteRows( 0, m_fieldGrid->GetNumberRows() );
+
     m_fieldGrid->AppendRows( templateFields.size() );
 
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
@@ -320,6 +332,7 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
         m_fieldGrid->SetCellRenderer( row, 2, new wxGridCellBoolRenderer() );
         m_fieldGrid->SetCellAlignment( row, 2, wxALIGN_CENTRE, wxALIGN_CENTRE );
     }
+
     m_fieldGrid->AutoSizeRows();
     m_fieldGrid->Thaw();
 
@@ -330,7 +343,7 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
 
 bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
 {
-    if( ! wxDialog::TransferDataFromWindow() )
+    if( !wxDialog::TransferDataFromWindow() )
         return false;
 
     if( !m_hotkeyListCtrl->TransferDataFromControl() )
@@ -342,7 +355,7 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
 
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
-        templateFields[row].m_Name = m_fieldGrid->GetCellValue( row, 0 );
+        templateFields[row].m_Name  = m_fieldGrid->GetCellValue( row, 0 );
         templateFields[row].m_Value = m_fieldGrid->GetCellValue( row, 1 );
         templateFields[row].m_Visible = ( m_fieldGrid->GetCellValue( row, 2 ) != wxEmptyString );
     }
@@ -365,4 +378,3 @@ TEMPLATE_FIELDNAMES DIALOG_EESCHEMA_OPTIONS::GetTemplateFields( void )
 {
     return templateFields;
 }
-
