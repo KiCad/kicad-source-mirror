@@ -25,6 +25,7 @@
 #include <widgets/widget_hotkey_list.h>
 
 #include <wx/dataview.h>
+#include <wx/statline.h>
 
 #include <draw_frame.h>
 #include <dialog_shim.h>
@@ -67,28 +68,44 @@ public:
         wxPanel* panel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
+        // Dialog layout:
+        //
+        // inst_label........................
+        // ----------------------------------
+        //
+        // cmd_label_0      cmd_label_1         \
+        //                                      |  fgsizer
+        // key_label_0      key_label_1         /
+
         wxStaticText* inst_label = new wxStaticText( panel, wxID_ANY, wxEmptyString,
                 wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL );
-        inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to reset..." ) );
-
-        {
-            wxFont font = inst_label->GetFont();
-            inst_label->SetFont( font.Bold() );
-        }
-
+        inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to cancel..." ) );
         sizer->Add( inst_label, 0, wxALL, 5 );
 
-        sizer->Add( new wxStaticText( panel, wxID_ANY,
-                        _( "Command: " ) + aName ),
-                    0, wxALL, 5 );
+        sizer->Add( new wxStaticLine( panel ), 0, wxALL | wxEXPAND, 2 );
 
-        sizer->Add( new wxStaticText( panel, wxID_ANY,
-                        _( "Current key: ") + aCurrentKey ),
-                    0, wxALL, 5 );
+        wxFlexGridSizer* fgsizer = new wxFlexGridSizer( 2 );
+
+        wxStaticText* cmd_label_0 = new wxStaticText( panel, wxID_ANY, _( "Command:" ) );
+        fgsizer->Add( cmd_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
+
+        wxStaticText* cmd_label_1 = new wxStaticText( panel, wxID_ANY, aName );
+        cmd_label_1->SetFont( cmd_label_1->GetFont().Bold().MakeLarger() );
+        fgsizer->Add( cmd_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
+
+        wxStaticText* key_label_0 = new wxStaticText( panel, wxID_ANY, _( "Current key:" ) );
+        fgsizer->Add( key_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
+
+        wxStaticText* key_label_1 = new wxStaticText( panel, wxID_ANY, aCurrentKey );
+        key_label_1->SetFont( key_label_1->GetFont().Bold().MakeLarger() );
+        fgsizer->Add( key_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
+
+
+        sizer->Add( fgsizer, 1, wxEXPAND );
 
         // Wrap the sizer in a second to give a larger border around the whole dialog
         wxBoxSizer* outer_sizer = new wxBoxSizer( wxVERTICAL );
-        outer_sizer->Add( sizer, 0, wxALL, 10 );
+        outer_sizer->Add( sizer, 0, wxALL | wxEXPAND, 10 );
         panel->SetSizer( outer_sizer );
 
         Layout();
