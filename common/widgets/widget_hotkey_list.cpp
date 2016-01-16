@@ -69,7 +69,7 @@ public:
 
         wxStaticText* inst_label = new wxStaticText( panel, wxID_ANY, wxEmptyString,
                 wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL );
-        inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to unset..." ) );
+        inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to reset..." ) );
 
         {
             wxFont font = inst_label->GetFont();
