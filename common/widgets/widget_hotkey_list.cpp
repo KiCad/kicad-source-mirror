@@ -27,6 +27,7 @@
 #include <wx/dataview.h>
 
 #include <draw_frame.h>
+#include <dialog_shim.h>
 
 
 /**
@@ -47,6 +48,92 @@ public:
 
     EDA_HOTKEY& GetHotkey() { return m_hotkey; }
     const wxString& GetSectionTag() const { return m_section_tag; }
+};
+
+
+/**
+ * Class HK_PROMPT_DIALOG
+ * Dialog to prompt the user to enter a key.
+ */
+class HK_PROMPT_DIALOG: public DIALOG_SHIM
+{
+    wxKeyEvent m_event;
+
+public:
+    HK_PROMPT_DIALOG( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
+            const wxString& aName, const wxString& aCurrentKey )
+        :   DIALOG_SHIM( aParent, aId, aTitle, wxDefaultPosition, wxDefaultSize )
+    {
+        wxPanel* panel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+        wxStaticText* inst_label = new wxStaticText( panel, wxID_ANY, wxEmptyString,
+                wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL );
+        inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to unset..." ) );
+
+        {
+            wxFont font = inst_label->GetFont();
+            inst_label->SetFont( font.Bold() );
+        }
+
+        sizer->Add( inst_label, 0, wxALL, 5 );
+
+        sizer->Add( new wxStaticText( panel, wxID_ANY,
+                        _( "Command: " ) + aName ),
+                    0, wxALL, 5 );
+
+        sizer->Add( new wxStaticText( panel, wxID_ANY,
+                        _( "Current key: ") + aCurrentKey ),
+                    0, wxALL, 5 );
+
+        // Wrap the sizer in a second to give a larger border around the whole dialog
+        wxBoxSizer* outer_sizer = new wxBoxSizer( wxVERTICAL );
+        outer_sizer->Add( sizer, 0, wxALL, 10 );
+        panel->SetSizer( outer_sizer );
+
+        Layout();
+        outer_sizer->Fit( this );
+        Center();
+
+        SetMinClientSize( GetClientSize() );
+
+        panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
+    }
+
+
+    void OnChar( wxKeyEvent& aEvent )
+    {
+        m_event = aEvent;
+        EndFlexible( wxID_OK );
+    }
+
+
+    /**
+     * End the dialog whether modal or quasimodal
+     */
+    void EndFlexible( int aRtnCode )
+    {
+        if( IsQuasiModal() )
+            EndQuasiModal( aRtnCode );
+        else
+            EndModal( aRtnCode );
+    }
+
+
+    static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
+            const wxString& aCurrentKey )
+    {
+        HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
+        if( dialog.ShowModal() == wxID_OK )
+        {
+            return dialog.m_event;
+        }
+        else
+        {
+            wxKeyEvent dummy;
+            return dummy;
+        }
+    }
 };
 
 
@@ -107,13 +194,26 @@ void WIDGET_HOTKEY_LIST::LoadSection( EDA_HOTKEY_CONFIG* aSection )
 }
 
 
-void WIDGET_HOTKEY_LIST::OnChar( wxKeyEvent& aEvent )
+void WIDGET_HOTKEY_LIST::OnActivated( wxTreeListEvent& aEvent )
 {
-    WIDGET_HOTKEY_CLIENT_DATA* data = GetSelHKClientData();
+    wxTreeListItem item = aEvent.GetItem();
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( item );
 
-    if( data )
+    if( !hkdata )
     {
-        long key = aEvent.GetKeyCode();
+        // Activated item was not a hotkey row
+        aEvent.Skip();
+        return;
+    }
+
+    wxString name = GetItemText( item, 0 );
+    wxString current_key = GetItemText( item, 1 );
+
+    wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( GetParent(), name, current_key );
+
+    if( hkdata )
+    {
+        long key = key_event.GetKeyCode();
 
         switch( key )
         {
@@ -127,7 +227,7 @@ void WIDGET_HOTKEY_LIST::OnChar( wxKeyEvent& aEvent )
 
             // Remap Ctrl A (=1+GR_KB_CTRL) to Ctrl Z(=26+GR_KB_CTRL)
             // to GR_KB_CTRL+'A' .. GR_KB_CTRL+'Z'
-            if( aEvent.ControlDown() && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
+            if( key_event.ControlDown() && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
                 key += 'A' - 1;
 
             /* Disallow shift for keys that have two keycodes on them (e.g. number and
@@ -138,27 +238,27 @@ void WIDGET_HOTKEY_LIST::OnChar( wxKeyEvent& aEvent )
              */
             bool keyIsLetter = key >= 'A' && key <= 'Z';
 
-            if( aEvent.ShiftDown() && ( keyIsLetter || key > 256 ) )
+            if( key_event.ShiftDown() && ( keyIsLetter || key > 256 ) )
                 key |= GR_KB_SHIFT;
 
-            if( aEvent.ControlDown() )
+            if( key_event.ControlDown() )
                 key |= GR_KB_CTRL;
 
-            if( aEvent.AltDown() )
+            if( key_event.AltDown() )
                 key |= GR_KB_ALT;
 
             // See if this key code is handled in hotkeys names list
             bool exists;
             KeyNameFromKeyCode( key, &exists );
 
-            if( exists && data->GetHotkey().m_KeyCode != key )
+            if( exists && hkdata->GetHotkey().m_KeyCode != key )
             {
-                wxString tag = data->GetSectionTag();
+                wxString tag = hkdata->GetSectionTag();
                 bool canUpdate = ResolveKeyConflicts( key, tag );
 
                 if( canUpdate )
                 {
-                    data->GetHotkey().m_KeyCode = key;
+                    hkdata->GetHotkey().m_KeyCode = key;
                 }
 
                 // Remove selection
@@ -289,7 +389,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, const HOTKEY_SECTIONS
     AppendColumn( _( "Command" ) );
     AppendColumn( _( "Hotkey" ) );
 
-    Bind( wxEVT_CHAR, &WIDGET_HOTKEY_LIST::OnChar, this );
+    Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::OnActivated, this );
     Bind( wxEVT_SIZE, &WIDGET_HOTKEY_LIST::OnSize, this );
 }
 

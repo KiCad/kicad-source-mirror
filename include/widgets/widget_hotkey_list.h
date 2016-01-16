@@ -91,11 +91,10 @@ protected:
     void LoadSection( EDA_HOTKEY_CONFIG* aSection );
 
     /**
-     * Function OnChar
-     * Handle keypress.
-     * XXX REMOVE
+     * Method OnActivated
+     * Handle activation of a row.
      */
-    void OnChar( wxKeyEvent& aEvent );
+    void OnActivated( wxTreeListEvent& aEvent );
 
     /**
      * Function OnSize
