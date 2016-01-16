@@ -48,8 +48,10 @@
 
 #include <dialog_edit_module_for_BoardEditor.h>
 #include <wildcards_and_files_ext.h>
-#include <3d_cache/dialogs/panel_prev_model.h>
-#include <3d_cache/dialogs/3d_cache_dialogs.h>
+#include "3d_cache/dialogs/panel_prev_model.h"
+#include "3d_cache/dialogs/3d_cache_dialogs.h"
+#include "3d_cache/3d_cache.h"
+#include "3d_cache/3d_filename_resolver.h"
 
 size_t DIALOG_MODULE_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 
@@ -260,6 +262,10 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     // Init 3D shape list
     S3D_MASTER* draw3D = m_CurrentModule->Models();
+    wxString origPath;
+    wxString alias;
+    wxString shortPath;
+    S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
     while( draw3D )
     {
@@ -268,8 +274,18 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
             S3D_MASTER* draw3DCopy = new S3D_MASTER( NULL );
             draw3DCopy->Copy( draw3D );
             m_Shapes3D_list.push_back( draw3DCopy );
-            m_3D_ShapeNameListBox->Append( draw3DCopy->GetShape3DName() );
+            origPath = draw3DCopy->GetShape3DName();
+
+            if( res && res->SplitAlias( origPath, alias, shortPath ) )
+            {
+                origPath = alias;
+                origPath.append( wxT( ":" ) );
+                origPath.append( shortPath );
+            }
+
+            m_3D_ShapeNameListBox->Append( origPath );
         }
+
         draw3D = (S3D_MASTER*) draw3D->Next();
     }
 
@@ -419,6 +435,7 @@ void DIALOG_MODULE_BOARD_EDITOR::On3DShapeNameSelected( wxCommandEvent& event )
         m_LastSelected3DShapeIndex = -1;
         return;
     }
+
     Transfert3DValuesToDisplay( m_Shapes3D_list[m_LastSelected3DShapeIndex] );
 }
 
@@ -461,27 +478,74 @@ void DIALOG_MODULE_BOARD_EDITOR::Edit3DShapeFileName()
     if( idx < 0 )
         return;
 
-    // Edit filename
-    wxString filename = m_3D_ShapeNameListBox->GetStringSelection();
+    // ensure any updated parameters are not discarded
+    TransfertDisplayTo3DValues( idx );
 
-    wxTextEntryDialog dlg( this, wxEmptyString, wxEmptyString, filename );
-    dlg.SetTextValidator( FILE_NAME_WITH_PATH_CHAR_VALIDATOR( &filename ) );
+    PROJECT& prj = Prj();
+    S3D_INFO model;
 
-    if( dlg.ShowModal() != wxID_OK || filename.IsEmpty() )
-        return;    //Aborted by user
+    wxString oldPath = m_Shapes3D_list[idx]->GetShape3DFullFilename();
+    wxString initialpath;
+
+    if( !oldPath.empty() )
+    {
+        wxFileName fname( oldPath );
+        initialpath = fname.GetPath();
+    }
+    else
+    {
+        initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
+    }
+
+    int filter = 0;
+    wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
+
+    if( !sidx.empty() )
+    {
+        long tmp;
+        sidx.ToLong( &tmp );
+
+        if( tmp > 0 && tmp <= 0x7FFFFFFF )
+            filter = (int) tmp;
+    }
+
+    if( !S3D::Select3DModel( this, Prj().Get3DCacheManager(),
+                             initialpath, filter, &model ) )
+    {
+        return;
+    }
+
+    prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
+    sidx = wxString::Format( wxT( "%i" ), filter );
+    prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
+
+    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
 
 #ifdef __WINDOWS__
     // In Kicad files, filenames and paths are stored using Unix notation
-    // So be sure the unix notation is still used
-    filename.Replace( wxT( "\\" ), wxT( "/" ) );
+    model.filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-    m_3D_ShapeNameListBox->SetString( idx, filename );
-
-    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
-    new3DShape->SetShape3DName( filename );
+    new3DShape->SetShape3DName( model.filename );
+    new3DShape->m_MatPosition = m_Shapes3D_list[idx]->m_MatPosition;
+    new3DShape->m_MatRotation = m_Shapes3D_list[idx]->m_MatRotation;
+    new3DShape->m_MatScale = m_Shapes3D_list[idx]->m_MatScale;
     delete m_Shapes3D_list[idx];
     m_Shapes3D_list[idx] = new3DShape;
+
+    wxString alias;
+    wxString shortPath;
+    S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
+    oldPath = model.filename;
+
+    if( res && res->SplitAlias( oldPath, alias, shortPath ) )
+    {
+        oldPath = alias;
+        oldPath.append( wxT( ":" ) );
+        oldPath.append( shortPath );
+    }
+
+    m_3D_ShapeNameListBox->SetString( idx, oldPath );
 
     Transfert3DValuesToDisplay( m_Shapes3D_list[idx] );
 
@@ -491,7 +555,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Edit3DShapeFileName()
 
 void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
 {
-    PROJECT&        prj = Prj();
+    PROJECT& prj = Prj();
     S3D_INFO model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
@@ -536,7 +600,20 @@ void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
     new3DShape->m_MatPosition.z = model.offset.z;
 
     m_Shapes3D_list.push_back( new3DShape );
-    m_3D_ShapeNameListBox->Append( model.filename );
+
+    wxString origPath = model.filename;
+    wxString alias;
+    wxString shortPath;
+    S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
+
+    if( res && res->SplitAlias( origPath, alias, shortPath ) )
+    {
+        origPath = alias;
+        origPath.append( wxT( ":" ) );
+        origPath.append( shortPath );
+    }
+
+    m_3D_ShapeNameListBox->Append( origPath );
 
     m_LastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetCount() - 1;
     m_3D_ShapeNameListBox->SetSelection( m_LastSelected3DShapeIndex );
