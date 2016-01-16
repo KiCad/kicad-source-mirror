@@ -61,6 +61,7 @@ class WIDGET_HOTKEY_LIST : public wxTreeListCtrl
 {
     HOTKEY_SECTIONS             m_sections;
     std::vector<HOTKEY_LIST>    m_hotkeys;
+    wxTreeListItem              m_context_menu_item;
 
     /**
      * Method GetHKClientData
@@ -91,10 +92,34 @@ protected:
     void LoadSection( EDA_HOTKEY_CONFIG* aSection );
 
     /**
+     * Method EditItem
+     * Prompt the user for a new hotkey given a list item.
+     */
+    void EditItem( wxTreeListItem aItem );
+
+    /**
+     * Method ResetItem
+     * Reset the item to the original from the dialog was created.
+     */
+    void ResetItem( wxTreeListItem aItem );
+
+    /**
      * Method OnActivated
      * Handle activation of a row.
      */
     void OnActivated( wxTreeListEvent& aEvent );
+
+    /**
+     * Method OnContextMenu
+     * Handle right-click on a row.
+     */
+    void OnContextMenu( wxTreeListEvent& aEvent );
+
+    /**
+     * Method OnMenu
+     * Handle activation of a context menu item.
+     */
+    void OnMenu( wxCommandEvent& aEvent );
 
     /**
      * Function OnSize

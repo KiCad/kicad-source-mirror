@@ -32,6 +32,17 @@
 
 
 /**
+ * Menu IDs for the hotkey context menu
+ */
+enum ID_WHKL_MENU_IDS
+{
+    ID_EDIT = 2001,
+    ID_RESET,
+    ID_RESET_ALL,
+};
+
+
+/**
  * Class WIDGET_HOTKEY_CLIENT_DATA
  * Stores the hotkey and section tag associated with each row. To change a
  * hotkey, edit it in the row's client data, then call WIDGET_HOTKEY_LIST::UpdateFromClientData().
@@ -210,21 +221,18 @@ void WIDGET_HOTKEY_LIST::LoadSection( EDA_HOTKEY_CONFIG* aSection )
     m_hotkeys.push_back( list );
 }
 
-
-void WIDGET_HOTKEY_LIST::OnActivated( wxTreeListEvent& aEvent )
+void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 {
-    wxTreeListItem item = aEvent.GetItem();
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( item );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( aItem );
 
     if( !hkdata )
     {
         // Activated item was not a hotkey row
-        aEvent.Skip();
         return;
     }
 
-    wxString name = GetItemText( item, 0 );
-    wxString current_key = GetItemText( item, 1 );
+    wxString name = GetItemText( aItem, 0 );
+    wxString current_key = GetItemText( aItem, 1 );
 
     wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( GetParent(), name, current_key );
 
@@ -259,6 +267,77 @@ void WIDGET_HOTKEY_LIST::OnActivated( wxTreeListEvent& aEvent )
         }
     }
     UpdateFromClientData();
+}
+
+
+void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem )
+{
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( aItem );
+    EDA_HOTKEY* hk = &hkdata->GetHotkey();
+
+    for( size_t sec_index = 0; sec_index < m_sections.size(); ++sec_index )
+    {
+        wxString& section_tag = *( m_sections[sec_index].m_section->m_SectionTag );
+        if( section_tag != hkdata->GetSectionTag() )
+            continue;
+
+        HOTKEY_LIST& each_list = m_hotkeys[sec_index];
+        HOTKEY_LIST::iterator hk_it;
+        for( hk_it = each_list.begin(); hk_it != each_list.end(); ++hk_it )
+        {
+            if( hk_it->m_Idcommand == hk->m_Idcommand )
+            {
+                hk->m_KeyCode = hk_it->m_KeyCode;
+                break;
+            }
+        }
+    }
+
+    UpdateFromClientData();
+}
+
+
+void WIDGET_HOTKEY_LIST::OnActivated( wxTreeListEvent& aEvent )
+{
+    EditItem( aEvent.GetItem() );
+}
+
+
+void WIDGET_HOTKEY_LIST::OnContextMenu( wxTreeListEvent& aEvent )
+{
+    // Save the active event for use in OnMenu
+    m_context_menu_item = aEvent.GetItem();
+
+    wxMenu menu;
+
+    menu.Append( ID_EDIT, _( "Edit..." ) );
+    menu.Append( ID_RESET, _( "Reset" ) );
+    menu.Append( wxID_SEPARATOR );
+    menu.Append( ID_RESET_ALL, _( "Reset all" ) );
+
+    PopupMenu( &menu );
+}
+
+
+void WIDGET_HOTKEY_LIST::OnMenu( wxCommandEvent& aEvent )
+{
+    switch( aEvent.GetId() )
+    {
+    case ID_EDIT:
+        EditItem( m_context_menu_item );
+        break;
+
+    case ID_RESET:
+        ResetItem( m_context_menu_item );
+        break;
+
+    case ID_RESET_ALL:
+        TransferDataToControl();
+        break;
+
+    default:
+        wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
+    }
 }
 
 
@@ -382,6 +461,8 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, const HOTKEY_SECTIONS
     AppendColumn( _( "Hotkey" ) );
 
     Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::OnActivated, this );
+    Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::OnContextMenu, this );
+    Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
     Bind( wxEVT_SIZE, &WIDGET_HOTKEY_LIST::OnSize, this );
 }
 
