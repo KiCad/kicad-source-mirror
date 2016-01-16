@@ -30,7 +30,7 @@
 #include <class_base_screen.h>
 
 #include <dialog_eeschema_options.h>
-#include <dialog_hotkeys_editor.h>
+#include <widgets/widget_hotkey_list.h>
 #include "../schframe.h"
 #include "hotkeys.h"
 
@@ -65,8 +65,8 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     }
 
     // Embed the hotkeys list
-    HOTKEYS_SECTIONS sections = HOTKEY_LIST_CTRL::Sections( g_Eeschema_Hokeys_Descr );
-    m_hotkeyListCtrl = new HOTKEY_LIST_CTRL( m_controlsPanel, sections );
+    HOTKEY_SECTIONS sections = WIDGET_HOTKEY_LIST::GenSections( g_Eeschema_Hokeys_Descr );
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_controlsPanel, sections );
     // Insert after the "Hotkeys:" label
     m_controlsSizer->Insert( 1, m_hotkeyListCtrl, wxSizerFlags( 1 ).Expand().Border( wxALL, 5 ) );
 
