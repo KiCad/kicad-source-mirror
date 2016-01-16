@@ -25,8 +25,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_bom.cpp
     dialogs/dialog_bom_base.cpp
     dialogs/dialog_bom_cfg_keywords.cpp
-    dialogs/dialog_color_config.cpp
-    dialogs/dialog_color_config_base.cpp
     dialogs/dialog_choose_component.cpp
     dialogs/dialog_choose_component_base.cpp
     dialogs/dialog_lib_edit_text.cpp
@@ -72,6 +70,11 @@ set( EESCHEMA_DLGS
     dialogs/dialog_schematic_find_base.cpp
     )
 
+set( EESCHEMA_WIDGETS
+    widgets/widget_eeschema_color_config.cpp
+    )
+
+
 set( EESCHEMA_SRCS
     autoplace_fields.cpp
     annotate.cpp
@@ -90,6 +93,7 @@ set( EESCHEMA_SRCS
     controle.cpp
     cross-probing.cpp
     ${EESCHEMA_DLGS}
+    ${EESCHEMA_WIDGETS}
     edit_component_in_schematic.cpp
     edit_bitmap.cpp
     edit_label.cpp

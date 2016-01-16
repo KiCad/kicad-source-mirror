@@ -130,10 +130,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
-    EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::OnColorConfig )
     EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
     EVT_MENU( ID_CONFIG_REQ, LIB_EDIT_FRAME::InstallConfigFrame )
-    EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::Process_Config )
 
     // Multiple item selection context menu commands.
     EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, LIB_EDIT_FRAME::OnSelectItem )

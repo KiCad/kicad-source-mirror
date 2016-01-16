@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,7 @@
 
 #include <general.h>
 
-#include <dialog_color_config.h>
-
-
-#define ID_COLOR_SETUP  1800
+#include "widget_eeschema_color_config.h"
 
 // Specify the width and height of every (color-displaying / bitmap) button
 const int BUTT_SIZE_X = 16;
@@ -110,20 +107,20 @@ static BUTTONINDEX buttonGroups[] = {
 static EDA_COLOR_T currentColors[ LAYERSCH_ID_COUNT ];
 
 
-DIALOG_COLOR_CONFIG::DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent ) :
-    DIALOG_COLOR_CONFIG_BASE( aParent )
+WIDGET_EESCHEMA_COLOR_CONFIG::WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
+    wxPanel( aParent ), m_drawFrame( aDrawFrame )
 {
-    m_parent = aParent;
     CreateControls();
-
-    GetSizer()->SetSizeHints( this );
 }
 
 
-void DIALOG_COLOR_CONFIG::CreateControls()
+void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
 {
     wxStaticText*   label;
     int             buttonId = 1800;
+
+    m_mainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( m_mainBoxSizer );
 
     BUTTONINDEX* groups = buttonGroups;
     wxBoxSizer* columnBoxSizer = NULL;
@@ -185,7 +182,7 @@ void DIALOG_COLOR_CONFIG::CreateControls()
     }
 
     Connect( 1800, buttonId - 1, wxEVT_COMMAND_BUTTON_CLICKED,
-             wxCommandEventHandler( DIALOG_COLOR_CONFIG::SetColor ) );
+             wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
 
     wxArrayString selBgColorStrings;
     selBgColorStrings.Add( _( "White" ) );
@@ -193,7 +190,7 @@ void DIALOG_COLOR_CONFIG::CreateControls()
     m_SelBgColor = new wxRadioBox( this, wxID_ANY, _( "Background Color" ),
                                    wxDefaultPosition, wxDefaultSize,
                                    selBgColorStrings, 1, wxRA_SPECIFY_COLS );
-    m_SelBgColor->SetSelection( ( m_parent->GetDrawBgColor() == BLACK ) ? 1 : 0 );
+    m_SelBgColor->SetSelection( ( GetDrawFrame()->GetDrawBgColor() == BLACK ) ? 1 : 0 );
 
     if( columnBoxSizer )
     {
@@ -202,13 +199,13 @@ void DIALOG_COLOR_CONFIG::CreateControls()
         columnBoxSizer->Add( m_SelBgColor, 1, wxGROW | wxRIGHT | wxTOP | wxBOTTOM, 5 );
     }
 
-    currentColors[ LAYER_BACKGROUND ] =  m_parent->GetDrawBgColor();
+    currentColors[ LAYER_BACKGROUND ] =  GetDrawFrame()->GetDrawBgColor();
 
     // Dialog now needs to be resized, but the associated command is found elsewhere.
 }
 
 
-void DIALOG_COLOR_CONFIG::SetColor( wxCommandEvent& event )
+void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 {
     wxBitmapButton* button = (wxBitmapButton*) event.GetEventObject();
 
@@ -246,7 +243,7 @@ void DIALOG_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 }
 
 
-bool DIALOG_COLOR_CONFIG::TransferDataFromWindow()
+bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
 {
     bool warning = false;
 
@@ -280,7 +277,7 @@ bool DIALOG_COLOR_CONFIG::TransferDataFromWindow()
     }
 
     // Update color of background
-    m_parent->SetDrawBgColor( bgcolor );
+    GetDrawFrame()->SetDrawBgColor( bgcolor );
     currentColors[ LAYER_BACKGROUND ] = bgcolor;
 
 
@@ -289,8 +286,17 @@ bool DIALOG_COLOR_CONFIG::TransferDataFromWindow()
         SetLayerColor( currentColors[ clyr ], clyr );
     }
 
-    m_parent->SetGridColor( GetLayerColor( LAYER_GRID ) );
-    m_parent->GetCanvas()->Refresh();
+    GetDrawFrame()->SetGridColor( GetLayerColor( LAYER_GRID ) );
+    GetDrawFrame()->GetCanvas()->Refresh();
 
     return true;
+}
+
+
+void WIDGET_EESCHEMA_COLOR_CONFIG::InstallOnPanel( wxPanel* aPanel )
+{
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    sizer->Add( this, 1, wxALL | wxEXPAND, 0 );
+    aPanel->SetSizer( sizer );
 }

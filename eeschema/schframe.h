@@ -266,7 +266,6 @@ public:
     void SetPlotDirectoryName( const wxString& aDirName ) { m_plotDirectoryName = aDirName; }
 
     void Process_Special_Functions( wxCommandEvent& event );
-    void OnColorConfig( wxCommandEvent& aEvent );
     void Process_Config( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
 
