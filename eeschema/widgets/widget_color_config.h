@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2007 G. Harland
+ * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,32 +22,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* Set up color Layers for Eeschema
- */
+#ifndef WIDGET_COLOR_CONFIG_H_
+#define WIDGET_COLOR_CONFIG_H_
 
-#include <fctsys.h>
-#include <draw_frame.h>
-#include <class_drawpanel.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
 
-#include <general.h>
+class wxBoxSizer;
+class wxStaticLine;
+class wxStdDialogButtonSizer;
 
-#include <dialog_color_config.h>
 
-#define ID_COLOR_SETUP  1800
+/***********************************************/
+/* Derived class for the frame color settings. */
+/***********************************************/
 
-DIALOG_COLOR_CONFIG::DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent ) :
-    DIALOG_COLOR_CONFIG_BASE( aParent )
+class WIDGET_COLOR_CONFIG : public wxPanel
 {
-    m_parent = aParent;
+private:
+    EDA_DRAW_FRAME*         m_drawFrame;
+    wxRadioBox*             m_SelBgColor;
+    wxBoxSizer*             m_mainBoxSizer;
 
-    m_colorConfig = new WIDGET_COLOR_CONFIG( this, aParent );
-    m_mainBoxSizer->Insert( 0, m_colorConfig, 1, wxEXPAND | wxALL, 5 );
+    // Creates the controls and sizers
+    void CreateControls();
 
-    GetSizer()->SetSizeHints( this );
-}
+    void    SetColor( wxCommandEvent& aEvent );
 
+    virtual EDA_DRAW_FRAME* GetDrawFrame() { return m_drawFrame; }
 
-bool DIALOG_COLOR_CONFIG::TransferDataFromWindow()
-{
-    return m_colorConfig->TransferDataFromControl();
-}
+public:
+    // Constructors and destructor
+    WIDGET_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame );
+
+    bool TransferDataFromControl();
+};
+
+#endif    // WIDGET_COLOR_CONFIG_H_

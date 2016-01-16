@@ -72,6 +72,11 @@ set( EESCHEMA_DLGS
     dialogs/dialog_schematic_find_base.cpp
     )
 
+set( EESCHEMA_WIDGETS
+    widgets/widget_color_config.cpp
+    )
+
+
 set( EESCHEMA_SRCS
     autoplace_fields.cpp
     annotate.cpp
@@ -90,6 +95,7 @@ set( EESCHEMA_SRCS
     controle.cpp
     cross-probing.cpp
     ${EESCHEMA_DLGS}
+    ${EESCHEMA_WIDGETS}
     edit_component_in_schematic.cpp
     edit_bitmap.cpp
     edit_label.cpp

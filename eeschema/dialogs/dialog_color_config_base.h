@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -14,13 +14,13 @@
 class DIALOG_SHIM;
 
 #include "dialog_shim.h"
-#include <wx/sizer.h>
-#include <wx/gdicmn.h>
 #include <wx/statline.h>
+#include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 

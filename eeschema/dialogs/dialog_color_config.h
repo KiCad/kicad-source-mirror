@@ -26,7 +26,7 @@
 #define DIALOG_COLOR_CONFIG_H_
 
 #include <dialog_color_config_base.h>
-
+#include "../widgets/widget_color_config.h"
 
 class wxBoxSizer;
 class wxStaticLine;
@@ -39,14 +39,8 @@ class wxStdDialogButtonSizer;
 
 class DIALOG_COLOR_CONFIG : public DIALOG_COLOR_CONFIG_BASE
 {
-private:
     EDA_DRAW_FRAME*         m_parent;
-    wxRadioBox*             m_SelBgColor;
-
-    // Creates the controls and sizers
-    void CreateControls();
-
-    void    SetColor( wxCommandEvent& aEvent );
+    WIDGET_COLOR_CONFIG*    m_colorConfig;
 
 public:
     // Constructors and destructor

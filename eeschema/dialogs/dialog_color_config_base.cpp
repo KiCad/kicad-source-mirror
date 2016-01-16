@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Dec 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -13,16 +13,10 @@ DIALOG_COLOR_CONFIG_BASE::DIALOG_COLOR_CONFIG_BASE( wxWindow* parent, wxWindowID
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxBoxSizer* bmainSizer;
-	bmainSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_mainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	bmainSizer->Add( m_mainBoxSizer, 1, wxEXPAND, 5 );
+	m_mainBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bmainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
+	m_mainBoxSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -33,12 +27,12 @@ DIALOG_COLOR_CONFIG_BASE::DIALOG_COLOR_CONFIG_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bmainSizer->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
+	m_mainBoxSizer->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
 	
-	this->SetSizer( bmainSizer );
+	this->SetSizer( m_mainBoxSizer );
 	this->Layout();
-	bmainSizer->Fit( this );
+	m_mainBoxSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }
