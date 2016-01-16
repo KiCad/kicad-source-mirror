@@ -68,6 +68,7 @@ public:
         :   m_hotkey( aHotkey ), m_section_tag( aSectionTag )
     {}
 
+
     EDA_HOTKEY& GetHotkey() { return m_hotkey; }
     const wxString& GetSectionTag() const { return m_section_tag; }
 };
@@ -123,7 +124,6 @@ public:
         key_label_1->SetFont( key_label_1->GetFont().Bold().MakeLarger() );
         fgsizer->Add( key_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
-
         sizer->Add( fgsizer, 1, wxEXPAND );
 
         // Wrap the sizer in a second to give a larger border around the whole dialog
@@ -137,13 +137,37 @@ public:
 
         SetMinClientSize( GetClientSize() );
 
+        // Binding both EVT_CHAR and EVT_CHAR_HOOK to the same handler ensures that
+        // all key events, including specials like Tab and Return, are received,
+        // particularly on MSW.
         panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
+        panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnChar, this );
     }
 
     void OnChar( wxKeyEvent& aEvent )
     {
-        m_event = aEvent;
-        EndFlexible( wxID_OK );
+        long key = aEvent.GetKeyCode();
+
+        // Some of these keys are duplicates on some platforms, so a switch()
+        // won't work.
+        if( key == WXK_NONE
+            || key == WXK_SHIFT
+            || key == WXK_ALT
+            || key == WXK_CONTROL
+            || key == WXK_CAPITAL
+            || key == WXK_NUMLOCK
+            || key == WXK_SCROLL
+            || key == WXK_RAW_CONTROL
+            || key == WXK_COMMAND
+            )
+        {
+            return;
+        }
+        else
+        {
+            m_event = aEvent;
+            EndFlexible( wxID_OK );
+        }
     }
 
     /**
