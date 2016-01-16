@@ -3269,7 +3269,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Track Width</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -15262,7 +15262,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">RF Attenuators</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -17506,11 +17506,11 @@
                                             <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">1</property>
-                                                <object class="wxPanel" expanded="0">
+                                                <object class="wxHtmlWindow" expanded="1">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -17543,7 +17543,7 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size">200,-1</property>
+                                                    <property name="minimum_size"></property>
                                                     <property name="moveable">1</property>
                                                     <property name="name">m_panelAttFormula</property>
                                                     <property name="pane_border">1</property>
@@ -17554,16 +17554,20 @@
                                                     <property name="pos"></property>
                                                     <property name="resize">Resizable</property>
                                                     <property name="show">1</property>
-                                                    <property name="size">-1,-1</property>
+                                                    <property name="size"></property>
+                                                    <property name="style">wxHW_SCROLLBAR_AUTO</property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
                                                     <property name="tooltip"></property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
-                                                    <property name="window_style">wxSIMPLE_BORDER|wxTAB_TRAVERSAL</property>
+                                                    <property name="window_style"></property>
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
+                                                    <event name="OnHtmlCellClicked"></event>
+                                                    <event name="OnHtmlCellHover"></event>
+                                                    <event name="OnHtmlLinkClicked"></event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -17577,7 +17581,7 @@
                                                     <event name="OnMotion"></event>
                                                     <event name="OnMouseEvents"></event>
                                                     <event name="OnMouseWheel"></event>
-                                                    <event name="OnPaint">OnPaintAttFormulaPanel</event>
+                                                    <event name="OnPaint"></event>
                                                     <event name="OnRightDClick"></event>
                                                     <event name="OnRightDown"></event>
                                                     <event name="OnRightUp"></event>

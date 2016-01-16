@@ -106,24 +106,25 @@ void DIALOG_EDITOR_DATA::OnOKClick( wxCommandEvent& event )
 
 bool DIALOG_EDITOR_DATA::IsOK()
 {
-    bool ok = true;
+    bool success = true;
+
     if( m_textCtrlName->GetValue().IsEmpty() )
-        ok = false;
+        success = false;
     if( m_textCtrlVref->GetValue().IsEmpty() )
-        ok = false;
+        success = false;
     else
     {
         double vref = DoubleFromString( m_textCtrlVref->GetValue() );
         if( fabs(vref) < 0.01 )
-            ok = false;
+            success = false;
     }
     if( m_choiceRegType->GetSelection() == 1 )
     {
         if( m_RegulIadjValue->GetValue().IsEmpty() )
-        ok = false;
+        success = false;
     }
 
-    return ok;
+    return success;
 }
 
 void DIALOG_EDITOR_DATA::CopyRegulatorDataToDialog( REGULATOR_DATA * aItem )

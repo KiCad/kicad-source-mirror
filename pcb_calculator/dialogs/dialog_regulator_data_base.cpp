@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 17 2012)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -71,6 +71,9 @@ DIALOG_EDITOR_DATA_BASE::DIALOG_EDITOR_DATA_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizerMain->Add( fgSizerPrms, 0, wxEXPAND, 5 );
 	
+	
+	bSizerMain->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 	
@@ -81,7 +84,7 @@ DIALOG_EDITOR_DATA_BASE::DIALOG_EDITOR_DATA_BASE( wxWindow* parent, wxWindowID i
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
 	
-	bSizerMain->Add( m_sdbSizerButtons, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizerButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
@@ -91,7 +94,6 @@ DIALOG_EDITOR_DATA_BASE::DIALOG_EDITOR_DATA_BASE( wxWindow* parent, wxWindowID i
 	
 	// Connect Events
 	m_choiceRegType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_EDITOR_DATA_BASE::OnRegTypeSelection ), NULL, this );
-	m_sdbSizerButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDITOR_DATA_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDITOR_DATA_BASE::OnOKClick ), NULL, this );
 }
 
@@ -99,7 +101,6 @@ DIALOG_EDITOR_DATA_BASE::~DIALOG_EDITOR_DATA_BASE()
 {
 	// Disconnect Events
 	m_choiceRegType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_EDITOR_DATA_BASE::OnRegTypeSelection ), NULL, this );
-	m_sdbSizerButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDITOR_DATA_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDITOR_DATA_BASE::OnOKClick ), NULL, this );
 	
 }

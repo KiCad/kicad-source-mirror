@@ -84,7 +84,6 @@ private:
     // icons that show the current item on the specific panels
     void OnPaintTranslinePanel( wxPaintEvent& event );
     void OnPaintAttenuatorPanel( wxPaintEvent& event );
-    void OnPaintAttFormulaPanel( wxPaintEvent& event );
 
     // Config read-write, virtual from EDA_BASE_FRAME
     void LoadSettings( wxConfigBase* aCfg );
