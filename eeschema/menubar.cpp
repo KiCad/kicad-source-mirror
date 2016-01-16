@@ -398,6 +398,39 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
+    // Import/export
+    wxMenu* importExportSubmenu = new wxMenu();
+
+    AddMenuItem( importExportSubmenu,
+                 ID_CONFIG_SAVE,
+                 _( "&Save Preferences" ),
+                 _( "Save application preferences" ),
+                 wxNullBitmap );
+
+    AddMenuItem( importExportSubmenu,
+                 ID_CONFIG_READ,
+                 _( "Load Prefe&rences" ),
+                 _( "Load application preferences" ),
+                 wxNullBitmap );
+
+    AddMenuItem( importExportSubmenu,
+                 ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
+                 _( "E&xport Hotkeys" ),
+                 _( "Create a hotkey configuration file to export the current hotkeys" ),
+                 wxNullBitmap );
+
+    AddMenuItem( importExportSubmenu,
+                 ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
+                 _( "&Import Hotkeys" ),
+                 _( "Load an existing hotkey configuration file" ),
+                 wxNullBitmap );
+
+    AddMenuItem( preferencesMenu, importExportSubmenu,
+                 wxID_ANY,
+                 _( "&Import and export" ),
+                 _( "Import and export settings" ),
+                 KiBitmap( save_setup_xpm ) );
+
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
 

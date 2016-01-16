@@ -36,17 +36,6 @@
 
 #include <wx/settings.h>
 
-/**
- * Menu IDs for the import/export menu.
- */
-enum IMP_EXP_MENU_IDS
-{
-    ID_IMPORT_PREFS = 2001,
-    ID_EXPORT_PREFS,
-    ID_IMPORT_HOTKEYS,
-    ID_EXPORT_HOTKEYS
-};
-
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
@@ -70,9 +59,6 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, sections );
     m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
 
-    // Bind event for the import/export menu
-    Bind( wxEVT_MENU, &DIALOG_EESCHEMA_OPTIONS::OnMenu, this );
-
     // Make sure we select the first tab of the options tab page
     m_notebook->SetSelection( 0 );
 
@@ -91,53 +77,6 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
 SCH_EDIT_FRAME* DIALOG_EESCHEMA_OPTIONS::GetParent()
 {
     return static_cast<SCH_EDIT_FRAME*>( DIALOG_EESCHEMA_OPTIONS_BASE::GetParent() );
-}
-
-
-void DIALOG_EESCHEMA_OPTIONS::OnImpExpClick( wxCommandEvent& aEvent )
-{
-    wxMenu menu;
-
-    menu.Append( ID_IMPORT_PREFS, _( "Import Preferences" ) );
-    menu.Append( ID_EXPORT_PREFS, _( "Export Preferences" ) );
-
-    menu.Append( wxID_SEPARATOR );
-    menu.Append( ID_IMPORT_HOTKEYS, _( "Import Hotkeys" ) );
-    menu.Append( ID_EXPORT_HOTKEYS, _( "Export Hotkeys" ) );
-
-    int btnw, btnh;
-    m_btnImpExp->GetSize( &btnw, &btnh );
-    m_btnImpExp->PopupMenu( &menu, wxPoint( 0, btnh ) );
-}
-
-
-void DIALOG_EESCHEMA_OPTIONS::OnMenu( wxCommandEvent& aEvent )
-{
-    switch( aEvent.GetId() )
-    {
-    case ID_IMPORT_PREFS:
-        aEvent.SetId( ID_CONFIG_READ );
-        GetParent()->Process_Config( aEvent );
-        break;
-
-    case ID_EXPORT_PREFS:
-        aEvent.SetId( ID_CONFIG_SAVE );
-        GetParent()->Process_Config( aEvent );
-        break;
-
-    case ID_IMPORT_HOTKEYS:
-        aEvent.SetId( ID_PREFERENCES_HOTKEY_IMPORT_CONFIG );
-        GetParent()->Process_Config( aEvent );
-        break;
-
-    case ID_EXPORT_HOTKEYS:
-        aEvent.SetId( ID_PREFERENCES_HOTKEY_EXPORT_CONFIG );
-        GetParent()->Process_Config( aEvent );
-        break;
-
-    default:
-        wxFAIL_MSG( "Unexpected menu ID" );
-    }
 }
 
 

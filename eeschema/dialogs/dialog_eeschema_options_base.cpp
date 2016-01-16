@@ -15,7 +15,6 @@ BEGIN_EVENT_TABLE( DIALOG_EESCHEMA_OPTIONS_BASE, DIALOG_SHIM )
 	EVT_CHECKBOX( xwID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnMiddleBtnPanEnbl )
 	EVT_BUTTON( wxID_ADD_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnAddButtonClick )
 	EVT_BUTTON( wxID_DELETE_FIELD, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnDeleteButtonClick )
-	EVT_BUTTON( ID_IMP_EXP, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnImpExpClick )
 END_EVENT_TABLE()
 
 DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
@@ -366,9 +365,6 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_btnImpExp = new wxButton( this, ID_IMP_EXP, _("Import/Export..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_btnImpExp, 0, wxALL, 5 );
-	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -379,7 +375,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer12->Add( m_sdbSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bOptionsSizer->Add( bSizer12, 0, wxEXPAND, 5 );
+	bOptionsSizer->Add( bSizer12, 0, wxBOTTOM|wxEXPAND, 5 );
 	
 	
 	mainSizer->Add( bOptionsSizer, 1, wxEXPAND, 12 );

@@ -50,7 +50,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		void _wxFB_OnMiddleBtnPanEnbl( wxCommandEvent& event ){ OnMiddleBtnPanEnbl( event ); }
 		void _wxFB_OnAddButtonClick( wxCommandEvent& event ){ OnAddButtonClick( event ); }
 		void _wxFB_OnDeleteButtonClick( wxCommandEvent& event ){ OnDeleteButtonClick( event ); }
-		void _wxFB_OnImpExpClick( wxCommandEvent& event ){ OnImpExpClick( event ); }
 		
 	
 	protected:
@@ -59,8 +58,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 			ID_M_SPINAUTOSAVEINTERVAL = 1000,
 			xwID_ANY,
 			wxID_ADD_FIELD,
-			wxID_DELETE_FIELD,
-			ID_IMP_EXP
+			wxID_DELETE_FIELD
 		};
 		
 		wxNotebook* m_notebook;
@@ -118,7 +116,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxGrid* m_fieldGrid;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
-		wxButton* m_btnImpExp;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -129,7 +126,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnImpExpClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

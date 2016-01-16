@@ -46,18 +46,6 @@ protected:
     TEMPLATE_FIELDNAMES templateFields;
 
     /**
-     * Function OnImpExpClick
-     * Display the settings import/export menu.
-     */
-    void OnImpExpClick( wxCommandEvent& aEvent );
-
-    /**
-     * Function OnMenu
-     * Handle menu clicks (for import/export)
-     */
-    void OnMenu( wxCommandEvent& aEvent );
-
-    /**
      * Function OnAddButtonClick
      * Process the wxWidgets @a event produced when the user presses the Add buton for the
      * template fieldnames control
