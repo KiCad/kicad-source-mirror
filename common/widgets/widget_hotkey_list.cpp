@@ -235,38 +235,28 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
     wxString current_key = GetItemText( aItem, 1 );
 
     wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( GetParent(), name, current_key );
+    long key = MapKeypressToKeycode( key_event );
 
-    if( hkdata )
+    if( hkdata && key )
     {
-        long key = MapKeypressToKeycode( key_event );
 
-        if( key == 0 )
-        {
-            // key: Escape
-            UnselectAll();
-        }
-        else
-        {
-            // See if this key code is handled in hotkeys names list
-            bool exists;
-            KeyNameFromKeyCode( key, &exists );
+        // See if this key code is handled in hotkeys names list
+        bool exists;
+        KeyNameFromKeyCode( key, &exists );
 
-            if( exists && hkdata->GetHotkey().m_KeyCode != key )
+        if( exists && hkdata->GetHotkey().m_KeyCode != key )
+        {
+            wxString tag = hkdata->GetSectionTag();
+            bool canUpdate = ResolveKeyConflicts( key, tag );
+
+            if( canUpdate )
             {
-                wxString tag = hkdata->GetSectionTag();
-                bool canUpdate = ResolveKeyConflicts( key, tag );
-
-                if( canUpdate )
-                {
-                    hkdata->GetHotkey().m_KeyCode = key;
-                }
-
-                // Remove selection
-                UnselectAll();
+                hkdata->GetHotkey().m_KeyCode = key;
             }
         }
+
+        UpdateFromClientData();
     }
-    UpdateFromClientData();
 }
 
 
