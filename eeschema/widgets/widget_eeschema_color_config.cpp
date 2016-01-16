@@ -111,8 +111,6 @@ WIDGET_EESCHEMA_COLOR_CONFIG::WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, E
     wxPanel( aParent ), m_drawFrame( aDrawFrame )
 {
     CreateControls();
-
-    GetSizer()->SetSizeHints( this );
 }
 
 

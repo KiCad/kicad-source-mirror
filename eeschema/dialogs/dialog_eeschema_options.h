@@ -34,13 +34,15 @@
 #include <dialog_eeschema_options_base.h>
 #include <template_fieldnames.h>
 
+class WIDGET_EESCHEMA_COLOR_CONFIG;
 class WIDGET_HOTKEY_LIST;
 class SCH_EDIT_FRAME;
 
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
 protected:
-    WIDGET_HOTKEY_LIST* m_hotkeyListCtrl;
+    WIDGET_HOTKEY_LIST*             m_hotkeyListCtrl;
+    WIDGET_EESCHEMA_COLOR_CONFIG*   m_colorConfigCtrl;
 
     /** @brief The template fieldnames for this dialog */
     TEMPLATE_FIELDNAMES templateFields;
