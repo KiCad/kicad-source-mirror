@@ -210,12 +210,12 @@ wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, EDA_COLOR_T aC
     // then create a wxBitmapButton from it.
     wxBitmap bitmap = makeBitmap( aColor );
 
-#ifndef __WXMAC__
+#ifdef __WXMAC__
     wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
-        wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_RAISED );
+        wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_NONE );
 #else
     wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
-        wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y));
+        wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_RAISED );
 #endif
     // save the color value in the name, no where else to put it.
     ret->SetName( makeColorTxt( aColor ) );
