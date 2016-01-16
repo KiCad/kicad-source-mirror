@@ -400,6 +400,14 @@ HOTKEY_SECTIONS WIDGET_HOTKEY_LIST::GenSections( EDA_HOTKEY_CONFIG* aHotkeys )
 }
 
 
+void WIDGET_HOTKEY_LIST::InstallOnPanel( wxPanel* aPanel )
+{
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+    sizer->Add( this, 1, wxALL | wxEXPAND, 0 );
+    aPanel->SetSizer( sizer );
+}
+
+
 bool WIDGET_HOTKEY_LIST::TransferDataToControl()
 {
     Freeze();

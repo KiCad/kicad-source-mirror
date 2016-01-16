@@ -66,9 +66,8 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
 
     // Embed the hotkeys list
     HOTKEY_SECTIONS sections = WIDGET_HOTKEY_LIST::GenSections( g_Eeschema_Hokeys_Descr );
-    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_controlsPanel, sections );
-    // Insert after the "Hotkeys:" label
-    m_controlsSizer->Insert( 1, m_hotkeyListCtrl, wxSizerFlags( 1 ).Expand().Border( wxALL, 5 ) );
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, sections );
+    m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
 
     // Bind event for the import/export menu
     Bind( wxEVT_MENU, &DIALOG_EESCHEMA_OPTIONS::OnMenu, this );

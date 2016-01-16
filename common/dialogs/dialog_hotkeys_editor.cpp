@@ -41,11 +41,13 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
     HOTKEYS_EDITOR_DIALOG_BASE( aParent ),
     m_hotkeys( aHotkeys )
 {
-    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, WIDGET_HOTKEY_LIST::GenSections( aHotkeys ) );
-    m_mainSizer->Insert( 1, m_hotkeyListCtrl, wxSizerFlags( 1 ).Expand().Border( wxALL, 5 ) );
-    Layout();
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys,
+            WIDGET_HOTKEY_LIST::GenSections( aHotkeys ) );
+    m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
 
     m_sdbSizerOK->SetDefault();
+
+    Layout();
     Center();
 }
 

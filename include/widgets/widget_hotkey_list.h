@@ -151,6 +151,14 @@ public:
     static HOTKEY_SECTIONS GenSections( EDA_HOTKEY_CONFIG* aHotkeys );
 
     /**
+     * Method InstallOnPanel
+     * Install this WIDGET_HOTKEY_LIST onto an empty panel. This is useful
+     * when combining with wxFormBuilder, as an empty panel can be left as a
+     * placeholder in the layout.
+     */
+    void InstallOnPanel( wxPanel* aPanel );
+
+    /**
      * Method TransferDataToControl
      * Load the hotkey data into the control. It is safe to call this multiple times,
      * for example to reset the control.

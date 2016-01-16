@@ -251,9 +251,22 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_controlsSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
+	
 	m_staticText20 = new wxStaticText( m_controlsPanel, wxID_ANY, _("Hotkeys:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
-	m_controlsSizer->Add( m_staticText20, 0, wxALL, 5 );
+	bSizer13->Add( m_staticText20, 1, wxALL, 5 );
+	
+	m_staticText21 = new wxStaticText( m_controlsPanel, wxID_ANY, _("Double-click to edit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21->Wrap( -1 );
+	bSizer13->Add( m_staticText21, 0, wxALL, 5 );
+	
+	
+	m_controlsSizer->Add( bSizer13, 0, wxEXPAND, 5 );
+	
+	m_panelHotkeys = new wxPanel( m_controlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_controlsSizer->Add( m_panelHotkeys, 1, wxEXPAND | wxALL, 5 );
 	
 	m_checkEnableZoomCenter = new wxCheckBox( m_controlsPanel, wxID_ANY, _("Cen&ter and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkEnableZoomCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
@@ -280,7 +293,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_controlsPanel->SetSizer( bSizer81 );
 	m_controlsPanel->Layout();
 	bSizer81->Fit( m_controlsPanel );
-	m_notebook->AddPage( m_controlsPanel, _("Co&ntrols"), false );
+	m_notebook->AddPage( m_controlsPanel, _("Co&ntrols"), true );
 	m_panel2 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
@@ -346,7 +359,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Default &Fields"), true );
+	m_notebook->AddPage( m_panel2, _("Default &Fields"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	
