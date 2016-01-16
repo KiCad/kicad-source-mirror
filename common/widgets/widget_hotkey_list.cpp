@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cctype>
+
 #include <widgets/widget_hotkey_list.h>
 
 #include <wx/dataview.h>
@@ -35,6 +37,7 @@
  * Minimum width of the hotkey column
  */
 static const int HOTKEY_MIN_WIDTH = 100;
+
 
 /**
  * Extra margin to compensate for vertical scrollbar
@@ -137,54 +140,56 @@ public:
 
         SetMinClientSize( GetClientSize() );
 
-        // Binding both EVT_CHAR and EVT_CHAR_HOOK to the same handler ensures that
-        // all key events, including specials like Tab and Return, are received,
-        // particularly on MSW.
+        // Binding both EVT_CHAR and EVT_CHAR_HOOK ensures that all key events,
+        // including specials like Tab and Return, are received, particularly
+        // on MSW.
         panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
-        panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnChar, this );
+        panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
     }
 
-    void OnChar( wxKeyEvent& aEvent )
-    {
-        long key = aEvent.GetKeyCode();
 
-        // Some of these keys are duplicates on some platforms, so a switch()
-        // won't work.
-        if( key == WXK_NONE
-            || key == WXK_SHIFT
-            || key == WXK_ALT
-            || key == WXK_CONTROL
-            || key == WXK_CAPITAL
-            || key == WXK_NUMLOCK
-            || key == WXK_SCROLL
-            || key == WXK_RAW_CONTROL
-            || key == WXK_COMMAND
-            )
+    void OnCharHook( wxKeyEvent& aEvent )
+    {
+        // On certain platforms, EVT_CHAR_HOOK is the only handler that receives
+        // certain "special" keys. However, it doesn't always receive "normal"
+        // keys correctly. For example, with a US keyboard, it sees ? as shift+/.
+        //
+        // Untangling these incorrect keys would be too much trouble, so we bind
+        // both events, and simply skip the EVT_CHAR_HOOK if it receives a
+        // "normal" key.
+
+        const enum wxKeyCode skipped_keys[] = {
+            WXK_NONE, WXK_SHIFT, WXK_ALT, WXK_CONTROL, WXK_CAPITAL,
+            WXK_NUMLOCK, WXK_SCROLL, WXK_RAW_CONTROL };
+
+        int key = aEvent.GetKeyCode();
+
+        for( size_t i = 0; i < sizeof( skipped_keys )/sizeof( skipped_keys[0] ); ++i )
         {
-            return;
+            if( key == skipped_keys[i] )
+                return;
+        }
+
+        if( key <= 255 && isprint( key ) )
+        {
+            // Let EVT_CHAR handle this one
+            aEvent.DoAllowNextEvent();
+            aEvent.Skip();
         }
         else
         {
-            m_event = aEvent;
-
-            // EVT_CHAR_HOOK returns some incorrect keys (shift+symbol,
-            // in particular). If the key is an ASCII printable, grab the
-            // code from GetUnicodeKey instead.
-
-            // TODO: Make the whole hotkey system support Unicode keys.
-
-            if( aEvent.GetKeyCode() >= '!' && aEvent.GetKeyCode() <= '~' )
-            {
-                if( aEvent.GetEventType() == wxEVT_CHAR_HOOK )
-                {
-                    aEvent.DoAllowNextEvent();
-                    return;
-                }
-            }
-
-            EndFlexible( wxID_OK );
+            OnChar( aEvent );
         }
+
     }
+
+
+    void OnChar( wxKeyEvent& aEvent )
+    {
+        m_event = aEvent;
+        EndFlexible( wxID_OK );
+    }
+
 
     /**
      * End the dialog whether modal or quasimodal
@@ -196,6 +201,7 @@ public:
         else
             EndModal( aRtnCode );
     }
+
 
     static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
             const wxString& aCurrentKey )
