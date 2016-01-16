@@ -158,13 +158,15 @@ public:
         // both events, and simply skip the EVT_CHAR_HOOK if it receives a
         // "normal" key.
 
-        const enum wxKeyCode skipped_keys[] = {
-            WXK_NONE, WXK_SHIFT, WXK_ALT, WXK_CONTROL, WXK_CAPITAL,
-            WXK_NUMLOCK, WXK_SCROLL, WXK_RAW_CONTROL };
+        const enum wxKeyCode skipped_keys[] =
+        {
+            WXK_NONE,    WXK_SHIFT,  WXK_ALT, WXK_CONTROL, WXK_CAPITAL,
+            WXK_NUMLOCK, WXK_SCROLL, WXK_RAW_CONTROL
+        };
 
         int key = aEvent.GetKeyCode();
 
-        for( size_t i = 0; i < sizeof( skipped_keys )/sizeof( skipped_keys[0] ); ++i )
+        for( size_t i = 0; i < sizeof( skipped_keys ) / sizeof( skipped_keys[0] ); ++i )
         {
             if( key == skipped_keys[i] )
                 return;
@@ -174,6 +176,10 @@ public:
         {
             // Let EVT_CHAR handle this one
             aEvent.DoAllowNextEvent();
+
+            // On Windows, wxEvent::Skip must NOT be called.
+            // On Linux and OSX, wxEvent::Skip MUST be called.
+            // No, I don't know why.
 #ifndef __WXMSW__
             aEvent.Skip();
 #endif
@@ -182,7 +188,6 @@ public:
         {
             OnChar( aEvent );
         }
-
     }
 
 
