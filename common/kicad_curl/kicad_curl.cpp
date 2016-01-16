@@ -23,12 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+// kicad_curl.h must be included before xw headers, to avoid
+// conflicts for some defines, at least on Windows
+#include <kicad_curl/kicad_curl.h>
+
 #include <wx/log.h>
 #include <wx/dynlib.h>
 
 #include <macros.h>
 #include <fctsys.h>
-#include <kicad_curl/kicad_curl.h>
 #include <ki_mutex.h>       // MUTEX and MUTLOCK
 #include <richio.h>
 

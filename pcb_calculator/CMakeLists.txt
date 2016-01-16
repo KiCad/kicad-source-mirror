@@ -162,4 +162,35 @@ add_custom_target(
         ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
 )
 
+#
+# Conversion of .html doc source files to .h files included in cpp sources
+#
+# Function html_doc2h : converts a single *.html text file to a *.h header
+function( html_doc2h inputFile )
+    add_custom_command(
+        OUTPUT ${inputFile}.h
+
+        COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile}.html -DoutputFile=${inputFile}.h
+            -P ${CMAKE_MODULE_PATH}/Html2C.cmake
+        DEPENDS ${inputFile}.html ${CMAKE_MODULE_PATH}/Html2C.cmake
+        COMMENT "creating ${inputFile}.h from ${inputFile}.html"
+        )
+endfunction()
+
+    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula )
+    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula )
+    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
+    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
+
+set( DOCS_LIST
+        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula.h
+    )
+
+set_source_files_properties( attenuators/attenuator_classes.cpp
+    PROPERTIES OBJECT_DEPENDS "${DOCS_LIST}"
+    )
+
 add_dependencies( pcb_calculator_kiface pcb_calculator_lexer_source_files )

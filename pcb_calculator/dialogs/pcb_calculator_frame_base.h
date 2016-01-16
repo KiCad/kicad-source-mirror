@@ -252,7 +252,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_attR3Unit;
 		wxStaticText* m_staticTextAttMsg;
 		wxHtmlWindow* m_Attenuator_Messages;
-		wxPanel* m_panelAttFormula;
+		wxHtmlWindow* m_panelAttFormula;
 		wxPanel* m_panelColorCode;
 		wxRadioBox* m_rbToleranceSelection;
 		wxStaticText* m_staticText31;
@@ -298,7 +298,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnAttenuatorSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintAttenuatorPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnCalculateAttenuator( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPaintAttFormulaPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnToleranceSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBoardClassesUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 		

@@ -14,10 +14,25 @@
 #include <att_tee.xpm>
 #include <att_bridge.xpm>
 #include <att_splitter.xpm>
-#include <pi_formula.xpm>
-#include <tee_formula.xpm>
-#include <bridged_tee_formula.xpm>
-#include <splitter_formula.xpm>
+
+
+// Html texts showing the formulas
+wxString pi_formula(
+#include <pi_formula.h>
+);
+
+wxString tee_formula(
+#include <tee_formula.h>
+);
+
+wxString bridget_tee_formula(
+#include <bridget_tee_formula.h>
+);
+
+wxString splitter_formula(
+#include <splitter_formula.h>
+);
+
 
 #ifndef NULL
 #define NULL 0
@@ -36,7 +51,7 @@ ATTENUATOR::ATTENUATOR( ATTENUATORS_TYPE aTopology )
     m_Attenuation_Enable = true;
     m_MinimumATT    = 0.0;          // dB
     m_SchBitMap     = NULL;
-    m_FormulaBitMap = NULL;
+    m_FormulaName   = NULL;
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
     m_R1 = 0.0;
@@ -49,7 +64,6 @@ ATTENUATOR::ATTENUATOR( ATTENUATORS_TYPE aTopology )
 ATTENUATOR::~ATTENUATOR()
 {
     delete m_SchBitMap;
-    delete m_FormulaBitMap;
 }
 
 
@@ -83,7 +97,7 @@ ATTENUATOR_PI::ATTENUATOR_PI() : ATTENUATOR( PI_TYPE )
 {
     m_Name = wxT("att_pi");
     m_SchBitMap     = new wxBitmap( att_pi_xpm );
-    m_FormulaBitMap = new wxBitmap( pi_formula_xpm );
+    m_FormulaName   = &pi_formula;
 }
 
 
@@ -104,7 +118,7 @@ ATTENUATOR_TEE::ATTENUATOR_TEE() : ATTENUATOR( TEE_TYPE )
 {
     m_Name = wxT("att_tee");
     m_SchBitMap     = new wxBitmap( att_tee_xpm );
-    m_FormulaBitMap = new wxBitmap( tee_formula_xpm );
+    m_FormulaName   = &tee_formula;
 }
 
 
@@ -127,7 +141,7 @@ ATTENUATOR_BRIDGE::ATTENUATOR_BRIDGE() : ATTENUATOR( BRIDGE_TYPE )
     m_Zin_Enable    = false;
     m_ResultCount   = 2;
     m_SchBitMap     = new wxBitmap( att_bridge_xpm );
-    m_FormulaBitMap = new wxBitmap( bridged_tee_formula_xpm );
+    m_FormulaName   = &bridget_tee_formula;
 }
 
 
@@ -153,7 +167,7 @@ ATTENUATOR_SPLITTER::ATTENUATOR_SPLITTER() : ATTENUATOR( SPLITTER_TYPE )
     m_MinimumATT    = 6.0;
     m_Zin_Enable    = false;
     m_SchBitMap     = new wxBitmap( att_splitter_xpm );
-    m_FormulaBitMap = new wxBitmap( splitter_formula_xpm );
+    m_FormulaName   = &splitter_formula;
 }
 
 
