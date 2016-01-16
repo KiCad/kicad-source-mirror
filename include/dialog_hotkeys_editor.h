@@ -173,6 +173,12 @@ protected:
      * @param aEvent is the key press event, the keycode is retrieved from it
      */
     void OnChar( wxKeyEvent& aEvent );
+
+    /**
+     * Function OnSize
+     * Handle resizing of the control. Overrides the buggy wxTreeListCtrl::OnSize.
+     */
+    void OnSize( wxSizeEvent& aEvent );
 };
 
 
@@ -184,13 +190,17 @@ protected:
 class HOTKEYS_EDITOR_DIALOG : public HOTKEYS_EDITOR_DIALOG_BASE
 {
 protected:
-    EDA_BASE_FRAME* m_parent;
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
 
     HOTKEY_LIST_CTRL* m_hotkeyListCtrl;
 
     bool TransferDataToWindow();
     bool TransferDataFromWindow();
+
+    virtual EDA_BASE_FRAME* GetParent()
+    {
+        return static_cast<EDA_BASE_FRAME*>( HOTKEYS_EDITOR_DIALOG_BASE::GetParent() );
+    }
 
 public:
     HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys );

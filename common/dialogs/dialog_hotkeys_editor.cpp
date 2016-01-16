@@ -27,6 +27,7 @@
 #include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
+#include <wx/dataview.h>
 
 #include <dialog_hotkeys_editor.h>
 
@@ -52,9 +53,8 @@ HOTKEY_LIST_CTRL::HOTKEY_LIST_CTRL( wxWindow *aParent, const HOTKEYS_SECTIONS& a
     AppendColumn( _( "Command" ) );
     AppendColumn( _( "Hotkey" ) );
 
-    SetColumnWidth( 1, 100 );
-
     Bind( wxEVT_CHAR, &HOTKEY_LIST_CTRL::OnChar, this );
+    Bind( wxEVT_SIZE, &HOTKEY_LIST_CTRL::OnSize, this );
 }
 
 
@@ -70,9 +70,34 @@ HOTKEYS_SECTIONS HOTKEY_LIST_CTRL::Sections( EDA_HOTKEY_CONFIG* aHotkeys )
 }
 
 
+void HOTKEY_LIST_CTRL::OnSize( wxSizeEvent& aEvent )
+{
+    // Handle this manually - wxTreeListCtrl screws up the width of the first column
+    wxDataViewCtrl* view = GetDataView();
+
+    if( !view )
+        return;
+
+    const wxRect rect = GetClientRect();
+    view->SetSize( rect );
+
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    {
+        wxWindow* const view = GetView();
+        view->Refresh();
+        view->Update();
+    }
+#endif
+
+    SetColumnWidth( 1, 100 );
+    SetColumnWidth( 0, rect.width - 120 );
+}
+
+
 void HOTKEY_LIST_CTRL::DeselectRow( int aRow )
 {
-    wxASSERT( aRow >= 0 && aRow < (int)m_items.size() );
+    wxASSERT( aRow >= 0 );
+    wxASSERT( (size_t)( aRow ) < m_items.size() );
     Unselect( m_items[aRow] );
 }
 
@@ -277,7 +302,7 @@ bool HOTKEY_LIST_CTRL::ResolveKeyConflicts( long aKey, const wxString& aSectionT
             KeyNameFromKeyCode( aKey ), GetChars( info ),
             *(conflictingSection->m_Title) );
 
-        wxMessageDialog dlg( m_parent, msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
+        wxMessageDialog dlg( GetParent(), msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
 
         if( dlg.ShowModal() == wxID_YES )
         {
@@ -358,7 +383,6 @@ void InstallHotkeyFrame( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aHotkeys )
 HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
                                               EDA_HOTKEY_CONFIG* aHotkeys ) :
     HOTKEYS_EDITOR_DIALOG_BASE( aParent ),
-    m_parent( aParent ),
     m_hotkeys( aHotkeys )
 {
     m_hotkeyListCtrl = new HOTKEY_LIST_CTRL( this, HOTKEY_LIST_CTRL::Sections( aHotkeys ) );
@@ -391,7 +415,7 @@ bool HOTKEYS_EDITOR_DIALOG::TransferDataFromWindow()
         return false;
 
     // save the hotkeys
-    m_parent->WriteHotkeyConfig( m_hotkeys );
+    GetParent()->WriteHotkeyConfig( m_hotkeys );
 
     return true;
 }

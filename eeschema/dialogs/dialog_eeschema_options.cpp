@@ -47,7 +47,7 @@ enum IMP_EXP_MENU_IDS
     ID_EXPORT_HOTKEYS
 };
 
-DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
+DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
 {
     m_choiceUnits->SetFocus();
@@ -80,6 +80,12 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
 }
 
 
+SCH_EDIT_FRAME* DIALOG_EESCHEMA_OPTIONS::GetParent()
+{
+    return static_cast<SCH_EDIT_FRAME*>( DIALOG_EESCHEMA_OPTIONS_BASE::GetParent() );
+}
+
+
 void DIALOG_EESCHEMA_OPTIONS::OnImpExpClick( wxCommandEvent& aEvent )
 {
     wxMenu menu;
@@ -103,19 +109,19 @@ void DIALOG_EESCHEMA_OPTIONS::OnMenu( wxCommandEvent& aEvent )
     {
     case ID_IMPORT_PREFS:
         aEvent.SetId( ID_CONFIG_READ );
-        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        GetParent()->Process_Config( aEvent );
         break;
     case ID_EXPORT_PREFS:
         aEvent.SetId( ID_CONFIG_SAVE );
-        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        GetParent()->Process_Config( aEvent );
         break;
     case ID_IMPORT_HOTKEYS:
         aEvent.SetId( ID_PREFERENCES_HOTKEY_IMPORT_CONFIG );
-        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        GetParent()->Process_Config( aEvent );
         break;
     case ID_EXPORT_HOTKEYS:
         aEvent.SetId( ID_PREFERENCES_HOTKEY_EXPORT_CONFIG );
-        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        GetParent()->Process_Config( aEvent );
         break;
     default:
         wxFAIL_MSG("Unexpected menu ID");

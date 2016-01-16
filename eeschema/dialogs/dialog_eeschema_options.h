@@ -35,6 +35,7 @@
 #include <template_fieldnames.h>
 
 class HOTKEY_LIST_CTRL;
+class SCH_EDIT_FRAME;
 
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
@@ -96,7 +97,9 @@ public:
      *
      * @param parent The dialog's parent
      */
-    DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
+    DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent );
+
+    virtual SCH_EDIT_FRAME* GetParent();
 
     /**
      * Function GetUnitsSelection
