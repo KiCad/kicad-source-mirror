@@ -36,12 +36,6 @@
 
 #include <hotkeys_basic.h>
 
-/// Width of the hotkey list
-const int WIDGET_HOTKEY_LIST_HKCOLUMN_WIDTH = 100;
-
-/// Extra margin to compensate for vertical scrollbar
-const int WIDGET_HOTKEY_LIST_HMARGIN = 30;
-
 /**
  * struct HOTKEY_SECTION
  * Associates a hotkey configuration with a name.

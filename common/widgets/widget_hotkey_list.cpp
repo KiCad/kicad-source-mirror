@@ -32,6 +32,17 @@
 
 
 /**
+ * Minimum width of the hotkey column
+ */
+static const int HOTKEY_MIN_WIDTH = 100;
+
+/**
+ * Extra margin to compensate for vertical scrollbar
+ */
+static const int HORIZ_MARGIN = 30;
+
+
+/**
  * Menu IDs for the hotkey context menu
  */
 enum ID_WHKL_MENU_IDS
@@ -352,9 +363,23 @@ void WIDGET_HOTKEY_LIST::OnSize( wxSizeEvent& aEvent )
     }
 #endif
 
-    SetColumnWidth( 1, WIDGET_HOTKEY_LIST_HKCOLUMN_WIDTH );
-    SetColumnWidth( 0,
-            rect.width - WIDGET_HOTKEY_LIST_HKCOLUMN_WIDTH - WIDGET_HOTKEY_LIST_HMARGIN );
+    // Find the maximum width of the hotkey column
+    int hk_column_width = 0;
+
+    for( wxTreeListItem item = GetFirstItem(); item.IsOk(); item = GetNextItem( item ) )
+    {
+        const wxString& text = GetItemText( item, 1 );
+        int width = WidthFor( text );
+
+        if( width > hk_column_width )
+            hk_column_width = width;
+    }
+
+    if( hk_column_width < HOTKEY_MIN_WIDTH )
+        hk_column_width = HOTKEY_MIN_WIDTH;
+
+    SetColumnWidth( 1, hk_column_width );
+    SetColumnWidth( 0, rect.width - hk_column_width - HORIZ_MARGIN );
 }
 
 
