@@ -90,7 +90,7 @@ void HOTKEY_LIST_CTRL::OnSize( wxSizeEvent& aEvent )
 #endif
 
     SetColumnWidth( 1, 100 );
-    SetColumnWidth( 0, rect.width - 120 );
+    SetColumnWidth( 0, rect.width - 130 );
 }
 
 

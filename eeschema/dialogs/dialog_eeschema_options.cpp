@@ -69,7 +69,6 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     m_hotkeyListCtrl = new HOTKEY_LIST_CTRL( m_controlsPanel, sections );
     // Insert after the "Hotkeys:" label
     m_controlsSizer->Insert( 1, m_hotkeyListCtrl, wxSizerFlags( 1 ).Expand().Border( wxALL, 5 ) );
-    Layout();
 
     // Bind event for the import/export menu
     Bind( wxEVT_MENU, &DIALOG_EESCHEMA_OPTIONS::OnMenu, this );
@@ -77,6 +76,14 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     // Make sure we select the first tab of the options tab page
     m_notebook->SetSelection( 0 );
 
+    // Lay out all child pages
+    // No, I don't know why this->Layout() doesn't propagate through to these,
+    // but at least on MSW, it does not.
+    for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
+    {
+        m_notebook->GetPage( i )->Layout();
+    }
+    Layout();
 }
 
 
@@ -317,6 +324,7 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
     m_fieldGrid->AutoSizeRows();
     m_fieldGrid->Thaw();
 
+    Layout();
     return true;
 }
 
