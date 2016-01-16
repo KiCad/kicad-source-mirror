@@ -58,6 +58,18 @@ HOTKEY_LIST_CTRL::HOTKEY_LIST_CTRL( wxWindow *aParent, const HOTKEYS_SECTIONS& a
 }
 
 
+HOTKEYS_SECTIONS HOTKEY_LIST_CTRL::Sections( EDA_HOTKEY_CONFIG* aHotkeys )
+{
+    HOTKEYS_SECTIONS sections;
+    for( EDA_HOTKEY_CONFIG* section = aHotkeys; section->m_HK_InfoList; ++section )
+    {
+        HOTKEYS_SECTION sec( wxGetTranslation( *section->m_Title ), section );
+        sections.push_back( sec );
+    }
+    return sections;
+}
+
+
 void HOTKEY_LIST_CTRL::DeselectRow( int aRow )
 {
     wxASSERT( aRow >= 0 && aRow < (int)m_items.size() );
@@ -349,16 +361,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME*    aParent,
     m_parent( aParent ),
     m_hotkeys( aHotkeys )
 {
-    EDA_HOTKEY_CONFIG* section;
-
-    HOTKEYS_SECTIONS sections;
-    for( section = m_hotkeys; section->m_HK_InfoList; section++ )
-    {
-        HOTKEYS_SECTION sec( wxGetTranslation( *section->m_Title ), section );
-        sections.push_back( sec );
-    }
-
-    m_hotkeyListCtrl = new HOTKEY_LIST_CTRL( this, sections );
+    m_hotkeyListCtrl = new HOTKEY_LIST_CTRL( this, HOTKEY_LIST_CTRL::Sections( aHotkeys ) );
     m_mainSizer->Insert( 1, m_hotkeyListCtrl, wxSizerFlags( 1 ).Expand().Border( wxALL, 5 ) );
     Layout();
 

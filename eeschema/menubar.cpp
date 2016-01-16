@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2014 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -397,24 +397,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
-
-    // Hotkey submenu
-    AddHotkeyConfigMenu( preferencesMenu );
-
-    // Separator
-    preferencesMenu->AppendSeparator();
-
-    AddMenuItem( preferencesMenu,
-                 ID_CONFIG_SAVE,
-                 _( "&Save Preferences" ),
-                 _( "Save application preferences" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    AddMenuItem( preferencesMenu,
-                 ID_CONFIG_READ,
-                 _( "Load Prefe&rences" ),
-                 _( "Load application preferences" ),
-                 KiBitmap( read_setup_xpm ) );
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;

@@ -64,6 +64,8 @@ class DIALOG_HOTKEY_CLIENT_DATA;
 class HOTKEY_LIST_CTRL : public wxTreeListCtrl
 {
 public:
+    static HOTKEYS_SECTIONS Sections( EDA_HOTKEY_CONFIG* aHotkeys );
+
     HOTKEY_LIST_CTRL( wxWindow* aParent, const HOTKEYS_SECTIONS& aSections );
     ~HOTKEY_LIST_CTRL() {};
 

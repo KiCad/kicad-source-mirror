@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,11 +34,27 @@
 #include <dialog_eeschema_options_base.h>
 #include <template_fieldnames.h>
 
+class HOTKEY_LIST_CTRL;
+
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
 protected:
+    HOTKEY_LIST_CTRL* m_hotkeyListCtrl;
+
     /** @brief The template fieldnames for this dialog */
     TEMPLATE_FIELDNAMES templateFields;
+
+    /**
+     * Function OnImpExpClick
+     * Display the settings import/export menu.
+     */
+    void OnImpExpClick( wxCommandEvent& aEvent );
+
+    /**
+     * Function OnMenu
+     * Handle menu clicks (for import/export)
+     */
+    void OnMenu( wxCommandEvent& aEvent );
 
     /**
      * Function OnAddButtonClick

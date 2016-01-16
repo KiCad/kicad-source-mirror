@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,8 +30,22 @@
 #include <class_base_screen.h>
 
 #include <dialog_eeschema_options.h>
+#include <dialog_hotkeys_editor.h>
+#include "../schframe.h"
+#include "hotkeys.h"
 
 #include "wx/settings.h"
+
+/**
+ * Menu IDs for the import/export menu.
+ */
+enum IMP_EXP_MENU_IDS
+{
+    ID_IMPORT_PREFS = 2001,
+    ID_EXPORT_PREFS,
+    ID_IMPORT_HOTKEYS,
+    ID_EXPORT_HOTKEYS
+};
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
@@ -50,9 +64,62 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
         m_fieldGrid->AutoSizeColLabelSize( i );
     }
 
+    // Embed the hotkeys list
+    HOTKEYS_SECTIONS sections = HOTKEY_LIST_CTRL::Sections( g_Eeschema_Hokeys_Descr );
+    m_hotkeyListCtrl = new HOTKEY_LIST_CTRL( m_controlsPanel, sections );
+    // Insert after the "Hotkeys:" label
+    m_controlsSizer->Insert( 1, m_hotkeyListCtrl, wxSizerFlags( 1 ).Expand().Border( wxALL, 5 ) );
+    Layout();
+
+    // Bind event for the import/export menu
+    Bind( wxEVT_MENU, &DIALOG_EESCHEMA_OPTIONS::OnMenu, this );
+
     // Make sure we select the first tab of the options tab page
     m_notebook->SetSelection( 0 );
 
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnImpExpClick( wxCommandEvent& aEvent )
+{
+    wxMenu menu;
+
+    menu.Append( ID_IMPORT_PREFS, _( "Import Preferences" ) );
+    menu.Append( ID_EXPORT_PREFS, _( "Export Preferences" ) );
+
+    menu.Append( wxID_SEPARATOR );
+    menu.Append( ID_IMPORT_HOTKEYS, _( "Import Hotkeys" ) );
+    menu.Append( ID_EXPORT_HOTKEYS, _( "Export Hotkeys" ) );
+
+    int btnw, btnh;
+    m_btnImpExp->GetSize( &btnw, &btnh );
+    m_btnImpExp->PopupMenu( &menu, wxPoint( 0, btnh ) );
+}
+
+
+void DIALOG_EESCHEMA_OPTIONS::OnMenu( wxCommandEvent& aEvent )
+{
+    switch( aEvent.GetId() )
+    {
+    case ID_IMPORT_PREFS:
+        aEvent.SetId( ID_CONFIG_READ );
+        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        break;
+    case ID_EXPORT_PREFS:
+        aEvent.SetId( ID_CONFIG_SAVE );
+        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        break;
+    case ID_IMPORT_HOTKEYS:
+        aEvent.SetId( ID_PREFERENCES_HOTKEY_IMPORT_CONFIG );
+        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        break;
+    case ID_EXPORT_HOTKEYS:
+        aEvent.SetId( ID_PREFERENCES_HOTKEY_EXPORT_CONFIG );
+        static_cast<SCH_EDIT_FRAME*>( m_parent )->Process_Config( aEvent );
+        break;
+    default:
+        wxFAIL_MSG("Unexpected menu ID");
+    }
 }
 
 
@@ -217,6 +284,9 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    if( !m_hotkeyListCtrl->TransferDataToControl() )
+        return false;
+
     m_fieldGrid->Freeze();
     if( m_fieldGrid->GetNumberRows() )
         m_fieldGrid->DeleteRows( 0, m_fieldGrid->GetNumberRows() );
@@ -247,6 +317,12 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
 
 bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
 {
+    if( ! wxDialog::TransferDataFromWindow() )
+        return false;
+
+    if( !m_hotkeyListCtrl->TransferDataFromControl() )
+        return false;
+
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         templateFields[row].m_Name = m_fieldGrid->GetCellValue( row, 0 );
