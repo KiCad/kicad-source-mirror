@@ -26,7 +26,7 @@
 #define DIALOG_COLOR_CONFIG_H_
 
 #include <dialog_color_config_base.h>
-#include "../widgets/widget_color_config.h"
+#include "../widgets/widget_eeschema_color_config.h"
 
 class wxBoxSizer;
 class wxStaticLine;
@@ -39,8 +39,8 @@ class wxStdDialogButtonSizer;
 
 class DIALOG_COLOR_CONFIG : public DIALOG_COLOR_CONFIG_BASE
 {
-    EDA_DRAW_FRAME*         m_parent;
-    WIDGET_COLOR_CONFIG*    m_colorConfig;
+    EDA_DRAW_FRAME*                 m_parent;
+    WIDGET_EESCHEMA_COLOR_CONFIG*   m_colorConfig;
 
 public:
     // Constructors and destructor

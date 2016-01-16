@@ -40,7 +40,7 @@ DIALOG_COLOR_CONFIG::DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent ) :
 {
     m_parent = aParent;
 
-    m_colorConfig = new WIDGET_COLOR_CONFIG( this, aParent );
+    m_colorConfig = new WIDGET_EESCHEMA_COLOR_CONFIG( this, aParent );
     m_colorConfig->InstallOnPanel( m_pnlColors );
 
     GetSizer()->SetSizeHints( this );

@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef WIDGET_COLOR_CONFIG_H_
-#define WIDGET_COLOR_CONFIG_H_
+#ifndef WIDGET_EESCHEMA_COLOR_CONFIG_H_
+#define WIDGET_EESCHEMA_COLOR_CONFIG_H_
 
 #include <wx/panel.h>
 #include <wx/sizer.h>
@@ -37,7 +37,7 @@ class wxStdDialogButtonSizer;
 /* Derived class for the frame color settings. */
 /***********************************************/
 
-class WIDGET_COLOR_CONFIG : public wxPanel
+class WIDGET_EESCHEMA_COLOR_CONFIG : public wxPanel
 {
 private:
     EDA_DRAW_FRAME*         m_drawFrame;
@@ -53,17 +53,17 @@ private:
 
 public:
     // Constructors and destructor
-    WIDGET_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame );
+    WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame );
 
     bool TransferDataFromControl();
 
     /**
      * Method InstallOnPanel
-     * Install this WIDGET_COLOR_CONFIG onto an empty panel. This is useful
+     * Install this WIDGET_EESCHEMA_COLOR_CONFIG onto an empty panel. This is useful
      * when combining with wxFormBuilder, as an empty panel can be left as a
      * placeholder in the layout.
      */
     void InstallOnPanel( wxPanel* aPanel );
 };
 
-#endif    // WIDGET_COLOR_CONFIG_H_
+#endif    // WIDGET_EESCHEMA_COLOR_CONFIG_H_

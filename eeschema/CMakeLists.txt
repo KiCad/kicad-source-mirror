@@ -73,7 +73,7 @@ set( EESCHEMA_DLGS
     )
 
 set( EESCHEMA_WIDGETS
-    widgets/widget_color_config.cpp
+    widgets/widget_eeschema_color_config.cpp
     )
 
 

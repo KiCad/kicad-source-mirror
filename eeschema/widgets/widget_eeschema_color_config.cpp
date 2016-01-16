@@ -31,7 +31,7 @@
 
 #include <general.h>
 
-#include "widget_color_config.h"
+#include "widget_eeschema_color_config.h"
 
 // Specify the width and height of every (color-displaying / bitmap) button
 const int BUTT_SIZE_X = 16;
@@ -107,7 +107,7 @@ static BUTTONINDEX buttonGroups[] = {
 static EDA_COLOR_T currentColors[ LAYERSCH_ID_COUNT ];
 
 
-WIDGET_COLOR_CONFIG::WIDGET_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
+WIDGET_EESCHEMA_COLOR_CONFIG::WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
     wxPanel( aParent ), m_drawFrame( aDrawFrame )
 {
     CreateControls();
@@ -116,7 +116,7 @@ WIDGET_COLOR_CONFIG::WIDGET_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDr
 }
 
 
-void WIDGET_COLOR_CONFIG::CreateControls()
+void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
 {
     wxStaticText*   label;
     int             buttonId = 1800;
@@ -184,7 +184,7 @@ void WIDGET_COLOR_CONFIG::CreateControls()
     }
 
     Connect( 1800, buttonId - 1, wxEVT_COMMAND_BUTTON_CLICKED,
-             wxCommandEventHandler( WIDGET_COLOR_CONFIG::SetColor ) );
+             wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
 
     wxArrayString selBgColorStrings;
     selBgColorStrings.Add( _( "White" ) );
@@ -207,7 +207,7 @@ void WIDGET_COLOR_CONFIG::CreateControls()
 }
 
 
-void WIDGET_COLOR_CONFIG::SetColor( wxCommandEvent& event )
+void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 {
     wxBitmapButton* button = (wxBitmapButton*) event.GetEventObject();
 
@@ -245,7 +245,7 @@ void WIDGET_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 }
 
 
-bool WIDGET_COLOR_CONFIG::TransferDataFromControl()
+bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
 {
     bool warning = false;
 
@@ -295,7 +295,7 @@ bool WIDGET_COLOR_CONFIG::TransferDataFromControl()
 }
 
 
-void WIDGET_COLOR_CONFIG::InstallOnPanel( wxPanel* aPanel )
+void WIDGET_EESCHEMA_COLOR_CONFIG::InstallOnPanel( wxPanel* aPanel )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
