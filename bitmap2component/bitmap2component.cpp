@@ -21,27 +21,23 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <cmath>
+
 #include <algorithm>    // std::max
-
-// For some unknown reasons, polygon.hpp should be included first
-#include <boost/polygon/polygon.hpp>
-
-#include <wx/wx.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
 #include <cmath>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <vector>
-#include <layers_id_colors_and_visibility.h>
+
 #include <common.h>
-
-#include <bitmap2component.h>
 #include <geometry/shape_poly_set.h>
+#include <layers_id_colors_and_visibility.h>
 
-// include this after shape_poly_set.h to avoid redefinition of min, max ...
 #include <potracelib.h>
+
+#include "bitmap2component.h"
+
 
 /* free a potrace bitmap */
 static void bm_free( potrace_bitmap_t* bm )
@@ -60,14 +56,14 @@ static void bm_free( potrace_bitmap_t* bm )
 class BITMAPCONV_INFO
 {
 public:
-    enum OUTPUT_FMT_ID m_Format; // File format
+    enum OUTPUT_FMT_ID m_Format;    // File format
     int m_PixmapWidth;
     int m_PixmapHeight;             // the bitmap size in pixels
     double             m_ScaleX;
     double             m_ScaleY;    // the conversion scale
     potrace_path_t*    m_Paths;     // the list of paths, from potrace (list of lines and bezier curves)
     FILE* m_Outfile;                // File to create
-    const char * m_CmpName;                 // The string used as cmp/footprint name
+    const char * m_CmpName;         // The string used as cmp/footprint name
 
 public:
     BITMAPCONV_INFO();
