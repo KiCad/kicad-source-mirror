@@ -195,14 +195,6 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
-{
-    DIALOG_COLOR_CONFIG dlg( this );
-
-    dlg.ShowModal();
-}
-
-
 void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
     // Identical to LIB_EDIT_FRAME::InstallConfigFrame()

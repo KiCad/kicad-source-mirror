@@ -375,13 +375,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Configure component libraries and paths" ),
                  KiBitmap( library_xpm ) );
 
-    // Colors
-    AddMenuItem( preferencesMenu,
-                 ID_COLORS_SETUP,
-                 _( "Set &Colors Scheme" ),
-                 _( "Set color preferences" ),
-                 KiBitmap( palette_xpm ) );
-
     // Options (Preferences on WXMAC)
 
 #ifdef __WXMAC__
