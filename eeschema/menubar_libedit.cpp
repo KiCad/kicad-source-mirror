@@ -238,13 +238,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Set Component Editor default values and options" ),
                  KiBitmap( preference_xpm ) );
 
-    // Colors
-    AddMenuItem( preferencesMenu,
-                 ID_COLORS_SETUP,
-                 _( "Set &Colors Scheme" ),
-                 _( "Set color preferences" ),
-                 KiBitmap( palette_xpm ) );
-
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
