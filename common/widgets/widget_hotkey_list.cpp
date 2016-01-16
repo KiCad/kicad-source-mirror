@@ -166,6 +166,22 @@ public:
         else
         {
             m_event = aEvent;
+
+            // EVT_CHAR_HOOK returns some incorrect keys (shift+symbol,
+            // in particular). If the key is an ASCII printable, grab the
+            // code from GetUnicodeKey instead.
+
+            // TODO: Make the whole hotkey system support Unicode keys.
+
+            if( aEvent.GetKeyCode() >= '!' && aEvent.GetKeyCode() <= '~' )
+            {
+                if( aEvent.GetEventType() == wxEVT_CHAR_HOOK )
+                {
+                    aEvent.DoAllowNextEvent();
+                    return;
+                }
+            }
+
             EndFlexible( wxID_OK );
         }
     }
