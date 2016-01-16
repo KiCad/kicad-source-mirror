@@ -15,6 +15,9 @@ DIALOG_COLOR_CONFIG_BASE::DIALOG_COLOR_CONFIG_BASE( wxWindow* parent, wxWindowID
 	
 	m_mainBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
+	m_pnlColors = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_mainBoxSizer->Add( m_pnlColors, 1, wxEXPAND | wxALL, 5 );
+	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_mainBoxSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
 	
@@ -32,7 +35,6 @@ DIALOG_COLOR_CONFIG_BASE::DIALOG_COLOR_CONFIG_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( m_mainBoxSizer );
 	this->Layout();
-	m_mainBoxSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

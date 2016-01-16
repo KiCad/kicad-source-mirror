@@ -293,3 +293,12 @@ bool WIDGET_COLOR_CONFIG::TransferDataFromControl()
 
     return true;
 }
+
+
+void WIDGET_COLOR_CONFIG::InstallOnPanel( wxPanel* aPanel )
+{
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    sizer->Add( this, 1, wxALL | wxEXPAND, 0 );
+    aPanel->SetSizer( sizer );
+}

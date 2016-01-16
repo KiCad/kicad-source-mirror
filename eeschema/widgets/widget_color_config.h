@@ -56,6 +56,14 @@ public:
     WIDGET_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame );
 
     bool TransferDataFromControl();
+
+    /**
+     * Method InstallOnPanel
+     * Install this WIDGET_COLOR_CONFIG onto an empty panel. This is useful
+     * when combining with wxFormBuilder, as an empty panel can be left as a
+     * placeholder in the layout.
+     */
+    void InstallOnPanel( wxPanel* aPanel );
 };
 
 #endif    // WIDGET_COLOR_CONFIG_H_
