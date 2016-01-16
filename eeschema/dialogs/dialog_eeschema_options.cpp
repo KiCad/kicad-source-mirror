@@ -337,12 +337,17 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
     if( !m_hotkeyListCtrl->TransferDataFromControl() )
         return false;
 
+    // Refresh hotkeys
+    GetParent()->ReCreateMenuBar();
+    GetParent()->Refresh();
+
     for( int row = 0; row < m_fieldGrid->GetNumberRows(); ++row )
     {
         templateFields[row].m_Name = m_fieldGrid->GetCellValue( row, 0 );
         templateFields[row].m_Value = m_fieldGrid->GetCellValue( row, 1 );
         templateFields[row].m_Visible = ( m_fieldGrid->GetCellValue( row, 2 ) != wxEmptyString );
     }
+
     return true;
 }
 
