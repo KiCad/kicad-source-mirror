@@ -170,11 +170,13 @@ public:
                 return;
         }
 
-        if( key <= 255 && isprint( key ) )
+        if( key <= 255 && isprint( key ) && !isspace( key ) )
         {
             // Let EVT_CHAR handle this one
             aEvent.DoAllowNextEvent();
+#ifndef __WXMSW__
             aEvent.Skip();
+#endif
         }
         else
         {
