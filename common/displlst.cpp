@@ -161,7 +161,7 @@ void EDA_LIST_DIALOG::Append( const wxArrayString& itemList )
 {
     long itemIndex = m_listBox->InsertItem( m_listBox->GetItemCount(), itemList[0] );
 
-    m_listBox->SetItemData( itemIndex, (long) &(itemList[0]) );
+    m_listBox->SetItemPtrData( itemIndex, wxUIntPtr( &itemList[0] ) );
 
     // Adding the next columns content
     for( unsigned i = 1; i < itemList.size(); i++ )
@@ -184,7 +184,7 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
             if( col == 0 )
             {
                 itemIndex = m_listBox->InsertItem( row+position, itemList[row].Item( col ) );
-                m_listBox->SetItemData( itemIndex, (long) &itemList[row].Item( col ) );
+                m_listBox->SetItemPtrData( itemIndex, wxUIntPtr( &itemList[row].Item( col ) ) );
             }
             else
             {
