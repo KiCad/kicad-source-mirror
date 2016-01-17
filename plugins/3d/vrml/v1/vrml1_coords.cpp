@@ -163,6 +163,19 @@ bool WRL1COORDS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         return false;
     }
 
+    // assuming legacy kicad expectation of 1U = 0.1 inch,
+    // convert to mm to meet the expectations of the SG structure
+    std::vector< WRLVEC3F >::iterator sP = points.begin();
+    std::vector< WRLVEC3F >::iterator eP = points.end();
+
+    while( sP != eP )
+    {
+        sP->x *= 2.54;
+        sP->y *= 2.54;
+        sP->z *= 2.54;
+        ++sP;
+    }
+
     if( proc.Peek() == '}' )
     {
         proc.Pop();
