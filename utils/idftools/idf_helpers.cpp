@@ -37,7 +37,7 @@ bool IDF3::FetchIDFLine( std::ifstream& aModel, std::string& aLine, bool& isComm
     aLine = "";
     aFilePos = aModel.tellg();
 
-    if( aFilePos == -1 )
+    if( aModel.fail() )
         return false;
 
     std::getline( aModel, aLine );
