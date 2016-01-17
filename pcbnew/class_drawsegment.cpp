@@ -391,8 +391,8 @@ void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKGREEN ) );
 
         // angle counter-clockwise from 3'o-clock
-        const double deg = RAD2DEG( atan2( m_Start.y - m_End.y,
-                                           m_End.x - m_Start.x ) );
+        const double deg = RAD2DEG( atan2( (double)( m_Start.y - m_End.y ),
+                                           (double)( m_End.x - m_Start.x ) ) );
         msg.Printf( wxT( "%.1f" ), deg );
         aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
     }
@@ -564,7 +564,8 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
     case S_ARC:
         radius = hypot( (double)( GetEnd().x - GetStart().x ),
                         (double)( GetEnd().y - GetStart().y ) );
-        theta  = std::atan2( GetEnd().y - GetStart().y , GetEnd().x - GetStart().x );
+        theta  = std::atan2( (double)( GetEnd().y - GetStart().y ),
+                             (double)( GetEnd().x - GetStart().x ) );
 
         //Approximate the arc with two lines. This should be accurate enough for selection.
         p1.x   = radius * std::cos( theta + M_PI/4 ) + GetStart().x;

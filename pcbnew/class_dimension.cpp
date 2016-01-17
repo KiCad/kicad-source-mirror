@@ -252,7 +252,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     // Calculate dimension value
     measure = KiROUND( hypot( deltax, deltay ) );
 
-    angle = atan2( deltay, deltax );
+    angle = atan2( (double)deltay, (double)deltax );
 
     // Calculation of parameters X and Y dimensions of the arrows and lines.
     hx = hy = ii;

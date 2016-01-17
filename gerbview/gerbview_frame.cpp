@@ -755,7 +755,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
         // atan2 in the 0,0 case returns 0
-        theta = RAD2DEG( atan2( -dy, dx ) );
+        theta = RAD2DEG( atan2( (double) -dy, (double) dx ) );
 
         ro = hypot( dx, dy );
         wxString formatter;

@@ -298,7 +298,7 @@ typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
 template <class T>
 double VECTOR2<T>::Angle() const
 {
-    return atan2( y, x );
+    return atan2( (double) y, (double) x );
 }
 
 
