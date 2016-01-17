@@ -985,7 +985,7 @@ bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 {
     wxASSERT( (unsigned) aLayerId < m_layers.size() );
 
-    std::set<int>::iterator it, it_end;
+    std::set<int>::const_iterator it, it_end;
 
     for( it = m_layers.at( aLayerId ).requiredLayers.begin(),
          it_end = m_layers.at( aLayerId ).requiredLayers.end(); it != it_end; ++it )

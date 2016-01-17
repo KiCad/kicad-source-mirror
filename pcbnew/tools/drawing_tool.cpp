@@ -481,7 +481,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         {
             delta = cursorPos - firstItem->GetPosition();
 
-            for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+            for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
                 static_cast<BOARD_ITEM*>( *it )->Move( wxPoint( delta.x, delta.y ) );
 
             preview.ViewUpdate();
@@ -491,7 +491,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
                     static_cast<BOARD_ITEM*>( *it )->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
                                                              m_frame->GetRotationAngle() );
 
@@ -499,7 +499,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
-                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
                     static_cast<BOARD_ITEM*>( *it )->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
 
                 preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
@@ -520,7 +520,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                 m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
                 m_board->m_Modules->SetLastEditTime();
 
-                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
                     BOARD_ITEM* converted = NULL;
@@ -561,7 +561,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             {
                 PICKED_ITEMS_LIST picklist;
 
-                for( KIGFX::VIEW_GROUP::iter it = preview.Begin(), end = preview.End(); it != end; ++it )
+                for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
                 {
                     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
                     m_board->Add( item );
