@@ -188,6 +188,11 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
                 return false;
             }
+
+            // convert from 1 VRML Unit = 0.1 inch to 1 VRML Unit = 1 mm
+            center.x *= 2.54;
+            center.y *= 2.54;
+            center.z *= 2.54;
         }
         else if( !glob.compare( "rotation" ) )
         {
@@ -248,6 +253,11 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
                 return false;
             }
+
+            // convert from 1 VRML Unit = 0.1 inch to 1 VRML Unit = 1 mm
+            translation.x *= 2.54;
+            translation.y *= 2.54;
+            translation.z *= 2.54;
         }
         else if( !glob.compare( "children" ) )
         {

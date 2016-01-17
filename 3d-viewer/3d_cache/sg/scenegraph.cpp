@@ -260,7 +260,13 @@ bool SCENEGRAPH::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
         aFile << " Transform {\n";
     }
 
-    S3D::FormatPoint( tmp, center );
+    // convert center to 1VRML unit = 0.1 inch
+    SGPOINT pt = center;
+    pt.x /= 2.54;
+    pt.y /= 2.54;
+    pt.z /= 2.54;
+
+    S3D::FormatPoint( tmp, pt );
     aFile << "  center " << tmp << "\n";
     S3D::FormatOrientation( tmp, rotation_axis, rotation_angle );
     aFile << "  rotation " << tmp << "\n";
@@ -268,7 +274,13 @@ bool SCENEGRAPH::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
     aFile << "  scale " << tmp << "\n";
     S3D::FormatOrientation( tmp, scale_axis, scale_angle );
     aFile << "  scaleOrientation " << tmp << "\n";
-    S3D::FormatPoint( tmp, translation );
+
+    // convert translation to 1VRML unit = 0.1 inch
+    pt = translation;
+    pt.x /= 2.54;
+    pt.y /= 2.54;
+    pt.z /= 2.54;
+    S3D::FormatPoint( tmp, pt );
     aFile << "  translation " << tmp << "\n";
 
     aFile << " children [\n";
