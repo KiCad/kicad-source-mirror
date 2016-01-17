@@ -227,9 +227,11 @@ bool SGCOORDS::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
 
     for( size_t i = 0; i < n; )
     {
-        pt = coords[i];
         // ensure VRML output has 1U = 0.1 inch as per legacy kicad expectations
+        pt = coords[i];
         pt.x /= 2.54;
+        pt.y /= 2.54;
+        pt.z /= 2.54;
         S3D::FormatPoint( tmp, pt );
         aFile << tmp ;
         ++i;
