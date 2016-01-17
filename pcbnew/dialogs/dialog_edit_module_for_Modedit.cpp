@@ -385,22 +385,6 @@ void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
     prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
     sidx = wxString::Format( wxT( "%i" ), filter );
     prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
-
-    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
-
-#ifdef __WINDOWS__
-    // In Kicad files, filenames and paths are stored using Unix notation
-    model.filename.Replace( wxT( "\\" ), wxT( "/" ) );
-#endif
-
-    new3DShape->SetShape3DName( model.filename );
-    new3DShape->m_MatPosition = m_shapes3D_list[idx]->m_MatPosition;
-    new3DShape->m_MatRotation = m_shapes3D_list[idx]->m_MatRotation;
-    new3DShape->m_MatScale = m_shapes3D_list[idx]->m_MatScale;
-
-    delete m_shapes3D_list[idx];
-    m_shapes3D_list[idx] = new3DShape;
-
     wxString alias;
     wxString shortPath;
     S3D_FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
@@ -415,6 +399,18 @@ void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
 
     m_3D_ShapeNameListBox->SetString( idx, oldPath );
 
+#ifdef __WINDOWS__
+    // In Kicad files, filenames and paths are stored using Unix notation
+    model.filename.Replace( wxT( "\\" ), wxT( "/" ) );
+#endif
+
+    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
+    new3DShape->SetShape3DName( model.filename );
+    new3DShape->m_MatPosition = m_shapes3D_list[idx]->m_MatPosition;
+    new3DShape->m_MatRotation = m_shapes3D_list[idx]->m_MatRotation;
+    new3DShape->m_MatScale = m_shapes3D_list[idx]->m_MatScale;
+    delete m_shapes3D_list[idx];
+    m_shapes3D_list[idx] = new3DShape;
     Transfert3DValuesToDisplay( m_shapes3D_list[idx] );
 
     return;
@@ -448,28 +444,6 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
     prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
     sidx = wxString::Format( wxT( "%i" ), filter );
     prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
-
-    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
-
-#ifdef __WINDOWS__
-    // In Kicad files, filenames and paths are stored using Unix notation
-    model.filename.Replace( wxT( "\\" ), wxT( "/" ) );
-#endif
-
-    new3DShape->SetShape3DName( model.filename );
-    new3DShape->m_MatScale.x = model.scale.x;
-    new3DShape->m_MatScale.y = model.scale.y;
-    new3DShape->m_MatScale.z = model.scale.z;
-    new3DShape->m_MatRotation.x = model.rotation.x;
-    new3DShape->m_MatRotation.y = model.rotation.y;
-    new3DShape->m_MatRotation.z = model.rotation.z;
-    new3DShape->m_MatPosition.x = model.offset.x;
-    new3DShape->m_MatPosition.y = model.offset.y;
-    new3DShape->m_MatPosition.z = model.offset.z;
-
-    m_shapes3D_list.push_back( new3DShape );
-
-
     wxString origPath = model.filename;
     wxString alias;
     wxString shortPath;
@@ -484,6 +458,24 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
 
     m_3D_ShapeNameListBox->Append( origPath );
 
+    #ifdef __WINDOWS__
+    // In Kicad files, filenames and paths are stored using Unix notation
+    model.filename.Replace( wxT( "\\" ), wxT( "/" ) );
+    #endif
+
+    S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
+    new3DShape->SetShape3DName( model.filename );
+    new3DShape->m_MatScale.x = model.scale.x;
+    new3DShape->m_MatScale.y = model.scale.y;
+    new3DShape->m_MatScale.z = model.scale.z;
+    new3DShape->m_MatRotation.x = model.rotation.x;
+    new3DShape->m_MatRotation.y = model.rotation.y;
+    new3DShape->m_MatRotation.z = model.rotation.z;
+    new3DShape->m_MatPosition.x = model.offset.x;
+    new3DShape->m_MatPosition.y = model.offset.y;
+    new3DShape->m_MatPosition.z = model.offset.z;
+
+    m_shapes3D_list.push_back( new3DShape );
     m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetCount() - 1;
     m_3D_ShapeNameListBox->SetSelection( m_lastSelected3DShapeIndex );
     Transfert3DValuesToDisplay( m_shapes3D_list[m_lastSelected3DShapeIndex] );
