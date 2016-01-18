@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,41 +21,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_config_3dpath.h
- * creates a dialog to edit the default search paths for 3D model files.
- */
 
-#ifndef DIALOG_CONFIG_3DPATH_H
-#define DIALOG_CONFIG_3DPATH_H
+#ifndef DLG_3D_PATHCONFIG_H
+#define DLG_3D_PATHCONFIG_H
 
-#include <vector>
-#include <wx/wx.h>
-#include <wx/listctrl.h>
+#include <wx/valtext.h>
+#include "dlg_3d_pathconfig_base.h"
 
 class S3D_FILENAME_RESOLVER;
 
-class DLG_CFG_3DPATH : public wxDialog
+class DLG_3D_PATH_CONFIG : public DLG_3D_PATH_CONFIG_BASE
 {
 private:
-    wxListView* pathList;
-    wxButton* editButton;
-    wxButton* deleteButton;
+    S3D_FILENAME_RESOLVER* m_resolver;
+    wxString m_curdir;
+    wxTextValidator m_aliasValidator;
 
-    S3D_FILENAME_RESOLVER* resolver;
-    std::vector< S3D_ALIAS > m_paths;
+    void OnAddAlias( wxCommandEvent& event );
+    void OnDelAlias( wxCommandEvent& event );
+    void OnAliasMoveUp( wxCommandEvent& event );
+    void OnAliasMoveDown( wxCommandEvent& event );
 
 public:
-    DLG_CFG_3DPATH( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver );
-    virtual bool TransferDataFromWindow();
-
-private:
-    void EditPath( wxCommandEvent& event );
-    void AddPath( wxCommandEvent& event );
-    void DeletePath( wxCommandEvent& event );
-    void PathSelect( wxCommandEvent& event );
-
-    wxDECLARE_EVENT_TABLE();
+    DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver );
+    bool TransferDataFromWindow();
 };
 
-#endif  // DIALOG_CONFIG_3DPATH_H
+#endif  // DLG_3D_PATHCONFIG_H

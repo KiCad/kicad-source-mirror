@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 #include "3d_cache.h"
 #include "plugins/3dapi/ifsg_api.h"
 #include "3d_cache_dialogs.h"
-#include "dialog_config_3dpath.h"
+#include "dlg_3d_pathconfig.h"
 #include "dialog_select_3dmodel.h"
 
 
@@ -59,7 +59,7 @@ bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
 
 bool S3D::Configure3DPaths( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver )
 {
-    DLG_CFG_3DPATH* dp = new DLG_CFG_3DPATH( aParent, aResolver );
+    DLG_3D_PATH_CONFIG* dp = new DLG_3D_PATH_CONFIG( aParent, aResolver );
 
     if( wxID_OK == dp->ShowModal() )
     {
