@@ -274,12 +274,32 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         }
     } while( 0 );
 
-    ++sPL;
+    ++sPL;  // skip to item 2: KISYS3DMOD
+
+    // check if the path is relative to KISYS3DMOD but lacking
+    // the "KISYS3DMOD:" alias tag
+    if( !sPL->m_pathexp.empty() )
+    {
+        wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
+        wxString fullPath = fpath.GetPathWithSep() + tname;
+
+        if( wxFileName::FileExists( fullPath ) )
+        {
+            wxFileName tmp( fullPath );
+
+            if( tmp.Normalize() )
+                tname = tmp.GetFullPath();
+
+            m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+
+            return tname;
+        }
+    }
 
     wxString alias;         // the alias portion of the short filename
     wxString relpath;       // the path relative to the alias
 
-    if( !SplitAlias( aFileName, alias, relpath ) )
+    if( !SplitAlias( tname, alias, relpath ) )
     {
         // XXX - no such path - consider showing the user a pop-up message
         return wxEmptyString;
