@@ -69,9 +69,20 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
         while( sL != eL )
         {
             m_Aliases->SetCellValue( nitems, 0, sL->m_alias );
-            pEdAlias = (wxGridCellTextEditor*) m_Aliases->GetCellEditor( nitems, 0 );
-            pEdAlias->SetValidator( m_aliasValidator );
-            pEdAlias->DecRef();
+
+            if( 0 == nitems )
+            {
+                m_Aliases->SetCellEditor( nitems, 0, new wxGridCellTextEditor );
+                pEdAlias = (wxGridCellTextEditor*) m_Aliases->GetCellEditor( nitems, 0 );
+                pEdAlias->SetValidator( m_aliasValidator );
+                pEdAlias->DecRef();
+            }
+            else
+            {
+                pEdAlias->IncRef();
+                m_Aliases->SetCellEditor( nitems, 0, pEdAlias );
+            }
+
             m_Aliases->SetCellValue( nitems, 1, sL->m_pathvar );
             m_Aliases->SetCellValue( nitems++, 2, sL->m_description );
 
@@ -135,9 +146,8 @@ void DLG_3D_PATH_CONFIG::OnAddAlias( wxCommandEvent& event )
     if( m_Aliases->InsertRows( ni, 1 ) )
     {
         wxGridCellTextEditor* pEdAlias;
-        pEdAlias = (wxGridCellTextEditor*) m_Aliases->GetCellEditor( ni, 0 );
-        pEdAlias->SetValidator( m_aliasValidator );
-        pEdAlias->DecRef();
+        pEdAlias = (wxGridCellTextEditor*) m_Aliases->GetCellEditor( 0, 0 );
+        m_Aliases->SetCellEditor( ni, 0, pEdAlias );
         m_Aliases->SelectRow( ni, false );
         m_Aliases->AutoSize();
         Fit();
