@@ -16,6 +16,9 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	
 	m_Aliases = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
@@ -26,7 +29,6 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	m_Aliases->SetMargins( 0, 0 );
 	
 	// Columns
-	m_Aliases->AutoSizeColumns();
 	m_Aliases->EnableDragColMove( false );
 	m_Aliases->EnableDragColSize( true );
 	m_Aliases->SetColLabelSize( 30 );
@@ -36,7 +38,8 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	m_Aliases->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	m_Aliases->EnableDragRowSize( true );
+	m_Aliases->AutoSizeRows();
+	m_Aliases->EnableDragRowSize( false );
 	m_Aliases->SetRowLabelSize( 80 );
 	m_Aliases->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
@@ -44,7 +47,10 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	
 	// Cell Defaults
 	m_Aliases->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer1->Add( m_Aliases, 0, wxALL, 5 );
+	bSizer3->Add( m_Aliases, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );

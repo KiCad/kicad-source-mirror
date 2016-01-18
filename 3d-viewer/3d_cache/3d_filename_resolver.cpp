@@ -150,20 +150,10 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
     lpath.m_description = _( "Current project directory" );
     m_Paths.push_back( lpath );
 
-    if( wxGetEnv( wxT( "KISYS3DMOD" ), &kmod ) && !kmod.empty() )
-    {
-        wxFileName tmp( kmod );
-        wxString kpath = tmp.GetFullPath();
-
-        if( tmp.Normalize() && lpath.m_pathexp.Cmp( kpath ) )
-        {
-            lpath.m_alias = wxT( "KISYS3DMOD" );
-            lpath.m_pathvar = wxT( "${KISYS3DMOD}" );
-            lpath.m_pathexp = kpath;
-            lpath.m_description = _( "Legacy 3D environment path" );
-            addPath( lpath );
-        }
-    }
+    lpath.m_alias = wxT( "KISYS3DMOD" );
+    lpath.m_pathvar = wxT( "${KISYS3DMOD}" );
+    lpath.m_description = _( "Legacy 3D environment path" );
+    addPath( lpath );
 
     if( !m_ConfigDir.empty() )
         readPathList();
@@ -499,6 +489,10 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
         if( !getHollerith( cfgLine, idx, al.m_alias ) )
             continue;
 
+        // never add on KISYS3DMOD from a config file
+        if( !al.m_alias.Cmp( wxT( "KISYS3DMOD" ) ) )
+            continue;
+
         if( !getHollerith( cfgLine, idx, al.m_pathvar ) )
             continue;
 
@@ -524,15 +518,39 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "3D configuration directory is unknown" );
         std::cerr << " * " << errmsg.ToUTF8() << "\n";
+        wxMessageBox( errmsg, _T( "Write 3D search path list" ) );
+
         return false;
     }
-
-    if( m_Paths.empty() || 1 == m_Paths.size() )
-        return false;
 
     wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );
     wxString cfgname = cfgpath.GetFullPath();
     std::ofstream cfgFile;
+
+    if( m_Paths.empty() || 1 == m_Paths.size() )
+    {
+        wxMessageDialog md( NULL,
+            _T( "3D search path list is empty;\ncontinue to write empty file?" ),
+            _T( "Write 3D search path list" ), wxYES_NO );
+
+        if( md.ShowModal() == wxID_YES )
+        {
+            cfgFile.open( cfgname.ToUTF8(), std::ios_base::trunc );
+
+            if( !cfgFile.is_open() )
+            {
+                wxMessageBox( _T( "Could not open configuration file" ),
+                    _T( "Write 3D search path list" ) );
+
+                return false;
+            }
+
+            cfgFile.close();
+            return true;
+        }
+
+        return false;
+    }
 
     cfgFile.open( cfgname.ToUTF8(), std::ios_base::trunc );
 
@@ -541,6 +559,9 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "could not open configuration file " );
         std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
+        wxMessageBox( _T( "Could not open configuration file" ),
+                      _T( "Write 3D search path list" ) );
+
         return false;
     }
 
@@ -554,6 +575,13 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
 
     while( sPL != ePL )
     {
+        // never write the KISYS3DMOD entry
+        if( !sPL->m_alias.Cmp( wxT( "KISYS3DMOD") ) )
+        {
+            ++sPL;
+            continue;
+        }
+
         tstr = sPL->m_alias.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
         tstr = sPL->m_pathvar.ToUTF8();
@@ -567,7 +595,12 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     cfgFile.close();
 
     if( bad )
+    {
+        wxMessageBox( _T( "Problems writing configuration file" ),
+                      _T( "Write 3D search path list" ) );
+
         return false;
+    }
 
     return true;
 }

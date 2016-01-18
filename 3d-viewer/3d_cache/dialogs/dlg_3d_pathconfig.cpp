@@ -29,6 +29,10 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
     DLG_3D_PATH_CONFIG_BASE( aParent ), m_resolver( aResolver )
 {
     m_Aliases->EnableEditing( true );
+    m_Aliases->SetColMinimalWidth( 0, 80 );
+    m_Aliases->SetColMinimalWidth( 1, 300 );
+    m_Aliases->SetColMinimalWidth( 2, 120 );
+    m_Aliases->SetColMinimalAcceptableWidth( 80 );
 
     if( m_resolver )
     {
@@ -42,10 +46,10 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
         if( listsize > 0 )
             m_curdir = rpaths->front().m_pathexp;
 
-        if( listsize < 2 )
+        if( listsize < 3 )
             return;
 
-        listsize = listsize - 1 - m_Aliases->GetNumberRows();
+        listsize = listsize - 2 - m_Aliases->GetNumberRows();
 
         // note: if the list allocation fails we have bigger problems
         // and there is no point in trying to notify the user here
@@ -56,7 +60,9 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
         std::list< S3D_ALIAS >::const_iterator eL = rpaths->end();
         int nitems = 0;
 
-        // skip the first entry which is always the current project dir
+        // skip the first 2 entries which are always the current project dir
+        // and KISYS3DMOD
+        ++sL;
         ++sL;
         wxGridCellTextEditor* pEdAlias;
 
@@ -74,10 +80,9 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
             ++sL;
         }
 
-        m_Aliases->AutoSizeColumns();
+        m_Aliases->AutoSize();
     }
 
-    Layout();
     Fit();
     SetMinSize( GetSize() );
 
@@ -88,7 +93,12 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
 bool DLG_3D_PATH_CONFIG::TransferDataFromWindow()
 {
     if( NULL == m_resolver )
+    {
+        wxMessageBox( _T( "[BUG] No valid resolver; data will not be updated" ),
+            _T( "Update 3D search path list" ) );
+
         return false;
+    }
 
     std::vector<S3D_ALIAS> alist;
     S3D_ALIAS alias;
@@ -129,6 +139,8 @@ void DLG_3D_PATH_CONFIG::OnAddAlias( wxCommandEvent& event )
         pEdAlias->SetValidator( m_aliasValidator );
         pEdAlias->DecRef();
         m_Aliases->SelectRow( ni, false );
+        m_Aliases->AutoSize();
+        Fit();
 
         // TODO: set the editors on any newly created rows
     }
@@ -164,6 +176,8 @@ void DLG_3D_PATH_CONFIG::OnDelAlias( wxCommandEvent& event )
             ni = m_Aliases->GetNumberRows() - 1;
 
         m_Aliases->SelectRow( ni, false );
+        m_Aliases->AutoSize();
+        Fit();
     }
     else
     {
