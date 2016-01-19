@@ -420,7 +420,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     // Calculate the color based on the given index using the formula:
     // color = ( emission + ambient + diffuse + shininess * specular ) / N
     // where N = number of non-zero components or 1 (if all zero)
-    // If the index exceeds the number of items in a list, use the FIRST
+    // If the index exceeds the number of items in a list, use the LAST
     // item rather than the default; this behavior caters to some bad
     // models.
 
@@ -435,7 +435,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     {
         if( !diffuseColor.empty() )
         {
-            rgb = diffuseColor.front();
+            rgb = diffuseColor.back();
             dRed = rgb.x;
             dGreen = rgb.y;
             dBlue = rgb.z;
@@ -459,7 +459,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     {
         if( !emissiveColor.empty() )
         {
-            rgb = emissiveColor.front();
+            rgb = emissiveColor.back();
             eRed = rgb.x;
             eGreen = rgb.y;
             eBlue = rgb.z;
@@ -483,7 +483,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     {
         if( !ambientColor.empty() )
         {
-            rgb = ambientColor.front();
+            rgb = ambientColor.back();
             aRed = rgb.x;
             aGreen = rgb.y;
             aBlue = rgb.z;
@@ -507,7 +507,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     {
         if( !specularColor.empty() )
         {
-            rgb = specularColor.front();
+            rgb = specularColor.back();
             sRed = rgb.x;
             sGreen = rgb.y;
             sBlue = rgb.z;
@@ -530,7 +530,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     if( aIndex < 0 || ( aIndex >= (int)shininess.size() ) )
     {
         if( !shininess.empty() )
-            shiny = shininess.front();
+            shiny = shininess.back();
         else
             shiny = 0.2;
     }
