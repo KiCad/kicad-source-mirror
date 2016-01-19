@@ -287,7 +287,9 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     std::vector< SGCOLOR > colorlist;
     SGNODE* sgcolor = NULL;
 
-    switch( m_current.matbind )
+    WRL1_BINDING mbind = m_current.matbind;
+
+    switch( mbind )
     {
     case BIND_PER_FACE:
     case BIND_PER_VERTEX:
@@ -301,7 +303,9 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             std::cerr << " * [INFO] bad model: per face indexed but no indices\n";
             #endif
 
-            return NULL;
+            // support bad models by temporarily switching bindings
+            mbind = BIND_OVERALL;
+            sgcolor = m_current.mat->GetAppearance( 0 );
         }
 
         break;
@@ -315,7 +319,9 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             std::cerr << matIndex.size() << "\n";
             #endif
 
-            return NULL;
+            // support bad models by temporarily switching bindings
+            mbind = BIND_OVERALL;
+            sgcolor = m_current.mat->GetAppearance( 0 );
         }
 
         break;
@@ -371,7 +377,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     std::vector< SGCOLOR > lColors; // colors points (if any) for SG node
     int nfaces = 0;                 // number of triangles for each face in the list
 
-    if( BIND_OVERALL == m_current.matbind || BIND_DEFAULT == m_current.matbind )
+    if( BIND_OVERALL == mbind || BIND_DEFAULT == mbind )
     {
         // no color list
         // assuming convex polygons, create triangles for the SG node
@@ -445,7 +451,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
         int cIndex;
         SGCOLOR pc1, pc2, pc3;
 
-        switch( m_current.matbind )
+        switch( mbind )
         {
         case BIND_PER_VERTEX:
             cIndex = 3;
@@ -493,8 +499,8 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 
         bool colorPerVertex = false;
 
-        if( BIND_PER_VERTEX == m_current.matbind
-            || BIND_PER_VERTEX_INDEXED == m_current.matbind )
+        if( BIND_PER_VERTEX == mbind
+            || BIND_PER_VERTEX_INDEXED == mbind )
             colorPerVertex = true;
 
         bool noidx = false;

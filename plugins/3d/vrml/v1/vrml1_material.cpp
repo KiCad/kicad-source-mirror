@@ -417,77 +417,166 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     if( NULL == aColor )
         return;
 
-    // Calculate the color based on the given index.
-    // If the index points to a valid diffuse and emissive colors,
-    // take the higher value of each component.
+    // Calculate the color based on the given index using the formula:
+    // color = ( emission + ambient + diffuse + shininess * specular ) / N
+    // where N = number of non-zero components or 1 (if all zero)
+    // If the index exceeds the number of items in a list, use the FIRST
+    // item rather than the default; this behavior caters to some bad
+    // models.
 
-    float red, blue, green;
+    WRLVEC3F rgb;
+    float dRed, dBlue, dGreen;
     float eRed, eBlue, eGreen;
+    float aRed, aBlue, aGreen;
+    float sRed, sBlue, sGreen;
+    float shiny;
 
-    if( aIndex < 0 || ( aIndex >= (int)diffuseColor.size()
-        && aIndex >= (int)emissiveColor.size() ) )
+    if( aIndex < 0 || ( aIndex >= (int)diffuseColor.size() ) )
     {
-        // If the index is out of bounds, use the default diffuse color.
-        red = 0.8;
-        green = 0.8;
-        blue = 0.8;
-        aColor->SetColor( red, green, blue );
-        return;
+        if( !diffuseColor.empty() )
+        {
+            rgb = diffuseColor.front();
+            dRed = rgb.x;
+            dGreen = rgb.y;
+            dBlue = rgb.z;
+        }
+        else
+        {
+            dRed = 0.8;
+            dGreen = 0.8;
+            dBlue = 0.8;
+        }
+    }
+    else
+    {
+        rgb = diffuseColor[aIndex];
+        dRed = rgb.x;
+        dGreen = rgb.y;
+        dBlue = rgb.z;
     }
 
-    if( aIndex >= (int)diffuseColor.size() )
+    if( aIndex < 0 || ( aIndex >= (int)emissiveColor.size() ) )
     {
-        red = emissiveColor[aIndex].x;
-        green = emissiveColor[aIndex].y;
-        blue = emissiveColor[aIndex].z;
-
-        checkRange( red );
-        checkRange( green );
-        checkRange( blue );
-
-        aColor->SetColor( red, green, blue );
-        return;
+        if( !emissiveColor.empty() )
+        {
+            rgb = emissiveColor.front();
+            eRed = rgb.x;
+            eGreen = rgb.y;
+            eBlue = rgb.z;
+        }
+        else
+        {
+            eRed = 0.0;
+            eGreen = 0.0;
+            eBlue = 0.0;
+        }
+    }
+    else
+    {
+        rgb = emissiveColor[aIndex];
+        eRed = rgb.x;
+        eGreen = rgb.y;
+        eBlue = rgb.z;
     }
 
-    if( aIndex >= (int)emissiveColor.size() )
+    if( aIndex < 0 || ( aIndex >= (int)ambientColor.size() ) )
     {
-        red = diffuseColor[aIndex].x;
-        green = diffuseColor[aIndex].y;
-        blue = diffuseColor[aIndex].z;
-
-        checkRange( red );
-        checkRange( green );
-        checkRange( blue );
-
-        aColor->SetColor( red, green, blue );
-        return;
+        if( !ambientColor.empty() )
+        {
+            rgb = ambientColor.front();
+            aRed = rgb.x;
+            aGreen = rgb.y;
+            aBlue = rgb.z;
+        }
+        else
+        {
+            aRed = 0.2;
+            aGreen = 0.2;
+            aBlue = 0.2;
+        }
+    }
+    else
+    {
+        rgb = ambientColor[aIndex];
+        aRed = rgb.x;
+        aGreen = rgb.y;
+        aBlue = rgb.z;
     }
 
-    red = diffuseColor[aIndex].x;
-    green = diffuseColor[aIndex].y;
-    blue = diffuseColor[aIndex].z;
+    if( aIndex < 0 || ( aIndex >= (int)specularColor.size() ) )
+    {
+        if( !specularColor.empty() )
+        {
+            rgb = specularColor.front();
+            sRed = rgb.x;
+            sGreen = rgb.y;
+            sBlue = rgb.z;
+        }
+        else
+        {
+            sRed = 0.2;
+            sGreen = 0.2;
+            sBlue = 0.2;
+        }
+    }
+    else
+    {
+        rgb = specularColor[aIndex];
+        sRed = rgb.x;
+        sGreen = rgb.y;
+        sBlue = rgb.z;
+    }
 
-    eRed = emissiveColor[aIndex].x;
-    eGreen = emissiveColor[aIndex].y;
-    eBlue = emissiveColor[aIndex].z;
+    if( aIndex < 0 || ( aIndex >= (int)shininess.size() ) )
+    {
+        if( !shininess.empty() )
+            shiny = shininess.front();
+        else
+            shiny = 0.2;
+    }
+    else
+    {
+        shiny = shininess[aIndex];
+    }
 
-    checkRange( red );
-    checkRange( green );
-    checkRange( blue );
-
+    checkRange( aRed );
+    checkRange( aGreen );
+    checkRange( aBlue );
     checkRange( eRed );
     checkRange( eGreen );
     checkRange( eBlue );
+    checkRange( dRed );
+    checkRange( dGreen );
+    checkRange( dBlue );
+    checkRange( sRed );
+    checkRange( sGreen );
+    checkRange( sBlue );
 
-    if( eRed > red )
-        red = eRed;
+    int n = 0;
 
-    if( eGreen > green )
-        green = eGreen;
+    if( aRed + aGreen + aBlue > 0.01 )
+        ++n;
 
-    if( eBlue > blue )
-        blue = eBlue;
+    if( eRed + eGreen + eBlue > 0.01 )
+        ++n;
 
+    if( dRed + dGreen + dBlue > 0.01 )
+        ++n;
+
+    if( (sRed + sGreen + sBlue) * shiny > 0.01 )
+        ++n;
+
+    if( 0 == n )
+        ++n;
+
+    float red, green, blue;
+
+    red = (eRed + aRed + dRed + sRed * shiny) / n;
+    green = (eGreen + aGreen + dGreen + sGreen * shiny) / n;
+    blue = (eBlue + aBlue + dBlue + sBlue * shiny) / n;
+    checkRange( red );
+    checkRange( green );
+    checkRange( blue );
     aColor->SetColor( red, green, blue );
 
     return;
