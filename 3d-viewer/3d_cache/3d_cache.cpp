@@ -307,11 +307,8 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     wxString bname = ep->GetCacheBaseName();
     wxString cachename = m_CacheDir + bname + wxT( ".3dc" );
 
-    if( wxFileName::FileExists( cachename ) )
-    {
-        loadCacheData( ep );
+    if( wxFileName::FileExists( cachename ) && loadCacheData( ep ) )
         return ep->sceneData;
-    }
 
     ep->sceneData = m_Plugins->Load3DModel( aFileName );
 
@@ -476,9 +473,6 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
             return false;
         }
-
-        // the file already exists on disk; just exit
-        return true;
     }
 
     return S3D::WriteCache( fname, true, (SGNODE*)aCacheItem->sceneData );

@@ -574,6 +574,8 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
                 istr.str( cfgLine.substr( 2 ) );
                 istr >> vnum;
             }
+
+            continue;
         }
 
         idx = 0;
