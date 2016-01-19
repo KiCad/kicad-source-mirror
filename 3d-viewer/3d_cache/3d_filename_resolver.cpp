@@ -35,8 +35,9 @@
 #define S3D_RESOLVER_CONFIG wxT( "3Dresolver.cfg" )
 
 // flag bits used to track different one-off messages to users
-#define ERRFLG_NODIR    (1)
+#define ERRFLG_ALIAS    (1)
 #define ERRFLG_RELPATH  (2)
+#define ERRFLG_ENVPATH  (4)
 
 
 static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult );
@@ -246,7 +247,15 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             return tname;
         }
 
-        // XXX - no such path - consider showing the user a pop-up message
+        if( !( m_errflags & ERRFLG_ENVPATH ) )
+        {
+            m_errflags |= ERRFLG_ENVPATH;
+            wxString errmsg = _( "No such path; ensure the environment var is defined" );
+            errmsg.append( "\n" );
+            errmsg.append( tname );
+            wxMessageBox( errmsg, _( "3D file resolver" ) );
+        }
+
         return wxEmptyString;
     }
 
@@ -301,7 +310,15 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     if( !SplitAlias( tname, alias, relpath ) )
     {
-        // XXX - no such path - consider showing the user a pop-up message
+        if( !( m_errflags & ERRFLG_RELPATH ) )
+        {
+            m_errflags |= ERRFLG_RELPATH;
+            wxString errmsg = _( "No such path; ensure KISYS3DMOD is correctly defined" );
+            errmsg.append( "\n" );
+            errmsg.append( tname );
+            wxMessageBox( errmsg, _( "3D file resolver" ) );
+        }
+
         return wxEmptyString;
     }
 
@@ -328,10 +345,14 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         ++sPL;
     }
 
-    // XXX - no such path - consider showing the user a pop-up message
-    wxString errmsg = _( "filename could not be resolved" );
-    std::cerr << " * [3D Model] " << errmsg.ToUTF8() << " '";
-    std::cerr << aFileName.ToUTF8() << "'\n";
+    if( !( m_errflags & ERRFLG_ALIAS ) )
+    {
+        m_errflags |= ERRFLG_ALIAS;
+        wxString errmsg = _( "No such path; ensure the path alias is defined" );
+        errmsg.append( "\n" );
+        errmsg.append( tname );
+        wxMessageBox( errmsg, _( "3D file resolver" ) );
+    }
 
     return wxEmptyString;
 }
@@ -361,18 +382,18 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
         if( !sPL->m_pathvar.empty() && !tpath.m_pathvar.empty()
             && !tpath.m_pathvar.Cmp( sPL->m_pathvar ) )
         {
-            wxString msg = _T( "This alias: " );
+            wxString msg = _( "This alias: " );
             msg.append( tpath.m_alias );
             msg.append( wxT( "\n" ) );
-            msg.append( _T( "This path: " ) );
+            msg.append( _( "This path: " ) );
             msg.append( tpath.m_pathvar );
             msg.append( wxT( "\n" ) );
-            msg.append( _T( "Existing alias: " ) );
+            msg.append( _( "Existing alias: " ) );
             msg.append( sPL->m_alias );
             msg.append( wxT( "\n" ) );
-            msg.append( _T( "Existing path: " ) );
+            msg.append( _( "Existing path: " ) );
             msg.append( sPL->m_pathvar );
-            wxMessageBox( msg, _T( "Bad alias (duplicate path)" ) );
+            wxMessageBox( msg, _( "Bad alias (duplicate path)" ) );
 
             return false;
         }
@@ -381,24 +402,24 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
         {
             if( !tpath.m_pathexp.Cmp( sPL->m_pathexp ) )
             {
-                wxString msg = _T( "This alias: " );
+                wxString msg = _( "This alias: " );
                 msg.append( tpath.m_alias );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "Existing alias: " ) );
+                msg.append( _( "Existing alias: " ) );
                 msg.append( sPL->m_alias );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "This path: " ) );
+                msg.append( _( "This path: " ) );
                 msg.append( tpath.m_pathexp );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "Existing path: " ) );
+                msg.append( _( "Existing path: " ) );
                 msg.append( sPL->m_pathexp );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "This full path: " ) );
+                msg.append( _( "This full path: " ) );
                 msg.append( tpath.m_pathexp );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "Existing full path: " ) );
+                msg.append( _( "Existing full path: " ) );
                 msg.append( sPL->m_pathexp );
-                wxMessageBox( msg, _T( "Bad alias (duplicate path)" ) );
+                wxMessageBox( msg, _( "Bad alias (duplicate path)" ) );
 
                 return false;
             }
@@ -406,18 +427,18 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
             if( tpath.m_pathexp.find( sPL->m_pathexp ) != wxString::npos
                 || sPL->m_pathexp.find( tpath.m_pathexp ) != wxString::npos )
             {
-                wxString msg = _T( "This alias: " );
+                wxString msg = _( "This alias: " );
                 msg.append( tpath.m_alias );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "This path: " ) );
+                msg.append( _( "This path: " ) );
                 msg.append( tpath.m_pathexp );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "Existing alias: " ) );
+                msg.append( _( "Existing alias: " ) );
                 msg.append( sPL->m_alias );
                 msg.append( wxT( "\n" ) );
-                msg.append( _T( "Existing path: " ) );
+                msg.append( _( "Existing path: " ) );
                 msg.append( sPL->m_pathexp );
-                wxMessageBox( msg, _T( "Bad alias (common path)" ) );
+                wxMessageBox( msg, _( "Bad alias (common path)" ) );
 
                 return false;
             }
@@ -425,15 +446,15 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
 
         if( !tpath.m_alias.Cmp( sPL->m_alias ) )
         {
-            wxString msg = _T( "Alias: " );
+            wxString msg = _( "Alias: " );
             msg.append( tpath.m_alias );
             msg.append( wxT( "\n" ) );
-            msg.append( _T( "This path: " ) );
+            msg.append( _( "This path: " ) );
             msg.append( tpath.m_pathvar );
             msg.append( wxT( "\n" ) );
-            msg.append( _T( "Existing path: " ) );
+            msg.append( _( "Existing path: " ) );
             msg.append( sPL->m_pathvar );
-            wxMessageBox( msg, _T( "Bad alias (duplicate name)" ) );
+            wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
 
             return false;
         }
@@ -538,7 +559,7 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "3D configuration directory is unknown" );
         std::cerr << " * " << errmsg.ToUTF8() << "\n";
-        wxMessageBox( errmsg, _T( "Write 3D search path list" ) );
+        wxMessageBox( errmsg, _( "Write 3D search path list" ) );
 
         return false;
     }
@@ -550,8 +571,8 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     if( m_Paths.empty() || 1 == m_Paths.size() )
     {
         wxMessageDialog md( NULL,
-            _T( "3D search path list is empty;\ncontinue to write empty file?" ),
-            _T( "Write 3D search path list" ), wxYES_NO );
+            _( "3D search path list is empty;\ncontinue to write empty file?" ),
+            _( "Write 3D search path list" ), wxYES_NO );
 
         if( md.ShowModal() == wxID_YES )
         {
@@ -559,8 +580,8 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
 
             if( !cfgFile.is_open() )
             {
-                wxMessageBox( _T( "Could not open configuration file" ),
-                    _T( "Write 3D search path list" ) );
+                wxMessageBox( _( "Could not open configuration file" ),
+                    _( "Write 3D search path list" ) );
 
                 return false;
             }
@@ -579,8 +600,8 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "could not open configuration file " );
         std::cerr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'\n";
-        wxMessageBox( _T( "Could not open configuration file" ),
-                      _T( "Write 3D search path list" ) );
+        wxMessageBox( _( "Could not open configuration file" ),
+                      _( "Write 3D search path list" ) );
 
         return false;
     }
@@ -616,8 +637,8 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
 
     if( bad )
     {
-        wxMessageBox( _T( "Problems writing configuration file" ),
-                      _T( "Write 3D search path list" ) );
+        wxMessageBox( _( "Problems writing configuration file" ),
+                      _( "Write 3D search path list" ) );
 
         return false;
     }

@@ -105,8 +105,8 @@ bool DLG_3D_PATH_CONFIG::TransferDataFromWindow()
 {
     if( NULL == m_resolver )
     {
-        wxMessageBox( _T( "[BUG] No valid resolver; data will not be updated" ),
-            _T( "Update 3D search path list" ) );
+        wxMessageBox( _( "[BUG] No valid resolver; data will not be updated" ),
+            _( "Update 3D search path list" ) );
 
         return false;
     }
@@ -166,14 +166,14 @@ void DLG_3D_PATH_CONFIG::OnDelAlias( wxCommandEvent& event )
 
     if( sel.empty() )
     {
-        wxMessageBox( _T( "No entry selected" ), _T( "Delete alias entry" ) );
+        wxMessageBox( _( "No entry selected" ), _( "Delete alias entry" ) );
         return;
     }
 
     if( sel.size() > 1 )
     {
-        wxMessageBox( _T( "Multiple entries selected; please\nselect only one entry" ),
-            _T( "Delete alias entry" ) );
+        wxMessageBox( _( "Multiple entries selected; please\nselect only one entry" ),
+            _( "Delete alias entry" ) );
         return;
     }
 
@@ -206,14 +206,14 @@ void DLG_3D_PATH_CONFIG::OnAliasMoveUp( wxCommandEvent& event )
 
     if( sel.empty() )
     {
-        wxMessageBox( _T( "No entry selected" ), _T( "Move alias up" ) );
+        wxMessageBox( _( "No entry selected" ), _( "Move alias up" ) );
         return;
     }
 
     if( sel.size() > 1 )
     {
-        wxMessageBox( _T( "Multiple entries selected; please\nselect only one entry" ),
-                      _T( "Move alias up" ) );
+        wxMessageBox( _( "Multiple entries selected; please\nselect only one entry" ),
+                      _( "Move alias up" ) );
         return;
     }
 
@@ -247,14 +247,14 @@ void DLG_3D_PATH_CONFIG::OnAliasMoveDown( wxCommandEvent& event )
 
     if( sel.empty() )
     {
-        wxMessageBox( _T( "No entry selected" ), _T( "Move alias down" ) );
+        wxMessageBox( _( "No entry selected" ), _( "Move alias down" ) );
         return;
     }
 
     if( sel.size() > 1 )
     {
-        wxMessageBox( _T( "Multiple entries selected; please\nselect only one entry" ),
-                      _T( "Move alias down" ) );
+        wxMessageBox( _( "Multiple entries selected; please\nselect only one entry" ),
+                      _( "Move alias down" ) );
         return;
     }
 
