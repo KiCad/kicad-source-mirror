@@ -41,6 +41,7 @@
 
 struct S3D_ALIAS
 {
+    bool m_duplicate;
     wxString m_alias;           // alias to the base path
     wxString m_pathvar;         // base path as stored in the config file
     wxString m_pathexp;         // expanded base path

@@ -32,6 +32,8 @@
 
 #include "3d_filename_resolver.h"
 
+// configuration file version
+#define CFGFILE_VERSION 1
 #define S3D_RESOLVER_CONFIG wxT( "3Dresolver.cfg" )
 
 // flag bits used to track different one-off messages to users
@@ -180,7 +182,7 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
 
 bool S3D_FILENAME_RESOLVER::UpdatePathList( std::vector< S3D_ALIAS >& aPathList )
 {
-    while( m_Paths.size() > 1 )
+    while( m_Paths.size() > 2 )
         m_Paths.pop_back();
 
     size_t nI = aPathList.size();
@@ -363,22 +365,50 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
     if( aPath.m_alias.empty() || aPath.m_pathvar.empty() )
         return false;
 
-    wxFileName path( aPath.m_pathvar, wxT( "" ) );
+    S3D_ALIAS tpath = aPath;
+    tpath.m_duplicate = false;
+
+    #ifdef _WIN32
+    while( tpath.m_pathvar.EndsWith( wxT( "\\" ) ) )
+        tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
+    #else
+    while( tpath.m_pathvar.EndsWith( wxT( "/" ) ) &&  tpath.m_pathvar.length() > 1 )
+        tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
+    #endif
+
+    wxFileName path( tpath.m_pathvar, wxT( "" ) );
     path.Normalize();
 
-    S3D_ALIAS tpath = aPath;
-
     if( !path.DirExists() )
+    {
+        wxString msg = _T( "The given path does not exist" );
+        msg.append( wxT( "\n" ) );
+        msg.append( tpath.m_pathvar );
         tpath.m_pathexp.clear();
+        wxMessageBox( msg, _T( "3D model search path" ) );
+    }
     else
+    {
         tpath.m_pathexp = path.GetFullPath();
 
+        #ifdef _WIN32
+        while( tpath.m_pathexp.EndsWith( wxT( "\\" ) ) )
+        tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
+        #else
+        while( tpath.m_pathexp.EndsWith( wxT( "/" ) ) &&  tpath.m_pathexp.length() > 1 )
+            tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
+        #endif
+    }
+
     wxString pname = path.GetPath();
-    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+    std::list< S3D_ALIAS >::iterator sPL = m_Paths.begin();
+    std::list< S3D_ALIAS >::iterator ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
+        // aliases with the same m_pathvar are forbidden and the
+        // user must be forced to fix the problem in order to
+        // obtain good filename resolution
         if( !sPL->m_pathvar.empty() && !tpath.m_pathvar.empty()
             && !tpath.m_pathvar.Cmp( sPL->m_pathvar ) )
         {
@@ -398,6 +428,10 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
             return false;
         }
 
+        // aliases with the same m_pathexp are acceptable (one or both
+        // aliases being testes may be expanded variables) but when shortening
+        // names the preference is for (a) a fully specified path in m_pathvar
+        // then (b) the more senior alias in the list
         if( !sPL->m_pathexp.empty() && !tpath.m_pathexp.empty() )
         {
             if( !tpath.m_pathexp.Cmp( sPL->m_pathexp ) )
@@ -421,11 +455,16 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
                 msg.append( sPL->m_pathexp );
                 wxMessageBox( msg, _( "Bad alias (duplicate path)" ) );
 
-                return false;
+                if( tpath.m_pathvar.StartsWith( wxT( "${" ) ) )
+                    tpath.m_duplicate = true;
+                else if( sPL->m_pathvar.StartsWith( wxT( "${" ) ) )
+                    sPL->m_duplicate = true;
+
             }
 
-            if( tpath.m_pathexp.find( sPL->m_pathexp ) != wxString::npos
+            if( ( tpath.m_pathexp.find( sPL->m_pathexp ) != wxString::npos
                 || sPL->m_pathexp.find( tpath.m_pathexp ) != wxString::npos )
+                && tpath.m_pathexp.Cmp( sPL->m_pathexp ) )
             {
                 wxString msg = _( "This alias: " );
                 msg.append( tpath.m_alias );
@@ -510,6 +549,7 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     int lineno = 0;
     S3D_ALIAS al;
     size_t idx;
+    int vnum = 0;           // version number
 
     while( cfgFile.good() )
     {
@@ -523,6 +563,17 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
                 break;
 
             continue;
+        }
+
+        if( 1 == lineno && cfgLine.find( "#V" ) == 0 )
+        {
+            // extract the version number and parse accordingly
+            if( cfgLine.size() > 2 )
+            {
+                std::istringstream istr;
+                istr.str( cfgLine.substr( 2 ) );
+                istr >> vnum;
+            }
         }
 
         idx = 0;
@@ -544,6 +595,9 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     }
 
     cfgFile.close();
+
+    if( vnum < CFGFILE_VERSION )
+        writePathList();
 
     if( m_Paths.size() != nitems )
         return true;
@@ -586,6 +640,7 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
                 return false;
             }
 
+            cfgFile << "#V" << CFGFILE_VERSION << "\n";
             cfgFile.close();
             return true;
         }
@@ -606,6 +661,7 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
         return false;
     }
 
+    cfgFile << "#V" << CFGFILE_VERSION << "\n";
     std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
     std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
 
@@ -659,25 +715,31 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
     size_t idx;
 
     // test for files within the current project directory
-    if( !sL->m_pathexp.empty() )
+    // and KISYS3DMOD directory
+    for( int i = 0; i < 2 && sL != eL; ++i )
     {
-        wxFileName fpath( sL->m_pathexp, wxT( "" ) );
-        wxString fps = fpath.GetPathWithSep();
-
-        idx = fname.find( fps );
-
-        if( std::string::npos != idx && 0 == idx  )
+        if( !sL->m_pathexp.empty() )
         {
-            fname = fname.substr( fps.size() );
-            return fname;
-        }
-    }
+            wxFileName fpath( sL->m_pathexp, wxT( "" ) );
+            wxString fps = fpath.GetPathWithSep();
 
-    ++sL;
+            idx = fname.find( fps );
+
+            if( std::string::npos != idx && 0 == idx  )
+            {
+                fname = fname.substr( fps.size() );
+                return fname;
+            }
+        }
+
+        ++sL;
+    }
 
     while( sL != eL )
     {
-        if( sL->m_pathexp.empty() )
+        // undefined paths and duplicates do not participate
+        // in the file name shortening procedure
+        if( sL->m_pathexp.empty() || sL->m_duplicate )
         {
             ++sL;
             continue;

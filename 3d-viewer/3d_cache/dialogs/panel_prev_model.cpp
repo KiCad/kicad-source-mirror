@@ -357,9 +357,9 @@ void PANEL_PREV_3D::updateDirChoiceList( void )
 
     while( sL != eL )
     {
-        if( !sL->m_pathexp.empty() )
+        if( !sL->m_pathexp.empty() && !sL->m_duplicate )
             cl.push_back( sL->m_pathexp );
-        
+
         ++sL;
     }
 

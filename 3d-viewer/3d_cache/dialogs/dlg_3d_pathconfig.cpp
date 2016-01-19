@@ -60,8 +60,7 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
         std::list< S3D_ALIAS >::const_iterator eL = rpaths->end();
         int nitems = 0;
 
-        // skip the first 2 entries which are always the current project dir
-        // and KISYS3DMOD
+        // skip the current project dir and KISYS3DMOD
         ++sL;
         ++sL;
         wxGridCellTextEditor* pEdAlias;
