@@ -43,6 +43,9 @@
 #include <view/view.h>
 #include <geometry/seg.h>
 
+#include <tool/tool_manager.h>
+#include <tools/common_actions.h>
+
 #include <pcbnew.h>
 #include <drc_stuff.h>
 
@@ -54,6 +57,7 @@ void DRC::ShowDialog()
 {
     if( !m_ui )
     {
+        m_mainWindow->GetToolManager()->RunAction( COMMON_ACTIONS::selectionClear, true );
         m_ui = new DIALOG_DRC_CONTROL( this, m_mainWindow );
         updatePointers();
 
