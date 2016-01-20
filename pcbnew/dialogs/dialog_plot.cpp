@@ -804,9 +804,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_useGerberExtensions->GetValue() )
             file_ext = GetGerberProtelExtension( layer );
 
-        // Create file name (from the English default layer name for non copper layers).
         BuildPlotFileName( &fn, outputDir.GetPath(),
-//                           m_board->GetStandardLayerName( layer ),
                            m_board->GetLayerName( layer ),
                            file_ext );
 
