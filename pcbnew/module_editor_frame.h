@@ -167,7 +167,7 @@ public:
      */
     void Show3D_Frame( wxCommandEvent& event );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
     void OnVerticalToolbar( wxCommandEvent& aEvent );
 
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
@@ -242,7 +242,7 @@ public:
     bool Clear_Pcb( bool aQuery );
 
     /* handlers for block commands */
-    virtual int BlockCommand( int key );
+    virtual int BlockCommand( EDA_KEY key );
 
     /**
      * Function HandleBlockPlace

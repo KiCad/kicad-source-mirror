@@ -47,7 +47,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool erase );
 
 
-int GERBVIEW_FRAME::BlockCommand( int key )
+int GERBVIEW_FRAME::BlockCommand( EDA_KEY key )
 {
     int cmd = 0;
 

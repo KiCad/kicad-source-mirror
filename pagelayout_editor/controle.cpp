@@ -32,7 +32,7 @@
 #include <pl_editor_frame.h>
 
 
-bool PL_EDITOR_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool PL_EDITOR_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
     bool eventHandled = true;
 

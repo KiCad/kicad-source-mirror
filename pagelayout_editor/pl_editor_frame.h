@@ -267,7 +267,7 @@ public:
     void                ToPrinter( wxCommandEvent& event );
 
     void                Files_io( wxCommandEvent& event );
-    bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
 
     /** Virtual function PrintPage
      * used to print a page
