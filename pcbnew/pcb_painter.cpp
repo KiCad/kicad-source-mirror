@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -1001,20 +1001,25 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 
 void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
 {
-    const BOARD_ITEM* item = aMarker->GetItem();
+    const int scale = 100000;
+    const VECTOR2D arrow[] = {
+        VECTOR2D(  0 * scale,   0 * scale ),
+        VECTOR2D(  8 * scale,   1 * scale ),
+        VECTOR2D(  4 * scale,   3 * scale ),
+        VECTOR2D( 13 * scale,   8 * scale ),
+        VECTOR2D(  9 * scale,   9 * scale ),
+        VECTOR2D(  8 * scale,  13 * scale ),
+        VECTOR2D(  3 * scale,   4 * scale ),
+        VECTOR2D(  1 * scale,   8 * scale )
+    };
 
-    if( item )      // By default draw an item in a different color
-    {
-        Draw( item, ITEM_GAL_LAYER( DRC_VISIBLE ) );
-    }
-    else            // If there is no item associated - draw a circle marking the DRC error
-    {
-        m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( 10000 );
-        m_gal->DrawCircle( VECTOR2D( aMarker->GetPosition() ), 200000 );
-    }
+    m_gal->Save();
+    m_gal->Translate( aMarker->GetPosition() );
+    m_gal->SetFillColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+    m_gal->SetIsFill( true );
+    m_gal->SetIsStroke( false );
+    m_gal->DrawPolygon( arrow, sizeof( arrow ) / sizeof( VECTOR2D ) );
+    m_gal->Restore();
 }
 
 
