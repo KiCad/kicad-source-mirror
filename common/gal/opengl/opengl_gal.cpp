@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
@@ -448,7 +448,7 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 }
 
 
-void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
+void OPENGL_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
 {
     if( aPointList.empty() )
         return;
@@ -476,25 +476,84 @@ void OPENGL_GAL::DrawPolyline( std::deque<VECTOR2D>& aPointList )
 }
 
 
+void OPENGL_GAL::DrawPolyline( const VECTOR2D aPointList[], int aListSize )
+{
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
+    // Start from the second point
+    for( int i = 1; i < aListSize; ++i )
+    {
+        const VECTOR2D startEndVector = ( aPointList[i] - aPointList[i - 1] );
+        double lineAngle = startEndVector.Angle();
+
+        drawLineQuad( aPointList[i - 1], aPointList[i] );
+
+        // There is no need to draw line caps on both ends of polyline's segments
+        drawFilledSemiCircle( aPointList[i - 1], lineWidth / 2, lineAngle + M_PI / 2 );
+    }
+
+    // ..and now - draw the ending cap
+    const VECTOR2D startEndVector = ( aPointList[aListSize - 1] - aPointList[aListSize - 2] );
+    double lineAngle = startEndVector.Angle();
+    drawFilledSemiCircle( aPointList[aListSize - 1], lineWidth / 2, lineAngle - M_PI / 2 );
+}
+
+
 void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 {
-    // Any non convex polygon needs to be tesselated
-    // for this purpose the GLU standard functions are used
     currentManager->Shader( SHADER_NONE );
     currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
+    // Any non convex polygon needs to be tesselated
+    // for this purpose the GLU standard functions are used
     TessParams params = { currentManager, tessIntersects };
     gluTessBeginPolygon( tesselator, &params );
     gluTessBeginContour( tesselator );
 
     boost::shared_array<GLdouble> points( new GLdouble[3 * aPointList.size()] );
     int v = 0;
+
     for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); ++it )
     {
         points[v]     = it->x;
         points[v + 1] = it->y;
         points[v + 2] = layerDepth;
         gluTessVertex( tesselator, &points[v], &points[v] );
+        v += 3;
+    }
+
+    gluTessEndContour( tesselator );
+    gluTessEndPolygon( tesselator );
+
+    // Free allocated intersecting points
+    tessIntersects.clear();
+
+    // vertexList destroyed here
+}
+
+
+void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
+{
+    currentManager->Shader( SHADER_NONE );
+    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+
+    // Any non convex polygon needs to be tesselated
+    // for this purpose the GLU standard functions are used
+    TessParams params = { currentManager, tessIntersects };
+    gluTessBeginPolygon( tesselator, &params );
+    gluTessBeginContour( tesselator );
+
+    boost::shared_array<GLdouble> points( new GLdouble[3 * aListSize] );
+    int v = 0;
+    const VECTOR2D* ptr = aPointList;
+
+    for( int i = 0; i < aListSize; ++i )
+    {
+        points[v]     = ptr->x;
+        points[v + 1] = ptr->y;
+        points[v + 2] = layerDepth;
+        gluTessVertex( tesselator, &points[v], &points[v] );
+        ++ptr;
         v += 3;
     }
 
