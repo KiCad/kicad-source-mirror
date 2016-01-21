@@ -56,15 +56,15 @@ class REPORTER;
 typedef uint32_t EDA_KEY;
 #define EDA_KEY_C UINT32_C
 
-static const EDA_KEY GR_KB_RIGHTSHIFT = EDA_KEY_C( 0x01000000 );
-static const EDA_KEY GR_KB_LEFTSHIFT  = EDA_KEY_C( 0x02000000 );
-static const EDA_KEY GR_KB_CTRL       = EDA_KEY_C( 0x04000000 );
-static const EDA_KEY GR_KB_ALT        = EDA_KEY_C( 0x08000000 );
-static const EDA_KEY GR_KB_SHIFT      = GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT;
-static const EDA_KEY GR_KB_SHIFTCTRL  = GR_KB_SHIFT | GR_KB_CTRL;
-static const EDA_KEY MOUSE_MIDDLE     = EDA_KEY_C( 0x10000000 );
-static const EDA_KEY GR_KEY_INVALID   = EDA_KEY_C( 0x80000000 );
-static const EDA_KEY GR_KEY_NONE      = EDA_KEY_C( 0 );
+#define GR_KB_RIGHTSHIFT    ( EDA_KEY_C( 0x01000000 ) )
+#define GR_KB_LEFTSHIFT     ( EDA_KEY_C( 0x02000000 ) )
+#define GR_KB_CTRL          ( EDA_KEY_C( 0x04000000 ) )
+#define GR_KB_ALT           ( EDA_KEY_C( 0x08000000 ) )
+#define GR_KB_SHIFT         ( GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT )
+#define GR_KB_SHIFTCTRL     ( GR_KB_SHIFT | GR_KB_CTRL )
+#define MOUSE_MIDDLE        ( EDA_KEY_C( 0x10000000 ) )
+#define GR_KEY_INVALID      ( EDA_KEY_C( 0x80000000 ) )
+#define GR_KEY_NONE         ( EDA_KEY_C( 0 ) )
 
 /// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
