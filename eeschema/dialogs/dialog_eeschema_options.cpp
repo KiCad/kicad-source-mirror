@@ -293,6 +293,8 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
     if( !m_hotkeyListCtrl->TransferDataFromControl() )
         return false;
 
+    GetParent()->WriteHotkeyConfig( g_Eeschema_Hokeys_Descr );
+
     if( !m_colorConfigCtrl->TransferDataFromControl() )
         return false;
 
