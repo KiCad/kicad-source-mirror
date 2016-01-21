@@ -130,6 +130,7 @@ void GERBER_LAYER_WIDGET::ReFillRender()
 void GERBER_LAYER_WIDGET::installRightLayerClickHandler()
 {
     int rowCount = GetLayerRowCount();
+
     for( int row=0;  row<rowCount;  ++row )
     {
         for( int col=0; col<LYR_COLUMN_COUNT;  ++col )
