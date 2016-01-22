@@ -33,7 +33,6 @@
 #define CLASS_DRAWSHEET_PATH_H
 
 #include <base_struct.h>
-#include <sch_reference_list.h>
 
 
 /** Info about complex hierarchies handling:
@@ -81,10 +80,8 @@
 
 class wxFindReplaceData;
 class SCH_SCREEN;
-class SCH_MARKER;
 class SCH_SHEET;
 class SCH_ITEM;
-class PART_LIBS;
 
 
 #define SHEET_NOT_FOUND          -1
@@ -210,18 +207,6 @@ public:
      * @return true if success else false
      */
     bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
-
-    /**
-     * Function GetMultiUnitComponents
-     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
-     * multi-unit parts in the sheet. The map key for each element will be the
-     * reference designator.
-     * @param aLibs the library list to use
-     * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols : false to only get normal components.
-     */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                 bool aIncludePowerSymbols = true );
 
     /**
      * Function SetFootprintField
@@ -399,18 +384,6 @@ public:
      *         \a aPath is found.
      */
     SCH_SHEET_PATH* GetSheetByPath( const wxString aPath, bool aHumanReadable = true );
-
-    /**
-     * Function GetMultiUnitComponents
-     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
-     * multi-unit parts in the list of sheets. The map key for each element will be the
-     * reference designator.
-     * @param aLibs the library list to use
-     * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols Set to false to only get normal components.
-     */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                 bool aIncludePowerSymbols = true );
 
     /**
      * Function FindNextItem

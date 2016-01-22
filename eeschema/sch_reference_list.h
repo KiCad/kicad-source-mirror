@@ -35,12 +35,13 @@
 #include <macros.h>
 
 #include <class_libentry.h>
-#include <sch_sheet.h>
-#include <sch_component.h>
 #include <sch_text.h>
 
 #include <map>
 
+
+class SCH_SHEET;
+class SCH_COMPONENT;
 class SCH_REFERENCE_LIST;
 
 
@@ -90,8 +91,7 @@ public:
         m_SheetNum     = 0;
     }
 
-    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
-                   SCH_SHEET* aSheet );
+    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent, SCH_SHEET* aSheet );
 
     SCH_COMPONENT* GetComp() const          { return m_RootCmp; }
 
@@ -152,25 +152,16 @@ public:
         return m_Ref.compare( item.m_Ref );
     }
 
-    int CompareLibName( const SCH_REFERENCE& item ) const
-    {
-        return Cmp_KEEPCASE( m_RootCmp->GetPartName(), item.m_RootCmp->GetPartName() );
-    }
+    int CompareLibName( const SCH_REFERENCE& item ) const;
 
     /**
      * Function IsSameInstance
      * returns whether this reference refers to the same component instance
      * (component and sheet) as another.
      */
-    bool IsSameInstance( const SCH_REFERENCE& other ) const
-    {
-        return GetComp() == other.GetComp() && GetSheet()->GetPath() == other.GetSheet()->GetPath();
-    }
+    bool IsSameInstance( const SCH_REFERENCE& other ) const;
 
-    bool IsUnitsLocked()
-    {
-        return m_Entry->UnitsLocked();
-    }
+    bool IsUnitsLocked() const;
 };
 
 
