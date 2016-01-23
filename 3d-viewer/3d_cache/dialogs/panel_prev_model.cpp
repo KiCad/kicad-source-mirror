@@ -477,6 +477,10 @@ void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
     if( NULL == aModel )
         return;
 
+    // XXX - due to cross-platform differences in wxWidgets,
+    // extracting scale/rotation/offset will be useless until
+    // the preview panel can be made to work in wxFileDialog
+    /*
     SGPOINT scale;
     SGPOINT rotation;
     SGPOINT offset;
@@ -486,6 +490,7 @@ void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
     aModel->scale = scale;
     aModel->offset = offset;
     aModel->rotation = rotation;
+    //*/
 
     // return if we are not in file selection mode
     if( NULL == m_FileDlg )
