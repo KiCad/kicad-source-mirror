@@ -34,6 +34,22 @@
 bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
     wxString& prevModelSelectDir, int& prevModelWildcard, S3D_INFO* aModel )
 {
+    if( NULL == aModel )
+        return false;
+
+    // set the default values to ensure reasonable settings
+    // even if the user cancels the operation
+    aModel->scale.x = 1.0;
+    aModel->scale.y = 1.0;
+    aModel->scale.z = 1.0;
+
+    aModel->rotation.x = 0.0;
+    aModel->rotation.y = 0.0;
+    aModel->rotation.z = 0.0;
+
+    aModel->offset = aModel->rotation;
+    aModel->filename.empty();
+
     DLG_SEL_3DMODEL* dm = new DLG_SEL_3DMODEL( aParent, aCache,
         prevModelSelectDir, prevModelWildcard );
 

@@ -503,17 +503,17 @@ void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
 
 void PANEL_PREV_3D::SetModelData( S3D_INFO const* aModel )
 {
-    xscale->ChangeValue( wxString::FromDouble( aModel->scale.x ) );
-    yscale->ChangeValue( wxString::FromDouble( aModel->scale.y ) );
-    zscale->ChangeValue( wxString::FromDouble( aModel->scale.z ) );
+    xscale->SetValue( wxString::FromDouble( aModel->scale.x ) );
+    yscale->SetValue( wxString::FromDouble( aModel->scale.y ) );
+    zscale->SetValue( wxString::FromDouble( aModel->scale.z ) );
 
-    xrot->ChangeValue( wxString::FromDouble( aModel->rotation.x ) );
-    yrot->ChangeValue( wxString::FromDouble( aModel->rotation.y ) );
-    zrot->ChangeValue( wxString::FromDouble( aModel->rotation.z ) );
+    xrot->SetValue( wxString::FromDouble( aModel->rotation.x ) );
+    yrot->SetValue( wxString::FromDouble( aModel->rotation.y ) );
+    zrot->SetValue( wxString::FromDouble( aModel->rotation.z ) );
 
-    xoff->ChangeValue( wxString::FromDouble( aModel->offset.x ) );
-    yoff->ChangeValue( wxString::FromDouble( aModel->offset.y ) );
-    zoff->ChangeValue( wxString::FromDouble( aModel->offset.z ) );
+    xoff->SetValue( wxString::FromDouble( aModel->offset.x ) );
+    yoff->SetValue( wxString::FromDouble( aModel->offset.y ) );
+    zoff->SetValue( wxString::FromDouble( aModel->offset.z ) );
 
     modelInfo = *aModel;
     UpdateModelName( aModel->filename );

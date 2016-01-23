@@ -261,6 +261,18 @@ void DIALOG_MODULE_MODULE_EDITOR::Transfert3DValuesToDisplay( S3D_MASTER * aStru
         params.rotation.y = aStruct3DSource->m_MatRotation.y;
         params.rotation.z = aStruct3DSource->m_MatRotation.z;
     }
+    else
+    {
+        params.scale.x = 1.0;
+        params.scale.y = 1.0;
+        params.scale.z = 1.0;
+
+        params.offset.x = 0.0;
+        params.offset.y = 0.0;
+        params.offset.z = 0.0;
+
+        params.rotation = params.offset;
+    }
 
     m_PreviewPane->SetModelData( &params );
     return;
@@ -409,9 +421,6 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
 {
     PROJECT&        prj = Prj();
     S3D_INFO model;
-    model.scale.x = 1.0;
-    model.scale.y = 1.0;
-    model.scale.z = 1.0;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );

@@ -35,6 +35,13 @@ static wxWindow* mkPreviewPanel( wxWindow* aParent )
     pp->SetModelManager( mm );
     pp->SetFileSelectorDlg( fm );
 
+    // ensure reasonable defaults when the dialog starts
+    S3D_INFO mdat;
+    mdat.scale.x = 1.0;
+    mdat.scale.y = 1.0;
+    mdat.scale.z = 1.0;
+    pp->SetModelData( &mdat );
+
     return (wxWindow*)pp;
 }
 
