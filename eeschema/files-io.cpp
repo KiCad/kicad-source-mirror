@@ -447,6 +447,8 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
             bs = nextbs;
         }
     }
+    
+    OnModify();
 
     // redraw base screen (ROOT) if necessary
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
