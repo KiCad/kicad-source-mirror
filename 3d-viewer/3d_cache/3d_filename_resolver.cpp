@@ -352,7 +352,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         m_errflags |= ERRFLG_ALIAS;
         wxString errmsg = _( "No such path; ensure the path alias is defined" );
         errmsg.append( "\n" );
-        errmsg.append( tname );
+        errmsg.append( tname.substr( 1 ) );
         wxMessageBox( errmsg, _( "3D file resolver" ) );
     }
 
