@@ -262,7 +262,8 @@ SCENEGRAPH* Load( char const* aFileName )
         delete modelFile;
 
     // DEBUG: WRITE OUT VRML2 FILE TO CONFIRM STRUCTURE
-    #if defined( DEBUG_VRML1 ) || defined( DEBUG_VRML2 )
+    #if ( defined( DEBUG_VRML1 ) && DEBUG_VRML1 > 3 ) \
+        || ( defined( DEBUG_VRML2 ) && DEBUG_VRML2 > 3 )
     if( scene )
     {
         wxFileName fn( wxString::FromUTF8Unchecked( aFileName ) );

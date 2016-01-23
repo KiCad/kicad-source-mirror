@@ -295,7 +295,7 @@ SCENEGRAPH* Load( char const* aFileName )
     }
 
     // DEBUG: WRITE OUT IDF FILE TO CONFIRM NORMALS
-    #ifdef DEBUG
+    #if defined( DEBUG_IDF ) && DEBUG_IDF > 3
     if( data )
     {
         wxFileName fn( aFileName );
