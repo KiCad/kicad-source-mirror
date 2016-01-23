@@ -94,6 +94,7 @@ wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
     EVT_TEXT_ENTER( ID_OFFX, PANEL_PREV_3D::updateOrientation )
     EVT_TEXT_ENTER( ID_OFFY, PANEL_PREV_3D::updateOrientation )
     EVT_TEXT_ENTER( ID_OFFZ, PANEL_PREV_3D::updateOrientation )
+    EVT_BUTTON( ID_SET_DIR, PANEL_PREV_3D::SetRootDir )
     EVT_BUTTON( ID_CFG_PATHS, PANEL_PREV_3D::Cfg3DPaths )
     EVT_BUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
     EVT_BUTTON( ID_3D_UPDATE, PANEL_PREV_3D::View3DUpdate )
@@ -143,9 +144,11 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
 #endif
 
         wxStaticText* stDirChoice = new wxStaticText( this, -1, _( "Paths:" ) );
+        wxButton* usePath = new wxButton( this, ID_SET_DIR, _( "Change" ) );
         wxButton* cfgPaths = new wxButton( this, ID_CFG_PATHS, _( "Configure Paths" ) );
         hboxDirChoice->Add( stDirChoice, 0, wxALL | wxCENTER, 5 );
         hboxDirChoice->Add( dirChoices, 1, wxEXPAND | wxALL, 5 );
+        hboxDirChoice->Add( usePath, 0, wxALL, 5 );
         hboxDirChoice->Add( cfgPaths, 0, wxALL, 5 );
     }
 
