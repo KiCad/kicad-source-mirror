@@ -167,6 +167,13 @@ public:
      * with the relative path.
      */
     bool SplitAlias( const wxString& aFileName, wxString& anAlias, wxString& aRelPath );
+
+    /**
+     * Function ValidateName
+     * returns true if the given path is a valid aliased relative path.
+     * If the path contains an alias then hasAlias is set true.
+     */
+    bool ValidateFileName( const wxString& aFileName, bool& hasAlias );
 };
 
 #endif  // FILENAME_RESOLVER_3D_H

@@ -897,3 +897,70 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     aIndex = i2 + 1;
     return true;
 }
+
+
+bool S3D_FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
+{
+    // Rules:
+    // 1. The generic form of an aliased 3D relative path is:
+    //    ALIAS:relative/path
+    // 2. ALIAS is a UTF string excluding wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" )
+    // 3. The relative path must be a valid relative path for the platform
+    hasAlias = false;
+
+    if( aFileName.empty() )
+        return false;
+
+    wxString filename = aFileName;
+    wxString lpath;
+    size_t pos0 = aFileName.find( ':' );
+
+    // ensure that the file separators suit the current platform
+    #ifdef __WINDOWS__
+    filename.Replace( wxT( "/" ), wxT( "\\" ) );
+
+    // if we see the :\ pattern then it must be a drive designator
+    if( pos0 != wxString::npos )
+    {
+        size_t pos1 = aFileName.find( wxT( ":\\" ) ) );
+
+        if( pos1 != wxString::npos && ( pos1 != pos0 || pos1 != 1 ) )
+            return false;
+
+        // if we have a drive designator then we have no alias
+        if( pos1 != wxString::npos )
+            pos0 = wxString::npos;
+    }
+    #else
+    filename.Replace( wxT( "\\" ), wxT( "/" ) );
+    #endif
+
+    // names may not end with ':'
+    if( pos0 == aFileName.length() -1 )
+        return false;
+
+    if( pos0 != wxString::npos )
+    {
+        // ensure the alias component is not empty
+        if( pos0 == 0 )
+            return false;
+
+        lpath = filename.substr( 0, pos0 );
+
+        if( wxString::npos != lpath.find_first_of( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) ) )
+            return false;
+
+        hasAlias = true;
+
+        lpath = aFileName.substr( pos0 + 1 );
+    }
+    else
+    {
+        lpath = aFileName;
+    }
+
+    if( wxString::npos != lpath.find_first_of( wxFileName::GetForbiddenChars() ) )
+        return false;
+
+    return true;
+}
