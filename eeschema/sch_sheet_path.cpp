@@ -227,39 +227,6 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 }
 
 
-SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
-{
-    bool hasWrapped = false;
-    bool firstItemFound = false;
-    SCH_ITEM* drawItem = LastDrawList();
-
-    while( drawItem )
-    {
-        if( drawItem->Type() == aType )
-        {
-            if( !aLastItem || firstItemFound )
-            {
-                return drawItem;
-            }
-            else if( !firstItemFound && drawItem == aLastItem )
-            {
-                firstItemFound = true;
-            }
-        }
-
-        drawItem = drawItem->Next();
-
-        if( !drawItem && aLastItem && aWrap && !hasWrapped )
-        {
-            hasWrapped = true;
-            drawItem = LastDrawList();
-        }
-    }
-
-    return NULL;
-}
-
-
 SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
 {
     bool hasWrapped = false;
@@ -290,18 +257,6 @@ SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, 
     }
 
     return NULL;
-}
-
-
-bool SCH_SHEET_PATH::SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
-                                            bool aSetVisible )
-{
-    SCH_SCREEN* screen = LastScreen();
-
-    if( screen == NULL )
-        return false;
-
-    return screen->SetComponentFootprint( this, aReference, aFootPrint, aSetVisible );
 }
 
 
@@ -642,40 +597,6 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
     }
 
     return NULL;
-}
-
-
-bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
-                                            const wxString& aFootPrint, bool aSetVisible )
-{
-    bool found = false;
-
-    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
-        found = path->SetComponentFootprint( aReference, aFootPrint, aSetVisible );
-
-    return found;
-}
-
-
-bool SCH_SHEET_LIST::IsComplexHierarchy() const
-{
-    wxString fileName;
-
-    for( int i = 0;  i < m_count;  i++ )
-    {
-        fileName = m_list[i].Last()->GetFileName();
-
-        for( int j = 0;  j < m_count;  j++ )
-        {
-            if( i == j )
-                continue;
-
-            if( fileName == m_list[j].Last()->GetFileName() )
-                return true;
-        }
-    }
-
-    return false;
 }
 
 

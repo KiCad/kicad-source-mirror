@@ -590,6 +590,16 @@ public:
     EDA_ITEM* Clone() const;
 
     /**
+     * Function GetSheets
+     *
+     * add the point to #SCH_SHEET and all of it's sub-sheets to \a aSheetList.
+     *
+     * @param aSheetList is a reference to a set containing the #SCH_SHEET pointers.
+     * @return the number of #SCH_SHEET object pointers in \a aSheetList.
+     */
+    unsigned GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const;
+
+    /**
      * Function GetRootSheet
      *
      * returns the root sheet of this SCH_SHEET object.
@@ -712,6 +722,30 @@ public:
      */
     void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
                                  bool aIncludePowerSymbols = true );
+
+    /**
+     * Function IsComplexHierarchy
+     * searches all of the sheets for duplicate files names which indicates a complex
+     * hierarchy.
+     *
+     * Typically this function would be called from the root sheet.  However, it is possible
+     * to test only the sub-hierarchy from any #SCH_SHEET object.
+     *
+     * @return true if the #SCH_SHEET is a complex hierarchy.
+     */
+    bool IsComplexHierarchy() const;
+
+    /**
+     * Find the next schematic item in this sheet object.
+     *
+     * @param aType - The type of schematic item object to search for.
+     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
+     *                    the beginning of the list.
+     * @param aWrap - Wrap around the end of the list to find the next item if aLastItem
+     *                is defined.
+     * @return - The next schematic item if found.  Otherwise, NULL is returned.
+     */
+    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
