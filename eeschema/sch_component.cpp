@@ -118,22 +118,22 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
     Init( aPos );
-    m_currentSheetPath = NULL;
+    m_currentSheet = NULL;
     m_fieldsAutoplaced = AUTOPLACED_NO;
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
+SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET* aSheet, int unit,
                               int convert, const wxPoint& pos, bool setNewItemFlag ) :
     SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     Init( pos );
 
-    m_unit      = unit;
-    m_convert   = convert;
-    m_part_name = aPart.GetName();
-    m_part      = aPart.SharedPtr();
-    m_currentSheetPath = NULL;
+    m_unit         = unit;
+    m_convert      = convert;
+    m_part_name    = aPart.GetName();
+    m_part         = aPart.SharedPtr();
+    m_currentSheet = aSheet;
     m_fieldsAutoplaced = AUTOPLACED_NO;
 
     SetTimeStamp( GetNewTimeStamp() );
@@ -186,7 +186,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
 
     // update the reference -- just the prefix for now.
     msg += wxT( "?" );
-    SetRef( sheet->Last(), msg );
+    SetRef( aSheet, msg );
 
     // Use the schematic component name instead of the library value field
     // name.
@@ -197,13 +197,13 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     SCH_ITEM( aComponent )
 {
-    m_currentSheetPath = NULL;
-    m_Parent    = aComponent.m_Parent;
-    m_Pos       = aComponent.m_Pos;
-    m_unit      = aComponent.m_unit;
-    m_convert   = aComponent.m_convert;
-    m_part_name = aComponent.m_part_name;
-    m_part      = aComponent.m_part;
+    m_currentSheet = NULL;
+    m_Parent       = aComponent.m_Parent;
+    m_Pos          = aComponent.m_Pos;
+    m_unit         = aComponent.m_unit;
+    m_convert      = aComponent.m_convert;
+    m_part_name    = aComponent.m_part_name;
+    m_part         = aComponent.m_part;
 
     SetTimeStamp( aComponent.m_TimeStamp );
 
@@ -1528,9 +1528,8 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
         if( !alias )
             return;
 
-        if( m_currentSheetPath )
-            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
-                                             GetRef( m_currentSheetPath->Last() ),
+        if( m_currentSheet )
+            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( m_currentSheet ),
                                              DARKCYAN ) );
 
         wxString msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );

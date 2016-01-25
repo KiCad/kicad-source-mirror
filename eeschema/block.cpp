@@ -62,7 +62,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                      const wxPoint& aPosition, bool aErase );
 
 
-int SCH_EDIT_FRAME::BlockCommand( int key )
+int SCH_EDIT_FRAME::BlockCommand( EDA_KEY key )
 {
     int cmd = BLOCK_IDLE;
 

@@ -322,6 +322,10 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
         }
 
         UpdateFromClientData();
+
+        // Trigger a resize in case column widths have changed
+        wxSizeEvent dummy_evt;
+        OnSize( dummy_evt );
     }
 }
 
@@ -432,9 +436,16 @@ void WIDGET_HOTKEY_LIST::OnSize( wxSizeEvent& aEvent )
 
     if( hk_column_width < HOTKEY_MIN_WIDTH )
         hk_column_width = HOTKEY_MIN_WIDTH;
+    else if( hk_column_width <= 0 )
+        hk_column_width = 1;
+
+    int name_column_width = rect.width - hk_column_width - HORIZ_MARGIN;
+
+    if( name_column_width <= 0 )
+        name_column_width = 1;
 
     SetColumnWidth( 1, hk_column_width );
-    SetColumnWidth( 0, rect.width - hk_column_width - HORIZ_MARGIN );
+    SetColumnWidth( 0, name_column_width );
 }
 
 

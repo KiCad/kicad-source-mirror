@@ -4,7 +4,7 @@
  * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #define INCLUDE__COMMON_H_
 
 #include <vector>
+#include <boost/cstdint.hpp>
 
 #include <wx/wx.h>
 #include <wx/confbase.h>
@@ -49,17 +50,21 @@ class REPORTER;
 
 
 // Flag for special keys
-#define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
-                                                     * shift key depressed */
-#define GR_KB_LEFTSHIFT  0x20000000                 /* left shift key depressed
-                                                     */
-#define GR_KB_CTRL       0x40000000                 // CTRL depressed
-#define GR_KB_ALT        0x80000000                 // ALT depressed
-#define GR_KB_SHIFT      (GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
-#define GR_KB_SHIFTCTRL  (GR_KB_SHIFT | GR_KB_CTRL)
-#define MOUSE_MIDDLE     0x08000000                 /* Middle button mouse
-                                                     * flag for block commands
-                                                     */
+// This type could be extended to 64 bits to add room for more flags.
+// For compatibility with old code, keep flag bits out of the least
+// significant nibble (0xF).
+typedef uint32_t EDA_KEY;
+#define EDA_KEY_C UINT32_C
+
+#define GR_KB_RIGHTSHIFT    ( EDA_KEY_C( 0x01000000 ) )
+#define GR_KB_LEFTSHIFT     ( EDA_KEY_C( 0x02000000 ) )
+#define GR_KB_CTRL          ( EDA_KEY_C( 0x04000000 ) )
+#define GR_KB_ALT           ( EDA_KEY_C( 0x08000000 ) )
+#define GR_KB_SHIFT         ( GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT )
+#define GR_KB_SHIFTCTRL     ( GR_KB_SHIFT | GR_KB_CTRL )
+#define MOUSE_MIDDLE        ( EDA_KEY_C( 0x10000000 ) )
+#define GR_KEY_INVALID      ( EDA_KEY_C( 0x80000000 ) )
+#define GR_KEY_NONE         ( EDA_KEY_C( 0 ) )
 
 /// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )

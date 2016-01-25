@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 G. Harland
- * Copyright (C) 1992-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_COLOR_CONFIG_H_
-#define DIALOG_COLOR_CONFIG_H_
+#ifndef WIDGET_EESCHEMA_COLOR_CONFIG_H_
+#define WIDGET_EESCHEMA_COLOR_CONFIG_H_
 
-#include <dialog_color_config_base.h>
-
+#include <wx/panel.h>
+#include <wx/sizer.h>
 
 class wxBoxSizer;
 class wxStaticLine;
@@ -37,22 +37,33 @@ class wxStdDialogButtonSizer;
 /* Derived class for the frame color settings. */
 /***********************************************/
 
-class DIALOG_COLOR_CONFIG : public DIALOG_COLOR_CONFIG_BASE
+class WIDGET_EESCHEMA_COLOR_CONFIG : public wxPanel
 {
 private:
-    EDA_DRAW_FRAME*         m_parent;
+    EDA_DRAW_FRAME*         m_drawFrame;
     wxRadioBox*             m_SelBgColor;
+    wxBoxSizer*             m_mainBoxSizer;
 
     // Creates the controls and sizers
     void CreateControls();
 
     void    SetColor( wxCommandEvent& aEvent );
 
+    virtual EDA_DRAW_FRAME* GetDrawFrame() { return m_drawFrame; }
+
 public:
     // Constructors and destructor
-    DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent );
+    WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame );
 
-    bool TransferDataFromWindow();
+    bool TransferDataFromControl();
+
+    /**
+     * Method InstallOnPanel
+     * Install this WIDGET_EESCHEMA_COLOR_CONFIG onto an empty panel. This is useful
+     * when combining with wxFormBuilder, as an empty panel can be left as a
+     * placeholder in the layout.
+     */
+    void InstallOnPanel( wxPanel* aPanel );
 };
 
-#endif    // DIALOG_COLOR_CONFIG_H_
+#endif    // WIDGET_EESCHEMA_COLOR_CONFIG_H_

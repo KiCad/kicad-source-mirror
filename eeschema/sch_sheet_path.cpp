@@ -227,80 +227,6 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 }
 
 
-void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs,
-                                             SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                             bool aIncludePowerSymbols )
-{
-    // Find sheet path number
-    int sheetnumber = 1; // 1 = root
-
-    SCH_SHEET_LIST sheetList;
-
-    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext(), sheetnumber++ )
-    {
-        if( Cmp( *path ) == 0 )
-            break;
-    }
-
-    for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
-    {
-        if( item->Type() != SCH_COMPONENT_T ) continue;
-        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-
-        // Skip pseudo components, which have a reference starting with #.  This mainly
-        // affects power symbols.
-        if( !aIncludePowerSymbols && component->GetRef( Last() )[0] == wxT( '#' ) )
-            continue;
-
-        LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
-        if( part && part->GetUnitCount() > 1 )
-        {
-            SCH_REFERENCE reference = SCH_REFERENCE( component, part, Last() );
-            reference.SetSheetNumber( sheetnumber );
-            wxString reference_str = reference.GetRef();
-
-            // Never lock unassigned references
-            if( reference_str[reference_str.Len() - 1] == '?' ) continue;
-
-            aRefList[reference_str].AddItem( reference );
-        }
-    }
-}
-
-
-SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
-{
-    bool hasWrapped = false;
-    bool firstItemFound = false;
-    SCH_ITEM* drawItem = LastDrawList();
-
-    while( drawItem )
-    {
-        if( drawItem->Type() == aType )
-        {
-            if( !aLastItem || firstItemFound )
-            {
-                return drawItem;
-            }
-            else if( !firstItemFound && drawItem == aLastItem )
-            {
-                firstItemFound = true;
-            }
-        }
-
-        drawItem = drawItem->Next();
-
-        if( !drawItem && aLastItem && aWrap && !hasWrapped )
-        {
-            hasWrapped = true;
-            drawItem = LastDrawList();
-        }
-    }
-
-    return NULL;
-}
-
-
 SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
 {
     bool hasWrapped = false;
@@ -331,18 +257,6 @@ SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, 
     }
 
     return NULL;
-}
-
-
-bool SCH_SHEET_PATH::SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
-                                            bool aSetVisible )
-{
-    SCH_SCREEN* screen = LastScreen();
-
-    if( screen == NULL )
-        return false;
-
-    return screen->SetComponentFootprint( this, aReference, aFootPrint, aSetVisible );
 }
 
 
@@ -595,29 +509,6 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 }
 
 
-void SCH_SHEET_LIST::GetMultiUnitComponents( PART_LIBS* aLibs,
-                                             SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                             bool aIncludePowerSymbols )
-{
-    for( SCH_SHEET_PATH* path = GetFirst(); path; path = GetNext() )
-    {
-        SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
-        path->GetMultiUnitComponents( aLibs, tempMap );
-
-        BOOST_FOREACH( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair, tempMap )
-        {
-            // Merge this list into the main one
-            unsigned n_refs = pair.second.GetCount();
-
-            for( unsigned thisRef = 0; thisRef < n_refs; ++thisRef )
-            {
-                aRefList[pair.first].AddItem( pair.second[thisRef] );
-            }
-        }
-    }
-}
-
-
 SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFoundIn,
                                         SCH_ITEM* aLastItem, bool aWrap )
 {
@@ -706,40 +597,6 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
     }
 
     return NULL;
-}
-
-
-bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
-                                            const wxString& aFootPrint, bool aSetVisible )
-{
-    bool found = false;
-
-    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
-        found = path->SetComponentFootprint( aReference, aFootPrint, aSetVisible );
-
-    return found;
-}
-
-
-bool SCH_SHEET_LIST::IsComplexHierarchy() const
-{
-    wxString fileName;
-
-    for( int i = 0;  i < m_count;  i++ )
-    {
-        fileName = m_list[i].Last()->GetFileName();
-
-        for( int j = 0;  j < m_count;  j++ )
-        {
-            if( i == j )
-                continue;
-
-            if( fileName == m_list[j].Last()->GetFileName() )
-                return true;
-        }
-    }
-
-    return false;
 }
 
 

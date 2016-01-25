@@ -282,6 +282,11 @@ public:
     void OnConfigurePaths( wxCommandEvent& aEvent );
 
     /**
+     * called when the alt key is pressed during a mouse wheel action
+     */
+    void OnAltWheel( wxCommandEvent& event );
+
+    /**
      * Function RecordMacros.
      * records sequence of hotkeys and cursor positions to a macro.
      * @param aDC = current device context
@@ -620,7 +625,7 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void UseGalCanvas( bool aEnable );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
 
     /**
      * Function ShowDesignRulesEditor
@@ -716,7 +721,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int BlockCommand( int aKey );
+    virtual int BlockCommand( EDA_KEY aKey );
 
     /**
      * Function HandleBlockPlace()
@@ -1682,44 +1687,6 @@ public:
     MODULE* Create_MuWavePolygonShape();
 
     void Begin_Self( wxDC* DC );
-
-    /**
-     * Function Genre_Self
-     * creates a self-shaped coil for microwave applications.
-     * - Length Mself.lng
-     * - Extremities Mself.m_Start and Mself.m_End
-     *
-     * We must determine:
-     * Mself.nbrin = number of segments perpendicular to the direction
-     * (The coil nbrin will demicercles + 1 + 2 1 / 4 circle)
-     * Mself.lbrin = length of a strand
-     * Mself.radius = radius of rounded parts of the coil
-     * Mself.delta = segments extremities connection between him and the coil even
-     *
-     * The equations are
-     * Mself.m_Size.x = 2 * Mself.radius + Mself.lbrin
-     * Mself.m_Size.y * Mself.delta = 2 + 2 * Mself.nbrin * Mself.radius
-     * Mself.lng = 2 * Mself.delta / / connections to the coil
-     + (Mself.nbrin-2) * Mself.lbrin / / length of the strands except 1st and last
-     + (Mself.nbrin 1) * (PI * Mself.radius) / / length of rounded
-     * Mself.lbrin + / 2 - Melf.radius * 2) / / length of 1st and last bit
-     *
-     * The constraints are:
-     * Nbrin >= 2
-     * Mself.radius < Mself.m_Size.x
-     * Mself.m_Size.y = Mself.radius * 4 + 2 * Mself.raccord
-     * Mself.lbrin> Mself.radius * 2
-     *
-     * The calculation is conducted in the following way:
-     * Initially:
-     * Nbrin = 2
-     * Radius = 4 * m_Size.x (arbitrarily fixed value)
-     * Then:
-     * Increasing the number of segments to the desired length
-     * (Radius decreases if necessary)
-     *
-     */
-    MODULE* Genere_Self( wxDC* DC );
 
     void ShowChangedLanguage();         // override EDA_BASE_FRAME virtual
 

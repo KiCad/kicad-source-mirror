@@ -103,7 +103,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkAutoplaceFields;
 		wxCheckBox* m_checkAutoplaceJustify;
 		wxCheckBox* m_checkAutoplaceAlign;
-		wxPanel* m_controlsPanel;
+		wxPanel* m_tabControls;
 		wxBoxSizer* m_controlsSizer;
 		wxStaticText* m_staticText20;
 		wxStaticText* m_staticText21;
@@ -112,6 +112,8 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkEnableMiddleButtonPan;
 		wxCheckBox* m_checkMiddleButtonPanLimited;
 		wxCheckBox* m_checkAutoPan;
+		wxPanel* m_tabColors;
+		wxPanel* m_panelColors;
 		wxPanel* m_panel2;
 		wxGrid* m_fieldGrid;
 		wxButton* addFieldButton;

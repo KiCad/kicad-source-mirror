@@ -66,7 +66,7 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
     // mouse events
     EVT_RIGHT_DOWN( EDA_3D_CANVAS::OnRightClick )
     EVT_MOUSEWHEEL( EDA_3D_CANVAS::OnMouseWheel )
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     EVT_MAGNIFY( EDA_3D_CANVAS::OnMagnify )
 #endif
     EVT_MOTION( EDA_3D_CANVAS::OnMouseMove )
@@ -319,7 +319,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 }
 
 
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 {
     double magnification = ( event.GetMagnification() + 1.0f );

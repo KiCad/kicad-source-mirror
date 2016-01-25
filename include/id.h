@@ -124,8 +124,6 @@ enum main_id
     ID_NO_TOOL_SELECTED,
     ID_SEL_BG_COLOR,
 
-    ID_COLORS_SETUP,
-
     ID_REPEAT_BUTT,
 
     ID_LANGUAGE_CHOICE,

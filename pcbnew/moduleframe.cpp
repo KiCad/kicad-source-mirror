@@ -696,7 +696,7 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
     bool eventHandled = true;
 

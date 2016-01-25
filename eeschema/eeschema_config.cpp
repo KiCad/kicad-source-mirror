@@ -47,7 +47,6 @@
 
 #include <dialog_hotkeys_editor.h>
 
-#include <dialogs/dialog_color_config.h>
 #include <dialogs/dialog_eeschema_options.h>
 #include <dialogs/dialog_libedit_options.h>
 #include <dialogs/dialog_schematic_find.h>
@@ -157,14 +156,6 @@ void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
-{
-    DIALOG_COLOR_CONFIG dlg( this );
-
-    dlg.ShowModal();
-}
-
-
 void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
@@ -192,14 +183,6 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     default:
         DisplayError( this, wxT( "LIB_EDIT_FRAME::Process_Config error" ) );
     }
-}
-
-
-void SCH_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
-{
-    DIALOG_COLOR_CONFIG dlg( this );
-
-    dlg.ShowModal();
 }
 
 

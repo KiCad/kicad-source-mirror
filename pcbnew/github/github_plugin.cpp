@@ -542,6 +542,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
     catch( const IO_ERROR& ioe )
     {
         // https "GET" has faild, report this to API caller.
+        // Note: kcurl.Perform() does not return an error if the file to download is not found
         UTF8 fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
 
         std::string msg = StrPrintf( fmt.c_str(),

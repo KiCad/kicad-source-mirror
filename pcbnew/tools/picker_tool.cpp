@@ -69,11 +69,14 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !getNext )
                 break;
             else
-                setControls();
+                m_toolMgr->PassEvent();
         }
 
         else if( evt->IsCancel() || evt->IsActivate() )
             break;
+
+        else
+            m_toolMgr->PassEvent();
     }
 
     reset();

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -135,12 +135,7 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    inline const SELECTION& GetSelection()
-    {
-        // The selected items list has been requested, so it is no longer preliminary
-        m_preliminary = false;
-        return m_selection;
-    }
+    const SELECTION& GetSelection();
 
     /**
      * Function EditModules()
@@ -276,6 +271,15 @@ private:
      * @return True if the item fulfills conditions to be selected.
      */
     bool selectable( const BOARD_ITEM* aItem ) const;
+
+    /**
+     * Function modifiable()
+     * Checks if an item might be modified. This function is used to filter out items
+     * from the selection when it is passed to other tools.
+     *
+     * @return True if the item fulfills conditions to be modified.
+     */
+    bool modifiable( const BOARD_ITEM* aItem ) const;
 
     /**
      * Function select()

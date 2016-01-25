@@ -166,7 +166,7 @@ public:
     {
         wxPoint delta( m_featureLineDO - m_featureLineGO );
 
-        return atan2( delta.y, delta.x );
+        return atan2( (double)delta.y, (double)delta.x );
     }
 
     /**

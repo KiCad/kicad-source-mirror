@@ -516,7 +516,7 @@ public:
      * @param aPosition The current cursor position in logical (drawing) units.
      * @param aHotKey A key event used for application specific control if not zero.
      */
-    virtual bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 )
+    virtual bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 )
     {
         return false;
     }
@@ -642,7 +642,7 @@ public:
      * initializes the block command including the command type, initial position,
      * and other variables.
      */
-    virtual bool HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition );
+    virtual bool HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition );
 
     /**
      * Function BlockCommand
@@ -653,7 +653,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int BlockCommand( int aKey );
+    virtual int BlockCommand( EDA_KEY aKey );
 
     /**
      * Function HandleBlockPlace( )

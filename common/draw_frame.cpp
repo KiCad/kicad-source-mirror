@@ -594,7 +594,7 @@ void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 }
 
 
-int EDA_DRAW_FRAME::BlockCommand( int key )
+int EDA_DRAW_FRAME::BlockCommand( EDA_KEY key )
 {
     return 0;
 }
@@ -767,7 +767,7 @@ wxString EDA_DRAW_FRAME::LengthDoubleToString( double aValue, bool aConvertToMil
 }
 
 
-bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition )
+bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition )
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 

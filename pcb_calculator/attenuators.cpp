@@ -30,6 +30,7 @@
 #include <pcb_calculator.h>
 #include <attenuator_classes.h>
 
+
 extern double DoubleFromString( const wxString& TextValue );
 
 // Called on a attenuator selection
@@ -44,6 +45,7 @@ void PCB_CALCULATOR_FRAME::SetAttenuator( unsigned aIdx )
 {
     if( aIdx >=m_attenuator_list.size() )
         aIdx = m_attenuator_list.size() - 1;
+
     m_currAttenuator = m_attenuator_list[aIdx];
     TransfAttenuatorDataToPanel();
     m_Attenuator_Messages->SetPage( wxEmptyString );
@@ -93,6 +95,11 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
 
     msg.Printf( wxT( "%g" ), m_currAttenuator->m_Zout );
     m_ZoutValueCtrl->SetValue( msg );
+
+    if( m_currAttenuator->m_FormulaName )
+        m_panelAttFormula->SetPage( *m_currAttenuator->m_FormulaName );
+    else
+        m_panelAttFormula->SetPage( wxEmptyString );
 }
 
 
@@ -144,22 +151,6 @@ void PCB_CALCULATOR_FRAME::OnPaintAttenuatorPanel( wxPaintEvent& event )
         size.x -= m_currAttenuator->m_SchBitMap->GetWidth();
         size.y -= m_currAttenuator->m_SchBitMap->GetHeight();
         dc.DrawBitmap( *m_currAttenuator->m_SchBitMap, size.x / 2, size.y / 2 );
-    }
-
-    event.Skip();
-}
-
-
-void PCB_CALCULATOR_FRAME::OnPaintAttFormulaPanel( wxPaintEvent& event )
-{
-    wxPaintDC dc( m_panelAttFormula );
-
-    if( m_currAttenuator && m_currAttenuator->m_FormulaBitMap )
-    {
-        wxSize size = m_panelAttFormula->GetSize();
-        size.x -= m_currAttenuator->m_FormulaBitMap->GetWidth();
-        size.y -= m_currAttenuator->m_FormulaBitMap->GetHeight();
-        dc.DrawBitmap( *m_currAttenuator->m_FormulaBitMap, size.x / 2, size.y / 2 );
     }
 
     event.Skip();

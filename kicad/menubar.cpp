@@ -148,7 +148,7 @@ static EDA_HOTKEY HkRunGerbview( _HKI( "Run Gerbview" ), HK_RUN_GERBVIEW, 'G' + 
 static EDA_HOTKEY HkRunBm2Cmp( _HKI( "Run Bitmap2Component" ),
                                HK_RUN_BM2COMPONENT, 'B' + GR_KB_CTRL, 0 );
 static EDA_HOTKEY HkRunPcbCalc( _HKI( "Run PcbCalculator" ),
-                                HK_RUN_PCBCALCULATOR, 'C' + GR_KB_CTRL, 0 );
+                                HK_RUN_PCBCALCULATOR, 'A' + GR_KB_CTRL, 0 );
 static EDA_HOTKEY HkRunPleditor( _HKI( "Run PlEditor" ), HK_RUN_PLEDITOR, 'Y' + GR_KB_CTRL, 0 );
 
 // List of hotkey descriptors

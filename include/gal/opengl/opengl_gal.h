@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
@@ -113,10 +113,12 @@ public:
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /// @copydoc GAL::DrawPolyline()
-    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
+    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList );
+    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize );
 
     /// @copydoc GAL::DrawPolygon()
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList );
+    virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize );
 
     /// @copydoc GAL::DrawCurve()
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,

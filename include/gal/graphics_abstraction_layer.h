@@ -105,7 +105,8 @@ public:
      *
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
-    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList ) {};
+    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) {};
+    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) {};
 
     /**
      * @brief Draw a circle using world coordinates.
@@ -140,6 +141,7 @@ public:
      * @param aPointList is the list of the polygon points.
      */
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) {};
+    virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) {};
 
     /**
      * @brief Draw a cubic bezier spline.

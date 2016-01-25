@@ -316,16 +316,12 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::HighContrastInc( const TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
-
     return 0;
 }
 
 
 int PCBNEW_CONTROL::HighContrastDec( const TOOL_EVENT& aEvent )
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
-
     return 0;
 }
 

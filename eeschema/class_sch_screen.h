@@ -49,6 +49,7 @@ class SCH_SHEET_PIN;
 class SCH_LINE;
 class SCH_TEXT;
 class PLOTTER;
+class SCH_SHEET;
 
 
 enum SCH_LINE_TEST_T
@@ -500,13 +501,13 @@ public:
      * searches screen for a component with \a aReference and set the footprint field to
      * \a aFootPrint if found.
      *
-     * @param aSheetPath The sheet path used to look up the reference designator.
+     * @param aSheet The sheet used to look up the reference designator.
      * @param aReference The reference designator of the component.
      * @param aFootPrint The value to set the footprint field.
      * @param aSetVisible The value to set the field visibility flag.
      * @return True if \a aReference was found otherwise false.
      */
-    bool SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
+    bool SetComponentFootprint( SCH_SHEET* aSheet, const wxString& aReference,
                                 const wxString& aFootPrint, bool aSetVisible );
 
     /**

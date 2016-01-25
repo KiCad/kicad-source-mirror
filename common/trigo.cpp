@@ -310,7 +310,7 @@ double ArcTangente( int dy, int dx )
     }
 
     // Of course dy and dx are treated as double
-    return RAD2DECIDEG( atan2( dy, dx ) );
+    return RAD2DECIDEG( atan2( (double) dy, (double) dx ) );
 }
 
 

@@ -72,7 +72,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
     EVT_ENTER_WINDOW( EDA_DRAW_PANEL::OnMouseEntering )
     EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     EVT_MAGNIFY( EDA_DRAW_PANEL::OnMagnify )
 #endif
     EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
@@ -994,7 +994,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 }
 
 
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 void EDA_DRAW_PANEL::OnMagnify( wxMouseEvent& event )
 {
     // Scale the panel around our cursor position.

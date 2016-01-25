@@ -40,7 +40,7 @@ public:
     double           m_R2;                  // value of R2
     double           m_R3;                  // value of R3 (if any)
     wxBitmap*        m_SchBitMap;           // The schema of this attenuator
-    wxBitmap*        m_FormulaBitMap;       // The formula used to calcualte this attenuator
+    wxString*        m_FormulaName;         // The HTML text name of the formula used to calculate this attenuator
 
 protected:
     double           Lmin, L, A; // internal variable for temporary use

@@ -33,6 +33,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 #include <sch_text.h>
+#include <sch_reference_list.h>
 
 
 class PART_LIBS;
@@ -44,7 +45,6 @@ class SCH_SHEET_PATH;
 class DANGLING_END_ITEM;
 class SCH_EDIT_FRAME;
 class NETLIST_OBJECT_LIST;
-class SCH_REFERENCE_LIST;
 
 
 #define MIN_SHEET_WIDTH  500
@@ -590,6 +590,16 @@ public:
     EDA_ITEM* Clone() const;
 
     /**
+     * Function GetSheets
+     *
+     * add the point to #SCH_SHEET and all of it's sub-sheets to \a aSheetList.
+     *
+     * @param aSheetList is a reference to a set containing the #SCH_SHEET pointers.
+     * @return the number of #SCH_SHEET object pointers in \a aSheetList.
+     */
+    unsigned GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const;
+
+    /**
      * Function GetRootSheet
      *
      * returns the root sheet of this SCH_SHEET object.
@@ -699,6 +709,43 @@ public:
      */
     void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
                         bool aIncludePowerSymbols = true, bool aIncludeSubSheets = true );
+
+    /**
+     * Function GetMultiUnitComponents
+     * adds a SCH_REFERENCE_LIST object to \a aRefList for each component with multiple units
+     * that has the same reference designator for this sheet and all of it's sub-sheets. The
+     * map key for each element will be the reference designator.
+     *
+     * @param aLibs a pointer to the #PART_LIB to use.
+     * @param aRefList Map of reference designators to reference lists
+     * @param aIncludePowerSymbols : false to only get normal components.
+     */
+    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+                                 bool aIncludePowerSymbols = true );
+
+    /**
+     * Function IsComplexHierarchy
+     * searches all of the sheets for duplicate files names which indicates a complex
+     * hierarchy.
+     *
+     * Typically this function would be called from the root sheet.  However, it is possible
+     * to test only the sub-hierarchy from any #SCH_SHEET object.
+     *
+     * @return true if the #SCH_SHEET is a complex hierarchy.
+     */
+    bool IsComplexHierarchy() const;
+
+    /**
+     * Find the next schematic item in this sheet object.
+     *
+     * @param aType - The type of schematic item object to search for.
+     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
+     *                    the beginning of the list.
+     * @param aWrap - Wrap around the end of the list to find the next item if aLastItem
+     *                is defined.
+     * @return - The next schematic item if found.  Otherwise, NULL is returned.
+     */
+    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

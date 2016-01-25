@@ -1103,7 +1103,7 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
 }
 
 
-bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
+bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET* aSheet, const wxString& aReference,
                                         const wxString& aFootPrint, bool aSetVisible )
 {
     SCH_COMPONENT* component;
@@ -1116,7 +1116,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
 
         component = (SCH_COMPONENT*) item;
 
-        if( aReference.CmpNoCase( component->GetRef( aSheetPath->Last() ) ) == 0 )
+        if( aReference.CmpNoCase( component->GetRef( aSheet ) ) == 0 )
         {
             // Found: Init Footprint Field
 
@@ -1125,6 +1125,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
              * it is probably not yet initialized
              */
             SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
+
             if( fpfield->GetText().IsEmpty()
               && ( fpfield->GetTextPosition() == component->GetPosition() ) )
             {

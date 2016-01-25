@@ -59,8 +59,6 @@ class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 class FPID;
-class TOOL_MANAGER;
-class TOOL_DISPATCHER;
 
 /**
  * class PCB_BASE_FRAME
