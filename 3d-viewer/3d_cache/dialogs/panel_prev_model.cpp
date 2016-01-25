@@ -41,7 +41,6 @@
 #include "3d_filename_resolver.h"
 #include "plugins/3dapi/ifsg_api.h"
 #include "panel_prev_model.h"
-#include "dialog_select_3dmodel.h"
 #include "3d_cache_dialogs.h"
 
 
