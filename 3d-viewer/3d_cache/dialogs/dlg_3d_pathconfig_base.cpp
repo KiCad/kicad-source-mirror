@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -79,6 +79,7 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
+	bSizer1->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

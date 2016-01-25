@@ -28,7 +28,7 @@
 #include "plugins/3dapi/ifsg_api.h"
 #include "3d_cache_dialogs.h"
 #include "dlg_3d_pathconfig.h"
-#include "dialog_select_3dmodel.h"
+#include "dlg_select_3dmodel.h"
 
 
 bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
@@ -37,33 +37,11 @@ bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
     if( NULL == aModel )
         return false;
 
-    // set the default values to ensure reasonable settings
-    // even if the user cancels the operation
-    aModel->scale.x = 1.0;
-    aModel->scale.y = 1.0;
-    aModel->scale.z = 1.0;
-
-    aModel->rotation.x = 0.0;
-    aModel->rotation.y = 0.0;
-    aModel->rotation.z = 0.0;
-
-    aModel->offset = aModel->rotation;
-    aModel->filename.empty();
-
-    DLG_SEL_3DMODEL* dm = new DLG_SEL_3DMODEL( aParent, aCache,
+    DLG_SELECT_3DMODEL* dm = new DLG_SELECT_3DMODEL( aParent, aCache, aModel,
         prevModelSelectDir, prevModelWildcard );
 
     if( wxID_OK == dm->ShowModal() )
     {
-        // retrieve the data entry for the 3D model
-        dm->GetModelData( aModel );
-
-        // remember the previous settings
-        prevModelWildcard = dm->GetFilterIndex();
-        wxFileName name( dm->GetPath() );
-        name.Normalize();
-        prevModelSelectDir = name.GetPath();
-
         delete dm;
         return true;
     }

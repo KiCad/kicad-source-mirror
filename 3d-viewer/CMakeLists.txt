@@ -56,7 +56,7 @@ set(3D-VIEWER_SRCS
     ${DIR_DLG}/3d_cache_dialogs.cpp
     ${DIR_DLG}/dlg_3d_pathconfig_base.cpp
     ${DIR_DLG}/dlg_3d_pathconfig.cpp
-    ${DIR_DLG}/dialog_select_3dmodel.cpp
+    ${DIR_DLG}/dlg_select_3dmodel.cpp
     ${DIR_DLG}/panel_prev_model.cpp
     3d_model_viewer/c3d_model_viewer.cpp
     3d_rendering/3d_render_ogl_legacy/c_ogl_3dmodel.cpp

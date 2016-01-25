@@ -40,17 +40,17 @@
 #include "plugins/3dapi/c3dmodel.h"
 #include "3d_cache/3d_info.h"
 
-class  S3D_CACHE;
+class S3D_CACHE;
+class S3D_FILENAME_RESOLVER;
 class C3D_MODEL_VIEWER;
+class wxGenericDirCtrl;
 
 class PANEL_PREV_3D : public wxPanel
 {
 public:
-    PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector = false );
+    PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager );
     ~PANEL_PREV_3D();
 
-    void SetModelManager( S3D_CACHE* aModelManager );
-    void SetFileSelectorDlg( wxFileDialog* aFileDlg );
     void SetRootDir( wxCommandEvent& event );
     void Cfg3DPaths( wxCommandEvent& event );
     // 3D views
@@ -72,7 +72,8 @@ public:
 private:
     wxString currentModelFile;
     S3D_CACHE* m_ModelManager;
-    wxFileDialog* m_FileDlg;
+    S3D_FILENAME_RESOLVER* m_resolver;
+    wxGenericDirCtrl* m_FileTree;
     wxChoice* dirChoices;
     wxTextCtrl* xscale;
     wxTextCtrl* yscale;

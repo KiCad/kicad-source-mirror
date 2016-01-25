@@ -22,6 +22,7 @@
  */
 
 
+#include <wx/msgdlg.h>
 #include "3d_cache/dialogs/dlg_3d_pathconfig.h"
 #include "3d_cache/3d_filename_resolver.h"
 

@@ -70,8 +70,7 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
-    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, false );
-    m_PreviewPane->SetModelManager( Prj().Get3DCacheManager() );
+    m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, aParent->Prj().Get3DCacheManager() );
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
 
     InitModeditProperties();

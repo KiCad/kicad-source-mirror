@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,30 +22,47 @@
  */
 
 /**
- * @file dialog_select_3dmodel.h
+ * @file dlg_select_3dmodel.h
  * creates a dialog to select 3D model files
  */
 
-#ifndef DIALOG_SELECT_3DMODEL_H
-#define DIALOG_SELECT_3DMODEL_H
+
+#ifndef DLG_SELECT_3DMODEL_H
+#define DLG_SELECT_3DMODEL_H
 
 #include <wx/wx.h>
-#include <wx/filedlg.h>
+#include <wx/dirctrl.h>
+#include <wx/sizer.h>
+#include <wx/frame.h>
 
-class S3D_CACHE;
 struct S3D_INFO;
+class  S3D_CACHE;
+class  S3D_FILENAME_RESOLVER;
+class  PANEL_PREV_3D;
+//class  wxGenericDirCtrl;
 
-class DLG_SEL_3DMODEL : public wxFileDialog
+class DLG_SELECT_3DMODEL : public wxDialog
 {
 private:
-    S3D_CACHE* m_manager;
+    S3D_INFO* m_model;                  // data for the selected model
+    S3D_CACHE* m_cache;                 // cache manager
+    S3D_FILENAME_RESOLVER*  m_resolver; // 3D filename resolver
+
+    wxString& m_previousDir;
+    int&      m_previousFilterIndex;
+
+    wxGenericDirCtrl* m_FileTree;
+    PANEL_PREV_3D*    m_preview;
 
 public:
-    DLG_SEL_3DMODEL( wxWindow* aParent, S3D_CACHE* aManager,
-        const wxString& aDefaultDir, int aFilterIndex );
+    DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, S3D_INFO* aModelItem,
+        wxString& prevModelSelectDir, int& prevModelWildcard );
 
-    // Retrieve model data
-    void GetModelData( S3D_INFO* aModel );
+    bool TransferDataFromWindow();
+    void OnSelectionChanged( wxTreeEvent& event );
+    void OnFileActivated( wxTreeEvent& event );
+
+    wxDECLARE_EVENT_TABLE();
 };
 
-#endif  // DIALOG_SELECT_3DMODEL_H
+#endif  // DLG_SELECT_3DMODEL_H

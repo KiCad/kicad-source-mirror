@@ -31,13 +31,15 @@
 #include <wx/choice.h>
 #include <wx/filename.h>
 #include <wx/glcanvas.h>
+#include <wx/dirctrl.h>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "project.h"
 #include "3d_cache.h"
 #include "3d_info.h"
 #include "3d_filename_resolver.h"
 #include "plugins/3dapi/ifsg_api.h"
-
 #include "panel_prev_model.h"
 #include "dialog_select_3dmodel.h"
 #include "3d_cache_dialogs.h"
@@ -107,11 +109,14 @@ wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
 wxEND_EVENT_TABLE()
 
 
-PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
-    wxPanel( aParent, -1 )
+PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
+    wxPanel( aParent, -1 ), m_ModelManager( aCacheManager )
 {
-    m_ModelManager = NULL;
-    m_FileDlg = NULL;
+    if( NULL != m_ModelManager )
+        m_resolver = m_ModelManager->GetResolver();
+    else
+        m_resolver = NULL;
+
     canvas = NULL;
     model = NULL;
     xscale = NULL;
@@ -130,18 +135,18 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
     wxBoxSizer* hboxDirChoice = NULL;
     dirChoices = NULL;
 
-    if( hasFileSelector )
+    m_FileTree = NULL;
+
+    if( NULL != aParent )
+        m_FileTree = (wxGenericDirCtrl*)
+            aParent->FindWindowByLabel( wxT( "3D_MODEL_SELECTOR" ), aParent );
+
+    if( NULL != m_FileTree )
     {
         hboxDirChoice = new wxBoxSizer( wxHORIZONTAL );
         dirChoices = new wxChoice( this, ID_SET_DIR, wxDefaultPosition,
             wxSize( 320, 20 ) );
         dirChoices->SetMinSize( wxSize( 320, 12 ) );
-
-#ifdef _WIN32
-        // Note: On Win32 the native selector box will truncate text
-        // if the text is too long.
-        dirChoices->SetMinSize( wxSize( 450, -1 ) );
-#endif
 
         wxStaticText* stDirChoice = new wxStaticText( this, -1, _( "Paths:" ) );
         wxButton* usePath = new wxButton( this, ID_SET_DIR, _( "Change" ) );
@@ -298,18 +303,23 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, bool hasFileSelector ) :
 
     mainBox->Add( vbox, 1, wxEXPAND | wxALL, 5 );
 
-    if( hasFileSelector )
+    if( NULL != m_FileTree )
     {
-        // NOTE: if/when the FIle Selector preview is implemented
+        // NOTE: if/when the File Selector preview is implemented
         // we may need to hide the orientation boxes to ensure the
         // users have sufficient display area for the browser.
         // hbox->Hide( vboxOrient, true );
         // XXX -
         // NOTE: for now we always suppress the preview and model orientation
         // panels while in the file selector
-        mainBox->Hide( vbox, true );
+        //mainBox->Hide( vbox, true );
+
+        hbox->Hide( vboxOrient, true );
+        vboxPrev->Hide( hbBT, true );
+        vboxPrev->Hide( hbBB, true );
     }
 
+    updateDirChoiceList();
     SetSizerAndFit( mainBox );
     Centre();
 
@@ -332,45 +342,32 @@ PANEL_PREV_3D::~PANEL_PREV_3D()
 }
 
 
-void PANEL_PREV_3D::SetModelManager( S3D_CACHE* aModelManager )
-{
-    m_ModelManager = aModelManager;
-    updateDirChoiceList();
-    return;
-}
-
-
-void PANEL_PREV_3D::SetFileSelectorDlg( wxFileDialog* aFileDlg )
-{
-    m_FileDlg = aFileDlg;
-    updateDirChoiceList();
-    return;
-}
-
-
 void PANEL_PREV_3D::updateDirChoiceList( void )
 {
-    if( NULL == m_FileDlg || NULL == m_ModelManager || NULL == dirChoices )
+    if( NULL == m_FileTree || NULL == m_ModelManager || NULL == dirChoices )
         return;
 
-    std::list< S3D_ALIAS > const* md = m_ModelManager->GetResolver()->GetPaths();
-    std::list< S3D_ALIAS >::const_iterator sL = md->begin();
-    std::list< S3D_ALIAS >::const_iterator eL = md->end();
-    std::vector< wxString > cl;
-
-    while( sL != eL )
+    if( NULL != m_resolver )
     {
-        if( !sL->m_pathexp.empty() && !sL->m_duplicate )
-            cl.push_back( sL->m_pathexp );
+        std::list< S3D_ALIAS > const* md = m_resolver->GetPaths();
+        std::list< S3D_ALIAS >::const_iterator sL = md->begin();
+        std::list< S3D_ALIAS >::const_iterator eL = md->end();
+        std::vector< wxString > cl;
 
-        ++sL;
-    }
+        while( sL != eL )
+        {
+            if( !sL->m_pathexp.empty() && !sL->m_duplicate )
+                cl.push_back( sL->m_pathexp );
 
-    if( !cl.empty() )
-    {
-        dirChoices->Clear();
-        dirChoices->Append( (int)cl.size(), &cl[0] );
-        dirChoices->Select( 0 );
+            ++sL;
+        }
+
+        if( !cl.empty() )
+        {
+            dirChoices->Clear();
+            dirChoices->Append( (int)cl.size(), &cl[0] );
+            dirChoices->Select( 0 );
+        }
     }
 
     return;
@@ -379,10 +376,10 @@ void PANEL_PREV_3D::updateDirChoiceList( void )
 
 void PANEL_PREV_3D::SetRootDir( wxCommandEvent& event )
 {
-    if( !m_FileDlg )
+    if( !m_FileTree )
         return;
 
-    m_FileDlg->SetDirectory( dirChoices->GetString( dirChoices->GetSelection() ) );
+    m_FileTree->SetPath( dirChoices->GetString( dirChoices->GetSelection() ) );
 
     return;
 }
@@ -390,13 +387,8 @@ void PANEL_PREV_3D::SetRootDir( wxCommandEvent& event )
 
 void PANEL_PREV_3D::Cfg3DPaths( wxCommandEvent& event )
 {
-    if( !m_FileDlg || !m_ModelManager )
-        return;
-
-    if( S3D::Configure3DPaths( this, m_ModelManager->GetResolver() ) )
+    if( S3D::Configure3DPaths( this, m_resolver ) )
         updateDirChoiceList();
-
-    return;
 }
 
 
@@ -414,9 +406,9 @@ void PANEL_PREV_3D::View3DUpdate( wxCommandEvent& event )
     std::cout << "Update 3D View\n";
 
     // update the model filename if appropriate
-    if( NULL != m_FileDlg )
+    if( NULL != m_FileTree )
     {
-        wxString modelName = m_FileDlg->GetCurrentlySelectedFilename();
+        wxString modelName = m_FileTree->GetFilePath();
         UpdateModelName( modelName );
     }
 
@@ -482,7 +474,7 @@ void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
     // panel is not embedded in a file selector dialog. This conditional
     // execution should be removed once the cross-platform issues are
     // fixed.
-    if( NULL == m_FileDlg )
+    if( NULL == m_FileTree )
     {
         SGPOINT scale;
         SGPOINT rotation;
@@ -496,14 +488,14 @@ void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
     }
 
     // return if we are not in file selection mode
-    if( NULL == m_FileDlg )
+    if( NULL == m_FileTree )
         return;
 
     // file selection mode: retrieve the filename and specify a
     // path relative to one of the config paths
-    wxFileName fname = m_FileDlg->GetPath();
+    wxFileName fname = m_FileTree->GetFilePath();
     fname.Normalize();
-    aModel->filename = m_ModelManager->GetResolver()->ShortenPath( fname.GetFullPath() );
+    aModel->filename = m_resolver->ShortenPath( fname.GetFullPath() );
 
     return;
 }
@@ -523,7 +515,6 @@ void PANEL_PREV_3D::SetModelData( S3D_INFO const* aModel )
     yoff->SetValue( wxString::FromDouble( aModel->offset.y ) );
     zoff->SetValue( wxString::FromDouble( aModel->offset.z ) );
 
-    modelInfo = *aModel;
     UpdateModelName( aModel->filename );
 
     return;
@@ -534,6 +525,8 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
 {
     bool newModel = false;
 
+    modelInfo.filename = aModelName;
+
     // if the model name is a directory simply clear the current model
     if( aModelName.empty() || wxFileName::DirExists( aModelName ) )
     {
@@ -543,11 +536,7 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
     else
     {
         wxString newModelFile;
-
-        if( m_ModelManager )
-            newModelFile = m_ModelManager->GetResolver()->ResolvePath( aModelName );
-        else if( wxFileName::FileExists( aModelName ) )
-            newModelFile = aModelName;
+        newModelFile = m_resolver->ResolvePath( aModelName );
 
         if( newModelFile.empty() )
         {
@@ -592,7 +581,10 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
             return;
     }
 
-    model = m_ModelManager->GetModel( modelInfo.filename );
+    if( NULL != m_ModelManager )
+        model = m_ModelManager->GetModel( modelInfo.filename );
+    else
+        model = NULL;
 
     if( NULL == model )
     {
@@ -685,7 +677,10 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 
     canvas->Clear3DModel();
 
-    model = m_ModelManager->GetModel( modelInfo.filename );
+    if( NULL != m_ModelManager )
+        model = m_ModelManager->GetModel( modelInfo.filename );
+    else
+        model = NULL;
 
     if( model )
     {
