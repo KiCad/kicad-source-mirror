@@ -61,7 +61,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     // and wxGenericDirCtrl events are posted
     m_preview = NULL;
 
-    m_FileTree = new wxGenericDirCtrl( this, ID_FILE_TREE, wxEmptyString, wxDefaultPosition,
+    m_FileTree = new wxGenericDirCtrl( this, ID_FILE_TREE, prevModelSelectDir, wxDefaultPosition,
         wxSize( 500,300 ), wxDIRCTRL_3D_INTERNAL | wxDIRCTRL_EDIT_LABELS
         | wxDIRCTRL_SELECT_FIRST | wxDIRCTRL_SHOW_FILTERS|wxSUNKEN_BORDER, wxEmptyString, 0 );
 
@@ -70,29 +70,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     m_FileTree->SetMinSize( wxSize( 500,150 ) );
     m_FileTree->SetLabel( wxT( "3D_MODEL_SELECTOR" ) );
 
-    if( prevModelSelectDir.empty() )
-    {
-        if( NULL != m_resolver )
-        {
-            const std::list< S3D_ALIAS >* ap = m_resolver->GetPaths();
-
-            if( !ap->empty() )
-            {
-                prevModelSelectDir = ap->front().m_pathexp;
-                m_FileTree->SetPath( prevModelSelectDir );
-                m_FileTree->GetPath();
-            }
-        }
-    }
-    else
-    {
-        m_FileTree->SetPath( prevModelSelectDir );
-        m_FileTree->GetPath();
-    }
-
     bSizer2->Add( m_FileTree, 1, wxEXPAND | wxALL, 5 );
-
-
     bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
 
     // m_preview must me instantiated after m_FileTree or else it will not
@@ -102,7 +80,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     previewSizer = new wxBoxSizer( wxVERTICAL );
     m_preview = new PANEL_PREV_3D( this, m_cache );
     previewSizer->Add( m_preview, 1, wxEXPAND | wxALL, 5 );
-    bSizer1->Add( previewSizer, 2, wxEXPAND, 5 );
+    bSizer1->Add( previewSizer, 1, wxEXPAND, 5 );
 
     // create the filter list
     if( NULL != m_cache )
@@ -146,11 +124,11 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     wxButton* btn_OK = new wxButton( this, wxID_OK, _T( "OK" ) );
     wxButton* btn_Cancel = new wxButton( this, wxID_CANCEL, _T( "Cancel" ) );
 
-    wxSizer* hSizer1 = new wxBoxSizer( wxHORIZONTAL );
-
-    hSizer1->Add( btn_OK, 0, wxALL | wxALIGN_RIGHT, 5 );
-    hSizer1->Add( btn_Cancel, 0, wxALL | wxALIGN_RIGHT, 5 );
-    bSizer1->Add( hSizer1, 0 );
+    wxStdDialogButtonSizer* hSizer1 = new wxStdDialogButtonSizer();
+    hSizer1->AddButton( btn_OK );
+    hSizer1->AddButton( btn_Cancel );
+    hSizer1->Realize();
+    bSizer1->Add( hSizer1, 0, wxALL | wxEXPAND, 5 );
 
     this->SetSizerAndFit( bSizer1 );
     this->Layout();
