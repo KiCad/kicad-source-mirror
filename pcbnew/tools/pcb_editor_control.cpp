@@ -642,7 +642,18 @@ int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
         m_probingSchToPcb = true;
         getView()->SetCenter( VECTOR2D( item->GetPosition() ) );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, item );
+
+        // If it is a pad and the net highlighting tool is enabled, highlight the net
+        if( item->Type() == PCB_PAD_T && m_frame->GetToolId() == ID_PCB_HIGHLIGHT_BUTT )
+        {
+            int net = static_cast<D_PAD*>( item )->GetNetCode();
+            m_toolMgr->RunAction( COMMON_ACTIONS::highlightNet, false, net );
+        }
+        else
+        // Otherwise simply select the corresponding item
+        {
+            m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, item );
+        }
     }
 
     return 0;
@@ -714,7 +725,19 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
 int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 {
-    highlightNet( m_toolMgr, getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+    int netcode = aEvent.Parameter<long>();
+
+    if( netcode > 0 )
+    {
+        KIGFX::RENDER_SETTINGS* render = m_toolMgr->GetView()->GetPainter()->GetSettings();
+        render->SetHighlight( true, netcode );
+        m_toolMgr->GetView()->UpdateAllLayersColor();
+    }
+    else
+    {
+        // No net code specified, pick the net code belonging to the item under the cursor
+        highlightNet( m_toolMgr, getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+    }
 
     return 0;
 }
