@@ -568,7 +568,7 @@ void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
     }
 
     if( !S3D::Select3DModel( this, Prj().Get3DCacheManager(),
-        initialpath, filter, &model ) )
+        initialpath, filter, &model ) || model.filename.empty() )
     {
         return;
     }
