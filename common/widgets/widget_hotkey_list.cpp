@@ -322,6 +322,10 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
         }
 
         UpdateFromClientData();
+
+        // Trigger a resize in case column widths have changed
+        wxSizeEvent dummy_evt;
+        OnSize( dummy_evt );
     }
 }
 
