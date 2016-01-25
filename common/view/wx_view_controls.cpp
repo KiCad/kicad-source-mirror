@@ -40,7 +40,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     m_parentPanel->Connect( wxEVT_MAGNIFY,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMagnify ), NULL, this );
 #endif
@@ -167,7 +167,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 }
 
 
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 void WX_VIEW_CONTROLS::onMagnify( wxMouseEvent& aEvent )
 {
     // Scale based on the magnification from our underlying magnification event.

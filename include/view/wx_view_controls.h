@@ -54,7 +54,7 @@ public:
     /// Handler functions
     void onWheel( wxMouseEvent& aEvent );
     void onMotion( wxMouseEvent& aEvent );
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     void onMagnify( wxMouseEvent& aEvent );
 #endif
     void onButton( wxMouseEvent& aEvent );

@@ -89,7 +89,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     Connect( wxEVT_RIGHT_UP,        wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_RIGHT_DCLICK,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_MOUSEWHEEL,      wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     Connect( wxEVT_MAGNIFY,         wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 #if defined _WIN32 || defined _WIN64
