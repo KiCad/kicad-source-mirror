@@ -51,8 +51,6 @@ public:
     PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager );
     ~PANEL_PREV_3D();
 
-    void SetRootDir( wxCommandEvent& event );
-    void Cfg3DPaths( wxCommandEvent& event );
     // 3D views
     void View3DISO( wxCommandEvent& event );
     void View3DUpdate( wxCommandEvent& event );
@@ -74,7 +72,6 @@ private:
     S3D_CACHE* m_ModelManager;
     S3D_FILENAME_RESOLVER* m_resolver;
     wxGenericDirCtrl* m_FileTree;
-    wxChoice* dirChoices;
     wxTextCtrl* xscale;
     wxTextCtrl* yscale;
     wxTextCtrl* zscale;
@@ -91,7 +88,6 @@ private:
 
 
 private:
-    void updateDirChoiceList( void );
     void updateOrientation( wxCommandEvent &event );
 
     void getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOINT& offset );

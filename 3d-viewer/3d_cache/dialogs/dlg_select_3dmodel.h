@@ -53,6 +53,9 @@ private:
 
     wxGenericDirCtrl* m_FileTree;
     PANEL_PREV_3D*    m_preview;
+    wxChoice*         dirChoices;
+
+    void updateDirChoiceList( void );
 
 public:
     DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, S3D_INFO* aModelItem,
@@ -61,6 +64,8 @@ public:
     bool TransferDataFromWindow();
     void OnSelectionChanged( wxTreeEvent& event );
     void OnFileActivated( wxTreeEvent& event );
+    void SetRootDir( wxCommandEvent& event );
+    void Cfg3DPaths( wxCommandEvent& event );
 
     wxDECLARE_EVENT_TABLE();
 };

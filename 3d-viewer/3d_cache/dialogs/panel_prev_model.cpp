@@ -41,7 +41,6 @@
 #include "3d_filename_resolver.h"
 #include "plugins/3dapi/ifsg_api.h"
 #include "panel_prev_model.h"
-#include "3d_cache_dialogs.h"
 
 
 // ensure -360 < rotation < 360
@@ -63,9 +62,7 @@ static void checkRotation( double& rot )
 
 
 enum {
-    ID_SET_DIR = wxID_LAST + 1,
-    ID_CFG_PATHS,
-    ID_SCALEX,
+    ID_SCALEX = wxID_LAST + 1,
     ID_SCALEY,
     ID_SCALEZ,
     ID_ROTX,
@@ -85,7 +82,6 @@ enum {
 };
 
 wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
-    EVT_CHOICE( ID_SET_DIR, PANEL_PREV_3D::SetRootDir )
     EVT_TEXT_ENTER( ID_SCALEX, PANEL_PREV_3D::updateOrientation )
     EVT_TEXT_ENTER( ID_SCALEY, PANEL_PREV_3D::updateOrientation )
     EVT_TEXT_ENTER( ID_SCALEZ, PANEL_PREV_3D::updateOrientation )
@@ -95,8 +91,6 @@ wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
     EVT_TEXT_ENTER( ID_OFFX, PANEL_PREV_3D::updateOrientation )
     EVT_TEXT_ENTER( ID_OFFY, PANEL_PREV_3D::updateOrientation )
     EVT_TEXT_ENTER( ID_OFFZ, PANEL_PREV_3D::updateOrientation )
-    EVT_BUTTON( ID_SET_DIR, PANEL_PREV_3D::SetRootDir )
-    EVT_BUTTON( ID_CFG_PATHS, PANEL_PREV_3D::Cfg3DPaths )
     EVT_BUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
     EVT_BUTTON( ID_3D_UPDATE, PANEL_PREV_3D::View3DUpdate )
     EVT_BUTTON( ID_3D_LEFT, PANEL_PREV_3D::View3DLeft )
@@ -131,30 +125,12 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     wxBoxSizer* mainBox = new wxBoxSizer( wxVERTICAL );
 
     wxStaticBoxSizer* vbox = new wxStaticBoxSizer( wxVERTICAL, this, _( "3D Model Orientation" ) );
-    wxBoxSizer* hboxDirChoice = NULL;
-    dirChoices = NULL;
 
     m_FileTree = NULL;
 
     if( NULL != aParent )
         m_FileTree = (wxGenericDirCtrl*)
             aParent->FindWindowByLabel( wxT( "3D_MODEL_SELECTOR" ), aParent );
-
-    if( NULL != m_FileTree )
-    {
-        hboxDirChoice = new wxBoxSizer( wxHORIZONTAL );
-        dirChoices = new wxChoice( this, ID_SET_DIR, wxDefaultPosition,
-            wxSize( 320, 20 ) );
-        dirChoices->SetMinSize( wxSize( 320, 12 ) );
-
-        wxStaticText* stDirChoice = new wxStaticText( this, -1, _( "Paths:" ) );
-        wxButton* usePath = new wxButton( this, ID_SET_DIR, _( "Change" ) );
-        wxButton* cfgPaths = new wxButton( this, ID_CFG_PATHS, _( "Configure Paths" ) );
-        hboxDirChoice->Add( stDirChoice, 0, wxALL | wxCENTER, 5 );
-        hboxDirChoice->Add( dirChoices, 1, wxEXPAND | wxALL, 5 );
-        hboxDirChoice->Add( usePath, 0, wxALL, 5 );
-        hboxDirChoice->Add( cfgPaths, 0, wxALL, 5 );
-    }
 
     wxFloatingPointValidator< float > valScale( 6 );
     valScale.SetRange( 0.001, 100 );
@@ -245,9 +221,6 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     vbOffset->Add( hbO2, 0, wxEXPAND | wxALL, 2 );
     vbOffset->Add( hbO3, 0, wxEXPAND | wxALL, 2 );
 
-    if( NULL != hboxDirChoice )
-        mainBox->Add( hboxDirChoice, 0, wxEXPAND );
-
     // hbox holding orientation data and preview
     wxBoxSizer* hbox = new wxBoxSizer( wxHORIZONTAL );
     // vbox holding orientation data
@@ -318,7 +291,6 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
         vboxPrev->Hide( hbBB, true );
     }
 
-    updateDirChoiceList();
     SetSizerAndFit( mainBox );
     Centre();
 
@@ -338,56 +310,6 @@ PANEL_PREV_3D::~PANEL_PREV_3D()
     model = NULL;
 
     return;
-}
-
-
-void PANEL_PREV_3D::updateDirChoiceList( void )
-{
-    if( NULL == m_FileTree || NULL == m_ModelManager || NULL == dirChoices )
-        return;
-
-    if( NULL != m_resolver )
-    {
-        std::list< S3D_ALIAS > const* md = m_resolver->GetPaths();
-        std::list< S3D_ALIAS >::const_iterator sL = md->begin();
-        std::list< S3D_ALIAS >::const_iterator eL = md->end();
-        std::vector< wxString > cl;
-
-        while( sL != eL )
-        {
-            if( !sL->m_pathexp.empty() && !sL->m_duplicate )
-                cl.push_back( sL->m_pathexp );
-
-            ++sL;
-        }
-
-        if( !cl.empty() )
-        {
-            dirChoices->Clear();
-            dirChoices->Append( (int)cl.size(), &cl[0] );
-            dirChoices->Select( 0 );
-        }
-    }
-
-    return;
-}
-
-
-void PANEL_PREV_3D::SetRootDir( wxCommandEvent& event )
-{
-    if( !m_FileTree )
-        return;
-
-    m_FileTree->SetPath( dirChoices->GetString( dirChoices->GetSelection() ) );
-
-    return;
-}
-
-
-void PANEL_PREV_3D::Cfg3DPaths( wxCommandEvent& event )
-{
-    if( S3D::Configure3DPaths( this, m_resolver ) )
-        updateDirChoiceList();
 }
 
 
