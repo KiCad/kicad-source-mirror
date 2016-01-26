@@ -955,6 +955,13 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             if( pad->PadNameEqual( aRefPad ) )
                 continue;
         }
+        
+        // if either pad has no drill and is only on technical layers, not a clearance violation
+        if( ( ( pad->GetLayerSet() & layerMask ) == 0 && !pad->GetDrillSize().x ) ||
+            ( ( aRefPad->GetLayerSet() & layerMask ) == 0 && !aRefPad->GetDrillSize().x ) )
+        {
+            continue;
+        }
 
         if( !checkClearancePadToPad( aRefPad, pad ) )
         {
