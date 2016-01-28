@@ -78,6 +78,8 @@ set( GERBVIEW_EXTRA_SRCS
 if( MINGW )
     # GERBVIEW_RESOURCES variable is set by the macro.
     mingw_resource_compiler( gerbview )
+else()
+    set( GERBVIEW_RESOURCES gerbview.rc )
 endif()
 
 if( APPLE )

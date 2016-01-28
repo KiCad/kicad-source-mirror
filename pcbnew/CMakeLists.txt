@@ -499,6 +499,8 @@ endif()
 if( MINGW )
     # PCBNEW_RESOURCES variable is set by the macro.
     mingw_resource_compiler( pcbnew )
+else()
+    set( PCBNEW_RESOURCES pcbnew.rc )
 endif()
 
 
