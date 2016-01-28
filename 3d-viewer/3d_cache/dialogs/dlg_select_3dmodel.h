@@ -30,7 +30,10 @@
 #ifndef DLG_SELECT_3DMODEL_H
 #define DLG_SELECT_3DMODEL_H
 
-#include <wx/wx.h>
+#include <wx/event.h>
+#include <wx/stattext.h>
+#include <wx/button.h>
+#include <wx/dialog.h>
 #include <wx/dirctrl.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>

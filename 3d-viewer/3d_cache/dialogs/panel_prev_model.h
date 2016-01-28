@@ -34,8 +34,8 @@
 #ifndef PANEL_PREV_MODEL_H
 #define PANEL_PREV_MODEL_H
 
-#include <wx/wx.h>
 #include <wx/panel.h>
+#include <wx/textctrl.h>
 
 #include "plugins/3dapi/c3dmodel.h"
 #include "3d_cache/3d_info.h"

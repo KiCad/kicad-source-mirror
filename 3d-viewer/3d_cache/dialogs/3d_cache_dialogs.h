@@ -24,7 +24,7 @@
 #ifndef CACHE_DIALOGS_3D_H
 #define CACHE_DIALOGS_3D_H
 
-#include <wx/wx.h>
+#include <wx/window.h>
 
 class S3D_CACHE;
 class S3D_FILENAME_RESOLVER;
