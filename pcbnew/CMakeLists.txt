@@ -145,6 +145,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_track_via_properties_base.cpp
     dialogs/dialog_track_via_size.cpp
     dialogs/dialog_track_via_size_base.cpp
+    dialogs/dialog_update_pcb_base.cpp
+    dialogs/dialog_update_pcb.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     dialogs/dialog_footprint_wizard_list_base.cpp
@@ -193,6 +195,7 @@ set( PCBNEW_CLASS_SRCS
     attribut.cpp
     board_items_to_polygon_shape_transform.cpp
     board_undo_redo.cpp
+    board_netlist_updater.cpp
     block.cpp
     block_module_editor.cpp
     build_BOM_from_board.cpp

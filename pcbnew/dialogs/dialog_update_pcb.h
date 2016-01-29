@@ -1,9 +1,11 @@
+/**
+ * @file pcbnew/dialogs/dialog_update_pcb.h
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
- * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,23 +25,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef _DIALOG_UPDATE_PCB_H_
+#define _DIALOG_UPDATE_PCB_H_
 
-#ifndef MAIL_TYPE_H_
-#define MAIL_TYPE_H_
+#include <dialog_update_pcb_base.h>
 
-/**
- * Enum MAIL_T
- * is the set of mail types sendable via KIWAY::ExpressMail() and supplied as
- * the @a aCommand parameter to that function.  Such mail will be received in
- * KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent ) and aEvent.Command() will
- * match aCommand to KIWAY::ExpressMail().
- */
-enum MAIL_T
+class NETLIST;
+class PCB_EDIT_FRAME;
+
+class DIALOG_UPDATE_PCB : public DIALOG_UPDATE_PCB_BASE
 {
-    MAIL_CROSS_PROBE,               ///< PCB<->SCH, CVPCB->SCH cross-probing.
-    MAIL_BACKANNOTATE_FOOTPRINTS,   ///< CVPCB->SCH footprint stuffing at cvpcb termination
-    MAIL_EESCHEMA_NETLIST,          ///< EESCHEMA->CVPCB netlist immediately after launching CVPCB
-    MAIL_SCH_PCB_UPDATE             ///< Sch->PCB forward update
+private:
+    PCB_EDIT_FRAME* m_frame;
+    NETLIST *m_netlist;
+
+public:
+    DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist );
+    ~DIALOG_UPDATE_PCB();
+
+    void PerformUpdate( bool aDryRun );
+
+private:
+
+    virtual void OnMatchChange( wxCommandEvent& event );
+    virtual void OnCancelClick( wxCommandEvent& event );
+    virtual void OnUpdateClick( wxCommandEvent& event );
+
 };
 
-#endif  // MAIL_TYPE_H_
+#endif
