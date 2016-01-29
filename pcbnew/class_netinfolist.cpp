@@ -88,6 +88,8 @@ void NETINFO_LIST::RemoveNet( NETINFO_ITEM* aNet )
             break;
         }
     }
+
+    m_newNetCode = std::min( m_newNetCode, aNet->m_NetCode - 1 );
 }
 
 

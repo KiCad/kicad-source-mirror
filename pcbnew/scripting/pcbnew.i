@@ -39,6 +39,7 @@
 
 // ignore a couple of items that generate warnings from swig built code
 
+%ignore NETINFO_ITEM;
 %ignore BOARD_ITEM::ZeroOffset;
 %ignore D_PAD::m_PadSketchModePenSize;
 

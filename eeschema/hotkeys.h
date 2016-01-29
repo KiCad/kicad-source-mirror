@@ -78,9 +78,9 @@ enum hotkey_id_commnand {
     HK_LEFT_CLICK,
     HK_LEFT_DCLICK,
     HK_LEAVE_SHEET,
-    HK_UPDATE_PCB_FROM_SCH,
+    HK_DELETE_NODE,
     HK_AUTOPLACE_FIELDS,
-    HK_DELETE_NODE
+    HK_UPDATE_PCB_FROM_SCH
 };
 
 // List of hotkey descriptors for Eeschema

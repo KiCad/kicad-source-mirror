@@ -764,9 +764,11 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     switch( aBoardItem->Type() )
     {
     case PCB_NETINFO_T:
-        m_NetInfo.RemoveNet ( (NETINFO_ITEM*) aBoardItem );
+    {
+        NETINFO_ITEM* item = (NETINFO_ITEM*) aBoardItem;
+        m_NetInfo.RemoveNet( item );
         break;
-
+    }
     case PCB_MARKER_T:
 
         // find the item in the vector, then remove it

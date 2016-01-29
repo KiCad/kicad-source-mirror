@@ -605,6 +605,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //----- Tools menu ----------------------------------------------------------
     wxMenu* toolsMenu = new wxMenu;
 
+    AddMenuItem( toolsMenu,
+                 ID_UPDATE_PCB_FROM_SCH,
+                 _( "Update PCB from Schematics" ),
+                 _( "Updates the PCB design with the current schematic (forward annotation)." ),
+                 KiBitmap( libedit_xpm ) );
+
+    toolsMenu->AppendSeparator( );
+
     AddMenuItem( toolsMenu, ID_GET_NETLIST,
                  _( "&Netlist" ),
                  _( "Read the netlist and update board connectivity" ),

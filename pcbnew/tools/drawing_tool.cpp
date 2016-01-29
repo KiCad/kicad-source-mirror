@@ -357,7 +357,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                         m_view->Add( dimension );
                         m_board->Add( dimension );
-                        dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                        //dimension->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
                         m_frame->OnModify();
                         m_frame->SaveCopyInUndoList( dimension, UR_NEW );

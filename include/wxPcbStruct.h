@@ -91,8 +91,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 
 
 protected:
-    bool m_undoDisabled;
-
     PCB_LAYER_WIDGET* m_Layers;
 
     DRC* m_drc;                                 ///< the DRC controller, see drc.cpp
@@ -228,11 +226,6 @@ public:
     void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         throw( IO_ERROR, PARSE_ERROR );
 
-    void DisableUndo( bool aDisable = true )
-    {
-        m_undoDisabled = aDisable;
-    }
-
     void OnQuit( wxCommandEvent& event );
 
     /**
@@ -288,6 +281,7 @@ public:
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
     void OnConfigurePaths( wxCommandEvent& aEvent );
+    void OnUpdatePCBFromSch( wxCommandEvent& event );
 
     /**
      * called when the alt key is pressed during a mouse wheel action

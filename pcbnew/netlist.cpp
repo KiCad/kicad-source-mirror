@@ -115,7 +115,6 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 
     netlist.SortByReference();
     board->ReplaceNetlist( netlist, aDeleteSinglePadNets, &newFootprints, aReporter );
-   
 
     // If it was a dry run, nothing has changed so we're done.
     if( netlist.IsDryRun() )
@@ -329,4 +328,3 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             component->SetModule( module );
     }
 }
-

@@ -297,7 +297,6 @@ public:
      */
     void AppendNet( NETINFO_ITEM* aNewElement );
 
-	
     /**
      * Function RemoveNet
      * Removes a new from the net list.

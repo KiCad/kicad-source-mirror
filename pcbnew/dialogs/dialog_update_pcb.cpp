@@ -84,8 +84,9 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     if( aDryRun )
         return;
 
-    m_frame->OnModify();
+    std::vector<MODULE*> newFootprints = updater.GetAddedComponents();
 
+    m_frame->OnModify();
     m_frame->SetCurItem( NULL );
 
     // Reload modules

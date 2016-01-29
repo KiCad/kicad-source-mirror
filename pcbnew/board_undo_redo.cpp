@@ -116,6 +116,7 @@
  * @param aItem = item to find
  *              = NULL to build the list of existing items
  */
+
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
     static std::vector<BOARD_ITEM*> itemsList;
@@ -391,8 +392,8 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
+        ITEM_PICKER picker = aItemsList.GetItemWrapper(ii);
         BOARD_ITEM* item    = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
-        UNDO_REDO_T status = aItemsList.GetPickedItemStatus( ii );
 
         // For texts belonging to modules, we need to save state of the parent module
         if( item->Type() == PCB_MODULE_TEXT_T  || item->Type() == PCB_PAD_T )
@@ -405,7 +406,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
             bool found = false;
 
-            for( int j = 0; j < commandToUndo->GetCount(); j++ )
+            for( unsigned j = 0; j < commandToUndo->GetCount(); j++ )
             {
                 if( commandToUndo->GetPickedItem( j ) == item && commandToUndo->GetPickedItemStatus( j ) == UR_CHANGED )
                 {
@@ -420,15 +421,13 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                 continue;
 
         } else {
-            commandToUndo->PushItem( ITEM_PICKER( item, status ) );
+            commandToUndo->PushItem( picker );
         }
     }
 
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
         BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
-        UNDO_REDO_T status = commandToUndo->GetPickedItemStatus( ii );
-
         UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
 
         if( command == UR_UNSPECIFIED )
@@ -448,7 +447,10 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
              * If this link is not null, the copy is already done
              */
             if( commandToUndo->GetPickedItemLink( ii ) == NULL )
-                commandToUndo->SetPickedItemLink( item->Clone(), ii );
+            {
+                EDA_ITEM* cloned = item->Clone();
+                commandToUndo->SetPickedItemLink( cloned, ii );
+            }
             break;
 
         case UR_MOVED:
@@ -492,6 +494,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     BOARD_ITEM* item;
     bool        not_found = false;
     bool        reBuild_ratsnest = false;
+    bool        deep_reBuild_ratsnest = false;
+
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
     RN_DATA* ratsnest = GetBoard()->GetRatsnest();
 
@@ -545,6 +549,11 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             reBuild_ratsnest = true;
             break;
 
+        case PCB_NETINFO_T:
+            reBuild_ratsnest = true;
+            deep_reBuild_ratsnest = true;
+            break;
+
         default:
             break;
         }
@@ -591,8 +600,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 MODULE* module = static_cast<MODULE*>( item );
                 module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
-            view->Remove( item );
 
+            view->Remove( item );
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
@@ -652,12 +661,18 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
     // Rebuild pointers and ratsnest that can be changed.
-    if( reBuild_ratsnest && aRebuildRatsnet )
+    if( reBuild_ratsnest )
     {
+        Compile_Ratsnest( NULL, true );
+
         if( IsGalCanvasActive() )
-            ratsnest->Recalculate();
-        else
-            Compile_Ratsnest( NULL, true );
+        {
+            if( deep_reBuild_ratsnest )
+                ratsnest->ProcessBoard();
+            else
+                ratsnest->Recalculate();
+        }
+
     }
 }
 

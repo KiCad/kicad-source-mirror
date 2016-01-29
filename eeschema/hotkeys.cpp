@@ -297,9 +297,9 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkAddBusEntry,
     &HkAddGraphicPolyLine,
     &HkAddGraphicText,
-    &HkLeaveSheet,
     &HkUpdatePcbFromSch,
     &HkAutoplaceFields,
+    &HkLeaveSheet,
     &HkDeleteNode,
     NULL
 };

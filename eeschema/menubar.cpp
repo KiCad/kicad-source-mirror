@@ -429,15 +429,17 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     text = AddHotkeyName( _( "Update PCB from Schematics" ), g_Schematic_Hokeys_Descr, HK_UPDATE_PCB_FROM_SCH );
 
-    wxMenuItem* updItem = AddMenuItem( toolsMenu,
+    AddMenuItem( toolsMenu,
                  ID_UPDATE_PCB_FROM_SCH,
                  text, _( "Updates the PCB design with the current schematic (forward annotation)." ),
-                 KiBitmap( libedit_xpm ) );
+                 KiBitmap( pcbnew_xpm ) );
 
-    KIWAY_PLAYER* pcbFrame = Kiway().Player( FRAME_PCB, false );  // test open already.
-
-    //if( Kiface().IsSingle() || !pcbFrame )   FIXME: refresh
-        //updItem->Enable( false );
+    // Run Pcbnew
+    AddMenuItem( toolsMenu,
+                 ID_RUN_PCB,
+                 _( "&Open PCB Editor" ),
+                 _( "Run Pcbnew" ),
+                 KiBitmap( pcbnew_xpm ) );
 
     toolsMenu->AppendSeparator();
 
@@ -488,16 +490,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Run CvPcb
     AddMenuItem( toolsMenu,
                  ID_RUN_CVPCB,
-                 _( "A&ssign Component Footprint" ),
+                 _( "A&ssign Component Footprints" ),
                  _( "Run CvPcb" ),
                  KiBitmap( cvpcb_xpm ) );
-
-    // Run Pcbnew
-    AddMenuItem( toolsMenu,
-                 ID_RUN_PCB,
-                 _( "&Layout Printed Circuit Board" ),
-                 _( "Run Pcbnew" ),
-                 KiBitmap( pcbnew_xpm ) );
 
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;
