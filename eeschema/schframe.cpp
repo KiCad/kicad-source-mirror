@@ -823,6 +823,36 @@ void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
+    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+
+    fn.SetExt( PcbFileExtension );
+
+    if( Kiface().IsSingle() )
+    {
+        DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is"
+                                " opened in stand-alone mode. In order to create/update"
+                                " PCBs from schematics, you need to launch Kicad shell"
+                                " and create a PCB project." ) );
+        return;
+    } else {
+        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB, true );
+
+        // a pcb frame can be already existing, but not yet used.
+        // this is the case when running the footprint editor, or the footprint viewer first
+        // if the frame is not visible, the board is not yet loaded
+        if( !frame->IsVisible() )
+        {
+            frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+            frame->Show( true );
+        }
+
+        // On Windows, Raise() does not bring the window on screen, when iconized
+        if( frame->IsIconized() )
+            frame->Iconize( false );
+
+        frame->Raise();
+    }
+
     NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
     NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchLibs() );
     STRING_FORMATTER formatter;

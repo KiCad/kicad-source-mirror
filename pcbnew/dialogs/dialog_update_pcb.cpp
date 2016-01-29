@@ -104,6 +104,9 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     m_frame->SetMsgPanel( board );
 
+    m_btnPerformUpdate->Enable( false );
+    m_btnPerformUpdate->SetLabel( _( "Update complete" ) );
+    m_btnCancel->SetFocus();
 }
 
 void DIALOG_UPDATE_PCB::OnMatchChange( wxCommandEvent& event )
