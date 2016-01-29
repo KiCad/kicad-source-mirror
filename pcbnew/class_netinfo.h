@@ -291,12 +291,18 @@ public:
     unsigned GetNetCount() const { return m_netNames.size(); }
 
     /**
-     * Function Append
-     * adds \a aNewElement to the end of the list. Negative net code means it is going to be
+     * Function AppendNet
+     * adds \a aNewElement to the end of the net list. Negative net code means it is going to be
      * auto-assigned.
      */
     void AppendNet( NETINFO_ITEM* aNewElement );
 
+	
+    /**
+     * Function RemoveNet
+     * Removes a new from the net list.
+     */
+    void RemoveNet( NETINFO_ITEM* aNet );
     /**
      * Function GetPadCount
      * @return the number of pads in board
@@ -348,11 +354,11 @@ public:
 
     ///> Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
     ///> (typically -1) when calling SetNetCode od board connected items
-    static const int FORCE_ORPHANED;
+    static const int ORPHANED;
 
     ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
     ///> board storing net list available.
-    static NETINFO_ITEM ORPHANED;
+    static NETINFO_ITEM ORPHANED_ITEM;
 
 #if defined(DEBUG)
     void Show() const;

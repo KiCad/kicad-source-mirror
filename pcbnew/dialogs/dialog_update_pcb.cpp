@@ -52,13 +52,23 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
     }
 
-    m_frame->LoadFootprints( *m_netlist, &reporter );
+    try {
+        m_frame->LoadFootprints( *m_netlist, &reporter );
+    }
+    catch( IO_ERROR &error )
+    {
+        wxString msg;
+
+        reporter.Report( _( "Failed to load one or more footprints. Please add the missing libraries in PCBNew configuration. "
+                            "The PCB will not update completely." ), REPORTER::RPT_ERROR );
+        reporter.Report( error.errorText, REPORTER::RPT_INFO );
+    }
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
 
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun);
-    updater.SetLookupByTimestamp( true );
+    updater.SetLookupByTimestamp( m_matchByTimestamp->GetValue() );
     updater.SetDeleteUnusedComponents ( true );
     updater.SetReplaceFootprints( true );
     updater.SetDeleteSinglePadNets ( false );
@@ -94,7 +104,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
 void DIALOG_UPDATE_PCB::OnMatchChange( wxCommandEvent& event )
 {
-
+    PerformUpdate( true );
 }
 
 void DIALOG_UPDATE_PCB::OnCancelClick( wxCommandEvent& event )
