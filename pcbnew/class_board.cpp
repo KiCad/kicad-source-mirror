@@ -737,6 +737,10 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         aBoardItem->SetParent( this );
         break;
 
+    case PCB_NETINFO_T:
+        m_NetInfo.AppendNet( (NETINFO_ITEM *) aBoardItem );
+        break;
+
     // other types may use linked list
     default:
         {
@@ -805,6 +809,11 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     case PCB_MODULE_EDGE_T:
     case PCB_TARGET_T:
         m_Drawings.Remove( aBoardItem );
+        break;
+
+    case PCB_NETINFO_T:
+        printf( "Unimpl! remove netinfo!\n" );
+        assert( false );
         break;
 
     // other types may use linked list

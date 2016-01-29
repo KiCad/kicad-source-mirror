@@ -89,19 +89,10 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
 
-    /**
-     * Function loadFootprints
-     * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
-     *
-     * @param aNetlist is the netlist of components to load the footprints into.
-     * @param aReporter is the #REPORTER object to report to.
-     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
-     *           occurs while reading footprint library files.
-     */
-    void loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
-        throw( IO_ERROR, PARSE_ERROR );
 
 protected:
+    bool m_undoDisabled;
+
     PCB_LAYER_WIDGET* m_Layers;
 
     DRC* m_drc;                                 ///< the DRC controller, see drc.cpp
@@ -224,6 +215,23 @@ public:
     bool m_show_layer_manager_tools;
 
     virtual ~PCB_EDIT_FRAME();
+
+    /**
+     * Function loadFootprints
+     * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
+     *
+     * @param aNetlist is the netlist of components to load the footprints into.
+     * @param aReporter is the #REPORTER object to report to.
+     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
+     *           occurs while reading footprint library files.
+     */
+    void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
+        throw( IO_ERROR, PARSE_ERROR );
+
+    void DisableUndo( bool aDisable = true )
+    {
+        m_undoDisabled = aDisable;
+    }
 
     void OnQuit( wxCommandEvent& event );
 
