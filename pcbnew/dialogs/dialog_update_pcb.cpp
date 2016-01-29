@@ -52,6 +52,10 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
     }
 
+    m_netlist->SetDeleteExtraFootprints( true );
+    m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetValue() );
+    m_netlist->SetReplaceFootprints( true );
+
     try {
         m_frame->LoadFootprints( *m_netlist, &reporter );
     }
