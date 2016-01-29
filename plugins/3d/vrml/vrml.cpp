@@ -276,7 +276,7 @@ SCENEGRAPH* Load( char const* aFileName )
 
         output.append( fn.GetName() );
         output.append( wxT(".wrl") );
-        S3D::WriteVRML( output, true, (SGNODE*)(scene), true, true );
+        S3D::WriteVRML( output.ToUTF8(), true, (SGNODE*)(scene), true, true );
     }
     #endif
 

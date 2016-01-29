@@ -405,7 +405,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( NULL != aCacheItem->sceneData )
         S3D::DestroyNode( (SGNODE*) aCacheItem->sceneData );
 
-    aCacheItem->sceneData = (SCENEGRAPH*)S3D::ReadCache( fname );
+    aCacheItem->sceneData = (SCENEGRAPH*)S3D::ReadCache( fname.ToUTF8() );
 
     if( NULL == aCacheItem->sceneData )
         return false;
@@ -475,7 +475,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
         }
     }
 
-    return S3D::WriteCache( fname, true, (SGNODE*)aCacheItem->sceneData );
+    return S3D::WriteCache( fname.ToUTF8(), true, (SGNODE*)aCacheItem->sceneData );
 }
 
 

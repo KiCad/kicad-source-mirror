@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,16 +23,16 @@
 
 /**
  * @file sg_version.h
- * defines the version number of 3DSG library. This file is parsed by
- * CMake to determine the version number of the 3DSG library.
+ * defines the library version of the intermediate scenegraph (SG)
+ * implementation
  */
 
 #ifndef SG_VERSION_H
 #define SG_VERSION_H
 
-#define SG_VERSION_MAJOR 1
-#define SG_VERSION_MINOR 0
-#define SG_VERSION_PATCH 0
-#define SG_VERSION_REVNO 0
+#define KICADSG_VERSION_MAJOR         1
+#define KICADSG_VERSION_MINOR         0
+#define KICADSG_VERSION_PATCH         0
+#define KICADSG_VERSION_REVISION      0
 
 #endif  // SG_VERSION_H

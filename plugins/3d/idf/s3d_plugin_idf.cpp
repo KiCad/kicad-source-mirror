@@ -302,7 +302,7 @@ SCENEGRAPH* Load( char const* aFileName )
         wxString output = wxT( "_idf-" );
         output.append( fn.GetName() );
         output.append( wxT(".wrl") );
-        S3D::WriteVRML( output, true, (SGNODE*)(data), true, true );
+        S3D::WriteVRML( output.ToUTF8(), true, (SGNODE*)(data), true, true );
     }
     #endif
 

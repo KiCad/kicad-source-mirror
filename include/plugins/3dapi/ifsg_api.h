@@ -29,8 +29,6 @@
 #ifndef IFSG_API_H
 #define IFSG_API_H
 
-#include <wx/string.h>
-
 #include "plugins/3dapi/sg_types.h"
 #include "plugins/3dapi/sg_base.h"
 #include "plugins/3dapi/c3dmodel.h"
@@ -42,6 +40,13 @@ struct S3D_POINT;
 
 namespace S3D
 {
+    /**
+     * Function GetLibVersion retrieves version information of the
+     * kicad_3dsg library
+     */
+    SGLIB_API void GetLibVersion( unsigned char* Major, unsigned char* Minor,
+                                  unsigned char* Patch, unsigned char* Revision );
+
     // functions to extract information from SGNODE pointers
     SGLIB_API S3D::SGTYPES GetSGNodeType( SGNODE* aNode );
     SGLIB_API SGNODE* GetSGNodeParent( SGNODE* aNode );
@@ -64,7 +69,7 @@ namespace S3D
      * @param aNode is any node within the node tree which is to be written
      * @return true on success
      */
-    SGLIB_API bool WriteCache( const wxString& aFileName, bool overwrite, SGNODE* aNode );
+    SGLIB_API bool WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode );
 
     /**
      * Function ReadCache
@@ -75,7 +80,7 @@ namespace S3D
      * if desired this node can be associated with an IFSG_TRANSFORM wrapper via
      * the IFSG_TRANSFORM::Attach() function.
      */
-    SGLIB_API SGNODE* ReadCache( const wxString& aFileName );
+    SGLIB_API SGNODE* ReadCache( const char* aFileName );
 
     /**
      * Function WriteVRML
@@ -87,7 +92,7 @@ namespace S3D
      * @param reuse should be set to true to make use of VRML DEF/USE features
      * @return true on success
      */
-    SGLIB_API bool WriteVRML( const wxString& filename, bool overwrite, SGNODE* aTopNode,
+    SGLIB_API bool WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
                     bool reuse, bool renameNodes );
 
     // NOTE: The following functions are used in combination to create a VRML
@@ -187,9 +192,6 @@ namespace S3D
      * creates and initializes an SMESH struct
      */
     SGLIB_API void Init3DMesh( SMESH& aMesh );
-
-    SGLIB_API void GetLibVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Patch, unsigned char* Revision );
 };
 
 #endif  // IFSG_API_H
