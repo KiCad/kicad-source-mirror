@@ -30,7 +30,7 @@ add_library( kicad_3dsg SHARED
 )
 
 find_file( S3DSG_VERSION_FILE sg_version.h
-        PATHS ${CMAKE_CURRENT_SOURCE_DIR} NO_DEFAULT_PATH )
+        PATHS ${CMAKE_SOURCE_DIR}/include/plugins/3dapi NO_DEFAULT_PATH )
 
 if( NOT ${S3DSG_VERSION_FILE} STREQUAL "S3DSG_VERSION_FILE-NOTFOUND" )
 
@@ -39,7 +39,7 @@ if( NOT ${S3DSG_VERSION_FILE} STREQUAL "S3DSG_VERSION_FILE-NOTFOUND" )
         REGEX "^[' ','\t']*#define[' ','\t']*SG_VERSION_.*" )
 
     foreach( SVAR ${_version} )
-        string( REGEX MATCH SG_VERSION_[M,A,J,O,R,I,N,P,T,C,H,E,V]* _VARNAME ${SVAR} )
+        string( REGEX MATCH KICADSG_VERSION_[M,A,J,O,R,I,N,P,T,C,H,E,V]* _VARNAME ${SVAR} )
         string( REGEX MATCH [0-9]+ _VALUE ${SVAR} )
 
         if( NOT ${_VARNAME} STREQUAL "" )
@@ -53,22 +53,22 @@ if( NOT ${S3DSG_VERSION_FILE} STREQUAL "S3DSG_VERSION_FILE-NOTFOUND" )
 
     endforeach()
 
-    if( NOT SG_VERSION_MAJOR AND NOT ${SG_VERSION_MAJOR} STREQUAL "0" )
+    if( NOT KICADSG_VERSION_MAJOR AND NOT ${KICADSG_VERSION_MAJOR} STREQUAL "0" )
         message( FATAL_ERROR "Cannot determine the S3DSG library version" )
     endif()
 
     #ensure that NOT SG_VERSION* will evaluate to '0'
-    if( NOT SG_VERSION_MINOR )
-        set( SG_VERSION_MINOR 0 )
+    if( NOT KICADSG_VERSION_MINOR )
+        set( KICADSG_VERSION_MINOR 0 )
     endif()
 
-    if( NOT SG_VERSION_PATCH )
-        set( SG_VERSION_PATCH 0 )
+    if( NOT KICADSG_VERSION_PATCH )
+        set( KICADSG_VERSION_PATCH 0 )
     endif()
 
     set_target_properties( kicad_3dsg
             PROPERTIES SOVERSION
-            ${SG_VERSION_MAJOR}.${SG_VERSION_MINOR}.${SG_VERSION_PATCH} )
+            ${KICADSG_VERSION_MAJOR}.${KICADSG_VERSION_MINOR}.${KICADSG_VERSION_PATCH} )
 
 else()
     message( FATAL_ERROR "Cannot determine the S3DSG library version" )
