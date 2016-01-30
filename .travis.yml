@@ -1,0 +1,46 @@
+language: cpp
+sudo: required
+dist: trusty
+
+addons:
+  apt:
+    packages:
+      - libglew-dev
+      - libglm-dev
+      - libcairo2-dev
+      - libboost-context-dev
+      - libboost-system-dev
+      - libboost-thread-dev
+      - doxygen
+#     - libwxgtk3.0-0
+
+matrix:
+  include:
+    - compiler: gcc
+    - compiler: clang
+    - os: osx
+      compiler: clang
+
+before_script:
+    # TODO: cmake should contain default version and override if needed
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        export EXTRA_ARGS=-DCMAKE_OSX_DEPLOYMENT_TARGET=10.10;
+      fi
+    - mkdir build && cd build && cmake $EXTRA_ARGS ..
+
+before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        brew update;
+        brew install cairo glew glm wxmac;
+      fi
+    # TODO: https://github.com/travis-ci/apt-package-whitelist/issues/417
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        sudo apt-get update -qq;
+        sudo apt-get install -y libwxgtk3.0-dev;
+      fi
+
+script: make
+
+notifications:
+    email: false
+
