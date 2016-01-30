@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew "(2016-01-22 BZR 6507)-product")
+(kicad_pcb (version 4) (host pcbnew "(2016-01-28 BZR 6518)-product")
 
   (general
     (links 200)
     (no_connects 0)
-    (area 79.311499 34.226499 195.008501 142.303501)
+    (area 69.241669 24.89454 202.259001 142.646401)
     (thickness 1.6002)
     (drawings 19)
     (tracks 782)
@@ -65,11 +65,13 @@
     (pad_size 1.397 1.397)
     (pad_drill 0.89916)
     (pad_to_mask_clearance 0.254)
+    (solder_mask_min_width 0.5)
     (aux_axis_origin 74.93 140.97)
     (visible_elements 7FFFFF7F)
     (pcbplotparams
-      (layerselection 0x00030_80000001)
+      (layerselection 0x000f0_ffffffff)
       (usegerberextensions false)
+      (usegerberattributes true)
       (excludeedgelayer false)
       (linewidth 0.150000)
       (plotframeref false)
@@ -89,7 +91,7 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
       (outputdirectory plot_files/))
   )
@@ -460,7 +462,7 @@
     (add_net VCC)
   )
 
-  (module LOGO (layer Composant) (tedit 0) (tstamp 56372FFF)
+  (module LOGO locked (layer Composant) (tedit 0) (tstamp 56372FFF)
     (at 89.027 98.552)
     (fp_text reference G*** (at 0 0) (layer F.SilkS) hide
       (effects (font (thickness 0.3)))

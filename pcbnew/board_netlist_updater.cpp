@@ -682,8 +682,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     // Update the ratsnest
 
-    m_reporter->Report( _(""), REPORTER::RPT_ACTION );
-    m_reporter->Report( _(""), REPORTER::RPT_ACTION );
+    m_reporter->Report( wxT(""), REPORTER::RPT_ACTION );
+    m_reporter->Report( wxT(""), REPORTER::RPT_ACTION );
 
     msg.Printf( _( "Total warnings: %d, errors: %d." ),
                 m_warningCount, m_errorCount );
