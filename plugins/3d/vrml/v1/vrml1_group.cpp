@@ -170,7 +170,7 @@ SGNODE* WRL1GROUP::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             return NULL;
         }
     }
-    else
+    else if( NULL == sp )
     {
         m_current.Init();
         sp = &m_current;
