@@ -127,6 +127,27 @@ perform_feature_checks()
 # Set flags for GCC, or treat llvm as GCC
 #================================================
 
+include(CheckCXXCompilerFlag)
+
+# wxWidgets 3.0 requires -std=c++11 support
+# TODO: This should be reported upstream and fixed there
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+if( COMPILER_SUPPORTS_CXX11 )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+else()
+    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+
+check_cxx_compiler_flag(-Wno-unused-local-typedefs, HAS_OPT_UNUSED_LOCAL_TYPEDEFS)
+if ( HAS_OPT_UNUSED_LOCAL_TYPEDEFS )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs")
+endif()
+check_cxx_compiler_flag(-Wno-strinct-aliasing, HAS_OPT_STRICT_ALIASING)
+if ( HAS_OPT_STRICT_ALIASING )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing" )
+endif()
+
+
 if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     execute_process( COMMAND ${CMAKE_C_COMPILER} -dumpversion
@@ -201,12 +222,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         endif()
 
     endif()
-
-    # quiet GCC while in boost
-    if( GCC_VERSION VERSION_GREATER 4.8 OR GCC_VERSION VERSION_EQUAL 4.8 OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs" )
-    endif()
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing" )
 
     if( APPLE )
 
