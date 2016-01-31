@@ -69,7 +69,8 @@ namespace S3D
      * @param aNode is any node within the node tree which is to be written
      * @return true on success
      */
-    SGLIB_API bool WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode );
+    SGLIB_API bool WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
+        const char* aPluginInfo );
 
     /**
      * Function ReadCache
@@ -80,7 +81,8 @@ namespace S3D
      * if desired this node can be associated with an IFSG_TRANSFORM wrapper via
      * the IFSG_TRANSFORM::Attach() function.
      */
-    SGLIB_API SGNODE* ReadCache( const char* aFileName );
+    SGLIB_API SGNODE* ReadCache( const char* aFileName, void* aPluginMgr,
+        bool (*aTagCheck)( const char*, void* ) );
 
     /**
      * Function WriteVRML

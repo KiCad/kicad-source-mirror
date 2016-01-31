@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,8 @@ private:
     GET_PLUGIN_NAME     m_getPluginName;
     GET_VERSION         m_getVersion;
 
-    wxString m_fileName;        // name of last opened Plugin
+    wxString    m_fileName;     // name of last opened Plugin
+    std::string m_pluginInfo;   // Name:Version tag for plugin
 
 protected:
     std::string m_error;    // error message
@@ -144,6 +145,8 @@ public:
     // returns false if no plugin is loaded
     bool GetVersion( unsigned char* Major, unsigned char* Minor,
         unsigned char* Patch, unsigned char* Revision );
+
+    void GetPluginInfo( std::string& aPluginInfo );
 };
 
 #endif  // PLUGINLDR_H

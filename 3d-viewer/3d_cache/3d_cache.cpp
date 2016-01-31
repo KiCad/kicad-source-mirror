@@ -51,6 +51,15 @@
 
 #define CACHE_CONFIG_NAME wxT( "cache.cfg" )
 
+static bool checkTag( const char* aTag, void* aPluginMgrPtr )
+{
+    if( NULL == aTag || NULL == aPluginMgrPtr )
+        return false;
+
+    S3D_PLUGIN_MANAGER *pp = (S3D_PLUGIN_MANAGER*) aPluginMgrPtr;
+
+    return pp->CheckTag( aTag );
+}
 
 static const wxString sha1ToWXString( const unsigned char* aSHA1Sum )
 {
@@ -136,8 +145,9 @@ public:
     const wxString GetCacheBaseName( void );
 
     unsigned char sha1sum[20];
-    SCENEGRAPH* sceneData;
-    S3DMODEL*   renderData;
+    std::string   pluginInfo;   // PluginName:Version string
+    SCENEGRAPH*   sceneData;
+    S3DMODEL*     renderData;
 };
 
 
@@ -310,7 +320,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
     if( wxFileName::FileExists( cachename ) && loadCacheData( ep ) )
         return ep->sceneData;
 
-    ep->sceneData = m_Plugins->Load3DModel( aFileName );
+    ep->sceneData = m_Plugins->Load3DModel( aFileName, ep->pluginInfo );
 
     if( NULL != ep->sceneData )
         saveCacheData( ep );
@@ -405,7 +415,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( NULL != aCacheItem->sceneData )
         S3D::DestroyNode( (SGNODE*) aCacheItem->sceneData );
 
-    aCacheItem->sceneData = (SCENEGRAPH*)S3D::ReadCache( fname.ToUTF8() );
+    aCacheItem->sceneData = (SCENEGRAPH*)S3D::ReadCache( fname.ToUTF8(), m_Plugins, checkTag );
 
     if( NULL == aCacheItem->sceneData )
         return false;
@@ -475,7 +485,8 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
         }
     }
 
-    return S3D::WriteCache( fname.ToUTF8(), true, (SGNODE*)aCacheItem->sceneData );
+    return S3D::WriteCache( fname.ToUTF8(), true, (SGNODE*)aCacheItem->sceneData,
+        aCacheItem->pluginInfo.c_str() );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,6 +241,16 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
     #endif
 
     ok = true;
+
+    // set the plugin info string
+    m_pluginInfo = GetKicadPluginName();
+    std::ostringstream ostr;
+    unsigned char r0, r1, r2, r3;
+    GetVersion( &r0, &r1, &r2, &r3 );
+    ostr << ":" << (unsigned int)r0 << "." << (unsigned int)r1;
+    ostr << "." << (unsigned int)r2 << "." << (unsigned int)r3;
+    m_pluginInfo.append( ostr.str() );
+
     return true;
 }
 
@@ -451,4 +461,10 @@ bool KICAD_PLUGIN_LDR::GetVersion( unsigned char* Major, unsigned char* Minor,
     m_getVersion( Major, Minor, Patch, Revision );
 
     return true;
+}
+
+
+void KICAD_PLUGIN_LDR::GetPluginInfo( std::string& aPluginInfo )
+{
+    aPluginInfo = m_pluginInfo;
 }

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 
 #include <map>
 #include <list>
+#include <string>
 #include <wx/string.h>
 
 class wxWindow;
@@ -82,7 +83,7 @@ public:
      */
     std::list< wxString > const* GetFileFilters( void ) const;
 
-    SCENEGRAPH* Load3DModel( const wxString& aFileName );
+    SCENEGRAPH* Load3DModel( const wxString& aFileName, std::string& aPluginInfo );
 
     /**
      * Function ClosePlugins
@@ -91,6 +92,13 @@ public:
      * reloaded as calls are made to load specific models.
      */
     void ClosePlugins( void );
+
+    /**
+     * Function CheckTag
+     * checks the given tag and returns true if the plugin named in the tag
+     * is not loaded or the plugin is loaded and the version matches
+     */
+    bool CheckTag( const char* aTag );
 };
 
 #endif  // PLUGIN_MANAGER_3D_H

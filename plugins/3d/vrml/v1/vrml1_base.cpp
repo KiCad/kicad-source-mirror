@@ -143,6 +143,11 @@ bool WRL1BASE::Read( WRLPROC& proc )
     std::string glob;
     WRL1NODES ntype;
 
+    // Note: according to the VRML1 specification, a file may contain
+    // only one grouping node at the top level. The following code
+    // supports non-conformant VRML1 files by processing all top level
+    // grouping nodes.
+
     while( proc.ReadName( glob ) )
     {
 
@@ -727,6 +732,10 @@ SGNODE* WRL1BASE::TranslateToSG( SGNODE* aParent, WRL1STATUS* /*sp*/ )
 
     if( m_Items.size() == 1 )
         return (*m_Items.begin())->TranslateToSG( NULL, NULL );
+
+    // Note: according to the VRML1 specification, a file may contain
+    // only one grouping node at the top level. The following code
+    // supports non-conformant VRML1 files.
 
     m_current.Init();
 

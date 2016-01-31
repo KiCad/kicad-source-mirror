@@ -48,6 +48,10 @@
 static char BadNode[] = " * [BUG] NULL pointer passed for aNode\n";
 #endif
 
+// version format of the cache file
+#define SG_VERSION_TAG "VERSION:2"
+
+
 static void formatMaterial( SMATERIAL& mat, SGAPPEARANCE const* app )
 {
     float v0, v1, v2;
@@ -229,7 +233,8 @@ void S3D::DestroyNode( SGNODE* aNode )
 }
 
 
-bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode )
+bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
+    const char* aPluginInfo )
 {
     if( NULL == aFileName || aFileName[0] == 0 )
         return false;
@@ -281,23 +286,34 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode )
         return false;
     }
 
+    output << "(" << SG_VERSION_TAG << ")";
+
+    if( NULL != aPluginInfo && aPluginInfo[0] != 0 )
+        output << "(" << aPluginInfo << ")";
+    else
+        output << "(INTERNAL:0.0.0.0)";
+
     bool rval = aNode->WriteCache( output, NULL );
     output.close();
 
-    #ifdef DEBUG
     if( !rval )
     {
+        #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [INFO] problems encountered writing cache file '";
         std::cerr << aFileName << "'\n";
+        #endif
+
+        // delete the defective file
+        wxRemoveFile( ofile );
     }
-    #endif
 
     return rval;
 }
 
 
-SGNODE* S3D::ReadCache( const char* aFileName )
+SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
+        bool (*aTagCheck)( const char*, void* ) )
 {
     if( NULL == aFileName || aFileName[0] == 0 )
         return NULL;
@@ -335,6 +351,79 @@ SGNODE* S3D::ReadCache( const char* aFileName )
         std::cerr << aFileName << "'\n";
         return NULL;
     }
+
+    // from SG_VERSION_TAG 1, read the version tag; if it's not the expected tag
+    // then we fail to read the cache file
+    do
+    {
+        std::string name;
+        char schar;
+        file.get( schar );
+
+        if( '(' != schar )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] corrupt data; missing left parenthesis at position ";
+            std::cerr << file.tellg() << "\n";
+            #endif
+
+            file.close();
+            return NULL;
+        }
+
+        file.get( schar );
+
+        while( ')' != schar && file.good() )
+        {
+            name.push_back( schar );
+            file.get( schar );
+        }
+
+        if( name.compare( SG_VERSION_TAG ) )
+        {
+            file.close();
+            return NULL;
+        }
+
+    } while( 0 );
+
+    // from SG_VERSION_TAG 2, read the PluginInfo string and check that it matches
+    // version tag; if it's not the expected tag then we fail to read the file
+    do
+    {
+        std::string name;
+        char schar;
+        file.get( schar );
+
+        if( '(' != schar )
+        {
+            #ifdef DEBUG
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] corrupt data; missing left parenthesis at position ";
+            std::cerr << file.tellg() << "\n";
+            #endif
+
+            file.close();
+            return NULL;
+        }
+
+        file.get( schar );
+
+        while( ')' != schar && file.good() )
+        {
+            name.push_back( schar );
+            file.get( schar );
+        }
+
+        // check the plugin tag
+        if( NULL != aTagCheck && NULL != aPluginMgr && !aTagCheck( name.c_str(), aPluginMgr ) )
+        {
+            file.close();
+            return NULL;
+        }
+
+    } while( 0 );
 
     bool rval = np->ReadCache( file, NULL );
     file.close();

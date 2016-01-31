@@ -33,9 +33,6 @@
 #include "3d_cache/sg/sg_helpers.h"
 
 
-// version format of the cache file
-#define SG_VERSION_TAG "VERSION:1"
-
 SCENEGRAPH::SCENEGRAPH( SGNODE* aParent ) : SGNODE( aParent )
 {
     m_SGtype = S3D::SGTYPE_TRANSFORM;
@@ -370,7 +367,6 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         // ensure unique node names
         ResetNodeIndex();
         ReNameNodes();
-        aFile << "[" << SG_VERSION_TAG << "]";
     }
 
     if( aFile.fail() )
@@ -467,36 +463,6 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 
     if( NULL == parentNode )
     {
-        // read the tag; if it's not the expected tag then we fail to read the cache file
-        do
-        {
-            char schar;
-            aFile.get( schar );
-
-            if( '[' != schar )
-            {
-                #ifdef DEBUG
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] corrupt data; missing left bracket at position ";
-                std::cerr << aFile.tellg() << "\n";
-                #endif
-
-                return false;
-            }
-
-            aFile.get( schar );
-
-            while( ']' != schar && aFile.good() )
-            {
-                name.push_back( schar );
-                aFile.get( schar );
-            }
-
-            if( name.compare( SG_VERSION_TAG ) )
-                return false;
-
-        } while( 0 );
-
         // we need to read the tag and verify its type
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {

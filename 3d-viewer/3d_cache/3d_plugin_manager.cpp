@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <string>
+#include <sstream>
 
 #include <wx/string.h>
 #include <wx/dir.h>
@@ -398,7 +399,7 @@ std::list< wxString > const* S3D_PLUGIN_MANAGER::GetFileFilters( void ) const
 }
 
 
-SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName )
+SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName, std::string& aPluginInfo )
 {
     wxFileName raw( aFileName );
     wxString ext = raw.GetExt();
@@ -416,7 +417,10 @@ SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName )
             SCENEGRAPH* sp = sL->second->Load( aFileName.ToUTF8() );
 
             if( NULL != sp )
+            {
+                sL->second->GetPluginInfo( aPluginInfo );
                 return sp;
+            }
         }
 
         ++sL;
@@ -443,4 +447,46 @@ void S3D_PLUGIN_MANAGER::ClosePlugins( void )
     }
 
     return;
+}
+
+
+bool S3D_PLUGIN_MANAGER::CheckTag( const char* aTag )
+{
+    if( NULL == aTag || aTag[0] == 0 || m_Plugins.empty() )
+        return false;
+
+    std::string tname = aTag;
+    std::string pname;      // plugin name
+
+    size_t cpos = tname.find( ':' );
+
+    // if there is no colon or plugin name then the tag is bad
+    if( cpos == std::string::npos || cpos == 0 )
+        return false;
+
+    pname = tname.substr( 0, cpos );
+    std::string ptag;   // tag from the plugin
+
+    std::list< KICAD_PLUGIN_LDR_3D* >::iterator pS = m_Plugins.begin();
+    std::list< KICAD_PLUGIN_LDR_3D* >::iterator pE = m_Plugins.end();
+
+    while( pS != pE )
+    {
+        ptag.clear();
+        (*pS)->GetPluginInfo( ptag );
+
+        // if the plugin name matches then the version
+        // must also match
+        if( !ptag.compare( 0, pname.size(), pname ) )
+        {
+            if( ptag.compare( tname ) )
+                return false;
+
+            return true;
+        }
+
+        ++pS;
+    }
+
+    return true;
 }
