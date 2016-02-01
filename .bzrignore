@@ -21,6 +21,10 @@ eeschema/template_fieldnames_lexer.h
 pcbnew/dialogs/dialog_freeroute_exchange_help_html.h
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
+pcb_calculator/attenuators/bridget_tee_formula.h
+pcb_calculator/attenuators/pi_formula.h
+pcb_calculator/attenuators/splitter_formula.h
+pcb_calculator/attenuators/tee_formula.h
 Makefile
 CMakeCache.txt
 auto_renamed_to_cpp
