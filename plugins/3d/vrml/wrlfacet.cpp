@@ -27,7 +27,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cmath>
-#include <iostream>
 
 #include "wrlfacet.h"
 
@@ -82,7 +81,7 @@ static WRLVEC3F VCalcTriNorm( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLV
         return result;
 
     // normal
-    tri = cross( pts[1] - pts[0], pts[2] - pts[0] );
+    tri = cross( pts[2] - pts[0], pts[1] - pts[0] );
     normalize( tri );
 
     result.x = tri.x;
@@ -92,12 +91,7 @@ static WRLVEC3F VCalcTriNorm( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLV
     return result;
 }
 
-void printX( const WRLVEC3F& p1 )
-{
-    std::cerr << p1.x << ", " << p1.y << ", " << p1.z << "\n";
-}
 
-// p1 = reference vertex
 static float VCalcAngle( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC3F& p3 )
 {
     // note: p1 = reference vertex
