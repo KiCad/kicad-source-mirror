@@ -1003,7 +1003,7 @@ void RN_NET::processPads()
             m_links.RemoveConnection( edge );
 
         LSET layers = pad->GetLayerSet();
-        RN_LINKS::RN_NODE_SET candidates = m_links.GetNodes();
+        const RN_LINKS::RN_NODE_SET& candidates = m_links.GetNodes();
         RN_LINKS::RN_NODE_SET::iterator point, pointEnd;
 
         point = candidates.begin();
