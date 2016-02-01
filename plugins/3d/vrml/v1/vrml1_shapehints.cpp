@@ -23,6 +23,7 @@
 
 
 #include <iostream>
+#include <cmath>
 
 #include "vrml1_base.h"
 #include "vrml1_shapehints.h"
@@ -33,6 +34,7 @@ WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDiction
 {
     m_order = ORD_UNKNOWN;
     m_Type = WRL1_SHAPEHINTS;
+    m_crease = 0.5;
     return;
 }
 
@@ -229,6 +231,13 @@ bool WRL1SHAPEHINTS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
                 return false;
             }
+
+            if( tmp < 0.0 )
+                tmp = 0.0;
+            else if( tmp > M_PI )
+                tmp = M_PI;
+
+            m_crease = tmp;
         }
         else
         {
@@ -262,6 +271,7 @@ SGNODE* WRL1SHAPEHINTS::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     }
 
     sp->order = m_order;
+    sp->creaseAngle = m_crease;
 
     return NULL;
 }

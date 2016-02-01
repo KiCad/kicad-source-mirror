@@ -80,6 +80,8 @@ struct WRL1STATUS
     // winding order of vertices
     WRL1_ORDER order;
 
+    float creaseAngle;
+
     WRL1STATUS()
     {
         Init();
@@ -95,6 +97,7 @@ struct WRL1STATUS
         coord = NULL;
         txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
         order = ORD_UNKNOWN;
+        creaseAngle = 0.5;
         return;
     }
 };

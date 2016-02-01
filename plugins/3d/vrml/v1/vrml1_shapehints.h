@@ -41,7 +41,8 @@ class SGNODE;
 class WRL1SHAPEHINTS : public WRL1NODE
 {
 private:
-    WRL1_ORDER m_order;
+    WRL1_ORDER m_order;     // vertex order
+    float      m_crease;    // VRML creaseAngle
 
 public:
     WRL1SHAPEHINTS( NAMEREGISTER* aDictionary );

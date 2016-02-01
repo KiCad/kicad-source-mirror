@@ -5,12 +5,13 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/v2
 )
 
-add_definitions( -DDEBUG_VRML1=2 -DDEBUG_VRML2=2 )
+add_definitions( -DDEBUG_VRML1=4 -DDEBUG_VRML2=1 )
 
 add_library( s3d_plugin_vrml MODULE
         ${CMAKE_SOURCE_DIR}/common/richio.cpp
         vrml.cpp
         wrlproc.cpp
+        wrlfacet.cpp
         v2/vrml2_node.cpp
         v2/vrml2_base.cpp
         v2/vrml2_transform.cpp
