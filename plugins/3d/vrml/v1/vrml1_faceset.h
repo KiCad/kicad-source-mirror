@@ -31,7 +31,7 @@
 
 #include <vector>
 
-#include "vrml2_node.h"
+#include "vrml1_node.h"
 
 class WRL1BASE;
 class SGNODE;

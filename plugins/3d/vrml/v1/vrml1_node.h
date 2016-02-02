@@ -80,7 +80,8 @@ struct WRL1STATUS
     // winding order of vertices
     WRL1_ORDER order;
 
-    float creaseAngle;
+    // cos( creaseAngle ) defines a boundary for normals smoothing
+    float creaseLimit;
 
     WRL1STATUS()
     {
@@ -97,7 +98,7 @@ struct WRL1STATUS
         coord = NULL;
         txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
         order = ORD_UNKNOWN;
-        creaseAngle = 0.5;
+        creaseLimit = 0.878;
         return;
     }
 };

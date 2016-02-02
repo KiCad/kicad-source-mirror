@@ -27,12 +27,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cmath>
+#include <iostream>
 
 #include "wrlfacet.h"
 
 
 static bool VDegenerate( glm::vec3* pts )
 {
+    // note: only checks the degenerate case of zero length sized; it
+    // does not detect the case of 3 distinct collinear points
+
     double dx, dy, dz;
 
     dx = pts[1].x - pts[0].x;
@@ -67,16 +71,16 @@ static WRLVEC3F VCalcTriNorm( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLV
     WRLVEC3F result;
     result.x = 0.0;
     result.y = 0.0;
-    result.z = 1.0;
+    result.z = 0.0;
 
-    glm::vec3 tri = glm::dvec3( 0.0, 0.0, 0.0 );
+    glm::vec3 tri = glm::vec3( 0.0, 0.0, 0.0 );
     glm::vec3 pts[3];
 
     pts[0] = glm::vec3( p1.x, p1.y, p1.z );
     pts[1] = glm::vec3( p2.x, p2.y, p2.z );
     pts[2] = glm::vec3( p3.x, p3.y, p3.z );
 
-    // degenerate points are given a default 0, 0, 1 normal
+    // degenerate points are given a default 0, 0, 0 normal
     if( VDegenerate( pts ) )
         return result;
 
@@ -92,7 +96,35 @@ static WRLVEC3F VCalcTriNorm( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLV
 }
 
 
-static float VCalcAngle( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC3F& p3 )
+static float VCalcAreaSq( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC3F& p3 )
+{
+    // calculate the area squared for the triangle using Heron's formula
+
+    // note: p1 = reference vertex
+    float dx, dy, dz;
+
+    dx = p2.x - p1.x;
+    dy = p2.y - p1.y;
+    dz = p2.z - p1.z;
+    float a = sqrt( dx*dx + dy*dy + dz*dz );
+
+    dx = p3.x - p2.x;
+    dy = p3.y - p2.y;
+    dz = p3.z - p2.z;
+    float b = sqrt( dx*dx + dy*dy + dz*dz );
+
+    dx = p3.x - p1.x;
+    dy = p3.y - p1.y;
+    dz = p3.z - p1.z;
+    float c = sqrt( dx*dx + dy*dy + dz*dz );
+
+    float s = (a + b + c) * 0.5;
+
+    return s*(s - a)*(s - b)*(s - c);
+}
+
+
+static float VCalcCosAngle( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC3F& p3 )
 {
     // note: p1 = reference vertex
     float l12, l13;
@@ -125,11 +157,13 @@ static float VCalcAngle( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC3F&
 
     // check the domain; errors in the cosAngle calculation
     // can result in domain errors
-    if( cosAngle > 1.0 || cosAngle < -1.0 )
+    if( cosAngle > 1.0 )
         cosAngle = 1.0;
+    else if( cosAngle < -1.0 )
+        cosAngle = -1.0;
 
     // note: we are guaranteed that acosf() is never negative
-    return acosf( cosAngle );
+    return cosAngle;
 }
 
 
@@ -228,10 +262,10 @@ void FACET::CalcFaceNormal()
 
     vnweight.clear();
     WRLVEC3F wnorm = face_normal;
-    float ang = VCalcAngle( lCPts[1], lCPts[0], lCPts[2] );
-    wnorm.x *= ang;
-    wnorm.y *= ang;
-    wnorm.z *= ang;
+    float a2 = VCalcAreaSq( lCPts[1], lCPts[0], lCPts[2] );
+    wnorm.x *= a2;
+    wnorm.y *= a2;
+    wnorm.z *= a2;
     vnweight.push_back( wnorm );
 
     while( sV != eV )
@@ -242,10 +276,10 @@ void FACET::CalcFaceNormal()
         ++sV;
 
         WRLVEC3F wnorm = face_normal;
-        ang = VCalcAngle( lCPts[1], lCPts[0], lCPts[2] );
-        wnorm.x *= ang;
-        wnorm.y *= ang;
-        wnorm.z *= ang;
+        a2 = VCalcAreaSq( lCPts[1], lCPts[0], lCPts[2] );
+        wnorm.x *= a2;
+        wnorm.y *= a2;
+        wnorm.z *= a2;
         vnweight.push_back( wnorm );
     }
 
@@ -254,17 +288,17 @@ void FACET::CalcFaceNormal()
     lCPts[2] = vertices.front();
 
     wnorm = face_normal;
-    ang = VCalcAngle( lCPts[1], lCPts[0], lCPts[2] );
-    wnorm.x *= ang;
-    wnorm.y *= ang;
-    wnorm.z *= ang;
+    a2 = VCalcAreaSq( lCPts[1], lCPts[0], lCPts[2] );
+    wnorm.x *= a2;
+    wnorm.y *= a2;
+    wnorm.z *= a2;
     vnweight.push_back( wnorm );
 
     return;
 }
 
 
-void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float aCreaseAngle )
+void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float aCreaseLimit )
 {
     if( vertices.size() < 3 )
         return;
@@ -286,7 +320,19 @@ void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float
         if( *sI == aIndex )
         {
             if( vnweight.size() != vertices.size() )
+            {
+                size_t os = vertices.size();
                 CalcFaceNormal();
+
+                // check if degenerate vertices were deleted
+                if( os != vertices.size() )
+                {
+                    sI = indices.begin();
+                    eI = indices.end();
+                    idx = 0;
+                    continue;
+                }
+            }
 
             // first set the default (weighted) normal value
             norms[idx] = vnweight[idx];
@@ -306,13 +352,15 @@ void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float
                 // check the create angle limit
                 (*sF)->GetFaceNormal( fp[1] );
 
-                if( aCreaseAngle >= VCalcAngle( fp[0], face_normal, fp[1] ) )
+                float thrs = VCalcCosAngle( fp[0], face_normal, fp[1] );
+
+                if( aCreaseLimit <= thrs )
                 {
                     if( GetWeightedNormal( aIndex, fp[1] ) )
                     {
-                        norms[idx].x += fp[1].x;
-                        norms[idx].y += fp[1].y;
-                        norms[idx].z += fp[1].z;
+                        norms[idx].x += fp[1].x * thrs;
+                        norms[idx].y += fp[1].y * thrs;
+                        norms[idx].z += fp[1].z * thrs;
                     }
                 }
 
@@ -320,7 +368,7 @@ void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float
             }
 
             // normalize the vector
-            glm::vec3 tri = glm::dvec3( norms[idx].x, norms[idx].y, norms[idx].z );
+            glm::vec3 tri = glm::vec3( norms[idx].x, norms[idx].y, norms[idx].z );
             normalize( tri );
             norms[idx].x = tri.x;
             norms[idx].y = tri.y;
@@ -356,7 +404,19 @@ bool FACET::GetWeightedNormal( int aIndex, WRLVEC3F& aNorm )
         if( *sI == aIndex )
         {
             if( vnweight.size() != vertices.size() )
+            {
+                size_t os = vertices.size();
                 CalcFaceNormal();
+
+                // check if degenerate vertices were deleted
+                if( os != vertices.size() )
+                {
+                    sI = indices.begin();
+                    eI = indices.end();
+                    idx = 0;
+                    continue;
+                }
+            }
 
             aNorm = vnweight[idx];
             return true;
@@ -380,7 +440,13 @@ bool FACET::GetFaceNormal( WRLVEC3F& aNorm )
         return false;
 
     if( vnweight.size() != vertices.size() )
+    {
         CalcFaceNormal();
+
+        // check if the polygon was invalidated
+        if( vertices.size() < 3 )
+            return false;
+    }
 
     aNorm = face_normal;
     return true;
@@ -619,7 +685,7 @@ FACET* SHAPE::NewFacet()
 
 
 SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrder,
-        float aCreaseAngle )
+        float aCreaseLimit )
 {
     if( facets.empty() || !facets.front()->HasMinPoints() )
         return NULL;
@@ -635,6 +701,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
 
     while( sF != eF )
     {
+        (*sF)->CalcFaceNormal();
         tmi = (*sF)->GetMaxIndex();
 
         if( tmi > maxIdx )
@@ -669,7 +736,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
 
         while( sF != eF )
         {
-            (*sF)->CalcVertexNormal( i, flist[i], aCreaseAngle );
+            (*sF)->CalcVertexNormal( i, flist[i], aCreaseLimit );
             ++sF;
         }
     }

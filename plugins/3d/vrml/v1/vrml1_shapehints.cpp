@@ -271,7 +271,10 @@ SGNODE* WRL1SHAPEHINTS::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     }
 
     sp->order = m_order;
-    sp->creaseAngle = m_crease;
+    sp->creaseLimit = cosf(m_crease);
+
+    if( sp->creaseLimit < 0.0 )
+        sp->creaseLimit = 0.0;
 
     return NULL;
 }

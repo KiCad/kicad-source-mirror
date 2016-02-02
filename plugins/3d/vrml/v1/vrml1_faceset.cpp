@@ -467,7 +467,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     }
 
     // extract the final data set
-    SGNODE* np = lShape.CalcShape( aParent, sgcolor, m_current.order, m_current.creaseAngle );
+    SGNODE* np = lShape.CalcShape( aParent, sgcolor, m_current.order, m_current.creaseLimit );
 
     return np;
 }
