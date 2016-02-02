@@ -5,7 +5,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/v2
 )
 
-add_definitions( -DDEBUG_VRML1=4 -DDEBUG_VRML2=1 )
+add_definitions( -DDEBUG_VRML1=1 -DDEBUG_VRML2=1 )
 
 add_library( s3d_plugin_vrml MODULE
         ${CMAKE_SOURCE_DIR}/common/richio.cpp
