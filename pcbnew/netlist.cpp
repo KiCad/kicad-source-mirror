@@ -123,12 +123,14 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     if( IsGalCanvasActive() )
     {
         SpreadFootprints( &newFootprints, false, false );
-
-        BOOST_FOREACH( MODULE* footprint, newFootprints )
+        if( !newFootprints.empty() )
         {
-            m_toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
+            BOOST_FOREACH( MODULE* footprint, newFootprints )
+            {
+                m_toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
+            }
+            m_toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
         }
-        m_toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
     }
 
     OnModify();
