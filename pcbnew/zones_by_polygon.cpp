@@ -589,9 +589,12 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT )
                 {
                     zoneInfo.SetIsKeepout( true );
-                    // Netcode and netname are irrelevant,
+                    // Netcode, netname and some other settings are irrelevant,
                     // so ensure they are cleared
                     zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                    zoneInfo.SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_NONE );
+                    zoneInfo.SetCornerRadius( 0 );
+
                     edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
                 }
                 else
