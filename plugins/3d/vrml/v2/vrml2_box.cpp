@@ -210,7 +210,7 @@ bool WRL2BOX::AddChildNode( WRL2NODE* aNode )
 }
 
 
-SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 

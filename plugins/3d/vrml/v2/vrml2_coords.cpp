@@ -220,7 +220,7 @@ void WRL2COORDS::GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize )
 }
 
 
-SGNODE* WRL2COORDS::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2COORDS::TranslateToSG( SGNODE* aParent )
 {
     // any data manipulation must be performed by the parent node
     return NULL;

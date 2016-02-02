@@ -27,14 +27,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cmath>
-#include <iostream>
 
 #include "wrlfacet.h"
 
 
 static bool VDegenerate( glm::vec3* pts )
 {
-    // note: only checks the degenerate case of zero length sized; it
+    // note: only checks the degenerate case of zero length sides; it
     // does not detect the case of 3 distinct collinear points
 
     double dx, dy, dz;
@@ -43,21 +42,21 @@ static bool VDegenerate( glm::vec3* pts )
     dy = pts[1].y - pts[0].y;
     dz = pts[1].z - pts[0].z;
 
-    if( ( dx*dx + dy*dy + dz*dz ) < 1e-6 )
+    if( ( dx*dx + dy*dy + dz*dz ) < 1e-9 )
         return true;
 
     dx = pts[2].x - pts[0].x;
     dy = pts[2].y - pts[0].y;
     dz = pts[2].z - pts[0].z;
 
-    if( ( dx*dx + dy*dy + dz*dz ) < 1e-6 )
+    if( ( dx*dx + dy*dy + dz*dz ) < 1e-9 )
         return true;
 
     dx = pts[2].x - pts[1].x;
     dy = pts[2].y - pts[1].y;
     dz = pts[2].z - pts[1].z;
 
-    if( ( dx*dx + dy*dy + dz*dz ) < 1e-6 )
+    if( ( dx*dx + dy*dy + dz*dz ) < 1e-9 )
         return true;
 
     return false;
@@ -106,17 +105,17 @@ static float VCalcAreaSq( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC3F
     dx = p2.x - p1.x;
     dy = p2.y - p1.y;
     dz = p2.z - p1.z;
-    float a = sqrt( dx*dx + dy*dy + dz*dz );
+    float a = sqrtf( dx*dx + dy*dy + dz*dz );
 
     dx = p3.x - p2.x;
     dy = p3.y - p2.y;
     dz = p3.z - p2.z;
-    float b = sqrt( dx*dx + dy*dy + dz*dz );
+    float b = sqrtf( dx*dx + dy*dy + dz*dz );
 
     dx = p3.x - p1.x;
     dy = p3.y - p1.y;
     dz = p3.z - p1.z;
-    float c = sqrt( dx*dx + dy*dy + dz*dz );
+    float c = sqrtf( dx*dx + dy*dy + dz*dz );
 
     float s = (a + b + c) * 0.5;
 
@@ -349,7 +348,7 @@ void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float
                     continue;
                 }
 
-                // check the create angle limit
+                // check the crease angle limit
                 (*sF)->GetFaceNormal( fp[1] );
 
                 float thrs = VCalcCosAngle( fp[0], face_normal, fp[1] );
@@ -368,11 +367,16 @@ void FACET::CalcVertexNormal( int aIndex, std::list< FACET* > &aFacetList, float
             }
 
             // normalize the vector
-            glm::vec3 tri = glm::vec3( norms[idx].x, norms[idx].y, norms[idx].z );
-            normalize( tri );
-            norms[idx].x = tri.x;
-            norms[idx].y = tri.y;
-            norms[idx].z = tri.z;
+            float dn = sqrtf( norms[idx].x * norms[idx].x
+                + norms[idx].y * norms[idx].y
+                + norms[idx].z * norms[idx].z );
+
+            if( dn > FLT_EPSILON )
+            {
+                norms[idx].x /= dn;
+                norms[idx].y /= dn;
+                norms[idx].z /= dn;
+            }
 
             return;
         }
@@ -685,7 +689,7 @@ FACET* SHAPE::NewFacet()
 
 
 SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrder,
-        float aCreaseLimit )
+        float aCreaseLimit, bool isVRML2 )
 {
     if( facets.empty() || !facets.front()->HasMinPoints() )
         return NULL;
@@ -760,14 +764,19 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
     if( vertices.size() < 3 )
         return NULL;
 
-    IFSG_SHAPE shapeNode( aParent );
+    IFSG_SHAPE shapeNode( false );
 
-    if( aColor )
+    if( !isVRML2 )
     {
-        if( NULL == S3D::GetSGNodeParent( aColor ) )
-            shapeNode.AddChildNode( aColor );
-        else
-            shapeNode.AddRefNode( aColor );
+        shapeNode.NewNode( aParent );
+
+        if( aColor )
+        {
+            if( NULL == S3D::GetSGNodeParent( aColor ) )
+                shapeNode.AddChildNode( aColor );
+            else
+                shapeNode.AddRefNode( aColor );
+        }
     }
 
     std::vector< SGPOINT >  lCPts;  // vertex points in SGPOINT (double) format
@@ -787,7 +796,13 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
     vertices.clear();
     normals.clear();
 
-    IFSG_FACESET fsNode( shapeNode );
+    IFSG_FACESET fsNode( false );
+
+    if( !isVRML2 )
+        fsNode.NewNode( shapeNode );
+    else
+        fsNode.NewNode( aParent );
+
     IFSG_COORDS cpNode( fsNode );
     cpNode.SetCoordsList( lCPts.size(), &lCPts[0] );
     IFSG_COORDINDEX ciNode( fsNode );
@@ -804,6 +819,9 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
         nmColor.SetColorList( colors.size(), &colors[0] );
         colors.clear();
     }
+
+    if( !isVRML2 )
+        return shapeNode.GetRawPtr();
 
     return fsNode.GetRawPtr();
 }

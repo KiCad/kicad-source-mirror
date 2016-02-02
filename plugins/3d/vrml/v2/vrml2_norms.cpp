@@ -192,7 +192,7 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2NORMS::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2NORMS::TranslateToSG( SGNODE* aParent )
 {
     // any data manipulation must be performed by the parent node
     return NULL;

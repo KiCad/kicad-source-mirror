@@ -58,7 +58,7 @@ public:
     // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
     bool AddRefNode( WRL2NODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals );
+    SGNODE* TranslateToSG( SGNODE* aParent );
 };
 
 #endif  // VRML2_SWITCH_H

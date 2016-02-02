@@ -28,6 +28,7 @@
 #include "vrml2_faceset.h"
 #include "vrml2_coords.h"
 #include "vrml2_color.h"
+#include "wrlfacet.h"
 #include "plugins/3dapi/ifsg_all.h"
 
 
@@ -78,7 +79,8 @@ void WRL2FACESET::setDefaults( void )
     normalPerVertex = true;
     solid = true;
 
-    creaseAngle = 0.0;
+    creaseAngle = 0.5;
+    creaseLimit = 0.878;    // approx cos( 0.5 )
 }
 
 
@@ -476,6 +478,13 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
                 return false;
             }
+
+            if( creaseAngle < 0.0 )
+                creaseAngle = 0.0;
+            else if( creaseAngle > M_PI_2 )
+                creaseAngle = M_PI_2;
+
+            creaseLimit = cosf( creaseAngle );
         }
         else if( !glob.compare( "colorIndex" ) )
         {
@@ -587,7 +596,7 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
@@ -633,12 +642,6 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
     if( NULL == coord || vsize < 3 )
         return NULL;
 
-    // create the index list and make sure we have >3 points
-    size_t idx;
-    int i1 = coordIndex[0];
-    int i2 = coordIndex[1];
-    int i3 = coordIndex[2];
-
     WRLVEC3F* pcoords;
     size_t coordsize;
     ((WRL2COORDS*) coord)->GetCoords( pcoords, coordsize );
@@ -647,7 +650,7 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
         return NULL;
 
     // check that all indices are valid
-    for( idx = 0; idx < vsize; ++idx )
+    for( size_t idx = 0; idx < vsize; ++idx )
     {
         if( coordIndex[idx] < 0 )
             continue;
@@ -656,320 +659,129 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
             return NULL;
     }
 
-    // if the indices are defective just give up
-    if( i1 < 0 || i2 < 0 || i3 < 0
-        || i1 == i2 || i1 == i3 || i2 == i3 )
-        return NULL;
-
-    std::vector< SGPOINT > lCPts;   // coordinate points for SG node
-    std::vector< int > lCIdx;       // coordinate index list for SG node (must be triads)
-    std::vector< SGVECTOR > lCNorm; // per-vertex normals
-    std::vector< int > faces;       // tracks the number of polygons for the entire set
-    std::vector< SGCOLOR > lColors; // colors points (if any) for SG node
-    int nfaces = 0;                 // number of triangles for each face in the list
+    SHAPE   lShape;
+    FACET*  fp = NULL;
+    size_t  iCoord;
+    int     idx;        // coordinate index
+    size_t  cidx = 0;   // color index
+    SGCOLOR pc1;
 
     if( NULL == color )
     {
-        // assuming convex polygons, create triangles for the SG node
-        for( idx = 3; idx <= vsize; )
+        // no per-vertex colors; we can save a few CPU cycles
+        for( iCoord = 0; iCoord < vsize; ++iCoord )
         {
-            lCIdx.push_back( i1 );
+            idx = coordIndex[iCoord];
 
-            if( ccw )
+            if( idx < 0 )
             {
-                lCIdx.push_back( i2 );
-                lCIdx.push_back( i3 );
-            }
-            else
-            {
-                lCIdx.push_back( i3 );
-                lCIdx.push_back( i2 );
-            }
-
-            ++nfaces;
-            i2 = i3;
-
-            if( idx == vsize )
-                break;
-
-            i3 = coordIndex[idx++];
-
-            while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
-            {
-                if( i3 < 0 )
+                if( NULL != fp )
                 {
-                    faces.push_back( nfaces );
-                    nfaces = 0;
+                    if( fp->HasMinPoints() )
+                        fp = NULL;
+                    else
+                        fp->Init();
                 }
 
-                i1 = i2;
-                i2 = i3;
-                i3 = coordIndex[idx++];
-
-                // any invalid polygons shall void the entire faceset; this is a requirement
-                // to ensure correct handling of the normals
-                if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
-                    return NULL;
+                continue;
             }
 
-            if( i1 < 0 || i2 < 0 || i3 < 0 )
-                break;
+            // if the coordinate is bad then skip it
+            if( idx >= (int)coordsize )
+                continue;
+
+            if( NULL == fp )
+                fp = lShape.NewFacet();
+
+            // push the vertex value and index
+            fp->AddVertex( pcoords[idx], idx );
         }
     }
     else
     {
-        int cIndex;
         WRL2COLOR* cn = (WRL2COLOR*) color;
-        SGCOLOR pc1, pc2, pc3;
         WRLVEC3F tc;
 
-        if( colorPerVertex )
+        for( iCoord = 0; iCoord < vsize; ++iCoord )
         {
-            cIndex = 3;
+            idx = coordIndex[iCoord];
 
-            if( colorIndex.empty() )
+            if( idx < 0 )
             {
-                cn->GetColor( coordIndex[0], tc.x, tc.y, tc.z );
-                pc1.SetColor( tc.x, tc.y, tc.z );
-                cn->GetColor( coordIndex[1], tc.x, tc.y, tc.z );
-                pc2.SetColor( tc.x, tc.y, tc.z );
-                cn->GetColor( coordIndex[2], tc.x, tc.y, tc.z );
-                pc3.SetColor( tc.x, tc.y, tc.z );
-            }
-            else
-            {
-                if( colorIndex.size() < coordIndex.size() )
+                if( NULL != fp )
                 {
-                    #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    std::cerr << " * [INFO] bad file; colorIndex.size() < coordIndex.size()\n";
-                    #endif
-
-                    return NULL;
+                    if( fp->HasMinPoints() )
+                        fp = NULL;
+                    else
+                        fp->Init();
                 }
 
-                cn->GetColor( colorIndex[0], tc.x, tc.y, tc.z );
-                pc1.SetColor( tc.x, tc.y, tc.z );
-                cn->GetColor( colorIndex[1], tc.x, tc.y, tc.z );
-                pc2.SetColor( tc.x, tc.y, tc.z );
-                cn->GetColor( colorIndex[2], tc.x, tc.y, tc.z );
-                pc3.SetColor( tc.x, tc.y, tc.z );
-            }
-        }
-        else
-        {
-            cIndex = 1;
+                if( !colorPerVertex )
+                    ++cidx;
 
-            if( colorIndex.empty() )
-            {
-                cn->GetColor( 0, tc.x, tc.y, tc.z );
-                pc1.SetColor( tc.x, tc.y, tc.z );
-                pc2.SetColor( tc.x, tc.y, tc.z );
-                pc3.SetColor( tc.x, tc.y, tc.z );
-            }
-            else
-            {
-                cn->GetColor( colorIndex[0], tc.x, tc.y, tc.z );
-                pc1.SetColor( tc.x, tc.y, tc.z );
-                pc2.SetColor( tc.x, tc.y, tc.z );
-                pc3.SetColor( tc.x, tc.y, tc.z );
-            }
-        }
-
-        // assuming convex polygons, create triangles for the SG node
-        int cMaxIdx = (int) colorIndex.size();
-
-        for( idx = 3; idx <= vsize; )
-        {
-            lCIdx.push_back( i1 );
-            lColors.push_back( pc1 );
-            lColors.push_back( pc2 );
-            lColors.push_back( pc3 );
-
-            if( ccw )
-            {
-                lCIdx.push_back( i2 );
-                lCIdx.push_back( i3 );
-            }
-            else
-            {
-                lCIdx.push_back( i3 );
-                lCIdx.push_back( i2 );
+                continue;
             }
 
-            ++nfaces;
-            i2 = i3;
+            // if the coordinate is bad then skip it
+            if( idx >= (int)coordsize )
+                continue;
 
-            if( colorPerVertex && i1 >= 0 && i2 >= 0 && i3 >= 0 )
+            if( NULL == fp )
+                fp = lShape.NewFacet();
+
+            // push the vertex value and index
+            fp->AddVertex( pcoords[idx], idx );
+
+            // push the color if appropriate
+            if( !colorPerVertex )
             {
-                pc1.SetColor( pc2 );
-                pc2.SetColor( pc3 );
-
                 if( colorIndex.empty() )
                 {
-                    cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
+                    cn->GetColor( cidx, tc.x, tc.y, tc.z );
                     pc1.SetColor( tc.x, tc.y, tc.z );
-                    cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
-                    pc2.SetColor( tc.x, tc.y, tc.z );
-                    cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
-                    pc3.SetColor( tc.x, tc.y, tc.z );
+                    fp->AddColor( pc1 );
                 }
                 else
-                    cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
-
-                pc3.SetColor( tc.x, tc.y, tc.z );
-            }
-
-            if( idx == vsize )
-                break;
-
-            i3 = coordIndex[idx++];
-
-            while( ( i1 < 0 || i2 < 0 || i3 < 0 ) && ( idx < vsize ) )
-            {
-                if( i3 < 0 )
                 {
-                    faces.push_back( nfaces );
-                    nfaces = 0;
-
-                    if( !colorPerVertex )
-                    {
-                        if( colorIndex.empty() || cIndex >= cMaxIdx )
-                            cn->GetColor( cIndex++, tc.x, tc.y, tc.z );
-                        else
-                            cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
-
-                        pc1.SetColor( tc.x, tc.y, tc.z );
-                        pc2.SetColor( tc.x, tc.y, tc.z );
-                        pc3.SetColor( tc.x, tc.y, tc.z );
-                    }
-                }
-
-                i1 = i2;
-                i2 = i3;
-
-                if( colorPerVertex )
-                {
-                    pc1.SetColor( pc2 );
-                    pc2.SetColor( pc3 );
-
-                    if( colorIndex.empty() )
-                    {
-                        cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
-                        pc1.SetColor( tc.x, tc.y, tc.z );
-                        cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
-                        pc2.SetColor( tc.x, tc.y, tc.z );
-                        cn->GetColor( coordIndex[idx], tc.x, tc.y, tc.z );
-                        pc3.SetColor( tc.x, tc.y, tc.z );
-                    }
+                    if( cidx < colorIndex.size() )
+                        cn->GetColor( colorIndex[cidx], tc.x, tc.y, tc.z );
                     else
-                        cn->GetColor( colorIndex[cIndex++], tc.x, tc.y, tc.z );
+                        cn->GetColor( colorIndex.back(), tc.x, tc.y, tc.z );
 
-                    pc3.SetColor( tc.x, tc.y, tc.z );
-                }
-
-                i3 = coordIndex[idx++];
-
-                // any invalid polygons shall void the entire faceset; this is a requirement
-                // to ensure correct handling of the normals
-                if( ( i1 < 0 && i2 < 0 ) || ( i1 < 0 && i3 < 0 ) || ( i2 < 0 && i3 < 0 ) )
-                    return NULL;
-            }
-
-            if( i1 < 0 || i2 < 0 || i3 < 0 )
-                break;
-        }
-    }
-
-    if( lCIdx.empty() )
-        return NULL;
-
-    if( calcNormals || NULL == normal )
-    {
-        // create a vertex list for per-face per-vertex normals
-        std::vector< int >::iterator sI = lCIdx.begin();
-        std::vector< int >::iterator eI = lCIdx.end();
-
-        while( sI != eI )
-        {
-            lCPts.push_back( SGPOINT( pcoords[*sI].x, pcoords[*sI].y, pcoords[*sI].z ) );
-            ++sI;
-        }
-
-        for( size_t i = 0; i < lCPts.size(); i += 3 )
-        {
-            SGVECTOR sv = S3D::CalcTriNorm( lCPts[i], lCPts[i+1], lCPts[i+2] );
-            lCNorm.push_back( sv );
-            lCNorm.push_back( sv );
-            lCNorm.push_back( sv );
-        }
-
-    }
-    else
-    {
-        // XXX - TO IMPLEMENT
-        return NULL;
-        /*
-            // use the vertex list as is
-            if( normalPerVertex )
-            {
-                // normalPerVertex = TRUE
-                // rules:
-                //  + if normalIndex is not EMPTY, it is used to select a normal for each vertex
-                //  + if normalIndex is EMPTY, the normal list is used in order per vertex
-
-                if( normalIndex.empty() )
-                {
-                    for( size_t i = 0; i < coordsize; ++i )
-                    {
-                        lCPts.push_back( SGPOINT( pcoords[i].x, pcoords[i].y, pcoords[i].z ) );
-
-                        // XXX - TO IMPLEMENT
-                    }
-                }
-                else
-                {
-                    // XXX - TO IMPLEMENT: index the normals
+                    pc1.SetColor( tc.x, tc.y, tc.z );
+                    fp->AddColor( pc1 );
                 }
             }
             else
             {
-                // normalPerVertex = FALSE
-                // rules:
-                //  + if normalIndex is not EMPTY, it is used to select a normal for each face
-                //  + if normalIndex is EMPTY, the normal list is used in order per face
+                if( colorIndex.empty() )
+                {
+                    cn->GetColor( idx, tc.x, tc.y, tc.z );
+                    pc1.SetColor( tc.x, tc.y, tc.z );
+                    fp->AddColor( pc1 );
+                }
+                else
+                {
+                    if( iCoord < colorIndex.size() )
+                        cn->GetColor( colorIndex[iCoord], tc.x, tc.y, tc.z );
+                    else
+                        cn->GetColor( colorIndex.back(), tc.x, tc.y, tc.z );
 
+                    pc1.SetColor( tc.x, tc.y, tc.z );
+                    fp->AddColor( pc1 );
+                }
             }
-        //*/
+        }
     }
 
-    IFSG_FACESET fsNode( aParent );
-    IFSG_COORDS cpNode( fsNode );
-    cpNode.SetCoordsList( lCPts.size(), &lCPts[0] );
-    IFSG_COORDINDEX ciNode( fsNode );
+    SGNODE* np = NULL;
 
-    if( calcNormals || NULL == normal )
-    {
-        for( int i = 0; i < (int)lCPts.size(); ++i )
-            ciNode.AddIndex( i );
-    }
+    if( ccw )
+        np = lShape.CalcShape( aParent, NULL, ORD_CCW, creaseLimit, true );
     else
-    {
-        ciNode.SetIndices( lCIdx.size(), &lCIdx[0] );
-    }
+        np = lShape.CalcShape( aParent, NULL, ORD_CLOCKWISE, creaseLimit, true );
 
-    IFSG_NORMALS nmNode( fsNode );
-    nmNode.SetNormalList( lCNorm.size(), &lCNorm[0] );
-
-    if( !lColors.empty() )
-    {
-        IFSG_COLORS nmColor( fsNode );
-        nmColor.SetColorList( lColors.size(), &lColors[0] );
-    }
-
-    m_sgNode = fsNode.GetRawPtr();
-
-    return m_sgNode;
+    return np;
 }
 
 

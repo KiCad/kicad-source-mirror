@@ -273,7 +273,7 @@ bool WRL2SWITCH::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent )
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     std::cerr << " * [INFO] Translating Switch with " << m_Children.size();
@@ -327,5 +327,5 @@ SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent, bool calcNormals )
         return NULL;
     }
 
-    return choices[whichChoice]->TranslateToSG( aParent, calcNormals );
+    return choices[whichChoice]->TranslateToSG( aParent );
 }

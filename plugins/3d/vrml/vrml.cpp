@@ -252,7 +252,7 @@ SCENEGRAPH* Load( char const* aFileName )
             #endif
 
             // for now we recalculate all normals per-vertex per-face
-            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, true );
+            scene = (SCENEGRAPH*)bp->TranslateToSG( NULL );
         }
 
         delete bp;

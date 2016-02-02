@@ -363,7 +363,7 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
     std::cerr << " * [INFO] Translating Transform with " << m_Children.size();
@@ -432,7 +432,7 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent, bool calcNormals )
             case WRL2_INLINE:
             case WRL2_TRANSFORM:
 
-                if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr(), calcNormals ) )
+                if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr() ) )
                     test = true;
 
                 break;

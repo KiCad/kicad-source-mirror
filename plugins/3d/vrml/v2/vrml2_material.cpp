@@ -296,7 +296,7 @@ bool WRL2MATERIAL::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 

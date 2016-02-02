@@ -360,7 +360,7 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
 {
     if( NULL == material && NULL == texture )
         return NULL;
@@ -418,7 +418,7 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent, bool calcNormals )
         return m_sgNode;
     }
 
-    m_sgNode = material->TranslateToSG( aParent, calcNormals );
+    m_sgNode = material->TranslateToSG( aParent );
 
     return m_sgNode;
 }

@@ -377,7 +377,7 @@ bool WRL2LINESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2LINESET::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2LINESET::TranslateToSG( SGNODE* aParent )
 {
     // note: there are no plans to support drawing of lines
     return NULL;

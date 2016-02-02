@@ -910,7 +910,7 @@ bool WRL2BASE::readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 }
 
 
-SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
 {
     if( m_Children.empty() )
         return NULL;
@@ -967,7 +967,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
             do
             {
                 IFSG_TRANSFORM wrapper( topNode.GetRawPtr() );
-                SGNODE* pshape = (*sC)->TranslateToSG( wrapper.GetRawPtr(), calcNormals );
+                SGNODE* pshape = (*sC)->TranslateToSG( wrapper.GetRawPtr() );
 
                 if( NULL != pshape )
                     test = true;
@@ -981,7 +981,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent, bool calcNormals )
         case WRL2_TRANSFORM:
         case WRL2_SWITCH:
 
-            if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr(), calcNormals ) )
+            if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr() ) )
                 test = true;
 
             break;

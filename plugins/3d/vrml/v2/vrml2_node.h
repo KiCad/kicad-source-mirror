@@ -185,7 +185,7 @@ public:
      * @param aParent is a pointer to the parent SG node
      * @return is non-NULL on success
      */
-    virtual SGNODE* TranslateToSG( SGNODE* aParent, bool calcNormals ) = 0;
+    virtual SGNODE* TranslateToSG( SGNODE* aParent ) = 0;
 };
 
 #endif  // VRML2_NODE_H

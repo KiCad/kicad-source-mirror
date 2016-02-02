@@ -326,7 +326,7 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 }
 
 
-SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
+SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
 {
     if( NULL == geometry )
         return NULL;
@@ -401,11 +401,11 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent, bool calcNormals )
     IFSG_SHAPE shNode( aParent );
 
     SGNODE* pShape = shNode.GetRawPtr();
-    SGNODE* pGeom = geometry->TranslateToSG( pShape, calcNormals );
+    SGNODE* pGeom = geometry->TranslateToSG( pShape );
     SGNODE* pApp = NULL;
 
     if( NULL != appearance )
-        pApp = appearance->TranslateToSG( pShape, calcNormals );
+        pApp = appearance->TranslateToSG( pShape );
 
     if( ( NULL != appearance && NULL == pApp ) || NULL == pGeom )
     {
