@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 28 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -91,7 +91,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search all pin &names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkAllPins, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 	
-	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet onl&y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkCurrentSheetOnly, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_checkReplaceReferences = new wxCheckBox( this, wxID_ANY, _("Replace componen&t reference designators"), wxDefaultPosition, wxDefaultSize, 0 );

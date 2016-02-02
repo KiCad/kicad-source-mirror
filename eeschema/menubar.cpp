@@ -427,6 +427,22 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
 
+    text = AddHotkeyName( _( "Update PCB from Schematics" ), g_Schematic_Hokeys_Descr, HK_UPDATE_PCB_FROM_SCH );
+
+    AddMenuItem( toolsMenu,
+                 ID_UPDATE_PCB_FROM_SCH,
+                 text, _( "Updates the PCB design with the current schematic (forward annotation)." ),
+                 KiBitmap( pcbnew_xpm ) );
+
+    // Run Pcbnew
+    AddMenuItem( toolsMenu,
+                 ID_RUN_PCB,
+                 _( "&Open PCB Editor" ),
+                 _( "Run Pcbnew" ),
+                 KiBitmap( pcbnew_xpm ) );
+
+    toolsMenu->AppendSeparator();
+
     AddMenuItem( toolsMenu,
                  ID_RUN_LIBRARY,
                  _( "Library &Editor" ), HELP_RUN_LIB_EDITOR,
@@ -474,16 +490,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Run CvPcb
     AddMenuItem( toolsMenu,
                  ID_RUN_CVPCB,
-                 _( "A&ssign Component Footprint" ),
+                 _( "A&ssign Component Footprints" ),
                  _( "Run CvPcb" ),
                  KiBitmap( cvpcb_xpm ) );
-
-    // Run Pcbnew
-    AddMenuItem( toolsMenu,
-                 ID_RUN_PCB,
-                 _( "&Layout Printed Circuit Board" ),
-                 _( "Run Pcbnew" ),
-                 KiBitmap( pcbnew_xpm ) );
 
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;

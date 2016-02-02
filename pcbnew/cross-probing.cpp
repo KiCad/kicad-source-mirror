@@ -24,6 +24,9 @@
 
 #include <collectors.h>
 #include <pcbnew.h>
+#include <netlist_reader.h>
+#include <pcb_netlist.h>
+#include <dialogs/dialog_update_pcb.h>
 
 #include <tools/common_actions.h>
 #include <tool/tool_manager.h>
@@ -242,6 +245,28 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_CROSS_PROBE:
         ExecuteRemoteCommand( payload.c_str() );
         break;
+
+    case MAIL_SCH_PCB_UPDATE:
+    {
+        NETLIST netlist;
+
+        try {
+            STRING_LINE_READER* lineReader = new STRING_LINE_READER( payload, _( "EEschema netlist" ) );
+            KICAD_NETLIST_READER netlistReader( lineReader, &netlist );
+            netlistReader.LoadNetlist();
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            assert( false ); // should never happen
+        }
+
+        DIALOG_UPDATE_PCB updateDialog( this, &netlist );
+
+        updateDialog.PerformUpdate( true );
+        updateDialog.ShowModal();
+
+        break;
+    }
 
     // many many others.
     default:

@@ -35,7 +35,7 @@
 #include <class_board_item.h>
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-    BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED ),
+    BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED_ITEM ),
     m_Subnet( 0 ), m_ZoneSubnet( 0 )
 {
 }
@@ -59,7 +59,7 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
     if( ( aNetCode >= 0 ) && board )
         m_netinfo = board->FindNet( aNetCode );
     else
-        m_netinfo = &NETINFO_LIST::ORPHANED;
+        m_netinfo = &NETINFO_LIST::ORPHANED_ITEM;
 
     if( !aNoAssert )
         assert( m_netinfo );

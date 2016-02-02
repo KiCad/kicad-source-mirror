@@ -23,6 +23,8 @@
 # These are additions to any inherited from pcbnew dir:
 include_directories( . )
 
+include_directories( ${CURL_INCLUDE_DIRS} )
+
 set( GITHUB_PLUGIN_SRCS
     github_plugin.cpp
     github_getliblist.cpp

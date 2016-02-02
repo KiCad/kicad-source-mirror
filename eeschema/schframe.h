@@ -809,6 +809,7 @@ private:
     void OnAnnotate( wxCommandEvent& event );
     void OnErc( wxCommandEvent& event );
     void OnCreateNetlist( wxCommandEvent& event );
+    void OnUpdatePCB( wxCommandEvent& event );
     void OnCreateBillOfMaterials( wxCommandEvent& event );
     void OnFindItems( wxCommandEvent& event );
     void OnFindDialogClose( wxFindDialogEvent& event );

@@ -197,6 +197,14 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         ExecuteRemoteCommand( payload.c_str() );
         break;
 
+    case MAIL_SCH_PCB_UPDATE_REQUEST:
+    {
+        wxCommandEvent dummy;
+
+        OnUpdatePCB( dummy );
+        break;
+    }
+
     case MAIL_BACKANNOTATE_FOOTPRINTS:
         try
         {

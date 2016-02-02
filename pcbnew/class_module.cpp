@@ -115,6 +115,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( *pad );
+        assert( newpad->GetNet() == pad->GetNet() );
         newpad->SetParent( this );
         m_Pads.PushBack( newpad );
     }
@@ -186,7 +187,7 @@ void MODULE::ClearAllNets()
     // Force the ORPHANED dummy net info for all pads.
     // ORPHANED dummy net does not depend on a board
     for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
-        pad->SetNetCode( NETINFO_LIST::FORCE_ORPHANED );
+        pad->SetNetCode( NETINFO_LIST::ORPHANED );
 }
 
 

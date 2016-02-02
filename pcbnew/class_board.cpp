@@ -672,6 +672,10 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
     switch( aBoardItem->Type() )
     {
+    case PCB_NETINFO_T:
+        aBoardItem->SetParent( this );
+        m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem );
+
     // this one uses a vector
     case PCB_MARKER_T:
         aBoardItem->SetParent( this );
@@ -759,6 +763,12 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 
     switch( aBoardItem->Type() )
     {
+    case PCB_NETINFO_T:
+    {
+        NETINFO_ITEM* item = (NETINFO_ITEM*) aBoardItem;
+        m_NetInfo.RemoveNet( item );
+        break;
+    }
     case PCB_MARKER_T:
 
         // find the item in the vector, then remove it
@@ -1252,7 +1262,7 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     wxASSERT( m_NetInfo.GetNetCount() > 0 );    // net zero should exist
 
     if( aNetcode == NETINFO_LIST::UNCONNECTED && m_NetInfo.GetNetCount() == 0 )
-        return &NETINFO_LIST::ORPHANED;
+        return &NETINFO_LIST::ORPHANED_ITEM;
     else
         return m_NetInfo.GetNetItem( aNetcode );
 }

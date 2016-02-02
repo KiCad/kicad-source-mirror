@@ -223,6 +223,8 @@ static EDA_HOTKEY HkLoadSchematic( _HKI( "Load Schematic" ), HK_LOAD_SCH, 'L' + 
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
                                         ID_AUTOPLACE_FIELDS );
 
+static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematics" ), HK_UPDATE_PCB_FROM_SCH, WXK_F8 );
+
 // List of common hotkey descriptors
 static EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -295,8 +297,9 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkAddBusEntry,
     &HkAddGraphicPolyLine,
     &HkAddGraphicText,
-    &HkLeaveSheet,
+    &HkUpdatePcbFromSch,
     &HkAutoplaceFields,
+    &HkLeaveSheet,
     &HkDeleteNode,
     NULL
 };

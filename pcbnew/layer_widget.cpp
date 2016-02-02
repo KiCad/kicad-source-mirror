@@ -422,9 +422,10 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     // column 1 (COLUMN_COLORBM)
     col = COLUMN_COLORBM;
     wxBitmapButton* bmb = makeColorButton( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
-    bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
+    bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
+    bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
     bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
-    bmb->SetToolTip( _("Left click for color change, right click for menu" ) );
+    bmb->SetToolTip( _("Left double click or middle click for color change, right click for menu" ) );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
     // column 2 (COLUMN_COLOR_LYR_CB)
@@ -458,9 +459,9 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     if( aSpec.color != -1 )
     {
         wxBitmapButton* bmb = makeColorButton( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
-        bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
+        bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
         bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
-        bmb->SetToolTip( _( "Left click for color change" ) );
+        bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
         m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
         // could add a left click handler on the color button that toggles checkbox.

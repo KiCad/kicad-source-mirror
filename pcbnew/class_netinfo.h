@@ -36,6 +36,7 @@
 
 #include <gr_basic.h>
 #include <class_netclass.h>
+#include <class_board_item.h>
 #include <boost/unordered_map.hpp>
 #include <hashtables.h>
 
@@ -290,12 +291,17 @@ public:
     unsigned GetNetCount() const { return m_netNames.size(); }
 
     /**
-     * Function Append
-     * adds \a aNewElement to the end of the list. Negative net code means it is going to be
+     * Function AppendNet
+     * adds \a aNewElement to the end of the net list. Negative net code means it is going to be
      * auto-assigned.
      */
     void AppendNet( NETINFO_ITEM* aNewElement );
 
+    /**
+     * Function RemoveNet
+     * Removes a new from the net list.
+     */
+    void RemoveNet( NETINFO_ITEM* aNet );
     /**
      * Function GetPadCount
      * @return the number of pads in board
@@ -347,11 +353,11 @@ public:
 
     ///> Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
     ///> (typically -1) when calling SetNetCode od board connected items
-    static const int FORCE_ORPHANED;
+    static const int ORPHANED;
 
     ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
     ///> board storing net list available.
-    static NETINFO_ITEM ORPHANED;
+    static NETINFO_ITEM ORPHANED_ITEM;
 
 #if defined(DEBUG)
     void Show() const;
@@ -422,6 +428,11 @@ public:
     }
 #endif
 
+    BOARD* GetParent() const
+    {
+        return m_Parent;
+    }
+
 private:
     /**
      * Function clear
@@ -468,7 +479,7 @@ private:
  * Class NETINFO_ITEM
  * handles the data for a net
  */
-class NETINFO_ITEM
+class NETINFO_ITEM : public BOARD_ITEM
 {
     friend class NETINFO_LIST;
 
@@ -485,7 +496,7 @@ private:
                                 // item of the net classes list
     NETCLASSPTR m_NetClass;
 
-    BOARD_ITEM* m_parent;       ///< The parent board item object the net belongs to.
+    BOARD* m_parent;            ///< The parent board the net belongs to.
 
 public:
     std::vector<D_PAD*> m_PadInNetList;    ///< List of pads connected to this net
@@ -498,8 +509,32 @@ public:
     unsigned m_RatsnestEndIdx;         // Ending point of ratsnests of this net
                                        // (excluded) in this buffer
 
-    NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName = wxEmptyString, int aNetCode = -1 );
+    NETINFO_ITEM( BOARD* aParent, const wxString& aNetName = wxEmptyString, int aNetCode = -1 );
     ~NETINFO_ITEM();
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_T == aItem->Type();
+    }
+
+    wxString GetClass() const
+    {
+        return wxT( "NETINFO_ITEM" );
+    }
+
+    void Show( int nestLevel, std::ostream& os ) const
+    {
+    }
+
+    const wxPoint& GetPosition() const
+    {
+        static wxPoint dummy(0, 0);
+        return dummy;
+    }
+
+    void SetPosition( const wxPoint& aPos )
+    {
+    }
 
     /**
      * Function SetClass
@@ -622,6 +657,8 @@ public:
      */
     int GetNet() const { return m_NetCode; }
 
+    void SetNetCode( int aNetCode ) { m_NetCode = aNetCode; }
+
     /**
      * Function GetNodesCount
      * @return int - number of nodes in the net
@@ -663,6 +700,12 @@ public:
 
         SetClass( NETCLASSPTR() );
     }
+
+    BOARD* GetParent() const
+    {
+        return m_parent;
+    }
+
 };
 
 

@@ -116,6 +116,7 @@
  * @param aItem = item to find
  *              = NULL to build the list of existing items
  */
+
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
     static std::vector<BOARD_ITEM*> itemsList;
@@ -145,6 +146,10 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
         for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
              icnt++;
 
+        NETINFO_LIST& netInfo = aPcb->GetNetInfo();
+
+        icnt += netInfo.GetNetCount();
+
         // Build candidate list:
         itemsList.clear();
         itemsList.reserve(icnt);
@@ -169,6 +174,9 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
         // Append zones segm:
         for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
             itemsList.push_back( item );
+
+        for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
+            itemsList.push_back( *i );
 
         // Sort list
         std::sort( itemsList.begin(), itemsList.end() );
@@ -310,12 +318,11 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     if( aItem->Type() == PCB_MODULE_TEXT_T )
     {
         aItem = aItem->GetParent();
+        wxASSERT( aItem->Type() == PCB_MODULE_T );
+        aCommandType = UR_CHANGED;
 
         if( aItem == NULL )
             return;
-
-        wxASSERT( aItem->Type() == PCB_MODULE_T );
-        aCommandType = UR_CHANGED;
     }
 
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
@@ -380,28 +387,47 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
     commandToUndo->m_TransformPoint = aTransformPoint;
 
-    // Copy picker list:
-    commandToUndo->CopyList( aItemsList );
+    // First, filter unnecessary stuff from the list (i.e. for multiple pads / labels modified),
+    // take the first occurence of the module.
 
-    // Verify list, and creates data if needed
-    for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
+    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
+        ITEM_PICKER picker = aItemsList.GetItemWrapper(ii);
+        BOARD_ITEM* item    = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
 
         // For texts belonging to modules, we need to save state of the parent module
         if( item->Type() == PCB_MODULE_TEXT_T  || item->Type() == PCB_PAD_T )
         {
             item = item->GetParent();
+            wxASSERT( item->Type() == PCB_MODULE_T );
 
             if( item == NULL )
                 continue;
 
-            wxASSERT( item->Type() == PCB_MODULE_T );
+            bool found = false;
 
-            commandToUndo->SetPickedItem( item, ii );
-            commandToUndo->SetPickedItemStatus( UR_CHANGED, ii );
+            for( unsigned j = 0; j < commandToUndo->GetCount(); j++ )
+            {
+                if( commandToUndo->GetPickedItem( j ) == item && commandToUndo->GetPickedItemStatus( j ) == UR_CHANGED )
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if( !found )
+                commandToUndo->PushItem( ITEM_PICKER(item, UR_CHANGED ) );
+            else
+                continue;
+
+        } else {
+            commandToUndo->PushItem( picker );
         }
+    }
 
+    for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
+    {
+        BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
         UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
 
         if( command == UR_UNSPECIFIED )
@@ -421,7 +447,10 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
              * If this link is not null, the copy is already done
              */
             if( commandToUndo->GetPickedItemLink( ii ) == NULL )
-                commandToUndo->SetPickedItemLink( item->Clone(), ii );
+            {
+                EDA_ITEM* cloned = item->Clone();
+                commandToUndo->SetPickedItemLink( cloned, ii );
+            }
             break;
 
         case UR_MOVED:
@@ -465,6 +494,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     BOARD_ITEM* item;
     bool        not_found = false;
     bool        reBuild_ratsnest = false;
+    bool        deep_reBuild_ratsnest = false;
+
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
     RN_DATA* ratsnest = GetBoard()->GetRatsnest();
 
@@ -518,6 +549,11 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             reBuild_ratsnest = true;
             break;
 
+        case PCB_NETINFO_T:
+            reBuild_ratsnest = true;
+            deep_reBuild_ratsnest = true;
+            break;
+
         default:
             break;
         }
@@ -564,8 +600,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 MODULE* module = static_cast<MODULE*>( item );
                 module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
-            view->Remove( item );
 
+            view->Remove( item );
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             break;
 
@@ -625,12 +661,18 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
     // Rebuild pointers and ratsnest that can be changed.
-    if( reBuild_ratsnest && aRebuildRatsnet )
+    if( reBuild_ratsnest )
     {
+        Compile_Ratsnest( NULL, true );
+
         if( IsGalCanvasActive() )
-            ratsnest->Recalculate();
-        else
-            Compile_Ratsnest( NULL, true );
+        {
+            if( deep_reBuild_ratsnest )
+                ratsnest->ProcessBoard();
+            else
+                ratsnest->Recalculate();
+        }
+
     }
 }
 
@@ -649,7 +691,6 @@ void PCB_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
-
     /* Undo the command */
     PutDataInPreviousState( List, false );
 

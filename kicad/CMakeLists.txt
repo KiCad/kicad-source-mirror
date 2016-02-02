@@ -25,6 +25,8 @@ set( KICAD_SRCS
 if( MINGW )
     # KICAD_RESOURCES variable is set by the macro.
     mingw_resource_compiler( kicad )
+else()
+    set( KICAD_RESOURCES kicad.rc )
 endif()
 
 if( APPLE )

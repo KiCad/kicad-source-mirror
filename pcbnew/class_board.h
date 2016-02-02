@@ -821,6 +821,11 @@ public:
         m_NetInfo.AppendNet( aNewNet );
     }
 
+    NETINFO_LIST& GetNetInfo()
+    {
+        return m_NetInfo;
+    }
+
 #ifndef SWIG
     /**
      * Function BeginNets

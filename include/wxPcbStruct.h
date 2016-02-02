@@ -89,17 +89,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
 
-    /**
-     * Function loadFootprints
-     * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
-     *
-     * @param aNetlist is the netlist of components to load the footprints into.
-     * @param aReporter is the #REPORTER object to report to.
-     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
-     *           occurs while reading footprint library files.
-     */
-    void loadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
-        throw( IO_ERROR, PARSE_ERROR );
 
 protected:
     PCB_LAYER_WIDGET* m_Layers;
@@ -225,6 +214,18 @@ public:
 
     virtual ~PCB_EDIT_FRAME();
 
+    /**
+     * Function loadFootprints
+     * loads the footprints for each #COMPONENT in \a aNetlist from the list of libraries.
+     *
+     * @param aNetlist is the netlist of components to load the footprints into.
+     * @param aReporter is the #REPORTER object to report to.
+     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
+     *           occurs while reading footprint library files.
+     */
+    void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
+        throw( IO_ERROR, PARSE_ERROR );
+
     void OnQuit( wxCommandEvent& event );
 
     /**
@@ -280,6 +281,7 @@ public:
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
     void OnConfigurePaths( wxCommandEvent& aEvent );
+    void OnUpdatePCBFromSch( wxCommandEvent& event );
 
     /**
      * called when the alt key is pressed during a mouse wheel action
