@@ -381,11 +381,17 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
 
     if( !path.DirExists() )
     {
-        wxString msg = _T( "The given path does not exist" );
-        msg.append( wxT( "\n" ) );
-        msg.append( tpath.m_pathvar );
+        // suppress the message if the missing pathvar is the
+        // legacy KISYS3DMOD variable
+        if( aPath.m_pathvar.compare( wxT( "${KISYS3DMOD}" ) ) )
+        {
+            wxString msg = _T( "The given path does not exist" );
+            msg.append( wxT( "\n" ) );
+            msg.append( tpath.m_pathvar );
+            wxMessageBox( msg, _T( "3D model search path" ) );
+        }
+
         tpath.m_pathexp.clear();
-        wxMessageBox( msg, _T( "3D model search path" ) );
     }
     else
     {

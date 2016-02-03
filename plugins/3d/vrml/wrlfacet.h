@@ -77,9 +77,13 @@ public:
     /**
      * Function CalcFaceNormal
      * calculates the normal to the facet assuming a CCW orientation
-     * and performs the calculation of the angle weighted vertex normals
+     * and performs the calculation of the angle weighted vertex normals.
+     *
+     * @return is the max. magnitude of any component of a vector
      */
-    void CalcFaceNormal();
+    float CalcFaceNormal();
+
+    void Renormalize( float aMaxValue );
 
     /**
      * Function CalcVertexNormal

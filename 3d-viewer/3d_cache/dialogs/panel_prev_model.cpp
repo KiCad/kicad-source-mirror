@@ -133,7 +133,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
             aParent->FindWindowByLabel( wxT( "3D_MODEL_SELECTOR" ), aParent );
 
     wxFloatingPointValidator< float > valScale( 6 );
-    valScale.SetRange( 0.001, 100 );
+    valScale.SetRange( 0.0001, 10000 );
     wxFloatingPointValidator< float > valRotate( 2 );
     valRotate.SetRange( -180.0, 180.0 );
     wxFloatingPointValidator< float > valOffset( 6 );
