@@ -427,6 +427,10 @@ void RN_NET::Update()
 
 void RN_NET::AddItem( const D_PAD* aPad )
 {
+    // Ratsnest is not computed for non-copper pads
+    if( ( aPad->GetLayerSet() & LSET::AllCuMask() ).none() )
+        return;
+
     RN_NODE_PTR node = m_links.AddNode( aPad->GetPosition().x, aPad->GetPosition().y );
     node->AddParent( aPad );
     m_pads[aPad].m_Node = node;
@@ -672,51 +676,53 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
 {
     std::list<RN_NODE_PTR> nodes;
 
-    try
+    switch( aItem->Type() )
     {
-        switch( aItem->Type() )
+    case PCB_PAD_T:
+    {
+        PAD_NODE_MAP::const_iterator it = m_pads.find( static_cast<const D_PAD*>( aItem ) );
+
+        if( it != m_pads.end() )
+            nodes.push_back( it->second.m_Node );
+    }
+    break;
+
+    case PCB_VIA_T:
+    {
+        VIA_NODE_MAP::const_iterator it = m_vias.find( static_cast<const VIA*>( aItem ) );
+
+        if( it != m_vias.end() )
+            nodes.push_back( it->second );
+    }
+    break;
+
+    case PCB_TRACE_T:
+    {
+        TRACK_EDGE_MAP::const_iterator it = m_tracks.find( static_cast<const TRACK*>( aItem ) );
+
+        if( it != m_tracks.end() )
         {
-        case PCB_PAD_T:
-        {
-            const D_PAD* pad = static_cast<const D_PAD*>( aItem );
-            nodes.push_back( m_pads.at( pad ).m_Node );
+            nodes.push_back( it->second->GetSourceNode() );
+            nodes.push_back( it->second->GetTargetNode() );
         }
-        break;
+    }
+    break;
 
-        case PCB_VIA_T:
+    case PCB_ZONE_AREA_T:
+    {
+        ZONE_DATA_MAP::const_iterator it = m_zones.find( static_cast<const ZONE_CONTAINER*>( aItem ) );
+
+        if( it != m_zones.end() )
         {
-            const VIA* via = static_cast<const VIA*>( aItem );
-            nodes.push_back( m_vias.at( via ) );
-        }
-        break;
-
-        case PCB_TRACE_T:
-        {
-            const TRACK* track = static_cast<const TRACK*>( aItem );
-            const RN_EDGE_MST_PTR& edge = m_tracks.at( track );
-
-            nodes.push_back( edge->GetSourceNode() );
-            nodes.push_back( edge->GetTargetNode() );
-        }
-        break;
-
-        case PCB_ZONE_AREA_T:
-        {
-            const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
-            const std::deque<RN_POLY>& polys = m_zones.at( zone ).m_Polygons;
-
+            const std::deque<RN_POLY>& polys = it->second.m_Polygons;
             for( std::deque<RN_POLY>::const_iterator it = polys.begin(); it != polys.end(); ++it )
                 nodes.push_back( it->GetNode() );
         }
-        break;
-
-        default:
-            break;
-        }
     }
-    catch( ... )
-    {
-        // It is fine, just return empty list of nodes
+    break;
+
+    default:
+        break;
     }
 
     return nodes;
