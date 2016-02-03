@@ -1015,7 +1015,7 @@ public:
      *
      * Note: the screen is not refresh. The caller is responsible to do that
      */
-    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
+    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET* aHierarchy );
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 

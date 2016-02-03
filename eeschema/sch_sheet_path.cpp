@@ -294,69 +294,6 @@ bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 }
 
 
-bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
-                                       const wxString& aDestFileName ) const
-{
-    wxFileName rootFn = g_RootSheet->GetFileName();
-    wxFileName srcFn = aSrcFileName;
-    wxFileName destFn = aDestFileName;
-
-    if( srcFn.IsRelative() )
-        srcFn.MakeAbsolute( rootFn.GetPath() );
-
-    if( destFn.IsRelative() )
-        destFn.MakeAbsolute( rootFn.GetPath() );
-
-
-    // The source and destination sheet file names cannot be the same.
-    if( srcFn == destFn )
-        return true;
-
-    /// @todo Store sheet file names with full path, either relative to project path
-    ///       or absolute path.  The current design always assumes subsheet files are
-    ///       located in the project folder which may or may not be desirable.
-    unsigned i = 0;
-
-    while( i < m_numSheets )
-    {
-        wxFileName cmpFn = m_sheets[i]->GetFileName();
-
-        if( cmpFn.IsRelative() )
-            cmpFn.MakeAbsolute( rootFn.GetPath() );
-
-        // Test if the file name of the destination sheet is in anywhere in this sheet path.
-        if( cmpFn == destFn )
-            break;
-
-        i++;
-    }
-
-    // The destination sheet file name was not found in the sheet path or the destination
-    // sheet file name is the root sheet so no recursion is possible.
-    if( i >= m_numSheets || i == 0 )
-        return false;
-
-    // Walk back up to the root sheet to see if the source file name is already a parent in
-    // the sheet path.  If so, recursion will occur.
-    do
-    {
-        i -= 1;
-
-        wxFileName cmpFn = m_sheets[i]->GetFileName();
-
-        if( cmpFn.IsRelative() )
-            cmpFn.MakeAbsolute( rootFn.GetPath() );
-
-        if( cmpFn == srcFn )
-            return true;
-
-    } while( i != 0 );
-
-    // The source sheet file name is not a parent of the destination sheet file name.
-    return false;
-}
-
-
 int SCH_SHEET_PATH::FindSheet( const wxString& aFileName ) const
 {
     for( unsigned i = 0; i < m_numSheets; i++ )
@@ -597,37 +534,6 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
     }
 
     return NULL;
-}
-
-
-bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
-                                       const wxString& aDestFileName ) const
-{
-    wxFileName rootFn = g_RootSheet->GetFileName();
-    wxFileName destFn = aDestFileName;
-
-    if( destFn.IsRelative() )
-        destFn.MakeAbsolute( rootFn.GetPath() );
-
-    // Test each SCH_SHEET_PATH in this SCH_SHEET_LIST for potential recursion.
-    for( int i = 0; i < m_count; i++ )
-    {
-        // Test each SCH_SHEET_PATH in the source sheet.
-        for( int j = 0; j < aSrcSheetHierarchy.GetCount(); j++ )
-        {
-            SCH_SHEET_PATH* sheetPath = aSrcSheetHierarchy.GetSheet( j );
-
-            for( unsigned k = 0; k < sheetPath->GetCount(); k++ )
-            {
-                if( m_list[i].TestForRecursion( sheetPath->GetSheet( k )->GetFileName(),
-                                                aDestFileName ) )
-                    return true;
-            }
-        }
-    }
-
-    // The source sheet file can safely be added to the destination sheet file.
-    return false;
 }
 
 

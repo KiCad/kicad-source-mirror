@@ -41,7 +41,7 @@
 #include <project.h>
 
 
-bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
+bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET* aHierarchy )
 {
     if( aSheet == NULL || aHierarchy == NULL )
         return false;
@@ -235,15 +235,16 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
                                            (long unsigned) aSheet->GetTimeStamp() ) );
 
     // Make sure the sheet changes do not cause any recursion.
-    SCH_SHEET_LIST sheetHierarchy( aSheet );
+    std::vector< std::vector< const SCH_SHEET* > > sheetHierarchy;
+    aSheet->GetSheetPaths( sheetHierarchy );
 
     // Make sure files have fully qualified path and file name.
-    wxFileName destFn = aHierarchy->Last()->GetFileName();
+    wxFileName destFn = aHierarchy->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( Prj().GetProjectPath() );
 
-    if( hierarchy.TestForRecursion( sheetHierarchy, destFn.GetFullPath( wxPATH_UNIX ) ) )
+    if( g_RootSheet->TestForRecursion( sheetHierarchy, destFn.GetFullPath( wxPATH_UNIX ) ) )
     {
         msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
                        "has the sheet <%s> or one of it's subsheets as a parent somewhere in "
