@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-04 19:10+0300\n"
-"PO-Revision-Date: 2016-02-04 19:11+0300\n"
+"PO-Revision-Date: 2016-02-04 19:51+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -4342,7 +4342,7 @@ msgstr "Показать границы страницы"
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
 msgid "Display"
-msgstr "Показать"
+msgstr "Отображение"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:133
 msgid "&Measurement units:"
@@ -5105,7 +5105,7 @@ msgstr "По центру страницы"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:302
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:63
 msgid "Origin"
-msgstr "Как есть"
+msgstr "Начало координат"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:74
 msgid "Pen width"
@@ -5124,7 +5124,9 @@ msgstr "Толщина линии по умолчанию"
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
-msgstr "Выбор толщины пера. Если 0, то используется толщина пера по умолчанию."
+msgstr ""
+"Выбор толщины пера по умолчанию, используемая для отображения элементов, "
+"когда их толщина установлена в 0."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:101
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
