@@ -2695,12 +2695,12 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
                     case T_chamfer:
                         if( !zone->GetIsKeepout() ) // smoothing has meaning only for filled zones
-                                zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_CHAMFER );
+                            zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_CHAMFER );
                         break;
 
                     case T_fillet:
                         if( !zone->GetIsKeepout() ) // smoothing has meaning only for filled zones
-                                zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_FILLET );
+                            zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_FILLET );
                         break;
 
                     default:

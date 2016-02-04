@@ -194,7 +194,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
     if( it != m_gh_cache->end() )  // fp_name is present
     {
-        wxMemoryInputStream mis( &m_zip_image[0], m_zip_image.size() );
+        wxMemoryInputStream mis( m_zip_image.data(), m_zip_image.size() );
 
         // This decoder should always be UTF8, since it was saved that way by git.
         // That is, since pretty footprints are UTF8, and they were pushed to the
@@ -205,21 +205,17 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         if( zis.OpenEntry( *entry ) )
         {
             INPUTSTREAM_LINE_READER reader( &zis, aLibraryPath );
-#if 1
+
             // I am a PCB_IO derivative with my own PCB_PARSER
             m_parser->SetLineReader( &reader );     // ownership not passed
 
             MODULE* ret = (MODULE*) m_parser->Parse();
-#else
-            PCB_PARSER              parser( &reader );
 
-            MODULE* ret = (MODULE*) parser.Parse();
-#endif
-
-            // Dude, the footprint name comes from the file name in
-            // a github library.  Zero out the library name, we don't know it here.
-            // Some caller may set the library nickname, one such instance is
-            // FP_LIB_TABLE::FootprintLoad().
+            // In a github library, (as well as in a "KiCad" library) the name of
+            // the pretty file defines the footprint name.  That filename trumps
+            // any name found in the pretty file; any name in the pretty file
+            // must be ignored here.  Also, the library nickname is unknown in
+            // this context so clear it just in case.
             ret->SetFPID( fp_name );
 
             return ret;
@@ -541,11 +537,14 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
     }
     catch( const IO_ERROR& ioe )
     {
-        // https "GET" has faild, report this to API caller.
+        // https "GET" has failed, report this to API caller.
         // Note: kcurl.Perform() does not return an error if the file to download is not found
+        static const char errorcmd[] = "http GET command failed";  // Do not translate this message
+
         UTF8 fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
 
         std::string msg = StrPrintf( fmt.c_str(),
+                                     errorcmd,
                                      zip_url.c_str(),
                                      TO_UTF8( aRepoURL ),
                                      TO_UTF8( ioe.errorText )
