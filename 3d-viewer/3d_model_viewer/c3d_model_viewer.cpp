@@ -24,7 +24,9 @@
 
 /**
  * @file  c3d_model_viewer.cpp
- * @brief Implements a model viewer canvas
+ * @brief Implements a model viewer canvas. The propose of model viewer is to
+ * render 3d models that come in the original data from the files without any
+ * transformations.
  */
 
 #include <iostream>
@@ -159,17 +161,17 @@ void C3D_MODEL_VIEWER::ogl_initialize()
     // Setup light
     // https://www.opengl.org/sdk/docs/man2/xhtml/glLight.xml
     // /////////////////////////////////////////////////////////////////////////
-    const GLfloat ambient[]  = { 0.1f, 0.1f, 0.1f, 1.0f };
+    const GLfloat ambient[]  = { 0.01f, 0.01f, 0.01f, 1.0f };
     const GLfloat diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
     const GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    const GLfloat position[] = { 0.0f, 0.0f, 1.0f, 0.0f };                      // defines a directional light that points along the negative z-axis
-    const GLfloat lmodel_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    const GLfloat position[] = { 0.0f, 0.0f, 2.0f * RANGE_SCALE_3D, 0.0f }; // defines a directional light that points along the negative z-axis
+    const GLfloat lmodel_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
     glLightfv( GL_LIGHT0, GL_AMBIENT,  ambient );
     glLightfv( GL_LIGHT0, GL_DIFFUSE,  diffuse );
     glLightfv( GL_LIGHT0, GL_SPECULAR, specular );
     glLightfv( GL_LIGHT0, GL_POSITION, position );
-    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, lmodel_ambient );
 }
 
 
@@ -253,36 +255,19 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     // Render Model
     if( m_ogl_3dmodel )
     {
-        /*
-        ogl_set_arrow_material();
-
-        glColor3f( 0.9f, 0.0f, 0.0f );
-        OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                        SFVEC3F( RANGE_SCALE_3D / 1.0f, 0.0f, 0.0f ),
-                        0.2f );
-
-        glColor3f( 0.0f, 0.9f, 0.0f );
-        OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                        SFVEC3F( 0.0f, RANGE_SCALE_3D / 1.0f, 0.0f ),
-                        0.2f );
-
-        glColor3f( 0.0f, 0.0f, 0.9f );
-        OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                        SFVEC3F( 0.0f, 0.0f, RANGE_SCALE_3D / 1.0f ),
-                        0.2f );
-        */
-
         glPushMatrix();
 
         double modelunit_to_3d_units_factor = m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
 
         glScaled( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor, modelunit_to_3d_units_factor);
 
+        // Center model in the render viewport
         const SFVEC3F model_center = m_ogl_3dmodel->GetBBox().GetCenter();
         glTranslatef( -model_center.x, -model_center.y, -model_center.z );
 
+        // !TODO: draw transparent models
         m_ogl_3dmodel->Draw_opaque();
-        //m_ogl_3dmodel->Draw_transparent();
+        m_ogl_3dmodel->Draw_transparent();
         //m_ogl_3dmodel->Draw_bboxes();
 
         glPopMatrix();
@@ -299,8 +284,8 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    glm::mat4 TranslationMatrix = glm::translate( glm::mat4(1.0f), SFVEC3F( 0.0f, 0.0f, -RANGE_SCALE_3D ) );
-    glm::mat4 ViewMatrix = TranslationMatrix * m_trackBallCamera.GetRotationMatrix();
+    const glm::mat4 TranslationMatrix = glm::translate( glm::mat4(1.0f), SFVEC3F( 0.0f, 0.0f, -RANGE_SCALE_3D ) );
+    const glm::mat4 ViewMatrix = TranslationMatrix * m_trackBallCamera.GetRotationMatrix();
 
     glLoadMatrixf( glm::value_ptr( ViewMatrix ) );
 

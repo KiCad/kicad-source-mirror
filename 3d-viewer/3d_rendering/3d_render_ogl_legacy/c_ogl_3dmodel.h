@@ -67,6 +67,16 @@ public:
     void Draw_bboxes() const;
 
     /**
+     * @brief Have_opaque - return true if have opaque meshs to render
+     */
+    bool Have_opaque() const;
+
+    /**
+     * @brief Have_transparent - return true if have transparent meshs to render
+     */
+    bool Have_transparent() const;
+
+    /**
      * @brief GetBBox - Get main bbox
      * @return the main model bbox
      */

@@ -24,7 +24,9 @@
 
 /**
  * @file  c3d_model_viewer.h
- * @brief   Implements a model viewer canvas
+ * @brief Implements a model viewer canvas. The propose of model viewer is to
+ * render 3d models that come in the original data from the files without any
+ * transformations.
  */
 
 #ifndef _C3D_MODEL_VIEWER_H_

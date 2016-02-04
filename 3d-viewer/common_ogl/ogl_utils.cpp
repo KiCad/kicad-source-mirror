@@ -117,7 +117,7 @@ GLuint OGL_LoadTexture( const CIMAGE &aImage )
 void OGL_SetMaterial( const SMATERIAL & aMaterial )
 {
     const SFVEC4F ambient  = SFVEC4F( aMaterial.m_Ambient,  1.0f );
-    const SFVEC4F diffuse  = SFVEC4F( aMaterial.m_Diffuse,  1.0f );
+    const SFVEC4F diffuse  = SFVEC4F( aMaterial.m_Diffuse - aMaterial.m_Transparency,  1.0f );
     const SFVEC4F specular = SFVEC4F( aMaterial.m_Specular, 1.0f );
     const SFVEC4F emissive = SFVEC4F( aMaterial.m_Emissive, 1.0f );
 
@@ -125,5 +125,5 @@ void OGL_SetMaterial( const SMATERIAL & aMaterial )
     glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE,  &diffuse.r );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &specular.r );
     glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, &emissive.r );
-    glMaterialf(  GL_FRONT_AND_BACK, GL_SHININESS, (aMaterial.m_Shininess > 128.0f)?128.0f:aMaterial.m_Shininess );
+    glMaterialf(  GL_FRONT_AND_BACK, GL_SHININESS, 128.0f * ((aMaterial.m_Shininess > 1.0f)?1.0f:aMaterial.m_Shininess) );
 }

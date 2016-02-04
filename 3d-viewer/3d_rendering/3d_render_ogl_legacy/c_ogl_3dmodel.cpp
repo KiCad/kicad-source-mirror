@@ -116,6 +116,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
 
                     if( mesh.m_Color != NULL )
                     {
+                        // This enables the use of the Color Pointer information
                         glEnable( GL_COLOR_MATERIAL );
                         glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
                     }
@@ -132,6 +133,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     // Draw mesh
                     // /////////////////////////////////////////////////////////
                     glDrawElements( GL_TRIANGLES, mesh.m_FaceIdxSize, GL_UNSIGNED_INT, mesh.m_FaceIdx );
+
+                    glDisable( GL_COLOR_MATERIAL );
 
                     glEndList();
 
@@ -196,7 +199,10 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     // Compile the model display list
                     glNewList( m_ogl_idx_list_transparent, GL_COMPILE );
 
-                    // Render each mesh display list (opaque first)
+                    glEnable( GL_BLEND );
+                    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+                    // Render each mesh display list
                     // /////////////////////////////////////////////////////////
                     for( unsigned mesh_i = 0; mesh_i < a3DModel.m_MeshesSize; ++mesh_i )
                     {
@@ -210,6 +216,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                                 glCallList( m_ogl_idx_list_meshes + mesh_i );           // Render the transparent mesh
                         }
                     }
+
+                    glDisable( GL_BLEND );
 
                     glEndList();
                 }
@@ -278,4 +286,15 @@ void C_OGL_3DMODEL::Draw_bboxes() const
 {
     for( unsigned int mesh_i = 0; mesh_i < m_nr_meshes; ++mesh_i )
         OGL_draw_bbox( m_meshs_bbox[mesh_i] );
+}
+
+bool C_OGL_3DMODEL::Have_opaque() const
+{
+    return glIsList( m_ogl_idx_list_opaque );
+}
+
+
+bool C_OGL_3DMODEL::Have_transparent() const
+{
+    return glIsList( m_ogl_idx_list_transparent );
 }
