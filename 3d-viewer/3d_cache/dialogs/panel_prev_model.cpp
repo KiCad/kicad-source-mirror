@@ -132,8 +132,8 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
         m_FileTree = (wxGenericDirCtrl*)
             aParent->FindWindowByLabel( wxT( "3D_MODEL_SELECTOR" ), aParent );
 
-    wxFloatingPointValidator< float > valScale( 6 );
-    valScale.SetRange( 0.0001, 10000 );
+    wxFloatingPointValidator< float > valScale( 4 );
+    valScale.SetRange( 0.0001, 9999 );
     wxFloatingPointValidator< float > valRotate( 2 );
     valRotate.SetRange( -180.0, 180.0 );
     wxFloatingPointValidator< float > valOffset( 6 );
@@ -628,7 +628,7 @@ void PANEL_PREV_3D::getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOI
     yscale->GetValue().ToDouble( &scale.y );
     zscale->GetValue().ToDouble( &scale.z );
 
-    if( 0.001 > scale.x || 0.001 > scale.y || 0.001 > scale.z )
+    if( 0.0001 > scale.x || 0.0001 > scale.y || 0.0001 > scale.z )
     {
         wxString errmsg = _("[INFO] invalid scale values; setting all to 1.0");
         wxLogMessage( "%s", errmsg.ToUTF8() );
