@@ -648,6 +648,7 @@ WARN_LOGFILE           =
 
 INPUT                  = coding-style-policy.md \
                          stable-release-policy.md \
+                         road-map-r5.md \
                          road-map.md \
                          compiling.md
 
