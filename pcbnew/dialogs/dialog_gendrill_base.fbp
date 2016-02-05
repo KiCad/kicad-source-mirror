@@ -759,7 +759,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Not recommanded.&#x0A;Used mostly by users who make themselves the boards.</property>
+                                                <property name="tooltip">Not recommended.&#x0A;Used mostly by users who make the boards themselves.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -847,7 +847,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Not recommanded.&#x0A;Use it only for board houses which do not accept fully featured headers.</property>
+                                                <property name="tooltip">Not recommended.&#x0A;Only use it for board houses which do not accept fully featured headers.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -935,7 +935,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Not recommanded.&#x0A;Use it only for board houses which ask for merged PTH and NPTH into onlu one file</property>
+                                                <property name="tooltip">Not recommended.&#x0A;Only use for board houses which ask for merged PTH and NTPH into a single file.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>

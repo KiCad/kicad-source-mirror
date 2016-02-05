@@ -83,17 +83,17 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Drill File Options:") ), wxVERTICAL );
 	
 	m_Check_Mirror = new wxCheckBox( sbOptSizer->GetStaticBox(), wxID_ANY, _("Mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Check_Mirror->SetToolTip( _("Not recommanded.\nUsed mostly by users who make themselves the boards.") );
+	m_Check_Mirror->SetToolTip( _("Not recommended.\nUsed mostly by users who make the boards themselves.") );
 	
 	sbOptSizer->Add( m_Check_Mirror, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_Check_Minimal = new wxCheckBox( sbOptSizer->GetStaticBox(), wxID_ANY, _("Minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Check_Minimal->SetToolTip( _("Not recommanded.\nUse it only for board houses which do not accept fully featured headers.") );
+	m_Check_Minimal->SetToolTip( _("Not recommended.\nOnly use for board houses which do not accept fully featured headers.") );
 	
 	sbOptSizer->Add( m_Check_Minimal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Check_Merge_PTH_NPTH = new wxCheckBox( sbOptSizer->GetStaticBox(), wxID_ANY, _("Merge PTH and NPTH holes into one file"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Check_Merge_PTH_NPTH->SetToolTip( _("Not recommanded.\nUse it only for board houses which ask for merged PTH and NPTH into onlu one file") );
+	m_Check_Merge_PTH_NPTH->SetToolTip( _("Not recommended.\nOnly use for board houses which ask for merged PTH and NPTH into a single file.") );
 	
 	sbOptSizer->Add( m_Check_Merge_PTH_NPTH, 0, wxALL, 5 );
 	
