@@ -30,6 +30,8 @@
 #ifndef WRLTYPES_H
 #define WRLTYPES_H
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
 
 // version of the VRML file being parsed
 enum WRLVERSION
@@ -176,25 +178,8 @@ enum WRL2NODES
 };
 
 
-struct WRLVEC2F
-{
-    float x;
-    float y;
-};
-
-struct WRLVEC3F
-{
-    float x;
-    float y;
-    float z;
-};
-
-struct WRLROTATION
-{
-    float x;
-    float y;
-    float z;
-    float w;
-};
+typedef glm::vec2 WRLVEC2F;
+typedef glm::vec3 WRLVEC3F;
+typedef glm::vec4 WRLROTATION;
 
 #endif  // WRLTYPES_H

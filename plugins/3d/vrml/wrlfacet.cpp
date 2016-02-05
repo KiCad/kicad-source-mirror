@@ -68,22 +68,16 @@ static bool VDegenerate( glm::vec3* pts )
 static WRLVEC3F VCalcTriNorm( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC3F& p3 )
 {
     // note: p1 = reference vertex
-
-    WRLVEC3F result;
-    result.x = 0.0;
-    result.y = 0.0;
-    result.z = 0.0;
-
     glm::vec3 tri = glm::vec3( 0.0, 0.0, 0.0 );
     glm::vec3 pts[3];
 
-    pts[0] = glm::vec3( p1.x, p1.y, p1.z );
-    pts[1] = glm::vec3( p2.x, p2.y, p2.z );
-    pts[2] = glm::vec3( p3.x, p3.y, p3.z );
+    pts[0] = p1;
+    pts[1] = p2;
+    pts[2] = p3;
 
     // degenerate points are given a default 0, 0, 0 normal
     if( VDegenerate( pts ) )
-        return result;
+        return tri;
 
     // normal
     tri = glm::cross( pts[2] - pts[0], pts[1] - pts[0] );
@@ -97,11 +91,7 @@ static WRLVEC3F VCalcTriNorm( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLV
         tri.z /= dn;
     }
 
-    result.x = tri.x;
-    result.y = tri.y;
-    result.z = tri.z;
-
-    return result;
+    return tri;
 }
 
 
@@ -259,9 +249,9 @@ float FACET::CalcFaceNormal()
     size_t j = 0;
 
     for( size_t i = 1; i < nv; ++i, ++j )
-        sum += glm::cross( *((glm::vec3*)&vertices[j]), *((glm::vec3*)&vertices[i]) );
+        sum += glm::cross( vertices[j], vertices[i] );
 
-    a1 = fabs( glm::dot( *((glm::vec3*)&face_normal), sum ) );
+    a1 = fabs( glm::dot( face_normal, sum ) );
     float a2 = acosf( VCalcCosAngle(  lCPts[1], lCPts[0], lCPts[2] ) );
 
     wnorm.x *= a1 * a2;
