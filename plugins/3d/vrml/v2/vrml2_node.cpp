@@ -140,9 +140,18 @@ WRL2NODE::~WRL2NODE()
         ++sBP;
     }
 
+    std::list< WRL2NODE* >::iterator sC = m_Refs.begin();
+    std::list< WRL2NODE* >::iterator eC = m_Refs.end();
+
+    while( sC != eC )
+    {
+        (*sC)->delNodeRef( this );
+        ++sC;
+    }
+
     m_Refs.clear();
-    std::list< WRL2NODE* >::iterator sC = m_Children.begin();
-    std::list< WRL2NODE* >::iterator eC = m_Children.end();
+    sC = m_Children.begin();
+    eC = m_Children.end();
 
     while( sC != eC )
     {
@@ -416,6 +425,7 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
     }
 
     m_Refs.push_back( aNode );
+    aNode->addNodeRef( this );
 
     return true;
 }

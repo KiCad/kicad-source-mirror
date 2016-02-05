@@ -293,9 +293,6 @@ bool WRL2TRANSFORM::AddRefNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( !WRL2NODE::AddRefNode( aNode ) )
-        return false;
-
     // take possession if the node is dangling WRL2_SHAPE
 
     if( WRL2_SHAPE == aNode->GetNodeType() && aNode->isDangling() )
@@ -304,7 +301,17 @@ bool WRL2TRANSFORM::AddRefNode( WRL2NODE* aNode )
 
         if( NULL != np )
             aNode->SetParent( this );
+
+
+        if( !WRL2NODE::AddChildNode( aNode ) )
+        {
+            aNode->SetParent( NULL );
+            return false;
+        }
     }
+
+    if( !WRL2NODE::AddRefNode( aNode ) )
+        return false;
 
     return true;
 }

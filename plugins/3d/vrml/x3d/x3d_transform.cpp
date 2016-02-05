@@ -247,6 +247,7 @@ bool X3DTRANSFORM::AddRefNode( X3DNODE* aNode )
     }
 
     m_Refs.push_back( aNode );
+    aNode->addNodeRef( this );
 
     return true;
 }

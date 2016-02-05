@@ -460,6 +460,7 @@ bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
     // the same level; for example a Coordinate3 node can be recalled
     // at any time to set the current coordinate set.
     m_Refs.push_back( aNode );
+    aNode->addNodeRef( this );
     addItem( aNode );
 
     return true;

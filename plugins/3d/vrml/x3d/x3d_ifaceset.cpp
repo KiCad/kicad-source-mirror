@@ -228,6 +228,7 @@ bool X3DIFACESET::AddRefNode( X3DNODE* aNode )
         return false;
 
     m_Refs.push_back( aNode );
+    aNode->addNodeRef( this );
     coord = aNode;
     return true;
 }

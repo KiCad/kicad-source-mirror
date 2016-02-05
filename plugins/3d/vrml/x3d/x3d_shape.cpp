@@ -219,6 +219,7 @@ bool X3DSHAPE::AddRefNode( X3DNODE* aNode )
         if( NULL == appearance )
         {
             m_Refs.push_back( aNode );
+            aNode->addNodeRef( this );
             appearance = aNode;
         }
         else
@@ -229,6 +230,7 @@ bool X3DSHAPE::AddRefNode( X3DNODE* aNode )
         if( NULL == geometry )
         {
             m_Refs.push_back( aNode );
+            aNode->addNodeRef( this );
             geometry = aNode;
         }
         else
