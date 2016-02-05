@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,9 @@
 
 /*
  * Description:
- *  This plugin implements the legacy kicad VRML1/VRML2 parsers.
- *  This VRML plugin will invoke a VRML1 or VRML2 parser depending
- *  on the identifying information in the file header:
+ *  This plugin implements the legacy kicad VRML1/VRML2 and X3D parsers
+ *  The plugin will invoke a VRML1 or VRML2 parser depending on the
+ *  identifying information in the file header:
  *
  *  #VRML V1.0 ascii
  *  #VRML V2.0 utf8
@@ -44,10 +44,11 @@
 #include "wrlproc.h"
 #include "vrml1_base.h"
 #include "vrml2_base.h"
+#include "x3d.h"
 
 
 #define PLUGIN_VRML_MAJOR 1
-#define PLUGIN_VRML_MINOR 1
+#define PLUGIN_VRML_MINOR 2
 #define PLUGIN_VRML_PATCH 0
 #define PLUGIN_VRML_REVNO 0
 
@@ -78,21 +79,25 @@ void GetPluginVersion( unsigned char* Major,
 
 // number of extensions supported
 #ifdef _WIN32
-#define NEXTS 1
-#else
 #define NEXTS 2
+#else
+#define NEXTS 4
 #endif
 
 // number of filter sets supported
-#define NFILS 1
+#define NFILS 2
 
 static char ext0[] = "wrl";
+static char ext1[] = "x3d";
 
 #ifdef _WIN32
 static char fil0[] = "VRML 1.0/2.0 (*.wrl)|*.wrl";
+static char fil1[] = "X3D (*.x3d)|*.x3d";
 #else
-static char ext1[] = "WRL";
+static char ext2[] = "WRL";
+static char ext3[] = "X3D";
 static char fil0[] = "VRML 1.0/2.0 (*.wrl;*.WRL)|*.wrl;*.WRL";
+static char fil1[] = "X3D (*.x3d;*.X3D)|*.x3d;*.X3D";
 #endif
 
 static struct FILE_DATA
@@ -103,10 +108,13 @@ static struct FILE_DATA
     FILE_DATA()
     {
         extensions[0] = ext0;
+        extensions[1] = ext1;
         filters[0] = fil0;
+        filters[1] = fil1;
 
 #ifndef _WIN32
-        extensions[1] = ext1;
+        extensions[2] = ext2;
+        extensions[3] = ext3;
 #endif
 
         return;
@@ -167,26 +175,16 @@ public:
 };
 
 
-SCENEGRAPH* Load( char const* aFileName )
+SCENEGRAPH* LoadVRML( const wxString& aFileName )
 {
-    if( NULL == aFileName )
-        return NULL;
-
-    wxString fname = wxString::FromUTF8Unchecked( aFileName );
-
-    if( !wxFileName::FileExists( fname ) )
-        return NULL;
-
-    LOCALESWITCH switcher;
-    SCENEGRAPH* scene = NULL;
-
     FILE_LINE_READER* modelFile = NULL;
+    SCENEGRAPH* scene = NULL;
 
     try
     {
         // set the max char limit to 8MB; if a VRML file contains
         // longer lines then perhaps it shouldn't be used
-        modelFile = new FILE_LINE_READER( fname, 0, 8388608 );
+        modelFile = new FILE_LINE_READER( aFileName, 0, 8388608 );
     }
     catch( IO_ERROR &e )
     {
@@ -279,6 +277,40 @@ SCENEGRAPH* Load( char const* aFileName )
         S3D::WriteVRML( output.ToUTF8(), true, (SGNODE*)(scene), true, true );
     }
     #endif
+
+    return scene;
+}
+
+
+SCENEGRAPH* LoadX3D( const wxString& aFileName )
+{
+    SCENEGRAPH* scene = NULL;
+    X3DPARSER model;
+    scene = model.Load( aFileName );
+
+    return scene;
+}
+
+
+SCENEGRAPH* Load( char const* aFileName )
+{
+    if( NULL == aFileName )
+        return NULL;
+
+    wxString fname = wxString::FromUTF8Unchecked( aFileName );
+
+    if( !wxFileName::FileExists( fname ) )
+        return NULL;
+
+    LOCALESWITCH switcher;
+
+    SCENEGRAPH* scene = NULL;
+    wxString ext = wxFileName( fname ).GetExt();
+
+    if( ext == "x3d" || ext == "X3D" )
+        scene = LoadX3D( fname );
+    else
+        scene = LoadVRML( fname );
 
     return scene;
 }

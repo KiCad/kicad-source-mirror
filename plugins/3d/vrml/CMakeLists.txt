@@ -3,6 +3,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/v1
     ${CMAKE_CURRENT_SOURCE_DIR}/v2
+    ${CMAKE_CURRENT_SOURCE_DIR}/x3d
 )
 
 add_definitions( -DDEBUG_VRML1=1 -DDEBUG_VRML2=1 )
@@ -10,6 +11,7 @@ add_definitions( -DDEBUG_VRML1=1 -DDEBUG_VRML2=1 )
 add_library( s3d_plugin_vrml MODULE
         ${CMAKE_SOURCE_DIR}/common/richio.cpp
         vrml.cpp
+        x3d.cpp
         wrlproc.cpp
         wrlfacet.cpp
         v2/vrml2_node.cpp
@@ -37,6 +39,13 @@ add_library( s3d_plugin_vrml MODULE
         v1/vrml1_faceset.cpp
         v1/vrml1_transform.cpp
         v1/vrml1_shapehints.cpp
+        x3d/x3d_appearance.cpp
+        x3d/x3d_base.cpp
+        x3d/x3d_coords.cpp
+        x3d/x3d_ifaceset.cpp
+        x3d/x3d_ops.cpp
+        x3d/x3d_shape.cpp
+        x3d/x3d_transform.cpp
         )
 
 target_link_libraries( s3d_plugin_vrml kicad_3dsg ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
