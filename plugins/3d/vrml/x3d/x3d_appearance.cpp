@@ -26,6 +26,7 @@
 #include <wx/xml/xml.h>
 #include "x3d_ops.h"
 #include "x3d_appearance.h"
+#include "plugins/3dapi/ifsg_all.h"
 
 
 X3DAPP::X3DAPP() : X3DNODE()
@@ -231,6 +232,52 @@ bool X3DAPP::AddRefNode( X3DNODE* aNode )
 
 SGNODE* X3DAPP::TranslateToSG( SGNODE* aParent )
 {
-    // XXX -
-    return NULL;
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    {
+        #ifdef DEBUG_X3D
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
+
+    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+    std::cerr << " * [INFO] Translating Appearance with " << m_Children.size();
+    std::cerr << " children, " << m_Refs.size() << " references and ";
+    std::cerr << m_BackPointers.size() << " backpointers\n";
+    #endif
+
+    if( m_sgNode )
+    {
+        if( NULL != aParent )
+        {
+            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
+                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+        }
+
+        return m_sgNode;
+    }
+
+    IFSG_APPEARANCE matNode( aParent );
+    matNode.SetEmissive( emissiveColor.x, emissiveColor.y, emissiveColor.z );
+    matNode.SetSpecular( specularColor.x, specularColor.y, specularColor.z );
+    matNode.SetDiffuse( diffuseColor.x, diffuseColor.y, diffuseColor.z );
+    matNode.SetAmbient( ambientIntensity );
+    matNode.SetShininess( shininess );
+    matNode.SetTransparency( transparency );
+    m_sgNode = matNode.GetRawPtr();
+
+    return m_sgNode;
 }

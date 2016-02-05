@@ -28,11 +28,15 @@
 #include <wx/tokenzr.h>
 #include "x3d_ops.h"
 #include "x3d_ifaceset.h"
+#include "x3d_coords.h"
+#include "plugins/3dapi/ifsg_all.h"
+#include "wrlfacet.h"
 
 
 X3DIFACESET::X3DIFACESET() : X3DNODE()
 {
     m_Type = X3D_INDEXED_FACE_SET;
+    coord = NULL;
     init();
 
     return;
@@ -42,6 +46,7 @@ X3DIFACESET::X3DIFACESET() : X3DNODE()
 X3DIFACESET::X3DIFACESET( X3DNODE* aParent ) : X3DNODE()
 {
     m_Type = X3D_INDEXED_FACE_SET;
+    coord = NULL;
     init();
 
     if( NULL != aParent )
@@ -155,8 +160,6 @@ bool X3DIFACESET::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
     if( !SetParent( aTopNode ) )
         return false;
 
-    std::cerr << "XXX: Got " << coordIndex.size() << " indices\n";
-
     return true;
 }
 
@@ -188,18 +191,151 @@ bool X3DIFACESET::SetParent( X3DNODE* aParent, bool doUnlink )
 
 bool X3DIFACESET::AddChildNode( X3DNODE* aNode )
 {
-    return false;
+    if( NULL == aNode )
+        return false;
+
+    if( aNode->GetNodeType() != X3D_COORDINATE )
+        return false;
+
+    if( aNode == coord )
+        return true;
+
+    if( NULL != coord )
+        return false;
+
+    m_Children.push_back( aNode );
+    coord = aNode;
+
+    if( aNode->GetParent() != this )
+        aNode->SetParent( this );
+
+    return true;
 }
 
 
 bool X3DIFACESET::AddRefNode( X3DNODE* aNode )
 {
-    return false;
+    if( NULL == aNode )
+        return false;
+
+    if( aNode->GetNodeType() != X3D_COORDINATE )
+        return false;
+
+    if( aNode == coord )
+        return true;
+
+    if( NULL != coord )
+        return false;
+
+    m_Refs.push_back( aNode );
+    coord = aNode;
+    return true;
 }
 
 
 SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
 {
-    // XXX -
-    return NULL;
+    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
+
+    if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
+    {
+        #ifdef DEBUG_X3D
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
+        std::cerr << ptype << ")\n";
+        #endif
+
+        return NULL;
+    }
+
+    #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
+    std::cerr << " * [INFO] Translating IndexedFaceSet with " << m_Children.size();
+    std::cerr << " children, " << m_Refs.size() << " references, ";
+    std::cerr << m_BackPointers.size() << " backpointers and ";
+    std::cerr << coordIndex.size() << " coord indices\n";
+    #endif
+
+    if( m_sgNode )
+    {
+        if( NULL != aParent )
+        {
+            if( NULL == S3D::GetSGNodeParent( m_sgNode )
+                && !S3D::AddSGNodeChild( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+            else if( aParent != S3D::GetSGNodeParent( m_sgNode )
+                     && !S3D::AddSGNodeRef( aParent, m_sgNode ) )
+            {
+                return NULL;
+            }
+        }
+
+        return m_sgNode;
+    }
+
+    size_t vsize = coordIndex.size();
+
+    if( NULL == coord || vsize < 3 )
+        return NULL;
+
+    WRLVEC3F* pcoords;
+    size_t coordsize;
+    ((X3DCOORDS*) coord)->GetCoords( pcoords, coordsize );
+
+    if( coordsize < 3 )
+        return NULL;
+
+    // check that all indices are valid
+    for( size_t idx = 0; idx < vsize; ++idx )
+    {
+        if( coordIndex[idx] < 0 )
+            continue;
+
+        if( coordIndex[idx] >= (int)coordsize )
+            return NULL;
+    }
+
+    SHAPE   lShape;
+    FACET*  fp = NULL;
+    size_t  iCoord;
+    int     idx;        // coordinate index
+
+    // no per-vertex colors; we can save a few CPU cycles
+    for( iCoord = 0; iCoord < vsize; ++iCoord )
+    {
+        idx = coordIndex[iCoord];
+
+        if( idx < 0 )
+        {
+            if( NULL != fp )
+            {
+                if( fp->HasMinPoints() )
+                    fp = NULL;
+                else
+                    fp->Init();
+            }
+
+            continue;
+        }
+
+        // if the coordinate is bad then skip it
+        if( idx >= (int)coordsize )
+            continue;
+
+        if( NULL == fp )
+            fp = lShape.NewFacet();
+
+        // push the vertex value and index
+        fp->AddVertex( pcoords[idx], idx );
+    }
+
+    SGNODE* np = NULL;
+
+    if( ccw )
+        np = lShape.CalcShape( aParent, NULL, ORD_CCW, creaseLimit, true );
+    else
+        np = lShape.CalcShape( aParent, NULL, ORD_CLOCKWISE, creaseLimit, true );
+
+    return np;
 }

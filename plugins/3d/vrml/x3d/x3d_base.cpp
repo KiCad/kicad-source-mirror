@@ -22,6 +22,7 @@
  */
 
 
+#include <iostream>
 #include <utility>
 #include <algorithm>
 #include "x3d_base.h"

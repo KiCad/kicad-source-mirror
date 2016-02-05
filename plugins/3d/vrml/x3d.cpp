@@ -81,7 +81,11 @@ SCENEGRAPH* X3DPARSER::Load( const wxString& aFileName )
     SCENEGRAPH* sp = NULL;
 
     if( ok )
+    {
+        std::cerr << "XXX: Translating ...\n";
         sp = (SCENEGRAPH*) topNode->TranslateToSG( NULL );
+        std::cerr << "XXX: sp = " << sp << "\n";
+    }
 
     delete topNode;
     return sp;

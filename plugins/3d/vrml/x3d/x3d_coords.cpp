@@ -171,8 +171,22 @@ bool X3DCOORDS::AddRefNode( X3DNODE* aNode )
 }
 
 
+void X3DCOORDS::GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize )
+{
+    if( points.size() < 3 )
+    {
+        aCoordList = NULL;
+        aListSize = 0;
+        return;
+    }
+
+    aCoordList = &points[0];
+    aListSize = points.size();
+    return;
+}
+
+
 SGNODE* X3DCOORDS::TranslateToSG( SGNODE* aParent )
 {
-    // XXX -
     return NULL;
 }

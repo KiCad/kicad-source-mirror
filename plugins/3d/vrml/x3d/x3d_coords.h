@@ -54,6 +54,8 @@ public:
     bool AddChildNode( X3DNODE* aNode );
     bool AddRefNode( X3DNODE* aNode );
     SGNODE* TranslateToSG( SGNODE* aParent );
+
+    void GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize );
 };
 
 #endif  // X3D_COORDS_H
