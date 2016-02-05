@@ -1166,7 +1166,24 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 }
 
 
-unsigned SCH_SHEET::GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const
+SCH_SHEET* SCH_SHEET::FindSheetByName( const wxString& aSheetName )
+{
+    std::vector< const SCH_SHEET* > sheets;
+
+    GetSheets( sheets );
+
+    for( unsigned i = 0; i < sheets.size(); i++ )
+    {
+        if( sheets[i]->GetName().CmpNoCase( aSheetName ) == 0 )
+            return const_cast< SCH_SHEET*>( sheets[i] );
+    }
+
+    return NULL;
+}
+
+
+unsigned SCH_SHEET::GetSheets( std::vector< const SCH_SHEET* >& aSheetList,
+                               bool aSortByPath ) const
 {
     // Sheet pointers must be unique.
     wxASSERT( find( aSheetList.begin(), aSheetList.end(), this ) == aSheetList.end() );
@@ -1182,6 +1199,9 @@ unsigned SCH_SHEET::GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const
 
         item = item->Next();
     }
+
+    if( aSortByPath )
+        std::sort( aSheetList.begin(), aSheetList.end(), SortByPath() );
 
     return aSheetList.size();
 }
@@ -1225,7 +1245,7 @@ const SCH_SHEET* SCH_SHEET::GetRootSheet() const
 }
 
 
-void SCH_SHEET::GetPath( SCH_CONST_SHEETS& aSheetPath ) const
+void SCH_SHEET::GetPath( std::vector< const SCH_SHEET* >& aSheetPath ) const
 {
     aSheetPath.insert( aSheetPath.begin(),  const_cast<SCH_SHEET*>( this ) );
 
@@ -1579,7 +1599,7 @@ int SCH_SHEET::operator-( const SCH_SHEET& aRhs ) const
     if( this == &aRhs )
         return 0;
 
-    SCH_CONST_SHEETS lhsPath, rhsPath;
+    std::vector< const SCH_SHEET* > lhsPath, rhsPath;
 
     GetPath( lhsPath );
     aRhs.GetPath( rhsPath );

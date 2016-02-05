@@ -577,6 +577,25 @@ public:
      */
     bool operator<( const SCH_SHEET& aRhs ) const;
 
+    /**
+     * Structure SortByPath
+     *
+     * tests if \a aLhs is less than \a aRhs.
+     *
+     * @param aLhs is the left hand side reference to a #SCH_SHEET for comparison.
+     * @param aRhs is the right hand side reference to a #SCH_SHEET for comparison.
+     * @return true if \a aLhs is less than \a aRhs otherwise false.
+     */
+    struct SortByPath
+    {
+        bool operator()( const SCH_SHEET* aLhs, const SCH_SHEET* aRhs )
+        {
+            wxCHECK( aLhs != NULL && aRhs != NULL, false );
+
+            return *aLhs < *aRhs;
+        }
+    };
+
     int operator-( const SCH_SHEET& aRhs ) const;
 
     wxPoint GetPosition() const { return m_pos; }
@@ -592,14 +611,32 @@ public:
     EDA_ITEM* Clone() const;
 
     /**
+     * Function FindSheetByName
+     *
+     * searches this #SCH_SHEET and all of it's sub-sheets for a sheet named \a aSheetName.
+     *
+     * @param aSheetName is the name of the sheet to find.
+     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
+
+    /**
      * Function GetSheets
      *
-     * add the point to #SCH_SHEET and all of it's sub-sheets to \a aSheetList.
+     * add the pointers to the #SCH_SHEET and all of it's sub-sheets to \a aSheetList.
+     *
+     * By default no sorting is performed and the #SCH_SHEET pointers are add to the list
+     * in the order they were loaded when the schematic was parse.  When \a aSortByPath is
+     * true, the list is sorted using the < operator which sort by path length then path
+     * time stamps.  This has the same sorting effect as the old SCH_SHEET_PATH::Cmp()
+     * function.
      *
      * @param aSheetList is a reference to a set containing the #SCH_SHEET pointers.
+     * @param aSortByPath true to sort by path.  False for load order.
      * @return the number of #SCH_SHEET object pointers in \a aSheetList.
      */
-    unsigned GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const;
+    unsigned GetSheets( std::vector< const SCH_SHEET* >& aSheetList,
+                        bool aSortByPath = false ) const;
 
     /**
      * Function GetSheetPaths
@@ -647,9 +684,9 @@ public:
      * recurses up the parent branch up to the root sheet adding a pointer for each
      * parent sheet to \a aSheetPath.
      *
-     * @param aSheetPath is a refernce to an #SCH_SHEETS object to populate.
+     * @param aSheetPath is a refernce to an #SCH_SHEET object to populate.
      */
-    void GetPath( std::vector<const SCH_SHEET*>& aSheetPath ) const;
+    void GetPath( std::vector< const SCH_SHEET* >& aSheetPath ) const;
 
     /**
      * Function GetPath
@@ -796,10 +833,5 @@ protected:
     void renumberPins();
 };
 
-
-typedef std::vector< SCH_SHEET* >       SCH_SHEETS;
-typedef std::vector< const SCH_SHEET* > SCH_CONST_SHEETS;
-typedef SCH_SHEETS::iterator            SCH_SHEETS_ITER;
-typedef SCH_SHEETS::const_iterator      SCH_SHEETS_CITER;
 
 #endif /* SCH_SHEEET_H */

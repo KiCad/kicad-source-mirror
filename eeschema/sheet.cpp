@@ -86,7 +86,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET* aHierarchy )
     }
 
     // Duplicate sheet names are not valid.
-    const SCH_SHEET* sheet = hierarchy.FindSheetByName( dlg.GetSheetName() );
+    const SCH_SHEET* sheet = g_RootSheet->FindSheetByName( dlg.GetSheetName() );
 
     if( sheet && (sheet != aSheet) )
     {
