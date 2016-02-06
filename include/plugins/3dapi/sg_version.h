@@ -30,7 +30,7 @@
 #ifndef SG_VERSION_H
 #define SG_VERSION_H
 
-#define KICADSG_VERSION_MAJOR         1
+#define KICADSG_VERSION_MAJOR         2
 #define KICADSG_VERSION_MINOR         0
 #define KICADSG_VERSION_PATCH         0
 #define KICADSG_VERSION_REVISION      0

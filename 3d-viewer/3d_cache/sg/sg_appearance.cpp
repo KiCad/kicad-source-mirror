@@ -32,7 +32,7 @@ SGAPPEARANCE::SGAPPEARANCE( SGNODE* aParent ) : SGNODE( aParent)
     m_SGtype = S3D::SGTYPE_APPEARANCE;
 
     // defaults in accord with VRML2.0 spec
-    ambient = 0.2;
+    ambient.SetColor( 0.05317, 0.17879, 0.01804 );
     shininess = 0.2;
     transparency = 0.0;
     diffuse.SetColor( 0.8, 0.8, 0.8 );
@@ -175,6 +175,34 @@ bool SGAPPEARANCE::SetSpecular( const SGCOLOR& aRGBColor )
 }
 
 
+bool SGAPPEARANCE::SetAmbient( float aRVal, float aGVal, float aBVal )
+{
+    return ambient.SetColor( aRVal, aGVal, aBVal );
+}
+
+
+bool SGAPPEARANCE::SetAmbient( const SGCOLOR* aRGBColor )
+{
+    if( NULL == aRGBColor )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << " * [BUG] NULL pointer passed for aRGBColor\n";
+        #endif
+
+        return false;
+    }
+
+    return ambient.SetColor( aRGBColor );
+}
+
+
+bool SGAPPEARANCE::SetAmbient( const SGCOLOR& aRGBColor )
+{
+    return ambient.SetColor( aRGBColor );
+}
+
+
 SGNODE* SGAPPEARANCE::FindNode(const char *aNodeName, const SGNODE *aCaller)
 {
     if( NULL == aNodeName || 0 == aNodeName[0] )
@@ -264,7 +292,21 @@ bool SGAPPEARANCE::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
     aFile << "  material Material {\n";
 
     std::string tmp;
-    S3D::FormatFloat( tmp, ambient );
+    float ambr, ambg, ambb;
+    ambient.GetColor( ambr, ambg, ambb );
+    float amb = ( 0.212671 * ambr + 0.71516 * ambg + 0.072169 * ambb );
+    diffuse.GetColor( ambr, ambg, ambb );
+    float den = ( 0.212671 * ambr + 0.71516 * ambg + 0.072169 * ambb );
+
+    if( den < 0.004 )
+        den = 0.004;
+
+    amb /= den;
+
+    if( amb > 1.0 )
+        amb = 1.0;
+
+    S3D::FormatFloat( tmp, amb );
     aFile << "   ambientIntensity " << tmp << "\n";
 
     float red, green, blue;

@@ -56,15 +56,18 @@ static void formatMaterial( SMATERIAL& mat, SGAPPEARANCE const* app )
 {
     float v0, v1, v2;
 
-    v0 = app->ambient;
+    app->ambient.GetColor( v0, v1, v2 );
     mat.m_Ambient.x = v0;
-    mat.m_Ambient.y = v0;
-    mat.m_Ambient.z = v0;
+    mat.m_Ambient.y = v1;
+    mat.m_Ambient.z = v2;
 
     app->diffuse.GetColor( v0, v1, v2 );
     mat.m_Diffuse.x = v0;
     mat.m_Diffuse.y = v1;
     mat.m_Diffuse.z = v2;
+    mat.m_Ambient.x *= v0;
+    mat.m_Ambient.y *= v1;
+    mat.m_Ambient.z *= v2;
 
     app->emissive.GetColor( v0, v1, v2 );
     mat.m_Emissive.x = v0;
@@ -459,7 +462,7 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
     // also typical of MCAD applications. When a model has no associated
     // material color it shall be assigned the index 0.
     SGAPPEARANCE app( NULL );
-    app.ambient = 0.9;
+    app.ambient = SGCOLOR( 0.6, 0.6, 0.6 );
     app.diffuse = SGCOLOR( 0.6, 0.6, 0.6 );
     app.specular = app.diffuse;
     app.shininess = 0.05;

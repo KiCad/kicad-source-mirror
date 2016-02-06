@@ -139,7 +139,6 @@ bool X3DTRANSFORM::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 {
     if( NULL == aTopNode || NULL == aNode )
         return false;
-    std::cerr << "XXX: Reading Transform\n";
 
     m_Dict = &aDict;
     readFields( aNode );

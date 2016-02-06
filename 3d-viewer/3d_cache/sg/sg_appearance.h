@@ -34,9 +34,9 @@
 class SGAPPEARANCE : public SGNODE
 {
 public:
-    float ambient;      // default 0.2
     float shininess;    // default 0.2
     float transparency; // default 0.0
+    SGCOLOR ambient;    // default 0.05317 0.17879 0.01804
     SGCOLOR diffuse;    // default 0.8 0.8 0.8
     SGCOLOR emissive;   // default 0.0 0.0 0.0
     SGCOLOR specular;   // default 0.0 0.0 0.0
@@ -61,6 +61,10 @@ public:
     bool SetSpecular( float aRVal, float aGVal, float aBVal );
     bool SetSpecular( const SGCOLOR* aRGBColor );
     bool SetSpecular( const SGCOLOR& aRGBColor );
+
+    bool SetAmbient( float aRVal, float aGVal, float aBVal );
+    bool SetAmbient( const SGCOLOR* aRGBColor );
+    bool SetAmbient( const SGCOLOR& aRGBColor );
 
     SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller);
     bool AddRefNode( SGNODE* aNode );

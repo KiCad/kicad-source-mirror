@@ -54,7 +54,10 @@ public:
     bool SetSpecular( const SGCOLOR* aRGBColor );
     bool SetSpecular( const SGCOLOR& aRGBColor );
 
-    bool SetAmbient( float aAmbientLight );
+    bool SetAmbient( float aRVal, float aGVal, float aBVal );
+    bool SetAmbient( const SGCOLOR* aRGBColor );
+    bool SetAmbient( const SGCOLOR& aRGBColor );
+
     bool SetShininess( float aShininess );
     bool SetTransparency( float aTransparency );
 };

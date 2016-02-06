@@ -322,7 +322,7 @@ bool IFSG_APPEARANCE::SetSpecular( const SGCOLOR& aRGBColor )
 }
 
 
-bool IFSG_APPEARANCE::SetAmbient( float aAmbientLight )
+bool IFSG_APPEARANCE::SetAmbient( float aRVal, float aGVal, float aBVal )
 {
     if( NULL == m_node )
     {
@@ -334,20 +334,41 @@ bool IFSG_APPEARANCE::SetAmbient( float aAmbientLight )
         return false;
     }
 
-    if( aAmbientLight < 0 || aAmbientLight > 1.0 )
+    return ((SGAPPEARANCE*)m_node)->SetAmbient( aRVal, aGVal, aBVal );
+}
+
+
+bool IFSG_APPEARANCE::SetAmbient( const SGCOLOR* aRGBColor )
+{
+    if( NULL == m_node )
     {
         #ifdef DEBUG
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] ambient intensity out of range [0..1]\n";
+        std::cerr << BadObject << "\n";
         #endif
 
         return false;
     }
 
-    ((SGAPPEARANCE*)m_node)->ambient = aAmbientLight;
-
-    return true;
+    return ((SGAPPEARANCE*)m_node)->SetAmbient( aRGBColor );
 }
+
+
+bool IFSG_APPEARANCE::SetAmbient( const SGCOLOR& aRGBColor )
+{
+    if( NULL == m_node )
+    {
+        #ifdef DEBUG
+        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::cerr << BadObject << "\n";
+        #endif
+
+        return false;
+    }
+
+    return ((SGAPPEARANCE*)m_node)->SetAmbient( aRGBColor );
+}
+
 
 bool IFSG_APPEARANCE::SetShininess( float aShininess )
 {

@@ -349,8 +349,7 @@ SGNODE* WRL1MATERIAL::GetAppearance( int aIndex )
     checkRange( red );
     checkRange( green );
     checkRange( blue );
-    val = (red + green + blue)/3.0;
-    app.SetAmbient( val );
+    app.SetAmbient( red, green, blue );
 
     if( aIndex == 0 || diffuseColor.empty() )
     {

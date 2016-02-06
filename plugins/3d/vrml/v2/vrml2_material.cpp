@@ -340,7 +340,10 @@ SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent )
     matNode.SetEmissive( emissiveColor.x, emissiveColor.y, emissiveColor.z );
     matNode.SetSpecular( specularColor.x, specularColor.y, specularColor.z );
     matNode.SetDiffuse( diffuseColor.x, diffuseColor.y, diffuseColor.z );
-    matNode.SetAmbient( ambientIntensity );
+    float ambr = ambientIntensity * diffuseColor.x;
+    float ambg = ambientIntensity * diffuseColor.y;
+    float ambb = ambientIntensity * diffuseColor.z;
+    matNode.SetAmbient( ambr, ambb, ambg );
     matNode.SetShininess( shininess );
     matNode.SetTransparency( transparency );
     m_sgNode = matNode.GetRawPtr();
