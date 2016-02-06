@@ -389,7 +389,7 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     }
 
     aFile << "[" << GetName() << "]";
-    aFile.write( (char*)&ambient, sizeof(ambient) );
+    S3D::WriteColor( aFile, ambient );
     aFile.write( (char*)&shininess, sizeof(shininess) );
     aFile.write( (char*)&transparency, sizeof(transparency) );
     S3D::WriteColor( aFile, diffuse );
@@ -405,7 +405,7 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
 bool SGAPPEARANCE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
 {
-    aFile.read( (char*)&ambient, sizeof(ambient) );
+    S3D::ReadColor( aFile, ambient );
     aFile.read( (char*)&shininess, sizeof(shininess) );
     aFile.read( (char*)&transparency, sizeof(transparency) );
     S3D::ReadColor( aFile, diffuse );
