@@ -35,6 +35,7 @@ WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDiction
     m_order = ORD_UNKNOWN;
     m_Type = WRL1_SHAPEHINTS;
     m_crease = 0.5;
+    m_crease = 0.733;   // approx 42 degrees; this is larger than VRML spec.
     return;
 }
 

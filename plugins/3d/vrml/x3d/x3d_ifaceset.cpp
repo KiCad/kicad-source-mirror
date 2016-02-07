@@ -79,8 +79,8 @@ void X3DIFACESET::init()
     coord = NULL;
 
     ccw = true;
-    creaseAngle = 0.5;
-    creaseLimit = 0.878;    // approx cos( 0.5 )
+    creaseAngle = 0.733;    // approx 42 degrees; this is larger than VRML spec.
+    creaseLimit = 0.74317;  // cos( 0.733 )
     return;
 }
 

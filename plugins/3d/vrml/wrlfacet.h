@@ -146,7 +146,7 @@ public:
 
     FACET* NewFacet();
     SGNODE* CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrder,
-            float aCreaseLimit = 0.878, bool isVRML2 = false );
+            float aCreaseLimit = 0.74317, bool isVRML2 = false );
 };
 
 #endif  // WRLFACET_H
