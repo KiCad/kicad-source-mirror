@@ -611,6 +611,18 @@ public:
     EDA_ITEM* Clone() const;
 
     /**
+     * Function SetPageNumbers
+     *
+     * sets the page numbers for each sheet by load order.
+     *
+     * The root sheet is always used to set the page numbers no matter which sheet this
+     * function is called.  This function will only have meaning when loading legacy
+     * schematics.  The upcoming s-expression schematic file format will allow for user
+     * defined page numbers.
+     */
+    void SetPageNumbers();
+
+    /**
      * Function FindSheetByName
      *
      * searches this #SCH_SHEET and all of it's sub-sheets for a sheet named \a aSheetName.
