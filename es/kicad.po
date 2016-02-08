@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-04 10:41+0100\n"
-"PO-Revision-Date: 2016-02-04 11:06+0100\n"
+"POT-Creation-Date: 2016-02-08 12:49+0100\n"
+"PO-Revision-Date: 2016-02-08 13:06+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -1171,7 +1171,7 @@ msgstr "Variable de entorno Ayuda"
 msgid "Name"
 msgstr "Nombre"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:39 eeschema/sch_sheet.cpp:812
+#: common/dialogs/dialog_env_var_config_base.cpp:39 eeschema/sch_sheet.cpp:809
 msgid "Path"
 msgstr "Ruta"
 
@@ -2868,7 +2868,8 @@ msgstr "Filtrar por librería"
 #: eeschema/annotate.cpp:87
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "Se han encontrado %d códigos de tiempo duplicados y se han replazado."
+msgstr ""
+"Se han encontrado %d códigos de tiempo duplicados y se han reemplazado."
 
 #: eeschema/backanno.cpp:224
 msgid "Load Component Footprint Link File"
@@ -6474,7 +6475,7 @@ msgstr "Zoom bloque (arrastrar botón central)"
 #: gerbview/onrightclick.cpp:76 pcbnew/modedit_onclick.cpp:250
 #: pcbnew/onrightclick.cpp:499
 msgid "Place Block"
-msgstr "Emplazar"
+msgstr "Emplazar bloque"
 
 #: eeschema/libedit_onrightclick.cpp:337
 msgid "Select Items"
@@ -7805,31 +7806,31 @@ msgstr "Línea %s de capa desconocida de (%s, %s) a (%s, %s)"
 msgid "Electronics Rule Check Error"
 msgstr "Error de ERC"
 
-#: eeschema/sch_sheet.cpp:810
+#: eeschema/sch_sheet.cpp:807
 msgid "Sheet Name"
 msgstr "Nombre de hoja"
 
-#: eeschema/sch_sheet.cpp:811
+#: eeschema/sch_sheet.cpp:808
 msgid "File Name"
 msgstr "Nombre de archivo"
 
-#: eeschema/sch_sheet.cpp:815
+#: eeschema/sch_sheet.cpp:812
 msgid "Hierarchy Type"
 msgstr "Tipo de jerarquía"
 
-#: eeschema/sch_sheet.cpp:816
+#: eeschema/sch_sheet.cpp:813
 msgid "Complex"
 msgstr "Compleja"
 
-#: eeschema/sch_sheet.cpp:816
+#: eeschema/sch_sheet.cpp:813
 msgid "Simple"
 msgstr "Simple"
 
-#: eeschema/sch_sheet.cpp:820
+#: eeschema/sch_sheet.cpp:817
 msgid "Time Stamp"
 msgstr "Marca de tiempo"
 
-#: eeschema/sch_sheet.cpp:1033
+#: eeschema/sch_sheet.cpp:1030
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Hoja jerárquica %s"
@@ -11982,7 +11983,7 @@ msgstr "Suministrador y ref"
 
 #: pcbnew/class_board.cpp:99
 msgid "This is the default net class."
-msgstr "Este es el tipo de red por defecto."
+msgstr "Esta es la clase de red por defecto."
 
 #: pcbnew/class_board.cpp:964 pcbnew/class_netinfo_item.cpp:134
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
@@ -13456,11 +13457,11 @@ msgstr "Nuevo nombre de clase de red:"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:677
 msgid "Duplicate net class names are not allowed."
-msgstr "Los se permiten los nombres de tipos de red duplicados."
+msgstr "No se permiten los nombres de clase de red duplicados."
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:739
 msgid "The default net class cannot be removed"
-msgstr "No puede eliminarse el tipo de red por defecto."
+msgstr "No puede eliminarse la clase de red por defecto."
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:922
 #, c-format
@@ -13607,7 +13608,7 @@ msgstr "Seleccionar todas las redes de la lista derecha"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:154
 msgid "Net Classes Editor"
-msgstr "Editor de tipos de red"
+msgstr "Editor de clases de red"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:163
 msgid "Via Options:"
@@ -15044,11 +15045,12 @@ msgstr "Invertir eje Y"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid ""
-"Not recommanded.\n"
-"Used mostly by users who make themselves the boards."
+"Not recommended.\n"
+"Used mostly by users who make the boards themselves."
 msgstr ""
 "No recomendado.\n"
-"Utilizado principalmente por usuarios que fabrican sus propias placas."
+"Utilizado principalmente por aquellos usuarios que fabrican sus propias "
+"placas."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:90
 msgid "Minimal header"
@@ -15056,11 +15058,11 @@ msgstr "Encabezamiento mínimo"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:91
 msgid ""
-"Not recommanded.\n"
-"Use it only for board houses which do not accept fully featured headers."
+"Not recommended.\n"
+"Only use for board houses which do not accept fully featured headers."
 msgstr ""
 "No recomendado.\n"
-"A utilizar únicamente para fabricantes de placas que no aceptan "
+"Utilizar únicamente para fabricantes de placas que no aceptan "
 "encabezamientos con todas las características."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:95
@@ -15069,13 +15071,13 @@ msgstr "Unificar agujeros con y sin plateado en un mismo archivo"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid ""
-"Not recommanded.\n"
-"Use it only for board houses which ask for merged PTH and NPTH into onlu one "
-"file"
+"Not recommended.\n"
+"Only use for board houses which ask for merged PTH and NPTH into a single "
+"file."
 msgstr ""
 "No recomendado.\n"
-"Utilizado únicamente para fabricantes que exigen ambos tipos de agujeros en "
-"un único archivo."
+"Utilizar únicamente con fabricantes que exigen los agujeros pasantes "
+"plateados y no plateados en un mismo archivo."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:103
 msgid "Absolute"
@@ -18699,7 +18701,7 @@ msgstr ""
 "Error al acceder a los datos JSON de la URL '%s'.\n"
 "Razón: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:286
+#: pcbnew/github/github_plugin.cpp:282
 #, c-format
 msgid ""
 "Footprint\n"
@@ -18712,7 +18714,7 @@ msgstr ""
 "no se encuentra en la parte editable de esta librería de Github\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:347
+#: pcbnew/github/github_plugin.cpp:343
 msgid ""
 "Set this property to a directory where footprints are to be written as "
 "pretty footprints when saving to this library. Anything saved will take "
@@ -18728,7 +18730,7 @@ msgstr ""
 "como actualizaciones. <p>La carpeta <b>debe</b> tener la extensión <b>."
 "pretty</b> ya que es el formato de almacenamiento.</p>"
 
-#: pcbnew/github/github_plugin.cpp:397
+#: pcbnew/github/github_plugin.cpp:393
 #, c-format
 msgid ""
 "option '%s' for Github library '%s' must point to a writable directory "
@@ -18737,7 +18739,7 @@ msgstr ""
 "la opción '%s' de la librería de Github '%s' debe apuntar a una carpeta con "
 "permiso de escritura terminada en '.pretty'."
 
-#: pcbnew/github/github_plugin.cpp:524
+#: pcbnew/github/github_plugin.cpp:520
 #, c-format
 msgid ""
 "Unable to parse URL:\n"
@@ -18746,7 +18748,7 @@ msgstr ""
 "No puede interpretarse la URL:\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:546
+#: pcbnew/github/github_plugin.cpp:544
 #, c-format
 msgid ""
 "%s\n"
@@ -18759,7 +18761,7 @@ msgstr ""
 "de la ruta de librería: '%s'.\n"
 "Razón: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:561
+#: pcbnew/github/github_plugin.cpp:560
 #, c-format
 msgid ""
 "Cannot download library '%s'.\n"
@@ -20833,7 +20835,7 @@ msgstr "Seleccionar capa y situar vía ciega/enterrada"
 # Pendiente de contexto
 #: pcbnew/onrightclick.cpp:610 pcbnew/router/router_tool.cpp:101
 msgid "Switch Track Posture"
-msgstr "Cambiar postura de pista"
+msgstr "Cambiar posición de pista"
 
 #: pcbnew/onrightclick.cpp:618
 msgid "Place Micro Via"
@@ -21393,9 +21395,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"No puede encontrarse la red complementaria para el afinado de la longitud. "
-"Asegurese de que los nombres de las redes que pertenecen al mismo par "
-"terminan en _N/_P o +/-."
+"No puede encontrarse la red complementaria del par diferencial para el "
+"afinado de la longitud. Asegurese de que los nombres de las redes que "
+"pertenecen al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:372
 #: pcbnew/router/pns_meander_placer.cpp:245
@@ -21428,34 +21430,37 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
+"No puede encontrarse la red complementaria del par diferencial para el "
+"afinado del desvío. Asegurese de que los nombres de las redes que pertenecen "
+"al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:156
 msgid "Too long: skew "
-msgstr ""
+msgstr "Demasiado largo: desvío "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:159
 msgid "Too short: skew "
-msgstr ""
+msgstr "Demasiado corto: desvío "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:162
 msgid "Tuned: skew "
-msgstr ""
+msgstr "Afinado: desvío "
 
 #: pcbnew/router/pns_tool_base.cpp:61
 msgid "Routing Options..."
-msgstr ""
+msgstr "Opciones de enrutado..."
 
 #: pcbnew/router/pns_tool_base.cpp:62
 msgid "Shows a dialog containing router options."
-msgstr ""
+msgstr "Muestra un diálogo con las opciones del enrutador."
 
 #: pcbnew/router/router_tool.cpp:67
 msgid "Stops laying the current track."
-msgstr ""
+msgstr "Detiene la disposición de la pista activa."
 
 #: pcbnew/router/router_tool.cpp:70
 msgid "Auto-end Track"
-msgstr ""
+msgstr "Finalizado de pista automático"
 
 #: pcbnew/router/router_tool.cpp:70
 msgid "Automagically finishes currently routed track."
@@ -21463,11 +21468,11 @@ msgstr "Termina la pista en proceso de enrutado automágicamente."
 
 #: pcbnew/router/router_tool.cpp:74
 msgid "Drag Track/Via"
-msgstr ""
+msgstr "Arrastrar Pista/Vía"
 
 #: pcbnew/router/router_tool.cpp:74
 msgid "Drags a track or a via."
-msgstr ""
+msgstr "Arrastra una pista o vía."
 
 #: pcbnew/router/router_tool.cpp:79
 msgid "Adds a through-hole via at the end of currently routed track."
@@ -21479,59 +21484,59 @@ msgstr "Añade una vía ciega o enterrada al final de la pista enrutada."
 
 #: pcbnew/router/router_tool.cpp:90
 msgid "Place Microvia"
-msgstr ""
+msgstr "Colocar microvía"
 
 #: pcbnew/router/router_tool.cpp:90
 msgid "Adds a microvia at the end of currently routed track."
-msgstr ""
+msgstr "Añade una microvía al final de la pista activa."
 
 #: pcbnew/router/router_tool.cpp:95
 msgid "Custom Track/Via Size"
-msgstr ""
+msgstr "Tamaño de Pista/Vía personalizado"
 
 #: pcbnew/router/router_tool.cpp:96
 msgid "Shows a dialog for changing the track width and via size."
-msgstr ""
+msgstr "Muestra un diálogo para cambiar el tamaño de la pista y vía."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Switches posture of the currenly routed track."
-msgstr ""
+msgstr "Cambia la posición de la pista activa."
 
 #: pcbnew/router/router_tool.cpp:107
 msgid "Differential Pair Dimensions..."
-msgstr ""
+msgstr "Dimensiones de par diferencial..."
 
 #: pcbnew/router/router_tool.cpp:108
 msgid "Sets the width and gap of the currently routed differential pair."
-msgstr ""
+msgstr "Ajusta el ancho y espaciado del par diferencial activo."
 
 #: pcbnew/router/router_tool.cpp:131
 msgid "Custom size"
-msgstr ""
+msgstr "Tamaño personalizado"
 
 #: pcbnew/router/router_tool.cpp:134
 msgid "Use the starting track width"
-msgstr ""
+msgstr "Utilizar el ancho de la pista inicial"
 
 #: pcbnew/router/router_tool.cpp:135
 msgid "Route using the width of the starting track."
-msgstr ""
+msgstr "Enrutar utilizando el ancho de la pista de inicio."
 
 #: pcbnew/router/router_tool.cpp:137
 msgid "Use net class values"
-msgstr ""
+msgstr "Utilizar valores de la clase de red"
 
 #: pcbnew/router/router_tool.cpp:138
 msgid "Use track and via sizes from the net class"
-msgstr ""
+msgstr "Utilizar tamaños de pista y vía de la clase de red"
 
 #: pcbnew/router/router_tool.cpp:205
 msgid "Interactive Router"
-msgstr ""
+msgstr "Enrutador interactivo"
 
 #: pcbnew/router/router_tool.cpp:218
 msgid "Select Track/Via Width"
-msgstr ""
+msgstr "Seleccionar ancho de Pista/Vía"
 
 #: pcbnew/router/router_tool.cpp:404
 msgid "Blind/buried vias have to be enabled in the design settings."
@@ -21539,25 +21544,27 @@ msgstr "Las vías ciegas/enterradas han de activarse en las opciones de diseño.
 
 #: pcbnew/router/router_tool.cpp:410
 msgid "Microvias have to be enabled in the design settings."
-msgstr ""
+msgstr "Las microvías han de ser activadas en las opciones de diseño."
 
 #: pcbnew/router/router_tool.cpp:417
 msgid "Only through vias are allowed on 2 layer boards."
-msgstr ""
+msgstr "En placas de dos capas solo están permitidas vías pasantes."
 
 #: pcbnew/router/router_tool.cpp:424
 msgid ""
 "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the "
 "ones directly adjacent to them."
 msgstr ""
+"Las microvías solo pueden situarse entre capas externas (F.Cu/B.Cu) y las "
+"inmediatamente adyacentes a ellas."
 
 #: pcbnew/router/router_tool.cpp:649
 msgid "Route Track"
-msgstr ""
+msgstr "Enrutar pista"
 
 #: pcbnew/router/router_tool.cpp:656
 msgid "Router Differential Pair"
-msgstr ""
+msgstr "Enrutar par diferencial"
 
 #: pcbnew/sel_layer.cpp:301
 msgid "Warning: The Top Layer and Bottom Layer are same."
@@ -21584,6 +21591,10 @@ msgid ""
 "mm).\n"
 "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each."
 msgstr ""
+"No puede encontrarse el siguiente segmento delimitador con un punto final en "
+"(%s mm, %s mm).\n"
+"Edite los gráficos del perímetro en Edge.Cuts, de forma que los polígonos "
+"sean contínuos."
 
 #: pcbnew/specctra_export.cpp:1293
 #, c-format
@@ -21591,20 +21602,26 @@ msgid ""
 "Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
 "Edit Edge.Cuts interior graphics, making them contiguous polygons each."
 msgstr ""
+"No puede encontrarse el siguiente segmento de zona restringida con un punto "
+"final en (%s mm, %s mm).\n"
+"Edite los gráficos del perímetro en Edge.Cuts, de forma que los polígonos "
+"sean contínuos."
 
 #: pcbnew/specctra_export.cpp:1452
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr ""
+"El componente de valor '%s' tiene el identificador de referencia vacío."
 
 #: pcbnew/specctra_export.cpp:1460
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr ""
+"Múltiples componentes tienen el mismo identificador de referencia '%s'."
 
 #: pcbnew/specctra_import.cpp:84
 msgid "Merge Specctra Session file:"
-msgstr ""
+msgstr "Combinar archivo Spectra Session:"
 
 #: pcbnew/specctra_import.cpp:108
 msgid "BOARD may be corrupted, do not save it."
@@ -21612,17 +21629,18 @@ msgstr "La PLACA puede estar corrompida: no guardar"
 
 #: pcbnew/specctra_import.cpp:110
 msgid "Fix problem and try again."
-msgstr "Arreglar el problema e intentarlo de nuevo"
+msgstr "Arreglar el problema e intentarlo de nuevo."
 
 #: pcbnew/specctra_import.cpp:128
 msgid "Session file imported and merged OK."
-msgstr ""
+msgstr "Archivo Session importado y combinado correctamente."
 
 #: pcbnew/specctra_import.cpp:200 pcbnew/specctra_import.cpp:312
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr ""
+msgstr "El archivo Session utiliza un identificador de capa \"%s\" no válido"
 
+# Pendiente
 #: pcbnew/specctra_import.cpp:253
 msgid "Session via padstack has no shapes"
 msgstr ""
@@ -21631,7 +21649,7 @@ msgstr ""
 #: pcbnew/specctra_import.cpp:303
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr ""
+msgstr "Forma de vía no soportada: %s"
 
 #: pcbnew/specctra_import.cpp:359
 msgid "Session file is missing the \"session\" section"
@@ -21674,47 +21692,47 @@ msgstr "   &Cancelar   "
 
 #: pcbnew/tool_modedit.cpp:62
 msgid "Create new library and save current footprint"
-msgstr ""
+msgstr "Crear una nueva librería y guardar la huella activa"
 
 #: pcbnew/tool_modedit.cpp:65 pcbnew/tool_pcb.cpp:237
 msgid "Open footprint viewer"
-msgstr ""
+msgstr "Abrir el visor de huellas"
 
 #: pcbnew/tool_modedit.cpp:69
 msgid "Delete part from active library"
-msgstr ""
+msgstr "Eliminar componente de la librería activa"
 
 #: pcbnew/tool_modedit.cpp:73
 msgid "New footprint"
-msgstr ""
+msgstr "Nueva huella"
 
 #: pcbnew/tool_modedit.cpp:78
 msgid "New footprint using the footprint wizard"
-msgstr ""
+msgstr "Nueva huella utilizando el asistente de huellas"
 
 #: pcbnew/tool_modedit.cpp:84
 msgid "Load footprint from library"
-msgstr ""
+msgstr "Cargar huella desde librería"
 
 #: pcbnew/tool_modedit.cpp:89
 msgid "Load footprint from current board"
-msgstr ""
+msgstr "Cargar huella desde la placa activa"
 
 #: pcbnew/tool_modedit.cpp:93
 msgid "Update footprint in current board"
-msgstr ""
+msgstr "Actualizar huella en la placa activa"
 
 #: pcbnew/tool_modedit.cpp:97
 msgid "Insert footprint into current board"
-msgstr ""
+msgstr "Insertar huella en la placa activa"
 
 #: pcbnew/tool_modedit.cpp:101
 msgid "Import footprint"
-msgstr ""
+msgstr "Importar huella"
 
 #: pcbnew/tool_modedit.cpp:104
 msgid "Export footprint"
-msgstr ""
+msgstr "Exportar huella"
 
 #: pcbnew/tool_modedit.cpp:109 pcbnew/help_common_strings.h:15
 msgid "Undo last edition"
@@ -21722,24 +21740,24 @@ msgstr "Deshacer último cambio"
 
 #: pcbnew/tool_modedit.cpp:116
 msgid "Footprint properties"
-msgstr ""
+msgstr "Propiedades de la huella"
 
 #: pcbnew/tool_modedit.cpp:120
 msgid "Print footprint"
-msgstr ""
+msgstr "Imprimir huella"
 
 #: pcbnew/tool_modedit.cpp:144
 msgid "Check footprint"
-msgstr ""
+msgstr "Comprobar huella"
 
 #: pcbnew/tool_modedit.cpp:166 pcbnew/tools/common_actions.cpp:418
 #: pcbnew/tools/module_tools.cpp:106
 msgid "Add pads"
-msgstr ""
+msgstr "Añadir pads"
 
 #: pcbnew/tool_modedit.cpp:183
 msgid "Place the footprint reference anchor"
-msgstr ""
+msgstr "Situar el ancla de referencia de la huella"
 
 #: pcbnew/tool_modedit.cpp:212
 msgid "Display Polar Coord ON"
@@ -21765,6 +21783,7 @@ msgstr "Mostrar huellas en modo boceto"
 msgid "Enable high contrast display mode"
 msgstr "Activar modo de pantalla de alto contraste"
 
+# Pendiente de contexto
 #: pcbnew/tool_modview.cpp:62
 msgid "Select footprint to browse"
 msgstr ""
@@ -21779,27 +21798,27 @@ msgstr "Mostrar la huella siguiente"
 
 #: pcbnew/tool_modview.cpp:104
 msgid "Insert footprint in board"
-msgstr ""
+msgstr "Insertar huella en la placa"
 
 #: pcbnew/tool_modview.cpp:151
 msgid "Close footprint viewer"
-msgstr ""
+msgstr "Cerrar visor de huellas"
 
 #: pcbnew/tool_modview.cpp:177
 msgid "3&D Viewer"
-msgstr ""
+msgstr "Visor 3&D"
 
 #: pcbnew/tool_modview.cpp:190
 msgid "Open the Pcbnew manual"
-msgstr ""
+msgstr "Abrir el manual de Pcbnew"
 
 #: pcbnew/tool_modview.cpp:201
 msgid "&About Pcbnew"
-msgstr ""
+msgstr "&Acerca de Pcbnew"
 
 #: pcbnew/tool_modview.cpp:202
 msgid "About Pcbnew PCB designer"
-msgstr ""
+msgstr "Acerca del diseñador de placas Pcbnew"
 
 #: pcbnew/tool_pcb.cpp:54
 msgid ""
@@ -22149,7 +22168,7 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:184
 msgid "Switch the arc posture"
-msgstr ""
+msgstr "Cambia la posición del arco"
 
 #: pcbnew/tools/common_actions.cpp:190
 msgid "Zoom In"
@@ -22980,6 +22999,30 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid ""
+#~ "Not recommanded.\n"
+#~ "Used mostly by users who make themselves the boards."
+#~ msgstr ""
+#~ "No recomendado.\n"
+#~ "Utilizado principalmente por usuarios que fabrican sus propias placas."
+
+#~ msgid ""
+#~ "Not recommanded.\n"
+#~ "Use it only for board houses which do not accept fully featured headers."
+#~ msgstr ""
+#~ "No recomendado.\n"
+#~ "A utilizar únicamente para fabricantes de placas que no aceptan "
+#~ "encabezamientos con todas las características."
+
+#~ msgid ""
+#~ "Not recommanded.\n"
+#~ "Use it only for board houses which ask for merged PTH and NPTH into onlu "
+#~ "one file"
+#~ msgstr ""
+#~ "No recomendado.\n"
+#~ "Utilizado únicamente para fabricantes que exigen ambos tipos de agujeros "
+#~ "en un único archivo."
 
 #~ msgid "Search the current &sheet onl&y"
 #~ msgstr "Bu&scar únicamente en la hoja activa"
