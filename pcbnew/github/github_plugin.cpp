@@ -194,6 +194,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
     if( it != m_gh_cache->end() )  // fp_name is present
     {
+        //std::string::data() ensures that the referenced data block is contiguous.
         wxMemoryInputStream mis( m_zip_image.data(), m_zip_image.size() );
 
         // This decoder should always be UTF8, since it was saved that way by git.
