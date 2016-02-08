@@ -119,7 +119,6 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
             if( wlist[ii]->IsTopLevel() && wlist[ii]->IsEnabled() )
                 enabledTopLevelWindows.push_back( wlist[ii] );
 
-
         // exception safe way to disable all top level windows except the modal one,
         // re-enables only those that were disabled on exit
         wxWindowDisabler    toggle( this );
