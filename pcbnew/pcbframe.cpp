@@ -994,7 +994,10 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
     else
         pythonPanelShown = ! pythonPanelFrame->IsShown();
 
-    pythonPanelFrame->Show( pythonPanelShown );
+    if( pythonPanelFrame )
+        pythonPanelFrame->Show( pythonPanelShown );
+    else
+        wxMessageBox( wxT( "Error: unable to create the Python Console" ) );
 }
 
 

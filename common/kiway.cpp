@@ -212,7 +212,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         if( ! wxFileExists( dname ) )
             msg << wxT( "It is missing.\n" );
         else
-            msg << wxT( "Perhaps a wxWidgets shared (.dll or .so) file is missing.\n" );
+            msg << wxT( "Perhaps a shared library (.dll or .so) file is missing.\n" );
 
         msg << wxT( "From command line: argv[0]:\n'" );
         msg << wxStandardPaths::Get().GetExecutablePath() << wxT( "'\n" );
