@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -121,6 +121,10 @@ bool SELECTION_TOOL::Init()
 
 void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
+    m_frame = getEditFrame<PCB_BASE_FRAME>();
+    m_locked = true;
+    m_preliminary = true;
+
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
         // Remove pointers to the selected items from containers
@@ -132,10 +136,6 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     else
         // Restore previous properties of selected items and remove them from containers
         clearSelection();
-
-    m_frame = getEditFrame<PCB_BASE_FRAME>();
-    m_locked = true;
-    m_preliminary = true;
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( m_selection.group );
@@ -299,6 +299,26 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     assert( false );
 
     return 0;
+}
+
+
+const SELECTION& SELECTION_TOOL::GetSelection()
+{
+    // The selected items list has been requested, so it is no longer preliminary
+    m_preliminary = false;
+
+    // Filter out not modifiable items
+    for( int i = 0; i < m_selection.Size(); )
+    {
+        BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
+
+        if( !modifiable( item ) )
+            m_selection.items.RemovePicker( i );
+        else
+            ++i;
+    }
+
+    return m_selection;
 }
 
 
@@ -466,11 +486,9 @@ bool SELECTION_TOOL::selectMultiple()
             else
                 m_frame->SetCurItem( NULL );
 
+            // Inform other potentially interested tools
             if( !m_selection.Empty() )
-            {
-                // Inform other potentially interested tools
                 m_toolMgr->ProcessEvent( SelectedEvent );
-            }
 
             break;  // Stop waiting for events
         }
@@ -604,14 +622,10 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
         return 0;
 
     BOARD_CONNECTED_ITEM* item = m_selection.Item<BOARD_CONNECTED_ITEM>( 0 );
+    clearSelection();
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
-    {
-        clearSelection();
         return 0;
-    }
-
-    clearSelection();
 
     int segmentCount;
     TRACK* trackList = getModel<BOARD>()->MarkTrace( static_cast<TRACK*>( item ), &segmentCount,
@@ -627,8 +641,7 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
     }
 
     // Inform other potentially interested tools
-    TOOL_EVENT selectEvent( SelectedEvent );
-    m_toolMgr->ProcessEvent( selectEvent );
+    m_toolMgr->ProcessEvent( SelectedEvent );
 
     return 0;
 }
@@ -640,17 +653,14 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
         return 0;
 
     BOARD_CONNECTED_ITEM* item = m_selection.Item<BOARD_CONNECTED_ITEM>( 0 );
+    clearSelection();
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
-    {
-        clearSelection();
         return 0;
-    }
 
     std::list<BOARD_CONNECTED_ITEM*> itemsList;
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
-    clearSelection();
     ratsnest->GetConnectedItems( item, itemsList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
 
     BOOST_FOREACH( BOARD_CONNECTED_ITEM* i, itemsList )
@@ -658,10 +668,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 
     // Inform other potentially interested tools
     if( itemsList.size() > 0 )
-    {
-        TOOL_EVENT selectEvent( SelectedEvent );
-        m_toolMgr->ProcessEvent( selectEvent );
-    }
+        m_toolMgr->ProcessEvent( SelectedEvent );
 
     return 0;
 }
@@ -686,10 +693,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
     // Inform other potentially interested tools
     if( itemsList.size() > 0 )
-    {
-        TOOL_EVENT selectEvent( SelectedEvent );
-        m_toolMgr->ProcessEvent( selectEvent );
-    }
+        m_toolMgr->ProcessEvent( SelectedEvent );
 
     return 0;
 }
@@ -742,9 +746,6 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::clearSelection()
 {
-    if( m_selection.Empty() )
-        return;
-
     KIGFX::VIEW_GROUP::const_iter it, it_end;
 
     // Restore the initial properties
@@ -756,6 +757,7 @@ void SELECTION_TOOL::clearSelection()
         item->ClearSelected();
         item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY ) ;
     }
+
     m_selection.clear();
 
     m_frame->SetCurItem( NULL );
@@ -928,7 +930,6 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
         return aItem->ViewIsVisible() && board->IsLayerVisible( aItem->GetLayer() );
 
-    // These are not selectable
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
     {
@@ -942,6 +943,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         break;
     }
 
+    // These are not selectable
     case NOT_USED:
     case TYPE_NOT_INIT:
         return false;
@@ -955,8 +957,20 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 }
 
 
+bool SELECTION_TOOL::modifiable( const BOARD_ITEM* aItem ) const
+{
+    if( aItem->Type() == PCB_MARKER_T )
+        return false;
+
+    return true;
+}
+
+
 void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
+    if( aItem->IsSelected() )
+        return;
+
     // Modules are treated in a special way - when they are selected, we have to mark
     // all the parts that make the module as selected
     if( aItem->Type() == PCB_MODULE_T )
@@ -992,6 +1006,9 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 
 void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
+    if( !aItem->IsSelected() )
+        return;
+
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
@@ -1011,9 +1028,6 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
         m_frame->SetCurItem( NULL );
         m_locked = true;
     }
-
-    // Inform other potentially interested tools
-    m_toolMgr->ProcessEvent( UnselectedEvent );
 }
 
 
@@ -1379,11 +1393,23 @@ bool SELECTION_TOOL::SanitizeSelection()
         }
     }
 
-    BOOST_FOREACH( BOARD_ITEM* item, rejected )
-        unselect( item );
+    if( !rejected.empty() )
+    {
+        BOOST_FOREACH( BOARD_ITEM* item, rejected )
+            unselect( item );
 
-    BOOST_FOREACH( BOARD_ITEM* item, added )
-        select( item );
+        // Inform other potentially interested tools
+        m_toolMgr->ProcessEvent( UnselectedEvent );
+    }
+
+    if( !added.empty() )
+    {
+        BOOST_FOREACH( BOARD_ITEM* item, added )
+            select( item );
+
+        // Inform other potentially interested tools
+        m_toolMgr->ProcessEvent( UnselectedEvent );
+    }
 
     return true;
 }
