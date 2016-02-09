@@ -167,7 +167,7 @@ Provide an object introspection system using properties.
 - Add definable properties to base objects.
 - Create introspection framework for manipulating object properties.
 - Serialization of properties to and from files and/or other I/O structures.
-- Create tool to edit property name/type/value table.
+- Create tool to edit property namespace/object name/name/type/value table.
 
 **Dependencies:**
 - None
@@ -378,6 +378,21 @@ against new schematic shared object.
 - None
 
 **Progress:**
+- No progress.
+
+## ERC Improvements ## {#v5_sch_erc_improvements}
+**Goal:**
+Improve the coverage and useability of the electrical rules checker (ERC).
+
+**Task:**
+- Add warning when multiple labels are defined for a single net.  The user should
+  be able to disable this warning.
+- Save electrical rules settings to project file between sessions.
+
+**Dependencies:**
+- None
+
+**Status:**
 - No progress.
 
 # CvPcb: Footprint Association Tool # {#v5_cvpcb}
