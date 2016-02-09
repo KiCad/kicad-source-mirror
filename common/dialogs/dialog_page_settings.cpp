@@ -52,26 +52,29 @@
 
 
 // List of page formats.
-// should be statically initialized, because we need both
-// the translated and the not translated version.
+// they are prefixed by "_HKI" (already in use for hotkeys) instead of "_",
+// because we need both the translated and the not translated version.
 // when displayed in dialog we should explicitely call wxGetTranslation()
 // to show the translated version.
+// See hotkeys_basic.h for more info
+#define _HKI( x ) wxT( x )
 static const wxString pageFmts[] =
 {
-    _("A4 210x297mm"),
-    _("A3 297x420mm"),
-    _("A2 420x594mm"),
-    _("A1 594x841mm"),
-    _("A0 841x1189mm"),
-    _("A 8.5x11in"),
-    _("B 11x17in"),
-    _("C 17x22in"),
-    _("D 22x34in"),
-    _("E 34x44in"),
-    _("USLetter 8.5x11in"),     // USLetter without space is correct
-    _("USLegal 8.5x14in"),      // USLegal without space is correct
-    _("USLedger 11x17in"),      // USLedger without space is correct
-    _("User (Custom)"),
+    _HKI("A4 210x297mm"),
+    _HKI("A3 297x420mm"),
+    _HKI("A2 420x594mm"),
+    _HKI("A1 594x841mm"),
+    _HKI("A0 841x1189mm"),
+    _HKI("A 8.5x11in"),
+    _HKI("B 11x17in"),
+    _HKI("C 17x22in"),
+    _HKI("D 22x34in"),
+    _HKI("E 34x44in"),
+    _HKI("USLetter 8.5x11in"),      // USLetter without space is correct
+    _HKI("USLegal 8.5x14in"),       // USLegal without space is correct
+    _HKI("USLedger 11x17in"),       // USLedger without space is correct
+    _HKI("User (Custom)"),          // size defined by user. The string must contain "Custom"
+                                    // to be reconized in code
 };
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )

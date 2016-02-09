@@ -89,36 +89,6 @@ const PAGE_INFO  PAGE_INFO::pageUSLedger( wxSize( 17000, 11000 ),  wxT( "USLedge
 int PAGE_INFO::s_user_width  = 17000;
 int PAGE_INFO::s_user_height = 11000;
 
-/*
-wxArrayString PAGE_INFO::GetStandardSizes()
-{
-    wxArrayString ret;
-
-    static const PAGE_INFO* stdPageSizes[] = {
-        &pageA4,
-        &pageA3,
-        &pageA2,
-        &pageA1,
-        &pageA0,
-        &pageA,
-        &pageB,
-        &pageC,
-        &pageD,
-        &pageE,
-        // &pageGERBER,     // standard?
-        &pageUSLetter,
-        &pageUSLegal,
-        &pageUSLedger,
-        &pageUser,
-    };
-
-    for( unsigned i=0;  i < DIM( stdPageSizes );  ++i )
-        ret.Add( stdPageSizes[i]->GetType() );
-
-    return ret;
-}
-*/
-
 
 inline void PAGE_INFO::updatePortrait()
 {
