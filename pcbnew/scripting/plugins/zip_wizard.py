@@ -74,7 +74,7 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
 
         array = PA.PadZGridArray(pad, pad_count, line_count, line_pitch, pad_pitch)
         array.AddPadsToModule(self.draw)
-
+         
         # draw the Silk Screen
         pads_per_line = pad_count // line_count
         row_length = pad_pitch * (pads_per_line - 1)  # fenceposts
@@ -102,9 +102,14 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         cmarginx = body[self.courtyard_x_margin_key]
         cmarginy = body[self.courtyard_y_margin_key]
         self.draw.SetLayer(pcbnew.F_CrtYd)
-        sizex = (pin1posX + cmarginx) * 2 + pad_Hsize
-        sizey = (pin1posY + cmarginy) * 2 + pad_Vsize
+        # set courtyard line thickness to the one defined in KLC
+        thick = self.draw.GetLineTickness()
+        sizex = (pin1posX + cmarginx) * 2 + pad_Hsize + thick
+        sizey = (pin1posY + cmarginy) * 2 + pad_Vsize + thick
+        self.draw.SetLineTickness(pcbnew.FromMM(0.05))
         self.draw.Box(0, 0, sizex, sizey)
+        # restore line thickness to previous value
+        self.draw.SetLineTickness(pcbnew.FromMM(thick))
 
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal

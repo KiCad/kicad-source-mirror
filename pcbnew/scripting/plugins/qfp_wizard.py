@@ -113,7 +113,12 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.draw.SetLayer(pcbnew.F_CrtYd)
         sizex = (lim_x + cmargin) * 2 + pad_length
         sizey = (lim_y + cmargin) * 2 + pad_length
+        # set courtyard line thickness to the one defined in KLC
+        thick = self.draw.GetLineTickness()
+        self.draw.SetLineTickness(pcbnew.FromMM(0.05))
         self.draw.Box(0, 0, sizex, sizey)
+        # restore line thickness to previous value
+        self.draw.SetLineTickness(pcbnew.FromMM(thick))
 
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal
