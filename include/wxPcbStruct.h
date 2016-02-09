@@ -496,6 +496,16 @@ public:
     bool OnHotkeyRotateItem( int aIdCommand );
 
     /**
+     * Function OnHotkeyFlipItem
+     * Flip the item (text or footprint) found under the mouse cursor
+     * @note This command can be used with an item currently in edit.
+     *       Only some items can be rotated (footprints and texts).
+     * @param aIdCommand = the hotkey command id
+     * @return true if an item was moved
+     */
+    bool OnHotkeyFlipItem( int aIdCommand );
+
+    /**
      * Function OnHotkeyBeginRoute
      * If the current active layer is a copper layer,
      * and if no item currently edited, start a new track segmenton
