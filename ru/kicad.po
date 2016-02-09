@@ -4378,7 +4378,7 @@ msgstr "(0 = неограниченно)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:199
 msgid "&Auto-save time interval"
-msgstr "Интервал времени авто-сохранения"
+msgstr "Интервал времени автосохранения"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:206
 msgid "minutes"
@@ -4390,11 +4390,11 @@ msgstr "Автоматически разместить поля компоне�
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:222
 msgid "A&llow field autoplace to change justification"
-msgstr "Разрешить при авто-размещении поля изменять выравнивание"
+msgstr "Разрешить при авторазмещении поля изменять выравнивание"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:225
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "Всегда выравнивать авто-размещенные поля по сетке 50 мил"
+msgstr "Всегда выравнивать авторазмещенные поля по сетке 50 мил"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:235
 msgid "Editing"
@@ -6032,7 +6032,7 @@ msgstr "Загрузить схему"
 
 #: eeschema/hotkeys.cpp:223 eeschema/onrightclick.cpp:397
 msgid "Autoplace Fields"
-msgstr "Авто-разместить поля"
+msgstr "Авторазместить поля"
 
 #: eeschema/hotkeys.cpp:226 eeschema/menubar.cpp:430
 #: pcbnew/menubar_pcbframe.cpp:610 pcbnew/dialogs/dialog_update_pcb_base.h:55
@@ -7620,7 +7620,7 @@ msgstr "Переместить глобальную метку"
 
 #: eeschema/onrightclick.cpp:494
 msgid "Drag Global Label"
-msgstr "Переташить глобальную метку"
+msgstr "Перетащить глобальную метку"
 
 #: eeschema/onrightclick.cpp:497
 msgid "Copy Global Label"
@@ -9828,7 +9828,7 @@ msgstr "Текстовый файл ("
 
 #: kicad/mainframe.cpp:454
 msgid "Load File to Edit"
-msgstr "Загрузить файл для редактировани"
+msgstr "Загрузить файл для редактирования"
 
 #: kicad/mainframe.cpp:508
 #, c-format
@@ -14895,7 +14895,7 @@ msgstr "Дубликат имени: '%s' в строке %d и %d"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:491
 msgid "Please Delete or Modify One"
-msgstr "Удалите или поправте один"
+msgstr "Удалите или исправьте один"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:20
 msgid "Library Tables by Scope"
@@ -17653,7 +17653,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:337
 msgid "Width correction"
-msgstr "Коррекция тольщины"
+msgstr "Коррекция толщины"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:343
 msgid ""
@@ -17930,7 +17930,7 @@ msgid ""
 msgstr ""
 "Определяет сколько времени трассировщик должен тратить на оптимизацию "
 "трассировки/толкания дорожек.\n"
-"Большое усилие означает более чистую трассировку (но медленее), меньшее "
+"Большое усилие означает более чистую трассировку (но медленнее), меньшее "
 "усилие означает быструю трассировку, но несколько не ровные дорожки."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:110
@@ -19627,7 +19627,7 @@ msgid ""
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
 "Запись/изменение legacy библиотек (.mod файлы) не разрешены\n"
-"Сохраните текущую библитеку в новом .pretty формате\n"
+"Сохраните текущую библиотеку в новом .pretty формате\n"
 "и обновите вашу таблицу библиотек посад.мест\n"
 "для сохранения вашего посад.места(из .kicad_mod файла) в каталоге .pretty "
 "библиотеки"
@@ -20830,7 +20830,7 @@ msgstr "Угол, °:"
 
 #: pcbnew/muonde.cpp:688
 msgid "Incorrect number, abort"
-msgstr "некорректный номер, прерывано"
+msgstr "некорректный номер, прервано"
 
 #: pcbnew/muonde.cpp:833
 msgid "Complex shape"
@@ -21945,7 +21945,7 @@ msgid ""
 msgstr ""
 "Не удалось найти следующий сегмент области запрета с конечной точкой в (%s "
 "мм, %s мм).\n"
-"Измените внутреннюю графику в Edge.Cuts, сделая из них неразрывные полигоны."
+"Измените внутреннюю графику в Edge.Cuts, делая из них неразрывные полигоны."
 
 #: pcbnew/specctra_export.cpp:1452
 #, c-format
@@ -22579,7 +22579,7 @@ msgstr "Убрать угол"
 
 #: pcbnew/tools/common_actions.cpp:560
 msgid "Align items to the top"
-msgstr "Выравнить элементы по верхнему"
+msgstr "Выровнять элементы по верхнему"
 
 #: pcbnew/tools/common_actions.cpp:561
 msgid "Aligns selected items to the top edge"
@@ -22587,7 +22587,7 @@ msgstr "Выравнивает выбранные элементы по верх
 
 #: pcbnew/tools/common_actions.cpp:565
 msgid "Align items to the bottom"
-msgstr "Выравнить элементы по нижнему"
+msgstr "Выровнять элементы по нижнему"
 
 #: pcbnew/tools/common_actions.cpp:566
 msgid "Aligns selected items to the bottom edge"
@@ -22595,7 +22595,7 @@ msgstr "Выравнивает выбранные элементы по нижн
 
 #: pcbnew/tools/common_actions.cpp:570
 msgid "Align items to the left"
-msgstr "Выравнить элементы по левому"
+msgstr "Выровнять элементы по левому"
 
 #: pcbnew/tools/common_actions.cpp:571
 msgid "Aligns selected items to the left edge"
@@ -22603,7 +22603,7 @@ msgstr "Выравнивает выбранные элементы по лево
 
 #: pcbnew/tools/common_actions.cpp:575
 msgid "Align items to the right"
-msgstr "Выравнить элементы по правому"
+msgstr "Выровнять элементы по правому"
 
 #: pcbnew/tools/common_actions.cpp:576
 msgid "Aligns selected items to the right edge"
