@@ -885,6 +885,9 @@ int PNS_NODE::FindLinesBetweenJoints( PNS_JOINT& aA, PNS_JOINT& aB, std::vector<
             PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
             PNS_LINE line = AssembleLine( seg );
 
+            if ( !line.Layers().Overlaps( aB.Layers() ) )
+                continue;
+
             PNS_JOINT j_start, j_end;
 
             FindLineEnds( line, j_start, j_end );
