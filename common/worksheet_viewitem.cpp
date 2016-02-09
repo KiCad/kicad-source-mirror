@@ -205,6 +205,8 @@ void WORKSHEET_VIEWITEM::drawBorder( GAL* aGal ) const
                              m_pageInfo->GetHeightMils() * 25400 );
 
     aGal->SetIsStroke( true );
+    // Use a gray color for the border color
+    aGal->SetStrokeColor( COLOR4D( 0.4, 0.4, 0.4, 1.0 ) );
     aGal->SetIsFill( false );
     aGal->DrawRectangle( origin, end );
 }

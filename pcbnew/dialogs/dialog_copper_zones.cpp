@@ -201,19 +201,6 @@ void DIALOG_COPPER_ZONE::initDialog()
         break;
     }
 
-    // Antipad and spokes are significant only for thermals
-    if( m_settings.GetPadConnection() != PAD_ZONE_CONN_THERMAL &&
-        m_settings.GetPadConnection() != PAD_ZONE_CONN_THT_THERMAL )
-    {
-        m_AntipadSizeValue->Enable( false );
-        m_CopperWidthValue->Enable( false );
-    }
-    else
-    {
-        m_AntipadSizeValue->Enable( true );
-        m_CopperWidthValue->Enable( true );
-    }
-
     m_PriorityLevelCtrl->SetValue( m_settings.m_ZonePriority );
 
     AddUnitSymbol( *m_AntipadSizeText, g_UserUnit );
@@ -578,19 +565,11 @@ void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 
 void DIALOG_COPPER_ZONE::OnPadsInZoneClick( wxCommandEvent& event )
 {
-    switch( m_PadInZoneOpt->GetSelection() )
-    {
-    default:
-        m_AntipadSizeValue->Enable( false );
-        m_CopperWidthValue->Enable( false );
-        break;
-
-    case 2:
-    case 1:
-        m_AntipadSizeValue->Enable( true );
-        m_CopperWidthValue->Enable( true );
-        break;
-    }
+    // Antipad and spokes are significant only for thermals
+    // However, even if thermals are disabled, these parameters must be set
+    // for pads which have local settings with thermal enabled
+    // Previously, wxTextCtrl widgets related to thermal settings were disabled,
+    // but this is not a good idea. We leave them always enabled.
 }
 
 

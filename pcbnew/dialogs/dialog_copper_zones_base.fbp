@@ -493,6 +493,7 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">m_NetSortOptSizer</property>
                                 <property name="orient">wxVERTICAL</property>
+                                <property name="parent">1</property>
                                 <property name="permission">none</property>
                                 <event name="OnUpdateUI"></event>
                                 <object class="sizeritem" expanded="0">
@@ -1116,6 +1117,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">m_ExportableSetupSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">none</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">
@@ -1863,7 +1865,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Pad connection:</property>
+                                        <property name="label">Default pad connection:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -1884,7 +1886,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">Default pad connection type to zone.&#x0A;This setting can be overridden by local  pad settings</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -2012,6 +2014,7 @@
                                         <property name="minimum_size"></property>
                                         <property name="name">m_ThermalShapesParamsSizer</property>
                                         <property name="orient">wxVERTICAL</property>
+                                        <property name="parent">1</property>
                                         <property name="permission">none</property>
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="0">
@@ -2407,7 +2410,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Priority level:</property>
+                                        <property name="label">Zone priority level:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
