@@ -635,8 +635,11 @@ public:
     {
         gridOrigin = aGridOrigin;
 
-        gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
-                               (long) gridOrigin.y % (long) gridSize.y );
+        if( gridSize.x == 0.0 || gridSize.y == 0.0 )
+            gridOffset = VECTOR2D(0.0, 0.0);
+        else
+            gridOffset = VECTOR2D( (long) gridOrigin.x % (long) gridSize.x,
+                                   (long) gridOrigin.y % (long) gridSize.y );
     }
 
     /**

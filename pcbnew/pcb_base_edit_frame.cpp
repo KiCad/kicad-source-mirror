@@ -25,6 +25,7 @@
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <pcb_draw_panel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <class_board.h>
 
 void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
@@ -73,6 +74,8 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     PCB_BASE_FRAME::SetBoard( aBoard );
 
+    GetGalCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetGridOrigin() ) );
+
     // update the tool manager with the new board and its view.
     if( m_toolManager )
     {
@@ -86,4 +89,3 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }
-
