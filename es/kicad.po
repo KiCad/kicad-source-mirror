@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-08 12:49+0100\n"
-"PO-Revision-Date: 2016-02-08 13:06+0100\n"
+"POT-Creation-Date: 2016-02-09 10:43+0100\n"
+"PO-Revision-Date: 2016-02-09 13:27+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -6004,7 +6004,7 @@ msgstr "Sin conectar"
 
 #: eeschema/lib_pin.cpp:207 gerbview/class_gerber_draw_item.cpp:183
 #: pcbnew/class_board_item.cpp:42
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Line"
@@ -6207,8 +6207,8 @@ msgstr "Archivo de documentación '%s' OK"
 
 #: eeschema/libedit.cpp:480 eeschema/viewlibs.cpp:295
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
@@ -12042,7 +12042,7 @@ msgid "Bezier Curve"
 msgstr "Curva Bézier"
 
 #: pcbnew/class_board_item.cpp:47
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:200
 msgid "Polygon"
 msgstr "Polígono"
 
@@ -12065,7 +12065,7 @@ msgid "Curve"
 msgstr "Curva"
 
 #: pcbnew/class_drawsegment.cpp:388
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:200
 msgid "Segment"
 msgstr "Segmento"
 
@@ -12998,31 +12998,31 @@ msgstr "Borrar pistas no con&ectadas"
 msgid "delete track segment having a dangling end"
 msgstr "borrar segmento de pista con un extremo libre"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:408
+#: pcbnew/dialogs/dialog_copper_zones.cpp:395
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
 msgstr "El margen debe ser menor de %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:420
+#: pcbnew/dialogs/dialog_copper_zones.cpp:407
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
 msgstr "El ancho mínimo debe ser mayor de %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:460
+#: pcbnew/dialogs/dialog_copper_zones.cpp:447
 msgid "Thermal relief spoke must be greater than the minimum width."
 msgstr "El radio del alivio térmico debe ser mayor que el ancho mínimo."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:473
+#: pcbnew/dialogs/dialog_copper_zones.cpp:460
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:227
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:496
 msgid "No layer selected."
 msgstr "No se ha seleccionado ninguna capa."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:484
+#: pcbnew/dialogs/dialog_copper_zones.cpp:471
 msgid "No net selected."
 msgstr "No se ha seleccionado ninguna red."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:490
+#: pcbnew/dialogs/dialog_copper_zones.cpp:477
 msgid ""
 "You have chosen the \"not connected\" option. This will create insulated "
 "copper islands. Are you sure ?"
@@ -13030,11 +13030,11 @@ msgstr ""
 "Ha elegido la opción de \"no conectado\". Esto creará islas de cobre "
 "aisladas. ¿Está seguro?"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:525
+#: pcbnew/dialogs/dialog_copper_zones.cpp:512
 msgid "Chamfer distance"
 msgstr "Distacia de biselado"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:531
+#: pcbnew/dialogs/dialog_copper_zones.cpp:518
 msgid "Fillet radius"
 msgstr "Radio de redondeado"
 
@@ -13081,7 +13081,7 @@ msgstr "Filtradas (número de pads)"
 msgid "Hidden net filter:"
 msgstr "Filtro de redes ocultas:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:79
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:78
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Net names matching this pattern are not displayed."
@@ -13089,16 +13089,16 @@ msgstr ""
 "Patrón para filtrar nombres de red en la lista.\n"
 "Los nombres de red coincidentes no se mostrarán."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:83
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:82
 msgid "Visible net filter:"
 msgstr "Filtro de redes visibles:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:87
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:86
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:35
 msgid "*"
 msgstr "*"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:89
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:87
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
@@ -13106,91 +13106,98 @@ msgstr ""
 "Patrón para filtrar nombres de red en la lista.\n"
 "Los nombres de red coincidentes no se mostrarán."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:93
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:91
 msgid "Apply Filters"
 msgstr "Aplicar filtros"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:103
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:101
 msgid "Settings"
 msgstr "Opciones"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:108
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:106
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:48
 #: pcbnew/dialogs/dialog_drc_base.cpp:36
 msgid "Clearance"
 msgstr "Margen"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:116
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:113
 msgid "Minimum width"
 msgstr "Ancho mínimo"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:118
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:115
 msgid "Minimun thickness of filled areas."
 msgstr "Grosor mínimo de las áreas rellenas."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:122
 msgid "Corner smoothing:"
 msgstr "Suavizado de esquinas:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Chamfer"
 msgstr "Bisel"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Fillet"
 msgstr "Redondeado"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:136
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:132
 msgid "Chamfer distance (mm):"
 msgstr "Distancia de biselado (mm):"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
-msgid "Pad connection:"
-msgstr "Conexión pads"
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:145
+msgid "Default pad connection:"
+msgstr "Conexión de pads por defecto:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:147
+msgid ""
+"Default pad connection type to zone.\n"
+"This setting can be overridden by local  pad settings"
+msgstr ""
+"Tipo de conexión entre pads y zonas por defecto.\n"
+"Esta opción puede ser modificada por las opciones locales de pad."
+
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "Solid"
 msgstr "Sólida"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "Thermal relief"
 msgstr "Alivio térmico"
 
 # Pendiente de contexto
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 msgid "THT thermal"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
 msgid "Thermal Reliefs"
 msgstr "Alivios térmicos"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:160
 msgid "Antipad clearance"
 msgstr "Margen del antipad"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:169
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:165
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Margen entre pads de la misma red y áreas rellenas."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:169
 msgid "Spoke width"
 msgstr "Ancho"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:174
 msgid "Width of copper in thermal reliefs."
 msgstr "Anchura del cobre en los alivios térmicos."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:192
-msgid "Priority level:"
-msgstr "Nivel de prioridad:"
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:187
+msgid "Zone priority level:"
+msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:189
 msgid ""
 "On each copper layer, zones are filled by priority order.\n"
 "So when a zone is inside an other zone:\n"
@@ -13204,53 +13211,53 @@ msgstr ""
 "* Si su prioridad es igual: se muestra un error de DRC ( comprobación de "
 "reglas de diseño)."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:196
 msgid "Fill mode:"
 msgstr "Modo de relleno:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:211
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:206
 msgid "Segments / 360 deg:"
 msgstr "Segmentos / 360 grados:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
 msgid "16"
 msgstr "16"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
 msgid "32"
 msgstr "32"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:222
 msgid "Outline slope:"
 msgstr "Pendiente del perímetro:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 msgid "Arbitrary"
 msgstr "Arbitraria"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 msgid "H, V, and 45 deg only"
 msgstr "H, V y 45 grados solo"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:237
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Outline style:"
 msgstr "Estilo del perímetro:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 msgid "Hatched"
 msgstr "Rayado"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 msgid "Fully hatched"
 msgstr "Rayado completo"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:256
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:251
 msgid "Export Settings to Other Zones"
 msgstr "Exportar ajustes a otras zonas"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:252
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
@@ -17179,6 +17186,10 @@ msgstr ""
 msgid "Copper Zones"
 msgstr "Zonas de cobre"
 
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
+msgid "Pad connection:"
+msgstr "Conexión pads"
+
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "From parent footprint"
 msgstr "Como la huella madre"
@@ -18701,7 +18712,7 @@ msgstr ""
 "Error al acceder a los datos JSON de la URL '%s'.\n"
 "Razón: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:282
+#: pcbnew/github/github_plugin.cpp:283
 #, c-format
 msgid ""
 "Footprint\n"
@@ -18714,7 +18725,7 @@ msgstr ""
 "no se encuentra en la parte editable de esta librería de Github\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:343
+#: pcbnew/github/github_plugin.cpp:344
 msgid ""
 "Set this property to a directory where footprints are to be written as "
 "pretty footprints when saving to this library. Anything saved will take "
@@ -18730,7 +18741,7 @@ msgstr ""
 "como actualizaciones. <p>La carpeta <b>debe</b> tener la extensión <b>."
 "pretty</b> ya que es el formato de almacenamiento.</p>"
 
-#: pcbnew/github/github_plugin.cpp:393
+#: pcbnew/github/github_plugin.cpp:394
 #, c-format
 msgid ""
 "option '%s' for Github library '%s' must point to a writable directory "
@@ -18739,7 +18750,7 @@ msgstr ""
 "la opción '%s' de la librería de Github '%s' debe apuntar a una carpeta con "
 "permiso de escritura terminada en '.pretty'."
 
-#: pcbnew/github/github_plugin.cpp:520
+#: pcbnew/github/github_plugin.cpp:521
 #, c-format
 msgid ""
 "Unable to parse URL:\n"
@@ -18748,7 +18759,7 @@ msgstr ""
 "No puede interpretarse la URL:\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:544
+#: pcbnew/github/github_plugin.cpp:545
 #, c-format
 msgid ""
 "%s\n"
@@ -18761,7 +18772,7 @@ msgstr ""
 "de la ruta de librería: '%s'.\n"
 "Razón: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:560
+#: pcbnew/github/github_plugin.cpp:561
 #, c-format
 msgid ""
 "Cannot download library '%s'.\n"
@@ -21830,15 +21841,15 @@ msgstr ""
 
 #: pcbnew/tool_pcb.cpp:218
 msgid "New board"
-msgstr ""
+msgstr "Nueva placa"
 
 #: pcbnew/tool_pcb.cpp:220
 msgid "Open existing board"
-msgstr ""
+msgstr "Abrir placa existente"
 
 #: pcbnew/tool_pcb.cpp:224
 msgid "Save board"
-msgstr ""
+msgstr "Guardar placa"
 
 #: pcbnew/tool_pcb.cpp:233
 msgid "Open footprint editor"
@@ -21854,55 +21865,55 @@ msgstr "Leer lista de redes"
 
 #: pcbnew/tool_pcb.cpp:293
 msgid "Mode footprint: manual and automatic movement and placement"
-msgstr ""
+msgstr "Modo huella: movimiento y emplazamiento manual y automático"
 
 #: pcbnew/tool_pcb.cpp:296
 msgid "Mode track: autorouting"
-msgstr ""
+msgstr "Modo pista: enrutado automático"
 
 #: pcbnew/tool_pcb.cpp:302
 msgid "Fast access to the FreeROUTE external advanced router"
-msgstr ""
+msgstr "Acceso rápido al enrutador avanzado externo FreeROUTE"
 
 #: pcbnew/tool_pcb.cpp:312
 msgid "Show/Hide the Python Scripting console"
-msgstr ""
+msgstr "Mostrar/Ocultar la consola de scripts de Python"
 
 #: pcbnew/tool_pcb.cpp:333 pcbnew/toolbars_update_user_interface.cpp:140
 msgid "Enable design rule checking"
-msgstr ""
+msgstr "Activar comprobación de reglas de diseño"
 
 #: pcbnew/tool_pcb.cpp:352 pcbnew/toolbars_update_user_interface.cpp:149
 msgid "Show board ratsnest"
-msgstr ""
+msgstr "Mostrar conexiones de la placa"
 
 #: pcbnew/tool_pcb.cpp:355
 msgid "Show footprint ratsnest when moving"
-msgstr ""
+msgstr "Mostrar conexiones de la huella al mover"
 
 #: pcbnew/tool_pcb.cpp:361
 msgid "Enable automatic track deletion"
-msgstr ""
+msgstr "Activar eliminación automática de pistas"
 
 #: pcbnew/tool_pcb.cpp:369
 msgid "Do not show filled areas in zones"
-msgstr ""
+msgstr "No mostrar áreas rellenas en zonas"
 
 #: pcbnew/tool_pcb.cpp:372
 msgid "Show outlines of filled areas only in zones"
-msgstr ""
+msgstr "Mostrar únicamente contornos de áreas rellenas en zonas"
 
 #: pcbnew/tool_pcb.cpp:381 pcbnew/toolbars_update_user_interface.cpp:180
 msgid "Show vias in outline mode"
-msgstr ""
+msgstr "Mostrar vías en modo contorno"
 
 #: pcbnew/tool_pcb.cpp:385 pcbnew/toolbars_update_user_interface.cpp:191
 msgid "Show tracks in outline mode"
-msgstr ""
+msgstr "Mostras pistas en modo contorno"
 
 #: pcbnew/tool_pcb.cpp:432
 msgid "Display local ratsnest"
-msgstr "Mostrar la red local"
+msgstr "Mostrar conexiones locales"
 
 #: pcbnew/tool_pcb.cpp:503
 msgid "Create line of specified length for microwave applications"
@@ -21942,32 +21953,32 @@ msgstr ""
 #: pcbnew/tool_pcb.cpp:623
 #, c-format
 msgid "Track: %.3f mm (%.2f mils)"
-msgstr ""
+msgstr "Pista: %.3f mm (%.2f mils)"
 
 #: pcbnew/tool_pcb.cpp:626
 #, c-format
 msgid "Track: %.2f mils (%.3f mm)"
-msgstr ""
+msgstr "Pista: %.2f mils (%.3f mm)"
 
 #: pcbnew/tool_pcb.cpp:661
 #, c-format
 msgid "Via: %.2f mm (%.1f mils)"
-msgstr ""
+msgstr "Vía: %.2f mm (%.1f mils)"
 
 #: pcbnew/tool_pcb.cpp:664
 #, c-format
 msgid "Via: %.1f mils (%.2f mm)"
-msgstr ""
+msgstr "Vía: %.1f mils (%.2f mm)"
 
 #: pcbnew/tool_pcb.cpp:677
 #, c-format
 msgid "%.2f mm (%.1f mils)"
-msgstr ""
+msgstr "%.2f mm (%.1f mils)"
 
 #: pcbnew/tool_pcb.cpp:680
 #, c-format
 msgid "%.1f mils (%.2f mm)"
-msgstr ""
+msgstr "%.1f mils (%.2f mm)"
 
 #: pcbnew/tool_pcb.cpp:705
 msgid "+/- to switch"
@@ -21975,35 +21986,35 @@ msgstr "+/- para cambiar"
 
 #: pcbnew/toolbars_update_user_interface.cpp:139
 msgid "Disable design rule checking"
-msgstr ""
+msgstr "Desactivar comprobación de reglas de diseño"
 
 #: pcbnew/toolbars_update_user_interface.cpp:148
 msgid "Hide board ratsnest"
-msgstr ""
+msgstr "Ocultar conexiones de la placa"
 
 #: pcbnew/toolbars_update_user_interface.cpp:159
 msgid "Hide footprint ratsnest"
-msgstr ""
+msgstr "Ocultar conexiones de la huella"
 
 #: pcbnew/toolbars_update_user_interface.cpp:160
 msgid "Show footprint ratsnest"
-msgstr ""
+msgstr "Mostrar conexiones de la huella"
 
 #: pcbnew/toolbars_update_user_interface.cpp:169
 msgid "Disable auto delete old track"
-msgstr ""
+msgstr "Desactivar eliminación automática de pistas"
 
 #: pcbnew/toolbars_update_user_interface.cpp:170
 msgid "Enable auto delete old track"
-msgstr ""
+msgstr "Activar eliminación automática de pistas"
 
 #: pcbnew/toolbars_update_user_interface.cpp:181
 msgid "Show vias in fill mode"
-msgstr ""
+msgstr "Mostrar vías en modo relleno"
 
 #: pcbnew/toolbars_update_user_interface.cpp:192
 msgid "Show tracks in fill mode"
-msgstr ""
+msgstr "Mostrar pistas en modo relleno"
 
 #: pcbnew/toolbars_update_user_interface.cpp:202
 msgid "Normal contrast display mode"
@@ -22013,37 +22024,39 @@ msgstr "Modo de pantalla de contraste normal"
 msgid "High contrast display mode"
 msgstr "Modo de pantalla de alto contraste"
 
+# Pendiente contexto
 #: pcbnew/tools/common_actions.cpp:58
 msgid "trivial connection"
-msgstr ""
+msgstr "conexión trivial"
 
 #: pcbnew/tools/common_actions.cpp:58
 msgid "Selects a connection between two junctions."
-msgstr ""
+msgstr "Selecciona una conexión entre dos puntos de unión."
 
 #: pcbnew/tools/common_actions.cpp:62
 msgid "copper connection"
-msgstr ""
+msgstr "conexión de cobre"
 
+# Pendiente de contexto
 #: pcbnew/tools/common_actions.cpp:62
 msgid "Selects whole copper connection."
-msgstr ""
+msgstr "Selecciona toda la conexión de cobre."
 
 #: pcbnew/tools/common_actions.cpp:66
 msgid "whole net"
-msgstr ""
+msgstr "toda la red"
 
 #: pcbnew/tools/common_actions.cpp:66
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr ""
+msgstr "Selecciona todas las pistas y vías pertenecientes a la misma red."
 
 #: pcbnew/tools/common_actions.cpp:70
 msgid "Find an item"
-msgstr ""
+msgstr "Buscar un elemento"
 
 #: pcbnew/tools/common_actions.cpp:70
 msgid "Searches the document for an item"
-msgstr ""
+msgstr "Busca un elemento en el documento."
 
 #: pcbnew/tools/common_actions.cpp:79
 msgid "Open in Footprint Editor"
@@ -22055,72 +22068,77 @@ msgstr "Abre la huella seleccionada en el Editor de huellas"
 
 #: pcbnew/tools/common_actions.cpp:85
 msgid "Copy pad settings to Current Settings"
-msgstr ""
+msgstr "Copiar opciones de pad a las opciones activas"
 
 #: pcbnew/tools/common_actions.cpp:86
 msgid ""
 "Copies the properties of selected pad to the current template pad settings."
 msgstr ""
+"Copia las propiedades del pad seleccionado a la plantilla de opciones de pad "
+"activa."
 
 #: pcbnew/tools/common_actions.cpp:90
 msgid "Copy Current Settings to pads"
-msgstr ""
+msgstr "Copiar opciones activas a los pads"
 
 #: pcbnew/tools/common_actions.cpp:91
 msgid "Copies the current template pad settings to the selected pad(s)."
 msgstr ""
+"Copia las opciones de la plantilla de opciones de pad activa al/los pad/pads "
+"seleccionados."
 
 #: pcbnew/tools/common_actions.cpp:95
 msgid "Global Pad Edition"
-msgstr ""
+msgstr "Edición global de pad"
 
 #: pcbnew/tools/common_actions.cpp:96
 msgid "Changes pad properties globally."
-msgstr ""
+msgstr "Cambia las opciones de pad globalmente."
 
 #: pcbnew/tools/common_actions.cpp:100
 msgid "Moves the selected item(s)"
-msgstr ""
+msgstr "Mueve el/los elemento/s seleccionado/s."
 
 #: pcbnew/tools/common_actions.cpp:104 pcbnew/tools/common_actions.cpp:108
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicar"
 
 #: pcbnew/tools/common_actions.cpp:104
 msgid "Duplicates the selected item(s)"
-msgstr ""
+msgstr "Duplica el/los elemento/s seleccionado/s."
 
 #: pcbnew/tools/common_actions.cpp:108
 msgid "Duplicates the selected item(s), incrementing pad numbers"
 msgstr ""
+"Duplica el/los elemento/s seleccionado/s, incrementado los números de pad."
 
 #: pcbnew/tools/common_actions.cpp:112
 msgid "Move Exactly..."
-msgstr ""
+msgstr "Mover exactamente..."
 
 #: pcbnew/tools/common_actions.cpp:112
 msgid "Moves the selected item(s) by an exact amount"
-msgstr ""
+msgstr "Mueve el/los elemento/s seleccionado/s una distancia exacta."
 
 #: pcbnew/tools/common_actions.cpp:117
 msgid "Create array"
-msgstr ""
+msgstr "Crear matrix"
 
 #: pcbnew/tools/common_actions.cpp:121
 msgid "Rotates selected item(s)"
-msgstr ""
+msgstr "Rota el/los elemnto/s seleccionado/s."
 
 #: pcbnew/tools/common_actions.cpp:125
 msgid "Flips selected item(s)"
-msgstr ""
+msgstr "Voltea el/los elemento/s seleccionado/s."
 
 #: pcbnew/tools/common_actions.cpp:129
 msgid "Deletes selected item(s)"
-msgstr ""
+msgstr "Elimina el/los elemento/s seleccionado/s."
 
 #: pcbnew/tools/common_actions.cpp:133
 msgid "Properties..."
-msgstr ""
+msgstr "Propiedades..."
 
 #: pcbnew/tools/common_actions.cpp:133
 msgid "Displays item properties dialog"
@@ -22128,27 +22146,27 @@ msgstr "Diálogo de propiedades de elemento"
 
 #: pcbnew/tools/common_actions.cpp:139
 msgid "Draw a line"
-msgstr ""
+msgstr "Dibujar una línea"
 
 #: pcbnew/tools/common_actions.cpp:143
 msgid "Draw a circle"
-msgstr ""
+msgstr "Dibujar un círculo"
 
 #: pcbnew/tools/common_actions.cpp:147
 msgid "Draw an arc"
-msgstr ""
+msgstr "Dibujar un arco"
 
 #: pcbnew/tools/common_actions.cpp:151
 msgid "Add a text"
-msgstr ""
+msgstr "Añadir texto"
 
 #: pcbnew/tools/common_actions.cpp:155
 msgid "Add a dimension"
-msgstr ""
+msgstr "Añadir una dimensión"
 
 #: pcbnew/tools/common_actions.cpp:159
 msgid "Add a filled zone"
-msgstr ""
+msgstr "Añadir una zona rellena"
 
 #: pcbnew/tools/common_actions.cpp:163
 msgid "Add a keepout area"
@@ -22156,15 +22174,15 @@ msgstr "Añadir área restringida"
 
 #: pcbnew/tools/common_actions.cpp:171 pcbnew/tools/drawing_tool.cpp:601
 msgid "Place the footprint anchor"
-msgstr ""
+msgstr "Situar el ancla de huella"
 
 #: pcbnew/tools/common_actions.cpp:176
 msgid "Increase the line width"
-msgstr ""
+msgstr "Aumentar el ancho de línea"
 
 #: pcbnew/tools/common_actions.cpp:180
 msgid "Decrease the line width"
-msgstr ""
+msgstr "Disminuir el ancho de línea"
 
 #: pcbnew/tools/common_actions.cpp:184
 msgid "Switch the arc posture"
@@ -22180,51 +22198,51 @@ msgstr "Zoom -"
 
 #: pcbnew/tools/common_actions.cpp:363
 msgid "Fill"
-msgstr ""
+msgstr "Rellenar"
 
 #: pcbnew/tools/common_actions.cpp:363
 msgid "Fill zone(s)"
-msgstr ""
+msgstr "Rellenar zona(s)"
 
 #: pcbnew/tools/common_actions.cpp:367
 msgid "Fill all"
-msgstr ""
+msgstr "Rellenar todo"
 
 #: pcbnew/tools/common_actions.cpp:367
 msgid "Fill all zones"
-msgstr ""
+msgstr "Rellenar todas las zonas"
 
 #: pcbnew/tools/common_actions.cpp:371
 msgid "Unfill"
-msgstr ""
+msgstr "Vaciar"
 
 #: pcbnew/tools/common_actions.cpp:371
 msgid "Unfill zone(s)"
-msgstr ""
+msgstr "Vaciar zona(s)"
 
 #: pcbnew/tools/common_actions.cpp:375
 msgid "Unfill all"
-msgstr ""
+msgstr "Vaciar todo"
 
 #: pcbnew/tools/common_actions.cpp:375
 msgid "Unfill all zones"
-msgstr ""
+msgstr "Vaciar todas las zonas"
 
 #: pcbnew/tools/common_actions.cpp:379
 msgid "Merge zones"
-msgstr ""
+msgstr "Fusionar zonas"
 
 #: pcbnew/tools/common_actions.cpp:422
 msgid "Enumerate pads"
-msgstr ""
+msgstr "Enumerar pads"
 
 #: pcbnew/tools/common_actions.cpp:426
 msgid "Copy items"
-msgstr ""
+msgstr "Copiar elementos"
 
 #: pcbnew/tools/common_actions.cpp:430
 msgid "Paste items"
-msgstr ""
+msgstr "Pegar elementos"
 
 #: pcbnew/tools/common_actions.cpp:510 pcbnew/tools/common_actions.cpp:511
 msgid "Run push & shove router (single tracks)"
@@ -22236,92 +22254,94 @@ msgstr "Ejecutar enrutado presionar y empujar (pares diferenciales)"
 
 #: pcbnew/tools/common_actions.cpp:520 pcbnew/tools/common_actions.cpp:521
 msgid "Open Interactive Router settings"
-msgstr ""
+msgstr "Abrir opciones del Enrutador interactivo"
 
 #: pcbnew/tools/common_actions.cpp:525 pcbnew/tools/common_actions.cpp:526
 msgid "Open Differential Pair Dimension settings"
-msgstr ""
+msgstr "Abrir las opciones de dimensiones de Par diferencial"
 
 #: pcbnew/tools/common_actions.cpp:538
 msgid "Tune skew of a differential pair"
-msgstr ""
+msgstr "Afinar desvío de un par diferencial"
 
 #: pcbnew/tools/common_actions.cpp:551
 msgid "Create corner"
-msgstr ""
+msgstr "Crear esquina"
 
 #: pcbnew/tools/common_actions.cpp:555
 msgid "Remove corner"
-msgstr ""
+msgstr "Eliminar esquina"
 
 #: pcbnew/tools/common_actions.cpp:560
 msgid "Align items to the top"
-msgstr ""
+msgstr "Alinear elementos arriba"
 
 #: pcbnew/tools/common_actions.cpp:561
 msgid "Aligns selected items to the top edge"
-msgstr ""
+msgstr "Alinea los elementos seleccionados al borde superior."
 
 #: pcbnew/tools/common_actions.cpp:565
 msgid "Align items to the bottom"
-msgstr ""
+msgstr "Alinear elementos abajo"
 
 #: pcbnew/tools/common_actions.cpp:566
 msgid "Aligns selected items to the bottom edge"
-msgstr ""
+msgstr "Alinea los elementos seleccionados al borde inferior."
 
 #: pcbnew/tools/common_actions.cpp:570
 msgid "Align items to the left"
-msgstr ""
+msgstr "Alinear elementos a la izquierda"
 
 #: pcbnew/tools/common_actions.cpp:571
 msgid "Aligns selected items to the left edge"
-msgstr ""
+msgstr "Alinea los elementos seleccionados al borde izquierdo."
 
 #: pcbnew/tools/common_actions.cpp:575
 msgid "Align items to the right"
-msgstr ""
+msgstr "Alinear elementos a la derecha"
 
 #: pcbnew/tools/common_actions.cpp:576
 msgid "Aligns selected items to the right edge"
-msgstr ""
+msgstr "Alinea los elementos seleccionados al borde derecho."
 
 #: pcbnew/tools/common_actions.cpp:580
 msgid "Distribute horizontally"
-msgstr ""
+msgstr "Distribuir horizontalmente"
 
 #: pcbnew/tools/common_actions.cpp:581
 msgid "Distributes selected items along the horizontal axis"
-msgstr ""
+msgstr "Distribuye los elementos seleccionados a lo largo del eje  horizontal."
 
 #: pcbnew/tools/common_actions.cpp:585
 msgid "Distribute vertically"
-msgstr ""
+msgstr "Distribuir verticalmente"
 
 #: pcbnew/tools/common_actions.cpp:586
 msgid "Distributes selected items along the vertical axis"
-msgstr ""
+msgstr "Distribuye los elementos seleccionados a lo largo del eje vertical."
 
 #: pcbnew/tools/edit_tool.cpp:582
 msgid "Cannot delete component reference."
-msgstr ""
+msgstr "No puede eliminarse la referencia del componente."
 
 #: pcbnew/tools/edit_tool.cpp:586
 msgid "Cannot delete component value."
-msgstr ""
+msgstr "No puede eliminarse el valor del componente."
 
 #: pcbnew/tools/edit_tool.cpp:781
 #, c-format
 msgid "Duplicated %d item(s)"
-msgstr ""
+msgstr "Elemento(s) duplicado(s) %d"
 
 #: pcbnew/tools/module_tools.cpp:228
 msgid "Hold left mouse button and move cursor over pads to enumerate them"
 msgstr ""
+"Mantenga pulsado el botón izquierdo del ratón y mueva el cursor sobre los "
+"pads para enumerarlos"
 
 #: pcbnew/tools/module_tools.cpp:345
 msgid "Select reference point"
-msgstr ""
+msgstr "Seleccionar punto de referencia"
 
 #: pcbnew/tools/module_tools.cpp:396
 #, c-format
@@ -22352,11 +22372,11 @@ msgstr ""
 msgid "Zoom"
 msgstr ""
 
-#: pcbnew/tools/selection_tool.cpp:554
+#: pcbnew/tools/selection_tool.cpp:559
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "La selección contienen elementos bloqueados. ¿Desea continuar?"
 
-#: pcbnew/tools/selection_tool.cpp:787
+#: pcbnew/tools/selection_tool.cpp:795
 msgid "Clarify selection"
 msgstr ""
 
@@ -22999,6 +23019,9 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "Priority level:"
+#~ msgstr "Nivel de prioridad:"
 
 #~ msgid ""
 #~ "Not recommanded.\n"
