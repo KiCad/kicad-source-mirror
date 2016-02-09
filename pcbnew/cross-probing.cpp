@@ -38,14 +38,15 @@
  */
 void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
-    char            line[1024];
-    wxString        msg;
-    wxString        modName;
-    char*           idcmd;
-    char*           text;
-    MODULE*         module = 0;
-    BOARD* pcb = GetBoard();
-    wxPoint         pos;
+    char        line[1024];
+    wxString    msg;
+    wxString    modName;
+    char*       idcmd;
+    char*       text;
+    MODULE*     module = NULL;
+    D_PAD*      pad = NULL;
+    BOARD*      pcb = GetBoard();
+    wxPoint     pos;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
     line[sizeof(line) - 1] = 0;
@@ -75,7 +76,6 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     else if( strcmp( idcmd, "$PIN:" ) == 0 )
     {
         wxString pinName;
-        D_PAD*   pad     = NULL;
         int      netcode = -1;
 
         pinName = FROM_UTF8( text );
@@ -132,7 +132,12 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         if( IsGalCanvasActive() )
         {
-            GetToolManager()->RunAction( COMMON_ACTIONS::crossProbeSchToPcb, true, module );
+            GetToolManager()->RunAction( COMMON_ACTIONS::crossProbeSchToPcb,
+                true,
+                pad ?
+                    static_cast<BOARD_ITEM*>( pad ) :
+                    static_cast<BOARD_ITEM*>( module )
+                );
         }
         else
         {
