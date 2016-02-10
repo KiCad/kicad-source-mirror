@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-09 10:43+0100\n"
-"PO-Revision-Date: 2016-02-09 13:27+0100\n"
+"POT-Creation-Date: 2016-02-10 09:31+0100\n"
+"PO-Revision-Date: 2016-02-10 09:56+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -3251,11 +3251,11 @@ msgstr "No se ha podido abrir el archivo '%s'"
 
 #: eeschema/dialogs/dialog_bom.cpp:447
 msgid "Plugin name in plugin list"
-msgstr "Nombre del Plugin en la lista"
+msgstr "Nombre del complemento en la lista"
 
 #: eeschema/dialogs/dialog_bom.cpp:448
 msgid "Plugin name"
-msgstr "Nombre del Plugin"
+msgstr "Nombre del complemento"
 
 #: eeschema/dialogs/dialog_bom.cpp:458
 msgid "This name already exists. Abort"
@@ -3263,11 +3263,12 @@ msgstr "Este nombre ya existe. Abortar"
 
 #: eeschema/dialogs/dialog_bom.cpp:486 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
-msgstr "Archivos de plugin:"
+msgstr "Archivos de complemento:"
 
 #: eeschema/dialogs/dialog_bom.cpp:577
 msgid "Plugin file name not found. Cannot edit plugin file"
-msgstr "No se ha encontrado el nombre del Plugin. No puede editarse el archivo"
+msgstr ""
+"No se ha encontrado el nombre del complemento. No puede editarse el archivo"
 
 #: eeschema/dialogs/dialog_bom.cpp:587
 msgid "No text editor selected in KiCad. Please choose it"
@@ -3279,7 +3280,7 @@ msgstr "Ayuda para la generación de la Lista de Materiales"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:37
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Complementos"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:58
 #: eeschema/dialogs/dialog_netlist_base.cpp:46
@@ -3293,16 +3294,16 @@ msgstr "Ayuda"
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 #: eeschema/dialogs/dialog_netlist_base.cpp:52
 msgid "Add Plugin"
-msgstr "Añadir Plugin"
+msgstr "Añadir complemento"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 #: eeschema/dialogs/dialog_netlist_base.cpp:55
 msgid "Remove Plugin"
-msgstr "Eliminar Plugin"
+msgstr "Eliminar complemento"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:77
 msgid "Edit Plugin File"
-msgstr "Editar Plugin"
+msgstr "Editar complemento"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:89
 msgid "Command line:"
@@ -3310,7 +3311,7 @@ msgstr "Línea de comandos:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:102
 msgid "Plugin Info:"
-msgstr "Información del plugin:"
+msgstr "Información del complemento:"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:250
 msgid "Description\n"
@@ -4877,7 +4878,7 @@ msgstr "Archivo de lista de redes de CadStar (.frp)|*.frp"
 
 #: eeschema/dialogs/dialog_netlist.cpp:783
 msgid "This plugin already exists. Abort"
-msgstr "Ya existe el plugin. Anular."
+msgstr "Ya existe el complemento. Anular."
 
 #: eeschema/dialogs/dialog_netlist.cpp:810
 msgid "Error. You must provide a command String"
@@ -4908,7 +4909,7 @@ msgstr "Aceptar"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:136
 msgid "Browse Plugins"
-msgstr "Explorar plugins:"
+msgstr "Explorar complementos:"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:171
 #: pcbnew/dialogs/dialog_SVG_print.cpp:215
@@ -13195,7 +13196,7 @@ msgstr "Anchura del cobre en los alivios térmicos."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:187
 msgid "Zone priority level:"
-msgstr ""
+msgstr "Nivel de prioridad de la zona:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:189
 msgid ""
@@ -14701,7 +14702,7 @@ msgstr "Ruta de la librería"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:208
 msgid "Plugin Type"
-msgstr "Tipo de plugin"
+msgstr "Tipo de complemento"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:432
 #, c-format
@@ -14813,7 +14814,7 @@ msgstr "Opciones para la librería '%s'"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:23
 msgid "Plugin Options:"
-msgstr "Opciones del plugin:"
+msgstr "Opciones del complemento:"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:39
 msgid "Option"
@@ -14845,7 +14846,7 @@ msgstr "Opciones:"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:94
 msgid "Options supported by current plugin"
-msgstr "Opciones soportadas por el plugin actual"
+msgstr "Opciones soportadas por el complemento actual"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:98
 msgid "<< Append Selected Option"
@@ -18926,12 +18927,12 @@ msgstr ""
 #: pcbnew/io_mgr.cpp:42 pcbnew/plugin.cpp:27
 #, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
-msgstr "El plugin '%s' no implementa la función '%s'."
+msgstr "El complemento '%s' no implementa la función '%s'."
 
 #: pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "No se ha encontrado el tipo de plugin '%s'."
+msgstr "No se ha encontrado el tipo de complemento '%s'."
 
 #: pcbnew/io_mgr.cpp:126
 #, c-format
@@ -21272,7 +21273,7 @@ msgstr "La placa tiene un número de capa inválido para la huella %s"
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr ""
 "Activar el log en modo <b>debug</b> para las funciones Footprint*() en este "
-"Plugin."
+"complemento."
 
 # Pendiente de contexto
 #: pcbnew/plugin.cpp:122
@@ -21794,10 +21795,9 @@ msgstr "Mostrar huellas en modo boceto"
 msgid "Enable high contrast display mode"
 msgstr "Activar modo de pantalla de alto contraste"
 
-# Pendiente de contexto
 #: pcbnew/tool_modview.cpp:62
 msgid "Select footprint to browse"
-msgstr ""
+msgstr "Seleccionar huella a explorar"
 
 #: pcbnew/tool_modview.cpp:67
 msgid "Display previous footprint"
@@ -22346,31 +22346,31 @@ msgstr "Seleccionar punto de referencia"
 #: pcbnew/tools/module_tools.cpp:396
 #, c-format
 msgid "Copied %d item(s)"
-msgstr ""
+msgstr "Copiado(s) %d elemento(s)"
 
 #: pcbnew/tools/module_tools.cpp:420
 msgid "Invalid clipboard contents"
-msgstr ""
+msgstr "Contenido del portapapeles no válido"
 
 #: pcbnew/tools/pcbnew_control.cpp:731
 msgid "Are you sure you want to delete item?"
-msgstr ""
+msgstr "¿Está seguro de que desea eliminar el elemento?"
 
 #: pcbnew/tools/pcbnew_control.cpp:914
 msgid "Not available in OpenGL/Cairo canvases."
-msgstr ""
+msgstr "No se encuentra disponible en los lienzos OpenGL/Cairo."
 
 #: pcbnew/tools/placement_tool.cpp:68
 msgid "Align/distribute"
-msgstr ""
+msgstr "Alinear/distribuir"
 
 #: pcbnew/tools/selection_tool.cpp:99
 msgid "Select..."
-msgstr ""
+msgstr "Seleccionar..."
 
 #: pcbnew/tools/selection_tool.cpp:113
 msgid "Zoom"
-msgstr ""
+msgstr "Zoom"
 
 #: pcbnew/tools/selection_tool.cpp:559
 msgid "Selection contains locked items. Do you want to continue?"
@@ -22378,96 +22378,97 @@ msgstr "La selección contienen elementos bloqueados. ¿Desea continuar?"
 
 #: pcbnew/tools/selection_tool.cpp:795
 msgid "Clarify selection"
-msgstr ""
+msgstr "Clarificar selección"
 
 #: pcbnew/tools/size_menu.cpp:45
 msgid "Track "
-msgstr ""
+msgstr "Pista "
 
 #: pcbnew/tools/size_menu.cpp:48
 msgid "net class width"
-msgstr ""
+msgstr "ancho de clase de red"
 
 #: pcbnew/tools/size_menu.cpp:64
 msgid "Via "
-msgstr ""
+msgstr "Vía "
 
 #: pcbnew/tools/size_menu.cpp:68
 msgid "net class size"
-msgstr ""
+msgstr "tamaño de clase de red"
 
 #: pcbnew/tools/size_menu.cpp:77
 msgid ", drill: default"
-msgstr ""
+msgstr ", taladro: por defecto"
 
 #: pcbnew/tools/size_menu.cpp:79
 msgid ", drill: "
-msgstr ""
+msgstr ", taladro: "
 
 #: pcbnew/tools/zoom_menu.cpp:48
 #, c-format
 msgid "Zoom: %.2f"
-msgstr ""
+msgstr "Zoom: %.2f"
 
 #: pcbnew/xchgmod.cpp:123
 #, c-format
 msgid "Change footprint of '%s'"
-msgstr ""
+msgstr "Cambiar huella de '%s'"
 
 #: pcbnew/xchgmod.cpp:131
 #, c-format
 msgid "Change footprints '%s'"
-msgstr ""
+msgstr "Cambiar huellas '%s'"
 
 #: pcbnew/xchgmod.cpp:217
 #, c-format
 msgid "File '%s' created\n"
-msgstr ""
+msgstr "Se ha creado el archivo '%s'\n"
 
 #: pcbnew/xchgmod.cpp:222
 #, c-format
 msgid "** Could not create file '%s' ***\n"
-msgstr ""
+msgstr "** No puede crearse el archivo '%s' ***\n"
 
 #: pcbnew/xchgmod.cpp:282
 #, c-format
 msgid "Change footprint %s -> %s (for value = %s)?"
-msgstr ""
+msgstr "¿Cambiar huella %s -> %s (para valor = %s)?"
 
 #: pcbnew/xchgmod.cpp:289
 #, c-format
 msgid "Change footprint %s -> %s ?"
-msgstr ""
+msgstr "¿Cambiar huella %s -> %s?"
 
 #: pcbnew/xchgmod.cpp:344
 msgid "Are you sure you want to change all footprints?"
-msgstr ""
+msgstr "¿Está seguro de que quiere cambiar todas las huellas?"
 
 #: pcbnew/xchgmod.cpp:394
 #, c-format
 msgid "Change footprint '%s' (from '%s') to '%s'"
-msgstr ""
+msgstr "Cambiar huella '%s' (de '%s') a '%s'"
 
 #: pcbnew/xchgmod.cpp:501
 msgid "No footprints!"
-msgstr ""
+msgstr "¡No hay huellas!"
 
 #: pcbnew/xchgmod.cpp:512
 msgid "Save Footprint Association File"
-msgstr ""
+msgstr "Guardar archivo de asociación de huellas"
 
 #: pcbnew/xchgmod.cpp:523
 #, c-format
 msgid "Could not create file '%s'"
-msgstr ""
+msgstr "No puede crearse el archivo '%s'"
 
 #: pcbnew/zones_by_polygon.cpp:131
 msgid "The duplicated zone cannot be on the same layer as the original zone."
 msgstr ""
+"La zona duplicada no puede estar en la misma capa que la zona original."
 
 #: pcbnew/zones_by_polygon.cpp:160
 msgid "Warning: The new zone fails DRC"
-msgstr ""
+msgstr "Atención: La nueva zona falla el Control de Reglas de Diseño (DRC)"
 
 #: pcbnew/zones_by_polygon.cpp:362 pcbnew/zones_by_polygon.cpp:420
 #: pcbnew/zones_by_polygon.cpp:810
@@ -22562,7 +22563,7 @@ msgstr "Abrir el editor de texto"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:87
 msgid "Field Properties"
-msgstr ""
+msgstr "Propiedades de campo"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:135
 msgid "Schematic Editor Options"
@@ -22574,23 +22575,24 @@ msgstr "Control de las reglas eléctricas (ERC)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.h:59
 msgid "Drawing Properties"
-msgstr ""
+msgstr "Propiedades de dibujo"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.h:99
 msgid "Pin Properties"
-msgstr ""
+msgstr "Propiedades de pin"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:50
 msgid "Pin Table"
-msgstr ""
+msgstr "Tabla de pines"
 
+# Pendiente de contexto
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:69
 msgid "Library Text Properties"
 msgstr ""
 
 #: eeschema/dialogs/dialog_libedit_options_base.h:80
 msgid "Library Editor Options"
-msgstr ""
+msgstr "Opciones del Editor de librerías"
 
 #: eeschema/dialogs/dialog_netlist_base.h:78
 #: pcbnew/dialogs/dialog_netlist_fbp.h:84
@@ -22599,7 +22601,7 @@ msgstr "Lista de redes"
 
 #: eeschema/dialogs/dialog_netlist_base.h:119
 msgid "Plugins:"
-msgstr ""
+msgstr "Complementos:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:85
 msgid "Plot Schematic"
@@ -22607,7 +22609,7 @@ msgstr "Trazar esquema"
 
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:56
 msgid "Sheet Pin Properties"
-msgstr ""
+msgstr "Propiedades de la hoja de pines"
 
 #: eeschema/dialogs/dialog_sch_sheet_props_base.h:60
 msgid "Schematic Sheet Properties"
@@ -22680,47 +22682,50 @@ msgid ""
 "Place a hierarchical label. Label will be seen as a hierarchical pin in the "
 "sheet symbol"
 msgstr ""
+"Añadir etiqueta jerárquica. La etiqueta se verá como un pin jerárquico en el "
+"símbolo de hoja"
 
 #: eeschema/help_common_strings.h:68
 msgid "Place junction"
-msgstr ""
+msgstr "Añadir unión"
 
 #: eeschema/help_common_strings.h:69
 msgid "Create hierarchical sheet"
-msgstr ""
+msgstr "Crear hoja jerárquica"
 
 #: eeschema/help_common_strings.h:71
 msgid ""
 "Place hierarchical pin imported from the corresponding hierarchical label"
 msgstr ""
+"Añadir pin jerárquico importado de la etiqueta jerárquica correspondiente."
 
 #: eeschema/help_common_strings.h:72
 msgid "Place hierarchical pin in sheet"
-msgstr ""
+msgstr "Añadir pin jerárquico en hoja"
 
 #: eeschema/help_common_strings.h:73
 msgid "Place graphic lines or polygons"
-msgstr ""
+msgstr "Añadir líneas o polígonos gráficos"
 
 #: eeschema/help_common_strings.h:74
 msgid "Place text"
-msgstr ""
+msgstr "Añadir texto"
 
 #: eeschema/help_common_strings.h:76
 msgid "Annotate schematic components"
-msgstr ""
+msgstr "Anotar componentes del esquema"
 
 #: eeschema/help_common_strings.h:77
 msgid "Library Editor - Create/edit components"
-msgstr ""
+msgstr "Editor de librerías - Crear/editar componentes"
 
 #: eeschema/help_common_strings.h:78
 msgid "Library Browser - Browse components"
-msgstr ""
+msgstr "Explorador de librerías - Explorar componentes"
 
 #: eeschema/help_common_strings.h:79
 msgid "Generate bill of materials and/or cross references"
-msgstr "Crear una lista de materiales y/o referencias cruzadas"
+msgstr "Generar listado de materiales y/o referencias cruzadas"
 
 #: eeschema/help_common_strings.h:81
 msgid "Back-import component footprint fields via CvPcb .cmp file"
@@ -22732,48 +22737,48 @@ msgstr "Añadir "
 
 #: eeschema/help_common_strings.h:85
 msgid "Add text to component body"
-msgstr ""
+msgstr "Añadir texto al cuerpo del componente"
 
 #: eeschema/help_common_strings.h:86
 msgid "Add graphic rectangle to component body"
-msgstr ""
+msgstr "Añadir rectágulo gráfico al cuerpo del componente"
 
 #: eeschema/help_common_strings.h:87
 msgid "Add circles to component body"
-msgstr ""
+msgstr "Añadir círculos al cuerpo del componente"
 
 #: eeschema/help_common_strings.h:88
 msgid "Add arcs to component body"
-msgstr ""
+msgstr "Añadir arcos al cuerpo del componente"
 
 #: eeschema/help_common_strings.h:89
 msgid "Add lines and polygons to component body"
-msgstr ""
+msgstr "Añadir líneas y polígonos al cuerpo del componente"
 
 #: eeschema/sch_bitmap.h:127
 msgid "Image"
-msgstr ""
+msgstr "Imagen"
 
 #: eeschema/sch_marker.h:100
 msgid "ERC Marker"
-msgstr ""
+msgstr "Marcador ERC"
 
 #: eeschema/sch_no_connect.h:88
 msgid "No Connect"
-msgstr ""
+msgstr "Sin conectar"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.h:50
 msgid "Page Borders"
-msgstr ""
+msgstr "Límites de página"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:65
 msgid "Gerbview Options"
-msgstr "Opciones Gerbview"
+msgstr "Opciones de Gerbview"
 
 #: include/class_drc_item.h:164
 #, c-format
 msgid "ErrType(%d): <b>%s</b><ul><li> %s </li></ul>"
-msgstr ""
+msgstr "Error(%d): <b>%s</b><ul><li> %s </li></ul>"
 
 #: include/class_drc_item.h:177
 #, c-format
@@ -22788,11 +22793,11 @@ msgstr "Error(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
 #: include/common.h:312
 #, c-format
 msgid " (%s):"
-msgstr ""
+msgstr " (%s):"
 
 #: include/kiway_player.h:260
 msgid "This file is already open."
-msgstr ""
+msgstr "Este archivo ya está abierto."
 
 #: include/richio.h:77
 #, c-format
@@ -22800,6 +22805,8 @@ msgid ""
 "IO_ERROR: %s\n"
 "from %s : %s"
 msgstr ""
+"IO_ERROR: %s\n"
+"de %s : %s"
 
 #: include/richio.h:78
 #, c-format
@@ -22809,10 +22816,14 @@ msgid ""
 "line %d  offset %d\n"
 "from %s : %s"
 msgstr ""
+"PARSE_ERROR: %s en entrada/origen\n"
+"'%s'\n"
+"línea %d  posición %d\n"
+"de %s : %s"
 
 #: kicad/dialogs/dialog_template_selector_base.h:68
 msgid "Project Template Selector"
-msgstr "Selector de plantillas de projecto"
+msgstr "Selector de plantillas de proyecto"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:71
 msgid "New Item"
