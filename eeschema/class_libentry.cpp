@@ -1754,16 +1754,16 @@ void LIB_PART::SetAliases( const wxArrayString& aAliasList )
     }
 
     // Remove names in the current component that are not in the new alias list.
-    LIB_ALIASES::iterator it;
+    LIB_ALIASES::iterator it = m_aliases.begin();
 
-    for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
+    while( it != m_aliases.end() )
     {
         int index = aAliasList.Index( (*it)->GetName(), false );
 
         if( index != wxNOT_FOUND || (*it)->IsRoot() )
-            continue;
-
-        it = m_aliases.erase( it );
+            ++it;
+        else
+            it = m_aliases.erase( it );
     }
 }
 
