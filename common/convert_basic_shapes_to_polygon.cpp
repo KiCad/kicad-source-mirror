@@ -64,6 +64,71 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     }
 }
 
+/* Returns the centers of the rounded corners of a rect.
+ */
+void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
+                const wxPoint& aPosition, const wxSize& aSize, double aRotation )
+{
+    wxSize size( aSize/2 );
+
+    size.x -= aRadius;
+    size.y -= aRadius;
+
+    aCenters[0].x = -size.x;
+    aCenters[0].y = size.y;
+
+    aCenters[1].x = size.x;
+    aCenters[1].y = size.y;
+
+    aCenters[2].x = size.x;
+    aCenters[2].y = -size.y;
+
+    aCenters[3].x = -size.x;
+    aCenters[3].y = -size.y;
+
+    // Rotate the polygon
+    if( aRotation )
+    {
+        for( int ii = 0; ii < 4; ii++ )
+            RotatePoint( &aCenters[ii], aRotation );
+    }
+
+    // move the polygon to the position
+    for( int ii = 0; ii < 4; ii++ )
+        aCenters[ii] += aPosition;
+}
+
+/**
+ * Function TransformRoundRectToPolygon
+ * convert a rectangle with rounded corners to a polygon
+ * Convert arcs to multiple straight lines
+ * @param aCornerBuffer = a buffer to store the polygon
+ * @param aPosition = the coordinate of the center of the rectangle
+ * @param aSize = the size of the rectangle
+ * @param aRadius = radius of rounded corners
+ * @param aRotation = rotation in 0.1 degrees of the rectangle
+ * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ */
+void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                  const wxPoint& aPosition, const wxSize& aSize,
+                                  double aRotation, int aCornerRadius,
+                                  int aCircleToSegmentsCount )
+{
+    wxPoint corners[4];
+    GetRoundRectCornerCenters( corners, aCornerRadius, aPosition, aSize, aRotation );
+
+    SHAPE_POLY_SET outline;
+    outline.NewOutline();
+
+    for( int ii = 0; ii < 4; ++ii )
+        outline.Append( corners[ii].x, corners[ii].y );
+
+    outline.Inflate( aCornerRadius, aCircleToSegmentsCount );
+
+    // Add the outline:
+    aCornerBuffer.Append( outline );
+}
+
 
 /**
  * Function TransformRoundedEndsSegmentToPolygon

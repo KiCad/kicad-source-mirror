@@ -136,8 +136,6 @@ public:
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
-//protected:  @todo: is it just me?
-
     wxPoint m_Start0;       // Start point or center, relative to module origin, orient 0.
     wxPoint m_End0;         // End point, relative to module origin, orient 0.
 };
