@@ -56,6 +56,8 @@ set( CVPCB_SRCS
 if( MINGW )
     # CVPCB_RESOURCES variable is set by the macro.
     mingw_resource_compiler( cvpcb )
+else()
+    set( CVPCB_RESOURCES cvpcb.rc )
 endif()
 
 

@@ -191,6 +191,8 @@ set( EESCHEMA_COMMON_SRCS
 if( MINGW )
     # EESCHEMA_RESOURCES variable is set by the macro.
     mingw_resource_compiler( eeschema )
+else()
+    set( EESCHEMA_RESOURCES eeschema.rc )
 endif()
 
 # Create a C++ compilable string initializer containing html text into a *.h file:
