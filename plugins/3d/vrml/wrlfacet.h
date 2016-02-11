@@ -79,7 +79,8 @@ public:
      * calculates the normal to the facet assuming a CCW orientation
      * and performs the calculation of the angle weighted vertex normals.
      *
-     * @return is the max. magnitude of any component of a vector
+     * @return is the max. magnitude of any component of the normal or zero
+     * if there is a fault or the normal has already been calculated.
      */
     float CalcFaceNormal();
 

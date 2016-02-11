@@ -517,8 +517,8 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
         aNormalsList.push_back( tnorm );
     }
 
-    bool hasColor;
-    bool perVC; // per-vertex colors?
+    bool hasColor = false;
+    bool perVC = false; // per-vertex colors?
 
     if( !colors.empty() )
     {
@@ -559,10 +559,6 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
                 aColorsList.push_back( colors[0] );
             }
         }
-    }
-    else
-    {
-        hasColor = false;
     }
 
     int lim = (int) vertices.size() - 1;
@@ -674,7 +670,6 @@ void FACET::CollectVertices( std::vector< std::list< FACET* > >& aFacetList )
 
 void FACET::Renormalize( float aMaxValue )
 {
-    //return;
     if( vnweight.empty() || aMaxValue < LOWER_LIMIT )
         return;
 
@@ -730,7 +725,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
     int maxIdx = 0;
     int tmi;
     float maxV = 0.0;
-    float tV;
+    float tV = 0.0;
 
     while( sF != eF )
     {

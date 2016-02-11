@@ -421,7 +421,6 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             case BIND_PER_VERTEX:
                 m_current.mat->GetColor( &pc1, idx );
                 fp->AddColor( pc1 );
-                ++cidx;
                 break;
 
             case BIND_PER_FACE_INDEXED:
