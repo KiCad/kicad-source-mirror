@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -47,7 +47,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_outputDirectoryName->SetMaxLength( 0 ); 
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	
 	bSizer29->Add( m_outputDirectoryName, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -171,7 +170,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer14->Add( m_textDefaultPenSize, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_linesWidth = new wxTextCtrl( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_linesWidth->SetMaxLength( 0 ); 
 	m_linesWidth->SetToolTip( _("Line width for, e.g., sheet references.") );
 	
 	bSizer14->Add( m_linesWidth, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
@@ -256,37 +254,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_HPGLOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxVERTICAL );
 	
 	wxBoxSizer* bSizer22;
-	bSizer22 = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxBoxSizer* bSizer20;
-	bSizer20 = new wxBoxSizer( wxVERTICAL );
+	bSizer22 = new wxBoxSizer( wxVERTICAL );
 	
 	m_textPenSize = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPenSize->Wrap( -1 );
-	bSizer20->Add( m_textPenSize, 0, wxRIGHT|wxLEFT, 5 );
+	bSizer22->Add( m_textPenSize, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_HPGLPenSizeOpt = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_HPGLPenSizeOpt->SetMaxLength( 0 ); 
-	bSizer20->Add( m_HPGLPenSizeOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	
-	bSizer22->Add( bSizer20, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
-	
-	m_textPenOvr = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen overlay"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPenOvr->Wrap( -1 );
-	bSizer21->Add( m_textPenOvr, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_HPGLPenOverlayOpt = new wxTextCtrl( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_HPGLPenOverlayOpt->SetMaxLength( 0 ); 
-	m_HPGLPenOverlayOpt->SetToolTip( _("Set plot overlay for filling") );
-	
-	bSizer21->Add( m_HPGLPenOverlayOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	
-	bSizer22->Add( bSizer21, 1, wxEXPAND, 5 );
+	bSizer22->Add( m_HPGLPenSizeOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	m_HPGLOptionsSizer->Add( bSizer22, 1, wxEXPAND, 5 );
@@ -307,7 +282,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer18->Add( m_staticText7, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_fineAdjustXscaleOpt = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fineAdjustXscaleOpt->SetMaxLength( 0 ); 
 	m_fineAdjustXscaleOpt->SetToolTip( _("Set global X scale adjust for exact scale postscript output.") );
 	
 	bSizer18->Add( m_fineAdjustXscaleOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -323,7 +297,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer19->Add( m_staticText8, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_fineAdjustYscaleOpt = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fineAdjustYscaleOpt->SetMaxLength( 0 ); 
 	m_fineAdjustYscaleOpt->SetToolTip( _("Set global Y scale adjust for exact scale postscript output.") );
 	
 	bSizer19->Add( m_fineAdjustYscaleOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -339,7 +312,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer191->Add( m_textPSFineAdjustWidth, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_PSFineAdjustWidthOpt = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PSFineAdjustWidthOpt->SetMaxLength( 0 ); 
 	m_PSFineAdjustWidthOpt->SetToolTip( _("Set global width correction for exact width postscript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
 	
 	bSizer191->Add( m_PSFineAdjustWidthOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );

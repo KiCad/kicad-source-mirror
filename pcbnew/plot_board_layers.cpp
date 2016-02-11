@@ -903,20 +903,9 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter,
     int pen_diam = KiROUND( aPlotOpts->GetHPGLPenDiameter() * IU_PER_MILS /
                             aPlotOpts->GetScale() );
 
-    // compute pen_overlay (value comes in mils) in pcb units with plot scale
-    if( aPlotOpts->GetHPGLPenOverlay() < 0 )
-        aPlotOpts->SetHPGLPenOverlay( 0 );
-
-    if( aPlotOpts->GetHPGLPenOverlay() >= aPlotOpts->GetHPGLPenDiameter() )
-        aPlotOpts->SetHPGLPenOverlay( aPlotOpts->GetHPGLPenDiameter() - 1 );
-
-    int pen_overlay = KiROUND( aPlotOpts->GetHPGLPenOverlay() * IU_PER_MILS /
-                               aPlotOpts->GetScale() );
-
     // Set HPGL-specific options and start
     aPlotter->SetPenSpeed( aPlotOpts->GetHPGLPenSpeed() );
     aPlotter->SetPenNumber( aPlotOpts->GetHPGLPenNum() );
-    aPlotter->SetPenOverlap( pen_overlay );
     aPlotter->SetPenDiameter( pen_diam );
 }
 

@@ -529,15 +529,7 @@ public:
         penNumber = number;
     }
 
-    virtual void SetPenDiameter( double diameter )
-    {
-        penDiameter = diameter;
-    }
-
-    virtual void SetPenOverlap( double overlap )
-    {
-        penOverlap = overlap;
-    }
+    virtual void SetPenDiameter( double diameter );
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror );
@@ -574,7 +566,6 @@ protected:
     int    penSpeed;
     int    penNumber;
     double penDiameter;
-    double penOverlap;
 };
 
 /**

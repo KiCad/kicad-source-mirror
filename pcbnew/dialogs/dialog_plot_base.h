@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -98,8 +98,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_HPGLOptionsSizer;
 		wxStaticText* m_textPenSize;
 		wxTextCtrl* m_HPGLPenSizeOpt;
-		wxStaticText* m_textPenOvr;
-		wxTextCtrl* m_HPGLPenOverlayOpt;
 		wxStaticBoxSizer* m_PSOptionsSizer;
 		wxStaticText* m_staticText7;
 		wxTextCtrl* m_fineAdjustXscaleOpt;
@@ -129,7 +127,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 566,711 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 566,618 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PLOT_BASE();
 		
 		void DIALOG_PLOT_BASEOnContextMenu( wxMouseEvent &event )
