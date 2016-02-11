@@ -237,8 +237,9 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel
         m_out->Print( 0, " (%s %s)", getTokenName( T_rotate ),
                       double2Str(aItem->m_Orient ).c_str() );
 
-    // Write font info
-    bool write_size = aItem->m_TextSize.x != 0.0 && aItem->m_TextSize.y != 0.0;
+    // Write font info, only if it is not the default setup
+    bool write_size = aItem->m_TextSize.x != 0.0 || aItem->m_TextSize.y != 0.0;
+
     if( write_size || aItem->IsBold() || aItem->IsItalic() )
     {
         m_out->Print( 0, " (%s", getTokenName( T_font ) );
