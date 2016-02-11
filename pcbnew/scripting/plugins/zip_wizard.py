@@ -90,7 +90,7 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
 
         # body inside pads is possible only for 2 rows.
         # for other values, there is no room
-        linew = self.draw.GetLineTickness()
+        linew = self.draw.GetLineThickness()
         if body['*'+self.silkscreen_inside_key] and line_count == 2:
             cornery = pin1posY - ssy_offset
             if cornery < linew:
@@ -103,13 +103,13 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         cmarginy = body[self.courtyard_y_margin_key]
         self.draw.SetLayer(pcbnew.F_CrtYd)
         # set courtyard line thickness to the one defined in KLC
-        thick = self.draw.GetLineTickness()
+        thick = self.draw.GetLineThickness()
         sizex = (pin1posX + cmarginx) * 2 + pad_Hsize + thick
         sizey = (pin1posY + cmarginy) * 2 + pad_Vsize + thick
-        self.draw.SetLineTickness(pcbnew.FromMM(0.05))
+        self.draw.SetLineThickness(pcbnew.FromMM(0.05))
         self.draw.Box(0, 0, sizex, sizey)
         # restore line thickness to previous value
-        self.draw.SetLineTickness(pcbnew.FromMM(thick))
+        self.draw.SetLineThickness(pcbnew.FromMM(thick))
 
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal

@@ -419,7 +419,7 @@ void EDA_3D_CANVAS::draw3DViaHole( const VIA* aVia )
 {
     LAYER_ID    top_layer, bottom_layer;
     int         thickness       = GetPrm3DVisu().GetCopperThicknessBIU();
-    int         inner_radius    = (int)((float)aVia->GetDrillValue() * 1.01f) / 2.0f;      // This add a bit more in order to correct a draw artifact while using tickness
+    int         inner_radius    = (int)((float)aVia->GetDrillValue() * 1.01f) / 2.0f;      // This add a bit more in order to correct a draw artifact while using thickness
 
     aVia->LayerPair( &top_layer, &bottom_layer );
 

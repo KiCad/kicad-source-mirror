@@ -187,7 +187,7 @@ class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
         step_length = float(touch_length) / float(steps)
 
         t_size = self.GetTextSize()
-        w_text = self.draw.GetLineTickness()
+        w_text = self.draw.GetLineThickness()
         ypos = touch_width/(bands*2) + t_size/2 + w_text
         self.draw.Value(0, -ypos, t_size)
         ypos += t_size + w_text*2

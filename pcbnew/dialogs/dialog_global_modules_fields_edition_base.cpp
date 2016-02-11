@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,13 +25,13 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint Fields") ), wxVERTICAL );
 	
-	m_ReferenceOpt = new wxCheckBox( this, wxID_ANY, _("Reference designator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ReferenceOpt = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Reference designator"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_ReferenceOpt, 0, wxALL|wxEXPAND, 5 );
 	
-	m_ValueOpt = new wxCheckBox( this, wxID_ANY, _("Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ValueOpt = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_ValueOpt, 0, wxALL|wxEXPAND, 5 );
 	
-	m_OtherFields = new wxCheckBox( this, wxID_ANY, _("User defined"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OtherFields = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("User defined"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_OtherFields, 0, wxALL|wxEXPAND, 5 );
 	
 	
@@ -44,7 +44,6 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	bLeftSizer->Add( m_staticTextFilter, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModuleFilter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_ModuleFilter->SetMaxLength( 0 ); 
 	bLeftSizer->Add( m_ModuleFilter, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	
@@ -62,41 +61,38 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	fgSizerCurrSettings->SetFlexibleDirection( wxBOTH );
 	fgSizerCurrSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( sbSizerSettings->GetStaticBox(), wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	fgSizerCurrSettings->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
-	m_SizeX_Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizeX_Value->SetMaxLength( 0 ); 
+	m_SizeX_Value = new wxTextCtrl( sbSizerSettings->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerCurrSettings->Add( m_SizeX_Value, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_SizeXunit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXunit = new wxStaticText( sbSizerSettings->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXunit->Wrap( -1 );
 	fgSizerCurrSettings->Add( m_SizeXunit, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6 = new wxStaticText( sbSizerSettings->GetStaticBox(), wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
 	fgSizerCurrSettings->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT|wxALIGN_RIGHT, 5 );
 	
-	m_SizeY_Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizeY_Value->SetMaxLength( 0 ); 
+	m_SizeY_Value = new wxTextCtrl( sbSizerSettings->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerCurrSettings->Add( m_SizeY_Value, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_SizeYunit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYunit = new wxStaticText( sbSizerSettings->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYunit->Wrap( -1 );
 	fgSizerCurrSettings->Add( m_SizeYunit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9 = new wxStaticText( sbSizerSettings->GetStaticBox(), wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	fgSizerCurrSettings->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_TicknessValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TicknessValue->SetMaxLength( 0 ); 
-	fgSizerCurrSettings->Add( m_TicknessValue, 0, wxALL|wxEXPAND, 5 );
+	m_ThicknessValue = new wxTextCtrl( sbSizerSettings->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerCurrSettings->Add( m_ThicknessValue, 0, wxALL|wxEXPAND, 5 );
 	
-	m_Ticknessunit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Ticknessunit->Wrap( -1 );
-	fgSizerCurrSettings->Add( m_Ticknessunit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_ThicknessUnit = new wxStaticText( sbSizerSettings->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessUnit->Wrap( -1 );
+	fgSizerCurrSettings->Add( m_ThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	sbSizerSettings->Add( fgSizerCurrSettings, 1, wxEXPAND, 5 );
