@@ -107,6 +107,10 @@ void X3DTRANSFORM::readFields( wxXmlNode* aNode )
 
     wxXmlAttribute* prop;
 
+    // note: center/translation are multiplied by 2.54 to retain
+    // legacy behavior of 1 X3D unit = 0.1 inch; the SG*
+    // classes expect all units in mm.
+
     for( prop = aNode->GetAttributes();
          prop != NULL;
          prop = prop->GetNext() )
@@ -119,11 +123,17 @@ void X3DTRANSFORM::readFields( wxXmlNode* aNode )
             m_Dict->AddName( m_Name, this );
         }
         else if( pname == "center" )
+        {
             X3D::ParseSFVec3( prop->GetValue(), center );
+            center *= 2.54;
+        }
         else if( pname == "scale" )
             X3D::ParseSFVec3( prop->GetValue(), scale );
         else if( pname == "translation" )
+        {
             X3D::ParseSFVec3( prop->GetValue(), translation );
+            translation *= 2.54;
+        }
         else if( pname == "rotation" )
             X3D::ParseSFRotation( prop->GetValue(), rotation );
         else if( pname == "scaleOrientation" )

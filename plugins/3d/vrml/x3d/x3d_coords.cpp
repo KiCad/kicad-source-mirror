@@ -96,18 +96,21 @@ bool X3DCOORDS::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
             {
                 if( plist.GetNextToken().ToDouble( &point ) )
                 {
+                    // note: coordinates are multiplied by 2.54 to retain
+                    // legacy behavior of 1 X3D unit = 0.1 inch; the SG*
+                    // classes expect all units in mm.
                     switch( i % 3 )
                     {
                     case 0:
-                        pt.x = point;
+                        pt.x = point * 2.54;
                         break;
 
                     case 1:
-                        pt.y = point;
+                        pt.y = point * 2.54;
                         break;
 
                     case 2:
-                        pt.z = point;
+                        pt.z = point * 2.54;
                         points.push_back( pt );
                         break;
 
