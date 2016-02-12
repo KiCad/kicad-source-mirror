@@ -34,7 +34,6 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <wxPcbStruct.h>
-#include <trigo.h>
 #include <pgm_base.h>
 #include <build_version.h>
 #include <macros.h>
@@ -42,12 +41,8 @@
 
 #include <class_board.h>
 #include <class_module.h>
-#include <class_drawsegment.h>
-#include <legacy_plugin.h>
 
 #include <pcbnew.h>
-#include <pcbplot.h>
-#include <pcb_plot_params.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_i.h>
 #include <wx_html_report_panel.h>
@@ -66,7 +61,7 @@
  *      ## Side : bottom
  * or
  *      ## Side : all
- *      # Ref    Val                  Package         PosX       PosY        Rot     Side
+ *      # Ref    Val              Package             PosX       PosY        Rot     Side
  *      C123     0,1uF/50V        SM0603              1.6024    -2.6280     180.0    Front
  *      C124     0,1uF/50V        SM0603              1.6063    -2.7579     180.0    Front
  *      C125     0,1uF/50V        SM0603              1.6010    -2.8310     180.0    Front
@@ -76,6 +71,10 @@
 #define PLACEFILE_UNITS_KEY wxT( "PlaceFileUnits" )
 #define PLACEFILE_OPT_KEY   wxT( "PlaceFileOpts" )
 
+
+#define PCB_BACK_SIDE 0
+#define PCB_FRONT_SIDE 1
+#define PCB_BOTH_SIDES 2
 
 class LIST_MOD      // An helper class used to build a list of useful footprints.
 {
@@ -228,7 +227,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     // Count the footprints to place, do not yet create a file
     int fpcount = m_parent->DoGenFootprintsPositionFile( wxEmptyString, UnitsMM(),
-                                                         ForceAllSmd(), 2 );
+                                                         ForceAllSmd(), PCB_BOTH_SIDES );
     if( fpcount == 0)
     {
         wxMessageBox( _( "No footprint for automated placement." ) );
@@ -255,11 +254,11 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     // Create the the Front or Top side placement file,
     // or the single file
-    int side = 1;
+    int side = PCB_FRONT_SIDE;
 
     if( singleFile )
     {
-        side = 2;
+        side = PCB_BOTH_SIDES;
         fn.SetName( fn.GetName() + wxT( "-" ) + wxT("all") );
     }
     else
@@ -295,7 +294,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     // Create the Back or Bottom side placement file
     fullcount = fpcount;
-    side = 0;
+    side = PCB_BACK_SIDE;
     fn = brd->GetFileName();
     fn.SetPath( outputDir.GetPath() );
     fn.SetName( fn.GetName() + wxT( "-" ) + backSideName );
@@ -343,9 +342,6 @@ static const double conv_unit_mm = 1.0 / IU_PER_MM;    // units = mm
 static const char unit_text_mm[] = "## Unit = mm, Angle = deg.\n";
 
 static wxPoint File_Place_Offset;  // Offset coordinates for generated file.
-
-static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile,
-                                 double aConvUnit );
 
 
 // Sort function use by GenereModulesPosition()
@@ -396,45 +392,57 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                                                  bool aUnitsMM,
                                                  bool aForceSmdItems, int aSide )
 {
-    MODULE*     module;
-    char        line[1024];
+    MODULE*     footprint;
+
+    // Minimal text lenghts:
+    int lenRefText = 8;
+    int lenValText = 8;
+    int lenPkgText = 16;
 
     File_Place_Offset = GetAuxOrigin();
 
-    // Calculating the number of useful modules (CMS attribute, not VIRTUAL)
-    int moduleCount = 0;
+    // Calculating the number of useful footprints (CMS attribute, not VIRTUAL)
+    int footprintCount = 0;
 
-    for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
+    // Select units:
+    double conv_unit = aUnitsMM ? conv_unit_mm : conv_unit_inch;
+    const char *unit_text = aUnitsMM ? unit_text_mm : unit_text_inch;
+
+    // Build and sort the list of footprints alphabetically
+    std::vector<LIST_MOD> list;
+    list.reserve( footprintCount );
+
+    for( footprint = GetBoard()->m_Modules; footprint; footprint = footprint->Next() )
     {
-        if( aSide < 2 )
+        if( aSide != PCB_BOTH_SIDES )
         {
-            if( module->GetLayer() == B_Cu && aSide == 1)
+            if( footprint->GetLayer() == B_Cu && aSide == PCB_FRONT_SIDE)
                 continue;
-            if( module->GetLayer() == F_Cu && aSide == 0)
+            if( footprint->GetLayer() == F_Cu && aSide == PCB_BACK_SIDE)
                 continue;
         }
 
-        if( module->GetAttributes() & MOD_VIRTUAL )
+        if( footprint->GetAttributes() & MOD_VIRTUAL )
         {
-            DBG( printf( "skipping module %s because it's virtual\n",
-                       TO_UTF8( module->GetReference() ) );)
+            DBG( printf( "skipping footprint %s because it's virtual\n",
+                         TO_UTF8( footprint->GetReference() ) );)
             continue;
         }
 
-        if( ( module->GetAttributes() & MOD_CMS ) == 0 )
+        if( ( footprint->GetAttributes() & MOD_CMS ) == 0 )
         {
-            if( aForceSmdItems )    // true to fix a bunch of mis-labeled modules:
+            if( aForceSmdItems )    // true to fix a bunch of mis-labeled footprints:
             {
-                if( !HasNonSMDPins( module ) )
+                if( !HasNonSMDPins( footprint ) )
                 {
-                    // all module's pins are SMD, mark the part for pick and place
-                    module->SetAttributes( module->GetAttributes() | MOD_CMS );
+                    // all footprint's pins are SMD, mark the part for pick and place
+                    footprint->SetAttributes( footprint->GetAttributes() | MOD_CMS );
                     OnModify();
                 }
                 else
                 {
                     DBG(printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n",
-                              TO_UTF8(module->GetReference()) ) );
+                                TO_UTF8(footprint->GetReference()) ) );
                     continue;
                 }
             }
@@ -442,46 +450,26 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                 continue;
         }
 
-        moduleCount++;
+        footprintCount++;
+
+        LIST_MOD item;
+        item.m_Module    = footprint;
+        item.m_Reference = footprint->GetReference();
+        item.m_Value     = footprint->GetValue();
+        item.m_Layer     = footprint->GetLayer();
+        list.push_back( item );
+
+        lenRefText = std::max( lenRefText, int(item.m_Reference.length()) );
+        lenValText = std::max( lenValText, int(item.m_Value.length()) );
+        lenPkgText = std::max( lenPkgText, int(item.m_Module->GetFPID().GetFootprintName().length()) );
     }
 
     if( aFullFileName.IsEmpty() )
-        return moduleCount;
+        return footprintCount;
 
     FILE * file = wxFopen( aFullFileName, wxT( "wt" ) );
     if( file == NULL )
         return -1;
-
-    // Select units:
-    double conv_unit = aUnitsMM ? conv_unit_mm : conv_unit_inch;
-    const char *unit_text = aUnitsMM ? unit_text_mm : unit_text_inch;
-
-    // Build and sort the list of modules alphabetically
-    std::vector<LIST_MOD> list;
-    list.reserve(moduleCount);
-    for( module = GetBoard()->m_Modules; module; module = module->Next() )
-    {
-        if( aSide < 2 )
-        {
-            if( module->GetLayer() == B_Cu && aSide == 1)
-                continue;
-            if( module->GetLayer() == F_Cu && aSide == 0)
-                continue;
-        }
-
-        if( module->GetAttributes() & MOD_VIRTUAL )
-            continue;
-
-        if( (module->GetAttributes() & MOD_CMS) == 0 )
-            continue;
-
-        LIST_MOD item;
-        item.m_Module    = module;
-        item.m_Reference = module->GetReference();
-        item.m_Value     = module->GetValue();
-        item.m_Layer     = module->GetLayer();
-        list.push_back( item );
-    }
 
     if( list.size() > 1 )
         sort( list.begin(), list.end(), sortFPlist );
@@ -490,70 +478,60 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     LOCALE_IO   toggle;
 
     // Write file header
-    sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
-    fputs( line, file );
+    fprintf( file, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
 
     wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
-    sprintf( line, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
-    fputs( line, file );
+    fprintf( file, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
 
     fputs( unit_text, file );
 
     fputs( "## Side : ", file );
 
-    if( aSide == 0 )
+    if( aSide == PCB_BACK_SIDE )
         fputs( TO_UTF8( backSideName ), file );
-    else if( aSide == 1 )
+    else if( aSide == PCB_FRONT_SIDE )
         fputs( TO_UTF8( frontSideName ), file );
     else
         fputs( "All", file );
 
     fputs( "\n", file );
 
-    fputs( "# Ref    Val                  Package         PosX       PosY        Rot     Side\n",
-           file );
+    fprintf(file, "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
+            int(lenRefText), "# Ref",
+            int(lenValText), "Val",
+            int(lenPkgText), "Package",
+            "PosX", "PosY", "Rot", "Side" );
 
-    for( int ii = 0; ii < moduleCount; ii++ )
+    for( int ii = 0; ii < footprintCount; ii++ )
     {
-        wxPoint  module_pos;
+        wxPoint  footprint_pos;
+        footprint_pos  = list[ii].m_Module->GetPosition();
+        footprint_pos -= File_Place_Offset;
+
+        LAYER_NUM layer = list[ii].m_Module->GetLayer();
+        wxASSERT( layer==F_Cu || layer==B_Cu );
 
         const wxString& ref = list[ii].m_Reference;
         const wxString& val = list[ii].m_Value;
         const wxString& pkg = list[ii].m_Module->GetFPID().GetFootprintName();
 
-        sprintf( line, "%-8.8s %-16.16s %-16.16s",
-                 TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
-
-        module_pos  = list[ii].m_Module->GetPosition();
-        module_pos -= File_Place_Offset;
-
-        char* text = line + strlen( line );
-        /* Keep the coordinates in the first quadrant, like the gerbers
-         * (i.e. change sign to y) */
-        sprintf( text, " %9.4f  %9.4f  %8.1f    ",
-                 module_pos.x * conv_unit,
-                 -module_pos.y * conv_unit,
-                 list[ii].m_Module->GetOrientation() / 10.0 );
-
-        LAYER_NUM layer = list[ii].m_Module->GetLayer();
-
-        fputs( line, file );
-
-        wxASSERT( layer==F_Cu || layer==B_Cu );
-
-        if( layer == F_Cu )
-            fputs( TO_UTF8( frontSideName ), file );
-        else if( layer == B_Cu )
-            fputs( TO_UTF8( backSideName ), file );
-
-        fputs( "\n", file );
+        fprintf(file, "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
+                lenRefText, TO_UTF8( ref ),
+                lenValText, TO_UTF8( val ),
+                lenPkgText, TO_UTF8( pkg ),
+                footprint_pos.x * conv_unit,
+                // Keep the coordinates in the first quadrant,
+                // (i.e. change y sign
+                -footprint_pos.y * conv_unit,
+                list[ii].m_Module->GetOrientation() / 10.0,
+                (layer == F_Cu ) ? TO_UTF8( frontSideName ) : TO_UTF8( backSideName ));
     }
 
     // Write EOF
     fputs( "## End\n", file );
 
     fclose( file );
-    return moduleCount;
+    return footprintCount;
 }
 
 
@@ -571,7 +549,8 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     fn.SetPath( dirDialog.GetPath() );
     fn.SetExt( wxT( "rpt" ) );
 
-    bool success = DoGenFootprintsReport( fn.GetFullPath(), false );
+    bool unitMM = g_UserUnit != INCHES;
+    bool success = DoGenFootprintsReport( fn.GetFullPath(), unitMM );
 
     wxString msg;
     if( success )
@@ -592,8 +571,6 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
  */
 bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM )
 {
-    D_PAD*   pad;
-    char     line[1024];
     wxString msg;
     FILE*    rptfile;
     wxPoint  module_pos;
@@ -612,157 +589,96 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
     LOCALE_IO   toggle;
 
     // Generate header file comments.)
-    sprintf( line, "## Module report - date %s\n", TO_UTF8( DateAndTime() ) );
-    fputs( line, rptfile );
+    fprintf( rptfile, "## Footprint report - date %s\n", TO_UTF8( DateAndTime() ) );
 
     wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
-    sprintf( line, "## Created by Pcbnew version %s\n", TO_UTF8( Title ) );
-    fputs( line, rptfile );
+    fprintf( rptfile, "## Created by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( unit_text, rptfile );
 
-    fputs( "##\n", rptfile );
     fputs( "\n$BeginDESCRIPTION\n", rptfile );
 
     EDA_RECT bbbox = GetBoard()->ComputeBoundingBox();
 
     fputs( "\n$BOARD\n", rptfile );
-    fputs( "unit INCH\n", rptfile );
 
-    sprintf( line, "upper_left_corner %9.6f %9.6f\n",
+    fprintf( rptfile, "upper_left_corner %9.6f %9.6f\n",
              bbbox.GetX() * conv_unit,
              bbbox.GetY() * conv_unit );
 
-    fputs( line, rptfile );
-
-    sprintf( line, "lower_right_corner %9.6f %9.6f\n",
+    fprintf( rptfile, "lower_right_corner %9.6f %9.6f\n",
              bbbox.GetRight()  * conv_unit,
              bbbox.GetBottom() * conv_unit );
-    fputs( line, rptfile );
 
     fputs( "$EndBOARD\n\n", rptfile );
 
-    try
+    for( MODULE* Module = GetBoard()->m_Modules;  Module;  Module = Module->Next() )
     {
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+        fprintf( rptfile, "$MODULE %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
 
-        LEGACY_PLUGIN* legacy = (LEGACY_PLUGIN*) (PLUGIN*) pi;
+        fprintf( rptfile, "reference %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
+        fprintf( rptfile, "value %s\n", EscapedUTF8( Module->GetValue() ).c_str() );
+        fprintf( rptfile, "footprint %s\n",
+                 EscapedUTF8( FROM_UTF8( Module->GetFPID().Format().c_str() ) ).c_str() );
 
-        legacy->SetFilePtr( rptfile );
+        msg = wxT( "attribut" );
 
-        for( MODULE* Module = GetBoard()->m_Modules;  Module;  Module = Module->Next() )
+        if( Module->GetAttributes() & MOD_VIRTUAL )
+            msg += wxT( " virtual" );
+
+        if( Module->GetAttributes() & MOD_CMS )
+            msg += wxT( " smd" );
+
+        if( ( Module->GetAttributes() & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
+            msg += wxT( " none" );
+
+        msg += wxT( "\n" );
+        fputs( TO_UTF8( msg ), rptfile );
+
+        module_pos    = Module->GetPosition();
+        module_pos.x -= File_Place_Offset.x;
+        module_pos.y -= File_Place_Offset.y;
+
+        fprintf( rptfile, "position %9.6f %9.6f  orientation %.2f\n",
+                 module_pos.x * conv_unit,
+                 module_pos.y * conv_unit,
+                 Module->GetOrientation() / 10.0 );
+
+        if( Module->GetLayer() == F_Cu )
+            fputs( "layer front\n", rptfile );
+        else if( Module->GetLayer() == B_Cu )
+            fputs( "layer back\n", rptfile );
+        else
+            fputs( "layer other\n", rptfile );
+
+        for( D_PAD* pad = Module->Pads(); pad != NULL; pad = pad->Next() )
         {
-            sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
-            fputs( line, rptfile );
+            fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
+            int layer = 0;
 
-            sprintf( line, "reference %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
-            fputs( line, rptfile );
-            sprintf( line, "value %s\n", EscapedUTF8( Module->GetValue() ).c_str() );
-            fputs( line, rptfile );
-            sprintf( line, "footprint %s\n",
-                     EscapedUTF8( FROM_UTF8( Module->GetFPID().Format().c_str() ) ).c_str() );
-            fputs( line, rptfile );
+            if( pad->GetLayerSet()[B_Cu] )
+                layer = 1;
 
-            msg = wxT( "attribut" );
+            if( pad->GetLayerSet()[F_Cu] )
+                layer |= 2;
 
-            if( Module->GetAttributes() & MOD_VIRTUAL )
-                msg += wxT( " virtual" );
+            static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
+            fprintf( rptfile, "Shape %s Layer %s\n", TO_UTF8( pad->ShowPadShape() ), layer_name[layer] );
 
-            if( Module->GetAttributes() & MOD_CMS )
-                msg += wxT( " smd" );
+            fprintf( rptfile, "position %9.6f %9.6f  size %9.6f %9.6f  orientation %.2f\n",
+                     pad->GetPos0().x * conv_unit, pad->GetPos0().y * conv_unit,
+                     pad->GetSize().x * conv_unit, pad->GetSize().y * conv_unit,
+                     (pad->GetOrientation() - Module->GetOrientation()) / 10.0 );
 
-            if( ( Module->GetAttributes() & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
-                msg += wxT( " none" );
+            fprintf( rptfile, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
 
-            msg += wxT( "\n" );
-            fputs( TO_UTF8( msg ), rptfile );
+            fprintf( rptfile, "shape_offset %9.6f %9.6f\n",
+                     pad->GetOffset().x * conv_unit,
+                     pad->GetOffset().y * conv_unit );
 
-            module_pos    = Module->GetPosition();
-            module_pos.x -= File_Place_Offset.x;
-            module_pos.y -= File_Place_Offset.y;
-
-            sprintf( line, "position %9.6f %9.6f\n",
-                     module_pos.x * conv_unit,
-                     module_pos.y * conv_unit );
-            fputs( line, rptfile );
-
-            sprintf( line, "orientation  %.2f\n", Module->GetOrientation() / 10.0 );
-
-            if( Module->GetLayer() == F_Cu )
-                strcat( line, "layer component\n" );
-            else if( Module->GetLayer() == B_Cu )
-                strcat( line, "layer copper\n" );
-            else
-                strcat( line, "layer other\n" );
-
-            fputs( line, rptfile );
-
-            legacy->SaveModule3D( Module );
-
-            for( pad = Module->Pads(); pad != NULL; pad = pad->Next() )
-            {
-                fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
-                sprintf( line, "position %9.6f %9.6f\n",
-                         pad->GetPos0().x * conv_unit,
-                         pad->GetPos0().y * conv_unit );
-                fputs( line, rptfile );
-
-                sprintf( line, "size %9.6f %9.6f\n",
-                         pad->GetSize().x * conv_unit,
-                         pad->GetSize().y * conv_unit );
-                fputs( line, rptfile );
-
-                sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
-                fputs( line, rptfile );
-
-                sprintf( line, "shape_offset %9.6f %9.6f\n",
-                         pad->GetOffset().x * conv_unit,
-                         pad->GetOffset().y * conv_unit );
-                fputs( line, rptfile );
-
-                sprintf( line, "orientation  %.2f\n",
-                         (pad->GetOrientation() - Module->GetOrientation()) / 10.0 );
-                fputs( line, rptfile );
-
-                static const char* shape_name[6] = { "???", "Circ", "Rect", "Oval", "Trap", "Spec" };
-
-                sprintf( line, "Shape  %s\n", shape_name[pad->GetShape()] );
-                fputs( line, rptfile );
-
-                int layer = 0;
-
-                if( pad->GetLayerSet()[B_Cu] )
-                    layer = 1;
-
-                if( pad->GetLayerSet()[F_Cu] )
-                    layer |= 2;
-
-                static const char* layer_name[4] = { "none", "back", "front", "both" };
-
-                sprintf( line, "Layer  %s\n", layer_name[layer] );
-                fputs( line, rptfile );
-                fprintf( rptfile, "$EndPAD\n" );
-            }
-
-            fprintf( rptfile, "$EndMODULE  %s\n\n", TO_UTF8 (Module->GetReference() ) );
+            fprintf( rptfile, "$EndPAD\n" );
         }
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( NULL, ioe.errorText );
-    }
 
-    // Write board Edges
-    EDA_ITEM* PtStruct;
-
-    for( PtStruct = GetBoard()->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
-    {
-        if( PtStruct->Type() != PCB_LINE_T )
-            continue;
-
-        if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != Edge_Cuts )
-            continue;
-
-        WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile, conv_unit );
+        fprintf( rptfile, "$EndMODULE  %s\n\n", TO_UTF8 (Module->GetReference() ) );
     }
 
     // Generate EOF.
@@ -772,67 +688,3 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
     return true;
 }
 
-
-/* Output to rpt file a segment type from the PCB drawing.
- * The contours are of different types:
- * Segment
- * Circle
- * Arc
- */
-void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile, double aConvUnit )
-{
-    double ux0, uy0, dx, dy;
-    double radius, width;
-    char   line[1024];
-
-    ux0 = PtDrawSegment->GetStart().x * aConvUnit;
-    uy0 = PtDrawSegment->GetStart().y * aConvUnit;
-
-    dx = PtDrawSegment->GetEnd().x * aConvUnit;
-    dy = PtDrawSegment->GetEnd().y * aConvUnit;
-
-    width = PtDrawSegment->GetWidth() * aConvUnit;
-
-    switch( PtDrawSegment->GetShape() )
-    {
-    case S_CIRCLE:
-        radius = Distance( ux0, uy0, dx, dy );
-        fprintf( rptfile, "$CIRCLE \n" );
-        fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
-        fprintf( rptfile, "radius %.6lf\n", radius );
-        fprintf( rptfile, "width %.6lf\n", width );
-        fprintf( rptfile, "$EndCIRCLE \n" );
-        break;
-
-    case S_ARC:
-        {
-            int endx = PtDrawSegment->GetEnd().x;
-            int endy = PtDrawSegment->GetEnd().y;
-
-            RotatePoint( &endx,
-                         &endy,
-                         PtDrawSegment->GetStart().x,
-                         PtDrawSegment->GetStart().y,
-                         PtDrawSegment->GetAngle() );
-
-            fprintf( rptfile, "$ARC \n" );
-            fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
-            fprintf( rptfile, "start %.6lf %.6lf\n",
-                     endx * aConvUnit, endy * aConvUnit );
-            fprintf( rptfile, "end %.6lf %.6lf\n", dx, dy );
-            fprintf( rptfile, "width %.6lf\n", width );
-            fprintf( rptfile, "$EndARC \n" );
-        }
-        break;
-
-    default:
-        sprintf( line, "$LINE \n" );
-        fputs( line, rptfile );
-
-        fprintf( rptfile, "start %.6lf %.6lf\n", ux0, uy0 );
-        fprintf( rptfile, "end %.6lf %.6lf\n", dx, dy );
-        fprintf( rptfile, "width %.6lf\n", width );
-        fprintf( rptfile, "$EndLINE \n" );
-        break;
-    }
-}
