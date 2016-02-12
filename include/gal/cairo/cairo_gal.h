@@ -112,10 +112,12 @@ public:
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /// @copydoc GAL::DrawPolyline()
-    virtual void DrawPolyline( std::deque<VECTOR2D>& aPointList );
+    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) { drawPoly( aPointList ); }
+    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) { drawPoly( aPointList, aListSize ); }
 
     /// @copydoc GAL::DrawPolygon()
-    virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList );
+    virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) { drawPoly( aPointList ); }
+    virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) { drawPoly( aPointList, aListSize ); }
 
     /// @copydoc GAL::DrawCurve()
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
@@ -380,6 +382,10 @@ private:
 
     /// Prepare the compositor
     void setCompositor();
+
+    /// Drawing polygons & polylines is the same in cairo, so here is the common code
+    void drawPoly( const std::deque<VECTOR2D>& aPointList );
+    void drawPoly( const VECTOR2D aPointList[], int aListSize );
 
     /**
      * @brief Returns a valid key that can be used as a new group number.
