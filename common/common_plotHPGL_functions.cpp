@@ -223,8 +223,6 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize.y *= 10.0 * aIusPerDecimil;
     SetDefaultLineWidth( 0 );    // HPGL has pen sizes instead
     m_plotMirror = aMirror;
-    penOverlap = 0;
-    penDiameter = 0;
 }
 
 
@@ -685,7 +683,12 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorne
         }
 
         // Calculation of dd = number of segments was traced to fill.
-        jj = jj / (int) ( penDiameter - penOverlap );
+        int delta = (int) ( penDiameter - penOverlap );
+
+        if( delta )
+            jj = jj / delta;
+        else
+            jj = 0;
 
         // Trace the outline.
         for( ; jj > 0; jj-- )
