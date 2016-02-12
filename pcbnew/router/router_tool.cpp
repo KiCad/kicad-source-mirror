@@ -603,9 +603,8 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_EndTrack ) )
         {
             bool still_routing = true;
-            while( still_routing ) {
+            while( still_routing )
                 still_routing = m_router->FixRoute( m_endSnapPoint, m_endItem );
-            }
             break;
         }
 
