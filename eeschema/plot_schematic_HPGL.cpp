@@ -240,7 +240,6 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     // Pen num and pen speed are not initialized here.
     // Default HPGL driver values are used
     plotter->SetPenDiameter( m_HPGLPenSize );
-    plotter->SetPenOverlap( m_HPGLPenSize / 4 );
     plotter->StartPlot();
 
     plotter->SetColor( BLACK );

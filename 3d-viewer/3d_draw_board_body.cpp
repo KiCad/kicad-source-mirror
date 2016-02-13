@@ -572,7 +572,10 @@ void EDA_3D_CANVAS::buildTechLayers3DView( REPORTER* aErrorMessages, REPORTER* a
 
         // bufferPolys contains polygons to merge. Many overlaps .
         // Calculate merged polygons and remove pads and vias holes
-        if( bufferPolys.IsEmpty() )
+        if( layer != B_Mask && layer != F_Mask && bufferPolys.IsEmpty() )
+            // if a layer has no item to draw, skip it
+            // However solder mask layers are negative layers, so no item
+            // means only a full layer mask
             continue;
 
         // Solder mask layers are "negative" layers.

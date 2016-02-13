@@ -181,6 +181,14 @@ static LANGUAGE_DESCR s_Languages[] =
         _( "Slovenian" )
     },
 
+    // Slovenian language
+    {
+        wxLANGUAGE_SLOVAK,
+        ID_LANGUAGE_SLOVAK,
+        lang_sk_xpm,
+        _( "Slovak" )
+    },
+
     // Hungarian language
     {
         wxLANGUAGE_HUNGARIAN,

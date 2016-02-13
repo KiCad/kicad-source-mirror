@@ -66,7 +66,9 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Save the footprints back into eeschema
     AddMenuItem( filesMenu, wxID_SAVE,
-                 _( "&Save Edits\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
+                 _( "&Save Edits\tCtrl+S" ),
+                 _( "Save footprint association in schematic component footprint fields" ),
+                 KiBitmap( save_xpm ) );
 
     // Separator
     filesMenu->AppendSeparator();
@@ -110,9 +112,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Separator
     preferencesMenu->AppendSeparator();
     AddMenuItem( preferencesMenu, ID_SAVE_PROJECT,
-                 _( "&Save Project File" ),
-                 _( "Save changes to the project configuration file" ),
-                 KiBitmap( save_setup_xpm ) );
+                 _( "&Save Project File" ), SAVE_HLP_MSG, KiBitmap( save_setup_xpm ) );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
@@ -138,7 +138,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus
-    menuBar->Append( filesMenu, _( "&File" ) );
+    menuBar->Append( filesMenu, _( "&Save" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 

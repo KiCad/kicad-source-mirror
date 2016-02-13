@@ -89,7 +89,6 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         plotter = hpgl_plotter;
         hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
         hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
-        hpgl_plotter->SetPenOverlap( 0 );
         plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
     }

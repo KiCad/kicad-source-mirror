@@ -46,6 +46,8 @@
 #include <class_board.h>
 #include <class_module.h>
 
+#include <origin_viewitem.h>
+
 #include <dialog_pad_properties_base.h>
 #include <html_messagebox.h>
 
@@ -94,10 +96,12 @@ public:
     ~DIALOG_PAD_PROPERTIES()
     {
         delete m_dummyPad;
+        delete m_axisOrigin;
     }
 
 private:
     PCB_BASE_FRAME* m_parent;
+    KIGFX::ORIGIN_VIEWITEM* m_axisOrigin;
     D_PAD*  m_currentPad;           // pad currently being edited
     D_PAD*  m_dummyPad;             // a working copy used to show changes
     D_PAD*  m_padMaster;            // The pad used to create new pads in board or
@@ -178,6 +182,13 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     else    // We are editing a "master" pad, i.e. a pad used to create new pads
         m_dummyPad->Copy( m_padMaster );
 
+    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D(0.0, 0.0, 0.8, 1.0),
+                                               KIGFX::ORIGIN_VIEWITEM::CROSS,
+                                               20000,
+                                               VECTOR2D( m_dummyPad->GetPosition().x,
+                                                         m_dummyPad->GetPosition().y ) );
+    m_axisOrigin->SetDrawAtZero( true );
+
     if( m_parent->IsGalCanvasActive() )
     {
         m_panelShowPadGal->UseColorScheme( m_board->GetColorsSettings() );
@@ -185,6 +196,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
         m_panelShowPadGal->Show();
         m_panelShowPad->Hide();
         m_panelShowPadGal->GetView()->Add( m_dummyPad );
+        m_panelShowPadGal->GetView()->Add( m_axisOrigin );
         m_panelShowPadGal->StartDrawing();
 
         Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );

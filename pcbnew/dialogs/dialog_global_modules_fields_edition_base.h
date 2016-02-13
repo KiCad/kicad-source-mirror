@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,8 +51,8 @@ class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SizeY_Value;
 		wxStaticText* m_SizeYunit;
 		wxStaticText* m_staticText9;
-		wxTextCtrl* m_TicknessValue;
-		wxStaticText* m_Ticknessunit;
+		wxTextCtrl* m_ThicknessValue;
+		wxStaticText* m_ThicknessUnit;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;

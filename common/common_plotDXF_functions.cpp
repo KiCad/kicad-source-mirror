@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -615,6 +615,43 @@ void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
     LineTo( wxPoint( fx, fy ) );
 
     FinishTo( wxPoint( ox, oy ) );
+}
+
+void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                     int aCornerRadius, double aOrient,
+                                     EDA_DRAW_MODE_T aTraceMode )
+{
+    SHAPE_POLY_SET outline;
+    const int segmentToCircleCount = 64;
+    TransformRoundRectToPolygon( outline, aPadPos, aSize, aOrient,
+                                 aCornerRadius, segmentToCircleCount );
+
+    // TransformRoundRectToPolygon creates only one convex polygon
+    SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+
+    MoveTo( wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+
+    for( int ii = 1; ii < poly.PointCount(); ++ii )
+        LineTo( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+
+    FinishTo( wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+}
+
+void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                   SHAPE_POLY_SET* aPolygons,
+                                   EDA_DRAW_MODE_T aTraceMode )
+{
+    for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
+    {
+        SHAPE_LINE_CHAIN& poly = aPolygons->Outline( cnt );
+
+        MoveTo( wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+
+        for( int ii = 1; ii < poly.PointCount(); ++ii )
+            LineTo( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+
+        FinishTo(wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+    }
 }
 
 

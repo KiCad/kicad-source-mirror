@@ -102,7 +102,7 @@ class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
         self.module.Add(pad_s1)
 
         # add footprint outline
-        linewidth = self.draw.GetLineTickness()
+        linewidth = self.draw.GetLineThickness()
         margin = linewidth
 
         # upper line

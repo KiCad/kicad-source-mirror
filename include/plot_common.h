@@ -38,6 +38,8 @@
 #include <class_page_info.h>
 #include <eda_text.h>       // FILL_T
 
+class SHAPE_POLY_SET;
+
 /**
  * Enum PlotFormat
  * is the set of supported output plot formats.  They should be kept in order
@@ -280,6 +282,29 @@ public:
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
                                double aPadOrient, EDA_DRAW_MODE_T aTraceMode ) = 0;
 
+    /**
+     * virtual function FlashPadRoundRect
+     * @param aPadPos Position of the shape (center of the rectangle
+     * @param aSize = size of rounded rect
+     * @param cornerRadius Radius of the rounded corners
+     * @param aOrient The rotation of the shape
+     * @param aTraceMode FILLED or SKETCH
+     */
+    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                    int aCornerRadius, double aOrient,
+                                    EDA_DRAW_MODE_T aTraceMode ) = 0;
+
+    /**
+     * virtual function FlashPadCustom
+     * @param aPadPos Position of the shape (center of the rectangle
+     * @param aSize = size of round reference pad
+     * @param aPolygons the shape as polygon set
+     * @param aTraceMode FILLED or SKETCH
+     */
+    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                 SHAPE_POLY_SET* aPolygons,
+                                 EDA_DRAW_MODE_T aTraceMode ) = 0;
+
     /** virtual function FlashPadTrapez
      * flash a trapezoidal pad
      * @param aPadPos = the position of the shape
@@ -504,15 +529,7 @@ public:
         penNumber = number;
     }
 
-    virtual void SetPenDiameter( double diameter )
-    {
-        penDiameter = diameter;
-    }
-
-    virtual void SetPenOverlap( double overlap )
-    {
-        penOverlap = overlap;
-    }
+    virtual void SetPenDiameter( double diameter );
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror );
@@ -534,6 +551,12 @@ public:
                                EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
                                double orient, EDA_DRAW_MODE_T trace_mode );
+    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                    int aCornerRadius, double aOrient,
+                                    EDA_DRAW_MODE_T aTraceMode );
+    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                 SHAPE_POLY_SET* aPolygons,
+                                 EDA_DRAW_MODE_T aTraceMode );
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
@@ -543,7 +566,6 @@ protected:
     int    penSpeed;
     int    penNumber;
     double penDiameter;
-    double penOverlap;
 };
 
 /**
@@ -586,6 +608,12 @@ public:
                                EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
                                double orient, EDA_DRAW_MODE_T trace_mode );
+    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                    int aCornerRadius, double aOrient,
+                                    EDA_DRAW_MODE_T aTraceMode );
+    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                 SHAPE_POLY_SET* aPolygons,
+                                 EDA_DRAW_MODE_T aTraceMode );
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
@@ -942,14 +970,28 @@ public:
                                EDA_DRAW_MODE_T trace_mode );
 
     /**
-     * Filled rect flashes are handled as aperture in the 90 degree positions only
+     * Filled rect flashes are handled as aperture in the 0 90 180 or 270 degree orientation only
+     * and as polygon for other orientations
+     * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
                                double orient, EDA_DRAW_MODE_T trace_mode );
 
     /**
+     * Roundrect pad at the moment are not handled as aperture, since
+     * they require aperture macros
+     * TODO: always use flashed shapes (aperture macros)
+     */
+    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                    int aCornerRadius, double aOrient,
+                                    EDA_DRAW_MODE_T aTraceMode );
+    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                 SHAPE_POLY_SET* aPolygons,
+                                 EDA_DRAW_MODE_T aTraceMode );
+    /**
      * Trapezoidal pad at the moment are *never* handled as aperture, since
      * they require aperture macros
+     * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
@@ -1069,6 +1111,12 @@ public:
                                EDA_DRAW_MODE_T trace_mode );
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
                                double orient, EDA_DRAW_MODE_T trace_mode );
+    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                    int aCornerRadius, double aOrient,
+                                    EDA_DRAW_MODE_T aTraceMode );
+    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                 SHAPE_POLY_SET* aPolygons,
+                                 EDA_DRAW_MODE_T aTraceMode );
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 

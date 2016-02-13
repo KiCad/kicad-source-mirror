@@ -324,6 +324,7 @@ set( BMAPS_MID
     lang_pl
     lang_pt
     lang_ru
+    lang_sk
     lang_sl
     language
     layers_manager

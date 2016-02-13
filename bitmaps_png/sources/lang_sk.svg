@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg:svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48"
+   height="48"
+   viewBox="0 0 0.48 0.48"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lang_sk.svg">
+  <svg:metadata
+     id="metadata26">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <format>image/svg+xml</format>
+        <type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <title>Flag of Slovakia</title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Flag of Slovakia</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </svg:metadata>
+  <svg:defs
+     id="defs24" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1629"
+     inkscape:window-height="851"
+     id="namedview22"
+     showgrid="false"
+     inkscape:zoom="7.3627084"
+     inkscape:cx="-55.238252"
+     inkscape:cy="35.245181"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <svg:title
+     id="title4">Flag of Slovakia</svg:title>
+  <svg:g
+     id="g3003"
+     transform="matrix(0.05321015,0,0,0.06157154,0,0.38525227)">
+    <svg:rect
+       style="fill:#ee1c25"
+       y="-5.52"
+       x="0"
+       id="rect6"
+       height="6"
+       width="9" />
+    <svg:rect
+       style="fill:#0b4ea2"
+       y="-5.52"
+       x="0"
+       id="rect8"
+       height="4"
+       width="9" />
+    <svg:rect
+       style="fill:#ffffff"
+       y="-5.52"
+       x="0"
+       id="rect10"
+       height="2"
+       width="9" />
+    <svg:g
+       transform="translate(0,-5.52)"
+       id="g12">
+      <svg:path
+         style="fill:#ffffff"
+         inkscape:connector-curvature="0"
+         id="path14"
+         d="M 3.16255,4.635 C 2.62474,4.37595 1.85545,3.86177 1.85545,2.84467 1.85545,1.82756 1.90408,1.365 1.90408,1.365 h 1.25847 1.2585 c 0,0 0.04864,0.46256 0.04864,1.47967 0,1.0171 -0.76929,1.53128 -1.30714,1.79033 z" />
+      <svg:path
+         style="fill:#ee1c25"
+         inkscape:connector-curvature="0"
+         id="path16"
+         d="M 3.16255,4.5 C 2.66915,4.26234 1.96338,3.79062 1.96338,2.85749 1.96338,1.924362 2.007992,1.5 2.007992,1.5 h 1.15456 1.15459 c 0,0 0.044626,0.424365 0.044626,1.35749 0,0.933128 -0.705776,1.40485 -1.19921,1.64251 z" />
+      <svg:path
+         style="fill:#ffffff"
+         inkscape:connector-curvature="0"
+         id="path18"
+         d="M 3.26808,2.61284 C 3.401679,2.615 3.662335,2.62023 3.894432,2.542567 c 0,0 -0.00613,0.083055 -0.00613,0.179805 0,0.096773 0.00613,0.179822 0.00613,0.179822 -0.21289,-0.07125 -0.4758,-0.07273 -0.62635,-0.07082 V 3.346765 H 3.057049 V 2.831374 c -0.150545,-0.00191 -0.41345,-4.252e-4 -0.626352,0.070815 0,0 0.00613,-0.083049 0.00613,-0.179822 0,-0.09675 -0.00613,-0.179805 -0.00613,-0.179805 0.2321,0.077665 0.492753,0.072432 0.626352,0.070273 V 2.289159 c -0.121766,-0.00108 -0.297234,0.00473 -0.49563,0.071126 0,0 0.00613,-0.083055 0.00613,-0.179822 0,-0.096756 -0.00613,-0.179811 -0.00613,-0.179811 0.198103,0.066283 0.373356,0.072192 0.495088,0.071137 -0.00626,-0.20498 -0.06597,-0.46332 -0.06597,-0.46332 0,0 0.12289,0.00959 0.172016,0.00959 0.049178,0 0.172031,-0.00959 0.172031,-0.00959 0,0 -0.059695,0.258346 -0.065964,0.463301 0.121741,0.00106 0.296989,-0.00485 0.495086,-0.071137 0,0 -0.00613,0.083055 -0.00613,0.179811 0,0.096767 0.00613,0.179822 0.00613,0.179822 C 3.565318,2.293874 3.389843,2.288059 3.268079,2.28914 v 0.323676 z" />
+      <svg:path
+         style="fill:#0b4ea2"
+         inkscape:connector-curvature="0"
+         id="path20"
+         d="m 3.1625,3.29094 c -0.24847,0 -0.381562,0.344688 -0.381562,0.344688 0,0 -0.073834,-0.163438 -0.276562,-0.163438 -0.137161,0 -0.238243,0.12201 -0.3025,0.235 0.24954,0.39705 0.64768,0.64207 0.96062,0.79281 0.31299,-0.15075 0.71139,-0.39571 0.96094,-0.79281 -0.064256,-0.11299 -0.165339,-0.235 -0.3025,-0.235 -0.202734,0 -0.276875,0.163438 -0.276875,0.163438 0,0 -0.133073,-0.344688 -0.381562,-0.344688 z" />
+    </svg:g>
+  </svg:g>
+</svg:svg>

@@ -104,6 +104,17 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
 
         self.DrawBox(ssx, ssy)
 
+        # Courtyard
+        cmargin = self.draw.GetLineThickness()
+        self.draw.SetLayer(pcbnew.F_CrtYd)
+        sizex = (ssx + cmargin) * 2
+        sizey = (ssy + cmargin) * 2
+        # set courtyard line thickness to the one defined in KLC
+        self.draw.SetLineThickness(pcbnew.FromMM(0.05))
+        self.draw.Box(0, 0, sizex, sizey)
+        # restore line thickness to previous value
+        self.draw.SetLineThickness(pcbnew.FromMM(cmargin))
+        
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal
 
@@ -176,7 +187,7 @@ class SDIPWizard(RowedFootprint):
 
             # draw the notch
             notchWidth = ssy/1.5
-            notchHeight = self.draw.GetLineTickness()*3
+            notchHeight = self.draw.GetLineThickness()*3
 
             # NotchedBox draws the notch on top. Rotate the box 90 degrees
             # to have it on the left

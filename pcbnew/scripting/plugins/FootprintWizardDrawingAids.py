@@ -26,7 +26,7 @@ class FootprintWizardDrawingAids:
     footprint wizards
 
     A "drawing context" is provided which can be used to set and retain
-    settings such as line tickness and layer
+    settings such as line thickness and layer
     """
 
     # directions (in degrees, compass-like)
@@ -240,16 +240,25 @@ class FootprintWizardDrawingAids:
         return pcbnew.wxPoint(x * mat[0] + y * mat[1] + mat[2],
                               x * mat[3] + y * mat[4] + mat[5])
 
-    def SetLineTickness(self, lineThickness):
+    def SetLineThickness(self, lineThickness):
         """
         Set the current pen lineThickness used for subsequent drawing
         operations
         """
         self.dc['lineThickness'] = lineThickness
 
-    def GetLineTickness(self):
+    def SetLineTickness(self, lineThickness):
         """
-        Get the current drawing context line tickness
+        Old version of SetLineThickness.
+        Does the same thing, but is is only here for compatibility with old scripts
+        Set the current pen lineThickness used for subsequent drawing
+        operations
+        """
+        self.dc['lineThickness'] = lineThickness
+
+    def GetLineThickness(self):
+        """
+        Get the current drawing context line thickness
         """
         return self.dc['lineThickness']
 
@@ -271,7 +280,7 @@ class FootprintWizardDrawingAids:
         Draw a line from (x1, y1) to (x2, y2)
         """
         outline = pcbnew.EDGE_MODULE(self.module)
-        outline.SetWidth(self.GetLineTickness())
+        outline.SetWidth(self.GetLineThickness())
         outline.SetLayer(self.GetLayer())
         outline.SetShape(pcbnew.S_SEGMENT)
         start = self.TransformPoint(x1, y1)

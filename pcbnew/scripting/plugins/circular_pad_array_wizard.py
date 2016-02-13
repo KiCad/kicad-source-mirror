@@ -69,12 +69,12 @@ class circular_pad_array_wizard(HFPW.HelpfulFootprintWizardPlugin):
 
         array.AddPadsToModule(self.draw)
 
-        body_radius = (prm['circle diameter'] + prm['pad width'])/2 + self.draw.GetLineTickness()
+        body_radius = (prm['circle diameter'] + prm['pad width'])/2 + self.draw.GetLineThickness()
         self.draw.Circle(0, 0, body_radius)
 
         text_size = self.GetTextSize()  # IPC nominal
         thickness = self.GetTextThickness()
-        textposy = body_radius + self.draw.GetLineTickness()/2 + self.GetTextSize()/2 + thickness
+        textposy = body_radius + self.draw.GetLineThickness()/2 + self.GetTextSize()/2 + thickness
         self.draw.Value( 0, textposy, text_size )
         self.draw.Reference( 0, -textposy, text_size )
 

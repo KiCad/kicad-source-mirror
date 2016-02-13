@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <plot_common.h>
 #include <macros.h>
 #include <kicad_string.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 #include <build_version.h>
 
@@ -479,8 +480,9 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
         if( trace_mode == FILLED )
         {
-	    /* XXX to do: use an aperture macro to declare the rotated pad */
-            /* The pad  is reduced to an oval with dy > dx */
+            // TODO: use an aperture macro to declare the rotated pad
+            //
+            // The pad is reduced to an segment with dy > dx
             delta = size.y - size.x;
             x0    = 0;
             y0    = -delta / 2;
@@ -559,12 +561,71 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     }
 }
 
+void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                     int aCornerRadius, double aOrient,
+                                     EDA_DRAW_MODE_T aTraceMode )
+
+{
+    // Currently, a Pad RoundRect is plotted as polygon.
+    // TODO: use Aperture macro and flash it
+    SHAPE_POLY_SET outline;
+    const int segmentToCircleCount = 64;
+    TransformRoundRectToPolygon( outline, aPadPos, aSize, aOrient,
+                                 aCornerRadius, segmentToCircleCount );
+
+    std::vector< wxPoint > cornerList;
+    cornerList.reserve( segmentToCircleCount + 5 );
+    // TransformRoundRectToPolygon creates only one convex polygon
+    SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+
+    for( int ii = 0; ii < poly.PointCount(); ++ii )
+        cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+
+    // Close polygon
+    cornerList.push_back( cornerList[0] );
+
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL );
+}
+
+void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                     SHAPE_POLY_SET* aPolygons,
+                                     EDA_DRAW_MODE_T aTraceMode )
+
+{
+    // A Pad custom is plotted as polygon.
+#if 1
+    // A flashed circle @aPadPos is added (anchor pad)
+    // However, because the anchor pad can be circle or rect, we use only
+    // a circle not bigger tahn the rect.
+    // the main purpose is to show a flashed DCode as pad anchor
+    FlashPadCircle( aPadPos, std::min( aSize.x, aSize.x ), aTraceMode );
+#endif
+
+    std::vector< wxPoint > cornerList;
+
+    for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
+    {
+        SHAPE_LINE_CHAIN& poly = aPolygons->Outline( cnt );
+        cornerList.clear();
+
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
+            cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+
+        // Close polygon
+        cornerList.push_back( cornerList[0] );
+
+        PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL );
+    }
+}
+
 
 void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCorners,
                                      double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 
 {
-    // XXX to do: use an aperture macro to declare the pad
+    // Currently, a Pad Trapezoid is plotted as polygon.
+    // TODO: use Aperture macro and flash it
+
     // polygon corners list
     std::vector< wxPoint > cornerList;
 

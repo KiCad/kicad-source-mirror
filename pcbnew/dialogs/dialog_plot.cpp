@@ -110,12 +110,6 @@ void DIALOG_PLOT::Init_Dialog()
                            m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
-    // Set units and value for HPGL pen overlay (this param in in mils).
-    AddUnitSymbol( *m_textPenOvr, g_UserUnit );
-    msg = StringFromValue( g_UserUnit,
-                                 m_plotOpts.GetHPGLPenOverlay() * IU_PER_MILS );
-    m_HPGLPenOverlayOpt->AppendText( msg );
-
     AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
     msg = StringFromValue( g_UserUnit, m_plotOpts.GetLineWidth() );
     m_linesWidth->AppendText( msg );
@@ -367,7 +361,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
         m_subtractMaskFromSilk->SetValue( false );
@@ -397,7 +390,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
         m_subtractMaskFromSilk->SetValue( false );
@@ -427,7 +419,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( true );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( true );
         m_useGerberExtensions->Enable( true );
@@ -455,7 +446,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( true );
-        m_HPGLPenOverlayOpt->Enable( true );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
         m_subtractMaskFromSilk->SetValue( false );
@@ -484,7 +474,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( true );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
         m_subtractMaskFromSilk->SetValue( false );
@@ -592,19 +581,6 @@ void DIALOG_PLOT::applyPlotSettings()
         msg = StringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained." ) );
-        reporter.Report( msg, REPORTER::RPT_INFO );
-    }
-
-    // Read HPGL pen overlay (this param is stored in mils)
-    msg = m_HPGLPenOverlayOpt->GetValue();
-    tmp = ValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
-
-    if( !tempOptions.SetHPGLPenOverlay( tmp ) )
-    {
-        msg = StringFromValue( g_UserUnit,
-                                     tempOptions.GetHPGLPenOverlay() * IU_PER_MILS );
-        m_HPGLPenOverlayOpt->SetValue( msg );
-        msg.Printf( _( "HPGL pen overlay constrained." ) );
         reporter.Report( msg, REPORTER::RPT_INFO );
     }
 

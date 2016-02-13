@@ -56,7 +56,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
 
     m_Type = text_type;
     m_NoShow = false;
-    // Set text tickness to a default value
+    // Set text thickness to a default value
     m_Thickness = Millimeter2iu( 0.15 );
     SetLayer( F_SilkS );
 

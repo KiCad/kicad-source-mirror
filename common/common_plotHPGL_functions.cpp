@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 /**
  * @file common_plotHPGL_functions.cpp
  * @brief KiCad: Common plot HPGL Routines
- * Filled primitive are not supported, but some could be using HPGL/2
  * Since this plot engine is mostly intended for import in external programs,
  * sadly HPGL/2 isn't supported a lot... some of the primitives use overlapped
  * strokes to fill the shape
@@ -113,6 +112,12 @@
  *               but the outputs and feedrates are affected.
  *  PD {x, y};
  *
+ *  PM          Polygon mode
+ *      associated commands:
+ *      PM2         End polygon mode
+ *      FP          Fill polygon
+ *      EP          Draw polygon outline
+ *
  *  PR (Plot Relative):    Moves to the relative position specified and sets relative mode
  *                       for future PU and PD commands.
  *                       If no arguments follow the command, only relative mode is set.
@@ -121,7 +126,7 @@
  *  PS (Paper Size):
  *  PS {n};
  *
- *  PT (Pen Thickness):
+ *  PT (Pen Thickness):     in mm
  *  PT {l};
  *
  *  PU (Pen Up):   Executes <current pen> pen then moves to the requested position
@@ -178,8 +183,8 @@
  *
  *  VS (Velocity Select):
  *  VS {v {, n}};
- *  v         [1 .. 40]
- *  n         [1 .. 8, je nach Ausstattung]
+ *  v         [1 .. 40]     in cm/s
+ *  n         [1 .. 8]
  *
  *  XT (X Tick):
  *  XT;
@@ -197,6 +202,13 @@
 #include <plot_common.h>
 #include <macros.h>
 #include <kicad_string.h>
+#include <convert_basic_shapes_to_polygon.h>
+
+// The hpgl command to close a polygon def, fill it and plot outline:
+// PM 2; ends the polygon definition and closes it if not closed
+// FP;   fills the polygon
+// EP;   draws the polygon outline. It usually gives a better look to the filled polygon
+static const char hpgl_end_polygon_cmd[] = "PM 2; FP; EP;\n";
 
 // HPGL scale factor (1 PLU = 1/40mm = 25 micrometers)
 static const double PLUsPERDECIMIL = 0.102041;
@@ -206,7 +218,6 @@ HPGL_PLOTTER::HPGL_PLOTTER()
     SetPenSpeed( 40 );      // Default pen speed = 40 cm/s; Pen speed is *always* in cm
     SetPenNumber( 1 );      // Default pen num = 1
     SetPenDiameter( 0.0 );
-    SetPenOverlap( 0.0 );
 }
 
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
@@ -223,8 +234,6 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize.y *= 10.0 * aIusPerDecimil;
     SetDefaultLineWidth( 0 );    // HPGL has pen sizes instead
     m_plotMirror = aMirror;
-    penOverlap = 0;
-    penDiameter = 0;
 }
 
 
@@ -235,6 +244,11 @@ bool HPGL_PLOTTER::StartPlot()
 {
     wxASSERT( outputFile );
     fprintf( outputFile, "IN;VS%d;PU;PA;SP%d;\n", penSpeed, penNumber );
+
+    // Set HPGL Pen Thickness (in mm) (usefull in polygon fill command)
+    double penThicknessMM = userToDeviceSize( penDiameter )/40;
+    fprintf( outputFile, "PT %.1f;\n", penThicknessMM );
+
     return true;
 }
 
@@ -252,6 +266,11 @@ bool HPGL_PLOTTER::EndPlot()
 }
 
 
+void HPGL_PLOTTER::SetPenDiameter( double diameter )
+{
+    penDiameter = diameter;
+}
+
 /**
  * HPGL rectangle: fill not supported
  */
@@ -265,14 +284,22 @@ void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int 
 }
 
 
-/**
- * HPGL circle: fill not supported
- */
+// HPGL circle
 void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill,
                            int width )
 {
     wxASSERT( outputFile );
     double radius = userToDeviceSize( diameter / 2 );
+    SetCurrentLineWidth( width );
+
+    if( fill == FILLED_SHAPE )
+    {
+        // Draw the filled area
+        MoveTo( centre );
+        fprintf( outputFile, "PM 0; CI %g;\n", radius );
+        fprintf( outputFile, hpgl_end_polygon_cmd );   // Close, fill polygon and draw outlines
+        PenFinish();
+    }
 
     if( radius > 0 )
     {
@@ -284,8 +311,9 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill,
 
 
 /**
- * HPGL polygon: fill not supported (but closed, at least)
+ * HPGL polygon:
  */
+
 void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
                              FILL_T aFill, int aWidth )
 {
@@ -293,19 +321,38 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
         return;
 
     SetCurrentLineWidth( aWidth );
-
     MoveTo( aCornerList[0] );
 
-    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
-        LineTo( aCornerList[ii] );
-
-    // Close polygon if filled.
-    if( aFill )
+    if( aFill == FILLED_SHAPE )
     {
+        // Draw the filled area
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+        fprintf( outputFile, "PM 0;\n" );       // Start polygon
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ++ii )
+            LineTo( aCornerList[ii] );
+
         int ii = aCornerList.size() - 1;
 
         if( aCornerList[ii] != aCornerList[0] )
             LineTo( aCornerList[0] );
+
+        fprintf( outputFile, hpgl_end_polygon_cmd );   // Close, fill polygon and draw outlines
+    }
+    else
+    {
+        // Plot only the polygon outline.
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            LineTo( aCornerList[ii] );
+
+        // Always close polygon if filled.
+        if( aFill )
+        {
+            int ii = aCornerList.size() - 1;
+
+            if( aCornerList[ii] != aCornerList[0] )
+                LineTo( aCornerList[0] );
+        }
     }
 
     PenFinish();
@@ -455,7 +502,7 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
     int     deltaxy, cx, cy;
     wxSize  size( aSize );
 
-    /* The pad is reduced to an oval with size.y > size.x
+    /* The pad will be drawn as an oblong shape with size.y > size.x
      * (Oval vertical orientation 0)
      */
     if( size.x > size.y )
@@ -477,7 +524,7 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
         RotatePoint( &cx, &cy, orient );
         FlashPadCircle( wxPoint( cx + pos.x, cy + pos.y ), size.x, trace_mode );
     }
-    else    // Plot in SKETCH mode.
+    else    // Plot in outline mode.
     {
         sketchOval( pos, size, orient, KiROUND( penDiameter ) );
     }
@@ -492,28 +539,34 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
     wxASSERT( outputFile );
     DPOINT  pos_dev = userToDeviceCoordinates( pos );
 
-    int     delta   = KiROUND( penDiameter - penOverlap );
-    int     radius  = ( diametre - KiROUND( penDiameter ) ) / 2;
+    int     radius  = diametre / 2;
+
+    if( trace_mode == FILLED )
+    {
+        // if filled mode, the pen diameter is removed from diameter
+        // to keep the pad size
+        radius -= KiROUND( penDiameter ) / 2;
+    }
 
     if( radius < 0 )
         radius = 0;
 
     double rsize = userToDeviceSize( radius );
 
-    fprintf( outputFile, "PA %.0f,%.0f;CI %.0f;\n",
-             pos_dev.x, pos_dev.y, rsize );
-
     if( trace_mode == FILLED )        // Plot in filled mode.
     {
-        if( delta > 0 )
-        {
-            while( (radius -= delta ) >= 0 )
-            {
-                rsize = userToDeviceSize( radius );
-                fprintf( outputFile, "PA %.0f,%.0f;CI %.0f;\n",
-                         pos_dev.x, pos_dev.y, rsize );
-            }
-        }
+        // A filled polygon uses always the current point to start the polygon.
+        // Gives a correct current starting point for the circle
+        MoveTo( wxPoint( pos.x+radius, pos.y ) );
+        // Plot filled area and its outline
+        fprintf( outputFile, "PM 0; PA %.0f,%.0f;CI %.0f;%s",
+                         pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd );
+    }
+    else
+    {
+        // Draw outline only:
+        fprintf( outputFile, "PA %.0f,%.0f;CI %.0f;\n",
+                     pos_dev.x, pos_dev.y, rsize );
     }
 
     PenFinish();
@@ -523,113 +576,92 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
                                  double orient, EDA_DRAW_MODE_T trace_mode )
 {
-    wxASSERT( outputFile );
-    wxSize  size;
-    int     delta;
-    int     ox, oy, fx, fy;
+    // Build rect polygon:
+    std::vector<wxPoint> corners;
 
-    size.x  = padsize.x / 2;
-    size.y  = padsize.y / 2;
-
-    size.x  = (padsize.x - (int) penDiameter) / 2;
-    size.y  = (padsize.y - (int) penDiameter) / 2;
-
-    if( size.x < 0 )
-        size.x = 0;
-
-    if( size.y < 0 )
-        size.y = 0;
-
-    // If a dimension is zero, the trace is reduced to 1 line.
-    if( size.x == 0 )
-    {
-        ox  = pos.x;
-        oy  = pos.y - size.y;
-        RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-        fx  = pos.x;
-        fy  = pos.y + size.y;
-        RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        MoveTo( wxPoint( ox, oy ) );
-        FinishTo( wxPoint( fx, fy ) );
-        return;
-    }
-
-    if( size.y == 0 )
-    {
-        ox  = pos.x - size.x;
-        oy  = pos.y;
-        RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-        fx  = pos.x + size.x;
-        fy  = pos.y;
-        RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        MoveTo( wxPoint( ox, oy ) );
-        FinishTo( wxPoint( fx, fy ) );
-        return;
-    }
-
-    ox  = pos.x - size.x;
-    oy  = pos.y - size.y;
-    RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-    MoveTo( wxPoint( ox, oy ) );
-
-    fx  = pos.x - size.x;
-    fy  = pos.y + size.y;
-    RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( wxPoint( fx, fy ) );
-
-    fx  = pos.x + size.x;
-    fy  = pos.y + size.y;
-    RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( wxPoint( fx, fy ) );
-
-    fx  = pos.x + size.x;
-    fy  = pos.y - size.y;
-    RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( wxPoint( fx, fy ) );
-
-    FinishTo( wxPoint( ox, oy ) );
+    int dx = padsize.x / 2;
+    int dy = padsize.y / 2;
 
     if( trace_mode == FILLED )
     {
-        // Plot in filled mode.
-        delta = (int) (penDiameter - penOverlap);
-
-        if( delta > 0 )
-            while( (size.x > 0) && (size.y > 0) )
-            {
-                size.x  -= delta;
-                size.y  -= delta;
-
-                if( size.x < 0 )
-                    size.x = 0;
-
-                if( size.y < 0 )
-                    size.y = 0;
-
-                ox  = pos.x - size.x;
-                oy  = pos.y - size.y;
-                RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-                MoveTo( wxPoint( ox, oy ) );
-
-                fx  = pos.x - size.x;
-                fy  = pos.y + size.y;
-                RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-                LineTo( wxPoint( fx, fy ) );
-
-                fx  = pos.x + size.x;
-                fy  = pos.y + size.y;
-                RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-                LineTo( wxPoint( fx, fy ) );
-
-                fx  = pos.x + size.x;
-                fy  = pos.y - size.y;
-                RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-                LineTo( wxPoint( fx, fy ) );
-
-                FinishTo( wxPoint( ox, oy ) );
-            }
+        // in filled mode, the pen diameter is removed from size
+        // to compensate the extra size due to this pen size
+        dx -= KiROUND( penDiameter ) / 2;
+        dx = std::max( dx, 0);
+        dy -= KiROUND( penDiameter ) / 2;
+        dy = std::max( dy, 0);
+    }
 
 
+    corners.push_back( wxPoint( - dx, - dy ) );
+    corners.push_back( wxPoint( - dx, + dy ) );
+    corners.push_back( wxPoint( + dx, + dy ) );
+    corners.push_back( wxPoint( + dx, - dy ) );
+
+
+    for( unsigned ii = 0; ii < corners.size(); ii++ )
+    {
+        RotatePoint( &corners[ii], orient );
+        corners[ii] += pos;
+    }
+
+    PlotPoly( corners, trace_mode == FILLED ? FILLED_SHAPE : NO_FILL );
+}
+
+
+void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+                                        int aCornerRadius, double aOrient,
+                                        EDA_DRAW_MODE_T aTraceMode )
+{
+    SHAPE_POLY_SET outline;
+    const int segmentToCircleCount = 32;
+
+    wxSize size = aSize;
+
+    if( aTraceMode == FILLED )
+    {
+        // in filled mode, the pen diameter is removed from size
+        // to keep the pad size
+        size.x -= KiROUND( penDiameter ) / 2;
+        size.x = std::max( size.x, 0);
+        size.y -= KiROUND( penDiameter ) / 2;
+        size.y = std::max( size.y, 0);
+
+        // keep aCornerRadius to a value < min size x,y < 2:
+        aCornerRadius = std::min( aCornerRadius, std::min( size.x, size.y ) /2 );
+    }
+
+    TransformRoundRectToPolygon( outline, aPadPos, size, aOrient,
+                                 aCornerRadius, segmentToCircleCount );
+
+    // TransformRoundRectToPolygon creates only one convex polygon
+    std::vector< wxPoint > cornerList;
+    cornerList.reserve( segmentToCircleCount + 4 );
+    SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+
+    for( int ii = 0; ii < poly.PointCount(); ++ii )
+        cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+
+    PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL );
+}
+
+void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+                                   SHAPE_POLY_SET* aPolygons,
+                                   EDA_DRAW_MODE_T aTraceMode )
+{
+    std::vector< wxPoint > cornerList;
+
+    for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
+    {
+        SHAPE_LINE_CHAIN& poly = aPolygons->Outline( cnt );
+
+        cornerList.clear();
+        cornerList.reserve( poly.PointCount() );
+
+        for( int ii = 1; ii < poly.PointCount(); ++ii )
+            cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+
+        PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL );
     }
 }
 
@@ -637,105 +669,16 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
 void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners,
                                    double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
-    wxASSERT( outputFile );
-    wxPoint polygone[4];        // coordinates of corners relatives to the pad
-    wxPoint coord[4];           // absolute coordinates of corners (coordinates in plotter space)
-    int     move;
-
-    move = KiROUND( penDiameter );
+    std::vector< wxPoint > cornerList;
+    cornerList.reserve( 4 );
 
     for( int ii = 0; ii < 4; ii++ )
-        polygone[ii] = aCorners[ii];
-
-    // polygone[0] is assumed the lower left
-    // polygone[1] is assumed the upper left
-    // polygone[2] is assumed the upper right
-    // polygone[3] is assumed the lower right
-
-    // Plot the outline:
-    for( int ii = 0; ii < 4; ii++ )
     {
-        coord[ii] = polygone[ii];
-        RotatePoint( &coord[ii], aPadOrient );
-        coord[ii] += aPadPos;
+        wxPoint coord( aCorners[ii] );
+        RotatePoint( &coord, aPadOrient );
+        coord += aPadPos;
+        cornerList.push_back( coord );
     }
 
-    MoveTo( coord[0] );
-    LineTo( coord[1] );
-    LineTo( coord[2] );
-    LineTo( coord[3] );
-    FinishTo( coord[0] );
-
-    // Fill shape:
-    if( aTrace_Mode == FILLED )
-    {
-        // TODO: replace this par the HPGL plot polygon.
-        int jj;
-        // Fill the shape
-        move = KiROUND( penDiameter - penOverlap );
-        // Calculate fill height.
-
-        if( polygone[0].y == polygone[3].y )    // Horizontal
-        {
-            jj = polygone[3].y - (int) ( penDiameter + ( 2 * penOverlap ) );
-        }
-        else    // vertical
-        {
-            jj = polygone[3].x - (int) ( penDiameter + ( 2 * penOverlap ) );
-        }
-
-        // Calculation of dd = number of segments was traced to fill.
-        jj = jj / (int) ( penDiameter - penOverlap );
-
-        // Trace the outline.
-        for( ; jj > 0; jj-- )
-        {
-            polygone[0].x   += move;
-            polygone[0].y   -= move;
-            polygone[1].x   += move;
-            polygone[1].y   += move;
-            polygone[2].x   -= move;
-            polygone[2].y   += move;
-            polygone[3].x   -= move;
-            polygone[3].y   -= move;
-
-            // Test for crossed vertexes.
-            if( polygone[0].x > polygone[3].x )    /* X axis intersection on
-                                                    * vertexes 0 and 3 */
-            {
-                polygone[0].x = polygone[3].x = 0;
-            }
-
-            if( polygone[1].x > polygone[2].x )    /*  X axis intersection on
-                                                    * vertexes 1 and 2 */
-            {
-                polygone[1].x = polygone[2].x = 0;
-            }
-
-            if( polygone[1].y > polygone[0].y )    /* Y axis intersection on
-                                                    * vertexes 0 and 1 */
-            {
-                polygone[0].y = polygone[1].y = 0;
-            }
-
-            if( polygone[2].y > polygone[3].y )    /* Y axis intersection on
-                                                    * vertexes 2 and 3 */
-            {
-                polygone[2].y = polygone[3].y = 0;
-            }
-
-            for( int ii = 0; ii < 4; ii++ )
-            {
-                coord[ii] = polygone[ii];
-                RotatePoint( &coord[ii], aPadOrient );
-                coord[ii] += aPadPos;
-            }
-
-            MoveTo( coord[0] );
-            LineTo( coord[1] );
-            LineTo( coord[2] );
-            LineTo( coord[3] );
-            FinishTo( coord[0] );
-        }
-    }
+    PlotPoly( cornerList, aTrace_Mode == FILLED ? FILLED_SHAPE : NO_FILL );
 }
