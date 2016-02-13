@@ -44,9 +44,9 @@ ATTENUATOR::ATTENUATOR( ATTENUATORS_TYPE aTopology )
     m_Error       = false;
     m_Topology    = aTopology;
     m_ResultCount = 3;              // If 3 values must be calculated
-    m_Zin = 50;                     // Ohms
+    m_Zin = 50;                     // Ohm
     m_Zin_Enable = true;
-    m_Zout = 50;                    // Ohms
+    m_Zout = 50;                    // Ohm
     m_Attenuation = 6.0;            // dB
     m_Attenuation_Enable = true;
     m_MinimumATT    = 0.0;          // dB

@@ -1067,7 +1067,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_ZinValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttPrms->Add( m_ZinValueCtrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_attZinUnit = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_attZinUnit = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attZinUnit->Wrap( -1 );
 	fgSizerAttPrms->Add( m_attZinUnit, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -1078,7 +1078,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_ZoutValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttPrms->Add( m_ZoutValueCtrl, 0, wxALL, 5 );
 	
-	m_attZoutUnit = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_attZoutUnit = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attZoutUnit->Wrap( -1 );
 	fgSizerAttPrms->Add( m_attZoutUnit, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -1116,7 +1116,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_Att_R1_Value = new wxTextCtrl( sbSizerAttValues->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttResults->Add( m_Att_R1_Value, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_attR1Unit = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_attR1Unit = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attR1Unit->Wrap( -1 );
 	fgSizerAttResults->Add( m_attR1Unit, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -1127,7 +1127,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_Att_R2_Value = new wxTextCtrl( sbSizerAttValues->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttResults->Add( m_Att_R2_Value, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_attR2Unit1 = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_attR2Unit1 = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attR2Unit1->Wrap( -1 );
 	fgSizerAttResults->Add( m_attR2Unit1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -1138,7 +1138,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_Att_R3_Value = new wxTextCtrl( sbSizerAttValues->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttResults->Add( m_Att_R3_Value, 0, wxALL, 5 );
 	
-	m_attR3Unit = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohms"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_attR3Unit = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("Ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attR3Unit->Wrap( -1 );
 	fgSizerAttResults->Add( m_attR3Unit, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
