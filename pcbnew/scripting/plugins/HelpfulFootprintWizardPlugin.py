@@ -248,7 +248,7 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
     def GetValue(self):
         raise NotImplementedError
 
-    # this value come from our KiCad Library Convention 0.11
+    # this value come from our KiCad Library Convention 1.0
     def GetReferencePrefix(self):
         return "REF"
 
@@ -259,7 +259,7 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         """
         IPC nominal
         """
-        return pcbnew.FromMM(1.2)
+        return pcbnew.FromMM(1.0)
 
     def GetTextThickness(self):
         """
