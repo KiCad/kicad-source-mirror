@@ -187,7 +187,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
     if( item )
     {
         if( item->Type() == SCH_COMPONENT_T )
-            ( (SCH_COMPONENT*) item )->SetCurrentSheet( GetCurrentSheet().Last() );
+            ( (SCH_COMPONENT*) item )->SetCurrentSheetPath( &GetCurrentSheet() );
 
         MSG_PANEL_ITEMS items;
         item->GetMsgPanelInfo( items );

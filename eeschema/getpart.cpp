@@ -221,8 +221,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
         return NULL;
     }
 
-    SCH_COMPONENT*  component = new SCH_COMPONENT( *part, m_CurrentSheet->Last(), unit, convert,
-                                                   GetCrossHairPosition(), true );
+    SCH_COMPONENT*  component = new SCH_COMPONENT( *part, m_CurrentSheet, unit, convert,
+            GetCrossHairPosition(), true );
 
     // Set the m_ChipName value, from component name in lib, for aliases
     // Note if part is found, and if name is an alias of a component,
@@ -237,7 +237,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
 
     MSG_PANEL_ITEMS items;
 
-    component->SetCurrentSheet( GetCurrentSheet().Last() );
+    component->SetCurrentSheetPath( &GetCurrentSheet() );
     component->GetMsgPanelInfo( items );
 
     SetMsgPanel( items );

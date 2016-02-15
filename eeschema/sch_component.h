@@ -89,12 +89,12 @@ private:
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
     /**
-     * A temporary sheet is required to generate the correct reference designator string
+     * A temporary sheet path is required to generate the correct reference designator string
      * in complex heirarchies.  Hopefully this is only a temporary hack to decouple schematic
      * objects from the drawing window until a better design for handling complex heirarchies
      * can be implemented.
      */
-    const SCH_SHEET* m_currentSheet;
+    const SCH_SHEET_PATH* m_currentSheetPath;
 
     /**
      * Defines the hierarchical path and reference of the component.  This allows support
@@ -121,7 +121,7 @@ public:
      * @param pos - Position to place new component.
      * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
      */
-    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET* aSheet,
+    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 ),
                    bool setNewItemFlag = false );
@@ -404,9 +404,9 @@ public:
      */
     static bool IsReferenceStringValid( const wxString& aReferenceString );
 
-    void SetCurrentSheet( const SCH_SHEET* aSheet )
+    void SetCurrentSheetPath( const SCH_SHEET_PATH* aSheetPath )
     {
-        m_currentSheet = aSheet;
+        m_currentSheetPath = aSheetPath;
     }
 
     /**
