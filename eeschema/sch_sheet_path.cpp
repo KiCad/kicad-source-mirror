@@ -684,6 +684,18 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 }
 
 
+bool SCH_SHEET_LIST::IsModified()
+{
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    {
+        if( sheet->LastScreen() && sheet->LastScreen()->IsModify() )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool SCH_SHEET_LIST::IsAutoSaveRequired()
 {
     for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
@@ -693,6 +705,16 @@ bool SCH_SHEET_LIST::IsAutoSaveRequired()
     }
 
     return false;
+}
+
+
+void SCH_SHEET_LIST::ClearModifyStatus()
+{
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    {
+        if( sheet->LastScreen() )
+            sheet->LastScreen()->ClrModify();
+    }
 }
 
 
