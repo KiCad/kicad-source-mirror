@@ -262,7 +262,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         PATHS ${WX_LIB_DIR}
         NO_DEFAULT_PATH
         )
-    mark_as_advanced(WX_${LIB}${_DBG})
+      mark_as_advanced(WX_${LIB}${_DBG})
     endforeach()
 
     # Find wxWidgets multilib base libraries.
