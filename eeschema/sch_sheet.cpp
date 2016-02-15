@@ -56,7 +56,6 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_screen = NULL;
     m_name.Printf( wxT( "Sheet%8.8lX" ), (long) m_TimeStamp );
     m_fileName.Printf( wxT( "file%8.8lX.sch" ), (long) m_TimeStamp );
-    m_number = 1;
 }
 
 
@@ -73,7 +72,6 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_name = aSheet.m_name;
     m_fileName = aSheet.m_fileName;
     m_pins = aSheet.m_pins;
-    m_number = aSheet.m_number;
 
     for( size_t i = 0;  i < m_pins.size();  i++ )
         m_pins[i].SetParent( this );
@@ -183,6 +181,11 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
     int              fieldNdx, size;
     SCH_SHEET_PIN*   sheetPin;
     char*            ptcar;
+
+    if( IsRootSheet() )
+        m_number = 1;
+    else
+        m_number = GetRootSheet()->CountSheets();
 
     SetTimeStamp( GetNewTimeStamp() );
 
@@ -1163,21 +1166,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 }
 
 
-void SCH_SHEET::SetPageNumbers()
-{
-    int pageNumber = 1;
-    std::vector< const SCH_SHEET* > sheets;
-
-    GetRootSheet()->GetSheets( sheets );
-
-    for( unsigned i = 0; i < sheets.size(); i++ )
-    {
-        const_cast< SCH_SHEET* >( sheets[i] )->m_number = pageNumber;
-        pageNumber += 1;
-    }
-}
-
-
 SCH_SHEET* SCH_SHEET::FindSheetByName( const wxString& aSheetName )
 {
     std::vector< const SCH_SHEET* > sheets;
@@ -1187,7 +1175,7 @@ SCH_SHEET* SCH_SHEET::FindSheetByName( const wxString& aSheetName )
     for( unsigned i = 0; i < sheets.size(); i++ )
     {
         if( sheets[i]->GetName().CmpNoCase( aSheetName ) == 0 )
-            return const_cast< SCH_SHEET* >( sheets[i] );
+            return const_cast< SCH_SHEET*>( sheets[i] );
     }
 
     return NULL;
