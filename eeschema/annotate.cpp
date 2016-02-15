@@ -33,9 +33,9 @@
 #include <confirm.h>
 #include <schframe.h>
 
+#include <sch_reference_list.h>
 #include <class_library.h>
 #include <sch_sheet.h>
-#include <sch_sheet_path.h>
 
 
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
@@ -111,11 +111,11 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     // Build component list
     if( aAnnotateSchematic )
     {
-        g_RootSheet->GetComponents( Prj().SchLibs(), references );
+        sheets.GetComponents( Prj().SchLibs(), references );
     }
     else
     {
-        m_CurrentSheet->Last()->GetComponents( Prj().SchLibs(), references, true, false );
+        m_CurrentSheet->GetComponents( Prj().SchLibs(), references );
     }
 
     // Break full components reference in name (prefix) and number:
@@ -186,13 +186,14 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 {
     // build the screen list
+    SCH_SHEET_LIST SheetList;
     SCH_REFERENCE_LIST ComponentsList;
 
     // Build the list of components
     if( !aOneSheetOnly )
-        g_RootSheet->GetComponents( Prj().SchLibs(), ComponentsList );
+        SheetList.GetComponents( Prj().SchLibs(), ComponentsList );
     else
-        m_CurrentSheet->Last()->GetComponents( Prj().SchLibs(), ComponentsList, true, false );
+        m_CurrentSheet->GetComponents( Prj().SchLibs(), ComponentsList );
 
     return ComponentsList.CheckAnnotation( aMessageList );
 }

@@ -42,7 +42,6 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <class_netlist_object.h>
-#include <sch_reference_list.h>
 
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
@@ -183,11 +182,6 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
     SCH_SHEET_PIN*   sheetPin;
     char*            ptcar;
 
-    if( IsRootSheet() )
-        m_number = 1;
-    else
-        m_number = GetRootSheet()->CountSheets();
-
     SetTimeStamp( GetNewTimeStamp() );
 
     // sheets are added to the GetDrawItems() like other schematic components.
@@ -227,10 +221,8 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
         if( ((char*)aLine)[0] == 'U' )
         {
             sscanf( ((char*)aLine) + 1, "%lX", &m_TimeStamp );
-
             if( m_TimeStamp == 0 )  // zero is not unique!
                 SetTimeStamp( GetNewTimeStamp() );
-
             continue;
         }
 
@@ -1358,39 +1350,6 @@ void SCH_SHEET::UpdateAllScreenReferences()
 }
 
 
-void SCH_SHEET::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                               bool aIncludePowerSymbols, bool aIncludeSubSheets )
-{
-    for( SCH_ITEM* item = m_screen->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_SHEET_T && aIncludeSubSheets )
-        {
-            ((SCH_SHEET*)item)->GetComponents( aLibs, aReferences, aIncludePowerSymbols,
-                                               aIncludeSubSheets );
-        }
-
-        if( item->Type() == SCH_COMPONENT_T )
-        {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-
-            // Skip pseudo components, which have a reference starting with #.  This mainly
-            // affects power symbols.
-            if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
-                continue;
-
-            LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
-
-            if( part )
-            {
-                SCH_REFERENCE reference = SCH_REFERENCE( component, part, this );
-                reference.SetSheetNumber( m_number );
-                aReferences.AddItem( reference );
-            }
-        }
-    }
-}
-
-
 SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
     wxLogDebug( wxT( "Sheet assignment operator." ) );
@@ -1426,18 +1385,9 @@ SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 
 bool SCH_SHEET::operator<( const SCH_SHEET& aRhs ) const
 {
-    if( (*this - aRhs) < 0 )
-        return true;
-
-    return false;
-}
-
-
-int SCH_SHEET::operator-( const SCH_SHEET& aRhs ) const
-{
     // Don't waste time against comparing the same objects..
     if( this == &aRhs )
-        return 0;
+        return false;
 
     SCH_CONST_SHEETS lhsPath, rhsPath;
 
@@ -1445,21 +1395,20 @@ int SCH_SHEET::operator-( const SCH_SHEET& aRhs ) const
     aRhs.GetPath( rhsPath );
 
     // Shorter paths are less than longer paths.
-    int retv = lhsPath.size() - rhsPath.size();
+    if( lhsPath.size() < rhsPath.size() )
+        return true;
 
-    if( retv == 0 )
+    if( lhsPath.size() > rhsPath.size() )
+        return false;
+
+    // Compare time stamps when path lengths are the same.
+    for( unsigned i = 0;  i < lhsPath.size();  i++ )
     {
-        // Compare time stamps when path lengths are the same.
-        for( unsigned i = 0;  i < lhsPath.size();  i++ )
-        {
-            retv = lhsPath[i]->GetTimeStamp() - rhsPath[i]->GetTimeStamp();
-
-            if( retv != 0 )
-                break;
-        }
+        if( lhsPath[i]->GetTimeStamp() < rhsPath[i]->GetTimeStamp() )
+            return true;
     }
 
-    return retv;
+    return false;
 }
 
 

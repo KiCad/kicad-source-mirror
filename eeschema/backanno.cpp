@@ -38,10 +38,9 @@
 #include <wildcards_and_files_ext.h>
 
 #include <general.h>
-#include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
-#include <sch_sheet_path.h>
 
 #include <dsnlexer.h>
 #include <ptree.h>
@@ -54,9 +53,10 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  refs;
+    SCH_SHEET_LIST      sheets;
     bool                isChanged = false;
 
-    g_RootSheet->GetComponents( Prj().SchLibs(), refs, false );
+    sheets.GetComponents( Prj().SchLibs(), refs, false );
 
     DSNLEXER    lexer( aChangedSetOfReferences, FROM_UTF8( __func__ ) );
     PTREE       doc;
@@ -135,8 +135,9 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  referencesList;
+    SCH_SHEET_LIST      sheetList;
 
-    g_RootSheet->GetComponents( Prj().SchLibs(), referencesList, false );
+    sheetList.GetComponents( Prj().SchLibs(), referencesList, false );
 
     FILE* cmpFile = wxFopen( aFullFilename, wxT( "rt" ) );
 
