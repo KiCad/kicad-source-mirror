@@ -289,7 +289,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* item
         DRAWSEGMENT*    graphic = (DRAWSEGMENT*) (*items)[i];
         unsigned        d;
 
-        wxASSERT( graphic->Type() == PCB_LINE_T );
+        wxASSERT( graphic->Type() == PCB_LINE_T || graphic->Type() == PCB_MODULE_EDGE_T );
 
         switch( graphic->GetShape() )
         {
@@ -348,7 +348,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* item
 #if defined(DEBUG)
     if( items->GetCount() )
     {
-        printf( "Unable to find segment matching point (%.6g,%.6g) (seg count %d)\n",
+        printf( "Unable to find segment matching point (%.6g;%.6g) (seg count %d)\n",
                 IU2um( aPoint.x )/1000, IU2um( aPoint.y )/1000,
                 items->GetCount());
 
@@ -356,13 +356,22 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, ::PCB_TYPE_COLLECTOR* item
         {
             DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
 
-            printf( "item %d, type=%s, start=%.6g %.6g  end=%.6g,%.6g\n",
-                    i + 1,
-                    TO_UTF8( BOARD_ITEM::ShowShape( graphic->GetShape() ) ),
-                    IU2um( graphic->GetStart().x )/1000,
-                    IU2um( graphic->GetStart().y )/1000,
-                    IU2um( graphic->GetEnd().x )/1000,
-                    IU2um( graphic->GetEnd().y )/1000 );
+            if( graphic->GetShape() == S_ARC )
+                printf( "item %d, type=%s, start=%.6g;%.6g  end=%.6g;%.6g\n",
+                        i + 1,
+                        TO_UTF8( BOARD_ITEM::ShowShape( graphic->GetShape() ) ),
+                        IU2um( graphic->GetArcStart().x )/1000,
+                        IU2um( graphic->GetArcStart().y )/1000,
+                        IU2um( graphic->GetArcEnd().x )/1000,
+                        IU2um( graphic->GetArcEnd().y )/1000 );
+            else
+                printf( "item %d, type=%s, start=%.6g;%.6g  end=%.6g;%.6g\n",
+                        i + 1,
+                        TO_UTF8( BOARD_ITEM::ShowShape( graphic->GetShape() ) ),
+                        IU2um( graphic->GetStart().x )/1000,
+                        IU2um( graphic->GetStart().y )/1000,
+                        IU2um( graphic->GetEnd().x )/1000,
+                        IU2um( graphic->GetEnd().y )/1000 );
         }
     }
 #endif
