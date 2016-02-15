@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,18 +35,19 @@
 
 #include <sch_reference_list.h>
 #include <class_library.h>
-#include <sch_sheet.h>
-
 
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 {
     if( aCurrentSheetOnly )
     {
-        m_CurrentSheet->Last()->ClearAnnotation();
+        SCH_SCREEN* screen = GetScreen();
+        wxCHECK_RET( screen != NULL, wxT( "Attempt to clear annotation of a NULL screen." ) );
+        screen->ClearAnnotation( m_CurrentSheet );
     }
     else
     {
-        m_CurrentSheet->Last()->GetRootSheet()->ClearAnnotation( true );
+        SCH_SCREENS ScreenList;
+        ScreenList.ClearAnnotation();
     }
 
     // Update the references for the sheet that is currently being displayed.

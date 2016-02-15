@@ -425,11 +425,11 @@ public:
 
     /**
      * Function ClearAnnotation
-     * clears the annotation for the components in \a aSheet on the screen.
-     * @param aSheet The sheet of the component annotation to clear.  If NULL then
-     *               the entire hierarchy is cleared for this screen.
+     * clears the annotation for the components in \a aSheetPath on the screen.
+     * @param aSheetPath The sheet path of the component annotation to clear.  If NULL then
+     *                   the entire hierarchy is cleared.
      */
-    void ClearAnnotation( SCH_SHEET* aSheet );
+    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function GetHierarchicalItems
@@ -548,6 +548,12 @@ public:
     SCH_SCREEN* GetFirst();
     SCH_SCREEN* GetNext();
     SCH_SCREEN* GetScreen( unsigned int aIndex ) const;
+
+    /**
+     * Function ClearAnnotation
+     * clears the annotation for all components in the hierarchy.
+     */
+    void ClearAnnotation();
 
     /**
      * Function SchematicCleanUp
