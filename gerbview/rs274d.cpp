@@ -548,6 +548,7 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
 
     case GC_TURN_ON_POLY_FILL:
         m_PolygonFillMode = true;
+        m_Exposure = false;
         break;
 
     case GC_TURN_OFF_POLY_FILL:
@@ -617,7 +618,7 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
         switch( D_commande )
         {
         case 1:     // code D01 Draw line, exposure ON
-            if( !m_Exposure )
+            if( !m_Exposure )   // Start a new polygon outline:
             {
                 m_Exposure = true;
                 gbritem    = new GERBER_DRAW_ITEM( layout, this );
