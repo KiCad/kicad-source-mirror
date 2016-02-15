@@ -234,7 +234,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
   #   if _CONFIGURATION = mswunivud, then _UNV=univ, _UCD=u _DBG=d
   #   if _CONFIGURATION = mswu,      then _UNV="",   _UCD=u _DBG=""
   #
-  macro(wx_get_name_components _CONFIGURATION _UNV _UCD _DBG)
+  macro(WX_GET_NAME_COMPONENTS _CONFIGURATION _UNV _UCD _DBG)
     string(REGEX MATCH "univ" ${_UNV} "${_CONFIGURATION}")
     string(REGEX REPLACE "msw.*(u)[d]*$" "u" ${_UCD} "${_CONFIGURATION}")
     if(${_UCD} STREQUAL ${_CONFIGURATION})
@@ -246,7 +246,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
   #
   # Find libraries associated to a configuration.
   #
-  macro(wx_find_libs _UNV _UCD _DBG)
+  macro(WX_FIND_LIBS _UNV _UCD _DBG)
     DBG_MSG_V("m_unv = ${_UNV}")
     DBG_MSG_V("m_ucd = ${_UCD}")
     DBG_MSG_V("m_dbg = ${_DBG}")
@@ -333,47 +333,47 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
   # Clear all library paths, so that FIND_LIBRARY refinds them.
   #
   # Clear a lib, reset its found flag, and mark as advanced.
-  macro(wx_clear_lib _LIB)
+  macro(WX_CLEAR_LIB _LIB)
     set(${_LIB} "${_LIB}-NOTFOUND" CACHE FILEPATH "Cleared." FORCE)
     set(${_LIB}_FOUND FALSE)
     mark_as_advanced(${_LIB})
   endmacro()
   # Clear all debug or release library paths (arguments are "d" or "").
-  macro(wx_clear_all_libs _DBG)
+  macro(WX_CLEAR_ALL_LIBS _DBG)
     # Clear wxWidgets common libraries.
     foreach(LIB ${wxWidgets_COMMON_LIBRARIES} scintilla)
-      wx_clear_lib(WX_${LIB}${_DBG})
+      WX_CLEAR_LIB(WX_${LIB}${_DBG})
     endforeach()
 
     # Clear wxWidgets multilib base libraries.
-    wx_clear_lib(WX_base${_DBG})
+    WX_CLEAR_LIB(WX_base${_DBG})
     foreach(LIB net odbc xml)
-      wx_clear_lib(WX_${LIB}${_DBG})
+      WX_CLEAR_LIB(WX_${LIB}${_DBG})
     endforeach()
 
     # Clear wxWidgets monolithic library.
-    wx_clear_lib(WX_mono${_DBG})
+    WX_CLEAR_LIB(WX_mono${_DBG})
 
     # Clear wxWidgets multilib libraries.
     foreach(LIB core adv aui html media xrc dbgrid gl qa richtext
                 webview stc ribbon propgrid)
-      wx_clear_lib(WX_${LIB}${_DBG})
+      WX_CLEAR_LIB(WX_${LIB}${_DBG})
     endforeach()
   endmacro()
   # Clear all wxWidgets debug libraries.
-  macro(wx_clear_all_dbg_libs)
-    wx_clear_all_libs("d")
+  macro(WX_CLEAR_ALL_DBG_LIBS)
+    WX_CLEAR_ALL_LIBS("d")
   endmacro()
   # Clear all wxWidgets release libraries.
-  macro(wx_clear_all_rel_libs)
-    wx_clear_all_libs("")
+  macro(WX_CLEAR_ALL_REL_LIBS)
+    WX_CLEAR_ALL_LIBS("")
   endmacro()
 
   #
   # Set the wxWidgets_LIBRARIES variable.
   # Also, Sets output variable wxWidgets_FOUND to FALSE if it fails.
   #
-  macro(wx_set_libraries _LIBS _DBG)
+  macro(WX_SET_LIBRARIES _LIBS _DBG)
     DBG_MSG_V("Looking for ${${_LIBS}}")
     if(WX_USE_REL_AND_DBG)
       foreach(LIB ${${_LIBS}})
@@ -523,8 +523,8 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
     # If wxWidgets_LIB_DIR changed, clear all libraries.
     if(NOT WX_LIB_DIR STREQUAL wxWidgets_LIB_DIR)
       set(WX_LIB_DIR ${wxWidgets_LIB_DIR} CACHE INTERNAL "wxWidgets_LIB_DIR")
-      wx_clear_all_dbg_libs()
-      wx_clear_all_rel_libs()
+      WX_CLEAR_ALL_DBG_LIBS()
+      WX_CLEAR_ALL_REL_LIBS()
     endif()
 
     if(WX_LIB_DIR)
@@ -575,7 +575,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         endif()
 
         # Get configuration parameters from the name.
-        wx_get_name_components(${wxWidgets_CONFIGURATION} UNV UCD DBG)
+        WX_GET_NAME_COMPONENTS(${wxWidgets_CONFIGURATION} UNV UCD DBG)
 
         # Set wxWidgets lib setup include directory.
         if(EXISTS ${WX_LIB_DIR}/${wxWidgets_CONFIGURATION}/wx/setup.h)
@@ -595,13 +595,13 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         endif()
 
         # Find wxWidgets libraries.
-        wx_find_libs("${UNV}" "${UCD}" "${DBG}")
+        WX_FIND_LIBS("${UNV}" "${UCD}" "${DBG}")
         if(WX_USE_REL_AND_DBG)
-          wx_find_libs("${UNV}" "${UCD}" "d")
+          WX_FIND_LIBS("${UNV}" "${UCD}" "d")
         endif()
 
         # Settings for requested libs (i.e., include dir, libraries, etc.).
-        wx_set_libraries(wxWidgets_FIND_COMPONENTS "${DBG}")
+        WX_SET_LIBRARIES(wxWidgets_FIND_COMPONENTS "${DBG}")
 
         # Add necessary definitions for unicode builds
         if("${UCD}" STREQUAL "u")
@@ -626,7 +626,7 @@ else()
     #
     # Set the default values based on "wx-config --selected-config".
     #
-    macro(wx_config_select_get_default)
+    macro(WX_CONFIG_SELECT_GET_DEFAULT)
       execute_process(
         COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}"
           ${wxWidgets_CONFIG_OPTIONS} --selected-config
@@ -655,7 +655,7 @@ else()
     # has both builds available. If so, provide the selection option
     # to the user.
     #
-    macro(wx_config_select_query_bool _OPT_NAME _OPT_HELP)
+    macro(WX_CONFIG_SELECT_QUERY_BOOL _OPT_NAME _OPT_HELP)
       execute_process(
         COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}"
           ${wxWidgets_CONFIG_OPTIONS} --${_OPT_NAME}=yes
@@ -690,7 +690,7 @@ else()
     # Set wxWidgets_SELECT_OPTIONS to wx-config options for selecting
     # among multiple builds.
     #
-    macro(wx_config_select_set_options)
+    macro(WX_CONFIG_SELECT_SET_OPTIONS)
       set(wxWidgets_SELECT_OPTIONS ${wxWidgets_CONFIG_OPTIONS})
       foreach(_opt_name debug static unicode universal)
         string(TOUPPER ${_opt_name} _upper_opt_name)
@@ -716,16 +716,16 @@ else()
       set(wxWidgets_FOUND TRUE)
 
       # get defaults based on "wx-config --selected-config"
-      wx_config_select_get_default()
+      WX_CONFIG_SELECT_GET_DEFAULT()
 
       # for each option: if both builds are available, provide option
-      wx_config_select_query_bool(debug "Use debug build?")
-      wx_config_select_query_bool(unicode "Use unicode build?")
-      wx_config_select_query_bool(universal "Use universal build?")
-      wx_config_select_query_bool(static "Link libraries statically?")
+      WX_CONFIG_SELECT_QUERY_BOOL(debug "Use debug build?")
+      WX_CONFIG_SELECT_QUERY_BOOL(unicode "Use unicode build?")
+      WX_CONFIG_SELECT_QUERY_BOOL(universal "Use universal build?")
+      WX_CONFIG_SELECT_QUERY_BOOL(static "Link libraries statically?")
 
       # process selection to set wxWidgets_SELECT_OPTIONS
-      wx_config_select_set_options()
+      WX_CONFIG_SELECT_SET_OPTIONS()
       DBG_MSG("wxWidgets_SELECT_OPTIONS=${wxWidgets_SELECT_OPTIONS}")
 
       # run the wx-config program to get cxxflags
@@ -915,18 +915,18 @@ find_program(wxWidgets_wxrc_EXECUTABLE wxrc
   )
 
 #
-# wx_split_arguments_on(<keyword> <left> <right> <arg1> <arg2> ...)
+# WX_SPLIT_ARGUMENTS_ON(<keyword> <left> <right> <arg1> <arg2> ...)
 #
 # Sets <left> and <right> to contain arguments to the left and right,
 # respectively, of <keyword>.
 #
 # Example usage:
-#  function(wxwidgets_add_resources outfiles)
-#    wx_split_arguments_on(OPTIONS wxrc_files wxrc_options ${ARGN})
+#  function(WXWIDGETS_ADD_RESOURCES outfiles)
+#    WX_SPLIT_ARGUMENTS_ON(OPTIONS wxrc_files wxrc_options ${ARGN})
 #    ...
 #  endfunction()
 #
-#  wxwidgets_add_resources(sources ${xrc_files} OPTIONS -e -o file.C)
+#  WXWIDGETS_ADD_RESOURCES(sources ${xrc_files} OPTIONS -e -o file.C)
 #
 # NOTE: This is a generic piece of code that should be renamed to
 # SPLIT_ARGUMENTS_ON and put in a file serving the same purpose as
@@ -935,7 +935,7 @@ find_program(wxWidgets_wxrc_EXECUTABLE wxrc
 # here a bit more generalized. So, there are already two find modules
 # using this approach.
 #
-function(wx_split_arguments_on _keyword _leftvar _rightvar)
+function(WX_SPLIT_ARGUMENTS_ON _keyword _leftvar _rightvar)
   # FIXME: Document that the input variables will be cleared.
   #list(APPEND ${_leftvar}  "")
   #list(APPEND ${_rightvar} "")
@@ -960,7 +960,7 @@ function(wx_split_arguments_on _keyword _leftvar _rightvar)
 endfunction()
 
 #
-# wx_get_dependencies_from_xml(
+# WX_GET_DEPENDENCIES_FROM_XML(
 #   <depends>
 #   <match_pattern>
 #   <clean_pattern>
@@ -970,7 +970,7 @@ endfunction()
 #
 # FIXME: Add documentation here...
 #
-function(wx_get_dependencies_from_xml
+function(WX_GET_DEPENDENCIES_FROM_XML
     _depends
     _match_patt
     _clean_patt
@@ -999,18 +999,18 @@ function(wx_get_dependencies_from_xml
 endfunction()
 
 #
-# wxwidgets_add_resources(<sources> <xrc_files>
+# WXWIDGETS_ADD_RESOURCES(<sources> <xrc_files>
 #                         OPTIONS <options> [NO_CPP_CODE])
 #
 # Adds a custom command for resource file compilation of the
 # <xrc_files> and appends the output files to <sources>.
 #
 # Example usages:
-#   wxwidgets_add_resources(sources xrc/main_frame.xrc)
-#   wxwidgets_add_resources(sources ${xrc_files} OPTIONS -e -o altname.cxx)
+#   WXWIDGETS_ADD_RESOURCES(sources xrc/main_frame.xrc)
+#   WXWIDGETS_ADD_RESOURCES(sources ${xrc_files} OPTIONS -e -o altname.cxx)
 #
-function(wxwidgets_add_resources _outfiles)
-  wx_split_arguments_on(OPTIONS rc_file_list rc_options ${ARGN})
+function(WXWIDGETS_ADD_RESOURCES _outfiles)
+  WX_SPLIT_ARGUMENTS_ON(OPTIONS rc_file_list rc_options ${ARGN})
 
   # Parse files for dependencies.
   set(rc_file_list_abs "")
@@ -1026,7 +1026,7 @@ function(wxwidgets_add_resources _outfiles)
     file(READ "${rc_file_abs}" rc_file_contents)
 
     # get bitmap/bitmap2 files
-    wx_get_dependencies_from_xml(
+    WX_GET_DEPENDENCIES_FROM_XML(
       rc_depends
       "<bitmap[^<]+"
       "^<bitmap[^>]*>"
@@ -1035,7 +1035,7 @@ function(wxwidgets_add_resources _outfiles)
       )
 
     # get url files
-    wx_get_dependencies_from_xml(
+    WX_GET_DEPENDENCIES_FROM_XML(
       rc_depends
       "<url[^<]+"
       "^<url[^>]*>"
@@ -1044,7 +1044,7 @@ function(wxwidgets_add_resources _outfiles)
       )
 
     # get wxIcon files
-    wx_get_dependencies_from_xml(
+    WX_GET_DEPENDENCIES_FROM_XML(
       rc_depends
       "<object[^>]*class=\"wxIcon\"[^<]+"
       "^<object[^>]*>"
