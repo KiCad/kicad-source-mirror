@@ -186,7 +186,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
 
     // update the reference -- just the prefix for now.
     msg += wxT( "?" );
-    SetRef( sheet->Last(), msg );
+    SetRef( sheet, msg );
 
     // Use the schematic component name instead of the library value field
     // name.
@@ -473,7 +473,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
     // all have the same component references, but perhaps this is best.
     if( !GetField( REFERENCE )->GetText().IsEmpty() )
     {
-        SetRef( sheet->Last(), GetField( REFERENCE )->GetText() );
+        SetRef( sheet, GetField( REFERENCE )->GetText() );
         return GetField( REFERENCE )->GetText();
     }
 
@@ -506,9 +506,9 @@ bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 }
 
 
-void SCH_COMPONENT::SetRef( const SCH_SHEET* aSheet, const wxString& ref )
+void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
-    wxString          path = GetPath( aSheet );
+    wxString          path = GetPath( sheet->Last() );
 
     bool              notInArray = true;
 

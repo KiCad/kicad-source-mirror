@@ -67,9 +67,9 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 
 bool SCH_EDIT_FRAME::prepareForNetlist()
 {
-    int refDes = 1;
+    SCH_SHEET_LIST sheets;
 
-    g_RootSheet->AnnotatePowerSymbols( Prj().SchLibs(), &refDes );
+    sheets.AnnotatePowerSymbols( Prj().SchLibs() );
 
     // Performs some controls:
     if( CheckAnnotate( NULL, 0 ) )

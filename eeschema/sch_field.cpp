@@ -48,7 +48,6 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_field.h>
-#include <sch_sheet_path.h>
 #include <kicad_string.h>
 
 
@@ -448,7 +447,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
         if( isReplaced )
-            component->SetRef( ((SCH_SHEET_PATH*) aAuxData)->Last(), text );
+            component->SetRef( (SCH_SHEET_PATH*) aAuxData, text );
     }
     else
     {

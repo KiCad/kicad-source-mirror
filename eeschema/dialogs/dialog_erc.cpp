@@ -455,8 +455,8 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     m_tstUniqueGlobalLabels = m_cbTestUniqueGlbLabels->GetValue();
 
     // Build the whole sheet list in hierarchy (sheet, not screen)
-    int refDes = 1;
-    g_RootSheet->AnnotatePowerSymbols( Prj().SchLibs(), &refDes );
+    SCH_SHEET_LIST sheets;
+    sheets.AnnotatePowerSymbols( Prj().SchLibs() );
 
     if( m_parent->CheckAnnotate( aMessagesList, false ) )
     {
