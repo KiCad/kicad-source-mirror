@@ -198,9 +198,7 @@ endif()
 if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_HOST_UNIX )
   set(wxWidgets_FIND_STYLE "win32")
 else()
-  if(CMAKE_HOST_UNIX OR MSYS)
-    set(wxWidgets_FIND_STYLE "unix")
-  endif()
+  set(wxWidgets_FIND_STYLE "unix")
 endif()
 
 #=====================================================================
