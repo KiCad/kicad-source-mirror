@@ -100,8 +100,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     }
 
     AddMenuItem( fileMenu,
-                 ID_APPEND_PROJECT, _( "App&end Schematic Sheet" ),
-                 _( "Append schematic sheet to current project" ),
+                 ID_APPEND_PROJECT, _( "Imp&ort Schematic Sheet Content" ),
+                 _( "Import a schematic sheet content from an other project in the current sheet" ),
                  KiBitmap( open_document_xpm ) );
 
     fileMenu->AppendSeparator();
