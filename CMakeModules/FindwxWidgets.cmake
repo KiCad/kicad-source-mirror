@@ -868,11 +868,11 @@ if(wxWidgets_FOUND AND wxWidgets_FIND_VERSION)
 
   file(READ ${_filename} _wx_version_h)
 
-  string(REGEX REPLACE "^(.*\n)?#define wxMAJOR_VERSION[ ]+([0-9]+).*"
+  string(REGEX REPLACE "^(.*\n)?#define +wxMAJOR_VERSION +([0-9]+).*"
     "\\2" wxWidgets_VERSION_MAJOR "${_wx_version_h}" )
-  string(REGEX REPLACE "^(.*\n)?#define wxMINOR_VERSION[ ]+([0-9]+).*"
+  string(REGEX REPLACE "^(.*\n)?#define +wxMINOR_VERSION +([0-9]+).*"
     "\\2" wxWidgets_VERSION_MINOR "${_wx_version_h}" )
-  string(REGEX REPLACE "^(.*\n)?#define wxRELEASE_NUMBER[ ]+([0-9]+).*"
+  string(REGEX REPLACE "^(.*\n)?#define +wxRELEASE_NUMBER +([0-9]+).*"
     "\\2" wxWidgets_VERSION_PATCH "${_wx_version_h}" )
   set(wxWidgets_VERSION_STRING
     "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}.${wxWidgets_VERSION_PATCH}" )
