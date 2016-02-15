@@ -858,7 +858,7 @@ else()
 endif()
 
 # Check if a specfic version was requested by find_package().
-if(wxWidgets_FOUND AND wxWidgets_FIND_VERSION)
+if(wxWidgets_FOUND)
   find_file(_filename wx/version.h PATHS ${wxWidgets_INCLUDE_DIRS} NO_DEFAULT_PATH)
   DBG_MSG("_filename:  ${_filename}")
 
