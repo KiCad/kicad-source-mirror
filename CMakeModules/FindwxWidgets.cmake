@@ -196,11 +196,9 @@ endif()
 
 
 if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_HOST_UNIX )
-  dbg_msg( "setting win32 style" )
   set(wxWidgets_FIND_STYLE "win32")
 else()
   if(CMAKE_HOST_UNIX OR MSYS)
-    dbg_msg( "unix style" )
     set(wxWidgets_FIND_STYLE "unix")
   endif()
 endif()
@@ -209,8 +207,6 @@ endif()
 # WIN32_FIND_STYLE
 #=====================================================================
 if(wxWidgets_FIND_STYLE STREQUAL "win32")
-  dbg_msg("Using win32 path")
-
   # Useful common wx libs needed by almost all components.
   set(wxWidgets_COMMON_LIBRARIES png tiff jpeg zlib regex expat)
 
@@ -268,8 +264,6 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         )
     mark_as_advanced(WX_${LIB}${_DBG})
     endforeach()
-
-    dbg_msg( "WX_LIB_DIR:${WX_LIB_DIR}" )
 
     # Find wxWidgets multilib base libraries.
     find_library(WX_base${_DBG}
@@ -475,8 +469,6 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
 
   # If wxWidgets_ROOT_DIR changed, clear lib dir.
   if(NOT WX_ROOT_DIR STREQUAL wxWidgets_ROOT_DIR)
-    dbg_msg( "WX_ROOT_DIR != wxWidgets_ROOT_DIR" )
-
     set(WX_ROOT_DIR ${wxWidgets_ROOT_DIR}
         CACHE INTERNAL "wxWidgets_ROOT_DIR")
     set(wxWidgets_LIB_DIR "wxWidgets_LIB_DIR-NOTFOUND"
@@ -484,19 +476,15 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
   endif()
 
   if(WX_ROOT_DIR)
-    dbg_msg( "WX_ROOT_DIR == wxWidgets_ROOT_DIR" )
-
     # Select one default tree inside the already determined wx tree.
     # Prefer static/shared order usually consistent with build
     # settings.
     if(MINGW)
-      dbg_msg( "MINGW" )
       set(WX_LIB_DIR_PREFIX gcc)
     else()
       set(WX_LIB_DIR_PREFIX vc)
     endif()
     if(BUILD_SHARED_LIBS)
-      dbg_msg( "BUILD_SHARED_LIBS" )
       find_path(wxWidgets_LIB_DIR
         NAMES
           msw/wx/setup.h
@@ -514,7 +502,6 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         NO_DEFAULT_PATH
         )
     else()
-      dbg_msg( "!BUILD_SHARED_LIBS  WX_LIB_DIR:${WX_LIB_DIR}" )
       find_path(wxWidgets_LIB_DIR
         NAMES
           msw/wx/setup.h
@@ -632,11 +619,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
 # UNIX_FIND_STYLE
 #=====================================================================
 else()
-  dbg_msg("NOT win32 path")
-
   if(wxWidgets_FIND_STYLE STREQUAL "unix")
-    dbg_msg("unix find style")
-
     #-----------------------------------------------------------------
     # UNIX: Helper MACROS
     #-----------------------------------------------------------------
@@ -908,7 +891,6 @@ dbg_msg("wxWidgets_VERSION_PATCH   : ${wxWidgets_VERSION_PATCH}")
 #=====================================================================
 #=====================================================================
 # Maintain consistency with all other variables.
-dbg_msg("wxWidgets_FOUND           : ${wxWidgets_FOUND}")
 set(WXWIDGETS_FOUND ${wxWidgetsS_FOUND})
 
 include(FindPackageHandleStandardArgs)
