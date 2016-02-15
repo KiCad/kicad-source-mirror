@@ -1187,31 +1187,10 @@ unsigned SCH_SHEET::GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const
 }
 
 
-void SCH_SHEET::GetSheetPaths( std::vector< std::vector< const SCH_SHEET* > >& aSheetPaths ) const
-{
-    static std::vector< const SCH_SHEET* > path;
-
-    path.push_back( const_cast< SCH_SHEET* >( this ) );
-    aSheetPaths.push_back( path );
-
-    SCH_ITEM* item = m_screen->GetDrawItems();
-
-    while( item )
-    {
-        if( item->Type() == SCH_SHEET_T )
-            ( (SCH_SHEET*) item )->GetSheetPaths( aSheetPaths );
-
-        item = item->Next();
-    }
-
-    path.pop_back();
-}
-
-
-const SCH_SHEET* SCH_SHEET::GetRootSheet() const
+SCH_SHEET* SCH_SHEET::GetRootSheet()
 {
     EDA_ITEM* parent = GetParent();
-    const SCH_SHEET* rootSheet = const_cast< SCH_SHEET* >( this );
+    SCH_SHEET* rootSheet = this;
 
     while( parent )
     {
@@ -1221,7 +1200,7 @@ const SCH_SHEET* SCH_SHEET::GetRootSheet() const
         parent = parent->GetParent();
     }
 
-    return const_cast< SCH_SHEET* >( rootSheet );
+    return rootSheet;
 }
 
 
@@ -1600,88 +1579,6 @@ int SCH_SHEET::operator-( const SCH_SHEET& aRhs ) const
     }
 
     return retv;
-}
-
-
-bool SCH_SHEET::TestForRecursion( std::vector< std::vector< const SCH_SHEET* > >& aSrcSheetHierarchy,
-                                  const wxString& aDestFileName ) const
-{
-    std::vector< std::vector< const SCH_SHEET* > > hierarchy;
-    wxFileName rootFn = GetRootSheet()->GetFileName();
-    wxFileName destFn = aDestFileName;
-
-    if( destFn.IsRelative() )
-        destFn.MakeAbsolute( rootFn.GetPath() );
-
-    GetRootSheet()->GetSheetPaths( hierarchy );
-
-    // Test each SCH_SHEET_PATH in this SCH_SHEET_LIST for potential recursion.
-    for( unsigned i = 0; i < hierarchy.size(); i++ )
-    {
-        // Test each SCH_SHEET_PATH in the source sheet.
-        for( unsigned j = 0; j < aSrcSheetHierarchy.size(); j++ )
-        {
-            std::vector< const SCH_SHEET* > sheetPath = aSrcSheetHierarchy[ j ];
-
-            for( unsigned k = 0; k < sheetPath.size(); k++ )
-            {
-                wxFileName srcFn = sheetPath[k]->GetFileName();
-
-                if( srcFn.IsRelative() )
-                    srcFn.MakeAbsolute( rootFn.GetPath() );
-
-                // The source and destination sheet file names cannot be the same.
-                if( srcFn == destFn )
-                    return true;
-
-                /// @todo Store sheet file names with full path, either relative to project path
-                ///       or absolute path.  The current design always assumes subsheet files are
-                ///       located in the project folder which may or may not be desirable.
-                std::vector< const SCH_SHEET* > destPath = hierarchy[i];
-                unsigned l = 0;
-
-                while( l < destPath.size() )
-                {
-                    wxFileName cmpFn = destPath[i]->GetFileName();
-
-                    if( cmpFn.IsRelative() )
-                        cmpFn.MakeAbsolute( rootFn.GetPath() );
-
-                    // Test if the file name of the destination sheet is in anywhere in the
-                    // source sheet path.
-                    if( cmpFn == destFn )
-                        break;
-
-                    l++;
-                }
-
-                // The destination sheet file name was not found in the any of the source sheet
-                // path or the destination sheet file name is the root sheet so no recursion is
-                // possible.
-                if( l >= destPath.size() || l == 0 )
-                    return false;
-
-                // Walk back up to the root sheet to see if the source file name is already a
-                // parent in destination the sheet path.  If so, recursion will occur.
-                do
-                {
-                    l -= 1;
-
-                    wxFileName cmpFn = destPath[i]->GetFileName();
-
-                    if( cmpFn.IsRelative() )
-                        cmpFn.MakeAbsolute( rootFn.GetPath() );
-
-                    if( cmpFn == srcFn )
-                        return true;
-
-                } while( l != 0 );
-            }
-        }
-    }
-
-    // The source sheet file can safely be added to the destination sheet file.
-    return false;
 }
 
 

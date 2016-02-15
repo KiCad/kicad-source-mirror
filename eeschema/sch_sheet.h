@@ -250,8 +250,6 @@ class SCH_SHEET : public SCH_ITEM
     //        than assigned in the order the sheets were parsed and loaded.
     int m_number;
 
-    SCH_SHEET* getRootSheet();
-
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -602,18 +600,6 @@ public:
     unsigned GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const;
 
     /**
-     * Function GetSheetPaths
-     *
-     * Returns a list of lists of #SCH_SHEET pointers to \a sSheetPaths.
-     *
-     * This is analagous to the old SCH_SHEET_LIST::BuildSheetList().  It creates a list of
-     * stacks to the sheet pointer hierarchy.
-     *
-     * @param aSheetPaths is a vector of vector of #SCH_SHEET pointers.
-     */
-    void GetSheetPaths( std::vector< std::vector< const SCH_SHEET* > >& aSheetPaths ) const;
-
-    /**
      * Function GetRootSheet
      *
      * returns the root sheet of this SCH_SHEET object.
@@ -624,12 +610,7 @@ public:
      *
      * @return a SCH_SHEET pointer to the root sheet.
      */
-    const SCH_SHEET* GetRootSheet() const;
-
-    SCH_SHEET* GetRootSheet()
-    {
-        return const_cast< SCH_SHEET* >( static_cast< const SCH_SHEET&>( *this ).GetRootSheet() );
-    }
+    SCH_SHEET* GetRootSheet();
 
     /**
      * Function IsRootSheet
@@ -765,20 +746,6 @@ public:
      * @return - The next schematic item if found.  Otherwise, NULL is returned.
      */
     SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
-
-    /**
-     * Function TestForRecursion
-     *
-     * test every SCH_SHEET in the SCH_SHEET hierarchy to verify if adding the sheets stored
-     * in \a aSrcSheetHierarchy to the sheet stored in \a aDestFileName  will cause recursion.
-     *
-     * @param aSrcSheetHierarchy is a list #SCH_SHEET pointer lists of the source sheet add
-     *                           to \a aDestFileName.
-     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
-     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
-     */
-    bool TestForRecursion( std::vector< std::vector< const SCH_SHEET* > >& aSrcSheetHierarchy,
-                           const wxString& aDestFileName ) const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

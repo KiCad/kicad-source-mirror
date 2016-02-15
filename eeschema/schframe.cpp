@@ -1274,7 +1274,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( bool aRedraw )
             // the m_mouseCaptureCallback function.
             m_canvas->SetMouseCapture( NULL, NULL );
 
-            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet->Last() ) )
+            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet ) )
             {
                 screen->SetCurItem( NULL );
                 delete item;

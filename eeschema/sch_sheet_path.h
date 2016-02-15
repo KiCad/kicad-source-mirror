@@ -220,6 +220,19 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
+    /**
+     * Function TestForRecursion
+     *
+     * test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
+     * \a aSrcFileName to the sheet stored in file \a aDestFileName  will cause a sheet
+     * path recursion.
+     *
+     * @param aSrcFileName is the source file name of the sheet add to \a aDestFileName.
+     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
+     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
+     */
+    bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName ) const;
+
     int FindSheet( const wxString& aFileName ) const;
 
     /**
@@ -374,6 +387,19 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
                                 SCH_ITEM* aLastItem = NULL, bool aWrap = true );
+
+    /**
+     * Function TestForRecursion
+     *
+     * test every SCH_SHEET_PATH in the SCH_SHEET_LIST to verify if adding the sheets stored
+     * in \a aSrcSheetHierarchy to the sheet stored in \a aDestFileName  will cause recursion.
+     *
+     * @param aSrcSheetHierarchy is the SCH_SHEET_LIST of the source sheet add to \a aDestFileName.
+     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
+     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
+     */
+    bool TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
+                           const wxString& aDestFileName ) const;
 
     /**
      * Function FindSheetByName
