@@ -894,8 +894,6 @@ DBG_MSG("wxWidgets_VERSION_PATCH   : ${wxWidgets_VERSION_PATCH}")
 
 #=====================================================================
 #=====================================================================
-# Maintain consistency with all other variables.
-set(WXWIDGETS_FOUND ${wxWidgetsS_FOUND})
 
 include(FindPackageHandleStandardArgs)
 
