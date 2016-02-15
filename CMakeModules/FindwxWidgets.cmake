@@ -150,10 +150,12 @@
 # Helper macro to control the debugging output globally. There are
 # two versions for controlling how verbose your output should be.
 macro(DBG_MSG _MSG)
-#  message(STATUS "${_MSG}")
+#  message(STATUS
+#    "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
 endmacro()
 macro(DBG_MSG_V _MSG)
-#  message(STATUS "${_MSG}")
+#  message(STATUS
+#    "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
 endmacro()
 
 # Clear return values in case the module is loaded more than once.
