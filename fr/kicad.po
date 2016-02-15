@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-04 08:29+0100\n"
-"PO-Revision-Date: 2016-02-04 08:45+0100\n"
+"POT-Creation-Date: 2016-02-15 17:00+0100\n"
+"PO-Revision-Date: 2016-02-15 17:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -231,7 +231,7 @@ msgstr "Déplacer vers le bas"
 msgid "Enable/Disable orthographic projection"
 msgstr "Active/Désactive projection orthographique"
 
-#: 3d-viewer/3d_toolbar.cpp:135 cvpcb/menubar.cpp:141 eeschema/menubar.cpp:523
+#: 3d-viewer/3d_toolbar.cpp:135 eeschema/menubar.cpp:523
 #: eeschema/menubar_libedit.cpp:276 eeschema/tool_viewlib.cpp:267
 #: gerbview/menubar.cpp:245 kicad/menubar.cpp:426
 #: pagelayout_editor/menubar.cpp:172 pcbnew/menubar_modedit.cpp:358
@@ -599,7 +599,7 @@ msgstr "Logo pour cartouche (fichier .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
-#: pcbnew/dialogs/dialog_plot_base.cpp:247
+#: pcbnew/dialogs/dialog_plot_base.cpp:245
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:187
 msgid "Format"
 msgstr "Format"
@@ -634,7 +634,7 @@ msgstr "Négatif"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:48
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:209
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:98
-#: pcbnew/dialogs/dialog_plot_base.cpp:82
+#: pcbnew/dialogs/dialog_plot_base.cpp:81
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
 msgid "Options"
 msgstr "Options"
@@ -914,7 +914,7 @@ msgstr "Répertoire de sortie '%s' créé.\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "Impossible de créer le répertoire de sortie '%s'.\n"
 
-#: common/confirm.cpp:73 common/pgm_base.cpp:855 eeschema/symbedit.cpp:111
+#: common/confirm.cpp:73 common/pgm_base.cpp:863 eeschema/symbedit.cpp:111
 #: eeschema/widgets/widget_eeschema_color_config.cpp:274
 msgid "Warning"
 msgstr "Avertissement"
@@ -1051,7 +1051,7 @@ msgstr "Infos de version de librairie"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
-#: pcbnew/dialogs/dialog_plot_base.cpp:386
+#: pcbnew/dialogs/dialog_plot_base.cpp:358
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:144
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:56
@@ -1173,7 +1173,7 @@ msgstr "Aide sur Variables d'Environnement"
 msgid "Name"
 msgstr "Nom"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:39 eeschema/sch_sheet.cpp:812
+#: common/dialogs/dialog_env_var_config_base.cpp:39 eeschema/sch_sheet.cpp:809
 msgid "Path"
 msgstr "Chemin"
 
@@ -1477,7 +1477,7 @@ msgid "Custom Size:"
 msgstr "Taille Utilisateur:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:62
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:77
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:75
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:76
 msgid "Height:"
 msgstr "Hauteur:"
@@ -1487,7 +1487,7 @@ msgid "Custom paper height."
 msgstr "Hauteur due la page (utilisateur)."
 
 #: common/dialogs/dialog_page_settings_base.cpp:78
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:65
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:64
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:86
@@ -1947,67 +1947,71 @@ msgid "Slovenian"
 msgstr "Slovène"
 
 #: common/pgm_base.cpp:189
+msgid "Slovak"
+msgstr "Slovaque"
+
+#: common/pgm_base.cpp:197
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: common/pgm_base.cpp:197
+#: common/pgm_base.cpp:205
 msgid "Polish"
 msgstr "Polonais"
 
-#: common/pgm_base.cpp:205
+#: common/pgm_base.cpp:213
 msgid "Czech"
 msgstr "Tchèque"
 
-#: common/pgm_base.cpp:213
+#: common/pgm_base.cpp:221
 msgid "Russian"
 msgstr "Russe"
 
-#: common/pgm_base.cpp:221
+#: common/pgm_base.cpp:229
 msgid "Korean"
 msgstr "Coréen"
 
-#: common/pgm_base.cpp:229
+#: common/pgm_base.cpp:237
 msgid "Chinese simplified"
 msgstr "Chinois Simplifié"
 
-#: common/pgm_base.cpp:237
+#: common/pgm_base.cpp:245
 msgid "Catalan"
 msgstr "Catalan"
 
-#: common/pgm_base.cpp:245
+#: common/pgm_base.cpp:253
 msgid "Dutch"
 msgstr "Hollandais"
 
-#: common/pgm_base.cpp:253
+#: common/pgm_base.cpp:261
 msgid "Japanese"
 msgstr "Japonais"
 
-#: common/pgm_base.cpp:261
+#: common/pgm_base.cpp:269
 msgid "Bulgarian"
 msgstr "Bulgare"
 
-#: common/pgm_base.cpp:331
+#: common/pgm_base.cpp:339
 msgid "No default editor found, you must choose it"
 msgstr "Pas d'éditeur par défaut trouvé, vous devez en choisir un"
 
-#: common/pgm_base.cpp:338
+#: common/pgm_base.cpp:346
 msgid "Preferred Editor:"
 msgstr "Éditeur préféré:"
 
-#: common/pgm_base.cpp:367
+#: common/pgm_base.cpp:375
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s est en cours d'exécution. Continuer?"
 
-#: common/pgm_base.cpp:772
+#: common/pgm_base.cpp:780
 msgid "Language"
 msgstr "Langue"
 
-#: common/pgm_base.cpp:773
+#: common/pgm_base.cpp:781
 msgid "Select application language (only for testing!)"
 msgstr "Choisir la langue (seulement pour tests!)"
 
-#: common/pgm_base.cpp:848
+#: common/pgm_base.cpp:856
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -2016,7 +2020,7 @@ msgstr ""
 "définis \n"
 "de façon externe à Kicad et seront temporairement remplacés."
 
-#: common/pgm_base.cpp:850
+#: common/pgm_base.cpp:858
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2033,7 +2037,7 @@ msgstr ""
 "la (les) définition(s) de la (les) variable(s) d'environnement de votre "
 "système."
 
-#: common/pgm_base.cpp:857
+#: common/pgm_base.cpp:865
 msgid "Do not show this message again."
 msgstr "Ne plus montrer de message de nouveau."
 
@@ -2732,40 +2736,46 @@ msgstr "Fichier cmp d'assignation"
 msgid "&Save Edits\tCtrl+S"
 msgstr "&Sauver Édition\tCtrl+S"
 
-#: cvpcb/menubar.cpp:76 eeschema/dialogs/dialog_erc_base.cpp:101
+#: cvpcb/menubar.cpp:70 cvpcb/common_help_msg.h:28
+msgid "Save footprint association in schematic component footprint fields"
+msgstr ""
+"Sauve l'association des empreintes dans le champ empreinte des composants en "
+"schématique."
+
+#: cvpcb/menubar.cpp:78 eeschema/dialogs/dialog_erc_base.cpp:101
 #: eeschema/menubar.cpp:170 gerbview/menubar.cpp:145 kicad/menubar.cpp:279
 #: pagelayout_editor/menubar.cpp:111 pcbnew/menubar_pcbframe.cpp:274
 msgid "&Close"
 msgstr "&Fermer"
 
-#: cvpcb/menubar.cpp:76
+#: cvpcb/menubar.cpp:78
 msgid "Close CvPcb"
 msgstr "Fermer CvPcb"
 
-#: cvpcb/menubar.cpp:83
+#: cvpcb/menubar.cpp:85
 msgid "Footprint Li&braries"
 msgstr "Li&brairies d'Empreintes"
 
-#: cvpcb/menubar.cpp:83 pcbnew/menubar_modedit.cpp:312
+#: cvpcb/menubar.cpp:85 pcbnew/menubar_modedit.cpp:312
 #: pcbnew/menubar_pcbframe.cpp:489
 msgid "Configure footprint libraries"
 msgstr "Configurer les librairies d'empreintes"
 
-#: cvpcb/menubar.cpp:89 kicad/menubar.cpp:306 pcbnew/menubar_modedit.cpp:318
+#: cvpcb/menubar.cpp:91 kicad/menubar.cpp:306 pcbnew/menubar_modedit.cpp:318
 #: pcbnew/menubar_pcbframe.cpp:495
 msgid "Configure Pa&ths"
 msgstr "Configurer les Che&mins"
 
-#: cvpcb/menubar.cpp:90 kicad/menubar.cpp:307 pcbnew/menubar_modedit.cpp:319
+#: cvpcb/menubar.cpp:92 kicad/menubar.cpp:307 pcbnew/menubar_modedit.cpp:319
 #: pcbnew/menubar_pcbframe.cpp:496
 msgid "Edit path configuration environment variables"
 msgstr "Éditer la configuration des variables d'environnement des chemins"
 
-#: cvpcb/menubar.cpp:94
+#: cvpcb/menubar.cpp:96
 msgid "Edit &Equ Files List"
 msgstr "Éditer Liste Fichiers &Equ"
 
-#: cvpcb/menubar.cpp:95
+#: cvpcb/menubar.cpp:97
 msgid ""
 "Setup equ files list (.equ files)\n"
 "They are files which give the footprint name from the component value"
@@ -2774,23 +2784,19 @@ msgstr ""
 "Ce sont les fichiers qui donnent le nom de l'empreinte à partir de la valeur "
 "du composant"
 
-#: cvpcb/menubar.cpp:104
+#: cvpcb/menubar.cpp:106
 msgid "&Keep Open On Save"
 msgstr "&Rester Ouvert après Sauvegarde"
 
-#: cvpcb/menubar.cpp:105
+#: cvpcb/menubar.cpp:107
 msgid "Prevent CvPcb from exiting after saving netlist file"
 msgstr ""
 "N'autorise pas la fermeture automatique de CvPcb après la sauvegarde de la "
 "netliste"
 
-#: cvpcb/menubar.cpp:113
+#: cvpcb/menubar.cpp:115
 msgid "&Save Project File"
 msgstr "&Sauver Fichier Projet"
-
-#: cvpcb/menubar.cpp:114
-msgid "Save changes to the project configuration file"
-msgstr "Sauver les changements dans le fichier de configuration du projet"
 
 #: cvpcb/menubar.cpp:124
 msgid "CvPcb &Manual"
@@ -2824,6 +2830,11 @@ msgstr "&Au Sujet de Kicad"
 #: pcbnew/menubar_modedit.cpp:354
 msgid "About KiCad"
 msgstr "Au Sujet de KiCad"
+
+#: cvpcb/menubar.cpp:141 kicad/menubar.cpp:252 pcbnew/menubar_pcbframe.cpp:109
+#: pcbnew/menubar_pcbframe.cpp:566
+msgid "&Save"
+msgstr "&Sauver"
 
 #: cvpcb/menubar.cpp:143 eeschema/menubar.cpp:529
 #: eeschema/menubar_libedit.cpp:281 eeschema/tool_viewlib.cpp:270
@@ -4031,9 +4042,9 @@ msgstr "La taille du texte du champ actuellement sélectionné"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:234
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:257
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:271
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:73
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:85
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:97
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:71
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:82
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:93
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:42
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:54
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:66
@@ -4975,14 +4986,14 @@ msgstr "Examen Plugins"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:171
 #: pcbnew/dialogs/dialog_SVG_print.cpp:215
-#: pcbnew/dialogs/dialog_gendrill.cpp:295 pcbnew/dialogs/dialog_plot.cpp:310
-#: pcbnew/exporters/gen_modules_placefile.cpp:176
-#: pcbnew/exporters/gen_modules_placefile.cpp:565
+#: pcbnew/dialogs/dialog_gendrill.cpp:295 pcbnew/dialogs/dialog_plot.cpp:304
+#: pcbnew/exporters/gen_modules_placefile.cpp:175
+#: pcbnew/exporters/gen_modules_placefile.cpp:543
 msgid "Select Output Directory"
 msgstr "Sélection du Répertoire de Sortie"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:183
-#: pcbnew/dialogs/dialog_plot.cpp:320
+#: pcbnew/dialogs/dialog_plot.cpp:314
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -4996,15 +5007,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_SVG_print.cpp:223
 #: pcbnew/dialogs/dialog_SVG_print.cpp:234
 #: pcbnew/dialogs/dialog_gendrill.cpp:303
-#: pcbnew/dialogs/dialog_gendrill.cpp:314 pcbnew/dialogs/dialog_plot.cpp:323
-#: pcbnew/dialogs/dialog_plot.cpp:330
-#: pcbnew/exporters/gen_modules_placefile.cpp:184
-#: pcbnew/exporters/gen_modules_placefile.cpp:193
+#: pcbnew/dialogs/dialog_gendrill.cpp:314 pcbnew/dialogs/dialog_plot.cpp:317
+#: pcbnew/dialogs/dialog_plot.cpp:324
+#: pcbnew/exporters/gen_modules_placefile.cpp:183
+#: pcbnew/exporters/gen_modules_placefile.cpp:192
 msgid "Plot Output Directory"
 msgstr "Répertoire de Sortie des Tracés"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:193
-#: pcbnew/dialogs/dialog_plot.cpp:329
+#: pcbnew/dialogs/dialog_plot.cpp:323
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Ne peut générer un chemin relatif (disque cible différent du disque du "
@@ -5035,7 +5046,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:34
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:35
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:40
-#: pcbnew/dialogs/dialog_plot_base.cpp:55
+#: pcbnew/dialogs/dialog_plot_base.cpp:54
 msgid "Browse..."
 msgstr "Examiner..."
 
@@ -5091,7 +5102,7 @@ msgid "Page Size:"
 msgstr "Dim Page:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
-#: pcbnew/dialogs/dialog_plot_base.cpp:256
+#: pcbnew/dialogs/dialog_plot_base.cpp:254
 msgid "HPGL Options"
 msgstr "Options HPGL"
 
@@ -6319,7 +6330,7 @@ msgstr "Non connecté"
 
 #: eeschema/lib_pin.cpp:207 gerbview/class_gerber_draw_item.cpp:183
 #: pcbnew/class_board_item.cpp:42
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Line"
@@ -6523,12 +6534,12 @@ msgstr "Fichier de doc '%s' OK"
 
 #: eeschema/libedit.cpp:480 eeschema/viewlibs.cpp:295
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
-#: pcbnew/dialogs/dialog_plot_base.cpp:141
+#: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "None"
 msgstr "Aucun"
 
@@ -7055,12 +7066,15 @@ msgid "Open a recent opened schematic project"
 msgstr "Ouvrir un projet schématique récemment ouvert"
 
 #: eeschema/menubar.cpp:103
-msgid "App&end Schematic Sheet"
-msgstr "Ajout&er Feuille de Schéma"
+msgid "Imp&ort Schematic Sheet Content"
+msgstr "Imp&orter le Contenu d'une Feuille de Schéma"
 
 #: eeschema/menubar.cpp:104
-msgid "Append schematic sheet to current project"
-msgstr "Ajouter une autre feuille de schéma au projet courant"
+msgid ""
+"Import a schematic sheet content from an other project in the current sheet"
+msgstr ""
+"Importer le contenu d'une feuille de schéma d'un autre project dans la "
+"feuille courante."
 
 #: eeschema/menubar.cpp:109
 msgid "&Save Schematic Project"
@@ -8075,31 +8089,31 @@ msgstr "Ligne %s sur Couche Inconnue de (%s,%s) à (%s,%s)"
 msgid "Electronics Rule Check Error"
 msgstr "Contrôle des Règles Electroniques: Erreur"
 
-#: eeschema/sch_sheet.cpp:810
+#: eeschema/sch_sheet.cpp:807
 msgid "Sheet Name"
 msgstr "Nom Feuille"
 
-#: eeschema/sch_sheet.cpp:811
+#: eeschema/sch_sheet.cpp:808
 msgid "File Name"
 msgstr "Nom Fichier"
 
-#: eeschema/sch_sheet.cpp:815
+#: eeschema/sch_sheet.cpp:812
 msgid "Hierarchy Type"
 msgstr "Type de Hiérarchie"
 
-#: eeschema/sch_sheet.cpp:816
+#: eeschema/sch_sheet.cpp:813
 msgid "Complex"
 msgstr "Complexe"
 
-#: eeschema/sch_sheet.cpp:816
+#: eeschema/sch_sheet.cpp:813
 msgid "Simple"
 msgstr "Simple"
 
-#: eeschema/sch_sheet.cpp:820
+#: eeschema/sch_sheet.cpp:817
 msgid "Time Stamp"
 msgstr "Signature Temporelle"
 
-#: eeschema/sch_sheet.cpp:1033
+#: eeschema/sch_sheet.cpp:1030
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Feuille Hiérarchique %s"
@@ -8970,19 +8984,19 @@ msgid "Error Init Printer info"
 msgstr "Erreur Init info imprimante"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:297
-#: pcbnew/dialogs/dialog_plot.cpp:779
+#: pcbnew/dialogs/dialog_plot.cpp:755
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:366
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:305
-#: pcbnew/dialogs/dialog_plot.cpp:775
+#: pcbnew/dialogs/dialog_plot.cpp:751
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:376
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:340
-#: pcbnew/dialogs/dialog_plot.cpp:838
+#: pcbnew/dialogs/dialog_plot.cpp:814
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:443
 msgid "No layer selected"
 msgstr "Pas de couche sélectionnée"
@@ -9202,14 +9216,14 @@ msgstr "Montrer DCodes"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:53
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:59
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:65
-#: pcbnew/dialogs/dialog_plot_base.cpp:161
+#: pcbnew/dialogs/dialog_plot_base.cpp:160
 msgid "Sketch"
 msgstr "Contour"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:53
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:59
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:65
-#: pcbnew/dialogs/dialog_plot_base.cpp:161
+#: pcbnew/dialogs/dialog_plot_base.cpp:160
 msgid "Filled"
 msgstr "Plein"
 
@@ -9975,11 +9989,6 @@ msgstr "Créer un nouveau projet à partir d'un modèle"
 #: kicad/menubar.cpp:245 kicad/menubar.cpp:467
 msgid "Create new project"
 msgstr "Créer un nouveau projet"
-
-#: kicad/menubar.cpp:252 pcbnew/menubar_pcbframe.cpp:109
-#: pcbnew/menubar_pcbframe.cpp:566
-msgid "&Save"
-msgstr "&Sauver"
 
 #: kicad/menubar.cpp:254 kicad/menubar.cpp:481
 msgid "Save current project"
@@ -12301,7 +12310,7 @@ msgid "Bezier Curve"
 msgstr "Courbe de Bézier"
 
 #: pcbnew/class_board_item.cpp:47
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:200
 msgid "Polygon"
 msgstr "Polygone"
 
@@ -12324,7 +12333,7 @@ msgid "Curve"
 msgstr "Courbe"
 
 #: pcbnew/class_drawsegment.cpp:388
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:200
 msgid "Segment"
 msgstr "Segment"
 
@@ -12958,7 +12967,7 @@ msgstr "Via Aveugle/Enterrée"
 
 #: pcbnew/class_track.cpp:1246 pcbnew/dialogs/dialog_layers_setup_base.cpp:86
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:315
-#: pcbnew/dialogs/dialog_plot_base.cpp:70
+#: pcbnew/dialogs/dialog_plot_base.cpp:69
 msgid "Layers"
 msgstr "Couches"
 
@@ -13083,12 +13092,12 @@ msgstr "Supprimer Net?"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222
 #: pcbnew/dialogs/dialog_gendrill.cpp:302
-#: pcbnew/exporters/gen_modules_placefile.cpp:183
+#: pcbnew/exporters/gen_modules_placefile.cpp:182
 msgid "Use a relative path? "
 msgstr "Utiliser un chemin relatif?"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:233
-#: pcbnew/exporters/gen_modules_placefile.cpp:192
+#: pcbnew/exporters/gen_modules_placefile.cpp:191
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
@@ -13099,8 +13108,8 @@ msgstr ""
 msgid "Plot: '%s' OK."
 msgstr "Tracé: '%s' OK."
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:830
-#: pcbnew/exporters/gen_modules_placefile.cpp:309
+#: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:806
+#: pcbnew/exporters/gen_modules_placefile.cpp:308
 #, c-format
 msgid "Unable to create file '%s'."
 msgstr "Impossible de créer le  fichier '%s'."
@@ -13189,8 +13198,8 @@ msgid "File option:"
 msgstr "Option de fichier:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:110
-#: pcbnew/dialogs/dialog_plot_base.cpp:379
-#: pcbnew/dialogs/dialog_plot_base.h:132
+#: pcbnew/dialogs/dialog_plot_base.cpp:351
+#: pcbnew/dialogs/dialog_plot_base.h:130
 msgid "Plot"
 msgstr "Tracer"
 
@@ -13254,32 +13263,32 @@ msgstr "Suppression &Pistes non connectées"
 msgid "delete track segment having a dangling end"
 msgstr "supprimer segments de piste avec une extrémité en l'air"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:408
+#: pcbnew/dialogs/dialog_copper_zones.cpp:395
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
 msgstr "L'isolation doit être plus petite que %f\" / %f mm"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:420
+#: pcbnew/dialogs/dialog_copper_zones.cpp:407
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
 msgstr "La largeur minimum doit être plus grande que %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:460
+#: pcbnew/dialogs/dialog_copper_zones.cpp:447
 msgid "Thermal relief spoke must be greater than the minimum width."
 msgstr ""
 "La largeur des freins thermique doit être plus grande que la largeur minimum."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:473
+#: pcbnew/dialogs/dialog_copper_zones.cpp:460
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:227
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:496
 msgid "No layer selected."
 msgstr "Pas de couche sélectionnée."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:484
+#: pcbnew/dialogs/dialog_copper_zones.cpp:471
 msgid "No net selected."
 msgstr "Pas de net sélectionné."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:490
+#: pcbnew/dialogs/dialog_copper_zones.cpp:477
 msgid ""
 "You have chosen the \"not connected\" option. This will create insulated "
 "copper islands. Are you sure ?"
@@ -13287,11 +13296,11 @@ msgstr ""
 "Vous avez choisi l'option \"non connecté\". Cela créera des ilots de cuivre "
 "non connectés. Êtes vous sûr ?"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:525
+#: pcbnew/dialogs/dialog_copper_zones.cpp:512
 msgid "Chamfer distance"
 msgstr "Distance de chanfreinage"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:531
+#: pcbnew/dialogs/dialog_copper_zones.cpp:518
 msgid "Fillet radius"
 msgstr "Rayon de l'arrondi"
 
@@ -13338,7 +13347,7 @@ msgstr "Filtré (nombre de pads)"
 msgid "Hidden net filter:"
 msgstr "Filtre des nets à cacher:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:79
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:78
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Net names matching this pattern are not displayed."
@@ -13346,16 +13355,16 @@ msgstr ""
 "Modèle en mode avancé, pour filtrer les noms de net en liste\n"
 "Les noms de net correspondant à ce modèle ne sont pas listés."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:83
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:82
 msgid "Visible net filter:"
 msgstr "Filtre pour nets visibles:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:87
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:86
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:35
 msgid "*"
 msgstr "*"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:89
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:87
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
@@ -13363,90 +13372,97 @@ msgstr ""
 "Modèle en mode avancé, pour filtrer les noms de net en liste\n"
 "Seuls les noms de net correspondant à ce modèle seront listés."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:93
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:91
 msgid "Apply Filters"
 msgstr "Appliquer Filtres"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:103
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:101
 msgid "Settings"
 msgstr "Caractéristiques"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:108
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:106
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:48
 #: pcbnew/dialogs/dialog_drc_base.cpp:36
 msgid "Clearance"
 msgstr "Isolation"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:116
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:113
 msgid "Minimum width"
 msgstr "Épaisseur minimum"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:118
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:115
 msgid "Minimun thickness of filled areas."
 msgstr "Valeur de l'épaisseur minimum des zones remplies"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:122
 msgid "Corner smoothing:"
 msgstr "Traitement des angles:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Chamfer"
 msgstr "Chanfrein"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Fillet"
 msgstr "Arrondi"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:136
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:132
 msgid "Chamfer distance (mm):"
 msgstr "Distance de chanfreinage (mm):"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
-msgid "Pad connection:"
-msgstr "Connexion des pads:"
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:145
+msgid "Default pad connection:"
+msgstr "Connexion pad par défaut"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:147
+msgid ""
+"Default pad connection type to zone.\n"
+"This setting can be overridden by local  pad settings"
+msgstr ""
+"Type de connexion par défaut des pads à la zone.\n"
+"Ce paramètre peut être remplacé par les paramètres locaux du pad"
+
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "Solid"
 msgstr "Solide"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "Thermal relief"
 msgstr "Frein thermique"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 msgid "THT thermal"
 msgstr "Frein th. sur pad traversant"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
 msgid "Thermal Reliefs"
 msgstr "Freins thermiques"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:160
 msgid "Antipad clearance"
 msgstr "Isolation antipad"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:169
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:165
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Distance entre pads et la surface remplie"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:169
 msgid "Spoke width"
 msgstr "Épaisseur frein"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:174
 msgid "Width of copper in thermal reliefs."
 msgstr "Définit l'épaisseur du cuivre dans les freins thermiques."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:192
-msgid "Priority level:"
-msgstr "Niveau de Priorité:"
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:187
+msgid "Zone priority level:"
+msgstr "Niveau de priorité de la zone:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:189
 msgid ""
 "On each copper layer, zones are filled by priority order.\n"
 "So when a zone is inside an other zone:\n"
@@ -13459,53 +13475,53 @@ msgstr ""
 "* Si sa priorité est plus grande: son contour est retiré de l'autre zone\n"
 "* Si sa priorité est égale : Une erreur DRC est signalée."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:196
 msgid "Fill mode:"
 msgstr "Mode de remplissage:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:211
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:206
 msgid "Segments / 360 deg:"
 msgstr "Segments / 360 deg:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
 msgid "16"
 msgstr "16"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
 msgid "32"
 msgstr "32"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:222
 msgid "Outline slope:"
 msgstr "Direction des Contours:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 msgid "Arbitrary"
 msgstr "Quelconque"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 msgid "H, V, and 45 deg only"
 msgstr "H, V et 45  deg seulement"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:237
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Outline style:"
 msgstr "Style des Contours:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 msgid "Hatched"
 msgstr "Hachuré"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 msgid "Fully hatched"
 msgstr "Pleinement hachuré"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:256
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:251
 msgid "Export Settings to Other Zones"
 msgstr "Exporter Options vers Autres Zones"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:252
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
@@ -14499,7 +14515,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:181
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:40
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:413
-#: pcbnew/dialogs/dialog_plot_base.cpp:196
+#: pcbnew/dialogs/dialog_plot_base.cpp:194
 msgid "Solder mask clearance:"
 msgstr "Marge vernis épargne:"
 
@@ -15156,7 +15172,7 @@ msgid "Merge a session file created by FreeRouter with the current board."
 msgstr "Importer un fichier session créé par FreeRouter dans le C.I. courant."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:35
-#: pcbnew/dialogs/dialog_plot_base.cpp:51
+#: pcbnew/dialogs/dialog_plot_base.cpp:50
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
@@ -15296,8 +15312,8 @@ msgstr "Miroir sur axe Y"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid ""
-"Not recommanded.\n"
-"Used mostly by users who make themselves the boards."
+"Not recommended.\n"
+"Used mostly by users who make the boards themselves."
 msgstr ""
 "Non recommandé.\n"
 "Utilisé principalement par les utilisateurs qui font eux-mêmes leur CI."
@@ -15308,8 +15324,8 @@ msgstr "Entête minimal"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:91
 msgid ""
-"Not recommanded.\n"
-"Use it only for board houses which do not accept fully featured headers."
+"Not recommended.\n"
+"Only use for board houses which do not accept fully featured headers."
 msgstr ""
 "Non recommandé.\n"
 "Utilisez le uniquement pour les les fabricants qui n'acceptent pas les en-"
@@ -15321,9 +15337,9 @@ msgstr "Générer trous métallisés et non métallisés en 1 seul fichier."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid ""
-"Not recommanded.\n"
-"Use it only for board houses which ask for merged PTH and NPTH into onlu one "
-"file"
+"Not recommended.\n"
+"Only use for board houses which ask for merged PTH and NPTH into a single "
+"file."
 msgstr ""
 "Non recommandé.\n"
 "Utilisez le uniquement pour les fabricantsl qui demandent pour les trous "
@@ -15775,11 +15791,11 @@ msgstr ""
 "filtre.\n"
 "Un filtre peut être quelque chose comme SM* (insensible à la casse)"
 
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:57
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:56
 msgid "Current Text Dimensions"
 msgstr " Dimensions du Texte Courantes"
 
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:89
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:86
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:112
 msgid "Thickness:"
 msgstr "Épaisseur:"
@@ -16005,7 +16021,7 @@ msgid "Default pen size:"
 msgstr "Taille  plume par défaut:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:111
-#: pcbnew/dialogs/dialog_plot_base.cpp:169
+#: pcbnew/dialogs/dialog_plot_base.cpp:168
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:86
 msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
@@ -16689,7 +16705,7 @@ msgstr ""
 "du pad"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:54
-#: pcbnew/dialogs/dialog_plot_base.cpp:206
+#: pcbnew/dialogs/dialog_plot_base.cpp:204
 msgid "Solder mask min width:"
 msgstr "Largeur mini pour le vernis épargne:"
 
@@ -17128,29 +17144,29 @@ msgstr "Inclure Modules Verrouillés"
 msgid "Force locked footprints to be modified"
 msgstr "Force Modules Verrouillés à être modifiés"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:340
+#: pcbnew/dialogs/dialog_pad_properties.cpp:352
 msgid "Back side (footprint is mirrored)"
 msgstr "Coté cuivre (le module est en miroir)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:743
+#: pcbnew/dialogs/dialog_pad_properties.cpp:755
 msgid "Pad size must be greater than zero"
 msgstr "La taille de la pastille doit être plus grande que zéro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:749
+#: pcbnew/dialogs/dialog_pad_properties.cpp:761
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr ""
 "Valeur incorrecte pour diamètre de perçage: perçage plus grand que la taille "
 "du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:757
+#: pcbnew/dialogs/dialog_pad_properties.cpp:769
 msgid "Error: pad has no layer"
 msgstr "Erreur: le pad n'est sur aucune couche"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:764
+#: pcbnew/dialogs/dialog_pad_properties.cpp:776
 msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Erreur: le pad n'est pas sur une couche cuivre et a un trou"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:769
+#: pcbnew/dialogs/dialog_pad_properties.cpp:781
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
@@ -17159,19 +17175,19 @@ msgstr ""
 "trou,\n"
 "si vous ne voulez pas que ce pad soit généré dans les fichiers Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:789
+#: pcbnew/dialogs/dialog_pad_properties.cpp:801
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:795
+#: pcbnew/dialogs/dialog_pad_properties.cpp:807
 msgid "Too large value for pad delta size"
 msgstr "Valeur trop grande pour delta du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:803
+#: pcbnew/dialogs/dialog_pad_properties.cpp:815
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Erreur: pad à trou traversant: diamètre de perçage mis à 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:808
+#: pcbnew/dialogs/dialog_pad_properties.cpp:820
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -17179,17 +17195,17 @@ msgstr ""
 "Erreur: les pads de connecteurs ne sont pas sur la couche de pâte à souder\n"
 "Utiliser les pads CMS à la place."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:817
+#: pcbnew/dialogs/dialog_pad_properties.cpp:829
 msgid "Error: only one external copper layer allowed for SMD or Connector pads"
 msgstr ""
 "Erreur: une seule couche cuivre externe permise pour les pads CMS ou "
 "Connecteurs"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:824
+#: pcbnew/dialogs/dialog_pad_properties.cpp:836
 msgid "Pad setup errors list"
 msgstr "Erreurs sur Paramètres du Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:942
+#: pcbnew/dialogs/dialog_pad_properties.cpp:954
 msgid "Unknown netname, netname not changed"
 msgstr "Net inconnu, pas de changement"
 
@@ -17429,6 +17445,10 @@ msgstr ""
 msgid "Copper Zones"
 msgstr "Zones Cuivre"
 
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
+msgid "Pad connection:"
+msgstr "Connexion des pads:"
+
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:474
 msgid "From parent footprint"
 msgstr "Du parent de l'empreinte"
@@ -17481,27 +17501,23 @@ msgstr "Justification:"
 msgid "Orientation (0.1 deg):"
 msgstr "Orientation (0,1 deg):"
 
-#: pcbnew/dialogs/dialog_plot.cpp:594
+#: pcbnew/dialogs/dialog_plot.cpp:583
 msgid "HPGL pen size constrained."
 msgstr "Taille plume HPGL limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:607
-msgid "HPGL pen overlay constrained."
-msgstr "Valeur de recouvrement de plume HPGL limitée."
-
-#: pcbnew/dialogs/dialog_plot.cpp:619
+#: pcbnew/dialogs/dialog_plot.cpp:595
 msgid "Default line width constrained."
 msgstr "Épaisseur ligne par défaut limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:632
+#: pcbnew/dialogs/dialog_plot.cpp:608
 msgid "X scale constrained."
 msgstr "Échelle X limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:646
+#: pcbnew/dialogs/dialog_plot.cpp:622
 msgid "Y scale constrained."
 msgstr "Échelle Y limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:660
+#: pcbnew/dialogs/dialog_plot.cpp:636
 #, c-format
 msgid ""
 "Width correction constrained. The reasonable width correction value must be "
@@ -17510,13 +17526,13 @@ msgstr ""
 "Correction d'épaisseur limitée. La valeur raisonnable de correction doit "
 "être dans la plage  [%+f; %+f] (%s)  pour les regles du CI courant."
 
-#: pcbnew/dialogs/dialog_plot.cpp:723
-#: pcbnew/exporters/gen_modules_placefile.cpp:247
+#: pcbnew/dialogs/dialog_plot.cpp:699
+#: pcbnew/exporters/gen_modules_placefile.cpp:246
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Impossible d'écrire les fichiers de traçage dans le répertoire <%s>."
 
-#: pcbnew/dialogs/dialog_plot.cpp:825
+#: pcbnew/dialogs/dialog_plot.cpp:801
 #, c-format
 msgid "Plot file '%s' created."
 msgstr "Fichier de tracé '%s' créé."
@@ -17525,15 +17541,15 @@ msgstr "Fichier de tracé '%s' créé."
 msgid "Plot format:"
 msgstr "Format du tracé:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:90
+#: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Plot sheet reference on all layers"
 msgstr "Imprimer cartouche sur toutes les couches"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:93
+#: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Plot pads on silkscreen"
 msgstr "Tracer pads sur sérigraphie"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:94
+#: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid ""
 "Enable plotting of pads on silkscreen layers\n"
 "When disabled, pads are never plotted on silkscreen layers\n"
@@ -17544,118 +17560,118 @@ msgstr ""
 "Si désactivé, les pads sont tracés seulement s'ils apparaissent sur les "
 "couches de sérigraphie"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:98
+#: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Plot footprint values"
 msgstr "Tracer les valeurs des modules"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:102
+#: pcbnew/dialogs/dialog_plot_base.cpp:101
 msgid "Plot footprint references"
 msgstr "Tracer les références des modules"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:105
+#: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Force plotting of invisible values/references"
 msgstr "Force le tracé des valeurs et/ou références invisibles"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:106
+#: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid "Force plot invisible values and/or references"
 msgstr "Force le tracé des valeurs et/ou références invisibles"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:110
+#: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid "Do not tent vias"
 msgstr "Ne pas couvrir les vias"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:111
+#: pcbnew/dialogs/dialog_plot_base.cpp:110
 msgid "Remove soldermask on vias"
 msgstr "Supprimer le masque de vernis épargne sur vias"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:115
+#: pcbnew/dialogs/dialog_plot_base.cpp:114
 msgid "Exclude PCB edge layer from other layers"
 msgstr "Exclure les tracés contour PCB des autres couches"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:116
+#: pcbnew/dialogs/dialog_plot_base.cpp:115
 msgid "Exclude contents of the pcb edge layer from all other layers"
 msgstr "Exclure les tracés contour PCB des autres couches"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:120
+#: pcbnew/dialogs/dialog_plot_base.cpp:119
 msgid "Mirrored plot"
 msgstr "Tracé miroir"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:123
+#: pcbnew/dialogs/dialog_plot_base.cpp:122
 msgid "Negative plot"
 msgstr "Tracé en négatif"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:126
+#: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "Use auxiliary axis as origin"
 msgstr "Utiliser axe auxiliaire comme origine"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:126
 msgid "Use auxiliary axis as coordinates origin in plot files"
 msgstr ""
 "Utiliser l'axe auxiliaire comme origine des coordonnées dans les fichiers de "
 "tracé"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:137
+#: pcbnew/dialogs/dialog_plot_base.cpp:136
 msgid "Drill marks:"
 msgstr "Marques de perçage"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:141
+#: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Small"
 msgstr "Petit"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:141
+#: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Actual size"
 msgstr "Taille réelle"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:147
+#: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Scaling:"
 msgstr "Échelle:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/dialogs/dialog_plot_base.cpp:150
 msgid "Auto"
 msgstr "Auto"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/dialogs/dialog_plot_base.cpp:150
 msgid "1:1"
 msgstr "1:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/dialogs/dialog_plot_base.cpp:150
 msgid "3:2"
 msgstr "3:2"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/dialogs/dialog_plot_base.cpp:150
 msgid "2:1"
 msgstr "2:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:151
+#: pcbnew/dialogs/dialog_plot_base.cpp:150
 msgid "3:1"
 msgstr "3:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:157
+#: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "Plot mode:"
 msgstr "Mode de tracé:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:167
+#: pcbnew/dialogs/dialog_plot_base.cpp:166
 msgid "Default line width"
 msgstr "Épaiss. ligne par défaut"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:175
+#: pcbnew/dialogs/dialog_plot_base.cpp:173
 msgid "Line width for, e.g., sheet references."
 msgstr "Épaisseur de ligne pour, par ex. cartouche"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:189
+#: pcbnew/dialogs/dialog_plot_base.cpp:187
 msgid "Current solder mask settings:"
 msgstr "Réglages courants du masque de soudure:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:198
+#: pcbnew/dialogs/dialog_plot_base.cpp:196
 msgid "Margin between pads and solder mask"
 msgstr "Marge entre pads et le vernis épargne"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:202
-#: pcbnew/dialogs/dialog_plot_base.cpp:212
+#: pcbnew/dialogs/dialog_plot_base.cpp:200
+#: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "val"
 msgstr "val"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:208
+#: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid ""
 "Minimum distance between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting"
@@ -17664,44 +17680,44 @@ msgstr ""
 "Deux zones de pads plus proches que cette valeur seront fusionnées pour le "
 "traçage."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:222
+#: pcbnew/dialogs/dialog_plot_base.cpp:220
 msgid "Gerber Options"
 msgstr "Options Gerber"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:227
+#: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "Use Protel filename extensions"
 msgstr "Utiliser extensions Gerber Protel"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:228
+#: pcbnew/dialogs/dialog_plot_base.cpp:226
 msgid "Use conventional Protel Gerber extensions - .GBL, .GTL, etc..."
 msgstr "Utiliser les extensions GERBER type Protel - .GBL, .GTL, etc..."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:232
+#: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid "Include extended attributes"
 msgstr "Inclure attributs étendus"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:233
+#: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Include extended attributes (X2 Gerber files format) in the Gerber file"
 msgstr ""
 "Inclure les attributs étendus (Gerber X2 format) dans les fichiers Gerber"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:237
+#: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Subtract soldermask from silkscreen"
 msgstr "Soustraire masque de la couche sérigraphie"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:238
+#: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid "Remove silkscreen from areas without soldermask"
 msgstr "Supprimer toute sérigraphie sur les plages d'accueil de soudure."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:245
+#: pcbnew/dialogs/dialog_plot_base.cpp:243
 msgid "4.5 (unit mm)"
 msgstr "4.5 (unité mm)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:245
+#: pcbnew/dialogs/dialog_plot_base.cpp:243
 msgid "4.6 (unit mm)"
 msgstr "4.6 (unité mm)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:249
+#: pcbnew/dialogs/dialog_plot_base.cpp:247
 msgid ""
 "Resolution of coordinates in Gerber files.\n"
 "Use the higher value if possible."
@@ -17709,43 +17725,35 @@ msgstr ""
 "Précision des coordonnées dans les fichiers Gerber.\n"
 "Utiliser la plus grande valeur possible."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:264
+#: pcbnew/dialogs/dialog_plot_base.cpp:259
 msgid "Pen size"
 msgstr "Diam plume"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:278
-msgid "Pen overlay"
-msgstr "Recouvrement"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:284
-msgid "Set plot overlay for filling"
-msgstr "Ajuste recouvrement des tracés pour les remplissages"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:297
+#: pcbnew/dialogs/dialog_plot_base.cpp:272
 msgid "Postscript Options"
 msgstr "Options Postscript"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:305
+#: pcbnew/dialogs/dialog_plot_base.cpp:280
 msgid "X scale:"
 msgstr "Échelle X:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:311
+#: pcbnew/dialogs/dialog_plot_base.cpp:285
 msgid "Set global X scale adjust for exact scale postscript output."
 msgstr "Ajuster échelle globale X pour traçage PS à l'échelle exacte"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:321
+#: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "Y scale:"
 msgstr "Échelle Y:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:327
+#: pcbnew/dialogs/dialog_plot_base.cpp:300
 msgid "Set global Y scale adjust for exact scale postscript output."
 msgstr "Ajuster échelle globale Y pour traçage PS à l'échelle exacte"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:337
+#: pcbnew/dialogs/dialog_plot_base.cpp:310
 msgid "Width correction"
 msgstr "Correction de largeur"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:343
+#: pcbnew/dialogs/dialog_plot_base.cpp:315
 msgid ""
 "Set global width correction for exact width postscript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -17760,31 +17768,31 @@ msgstr ""
 "La correction raisonnable doit être dans la gamme [-(MinTrackWidth-1), "
 "+(MinClearanceValue-1)]."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:353
+#: pcbnew/dialogs/dialog_plot_base.cpp:325
 msgid "Force A4 output"
 msgstr "Force format A4"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:383
+#: pcbnew/dialogs/dialog_plot_base.cpp:355
 msgid "Generate Drill File"
 msgstr "Créer Fichier de Perçage"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:397
+#: pcbnew/dialogs/dialog_plot_base.cpp:369
 msgid "Select Fab Layers"
 msgstr "Sélection Couches pour Fabr."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:401
+#: pcbnew/dialogs/dialog_plot_base.cpp:373
 msgid "Select all Copper Layers"
 msgstr "Sélection Toutes Couches Cuivre"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:405
+#: pcbnew/dialogs/dialog_plot_base.cpp:377
 msgid "Deselect all Copper Layers"
 msgstr "Désélection Toutes Couches Cuivre"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:409
+#: pcbnew/dialogs/dialog_plot_base.cpp:381
 msgid "Select all Layers"
 msgstr "Sélection Toutes Couches"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:413
+#: pcbnew/dialogs/dialog_plot_base.cpp:385
 msgid "Deselect all Layers"
 msgstr "Désélection Toutes Couches"
 
@@ -18710,47 +18718,47 @@ msgstr ""
 "Erreur en export VRML:\n"
 "Impossible d'ajouter les trous aux contours."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:234
+#: pcbnew/exporters/gen_modules_placefile.cpp:233
 msgid "No footprint for automated placement."
 msgstr "Pas d'empreinte pour placement automatisé"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:274
+#: pcbnew/exporters/gen_modules_placefile.cpp:273
 #, c-format
 msgid "Unable to create '%s'."
 msgstr "Impossible de créer '%s'."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:281
+#: pcbnew/exporters/gen_modules_placefile.cpp:280
 #, c-format
 msgid "Place file: '%s'."
 msgstr "Fichier placement: '%s'."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:283
+#: pcbnew/exporters/gen_modules_placefile.cpp:282
 #, c-format
 msgid "Front side (top side) place file: '%s'."
 msgstr "Fichier placement côté composant (dessus): '%s'."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:287
-#: pcbnew/exporters/gen_modules_placefile.cpp:321
+#: pcbnew/exporters/gen_modules_placefile.cpp:286
+#: pcbnew/exporters/gen_modules_placefile.cpp:320
 #, c-format
 msgid "Component count: %d."
 msgstr "Nombre de composants: %d"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:292
-#: pcbnew/exporters/gen_modules_placefile.cpp:333
+#: pcbnew/exporters/gen_modules_placefile.cpp:291
+#: pcbnew/exporters/gen_modules_placefile.cpp:332
 msgid "Componment Placement File generation OK."
 msgstr "Génération du fichier de  Placement de Composants OK."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:318
+#: pcbnew/exporters/gen_modules_placefile.cpp:317
 #, c-format
 msgid "Back side (bottom side) place file: '%s'."
 msgstr "Fichier placement côté soudure (dessous): '%s'."
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:329
+#: pcbnew/exporters/gen_modules_placefile.cpp:328
 #, c-format
 msgid "Full component count: %d\n"
 msgstr "Nombre total de composants: %d\n"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:579
+#: pcbnew/exporters/gen_modules_placefile.cpp:558
 #, c-format
 msgid ""
 "Footprint report file created:\n"
@@ -18759,11 +18767,11 @@ msgstr ""
 "Fichier rapport sur empreintes créé:\n"
 "'%s'"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:581
+#: pcbnew/exporters/gen_modules_placefile.cpp:560
 msgid "Footprint Report"
 msgstr "Rapport sur Empreintes"
 
-#: pcbnew/exporters/gen_modules_placefile.cpp:586
+#: pcbnew/exporters/gen_modules_placefile.cpp:565
 #, c-format
 msgid "Unable to create '%s'"
 msgstr "Incapable de créer '%s'"
@@ -18940,7 +18948,7 @@ msgstr ""
 "Erreur de récupération des données JSON depuis l'URL '%s'.\n"
 "Raison: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:282
+#: pcbnew/github/github_plugin.cpp:283
 #, c-format
 msgid ""
 "Footprint\n"
@@ -18953,7 +18961,7 @@ msgstr ""
 "n'est pas dans la partie inscriptible de cette librairie sur Github\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:343
+#: pcbnew/github/github_plugin.cpp:344
 msgid ""
 "Set this property to a directory where footprints are to be written as "
 "pretty footprints when saving to this library. Anything saved will take "
@@ -18970,7 +18978,7 @@ msgstr ""
 "avoir <b>.pretty</b> comme extension parce que  le format de sauvegarde est "
 "pretty.</p>"
 
-#: pcbnew/github/github_plugin.cpp:393
+#: pcbnew/github/github_plugin.cpp:394
 #, c-format
 msgid ""
 "option '%s' for Github library '%s' must point to a writable directory "
@@ -18979,7 +18987,7 @@ msgstr ""
 "l'option '%s' pour la librairie Github '%s' doit pointer un répertoire "
 "inscriptible dont le nom finit par  '.pretty'."
 
-#: pcbnew/github/github_plugin.cpp:520
+#: pcbnew/github/github_plugin.cpp:521
 #, c-format
 msgid ""
 "Unable to parse URL:\n"
@@ -18988,7 +18996,7 @@ msgstr ""
 "Impossible d'analyser l'URL:\n"
 "<%s>"
 
-#: pcbnew/github/github_plugin.cpp:544
+#: pcbnew/github/github_plugin.cpp:545
 #, c-format
 msgid ""
 "%s\n"
@@ -19001,7 +19009,7 @@ msgstr ""
 "à partir du chemin librairie: '%s'.\n"
 "Raison: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:560
+#: pcbnew/github/github_plugin.cpp:561
 #, c-format
 msgid ""
 "Cannot download library '%s'.\n"
@@ -22042,11 +22050,11 @@ msgstr ""
 "Les microvias peuvent être placées seulement entre une couche extérieure (F."
 "Cu/B.Cu) et celle adjacente."
 
-#: pcbnew/router/router_tool.cpp:649
+#: pcbnew/router/router_tool.cpp:651
 msgid "Route Track"
 msgstr "Router Piste"
 
-#: pcbnew/router/router_tool.cpp:656
+#: pcbnew/router/router_tool.cpp:658
 msgid "Router Differential Pair"
 msgstr "Router Paire Différentielle"
 
@@ -22062,13 +22070,13 @@ msgstr "PCB exporté Ok."
 msgid "Unable to export, please fix and try again."
 msgstr "Impossible d'exporter, fixer le problème et recommencer"
 
-#: pcbnew/specctra_export.cpp:1025 pcbnew/specctra_export.cpp:1132
-#: pcbnew/specctra_export.cpp:1268
+#: pcbnew/specctra_export.cpp:1034 pcbnew/specctra_export.cpp:1141
+#: pcbnew/specctra_export.cpp:1277
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "DRAWSEGMENT type %s non supporté"
 
-#: pcbnew/specctra_export.cpp:1157
+#: pcbnew/specctra_export.cpp:1166
 #, c-format
 msgid ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s "
@@ -22080,7 +22088,7 @@ msgstr ""
 "Éditer le contour. Modifier les éléments graphiques du contour extérieur "
 "pour former un polygone fermé."
 
-#: pcbnew/specctra_export.cpp:1293
+#: pcbnew/specctra_export.cpp:1302
 #, c-format
 msgid ""
 "Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
@@ -22091,12 +22099,12 @@ msgstr ""
 "Éditer le contour. Modifier les éléments graphiques du contour intérieur "
 "pour former un polygone fermé."
 
-#: pcbnew/specctra_export.cpp:1452
+#: pcbnew/specctra_export.cpp:1461
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Le composant avec valeur '%s' a une référence vide."
 
-#: pcbnew/specctra_export.cpp:1460
+#: pcbnew/specctra_export.cpp:1469
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "De multiple composants ont une référence identique  '%s'."
@@ -22828,12 +22836,12 @@ msgstr "Sélection..."
 msgid "Zoom"
 msgstr "Zoom"
 
-#: pcbnew/tools/selection_tool.cpp:554
+#: pcbnew/tools/selection_tool.cpp:559
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr ""
 "La sélection contient des éléments verrouillés. Voulez vous continuer ?"
 
-#: pcbnew/tools/selection_tool.cpp:787
+#: pcbnew/tools/selection_tool.cpp:795
 msgid "Clarify selection"
 msgstr "Clarification sélection"
 
@@ -22993,12 +23001,6 @@ msgstr "Éditeur d'Image"
 #: common/dialogs/dialog_page_settings_base.h:121
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
-
-#: cvpcb/common_help_msg.h:28
-msgid "Save footprint association in schematic component footprint fields"
-msgstr ""
-"Sauve l'association des empreintes dans le champ empreinte des composants en "
-"schématique."
 
 #: cvpcb/dialogs/dialog_display_options_base.h:63
 #: pcbnew/dialogs/dialog_display_options_base.h:72
@@ -23442,6 +23444,51 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
+
+#~ msgid "Save changes to the project configuration file"
+#~ msgstr "Sauver les changements dans le fichier de configuration du projet"
+
+#~ msgid "App&end Schematic Sheet"
+#~ msgstr "Ajout&er Feuille de Schéma"
+
+#~ msgid "Append schematic sheet to current project"
+#~ msgstr "Ajouter une autre feuille de schéma au projet courant"
+
+#~ msgid "Priority level:"
+#~ msgstr "Niveau de Priorité:"
+
+#~ msgid ""
+#~ "Not recommanded.\n"
+#~ "Used mostly by users who make themselves the boards."
+#~ msgstr ""
+#~ "Non recommandé.\n"
+#~ "Utilisé principalement par les utilisateurs qui font eux-mêmes leur CI."
+
+#~ msgid ""
+#~ "Not recommanded.\n"
+#~ "Use it only for board houses which do not accept fully featured headers."
+#~ msgstr ""
+#~ "Non recommandé.\n"
+#~ "Utilisez le uniquement pour les les fabricants qui n'acceptent pas les en-"
+#~ "têtes complets."
+
+#~ msgid ""
+#~ "Not recommanded.\n"
+#~ "Use it only for board houses which ask for merged PTH and NPTH into onlu "
+#~ "one file"
+#~ msgstr ""
+#~ "Non recommandé.\n"
+#~ "Utilisez le uniquement pour les fabricantsl qui demandent pour les trous "
+#~ "métallisés  et non métallisés soient fusionnés en un seul fichier."
+
+#~ msgid "HPGL pen overlay constrained."
+#~ msgstr "Valeur de recouvrement de plume HPGL limitée."
+
+#~ msgid "Pen overlay"
+#~ msgstr "Recouvrement"
+
+#~ msgid "Set plot overlay for filling"
+#~ msgstr "Ajuste recouvrement des tracés pour les remplissages"
 
 #~ msgid "Search the current &sheet onl&y"
 #~ msgstr "Chercher dans la &feuille courante uniquement"
