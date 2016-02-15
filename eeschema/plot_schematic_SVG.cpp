@@ -34,7 +34,6 @@
 #include <schframe.h>
 #include <base_units.h>
 #include <libeditframe.h>
-#include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <project.h>
 #include <reporter.h>
@@ -68,7 +67,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
                 m_parent->SetCurrentSheet( list );
-                m_parent->GetCurrentSheet().Last()->UpdateAllScreenReferences();
+                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
                 m_parent->SetSheetNumberAndCount();
                 screen = m_parent->GetCurrentSheet().LastScreen();
             }
@@ -110,14 +109,14 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
                 reporter.Report( msg, REPORTER::RPT_ERROR );
 
                 m_parent->SetCurrentSheet( oldsheetpath );
-                m_parent->GetCurrentSheet().Last()->UpdateAllScreenReferences();
+                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
                 m_parent->SetSheetNumberAndCount();
                 return;
             }
         }
 
         m_parent->SetCurrentSheet( oldsheetpath );
-        m_parent->GetCurrentSheet().Last()->UpdateAllScreenReferences();
+        m_parent->GetCurrentSheet().UpdateAllScreenReferences();
         m_parent->SetSheetNumberAndCount();
     }
     else    // Print current sheet

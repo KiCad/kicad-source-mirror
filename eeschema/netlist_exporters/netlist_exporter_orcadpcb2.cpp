@@ -99,7 +99,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName, uns
             else
                 footprint = wxT( "$noname" );
 
-            field = comp->GetRef( path->Last() );
+            field = comp->GetRef( path );
 
             ret |= fprintf( f, " ( %s %s",
                             TO_UTF8( comp->GetPath( path->Last() ) ),
