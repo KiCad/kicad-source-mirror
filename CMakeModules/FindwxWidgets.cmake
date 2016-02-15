@@ -898,7 +898,6 @@ DBG_MSG("wxWidgets_VERSION_PATCH   : ${wxWidgets_VERSION_PATCH}")
 include(FindPackageHandleStandardArgs)
 
 find_package_handle_standard_args(wxWidgets
-  FOUND_VAR     wxWidgets_FOUND
   REQUIRED_VARS wxWidgets_LIBRARIES wxWidgets_INCLUDE_DIRS
   VERSION_VAR   wxWidgets_VERSION_STRING
   )
