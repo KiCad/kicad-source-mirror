@@ -562,7 +562,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
 
         # If release config selected, and both release/debug exist.
         if(WX_${wxWidgets_CONFIGURATION}d_FOUND)
-          OPTION(wxWidgets_USE_REL_AND_DBG
+          option(wxWidgets_USE_REL_AND_DBG
             "Use release and debug configurations?" TRUE)
           set(WX_USE_REL_AND_DBG ${wxWidgets_USE_REL_AND_DBG})
         else()
@@ -672,7 +672,7 @@ else()
         )
       string(TOUPPER ${_OPT_NAME} _UPPER_OPT_NAME)
       if(_wx_result_yes EQUAL 0 AND _wx_result_no EQUAL 0)
-        OPTION(wxWidgets_USE_${_UPPER_OPT_NAME}
+        option(wxWidgets_USE_${_UPPER_OPT_NAME}
           ${_OPT_HELP} ${wxWidgets_DEFAULT_${_UPPER_OPT_NAME}})
       else()
         # If option exists (already in cache), force to available one.
@@ -1073,7 +1073,7 @@ function(WXWIDGETS_ADD_RESOURCES _outfiles)
   # - short option scanning
   list(FIND rc_options -o index)
   if(NOT index EQUAL -1)
-    MATH(EXPR filename_index "${index} + 1")
+    math(EXPR filename_index "${index} + 1")
     list(GET rc_options ${filename_index} outfile)
     #list(REMOVE_AT rc_options ${index} ${filename_index})
   endif()
