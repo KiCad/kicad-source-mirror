@@ -736,24 +736,6 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent
 }
 
 
-int SCH_REFERENCE::CompareLibName( const SCH_REFERENCE& item ) const
-{
-    return Cmp_KEEPCASE( m_RootCmp->GetPartName(), item.m_RootCmp->GetPartName() );
-}
-
-
-bool SCH_REFERENCE::IsSameInstance( const SCH_REFERENCE& other ) const
-{
-    return GetComp() == other.GetComp() && GetSheet()->GetPath() == other.GetSheet()->GetPath();
-}
-
-
-bool SCH_REFERENCE::IsUnitsLocked() const
-{
-    return m_Entry->UnitsLocked();
-}
-
-
 void SCH_REFERENCE::Annotate()
 {
     if( m_NumRef < 0 )

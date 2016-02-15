@@ -33,7 +33,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 #include <sch_text.h>
-#include <sch_reference_list.h>
 
 
 class PART_LIBS;
@@ -45,6 +44,7 @@ class SCH_SHEET_PATH;
 class DANGLING_END_ITEM;
 class SCH_EDIT_FRAME;
 class NETLIST_OBJECT_LIST;
+class SCH_REFERENCE_LIST;
 
 
 #define MIN_SHEET_WIDTH  500
@@ -699,19 +699,6 @@ public:
      */
     void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
                         bool aIncludePowerSymbols = true, bool aIncludeSubSheets = true );
-
-    /**
-     * Function GetMultiUnitComponents
-     * adds a SCH_REFERENCE_LIST object to \a aRefList for each component with multiple units
-     * that has the same reference designator for this sheet and all of it's sub-sheets. The
-     * map key for each element will be the reference designator.
-     *
-     * @param aLibs a pointer to the #PART_LIB to use.
-     * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols : false to only get normal components.
-     */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                 bool aIncludePowerSymbols = true );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

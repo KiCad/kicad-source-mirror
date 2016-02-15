@@ -34,7 +34,6 @@
 #include <schframe.h>
 
 #include <class_library.h>
-#include <sch_reference_list.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 
@@ -94,11 +93,11 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     {
         if( aAnnotateSchematic )
         {
-            g_RootSheet->GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
+            sheets.GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
         }
         else
         {
-            m_CurrentSheet->Last()->GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
+            m_CurrentSheet->GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
         }
     }
 

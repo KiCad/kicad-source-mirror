@@ -42,6 +42,7 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <class_netlist_object.h>
+#include <sch_reference_list.h>
 
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
@@ -1420,46 +1421,6 @@ SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
     }
 
     return *this;
-}
-
-
-void SCH_SHEET::GetMultiUnitComponents( PART_LIBS*                    aLibs,
-                                        SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                        bool                          aIncludePowerSymbols )
-{
-    for( SCH_ITEM* item = m_screen->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_SHEET_T )
-        {
-            ( (SCH_SHEET*) item )->GetMultiUnitComponents( aLibs, aRefList, aIncludePowerSymbols );
-            continue;
-        }
-
-        if( item->Type() != SCH_COMPONENT_T )
-            continue;
-
-        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-
-        // Skip pseudo components, which have a reference starting with #.  This mainly
-        // affects power symbols.
-        if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
-            continue;
-
-        LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
-
-        if( part && part->GetUnitCount() > 1 )
-        {
-            SCH_REFERENCE reference = SCH_REFERENCE( component, part, this );
-            reference.SetSheetNumber( m_number );
-            wxString reference_str = reference.GetRef();
-
-            // Never lock unassigned references
-            if( reference_str[reference_str.Len() - 1] == '?' )
-                continue;
-
-            aRefList[reference_str].AddItem( reference );
-        }
-    }
 }
 
 

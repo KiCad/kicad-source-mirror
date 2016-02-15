@@ -227,6 +227,47 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 }
 
 
+void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs,
+                                             SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+                                             bool aIncludePowerSymbols )
+{
+    // Find sheet path number
+    int sheetnumber = 1; // 1 = root
+
+    SCH_SHEET_LIST sheetList;
+
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext(), sheetnumber++ )
+    {
+        if( Cmp( *path ) == 0 )
+            break;
+    }
+
+    for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T ) continue;
+        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+        // Skip pseudo components, which have a reference starting with #.  This mainly
+        // affects power symbols.
+        if( !aIncludePowerSymbols && component->GetRef( Last() )[0] == wxT( '#' ) )
+            continue;
+
+        LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
+        if( part && part->GetUnitCount() > 1 )
+        {
+            SCH_REFERENCE reference = SCH_REFERENCE( component, part, Last() );
+            reference.SetSheetNumber( sheetnumber );
+            wxString reference_str = reference.GetRef();
+
+            // Never lock unassigned references
+            if( reference_str[reference_str.Len() - 1] == '?' ) continue;
+
+            aRefList[reference_str].AddItem( reference );
+        }
+    }
+}
+
+
 SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
 {
     bool hasWrapped = false;
@@ -551,6 +592,29 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     }
 
     m_currList.Pop();
+}
+
+
+void SCH_SHEET_LIST::GetMultiUnitComponents( PART_LIBS* aLibs,
+                                             SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+                                             bool aIncludePowerSymbols )
+{
+    for( SCH_SHEET_PATH* path = GetFirst(); path; path = GetNext() )
+    {
+        SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
+        path->GetMultiUnitComponents( aLibs, tempMap );
+
+        BOOST_FOREACH( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair, tempMap )
+        {
+            // Merge this list into the main one
+            unsigned n_refs = pair.second.GetCount();
+
+            for( unsigned thisRef = 0; thisRef < n_refs; ++thisRef )
+            {
+                aRefList[pair.first].AddItem( pair.second[thisRef] );
+            }
+        }
+    }
 }
 
 
