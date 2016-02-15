@@ -219,8 +219,6 @@ endif()
 #=====================================================================
 # Determine whether unix or win32 paths should be used
 #=====================================================================
-
-
 if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_HOST_UNIX )
   set(wxWidgets_FIND_STYLE "win32")
 else()
@@ -903,7 +901,6 @@ if(wxWidgets_FOUND)
     "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}.${wxWidgets_VERSION_PATCH}" )
   DBG_MSG("wxWidgets_VERSION_STRING:    ${wxWidgets_VERSION_STRING}")
 endif()
-
 
 # Debug output:
 DBG_MSG("wxWidgets_FOUND           : ${wxWidgets_FOUND}")
