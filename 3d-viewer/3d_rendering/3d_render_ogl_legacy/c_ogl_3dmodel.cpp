@@ -29,7 +29,7 @@
 
 #include "c_ogl_3dmodel.h"
 #include "ogl_legacy_utils.h"
-#include "common_ogl/ogl_utils.h"
+#include "../common_ogl/ogl_utils.h"
 #include <wx/debug.h>
 
 
@@ -74,6 +74,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     (mesh.m_FaceIdx != NULL) &&
                     (mesh.m_FaceIdxSize > 0) && (mesh.m_VertexSize > 0) )
                 {
+                    SFVEC4F        *pColorRGBA = NULL;
+
                     // Create the bbox for this mesh
                     // /////////////////////////////////////////////////////////
                     m_meshs_bbox[mesh_i].Reset();
@@ -98,7 +100,29 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     if( mesh.m_Color != NULL )
                     {
                         glEnableClientState( GL_COLOR_ARRAY );
-                        glColorPointer( 3, GL_FLOAT, 0, mesh.m_Color );
+
+                        float transparency = 0.0f;
+
+                        if( mesh.m_MaterialIdx < a3DModel.m_MaterialsSize )
+                            transparency = a3DModel.m_Materials[mesh.m_MaterialIdx].m_Transparency;
+
+                        if( transparency > FLT_EPSILON )
+                        {
+                            // Create a new array of RGBA colors
+                            pColorRGBA = new SFVEC4F[mesh.m_VertexSize];
+
+                            // Copy RGB array and add the Alpha value
+                            for( unsigned int i = 0; i < mesh.m_VertexSize; ++i )
+                                pColorRGBA[i] = SFVEC4F( mesh.m_Color[i], 1.0f - transparency );
+
+                            // Load an RGBA array
+                            glColorPointer( 4, GL_FLOAT, 0, pColorRGBA );
+                        }
+                        else
+                        {
+                            // Else load the original RGB color array
+                            glColorPointer( 3, GL_FLOAT, 0, mesh.m_Color );
+                        }
                     }
 
                     if( mesh.m_Texcoords != NULL )
@@ -144,6 +168,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     glDisableClientState( GL_COLOR_ARRAY );
                     glDisableClientState( GL_NORMAL_ARRAY );
                     glDisableClientState( GL_VERTEX_ARRAY );
+
+                    delete pColorRGBA;
                 }
             }
         }// for each mesh
@@ -287,6 +313,7 @@ void C_OGL_3DMODEL::Draw_bboxes() const
     for( unsigned int mesh_i = 0; mesh_i < m_nr_meshes; ++mesh_i )
         OGL_draw_bbox( m_meshs_bbox[mesh_i] );
 }
+
 
 bool C_OGL_3DMODEL::Have_opaque() const
 {
