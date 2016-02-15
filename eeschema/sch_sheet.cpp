@@ -811,11 +811,6 @@ void SCH_SHEET::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "File Name" ), m_fileName, BROWN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Path" ), GetHumanReadablePath(), DARKMAGENTA ) );
 
-    if( IsRootSheet() )
-        aList.push_back( MSG_PANEL_ITEM( _( "Hierarchy Type" ),
-                                         IsComplexHierarchy() ? _( "Complex" ) : _( "Simple" ),
-                                         GREEN ) );
-
 #if 1   // Set to 1 to display the sheet time stamp (mainly for test)
     aList.push_back( MSG_PANEL_ITEM( _( "Time Stamp" ), GetPath(), BLUE ) );
 #endif
@@ -1166,27 +1161,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 }
 
 
-unsigned SCH_SHEET::GetSheets( std::vector<const SCH_SHEET*>& aSheetList ) const
-{
-    // Sheet pointers must be unique.
-    wxASSERT( find( aSheetList.begin(), aSheetList.end(), this ) == aSheetList.end() );
-
-    aSheetList.push_back( this );
-
-    const SCH_ITEM* item = m_screen->GetDrawItems();
-
-    while( item )
-    {
-        if( item->Type() == SCH_SHEET_T )
-            ( (SCH_SHEET*) item )->GetSheets( aSheetList );
-
-        item = item->Next();
-    }
-
-    return aSheetList.size();
-}
-
-
 SCH_SHEET* SCH_SHEET::GetRootSheet()
 {
     EDA_ITEM* parent = GetParent();
@@ -1486,60 +1460,6 @@ void SCH_SHEET::GetMultiUnitComponents( PART_LIBS*                    aLibs,
             aRefList[reference_str].AddItem( reference );
         }
     }
-}
-
-
-bool SCH_SHEET::IsComplexHierarchy() const
-{
-    std::set<wxString> fileNames;
-    std::vector< const SCH_SHEET* > sheets;
-
-    unsigned count = GetSheets( sheets );
-
-    for( unsigned i = 0;  i < count;  i++ )
-    {
-        if( fileNames.find( sheets[i]->m_fileName ) != fileNames.end() )
-            return true;
-
-        fileNames.insert( sheets[i]->m_fileName );
-    }
-
-    return false;
-}
-
-
-SCH_ITEM* SCH_SHEET::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
-{
-    wxCHECK( m_screen != NULL, NULL );
-
-    bool hasWrapped = false;
-    bool firstItemFound = false;
-    SCH_ITEM* drawItem = m_screen->GetDrawItems();
-
-    while( drawItem )
-    {
-        if( drawItem->Type() == aType )
-        {
-            if( !aLastItem || firstItemFound )
-            {
-                return drawItem;
-            }
-            else if( !firstItemFound && drawItem == aLastItem )
-            {
-                firstItemFound = true;
-            }
-        }
-
-        drawItem = drawItem->Next();
-
-        if( !drawItem && aLastItem && aWrap && !hasWrapped )
-        {
-            hasWrapped = true;
-            drawItem = m_screen->GetDrawItems();
-        }
-    }
-
-    return NULL;
 }
 
 

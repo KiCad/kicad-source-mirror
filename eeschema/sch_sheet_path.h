@@ -209,6 +209,31 @@ public:
     bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
 
     /**
+     * Function SetFootprintField
+     * searches last sheet in the path for a component with \a aReference and set the footprint
+     * field to \a aFootPrint if found.
+     *
+     * @param aReference The reference designator of the component.
+     * @param aFootPrint The value to set the footprint field.
+     * @param aSetVisible The value to set the field visibility flag.
+     * @return True if \a aReference was found otherwise false.
+     */
+    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                bool aSetVisible );
+
+    /**
+     * Find the next schematic item in this sheet object.
+     *
+     * @param aType - The type of schematic item object to search for.
+     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
+     *                    the beginning of the list.
+     * @param aWrap - Wrap around the end of the list to find the next item if aLastItem
+     *                is defined.
+     * @return - The next schematic item if found.  Otherwise, NULL is returned.
+     */
+    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
+
+    /**
      * Find the previous schematic item in this sheet path object.
      *
      * @param aType - The type of schematic item object to search for.
@@ -387,6 +412,28 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
                                 SCH_ITEM* aLastItem = NULL, bool aWrap = true );
+
+    /**
+     * Function SetFootprintField
+     * searches all the sheets for a component with \a aReference and set the footprint
+     * field to \a aFootPrint if found.
+     *
+     * @param aReference The reference designator of the component.
+     * @param aFootPrint The value to set the footprint field.
+     * @param aSetVisible The value to set the field visibility flag.
+     * @return True if \a aReference was found otherwise false.
+     */
+    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                bool aSetVisible );
+
+    /**
+     * Function IsComplexHierarchy
+     * searches all of the sheets for duplicate files names which indicates a complex
+     * hierarchy.
+     *
+     * @return true if the #SCH_SHEET_LIST is a complex hierarchy.
+     */
+    bool IsComplexHierarchy() const;
 
     /**
      * Function TestForRecursion

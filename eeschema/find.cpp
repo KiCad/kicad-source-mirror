@@ -71,8 +71,7 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
     if( event.GetFlags() & FR_CURRENT_SHEET_ONLY )
     {
         sheetFoundIn = m_CurrentSheet;
-        lastMarker = (SCH_MARKER*) m_CurrentSheet->Last()->FindNextItem( SCH_MARKER_T,
-                                                                         lastMarker, wrap );
+        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( SCH_MARKER_T, lastMarker, wrap );
     }
     else
     {
