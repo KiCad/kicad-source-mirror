@@ -836,6 +836,7 @@ else()
 
       else()
         set(wxWidgets_FOUND FALSE)
+        DBG_MSG("${wxWidgets_CONFIG_EXECUTABLE} --libs ${wxWidgets_FIND_COMPONENTS} FAILED with RET=${RET}")
       endif()
     endif()
 
