@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,6 +294,30 @@ bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 }
 
 
+int SCH_SHEET_PATH::FindSheet( const wxString& aFileName ) const
+{
+    for( unsigned i = 0; i < m_numSheets; i++ )
+    {
+        if( m_sheets[i]->GetFileName().CmpNoCase( aFileName ) == 0 )
+            return (int)i;
+    }
+
+    return SHEET_NOT_FOUND;
+}
+
+
+SCH_SHEET* SCH_SHEET_PATH::FindSheetByName( const wxString& aSheetName )
+{
+    for( unsigned i = 0; i < m_numSheets; i++ )
+    {
+        if( m_sheets[i]->GetName().CmpNoCase( aSheetName ) == 0 )
+            return m_sheets[i];
+    }
+
+    return NULL;
+}
+
+
 /********************************************************************/
 /* Class SCH_SHEET_LIST to handle the list of Sheets in a hierarchy */
 /********************************************************************/
@@ -507,6 +531,20 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
             hasWrapped = true;
             sheet = GetLast();
         }
+    }
+
+    return NULL;
+}
+
+
+SCH_SHEET* SCH_SHEET_LIST::FindSheetByName( const wxString& aSheetName )
+{
+    for( int i = 0; i < m_count; i++ )
+    {
+        SCH_SHEET* sheet = m_list[i].FindSheetByName( aSheetName );
+
+        if( sheet )
+            return sheet;
     }
 
     return NULL;

@@ -220,6 +220,18 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
+    int FindSheet( const wxString& aFileName ) const;
+
+    /**
+     * Function FindSheetByName
+     *
+     * searches the #SCH_SHEET_PATH for a sheet named \a aSheetName.
+     *
+     * @param aSheetName is the name of the sheet to find.
+     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
+
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& d1 );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
@@ -362,6 +374,16 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
                                 SCH_ITEM* aLastItem = NULL, bool aWrap = true );
+
+    /**
+     * Function FindSheetByName
+     *
+     * searches the entire #SCH_SHEET_LIST for a sheet named \a aSheetName.
+     *
+     * @param aSheetName is the name of the sheet to find.
+     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
 private:
 
