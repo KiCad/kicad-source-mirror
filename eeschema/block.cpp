@@ -475,11 +475,10 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
             if( srcFn.IsRelative() )
                 srcFn.MakeAbsolute( Prj().GetProjectPath() );
 
-            std::vector< std::vector< const SCH_SHEET* > > sheetHierarchy;
-            sheet->GetSheetPaths( sheetHierarchy );
+            SCH_SHEET_LIST sheetHierarchy( sheet );
 
-            if( g_RootSheet->TestForRecursion( sheetHierarchy,
-                                               destFn.GetFullPath( wxPATH_UNIX ) ) )
+            if( hierarchy.TestForRecursion( sheetHierarchy,
+                                            destFn.GetFullPath( wxPATH_UNIX ) ) )
             {
                 wxString msg;
 

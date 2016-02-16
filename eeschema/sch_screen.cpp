@@ -755,7 +755,7 @@ int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) 
 }
 
 
-void SCH_SCREEN::ClearAnnotation( SCH_SHEET* aSheet )
+void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
@@ -763,7 +763,7 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET* aSheet )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-            component->ClearAnnotation( aSheet );
+            component->ClearAnnotation( aSheetPath );
 
             // Clear the modified component flag set by component->ClearAnnotation
             // because we do not use it here and we should not leave this flag set,
@@ -1103,7 +1103,7 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
 }
 
 
-bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET* aSheet, const wxString& aReference,
+bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
                                         const wxString& aFootPrint, bool aSetVisible )
 {
     SCH_COMPONENT* component;
@@ -1116,7 +1116,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET* aSheet, const wxString& aRefe
 
         component = (SCH_COMPONENT*) item;
 
-        if( aReference.CmpNoCase( component->GetRef( aSheet ) ) == 0 )
+        if( aReference.CmpNoCase( component->GetRef( aSheetPath ) ) == 0 )
         {
             // Found: Init Footprint Field
 
@@ -1125,7 +1125,6 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET* aSheet, const wxString& aRefe
              * it is probably not yet initialized
              */
             SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
-
             if( fpfield->GetText().IsEmpty()
               && ( fpfield->GetTextPosition() == component->GetPosition() ) )
             {
@@ -1429,6 +1428,13 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
             strct = strct->Next();
         }
     }
+}
+
+
+void SCH_SCREENS::ClearAnnotation()
+{
+    for( size_t i = 0;  i < m_screens.size();  i++ )
+        m_screens[i]->ClearAnnotation( NULL );
 }
 
 

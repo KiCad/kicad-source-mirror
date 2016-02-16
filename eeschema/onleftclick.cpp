@@ -98,11 +98,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         else
         {
             item = LocateAndShowItem( aPosition );
-
-            // Show the sheet information when the user clicks anywhere there are no items
-            // in the schematic.
-            if( item == NULL )
-                SetMsgPanel( GetCurrentSheet().Last() );
         }
     }
 

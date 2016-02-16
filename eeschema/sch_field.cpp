@@ -48,7 +48,6 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_field.h>
-#include <sch_sheet_path.h>
 #include <kicad_string.h>
 
 
@@ -402,7 +401,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
         wxCHECK_MSG( component != NULL, false,
                      wxT( "No component associated with field" ) + text );
 
-        text = component->GetRef( ((SCH_SHEET_PATH*) aAuxData)->Last() );
+        text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
         if( component->GetUnitCount() > 1 )
             text << LIB_PART::SubReference( component->GetUnit() );
@@ -440,7 +439,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         wxCHECK_MSG( component != NULL, false,
                      wxT( "No component associated with field" ) + text );
 
-        text = component->GetRef( ((SCH_SHEET_PATH*) aAuxData)->Last() );
+        text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
         // if( component->GetUnitCount() > 1 )
         //     text << LIB_PART::SubReference( component->GetUnit() );
@@ -448,7 +447,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
         if( isReplaced )
-            component->SetRef( ((SCH_SHEET_PATH*) aAuxData)->Last(), text );
+            component->SetRef( (SCH_SHEET_PATH*) aAuxData, text );
     }
     else
     {

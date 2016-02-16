@@ -89,12 +89,12 @@ private:
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
     /**
-     * A temporary sheet is required to generate the correct reference designator string
+     * A temporary sheet path is required to generate the correct reference designator string
      * in complex heirarchies.  Hopefully this is only a temporary hack to decouple schematic
      * objects from the drawing window until a better design for handling complex heirarchies
      * can be implemented.
      */
-    const SCH_SHEET* m_currentSheet;
+    const SCH_SHEET_PATH* m_currentSheetPath;
 
     /**
      * Defines the hierarchical path and reference of the component.  This allows support
@@ -121,7 +121,7 @@ public:
      * @param pos - Position to place new component.
      * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
      */
-    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET* aSheet,
+    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 ),
                    bool setNewItemFlag = false );
@@ -244,10 +244,10 @@ public:
     /**
      * Function ClearAnnotation
      * clears exiting component annotation ( i.i IC23 changed to IC? and part reset to 1)
-     * @param aSheet: SCH_SHEET value: if NULL remove all annotations,
-     *                else remove annotation relative to \a aSheet.
+     * @param aSheetPath: SCH_SHEET_PATH value: if NULL remove all annotations,
+     *                    else remove annotation relative to this sheetpath
      */
-    void ClearAnnotation( SCH_SHEET* aSheet );
+    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function SetTimeStamp
@@ -391,8 +391,8 @@ public:
 
     void SwapData( SCH_ITEM* aItem );
 
-    // returns a unique ID, in the form of a path determined by \a aSheet.
-    wxString GetPath( const SCH_SHEET* sheet ) const;
+    // returns a unique ID, in the form of a path.
+    wxString GetPath( const SCH_SHEET_PATH* sheet ) const;
 
     /**
      * Function IsReferenceStringValid (static)
@@ -404,21 +404,21 @@ public:
      */
     static bool IsReferenceStringValid( const wxString& aReferenceString );
 
-    void SetCurrentSheet( const SCH_SHEET* aSheet )
+    void SetCurrentSheetPath( const SCH_SHEET_PATH* aSheetPath )
     {
-        m_currentSheet = aSheet;
+        m_currentSheetPath = aSheetPath;
     }
 
     /**
      * Function GetRef
      * returns the reference, for the given sheet path.
      */
-    const wxString GetRef( const SCH_SHEET* sheet );
+    const wxString GetRef( const SCH_SHEET_PATH* sheet );
 
     /**
      * Set the reference, for the given sheet path.
      */
-    void SetRef( const SCH_SHEET* aSheet, const wxString& ref );
+    void SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref );
 
     /**
      * Function AddHierarchicalReference
@@ -432,11 +432,11 @@ public:
                                    const wxString& aRef,
                                    int             aMulti );
 
-    // returns the unit selection, for the given sheet.
-    int GetUnitSelection( SCH_SHEET* aSheet );
+    // returns the unit selection, for the given sheet path.
+    int GetUnitSelection( SCH_SHEET_PATH* aSheet );
 
-    // Set the unit selection, for the given sheet.
-    void SetUnitSelection( SCH_SHEET* aSheet, int aUnitSelection );
+    // Set the unit selection, for the given sheet path.
+    void SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
     // Geometric transforms (used in block operations):
 

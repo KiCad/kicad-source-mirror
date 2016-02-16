@@ -1,10 +1,9 @@
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,12 +79,20 @@
 
 class wxFindReplaceData;
 class SCH_SCREEN;
+class SCH_MARKER;
 class SCH_SHEET;
 class SCH_ITEM;
-
+class SCH_REFERENCE_LIST;
+class PART_LIBS;
 
 #define SHEET_NOT_FOUND          -1
 
+
+/**
+ * Type SCH_MULTI_UNIT_REFERENCE_MAP
+ * is used to create a map of reference designators for multi-unit parts.
+ */
+typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
 
 /**
  * Class SCH_SHEET_PATH
@@ -209,6 +216,75 @@ public:
     bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
 
     /**
+     * Function UpdateAllScreenReferences
+     * updates the reference and the m_Multi parameter (part selection) for all
+     * components on a screen depending on the actual sheet path.
+     * Mandatory in complex hierarchies because sheets use the same screen
+     * (basic schematic)
+     * but with different references and part selections according to the
+     * displayed sheet
+     */
+    void UpdateAllScreenReferences();
+
+    /**
+     * Function AnnotatePowerSymbols
+     * annotates the power symbols only starting at \a aReference in the sheet path.
+     * @param aLibs the library list to use
+     * @param aReference A pointer to the number for the reference designator of the
+     *                   first power symbol to be annotated.  If the pointer is NULL
+     *                   the annotation starts at 1.  The number is incremented for
+     *                   each power symbol annotated.
+     */
+    void AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference );
+
+    /**
+     * Function GetComponents
+     * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
+     * @param aLibs the library list to use
+     * @param aReferences List of references to populate.
+     * @param aIncludePowerSymbols : false to only get normal components.
+     */
+    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
+                        bool aIncludePowerSymbols = true  );
+
+    /**
+     * Function GetMultiUnitComponents
+     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
+     * multi-unit parts in the sheet. The map key for each element will be the
+     * reference designator.
+     * @param aLibs the library list to use
+     * @param aRefList Map of reference designators to reference lists
+     * @param aIncludePowerSymbols : false to only get normal components.
+     */
+    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+                                 bool aIncludePowerSymbols = true );
+
+    /**
+     * Function SetFootprintField
+     * searches last sheet in the path for a component with \a aReference and set the footprint
+     * field to \a aFootPrint if found.
+     *
+     * @param aReference The reference designator of the component.
+     * @param aFootPrint The value to set the footprint field.
+     * @param aSetVisible The value to set the field visibility flag.
+     * @return True if \a aReference was found otherwise false.
+     */
+    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                bool aSetVisible );
+
+    /**
+     * Find the next schematic item in this sheet object.
+     *
+     * @param aType - The type of schematic item object to search for.
+     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
+     *                    the beginning of the list.
+     * @param aWrap - Wrap around the end of the list to find the next item if aLastItem
+     *                is defined.
+     * @return - The next schematic item if found.  Otherwise, NULL is returned.
+     */
+    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
+
+    /**
      * Find the previous schematic item in this sheet path object.
      *
      * @param aType - The type of schematic item object to search for.
@@ -219,6 +295,31 @@ public:
      * @return - The previous schematic item if found.  Otherwise, NULL is returned.
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
+
+    /**
+     * Function TestForRecursion
+     *
+     * test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
+     * \a aSrcFileName to the sheet stored in file \a aDestFileName  will cause a sheet
+     * path recursion.
+     *
+     * @param aSrcFileName is the source file name of the sheet add to \a aDestFileName.
+     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
+     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
+     */
+    bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName ) const;
+
+    int FindSheet( const wxString& aFileName ) const;
+
+    /**
+     * Function FindSheetByName
+     *
+     * searches the #SCH_SHEET_PATH for a sheet named \a aSheetName.
+     *
+     * @param aSheetName is the name of the sheet to find.
+     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& d1 );
 
@@ -336,6 +437,51 @@ public:
     SCH_SHEET_PATH* GetSheetByPath( const wxString aPath, bool aHumanReadable = true );
 
     /**
+     * Function IsModified
+     * checks the entire hierarchy for any modifications.
+     * @returns True if the hierarchy is modified otherwise false.
+     */
+    bool IsModified();
+
+    /**
+     * Function IsAutoSaveRequired
+     * checks the entire hierarchy for any modifications that require auto save.
+     * @return True if the hierarchy is modified otherwise false.
+     */
+    bool IsAutoSaveRequired();
+
+    void ClearModifyStatus();
+
+    /**
+     * Function AnnotatePowerSymbols
+     * clear and annotates the entire hierarchy of the sheet path list.
+     * @param aLib the library list to use
+     */
+    void AnnotatePowerSymbols( PART_LIBS* aLib );
+
+    /**
+     * Function GetComponents
+     * adds a SCH_REFERENCE() object to \a aReferences for each component in the list
+     * of sheets.
+     * @param aLibs the library list to use
+     * @param aReferences List of references to populate.
+     * @param aIncludePowerSymbols Set to false to only get normal components.
+     */
+    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
+
+    /**
+     * Function GetMultiUnitComponents
+     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
+     * multi-unit parts in the list of sheets. The map key for each element will be the
+     * reference designator.
+     * @param aLibs the library list to use
+     * @param aRefList Map of reference designators to reference lists
+     * @param aIncludePowerSymbols Set to false to only get normal components.
+     */
+    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+            bool aIncludePowerSymbols = true );
+
+    /**
      * Function FindNextItem
      * searches the entire schematic for the next schematic object.
      *
@@ -362,6 +508,51 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
                                 SCH_ITEM* aLastItem = NULL, bool aWrap = true );
+
+    /**
+     * Function SetFootprintField
+     * searches all the sheets for a component with \a aReference and set the footprint
+     * field to \a aFootPrint if found.
+     *
+     * @param aReference The reference designator of the component.
+     * @param aFootPrint The value to set the footprint field.
+     * @param aSetVisible The value to set the field visibility flag.
+     * @return True if \a aReference was found otherwise false.
+     */
+    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                bool aSetVisible );
+
+    /**
+     * Function IsComplexHierarchy
+     * searches all of the sheets for duplicate files names which indicates a complex
+     * hierarchy.
+     *
+     * @return true if the #SCH_SHEET_LIST is a complex hierarchy.
+     */
+    bool IsComplexHierarchy() const;
+
+    /**
+     * Function TestForRecursion
+     *
+     * test every SCH_SHEET_PATH in the SCH_SHEET_LIST to verify if adding the sheets stored
+     * in \a aSrcSheetHierarchy to the sheet stored in \a aDestFileName  will cause recursion.
+     *
+     * @param aSrcSheetHierarchy is the SCH_SHEET_LIST of the source sheet add to \a aDestFileName.
+     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
+     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
+     */
+    bool TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
+                           const wxString& aDestFileName ) const;
+
+    /**
+     * Function FindSheetByName
+     *
+     * searches the entire #SCH_SHEET_LIST for a sheet named \a aSheetName.
+     *
+     * @param aSheetName is the name of the sheet to find.
+     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
 private:
 
