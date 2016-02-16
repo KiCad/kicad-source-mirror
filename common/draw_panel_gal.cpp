@@ -182,20 +182,27 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
     if( m_pendingRefresh )
         return;
 
+    m_pendingRefresh = true;
+
+#ifdef __WXMAC__
+    // Timers on OS X may have a high latency (seen up to 500ms and more) which
+    // makes repaints jerky. No negative impact seen without throttling, so just
+    // do an unconditional refresh for OS X.
+    ForceRefresh();
+#else
     wxLongLong t = wxGetLocalTimeMillis();
     wxLongLong delta = t - m_lastRefresh;
 
     if( delta >= MinRefreshPeriod )
     {
         ForceRefresh();
-        m_pendingRefresh = true;
     }
     else
     {
         // One shot timer
         m_refreshTimer.Start( ( MinRefreshPeriod - delta ).ToLong(), true );
-        m_pendingRefresh = true;
     }
+#endif
 }
 
 
