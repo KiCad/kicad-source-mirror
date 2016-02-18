@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2015 KiCad Developers, see authors.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -35,15 +35,14 @@
 #include <macros.h>
 
 #include <class_libentry.h>
+#include <sch_sheet_path.h>
+#include <sch_component.h>
 #include <sch_text.h>
 
 #include <map>
 
-
-class SCH_SHEET;
-class SCH_COMPONENT;
+class SCH_REFERENCE;
 class SCH_REFERENCE_LIST;
-
 
 /**
  * Class SCH_REFERENCE
@@ -63,11 +62,11 @@ class SCH_REFERENCE
                                         ///< used to annotate by X or Y position
     int            m_Unit;              ///< The unit number for components with multiple parts
                                         ///< per package.
-    SCH_SHEET*     m_Sheet;             ///< The sheet for this reference.
+    SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
     bool           m_IsNew;             ///< True if not yet annotated.
     int            m_SheetNum;          ///< The sheet number for the reference.
     time_t         m_TimeStamp;         ///< The time stamp for the reference.
-    EDA_TEXT*      m_Value;             ///< The component value of the reference.  It is the
+    EDA_TEXT*      m_Value;             ///< The component value of the refernce.  It is the
                                         ///< same for all instances.
     int            m_NumRef;            ///< The numeric part of the reference designator.
     int            m_Flag;
@@ -78,7 +77,7 @@ class SCH_REFERENCE
 public:
 
     SCH_REFERENCE() :
-        m_Sheet()
+        m_SheetPath()
     {
         m_RootCmp      = NULL;
         m_Entry        = NULL;
@@ -91,13 +90,14 @@ public:
         m_SheetNum     = 0;
     }
 
-    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent, SCH_SHEET* aSheet );
+    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComponent,
+                   SCH_SHEET_PATH& aSheetPath );
 
     SCH_COMPONENT* GetComp() const          { return m_RootCmp; }
 
     LIB_PART*      GetLibComponent() const  { return m_Entry; }
 
-    SCH_SHEET*     GetSheet() const         { return m_Sheet; }
+    SCH_SHEET_PATH GetSheetPath() const     { return m_SheetPath; }
 
     int GetUnit() const                     { return m_Unit; }
 
@@ -131,12 +131,10 @@ public:
     {
         return m_Ref;
     }
-
     void SetRefStr( const std::string& aReference )
     {
         m_Ref = aReference;
     }
-
     const char* GetRefStr() const
     {
         return m_Ref.c_str();
@@ -152,16 +150,25 @@ public:
         return m_Ref.compare( item.m_Ref );
     }
 
-    int CompareLibName( const SCH_REFERENCE& item ) const;
+    int CompareLibName( const SCH_REFERENCE& item ) const
+    {
+        return Cmp_KEEPCASE( m_RootCmp->GetPartName(), item.m_RootCmp->GetPartName() );
+    }
 
     /**
      * Function IsSameInstance
      * returns whether this reference refers to the same component instance
      * (component and sheet) as another.
      */
-    bool IsSameInstance( const SCH_REFERENCE& other ) const;
+    bool IsSameInstance( const SCH_REFERENCE& other ) const
+    {
+        return GetComp() == other.GetComp() && GetSheetPath().Path() == other.GetSheetPath().Path();
+    }
 
-    bool IsUnitsLocked() const;
+    bool IsUnitsLocked()
+    {
+        return m_Entry->UnitsLocked();
+    }
 };
 
 
@@ -289,8 +296,7 @@ public:
      * referenced U201 to U351, and items in sheet 3 start from U352
      * </p>
      */
-    void Annotate( bool aUseSheetNum, int aSheetIntervalId,
-                   std::map<wxString, SCH_REFERENCE_LIST>& aLockedUnitMap );
+    void Annotate( bool aUseSheetNum, int aSheetIntervalId, SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap );
 
     /**
      * Function CheckAnnotation
@@ -459,13 +465,5 @@ private:
      */
     int CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
 };
-
-
-/**
- * Type SCH_MULTI_UNIT_REFERENCE_MAP
- * is used to create a map of reference designators for multi-unit parts.
- */
-typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
-
 
 #endif    // _SCH_REFERENCE_LIST_H_

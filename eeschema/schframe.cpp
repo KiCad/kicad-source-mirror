@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -523,8 +523,6 @@ void SCH_EDIT_FRAME::CreateScreens()
     if( g_RootSheet == NULL )
     {
         g_RootSheet = new SCH_SHEET();
-        g_RootSheet->SetName( "root" );
-        g_RootSheet->SetFileName( "noname.sch" );
     }
 
     if( g_RootSheet->GetScreen() == NULL )
@@ -616,7 +614,9 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             return;
     }
 
-    if( g_RootSheet->IsModified() )
+    SCH_SHEET_LIST sheetList;
+
+    if( sheetList.IsModified() )
     {
         wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
         wxString msg = wxString::Format( _(
@@ -667,7 +667,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             wxRemoveFile( fn.GetFullPath() );
     }
 
-    g_RootSheet->ClearModifyStatus();
+    sheetList.ClearModifyStatus();
 
     wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
 
@@ -787,13 +787,16 @@ void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( g_RootSheet->IsModified() );
+    SCH_SHEET_LIST sheetList;
+
+    aEvent.Enable( sheetList.IsModified() );
 }
 
 
 void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetScreen()->IsModify() );
+
 }
 
 
@@ -1226,9 +1229,12 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 {
     // In case this event happens before g_RootSheet is initialized which does happen
     // on mingw64 builds.
+
     if( g_RootSheet != NULL )
     {
-        return g_RootSheet->IsAutoSaveRequired();
+        SCH_SHEET_LIST sheetList;
+
+        return sheetList.IsAutoSaveRequired();
     }
 
     return false;
@@ -1274,7 +1280,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( bool aRedraw )
             // the m_mouseCaptureCallback function.
             m_canvas->SetMouseCapture( NULL, NULL );
 
-            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet->Last() ) )
+            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet ) )
             {
                 screen->SetCurItem( NULL );
                 delete item;

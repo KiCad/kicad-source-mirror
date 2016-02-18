@@ -983,7 +983,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     }
 
     case SCH_SHEET_T:
-        if( EditSheet( (SCH_SHEET*) item, m_CurrentSheet->Last() ) )
+        if( EditSheet( (SCH_SHEET*) item, m_CurrentSheet ) )
             m_canvas->Refresh();
         break;
 

@@ -33,10 +33,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 #include <sch_text.h>
-#include <sch_reference_list.h>
 
 
-class PART_LIBS;
 class LINE_READER;
 class SCH_SCREEN;
 class SCH_SHEET;
@@ -245,13 +243,6 @@ class SCH_SHEET : public SCH_ITEM
     /// The size of the sheet.
     wxSize m_size;
 
-    /// The sheet number ordered by file load.
-    // @todo: At some point this should really be a sheet number assigned by the user rather
-    //        than assigned in the order the sheets were parsed and loaded.
-    int m_number;
-
-    SCH_SHEET* getRootSheet();
-
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -274,7 +265,7 @@ public:
      * Return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor
      * Usually return true for small items (labels, junctions) and false for
-     * items which can be large (hierarchical sheets, components)
+     * items which can be large (hierarchical sheets, compoments)
      * @return false for a hierarchical sheet
      */
     bool IsMovableFromAnchorPoint() { return false; }
@@ -467,6 +458,19 @@ public:
     bool SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen );
 
     /**
+     * Function LocatePathOfScreen
+     * search the existing hierarchy for an instance of screen "FileName".
+     * don't bother looking at the root sheet - it must be unique,
+     * no other references to its m_screen otherwise there would be
+     * loops in the hierarchy.
+     *
+     * @param aScreen = the SCH_SCREEN* screen that we search for
+     * @param aList = the SCH_SHEET_PATH*  that must be used
+     * @return true if found
+     */
+    bool LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList );
+
+    /**
      * Function CountSheets
      * calculates the number of sheets found in "this"
      * this number includes the full subsheets count
@@ -486,7 +490,7 @@ public:
     {
         m_fileName = aFilename;
         // Filenames are stored using unix notation
-        m_fileName.Replace( wxT( "\\" ), wxT( "/" ) );
+        m_fileName.Replace( wxT("\\"), wxT("/") );
     }
 
     bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );
@@ -551,7 +555,7 @@ public:
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
 
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
-                         const KICAD_T scanTypes[] );
+                                 const KICAD_T scanTypes[] );
 
     wxString GetSelectMenuText() const;
 
@@ -561,42 +565,6 @@ public:
                          SCH_SHEET_PATH*      aSheetPath );
 
     SCH_ITEM& operator=( const SCH_ITEM& aSheet );
-
-    /**
-     * Operator <
-     *
-     * test if a \a aRhs is less than this sheet.
-     *
-     * Sheet comparison order is:
-     * The number of parent sheets of this sheet is less than \a aRhs.
-     * When the number of parent sheets for this sheet are the same as \a aRhs, the time
-     * stamps of each parent sheet are compared from the root sheet to the last sheet.
-     *
-     * @param aRhs is an SCH_SHEET reference to the right hand side of the comparison.
-     * @return true if this #SCH_SHEET is less than \a aRhs.
-     */
-    bool operator<( const SCH_SHEET& aRhs ) const;
-
-    /**
-     * Structure SortByPath
-     *
-     * tests if \a aLhs is less than \a aRhs.
-     *
-     * @param aLhs is the left hand side reference to a #SCH_SHEET for comparison.
-     * @param aRhs is the right hand side reference to a #SCH_SHEET for comparison.
-     * @return true if \a aLhs is less than \a aRhs otherwise false.
-     */
-    struct SortByPath
-    {
-        bool operator()( const SCH_SHEET* aLhs, const SCH_SHEET* aRhs )
-        {
-            wxCHECK( aLhs != NULL && aRhs != NULL, false );
-
-            return *aLhs < *aRhs;
-        }
-    };
-
-    int operator-( const SCH_SHEET& aRhs ) const;
 
     wxPoint GetPosition() const { return m_pos; }
 
@@ -609,225 +577,6 @@ public:
     void Plot( PLOTTER* aPlotter );
 
     EDA_ITEM* Clone() const;
-
-    /**
-     * Function SetPageNumbers
-     *
-     * sets the page numbers for each sheet by load order.
-     *
-     * The root sheet is always used to set the page numbers no matter which sheet this
-     * function is called.  This function will only have meaning when loading legacy
-     * schematics.  The upcoming s-expression schematic file format will allow for user
-     * defined page numbers.
-     */
-    void SetPageNumbers();
-
-    /**
-     * Function FindSheetByName
-     *
-     * searches this #SCH_SHEET and all of it's sub-sheets for a sheet named \a aSheetName.
-     *
-     * @param aSheetName is the name of the sheet to find.
-     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
-     */
-    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
-
-    /**
-     * Function GetSheets
-     *
-     * add the pointers to the #SCH_SHEET and all of it's sub-sheets to \a aSheetList.
-     *
-     * By default no sorting is performed and the #SCH_SHEET pointers are add to the list
-     * in the order they were loaded when the schematic was parse.  When \a aSortByPath is
-     * true, the list is sorted using the < operator which sort by path length then path
-     * time stamps.  This has the same sorting effect as the old SCH_SHEET_PATH::Cmp()
-     * function.
-     *
-     * @param aSheetList is a reference to a set containing the #SCH_SHEET pointers.
-     * @param aSortByPath true to sort by path.  False for load order.
-     * @return the number of #SCH_SHEET object pointers in \a aSheetList.
-     */
-    unsigned GetSheets( std::vector< const SCH_SHEET* >& aSheetList,
-                        bool aSortByPath = false ) const;
-
-    /**
-     * Function GetSheetPaths
-     *
-     * Returns a list of lists of #SCH_SHEET pointers to \a sSheetPaths.
-     *
-     * This is analagous to the old SCH_SHEET_LIST::BuildSheetList().  It creates a list of
-     * stacks to the sheet pointer hierarchy.
-     *
-     * @param aSheetPaths is a vector of vector of #SCH_SHEET pointers.
-     */
-    void GetSheetPaths( std::vector< std::vector< const SCH_SHEET* > >& aSheetPaths ) const;
-
-    /**
-     * Function GetRootSheet
-     *
-     * returns the root sheet of this SCH_SHEET object.
-     *
-     * The root (top level) sheet can be found by walking up the parent links until the only
-     * sheet that has no parent is found.  The root sheet can be found from any sheet in the
-     * hierarchy.
-     *
-     * @return a SCH_SHEET pointer to the root sheet.
-     */
-    const SCH_SHEET* GetRootSheet() const;
-
-    SCH_SHEET* GetRootSheet()
-    {
-        return const_cast< SCH_SHEET* >( static_cast< const SCH_SHEET&>( *this ).GetRootSheet() );
-    }
-
-    /**
-     * Function IsRootSheet
-     *
-     * returns true if `this` sheet has no parent which indicates it is the root (top level)
-     * sheet.
-     *
-     * @return true if this is the root sheet, otherwise false.
-     */
-    bool IsRootSheet() const { return GetParent() == NULL; }
-
-    /**
-     * Function GetPath
-     *
-     * recurses up the parent branch up to the root sheet adding a pointer for each
-     * parent sheet to \a aSheetPath.
-     *
-     * @param aSheetPath is a refernce to an #SCH_SHEET object to populate.
-     */
-    void GetPath( std::vector< const SCH_SHEET* >& aSheetPath ) const;
-
-    /**
-     * Function GetPath
-     *
-     * returns a wxString containing the sheet path of this SCH_SHEET.
-     *
-     * The SCH_SHEET path is a Posix like path containing the hexadecimal time stamps in
-     * the parent order of this SCH_SHEET.  It looks something like /4567FEDC/AA2233DD/.
-     */
-    wxString GetPath() const;
-
-    /**
-     * Function GetHumanReadablePath
-     *
-     * returns a wxString containing the human readable path of this sheet.
-     *
-     * Human readable SCH_SHEET paths are Posix like paths made up of the sheet names
-     * in the parent order of this SCH_SHEET.  It looks something like /sheet1/sheet2.
-     */
-    wxString GetHumanReadablePath() const;
-
-    void ClearAnnotation( bool aIncludeSubSheets = false );
-
-    /**
-     * Function IsModified
-     * checks the sheet and any of it's sub-sheets (hierarchy) for any modifications.
-     * @return true if the hierarchy is modified otherwise false.
-     */
-    bool IsModified() const;
-
-    /**
-     * Function ClearModifyStatus
-     *
-     * clears the modification flag for everything in the sheet and all sub-sheets.
-     */
-    void ClearModifyStatus();
-
-    /**
-     * Function IsAutoSaveRequired
-     * checks the entire hierarchy for any modifications that require auto save.
-     * @return True if the hierarchy is modified otherwise false.
-     */
-    bool IsAutoSaveRequired();
-
-    /**
-     * Function AnnotatePowerSymbols
-     * annotates the power symbols only starting at \a aReference in the sheet path.
-     * @param aLibs the library list to use
-     * @param aReference A pointer to the number for the reference designator of the
-     *                   first power symbol to be annotated.  If the pointer is NULL
-     *                   the annotation starts at 1.  The number is incremented for
-     *                   each power symbol in the sheet that is annotated.
-     */
-    void AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference );
-
-    /**
-     * Function UpdateAllScreenReferences
-     * updates the reference and the m_Multi parameter (part selection) for all
-     * components on a screen depending on the actual sheet.
-     * Mandatory in complex hierarchies because sheets use the same screen
-     * (basic schematic)
-     * but with different references and part selections according to the
-     * displayed sheet
-     */
-    void UpdateAllScreenReferences();
-
-    /**
-     * Function GetComponents
-     * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
-     *
-     * @param aLibs the library list to use
-     * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols : false to only get normal components.
-     * @param aIncludeSubSheets true includes components of all sub-sheets and false includes
-     *                          only the components in this sheet.
-     */
-    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                        bool aIncludePowerSymbols = true, bool aIncludeSubSheets = true );
-
-    /**
-     * Function GetMultiUnitComponents
-     * adds a SCH_REFERENCE_LIST object to \a aRefList for each component with multiple units
-     * that has the same reference designator for this sheet and all of it's sub-sheets. The
-     * map key for each element will be the reference designator.
-     *
-     * @param aLibs a pointer to the #PART_LIB to use.
-     * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols : false to only get normal components.
-     */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                 bool aIncludePowerSymbols = true );
-
-    /**
-     * Function IsComplexHierarchy
-     * searches all of the sheets for duplicate files names which indicates a complex
-     * hierarchy.
-     *
-     * Typically this function would be called from the root sheet.  However, it is possible
-     * to test only the sub-hierarchy from any #SCH_SHEET object.
-     *
-     * @return true if the #SCH_SHEET is a complex hierarchy.
-     */
-    bool IsComplexHierarchy() const;
-
-    /**
-     * Find the next schematic item in this sheet object.
-     *
-     * @param aType - The type of schematic item object to search for.
-     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
-     *                    the beginning of the list.
-     * @param aWrap - Wrap around the end of the list to find the next item if aLastItem
-     *                is defined.
-     * @return - The next schematic item if found.  Otherwise, NULL is returned.
-     */
-    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
-
-    /**
-     * Function TestForRecursion
-     *
-     * test every SCH_SHEET in the SCH_SHEET hierarchy to verify if adding the sheets stored
-     * in \a aSrcSheetHierarchy to the sheet stored in \a aDestFileName  will cause recursion.
-     *
-     * @param aSrcSheetHierarchy is a list #SCH_SHEET pointer lists of the source sheet add
-     *                           to \a aDestFileName.
-     * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
-     * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
-     */
-    bool TestForRecursion( std::vector< std::vector< const SCH_SHEET* > >& aSrcSheetHierarchy,
-                           const wxString& aDestFileName ) const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
@@ -845,5 +594,7 @@ protected:
     void renumberPins();
 };
 
+
+typedef std::vector< SCH_SHEET* > SCH_SHEETS;
 
 #endif /* SCH_SHEEET_H */

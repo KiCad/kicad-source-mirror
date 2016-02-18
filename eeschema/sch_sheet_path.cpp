@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,6 +227,169 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 }
 
 
+void SCH_SHEET_PATH::UpdateAllScreenReferences()
+{
+    EDA_ITEM* t = LastDrawList();
+
+    while( t )
+    {
+        if( t->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) t;
+            component->GetField( REFERENCE )->SetText( component->GetRef( this ) );
+            component->UpdateUnit( component->GetUnitSelection( this ) );
+        }
+
+        t = t->Next();
+    }
+}
+
+
+void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
+{
+    int ref = 1;
+
+    if( aReference )
+        ref = *aReference;
+
+    for( EDA_ITEM* item = LastDrawList();  item;  item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+                continue;
+
+        SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
+        LIB_PART*       part = aLibs->FindLibPart( component->GetPartName() );
+
+        if( !part || !part->IsPower() )
+            continue;
+
+        wxString refstr = component->GetPrefix();
+
+        //str will be "C?" or so after the ClearAnnotation call.
+        while( refstr.Last() == '?' )
+            refstr.RemoveLast();
+
+        if( !refstr.StartsWith( wxT( "#" ) ) )
+            refstr = wxT( "#" ) + refstr;
+
+        refstr << wxT( "0" ) << ref;
+        component->SetRef( this, refstr );
+        ref++;
+    }
+
+    if( aReference )
+        *aReference = ref;
+}
+
+
+void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
+{
+    // Search to sheet path number:
+    int sheetnumber = 1;    // 1 = root
+
+    SCH_SHEET_LIST sheetList;
+
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext(), sheetnumber++ )
+    {
+        if( Cmp( *path ) == 0 )
+            break;
+    }
+
+    for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+            // Skip pseudo components, which have a reference starting with #.  This mainly
+            // affects power symbols.
+            if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
+                continue;
+
+            LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
+            if( part )
+            {
+                SCH_REFERENCE reference = SCH_REFERENCE( component, part, *this );
+                reference.SetSheetNumber( sheetnumber );
+                aReferences.AddItem( reference );
+            }
+        }
+    }
+}
+
+void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+       bool aIncludePowerSymbols )
+{
+    // Find sheet path number
+    int sheetnumber = 1; // 1 = root
+
+    SCH_SHEET_LIST sheetList;
+
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext(), sheetnumber++ )
+    {
+        if( Cmp( *path ) == 0 )
+            break;
+    }
+
+    for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T ) continue;
+        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+        // Skip pseudo components, which have a reference starting with #.  This mainly
+        // affects power symbols.
+        if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
+            continue;
+
+        LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
+        if( part && part->GetUnitCount() > 1 )
+        {
+            SCH_REFERENCE reference = SCH_REFERENCE( component, part, *this );
+            reference.SetSheetNumber( sheetnumber );
+            wxString reference_str = reference.GetRef();
+
+            // Never lock unassigned references
+            if( reference_str[reference_str.Len() - 1] == '?' ) continue;
+
+            aRefList[reference_str].AddItem( reference );
+        }
+    }
+}
+
+
+SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
+{
+    bool hasWrapped = false;
+    bool firstItemFound = false;
+    SCH_ITEM* drawItem = LastDrawList();
+
+    while( drawItem )
+    {
+        if( drawItem->Type() == aType )
+        {
+            if( !aLastItem || firstItemFound )
+            {
+                return drawItem;
+            }
+            else if( !firstItemFound && drawItem == aLastItem )
+            {
+                firstItemFound = true;
+            }
+        }
+
+        drawItem = drawItem->Next();
+
+        if( !drawItem && aLastItem && aWrap && !hasWrapped )
+        {
+            hasWrapped = true;
+            drawItem = LastDrawList();
+        }
+    }
+
+    return NULL;
+}
+
+
 SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap ) const
 {
     bool hasWrapped = false;
@@ -257,6 +420,18 @@ SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, 
     }
 
     return NULL;
+}
+
+
+bool SCH_SHEET_PATH::SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                            bool aSetVisible )
+{
+    SCH_SCREEN* screen = LastScreen();
+
+    if( screen == NULL )
+        return false;
+
+    return screen->SetComponentFootprint( this, aReference, aFootPrint, aSetVisible );
 }
 
 
@@ -291,6 +466,93 @@ bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
     }
 
     return true;
+}
+
+
+bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
+                                       const wxString& aDestFileName ) const
+{
+    wxFileName rootFn = g_RootSheet->GetFileName();
+    wxFileName srcFn = aSrcFileName;
+    wxFileName destFn = aDestFileName;
+
+    if( srcFn.IsRelative() )
+        srcFn.MakeAbsolute( rootFn.GetPath() );
+
+    if( destFn.IsRelative() )
+        destFn.MakeAbsolute( rootFn.GetPath() );
+
+
+    // The source and destination sheet file names cannot be the same.
+    if( srcFn == destFn )
+        return true;
+
+    /// @todo Store sheet file names with full path, either relative to project path
+    ///       or absolute path.  The current design always assumes subsheet files are
+    ///       located in the project folder which may or may not be desirable.
+    unsigned i = 0;
+
+    while( i < m_numSheets )
+    {
+        wxFileName cmpFn = m_sheets[i]->GetFileName();
+
+        if( cmpFn.IsRelative() )
+            cmpFn.MakeAbsolute( rootFn.GetPath() );
+
+        // Test if the file name of the destination sheet is in anywhere in this sheet path.
+        if( cmpFn == destFn )
+            break;
+
+        i++;
+    }
+
+    // The destination sheet file name was not found in the sheet path or the destination
+    // sheet file name is the root sheet so no recursion is possible.
+    if( i >= m_numSheets || i == 0 )
+        return false;
+
+    // Walk back up to the root sheet to see if the source file name is already a parent in
+    // the sheet path.  If so, recursion will occur.
+    do
+    {
+        i -= 1;
+
+        wxFileName cmpFn = m_sheets[i]->GetFileName();
+
+        if( cmpFn.IsRelative() )
+            cmpFn.MakeAbsolute( rootFn.GetPath() );
+
+        if( cmpFn == srcFn )
+            return true;
+
+    } while( i != 0 );
+
+    // The source sheet file name is not a parent of the destination sheet file name.
+    return false;
+}
+
+
+int SCH_SHEET_PATH::FindSheet( const wxString& aFileName ) const
+{
+    for( unsigned i = 0; i < m_numSheets; i++ )
+    {
+        if( m_sheets[i]->GetFileName().CmpNoCase( aFileName ) == 0 )
+            return (int)i;
+    }
+
+    return SHEET_NOT_FOUND;
+}
+
+
+SCH_SHEET* SCH_SHEET_PATH::FindSheetByName( const wxString& aSheetName )
+{
+    for( unsigned i = 0; i < m_numSheets; i++ )
+    {
+        if( m_sheets[i]->GetName().CmpNoCase( aSheetName ) == 0 )
+            return m_sheets[i];
+    }
+
+    return NULL;
 }
 
 
@@ -422,6 +684,76 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 }
 
 
+bool SCH_SHEET_LIST::IsModified()
+{
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    {
+        if( sheet->LastScreen() && sheet->LastScreen()->IsModify() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_LIST::IsAutoSaveRequired()
+{
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    {
+        if( sheet->LastScreen() && sheet->LastScreen()->IsSave() )
+            return true;
+    }
+
+    return false;
+}
+
+
+void SCH_SHEET_LIST::ClearModifyStatus()
+{
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    {
+        if( sheet->LastScreen() )
+            sheet->LastScreen()->ClrModify();
+    }
+}
+
+
+void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
+{
+    int ref = 1;
+
+    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
+        path->AnnotatePowerSymbols( aLibs, &ref );
+}
+
+
+void SCH_SHEET_LIST::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
+        bool aIncludePowerSymbols )
+{
+    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
+        path->GetComponents( aLibs, aReferences, aIncludePowerSymbols );
+}
+
+void SCH_SHEET_LIST::GetMultiUnitComponents( PART_LIBS* aLibs,
+        SCH_MULTI_UNIT_REFERENCE_MAP &aRefList, bool aIncludePowerSymbols )
+{
+    for( SCH_SHEET_PATH* path = GetFirst(); path; path = GetNext() )
+    {
+        SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
+        path->GetMultiUnitComponents( aLibs, tempMap );
+        BOOST_FOREACH( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair, tempMap )
+        {
+            // Merge this list into the main one
+            unsigned n_refs = pair.second.GetCount();
+            for( unsigned thisRef = 0; thisRef < n_refs; ++thisRef )
+            {
+                aRefList[pair.first].AddItem( pair.second[thisRef] );
+            }
+        }
+    }
+}
+
+
 SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFoundIn,
                                         SCH_ITEM* aLastItem, bool aWrap )
 {
@@ -507,6 +839,85 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
             hasWrapped = true;
             sheet = GetLast();
         }
+    }
+
+    return NULL;
+}
+
+
+bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
+                                            const wxString& aFootPrint, bool aSetVisible )
+{
+    bool found = false;
+
+    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
+        found = path->SetComponentFootprint( aReference, aFootPrint, aSetVisible );
+
+    return found;
+}
+
+
+bool SCH_SHEET_LIST::IsComplexHierarchy() const
+{
+    wxString fileName;
+
+    for( int i = 0;  i < m_count;  i++ )
+    {
+        fileName = m_list[i].Last()->GetFileName();
+
+        for( int j = 0;  j < m_count;  j++ )
+        {
+            if( i == j )
+                continue;
+
+            if( fileName == m_list[j].Last()->GetFileName() )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
+                                       const wxString& aDestFileName ) const
+{
+    wxFileName rootFn = g_RootSheet->GetFileName();
+    wxFileName destFn = aDestFileName;
+
+    if( destFn.IsRelative() )
+        destFn.MakeAbsolute( rootFn.GetPath() );
+
+    // Test each SCH_SHEET_PATH in this SCH_SHEET_LIST for potential recursion.
+    for( int i = 0; i < m_count; i++ )
+    {
+        // Test each SCH_SHEET_PATH in the source sheet.
+        for( int j = 0; j < aSrcSheetHierarchy.GetCount(); j++ )
+        {
+            SCH_SHEET_PATH* sheetPath = aSrcSheetHierarchy.GetSheet( j );
+
+            for( unsigned k = 0; k < sheetPath->GetCount(); k++ )
+            {
+                if( m_list[i].TestForRecursion( sheetPath->GetSheet( k )->GetFileName(),
+                                                aDestFileName ) )
+                    return true;
+            }
+        }
+    }
+
+    // The source sheet file can safely be added to the destination sheet file.
+    return false;
+}
+
+
+SCH_SHEET* SCH_SHEET_LIST::FindSheetByName( const wxString& aSheetName )
+{
+    for( int i = 0; i < m_count; i++ )
+    {
+        SCH_SHEET* sheet = m_list[i].FindSheetByName( aSheetName );
+
+        if( sheet )
+            return sheet;
     }
 
     return NULL;

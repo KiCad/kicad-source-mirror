@@ -87,7 +87,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName, uns
             {
                 if( part->GetFootPrints().GetCount() != 0 )    // Put in list
                 {
-                    cmpList.push_back( SCH_REFERENCE( comp, part, path->Last() ) );
+                    cmpList.push_back( SCH_REFERENCE( comp, part, *path ) );
                 }
             }
 
@@ -99,10 +99,10 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName, uns
             else
                 footprint = wxT( "$noname" );
 
-            field = comp->GetRef( path->Last() );
+            field = comp->GetRef( path );
 
             ret |= fprintf( f, " ( %s %s",
-                            TO_UTF8( comp->GetPath( path->Last() ) ),
+                            TO_UTF8( comp->GetPath( path ) ),
                             TO_UTF8( footprint ) );
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );

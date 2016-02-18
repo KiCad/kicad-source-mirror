@@ -260,7 +260,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     GetScreen()->SetFileName( fullFileName );
     g_RootSheet->SetFileName( fullFileName );
-    g_RootSheet->SetName( "root" );
+
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
@@ -327,7 +327,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
-    g_RootSheet->SetPageNumbers();
+
     m_canvas->Refresh( true );
 
     return true;

@@ -108,7 +108,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
         Pin->GetMsgPanelInfo( items );
 
         if( LibItem )
-            items.push_back( MSG_PANEL_ITEM( LibItem->GetRef( m_CurrentSheet->Last() ),
+            items.push_back( MSG_PANEL_ITEM( LibItem->GetRef( m_CurrentSheet ),
                                              LibItem->GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
         SetMsgPanel( items );
@@ -187,7 +187,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
     if( item )
     {
         if( item->Type() == SCH_COMPONENT_T )
-            ( (SCH_COMPONENT*) item )->SetCurrentSheet( GetCurrentSheet().Last() );
+            ( (SCH_COMPONENT*) item )->SetCurrentSheetPath( &GetCurrentSheet() );
 
         MSG_PANEL_ITEMS items;
         item->GetMsgPanelInfo( items );

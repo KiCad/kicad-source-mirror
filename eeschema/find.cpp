@@ -71,8 +71,7 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
     if( event.GetFlags() & FR_CURRENT_SHEET_ONLY )
     {
         sheetFoundIn = m_CurrentSheet;
-        lastMarker = (SCH_MARKER*) m_CurrentSheet->Last()->FindNextItem( SCH_MARKER_T,
-                                                                         lastMarker, wrap );
+        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( SCH_MARKER_T, lastMarker, wrap );
     }
     else
     {
@@ -86,7 +85,7 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
         {
             sheetFoundIn->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheetFoundIn;
-            m_CurrentSheet->Last()->UpdateAllScreenReferences();
+            m_CurrentSheet->UpdateAllScreenReferences();
         }
 
         SetCrossHairPosition( lastMarker->GetPosition() );
@@ -140,7 +139,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
             SCH_COMPONENT* pSch = (SCH_COMPONENT*) item;
 
-            if( aReference.CmpNoCase( pSch->GetRef( sheet->Last() ) ) == 0 )
+            if( aReference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
             {
                 Component = pSch;
                 sheetWithComponentFound = sheet;
@@ -194,7 +193,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-            m_CurrentSheet->Last()->UpdateAllScreenReferences();
+            m_CurrentSheet->UpdateAllScreenReferences();
             centerAndRedraw = true;
         }
 
@@ -490,7 +489,7 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-            m_CurrentSheet->Last()->UpdateAllScreenReferences();
+            m_CurrentSheet->UpdateAllScreenReferences();
             SetScreen( sheet->LastScreen() );
         }
 

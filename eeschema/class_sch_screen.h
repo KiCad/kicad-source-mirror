@@ -49,7 +49,6 @@ class SCH_SHEET_PIN;
 class SCH_LINE;
 class SCH_TEXT;
 class PLOTTER;
-class SCH_SHEET;
 
 
 enum SCH_LINE_TEST_T
@@ -426,11 +425,11 @@ public:
 
     /**
      * Function ClearAnnotation
-     * clears the annotation for the components in \a aSheet on the screen.
-     * @param aSheet The sheet of the component annotation to clear.  If NULL then
-     *               the entire hierarchy is cleared for this screen.
+     * clears the annotation for the components in \a aSheetPath on the screen.
+     * @param aSheetPath The sheet path of the component annotation to clear.  If NULL then
+     *                   the entire hierarchy is cleared.
      */
-    void ClearAnnotation( SCH_SHEET* aSheet );
+    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function GetHierarchicalItems
@@ -501,13 +500,13 @@ public:
      * searches screen for a component with \a aReference and set the footprint field to
      * \a aFootPrint if found.
      *
-     * @param aSheet The sheet used to look up the reference designator.
+     * @param aSheetPath The sheet path used to look up the reference designator.
      * @param aReference The reference designator of the component.
      * @param aFootPrint The value to set the footprint field.
      * @param aSetVisible The value to set the field visibility flag.
      * @return True if \a aReference was found otherwise false.
      */
-    bool SetComponentFootprint( SCH_SHEET* aSheet, const wxString& aReference,
+    bool SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
                                 const wxString& aFootPrint, bool aSetVisible );
 
     /**
@@ -549,6 +548,12 @@ public:
     SCH_SCREEN* GetFirst();
     SCH_SCREEN* GetNext();
     SCH_SCREEN* GetScreen( unsigned int aIndex ) const;
+
+    /**
+     * Function ClearAnnotation
+     * clears the annotation for all components in the hierarchy.
+     */
+    void ClearAnnotation();
 
     /**
      * Function SchematicCleanUp

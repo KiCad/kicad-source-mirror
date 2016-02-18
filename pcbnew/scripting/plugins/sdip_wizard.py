@@ -37,7 +37,7 @@ class RowedGridArray(PA.PadGridArray):
 
 class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
 
-    pad_count_key = 'pas count'
+    pad_count_key = 'pad count'
     row_count_key = 'row count'
     row_spacing_key = 'row spacing'
     pad_length_key = 'pad length'
@@ -114,7 +114,7 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         self.draw.Box(0, 0, sizex, sizey)
         # restore line thickness to previous value
         self.draw.SetLineThickness(pcbnew.FromMM(cmargin))
-        
+
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal
 
