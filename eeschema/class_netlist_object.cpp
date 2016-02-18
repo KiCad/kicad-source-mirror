@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -315,6 +315,32 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     }
 }
 
+
+bool NETLIST_OBJECT::IsLabelGlobal() const
+{
+    // return true if the object is a global label
+    // * a actual global label
+    // * a pin label coming from a invisible power pin
+    return ( m_Type == NET_PINLABEL ) ||
+           ( m_Type == NET_GLOBLABEL ) ||
+           ( m_Type == NET_GLOBBUSLABELMEMBER );
+}
+
+
+bool NETLIST_OBJECT::IsLabelBusMemberType() const
+{
+    // return true if the object is a bus label member build from a
+    // schematic bus label (like label[xx..yy)
+    // They are labels with very specific properties, especially for connection
+    // between them: 2 bus label members can be connected only
+    // if they have the same member value.
+    return ( m_Type == NET_SHEETBUSLABELMEMBER ) ||
+           ( m_Type == NET_BUSLABELMEMBER ) ||
+           ( m_Type == NET_HIERBUSLABELMEMBER ) ||
+           ( m_Type == NET_GLOBBUSLABELMEMBER );
+}
+
+
 /*
  * return the net name of the item
  */
@@ -373,7 +399,7 @@ wxString NETLIST_OBJECT::GetShortNetName() const
  * Set m_netNameCandidate to a connected item which will
  * be used to calcule the net name of the item
  * Obviously the candidate can be only a label
- * when there is no label on the net a pad which will
+ * If there is no label on the net, a pad name will be
  * used to build a net name (something like Cmp<REF>_Pad<PAD_NAME>
  * @param aCandidate = the connected item candidate
  */
@@ -385,6 +411,8 @@ void NETLIST_OBJECT::SetNetNameCandidate( NETLIST_OBJECT* aCandidate )
         case NET_LABEL:
         case NET_PINLABEL:
         case NET_GLOBLABEL:
+        case NET_GLOBBUSLABELMEMBER:
+        case NET_SHEETBUSLABELMEMBER:
         case NET_PIN:
             m_netNameCandidate = aCandidate;
             break;
