@@ -102,10 +102,13 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         cmarginx = body[self.courtyard_x_margin_key]
         cmarginy = body[self.courtyard_y_margin_key]
         self.draw.SetLayer(pcbnew.F_CrtYd)
-        # set courtyard line thickness to the one defined in KLC
         thick = self.draw.GetLineThickness()
         sizex = (pin1posX + cmarginx) * 2 + pad_Hsize + thick
         sizey = (pin1posY + cmarginy) * 2 + pad_Vsize + thick
+        # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
+        sizex = self.PutOnGridMM(sizex, 0.1)
+        sizey = self.PutOnGridMM(sizey, 0.1)
+        # set courtyard line thickness to the one defined in KLC
         self.draw.SetLineThickness(pcbnew.FromMM(0.05))
         self.draw.Box(0, 0, sizex, sizey)
         # restore line thickness to previous value

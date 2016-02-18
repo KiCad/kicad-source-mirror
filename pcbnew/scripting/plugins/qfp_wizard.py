@@ -113,6 +113,9 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.draw.SetLayer(pcbnew.F_CrtYd)
         sizex = (lim_x + cmargin) * 2 + pad_length
         sizey = (lim_y + cmargin) * 2 + pad_length
+        # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
+        sizex = self.PutOnGridMM(sizex, 0.1)
+        sizey = self.PutOnGridMM(sizey, 0.1)
         # set courtyard line thickness to the one defined in KLC
         thick = self.draw.GetLineThickness()
         self.draw.SetLineThickness(pcbnew.FromMM(0.05))

@@ -279,6 +279,24 @@ class HelpfulFootprintWizardPlugin(pcbnew.FootprintWizardPlugin,
         """
         pass
 
+    def PutOnGridMM(self, value, gridSizeMM=0.05):
+        """
+        Round the value (in KiCAD internal units 1nm) according to the 
+        provided gridSize in mm.
+        """
+        thresh = pcbnew.FromMM(gridSizeMM)
+        res = round(value/thresh)*thresh
+        return res
+
+    def PutOnGridMils(self, value, gridSizeMil=2):
+        """
+        Round the value (in KiCAD internal units 1nm) according to the 
+        provided gridSize in mil.
+        """
+        thresh = pcbnew.FromMils(gridSizeMil)
+        res = round(value/thresh)*thresh
+        return res
+
     def BuildThisFootprint(self):
         """
         Draw the footprint.
