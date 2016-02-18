@@ -128,6 +128,11 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
             self.draw.Value(0, 0, text_size)
             self.draw.Reference(-text_px, 0, text_size, orientation_degree=90)
 
+        # set the attribute
+        if self.GetName() == "S-DIP":
+            self.module.SetAttributes(pcbnew.MOD_DEFAULT)
+        elif self.GetName() == "SOIC":
+            self.module.SetAttributes(pcbnew.MOD_CMS)
 
 class SDIPWizard(RowedFootprint):
 

@@ -98,5 +98,7 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         self.draw.Value(0, ypos, text_size)
         self.draw.Reference(0, -ypos, text_size)
 
+        # set SMD attribute
+        self.module.SetAttributes(pcbnew.MOD_CMS)
 
 BGAWizard().register()

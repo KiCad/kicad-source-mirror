@@ -127,4 +127,7 @@ class QFPWizard(HelpfulFootprintWizardPlugin.HelpfulFootprintWizardPlugin):
         self.draw.Value(0, text_offset, text_size)
         self.draw.Reference(0, -text_offset, text_size)
 
+        # set SMD attribute
+        self.module.SetAttributes(pcbnew.MOD_CMS)
+
 QFPWizard().register()

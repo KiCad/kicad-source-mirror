@@ -127,6 +127,9 @@ class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
         # right pad side
         self.draw.Line(-xstart, posy, -xend, yend)
 
+        # set SMD attribute
+        self.module.SetAttributes(pcbnew.MOD_CMS)
+        
         # vertical segment at left of the pad
         xstart = xend
         yend = posy - (shl_height + linewidth + margin*2)

@@ -118,6 +118,12 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         self.draw.Value(0, t_posy, text_size)
         self.draw.Reference(0, -t_posy, text_size)
 
+        # set SMD attribute
+        if self.GetName() == "ZIP":
+            self.module.SetAttributes(pcbnew.MOD_DEFAULT)
+        elif self.GetName() == "ZOIC":
+            self.module.SetAttributes(pcbnew.MOD_CMS)
+
     def DrawBox(self, sizex, sizey):
 
         #  ----------
