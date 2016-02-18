@@ -51,7 +51,8 @@ void LoadInputFile( wxString aFileName, wxXmlDocument* aXmlDoc )
 
     // check file format
     if( !fgets( line, sizeof( line ), fp )
-        || strcmp( line, ACCEL_ASCII_KEYWORD ) )
+        // first line starts with "ACCEL_ASCII" with optional stuff on same line after that.
+        || memcmp( line, ACCEL_ASCII_KEYWORD, sizeof(ACCEL_ASCII_KEYWORD)-1 ) )
         THROW_IO_ERROR( "Unknown file type" );
 
     // rewind the file
