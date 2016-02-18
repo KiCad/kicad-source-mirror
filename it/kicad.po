@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-15 20:10+0100\n"
-"PO-Revision-Date: 2016-02-15 20:17+0100\n"
+"POT-Creation-Date: 2016-02-18 22:00+0100\n"
+"PO-Revision-Date: 2016-02-18 22:02+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -467,7 +467,7 @@ msgstr ""
 "Per procedere, si può usare il menu File per iniziare un nuovo progetto."
 
 #: kicad/prjconfig.cpp:335 pcbnew/pcbframe.cpp:992 pcbnew/moduleframe.cpp:768
-#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1357
+#: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1363
 #: cvpcb/cvpcb_mainframe.cpp:716
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -737,10 +737,10 @@ msgstr "Rif."
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: pcbnew/class_edge_mod.cpp:261 eeschema/template_fieldnames.cpp:42
-#: eeschema/onrightclick.cpp:426 eeschema/sch_component.cpp:1535
+#: eeschema/onrightclick.cpp:426 eeschema/sch_component.cpp:1542
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
-#: eeschema/dialogs/dialog_rescue_each.cpp:110
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:190
+#: eeschema/dialogs/dialog_rescue_each.cpp:108
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:189
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
 #: eeschema/lib_field.cpp:581 eeschema/lib_field.cpp:759
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
@@ -759,7 +759,7 @@ msgstr "Testo"
 #: pcbnew/class_text_mod.cpp:369 pcbnew/class_module.cpp:627
 #: pcbnew/loadcmp.cpp:435 pcbnew/loadcmp.cpp:499 pcbnew/class_pad.cpp:613
 #: pcbnew/class_edge_mod.cpp:260 eeschema/template_fieldnames.cpp:45
-#: eeschema/onrightclick.cpp:436 eeschema/sch_component.cpp:1553
+#: eeschema/onrightclick.cpp:436 eeschema/sch_component.cpp:1560
 #: eeschema/lib_field.cpp:588
 msgid "Footprint"
 msgstr "Impronta"
@@ -780,7 +780,7 @@ msgstr "Tipo"
 
 #: pcbnew/class_text_mod.cpp:378 pcbnew/class_pcb_text.cpp:143
 #: eeschema/lib_pin.cpp:2002
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:988
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:987
 #: gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
 msgid "No"
@@ -789,7 +789,7 @@ msgstr "No"
 #: pcbnew/class_text_mod.cpp:380 pcbnew/class_pcb_text.cpp:145
 #: eeschema/lib_pin.cpp:2000
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:986
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:985
 #: gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
 msgid "Yes"
@@ -3810,7 +3810,7 @@ msgstr "Denominazione"
 #: pcbnew/librairi.cpp:775 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: common/dialog_about/AboutDialog_main.cpp:131 eeschema/viewlibs.cpp:308
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1556
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1563
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
 msgid "Description"
@@ -5271,7 +5271,7 @@ msgstr ""
 "configurato in modo che possa trovare le librerie di impronte."
 
 #: pcbnew/loadcmp.cpp:436 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
-#: eeschema/sch_component.cpp:1545
+#: eeschema/sch_component.cpp:1552
 msgid "Library"
 msgstr "Libreria"
 
@@ -7239,9 +7239,9 @@ msgstr "Abbina componenti per:"
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: eeschema/template_fieldnames.cpp:39 eeschema/onrightclick.cpp:431
-#: eeschema/sch_component.cpp:1532
+#: eeschema/sch_component.cpp:1538
 #: eeschema/widgets/widget_eeschema_color_config.cpp:75
-#: eeschema/dialogs/dialog_rescue_each.cpp:109 eeschema/lib_field.cpp:574
+#: eeschema/dialogs/dialog_rescue_each.cpp:107 eeschema/lib_field.cpp:574
 msgid "Reference"
 msgstr "Riferimento"
 
@@ -8027,7 +8027,7 @@ msgstr "File netlist:"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:159
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:333
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:336
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:187
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:186
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
@@ -8188,7 +8188,8 @@ msgid ""
 "file."
 msgstr ""
 "Non raccomandato.\n"
-"Usato solo per i fabbricanti di circuiti stampati che richiedono fori, metallizzati e non, in un unico file."
+"Usato solo per i fabbricanti di circuiti stampati che richiedono fori, "
+"metallizzati e non, in un unico file."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:103
 msgid "Absolute"
@@ -13094,13 +13095,13 @@ msgstr "Scheda esportata correttamente."
 msgid "Unable to export, please fix and try again."
 msgstr "Impossibile esportare la scheda. Correggere e riprovare."
 
-#: pcbnew/specctra_export.cpp:1025 pcbnew/specctra_export.cpp:1132
-#: pcbnew/specctra_export.cpp:1268
+#: pcbnew/specctra_export.cpp:1034 pcbnew/specctra_export.cpp:1141
+#: pcbnew/specctra_export.cpp:1277
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "DRAWSEGMENT tipo %s non supportatato"
 
-#: pcbnew/specctra_export.cpp:1157
+#: pcbnew/specctra_export.cpp:1166
 #, c-format
 msgid ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s "
@@ -13112,7 +13113,7 @@ msgstr ""
 "Modificare le grafiche perimetrali di Edge.Cuts, rendendole dei poligoni "
 "contigui."
 
-#: pcbnew/specctra_export.cpp:1293
+#: pcbnew/specctra_export.cpp:1302
 #, c-format
 msgid ""
 "Unable to find the next keepout segment with an endpoint of (%s mm, %s mm).\n"
@@ -13122,12 +13123,12 @@ msgstr ""
 "di (%s mm, %s mm).\n"
 "Modificare le grafiche interne a Edge.Cuts, rendendole dei poligoni contigui."
 
-#: pcbnew/specctra_export.cpp:1452
+#: pcbnew/specctra_export.cpp:1461
 #, c-format
 msgid "Component with value of '%s' has empty reference id."
 msgstr "Il componente con valore \"%s\" ha l'id di riferimento vuoto."
 
-#: pcbnew/specctra_export.cpp:1460
+#: pcbnew/specctra_export.cpp:1469
 #, c-format
 msgid "Multiple components have identical reference IDs of '%s'."
 msgstr "Più componenti hanno lo stesso id di riferimento \"%s\"."
@@ -14747,7 +14748,7 @@ msgstr "Commento4"
 msgid "Page layout description file"
 msgstr "File di descrizione disposizione pagina"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:39 eeschema/sch_sheet.cpp:809
+#: common/dialogs/dialog_env_var_config_base.cpp:39
 msgid "Path"
 msgstr "Percorso"
 
@@ -15326,21 +15327,21 @@ msgstr "Specifiche"
 msgid "Field"
 msgstr "Campo"
 
-#: eeschema/plot_schematic_SVG.cpp:95
+#: eeschema/plot_schematic_SVG.cpp:94
 #, c-format
 msgid "Cannot create file '%s'.\n"
 msgstr "Impossibile creare il file \"%s\".\n"
 
-#: eeschema/plot_schematic_SVG.cpp:101 eeschema/plot_schematic_SVG.cpp:138
-#: eeschema/plot_schematic_PS.cpp:123 eeschema/plot_schematic_PDF.cpp:140
-#: eeschema/plot_schematic_DXF.cpp:95 eeschema/plot_schematic_HPGL.cpp:191
+#: eeschema/plot_schematic_SVG.cpp:100 eeschema/plot_schematic_SVG.cpp:137
+#: eeschema/plot_schematic_PS.cpp:122 eeschema/plot_schematic_PDF.cpp:139
+#: eeschema/plot_schematic_DXF.cpp:94 eeschema/plot_schematic_HPGL.cpp:190
 #, c-format
 msgid "Plot: '%s' OK.\n"
 msgstr "Tracciatura: \"%s\" OK.\n"
 
-#: eeschema/plot_schematic_SVG.cpp:145 eeschema/plot_schematic_PS.cpp:129
-#: eeschema/plot_schematic_PDF.cpp:103 eeschema/plot_schematic_DXF.cpp:100
-#: eeschema/plot_schematic_HPGL.cpp:196
+#: eeschema/plot_schematic_SVG.cpp:144 eeschema/plot_schematic_PS.cpp:128
+#: eeschema/plot_schematic_PDF.cpp:102 eeschema/plot_schematic_DXF.cpp:99
+#: eeschema/plot_schematic_HPGL.cpp:195
 #, c-format
 msgid "Unable to create file '%s'.\n"
 msgstr "Impossibile creare il file \"%s\".\n"
@@ -15492,20 +15493,20 @@ msgstr "Larghezza conduttore"
 msgid "Rectangle from (%s, %s) to (%s, %s)"
 msgstr "Rettangolo da (%s, %s) a (%s, %s)"
 
-#: eeschema/edit_component_in_schematic.cpp:74
+#: eeschema/edit_component_in_schematic.cpp:73
 #, c-format
 msgid "Edit %s Field"
 msgstr "Modifica campo %s"
 
-#: eeschema/edit_component_in_schematic.cpp:109
+#: eeschema/edit_component_in_schematic.cpp:108
 msgid "Illegal reference string!  No change"
 msgstr "Campo Riferimento errato!"
 
-#: eeschema/edit_component_in_schematic.cpp:118
+#: eeschema/edit_component_in_schematic.cpp:117
 msgid "The reference field cannot be empty!  No change"
 msgstr "Il campo Riferimento non può essere vuoto!"
 
-#: eeschema/edit_component_in_schematic.cpp:128
+#: eeschema/edit_component_in_schematic.cpp:127
 msgid "The value field cannot be empty!  No change"
 msgstr "Il campo Valore non può essere vuoto!"
 
@@ -16012,12 +16013,13 @@ msgid "Open a recent opened schematic project"
 msgstr "Apri un schema elettrico aperto recentemente"
 
 #: eeschema/menubar.cpp:103
-msgid "App&end Schematic Sheet"
-msgstr "Accoda foglio sch&ema"
+msgid "Imp&ort Schematic Sheet Content"
+msgstr "Imp&orta il contenuto dello schema"
 
 #: eeschema/menubar.cpp:104
-msgid "Append schematic sheet to current project"
-msgstr "Accoda un nuovo foglio allo schema corrente"
+msgid ""
+"Import a schematic sheet content from an other project in the current sheet"
+msgstr "Importa il contenuto di uno schema elettrico da un altro progetto nel foglio corrente"
 
 #: eeschema/menubar.cpp:109
 msgid "&Save Schematic Project"
@@ -16513,60 +16515,48 @@ msgstr "Imposta i valori predefiniti e le opzioni dell'editor dei componenti"
 msgid "Open the Eeschema Manual"
 msgstr "Apri il manuale di Eeschema"
 
-#: eeschema/backanno.cpp:224
+#: eeschema/backanno.cpp:225
 msgid "Load Component Footprint Link File"
 msgstr "Carica file di collegamento componente impronta"
 
-#: eeschema/backanno.cpp:238
+#: eeschema/backanno.cpp:239
 msgid "Keep existing footprint field visibility"
 msgstr "Mantieni la visibilità dei campi componenti esistente"
 
-#: eeschema/backanno.cpp:239
+#: eeschema/backanno.cpp:240
 msgid "Show all footprint fields"
 msgstr "Mostra tutti i campi impronta"
 
-#: eeschema/backanno.cpp:240
+#: eeschema/backanno.cpp:241
 msgid "Hide all footprint fields"
 msgstr "Nascondi tutti i campi impronta"
 
-#: eeschema/backanno.cpp:242
+#: eeschema/backanno.cpp:243
 msgid "Select the footprint field visibility setting."
 msgstr "Selezionare le impostazioni di visibilità campi impronta."
 
-#: eeschema/backanno.cpp:243
+#: eeschema/backanno.cpp:244
 msgid "Change Visibility"
 msgstr "Cambia la visibilità"
 
-#: eeschema/backanno.cpp:254
+#: eeschema/backanno.cpp:255
 #, c-format
 msgid "Failed to open component-footprint link file '%s'"
 msgstr "Fallita l'apertura del file di associazione componenti-impronte \"%s\""
 
-#: eeschema/sch_sheet.cpp:807
+#: eeschema/sch_sheet.cpp:828
 msgid "Sheet Name"
 msgstr "Nome foglio"
 
-#: eeschema/sch_sheet.cpp:808
+#: eeschema/sch_sheet.cpp:829
 msgid "File Name"
 msgstr "Nome file"
 
-#: eeschema/sch_sheet.cpp:812
-msgid "Hierarchy Type"
-msgstr "Tipo gerarchico"
-
-#: eeschema/sch_sheet.cpp:813
-msgid "Complex"
-msgstr "Complesso"
-
-#: eeschema/sch_sheet.cpp:813
-msgid "Simple"
-msgstr "Semplice"
-
-#: eeschema/sch_sheet.cpp:817
+#: eeschema/sch_sheet.cpp:834
 msgid "Time Stamp"
 msgstr "Marcatura temporale"
 
-#: eeschema/sch_sheet.cpp:1030
+#: eeschema/sch_sheet.cpp:1047
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Foglio gerarchico %s"
@@ -17358,34 +17348,34 @@ msgstr "Nessuna libreria componenti caricata."
 msgid "Select Component"
 msgstr "Seleziona componente"
 
-#: eeschema/sch_field.cpp:471
+#: eeschema/sch_field.cpp:470
 #, c-format
 msgid "Field %s"
 msgstr "Campo %s"
 
-#: eeschema/sch_component.cpp:1535
+#: eeschema/sch_component.cpp:1542
 msgid "Power symbol"
 msgstr "Simbolo di alimentazione"
 
-#: eeschema/sch_component.cpp:1540
+#: eeschema/sch_component.cpp:1547
 #: eeschema/widgets/widget_eeschema_color_config.cpp:100
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 msgid "Component"
 msgstr "Componente"
 
-#: eeschema/sch_component.cpp:1543
+#: eeschema/sch_component.cpp:1550
 msgid "Alias of"
 msgstr "Alias di"
 
-#: eeschema/sch_component.cpp:1551
+#: eeschema/sch_component.cpp:1558
 msgid "<Unknown>"
 msgstr "<Sconosciuto>"
 
-#: eeschema/sch_component.cpp:1557
+#: eeschema/sch_component.cpp:1564
 msgid "Key Words"
 msgstr "Parole chiave"
 
-#: eeschema/sch_component.cpp:1801
+#: eeschema/sch_component.cpp:1808
 #, c-format
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
@@ -17455,7 +17445,7 @@ msgstr ""
 msgid "Do you wish to convert it to a simple hierarchical sheet?"
 msgstr "Desideri convertire in un foglio a gerarchia semplificata?"
 
-#: eeschema/sheet.cpp:249 eeschema/block.cpp:486
+#: eeschema/sheet.cpp:248 eeschema/block.cpp:485
 #, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
@@ -17700,16 +17690,16 @@ msgstr "Mostra piedini nascosti"
 msgid "HV orientation for wires and bus"
 msgstr "Orientamento per fili e bus"
 
-#: eeschema/getpart.cpp:153
+#: eeschema/getpart.cpp:152
 msgid "History"
 msgstr "Cronologia"
 
-#: eeschema/getpart.cpp:159
+#: eeschema/getpart.cpp:158
 #, c-format
 msgid "Choose Component (%d items loaded)"
 msgstr "Scegli componente (%d elementi caricati):"
 
-#: eeschema/getpart.cpp:217
+#: eeschema/getpart.cpp:216
 #, c-format
 msgid "Failed to find part '%s' in library"
 msgstr "Impossibile trovare il componente \"%s\" nella libreria"
@@ -17733,39 +17723,39 @@ msgstr "%d stampigliature duplicate trovate e sostituite."
 msgid "No new hierarchical labels found."
 msgstr "Nessuna nuova etichetta gerarchica trovata."
 
-#: eeschema/component_references_lister.cpp:534
+#: eeschema/component_references_lister.cpp:521
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Elemento non annotato: %s%s (unità %d)\n"
 
-#: eeschema/component_references_lister.cpp:541
+#: eeschema/component_references_lister.cpp:528
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Elemento non annotato: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:564
+#: eeschema/component_references_lister.cpp:551
 #, c-format
 msgid "Error item %s%s unit %d and no more than %d parts\n"
 msgstr "Errore elemento %s%s unità %d e non più di %d parti\n"
 
-#: eeschema/component_references_lister.cpp:604
-#: eeschema/component_references_lister.cpp:636
+#: eeschema/component_references_lister.cpp:591
+#: eeschema/component_references_lister.cpp:623
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
 msgstr "Elemento multiplo %s%s (unità %d)\n"
 
-#: eeschema/component_references_lister.cpp:611
-#: eeschema/component_references_lister.cpp:643
+#: eeschema/component_references_lister.cpp:598
+#: eeschema/component_references_lister.cpp:630
 #, c-format
 msgid "Multiple item %s%s\n"
 msgstr "Elemento multiplo %s%s\n"
 
-#: eeschema/component_references_lister.cpp:659
+#: eeschema/component_references_lister.cpp:646
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
 
-#: eeschema/component_references_lister.cpp:694
+#: eeschema/component_references_lister.cpp:681
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Duplicazione stampigliatura (%s) per %s%d e %s%d"
@@ -17880,7 +17870,7 @@ msgstr "In stampa"
 msgid "Print page %d"
 msgstr "Stampa pagina %d "
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:87
+#: eeschema/dialogs/dialog_rescue_each.cpp:85
 msgid ""
 "It looks like this project was made using older schematic component "
 "libraries.\n"
@@ -17898,21 +17888,21 @@ msgstr ""
 "simboli in una nuova libreria.\n"
 "I seguenti cambiamenti sono raccomandati per aggiornare il progetto."
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:106
+#: eeschema/dialogs/dialog_rescue_each.cpp:104
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:192
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:609
 msgid "Accept"
 msgstr "Accetta "
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:107
+#: eeschema/dialogs/dialog_rescue_each.cpp:105
 msgid "Symbol"
 msgstr "Simbolo"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:108
+#: eeschema/dialogs/dialog_rescue_each.cpp:106
 msgid "Action"
 msgstr "Azione"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:282
+#: eeschema/dialogs/dialog_rescue_each.cpp:280
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -17927,7 +17917,7 @@ msgstr ""
 "componenti\",\n"
 "e lo strumento può essere attivato manualmente dal menu \"Strumenti\"."
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:286
+#: eeschema/dialogs/dialog_rescue_each.cpp:284
 msgid "Rescue Components"
 msgstr "Recupera componenti"
 
@@ -18093,7 +18083,7 @@ msgstr "Valore campo"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:849
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:848
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:697
 msgid "Show in Browser"
 msgstr "Mostra nell'esploratore"
@@ -19349,39 +19339,39 @@ msgstr ""
 "I nomi delle impronte possono usare caratteri jolly.\n"
 "(come sm* per cercare impronte che iniziano con sm)"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:224
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:223
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Componente \"%s\" trovato nella libreria \"%s\""
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:230
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:229
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "Componente \"%s\" non trovato in nessuna libreria"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:246
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:245
 msgid "However, some candidates are found:"
 msgstr "Comunque, alcuni candidati sono stati trovati:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:252
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:251
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "\"%s\" trovato nella libreria \"%s\""
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:314
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:313
 msgid "No Component Name!"
 msgstr "Nessun nome al componente"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:323
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:322
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "Componente \"%s\" non trovato!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:397
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:396
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Riferimento errato. Un riferimento deve cominciare con una lettera."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:423
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:422
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field "
@@ -19392,11 +19382,11 @@ msgstr ""
 "e saranno rimossi dal componente. Si desidera rimuovere questo e gli altri "
 "campi vuoti?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:430
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:429
 msgid "Remove Fields"
 msgstr "Elimina campo"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:851
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:850
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Assign Footprint"
 msgstr "Assegna impronta"
@@ -19655,7 +19645,7 @@ msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 msgid "Do not show hidden pins"
 msgstr "Non mostrare i piedini nascosti"
 
-#: eeschema/schframe.cpp:832
+#: eeschema/schframe.cpp:835
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, you need to launch "
@@ -19666,28 +19656,28 @@ msgstr ""
 "stampato da uno schema elettrico, è necessario eseguire il gestore progetti "
 "KiCad e creare un progetto di circuito stampato."
 
-#: eeschema/schframe.cpp:947
+#: eeschema/schframe.cpp:950
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/schframe.cpp:966
+#: eeschema/schframe.cpp:969
 msgid "New Schematic"
 msgstr "Nuovo schema"
 
-#: eeschema/schframe.cpp:979
+#: eeschema/schframe.cpp:982
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
-#: eeschema/schframe.cpp:1000
+#: eeschema/schframe.cpp:1003
 msgid "Open Schematic"
 msgstr "Apri schema"
 
-#: eeschema/schframe.cpp:1130
+#: eeschema/schframe.cpp:1133
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1360
+#: eeschema/schframe.cpp:1366
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -19869,53 +19859,53 @@ msgid ""
 msgstr ""
 "Si è tentato di rimuovere il campo %s del componente %s nella libreria %s."
 
-#: eeschema/find.cpp:100
+#: eeschema/find.cpp:99
 #, c-format
 msgid "Design rule check marker found in sheet %s at %0.3f%s, %0.3f%s"
 msgstr "Controllo regole: marcatore trovato nel foglio %s a %0.3f%s, %0.3f%s"
 
-#: eeschema/find.cpp:106
+#: eeschema/find.cpp:105
 msgid "No more markers were found."
 msgstr "Nessun ulteriore marcatore trovato."
 
-#: eeschema/find.cpp:243
+#: eeschema/find.cpp:242
 msgid "component"
 msgstr "componente"
 
-#: eeschema/find.cpp:247
+#: eeschema/find.cpp:246
 #, c-format
 msgid "pin %s"
 msgstr "pin %s"
 
-#: eeschema/find.cpp:251
+#: eeschema/find.cpp:250
 #, c-format
 msgid "reference %s"
 msgstr "riferimento %s"
 
-#: eeschema/find.cpp:255
+#: eeschema/find.cpp:254
 msgid "value"
 msgstr "valore"
 
-#: eeschema/find.cpp:259
+#: eeschema/find.cpp:258
 msgid "field"
 msgstr "campo"
 
-#: eeschema/find.cpp:267
+#: eeschema/find.cpp:266
 #, c-format
 msgid "%s %s found"
 msgstr "%s %s trovato"
 
-#: eeschema/find.cpp:272
+#: eeschema/find.cpp:271
 #, c-format
 msgid "%s found but %s not found"
 msgstr "%s trovato ma %s non trovato"
 
-#: eeschema/find.cpp:278
+#: eeschema/find.cpp:277
 #, c-format
 msgid "Component %s not found"
 msgstr "Componente %s non trovato"
 
-#: eeschema/find.cpp:512
+#: eeschema/find.cpp:511
 #, c-format
 msgid "No item found matching %s."
 msgstr "Nessun componente corrisponde a %s."
