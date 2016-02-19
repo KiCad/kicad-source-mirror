@@ -369,21 +369,27 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
 
     wxFileName fn = aFileName;
 
-    if( fn.GetExt() == IO_MGR::GetFileExtension( IO_MGR::LEGACY ) )
+    // Note: file extensions are expected to be in ower case.
+    // This is not always true, especially when importing files, so the string
+    // comparisons are case insensitive to try to find the suitable plugin.
+
+    if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::LEGACY ) ) == 0 )
     {
         // both legacy and eagle share a common file extension.
         pluginType = ( aCtl & KICTL_EAGLE_BRD ) ? IO_MGR::EAGLE : IO_MGR::LEGACY;
     }
-    else if( fn.GetExt() == IO_MGR::GetFileExtension( IO_MGR::LEGACY ) + backupSuffix )
+    else if( fn.GetExt().CmpNoCase(  IO_MGR::GetFileExtension( IO_MGR::LEGACY ) + backupSuffix ) == 0 )
     {
         pluginType = IO_MGR::LEGACY;
     }
-    else if( fn.GetExt() == IO_MGR::GetFileExtension( IO_MGR::IO_MGR::PCAD ) )
+    else if( fn.GetExt().CmpNoCase(  IO_MGR::GetFileExtension( IO_MGR::PCAD ) ) == 0 )
     {
         pluginType = IO_MGR::PCAD;
     }
     else
+    {
         pluginType = IO_MGR::KICAD;
+    }
 
     return pluginType;
 }
