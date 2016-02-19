@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,24 +27,24 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxStaticBoxSizer* m_OptionsBoxSizer;
 	m_OptionsBoxSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General") ), wxVERTICAL );
 	
-	m_AsConvertButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Has alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AsConvertButt = new wxCheckBox( m_OptionsBoxSizer->GetStaticBox(), wxID_ANY, _("Has alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AsConvertButt->SetToolTip( _("Check this option if the component has an alternate body style (De Morgan)") );
 	
 	m_OptionsBoxSizer->Add( m_AsConvertButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_ShowPinNumButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show pin number"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNumButt = new wxCheckBox( m_OptionsBoxSizer->GetStaticBox(), wxID_ANY, _("Show pin number"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNumButt->SetValue(true); 
 	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
 	
 	m_OptionsBoxSizer->Add( m_ShowPinNumButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_ShowPinNameButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show pin name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNameButt = new wxCheckBox( m_OptionsBoxSizer->GetStaticBox(), wxID_ANY, _("Show pin name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNameButt->SetValue(true); 
 	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
 	
 	m_OptionsBoxSizer->Add( m_ShowPinNameButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_PinsNameInsideButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Place pin names inside"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PinsNameInsideButt = new wxCheckBox( m_OptionsBoxSizer->GetStaticBox(), wxID_ANY, _("Place pin names inside"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PinsNameInsideButt->SetValue(true); 
 	m_PinsNameInsideButt->SetToolTip( _("Check this option to have pin names inside the body and pin number outside.\nIf not checked pins names and pins numbers are outside.") );
 	

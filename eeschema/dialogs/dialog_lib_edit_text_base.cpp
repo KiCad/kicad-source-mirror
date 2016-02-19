@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -76,19 +76,19 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	wxStaticBoxSizer* sOptionsSizer;
 	sOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 	
-	m_Orient = new wxCheckBox( this, wxID_ANY, _("Vertical"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Orient = new wxCheckBox( sOptionsSizer->GetStaticBox(), wxID_ANY, _("Vertical"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_Orient, 0, wxALL, 5 );
 	
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_staticline1 = new wxStaticLine( sOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sOptionsSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_CommonUnit = new wxCheckBox( this, wxID_ANY, _("Common to all units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CommonUnit = new wxCheckBox( sOptionsSizer->GetStaticBox(), wxID_ANY, _("Common to all units"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_CommonUnit, 0, wxALL, 5 );
 	
-	m_CommonConvert = new wxCheckBox( this, wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CommonConvert = new wxCheckBox( sOptionsSizer->GetStaticBox(), wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_CommonConvert, 0, wxALL|wxEXPAND, 5 );
 	
-	m_Invisible = new wxCheckBox( this, wxID_ANY, _("Invisible"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Invisible = new wxCheckBox( sOptionsSizer->GetStaticBox(), wxID_ANY, _("Invisible"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_Invisible, 0, wxALL, 5 );
 	
 	

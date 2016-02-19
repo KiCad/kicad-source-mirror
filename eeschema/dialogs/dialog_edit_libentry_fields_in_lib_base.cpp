@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 28 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -76,12 +76,12 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	wxStaticBoxSizer* visibilitySizer;
 	visibilitySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Visibility") ), wxVERTICAL );
 	
-	showCheckBox = new wxCheckBox( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
+	showCheckBox = new wxCheckBox( visibilitySizer->GetStaticBox(), wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
 	showCheckBox->SetToolTip( _("Check if you want this field visible") );
 	
 	visibilitySizer->Add( showCheckBox, 0, wxALL, 5 );
 	
-	rotateCheckBox = new wxCheckBox( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
+	rotateCheckBox = new wxCheckBox( visibilitySizer->GetStaticBox(), wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
 	rotateCheckBox->SetToolTip( _("Check if you want this field's text rotated 90 degrees") );
 	
 	visibilitySizer->Add( rotateCheckBox, 0, wxALL, 5 );
