@@ -187,8 +187,10 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION );
         screen->SetCurItem( NULL );
         SetRepeatItem( NULL );
-        screen->TestDanglingEnds( m_canvas, &dc );
-        m_canvas->Refresh();
+
+        if( screen->TestDanglingEnds() )
+            m_canvas->Refresh();
+
         break;
 
     case ID_POPUP_SCH_BREAK_WIRE:
@@ -215,7 +217,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
             }
 
-            screen->TestDanglingEnds( m_canvas, &dc );
+            if( screen->TestDanglingEnds() )
+                m_canvas->Refresh();
         }
         break;
 
@@ -227,8 +230,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DeleteItem( item );
         screen->SetCurItem( NULL );
         SetRepeatItem( NULL );
-        screen->TestDanglingEnds( m_canvas, &dc );
+        screen->TestDanglingEnds();
         SetSheetNumberAndCount();
+        m_canvas->Refresh();
         OnModify();
         break;
 
@@ -239,7 +243,10 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_RESIZE_SHEET:
         ReSizeSheet( (SCH_SHEET*) item, &dc );
-        screen->TestDanglingEnds( m_canvas, &dc );
+
+        if( screen->TestDanglingEnds() )
+            m_canvas->Refresh();
+
         break;
 
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
@@ -375,7 +382,10 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ADD_JUNCTION:
         m_canvas->MoveCursorToCrossHair();
         screen->SetCurItem( AddJunction( &dc, GetCrossHairPosition(), true ) );
-        screen->TestDanglingEnds( m_canvas, &dc );
+
+        if( screen->TestDanglingEnds() )
+            m_canvas->Refresh();
+
         screen->SetCurItem( NULL );
         break;
 
@@ -648,8 +658,8 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
         SetRepeatItem( NULL );
         DeleteItem( item );
 
-        if( itemHasConnections )
-            screen->TestDanglingEnds( m_canvas, DC );
+        if( itemHasConnections && screen->TestDanglingEnds() )
+            m_canvas->Refresh();
 
         OnModify();
         return true;

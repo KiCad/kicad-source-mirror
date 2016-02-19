@@ -173,7 +173,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->ClearDrawingState();
     GetScreen()->ClearBlockCommand();
     GetScreen()->SetCurItem( NULL );
-    GetScreen()->TestDanglingEnds( m_canvas, DC );
+    GetScreen()->TestDanglingEnds();
 
     if( block->GetCount() )
     {
@@ -232,7 +232,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             }
 
             block->ClearItemsList();
-            GetScreen()->TestDanglingEnds( m_canvas, aDC );
+            GetScreen()->TestDanglingEnds();
             m_canvas->Refresh();
             break;
 
@@ -286,7 +286,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 OnModify();
             }
             block->ClearItemsList();
-            GetScreen()->TestDanglingEnds( m_canvas, aDC );
+            GetScreen()->TestDanglingEnds();
             m_canvas->Refresh();
             break;
 
@@ -327,7 +327,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 OnModify();
             }
 
-            GetScreen()->TestDanglingEnds( m_canvas, aDC );
+            GetScreen()->TestDanglingEnds();
             m_canvas->Refresh();
             break;
 
@@ -346,7 +346,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 OnModify();
             }
 
-            GetScreen()->TestDanglingEnds( m_canvas, aDC );
+            GetScreen()->TestDanglingEnds();
             m_canvas->Refresh();
             break;
 

@@ -457,7 +457,8 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
                     testItem = testItem->Next();
                 }
             }
-            else if ( ( ( item->Type() == SCH_JUNCTION_T ) && ( testItem->Type() == SCH_JUNCTION_T ) ) && ( testItem != item ) )
+            else if ( ( ( item->Type() == SCH_JUNCTION_T )
+                      && ( testItem->Type() == SCH_JUNCTION_T ) ) && ( testItem != item ) )
             {
                 if ( testItem->HitTest( item->GetPosition() ) )
                 {
@@ -479,7 +480,7 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
         }
     }
 
-    TestDanglingEnds( aCanvas, aDC );
+    TestDanglingEnds();
 
     if( aCanvas && modified )
         aCanvas->Refresh();
@@ -931,28 +932,22 @@ int SCH_SCREEN::UpdatePickList()
 }
 
 
-bool SCH_SCREEN::TestDanglingEnds( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
+bool SCH_SCREEN::TestDanglingEnds()
 {
     SCH_ITEM* item;
     std::vector< DANGLING_END_ITEM > endPoints;
-    bool hasDanglingEnds = false;
+    bool hasStateChanged = false;
 
     for( item = m_drawList.begin(); item; item = item->Next() )
         item->GetEndPoints( endPoints );
 
     for( item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( item->IsDanglingStateChanged( endPoints ) && ( aCanvas ) && ( aDC ) )
-        {
-            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        }
-
-        if( item->IsDangling() )
-            hasDanglingEnds = true;
+        if( item->IsDanglingStateChanged( endPoints ) )
+            hasStateChanged = true;
     }
 
-    return hasDanglingEnds;
+    return hasStateChanged;
 }
 
 

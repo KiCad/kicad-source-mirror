@@ -494,8 +494,17 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
             ( (SCH_TEXT*) my_clone )->IncrementLabel( GetRepeatDeltaLabel() );
 
         GetScreen()->Append( my_clone );
-        GetScreen()->TestDanglingEnds();
-        my_clone->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+
+        if( my_clone->IsConnectable() )
+        {
+            if( GetScreen()->TestDanglingEnds() )
+                m_canvas->Refresh();
+        }
+        else
+        {
+            my_clone->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        }
+
         SaveCopyInUndoList( my_clone, UR_NEW );
         my_clone->ClearFlags();
     }

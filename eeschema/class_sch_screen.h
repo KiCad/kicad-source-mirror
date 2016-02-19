@@ -265,11 +265,9 @@ public:
     /**
      * Function TestDanglingEnds
      * tests all of the connectible objects in the schematic for unused connection points.
-     * @param aDC - The device context to draw the dangling status indicators.
-     * @param aCanvas - The window to draw on.
-     * @return True if any dangling ends were found.
+     * @return True if any connection state changes were made.
      */
-    bool TestDanglingEnds( EDA_DRAW_PANEL* aCanvas = NULL, wxDC* aDC = NULL );
+    bool TestDanglingEnds();
 
     /**
      * Function ExtractWires
