@@ -1,7 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include "dialog_lib_edit_pin_table.h"
-
 #include "lib_pin.h"
-
 #include "pin_number.h"
 
 #include <boost/algorithm/string/join.hpp>
@@ -168,14 +189,14 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent,
             DataViewModel::PIN_TYPE,
             100,
             wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
-            wxDATAVIEW_COL_RESIZABLE );
+            wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
     wxDataViewTextRenderer* rend3 = new wxDataViewTextRenderer( wxT( "string" ), wxDATAVIEW_CELL_INERT );
     wxDataViewColumn* col3 = new wxDataViewColumn( _( "Position" ),
             rend3,
             DataViewModel::PIN_POSITION,
             100,
             wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
-            wxDATAVIEW_COL_RESIZABLE );
+            wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
     m_Pins->AppendColumn( col0 );
     m_Pins->SetExpanderColumn( col0 );
     m_Pins->AppendColumn( col1 );
