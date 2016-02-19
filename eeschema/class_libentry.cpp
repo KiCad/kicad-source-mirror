@@ -1672,6 +1672,8 @@ void LIB_PART::SetConversion( bool aSetConvert )
     // Duplicate items to create the converted shape
     if( aSetConvert )
     {
+        std::vector< LIB_ITEM* > tmp;     // Temporarily store the duplicated pins here.
+
         BOOST_FOREACH( LIB_ITEM& item, drawings )
         {
             // Only pins are duplicated.
@@ -1682,9 +1684,13 @@ void LIB_PART::SetConversion( bool aSetConvert )
             {
                 LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
                 newItem->m_Convert = 2;
-                drawings.push_back( newItem );
+                tmp.push_back( newItem );
             }
         }
+
+        // Transfer the new pins to the LIB_PART.
+        for( unsigned i = 0;  i < tmp.size();  i++ )
+            drawings.push_back( tmp[i] );
     }
     else
     {
