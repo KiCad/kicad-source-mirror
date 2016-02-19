@@ -105,8 +105,7 @@ public:
     int m_Flag;                         /* flag used in calculations */
     SCH_SHEET_PATH  m_SheetPath;        // the sheet path which contains this item
     SCH_SHEET_PATH  m_SheetPathInclude; // sheet path which contains the hierarchical label
-    int m_ElectricalType;               /* Has meaning only for Pins and
-                                         * hierarchical pins: electrical type */
+    ELECTRICAL_PINTYPE m_ElectricalPinType; // Has meaning only for Pins: electrical type of the pin
     int m_BusNetCode;                   /* Used for BUS connections */
     int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
                                          * created from the BUS label ) member number.

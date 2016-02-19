@@ -1092,7 +1092,6 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         item->m_Comp = &m_pins[i];
         item->m_Link = this;
         item->m_Type = NET_SHEETLABEL;
-        item->m_ElectricalType = m_pins[i].GetShape();
         item->m_Label = m_pins[i].GetText();
         item->m_Start = item->m_End = m_pins[i].GetPosition();
         aNetListItems.push_back( item );

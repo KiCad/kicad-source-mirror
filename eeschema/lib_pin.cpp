@@ -405,13 +405,13 @@ void LIB_PIN::SetShape( int aShape )
 }
 
 
-void LIB_PIN::SetType( int aType )
+void LIB_PIN::SetType( ELECTRICAL_PINTYPE aType )
 {
-    if( aType < 0 )
-        aType = 0;
+    if( aType < PIN_INPUT )
+        aType = PIN_INPUT;
 
-    if( aType >= (int)PIN_ELECTRICAL_TYPE_CNT )
-        aType = PIN_ELECTRICAL_TYPE_CNT - 1;
+    if( aType >= PIN_NMAX )
+        aType = PIN_NC;
 
     if( m_type != aType )
     {

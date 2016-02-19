@@ -38,7 +38,7 @@
 /**
  * The component library pin object electrical types used in ERC tests.
  */
-enum ElectricPinType {
+enum ELECTRICAL_PINTYPE {
     PIN_INPUT,
     PIN_OUTPUT,
     PIN_BIDI,
@@ -50,7 +50,7 @@ enum ElectricPinType {
     PIN_OPENCOLLECTOR,
     PIN_OPENEMITTER,
     PIN_NC,             /* No connect */
-    PIN_NMAX            /* End of List (no used as pin type) */
+    PIN_NMAX            /* End of List (not used as pin type) */
 };
 
 
@@ -96,7 +96,7 @@ class LIB_PIN : public LIB_ITEM
     int      m_orientation;  ///< Pin orientation (Up, Down, Left, Right)
     int      m_shape;        ///< Bitwise ORed of pin shapes (see enum DrawPinShape)
     int      m_width;        ///< Line width of the pin.
-    int      m_type;         ///< Electrical type of the pin.  See enum ElectricPinType.
+    ELECTRICAL_PINTYPE m_type;  ///< Electrical type of the pin.  See enum ELECTRICAL_PINTYPE.
     int      m_attributes;   ///< Set bit 0 to indicate pin is invisible.
     wxString m_name;
     long     m_number;       ///< Pin number defined as 4 ASCII characters like "12", "anod",
@@ -279,7 +279,7 @@ public:
      *
      * @return The electrical type of the pin (see enun ElectricPinType for values).
      */
-    int GetType() const { return m_type; }
+    ELECTRICAL_PINTYPE GetType() const { return m_type; }
 
     /**
      * return a string giving the electrical type of a pin.
@@ -321,9 +321,9 @@ public:
      * This will also update the electrical type of the pins marked by
      * EnableEditMode().
      *
-     * @param aType - The electrical type of the pin(see enun ElectricPinType for values).
+     * @param aType - The electrical type of the pin(see enun ELECTRICAL_PINTYPE for values).
      */
-    void SetType( int aType );
+    void SetType( ELECTRICAL_PINTYPE aType );
 
     /**
      * Set the pin length.
