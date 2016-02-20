@@ -26,6 +26,7 @@
 # mc: - Browser = TT
 # mc: - Nickname = Denominazione
 # mc: - Die = TT
+# mc: - Dia = diametro (per chiarezza)
 # mc: - legacy = datato (o non tradurlo)
 # mc: - courtyard = TT
 # mc: - assembly = TT
@@ -76,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-20 21:25+0100\n"
-"PO-Revision-Date: 2016-02-20 21:39+0100\n"
+"PO-Revision-Date: 2016-02-20 21:42+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -10340,7 +10341,7 @@ msgstr "Larghezza piste"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:50
 msgid "Via Dia"
-msgstr "Dia via"
+msgstr "Diametro via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:51
 msgid "Via Drill"
@@ -10348,7 +10349,7 @@ msgstr "Foro via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:52
 msgid "uVia Dia"
-msgstr "Dia microvia"
+msgstr "Diametro microvia"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:102
