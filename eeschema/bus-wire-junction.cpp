@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -314,7 +314,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     screen->Append( s_wires );
 
     // Correct and remove segments that need to be merged.
-    screen->SchematicCleanUp( NULL, DC );
+    screen->SchematicCleanUp();
 
     // A junction could be needed to connect the end point of the last created segment.
     if( screen->IsJunctionNeeded( endpoint ) )
@@ -429,7 +429,7 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPositio
 
     SetRepeatItem( no_connect );
     GetScreen()->Append( no_connect );
-    GetScreen()->SchematicCleanUp( m_canvas, aDC );
+    GetScreen()->SchematicCleanUp();
     OnModify();
     m_canvas->Refresh();
     SaveCopyInUndoList( no_connect, UR_NEW );
@@ -497,8 +497,8 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 
         if( my_clone->IsConnectable() )
         {
-            if( GetScreen()->TestDanglingEnds() )
-                m_canvas->Refresh();
+            GetScreen()->TestDanglingEnds();
+            m_canvas->Refresh();
         }
         else
         {
