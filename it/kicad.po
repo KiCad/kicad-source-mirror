@@ -34,6 +34,7 @@
 # mc: - pad = piazzola
 # mc: - track = pista
 # mc: - via = via
+# mc: - uvia = microvia (per chiarezza)
 # mc: - layer = strato
 # mc: - zone = zona
 # mc: - keepout = proibita
@@ -75,7 +76,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-20 21:25+0100\n"
-"PO-Revision-Date: 2016-02-20 21:29+0100\n"
+"PO-Revision-Date: 2016-02-20 21:39+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -10347,7 +10348,7 @@ msgstr "Foro via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:52
 msgid "uVia Dia"
-msgstr "Dia uvia"
+msgstr "Dia microvia"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:102
@@ -10495,11 +10496,11 @@ msgstr "Diametro minimo foro dei via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:217
 msgid "Min uvia diameter"
-msgstr "Diametro minimo MicroVia"
+msgstr "Diametro minimo microvia"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:225
 msgid "Min uvia drill dia"
-msgstr "Diametro minimo foro MicroVia"
+msgstr "Diametro minimo foro microvia"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:245
 msgid ""
@@ -11653,7 +11654,7 @@ msgstr "Inserire il valore minimo accettabile per il diametro dei via"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:66
 msgid "Min uVia size"
-msgstr "Minima dimensione MicroVia"
+msgstr "Dimensione minima microvia"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:68
 msgid "Enter the minimum acceptable diameter for a micro via"
