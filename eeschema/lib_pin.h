@@ -277,14 +277,14 @@ public:
     /**
      * Get the electrical type of the pin.
      *
-     * @return The electrical type of the pin (see enun ElectricPinType for values).
+     * @return The electrical type of the pin (see enun ELECTRICAL_PINTYPE for values).
      */
     ELECTRICAL_PINTYPE GetType() const { return m_type; }
 
     /**
      * return a string giving the electrical type of a pin.
      * Can be used when a known, not translated name is needed (for instance in net lists)
-     * @param aType is the electrical type (see enum ElectricPinType )
+     * @param aType is the electrical type (see enum ELECTRICAL_PINTYPE )
      * @return The electrical name for a pin type (see enun MsgPinElectricType for names).
      */
     static const wxString GetCanonicalElectricalTypeName( unsigned aType );
@@ -301,7 +301,7 @@ public:
 
     /**
      * return a translated string for messages giving the electrical type of a pin.
-     * @param aType is the electrical type (see enum ElectricPinType )
+     * @param aType is the electrical type (see enum ELECTRICAL_PINTYPE )
      * @return The electrical name of the pin (see enun MsgPinElectricType for names).
      */
     static const wxString GetElectricalTypeName( unsigned aType );
