@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-20 21:25+0100\n"
-"PO-Revision-Date: 2016-02-20 21:25+0100\n"
+"PO-Revision-Date: 2016-02-20 21:29+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -10330,7 +10330,7 @@ msgstr "Piste, via e piazzole sono consentite. La zona proibita non serve."
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:27
 msgid "Net Classes:"
-msgstr "Gruppo di collegamenti:"
+msgstr "Netclass:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:49
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:521
@@ -10339,7 +10339,7 @@ msgstr "Larghezza piste"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:50
 msgid "Via Dia"
-msgstr "Diametro via"
+msgstr "Dia via"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:51
 msgid "Via Drill"
