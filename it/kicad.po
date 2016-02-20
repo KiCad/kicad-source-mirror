@@ -74,8 +74,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-18 22:00+0100\n"
-"PO-Revision-Date: 2016-02-18 22:02+0100\n"
+"POT-Creation-Date: 2016-02-20 21:25+0100\n"
+"PO-Revision-Date: 2016-02-20 21:25+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -10430,7 +10430,7 @@ msgstr "Seleziona tutti i collegamenti nell'elenco di destra"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:154
 msgid "Net Classes Editor"
-msgstr "Editor delle neclass"
+msgstr "Editor delle netclass"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:163
 msgid "Via Options:"
@@ -16019,7 +16019,9 @@ msgstr "Imp&orta il contenuto dello schema"
 #: eeschema/menubar.cpp:104
 msgid ""
 "Import a schematic sheet content from an other project in the current sheet"
-msgstr "Importa il contenuto di uno schema elettrico da un altro progetto nel foglio corrente"
+msgstr ""
+"Importa il contenuto di uno schema elettrico da un altro progetto nel foglio "
+"corrente"
 
 #: eeschema/menubar.cpp:109
 msgid "&Save Schematic Project"
