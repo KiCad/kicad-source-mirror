@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-20 21:25+0100\n"
-"PO-Revision-Date: 2016-02-20 21:42+0100\n"
+"PO-Revision-Date: 2016-02-20 23:59+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -10485,23 +10485,23 @@ msgstr "Valore minimo consentito:"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:193
 #: pcbnew/dialogs/dialog_drc_base.cpp:46
 msgid "Min track width"
-msgstr "Minima larghezza pista"
+msgstr "Larghezza pista minima"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:201
 msgid "Min via diameter"
-msgstr "Diametro minimo via"
+msgstr "Diametro via minimo"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:209
 msgid "Min via drill dia"
-msgstr "Diametro minimo foro dei via"
+msgstr "Diametro foro via minimo"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:217
 msgid "Min uvia diameter"
-msgstr "Diametro minimo microvia"
+msgstr "Diametro microvia minimo"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:225
 msgid "Min uvia drill dia"
-msgstr "Diametro minimo foro microvia"
+msgstr "Diametro foro microvia minimo"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:245
 msgid ""
