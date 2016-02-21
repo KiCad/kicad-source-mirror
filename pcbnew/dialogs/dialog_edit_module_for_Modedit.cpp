@@ -94,6 +94,10 @@ DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
 
     m_shapes3D_list.clear();
 
+    // free the memory used by all models, otherwise models which were
+    // browsed but not used would consume memory
+    Prj().Get3DCacheManager()->FlushCache( false );
+
     delete m_referenceCopy;
     delete m_valueCopy;
 }

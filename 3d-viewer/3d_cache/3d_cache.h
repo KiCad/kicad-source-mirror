@@ -172,9 +172,9 @@ public:
 
     /**
      * Function FlushCache
-     * frees all data in the cache and closes all plugins
+     * frees all data in the cache and by default closes all plugins
      */
-    void FlushCache( void );
+    void FlushCache( bool closePlugins = true );
 
     /**
      * Function ClosePlugins

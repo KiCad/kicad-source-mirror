@@ -651,7 +651,7 @@ std::list< wxString > const* S3D_CACHE::GetFileFilters( void ) const
 }
 
 
-void S3D_CACHE::FlushCache( void )
+void S3D_CACHE::FlushCache( bool closePlugins )
 {
     std::list< S3D_CACHE_ENTRY* >::iterator sCL = m_CacheList.begin();
     std::list< S3D_CACHE_ENTRY* >::iterator eCL = m_CacheList.end();
@@ -663,7 +663,10 @@ void S3D_CACHE::FlushCache( void )
     }
 
     m_CacheList.clear();
-    ClosePlugins();
+    m_CacheMap.clear();
+
+    if( closePlugins )
+        ClosePlugins();
 
     return;
 }
