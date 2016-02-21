@@ -146,7 +146,7 @@ bool WRL1BASE::Read( WRLPROC& proc )
     // Note: according to the VRML1 specification, a file may contain
     // only one grouping node at the top level. The following code
     // supports non-conformant VRML1 files by processing all top level
-    // grouping nodes.
+    // grouping nodes and ignoring any top-level non-grouping nodes.
 
     while( proc.ReadName( glob ) )
     {
@@ -188,7 +188,19 @@ bool WRL1BASE::Read( WRLPROC& proc )
             std::cerr << " * [INFO] bad file - top node is not a Separator, Switch, or Group\n";
             #endif
 
-            return false;
+            if( !proc.DiscardNode() )
+            {
+                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
+                std::cerr << proc.GetError() << "\n";
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] could not discard node at line " << line;
+            std::cerr << ", column " << column << "\n";
+                #endif
+
+                return false;
+            }
+
+            continue;
         }
 
         switch( ntype )
