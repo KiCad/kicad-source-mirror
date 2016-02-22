@@ -142,6 +142,9 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
             return false;
         }
+
+        // for legacy KiCad support we interpret units as 0.1 inch
+        size *= 2.54;
     }
     else
     {
