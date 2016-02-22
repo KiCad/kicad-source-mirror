@@ -48,9 +48,9 @@
 
 
 #define PLUGIN_VRML_MAJOR 1
-#define PLUGIN_VRML_MINOR 2
+#define PLUGIN_VRML_MINOR 3
 #define PLUGIN_VRML_PATCH 0
-#define PLUGIN_VRML_REVNO 1
+#define PLUGIN_VRML_REVNO 0
 
 
 const char* GetKicadPluginName( void )
@@ -175,7 +175,7 @@ public:
 };
 
 
-SCENEGRAPH* LoadVRML( const wxString& aFileName )
+SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 {
     FILE_LINE_READER* modelFile = NULL;
     SCENEGRAPH* scene = NULL;
@@ -206,8 +206,8 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName )
 
         WRL1BASE* bp = new WRL1BASE;
 
-        // allow Inline{} files to be included
-        bp->SetEnableInline( true );
+        // allow or ignore Inline{} files
+        bp->SetEnableInline( useInline );
 
         if( !bp->Read( proc ) )
         {
@@ -310,7 +310,7 @@ SCENEGRAPH* Load( char const* aFileName )
     if( ext == "x3d" || ext == "X3D" )
         scene = LoadX3D( fname );
     else
-        scene = LoadVRML( fname );
+        scene = LoadVRML( fname, true );
 
     return scene;
 }

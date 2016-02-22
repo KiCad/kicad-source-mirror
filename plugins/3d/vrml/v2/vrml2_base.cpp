@@ -22,6 +22,9 @@
  */
 
 #include <iostream>
+#include <utility>
+#include <wx/string.h>
+#include <wx/filename.h>
 
 #include "vrml2_base.h"
 #include "vrml2_transform.h"
@@ -36,8 +39,11 @@
 #include "vrml2_color.h"
 #include "vrml2_box.h"
 #include "vrml2_switch.h"
+#include "vrml2_inline.h"
 #include "plugins/3dapi/ifsg_all.h"
 
+
+SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline );
 
 WRL2BASE::WRL2BASE() : WRL2NODE()
 {
@@ -49,6 +55,22 @@ WRL2BASE::WRL2BASE() : WRL2NODE()
 
 WRL2BASE::~WRL2BASE()
 {
+    std::map< std::string, SGNODE* >::iterator iS = m_inlineModels.begin();
+    std::map< std::string, SGNODE* >::iterator eS = m_inlineModels.end();
+
+    while( iS != eS )
+    {
+        SGNODE* np = iS->second;
+
+        // destroy any orphaned Inline{} node data
+        if( np && NULL == S3D::GetSGNodeParent( np ) )
+            S3D::DestroyNode( np );
+
+        ++iS;
+    }
+
+    m_inlineModels.clear();
+
     return;
 }
 
@@ -78,28 +100,50 @@ bool WRL2BASE::GetEnableInline( void )
 }
 
 
-SGNODE* WRL2BASE::AddInlineData( const std::string& aName, WRL2INLINE* aObject )
+SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
 {
-    std::map< std::string, WRL2INLINE* >::iterator dp = m_inlineModels.find( aName );
-    // XXX;
-    // qwerty;
-    return NULL;
-}
+    if( aName.empty() )
+        return NULL;
 
+    std::map< std::string, SGNODE* >::iterator dp = m_inlineModels.find( aName );
 
-SGNODE* WRL2BASE::GetInlineData( const std::string& aName, WRL2INLINE* aObject )
-{
-    // XXX;
-    // qwerty;
-    return NULL;
-}
+    if( dp != m_inlineModels.end() )
+        return dp->second;
 
+    wxString tname;
 
-void WRL2BASE::DelInlineData( const std::string& aName, WRL2INLINE* aObject )
-{
-    // XXX;
-    // qwerty;
-    return;
+    if( aName.find( "file://", 0, 7 ) == 0 )
+    {
+        if( aName.length() <= 7 )
+            return NULL;
+
+        tname = wxString::FromUTF8Unchecked( aName.substr( 7 ).c_str() );
+    }
+    else
+    {
+        tname = wxString::FromUTF8Unchecked( aName.c_str() );
+    }
+
+    wxFileName fn;
+    fn.Assign( tname );
+
+    if( !fn.Normalize() )
+    {
+        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, NULL ) );
+        return NULL;
+    }
+
+    SCENEGRAPH* sp = LoadVRML( fn.GetFullPath(), false );
+
+    if( NULL == sp )
+    {
+        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, NULL ) );
+        return NULL;
+    }
+
+    m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, (SGNODE*)sp ) );
+
+    return (SGNODE*)sp;
 }
 
 
@@ -587,6 +631,13 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
+    case WRL2_INLINE:
+
+        if( !readInline( proc, aParent, aNode ) )
+            return false;
+
+        break;
+
     //
     // items not implemented or for optional future implementation:
     //
@@ -602,7 +653,6 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     case WRL2_FOG:
     case WRL2_FONTSTYLE:
     case WRL2_IMAGETEXTURE:
-    case WRL2_INLINE:
     case WRL2_LOD:
     case WRL2_MOVIETEXTURE:
     case WRL2_NAVIGATIONINFO:
@@ -910,6 +960,47 @@ bool WRL2BASE::readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 }
 
 
+bool WRL2BASE::readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
+{
+    if( NULL != aNode )
+        *aNode = NULL;
+
+    if( !m_useInline )
+    {
+        size_t line = 0;
+        size_t column = 0;
+        proc.GetFilePosData( line, column );
+
+        if( !proc.DiscardNode() )
+        {
+            #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
+            std::cerr << proc.GetError() << "\n";
+            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::cerr << " * [INFO] could not discard Inline node at line " << line;
+            std::cerr << ", column " << column << "\n";
+            #endif
+
+            return false;
+        }
+
+        return true;
+    }
+
+    WRL2INLINE* np = new WRL2INLINE( aParent );
+
+    if( !np->Read( proc, this ) )
+    {
+        delete np;
+        return false;
+    }
+
+    if( NULL != aNode )
+        *aNode = (WRL2NODE*) np;
+
+    return true;
+}
+
+
 SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
 {
     if( m_Children.empty() )
@@ -980,6 +1071,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
 
         case WRL2_TRANSFORM:
         case WRL2_SWITCH:
+        case WRL2_INLINE:
 
             if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr() ) )
                 test = true;

@@ -77,8 +77,9 @@ private:
     bool readColor( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readBox( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+    bool readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
-    std::map< std::string, WRL2INLINE* > m_inlineModels;
+    std::map< std::string, SGNODE* > m_inlineModels;
 
 public:
 
@@ -94,9 +95,7 @@ public:
     bool GetEnableInline( void );
 
     // functions to manipulate Inline{} objects
-    SGNODE* AddInlineData( const std::string& aName, WRL2INLINE* aObject );
-    SGNODE* GetInlineData( const std::string& aName, WRL2INLINE* aObject );
-    void DelInlineData( const std::string& aName, WRL2INLINE* aObject );
+    SGNODE* GetInlineData( const std::string& aName );
 
     // function to read entire VRML file
     bool Read( WRLPROC& proc );

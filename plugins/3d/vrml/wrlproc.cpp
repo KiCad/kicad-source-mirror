@@ -687,13 +687,16 @@ bool WRLPROC::ReadString( std::string& aSFString )
 
             continue;
         }
-
-        if( '"' ==  m_buf[m_bufpos] )
+        else if( '"' ==  m_buf[m_bufpos] )
         {
             if( isesc )
                 aSFString.append( 1, '"' );
             else
                 break;
+        }
+        else
+        {
+            aSFString.append( 1, m_buf[m_bufpos] );
         }
 
         // ensure that the backslash escape cannot extend beyond the first character
