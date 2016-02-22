@@ -1,6 +1,7 @@
 
 Examples description
 ====================
+A PCAD ASCII sample file can be downloaded from http://www.pcadbegin.webtm.ru
+(Provided by its author Andrey Manin <pcadbegin[at]rambler.ru>)
 
-CK1202_V1.pcb - provided by author Andrey Manin <pcadbegin[at]rambler.ru>,
-downloaded from http://www.pcadbegin.webtm.ru/schetchik.php?scach=1
+http://www.pcadbegin.webtm.ru/schetchik.php?scach=1 (CK1202_V1.pcb)

@@ -1900,7 +1900,7 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
             item->m_SheetPath = *aSheetPath;
             item->m_Type = NET_PIN;
             item->m_Link = (SCH_ITEM*) this;
-            item->m_ElectricalType = pin->GetType();
+            item->m_ElectricalPinType = pin->GetType();
             item->m_PinNum = pin->GetNumber();
             item->m_Label = pin->GetName();
             item->m_Start = item->m_End = pos;

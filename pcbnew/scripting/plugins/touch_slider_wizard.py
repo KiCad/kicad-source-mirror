@@ -193,6 +193,9 @@ class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
         ypos += t_size + w_text*2
         self.draw.Reference(0, -ypos, t_size)
 
+        # set SMD attribute
+        self.module.SetAttributes(MOD_CMS)
+
         # starting pad
         pos = wxPointMM(0,0)
         band_width = touch_width/bands

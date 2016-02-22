@@ -103,7 +103,7 @@ static const int pin_style_codes[] =
 #define PIN_STYLE_CNT DIM( pin_style_codes )
 
 // bitmaps to show pins electrical type in dialog editor
-// must have same order than enum ElectricPinType (see lib_pin.h)
+// must have same order than enum ELECTRICAL_PINTYPE (see lib_pin.h)
 static const BITMAP_DEF iconsPinsElectricalType[] =
 {
     pintype_input_xpm,
@@ -127,7 +127,7 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( unsigned aType )
     // These strings are the canonical name of the electrictal type
     // Not translated, no space in name, only ASCII chars.
     // to use when the string name must be known and well defined
-    // must have same order than enum ElectricPinType (see lib_pin.h)
+    // must have same order than enum ELECTRICAL_PINTYPE (see lib_pin.h)
     static const wxChar* msgPinElectricType[] =
     {
         wxT( "input" ),
@@ -405,13 +405,13 @@ void LIB_PIN::SetShape( int aShape )
 }
 
 
-void LIB_PIN::SetType( int aType )
+void LIB_PIN::SetType( ELECTRICAL_PINTYPE aType )
 {
-    if( aType < 0 )
-        aType = 0;
+    if( aType < PIN_INPUT )
+        aType = PIN_INPUT;
 
-    if( aType >= (int)PIN_ELECTRICAL_TYPE_CNT )
-        aType = PIN_ELECTRICAL_TYPE_CNT - 1;
+    if( aType >= PIN_NMAX )
+        aType = PIN_NC;
 
     if( m_type != aType )
     {

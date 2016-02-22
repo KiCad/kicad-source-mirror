@@ -59,6 +59,8 @@ enum NETLIST_ITEM_T
                                      * the bus label (like DATA[0..7] is
                                      * converted to n single labels like
                                      * DATA0, DATA1 ...
+                                     * These objects are living only in the current
+                                     * NETLIST_OBJECT_LIST, not in shematic.
                                      */
     NET_GLOBBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
                                     // global bus label is found
@@ -103,8 +105,7 @@ public:
     int m_Flag;                         /* flag used in calculations */
     SCH_SHEET_PATH  m_SheetPath;        // the sheet path which contains this item
     SCH_SHEET_PATH  m_SheetPathInclude; // sheet path which contains the hierarchical label
-    int m_ElectricalType;               /* Has meaning only for Pins and
-                                         * hierarchical pins: electrical type */
+    ELECTRICAL_PINTYPE m_ElectricalPinType; // Has meaning only for Pins: electrical type of the pin
     int m_BusNetCode;                   /* Used for BUS connections */
     int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
                                          * created from the BUS label ) member number.
@@ -217,10 +218,19 @@ public:
      * (i.e. an real global label or a pin label coming
      * from a power pin invisible
      */
-    bool IsLabelGlobal() const
-    {
-        return ( m_Type == NET_PINLABEL ) || ( m_Type == NET_GLOBLABEL );
-    }
+    bool IsLabelGlobal() const;
+
+    /**
+     * Function IsLabelBusMemberType
+     * @return true if the object is a bus label member build from a
+     * schematic bus label (like label[xx..yy], xx and yy are the first and last
+     * bus member id)
+     * bus label members have specific properties:
+     * they do not live in schematic
+     * they have specific properties in connections:
+     * 2 bus label members can be connected connected only if they have the same member value.
+     */
+    bool IsLabelBusMemberType() const;
 
     /**
      * Function IsLabelType
@@ -436,7 +446,7 @@ private:
         return Objet1->m_SheetPath.Cmp( Objet2->m_SheetPath ) < 0;
     }
 
-    /*
+    /**
      * Propagate net codes from a parent sheet to an include sheet,
      * from a pin sheet connection
      */
@@ -444,8 +454,8 @@ private:
 
     void pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus, int start );
 
-    /*
-     * Search connections betweena junction and segments
+    /**
+     * Search connections between a junction and segments
      * Propagate the junction net code to objects connected by this junction.
      * The junction must have a valid net code
      * The list of objects is expected sorted by sheets.
@@ -453,9 +463,16 @@ private:
      */
     void segmentToPointConnect( NETLIST_OBJECT* aJonction, bool aIsBus, int aIdxStart );
 
+
+    /**
+     * Function connectBusLabels
+     * Propagate the net code (and create it, if not yet existing) between
+     * all bus label member objects connected by they name.
+     * Search is done in the entire list
+     */
     void connectBusLabels();
 
-    /*
+    /**
      * Set the m_FlagOfConnection member of items in list
      * depending on the connection type:
      * UNCONNECTED, PAD_CONNECT or NOCONNECT_SYMBOL_PRESENT

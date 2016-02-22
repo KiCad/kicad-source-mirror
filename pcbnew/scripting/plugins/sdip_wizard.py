@@ -109,6 +109,9 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
         self.draw.SetLayer(pcbnew.F_CrtYd)
         sizex = (ssx + cmargin) * 2
         sizey = (ssy + cmargin) * 2
+        # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
+        sizex = self.PutOnGridMM(sizex, 0.1)
+        sizey = self.PutOnGridMM(sizey, 0.1)
         # set courtyard line thickness to the one defined in KLC
         self.draw.SetLineThickness(pcbnew.FromMM(0.05))
         self.draw.Box(0, 0, sizex, sizey)
@@ -128,6 +131,11 @@ class RowedFootprint(HFPW.HelpfulFootprintWizardPlugin):
             self.draw.Value(0, 0, text_size)
             self.draw.Reference(-text_px, 0, text_size, orientation_degree=90)
 
+        # set the attribute
+        if self.GetName() == "S-DIP":
+            self.module.SetAttributes(pcbnew.MOD_DEFAULT)
+        elif self.GetName() == "SOIC":
+            self.module.SetAttributes(pcbnew.MOD_CMS)
 
 class SDIPWizard(RowedFootprint):
 

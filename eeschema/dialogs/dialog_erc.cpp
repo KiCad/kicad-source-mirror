@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -480,7 +480,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         /* Ff wire list has changed, delete Undo Redo list to avoid pointers on deleted
          * data problems.
          */
-        if( screen->SchematicCleanUp( NULL ) )
+        if( screen->SchematicCleanUp() )
             screen->ClearUndoRedoList();
     }
 

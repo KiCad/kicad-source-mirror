@@ -279,7 +279,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         return;
     }
 
-    ii = aNetItemRef->m_ElectricalType;
+    ii = aNetItemRef->m_ElectricalPinType;
 
     wxString string_pinnum, cmp_ref;
     char     ascii_buf[5];
@@ -337,7 +337,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     if( aNetItemTst )         /* Error between 2 pins */
     {
-        jj = aNetItemTst->m_ElectricalType;
+        jj = aNetItemTst->m_ElectricalPinType;
         int errortype = ERCE_PIN_TO_PIN_WARNING;
 
         if( aDiag == ERR )
@@ -378,7 +378,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList,
     int erc = OK;
 
     /* Analysis of the table of connections. */
-    int ref_elect_type = aList->GetItem( aNetItemRef )->m_ElectricalType;
+    ELECTRICAL_PINTYPE ref_elect_type = aList->GetItem( aNetItemRef )->m_ElectricalPinType;
     int local_minconn = NOC;
 
     if( ref_elect_type == PIN_NC )
@@ -476,7 +476,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList,
             break;
 
         case NET_PIN:
-            jj = aList->GetItem( netItemTst )->m_ElectricalType;
+            jj = aList->GetItem( netItemTst )->m_ElectricalPinType;
             local_minconn = std::max( MinimalReq[ref_elect_type][jj], local_minconn );
 
             if( netItemTst <= aNetItemRef )

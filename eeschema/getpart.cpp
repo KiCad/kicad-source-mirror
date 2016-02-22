@@ -275,8 +275,10 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
     component->SetOrientation( aOrientation );
 
     m_canvas->CrossHairOn( &dc );
-    GetScreen()->TestDanglingEnds( m_canvas, &dc );
-    m_canvas->Refresh();
+
+    if( GetScreen()->TestDanglingEnds() )
+        m_canvas->Refresh();
+
     OnModify();
 }
 
@@ -333,8 +335,9 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
         if( m_autoplaceFields )
             component->AutoAutoplaceFields( GetScreen() );
 
-        screen->TestDanglingEnds( m_canvas, &dc );
-        m_canvas->Refresh();
+        if( screen->TestDanglingEnds() )
+            m_canvas->Refresh();
+
         OnModify();
     }
 }
@@ -371,6 +374,9 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
         if( DrawComponent->GetConvert() > 2 )
             DrawComponent->SetConvert( 1 );
 
+        // The alternate symbol may cause a change in the connection status so test the
+        // connections so the connection indicators are drawn correctly.
+        GetScreen()->TestDanglingEnds();
         DrawComponent->ClearFlags();
         DrawComponent->SetFlags( flags );   // Restore m_Flag (modified by SetConvert())
 
@@ -380,7 +386,6 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
         else
             DrawComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-        GetScreen()->TestDanglingEnds( m_canvas, DC );
         OnModify();
     }
 }

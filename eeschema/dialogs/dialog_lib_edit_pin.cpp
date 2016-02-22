@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,7 +134,7 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
     int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );
     int pinLength = ValueFromString( g_UserUnit, GetLength() );
     int pinShape = LIB_PIN::GetStyleCode( GetStyle() );
-    int pinType = GetElectricalType();
+    ELECTRICAL_PINTYPE pinType = GetElectricalType();
 
     m_dummyPin->SetName( GetPinName() );
     m_dummyPin->SetNameTextSize( pinNameSize );

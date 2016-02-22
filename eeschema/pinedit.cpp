@@ -55,7 +55,7 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
 
 static wxPoint OldPos;
 static wxPoint PinPreviousPos;
-static int     LastPinType          = PIN_INPUT;
+static ELECTRICAL_PINTYPE LastPinType   = PIN_INPUT;
 static int     LastPinOrient        = PIN_RIGHT;
 static int     LastPinShape         = NONE;
 static bool    LastPinCommonConvert = false;

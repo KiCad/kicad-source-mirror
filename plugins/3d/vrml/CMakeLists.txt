@@ -28,6 +28,7 @@ add_library( s3d_plugin_vrml MODULE
         v2/vrml2_color.cpp
         v2/vrml2_box.cpp
         v2/vrml2_switch.cpp
+        v2/vrml2_inline.cpp
         v1/vrml1_node.cpp
         v1/vrml1_base.cpp
         v1/vrml1_group.cpp

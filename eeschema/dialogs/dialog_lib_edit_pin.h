@@ -64,9 +64,12 @@ public:
     {
         m_choiceElectricalType->SetSelection( type );
     }
-    int GetElectricalType( void )
+
+    ELECTRICAL_PINTYPE GetElectricalType( void )
     {
-        return m_choiceElectricalType->GetSelection();
+        // m_choiceElectricalType is expected having the eletrical type names
+        // order indentical to the ELECTRICAL_PINTYPE enum
+        return (ELECTRICAL_PINTYPE)m_choiceElectricalType->GetSelection();
     }
 
     void SetStyleList( const wxArrayString& list, const BITMAP_DEF* aBitmaps );

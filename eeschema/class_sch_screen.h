@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,20 +256,16 @@ public:
      * performs routine schematic cleaning including breaking wire and buses and
      * deleting identical objects superimposed on top of each other.
      *
-     * @param aCanvas The window to draw on.
-     * @param aDC The device context used for drawing to \a aCanvas.
      * @return True if any schematic clean up was performed.
      */
-    bool SchematicCleanUp( EDA_DRAW_PANEL* aCanvas = NULL, wxDC* aDC = NULL );
+    bool SchematicCleanUp();
 
     /**
      * Function TestDanglingEnds
      * tests all of the connectible objects in the schematic for unused connection points.
-     * @param aDC - The device context to draw the dangling status indicators.
-     * @param aCanvas - The window to draw on.
-     * @return True if any dangling ends were found.
+     * @return True if any connection state changes were made.
      */
-    bool TestDanglingEnds( EDA_DRAW_PANEL* aCanvas = NULL, wxDC* aDC = NULL );
+    bool TestDanglingEnds();
 
     /**
      * Function ExtractWires
