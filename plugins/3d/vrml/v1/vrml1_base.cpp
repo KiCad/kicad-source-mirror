@@ -146,85 +146,20 @@ bool WRL1BASE::Read( WRLPROC& proc )
     // Note: according to the VRML1 specification, a file may contain
     // only one grouping node at the top level. The following code
     // supports non-conformant VRML1 files by processing all top level
-    // grouping nodes and ignoring any top-level non-grouping nodes.
+    // nodes as if the vrml1_base were the equivalent of a vrml1_separator
 
-    while( proc.ReadName( glob ) )
+    while( proc.Peek() )
     {
-
-        // Process node name: only Separator, Switch and DEF are acceptable;
-        // WWWAnchor and LOD will not be supported
-        if( !glob.compare( "DEF" ) )
-        {
-            // read the name and discard it; we must not add it to the dictionary
-            // because that invites the possibility of a circular reference
-
-            for( int i = 0; i < 2; ++i )
-            {
-                if( !proc.ReadName( glob ) )
-                {
-                    #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    std::cerr << proc.GetError() << "\n";
-                    #endif
-
-                    return false;
-                }
-            }
-        }
-
-        ntype = getNodeTypeID( glob );
-        size_t line = 0;
-        size_t column = 0;
-        proc.GetFilePosData( line, column );
-
-        #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        std::cerr << " * [INFO] Processing node '" << glob << "' ID: " << ntype << "\n";
-        #endif
-
-        if( ntype != WRL1_SEPARATOR && ntype != WRL1_SWITCH && ntype != WRL1_GROUP )
+        if( !ReadNode( proc, this, NULL ) )
         {
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file - top node is not a Separator, Switch, or Group\n";
+            std::cerr << " * [INFO] bad file format; unexpected eof at line ";
+            std::cerr << line << ", column " << column << "\n";
             #endif
 
-            if( !proc.DiscardNode() )
-            {
-                #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << proc.GetError() << "\n";
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] could not discard node at line " << line;
-            std::cerr << ", column " << column << "\n";
-                #endif
-
-                return false;
-            }
-
-            continue;
+            return false;
         }
-
-        switch( ntype )
-        {
-        case WRL1_SEPARATOR:
-
-            if( !readSeparator( proc, this, NULL ) )
-                return false;
-
-            break;
-
-        case WRL1_GROUP:
-
-            if( !readGroup( proc, this, NULL ) )
-                return false;
-
-            break;
-
-        default:
-
-            if( !readSwitch( proc, this, NULL ) )
-                return false;
-        }
-
     }
 
     if( !proc.eof() )
