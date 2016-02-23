@@ -24,22 +24,22 @@
 
 #include <utility>
 #include <iostream>
-#include <unistd.h>
-#include <sys/types.h>
-#include <string>
 #include <sstream>
+#include <wx/log.h>
 
 #include <wx/string.h>
 #include <wx/dir.h>
 #include <wx/config.h>
 #include <wx/stdpaths.h>
-#include <wx/filename.h>
 #include <wx/dynlib.h>
 
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
 #include "3d_cache/sg/scenegraph.h"
 #include "plugins/ldr/3d/pluginldr3D.h"
+
+#define MASK_3D_PLUGINMGR "3D_PLUGIN_MANAGER"
+
 
 S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 {
@@ -54,19 +54,19 @@ S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
     {
         std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::const_iterator sM = m_ExtMap.begin();
         std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::const_iterator eM = m_ExtMap.end();
-        std::cout << "* Extension [plugin name]:\n";
+        wxLogTrace( MASK_3D_PLUGINMGR, " * Extension [plugin name]:\n" );
 
         while( sM != eM )
         {
-            std::cout << "  + '" << sM->first.ToUTF8() << "' [";
-            std::cout << sM->second->GetKicadPluginName() << "]\n";
+            wxLogTrace( MASK_3D_PLUGINMGR, "   + '%s' [%s]\n", sM->first.ToUTF8(),
+                  sM->second->GetKicadPluginName() );
             ++sM;
         }
 
     }
     else
     {
-        std::cout << "* No plugins available\n";
+        wxLogTrace( MASK_3D_PLUGINMGR, " * No plugins available\n" );
     }
 
 
@@ -75,17 +75,17 @@ S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
         /// list of file filters
         std::list< wxString >::const_iterator sFF = m_FileFilters.begin();
         std::list< wxString >::const_iterator eFF = m_FileFilters.end();
-        std::cout << "* File filters:\n";
+        wxLogTrace( MASK_3D_PLUGINMGR, " * File filters:\n" );
 
         while( sFF != eFF )
         {
-            std::cout << " + '" << *sFF << "'\n";
+            wxLogTrace( MASK_3D_PLUGINMGR, " + '%s'\n", (*sFF).ToUTF8() );
             ++sFF;
         }
     }
     else
     {
-        std::cout << "* No file filters available\n";
+        wxLogTrace( MASK_3D_PLUGINMGR, " * No file filters available\n" );
     }
 #endif  // DEBUG
 
@@ -168,8 +168,12 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     while( sPL != ePL )
     {
 #ifdef DEBUG
-        std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
-        std::cout << "* [DEBUG] searching path: '" << (*sPL).ToUTF8() << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
+            ostr << " * [DEBUG] searching path: '" << (*sPL).ToUTF8() << "'";
+            wxLogTrace( MASK_3D_PLUGINMGR, "%s\n", ostr.str().c_str() );
+        } while( 0 );
 #endif
         listPlugins( *sPL, pluginlist );
         ++sPL;
@@ -188,15 +192,23 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
         if( pp->Open( sPL->ToUTF8() ) )
         {
 #ifdef DEBUG
-            std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
-            std::cout << "* [DEBUG] adding plugin\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
+                ostr << "* [DEBUG] adding plugin";
+                wxLogTrace( MASK_3D_PLUGINMGR, "%s\n", ostr.str().c_str() );
+            } while( 0 );
 #endif
             m_Plugins.push_back( pp );
             int nf = pp->GetNFilters();
 
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] adding " << nf << " filters\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] adding " << nf << " filters";
+                wxLogTrace( MASK_3D_PLUGINMGR, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             for( int i = 0; i < nf; ++i )
@@ -215,8 +227,12 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
         else
         {
 #ifdef DEBUG
-            std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
-            std::cout << "* [DEBUG] deleting plugin\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
+                ostr << "* [DEBUG] deleting plugin";
+                wxLogTrace( MASK_3D_PLUGINMGR, "%s\n", ostr.str().c_str() );
+            } while( 0 );
 #endif
             delete pp;
         }
@@ -225,8 +241,12 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     }
 
 #ifdef DEBUG
-    std::cout << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
-    std::cout << "* [DEBUG] plugins loaded\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ":\n";
+        ostr << "* [DEBUG] plugins loaded";
+        wxLogTrace( MASK_3D_PLUGINMGR, "%s\n", ostr.str().c_str() );
+    } while( 0 );
 #endif
 
     return;
@@ -296,7 +316,8 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
     aPluginList.push_back( wxpath );
 
     #ifdef DEBUG
-    std::cerr << " * [INFO] found 3D plugin '" << wxpath.ToUTF8() << "'\n";
+    wxLogTrace( MASK_3D_PLUGINMGR, " * [INFO] found 3D plugin '%s'\n",
+        wxpath.ToUTF8() );
     #endif
 
     return;
@@ -311,7 +332,8 @@ void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
         return;
 
     #ifdef DEBUG
-    std::cerr << " * [INFO] checking for 3D plugins in '" << aPath << "'\n";
+    wxLogTrace( MASK_3D_PLUGINMGR, " * [INFO] checking for 3D plugins in '%s'\n",
+        aPath.ToUTF8() );
     #endif
 
     wxFileName path( wxFileName::DirName( aPath ) );
@@ -370,8 +392,12 @@ void S3D_PLUGIN_MANAGER::addExtensionMap( KICAD_PLUGIN_LDR_3D* aPlugin )
     int nExt = aPlugin->GetNExtensions();
 
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [INFO] adding " << nExt << " extensions\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] adding " << nExt << " extensions";
+        wxLogTrace( MASK_3D_PLUGINMGR, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     for( int i = 0; i < nExt; ++i )
@@ -436,8 +462,12 @@ void S3D_PLUGIN_MANAGER::ClosePlugins( void )
     std::list< KICAD_PLUGIN_LDR_3D* >::iterator eP = m_Plugins.end();
 
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [INFO] closing " << m_Plugins.size() << " plugins\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] closing " << m_Plugins.size() << " plugins";
+        wxLogTrace( MASK_3D_PLUGINMGR, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     while( sP != eP )

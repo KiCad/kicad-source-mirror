@@ -24,13 +24,13 @@
 #define GLM_FORCE_RADIANS
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
-#include <string>
 #include <utility>
 #include <iterator>
-#include <cstdio>
 
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/utils.h>
 #include <wx/stdpaths.h>
 
@@ -50,6 +50,7 @@
 
 
 #define CACHE_CONFIG_NAME wxT( "cache.cfg" )
+#define MASK_3D_CACHE "3D_CACHE"
 
 static bool checkTag( const char* aTag, void* aPluginMgrPtr )
 {
@@ -112,9 +113,14 @@ static bool isSHA1null( const unsigned char* aSHA1Sum )
     if( NULL == aSHA1Sum )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aSHA1Sum\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed for aSHA1Sum";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
+
         return false;
     }
 
@@ -174,9 +180,14 @@ void S3D_CACHE_ENTRY::SetSHA1( const unsigned char* aSHA1Sum )
     if( NULL == aSHA1Sum )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aSHA1Sum\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed for aSHA1Sum";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
+
         return;
     }
 
@@ -227,8 +238,8 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
     if( full3Dpath.empty() )
     {
         // the model cannot be found; we cannot proceed
-        std::cout << " * [3D model] could not find model '";
-        std::cout << aModelFile.ToUTF8() << "'\n";
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] could not find model '%s'\n",
+            aModelFile.ToUTF8() );
         return NULL;
     }
 
@@ -274,9 +285,13 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
             ( aFileName, ep ) ).second == false )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] duplicate entry in map file; key = ";
-            std::cerr << aFileName.ToUTF8() << "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [BUG] duplicate entry in map file; key = '";
+                ostr << aFileName.ToUTF8() << "'";
+                wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             m_CacheList.pop_back();
@@ -299,9 +314,13 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
                                ( aFileName, ep ) ).second == false )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] duplicate entry in map file; key = ";
-        std::cerr << aFileName.ToUTF8() << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] duplicate entry in map file; key = '";
+            ostr << aFileName.ToUTF8() << "'";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         m_CacheList.pop_back();
@@ -334,8 +353,12 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
     if( aFileName.empty() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] empty filename\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] empty filename";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -344,8 +367,12 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
     if( NULL == aSHA1Sum )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aMD5Sum\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL pointer passed for aMD5Sum";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -392,7 +419,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( bname.empty() )
     {
         #ifdef DEBUG
-        std::cerr << " * [3D model] cannot load cached model; no md5 hash available\n";
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] cannot load cached model; no file hash available\n" );
         #endif
 
         return false;
@@ -401,7 +428,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( m_CacheDir.empty() )
     {
         wxString errmsg = _( "cannot load cached model; config directory unknown" );
-        std::cerr << " * [3D model] " << errmsg.ToUTF8() << "\n";
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.ToUTF8() );
 
         return false;
     }
@@ -411,8 +438,8 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( !wxFileName::FileExists( fname ) )
     {
         wxString errmsg = _( "cannot open file" );
-        std::cerr << " * [3D model] " << errmsg.ToUTF8() << " '";
-        std::cerr << fname.ToUTF8() << "'\n";
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] %s '%s'\n",
+            errmsg.ToUTF8(), fname.ToUTF8() );
         return false;
     }
 
@@ -433,8 +460,12 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( NULL == aCacheItem )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * NULL passed for aCacheItem\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * NULL passed for aCacheItem";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -443,8 +474,12 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( NULL == aCacheItem->sceneData )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * aCacheItem has no valid scene data\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * aCacheItem has no valid scene data";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -455,7 +490,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( bname.empty() )
     {
         #ifdef DEBUG
-        std::cerr << " * [3D model] cannot load cached model; no hash available\n";
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] cannot load cached model; no file hash available\n" );
         #endif
 
         return false;
@@ -464,7 +499,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( m_CacheDir.empty() )
     {
         wxString errmsg = _( "cannot load cached model; config directory unknown" );
-        std::cerr << " * [3D model] " << errmsg.ToUTF8() << "\n";
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.ToUTF8() );
 
         return false;
     }
@@ -482,8 +517,8 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
         if( !S_ISREG( info.st_mode ) )
         {
             wxString errmsg = _( "path exists but is not a regular file" );
-            std::cerr << " * [3D model] " << errmsg.ToUTF8() << " '";
-            std::cerr << fname.ToUTF8() << "'\n";
+            wxLogTrace( MASK_3D_CACHE, " * [3D model] %s '%s'\n", errmsg.ToUTF8(),
+                fname.ToUTF8() );
 
             return false;
         }
@@ -508,12 +543,14 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
 
         if( !cfgdir.DirExists() )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             wxString errmsg = _( "failed to create 3D configuration directory" );
-            std::cerr << " * " << errmsg.ToUTF8() << "\n";
+            ostr << " * " << errmsg.ToUTF8() << "\n";
             errmsg = _( "config directory" );
-            std::cerr << " * " << errmsg.ToUTF8() << " '";
-            std::cerr << cfgdir.GetPath().ToUTF8() << "'\n";
+            ostr << " * " << errmsg.ToUTF8() << " '";
+            ostr << cfgdir.GetPath().ToUTF8() << "'";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
 
             return false;
         }
@@ -525,9 +562,13 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     if( !m_FNResolver->Set3DConfigDir( m_ConfigDir ) )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * could not set 3D Config Directory on filename resolver\n";
-        std::cerr << " * config directory: '" << m_ConfigDir.ToUTF8() << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * could not set 3D Config Directory on filename resolver\n";
+            ostr << " * config directory: '" << m_ConfigDir.ToUTF8() << "'";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
     }
 
@@ -539,12 +580,14 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
 
         if( !cfgdir.DirExists() )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             wxString errmsg = _( "failed to create 3D cache directory" );
-            std::cerr << " * " << errmsg.ToUTF8() << "\n";
+            ostr << " * " << errmsg.ToUTF8() << "\n";
             errmsg = _( "cache directory" );
-            std::cerr << " * " << errmsg.ToUTF8() << " '";
-            std::cerr << cfgdir.GetPath().ToUTF8() << "'\n";
+            ostr << " * " << errmsg.ToUTF8() << " '";
+            ostr << cfgdir.GetPath().ToUTF8() << "'";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
 
             return false;
         }
@@ -597,9 +640,11 @@ wxString S3D_CACHE::Get3DConfigDir( bool createDefault )
 
     if( !cfgpath.DirExists() )
     {
+        std::ostringstream ostr;
         wxString errmsg = _( "failed to create 3D configuration directory" );
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * " << errmsg.ToUTF8() << "\n";
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * " << errmsg.ToUTF8();
+        wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
 
         return wxT( "" );
     }
@@ -696,8 +741,12 @@ S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
     if( !cp )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] model loaded with no associated S3D_CACHE_ENTRY\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] model loaded with no associated S3D_CACHE_ENTRY";
+            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return NULL;
